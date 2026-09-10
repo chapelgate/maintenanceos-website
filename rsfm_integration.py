@@ -44,7 +44,8 @@ def publish_control_event(kind: str, data: dict[str, Any], *, actor_id: str = "m
     conn = conn_cls(parsed.hostname, parsed.port or (443 if parsed.scheme == "https" else 80), timeout=3)
     try:
         conn.request("POST", target, body=payload,
-                     headers={"content-type": "application/json", "x-rsfm-token": token})
+                     headers={"content-type": "application/json", "x-rsfm-token": token,
+                              "x-rsfm-app-id": APP_ID})
         response = conn.getresponse()
         response.read()
         return 200 <= response.status < 300
