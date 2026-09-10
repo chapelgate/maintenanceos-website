@@ -1,0 +1,14 @@
+.env
+.venv/
+.pytest_cache/
+__pycache__/
+.codex/
+.codex_*/
+evidence/
+*.db
+*.db-*
+*.log
+*.tmp
+*.jsonl
+*.pyc
+.DS_Store

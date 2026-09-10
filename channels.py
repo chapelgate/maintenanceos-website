@@ -1,0 +1,97 @@
+import hashlib
+import json
+import re
+from datetime import datetime
+from clock import utcnow
+from sqlalchemy.exc import IntegrityError
+from models import *
+from identity import normalise_phone
+from decision_engine import apply_intake_rules
+from lifecycle import transition_work_order
+from operations import select_contractor,create_dispatch_approval
+from tenant_security import require_client_resource,resident_by_phone_for_client
+
+def resident_by_email(client_id,email):
+    with SessionLocal() as s:
+        r=s.query(Resident).filter_by(client_id=client_id,email=email,active=True).first()
+        return r.id if r else None
+
+def resident_by_phone(phone,client_id=None):
+    if client_id is None:
+        return None
+    target=normalise_phone(phone)
+    with SessionLocal() as s:
+        resident=resident_by_phone_for_client(s,client_id,target)
+        return resident.id if resident else None
+
+def _enforce_identity_review(work_order_id,identity_verified):
+    with SessionLocal() as s:
+        wo=s.get(WorkOrder,work_order_id)
+        if not wo:return
+        existing=s.query(Approval).filter_by(work_order_id=work_order_id,approval_type="IDENTITY",status="PENDING").first()
+        if identity_verified and not existing:return
+        transition_work_order(s,wo,"HUMAN_REVIEW",actor="Identity Gate",reason="Caller identity is not verified")
+        if not existing:
+            s.add(Approval(client_id=wo.client_id,work_order_id=work_order_id,approval_type="IDENTITY",
+                           proposed_action="Verify caller identity before property-specific action",
+                           reason="Inbound caller has not completed second-factor verification"))
+        s.add(AuditEvent(work_order_id=work_order_id,actor="Identity Gate",event="IDENTITY_REVIEW_REQUIRED",
+                         detail="No property-specific information or dispatch permitted"))
+        s.commit()
+
+def _finish_intake(work_order_id,identity_verified):
+    apply_intake_rules(work_order_id)
+    _enforce_identity_review(work_order_id,identity_verified)
+    cid=select_contractor(work_order_id)
+    if cid:create_dispatch_approval(work_order_id)
+
+def canonical_incident_key(client_id,property_id,resident_id,description):
+    caller_lines=[]
+    for line in (description or "").splitlines():
+        if line.lower().startswith("caller") and ":" in line:
+            caller_lines.append(line.split(":",1)[1])
+    text=" ".join(caller_lines) if caller_lines else (description or "")
+    normalised=re.sub(r"[^a-z0-9]+"," ",text.lower()).strip()
+    digest=hashlib.sha256(normalised.encode()).hexdigest()
+    return f"daily:{utcnow().date().isoformat()}:{client_id}:{property_id}:{resident_id or 0}:{digest}"
+
+
+def create_from_channel(client_id,property_id,resident_id,source,description,participant="",media_url="",identity_verified=True,incident_key=None,event_key=None):
+    incident_key=(incident_key or canonical_incident_key(client_id,property_id,resident_id,description)).strip()
+    event_key=(event_key or "").strip()
+    with SessionLocal() as s:
+        require_client_resource(s,client_id,property_id=property_id,resident_id=resident_id)
+        if event_key:
+            event=s.query(ChannelEventIdentity).filter_by(client_id=client_id,source=source,event_key=event_key).first()
+            if event:return event.work_order_id
+        existing=s.query(IncidentIdentity).filter_by(client_id=client_id,incident_key=incident_key).first()
+        if existing:
+            wo=s.get(WorkOrder,existing.work_order_id)
+            if event_key:s.add(ChannelEventIdentity(client_id=client_id,source=source,event_key=event_key,work_order_id=wo.id))
+            s.add(Communication(work_order_id=wo.id,channel=source,direction="INBOUND",participant=participant,body=description,media_url=media_url))
+            if description and description not in wo.description:wo.description=(wo.description+"\n"+description).strip()
+            try:s.commit();wid=wo.id
+            except IntegrityError:
+                s.rollback()
+                event=s.query(ChannelEventIdentity).filter_by(client_id=client_id,source=source,event_key=event_key).first() if event_key else None
+                if event:return event.work_order_id
+                raise
+            _finish_intake(wid,identity_verified)
+            return wid
+        wo=WorkOrder(client_id=client_id,property_id=property_id,resident_id=resident_id,
+                     source=source,description=description)
+        s.add(wo);s.flush()
+        s.add(IncidentIdentity(client_id=client_id,incident_key=incident_key,work_order_id=wo.id))
+        if event_key:s.add(ChannelEventIdentity(client_id=client_id,source=source,event_key=event_key,work_order_id=wo.id))
+        s.add(Communication(work_order_id=wo.id,channel=source,direction="INBOUND",
+                            participant=participant,body=description,media_url=media_url))
+        try:
+            s.commit();wid=wo.id
+        except IntegrityError:
+            s.rollback()
+            existing=s.query(IncidentIdentity).filter_by(client_id=client_id,incident_key=incident_key).first()
+            if not existing:
+                raise
+            return existing.work_order_id
+    _finish_intake(wid,identity_verified)
+    return wid

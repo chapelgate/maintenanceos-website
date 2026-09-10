@@ -1,0 +1,3122 @@
+[
+  {
+    "id": "RED-gas-000",
+    "text": "There is a gas smell beside the boiler. Reference 0.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-000",
+    "text": "There are flames in the kitchen and it is on fire. Reference 0.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-000",
+    "text": "The carbon monoxide alarm has gone off. Reference 0.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-000",
+    "text": "The socket is sparking when I touch the switch. Reference 0.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-000",
+    "text": "Water is pouring through the ceiling. Reference 0.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-000",
+    "text": "Part of the ceiling collapsed. Reference 0.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-000",
+    "text": "My child is trapped behind the locked door. Reference 0.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-001",
+    "text": "There is a gas smell beside the boiler. Reference 1.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-001",
+    "text": "There are flames in the kitchen and it is on fire. Reference 1.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-001",
+    "text": "The carbon monoxide alarm has gone off. Reference 1.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-001",
+    "text": "The socket is sparking when I touch the switch. Reference 1.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-001",
+    "text": "Water is pouring through the ceiling. Reference 1.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-001",
+    "text": "Part of the ceiling collapsed. Reference 1.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-001",
+    "text": "My child is trapped behind the locked door. Reference 1.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-002",
+    "text": "There is a gas smell beside the boiler. Reference 2.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-002",
+    "text": "There are flames in the kitchen and it is on fire. Reference 2.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-002",
+    "text": "The carbon monoxide alarm has gone off. Reference 2.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-002",
+    "text": "The socket is sparking when I touch the switch. Reference 2.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-002",
+    "text": "Water is pouring through the ceiling. Reference 2.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-002",
+    "text": "Part of the ceiling collapsed. Reference 2.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-002",
+    "text": "My child is trapped behind the locked door. Reference 2.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-003",
+    "text": "There is a gas smell beside the boiler. Reference 3.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-003",
+    "text": "There are flames in the kitchen and it is on fire. Reference 3.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-003",
+    "text": "The carbon monoxide alarm has gone off. Reference 3.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-003",
+    "text": "The socket is sparking when I touch the switch. Reference 3.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-003",
+    "text": "Water is pouring through the ceiling. Reference 3.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-003",
+    "text": "Part of the ceiling collapsed. Reference 3.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-003",
+    "text": "My child is trapped behind the locked door. Reference 3.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-004",
+    "text": "There is a gas smell beside the boiler. Reference 4.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-004",
+    "text": "There are flames in the kitchen and it is on fire. Reference 4.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-004",
+    "text": "The carbon monoxide alarm has gone off. Reference 4.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-004",
+    "text": "The socket is sparking when I touch the switch. Reference 4.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-004",
+    "text": "Water is pouring through the ceiling. Reference 4.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-004",
+    "text": "Part of the ceiling collapsed. Reference 4.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-004",
+    "text": "My child is trapped behind the locked door. Reference 4.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-005",
+    "text": "There is a gas smell beside the boiler. Reference 5.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-005",
+    "text": "There are flames in the kitchen and it is on fire. Reference 5.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-005",
+    "text": "The carbon monoxide alarm has gone off. Reference 5.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-005",
+    "text": "The socket is sparking when I touch the switch. Reference 5.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-005",
+    "text": "Water is pouring through the ceiling. Reference 5.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-005",
+    "text": "Part of the ceiling collapsed. Reference 5.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-005",
+    "text": "My child is trapped behind the locked door. Reference 5.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-006",
+    "text": "There is a gas smell beside the boiler. Reference 6.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-006",
+    "text": "There are flames in the kitchen and it is on fire. Reference 6.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-006",
+    "text": "The carbon monoxide alarm has gone off. Reference 6.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-006",
+    "text": "The socket is sparking when I touch the switch. Reference 6.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-006",
+    "text": "Water is pouring through the ceiling. Reference 6.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-006",
+    "text": "Part of the ceiling collapsed. Reference 6.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-006",
+    "text": "My child is trapped behind the locked door. Reference 6.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-007",
+    "text": "There is a gas smell beside the boiler. Reference 7.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-007",
+    "text": "There are flames in the kitchen and it is on fire. Reference 7.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-007",
+    "text": "The carbon monoxide alarm has gone off. Reference 7.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-007",
+    "text": "The socket is sparking when I touch the switch. Reference 7.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-007",
+    "text": "Water is pouring through the ceiling. Reference 7.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-007",
+    "text": "Part of the ceiling collapsed. Reference 7.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-007",
+    "text": "My child is trapped behind the locked door. Reference 7.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-008",
+    "text": "There is a gas smell beside the boiler. Reference 8.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-008",
+    "text": "There are flames in the kitchen and it is on fire. Reference 8.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-008",
+    "text": "The carbon monoxide alarm has gone off. Reference 8.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-008",
+    "text": "The socket is sparking when I touch the switch. Reference 8.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-008",
+    "text": "Water is pouring through the ceiling. Reference 8.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-008",
+    "text": "Part of the ceiling collapsed. Reference 8.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-008",
+    "text": "My child is trapped behind the locked door. Reference 8.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-009",
+    "text": "There is a gas smell beside the boiler. Reference 9.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-009",
+    "text": "There are flames in the kitchen and it is on fire. Reference 9.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-009",
+    "text": "The carbon monoxide alarm has gone off. Reference 9.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-009",
+    "text": "The socket is sparking when I touch the switch. Reference 9.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-009",
+    "text": "Water is pouring through the ceiling. Reference 9.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-009",
+    "text": "Part of the ceiling collapsed. Reference 9.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-009",
+    "text": "My child is trapped behind the locked door. Reference 9.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-010",
+    "text": "There is a gas smell beside the boiler. Reference 10.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-010",
+    "text": "There are flames in the kitchen and it is on fire. Reference 10.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-010",
+    "text": "The carbon monoxide alarm has gone off. Reference 10.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-010",
+    "text": "The socket is sparking when I touch the switch. Reference 10.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-010",
+    "text": "Water is pouring through the ceiling. Reference 10.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-010",
+    "text": "Part of the ceiling collapsed. Reference 10.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-010",
+    "text": "My child is trapped behind the locked door. Reference 10.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-011",
+    "text": "There is a gas smell beside the boiler. Reference 11.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-011",
+    "text": "There are flames in the kitchen and it is on fire. Reference 11.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-011",
+    "text": "The carbon monoxide alarm has gone off. Reference 11.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-011",
+    "text": "The socket is sparking when I touch the switch. Reference 11.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-011",
+    "text": "Water is pouring through the ceiling. Reference 11.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-011",
+    "text": "Part of the ceiling collapsed. Reference 11.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-011",
+    "text": "My child is trapped behind the locked door. Reference 11.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-012",
+    "text": "There is a gas smell beside the boiler. Reference 12.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-012",
+    "text": "There are flames in the kitchen and it is on fire. Reference 12.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-012",
+    "text": "The carbon monoxide alarm has gone off. Reference 12.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-012",
+    "text": "The socket is sparking when I touch the switch. Reference 12.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-012",
+    "text": "Water is pouring through the ceiling. Reference 12.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-012",
+    "text": "Part of the ceiling collapsed. Reference 12.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-012",
+    "text": "My child is trapped behind the locked door. Reference 12.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-013",
+    "text": "There is a gas smell beside the boiler. Reference 13.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-013",
+    "text": "There are flames in the kitchen and it is on fire. Reference 13.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-013",
+    "text": "The carbon monoxide alarm has gone off. Reference 13.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-013",
+    "text": "The socket is sparking when I touch the switch. Reference 13.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-013",
+    "text": "Water is pouring through the ceiling. Reference 13.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-013",
+    "text": "Part of the ceiling collapsed. Reference 13.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-013",
+    "text": "My child is trapped behind the locked door. Reference 13.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-014",
+    "text": "There is a gas smell beside the boiler. Reference 14.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-014",
+    "text": "There are flames in the kitchen and it is on fire. Reference 14.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-014",
+    "text": "The carbon monoxide alarm has gone off. Reference 14.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-014",
+    "text": "The socket is sparking when I touch the switch. Reference 14.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-014",
+    "text": "Water is pouring through the ceiling. Reference 14.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-014",
+    "text": "Part of the ceiling collapsed. Reference 14.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-014",
+    "text": "My child is trapped behind the locked door. Reference 14.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-015",
+    "text": "There is a gas smell beside the boiler. Reference 15.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-015",
+    "text": "There are flames in the kitchen and it is on fire. Reference 15.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-015",
+    "text": "The carbon monoxide alarm has gone off. Reference 15.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-015",
+    "text": "The socket is sparking when I touch the switch. Reference 15.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-015",
+    "text": "Water is pouring through the ceiling. Reference 15.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-015",
+    "text": "Part of the ceiling collapsed. Reference 15.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-015",
+    "text": "My child is trapped behind the locked door. Reference 15.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-016",
+    "text": "There is a gas smell beside the boiler. Reference 16.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-016",
+    "text": "There are flames in the kitchen and it is on fire. Reference 16.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-016",
+    "text": "The carbon monoxide alarm has gone off. Reference 16.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-016",
+    "text": "The socket is sparking when I touch the switch. Reference 16.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-016",
+    "text": "Water is pouring through the ceiling. Reference 16.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-016",
+    "text": "Part of the ceiling collapsed. Reference 16.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-016",
+    "text": "My child is trapped behind the locked door. Reference 16.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-017",
+    "text": "There is a gas smell beside the boiler. Reference 17.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-017",
+    "text": "There are flames in the kitchen and it is on fire. Reference 17.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-017",
+    "text": "The carbon monoxide alarm has gone off. Reference 17.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-017",
+    "text": "The socket is sparking when I touch the switch. Reference 17.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-017",
+    "text": "Water is pouring through the ceiling. Reference 17.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-017",
+    "text": "Part of the ceiling collapsed. Reference 17.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-017",
+    "text": "My child is trapped behind the locked door. Reference 17.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-018",
+    "text": "There is a gas smell beside the boiler. Reference 18.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-018",
+    "text": "There are flames in the kitchen and it is on fire. Reference 18.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-018",
+    "text": "The carbon monoxide alarm has gone off. Reference 18.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-018",
+    "text": "The socket is sparking when I touch the switch. Reference 18.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-018",
+    "text": "Water is pouring through the ceiling. Reference 18.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-018",
+    "text": "Part of the ceiling collapsed. Reference 18.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-018",
+    "text": "My child is trapped behind the locked door. Reference 18.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-019",
+    "text": "There is a gas smell beside the boiler. Reference 19.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-019",
+    "text": "There are flames in the kitchen and it is on fire. Reference 19.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-019",
+    "text": "The carbon monoxide alarm has gone off. Reference 19.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-019",
+    "text": "The socket is sparking when I touch the switch. Reference 19.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-019",
+    "text": "Water is pouring through the ceiling. Reference 19.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-019",
+    "text": "Part of the ceiling collapsed. Reference 19.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-019",
+    "text": "My child is trapped behind the locked door. Reference 19.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-020",
+    "text": "There is a gas smell beside the boiler. Reference 20.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-020",
+    "text": "There are flames in the kitchen and it is on fire. Reference 20.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-020",
+    "text": "The carbon monoxide alarm has gone off. Reference 20.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-020",
+    "text": "The socket is sparking when I touch the switch. Reference 20.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-020",
+    "text": "Water is pouring through the ceiling. Reference 20.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-020",
+    "text": "Part of the ceiling collapsed. Reference 20.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-020",
+    "text": "My child is trapped behind the locked door. Reference 20.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-021",
+    "text": "There is a gas smell beside the boiler. Reference 21.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-021",
+    "text": "There are flames in the kitchen and it is on fire. Reference 21.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-021",
+    "text": "The carbon monoxide alarm has gone off. Reference 21.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-021",
+    "text": "The socket is sparking when I touch the switch. Reference 21.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-021",
+    "text": "Water is pouring through the ceiling. Reference 21.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-021",
+    "text": "Part of the ceiling collapsed. Reference 21.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-021",
+    "text": "My child is trapped behind the locked door. Reference 21.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-022",
+    "text": "There is a gas smell beside the boiler. Reference 22.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-022",
+    "text": "There are flames in the kitchen and it is on fire. Reference 22.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-022",
+    "text": "The carbon monoxide alarm has gone off. Reference 22.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-022",
+    "text": "The socket is sparking when I touch the switch. Reference 22.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-022",
+    "text": "Water is pouring through the ceiling. Reference 22.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-022",
+    "text": "Part of the ceiling collapsed. Reference 22.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-022",
+    "text": "My child is trapped behind the locked door. Reference 22.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-023",
+    "text": "There is a gas smell beside the boiler. Reference 23.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-023",
+    "text": "There are flames in the kitchen and it is on fire. Reference 23.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-023",
+    "text": "The carbon monoxide alarm has gone off. Reference 23.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-023",
+    "text": "The socket is sparking when I touch the switch. Reference 23.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-023",
+    "text": "Water is pouring through the ceiling. Reference 23.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-023",
+    "text": "Part of the ceiling collapsed. Reference 23.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-023",
+    "text": "My child is trapped behind the locked door. Reference 23.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-024",
+    "text": "There is a gas smell beside the boiler. Reference 24.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-024",
+    "text": "There are flames in the kitchen and it is on fire. Reference 24.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-024",
+    "text": "The carbon monoxide alarm has gone off. Reference 24.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-024",
+    "text": "The socket is sparking when I touch the switch. Reference 24.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-024",
+    "text": "Water is pouring through the ceiling. Reference 24.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-024",
+    "text": "Part of the ceiling collapsed. Reference 24.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-024",
+    "text": "My child is trapped behind the locked door. Reference 24.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-025",
+    "text": "There is a gas smell beside the boiler. Reference 25.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-025",
+    "text": "There are flames in the kitchen and it is on fire. Reference 25.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-025",
+    "text": "The carbon monoxide alarm has gone off. Reference 25.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-025",
+    "text": "The socket is sparking when I touch the switch. Reference 25.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-025",
+    "text": "Water is pouring through the ceiling. Reference 25.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-025",
+    "text": "Part of the ceiling collapsed. Reference 25.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-025",
+    "text": "My child is trapped behind the locked door. Reference 25.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-026",
+    "text": "There is a gas smell beside the boiler. Reference 26.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-026",
+    "text": "There are flames in the kitchen and it is on fire. Reference 26.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-026",
+    "text": "The carbon monoxide alarm has gone off. Reference 26.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-026",
+    "text": "The socket is sparking when I touch the switch. Reference 26.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-026",
+    "text": "Water is pouring through the ceiling. Reference 26.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-026",
+    "text": "Part of the ceiling collapsed. Reference 26.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-026",
+    "text": "My child is trapped behind the locked door. Reference 26.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-027",
+    "text": "There is a gas smell beside the boiler. Reference 27.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-027",
+    "text": "There are flames in the kitchen and it is on fire. Reference 27.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-027",
+    "text": "The carbon monoxide alarm has gone off. Reference 27.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-027",
+    "text": "The socket is sparking when I touch the switch. Reference 27.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-027",
+    "text": "Water is pouring through the ceiling. Reference 27.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-027",
+    "text": "Part of the ceiling collapsed. Reference 27.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-027",
+    "text": "My child is trapped behind the locked door. Reference 27.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-028",
+    "text": "There is a gas smell beside the boiler. Reference 28.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-028",
+    "text": "There are flames in the kitchen and it is on fire. Reference 28.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-028",
+    "text": "The carbon monoxide alarm has gone off. Reference 28.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-028",
+    "text": "The socket is sparking when I touch the switch. Reference 28.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-028",
+    "text": "Water is pouring through the ceiling. Reference 28.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-028",
+    "text": "Part of the ceiling collapsed. Reference 28.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-028",
+    "text": "My child is trapped behind the locked door. Reference 28.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-029",
+    "text": "There is a gas smell beside the boiler. Reference 29.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-029",
+    "text": "There are flames in the kitchen and it is on fire. Reference 29.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-029",
+    "text": "The carbon monoxide alarm has gone off. Reference 29.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-029",
+    "text": "The socket is sparking when I touch the switch. Reference 29.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-029",
+    "text": "Water is pouring through the ceiling. Reference 29.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-029",
+    "text": "Part of the ceiling collapsed. Reference 29.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-029",
+    "text": "My child is trapped behind the locked door. Reference 29.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-030",
+    "text": "There is a gas smell beside the boiler. Reference 30.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-030",
+    "text": "There are flames in the kitchen and it is on fire. Reference 30.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-030",
+    "text": "The carbon monoxide alarm has gone off. Reference 30.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-030",
+    "text": "The socket is sparking when I touch the switch. Reference 30.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-030",
+    "text": "Water is pouring through the ceiling. Reference 30.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-030",
+    "text": "Part of the ceiling collapsed. Reference 30.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-030",
+    "text": "My child is trapped behind the locked door. Reference 30.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-031",
+    "text": "There is a gas smell beside the boiler. Reference 31.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-031",
+    "text": "There are flames in the kitchen and it is on fire. Reference 31.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-031",
+    "text": "The carbon monoxide alarm has gone off. Reference 31.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-031",
+    "text": "The socket is sparking when I touch the switch. Reference 31.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-031",
+    "text": "Water is pouring through the ceiling. Reference 31.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-031",
+    "text": "Part of the ceiling collapsed. Reference 31.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-031",
+    "text": "My child is trapped behind the locked door. Reference 31.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-032",
+    "text": "There is a gas smell beside the boiler. Reference 32.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-032",
+    "text": "There are flames in the kitchen and it is on fire. Reference 32.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-032",
+    "text": "The carbon monoxide alarm has gone off. Reference 32.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-032",
+    "text": "The socket is sparking when I touch the switch. Reference 32.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-032",
+    "text": "Water is pouring through the ceiling. Reference 32.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-032",
+    "text": "Part of the ceiling collapsed. Reference 32.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-032",
+    "text": "My child is trapped behind the locked door. Reference 32.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-033",
+    "text": "There is a gas smell beside the boiler. Reference 33.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-033",
+    "text": "There are flames in the kitchen and it is on fire. Reference 33.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-033",
+    "text": "The carbon monoxide alarm has gone off. Reference 33.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-033",
+    "text": "The socket is sparking when I touch the switch. Reference 33.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-033",
+    "text": "Water is pouring through the ceiling. Reference 33.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-033",
+    "text": "Part of the ceiling collapsed. Reference 33.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-033",
+    "text": "My child is trapped behind the locked door. Reference 33.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-034",
+    "text": "There is a gas smell beside the boiler. Reference 34.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-034",
+    "text": "There are flames in the kitchen and it is on fire. Reference 34.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-034",
+    "text": "The carbon monoxide alarm has gone off. Reference 34.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-034",
+    "text": "The socket is sparking when I touch the switch. Reference 34.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-034",
+    "text": "Water is pouring through the ceiling. Reference 34.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-034",
+    "text": "Part of the ceiling collapsed. Reference 34.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-034",
+    "text": "My child is trapped behind the locked door. Reference 34.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-035",
+    "text": "There is a gas smell beside the boiler. Reference 35.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-035",
+    "text": "There are flames in the kitchen and it is on fire. Reference 35.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-035",
+    "text": "The carbon monoxide alarm has gone off. Reference 35.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-035",
+    "text": "The socket is sparking when I touch the switch. Reference 35.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-035",
+    "text": "Water is pouring through the ceiling. Reference 35.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-035",
+    "text": "Part of the ceiling collapsed. Reference 35.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-035",
+    "text": "My child is trapped behind the locked door. Reference 35.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-036",
+    "text": "There is a gas smell beside the boiler. Reference 36.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-036",
+    "text": "There are flames in the kitchen and it is on fire. Reference 36.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-036",
+    "text": "The carbon monoxide alarm has gone off. Reference 36.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-036",
+    "text": "The socket is sparking when I touch the switch. Reference 36.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-036",
+    "text": "Water is pouring through the ceiling. Reference 36.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-036",
+    "text": "Part of the ceiling collapsed. Reference 36.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-036",
+    "text": "My child is trapped behind the locked door. Reference 36.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-037",
+    "text": "There is a gas smell beside the boiler. Reference 37.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-037",
+    "text": "There are flames in the kitchen and it is on fire. Reference 37.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-037",
+    "text": "The carbon monoxide alarm has gone off. Reference 37.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-037",
+    "text": "The socket is sparking when I touch the switch. Reference 37.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-037",
+    "text": "Water is pouring through the ceiling. Reference 37.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-037",
+    "text": "Part of the ceiling collapsed. Reference 37.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-037",
+    "text": "My child is trapped behind the locked door. Reference 37.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-038",
+    "text": "There is a gas smell beside the boiler. Reference 38.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-038",
+    "text": "There are flames in the kitchen and it is on fire. Reference 38.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-038",
+    "text": "The carbon monoxide alarm has gone off. Reference 38.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-038",
+    "text": "The socket is sparking when I touch the switch. Reference 38.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-038",
+    "text": "Water is pouring through the ceiling. Reference 38.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-038",
+    "text": "Part of the ceiling collapsed. Reference 38.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-038",
+    "text": "My child is trapped behind the locked door. Reference 38.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-039",
+    "text": "There is a gas smell beside the boiler. Reference 39.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-039",
+    "text": "There are flames in the kitchen and it is on fire. Reference 39.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-039",
+    "text": "The carbon monoxide alarm has gone off. Reference 39.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-039",
+    "text": "The socket is sparking when I touch the switch. Reference 39.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-039",
+    "text": "Water is pouring through the ceiling. Reference 39.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-039",
+    "text": "Part of the ceiling collapsed. Reference 39.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-039",
+    "text": "My child is trapped behind the locked door. Reference 39.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-040",
+    "text": "There is a gas smell beside the boiler. Reference 40.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-040",
+    "text": "There are flames in the kitchen and it is on fire. Reference 40.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-040",
+    "text": "The carbon monoxide alarm has gone off. Reference 40.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-040",
+    "text": "The socket is sparking when I touch the switch. Reference 40.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-040",
+    "text": "Water is pouring through the ceiling. Reference 40.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-040",
+    "text": "Part of the ceiling collapsed. Reference 40.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-040",
+    "text": "My child is trapped behind the locked door. Reference 40.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-041",
+    "text": "There is a gas smell beside the boiler. Reference 41.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-041",
+    "text": "There are flames in the kitchen and it is on fire. Reference 41.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-041",
+    "text": "The carbon monoxide alarm has gone off. Reference 41.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-041",
+    "text": "The socket is sparking when I touch the switch. Reference 41.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-041",
+    "text": "Water is pouring through the ceiling. Reference 41.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-041",
+    "text": "Part of the ceiling collapsed. Reference 41.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-041",
+    "text": "My child is trapped behind the locked door. Reference 41.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-042",
+    "text": "There is a gas smell beside the boiler. Reference 42.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-042",
+    "text": "There are flames in the kitchen and it is on fire. Reference 42.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-042",
+    "text": "The carbon monoxide alarm has gone off. Reference 42.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-042",
+    "text": "The socket is sparking when I touch the switch. Reference 42.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-042",
+    "text": "Water is pouring through the ceiling. Reference 42.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-042",
+    "text": "Part of the ceiling collapsed. Reference 42.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-042",
+    "text": "My child is trapped behind the locked door. Reference 42.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-043",
+    "text": "There is a gas smell beside the boiler. Reference 43.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-043",
+    "text": "There are flames in the kitchen and it is on fire. Reference 43.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-043",
+    "text": "The carbon monoxide alarm has gone off. Reference 43.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-043",
+    "text": "The socket is sparking when I touch the switch. Reference 43.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-043",
+    "text": "Water is pouring through the ceiling. Reference 43.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-043",
+    "text": "Part of the ceiling collapsed. Reference 43.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-043",
+    "text": "My child is trapped behind the locked door. Reference 43.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-044",
+    "text": "There is a gas smell beside the boiler. Reference 44.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-044",
+    "text": "There are flames in the kitchen and it is on fire. Reference 44.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-044",
+    "text": "The carbon monoxide alarm has gone off. Reference 44.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-044",
+    "text": "The socket is sparking when I touch the switch. Reference 44.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-044",
+    "text": "Water is pouring through the ceiling. Reference 44.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-044",
+    "text": "Part of the ceiling collapsed. Reference 44.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-044",
+    "text": "My child is trapped behind the locked door. Reference 44.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-045",
+    "text": "There is a gas smell beside the boiler. Reference 45.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-045",
+    "text": "There are flames in the kitchen and it is on fire. Reference 45.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-045",
+    "text": "The carbon monoxide alarm has gone off. Reference 45.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-045",
+    "text": "The socket is sparking when I touch the switch. Reference 45.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-045",
+    "text": "Water is pouring through the ceiling. Reference 45.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-045",
+    "text": "Part of the ceiling collapsed. Reference 45.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-045",
+    "text": "My child is trapped behind the locked door. Reference 45.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-046",
+    "text": "There is a gas smell beside the boiler. Reference 46.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-046",
+    "text": "There are flames in the kitchen and it is on fire. Reference 46.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-046",
+    "text": "The carbon monoxide alarm has gone off. Reference 46.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-046",
+    "text": "The socket is sparking when I touch the switch. Reference 46.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-046",
+    "text": "Water is pouring through the ceiling. Reference 46.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-046",
+    "text": "Part of the ceiling collapsed. Reference 46.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-046",
+    "text": "My child is trapped behind the locked door. Reference 46.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-047",
+    "text": "There is a gas smell beside the boiler. Reference 47.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-047",
+    "text": "There are flames in the kitchen and it is on fire. Reference 47.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-047",
+    "text": "The carbon monoxide alarm has gone off. Reference 47.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-047",
+    "text": "The socket is sparking when I touch the switch. Reference 47.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-047",
+    "text": "Water is pouring through the ceiling. Reference 47.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-047",
+    "text": "Part of the ceiling collapsed. Reference 47.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-047",
+    "text": "My child is trapped behind the locked door. Reference 47.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-048",
+    "text": "There is a gas smell beside the boiler. Reference 48.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-048",
+    "text": "There are flames in the kitchen and it is on fire. Reference 48.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-048",
+    "text": "The carbon monoxide alarm has gone off. Reference 48.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-048",
+    "text": "The socket is sparking when I touch the switch. Reference 48.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-048",
+    "text": "Water is pouring through the ceiling. Reference 48.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-048",
+    "text": "Part of the ceiling collapsed. Reference 48.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-048",
+    "text": "My child is trapped behind the locked door. Reference 48.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-049",
+    "text": "There is a gas smell beside the boiler. Reference 49.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-049",
+    "text": "There are flames in the kitchen and it is on fire. Reference 49.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-049",
+    "text": "The carbon monoxide alarm has gone off. Reference 49.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-049",
+    "text": "The socket is sparking when I touch the switch. Reference 49.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-049",
+    "text": "Water is pouring through the ceiling. Reference 49.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-049",
+    "text": "Part of the ceiling collapsed. Reference 49.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-049",
+    "text": "My child is trapped behind the locked door. Reference 49.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-050",
+    "text": "There is a gas smell beside the boiler. Reference 50.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-050",
+    "text": "There are flames in the kitchen and it is on fire. Reference 50.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-050",
+    "text": "The carbon monoxide alarm has gone off. Reference 50.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-050",
+    "text": "The socket is sparking when I touch the switch. Reference 50.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-050",
+    "text": "Water is pouring through the ceiling. Reference 50.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-050",
+    "text": "Part of the ceiling collapsed. Reference 50.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-050",
+    "text": "My child is trapped behind the locked door. Reference 50.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-051",
+    "text": "There is a gas smell beside the boiler. Reference 51.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-051",
+    "text": "There are flames in the kitchen and it is on fire. Reference 51.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-051",
+    "text": "The carbon monoxide alarm has gone off. Reference 51.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-051",
+    "text": "The socket is sparking when I touch the switch. Reference 51.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-051",
+    "text": "Water is pouring through the ceiling. Reference 51.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-051",
+    "text": "Part of the ceiling collapsed. Reference 51.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-051",
+    "text": "My child is trapped behind the locked door. Reference 51.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-052",
+    "text": "There is a gas smell beside the boiler. Reference 52.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-052",
+    "text": "There are flames in the kitchen and it is on fire. Reference 52.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-052",
+    "text": "The carbon monoxide alarm has gone off. Reference 52.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-052",
+    "text": "The socket is sparking when I touch the switch. Reference 52.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-052",
+    "text": "Water is pouring through the ceiling. Reference 52.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-052",
+    "text": "Part of the ceiling collapsed. Reference 52.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-052",
+    "text": "My child is trapped behind the locked door. Reference 52.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-053",
+    "text": "There is a gas smell beside the boiler. Reference 53.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-053",
+    "text": "There are flames in the kitchen and it is on fire. Reference 53.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-053",
+    "text": "The carbon monoxide alarm has gone off. Reference 53.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-053",
+    "text": "The socket is sparking when I touch the switch. Reference 53.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-053",
+    "text": "Water is pouring through the ceiling. Reference 53.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-053",
+    "text": "Part of the ceiling collapsed. Reference 53.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-053",
+    "text": "My child is trapped behind the locked door. Reference 53.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-054",
+    "text": "There is a gas smell beside the boiler. Reference 54.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-054",
+    "text": "There are flames in the kitchen and it is on fire. Reference 54.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-054",
+    "text": "The carbon monoxide alarm has gone off. Reference 54.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-054",
+    "text": "The socket is sparking when I touch the switch. Reference 54.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-054",
+    "text": "Water is pouring through the ceiling. Reference 54.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-054",
+    "text": "Part of the ceiling collapsed. Reference 54.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-054",
+    "text": "My child is trapped behind the locked door. Reference 54.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-055",
+    "text": "There is a gas smell beside the boiler. Reference 55.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-055",
+    "text": "There are flames in the kitchen and it is on fire. Reference 55.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-055",
+    "text": "The carbon monoxide alarm has gone off. Reference 55.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-055",
+    "text": "The socket is sparking when I touch the switch. Reference 55.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-055",
+    "text": "Water is pouring through the ceiling. Reference 55.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-055",
+    "text": "Part of the ceiling collapsed. Reference 55.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-055",
+    "text": "My child is trapped behind the locked door. Reference 55.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-056",
+    "text": "There is a gas smell beside the boiler. Reference 56.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-056",
+    "text": "There are flames in the kitchen and it is on fire. Reference 56.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-056",
+    "text": "The carbon monoxide alarm has gone off. Reference 56.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-056",
+    "text": "The socket is sparking when I touch the switch. Reference 56.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-056",
+    "text": "Water is pouring through the ceiling. Reference 56.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-056",
+    "text": "Part of the ceiling collapsed. Reference 56.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-056",
+    "text": "My child is trapped behind the locked door. Reference 56.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-057",
+    "text": "There is a gas smell beside the boiler. Reference 57.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-057",
+    "text": "There are flames in the kitchen and it is on fire. Reference 57.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-057",
+    "text": "The carbon monoxide alarm has gone off. Reference 57.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-057",
+    "text": "The socket is sparking when I touch the switch. Reference 57.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-057",
+    "text": "Water is pouring through the ceiling. Reference 57.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-057",
+    "text": "Part of the ceiling collapsed. Reference 57.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-057",
+    "text": "My child is trapped behind the locked door. Reference 57.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-058",
+    "text": "There is a gas smell beside the boiler. Reference 58.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-058",
+    "text": "There are flames in the kitchen and it is on fire. Reference 58.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-058",
+    "text": "The carbon monoxide alarm has gone off. Reference 58.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-058",
+    "text": "The socket is sparking when I touch the switch. Reference 58.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-058",
+    "text": "Water is pouring through the ceiling. Reference 58.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-058",
+    "text": "Part of the ceiling collapsed. Reference 58.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-058",
+    "text": "My child is trapped behind the locked door. Reference 58.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-gas-059",
+    "text": "There is a gas smell beside the boiler. Reference 59.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-fire-059",
+    "text": "There are flames in the kitchen and it is on fire. Reference 59.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-co-059",
+    "text": "The carbon monoxide alarm has gone off. Reference 59.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-electric-059",
+    "text": "The socket is sparking when I touch the switch. Reference 59.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-flood-059",
+    "text": "Water is pouring through the ceiling. Reference 59.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-structural-059",
+    "text": "Part of the ceiling collapsed. Reference 59.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "RED-trapped-059",
+    "text": "My child is trapped behind the locked door. Reference 59.",
+    "expected": "P1",
+    "red": true
+  },
+  {
+    "id": "ROUTINE-plumbing-000",
+    "text": "The kitchen tap is dripping. Reference 0.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-000",
+    "text": "One radiator is cold. Reference 0.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-000",
+    "text": "The lock is stiff but the door still secures. Reference 0.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-000",
+    "text": "The washing machine is not spinning. Reference 0.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-000",
+    "text": "There is mould around the bathroom window. Reference 0.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-001",
+    "text": "The kitchen tap is dripping. Reference 1.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-001",
+    "text": "One radiator is cold. Reference 1.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-001",
+    "text": "The lock is stiff but the door still secures. Reference 1.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-001",
+    "text": "The washing machine is not spinning. Reference 1.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-001",
+    "text": "There is mould around the bathroom window. Reference 1.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-002",
+    "text": "The kitchen tap is dripping. Reference 2.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-002",
+    "text": "One radiator is cold. Reference 2.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-002",
+    "text": "The lock is stiff but the door still secures. Reference 2.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-002",
+    "text": "The washing machine is not spinning. Reference 2.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-002",
+    "text": "There is mould around the bathroom window. Reference 2.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-003",
+    "text": "The kitchen tap is dripping. Reference 3.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-003",
+    "text": "One radiator is cold. Reference 3.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-003",
+    "text": "The lock is stiff but the door still secures. Reference 3.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-003",
+    "text": "The washing machine is not spinning. Reference 3.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-003",
+    "text": "There is mould around the bathroom window. Reference 3.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-004",
+    "text": "The kitchen tap is dripping. Reference 4.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-004",
+    "text": "One radiator is cold. Reference 4.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-004",
+    "text": "The lock is stiff but the door still secures. Reference 4.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-004",
+    "text": "The washing machine is not spinning. Reference 4.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-004",
+    "text": "There is mould around the bathroom window. Reference 4.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-005",
+    "text": "The kitchen tap is dripping. Reference 5.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-005",
+    "text": "One radiator is cold. Reference 5.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-005",
+    "text": "The lock is stiff but the door still secures. Reference 5.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-005",
+    "text": "The washing machine is not spinning. Reference 5.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-005",
+    "text": "There is mould around the bathroom window. Reference 5.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-006",
+    "text": "The kitchen tap is dripping. Reference 6.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-006",
+    "text": "One radiator is cold. Reference 6.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-006",
+    "text": "The lock is stiff but the door still secures. Reference 6.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-006",
+    "text": "The washing machine is not spinning. Reference 6.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-006",
+    "text": "There is mould around the bathroom window. Reference 6.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-007",
+    "text": "The kitchen tap is dripping. Reference 7.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-007",
+    "text": "One radiator is cold. Reference 7.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-007",
+    "text": "The lock is stiff but the door still secures. Reference 7.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-007",
+    "text": "The washing machine is not spinning. Reference 7.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-007",
+    "text": "There is mould around the bathroom window. Reference 7.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-008",
+    "text": "The kitchen tap is dripping. Reference 8.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-008",
+    "text": "One radiator is cold. Reference 8.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-008",
+    "text": "The lock is stiff but the door still secures. Reference 8.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-008",
+    "text": "The washing machine is not spinning. Reference 8.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-008",
+    "text": "There is mould around the bathroom window. Reference 8.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-009",
+    "text": "The kitchen tap is dripping. Reference 9.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-009",
+    "text": "One radiator is cold. Reference 9.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-009",
+    "text": "The lock is stiff but the door still secures. Reference 9.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-009",
+    "text": "The washing machine is not spinning. Reference 9.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-009",
+    "text": "There is mould around the bathroom window. Reference 9.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-010",
+    "text": "The kitchen tap is dripping. Reference 10.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-010",
+    "text": "One radiator is cold. Reference 10.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-010",
+    "text": "The lock is stiff but the door still secures. Reference 10.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-010",
+    "text": "The washing machine is not spinning. Reference 10.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-010",
+    "text": "There is mould around the bathroom window. Reference 10.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-011",
+    "text": "The kitchen tap is dripping. Reference 11.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-011",
+    "text": "One radiator is cold. Reference 11.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-011",
+    "text": "The lock is stiff but the door still secures. Reference 11.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-011",
+    "text": "The washing machine is not spinning. Reference 11.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-011",
+    "text": "There is mould around the bathroom window. Reference 11.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-012",
+    "text": "The kitchen tap is dripping. Reference 12.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-012",
+    "text": "One radiator is cold. Reference 12.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-012",
+    "text": "The lock is stiff but the door still secures. Reference 12.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-012",
+    "text": "The washing machine is not spinning. Reference 12.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-012",
+    "text": "There is mould around the bathroom window. Reference 12.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-013",
+    "text": "The kitchen tap is dripping. Reference 13.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-013",
+    "text": "One radiator is cold. Reference 13.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-013",
+    "text": "The lock is stiff but the door still secures. Reference 13.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-013",
+    "text": "The washing machine is not spinning. Reference 13.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-013",
+    "text": "There is mould around the bathroom window. Reference 13.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-014",
+    "text": "The kitchen tap is dripping. Reference 14.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-014",
+    "text": "One radiator is cold. Reference 14.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-014",
+    "text": "The lock is stiff but the door still secures. Reference 14.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-014",
+    "text": "The washing machine is not spinning. Reference 14.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-014",
+    "text": "There is mould around the bathroom window. Reference 14.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-015",
+    "text": "The kitchen tap is dripping. Reference 15.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-015",
+    "text": "One radiator is cold. Reference 15.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-015",
+    "text": "The lock is stiff but the door still secures. Reference 15.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-015",
+    "text": "The washing machine is not spinning. Reference 15.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-015",
+    "text": "There is mould around the bathroom window. Reference 15.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-016",
+    "text": "The kitchen tap is dripping. Reference 16.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-016",
+    "text": "One radiator is cold. Reference 16.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-016",
+    "text": "The lock is stiff but the door still secures. Reference 16.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-016",
+    "text": "The washing machine is not spinning. Reference 16.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-016",
+    "text": "There is mould around the bathroom window. Reference 16.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-017",
+    "text": "The kitchen tap is dripping. Reference 17.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-017",
+    "text": "One radiator is cold. Reference 17.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-017",
+    "text": "The lock is stiff but the door still secures. Reference 17.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-017",
+    "text": "The washing machine is not spinning. Reference 17.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-017",
+    "text": "There is mould around the bathroom window. Reference 17.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-018",
+    "text": "The kitchen tap is dripping. Reference 18.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-018",
+    "text": "One radiator is cold. Reference 18.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-018",
+    "text": "The lock is stiff but the door still secures. Reference 18.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-018",
+    "text": "The washing machine is not spinning. Reference 18.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-018",
+    "text": "There is mould around the bathroom window. Reference 18.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-plumbing-019",
+    "text": "The kitchen tap is dripping. Reference 19.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-heating-019",
+    "text": "One radiator is cold. Reference 19.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-lock-019",
+    "text": "The lock is stiff but the door still secures. Reference 19.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-appliance-019",
+    "text": "The washing machine is not spinning. Reference 19.",
+    "expected": "P3",
+    "red": false
+  },
+  {
+    "id": "ROUTINE-mould-019",
+    "text": "There is mould around the bathroom window. Reference 19.",
+    "expected": "P3",
+    "red": false
+  }
+]
