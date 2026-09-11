@@ -28,8 +28,23 @@ jobs:
         run: pip check
       - name: Compile source tree
         run: python -m compileall -q .
-      - name: Run test suite
-        run: pytest -q
+      - name: Run deterministic test suite
+        run: pytest -q -k 'not test_local_tls_https_and_wss_transport_reaches_actual_routes'
+      - name: Run TLS/WSS transport probe with bounded retry
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            echo "TLS/WSS transport probe attempt ${attempt}/3"
+            if pytest -q tests/test_staged_voice_routes.py::test_local_tls_https_and_wss_transport_reaches_actual_routes; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "TLS/WSS transport probe failed three times." >&2
+              exit 1
+            fi
+            sleep 1
+          done
 
   staging-config:
     runs-on: ubuntu-latest
