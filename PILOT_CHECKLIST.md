@@ -20,6 +20,8 @@ that successfully ran Python 3.13.15.
 
 2026-09-10: External preflight advanced without enabling live traffic. Test credentials validate; Twilio and OpenAI read-only authentication passed; the dedicated Twilio test number is voice-capable with all live routes blank; 84 targeted voice tests passed; and a secret-free checksum-verified cloud bundle was created under `evidence\external-preflight-20260910-1645`. No paid host was created and no call was placed.
 
+2026-09-11/12: Cloud validation subsequently proved Gemini credential availability, synthetic voice tenant readiness and Twilio webhook readiness. A sanitized provider probe confirmed the configured test number belongs to the Twilio account, routes by HTTPS POST to `/voice/inbound`, and is distinct from the human transfer destination. Canonical PR #25 passed Cloud CI and Security CI and was merged to `main` as `1f4ba147124731b46b281878d771fcd9e58ee789`.
+
 ## Local Acceptance
 
 - [x] Source/evidence manifest matches the final tested tree.
@@ -32,17 +34,19 @@ that successfully ran Python 3.13.15.
 
 ## External Test Environment
 
-- [ ] Dedicated synthetic tenant and test number; live business number untouched.
+- [x] Dedicated synthetic tenant and test number; live business number untouched.
 - [ ] Managed database migration/rollback and provider backup/restore rehearsed.
 - [ ] Private secret injection; defaults removed; rotation owner named.
 - [ ] Trusted HTTPS/WSS, exact forwarded URLs, request limits, and edge rate limits.
 - [ ] Dashboard/admin/database private; staff authentication and least privilege.
 - [ ] Structured redacted logs, alerts, tracing, incident response, and rollback.
 - [ ] Twilio HTTP/WSS signatures demonstrated from provider traffic.
-- [ ] OpenAI model/project access and Realtime session schema demonstrated.
-- [ ] Staffed human transfer and no-answer fallback demonstrated.
+- [ ] Gemini model/project access and Live session schema demonstrated on the canonical deployment.
+- [ ] Staffed human transfer and no-answer fallback demonstrated on the canonical deployment.
 
 ## One Controlled Call
+
+Use `CONTROLLED_GEMINI_CALL_RUNBOOK.md` for the exact evidence sequence.
 
 - [ ] Separate owner approval for the call and test window.
 - [ ] Synthetic caller/property only; AI side effects disabled.
