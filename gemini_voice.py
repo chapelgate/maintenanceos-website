@@ -161,6 +161,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             raise vb.VoiceProtocolError("invalid_or_duplicate_call_session")
         vb._ACTIVE_CALL_SESSIONS.add(call_session_id)
         stream_sid = str(start.get("streamSid") or "")
+        call_sid = str(start.get("callSid") or "")
 
         model = os.getenv("GEMINI_LIVE_MODEL", GEMINI_MODEL_DEFAULT).strip() or GEMINI_MODEL_DEFAULT
         voice = os.getenv("GEMINI_LIVE_VOICE", GEMINI_VOICE_DEFAULT).strip() or GEMINI_VOICE_DEFAULT
@@ -187,8 +188,14 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                 if transfer_required.is_set():
                     return
                 transfer_required.set()
+                transferred = False
                 with suppress(Exception):
-                    vb.record_call_interruption(call_session_id, "caller_requested_human")
+                    transferred = await asyncio.to_thread(vb._request_live_human_transfer, call_sid)
+                with suppress(Exception):
+                    vb.record_call_interruption(
+                        call_session_id,
+                        "caller_requested_human" if transferred else "human_transfer_failed",
+                    )
                 await vb._safe_close(websocket, 1000)
                 if not lifecycle_closed:
                     with suppress(Exception):

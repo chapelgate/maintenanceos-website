@@ -168,7 +168,6 @@ def _stream_token(call_session_id: int, call_sid: str) -> str:
 def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
     stream_url = public_stream_url()
     status_url = public_stream_status_url()
-    transfer_number = os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER", "")
     voice = escape(twilio_tts_voice())
     language = escape(twilio_tts_language())
     token = _stream_token(call_session_id, call_sid)
@@ -184,11 +183,30 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
         f'<Parameter name="stream_token" value="{escape(token)}" />'
         "</Stream>"
         "</Connect>"
-        f'<Say language="{language}" voice="{voice}">{escape(UNVERIFIED_ACTION_FALLBACK)}</Say>'
-        f"<Dial>{escape(transfer_number)}</Dial>"
-        f'<Say language="{language}" voice="{voice}">The transfer was not answered. If there is immediate danger, call 999.</Say>'
+        f'<Say language="{language}" voice="{voice}">Sorry, the call was interrupted before I could finish taking the details. Please call Chapelgate again.</Say>'
         "</Response>"
     )
+
+
+def _request_live_human_transfer(call_sid: str) -> bool:
+    transfer_number = os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER", "").strip()
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
+    if not call_sid or not transfer_number or not account_sid or not auth_token:
+        return False
+    from twilio.rest import Client as TwilioClient
+    voice = escape(twilio_tts_voice())
+    language = escape(twilio_tts_language())
+    twiml = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<Response>'
+        f'<Say language="{language}" voice="{voice}">One moment while I put you through.</Say>'
+        f'<Dial>{escape(transfer_number)}</Dial>'
+        f'<Say language="{language}" voice="{voice}">Sorry, nobody was available. Please call Chapelgate again later.</Say>'
+        '</Response>'
+    )
+    TwilioClient(account_sid, auth_token).calls(call_sid).update(twiml=twiml)
+    return True
 
 
 def create_call_session(call_sid: str, caller: str, client_id: int) -> int:

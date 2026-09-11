@@ -1,0 +1,64 @@
+name: MaintenanceOS OpenAI Explicit Transfer Parity
+
+on:
+  push:
+    branches: [explicit-transfer-only-20260911]
+    paths:
+      - scripts/apply_openai_explicit_transfer_fix.py
+      - .github/workflows/openai-explicit-transfer-autopatch.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: explicit-transfer-only-20260911
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply OpenAI transfer parity patch
+        run: python scripts/apply_openai_explicit_transfer_fix.py
+      - name: Add OpenAI parity regression tests
+        run: |
+          cat > tests/test_openai_explicit_transfer_only.py <<'PY'
+          import inspect
+          import voice_bridge
+
+          def test_openai_explicit_transfer_uses_live_call_update():
+              source = inspect.getsource(voice_bridge.handle_twilio_media_stream)
+              assert '_request_live_human_transfer' in source
+              assert 'reason == "caller_requested_human"' in source
+              assert 'human_transfer_failed' in source
+
+          def test_partial_transcript_does_not_drive_transfer():
+              source = inspect.getsource(voice_bridge.handle_twilio_media_stream)
+              delta = source.split('conversation.item.input_audio_transcription.delta', 1)[1].split(
+                  'conversation.item.input_audio_transcription.completed', 1
+              )[0]
+              assert 'request_transfer' not in delta
+              assert 'record_safety_observation' not in delta
+
+          def test_completed_transcript_transfers_only_for_clear_human_request():
+              source = inspect.getsource(voice_bridge.handle_twilio_media_stream)
+              completed = source.split('conversation.item.input_audio_transcription.completed', 1)[1].split(
+                  'conversation.item.input_audio_transcription.failed', 1
+              )[0]
+              assert 'explicit_human' in completed
+              assert 'caller_requested_human' in completed
+              assert 'deterministic_escalation' not in completed
+          PY
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Run focused provider/voice suite
+        run: python -m pytest -q tests/test_openai_explicit_transfer_only.py tests/test_explicit_transfer_only.py tests/test_gemini_provider.py tests/test_voice_bridge.py tests/test_staged_voice_routes.py
+      - name: Commit verified parity changes
+        run: |
+          git config user.name 'maintenanceos-cloud-bot'
+          git config user.email 'maintenanceos-cloud-bot@users.noreply.github.com'
+          git add voice_bridge.py tests/test_openai_explicit_transfer_only.py
+          git commit -m 'Align OpenAI fallback with explicit-transfer-only policy'
+          git push origin HEAD:explicit-transfer-only-20260911

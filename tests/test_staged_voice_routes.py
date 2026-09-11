@@ -213,7 +213,7 @@ def test_signed_inbound_route_fails_closed_to_human_fallback(staged_routes):
     response = _signed_post(client, "/voice/inbound", params)
     assert response.status_code == 200
     assert "The automated service is unavailable." in response.text
-    assert "<Dial>+440000000099</Dial>" in response.text
+    assert "<Dial>" not in response.text
     assert "<Stream" not in response.text
     with session_factory() as session:
         calls = session.query(CallSession).all()

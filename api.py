@@ -349,16 +349,15 @@ async def voice_inbound(request:Request):
         raise HTTPException(400,"Missing CallSid")
     tenant_id=configured_voice_client_id()
     if tenant_id is None:
-        return Response(inbound_fallback_twiml("The automated service is unavailable.",os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER","")),media_type="application/xml")
+        return Response(inbound_fallback_twiml("The automated service is unavailable."),media_type="application/xml")
     try:
         call_session_id=create_call_session(call_sid,caller,tenant_id)
     except (SQLAlchemyError,TenantAccessError):
-        return Response(inbound_fallback_twiml("The automated service is unavailable.",os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER","")),media_type="application/xml")
+        return Response(inbound_fallback_twiml("The automated service is unavailable."),media_type="application/xml")
     if not voice_ready():
         record_call_interruption(call_session_id,"voice_not_ready")
         msg="The automated service is unavailable."
-        transfer=os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER","")
-        return Response(inbound_fallback_twiml(msg,transfer),media_type="application/xml")
+        return Response(inbound_fallback_twiml(msg),media_type="application/xml")
     return Response(inbound_stream_twiml(call_session_id,call_sid),media_type="application/xml")
 
 @app.post("/voice/stream-status")
