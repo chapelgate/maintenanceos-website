@@ -215,10 +215,14 @@ def test_voice_ready_rejects_deprecated_realtime_model(monkeypatch):
 def test_twiml_builders_escape_stream_bind_and_transfer(monkeypatch):
     monkeypatch.setenv("PUBLIC_BASE_URL", "https://pilot.example.com")
     monkeypatch.setenv("TWILIO_HUMAN_TRANSFER_NUMBER", "+441234567890")
+    monkeypatch.setenv("TWILIO_TTS_LANGUAGE", "en-GB")
+    monkeypatch.setenv("TWILIO_TTS_VOICE", "Polly.Amy")
     monkeypatch.setenv("APP_SECRET", "s" * 32)
     fallback = inbound_fallback_twiml("Voice <not> live", "+441234567890")
     assert "Voice &lt;not&gt; live" in fallback
     assert "<Dial>+441234567890</Dial>" in fallback
+    assert 'language="en-GB"' in fallback
+    assert 'voice="Polly.Amy"' in fallback
 
     twiml = inbound_stream_twiml(42, "CA-test")
     assert 'url="wss://pilot.example.com/voice/media-stream"' in twiml
@@ -227,6 +231,8 @@ def test_twiml_builders_escape_stream_bind_and_transfer(monkeypatch):
     assert "stream_token" in twiml
     assert "<Dial>+441234567890</Dial>" in twiml
     assert "Do not assume that a contractor, emergency service, human operator" in twiml
+    assert 'language="en-GB"' in twiml
+    assert 'voice="Polly.Amy"' in twiml
 
 
 def test_voice_escalation_keeps_deterministic_safety_authority():
@@ -255,6 +261,9 @@ def test_realtime_session_configures_input_transcription(monkeypatch):
     assert session["tools"] == []
     assert session["tool_choice"] == "none"
     assert "backend deterministic safety engine has final authority" in session["instructions"]
+    assert "British English" in session["instructions"]
+    assert "999" in session["instructions"]
+    assert "911" in session["instructions"]
 
 
 def test_connected_start_media_stop_and_duplicate_media(monkeypatch):

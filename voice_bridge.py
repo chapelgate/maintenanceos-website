@@ -31,6 +31,8 @@ from webhook_security import dedicated_test_number_ready,public_provider_ingress
 
 
 SYSTEM_PROMPT = """You are a UK property maintenance receptionist.
+Speak natural British English and use UK terminology throughout.
+For emergencies, the UK emergency number is 999. Never tell a UK caller to call 911.
 Gather repair details concisely. Do not give safety certification or unsafe DIY instructions.
 Never tell a caller that a possible danger is safe or probably fine.
 If the caller asks for a person, is threatening, raises safeguarding/legal issues, or you are uncertain, escalate.
@@ -89,6 +91,16 @@ def realtime_enabled() -> bool:
     return os.getenv("ENABLE_REALTIME_VOICE", "false").lower() == "true"
 
 
+def twilio_tts_voice() -> str:
+    value = os.getenv("TWILIO_TTS_VOICE", "Polly.Amy").strip()
+    return value if re.fullmatch(r"[A-Za-z0-9.-]+", value) else "Polly.Amy"
+
+
+def twilio_tts_language() -> str:
+    value = os.getenv("TWILIO_TTS_LANGUAGE", "en-GB").strip()
+    return value if re.fullmatch(r"[A-Za-z]{2}-[A-Za-z]{2}", value) else "en-GB"
+
+
 def realtime_model_supported() -> bool:
     return os.getenv("OPENAI_REALTIME_MODEL", "") in SUPPORTED_REALTIME_MODELS
 
@@ -132,13 +144,18 @@ def voice_ready() -> bool:
 
 
 def inbound_fallback_twiml(message: str, transfer_number: str = "") -> str:
+    voice = escape(twilio_tts_voice())
+    language = escape(twilio_tts_language())
     dial = ""
     if transfer_number:
-        dial = f'<Say voice="alice">Please hold while I transfer you.</Say><Dial>{escape(transfer_number)}</Dial>'
+        dial = (
+            f'<Say language="{language}" voice="{voice}">Please hold while I transfer you.</Say>'
+            f'<Dial>{escape(transfer_number)}</Dial>'
+        )
     return (
         '<?xml version="1.0" encoding="UTF-8"?>'
         "<Response>"
-        f'<Say voice="alice">{escape(message)}</Say>'
+        f'<Say language="{language}" voice="{voice}">{escape(message)}</Say>'
         f"{dial}"
         "</Response>"
     )
@@ -152,11 +169,13 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
     stream_url = public_stream_url()
     status_url = public_stream_status_url()
     transfer_number = os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER", "")
+    voice = escape(twilio_tts_voice())
+    language = escape(twilio_tts_language())
     token = _stream_token(call_session_id, call_sid)
     return (
         '<?xml version="1.0" encoding="UTF-8"?>'
         "<Response>"
-        '<Say voice="alice">This call uses an automated assistant and live transcription. '
+        f'<Say language="{language}" voice="{voice}">This call uses an automated assistant and live transcription. '
         "Say human or press zero at any time to be transferred.</Say>"
         "<Connect>"
         f'<Stream url="{escape(stream_url)}" statusCallback="{escape(status_url)}" statusCallbackMethod="POST">'
@@ -165,9 +184,9 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
         f'<Parameter name="stream_token" value="{escape(token)}" />'
         "</Stream>"
         "</Connect>"
-        f'<Say voice="alice">{escape(UNVERIFIED_ACTION_FALLBACK)}</Say>'
+        f'<Say language="{language}" voice="{voice}">{escape(UNVERIFIED_ACTION_FALLBACK)}</Say>'
         f"<Dial>{escape(transfer_number)}</Dial>"
-        '<Say voice="alice">The transfer was not answered. If there is immediate danger, call 999.</Say>'
+        f'<Say language="{language}" voice="{voice}">The transfer was not answered. If there is immediate danger, call 999.</Say>'
         "</Response>"
     )
 
