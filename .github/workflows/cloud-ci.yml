@@ -8,26 +8,98 @@ permissions:
   contents: read
 jobs:
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       PYTHONPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python-version }}
+          cache: pip
       - run: python -m pip install --upgrade pip
       - run: pip install -r requirements.txt
-      - run: python -m compileall -q .
-      - run: pytest -q
+      - name: Verify dependency consistency
+        run: pip check
+      - name: Compile source tree
+        run: python -m compileall -q .
+      - name: Run test suite
+        run: pytest -q
+
+  staging-config:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATABASE_URL: postgresql+psycopg://maintenanceos:synthetic@db.invalid:5432/maintenanceos
+      APP_SECRET: ci-synthetic-app-secret-not-for-runtime
+      INTERNAL_API_TOKEN: ci-synthetic-internal-token-not-for-runtime
+      INTERNAL_API_CLIENT_ID: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate locked-down staging compose configuration
+        run: docker compose -f docker-compose.staging.yml config > staging-compose-rendered.yml
+      - name: Assert provider ingress and live channels remain disabled
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'ENABLE_PUBLIC_PROVIDER_INGRESS: "false"' staging-compose-rendered.yml
+          grep -q 'ENABLE_REALTIME_VOICE: "false"' staging-compose-rendered.yml
+          grep -q 'ENABLE_LIVE_EMAIL: "false"' staging-compose-rendered.yml
+          grep -q 'ENABLE_LIVE_MESSAGING: "false"' staging-compose-rendered.yml
+          grep -q 'ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE: "false"' staging-compose-rendered.yml
+      - name: Remove rendered config containing synthetic values
+        if: always()
+        run: rm -f staging-compose-rendered.yml
 
   container-build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: Build production container
         run: docker build -t maintenanceos:${{ github.sha }} .
       - name: Verify non-root runtime contract
         run: test "$(docker image inspect maintenanceos:${{ github.sha }} --format '{{.Config.User}}')" = "maintenanceos"
+      - name: Smoke-test production container health endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --rm \
+            --name maintenanceos-smoke \
+            -p 127.0.0.1:18000:8000 \
+            -e ENABLE_REALTIME_VOICE=false \
+            -e DATABASE_URL=sqlite:////tmp/maintenanceos-smoke.db \
+            maintenanceos:${{ github.sha }}
+          trap 'docker logs maintenanceos-smoke || true; docker stop maintenanceos-smoke || true' EXIT
+          python - <<'PY'
+          import json
+          import time
+          import urllib.request
+
+          url = "http://127.0.0.1:18000/health"
+          last_error = None
+          for _ in range(30):
+              try:
+                  with urllib.request.urlopen(url, timeout=2) as response:
+                      payload = json.load(response)
+                  if response.status == 200 and payload.get("ok") is True and payload.get("realtime_voice") is False:
+                      break
+                  raise RuntimeError(f"unexpected health payload: {payload!r}")
+              except Exception as exc:
+                  last_error = exc
+                  time.sleep(1)
+          else:
+              raise SystemExit(f"container health check failed: {last_error}")
+          PY
+      - name: Record image metadata
+        run: docker image inspect maintenanceos:${{ github.sha }} > maintenanceos-image-inspect.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maintenanceos-image-metadata-${{ github.sha }}
+          path: maintenanceos-image-inspect.json
+          retention-days: 14
