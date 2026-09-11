@@ -1,6 +1,7 @@
 # Controlled Test Call Runbook
 
-This runbook does not authorise external configuration or a telephone call.
+This runbook governs future controlled tests; it does not erase or supersede calls
+that have already occurred.
 
 ## Locally Proven
 
@@ -11,15 +12,34 @@ This runbook does not authorise external configuration or a telephone call.
 - AI side-effect kill switch with human/manual operations preserved.
 - Payment/refund/compensation/client-money actions absent from the model tool surface and false confirmations blocked before audio playback.
 
-The exact local evidence is the complete `pytest` suite. A passing local test is not evidence of carrier, network, audio, transcription, or live Realtime behavior.
+The exact local evidence is the complete `pytest` suite. A passing synthetic test is
+not evidence of carrier, network, audio, transcription, transfer or live Realtime
+behaviour.
 
-## Staged Or Live Proof Required
+## Real-call checkpoint
 
-- Twilio webhook and WebSocket signatures as delivered through the selected public ingress.
-- Twilio `connected -> start -> media -> stop`, DTMF, stream status callbacks, fallback `<Dial>`, and reconnect behavior over the real carrier path.
-- OpenAI Realtime WebSocket connection, PCMU audio exchange, transcript timing, output transcript availability, and upstream failure behavior.
-- UK caller audio involving noise, accents, interruptions, and ambiguous safety language.
-- Human transfer answer/no-answer behavior and operational follow-up delivery.
+Real receptionist calls have already been made. Their telemetry must be reconciled
+before declaring the live-call acceptance state. Until provider evidence is imported,
+each live criterion is PASS only when supported by objective evidence, FAIL when an
+observed defect establishes failure, and UNKNOWN otherwise.
+
+Known user-observed failures requiring correction and retest:
+
+- Voice/accent quality was unacceptable for the intended UK receptionist experience.
+- Emergency wording exposed US-oriented guidance; UK emergency/safety wording must be deterministic.
+- Human-transfer behaviour did not provide the intended staffed fallback path.
+
+Do not report "no live call has occurred" merely because provider evidence has not
+yet been imported.
+
+## Live evidence to reconcile
+
+- Twilio webhook and WebSocket signatures as delivered through the public ingress.
+- Twilio `connected -> start -> media -> stop`, DTMF, stream status callbacks, fallback `<Dial>`, reconnect and final call status.
+- OpenAI Realtime WebSocket connection, PCMU audio exchange, transcript timing, output transcript availability, upstream errors and latency.
+- UK caller audio involving noise, accents, interruptions and ambiguous safety language.
+- Human-transfer destination, answer/no-answer behaviour and operational follow-up delivery.
+- Call SID/timestamp/duration mapping so every acceptance decision can point to a specific test call without publishing caller PII.
 
 ## Kill Switch
 
@@ -29,17 +49,14 @@ Set the database-backed `AI_SIDE_EFFECTS` runtime control to disabled through th
 
 1. Disable `AI_SIDE_EFFECTS` and confirm the control reads disabled.
 2. Disable `ENABLE_REALTIME_VOICE` if the audio bridge itself must stop.
-3. Restore the prior test webhook only after the active test call has ended.
-4. Preserve call, escalation, audit, and critical-safety records for review; do not delete or downgrade them.
-5. Do not re-enable until the failed staged test has an incident note and an authorised reviewer agrees to retry.
+3. Restore the prior webhook only after the active test call has ended.
+4. Preserve call, escalation, audit and critical-safety records for review; do not delete or downgrade them.
+5. Do not re-enable a failed path until the failure has an incident note and an authorised reviewer agrees to retry.
 
 ## Known Limits
 
-- No live Twilio/OpenAI call has passed yet.
-- Text fixtures do not validate speech recognition quality.
-- SQLite is suitable for the isolated local test but production concurrency requires the configured transactional database to be staged under load.
+- The repository does not currently contain the private provider telemetry needed to grade the calls already made.
+- Text fixtures do not validate speech recognition or voice quality.
+- SQLite is suitable for isolated tests but production concurrency requires the configured transactional database to be staged under load.
 - Evidence reuse detection is exact-fingerprint detection, not forensic image analysis.
-- Public ingress rate limiting, central monitoring, and managed-database failover are
-  test-environment requirements, not locally proven controls.
-- This runbook cannot authorise configuration or a call; those are separate owner
-  approval boundaries.
+- Public ingress rate limiting, central monitoring and managed-database failover require external-environment evidence.
