@@ -7,13 +7,21 @@ import urllib.parse
 from typing import Any
 
 APP_ID = "maintenanceos"
+ENABLE_ENV = "MAINTENANCEOS_RSFM_INTEGRATION_ENABLED"
+TOKEN_ENV = "RSFM_MAINTENANCEOS_TOKEN"
 
 
 def _config() -> tuple[str, str, str] | None:
-    if os.environ.get("RSFM_INTEGRATION_ENABLED", "0") != "1":
+    """Return dedicated MaintenanceOS RSFM config when explicitly enabled.
+
+    Generic RSFM switches/tokens intentionally do not activate MaintenanceOS.
+    This prevents a shared worker setting from accidentally granting this app
+    an RSFM identity.
+    """
+    if os.environ.get(ENABLE_ENV, "0") != "1":
         return None
     base_url = os.environ.get("RSFM_CONTROL_PLANE_URL", "").strip()
-    token = os.environ.get("RSFM_CONTROL_PLANE_TOKEN", "").strip()
+    token = os.environ.get(TOKEN_ENV, "").strip()
     tenant = os.environ.get("RSFM_TENANT_ID", "chapelgate").strip()
     if not base_url or not token or not tenant:
         return None
