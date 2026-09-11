@@ -14,12 +14,13 @@ from idempotency import ai_side_effects_enabled
 from ingress_security import rate_setting_valid
 from models import RuntimeControl,SessionLocal
 from operational_logging import structured_logging_enabled
+from provider_runtime import provider_ready, voice_provider
+from gemini_voice import gemini_ready
 from security import app_secret_ready
 from schema_health import schema_report
 from tenant_security import internal_api_tenant_ready,isolated_voice_tenant_ready
-from voice_bridge import realtime_model_supported,realtime_voice_supported,transcription_model_supported,voice_ready
+from voice_bridge import realtime_model_supported,realtime_voice_supported,transcription_model_supported
 from webhook_security import dedicated_test_number_ready,public_https_origin_ready,public_provider_ingress_ready
-
 
 load_dotenv()
 
@@ -32,30 +33,55 @@ def _disabled(name: str) -> bool:
     return not _enabled(name)
 
 
+def _provider_selected() -> bool:
+    return voice_provider() in {"openai", "gemini"}
+
+
+def _provider_credential_ready() -> bool:
+    provider = voice_provider()
+    if provider == "gemini":
+        return gemini_ready()
+    if provider == "openai":
+        return bool(os.getenv("OPENAI_API_KEY"))
+    return False
+
+
+def _provider_runtime_supported() -> bool:
+    provider = voice_provider()
+    if provider == "gemini":
+        return gemini_ready()
+    if provider == "openai":
+        return bool(realtime_model_supported() and transcription_model_supported() and realtime_voice_supported())
+    return False
+
+
 def _credential_formats_valid() -> bool:
-    values = {
+    base = {
         key: os.getenv(key, "")
         for key in (
             "TWILIO_ACCOUNT_SID",
             "TWILIO_AUTH_TOKEN",
             "TWILIO_PHONE_NUMBER",
             "TWILIO_HUMAN_TRANSFER_NUMBER",
-            "OPENAI_API_KEY",
         )
     }
-    return all(validate_credentials(values).values())
+    checks = validate_credentials(base)
+    if not all(checks.values()):
+        return False
+    provider = voice_provider()
+    if provider == "gemini":
+        return gemini_ready()
+    if provider == "openai":
+        openai_checks = validate_credentials({"OPENAI_API_KEY": os.getenv("OPENAI_API_KEY", "")})
+        return all(openai_checks.values())
+    return False
 
 
 def _kill_switch_recorded_disabled() -> bool:
     try:
         with SessionLocal() as session:
             control = session.get(RuntimeControl, "AI_SIDE_EFFECTS")
-            return bool(
-                control
-                and not control.enabled
-                and (control.updated_by or "").strip()
-                and (control.reason or "").strip()
-            )
+            return bool(control and not control.enabled and (control.updated_by or "").strip() and (control.reason or "").strip())
     except Exception:
         return False
 
@@ -79,11 +105,7 @@ def _voice_timing_valid() -> bool:
 
 def _staged_database_configured() -> bool:
     url = os.getenv("DATABASE_URL", "").strip().lower()
-    return bool(
-        url.startswith(("postgresql://", "postgresql+psycopg://"))
-        and os.getenv("DATABASE_DEPLOYMENT_MODE", "").strip().lower() == "managed_test"
-        and _enabled("DATABASE_TLS_REQUIRED")
-    )
+    return bool(url.startswith(("postgresql://", "postgresql+psycopg://")) and os.getenv("DATABASE_DEPLOYMENT_MODE", "").strip().lower() == "managed_test" and _enabled("DATABASE_TLS_REQUIRED"))
 
 
 CHECKS={
@@ -92,10 +114,14 @@ CHECKS={
     "app_secret_changed": app_secret_ready,
     "internal_api_secured": lambda: len(os.getenv("INTERNAL_API_TOKEN", "")) >= 32,
     "internal_api_tenant": internal_api_tenant_ready,
+    "ai_provider_selected": _provider_selected,
+    "ai_provider_credential": _provider_credential_ready,
+    "ai_provider_runtime": _provider_runtime_supported,
     "openai_key": lambda: bool(os.getenv("OPENAI_API_KEY")),
     "openai_realtime_model": realtime_model_supported,
     "openai_transcription_model": transcription_model_supported,
     "openai_realtime_voice": realtime_voice_supported,
+    "gemini_key": gemini_ready,
     "provider_credential_formats": _credential_formats_valid,
     "public_https_url": public_https_origin_ready,
     "twilio_sid": lambda: bool(os.getenv("TWILIO_ACCOUNT_SID")),
@@ -124,23 +150,20 @@ CHECKS={
     "staged_database_configured": _staged_database_configured,
 }
 
-
 LOCAL_CLOSED_KEYS = (
     "database","schema_compatible","app_secret_changed","internal_api_secured",
-    "internal_api_tenant","isolated_voice_tenant","openai_key","openai_realtime_model",
-    "openai_transcription_model","openai_realtime_voice","provider_credential_formats",
-    "dedicated_test_number","public_provider_ingress_disabled","contractor_portal_disabled",
-    "live_email_disabled","live_messaging_disabled","automatic_dispatch_disabled",
-    "remote_ai_enable_disabled","ai_side_effects_disabled","ai_kill_switch_recorded",
-    "structured_logging","http_rate_limit_configured","websocket_rate_limit_configured",
-    "voice_timing_configured",
+    "internal_api_tenant","isolated_voice_tenant","ai_provider_selected","ai_provider_credential",
+    "ai_provider_runtime","provider_credential_formats","dedicated_test_number",
+    "public_provider_ingress_disabled","contractor_portal_disabled","live_email_disabled",
+    "live_messaging_disabled","automatic_dispatch_disabled","remote_ai_enable_disabled",
+    "ai_side_effects_disabled","ai_kill_switch_recorded","structured_logging",
+    "http_rate_limit_configured","websocket_rate_limit_configured","voice_timing_configured",
 )
 PUBLIC_TEST_CONFIG_KEYS = (
     "database","schema_compatible","staged_database_configured","app_secret_changed",
-    "internal_api_secured","internal_api_tenant","isolated_voice_tenant","openai_key",
-    "openai_realtime_model","openai_transcription_model","openai_realtime_voice",
-    "provider_credential_formats","dedicated_test_number","public_https_url",
-    "twilio_signatures","public_provider_ingress","contractor_portal_disabled",
+    "internal_api_secured","internal_api_tenant","isolated_voice_tenant","ai_provider_selected",
+    "ai_provider_credential","ai_provider_runtime","provider_credential_formats","dedicated_test_number",
+    "public_https_url","twilio_signatures","public_provider_ingress","contractor_portal_disabled",
     "live_email_disabled","live_messaging_disabled","automatic_dispatch_disabled",
     "remote_ai_enable_disabled","ai_side_effects_disabled","ai_kill_switch_recorded",
     "structured_logging","http_rate_limit_configured","websocket_rate_limit_configured",
@@ -153,20 +176,18 @@ def report():
     for key,check in CHECKS.items():
         try:results[key]=bool(check())
         except Exception:results[key]=False
-    results["voice_ready"]=voice_ready()
+    results["voice_ready"]=provider_ready()
     results["local_pre_live_ready"]=all(results[key] for key in LOCAL_CLOSED_KEYS)
     results["public_test_config_ready"]=all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and not results["realtime_voice_enabled"]
     results["controlled_call_config_ready"]=all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and results["voice_ready"]
     results["live_ready"]=results["controlled_call_config_ready"]
     return results
 
-
 PROFILE_KEYS = {
     "local-closed": "local_pre_live_ready",
     "public-test-config": "public_test_config_ready",
     "controlled-call-config": "controlled_call_config_ready",
 }
-
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description="Emit boolean-only MaintenanceOS readiness")
