@@ -11,30 +11,38 @@ The historical copy under `chapelgate/cloud-workers/jobs/maintenanceos` is a clo
 ## Verified canonical state
 
 - Canonical `main` includes the Gemini Live provider, provider-aware routing/readiness, UK voice hardening and deterministic safety/lifecycle controls.
-- PR #25, `Require explicit caller request for live human transfer`, passed the latest MaintenanceOS Cloud CI and Security CI and was squash-merged to `main` as commit `1f4ba147124731b46b281878d771fcd9e58ee789`.
-- Gemini and the retained OpenAI fallback now use the same human-transfer policy: normal provider/stream failures do not silently dial the human transfer number; live transfer is reserved for an explicit caller transfer request/control.
+- PR #25, `Require explicit caller request for live human transfer`, passed MaintenanceOS Cloud CI and Security CI and was merged as `1f4ba147124731b46b281878d771fcd9e58ee789`.
+- Gemini and OpenAI fallback use the same explicit-request human-transfer policy.
 - Consequential business actions remain controlled by deterministic MaintenanceOS rules, not by the model.
-- The canonical deterministic suite includes local acceptance, API/security boundaries, lifecycle integrity, backup/restore, Gemini provider and explicit-transfer regression coverage.
+
+## Verified DigitalOcean deployment — 2026-09-12
+
+- Canonical source commit `3d7e94801ac0d58b91f3b050c37ac407dbe6a2f8` was transferred to the existing `chapelgate-production-01` DigitalOcean host and built there.
+- Permanent Docker Compose deployment now runs an isolated MaintenanceOS API, worker and PostgreSQL 16 database.
+- API is bound to host loopback only at `127.0.0.1:18000`; it is not exposed to public customer traffic.
+- `/health` returned `ok=true`, version `v1-pilot`, with realtime voice false.
+- API and Postgres reported healthy. Worker reported `MaintenanceOS V1 worker running`.
+- API/worker restart was performed; API returned healthy after restart and the dedicated Docker Postgres volume remained present.
+- Runtime flags were directly verified with realtime voice, public provider ingress, live email, live messaging, contractor portal and remote AI side-effect enable all disabled.
+- Existing Holiday Let Operator workload was left intact.
+- No live call, customer traffic, live email/message or consequential AI action was enabled during deployment verification.
 
 ## Cloud evidence already recovered
 
-The prior Render validation lane proved Gemini credential availability, 255 passing tests, synthetic voice tenant readiness, Twilio webhook readiness and Render red-team success. A sanitized read-only Twilio probe confirmed the configured test number is in the account, the HTTPS POST voice webhook targets `/voice/inbound`, the transfer number is distinct, and recent provider call/transfer records exist without committing phone numbers, credentials or raw call SIDs.
+Prior Render validation proved Gemini credential availability, 255 passing tests, synthetic voice tenant readiness, Twilio webhook readiness and red-team success. A sanitized provider probe confirmed the configured test number belongs to the Twilio account, routes by HTTPS POST to `/voice/inbound`, and is distinct from the human transfer destination.
 
-## Infrastructure work attempted on 2026-09-12
+## Current controlled-call gate
 
-- A new canonical Render web service could not be created because the Render connector cannot fetch the private canonical repository directly.
-- A new Railway canonical service could not be provisioned because the current Railway plan has reached its free resource provisioning limit.
-- A dedicated Render `maintenanceos-pilot-pg` database could not be provisioned because the Render Hobby workspace is at its 25-service cap.
-- A GitHub Actions deployment-mirror experiment correctly failed closed because a repository-scoped Actions token cannot read the separate private canonical repository. No false mirror was accepted as canonical proof.
-- No unrelated database was reused, no existing project service was deleted, no live Chapelgate number was changed, and no paid infrastructure was provisioned.
+The DigitalOcean runtime/persistence gate is now substantially closed. The controlled Gemini call is NOT yet authorised/configured on this deployment.
 
-## Remaining external gates before live customer calls
+A boolean-only readiness run on the DigitalOcean deployment currently reports the provider/test-number credentials and public HTTPS/WSS test configuration absent from that runtime. The legacy local test environment contains Twilio test credentials, but secrets have not been copied blindly into production. Gemini credentials were previously proven in cloud validation but are not currently present in the DigitalOcean runtime.
 
-1. Free or add two cloud resource slots (one canonical MaintenanceOS runtime and one isolated MaintenanceOS Postgres), or explicitly connect a separate dedicated database/runtime provider.
-2. Authorise the private canonical GitHub repository to the chosen runtime provider so the deployed source is exactly this repository/commit lineage.
-3. Deploy the canonical build with the existing Gemini/Twilio credentials and an isolated `DATABASE_URL`; verify health/readiness and persistence/restart behaviour.
-4. Run one fresh controlled Gemini test-number call and record provider-delivered WSS/media-stream, British voice/accent, transcript/content capture, interruption/barge-in and explicit human-transfer/no-answer evidence.
-5. Complete the live-call acceptance checklist; only then start a limited monitored customer pilot.
+Before one controlled call:
+1. inject the approved Gemini and dedicated Twilio test credentials into the DigitalOcean secret environment without committing or logging them;
+2. establish a trusted HTTPS/WSS endpoint for the dedicated test-number route only;
+3. rerun `readiness.py --profile public-test-config` and require pass with realtime still disabled;
+4. enable realtime/provider ingress only for the controlled test window;
+5. run the one-call script in `CONTROLLED_GEMINI_CALL_RUNBOOK.md`, capture redacted evidence, then disable realtime/provider ingress again.
 
 ## Agent rule
 
