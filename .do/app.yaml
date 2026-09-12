@@ -1,0 +1,102 @@
+name: maintenanceos
+region: lon
+services:
+  - name: web
+    github:
+      repo: chapelgate/maintenanceos-v1-pilot
+      branch: main
+      deploy_on_push: false
+    source_dir: /
+    dockerfile_path: Dockerfile
+    http_port: 8000
+    instance_count: 1
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 15
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    envs:
+      - key: DATABASE_DEPLOYMENT_MODE
+        value: managed_test
+        scope: RUN_TIME
+        type: GENERAL
+      - key: DATABASE_TLS_REQUIRED
+        value: "true"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: PUBLIC_BASE_URL
+        value: ${_self.PUBLIC_URL}
+        scope: RUN_TIME
+        type: GENERAL
+      - key: VOICE_PROVIDER
+        value: gemini
+        scope: RUN_TIME
+        type: GENERAL
+      - key: GEMINI_LIVE_MODEL
+        value: gemini-3.1-flash-live-preview
+        scope: RUN_TIME
+        type: GENERAL
+      - key: GEMINI_LIVE_VOICE
+        value: Kore
+        scope: RUN_TIME
+        type: GENERAL
+      - key: TWILIO_TTS_LANGUAGE
+        value: en-GB
+        scope: RUN_TIME
+        type: GENERAL
+      - key: TWILIO_TTS_VOICE
+        value: Polly.Amy
+        scope: RUN_TIME
+        type: GENERAL
+      - key: VERIFY_TWILIO_SIGNATURES
+        value: "true"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: ENABLE_PUBLIC_PROVIDER_INGRESS
+        value: "false"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: ENABLE_REALTIME_VOICE
+        value: "false"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: ENABLE_LIVE_EMAIL
+        value: "false"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: ENABLE_LIVE_MESSAGING
+        value: "false"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE
+        value: "false"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: ENABLE_CONTRACTOR_PORTAL
+        value: "false"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: EMAIL_MODE
+        value: mock
+        scope: RUN_TIME
+        type: GENERAL
+      - key: ENABLE_STRUCTURED_LOGGING
+        value: "true"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: DEFAULT_AUTO_DISPATCH_LIMIT
+        value: "0"
+        scope: RUN_TIME
+        type: GENERAL
+ingress:
+  rules:
+    - component:
+        name: web
+      match:
+        path:
+          prefix: /
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED
