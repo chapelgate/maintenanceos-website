@@ -56,6 +56,8 @@ services:
     security_opt:
       - no-new-privileges:true
     command: ["python","worker.py"]
+    healthcheck:
+      disable: true
     environment:
       DATABASE_URL: postgresql+psycopg://maintenanceos:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD securely}@db:5432/maintenanceos
       DATABASE_DEPLOYMENT_MODE: local_compose
