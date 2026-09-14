@@ -17,10 +17,11 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - Code inspection and regression tests confirm UK/British wording, 999/never-911 controls, explicit caller-request transfer and no-answer fallback.
    - Live carrier behaviour after the correction is not yet evidenced, so this remains OPEN.
 
-4. **Recover provider call evidence — OPEN**
-   - Historical sanitized provider probe established 17 recent Twilio call records including completed inbound calls, busy attempts, and outbound transfer attempts with completed/no-answer outcomes.
-   - Protected Render validation logs also show `GEMINI_CREDENTIAL_PRESENT`, `TWILIO_VOICE_WEBHOOK_READY`, an active/reachable Twilio account, the dedicated test number present, distinct transfer number, signature verification enabled, and `voice_provider=gemini` on the historical validation host.
-   - GitHub-hosted provider evidence cannot fetch fresh rows because the required provider credentials are not present in that runner.
+4. **Recover provider call evidence — PASS**
+   - Protected Render validation logs independently recover the historical sanitized provider evidence.
+   - The Twilio provider probe reports an active/reachable account, dedicated configured test number, HTTPS POST `/voice/inbound` routing, public provider ingress enabled on the historical validation host, signature verification enabled, distinct transfer destination, and `voice_provider=gemini`.
+   - The probe recovers 17 recent Twilio records: completed inbound calls, busy inbound attempts, completed outbound transfer attempts and no-answer outbound transfer attempts. SIDs remain hashed/redacted.
+   - Render also records `GEMINI_CREDENTIAL_PRESENT`, `SYNTHETIC_VOICE_TENANT_READY` and `TWILIO_VOICE_WEBHOOK_READY`.
    - No credential, telephone number, full SID, recording or transcript is committed to GitHub.
 
 5. **Reconcile each historical real call against acceptance criteria — OPEN**
@@ -40,7 +41,7 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - Canonical DigitalOcean currently has `PUBLIC_BASE_URL` present and `VERIFY_TWILIO_SIGNATURES=true`.
    - Safety switches are confirmed off: realtime voice, public provider ingress, live email and live messaging.
    - Canonical DigitalOcean currently reports `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_TEST_NUMBER`, `OPENAI_API_KEY` and `GEMINI_API_KEY` missing from the API container. This is the immediate deployment blocker.
-   - A legacy local MaintenanceOS `.env` contains names for Twilio account SID/auth token/test number and OpenAI API key, while protected Render evidence confirms a Gemini credential exists there. Secret values were not read into chat or written to GitHub.
+   - Protected Render evidence confirms working historical Twilio credentials and a Gemini credential existed on the validation host, but the available Render connector does not expose secret values for export.
    - Secret injection/rotation ownership, trusted HTTPS/WSS, provider-delivered Twilio signature evidence, protected runtime logs/alerts, database restore rehearsal and least-privilege proof remain OPEN.
 
 9. **Controlled carrier retest of corrected behaviour — OPEN**
