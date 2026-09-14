@@ -855,6 +855,12 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         twilio_task = asyncio.create_task(from_twilio())
         openai_task = asyncio.create_task(from_openai())
         done, pending = await asyncio.wait({twilio_task, openai_task}, return_when=asyncio.FIRST_COMPLETED)
+        if stop_received.is_set() and not twilio_task.done():
+            # A provider transport may close immediately after Twilio sends stop.
+            # Let the Twilio task finish its bounded transcript grace and persist call closure.
+            await twilio_task
+            done.add(twilio_task)
+            pending.discard(twilio_task)
         for task in done:
             error = task.exception()
             if error:
