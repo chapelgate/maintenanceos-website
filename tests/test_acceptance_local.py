@@ -409,7 +409,7 @@ def test_at30_failed_consequential_write_never_returns_success(local_db,monkeypa
 def test_at09_at15_safety_transfer_does_not_depend_on_database_write(monkeypatch):
     from test_voice_bridge import FakeOpenAI, FakeTwilio, configure_bridge, connected_start_events
     twilio=FakeTwilio(connected_start_events())
-    openai=FakeOpenAI([{"type":"conversation.item.input_audio_transcription.delta","item_id":"i","delta":"I smell gas"}])
+    openai=FakeOpenAI([{"type":"conversation.item.input_audio_transcription.completed","item_id":"i","transcript":"I smell gas"}])
     configure_bridge(monkeypatch,openai)
     monkeypatch.setattr(voice_bridge,"record_safety_observation",lambda *_:True)
     monkeypatch.setattr(voice_bridge,"record_call_interruption",lambda *_:(_ for _ in ()).throw(SQLAlchemyError("db down")))
