@@ -413,9 +413,15 @@ def test_local_tls_https_and_wss_transport_reaches_actual_routes(
         assert [item["type"] for item in fake_openai.sent].count(
             "input_audio_buffer.append"
         ) == 1
-        with session_factory() as session:
-            call_row = session.query(CallSession).filter_by(call_sid=call["CallSid"]).one()
-            assert call_row.ended_at is not None
+        deadline = time.monotonic() + 2
+        while True:
+            with session_factory() as session:
+                call_row = session.query(CallSession).filter_by(call_sid=call["CallSid"]).one()
+                if call_row.ended_at is not None:
+                    break
+            if time.monotonic() >= deadline:
+                raise AssertionError("call end was not persisted before timeout")
+            time.sleep(0.01)
     finally:
         server.should_exit = True
         thread.join(timeout=5)
