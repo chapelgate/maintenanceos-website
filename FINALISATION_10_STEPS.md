@@ -25,7 +25,9 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - No credential, telephone number, full SID, recording or transcript is committed to GitHub.
 
 5. **Reconcile each historical real call against acceptance criteria — OPEN**
-   - Provider metadata establishes that calls and transfers occurred, but protected runtime logs are still required for webhook/WSS, realtime events, latency and per-call acceptance mapping.
+   - Protected Render runtime logs now prove accepted carrier WebSocket connections at `/voice/media-stream` during historical real-call windows and successful `/voice/stream-status` callbacks returning HTTP 204.
+   - Provider metadata independently establishes the corresponding completed inbound calls and completed/no-answer transfer attempts.
+   - Remaining evidence needed before PASS is provider-delivered signature result at the per-call level, realtime/Gemini event sequence and latency, persisted intake/transcript evidence where approved, and complete per-call acceptance mapping.
 
 6. **Harden and regression-test transfer / UK behaviour — PASS**
    - Current main has deterministic regressions for OpenAI/Gemini UK wording, 999/never-911, explicit-request-only human transfer, en-GB/Polly.Amy fallback and no-answer fallback.
