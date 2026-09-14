@@ -29,7 +29,7 @@ jobs:
       - name: Compile source tree
         run: python -m compileall -q .
       - name: Run deterministic test suite
-        run: pytest -q -k 'not test_local_tls_https_and_wss_transport_reaches_actual_routes'
+        run: timeout 180s pytest -vv -x -k 'not test_local_tls_https_and_wss_transport_reaches_actual_routes'
       - name: Run TLS/WSS transport probe with bounded retry
         shell: bash
         run: |
