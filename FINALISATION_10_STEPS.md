@@ -25,9 +25,10 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - No credential, telephone number, full SID, recording or transcript is committed to GitHub.
 
 5. **Reconcile each historical real call against acceptance criteria — OPEN**
-   - Protected Render runtime logs now prove accepted carrier WebSocket connections at `/voice/media-stream` during historical real-call windows and successful `/voice/stream-status` callbacks returning HTTP 204.
-   - Provider metadata independently establishes the corresponding completed inbound calls and completed/no-answer transfer attempts.
-   - Remaining evidence needed before PASS is provider-delivered signature result at the per-call level, realtime/Gemini event sequence and latency, persisted intake/transcript evidence where approved, and complete per-call acceptance mapping.
+   - Protected Render runtime logs now correlate multiple historical carrier windows with `POST /voice/inbound` HTTP 200, accepted `WebSocket /voice/media-stream` connections and `/voice/stream-status` HTTP 204 callbacks.
+   - Provider metadata independently establishes the corresponding completed inbound calls plus completed/no-answer outbound transfer attempts. The recovered 17-call sample includes several completed inbound calls from 5 to 63 seconds and both completed and no-answer transfer attempts.
+   - Structured request logging is present for carrier ingress, including redacted request IDs and request duration without exposing credentials or full call identifiers.
+   - Remaining evidence needed before PASS is provider-delivered signature result at the per-call level, the live Gemini event sequence/latency for the same calls, persisted intake/transcript evidence where approved, and complete per-call acceptance mapping.
 
 6. **Harden and regression-test transfer / UK behaviour — PASS**
    - Current main has deterministic regressions for OpenAI/Gemini UK wording, 999/never-911, explicit-request-only human transfer, en-GB/Polly.Amy fallback and no-answer fallback.
@@ -39,8 +40,9 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - Host audit confirms the MaintenanceOS compose project at `/srv/chapelgate/maintenanceos/app-new/docker-compose.yml`, API/worker/Postgres running, `/health` returns `ok=true`, `version=v1-pilot`, `realtime_voice=false`, and the API is bound to loopback `127.0.0.1:18000`.
    - A trusted HTTPS endpoint now terminates at `maintenanceos.167-99-202-163.sslip.io` and only proxies the three `/voice/*` provider routes; non-provider paths return 404.
    - TLS verification succeeds externally and a POST to `/voice/inbound` fails closed with HTTP 503 while provider ingress remains disabled.
-   - Current protected runtime logs plus final canonical-source verification are still required before this step can PASS.
-   - Administrative SSH is currently rejecting the previously working key while the Droplet remains active; the DigitalOcean web console also reports SSH Connection Lost. This is an access-path blocker, not evidence of application failure.
+   - Administrative recovery is now active through the DigitalOcean Recovery ISO. The real 49 GB root partition `/dev/vda1` is mounted at `/mnt`; `/mnt/root/.ssh/authorized_keys` has been recreated with restrictive permissions and no application/database data has been modified by the recovery procedure.
+   - GitHub username key import was attempted in the rescue shell but returned no matching public keys, so the remaining access task is to restore one of the Droplet's registered trusted SSH keys and boot back from the hard drive.
+   - Current protected runtime logs plus normal-boot host verification remain required before this step can PASS.
 
 8. **Close external environment evidence — OPEN**
    - Canonical DigitalOcean currently has `PUBLIC_BASE_URL` present and `VERIFY_TWILIO_SIGNATURES=true`.
