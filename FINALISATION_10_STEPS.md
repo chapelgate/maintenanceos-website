@@ -10,7 +10,7 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - `INPUTS_NEEDED_NEXT.md` overrides stale pre-call wording where they conflict.
 
 2. **Verify cloud CI baseline — PASS**
-   - Current main `103e4720a694af31a244af0dabe1b2e7ea74eb66` passes Cloud CI and Security CI.
+   - Cloud CI and Security CI pass on current main.
    - Python 3.12/3.13 deterministic tests, TLS/WSS probe, production container build, non-root runtime, locked staging configuration, dependency audit, SBOM and secret-pattern guard pass.
 
 3. **Audit the three observed live-call defects — OPEN**
@@ -19,23 +19,29 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
 
 4. **Recover provider call evidence — OPEN**
    - Historical sanitized provider probe established 17 recent Twilio call records including completed inbound calls, busy attempts, and outbound transfer attempts with completed/no-answer outcomes.
-   - A new GitHub-hosted provider-evidence workflow ran successfully, but its redacted artifact reports provider credentials unavailable in that runner; therefore it did not recover fresh call rows.
+   - Protected Render validation logs also show `GEMINI_CREDENTIAL_PRESENT`, `TWILIO_VOICE_WEBHOOK_READY`, an active/reachable Twilio account, the dedicated test number present, distinct transfer number, signature verification enabled, and `voice_provider=gemini` on the historical validation host.
+   - GitHub-hosted provider evidence cannot fetch fresh rows because the required provider credentials are not present in that runner.
    - No credential, telephone number, full SID, recording or transcript is committed to GitHub.
 
 5. **Reconcile each historical real call against acceptance criteria — OPEN**
    - Provider metadata establishes that calls and transfers occurred, but protected runtime logs are still required for webhook/WSS, realtime events, latency and per-call acceptance mapping.
 
 6. **Harden and regression-test transfer / UK behaviour — PASS**
-   - Latest main adds deterministic regressions for OpenAI/Gemini UK wording, 999/never-911, explicit-request-only human transfer, en-GB/Polly.Amy fallback and no-answer fallback.
-   - Cloud CI and Security CI pass on the same commit.
+   - Current main has deterministic regressions for OpenAI/Gemini UK wording, 999/never-911, explicit-request-only human transfer, en-GB/Polly.Amy fallback and no-answer fallback.
+   - Cloud CI and Security CI pass.
 
 7. **Verify canonical DigitalOcean runtime — OPEN**
-   - `chapelgate-production-01` exists in `lon1`, is active and has monitoring/private networking.
+   - `chapelgate-production-01` is active in `lon1` with monitoring/private networking.
    - DigitalOcean confirms daily backups enabled with a 7-day retention policy.
-   - Current host process/log/config verification is still required before this step can PASS.
+   - Host audit confirms the MaintenanceOS compose project at `/srv/chapelgate/maintenanceos/app-new/docker-compose.yml`, API/worker/Postgres running, `/health` returns `ok=true`, `version=v1-pilot`, `realtime_voice=false`, and the API is bound to loopback `127.0.0.1:18000`.
+   - Current protected runtime logs and full config evidence are still required before this step can PASS.
 
 8. **Close external environment evidence — OPEN**
-   - Secret injection/rotation owner, trusted HTTPS/WSS, provider-delivered Twilio signature evidence, protected runtime logs/alerts, database restore rehearsal and least-privilege proof still require current canonical-deployment evidence.
+   - Canonical DigitalOcean currently has `PUBLIC_BASE_URL` present and `VERIFY_TWILIO_SIGNATURES=true`.
+   - Safety switches are confirmed off: realtime voice, public provider ingress, live email and live messaging.
+   - Canonical DigitalOcean currently reports `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_TEST_NUMBER`, `OPENAI_API_KEY` and `GEMINI_API_KEY` missing from the API container. This is the immediate deployment blocker.
+   - A legacy local MaintenanceOS `.env` contains names for Twilio account SID/auth token/test number and OpenAI API key, while protected Render evidence confirms a Gemini credential exists there. Secret values were not read into chat or written to GitHub.
+   - Secret injection/rotation ownership, trusted HTTPS/WSS, provider-delivered Twilio signature evidence, protected runtime logs/alerts, database restore rehearsal and least-privilege proof remain OPEN.
 
 9. **Controlled carrier retest of corrected behaviour — OPEN**
    - This is a retest, not a first call.
