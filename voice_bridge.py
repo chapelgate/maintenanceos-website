@@ -753,9 +753,6 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     if len(transcript) > MAX_TRANSCRIPT_CHARS:
                         raise VoiceProtocolError("input_transcript_too_large")
                     transcript_parts[item_id] = transcript
-                    if record_safety_observation(call_session_id, transcript_parts[item_id]):
-                        await request_transfer("deterministic_safety", already_recorded=True)
-                        return
                 elif event_type == "conversation.item.input_audio_transcription.completed":
                     item_id = str(event.get("item_id") or "current")
                     transcript = str(event.get("transcript") or transcript_parts.get(item_id, ""))
