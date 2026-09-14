@@ -40,6 +40,7 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - A trusted HTTPS endpoint now terminates at `maintenanceos.167-99-202-163.sslip.io` and only proxies the three `/voice/*` provider routes; non-provider paths return 404.
    - TLS verification succeeds externally and a POST to `/voice/inbound` fails closed with HTTP 503 while provider ingress remains disabled.
    - Current protected runtime logs plus final canonical-source verification are still required before this step can PASS.
+   - Administrative SSH is currently rejecting the previously working key while the Droplet remains active; the DigitalOcean web console also reports SSH Connection Lost. This is an access-path blocker, not evidence of application failure.
 
 8. **Close external environment evidence — OPEN**
    - Canonical DigitalOcean currently has `PUBLIC_BASE_URL` present and `VERIFY_TWILIO_SIGNATURES=true`.
@@ -49,6 +50,7 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - The trusted HTTPS provider endpoint is established and externally TLS-valid. Readiness profile semantics were corrected so pre-call public configuration keeps provider ingress disabled, while the controlled-call profile requires ingress plus live voice.
    - Managed production PostgreSQL remains a production hardening item rather than a blocker for the isolated controlled-call test; the compose Postgres persistence gate was already proven separately.
    - Provider-delivered signature evidence on the corrected deployment, protected runtime logs/alerts, database restore rehearsal and least-privilege proof remain OPEN.
+   - Restoring protected administrative access is required before the latest canonical readiness profile adjustment can be deployed and re-verified on the host.
 
 9. **Controlled carrier retest of corrected behaviour — OPEN**
    - This is a retest, not a first call.
