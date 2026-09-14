@@ -7,6 +7,7 @@ def _all_checks(value=True):
 
 def test_public_test_profile_requires_ingress_disabled(monkeypatch):
     checks = _all_checks(True)
+    checks["staged_database_configured"] = lambda: False
     checks["public_provider_ingress"] = lambda: False
     checks["public_provider_ingress_disabled"] = lambda: True
     checks["realtime_voice_enabled"] = lambda: False
@@ -19,6 +20,7 @@ def test_public_test_profile_requires_ingress_disabled(monkeypatch):
 
 def test_controlled_call_profile_requires_live_ingress_and_voice(monkeypatch):
     checks = _all_checks(True)
+    checks["staged_database_configured"] = lambda: False
     checks["public_provider_ingress"] = lambda: True
     checks["public_provider_ingress_disabled"] = lambda: False
     checks["realtime_voice_enabled"] = lambda: True

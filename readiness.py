@@ -164,7 +164,7 @@ LOCAL_CLOSED_KEYS = (
     "http_rate_limit_configured","websocket_rate_limit_configured","voice_timing_configured",
 )
 PUBLIC_TEST_CONFIG_KEYS = (
-    "database","schema_compatible","staged_database_configured","app_secret_changed",
+    "database","schema_compatible","app_secret_changed",
     "internal_api_secured","internal_api_tenant","isolated_voice_tenant","ai_provider_selected",
     "ai_provider_credential","ai_provider_runtime","provider_credential_formats","dedicated_test_number",
     "public_https_url","twilio_signatures","public_provider_ingress_disabled","contractor_portal_disabled",
