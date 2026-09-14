@@ -1,0 +1,37 @@
+name: MaintenanceOS Provider Evidence
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/reconcile_live_call_evidence.py'
+      - '.github/workflows/provider-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Reconcile redacted Twilio call metadata
+        run: python scripts/reconcile_live_call_evidence.py > provider-evidence.json
+      - name: Assert artifact contains no obvious phone-number or SID plaintext
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -Eq '\+[0-9]{7,}|AC[a-fA-F0-9]{32}|CA[a-fA-F0-9]{32}' provider-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maintenanceos-provider-evidence-${{ github.sha }}
+          path: provider-evidence.json
+          retention-days: 14
