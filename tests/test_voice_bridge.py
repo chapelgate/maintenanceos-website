@@ -312,7 +312,7 @@ def test_partial_transcript_is_not_safety_routed_before_completion(monkeypatch):
 
     assert not [item for item in observations if item[0] == "safety"]
     assert ("close", 7) in observations
-    assert twilio.closed
+    assert not twilio.closed
 
 
 @pytest.mark.parametrize(
