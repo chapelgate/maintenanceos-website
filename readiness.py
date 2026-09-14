@@ -66,13 +66,17 @@ def _credential_formats_valid() -> bool:
         )
     }
     checks = validate_credentials(base)
-    if not all(checks.values()):
+    twilio_checks = (
+        "twilio_account_sid", "twilio_auth_token", "twilio_phone_number",
+        "human_transfer_number", "distinct_transfer_number",
+    )
+    if not all(checks[key] for key in twilio_checks):
         return False
     provider = voice_provider()
     if provider == "gemini":
         return gemini_ready()
     if provider == "openai":
-        openai_checks = validate_credentials({"OPENAI_API_KEY": os.getenv("OPENAI_API_KEY", "")})
+        openai_checks = validate_credentials({**base, "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY", "")})
         return all(openai_checks.values())
     return False
 
@@ -163,11 +167,15 @@ PUBLIC_TEST_CONFIG_KEYS = (
     "database","schema_compatible","staged_database_configured","app_secret_changed",
     "internal_api_secured","internal_api_tenant","isolated_voice_tenant","ai_provider_selected",
     "ai_provider_credential","ai_provider_runtime","provider_credential_formats","dedicated_test_number",
-    "public_https_url","twilio_signatures","public_provider_ingress","contractor_portal_disabled",
+    "public_https_url","twilio_signatures","public_provider_ingress_disabled","contractor_portal_disabled",
     "live_email_disabled","live_messaging_disabled","automatic_dispatch_disabled",
     "remote_ai_enable_disabled","ai_side_effects_disabled","ai_kill_switch_recorded",
     "structured_logging","http_rate_limit_configured","websocket_rate_limit_configured",
     "voice_timing_configured",
+)
+CONTROLLED_CALL_CONFIG_KEYS = tuple(
+    "public_provider_ingress" if key == "public_provider_ingress_disabled" else key
+    for key in PUBLIC_TEST_CONFIG_KEYS
 )
 
 
@@ -179,7 +187,7 @@ def report():
     results["voice_ready"]=provider_ready()
     results["local_pre_live_ready"]=all(results[key] for key in LOCAL_CLOSED_KEYS)
     results["public_test_config_ready"]=all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and not results["realtime_voice_enabled"]
-    results["controlled_call_config_ready"]=all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and results["voice_ready"]
+    results["controlled_call_config_ready"]=all(results[key] for key in CONTROLLED_CALL_CONFIG_KEYS) and results["voice_ready"]
     results["live_ready"]=results["controlled_call_config_ready"]
     return results
 
