@@ -290,7 +290,7 @@ def test_connected_start_media_stop_and_duplicate_media(monkeypatch):
     assert not [item for item in observations if item[0] == "interrupt"]
 
 
-def test_danger_partial_processed_before_immediate_disconnect(monkeypatch):
+def test_partial_transcript_is_not_safety_routed_before_completion(monkeypatch):
     monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0.05")
     events = connected_start_events() + [
         {"event": "media", "sequenceNumber": "2", "media": {"chunk": "1", "payload": "YQ=="}},
@@ -305,12 +305,12 @@ def test_danger_partial_processed_before_immediate_disconnect(monkeypatch):
 
     def safety(call_id, text):
         observations.append(("safety", text))
-        return "smell gas" in text.lower()
+        return True
 
     monkeypatch.setattr(voice_bridge, "record_safety_observation", safety)
     asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
 
-    assert observations[0] == ("safety", "I smell gas")
+    assert not [item for item in observations if item[0] == "safety"]
     assert ("close", 7) in observations
     assert twilio.closed
 
