@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import urllib.parse
 import urllib.request
 from typing import Any
 
@@ -24,7 +25,8 @@ def _config(app_id: str) -> tuple[str, str, str] | None:
     base = os.getenv("RSFM_CONTROL_PLANE_URL", "").rstrip("/")
     token = os.getenv(_ALLOWED[app_id], "").strip()
     tenant = os.getenv("RSFM_TENANT_ID", "chapelgate").strip()
-    if not base or not token or not tenant:
+    parsed = urllib.parse.urlsplit(base)
+    if parsed.scheme != "https" or not parsed.netloc or not token or not tenant:
         return None
     return base, token, tenant
 
@@ -51,7 +53,7 @@ def publish_record(app_id: str, record_class: str, kind: str, data: dict[str, An
         "x-rsfm-app-id": app_id,
     })
     try:
-        with urllib.request.urlopen(req, timeout=3) as response:
+        with urllib.request.urlopen(req, timeout=3) as response:  # nosec B310 - base is validated as HTTPS above
             return 200 <= response.status < 300
     except Exception:
         return False
