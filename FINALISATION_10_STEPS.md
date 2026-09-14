@@ -37,22 +37,20 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
 7. **Verify canonical DigitalOcean runtime — OPEN**
    - `chapelgate-production-01` is active in `lon1` with monitoring/private networking.
    - DigitalOcean confirms daily backups enabled with a 7-day retention policy.
-   - Host audit confirms the MaintenanceOS compose project at `/srv/chapelgate/maintenanceos/app-new/docker-compose.yml`, API/worker/Postgres running, `/health` returns `ok=true`, `version=v1-pilot`, `realtime_voice=false`, and the API is bound to loopback `127.0.0.1:18000`.
-   - A trusted HTTPS endpoint now terminates at `maintenanceos.167-99-202-163.sslip.io` and only proxies the three `/voice/*` provider routes; non-provider paths return 404.
-   - TLS verification succeeds externally and a POST to `/voice/inbound` fails closed with HTTP 503 while provider ingress remains disabled.
-   - Administrative recovery is now active through the DigitalOcean Recovery ISO. The real 49 GB root partition `/dev/vda1` is mounted at `/mnt`; `/mnt/root/.ssh/authorized_keys` has been recreated with restrictive permissions and no application/database data has been modified by the recovery procedure.
-   - GitHub username key import was attempted in the rescue shell but returned no matching public keys, so the remaining access task is to restore one of the Droplet's registered trusted SSH keys and boot back from the hard drive.
-   - Current protected runtime logs plus normal-boot host verification remain required before this step can PASS.
+   - Historical host audit confirms the MaintenanceOS compose project at `/srv/chapelgate/maintenanceos/app-new/docker-compose.yml`, API/worker/Postgres running, `/health` returning `ok=true`, `version=v1-pilot`, `realtime_voice=false`, and the API bound to loopback `127.0.0.1:18000`.
+   - The Recovery ISO path was successfully reached over SSH. The real root partition was mounted at `/mnt`; the missing usr-merge links `/bin`, `/lib`, and `/lib64` were repaired and `chroot /mnt /bin/true` then passed. Docker 29.8.0 and Caddy 2.6.2 are present in the installed system.
+   - Recovery mode was switched back to Boot from Hard Drive and the Droplet was powered off/on through DigitalOcean. The control plane reports the Droplet active, but current TCP 22 and HTTPS provider ingress are unreachable, so normal-boot host verification remains OPEN.
+   - A fresh post-repair snapshot `chapelgate-production-01-post-repair-2026-09-14` was captured successfully before further recovery work.
+   - A non-destructive clone from that snapshot was attempted as a fallback, but DigitalOcean rejected creation because the account Droplet limit is currently reached. No existing Droplet was deleted or rebuilt to make room.
 
 8. **Close external environment evidence — OPEN**
    - Canonical DigitalOcean currently has `PUBLIC_BASE_URL` present and `VERIFY_TWILIO_SIGNATURES=true`.
    - Safety switches are confirmed off: realtime voice, public provider ingress, live email and live messaging.
-   - Approved Twilio and Gemini credentials are now present in the DigitalOcean API runtime; the dedicated test number and distinct human-transfer number are present and validated.
-   - `TWILIO_TEST_NUMBER_CONFIRMED=true`, provider credential formats are valid, and the `local-closed` readiness profile passes with realtime/provider ingress still disabled.
-   - The trusted HTTPS provider endpoint is established and externally TLS-valid. Readiness profile semantics were corrected so pre-call public configuration keeps provider ingress disabled, while the controlled-call profile requires ingress plus live voice.
+   - Approved Twilio and Gemini credentials are present in the DigitalOcean API runtime; the dedicated test number and distinct human-transfer number are present and validated.
+   - `TWILIO_TEST_NUMBER_CONFIRMED=true`, provider credential formats are valid, and the `local-closed` readiness profile previously passed with realtime/provider ingress disabled.
+   - The trusted HTTPS provider endpoint was established and externally TLS-valid before the recovery incident. Current normal-boot reachability is OPEN because the host is not answering on the network after the hard-drive boot attempt.
    - Managed production PostgreSQL remains a production hardening item rather than a blocker for the isolated controlled-call test; the compose Postgres persistence gate was already proven separately.
    - Provider-delivered signature evidence on the corrected deployment, protected runtime logs/alerts, database restore rehearsal and least-privilege proof remain OPEN.
-   - Restoring protected administrative access is required before the latest canonical readiness profile adjustment can be deployed and re-verified on the host.
 
 9. **Controlled carrier retest of corrected behaviour — OPEN**
    - This is a retest, not a first call.
