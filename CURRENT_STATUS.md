@@ -1,6 +1,6 @@
 # MaintenanceOS Current Status
 
-Date: 2026-09-12
+Date: 2026-09-14
 
 ## Authoritative source
 
@@ -15,17 +15,18 @@ The historical copy under `chapelgate/cloud-workers/jobs/maintenanceos` is a clo
 - Gemini and OpenAI fallback use the same explicit-request human-transfer policy.
 - Consequential business actions remain controlled by deterministic MaintenanceOS rules, not by the model.
 
-## Verified DigitalOcean deployment — 2026-09-12
+## Verified DigitalOcean deployment
 
-- Canonical source commit `3d7e94801ac0d58b91f3b050c37ac407dbe6a2f8` was transferred to the existing `chapelgate-production-01` DigitalOcean host and built there.
-- Permanent Docker Compose deployment now runs an isolated MaintenanceOS API, worker and PostgreSQL 16 database.
+- Canonical source commit `3d7e94801ac0d58b91f3b050c37ac407dbe6a2f8` is deployed on DigitalOcean droplet ID `599872085`, now explicitly named `chapelgate-maintenanceos-production`, public IPv4 `167.99.202.163`.
+- Runtime was re-verified live on 2026-09-14 from the running host rather than from historical naming.
+- Live containers: `recovered-e899990-api-1`, `recovered-e899990-worker-1`, `recovered-e899990-db-1`.
+- Permanent Docker Compose deployment runs an isolated MaintenanceOS API, worker and PostgreSQL 16 database.
 - API is bound to host loopback only at `127.0.0.1:18000`; it is not exposed to public customer traffic.
 - `/health` returned `ok=true`, version `v1-pilot`, with realtime voice false.
-- API and Postgres reported healthy. Worker reported `MaintenanceOS V1 worker running`.
-- API/worker restart was performed; API returned healthy after restart and the dedicated Docker Postgres volume remained present.
-- Runtime flags were directly verified with realtime voice, public provider ingress, live email, live messaging, contractor portal and remote AI side-effect enable all disabled.
-- Existing Holiday Let Operator workload was left intact.
-- No live call, customer traffic, live email/message or consequential AI action was enabled during deployment verification.
+- API and Postgres reported healthy; worker was running.
+- Runtime flags remain intended to keep realtime voice, public provider ingress, live email, live messaging, contractor portal and remote AI side effects disabled outside a controlled test window.
+- Holiday Let Operator is also co-located on this host as a separate workload. Its presence must not be used to relabel this Droplet as HLO; MaintenanceOS is the verified primary host identity.
+- DigitalOcean daily backups are enabled at 20:00 UTC with 7-day retention.
 
 ## Cloud evidence already recovered
 
@@ -33,9 +34,9 @@ Prior Render validation proved Gemini credential availability, 255 passing tests
 
 ## Current controlled-call gate
 
-The DigitalOcean runtime/persistence gate is now substantially closed. The controlled Gemini call is NOT yet authorised/configured on this deployment.
+The DigitalOcean runtime/persistence gate is substantially closed. The controlled Gemini call is NOT yet authorised/configured on this deployment.
 
-A boolean-only readiness run on the DigitalOcean deployment currently reports the provider/test-number credentials and public HTTPS/WSS test configuration absent from that runtime. The legacy local test environment contains Twilio test credentials, but secrets have not been copied blindly into production. Gemini credentials were previously proven in cloud validation but are not currently present in the DigitalOcean runtime.
+A boolean-only readiness run on the DigitalOcean deployment previously reported the provider/test-number credentials and public HTTPS/WSS test configuration absent from that runtime. The legacy local test environment contains Twilio test credentials, but secrets must not be copied blindly into production. Gemini credentials were previously proven in cloud validation but were not present in the DigitalOcean runtime at the last readiness check.
 
 Before one controlled call:
 1. inject the approved Gemini and dedicated Twilio test credentials into the DigitalOcean secret environment without committing or logging them;
@@ -46,4 +47,4 @@ Before one controlled call:
 
 ## Agent rule
 
-All MaintenanceOS agents must begin from this repository and this status file. Do not treat chat memory, the old `cloud-workers/jobs/maintenanceos` directory, or an unverified deployment as the source of truth.
+All MaintenanceOS agents must begin from this repository and this status file. Do not treat chat memory, the old `cloud-workers/jobs/maintenanceos` directory, a historical Droplet name, or an unverified deployment as the source of truth.
