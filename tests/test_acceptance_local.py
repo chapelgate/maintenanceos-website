@@ -411,7 +411,7 @@ def test_at09_at15_safety_transfer_does_not_depend_on_database_write(monkeypatch
     twilio=FakeTwilio(connected_start_events())
     openai=FakeOpenAI([{"type":"conversation.item.input_audio_transcription.completed","item_id":"i","transcript":"I smell gas"}])
     configure_bridge(monkeypatch,openai)
-    monkeypatch.setattr(voice_bridge,"record_safety_observation",lambda *_:True)
+    monkeypatch.setattr(voice_bridge,"record_transcript_segment",lambda *_:True)
     monkeypatch.setattr(voice_bridge,"record_call_interruption",lambda *_:(_ for _ in ()).throw(SQLAlchemyError("db down")))
     monkeypatch.setattr(voice_bridge,"close_call_session",lambda *_:(_ for _ in ()).throw(SQLAlchemyError("db down")))
     asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
