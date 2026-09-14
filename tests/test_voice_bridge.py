@@ -204,6 +204,7 @@ def test_voice_ready_rejects_deprecated_realtime_model(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
     monkeypatch.setenv("OPENAI_REALTIME_MODEL", "gpt-realtime")
     monkeypatch.setenv("OPENAI_TRANSCRIPTION_MODEL", "gpt-live-transcribe")
+    monkeypatch.setenv("OPENAI_REALTIME_VOICE", "alloy")
     monkeypatch.setenv("TWILIO_ACCOUNT_SID", "AC-test")
     monkeypatch.setenv("TWILIO_AUTH_TOKEN", "token")
     monkeypatch.setenv("TWILIO_HUMAN_TRANSFER_NUMBER", "+441234567890")
