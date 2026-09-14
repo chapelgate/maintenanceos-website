@@ -37,14 +37,18 @@ Rule: fixed-checklist mode. Report PASS or OPEN only. Mark PASS only from curren
    - `chapelgate-production-01` is active in `lon1` with monitoring/private networking.
    - DigitalOcean confirms daily backups enabled with a 7-day retention policy.
    - Host audit confirms the MaintenanceOS compose project at `/srv/chapelgate/maintenanceos/app-new/docker-compose.yml`, API/worker/Postgres running, `/health` returns `ok=true`, `version=v1-pilot`, `realtime_voice=false`, and the API is bound to loopback `127.0.0.1:18000`.
-   - Current protected runtime logs and full config evidence are still required before this step can PASS.
+   - A trusted HTTPS endpoint now terminates at `maintenanceos.167-99-202-163.sslip.io` and only proxies the three `/voice/*` provider routes; non-provider paths return 404.
+   - TLS verification succeeds externally and a POST to `/voice/inbound` fails closed with HTTP 503 while provider ingress remains disabled.
+   - Current protected runtime logs plus final canonical-source verification are still required before this step can PASS.
 
 8. **Close external environment evidence — OPEN**
    - Canonical DigitalOcean currently has `PUBLIC_BASE_URL` present and `VERIFY_TWILIO_SIGNATURES=true`.
    - Safety switches are confirmed off: realtime voice, public provider ingress, live email and live messaging.
-   - Canonical DigitalOcean currently reports `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_TEST_NUMBER`, `OPENAI_API_KEY` and `GEMINI_API_KEY` missing from the API container. This is the immediate deployment blocker.
-   - Protected Render evidence confirms working historical Twilio credentials and a Gemini credential existed on the validation host, but the available Render connector does not expose secret values for export.
-   - Secret injection/rotation ownership, trusted HTTPS/WSS, provider-delivered Twilio signature evidence, protected runtime logs/alerts, database restore rehearsal and least-privilege proof remain OPEN.
+   - Approved Twilio and Gemini credentials are now present in the DigitalOcean API runtime; the dedicated test number and distinct human-transfer number are present and validated.
+   - `TWILIO_TEST_NUMBER_CONFIRMED=true`, provider credential formats are valid, and the `local-closed` readiness profile passes with realtime/provider ingress still disabled.
+   - The trusted HTTPS provider endpoint is established and externally TLS-valid. Readiness profile semantics were corrected so pre-call public configuration keeps provider ingress disabled, while the controlled-call profile requires ingress plus live voice.
+   - Managed production PostgreSQL remains a production hardening item rather than a blocker for the isolated controlled-call test; the compose Postgres persistence gate was already proven separately.
+   - Provider-delivered signature evidence on the corrected deployment, protected runtime logs/alerts, database restore rehearsal and least-privilege proof remain OPEN.
 
 9. **Controlled carrier retest of corrected behaviour — OPEN**
    - This is a retest, not a first call.
