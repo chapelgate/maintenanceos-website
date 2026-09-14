@@ -253,6 +253,7 @@ def test_voice_escalation_keeps_deterministic_safety_authority():
 def test_realtime_session_configures_input_transcription(monkeypatch):
     monkeypatch.setenv("OPENAI_REALTIME_MODEL", "gpt-realtime-2.1")
     monkeypatch.setenv("OPENAI_TRANSCRIPTION_MODEL", "gpt-live-transcribe")
+    monkeypatch.setenv("OPENAI_REALTIME_VOICE", "alloy")
     openai = FakeOpenAI()
     asyncio.run(voice_bridge._configure_realtime(openai))
     session = openai.sent[0]["session"]
