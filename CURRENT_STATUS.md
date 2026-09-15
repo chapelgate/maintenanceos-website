@@ -40,11 +40,13 @@ A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assum
 
 ### Observed 2026-09-15
 
-- `GET /health` → HTTP 200 `{"ok":true,"version":"v1-pilot","realtime_voice":true}`
+- `GET /health` → HTTP 200 `{"ok":true,"version":"v1-pilot","realtime_voice":true}` (re-checked later the same day; still true; `rndr-id` present; origin `uvicorn`)
 - That means **ENABLE_REALTIME_VOICE is currently TRUE on the live service**
 - Intended CLOSED/PRE-CALL configuration requires `ENABLE_REALTIME_VOICE=false` and `ENABLE_PUBLIC_PROVIDER_INGRESS=false`
 - `/readiness` remains HTTP 401 without internal credentials (expected)
-- Exact Render deploy ID / commit SHA / full env were **not** readable from this agent because `RENDER_API_KEY` was not present in the cloud-agent environment. Do not assume which deployment is current.
+- PR #32 (`98ff849`) is ready for review with 6/6 CI PASS. It is **not** merged: CI green does not satisfy the live runtime safety gate.
+- Authorised write routes to Render were exhausted from this agent and are all closed: no `RENDER_API_KEY`; Render API unauthenticated `401`; no Render CLI session; no Render MCP; no `render.yaml` / deploy hook in this repo; GitHub token can see only `chapelgate/maintenanceos-v1-pilot` (not `cloud-workers`); GitHub environments empty; workflows do not set live Render env vars (red-team job is localhost-only). The live `/controls/ai-side-effects` path cannot change `ENABLE_REALTIME_VOICE` (env-only; endpoint is authenticated anyway).
+- Exact Render deploy ID / commit SHA / full env remain unread. Do not assume which deployment is current.
 
 ## Intended CLOSED / PRE-CALL configuration
 
