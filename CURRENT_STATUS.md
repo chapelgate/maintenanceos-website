@@ -44,7 +44,8 @@ A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assum
 - That means **ENABLE_REALTIME_VOICE is currently TRUE on the live service**
 - Intended CLOSED/PRE-CALL configuration requires `ENABLE_REALTIME_VOICE=false` and `ENABLE_PUBLIC_PROVIDER_INGRESS=false`
 - `/readiness` remains HTTP 401 without internal credentials (expected)
-- PR #32 (`98ff849`) is ready for review with 6/6 CI PASS. It is **not** merged: CI green does not satisfy the live runtime safety gate.
+- PR #32 is open and must not be merged on CI green alone.
+- 2026-09-15 later: Andrew set `ENABLE_REALTIME_VOICE=false` and `ENABLE_PUBLIC_PROVIDER_INGRESS=false` on `maintenanceos-redteam-v2` and chose Manual Deploy → Deploy latest commit. The **new build failed** after `280 passed, 17 warnings`, `SYNTHETIC_VOICE_TENANT_READY`, then `Refusing Twilio webhook configuration: public provider ingress is not ready`. Closed-mode was recognised; the deploy path treated the intentional webhook refusal as fatal. Do not turn the safety flags back on. Canonical fix: `python render_prepare.py` / `python configure_twilio_webhooks.py` skip Twilio mutation in closed mode and exit 0. Live `/health` still showed `realtime_voice: true` after the failed deploy because the previous instance remained running.
 - Authorised write routes to Render were exhausted from this agent and are all closed: no `RENDER_API_KEY`; Render API unauthenticated `401`; no Render CLI session; no Render MCP; no `render.yaml` / deploy hook in this repo; GitHub token can see only `chapelgate/maintenanceos-v1-pilot` (not `cloud-workers`); GitHub environments empty; workflows do not set live Render env vars (red-team job is localhost-only). The live `/controls/ai-side-effects` path cannot change `ENABLE_REALTIME_VOICE` (env-only; endpoint is authenticated anyway).
 - Exact Render deploy ID / commit SHA / full env remain unread. Do not assume which deployment is current.
 
