@@ -252,13 +252,16 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                     input_tx = getattr(content, "input_transcription", None)
                     if input_tx and getattr(input_tx, "text", None):
                         text = str(input_tx.text)
-                        with suppress(Exception):
-                            vb.record_transcript_segment(call_session_id, "Caller", text)
-                        if _explicit_human_request(text):
-                            await request_human_transfer()
-                            return
+                        # Gemini streams partial hypotheses with finished=False/None.
+                        # Never Dial or persist consequential transcript until finished=True.
+                        if getattr(input_tx, "finished", None) is True:
+                            with suppress(Exception):
+                                vb.record_transcript_segment(call_session_id, "Caller", text)
+                            if _explicit_human_request(text):
+                                await request_human_transfer()
+                                return
                     output_tx = getattr(content, "output_transcription", None)
-                    if output_tx and getattr(output_tx, "text", None):
+                    if output_tx and getattr(output_tx, "text", None) and getattr(output_tx, "finished", None) is True:
                         with suppress(Exception):
                             vb.record_transcript_segment(call_session_id, "Assistant", str(output_tx.text))
                     model_turn = getattr(content, "model_turn", None)
