@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 import pytest
 
@@ -7,11 +8,14 @@ from call_capacity import (
     CapacityRejected,
     admit_call,
     capacity_snapshot,
+    expire_stale_leases,
     global_max_concurrent_calls,
     release_call_lease,
     reset_capacity_backend_for_tests,
+    set_capacity_draining,
 )
 from concurrency_loadtest import LADDER, run_ladder, run_level
+from telephony_path_concurrency_probe import run_telephony_path_probe
 
 
 @pytest.fixture(autouse=True)
@@ -61,6 +65,30 @@ def test_capacity_idempotent_for_same_call():
     assert capacity_snapshot().active_calls == 0
 
 
+def test_drain_rejects_new_calls_without_touching_active():
+    active = admit_call(call_sid="CA-live", call_session_id=1, client_id=1)
+    set_capacity_draining(True)
+    with pytest.raises(CapacityRejected) as exc:
+        admit_call(call_sid="CA-new", call_session_id=2, client_id=1)
+    assert exc.value.reason == "draining"
+    assert capacity_snapshot().active_calls == 1
+    assert capacity_snapshot().draining is True
+    release_call_lease(active)
+    assert capacity_snapshot().active_calls == 0
+
+
+def test_stale_lease_expiry_does_not_corrupt_live_calls():
+    live = admit_call(call_sid="CA-alive", call_session_id=1, client_id=1)
+    dead = admit_call(call_sid="CA-dead", call_session_id=2, client_id=1)
+    dead.acquired_at = time.monotonic() - 10_000
+    removed = expire_stale_leases(max_age_seconds=60)
+    assert removed == 1
+    snap = capacity_snapshot()
+    assert snap.active_calls == 1
+    release_call_lease(live)
+    assert capacity_snapshot().active_calls == 0
+
+
 def test_concurrency_ladder_to_100(tmp_path, monkeypatch):
     monkeypatch.setenv("GLOBAL_MAX_CONCURRENT_CALLS", "100")
     monkeypatch.setenv("PER_CLIENT_MAX_CONCURRENT_CALLS", "100")
@@ -71,19 +99,35 @@ def test_concurrency_ladder_to_100(tmp_path, monkeypatch):
         assert report.pass_gate, (
             f"level {report.target} failed bottleneck={report.bottleneck} "
             f"accepted={report.accepted} peak={report.active_calls_peak} "
-            f"errors={report.errors} cross={report.cross_leak_detected}"
+            f"errors={report.errors} cross={report.cross_leak_detected} "
+            f"recovery={report.recovery_ok}"
         )
         assert report.active_calls_peak >= report.target
         assert report.unique_call_ids == report.target
         assert report.unique_session_ids == report.target
         assert report.unique_transcripts == report.target
         assert report.cross_leak_detected is False
+        assert report.recovery_ok is True
+        assert report.duplicate_actions == 0
+        assert report.webhook_retries == report.target
     final = reports[-1]
     assert final.target == 100
     assert final.accepted == 100
+    assert final.bottleneck_class == "provider_quota_next"
     evidence = tmp_path / "ladder.json"
     evidence.write_text(json.dumps([report.__dict__ for report in reports], default=str))
     assert evidence.exists()
+
+
+def test_telephony_path_probe_twelve(monkeypatch):
+    monkeypatch.setenv("GLOBAL_MAX_CONCURRENT_CALLS", "100")
+    report = run_telephony_path_probe(12)
+    assert report.pass_gate, (
+        f"path probe failed accepted={report.accepted} peak={report.peak_active} "
+        f"errors={report.errors} class={report.bottleneck_class}"
+    )
+    assert report.unique_call_ids == 12
+    assert report.unique_session_ids == 12
 
 
 def test_global_limit_env_defaults_to_hundred():

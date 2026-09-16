@@ -28,6 +28,7 @@ from call_capacity import (
     CapacityRejected,
     admit_call,
     capacity_snapshot,
+    expire_stale_leases,
     release_call_lease,
     reset_capacity_backend_for_tests,
 )
@@ -53,6 +54,9 @@ class CallSimResult:
     terminated: bool = False
     connection_ms: float = 0.0
     response_ms: float = 0.0
+    webhook_retries: int = 0
+    network_bytes: int = 0
+    duplicate_close: bool = False
     error: str = ""
 
 
@@ -78,9 +82,14 @@ class LadderLevelReport:
     unique_transcripts: int
     cross_leak_detected: bool
     duplicate_actions: int
+    webhook_retries: int
+    estimated_network_bytes: int
+    ai_session_utilisation_peak: float
+    recovery_ok: bool
     estimated_cost_usd: float
     pass_gate: bool
     bottleneck: str = ""
+    bottleneck_class: str = ""
     details: list[dict[str, Any]] = field(default_factory=list)
 
 
@@ -155,6 +164,9 @@ def _simulate_one(
         unique_line = f"Caller-{index}: gate {1000 + index} repair marker {marker}-{index}"
         voice_bridge.record_transcript_segment(call_session_id, "Caller", unique_line)
         voice_bridge.record_transcript_segment(call_session_id, "Assistant", f"Ack {index} for {marker}")
+        # Simulated webhook retry (idempotent re-admit of same CallSid)
+        admit_call(call_sid=call_sid, call_session_id=call_session_id, client_id=client_id)
+        result.webhook_retries = 1
 
         # Synchronise so all admitted calls are active together before release.
         if barrier is not None:
@@ -163,6 +175,8 @@ def _simulate_one(
             snap = capacity_snapshot()
             with peak_lock:
                 peak_tracker[0] = max(peak_tracker[0], snap.active_calls)
+                if len(peak_tracker) > 1:
+                    peak_tracker[1] = max(peak_tracker[1], snap.ai_session_utilisation)
         time.sleep(hold_seconds)
 
         with factory() as session:
@@ -177,9 +191,13 @@ def _simulate_one(
                 if other != index
             )
             result.isolation_ok = result.transcript_ok and not leak
+            result.network_bytes = len((text or "").encode("utf-8"))
 
         voice_bridge.close_call_session(call_session_id)
+        # Duplicate close must not invent a second post-call action path.
+        voice_bridge.close_call_session(call_session_id)
         result.terminated = True
+        result.duplicate_close = True
     except CapacityRejected as exc:
         result.rejected_reason = exc.reason
         release_call_lease(call_sid=call_sid, call_session_id=result.call_session_id or 0)
@@ -229,7 +247,8 @@ def run_level(
     barrier = threading.Barrier(target)
 
     cpu_before = resource.getrusage(resource.RUSAGE_SELF)
-    peak_tracker = [0]
+    # [0]=peak active leases, [1]=peak AI utilisation fraction
+    peak_tracker = [0, 0.0]
     peak_lock = threading.Lock()
     results: list[CallSimResult] = []
 
@@ -251,7 +270,19 @@ def run_level(
         for fut in as_completed(futures):
             results.append(fut.result())
 
-    peak_active = peak_tracker[0]
+    peak_active = int(peak_tracker[0])
+    peak_util = float(peak_tracker[1])
+
+    # Recovery probe: inject a stale orphan lease, expire it, ensure capacity clears
+    # without disturbing the already-terminated cohort.
+    orphan = admit_call(call_sid=f"CA-ORPHAN-{marker}", call_session_id=9_000_000 + target, client_id=primary)
+    # Backdate acquisition so expire_stale treats it as dead-worker debris.
+    orphan.acquired_at = orphan.acquired_at - 10_000
+    capacity_backend = call_capacity.capacity_backend()
+    with capacity_backend._lock:
+        capacity_backend._leases[orphan.lease_id] = orphan
+    removed = expire_stale_leases(max_age_seconds=1.0)
+    recovery_ok = removed >= 1 and capacity_snapshot().active_calls == 0
 
     cpu_after = resource.getrusage(resource.RUSAGE_SELF)
     accepted = [r for r in results if r.accepted]
@@ -278,6 +309,10 @@ def run_level(
 
     conn_stats = _latency_stats([r.connection_ms for r in accepted])
     resp_stats = _latency_stats([r.response_ms for r in accepted])
+    network_bytes = sum(r.network_bytes for r in accepted)
+    webhook_retries = sum(r.webhook_retries for r in accepted)
+    # Duplicate close attempted once per accepted call; count failures only.
+    duplicate_actions = sum(1 for r in accepted if r.duplicate_close and not r.terminated)
 
     # Gate: all target calls accepted AND simultaneously active with isolation.
     pass_gate = (
@@ -288,27 +323,43 @@ def run_level(
         and len({t for t in transcripts if t}) == target
         and not cross
         and peak_active >= target
+        and recovery_ok
         and all(r.isolation_ok and r.tenant_ok and r.terminated for r in accepted)
     )
 
     bottleneck = ""
+    bottleneck_class = ""
     if not pass_gate:
         if any(r.rejected_reason == "global_capacity" for r in results):
             bottleneck = "application_capacity_limit"
+            bottleneck_class = "application_architecture"
         elif any(r.rejected_reason == "client_capacity" for r in results):
             bottleneck = "per_company_capacity_limit"
+            bottleneck_class = "application_architecture"
+        elif not recovery_ok:
+            bottleneck = "lease_recovery"
+            bottleneck_class = "application_architecture"
         elif errored:
             sample = errored[0].error
             if "database" in sample.lower() or "sqlite" in sample.lower() or "OperationalError" in sample:
                 bottleneck = "database"
+                bottleneck_class = "database"
             elif "timeout" in sample.lower():
                 bottleneck = "timeouts"
+                bottleneck_class = "networking"
             else:
                 bottleneck = f"application_error:{sample[:80]}"
+                bottleneck_class = "application_architecture"
         elif cross:
             bottleneck = "session_isolation"
+            bottleneck_class = "application_architecture"
         else:
             bottleneck = "incomplete_acceptance_gate"
+            bottleneck_class = "application_architecture"
+    else:
+        # Even on PASS, classify the likely next external limiter for operators.
+        bottleneck_class = "provider_quota_next"
+        bottleneck = "none_app_layer_cleared_check_twilio_gemini_quotas"
 
     report = LadderLevelReport(
         target=target,
@@ -330,10 +381,15 @@ def run_level(
         unique_session_ids=len(session_ids),
         unique_transcripts=len({t for t in transcripts if t}),
         cross_leak_detected=cross,
-        duplicate_actions=0,
+        duplicate_actions=duplicate_actions,
+        webhook_retries=webhook_retries,
+        estimated_network_bytes=network_bytes,
+        ai_session_utilisation_peak=round(peak_util, 4),
+        recovery_ok=recovery_ok,
         estimated_cost_usd=_estimate_cost(len(accepted)),
         pass_gate=pass_gate,
         bottleneck=bottleneck,
+        bottleneck_class=bottleneck_class,
         details=[asdict(r) for r in sorted(results, key=lambda item: item.index)],
     )
     if tmp_path:

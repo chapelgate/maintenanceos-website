@@ -93,6 +93,19 @@ Get MaintenanceOS demonstrably ready for Andrew to make **one** controlled real 
 
 Do **not** declare `READY FOR CONTROLLED TEST CALL` from unit tests, `/health`, or historical Twilio evidence alone. Prove the complete current pre-call configuration first.
 
+## Concurrency / call-centre scale (isolated branch)
+
+Branch: `cursor/concurrency-100-scale-d1b9` (PR #41). **Not merged to production path yet.**
+
+| Gate | Status |
+| --- | --- |
+| Simulated ladder 1→5→12→25→50→75→100 | PASS (session/transcript/tenant isolation + recovery) |
+| HTTP telephony-path probe 1→5→12 (signed `/voice/inbound`, no carrier spend) | Required on this branch |
+| Smallest real concurrency probe | **N=2 live calls only** after controlled-call deploy — never 100 chargeable |
+| Next bottleneck class after app-layer PASS | Twilio / Gemini-or-OpenAI realtime **provider quotas** |
+
+Design: `docs/CONCURRENCY_100_SCALE.md`. Capacity: `GLOBAL_MAX_CONCURRENT_CALLS` / per-client caps, drain, stale-lease recovery. Redis/shared capacity only if multi-instance tests prove need.
+
 ## Agent rule
 
 All MaintenanceOS agents must begin from this repository and this status file. Do not treat chat memory, the old `cloud-workers/jobs/maintenanceos` directory, a historical Droplet name, or an unverified deployment as the source of truth. Never touch HLO.

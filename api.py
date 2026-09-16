@@ -3,6 +3,7 @@ import hashlib
 import json
 import math
 import os
+from contextlib import suppress
 from datetime import datetime
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
 from fastapi.responses import HTMLResponse,Response
@@ -134,6 +135,9 @@ def health():
             "global_limit": snap.global_limit,
             "per_client_limit": snap.per_client_limit,
             "backend": snap.backend,
+            "draining": snap.draining,
+            "ai_session_utilisation": snap.ai_session_utilisation,
+            "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
         },
     }
 
@@ -370,14 +374,16 @@ async def voice_inbound(request:Request):
     try:
         admit_call(call_sid=call_sid, call_session_id=call_session_id, client_id=tenant_id)
     except CapacityRejected:
-        record_call_interruption(call_session_id, "capacity_rejected")
+        with suppress(Exception):
+            record_call_interruption(call_session_id, "capacity_rejected")
         return Response(
             inbound_fallback_twiml("All lines are currently busy. Please try again shortly."),
             media_type="application/xml",
         )
     if not voice_ready():
         release_call_lease(call_sid=call_sid, call_session_id=call_session_id)
-        record_call_interruption(call_session_id,"voice_not_ready")
+        with suppress(Exception):
+            record_call_interruption(call_session_id,"voice_not_ready")
         msg="The automated service is unavailable."
         return Response(inbound_fallback_twiml(msg),media_type="application/xml")
     return Response(inbound_stream_twiml(call_session_id,call_sid),media_type="application/xml")

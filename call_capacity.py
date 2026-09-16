@@ -61,6 +61,10 @@ class CapacitySnapshot:
     backend: str = "process_local"
     rejected_total: int = 0
     accepted_total: int = 0
+    draining: bool = False
+    ai_session_utilisation: float = 0.0
+    estimated_hourly_burn_usd: float = 0.0
+    worker_id: str = ""
 
 
 class CapacityBackend(Protocol):
@@ -77,6 +81,12 @@ class CapacityBackend(Protocol):
         ...
 
 
+def _estimated_hourly_burn(active_calls: int) -> float:
+    """Planning estimate only — not billed. Used for cost-protection signals."""
+    per_call_hour = float(os.getenv("EST_COST_PER_CALL_HOUR_USD", "0.60"))
+    return round(active_calls * per_call_hour, 4)
+
+
 class ProcessLocalCapacityBackend:
     """Thread-safe in-process registry.
 
@@ -91,6 +101,11 @@ class ProcessLocalCapacityBackend:
         self._by_session: dict[int, str] = {}
         self.accepted_total = 0
         self.rejected_total = 0
+        self.draining = False
+
+    def set_draining(self, enabled: bool) -> None:
+        with self._lock:
+            self.draining = bool(enabled)
 
     def try_acquire(self, lease: CallLease, *, global_limit: int, per_client_limit: int) -> tuple[bool, str]:
         with self._lock:
@@ -101,6 +116,9 @@ class ProcessLocalCapacityBackend:
                 if held and held.call_sid == lease.call_sid and held.client_id == lease.client_id:
                     return True, "idempotent"
                 return False, "duplicate_active_call"
+            if self.draining:
+                self.rejected_total += 1
+                return False, "draining"
             if len(self._leases) >= global_limit:
                 self.rejected_total += 1
                 return False, "global_capacity"
@@ -142,14 +160,21 @@ class ProcessLocalCapacityBackend:
             by_client: dict[int, int] = {}
             for lease in self._leases.values():
                 by_client[lease.client_id] = by_client.get(lease.client_id, 0) + 1
+            active = len(self._leases)
+            global_limit = global_max_concurrent_calls()
+            utilisation = round(active / global_limit, 4) if global_limit else 0.0
             return CapacitySnapshot(
-                active_calls=len(self._leases),
-                global_limit=global_max_concurrent_calls(),
+                active_calls=active,
+                global_limit=global_limit,
                 per_client_limit=per_client_max_concurrent_calls(),
                 by_client=by_client,
                 backend="process_local",
                 rejected_total=self.rejected_total,
                 accepted_total=self.accepted_total,
+                draining=self.draining,
+                ai_session_utilisation=utilisation,
+                estimated_hourly_burn_usd=_estimated_hourly_burn(active),
+                worker_id=_WORKER_ID,
             )
 
     def expire_stale(self, max_age_seconds: float) -> int:
@@ -171,6 +196,7 @@ class ProcessLocalCapacityBackend:
             self._by_session.clear()
             self.accepted_total = 0
             self.rejected_total = 0
+            self.draining = False
 
 
 _WORKER_ID = os.getenv("HOSTNAME") or os.getenv("RENDER_INSTANCE_ID") or uuid.uuid4().hex[:12]
@@ -225,6 +251,23 @@ def release_call_lease(lease: CallLease | None = None, *, call_sid: str = "", ca
         backend.release(lease.lease_id)
         return
     backend.release_call(call_sid=call_sid, call_session_id=call_session_id)
+
+
+def expire_stale_leases(max_age_seconds: float | None = None) -> int:
+    """Drop leases left behind by a dead worker/process.
+
+    Does not touch other active leases. Default age comes from
+    CAPACITY_LEASE_MAX_AGE_SECONDS (1 hour) — long enough for real calls,
+    short enough to free capacity after crashes.
+    """
+    if max_age_seconds is None:
+        max_age_seconds = float(os.getenv("CAPACITY_LEASE_MAX_AGE_SECONDS", "3600"))
+    return capacity_backend().expire_stale(max_age_seconds)
+
+
+def set_capacity_draining(enabled: bool) -> None:
+    """Graceful drain: reject new admits; existing calls finish normally."""
+    capacity_backend().set_draining(enabled)
 
 
 def capacity_snapshot() -> CapacitySnapshot:
