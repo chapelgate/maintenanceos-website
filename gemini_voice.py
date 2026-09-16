@@ -243,39 +243,40 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         return
 
             async def from_gemini() -> None:
-                async for response in session.receive():
-                    content = response.server_content
-                    if not content:
-                        continue
-                    if getattr(content, "interrupted", False):
-                        await websocket.send_json({"event": "clear", "streamSid": stream_sid})
-                    input_tx = getattr(content, "input_transcription", None)
-                    if input_tx and getattr(input_tx, "text", None):
-                        text = str(input_tx.text)
-                        # Gemini streams partial hypotheses with finished=False/None.
-                        # Never Dial or persist consequential transcript until finished=True.
-                        if getattr(input_tx, "finished", None) is True:
+                while not stop_received.is_set() and not transfer_required.is_set():
+                    async for response in session.receive():
+                        content = response.server_content
+                        if not content:
+                            continue
+                        if getattr(content, "interrupted", False):
+                            await websocket.send_json({"event": "clear", "streamSid": stream_sid})
+                        input_tx = getattr(content, "input_transcription", None)
+                        if input_tx and getattr(input_tx, "text", None):
+                            text = str(input_tx.text)
+                            # Gemini streams partial hypotheses with finished=False/None.
+                            # Never Dial or persist consequential transcript until finished=True.
+                            if getattr(input_tx, "finished", None) is True:
+                                with suppress(Exception):
+                                    vb.record_transcript_segment(call_session_id, "Caller", text)
+                                if _explicit_human_request(text):
+                                    await request_human_transfer()
+                                    return
+                        output_tx = getattr(content, "output_transcription", None)
+                        if output_tx and getattr(output_tx, "text", None) and getattr(output_tx, "finished", None) is True:
                             with suppress(Exception):
-                                vb.record_transcript_segment(call_session_id, "Caller", text)
-                            if _explicit_human_request(text):
-                                await request_human_transfer()
-                                return
-                    output_tx = getattr(content, "output_transcription", None)
-                    if output_tx and getattr(output_tx, "text", None) and getattr(output_tx, "finished", None) is True:
-                        with suppress(Exception):
-                            vb.record_transcript_segment(call_session_id, "Assistant", str(output_tx.text))
-                    model_turn = getattr(content, "model_turn", None)
-                    if model_turn and getattr(model_turn, "parts", None):
-                        for part in model_turn.parts:
-                            inline = getattr(part, "inline_data", None)
-                            audio = getattr(inline, "data", None) if inline else None
-                            if audio:
-                                ulaw = gemini_pcm_to_twilio_mulaw(bytes(audio))
-                                await websocket.send_json({
-                                    "event": "media",
-                                    "streamSid": stream_sid,
-                                    "media": {"payload": base64.b64encode(ulaw).decode("ascii")},
-                                })
+                                vb.record_transcript_segment(call_session_id, "Assistant", str(output_tx.text))
+                        model_turn = getattr(content, "model_turn", None)
+                        if model_turn and getattr(model_turn, "parts", None):
+                            for part in model_turn.parts:
+                                inline = getattr(part, "inline_data", None)
+                                audio = getattr(inline, "data", None) if inline else None
+                                if audio:
+                                    ulaw = gemini_pcm_to_twilio_mulaw(bytes(audio))
+                                    await websocket.send_json({
+                                        "event": "media",
+                                        "streamSid": stream_sid,
+                                        "media": {"payload": base64.b64encode(ulaw).decode("ascii")},
+                                    })
 
             twilio_task = asyncio.create_task(from_twilio())
             gemini_task = asyncio.create_task(from_gemini())
