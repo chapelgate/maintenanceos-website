@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = Path(os.getenv("CONCURRENCY_EVIDENCE_DIR", "/tmp/concurrency-ladder-evidence"))
 ARTIFACT = Path(os.getenv("CONCURRENCY_ARTIFACT_DIR", "/opt/cursor/artifacts/concurrency-100-evidence"))
-REPO_EVIDENCE = ROOT / "docs" / "evidence"
+REPO_EVIDENCE = ROOT / "docs" / "concurrency_100_evidence"
 
 
 def _run(cmd: list[str], log_name: str) -> int:

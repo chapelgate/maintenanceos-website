@@ -104,7 +104,7 @@ Progressive PASS with simultaneous peak == target (session/transcript isolation 
 
 Command: `python3 telephony_path_concurrency_probe.py` → HTTP path 1/5/12.
 
-Evidence pack: `python3 scripts/build_concurrency_evidence_pack.py` → `docs/evidence/`.
+Evidence pack: `python3 scripts/build_concurrency_evidence_pack.py` → `docs/concurrency_100_evidence/`.
 
 ## Smallest real-world concurrency probe (chargeable)
 

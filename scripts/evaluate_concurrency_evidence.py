@@ -55,7 +55,7 @@ def evaluate(pack: dict) -> dict:
 
 
 def main() -> int:
-    path = Path(sys.argv[1] if len(sys.argv) > 1 else "docs/evidence/evidence-pack.json")
+    path = Path(sys.argv[1] if len(sys.argv) > 1 else "docs/concurrency_100_evidence/evidence-pack.json")
     if not path.exists():
         print(json.dumps({"verdict": "DEFENDER_FAIL", "findings": [f"missing:{path}"]}))
         return 1

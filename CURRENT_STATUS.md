@@ -108,7 +108,7 @@ Branch: `cursor/concurrency-100-scale-d1b9` (PR #41). **Not merged to production
 | Smallest real concurrency probe | **OPEN** — **N=2 live calls only** after controlled-call deploy — never 100 chargeable |
 | Next bottleneck class | Twilio / Gemini-or-OpenAI realtime **provider quotas** |
 
-Evidence: `docs/evidence/CONCURRENCY_100_EVIDENCE.md` / `scripts/build_concurrency_evidence_pack.py`.
+Evidence: `docs/concurrency_100_evidence/CONCURRENCY_100_EVIDENCE.md` / `scripts/build_concurrency_evidence_pack.py`.
 
 Design: `docs/CONCURRENCY_100_SCALE.md` (includes 250/500/1000 scaling seams without provisioning spend).
 
