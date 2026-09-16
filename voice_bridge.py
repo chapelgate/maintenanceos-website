@@ -415,76 +415,79 @@ def close_call_session(call_session_id: int) -> None:
         cs = s.query(CallSession).filter_by(id=call_session_id).first()
         if not cs:
             return
-        if cs.ended_at:
-            return
-        client_id=call_client_id(s,cs.id)
-        transcript = cs.transcript.strip()
-        if transcript and not cs.resident_id and not cs.work_order_id:
-            _, fresh = claim_action(
-                s,
-                "VOICE_UNMATCHED_REPORT",
-                cs.call_sid,
-                client_id=client_id,
-            )
-            if fresh:
-                s.add(UnmatchedInbound(
+        if not cs.ended_at:
+            client_id=call_client_id(s,cs.id)
+            transcript = cs.transcript.strip()
+            if transcript and not cs.resident_id and not cs.work_order_id:
+                _, fresh = claim_action(
+                    s,
+                    "VOICE_UNMATCHED_REPORT",
+                    cs.call_sid,
                     client_id=client_id,
-                    channel="VOICE",
-                    participant_hash=cs.caller.removeprefix("sha256:"),
-                    body=transcript,
-                ))
-                _record_call_event(s, cs, "UNMATCHED_VOICE_REPORT_RECORDED", "human review required", cs.call_sid)
-        elif transcript and cs.resident_id and not cs.work_order_id:
-            resident = s.query(Resident).filter_by(id=cs.resident_id).first()
-            if resident and resident.client_id==client_id:
-                cs.work_order_id = create_from_channel(
-                    client_id,
-                    resident.property_id,
-                    resident.id,
-                    "VOICE",
-                    transcript,
-                    participant=cs.caller,
-                    identity_verified=cs.verification_status == "POSTCODE_VERIFIED",
-                    event_key=f"voice:{cs.call_sid}",
                 )
-                for escalation in s.query(Escalation).filter_by(work_order_id=None).all():
-                    try:
-                        payload = json.loads(escalation.reason)
-                    except (TypeError, json.JSONDecodeError):
-                        continue
-                    if payload.get("call_session_id") == cs.id:
-                        escalation.work_order_id = cs.work_order_id
-                for call_event in s.query(CallEvent).filter_by(call_session_id=cs.id).all():
-                    exists = s.query(AuditEvent).filter_by(
-                        work_order_id=cs.work_order_id,
-                        event=call_event.event,
-                        detail=call_event.detail,
-                    ).first()
-                    if not exists:
-                        s.add(AuditEvent(
+                if fresh:
+                    s.add(UnmatchedInbound(
+                        client_id=client_id,
+                        channel="VOICE",
+                        participant_hash=cs.caller.removeprefix("sha256:"),
+                        body=transcript,
+                    ))
+                    _record_call_event(s, cs, "UNMATCHED_VOICE_REPORT_RECORDED", "human review required", cs.call_sid)
+            elif transcript and cs.resident_id and not cs.work_order_id:
+                resident = s.query(Resident).filter_by(id=cs.resident_id).first()
+                if resident and resident.client_id==client_id:
+                    cs.work_order_id = create_from_channel(
+                        client_id,
+                        resident.property_id,
+                        resident.id,
+                        "VOICE",
+                        transcript,
+                        participant=cs.caller,
+                        identity_verified=cs.verification_status == "POSTCODE_VERIFIED",
+                        event_key=f"voice:{cs.call_sid}",
+                    )
+                    for escalation in s.query(Escalation).filter_by(work_order_id=None).all():
+                        try:
+                            payload = json.loads(escalation.reason)
+                        except (TypeError, json.JSONDecodeError):
+                            continue
+                        if payload.get("call_session_id") == cs.id:
+                            escalation.work_order_id = cs.work_order_id
+                    for call_event in s.query(CallEvent).filter_by(call_session_id=cs.id).all():
+                        exists = s.query(AuditEvent).filter_by(
                             work_order_id=cs.work_order_id,
-                            actor="Voice Call Gate",
                             event=call_event.event,
                             detail=call_event.detail,
-                        ))
-                    if call_event.event == "VOICE_ESCALATION_REQUIRED":
-                        try:
-                            payload = json.loads(call_event.detail)
-                        except (TypeError, json.JSONDecodeError):
-                            payload = {}
-                        level = "RED" if payload.get("flags") else "AMBER"
-                        existing = s.query(Escalation).filter_by(
-                            work_order_id=cs.work_order_id,
-                            reason=call_event.detail,
                         ).first()
-                        if not existing:
-                            s.add(Escalation(
+                        if not exists:
+                            s.add(AuditEvent(
                                 work_order_id=cs.work_order_id,
-                                level=level,
-                                reason=call_event.detail,
+                                actor="Voice Call Gate",
+                                event=call_event.event,
+                                detail=call_event.detail,
                             ))
-        cs.ended_at = cs.ended_at or utcnow()
-        s.commit()
+                        if call_event.event == "VOICE_ESCALATION_REQUIRED":
+                            try:
+                                payload = json.loads(call_event.detail)
+                            except (TypeError, json.JSONDecodeError):
+                                payload = {}
+                            level = "RED" if payload.get("flags") else "AMBER"
+                            existing = s.query(Escalation).filter_by(
+                                work_order_id=cs.work_order_id,
+                                reason=call_event.detail,
+                            ).first()
+                            if not existing:
+                                s.add(Escalation(
+                                    work_order_id=cs.work_order_id,
+                                    level=level,
+                                    reason=call_event.detail,
+                                ))
+            cs.ended_at = cs.ended_at or utcnow()
+            s.commit()
+    # Persist first; email failures must never lose the call/job.
+    with suppress(Exception):
+        from call_notifications import dispatch_internal_call_email
+        dispatch_internal_call_email(call_session_id)
 
 
 def validate_stream_start(start: dict, params: dict) -> int | None:

@@ -231,7 +231,7 @@ def test_twiml_builders_escape_stream_bind_and_transfer(monkeypatch):
     assert 'name="call_sid" value="CA-test"' in twiml
     assert "stream_token" in twiml
     assert "<Dial>" not in twiml
-    assert "call was interrupted" in twiml
+    assert "Thank you for calling Chapel Gate. Goodbye." in twiml
     assert 'language="en-GB"' in twiml
     assert 'voice="Polly.Amy"' in twiml
 

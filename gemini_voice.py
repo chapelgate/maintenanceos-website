@@ -7,11 +7,13 @@ fail-closed primitives rather than duplicating consequential business logic.
 
 from __future__ import annotations
 
+import array
 import asyncio
 import base64
 import json
 import os
 import struct
+import time
 from contextlib import suppress
 
 from fastapi import WebSocket
@@ -78,22 +80,27 @@ def _mulaw_decode_byte(value: int) -> int:
 
 
 def mulaw_to_pcm16(data: bytes) -> bytes:
-    return b"".join(struct.pack("<h", max(-32768, min(32767, _mulaw_decode_byte(b)))) for b in data)
+    # Vectorised decode — per-sample struct.pack was a measurable audio-path cost.
+    out = array.array("h", (max(-32768, min(32767, _mulaw_decode_byte(b))) for b in data))
+    return out.tobytes()
 
 
-def _pcm16_samples(data: bytes) -> list[int]:
+def _pcm16_samples(data: bytes) -> array.array:
     if len(data) % 2:
         data = data[:-1]
-    if not data:
-        return []
-    return list(struct.unpack("<" + "h" * (len(data) // 2), data))
+    samples = array.array("h")
+    if data:
+        samples.frombytes(data)
+    return samples
 
 
-def _samples_to_pcm16(samples: list[int]) -> bytes:
+def _samples_to_pcm16(samples: array.array | list[int]) -> bytes:
     if not samples:
         return b""
-    clipped = [max(-32768, min(32767, int(v))) for v in samples]
-    return struct.pack("<" + "h" * len(clipped), *clipped)
+    if isinstance(samples, array.array) and samples.typecode == "h":
+        return samples.tobytes()
+    out = array.array("h", (max(-32768, min(32767, int(v))) for v in samples))
+    return out.tobytes()
 
 
 def resample_pcm16(data: bytes, src_rate: int, dst_rate: int) -> bytes:
@@ -102,16 +109,40 @@ def resample_pcm16(data: bytes, src_rate: int, dst_rate: int) -> bytes:
         return data
     out_len = max(1, int(round(len(samples) * dst_rate / src_rate)))
     if len(samples) == 1:
-        return _samples_to_pcm16([samples[0]] * out_len)
+        return _samples_to_pcm16(array.array("h", [samples[0]] * out_len))
+    # Exact 2x upsample (8k→16k) is the Twilio→Gemini hot path.
+    if dst_rate == src_rate * 2:
+        out = array.array("h", [0]) * out_len
+        last = len(samples) - 1
+        for i, sample in enumerate(samples):
+            out[i * 2] = sample
+            nxt = samples[i + 1] if i < last else sample
+            out[i * 2 + 1] = (sample + nxt) // 2
+        return out.tobytes()
+    # Exact 3x downsample (24k→8k) is the Gemini→Twilio hot path.
+    if src_rate == dst_rate * 3:
+        out = array.array("h")
+        for i in range(0, len(samples) - 2, 3):
+            out.append((samples[i] + samples[i + 1] + samples[i + 2]) // 3)
+        return out.tobytes()
     scale = (len(samples) - 1) / max(1, out_len - 1)
-    out: list[int] = []
+    out = array.array("h", [0]) * out_len
     for i in range(out_len):
         pos = i * scale
         left = int(pos)
         right = min(left + 1, len(samples) - 1)
         frac = pos - left
-        out.append(round(samples[left] * (1.0 - frac) + samples[right] * frac))
-    return _samples_to_pcm16(out)
+        out[i] = int(round(samples[left] * (1.0 - frac) + samples[right] * frac))
+    return out.tobytes()
+
+
+def _silence_duration_ms() -> int:
+    raw = os.getenv("GEMINI_SILENCE_DURATION_MS", "450").strip()
+    try:
+        value = int(raw)
+    except ValueError:
+        value = 450
+    return max(200, min(value, 1200))
 
 
 def twilio_mulaw_to_gemini_pcm(data: bytes) -> bytes:
@@ -199,6 +230,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
         model = os.getenv("GEMINI_LIVE_MODEL", GEMINI_MODEL_DEFAULT).strip() or GEMINI_MODEL_DEFAULT
         voice = os.getenv("GEMINI_LIVE_VOICE", GEMINI_VOICE_DEFAULT).strip() or GEMINI_VOICE_DEFAULT
         client = genai.Client(api_key=gemini_api_key())
+        silence_ms = _silence_duration_ms()
         config = types.LiveConnectConfig(
             response_modalities=["AUDIO"],
             system_instruction=SYSTEM_PROMPT,
@@ -209,12 +241,46 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                     prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=voice)
                 )
             ),
+            # Lower end-of-speech silence without disabling barge-in safety.
+            realtime_input_config=types.RealtimeInputConfig(
+                automatic_activity_detection=types.AutomaticActivityDetection(
+                    disabled=False,
+                    start_of_speech_sensitivity=types.StartSensitivity.START_SENSITIVITY_HIGH,
+                    end_of_speech_sensitivity=types.EndSensitivity.END_SENSITIVITY_HIGH,
+                    prefix_padding_ms=20,
+                    silence_duration_ms=silence_ms,
+                ),
+                activity_handling=types.ActivityHandling.START_OF_ACTIVITY_INTERRUPTS,
+                turn_coverage=types.TurnCoverage.TURN_INCLUDES_ONLY_ACTIVITY,
+            ),
+            # Disable thinking budget so the live receptionist does not pay extra
+            # pre-audio reasoning latency on ordinary turn-taking.
+            thinking_config=types.ThinkingConfig(thinking_budget=0),
         )
 
         async with client.aio.live.connect(model=model, config=config) as session:
             operational_event("gemini_live_connected", transport="gemini", outcome="connected")
             await session.send_realtime_input(text=f"The phone call has just connected. This call's job reference is {job_reference}. Greet the caller now exactly as instructed, then listen.")
             seen_sequences: set[str] = set()
+            # Latency markers (no caller PII): turn completion → model audio → Twilio send.
+            turn_latency = {
+                "caller_turn_ms": None,
+                "gemini_turn_ms": None,
+                "first_model_audio_ms": None,
+                "first_twilio_audio_ms": None,
+            }
+
+            def _mark(stage: str) -> None:
+                now_ms = int(time.monotonic() * 1000)
+                turn_latency[stage] = now_ms
+                if stage == "first_twilio_audio_ms" and turn_latency["caller_turn_ms"] is not None:
+                    operational_event(
+                        "voice_turn_latency",
+                        transport="gemini",
+                        outcome="measured",
+                        duration_ms=max(0, now_ms - turn_latency["caller_turn_ms"]),
+                        reason_code=f"silence_{silence_ms}",
+                    )
 
             async def request_human_transfer() -> None:
                 nonlocal lifecycle_closed
@@ -286,12 +352,25 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         input_tx = getattr(content, "input_transcription", None)
                         if input_tx and getattr(input_tx, "text", None):
                             text = str(input_tx.text)
-                            if getattr(input_tx, "finished", None) is True:
+                            finished = getattr(input_tx, "finished", None) is True
+                            if finished or turn_latency["caller_turn_ms"] is None:
+                                # Prefer finished transcript as turn completion; fall back to first partial.
+                                if finished or getattr(content, "turn_complete", False):
+                                    _mark("caller_turn_ms")
+                                    turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
+                                    turn_latency["first_model_audio_ms"] = None
+                                    turn_latency["first_twilio_audio_ms"] = None
+                            if finished:
                                 with suppress(Exception):
                                     vb.record_transcript_segment(call_session_id, "Caller", text)
                                 if _explicit_human_request(text) or _needs_payment_handoff(text):
                                     await request_human_transfer()
                                     return
+                        if getattr(content, "turn_complete", False) and turn_latency["caller_turn_ms"] is None:
+                            _mark("caller_turn_ms")
+                            turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
+                            turn_latency["first_model_audio_ms"] = None
+                            turn_latency["first_twilio_audio_ms"] = None
                         output_tx = getattr(content, "output_transcription", None)
                         if output_tx and getattr(output_tx, "text", None) and getattr(output_tx, "finished", None) is True:
                             with suppress(Exception):
@@ -302,12 +381,16 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                 inline = getattr(part, "inline_data", None)
                                 audio = getattr(inline, "data", None) if inline else None
                                 if audio:
+                                    if turn_latency["first_model_audio_ms"] is None:
+                                        _mark("first_model_audio_ms")
                                     ulaw = gemini_pcm_to_twilio_mulaw(bytes(audio))
                                     await websocket.send_json({
                                         "event": "media",
                                         "streamSid": stream_sid,
                                         "media": {"payload": base64.b64encode(ulaw).decode("ascii")},
                                     })
+                                    if turn_latency["first_twilio_audio_ms"] is None:
+                                        _mark("first_twilio_audio_ms")
 
             twilio_task = asyncio.create_task(from_twilio())
             gemini_task = asyncio.create_task(from_gemini())

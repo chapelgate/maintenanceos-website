@@ -7,7 +7,8 @@ def test_normal_stream_exit_never_auto_dials_human(monkeypatch):
     monkeypatch.setenv('APP_SECRET', 's' * 32)
     xml = voice_bridge.inbound_stream_twiml(1, 'CA-test')
     assert '<Dial>' not in xml
-    assert 'call was interrupted' in xml
+    assert 'Thank you for calling Chapel Gate. Goodbye.' in xml
+    assert 'call was interrupted' not in xml
 
 def test_not_ready_api_does_not_auto_dial():
     source = inspect.getsource(api.voice_inbound)

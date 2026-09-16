@@ -10,6 +10,11 @@ def live_email_enabled():
         and os.getenv("ENABLE_LIVE_EMAIL", "false").lower() == "true"
     )
 
+def smtp_configured():
+    host=os.getenv("SMTP_HOST");user=os.getenv("SMTP_USERNAME");pw=os.getenv("SMTP_PASSWORD")
+    sender=os.getenv("SMTP_FROM") or user
+    return bool(host and user and pw and sender)
+
 def decode_header_value(v):
     if not v:return ""
     out=""
@@ -50,16 +55,28 @@ def fetch_unseen():
     return rows
 
 def send_email(to,subject,body):
+    """Send via SMTP when live email is enabled.
+
+    Mock mode returns a synthetic id and must never be treated as real delivery.
+    """
     if os.getenv("EMAIL_MODE","mock")!="imap_smtp":
         return {"mock":True,"message_id":f"<mock-{uuid.uuid4()}@maintenanceos>"}
     if not live_email_enabled():
         raise RuntimeError("Live email is disabled")
+    if not smtp_configured():
+        raise RuntimeError("SMTP configuration incomplete")
     host=os.getenv("SMTP_HOST");user=os.getenv("SMTP_USERNAME");pw=os.getenv("SMTP_PASSWORD")
     sender=os.getenv("SMTP_FROM") or user
-    if not all([host,user,pw,sender]):raise RuntimeError("SMTP configuration incomplete")
+    port=int(os.getenv("SMTP_PORT","587"))
+    use_tls=os.getenv("SMTP_USE_TLS","true").lower()=="true"
+    use_ssl=os.getenv("SMTP_USE_SSL","false").lower()=="true"
     msg=EmailMessage();msg["From"]=sender;msg["To"]=to;msg["Subject"]=subject
     mid=f"<maintenanceos-{uuid.uuid4()}@local>";msg["Message-ID"]=mid;msg.set_content(body)
-    with smtplib.SMTP(host,int(os.getenv("SMTP_PORT","587")),timeout=30) as s:
-        if os.getenv("SMTP_USE_TLS","true").lower()=="true":s.starttls()
-        s.login(user,pw);s.send_message(msg)
+    if use_ssl:
+        with smtplib.SMTP_SSL(host,port,timeout=30) as s:
+            s.login(user,pw);s.send_message(msg)
+    else:
+        with smtplib.SMTP(host,port,timeout=30) as s:
+            if use_tls:s.starttls()
+            s.login(user,pw);s.send_message(msg)
     return {"mock":False,"message_id":mid}
