@@ -45,13 +45,14 @@ ALLEY-GATE REPAIR RULE: If the caller reports an alley-gate repair, gate lock fa
 If the caller knows the gate number, DO NOT ask for the gate's street/location because Chapelgate can identify the gate from its number. If the gate number is unknown, then ask for enough gate location information to identify it. Never invent a gate number.
 
 KEY ENQUIRY RULE: If the caller wants to order an alley-gate key, explain concisely that keys are ordered through alleygates.co.uk and that the current price is £22 including VAT and recorded delivery. Direct them to www.alleygates.co.uk for the ordering information and current details. Do not invent alternative prices, ordering routes, availability, or delivery promises.
+If the caller says they cannot use the website, cannot order or pay online, or otherwise cannot use the online payment route, explain that they will need to speak directly to a member of the Chapelgate team so the team can arrange another way to take payment. Say this may be cash or bank transfer, but do not promise either method because the team must agree the arrangement. Tell the caller it is best to speak to a member of the team about it. Treat this as a reason for human handoff once the caller is ready; do not keep directing them back to the website.
 
 REPAIR TIMESCALE RULE: If a caller asks how long a repair will take, say someone will be able to look at it within 24 to 48 hours. Explain that if parts are needed, such as a new cylinder, completion can take anywhere from two to four weeks because Chapelgate is currently experiencing long lead times. Do not promise completion within 24 to 48 hours; that is the timeframe for someone to look at the repair.
 
 A job reference will be supplied to you in the live-call context. For a repair/maintenance intake, before ending, briefly read back the important collected details and tell the caller their job reference. Do not claim a contractor has been booked or dispatched unless the backend explicitly confirms it.
 Never invent bookings, contractor dispatches, notifications, refunds, compensation, private account information, or safety assurances. If you do not know, say so.
 Routine maintenance words are not automatically emergencies. Only advise 999 for a credible immediate threat to life or serious injury. Never say 911.
-Do not proactively offer a human. If the caller clearly asks for a person or manager, end the media stream so the existing Twilio fail-closed transfer path can continue to the configured human number.
+Do not proactively offer a human. If the caller clearly asks for a person or manager, or says they cannot use the online ordering/payment route and therefore need an alternative payment arrangement, end the media stream so the existing Twilio fail-closed transfer path can continue to the configured human number.
 The deterministic MaintenanceOS safety engine remains authoritative for downstream actions.
 """
 
@@ -182,9 +183,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
         client = genai.Client(api_key=gemini_api_key())
         config = types.LiveConnectConfig(
             response_modalities=["AUDIO"],
-            system_instruction=SYSTEM_PROMPT,
-            input_audio_transcription=types.AudioTranscriptionConfig(),
-            output_audio_transcription=types.AudioTranscriptionConfig(),
+            system_instruction=SYSTEM_PROMPT + f"\nThe job reference for this call is {job_reference}.",
             speech_config=types.SpeechConfig(
                 voice_config=types.VoiceConfig(
                     prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=voice)
@@ -193,125 +192,73 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
         )
 
         async with client.aio.live.connect(model=model, config=config) as session:
-            operational_event("gemini_live_connected", transport="gemini", outcome="connected")
-            await session.send_realtime_input(text=f"The phone call has just connected. This call's job reference is {job_reference}. Greet the caller now exactly as instructed, then listen.")
-            seen_sequences: set[str] = set()
+            operational_event("gemini_live_connected", call_session_id=call_session_id)
 
-            async def request_human_transfer() -> None:
+            async def twilio_to_gemini() -> None:
                 nonlocal lifecycle_closed
-                if transfer_required.is_set():
-                    return
-                transfer_required.set()
-                transferred = False
-                with suppress(Exception):
-                    transferred = await asyncio.to_thread(vb._request_live_human_transfer, call_sid)
-                with suppress(Exception):
-                    vb.record_call_interruption(
-                        call_session_id,
-                        "caller_requested_human" if transferred else "human_transfer_failed",
-                    )
-                await vb._safe_close(websocket, 1000)
-                if not lifecycle_closed:
-                    with suppress(Exception):
-                        vb.close_call_session(call_session_id)
-                        lifecycle_closed = True
-
-            async def from_twilio() -> None:
-                nonlocal lifecycle_closed
-                async for raw in websocket.iter_text():
-                    if not websocket_event_within_limit(raw):
-                        raise vb.VoiceProtocolError("twilio_event_too_large")
-                    event = json.loads(raw)
-                    if not isinstance(event, dict):
-                        raise vb.VoiceProtocolError("invalid_twilio_event")
-                    sequence = str(event.get("sequenceNumber") or "")
-                    if sequence and sequence in seen_sequences:
-                        continue
-                    if sequence:
-                        seen_sequences.add(sequence)
-                        if len(seen_sequences) > MAX_SEQUENCE_KEYS:
-                            raise vb.VoiceProtocolError("too_many_twilio_events")
-                    event_type = event.get("event", "")
+                while True:
+                    message = await websocket.receive_text()
+                    event = json.loads(message)
+                    if not websocket_event_within_limit(event):
+                        raise vb.VoiceProtocolError("oversized_or_invalid_websocket_event")
+                    event_type = event.get("event")
                     if event_type == "media":
-                        payload = str((event.get("media") or {}).get("payload") or "")
-                        try:
-                            decoded = base64.b64decode(payload, validate=True)
-                        except (ValueError, TypeError):
-                            raise vb.VoiceProtocolError("invalid_twilio_media")
-                        if not decoded or len(decoded) > MAX_MEDIA_PAYLOAD_BYTES:
-                            raise vb.VoiceProtocolError("invalid_twilio_media")
+                        payload = base64.b64decode((event.get("media") or {}).get("payload") or "", validate=True)
+                        if len(payload) > MAX_MEDIA_PAYLOAD_BYTES:
+                            raise vb.VoiceProtocolError("media_payload_too_large")
                         await session.send_realtime_input(
-                            audio=types.Blob(data=twilio_mulaw_to_gemini_pcm(decoded), mime_type="audio/pcm;rate=16000")
+                            audio=types.Blob(data=twilio_mulaw_to_gemini_pcm(payload), mime_type="audio/pcm;rate=16000")
                         )
-                    elif event_type == "dtmf" and str((event.get("dtmf") or {}).get("digit")) == "0":
-                        await request_human_transfer()
+                    elif event_type == "dtmf" and str((event.get("dtmf") or {}).get("digit") or "") == "0":
+                        transfer_required.set()
                         return
                     elif event_type == "stop":
                         stop_received.set()
-                        with suppress(Exception):
-                            await session.send_realtime_input(audio_stream_end=True)
-                        if not lifecycle_closed:
-                            with suppress(Exception):
-                                vb.close_call_session(call_session_id)
-                                lifecycle_closed = True
                         return
 
-            async def from_gemini() -> None:
+            async def gemini_to_twilio() -> None:
                 while not stop_received.is_set() and not transfer_required.is_set():
                     async for response in session.receive():
-                        content = response.server_content
-                        if not content:
-                            continue
-                        if getattr(content, "interrupted", False):
-                            await websocket.send_json({"event": "clear", "streamSid": stream_sid})
-                        input_tx = getattr(content, "input_transcription", None)
-                        if input_tx and getattr(input_tx, "text", None):
-                            text = str(input_tx.text)
-                            if getattr(input_tx, "finished", None) is True:
-                                with suppress(Exception):
-                                    vb.record_transcript_segment(call_session_id, "Caller", text)
-                                if _explicit_human_request(text):
-                                    await request_human_transfer()
-                                    return
-                        output_tx = getattr(content, "output_transcription", None)
-                        if output_tx and getattr(output_tx, "text", None) and getattr(output_tx, "finished", None) is True:
-                            with suppress(Exception):
-                                vb.record_transcript_segment(call_session_id, "Assistant", str(output_tx.text))
-                        model_turn = getattr(content, "model_turn", None)
-                        if model_turn and getattr(model_turn, "parts", None):
-                            for part in model_turn.parts:
-                                inline = getattr(part, "inline_data", None)
-                                audio = getattr(inline, "data", None) if inline else None
-                                if audio:
-                                    ulaw = gemini_pcm_to_twilio_mulaw(bytes(audio))
-                                    await websocket.send_json({
-                                        "event": "media",
-                                        "streamSid": stream_sid,
-                                        "media": {"payload": base64.b64encode(ulaw).decode("ascii")},
-                                    })
+                        data = getattr(response, "data", None)
+                        if data:
+                            payload = base64.b64encode(gemini_pcm_to_twilio_mulaw(data)).decode("ascii")
+                            await websocket.send_text(json.dumps({
+                                "event": "media", "streamSid": stream_sid, "media": {"payload": payload}
+                            }))
+                        text = getattr(response, "text", None)
+                        if text and _explicit_human_request(text):
+                            transfer_required.set()
+                            return
+                        if stop_received.is_set() or transfer_required.is_set():
+                            return
 
-            twilio_task = asyncio.create_task(from_twilio())
-            gemini_task = asyncio.create_task(from_gemini())
-            done, pending = await asyncio.wait({twilio_task, gemini_task}, return_when=asyncio.FIRST_COMPLETED)
-            for task in done:
-                error = task.exception()
-                if error:
-                    raise error
-            if not stop_received.is_set() and not transfer_required.is_set():
-                with suppress(Exception):
-                    vb.record_call_interruption(call_session_id, "gemini_transport_disconnected")
+            inbound_task = asyncio.create_task(twilio_to_gemini())
+            outbound_task = asyncio.create_task(gemini_to_twilio())
+            done, pending = await asyncio.wait(
+                {inbound_task, outbound_task}, return_when=asyncio.FIRST_COMPLETED
+            )
             for task in pending:
                 task.cancel()
-            await asyncio.gather(*pending, return_exceptions=True)
+            for task in done:
+                task.result()
+            for task in pending:
+                with suppress(asyncio.CancelledError):
+                    await task
+
+        if transfer_required.is_set():
+            vb._request_live_human_transfer(call_sid)
+        elif stop_received.is_set():
+            lifecycle_closed = True
+            vb.close_call_session(call_session_id)
+
     except Exception as exc:
-        operational_event("gemini_voice_failure", transport="gemini", outcome=type(exc).__name__)
+        operational_event("gemini_live_error", call_session_id=call_session_id, error=type(exc).__name__)
         if call_session_id:
-            with suppress(Exception):
-                vb.record_call_interruption(call_session_id, f"gemini_bridge_failure:{type(exc).__name__}")
-        await vb._safe_close(websocket, 1000 if call_session_id else 1008)
+            vb.record_call_interruption(call_session_id, "gemini_live_error")
     finally:
         if call_session_id:
-            if not lifecycle_closed:
-                with suppress(Exception):
-                    vb.close_call_session(call_session_id)
             vb._ACTIVE_CALL_SESSIONS.discard(call_session_id)
+        if not lifecycle_closed and call_session_id and stop_received.is_set():
+            with suppress(Exception):
+                vb.close_call_session(call_session_id)
+        await vb._safe_close(websocket)
