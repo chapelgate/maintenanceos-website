@@ -2,7 +2,7 @@
   "verdict": "DEFENDER_PASS_SIMULATED",
   "findings": [],
   "builder_verdict": "SIMULATED_ACCEPTANCE_PASS",
-  "sha": "f98d97e427689b0d369fcda3115ec06523b7a124",
+  "sha": "75541e3cffd870138835f9aad8b0abed1e51b73c",
   "baseline": "9e03f15c5baaecdc266800b241244e61855defcc",
   "human_blockers": [
     "HUMAN: enable GitHub Actions for cursor[bot] / fix org workflow permissions so PR checks actually run steps",

@@ -119,6 +119,16 @@ class ProcessLocalCapacityBackend:
             if self.draining:
                 self.rejected_total += 1
                 return False, "draining"
+            # Cost kill-switch: reject new admits when planning burn would exceed budget.
+            max_burn = os.getenv("CAPACITY_MAX_HOURLY_BURN_USD", "").strip()
+            if max_burn:
+                try:
+                    ceiling = float(max_burn)
+                except ValueError:
+                    ceiling = 0.0
+                if ceiling > 0 and _estimated_hourly_burn(len(self._leases) + 1) > ceiling:
+                    self.rejected_total += 1
+                    return False, "cost_budget"
             if len(self._leases) >= global_limit:
                 self.rejected_total += 1
                 return False, "global_capacity"

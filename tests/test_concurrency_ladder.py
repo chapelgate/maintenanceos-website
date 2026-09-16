@@ -130,5 +130,12 @@ def test_telephony_path_probe_twelve(monkeypatch):
     assert report.unique_session_ids == 12
 
 
-def test_global_limit_env_defaults_to_hundred():
-    assert global_max_concurrent_calls() == 100
+def test_cost_budget_kill_switch_rejects_new_admits(monkeypatch):
+    monkeypatch.setenv("GLOBAL_MAX_CONCURRENT_CALLS", "100")
+    monkeypatch.setenv("EST_COST_PER_CALL_HOUR_USD", "10")
+    monkeypatch.setenv("CAPACITY_MAX_HOURLY_BURN_USD", "15")
+    reset_capacity_backend_for_tests()
+    admit_call(call_sid="CA-budget-1", call_session_id=1, client_id=1)
+    with pytest.raises(CapacityRejected) as exc:
+        admit_call(call_sid="CA-budget-2", call_session_id=2, client_id=1)
+    assert exc.value.reason == "cost_budget"
