@@ -11,13 +11,27 @@ from provider_webhooks import (
     plan_twilio_voice_webhook,
 )
 from seed_synthetic_tenant import ensure_synthetic_tenant
+from idempotency import set_ai_side_effects
+from models import SessionLocal
 
 SYNTHETIC_READY = "SYNTHETIC_VOICE_TENANT_READY"
 PREPARE_PASS = "RENDER_PREPARE_PASS"
 
 
+def _record_fail_closed_side_effects() -> None:
+    with SessionLocal() as session:
+        set_ai_side_effects(
+            session,
+            False,
+            actor="render-preflight",
+            reason="Controlled test-call preflight: AI side effects remain disabled",
+        )
+        session.commit()
+
+
 def prepare_runtime(*, twilio_updater=None) -> dict[str, object]:
     tenant_id = ensure_synthetic_tenant()
+    _record_fail_closed_side_effects()
     webhook = configure_twilio_voice_webhook(twilio_updater=twilio_updater)
     plan = plan_twilio_voice_webhook()
     return {
