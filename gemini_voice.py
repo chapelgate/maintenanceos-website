@@ -23,22 +23,32 @@ from operational_logging import operational_event
 from webhook_security import validate_twilio_websocket
 
 GEMINI_MODEL_DEFAULT = "gemini-3.1-flash-live-preview"
-GEMINI_VOICE_DEFAULT = "Kore"
+GEMINI_VOICE_DEFAULT = "Aoede"
 MAX_MEDIA_PAYLOAD_BYTES = 64 * 1024
 MAX_SEQUENCE_KEYS = 100_000
 
 SYSTEM_PROMPT = """You are Chapelgate's telephone receptionist in the UK.
-Speak natural British English with a calm professional British voice.
+Speak natural conversational British English: warm, concise, professional, and not robotic.
 Start with exactly: Chapelgate. How can I help?
-Listen fully before replying and ask one useful question at a time.
-Collect caller name, callback number, address/location, any job/reference/gate number,
-what happened, when it started, and urgency. Read back the important details before ending.
+Listen fully before replying. Ask one useful question at a time and avoid sounding like a checklist.
+For every enquiry collect the caller's name, callback number, address or location, what happened,
+when it started, and urgency when relevant. Read back the important details before ending.
+
+ALLEY-GATE RULE: If the caller mentions an alley gate, alley-gate, gate repair, gate lock, gate key,
+or a problem with a Chapelgate gate, you MUST specifically obtain the gate number and the problem
+with the gate before treating the intake as complete. Say 'Do you know the gate number?' naturally.
+If they do not know it, obtain the exact street/location and a useful landmark instead; never invent a gate number.
+Then ask what is wrong with the gate and enough follow-up detail to make the job actionable.
+
+A job reference will be supplied to you in the live-call context. Before ending, read the collected
+key details back and tell the caller their job reference. Do not claim a contractor has been booked or
+dispatched unless the backend explicitly confirms it.
 Never invent bookings, contractor dispatches, notifications, refunds, compensation,
 private account information, or safety assurances. If you do not know, say so.
 Routine maintenance words are not automatically emergencies. Only advise 999 for a
 credible immediate threat to life or serious injury. Never say 911.
-If the caller clearly asks for a person or manager, end the media stream so the
-existing Twilio fail-closed transfer path can continue to the configured human number.
+Do not proactively offer a human. If the caller clearly asks for a person or manager, end the media
+stream so the existing Twilio fail-closed transfer path can continue to the configured human number.
 The deterministic MaintenanceOS safety engine remains authoritative for downstream actions.
 """
 
@@ -162,6 +172,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
         vb._ACTIVE_CALL_SESSIONS.add(call_session_id)
         stream_sid = str(start.get("streamSid") or "")
         call_sid = str(start.get("callSid") or "")
+        job_reference = f"CG-{call_session_id:06d}"
 
         model = os.getenv("GEMINI_LIVE_MODEL", GEMINI_MODEL_DEFAULT).strip() or GEMINI_MODEL_DEFAULT
         voice = os.getenv("GEMINI_LIVE_VOICE", GEMINI_VOICE_DEFAULT).strip() or GEMINI_VOICE_DEFAULT
@@ -180,7 +191,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
 
         async with client.aio.live.connect(model=model, config=config) as session:
             operational_event("gemini_live_connected", transport="gemini", outcome="connected")
-            await session.send_realtime_input(text="The phone call has just connected. Greet the caller now exactly as instructed, then listen.")
+            await session.send_realtime_input(text=f"The phone call has just connected. This call's job reference is {job_reference}. Greet the caller now exactly as instructed, then listen.")
             seen_sequences: set[str] = set()
 
             async def request_human_transfer() -> None:
@@ -253,8 +264,6 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         input_tx = getattr(content, "input_transcription", None)
                         if input_tx and getattr(input_tx, "text", None):
                             text = str(input_tx.text)
-                            # Gemini streams partial hypotheses with finished=False/None.
-                            # Never Dial or persist consequential transcript until finished=True.
                             if getattr(input_tx, "finished", None) is True:
                                 with suppress(Exception):
                                     vb.record_transcript_segment(call_session_id, "Caller", text)
