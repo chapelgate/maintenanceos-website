@@ -174,7 +174,6 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
     return (
         '<?xml version="1.0" encoding="UTF-8"?>'
         "<Response>"
-        f'<Say language="{language}" voice="{voice}">Hello, you have reached Chapel Gate. This call uses an automated assistant and live transcription. How can I help you today?</Say>'
         "<Connect>"
         f'<Stream url="{escape(stream_url)}" statusCallback="{escape(status_url)}" statusCallbackMethod="POST">'
         f'<Parameter name="call_session_id" value="{call_session_id}" />'
