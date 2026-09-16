@@ -75,6 +75,17 @@ When a gate fails (or a live probe is blocked), record exactly one class:
 | worker_count | Automation lag only | Scale `worker.py` replicas |
 | rate_limits | App `PUBLIC_WS_RATE_*` rejects | Raise config (already 300 default for 100 streams) |
 
+## Horizontal scale beyond 100 (design only — do not provision spend to demo)
+
+| Concurrent sessions | Likely first limiter | Add only when measured |
+| --- | --- | --- |
+| 100 | App admission + provider quotas | Current process-local design |
+| 250 | Single-process CPU/FD or provider session caps | 2–3 app instances + sticky WS; shared capacity backend |
+| 500 | DB pool + post-call workers + provider CPS | Postgres pool sizing; more workers; quota raise |
+| 1,000+ | Multi-region / multi-account telephony + model fan-out | LB pools; per-pool capacity; cost kill-switch |
+
+Do **not** spend to prove 250/500/1000 in this iteration. Document the scaling seam; keep Redis optional until multi-instance tests fail without it.
+
 ## Simulated ladder evidence (this branch)
 
 Command: `python3 concurrency_loadtest.py`
@@ -92,6 +103,8 @@ Progressive PASS with simultaneous peak == target (session/transcript isolation 
 | 100 | PASS — 100 independent call IDs/sessions/transcripts, no cross-leak |
 
 Command: `python3 telephony_path_concurrency_probe.py` → HTTP path 1/5/12.
+
+Evidence pack: `python3 scripts/build_concurrency_evidence_pack.py` → `docs/evidence/`.
 
 ## Smallest real-world concurrency probe (chargeable)
 

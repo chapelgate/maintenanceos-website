@@ -99,12 +99,20 @@ Branch: `cursor/concurrency-100-scale-d1b9` (PR #41). **Not merged to production
 
 | Gate | Status |
 | --- | --- |
-| Simulated ladder 1→5→12→25→50→75→100 | PASS (session/transcript/tenant isolation + recovery) |
-| HTTP telephony-path probe 1→5→12 (signed `/voice/inbound`, no carrier spend) | Required on this branch |
-| Smallest real concurrency probe | **N=2 live calls only** after controlled-call deploy — never 100 chargeable |
-| Next bottleneck class after app-layer PASS | Twilio / Gemini-or-OpenAI realtime **provider quotas** |
+| Simulated ladder 1→5→12→25→50→75→100 | **PASS** (peak=target; isolation; recovery) |
+| HTTP telephony-path probe 1→5→12 | **PASS** (signed `/voice/inbound`, no carrier spend) |
+| Regression suite | **PASS** locally (303 passed) |
+| Concurrency red-team | **PASS** |
+| Independent defender eval | **PASS** (`DEFENDER_PASS_SIMULATED`) |
+| GitHub Actions on PR | **BLOCKED** — `cursor[bot]` jobs finish in ~2–7s with **empty steps** (org/Actions permission) |
+| Smallest real concurrency probe | **OPEN** — **N=2 live calls only** after controlled-call deploy — never 100 chargeable |
+| Next bottleneck class | Twilio / Gemini-or-OpenAI realtime **provider quotas** |
 
-Design: `docs/CONCURRENCY_100_SCALE.md`. Capacity: `GLOBAL_MAX_CONCURRENT_CALLS` / per-client caps, drain, stale-lease recovery. Redis/shared capacity only if multi-instance tests prove need.
+Evidence: `docs/evidence/CONCURRENCY_100_EVIDENCE.md` / `scripts/build_concurrency_evidence_pack.py`.
+
+Design: `docs/CONCURRENCY_100_SCALE.md` (includes 250/500/1000 scaling seams without provisioning spend).
+
+Rollback point: `origin/main` baseline recorded in evidence pack.
 
 ## Agent rule
 

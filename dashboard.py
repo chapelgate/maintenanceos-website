@@ -206,6 +206,18 @@ elif page=="System Health":
     st.title("System Health")
     checks=readiness_report()
     st.dataframe([{"check":key,"ready":value} for key,value in checks.items()],hide_index=True,use_container_width=True)
+    from call_capacity import capacity_snapshot
+    snap=capacity_snapshot()
+    st.subheader("Live call capacity")
+    ccap=st.columns(4)
+    ccap[0].metric("Active AI calls", snap.active_calls)
+    ccap[1].metric("Global limit", snap.global_limit)
+    ccap[2].metric("Utilisation", f"{snap.ai_session_utilisation:.0%}")
+    ccap[3].metric("Draining", "Yes" if snap.draining else "No")
+    st.caption(
+        f"Backend={snap.backend}; per-company limit={snap.per_client_limit}; "
+        f"est. hourly burn (planning only)=${snap.estimated_hourly_burn_usd:.2f}"
+    )
     with SessionLocal() as s:
         enabled=ai_side_effects_enabled(s)
         failed_jobs=(s.query(AutomationJob).join(WorkOrder,AutomationJob.work_order_id==WorkOrder.id)
