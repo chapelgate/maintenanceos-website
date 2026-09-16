@@ -20,6 +20,7 @@ from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
 from channels import resident_by_phone,create_from_channel
 from identity import postcode_matches
 from readiness import report as readiness_report
+from call_capacity import CapacityRejected, admit_call, capacity_snapshot, release_call_lease
 from voice_bridge import (
     create_call_session,
     handle_twilio_media_stream,
@@ -122,7 +123,19 @@ def require_public_provider_ingress():
 
 @app.get("/health")
 def health():
-    return {"ok":True,"version":"v1-pilot","realtime_voice":os.getenv("ENABLE_REALTIME_VOICE","false").lower()=="true"}
+    snap = capacity_snapshot()
+    return {
+        "ok": True,
+        "version": "v1-pilot",
+        "realtime_voice": os.getenv("ENABLE_REALTIME_VOICE", "false").lower() == "true",
+        "active_calls": snap.active_calls,
+        "call_capacity": {
+            "active": snap.active_calls,
+            "global_limit": snap.global_limit,
+            "per_client_limit": snap.per_client_limit,
+            "backend": snap.backend,
+        },
+    }
 
 @app.post("/work-orders")
 async def create_work_order(request:Request,client_id=Depends(require_internal_api)):
@@ -354,7 +367,16 @@ async def voice_inbound(request:Request):
         call_session_id=create_call_session(call_sid,caller,tenant_id)
     except (SQLAlchemyError,TenantAccessError):
         return Response(inbound_fallback_twiml("The automated service is unavailable."),media_type="application/xml")
+    try:
+        admit_call(call_sid=call_sid, call_session_id=call_session_id, client_id=tenant_id)
+    except CapacityRejected:
+        record_call_interruption(call_session_id, "capacity_rejected")
+        return Response(
+            inbound_fallback_twiml("All lines are currently busy. Please try again shortly."),
+            media_type="application/xml",
+        )
     if not voice_ready():
+        release_call_lease(call_sid=call_sid, call_session_id=call_session_id)
         record_call_interruption(call_session_id,"voice_not_ready")
         msg="The automated service is unavailable."
         return Response(inbound_fallback_twiml(msg),media_type="application/xml")

@@ -28,6 +28,7 @@ from operational_logging import operational_event
 from tenant_security import bind_call_to_tenant,call_client_id,configured_voice_client_id,isolated_voice_tenant_ready
 from voice_policy import authorize_model_action,validate_assistant_text,verified_actions_for_work_order
 from webhook_security import dedicated_test_number_ready,public_provider_ingress_ready,validate_twilio_websocket
+from call_capacity import release_call_lease
 
 
 SYSTEM_PROMPT = """You are a UK property maintenance receptionist.
@@ -484,6 +485,8 @@ def close_call_session(call_session_id: int) -> None:
                                 ))
             cs.ended_at = cs.ended_at or utcnow()
             s.commit()
+    with suppress(Exception):
+        release_call_lease(call_session_id=call_session_id)
     # Persist first; email failures must never lose the call/job.
     with suppress(Exception):
         from call_notifications import dispatch_internal_call_email
