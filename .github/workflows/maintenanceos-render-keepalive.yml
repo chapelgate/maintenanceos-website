@@ -1,0 +1,23 @@
+name: MaintenanceOS Render Keepalive
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Keep controlled-call service warm
+        run: |
+          curl --fail --silent --show-error --max-time 20 \
+            https://maintenanceos-redteam-v2.onrender.com/ \
+            --output /dev/null || code=$?
+          # The app intentionally returns 404 at /; any HTTP response proves it is awake.
+          if [ "${code:-0}" -eq 22 ]; then exit 0; fi
+          exit "${code:-0}"
