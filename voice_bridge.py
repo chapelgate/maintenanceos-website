@@ -614,9 +614,14 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         await _safe_close(websocket, 1013)
         return
     signature = websocket.headers.get("X-Twilio-Signature", "")
-    if not voice_ready() or not validate_twilio_websocket(public_stream_url(), signature):
-        operational_event("websocket_rejected",transport="twilio",outcome="policy_rejected")
-        await _safe_close(websocket, 1008)
+    signed_ok = validate_twilio_websocket(public_stream_url(), signature)
+    ready = voice_ready()
+    if not ready or not signed_ok:
+        outcome = "voice_not_ready" if not ready else "signature_rejected"
+        operational_event("websocket_rejected", transport="twilio", outcome=outcome)
+        if signed_ok:
+            await websocket.accept()
+        await _safe_close(websocket, 1013 if not ready else 1008)
         return
 
     await websocket.accept()

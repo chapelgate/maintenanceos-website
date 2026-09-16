@@ -163,9 +163,17 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
         operational_event("websocket_rejected", transport="twilio", outcome="rate_limited")
         await vb._safe_close(websocket, 1013)
         return
-    if not gemini_ready() or not validate_twilio_websocket(vb.public_stream_url(), websocket.headers.get("X-Twilio-Signature", "")):
-        operational_event("websocket_rejected", transport="twilio", outcome="gemini_policy_rejected")
-        await vb._safe_close(websocket, 1008)
+    signature = websocket.headers.get("X-Twilio-Signature", "")
+    signed_ok = validate_twilio_websocket(vb.public_stream_url(), signature)
+    ready = gemini_ready()
+    if not ready or not signed_ok:
+        outcome = "gemini_not_ready" if not ready else "signature_rejected"
+        operational_event("websocket_rejected", transport="twilio", outcome=outcome)
+        # For an authenticated Twilio stream, accept then close cleanly when the
+        # provider is unavailable so Twilio can continue the fallback TwiML.
+        if signed_ok:
+            await websocket.accept()
+        await vb._safe_close(websocket, 1013 if not ready else 1008)
         return
 
     await websocket.accept()
