@@ -519,6 +519,7 @@ def validate_stream_start(start: dict, params: dict) -> int | None:
 
 
 def record_stream_status(call_sid: str, stream_sid: str, event: str, error: str = "") -> None:
+    operational_event("twilio_stream_status", transport="twilio", outcome=event or "unknown", stream_error=(error or "")[:500])
     with SessionLocal() as s:
         cs = s.query(CallSession).filter_by(call_sid=call_sid).first()
         if not cs:
