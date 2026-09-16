@@ -14,6 +14,7 @@ from call_capacity import (
     reset_capacity_backend_for_tests,
     set_capacity_draining,
 )
+import voice_bridge
 from concurrency_loadtest import LADDER, run_ladder, run_level
 from telephony_path_concurrency_probe import run_telephony_path_probe
 
@@ -106,10 +107,15 @@ def test_concurrency_ladder_to_100(tmp_path, monkeypatch):
         assert report.unique_call_ids == report.target
         assert report.unique_session_ids == report.target
         assert report.unique_transcripts == report.target
+        assert report.unique_ai_contexts == report.target
+        assert report.ai_contexts_peak >= report.target
+        assert report.call_session_tenant_rows == report.target
         assert report.cross_leak_detected is False
         assert report.recovery_ok is True
         assert report.duplicate_actions == 0
         assert report.webhook_retries == report.target
+        assert report.live_media_exercised is False
+        assert report.gate_scope == "simulated_admission_db_and_mock_ai_contexts"
     final = reports[-1]
     assert final.target == 100
     assert final.accepted == 100
@@ -139,6 +145,21 @@ def test_cost_budget_kill_switch_rejects_new_admits(monkeypatch):
     with pytest.raises(CapacityRejected) as exc:
         admit_call(call_sid="CA-budget-2", call_session_id=2, client_id=1)
     assert exc.value.reason == "cost_budget"
+
+
+def test_capacity_readmit_rejects_client_id_mismatch():
+    admit_call(call_sid="CA-mismatch", call_session_id=42, client_id=1)
+    with pytest.raises(CapacityRejected) as exc:
+        admit_call(call_sid="CA-mismatch", call_session_id=42, client_id=2)
+    assert exc.value.reason == "duplicate_active_call"
+
+
+def test_claim_active_call_session_is_atomic():
+    assert voice_bridge.claim_active_call_session(501) is True
+    assert voice_bridge.claim_active_call_session(501) is False
+    voice_bridge.release_active_call_session(501)
+    assert voice_bridge.claim_active_call_session(501) is True
+    voice_bridge.release_active_call_session(501)
 
 
 def test_global_limit_env_defaults_to_hundred():

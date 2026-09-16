@@ -78,17 +78,24 @@ def main() -> int:
             "redteam_green": rc_red == 0,
             "cross_leak": bool(final.get("cross_leak_detected")),
             "recovery_ok": bool(final.get("recovery_ok")),
-            "github_actions": "BLOCKED_empty_steps_cursor_bot_permissions",
+            "ai_contexts_peak_100": bool((final.get("ai_contexts_peak") or 0) >= 100),
+            "github_actions": "BLOCKED_actions_budget_exhausted",
         },
+        "gate_scope": final.get("gate_scope") or "simulated_admission_db_and_mock_ai_contexts",
+        "live_media_exercised": bool(final.get("live_media_exercised")),
         "ladder_summary": [
             {
                 "target": r.get("target"),
                 "pass_gate": r.get("pass_gate"),
                 "peak": r.get("active_calls_peak"),
+                "ai_contexts_peak": r.get("ai_contexts_peak"),
+                "unique_ai_contexts": r.get("unique_ai_contexts"),
                 "p95_conn_ms": (r.get("connection_latency_ms") or {}).get("p95"),
                 "rss_kb": r.get("max_rss_kb"),
                 "cost_usd_est": r.get("estimated_cost_usd"),
                 "bottleneck_class": r.get("bottleneck_class"),
+                "gate_scope": r.get("gate_scope"),
+                "live_media_exercised": r.get("live_media_exercised"),
             }
             for r in ladder
         ],
@@ -100,7 +107,8 @@ def main() -> int:
             "feature_branch": branch,
         },
         "remaining_risks": [
-            "GitHub Actions cannot be verified by cursor[bot] (jobs fail with empty steps) — org Actions permission human fix required",
+            "GitHub Actions budget exhausted — jobs fail with empty steps until spending limit raised",
+            "Ladder does not open live Twilio media WS or provider Realtime sockets (mock AI contexts only)",
             "Provider concurrent-call quotas (Twilio / Gemini-or-OpenAI) not validated with live N=2 yet",
             "Process-local capacity only — multi-instance requires shared backend when horizontally scaled",
         ],
@@ -112,19 +120,23 @@ def main() -> int:
             pack["gates"]["path_probe_12"],
             pack["gates"]["pytest_green"],
             pack["gates"]["redteam_green"],
+            pack["gates"]["ai_contexts_peak_100"],
             not pack["gates"]["cross_leak"],
             pack["gates"]["recovery_ok"],
+            pack["live_media_exercised"] is False,
         ]
     )
     pack["verdict"] = "SIMULATED_ACCEPTANCE_PASS" if verified else "NOT_PASS"
-    # Full VERIFIED COMPLETE still requires Actions green + optional N=2 live probe.
     pack["complete_blocked_by"] = []
     if pack["gates"]["github_actions"].startswith("BLOCKED"):
         pack["complete_blocked_by"].append(
-            "HUMAN: enable GitHub Actions for cursor[bot] / fix org workflow permissions so PR checks actually run steps"
+            "HUMAN: raise/remove GitHub Actions spending limit (billing) so PR checks get runners"
         )
     pack["complete_blocked_by"].append(
         "CONTROLLED-CALL: run smallest real concurrency probe N=2 after isolated deploy (owner-authorised)"
+    )
+    pack["complete_blocked_by"].append(
+        "OPTIONAL-NEXT: mocked media duplex load harness still short of live provider sockets"
     )
 
     for target in (OUT, ARTIFACT, REPO_EVIDENCE):

@@ -138,6 +138,7 @@ def health():
             "draining": snap.draining,
             "ai_session_utilisation": snap.ai_session_utilisation,
             "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
+            "by_client": {str(k): v for k, v in snap.by_client.items()},
         },
     }
 

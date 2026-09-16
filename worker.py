@@ -1,5 +1,6 @@
 import json
 import os
+from contextlib import suppress
 from datetime import datetime, timedelta
 from clock import utcnow
 
@@ -218,6 +219,9 @@ def check_sla():
 def cycle():
     run_due_jobs()
     check_sla()
+    with suppress(Exception):
+        from call_capacity import expire_stale_leases
+        expire_stale_leases()
 
 
 if __name__ == "__main__":

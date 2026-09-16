@@ -99,12 +99,12 @@ Branch: `cursor/concurrency-100-scale-d1b9` (PR #41). **Not merged to production
 
 | Gate | Status |
 | --- | --- |
-| Simulated ladder 1→5→12→25→50→75→100 | **PASS** (peak=target; isolation; recovery) |
+| Simulated ladder 1→5→12→25→50→75→100 | **PASS** (leases + DB isolation + **100 mock AI contexts**; not live media) |
 | HTTP telephony-path probe 1→5→12 | **PASS** (signed `/voice/inbound`, no carrier spend) |
-| Regression suite | **PASS** locally (303 passed) |
+| Regression suite | **PASS** locally (306 passed) |
 | Concurrency red-team | **PASS** |
-| Independent defender eval | **PASS** (`DEFENDER_PASS_SIMULATED`) |
-| GitHub Actions on PR | **BLOCKED** — `cursor[bot]` jobs finish in ~2–7s with **empty steps** (org/Actions permission) |
+| Independent defender (re-executes ladder) | **PASS** (`DEFENDER_PASS_SIMULATED`) |
+| GitHub Actions on PR | **BLOCKED** — Actions **budget exhausted** (empty-step fails) |
 | Smallest real concurrency probe | **OPEN** — **N=2 live calls only** after controlled-call deploy — never 100 chargeable |
 | Next bottleneck class | Twilio / Gemini-or-OpenAI realtime **provider quotas** |
 

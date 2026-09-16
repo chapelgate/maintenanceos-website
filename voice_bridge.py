@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+import threading
 import time
 from contextlib import suppress
 from datetime import datetime
@@ -65,6 +66,32 @@ ESCALATION_TERMS = [
 ]
 
 _ACTIVE_CALL_SESSIONS = set()
+_ACTIVE_CALL_LOCK = threading.Lock()
+
+
+def claim_active_call_session(call_session_id: int) -> bool:
+    """Atomically claim an in-process media/AI session slot for this call_session_id."""
+    if not call_session_id:
+        return False
+    with _ACTIVE_CALL_LOCK:
+        if call_session_id in _ACTIVE_CALL_SESSIONS:
+            return False
+        _ACTIVE_CALL_SESSIONS.add(call_session_id)
+        return True
+
+
+def release_active_call_session(call_session_id: int | None) -> None:
+    if not call_session_id:
+        return
+    with _ACTIVE_CALL_LOCK:
+        _ACTIVE_CALL_SESSIONS.discard(call_session_id)
+
+
+def active_call_session_count() -> int:
+    with _ACTIVE_CALL_LOCK:
+        return len(_ACTIVE_CALL_SESSIONS)
+
+
 UNVERIFIED_ACTION_FALLBACK = (
     "The automated response could not be verified. Do not assume that a contractor, "
     "emergency service, human operator, or other person has been contacted. If there is "
@@ -228,6 +255,9 @@ def create_call_session(call_sid: str, caller: str, client_id: int) -> int:
             s.rollback()
             existing = s.query(CallSession).filter_by(call_sid=call_sid).first()
             if existing:
+                # Must re-check tenant binding — never return a foreign session id.
+                bind_call_to_tenant(s, existing.id, client_id)
+                s.commit()
                 return existing.id
             raise
         return cs.id
@@ -643,9 +673,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         start = first_event.get("start") or {}
         params = start.get("customParameters") or {}
         call_session_id = validate_stream_start(start, params)
-        if not call_session_id or call_session_id in _ACTIVE_CALL_SESSIONS:
+        if not claim_active_call_session(call_session_id):
             raise VoiceProtocolError("invalid_or_duplicate_call_session")
-        _ACTIVE_CALL_SESSIONS.add(call_session_id)
 
         stream_sid = str(start.get("streamSid") or "")
         openai_ws = await _connect_openai(f"maintenanceos-voice-call-{call_session_id}")
@@ -892,4 +921,4 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             transcription_watchdog.cancel()
         await _safe_close(openai_ws)
         if call_session_id:
-            _ACTIVE_CALL_SESSIONS.discard(call_session_id)
+            release_active_call_session(call_session_id)

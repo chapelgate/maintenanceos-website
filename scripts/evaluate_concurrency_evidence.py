@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """Independent Defender/Evaluator for concurrency-100 gates.
 
-Reads evidence-pack.json produced by scripts/build_concurrency_evidence_pack.py.
-Does not modify product code. Exit 0 only when simulated acceptance gates PASS
-and evidence is internally consistent. Never fabricates results.
+Re-executes the ladder and path probe; does not trust builder booleans alone.
+Never fabricates results. Does not modify product code.
 """
 
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 REQUIRED_GATES = (
@@ -22,7 +24,7 @@ REQUIRED_GATES = (
 )
 
 
-def evaluate(pack: dict) -> dict:
+def evaluate(pack: dict, *, reexec: bool = True) -> dict:
     gates = pack.get("gates") or {}
     findings = []
     for key in REQUIRED_GATES:
@@ -30,17 +32,53 @@ def evaluate(pack: dict) -> dict:
             findings.append(f"FAIL gate:{key}")
     if gates.get("cross_leak"):
         findings.append("FAIL cross_leak_detected")
+
     ladder = pack.get("ladder_summary") or []
     if not ladder or ladder[-1].get("target") != 100 or not ladder[-1].get("pass_gate"):
         findings.append("FAIL ladder_final_not_100_pass")
     if ladder and ladder[-1].get("peak", 0) < 100:
         findings.append("FAIL peak_below_100")
-    # Levels must be progressive without early abort
+    if ladder and ladder[-1].get("ai_contexts_peak", 0) < 100:
+        findings.append("FAIL ai_contexts_peak_below_100")
     targets = [row.get("target") for row in ladder]
     if targets != [1, 5, 12, 25, 50, 75, 100]:
         findings.append(f"FAIL ladder_targets:{targets}")
     if any(not row.get("pass_gate") for row in ladder):
         findings.append("FAIL intermediate_ladder_level")
+
+    # Honesty: builder must not claim live media for this gate.
+    if pack.get("live_media_exercised") is True:
+        findings.append("FAIL overclaim_live_media_in_simulated_pack")
+    scope = pack.get("gate_scope") or ""
+    if scope and "mock" not in scope and "simulated" not in scope:
+        findings.append(f"FAIL dishonest_gate_scope:{scope}")
+
+    # Actions budget block must be acknowledged, not hidden.
+    if not str(gates.get("github_actions", "")).startswith("BLOCKED"):
+        findings.append("FAIL missing_actions_blocker_ack")
+
+    if reexec:
+        # Independent re-run of the 100-level only (fast enough, non-chargeable).
+        proc = subprocess.run(
+            [sys.executable, "-c", "from concurrency_loadtest import run_level; r=run_level(100); import json; print(json.dumps({'pass':r.pass_gate,'peak':r.active_calls_peak,'ai':r.ai_contexts_peak,'cross':r.cross_leak_detected,'scope':r.gate_scope}))"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        if proc.returncode != 0:
+            findings.append(f"FAIL reexec_ladder:{proc.stderr[-200:]}")
+        else:
+            try:
+                line = [ln for ln in proc.stdout.splitlines() if ln.startswith("{")][-1]
+                data = json.loads(line)
+                if not data.get("pass"):
+                    findings.append("FAIL reexec_ladder_not_pass")
+                if data.get("peak", 0) < 100 or data.get("ai", 0) < 100:
+                    findings.append("FAIL reexec_peaks")
+                if data.get("cross"):
+                    findings.append("FAIL reexec_cross_leak")
+            except Exception as exc:  # noqa: BLE001
+                findings.append(f"FAIL reexec_parse:{exc}")
 
     verdict = "DEFENDER_PASS_SIMULATED" if not findings else "DEFENDER_FAIL"
     return {
@@ -50,17 +88,22 @@ def evaluate(pack: dict) -> dict:
         "sha": pack.get("final_sha"),
         "baseline": pack.get("baseline_main_sha"),
         "human_blockers": pack.get("complete_blocked_by") or [],
-        "note": "Simulated acceptance only; GitHub Actions + N=2 live probe remain for full COMPLETE",
+        "note": (
+            "Simulated admission+DB+mock AI contexts only. "
+            "Not live Twilio media / provider Realtime. "
+            "GitHub Actions budget + N=2 live probe remain for full COMPLETE."
+        ),
     }
 
 
 def main() -> int:
     path = Path(sys.argv[1] if len(sys.argv) > 1 else "docs/concurrency_100_evidence/evidence-pack.json")
+    reexec = "--no-reexec" not in sys.argv
     if not path.exists():
         print(json.dumps({"verdict": "DEFENDER_FAIL", "findings": [f"missing:{path}"]}))
         return 1
     pack = json.loads(path.read_text())
-    result = evaluate(pack)
+    result = evaluate(pack, reexec=reexec)
     print(json.dumps(result, indent=2))
     out = path.parent / "defender-evaluation.json"
     out.write_text(json.dumps(result, indent=2))

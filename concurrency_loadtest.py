@@ -24,6 +24,12 @@ from sqlalchemy.orm import sessionmaker
 import call_capacity
 import channels
 import voice_bridge
+from ai_session_sim import (
+    active_mock_ai_sessions,
+    close_mock_ai_session,
+    open_mock_ai_session,
+    reset_mock_ai_sessions,
+)
 from call_capacity import (
     CapacityRejected,
     admit_call,
@@ -48,6 +54,7 @@ class CallSimResult:
     accepted: bool
     rejected_reason: str = ""
     session_created: bool = False
+    ai_context_id: str = ""
     transcript_ok: bool = False
     isolation_ok: bool = False
     tenant_ok: bool = False
@@ -76,10 +83,13 @@ class LadderLevelReport:
     cpu_system_s: float
     max_rss_kb: int
     active_calls_peak: int
+    ai_contexts_peak: int
+    unique_ai_contexts: int
     db_sessions: int
     unique_call_ids: int
     unique_session_ids: int
     unique_transcripts: int
+    call_session_tenant_rows: int
     cross_leak_detected: bool
     duplicate_actions: int
     webhook_retries: int
@@ -88,6 +98,8 @@ class LadderLevelReport:
     recovery_ok: bool
     estimated_cost_usd: float
     pass_gate: bool
+    gate_scope: str = "simulated_admission_db_and_mock_ai_contexts"
+    live_media_exercised: bool = False
     bottleneck: str = ""
     bottleneck_class: str = ""
     details: list[dict[str, Any]] = field(default_factory=list)
@@ -141,76 +153,85 @@ def _simulate_one(
     barrier: threading.Barrier | None,
     hold_seconds: float,
     marker: str,
-    peak_tracker: list[int] | None = None,
+    peak_tracker: list | None = None,
     peak_lock: threading.Lock | None = None,
 ) -> CallSimResult:
     call_sid = f"CA-SIM-{marker}-{index:05d}"
     started = time.perf_counter()
     result = CallSimResult(index=index, call_sid=call_sid, call_session_id=None, client_id=client_id, accepted=False)
     try:
-        # Simulated Twilio webhook → session create
         call_session_id = voice_bridge.create_call_session(call_sid, f"+4477009{index:05d}", client_id)
         result.call_session_id = call_session_id
         result.session_created = True
         result.connection_ms = (time.perf_counter() - started) * 1000
 
-        # Simulated capacity admission (as /voice/inbound would)
         t1 = time.perf_counter()
         admit_call(call_sid=call_sid, call_session_id=call_session_id, client_id=client_id)
         result.accepted = True
         result.response_ms = (time.perf_counter() - t1) * 1000
 
-        # Simulated independent AI transcript (no provider calls)
+        if not voice_bridge.claim_active_call_session(call_session_id):
+            raise RuntimeError("duplicate_active_media_session")
+        ai = open_mock_ai_session(call_sid=call_sid, call_session_id=call_session_id, client_id=client_id)
+        result.ai_context_id = ai.context_id
+
         unique_line = f"Caller-{index}: gate {1000 + index} repair marker {marker}-{index}"
         voice_bridge.record_transcript_segment(call_session_id, "Caller", unique_line)
         voice_bridge.record_transcript_segment(call_session_id, "Assistant", f"Ack {index} for {marker}")
-        # Simulated webhook retry (idempotent re-admit of same CallSid)
         admit_call(call_sid=call_sid, call_session_id=call_session_id, client_id=client_id)
         result.webhook_retries = 1
 
-        # Synchronise so all admitted calls are active together before release.
         if barrier is not None:
             barrier.wait(timeout=max(5.0, hold_seconds * 20 + 5.0))
         if peak_tracker is not None and peak_lock is not None:
             snap = capacity_snapshot()
             with peak_lock:
                 peak_tracker[0] = max(peak_tracker[0], snap.active_calls)
-                if len(peak_tracker) > 1:
-                    peak_tracker[1] = max(peak_tracker[1], snap.ai_session_utilisation)
+                peak_tracker[1] = max(peak_tracker[1], snap.ai_session_utilisation)
+                peak_tracker[2] = max(peak_tracker[2], active_mock_ai_sessions())
+                peak_tracker[3] = max(peak_tracker[3], voice_bridge.active_call_session_count())
         time.sleep(hold_seconds)
 
         with factory() as session:
             cs = session.get(CallSession, call_session_id)
             bound = call_client_id(session, call_session_id)
             result.tenant_ok = bound == client_id
-            text = cs.transcript if cs else ""
-            result.transcript_ok = unique_line in text and f"Caller-{index}:" in text
-            leak = any(
-                f"Caller-{other}:" in text
-                for other in range(max(0, index - 3), index + 4)
-                if other != index
-            )
-            result.isolation_ok = result.transcript_ok and not leak
-            result.network_bytes = len((text or "").encode("utf-8"))
+            text_body = cs.transcript if cs else ""
+            result.transcript_ok = unique_line in text_body and f"Caller-{index}:" in text_body
+            foreign = [
+                line
+                for line in (text_body or "").splitlines()
+                if line.startswith("Caller-") and not line.startswith(f"Caller-{index}:")
+            ]
+            result.isolation_ok = result.transcript_ok and not foreign
+            result.network_bytes = len((text_body or "").encode("utf-8"))
 
+        close_mock_ai_session(call_session_id)
+        voice_bridge.release_active_call_session(call_session_id)
         voice_bridge.close_call_session(call_session_id)
-        # Duplicate close must not invent a second post-call action path.
         voice_bridge.close_call_session(call_session_id)
         result.terminated = True
         result.duplicate_close = True
     except CapacityRejected as exc:
         result.rejected_reason = exc.reason
+        if result.call_session_id:
+            close_mock_ai_session(result.call_session_id)
+            voice_bridge.release_active_call_session(result.call_session_id)
         release_call_lease(call_sid=call_sid, call_session_id=result.call_session_id or 0)
         if barrier is not None:
             with suppress(Exception):
                 barrier.abort()
     except Exception as exc:
         result.error = f"{type(exc).__name__}:{exc}"
+        if result.call_session_id:
+            close_mock_ai_session(result.call_session_id)
+            voice_bridge.release_active_call_session(result.call_session_id)
         release_call_lease(call_sid=call_sid, call_session_id=result.call_session_id or 0)
         if barrier is not None:
             with suppress(Exception):
                 barrier.abort()
     return result
+
 
 
 def run_level(
@@ -240,6 +261,7 @@ def run_level(
     voice_bridge.SessionLocal = factory
     channels.SessionLocal = factory
     voice_bridge._ACTIVE_CALL_SESSIONS.clear()
+    reset_mock_ai_sessions()
 
     marker = f"L{target}-{int(time.time())}"
     primary = _seed_tenant(factory, f"{marker}-A")
@@ -247,8 +269,8 @@ def run_level(
     barrier = threading.Barrier(target)
 
     cpu_before = resource.getrusage(resource.RUSAGE_SELF)
-    # [0]=peak active leases, [1]=peak AI utilisation fraction
-    peak_tracker = [0, 0.0]
+    # [0]=leases, [1]=util, [2]=mock AI contexts, [3]=media claims
+    peak_tracker = [0, 0.0, 0, 0]
     peak_lock = threading.Lock()
     results: list[CallSimResult] = []
 
@@ -272,6 +294,8 @@ def run_level(
 
     peak_active = int(peak_tracker[0])
     peak_util = float(peak_tracker[1])
+    peak_ai = int(peak_tracker[2])
+    peak_media = int(peak_tracker[3])
 
     # Recovery probe: inject a stale orphan lease, expire it, ensure capacity clears
     # without disturbing the already-terminated cohort.
@@ -294,6 +318,7 @@ def run_level(
         transcripts = [cs.transcript for cs in sessions]
         session_ids = {cs.id for cs in sessions}
         call_ids = {cs.call_sid for cs in sessions}
+        tenant_rows = session.query(CallSessionTenant).count()
         # Cross-leak: a transcript containing another caller's unique marker
         cross = False
         for cs in sessions:
@@ -314,17 +339,24 @@ def run_level(
     # Duplicate close attempted once per accepted call; count failures only.
     duplicate_actions = sum(1 for r in accepted if r.duplicate_close and not r.terminated)
 
-    # Gate: all target calls accepted AND simultaneously active with isolation.
+    ai_context_ids = {r.ai_context_id for r in accepted if r.ai_context_id}
+
+    # Gate: admission + DB isolation + mock AI contexts simultaneously active.
+    # Explicitly does NOT claim live Twilio media or provider Realtime sockets.
     pass_gate = (
         len(accepted) == target
         and len(errored) == 0
         and len(call_ids) == target
         and len(session_ids) == target
         and len({t for t in transcripts if t}) == target
+        and tenant_rows == target
         and not cross
         and peak_active >= target
+        and peak_ai >= target
+        and peak_media >= target
+        and len(ai_context_ids) == target
         and recovery_ok
-        and all(r.isolation_ok and r.tenant_ok and r.terminated for r in accepted)
+        and all(r.isolation_ok and r.tenant_ok and r.terminated and r.ai_context_id for r in accepted)
     )
 
     bottleneck = ""
@@ -376,10 +408,13 @@ def run_level(
         cpu_system_s=round(cpu_after.ru_stime - cpu_before.ru_stime, 4),
         max_rss_kb=_rss_kb(),
         active_calls_peak=peak_active,
+        ai_contexts_peak=peak_ai,
+        unique_ai_contexts=len(ai_context_ids),
         db_sessions=len(sessions),
         unique_call_ids=len(call_ids),
         unique_session_ids=len(session_ids),
         unique_transcripts=len({t for t in transcripts if t}),
+        call_session_tenant_rows=tenant_rows,
         cross_leak_detected=cross,
         duplicate_actions=duplicate_actions,
         webhook_retries=webhook_retries,
@@ -388,6 +423,8 @@ def run_level(
         recovery_ok=recovery_ok,
         estimated_cost_usd=_estimate_cost(len(accepted)),
         pass_gate=pass_gate,
+        gate_scope="simulated_admission_db_and_mock_ai_contexts",
+        live_media_exercised=False,
         bottleneck=bottleneck,
         bottleneck_class=bottleneck_class,
         details=[asdict(r) for r in sorted(results, key=lambda item: item.index)],
@@ -430,8 +467,9 @@ def main() -> int:
         status = "PASS" if report.pass_gate else "FAIL"
         print(
             f"LEVEL {report.target}: {status} accepted={report.accepted}/{report.target} "
-            f"peak_active={report.active_calls_peak} p95_conn_ms={report.connection_latency_ms['p95']} "
-            f"bottleneck={report.bottleneck or 'none'}"
+            f"peak_active={report.active_calls_peak} peak_ai={report.ai_contexts_peak} "
+            f"p95_conn_ms={report.connection_latency_ms['p95']} "
+            f"scope={report.gate_scope} bottleneck={report.bottleneck or 'none'}"
         )
     return 0 if reports and reports[-1].pass_gate and reports[-1].target == max(LADDER) else 1
 

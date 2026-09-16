@@ -233,9 +233,8 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
         start = first_event.get("start") or {}
         params = start.get("customParameters") or {}
         call_session_id = vb.validate_stream_start(start, params)
-        if not call_session_id or call_session_id in vb._ACTIVE_CALL_SESSIONS:
+        if not vb.claim_active_call_session(call_session_id):
             raise vb.VoiceProtocolError("invalid_or_duplicate_call_session")
-        vb._ACTIVE_CALL_SESSIONS.add(call_session_id)
         stream_sid = str(start.get("streamSid") or "")
         call_sid = str(start.get("callSid") or "")
         job_reference = f"CG-{call_session_id:06d}"
@@ -454,4 +453,4 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             if not lifecycle_closed:
                 with suppress(Exception):
                     vb.close_call_session(call_session_id)
-            vb._ACTIVE_CALL_SESSIONS.discard(call_session_id)
+            vb.release_active_call_session(call_session_id)

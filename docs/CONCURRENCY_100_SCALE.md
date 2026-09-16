@@ -30,10 +30,10 @@ Final product shape:
 2. **Simulated ladder** (`concurrency_loadtest.py`)
    - Levels: 1, 5, 12, 25, 50, 75, 100
    - No real Twilio / model spend
-   - Measures accept/reject, session creation, connection/response latency,
-     CPU, RSS, DB sessions, active connections, AI utilisation, webhook
-     retries, duplicate closes, transcript/tenant isolation, recovery,
-     estimated cost
+   - Claims capacity leases + **independent mock AI context IDs** + in-process media slots
+   - Full-cohort transcript isolation (not adjacent-only)
+   - Gate scope is explicitly `simulated_admission_db_and_mock_ai_contexts`
+     (`live_media_exercised=false`) — does **not** claim live Twilio media or provider sockets
 
 3. **HTTP telephony-path probe** (`telephony_path_concurrency_probe.py`)
    - Signed synthetic `/voice/inbound` concurrency (still zero carrier/model spend)

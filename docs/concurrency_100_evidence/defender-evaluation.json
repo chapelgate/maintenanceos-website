@@ -2,11 +2,12 @@
   "verdict": "DEFENDER_PASS_SIMULATED",
   "findings": [],
   "builder_verdict": "SIMULATED_ACCEPTANCE_PASS",
-  "sha": "75541e3cffd870138835f9aad8b0abed1e51b73c",
+  "sha": "e78806edd6cec6e08e0e84a834df2e60238de978",
   "baseline": "9e03f15c5baaecdc266800b241244e61855defcc",
   "human_blockers": [
-    "HUMAN: enable GitHub Actions for cursor[bot] / fix org workflow permissions so PR checks actually run steps",
-    "CONTROLLED-CALL: run smallest real concurrency probe N=2 after isolated deploy (owner-authorised)"
+    "HUMAN: raise/remove GitHub Actions spending limit (billing) so PR checks get runners",
+    "CONTROLLED-CALL: run smallest real concurrency probe N=2 after isolated deploy (owner-authorised)",
+    "OPTIONAL-NEXT: mocked media duplex load harness still short of live provider sockets"
   ],
-  "note": "Simulated acceptance only; GitHub Actions + N=2 live probe remain for full COMPLETE"
+  "note": "Simulated admission+DB+mock AI contexts only. Not live Twilio media / provider Realtime. GitHub Actions budget + N=2 live probe remain for full COMPLETE."
 }

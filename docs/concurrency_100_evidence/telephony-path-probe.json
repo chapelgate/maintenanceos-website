@@ -7,7 +7,7 @@
     "unique_call_ids": 1,
     "unique_session_ids": 1,
     "peak_active": 1,
-    "p95_ms": 73.953,
+    "p95_ms": 75.031,
     "pass_gate": true,
     "bottleneck_class": "none"
   },
@@ -19,7 +19,7 @@
     "unique_call_ids": 5,
     "unique_session_ids": 5,
     "peak_active": 5,
-    "p95_ms": 109.836,
+    "p95_ms": 115.068,
     "pass_gate": true,
     "bottleneck_class": "none"
   },
@@ -31,7 +31,7 @@
     "unique_call_ids": 12,
     "unique_session_ids": 12,
     "peak_active": 12,
-    "p95_ms": 234.039,
+    "p95_ms": 247.135,
     "pass_gate": true,
     "bottleneck_class": "none"
   }
