@@ -139,3 +139,7 @@ def test_cost_budget_kill_switch_rejects_new_admits(monkeypatch):
     with pytest.raises(CapacityRejected) as exc:
         admit_call(call_sid="CA-budget-2", call_session_id=2, client_id=1)
     assert exc.value.reason == "cost_budget"
+
+
+def test_global_limit_env_defaults_to_hundred():
+    assert global_max_concurrent_calls() == 100
