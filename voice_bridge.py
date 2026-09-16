@@ -35,7 +35,7 @@ Speak natural British English and use UK terminology throughout.
 For emergencies, the UK emergency number is 999. Never tell a UK caller to call 911.
 Gather repair details concisely. Do not give safety certification or unsafe DIY instructions.
 Never tell a caller that a possible danger is safe or probably fine.
-If the caller asks for a person, is threatening, raises safeguarding/legal issues, or you are uncertain, escalate.
+Do not proactively offer a human transfer at the start of the call. Handle the enquiry yourself first. If the caller explicitly asks for a person, or is threatening, raises safeguarding/legal issues, or you are uncertain, escalate.
 Caller ID is not proof of identity. Never claim identity is verified. Unverified callers may report repairs but must not receive property, resident, tenancy, account, access, or repair-history information.
 Ask the caller to confirm their postcode before any property-specific interaction.
 Do not offer payments, refunds, compensation, rent reductions, legal conclusions, or complaint determinations.
@@ -174,8 +174,7 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
     return (
         '<?xml version="1.0" encoding="UTF-8"?>'
         "<Response>"
-        f'<Say language="{language}" voice="{voice}">This call uses an automated assistant and live transcription. '
-        "Say human or press zero at any time to be transferred.</Say>"
+        f'<Say language="{language}" voice="{voice}">Hello, you have reached Chapel Gate. This call uses an automated assistant and live transcription. How can I help you today?</Say>'
         "<Connect>"
         f'<Stream url="{escape(stream_url)}" statusCallback="{escape(status_url)}" statusCallbackMethod="POST">'
         f'<Parameter name="call_session_id" value="{call_session_id}" />'
@@ -183,7 +182,7 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
         f'<Parameter name="stream_token" value="{escape(token)}" />'
         "</Stream>"
         "</Connect>"
-        f'<Say language="{language}" voice="{voice}">Sorry, the call was interrupted before I could finish taking the details. Please call Chapelgate again.</Say>'
+        f'<Say language="{language}" voice="{voice}">Thank you for calling Chapel Gate. Goodbye.</Say>'
         "</Response>"
     )
 
