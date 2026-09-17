@@ -1,4 +1,4 @@
-import os,imaplib,smtplib,email,uuid
+import os,imaplib,smtplib,email,uuid,json,urllib.request
 from email.message import EmailMessage
 from email.header import decode_header
 from dotenv import load_dotenv
@@ -54,10 +54,23 @@ def fetch_unseen():
     im.close();im.logout()
     return rows
 
-def send_email(to,subject,body):
-    """Send via SMTP when live email is enabled.
+def _send_resend_http(to, subject, body, sender, api_key):
+    payload=json.dumps({"from":sender,"to":[to],"subject":subject,"text":body}).encode("utf-8")
+    req=urllib.request.Request(
+        os.getenv("RESEND_API_URL","https://api.resend.com/emails"),
+        data=payload,
+        headers={"Authorization":f"Bearer {api_key}","Content-Type":"application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req,timeout=10) as response:
+        data=json.loads(response.read().decode("utf-8"))
+    return {"mock":False,"message_id":str(data.get("id") or f"<resend-{uuid.uuid4()}@api>")}
 
-    Mock mode returns a synthetic id and must never be treated as real delivery.
+def send_email(to,subject,body):
+    """Send live mail without ever making SMTP a voice-call critical path.
+
+    Resend SMTP credentials are also valid API credentials, so Resend-hosted
+    configurations prefer HTTPS and fall back to SMTP only if the API fails.
     """
     if os.getenv("EMAIL_MODE","mock")!="imap_smtp":
         return {"mock":True,"message_id":f"<mock-{uuid.uuid4()}@maintenanceos>"}
@@ -67,6 +80,11 @@ def send_email(to,subject,body):
         raise RuntimeError("SMTP configuration incomplete")
     host=os.getenv("SMTP_HOST");user=os.getenv("SMTP_USERNAME");pw=os.getenv("SMTP_PASSWORD")
     sender=os.getenv("SMTP_FROM") or user
+    if host and host.lower().endswith("resend.com"):
+        try:
+            return _send_resend_http(to,subject,body,sender,pw)
+        except Exception:
+            pass
     port=int(os.getenv("SMTP_PORT","587"))
     use_tls=os.getenv("SMTP_USE_TLS","true").lower()=="true"
     use_ssl=os.getenv("SMTP_USE_SSL","false").lower()=="true"

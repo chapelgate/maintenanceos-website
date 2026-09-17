@@ -211,7 +211,7 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
         f'<Parameter name="stream_token" value="{escape(token)}" />'
         "</Stream>"
         "</Connect>"
-        f'<Say language="{language}" voice="{voice}">Thank you for calling Chapel Gate. Goodbye.</Say>'
+        f'<Say language="{language}" voice="{voice}">Thank you for calling Chapel Gate. Goodbye, have a nice day.</Say>'
         "</Response>"
     )
 

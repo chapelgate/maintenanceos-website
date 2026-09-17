@@ -46,3 +46,21 @@ def test_system_prompt_requires_polite_completed_call_farewell():
 
     assert "Thank you for calling Chapel Gate. Goodbye, have a nice day." in SYSTEM_PROMPT
     assert "Never end a completed routine call in silence." in SYSTEM_PROMPT
+
+
+def test_deterministic_close_helpers_only_fire_after_invitation():
+    from gemini_voice import _assistant_invited_close, _routine_close_confirmed
+
+    assert _assistant_invited_close("Is there anything else I can help you with?")
+    assert _routine_close_confirmed("No thanks, that's all.")
+    assert not _assistant_invited_close("Do you know the gate number?")
+    assert not _routine_close_confirmed("No, I don't know the gate number")
+
+
+def test_gemini_bridge_moves_close_work_off_event_loop():
+    import inspect
+    import gemini_voice
+
+    source = inspect.getsource(gemini_voice.handle_gemini_media_stream)
+    assert "await asyncio.to_thread(vb.close_call_session, call_session_id)" in source
+    assert "deterministic_goodbye" in source

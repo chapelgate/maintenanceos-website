@@ -202,6 +202,25 @@ def _merge_transcription(current: str, fragment: str) -> str:
     return f"{current} {fragment}".strip()
 
 
+def _assistant_invited_close(text: str) -> bool:
+    lowered = " ".join((text or "").casefold().split())
+    return any(phrase in lowered for phrase in (
+        "anything else i can help",
+        "anything else we can help",
+        "is there anything else",
+        "anything more i can help",
+    ))
+
+
+def _routine_close_confirmed(text: str) -> bool:
+    lowered = " ".join((text or "").casefold().replace("’", "'").split())
+    return any(phrase in lowered for phrase in (
+        "no thanks", "no thank you", "no, thanks", "no, thank you",
+        "that's all", "thats all", "that's everything", "thats everything",
+        "nothing else", "no that's it", "no thats it", "all done",
+    ))
+
+
 async def handle_gemini_media_stream(websocket: WebSocket) -> None:
     import voice_bridge as vb
 
@@ -227,6 +246,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
     lifecycle_closed = False
     stop_received = asyncio.Event()
     transfer_required = asyncio.Event()
+    routine_close_requested = asyncio.Event()
 
     try:
         first_event = await vb._receive_twilio_start(websocket)
@@ -275,6 +295,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             await session.send_realtime_input(text=f"The phone call has just connected. This call's job reference is {job_reference}. Greet the caller now exactly as instructed, then listen.")
             seen_sequences: set[str] = set()
             transcript_buffers = {"caller": "", "assistant": ""}
+            closing_prompt_seen = False
             # Latency markers (no caller PII): turn completion → model audio → Twilio send.
             turn_latency = {
                 "caller_turn_ms": None,
@@ -295,6 +316,14 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         reason_code=f"silence_{silence_ms}",
                     )
 
+            async def close_lifecycle() -> None:
+                nonlocal lifecycle_closed
+                if lifecycle_closed:
+                    return
+                with suppress(Exception):
+                    await asyncio.to_thread(vb.close_call_session, call_session_id)
+                lifecycle_closed = True
+
             async def request_human_transfer() -> None:
                 nonlocal lifecycle_closed
                 if transfer_required.is_set():
@@ -309,10 +338,18 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         "caller_requested_human" if transferred else "human_transfer_failed",
                     )
                 await vb._safe_close(websocket, 1000)
-                if not lifecycle_closed:
-                    with suppress(Exception):
-                        vb.close_call_session(call_session_id)
-                        lifecycle_closed = True
+                await close_lifecycle()
+
+            async def request_routine_close() -> None:
+                if routine_close_requested.is_set():
+                    return
+                routine_close_requested.set()
+                operational_event("routine_call_close", transport="twilio", outcome="deterministic_goodbye")
+                # End the media stream first. Twilio then immediately continues the
+                # post-Stream TwiML <Say>, which provides the exact goodbye without
+                # waiting for another model turn.
+                await vb._safe_close(websocket, 1000)
+                await close_lifecycle()
 
             async def from_twilio() -> None:
                 nonlocal lifecycle_closed
@@ -357,14 +394,12 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                     vb.record_transcript_segment(call_session_id, speaker, text)
                                 transcript_buffers[key] = ""
                         stop_received.set()
-                        if not lifecycle_closed:
-                            with suppress(Exception):
-                                vb.close_call_session(call_session_id)
-                                lifecycle_closed = True
+                        await close_lifecycle()
                         return
 
             async def from_gemini() -> None:
-                while not stop_received.is_set() and not transfer_required.is_set():
+                nonlocal closing_prompt_seen
+                while not stop_received.is_set() and not transfer_required.is_set() and not routine_close_requested.is_set():
                     async for response in session.receive():
                         content = response.server_content
                         if not content:
@@ -386,6 +421,9 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                     with suppress(Exception):
                                         vb.record_transcript_segment(call_session_id, "Caller", merged)
                                     transcript_buffers["caller"] = ""
+                                if closing_prompt_seen and _routine_close_confirmed(merged):
+                                    await request_routine_close()
+                                    return
                             if _explicit_human_request(text) or _needs_payment_handoff(text):
                                 await request_human_transfer()
                                 return
@@ -394,6 +432,8 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                             transcript_buffers["assistant"] = _merge_transcription(
                                 transcript_buffers["assistant"], str(output_tx.text)
                             )
+                            if _assistant_invited_close(transcript_buffers["assistant"]):
+                                closing_prompt_seen = True
                             if getattr(output_tx, "finished", None) is True:
                                 merged = transcript_buffers["assistant"].strip()
                                 if merged:
@@ -436,7 +476,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                 error = task.exception()
                 if error:
                     raise error
-            if not stop_received.is_set() and not transfer_required.is_set():
+            if not stop_received.is_set() and not transfer_required.is_set() and not routine_close_requested.is_set():
                 with suppress(Exception):
                     vb.record_call_interruption(call_session_id, "gemini_transport_disconnected")
             for task in pending:
