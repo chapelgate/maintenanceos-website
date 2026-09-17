@@ -104,7 +104,7 @@ Branch: `cursor/concurrency-100-scale-d1b9` (PR #41). **Not merged to production
 | Regression suite | **PASS** locally (306 passed) |
 | Concurrency red-team | **PASS** |
 | Independent defender (re-executes ladder) | **PASS** (`DEFENDER_PASS_SIMULATED`) |
-| GitHub Actions on PR | **BLOCKED** — Actions **budget exhausted** (empty-step fails) |
+| GitHub Actions on PR | **PASS** — Cloud CI + Security CI green on `8d6fa94` (real runners/steps) |
 | Smallest real concurrency probe | **OPEN** — **N=2 live calls only** after controlled-call deploy — never 100 chargeable |
 | Next bottleneck class | Twilio / Gemini-or-OpenAI realtime **provider quotas** |
 

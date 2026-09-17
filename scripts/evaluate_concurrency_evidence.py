@@ -54,9 +54,10 @@ def evaluate(pack: dict, *, reexec: bool = True) -> dict:
     if scope and "mock" not in scope and "simulated" not in scope:
         findings.append(f"FAIL dishonest_gate_scope:{scope}")
 
-    # Actions budget block must be acknowledged, not hidden.
-    if not str(gates.get("github_actions", "")).startswith("BLOCKED"):
-        findings.append("FAIL missing_actions_blocker_ack")
+    # Actions must be acknowledged: either blocked with reason, or verified green.
+    ga = str(gates.get("github_actions", ""))
+    if not (ga.startswith("BLOCKED") or ga.startswith("PASS")):
+        findings.append("FAIL missing_actions_status_ack")
 
     if reexec:
         # Independent re-run of the 100-level only (fast enough, non-chargeable).
@@ -123,8 +124,9 @@ def evaluate(pack: dict, *, reexec: bool = True) -> dict:
 
 
 def main() -> int:
-    path = Path(sys.argv[1] if len(sys.argv) > 1 else "docs/concurrency_100_evidence/evidence-pack.json")
+    args = [a for a in sys.argv[1:] if a != "--no-reexec"]
     reexec = "--no-reexec" not in sys.argv
+    path = Path(args[0] if args else "docs/concurrency_100_evidence/evidence-pack.json")
     if not path.exists():
         print(json.dumps({"verdict": "DEFENDER_FAIL", "findings": [f"missing:{path}"]}))
         return 1

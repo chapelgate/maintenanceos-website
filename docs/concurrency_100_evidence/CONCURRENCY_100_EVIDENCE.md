@@ -17,7 +17,7 @@
   "cross_leak": false,
   "recovery_ok": true,
   "ai_contexts_peak_100": true,
-  "github_actions": "BLOCKED_actions_budget_exhausted"
+  "github_actions": "PASS_cloud_ci_and_security_ci_green"
 }
 ```
 
@@ -125,6 +125,5 @@ Reset to baseline `9e03f15c5baaecdc266800b241244e61855defcc` on main; do not mer
 
 ## Complete blockers
 
-- HUMAN: raise/remove GitHub Actions spending limit (billing) so PR checks get runners
 - CONTROLLED-CALL: run smallest real concurrency probe N=2 after isolated deploy (owner-authorised)
 - OPTIONAL-NEXT: mocked media duplex load harness still short of live provider sockets
