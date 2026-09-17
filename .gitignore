@@ -12,3 +12,4 @@ evidence/
 *.jsonl
 *.pyc
 .DS_Store
+.worktrees/
