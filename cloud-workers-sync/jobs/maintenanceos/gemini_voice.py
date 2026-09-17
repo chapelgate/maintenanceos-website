@@ -54,6 +54,7 @@ MASTER KEY RULE: Master keys are restricted and are not ordinary resident keys. 
 REPAIR TIMESCALE RULE: If a caller asks how long a repair will take, say someone will be able to look at it within 24 to 48 hours. Explain that if parts are needed, such as a new cylinder, completion can take anywhere from two to four weeks because Chapelgate is currently experiencing long lead times. Do not promise completion within 24 to 48 hours; that is the timeframe for someone to look at the repair.
 
 A job reference will be supplied to you in the live-call context. For a repair/maintenance intake, before ending, briefly read back the important collected details and tell the caller their job reference. Do not claim a contractor has been booked or dispatched unless the backend explicitly confirms it.
+CALL CLOSING RULE: If you ask whether there is anything else and the caller says no, no thanks, that's all, or otherwise confirms they are finished, you MUST reply before the call ends: 'Thank you for calling Chapel Gate. Goodbye, have a nice day.' Never end a completed routine call in silence.
 Never invent bookings, contractor dispatches, notifications, refunds, compensation, private account information, or safety assurances. If you do not know, say so.
 Routine maintenance words are not automatically emergencies. Only advise 999 for a credible immediate threat to life or serious injury. Never say 911.
 Do not proactively offer a human. If the caller clearly asks for a person or manager, or cannot use the online ordering/payment route and needs an alternative payment arrangement, end the media stream so the existing Twilio fail-closed transfer path can continue to the configured human number.
@@ -189,6 +190,18 @@ def _explicit_human_request(text: str) -> bool:
     ))
 
 
+def _merge_transcription(current: str, fragment: str) -> str:
+    current = (current or "").strip()
+    fragment = (fragment or "").strip()
+    if not fragment:
+        return current
+    if not current or fragment.startswith(current):
+        return fragment
+    if current.endswith(fragment) or current == fragment:
+        return current
+    return f"{current} {fragment}".strip()
+
+
 async def handle_gemini_media_stream(websocket: WebSocket) -> None:
     import voice_bridge as vb
 
@@ -220,9 +233,8 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
         start = first_event.get("start") or {}
         params = start.get("customParameters") or {}
         call_session_id = vb.validate_stream_start(start, params)
-        if not call_session_id or call_session_id in vb._ACTIVE_CALL_SESSIONS:
+        if not vb.claim_active_call_session(call_session_id):
             raise vb.VoiceProtocolError("invalid_or_duplicate_call_session")
-        vb._ACTIVE_CALL_SESSIONS.add(call_session_id)
         stream_sid = str(start.get("streamSid") or "")
         call_sid = str(start.get("callSid") or "")
         job_reference = f"CG-{call_session_id:06d}"
@@ -262,6 +274,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             operational_event("gemini_live_connected", transport="gemini", outcome="connected")
             await session.send_realtime_input(text=f"The phone call has just connected. This call's job reference is {job_reference}. Greet the caller now exactly as instructed, then listen.")
             seen_sequences: set[str] = set()
+            transcript_buffers = {"caller": "", "assistant": ""}
             # Latency markers (no caller PII): turn completion → model audio → Twilio send.
             turn_latency = {
                 "caller_turn_ms": None,
@@ -332,9 +345,18 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         await request_human_transfer()
                         return
                     elif event_type == "stop":
-                        stop_received.set()
                         with suppress(Exception):
                             await session.send_realtime_input(audio_stream_end=True)
+                        # Give Gemini a short post-hangup window to emit final transcription.
+                        # This is after the caller has disconnected, so it does not add call latency.
+                        await asyncio.sleep(0.75)
+                        for speaker, key in (("Caller", "caller"), ("Assistant", "assistant")):
+                            text = transcript_buffers[key].strip()
+                            if text:
+                                with suppress(Exception):
+                                    vb.record_transcript_segment(call_session_id, speaker, text)
+                                transcript_buffers[key] = ""
+                        stop_received.set()
                         if not lifecycle_closed:
                             with suppress(Exception):
                                 vb.close_call_session(call_session_id)
@@ -352,29 +374,44 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         input_tx = getattr(content, "input_transcription", None)
                         if input_tx and getattr(input_tx, "text", None):
                             text = str(input_tx.text)
+                            transcript_buffers["caller"] = _merge_transcription(transcript_buffers["caller"], text)
                             finished = getattr(input_tx, "finished", None) is True
-                            if finished or turn_latency["caller_turn_ms"] is None:
-                                # Prefer finished transcript as turn completion; fall back to first partial.
-                                if finished or getattr(content, "turn_complete", False):
-                                    _mark("caller_turn_ms")
-                                    turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
-                                    turn_latency["first_model_audio_ms"] = None
-                                    turn_latency["first_twilio_audio_ms"] = None
                             if finished:
-                                with suppress(Exception):
-                                    vb.record_transcript_segment(call_session_id, "Caller", text)
-                                if _explicit_human_request(text) or _needs_payment_handoff(text):
-                                    await request_human_transfer()
-                                    return
-                        if getattr(content, "turn_complete", False) and turn_latency["caller_turn_ms"] is None:
-                            _mark("caller_turn_ms")
-                            turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
-                            turn_latency["first_model_audio_ms"] = None
-                            turn_latency["first_twilio_audio_ms"] = None
+                                _mark("caller_turn_ms")
+                                turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
+                                turn_latency["first_model_audio_ms"] = None
+                                turn_latency["first_twilio_audio_ms"] = None
+                                merged = transcript_buffers["caller"].strip()
+                                if merged:
+                                    with suppress(Exception):
+                                        vb.record_transcript_segment(call_session_id, "Caller", merged)
+                                    transcript_buffers["caller"] = ""
+                            if _explicit_human_request(text) or _needs_payment_handoff(text):
+                                await request_human_transfer()
+                                return
                         output_tx = getattr(content, "output_transcription", None)
-                        if output_tx and getattr(output_tx, "text", None) and getattr(output_tx, "finished", None) is True:
-                            with suppress(Exception):
-                                vb.record_transcript_segment(call_session_id, "Assistant", str(output_tx.text))
+                        if output_tx and getattr(output_tx, "text", None):
+                            transcript_buffers["assistant"] = _merge_transcription(
+                                transcript_buffers["assistant"], str(output_tx.text)
+                            )
+                            if getattr(output_tx, "finished", None) is True:
+                                merged = transcript_buffers["assistant"].strip()
+                                if merged:
+                                    with suppress(Exception):
+                                        vb.record_transcript_segment(call_session_id, "Assistant", merged)
+                                    transcript_buffers["assistant"] = ""
+                        if getattr(content, "turn_complete", False):
+                            if turn_latency["caller_turn_ms"] is None:
+                                _mark("caller_turn_ms")
+                                turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
+                                turn_latency["first_model_audio_ms"] = None
+                                turn_latency["first_twilio_audio_ms"] = None
+                            for speaker, key in (("Caller", "caller"), ("Assistant", "assistant")):
+                                merged = transcript_buffers[key].strip()
+                                if merged:
+                                    with suppress(Exception):
+                                        vb.record_transcript_segment(call_session_id, speaker, merged)
+                                    transcript_buffers[key] = ""
                         model_turn = getattr(content, "model_turn", None)
                         if model_turn and getattr(model_turn, "parts", None):
                             for part in model_turn.parts:
@@ -416,4 +453,4 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             if not lifecycle_closed:
                 with suppress(Exception):
                     vb.close_call_session(call_session_id)
-            vb._ACTIVE_CALL_SESSIONS.discard(call_session_id)
+            vb.release_active_call_session(call_session_id)

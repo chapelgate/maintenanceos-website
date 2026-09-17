@@ -1,0 +1,19 @@
+{
+  "capacity_present": false,
+  "checked_at": "2026-09-17T00:58:07Z",
+  "concurrency_capacity_gte_2": false,
+  "cost_kill_switch_signal_present": false,
+  "draining": false,
+  "email_sender_not_probed_here": true,
+  "estimated_hourly_burn_usd": null,
+  "gemini_not_opened_here": true,
+  "global_limit": 0,
+  "health_http_ok": true,
+  "health_ok": true,
+  "profile": "n2-preflight",
+  "ready_for_andy_n2_calls": false,
+  "realtime_voice": true,
+  "rollback_point_file_present": false,
+  "twilio_webhook_not_mutated_here": true,
+  "wss_not_opened_here": true
+}

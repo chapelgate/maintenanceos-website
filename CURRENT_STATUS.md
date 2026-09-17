@@ -95,24 +95,29 @@ Do **not** declare `READY FOR CONTROLLED TEST CALL` from unit tests, `/health`, 
 
 ## Concurrency / call-centre scale (isolated branch)
 
-Branch: `cursor/concurrency-100-scale-d1b9` (PR #41). **Not merged to production path yet.**
+Branch: `cursor/n2-live-concurrency-e283` (updates PR #41 / `cursor/concurrency-100-scale-d1b9`).
+Reconciled with `main` @ `9e03f15` (Render keepalive/warm). **Not merged to production path yet.**
 
 | Gate | Status |
 | --- | --- |
 | Simulated ladder 1→5→12→25→50→75→100 | **PASS** (leases + DB isolation + **100 mock AI contexts**; not live media) |
 | HTTP telephony-path probe 1→5→12 | **PASS** (signed `/voice/inbound`, no carrier spend) |
-| Regression suite | **PASS** locally (306 passed) |
+| Regression suite | **PASS** locally (307 passed after main reconcile) |
 | Concurrency red-team | **PASS** |
 | Independent defender (re-executes ladder) | **PASS** (`DEFENDER_PASS_SIMULATED`) |
-| GitHub Actions on PR | **PASS** — Cloud CI + Security CI green on `8d6fa94` (real runners/steps) |
-| Smallest real concurrency probe | **OPEN** — **N=2 live calls only** after controlled-call deploy — never 100 chargeable |
+| GitHub Actions on PR | **PASS** — Cloud CI + Security CI green on `8d6fa94` / evidence commit `d075483` |
+| Controlled deploy tooling | **READY** — `scripts/controlled_n2_deploy.py` (MOS-only; rollback file; kill-switch env) |
+| Deploy credential | **BLOCKED** — `RENDER_API_KEY` absent in this agent; `cloud-workers` GitHub 404 |
+| Smallest real concurrency probe | **OPEN** — owner-authorised **N=2** after controlled-call deploy — never 100 chargeable |
 | Next bottleneck class | Twilio / Gemini-or-OpenAI realtime **provider quotas** |
 
-Evidence: `docs/concurrency_100_evidence/CONCURRENCY_100_EVIDENCE.md` / `scripts/build_concurrency_evidence_pack.py`.
+Evidence: `docs/concurrency_100_evidence/` / `scripts/build_concurrency_evidence_pack.py`.
 
 Design: `docs/CONCURRENCY_100_SCALE.md` (includes 250/500/1000 scaling seams without provisioning spend).
 
-Rollback point: `origin/main` baseline recorded in evidence pack.
+Rollback point: `origin/main` baseline `9e03f15c5baaecdc266800b241244e61855defcc` (`scripts/verify_rollback_point.sh`).
+
+Deploy: inject `RENDER_API_KEY` into this Cloud Agent, then the agent runs `--apply` on `maintenanceos-redteam-v2` only.
 
 ## Agent rule
 

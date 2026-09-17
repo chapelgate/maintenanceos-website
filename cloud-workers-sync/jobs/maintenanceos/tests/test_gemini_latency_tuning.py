@@ -30,3 +30,19 @@ def test_hot_path_resamplers_preserve_energy():
     # generic path still works
     out = resample_pcm16(pcm24k, 24000, 12000)
     assert len(out) == len(pcm24k) // 2
+
+
+def test_transcription_merge_handles_cumulative_and_chunked_fragments():
+    from gemini_voice import _merge_transcription
+
+    assert _merge_transcription("", "Gate 943") == "Gate 943"
+    assert _merge_transcription("Gate 943", "Gate 943 is broken") == "Gate 943 is broken"
+    assert _merge_transcription("Gate 943 is", "broken") == "Gate 943 is broken"
+    assert _merge_transcription("Gate 943 is broken", "broken") == "Gate 943 is broken"
+
+
+def test_system_prompt_requires_polite_completed_call_farewell():
+    from gemini_voice import SYSTEM_PROMPT
+
+    assert "Thank you for calling Chapel Gate. Goodbye, have a nice day." in SYSTEM_PROMPT
+    assert "Never end a completed routine call in silence." in SYSTEM_PROMPT

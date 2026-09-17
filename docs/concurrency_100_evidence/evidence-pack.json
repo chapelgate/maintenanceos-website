@@ -175,5 +175,10 @@
       35165004622,
       35165004632
     ]
-  }
+  },
+  "reconciled_with_main": true,
+  "reconcile_note": "Merged origin/main keepalive/warm (9e03f15) into concurrency branch for N=2 live probe",
+  "n2_branch": "cursor/n2-live-concurrency-e283",
+  "n2_status": "PRE_DEPLOY_BLOCKED_ON_RENDER_API_KEY",
+  "updated_at": "2026-09-17T00:58:07Z"
 }
