@@ -5,7 +5,7 @@ import { PageHero } from "@/components/PageHero";
 export const metadata = {
   title: "How it works",
   description:
-    "How MaintenanceOS is designed to work: intake, deterministic triage, human oversight, and accountable execution — pre-launch, claims-gated.",
+    "How MaintenanceOS is designed to work: intake, classify, rules and human clearance, work order and evidence — pre-launch, claims-gated.",
 };
 
 export default function HowItWorksPage() {
@@ -76,9 +76,9 @@ export default function HowItWorksPage() {
         <CtaPair
           className="mt-6"
           primaryHref="/demo/"
-          primaryLabel="Request early demo"
+          primaryLabel="Request an early demo"
           secondaryHref="/demo/#launch"
-          secondaryLabel="Join launch list"
+          secondaryLabel="Join the launch list"
         />
       </div>
     </>

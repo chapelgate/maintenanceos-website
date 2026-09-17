@@ -1,6 +1,7 @@
 /**
- * Visual intake → triage → oversight → execution flow.
- * CSS/SVG only — static export friendly, no client JS.
+ * Visual flow per UX_JOURNEYS §2:
+ * Intake → Classify → Rules & human clearance → Work order & evidence.
+ * CSS only — static export friendly; vertical stepper on mobile; no AI-theatre animation.
  */
 const STAGES = [
   {
@@ -10,21 +11,21 @@ const STAGES = [
     body: "Residents, agents, or voice channels. Caller and property details become structured work.",
   },
   {
-    id: "triage",
-    title: "Triage & rules",
-    short: "Classify & route",
-    body: "Deterministic safety and lifecycle rules classify and route. AI may draft or classify — it does not override safety rules.",
+    id: "classify",
+    title: "Classify",
+    short: "Structure the request",
+    body: "AI may assist with drafting and classification. It does not override safety or lifecycle rules.",
   },
   {
-    id: "oversight",
-    title: "Human oversight",
-    short: "Clearance first",
-    body: "Critical safety paths need human clearance. Escalation queues keep people in the loop before consequential dispatch.",
+    id: "rules-clearance",
+    title: "Rules & human clearance",
+    short: "Safety first",
+    body: "Deterministic safety and lifecycle rules classify and route. Critical paths require human clearance before consequential dispatch.",
   },
   {
-    id: "execution",
-    title: "Accountable execution",
-    short: "Jobs & audit",
+    id: "work-order",
+    title: "Work order & evidence",
+    short: "Accountable execution",
     body: "Jobs, communications, and audit evidence stay tied to the work order so operations stay reviewable.",
   },
 ] as const;
@@ -40,6 +41,7 @@ export function HowItWorksFlow() {
         not the other way around.
       </p>
 
+      {/* Desktop: horizontal stage cards */}
       <ol
         className="mt-10 hidden md:grid md:grid-cols-4 md:gap-3"
         aria-label="How MaintenanceOS is designed to work"
@@ -74,16 +76,22 @@ export function HowItWorksFlow() {
         ))}
       </ol>
 
-      <ol className="mt-8 space-y-4 md:hidden" aria-label="How MaintenanceOS is designed to work">
+      {/* Mobile: vertical stepper */}
+      <ol className="relative mt-8 space-y-0 md:hidden" aria-label="How MaintenanceOS is designed to work">
         {STAGES.map((stage, i) => (
-          <li
-            key={stage.id}
-            className="flex gap-4 rounded-lg border border-border bg-surface p-4"
-          >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-white">
-              {i + 1}
-            </span>
-            <div>
+          <li key={stage.id} className="relative flex gap-4 pb-8 last:pb-0">
+            <div className="flex flex-col items-center">
+              <span className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-white">
+                {i + 1}
+              </span>
+              {i < STAGES.length - 1 ? (
+                <span
+                  className="mt-1 w-0.5 flex-1 min-h-[2rem] bg-border"
+                  aria-hidden="true"
+                />
+              ) : null}
+            </div>
+            <div className="flex-1 rounded-lg border border-border bg-surface p-4">
               <h3 className="text-lg font-semibold text-ink">{stage.title}</h3>
               <p className="mt-1 text-sm font-medium text-accent">{stage.short}</p>
               <p className="mt-2 text-sm text-muted">{stage.body}</p>
