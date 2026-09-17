@@ -138,3 +138,19 @@ Reset to baseline `9e03f15c5baaecdc266800b241244e61855defcc` on main; do not mer
 - Deploy tooling: `scripts/controlled_n2_deploy.py` (MOS-only)
 - **BLOCKER**: `RENDER_API_KEY` not present in Cloud Agent (requested from owner)
 - Live `/health` still lacks `call_capacity` → concurrency code not yet on Render
+
+
+## N=2 live deploy observed (2026-09-17)
+
+Live `https://maintenanceos-redteam-v2.onrender.com/health` now reports:
+- `ok: true`
+- `realtime_voice: true`
+- `call_capacity.global_limit: 2`
+- `call_capacity.per_client_limit: 2`
+- `draining: false`
+- `estimated_hourly_burn_usd` present (cost signal)
+
+`scripts/n2_preflight.py` → **ready_for_andy_n2_calls: true**
+Rollback baseline still `9e03f15`; `n2-rollback-point.json` recorded.
+
+**Next:** owner places exactly **two simultaneous** calls on the dedicated MaintenanceOS test number.

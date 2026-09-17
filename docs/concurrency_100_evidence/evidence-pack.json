@@ -179,10 +179,19 @@
   "reconciled_with_main": true,
   "reconcile_note": "Merged origin/main keepalive/warm (9e03f15) into concurrency branch for N=2 live probe",
   "n2_branch": "cursor/n2-live-concurrency-e283",
-  "n2_status": "CI_GREEN_AWAITING_RENDER_API_KEY",
-  "updated_at": "2026-09-17T00:58:07Z",
+  "n2_status": "DEPLOYED_PREFLIGHT_PASS_AWAITING_PHYSICAL_CALLS",
+  "updated_at": "2026-09-17T06:31:11Z",
   "github_actions_after_reconcile": "PASS_cloud_ci_and_security_ci_green",
-  "n2_head_sha": "0da97e05d37b6e7af163acb7f5aed80df1a50723",
+  "n2_head_sha": "89c8b5db13d439598c886e305dfb899939d500cc",
   "local_pytest_after_reconcile": "307_passed",
-  "ci_checked_at": "2026-09-17T01:01:15Z"
+  "ci_checked_at": "2026-09-17T01:01:15Z",
+  "n2_live_health": {
+    "ok": true,
+    "realtime_voice": true,
+    "global_limit": 2,
+    "per_client_limit": 2,
+    "draining": false,
+    "estimated_hourly_burn_usd": 0.0
+  },
+  "n2_preflight_ready": true
 }
