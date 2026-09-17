@@ -3,9 +3,12 @@ import { footerNav, siteConfig } from "@/config/site";
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-border bg-ink text-paper">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-[70rem] gap-10 px-4 py-12 md:px-6 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="text-lg font-semibold">{siteConfig.name}</p>
+          <p className="text-lg text-paper" aria-label={siteConfig.name}>
+            <span className="font-medium">Maintenance</span>
+            <span className="font-semibold">OS</span>
+          </p>
           <p className="mt-2 text-sm text-slate-300">
             Built for UK maintenance operations. Pre-launch — not commercially
             generally available.
@@ -27,7 +30,7 @@ export function SiteFooter() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-sm text-slate-200 hover:text-white"
+                    className="text-sm text-slate-200 transition-colors hover:text-white"
                   >
                     {link.label}
                     {title === "Legal" ? (
@@ -42,12 +45,16 @@ export function SiteFooter() {
           </div>
         ))}
       </div>
-      <div className="border-t border-slate-700 px-4 py-4">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 text-sm text-slate-400">
+      <div className="border-t border-slate-700 px-4 py-4 md:px-6">
+        <div className="mx-auto flex max-w-[70rem] flex-wrap items-center justify-between gap-3 text-sm text-slate-400">
           <p>© {new Date().getFullYear()} Chapelgate · MaintenanceOS</p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             {footerNav.convert.map((link) => (
-              <a key={link.href} href={link.href} className="hover:text-white">
+              <a
+                key={link.href}
+                href={link.href}
+                className="transition-colors hover:text-white"
+              >
                 {link.label}
               </a>
             ))}
