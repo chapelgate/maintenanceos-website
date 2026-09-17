@@ -136,7 +136,7 @@ def health():
             "per_client_limit": snap.per_client_limit,
             "backend": snap.backend,
             "draining": snap.draining,
-            "ai_session_utilisation": snap.ai_session_utilisation,
+            "ai_session_utilisation": snap.ai_session_utilisation,  # lease util, not mock AI contexts
             "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
             "by_client": {str(k): v for k, v in snap.by_client.items()},
         },

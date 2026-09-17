@@ -62,7 +62,7 @@ class CapacitySnapshot:
     rejected_total: int = 0
     accepted_total: int = 0
     draining: bool = False
-    ai_session_utilisation: float = 0.0
+    ai_session_utilisation: float = 0.0  # lease utilisation (active_leases / global_limit), not mock AI contexts
     estimated_hourly_burn_usd: float = 0.0
     worker_id: str = ""
 
