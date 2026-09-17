@@ -127,3 +127,14 @@ Reset to baseline `9e03f15c5baaecdc266800b241244e61855defcc` on main; do not mer
 
 - CONTROLLED-CALL: run smallest real concurrency probe N=2 after isolated deploy (owner-authorised)
 - OPTIONAL-NEXT: mocked media duplex load harness still short of live provider sockets
+
+
+## N=2 live probe preparation (2026-09-17)
+
+- Reconciled with main keepalive/warm (`9e03f15`)
+- Local pytest: **307 passed**
+- Cloud CI + Security CI: **GREEN** on reconcile HEAD
+- Rollback baseline verified: `9e03f15c5baaecdc266800b241244e61855defcc`
+- Deploy tooling: `scripts/controlled_n2_deploy.py` (MOS-only)
+- **BLOCKER**: `RENDER_API_KEY` not present in Cloud Agent (requested from owner)
+- Live `/health` still lacks `call_capacity` → concurrency code not yet on Render
