@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Independent Defender/Evaluator for concurrency-100 gates.
 
-Re-executes the ladder and path probe; does not trust builder booleans alone.
-Never fabricates results. Does not modify product code.
+Re-executes the ladder (N=100) and the HTTP path probe (N=12).
+Does not trust builder booleans alone. Never fabricates results.
+Does not modify product code.
 """
 
 from __future__ import annotations
@@ -79,6 +80,31 @@ def evaluate(pack: dict, *, reexec: bool = True) -> dict:
                     findings.append("FAIL reexec_cross_leak")
             except Exception as exc:  # noqa: BLE001
                 findings.append(f"FAIL reexec_parse:{exc}")
+
+        path_proc = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                (
+                    "from telephony_path_concurrency_probe import run_telephony_path_probe; "
+                    "r=run_telephony_path_probe(12); import json; "
+                    "print(json.dumps({'pass':r.pass_gate,'accepted':r.accepted,'peak':r.peak_active}))"
+                ),
+            ],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+        if path_proc.returncode != 0:
+            findings.append(f"FAIL reexec_path_probe:{path_proc.stderr[-200:]}")
+        else:
+            try:
+                line = [ln for ln in path_proc.stdout.splitlines() if ln.startswith("{")][-1]
+                data = json.loads(line)
+                if not data.get("pass") or data.get("accepted") != 12 or data.get("peak", 0) < 12:
+                    findings.append("FAIL reexec_path_probe_not_pass")
+            except Exception as exc:  # noqa: BLE001
+                findings.append(f"FAIL reexec_path_parse:{exc}")
 
     verdict = "DEFENDER_PASS_SIMULATED" if not findings else "DEFENDER_FAIL"
     return {
