@@ -1,0 +1,78 @@
+/**
+ * MaintenanceOS design tokens — Brand System v0.1 (amber)
+ * Source of truth: docs/website/BRAND_SYSTEM.md
+ * For Front-End reuse (CSS modules / Tailwind theme mapping).
+ */
+
+:root {
+  /* Core */
+  --mos-ink: #0F172A;
+  --mos-ink-muted: #475569;
+  --mos-paper: #F8FAFC;
+  --mos-surface: #FFFFFF;
+  --mos-line: #E2E8F0;
+  --mos-accent: #B45309;
+  --mos-accent-hover: #D97706;
+  --mos-accent-subtle: #FEF3C7;
+  --mos-on-accent: #FFFFFF;
+
+  /* Functional — never colour-only */
+  --mos-ok: #15803D;
+  --mos-warn: #92400E;
+  --mos-critical: #B91C1C;
+  --mos-info: #1D4ED8;
+
+  /* Elevation — Brand §6 one soft shadow */
+  --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
+
+  /* Radii */
+  --mos-radius: 8px;
+  --mos-radius-lg: 12px;
+
+  /* Focus */
+  --mos-focus-ring: 2px solid var(--mos-accent);
+  --mos-focus-offset: 2px;
+
+  /* Motion */
+  --mos-duration: 150ms;
+  --mos-duration-slow: 200ms;
+  --mos-easing: ease;
+
+  /* Type */
+  --mos-font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mos-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Spacing (4/8 base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-8: 48px;
+  --space-10: 64px;
+  --space-12: 96px;
+
+  /* Layout */
+  --mos-content-max: 70rem;
+}
+
+[data-theme="dark"] {
+  --mos-ink: #F8FAFC;
+  --mos-ink-muted: #94A3B8;
+  --mos-paper: #020617;
+  --mos-surface: #0F172A;
+  --mos-line: #1E293B;
+  --mos-accent: #F59E0B;
+  --mos-accent-hover: #FBBF24;
+  --mos-accent-subtle: #451A03;
+  --mos-on-accent: #0F172A;
+  --mos-shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 35%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mos-duration: 0ms;
+    --mos-duration-slow: 0ms;
+  }
+}

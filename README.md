@@ -1,28 +1,54 @@
-# MaintenanceOS website
+# MaintenanceOS marketing website
 
-Private marketing site for **MaintenanceOS**.
+Truthful **pre-launch** marketing site for MaintenanceOS (not the product backend).
+
+**Brand System v0.1 APPROVED** — amber accent `#B45309`, ink `#0F172A`, paper `#F8FAFC`, Inter. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
 
 ## Stance
 
-- **Pre-launch.** Do not claim the product is commercially live.
-- Truthful claims only (see programme `PRODUCT_CLAIMS_REGISTER.md`).
-- No domain purchase or paid hosting from agents without owner approval.
-- CTAs: join launch list / request early demo only.
+- `PUBLIC_LAUNCH` defaults to **false** (`NEXT_PUBLIC_PUBLIC_LAUNCH` / `src/config/site.ts`).
+- CTAs only: **Join launch list** / **Request early demo**.
+- Never claim commercially live / GA / certified / production call-ready.
+- No fake social proof, dashboards-as-live-product, customers, or certifications.
+- Copy gated by `PRODUCT_CLAIMS_REGISTER.md`.
 
-## Stack (intended)
+## Stack
 
-Next.js App Router + TypeScript + Tailwind CSS.
+- Next.js 15 App Router + TypeScript + Tailwind CSS v4
+- **Static export** (`output: 'export'`) → `out/` for DigitalOcean App Platform static (or any static host)
+- Provider-independent lead adapter (`src/lib/lead-adapter.ts`) — posts to `NEXT_PUBLIC_FORM_ENDPOINT` when set; otherwise success stub / queue message (does **not** claim email was sent)
+- No Node API routes (static-export compatible)
 
-## Repo
+## Quick start
 
-https://github.com/chapelgate/maintenanceos-website
+```bash
+cp .env.example .env.local   # placeholders only — no secrets in git
+npm install
+npm run dev                  # local preview
+npm run build                # emits out/
+```
 
-## Status (2026-09-17)
+Serve the static site (optional): `npx serve out`.
 
-- Repository created (private).
-- Next.js scaffold pending (Cursor cloud agent blocked on account usage / on-demand).
-- No staging/preview URL yet.
+### DigitalOcean App Platform (static)
 
-## Programme board
+Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets.
 
-Ops coordination board: `chapelgate-ops/docs/website/WEBSITE_AGENT_BOARD.md`
+## Desktop navigation (IA v0.2)
+
+How it works · Features · AI receptionist · Security · **Pricing** · Industries (+ Join launch list CTA). `/demo` is the conversion canon (launch list + early demo tabs/sections).
+
+## Programme docs (repo root)
+
+- `CURSOR_HANDOFF.md`
+- `WEBSITE_ARCHITECTURE.md`
+- `PRODUCT_CLAIMS_REGISTER.md`
+- `WEBSITE_AGENT_BOARD.md`
+- `WEBSITE_LAUNCH_CHECKLIST.md`
+- `WEBSITE_BACKLOG.md`
+- `WEBSITE_IA.md`
+- `MISSION_BRIEF.md`
+
+## Secrets
+
+None in this repository. Use `.env.example` placeholders only.
