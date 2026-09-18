@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getCanonicalSiteUrl } from "@/lib/site-url";
 
+export const dynamic = "force-static";
+
 /**
  * AI crawlers the owner wants able to read marketing pages and /llms.txt.
  * Default `*` also allows indexing — there are no admin/private routes in this export.

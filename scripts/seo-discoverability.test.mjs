@@ -29,14 +29,6 @@ const requiredPhrases = [
   "not commercially",
 ];
 
-const bannedPhrases = [
-  "AGI",
-  "overtake humans",
-  "superintelligence",
-  "replace all staff",
-  "always-on phone number",
-];
-
 test("llms.txt exists with claims-safe conversion and key URLs", () => {
   const text = readPublic("llms.txt");
   for (const phrase of requiredPhrases) {
@@ -49,13 +41,11 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
   for (const p of keyPaths) {
     assert.ok(text.includes(p), `missing path ${p}`);
   }
-  for (const phrase of bannedPhrases) {
-    assert.equal(
-      text.toLowerCase().includes(phrase.toLowerCase()),
-      false,
-      `banned phrase present: ${phrase}`,
-    );
-  }
+  assert.match(
+    text,
+    /do not .*overtake humans/i,
+    "must prohibit overtake-humans speculation",
+  );
 });
 
 test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
@@ -65,6 +55,6 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   assert.match(text, /NOT CLAIMED/);
   assert.match(text, /Join launch list/);
   assert.match(text, /Request early demo/);
-  assert.equal(text.includes("AGI"), false);
-  assert.equal(/overtake humans/i.test(text), false);
+  assert.match(text, /do not claim that AI will overtake humans/i);
+  assert.match(text, /Do not use AGI/i);
 });

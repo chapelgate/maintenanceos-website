@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { marketingPaths } from "@/config/routes";
 import { absoluteUrl } from "@/lib/site-url";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return marketingPaths.map((path) => ({
     url: absoluteUrl(path),
