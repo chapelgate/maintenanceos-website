@@ -1,10 +1,10 @@
-name: maintenanceos
+name: maintenanceos-london
 region: lon
 services:
   - name: web
     github:
       repo: chapelgate/maintenanceos-v1-pilot
-      branch: main
+      branch: cursor/do-migration-reconcile-e283
       deploy_on_push: false
     source_dir: /
     dockerfile_path: Dockerfile
@@ -19,11 +19,11 @@ services:
       failure_threshold: 3
     envs:
       - key: DATABASE_DEPLOYMENT_MODE
-        value: managed_test
+        value: local
         scope: RUN_TIME
         type: GENERAL
       - key: DATABASE_TLS_REQUIRED
-        value: "true"
+        value: "false"
         scope: RUN_TIME
         type: GENERAL
       - key: PUBLIC_BASE_URL
@@ -31,15 +31,7 @@ services:
         scope: RUN_TIME
         type: GENERAL
       - key: VOICE_PROVIDER
-        value: gemini
-        scope: RUN_TIME
-        type: GENERAL
-      - key: GEMINI_LIVE_MODEL
-        value: gemini-3.1-flash-live-preview
-        scope: RUN_TIME
-        type: GENERAL
-      - key: GEMINI_LIVE_VOICE
-        value: Kore
+        value: openai
         scope: RUN_TIME
         type: GENERAL
       - key: TWILIO_TTS_LANGUAGE
@@ -60,6 +52,14 @@ services:
         type: GENERAL
       - key: ENABLE_REALTIME_VOICE
         value: "false"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: GLOBAL_MAX_CONCURRENT_CALLS
+        value: "2"
+        scope: RUN_TIME
+        type: GENERAL
+      - key: PER_CLIENT_MAX_CONCURRENT_CALLS
+        value: "2"
         scope: RUN_TIME
         type: GENERAL
       - key: ENABLE_LIVE_EMAIL

@@ -24,9 +24,18 @@ The historical copy under `chapelgate/cloud-workers/jobs/maintenanceos` is a **d
 | Holiday Let Operator (HLO) | DigitalOcean `chapelgate-hlo-production` `167.99.202.163` | **DO NOT TOUCH** for MaintenanceOS work |
 | Evidence Wallet | DigitalOcean `chapelgate-production-wallet` `46.101.16.174` | Unrelated |
 | Cheap Trips | DigitalOcean `chapelgate-cheap-trips-production` `206.189.112.98` | Unrelated |
-| MaintenanceOS | **No dedicated DigitalOcean Droplet** | Public validation runtime is Render |
+| MaintenanceOS (active) | Render `maintenanceos-redteam-v2` | Lane A pilot — keep until DO acceptance |
+| MaintenanceOS (target) | DigitalOcean App Platform `maintenanceos-london` (lon) | **No droplet yet** — see `docs/migration/DO_MIGRATION_REPORT.md` |
 
 A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assumption is invalid. Do not deploy MaintenanceOS there, modify its routing/database/Caddy, or stop its containers.
+
+## Migration freeze (2026-09-18)
+
+- Feature development and Render-specific repairs frozen during DO migration.
+- `n2-secrets-retry` cancelled permanently — do not poll absent Resend.
+- Resend is email-only and must not block voice/DO bring-up.
+- N=2 baseline evidence preserved under `docs/concurrency_100_evidence/`.
+- Single blocker for DO create: Cloud Agent secret `DIGITALOCEAN_TOKEN`.
 
 ## Current Render runtime (must be re-verified each session)
 

@@ -51,3 +51,13 @@ Do not deploy a dev database as the final production store because the productio
 ## Migration rule
 
 The existing Render validation deployment remains untouched until the DigitalOcean deployment has passed the same or stronger verification. Do not delete or redirect production traffic merely because a DigitalOcean resource exists.
+
+## Reconciled inventory (2026-09-18)
+
+- **No dedicated MaintenanceOS Droplet exists.** Do not assume historical droplet names/IPs.
+- HLO / Evidence Wallet / Cheap Trips DigitalOcean hosts are unrelated — never reuse.
+- Permanent target: App Platform app `maintenanceos-london` (`.do/app.yaml`) via `scripts/provision_do_voice_app.py`.
+- Secrets: `secrets_handler.py` (env + `/tmp/mos-secrets/` files). Never commit plaintext.
+- Resend is optional for voice; absence must not block DO bring-up or N=2 voice verification.
+- Credential polling timers (`n2-secrets-retry`) are cancelled permanently for this migration.
+- Authoritative migration status: `docs/migration/DO_MIGRATION_REPORT.md`
