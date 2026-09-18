@@ -20,7 +20,8 @@ from tenant_security import call_client_id
 CATEGORY_REPAIR = "repair"
 CATEGORY_KEY = "key"
 CATEGORY_MASTER_KEY = "master_key"
-ACTIONABLE_CATEGORIES = {CATEGORY_REPAIR, CATEGORY_KEY, CATEGORY_MASTER_KEY}
+CATEGORY_CALL_REVIEW = "call_review"
+ACTIONABLE_CATEGORIES = {CATEGORY_REPAIR, CATEGORY_KEY, CATEGORY_MASTER_KEY, CATEGORY_CALL_REVIEW}
 
 _MASTER_KEY = re.compile(
     r"\bmaster\s*keys?\b|\brestricted\s+keys?\b|\bmaster\s+key\s+application\b",
@@ -144,9 +145,12 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     elif category == CATEGORY_KEY:
         subject = f"[KEY REQUEST] Alley-gate key enquiry {job_ref}"
         banner = "KEY / RESIDENT KEY ENQUIRY (distinguish from repair jobs)\n"
-    else:
+    elif category == CATEGORY_REPAIR:
         subject = f"[REPAIR] Maintenance request {job_ref}"
         banner = "REPAIR / MAINTENANCE REQUEST\n"
+    else:
+        subject = f"[CALL REVIEW] Chapelgate phone call {job_ref}"
+        banner = "COMPLETED CHAPELGATE CALL — REVIEW / CLASSIFICATION REQUIRED\n"
 
     lines = [
         banner,
@@ -224,19 +228,18 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
             cs = session.query(CallSession).filter_by(id=call_session_id).first()
             if not cs:
                 result["reason"] = "missing_call"
+                operational_event("voice_notification", transport="email", outcome="missing_call")
                 return result
             client_id = call_client_id(session, cs.id)
             if not client_id:
                 result["reason"] = "missing_tenant"
+                operational_event("voice_notification", transport="email", outcome="missing_tenant")
                 return result
             transcript = (cs.transcript or "").strip()
-            if not transcript:
-                result["reason"] = "empty_transcript"
-                return result
-            category = classify_call_category(transcript)
-            if category not in ACTIONABLE_CATEGORIES:
-                result["reason"] = "non_actionable_category"
-                return result
+            category = classify_call_category(transcript) or CATEGORY_CALL_REVIEW
+            # Never silently lose a completed pilot call because realtime
+            # transcription/classification was incomplete. Recognised repair/key
+            # calls keep their specific subject; anything else becomes CALL REVIEW.
 
             job_reference = f"CG-{cs.id:06d}"
             action_key = f"voice-internal-email:{cs.call_sid}:{category}"
