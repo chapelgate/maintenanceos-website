@@ -156,3 +156,13 @@ def test_red_team_guard_matrix(monkeypatch):
     evaluate_signals_and_maybe_abort({"tenant_id": "chapelgate", "duplicate_jobs": True})
     with pytest.raises(CapacityRejected):
         admit_call(call_sid="CA-ABORT", call_session_id=1, client_id=1, tenant_id="chapelgate")
+
+
+def test_bootstrap_env_cannot_lower_owner_floor(monkeypatch, tmp_path):
+    monkeypatch.setenv("PILOT_STATE_PATH", str(tmp_path / "state.json"))
+    monkeypatch.setenv("PILOT_BOOTSTRAP_CALLS", "2")  # stale env must not erase Call 3
+    reset_pilot_runtime_for_tests()
+    monkeypatch.setenv("PILOT_MODE_ARMED", "true")
+    st = pilot_status()
+    assert st["persistence"]["bootstrap_floor"] == 3
+    assert st["calls_completed"] >= 3

@@ -454,6 +454,79 @@ async def safety_clearance(request:Request,client_id=Depends(require_internal_ap
     return {"cleared":True,"status":"HUMAN_REVIEW"}
 
 
+
+@app.post("/pilot/synthetic-email-proof")
+async def pilot_synthetic_email_proof(request: Request):
+    """Controlled internal completion-email proof. Does not place a Twilio call
+    and does not consume the 10-call pilot ceiling. Token-gated only.
+    """
+    expected = (os.getenv("PILOT_SYNTHETIC_PROOF_TOKEN") or "").strip()
+    provided = (request.headers.get("X-Pilot-Proof-Token") or "").strip()
+    if not expected or not provided or not hmac.compare_digest(provided, expected):
+        raise HTTPException(404, "Not found")
+    from pilot.runtime_guard import is_pilot_mode_armed
+    if not is_pilot_mode_armed():
+        raise HTTPException(409, "pilot_not_armed")
+    body = {}
+    with suppress(Exception):
+        body = await _json_object(request)
+    marker = _bounded_text(body.get("marker") or f"P0-PROOF-{os.urandom(4).hex()}", "marker", required=True, maximum=64)
+    # Build a minimal synthetic call session for chapelgate tenant and dispatch.
+    from call_notifications import dispatch_internal_call_email
+    from models import Client, Property, TenantBoundary, SessionLocal
+    from voice_bridge import create_call_session, close_call_session
+
+    with SessionLocal() as session:
+        client = session.query(Client).order_by(Client.id.asc()).first()
+        if client is None:
+            client = Client(name="Chapelgate synthetic proof")
+            session.add(client)
+            session.flush()
+        if session.query(Property).filter_by(client_id=client.id).first() is None:
+            session.add(Property(client_id=client.id, address="Synthetic proof", postcode="CH1 1AA"))
+        if session.query(TenantBoundary).filter_by(client_id=client.id).first() is None:
+            session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="P0"))
+        session.commit()
+        client_id = client.id
+
+    call_sid = f"CA-p0-proof-{marker}"[-34:]
+    call_id = create_call_session(call_sid, "+440000000998", client_id)
+    # Incomplete transcript => CALL REVIEW fallback must still send.
+    close_call_session(call_id)
+    result = dispatch_internal_call_email(call_id)
+    # Wait briefly if email is async
+    import time
+    time.sleep(1.5)
+    from models import CommunicationDelivery
+    with SessionLocal() as session:
+        rows = (
+            session.query(CommunicationDelivery)
+            .filter(CommunicationDelivery.provider_reference.isnot(None))
+            .order_by(CommunicationDelivery.id.desc())
+            .limit(5)
+            .all()
+        )
+        delivery = None
+        for row in rows:
+            if marker in (row.provider_reference or "") or (row.status or "").upper() == "SENT":
+                delivery = row
+                break
+        if delivery is None and rows:
+            delivery = rows[0]
+        provider_id = getattr(delivery, "provider_reference", None) if delivery else None
+        status = getattr(delivery, "status", None) if delivery else None
+    return {
+        "ok": True,
+        "synthetic": True,
+        "pilot_call_consumed": False,
+        "call_session_id": call_id,
+        "dispatch": {k: result.get(k) for k in ("sent", "category", "provider_reference", "mock") if isinstance(result, dict)},
+        "provider_message_id_present": bool(provider_id),
+        "delivery_status": status,
+        "marker": marker,
+    }
+
+
 @app.get("/readiness")
 def readiness_endpoint(_=Depends(require_internal_api)):
     return readiness_report()

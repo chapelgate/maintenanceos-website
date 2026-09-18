@@ -65,16 +65,19 @@ def _bootstrap_count() -> int:
     """Durable floor for owner-verified calls.
 
     Production default is 3 (Calls 1–3 already completed). Explicit
-    PILOT_BOOTSTRAP_CALLS=0 is allowed for tests.
+    PILOT_BOOTSTRAP_CALLS=0 is allowed for tests only. Any other env value
+    may raise the floor but must never lower it below the owner-verified count.
     """
     raw = os.getenv("PILOT_BOOTSTRAP_CALLS", "").strip()
+    if raw == "0":
+        return 0
     if raw == "":
         return _OWNER_VERIFIED_FLOOR
     try:
         value = int(raw)
     except (TypeError, ValueError):
         value = _OWNER_VERIFIED_FLOOR
-    return max(0, min(value, MAX_REAL_CALLS))
+    return max(_OWNER_VERIFIED_FLOOR, min(value, MAX_REAL_CALLS))
 
 
 def _db_backend_kind() -> str:
