@@ -9,8 +9,10 @@ import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   variable: "--font-inter",
   display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -31,7 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-GB">
-      <body className={`${inter.variable} flex min-h-screen flex-col font-sans antialiased`}>
+      <body
+        className={`${inter.variable} flex min-h-screen flex-col font-sans antialiased`}
+      >
         <SkipLink />
         <PreLaunchBanner />
         <SiteHeader />
