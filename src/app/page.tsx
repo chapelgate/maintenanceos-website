@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const pillars = [
   {
     title: "AI for intake. Rules for the operation.",
-    body: "The model gathers caller details and classifies the issue. Lifecycle, safety latching, escalations, and approvals stay on deterministic server controls. The AI does not override safety or perform consequential actions on its own.",
+    body: "The receptionist is designed to gather caller details and classify the issue (capability under testing). Lifecycle, safety latching, escalations, and approvals stay on deterministic server controls. The AI does not override safety or perform consequential actions on its own.",
     href: "/how-it-works/",
     link: "See how it works",
   },
@@ -52,9 +52,9 @@ export default function HomePage() {
             </h1>
             <p className="mt-5 text-lg text-ink">
               MaintenanceOS is a multi-tenant platform for UK landlords, letting
-              agents, and property managers. An AI receptionist layer collects
-              and classifies what callers say; deterministic rules own safety,
-              approvals, and money prohibitions.
+              agents, and property managers. An AI receptionist layer is designed
+              to collect and classify what callers say (under testing);
+              deterministic rules own safety, approvals, and money prohibitions.
             </p>
             <CtaPair className="mt-8" primaryHref="/#join" />
             <p className="mt-4 text-sm">
