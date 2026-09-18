@@ -1,35 +1,145 @@
 import { LegalDraftBanner } from "@/components/LegalDraftBanner";
+import { LegalPageChrome } from "@/components/LegalPageChrome";
 import { PageHero } from "@/components/PageHero";
 
-export const metadata = { title: "Terms" };
+export const metadata = {
+  title: "Terms (Draft)",
+  description:
+    "Draft website terms of use scaffold for the MaintenanceOS marketing site. Pending legal review — not binding policy.",
+};
 
-export default function Page() {
+const sections: { id: string; title: string; body: string }[] = [
+  {
+    id: "about",
+    title: "About these terms",
+    body: "These draft terms cover access to and use of the public MaintenanceOS website; they are a scaffold for counsel, not a finished agreement.",
+  },
+  {
+    id: "who-we-are",
+    title: "Who we are",
+    body: "[OWNER / COUNSEL] — same controller/operator identity placeholder as the privacy notice; do not invent legal entity details.",
+  },
+  {
+    id: "acceptance",
+    title: "Acceptance of terms",
+    body: "Using the site will mean you agree to these terms once counsel-approved; until then, the draft banner governs expectations.",
+  },
+  {
+    id: "pre-launch",
+    title: "Pre-launch and no reliance",
+    body: "This site is pre-launch and informational; content may change; it is not an offer of a live commercial service unless expressly stated.",
+  },
+  {
+    id: "accounts",
+    title: "Accounts and product access",
+    body: "The marketing site is not product login; reserved paths such as /account or /portal are stubs until real — N/A for pre-launch access.",
+  },
+  {
+    id: "lead-forms",
+    title: "Lead forms and communications",
+    body: "Submit accurate information on launch-list, demo, and contact forms; we may contact you about that request subject to the privacy notice.",
+  },
+  {
+    id: "acceptable-use",
+    title: "Acceptable use (summary)",
+    body: "Do not misuse the site: no scraping abuse, injecting malware, unauthorized access, form flooding, or unlawful content — full AUP appendix optional; no separate /acceptable-use route.",
+  },
+  {
+    id: "ip",
+    title: "Intellectual property",
+    body: "[COUNSEL] — ownership of site content, marks, and branding; limited licence to view only as counsel directs.",
+  },
+  {
+    id: "third-party",
+    title: "Third-party links",
+    body: "Links to external sites are for convenience and do not imply endorsement.",
+  },
+  {
+    id: "disclaimer",
+    title: "Disclaimer of warranties",
+    body: "[COUNSEL: UK consumer/B2B fit] — informational site “as is” style disclaimer structure only; no invented warranties.",
+  },
+  {
+    id: "liability",
+    title: "Limitation of liability",
+    body: "[COUNSEL] — caps and exclusions structure for counsel; do not invent figures.",
+  },
+  {
+    id: "indemnity",
+    title: "Indemnity (if used)",
+    body: "[COUNSEL: include or omit] — optional placeholder only.",
+  },
+  {
+    id: "privacy",
+    title: "Privacy",
+    body: "Personal data and cookies are described in the Privacy and Cookie notices, not in these terms.",
+  },
+  {
+    id: "changes",
+    title: "Changes to these terms",
+    body: "[COUNSEL] — how updates take effect once a final version exists.",
+  },
+  {
+    id: "governing-law",
+    title: "Governing law and disputes",
+    body: "[COUNSEL: confirm] — placeholder for UK law and courts; do not invent venue details.",
+  },
+  {
+    id: "contact",
+    title: "Contact",
+    body: "Operator contact is [OWNER: details] until confirmed; use the contact form for pre-launch enquiries.",
+  },
+];
+
+export default function TermsPage() {
   return (
     <>
       <PageHero
-        title="Terms"
-        lede="Scaffold policy page. Content below is placeholder only."
+        eyebrow="Legal · Draft"
+        title="Terms (Draft)"
+        lede="Scaffold website terms of use for the MaintenanceOS marketing site — not a customer SaaS MSA. Pending legal review."
       />
       <div className="mx-auto max-w-3xl px-4 py-12">
         <LegalDraftBanner />
-        <div className="space-y-4 text-muted">
-          <p>
-            This Terms document is a draft for legal review. It does not
-            constitute final policy, advice, or a binding agreement.
-          </p>
-          <p>
-            When a form endpoint is configured, lead data will be processed
-            according to the published policy. Until then, client-side stubs do
-            not transmit email.
-          </p>
-          <p>
-            Contact: use the{" "}
-            <a href="/contact/" className="text-accent underline">
-              contact form
-            </a> 
-            for pre-launch enquiries.
-          </p>
+        <LegalPageChrome noticeLabel="terms notice" />
+        <div className="space-y-10">
+          {sections.map((s) => (
+            <section key={s.id} aria-labelledby={`terms-${s.id}`}>
+              <h2
+                id={`terms-${s.id}`}
+                className="text-xl font-semibold text-ink"
+              >
+                {s.title}
+              </h2>
+              <p className="mt-2 text-muted">{s.body}</p>
+              {s.id === "privacy" ? (
+                <p className="mt-2 text-muted">
+                  See{" "}
+                  <a href="/privacy/" className="text-accent underline">
+                    Privacy Policy (Draft)
+                  </a>{" "}
+                  and{" "}
+                  <a href="/cookies/" className="text-accent underline">
+                    Cookie Policy (Draft)
+                  </a>
+                  .
+                </p>
+              ) : null}
+              {s.id === "contact" ? (
+                <p className="mt-2 text-muted">
+                  <a href="/contact/" className="text-accent underline">
+                    Contact form
+                  </a>
+                  .
+                </p>
+              ) : null}
+            </section>
+          ))}
         </div>
+        <p className="mt-12 text-sm text-muted">
+          To be completed by legal review. No binding terms until counsel
+          completes this scaffold.
+        </p>
       </div>
     </>
   );
