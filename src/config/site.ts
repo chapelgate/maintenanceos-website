@@ -36,14 +36,18 @@ export const industries = [
   { slug: "holiday-lets", label: "Holiday lets" },
 ] as const;
 
-/** Desktop primary nav (IA v0.2): includes Pricing. */
+/**
+ * Desktop primary (IA v0.2 + FE shell polish).
+ * Order: How it works · Features · AI receptionist · Security · Industries · Pricing
+ * (Pricing remains in primary bar; Industries before Pricing per FE Orchestra sprint.)
+ */
 export const primaryNav = [
   { href: "/how-it-works/", label: "How it works" },
   { href: "/features/", label: "Features" },
   { href: "/ai-receptionist/", label: "AI receptionist" },
   { href: "/security/", label: "Security" },
-  { href: "/pricing/", label: "Pricing" },
   { href: "/industries/", label: "Industries", children: industries },
+  { href: "/pricing/", label: "Pricing" },
 ] as const;
 
 export const footerNav = {
@@ -52,8 +56,8 @@ export const footerNav = {
     { href: "/features/", label: "Features" },
     { href: "/ai-receptionist/", label: "AI receptionist" },
     { href: "/security/", label: "Security" },
-    { href: "/pricing/", label: "Pricing" },
     { href: "/industries/", label: "Industries" },
+    { href: "/pricing/", label: "Pricing" },
   ],
   company: [
     { href: "/about/", label: "About" },
