@@ -236,7 +236,23 @@ def reset_capacity_backend_for_tests() -> None:
         _BACKEND = ProcessLocalCapacityBackend()
 
 
-def admit_call(*, call_sid: str, call_session_id: int, client_id: int) -> CallLease:
+def admit_call(*, call_sid: str, call_session_id: int, client_id: int, tenant_id: str | None = None) -> CallLease:
+    # Minimal Chapelgate pilot guard (no voice redesign). When PILOT_MODE_ARMED,
+    # enforce tenant + 10-call ceiling; otherwise pass through unchanged.
+    try:
+        from pilot.runtime_guard import PilotAdmitRejected, admit_pilot_call
+
+        admit_pilot_call(
+            tenant_id=str(tenant_id or "chapelgate"),
+            call_sid=str(call_sid or ""),
+        )
+    except PilotAdmitRejected as exc:
+        raise CapacityRejected(str(exc.reason)) from exc
+    except Exception:
+        # Pilot package missing/misconfigured must not silently invent success;
+        # if armed env is set, fail closed. If not armed, ignore import/runtime noise.
+        if os.getenv("PILOT_MODE_ARMED", "").strip().lower() in {"1", "true", "yes", "on"}:
+            raise CapacityRejected("pilot_guard_unavailable")
     lease = CallLease(
         lease_id=uuid.uuid4().hex,
         call_sid=call_sid,
@@ -259,8 +275,16 @@ def release_call_lease(lease: CallLease | None = None, *, call_sid: str = "", ca
     backend = capacity_backend()
     if lease is not None:
         backend.release(lease.lease_id)
-        return
-    backend.release_call(call_sid=call_sid, call_session_id=call_session_id)
+    else:
+        backend.release_call(call_sid=call_sid, call_session_id=call_session_id)
+    # Minimal pilot counter: count released leases toward the 10-call ceiling when armed.
+    try:
+        from pilot.runtime_guard import is_pilot_mode_armed, record_pilot_call_completed
+
+        if is_pilot_mode_armed():
+            record_pilot_call_completed(success=True)
+    except Exception:
+        pass
 
 
 def expire_stale_leases(max_age_seconds: float | None = None) -> int:

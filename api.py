@@ -125,6 +125,13 @@ def require_public_provider_ingress():
 @app.get("/health")
 def health():
     snap = capacity_snapshot()
+    pilot = {}
+    try:
+        from pilot.runtime_guard import pilot_status
+
+        pilot = pilot_status()
+    except Exception:
+        pilot = {"armed": False, "error": "pilot_status_unavailable"}
     return {
         "ok": True,
         "version": "v1-pilot",
@@ -140,6 +147,7 @@ def health():
             "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
             "by_client": {str(k): v for k, v in snap.by_client.items()},
         },
+        "pilot": pilot,
     }
 
 @app.post("/work-orders")
@@ -373,7 +381,12 @@ async def voice_inbound(request:Request):
     except (SQLAlchemyError,TenantAccessError):
         return Response(inbound_fallback_twiml("The automated service is unavailable."),media_type="application/xml")
     try:
-        admit_call(call_sid=call_sid, call_session_id=call_session_id, client_id=tenant_id)
+        admit_call(
+            call_sid=call_sid,
+            call_session_id=call_session_id,
+            client_id=tenant_id,
+            tenant_id="chapelgate",
+        )
     except CapacityRejected:
         with suppress(Exception):
             record_call_interruption(call_session_id, "capacity_rejected")
