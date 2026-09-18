@@ -33,9 +33,9 @@ export function TrustPillars() {
         What this product is designed to control
       </h2>
       <p className="mt-2 max-w-2xl text-muted">
-        Three controls we can describe from product design and source. Wording
-        stays in designed / under testing — never certified or generally
-        available.
+        Three controls we can describe from product design and source. We
+        describe them as designed and under testing — never as certified or
+        generally available.
       </p>
       <ul className="mt-10 grid gap-4 md:grid-cols-3">
         {PILLARS.map((pillar) => (
