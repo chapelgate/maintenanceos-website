@@ -1,17 +1,15 @@
-import { IndustryStubPage } from "@/components/IndustryStubPage";
+import { IndustryRolePage } from "@/components/IndustryRolePage";
+import { getIndustryRole } from "@/config/industries";
+import { notFound } from "next/navigation";
 
-export const metadata = { title: "Housing associations" };
+const role = getIndustryRole("housing-associations");
+
+export const metadata = {
+  title: role?.label ?? "Industries",
+  description: role?.metaDescription,
+};
 
 export default function Page() {
-  return (
-    <IndustryStubPage
-      title="Housing associations"
-      audience="For housing providers and associations managing resident repairs."
-      focus={[
-    "Accountable intake and triage patterns",
-    "Safety latch requiring human clearance",
-    "Audit-oriented evidence for consequential actions"
-  ]}
-    />
-  );
+  if (!role) notFound();
+  return <IndustryRolePage role={role} />;
 }

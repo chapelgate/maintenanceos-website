@@ -37,7 +37,12 @@ export function IndustryStubPage({
           </a>
           .
         </p>
-        <CtaPair />
+        <CtaPair
+          primaryHref="/demo/"
+          primaryLabel="Request early demo"
+          secondaryHref="/demo/#launch"
+          secondaryLabel="Join launch list"
+        />
       </div>
     </>
   );

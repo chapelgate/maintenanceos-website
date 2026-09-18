@@ -1,17 +1,15 @@
-import { IndustryStubPage } from "@/components/IndustryStubPage";
+import { IndustryRolePage } from "@/components/IndustryRolePage";
+import { getIndustryRole } from "@/config/industries";
+import { notFound } from "next/navigation";
 
-export const metadata = { title: "Holiday lets" };
+const role = getIndustryRole("holiday-lets");
+
+export const metadata = {
+  title: role?.label ?? "Industries",
+  description: role?.metaDescription,
+};
 
 export default function Page() {
-  return (
-    <IndustryStubPage
-      title="Holiday lets"
-      audience="For holiday-let operators coordinating turnaround and reactive maintenance."
-      focus={[
-    "Fast intake when guests or cleaners report issues",
-    "Clear contractor handoff",
-    "AI receptionist capability under testing for high-volume messaging — no capacity claims"
-  ]}
-    />
-  );
+  if (!role) notFound();
+  return <IndustryRolePage role={role} />;
 }
