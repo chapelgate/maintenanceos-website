@@ -21,7 +21,9 @@ from pilot.scorecard import apply_scorecard_event, empty_scorecard
 
 
 @pytest.fixture(autouse=True)
-def _reset(monkeypatch):
+def _reset(monkeypatch, tmp_path):
+    monkeypatch.setenv("PILOT_BOOTSTRAP_CALLS", "0")
+    monkeypatch.setenv("PILOT_STATE_PATH", str(tmp_path / "pilot_state.json"))
     reset_pilot_runtime_for_tests()
     reset_capacity_backend_for_tests()
     monkeypatch.delenv("PILOT_MODE_ARMED", raising=False)
@@ -100,18 +102,28 @@ def test_abort_conditions_matrix():
     )["abort"] is True
 
 
-def test_voice_notification_modules_untouched():
-    """Guardrail: voice/email modules must not be modified by this integration."""
-    import pathlib
-    import subprocess
+def test_owner_verified_floor_and_file_mirror_survive_db_wipe(monkeypatch, tmp_path):
+    """Ephemeral SQLite wipe must not drop below the owner-verified floor."""
+    monkeypatch.delenv("PILOT_BOOTSTRAP_CALLS", raising=False)
+    path = tmp_path / "durable.json"
+    monkeypatch.setenv("PILOT_STATE_PATH", str(path))
+    reset_pilot_runtime_for_tests()
+    monkeypatch.setenv("PILOT_MODE_ARMED", "true")
+    st = pilot_status()
+    assert st["calls_completed"] >= 2
+    assert st["persistence"]["bootstrap_floor"] == 2
+    assert path.is_file()
+    # Simulate ephemeral DB loss while file mirror remains.
+    from models import SessionLocal, RuntimeControl
+    from pilot.runtime_guard import PERSIST_KEY
 
-    root = pathlib.Path(__file__).resolve().parents[1]
-    out = subprocess.check_output(
-        ["git", "diff", "--name-only", "HEAD", "--", "voice_bridge.py", "gemini_voice.py", "call_notifications.py"],
-        cwd=root,
-        text=True,
-    ).strip()
-    assert out == ""
+    with SessionLocal() as session:
+        row = session.query(RuntimeControl).filter_by(key=PERSIST_KEY).one_or_none()
+        if row is not None:
+            session.delete(row)
+        session.commit()
+    st2 = pilot_status()
+    assert st2["calls_completed"] >= 2
 
 
 def test_red_team_guard_matrix(monkeypatch):

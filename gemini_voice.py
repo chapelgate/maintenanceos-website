@@ -138,11 +138,12 @@ def resample_pcm16(data: bytes, src_rate: int, dst_rate: int) -> bytes:
 
 
 def _silence_duration_ms() -> int:
-    raw = os.getenv("GEMINI_SILENCE_DURATION_MS", "450").strip()
+    # Default 350ms keeps barge-in safe while shaving end-of-speech wait vs 450ms.
+    raw = os.getenv("GEMINI_SILENCE_DURATION_MS", "350").strip()
     try:
         value = int(raw)
     except ValueError:
-        value = 450
+        value = 350
     return max(200, min(value, 1200))
 
 
@@ -202,23 +203,109 @@ def _merge_transcription(current: str, fragment: str) -> str:
     return f"{current} {fragment}".strip()
 
 
+def _normalize_utterance(text: str) -> str:
+    lowered = (text or "").casefold().replace("’", "'").replace("‘", "'")
+    cleaned = "".join(ch if ch.isalnum() or ch in {" ", "'"} else " " for ch in lowered)
+    return " ".join(cleaned.split())
+
+
 def _assistant_invited_close(text: str) -> bool:
-    lowered = " ".join((text or "").casefold().split())
+    lowered = _normalize_utterance(text)
     return any(phrase in lowered for phrase in (
         "anything else i can help",
         "anything else we can help",
         "is there anything else",
         "anything more i can help",
+        "help you with anything else",
+        "help with anything else",
+        "will that be all",
+        "was there anything else",
+        "need anything else",
+        "anything else today",
+        "anything else for you",
+        "can i do anything else",
     ))
+
+
+_CLOSE_EXACT = frozenset({
+    "no",
+    "nope",
+    "nah",
+    "no thanks",
+    "no thank you",
+    "no thanks that's all",
+    "no thank you that's all",
+    "that's all",
+    "thats all",
+    "that's everything",
+    "thats everything",
+    "that's it",
+    "thats it",
+    "no that's it",
+    "no thats it",
+    "nothing else",
+    "nothing",
+    "all done",
+    "i'm fine",
+    "im fine",
+    "i am fine",
+    "i'm good",
+    "im good",
+    "i'm okay",
+    "im okay",
+    "thanks",
+    "thank you",
+    "that's all thanks",
+    "thats all thanks",
+    "cheers",
+    "okay",
+    "ok",
+})
+
+_FAREWELL_EXACT = frozenset({
+    "bye",
+    "goodbye",
+    "bye bye",
+    "okay bye",
+    "ok bye",
+    "thanks bye",
+    "thank you bye",
+    "cheers bye",
+    "goodbye now",
+})
 
 
 def _routine_close_confirmed(text: str) -> bool:
-    lowered = " ".join((text or "").casefold().replace("’", "'").split())
-    return any(phrase in lowered for phrase in (
-        "no thanks", "no thank you", "no, thanks", "no, thank you",
-        "that's all", "thats all", "that's everything", "thats everything",
-        "nothing else", "no that's it", "no thats it", "all done",
-    ))
+    """True for natural finished-call confirms; avoids mid-dialogue false positives."""
+    lowered = _normalize_utterance(text)
+    if not lowered:
+        return False
+    if lowered in _CLOSE_EXACT or lowered in _FAREWELL_EXACT:
+        return True
+    words = lowered.split()
+    if len(words) <= 6 and any(
+        phrase in lowered
+        for phrase in (
+            "no thanks",
+            "no thank you",
+            "that's all",
+            "thats all",
+            "that's everything",
+            "thats everything",
+            "nothing else",
+            "that's it",
+            "thats it",
+            "all done",
+            "i'm fine",
+            "im fine",
+        )
+    ):
+        return True
+    return False
+
+
+def _farewell_only(text: str) -> bool:
+    return _normalize_utterance(text) in _FAREWELL_EXACT
 
 
 async def handle_gemini_media_stream(websocket: WebSocket) -> None:
@@ -296,33 +383,75 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             seen_sequences: set[str] = set()
             transcript_buffers = {"caller": "", "assistant": ""}
             closing_prompt_seen = False
-            # Latency markers (no caller PII): turn completion → model audio → Twilio send.
+            # Latency markers (no caller PII): speech ended → model audio → Twilio send.
             turn_latency = {
                 "caller_turn_ms": None,
                 "gemini_turn_ms": None,
                 "first_model_audio_ms": None,
+                "audio_converted_ms": None,
                 "first_twilio_audio_ms": None,
             }
 
             def _mark(stage: str) -> None:
                 now_ms = int(time.monotonic() * 1000)
                 turn_latency[stage] = now_ms
-                if stage == "first_twilio_audio_ms" and turn_latency["caller_turn_ms"] is not None:
+                base = turn_latency.get("caller_turn_ms")
+                if base is None:
+                    return
+                if stage == "gemini_turn_ms":
+                    operational_event(
+                        "voice_turn_stage",
+                        transport="gemini",
+                        outcome="gemini_turn_accepted",
+                        duration_ms=max(0, now_ms - base),
+                        reason_code=f"silence_{silence_ms}",
+                    )
+                elif stage == "first_model_audio_ms":
+                    operational_event(
+                        "voice_turn_stage",
+                        transport="gemini",
+                        outcome="first_model_audio",
+                        duration_ms=max(0, now_ms - base),
+                        reason_code=f"silence_{silence_ms}",
+                    )
+                elif stage == "audio_converted_ms":
+                    model_ms = turn_latency.get("first_model_audio_ms") or base
+                    operational_event(
+                        "voice_turn_stage",
+                        transport="gemini",
+                        outcome="audio_conversion",
+                        duration_ms=max(0, now_ms - model_ms),
+                        reason_code=f"silence_{silence_ms}",
+                    )
+                elif stage == "first_twilio_audio_ms":
+                    operational_event(
+                        "voice_turn_stage",
+                        transport="gemini",
+                        outcome="first_twilio_media",
+                        duration_ms=max(0, now_ms - base),
+                        reason_code=f"silence_{silence_ms}",
+                    )
                     operational_event(
                         "voice_turn_latency",
                         transport="gemini",
                         outcome="measured",
-                        duration_ms=max(0, now_ms - turn_latency["caller_turn_ms"]),
+                        duration_ms=max(0, now_ms - base),
                         reason_code=f"silence_{silence_ms}",
                     )
+
+            async def _persist_segment(speaker: str, text: str) -> None:
+                # Never block the realtime media loop on SQLite/Postgres writes.
+                with suppress(Exception):
+                    await asyncio.to_thread(vb.record_transcript_segment, call_session_id, speaker, text)
 
             async def close_lifecycle() -> None:
                 nonlocal lifecycle_closed
                 if lifecycle_closed:
                     return
-                with suppress(Exception):
-                    await asyncio.to_thread(vb.close_call_session, call_session_id)
                 lifecycle_closed = True
+                with suppress(Exception):
+                    # close_call_session persists then schedules email off-thread.
+                    await asyncio.to_thread(vb.close_call_session, call_session_id)
 
             async def request_human_transfer() -> None:
                 nonlocal lifecycle_closed
@@ -390,8 +519,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         for speaker, key in (("Caller", "caller"), ("Assistant", "assistant")):
                             text = transcript_buffers[key].strip()
                             if text:
-                                with suppress(Exception):
-                                    vb.record_transcript_segment(call_session_id, speaker, text)
+                                await _persist_segment(speaker, text)
                                 transcript_buffers[key] = ""
                         stop_received.set()
                         await close_lifecycle()
@@ -404,6 +532,8 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         content = response.server_content
                         if not content:
                             continue
+                        if turn_latency["caller_turn_ms"] is not None and turn_latency["gemini_turn_ms"] is None:
+                            _mark("gemini_turn_ms")
                         if getattr(content, "interrupted", False):
                             await websocket.send_json({"event": "clear", "streamSid": stream_sid})
                         input_tx = getattr(content, "input_transcription", None)
@@ -413,15 +543,19 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                             finished = getattr(input_tx, "finished", None) is True
                             if finished:
                                 _mark("caller_turn_ms")
-                                turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
+                                turn_latency["gemini_turn_ms"] = None
                                 turn_latency["first_model_audio_ms"] = None
+                                turn_latency["audio_converted_ms"] = None
                                 turn_latency["first_twilio_audio_ms"] = None
                                 merged = transcript_buffers["caller"].strip()
                                 if merged:
-                                    with suppress(Exception):
-                                        vb.record_transcript_segment(call_session_id, "Caller", merged)
+                                    await _persist_segment("Caller", merged)
                                     transcript_buffers["caller"] = ""
-                                if closing_prompt_seen and _routine_close_confirmed(merged):
+                                should_close = (
+                                    (closing_prompt_seen and _routine_close_confirmed(merged))
+                                    or _farewell_only(merged)
+                                )
+                                if should_close:
                                     await request_routine_close()
                                     return
                             if _explicit_human_request(text) or _needs_payment_handoff(text):
@@ -437,20 +571,19 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                             if getattr(output_tx, "finished", None) is True:
                                 merged = transcript_buffers["assistant"].strip()
                                 if merged:
-                                    with suppress(Exception):
-                                        vb.record_transcript_segment(call_session_id, "Assistant", merged)
+                                    await _persist_segment("Assistant", merged)
                                     transcript_buffers["assistant"] = ""
                         if getattr(content, "turn_complete", False):
                             if turn_latency["caller_turn_ms"] is None:
                                 _mark("caller_turn_ms")
-                                turn_latency["gemini_turn_ms"] = turn_latency["caller_turn_ms"]
+                                turn_latency["gemini_turn_ms"] = None
                                 turn_latency["first_model_audio_ms"] = None
+                                turn_latency["audio_converted_ms"] = None
                                 turn_latency["first_twilio_audio_ms"] = None
                             for speaker, key in (("Caller", "caller"), ("Assistant", "assistant")):
                                 merged = transcript_buffers[key].strip()
                                 if merged:
-                                    with suppress(Exception):
-                                        vb.record_transcript_segment(call_session_id, speaker, merged)
+                                    await _persist_segment(speaker, merged)
                                     transcript_buffers[key] = ""
                         model_turn = getattr(content, "model_turn", None)
                         if model_turn and getattr(model_turn, "parts", None):
@@ -461,6 +594,8 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                     if turn_latency["first_model_audio_ms"] is None:
                                         _mark("first_model_audio_ms")
                                     ulaw = gemini_pcm_to_twilio_mulaw(bytes(audio))
+                                    if turn_latency["audio_converted_ms"] is None:
+                                        _mark("audio_converted_ms")
                                     await websocket.send_json({
                                         "event": "media",
                                         "streamSid": stream_sid,

@@ -68,6 +68,7 @@ def test_close_call_sends_idempotent_internal_email(monkeypatch):
     monkeypatch.setattr(voice_bridge, "SessionLocal", factory)
     monkeypatch.setattr(channels, "SessionLocal", factory)
     monkeypatch.setattr(call_notifications, "SessionLocal", factory)
+    monkeypatch.setenv("VOICE_COMPLETION_EMAIL_SYNC", "true")
     monkeypatch.setenv("INTERNAL_NOTIFICATION_EMAIL", "chapelgate@gmail.com")
     monkeypatch.setenv("EMAIL_MODE", "imap_smtp")
     monkeypatch.setenv("ENABLE_LIVE_EMAIL", "true")
@@ -78,7 +79,7 @@ def test_close_call_sends_idempotent_internal_email(monkeypatch):
 
     sends = []
 
-    def fake_send(to, subject, body):
+    def fake_send(to, subject, body, **_kwargs):
         sends.append({"to": to, "subject": subject, "body": body})
         return {"mock": False, "message_id": "<real-1@test>"}
 
@@ -118,6 +119,7 @@ def test_email_failure_does_not_lose_persisted_call(monkeypatch):
     monkeypatch.setattr(voice_bridge, "SessionLocal", factory)
     monkeypatch.setattr(channels, "SessionLocal", factory)
     monkeypatch.setattr(call_notifications, "SessionLocal", factory)
+    monkeypatch.setenv("VOICE_COMPLETION_EMAIL_SYNC", "true")
     monkeypatch.setenv("INTERNAL_NOTIFICATION_EMAIL", "chapelgate@gmail.com")
     monkeypatch.setenv("EMAIL_MODE", "imap_smtp")
     monkeypatch.setenv("ENABLE_LIVE_EMAIL", "true")
@@ -151,6 +153,40 @@ def test_email_failure_does_not_lose_persisted_call(monkeypatch):
         delivery = session.query(CommunicationDelivery).one()
         assert delivery.status == "FAILED"
         assert delivery.failure_code == "RuntimeError"
+
+
+def test_call_review_fallback_still_sends(monkeypatch):
+    factory = _factory()
+    monkeypatch.setattr(call_notifications, "SessionLocal", factory)
+    monkeypatch.setenv("INTERNAL_NOTIFICATION_EMAIL", "chapelgate@gmail.com")
+    monkeypatch.setenv("EMAIL_MODE", "imap_smtp")
+    monkeypatch.setenv("ENABLE_LIVE_EMAIL", "true")
+    monkeypatch.setenv("SMTP_HOST", "smtp.example.test")
+    monkeypatch.setenv("SMTP_USERNAME", "user")
+    monkeypatch.setenv("SMTP_PASSWORD", "pass")
+    monkeypatch.setenv("SMTP_FROM", "noreply@example.test")
+    sends = []
+    monkeypatch.setattr(
+        call_notifications,
+        "send_email",
+        lambda to, subject, body, **_k: sends.append(subject) or {"mock": False, "message_id": "id-1"},
+    )
+    with factory() as session:
+        client = Client(name="Review tenant")
+        session.add(client)
+        session.flush()
+        session.add(Property(client_id=client.id, address="Synthetic", postcode="ZZ1 1ZZ"))
+        session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="Review"))
+        call = CallSession(call_sid="CA-review", caller="sha256:abc", transcript="")
+        session.add(call)
+        session.flush()
+        session.add(CallSessionTenant(call_session_id=call.id, client_id=client.id))
+        session.commit()
+        call_id = call.id
+    result = dispatch_internal_call_email(call_id)
+    assert result["sent"] is True
+    assert result["category"] == "call_review"
+    assert any("[CALL REVIEW]" in s for s in sends)
 
 
 def test_mock_email_is_not_marked_sent(monkeypatch):

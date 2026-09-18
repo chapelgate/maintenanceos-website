@@ -223,6 +223,12 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
     Safe to call repeatedly. Never raises to the voice lifecycle caller.
     """
     result: dict[str, Any] = {"sent": False, "skipped": True, "reason": "init"}
+    operational_event(
+        "voice_notification",
+        transport="email",
+        outcome="notification_started",
+        reason_code=str(call_session_id),
+    )
     try:
         with SessionLocal() as session:
             cs = session.query(CallSession).filter_by(id=call_session_id).first()
@@ -236,10 +242,22 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
                 operational_event("voice_notification", transport="email", outcome="missing_tenant")
                 return result
             transcript = (cs.transcript or "").strip()
+            if not transcript:
+                operational_event(
+                    "voice_notification",
+                    transport="email",
+                    outcome="empty_incomplete_transcript",
+                )
             category = classify_call_category(transcript) or CATEGORY_CALL_REVIEW
             # Never silently lose a completed pilot call because realtime
             # transcription/classification was incomplete. Recognised repair/key
             # calls keep their specific subject; anything else becomes CALL REVIEW.
+            operational_event(
+                "voice_notification",
+                transport="email",
+                outcome="classification",
+                reason_code=category,
+            )
 
             job_reference = f"CG-{cs.id:06d}"
             action_key = f"voice-internal-email:{cs.call_sid}:{category}"
@@ -280,10 +298,16 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
                 operational_event(
                     "voice_notification",
                     transport="email",
-                    outcome="recipient_unconfigured",
-                    reason_code=category,
+                    outcome="recipient",
+                    reason_code="unconfigured",
                 )
                 return result
+            operational_event(
+                "voice_notification",
+                transport="email",
+                outcome="recipient",
+                reason_code="resolved",
+            )
 
             details = extract_call_details(transcript, job_reference=job_reference)
             details["category"] = category
@@ -320,7 +344,14 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
             with SessionLocal() as session:
                 record_delivery_status(session, delivery_id, "ATTEMPTED")
                 session.commit()
-            send_result = send_email(recipient, subject, body)
+            operational_event(
+                "voice_notification",
+                transport="email",
+                outcome="provider_attempt",
+                reason_code=category,
+            )
+            # Never allow a 30s SMTP timeout on the call-completion path.
+            send_result = send_email(recipient, subject, body, allow_smtp_fallback=False)
             provider_ref = str(send_result.get("message_id") or "")[:200]
             if send_result.get("mock"):
                 with SessionLocal() as session:
@@ -332,8 +363,8 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
                 operational_event(
                     "voice_notification",
                     transport="email",
-                    outcome="mock_rejected",
-                    reason_code=category,
+                    outcome="provider_failure",
+                    reason_code="mock_rejected",
                 )
                 return result
             with SessionLocal() as session:
@@ -349,6 +380,12 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
                     "category": category,
                     "provider_reference": provider_ref,
                 }
+            )
+            operational_event(
+                "voice_notification",
+                transport="email",
+                outcome="provider_success",
+                reason_code=category,
             )
             operational_event(
                 "voice_notification",
@@ -384,7 +421,7 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
             operational_event(
                 "voice_notification",
                 transport="email",
-                outcome="send_failed",
+                outcome="provider_failure",
                 reason_code=type(exc).__name__,
             )
             return result

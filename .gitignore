@@ -5,6 +5,7 @@ __pycache__/
 .codex/
 .codex_*/
 evidence/
+.pilot_state/
 *.db
 *.db-*
 *.log

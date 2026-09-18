@@ -50,6 +50,8 @@ PILOT_ENV = {
     "PILOT_OWNER_APPROVED": "true",
     "PILOT_TENANT": "chapelgate",
     "PILOT_MAX_REAL_CALLS": "10",
+    "PILOT_BOOTSTRAP_CALLS": "2",
+    "GEMINI_SILENCE_DURATION_MS": "350",
 }
 
 

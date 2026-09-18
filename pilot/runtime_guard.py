@@ -6,8 +6,9 @@ Enforces:
 - owner approval recorded + Release Guardian arm (PILOT_MODE_ARMED)
 - abort conditions freeze new admits
 - scorecard increments on admit/complete
-- pilot state persists in the existing RuntimeControl table so deploys/restarts
-  cannot reset the real-call ceiling or scorecard.
+- pilot state persists in RuntimeControl AND a small durable JSON mirror so
+  ephemeral SQLite/local filesystem redeploys cannot silently reset the
+  10-call ceiling below the owner-verified floor.
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ import os
 import threading
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Mapping
 
 from clock import utcnow
@@ -34,6 +36,9 @@ from pilot.scorecard import PilotScorecard, apply_scorecard_event, empty_scoreca
 
 PERSIST_KEY = "CHAPELGATE_10_CALL_PILOT_STATE"
 _LOCK = threading.Lock()
+# Owner-verified real calls already completed before durable mirror existed.
+# Env PILOT_BOOTSTRAP_CALLS may raise this further; it must never lower it.
+_OWNER_VERIFIED_FLOOR = 2
 
 
 class PilotAdmitRejected(RuntimeError):
@@ -57,13 +62,44 @@ class PilotRuntimeState:
 
 
 def _bootstrap_count() -> int:
-    """One-time offset for owner-verified calls completed before persistence existed."""
-    raw = os.getenv("PILOT_BOOTSTRAP_CALLS", "0").strip()
+    """Durable floor for owner-verified calls.
+
+    Production default is 2 (Calls 1–2 already completed). Explicit
+    PILOT_BOOTSTRAP_CALLS=0 is allowed for tests.
+    """
+    raw = os.getenv("PILOT_BOOTSTRAP_CALLS", "").strip()
+    if raw == "":
+        return _OWNER_VERIFIED_FLOOR
     try:
         value = int(raw)
     except (TypeError, ValueError):
-        value = 0
+        value = _OWNER_VERIFIED_FLOOR
     return max(0, min(value, MAX_REAL_CALLS))
+
+
+def _db_backend_kind() -> str:
+    url = (os.getenv("DATABASE_URL") or "").strip().lower()
+    if url.startswith(("postgresql://", "postgresql+psycopg://", "postgres://")):
+        return "postgres"
+    if url.startswith("sqlite"):
+        return "sqlite"
+    if not url:
+        return "sqlite_default"
+    return "other"
+
+
+def _state_file_path() -> Path:
+    configured = (os.getenv("PILOT_STATE_PATH") or "").strip()
+    if configured:
+        return Path(configured)
+    # Prefer Render persistent disk mount when present; else local mirror.
+    for candidate in (
+        Path("/var/data/chapelgate_pilot_state.json"),
+        Path("/data/chapelgate_pilot_state.json"),
+    ):
+        if candidate.parent.exists():
+            return candidate
+    return Path(os.getenv("PILOT_STATE_FALLBACK_DIR", ".")).resolve() / ".pilot_state" / "chapelgate_pilot_state.json"
 
 
 def _scorecard_from_payload(payload: Mapping[str, Any] | None) -> PilotScorecard:
@@ -113,19 +149,58 @@ def _decode_state(value: str) -> PilotRuntimeState:
     )
 
 
+def _read_file_state() -> PilotRuntimeState | None:
+    path = _state_file_path()
+    try:
+        if not path.is_file():
+            return None
+        return _decode_state(path.read_text(encoding="utf-8"))
+    except OSError:
+        return None
+
+
+def _write_file_state(state: PilotRuntimeState) -> bool:
+    path = _state_file_path()
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix(".tmp")
+        payload = _encode_state(state)
+        tmp.write_text(payload, encoding="utf-8")
+        tmp.replace(path)
+        return True
+    except OSError:
+        return False
+
+
+def _apply_floor(state: PilotRuntimeState) -> PilotRuntimeState:
+    """Never allow persisted/ephemeral state below the owner-verified floor."""
+    floor = _bootstrap_count()
+    file_state = _read_file_state()
+    file_completed = file_state.calls_completed if file_state else 0
+    file_admitted = file_state.calls_admitted if file_state else 0
+    completed = max(int(state.calls_completed), file_completed, floor)
+    admitted = max(int(state.calls_admitted), file_admitted, completed, floor)
+    if completed > state.calls_completed or admitted > state.calls_admitted:
+        state.calls_completed = completed
+        state.calls_admitted = admitted
+        if state.scorecard.calls_answered < completed:
+            state.scorecard.calls_answered = completed
+        if state.scorecard.successful_conversations < completed:
+            state.scorecard.successful_conversations = completed
+        if state.scorecard.latency_samples < completed:
+            state.scorecard.latency_samples = completed
+        state.scorecard.updated_at = _utcnow()
+        state.last_event_at = _utcnow()
+    return state
+
+
 def _load_state(session, *, for_update: bool) -> tuple[PilotRuntimeState, RuntimeControl]:
     query = session.query(RuntimeControl).filter_by(key=PERSIST_KEY)
     if for_update:
         query = query.with_for_update()
     control = query.one_or_none()
     if control is None:
-        bootstrap = _bootstrap_count()
-        state = PilotRuntimeState(calls_completed=bootstrap, calls_admitted=bootstrap)
-        if bootstrap:
-            state.scorecard.calls_answered = bootstrap
-            state.scorecard.successful_conversations = bootstrap
-            state.scorecard.latency_samples = bootstrap
-            state.scorecard.updated_at = _utcnow()
+        state = _apply_floor(PilotRuntimeState())
         control = RuntimeControl(
             key=PERSIST_KEY,
             enabled=True,
@@ -134,16 +209,28 @@ def _load_state(session, *, for_update: bool) -> tuple[PilotRuntimeState, Runtim
         )
         session.add(control)
         session.flush()
+        _write_file_state(state)
         return state, control
-    return _decode_state(control.reason), control
+    state = _apply_floor(_decode_state(control.reason))
+    # Re-persist if floor/file raised the counters (e.g. after ephemeral DB wipe).
+    encoded = _encode_state(state)
+    if control.reason != encoded:
+        control.reason = encoded
+        control.updated_by = "pilot_guard"
+        control.updated_at = utcnow()
+        session.flush()
+        _write_file_state(state)
+    return state, control
 
 
 def _save_state(session, control: RuntimeControl, state: PilotRuntimeState) -> None:
+    state = _apply_floor(state)
     control.enabled = True
     control.updated_by = "pilot_guard"
     control.updated_at = utcnow()
     control.reason = _encode_state(state)
     session.flush()
+    _write_file_state(state)
 
 
 def reset_pilot_runtime_for_tests() -> None:
@@ -154,13 +241,26 @@ def reset_pilot_runtime_for_tests() -> None:
             if control is not None:
                 session.delete(control)
             session.commit()
+        path = _state_file_path()
+        with suppress_os_error():
+            if path.is_file():
+                path.unlink()
+
+
+class suppress_os_error:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return exc_type is not None and issubclass(exc_type, OSError)
 
 
 def _state() -> PilotRuntimeState:
     """Compatibility helper used by tests; state is read from durable storage."""
     with SessionLocal() as session:
         state, _ = _load_state(session, for_update=False)
-        session.rollback()
+        # Persist floor repairs so ephemeral empties do not keep re-bootstraping.
+        session.commit()
         return state
 
 
@@ -246,7 +346,9 @@ def record_pilot_call_completed(*, success: bool = True) -> dict[str, Any]:
                 _save_state(session, control, state)
                 session.commit()
             else:
-                session.rollback()
+                # Still re-mirror floor state so redeploys keep the verified count.
+                _save_state(session, control, state)
+                session.commit()
             return {
                 "calls_completed": state.calls_completed,
                 "max_real_calls": MAX_REAL_CALLS,
@@ -274,7 +376,9 @@ def pilot_status() -> dict[str, Any]:
     with _LOCK:
         with SessionLocal() as session:
             state, _ = _load_state(session, for_update=False)
-            session.rollback()
+            # Commit floor repairs so health checks heal ephemeral empties.
+            session.commit()
+    file_ok = _state_file_path().is_file()
     return {
         "pilot_name": cfg["pilot_name"],
         "tenant": TENANT_ID,
@@ -292,4 +396,10 @@ def pilot_status() -> dict[str, Any]:
         "main_number_changed": False,
         "healthcare_regulatory_enablement": False,
         "last_event_at": state.last_event_at,
+        "persistence": {
+            "db_backend": _db_backend_kind(),
+            "file_mirror": file_ok,
+            "bootstrap_floor": _bootstrap_count(),
+            "ephemeral_sqlite_risk": _db_backend_kind().startswith("sqlite"),
+        },
     }

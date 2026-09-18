@@ -10,8 +10,8 @@ from gemini_voice import (
 
 
 def test_silence_duration_env_bounds(monkeypatch):
-    monkeypatch.setenv("GEMINI_SILENCE_DURATION_MS", "450")
-    assert _silence_duration_ms() == 450
+    monkeypatch.setenv("GEMINI_SILENCE_DURATION_MS", "350")
+    assert _silence_duration_ms() == 350
     monkeypatch.setenv("GEMINI_SILENCE_DURATION_MS", "50")
     assert _silence_duration_ms() == 200
     monkeypatch.setenv("GEMINI_SILENCE_DURATION_MS", "5000")
@@ -49,12 +49,24 @@ def test_system_prompt_requires_polite_completed_call_farewell():
 
 
 def test_deterministic_close_helpers_only_fire_after_invitation():
-    from gemini_voice import _assistant_invited_close, _routine_close_confirmed
+    from gemini_voice import (
+        _assistant_invited_close,
+        _farewell_only,
+        _routine_close_confirmed,
+    )
 
     assert _assistant_invited_close("Is there anything else I can help you with?")
+    assert _assistant_invited_close("Will that be all for today?")
     assert _routine_close_confirmed("No thanks, that's all.")
+    assert _routine_close_confirmed("no")
+    assert _routine_close_confirmed("that's it")
+    assert _routine_close_confirmed("I'm fine")
+    assert _routine_close_confirmed("nothing else")
+    assert _farewell_only("okay bye")
+    assert _farewell_only("goodbye")
     assert not _assistant_invited_close("Do you know the gate number?")
     assert not _routine_close_confirmed("No, I don't know the gate number")
+    assert not _farewell_only("cheers for the update on the gate")
 
 
 def test_gemini_bridge_moves_close_work_off_event_loop():
@@ -63,4 +75,6 @@ def test_gemini_bridge_moves_close_work_off_event_loop():
 
     source = inspect.getsource(gemini_voice.handle_gemini_media_stream)
     assert "await asyncio.to_thread(vb.close_call_session, call_session_id)" in source
+    assert "await asyncio.to_thread(vb.record_transcript_segment" in source
     assert "deterministic_goodbye" in source
+    assert "voice_turn_stage" in source

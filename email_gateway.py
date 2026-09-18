@@ -1,4 +1,4 @@
-import os,imaplib,smtplib,email,uuid,json,urllib.request
+import os,imaplib,smtplib,email,uuid,json,urllib.request,urllib.error
 from email.message import EmailMessage
 from email.header import decode_header
 from dotenv import load_dotenv
@@ -54,6 +54,16 @@ def fetch_unseen():
     im.close();im.logout()
     return rows
 
+def _resend_api_key():
+    explicit=(os.getenv("RESEND_API_KEY") or "").strip()
+    if explicit:
+        return explicit
+    user=os.getenv("SMTP_USERNAME","").strip()
+    pw=os.getenv("SMTP_PASSWORD","").strip()
+    if user.casefold()=="resend" or pw.startswith("re_"):
+        return pw
+    return ""
+
 def _send_resend_http(to, subject, body, sender, api_key):
     payload=json.dumps({"from":sender,"to":[to],"subject":subject,"text":body}).encode("utf-8")
     req=urllib.request.Request(
@@ -62,47 +72,47 @@ def _send_resend_http(to, subject, body, sender, api_key):
         headers={"Authorization":f"Bearer {api_key}","Content-Type":"application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req,timeout=10) as response:
-        data=json.loads(response.read().decode("utf-8"))
-    return {"mock":False,"message_id":str(data.get("id") or f"<resend-{uuid.uuid4()}@api>")}
+    try:
+        with urllib.request.urlopen(req,timeout=10) as response:
+            data=json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        # Do not include response body: provider errors can echo addresses/secrets.
+        raise RuntimeError(f"resend_http_{exc.code}") from None
+    return {"mock":False,"message_id":str(data.get("id") or f"<resend-{uuid.uuid4()}@api>"),"provider":"resend_https"}
 
-def send_email(to,subject,body):
+def send_email(to,subject,body,*,allow_smtp_fallback=False):
     """Send live mail without making SMTP a voice-call critical path.
 
     Prefer Resend HTTPS whenever an existing Resend credential is available.
-    This deliberately does not depend on SMTP_HOST being smtp.resend.com:
-    deployments sometimes keep an old/SES SMTP host while the verified
-    Chapelgate sender and Resend sending key are already configured.
+    Voice/completion dispatch keeps allow_smtp_fallback=False so a 30s SMTP
+    timeout cannot stall the call lifecycle. Explicit non-voice tooling may
+    opt into SMTP fallback.
     """
     if os.getenv("EMAIL_MODE","mock")!="imap_smtp":
         return {"mock":True,"message_id":f"<mock-{uuid.uuid4()}@maintenanceos>"}
     if not live_email_enabled():
         raise RuntimeError("Live email is disabled")
-    host=os.getenv("SMTP_HOST","").strip()
     user=os.getenv("SMTP_USERNAME","").strip()
-    pw=os.getenv("SMTP_PASSWORD","").strip()
     sender=(os.getenv("SMTP_FROM") or user).strip()
-    resend_key=(os.getenv("RESEND_API_KEY") or "").strip()
-    if not resend_key and (user.casefold()=="resend" or pw.startswith("re_")):
-        resend_key=pw
+    resend_key=_resend_api_key()
     if resend_key and sender:
-        try:
-            return _send_resend_http(to,subject,body,sender,resend_key)
-        except Exception:
-            # Keep the existing SMTP path as a fallback, but never expose secrets.
-            pass
+        return _send_resend_http(to,subject,body,sender,resend_key)
+    if not allow_smtp_fallback:
+        raise RuntimeError("resend_https_required")
     if not smtp_configured():
         raise RuntimeError("Email sender configuration incomplete")
+    host=os.getenv("SMTP_HOST","").strip()
+    pw=os.getenv("SMTP_PASSWORD","").strip()
     port=int(os.getenv("SMTP_PORT","587"))
     use_tls=os.getenv("SMTP_USE_TLS","true").lower()=="true"
     use_ssl=os.getenv("SMTP_USE_SSL","false").lower()=="true"
     msg=EmailMessage();msg["From"]=sender;msg["To"]=to;msg["Subject"]=subject
     mid=f"<maintenanceos-{uuid.uuid4()}@local>";msg["Message-ID"]=mid;msg.set_content(body)
     if use_ssl:
-        with smtplib.SMTP_SSL(host,port,timeout=30) as s:
+        with smtplib.SMTP_SSL(host,port,timeout=10) as s:
             s.login(user,pw);s.send_message(msg)
     else:
-        with smtplib.SMTP(host,port,timeout=30) as s:
+        with smtplib.SMTP(host,port,timeout=10) as s:
             if use_tls:s.starttls()
             s.login(user,pw);s.send_message(msg)
-    return {"mock":False,"message_id":mid}
+    return {"mock":False,"message_id":mid,"provider":"smtp"}

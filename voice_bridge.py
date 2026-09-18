@@ -517,10 +517,20 @@ def close_call_session(call_session_id: int) -> None:
             s.commit()
     with suppress(Exception):
         release_call_lease(call_session_id=call_session_id)
-    # Persist first; email failures must never lose the call/job.
-    with suppress(Exception):
-        from call_notifications import dispatch_internal_call_email
-        dispatch_internal_call_email(call_session_id)
+    # Persist first; email must never block the realtime voice path or post-Stream TwiML.
+    def _dispatch_completion_email() -> None:
+        with suppress(Exception):
+            from call_notifications import dispatch_internal_call_email
+            dispatch_internal_call_email(call_session_id)
+
+    if os.getenv("VOICE_COMPLETION_EMAIL_SYNC", "").strip().lower() in {"1", "true", "yes", "on"}:
+        _dispatch_completion_email()
+    else:
+        threading.Thread(
+            target=_dispatch_completion_email,
+            name=f"voice-email-{call_session_id}",
+            daemon=True,
+        ).start()
 
 
 def validate_stream_start(start: dict, params: dict) -> int | None:
