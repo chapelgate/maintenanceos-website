@@ -189,12 +189,48 @@ def test_call_review_fallback_still_sends(monkeypatch):
     assert any("[CALL REVIEW]" in s for s in sends)
 
 
+def test_call_review_sends_when_pilot_resend_ready(monkeypatch):
+    factory = _factory()
+    monkeypatch.setattr(call_notifications, "SessionLocal", factory)
+    monkeypatch.setenv("PILOT_MODE_ARMED", "true")
+    monkeypatch.setenv("INTERNAL_NOTIFICATION_EMAIL", "chapelgate@gmail.com")
+    monkeypatch.setenv("EMAIL_MODE", "mock")
+    monkeypatch.setenv("ENABLE_LIVE_EMAIL", "false")
+    monkeypatch.setenv("SMTP_FROM", "info@chapelgateservices.com")
+    monkeypatch.setenv("RESEND_API_KEY", "re_test_key")
+    sends = []
+    monkeypatch.setattr(
+        call_notifications,
+        "send_email",
+        lambda to, subject, body, **_k: sends.append(subject)
+        or {"mock": False, "message_id": "resend-1"},
+    )
+    monkeypatch.setattr(call_notifications, "pilot_resend_ready", lambda: True)
+    monkeypatch.setattr(call_notifications, "live_email_enabled", lambda: False)
+    with factory() as session:
+        client = Client(name="Pilot resend tenant")
+        session.add(client)
+        session.flush()
+        session.add(Property(client_id=client.id, address="Synthetic", postcode="ZZ1 1ZZ"))
+        session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="Pilot"))
+        call = CallSession(call_sid="CA-pilot-resend", caller="sha256:abc", transcript="")
+        session.add(call)
+        session.flush()
+        session.add(CallSessionTenant(call_session_id=call.id, client_id=client.id))
+        session.commit()
+        call_id = call.id
+    result = dispatch_internal_call_email(call_id)
+    assert result["sent"] is True
+    assert any("[CALL REVIEW]" in s for s in sends)
+
+
 def test_mock_email_is_not_marked_sent(monkeypatch):
     factory = _factory()
     monkeypatch.setattr(call_notifications, "SessionLocal", factory)
     monkeypatch.setenv("INTERNAL_NOTIFICATION_EMAIL", "chapelgate@gmail.com")
     monkeypatch.setenv("EMAIL_MODE", "mock")
     monkeypatch.setenv("ENABLE_LIVE_EMAIL", "false")
+    monkeypatch.delenv("PILOT_MODE_ARMED", raising=False)
     with factory() as session:
         client = Client(name="Mock tenant")
         session.add(client)

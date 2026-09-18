@@ -11,7 +11,8 @@ import re
 from typing import Any
 
 from communications import queue_outbound, record_delivery_status
-from email_gateway import live_email_enabled, send_email
+from email_gateway import live_email_enabled, pilot_resend_ready, send_email
+
 from idempotency import claim_action
 from models import CallSession, Property, Resident, SessionLocal, WorkOrder
 from operational_logging import operational_event
@@ -325,7 +326,8 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
             delivery_id = delivery.id
 
         # Delivery attempt is outside the persistence transaction.
-        if not live_email_enabled():
+        # Pilot-armed Resend HTTPS may proceed even when ENABLE_LIVE_EMAIL is false.
+        if not live_email_enabled() and not pilot_resend_ready():
             with SessionLocal() as session:
                 record_delivery_status(
                     session, delivery_id, "FAILED", failure_code="live_email_disabled"

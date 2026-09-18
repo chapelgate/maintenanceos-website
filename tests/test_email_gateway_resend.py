@@ -10,6 +10,27 @@ def _live_resend_env(monkeypatch):
     monkeypatch.setenv("SMTP_FROM", "info@example.test")
 
 
+def test_pilot_armed_resend_bypasses_live_email_flag(monkeypatch):
+    monkeypatch.setenv("PILOT_MODE_ARMED", "true")
+    monkeypatch.setenv("EMAIL_MODE", "mock")
+    monkeypatch.setenv("ENABLE_LIVE_EMAIL", "false")
+    monkeypatch.setenv("SMTP_FROM", "info@chapelgateservices.com")
+    monkeypatch.setenv("SMTP_USERNAME", "resend")
+    monkeypatch.setenv("SMTP_PASSWORD", "re_test_key")
+    monkeypatch.delenv("RESEND_API_KEY", raising=False)
+    assert email_gateway.pilot_resend_ready() is True
+    calls = []
+    monkeypatch.setattr(
+        email_gateway,
+        "_send_resend_http",
+        lambda to, subject, body, sender, api_key: calls.append((to, sender, api_key))
+        or {"mock": False, "message_id": "pilot-id", "provider": "resend_https"},
+    )
+    result = email_gateway.send_email("chapelgate@gmail.com", "subject", "body")
+    assert result["message_id"] == "pilot-id"
+    assert calls == [("chapelgate@gmail.com", "info@chapelgateservices.com", "re_test_key")]
+
+
 def test_resend_smtp_configuration_prefers_https_api(monkeypatch):
     _live_resend_env(monkeypatch)
     calls = []

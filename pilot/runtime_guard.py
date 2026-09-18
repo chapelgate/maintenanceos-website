@@ -92,10 +92,12 @@ def _state_file_path() -> Path:
     configured = (os.getenv("PILOT_STATE_PATH") or "").strip()
     if configured:
         return Path(configured)
-    # Prefer Render persistent disk mount when present; else local mirror.
+    # Prefer Render persistent disk when present; else writable /tmp mirror;
+    # else local .pilot_state under the app directory.
     for candidate in (
         Path("/var/data/chapelgate_pilot_state.json"),
         Path("/data/chapelgate_pilot_state.json"),
+        Path("/tmp/chapelgate_pilot_state.json"),
     ):
         if candidate.parent.exists():
             return candidate
@@ -379,6 +381,18 @@ def pilot_status() -> dict[str, Any]:
             # Commit floor repairs so health checks heal ephemeral empties.
             session.commit()
     file_ok = _state_file_path().is_file()
+    try:
+        from email_gateway import email_gate_status
+
+        email_gate = email_gate_status()
+    except Exception:
+        email_gate = {
+            "live_email_flag": False,
+            "pilot_resend_ready": False,
+            "resend_key_present": False,
+            "sender_configured": False,
+            "recipient_configured": False,
+        }
     return {
         "pilot_name": cfg["pilot_name"],
         "tenant": TENANT_ID,
@@ -402,4 +416,5 @@ def pilot_status() -> dict[str, Any]:
             "bootstrap_floor": _bootstrap_count(),
             "ephemeral_sqlite_risk": _db_backend_kind().startswith("sqlite"),
         },
+        "email_gate": email_gate,
     }
