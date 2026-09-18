@@ -1,12 +1,14 @@
 import { CtaPair } from "@/components/CtaPair";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
 import { PageHero } from "@/components/PageHero";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = {
+export const metadata = contentPageMetadata({
   title: "How MaintenanceOS is designed to work — From caller to structured work",
   description:
     "Intake, controlled triage, and human oversight. Deterministic rules own safety and money; AI helps structure the paperwork. Pre-launch.",
-};
+  path: "/how-it-works/",
+});
 
 export default function HowItWorksPage() {
   return (

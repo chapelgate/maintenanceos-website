@@ -1,12 +1,14 @@
 import { LegalDraftBanner } from "@/components/LegalDraftBanner";
 import { LegalPageChrome } from "@/components/LegalPageChrome";
 import { PageHero } from "@/components/PageHero";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = {
+export const metadata = contentPageMetadata({
   title: "Privacy Policy (Draft)",
   description:
     "Draft privacy notice scaffold for the MaintenanceOS marketing website. Pending legal review — not final policy.",
-};
+  path: "/privacy/",
+});
 
 const sections: { id: string; title: string; body: string }[] = [
   {

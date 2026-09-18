@@ -1,12 +1,14 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { TrustPillars } from "@/components/TrustPillars";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = {
+export const metadata = contentPageMetadata({
   title: "Security",
   description:
     "MaintenanceOS trust posture: tenant isolation, human clearance, and audit evidence by design. No ISO, SOC 2, or other certification claims. Pre-launch.",
-};
+  path: "/security/",
+});
 
 export default function SecurityPage() {
   return (

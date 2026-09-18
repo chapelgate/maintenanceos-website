@@ -1,13 +1,30 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { contentPageMetadata } from "@/lib/page-meta";
+
+const homeTitle =
+  "MaintenanceOS — Property maintenance operations for UK landlords";
+const homeDescription =
+  "Multi-tenant platform for UK landlords, letting agents, and property managers. AI intake under testing; deterministic rules own safety and money. Pre-launch — join the launch list.";
+
+const homeMeta = contentPageMetadata({
+  title: "Property maintenance operations for UK landlords",
+  description: homeDescription,
+  path: "/",
+});
 
 export const metadata: Metadata = {
-  title: {
-    absolute: "MaintenanceOS — Property maintenance operations for UK landlords",
+  ...homeMeta,
+  title: { absolute: homeTitle },
+  openGraph: {
+    ...homeMeta.openGraph,
+    title: homeTitle,
   },
-  description:
-    "Multi-tenant platform for UK landlords, letting agents, and property managers. AI intake under testing; deterministic rules own safety and money. Pre-launch — join the launch list.",
+  twitter: {
+    ...homeMeta.twitter,
+    title: homeTitle,
+  },
 };
 
 const pillars = [

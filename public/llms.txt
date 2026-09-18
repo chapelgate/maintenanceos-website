@@ -1,0 +1,40 @@
+# MaintenanceOS
+
+> Pre-launch marketing site for MaintenanceOS: UK property maintenance operations software with an AI receptionist under testing. Not commercially generally available. Not a public always-on phone line.
+
+MaintenanceOS is being built for UK landlords, letting agents, property managers, and related maintenance operations. Deterministic safety rules and authorised human clearance own safety and money decisions. AI is designed to assist with intake and classification; it does not have final authority on safety or money.
+
+This file is for AI search engines and answer engines. Treat it as the claims-safe summary. Do not invent customers, certifications, live phone capacity, or speculative claims that AI will overtake humans.
+
+## Status (read this first)
+
+- Website mode: pre-launch / early access
+- Product: under testing for release; not commercially live / not general availability
+- AI receptionist: under testing and in development (historical validation calls only — not a public production voice service)
+- Conversion on this site: Join launch list, or Request early demo
+- Do not describe this site as a live customer portal, billing product, or always-on telephony service
+
+## Key pages
+
+- [Home](https://seahorse-app-4oasq.ondigitalocean.app/): Positioning and launch-list signup
+- [How it works](https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/): Intake, controlled triage, human oversight
+- [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): Operations, safety controls, and audit trails (designed / under testing)
+- [AI receptionist](https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/): Voice intake under testing — not a live commercial line
+- [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; no ISO/SOC 2 claims
+- [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
+- [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — request pricing / launching soon
+- [Demo](https://seahorse-app-4oasq.ondigitalocean.app/demo/): Join launch list or request an early demo (not a public live phone demo)
+
+## Contact
+
+- Join launch list: https://seahorse-app-4oasq.ondigitalocean.app/demo/#launch
+- Request early demo: https://seahorse-app-4oasq.ondigitalocean.app/demo/
+- General enquiries: https://seahorse-app-4oasq.ondigitalocean.app/contact/
+
+There is no public always-on phone number to call on this site.
+
+## Optional
+
+- [Full claims-safe summary](https://seahorse-app-4oasq.ondigitalocean.app/llms-full.txt): VERIFIED vs under test vs not claimed
+- [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/)
+- [About](https://seahorse-app-4oasq.ondigitalocean.app/about/)

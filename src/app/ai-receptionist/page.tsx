@@ -1,11 +1,13 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = {
+export const metadata = contentPageMetadata({
   title: "AI receptionist",
   description:
     "AI receptionist for maintenance intake — under testing and in development. Not a live commercial voice service.",
-};
+  path: "/ai-receptionist/",
+});
 
 const callFlow = [
   "Answer and gather caller details into structured maintenance intake",

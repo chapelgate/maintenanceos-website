@@ -1,8 +1,14 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { getPricingConfig } from "@/config/pricing";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = { title: "Pricing" };
+export const metadata = contentPageMetadata({
+  title: "Pricing",
+  description:
+    "Public list pricing is not published yet. Request pricing or join the launch list. Pre-launch — no self-serve checkout.",
+  path: "/pricing/",
+});
 
 export default function PricingPage() {
   const pricing = getPricingConfig();

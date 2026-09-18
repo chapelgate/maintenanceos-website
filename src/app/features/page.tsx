@@ -1,7 +1,13 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = { title: "Features" };
+export const metadata = contentPageMetadata({
+  title: "Features",
+  description:
+    "Capability map for MaintenanceOS operations, safety controls, and audit trails. Designed, built, and under testing — not commercial general availability.",
+  path: "/features/",
+});
 
 const groups = [
   {
