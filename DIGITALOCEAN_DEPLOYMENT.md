@@ -61,6 +61,6 @@ The existing Render validation deployment remains untouched until the DigitalOce
 - Provisioners: `scripts/provision_do_voice_app.py`, `scripts/ush_do_broker.py` — fail closed without principal grant; no secret-retry loop.
 - Evidence: USH PR #7 recorded vaulted DO + DO write via USH (`USH PASS`). Re-asking Andy for the DO token is forbidden.
 - `n2-secrets-retry` cancelled permanently.
-- Remaining human action: add USH repo to this environment and register MOS principal on USH (admin) — deliver only `USH_WORKLOAD_TOKEN` into the MOS secrets store.
+- Remaining human action: add Cursor secret `USH_BOOTSTRAP_TOKEN` (preferred) or `USH_WORKLOAD_TOKEN` for `maintenanceos-v1-pilot` — sourced from USH admin on chapelgate-ush-1. Do not paste into chat/Git. Do not add `DIGITALOCEAN_TOKEN`. Then run `python3 scripts/ush_establish_mos_identity.py`.
 
 See `docs/migration/DO_MIGRATION_REPORT.md`, `docs/migration/USH_PROVIDER_MATRIX.md`, `contrib/ush-digitalocean-adapter/`.

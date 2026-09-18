@@ -46,15 +46,23 @@ MOS client: `ush_client.py` (operations/credentials via workload identity)
 
 ## Blocker (not DO token bootstrap)
 
-USH principal registration for MOS now requires admin bootstrap (`bootstrap_admin_required`).  
-This agent has no `USH_WORKLOAD_TOKEN`, so brokered DO ops fail closed without a secret-retry loop.
+Exhausted autonomous identity routes on 2026-09-18 (see `USH_IDENTITY_EXHAUSTION.json`):
 
-**Human action (secure, no paste into chat/Cursor/Git):**
+- Live USH `https://68.183.44.222` healthy; DigitalOcean adapter vaulted (`DO_USH_DEPLOY`)
+- `POST /v1/principals/register` → `401 bootstrap_admin_required` for all principal kinds
+- All capability/operation APIs → `401 authentication_required` without workload bearer
+- Render / GitHub Actions / IMDS / self-hosted workers: no USH identity material
+- SSH to live USH: **publickey only** (DO welcome root passwords rejected / unusable)
+- Second chapelgate-ush-1 IP from DO mail unreachable
+- USH git repo not required — live API is authority
 
-1. Add `github.com/chapelgate/chapelgate-universal-secrets-handler.` to Cloud Agent environment  
-   https://cursor.com/dashboard/cloud-agents/environments/e/69e354a8-aed0-11f1-bf4b-42ffb4d10ea7  
-2. On USH admin path, register principal `maintenanceos-v1-pilot` (`kind=application`, `project=maintenanceos`, `environment=london`, `tenant=chapelgate`) with explicit policy for DigitalOcean `apps.*`  
-3. Deliver only `USH_WORKLOAD_TOKEN` into the MOS secure secrets store (not DO token)
+**ONE human-only action:** add Cursor Cloud Agent secret `USH_BOOTSTRAP_TOKEN` (preferred) or `USH_WORKLOAD_TOKEN` for principal `maintenanceos-v1-pilot` at
+https://cursor.com/dashboard/cloud-agents/environments/e/69e354a8-aed0-11f1-bf4b-42ffb4d10ea7
+
+Source from USH admin on `chapelgate-ush-1` (Estate bootstrap). Do **not** paste into chat/Git/PR. Do **not** add `DIGITALOCEAN_TOKEN`.
+
+After inject, run `python3 scripts/ush_establish_mos_identity.py` then continue DO provision + N=2.
+
 
 ## DigitalOcean N=2 / N=5 / N=10 / N=25
 
