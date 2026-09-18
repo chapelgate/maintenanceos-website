@@ -34,6 +34,10 @@ from voice_bridge import (
 load_dotenv()
 app=FastAPI(title="MaintenanceOS V1 Pilot",docs_url=None,redoc_url=None,openapi_url=None)
 init_db()
+# Optional one-shot completion-email proof on boot (no Twilio / no pilot ceiling).
+with suppress(Exception):
+    from pilot.email_selftest import run_email_selftest_if_configured
+    run_email_selftest_if_configured()
 app.add_middleware(HttpSecurityBoundary,maximum_body_bytes=MAX_REQUEST_BYTES)
 
 

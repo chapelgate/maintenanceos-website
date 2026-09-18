@@ -396,6 +396,12 @@ def pilot_status() -> dict[str, Any]:
             "sender_configured": False,
             "recipient_configured": False,
         }
+    try:
+        from pilot.email_selftest import selftest_status
+
+        email_selftest = selftest_status()
+    except Exception:
+        email_selftest = None
     return {
         "pilot_name": cfg["pilot_name"],
         "tenant": TENANT_ID,
@@ -420,4 +426,5 @@ def pilot_status() -> dict[str, Any]:
             "ephemeral_sqlite_risk": _db_backend_kind().startswith("sqlite"),
         },
         "email_gate": email_gate,
+        "email_selftest": email_selftest,
     }
