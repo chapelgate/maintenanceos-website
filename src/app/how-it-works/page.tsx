@@ -38,20 +38,6 @@ export default function HowItWorksPage() {
             >
               See verified capabilities
             </a>
-            {" · "}
-            <a
-              href="/ai-receptionist/"
-              className="text-accent underline hover:text-accent-hover"
-            >
-              AI receptionist
-            </a>
-            {" · "}
-            <a
-              href="/security/"
-              className="text-accent underline hover:text-accent-hover"
-            >
-              Security
-            </a>
           </p>
         </div>
       </section>
