@@ -1,6 +1,6 @@
 {
   "capacity_present": true,
-  "checked_at": "2026-09-17T06:30:58Z",
+  "checked_at": "2026-09-18T14:48:39Z",
   "concurrency_capacity_gte_2": true,
   "cost_kill_switch_signal_present": true,
   "draining": false,
