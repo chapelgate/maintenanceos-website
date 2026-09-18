@@ -353,6 +353,12 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
                 outcome="sent",
                 reason_code=category,
             )
+            try:
+                from pilot.runtime_guard import record_pilot_scorecard_event
+                record_pilot_scorecard_event("email_delivered")
+            except Exception:
+                # Notification success must not be reversed by scorecard telemetry.
+                pass
             return result
         except Exception as exc:
             with SessionLocal() as session:
