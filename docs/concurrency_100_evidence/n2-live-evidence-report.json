@@ -1,8 +1,8 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T15:59:19Z",
+  "generated_at": "2026-09-18T16:05:17Z",
   "LIVE_N2": "FAIL",
-  "reason": "twilio_sid_token_absent_in_render_env__deploy_update_failed_blocks_proof_token",
+  "reason": "deploy_update_failed_after_secret_env_wipe_recovery_in_progress",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
@@ -73,5 +73,18 @@
   "twilio_missing_in_render_env": [
     "TWILIO_ACCOUNT_SID",
     "TWILIO_AUTH_TOKEN"
-  ]
+  ],
+  "incident": {
+    "bulk_env_put_dropped_unreturned_secrets": true,
+    "live_instance_still_healthy_old_container": true,
+    "missing_secret_keys_expected": [
+      "GEMINI_API_KEY",
+      "GOOGLE_API_KEY",
+      "RESEND_API_KEY",
+      "TWILIO_ACCOUNT_SID",
+      "TWILIO_AUTH_TOKEN"
+    ],
+    "non_secret_config_restored": true,
+    "proof_token_set_in_render_env_not_yet_live": true
+  }
 }
