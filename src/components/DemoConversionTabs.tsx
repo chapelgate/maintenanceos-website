@@ -54,6 +54,7 @@ export function DemoConversionTabs() {
       <div
         role="tablist"
         aria-label="Conversion options"
+        tabIndex={0}
         className="flex gap-1 rounded-lg border border-border bg-surface p-1"
         onKeyDown={onTabKeyDown}
       >
