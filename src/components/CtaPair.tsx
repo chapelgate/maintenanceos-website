@@ -17,13 +17,13 @@ export function CtaPair({
     <div className={`flex flex-wrap gap-3 ${className}`}>
       <a
         href={primaryHref}
-        className="inline-flex items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover"
+        className="inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
       >
         {primaryLabel}
       </a>
       <a
         href={secondaryHref}
-        className="inline-flex items-center justify-center rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-ink hover:border-accent hover:text-accent"
+        className="inline-flex min-h-6 min-w-6 items-center justify-center rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-ink hover:border-accent hover:text-accent"
       >
         {secondaryLabel}
       </a>
