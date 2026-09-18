@@ -1,17 +1,15 @@
-import { IndustryStubPage } from "@/components/IndustryStubPage";
+import { IndustryRolePage } from "@/components/IndustryRolePage";
+import { getIndustryRole } from "@/config/industries";
+import { notFound } from "next/navigation";
 
-export const metadata = { title: "Landlords" };
+const role = getIndustryRole("landlords");
+
+export const metadata = {
+  title: role?.label ?? "Industries",
+  description: role?.metaDescription,
+};
 
 export default function Page() {
-  return (
-    <IndustryStubPage
-      title="Landlords"
-      audience="For private and portfolio landlords who need clear maintenance accountability."
-      focus={[
-    "Resident-reported repairs into structured work orders",
-    "Visibility without drowning in unstructured messages",
-    "Human clearance on safety-critical paths"
-  ]}
-    />
-  );
+  if (!role) notFound();
+  return <IndustryRolePage role={role} />;
 }

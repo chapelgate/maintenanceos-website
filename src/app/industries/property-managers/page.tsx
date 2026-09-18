@@ -1,17 +1,15 @@
-import { IndustryStubPage } from "@/components/IndustryStubPage";
+import { IndustryRolePage } from "@/components/IndustryRolePage";
+import { getIndustryRole } from "@/config/industries";
+import { notFound } from "next/navigation";
 
-export const metadata = { title: "Property managers" };
+const role = getIndustryRole("property-managers");
+
+export const metadata = {
+  title: role?.label ?? "Industries",
+  description: role?.metaDescription,
+};
 
 export default function Page() {
-  return (
-    <IndustryStubPage
-      title="Property managers"
-      audience="For property managers running day-to-day maintenance operations."
-      focus={[
-    "Work orders, jobs, and communications in one operational picture",
-    "Escalation queues for human review",
-    "Deterministic rules ahead of AI suggestions"
-  ]}
-    />
-  );
+  if (!role) notFound();
+  return <IndustryRolePage role={role} />;
 }

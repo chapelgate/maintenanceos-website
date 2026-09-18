@@ -52,7 +52,12 @@ export function IndustryRolePage({ role }: Props) {
         </section>
 
         <section className="space-y-4 border-t border-border pt-8">
-          <CtaPair />
+          <CtaPair
+            primaryHref="/demo/"
+            primaryLabel="Request early demo"
+            secondaryHref="/demo/#launch"
+            secondaryLabel="Join launch list"
+          />
           <p className="text-sm text-muted">
             <a href="/industries/" className="text-accent underline">
               All industries
