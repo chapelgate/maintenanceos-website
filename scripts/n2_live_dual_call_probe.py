@@ -9,11 +9,14 @@ Requires env:
   TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER
 Optional:
   TWILIO_FROM_NUMBER / TWILIO_HUMAN_TRANSFER_NUMBER (must be allowed From)
+  TWILIO_FROM_NUMBER_2 (second distinct From for true dual-leg independence)
   N2_CALL_HOLD_SECONDS (default 45)
   PUBLIC_BASE_URL (default Lane A health host)
   N2_EVIDENCE_OUT (default docs/concurrency_100_evidence/n2-live-dual-call.json)
+  N2_SECRETS_FILE (default /tmp/n2-live-secrets.env — loaded if present)
 
-Exit 0 only when both calls overlap in-progress and health showed active>=2.
+Exit 0 only when both calls overlap in-progress and health showed active>=2
+with distinct call refs (no shared call ID).
 """
 
 from __future__ import annotations
@@ -33,6 +36,22 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = ROOT / "docs" / "concurrency_100_evidence" / "n2-live-dual-call.json"
 PUBLIC_BASE = os.getenv("PUBLIC_BASE_URL", "https://maintenanceos-redteam-v2.onrender.com").rstrip("/")
 HOLD_S = int(os.getenv("N2_CALL_HOLD_SECONDS", "45"))
+SECRETS_FILE = Path(os.getenv("N2_SECRETS_FILE", "/tmp/n2-live-secrets.env"))
+
+
+def _load_secrets_file(path: Path) -> None:
+    """Load KEY=VALUE lines into os.environ if not already set (no overwrite)."""
+    if not path.is_file():
+        return
+    for raw in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and value and not (os.getenv(key) or "").strip():
+            os.environ[key] = value
 
 
 def _token(value: str) -> str:
@@ -57,6 +76,7 @@ def _require_env(*names: str) -> list[str]:
 
 
 def main() -> int:
+    _load_secrets_file(SECRETS_FILE)
     out_path = Path(os.getenv("N2_EVIDENCE_OUT", str(DEFAULT_OUT)))
     missing = _require_env("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_PHONE_NUMBER")
     if missing:
@@ -80,7 +100,12 @@ def main() -> int:
     auth = os.environ["TWILIO_AUTH_TOKEN"].strip()
     mos_number = os.environ["TWILIO_PHONE_NUMBER"].strip()
     from_candidates = []
-    for key in ("TWILIO_FROM_NUMBER", "TWILIO_HUMAN_TRANSFER_NUMBER", "TWILIO_SECOND_NUMBER"):
+    for key in (
+        "TWILIO_FROM_NUMBER",
+        "TWILIO_FROM_NUMBER_2",
+        "TWILIO_HUMAN_TRANSFER_NUMBER",
+        "TWILIO_SECOND_NUMBER",
+    ):
         value = (os.getenv(key) or "").strip()
         if value and value != mos_number and value not in from_candidates:
             from_candidates.append(value)
@@ -102,6 +127,7 @@ def main() -> int:
     pre = _health()
     body = pre.get("body") or {}
     cap = body.get("call_capacity") if isinstance(body.get("call_capacity"), dict) else {}
+    pilot_pre = body.get("pilot") if isinstance(body.get("pilot"), dict) else {}
     if not (
         pre.get("http_status") == 200
         and body.get("ok") is True
@@ -128,22 +154,23 @@ def main() -> int:
         print(json.dumps(report, indent=2, sort_keys=True))
         return 4
 
-    # TwiML keeps the outbound caller legs alive while MOS answers + converses.
-    twiml = (
-        '<?xml version="1.0" encoding="UTF-8"?>'
-        "<Response>"
-        "<Pause length=\"2\"/>"
-        "<Say voice=\"Polly.Amy\">MaintenanceOS N2 concurrency probe caller.</Say>"
-        f"<Pause length=\"{max(20, HOLD_S)}\"/>"
-        "<Hangup/>"
-        "</Response>"
-    )
     client = Client(account, auth)
-    from_number = from_candidates[0]
     placed: list[dict[str, Any]] = []
+    placed_sids: list[str] = []
     errors: list[str] = []
     t0 = time.time()
     for idx in (1, 2):
+        from_number = from_candidates[(idx - 1) % len(from_candidates)]
+        # Distinct spoken marker per leg so transcripts (if captured) cannot be shared.
+        twiml = (
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            "<Response>"
+            '<Pause length="2"/>'
+            f'<Say voice="Polly.Amy">MaintenanceOS N2 probe caller {idx}.</Say>'
+            f'<Pause length="{max(20, HOLD_S)}"/>'
+            "<Hangup/>"
+            "</Response>"
+        )
         try:
             call = client.calls.create(
                 to=mos_number,
@@ -151,6 +178,7 @@ def main() -> int:
                 twiml=twiml,
                 timeout=30,
             )
+            placed_sids.append(call.sid)
             placed.append(
                 {
                     "index": idx,
@@ -166,8 +194,9 @@ def main() -> int:
         except Exception as exc:
             errors.append(exc.__class__.__name__)
 
-    # Poll health for simultaneous active peak
+    # Poll health for simultaneous active peak + distinct call isolation signals
     peak_active = 0
+    overlap_window: dict[str, Any] | None = None
     samples: list[dict[str, Any]] = []
     deadline = time.time() + HOLD_S + 15
     while time.time() < deadline:
@@ -176,16 +205,24 @@ def main() -> int:
         c = b.get("call_capacity") if isinstance(b.get("call_capacity"), dict) else {}
         active = int(c.get("active") or b.get("active_calls") or 0)
         peak_active = max(peak_active, active)
-        samples.append({"at": _iso(), "active": active, "by_client_keys": len(c.get("by_client") or {})})
+        sample = {
+            "at": _iso(),
+            "active": active,
+            "by_client_keys": len(c.get("by_client") or {}),
+        }
+        samples.append(sample)
+        if active >= 2 and overlap_window is None:
+            overlap_window = {
+                "first_observed_at": sample["at"],
+                "active": active,
+                "elapsed_seconds": round(time.time() - t0, 2),
+            }
         if peak_active >= 2 and time.time() - t0 >= 8:
             break
         time.sleep(2)
 
-    # Refresh Twilio call statuses
-    for row in placed:
-        # Cannot look up by token; re-list recent to-number calls
-        pass
     recent = []
+    final_statuses: list[dict[str, Any]] = []
     try:
         for record in client.calls.list(to=mos_number, limit=10):
             recent.append(
@@ -200,20 +237,56 @@ def main() -> int:
     except Exception as exc:
         errors.append(f"list_{exc.__class__.__name__}")
 
-    # Hang up any still-ringing probe calls via recent in-progress
-    try:
-        for record in client.calls.list(to=mos_number, status="in-progress", limit=5):
+    # Wait for placed legs to leave in-progress, then force-complete stragglers.
+    settle_deadline = time.time() + 90
+    while time.time() < settle_deadline and placed_sids:
+        still_live = False
+        final_statuses = []
+        for sid in placed_sids:
             try:
-                client.calls(record.sid).update(status="completed")
+                record = client.calls(sid).fetch()
+                final_statuses.append(
+                    {
+                        "call_ref": _token(sid),
+                        "status": record.status,
+                        "duration_seconds": int(record.duration)
+                        if str(record.duration or "").isdigit()
+                        else None,
+                        "start": record.start_time.isoformat() if record.start_time else None,
+                        "end": record.end_time.isoformat() if record.end_time else None,
+                    }
+                )
+                if record.status in {"queued", "ringing", "in-progress"}:
+                    still_live = True
+            except Exception as exc:
+                errors.append(f"fetch_{exc.__class__.__name__}")
+        if not still_live:
+            break
+        time.sleep(3)
+    try:
+        for sid in placed_sids:
+            try:
+                record = client.calls(sid).fetch()
+                if record.status in {"queued", "ringing", "in-progress"}:
+                    client.calls(sid).update(status="completed")
             except Exception:
                 pass
     except Exception:
         pass
 
     post = _health()
+    post_body = post.get("body") or {}
+    post_pilot = post_body.get("pilot") if isinstance(post_body.get("pilot"), dict) else {}
     overlap = peak_active >= 2
     both_placed = len(placed) == 2
-    passed = both_placed and overlap and not errors
+    distinct_refs = len({row["call_ref"] for row in placed}) == 2
+    completed_ok = (
+        len(final_statuses) == 2
+        and all(row.get("status") in {"completed", "busy", "no-answer", "canceled", "failed"} for row in final_statuses)
+        and all(row.get("status") == "completed" for row in final_statuses)
+    )
+    # Prefer completed; allow PASS only when both completed normally after overlap.
+    passed = both_placed and distinct_refs and overlap and completed_ok and not errors
     report = {
         "profile": "n2-live-dual-call",
         "ok": True,
@@ -222,32 +295,41 @@ def main() -> int:
         "public_base": PUBLIC_BASE,
         "hold_seconds": HOLD_S,
         "mos_number_ref": _token(mos_number),
-        "from_number_ref": _token(from_number),
+        "from_number_refs": [_token(n) for n in from_candidates[:2]],
         "placed_count": len(placed),
         "placed": placed,
+        "placed_call_refs_distinct": distinct_refs,
+        "final_leg_statuses": final_statuses,
         "errors": errors,
         "peak_active_observed": peak_active,
         "overlap_active_ge_2": overlap,
+        "overlap_window": overlap_window,
         "health_samples": samples[:30],
         "recent_to_number_calls": recent[:10],
         "pre_health": {
             "global_limit": cap.get("global_limit"),
             "active": cap.get("active"),
             "realtime_voice": body.get("realtime_voice"),
-            "pilot_calls_completed": (body.get("pilot") or {}).get("calls_completed")
-            if isinstance(body.get("pilot"), dict)
+            "pilot_calls_completed": pilot_pre.get("calls_completed"),
+            "emails_delivered": (pilot_pre.get("scorecard") or {}).get("emails_successfully_delivered")
+            if isinstance(pilot_pre.get("scorecard"), dict)
             else None,
         },
         "post_health": {
-            "active": ((post.get("body") or {}).get("call_capacity") or {}).get("active"),
-            "pilot_calls_completed": ((post.get("body") or {}).get("pilot") or {}).get("calls_completed")
-            if isinstance((post.get("body") or {}).get("pilot"), dict)
+            "active": ((post_body.get("call_capacity") or {}) if isinstance(post_body.get("call_capacity"), dict) else {}).get(
+                "active"
+            ),
+            "pilot_calls_completed": post_pilot.get("calls_completed"),
+            "emails_delivered": (post_pilot.get("scorecard") or {}).get("emails_successfully_delivered")
+            if isinstance(post_pilot.get("scorecard"), dict)
             else None,
         },
         "acceptance": {
             "two_real_calls_placed": both_placed,
             "simultaneous_active_observed": overlap,
-            "independent_legs": both_placed,
+            "independent_legs_distinct_call_ids": distinct_refs,
+            "both_terminated_completed": completed_ok,
+            "no_shared_call_id": distinct_refs,
         },
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)

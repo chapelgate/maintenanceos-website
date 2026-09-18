@@ -1,25 +1,30 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T14:50:17Z",
+  "generated_at": "2026-09-18T15:25:00Z",
   "LIVE_N2": "FAIL",
-  "reason": "twilio_secrets_absent_in_actions_and_cloud_agent",
+  "reason": "twilio_render_secrets_absent__google_oauth_password_blocker",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
+  "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
   "live_health": {
     "global_limit": 2,
     "realtime_voice": true,
     "pilot_calls_completed": 3,
-    "email_gate_present": true
+    "email_gate_present": true,
+    "synthetic_email_proof_route": "404_not_deployed",
+    "active_calls": 0
   },
   "call_ids": null,
   "overlapping_timestamps": null,
   "test_results": {
-    "pytest": "327 passed",
+    "pytest": "327 passed (re-verified 2026-09-18T15:20Z)",
     "simulated_ladder_1_to_100": "PASS",
     "telephony_http_path_1_5_12": "PASS",
     "n2_preflight": "ready_for_andy_n2_calls=true",
     "actions_dual_call_workflow": "gated_skip_secrets_absent",
-    "actions_run": "https://github.com/chapelgate/maintenanceos-v1-pilot/actions/runs/35358556550"
+    "actions_run": "https://github.com/chapelgate/maintenanceos-v1-pilot/actions/runs/35358556550",
+    "browser_console_login": "blocked_google_oauth_password",
+    "cloud_agent_secrets": "CHAPELGATE_OPENAI_KEY,OPENAI_API_KEY only"
   },
   "production_errors": [],
   "measured_latency_simulated_p95_ms": {
@@ -33,7 +38,7 @@
   },
   "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
   "N5_N10_N25_simulated": "PASS",
-  "identified_bottleneck": "Credentials: TWILIO_* and RENDER_API_KEY not in Cloud Agent or GitHub Actions secret stores. App-layer concurrency clears simulated 100.",
+  "identified_bottleneck": "Human credential gate: TWILIO_* + RENDER_API_KEY not in Cloud Agent or GitHub Actions; Twilio/Render consoles require Google OAuth password for chaplegate@gmail.com (no saved Chrome passwords, no OTP path completed). App-layer concurrency clears simulated 100.",
   "exact_safe_concurrency_proven": {
     "live_pstn_simultaneous": 0,
     "live_capacity_configured": 2,
@@ -41,11 +46,20 @@
     "http_telephony_path_probe": 12
   },
   "remaining_to_100_live": [
-    "Inject TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, and a distinct TWILIO_FROM_NUMBER into Cloud Agent or GitHub Actions",
-    "Inject RENDER_API_KEY to Manual-Deploy tip 054b92b if auto-deploy off",
-    "Re-run workflow n2-live-dual-call / scripts/n2_live_dual_call_probe.py until LIVE N=2 PASS",
-    "Raise GLOBAL_MAX_CONCURRENT_CALLS progressively for live N=5/10/25 only after N=2 PASS",
+    "Inject TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, TWILIO_FROM_NUMBER (distinct) into Cloud Agent secrets or /tmp/n2-live-secrets.env",
+    "Inject RENDER_API_KEY OR Manual Deploy tip 054b92b+ on maintenanceos-redteam-v2",
+    "Re-run scripts/n2_live_dual_call_probe.py until LIVE N=2 PASS with overlap_active_ge_2 and distinct call refs",
+    "Raise GLOBAL_MAX_CONCURRENT_CALLS for live N=5/10/25 only after N=2 PASS",
     "Measure Twilio + Gemini provider quotas under live load before N=50/100"
   ],
-  "pr_consolidation": "docs/concurrency_100_evidence/N2_CONSOLIDATION.md"
+  "pr_consolidation": "docs/concurrency_100_evidence/N2_CONSOLIDATION.md",
+  "open_pr_decisions": {
+    "32": "LIVE candidate Lane A — keep; do not blind-merge others into it",
+    "42": "N=2 consolidation branch (this work) — keep",
+    "41": "superseded by 42 — do not merge separately",
+    "52_53": "DO NOT MERGE — conflicts with proven P0 latency/close",
+    "39": "superseded by live email fail-safe",
+    "45": "docs/EE only — not runtime",
+    "36": "alternate DO host — conflict; unused for this N=2"
+  }
 }
