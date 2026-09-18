@@ -21,20 +21,23 @@ export default function HowItWorksPage() {
 
       <section
         aria-labelledby="honesty-heading"
-        className="border-y border-border bg-accent-subtle/60"
+        className="border-y border-border bg-accent-subtle"
       >
-        <div className="mx-auto max-w-3xl px-4 py-12">
-          <h2 id="honesty-heading" className="text-2xl font-semibold text-ink">
+        <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+          <h2
+            id="honesty-heading"
+            className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+          >
             Designed so marketing never outruns the product.
           </h2>
-          <p className="mt-3 text-muted">
+          <p className="mt-3 text-base leading-relaxed text-muted">
             Further controlled live testing is still required before we claim a
             public always-on receptionist.
           </p>
-          <p className="mt-6 text-sm text-muted">
+          <p className="mt-6 text-sm">
             <a
               href="/features/"
-              className="text-accent underline hover:text-accent-hover"
+              className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
             >
               See verified capabilities
             </a>
@@ -42,9 +45,8 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-3xl px-4 py-12">
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
         <CtaPair
-          className="mt-2"
           primaryHref="/demo/#launch"
           primaryLabel="Join launch list"
           secondaryHref="/demo/"
