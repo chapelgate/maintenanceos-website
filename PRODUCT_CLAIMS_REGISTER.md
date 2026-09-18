@@ -1,64 +1,99 @@
-# PRODUCT_CLAIMS_REGISTER.md (seed — MaintenanceOS Website)
+# PRODUCT_CLAIMS_REGISTER.md — SIGNED (VERIFIED-ONLY APPROVAL)
 
-Source of truth: `chapelgate/maintenanceos-v1-pilot` (CURRENT_STATUS.md dated 2026-09-14, README, ARCHITECTURE, open issues #9 #26 #31).
+**Signer:** MOS Product Investigator  
+**Signed:** 2026-09-18 13:15 BST  
+**Product source:** `chapelgate/maintenanceos-v1-pilot` (`main`)  
+**Checkpoint:** `CURRENT_STATUS.md` dated 2026-09-14  
+**Also reviewed:** README.md, ARCHITECTURE.md, DECISION_BOOK.md, PILOT_CHECKLIST.md, STAGED_VOICE_INTEGRATION.md, FINALISATION_10_STEPS.md  
+**Website mode:** PRE-LAUNCH  
 
-Website mode: **PRE-LAUNCH** (`PUBLIC_LAUNCH=false`). Do NOT claim commercially live, generally available, certified, or production call-ready.
+## Hard gates
 
-## Claim taxonomy
+- **Commercially live / GA:** NOT AVAILABLE — never claim
+- **Telephony controlled Gemini call:** NOT AVAILABLE — **NO-GO**
+- **Present-fact marketing copy:** **VERIFIED rows only** (this section)
+- UNDER TEST / PLANNED / NOT AVAILABLE must not be stated as present commercial fact
 
-- VERIFIED NOW — may state as present fact on website
-- IMPLEMENTED BUT NOT RELEASE-VERIFIED — describe carefully as built/under test; not as GA
-- PLANNED — upcoming/planned only if mentioned
-- NOT AVAILABLE — do not claim
+## Taxonomy
+
+| Status | Website use |
+|---|---|
+| **VERIFIED** | Only status approved as present fact (still PRE-LAUNCH product, not “buy now live service”) |
+| **UNDER TEST** | “Under testing / designed to” only — not GA |
+| **PLANNED** | Label as planned |
+| **NOT AVAILABLE** | Omit |
 
 ---
 
-### AI receptionist / voice handling
-| Claim | Status | Evidence | Approved for website? |
-|---|---|---|---|
-| AI-powered receptionist capability exists in product source | IMPLEMENTED BUT NOT RELEASE-VERIFIED | README: Gemini Live primary `VOICE_PROVIDER=gemini`; OpenAI Realtime optional fallback | Yes — as capability under testing / in development, not as live commercial service |
-| UK terminology and 999 emergency guidance in source | VERIFIED NOW (in source + regression tests) | README; issue #9; tests lock UK/999/never-911 | Yes — as designed product behaviour; note live-carrier retest still required for corrected accent/emergency wording |
-| Collects caller details | VERIFIED NOW (product design/source) | README receptionist collects caller details | Yes |
-| Explicit human transfer supported in source | VERIFIED NOW (source + CI) | PR #25 merged; explicit-request-only transfer | Yes — callers can request a human; transfer quality still under retest |
-| Must not invent bookings/dispatches/refunds/compensation/account/safety assurances | VERIFIED NOW | README product controls | Yes — trust section |
-| Real receptionist calls have occurred historically | VERIFIED NOW | README; CURRENT_STATUS; issue #9 | Yes — carefully: prior test/validation calls, NOT commercial GA |
-| Controlled Gemini call on current DigitalOcean deployment | NOT AVAILABLE / blocked | CURRENT_STATUS: controlled Gemini call NOT yet authorised on DO runtime; realtime voice false on /health | No as “live now”; may say further controlled testing underway |
-| Concurrent multi-line production scale | PLANNED / NOT RELEASE-VERIFIED | Architecture mentions concurrency controls for consequential work; no verified “handles N simultaneous calls” | Website: architecture being developed / designed for concurrent operations — NEVER invent numbers |
+# APPROVED FOR PRESENT-FACT COPY (VERIFIED ONLY)
 
-### Maintenance operations / triage
-| Claim | Status | Evidence | Approved? |
-|---|---|---|---|
-| Multi-tenant maintenance-operations system | VERIFIED NOW (source) | README | Yes |
-| Work orders, properties, residents, contractors, jobs, communications | VERIFIED NOW (source) | README implemented controls | Yes as product capabilities under testing |
-| Deterministic safety/lifecycle rules override AI | VERIFIED NOW | README; ARCHITECTURE trust boundaries | Yes — core differentiator |
-| Critical safety latch requiring human clearance | VERIFIED NOW | ARCHITECTURE critical-safety invariant | Yes |
-| Escalation queues / human review | VERIFIED NOW | README; ARCHITECTURE | Yes |
-| Quotes/invoices checks exist; no payment/refund authority | VERIFIED NOW | README: no payment/refund/compensation/fee-waiver/client-money execution | Yes — do not claim payments processing |
-| Streamlit supervisor dashboard | VERIFIED NOW (source) | README | Yes as internal supervisor tooling — not as public customer portal GA |
-| Customer portal / public account login | PLANNED / NOT AVAILABLE as GA | Future integration points only | Scaffold links only; no fake portal |
+| ID | Claim | Evidence |
+|---|---|---|
+| V-02 | UK terminology and 999 (never 911) emergency guidance in product source and regressions | README; PR #25 lane; FINALISATION step 6; PILOT voice tests |
+| V-03 | Receptionist collects caller details (product design/source) | README |
+| V-04 | Explicit caller-request human transfer exists in source + CI (Gemini and OpenAI share policy) | CURRENT_STATUS: PR #25 merged `1f4ba147…` |
+| V-05 | Must not invent bookings, dispatches, refunds, compensation, account information, or safety assurances | README; voice_policy / action_evidence architecture |
+| V-06 | Historical real receptionist / validation calls have occurred (test/validation context only — not commercial GA) | README; CURRENT_STATUS; PILOT_CHECKLIST |
+| O-01 | Multi-tenant maintenance-operations system | README |
+| O-02 | Tenant-scoped properties, residents, contractors, work orders, jobs, communications, exports, action evidence, call sessions (in product source) | README |
+| O-03 | Deterministic server rules own safety, lifecycle, and approvals; AI does not override | README; ARCHITECTURE; DECISION_BOOK |
+| O-04 | Critical-safety latch requiring authorised human clearance | ARCHITECTURE |
+| O-05 | Escalation queues / HUMAN_REVIEW for RED cases | README; ARCHITECTURE; DECISION_BOOK |
+| O-06 | Quote/invoice checks exist; **no** payment, refund, compensation, fee-waiver, or client-money execution | README; DECISION_BOOK |
+| O-07 | Streamlit supervisor dashboard exists as internal supervisor tooling | README; ARCHITECTURE |
+| S-01 | Tenant isolation controls in source | ARCHITECTURE `tenant_security.py` |
+| S-02 | Twilio HTTP/WSS signature verification implemented in source | README |
+| S-03 | Audit events / action evidence; affirmative operational claims need verified success evidence | ARCHITECTURE `action_evidence.py` |
+| S-04 | Cloud CI and Security CI baseline pass on canonical application code | CURRENT_STATUS; FINALISATION step 2 |
+| R-04 | Local acceptance evidenced 2026-09-10: full pytest pass, local-closed readiness, SQLite backup/restore | PILOT_CHECKLIST |
 
-### Security / trust
-| Claim | Status | Evidence | Approved? |
-|---|---|---|---|
-| Tenant isolation | VERIFIED NOW (source) | ARCHITECTURE tenant_security | Yes |
-| Twilio HTTP/WSS signature verification in source | VERIFIED NOW (source) | README | Yes as design; live verification still in checklist |
-| Audit events / action evidence | VERIFIED NOW | ARCHITECTURE action_evidence | Yes |
-| Certifications (ISO, SOC2, etc.) | NOT AVAILABLE | No evidence | Never invent |
-| Fake uptime stats / customer logos / awards | NOT AVAILABLE | — | Forbidden |
+**Wording rule for VERIFIED:** state as product capability that exists in MaintenanceOS. Do **not** imply commercially live phone line, public production access, or general availability.
 
-### Release readiness
-| Claim | Status | Evidence | Approved? |
-|---|---|---|---|
-| Commercially generally available | NOT AVAILABLE | CURRENT_STATUS; issues #9 #26 #31 open | NO — PRE-LAUNCH only |
-| Production customer call pilot authorised | NOT AVAILABLE | Issue #26 gate incomplete | NO |
-| DigitalOcean deployment exists (loopback API) | VERIFIED NOW | CURRENT_STATUS droplet chapelgate-maintenanceos-production | Internal only — do not publish IPs/hosts on marketing site |
-| Cloud CI / Security CI passing on main | VERIFIED NOW | CURRENT_STATUS; issue #9 | Soft trust wording only if needed; no overclaim |
+---
 
-## Required website wording patterns
-- Primary CTA: Join launch list / Request early demo
-- Pricing: Request pricing / Pricing launching soon (config-driven)
-- Features: “designed to…”, “under testing…”, “built to…” where UNDER TEST
-- Never: “available now”, “handles 100 concurrent calls”, fake reviews
+# NOT APPROVED AS PRESENT FACT
 
-## Future integration stubs (do not fake backends)
-account login, dashboard, onboarding, demo env, customer portal, docs, API docs, billing, status page
+## UNDER TEST (careful language only)
+
+| ID | Claim | Note |
+|---|---|---|
+| V-01 | AI receptionist (Gemini Live primary) in source | Capability under testing — not live commercial service |
+| V-10 | Live human-transfer answer / no-answer on carrier | Historical mixed outcomes; retest open |
+| R-02 / R-03 | Public / production hosting | Doc conflict: CURRENT_STATUS vs FINALISATION on DO host identity; API loopback-only per CURRENT_STATUS — do not market public production |
+
+## PLANNED
+
+| ID | Claim |
+|---|---|
+| R-05 | Production blockers (governance, SSO/MFA, pen test, legal, insurance, etc.) |
+
+## NOT AVAILABLE (omit / forbidden)
+
+| ID | Claim |
+|---|---|
+| V-07 | Controlled Gemini call on canonical deployment — **NO-GO** |
+| V-08 | Public production voice / Twilio media streaming proven on canonical runtime |
+| V-09 | Concurrent multi-line capacity numbers |
+| O-08 | Public customer portal / account login / billing GA |
+| O-09 | Live email / messaging / remote AI side effects as “live now” |
+| R-01 | Commercially generally available / production customer call pilot |
+| S-05 | Certifications (ISO, SOC2, etc.) |
+| S-06 | Fake uptime, logos, awards, reviews |
+
+---
+
+## Required CTAs
+
+Join launch list / Request early demo. Pricing: request pricing / launching soon.
+
+## Signature
+
+```
+SIGNED-BY: MOS Product Investigator
+DATE: 2026-09-18T13:15:00+01:00
+PRODUCT_REPO: chapelgate/maintenanceos-v1-pilot
+WEBSITE_PATH: PRODUCT_CLAIMS_REGISTER.md
+PRESENT_FACT: VERIFIED rows only
+COMMERCIALLY_LIVE: NO
+TELEPHONY_CONTROLLED_CALL: NO-GO
+```
