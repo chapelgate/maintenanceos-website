@@ -1,7 +1,7 @@
 /**
  * Config-driven /pricing. Behaviour follows siteConfig.publicLaunch.
- * Never invent list prices, tiers, or checkout — only show published tiers
- * when explicitly filled below AND PUBLIC_LAUNCH is true.
+ * Never invent list prices, tiers, or checkout — published tiers only when
+ * explicitly filled below AND PUBLIC_LAUNCH is true.
  */
 import { siteConfig } from "@/config/site";
 
@@ -47,14 +47,13 @@ const prelaunch = {
 
 /**
  * Published-mode copy. Keep `tiers` empty until real packages are approved.
- * An empty tiers array falls back to the same request-pricing card (no fake prices).
+ * Empty tiers fall back to the request-pricing card (no fake prices).
  */
 const published = {
   eyebrow: "",
   title: "Pricing",
   lede:
     "Packages for UK landlords, letting agents, and property managers. No self-serve checkout on this site — request a quote if you need a tailored plan.",
-  /** Fill only with verified, approved package copy. Empty = still request pricing. */
   tiers: [] as PricingTier[],
   fallbackCardTitle: "Request a quote",
   fallbackCardBody:
