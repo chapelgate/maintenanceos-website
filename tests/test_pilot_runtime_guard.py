@@ -111,7 +111,7 @@ def test_owner_verified_floor_and_file_mirror_survive_db_wipe(monkeypatch, tmp_p
     monkeypatch.setenv("PILOT_MODE_ARMED", "true")
     st = pilot_status()
     assert st["calls_completed"] >= 2
-    assert st["persistence"]["bootstrap_floor"] == 2
+    assert st["persistence"]["bootstrap_floor"] == 3
     assert path.is_file()
     # Simulate ephemeral DB loss while file mirror remains.
     from models import SessionLocal, RuntimeControl

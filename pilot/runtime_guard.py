@@ -38,7 +38,7 @@ PERSIST_KEY = "CHAPELGATE_10_CALL_PILOT_STATE"
 _LOCK = threading.Lock()
 # Owner-verified real calls already completed before durable mirror existed.
 # Env PILOT_BOOTSTRAP_CALLS may raise this further; it must never lower it.
-_OWNER_VERIFIED_FLOOR = 2
+_OWNER_VERIFIED_FLOOR = 3
 
 
 class PilotAdmitRejected(RuntimeError):
@@ -64,7 +64,7 @@ class PilotRuntimeState:
 def _bootstrap_count() -> int:
     """Durable floor for owner-verified calls.
 
-    Production default is 2 (Calls 1–2 already completed). Explicit
+    Production default is 3 (Calls 1–3 already completed). Explicit
     PILOT_BOOTSTRAP_CALLS=0 is allowed for tests.
     """
     raw = os.getenv("PILOT_BOOTSTRAP_CALLS", "").strip()

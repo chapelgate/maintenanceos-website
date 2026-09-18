@@ -95,7 +95,7 @@ def proof_latency_path() -> dict:
 
 
 def proof_pilot_counter(tmp: Path) -> dict:
-    os.environ["PILOT_BOOTSTRAP_CALLS"] = ""  # production default floor=2
+    os.environ["PILOT_BOOTSTRAP_CALLS"] = ""  # production default floor=3
     os.environ["PILOT_STATE_PATH"] = str(tmp / "pilot_state.json")
     os.environ["PILOT_MODE_ARMED"] = "true"
     from pilot.runtime_guard import (
@@ -110,7 +110,7 @@ def proof_pilot_counter(tmp: Path) -> dict:
     reset_pilot_runtime_for_tests()
     st = pilot_status()
     if st["calls_completed"] < 2:
-        return _fail("PILOT_COUNTER", f"expected floor 2, got {st['calls_completed']}")
+        return _fail("PILOT_COUNTER", f"expected floor 3, got {st['calls_completed']}")
 
     # Simulate restart: wipe RuntimeControl (ephemeral SQLite) but keep file mirror.
     with SessionLocal() as session:
