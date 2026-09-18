@@ -1,39 +1,82 @@
 name: MaintenanceOS Cloud CI
+
 on:
   workflow_dispatch:
   pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+
 concurrency:
   group: maintenanceos-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
+
 jobs:
-  test:
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.12', '3.13']
+  primary-test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      container_changed: ${{ steps.changes.outputs.container_changed }}
+      staging_changed: ${{ steps.changes.outputs.staging_changed }}
     env:
       PYTHONPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Classify expensive PR checks
+        id: changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          container_changed=true
+          staging_changed=true
+
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+            files="$(git diff --name-only "$base...$head")"
+
+            container_changed=false
+            staging_changed=false
+
+            if printf '%s\n' "$files" | grep -Eq '^(Dockerfile|requirements\.txt|\.dockerignore|\.github/workflows/cloud-ci\.yml)$'; then
+              container_changed=true
+            fi
+            if printf '%s\n' "$files" | grep -Eq '^(docker-compose\.staging\.yml|\.env\.staging\.example|\.github/workflows/cloud-ci\.yml)$'; then
+              staging_changed=true
+            fi
+          fi
+
+          echo "container_changed=$container_changed" >> "$GITHUB_OUTPUT"
+          echo "staging_changed=$staging_changed" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.13'
           cache: pip
+
       - run: python -m pip install --upgrade pip
       - run: pip install -r requirements.txt
+
       - name: Verify dependency consistency
         run: pip check
+
       - name: Compile source tree
         run: python -m compileall -q .
+
       - name: Run deterministic test suite
         run: timeout 180s pytest -vv -x -k 'not test_local_tls_https_and_wss_transport_reaches_actual_routes'
+
       - name: Run TLS/WSS transport probe with bounded retry
         shell: bash
         run: |
@@ -50,7 +93,28 @@ jobs:
             sleep 1
           done
 
+  compatibility-test:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: pip check
+      - run: python -m compileall -q .
+      - name: Compatibility regression suite
+        run: timeout 180s pytest -q -x -k 'not test_local_tls_https_and_wss_transport_reaches_actual_routes'
+
   staging-config:
+    needs: primary-test
+    if: github.event_name != 'pull_request' || needs.primary-test.outputs.staging_changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -76,6 +140,8 @@ jobs:
         run: rm -f staging-compose-rendered.yml
 
   container-build:
+    needs: primary-test
+    if: github.event_name != 'pull_request' || needs.primary-test.outputs.container_changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -121,4 +187,4 @@ jobs:
         with:
           name: maintenanceos-image-metadata-${{ github.sha }}
           path: maintenanceos-image-inspect.json
-          retention-days: 14
+          retention-days: 7

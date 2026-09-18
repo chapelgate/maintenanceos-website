@@ -1,60 +1,35 @@
 name: MaintenanceOS Security CI
+
 on:
   workflow_dispatch:
   pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
   schedule:
     - cron: '17 4 * * 1'
+
 concurrency:
   group: maintenanceos-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
+
 jobs:
-  dependency-audit:
+  security:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: pip
-      - run: python -m pip install --upgrade pip
-      - run: pip install -r requirements.txt pip-audit cyclonedx-bom
-      - name: Dependency consistency
-        run: pip check
-      - name: Vulnerability audit
-        id: audit
-        continue-on-error: true
-        run: pip-audit -r requirements.txt --format json --output pip-audit.json
-      - name: Generate Python SBOM
-        if: always()
-        run: cyclonedx-py requirements requirements.txt --output-format JSON --output-file sbom-python.json
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: maintenanceos-security-evidence-${{ github.sha }}
-          path: |
-            pip-audit.json
-            sbom-python.json
-          if-no-files-found: warn
-          retention-days: 30
-      - name: Enforce vulnerability gate
-        if: steps.audit.outcome == 'failure'
-        run: |
-          echo 'pip-audit reported one or more vulnerable dependencies.' >&2
-          exit 1
-
-  secret-pattern-guard:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Reject obvious committed private keys and provider secrets
         shell: bash
         run: |
@@ -64,3 +39,62 @@ jobs:
             exit 1
           fi
           echo 'No obvious provider/private-key secret patterns found.'
+
+      - name: Decide whether dependency audit is needed
+        id: dep
+        shell: bash
+        run: |
+          set -euo pipefail
+          run_audit=true
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+            files="$(git diff --name-only "$base...$head")"
+            run_audit=false
+            if printf '%s\n' "$files" | grep -Eq '^(requirements\.txt|Dockerfile|\.github/workflows/security-ci\.yml)$'; then
+              run_audit=true
+            fi
+          fi
+          echo "run_audit=$run_audit" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        if: steps.dep.outputs.run_audit == 'true'
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install audit tooling
+        if: steps.dep.outputs.run_audit == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pip-audit cyclonedx-bom
+
+      - name: Dependency consistency
+        if: steps.dep.outputs.run_audit == 'true'
+        run: pip check
+
+      - name: Vulnerability audit
+        if: steps.dep.outputs.run_audit == 'true'
+        id: audit
+        continue-on-error: true
+        run: pip-audit -r requirements.txt --format json --output pip-audit.json
+
+      - name: Generate Python SBOM
+        if: steps.dep.outputs.run_audit == 'true'
+        run: cyclonedx-py requirements requirements.txt --output-format JSON --output-file sbom-python.json
+
+      - uses: actions/upload-artifact@v4
+        if: steps.dep.outputs.run_audit == 'true'
+        with:
+          name: maintenanceos-security-evidence-${{ github.sha }}
+          path: |
+            pip-audit.json
+            sbom-python.json
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Enforce vulnerability gate
+        if: steps.dep.outputs.run_audit == 'true' && steps.audit.outcome == 'failure'
+        run: |
+          echo 'pip-audit reported one or more vulnerable dependencies.' >&2
+          exit 1
