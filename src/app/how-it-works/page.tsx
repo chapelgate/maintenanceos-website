@@ -28,17 +28,15 @@ export default function HowItWorksPage() {
             Designed so marketing never outruns the product.
           </h2>
           <p className="mt-3 text-muted">
-            Offline safety evaluation supports QA. A fresh controlled live call
-            on the current stack is still required before any production
-            always-on receptionist claim.
+            Further controlled live testing is still required before we claim a
+            public always-on receptionist.
           </p>
           <p className="mt-6 text-sm text-muted">
-            See{" "}
             <a
               href="/features/"
               className="text-accent underline hover:text-accent-hover"
             >
-              verified capabilities
+              See verified capabilities
             </a>
             {" · "}
             <a
