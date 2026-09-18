@@ -1,8 +1,11 @@
+"use client";
+
+import { useEffect } from "react";
 import { industries, primaryNav, siteConfig } from "@/config/site";
 
 /**
- * Server SiteHeader: preserves Shell #11 chrome (wordmark, amber dual CTAs,
- * hamburger affordance) using native <details> — no client JS island.
+ * Shell #11 chrome (wordmark, amber dual CTAs, hamburger) via native <details>.
+ * Client only for Escape → close open details and return focus to summary.
  * CTA labels exact Copy pack: Join launch list / Request early demo.
  */
 function Wordmark() {
@@ -47,19 +50,35 @@ function MenuIcon() {
 }
 
 export function SiteHeader() {
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      const openDetails = document.querySelectorAll<HTMLDetailsElement>(
+        "header details[open]",
+      );
+      openDetails.forEach((details) => {
+        details.open = false;
+        const summary = details.querySelector("summary");
+        summary?.focus();
+      });
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
       <div className="mx-auto flex h-16 max-w-[70rem] items-center justify-between gap-4 px-4 md:px-6">
         <Wordmark />
 
         <nav
-          className="hidden items-center gap-1 lg:gap-2 md:flex"
+          className="hidden items-center gap-1 md:flex lg:gap-2"
           aria-label="Primary"
         >
           {primaryNav.map((item) =>
             "children" in item && item.children ? (
               <details key={item.href} className="relative">
-                <summary className="inline-flex h-9 cursor-pointer list-none items-center rounded-md px-2.5 text-sm font-medium text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
+                <summary className="inline-flex h-9 min-h-6 min-w-6 cursor-pointer list-none items-center rounded-md px-2.5 text-sm font-medium text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
                   {item.label}
                   <svg
                     className="ml-1 opacity-60"
@@ -108,7 +127,7 @@ export function SiteHeader() {
               <a
                 key={item.href}
                 href={item.href}
-                className="inline-flex h-9 items-center rounded-md px-2.5 text-sm font-medium text-ink transition-colors hover:text-accent"
+                className="inline-flex h-9 min-h-6 items-center rounded-md px-2.5 text-sm font-medium text-ink transition-colors hover:text-accent"
               >
                 {item.label}
               </a>
@@ -118,13 +137,13 @@ export function SiteHeader() {
           <div className="ml-2 flex items-center gap-2">
             <a
               href="/demo/"
-              className="inline-flex h-9 items-center rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
             >
               Request early demo
             </a>
             <a
               href="/demo/#launch"
-              className="inline-flex h-9 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
             >
               Join launch list
             </a>
@@ -134,13 +153,13 @@ export function SiteHeader() {
         <div className="flex items-center gap-2 md:hidden">
           <a
             href="/demo/#launch"
-            className="inline-flex h-9 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
+            className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
           >
             Join launch list
           </a>
           <details className="relative">
             <summary
-              className="inline-flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-md border border-border text-ink [&::-webkit-details-marker]:hidden"
+              className="inline-flex h-9 w-9 min-h-6 min-w-6 cursor-pointer list-none items-center justify-center rounded-md border border-border text-ink [&::-webkit-details-marker]:hidden"
               aria-label="Open menu"
             >
               <MenuIcon />
@@ -201,7 +220,7 @@ export function SiteHeader() {
                 <li className="pt-2">
                   <a
                     href="/demo/"
-                    className="inline-flex h-10 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
+                    className="inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
                   >
                     Request early demo
                   </a>

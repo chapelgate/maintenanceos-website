@@ -13,7 +13,8 @@
   --color-surface: #ffffff;
   --color-border: #e2e8f0;
   --color-accent: #b45309;
-  --color-accent-hover: #d97706;
+  /* Darkened from #D97706 — white labels stay ≥4.5:1 (CONTRAST_TOKEN_AUDIT) */
+  --color-accent-hover: #9a3412;
   --color-accent-subtle: #fef3c7;
   --color-on-accent: #ffffff;
 
@@ -59,6 +60,15 @@
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* 2.4.11 Focus Not Obscured — sticky SiteHeader (h-16) */
+html {
+  scroll-padding-top: 5.5rem;
+}
+
+#main {
+  scroll-margin-top: 5.5rem;
+}
+
 body {
   background: var(--color-paper);
   color: var(--color-ink);
@@ -86,13 +96,13 @@ textarea:focus-visible {
   }
 }
 
-/* Native disclosure controls used by SiteHeader (no client JS) */
+/* Native disclosure controls used by SiteHeader */
 summary:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-/* Screen-reader-only utility (mobile menu label) */
+/* Screen-reader-only utility */
 .sr-only {
   position: absolute;
   width: 1px;
