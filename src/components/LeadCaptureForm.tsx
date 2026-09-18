@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useId, useState } from "react";
 import type { LeadType } from "@/config/site";
 import { submitLead, type LeadSuccessMode } from "@/lib/lead-adapter";
 
@@ -43,11 +43,13 @@ export function LeadCaptureForm({
   showOrganisation = true,
   id,
 }: LeadCaptureFormProps) {
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
-    "idle",
-  );
-  const [successMode, setSuccessMode] = useState<LeadSuccessMode>("local_stub");
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+  const [successMode, setSuccessMode] =
+    useState<LeadSuccessMode>("local_stub");
   const [error, setError] = useState<string | null>(null);
+  const errorId = useId();
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -91,6 +93,8 @@ export function LeadCaptureForm({
     );
   }
 
+  const emailInvalid = status === "error" && Boolean(error);
+
   return (
     <form
       id={id}
@@ -114,12 +118,14 @@ export function LeadCaptureForm({
           />
         </label>
         <label className="block text-sm">
-          <span className="font-medium text-ink">Email *</span>
+          <span className="font-medium text-ink">Email (required)</span>
           <input
             name="email"
             type="email"
             required
             autoComplete="email"
+            aria-invalid={emailInvalid || undefined}
+            aria-describedby={emailInvalid ? errorId : undefined}
             className="mt-1 w-full rounded-md border border-border px-3 py-2"
           />
         </label>
@@ -174,14 +180,14 @@ export function LeadCaptureForm({
         </label>
       </div>
       {error ? (
-        <p className="mt-3 text-sm text-red-700" role="alert">
+        <p id={errorId} className="mt-3 text-sm text-red-700" role="alert">
           {error}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-5 inline-flex rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover disabled:opacity-60"
+        className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
       >
         {status === "submitting" ? "Submitting…" : submitLabel}
       </button>
