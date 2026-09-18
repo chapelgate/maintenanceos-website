@@ -1,8 +1,8 @@
 name: MaintenanceOS Render Keepalive
 
+# No recurring GitHub timer: invoke manually only if this legacy Render runtime needs waking.
+
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 permissions:
