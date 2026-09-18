@@ -1,8 +1,8 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T16:32:39Z",
+  "generated_at": "2026-09-18T16:38:20Z",
   "LIVE_N2": "FAIL",
-  "reason": "twilio_auth_token_and_resend_still_missing_after_sid_phone_restore; ingress=false",
+  "reason": "human_blocker_twilio_auth_token_and_resend_api_key_after_console_sso_failure",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
@@ -21,7 +21,7 @@
   "call_ids": null,
   "overlapping_timestamps": null,
   "test_results": {
-    "pytest": "327 passed (re-verified 2026-09-18T16:32Z)",
+    "pytest": "327 passed",
     "simulated_ladder_1_to_100": "PASS",
     "telephony_http_path_1_5_12": "PASS",
     "n2_preflight": "ready_for_andy_n2_calls=true",
@@ -36,7 +36,14 @@
     "twilio_phone_restored": true,
     "twilio_auth_token": "MISSING",
     "resend_api_key": "MISSING",
-    "browser_restore_agent": "bc-0dd6421b-8a7c-557b-919a-9d409f8794b3 RUNNING"
+    "browser_restore_agent": "bc-0dd6421b-8a7c-557b-919a-9d409f8794b3 RUNNING",
+    "transcript_secret_mine": "no_auth_token_or_resend",
+    "actions_twilio_secrets": "absent",
+    "browser_twilio_sso": "blocked",
+    "browser_resend_login": "failed_bad_password",
+    "human_secret_request": "submitted_TWILIO_AUTH_TOKEN_RESEND_API_KEY_optional_FROM_numbers",
+    "twilio_account_sid_on_render": true,
+    "twilio_phone_on_render": true
   },
   "production_errors": [],
   "measured_latency_simulated_p95_ms": {
@@ -50,7 +57,7 @@
   },
   "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
   "N5_N10_N25_simulated": "PASS",
-  "identified_bottleneck": "TWILIO_AUTH_TOKEN + RESEND_API_KEY wiped by bulk env PUT; not in Cursor secrets or Gmail; browser recovering from Twilio/Resend consoles (Google SSO risk)",
+  "identified_bottleneck": "TWILIO_AUTH_TOKEN + RESEND_API_KEY wiped; console recovery blocked by Google SSO / Resend password; requested human inject into Cloud Agent secrets",
   "exact_safe_concurrency_proven": {
     "live_pstn_simultaneous": 0,
     "live_capacity_configured": 2,
@@ -59,11 +66,10 @@
     "pytest_passed": 327
   },
   "remaining_to_100_live": [
-    "Inject TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, TWILIO_FROM_NUMBER (distinct) into Cloud Agent secrets or /tmp/n2-live-secrets.env",
-    "Inject RENDER_API_KEY OR Manual Deploy tip 054b92b+ on maintenanceos-redteam-v2",
-    "Re-run scripts/n2_live_dual_call_probe.py until LIVE N=2 PASS with overlap_active_ge_2 and distinct call refs",
-    "Raise GLOBAL_MAX_CONCURRENT_CALLS for live N=5/10/25 only after N=2 PASS",
-    "Measure Twilio + Gemini provider quotas under live load before N=50/100"
+    "Human inject TWILIO_AUTH_TOKEN + RESEND_API_KEY (+ optional distinct TWILIO_FROM_NUMBER) into Cloud Agent secrets",
+    "PUT secrets individually onto Render (no bulk replace); set ENABLE_PUBLIC_PROVIDER_INGRESS=true",
+    "Run scripts/n2_live_dual_call_probe.py until LIVE N=2 PASS with overlap evidence",
+    "Then progressive live N=5/10/25 before N=50/100"
   ],
   "pr_consolidation": "docs/concurrency_100_evidence/N2_CONSOLIDATION.md",
   "open_pr_decisions": {
