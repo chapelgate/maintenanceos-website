@@ -1,8 +1,8 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T15:37:11Z",
+  "generated_at": "2026-09-18T15:59:19Z",
   "LIVE_N2": "FAIL",
-  "reason": "twilio_absent__render_password_reset_done_awaiting_api_key",
+  "reason": "twilio_sid_token_absent_in_render_env__deploy_update_failed_blocks_proof_token",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
@@ -63,5 +63,15 @@
     "39": "superseded by live email fail-safe",
     "45": "docs/EE only \u2014 not runtime",
     "36": "alternate DO host \u2014 conflict; unused for this N=2"
-  }
+  },
+  "live_deploy_note": "11571e8 live; subsequent deploys update_failed; proof route present but token-gated 404 until env applies",
+  "render_api_key": "valid",
+  "twilio_in_render_env": [
+    "TWILIO_PHONE_NUMBER",
+    "TWILIO_TEST_TO_NUMBER"
+  ],
+  "twilio_missing_in_render_env": [
+    "TWILIO_ACCOUNT_SID",
+    "TWILIO_AUTH_TOKEN"
+  ]
 }
