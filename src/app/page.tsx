@@ -161,6 +161,7 @@ export default function HomePage() {
             line.
           </p>
           <div className="mt-6">
+            {/* launch_list via LeadCaptureForm (same adapter as /demo and /contact). */}
             <LeadCaptureForm
               leadType="launch_list"
               submitLabel="Join launch list"
