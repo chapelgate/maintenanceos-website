@@ -1,8 +1,8 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T16:38:20Z",
+  "generated_at": "2026-09-18T16:48:30Z",
   "LIVE_N2": "FAIL",
-  "reason": "human_blocker_twilio_auth_token_and_resend_api_key_after_console_sso_failure",
+  "reason": "human_blocker_google_sso_for_twilio_auth_token_and_resend",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
@@ -41,9 +41,10 @@
     "actions_twilio_secrets": "absent",
     "browser_twilio_sso": "blocked",
     "browser_resend_login": "failed_bad_password",
-    "human_secret_request": "submitted_TWILIO_AUTH_TOKEN_RESEND_API_KEY_optional_FROM_numbers",
+    "human_secret_request": "submitted",
     "twilio_account_sid_on_render": true,
-    "twilio_phone_on_render": true
+    "twilio_phone_on_render": true,
+    "browser_resend_twilio_sso": "blocked_google_password_passkey"
   },
   "production_errors": [],
   "measured_latency_simulated_p95_ms": {
@@ -57,7 +58,7 @@
   },
   "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
   "N5_N10_N25_simulated": "PASS",
-  "identified_bottleneck": "TWILIO_AUTH_TOKEN + RESEND_API_KEY wiped; console recovery blocked by Google SSO / Resend password; requested human inject into Cloud Agent secrets",
+  "identified_bottleneck": "Google SSO password/passkey required for Twilio Console + Resend; credentials wiped from Render and absent from Cursor/Actions; human inject requested",
   "exact_safe_concurrency_proven": {
     "live_pstn_simultaneous": 0,
     "live_capacity_configured": 2,
