@@ -1,33 +1,44 @@
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { DemoConversionTabs } from "@/components/DemoConversionTabs";
 import { PageHero } from "@/components/PageHero";
 
-export const metadata = { title: "Demo & launch list" };
+export const metadata = {
+  title: "Demo & launch list",
+  description:
+    "Book a MaintenanceOS early access briefing or join the launch list. Pre-launch — not a public live phone line.",
+};
 
 export default function DemoPage() {
   return (
     <>
       <PageHero
-        eyebrow="Conversion"
-        title="Request an early demo or join the launch list"
-        lede="Canonical conversion page. Choose the path that fits — we are pre-launch and will not claim a live commercial service."
+        eyebrow="Pre-launch"
+        title="See MaintenanceOS the honest way."
+        lede="Book a product walkthrough of the maintenance operations platform and receptionist architecture. This is an early access briefing — not a public live phone line."
       />
-      <div className="mx-auto grid max-w-5xl gap-10 px-4 py-12 lg:grid-cols-2">
-        <div id="launch">
-          <LeadCaptureForm
-            leadType="launch_list"
-            title="Join launch list"
-            submitLabel="Join launch list"
-          />
-        </div>
-        <div id="demo">
-          <LeadCaptureForm
-            leadType="early_demo"
-            title="Request early demo"
-            submitLabel="Request early demo"
-            showMessage
-          />
-        </div>
-      </div>
+      <section className="mx-auto max-w-3xl px-4 pt-10">
+        <h2 className="text-lg font-semibold text-ink">What you get</h2>
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
+          <li>
+            Walkthrough of multi-tenant maintenance operations (properties, work
+            orders, contractors, audit and evidence primitives).
+          </li>
+          <li>
+            Clear explanation of AI intake versus deterministic safety and
+            financial prohibitions.
+          </li>
+          <li>
+            Pre-launch candour: what is verified today versus still gated
+            (including controlled-call status).
+          </li>
+        </ul>
+        <h2 className="mt-8 text-lg font-semibold text-ink">What this is not</h2>
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
+          <li>Not a self-serve “call our AI now” public demo.</li>
+          <li>Not a production telephony GO.</li>
+          <li>Not a promise of autonomous job booking or payments.</li>
+        </ul>
+      </section>
+      <DemoConversionTabs />
     </>
   );
 }
