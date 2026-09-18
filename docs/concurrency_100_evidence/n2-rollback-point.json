@@ -1,19 +1,13 @@
 {
-  "created_at": "2026-09-17T06:30:58Z",
+  "created_at": "2026-09-18T16:32:59Z",
   "service": "maintenanceos-redteam-v2",
-  "note": "Best-effort rollback point recorded after owner Manual Deploy landed concurrency on live /health. RENDER_API_KEY still absent in agent; prior cloud-workers/main SHA 9e03f15 remains git rollback baseline.",
-  "baseline_main_sha": "9e03f15c5baaecdc266800b241244e61855defcc",
+  "service_id": "srv-dahhskafngtc739pnplg",
   "n2_branch": "cursor/n2-live-concurrency-e283",
-  "n2_head_sha": "89c8b5db13d439598c886e305dfb899939d500cc",
-  "observed_live_health": {
-    "ok": true,
-    "realtime_voice": true,
-    "global_limit": 2,
-    "per_client_limit": 2,
-    "draining": false,
-    "estimated_hourly_burn_usd": 0.0,
-    "backend": "process_local"
-  },
-  "procedure": "git checkout main @ 9e03f15 and Manual Deploy prior Render commit; or close ENABLE_REALTIME_VOICE / ENABLE_PUBLIC_PROVIDER_INGRESS",
-  "rollback_ready": true
+  "live_commit": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
+  "live_deploy_id": "dep-dammce6k1f9s739jrr3g",
+  "baseline_main_sha": "9e03f15c5baaecdc266800b241244e61855defcc",
+  "prior_branch": "cursor/controlled-call-readiness-3402",
+  "procedure": "Manual Deploy prior Render commit OR set ENABLE_PUBLIC_PROVIDER_INGRESS=false / ENABLE_REALTIME_VOICE=false; baseline main SHA 9e03f15",
+  "rollback_ready": true,
+  "note": "Tip 054b92b LIVE with ingress closed; SID+phone restored; auth token/Resend still wiped"
 }

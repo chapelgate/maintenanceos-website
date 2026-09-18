@@ -1,23 +1,27 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T16:08:54Z",
+  "generated_at": "2026-09-18T16:32:39Z",
   "LIVE_N2": "FAIL",
-  "reason": "update_failed_due_to_wiped_twilio_gemini_secrets_on_new_deploys",
+  "reason": "twilio_auth_token_and_resend_still_missing_after_sid_phone_restore; ingress=false",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
   "live_health": {
     "global_limit": 2,
     "realtime_voice": true,
-    "pilot_calls_completed": 4,
+    "pilot_calls_completed": 3,
+    "pilot_armed": true,
     "email_gate_present": true,
-    "synthetic_email_proof_route": "404_not_deployed",
-    "active_calls": 0
+    "resend_key_present": false,
+    "synthetic_email_proof_route": "deployed_token_gated",
+    "active_calls": 0,
+    "ingress": false,
+    "live_commit": "054b92b"
   },
   "call_ids": null,
   "overlapping_timestamps": null,
   "test_results": {
-    "pytest": "327 passed (re-verified 2026-09-18T15:20Z)",
+    "pytest": "327 passed (re-verified 2026-09-18T16:32Z)",
     "simulated_ladder_1_to_100": "PASS",
     "telephony_http_path_1_5_12": "PASS",
     "n2_preflight": "ready_for_andy_n2_calls=true",
@@ -26,7 +30,13 @@
     "browser_console_login": "blocked_google_oauth_password",
     "cloud_agent_secrets": "CHAPELGATE_OPENAI_KEY,OPENAI_API_KEY only",
     "render_password_reset": "completed_2026-09-18T15:35Z",
-    "render_api_key": "pending_browser_login"
+    "render_api_key": "valid",
+    "tip_deploy": "054b92b LIVE",
+    "twilio_account_sid_restored": true,
+    "twilio_phone_restored": true,
+    "twilio_auth_token": "MISSING",
+    "resend_api_key": "MISSING",
+    "browser_restore_agent": "bc-0dd6421b-8a7c-557b-919a-9d409f8794b3 RUNNING"
   },
   "production_errors": [],
   "measured_latency_simulated_p95_ms": {
@@ -40,12 +50,13 @@
   },
   "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
   "N5_N10_N25_simulated": "PASS",
-  "identified_bottleneck": "Twilio secrets still absent (Google SSO). Render password reset completed; awaiting API key capture from dashboard session then Manual Deploy tip.",
+  "identified_bottleneck": "TWILIO_AUTH_TOKEN + RESEND_API_KEY wiped by bulk env PUT; not in Cursor secrets or Gmail; browser recovering from Twilio/Resend consoles (Google SSO risk)",
   "exact_safe_concurrency_proven": {
     "live_pstn_simultaneous": 0,
     "live_capacity_configured": 2,
     "simulated_admission_db_mock_ai": 100,
-    "http_telephony_path_probe": 12
+    "http_telephony_path_probe": 12,
+    "pytest_passed": 327
   },
   "remaining_to_100_live": [
     "Inject TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, TWILIO_FROM_NUMBER (distinct) into Cloud Agent secrets or /tmp/n2-live-secrets.env",
@@ -64,14 +75,13 @@
     "45": "docs/EE only \u2014 not runtime",
     "36": "alternate DO host \u2014 conflict; unused for this N=2"
   },
-  "live_deploy_note": "11571e8 live; subsequent deploys update_failed; proof route present but token-gated 404 until env applies",
+  "live_deploy_note": "054b92b LIVE after closing ingress; SID+phone restored individually (no bulk PUT); auth token + Resend still missing",
   "render_api_key": "valid",
   "twilio_in_render_env": [
-    "TWILIO_PHONE_NUMBER",
-    "TWILIO_TEST_TO_NUMBER"
+    "TWILIO_ACCOUNT_SID",
+    "TWILIO_PHONE_NUMBER"
   ],
   "twilio_missing_in_render_env": [
-    "TWILIO_ACCOUNT_SID",
     "TWILIO_AUTH_TOKEN"
   ],
   "incident": {
@@ -85,7 +95,17 @@
       "TWILIO_AUTH_TOKEN"
     ],
     "non_secret_config_restored": true,
-    "proof_token_set_in_render_env_not_yet_live": true
+    "proof_token_set_in_render_env_not_yet_live": true,
+    "sid_restored_from_gmail_notification": "AC7578a88880a7ed5fe4a6281efb3e3612",
+    "openai_key_present_on_render": true,
+    "voice_provider": "openai",
+    "gemini_optional_while_openai_voice": true,
+    "awaiting": [
+      "TWILIO_AUTH_TOKEN",
+      "RESEND_API_KEY",
+      "TWILIO_FROM_NUMBER(distinct)",
+      "ENABLE_PUBLIC_PROVIDER_INGRESS=true after secrets"
+    ]
   },
   "deploy_fail_corrected": "not_free_tier_disk; live works on free sqlite; render_prepare needs Twilio SID/token when ingress+realtime enabled"
 }
