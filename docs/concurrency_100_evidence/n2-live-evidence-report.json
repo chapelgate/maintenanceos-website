@@ -1,0 +1,51 @@
+{
+  "profile": "n2-live-evidence-report",
+  "generated_at": "2026-09-18T14:50:17Z",
+  "LIVE_N2": "FAIL",
+  "reason": "twilio_secrets_absent_in_actions_and_cloud_agent",
+  "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
+  "live_service": "https://maintenanceos-redteam-v2.onrender.com",
+  "live_health": {
+    "global_limit": 2,
+    "realtime_voice": true,
+    "pilot_calls_completed": 3,
+    "email_gate_present": true
+  },
+  "call_ids": null,
+  "overlapping_timestamps": null,
+  "test_results": {
+    "pytest": "327 passed",
+    "simulated_ladder_1_to_100": "PASS",
+    "telephony_http_path_1_5_12": "PASS",
+    "n2_preflight": "ready_for_andy_n2_calls=true",
+    "actions_dual_call_workflow": "gated_skip_secrets_absent",
+    "actions_run": "https://github.com/chapelgate/maintenanceos-v1-pilot/actions/runs/35358556550"
+  },
+  "production_errors": [],
+  "measured_latency_simulated_p95_ms": {
+    "N1": 10.7,
+    "N5": 101.3,
+    "N12": 193.0,
+    "N25": 649.0,
+    "N50": 672.0,
+    "N75": 1254.5,
+    "N100": 1636.7
+  },
+  "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
+  "N5_N10_N25_simulated": "PASS",
+  "identified_bottleneck": "Credentials: TWILIO_* and RENDER_API_KEY not in Cloud Agent or GitHub Actions secret stores. App-layer concurrency clears simulated 100.",
+  "exact_safe_concurrency_proven": {
+    "live_pstn_simultaneous": 0,
+    "live_capacity_configured": 2,
+    "simulated_admission_db_mock_ai": 100,
+    "http_telephony_path_probe": 12
+  },
+  "remaining_to_100_live": [
+    "Inject TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, and a distinct TWILIO_FROM_NUMBER into Cloud Agent or GitHub Actions",
+    "Inject RENDER_API_KEY to Manual-Deploy tip 054b92b if auto-deploy off",
+    "Re-run workflow n2-live-dual-call / scripts/n2_live_dual_call_probe.py until LIVE N=2 PASS",
+    "Raise GLOBAL_MAX_CONCURRENT_CALLS progressively for live N=5/10/25 only after N=2 PASS",
+    "Measure Twilio + Gemini provider quotas under live load before N=50/100"
+  ],
+  "pr_consolidation": "docs/concurrency_100_evidence/N2_CONSOLIDATION.md"
+}
