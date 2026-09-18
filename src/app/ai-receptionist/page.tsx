@@ -109,7 +109,7 @@ export default function AiReceptionistPage() {
             </li>
             <li>
               Controlled Gemini / carrier testing on the current DigitalOcean
-              deployment remains gated — not available as "live now"
+              deployment remains gated — not available as &ldquo;live now&rdquo;
             </li>
             <li>
               Architecture for concurrent operations is being developed — we

@@ -190,6 +190,7 @@ export default function HomePage() {
             pre-launch.
           </p>
           <div className="mt-6">
+            {/* launch_list via LeadCaptureForm (same adapter as /demo and /contact). */}
             <LeadCaptureForm
               leadType="launch_list"
               submitLabel="Join launch list"

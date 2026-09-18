@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import type { LeadType } from "@/config/site";
-import { submitLead } from "@/lib/lead-adapter";
+import { submitLead, type LeadSuccessMode } from "@/lib/lead-adapter";
 
 type LeadCaptureFormProps = {
   leadType: LeadType;
@@ -14,6 +14,26 @@ type LeadCaptureFormProps = {
   id?: string;
 };
 
+function successCopy(mode: LeadSuccessMode): { title: string; body: string } {
+  // All success paths must stay truthful: accepting a lead ≠ sending email.
+  if (mode === "local_stub") {
+    return {
+      title: "Thank you",
+      body: "Your details have been recorded locally for this session. A form endpoint is not configured yet, so no email was sent. We will connect a lead queue before launch.",
+    };
+  }
+  if (mode === "queued_stub") {
+    return {
+      title: "Thank you",
+      body: "Your details were stored by the local form stub. No email was sent, and nobody has been notified yet.",
+    };
+  }
+  return {
+    title: "Thank you",
+    body: "Your request was accepted into the lead queue. We will be in touch. No confirmation email was sent.",
+  };
+}
+
 export function LeadCaptureForm({
   leadType,
   title,
@@ -23,9 +43,10 @@ export function LeadCaptureForm({
   showOrganisation = true,
   id,
 }: LeadCaptureFormProps) {
-  const [status, setStatus] = useState<
-    "idle" | "submitting" | "success_stub" | "success_sent" | "error"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
+    "idle",
+  );
+  const [successMode, setSuccessMode] = useState<LeadSuccessMode>("local_stub");
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -45,36 +66,27 @@ export function LeadCaptureForm({
     if (!result.ok) {
       setError(
         result.error ||
-          "We couldn’t send that. Try again, or email us if it keeps failing.",
+          "We could not submit just now. Please try again shortly.",
       );
       setStatus("error");
       return;
     }
-    setStatus(result.mode === "submitted" ? "success_sent" : "success_stub");
+    setSuccessMode(result.mode);
+    setStatus("success");
     e.currentTarget.reset();
   }
 
-  if (status === "success_sent" || status === "success_stub") {
+  if (status === "success") {
+    const copy = successCopy(successMode);
     return (
       <div
         id={id}
         className="rounded-md border border-border bg-surface p-6"
         role="status"
+        data-lead-success={successMode}
       >
-        <p className="font-semibold text-ink">Thank you</p>
-        {status === "success_sent" ? (
-          <p className="mt-2 text-sm text-muted">
-            Thanks — you’re on the early access list. We’ll be in touch with a
-            briefing slot. Public always-on phone access isn’t open yet; we’ll
-            say so plainly when that gate clears.
-          </p>
-        ) : (
-          <p className="mt-2 text-sm text-muted">
-            Your details have been recorded for this session. A form endpoint is
-            not configured yet, so no email was sent. We will connect a lead
-            queue before launch.
-          </p>
-        )}
+        <p className="font-semibold text-ink">{copy.title}</p>
+        <p className="mt-2 text-sm text-muted">{copy.body}</p>
       </div>
     );
   }
@@ -83,8 +95,9 @@ export function LeadCaptureForm({
     <form
       id={id}
       onSubmit={onSubmit}
-      className="relative rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="relative overflow-hidden rounded-md border border-border bg-surface p-6 shadow-sm"
       noValidate
+      data-lead-type={leadType}
     >
       {title ? (
         <h2 className="text-lg font-semibold text-ink">{title}</h2>
@@ -153,6 +166,7 @@ export function LeadCaptureForm({
           />
         </label>
       ) : null}
+      {/* Honeypot */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <label>
           Website
@@ -169,11 +183,11 @@ export function LeadCaptureForm({
         disabled={status === "submitting"}
         className="mt-5 inline-flex rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover disabled:opacity-60"
       >
-        {status === "submitting" ? "Sending…" : submitLabel}
+        {status === "submitting" ? "Submitting…" : submitLabel}
       </button>
       <p className="mt-3 text-xs text-muted">
-        We’ll only use this to contact you about MaintenanceOS evaluation. Legal
-        pages are drafts pending review.
+        Pre-launch capture only. Submitting this form does not send you email.
+        Legal pages are drafts pending review.
       </p>
     </form>
   );

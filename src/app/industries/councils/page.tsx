@@ -1,17 +1,15 @@
-import { IndustryStubPage } from "@/components/IndustryStubPage";
+import { IndustryRolePage } from "@/components/IndustryRolePage";
+import { getIndustryRole } from "@/config/industries";
+import { notFound } from "next/navigation";
 
-export const metadata = { title: "Councils" };
+const role = getIndustryRole("councils");
+
+export const metadata = {
+  title: role?.label ?? "Industries",
+  description: role?.metaDescription,
+};
 
 export default function Page() {
-  return (
-    <IndustryStubPage
-      title="Councils"
-      audience="For local-authority housing and repairs teams exploring modern operations tooling."
-      focus={[
-    "Structured resident intake",
-    "Human oversight on critical safety",
-    "Honest pre-launch posture — no fabricated public-sector case studies"
-  ]}
-    />
-  );
+  if (!role) notFound();
+  return <IndustryRolePage role={role} />;
 }

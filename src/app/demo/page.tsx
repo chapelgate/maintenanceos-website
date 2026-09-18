@@ -38,6 +38,7 @@ export default function DemoPage() {
           <li>Not a promise of autonomous job booking or payments.</li>
         </ul>
       </section>
+      {/* launch_list + early_demo both render LeadCaptureForm inside DemoConversionTabs. */}
       <DemoConversionTabs />
     </>
   );

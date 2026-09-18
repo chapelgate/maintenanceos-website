@@ -1,17 +1,15 @@
-import { IndustryStubPage } from "@/components/IndustryStubPage";
+import { IndustryRolePage } from "@/components/IndustryRolePage";
+import { getIndustryRole } from "@/config/industries";
+import { notFound } from "next/navigation";
 
-export const metadata = { title: "Maintenance companies" };
+const role = getIndustryRole("maintenance-companies");
+
+export const metadata = {
+  title: role?.label ?? "Industries",
+  description: role?.metaDescription,
+};
 
 export default function Page() {
-  return (
-    <IndustryStubPage
-      title="Maintenance companies"
-      audience="For maintenance companies delivering contracted repairs."
-      focus={[
-    "Job clarity and evidence for completed work",
-    "Coordination with agents and landlords",
-    "No invented dispatch promises from AI"
-  ]}
-    />
-  );
+  if (!role) notFound();
+  return <IndustryRolePage role={role} />;
 }
