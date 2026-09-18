@@ -64,6 +64,7 @@ export const footerNav = {
   legal: [
     { href: "/privacy/", label: "Privacy" },
     { href: "/cookies/", label: "Cookies" },
+    { href: "/cookies/#settings", label: "Cookie settings" },
     { href: "/terms/", label: "Terms" },
   ],
   convert: [
