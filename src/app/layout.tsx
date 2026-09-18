@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { JsonLd } from "@/components/JsonLd";
 import { PreLaunchBanner } from "@/components/PreLaunchBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SkipLink } from "@/components/SkipLink";
-import { siteConfig } from "@/config/site";
+import { marketingJsonLd } from "@/lib/json-ld";
+import { buildRootMetadata } from "@/lib/page-meta";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,16 +17,7 @@ const inter = Inter({
   preload: true,
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: `${siteConfig.name} — Property maintenance operations`,
-    template: `%s · ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  robots: siteConfig.publicLaunch
-    ? { index: true, follow: true }
-    : { index: false, follow: false },
-};
+export const metadata: Metadata = buildRootMetadata();
 
 export default function RootLayout({
   children,
@@ -36,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} flex min-h-screen flex-col font-sans antialiased`}
       >
+        <JsonLd data={marketingJsonLd()} />
         <SkipLink />
         <PreLaunchBanner />
         <SiteHeader />

@@ -1,11 +1,13 @@
 import { DemoConversionTabs } from "@/components/DemoConversionTabs";
 import { PageHero } from "@/components/PageHero";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = {
+export const metadata = contentPageMetadata({
   title: "Demo & launch list",
   description:
     "Book a MaintenanceOS early access briefing or join the launch list. Pre-launch — not a public live phone line.",
-};
+  path: "/demo/",
+});
 
 export default function DemoPage() {
   return (

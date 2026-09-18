@@ -2,12 +2,14 @@ import { CookieSettingsStub } from "@/components/CookieSettingsStub";
 import { LegalDraftBanner } from "@/components/LegalDraftBanner";
 import { LegalPageChrome } from "@/components/LegalPageChrome";
 import { PageHero } from "@/components/PageHero";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = {
+export const metadata = contentPageMetadata({
   title: "Cookie Policy (Draft)",
   description:
     "Draft cookie notice scaffold for the MaintenanceOS marketing website. Pending legal review — not final policy.",
-};
+  path: "/cookies/",
+});
 
 export default function CookiesPage() {
   return (

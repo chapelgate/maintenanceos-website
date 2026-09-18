@@ -17,6 +17,11 @@ export const siteConfig = {
     "Maintenance department as a service for UK landlords, letting agents, and property managers. Deterministic safety rules and human clearance; AI assists without final authority on safety or money.",
   /** PRE-LAUNCH gate. Default false. */
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
+  /**
+   * Absolute origin for canonical / OG / JSON-LD / sitemap.
+   * Empty at build → fallback in `src/lib/site-url.ts`
+   * (`https://seahorse-app-4oasq.ondigitalocean.app`).
+   */
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "",
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? "local",
   /** Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md. Empty = local stub. */

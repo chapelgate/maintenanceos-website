@@ -11,6 +11,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 - Never claim commercially live / GA / certified / production call-ready.
 - No fake social proof, dashboards-as-live-product, customers, or certifications.
 - Copy gated by `PRODUCT_CLAIMS_REGISTER.md`.
+- `NEXT_PUBLIC_SITE_URL` — absolute origin for canonical URLs, Open Graph, JSON-LD, sitemap, and robots (see `.env.example`). If unset at build, `src/lib/site-url.ts` falls back to the DigitalOcean staging host.
 
 ## Stack
 
@@ -19,6 +20,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 - **No Next.js API routes** (incompatible with static export)
 - Provider-independent lead adapter (`src/lib/lead-adapter.ts`) posts JSON to `NEXT_PUBLIC_FORM_ENDPOINT` when that value is an absolute `http(s)` URL; otherwise a local success stub. Success UI **never claims email was sent**.
 - Contract: [`docs/FORM_ENDPOINT_CONTRACT.md`](docs/FORM_ENDPOINT_CONTRACT.md). Local stub: `npm run form-stub` (`scripts/form-stub-server.mjs`)
+- AI / search discoverability: `public/llms.txt`, `public/llms-full.txt`, JSON-LD (Organization, WebSite, pre-launch SoftwareApplication, FAQPage on `/faq/`), `src/app/robots.ts` (allows major AI crawlers), `src/app/sitemap.ts`
 
 ## Quick start
 
@@ -27,7 +29,7 @@ cp .env.example .env.local   # placeholders only — no secrets in git
 npm install
 npm run dev                  # local preview
 npm run build                # emits out/
-npm test                     # form-stub contract tests
+npm test                     # form-stub + llms.txt claims-safety checks
 ```
 
 Serve the static site (optional): `npx serve out`.

@@ -1,12 +1,14 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { industryRoles } from "@/config/industries";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = {
+export const metadata = contentPageMetadata({
   title: "Industries",
   description:
     "Role pages for UK landlords, agents, managers, housing, FM, councils, and holiday lets. Pre-launch.",
-};
+  path: "/industries/",
+});
 
 export default function IndustriesPage() {
   return (
