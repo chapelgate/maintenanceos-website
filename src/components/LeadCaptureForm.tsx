@@ -7,6 +7,7 @@ import { submitLead } from "@/lib/lead-adapter";
 type LeadCaptureFormProps = {
   leadType: LeadType;
   title?: string;
+  helper?: string;
   submitLabel?: string;
   showMessage?: boolean;
   showOrganisation?: boolean;
@@ -16,6 +17,7 @@ type LeadCaptureFormProps = {
 export function LeadCaptureForm({
   leadType,
   title,
+  helper,
   submitLabel = "Submit",
   showMessage = false,
   showOrganisation = true,
@@ -41,7 +43,10 @@ export function LeadCaptureForm({
       website: String(fd.get("website") ?? ""),
     });
     if (!result.ok) {
-      setError(result.error);
+      setError(
+        result.error ||
+          "We couldn’t send that. Try again, or email us if it keeps failing.",
+      );
       setStatus("error");
       return;
     }
@@ -59,13 +64,15 @@ export function LeadCaptureForm({
         <p className="font-semibold text-ink">Thank you</p>
         {status === "success_sent" ? (
           <p className="mt-2 text-sm text-muted">
-            Your request was submitted. We will be in touch.
+            Thanks — you’re on the early access list. We’ll be in touch with a
+            briefing slot. Public always-on phone access isn’t open yet; we’ll
+            say so plainly when that gate clears.
           </p>
         ) : (
           <p className="mt-2 text-sm text-muted">
-            Your details have been recorded locally for this session. A form
-            endpoint is not configured yet, so no email was sent. We will
-            connect a lead queue before launch.
+            Your details have been recorded for this session. A form endpoint is
+            not configured yet, so no email was sent. We will connect a lead
+            queue before launch.
           </p>
         )}
       </div>
@@ -76,12 +83,13 @@ export function LeadCaptureForm({
     <form
       id={id}
       onSubmit={onSubmit}
-      className="rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="relative rounded-md border border-border bg-surface p-6 shadow-sm"
       noValidate
     >
       {title ? (
         <h2 className="text-lg font-semibold text-ink">{title}</h2>
       ) : null}
+      {helper ? <p className="mt-2 text-sm text-muted">{helper}</p> : null}
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <label className="block text-sm">
           <span className="font-medium text-ink">Name</span>
@@ -145,7 +153,6 @@ export function LeadCaptureForm({
           />
         </label>
       ) : null}
-      {/* Honeypot */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <label>
           Website
@@ -165,7 +172,8 @@ export function LeadCaptureForm({
         {status === "submitting" ? "Sending…" : submitLabel}
       </button>
       <p className="mt-3 text-xs text-muted">
-        Pre-launch capture only. We will not claim a live commercial service.
+        We’ll only use this to contact you about MaintenanceOS evaluation. Legal
+        pages are drafts pending review.
       </p>
     </form>
   );
