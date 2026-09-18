@@ -1,18 +1,10 @@
 #!/usr/bin/env python3
-"""Provision a dedicated MaintenanceOS voice/test droplet in London (lon1).
+"""Provision a dedicated MaintenanceOS voice/test droplet in London (lon1) via USH.
 
-Requires DIGITALOCEAN_TOKEN (or DIGITALOCEAN_ACCESS_TOKEN / DO_API_TOKEN).
+DigitalOcean credentials live in the USH vault. This script brokers droplet
+operations through ush_client — it does NOT read DIGITALOCEAN_TOKEN from Cursor.
+
 Does NOT modify existing Chapelgate droplets (HLO, Evidence Wallet, Cheap Trips).
-
-Creates:
-  - Ubuntu droplet in lon1 with monitoring + backups
-  - Cloud firewall (22/80/443)
-  - SSH key for this agent
-  - cloud-init that installs Docker and waits for deploy
-
-Secrets are NEVER written to git. Runtime secrets are injected via DO user_data
-env file generated locally under /tmp (mode 600) only when provided in the
-agent environment.
 """
 
 from __future__ import annotations
@@ -21,11 +13,13 @@ import json
 import os
 import sys
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 
-API = "https://api.digitalocean.com/v2"
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+import ush_client  # noqa: E402
+
 DROPLET_NAME = "chapelgate-maintenanceos-voice-test"
 REGION = "lon1"
 SIZE = "s-2vcpu-4gb"  # minimal production-capable for WSS + Gemini
@@ -36,42 +30,64 @@ PROTECTED_NAMES = {
     "chapelgate-cheap-trips-production",
     "chapelgate-production-01",
     "chapelgate-production-01-keyed",
+    "chapelgate-ush-1",
 }
-PROTECTED_IPS = {"167.99.202.163", "46.101.16.174", "206.189.112.98"}
+PROTECTED_IPS = {"167.99.202.163", "46.101.16.174", "206.189.112.98", "68.183.44.222"}
 
 
-def _token() -> str:
-    for key in ("DIGITALOCEAN_TOKEN", "DIGITALOCEAN_ACCESS_TOKEN", "DO_API_TOKEN"):
-        value = (os.getenv(key) or "").strip()
-        if value:
-            return value
-    return ""
+def _ush_do(operation: str, params: dict | None = None) -> dict:
+    ush_client.forbid_cursor_digitalocean_token()
+    try:
+        return ush_client.request_operation(
+            "digitalocean",
+            operation,
+            params=params or {},
+            reason=f"maintenanceos-droplet:{operation}",
+        )
+    except ush_client.UshError as exc:
+        if exc.code == "USH_IDENTITY_MISSING":
+            raise SystemExit(
+                "USH_PRINCIPAL_GRANT_REQUIRED: DO already vaulted in USH; "
+                "grant MOS principal — do not paste DIGITALOCEAN_TOKEN into Cursor"
+            ) from None
+        raise SystemExit(f"USH_DO:{exc.code}:{exc.detail}") from None
 
 
 def _request(method: str, path: str, payload: dict | None = None) -> dict:
-    token = _token()
-    if not token:
+    """Limited DO REST mapping via USH broker (droplet path)."""
+    if method == "GET" and path.startswith("/droplets"):
+        if "/droplets/" in path and not path.endswith("/droplets"):
+            droplet_id = path.rstrip("/").split("/")[-1].split("?")[0]
+            return _ush_do("droplets.get", {"droplet_id": droplet_id})
+        return _ush_do("droplets.list", {"per_page": 200})
+    if method == "POST" and path == "/droplets":
+        return _ush_do("droplets.create", payload or {})
+    if method == "GET" and path.startswith("/account/keys"):
+        return _ush_do("account.keys.list", {})
+    if method == "POST" and path == "/account/keys":
+        return _ush_do("account.keys.create", payload or {})
+    if method == "GET" and path.startswith("/firewalls"):
+        return _ush_do("firewalls.list", {})
+    if method == "POST" and path == "/firewalls":
+        return _ush_do("firewalls.create", payload or {})
+    if method == "PUT" and path.startswith("/firewalls/"):
+        fw_id = path.rstrip("/").split("/")[-1]
+        return _ush_do("firewalls.update", {"firewall_id": fw_id, **(payload or {})})
+    raise SystemExit(f"UNSUPPORTED_DO_PATH:{method}:{path}")
+
+
+def _token() -> str:
+    # Intentionally unused — kept so older call sites fail closed via USH.
+    return ""
+
+
+def main_guard() -> None:
+    gates = ush_client.release_gates()["gates"]
+    if not gates.get("workload_identity_present"):
         raise SystemExit(
-            "MISSING_SECRET:DIGITALOCEAN_TOKEN — cannot create London voice droplet"
+            "USH_PRINCIPAL_GRANT_REQUIRED: DO already vaulted in USH; "
+            "grant MOS principal — do not paste DIGITALOCEAN_TOKEN into Cursor"
         )
-    data = None if payload is None else json.dumps(payload).encode()
-    req = urllib.request.Request(
-        f"{API}{path}",
-        data=data,
-        method=method,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            body = resp.read().decode() or "{}"
-            return json.loads(body)
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode()[:500]
-        raise SystemExit(f"DigitalOcean API {exc.code} on {method} {path}: {detail}") from exc
 
 
 def _ensure_ssh_key() -> str:
@@ -189,6 +205,7 @@ def ensure_firewall(droplet_id: int) -> None:
 
 
 def main() -> int:
+    main_guard()
     repo_sha = (os.getenv("MOS_DEPLOY_SHA") or "").strip() or "main"
     existing = _find_existing()
     if existing:

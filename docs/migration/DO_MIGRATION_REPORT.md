@@ -1,89 +1,69 @@
-# DigitalOcean migration report (Architecture Reconciliation)
+# DigitalOcean migration report (USH architecture)
 
-**Generated:** 2026-09-18T18:30:00Z  
+**Generated:** 2026-09-18T19:05:00Z  
 **Branch:** `cursor/do-migration-reconcile-e283`  
-**Mode:** ARCHITECTURE RECONCILIATION / MIGRATION
+**Mode:** STOP secret-retry / USH DigitalOcean broker
 
 ## Cancelled obsolete machinery
 
-- Unsubscribed `n2-secrets-retry` (600s Resend/Twilio poll) — **do not resubscribe**
-- Unsubscribed `p0-deploy-watch` (Render Resend Call-3 loop)
-- Unsubscribed EE cycle / overnight / evolution timers (feature freeze during migration)
+- `n2-secrets-retry` — **cancelled permanently** (do not resubscribe; do not poll absent secrets)
+- Cursor Cloud Agent `DIGITALOCEAN_TOKEN` inject — **forbidden**; DO credentials belong in USH vault
+- EE / overnight feature timers — frozen during migration
 
-## CURRENT active runtime (Lane A — do not alter)
+## Target architecture
+
+| Layer | System |
+| --- | --- |
+| Source of truth | GitHub (`maintenanceos-v1-pilot`) |
+| Runtime | DigitalOcean (App Platform `maintenanceos-london`, lon) |
+| Credential broker | USH (`chapelgate/chapelgate-universal-secrets-handler.`) @ `https://68.183.44.222` |
+| External providers | Twilio / Gemini / OpenAI / Resend via USH |
+| Render | Legacy validation / rollback only — **not** an active secret-resolution path for DO |
+
+## USH DigitalOcean adapter (live evidence)
+
+```text
+GET https://68.183.44.222/health
+→ digitalocean.registered=true
+→ adapter_class=live_http
+→ profile=DO_USH_DEPLOY
+```
+
+OpenAPI snapshot: `docs/migration/USH_OPENAPI_SNAPSHOT.json`  
+Contract contribution: `contrib/ush-digitalocean-adapter/`  
+MOS client: `ush_client.py` (operations/credentials via workload identity)
+
+**DO account credential is already vaulted in USH.** Re-asking Andy for a DigitalOcean token is forbidden.
+
+## CURRENT active runtime (Lane A — untouched until DO acceptance)
 
 | Field | Value |
 | --- | --- |
-| Service | `maintenanceos-redteam-v2` (`srv-dahhskafngtc739pnplg`) |
+| Service | `maintenanceos-redteam-v2` |
 | URL | https://maintenanceos-redteam-v2.onrender.com |
 | Deploy SHA | `054b92b2ed28d9c6ab9dfd6ca66c142778537cec` |
-| Branch on Render | `cursor/controlled-call-readiness-3402` |
-| Region / plan | Frankfurt / free |
-| Auto-deploy | OFF |
-| Voice | `VOICE_PROVIDER=openai`, `ENABLE_REALTIME_VOICE=true` |
-| Ingress | `ENABLE_PUBLIC_PROVIDER_INGRESS=false` (Twilio public route closed) |
-| Signatures | `VERIFY_TWILIO_SIGNATURES=false` |
-| Concurrency | global=2, per_client=2 |
-| Pilot | armed, calls_completed=3, bootstrap_floor=3, sqlite+file_mirror |
-| Twilio number | `+441514535238` (SID present; **auth token absent on Render**) |
-| Resend | absent (email-only; **not required for voice**) |
-| Gemini | absent (OpenAI voice path active) |
+| Voice | OpenAI realtime; Resend absent (email-only; not required for voice) |
 
-Machine-readable inventory: `docs/migration/LANE_A_INVENTORY.json`
+## Blocker (not DO token bootstrap)
 
-## N=2 voice baseline preserved
+USH principal registration for MOS now requires admin bootstrap (`bootstrap_admin_required`).  
+This agent has no `USH_WORKLOAD_TOKEN`, so brokered DO ops fail closed without a secret-retry loop.
 
-- Evidence: `docs/concurrency_100_evidence/n2-live-evidence-report.json`
-- Programme status: INTEGRATION (owner dual-call attested historically)
-- Live PSTN dual-call on this agent session: blocked on Twilio auth/From — **not re-run for missing Resend**
-- Simulated concurrency ladder remains PASS in evidence pack
+**Human action (secure, no paste into chat/Cursor/Git):**
 
-## NEW DigitalOcean runtime
+1. Add `github.com/chapelgate/chapelgate-universal-secrets-handler.` to Cloud Agent environment  
+   https://cursor.com/dashboard/cloud-agents/environments/e/69e354a8-aed0-11f1-bf4b-42ffb4d10ea7  
+2. On USH admin path, register principal `maintenanceos-v1-pilot` (`kind=application`, `project=maintenanceos`, `environment=london`, `tenant=chapelgate`) with explicit policy for DigitalOcean `apps.*`  
+3. Deliver only `USH_WORKLOAD_TOKEN` into the MOS secure secrets store (not DO token)
 
-| Field | Value |
-| --- | --- |
-| Intended platform | DigitalOcean App Platform, region `lon` |
-| Spec | `.do/app.yaml` (`maintenanceos-london`) |
-| Provisioner | `scripts/provision_do_voice_app.py` (secrets via `secrets_handler.py`) |
-| Droplet path | `scripts/provision_do_voice_droplet.py` (only if `PUBLIC_HOST` set) |
-| Existing MOS droplet | **None** (reconciled — do not assume stale IDs) |
-| HLO / Wallet / Cheap Trips | Untouched |
+## DigitalOcean N=2 / N=5 / N=10 / N=25
 
-## DigitalOcean N=2 result
+**NOT_RUN** — waiting on MOS principal grant. Adapter + vault already PASS.
 
-**NOT_RUN** — blocked on missing `DIGITALOCEAN_TOKEN` (cannot create/list App Platform apps).
+## Twilio / Resend
 
-## Resend status
-
-- Required for realtime voice: **no** (async post-call email only)
-- Present in Cursor / Render / mail / transcripts: **no**
-- Blocks DO voice migration: **no**
-- Human action for email proof: optional, separate from this migration
-
-## Twilio route before / after
-
-| | Value |
-| --- | --- |
-| Before | Still on Render Lane A (ingress currently false) |
-| After | **unchanged** until DO health + synthetic + N=2 gates pass |
-| Cutover | Reversible webhook flip only after DO acceptance; Render kept as rollback |
-
-## Rollback path
-
-1. Keep Render `maintenanceos-redteam-v2` live and untouched during DO bring-up
-2. On DO failure: leave Twilio pointed at Render (or re-point if cutover started)
-3. Do not delete Render until post-cutover verification window completes
+Obtain through USH credential broker after principal grant. No separate retry architecture.
 
 ## Render retirement
 
-**NO** — Render remains active runtime and rollback. Retirement deferred until DO passes acceptance.
-
-## Single genuine human-only blocker
-
-**HUMAN BLOCKER: DIGITALOCEAN_TOKEN genuinely absent**
-
-Exact action: Create a DigitalOcean personal access token (read/write Apps) for the Chapelgate team → add Cloud Agent secret `DIGITALOCEAN_TOKEN`.
-
-Also required before live DO N=2 (not for App create with closed ingress if using synthetic-only): `TWILIO_AUTH_TOKEN` (+ distinct `TWILIO_FROM_NUMBER` for dual-leg probe). OpenAI key is already present for Lane A parity voice.
-
-After inject: run `python3 scripts/do_migration_preflight.py` then `MOS_LANE_A_PARITY=1 python3 scripts/provision_do_voice_app.py` (Twilio route still unchanged).
+Deferred until DO readiness + progressive N gates pass. Specs keep Render as rollback URL only.

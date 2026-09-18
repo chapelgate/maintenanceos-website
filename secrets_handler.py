@@ -108,6 +108,13 @@ def presence_map(names: Iterable[str] | None = None, *, secrets_dir: Path | None
 
 
 def digitalocean_token() -> str:
+    """Deprecated for MOS deploy — DigitalOcean credentials live in USH vault.
+
+    Returns empty unless USH_ALLOW_LEGACY_DO_TOKEN=1 (emergency rollback only).
+    Prefer ush_client.request_operation('digitalocean', ...).
+    """
+    if (os.getenv("USH_ALLOW_LEGACY_DO_TOKEN") or "").strip().lower() not in {"1", "true", "yes", "on"}:
+        return ""
     return get_secret("DIGITALOCEAN_TOKEN")
 
 
@@ -119,13 +126,21 @@ def voice_provider_credentials_ready() -> dict[str, bool]:
         get_secret(k)
         for k in ("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_PHONE_NUMBER")
     )
+    ush_ready = False
+    try:
+        import ush_client
+
+        ush_ready = bool(ush_client.health().get("digitalocean_registered"))
+    except Exception:
+        ush_ready = False
     return {
         "openai_or_gemini": openai or gemini,
         "openai": openai,
         "gemini": gemini,
         "twilio_core": twilio,
         "resend_optional_for_voice": bool(get_secret("RESEND_API_KEY")),
-        "digitalocean": bool(digitalocean_token()),
+        "digitalocean_via_ush": ush_ready,
+        "digitalocean_legacy_token": bool(digitalocean_token()),
     }
 
 

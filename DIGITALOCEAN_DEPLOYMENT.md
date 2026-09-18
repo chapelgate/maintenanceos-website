@@ -52,12 +52,15 @@ Do not deploy a dev database as the final production store because the productio
 
 The existing Render validation deployment remains untouched until the DigitalOcean deployment has passed the same or stronger verification. Do not delete or redirect production traffic merely because a DigitalOcean resource exists.
 
-## Reconciled inventory (2026-09-18)
+## Secrets / USH (2026-09-18)
 
-- **No dedicated MaintenanceOS Droplet exists.** Do not assume historical droplet names/IPs.
-- HLO / Evidence Wallet / Cheap Trips DigitalOcean hosts are unrelated — never reuse.
-- Permanent target: App Platform app `maintenanceos-london` (`.do/app.yaml`) via `scripts/provision_do_voice_app.py`.
-- Secrets: `secrets_handler.py` (env + `/tmp/mos-secrets/` files). Never commit plaintext.
-- Resend is optional for voice; absence must not block DO bring-up or N=2 voice verification.
-- Credential polling timers (`n2-secrets-retry`) are cancelled permanently for this migration.
-- Authoritative migration status: `docs/migration/DO_MIGRATION_REPORT.md`
+- **Do not** inject `DIGITALOCEAN_TOKEN` into Cursor Cloud Agent secrets for MaintenanceOS.
+- DigitalOcean credentials belong in **USH encrypted vault** (`chapelgate/chapelgate-universal-secrets-handler.`).
+- Live USH: `https://68.183.44.222` — `digitalocean` adapter `live_http`, profile `DO_USH_DEPLOY` (**already vaulted**).
+- MaintenanceOS requests DO capabilities via `ush_client.py` + workload identity (`USH_WORKLOAD_TOKEN`).
+- Provisioners: `scripts/provision_do_voice_app.py`, `scripts/ush_do_broker.py` — fail closed without principal grant; no secret-retry loop.
+- Evidence: USH PR #7 recorded vaulted DO + DO write via USH (`USH PASS`). Re-asking Andy for the DO token is forbidden.
+- `n2-secrets-retry` cancelled permanently.
+- Remaining human action: add USH repo to this environment and register MOS principal on USH (admin) — deliver only `USH_WORKLOAD_TOKEN` into the MOS secrets store.
+
+See `docs/migration/DO_MIGRATION_REPORT.md`, `docs/migration/USH_PROVIDER_MATRIX.md`, `contrib/ush-digitalocean-adapter/`.

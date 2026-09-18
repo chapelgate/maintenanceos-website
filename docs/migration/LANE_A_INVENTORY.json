@@ -154,5 +154,13 @@
     "required_for_voice": false,
     "present": false,
     "status": "absent_email_only_optional"
-  }
+  },
+  "ush": {
+    "control_plane": "https://68.183.44.222",
+    "digitalocean_adapter_registered": true,
+    "digitalocean_profile": "DO_USH_DEPLOY",
+    "cursor_digitalocean_token_forbidden": true,
+    "mos_principal_grant_required": true
+  },
+  "secrets_presence_note": "DO token must not be injected into Cursor; obtain via USH"
 }

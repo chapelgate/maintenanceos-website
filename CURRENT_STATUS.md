@@ -32,10 +32,12 @@ A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assum
 ## Migration freeze (2026-09-18)
 
 - Feature development and Render-specific repairs frozen during DO migration.
-- `n2-secrets-retry` cancelled permanently — do not poll absent Resend.
+- `n2-secrets-retry` cancelled permanently — do not poll absent Resend / Twilio / DO tokens.
 - Resend is email-only and must not block voice/DO bring-up.
 - N=2 baseline evidence preserved under `docs/concurrency_100_evidence/`.
-- Single blocker for DO create: Cloud Agent secret `DIGITALOCEAN_TOKEN`.
+- DigitalOcean credentials live in **USH** (`DO_USH_DEPLOY` on `https://68.183.44.222`) — **do not** inject `DIGITALOCEAN_TOKEN` into Cursor.
+- Blocker: MOS principal / `USH_WORKLOAD_TOKEN` grant (USH repo + admin registration), not DO token bootstrap.
+- See `docs/migration/DO_MIGRATION_REPORT.md` and `docs/migration/USH_PROVIDER_MATRIX.md`.
 
 ## Current Render runtime (must be re-verified each session)
 

@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Create/update a DigitalOcean App Platform London MaintenanceOS runtime.
+"""Create/update a DigitalOcean App Platform London MaintenanceOS runtime via USH.
 
 Migration mode defaults (pre-Twilio-cutover):
 - ENABLE_PUBLIC_PROVIDER_INGRESS=false
 - ENABLE_REALTIME_VOICE=false until gates pass
 - Matches Lane A concurrency (GLOBAL/PER_CLIENT=2) when MOS_LANE_A_PARITY=1
 
-Provides always-on HTTPS + WebSocket (*.ondigitalocean.app). Dedicated lon1
-droplet remains available via provision_do_voice_droplet.py when a hostname is ready.
+DigitalOcean credentials must live in USH vault (profile DO_USH_DEPLOY).
+This script brokers App Platform mutations through ush_client — it does NOT
+read DIGITALOCEAN_TOKEN from Cursor Cloud Agent secrets.
 
-Requires DIGITALOCEAN_TOKEN. Never prints secret values. Never touches Render.
+Never prints secret values. Never touches Render.
 """
 
 from __future__ import annotations
@@ -18,42 +19,49 @@ import json
 import os
 import sys
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from secrets_handler import digitalocean_token, get_secret, require_secrets  # noqa: E402
+import ush_client  # noqa: E402
+from secrets_handler import get_secret, require_secrets  # noqa: E402
 
-API = "https://api.digitalocean.com/v2"
 APP_NAME = os.getenv("MOS_DO_APP_NAME", "maintenanceos-london").strip() or "maintenanceos-london"
 
 
-def _token() -> str:
-    return digitalocean_token()
+def _ush_do(operation: str, params: dict | None = None) -> dict:
+    ush_client.forbid_cursor_digitalocean_token()
+    try:
+        return ush_client.request_operation(
+            "digitalocean",
+            operation,
+            params=params or {},
+            reason=f"maintenanceos-provision:{operation}",
+            idempotency_key=f"mos-{APP_NAME}-{operation}",
+        )
+    except ush_client.UshError as exc:
+        if exc.code == "USH_IDENTITY_MISSING":
+            raise SystemExit(
+                "USH_PRINCIPAL_GRANT_REQUIRED: register maintenanceos-v1-pilot on USH; "
+                "do not paste DIGITALOCEAN_TOKEN into Cursor"
+            ) from None
+        raise SystemExit(f"USH_DO:{exc.code}:{exc.detail}") from None
 
 
 def _request(method: str, path: str, payload: dict | None = None) -> dict:
-    token = _token()
-    if not token:
-        raise SystemExit("MISSING_SECRET:DIGITALOCEAN_TOKEN")
-    data = None if payload is None else json.dumps(payload).encode()
-    req = urllib.request.Request(
-        f"{API}{path}",
-        data=data,
-        method=method,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        },
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=90) as resp:
-            return json.loads(resp.read().decode() or "{}")
-    except urllib.error.HTTPError as exc:
-        raise SystemExit(f"DO API {exc.code}: {exc.read().decode()[:500]}") from exc
+    """Map legacy DO REST helpers onto USH brokered operations."""
+    if method == "GET" and path.startswith("/apps"):
+        if path == "/apps?per_page=100" or path.startswith("/apps?"):
+            return _ush_do("apps.list", {"per_page": 100})
+        app_id = path.split("/apps/", 1)[-1].split("?", 1)[0]
+        return _ush_do("apps.get", {"app_id": app_id})
+    if method == "POST" and path == "/apps":
+        return _ush_do("apps.create", {"spec": (payload or {}).get("spec") or payload})
+    if method == "PUT" and path.startswith("/apps/"):
+        app_id = path.split("/apps/", 1)[-1]
+        return _ush_do("apps.update", {"app_id": app_id, "spec": (payload or {}).get("spec") or payload})
+    raise SystemExit(f"UNSUPPORTED_DO_PATH:{method}:{path}")
 
 
 def _secret_envs() -> list[dict]:
@@ -172,10 +180,18 @@ def _spec(branch: str) -> dict:
 
 def main() -> int:
     branch = (os.getenv("MOS_DEPLOY_BRANCH") or "cursor/do-migration-reconcile-e283").strip()
-    if not _token():
-        raise SystemExit("MISSING_SECRET:DIGITALOCEAN_TOKEN")
-    apps = _request("GET", "/apps?per_page=100").get("apps", [])
-    existing = next((a for a in apps if a.get("spec", {}).get("name") == APP_NAME), None)
+    gates = ush_client.release_gates()["gates"]
+    if not gates.get("ush_reachable") or not gates.get("digitalocean_adapter_registered"):
+        raise SystemExit("USH_DO_ADAPTER_NOT_READY")
+    if not gates.get("workload_identity_present"):
+        raise SystemExit(
+            "USH_PRINCIPAL_GRANT_REQUIRED: DO credential already vaulted in USH "
+            "(DO_USH_DEPLOY); grant MOS principal — do not inject DIGITALOCEAN_TOKEN into Cursor"
+        )
+
+    listed = _request("GET", "/apps?per_page=100")
+    apps = listed.get("apps") or listed.get("result", {}).get("apps") or []
+    existing = next((a for a in apps if (a.get("spec") or {}).get("name") == APP_NAME or a.get("name") == APP_NAME), None)
     spec = _spec(branch)
     if existing:
         app_id = existing["id"]
@@ -183,14 +199,15 @@ def main() -> int:
         action = "updated"
     else:
         created = _request("POST", "/apps", {"spec": spec})
-        app_id = created["app"]["id"]
+        app_obj = created.get("app") or created.get("result", {}).get("app") or created
+        app_id = app_obj["id"]
         action = "created"
-        existing = created["app"]
 
-    # Wait briefly for live URL
+    # Wait briefly for live URL (brokered gets)
     url = ""
     for _ in range(36):
-        app = _request("GET", f"/apps/{app_id}")["app"]
+        app_resp = _request("GET", f"/apps/{app_id}")
+        app = app_resp.get("app") or app_resp.get("result", {}).get("app") or app_resp
         url = (app.get("live_url") or "").rstrip("/")
         if url:
             break
@@ -206,11 +223,13 @@ def main() -> int:
                 "region": "lon",
                 "live_url": url,
                 "branch": branch,
+                "via_ush": True,
                 "twilio_route_unchanged": True,
                 "ingress_enabled": (os.getenv("MOS_DO_CUTOVER_READY") or "").strip().lower()
                 in {"1", "true", "yes", "on"},
                 "rollback_render": "https://maintenanceos-redteam-v2.onrender.com",
                 "resend_optional": True,
+                "render_active_dependency": False,
             },
             indent=2,
         )

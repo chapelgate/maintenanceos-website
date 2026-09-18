@@ -28,7 +28,16 @@ def test_voice_does_not_require_resend(monkeypatch, tmp_path):
     monkeypatch.setenv("TWILIO_ACCOUNT_SID", "ACtest")
     monkeypatch.setenv("TWILIO_AUTH_TOKEN", "token")
     monkeypatch.setenv("TWILIO_PHONE_NUMBER", "+440000")
+    monkeypatch.setenv("USH_BASE_URL", "https://127.0.0.1:9")
     voice = sh.voice_provider_credentials_ready()
     assert voice["openai_or_gemini"] is True
     assert voice["twilio_core"] is True
     assert voice["resend_optional_for_voice"] is False
+    assert "digitalocean_via_ush" in voice
+
+
+def test_digitalocean_token_disabled_without_legacy_flag(monkeypatch, tmp_path):
+    monkeypatch.delenv("USH_ALLOW_LEGACY_DO_TOKEN", raising=False)
+    monkeypatch.setenv("DIGITALOCEAN_TOKEN", "dop_v1_should_not_be_used")
+    assert sh.digitalocean_token() == ""
+

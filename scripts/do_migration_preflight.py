@@ -108,7 +108,7 @@ def _do_probe() -> dict:
             "token_present": False,
             "apps": [],
             "droplets_mos": [],
-            "note": "No DIGITALOCEAN_TOKEN — cannot list App Platform or droplets. Stale droplet IDs must not be assumed.",
+            "note": "DO ops via USH only — adapter registered (DO_USH_DEPLOY). MOS principal grant required; do not inject DIGITALOCEAN_TOKEN into Cursor. Stale droplet IDs must not be assumed.",
         }
     req = urllib.request.Request(
         "https://api.digitalocean.com/v2/apps?per_page=100",
