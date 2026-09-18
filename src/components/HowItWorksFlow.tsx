@@ -1,64 +1,76 @@
 /**
- * Visual flow per UX_JOURNEYS §2:
- * Intake → Classify → Rules & human clearance → Work order & evidence.
- * CSS only — static export friendly; vertical stepper on mobile; no AI-theatre animation.
+ * How-it-works flow — COPY_PACK_HOME_HOW_DEMO.md §B diagram labels.
+ * Intake → Controlled triage → Human oversight.
+ * CSS only; mobile vertical stepper; no AI-theatre animation.
  */
 const STAGES = [
   {
     id: "intake",
     title: "Intake",
-    short: "Requests arrive",
-    body: "Residents, agents, or voice channels. Caller and property details become structured work.",
+    short: "Capture the call, don’t invent the job",
+    body: "The receptionist layer is designed to collect caller details and classify what it hears in UK property-maintenance language — including 999 guidance where relevant.",
+    note: "Voice intake is under testing for release — not offered here as a public always-on service.",
   },
   {
-    id: "classify",
-    title: "Classify",
-    short: "Structure the request",
-    body: "AI may assist with drafting and classification. It does not override safety or lifecycle rules.",
+    id: "triage",
+    title: "Controlled triage",
+    short: "Deterministic rules decide what happens next",
+    body: "Tenant isolation, lifecycle transitions, safety latching, escalation queues, and approvals sit in server rules. Consequential actions are not left to the model.",
   },
   {
-    id: "rules-clearance",
-    title: "Rules & human clearance",
-    short: "Safety first",
-    body: "Deterministic safety and lifecycle rules classify and route. Critical paths require human clearance before consequential dispatch.",
-  },
-  {
-    id: "work-order",
-    title: "Work order & evidence",
-    short: "Accountable execution",
-    body: "Jobs, communications, and audit evidence stay tied to the work order so operations stay reviewable.",
+    id: "oversight",
+    title: "Human oversight",
+    short: "Transfer and clearance when people need to decide",
+    body: "Explicit-request human transfer and human clearance keep judgement with your team. No autonomous dispatch, booking, or payment claims.",
   },
 ] as const;
+
+function StageCard({
+  stage,
+  index,
+}: {
+  stage: (typeof STAGES)[number];
+  index: number;
+}) {
+  return (
+    <div className="flex flex-1 flex-col rounded-lg border border-border bg-surface p-5 shadow-[0_1px_2px_rgb(15_23_42_/_6%),0_8px_24px_rgb(15_23_42_/_6%)]">
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-white">
+        {index + 1}
+      </span>
+      <h3 className="mt-4 text-lg font-semibold text-ink">{stage.title}</h3>
+      <p className="mt-1 text-sm font-medium text-accent">{stage.short}</p>
+      <p className="mt-3 flex-1 text-sm text-muted">{stage.body}</p>
+      {"note" in stage && stage.note ? (
+        <p className="mt-3 text-xs text-muted">
+          <span className="font-medium text-ink">Status: </span>
+          {stage.note}
+        </p>
+      ) : null}
+    </div>
+  );
+}
 
 export function HowItWorksFlow() {
   return (
     <section aria-labelledby="flow-heading" className="mx-auto max-w-5xl px-4 py-12">
       <h2 id="flow-heading" className="text-2xl font-semibold text-ink">
-        The operations flow
+        Three stages property teams can trust
       </h2>
       <p className="mt-2 max-w-2xl text-muted">
-        Designed so intake and assistance sit in front of deterministic controls —
-        not the other way around.
+        AI assists at intake and classification. Authority for safety and
+        consequential actions stays with system rules and people.
       </p>
 
-      {/* Desktop: horizontal stage cards */}
       <ol
-        className="mt-10 hidden md:grid md:grid-cols-4 md:gap-3"
+        className="mt-10 hidden md:grid md:grid-cols-3 md:gap-4"
         aria-label="How MaintenanceOS is designed to work"
       >
         {STAGES.map((stage, i) => (
           <li key={stage.id} className="relative flex flex-col">
-            <div className="flex flex-1 flex-col rounded-lg border border-border bg-surface p-5 shadow-[0_1px_2px_rgb(15_23_42_/_6%),0_8px_24px_rgb(15_23_42_/_6%)]">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-white">
-                {i + 1}
-              </span>
-              <h3 className="mt-4 text-lg font-semibold text-ink">{stage.title}</h3>
-              <p className="mt-1 text-sm font-medium text-accent">{stage.short}</p>
-              <p className="mt-3 flex-1 text-sm text-muted">{stage.body}</p>
-            </div>
+            <StageCard stage={stage} index={i} />
             {i < STAGES.length - 1 ? (
               <span
-                className="pointer-events-none absolute -right-2 top-1/2 z-10 hidden -translate-y-1/2 text-accent md:block"
+                className="pointer-events-none absolute -right-2.5 top-1/2 z-10 -translate-y-1/2 text-accent"
                 aria-hidden="true"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -76,8 +88,10 @@ export function HowItWorksFlow() {
         ))}
       </ol>
 
-      {/* Mobile: vertical stepper */}
-      <ol className="relative mt-8 space-y-0 md:hidden" aria-label="How MaintenanceOS is designed to work">
+      <ol
+        className="relative mt-8 space-y-0 md:hidden"
+        aria-label="How MaintenanceOS is designed to work"
+      >
         {STAGES.map((stage, i) => (
           <li key={stage.id} className="relative flex gap-4 pb-8 last:pb-0">
             <div className="flex flex-col items-center">
@@ -86,15 +100,13 @@ export function HowItWorksFlow() {
               </span>
               {i < STAGES.length - 1 ? (
                 <span
-                  className="mt-1 w-0.5 flex-1 min-h-[2rem] bg-border"
+                  className="mt-1 min-h-[2rem] w-0.5 flex-1 bg-border"
                   aria-hidden="true"
                 />
               ) : null}
             </div>
-            <div className="flex-1 rounded-lg border border-border bg-surface p-4">
-              <h3 className="text-lg font-semibold text-ink">{stage.title}</h3>
-              <p className="mt-1 text-sm font-medium text-accent">{stage.short}</p>
-              <p className="mt-2 text-sm text-muted">{stage.body}</p>
+            <div className="flex-1">
+              <StageCard stage={stage} index={i} />
             </div>
           </li>
         ))}
