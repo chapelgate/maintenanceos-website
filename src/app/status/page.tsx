@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
+import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = { title: "Status" };
+export const metadata: Metadata = contentPageMetadata({
+  title: "Status",
+  description:
+    "Architecture placeholder for a future MaintenanceOS public status surface. No live uptime metrics are shown here.",
+  path: "/status/",
+});
 
 export default function StatusPage() {
   return (
@@ -16,11 +23,22 @@ export default function StatusPage() {
           verified component health from monitored systems — not invented
           percentages.
         </p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>Marketing site static hosting (this site)</li>
-          <li>Lead-capture adapter / form endpoint (when configured)</li>
-          <li>Product API and voice runtime (internal; not linked from marketing until authorised)</li>
-        </ul>
+        <section aria-labelledby="status-components">
+          <h2
+            id="status-components"
+            className="text-lg font-semibold text-ink"
+          >
+            Components a future status page would cover
+          </h2>
+          <ul className="mt-3 list-disc space-y-2 pl-5">
+            <li>Marketing site static hosting (this site)</li>
+            <li>Lead-capture adapter / form endpoint (when configured)</li>
+            <li>
+              Product API and voice runtime (internal; not linked from
+              marketing until authorised)
+            </li>
+          </ul>
+        </section>
         <p className="rounded-md border border-dashed border-border bg-surface p-4 text-sm">
           No fake uptime charts, incident timelines, or SLA badges are shown
           here. Metrics appear only when wired to real monitors.
