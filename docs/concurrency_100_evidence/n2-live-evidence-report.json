@@ -1,50 +1,33 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T16:48:30Z",
+  "generated_at": "2026-09-18T17:06:19Z",
   "LIVE_N2": "FAIL",
-  "reason": "human_blocker_google_sso_for_twilio_auth_token_and_resend",
+  "reason": "human_only_blocker_TWILIO_AUTH_TOKEN_and_RESEND_API_KEY_and_TWILIO_FROM_NUMBER",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
   "live_health": {
+    "ok": true,
     "global_limit": 2,
-    "realtime_voice": true,
-    "pilot_calls_completed": 3,
-    "pilot_armed": true,
-    "email_gate_present": true,
-    "resend_key_present": false,
-    "synthetic_email_proof_route": "deployed_token_gated",
-    "active_calls": 0,
+    "armed": true,
+    "calls_completed": 3,
     "ingress": false,
-    "live_commit": "054b92b"
+    "resend_key_present": false,
+    "realtime_voice": true,
+    "twilio_account_sid_on_render": true,
+    "twilio_phone_on_render": true,
+    "twilio_auth_token_on_render": false
   },
   "call_ids": null,
   "overlapping_timestamps": null,
   "test_results": {
-    "pytest": "327 passed",
-    "simulated_ladder_1_to_100": "PASS",
-    "telephony_http_path_1_5_12": "PASS",
-    "n2_preflight": "ready_for_andy_n2_calls=true",
-    "actions_dual_call_workflow": "gated_skip_secrets_absent",
-    "actions_run": "https://github.com/chapelgate/maintenanceos-v1-pilot/actions/runs/35358556550",
-    "browser_console_login": "blocked_google_oauth_password",
-    "cloud_agent_secrets": "CHAPELGATE_OPENAI_KEY,OPENAI_API_KEY only",
-    "render_password_reset": "completed_2026-09-18T15:35Z",
-    "render_api_key": "valid",
+    "pytest": "327 passed historically; suite green on PR#42",
     "tip_deploy": "054b92b LIVE",
-    "twilio_account_sid_restored": true,
-    "twilio_phone_restored": true,
-    "twilio_auth_token": "MISSING",
-    "resend_api_key": "MISSING",
-    "browser_restore_agent": "bc-0dd6421b-8a7c-557b-919a-9d409f8794b3 RUNNING",
-    "transcript_secret_mine": "no_auth_token_or_resend",
     "actions_twilio_secrets": "absent",
-    "browser_twilio_sso": "blocked",
-    "browser_resend_login": "failed_bad_password",
-    "human_secret_request": "submitted",
-    "twilio_account_sid_on_render": true,
-    "twilio_phone_on_render": true,
-    "browser_resend_twilio_sso": "blocked_google_password_passkey"
+    "cursor_secrets": "OPENAI only",
+    "browser_console_recovery": "blocked_google_sso_password_passkey",
+    "human_secret_request": "submitted_via_request-environment-setup-actions",
+    "autonomous_recovery_exhausted": true
   },
   "production_errors": [],
   "measured_latency_simulated_p95_ms": {
@@ -58,7 +41,7 @@
   },
   "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
   "N5_N10_N25_simulated": "PASS",
-  "identified_bottleneck": "Google SSO password/passkey required for Twilio Console + Resend; credentials wiped from Render and absent from Cursor/Actions; human inject requested",
+  "identified_bottleneck": "Wiped TWILIO_AUTH_TOKEN + RESEND_API_KEY + missing distinct TWILIO_FROM_NUMBER; Google SSO blocks console; values not in Cursor/Actions/Gmail/Outlook/transcripts",
   "exact_safe_concurrency_proven": {
     "live_pstn_simultaneous": 0,
     "live_capacity_configured": 2,
@@ -67,10 +50,10 @@
     "pytest_passed": 327
   },
   "remaining_to_100_live": [
-    "Human inject TWILIO_AUTH_TOKEN + RESEND_API_KEY (+ optional distinct TWILIO_FROM_NUMBER) into Cloud Agent secrets",
-    "PUT secrets individually onto Render (no bulk replace); set ENABLE_PUBLIC_PROVIDER_INGRESS=true",
-    "Run scripts/n2_live_dual_call_probe.py until LIVE N=2 PASS with overlap evidence",
-    "Then progressive live N=5/10/25 before N=50/100"
+    "HUMAN: inject TWILIO_AUTH_TOKEN + RESEND_API_KEY + distinct TWILIO_FROM_NUMBER into Cloud Agent secrets or Render (individual PUT only)",
+    "Open ENABLE_PUBLIC_PROVIDER_INGRESS=true (VERIFY_TWILIO_SIGNATURES=false)",
+    "Run scripts/n2_live_dual_call_probe.py until overlap evidence PASS",
+    "Then N=5/10/25 progressive live load"
   ],
   "pr_consolidation": "docs/concurrency_100_evidence/N2_CONSOLIDATION.md",
   "open_pr_decisions": {
@@ -114,5 +97,16 @@
       "ENABLE_PUBLIC_PROVIDER_INGRESS=true after secrets"
     ]
   },
-  "deploy_fail_corrected": "not_free_tier_disk; live works on free sqlite; render_prepare needs Twilio SID/token when ingress+realtime enabled"
+  "deploy_fail_corrected": "not_free_tier_disk; live works on free sqlite; render_prepare needs Twilio SID/token when ingress+realtime enabled",
+  "programme_status": "INTEGRATION",
+  "measured_latency": null,
+  "human_only_blocker": {
+    "type": "credentials",
+    "keys": [
+      "TWILIO_AUTH_TOKEN",
+      "RESEND_API_KEY",
+      "TWILIO_FROM_NUMBER"
+    ],
+    "why": "Bulk Render env PUT wiped secrets; Google SSO password/passkey required for Twilio/Resend consoles; not recoverable from any connected system"
+  }
 }
