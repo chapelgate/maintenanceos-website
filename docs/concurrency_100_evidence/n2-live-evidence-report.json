@@ -1,8 +1,8 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T16:05:17Z",
+  "generated_at": "2026-09-18T16:08:54Z",
   "LIVE_N2": "FAIL",
-  "reason": "deploy_update_failed_after_secret_env_wipe_recovery_in_progress",
+  "reason": "update_failed_due_to_wiped_twilio_gemini_secrets_on_new_deploys",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
@@ -86,5 +86,6 @@
     ],
     "non_secret_config_restored": true,
     "proof_token_set_in_render_env_not_yet_live": true
-  }
+  },
+  "deploy_fail_corrected": "not_free_tier_disk; live works on free sqlite; render_prepare needs Twilio SID/token when ingress+realtime enabled"
 }
