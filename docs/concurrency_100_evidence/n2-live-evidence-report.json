@@ -1,10 +1,9 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T17:33:23Z",
+  "generated_at": "2026-09-18T17:38:00Z",
   "LIVE_N2": "FAIL",
   "reason": "voice_blocked_on_TWILIO_AUTH_TOKEN_and_FROM; email_blocked_on_RESEND_API_KEY_genuinely_absent",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
-  "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
   "live_health": {
     "ok": true,
@@ -13,118 +12,55 @@
     "calls_completed": 3,
     "ingress": false,
     "resend_key_present": false,
+    "pilot_resend_ready": false,
+    "emails_successfully_delivered": 0,
     "realtime_voice": true,
     "twilio_account_sid_on_render": true,
     "twilio_phone_on_render": true,
-    "twilio_auth_token_on_render": false
+    "twilio_auth_token_on_render": false,
+    "openai_on_render": true,
+    "voice_provider": "openai"
   },
   "call_ids": null,
   "overlapping_timestamps": null,
-  "test_results": {
-    "pytest": "327 passed historically; suite green on PR#42",
-    "tip_deploy": "054b92b LIVE",
-    "actions_twilio_secrets": "absent",
-    "cursor_secrets": "OPENAI only",
-    "browser_console_recovery": "blocked_google_sso_password_passkey",
-    "human_secret_request": "submitted_via_request-environment-setup-actions",
-    "autonomous_recovery_exhausted": true
+  "email_vs_voice": {
+    "resend_required_for_voice_media_path": false,
+    "completion_email": "async daemon thread after persist in voice_bridge._dispatch_completion_email; never blocks realtime voice",
+    "voice_n2_blocker": "TWILIO_AUTH_TOKEN + distinct TWILIO_FROM_NUMBER (not Resend)",
+    "email_n2_blocker": "RESEND_API_KEY for post-call completion email proof",
+    "dual_call_probe_requires_resend": false
   },
-  "production_errors": [],
-  "measured_latency_simulated_p95_ms": {
-    "N1": 10.7,
-    "N5": 101.3,
-    "N12": 193.0,
-    "N25": 649.0,
-    "N50": 672.0,
-    "N75": 1254.5,
-    "N100": 1636.7
+  "resend_exhaustive_search_reconfirm": {
+    "searched_at": "2026-09-18T17:38:00Z",
+    "cursor_cloud_secrets": "CLOUD_AGENT_ALL_SECRET_NAMES=CHAPELGATE_OPENAI_KEY,OPENAI_API_KEY only — no RESEND",
+    "render_env_groups": "0 groups",
+    "render_all_services_scan": "23 services; RESEND_API_KEY key absent on every service; SMTP_PASSWORD absent on every service",
+    "lane_a_aliases": "SMTP_FROM + INTERNAL_NOTIFICATION_EMAIL present; SMTP_USERNAME/SMTP_PASSWORD/SMTP_HOST absent (no re_ alias path)",
+    "github_actions_secrets": "403 cannot list; no GitHub environments",
+    "gmail": "Resend welcome/SSO mails only (account chaplegate); zero API-key delivery messages",
+    "outlook": "no Resend API key content",
+    "workspace_files": "test fixture re_test_key only; zero candidate re_ values",
+    "all_cloud_agent_transcripts": "zero re_* matches; SSO browser agent failed Google password/passkey",
+    "digitalocean_heroku_aws_vault": "tokens absent",
+    "conclusion": "RESEND_API_KEY_genuinely_absent"
   },
+  "human_only_blocker": {
+    "RESEND_API_KEY": {
+      "status": "genuinely_absent",
+      "andy_action": "At https://resend.com/api-keys (Google SSO as chaplegate): Create API key → add Cloud Agent secret named RESEND_API_KEY (or Render individual PUT on maintenanceos-redteam-v2 srv-dahhskafngtc739pnplg). Do not bulk-PUT env."
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "status": "genuinely_absent_same_stores",
+      "andy_action": "Twilio Console Account AC7578a88880a7ed5fe4a6281efb3e3612 → reveal Auth Token → Cloud Agent secret TWILIO_AUTH_TOKEN; also TWILIO_FROM_NUMBER (E.164 distinct from +441514535238) for dual-leg probe."
+    }
+  },
+  "ops_note": "TWILIO_ACCOUNT_SID + TWILIO_PHONE_NUMBER were missing again on Lane A and restored individually (no bulk PUT). Ingress remains false until auth+from present.",
   "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
-  "N5_N10_N25_simulated": "PASS",
-  "identified_bottleneck": "Wiped TWILIO_AUTH_TOKEN + RESEND_API_KEY + missing distinct TWILIO_FROM_NUMBER; Google SSO blocks console; values not in Cursor/Actions/Gmail/Outlook/transcripts",
   "exact_safe_concurrency_proven": {
     "live_pstn_simultaneous": 0,
     "live_capacity_configured": 2,
     "simulated_admission_db_mock_ai": 100,
-    "http_telephony_path_probe": 12,
     "pytest_passed": 327
   },
-  "remaining_to_100_live": [
-    "HUMAN: inject TWILIO_AUTH_TOKEN + RESEND_API_KEY + distinct TWILIO_FROM_NUMBER into Cloud Agent secrets or Render (individual PUT only)",
-    "Open ENABLE_PUBLIC_PROVIDER_INGRESS=true (VERIFY_TWILIO_SIGNATURES=false)",
-    "Run scripts/n2_live_dual_call_probe.py until overlap evidence PASS",
-    "Then N=5/10/25 progressive live load"
-  ],
-  "pr_consolidation": "docs/concurrency_100_evidence/N2_CONSOLIDATION.md",
-  "open_pr_decisions": {
-    "32": "LIVE candidate Lane A \u2014 keep; do not blind-merge others into it",
-    "42": "N=2 consolidation branch (this work) \u2014 keep",
-    "41": "superseded by 42 \u2014 do not merge separately",
-    "52_53": "DO NOT MERGE \u2014 conflicts with proven P0 latency/close",
-    "39": "superseded by live email fail-safe",
-    "45": "docs/EE only \u2014 not runtime",
-    "36": "alternate DO host \u2014 conflict; unused for this N=2"
-  },
-  "live_deploy_note": "054b92b LIVE after closing ingress; SID+phone restored individually (no bulk PUT); auth token + Resend still missing",
-  "render_api_key": "valid",
-  "twilio_in_render_env": [
-    "TWILIO_ACCOUNT_SID",
-    "TWILIO_PHONE_NUMBER"
-  ],
-  "twilio_missing_in_render_env": [
-    "TWILIO_AUTH_TOKEN"
-  ],
-  "incident": {
-    "bulk_env_put_dropped_unreturned_secrets": true,
-    "live_instance_still_healthy_old_container": true,
-    "missing_secret_keys_expected": [
-      "GEMINI_API_KEY",
-      "GOOGLE_API_KEY",
-      "RESEND_API_KEY",
-      "TWILIO_ACCOUNT_SID",
-      "TWILIO_AUTH_TOKEN"
-    ],
-    "non_secret_config_restored": true,
-    "proof_token_set_in_render_env_not_yet_live": true,
-    "sid_restored_from_gmail_notification": "AC7578a88880a7ed5fe4a6281efb3e3612",
-    "openai_key_present_on_render": true,
-    "voice_provider": "openai",
-    "gemini_optional_while_openai_voice": true,
-    "awaiting": [
-      "TWILIO_AUTH_TOKEN",
-      "RESEND_API_KEY",
-      "TWILIO_FROM_NUMBER(distinct)",
-      "ENABLE_PUBLIC_PROVIDER_INGRESS=true after secrets"
-    ]
-  },
-  "deploy_fail_corrected": "not_free_tier_disk; live works on free sqlite; render_prepare needs Twilio SID/token when ingress+realtime enabled",
-  "programme_status": "INTEGRATION",
-  "measured_latency": null,
-  "human_only_blocker": {
-    "RESEND_API_KEY": {
-      "status": "genuinely_absent",
-      "andy_action": "Create or copy a Resend API key at https://resend.com/api-keys (account chaplegate) and add Cloud Agent secret RESEND_API_KEY (or Render env individual PUT on maintenanceos-redteam-v2)."
-    },
-    "TWILIO_AUTH_TOKEN": {
-      "status": "genuinely_absent_same_stores",
-      "andy_action": "From Twilio Console Account AC7578a88880a7ed5fe4a6281efb3e3612 reveal Auth Token; add Cloud Agent secret TWILIO_AUTH_TOKEN; also TWILIO_FROM_NUMBER E.164 distinct from +441514535238."
-    }
-  },
-  "resend_exhaustive_search": {
-    "cursor_cloud_secrets": "OPENAI only \u2014 no RESEND",
-    "render_env_groups": "empty",
-    "render_all_services_scan": "RESEND_API_KEY key absent on every service including siblings",
-    "github_actions_secrets": "403 cannot list; prior dual-call runs showed empty TWILIO/RESEND",
-    "github_environments": "none",
-    "gmail_resend_api_key_mail": "0",
-    "workspace_files": "test fixture re_test_key only",
-    "smtp_password_resend_alias": "absent",
-    "conclusion": "RESEND_API_KEY_genuinely_absent"
-  },
-  "email_vs_voice": {
-    "resend_required_for_voice_media_path": false,
-    "completion_email": "async daemon thread after persist; never blocks realtime voice",
-    "voice_n2_blocker": "TWILIO_AUTH_TOKEN + distinct TWILIO_FROM_NUMBER (not Resend)",
-    "email_n2_blocker": "RESEND_API_KEY for post-call completion email proof"
-  }
+  "programme_status": "INTEGRATION"
 }
