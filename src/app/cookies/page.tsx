@@ -147,7 +147,7 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               Remember UI or locale choices if introduced — non-essential;
-              default off until consent — [OWNER: list or “none currently"].
+              default off until consent — [OWNER: list or “none currently”].
               None currently.
             </p>
           </section>
