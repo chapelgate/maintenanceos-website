@@ -1,8 +1,8 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T17:06:19Z",
+  "generated_at": "2026-09-18T17:33:23Z",
   "LIVE_N2": "FAIL",
-  "reason": "human_only_blocker_TWILIO_AUTH_TOKEN_and_RESEND_API_KEY_and_TWILIO_FROM_NUMBER",
+  "reason": "voice_blocked_on_TWILIO_AUTH_TOKEN_and_FROM; email_blocked_on_RESEND_API_KEY_genuinely_absent",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
@@ -101,12 +101,30 @@
   "programme_status": "INTEGRATION",
   "measured_latency": null,
   "human_only_blocker": {
-    "type": "credentials",
-    "keys": [
-      "TWILIO_AUTH_TOKEN",
-      "RESEND_API_KEY",
-      "TWILIO_FROM_NUMBER"
-    ],
-    "why": "Bulk Render env PUT wiped secrets; Google SSO password/passkey required for Twilio/Resend consoles; not recoverable from any connected system"
+    "RESEND_API_KEY": {
+      "status": "genuinely_absent",
+      "andy_action": "Create or copy a Resend API key at https://resend.com/api-keys (account chaplegate) and add Cloud Agent secret RESEND_API_KEY (or Render env individual PUT on maintenanceos-redteam-v2)."
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "status": "genuinely_absent_same_stores",
+      "andy_action": "From Twilio Console Account AC7578a88880a7ed5fe4a6281efb3e3612 reveal Auth Token; add Cloud Agent secret TWILIO_AUTH_TOKEN; also TWILIO_FROM_NUMBER E.164 distinct from +441514535238."
+    }
+  },
+  "resend_exhaustive_search": {
+    "cursor_cloud_secrets": "OPENAI only \u2014 no RESEND",
+    "render_env_groups": "empty",
+    "render_all_services_scan": "RESEND_API_KEY key absent on every service including siblings",
+    "github_actions_secrets": "403 cannot list; prior dual-call runs showed empty TWILIO/RESEND",
+    "github_environments": "none",
+    "gmail_resend_api_key_mail": "0",
+    "workspace_files": "test fixture re_test_key only",
+    "smtp_password_resend_alias": "absent",
+    "conclusion": "RESEND_API_KEY_genuinely_absent"
+  },
+  "email_vs_voice": {
+    "resend_required_for_voice_media_path": false,
+    "completion_email": "async daemon thread after persist; never blocks realtime voice",
+    "voice_n2_blocker": "TWILIO_AUTH_TOKEN + distinct TWILIO_FROM_NUMBER (not Resend)",
+    "email_n2_blocker": "RESEND_API_KEY for post-call completion email proof"
   }
 }
