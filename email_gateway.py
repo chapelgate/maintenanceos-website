@@ -67,24 +67,32 @@ def _send_resend_http(to, subject, body, sender, api_key):
     return {"mock":False,"message_id":str(data.get("id") or f"<resend-{uuid.uuid4()}@api>")}
 
 def send_email(to,subject,body):
-    """Send live mail without ever making SMTP a voice-call critical path.
+    """Send live mail without making SMTP a voice-call critical path.
 
-    Resend SMTP credentials are also valid API credentials, so Resend-hosted
-    configurations prefer HTTPS and fall back to SMTP only if the API fails.
+    Prefer Resend HTTPS whenever an existing Resend credential is available.
+    This deliberately does not depend on SMTP_HOST being smtp.resend.com:
+    deployments sometimes keep an old/SES SMTP host while the verified
+    Chapelgate sender and Resend sending key are already configured.
     """
     if os.getenv("EMAIL_MODE","mock")!="imap_smtp":
         return {"mock":True,"message_id":f"<mock-{uuid.uuid4()}@maintenanceos>"}
     if not live_email_enabled():
         raise RuntimeError("Live email is disabled")
-    if not smtp_configured():
-        raise RuntimeError("SMTP configuration incomplete")
-    host=os.getenv("SMTP_HOST");user=os.getenv("SMTP_USERNAME");pw=os.getenv("SMTP_PASSWORD")
-    sender=os.getenv("SMTP_FROM") or user
-    if host and host.lower().endswith("resend.com"):
+    host=os.getenv("SMTP_HOST","").strip()
+    user=os.getenv("SMTP_USERNAME","").strip()
+    pw=os.getenv("SMTP_PASSWORD","").strip()
+    sender=(os.getenv("SMTP_FROM") or user).strip()
+    resend_key=(os.getenv("RESEND_API_KEY") or "").strip()
+    if not resend_key and (user.casefold()=="resend" or pw.startswith("re_")):
+        resend_key=pw
+    if resend_key and sender:
         try:
-            return _send_resend_http(to,subject,body,sender,pw)
+            return _send_resend_http(to,subject,body,sender,resend_key)
         except Exception:
+            # Keep the existing SMTP path as a fallback, but never expose secrets.
             pass
+    if not smtp_configured():
+        raise RuntimeError("Email sender configuration incomplete")
     port=int(os.getenv("SMTP_PORT","587"))
     use_tls=os.getenv("SMTP_USE_TLS","true").lower()=="true"
     use_ssl=os.getenv("SMTP_USE_SSL","false").lower()=="true"
