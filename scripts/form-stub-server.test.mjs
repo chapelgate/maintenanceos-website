@@ -1,0 +1,152 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import test from "node:test";
+import {
+  LEAD_TYPES,
+  createFormStubServer,
+  successBody,
+  validateLead,
+} from "./form-stub-server.mjs";
+
+const validLead = {
+  lead_type: "launch_list",
+  email: "alex@example.com",
+  name: "Alex Example",
+  source: "maintenanceos-website",
+  public_launch: false,
+};
+
+function listen(server) {
+  return new Promise((resolve) => {
+    server.listen(0, "127.0.0.1", () => resolve(server.address().port));
+  });
+}
+
+async function withServer(fn) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "form-stub-"));
+  const dataFile = path.join(dir, "leads.jsonl");
+  const { server } = createFormStubServer({ dataFile });
+  const port = await listen(server);
+  const base = `http://127.0.0.1:${port}`;
+  try {
+    return await fn({ base, dataFile });
+  } finally {
+    await new Promise((resolve, reject) =>
+      server.close((err) => (err ? reject(err) : resolve())),
+    );
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+test("success body never claims email delivery", () => {
+  const body = successBody();
+  assert.equal(body.ok, true);
+  assert.equal(body.mode, "queued_stub");
+  assert.equal(body.sends_email, false);
+});
+
+test("lead types match the public contract", () => {
+  assert.deepEqual([...LEAD_TYPES].sort(), ["contact", "early_demo", "launch_list"]);
+});
+
+test("validateLead accepts the three conversion types", () => {
+  for (const lead_type of LEAD_TYPES) {
+    const result = validateLead({ ...validLead, lead_type });
+    assert.equal(result.ok, true);
+    assert.equal(result.record.sends_email, false);
+  }
+});
+
+test("validateLead rejects bad email and unknown type", () => {
+  assert.equal(validateLead({ ...validLead, email: "not-an-email" }).ok, false);
+  assert.equal(validateLead({ ...validLead, lead_type: "waitlist" }).ok, false);
+});
+
+test("honeypot is discarded without recording a lead", () => {
+  const result = validateLead({ ...validLead, website: "https://spam.test" });
+  assert.equal(result.ok, true);
+  assert.equal(result.discarded, true);
+});
+
+test("POST /leads stores jsonl and returns queued_stub", async () => {
+  await withServer(async ({ base, dataFile }) => {
+    const res = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      body: JSON.stringify({ ...validLead, lead_type: "early_demo" }),
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers.get("access-control-allow-origin"), "http://localhost:3000");
+    const json = await res.json();
+    assert.equal(json.ok, true);
+    assert.equal(json.mode, "queued_stub");
+    assert.equal(json.sends_email, false);
+    assert.equal(JSON.stringify(json).toLowerCase().includes("email was sent"), false);
+
+    const lines = fs.readFileSync(dataFile, "utf8").trim().split("\n");
+    assert.equal(lines.length, 1);
+    const stored = JSON.parse(lines[0]);
+    assert.equal(stored.lead_type, "early_demo");
+    assert.equal(stored.email, "alex@example.com");
+    assert.equal(stored.sends_email, false);
+  });
+});
+
+test("POST /leads contact type is accepted", async () => {
+  await withServer(async ({ base }) => {
+    const res = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lead_type: "contact",
+        email: "ops@example.com",
+        message: "General enquiry",
+      }),
+    });
+    assert.equal(res.status, 200);
+    assert.equal((await res.json()).mode, "queued_stub");
+  });
+});
+
+test("OPTIONS preflight is empty 204 with CORS", async () => {
+  await withServer(async ({ base }) => {
+    const res = await fetch(`${base}/leads`, {
+      method: "OPTIONS",
+      headers: { Origin: "http://127.0.0.1:3000" },
+    });
+    assert.equal(res.status, 204);
+    assert.equal(res.headers.get("access-control-allow-methods")?.includes("POST"), true);
+  });
+});
+
+test("GET /health advertises no email sending", async () => {
+  await withServer(async ({ base }) => {
+    const res = await fetch(`${base}/health`);
+    const json = await res.json();
+    assert.equal(res.status, 200);
+    assert.equal(json.ok, true);
+    assert.equal(json.sends_email, false);
+  });
+});
+
+test("invalid JSON and unknown path fail closed", async () => {
+  await withServer(async ({ base }) => {
+    const bad = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{",
+    });
+    assert.equal(bad.status, 400);
+    const missing = await fetch(`${base}/api/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(validLead),
+    });
+    assert.equal(missing.status, 404);
+  });
+});

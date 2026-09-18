@@ -16,8 +16,9 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 
 - Next.js 15 App Router + TypeScript + Tailwind CSS v4
 - **Static export** (`output: 'export'`) → `out/` for DigitalOcean App Platform static (or any static host)
-- Provider-independent lead adapter (`src/lib/lead-adapter.ts`) — posts to `NEXT_PUBLIC_FORM_ENDPOINT` when set; otherwise success stub / queue message (does **not** claim email was sent)
-- No Node API routes (static-export compatible)
+- **No Next.js API routes** (incompatible with static export)
+- Provider-independent lead adapter (`src/lib/lead-adapter.ts`) posts JSON to `NEXT_PUBLIC_FORM_ENDPOINT` when that value is an absolute `http(s)` URL; otherwise a local success stub. Success UI **never claims email was sent**.
+- Contract: [`docs/FORM_ENDPOINT_CONTRACT.md`](docs/FORM_ENDPOINT_CONTRACT.md). Local stub: `npm run form-stub` (`scripts/form-stub-server.mjs`)
 
 ## Quick start
 
@@ -26,9 +27,24 @@ cp .env.example .env.local   # placeholders only — no secrets in git
 npm install
 npm run dev                  # local preview
 npm run build                # emits out/
+npm test                     # form-stub contract tests
 ```
 
 Serve the static site (optional): `npx serve out`.
+
+### Lead capture (static export)
+
+`launch_list`, `early_demo`, and `contact` all render `LeadCaptureForm` (`/` `#join`, `/demo/`, `/contact/`). The browser posts to `NEXT_PUBLIC_FORM_ENDPOINT`; this repo does not add `/api/*` routes.
+
+```bash
+# Terminal 1 — loopback stub (stores JSONL under .data/, never sends mail)
+npm run form-stub
+
+# Terminal 2 — point the static site at the stub
+NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run dev
+```
+
+Leave `NEXT_PUBLIC_FORM_ENDPOINT` empty to exercise the client-only stub. Either way, thank-you copy must not say that email was sent. DigitalOcean static hosting cannot run this stub; production needs a contract-compliant external endpoint.
 
 ### DigitalOcean App Platform (static)
 

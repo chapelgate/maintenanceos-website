@@ -12,29 +12,77 @@ export type LeadPayload = {
   website?: string;
 };
 
+/**
+ * `local_stub` — no endpoint configured (client-only).
+ * `queued_stub` — endpoint stored the lead without delivery (local stub).
+ * `accepted` — endpoint accepted the lead. Never means email was sent.
+ */
+export type LeadSuccessMode = "local_stub" | "queued_stub" | "accepted";
+
 export type LeadResult =
-  | { ok: true; mode: "submitted" | "queued_stub" }
+  | { ok: true; mode: LeadSuccessMode }
   | { ok: false; error: string };
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isAbsoluteHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function parseMode(body: unknown): LeadSuccessMode | null {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  const mode = (body as { mode?: unknown }).mode;
+  if (mode === "queued_stub" || mode === "local_stub") return "queued_stub";
+  if (mode === "accepted" || mode === "submitted") return "accepted";
+  return null;
+}
+
+function parseError(body: unknown): string | null {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  const error = (body as { error?: unknown }).error;
+  return typeof error === "string" && error.trim() ? error.trim() : null;
+}
+
+function bodyOkFlag(body: unknown): boolean | null {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  const ok = (body as { ok?: unknown }).ok;
+  if (ok === true) return true;
+  if (ok === false) return false;
+  return null;
+}
 
 /**
  * Static-friendly lead adapter.
- * Posts to NEXT_PUBLIC_FORM_ENDPOINT when set; otherwise returns a local
- * success stub without claiming email was sent.
+ * Posts to NEXT_PUBLIC_FORM_ENDPOINT when set (see docs/FORM_ENDPOINT_CONTRACT.md).
+ * Success never means a confirmation or notification email was sent.
  */
 export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
   if (payload.website) {
-    // Honeypot tripped — pretend success.
-    return { ok: true, mode: "queued_stub" };
+    // Honeypot tripped — pretend success without claiming email.
+    return { ok: true, mode: "local_stub" };
   }
 
   const email = payload.email.trim();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!email || !EMAIL_RE.test(email)) {
     return { ok: false, error: "Please enter a valid email address." };
   }
 
   const endpoint = siteConfig.formEndpoint.trim();
   if (!endpoint) {
-    return { ok: true, mode: "queued_stub" };
+    return { ok: true, mode: "local_stub" };
+  }
+
+  if (!isAbsoluteHttpUrl(endpoint)) {
+    return {
+      ok: false,
+      error:
+        "Form endpoint is not a valid http(s) URL. Static export cannot use relative API routes.",
+    };
   }
 
   try {
@@ -52,13 +100,36 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
         public_launch: siteConfig.publicLaunch,
       }),
     });
+
+    let parsed: unknown = null;
+    const text = await res.text();
+    if (text) {
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        parsed = null;
+      }
+    }
+
+    if (bodyOkFlag(parsed) === false) {
+      return {
+        ok: false,
+        error:
+          parseError(parsed) ??
+          "We could not submit just now. Please try again shortly.",
+      };
+    }
+
     if (!res.ok) {
       return {
         ok: false,
-        error: "We could not submit just now. Please try again shortly.",
+        error:
+          parseError(parsed) ??
+          "We could not submit just now. Please try again shortly.",
       };
     }
-    return { ok: true, mode: "submitted" };
+
+    return { ok: true, mode: parseMode(parsed) ?? "accepted" };
   } catch {
     return {
       ok: false,

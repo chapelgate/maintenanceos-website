@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "npx serve out",
-    "lint": "eslint"
+    "lint": "eslint",
+    "form-stub": "node scripts/form-stub-server.mjs",
+    "test": "node --test scripts/form-stub-server.test.mjs"
   },
   "dependencies": {
     "react": "19.1.0",

@@ -39,6 +39,7 @@ export default function ContactPage() {
           </ul>
         </aside>
 
+        {/* contact lead_type — same LeadCaptureForm as launch_list / early_demo. */}
         <LeadCaptureForm
           leadType="contact"
           title="Send a message"

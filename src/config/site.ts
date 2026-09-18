@@ -19,10 +19,12 @@ export const siteConfig = {
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "",
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? "local",
+  /** Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md. Empty = local stub. */
   formEndpoint: process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "",
   locale: "en-GB",
 } as const;
 
+/** Conversion forms — always render via LeadCaptureForm. See docs/FORM_ENDPOINT_CONTRACT.md. */
 export type LeadType = "launch_list" | "early_demo" | "contact";
 
 export const industries = [
