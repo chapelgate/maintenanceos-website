@@ -1,15 +1,15 @@
 {
   "profile": "n2-live-evidence-report",
-  "generated_at": "2026-09-18T15:25:00Z",
+  "generated_at": "2026-09-18T15:37:11Z",
   "LIVE_N2": "FAIL",
-  "reason": "twilio_render_secrets_absent__google_oauth_password_blocker",
+  "reason": "twilio_absent__render_password_reset_done_awaiting_api_key",
   "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
   "evidence_branch_sha": "615b3d8bdc6de1b6de38ebc0bfefded20d4e345b",
   "live_service": "https://maintenanceos-redteam-v2.onrender.com",
   "live_health": {
     "global_limit": 2,
     "realtime_voice": true,
-    "pilot_calls_completed": 3,
+    "pilot_calls_completed": 4,
     "email_gate_present": true,
     "synthetic_email_proof_route": "404_not_deployed",
     "active_calls": 0
@@ -24,7 +24,9 @@
     "actions_dual_call_workflow": "gated_skip_secrets_absent",
     "actions_run": "https://github.com/chapelgate/maintenanceos-v1-pilot/actions/runs/35358556550",
     "browser_console_login": "blocked_google_oauth_password",
-    "cloud_agent_secrets": "CHAPELGATE_OPENAI_KEY,OPENAI_API_KEY only"
+    "cloud_agent_secrets": "CHAPELGATE_OPENAI_KEY,OPENAI_API_KEY only",
+    "render_password_reset": "completed_2026-09-18T15:35Z",
+    "render_api_key": "pending_browser_login"
   },
   "production_errors": [],
   "measured_latency_simulated_p95_ms": {
@@ -38,7 +40,7 @@
   },
   "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
   "N5_N10_N25_simulated": "PASS",
-  "identified_bottleneck": "Human credential gate: TWILIO_* + RENDER_API_KEY not in Cloud Agent or GitHub Actions; Twilio/Render consoles require Google OAuth password for chaplegate@gmail.com (no saved Chrome passwords, no OTP path completed). App-layer concurrency clears simulated 100.",
+  "identified_bottleneck": "Twilio secrets still absent (Google SSO). Render password reset completed; awaiting API key capture from dashboard session then Manual Deploy tip.",
   "exact_safe_concurrency_proven": {
     "live_pstn_simultaneous": 0,
     "live_capacity_configured": 2,
@@ -54,12 +56,12 @@
   ],
   "pr_consolidation": "docs/concurrency_100_evidence/N2_CONSOLIDATION.md",
   "open_pr_decisions": {
-    "32": "LIVE candidate Lane A — keep; do not blind-merge others into it",
-    "42": "N=2 consolidation branch (this work) — keep",
-    "41": "superseded by 42 — do not merge separately",
-    "52_53": "DO NOT MERGE — conflicts with proven P0 latency/close",
+    "32": "LIVE candidate Lane A \u2014 keep; do not blind-merge others into it",
+    "42": "N=2 consolidation branch (this work) \u2014 keep",
+    "41": "superseded by 42 \u2014 do not merge separately",
+    "52_53": "DO NOT MERGE \u2014 conflicts with proven P0 latency/close",
     "39": "superseded by live email fail-safe",
-    "45": "docs/EE only — not runtime",
-    "36": "alternate DO host — conflict; unused for this N=2"
+    "45": "docs/EE only \u2014 not runtime",
+    "36": "alternate DO host \u2014 conflict; unused for this N=2"
   }
 }
