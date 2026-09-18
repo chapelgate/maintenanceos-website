@@ -36,12 +36,12 @@ const prelaunch = {
     "No self-serve checkout on this marketing site",
   ] as const,
   primaryCta: {
-    href: "/demo/",
-    label: "Request pricing",
+    href: "/demo/#launch",
+    label: "Join launch list",
   } satisfies PricingCta,
   secondaryCta: {
     href: "/demo/",
-    label: "Request an early demo",
+    label: "Request early demo",
   } satisfies PricingCta,
 } as const;
 
@@ -64,12 +64,12 @@ const published = {
     "Human clearance stays on safety and money decisions",
   ] as const,
   primaryCta: {
-    href: "/demo/",
-    label: "Request pricing",
+    href: "/demo/#launch",
+    label: "Join launch list",
   } satisfies PricingCta,
   secondaryCta: {
     href: "/demo/",
-    label: "Request an early demo",
+    label: "Request early demo",
   } satisfies PricingCta,
 } as const;
 
