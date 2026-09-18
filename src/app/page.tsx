@@ -37,37 +37,49 @@ const pillars = [
   },
 ] as const;
 
+const honestyItems = [
+  "No fabricated customers, logos, or awards",
+  "No certifications we do not hold",
+  "No “handles N concurrent lines” marketing numbers",
+  "No public live receptionist claim until that gate is cleared",
+] as const;
+
 export default function HomePage() {
   return (
     <>
-      <section className="border-b border-border bg-surface px-4 py-16 sm:py-24">
+      {/* 1. Hero — UX journey entry */}
+      <section className="border-b border-border bg-surface px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
           <div>
-            <p className="text-sm font-medium uppercase tracking-wide text-accent">
+            <p className="inline-flex items-center rounded-md bg-accent-subtle px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
               Pre-launch · United Kingdom
             </p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+            <h1 className="mt-5 text-4xl font-semibold tracking-tight text-ink sm:text-5xl sm:leading-[1.12]">
               Maintenance calls, structured — without the model running your
               operation.
             </h1>
-            <p className="mt-5 text-lg text-ink">
+            <p className="mt-5 text-lg leading-relaxed text-ink">
               MaintenanceOS is a multi-tenant platform for UK landlords, letting
               agents, and property managers. An AI receptionist layer is designed
               to collect and classify what callers say (under testing);
               deterministic rules own safety, approvals, and money prohibitions.
             </p>
-            <CtaPair className="mt-8" primaryHref="/#join" />
-            <p className="mt-4 text-sm">
+            <CtaPair
+              className="mt-8"
+              primaryHref="/#join"
+              primaryLabel="Join launch list"
+              secondaryHref="/demo/"
+              secondaryLabel="Request early demo"
+            />
+            <p className="mt-5 text-sm leading-relaxed text-muted">
+              Pilot-stage. Core controls are real; public always-on phone is not
+              declared ready yet.{" "}
               <a
                 href="/how-it-works/"
-                className="font-medium text-accent underline-offset-2 hover:underline"
+                className="font-medium text-accent underline-offset-4 hover:underline"
               >
                 See how intake works
               </a>
-            </p>
-            <p className="mt-4 text-sm text-muted">
-              Pilot-stage. Core controls are real; public always-on phone is not
-              declared ready yet.
             </p>
           </div>
 
@@ -103,7 +115,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      {/* 2. Value pillars */}
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <div className="grid gap-6 md:grid-cols-2">
           {pillars.map((pillar) => (
             <article
@@ -113,11 +126,11 @@ export default function HomePage() {
               <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
                 {pillar.title}
               </h2>
-              <p className="mt-3 text-base text-ink">{pillar.body}</p>
+              <p className="mt-3 text-base leading-relaxed text-ink">{pillar.body}</p>
               <p className="mt-5 text-sm">
                 <a
                   href={pillar.href}
-                  className="font-medium text-accent underline-offset-2 hover:underline"
+                  className="font-semibold text-accent underline-offset-4 hover:underline"
                 >
                   {pillar.link}
                 </a>
@@ -127,38 +140,54 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-paper px-4 py-12">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-medium uppercase tracking-wide text-accent">
+      {/* 3. Honesty — what we will not claim */}
+      <section className="border-y border-border bg-paper px-4 py-14 sm:px-6">
+        <div className="mx-auto max-w-3xl">
+          <p className="text-center text-sm font-semibold uppercase tracking-wide text-accent">
             What we will not claim
           </p>
-          <p className="mt-3 text-base text-ink">
-            No fabricated customers or logos. No certifications we do not hold.
-            No “handles N concurrent lines” marketing numbers. No public live
-            receptionist claim until that gate is cleared.
-          </p>
+          <ul className="mx-auto mt-6 max-w-xl space-y-3">
+            {honestyItems.map((item) => (
+              <li key={item} className="flex gap-3 text-base leading-relaxed text-ink">
+                <span
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                  aria-hidden="true"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <section className="bg-surface px-4 py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
-            Want an early look?
-          </h2>
-          <p className="mt-3 text-base text-ink">
-            We’ll brief you on what’s verified today and what’s still under
-            test.
-          </p>
-          <CtaPair className="mt-8 justify-center" />
+      {/* 4. Closing CTA band */}
+      <section className="bg-surface px-4 py-14 sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 rounded-xl border border-border bg-paper p-8 sm:flex-row sm:items-center sm:p-10">
+          <div className="max-w-lg">
+            <h2 className="text-xl font-semibold text-ink sm:text-2xl">
+              Join the list or request a briefing
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              Early access is opening carefully. No live phone demo from this
+              site — a walkthrough of the operating model when you are ready.
+            </p>
+          </div>
+          <CtaPair
+            primaryHref="/demo/#launch"
+            primaryLabel="Join launch list"
+            secondaryHref="/demo/"
+            secondaryLabel="Request early demo"
+          />
         </div>
       </section>
 
-      <section id="join" className="border-t border-border bg-paper px-4 py-16">
+      {/* 5. #join capture */}
+      <section id="join" className="border-t border-border bg-paper px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-xl">
-          <h2 className="text-2xl font-semibold text-ink">Join the launch list</h2>
+          <h2 className="text-2xl font-semibold text-ink">Join launch list</h2>
           <p className="mt-2 text-muted">
-            Email and role only. Pre-launch updates — no spam, no live phone
-            line.
+            Be notified when early access opens. No fake urgency — we are still
+            pre-launch.
           </p>
           <div className="mt-6">
             {/* launch_list via LeadCaptureForm (same adapter as /demo and /contact). */}
