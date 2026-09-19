@@ -337,43 +337,7 @@ def _http_json(
         raise UshIdentityError("USH_NETWORK", type(exc).__name__) from None
 
 
-def exchange_workload_bearer(
-    identity: WorkloadIdentity,
-    *,
-    now: float | None = None,
-    base_url: str | None = None,
-    opener: Callable[..., Any] | None = None,
-) -> BearerSession:
-    """Mint a short-lived USH bearer from the durable workload key (renewable)."""
-    ts = float(now if now is not None else time.time())
-    assertion = build_assertion(identity, now=ts)
-    payload = {
-        "principal_id": identity.principal_id,
-        "project": identity.project,
-        "environment": identity.environment,
-        "tenant": identity.tenant,
-        "kind": "application",
-        "delivery_mode": "workload_identity",
-        "key_id": identity.key_id,
-        "public_key": identity.public_key_b64,
-        "assertion": assertion["assertion"],
-        "assertion_payload": assertion["payload"],
-        "signature": assertion["signature"],
-    }
-    code, body = _http_json(
-        "POST",
-        f"{(base_url or ush_base_url()).rstrip('/')}/v1/auth/workload",
-        payload,
-        opener=opener,
-    )
-    if code == 401 or code == 403:
-        detail = str(body.get("detail") or body.get("error") or code)
-        if "revok" in detail.lower():
-            raise UshIdentityError("USH_IDENTITY_REVOKED", detail[:80])
-        raise UshIdentityError("USH_IDENTITY_RENEWAL_FAILED", f"{code}:{detail[:80]}")
-    if code >= 400:
-        raise UshIdentityError("USH_IDENTITY_RENEWAL_FAILED", f"{code}:{str(body.get('detail') or body.get('error') or '')[:80]}")
-
+def _parse_bearer_body(body: dict[str, Any], *, now: float) -> BearerSession:
     token = ""
     for key in ("access_token", "token", "workload_token", "bearer"):
         val = body.get(key)
@@ -392,13 +356,136 @@ def exchange_workload_bearer(
     if "expires_at" in body:
         expires_at = float(body["expires_at"])
     elif "expires_in" in body:
-        expires_at = ts + float(body["expires_in"])
+        expires_at = now + float(body["expires_in"])
     elif isinstance(body.get("session"), dict) and body["session"].get("expires_in"):
-        expires_at = ts + float(body["session"]["expires_in"])
+        expires_at = now + float(body["session"]["expires_in"])
     else:
-        expires_at = ts + float(os.getenv("USH_BEARER_TTL_HINT") or DEFAULT_BEARER_TTL_HINT)
+        expires_at = now + float(os.getenv("USH_BEARER_TTL_HINT") or DEFAULT_BEARER_TTL_HINT)
+    return BearerSession(access_token=token, expires_at=expires_at, issued_at=now)
 
-    return BearerSession(access_token=token, expires_at=expires_at, issued_at=ts)
+
+def _raise_auth_failure(code: int, body: dict[str, Any]) -> None:
+    detail = str(body.get("detail") or body.get("error") or code)
+    if code in {401, 403} and "revok" in detail.lower():
+        raise UshIdentityError("USH_IDENTITY_REVOKED", detail[:80])
+    if code >= 400:
+        raise UshIdentityError("USH_IDENTITY_RENEWAL_FAILED", f"{code}:{detail[:80]}")
+
+
+def platform_workload_token() -> str:
+    """Cloud/platform workload token for live USH POST /v1/auth/workload.
+
+    Live USH (2026-09) requires JSON field ``workload_token`` (IMDS / managed-identity JWT).
+    Ed25519 assertions remain supported for test fakes and future USH upgrades.
+    """
+    for key in ("USH_PLATFORM_WORKLOAD_TOKEN", "CLOUD_WORKLOAD_TOKEN", "DO_WORKLOAD_TOKEN"):
+        val = (os.getenv(key) or "").strip()
+        if val:
+            return val
+    path = Path(os.getenv("USH_PLATFORM_WORKLOAD_TOKEN_FILE") or "")
+    if path.is_file():
+        return path.read_text(encoding="utf-8").strip()
+    return ""
+
+
+def resume_bearer(
+    session: BearerSession,
+    *,
+    now: float | None = None,
+    base_url: str | None = None,
+    opener: Callable[..., Any] | None = None,
+) -> BearerSession:
+    """Renew an existing short-lived bearer via POST /v1/auth/resume (live USH path)."""
+    ts = float(now if now is not None else time.time())
+    auth = session.access_token
+    headers = {"Authorization": auth if auth.lower().startswith("bearer ") else f"Bearer {auth}"}
+    code, body = _http_json(
+        "POST",
+        f"{(base_url or ush_base_url()).rstrip('/')}/v1/auth/resume",
+        {"reason": "maintenanceos_auto_refresh"},
+        headers=headers,
+        opener=opener,
+    )
+    _raise_auth_failure(code, body)
+    return _parse_bearer_body(body, now=ts)
+
+
+def exchange_workload_bearer(
+    identity: WorkloadIdentity,
+    *,
+    now: float | None = None,
+    base_url: str | None = None,
+    opener: Callable[..., Any] | None = None,
+) -> BearerSession:
+    """Mint a short-lived USH bearer.
+
+    Order:
+      1. Platform ``workload_token`` (live USH control plane)
+      2. Ed25519 signed assertion (tests / future USH EdDSA support)
+    """
+    ts = float(now if now is not None else time.time())
+    base = (base_url or ush_base_url()).rstrip("/")
+
+    platform = platform_workload_token()
+    if platform:
+        code, body = _http_json(
+            "POST",
+            f"{base}/v1/auth/workload",
+            {
+                "workload_token": platform,
+                "principal_id": identity.principal_id,
+                "project": identity.project,
+                "environment": identity.environment,
+                "tenant": identity.tenant,
+                "kind": "application",
+            },
+            opener=opener,
+        )
+        _raise_auth_failure(code, body)
+        return _parse_bearer_body(body, now=ts)
+
+    assertion = build_assertion(identity, now=ts)
+    payload = {
+        "principal_id": identity.principal_id,
+        "project": identity.project,
+        "environment": identity.environment,
+        "tenant": identity.tenant,
+        "kind": "application",
+        "delivery_mode": "workload_identity",
+        "key_id": identity.key_id,
+        "public_key": identity.public_key_b64,
+        "assertion": assertion["assertion"],
+        "assertion_payload": assertion["payload"],
+        "signature": assertion["signature"],
+        # Live USH currently keys off workload_token; assertion retained for compatible fakes.
+        "workload_token": assertion["assertion"],
+    }
+    code, body = _http_json(
+        "POST",
+        f"{base}/v1/auth/workload",
+        payload,
+        opener=opener,
+    )
+    _raise_auth_failure(code, body)
+    return _parse_bearer_body(body, now=ts)
+
+
+def seed_ephemeral_bearer(
+    access_token: str,
+    *,
+    expires_at: float | None = None,
+    expires_in: float | None = None,
+    directory: Path | None = None,
+    now: float | None = None,
+) -> BearerSession:
+    """Cache a short-lived bearer from bootstrap/register — never as USH_WORKLOAD_TOKEN."""
+    ts = float(now if now is not None else time.time())
+    if expires_at is None:
+        ttl = float(expires_in if expires_in is not None else (os.getenv("USH_BEARER_TTL_HINT") or DEFAULT_BEARER_TTL_HINT))
+        expires_at = ts + ttl
+    session = BearerSession(access_token=access_token.strip(), expires_at=float(expires_at), issued_at=ts)
+    save_bearer_cache(session, directory)
+    return session
 
 
 class IdentityRuntime:
@@ -446,14 +533,32 @@ class IdentityRuntime:
             if session and session.valid(now, skew=self.refresh_skew):
                 self._memory_bearer = session
                 return session.access_token
-            # Expired or missing — single-flight renew from durable key (no human).
+            # Near/past expiry — prefer resume (live USH), then mint via platform token / assertion.
             try:
-                session = exchange_workload_bearer(
-                    identity,
-                    now=now,
-                    base_url=self.base_url,
-                    opener=self.opener,
-                )
+                if session and session.access_token:
+                    try:
+                        session = resume_bearer(
+                            session,
+                            now=now,
+                            base_url=self.base_url,
+                            opener=self.opener,
+                        )
+                    except UshIdentityError as resume_exc:
+                        if resume_exc.code == "USH_IDENTITY_REVOKED":
+                            raise
+                        session = exchange_workload_bearer(
+                            identity,
+                            now=now,
+                            base_url=self.base_url,
+                            opener=self.opener,
+                        )
+                else:
+                    session = exchange_workload_bearer(
+                        identity,
+                        now=now,
+                        base_url=self.base_url,
+                        opener=self.opener,
+                    )
             except UshIdentityError as exc:
                 self._memory_bearer = None
                 clear_bearer_cache(self.directory)

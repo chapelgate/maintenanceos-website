@@ -76,5 +76,19 @@
     "where_to_enter": "Cursor Cloud Agent environment secrets for environment https://cursor.com/dashboard/cloud-agents/environments/e/69e354a8-aed0-11f1-bf4b-42ffb4d10ea7 \u2014 add USH_BOOTSTRAP_TOKEN (preferred) OR USH_WORKLOAD_TOKEN for principal maintenanceos-v1-pilot. Source the value from USH admin on chapelgate-ush-1 (Estate bootstrap), not from chat/Git/PR. Do NOT add DIGITALOCEAN_TOKEN.",
     "after_inject": "Agent will register/confirm maintenanceos-v1-pilot, add least-privilege policy for digitalocean/twilio/resend on project=maintenanceos only, write USH_WORKLOAD_TOKEN to /tmp/mos-secrets (mode 600), validate with redacted health/gates, then continue DO provision + N=2."
   },
-  "pr57_status": "draft/open \u2014 not merged to main"
+  "pr57_status": "MERGED as c3f53dc20c4e97aa3858f895d593fbc21cf5e1c3",
+  "live_workload_protocol": {
+    "post_v1_auth_workload": "requires workload_token field",
+    "empty_body": "400 workload_token_required",
+    "dummy_token": "401 invalid_workload_identity",
+    "ed25519_assertion_alone": "not accepted by live USH (2026-09-19)",
+    "mos_adaptation": "resume_first + platform_workload_token + ed25519_fallback"
+  },
+  "lane_a_deploy": {
+    "service": "maintenanceos-redteam-v2",
+    "commit": "c3f53dc20c4e97aa3858f895d593fbc21cf5e1c3",
+    "deploy_id": "dep-dan70r3tqb8s73arh4b0",
+    "status": "live_closed_mode",
+    "twilio_auth_token_present": false
+  }
 }
