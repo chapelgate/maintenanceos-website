@@ -45,7 +45,7 @@ from render_inventory import (  # noqa: E402
 )
 
 CANONICAL_REPO = "https://github.com/chapelgate/maintenanceos-v1-pilot"
-DEFAULT_BRANCH = os.getenv("N2_DEPLOY_BRANCH", "cursor/n2-live-concurrency-e283")
+DEFAULT_BRANCH = os.getenv("N2_DEPLOY_BRANCH", "main")
 ROLLBACK_FILE = ROOT / "docs" / "concurrency_100_evidence" / "n2-rollback-point.json"
 PREFLIGHT_FILE = ROOT / "docs" / "concurrency_100_evidence" / "n2-preflight.json"
 
@@ -53,13 +53,46 @@ PREFLIGHT_FILE = ROOT / "docs" / "concurrency_100_evidence" / "n2-preflight.json
 OPEN_CALL_ENV = {
     "ENABLE_REALTIME_VOICE": "true",
     "ENABLE_PUBLIC_PROVIDER_INGRESS": "true",
-    "VOICE_PROVIDER": "gemini",
+    # Preserve the already-validated runtime provider. N=2 must not silently
+    # switch from OpenAI to Gemini (or vice versa) during a deployment.
     "VERIFY_TWILIO_SIGNATURES": "true",
-    "GLOBAL_MAX_CONCURRENT_CALLS": "100",
-    "PER_CLIENT_MAX_CONCURRENT_CALLS": "100",
-    # Kill-switch: ~$50/hr planning budget keeps N=2 safe and rejects runaway admits.
+    # This script is specifically the N=2 gate. Higher stages raise capacity
+    # only after N=2 has passed.
+    "GLOBAL_MAX_CONCURRENT_CALLS": "2",
+    "PER_CLIENT_MAX_CONCURRENT_CALLS": "2",
+    # Kill-switch: planning budget guard; N=2 remains the actual live limit.
     "CAPACITY_MAX_HOURLY_BURN_USD": "50",
 }
+
+PROTECTED_ENV_KEYS = {
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "TWILIO_ACCOUNT_SID",
+    "TWILIO_AUTH_TOKEN",
+    "TWILIO_PHONE_NUMBER",
+    "RESEND_API_KEY",
+    "DATABASE_URL",
+}
+
+
+def _env_presence(client: RenderClient, service_id: str) -> dict[str, bool]:
+    """Return protected credential presence only; never return secret values."""
+    env = client.env_vars(service_id)
+    return {key: bool((env.get(key) or "").strip()) for key in sorted(PROTECTED_ENV_KEYS)}
+
+
+def _assert_protected_env_preserved(
+    before: dict[str, bool],
+    after: dict[str, bool],
+) -> None:
+    """Fail closed if any credential present before mutation disappears."""
+    lost = sorted(key for key, present in before.items() if present and not after.get(key, False))
+    if lost:
+        raise RenderInventoryError(
+            "protected Render env key(s) disappeared during per-key mutation: "
+            + ", ".join(lost)
+            + ". Refusing deploy; collection-level env replacement is prohibited."
+        )
 
 
 def _git_sha() -> str:
@@ -175,12 +208,16 @@ def apply_deploy(client: RenderClient, report: dict[str, Any], *, branch: str, r
 
     # Opening public ingress runs render_prepare Twilio mutation at boot.
     # Missing TWILIO_AUTH_TOKEN → ProviderWebhookError → non-zero exit → update_failed.
+    # Check this before any extra Render API reads so the fail-closed contract remains
+    # deterministic and testable even with a minimal client.
     env_creds = ((report.get("env") or {}).get("credentials_present") or {})
     if not env_creds.get("TWILIO_AUTH_TOKEN"):
         raise RenderInventoryError(
             "TWILIO_AUTH_TOKEN absent on target service — refuse opening call window "
             "(open ingress would fail closed at boot). Restore token via estate/USH, not chat."
         )
+
+    protected_before = _env_presence(client, service_id)
 
     if retarget:
         # Clear rootDir so Dockerfile at repo root is used (not jobs/maintenanceos).
@@ -197,6 +234,20 @@ def apply_deploy(client: RenderClient, report: dict[str, Any], *, branch: str, r
 
     for key, value in OPEN_CALL_ENV.items():
         client.put_env_var(service_id, key, value)
+
+    # Render's collection-level env PUT replaces the whole environment and
+    # previously wiped Twilio/Resend credentials. We only use per-key PUTs,
+    # then prove no protected key that existed beforehand was lost.
+    protected_after = _env_presence(client, service_id)
+    try:
+        _assert_protected_env_preserved(protected_before, protected_after)
+    except RenderInventoryError:
+        for key, value in {
+            "ENABLE_REALTIME_VOICE": "false",
+            "ENABLE_PUBLIC_PROVIDER_INGRESS": "false",
+        }.items():
+            client.put_env_var(service_id, key, value)
+        raise
 
     deploy = client.trigger_deploy(service_id)
     health = _wait_health(want_capacity=True)
