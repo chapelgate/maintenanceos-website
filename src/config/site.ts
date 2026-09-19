@@ -32,7 +32,7 @@ export const siteConfig = {
 /** Conversion forms — always render via LeadCaptureForm. See docs/FORM_ENDPOINT_CONTRACT.md. */
 export type LeadType = "launch_list" | "early_demo" | "contact";
 
-/** Industry nav — labels are *OS product line names. */
+/** Industry nav — *OS product line names. */
 export const industries = [
   { slug: "landlords", label: "LandlordOS" },
   { slug: "letting-agents", label: "LettingAgentOS" },
