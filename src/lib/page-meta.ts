@@ -74,6 +74,7 @@ export function industryRoleMetadata(
     | {
         slug: string;
         label: string;
+        productName?: string;
         metaDescription: string;
       }
     | undefined,
@@ -82,12 +83,12 @@ export function industryRoleMetadata(
     return contentPageMetadata({
       title: "Industries",
       description:
-        "Role pages for UK landlords, agents, managers, housing, FM, councils, and holiday lets. Pre-launch.",
+        "Industry OS lines for UK landlords, agents, managers, housing, FM, councils, and holiday lets. Pre-launch.",
       path: "/industries/",
     });
   }
   return contentPageMetadata({
-    title: role.label,
+    title: role.productName ?? role.label,
     description: role.metaDescription,
     path: `/industries/${role.slug}/`,
   });

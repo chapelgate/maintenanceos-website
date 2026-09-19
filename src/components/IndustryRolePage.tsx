@@ -10,10 +10,15 @@ type Props = { role: IndustryRole };
 export function IndustryRolePage({ role }: Props) {
   return (
     <>
-      <PageHero eyebrow="Industries" title={role.title} lede={role.sub} />
+      <PageHero
+        eyebrow={`${role.productName} · Industries`}
+        title={role.title}
+        lede={role.sub}
+      />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <p className="rounded-md border border-border bg-surface px-4 py-3 text-sm text-muted">
-          {honesty}
+          {honesty} Product line: <strong className="text-ink">{role.productName}</strong>{" "}
+          under Chapelgate Technologies.
         </p>
 
         <section className="space-y-3">
@@ -26,7 +31,9 @@ export function IndustryRolePage({ role }: Props) {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-semibold text-ink">How MaintenanceOS fits</h2>
+          <h2 className="text-xl font-semibold text-ink">
+            How {role.productName} fits
+          </h2>
           <ul className="list-disc space-y-2 pl-5 text-muted">
             {role.fits.map((item) => (
               <li key={item}>{item}</li>
@@ -60,7 +67,7 @@ export function IndustryRolePage({ role }: Props) {
           />
           <p className="text-sm text-muted">
             <a href="/industries/" className="text-accent underline">
-              All industries
+              All industry OS lines
             </a>
           </p>
         </section>
