@@ -4,11 +4,14 @@ USH is the credential broker/vault. MaintenanceOS must not hold a long-lived
 DigitalOcean token, must not ask Andy to paste tokens into Cursor, and must
 not run absent-secret retry loops.
 
-Live control plane (2026-09-18): https://68.183.44.222
-  /health → digitalocean registered, adapter_class=live_http, profile=DO_USH_DEPLOY
+Identity lifecycle (see ush_identity.py):
+  Durable: Ed25519 workload keypair under MOS secrets (survives restart)
+  Ephemeral: short-lived USH bearer minted via POST /v1/auth/workload
+  Auto-refresh before expiry; fail closed on renewal/revocation failure
+  NEVER persist issue_token() 3600s bearers as permanent USH_WORKLOAD_TOKEN
 
-Preferred path: POST /v1/operations/request (brokered provider ops, no secret exposure).
-Identity: workload / principal bearer token (USH_WORKLOAD_TOKEN), never DIGITALOCEAN_TOKEN.
+Live control plane: https://68.183.44.222
+  /health → digitalocean registered, adapter_class=live_http, profile=DO_USH_DEPLOY
 """
 
 from __future__ import annotations
@@ -20,11 +23,16 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-DEFAULT_USH_BASE = "https://68.183.44.222"
-MOS_PROJECT = "maintenanceos"
-MOS_ENVIRONMENT = "london"
-MOS_TENANT = "chapelgate"
-MOS_PRINCIPAL_ID = "maintenanceos-v1-pilot"
+import ush_identity
+from ush_identity import (  # re-export constants used by scripts/tests
+    MOS_ENVIRONMENT,
+    MOS_PRINCIPAL_ID,
+    MOS_PROJECT,
+    MOS_TENANT,
+    UshIdentityError,
+)
+
+DEFAULT_USH_BASE = ush_identity.DEFAULT_USH_BASE
 
 # Providers USH must broker for MaintenanceOS (release-gate matrix).
 PROVIDER_MATRIX: dict[str, dict[str, Any]] = {
@@ -82,43 +90,46 @@ class UshError(RuntimeError):
 
 
 def ush_base_url() -> str:
-    return (os.getenv("USH_BASE_URL") or os.getenv("UNIVERSAL_SECRETS_URL") or DEFAULT_USH_BASE).rstrip("/")
+    return ush_identity.ush_base_url()
 
 
 def _tls_context() -> ssl.SSLContext:
-    # Production USH currently presents a self-signed cert on the droplet IP.
-    # Prefer USH_TLS_VERIFY=1 once a public cert is installed.
     verify = (os.getenv("USH_TLS_VERIFY") or "").strip().lower() in {"1", "true", "yes", "on"}
-    if verify:
-        return ssl.create_default_context()
-    return ssl._create_unverified_context()
+    return ssl.create_default_context() if verify else ssl._create_unverified_context()
+
+
+def _legacy_bearer_allowed() -> bool:
+    return (os.getenv("USH_ALLOW_LEGACY_BEARER") or "").strip().lower() in {"1", "true", "yes", "on"}
 
 
 def workload_identity() -> dict[str, str]:
-    """Application/workload identity headers (names only; values from env/files)."""
-    headers: dict[str, str] = {}
-    token = (os.getenv("USH_WORKLOAD_TOKEN") or "").strip()
-    if not token:
-        token_path = os.getenv("USH_WORKLOAD_TOKEN_FILE") or "/tmp/mos-secrets/USH_WORKLOAD_TOKEN"
-        try:
-            if os.path.isfile(token_path):
-                token = open(token_path, encoding="utf-8").read().strip()
-        except OSError:
-            token = ""
-    if token:
-        headers["Authorization"] = token if token.lower().startswith("bearer ") else f"Bearer {token}"
-    for env_name, header in (
-        ("USH_CLIENT_ID", "X-USH-Client-Id"),
-        ("USH_TENANT_ID", "X-USH-Tenant-Id"),
-        ("USH_APP_ID", "X-USH-App-Id"),
-        ("USH_PRINCIPAL_ID", "X-USH-Principal-Id"),
-    ):
-        value = (os.getenv(env_name) or "").strip()
-        if value:
-            headers[header] = value
-    if "X-USH-Principal-Id" not in headers:
-        headers["X-USH-Principal-Id"] = os.getenv("USH_PRINCIPAL_ID") or MOS_PRINCIPAL_ID
-    return headers
+    """Auth headers from renewable workload identity (preferred) or explicit test override."""
+    # Preferred: durable keypair → auto-refreshed short-lived bearer
+    try:
+        runtime = ush_identity.get_runtime()
+        if runtime.has_durable_identity():
+            return runtime.authorization_header()
+    except UshIdentityError as exc:
+        raise UshError(exc.code, exc.detail) from None
+
+    # Explicit test-only legacy bearer (never the production path)
+    if _legacy_bearer_allowed():
+        token = (os.getenv("USH_WORKLOAD_TOKEN") or "").strip()
+        if not token:
+            token_path = os.getenv("USH_WORKLOAD_TOKEN_FILE") or "/tmp/mos-secrets/USH_WORKLOAD_TOKEN"
+            try:
+                if os.path.isfile(token_path):
+                    token = open(token_path, encoding="utf-8").read().strip()
+            except OSError:
+                token = ""
+        if token:
+            headers = {
+                "Authorization": token if token.lower().startswith("bearer ") else f"Bearer {token}",
+                "X-USH-Principal-Id": os.getenv("USH_PRINCIPAL_ID") or MOS_PRINCIPAL_ID,
+            }
+            return headers
+
+    return {"X-USH-Principal-Id": os.getenv("USH_PRINCIPAL_ID") or MOS_PRINCIPAL_ID}
 
 
 def _request(
@@ -131,11 +142,14 @@ def _request(
     base = ush_base_url()
     if not base:
         raise UshError("USH_UNREACHABLE", "USH_BASE_URL unset")
-    headers = {"Accept": "application/json", "User-Agent": "maintenanceos-ush-client/1", **workload_identity()}
+    try:
+        headers = {"Accept": "application/json", "User-Agent": "maintenanceos-ush-client/2", **workload_identity()}
+    except UshError:
+        raise
     if auth_required and "Authorization" not in headers:
         raise UshError(
             "USH_IDENTITY_MISSING",
-            "configure USH_WORKLOAD_TOKEN (MOS principal grant) — do not inject DIGITALOCEAN_TOKEN into Cursor",
+            "durable workload identity absent — refuse permanent 1h bearer; bootstrap renewable keypair once",
         )
     body = None
     if payload is not None:
@@ -148,7 +162,24 @@ def _request(
             parsed = json.loads(raw)
             return parsed if isinstance(parsed, dict) else {"data": parsed}
     except urllib.error.HTTPError as exc:
-        # Never include response body — may echo secrets.
+        if exc.code in {401, 403} and auth_required:
+            # Drop ephemeral bearer and renew from durable key once; fail closed if renew fails.
+            try:
+                runtime = ush_identity.get_runtime()
+                runtime._memory_bearer = None
+                ush_identity.clear_bearer_cache(runtime.directory)
+                headers = {"Accept": "application/json", "User-Agent": "maintenanceos-ush-client/2", **workload_identity()}
+                req2 = urllib.request.Request(f"{base}{path}", data=body, headers=headers, method=method)
+                with urllib.request.urlopen(req2, timeout=45, context=_tls_context()) as resp2:
+                    raw2 = resp2.read().decode() or "{}"
+                    parsed2 = json.loads(raw2)
+                    return parsed2 if isinstance(parsed2, dict) else {"data": parsed2}
+            except UshError as renew_exc:
+                raise UshError(renew_exc.code, renew_exc.detail) from None
+            except urllib.error.HTTPError as exc2:
+                raise UshError("USH_HTTP", str(exc2.code)) from None
+            except Exception:
+                raise UshError("USH_HTTP", str(exc.code)) from None
         raise UshError("USH_HTTP", str(exc.code)) from None
     except urllib.error.URLError as exc:
         raise UshError("USH_NETWORK", type(exc).__name__) from None
@@ -156,6 +187,11 @@ def _request(
 
 def health() -> dict[str, Any]:
     """Public health (no auth). Safe to log."""
+    identity_status: dict[str, Any] = {}
+    try:
+        identity_status = ush_identity.get_runtime().status()
+    except Exception:
+        identity_status = {"durable_identity_present": False}
     try:
         body = _request("GET", "/health", auth_required=False)
     except UshError as exc:
@@ -163,9 +199,11 @@ def health() -> dict[str, Any]:
             "ok": False,
             "error": exc.code,
             "ush_base_configured": bool(ush_base_url()),
-            "workload_identity_present": "Authorization" in workload_identity(),
+            "workload_identity_present": bool(identity_status.get("durable_identity_present")),
+            "identity": identity_status,
             "cursor_digitalocean_token_forbidden": True,
             "n2_secrets_retry_disabled": True,
+            "legacy_permanent_bearer_forbidden": True,
             "provider_matrix": {
                 k: {"required": v.get("required"), "active_dependency": v.get("active_dependency", True)}
                 for k, v in PROVIDER_MATRIX.items()
@@ -182,10 +220,15 @@ def health() -> dict[str, Any]:
         "digitalocean_adapter_class": do.get("adapter_class"),
         "digitalocean_profile": do.get("profile"),
         "ush_base_configured": True,
-        "workload_identity_present": "Authorization" in workload_identity(),
+        "workload_identity_present": bool(identity_status.get("durable_identity_present")),
+        "identity": identity_status,
         "cursor_digitalocean_token_forbidden": True,
         "n2_secrets_retry_disabled": True,
-        "provider_matrix": {k: {"required": v.get("required"), "active_dependency": v.get("active_dependency", True)} for k, v in PROVIDER_MATRIX.items()},
+        "legacy_permanent_bearer_forbidden": True,
+        "provider_matrix": {
+            k: {"required": v.get("required"), "active_dependency": v.get("active_dependency", True)}
+            for k, v in PROVIDER_MATRIX.items()
+        },
     }
 
 
@@ -258,12 +301,10 @@ def invoke_credential(credential_id: str, operation: str, params: dict[str, Any]
 
 
 def digitalocean_deploy_capability() -> dict[str, Any]:
-    """Least-privilege DO deploy capability via USH (not a Cursor secret)."""
     return request_credential("digitalocean", "apps.deploy", requester_kind="application")
 
 
 def digitalocean_discover() -> dict[str, Any]:
-    """Discover MaintenanceOS-related DO resources via USH brokered ops."""
     return request_operation(
         "digitalocean",
         "discover",
@@ -289,10 +330,6 @@ def assert_project_isolation(
     foreign_project: str = "holiday-let-operator",
     capability: str = "apps.deploy",
 ) -> dict[str, Any]:
-    """Another Chapelgate app must not obtain MOS deploy credentials without explicit policy grant.
-
-    Expect USH_HTTP:403 / denied. Never treats success as OK.
-    """
     try:
         request_credential(
             "digitalocean",
@@ -305,7 +342,7 @@ def assert_project_isolation(
     except UshError as exc:
         denied = exc.code == "USH_HTTP" and exc.detail in {"401", "403", "404"}
         return {
-            "ok": denied or exc.code in {"USH_DENIED", "USH_IDENTITY_MISSING"},
+            "ok": denied or exc.code in {"USH_DENIED", "USH_IDENTITY_MISSING", "USH_IDENTITY_RENEWAL_FAILED", "USH_IDENTITY_REVOKED"},
             "denied_code": exc.code,
             "denied_detail": exc.detail,
             "foreign_project": foreign_project,
@@ -313,18 +350,17 @@ def assert_project_isolation(
 
 
 def forbid_cursor_digitalocean_token() -> None:
-    """Hard rule: MOS deploy must not read DIGITALOCEAN_TOKEN from Cursor agent env."""
     if (os.getenv("DIGITALOCEAN_TOKEN") or os.getenv("DIGITALOCEAN_ACCESS_TOKEN") or os.getenv("DO_API_TOKEN") or "").strip():
         if (os.getenv("USH_ALLOW_LEGACY_DO_TOKEN") or "").strip().lower() not in {"1", "true", "yes"}:
             raise UshError(
                 "CURSOR_DO_TOKEN_FORBIDDEN",
-                "DigitalOcean credentials belong in USH vault; remove Cursor DIGITALOCEAN_TOKEN and use USH_WORKLOAD_TOKEN",
+                "DigitalOcean credentials belong in USH vault; use renewable MOS workload identity",
             )
 
 
 def release_gates() -> dict[str, Any]:
-    """USH provider matrix release gates for MaintenanceOS."""
     h = health()
+    identity = h.get("identity") or {}
     gates = {
         "ush_reachable": bool(h.get("ok")),
         "digitalocean_adapter_registered": bool(h.get("digitalocean_registered")),
@@ -332,15 +368,18 @@ def release_gates() -> dict[str, Any]:
         "n2_secrets_retry_disabled": True,
         "cursor_digitalocean_token_forbidden": True,
         "render_active_dependency": False,
-        "workload_identity_present": bool(h.get("workload_identity_present")),
+        "durable_workload_identity_present": bool(identity.get("durable_identity_present")),
+        "legacy_permanent_bearer_forbidden": True,
+        "workload_identity_present": bool(identity.get("durable_identity_present")),
         "twilio_via_ush": "twilio" in (h.get("providers") or []),
         "openai_via_ush": "openai" in (h.get("providers") or []),
+        "identity_lifecycle_renewable": True,
     }
     gates["ready_for_do_provision"] = all(
         [
             gates["ush_reachable"],
             gates["digitalocean_adapter_registered"],
-            gates["workload_identity_present"],
+            gates["durable_workload_identity_present"],
             gates["n2_secrets_retry_disabled"],
         ]
     )

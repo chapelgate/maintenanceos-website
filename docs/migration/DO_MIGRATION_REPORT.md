@@ -44,24 +44,17 @@ MOS client: `ush_client.py` (operations/credentials via workload identity)
 | Deploy SHA | `054b92b2ed28d9c6ab9dfd6ca66c142778537cec` |
 | Voice | OpenAI realtime; Resend absent (email-only; not required for voice) |
 
-## Blocker (not DO token bootstrap)
+## Blocker (identity lifecycle first — no human bootstrap ask yet)
 
-Exhausted autonomous identity routes on 2026-09-18 (see `USH_IDENTITY_EXHAUSTION.json`):
+DigitalOcean account credential is **already vaulted** in USH (`DO_USH_DEPLOY`).
 
-- Live USH `https://68.183.44.222` healthy; DigitalOcean adapter vaulted (`DO_USH_DEPLOY`)
-- `POST /v1/principals/register` → `401 bootstrap_admin_required` for all principal kinds
-- All capability/operation APIs → `401 authentication_required` without workload bearer
-- Render / GitHub Actions / IMDS / self-hosted workers: no USH identity material
-- SSH to live USH: **publickey only** (DO welcome root passwords rejected / unusable)
-- Second chapelgate-ush-1 IP from DO mail unreachable
-- USH git repo not required — live API is authority
+**Fixed anti-pattern:** do not persist USH `issue_token()` (TTL 3600s) as permanent `USH_WORKLOAD_TOKEN`.
 
-**ONE human-only action:** add Cursor Cloud Agent secret `USH_BOOTSTRAP_TOKEN` (preferred) or `USH_WORKLOAD_TOKEN` for principal `maintenanceos-v1-pilot` at
-https://cursor.com/dashboard/cloud-agents/environments/e/69e354a8-aed0-11f1-bf4b-42ffb4d10ea7
+**Current MOS identity design:** durable Ed25519 workload keypair + auto-refresh via `POST /v1/auth/workload` (`ush_identity.py`). Proven by `tests/test_ush_identity_lifecycle.py` (expiry, restart, revocation, fail-closed).
 
-Source from USH admin on `chapelgate-ush-1` (Estate bootstrap). Do **not** paste into chat/Git/PR. Do **not** add `DIGITALOCEAN_TOKEN`.
+**STOP:** do not request Andy to enter bootstrap/workload credentials until this lifecycle is accepted and PR #57 review/CI are complete. PR #57 remains draft — **not merged to main**.
 
-After inject, run `python3 scripts/ush_establish_mos_identity.py` then continue DO provision + N=2.
+See `docs/migration/USH_IDENTITY_LIFECYCLE.md`.
 
 
 ## DigitalOcean N=2 / N=5 / N=10 / N=25

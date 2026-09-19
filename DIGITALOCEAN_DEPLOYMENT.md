@@ -52,15 +52,12 @@ Do not deploy a dev database as the final production store because the productio
 
 The existing Render validation deployment remains untouched until the DigitalOcean deployment has passed the same or stronger verification. Do not delete or redirect production traffic merely because a DigitalOcean resource exists.
 
-## Secrets / USH (2026-09-18)
+## Secrets / USH (2026-09-19)
 
 - **Do not** inject `DIGITALOCEAN_TOKEN` into Cursor Cloud Agent secrets for MaintenanceOS.
-- DigitalOcean credentials belong in **USH encrypted vault** (`chapelgate/chapelgate-universal-secrets-handler.`).
-- Live USH: `https://68.183.44.222` — `digitalocean` adapter `live_http`, profile `DO_USH_DEPLOY` (**already vaulted**).
-- MaintenanceOS requests DO capabilities via `ush_client.py` + workload identity (`USH_WORKLOAD_TOKEN`).
-- Provisioners: `scripts/provision_do_voice_app.py`, `scripts/ush_do_broker.py` — fail closed without principal grant; no secret-retry loop.
-- Evidence: USH PR #7 recorded vaulted DO + DO write via USH (`USH PASS`). Re-asking Andy for the DO token is forbidden.
-- `n2-secrets-retry` cancelled permanently.
-- Remaining human action: add Cursor secret `USH_BOOTSTRAP_TOKEN` (preferred) or `USH_WORKLOAD_TOKEN` for `maintenanceos-v1-pilot` — sourced from USH admin on chapelgate-ush-1. Do not paste into chat/Git. Do not add `DIGITALOCEAN_TOKEN`. Then run `python3 scripts/ush_establish_mos_identity.py`.
+- DigitalOcean credentials belong in **USH encrypted vault** (`DO_USH_DEPLOY` on `https://68.183.44.222`).
+- MOS identity is a **renewable Ed25519 workload keypair** (`ush_identity.py`), not a permanent copy of USH’s 3600s `issue_token()` bearer.
+- Short-lived USH bearers are minted via `POST /v1/auth/workload` and auto-refreshed before expiry; fail closed on renewal/revocation failure.
+- See `docs/migration/USH_IDENTITY_LIFECYCLE.md`. **Do not merge PR #57** until lifecycle tests stay green.
+- **STOP:** do not request human bootstrap until identity lifecycle is accepted.
 
-See `docs/migration/DO_MIGRATION_REPORT.md`, `docs/migration/USH_PROVIDER_MATRIX.md`, `contrib/ush-digitalocean-adapter/`.

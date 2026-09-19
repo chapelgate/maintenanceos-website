@@ -36,8 +36,10 @@ A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assum
 - Resend is email-only and must not block voice/DO bring-up.
 - N=2 baseline evidence preserved under `docs/concurrency_100_evidence/`.
 - DigitalOcean credentials live in **USH** (`DO_USH_DEPLOY` on `https://68.183.44.222`) — **do not** inject `DIGITALOCEAN_TOKEN` into Cursor.
-- Blocker: MOS principal / `USH_WORKLOAD_TOKEN` grant (USH repo + admin registration), not DO token bootstrap.
-- See `docs/migration/DO_MIGRATION_REPORT.md` and `docs/migration/USH_PROVIDER_MATRIX.md`.
+- MOS→USH identity must be **renewable** (Ed25519 workload key + bearer auto-refresh). Do not store 1h `issue_token` bearers as `USH_WORKLOAD_TOKEN`.
+- See `docs/migration/USH_IDENTITY_LIFECYCLE.md`. Do not merge PR #57 until lifecycle tests remain green.
+- **STOP:** no human bootstrap ask until identity lifecycle is accepted.
+
 
 ## Current Render runtime (must be re-verified each session)
 

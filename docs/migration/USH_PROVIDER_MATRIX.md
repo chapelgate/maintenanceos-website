@@ -16,7 +16,7 @@
 
 1. USH reachable + kill_switch false  
 2. DigitalOcean adapter registered (`live_http`) + vault profile present  
-3. MOS principal `maintenanceos-v1-pilot` granted + `USH_WORKLOAD_TOKEN` available to workers  
+3. MOS durable Ed25519 workload identity present + auto-refresh via `/v1/auth/workload` (never permanent 3600s `issue_token` bearer)  
 4. Cross-project isolation: foreign Chapelgate apps denied MOS DO deploy without explicit policy  
 5. `n2-secrets-retry` permanently disabled  
 6. Cursor Cloud Agent must **not** hold `DIGITALOCEAN_TOKEN`  
