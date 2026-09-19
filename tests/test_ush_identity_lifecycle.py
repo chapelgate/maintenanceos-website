@@ -376,3 +376,81 @@ def test_release_gates_require_durable_identity(fake_ush):
     assert gates["identity_lifecycle_renewable"] is True
     assert gates["durable_workload_identity_present"] is False
     assert gates["ready_for_do_provision"] is False
+
+
+def test_private_key_and_cache_permissions_are_restrictive(fake_ush):
+    state, base, identity_dir, _secrets = fake_ush
+    clock = state.clock
+    _bootstrap_identity(state, identity_dir, base, clock)
+    priv = identity_dir / "private.pem"
+    meta = identity_dir / "identity.json"
+    cache = identity_dir / "bearer.cache.json"
+    assert priv.exists() and meta.exists() and cache.exists()
+    assert (priv.stat().st_mode & 0o777) == 0o600
+    assert (meta.stat().st_mode & 0o777) == 0o600
+    assert (cache.stat().st_mode & 0o777) == 0o600
+    assert (identity_dir.stat().st_mode & 0o777) == 0o700
+
+
+def test_parallel_refresh_is_single_flight(fake_ush):
+    """Concurrent callers near expiry must not stampede USH with duplicate exchanges."""
+    state, base, identity_dir, _secrets = fake_ush
+    clock = state.clock
+    _bootstrap_identity(state, identity_dir, base, clock)
+    runtime = ush_identity.get_runtime(directory=identity_dir, clock=clock, base_url=base, refresh_skew=120)
+    assert runtime.ensure_access_token()
+    exchanges_before = state.exchange_count
+    clock.advance(3600 + 121)
+
+    barrier = threading.Barrier(8)
+    tokens: list[str] = []
+    errors: list[BaseException] = []
+
+    def worker() -> None:
+        try:
+            barrier.wait(timeout=5)
+            tokens.append(runtime.ensure_access_token())
+        except BaseException as exc:  # noqa: BLE001 — collect for assertion
+            errors.append(exc)
+
+    threads = [threading.Thread(target=worker) for _ in range(8)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join(timeout=10)
+        assert not t.is_alive()
+
+    assert not errors
+    assert len(tokens) == 8
+    assert len(set(tokens)) == 1
+    assert state.exchange_count == exchanges_before + 1
+
+
+def test_legacy_permanent_bearer_env_rejected_without_override(fake_ush, monkeypatch):
+    state, base, identity_dir, _secrets = fake_ush
+    clock = state.clock
+    # Durable identity present, but force a stale "permanent" env bearer that must not win.
+    _bootstrap_identity(state, identity_dir, base, clock)
+    monkeypatch.setenv("USH_WORKLOAD_TOKEN", "ush_sess_permanent_should_be_ignored")
+    monkeypatch.delenv("USH_ALLOW_LEGACY_BEARER", raising=False)
+    ush_identity.reset_runtime()
+    runtime = ush_identity.get_runtime(directory=identity_dir, clock=clock, base_url=base, refresh_skew=120)
+    token = runtime.ensure_access_token()
+    assert token.startswith("ush_sess_")
+    assert token != "ush_sess_permanent_should_be_ignored"
+    headers = ush_client.workload_identity()
+    assert "ush_sess_permanent_should_be_ignored" not in headers.get("Authorization", "")
+
+
+def test_revoked_runtime_stays_fail_closed_after_mark(fake_ush):
+    state, base, identity_dir, _secrets = fake_ush
+    clock = state.clock
+    identity = _bootstrap_identity(state, identity_dir, base, clock)
+    runtime = ush_identity.get_runtime(directory=identity_dir, clock=clock, base_url=base, refresh_skew=120)
+    assert runtime.ensure_access_token()
+    state.revoked.add(identity.principal_id)
+    runtime.mark_revoked()
+    with pytest.raises(ush_identity.UshIdentityError) as exc:
+        runtime.ensure_access_token()
+    assert exc.value.code == "USH_IDENTITY_REVOKED"
+    assert not (identity_dir / "bearer.cache.json").exists()

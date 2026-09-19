@@ -35,7 +35,13 @@ revocation → USH denies exchange → MOS fails closed
 3. Process restart + wiped bearer cache → durable key reloads; re-exchange succeeds
 4. USH principal revocation → renewal fails closed
 5. Missing durable identity → fail closed (legacy env bearer ignored)
+6. `private.pem` / `identity.json` / `bearer.cache.json` are mode `0600`; identity dir `0700`
+7. Parallel callers near expiry single-flight refresh (one exchange)
+8. Legacy `USH_WORKLOAD_TOKEN` env cannot override durable renewable identity
 
+## Git hygiene
+
+`.gitignore` excludes `ush-identity/`, `*.pem`, and `USH_WORKLOAD_TOKEN` so durable keys and ephemeral bearers never enter git.
 ## DigitalOcean token
 
 Still vaulted only in USH (`DO_USH_DEPLOY`). Never place in Cursor, GitHub, MOS source, or prompts.

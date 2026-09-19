@@ -14,3 +14,12 @@ evidence/
 *.pyc
 .DS_Store
 .worktrees/
+
+# USH workload identity — never commit key material or ephemeral bearers
+ush-identity/
+**/ush-identity/private.pem
+**/ush-identity/bearer.cache.json
+**/ush-identity/identity.json
+USH_WORKLOAD_TOKEN
+**/USH_WORKLOAD_TOKEN
+*.pem

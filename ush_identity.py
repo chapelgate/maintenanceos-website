@@ -27,6 +27,8 @@ import hashlib
 import json
 import os
 import ssl
+import tempfile
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -137,10 +139,39 @@ def generate_identity(
     )
 
 
+def _ensure_secret_dir(d: Path) -> None:
+    d.mkdir(mode=0o700, parents=True, exist_ok=True)
+    try:
+        os.chmod(d, 0o700)
+    except OSError:
+        pass
+
+
+def _atomic_write_text(path: Path, text: str, *, mode: int = 0o600) -> None:
+    """Write secrets atomically (temp + replace) with restrictive permissions."""
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    fd, tmp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=str(path.parent), text=True)
+    tmp_path = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(text)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.chmod(tmp_path, mode)
+        os.replace(tmp_path, path)
+        os.chmod(path, mode)
+    except Exception:
+        try:
+            tmp_path.unlink(missing_ok=True)
+        except OSError:
+            pass
+        raise
+
+
 def save_identity(identity: WorkloadIdentity, directory: Path | None = None) -> Path:
     """Persist durable key material. Never writes USH bearers here."""
     d = directory if directory is not None else identity_dir()
-    d.mkdir(mode=0o700, parents=True, exist_ok=True)
+    _ensure_secret_dir(d)
     priv_path = d / "private.pem"
     meta_path = d / "identity.json"
     pem = identity.private_key.private_bytes(
@@ -148,8 +179,7 @@ def save_identity(identity: WorkloadIdentity, directory: Path | None = None) -> 
         format=serialization.PrivateFormat.PKCS8,
         encryption_algorithm=serialization.NoEncryption(),
     )
-    priv_path.write_bytes(pem)
-    os.chmod(priv_path, 0o600)
+    _atomic_write_text(priv_path, pem.decode("utf-8"), mode=0o600)
     meta = {
         "principal_id": identity.principal_id,
         "project": identity.project,
@@ -161,8 +191,7 @@ def save_identity(identity: WorkloadIdentity, directory: Path | None = None) -> 
         "kind": "ed25519_workload",
         "note": "Durable MOS→USH trust root. Short-lived USH bearers live only in bearer.cache.json.",
     }
-    meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
-    os.chmod(meta_path, 0o600)
+    _atomic_write_text(meta_path, json.dumps(meta, indent=2) + "\n", mode=0o600)
     return d
 
 
@@ -216,9 +245,10 @@ def load_bearer_cache(directory: Path | None = None) -> BearerSession | None:
 
 def save_bearer_cache(session: BearerSession, directory: Path | None = None) -> None:
     d = directory or identity_dir()
-    d.mkdir(mode=0o700, parents=True, exist_ok=True)
+    _ensure_secret_dir(d)
     path = d / "bearer.cache.json"
-    path.write_text(
+    _atomic_write_text(
+        path,
         json.dumps(
             {
                 "access_token": session.access_token,
@@ -230,9 +260,8 @@ def save_bearer_cache(session: BearerSession, directory: Path | None = None) -> 
             indent=2,
         )
         + "\n",
-        encoding="utf-8",
+        mode=0o600,
     )
-    os.chmod(path, 0o600)
 
 
 def build_assertion(identity: WorkloadIdentity, *, now: float | None = None, nonce: str | None = None) -> dict[str, Any]:
@@ -391,44 +420,49 @@ class IdentityRuntime:
         self.base_url = base_url
         self._memory_bearer: BearerSession | None = None
         self._revoked = False
+        self._refresh_lock = threading.RLock()
 
     def has_durable_identity(self) -> bool:
         return (self.directory / "private.pem").is_file() and (self.directory / "identity.json").is_file()
 
     def mark_revoked(self) -> None:
-        self._revoked = True
-        self._memory_bearer = None
-        clear_bearer_cache(self.directory)
-
-    def ensure_access_token(self) -> str:
-        if self._revoked:
-            raise UshIdentityError("USH_IDENTITY_REVOKED")
-        identity = load_identity(self.directory)
-        if identity is None:
-            raise UshIdentityError(
-                "USH_IDENTITY_MISSING",
-                "durable workload keypair absent — refuse permanent 1h bearer; run identity bootstrap once",
-            )
-        now = float(self.clock())
-        session = self._memory_bearer or load_bearer_cache(self.directory)
-        if session and session.valid(now, skew=self.refresh_skew):
-            self._memory_bearer = session
-            return session.access_token
-        # Expired or missing — renew from durable key (no human).
-        try:
-            session = exchange_workload_bearer(
-                identity,
-                now=now,
-                base_url=self.base_url,
-                opener=self.opener,
-            )
-        except UshIdentityError:
+        with self._refresh_lock:
+            self._revoked = True
             self._memory_bearer = None
             clear_bearer_cache(self.directory)
-            raise
-        self._memory_bearer = session
-        save_bearer_cache(session, self.directory)
-        return session.access_token
+
+    def ensure_access_token(self) -> str:
+        with self._refresh_lock:
+            if self._revoked:
+                raise UshIdentityError("USH_IDENTITY_REVOKED")
+            identity = load_identity(self.directory)
+            if identity is None:
+                raise UshIdentityError(
+                    "USH_IDENTITY_MISSING",
+                    "durable workload keypair absent — refuse permanent 1h bearer; run identity bootstrap once",
+                )
+            now = float(self.clock())
+            session = self._memory_bearer or load_bearer_cache(self.directory)
+            if session and session.valid(now, skew=self.refresh_skew):
+                self._memory_bearer = session
+                return session.access_token
+            # Expired or missing — single-flight renew from durable key (no human).
+            try:
+                session = exchange_workload_bearer(
+                    identity,
+                    now=now,
+                    base_url=self.base_url,
+                    opener=self.opener,
+                )
+            except UshIdentityError as exc:
+                self._memory_bearer = None
+                clear_bearer_cache(self.directory)
+                if exc.code == "USH_IDENTITY_REVOKED":
+                    self._revoked = True
+                raise
+            self._memory_bearer = session
+            save_bearer_cache(session, self.directory)
+            return session.access_token
 
     def authorization_header(self) -> dict[str, str]:
         token = self.ensure_access_token()
