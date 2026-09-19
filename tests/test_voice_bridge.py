@@ -236,6 +236,32 @@ def test_twiml_builders_escape_stream_bind_and_transfer(monkeypatch):
     assert 'voice="Polly.Amy"' in twiml
 
 
+def test_alleygate_prompt_matches_live_business_rules():
+    prompt = voice_bridge.SYSTEM_PROMPT
+    assert "Hi, thank you for calling Chapel Gate. How can we help you today?" in prompt
+    assert "Never ask for the postcode of an alley gate" in prompt
+    assert "www.alleygates.co.uk" in prompt
+    assert "£22 including VAT and recorded delivery" in prompt
+    assert "Do not tell them to get the key from a landlord" in prompt
+    assert "Never mention master-key details unless the caller explicitly asks for a master key" in prompt
+
+
+def test_gate_emergency_hands_to_chapelgate_without_generic_999_safety_flag():
+    escalate, reason, flags = voice_bridge.requires_immediate_human_escalation(
+        "The alley gate is jammed shut and this is an emergency"
+    )
+    assert escalate
+    assert reason == "gate_emergency_handoff"
+    assert flags == []
+
+
+def test_routine_gate_fault_does_not_force_emergency_handoff():
+    escalate, _reason, _flags = voice_bridge.requires_immediate_human_escalation(
+        "The alley gate lock is broken but nobody is in danger"
+    )
+    assert not escalate
+
+
 def test_voice_escalation_keeps_deterministic_safety_authority():
     escalate, reason = requires_human_escalation("I can smell gas by the boiler")
     assert escalate
@@ -260,6 +286,12 @@ def test_realtime_session_configures_input_transcription(monkeypatch):
     assert session["audio"]["input"]["format"] == {"type": "audio/pcmu"}
     assert session["audio"]["input"]["transcription"]["model"]
     assert session["audio"]["output"] == {"format": {"type": "audio/pcmu"}, "voice": "alloy"}
+    assert session["audio"]["input"]["turn_detection"] == {
+        "type": "semantic_vad",
+        "eagerness": "high",
+        "create_response": True,
+        "interrupt_response": True,
+    }
     assert session["tools"] == []
     assert session["tool_choice"] == "none"
     assert "backend deterministic safety engine has final authority" in session["instructions"]

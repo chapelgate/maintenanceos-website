@@ -8,7 +8,6 @@ import voice_bridge as openai_voice
 from gemini_voice import gemini_ready, handle_gemini_media_stream
 from security import app_secret_ready
 from tenant_security import isolated_voice_tenant_ready
-from models import SessionLocal
 from webhook_security import dedicated_test_number_ready, public_provider_ingress_ready
 
 SUPPORTED_PROVIDERS = {"openai", "gemini"}
@@ -28,7 +27,7 @@ def provider_ready() -> bool:
         and dedicated_test_number_ready()
         and os.getenv("VERIFY_TWILIO_SIGNATURES", "false").lower() == "true"
         and app_secret_ready()
-        and isolated_voice_tenant_ready(lambda: SessionLocal())
+        and isolated_voice_tenant_ready(lambda: openai_voice.SessionLocal())
     )
     if not common:
         return False

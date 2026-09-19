@@ -24,13 +24,12 @@ from readiness import report as readiness_report
 from call_capacity import CapacityRejected, admit_call, capacity_snapshot, release_call_lease
 from voice_bridge import (
     create_call_session,
-    handle_twilio_media_stream,
     inbound_fallback_twiml,
     inbound_stream_twiml,
     record_call_interruption,
     record_stream_status,
-    voice_ready,
 )
+from provider_runtime import handle_provider_media_stream, provider_ready
 load_dotenv()
 app=FastAPI(title="MaintenanceOS V1 Pilot",docs_url=None,redoc_url=None,openapi_url=None)
 init_db()
@@ -398,7 +397,7 @@ async def voice_inbound(request:Request):
             inbound_fallback_twiml("All lines are currently busy. Please try again shortly."),
             media_type="application/xml",
         )
-    if not voice_ready():
+    if not provider_ready():
         release_call_lease(call_sid=call_sid, call_session_id=call_session_id)
         with suppress(Exception):
             record_call_interruption(call_session_id,"voice_not_ready")
@@ -424,7 +423,7 @@ async def voice_stream_status(request:Request):
 
 @app.websocket("/voice/media-stream")
 async def voice_media_stream(websocket:WebSocket):
-    await handle_twilio_media_stream(websocket)
+    await handle_provider_media_stream(websocket)
 
 @app.post("/identity/postcode")
 async def identity_postcode(request:Request,client_id=Depends(require_internal_api)):
