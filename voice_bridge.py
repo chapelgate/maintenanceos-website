@@ -689,6 +689,19 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         stream_sid = str(start.get("streamSid") or "")
         openai_ws = await _connect_openai(f"maintenanceos-voice-call-{call_session_id}")
         await _configure_realtime(openai_ws)
+        # The phone line is answered immediately by Twilio. Proactively create the
+        # first assistant turn so callers hear a greeting instead of dead air.
+        await openai_ws.send(json.dumps({
+            "type": "response.create",
+            "response": {
+                "instructions": (
+                    "Greet the caller now exactly: "
+                    "Hi, thank you for calling Chapel Gate. How can we help you today? "
+                    "Then wait for the caller to reply."
+                )
+            },
+        }))
+        operational_event("openai_initial_greeting_requested", transport="openai", outcome="requested")
 
         seen_sequences = set()
         transcript_parts = {}
@@ -696,7 +709,10 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         assistant_audio = []
         assistant_audio_bytes = 0
         assistant_text_validated = False
-        turn_cleared = False
+        # There is no caller transcript before the initial greeting. Treat the
+        # greeting as a cleared turn so policy-validated greeting audio can flow.
+        # Any caller speech immediately flips this back to False below.
+        turn_cleared = True
         turn_number = 0
         transcription_watchdog = None
         last_output_item = None

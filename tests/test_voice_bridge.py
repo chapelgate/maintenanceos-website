@@ -290,6 +290,28 @@ def test_connected_start_media_stop_and_duplicate_media(monkeypatch):
     assert not [item for item in observations if item[0] == "interrupt"]
 
 
+def test_initial_greeting_is_requested_and_reaches_twilio_without_caller_speech(monkeypatch):
+    audio = base64.b64encode(b"a" * 160).decode()
+    events = connected_start_events() + [
+        ({"event": "stop", "sequenceNumber": "3", "stop": {"callSid": "CA-test"}}, 0.05),
+    ]
+    greeting = "Hi, thank you for calling Chapel Gate. How can we help you today?"
+    openai = FakeOpenAI([
+        {"type": "response.output_audio.delta", "item_id": "greeting-1", "delta": audio},
+        {"type": "response.output_audio_transcript.done", "item_id": "greeting-1", "transcript": greeting},
+    ])
+    twilio = FakeTwilio(events)
+    configure_bridge(monkeypatch, openai)
+    monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0")
+
+    asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
+
+    response_creates = [item for item in openai.sent if item.get("type") == "response.create"]
+    assert len(response_creates) == 1
+    assert "Hi, thank you for calling Chapel Gate" in response_creates[0]["response"]["instructions"]
+    assert any(item.get("event") == "media" for item in twilio.sent)
+
+
 def test_partial_transcript_is_not_safety_routed_before_completion(monkeypatch):
     monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0.05")
     events = connected_start_events() + [
