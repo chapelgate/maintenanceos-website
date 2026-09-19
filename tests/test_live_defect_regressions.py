@@ -40,7 +40,9 @@ def test_twilio_fallback_uses_uk_language_and_configurable_voice(monkeypatch):
     assert voice_bridge.twilio_tts_voice() == "Polly.Amy"
 
 
-def test_transfer_path_has_no_answer_fallback():
+def test_transfer_path_does_not_inject_second_tts_voice():
     source = voice_bridge._request_live_human_transfer.__code__.co_consts
     joined = " ".join(value for value in source if isinstance(value, str)).casefold()
-    assert "nobody was available" in joined
+    assert "<dial>" in joined
+    assert "<say" not in joined
+    assert "nobody was available" not in joined

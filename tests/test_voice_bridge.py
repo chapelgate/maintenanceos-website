@@ -231,9 +231,10 @@ def test_twiml_builders_escape_stream_bind_and_transfer(monkeypatch):
     assert 'name="call_sid" value="CA-test"' in twiml
     assert "stream_token" in twiml
     assert "<Dial>" not in twiml
-    assert "Thank you for calling Chapel Gate. Goodbye, have a nice day." in twiml
-    assert 'language="en-GB"' in twiml
-    assert 'voice="Polly.Amy"' in twiml
+    # Normal live calls must stay single-voice. Twilio must not inject Polly
+    # after the realtime stream ends.
+    assert "<Say" not in twiml
+    assert "Goodbye, have a nice day." not in twiml
 
 
 def test_alleygate_prompt_matches_live_business_rules():
@@ -285,10 +286,17 @@ def test_realtime_session_configures_input_transcription(monkeypatch):
     session = openai.sent[0]["session"]
     assert session["audio"]["input"]["format"] == {"type": "audio/pcmu"}
     assert session["audio"]["input"]["transcription"]["model"]
-    assert session["audio"]["output"] == {"format": {"type": "audio/pcmu"}, "voice": "alloy"}
+    assert session["audio"]["output"] == {
+        "format": {"type": "audio/pcmu"},
+        "voice": "alloy",
+        "speed": 1.08,
+    }
+    assert session["max_output_tokens"] == 320
     assert session["audio"]["input"]["turn_detection"] == {
-        "type": "semantic_vad",
-        "eagerness": "high",
+        "type": "server_vad",
+        "threshold": 0.5,
+        "prefix_padding_ms": 250,
+        "silence_duration_ms": 300,
         "create_response": True,
         "interrupt_response": True,
     }
@@ -342,6 +350,75 @@ def test_initial_greeting_is_requested_and_reaches_twilio_without_caller_speech(
     assert len(response_creates) == 1
     assert "Hi, thank you for calling Chapel Gate" in response_creates[0]["response"]["instructions"]
     assert any(item.get("event") == "media" for item in twilio.sent)
+
+
+def test_live_handoff_twiml_contains_no_second_tts_voice(monkeypatch):
+    import twilio.rest
+
+    captured = {}
+
+    class FakeCall:
+        def update(self, **kwargs):
+            captured.update(kwargs)
+
+    class FakeCalls:
+        def __call__(self, _sid):
+            return FakeCall()
+
+    class FakeClient:
+        def __init__(self, _sid, _token):
+            self.calls = FakeCalls()
+
+    monkeypatch.setenv("TWILIO_ACCOUNT_SID", "AC-test")
+    monkeypatch.setenv("TWILIO_AUTH_TOKEN", "token")
+    monkeypatch.setenv("TWILIO_HUMAN_TRANSFER_NUMBER", "+441234567890")
+    monkeypatch.setattr(twilio.rest, "Client", FakeClient)
+
+    assert voice_bridge._request_live_human_transfer("CA-test")
+    twiml = captured["twiml"]
+    assert "<Dial>+441234567890</Dial>" in twiml
+    assert "<Say" not in twiml
+    assert "put you through" not in twiml.lower()
+
+
+def test_proactive_handoff_language_is_suppressed_and_corrected(monkeypatch):
+    audio = base64.b64encode(b"a" * 160).decode()
+    greeting = "Hi, thank you for calling Chapel Gate. How can we help you today?"
+    openai = FakeOpenAI([
+        {"type": "response.output_audio.delta", "item_id": "greet", "delta": audio},
+        {"type": "response.output_audio_transcript.done", "item_id": "greet", "transcript": greeting},
+        {
+            "type": "conversation.item.input_audio_transcription.completed",
+            "item_id": "in-routine",
+            "transcript": "The gate number is 943 and the lock is sticking",
+        },
+        {"type": "response.output_audio.delta", "item_id": "bad", "delta": audio},
+        {
+            "type": "response.output_audio_transcript.done",
+            "item_id": "bad",
+            "transcript": "I'll put you through to a member of the team.",
+        },
+        {"type": "response.output_audio.delta", "item_id": "good", "delta": audio},
+        {
+            "type": "response.output_audio_transcript.done",
+            "item_id": "good",
+            "transcript": "Thanks. Can I take your full name and address?",
+        },
+    ])
+    twilio = FakeTwilio(connected_start_events() + [
+        ({"event": "stop", "sequenceNumber": "3", "stop": {"callSid": "CA-test"}}, 0.1),
+    ])
+    configure_bridge(monkeypatch, openai)
+    monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0")
+
+    asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
+
+    corrections = [
+        item for item in openai.sent
+        if item.get("type") == "response.create"
+        and "Do not mention a team member" in item.get("response", {}).get("instructions", "")
+    ]
+    assert corrections
 
 
 def test_dtmf_zero_performs_real_twilio_handoff(monkeypatch):

@@ -36,7 +36,9 @@ SYSTEM_PROMPT = """You are Chapelgate's telephone receptionist for the Alleygate
 Speak natural conversational British English: warm, concise, professional, and human-sounding.
 Start every call with exactly: Hi, thank you for calling Chapel Gate. How can we help you today?
 Listen fully before replying. Ask one useful question at a time. Keep replies short and responsive.
+Normally use one short sentence per turn, and no more than two short sentences unless a required process genuinely needs it.
 Do not leave long silent pauses. When you need a moment, use a brief natural acknowledgement such as "Okay" or "Thanks".
+Never proactively mention a team member, human operator, transfer, or putting the caller through. Only mention a transfer if the caller explicitly asks for a person or the caller describes a genuine gate emergency requiring immediate Chapelgate attention.
 
 ALLEY-GATE REPAIR INTAKE — follow this order:
 1. After the caller explains that it is a gate repair/fault, first take their full name, their own address, and their callback/contact number.
@@ -55,7 +57,7 @@ RESIDENT KEY RULE:
 If the caller asks for "a key", "an alley-gate key", "a resident key", "a replacement key", or otherwise does not explicitly say "master key", treat it as an ordinary resident key enquiry.
 Tell them ordinary resident keys are ordered at www.alleygates.co.uk. The current price is £22 including VAT and recorded delivery.
 Do not tell them to get the key from a landlord, housing association, housing provider, council, or another third party.
-If they cannot use the website or cannot pay online, explain that a Chapelgate team member can arrange another payment method such as cash or bank transfer, and treat that as a human handoff.
+If they cannot use the website or cannot pay online, tell them to email info@alleygates.co.uk so another payment method such as cash or bank transfer can be arranged. Do not offer to transfer the call unless the caller explicitly asks for a person.
 
 MASTER KEY RULE:
 Never mention master-key details unless the caller explicitly asks for a master key or clearly states that they need a restricted organisational master key.
@@ -68,7 +70,7 @@ If asked how long a repair will take, say someone will be able to look at it wit
 For repair/maintenance calls, before ending, briefly read back the important details you collected.
 Never invent bookings, contractor dispatches, notifications, refunds, compensation, private account information, or safety assurances. If you do not know, say so.
 Caller ID is not proof of identity. Do not disclose private resident/property/account information to an unverified caller.
-Do not proactively offer a human unless the caller asks, cannot use the online key route, or the gate issue requires immediate Chapelgate attention.
+Do not proactively offer a human or a transfer. Transfer only when the caller explicitly asks for a person, or when a gate issue requires immediate Chapelgate attention.
 The backend deterministic safety engine has final authority. It remains authoritative for downstream actions."""
 
 ESCALATION_TERMS = [
@@ -237,7 +239,6 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
         f'<Parameter name="stream_token" value="{escape(token)}" />'
         "</Stream>"
         "</Connect>"
-        f'<Say language="{language}" voice="{voice}">Thank you for calling Chapel Gate. Goodbye, have a nice day.</Say>'
         "</Response>"
     )
 
@@ -249,14 +250,12 @@ def _request_live_human_transfer(call_sid: str) -> bool:
     if not call_sid or not transfer_number or not account_sid or not auth_token:
         return False
     from twilio.rest import Client as TwilioClient
-    voice = escape(twilio_tts_voice())
-    language = escape(twilio_tts_language())
+    # Keep transfer audio single-voice: the AI decides whether to announce the
+    # handoff. Twilio itself must not inject a second TTS voice mid-call.
     twiml = (
         '<?xml version="1.0" encoding="UTF-8"?>'
         '<Response>'
-        f'<Say language="{language}" voice="{voice}">One moment while I put you through.</Say>'
         f'<Dial>{escape(transfer_number)}</Dial>'
-        f'<Say language="{language}" voice="{voice}">Sorry, nobody was available. Please call Chapelgate again later.</Say>'
         '</Response>'
     )
     TwilioClient(account_sid, auth_token).calls(call_sid).update(twiml=twiml)
@@ -652,6 +651,9 @@ async def _configure_realtime(openai_ws) -> None:
                     "model": os.getenv("OPENAI_REALTIME_MODEL", "gpt-realtime-2.1"),
                     "instructions": SYSTEM_PROMPT,
                     "output_modalities": ["audio"],
+                    # Shorter turns matter because audited audio is held until the
+                    # matching transcript has been policy-checked.
+                    "max_output_tokens": int(os.getenv("OPENAI_REALTIME_MAX_OUTPUT_TOKENS", "320")),
                     "tools": [],
                     "tool_choice": "none",
                     "audio": {
@@ -659,8 +661,10 @@ async def _configure_realtime(openai_ws) -> None:
                             "format": {"type": "audio/pcmu"},
                             "transcription": {"model": os.getenv("OPENAI_TRANSCRIPTION_MODEL", "gpt-live-transcribe")},
                             "turn_detection": {
-                                "type": "semantic_vad",
-                                "eagerness": "high",
+                                "type": "server_vad",
+                                "threshold": float(os.getenv("OPENAI_VAD_THRESHOLD", "0.5")),
+                                "prefix_padding_ms": int(os.getenv("OPENAI_VAD_PREFIX_MS", "250")),
+                                "silence_duration_ms": int(os.getenv("OPENAI_VAD_SILENCE_MS", "300")),
                                 "create_response": True,
                                 "interrupt_response": True,
                             },
@@ -668,6 +672,7 @@ async def _configure_realtime(openai_ws) -> None:
                         "output": {
                             "format": {"type": "audio/pcmu"},
                             "voice": voice,
+                            "speed": float(os.getenv("OPENAI_REALTIME_SPEED", "1.08")),
                         },
                     },
                 },
@@ -1040,6 +1045,22 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                                 continue
                             await request_transfer("resident_key_contract_failed")
                             return
+
+                    transfer_language = any(phrase in lowered_output for phrase in (
+                        "put you through", "transfer you", "transfer the call",
+                        "member of the team", "team member",
+                        "speak to someone", "speak to a person",
+                    ))
+                    if transfer_language:
+                        if await request_corrected_response(
+                            "Answer the caller directly. Do not mention a team member, human operator, "
+                            "transfer, colleague, or putting the caller through. A transfer may only be "
+                            "mentioned after the caller explicitly asks for a person or for a genuine "
+                            "gate emergency, and those cases are handled deterministically."
+                        ):
+                            continue
+                        await request_transfer("proactive_handoff_language_blocked")
+                        return
 
                     with SessionLocal() as s:
                         cs=s.get(CallSession,call_session_id)
