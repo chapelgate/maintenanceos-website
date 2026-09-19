@@ -138,8 +138,22 @@ def _start_fake_ush(state: FakeUshState) -> tuple[HTTPServer, str]:
                     self._send(401, {"detail": "principal_revoked"})
                     return
                 assertion = body.get("assertion") or ""
+                workload_token = body.get("workload_token") or ""
                 public_key = body.get("public_key") or ""
                 key_id = body.get("key_id") or ""
+                # Live USH accepts platform workload_token; test fake also accepts Ed25519 assertion.
+                if not assertion and not workload_token:
+                    self._send(400, {"detail": "workload_token_required"})
+                    return
+                if workload_token and not assertion:
+                    # Platform token path — mint if principal known or public key registered later
+                    if principal in state.revoked:
+                        self._send(401, {"detail": "principal_revoked"})
+                        return
+                    if principal and principal not in state.registered:
+                        state.registered[principal] = {"public_key": "platform", "key_id": "platform"}
+                    self._send(200, state.issue_token(principal or "platform"))
+                    return
                 if not assertion or not public_key or not key_id:
                     self._send(400, {"detail": "workload_assertion_required"})
                     return
@@ -176,6 +190,26 @@ def _start_fake_ush(state: FakeUshState) -> tuple[HTTPServer, str]:
                     )
                 except Exception:
                     self._send(401, {"detail": "invalid_workload_identity"})
+                    return
+                self._send(200, state.issue_token(principal))
+                return
+
+            if path == "/v1/auth/resume":
+                auth = self.headers.get("Authorization") or ""
+                if not auth.startswith("Bearer ush_sess_"):
+                    self._send(401, {"detail": "authentication_required"})
+                    return
+                token = auth.split(" ", 1)[1]
+                try:
+                    rest = token[len("ush_sess_") :]
+                    principal, count_s, ts_s = rest.rsplit("_", 2)
+                    int(count_s)
+                    int(ts_s)
+                except Exception:
+                    self._send(401, {"detail": "invalid_token"})
+                    return
+                if principal in state.revoked:
+                    self._send(401, {"detail": "principal_revoked"})
                     return
                 self._send(200, state.issue_token(principal))
                 return
@@ -454,3 +488,49 @@ def test_revoked_runtime_stays_fail_closed_after_mark(fake_ush):
         runtime.ensure_access_token()
     assert exc.value.code == "USH_IDENTITY_REVOKED"
     assert not (identity_dir / "bearer.cache.json").exists()
+
+
+def test_resume_path_renews_without_reassertion(fake_ush):
+    state, base, identity_dir, _secrets = fake_ush
+    clock = state.clock
+    _bootstrap_identity(state, identity_dir, base, clock)
+    runtime = ush_identity.get_runtime(directory=identity_dir, clock=clock, base_url=base, refresh_skew=120)
+    first = runtime.ensure_access_token()
+    exchanges_before = state.exchange_count
+    clock.advance(3600 + 121)
+    second = runtime.ensure_access_token()
+    assert second != first
+    # Resume issues a new token (counts as exchange in fake); must not fail closed.
+    assert state.exchange_count >= exchanges_before + 1
+
+
+def test_platform_workload_token_exchange(fake_ush, monkeypatch):
+    state, base, identity_dir, _secrets = fake_ush
+    clock = state.clock
+    identity = ush_identity.generate_identity()
+    ush_identity.save_identity(identity, identity_dir)
+    monkeypatch.setenv("USH_PLATFORM_WORKLOAD_TOKEN", "platform-jwt-for-tests")
+    ush_identity.reset_runtime()
+    runtime = ush_identity.get_runtime(directory=identity_dir, clock=clock, base_url=base, refresh_skew=120)
+    token = runtime.ensure_access_token()
+    assert token.startswith("ush_sess_")
+    assert state.exchange_count >= 1
+
+
+def test_controlled_n2_deploy_refuses_open_window_without_twilio_auth():
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "scripts" / "controlled_n2_deploy.py"
+    spec = importlib.util.spec_from_file_location("controlled_n2_deploy", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    class BoomClient:
+        pass
+
+    report = {"target": {"name": "maintenanceos-redteam-v2", "id": "srv-test"}, "env": {"credentials_present": {"TWILIO_AUTH_TOKEN": False}}}
+    with pytest.raises(mod.RenderInventoryError) as exc:
+        mod.apply_deploy(BoomClient(), report, branch="main", retarget=False)
+    assert "TWILIO_AUTH_TOKEN" in str(exc.value)

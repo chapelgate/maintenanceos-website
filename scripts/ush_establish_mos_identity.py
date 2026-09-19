@@ -232,8 +232,21 @@ def main() -> int:
         return 5
 
     if ephemeral:
+        # Cache register's short-lived bearer ephemerally — never as USH_WORKLOAD_TOKEN.
+        expires_at = None
+        expires_in = None
+        if isinstance(body.get("expires_at"), (int, float)):
+            expires_at = float(body["expires_at"])
+        if isinstance(body.get("expires_in"), (int, float)):
+            expires_in = float(body["expires_in"])
+        ush_identity.seed_ephemeral_bearer(
+            ephemeral,
+            expires_at=expires_at,
+            expires_in=expires_in,
+            directory=IDENTITY_DIR,
+        )
         report["policy"] = _policy_rules(f"Bearer {ephemeral}", boot)
-        # Explicitly discard ephemeral bearer — do not write USH_WORKLOAD_TOKEN.
+        # Drop local copy; durable renewal uses bearer.cache.json + resume/exchange.
         ephemeral = ""
 
     ush_identity.reset_runtime()

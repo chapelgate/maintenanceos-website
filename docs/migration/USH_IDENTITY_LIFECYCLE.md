@@ -39,9 +39,15 @@ revocation → USH denies exchange → MOS fails closed
 7. Parallel callers near expiry single-flight refresh (one exchange)
 8. Legacy `USH_WORKLOAD_TOKEN` env cannot override durable renewable identity
 
-## Git hygiene
+## Live USH protocol note (2026-09-19)
 
-`.gitignore` excludes `ush-identity/`, `*.pem`, and `USH_WORKLOAD_TOKEN` so durable keys and ephemeral bearers never enter git.
+Observed against `https://68.183.44.222`:
+
+- `POST /v1/auth/workload` requires JSON field **`workload_token`** (platform/IMDS JWT). Missing → `400 workload_token_required`.
+- `POST /v1/principals/register` still requires `x-ush-bootstrap-token`.
+- MOS renewal order: valid cache → **`/v1/auth/resume`** → platform `workload_token` exchange → Ed25519 assertion (tests / future USH).
+- Bootstrap register’s 3600s bearer is seeded only into `bearer.cache.json`, never `USH_WORKLOAD_TOKEN`.
+
 ## DigitalOcean token
 
 Still vaulted only in USH (`DO_USH_DEPLOY`). Never place in Cursor, GitHub, MOS source, or prompts.
