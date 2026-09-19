@@ -33,22 +33,38 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Classify expensive PR checks
+      - name: Reject obvious committed private keys and provider secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -nE -- ':!*.example' ':!*.md' '(-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|sk-[A-Za-z0-9_-]{20,}|AC[a-fA-F0-9]{32}|SK[a-fA-F0-9]{32})'; then
+            echo 'Potential secret material found in tracked source.' >&2
+            exit 1
+          fi
+          echo 'No obvious provider/private-key secret patterns found.'
+
+      - name: Classify expensive checks by changed files
         id: changes
         shell: bash
         run: |
           set -euo pipefail
           container_changed=true
           staging_changed=true
+          files=""
 
           if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
             base="${{ github.event.pull_request.base.sha }}"
             head="${{ github.event.pull_request.head.sha }}"
             files="$(git diff --name-only "$base...$head")"
-
             container_changed=false
             staging_changed=false
+          elif [ "${GITHUB_EVENT_NAME}" = "push" ] && [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            files="$(git diff --name-only "${{ github.event.before }}...${{ github.sha }}")"
+            container_changed=false
+            staging_changed=false
+          fi
 
+          if [ -n "$files" ]; then
             if printf '%s\n' "$files" | grep -Eq '^(Dockerfile|requirements\.txt|\.dockerignore|\.github/workflows/cloud-ci\.yml)$'; then
               container_changed=true
             fi
@@ -114,7 +130,7 @@ jobs:
 
   staging-config:
     needs: primary-test
-    if: github.event_name != 'pull_request' || needs.primary-test.outputs.staging_changed == 'true'
+    if: needs.primary-test.outputs.staging_changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -141,7 +157,7 @@ jobs:
 
   container-build:
     needs: primary-test
-    if: github.event_name != 'pull_request' || needs.primary-test.outputs.container_changed == 'true'
+    if: needs.primary-test.outputs.container_changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
