@@ -1,0 +1,25 @@
+---
+description: Permanent GitHub Actions cost + minimum-check discipline
+alwaysApply: true
+---
+
+# GitHub Actions cost discipline
+
+Treat GitHub-hosted jobs as metered compute.
+
+- Dormant/stored code: no scheduled Actions.
+- Prefer event, webhook, relevant code-change, release or manual workflow_dispatch.
+- Batch logically related changes before pushing.
+- Validate locally/in-agent before remote CI where practical.
+- Never create commits merely to trigger CI.
+- Never manually rerun an equivalent CI run that is already queued/running.
+- Add PR concurrency/cancel-in-progress where safe so superseded code does not keep consuming minutes.
+- Use changed-path filters where safe.
+- Fast validation during active PR work; full validation at main/release/dependency/security gates.
+- Never weaken required release/security coverage to save money.
+- No cron/polling "just in case".
+- Live-service uptime checks belong on the cheapest appropriate central monitor, not GitHub Actions, unless GitHub is genuinely required.
+- Autonomous agents wake for real work/events, not merely because a timer expired.
+- Do not raise spend limits to mask inefficient workflow design.
+
+Before every push ask: "Does this push contain enough completed, validated work to justify another CI run?"
