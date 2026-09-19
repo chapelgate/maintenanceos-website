@@ -1,0 +1,197 @@
+{
+  "generated_at": "2026-09-17T00:43:33.482638+00:00",
+  "baseline_main_sha": "9e03f15c5baaecdc266800b241244e61855defcc",
+  "final_sha": "b442e903aae967f8594907eb2f3e07a383ec3db1",
+  "branch": "cursor/concurrency-100-scale-d1b9",
+  "commands": {
+    "ladder_rc": 0,
+    "path_probe_rc": 0,
+    "pytest_rc": 0,
+    "redteam_rc": 0
+  },
+  "gates": {
+    "sim_ladder_100": true,
+    "path_probe_12": true,
+    "pytest_green": true,
+    "redteam_green": true,
+    "cross_leak": false,
+    "recovery_ok": true,
+    "ai_contexts_peak_100": true,
+    "github_actions": "PASS_cloud_ci_and_security_ci_green"
+  },
+  "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+  "live_media_exercised": false,
+  "ladder_summary": [
+    {
+      "target": 1,
+      "pass_gate": true,
+      "peak": 1,
+      "ai_contexts_peak": 1,
+      "unique_ai_contexts": 1,
+      "p95_conn_ms": 12.208,
+      "rss_kb": 67932,
+      "cost_usd_est": 0.1,
+      "bottleneck_class": "provider_quota_next",
+      "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+      "live_media_exercised": false
+    },
+    {
+      "target": 5,
+      "pass_gate": true,
+      "peak": 5,
+      "ai_contexts_peak": 5,
+      "unique_ai_contexts": 5,
+      "p95_conn_ms": 99.42,
+      "rss_kb": 69724,
+      "cost_usd_est": 0.5,
+      "bottleneck_class": "provider_quota_next",
+      "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+      "live_media_exercised": false
+    },
+    {
+      "target": 12,
+      "pass_gate": true,
+      "peak": 12,
+      "ai_contexts_peak": 12,
+      "unique_ai_contexts": 12,
+      "p95_conn_ms": 244.063,
+      "rss_kb": 73180,
+      "cost_usd_est": 1.2,
+      "bottleneck_class": "provider_quota_next",
+      "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+      "live_media_exercised": false
+    },
+    {
+      "target": 25,
+      "pass_gate": true,
+      "peak": 25,
+      "ai_contexts_peak": 25,
+      "unique_ai_contexts": 25,
+      "p95_conn_ms": 651.719,
+      "rss_kb": 76252,
+      "cost_usd_est": 2.5,
+      "bottleneck_class": "provider_quota_next",
+      "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+      "live_media_exercised": false
+    },
+    {
+      "target": 50,
+      "pass_gate": true,
+      "peak": 50,
+      "ai_contexts_peak": 50,
+      "unique_ai_contexts": 50,
+      "p95_conn_ms": 774.684,
+      "rss_kb": 80476,
+      "cost_usd_est": 5.0,
+      "bottleneck_class": "provider_quota_next",
+      "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+      "live_media_exercised": false
+    },
+    {
+      "target": 75,
+      "pass_gate": true,
+      "peak": 75,
+      "ai_contexts_peak": 75,
+      "unique_ai_contexts": 75,
+      "p95_conn_ms": 943.433,
+      "rss_kb": 82628,
+      "cost_usd_est": 7.5,
+      "bottleneck_class": "provider_quota_next",
+      "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+      "live_media_exercised": false
+    },
+    {
+      "target": 100,
+      "pass_gate": true,
+      "peak": 100,
+      "ai_contexts_peak": 100,
+      "unique_ai_contexts": 100,
+      "p95_conn_ms": 1387.465,
+      "rss_kb": 84400,
+      "cost_usd_est": 10.0,
+      "bottleneck_class": "provider_quota_next",
+      "gate_scope": "simulated_admission_db_and_mock_ai_contexts",
+      "live_media_exercised": false
+    }
+  ],
+  "path_probe_summary": [
+    {
+      "target": 1,
+      "accepted": 1,
+      "rejected_busy": 0,
+      "errors": 0,
+      "unique_call_ids": 1,
+      "unique_session_ids": 1,
+      "peak_active": 1,
+      "p95_ms": 75.031,
+      "pass_gate": true,
+      "bottleneck_class": "none"
+    },
+    {
+      "target": 5,
+      "accepted": 5,
+      "rejected_busy": 0,
+      "errors": 0,
+      "unique_call_ids": 5,
+      "unique_session_ids": 5,
+      "peak_active": 5,
+      "p95_ms": 115.068,
+      "pass_gate": true,
+      "bottleneck_class": "none"
+    },
+    {
+      "target": 12,
+      "accepted": 12,
+      "rejected_busy": 0,
+      "errors": 0,
+      "unique_call_ids": 12,
+      "unique_session_ids": 12,
+      "peak_active": 12,
+      "p95_ms": 247.135,
+      "pass_gate": true,
+      "bottleneck_class": "none"
+    }
+  ],
+  "smallest_real_probe": "N=2 live calls only after controlled-call deploy; never 100 chargeable",
+  "rollback": {
+    "procedure": "git checkout main && git reset --hard <baseline_main_sha>; redeploy previous Render/cloud-workers SHA",
+    "baseline_main_sha": "9e03f15c5baaecdc266800b241244e61855defcc",
+    "feature_branch": "cursor/concurrency-100-scale-d1b9"
+  },
+  "remaining_risks": [
+    "Ladder does not open live Twilio media WS or provider Realtime sockets (mock AI contexts only)",
+    "Provider concurrent-call quotas (Twilio / Gemini-or-OpenAI) not validated with live N=2 yet",
+    "Process-local capacity only \u2014 multi-instance requires shared backend when horizontally scaled"
+  ],
+  "verdict": "SIMULATED_ACCEPTANCE_PASS",
+  "complete_blocked_by": [
+    "CONTROLLED-CALL: run smallest real concurrency probe N=2 after isolated deploy (owner-authorised)",
+    "OPTIONAL-NEXT: mocked media duplex load harness still short of live provider sockets"
+  ],
+  "ci": {
+    "head_sha": "8d6fa94820885302d54cdec5576be895a7982f99",
+    "pr_checks": "all 6 green",
+    "runs": [
+      35165004622,
+      35165004632
+    ]
+  },
+  "reconciled_with_main": true,
+  "reconcile_note": "Merged origin/main keepalive/warm (9e03f15) into concurrency branch for N=2 live probe",
+  "n2_branch": "cursor/n2-live-concurrency-e283",
+  "n2_status": "DEPLOYED_PREFLIGHT_PASS_AWAITING_PHYSICAL_CALLS",
+  "updated_at": "2026-09-17T06:31:11Z",
+  "github_actions_after_reconcile": "PASS_cloud_ci_and_security_ci_green",
+  "n2_head_sha": "89c8b5db13d439598c886e305dfb899939d500cc",
+  "local_pytest_after_reconcile": "307_passed",
+  "ci_checked_at": "2026-09-17T01:01:15Z",
+  "n2_live_health": {
+    "ok": true,
+    "realtime_voice": true,
+    "global_limit": 2,
+    "per_client_limit": 2,
+    "draining": false,
+    "estimated_hourly_burn_usd": 0.0
+  },
+  "n2_preflight_ready": true
+}

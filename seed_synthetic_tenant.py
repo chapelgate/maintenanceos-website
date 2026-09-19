@@ -22,4 +22,5 @@ def ensure_synthetic_tenant(session_factory=SessionLocal):
 
 if __name__=="__main__":
     tenant_id=ensure_synthetic_tenant()
+    print("SYNTHETIC_VOICE_TENANT_READY")
     print(f"Synthetic test tenant ready (client id {tenant_id}).")

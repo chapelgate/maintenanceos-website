@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+import threading
 import time
 from contextlib import suppress
 from datetime import datetime
@@ -28,6 +29,7 @@ from operational_logging import operational_event
 from tenant_security import bind_call_to_tenant,call_client_id,configured_voice_client_id,isolated_voice_tenant_ready
 from voice_policy import authorize_model_action,validate_assistant_text,verified_actions_for_work_order
 from webhook_security import dedicated_test_number_ready,public_provider_ingress_ready,validate_twilio_websocket
+from call_capacity import release_call_lease
 
 
 SYSTEM_PROMPT = """You are a UK property maintenance receptionist.
@@ -35,7 +37,9 @@ Speak natural British English and use UK terminology throughout.
 For emergencies, the UK emergency number is 999. Never tell a UK caller to call 911.
 Gather repair details concisely. Do not give safety certification or unsafe DIY instructions.
 Never tell a caller that a possible danger is safe or probably fine.
-If the caller asks for a person, is threatening, raises safeguarding/legal issues, or you are uncertain, escalate.
+Do not proactively offer a human transfer at the start of the call. Handle the enquiry yourself first. If the caller explicitly asks for a person, or is threatening, raises safeguarding/legal issues, or you are uncertain, escalate.
+MASTER KEY RULE: Master keys are restricted and are not ordinary resident keys. Do not say they can be ordered through the resident-key website. Anyone wishing to apply for a master key must email info@alleygates.co.uk from an official organisation or work email address, explaining why the master key is required and providing their full name, role/organisation, postal address, contact number, area/site, and any relevant gate or reference details. This is an application only; approval is not guaranteed. Do not disclose master-key security details or promise eligibility or approval.
+
 Caller ID is not proof of identity. Never claim identity is verified. Unverified callers may report repairs but must not receive property, resident, tenancy, account, access, or repair-history information.
 Ask the caller to confirm their postcode before any property-specific interaction.
 Do not offer payments, refunds, compensation, rent reductions, legal conclusions, or complaint determinations.
@@ -62,6 +66,32 @@ ESCALATION_TERMS = [
 ]
 
 _ACTIVE_CALL_SESSIONS = set()
+_ACTIVE_CALL_LOCK = threading.Lock()
+
+
+def claim_active_call_session(call_session_id: int) -> bool:
+    """Atomically claim an in-process media/AI session slot for this call_session_id."""
+    if not call_session_id:
+        return False
+    with _ACTIVE_CALL_LOCK:
+        if call_session_id in _ACTIVE_CALL_SESSIONS:
+            return False
+        _ACTIVE_CALL_SESSIONS.add(call_session_id)
+        return True
+
+
+def release_active_call_session(call_session_id: int | None) -> None:
+    if not call_session_id:
+        return
+    with _ACTIVE_CALL_LOCK:
+        _ACTIVE_CALL_SESSIONS.discard(call_session_id)
+
+
+def active_call_session_count() -> int:
+    with _ACTIVE_CALL_LOCK:
+        return len(_ACTIVE_CALL_SESSIONS)
+
+
 UNVERIFIED_ACTION_FALLBACK = (
     "The automated response could not be verified. Do not assume that a contractor, "
     "emergency service, human operator, or other person has been contacted. If there is "
@@ -174,8 +204,6 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
     return (
         '<?xml version="1.0" encoding="UTF-8"?>'
         "<Response>"
-        f'<Say language="{language}" voice="{voice}">This call uses an automated assistant and live transcription. '
-        "Say human or press zero at any time to be transferred.</Say>"
         "<Connect>"
         f'<Stream url="{escape(stream_url)}" statusCallback="{escape(status_url)}" statusCallbackMethod="POST">'
         f'<Parameter name="call_session_id" value="{call_session_id}" />'
@@ -183,7 +211,7 @@ def inbound_stream_twiml(call_session_id: int, call_sid: str) -> str:
         f'<Parameter name="stream_token" value="{escape(token)}" />'
         "</Stream>"
         "</Connect>"
-        f'<Say language="{language}" voice="{voice}">Sorry, the call was interrupted before I could finish taking the details. Please call Chapelgate again.</Say>'
+        f'<Say language="{language}" voice="{voice}">Thank you for calling Chapel Gate. Goodbye, have a nice day.</Say>'
         "</Response>"
     )
 
@@ -227,6 +255,9 @@ def create_call_session(call_sid: str, caller: str, client_id: int) -> int:
             s.rollback()
             existing = s.query(CallSession).filter_by(call_sid=call_sid).first()
             if existing:
+                # Must re-check tenant binding — never return a foreign session id.
+                bind_call_to_tenant(s, existing.id, client_id)
+                s.commit()
                 return existing.id
             raise
         return cs.id
@@ -415,76 +446,91 @@ def close_call_session(call_session_id: int) -> None:
         cs = s.query(CallSession).filter_by(id=call_session_id).first()
         if not cs:
             return
-        if cs.ended_at:
-            return
-        client_id=call_client_id(s,cs.id)
-        transcript = cs.transcript.strip()
-        if transcript and not cs.resident_id and not cs.work_order_id:
-            _, fresh = claim_action(
-                s,
-                "VOICE_UNMATCHED_REPORT",
-                cs.call_sid,
-                client_id=client_id,
-            )
-            if fresh:
-                s.add(UnmatchedInbound(
+        if not cs.ended_at:
+            client_id=call_client_id(s,cs.id)
+            transcript = cs.transcript.strip()
+            if transcript and not cs.resident_id and not cs.work_order_id:
+                _, fresh = claim_action(
+                    s,
+                    "VOICE_UNMATCHED_REPORT",
+                    cs.call_sid,
                     client_id=client_id,
-                    channel="VOICE",
-                    participant_hash=cs.caller.removeprefix("sha256:"),
-                    body=transcript,
-                ))
-                _record_call_event(s, cs, "UNMATCHED_VOICE_REPORT_RECORDED", "human review required", cs.call_sid)
-        elif transcript and cs.resident_id and not cs.work_order_id:
-            resident = s.query(Resident).filter_by(id=cs.resident_id).first()
-            if resident and resident.client_id==client_id:
-                cs.work_order_id = create_from_channel(
-                    client_id,
-                    resident.property_id,
-                    resident.id,
-                    "VOICE",
-                    transcript,
-                    participant=cs.caller,
-                    identity_verified=cs.verification_status == "POSTCODE_VERIFIED",
-                    event_key=f"voice:{cs.call_sid}",
                 )
-                for escalation in s.query(Escalation).filter_by(work_order_id=None).all():
-                    try:
-                        payload = json.loads(escalation.reason)
-                    except (TypeError, json.JSONDecodeError):
-                        continue
-                    if payload.get("call_session_id") == cs.id:
-                        escalation.work_order_id = cs.work_order_id
-                for call_event in s.query(CallEvent).filter_by(call_session_id=cs.id).all():
-                    exists = s.query(AuditEvent).filter_by(
-                        work_order_id=cs.work_order_id,
-                        event=call_event.event,
-                        detail=call_event.detail,
-                    ).first()
-                    if not exists:
-                        s.add(AuditEvent(
+                if fresh:
+                    s.add(UnmatchedInbound(
+                        client_id=client_id,
+                        channel="VOICE",
+                        participant_hash=cs.caller.removeprefix("sha256:"),
+                        body=transcript,
+                    ))
+                    _record_call_event(s, cs, "UNMATCHED_VOICE_REPORT_RECORDED", "human review required", cs.call_sid)
+            elif transcript and cs.resident_id and not cs.work_order_id:
+                resident = s.query(Resident).filter_by(id=cs.resident_id).first()
+                if resident and resident.client_id==client_id:
+                    cs.work_order_id = create_from_channel(
+                        client_id,
+                        resident.property_id,
+                        resident.id,
+                        "VOICE",
+                        transcript,
+                        participant=cs.caller,
+                        identity_verified=cs.verification_status == "POSTCODE_VERIFIED",
+                        event_key=f"voice:{cs.call_sid}",
+                    )
+                    for escalation in s.query(Escalation).filter_by(work_order_id=None).all():
+                        try:
+                            payload = json.loads(escalation.reason)
+                        except (TypeError, json.JSONDecodeError):
+                            continue
+                        if payload.get("call_session_id") == cs.id:
+                            escalation.work_order_id = cs.work_order_id
+                    for call_event in s.query(CallEvent).filter_by(call_session_id=cs.id).all():
+                        exists = s.query(AuditEvent).filter_by(
                             work_order_id=cs.work_order_id,
-                            actor="Voice Call Gate",
                             event=call_event.event,
                             detail=call_event.detail,
-                        ))
-                    if call_event.event == "VOICE_ESCALATION_REQUIRED":
-                        try:
-                            payload = json.loads(call_event.detail)
-                        except (TypeError, json.JSONDecodeError):
-                            payload = {}
-                        level = "RED" if payload.get("flags") else "AMBER"
-                        existing = s.query(Escalation).filter_by(
-                            work_order_id=cs.work_order_id,
-                            reason=call_event.detail,
                         ).first()
-                        if not existing:
-                            s.add(Escalation(
+                        if not exists:
+                            s.add(AuditEvent(
                                 work_order_id=cs.work_order_id,
-                                level=level,
-                                reason=call_event.detail,
+                                actor="Voice Call Gate",
+                                event=call_event.event,
+                                detail=call_event.detail,
                             ))
-        cs.ended_at = cs.ended_at or utcnow()
-        s.commit()
+                        if call_event.event == "VOICE_ESCALATION_REQUIRED":
+                            try:
+                                payload = json.loads(call_event.detail)
+                            except (TypeError, json.JSONDecodeError):
+                                payload = {}
+                            level = "RED" if payload.get("flags") else "AMBER"
+                            existing = s.query(Escalation).filter_by(
+                                work_order_id=cs.work_order_id,
+                                reason=call_event.detail,
+                            ).first()
+                            if not existing:
+                                s.add(Escalation(
+                                    work_order_id=cs.work_order_id,
+                                    level=level,
+                                    reason=call_event.detail,
+                                ))
+            cs.ended_at = cs.ended_at or utcnow()
+            s.commit()
+    with suppress(Exception):
+        release_call_lease(call_session_id=call_session_id)
+    # Persist first; email must never block the realtime voice path or post-Stream TwiML.
+    def _dispatch_completion_email() -> None:
+        with suppress(Exception):
+            from call_notifications import dispatch_internal_call_email
+            dispatch_internal_call_email(call_session_id)
+
+    if os.getenv("VOICE_COMPLETION_EMAIL_SYNC", "").strip().lower() in {"1", "true", "yes", "on"}:
+        _dispatch_completion_email()
+    else:
+        threading.Thread(
+            target=_dispatch_completion_email,
+            name=f"voice-email-{call_session_id}",
+            daemon=True,
+        ).start()
 
 
 def validate_stream_start(start: dict, params: dict) -> int | None:
@@ -521,6 +567,7 @@ def validate_stream_start(start: dict, params: dict) -> int | None:
 
 
 def record_stream_status(call_sid: str, stream_sid: str, event: str, error: str = "") -> None:
+    operational_event("twilio_stream_status", transport="twilio", outcome=event or "unknown", stream_error=(error or "")[:500])
     with SessionLocal() as s:
         cs = s.query(CallSession).filter_by(call_sid=call_sid).first()
         if not cs:
@@ -615,9 +662,14 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         await _safe_close(websocket, 1013)
         return
     signature = websocket.headers.get("X-Twilio-Signature", "")
-    if not voice_ready() or not validate_twilio_websocket(public_stream_url(), signature):
-        operational_event("websocket_rejected",transport="twilio",outcome="policy_rejected")
-        await _safe_close(websocket, 1008)
+    signed_ok = validate_twilio_websocket(public_stream_url(), signature)
+    ready = voice_ready()
+    if not ready or not signed_ok:
+        outcome = "voice_not_ready" if not ready else "signature_rejected"
+        operational_event("websocket_rejected", transport="twilio", outcome=outcome)
+        if signed_ok:
+            await websocket.accept()
+        await _safe_close(websocket, 1013 if not ready else 1008)
         return
 
     await websocket.accept()
@@ -631,9 +683,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         start = first_event.get("start") or {}
         params = start.get("customParameters") or {}
         call_session_id = validate_stream_start(start, params)
-        if not call_session_id or call_session_id in _ACTIVE_CALL_SESSIONS:
+        if not claim_active_call_session(call_session_id):
             raise VoiceProtocolError("invalid_or_duplicate_call_session")
-        _ACTIVE_CALL_SESSIONS.add(call_session_id)
 
         stream_sid = str(start.get("streamSid") or "")
         openai_ws = await _connect_openai(f"maintenanceos-voice-call-{call_session_id}")
@@ -880,4 +931,4 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             transcription_watchdog.cancel()
         await _safe_close(openai_ws)
         if call_session_id:
-            _ACTIVE_CALL_SESSIONS.discard(call_session_id)
+            release_active_call_session(call_session_id)

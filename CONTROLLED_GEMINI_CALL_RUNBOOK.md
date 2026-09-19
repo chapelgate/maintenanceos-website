@@ -6,6 +6,7 @@ Purpose: prove the exact canonical MaintenanceOS deployment is safe enough for a
 
 Do not place the controlled call until all of these are true:
 
+- Operator inventory `python render_inventory.py` has been run with `RENDER_API_KEY` and reports `closed_pre_call_ready=true` before the call window is opened. The script is boolean-only and must not touch HLO.
 - Runtime is deployed from `chapelgate/maintenanceos-v1-pilot` canonical `main` lineage.
 - Dedicated isolated MaintenanceOS Postgres is attached and restart persistence has been proven.
 - Dedicated Twilio test number is confirmed; normal Chapelgate business number remains untouched.

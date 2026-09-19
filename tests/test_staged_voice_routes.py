@@ -402,6 +402,13 @@ def test_local_tls_https_and_wss_transport_reaches_actual_routes(
                         "payload": base64.b64encode(b"synthetic-pcmu").decode(),
                     },
                 }))
+                media_deadline = time.monotonic() + 2
+                while time.monotonic() < media_deadline:
+                    if any(item.get("type") == "input_audio_buffer.append" for item in fake_openai.sent):
+                        break
+                    await asyncio.sleep(0.01)
+                else:
+                    raise AssertionError("openai did not receive appended media before stop")
                 await socket_client.send(json.dumps({
                     "event": "stop",
                     "sequenceNumber": "3",

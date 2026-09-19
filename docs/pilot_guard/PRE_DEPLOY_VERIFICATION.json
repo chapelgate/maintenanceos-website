@@ -1,0 +1,49 @@
+{
+  "verified_at": "2026-09-18T10:35:00Z",
+  "branch": "cursor/pilot-guard-lane-a-e283",
+  "commit": "ac17b2cc7c20fad8ef4766c8309de5a0929d3074",
+  "base_lane_a": "cursor/controlled-call-readiness-3402",
+  "checkpoint_sha": "2e28fef43f18c236bfa422b7a5384bdaf673b504",
+  "rollback_tag": "pilot-guard-rollback-2e28fef",
+  "pr": "https://github.com/chapelgate/maintenanceos-v1-pilot/pull/48",
+  "owner_approval": "PR#45 recorded; not re-asked",
+  "checks": {
+    "1_checkpoint_deployed_sha": "PASS",
+    "2_rollback_tag_ref": "PASS (pilot-guard-rollback-2e28fef pushed)",
+    "3_minimal_pilot_guard_only": "PASS (no master-programme merge; voice untouched)",
+    "4_focused_regression": "PASS (66 tests: pilot+concurrency+voice+notifications+staged)",
+    "5_voice_path_unchanged": "PASS (voice_bridge.py / gemini_voice.py identical to HEAD base)",
+    "6_goodbye_unchanged": "PASS (preserved markers; voice modules unmodified)",
+    "7_email_notifications_unchanged": "PASS (call_notifications.py unmodified; 4 notification tests PASS)",
+    "8_n2_concurrency": "PASS (concurrency ladder + red team)",
+    "9_abort_logic": "PASS",
+    "10_call_11_refused": "PASS",
+    "11_scorecard_increments": "PASS",
+    "12_tenant_isolation": "PASS (cross-tenant aborts when armed)",
+    "13_red_team_guard": "PASS"
+  },
+  "deploy": {
+    "status": "BLOCKED",
+    "blocker": "RENDER_API_KEY missing from cloud agent secrets",
+    "command": "python3 scripts/rg_arm_chapelgate_pilot.py --apply",
+    "service": "maintenanceos-redteam-v2",
+    "live_health_before_deploy": {
+      "ok": true,
+      "realtime_voice": true,
+      "global_limit": 2,
+      "active_calls": 0,
+      "pilot_field_present": false
+    }
+  },
+  "post_deploy_gates_not_yet_true": {
+    "LANE_A": "HEALTHY (pre-existing live)",
+    "PILOT_MODE": "NOT_ARMED (awaiting RG apply)",
+    "TENANT": "n/a until armed",
+    "CALL_LIMIT": "n/a until armed",
+    "CALLS_COMPLETED": "n/a until armed",
+    "ABORT_LOGIC": "code ACTIVE; runtime pending deploy",
+    "SCORECARD": "code ACTIVE; runtime pending deploy",
+    "MAIN_NUMBER_CHANGED": "NO",
+    "ROLLBACK_READY": "YES"
+  }
+}

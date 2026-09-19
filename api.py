@@ -3,6 +3,7 @@ import hashlib
 import json
 import math
 import os
+from contextlib import suppress
 from datetime import datetime
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
 from fastapi.responses import HTMLResponse,Response
@@ -20,6 +21,7 @@ from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
 from channels import resident_by_phone,create_from_channel
 from identity import postcode_matches
 from readiness import report as readiness_report
+from call_capacity import CapacityRejected, admit_call, capacity_snapshot, release_call_lease
 from voice_bridge import (
     create_call_session,
     handle_twilio_media_stream,
@@ -32,6 +34,10 @@ from voice_bridge import (
 load_dotenv()
 app=FastAPI(title="MaintenanceOS V1 Pilot",docs_url=None,redoc_url=None,openapi_url=None)
 init_db()
+# Optional one-shot completion-email proof on boot (no Twilio / no pilot ceiling).
+with suppress(Exception):
+    from pilot.email_selftest import run_email_selftest_if_configured
+    run_email_selftest_if_configured()
 app.add_middleware(HttpSecurityBoundary,maximum_body_bytes=MAX_REQUEST_BYTES)
 
 
@@ -122,7 +128,31 @@ def require_public_provider_ingress():
 
 @app.get("/health")
 def health():
-    return {"ok":True,"version":"v1-pilot","realtime_voice":os.getenv("ENABLE_REALTIME_VOICE","false").lower()=="true"}
+    snap = capacity_snapshot()
+    pilot = {}
+    try:
+        from pilot.runtime_guard import pilot_status
+
+        pilot = pilot_status()
+    except Exception:
+        pilot = {"armed": False, "error": "pilot_status_unavailable"}
+    return {
+        "ok": True,
+        "version": "v1-pilot",
+        "realtime_voice": os.getenv("ENABLE_REALTIME_VOICE", "false").lower() == "true",
+        "active_calls": snap.active_calls,
+        "call_capacity": {
+            "active": snap.active_calls,
+            "global_limit": snap.global_limit,
+            "per_client_limit": snap.per_client_limit,
+            "backend": snap.backend,
+            "draining": snap.draining,
+            "ai_session_utilisation": snap.ai_session_utilisation,  # lease util, not mock AI contexts
+            "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
+            "by_client": {str(k): v for k, v in snap.by_client.items()},
+        },
+        "pilot": pilot,
+    }
 
 @app.post("/work-orders")
 async def create_work_order(request:Request,client_id=Depends(require_internal_api)):
@@ -354,8 +384,24 @@ async def voice_inbound(request:Request):
         call_session_id=create_call_session(call_sid,caller,tenant_id)
     except (SQLAlchemyError,TenantAccessError):
         return Response(inbound_fallback_twiml("The automated service is unavailable."),media_type="application/xml")
+    try:
+        admit_call(
+            call_sid=call_sid,
+            call_session_id=call_session_id,
+            client_id=tenant_id,
+            tenant_id="chapelgate",
+        )
+    except CapacityRejected:
+        with suppress(Exception):
+            record_call_interruption(call_session_id, "capacity_rejected")
+        return Response(
+            inbound_fallback_twiml("All lines are currently busy. Please try again shortly."),
+            media_type="application/xml",
+        )
     if not voice_ready():
-        record_call_interruption(call_session_id,"voice_not_ready")
+        release_call_lease(call_sid=call_sid, call_session_id=call_session_id)
+        with suppress(Exception):
+            record_call_interruption(call_session_id,"voice_not_ready")
         msg="The automated service is unavailable."
         return Response(inbound_fallback_twiml(msg),media_type="application/xml")
     return Response(inbound_stream_twiml(call_session_id,call_sid),media_type="application/xml")
@@ -410,6 +456,79 @@ async def safety_clearance(request:Request,client_id=Depends(require_internal_ap
             s.commit()
     except SafetyStateError as exc:raise HTTPException(409,str(exc))
     return {"cleared":True,"status":"HUMAN_REVIEW"}
+
+
+
+@app.post("/pilot/synthetic-email-proof")
+async def pilot_synthetic_email_proof(request: Request):
+    """Controlled internal completion-email proof. Does not place a Twilio call
+    and does not consume the 10-call pilot ceiling. Token-gated only.
+    """
+    expected = (os.getenv("PILOT_SYNTHETIC_PROOF_TOKEN") or "").strip()
+    provided = (request.headers.get("X-Pilot-Proof-Token") or "").strip()
+    if not expected or not provided or not hmac.compare_digest(provided, expected):
+        raise HTTPException(404, "Not found")
+    from pilot.runtime_guard import is_pilot_mode_armed
+    if not is_pilot_mode_armed():
+        raise HTTPException(409, "pilot_not_armed")
+    body = {}
+    with suppress(Exception):
+        body = await _json_object(request)
+    marker = _bounded_text(body.get("marker") or f"P0-PROOF-{os.urandom(4).hex()}", "marker", required=True, maximum=64)
+    # Build a minimal synthetic call session for chapelgate tenant and dispatch.
+    from call_notifications import dispatch_internal_call_email
+    from models import Client, Property, TenantBoundary, SessionLocal
+    from voice_bridge import create_call_session, close_call_session
+
+    with SessionLocal() as session:
+        client = session.query(Client).order_by(Client.id.asc()).first()
+        if client is None:
+            client = Client(name="Chapelgate synthetic proof")
+            session.add(client)
+            session.flush()
+        if session.query(Property).filter_by(client_id=client.id).first() is None:
+            session.add(Property(client_id=client.id, address="Synthetic proof", postcode="CH1 1AA"))
+        if session.query(TenantBoundary).filter_by(client_id=client.id).first() is None:
+            session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="P0"))
+        session.commit()
+        client_id = client.id
+
+    call_sid = f"CA-p0-proof-{marker}"[-34:]
+    call_id = create_call_session(call_sid, "+440000000998", client_id)
+    # Incomplete transcript => CALL REVIEW fallback must still send.
+    close_call_session(call_id)
+    result = dispatch_internal_call_email(call_id)
+    # Wait briefly if email is async
+    import time
+    time.sleep(1.5)
+    from models import CommunicationDelivery
+    with SessionLocal() as session:
+        rows = (
+            session.query(CommunicationDelivery)
+            .filter(CommunicationDelivery.provider_reference.isnot(None))
+            .order_by(CommunicationDelivery.id.desc())
+            .limit(5)
+            .all()
+        )
+        delivery = None
+        for row in rows:
+            if marker in (row.provider_reference or "") or (row.status or "").upper() == "SENT":
+                delivery = row
+                break
+        if delivery is None and rows:
+            delivery = rows[0]
+        provider_id = getattr(delivery, "provider_reference", None) if delivery else None
+        status = getattr(delivery, "status", None) if delivery else None
+    return {
+        "ok": True,
+        "synthetic": True,
+        "pilot_call_consumed": False,
+        "call_session_id": call_id,
+        "dispatch": {k: result.get(k) for k in ("sent", "category", "provider_reference", "mock") if isinstance(result, dict)},
+        "provider_message_id_present": bool(provider_id),
+        "delivery_status": status,
+        "marker": marker,
+    }
 
 
 @app.get("/readiness")

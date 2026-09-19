@@ -1,0 +1,45 @@
+{
+  "recorded_at": "2026-09-18T10:47:00Z",
+  "owner_approval": "CONFIRMED (PR#45) — not re-asked",
+  "integration_branch": "cursor/pilot-guard-lane-a-e283",
+  "integration_sha": "7129001e0a62eec90d47de75e4a3063b0a9c9d83",
+  "base_lane_a": "cursor/controlled-call-readiness-3402",
+  "checkpoint_sha": "2e28fef43f18c236bfa422b7a5384bdaf673b504",
+  "rollback_tag": "pilot-guard-rollback-2e28fef",
+  "pr": "https://github.com/chapelgate/maintenanceos-v1-pilot/pull/48",
+  "master_programme_merged": false,
+  "voice_modules_modified": false,
+  "pre_deploy": {
+    "1_checkpoint": "PASS",
+    "2_rollback": "PASS",
+    "3_minimal_guard": "PASS",
+    "4_focused_regression": "PASS (27 reconfirmed)",
+    "5_voice_unchanged": "PASS",
+    "6_email_unchanged": "PASS",
+    "7_goodbye_unchanged": "PASS",
+    "8_n2_concurrency": "PASS",
+    "9_scorecard": "PASS",
+    "10_abort": "PASS",
+    "11_call_11_refused": "PASS",
+    "12_tenant_isolation": "PASS",
+    "13_red_team": "PASS"
+  },
+  "deploy": {
+    "status": "BLOCKED_OWNER_INFRA",
+    "blocker": "RENDER_API_KEY missing from cloud agent secrets",
+    "rg_command": "python3 scripts/rg_arm_chapelgate_pilot.py --apply",
+    "service": "maintenanceos-redteam-v2"
+  },
+  "post_deploy_gates": {
+    "LANE_A": "HEALTHY (live pre-arm)",
+    "PILOT_MODE": "NOT_ARMED",
+    "TENANT": "pending arm",
+    "CALL_LIMIT": "pending arm",
+    "CALLS_COMPLETED": "pending arm",
+    "ABORT_LOGIC": "code ready; runtime pending arm",
+    "SCORECARD": "code ready; runtime pending arm",
+    "MAIN_NUMBER_CHANGED": "NO",
+    "ROLLBACK_READY": "YES"
+  },
+  "pilot_live": false
+}

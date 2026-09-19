@@ -1,0 +1,38 @@
+[
+  {
+    "target": 1,
+    "accepted": 1,
+    "rejected_busy": 0,
+    "errors": 0,
+    "unique_call_ids": 1,
+    "unique_session_ids": 1,
+    "peak_active": 1,
+    "p95_ms": 75.031,
+    "pass_gate": true,
+    "bottleneck_class": "none"
+  },
+  {
+    "target": 5,
+    "accepted": 5,
+    "rejected_busy": 0,
+    "errors": 0,
+    "unique_call_ids": 5,
+    "unique_session_ids": 5,
+    "peak_active": 5,
+    "p95_ms": 115.068,
+    "pass_gate": true,
+    "bottleneck_class": "none"
+  },
+  {
+    "target": 12,
+    "accepted": 12,
+    "rejected_busy": 0,
+    "errors": 0,
+    "unique_call_ids": 12,
+    "unique_session_ids": 12,
+    "peak_active": 12,
+    "p95_ms": 247.135,
+    "pass_gate": true,
+    "bottleneck_class": "none"
+  }
+]

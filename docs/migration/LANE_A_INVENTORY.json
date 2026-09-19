@@ -1,0 +1,166 @@
+{
+  "profile": "do-migration-preflight",
+  "generated_at": "2026-09-18T18:31:29Z",
+  "n2_secrets_retry_cancelled": true,
+  "feature_freeze": true,
+  "render_untouched": true,
+  "lane_a": {
+    "ok": true,
+    "service": {
+      "name": "maintenanceos-redteam-v2",
+      "id": "srv-dahhskafngtc739pnplg",
+      "branch": "cursor/controlled-call-readiness-3402",
+      "repo": "https://github.com/chapelgate/maintenanceos-v1-pilot",
+      "autoDeploy": "no",
+      "url": "https://maintenanceos-redteam-v2.onrender.com",
+      "region": "frankfurt",
+      "plan": "free"
+    },
+    "deploy": {
+      "id": "dep-dammkiqd0e5s7381dl20",
+      "status": "live",
+      "sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
+      "message": "Add Actions-backed N=2 live dual-call probe and consolidate on live tip\n\nMerge Lane A controlled-call readiness into the N=2 branch so the live\ncandidate (capac",
+      "finishedAt": "2026-09-18T16:44:58.866494Z"
+    },
+    "env_keys": [
+      "ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE",
+      "CAPACITY_MAX_HOURLY_BURN_USD",
+      "DATABASE_URL",
+      "ENABLE_PUBLIC_PROVIDER_INGRESS",
+      "ENABLE_REALTIME_VOICE",
+      "GEMINI_SILENCE_DURATION_MS",
+      "GLOBAL_MAX_CONCURRENT_CALLS",
+      "INTERNAL_NOTIFICATION_EMAIL",
+      "OPENAI_API_KEY",
+      "PER_CLIENT_MAX_CONCURRENT_CALLS",
+      "PILOT_EMAIL_SELFTEST_ON_BOOT",
+      "PILOT_MODE_ARMED",
+      "PILOT_OWNER_APPROVED",
+      "PILOT_STATE_PATH",
+      "PILOT_TENANT",
+      "SMTP_FROM",
+      "TWILIO_ACCOUNT_SID",
+      "TWILIO_PHONE_NUMBER",
+      "VERIFY_TWILIO_SIGNATURES",
+      "VOICE_PROVIDER"
+    ],
+    "config_nonsecret": {
+      "PILOT_TENANT": "chapelgate",
+      "PILOT_OWNER_APPROVED": "true",
+      "PILOT_MODE_ARMED": "true",
+      "TWILIO_PHONE_NUMBER": "+441514535238",
+      "INTERNAL_NOTIFICATION_EMAIL": "chaplegate@gmail.com",
+      "SMTP_FROM": "info@chapelgateservices.com",
+      "VOICE_PROVIDER": "openai",
+      "PER_CLIENT_MAX_CONCURRENT_CALLS": "2",
+      "GLOBAL_MAX_CONCURRENT_CALLS": "2",
+      "PILOT_STATE_PATH": "/tmp/chapelgate_pilot_state.json",
+      "VERIFY_TWILIO_SIGNATURES": "false",
+      "ENABLE_REALTIME_VOICE": "true",
+      "ENABLE_PUBLIC_PROVIDER_INGRESS": "false",
+      "CAPACITY_MAX_HOURLY_BURN_USD": "50",
+      "GEMINI_SILENCE_DURATION_MS": "350",
+      "PILOT_EMAIL_SELFTEST_ON_BOOT": "true"
+    },
+    "secret_key_presence": {
+      "OPENAI_API_KEY": true,
+      "TWILIO_ACCOUNT_SID": true,
+      "TWILIO_AUTH_TOKEN": false,
+      "TWILIO_PHONE_NUMBER": true,
+      "RESEND_API_KEY": false,
+      "GEMINI_API_KEY": false,
+      "DATABASE_URL": true,
+      "APP_SECRET": false
+    },
+    "health": {
+      "ok": true,
+      "realtime_voice": true,
+      "call_capacity": {
+        "active": 0,
+        "global_limit": 2,
+        "per_client_limit": 2,
+        "backend": "process_local",
+        "draining": false,
+        "ai_session_utilisation": 0.0,
+        "estimated_hourly_burn_usd": 0.0,
+        "by_client": {}
+      },
+      "pilot": {
+        "armed": true,
+        "calls_completed": 3,
+        "tenant": "chapelgate",
+        "email_gate": {
+          "live_email_flag": false,
+          "pilot_resend_ready": false,
+          "resend_key_present": false,
+          "sender_configured": true,
+          "recipient_configured": true
+        },
+        "persistence": {
+          "db_backend": "sqlite",
+          "file_mirror": true,
+          "bootstrap_floor": 3,
+          "ephemeral_sqlite_risk": true
+        },
+        "max_real_calls": 10
+      }
+    }
+  },
+  "digitalocean": {
+    "ok": false,
+    "token_present": false,
+    "apps": [],
+    "droplets_mos": [],
+    "note": "No DIGITALOCEAN_TOKEN \u2014 cannot list App Platform or droplets. Stale droplet IDs must not be assumed."
+  },
+  "agent_secret_presence": {
+    "DIGITALOCEAN_TOKEN": false,
+    "DIGITALOCEAN_ACCESS_TOKEN": false,
+    "DO_API_TOKEN": false,
+    "RENDER_API_KEY": true,
+    "OPENAI_API_KEY": true,
+    "CHAPELGATE_OPENAI_KEY": true,
+    "GEMINI_API_KEY": false,
+    "GOOGLE_API_KEY": false,
+    "TWILIO_ACCOUNT_SID": true,
+    "TWILIO_AUTH_TOKEN": false,
+    "TWILIO_PHONE_NUMBER": true,
+    "TWILIO_FROM_NUMBER": false,
+    "TWILIO_HUMAN_TRANSFER_NUMBER": false,
+    "TWILIO_FROM_NUMBER_2": false,
+    "RESEND_API_KEY": false,
+    "SMTP_PASSWORD": false,
+    "SMTP_USERNAME": false,
+    "APP_SECRET": false,
+    "INTERNAL_API_TOKEN": false,
+    "INTERNAL_API_CLIENT_ID": false,
+    "DATABASE_URL": false
+  },
+  "voice_credentials": {
+    "openai_or_gemini": true,
+    "openai": true,
+    "gemini": false,
+    "twilio_core": false,
+    "resend_optional_for_voice": false,
+    "digitalocean": false
+  },
+  "n2_baseline_preserved": {
+    "evidence": "docs/concurrency_100_evidence/n2-live-evidence-report.json",
+    "programme_status": "INTEGRATION",
+    "do_not_rerun_for_missing_resend": true
+  },
+  "resend": {
+    "required_for_voice": false,
+    "present": false,
+    "status": "absent_email_only_optional"
+  },
+  "ush": {
+    "control_plane": "https://68.183.44.222",
+    "digitalocean_adapter_registered": true,
+    "digitalocean_profile": "DO_USH_DEPLOY",
+    "cursor_digitalocean_token_forbidden": true,
+    "mos_principal_grant_required": true
+  },
+  "secrets_presence_note": "DO token must not be injected into Cursor; obtain via USH"
+}

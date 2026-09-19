@@ -41,12 +41,12 @@ def bounded_rate(name: str, default: int) -> int:
         value = int(os.getenv(name, str(default)))
     except (TypeError, ValueError):
         return default
-    return value if 1 <= value <= 10_000 else default
+    return value if 1 <= value <= 100_000 else default
 
 
 def rate_setting_valid(name: str) -> bool:
     try:
-        return 1 <= int(os.getenv(name, "")) <= 10_000
+        return 1 <= int(os.getenv(name, "")) <= 100_000
     except (TypeError, ValueError):
         return False
 
@@ -96,9 +96,11 @@ def _peer(scope) -> str:
 def websocket_rate_allowed(websocket) -> bool:
     client = getattr(websocket, "client", None)
     host = str(getattr(client, "host", "unknown"))[:100]
+    # Default 300/min supports a 100-call burst from a telephony edge IP with headroom.
+    # Override via PUBLIC_WS_RATE_LIMIT_PER_MINUTE; edge limits still apply in production.
     return PUBLIC_INGRESS_LIMITER.allow(
         f"ws:{host}:/voice/media-stream",
-        limit=bounded_rate("PUBLIC_WS_RATE_LIMIT_PER_MINUTE", 60),
+        limit=bounded_rate("PUBLIC_WS_RATE_LIMIT_PER_MINUTE", 300),
     )
 
 

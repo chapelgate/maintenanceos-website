@@ -51,7 +51,7 @@ class FakeStreamlit(types.ModuleType):
         self.sidebar = self
 
     def __getattr__(self, name):
-        if name in {"title", "subheader", "write", "json", "dataframe", "metric", "error", "warning", "success", "set_page_config"}:
+        if name in {"title", "subheader", "write", "json", "dataframe", "metric", "error", "warning", "success", "set_page_config", "caption"}:
             return lambda *args, **kwargs: self._events.append({"op": name, "args": [str(x) for x in args[:2]]})
         if name in {"text_input", "text_area"}:
             return lambda *args, **kwargs: "Synthetic supervisor reason"

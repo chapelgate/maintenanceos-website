@@ -1,0 +1,65 @@
+name: MaintenanceOS N=2 Live Dual Call
+
+# Places two simultaneous PSTN legs into the dedicated MOS test number using
+# existing GitHub Actions Twilio secrets. Never prints secret values.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cursor/n2-live-concurrency-e283
+    paths:
+      - "scripts/n2_live_dual_call_probe.py"
+      - ".github/workflows/n2-live-dual-call.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  n2-dual-call:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+      TWILIO_HUMAN_TRANSFER_NUMBER: ${{ secrets.TWILIO_HUMAN_TRANSFER_NUMBER }}
+      TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+      PUBLIC_BASE_URL: https://maintenanceos-redteam-v2.onrender.com
+      N2_CALL_HOLD_SECONDS: "40"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Gate on Twilio secrets
+        id: gate
+        run: |
+          missing=0
+          for n in TWILIO_ACCOUNT_SID TWILIO_AUTH_TOKEN TWILIO_PHONE_NUMBER; do
+            if [ -z "${!n}" ]; then echo "absent:$n"; missing=1; fi
+          done
+          if [ "$missing" = 1 ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Twilio secrets absent in Actions; cannot place live N=2."
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - name: Preflight live health
+        if: steps.gate.outputs.ready == 'true'
+        run: python3 scripts/n2_preflight.py
+      - name: Place N=2 simultaneous live calls
+        if: steps.gate.outputs.ready == 'true'
+        run: python3 scripts/n2_live_dual_call_probe.py | tee n2-live-dual-call.json
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: n2-live-dual-call-${{ github.sha }}
+          path: |
+            n2-live-dual-call.json
+            docs/concurrency_100_evidence/n2-live-dual-call.json
+            docs/concurrency_100_evidence/n2-preflight.json
+          if-no-files-found: warn
+          retention-days: 14

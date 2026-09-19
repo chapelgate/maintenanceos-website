@@ -1,0 +1,66 @@
+{
+  "profile": "n2-live-evidence-report",
+  "generated_at": "2026-09-18T17:38:00Z",
+  "LIVE_N2": "FAIL",
+  "reason": "voice_blocked_on_TWILIO_AUTH_TOKEN_and_FROM; email_blocked_on_RESEND_API_KEY_genuinely_absent",
+  "deployment_candidate_sha": "054b92b2ed28d9c6ab9dfd6ca66c142778537cec",
+  "live_service": "https://maintenanceos-redteam-v2.onrender.com",
+  "live_health": {
+    "ok": true,
+    "global_limit": 2,
+    "armed": true,
+    "calls_completed": 3,
+    "ingress": false,
+    "resend_key_present": false,
+    "pilot_resend_ready": false,
+    "emails_successfully_delivered": 0,
+    "realtime_voice": true,
+    "twilio_account_sid_on_render": true,
+    "twilio_phone_on_render": true,
+    "twilio_auth_token_on_render": false,
+    "openai_on_render": true,
+    "voice_provider": "openai"
+  },
+  "call_ids": null,
+  "overlapping_timestamps": null,
+  "email_vs_voice": {
+    "resend_required_for_voice_media_path": false,
+    "completion_email": "async daemon thread after persist in voice_bridge._dispatch_completion_email; never blocks realtime voice",
+    "voice_n2_blocker": "TWILIO_AUTH_TOKEN + distinct TWILIO_FROM_NUMBER (not Resend)",
+    "email_n2_blocker": "RESEND_API_KEY for post-call completion email proof",
+    "dual_call_probe_requires_resend": false
+  },
+  "resend_exhaustive_search_reconfirm": {
+    "searched_at": "2026-09-18T17:38:00Z",
+    "cursor_cloud_secrets": "CLOUD_AGENT_ALL_SECRET_NAMES=CHAPELGATE_OPENAI_KEY,OPENAI_API_KEY only — no RESEND",
+    "render_env_groups": "0 groups",
+    "render_all_services_scan": "23 services; RESEND_API_KEY key absent on every service; SMTP_PASSWORD absent on every service",
+    "lane_a_aliases": "SMTP_FROM + INTERNAL_NOTIFICATION_EMAIL present; SMTP_USERNAME/SMTP_PASSWORD/SMTP_HOST absent (no re_ alias path)",
+    "github_actions_secrets": "403 cannot list; no GitHub environments",
+    "gmail": "Resend welcome/SSO mails only (account chaplegate); zero API-key delivery messages",
+    "outlook": "no Resend API key content",
+    "workspace_files": "test fixture re_test_key only; zero candidate re_ values",
+    "all_cloud_agent_transcripts": "zero re_* matches; SSO browser agent failed Google password/passkey",
+    "digitalocean_heroku_aws_vault": "tokens absent",
+    "conclusion": "RESEND_API_KEY_genuinely_absent"
+  },
+  "human_only_blocker": {
+    "RESEND_API_KEY": {
+      "status": "genuinely_absent",
+      "andy_action": "At https://resend.com/api-keys (Google SSO as chaplegate): Create API key → add Cloud Agent secret named RESEND_API_KEY (or Render individual PUT on maintenanceos-redteam-v2 srv-dahhskafngtc739pnplg). Do not bulk-PUT env."
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "status": "genuinely_absent_same_stores",
+      "andy_action": "Twilio Console Account AC7578a88880a7ed5fe4a6281efb3e3612 → reveal Auth Token → Cloud Agent secret TWILIO_AUTH_TOKEN; also TWILIO_FROM_NUMBER (E.164 distinct from +441514535238) for dual-leg probe."
+    }
+  },
+  "ops_note": "TWILIO_ACCOUNT_SID + TWILIO_PHONE_NUMBER were missing again on Lane A and restored individually (no bulk PUT). Ingress remains false until auth+from present.",
+  "N5_N10_N25_live": "NOT_RUN_pending_N2_live_pass",
+  "exact_safe_concurrency_proven": {
+    "live_pstn_simultaneous": 0,
+    "live_capacity_configured": 2,
+    "simulated_admission_db_mock_ai": 100,
+    "pytest_passed": 327
+  },
+  "programme_status": "INTEGRATION"
+}

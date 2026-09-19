@@ -1,0 +1,80 @@
+{
+  "generated_at": "2026-09-18T19:38:57.976462+00:00",
+  "ush_control_plane": "https://68.183.44.222",
+  "health": {
+    "http": 200,
+    "status": "ok",
+    "digitalocean_registered": true,
+    "digitalocean_profile": "DO_USH_DEPLOY",
+    "adapter_class": "live_http",
+    "providers": [
+      "cloud-imds-managed-identity",
+      "digitalocean",
+      "machine-ssh",
+      "managed-identity",
+      "openai",
+      "twilio",
+      "workload-identity"
+    ]
+  },
+  "autonomous_routes_exhausted": [
+    {
+      "route": "GET /health",
+      "result": "PASS \u2014 DO vaulted"
+    },
+    {
+      "route": "POST /v1/principals/register (all kinds)",
+      "result": "FAIL 401 bootstrap_admin_required"
+    },
+    {
+      "route": "GET /v1/capabilities (unauth)",
+      "result": "FAIL 401 authentication_required"
+    },
+    {
+      "route": "POST /v1/operations/request digitalocean",
+      "result": "FAIL 401 authentication_required"
+    },
+    {
+      "route": "POST /v1/auth/workload|oidc|resume with Render/OpenAI/gh tokens",
+      "result": "FAIL invalid_token / invalid_workload_identity"
+    },
+    {
+      "route": "x-ush-bootstrap-token with available env tokens",
+      "result": "FAIL bootstrap_admin_required"
+    },
+    {
+      "route": "SSH root@chapelgate-ush-1 / robot-labour",
+      "result": "FAIL Permission denied (publickey); no local SSH keys"
+    },
+    {
+      "route": "Self-hosted Cursor workers",
+      "result": "FAIL none connected"
+    },
+    {
+      "route": "Render Lane A env USH_* keys",
+      "result": "FAIL absent"
+    },
+    {
+      "route": "GitHub Actions DIGITALOCEAN_TOKEN / Twilio",
+      "result": "FAIL absent (run 35114919081)"
+    },
+    {
+      "route": "USH git repo API from this token",
+      "result": "FAIL 404 \u2014 not required; live API is authority"
+    },
+    {
+      "route": "Cloud IMDS managed identity",
+      "result": "FAIL no IMDS token on this VM"
+    }
+  ],
+  "principal_existence": "UNDETERMINED \u2014 list/status endpoints require authentication; register returns bootstrap_admin_required (does not confirm existence)",
+  "digitalocean_token_requested": false,
+  "human_boundary": {
+    "required_secret": "USH_BOOTSTRAP_TOKEN",
+    "alternate_secret": "USH_WORKLOAD_TOKEN",
+    "why_not_automatable": "USH production mode requires x-ush-bootstrap-token (admin) to register principals or a pre-issued principal bearer for all capability/operation APIs. No authorised store reachable from this agent contains either credential; SSH to the USH droplet is denied; Estate/robot-labour access is unavailable from this environment.",
+    "where_to_enter": "Cursor Cloud Agent environment secrets for environment https://cursor.com/dashboard/cloud-agents/environments/e/69e354a8-aed0-11f1-bf4b-42ffb4d10ea7 \u2014 add USH_BOOTSTRAP_TOKEN (preferred) OR USH_WORKLOAD_TOKEN for principal maintenanceos-v1-pilot. Source the value from USH admin on chapelgate-ush-1 (Estate bootstrap), not from chat/Git/PR. Do NOT add DIGITALOCEAN_TOKEN.",
+    "after_inject": "Agent will register/confirm maintenanceos-v1-pilot, add least-privilege policy for digitalocean/twilio/resend on project=maintenanceos only, write USH_WORKLOAD_TOKEN to /tmp/mos-secrets (mode 600), validate with redacted health/gates, then continue DO provision + N=2."
+  },
+  "pr57_status": "draft/open \u2014 not merged to main"
+}
