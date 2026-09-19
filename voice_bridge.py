@@ -289,6 +289,15 @@ def create_call_session(call_sid: str, caller: str, client_id: int) -> int:
         return cs.id
 
 
+def _explicit_human_request(text: str) -> bool:
+    lowered = (text or "").casefold()
+    return any(phrase in lowered for phrase in (
+        "speak to a person", "speak to someone", "speak to a human",
+        "speak to the manager", "talk to a person", "talk to someone",
+        "put me through", "transfer me", "get me a person",
+    ))
+
+
 def requires_immediate_human_escalation(text: str) -> tuple[bool, str, list]:
     lowered = text.lower() if isinstance(text, str) else ""
     # Alleygate-specific operational emergencies go to Chapelgate directly.
@@ -729,6 +738,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             raise VoiceProtocolError("invalid_or_duplicate_call_session")
 
         stream_sid = str(start.get("streamSid") or "")
+        call_sid = str(start.get("callSid") or "")
         openai_ws = await _connect_openai(f"maintenanceos-voice-call-{call_session_id}")
         await _configure_realtime(openai_ws)
         # The phone line is answered immediately by Twilio. Proactively create the
@@ -751,6 +761,13 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         assistant_audio = []
         assistant_audio_bytes = 0
         assistant_text_validated = False
+        # Deterministic Alleygates dialogue guards. These stop the model from
+        # drifting back to the generic property-maintenance flow observed live.
+        greeting_pending = True
+        gate_repair_context = False
+        resident_key_context = False
+        master_key_context = False
+        correction_attempts = 0
         # There is no caller transcript before the initial greeting. Treat the
         # greeting as a cleared turn so policy-validated greeting audio can flow.
         # Any caller speech immediately flips this back to False below.
@@ -761,14 +778,49 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         last_output_started = None
         last_output_ms = 0
 
-        async def request_transfer(reason: str, already_recorded: bool = False) -> None:
+        async def request_transfer(
+            reason: str,
+            already_recorded: bool = False,
+            *,
+            live_handoff: bool = False,
+        ) -> None:
             if transfer_required.is_set():
                 return
             transfer_required.set()
+            transferred = False
+            if live_handoff:
+                with suppress(Exception):
+                    transferred = await asyncio.to_thread(_request_live_human_transfer, call_sid)
             await _safe_close(websocket, 1000)
             if not already_recorded:
-                with suppress(Exception):record_call_interruption(call_session_id, reason)
-            with suppress(Exception):close_call_session(call_session_id)
+                with suppress(Exception):
+                    record_call_interruption(call_session_id, reason)
+            if live_handoff and not transferred:
+                with suppress(Exception):
+                    record_call_interruption(call_session_id, "human_transfer_failed")
+            with suppress(Exception):
+                close_call_session(call_session_id)
+
+        async def request_corrected_response(instruction: str) -> bool:
+            nonlocal correction_attempts, assistant_text_validated, assistant_audio_bytes
+            if correction_attempts >= 2:
+                return False
+            correction_attempts += 1
+            assistant_audio.clear()
+            buffered_audio.clear()
+            assistant_audio_bytes = 0
+            assistant_text_validated = False
+            await openai_ws.send(json.dumps({
+                "type": "response.create",
+                "response": {"instructions": instruction},
+            }))
+            operational_event(
+                "openai_response_corrected",
+                transport="openai",
+                outcome="requested",
+                reason_code=f"attempt_{correction_attempts}",
+            )
+            return True
 
         async def send_twilio_media(payload: str) -> None:
             await websocket.send_json({"event": "media", "streamSid": stream_sid, "media": {"payload": payload}})
@@ -807,7 +859,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     media_received = True
                     await openai_ws.send(json.dumps({"type": "input_audio_buffer.append", "audio": payload}))
                 elif event_type == "dtmf" and str((event.get("dtmf") or {}).get("digit")) == "0":
-                    await request_transfer("caller_requested_human")
+                    await request_transfer("caller_requested_human", live_handoff=True)
                     return
                 elif event_type == "stop":
                     stop_received.set()
@@ -822,6 +874,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         async def from_openai() -> None:
             nonlocal turn_cleared, turn_number, transcription_watchdog,assistant_text_validated
             nonlocal last_output_item, last_output_started, last_output_ms,assistant_audio_bytes
+            nonlocal greeting_pending, gate_repair_context, resident_key_context, master_key_context
+            nonlocal correction_attempts
             async for raw in openai_ws:
                 if not websocket_event_within_limit(raw):
                     raise VoiceProtocolError("openai_event_too_large")
@@ -840,6 +894,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     assistant_audio.clear()
                     assistant_audio_bytes=0
                     assistant_text_validated=False
+                    correction_attempts=0
                     await websocket.send_json({"event": "clear", "streamSid": stream_sid})
                     if last_output_item and last_output_ms > 0:
                         played_ms = min(last_output_ms, int((time.monotonic() - last_output_started) * 1000))
@@ -871,8 +926,37 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     if transcription_watchdog:
                         transcription_watchdog.cancel()
                         transcription_watchdog = None
-                    if record_transcript_segment(call_session_id, "Caller", transcript):
-                        await request_transfer("deterministic_escalation", already_recorded=True)
+
+                    lowered = transcript.casefold()
+                    # If the caller speaks before the opening turn completes (barge-in),
+                    # do not force a greeting over the top of their live enquiry.
+                    greeting_pending = False
+                    explicit_master = "master key" in lowered or "master-key" in lowered
+                    if explicit_master:
+                        master_key_context = True
+                        resident_key_context = False
+                    elif "key" in lowered:
+                        resident_key_context = True
+                    gate_terms = ("gate", "alley gate", "alleygate")
+                    fault_terms = (
+                        "repair", "broken", "fault", "damaged", "jammed", "lock",
+                        "won't close", "will not close", "won't open", "will not open",
+                    )
+                    if any(term in lowered for term in gate_terms) and any(term in lowered for term in fault_terms):
+                        gate_repair_context = True
+
+                    escalate_now, escalation_reason, _flags = requires_immediate_human_escalation(transcript)
+                    escalated = record_transcript_segment(call_session_id, "Caller", transcript)
+                    if escalated:
+                        live_handoff = (
+                            escalation_reason == "gate_emergency_handoff"
+                            or _explicit_human_request(transcript)
+                        )
+                        await request_transfer(
+                            escalation_reason or "deterministic_escalation",
+                            already_recorded=True,
+                            live_handoff=live_handoff,
+                        )
                         return
                     turn_cleared = True
                     if assistant_text_validated:
@@ -907,6 +991,56 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     transcript=str(event.get("transcript") or "")
                     if len(transcript)>MAX_TRANSCRIPT_CHARS:
                         raise VoiceProtocolError("output_transcript_too_large")
+                    lowered_output = transcript.casefold()
+                    expected_greeting = "hi, thank you for calling chapel gate. how can we help you today?"
+                    if greeting_pending:
+                        normalised = " ".join(
+                            re.sub(r"[^a-z0-9 ]+", " ", lowered_output).split()
+                        )
+                        expected_normalised = " ".join(
+                            re.sub(r"[^a-z0-9 ]+", " ", expected_greeting).split()
+                        )
+                        if normalised != expected_normalised:
+                            if await request_corrected_response(
+                                "Say exactly: Hi, thank you for calling Chapel Gate. "
+                                "How can we help you today? Say nothing else and then wait."
+                            ):
+                                continue
+                            await request_transfer("initial_greeting_contract_failed")
+                            return
+                        greeting_pending = False
+
+                    if gate_repair_context and "postcode" in lowered_output:
+                        if await request_corrected_response(
+                            "This is an alley-gate repair. Do not ask for any postcode. "
+                            "Ask for the caller's full name, their own address and callback number "
+                            "if not already collected, then ask whether the gate is in Wirral or Sefton "
+                            "and ask for the gate number."
+                        ):
+                            continue
+                        await request_transfer("gate_postcode_contract_failed")
+                        return
+
+                    if resident_key_context and not master_key_context:
+                        forbidden_resident_key = any(term in lowered_output for term in (
+                            "master key", "info@alleygates.co.uk", "landlord",
+                            "housing provider", "housing association",
+                        ))
+                        required_resident_route = (
+                            "alleygates.co.uk" in lowered_output
+                            and ("£22" in transcript or "22" in lowered_output)
+                        )
+                        if forbidden_resident_key or not required_resident_route:
+                            if await request_corrected_response(
+                                "The caller is asking about an ordinary resident alley-gate key, "
+                                "not a master key. Tell them to order it at www.alleygates.co.uk "
+                                "for £22 including VAT and recorded delivery. Do not mention master keys, "
+                                "landlords, housing providers or housing associations."
+                            ):
+                                continue
+                            await request_transfer("resident_key_contract_failed")
+                            return
+
                     with SessionLocal() as s:
                         cs=s.get(CallSession,call_session_id)
                         state=_summary_state(cs) if cs else {}

@@ -344,6 +344,139 @@ def test_initial_greeting_is_requested_and_reaches_twilio_without_caller_speech(
     assert any(item.get("event") == "media" for item in twilio.sent)
 
 
+def test_dtmf_zero_performs_real_twilio_handoff(monkeypatch):
+    twilio = FakeTwilio(connected_start_events() + [
+        {"event": "dtmf", "sequenceNumber": "2", "dtmf": {"digit": "0"}},
+    ])
+    openai = FakeOpenAI()
+    observations = configure_bridge(monkeypatch, openai)
+    transfers = []
+
+    monkeypatch.setattr(
+        voice_bridge,
+        "_request_live_human_transfer",
+        lambda call_sid: transfers.append(call_sid) or True,
+    )
+
+    asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
+
+    assert transfers == ["CA-test"]
+    assert twilio.closed
+    assert ("close", 7) in observations
+
+
+def test_gate_emergency_transcript_performs_real_twilio_handoff(monkeypatch):
+    twilio = FakeTwilio(connected_start_events())
+    openai = FakeOpenAI([
+        {
+            "type": "conversation.item.input_audio_transcription.completed",
+            "item_id": "in-gate",
+            "transcript": "The alley gate is jammed shut and this is an emergency",
+        }
+    ])
+    observations = configure_bridge(monkeypatch, openai)
+    transfers = []
+
+    monkeypatch.setattr(
+        voice_bridge,
+        "record_transcript_segment",
+        lambda call_id, speaker, text: True,
+    )
+    monkeypatch.setattr(
+        voice_bridge,
+        "_request_live_human_transfer",
+        lambda call_sid: transfers.append(call_sid) or True,
+    )
+
+    asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
+
+    assert transfers == ["CA-test"]
+    assert twilio.closed
+    assert ("close", 7) in observations
+
+
+def test_ordinary_key_bad_answer_is_suppressed_and_corrected(monkeypatch):
+    audio = base64.b64encode(b"a" * 160).decode()
+    greeting = "Hi, thank you for calling Chapel Gate. How can we help you today?"
+    openai = FakeOpenAI([
+        {"type": "response.output_audio.delta", "item_id": "greet", "delta": audio},
+        {"type": "response.output_audio_transcript.done", "item_id": "greet", "transcript": greeting},
+        {
+            "type": "conversation.item.input_audio_transcription.completed",
+            "item_id": "in-key",
+            "transcript": "I need an alley gate key",
+        },
+        {"type": "response.output_audio.delta", "item_id": "bad-key", "delta": audio},
+        {
+            "type": "response.output_audio_transcript.done",
+            "item_id": "bad-key",
+            "transcript": "Ask your landlord for a key, or I can tell you about a master key.",
+        },
+        {"type": "response.output_audio.delta", "item_id": "good-key", "delta": audio},
+        {
+            "type": "response.output_audio_transcript.done",
+            "item_id": "good-key",
+            "transcript": "You can order an ordinary resident key at www.alleygates.co.uk for £22 including VAT and recorded delivery.",
+        },
+    ])
+    twilio = FakeTwilio(connected_start_events() + [
+        ({"event": "stop", "sequenceNumber": "3", "stop": {"callSid": "CA-test"}}, 0.1),
+    ])
+    configure_bridge(monkeypatch, openai)
+    monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0")
+
+    asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
+
+    correction_requests = [
+        item for item in openai.sent
+        if item.get("type") == "response.create"
+        and "ordinary resident alley-gate key" in item.get("response", {}).get("instructions", "")
+    ]
+    assert correction_requests
+    media = [item for item in twilio.sent if item.get("event") == "media"]
+    assert len(media) >= 2
+
+
+def test_gate_postcode_answer_is_suppressed_and_corrected(monkeypatch):
+    audio = base64.b64encode(b"a" * 160).decode()
+    greeting = "Hi, thank you for calling Chapel Gate. How can we help you today?"
+    openai = FakeOpenAI([
+        {"type": "response.output_audio.delta", "item_id": "greet", "delta": audio},
+        {"type": "response.output_audio_transcript.done", "item_id": "greet", "transcript": greeting},
+        {
+            "type": "conversation.item.input_audio_transcription.completed",
+            "item_id": "in-gate",
+            "transcript": "The alley gate lock is broken and needs a repair",
+        },
+        {"type": "response.output_audio.delta", "item_id": "bad-gate", "delta": audio},
+        {
+            "type": "response.output_audio_transcript.done",
+            "item_id": "bad-gate",
+            "transcript": "What is the postcode of the gate?",
+        },
+        {"type": "response.output_audio.delta", "item_id": "good-gate", "delta": audio},
+        {
+            "type": "response.output_audio_transcript.done",
+            "item_id": "good-gate",
+            "transcript": "Can I take your full name, your address and a callback number?",
+        },
+    ])
+    twilio = FakeTwilio(connected_start_events() + [
+        ({"event": "stop", "sequenceNumber": "3", "stop": {"callSid": "CA-test"}}, 0.1),
+    ])
+    configure_bridge(monkeypatch, openai)
+    monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0")
+
+    asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
+
+    correction_requests = [
+        item for item in openai.sent
+        if item.get("type") == "response.create"
+        and "Do not ask for any postcode" in item.get("response", {}).get("instructions", "")
+    ]
+    assert correction_requests
+
+
 def test_partial_transcript_is_not_safety_routed_before_completion(monkeypatch):
     monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0.05")
     events = connected_start_events() + [
