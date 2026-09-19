@@ -32,22 +32,18 @@ export const siteConfig = {
 /** Conversion forms — always render via LeadCaptureForm. See docs/FORM_ENDPOINT_CONTRACT.md. */
 export type LeadType = "launch_list" | "early_demo" | "contact";
 
+/** Industry nav — labels are *OS product line names. */
 export const industries = [
-  { slug: "landlords", label: "Landlords" },
-  { slug: "letting-agents", label: "Letting agents" },
-  { slug: "property-managers", label: "Property managers" },
-  { slug: "maintenance-companies", label: "Maintenance companies" },
-  { slug: "housing-associations", label: "Housing associations" },
-  { slug: "facilities-management", label: "Facilities management" },
-  { slug: "councils", label: "Councils" },
-  { slug: "holiday-lets", label: "Holiday lets" },
+  { slug: "landlords", label: "LandlordOS" },
+  { slug: "letting-agents", label: "LettingAgentOS" },
+  { slug: "property-managers", label: "PropertyManagerOS" },
+  { slug: "maintenance-companies", label: "MaintenanceOS" },
+  { slug: "housing-associations", label: "HousingAssociationOS" },
+  { slug: "facilities-management", label: "FacilitiesOS" },
+  { slug: "councils", label: "CouncilOS" },
+  { slug: "holiday-lets", label: "HolidayLetOS" },
 ] as const;
 
-/**
- * Desktop primary (IA v0.2 + FE shell polish).
- * Order: How it works · Features · AI receptionist · Security · Industries · Pricing
- * (Pricing remains in primary bar; Industries before Pricing per FE Orchestra sprint.)
- */
 export const primaryNav = [
   { href: "/how-it-works/", label: "How it works" },
   { href: "/features/", label: "Features" },

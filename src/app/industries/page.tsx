@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Industries",
   description:
-    "Role pages for UK landlords, agents, managers, housing, FM, councils, and holiday lets. Pre-launch.",
+    "Chapelgate industry OS lines for UK landlords, letting agents, property managers, maintenance companies, housing associations, facilities management, councils, and holiday lets. Pre-launch.",
   path: "/industries/",
 });
 
@@ -15,8 +15,8 @@ export default function IndustriesPage() {
     <>
       <PageHero
         eyebrow="Pre-launch · United Kingdom"
-        title="Built around how UK maintenance work actually runs."
-        lede="Choose your role. Each page explains the same platform from your operational angle — intake that structures calls, rules that own safety and money boundaries, and humans when decisions matter."
+        title="One OS per industry."
+        lede="Each role is its own product line under Chapelgate Technologies — industry name with OS on the end. Choose your line. Pages explain intended use from your operational angle. Pilot-stage — not commercial general availability."
       />
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-12">
         <p className="max-w-3xl text-sm text-muted">
@@ -31,7 +31,10 @@ export default function IndustriesPage() {
                 href={`/industries/${ind.slug}/`}
                 className="block h-full rounded-lg border border-border bg-surface p-5 hover:border-accent"
               >
-                <span className="font-semibold text-ink">{ind.label}</span>
+                <span className="font-semibold text-ink">{ind.productName}</span>
+                <span className="mt-1 block text-xs uppercase tracking-wide text-accent">
+                  {ind.label}
+                </span>
                 <span className="mt-2 block text-sm text-muted">{ind.card}</span>
               </a>
             </li>
@@ -39,7 +42,7 @@ export default function IndustriesPage() {
         </ul>
         <section className="max-w-3xl space-y-4 border-t border-border pt-10">
           <h2 className="text-xl font-semibold text-ink">
-            Not sure which page fits?
+            Not sure which OS fits?
           </h2>
           <p className="text-muted">
             Join the launch list with your role, or request an early demo

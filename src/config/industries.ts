@@ -1,7 +1,10 @@
-/** Industry role pages — copy from INDUSTRIES_CONTENT_PACK (DRAFT; Claims Verifier pending). */
+/** Industry / *OS role pages — labels use industry + OS naming. */
 
 export type IndustryRole = {
   slug: string;
+  /** Product line name (industry + OS). */
+  productName: string;
+  /** Short audience label. */
   label: string;
   card: string;
   title: string;
@@ -16,10 +19,11 @@ export type IndustryRole = {
 export const industryRoles: IndustryRole[] = [
   {
     slug: "landlords",
+    productName: "LandlordOS",
     label: "Landlords",
-    card: "Catch maintenance reports without inventing jobs or spending authority.",
-    title: "Maintenance calls that become structured work — not inventing the job.",
-    sub: "For UK landlords who need caller details captured clearly, safety paths that latch for a person, and no AI authority over money or dispatches.",
+    card: "LandlordOS — catch maintenance reports without inventing jobs or spending authority.",
+    title: "LandlordOS — maintenance calls that become structured work.",
+    sub: "For UK landlords who need caller details captured clearly, safety paths that latch for a person, and no AI authority over money or dispatches. Pre-launch product line under Chapelgate Technologies.",
     job: [
       "Missed or half-reported maintenance calls when you cannot pick up.",
       "Residents describing emergencies in everyday language — you need structure, not improvisation.",
@@ -37,14 +41,15 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No “landlords already live on our phone line.” No fabricated landlord logos or occupancy stats. No concurrent-line marketing numbers.",
     metaDescription:
-      "Structured maintenance intake for UK landlords. Rules own safety and money boundaries. Pilot-stage.",
+      "LandlordOS — structured maintenance intake for UK landlords. Rules own safety and money boundaries. Pilot-stage.",
   },
   {
     slug: "letting-agents",
+    productName: "LettingAgentOS",
     label: "Letting agents",
-    card: "Structured intake across portfolios — rules stay in charge.",
-    title: "Portfolio maintenance intake without the model running the agency.",
-    sub: "For UK letting agents who need consistent caller capture across landlords and tenants, with rules — not improvisation — owning safety and money boundaries.",
+    card: "LettingAgentOS — structured intake across portfolios; rules stay in charge.",
+    title: "LettingAgentOS — portfolio maintenance intake without the model running the agency.",
+    sub: "For UK letting agents who need consistent caller capture across landlords and tenants, with rules — not improvisation — owning safety and money boundaries. Pre-launch product line under Chapelgate Technologies.",
     job: [
       "High call volume across many properties; notes get lost between phones and inboxes.",
       "Tenants and landlords both calling — roles and permissions must stay clear.",
@@ -62,14 +67,15 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No agency case studies. No “replaces your helpdesk today.” No live multi-line production scale numbers.",
     metaDescription:
-      "Portfolio maintenance intake for UK letting agents. Pre-launch briefing available.",
+      "LettingAgentOS — portfolio maintenance intake for UK letting agents. Pre-launch.",
   },
   {
     slug: "property-managers",
+    productName: "PropertyManagerOS",
     label: "Property managers",
-    card: "Multi-tenant ops: properties, residents, contractors, work orders.",
-    title: "Multi-tenant maintenance ops with AI for intake — rules for the operation.",
-    sub: "For UK property managers who run properties, residents, contractors, and work orders and need accountable triage without autonomous dispatch.",
+    card: "PropertyManagerOS — multi-tenant ops: properties, residents, contractors, work orders.",
+    title: "PropertyManagerOS — multi-tenant maintenance ops with AI for intake, rules for the operation.",
+    sub: "For UK property managers who run properties, residents, contractors, and work orders and need accountable triage without autonomous dispatch. Pre-launch product line under Chapelgate Technologies.",
     job: [
       "Coordinating jobs across sites without a single structured intake spine.",
       "Safety-critical reports that must not be “handled” by a model alone.",
@@ -88,14 +94,15 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No fake property-manager firm logos. No “dashboard for your residents today.” No production call-pilot authorised claim.",
     metaDescription:
-      "Multi-tenant maintenance ops with AI intake and deterministic controls.",
+      "PropertyManagerOS — multi-tenant maintenance ops with AI intake and deterministic controls.",
   },
   {
     slug: "maintenance-companies",
+    productName: "MaintenanceOS",
     label: "Maintenance companies",
-    card: "Cleaner handoffs into jobs and communications — under testing.",
-    title: "Cleaner handoffs into jobs and communications — under testing.",
-    sub: "For maintenance companies that receive work from landlords, agents, and managers and need structured intake upstream of the job — without AI inventing dispatches.",
+    card: "MaintenanceOS — cleaner handoffs into jobs and communications — under testing.",
+    title: "MaintenanceOS — cleaner handoffs into jobs and communications.",
+    sub: "For maintenance companies that receive work from landlords, agents, and managers and need structured intake upstream of the job — without AI inventing dispatches. First public Chapelgate *OS marketing site (pilot-stage).",
     job: [
       "Incomplete job details from phone-only reporting.",
       "Disputes over what was promised on the call.",
@@ -112,14 +119,15 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No contractor marketplace pitch. No “we dispatch your team automatically.” No invented SLA percentages.",
     metaDescription:
-      "Structured handoffs into jobs and communications — under testing.",
+      "MaintenanceOS — structured handoffs into jobs and communications — under testing.",
   },
   {
     slug: "housing-associations",
+    productName: "HousingAssociationOS",
     label: "Housing associations",
-    card: "Safety latch and escalation queues designed for accountable housing ops.",
-    title: "Accountable intake for housing maintenance — humans clear what matters.",
-    sub: "For UK housing associations and housing providers who need structured reporting, safety latching, and escalation queues without over-claiming live voice GA.",
+    card: "HousingAssociationOS — safety latch and escalation queues for accountable housing ops.",
+    title: "HousingAssociationOS — accountable intake for housing maintenance.",
+    sub: "For UK housing associations and housing providers who need structured reporting, safety latching, and escalation queues without over-claiming live voice GA. Pre-launch product line under Chapelgate Technologies.",
     job: [
       "Vulnerable residents and safety-critical fabric issues need clear escalation.",
       "Audit trails matter for governance — not marketing dashboards with fake KPIs.",
@@ -137,14 +145,15 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No housing-provider customer list. No regulatory certification badges. No “compliant out of the box” legal claims.",
     metaDescription:
-      "Safety latch and escalation for accountable housing maintenance ops.",
+      "HousingAssociationOS — safety latch and escalation for accountable housing maintenance ops.",
   },
   {
     slug: "facilities-management",
+    productName: "FacilitiesOS",
     label: "Facilities management",
-    card: "Triage and audit trails for sites that need human clearance.",
-    title: "Site maintenance triage with clearance and audit in the loop.",
-    sub: "For UK facilities management teams coordinating sites, contractors, and urgent reports — AI for capture, rules and people for consequential steps.",
+    card: "FacilitiesOS — triage and audit trails for sites that need human clearance.",
+    title: "FacilitiesOS — site maintenance triage with clearance and audit in the loop.",
+    sub: "For UK facilities management teams coordinating sites, contractors, and urgent reports — AI for capture, rules and people for consequential steps. Pre-launch product line under Chapelgate Technologies.",
     job: [
       "Mixed urgent and routine reports across sites.",
       "Need for consistent classification before a contractor moves.",
@@ -161,14 +170,15 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No FM enterprise logos. No uptime or site-count vanity metrics. No “AI runs your FM operation.”",
     metaDescription:
-      "Site triage with human clearance and audit framing. Pre-launch.",
+      "FacilitiesOS — site triage with human clearance and audit framing. Pre-launch.",
   },
   {
     slug: "councils",
+    productName: "CouncilOS",
     label: "Councils",
-    card: "Controlled intake and oversight language for public-sector maintenance.",
-    title: "Controlled maintenance intake language for public-sector teams.",
-    sub: "For council and local-authority maintenance contacts evaluating early access — honest about pilot stage, strict about safety and money boundaries.",
+    card: "CouncilOS — controlled intake and oversight language for public-sector maintenance.",
+    title: "CouncilOS — controlled maintenance intake for public-sector teams.",
+    sub: "For council and local-authority maintenance contacts evaluating early access — honest about pilot stage, strict about safety and money boundaries. Pre-launch product line under Chapelgate Technologies.",
     job: [
       "Public callers expect clarity; systems must not over-promise.",
       "Emergency wording must follow UK practice (999), not improvised scripts.",
@@ -186,14 +196,15 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No “approved for local government” badges. No named council customers. No live telephony GA.",
     metaDescription:
-      "Controlled intake language for public-sector maintenance evaluation.",
+      "CouncilOS — controlled intake language for public-sector maintenance evaluation.",
   },
   {
     slug: "holiday-lets",
+    productName: "HolidayLetOS",
     label: "Holiday lets",
-    card: "Guest-facing maintenance calls structured without autonomous dispatch.",
-    title: "Guest maintenance calls, structured — without autonomous dispatch.",
-    sub: "For UK holiday-let operators who get out-of-hours guest reports and need clear capture, safety boundaries, and human handover — not a model inventing engineer visits.",
+    card: "HolidayLetOS — guest-facing maintenance calls structured without autonomous dispatch.",
+    title: "HolidayLetOS — guest maintenance calls, structured — without autonomous dispatch.",
+    sub: "For UK holiday-let operators who get out-of-hours guest reports and need clear capture, safety boundaries, and human handover — not a model inventing engineer visits. Pre-launch product line under Chapelgate Technologies.",
     job: [
       "Guests calling about boilers, access, leaks — often outside office hours.",
       "Risk of anyone promising a contractor visit or compensation on the spot.",
@@ -210,7 +221,7 @@ export const industryRoles: IndustryRole[] = [
     willNotClaim:
       "No OTA partnership badges. No occupancy or booking-channel integrations as live features. No “24/7 live guest line” claim.",
     metaDescription:
-      "Guest maintenance calls structured without autonomous dispatch.",
+      "HolidayLetOS — guest maintenance calls structured without autonomous dispatch.",
   },
 ];
 
