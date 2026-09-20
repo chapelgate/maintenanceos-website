@@ -8,6 +8,11 @@ on:
       - '.github/workflows/provider-evidence.yml'
 permissions:
   contents: read
+
+concurrency:
+  group: maintenanceos-provider-evidence
+  cancel-in-progress: true
+
 jobs:
   reconcile:
     runs-on: ubuntu-latest
@@ -34,4 +39,4 @@ jobs:
         with:
           name: maintenanceos-provider-evidence-${{ github.sha }}
           path: provider-evidence.json
-          retention-days: 14
+          retention-days: 7

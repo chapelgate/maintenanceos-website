@@ -1,11 +1,7 @@
 name: MaintenanceOS OpenAI Explicit Transfer Parity
 
 on:
-  push:
-    branches: [explicit-transfer-only-20260911]
-    paths:
-      - scripts/apply_openai_explicit_transfer_fix.py
-      - .github/workflows/openai-explicit-transfer-autopatch.yml
+  workflow_dispatch:
 
 permissions:
   contents: write

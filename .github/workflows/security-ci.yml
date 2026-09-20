@@ -95,7 +95,7 @@ jobs:
             pip-audit.json
             sbom-python.json
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 7
 
       - name: Enforce vulnerability gate
         if: steps.dep.outputs.run_audit == 'true' && steps.audit.outcome == 'failure'

@@ -4,15 +4,13 @@ name: MaintenanceOS N=2 Live Dual Call
 # existing GitHub Actions Twilio secrets. Never prints secret values.
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - cursor/n2-live-concurrency-e283
-    paths:
-      - "scripts/n2_live_dual_call_probe.py"
-      - ".github/workflows/n2-live-dual-call.yml"
 
 permissions:
   contents: read
+
+concurrency:
+  group: maintenanceos-n2-live-dual-call
+  cancel-in-progress: false
 
 jobs:
   n2-dual-call:
@@ -62,4 +60,4 @@ jobs:
             docs/concurrency_100_evidence/n2-live-dual-call.json
             docs/concurrency_100_evidence/n2-preflight.json
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 7
