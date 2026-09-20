@@ -11,7 +11,7 @@
 4. Review screen: name, greeting, services, FAQs, hours (edit inline).
 5. Choose voice + language (UK English default).
 6. **Call my receptionist** — sandbox test (feature-flagged; not fake).
-7. Connect calendar / number / go-live checklist (later steps; can defer).
+7. Connect calendar / number / go-live checklist — calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). Not a live phone booking step.
 
 ## Failure modes (must handle)
 
@@ -56,6 +56,8 @@ POST /v1/onboarding/jobs/{jobId}/promote
 - `ONBOARDING_WEB_INGEST` — enable crawl
 - `ONBOARDING_SANDBOX_CALL` — enable test call
 - `ONBOARDING_PUBLIC` — show `/create` publicly (default off until QA)
+- `CALENDAR_ADAPTERS_ENABLED` — enable calendar companion (default off)
+- `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` — show `/create` slot picker (default off)
 
 ## Claims-safe marketing copy
 

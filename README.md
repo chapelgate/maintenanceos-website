@@ -62,6 +62,24 @@ NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run dev
 
 Leave `NEXT_PUBLIC_FORM_ENDPOINT` empty to exercise the client-only stub. Either way, thank-you copy must not say that email was sent. DigitalOcean static hosting cannot run this stub; production needs a contract-compliant external endpoint.
 
+### Calendar adapters (companion + /create panel)
+
+Provider-agnostic book / reschedule lives in `packages/calendar-adapters` and is **off by default** (`CALENDAR_ADAPTERS_ENABLED`). Same static-export rule: no Next `/api/*` routes. Contract: [`docs/CALENDAR_ADAPTERS_CONTRACT.md`](docs/CALENDAR_ADAPTERS_CONTRACT.md).
+
+```bash
+# Terminal 1 — mock adapter on loopback
+CALENDAR_ADAPTERS_ENABLED=true CALENDAR_ADAPTER_PROVIDER=mock npm run calendar-adapters
+
+# Terminal 2 — show the /create slot picker
+NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED=true \
+NEXT_PUBLIC_CALENDAR_ENDPOINT=http://127.0.0.1:8789/v1/calendar \
+  npm run dev
+```
+
+Leave both public vars unset/false on DigitalOcean static hosting. `/create` then says **Calendar connect — coming / under testing** and never claims a booking. If the public flag is on and the endpoint is empty, the picker uses an in-browser mock labelled as local testing only.
+
+Google Calendar / Microsoft 365: set OAuth env on the companion process only (see `packages/calendar-adapters/README.md`). No secrets in git. Do not wire this to frozen live telephony.
+
 ### DigitalOcean App Platform (static)
 
 Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets.

@@ -33,6 +33,20 @@ export const siteConfig = {
    */
   onboardingScanEndpoint:
     process.env.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT ?? "",
+  /**
+   * Build-time gate for the /create calendar panel. Default false.
+   * Companion process uses CALENDAR_ADAPTERS_ENABLED (not inlined here).
+   */
+  calendarAdaptersEnabled: envFlag(
+    process.env.NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED,
+    false,
+  ),
+  /**
+   * Absolute URL prefix of the calendar companion (`…/v1/calendar`).
+   * Empty + public flag on = in-browser mock. Static export cannot use
+   * relative Next.js API routes.
+   */
+  calendarEndpoint: process.env.NEXT_PUBLIC_CALENDAR_ENDPOINT ?? "",
   locale: "en-GB",
 } as const;
 
