@@ -854,3 +854,18 @@ def test_resident_key_prompt_preserves_followup_context_without_guessing():
     assert "Answer only the question asked; do not repeat the full ordering script" in prompt
     assert "If asked for a fact not supplied here" in prompt
     assert "say you do not know rather than guessing" in prompt
+
+
+def test_resident_key_requires_gate_number_and_never_mentions_live_orders():
+    prompt = voice_bridge.SYSTEM_PROMPT
+    assert "they will need the gate number when ordering online" in prompt
+    assert 'Never mention "live orders"' in prompt
+    assert "order tracking" in prompt
+
+
+def test_topic_switch_and_transfer_contract_is_natural_and_strict():
+    prompt = voice_bridge.SYSTEM_PROMPT
+    assert "acknowledge the change naturally in one short sentence" in prompt
+    assert "do not finish or restart the old script" in prompt
+    assert "Routine repairs, uncertainty, topic changes, and awkward conversation are NOT reasons to transfer" in prompt
+    assert "Only transfer if the caller explicitly asks to speak to a person" in prompt
