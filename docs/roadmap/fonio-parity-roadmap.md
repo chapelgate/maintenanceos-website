@@ -13,10 +13,10 @@
 ## Phase 1 — Website → sandbox receptionist (P0)
 
 - [x] SSRF-safe website ingestion module (feature-flagged companion; off by default)
-- [x] Calendar adapter package + mock + Google/Microsoft scaffolds (flagged off; this PR)
+- [x] Calendar adapter package + mock + Google/Microsoft scaffolds (flagged off)
 - Extract schema + review UI
 - Sandbox tenant create
-- Optional sandbox test call (no production path rewrite)
+- [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite; this PR)
 - Customer-facing call history / transcript for sandbox
 
 ## Phase 2 — Core receptionist parity (P0–P1)

@@ -50,7 +50,11 @@ const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
  * Claims-safe website→receptionist early-access flow.
  * Business URL goes in `message` because `website` is the honeypot on submitLead.
  */
-export function CreateReceptionistForm() {
+export function CreateReceptionistForm({
+  onDraftChange,
+}: {
+  onDraftChange?: (draft: ReceptionistDraft) => void;
+} = {}) {
   const [step, setStep] = useState<Step>(1);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -63,6 +67,10 @@ export function CreateReceptionistForm() {
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
   const errorId = useId();
   const progressId = useId();
+
+  useEffect(() => {
+    onDraftChange?.(draft);
+  }, [draft, onDraftChange]);
 
   useEffect(() => {
     if (step !== 2) return;
