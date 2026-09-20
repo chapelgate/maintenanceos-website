@@ -58,6 +58,8 @@ If the caller asks for "a key", "an alley-gate key", "a resident key", "a replac
 Tell them ordinary resident keys are ordered at www.alleygates.co.uk. The current price is £22 including VAT and recorded delivery.
 Do not tell them to get the key from a landlord, housing association, housing provider, council, or another third party.
 If they cannot use the website or cannot pay online, tell them to email info@alleygates.co.uk so another payment method such as cash or bank transfer can be arranged. Do not offer to transfer the call unless the caller explicitly asks for a person.
+Once an ordinary resident-key enquiry has started, keep that as the active topic for natural follow-up questions. Short follow-ups such as "how much is it?", "does that include delivery?", "where do I order it?", "can I pay another way?", "what if I can't use the website?", or "how long does it take?" refer to the resident key unless the caller clearly changes subject or explicitly asks for a master key. Answer only the question asked; do not repeat the full ordering script on every turn.
+For resident-key follow-ups: the known facts are www.alleygates.co.uk; £22 including VAT and recorded delivery; and, if online ordering/payment cannot be used, info@alleygates.co.uk can arrange another payment method such as cash or bank transfer. If asked for a fact not supplied here (for example a delivery timescale), say you do not know rather than guessing.
 
 MASTER KEY RULE:
 Never mention master-key details unless the caller explicitly asks for a master key or clearly states that they need a restricted organisational master key.
@@ -772,6 +774,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         gate_repair_context = False
         resident_key_context = False
         master_key_context = False
+        resident_key_first_answer_pending = False
         correction_attempts = 0
         # There is no caller transcript before the initial greeting. Treat the
         # greeting as a cleared turn so policy-validated greeting audio can flow.
@@ -880,7 +883,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             nonlocal turn_cleared, turn_number, transcription_watchdog,assistant_text_validated
             nonlocal last_output_item, last_output_started, last_output_ms,assistant_audio_bytes
             nonlocal greeting_pending, gate_repair_context, resident_key_context, master_key_context
-            nonlocal correction_attempts
+            nonlocal resident_key_first_answer_pending, correction_attempts
             async for raw in openai_ws:
                 if not websocket_event_within_limit(raw):
                     raise VoiceProtocolError("openai_event_too_large")
@@ -940,7 +943,12 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     if explicit_master:
                         master_key_context = True
                         resident_key_context = False
+                        resident_key_first_answer_pending = False
                     elif "key" in lowered:
+                        # Keep ordinary resident-key intent sticky across subsequent short
+                        # follow-up turns; only an explicit master-key request switches it.
+                        if not resident_key_context:
+                            resident_key_first_answer_pending = True
                         resident_key_context = True
                     gate_terms = ("gate", "alley gate", "alleygate")
                     fault_terms = (
@@ -1027,24 +1035,32 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                         return
 
                     if resident_key_context and not master_key_context:
+                        # Do not force every follow-up answer to repeat URL + price. That
+                        # made real calls sound confused when callers asked a different
+                        # question about the same key. Enforce the full route only on the
+                        # first resident-key answer; thereafter preserve context and block
+                        # cross-contamination with master-key/third-party advice.
                         forbidden_resident_key = any(term in lowered_output for term in (
-                            "master key", "info@alleygates.co.uk", "landlord",
-                            "housing provider", "housing association",
+                            "master key", "landlord", "housing provider", "housing association",
                         ))
                         required_resident_route = (
                             "alleygates.co.uk" in lowered_output
                             and ("£22" in transcript or "22" in lowered_output)
                         )
-                        if forbidden_resident_key or not required_resident_route:
+                        if forbidden_resident_key or (resident_key_first_answer_pending and not required_resident_route):
                             if await request_corrected_response(
-                                "The caller is asking about an ordinary resident alley-gate key, "
-                                "not a master key. Tell them to order it at www.alleygates.co.uk "
-                                "for £22 including VAT and recorded delivery. Do not mention master keys, "
-                                "landlords, housing providers or housing associations."
+                                "This is an ordinary resident alley-gate key enquiry. Keep the resident-key "
+                                "topic active and answer the caller's latest question directly. For the first "
+                                "key answer, give www.alleygates.co.uk and £22 including VAT and recorded "
+                                "delivery. For later follow-ups, do not repeat the whole script unless needed. "
+                                "If online ordering or payment cannot be used, info@alleygates.co.uk can arrange "
+                                "cash or bank transfer. Do not mention master keys, landlords or housing providers, "
+                                "and do not invent facts that are not in the supplied rules."
                             ):
                                 continue
                             await request_transfer("resident_key_contract_failed")
                             return
+                        resident_key_first_answer_pending = False
 
                     transfer_language = any(phrase in lowered_output for phrase in (
                         "put you through", "transfer you", "transfer the call",
