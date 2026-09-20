@@ -13,6 +13,7 @@
 ## Phase 1 — Website → sandbox receptionist (P0)
 
 - [x] SSRF-safe website ingestion module (feature-flagged companion; off by default)
+- [x] Calendar adapter package + mock + Google/Microsoft scaffolds (flagged off; this PR)
 - Extract schema + review UI
 - Sandbox tenant create
 - Optional sandbox test call (no production path rewrite)
@@ -21,7 +22,7 @@
 ## Phase 2 — Core receptionist parity (P0–P1)
 
 - Knowledge base productisation + provenance
-- Calendar booking adapters (Google / Microsoft class)
+- Customer-facing calendar connect in the receptionist (adapters exist; not GA)
 - Human transfer config in dashboard
 - Summaries (email/SMS)
 - Concurrent-call capacity design + load tests before claims

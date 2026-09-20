@@ -9,7 +9,8 @@
     "lint": "eslint",
     "form-stub": "node scripts/form-stub-server.mjs",
     "onboarding-scan": "node --experimental-strip-types packages/onboarding-ingest/src/server.ts",
-    "test": "node --test scripts/*.test.mjs && node --experimental-strip-types --test packages/onboarding-ingest/src/*.test.ts src/lib/onboarding-create.test.ts"
+    "calendar-adapters": "node --experimental-strip-types packages/calendar-adapters/src/server.ts",
+    "test": "node --test scripts/*.test.mjs && node --experimental-strip-types --test packages/onboarding-ingest/src/*.test.ts packages/calendar-adapters/src/*.test.ts src/lib/*.test.ts"
   },
   "dependencies": {
     "react": "19.1.0",

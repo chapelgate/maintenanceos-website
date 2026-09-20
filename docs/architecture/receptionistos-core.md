@@ -28,7 +28,7 @@ Marketing sites remain static (DigitalOcean free tier). Product APIs and voice r
 | Onboarding | URL ingest, extract, create tenant+assistant draft | Untrusted crawl content; never inject into system prompts raw |
 | Knowledge | Collections, citations, approve-to-learn | Every fact has source URL/snippet/hash when from web |
 | Voice | Session, STT/TTS/LLM, barge-in, transfer | Reuse pilot modules behind feature flags |
-| Tools | Calendar, CRM, job systems | Deterministic allowlists; money/safety latches |
+| Tools | Calendar, CRM, job systems | Calendar v0: `packages/calendar-adapters` (flagged off). Deterministic allowlists; money/safety latches |
 | Comms | SMS/email summaries, webhooks | Opt-in; retention controls |
 | Admin | Dashboard, transcripts, analytics | Customer-facing; not Streamlit-only |
 

@@ -1,3 +1,4 @@
+import { CalendarConnectPanel } from "@/components/CalendarConnectPanel";
 import { CreateReceptionistForm } from "@/components/CreateReceptionistForm";
 import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
@@ -53,6 +54,8 @@ export default function CreateReceptionistPage() {
           </div>
         </section>
 
+        <CalendarConnectPanel />
+
         <section aria-labelledby="create-steps-heading">
           <h2
             id="create-steps-heading"
@@ -81,6 +84,10 @@ export default function CreateReceptionistPage() {
             <li>
               This page does not claim a 30-second live phone number or commercial
               always-on service
+            </li>
+            <li>
+              Calendar connect is coming / under testing unless a local adapter
+              flag is on — this page never invents a booked confirmation
             </li>
             <li>
               Live telephony changes stay gated until controlled-call criteria

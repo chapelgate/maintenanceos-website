@@ -55,7 +55,7 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 
 | FEATURE | FONIO | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
-| Calendar book / reschedule | Yes (Google/Microsoft etc.) | Not customer-facing | Calendar adapters | BUILD | P0 | MISSING |
+| Calendar book / reschedule | Yes (Google/Microsoft etc.) | Adapter interface + mock + Google/Microsoft OAuth scaffolds in `packages/calendar-adapters`. Flag `CALENDAR_ADAPTERS_ENABLED` defaults off. `/create` shows “coming / under testing” unless `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` + mock/companion. No live phone booking. | Not customer-GA; OAuth operator-configured; no voice confirmation | BUILD | P0 | PARTIAL (this PR: flagged adapter foundation) |
 | Tool/actions (jobs, tickets, CRM) | API/CRM integrations claimed | Deterministic ops + action evidence in pilot | Secure tool framework + adapters | REUSE + BUILD | P0 | PARTIAL |
 | Structured variable extraction | Claimed | Partial in voice/ops | Configurable schemas | BUILD | P0 | PARTIAL |
 
@@ -101,7 +101,8 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 - **HAVE:** industry *OS naming; UK safety posture in product source  
 - **PARTIAL:** voice telephony pilot; transfers; evidence; supervisor; marketing site  
 - **PARTIAL (P0 onboarding):** public `/create` multi-step funnel + draft review; crawl only if scan endpoint configured (else queued / early access). Instant test call still not website-triggered.  
-- **MISSING (P0):** production website→receptionist engine; customer test-call UX; calendar; customer dashboard; modular KB productisation  
+- **PARTIAL (P0 calendar):** flagged `packages/calendar-adapters` (mock + Google/Microsoft class); `/create` honest coming-soon unless local flag. Not customer-GA; no voice booking confirmation.  
+- **MISSING (P0):** production website→receptionist engine; customer test-call UX; customer dashboard; modular KB productisation  
 
 **Do not modify frozen live telephony** until controlled-call gates in `CURRENT_STATUS.md` pass.
 
