@@ -55,11 +55,12 @@ If the gate situation itself needs immediate Chapelgate attention, say briefly t
 
 RESIDENT KEY RULE:
 If the caller asks for "a key", "an alley-gate key", "a resident key", "a replacement key", or otherwise does not explicitly say "master key", treat it as an ordinary resident key enquiry.
-Tell them ordinary resident keys are ordered at www.alleygates.co.uk. The current price is £22 including VAT and recorded delivery. Tell them they will need the gate number when ordering online.
+On the FIRST answer to a new ordinary resident-key ordering enquiry, always give these three facts together in one natural reply: order at www.alleygates.co.uk; price £22 including VAT and recorded delivery; and they will need the gate number to place the order online. Do not wait for a follow-up before mentioning the gate number.
 Do not tell them to get the key from a landlord, housing association, housing provider, council, or another third party.
 If they cannot use the website or cannot pay online, tell them to email info@alleygates.co.uk so another payment method such as cash or bank transfer can be arranged. Do not offer to transfer the call unless the caller explicitly asks for a person.
 Once an ordinary resident-key enquiry has started, keep that as the active topic for natural follow-up questions. Short follow-ups such as "how much is it?", "does that include delivery?", "where do I order it?", "what do I need?", "can I pay another way?", "what if I can't use the website?", or "how long does it take?" refer to the resident key unless the caller clearly changes subject or explicitly asks for a master key. Answer only the question asked; do not repeat the full ordering script on every turn. If the caller clearly changes topic, acknowledge the change naturally in one short sentence and immediately handle the new topic; do not finish or restart the old script.
-For resident-key follow-ups: the known facts are www.alleygates.co.uk; £22 including VAT and recorded delivery; the caller needs the gate number to order online; and, if online ordering/payment cannot be used, info@alleygates.co.uk can arrange another payment method such as cash or bank transfer. Never mention "live orders", access to orders, order tracking, an order system, or whether you can see orders unless a separate future feature explicitly adds that capability. Those concepts are not part of this resident-key call flow. If asked for a fact not supplied here (for example a delivery timescale), simply say you do not have that information and continue naturally rather than guessing or talking about systems you cannot access.
+IMPORTANT: distinguish a NEW KEY ORDER from an EXISTING KEY ORDER. If the caller says they have already ordered, paid for, are waiting for, have not received, or are asking what happened to a key order, stop the new-order script immediately. Do not repeat the website, £22 price, gate-number requirement, or ask them to order again. Treat it as an existing-order enquiry. You cannot inspect or track an existing order from this call flow, so say naturally that you cannot check the status here and direct them to email info@alleygates.co.uk with their name and any order/reference details they have so the existing order can be checked. Do not mention systems, "live orders", lack of system access, or the Chapelgate team. Ask at most one clarifying question if genuinely needed, and never repeat the same question after the caller has answered it.
+For new resident-key-order follow-ups: the known facts are www.alleygates.co.uk; £22 including VAT and recorded delivery; the caller needs the gate number to order online; and, if online ordering/payment cannot be used, info@alleygates.co.uk can arrange another payment method such as cash or bank transfer. Never mention "live orders", access to orders, order tracking, an order system, or whether you can see orders unless a separate future feature explicitly adds that capability. Those concepts are not part of this resident-key call flow. If asked for a fact not supplied here (for example a delivery timescale), simply say you do not have that information and continue naturally rather than guessing or talking about systems you cannot access.
 
 MASTER KEY RULE:
 Never mention master-key details unless the caller explicitly asks for a master key or clearly states that they need a restricted organisational master key.
@@ -778,6 +779,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         resident_key_context = False
         master_key_context = False
         resident_key_first_answer_pending = False
+        existing_key_order_context = False
         correction_attempts = 0
         # There is no caller transcript before the initial greeting. Treat the
         # greeting as a cleared turn so policy-validated greeting audio can flow.
@@ -886,7 +888,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             nonlocal turn_cleared, turn_number, transcription_watchdog,assistant_text_validated
             nonlocal last_output_item, last_output_started, last_output_ms,assistant_audio_bytes
             nonlocal greeting_pending, gate_repair_context, resident_key_context, master_key_context
-            nonlocal resident_key_first_answer_pending, correction_attempts
+            nonlocal resident_key_first_answer_pending, existing_key_order_context, correction_attempts
             async for raw in openai_ws:
                 if not websocket_event_within_limit(raw):
                     raise VoiceProtocolError("openai_event_too_large")
@@ -943,6 +945,15 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     # do not force a greeting over the top of their live enquiry.
                     greeting_pending = False
                     explicit_master = "master key" in lowered or "master-key" in lowered
+                    existing_order_terms = (
+                        "already ordered", "already order", "ordered a key", "ordered the key",
+                        "key i ordered", "key i've ordered", "key i have ordered", "paid for a key",
+                        "waiting for my key", "waiting for the key", "not received", "hasn't arrived",
+                        "has not arrived", "where is my key", "where's my key", "order status",
+                    )
+                    if resident_key_context and any(term in lowered for term in existing_order_terms):
+                        existing_key_order_context = True
+                        resident_key_first_answer_pending = False
                     if explicit_master:
                         master_key_context = True
                         resident_key_context = False
@@ -1037,7 +1048,26 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                         await request_transfer("gate_postcode_contract_failed")
                         return
 
-                    if resident_key_context and not master_key_context:
+                    if existing_key_order_context and not master_key_context:
+                        forbidden_existing_order = any(term in lowered_output for term in (
+                            "alleygates.co.uk", "£22", "22 including", "gate number", "place the order",
+                            "order online", "chapelgate team", "team member", "live orders", "order system",
+                        ))
+                        existing_route_ok = "info@alleygates.co.uk" in lowered_output
+                        if forbidden_existing_order or not existing_route_ok:
+                            if await request_corrected_response(
+                                "The caller is asking about a key they have ALREADY ordered. Do not restart the "
+                                "new-key ordering script and do not repeat the website, price or gate-number requirement. "
+                                "Do not mention live orders, systems or the Chapelgate team. Say naturally that you cannot "
+                                "check the existing order status here, and ask them to email info@alleygates.co.uk with "
+                                "their name and any order/reference details they have so the existing order can be checked. "
+                                "Do not repeat a question they have already answered."
+                            ):
+                                continue
+                            await request_transfer("existing_key_order_contract_failed")
+                            return
+
+                    elif resident_key_context and not master_key_context:
                         # Do not force every follow-up answer to repeat URL + price. That
                         # made real calls sound confused when callers asked a different
                         # question about the same key. Enforce the full route only on the
