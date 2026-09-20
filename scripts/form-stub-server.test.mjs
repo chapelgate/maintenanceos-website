@@ -48,10 +48,13 @@ test("success body never claims email delivery", () => {
 });
 
 test("lead types match the public contract", () => {
-  assert.deepEqual([...LEAD_TYPES].sort(), ["contact", "early_demo", "launch_list"]);
+  assert.deepEqual(
+    [...LEAD_TYPES].sort(),
+    ["contact", "create_receptionist", "early_demo", "launch_list"],
+  );
 });
 
-test("validateLead accepts the three conversion types", () => {
+test("validateLead accepts the four conversion types", () => {
   for (const lead_type of LEAD_TYPES) {
     const result = validateLead({ ...validLead, lead_type });
     assert.equal(result.ok, true);
@@ -94,6 +97,26 @@ test("POST /leads stores jsonl and returns queued_stub", async () => {
     assert.equal(stored.lead_type, "early_demo");
     assert.equal(stored.email, "alex@example.com");
     assert.equal(stored.sends_email, false);
+  });
+});
+
+test("POST /leads create_receptionist type is accepted", async () => {
+  await withServer(async ({ base, dataFile }) => {
+    const res = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lead_type: "create_receptionist",
+        email: "ops@example.com",
+        message:
+          "Website-to-receptionist early access request.\nBusiness URL: https://example.com/\nDraft JSON:\n{}",
+      }),
+    });
+    assert.equal(res.status, 200);
+    assert.equal((await res.json()).mode, "queued_stub");
+    const stored = JSON.parse(fs.readFileSync(dataFile, "utf8").trim());
+    assert.equal(stored.lead_type, "create_receptionist");
+    assert.match(stored.message, /Business URL: https:\/\/example.com\//);
   });
 });
 

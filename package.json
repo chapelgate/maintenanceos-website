@@ -8,7 +8,7 @@
     "start": "npx serve out",
     "lint": "eslint",
     "form-stub": "node scripts/form-stub-server.mjs",
-    "test": "node --test scripts/*.test.mjs"
+    "test": "node --test scripts/*.test.mjs && node --experimental-strip-types --test packages/onboarding-ingest/src/ssrf.test.ts src/lib/onboarding-create.test.ts"
   },
   "dependencies": {
     "react": "19.1.0",

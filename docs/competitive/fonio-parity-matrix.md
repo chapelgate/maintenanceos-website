@@ -22,8 +22,8 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 
 | FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
-| Enter business website URL to bootstrap assistant | Marketed (~30s create from website) | No public create funnel | Build `/create` + ingestion service | BUILD | P0 | MISSING |
-| AI extracts company knowledge from site | Claimed | Not productised | SSRF-safe crawler + extract schema | BUILD | P0 | MISSING |
+| Enter business website URL to bootstrap assistant | Marketed (~30s create from website) | Claims-safe `/create` multi-step funnel (URL → check → draft → `create_receptionist` lead). No live number, no test-call button. | Wire scan service + sandbox tenant; do not claim 30s live phone | BUILD | P0 | PARTIAL (this PR: public create funnel) |
+| AI extracts company knowledge from site | Claimed | Review UI + optional `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`. If unset, crawl is queued — no invented results. Hostname may seed business name only. SSRF helpers + unit tests in `packages/onboarding-ingest`. | Production crawler still feature-flagged; DNS re-check after resolve/redirect | BUILD | P0 | PARTIAL (this PR: onboarding draft + queued scan honesty) |
 | Instant test call / “call my receptionist” | Marketed | Pilot voice under testing; not website-triggered | Wire create flow to sandbox tenant only | BUILD + REUSE pilot voice | P0 | PARTIAL |
 | No-code assistant setup | Claimed | Streamlit supervisor internal | Customer dashboard | BUILD | P0 | PARTIAL |
 | Voice + welcome message selection | 120+ voices | Limited pilot voices | Voice catalogue UX | BUILD/BUY TTS | P1 | PARTIAL |
@@ -100,7 +100,8 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 
 - **HAVE:** industry *OS naming; UK safety posture in product source  
 - **PARTIAL:** voice telephony pilot; transfers; evidence; supervisor; marketing site  
-- **MISSING (P0):** public website→receptionist engine; customer create/test UX; calendar; customer dashboard; modular KB productisation  
+- **PARTIAL (P0 onboarding):** public `/create` multi-step funnel + draft review; crawl only if scan endpoint configured (else queued / early access). Instant test call still not website-triggered.  
+- **MISSING (P0):** production website→receptionist engine; customer test-call UX; calendar; customer dashboard; modular KB productisation  
 
 **Do not modify frozen live telephony** until controlled-call gates in `CURRENT_STATUS.md` pass.
 

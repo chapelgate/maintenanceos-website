@@ -26,6 +26,13 @@ export const siteConfig = {
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? "local",
   /** Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md. Empty = local stub. */
   formEndpoint: process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "",
+  /**
+   * Absolute URL of an optional onboarding scan service (POST `{ url }`).
+   * Empty = no crawl; `/create` must not invent extracted content.
+   * Static export cannot use relative Next.js API routes.
+   */
+  onboardingScanEndpoint:
+    process.env.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT ?? "",
   locale: "en-GB",
 } as const;
 
