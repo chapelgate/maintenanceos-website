@@ -25,8 +25,9 @@ The historical copy under `chapelgate/cloud-workers/jobs/maintenanceos` is a **d
 | Evidence Wallet | DigitalOcean `chapelgate-production-wallet` `46.101.16.174` | Unrelated |
 | Cheap Trips | DigitalOcean `chapelgate-cheap-trips-production` `206.189.112.98` | Unrelated |
 | MaintenanceOS (active voice path) | Render `maintenanceos-redteam-v2` | Lane A pilot — `/health` 200 2026-09-20T11:47:59Z; armed 3/10; **do not pause** |
-| MaintenanceOS (DO voice droplet) | DigitalOcean `maintenanceos-production-voice` `601962983` `165.227.227.9` | Created 2026-09-19T13:31:55Z; tags `temporary,ssh-recovery`. **Do not create another MOS droplet.** |
-| MaintenanceOS (DO recovery clone) | DigitalOcean `maintenanceos-recovery-clone-20260920` `602160871` `144.126.201.252` | Created 2026-09-20T12:11:55Z from snap `246275088`; tags `temporary,recovery-clone`. Caddy 308; SSH open. **Do not create a third MOS droplet.** |
+| MaintenanceOS (DO voice droplet) | DigitalOcean `maintenanceos-production-voice` `601962983` `165.227.227.9` | Created 2026-09-19T13:31:55Z; tags `temporary,ssh-recovery`. Caddy 308; SSH open. **Do not create another MOS droplet.** |
+| MaintenanceOS (DO recovery clone) | DigitalOcean `maintenanceos-recovery-clone-20260920` `602160871` | **GONE** from live inventory 2026-09-20T12:49:33Z after owner password reset 12:31Z. |
+| MaintenanceOS (DO phone staging) | DigitalOcean `maintenanceos-phone-staging` `602165089` `138.68.137.113` | Created 2026-09-20T12:43:06Z; tags `chapelgate,maintenanceos,staging`; fresh 24.04; Pingora 502 on :80; SSH open. **Do not create a fourth MOS droplet.** |
 | MaintenanceOS (App Platform target) | `maintenanceos-london` | **Absent** from live App Platform list. Live $0 starter static site is `seahorse-app` / `maintenanceos-website`. |
 
 A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assumption is invalid. Do not deploy MaintenanceOS there, modify its routing/database/Caddy, or stop its containers.

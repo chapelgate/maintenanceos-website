@@ -25,8 +25,9 @@ EXISTING_VOICE_NAMES = {
     DROPLET_NAME,
     "maintenanceos-production-voice",
     "maintenanceos-recovery-clone-20260920",
+    "maintenanceos-phone-staging",
 }
-EXISTING_VOICE_IDS = {601962983, 602160871}
+EXISTING_VOICE_IDS = {601962983, 602160871, 602165089}
 REGION = "lon1"
 SIZE = "s-2vcpu-4gb"  # minimal production-capable for WSS + Gemini
 IMAGE = "ubuntu-24-04-x64"
