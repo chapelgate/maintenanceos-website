@@ -1,6 +1,6 @@
 # MaintenanceOS Current Status
 
-Date: 2026-09-15
+Date: 2026-09-20
 
 ## Authoritative source
 
@@ -24,8 +24,9 @@ The historical copy under `chapelgate/cloud-workers/jobs/maintenanceos` is a **d
 | Holiday Let Operator (HLO) | DigitalOcean `chapelgate-hlo-production` `167.99.202.163` | **DO NOT TOUCH** for MaintenanceOS work |
 | Evidence Wallet | DigitalOcean `chapelgate-production-wallet` `46.101.16.174` | Unrelated |
 | Cheap Trips | DigitalOcean `chapelgate-cheap-trips-production` `206.189.112.98` | Unrelated |
-| MaintenanceOS (active) | Render `maintenanceos-redteam-v2` | Lane A pilot — keep until DO acceptance |
-| MaintenanceOS (target) | DigitalOcean App Platform `maintenanceos-london` (lon) | **No droplet yet** — see `docs/migration/DO_MIGRATION_REPORT.md` |
+| MaintenanceOS (active voice path) | Render `maintenanceos-redteam-v2` | Lane A pilot — `/health` 200 2026-09-20T11:47:59Z; armed 3/10; **do not pause** |
+| MaintenanceOS (DO voice droplet) | DigitalOcean `maintenanceos-production-voice` `601962983` `165.227.227.9` | Created 2026-09-19T13:31:55Z; tags `temporary,ssh-recovery`; Caddy 308; SSH recovery in progress. **Do not create another MOS droplet.** Recovery snap `246275088`. |
+| MaintenanceOS (App Platform target) | `maintenanceos-london` | **Absent** from live App Platform list. Live $0 starter static site is `seahorse-app` / `maintenanceos-website`. |
 
 A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assumption is invalid. Do not deploy MaintenanceOS there, modify its routing/database/Caddy, or stop its containers.
 
