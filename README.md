@@ -96,13 +96,31 @@ NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT=http://127.0.0.1:8790/v1/sandbox \
 
 Leave both public vars unset/false on DigitalOcean static hosting. `/create` then says **Sandbox test call — under testing / coming** and never invents a live customer call. If the public flag is on and the endpoint is empty, the panel uses an in-browser scripted stub labelled as local testing only. Asking for WebRTC / live media returns `not_configured` — this is not production telephony and does not touch the frozen live voice path. Do not claim Fonio-parity voice quality.
 
+### Customer dashboard (call history / transcripts / bookings stub)
+
+Claims-safe `/dashboard` lives in `packages/customer-dashboard` and is **off by default** (`CUSTOMER_DASHBOARD_ENABLED` / `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED`). Same static-export rule: no Next `/api/*` routes. Contract: [`docs/CUSTOMER_DASHBOARD_CONTRACT.md`](docs/CUSTOMER_DASHBOARD_CONTRACT.md).
+
+```bash
+# Terminal 1 — SAMPLE catalogue on loopback
+CUSTOMER_DASHBOARD_ENABLED=true npm run customer-dashboard
+
+# Terminal 2 — show the labelled demo dashboard
+NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED=true \
+NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT=http://127.0.0.1:8791/v1/dashboard \
+  npm run dev
+```
+
+Leave both public vars unset/false on DigitalOcean static hosting. `/dashboard` then says **Customer dashboard — coming / under testing** and never presents sample rows as live production metrics. If the public flag is on and the endpoint is empty, the page uses an in-browser mock labelled **SAMPLE / DEMO**. An empty store (`CUSTOMER_DASHBOARD_DEMO_DATA=false`, or the in-browser “Empty store” control) invents no customers.
+
+Nav shows **Dashboard (soon)** when the public flag is off, and **Dashboard** when it is on. Do not wire this to frozen live telephony.
+
 ### DigitalOcean App Platform (static)
 
 Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets.
 
 ## Desktop navigation (IA v0.2)
 
-How it works · Features · AI receptionist · Security · **Pricing** · Industries (+ Join launch list CTA). `/demo` is the conversion canon (launch list + early demo tabs/sections).
+How it works · Features · AI receptionist · Create · **Dashboard (soon)** · Security · **Pricing** · Industries (+ Join launch list CTA). `/demo` is the conversion canon (launch list + early demo tabs/sections). `/dashboard` is coming / under testing unless `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` is on.
 
 ## Programme docs (repo root)
 

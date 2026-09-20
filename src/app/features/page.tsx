@@ -64,6 +64,12 @@ const groups = [
   },
 ] as const;
 
+const comingUnderTesting = [
+  "Flagged /dashboard foundation for call history, SAMPLE transcripts, and a bookings stub — off by default",
+  "When the flag is off the page says coming / under testing and does not show sample rows as live product",
+  "SAMPLE / DEMO rows are labelled examples; an empty store does not invent customers",
+] as const;
+
 const notOnThisSite = [
   "Commercially live / generally available product",
   "Public always-on customer phone receptionist",
@@ -93,6 +99,20 @@ export default function FeaturesPage() {
             </ul>
           </section>
         ))}
+
+        <section>
+          <h2 className="text-xl font-semibold text-ink">
+            Customer dashboard foundation
+          </h2>
+          <p className="mt-1 text-sm font-medium text-accent">
+            Coming / under testing — not a live customer portal
+          </p>
+          <ul className="mt-4 list-disc space-y-2 pl-5 text-muted">
+            {comingUnderTesting.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
 
         <section>
           <h2 className="text-xl font-semibold text-ink">Not claimed on this site</h2>

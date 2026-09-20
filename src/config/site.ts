@@ -62,8 +62,27 @@ export const siteConfig = {
    */
   sandboxTestCallEndpoint:
     process.env.NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT ?? "",
+  /**
+   * Build-time gate for /dashboard. Default false.
+   * Companion process uses CUSTOMER_DASHBOARD_ENABLED (not inlined here).
+   */
+  customerDashboardEnabled: envFlag(
+    process.env.NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED,
+    false,
+  ),
+  /**
+   * Absolute URL prefix of the dashboard companion (`…/v1/dashboard`).
+   * Empty + public flag on = in-browser SAMPLE mock. Static export cannot
+   * use relative Next.js API routes.
+   */
+  customerDashboardEndpoint:
+    process.env.NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT ?? "",
   locale: "en-GB",
 } as const;
+
+export const dashboardNavLabel = siteConfig.customerDashboardEnabled
+  ? "Dashboard"
+  : "Dashboard (soon)";
 
 /** Conversion forms — always render via LeadCaptureForm. See docs/FORM_ENDPOINT_CONTRACT.md. */
 export type LeadType =
@@ -89,6 +108,7 @@ export const primaryNav = [
   { href: "/features/", label: "Features" },
   { href: "/ai-receptionist/", label: "AI receptionist" },
   { href: "/create/", label: "Create" },
+  { href: "/dashboard/", label: dashboardNavLabel },
   { href: "/security/", label: "Security" },
   { href: "/industries/", label: "Industries", children: industries },
   { href: "/pricing/", label: "Pricing" },
@@ -100,6 +120,7 @@ export const footerNav = {
     { href: "/features/", label: "Features" },
     { href: "/ai-receptionist/", label: "AI receptionist" },
     { href: "/create/", label: "Create receptionist" },
+    { href: "/dashboard/", label: dashboardNavLabel },
     { href: "/security/", label: "Security" },
     { href: "/industries/", label: "Industries" },
     { href: "/pricing/", label: "Pricing" },
