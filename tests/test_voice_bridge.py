@@ -853,7 +853,8 @@ def test_resident_key_prompt_preserves_followup_context_without_guessing():
     assert "keep that as the active topic for natural follow-up questions" in prompt
     assert "Answer only the question asked; do not repeat the full ordering script" in prompt
     assert "If asked for a fact not supplied here" in prompt
-    assert "say you do not know rather than guessing" in prompt
+    assert "simply say you do not have that information" in prompt
+    assert "rather than guessing" in prompt
 
 
 def test_resident_key_requires_gate_number_and_never_mentions_live_orders():
