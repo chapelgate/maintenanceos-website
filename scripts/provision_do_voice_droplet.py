@@ -21,6 +21,13 @@ sys.path.insert(0, str(ROOT))
 import ush_client  # noqa: E402
 
 DROPLET_NAME = "chapelgate-maintenanceos-voice-test"
+EXISTING_VOICE_NAMES = {
+    DROPLET_NAME,
+    "maintenanceos-production-voice",
+    "maintenanceos-recovery-clone-20260920",
+    "maintenanceos-phone-staging",
+}
+EXISTING_VOICE_IDS = {601962983, 602160871, 602165089}
 REGION = "lon1"
 SIZE = "s-2vcpu-4gb"  # minimal production-capable for WSS + Gemini
 IMAGE = "ubuntu-24-04-x64"
@@ -31,8 +38,17 @@ PROTECTED_NAMES = {
     "chapelgate-production-01",
     "chapelgate-production-01-keyed",
     "chapelgate-ush-1",
+    "hlo-prod-20260916T194329Z",
+    "hlo-restore-verify-20260919",
 }
-PROTECTED_IPS = {"167.99.202.163", "46.101.16.174", "206.189.112.98", "68.183.44.222"}
+PROTECTED_IPS = {
+    "167.99.202.163",
+    "46.101.16.174",
+    "206.189.112.98",
+    "68.183.44.222",
+    "144.126.226.143",
+    "178.128.168.246",
+}
 
 
 def _ush_do(operation: str, params: dict | None = None) -> dict:
@@ -153,7 +169,8 @@ def _find_existing() -> dict | None:
     droplets = _request("GET", "/droplets?per_page=200").get("droplets", [])
     for droplet in droplets:
         name = droplet.get("name") or ""
-        if name == DROPLET_NAME:
+        droplet_id = droplet.get("id")
+        if droplet_id in EXISTING_VOICE_IDS or name in EXISTING_VOICE_NAMES:
             return droplet
         if name in PROTECTED_NAMES:
             continue
