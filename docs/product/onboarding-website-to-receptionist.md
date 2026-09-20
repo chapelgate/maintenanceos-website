@@ -36,6 +36,26 @@ POST /v1/onboarding/scan
 
 `ONBOARDING_WEB_INGEST` defaults to **false**. HTTPS + SSRF (DNS and redirect re-check) are enforced. Missing draft keys are omitted, never invented.
 
+## Sandbox test (v0 implemented)
+
+Companion: `packages/sandbox-test-call` (`npm run sandbox-test-call`). Contract: `docs/SANDBOX_TEST_CALL_CONTRACT.md`.
+
+```
+POST /v1/sandbox/sessions
+  { businessName, greeting, hours, services, faqs }
+  → { ok: true, liveCall: false, liveNumber: null, data: { id, kind: "sandbox", draft, … } }
+
+GET /v1/sandbox/sessions/{id}
+
+POST /v1/sandbox/sessions/{id}/test-call
+  { "mode": "scripted" }
+  → { ok: true, liveCall: false, data: { status: "scripted_demo_complete", turns: […] } }
+  → { ok: false, error: "not_configured" }   // mode=webrtc
+  → { ok: false, error: "live_call_forbidden" } // mode=live
+```
+
+`SANDBOX_TEST_CALL_ENABLED` defaults to **false**. This is not a live customer number.
+
 ## Later API (sandbox promote — not implemented)
 
 ```
@@ -54,7 +74,9 @@ POST /v1/onboarding/jobs/{jobId}/promote
 ## Feature flags
 
 - `ONBOARDING_WEB_INGEST` — enable crawl
-- `ONBOARDING_SANDBOX_CALL` — enable test call
+- `ONBOARDING_SANDBOX_CALL` — alias for sandbox test-call companion (default off)
+- `SANDBOX_TEST_CALL_ENABLED` — enable sandbox session + scripted test companion (default off)
+- `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` — show `/create` sandbox controls (default off)
 - `ONBOARDING_PUBLIC` — show `/create` publicly (default off until QA)
 - `CALENDAR_ADAPTERS_ENABLED` — enable calendar companion (default off)
 - `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` — show `/create` slot picker (default off)

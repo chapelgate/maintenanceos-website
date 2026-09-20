@@ -25,7 +25,7 @@ Missing keys are left empty. The client **does not invent** crawl results. If th
 | Env | Default | Purpose |
 | --- | --- | --- |
 | `ONBOARDING_WEB_INGEST` | `false` | Master switch. When not `true`/`1`, `POST /v1/onboarding/scan` returns `503 scan_disabled` and does not fetch. |
-| `ONBOARDING_SANDBOX_CALL` | `false` | Unused here. Health reports `sandboxCall: false`. Do not claim a test call. |
+| `ONBOARDING_SANDBOX_CALL` | `false` | Unused here. Health reports `sandboxCall: false`. Sandbox test-call is `packages/sandbox-test-call`. |
 | `ONBOARDING_SCAN_HOST` | `127.0.0.1` | Bind address (keep loopback unless you intend otherwise) |
 | `ONBOARDING_SCAN_PORT` | `8788` | Listen port |
 | `ONBOARDING_SCAN_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS allow origin for the static site |

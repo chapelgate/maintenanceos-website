@@ -39,7 +39,7 @@ Marketing sites remain static (DigitalOcean free tier). Product APIs and voice r
 3. Extract structured draft: business name, hours, services, FAQs, contact, locations.
 4. Create **sandbox** tenant + receptionist draft (not production telephony by default).
 5. User reviews/edits knowledge; picks voice + greeting.
-6. Optional: sandbox test call / “CALL MY RECEPTIONIST” against non-production number.
+6. Optional: sandbox test call / “CALL MY RECEPTIONIST” — v0 is flagged `packages/sandbox-test-call` (scripted / browser-mock only; no live number; frozen path untouched).
 7. Promote to live only after explicit confirm + number assignment.
 
 ## Provider abstraction

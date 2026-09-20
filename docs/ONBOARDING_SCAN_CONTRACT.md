@@ -79,7 +79,7 @@ Same expectation as `docs/FORM_ENDPOINT_CONTRACT.md`: `OPTIONS` → 204; allow `
 ## Feature flags
 
 - `ONBOARDING_WEB_INGEST=false` (default) — service may listen for `/health`, but scan is off.
-- `ONBOARDING_SANDBOX_CALL` — not implemented; do not advertise a test call.
+- `ONBOARDING_SANDBOX_CALL` — unused by this scan service (health still reports `sandboxCall: false`). Sandbox test-call is `packages/sandbox-test-call` (`SANDBOX_TEST_CALL_ENABLED`; this name is accepted there as an alias).
 - Marketing `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` — empty on DigitalOcean static by default.
 
 ## Claims

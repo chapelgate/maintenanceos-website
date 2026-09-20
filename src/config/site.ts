@@ -47,6 +47,21 @@ export const siteConfig = {
    * relative Next.js API routes.
    */
   calendarEndpoint: process.env.NEXT_PUBLIC_CALENDAR_ENDPOINT ?? "",
+  /**
+   * Build-time gate for the /create sandbox test-call panel. Default false.
+   * Companion process uses SANDBOX_TEST_CALL_ENABLED (not inlined here).
+   */
+  sandboxTestCallEnabled: envFlag(
+    process.env.NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED,
+    false,
+  ),
+  /**
+   * Absolute URL prefix of the sandbox companion (`…/v1/sandbox`).
+   * Empty + public flag on = in-browser scripted stub. Static export cannot
+   * use relative Next.js API routes.
+   */
+  sandboxTestCallEndpoint:
+    process.env.NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT ?? "",
   locale: "en-GB",
 } as const;
 

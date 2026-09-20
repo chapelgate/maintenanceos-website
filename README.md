@@ -80,6 +80,22 @@ Leave both public vars unset/false on DigitalOcean static hosting. `/create` the
 
 Google Calendar / Microsoft 365: set OAuth env on the companion process only (see `packages/calendar-adapters/README.md`). No secrets in git. Do not wire this to frozen live telephony.
 
+### Sandbox test call (companion + /create panel)
+
+A claims-safe “call my receptionist” **foundation** lives in `packages/sandbox-test-call` and is **off by default** (`SANDBOX_TEST_CALL_ENABLED` / `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED`). Same static-export rule: no Next `/api/*` routes. Contract: [`docs/SANDBOX_TEST_CALL_CONTRACT.md`](docs/SANDBOX_TEST_CALL_CONTRACT.md).
+
+```bash
+# Terminal 1 — sandbox companion on loopback
+SANDBOX_TEST_CALL_ENABLED=true npm run sandbox-test-call
+
+# Terminal 2 — show honest /create controls
+NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true \
+NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT=http://127.0.0.1:8790/v1/sandbox \
+  npm run dev
+```
+
+Leave both public vars unset/false on DigitalOcean static hosting. `/create` then says **Sandbox test call — under testing / coming** and never invents a live customer call. If the public flag is on and the endpoint is empty, the panel uses an in-browser scripted stub labelled as local testing only. Asking for WebRTC / live media returns `not_configured` — this is not production telephony and does not touch the frozen live voice path. Do not claim Fonio-parity voice quality.
+
 ### DigitalOcean App Platform (static)
 
 Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets.

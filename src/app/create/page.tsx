@@ -1,5 +1,5 @@
 import { CalendarConnectPanel } from "@/components/CalendarConnectPanel";
-import { CreateReceptionistForm } from "@/components/CreateReceptionistForm";
+import { CreateJourney } from "@/components/CreateJourney";
 import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
 
@@ -27,6 +27,10 @@ const steps = [
     title: "Submit early access",
     body: "We queue an early access lead with your URL and draft JSON. No live phone number is assigned.",
   },
+  {
+    title: "Optional sandbox test (flagged)",
+    body: "A sandbox test-call panel sits after the draft. Off by default it says under testing / coming. When enabled locally it runs a scripted demo against your draft — not a live customer number.",
+  },
 ] as const;
 
 export default function CreateReceptionistPage() {
@@ -46,11 +50,12 @@ export default function CreateReceptionistPage() {
             Start with your website URL
           </h2>
           <p className="mt-2 text-sm text-muted">
-            We will only contact you about early access for this product. No
-            fabricated live demo or test-call button runs from this page.
+            We will only contact you about early access for this product. The
+            sandbox test-call panel below stays off unless a local flag is on.
+            It never places a live customer call.
           </p>
           <div className="mt-6">
-            <CreateReceptionistForm />
+            <CreateJourney />
           </div>
         </section>
 
@@ -90,8 +95,12 @@ export default function CreateReceptionistPage() {
               flag is on — this page never invents a booked confirmation
             </li>
             <li>
+              Sandbox test call is under testing / coming unless a local flag is
+              on — this page never invents a live customer phone number
+            </li>
+            <li>
               Live telephony changes stay gated until controlled-call criteria
-              pass
+              pass. The frozen production voice path is not used here.
             </li>
           </ul>
           <p className="mt-3">

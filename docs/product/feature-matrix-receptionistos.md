@@ -8,7 +8,7 @@ Synced conceptually with `docs/competitive/fonio-parity-matrix.md`. Use this for
 | R-02 | SSRF-safe web ingest | P0 | PARTIAL (flagged companion in `packages/onboarding-ingest`; DNS/redirect re-check; off by default) | Platform |
 | R-03 | Knowledge extract + review UI | P0 | PARTIAL (editable draft; service returns known strings only; invent-nothing on failure) | Platform |
 | R-04 | Sandbox tenant + assistant | P0 | PLANNED | Platform |
-| R-05 | Sandbox test call | P0 | PLANNED | Voice (flagged) |
+| R-05 | Sandbox test call | P0 | PARTIAL (flagged `packages/sandbox-test-call`; `/create` coming-soon unless local flag; scripted stub only; no live number) | Voice (flagged) |
 | R-06 | Calendar adapters | P0 | PARTIAL (flagged `packages/calendar-adapters`; mock + Google/Microsoft OAuth scaffolds; `/create` coming-soon unless local flag; no voice booking) | Integrations |
 | R-07 | Customer dashboard (history/transcripts) | P0 | PLANNED | App |
 | R-08 | Provenance KB | P0 | PLANNED | Platform |
