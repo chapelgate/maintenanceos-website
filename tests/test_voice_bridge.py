@@ -846,3 +846,11 @@ def test_malformed_voice_observation_fails_closed_without_exception(value):
     assert not record_safety_observation(999, value)
     escalated, reason = requires_human_escalation(value)
     assert escalated and reason == "low_confidence_or_unknown_category"
+
+
+def test_resident_key_prompt_preserves_followup_context_without_guessing():
+    prompt = voice_bridge.SYSTEM_PROMPT
+    assert "keep that as the active topic for natural follow-up questions" in prompt
+    assert "Answer only the question asked; do not repeat the full ordering script" in prompt
+    assert "If asked for a fact not supplied here" in prompt
+    assert "say you do not know rather than guessing" in prompt
