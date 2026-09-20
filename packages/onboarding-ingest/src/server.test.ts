@@ -1,0 +1,180 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import {
+  createScanServer,
+  resetRateLimitForTests,
+} from "./server.ts";
+import type { ScanResult } from "./types.ts";
+
+function listen(server: ReturnType<typeof createScanServer>): Promise<number> {
+  return new Promise((resolve) => {
+    server.listen(0, "127.0.0.1", () => {
+      const addr = server.address();
+      if (!addr || typeof addr === "string") throw new Error("no port");
+      resolve(addr.port);
+    });
+  });
+}
+
+async function withServer(
+  options: Parameters<typeof createScanServer>[0],
+  fn: (base: string) => Promise<void>,
+): Promise<void> {
+  resetRateLimitForTests();
+  const server = createScanServer(options);
+  const port = await listen(server);
+  try {
+    await fn(`http://127.0.0.1:${port}`);
+  } finally {
+    await new Promise<void>((resolve, reject) =>
+      server.close((err) => (err ? reject(err) : resolve())),
+    );
+  }
+}
+
+test("GET /health reports ingest flag and no sandbox call", async () => {
+  await withServer({ ingestEnabled: false }, async (base) => {
+    const res = await fetch(`${base}/health`);
+    const json = await res.json();
+    assert.equal(res.status, 200);
+    assert.equal(json.ok, true);
+    assert.equal(json.ingestEnabled, false);
+    assert.equal(json.sandboxCall, false);
+    assert.equal(json.scanPath, "/v1/onboarding/scan");
+  });
+});
+
+test("POST scan is disabled when ONBOARDING_WEB_INGEST is off", async () => {
+  await withServer({ ingestEnabled: false }, async (base) => {
+    const res = await fetch(`${base}/v1/onboarding/scan`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: "http://localhost:3000" },
+      body: JSON.stringify({ url: "https://example.com/" }),
+    });
+    const json = await res.json();
+    assert.equal(res.status, 503);
+    assert.equal(json.ok, false);
+    assert.equal(json.error, "scan_disabled");
+    assert.equal(res.headers.get("access-control-allow-origin"), "http://localhost:3000");
+  });
+});
+
+test("POST scan denies SSRF targets and does not invent a draft", async () => {
+  let called = false;
+  await withServer(
+    {
+      ingestEnabled: true,
+      scan: async () => {
+        called = true;
+        return {
+          ok: false,
+          error: "non_public_host",
+          message: "This URL is not a public website and will not be fetched.",
+          warnings: ["ssrf_denied"],
+        };
+      },
+    },
+    async (base) => {
+      const res = await fetch(`${base}/v1/onboarding/scan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: "https://127.0.0.1/" }),
+      });
+      // Handler still uses injected scan; also cover built-in deny via a second server.
+      assert.ok(res.status === 400 || res.status === 422);
+      const json = await res.json();
+      assert.equal(json.ok, false);
+      assert.equal(json.draft, undefined);
+    },
+  );
+  assert.equal(called, true);
+
+  await withServer({ ingestEnabled: true }, async (base) => {
+    const res = await fetch(`${base}/v1/onboarding/scan`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: "https://localhost/admin" }),
+    });
+    const json = await res.json();
+    assert.equal(res.status, 400);
+    assert.equal(json.ok, false);
+    assert.equal(json.error, "non_public_host");
+    assert.equal(json.draft, undefined);
+  });
+});
+
+test("POST scan happy path returns draft shape /create already maps", async () => {
+  const draftResult: ScanResult = {
+    ok: true,
+    untrusted: true,
+    draft: {
+      businessName: "Acme Plumbing",
+      hours: "Mo-Fr 08:00-17:00",
+      services: "Boiler repair",
+      faqs: "Q: Do you cover London?\nA: Yes, within the M25.",
+    },
+    warnings: ["greeting_not_found", "untrusted_crawl_text"],
+    sources: [{ url: "https://acme.example/", status: 200, bytes: 120 }],
+  };
+
+  await withServer(
+    {
+      ingestEnabled: true,
+      scan: async (url) => {
+        assert.equal(url, "https://acme.example/");
+        return draftResult;
+      },
+    },
+    async (base) => {
+      const res = await fetch(`${base}/v1/onboarding/scan`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: JSON.stringify({ url: "https://acme.example/" }),
+      });
+      const json = await res.json();
+      assert.equal(res.status, 200);
+      assert.equal(json.ok, true);
+      assert.equal(json.untrusted, true);
+      assert.equal(json.draft.businessName, "Acme Plumbing");
+      assert.equal(json.draft.hours, "Mo-Fr 08:00-17:00");
+      assert.equal(json.draft.services, "Boiler repair");
+      assert.match(json.draft.faqs, /Do you cover London/);
+      assert.equal(json.draft.greeting, undefined);
+      assert.equal(res.headers.get("access-control-allow-origin"), "http://localhost:3000");
+    },
+  );
+});
+
+test("OPTIONS preflight is empty 204", async () => {
+  await withServer({ ingestEnabled: true }, async (base) => {
+    const res = await fetch(`${base}/v1/onboarding/scan`, {
+      method: "OPTIONS",
+      headers: { Origin: "http://localhost:3000" },
+    });
+    assert.equal(res.status, 204);
+    assert.equal(
+      res.headers.get("access-control-allow-methods")?.includes("POST"),
+      true,
+    );
+  });
+});
+
+test("invalid JSON and missing url fail closed", async () => {
+  await withServer({ ingestEnabled: true }, async (base) => {
+    const bad = await fetch(`${base}/v1/onboarding/scan`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{",
+    });
+    assert.equal(bad.status, 400);
+    const missing = await fetch(`${base}/v1/onboarding/scan`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ href: "https://example.com/" }),
+    });
+    assert.equal(missing.status, 400);
+  });
+});

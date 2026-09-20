@@ -23,7 +23,20 @@
 | Thin content | Ask user to add FAQ / upload PDF |
 | Extract low confidence | Highlight fields needing confirm |
 
-## API sketch (onboarding service)
+## API (v0 implemented for `/create`)
+
+The marketing client is **synchronous**. Companion service: `packages/onboarding-ingest` (`npm run onboarding-scan`). Contract: `docs/ONBOARDING_SCAN_CONTRACT.md`.
+
+```
+POST /v1/onboarding/scan
+  { "url": "https://example.com" }
+  → { "ok": true, "untrusted": true, "draft": { businessName, greeting, hours, services, faqs }, "warnings": [] }
+  → { "ok": false, "error": "non_public_host|scan_disabled|fetch_failed|…", "message": "…", "warnings": [] }
+```
+
+`ONBOARDING_WEB_INGEST` defaults to **false**. HTTPS + SSRF (DNS and redirect re-check) are enforced. Missing draft keys are omitted, never invented.
+
+## Later API (sandbox promote — not implemented)
 
 ```
 POST /v1/onboarding/scan

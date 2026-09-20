@@ -1,29 +1,107 @@
-# onboarding-ingest (scaffold)
+# onboarding-ingest
 
-Feature-flagged website → knowledge draft ingestion for ReceptionistOS / MaintenanceOS.
+Feature-flagged, SSRF-safe website → receptionist **draft** scan for ReceptionistOS / MaintenanceOS.
 
-**Status:** scaffold only — not wired to production telephony.
+This is a **standalone Node service**, not a Next.js API route. The marketing site stays `output: 'export'` on DigitalOcean static hosting. `/create` calls this service only when `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` is an absolute `http(s)` URL.
+
+**Status:** local / staging companion. Off by default. Not wired to production telephony. Crawl text is **untrusted data** and must never be concatenated into a system prompt.
+
+## What `/create` already expects
+
+The marketing client (`src/lib/onboarding-create.ts`) POSTs `{ "url": "https://…" }` and maps **only** these string fields, from the JSON root or a `draft` object:
+
+| Field | Meaning |
+| --- | --- |
+| `businessName` | Visible business name |
+| `greeting` | Only if the site itself states a slogan/tagline |
+| `hours` | Opening hours found on the pages |
+| `services` | Services found on the pages |
+| `faqs` | FAQ pairs found on the pages |
+
+Missing keys are left empty. The client **does not invent** crawl results. If this endpoint is unset, `/create` says the crawl is queued and may seed `businessName` from the hostname only.
 
 ## Flags
 
-- `ONBOARDING_WEB_INGEST=false` (default)
-- `ONBOARDING_SANDBOX_CALL=false` (default)
-- `ONBOARDING_PUBLIC=false` (default)
+| Env | Default | Purpose |
+| --- | --- | --- |
+| `ONBOARDING_WEB_INGEST` | `false` | Master switch. When not `true`/`1`, `POST /v1/onboarding/scan` returns `503 scan_disabled` and does not fetch. |
+| `ONBOARDING_SANDBOX_CALL` | `false` | Unused here. Health reports `sandboxCall: false`. Do not claim a test call. |
+| `ONBOARDING_SCAN_HOST` | `127.0.0.1` | Bind address (keep loopback unless you intend otherwise) |
+| `ONBOARDING_SCAN_PORT` | `8788` | Listen port |
+| `ONBOARDING_SCAN_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS allow origin for the static site |
 
-## SSRF helpers (`src/ssrf.ts`)
+See also `docs/ONBOARDING_SCAN_CONTRACT.md` in the website repo.
 
-`allowPublicHttpsUrl` allows **public https only**. It blocks localhost, private/reserved IPv4 and IPv6 literals, cloud metadata hostnames, `.local`/`.internal` names, and userinfo in the URL.
+## Run locally
 
-`assertResolvedAddressesPublic` is the post-DNS / post-redirect check. Call it on every resolved address. Fail closed on unparseable values.
+From the website repo root (Node 22+):
 
-Unit tests: `src/ssrf.test.ts` (run via root `npm test`).
+```bash
+# Terminal 1 — scan service (still disabled until the ingest flag is on)
+npm run onboarding-scan
 
-## SSRF rules (must implement before enable)
+# Enable crawl for local/staging only
+ONBOARDING_WEB_INGEST=true npm run onboarding-scan
+```
 
-1. Only `https` URLs (`allowPublicHttpsUrl`)
-2. Resolve DNS; reject private, loopback, link-local, metadata IPs (`assertResolvedAddressesPublic`)
-3. Re-check IP after redirects
-4. Cap pages, bytes, and wall time
-5. Treat all fetched text as untrusted data (never system prompt)
+Health check:
 
-See `docs/security/threat-model-onboarding-ingest.md` in the website repo.
+```bash
+curl -s http://127.0.0.1:8788/health
+```
+
+Manual scan:
+
+```bash
+curl -s -X POST http://127.0.0.1:8788/v1/onboarding/scan \
+  -H 'Content-Type: application/json' \
+  -d '{"url":"https://example.com/"}'
+```
+
+### Point `/create` at it
+
+The Next.js **dev/build** process must see the absolute endpoint (static export inlines `NEXT_PUBLIC_*`):
+
+```bash
+# Terminal 2 — marketing site
+NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/v1/onboarding/scan \
+  npm run dev
+```
+
+Then open `/create/`, enter a public HTTPS URL, and continue. Step 2 should say a scan response was received only when this service returned mapped string fields. Empty fields mean “not found”, not invented copy.
+
+For a static preview of `out/`:
+
+```bash
+ONBOARDING_WEB_INGEST=true npm run onboarding-scan
+NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/v1/onboarding/scan npm run build
+npx serve out
+```
+
+DigitalOcean static hosting cannot run this process. Leave `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` empty there until a separate host runs this service. No new paid infra is required: run the same Node file on any existing loopback, staging VM, or free-tier process.
+
+## SSRF rules (enforced)
+
+1. HTTPS only (`allowPublicHttpsUrl` — http, userinfo, localhost, private/reserved IPs, metadata hosts denied)
+2. DNS lookup, then `assertResolvedAddressesPublic` on every address
+3. Connect to a resolved public IP with SNI/Host of the original hostname
+4. Re-check scheme, hostname, and resolved IPs after every redirect
+5. Caps: 5 pages, 256 KiB/page, 768 KiB total, 4 redirects, ~4s/page, 12s wall clock
+6. `robots.txt` honoured when it can be fetched (`User-agent: *` and `MaintenanceOS-OnboardingScan`)
+7. Fetched text is returned only as draft **data** (`untrusted: true`)
+
+## Claims-safe extract
+
+- Copy values that are present in JSON-LD, obvious meta/title, or a clearly labelled hours/services/FAQ block.
+- Do **not** invent a receptionist greeting, hours, services, or FAQs when extract fails.
+- Failures return `{ "ok": false, "error": "…", "message": "…", "warnings": […] }` with no draft.
+
+## Tests
+
+From repo root: `npm test` (includes `src/*.test.ts` here).
+
+```bash
+node --experimental-strip-types --test packages/onboarding-ingest/src/*.test.ts
+```
+
+Coverage: SSRF deny (localhost, private IPs, metadata, private DNS, redirect to metadata), feature flag off, robots `Disallow: /`, and happy-path draft shape (`businessName`, `hours`, `services`, `faqs`).

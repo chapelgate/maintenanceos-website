@@ -11,7 +11,7 @@
 | Boundary | Rule |
 | --- | --- |
 | Public `/create` form | Rate limit, CAPTCHA/abuse controls, email verify when public |
-| Crawl fetcher | Only public HTTPS; block RFC1918/link-local/metadata IPs; DNS rebinding checks; size/time caps |
+| Crawl fetcher | Implemented in `packages/onboarding-ingest`: public HTTPS only; RFC1918/link-local/metadata denied; DNS + redirect re-check; page/byte/time caps; `ONBOARDING_WEB_INGEST` off by default |
 | Extracted text | Untrusted; never concatenate into system prompts; store as data with provenance |
 | Promote-to-live | Human confirm; separate from sandbox |
 

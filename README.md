@@ -38,6 +38,20 @@ Serve the static site (optional): `npx serve out`.
 
 `launch_list`, `early_demo`, and `contact` render `LeadCaptureForm` (`/` `#join`, `/demo/`, `/contact/`). `/create/` uses `CreateReceptionistForm` with `lead_type` `create_receptionist`. The browser posts to `NEXT_PUBLIC_FORM_ENDPOINT`; this repo does not add `/api/*` routes. Optional site scan uses `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` (absolute URL only); if empty, `/create` queues crawl honestly and does not invent results.
 
+### Website onboarding scan (companion service)
+
+SSRF-safe crawl lives in `packages/onboarding-ingest` and is **off by default** (`ONBOARDING_WEB_INGEST`). It is a separate Node process so the static DigitalOcean export stays API-routeless. Contract: [`docs/ONBOARDING_SCAN_CONTRACT.md`](docs/ONBOARDING_SCAN_CONTRACT.md).
+
+```bash
+# Terminal 1 — enable crawl locally (loopback)
+ONBOARDING_WEB_INGEST=true npm run onboarding-scan
+
+# Terminal 2 — point /create at it (must be set for next dev/build)
+NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/v1/onboarding/scan npm run dev
+```
+
+The client POSTs `{ "url" }` and copies only `businessName`, `greeting`, `hours`, `services`, and `faqs` when those strings are present. Fetch/extract failures return errors/warnings — nothing is invented. Leave the Next env empty on DigitalOcean static hosting until this process runs elsewhere.
+
 ```bash
 # Terminal 1 — loopback stub (stores JSONL under .data/, never sends mail)
 npm run form-stub
