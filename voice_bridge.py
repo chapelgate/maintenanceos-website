@@ -291,7 +291,9 @@ def create_call_session(call_sid: str, caller: str, client_id: int) -> int:
 
 
 def _explicit_human_request(text: str) -> bool:
-    lowered = (text or "").casefold()
+    if not isinstance(text, str):
+        return False
+    lowered = text.casefold()
     return any(phrase in lowered for phrase in (
         "speak to a person", "speak to someone", "speak to a human",
         "speak to the manager", "talk to a person", "talk to someone",
