@@ -30,7 +30,11 @@ export const siteConfig = {
 } as const;
 
 /** Conversion forms — always render via LeadCaptureForm. See docs/FORM_ENDPOINT_CONTRACT.md. */
-export type LeadType = "launch_list" | "early_demo" | "contact";
+export type LeadType =
+  | "launch_list"
+  | "early_demo"
+  | "contact"
+  | "create_receptionist";
 
 /** Industry nav — *OS product line names. */
 export const industries = [
@@ -48,6 +52,7 @@ export const primaryNav = [
   { href: "/how-it-works/", label: "How it works" },
   { href: "/features/", label: "Features" },
   { href: "/ai-receptionist/", label: "AI receptionist" },
+  { href: "/create/", label: "Create" },
   { href: "/security/", label: "Security" },
   { href: "/industries/", label: "Industries", children: industries },
   { href: "/pricing/", label: "Pricing" },
@@ -58,6 +63,7 @@ export const footerNav = {
     { href: "/how-it-works/", label: "How it works" },
     { href: "/features/", label: "Features" },
     { href: "/ai-receptionist/", label: "AI receptionist" },
+    { href: "/create/", label: "Create receptionist" },
     { href: "/security/", label: "Security" },
     { href: "/industries/", label: "Industries" },
     { href: "/pricing/", label: "Pricing" },
@@ -75,6 +81,7 @@ export const footerNav = {
     { href: "/terms/", label: "Terms" },
   ],
   convert: [
+    { href: "/create/", label: "Create from website" },
     { href: "/demo/#launch", label: "Join launch list" },
     { href: "/demo/", label: "Request early demo" },
   ],
