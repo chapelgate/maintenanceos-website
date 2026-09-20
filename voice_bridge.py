@@ -315,9 +315,12 @@ def requires_immediate_human_escalation(text: str) -> tuple[bool, str, list]:
     result = classify(text)
     if result["safety_flags"]:
         return True, "deterministic_safety", result["safety_flags"]
-    # Generic human-review/escalation classifications are internal workflow
-    # signals, not permission to transfer a live caller. Live voice handoff is
-    # deliberately narrower: explicit caller request or genuine gate emergency.
+    # A caller explicitly asking for a person may carry an internal reason such
+    # as COMPLAINT, but generic review/escalation flags alone never initiate a
+    # live transfer.
+    if _explicit_human_request(text):
+        flags = result.get("human_escalation_flags") or []
+        return True, "caller_requested_human", flags
     return False, "", []
 
 
