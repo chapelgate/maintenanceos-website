@@ -1,7 +1,7 @@
 # Form endpoint contract (v1)
 
 **Status:** v1 — provider-independent  
-**Consumers:** `src/lib/lead-adapter.ts`, `src/components/LeadCaptureForm.tsx`  
+**Consumers:** `src/lib/lead-adapter.ts`, `src/components/LeadCaptureForm.tsx`, `src/components/CreateReceptionistForm.tsx`  
 **Local stub:** `scripts/form-stub-server.mjs` (`npm run form-stub`)
 
 This marketing site is a **static export** (`output: 'export'` in `next.config.ts`). There are **no Next.js API routes**. Lead capture posts from the browser to `NEXT_PUBLIC_FORM_ENDPOINT`. If that variable is empty, the client returns a local success stub and **must not claim that email was sent**.
@@ -12,13 +12,14 @@ Production hosting (for example DigitalOcean App Platform static) cannot run the
 
 Every conversion form uses `LeadCaptureForm` with one of:
 
-| `lead_type`   | Page                         | Intent                          |
-|---------------|------------------------------|---------------------------------|
-| `launch_list` | `/` (`#join`), `/demo/#launch` | Join launch list                |
-| `early_demo`  | `/demo/#demo`                | Request early demo              |
-| `contact`     | `/contact/`                  | General enquiry                 |
+| `lead_type`            | Page                         | Intent                          |
+|------------------------|------------------------------|---------------------------------|
+| `launch_list`          | `/` (`#join`), `/demo/#launch` | Join launch list                |
+| `early_demo`           | `/demo/#demo`                | Request early demo              |
+| `contact`              | `/contact/`                  | General enquiry                 |
+| `create_receptionist`  | `/create/`                   | Website→receptionist early access |
 
-Do not invent additional types without updating `LeadType` in `src/config/site.ts`.
+`create_receptionist` is captured by `CreateReceptionistForm` (not `LeadCaptureForm`). The `message` field should include the business URL and draft JSON. Do not invent additional types without updating `LeadType` in `src/config/site.ts`.
 
 ## Request
 
@@ -34,7 +35,7 @@ Accept: application/json
 
 | Field            | Required | Type      | Notes |
 |------------------|----------|-----------|--------|
-| `lead_type`      | yes      | string    | `launch_list` \| `early_demo` \| `contact` |
+| `lead_type`      | yes      | string    | `launch_list` \| `early_demo` \| `contact` \| `create_receptionist` |
 | `email`          | yes      | string    | Trimmed; basic `local@domain` shape |
 | `name`           | no       | string    | Omitted if empty |
 | `organisation`   | no       | string    | Omitted if empty |

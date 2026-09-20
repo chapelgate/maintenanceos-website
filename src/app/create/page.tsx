@@ -5,22 +5,26 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Create your AI receptionist",
   description:
-    "Paste your business website URL to join early access for website-to-receptionist onboarding. Pre-launch — this form does not provision a live phone number.",
+    "Paste your business website URL, review a draft, and request website-to-receptionist early access. Pre-launch — this form does not provision a live phone number.",
   path: "/create/",
 });
 
 const steps = [
   {
     title: "Share your website",
-    body: "We use your public site as the starting point for a receptionist knowledge draft.",
+    body: "Enter a public site URL and an email so we can record the early access request.",
   },
   {
-    title: "Review what we extract",
-    body: "You confirm business name, hours, services, and FAQs before anything goes further.",
+    title: "Check the URL",
+    body: "If a scan service is configured we ask it for a draft. If not, the crawl is queued — we do not invent extracted content.",
   },
   {
-    title: "Sandbox first",
-    body: "Early access creates a reviewable draft — not an always-on live phone line.",
+    title: "Review the draft",
+    body: "You edit business name, greeting, hours, services, and FAQs before anything is stored.",
+  },
+  {
+    title: "Submit early access",
+    body: "We queue an early access lead with your URL and draft JSON. No live phone number is assigned.",
   },
 ] as const;
 
@@ -30,7 +34,7 @@ export default function CreateReceptionistPage() {
       <PageHero
         eyebrow="Early access · Pre-launch"
         title="Turn your business website into an AI receptionist"
-        lede="Paste your site URL to join the website-to-receptionist early access list. Scanning and sandbox creation are coming next — this form does not place a live call or assign a phone number today."
+        lede="Paste your site URL, review a draft, and request website-to-receptionist early access. If no scan service is configured, the crawl is queued — we do not invent crawl results. This form does not place a live call or assign a phone number."
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <section aria-labelledby="create-form-heading">
@@ -42,7 +46,7 @@ export default function CreateReceptionistPage() {
           </h2>
           <p className="mt-2 text-sm text-muted">
             We will only contact you about early access for this product. No
-            fabricated live demo runs from this page.
+            fabricated live demo or test-call button runs from this page.
           </p>
           <div className="mt-6">
             <CreateReceptionistForm />
@@ -70,6 +74,10 @@ export default function CreateReceptionistPage() {
           <h2 className="text-base font-semibold text-ink">Honest limits</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>AI voice and receptionist behaviour remain under testing</li>
+            <li>
+              Website crawl is queued unless an external scan endpoint is
+              configured — this page will not invent extracted content
+            </li>
             <li>
               This page does not claim a 30-second live phone number or commercial
               always-on service

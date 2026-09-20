@@ -11,7 +11,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-export const LEAD_TYPES = new Set(["launch_list", "early_demo", "contact"]);
+export const LEAD_TYPES = new Set([
+  "launch_list",
+  "early_demo",
+  "contact",
+  "create_receptionist",
+]);
 export const MAX_BODY_BYTES = 32 * 1024;
 export const DEFAULT_HOST = "127.0.0.1";
 export const DEFAULT_PORT = 8787;
@@ -69,7 +74,8 @@ export function validateLead(payload) {
   if (!LEAD_TYPES.has(leadType)) {
     return {
       ok: false,
-      error: "lead_type must be launch_list, early_demo, or contact.",
+      error:
+        "lead_type must be launch_list, early_demo, contact, or create_receptionist.",
       status: 400,
     };
   }

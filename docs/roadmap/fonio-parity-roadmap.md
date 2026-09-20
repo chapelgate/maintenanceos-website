@@ -7,7 +7,7 @@
 
 - [x] Competitive parity matrix
 - [x] Architecture + onboarding + threat model + test plans (docs)
-- [ ] Claims-safe `/create` marketing funnel (preview / waitlist OK)
+- [x] Claims-safe `/create` marketing funnel (preview / waitlist OK)
 - [ ] SCM access for Cursor cloud agents on private website repo
 
 ## Phase 1 — Website → sandbox receptionist (P0)

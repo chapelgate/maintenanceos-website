@@ -36,7 +36,7 @@ Serve the static site (optional): `npx serve out`.
 
 ### Lead capture (static export)
 
-`launch_list`, `early_demo`, and `contact` all render `LeadCaptureForm` (`/` `#join`, `/demo/`, `/contact/`). The browser posts to `NEXT_PUBLIC_FORM_ENDPOINT`; this repo does not add `/api/*` routes.
+`launch_list`, `early_demo`, and `contact` render `LeadCaptureForm` (`/` `#join`, `/demo/`, `/contact/`). `/create/` uses `CreateReceptionistForm` with `lead_type` `create_receptionist`. The browser posts to `NEXT_PUBLIC_FORM_ENDPOINT`; this repo does not add `/api/*` routes. Optional site scan uses `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` (absolute URL only); if empty, `/create` queues crawl honestly and does not invent results.
 
 ```bash
 # Terminal 1 — loopback stub (stores JSONL under .data/, never sends mail)
