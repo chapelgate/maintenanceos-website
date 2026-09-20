@@ -870,3 +870,13 @@ def test_topic_switch_and_transfer_contract_is_natural_and_strict():
     assert "do not finish or restart the old script" in prompt
     assert "Routine repairs, uncertainty, topic changes, and awkward conversation are NOT reasons to transfer" in prompt
     assert "Only transfer if the caller explicitly asks to speak to a person" in prompt
+
+
+def test_key_prompt_separates_new_order_from_existing_order():
+    prompt = voice_bridge.SYSTEM_PROMPT
+    assert "FIRST answer to a new ordinary resident-key ordering enquiry" in prompt
+    assert "they will need the gate number" in prompt
+    assert "distinguish a NEW KEY ORDER from an EXISTING KEY ORDER" in prompt
+    assert "stop the new-order script immediately" in prompt
+    assert "never repeat the same question after the caller has answered it" in prompt
+    assert "info@alleygates.co.uk" in prompt
