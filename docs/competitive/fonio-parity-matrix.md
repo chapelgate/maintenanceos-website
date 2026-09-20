@@ -103,3 +103,16 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 - **MISSING (P0):** public website→receptionist engine; customer create/test UX; calendar; customer dashboard; modular KB productisation  
 
 **Do not modify frozen live telephony** until controlled-call gates in `CURRENT_STATUS.md` pass.
+
+
+## Project-wide benchmark rule
+
+**HARD RULE — applies to the whole MaintenanceOS / ReceptionistOS project.**
+
+Fonio is the minimum competitive benchmark, not the target ceiling. Every product, website, onboarding, knowledge, voice, conversation-quality, telephony, integration, dashboard, analytics, reliability, safety, performance and customer-experience change must be assessed against the relevant Fonio capability.
+
+- Do not knowingly regress below an already-achieved benchmark capability.
+- Where Fonio has a relevant capability, aim to meet it at minimum and exceed it where practical and evidence supports doing so.
+- New plans and acceptance criteria must explicitly consider the relevant Fonio parity gap.
+- Never claim parity or superiority without evidence from comparable testing.
+- This benchmark rule does **not** authorize changes to a frozen/live telephony path; normal safety, release and controlled-call gates still apply.
