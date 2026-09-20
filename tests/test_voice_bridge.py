@@ -493,7 +493,7 @@ def test_ordinary_key_bad_answer_is_suppressed_and_corrected(monkeypatch):
         {
             "type": "response.output_audio_transcript.done",
             "item_id": "good-key",
-            "transcript": "You can order an ordinary resident key at www.alleygates.co.uk for £22 including VAT and recorded delivery.",
+            "transcript": "You can order an ordinary resident key at www.alleygates.co.uk for £22 including VAT and recorded delivery. You will need the gate number when ordering online.",
         },
     ])
     twilio = FakeTwilio(connected_start_events() + [
