@@ -5,8 +5,8 @@ Synced conceptually with `docs/competitive/fonio-parity-matrix.md`. Use this for
 | ID | Feature | Priority | Status | Owner lane |
 | --- | --- | --- | --- | --- |
 | R-01 | Public `/create` funnel (claims-safe) | P0 | PARTIAL (multi-step early access; no live phone) | Website |
-| R-02 | SSRF-safe web ingest | P0 | PARTIAL (helpers + unit tests; crawl not enabled) | Platform |
-| R-03 | Knowledge extract + review UI | P0 | PARTIAL (editable draft; invent-nothing if no scan) | Platform |
+| R-02 | SSRF-safe web ingest | P0 | PARTIAL (flagged companion in `packages/onboarding-ingest`; DNS/redirect re-check; off by default) | Platform |
+| R-03 | Knowledge extract + review UI | P0 | PARTIAL (editable draft; service returns known strings only; invent-nothing on failure) | Platform |
 | R-04 | Sandbox tenant + assistant | P0 | PLANNED | Platform |
 | R-05 | Sandbox test call | P0 | PLANNED | Voice (flagged) |
 | R-06 | Calendar adapters | P0 | PLANNED | Integrations |

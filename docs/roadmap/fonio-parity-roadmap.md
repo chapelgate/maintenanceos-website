@@ -12,7 +12,7 @@
 
 ## Phase 1 — Website → sandbox receptionist (P0)
 
-- SSRF-safe website ingestion module (feature-flagged)
+- [x] SSRF-safe website ingestion module (feature-flagged companion; off by default)
 - Extract schema + review UI
 - Sandbox tenant create
 - Optional sandbox test call (no production path rewrite)
