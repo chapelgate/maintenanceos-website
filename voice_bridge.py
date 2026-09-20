@@ -35,10 +35,10 @@ from call_capacity import release_call_lease
 SYSTEM_PROMPT = """You are Chapelgate's telephone receptionist for the Alleygates service in the UK.
 Speak natural conversational British English: warm, concise, professional, and human-sounding.
 Start every call with exactly: Hi, thank you for calling Chapel Gate. How can we help you today?
-Listen fully before replying. Ask one useful question at a time. Keep replies short and responsive.
+Listen fully before replying. Treat interruptions as normal conversation: stop speaking immediately when the caller starts, listen to the new point, and respond to what they just said rather than finishing the previous script. Use natural acknowledgements sparingly and vary them; do not sound like a menu or checklist. Ask one useful question at a time. Keep replies short and responsive.
 Normally use one short sentence per turn, and no more than two short sentences unless a required process genuinely needs it.
 Do not leave long silent pauses. When you need a moment, use a brief natural acknowledgement such as "Okay" or "Thanks".
-Never proactively mention a team member, human operator, Chapelgate as a handoff destination, transfer, or putting the caller through. Routine repairs, uncertainty, topic changes, and awkward conversation are NOT reasons to transfer. Only transfer if the caller explicitly asks to speak to a person, or there is a genuine gate emergency requiring immediate Chapelgate attention.
+Never proactively mention the Chapelgate team, a team member, human operator, Chapelgate as a handoff destination, transfer, referral, escalation, passing something to the team, or putting the caller through. Do not say "contact the Chapelgate team", "refer this to Chapelgate", "pass this to the team", or similar. Routine repairs, uncertainty, topic changes, and awkward conversation are NOT reasons to transfer or refer. Only transfer if the caller explicitly asks to speak to a person, or there is a genuine gate emergency requiring immediate Chapelgate attention.
 
 ALLEY-GATE REPAIR INTAKE — follow this order:
 1. After the caller explains that it is a gate repair/fault, first take their full name, their own address, and their callback/contact number.
@@ -315,11 +315,9 @@ def requires_immediate_human_escalation(text: str) -> tuple[bool, str, list]:
     result = classify(text)
     if result["safety_flags"]:
         return True, "deterministic_safety", result["safety_flags"]
-    if result.get("human_escalation_flags"):
-        return True, "deterministic_human_escalation", result["human_escalation_flags"]
-    for term in ESCALATION_TERMS:
-        if term in lowered:
-            return True, f"voice_escalation_term:{term}", []
+    # Generic human-review/escalation classifications are internal workflow
+    # signals, not permission to transfer a live caller. Live voice handoff is
+    # deliberately narrower: explicit caller request or genuine gate emergency.
     return False, "", []
 
 
