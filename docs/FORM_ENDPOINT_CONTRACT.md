@@ -16,7 +16,7 @@ Every conversion form uses `LeadCaptureForm` with one of:
 |------------------------|------------------------------|---------------------------------|
 | `launch_list`          | `/` (`#join`), `/demo/#launch` | Join launch list                |
 | `early_demo`           | `/demo/#demo`                | Request early access (human briefing — not a live phone) |
-| `contact`              | `/contact/`                  | General enquiry                 |
+| `contact`              | `/contact/`                  | Human enquiry / early access (not a support desk) |
 | `create_receptionist`  | `/create/`                   | Website→receptionist early access |
 
 `create_receptionist` is captured by `CreateReceptionistForm` (not `LeadCaptureForm`). The `message` field should include the business URL and draft JSON. Do not invent additional types without updating `LeadType` in `src/config/site.ts`.

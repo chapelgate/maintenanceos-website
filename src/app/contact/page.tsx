@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata: Metadata = contentPageMetadata({
   title: "Contact",
   description:
-    "General enquiries about MaintenanceOS. The public path is /create. Launch-list and early-access briefing forms live on /demo. Pre-launch — not a live phone.",
+    "Genuine human enquiries and early access. Product interest starts at /create. Pre-launch — not live phone provisioning, not a GA support desk, no invented SLA.",
   path: "/contact/",
 });
 
@@ -15,7 +15,7 @@ export default function ContactPage() {
     <>
       <PageHero
         title="Contact"
-        lede="General enquiries about MaintenanceOS. Prefer Create from website for the public path, or /demo for launch-list signup and an early-access briefing."
+        lede="Genuine human enquiries about MaintenanceOS. Product interest starts at Create from website. Launch-list and early-access briefings live on /demo. Not live phone provisioning, not a GA support desk, and no invented response SLA."
       />
       <div className="mx-auto max-w-xl space-y-8 px-4 py-12">
         <aside className="rounded-md border border-border bg-surface p-4 text-sm text-muted">
@@ -40,8 +40,8 @@ export default function ContactPage() {
               — a human briefing, not a live phone number
             </li>
             <li>
-              This page — anything else that is not create, briefing, or
-              launch-list signup
+              This page — genuine human enquiries / early access. Not a
+              support desk, not live phone provisioning, no invented SLA
             </li>
           </ul>
         </aside>
@@ -50,6 +50,7 @@ export default function ContactPage() {
         <LeadCaptureForm
           leadType="contact"
           title="Send a message"
+          helper="Human enquiry only — not a GA support desk, not live number provisioning, and no promised response time."
           submitLabel="Send enquiry"
           showMessage
         />
@@ -64,6 +65,9 @@ export default function ContactPage() {
             FAQ
           </a>
           .
+        </p>
+        <p className="text-xs text-muted">
+          No support-desk hours. No live phone. No invented SLA.
         </p>
       </div>
     </>

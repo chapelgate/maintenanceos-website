@@ -108,3 +108,5 @@ TELEPHONY_CONTROLLED_CALL: NO-GO
 **Fonio amendment (2026-09-21, /demo CTAs):** the public primary CTA is now **Create from website** (`/create/`). Join launch list / Request early demo remain allowed secondary conversions. Request early demo is a human early-access briefing — not live number provisioning. VERIFIED rows and the signature above are unchanged.
 
 **Fonio amendment (2026-09-21, /pricing):** `/pricing` stays request-pricing / launching soon. No live phone included in a plan, no GA, no invented £ figures. Primary CTA is Create from website (`/create/`). Telephony and calendar: early access / coming. VERIFIED rows and the signature above are unchanged.
+
+**Fonio amendment (2026-09-21, /contact):** `/contact` is for genuine human enquiries / early access. Primary path for product interest is Create from website (`/create/`). Not live phone provisioning, not a GA support desk, no invented SLAs. VERIFIED rows and the signature above are unchanged.
