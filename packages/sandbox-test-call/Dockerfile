@@ -18,6 +18,8 @@ WORKDIR /app
 
 COPY packages/sandbox-test-call/package.json ./packages/sandbox-test-call/package.json
 COPY packages/sandbox-test-call/src ./packages/sandbox-test-call/src
+COPY packages/receptionist-draft/package.json ./packages/receptionist-draft/package.json
+COPY packages/receptionist-draft/src ./packages/receptionist-draft/src
 
 # Public bind for PaaS health checks. PORT is injected by Render; the server
 # also honours SANDBOX_TEST_CALL_PORT. Sandbox stays off until

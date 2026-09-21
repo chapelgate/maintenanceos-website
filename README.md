@@ -50,7 +50,7 @@ ONBOARDING_WEB_INGEST=true npm run onboarding-scan
 NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/v1/onboarding/scan npm run dev
 ```
 
-The client POSTs `{ "url" }` and copies only `businessName`, `greeting`, `hours`, `services`, and `faqs` when those strings are present. Fetch/extract failures return errors/warnings — nothing is invented. Leave the Next env empty on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/ONBOARDING_SCAN_DEPLOY.md`) — then set `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` and **rebuild**. Do not put this process on the frozen Render voice app.
+The client POSTs `{ "url" }` and copies only `businessName`, `greeting`, `hours`, `services`, and `faqs` when those strings are present. Fetch/extract failures return errors/warnings — nothing is invented. After draft review, `/create` builds a claims-safe knowledge pack + system prompt (`packages/receptionist-draft`; `docs/RECEPTIONIST_DRAFT_CONTRACT.md`) without a companion. Leave the Next env empty on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/ONBOARDING_SCAN_DEPLOY.md`) — then set `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` and **rebuild**. Do not put this process on the frozen Render voice app.
 
 ```bash
 # Terminal 1 — loopback stub (stores JSONL under .data/, never sends mail)

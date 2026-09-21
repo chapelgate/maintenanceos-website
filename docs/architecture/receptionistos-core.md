@@ -37,9 +37,9 @@ Marketing sites remain static (DigitalOcean free tier). Product APIs and voice r
 1. User submits HTTPS business URL on `/create`.
 2. Ingestion service: DNS allowlist, block private IPs (SSRF), fetch robots-respecting pages (cap pages/bytes/time).
 3. Extract structured draft: business name, hours, services, FAQs, contact, locations.
-4. Create **sandbox** tenant + receptionist draft (not production telephony by default).
-5. User reviews/edits knowledge; picks voice + greeting.
-6. Optional: sandbox test call / “CALL MY RECEPTIONIST” — v0 is flagged `packages/sandbox-test-call` (scripted / browser-mock only; no live number; frozen path untouched).
+4. Review draft; build a claims-safe knowledge pack + system prompt (`packages/receptionist-draft`). Missing fields stay missing. Not production telephony.
+5. User reviews/edits knowledge pack and prompt.
+6. Optional: sandbox test call / “CALL MY RECEPTIONIST” — v0 is flagged `packages/sandbox-test-call` (scripted / browser-mock only; session stores pack + prompt; no live number; frozen path untouched).
 7. Promote to live only after explicit confirm + number assignment.
 
 ## Provider abstraction

@@ -1,5 +1,6 @@
 import type {
   ReceptionistDraft,
+  ReceptionistDraftResult,
   SandboxSession,
   SandboxStore,
   SandboxTest,
@@ -11,13 +12,20 @@ export function createMemoryStore(): SandboxStore {
   let sessionSeq = 0;
 
   return {
-    create(draft: ReceptionistDraft, now: Date): SandboxSession {
+    create(
+      draft: ReceptionistDraft,
+      now: Date,
+      built: ReceptionistDraftResult,
+    ): SandboxSession {
       sessionSeq += 1;
       const session: SandboxSession = {
         id: `sandbox_sess_${sessionSeq}`,
         kind: "sandbox",
         status: "ready",
         draft,
+        knowledgePack: built.knowledgePack,
+        systemPrompt: built.systemPrompt,
+        limitations: built.limitations,
         createdAt: now.toISOString(),
         liveCall: false,
         liveNumber: null,

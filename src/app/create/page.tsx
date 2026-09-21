@@ -24,8 +24,12 @@ const steps = [
     body: "You edit business name, greeting, hours, services, and FAQs before anything is stored. Copied fields show where they came from and how confident the scan was. Empty fields were not invented.",
   },
   {
+    title: "Preview the receptionist pack",
+    body: "We turn the reviewed draft into a claims-safe knowledge pack and system prompt. You can edit them. Missing hours or services stay missing. This is not a live number and not always-on.",
+  },
+  {
     title: "Submit early access",
-    body: "We queue an early access lead with your URL and draft JSON. No live phone number is assigned.",
+    body: "We queue an early access lead with your URL, draft JSON, knowledge pack, and prompt. No live phone number is assigned.",
   },
   {
     title: "Optional sandbox test (flagged)",
@@ -39,7 +43,7 @@ export default function CreateReceptionistPage() {
       <PageHero
         eyebrow="Early access · Pre-launch"
         title="Turn your business website into an AI receptionist"
-        lede="Paste your site URL, review a draft, and request website-to-receptionist early access. If no scan service is configured, the crawl is queued — we do not invent crawl results. This form does not place a live call or assign a phone number."
+        lede="Paste your site URL, review a draft, preview a sandbox receptionist pack, and request website-to-receptionist early access. If no scan service is configured, the crawl is queued — we do not invent crawl results. This form does not place a live call or assign a phone number."
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <section aria-labelledby="create-form-heading">
@@ -93,6 +97,11 @@ export default function CreateReceptionistPage() {
             <li>
               Calendar connect is coming / under testing unless a local adapter
               flag is on — this page never invents a booked confirmation
+            </li>
+            <li>
+              The receptionist knowledge pack on this page is a sandbox draft
+              from reviewed fields — not a live number, not always-on, and not a
+              trained knowledge base. Missing hours or services stay missing.
             </li>
             <li>
               Sandbox test call is under testing / coming unless a local flag is

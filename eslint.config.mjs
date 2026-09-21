@@ -18,6 +18,7 @@ const eslintConfig = [
       "packages/onboarding-ingest/**",
       "packages/calendar-adapters/**",
       "packages/sandbox-test-call/**",
+      "packages/receptionist-draft/**",
       "next-env.d.ts",
     ],
   },

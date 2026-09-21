@@ -9,9 +9,10 @@
 2. `/create` — enter business URL (+ optional email).
 3. Progress UI: resolving → fetching → extracting → creating sandbox.
 4. Review screen: name, greeting, services, FAQs, hours (edit inline).
-5. Choose voice + language (UK English default).
-6. **Call my receptionist** — sandbox test (feature-flagged; not fake).
-7. Connect calendar / number / go-live checklist — calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). Not a live phone booking step.
+5. Preview claims-safe knowledge pack + system prompt (edit inline). Missing fields stay missing.
+6. Choose voice + language (UK English default).
+7. **Call my receptionist** — sandbox test (feature-flagged; not fake).
+8. Connect calendar / number / go-live checklist — calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). Not a live phone booking step.
 
 ## Failure modes (must handle)
 
@@ -36,14 +37,25 @@ POST /v1/onboarding/scan
 
 `ONBOARDING_WEB_INGEST` defaults to **false**. HTTPS + SSRF (DNS and redirect re-check) are enforced. Missing draft keys are omitted, never invented.
 
+## Receptionist draft (v0 implemented)
+
+Library: `packages/receptionist-draft`. Contract: `docs/RECEPTIONIST_DRAFT_CONTRACT.md`. Pure function — no companion and no Next API route.
+
+```
+buildReceptionistDraft({ businessName, greeting, hours, services, faqs })
+  → { knowledgePack, systemPrompt, limitations[] }
+```
+
+`/create` shows an editable preview after draft review. Missing hours/services stay omitted. The generated prompt must not claim a live number or always-on service. Sandbox `POST /v1/sandbox/sessions` stores the pack + prompt (or builds them from draft fields).
+
 ## Sandbox test (v0 implemented)
 
 Companion: `packages/sandbox-test-call` (`npm run sandbox-test-call`). Contract: `docs/SANDBOX_TEST_CALL_CONTRACT.md`.
 
 ```
 POST /v1/sandbox/sessions
-  { businessName, greeting, hours, services, faqs }
-  → { ok: true, liveCall: false, liveNumber: null, data: { id, kind: "sandbox", draft, … } }
+  { businessName, greeting, hours, services, faqs, knowledgePack?, systemPrompt? }
+  → { ok: true, liveCall: false, liveNumber: null, data: { id, kind: "sandbox", draft, knowledgePack, systemPrompt, limitations, … } }
 
 GET /v1/sandbox/sessions/{id}
 

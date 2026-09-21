@@ -15,7 +15,7 @@ Scan remains `docs/ONBOARDING_SCAN_DEPLOY.md` / service `maintenanceos-onboardin
 | Item | Value (from source, not assumed) |
 | --- | --- |
 | Health | `GET /health` → 200 `{ ok, service: "maintenanceos-sandbox-test-call", sandboxEnabled, telephony: false, liveCall: false, liveNumber: null, productionTelephony: false, frozenLivePathUntouched: true, sessionsPath }` even when the flag is off |
-| Create session | `POST /v1/sandbox/sessions` with JSON draft fields |
+| Create session | `POST /v1/sandbox/sessions` with JSON draft fields; response includes a claims-safe `knowledgePack` + `systemPrompt` (`packages/receptionist-draft`; missing hours/services stay missing; `liveCall: false`) |
 | Describe session | `GET /v1/sandbox/sessions/{id}` |
 | Scripted test | `POST /v1/sandbox/sessions/{id}/test-call` `{ "mode": "scripted" }` → `scripted_demo_complete`, `liveCall: false` |
 | WebRTC | `{ "mode": "webrtc" }` → **503** `not_configured`, `liveCall: false` — never a successful live call |
