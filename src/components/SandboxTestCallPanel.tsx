@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { siteConfig } from "@/config/site";
 import {
+  requestSandboxScriptedDemo,
   requestSandboxSession,
   requestSandboxTest,
   type ReceptionistDraft,
@@ -43,12 +44,12 @@ export function SandboxTestCallPanel({
   const [tested, setTested] = useState<SandboxTest | null>(null);
   const statusId = useId();
 
-  async function onCreateSession() {
+  async function onRunScriptedDemo() {
     setSessionState("submitting");
-    setTestState("idle");
+    setTestState("submitting");
     setDetail(null);
     setTested(null);
-    const outcome = await requestSandboxSession({
+    const outcome = await requestSandboxScriptedDemo({
       enabled,
       endpoint,
       draft,
@@ -56,12 +57,16 @@ export function SandboxTestCallPanel({
       systemPrompt: receptionist?.systemPrompt,
     });
     if (outcome.status === "ok") {
-      setSession(outcome.data);
+      setSession(outcome.data.session);
+      setTested(outcome.data.test);
       setSessionState("ok");
+      setTestState("ok");
       return;
     }
     setSession(null);
+    setTested(null);
     setSessionState("error");
+    setTestState("error");
     setDetail(
       outcome.status === "disabled"
         ? "Sandbox test call is off in this build. No live call was placed."
@@ -69,20 +74,37 @@ export function SandboxTestCallPanel({
     );
   }
 
-  async function onStartTest(mode: "scripted" | "webrtc") {
-    if (!session) {
-      setTestState("error");
-      setDetail("Create a sandbox session first. No live call was placed.");
-      return;
-    }
-    setTestState("submitting");
+  async function onTryWebrtc() {
+    setSessionState("submitting");
+    setTestState("idle");
     setDetail(null);
     setTested(null);
+    const created = await requestSandboxSession({
+      enabled,
+      endpoint,
+      draft,
+      knowledgePack: receptionist?.knowledgePack,
+      systemPrompt: receptionist?.systemPrompt,
+    });
+    if (created.status !== "ok") {
+      setSession(null);
+      setSessionState("error");
+      setTestState("error");
+      setDetail(
+        created.status === "disabled"
+          ? "Sandbox test call is off in this build. No live call was placed."
+          : created.message,
+      );
+      return;
+    }
+    setSession(created.data);
+    setSessionState("ok");
+    setTestState("submitting");
     const outcome = await requestSandboxTest({
       enabled,
       endpoint,
-      sessionId: session.id,
-      mode,
+      sessionId: created.data.id,
+      mode: "webrtc",
     });
     if (outcome.status === "ok") {
       setTested(outcome.data);
@@ -115,8 +137,9 @@ export function SandboxTestCallPanel({
           A feature-flagged sandbox session lives in{" "}
           <code className="text-xs">packages/sandbox-test-call</code> behind{" "}
           <code className="text-xs">SANDBOX_TEST_CALL_ENABLED=false</code>{" "}
-          (default off). This is not a live customer phone number, not
-          production telephony, and the frozen live voice path is untouched.
+          (default off). When enabled locally, a pack-aware scripted demo is
+          one click — still not a live customer phone number, not production
+          telephony, and the frozen live voice path is untouched.
         </p>
       </section>
     );
@@ -148,43 +171,35 @@ export function SandboxTestCallPanel({
       </p>
       <p className="mt-2 text-sm text-muted">
         {hasDraftSignal
-          ? "The scripted demo answers from the stored knowledge pack (business name, hours, services, FAQs) and follows the system prompt: missing facts stay missing. Empty fields are answered as not on file — never invented. This is still not a live phone call."
-          : "No draft fields have been entered yet. You can still create a sandbox session; missing pack facts will be answered as not on file."}
+          ? "One click runs a pack-aware scripted demo from the stored knowledge pack (name, hours, services, FAQs). Missing facts stay not on file — never invented. This is still not a live phone call."
+          : "No draft fields yet. One click still runs the scripted demo; missing pack facts are answered as not on file."}
       </p>
 
       <div id={statusId} className="mt-4 space-y-2 text-sm text-muted" aria-live="polite">
-        {sessionState === "submitting" ? <p>Creating sandbox session…</p> : null}
-        {testState === "submitting" ? <p>Starting scripted sandbox test…</p> : null}
+        {sessionState === "submitting" && testState !== "submitting" ? (
+          <p>Creating sandbox session…</p>
+        ) : null}
+        {testState === "submitting" ? <p>Running pack-aware scripted demo…</p> : null}
       </div>
 
       <div className="mt-4 flex flex-wrap gap-3">
         <button
           type="button"
-          disabled={sessionState === "submitting"}
-          onClick={() => void onCreateSession()}
+          disabled={sessionState === "submitting" || testState === "submitting"}
+          onClick={() => void onRunScriptedDemo()}
           className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
-        >
-          {sessionState === "submitting"
-            ? "Creating session…"
-            : "Create sandbox session from draft"}
-        </button>
-        <button
-          type="button"
-          disabled={!session || testState === "submitting"}
-          onClick={() => void onStartTest("scripted")}
-          className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
         >
           {testState === "submitting"
             ? "Running scripted demo…"
-            : "Start scripted sandbox test"}
+            : "Run pack-aware scripted demo"}
         </button>
         <button
           type="button"
-          disabled={!session || testState === "submitting"}
-          onClick={() => void onStartTest("webrtc")}
+          disabled={sessionState === "submitting" || testState === "submitting"}
+          onClick={() => void onTryWebrtc()}
           className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
         >
-          Try WebRTC / live media
+          WebRTC / live media (not configured)
         </button>
       </div>
 

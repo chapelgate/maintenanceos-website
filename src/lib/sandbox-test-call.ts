@@ -384,3 +384,28 @@ export async function requestSandboxTest(input: {
     "The sandbox service did not return a scripted demo. No live call was invented.",
   );
 }
+
+export type SandboxScriptedDemo = {
+  session: SandboxSession;
+  test: SandboxTest;
+};
+
+/** One-click pack-aware scripted demo: create session, then run scripted test. */
+export async function requestSandboxScriptedDemo(input: {
+  enabled: boolean;
+  endpoint: string;
+  draft: ReceptionistDraft;
+  knowledgePack?: KnowledgePack;
+  systemPrompt?: string;
+}): Promise<SandboxOutcome<SandboxScriptedDemo>> {
+  const session = await requestSandboxSession(input);
+  if (session.status !== "ok") return session;
+  const test = await requestSandboxTest({
+    enabled: input.enabled,
+    endpoint: input.endpoint,
+    sessionId: session.data.id,
+    mode: "scripted",
+  });
+  if (test.status !== "ok") return test;
+  return { status: "ok", data: { session: session.data, test: test.data } };
+}

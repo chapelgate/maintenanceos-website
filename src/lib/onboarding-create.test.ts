@@ -1,8 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  CREATE_JOURNEY_STEPS,
   buildCreateLeadMessage,
+  createJourneyNextAction,
+  createScanProgressTitle,
+  emptyHoursOrServicesNote,
   hostnameBusinessHint,
+  isCreateScanReady,
   mapScanFieldMeta,
   mapScanResponse,
   normalisePublicUrl,
@@ -65,6 +70,35 @@ test("mapScanFieldMeta copies only known provenance and ignores junk", () => {
       services: { source: "nav", confidence: "low" },
     },
   );
+});
+
+test("create journey steps name the next action without a live-phone claim", () => {
+  assert.deepEqual(
+    CREATE_JOURNEY_STEPS.map((item) => item.label),
+    ["Website", "Check", "Review", "Pack"],
+  );
+  assert.equal(createJourneyNextAction(1), "Check this website");
+  assert.equal(createJourneyNextAction(2, "checking"), "Checking…");
+  assert.equal(createJourneyNextAction(2, "scanned"), "Review draft");
+  assert.equal(createJourneyNextAction(3), "Preview knowledge pack");
+  assert.equal(createJourneyNextAction(4), "Submit early access request");
+  assert.equal(isCreateScanReady("scanning"), false);
+  assert.equal(isCreateScanReady("queued"), true);
+  assert.match(createScanProgressTitle("queued"), /review a blank draft/i);
+  assert.match(createScanProgressTitle("scanned"), /review extracted fields/i);
+  for (const item of CREATE_JOURNEY_STEPS) {
+    assert.doesNotMatch(item.nextAction, /live (phone|number|call)/i);
+  }
+});
+
+test("emptyHoursOrServicesNote stays empty and never uses sample copy", () => {
+  assert.equal(emptyHoursOrServicesNote("hours", "Mon–Fri 08:00–17:00"), null);
+  assert.equal(emptyHoursOrServicesNote("services", "Boilers"), null);
+  assert.match(emptyHoursOrServicesNote("hours", "") ?? "", /Empty — not on file/);
+  assert.match(emptyHoursOrServicesNote("services", "   ") ?? "", /Empty — not on file/);
+  assert.match(emptyHoursOrServicesNote("hours", undefined) ?? "", /not invented/);
+  assert.doesNotMatch(emptyHoursOrServicesNote("hours", "") ?? "", /Mon–Fri|09:00|example/i);
+  assert.doesNotMatch(emptyHoursOrServicesNote("services", "") ?? "", /boiler|example/i);
 });
 
 test("scanFieldReviewHint is honest about missing provenance and empty fields", () => {

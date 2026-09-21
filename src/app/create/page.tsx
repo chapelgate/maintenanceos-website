@@ -33,7 +33,7 @@ const steps = [
   },
   {
     title: "Optional sandbox test (flagged)",
-    body: "A sandbox test-call panel sits after the draft. Off by default it says under testing / coming. When enabled locally it runs a scripted demo against your knowledge pack — not a live customer number.",
+    body: "A sandbox test-call panel sits after the draft. Off by default it says under testing / coming. When enabled locally, one click runs a pack-aware scripted demo against your knowledge pack — not a live customer number.",
   },
 ] as const;
 
@@ -43,7 +43,7 @@ export default function CreateReceptionistPage() {
       <PageHero
         eyebrow="Early access · Pre-launch"
         title="Turn your business website into an AI receptionist"
-        lede="Paste your site URL, review a draft, preview a sandbox receptionist pack, and request website-to-receptionist early access. If no scan service is configured, the crawl is queued — we do not invent crawl results. This form does not place a live call or assign a phone number."
+        lede="Paste your site URL, review a draft, preview a sandbox receptionist pack, and request website-to-receptionist early access. Typical local shape: website → draft → pack → optional scripted sandbox demo. If no scan service is configured, the crawl is queued — we do not invent crawl results. This form does not place a live call or assign a phone number."
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <section aria-labelledby="create-form-heading">
@@ -54,8 +54,9 @@ export default function CreateReceptionistPage() {
             Start with your website URL
           </h2>
           <p className="mt-2 text-sm text-muted">
-            We will only contact you about early access for this product. The
-            sandbox test-call panel below stays off unless a local flag is on.
+            Next: check the URL, review the draft, preview the knowledge pack,
+            then request early access. The sandbox panel below stays off unless
+            a local flag is on — then a pack-aware scripted demo is one click.
             It never places a live customer call.
           </p>
           <div className="mt-6">

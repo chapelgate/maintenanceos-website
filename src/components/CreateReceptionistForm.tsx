@@ -5,13 +5,20 @@ import { ReceptionistDraftPreview } from "@/components/ReceptionistDraftPreview"
 import { siteConfig } from "@/config/site";
 import { submitLead } from "@/lib/lead-adapter";
 import {
+  CREATE_JOURNEY_STEPS,
   EMPTY_RECEPTIONIST_DRAFT,
   buildCreateLeadMessage,
+  createJourneyNextAction,
+  createScanProgressTitle,
+  emptyHoursOrServicesNote,
   hostnameBusinessHint,
+  isCreateScanReady,
   isValidEmail,
   normalisePublicUrl,
   requestOnboardingScan,
   scanFieldReviewHint,
+  type CreateJourneyStep,
+  type CreateScanProgress,
   type DraftFieldMeta,
   type ReceptionistDraft,
   type ScanDraftFieldMeta,
@@ -24,24 +31,9 @@ import {
   type ReceptionistDraftResult,
 } from "@/lib/receptionist-draft";
 
-type Step = 1 | 2 | 3 | 4;
 type Status = "idle" | "submitting" | "success" | "error";
-type Progress =
-  | "checking"
-  | "scanning"
-  | "queued"
-  | "scanned"
-  | "scanned_empty"
-  | "scan_failed";
 
-const STEPS: { step: Step; label: string }[] = [
-  { step: 1, label: "Website" },
-  { step: 2, label: "Check" },
-  { step: 3, label: "Draft" },
-  { step: 4, label: "Submit" },
-];
-
-function scanNoteFor(progress: Progress): string {
+function scanNoteFor(progress: CreateScanProgress): string {
   switch (progress) {
     case "scanned":
       return "scan_response_mapped";
@@ -65,6 +57,7 @@ function DraftReviewField({
   hintId,
   rows,
   placeholder,
+  emptyNote,
 }: {
   label: string;
   value: string;
@@ -73,12 +66,20 @@ function DraftReviewField({
   hintId: string;
   rows?: number;
   placeholder?: string;
+  emptyNote?: string | null;
 }) {
-  const hint = scanFieldReviewHint(meta, value);
+  const hint = emptyNote || scanFieldReviewHint(meta, value);
   const describedBy = hint ? hintId : undefined;
+  const empty = !value.trim() && Boolean(emptyNote);
+  const fieldClass = empty ? `${FIELD_CLASS} border-dashed` : FIELD_CLASS;
   return (
     <label className="block text-sm">
-      <span className="font-medium text-ink">{label}</span>
+      <span className="font-medium text-ink">
+        {label}
+        {empty ? (
+          <span className="ml-2 font-normal text-muted">Empty</span>
+        ) : null}
+      </span>
       {rows ? (
         <textarea
           rows={rows}
@@ -86,14 +87,14 @@ function DraftReviewField({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           aria-describedby={describedBy}
-          className={FIELD_CLASS}
+          className={fieldClass}
         />
       ) : (
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           aria-describedby={describedBy}
-          className={FIELD_CLASS}
+          className={fieldClass}
         />
       )}
       {hint ? (
@@ -116,10 +117,10 @@ export function CreateReceptionistForm({
   onDraftChange?: (draft: ReceptionistDraft) => void;
   onReceptionistChange?: (built: ReceptionistDraftResult | null) => void;
 } = {}) {
-  const [step, setStep] = useState<Step>(1);
+  const [step, setStep] = useState<CreateJourneyStep>(1);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState<Progress>("checking");
+  const [progress, setProgress] = useState<CreateScanProgress>("checking");
   const [scanDetail, setScanDetail] = useState<string | null>(null);
   const [businessUrl, setBusinessUrl] = useState("");
   const [email, setEmail] = useState("");
@@ -299,22 +300,21 @@ export function CreateReceptionistForm({
     );
   }
 
-  const stepReady =
-    progress === "queued" ||
-    progress === "scanned" ||
-    progress === "scanned_empty" ||
-    progress === "scan_failed";
+  const stepReady = isCreateScanReady(progress);
+  const nextAction = createJourneyNextAction(step, progress);
 
   return (
     <div
       className="rounded-md border border-border bg-surface p-6 shadow-sm"
       data-lead-type="create_receptionist"
+      data-create-step={step}
+      data-create-next-action={nextAction}
     >
       <ol
-        className="mb-6 grid grid-cols-4 gap-2 text-center text-xs font-medium"
+        className="mb-3 grid grid-cols-4 gap-2 text-center text-xs font-medium"
         aria-label="Create receptionist steps"
       >
-        {STEPS.map((item) => {
+        {CREATE_JOURNEY_STEPS.map((item) => {
           const current = item.step === step;
           const done = item.step < step;
           return (
@@ -337,6 +337,12 @@ export function CreateReceptionistForm({
           );
         })}
       </ol>
+      <p className="mb-6 text-sm text-muted">
+        Next: {nextAction}
+        {step === 4
+          ? ". Optional scripted sandbox demo is below when the local flag is on — not a live phone."
+          : null}
+      </p>
 
       {step === 1 ? (
         <form onSubmit={onStep1} noValidate className="relative overflow-hidden">
@@ -410,11 +416,11 @@ export function CreateReceptionistForm({
             type="submit"
             className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
           >
-            Continue
+            Check this website
           </button>
           <p className="mt-3 text-xs text-muted">
-            Pre-launch capture only. Continuing does not scan a live phone line
-            and does not create a receptionist.
+            Pre-launch capture only. Checking this website does not scan a live
+            phone line and does not create a receptionist.
           </p>
         </form>
       ) : null}
@@ -426,7 +432,7 @@ export function CreateReceptionistForm({
             className="space-y-3 text-sm text-muted"
             aria-live="polite"
           >
-            <p className="font-medium text-ink">Checking URL…</p>
+            <p className="font-medium text-ink">{createScanProgressTitle(progress)}</p>
             <p>
               We only accept a public website address here. Private or internal
               hosts are not fetched from this page.
@@ -484,7 +490,7 @@ export function CreateReceptionistForm({
               }}
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
             >
-              Review draft
+              {stepReady ? createJourneyNextAction(2, progress) : "Checking…"}
             </button>
           </div>
         </div>
@@ -531,6 +537,7 @@ export function CreateReceptionistForm({
               meta={fieldMeta.hours}
               hintId={hoursHintId}
               rows={2}
+              emptyNote={emptyHoursOrServicesNote("hours", draft.hours)}
             />
             <DraftReviewField
               label="Services"
@@ -539,6 +546,7 @@ export function CreateReceptionistForm({
               meta={fieldMeta.services}
               hintId={servicesHintId}
               rows={3}
+              emptyNote={emptyHoursOrServicesNote("services", draft.services)}
             />
             <DraftReviewField
               label="FAQs"
@@ -561,7 +569,7 @@ export function CreateReceptionistForm({
               type="submit"
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
             >
-              Preview receptionist draft
+              Preview knowledge pack
             </button>
           </div>
         </form>
@@ -664,7 +672,7 @@ export function CreateReceptionistForm({
             >
               {status === "submitting"
                 ? "Submitting…"
-                : "Submit early access request"}
+                : createJourneyNextAction(4)}
             </button>
           </div>
           <p className="mt-3 text-xs text-muted">
