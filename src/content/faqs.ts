@@ -74,8 +74,15 @@ export const faqItems: FaqItem[] = [
   {
     question: "Are you ISO or SOC 2 certified?",
     answer:
-      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. Privacy and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
+      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
     relatedHref: "/create/",
     relatedLabel: "Create from website",
+  },
+  {
+    question: "Do you use cookies or a consent banner?",
+    answer:
+      "There is no site-wide cookie or consent banner. No analytics or marketing tags are loaded on this site today, so there are no non-essential cookies to consent to. The cookie notice is DRAFT FOR LEGAL REVIEW — not final policy and not a Google Analytics, PECR, or GDPR compliance certification. If analytics is added later, it stays off until consent. Footer Cookie settings opens that draft notice, not a live preference centre.",
+    relatedHref: "/cookies/",
+    relatedLabel: "Cookie Policy (Draft)",
   },
 ];

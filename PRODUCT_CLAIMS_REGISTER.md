@@ -112,3 +112,5 @@ TELEPHONY_CONTROLLED_CALL: NO-GO
 **Fonio amendment (2026-09-21, /contact):** `/contact` is for genuine human enquiries / early access. Primary path for product interest is Create from website (`/create/`). Not live phone provisioning, not a GA support desk, no invented SLAs. VERIFIED rows and the signature above are unchanged.
 
 **Fonio amendment (2026-09-21, /security):** `/security` stays a designed-control trust posture. SSRF-safe website scan is UNDER TEST (F-02) — not a live crawl. No ISO/SOC2/bank-grade claims (S-05). Legal pages remain DRAFT FOR LEGAL REVIEW. Product interest starts at Create from website (`/create/`). VERIFIED rows and the signature above are unchanged.
+
+**Fonio amendment (2026-09-21, /cookies):** `/cookies` stays a DRAFT FOR LEGAL REVIEW scaffold. No site-wide consent banner (no non-essential tags). No analytics or marketing tags today — not “prepared”. If analytics is added later, it stays off until consent. No invented tracking and no Google Analytics / PECR / GDPR compliance certification. Footer Cookie settings opens the draft notice, not a live preference centre. VERIFIED rows and the signature above are unchanged.

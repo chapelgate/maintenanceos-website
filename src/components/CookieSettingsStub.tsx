@@ -7,8 +7,9 @@ export function CookieSettingsStub() {
   return (
     <div className="mt-4 rounded-md border border-border bg-paper px-4 py-3 text-sm text-muted">
       <p className="font-medium text-accent">
-        Consent UI TBD — draft expectations only. No non-essential tags are
-        loaded on this site today.
+        Consent UI TBD — draft expectations only. No site-wide banner and no
+        non-essential tags are loaded on this site today. This is not a Google
+        Analytics, PECR, or GDPR compliance certification.
       </p>
       <ul className="mt-3 list-disc space-y-2 pl-5">
         <li>

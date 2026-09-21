@@ -7,7 +7,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Cookie Policy (Draft)",
   description:
-    "Draft cookie notice scaffold for the MaintenanceOS marketing website. Pending legal review — not final policy.",
+    "Draft cookie notice. No analytics or marketing tags today; no site-wide consent banner. Pending legal review — not final policy and not a compliance certification.",
   path: "/cookies/",
 });
 
@@ -17,7 +17,7 @@ export default function CookiesPage() {
       <PageHero
         eyebrow="Legal · Draft"
         title="Cookie Policy (Draft)"
-        lede="Scaffold cookie notice for the MaintenanceOS marketing website. Four categories aligned with MOS Privacy; inventory empty until real tags exist."
+        lede="Draft cookie notice for the MaintenanceOS marketing website. Four categories (Essential, Preferences, Analytics, Marketing); inventory empty; no invented tags. Not a compliance certification."
       />
       <div className="mx-auto max-w-3xl px-4 py-12">
         <LegalDraftBanner />
@@ -57,8 +57,9 @@ export default function CookiesPage() {
               How we use cookies
             </h2>
             <p className="mt-2 text-muted">
-              We use the four-category model agreed with MOS Privacy below, and
-              only enable categories that exist in the build.
+              We use a four-category scaffold below, and only enable categories
+              that exist in the build. None of this is a finished counsel-approved
+              policy.
             </p>
           </section>
 
@@ -67,7 +68,7 @@ export default function CookiesPage() {
               id="cookies-categories"
               className="text-xl font-semibold text-ink"
             >
-              Cookie categories (aligned with MOS Privacy)
+              Cookie categories
             </h2>
             <p className="mt-2 text-muted">
               Essential · Preferences · Analytics · Marketing. UK-style
@@ -99,8 +100,8 @@ export default function CookiesPage() {
                     </th>
                     <td className="py-2 pr-3">Yes</td>
                     <td className="py-2">
-                      Active as implemented (security, load, consent preference
-                      storage when built)
+                      None named in inventory yet. Hosting may set operational
+                      cookies; consent-preference storage is not built.
                     </td>
                   </tr>
                   <tr className="border-b border-border">
@@ -116,7 +117,8 @@ export default function CookiesPage() {
                     </th>
                     <td className="py-2 pr-3">No</td>
                     <td className="py-2">
-                      Off until consent; vendor TBD — prepared but inactive
+                      None currently — no vendor, no tags. If added later, off
+                      until consent.
                     </td>
                   </tr>
                   <tr>
@@ -139,11 +141,10 @@ export default function CookiesPage() {
               Essential cookies
             </h2>
             <p className="mt-2 text-muted">
-              Required for the site to work (security, load balancing, storing
-              the consent choice itself, CSRF/session for forms when
-              implemented, bot abuse protection, basic error/uptime) — always
-              on; [OWNER: list when known]. Do not put analytics or marketing
-              here.
+              Reserved for required site operation if and when named. Inventory
+              is empty — do not invent cookie names. Consent-preference storage
+              is not implemented. Do not put analytics or marketing here.
+              [OWNER: list when known].
             </p>
           </section>
 
@@ -169,8 +170,10 @@ export default function CookiesPage() {
               Analytics cookies
             </h2>
             <p className="mt-2 text-muted">
-              Consent-gated aggregate traffic/funnel measurement only; no PII in
-              events; inactive until vendor and consent — [OWNER: provider TBD].
+              None currently. No vendor and no tags. If analytics is added
+              later, it is consent-gated and stays off until affirmative
+              consent; no PII in events. This is not a Google Analytics, PECR,
+              or GDPR compliance certification. [OWNER: provider TBD].
             </p>
           </section>
 
@@ -247,9 +250,10 @@ export default function CookiesPage() {
               Managing your preferences
             </h2>
             <p className="mt-2 text-muted">
-              A banner or preference centre for non-essential categories will be
-              wired when Privacy and Analytics land; this page explains
-              expectations and does not own consent logic alone.
+              There is no site-wide consent banner today because no
+              non-essential tags are loaded. A preference centre would be wired
+              only if analytics or other optional tags land; this page explains
+              expectations and is not a live consent manager.
             </p>
             <CookieSettingsStub />
           </section>

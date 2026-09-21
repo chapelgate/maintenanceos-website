@@ -58,7 +58,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "cookies",
     title: "Cookies and similar technologies",
-    body: "See the Cookie notice for categories and consent; this privacy page does not duplicate the cookie inventory.",
+    body: "See the Cookie notice for categories and consent; this privacy page does not duplicate the cookie inventory. No analytics or marketing tags are loaded today.",
   },
   {
     id: "sharing",
