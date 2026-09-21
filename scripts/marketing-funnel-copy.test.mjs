@@ -90,6 +90,54 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /pricing copy aligned; still not published list prices/);
   assert.match(matrix, /Contact \/ enquiry CTAs vs `\/create` funnel/);
   assert.match(matrix, /contact copy aligned; still not a support desk/);
+  assert.match(matrix, /Security \/ trust marketing vs certifications/);
+  assert.match(matrix, /security copy aligned; still not certified/);
+});
+
+test("security stays claims-safe with SSRF-safe scan and no cert theatre", () => {
+  const page = read("src/app/security/page.tsx");
+  const faqs = read("src/content/faqs.ts");
+  const features = read("src/app/features/page.tsx");
+  const home = read("src/app/page.tsx");
+  const flow = read("src/components/HowItWorksFlow.tsx");
+  const llms = read("public/llms.txt");
+  const llmsFull = read("public/llms-full.txt");
+  const nextConfig = read("next.config.ts");
+
+  assert.match(page, /primaryHref="\/create\/"/);
+  assert.match(page, /Create from website/);
+  assert.match(page, /SSRF-safe/);
+  assert.match(page, /not a live knowledge crawl/);
+  assert.match(page, /No ISO 27001, SOC 2/);
+  assert.match(page, /No bank-grade/);
+  assert.match(page, /DRAFT FOR LEGAL REVIEW/);
+  assert.match(page, /Product interest starts at Create from website/);
+  assert.doesNotMatch(page, /bank-grade security we provide/i);
+  assert.doesNotMatch(page, /ISO 27001 certified/i);
+  assert.doesNotMatch(page, /SOC 2 Type/i);
+
+  assert.match(faqs, /question: "Are you ISO or SOC 2 certified\?"/);
+  assert.match(faqs, /bank-grade security/);
+  assert.match(faqs, /SSRF-safe and under test/);
+  assert.match(faqs, /DRAFT FOR LEGAL REVIEW/);
+  assert.match(
+    faqs,
+    /question: "Are you ISO or SOC 2 certified\?"[\s\S]*relatedHref: "\/create\/"/,
+  );
+
+  assert.match(features, /SSRF-safe website scan companion/);
+  assert.match(features, /bank-grade/);
+  assert.match(home, /No ISO, SOC 2, or bank-grade claims/);
+  assert.match(flow, /SSRF-safe companion/);
+  assert.match(flow, /not a live knowledge crawl/);
+
+  assert.match(llms, /SSRF-safe scan under test/);
+  assert.match(llms, /no ISO\/SOC 2 or bank-grade claims/);
+  assert.match(llms, /legal pages are DRAFT/);
+  assert.match(llmsFull, /## Security/);
+  assert.match(llmsFull, /bank-grade claims/);
+  assert.match(llmsFull, /DRAFT FOR LEGAL REVIEW/);
+  assert.match(nextConfig, /output:\s*["']export["']/);
 });
 
 test("contact stays claims-safe as human enquiry, not a support desk", () => {

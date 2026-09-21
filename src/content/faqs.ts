@@ -29,7 +29,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "What happens if the website scan is not configured?",
     answer:
-      "If a scan service is not configured, the crawl is queued. We do not invent extracted hours, services, or FAQs. Staging scan is still owner-blocked (Render companion + DigitalOcean env), so a queued crawl is the honest result — not a completed knowledge crawl.",
+      "If a scan service is not configured, the crawl is queued. We do not invent extracted hours, services, or FAQs. When a scan does run, it is designed to be SSRF-safe. Staging scan is still owner-blocked (Render companion + DigitalOcean env), so a queued crawl is the honest result — not a completed knowledge crawl.",
     relatedHref: "/how-it-works/",
     relatedLabel: "How it works",
   },
@@ -68,6 +68,13 @@ export const faqItems: FaqItem[] = [
     question: "How do I contact you?",
     answer:
       "For product interest, start at Create from website. The contact form is for genuine human enquiries and early access — not live phone provisioning, not a GA support desk, and not an invented SLA. You can also join the launch list or request an early-access briefing on the demo page.",
+    relatedHref: "/create/",
+    relatedLabel: "Create from website",
+  },
+  {
+    question: "Are you ISO or SOC 2 certified?",
+    answer:
+      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. Privacy and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },

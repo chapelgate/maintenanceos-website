@@ -36,7 +36,7 @@ const pillars = [
 
 const honestyItems = [
   "No fabricated customers, logos, or awards",
-  "No certifications we do not hold",
+  "No ISO, SOC 2, or bank-grade claims we have not earned",
   "No “handles N concurrent lines” marketing numbers",
   "No public live receptionist claim until that gate is cleared",
 ] as const;

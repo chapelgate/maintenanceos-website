@@ -110,3 +110,5 @@ TELEPHONY_CONTROLLED_CALL: NO-GO
 **Fonio amendment (2026-09-21, /pricing):** `/pricing` stays request-pricing / launching soon. No live phone included in a plan, no GA, no invented £ figures. Primary CTA is Create from website (`/create/`). Telephony and calendar: early access / coming. VERIFIED rows and the signature above are unchanged.
 
 **Fonio amendment (2026-09-21, /contact):** `/contact` is for genuine human enquiries / early access. Primary path for product interest is Create from website (`/create/`). Not live phone provisioning, not a GA support desk, no invented SLAs. VERIFIED rows and the signature above are unchanged.
+
+**Fonio amendment (2026-09-21, /security):** `/security` stays a designed-control trust posture. SSRF-safe website scan is UNDER TEST (F-02) — not a live crawl. No ISO/SOC2/bank-grade claims (S-05). Legal pages remain DRAFT FOR LEGAL REVIEW. Product interest starts at Create from website (`/create/`). VERIFIED rows and the signature above are unchanged.
