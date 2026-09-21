@@ -9,7 +9,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata: Metadata = contentPageMetadata({
   title: "FAQ",
   description:
-    "Straight answers on MaintenanceOS readiness, AI authority, emergency guidance, and pricing — aligned with our product claims register. Pre-launch.",
+    "Website URL → check → review → pack → optional scripted sandbox → early access. Straight answers on scan honesty, empty hours/services, UK 999, and pricing — aligned with our product claims register. Pre-launch. Not a live phone.",
   path: "/faq/",
 });
 
@@ -19,7 +19,7 @@ export default function FaqPage() {
       <JsonLd data={faqPageJsonLd()} />
       <PageHero
         title="Frequently asked questions"
-        lede="Straight answers aligned with our product claims register. No marketing spin on readiness."
+        lede="Straight answers aligned with our product claims register. Same path as Create from website: website URL → check → review → pack → optional scripted sandbox → early access. No live phone, no invented crawl, no marketing spin on readiness."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
         <div className="space-y-4">

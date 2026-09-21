@@ -58,6 +58,7 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
   assert.match(text, /not commercially generally available/i);
   assert.match(text, /Do not claim/i);
   assert.match(text, /Ratings, reviews, or aggregate scores/);
+  assert.match(text, /\[FAQ\].*owner-blocked staging scan/);
   assert.doesNotMatch(text, /always-on phone line is live/i);
 });
 
@@ -76,4 +77,6 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   assert.match(text, /do not invent crawl results/i);
   assert.match(text, /no telephone, aggregateRating, reviews, or offers/);
   assert.match(text, /robots\.txt allows major AI crawlers/);
+  assert.match(text, /FAQPage JSON-LD/);
+  assert.match(text, /empty hours\/services stay empty/);
 });
