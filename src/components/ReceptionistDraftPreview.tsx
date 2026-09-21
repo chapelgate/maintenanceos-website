@@ -43,10 +43,7 @@ export function ReceptionistDraftPreview({
           Honest limitations{" "}
           <span className="font-normal text-muted">(read-only)</span>
         </h3>
-        <ul
-          className="mt-2 list-disc space-y-0.5 pl-5 text-xs text-muted"
-          aria-readonly="true"
-        >
+        <ul className="mt-2 list-disc space-y-0.5 pl-5 text-xs text-muted">
           {result.limitations.map((line) => (
             <li key={line}>{line}</li>
           ))}
