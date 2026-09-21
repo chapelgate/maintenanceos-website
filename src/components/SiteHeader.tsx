@@ -1,9 +1,8 @@
 import { industries, primaryNav, siteConfig } from "@/config/site";
 
 /**
- * Marketing chrome (wordmark, dual CTAs, hamburger) via native <details>.
+ * Shell #11 chrome (wordmark, amber dual CTAs, hamburger) via native <details>.
  * Server component (PERFORMANCE_BUDGET: no layout chrome `"use client"`).
- * Frosted glass bar — luminous dusk language, not flat amber/paper.
  * Escape → close open details and return focus to summary is a tiny inline
  * script so content routes do not hydrate React for the header.
  * CTA labels: Create from website (primary) / Early access (secondary briefing).
@@ -54,7 +53,7 @@ function MenuIcon() {
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/40 bg-white/70 shadow-[var(--mos-shadow)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/55">
+    <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
       <div className="mx-auto flex h-16 max-w-[70rem] items-center justify-between gap-4 px-4 md:px-6">
         <Wordmark />
 
@@ -85,7 +84,7 @@ export function SiteHeader() {
                   </svg>
                 </summary>
                 <ul
-                  className="mos-glass absolute left-0 top-full z-50 mt-2 min-w-[15rem] py-2"
+                  className="absolute left-0 top-full z-50 mt-2 min-w-[15rem] rounded-xl border border-border bg-surface py-2 shadow-[var(--mos-shadow)]"
                   role="menu"
                 >
                   <li role="none">
@@ -124,13 +123,13 @@ export function SiteHeader() {
           <div className="ml-2 flex shrink-0 items-center gap-2">
             <a
               href="/demo/#demo"
-              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-xl border border-border bg-white/60 px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
             >
               Early access
             </a>
             <a
               href="/create/"
-              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-xl bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
             >
               Create from website
             </a>
@@ -140,19 +139,19 @@ export function SiteHeader() {
         <div className="flex items-center gap-2 md:hidden">
           <a
             href="/create/"
-            className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-xl bg-accent px-3 text-sm font-semibold text-on-accent"
+            className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
           >
             Create
           </a>
           <details className="relative">
             <summary
-              className="inline-flex h-9 w-9 min-h-6 min-w-6 cursor-pointer list-none items-center justify-center rounded-xl border border-border bg-white/60 text-ink [&::-webkit-details-marker]:hidden"
+              className="inline-flex h-9 w-9 min-h-6 min-w-6 cursor-pointer list-none items-center justify-center rounded-md border border-border text-ink [&::-webkit-details-marker]:hidden"
               aria-label="Open menu"
             >
               <MenuIcon />
             </summary>
             <nav
-              className="mos-glass absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,20rem)] px-4 py-4 md:hidden"
+              className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,20rem)] rounded-xl border border-border bg-surface px-4 py-4 shadow-[var(--mos-shadow)] md:hidden"
               aria-label="Mobile"
             >
               <ul className="flex flex-col gap-1">
@@ -207,7 +206,7 @@ export function SiteHeader() {
                 <li className="pt-2">
                   <a
                     href="/demo/#demo"
-                    className="inline-flex h-10 min-h-6 w-full items-center justify-center rounded-xl border border-border bg-white/60 px-3 text-sm font-semibold text-ink"
+                    className="inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
                   >
                     Request early access
                   </a>

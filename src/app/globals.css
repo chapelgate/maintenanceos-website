@@ -1,36 +1,28 @@
 @import "tailwindcss";
 
 /*
- * Brand System v0.2 — luminous dusk + Siri-like orb/cloud.
+ * Brand System v0.2 — Design council lock (2026-09-21).
+ * Light paper + amber accent. Orb is a SECONDARY “intake listening” cue.
+ * Glow is single-hue amber → peach/cream only. No dusk theme, no rainbow Siri blooms.
  * Source: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / ui-preview/tokens.css
- * Functional CTA accent stays #B45309 (AA on light). Amber is one glow among teal/violet.
- * Do not regress to flat amber/paper cards.
  */
 :root {
-  /* Core */
-  --color-ink: #0b1220;
+  /* Core (Brand / UI Visual System) */
+  --color-ink: #0f172a;
   --color-muted: #475569;
-  --color-paper: #eef2f8;
+  --color-paper: #f8fafc;
   --color-surface: #ffffff;
-  --color-border: #d5deea;
+  --color-border: #e2e8f0;
   --color-accent: #b45309;
   /* Darkened from #D97706 — white labels stay ≥4.5:1 (CONTRAST_TOKEN_AUDIT) */
   --color-accent-hover: #9a3412;
   --color-accent-subtle: #fef3c7;
   --color-on-accent: #ffffff;
 
-  /* Dusk canvas + luminous text (hero / orb stage) */
-  --color-dusk: #0b1224;
-  --color-dusk-mid: #141c34;
-  --color-on-dusk: #f8fafc;
-  --color-on-dusk-muted: #cbd5e1;
-  --color-accent-luminous: #f5c16c;
-
-  /* Orb glow stops — atmospheric, not a parody logo */
-  --glow-teal: #5eead4;
-  --glow-violet: #c4b5fd;
-  --glow-amber: #fbbf24;
-  --glow-cyan: #7dd3fc;
+  /* Amber glow stops only — peach / cream. No cyan, violet, or black glyph. */
+  --glow-amber: #b45309;
+  --glow-peach: #f5c16c;
+  --glow-cream: #fffbeb;
 
   /* Functional — never colour-only */
   --color-ok: #15803d;
@@ -41,18 +33,12 @@
   --color-warning-border: #f59e0b;
   --color-warning-text: #92400e;
 
-  /* Glass + elevation */
-  --mos-glass: rgb(255 255 255 / 72%);
-  --mos-glass-border: rgb(255 255 255 / 62%);
-  --mos-glass-dusk: rgb(255 255 255 / 14%);
-  --mos-glass-dusk-border: rgb(255 255 255 / 30%);
-  --mos-shadow: 0 1px 2px rgb(15 23 42 / 5%), 0 14px 40px rgb(15 23 42 / 8%),
-    0 0 48px rgb(125 211 252 / 10%);
-  --mos-radius: 12px;
-  --mos-radius-lg: 20px;
-  --mos-radius-xl: 28px;
-  --mos-duration: 280ms;
-  --mos-easing: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Elevation / radii / motion (UI Visual System) */
+  --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
+  --mos-radius: 8px;
+  --mos-radius-lg: 12px;
+  --mos-duration: 150ms;
+  --mos-easing: ease;
 
   /* Aliases matching UI_VISUAL_SYSTEM --mos-* names */
   --mos-ink: var(--color-ink);
@@ -64,9 +50,6 @@
   --mos-accent-hover: var(--color-accent-hover);
   --mos-accent-subtle: var(--color-accent-subtle);
   --mos-on-accent: var(--color-on-accent);
-  --mos-dusk: var(--color-dusk);
-  --mos-on-dusk: var(--color-on-dusk);
-  --mos-accent-luminous: var(--color-accent-luminous);
 }
 
 @theme inline {
@@ -79,10 +62,6 @@
   --color-muted: var(--color-muted);
   --color-border: var(--color-border);
   --color-surface: var(--color-surface);
-  --color-dusk: var(--color-dusk);
-  --color-on-dusk: var(--color-on-dusk);
-  --color-on-dusk-muted: var(--color-on-dusk-muted);
-  --color-accent-luminous: var(--color-accent-luminous);
   --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -97,22 +76,10 @@ html {
 }
 
 body {
-  background-color: var(--color-paper);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 8% -8%, rgb(125 211 252 / 22%), transparent 55%),
-    radial-gradient(ellipse 55% 40% at 100% 0%, rgb(196 181 253 / 16%), transparent 50%),
-    radial-gradient(ellipse 40% 30% at 70% 100%, rgb(251 191 36 / 8%), transparent 55%);
-  background-attachment: fixed;
+  background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   line-height: 1.6;
-}
-
-h1,
-h2,
-h3 {
-  letter-spacing: -0.02em;
-  font-feature-settings: "ss01" 1, "kern" 1;
 }
 
 a:focus-visible,
@@ -125,12 +92,6 @@ summary:focus-visible {
   outline-offset: 2px;
 }
 
-.mos-hero-dusk a:focus-visible,
-.mos-hero-dusk button:focus-visible,
-.siri-orb:focus-visible {
-  outline-color: var(--color-accent-luminous);
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -141,10 +102,13 @@ summary:focus-visible {
     scroll-behavior: auto !important;
   }
 
-  .siri-orb,
-  .siri-orb::before,
-  .siri-orb--mini {
+  .intake-orb,
+  .intake-orb::before {
     animation: none !important;
+  }
+
+  .intake-cloud {
+    transition: none !important;
   }
 }
 
@@ -167,256 +131,140 @@ summary:focus-visible {
   border-width: 0;
 }
 
-/* ——— Surfaces ——— */
-
+/*
+ * Ops glass — one blur layer, surface fill, thin line, brand shadow, 12px.
+ * Drop blur (keep fill + line + shadow) if frost ever fails AA.
+ */
 .mos-glass {
-  background: var(--mos-glass);
-  backdrop-filter: blur(18px) saturate(1.35);
-  -webkit-backdrop-filter: blur(18px) saturate(1.35);
-  border: 1px solid var(--mos-glass-border);
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
   box-shadow: var(--mos-shadow);
   border-radius: var(--mos-radius-lg);
 }
 
-.mos-glass-dusk {
-  background: var(--mos-glass-dusk);
-  backdrop-filter: blur(28px) saturate(1.45);
-  -webkit-backdrop-filter: blur(28px) saturate(1.45);
-  border: 1px solid var(--mos-glass-dusk-border);
-  box-shadow:
-    0 0 0 1px rgb(255 255 255 / 6%),
-    0 18px 50px rgb(2 6 23 / 35%),
-    0 0 80px rgb(125 211 252 / 18%);
-  border-radius: var(--mos-radius-xl);
-}
-
-.mos-hero-dusk {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  color: var(--color-on-dusk);
-  background-color: var(--color-dusk);
-  background-image:
-    radial-gradient(ellipse 70% 55% at 78% 38%, rgb(99 102 241 / 28%), transparent 58%),
-    radial-gradient(ellipse 50% 42% at 22% 72%, rgb(14 165 233 / 22%), transparent 55%),
-    radial-gradient(ellipse 36% 28% at 86% 82%, rgb(180 83 9 / 22%), transparent 60%),
-    radial-gradient(ellipse 40% 30% at 50% 0%, rgb(196 181 253 / 16%), transparent 50%),
-    linear-gradient(180deg, var(--color-dusk) 0%, var(--color-dusk-mid) 100%);
-}
-
-.mos-hero-dusk::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 5.5rem;
-  pointer-events: none;
-  background: linear-gradient(to bottom, transparent, var(--color-paper));
-  z-index: 1;
-}
-
+/* Soft amber wash for inner page heroes — gradient only, no extra blur layer. */
 .mos-page-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  border-bottom: 1px solid var(--mos-glass-border);
-  background: rgb(255 255 255 / 55%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  background-image: radial-gradient(
+    ellipse 40% 80% at 100% 0%,
+    rgb(254 243 199 / 55%),
+    transparent 60%
+  );
 }
 
-.mos-page-hero-glow {
-  position: absolute;
-  width: 16rem;
-  height: 16rem;
-  right: -2rem;
-  top: -5rem;
-  border-radius: 50%;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 40% 40%, rgb(94 234 212 / 35%), transparent 42%),
-    radial-gradient(circle at 65% 55%, rgb(196 181 253 / 30%), transparent 48%),
-    radial-gradient(circle at 50% 60%, rgb(251 191 36 / 22%), transparent 50%);
-  filter: blur(12px);
-  opacity: 0.85;
-}
+/* ——— Intake listening orb (secondary affordance) ——— */
 
-/* ——— Siri-like orb / cloud ——— */
-
-.siri-orb-wrap {
+.intake-orb-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-.siri-orb-stage {
-  position: relative;
+.intake-orb-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  width: min(100%, 26rem);
-  min-height: 16rem;
-  padding-top: 1.25rem;
+  width: min(100%, 20rem);
 }
 
-.siri-orb {
+.intake-orb {
   position: relative;
   z-index: 2;
-  width: 10rem;
-  height: 10rem;
+  width: 5.5rem;
+  height: 5.5rem;
   border: 0;
   padding: 0;
   border-radius: 50%;
   cursor: pointer;
-  color: transparent;
-  background:
-    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 92%) 0%, transparent 34%),
-    radial-gradient(circle at 62% 36%, rgb(94 234 212 / 78%) 0%, transparent 44%),
-    radial-gradient(circle at 38% 70%, rgb(196 181 253 / 72%) 0%, transparent 50%),
-    radial-gradient(circle at 74% 64%, rgb(251 191 36 / 58%) 0%, transparent 44%),
-    radial-gradient(circle at 50% 50%, #312e81 0%, #0f172a 72%);
+  background: radial-gradient(
+    circle at 38% 32%,
+    var(--glow-cream) 0 16%,
+    #fde6c8 34%,
+    var(--glow-peach) 58%,
+    var(--glow-amber) 100%
+  );
   box-shadow:
-    0 0 24px rgb(125 211 252 / 50%),
-    0 0 56px rgb(196 181 253 / 38%),
-    0 0 100px rgb(251 191 36 / 24%),
-    inset 0 0 22px rgb(255 255 255 / 28%);
-  animation: siri-breathe 3.4s ease-in-out infinite;
-  transition:
-    transform var(--mos-duration) var(--mos-easing),
-    box-shadow var(--mos-duration) var(--mos-easing);
+    0 0 18px rgb(180 83 9 / 22%),
+    0 0 36px rgb(245 193 108 / 28%);
+  animation: intake-pulse 3.8s ease-in-out infinite;
 }
 
-.siri-orb::before {
+.intake-orb::before {
   content: "";
   position: absolute;
-  inset: -38%;
+  inset: -28%;
   border-radius: 50%;
   z-index: -1;
-  background: radial-gradient(circle, rgb(165 243 252 / 30%), transparent 68%);
-  animation: siri-halo 4.2s ease-in-out infinite;
+  background: radial-gradient(
+    circle,
+    rgb(245 193 108 / 38%),
+    rgb(180 83 9 / 0%) 70%
+  );
+  animation: intake-halo 4.4s ease-in-out infinite;
 }
 
-.siri-orb:hover {
-  transform: scale(1.04);
-}
-
-.siri-orb-stage.is-open .siri-orb {
-  transform: scale(1.18);
-  animation: none;
+.intake-orb:hover {
   box-shadow:
-    0 0 36px rgb(125 211 252 / 55%),
-    0 0 80px rgb(196 181 253 / 42%),
-    0 0 120px rgb(251 191 36 / 28%),
-    inset 0 0 28px rgb(255 255 255 / 32%);
+    0 0 22px rgb(180 83 9 / 28%),
+    0 0 42px rgb(245 193 108 / 34%);
 }
 
-.siri-cloud {
-  z-index: 3;
-  width: min(100%, 22.5rem);
-  margin-top: 0.35rem;
-  padding: 0 1.5rem;
+.intake-orb-stage.is-open .intake-orb {
+  animation: none;
+}
+
+.intake-cloud {
+  width: min(100%, 20rem);
+  margin-top: 0.75rem;
   max-height: 0;
   overflow: hidden;
-  text-align: left;
   opacity: 0;
-  transform: translateY(-0.6rem) scale(0.92);
+  text-align: left;
   pointer-events: none;
   transition:
     opacity var(--mos-duration) var(--mos-easing),
-    transform var(--mos-duration) var(--mos-easing),
-    max-height var(--mos-duration) var(--mos-easing),
-    padding var(--mos-duration) var(--mos-easing);
+    max-height var(--mos-duration) var(--mos-easing);
 }
 
-.siri-orb-stage.is-open .siri-cloud {
-  max-height: 22rem;
-  padding: 1.5rem 1.5rem 1.35rem;
+.intake-orb-stage.is-open .intake-cloud {
+  max-height: 16rem;
   opacity: 1;
-  transform: none;
   pointer-events: auto;
 }
 
-.siri-cloud-kicker {
-  margin: 0;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-accent-luminous);
+.intake-cloud-inner {
+  padding: 1rem 1.1rem;
 }
 
-.siri-cloud-copy {
-  margin: 0.4rem 0 1.1rem;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: var(--color-on-dusk);
-}
-
-.siri-cloud-hint {
-  margin: 0.85rem 0 0;
+.intake-orb-caption {
+  margin: 0.65rem 0 0;
   font-size: 0.75rem;
-  line-height: 1.45;
-  color: var(--color-on-dusk-muted);
+  color: var(--color-muted);
 }
 
-.siri-orb-hint {
-  margin: 0.25rem 0 0;
-  font-size: 0.8rem;
-  color: var(--color-on-dusk-muted);
-  transition: opacity var(--mos-duration) var(--mos-easing);
-}
-
-.siri-orb-wrap.is-open .siri-orb-hint {
-  opacity: 0;
-}
-
-.siri-orb--mini {
-  display: block;
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: 50%;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 90%) 0%, transparent 34%),
-    radial-gradient(circle at 62% 36%, rgb(94 234 212 / 75%) 0%, transparent 44%),
-    radial-gradient(circle at 38% 70%, rgb(196 181 253 / 70%) 0%, transparent 50%),
-    radial-gradient(circle at 74% 64%, rgb(251 191 36 / 55%) 0%, transparent 44%),
-    radial-gradient(circle at 50% 50%, #312e81 0%, #0f172a 72%);
-  box-shadow:
-    0 0 16px rgb(125 211 252 / 45%),
-    0 0 32px rgb(196 181 253 / 28%),
-    0 0 40px rgb(251 191 36 / 16%);
-  animation: siri-breathe 3.4s ease-in-out infinite;
-}
-
-.create-orb-accent {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  margin-bottom: 0.75rem;
-}
-
-@keyframes siri-breathe {
+@keyframes intake-pulse {
   0%,
   100% {
     transform: scale(1);
-    filter: saturate(1);
   }
   50% {
-    transform: scale(1.045);
-    filter: saturate(1.12);
+    transform: scale(1.03);
   }
 }
 
-@keyframes siri-halo {
+@keyframes intake-halo {
   0%,
   100% {
     opacity: 0.7;
-    transform: scale(1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.08);
   }
 }

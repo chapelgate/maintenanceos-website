@@ -7,7 +7,6 @@ type PageHeroProps = {
 export function PageHero({ title, lede, eyebrow }: PageHeroProps) {
   return (
     <header className="mos-page-hero px-4 py-12 sm:py-16">
-      <div className="mos-page-hero-glow" aria-hidden="true" />
       <div className="relative mx-auto max-w-3xl">
         {eyebrow ? (
           <p className="mb-2 text-sm font-medium uppercase tracking-wide text-accent">

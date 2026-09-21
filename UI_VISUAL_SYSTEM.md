@@ -1,52 +1,51 @@
-# UI Visual System v0.2 — orb / cloud / glass
+# UI Visual System v0.2 — council lock
 
-**Status:** marketing site (2026-09-21).  
-**Do not regress** to hard slate borders, 8px cards, and a flat “Work orders” placeholder as the homepage hero.
+**Status:** Design council lock, 2026-09-21.  
+**Do not** make the orb the brand mark or the primary conversion control.  
+**Do not** invent a dusk / dark-glass theme. If frost kills contrast, drop blur first.
 
 ## Surfaces
 
-- **Glass** (`.mos-glass`): translucent white, `backdrop-filter` blur, luminous soft shadow, radius 20px.
-- **Dusk glass** (`.mos-glass-dusk`): frosted panel on the hero orb stage.
-- **Page hero** (`.mos-page-hero`): light glass band with a decorative corner glow. Used by inner routes via `PageHero`.
-- **Home hero** (`.mos-hero-dusk`): deep cool canvas; orb is the visual centrepiece.
+- **Paper / surface:** light (`#F8FAFC` / `#FFFFFF`). Home hero stays light so amber CTAs remain WCAG AA.
+- **Ops glass** (`.mos-glass`): surface fill, 1px line (`--mos-line`), **one** `backdrop-filter` layer (≤12px blur), brand `--mos-shadow`, **12px** radius, ink type. Max **two** blur layers on a view (orb halo + panel).
+- **Page hero** (`.mos-page-hero`): light surface + a single amber cream wash (gradient only, no extra blur).
 
-Radii: 12px default, 20px cards, 28px cloud. Shadows are soft and luminous — not 1px slate boxes.
+Buttons, focus rings, and in-panel links inherit the existing system: `rounded-md`, `bg-accent` / outline secondary, `outline: 2px solid var(--color-accent)`.
 
-## Orb → cloud (homepage)
+## Orb → cloud (homepage only)
 
-`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus return).
+`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus into panel + restore). Secondary affordance: **intake listening**.
 
 | State | Behaviour |
 | --- | --- |
-| Idle | Soft multi-stop radial orb; gentle breathe pulse |
-| Press / click / keyboard | Orb scales; frosted cloud panel reveals Create from website + early access |
-| Escape | Closes; focus returns to the orb button |
-| `prefers-reduced-motion: reduce` | Static orb; open/close is instant (global motion cut) |
+| Idle | Soft amber→peach→cream orb; calm pulse only |
+| Press / Enter / Space | CSS expand into ops-glass cloud |
+| Panel copy | Short honesty + links to `/how-it-works/` and `/create/` |
+| Escape | Instant close; focus returns to the orb button |
+| `prefers-reduced-motion: reduce` | No idle pulse; instant open/close |
 
-Accessibility: real `<button>`, `aria-expanded`, `aria-controls`, `inert` on the closed panel, visible focus ring (luminous on dusk). **Not modal** — no focus trap. Not a live phone control.
+Do **not** nest `CtaPair`, the create funnel, or fake metrics in the glass. No GSAP unless gated on `prefers-reduced-motion: no-preference` (CSS-first is enough).
 
 ## `/create`
 
-Same language, lightly: `CreateOrbAccent` is **CSS-only** (mini orb). Do not add the interactive orb island here — First Load JS budget (`PERFORMANCE_BUDGET.md`). Do not change scan/form wiring (`NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`).
+Light PageHero wash only. **Never** place an orb above the URL field. Do not import the interactive orb. Scan/form wiring (`NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`) is untouched.
 
 ## Chrome
 
-- `SiteHeader` stays a **server** component (`<details>` + inline Escape). Frosted bar, larger CTA radii.
-- `CtaPair` `tone="on-dusk"` for dusk canvases; default tone for paper/glass.
-- `PreLaunchBanner` / `SiteFooter` use dusk + on-dusk text.
+- `SiteHeader` stays a **server** component (`<details>` + inline Escape).
+- `CtaPair` stays the primary conversion control on the home hero.
+- Banner / footer stay ink-on-paper as on main — not a dusk theme.
 
-## Motion
+## Motion / assets
 
-CSS-first. Duration ~280ms, ease `cubic-bezier(0.22, 1, 0.36, 1)`. Honour `prefers-reduced-motion: reduce` globally. No WebGL, no hero image assets.
-
-## Contrast
-
-Text on paper/glass stays ink/muted (AA). Text on dusk uses on-dusk / luminous amber — **do not** use `#B45309` as small text on dusk. Button fills stay `#B45309` + white.
+CSS-first. No WebGL, no video, no paid Higgsfield hero assets. Client island must stay ≤ ~15–20 kB gz.
 
 ## Anti-patterns
 
-- Flat “Work orders” metric cards as the hero visual
-- Hard `#E2E8F0` boxes everywhere
-- Client JS on layout chrome
-- Interactive orb on `/create` (budget)
+- Orb as logo or primary CTA (“press the glow to begin”)
+- Rainbow / cyan / violet blooms or black circular glyphs
+- Dark glass hero that breaks amber CTA contrast
+- Nesting `/create` steps inside the cloud
+- Fake work-order metrics as the hero visual
+- Interactive orb on `/create`
 - Fake live-call UI, always-on phone, fabricated social proof

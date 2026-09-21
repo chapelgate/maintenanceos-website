@@ -1,33 +1,22 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { CtaPair } from "@/components/CtaPair";
-
-type SiriOrbCloudProps = {
-  primaryHref?: string;
-  primaryLabel?: string;
-  secondaryHref?: string;
-  secondaryLabel?: string;
-  subtitle?: string;
-};
 
 /**
- * Siri-inspired orb → frosted cloud. Tiny client island for toggle/Escape only.
- * Not a live phone control. Closed state stays a real button (aria-expanded).
+ * Secondary “intake listening” affordance — not the brand mark, not a CTA.
+ * CSS expand/collapse. Tiny client island for toggle, Escape, and focus restore.
  */
-export function SiriOrbCloud({
-  primaryHref = "/create/",
-  primaryLabel = "Create from website",
-  secondaryHref = "/demo/#demo",
-  secondaryLabel = "Request early access",
-  subtitle = "Pilot-stage. Website URL to a draft pack — not a live phone.",
-}: SiriOrbCloudProps) {
+export function SiriOrbCloud() {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
   useEffect(() => {
     if (!open) return;
+
+    const firstLink = panelRef.current?.querySelector("a");
+    firstLink?.focus();
 
     function onKey(event: KeyboardEvent) {
       if (event.key !== "Escape") return;
@@ -40,46 +29,57 @@ export function SiriOrbCloud({
   }, [open]);
 
   return (
-    <div className={`siri-orb-wrap${open ? " is-open" : ""}`}>
-      <div className={`siri-orb-stage${open ? " is-open" : ""}`}>
+    <div className="intake-orb-wrap">
+      <div className={`intake-orb-stage${open ? " is-open" : ""}`}>
         <button
           ref={buttonRef}
           type="button"
-          className="siri-orb"
+          className="intake-orb"
           aria-expanded={open}
           aria-controls={panelId}
+          aria-label={
+            open
+              ? "Close intake listening note"
+              : "Open intake listening note"
+          }
           onClick={() => setOpen((value) => !value)}
-        >
-          <span className="sr-only">
-            {open ? "Close early access panel" : "Open early access panel"}
-          </span>
-        </button>
+        />
         <div
+          ref={panelRef}
           id={panelId}
-          className="siri-cloud mos-glass-dusk"
+          className="intake-cloud mos-glass"
           role="region"
-          aria-label="Early access"
+          aria-label="Intake listening"
           aria-hidden={!open}
           inert={!open ? true : undefined}
         >
-          <p className="siri-cloud-kicker">Early access</p>
-          <p className="siri-cloud-copy">{subtitle}</p>
-          <CtaPair
-            tone="on-dusk"
-            primaryHref={primaryHref}
-            primaryLabel={primaryLabel}
-            secondaryHref={secondaryHref}
-            secondaryLabel={secondaryLabel}
-          />
-          <p className="siri-cloud-hint">
-            Escape or the glow closes this panel. No live phone from this
-            control.
-          </p>
+          <div className="intake-cloud-inner">
+            <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+              Intake listening
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink">
+              A listening cue for structured intake — under testing. Not a live
+              receptionist, not always-on, and not a conversion control.
+            </p>
+            <p className="mt-3 text-sm">
+              <a
+                href="/how-it-works/"
+                className="font-semibold text-accent underline-offset-4 hover:underline"
+              >
+                See how it works
+              </a>
+              <span className="text-muted"> · </span>
+              <a
+                href="/create/"
+                className="font-semibold text-accent underline-offset-4 hover:underline"
+              >
+                Create from website
+              </a>
+            </p>
+          </div>
         </div>
       </div>
-      <p className="siri-orb-hint" aria-hidden={open}>
-        Press the glow to begin
-      </p>
+      <p className="intake-orb-caption">Intake listening · under testing</p>
     </div>
   );
 }

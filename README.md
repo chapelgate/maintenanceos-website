@@ -2,7 +2,7 @@
 
 Truthful **pre-launch** marketing site for MaintenanceOS (not the product backend).
 
-**Brand System v0.2** — luminous dusk + Siri-like orb/cloud. Functional CTA accent stays `#B45309` (AA). See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`. Do not regress to flat amber/paper cards.
+**Brand System v0.2 (council lock)** — light paper, amber accent `#B45309`, ops glass. The homepage orb is a secondary “intake listening” cue (amber→peach→cream only), not the brand mark and not a CTA. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
 
 ## Stance
 
