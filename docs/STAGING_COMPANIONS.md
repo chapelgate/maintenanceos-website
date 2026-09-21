@@ -56,6 +56,18 @@ Omit a row (or leave the public flag `false` / endpoint empty) for any companion
 
 Do **not** paste loopback URLs (`http://127.0.0.1:8788` …) onto App Platform.
 
+## Owner blocker (not a code defect)
+
+Live scan on staging is still an **owner** step. `/create` crawl code paths are ready and stay honest when the endpoint is unset.
+
+Still required before a live extract is evidenced:
+
+1. Create / wake the **Render free** onboarding-scan service (`docs/ONBOARDING_SCAN_DEPLOY.md`; instance type Free; `ONBOARDING_WEB_INGEST=true`).
+2. Set DigitalOcean App Platform `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` (and any other `NEXT_PUBLIC_*` companions you are wiring).
+3. **Rebuild** the static site. `NEXT_PUBLIC_*` is inlined at `npm run build`. A runtime-only App Platform restart is not enough.
+
+Until those three happen, `/create` must queue crawl and invent nothing. That is expected — **not a website code defect**. This checklist does not create Render or DigitalOcean resources and is not a spend request.
+
 ## Rebuild (required)
 
 Static export inlines `NEXT_PUBLIC_*` at `npm run build`.

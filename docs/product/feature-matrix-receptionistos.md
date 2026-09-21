@@ -19,4 +19,4 @@ Synced conceptually with `docs/competitive/fonio-parity-matrix.md`. Use this for
 | R-12 | SIP / BYO number | P1 | PLANNED | Telephony |
 | R-13 | Outbound campaigns | P2 | PLANNED | Growth |
 | R-14 | Public API + webhooks | P1 | PLANNED | Platform |
-| R-15 | Vertical packs (Maintenance first) | P1 | PARTIAL | Product |
+| R-15 | Vertical packs (Maintenance first) | P1 | PARTIAL (stronger) / SUPERIOR-in-positioning-only on `/industries/*`; product packs still under test | Product |

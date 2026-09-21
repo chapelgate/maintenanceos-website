@@ -1,7 +1,7 @@
 # Fonio parity matrix — ReceptionistOS / MaintenanceOS
 
 **Date:** 2026-09-21 (Europe/London)  
-**Verified through:** `chapelgate/maintenanceos-website` `main` including merged PR **#44** (scripted conversation benchmark)  
+**Verified through:** `chapelgate/maintenanceos-website` `main` including merged PR **#47** (`/create` UX polish). UK/vertical industries copy in this refresh.  
 **Benchmark:** public Fonio site `https://www.fonio.ai/en/` (home, pricing, business AI phone assistant pages)  
 **Our surfaces:** `chapelgate/maintenanceos-website` (marketing) + `chapelgate/maintenanceos-v1-pilot` (product; live telephony path **frozen** per `CURRENT_STATUS.md`)  
 **Stance:** PRE-LAUNCH — no commercial GA claims. Do **not** claim a live always-on phone.
@@ -90,7 +90,7 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 | FEATURE | FONIO | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
 | UK 999 (not 911) | Generic intl | Locked in MOS source/tests | Keep | REUSE — SUPERIOR for UK | P0 | SUPERIOR |
-| Maintenance / trades vertical templates | Generic | MaintenanceOS vertical | Property/trades packs | BUILD | P1 | PARTIAL |
+| Maintenance / trades vertical templates | Generic AI receptionist (24/7 answer + book visits) | `/industries/*` now names emergency triage vs jobs, contractor-dispatch language, out-of-hours honesty, 999 vs jobs, and no client-money. Product trades packs still under test. | Productised trades packs / live voice | BUILD | P1 | PARTIAL (stronger) / SUPERIOR-in-positioning-only |
 | Industry *OS portfolio naming | N/A | LandlordOS…HolidayLetOS named | Sites + future verticals | BUILD | P1 | HAVE |
 
 ## Website marketing
@@ -103,6 +103,7 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 ## Summary counts (launch-relevant)
 
 - **HAVE:** industry *OS naming; UK safety posture in product source; public `/create` multi-step funnel **EXISTS** (not MISSING); conversation benchmark **scripted** path (`npm run conversation-benchmark`)  
+- **PARTIAL (stronger) / SUPERIOR-in-positioning-only (UK vertical):** `/industries/*` copy now contrasts UK maintenance (999 vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money) with a generic AI receptionist. Product features remain under test — not a live always-on phone or GA. Do not claim product superiority beyond positioning.  
 - **PARTIAL:** voice telephony pilot (not public always-on); transfers; evidence; supervisor; marketing site  
 - **PARTIAL / UNDER TEST (P0 scan):** SSRF-safe `packages/onboarding-ingest` companion, flagged off by default. Staging `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` is **often unset** — `/create` then queues crawl honestly. Live scan on staging is not evidenced.  
 - **PARTIAL (P0 knowledge pack):** `packages/receptionist-draft` + `/create` preview after draft review. Claims-safe pack + system prompt; missing fields stay missing. Not a live tenant.  

@@ -1,6 +1,9 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
-import type { IndustryRole } from "@/config/industries";
+import {
+  ukMaintenanceVsGeneric,
+  type IndustryRole,
+} from "@/config/industries";
 
 const honesty =
   "Pilot-stage. Core controls are real; public always-on phone is not declared ready yet.";
@@ -20,6 +23,22 @@ export function IndustryRolePage({ role }: Props) {
           {honesty} Product line: <strong className="text-ink">{role.productName}</strong>{" "}
           under Chapelgate Technologies.
         </p>
+
+        <section className="space-y-3">
+          <h2 className="text-xl font-semibold text-ink">
+            UK maintenance — not a generic AI receptionist
+          </h2>
+          <p className="text-muted">
+            Generic receptionist tools answer phones. {role.productName} is
+            written for UK property-maintenance operations. Positioning only —
+            voice remains under testing; not commercial general availability.
+          </p>
+          <ul className="list-disc space-y-2 pl-5 text-muted">
+            {ukMaintenanceVsGeneric.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold text-ink">The job you are doing</h2>

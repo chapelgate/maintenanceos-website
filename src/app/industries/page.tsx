@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Industries",
   description:
-    "Chapelgate industry OS lines for UK landlords, letting agents, property managers, maintenance companies, housing associations, facilities management, councils, and holiday lets. Pre-launch.",
+    "Chapelgate industry OS lines for UK property-maintenance firms — emergency triage vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money. Pre-launch, not a generic AI receptionist.",
   path: "/industries/",
 });
 
@@ -16,13 +16,14 @@ export default function IndustriesPage() {
       <PageHero
         eyebrow="Pre-launch · United Kingdom"
         title="One OS per industry."
-        lede="Each role is its own product line under Chapelgate Technologies — industry name with OS on the end. Choose your line. Pages explain intended use from your operational angle. Pilot-stage — not commercial general availability."
+        lede="Each role is its own product line under Chapelgate Technologies — industry name with OS on the end. Copy is written for UK property-maintenance operations (emergency triage vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money) — not a generic AI receptionist. Pilot-stage — not commercial general availability."
       />
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-12">
         <p className="max-w-3xl text-sm text-muted">
           Pilot-stage. Core controls are real; public always-on phone is not
-          declared ready yet. These pages describe intended use — not named
-          customer case studies or fabricated testimonials.
+          declared ready yet. These pages describe intended use for UK
+          maintenance firms — not named customer case studies, fabricated
+          testimonials, or a Fonio-class “live 24/7 receptionist” claim.
         </p>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {industryRoles.map((ind) => (

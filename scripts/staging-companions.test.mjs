@@ -37,6 +37,10 @@ test("staging companions checklist links the four runbooks and exact DO env", ()
   assert.match(doc, /copy `\.env\.example\.fonio-local` onto App Platform/);
   assert.match(doc, /Cold-start wake order/);
   assert.match(doc, /review hint/);
+  assert.match(doc, /Owner blocker \(not a code defect\)/);
+  assert.match(doc, /not a website code defect/);
+  assert.match(doc, /Render free/);
+  assert.match(doc, /NEXT_PUBLIC_\*/);
 });
 
 test("site.ts public env names match the staging companions checklist", () => {

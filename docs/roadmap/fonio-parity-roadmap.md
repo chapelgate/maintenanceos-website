@@ -2,7 +2,7 @@
 
 **Benchmark:** Fonio public product (fonio.ai). Fonio is the **minimum** bar, not the ceiling.  
 **Constraint:** frozen live telephony until controlled-call gates pass.  
-**Verified through:** website `main` including PR **#44**. Live always-on phone remains **MISSING / frozen** — do not claim live.
+**Verified through:** website `main` including PR **#47**. Live always-on phone remains **MISSING / frozen** — do not claim live.
 
 ## Phase 0 — Foundations (this PR / docs)
 
@@ -48,7 +48,7 @@
 
 ## Phase 4 — Vertical superiority (P1–P2)
 
-- MaintenanceOS / trades packs (job intake, SLA language, UK safety)
+- MaintenanceOS / trades packs (job intake, SLA language, UK safety) — marketing `/industries/*` now **PARTIAL (stronger) / SUPERIOR-in-positioning-only**; product packs still under test
 - Property / letting templates
 - Industry *OS portfolio under Chapelgate Technologies
 
