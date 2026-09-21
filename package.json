@@ -11,6 +11,7 @@
     "onboarding-scan": "node --experimental-strip-types packages/onboarding-ingest/src/server.ts",
     "calendar-adapters": "node --experimental-strip-types packages/calendar-adapters/src/server.ts",
     "sandbox-test-call": "node --experimental-strip-types packages/sandbox-test-call/src/server.ts",
+    "conversation-benchmark": "node --experimental-strip-types packages/sandbox-test-call/src/conversation-benchmark.ts",
     "customer-dashboard": "node --experimental-strip-types packages/customer-dashboard/src/server.ts",
     "fonio-local-stack": "bash scripts/fonio-local-stack.sh",
     "fonio-local-smoke": "node scripts/fonio-local-smoke.mjs",

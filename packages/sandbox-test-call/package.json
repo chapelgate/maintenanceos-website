@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node --experimental-strip-types src/server.ts",
-    "test": "node --experimental-strip-types --test src/*.test.ts"
+    "test": "node --experimental-strip-types --test src/*.test.ts",
+    "conversation-benchmark": "node --experimental-strip-types src/conversation-benchmark.ts"
   }
 }

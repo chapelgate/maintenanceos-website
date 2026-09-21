@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { TRUSTED_SANDBOX_CONSTRAINTS } from "../../receptionist-draft/src/index.ts";
-import { missingOnFileReply, runScriptedDemo } from "./scripted.ts";
+import {
+  classifyCallerIntent,
+  missingOnFileReply,
+  runScriptedDemo,
+  scriptedReply,
+} from "./scripted.ts";
 
 function receptionistTexts(pack: unknown, prompt?: string): string {
   return runScriptedDemo(pack, prompt)
@@ -102,4 +107,70 @@ test("scripted demo uses pack FAQs and services without falling back to invented
         /Power flushing/.test(turn.text),
     ),
   );
+});
+
+const ACME_PACK = {
+  businessName: "Acme Plumbing",
+  greeting: "Warm homes, honest quotes",
+  hours: "Mon–Fri 08:00–17:00",
+  services: ["Boiler repair", "Power flushing"],
+  faqs: [{ question: "Do you cover London?", answer: "Yes, within the M25." }],
+};
+
+test("scriptedReply cites pack hours and services", () => {
+  const hours = scriptedReply("What are your opening hours?", ACME_PACK);
+  assert.equal(hours.source, "knowledge.hours");
+  assert.match(hours.text, /Acme Plumbing/);
+  assert.match(hours.text, /Mon–Fri 08:00–17:00/);
+  const services = scriptedReply("What services do you offer?", ACME_PACK);
+  assert.equal(services.source, "knowledge.services");
+  assert.match(services.text, /Boiler repair/);
+  assert.match(services.text, /Power flushing/);
+});
+
+test("scriptedReply missing hours stays honest and invents no clock", () => {
+  const hours = scriptedReply("What are your opening hours?", {
+    businessName: "Acme Plumbing",
+    services: ["Boiler repair"],
+  });
+  assert.equal(hours.source, "missing");
+  assert.match(hours.text, /not sure/i);
+  assert.match(hours.text, /not on file/i);
+  assert.doesNotMatch(hours.text, /\d{1,2}:\d{2}/);
+});
+
+test("scriptedReply emergency uses UK 999 not 911 and does not dispatch", () => {
+  const reply = scriptedReply(
+    "This is an emergency — there's a gas leak and someone is hurt.",
+    ACME_PACK,
+  );
+  assert.match(reply.text, /\b999\b/);
+  assert.match(reply.text, /not 911/i);
+  assert.match(reply.text, /cannot dispatch/i);
+  assert.doesNotMatch(reply.text.replace(/not 911/gi, ""), /\b911\b/);
+});
+
+test("scriptedReply never invents a booking", () => {
+  const reply = scriptedReply(
+    "Can you book me an appointment tomorrow at 10:00?",
+    ACME_PACK,
+  );
+  assert.match(reply.text, /cannot book/i);
+  assert.match(reply.text, /calendar booking is not connected/i);
+  assert.doesNotMatch(reply.text, /you're booked|i(?:'ve| have) booked/i);
+});
+
+test("scriptedReply ranks emergency above booking", () => {
+  assert.equal(
+    classifyCallerIntent(
+      "Please book me an emergency gas leak appointment, someone is hurt.",
+    ),
+    "emergency",
+  );
+  const reply = scriptedReply(
+    "Please book me an emergency gas leak appointment, someone is hurt.",
+    ACME_PACK,
+  );
+  assert.match(reply.text, /\b999\b/);
+  assert.match(reply.text, /cannot dispatch/i);
 });

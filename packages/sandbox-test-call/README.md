@@ -117,4 +117,10 @@ From repo root: `npm test` (includes `src/*.test.ts` here).
 node --experimental-strip-types --test packages/sandbox-test-call/src/*.test.ts
 ```
 
-Coverage: flag default off, alias flag, scripted demo uses stored knowledge pack / system prompt (name+hours mentioned; empty hours → not on file), `webrtc` → `not_configured`, `live` → `live_call_forbidden`, companion `503` when disabled.
+Coverage: flag default off, alias flag, scripted demo uses stored knowledge pack / system prompt (name+hours mentioned; empty hours → not on file), per-utterance `scriptedReply` + `npm run conversation-benchmark` fixtures (hours/services from pack, missing fields honest, UK 999, no invented bookings, no fake live-call success), `webrtc` → `not_configured`, `live` → `live_call_forbidden`, companion `503` when disabled.
+
+```bash
+npm run conversation-benchmark
+```
+
+Scripted sandbox only. Not a live phone call. Frozen telephony unused. Live-call parity still open.
