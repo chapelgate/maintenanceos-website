@@ -24,11 +24,11 @@ This PR does **not** provision a production Twilio number and does not rewrite t
 | --- | --- | --- |
 | `SANDBOX_TEST_CALL_ENABLED` | `false` | Master switch. When not `true`/`1`, the engine returns `sandbox_disabled` and the HTTP companion answers `503`. |
 | `ONBOARDING_SANDBOX_CALL` | `false` | Documented alias for the master switch (same truthy values). |
-| `SANDBOX_TEST_CALL_HOST` | `127.0.0.1` | Companion bind address (keep loopback unless you intend otherwise) |
-| `SANDBOX_TEST_CALL_PORT` | `8790` | Companion listen port |
-| `SANDBOX_TEST_CALL_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS for the static site |
+| `SANDBOX_TEST_CALL_HOST` | `127.0.0.1` | Companion bind address (keep loopback unless you intend otherwise). Hosted companions must use `0.0.0.0`. |
+| `SANDBOX_TEST_CALL_PORT` | `8790` | Companion listen port. If unset, `PORT` is used (Render injects this). |
+| `SANDBOX_TEST_CALL_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS for the static site. One origin string; unset to allow seahorse-app and chapelgate staging together. |
 
-Marketing UI uses a **separate** build-time flag, `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` (also default false). Static export inlines `NEXT_PUBLIC_*`. See repo `.env.example` and `docs/SANDBOX_TEST_CALL_CONTRACT.md`.
+Marketing UI uses a **separate** build-time flag, `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` (also default false). Static export inlines `NEXT_PUBLIC_*`. See repo `.env.example`, `docs/SANDBOX_TEST_CALL_CONTRACT.md`, and the $0 host runbook `docs/SANDBOX_DEPLOY.md`.
 
 ## Run the companion locally
 
@@ -87,7 +87,7 @@ NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT=http://127.0.0.1:8790/v1/sandbox \
 
 If the public flag is on but the endpoint is empty, `/create` uses an **in-browser scripted stub** labelled as local testing only. If the flag is off (default), the page says **Sandbox test call — under testing / coming** and does not invent a live call.
 
-DigitalOcean static hosting cannot run this process. Leave both public vars empty there. No new paid infra: run the same Node file on loopback, a staging VM, or a free-tier process.
+DigitalOcean static hosting cannot run this process. Staging `/create` needs a **separate** free-tier service (Render web service, not the frozen voice app) and a DigitalOcean **rebuild** after setting `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` and `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT`. Runbook: `docs/SANDBOX_DEPLOY.md`. No paid plan is required. WebRTC / live media stay `not_configured` / `live_call_forbidden` — never invent a successful live call.
 
 ## Plug into ReceptionistOS
 

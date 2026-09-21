@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createMockCalendarAdapter } from "./mock.ts";
-import { createCalendarServer, resetRateLimitForTests } from "./server.ts";
+import {
+  createCalendarServer,
+  resetRateLimitForTests,
+  resolveListenHost,
+  resolveListenPort,
+  DEFAULT_HOST,
+  DEFAULT_PORT,
+} from "./server.ts";
 
 function listen(server: ReturnType<typeof createCalendarServer>): Promise<number> {
   return new Promise((resolve) => {
@@ -28,6 +35,24 @@ async function withServer(
     );
   }
 }
+
+test("resolveListenHost stays loopback unless CALENDAR_ADAPTERS_HOST is set", () => {
+  assert.equal(resolveListenHost({}), DEFAULT_HOST);
+  assert.equal(resolveListenHost({ CALENDAR_ADAPTERS_HOST: "0.0.0.0" }), "0.0.0.0");
+  assert.equal(resolveListenHost({ CALENDAR_ADAPTERS_HOST: "  " }), DEFAULT_HOST);
+});
+
+test("resolveListenPort prefers CALENDAR_ADAPTERS_PORT then PORT", () => {
+  assert.equal(resolveListenPort({}), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ CALENDAR_ADAPTERS_PORT: "8789" }), 8789);
+  assert.equal(resolveListenPort({ PORT: "10000" }), 10000);
+  assert.equal(
+    resolveListenPort({ CALENDAR_ADAPTERS_PORT: "8789", PORT: "10000" }),
+    8789,
+  );
+  assert.equal(resolveListenPort({ PORT: "not-a-port" }), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ CALENDAR_ADAPTERS_PORT: "-1" }), DEFAULT_PORT);
+});
 
 test("GET /health reports flag off and no telephony", async () => {
   await withServer({ adaptersEnabled: false }, async (base) => {

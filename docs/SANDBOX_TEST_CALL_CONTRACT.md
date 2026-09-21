@@ -137,11 +137,13 @@ The client must ignore any payload that sets `liveCall: true` or includes a `liv
 
 Same expectation as `docs/FORM_ENDPOINT_CONTRACT.md`: `OPTIONS` → 204; allow `GET, POST, OPTIONS` and `Content-Type, Accept`.
 
+Staging `/create` is cross-origin (DigitalOcean static → Render companion). Unset `SANDBOX_TEST_CALL_CORS_ORIGIN` echoes the browser `Origin` so `https://seahorse-app-4oasq.ondigitalocean.app` and a chapelgate custom origin both work. A single configured origin locks to that origin only. Details: `docs/SANDBOX_DEPLOY.md`.
+
 ## Feature flags
 
 - `SANDBOX_TEST_CALL_ENABLED=false` (default) — companion may listen for `/health`, but mutations are off.
 - `ONBOARDING_SANDBOX_CALL` — alias for the companion master switch.
-- Marketing `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` and `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT` — empty / false on DigitalOcean static by default.
+- Marketing `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` and `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT` — empty / false on DigitalOcean static by default. To point staging `/create` at a hosted companion, set the absolute `https://…/v1/sandbox` URL and the public flag on App Platform and **rebuild** (static export inlines `NEXT_PUBLIC_*`). Runbook: `docs/SANDBOX_DEPLOY.md`.
 - If the public flag is on and the endpoint is empty, `/create` uses an in-browser scripted stub. That stub still returns `not_configured` / `live_call_forbidden` for live media.
 
 ## Claims
