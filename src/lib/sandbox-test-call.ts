@@ -2,6 +2,7 @@
  * Claims-safe sandbox test-call client for the static /create journey.
  * Talks to packages/sandbox-test-call over an absolute URL, or an in-browser
  * scripted mock when the public flag is on and no endpoint is configured.
+ * Scripted turns read the stored knowledge pack / system prompt.
  * Never invents a successful live phone call.
  */
 
@@ -10,6 +11,7 @@ import {
   type KnowledgePack,
   type ReceptionistDraftResult,
 } from "./receptionist-draft.ts";
+import { runScriptedDemo } from "../../packages/sandbox-test-call/src/scripted.ts";
 
 export type ReceptionistDraft = {
   businessName: string;
@@ -130,62 +132,11 @@ function sessionFromDraft(
   };
 }
 
-function firstFaqPair(faqs: string): { question: string; answer: string } | null {
-  const text = faqs.trim();
-  if (!text) return null;
-  const qa = text.match(/Q:\s*([\s\S]+?)\s*A:\s*([\s\S]+?)(?=\s*Q:|$)/i);
-  if (qa) return { question: qa[1].trim(), answer: qa[2].trim() };
-  const lines = text.split(/\n+/).map((line) => line.trim()).filter(Boolean);
-  if (lines.length >= 2) return { question: lines[0], answer: lines[1] };
-  return { question: "Do you have any frequently asked questions?", answer: text };
-}
-
-export function runBrowserScriptedDemo(draft: ReceptionistDraft): ScriptedTurn[] {
-  const name = draft.businessName || "this business";
-  const greeting = draft.greeting
-    ? draft.greeting
-    : `Hello, this is a sandbox draft receptionist for ${name}. This is not a live phone line.`;
-  const hours = draft.hours
-    ? draft.hours
-    : "I do not have opening hours in this sandbox draft yet.";
-  const services = draft.services
-    ? draft.services
-    : "I do not have services listed in this sandbox draft yet.";
-  const faq = firstFaqPair(draft.faqs);
-  return [
-    {
-      speaker: "receptionist",
-      text: greeting,
-      source: draft.greeting ? "draft.greeting" : "missing",
-    },
-    { speaker: "caller", text: "What are your opening hours?", source: "script" },
-    {
-      speaker: "receptionist",
-      text: hours,
-      source: draft.hours ? "draft.hours" : "missing",
-    },
-    { speaker: "caller", text: "What services do you offer?", source: "script" },
-    {
-      speaker: "receptionist",
-      text: services,
-      source: draft.services ? "draft.services" : "missing",
-    },
-    {
-      speaker: "caller",
-      text: faq?.question ?? "Do you have any frequently asked questions?",
-      source: faq ? "draft.faqs" : "script",
-    },
-    {
-      speaker: "receptionist",
-      text: faq ? faq.answer : "I do not have FAQs in this sandbox draft yet.",
-      source: faq ? "draft.faqs" : "missing",
-    },
-    {
-      speaker: "receptionist",
-      text: "This was a scripted sandbox demo. It was not a live phone call, no customer number was used, and the frozen production telephony path was not touched.",
-      source: "script",
-    },
-  ];
+export function runBrowserScriptedDemo(
+  pack: unknown,
+  systemPrompt?: string,
+): ScriptedTurn[] {
+  return runScriptedDemo(pack, systemPrompt);
 }
 
 /** Map only a confirmed sandbox session. Missing id → null (not invented). */
@@ -317,7 +268,7 @@ function browserStartTest(
       sessionId: session.id,
       mode: resolved === "scripted" ? "scripted" : "browser_mock",
       status: "scripted_demo_complete",
-      turns: runBrowserScriptedDemo(session.draft),
+      turns: runBrowserScriptedDemo(session.knowledgePack, session.systemPrompt),
       liveCall: false,
       liveNumber: null,
     },

@@ -46,7 +46,7 @@ const { knowledgePack, systemPrompt, limitations } = buildReceptionistDraft({
 
 Empty or omitted fields stay missing. A greeting that *mentions* “always-on” is stored as untrusted data; the builder still will not set `alwaysOn: true` or invent hours.
 
-`/create` shows an editable preview after draft review. Sandbox `POST /v1/sandbox/sessions` stores the pack + prompt (or builds them from draft fields if omitted). Contract: `docs/RECEPTIONIST_DRAFT_CONTRACT.md`.
+`/create` shows an editable preview after draft review. Sandbox `POST /v1/sandbox/sessions` stores the pack + prompt (or builds them from draft fields if omitted). The scripted test-call then answers from that stored pack (missing fields → not on file). Contract: `docs/RECEPTIONIST_DRAFT_CONTRACT.md`.
 
 ## Tests
 

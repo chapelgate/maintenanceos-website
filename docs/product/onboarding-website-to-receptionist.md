@@ -66,7 +66,7 @@ POST /v1/sandbox/sessions/{id}/test-call
   → { ok: false, error: "live_call_forbidden" } // mode=live
 ```
 
-`SANDBOX_TEST_CALL_ENABLED` defaults to **false**. This is not a live customer number.
+`SANDBOX_TEST_CALL_ENABLED` defaults to **false**. Scripted turns read the stored session knowledge pack and follow the system prompt’s missing-field rule. This is not a live customer number.
 
 ## Later API (sandbox promote — not implemented)
 

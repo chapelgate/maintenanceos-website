@@ -109,7 +109,7 @@ export function createSandboxEngine(deps: EngineDeps = {}) {
         sessionId: session.id,
         mode: kind,
         status: "scripted_demo_complete",
-        turns: runScriptedDemo(session.draft),
+        turns: runScriptedDemo(session.knowledgePack, session.systemPrompt),
         liveCall: false,
         liveNumber: null,
         productionTelephony: false,

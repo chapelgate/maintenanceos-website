@@ -148,8 +148,8 @@ export function SandboxTestCallPanel({
       </p>
       <p className="mt-2 text-sm text-muted">
         {hasDraftSignal
-          ? "The scripted demo will use the draft fields from the create journey (business name, greeting, hours, services, FAQs). If you previewed a knowledge pack, that pack and prompt are sent with the sandbox session. Empty fields stay empty."
-          : "No draft fields have been entered yet. You can still create a sandbox session; missing answers will be stated as missing."}
+          ? "The scripted demo answers from the stored knowledge pack (business name, hours, services, FAQs) and follows the system prompt: missing facts stay missing. Empty fields are answered as not on file — never invented. This is still not a live phone call."
+          : "No draft fields have been entered yet. You can still create a sandbox session; missing pack facts will be answered as not on file."}
       </p>
 
       <div id={statusId} className="mt-4 space-y-2 text-sm text-muted" aria-live="polite">

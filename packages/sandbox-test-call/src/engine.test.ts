@@ -40,7 +40,7 @@ test("engine is disabled when the flag is off", () => {
   }
 });
 
-test("create + describe + scripted test uses draft fields only", () => {
+test("create + describe + scripted test uses stored knowledge pack", () => {
   const engine = createSandboxEngine({
     enabled: true,
     now: () => new Date("2026-09-20T12:00:00.000Z"),
@@ -88,19 +88,62 @@ test("create + describe + scripted test uses draft fields only", () => {
   );
 });
 
-test("scripted demo states missing fields instead of inventing them", () => {
-  const turns = runScriptedDemo({
-    businessName: "",
-    greeting: "",
-    hours: "",
-    services: "",
-    faqs: "",
-  });
+test("scripted demo states missing pack fields instead of inventing them", () => {
+  const turns = runScriptedDemo({});
   const missing = turns.filter((turn) => turn.source === "missing");
   assert.ok(missing.length >= 3);
-  assert.ok(missing.some((turn) => /do not have opening hours/i.test(turn.text)));
-  assert.ok(missing.some((turn) => /do not have services/i.test(turn.text)));
-  assert.ok(missing.some((turn) => /do not have FAQs/i.test(turn.text)));
+  assert.ok(missing.some((turn) => /opening hours/i.test(turn.text) && /not on file/i.test(turn.text)));
+  assert.ok(missing.some((turn) => /services/i.test(turn.text) && /not on file/i.test(turn.text)));
+  assert.ok(missing.some((turn) => /FAQs/i.test(turn.text) && /not on file/i.test(turn.text)));
+});
+
+test("scripted test uses overlay pack name+hours, not stale draft fields", () => {
+  const engine = createSandboxEngine({ enabled: true });
+  const created = engine.createSession({
+    businessName: "Draft Name Ltd",
+    hours: "Mon–Fri 08:00–17:00",
+    services: "Invented draft service",
+    knowledgePack: {
+      businessName: "Reviewed Plumbing",
+      hours: "Sat 10:00–14:00",
+      services: ["Emergency call-out"],
+    },
+  });
+  assert.equal(created.ok, true);
+  if (!created.ok) return;
+  const testCall = engine.startTest({ sessionId: created.data.id, mode: "scripted" });
+  assert.equal(testCall.ok, true);
+  if (!testCall.ok) return;
+  const text = testCall.data.turns.map((turn) => turn.text).join("\n");
+  assert.match(text, /Reviewed Plumbing/);
+  assert.match(text, /Sat 10:00–14:00/);
+  assert.match(text, /Emergency call-out/);
+  assert.doesNotMatch(text, /Draft Name Ltd/);
+  assert.doesNotMatch(text, /Mon–Fri 08:00–17:00/);
+  assert.doesNotMatch(text, /Invented draft service/);
+});
+
+test("scripted test with empty pack hours does not leak draft hours", () => {
+  const engine = createSandboxEngine({ enabled: true });
+  const created = engine.createSession({
+    businessName: "Acme",
+    hours: "Mon–Fri 08:00–17:00",
+    knowledgePack: { businessName: "Acme Overlay" },
+  });
+  assert.equal(created.ok, true);
+  if (!created.ok) return;
+  const testCall = engine.startTest({ sessionId: created.data.id, mode: "scripted" });
+  assert.equal(testCall.ok, true);
+  if (!testCall.ok) return;
+  const text = testCall.data.turns.map((turn) => turn.text).join("\n");
+  assert.match(text, /Acme Overlay/);
+  assert.match(text, /not sure/i);
+  assert.match(text, /not on file/i);
+  assert.doesNotMatch(text, /Mon–Fri 08:00–17:00/);
+  const hoursTurn = testCall.data.turns.find(
+    (turn) => turn.speaker === "receptionist" && /opening hours/i.test(turn.text),
+  );
+  assert.equal(hoursTurn?.source, "missing");
 });
 
 test("webrtc and live modes never invent a successful live call", () => {

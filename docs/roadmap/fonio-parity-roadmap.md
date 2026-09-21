@@ -18,6 +18,7 @@
 - Extract schema + review UI
 - Sandbox tenant create
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)
+- [x] Scripted sandbox demo answers from stored knowledge pack / system prompt (missing fields not on file; still not live voice)
 - [x] Flagged customer dashboard foundation (history / transcript / bookings stubs; SAMPLE only)
 - [x] Local e2e orchestration (stack script + compose + runbook; flags on locally only; not production Fonio-parity)
 - [x] $0 scan companion deploy path (Render free web service + `docs/ONBOARDING_SCAN_DEPLOY.md`; ingest off until configured; DO rebuild required for `NEXT_PUBLIC_*`)
