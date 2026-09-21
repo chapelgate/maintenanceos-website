@@ -113,6 +113,22 @@ Same expectation as `docs/FORM_ENDPOINT_CONTRACT.md`: `OPTIONS` → 204; allow `
 ## Feature flags
 
 - `CALENDAR_ADAPTERS_ENABLED=false` (default) — companion may listen for `/health`, but mutations are off.
-- `CALENDAR_ADAPTER_PROVIDER=mock` (default) — or `google` / `microsoft`.
+- `CALENDAR_ADAPTER_PROVIDER=mock` (default) — or `google` / `microsoft`. Mock is used when the provider is unset, including when Google OAuth env is missing.
 - Marketing `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT` — empty / false on DigitalOcean static by default. Hosted mock companion (optional, same free Render blueprint as sandbox): `docs/SANDBOX_DEPLOY.md`. Rebuild DigitalOcean after setting `NEXT_PUBLIC_*`.
 - No live phone booking confirmation is exposed on this contract.
+- Do **not** claim Google Calendar is live on staging. Hosted Render stays `provider: mock`. Local Google OAuth is operator-configured (see below).
+
+## Google OAuth (local companion only)
+
+Not a Next.js route. Flags must be on (`CALENDAR_ADAPTERS_ENABLED=true`) and `GOOGLE_CALENDAR_CLIENT_ID` + `GOOGLE_CALENDAR_CLIENT_SECRET` set (never in git).
+
+| Method | Path | Result |
+| --- | --- | --- |
+| GET | `/oauth/google/start` | **302** to Google (offline calendar scopes + CSRF `state`), or **503** `calendar_disabled` / `not_configured` |
+| GET | `/oauth/google/callback` | Exchanges `code` for a refresh token; stores it in memory or `GOOGLE_CALENDAR_TOKEN_FILE`. HTML confirmation. Invalid `state` → **400**. Missing refresh token → **503** `auth_failed`. **No invented booking.** |
+
+Default redirect URI: `http://127.0.0.1:8789/oauth/google/callback` (override with `GOOGLE_CALENDAR_REDIRECT_URI`). Register that exact URI in Google Cloud.
+
+`GET /health` includes `googleOAuth: { clientConfigured, tokenPresent, startPath, callbackPath }` and `googleCalendarLiveOnStaging: false`.
+
+Until a refresh token exists (env or store) and `CALENDAR_ADAPTER_PROVIDER=google`, `listFreeSlots` / `createBooking` return **`not_configured`**. `/create` must not display a booked confirmation from that.

@@ -29,11 +29,31 @@ export { createDisabledAdapter } from "./disabled.ts";
 export { createCalendarAdapter } from "./factory.ts";
 export {
   exchangeRefreshToken,
+  exchangeAuthorizationCode,
   googleAuthorizationUrl,
+  googleClientFromEnv,
   googleEnvCredentials,
+  googleOAuthStatus,
+  googleRedirectUriFromEnv,
+  resolveGoogleCredentials,
   microsoftAuthorizationUrl,
   microsoftEnvCredentials,
+  createMemoryOauthStateStore,
+  GOOGLE_OAUTH_START_PATH,
+  GOOGLE_OAUTH_CALLBACK_PATH,
+  GOOGLE_TOKEN_URL,
 } from "./oauth.ts";
+export {
+  handleGoogleOAuthStart,
+  handleGoogleOAuthCallback,
+} from "./oauth-http.ts";
+export {
+  createFileTokenStore,
+  createMemoryTokenStore,
+  createTokenStoreFromEnv,
+} from "./tokens.ts";
+export type { GoogleStoredTokens, TokenStore } from "./tokens.ts";
+export type { GoogleClientConfig, GoogleCredentials, OauthStateStore } from "./oauth.ts";
 export {
   createCalendarServer,
   handleCalendarRequest,

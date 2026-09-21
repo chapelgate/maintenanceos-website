@@ -12,7 +12,19 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { createCalendarAdapter } from "./factory.ts";
 import { isCalendarAdaptersEnabled, calendarProviderFromEnv } from "./flags.ts";
-import type { CalendarAdapter, CalendarResult } from "./types.ts";
+import {
+  GOOGLE_OAUTH_CALLBACK_PATH,
+  GOOGLE_OAUTH_START_PATH,
+  handleGoogleOAuthCallback,
+  handleGoogleOAuthStart,
+} from "./oauth-http.ts";
+import {
+  createMemoryOauthStateStore,
+  googleOAuthStatus,
+  type OauthStateStore,
+} from "./oauth.ts";
+import { createTokenStoreFromEnv, type TokenStore } from "./tokens.ts";
+import type { CalendarAdapter, CalendarResult, FetchLike } from "./types.ts";
 
 export const DEFAULT_HOST = "127.0.0.1";
 export const DEFAULT_PORT = 8789;
@@ -21,12 +33,18 @@ export const MAX_BODY_BYTES = 8 * 1024;
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 20;
 
+const defaultOauthStateStore = createMemoryOauthStateStore();
+
 export type ServerOptions = {
   host?: string;
   port?: number;
   adaptersEnabled?: boolean;
   corsOrigin?: string;
   adapter?: CalendarAdapter;
+  env?: NodeJS.ProcessEnv;
+  tokenStore?: TokenStore;
+  oauthStateStore?: OauthStateStore;
+  fetch?: FetchLike;
 };
 
 type RateBucket = number[];
@@ -169,10 +187,13 @@ export async function handleCalendarRequest(
   const configured = options.corsOrigin;
   const method = (req.method ?? "GET").toUpperCase();
   const pathname = pathnameOf(req);
-  const adaptersEnabled = options.adaptersEnabled ?? isCalendarAdaptersEnabled();
+  const env = options.env ?? process.env;
+  const adaptersEnabled = options.adaptersEnabled ?? isCalendarAdaptersEnabled(env);
+  const tokenStore = options.tokenStore ?? createTokenStoreFromEnv(env);
+  const oauthStateStore = options.oauthStateStore ?? defaultOauthStateStore;
   const adapter =
     options.adapter ??
-    createCalendarAdapter({ enabled: adaptersEnabled });
+    createCalendarAdapter({ enabled: adaptersEnabled, env, tokenStore, fetch: options.fetch });
 
   if (method === "OPTIONS") {
     res.writeHead(204, corsHeaders(origin, configured));
@@ -181,6 +202,7 @@ export async function handleCalendarRequest(
   }
 
   if (method === "GET" && pathname === "/health") {
+    const google = await googleOAuthStatus(env, tokenStore);
     send(
       res,
       200,
@@ -189,12 +211,47 @@ export async function handleCalendarRequest(
         ok: true,
         service: "maintenanceos-calendar-adapters",
         adaptersEnabled,
-        provider: calendarProviderFromEnv(),
+        provider: calendarProviderFromEnv(env),
         telephony: false,
+        googleCalendarLiveOnStaging: false,
+        googleOAuth: {
+          clientConfigured: google.clientConfigured,
+          tokenPresent: google.tokenPresent,
+          startPath: GOOGLE_OAUTH_START_PATH,
+          callbackPath: GOOGLE_OAUTH_CALLBACK_PATH,
+        },
         slotsPath: "/v1/calendar/slots",
       },
       configured,
     );
+    return;
+  }
+
+  if (method === "GET" && pathname === GOOGLE_OAUTH_START_PATH) {
+    const result = handleGoogleOAuthStart({
+      adaptersEnabled,
+      env,
+      tokenStore,
+      oauthStateStore,
+      fetch: options.fetch,
+      extraHeaders: corsHeaders(origin, configured),
+    });
+    res.writeHead(result.status, result.headers);
+    res.end(result.body);
+    return;
+  }
+
+  if (method === "GET" && pathname === GOOGLE_OAUTH_CALLBACK_PATH) {
+    const result = await handleGoogleOAuthCallback(req.url ?? "/", {
+      adaptersEnabled,
+      env,
+      tokenStore,
+      oauthStateStore,
+      fetch: options.fetch,
+      extraHeaders: corsHeaders(origin, configured),
+    });
+    res.writeHead(result.status, result.headers);
+    res.end(result.body);
     return;
   }
 
@@ -309,11 +366,24 @@ export async function handleCalendarRequest(
 }
 
 export function createCalendarServer(options: ServerOptions = {}): http.Server {
-  const adaptersEnabled = options.adaptersEnabled ?? isCalendarAdaptersEnabled();
+  const env = options.env ?? process.env;
+  const adaptersEnabled = options.adaptersEnabled ?? isCalendarAdaptersEnabled(env);
+  const tokenStore = options.tokenStore ?? createTokenStoreFromEnv(env);
+  const oauthStateStore = options.oauthStateStore ?? createMemoryOauthStateStore();
   const shared: ServerOptions = {
     ...options,
+    env,
     adaptersEnabled,
-    adapter: options.adapter ?? createCalendarAdapter({ enabled: adaptersEnabled }),
+    tokenStore,
+    oauthStateStore,
+    adapter:
+      options.adapter ??
+      createCalendarAdapter({
+        enabled: adaptersEnabled,
+        env,
+        tokenStore,
+        fetch: options.fetch,
+      }),
   };
   return http.createServer((req, res) => {
     handleCalendarRequest(req, res, shared).catch((err) => {
@@ -363,9 +433,14 @@ export function listenCalendarServer(options: ServerOptions = {}): http.Server {
   server.listen(port, host, () => {
     console.log(`[calendar-adapters] listening on http://${host}:${port}/v1/calendar/slots`);
     console.log(`[calendar-adapters] health    http://${host}:${port}/health`);
+    console.log(
+      `[calendar-adapters] google oauth start http://${host}:${port}${GOOGLE_OAUTH_START_PATH}`,
+    );
     console.log(`[calendar-adapters] CALENDAR_ADAPTERS_ENABLED=${enabled ? "true" : "false"}`);
     console.log(`[calendar-adapters] provider=${calendarProviderFromEnv()}`);
-    console.log("[calendar-adapters] no telephony; no invented bookings");
+    console.log(
+      "[calendar-adapters] no telephony; mock default; Google Calendar is not live on staging",
+    );
   });
 
   const shutdown = () => {

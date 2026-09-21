@@ -3,6 +3,7 @@ import { calendarProviderFromEnv, isCalendarAdaptersEnabled } from "./flags.ts";
 import { createGoogleCalendarAdapter } from "./google.ts";
 import { createMicrosoftCalendarAdapter } from "./microsoft.ts";
 import { createMockCalendarAdapter } from "./mock.ts";
+import { createTokenStoreFromEnv } from "./tokens.ts";
 import type { AdapterDeps, CalendarAdapter } from "./types.ts";
 
 export function createCalendarAdapter(deps: AdapterDeps = {}): CalendarAdapter {
@@ -10,7 +11,10 @@ export function createCalendarAdapter(deps: AdapterDeps = {}): CalendarAdapter {
   const enabled = deps.enabled ?? isCalendarAdaptersEnabled(env);
   const provider = calendarProviderFromEnv(env);
   if (!enabled) return createDisabledAdapter(provider);
-  if (provider === "google") return createGoogleCalendarAdapter(deps);
+  const tokenStore = deps.tokenStore ?? createTokenStoreFromEnv(env);
+  if (provider === "google") {
+    return createGoogleCalendarAdapter({ ...deps, env, tokenStore });
+  }
   if (provider === "microsoft") return createMicrosoftCalendarAdapter(deps);
   return createMockCalendarAdapter(deps);
 }

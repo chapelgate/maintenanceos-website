@@ -13,7 +13,7 @@
 ## Phase 1 — Website → sandbox receptionist (P0)
 
 - [x] SSRF-safe website ingestion module (feature-flagged companion; off by default)
-- [x] Calendar adapter package + mock + Google/Microsoft scaffolds (flagged off)
+- [x] Calendar adapter package + mock + Google OAuth start/callback scaffold (flagged off; not live on staging)
 - Extract schema + review UI
 - Sandbox tenant create
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)

@@ -141,7 +141,7 @@ export function CalendarConnectPanel() {
       <p className="mt-2 text-sm text-muted">
         Adapters are enabled in this build only.{" "}
         {usesCompanion
-          ? "Slots come from the companion service (mock, Google, or Microsoft — whatever that process was started with)."
+          ? "Slots come from the companion service. Mock is the default when Google OAuth is unset. Google Calendar OAuth is operator-configured on that process (not this static page) and stays not_configured without secrets — this is not live Google Calendar on staging."
           : "No calendar endpoint is configured, so this picker uses an in-browser mock. It is not Google or Microsoft."}{" "}
         Reserving a slot tests the adapter. It does not place a phone booking or
         create a live receptionist.

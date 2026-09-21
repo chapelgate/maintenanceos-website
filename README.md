@@ -78,7 +78,7 @@ NEXT_PUBLIC_CALENDAR_ENDPOINT=http://127.0.0.1:8789/v1/calendar \
 
 Leave both public vars unset/false on DigitalOcean static hosting until a **separate** free-tier mock companion is up (`docs/SANDBOX_DEPLOY.md`, calendar section) — then set `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT` and **rebuild**. `/create` then says **Calendar connect — coming / under testing** until that rebuild. If the public flag is on and the endpoint is empty, the picker uses an in-browser mock labelled as local testing only.
 
-Google Calendar / Microsoft 365: set OAuth env on the companion process only (see `packages/calendar-adapters/README.md`). No secrets in git. Do not wire this to frozen live telephony.
+Google Calendar / Microsoft 365: local OAuth scaffold on the companion only (`GET /oauth/google/start` → `/oauth/google/callback`; see `packages/calendar-adapters/README.md`). No secrets in git. Mock is the default when Google env is missing. Do not claim Google Calendar is live on staging. Do not wire this to frozen live telephony.
 
 ### Sandbox test call (companion + /create panel)
 

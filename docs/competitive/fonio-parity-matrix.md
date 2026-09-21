@@ -55,7 +55,7 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 
 | FEATURE | FONIO | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
-| Calendar book / reschedule | Yes (Google/Microsoft etc.) | Adapter interface + mock + Google/Microsoft OAuth scaffolds in `packages/calendar-adapters`. Flag `CALENDAR_ADAPTERS_ENABLED` defaults off. `/create` shows “coming / under testing” unless `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` + mock/companion. Optional $0 Render mock sibling: `docs/SANDBOX_DEPLOY.md`. No live phone booking. | Not customer-GA; OAuth operator-configured; no voice confirmation | BUILD | P0 | PARTIAL (flagged adapter foundation + optional free mock host) |
+| Calendar book / reschedule | Yes (Google/Microsoft etc.) | Adapter interface + mock default + Google OAuth start/callback scaffold (`/oauth/google/start` → `/oauth/google/callback`, memory/file token store) and Microsoft env-token scaffold in `packages/calendar-adapters`. Flag `CALENDAR_ADAPTERS_ENABLED` defaults off. `/create` shows “coming / under testing” unless `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` + mock/companion. Optional $0 Render **mock** sibling: `docs/SANDBOX_DEPLOY.md`. No live phone booking. Google Calendar is **not** live on staging. | Not customer-GA; OAuth operator-configured locally; no voice confirmation | BUILD | P0 | PARTIAL (flagged adapter + local Google OAuth scaffold + optional free mock host) |
 | Tool/actions (jobs, tickets, CRM) | API/CRM integrations claimed | Deterministic ops + action evidence in pilot | Secure tool framework + adapters | REUSE + BUILD | P0 | PARTIAL |
 | Structured variable extraction | Claimed | Partial in voice/ops | Configurable schemas | BUILD | P0 | PARTIAL |
 

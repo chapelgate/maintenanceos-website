@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createMockCalendarAdapter } from "./mock.ts";
+import { createMemoryTokenStore } from "./tokens.ts";
 import {
   createCalendarServer,
   resetRateLimitForTests,
@@ -54,7 +55,7 @@ test("resolveListenPort prefers CALENDAR_ADAPTERS_PORT then PORT", () => {
   assert.equal(resolveListenPort({ CALENDAR_ADAPTERS_PORT: "-1" }), DEFAULT_PORT);
 });
 
-test("GET /health reports flag off and no telephony", async () => {
+test("GET /health reports flag off, no telephony, and Google not live on staging", async () => {
   await withServer({ adaptersEnabled: false }, async (base) => {
     const res = await fetch(`${base}/health`);
     const json = await res.json();
@@ -62,6 +63,11 @@ test("GET /health reports flag off and no telephony", async () => {
     assert.equal(json.ok, true);
     assert.equal(json.adaptersEnabled, false);
     assert.equal(json.telephony, false);
+    assert.equal(json.googleCalendarLiveOnStaging, false);
+    assert.equal(json.googleOAuth.clientConfigured, false);
+    assert.equal(json.googleOAuth.tokenPresent, false);
+    assert.equal(json.googleOAuth.startPath, "/oauth/google/start");
+    assert.equal(json.googleOAuth.callbackPath, "/oauth/google/callback");
   });
 });
 
@@ -176,4 +182,116 @@ test("listen-shaped server keeps mock bookings across list + book + conflict", a
     assert.equal(again.status, 409);
     assert.equal(conflict.error, "slot_unavailable");
   });
+});
+
+test("GET /oauth/google/start is 503 when client env is missing", async () => {
+  await withServer(
+    { adaptersEnabled: true, env: { CALENDAR_ADAPTER_PROVIDER: "mock" } },
+    async (base) => {
+      const res = await fetch(`${base}/oauth/google/start`, { redirect: "manual" });
+      assert.equal(res.status, 503);
+      const json = await res.json();
+      assert.equal(json.error, "not_configured");
+    },
+  );
+});
+
+test("Google OAuth callback stores a token then list/book can use the store", async () => {
+  const tokenStore = createMemoryTokenStore();
+  const env = {
+    CALENDAR_ADAPTERS_ENABLED: "true",
+    CALENDAR_ADAPTER_PROVIDER: "google",
+    GOOGLE_CALENDAR_CLIENT_ID: "client",
+    GOOGLE_CALENDAR_CLIENT_SECRET: "secret",
+  };
+  const fetchFn: typeof fetch = async (input, init) => {
+    const url = String(input);
+    const method = (init?.method ?? "GET").toUpperCase();
+    const rawBody = init?.body;
+    const body =
+      typeof rawBody === "string"
+        ? rawBody
+        : rawBody instanceof URLSearchParams
+          ? rawBody.toString()
+          : String(rawBody ?? "");
+    if (url.includes("oauth2.googleapis.com/token")) {
+      if (body.includes("grant_type=authorization_code")) {
+        return new Response(
+          JSON.stringify({
+            access_token: "at",
+            refresh_token: "rt-from-code",
+            expires_in: 3600,
+          }),
+          { status: 200 },
+        );
+      }
+      return new Response(JSON.stringify({ access_token: "at", expires_in: 3600 }), {
+        status: 200,
+      });
+    }
+    if (url.endsWith("/freeBusy")) {
+      return new Response(JSON.stringify({ calendars: { primary: { busy: [] } } }), {
+        status: 200,
+      });
+    }
+    if (method === "POST" && url.includes("/events")) {
+      return new Response(
+        JSON.stringify({
+          id: "evt_oauth",
+          summary: "OAuth booking",
+          start: { dateTime: "2026-09-21T08:00:00.000Z", timeZone: "Europe/London" },
+          end: { dateTime: "2026-09-21T08:30:00.000Z", timeZone: "Europe/London" },
+        }),
+        { status: 200 },
+      );
+    }
+    return new Response("{}", { status: 500 });
+  };
+
+  await withServer(
+    {
+      adaptersEnabled: true,
+      env,
+      tokenStore,
+      fetch: fetchFn,
+    },
+    async (base) => {
+      const start = await fetch(`${base}/oauth/google/start`, { redirect: "manual" });
+      assert.equal(start.status, 302);
+      const location = start.headers.get("location");
+      assert.ok(location);
+      const state = new URL(location).searchParams.get("state");
+      assert.ok(state);
+
+      const callback = await fetch(
+        `${base}/oauth/google/callback?code=auth-code&state=${state}`,
+      );
+      const html = await callback.text();
+      assert.equal(callback.status, 200);
+      assert.match(html, /token stored locally/i);
+      assert.equal((await tokenStore.get("google"))?.refreshToken, "rt-from-code");
+
+      const health = await fetch(`${base}/health`);
+      const healthJson = await health.json();
+      assert.equal(healthJson.googleOAuth.clientConfigured, true);
+      assert.equal(healthJson.googleOAuth.tokenPresent, true);
+      assert.equal(healthJson.googleCalendarLiveOnStaging, false);
+
+      const bookRes = await fetch(`${base}/v1/calendar/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          start: "2026-09-21T08:00:00.000Z",
+          end: "2026-09-21T08:30:00.000Z",
+          timezone: "Europe/London",
+          title: "OAuth adapter test",
+        }),
+      });
+      const booked = await bookRes.json();
+      assert.equal(bookRes.status, 200);
+      assert.equal(booked.ok, true);
+      assert.equal(booked.data.id, "evt_oauth");
+      assert.equal(booked.data.provider, "google");
+    },
+  );
 });

@@ -3,6 +3,8 @@
  * Adapters must not invent bookings: ok:true only after a real provider/mock confirm.
  */
 
+import type { TokenStore } from "./tokens.ts";
+
 export const CALENDAR_PROVIDERS = ["mock", "google", "microsoft"] as const;
 export type CalendarProviderId = (typeof CALENDAR_PROVIDERS)[number];
 
@@ -91,6 +93,8 @@ export type AdapterDeps = {
   fetch?: FetchLike;
   now?: () => Date;
   enabled?: boolean;
+  /** Local Google OAuth token store (memory or file). Never commit contents. */
+  tokenStore?: TokenStore;
 };
 
 export function calendarFailure(

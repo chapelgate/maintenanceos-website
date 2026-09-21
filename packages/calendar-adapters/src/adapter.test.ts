@@ -108,3 +108,36 @@ test("factory enables mock when CALENDAR_ADAPTERS_ENABLED=true", async () => {
   assert.equal(adapter.provider, "mock");
   await assertAdapterContract(adapter);
 });
+
+test("factory defaults to mock when Google OAuth env is missing", async () => {
+  const adapter = createCalendarAdapter({
+    env: { CALENDAR_ADAPTERS_ENABLED: "true" },
+    now: NOW,
+  });
+  assert.equal(adapter.provider, "mock");
+  const booked = await adapter.createBooking({
+    start: "2026-09-21T09:00:00.000Z",
+    end: "2026-09-21T09:30:00.000Z",
+  });
+  assert.equal(booked.ok, true);
+  if (booked.ok) assert.equal(booked.data.provider, "mock");
+});
+
+test("factory google provider without credentials is not_configured, not a fake booking", async () => {
+  const adapter = createCalendarAdapter({
+    env: {
+      CALENDAR_ADAPTERS_ENABLED: "true",
+      CALENDAR_ADAPTER_PROVIDER: "google",
+    },
+  });
+  assert.equal(adapter.provider, "google");
+  const booked = await adapter.createBooking({
+    start: "2026-09-21T09:00:00.000Z",
+    end: "2026-09-21T09:30:00.000Z",
+  });
+  assert.equal(booked.ok, false);
+  if (!booked.ok) {
+    assert.equal(booked.error, "not_configured");
+    assert.match(booked.message, /No booking was created/);
+  }
+});
