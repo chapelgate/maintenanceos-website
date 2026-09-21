@@ -1,7 +1,7 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { FormEvent, useEffect, useId, useRef, useState } from "react";
-import { ReceptionistDraftPreview } from "@/components/ReceptionistDraftPreview";
 import { siteConfig } from "@/config/site";
 import { submitLead } from "@/lib/lead-adapter";
 import {
@@ -26,13 +26,19 @@ import {
   type ReceptionistDraft,
   type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
-import {
-  buildReceptionistDraft,
-  finalizeSystemPrompt,
-  limitationsFor,
-  normalizeKnowledgePack,
-  type ReceptionistDraftResult,
-} from "@/lib/receptionist-draft";
+import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
+
+const ReceptionistDraftPreview = dynamic(
+  () =>
+    import("@/components/ReceptionistDraftPreview").then(
+      (module) => module.ReceptionistDraftPreview,
+    ),
+  { ssr: false },
+);
+
+function loadReceptionistDraft() {
+  return import("@/lib/receptionist-draft");
+}
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -189,6 +195,11 @@ export function CreateReceptionistForm({
     setPromptText(built.systemPrompt);
     setPackError(null);
   }
+
+  useEffect(() => {
+    if (step < 3) return;
+    void loadReceptionistDraft();
+  }, [step]);
 
   useEffect(() => {
     if (step !== 2) return;
@@ -564,8 +575,10 @@ export function CreateReceptionistForm({
             e.preventDefault();
             setStatus("idle");
             clearError();
-            applyBuilt(buildReceptionistDraft(draft));
-            setStep(4);
+            void loadReceptionistDraft().then(({ buildReceptionistDraft }) => {
+              applyBuilt(buildReceptionistDraft(draft));
+              setStep(4);
+            });
           }}
         >
           <p className="text-sm text-muted">
@@ -648,40 +661,52 @@ export function CreateReceptionistForm({
               packError={packError}
               onPackTextChange={(value) => {
                 setPackText(value);
-                try {
-                  const parsed: unknown = JSON.parse(value);
-                  const pack = normalizeKnowledgePack(parsed);
-                  if (!pack) {
-                    setPackError(
-                      "Knowledge pack JSON was not accepted. Missing fields stay missing; live-call flags cannot be set.",
-                    );
-                    return;
-                  }
-                  setPackError(null);
-                  setReceptionist({
-                    knowledgePack: pack,
-                    systemPrompt: finalizeSystemPrompt(promptText),
-                    limitations: limitationsFor(pack),
-                  });
-                } catch {
-                  setPackError(
-                    "Knowledge pack must be valid JSON. The last accepted pack will be used until this parses.",
-                  );
-                }
+                void loadReceptionistDraft().then(
+                  ({
+                    finalizeSystemPrompt,
+                    limitationsFor,
+                    normalizeKnowledgePack,
+                  }) => {
+                    try {
+                      const parsed: unknown = JSON.parse(value);
+                      const pack = normalizeKnowledgePack(parsed);
+                      if (!pack) {
+                        setPackError(
+                          "Knowledge pack JSON was not accepted. Missing fields stay missing; live-call flags cannot be set.",
+                        );
+                        return;
+                      }
+                      setPackError(null);
+                      setReceptionist({
+                        knowledgePack: pack,
+                        systemPrompt: finalizeSystemPrompt(promptText),
+                        limitations: limitationsFor(pack),
+                      });
+                    } catch {
+                      setPackError(
+                        "Knowledge pack must be valid JSON. The last accepted pack will be used until this parses.",
+                      );
+                    }
+                  },
+                );
               }}
               onPromptTextChange={(value) => {
                 setPromptText(value);
-                setReceptionist((current) =>
-                  current
-                    ? {
-                        ...current,
-                        systemPrompt: finalizeSystemPrompt(value),
-                      }
-                    : current,
-                );
+                void loadReceptionistDraft().then(({ finalizeSystemPrompt }) => {
+                  setReceptionist((current) =>
+                    current
+                      ? {
+                          ...current,
+                          systemPrompt: finalizeSystemPrompt(value),
+                        }
+                      : current,
+                  );
+                });
               }}
               onReset={() => {
-                applyBuilt(buildReceptionistDraft(draft));
+                void loadReceptionistDraft().then(({ buildReceptionistDraft }) => {
+                  applyBuilt(buildReceptionistDraft(draft));
+                });
               }}
             />
           ) : null}
