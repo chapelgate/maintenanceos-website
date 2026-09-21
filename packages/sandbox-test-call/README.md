@@ -13,7 +13,7 @@ Toward Fonio’s “call my receptionist” loop, without touching the frozen li
 | Action | Meaning |
 | --- | --- |
 | Create / describe session | In-memory sandbox session from draft fields: `businessName`, `greeting`, `hours`, `services`, `faqs`, plus a claims-safe `knowledgePack` + `systemPrompt` (`packages/receptionist-draft`). `kind: "sandbox"`. `liveNumber` is always `null`. |
-| Start scripted test | Deterministic transcript against those draft fields. Missing fields are stated as missing. Status is `scripted_demo_complete` only. |
+| Start scripted test | Deterministic transcript against the **stored knowledge pack** (and system-prompt missing-field rule). Missing pack fields are answered as not on file — never invented. Status is `scripted_demo_complete` only. Still not live voice. |
 | WebRTC / live media | Returns `not_configured` (or `live_call_forbidden` for `live` / `twilio`). Never `ok: true` with `liveCall: true`. |
 
 This PR does **not** provision a production Twilio number and does not rewrite the frozen receptionist path.
@@ -117,4 +117,4 @@ From repo root: `npm test` (includes `src/*.test.ts` here).
 node --experimental-strip-types --test packages/sandbox-test-call/src/*.test.ts
 ```
 
-Coverage: flag default off, alias flag, scripted demo uses draft / states missing fields, `webrtc` → `not_configured`, `live` → `live_call_forbidden`, companion `503` when disabled.
+Coverage: flag default off, alias flag, scripted demo uses stored knowledge pack / system prompt (name+hours mentioned; empty hours → not on file), `webrtc` → `not_configured`, `live` → `live_call_forbidden`, companion `503` when disabled.

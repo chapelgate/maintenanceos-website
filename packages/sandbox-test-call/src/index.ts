@@ -24,7 +24,7 @@ export type {
 } from "./types.ts";
 export { isSandboxTestCallEnabled } from "./flags.ts";
 export { asDraftString, firstFaqPair, normalizeDraft } from "./draft.ts";
-export { runScriptedDemo } from "./scripted.ts";
+export { missingOnFileReply, runScriptedDemo } from "./scripted.ts";
 export { createMemoryStore } from "./store.ts";
 export { createSandboxEngine, resolveTestMode } from "./engine.ts";
 export type { SandboxEngine } from "./engine.ts";

@@ -89,7 +89,7 @@ POST {BASE}/sessions/{id}/test-call
 
 | `mode` | Result |
 | --- | --- |
-| omitted / `scripted` / `browser_mock` | HTTP **200** + `status: "scripted_demo_complete"` and a transcript. `liveCall` is **false**. |
+| omitted / `scripted` / `browser_mock` | HTTP **200** + `status: "scripted_demo_complete"` and a transcript built from the session **knowledge pack**. Missing pack fields are answered as not on file. `liveCall` is **false**. |
 | `webrtc` | HTTP **503** `{ "ok": false, "error": "not_configured" }` — live media is not configured. |
 | `live` / `production` / `twilio` | HTTP **403** `{ "ok": false, "error": "live_call_forbidden" }` |
 
@@ -107,7 +107,7 @@ HTTP **200** example:
     "mode": "scripted",
     "status": "scripted_demo_complete",
     "turns": [
-      { "speaker": "receptionist", "text": "Warm homes, honest quotes", "source": "draft.greeting" }
+      { "speaker": "receptionist", "text": "Acme Plumbing opening hours are Mon–Fri 08:00–17:00.", "source": "knowledge.hours" }
     ],
     "liveCall": false,
     "liveNumber": null,
@@ -118,6 +118,8 @@ HTTP **200** example:
 ```
 
 The client must ignore any payload that sets `liveCall: true` or includes a `liveNumber`. Treat that as failure — do not display “call connected”.
+
+Scripted turns are pack-aware: receptionist answers come from the session `knowledgePack` (`source` like `knowledge.hours`). If a field is omitted from the pack, the reply says it is not on file (`source: "missing"`) and must not invent hours, services, or FAQs. The stored system prompt’s missing-field rule is applied; this is still not live voice.
 
 ## Errors
 

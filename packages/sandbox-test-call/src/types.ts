@@ -64,10 +64,12 @@ export type SandboxSession = {
 
 export type ScriptedTurnSource =
   | "script"
-  | "draft.greeting"
-  | "draft.hours"
-  | "draft.services"
-  | "draft.faqs"
+  | "knowledge.businessName"
+  | "knowledge.greeting"
+  | "knowledge.hours"
+  | "knowledge.services"
+  | "knowledge.faqs"
+  | "systemPrompt"
   | "missing";
 
 export type ScriptedTurn = {

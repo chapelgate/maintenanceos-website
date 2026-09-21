@@ -33,7 +33,7 @@ const steps = [
   },
   {
     title: "Optional sandbox test (flagged)",
-    body: "A sandbox test-call panel sits after the draft. Off by default it says under testing / coming. When enabled locally it runs a scripted demo against your draft — not a live customer number.",
+    body: "A sandbox test-call panel sits after the draft. Off by default it says under testing / coming. When enabled locally it runs a scripted demo against your knowledge pack — not a live customer number.",
   },
 ] as const;
 

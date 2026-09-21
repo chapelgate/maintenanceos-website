@@ -48,6 +48,6 @@ After draft review (step 3), step 4 shows an **editable** pack + prompt preview 
 
 ## Sandbox consume
 
-`POST /v1/sandbox/sessions` may include `knowledgePack` and `systemPrompt`. The session object always returns a claims-safe pack + prompt + limitations. Scripted test-call answers still come from draft fields; missing answers stay missing.
+`POST /v1/sandbox/sessions` may include `knowledgePack` and `systemPrompt`. The session object always returns a claims-safe pack + prompt + limitations. Scripted test-call answers come from the **stored knowledge pack** (and the system prompt’s missing-field rule). If a pack field is missing, the reply says it is not on file — never invent hours or services.
 
 Never treat this as a live phone call.

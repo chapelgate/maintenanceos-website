@@ -39,7 +39,7 @@ Marketing sites remain static (DigitalOcean free tier). Product APIs and voice r
 3. Extract structured draft: business name, hours, services, FAQs, contact, locations.
 4. Review draft; build a claims-safe knowledge pack + system prompt (`packages/receptionist-draft`). Missing fields stay missing. Not production telephony.
 5. User reviews/edits knowledge pack and prompt.
-6. Optional: sandbox test call / “CALL MY RECEPTIONIST” — v0 is flagged `packages/sandbox-test-call` (scripted / browser-mock only; session stores pack + prompt; no live number; frozen path untouched).
+6. Optional: sandbox test call / “CALL MY RECEPTIONIST” — v0 is flagged `packages/sandbox-test-call` (scripted / browser-mock only; session stores pack + prompt; **scripted turns read that pack**; no live number; frozen path untouched).
 7. Promote to live only after explicit confirm + number assignment.
 
 ## Provider abstraction

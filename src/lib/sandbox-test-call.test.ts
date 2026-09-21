@@ -114,6 +114,53 @@ test("in-browser mock creates a session and runs a scripted demo", async () => {
   assert.equal(tested.data.status, "scripted_demo_complete");
   assert.equal(tested.data.liveCall, false);
   assert.ok(tested.data.turns.some((turn) => turn.text.includes("Warm homes")));
+  assert.ok(tested.data.turns.some((turn) => /Acme Plumbing/.test(turn.text) && /9-5/.test(turn.text)));
+  assert.ok(tested.data.turns.some((turn) => /Boilers/.test(turn.text)));
+});
+
+test("in-browser scripted demo uses overlay pack and does not invent missing hours", async () => {
+  resetBrowserSandboxMock();
+  const session = await requestSandboxSession({
+    enabled: true,
+    endpoint: "",
+    draft: {
+      businessName: "Draft Name Ltd",
+      greeting: "",
+      hours: "Mon–Fri 08:00–17:00",
+      services: "Draft-only service",
+      faqs: "",
+    },
+    knowledgePack: {
+      untrusted: true,
+      kind: "sandbox_knowledge_pack",
+      liveCall: false,
+      liveNumber: null,
+      alwaysOn: false,
+      productionTelephony: false,
+      businessName: "Reviewed Plumbing",
+      missing: ["greeting", "hours", "services", "faqs"],
+    },
+  });
+  assert.equal(session.status, "ok");
+  if (session.status !== "ok") return;
+  assert.equal(session.data.knowledgePack?.businessName, "Reviewed Plumbing");
+  assert.equal(session.data.knowledgePack?.hours, undefined);
+
+  const tested = await requestSandboxTest({
+    enabled: true,
+    endpoint: "",
+    sessionId: session.data.id,
+    mode: "scripted",
+  });
+  assert.equal(tested.status, "ok");
+  if (tested.status !== "ok") return;
+  const text = tested.data.turns.map((turn) => turn.text).join("\n");
+  assert.match(text, /Reviewed Plumbing/);
+  assert.match(text, /not sure/i);
+  assert.match(text, /not on file/i);
+  assert.doesNotMatch(text, /Mon–Fri 08:00–17:00/);
+  assert.doesNotMatch(text, /Draft-only service/);
+  assert.doesNotMatch(text, /Draft Name Ltd/);
 });
 
 test("in-browser webrtc / live modes never invent a live call", async () => {
@@ -156,14 +203,22 @@ test("in-browser webrtc / live modes never invent a live call", async () => {
   }
 });
 
-test("runBrowserScriptedDemo does not invent missing draft answers", () => {
+test("runBrowserScriptedDemo does not invent missing pack answers", () => {
   const turns = runBrowserScriptedDemo({
-    businessName: "",
-    greeting: "",
-    hours: "",
-    services: "",
-    faqs: "",
+    businessName: "Acme Plumbing",
   });
-  assert.ok(turns.some((turn) => /do not have opening hours/i.test(turn.text)));
+  assert.ok(turns.some((turn) => /Acme Plumbing/.test(turn.text)));
+  assert.ok(turns.some((turn) => /not sure/i.test(turn.text) && /opening hours/i.test(turn.text) && /not on file/i.test(turn.text)));
   assert.ok(turns.some((turn) => /not a live phone call/i.test(turn.text)));
+});
+
+test("runBrowserScriptedDemo with pack name+hours mentions both", () => {
+  const turns = runBrowserScriptedDemo({
+    businessName: "Acme Plumbing",
+    hours: "Mon–Fri 08:00–17:00",
+  });
+  const hoursTurn = turns.find((turn) => turn.source === "knowledge.hours");
+  assert.ok(hoursTurn);
+  assert.match(hoursTurn.text, /Acme Plumbing/);
+  assert.match(hoursTurn.text, /Mon–Fri 08:00–17:00/);
 });
