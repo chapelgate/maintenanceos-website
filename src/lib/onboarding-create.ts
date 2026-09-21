@@ -88,6 +88,32 @@ export function createJourneyNextAction(
   return CREATE_JOURNEY_STEPS[step - 1]?.nextAction ?? "Continue";
 }
 
+export type CreateJourneyStepStatus = "current" | "completed" | "upcoming";
+
+/** Colour is not enough — AT and the visible stepper share this status. */
+export function createJourneyStepStatus(
+  itemStep: CreateJourneyStep,
+  current: CreateJourneyStep,
+): CreateJourneyStepStatus {
+  if (itemStep === current) return "current";
+  if (itemStep < current) return "completed";
+  return "upcoming";
+}
+
+export function createJourneyStepStatusLabel(
+  status: CreateJourneyStepStatus,
+): string {
+  if (status === "current") return "Current step";
+  if (status === "completed") return "Completed";
+  return "Not started";
+}
+
+/** Focus target / live announcement after a step change — not a live-phone claim. */
+export function createJourneyStepAnnouncement(step: CreateJourneyStep): string {
+  const item = CREATE_JOURNEY_STEPS[step - 1];
+  return `Step ${step} of ${CREATE_JOURNEY_STEPS.length}: ${item?.label ?? "Website"}`;
+}
+
 /**
  * Visible empty-state for hours/services. Never a sample timetable or service list.
  */

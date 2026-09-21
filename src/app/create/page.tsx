@@ -83,8 +83,13 @@ export default function CreateReceptionistPage() {
           </ol>
         </section>
 
-        <section className="rounded-md border border-border bg-surface p-5 text-sm text-muted">
-          <h2 className="text-base font-semibold text-ink">Honest limits</h2>
+        <section
+          className="rounded-md border border-border bg-surface p-5 text-sm text-muted"
+          aria-labelledby="create-limits-heading"
+        >
+          <h2 id="create-limits-heading" className="text-base font-semibold text-ink">
+            Honest limits
+          </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>AI voice and receptionist behaviour remain under testing</li>
             <li>

@@ -43,6 +43,7 @@ export function SandboxTestCallPanel({
   const [session, setSession] = useState<SandboxSession | null>(null);
   const [tested, setTested] = useState<SandboxTest | null>(null);
   const statusId = useId();
+  const comingCopyId = useId();
 
   async function onRunScriptedDemo() {
     setSessionState("submitting");
@@ -126,6 +127,7 @@ export function SandboxTestCallPanel({
         className="rounded-md border border-border bg-surface p-5"
         data-sandbox-test-call="off"
         aria-labelledby="sandbox-test-call-heading"
+        aria-describedby={comingCopyId}
       >
         <h2
           id="sandbox-test-call-heading"
@@ -133,7 +135,7 @@ export function SandboxTestCallPanel({
         >
           Sandbox test call — under testing / coming
         </h2>
-        <p className="mt-2 text-sm text-muted">
+        <p id={comingCopyId} className="mt-2 text-sm text-muted">
           A feature-flagged sandbox session lives in{" "}
           <code className="text-xs">packages/sandbox-test-call</code> behind{" "}
           <code className="text-xs">SANDBOX_TEST_CALL_ENABLED=false</code>{" "}
@@ -153,6 +155,7 @@ export function SandboxTestCallPanel({
       data-sandbox-test-call="on"
       data-sandbox-source={usesCompanion ? "companion" : "browser-mock"}
       aria-labelledby="sandbox-test-call-heading"
+      aria-describedby={comingCopyId}
     >
       <h2
         id="sandbox-test-call-heading"
@@ -160,7 +163,7 @@ export function SandboxTestCallPanel({
       >
         Sandbox test call — local scripted demo
       </h2>
-      <p className="mt-2 text-sm text-muted">
+      <p id={comingCopyId} className="mt-2 text-sm text-muted">
         This control is enabled in this build only.{" "}
         {usesCompanion
           ? "Sessions come from the companion service on loopback / staging."

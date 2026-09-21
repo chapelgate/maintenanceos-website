@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
 
 const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
@@ -26,6 +27,8 @@ export function ReceptionistDraftPreview({
   onReset: () => void;
 }) {
   const missing = result.knowledgePack.missing;
+  const limitationsHeadingId = useId();
+  const packErrorId = useId();
 
   return (
     <div data-receptionist-draft="preview" className="space-y-3">
@@ -35,11 +38,12 @@ export function ReceptionistDraftPreview({
         stay empty.
       </p>
 
-      <div
+      <section
         className="rounded-md border border-border bg-paper p-3"
         data-limitations="readonly"
+        aria-labelledby={limitationsHeadingId}
       >
-        <h3 className="text-sm font-semibold text-ink">
+        <h3 id={limitationsHeadingId} className="text-sm font-semibold text-ink">
           Honest limitations{" "}
           <span className="font-normal text-muted">(read-only)</span>
         </h3>
@@ -53,7 +57,7 @@ export function ReceptionistDraftPreview({
             Missing (not invented): {missing.join(", ")}
           </p>
         ) : null}
-      </div>
+      </section>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <label className="block text-sm">
@@ -65,6 +69,8 @@ export function ReceptionistDraftPreview({
             value={packText}
             onChange={(e) => onPackTextChange(e.target.value)}
             spellCheck={false}
+            aria-invalid={packError ? true : undefined}
+            aria-describedby={packError ? packErrorId : undefined}
             className={`${FIELD_CLASS} font-mono text-xs`}
           />
         </label>
@@ -82,7 +88,7 @@ export function ReceptionistDraftPreview({
         </label>
       </div>
       {packError ? (
-        <p className="text-sm text-red-700" role="alert">
+        <p id={packErrorId} className="text-sm text-red-700" role="alert">
           {packError}
         </p>
       ) : null}

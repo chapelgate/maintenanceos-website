@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useId, useState } from "react";
+import { FormEvent, useEffect, useId, useRef, useState } from "react";
 import { ReceptionistDraftPreview } from "@/components/ReceptionistDraftPreview";
 import { siteConfig } from "@/config/site";
 import { submitLead } from "@/lib/lead-adapter";
@@ -9,6 +9,9 @@ import {
   EMPTY_RECEPTIONIST_DRAFT,
   buildCreateLeadMessage,
   createJourneyNextAction,
+  createJourneyStepAnnouncement,
+  createJourneyStepStatus,
+  createJourneyStepStatusLabel,
   createScanProgressTitle,
   emptyHoursOrServicesNote,
   hostnameBusinessHint,
@@ -77,7 +80,7 @@ function DraftReviewField({
       <span className="font-medium text-ink">
         {label}
         {empty ? (
-          <span className="ml-2 font-normal text-muted">Empty</span>
+          <span className="ml-2 font-normal text-muted">Empty — not on file</span>
         ) : null}
       </span>
       {rows ? (
@@ -98,7 +101,11 @@ function DraftReviewField({
         />
       )}
       {hint ? (
-        <p id={hintId} className="mt-1 text-xs text-muted">
+        <p
+          id={hintId}
+          className="mt-1 text-xs text-muted"
+          data-empty-field={empty || undefined}
+        >
           {hint}
         </p>
       ) : null}
@@ -120,6 +127,9 @@ export function CreateReceptionistForm({
   const [step, setStep] = useState<CreateJourneyStep>(1);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [errorField, setErrorField] = useState<"businessUrl" | "email" | null>(
+    null,
+  );
   const [progress, setProgress] = useState<CreateScanProgress>("checking");
   const [scanDetail, setScanDetail] = useState<string | null>(null);
   const [businessUrl, setBusinessUrl] = useState("");
@@ -141,6 +151,29 @@ export function CreateReceptionistForm({
   const hoursHintId = useId();
   const servicesHintId = useId();
   const faqsHintId = useId();
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const businessUrlRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const didMountStep = useRef(false);
+
+  useEffect(() => {
+    if (!didMountStep.current) {
+      didMountStep.current = true;
+      return;
+    }
+    stepHeadingRef.current?.focus();
+  }, [step]);
+
+  useEffect(() => {
+    if (status !== "error") return;
+    if (errorField === "businessUrl") {
+      businessUrlRef.current?.focus();
+      return;
+    }
+    if (errorField === "email") {
+      emailRef.current?.focus();
+    }
+  }, [status, error, errorField]);
 
   useEffect(() => {
     onDraftChange?.(draft);
@@ -215,9 +248,14 @@ export function CreateReceptionistForm({
     setDraft((current) => ({ ...current, [key]: value }));
   }
 
+  function clearError() {
+    setError(null);
+    setErrorField(null);
+  }
+
   function onStep1(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
+    clearError();
     const fd = new FormData(e.currentTarget);
 
     if (String(fd.get("website") ?? "").trim()) {
@@ -230,12 +268,14 @@ export function CreateReceptionistForm({
       setError(
         "Enter a valid public website URL (for example https://example.com).",
       );
+      setErrorField("businessUrl");
       setStatus("error");
       return;
     }
     const nextEmail = String(fd.get("email") ?? "").trim();
     if (!isValidEmail(nextEmail)) {
       setError("Please enter a valid email address.");
+      setErrorField("email");
       setStatus("error");
       return;
     }
@@ -255,7 +295,7 @@ export function CreateReceptionistForm({
   }
 
   async function onSubmitLead() {
-    setError(null);
+    clearError();
     setStatus("submitting");
     const result = await submitLead({
       leadType: "create_receptionist",
@@ -315,8 +355,9 @@ export function CreateReceptionistForm({
         aria-label="Create receptionist steps"
       >
         {CREATE_JOURNEY_STEPS.map((item) => {
-          const current = item.step === step;
-          const done = item.step < step;
+          const statusForStep = createJourneyStepStatus(item.step, step);
+          const current = statusForStep === "current";
+          const done = statusForStep === "completed";
           return (
             <li
               key={item.step}
@@ -329,6 +370,9 @@ export function CreateReceptionistForm({
                     : "rounded-md px-2 py-2 text-muted"
               }
             >
+              <span className="sr-only">
+                {createJourneyStepStatusLabel(statusForStep)}.{" "}
+              </span>
               <span className="block text-[0.7rem] uppercase tracking-wide">
                 Step {item.step}
               </span>
@@ -337,6 +381,13 @@ export function CreateReceptionistForm({
           );
         })}
       </ol>
+      <h3
+        ref={stepHeadingRef}
+        tabIndex={-1}
+        className="sr-only"
+      >
+        {createJourneyStepAnnouncement(step)}
+      </h3>
       <p className="mb-6 text-sm text-muted">
         Next: {nextAction}
         {step === 4
@@ -348,8 +399,11 @@ export function CreateReceptionistForm({
         <form onSubmit={onStep1} noValidate className="relative overflow-hidden">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block text-sm sm:col-span-2">
-              <span className="font-medium text-ink">Business website URL</span>
+              <span className="font-medium text-ink">
+                Business website URL (required)
+              </span>
               <input
+                ref={businessUrlRef}
                 name="businessUrl"
                 type="url"
                 inputMode="url"
@@ -357,6 +411,10 @@ export function CreateReceptionistForm({
                 required
                 defaultValue={businessUrl}
                 placeholder="https://your-business.co.uk"
+                aria-invalid={errorField === "businessUrl" || undefined}
+                aria-describedby={
+                  errorField === "businessUrl" && error ? errorId : undefined
+                }
                 className={FIELD_CLASS}
               />
             </label>
@@ -373,14 +431,15 @@ export function CreateReceptionistForm({
             <label className="block text-sm">
               <span className="font-medium text-ink">Email (required)</span>
               <input
+                ref={emailRef}
                 name="email"
                 type="email"
                 required
                 autoComplete="email"
                 defaultValue={email}
-                aria-invalid={status === "error" || undefined}
+                aria-invalid={errorField === "email" || undefined}
                 aria-describedby={
-                  status === "error" && error ? errorId : undefined
+                  errorField === "email" && error ? errorId : undefined
                 }
                 className={FIELD_CLASS}
               />
@@ -414,6 +473,7 @@ export function CreateReceptionistForm({
           ) : null}
           <button
             type="submit"
+            data-create-primary-action=""
             className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
           >
             Check this website
@@ -473,7 +533,7 @@ export function CreateReceptionistForm({
               type="button"
               onClick={() => {
                 setStatus("idle");
-                setError(null);
+                clearError();
                 setStep(1);
               }}
               className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper"
@@ -483,9 +543,11 @@ export function CreateReceptionistForm({
             <button
               type="button"
               disabled={!stepReady}
+              aria-describedby={progressId}
+              data-create-primary-action=""
               onClick={() => {
                 setStatus("idle");
-                setError(null);
+                clearError();
                 setStep(3);
               }}
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
@@ -501,7 +563,7 @@ export function CreateReceptionistForm({
           onSubmit={(e) => {
             e.preventDefault();
             setStatus("idle");
-            setError(null);
+            clearError();
             applyBuilt(buildReceptionistDraft(draft));
             setStep(4);
           }}
@@ -567,6 +629,7 @@ export function CreateReceptionistForm({
             </button>
             <button
               type="submit"
+              data-create-primary-action=""
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
             >
               Preview knowledge pack
@@ -657,7 +720,7 @@ export function CreateReceptionistForm({
               type="button"
               onClick={() => {
                 setStatus("idle");
-                setError(null);
+                clearError();
                 setStep(3);
               }}
               className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper"
@@ -667,6 +730,8 @@ export function CreateReceptionistForm({
             <button
               type="button"
               disabled={status === "submitting"}
+              aria-describedby={error ? errorId : undefined}
+              data-create-primary-action=""
               onClick={() => void onSubmitLead()}
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
             >
