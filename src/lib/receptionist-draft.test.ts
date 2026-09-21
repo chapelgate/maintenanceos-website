@@ -14,7 +14,7 @@ test("src re-export builds a claims-safe pack for /create", () => {
   assert.equal(result.knowledgePack.hours, undefined);
   assert.equal(result.knowledgePack.services, undefined);
   assert.equal(result.knowledgePack.liveCall, false);
-  assert.match(result.systemPrompt, TRUSTED_CONSTRAINTS_MARKER);
+  assert.ok(result.systemPrompt.includes(TRUSTED_CONSTRAINTS_MARKER));
   assert.match(result.systemPrompt, /not a live customer phone line/i);
   assert.ok(result.limitations.some((line) => /Opening hours are missing/i.test(line)));
 });
