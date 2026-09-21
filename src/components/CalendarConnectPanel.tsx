@@ -29,6 +29,7 @@ export function CalendarConnectPanel() {
   const [detail, setDetail] = useState<string | null>(null);
   const [booking, setBooking] = useState<CalendarBooking | null>(null);
   const statusId = useId();
+  const comingCopyId = useId();
 
   useEffect(() => {
     if (!enabled) return;
@@ -105,6 +106,7 @@ export function CalendarConnectPanel() {
         className="rounded-md border border-border bg-surface p-5"
         data-calendar-adapters="off"
         aria-labelledby="calendar-connect-heading"
+        aria-describedby={comingCopyId}
       >
         <h2
           id="calendar-connect-heading"
@@ -112,7 +114,7 @@ export function CalendarConnectPanel() {
         >
           Calendar connect — coming / under testing
         </h2>
-        <p className="mt-2 text-sm text-muted">
+        <p id={comingCopyId} className="mt-2 text-sm text-muted">
           Google Calendar and Microsoft 365 adapters live in{" "}
           <code className="text-xs">packages/calendar-adapters</code> behind{" "}
           <code className="text-xs">CALENDAR_ADAPTERS_ENABLED=false</code> (default

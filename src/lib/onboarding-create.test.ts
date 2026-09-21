@@ -4,6 +4,9 @@ import {
   CREATE_JOURNEY_STEPS,
   buildCreateLeadMessage,
   createJourneyNextAction,
+  createJourneyStepAnnouncement,
+  createJourneyStepStatus,
+  createJourneyStepStatusLabel,
   createScanProgressTitle,
   emptyHoursOrServicesNote,
   hostnameBusinessHint,
@@ -89,6 +92,18 @@ test("create journey steps name the next action without a live-phone claim", () 
   for (const item of CREATE_JOURNEY_STEPS) {
     assert.doesNotMatch(item.nextAction, /live (phone|number|call)/i);
   }
+});
+
+test("create journey stepper names current/completed without a live-phone claim", () => {
+  assert.equal(createJourneyStepStatus(1, 1), "current");
+  assert.equal(createJourneyStepStatus(1, 3), "completed");
+  assert.equal(createJourneyStepStatus(4, 2), "upcoming");
+  assert.equal(createJourneyStepStatusLabel("current"), "Current step");
+  assert.equal(createJourneyStepStatusLabel("completed"), "Completed");
+  assert.equal(createJourneyStepStatusLabel("upcoming"), "Not started");
+  assert.equal(createJourneyStepAnnouncement(1), "Step 1 of 4: Website");
+  assert.equal(createJourneyStepAnnouncement(3), "Step 3 of 4: Review");
+  assert.doesNotMatch(createJourneyStepAnnouncement(4), /live (phone|number|call)/i);
 });
 
 test("emptyHoursOrServicesNote stays empty and never uses sample copy", () => {
