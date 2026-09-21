@@ -128,6 +128,8 @@ npm run fonio-local-smoke
 
 This is **not** production Fonio-parity and **must not** be copied onto DigitalOcean static hosting. Default `.env.example` flags stay off. Optional Compose: `docker compose -f docker-compose.fonio-local.yml up`.
 
+What is already on `main` through PR **#62** vs owner blockers (live scan, legal review, frozen telephony): [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). Website onboarding path is substantially ready; live phone parity is still open. Not a complete-vs-Fonio claim.
+
 ### DigitalOcean App Platform (static)
 
 Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / companion Dockerfiles on App Platform; those are loopback e2e or the **separate** Render free companions (`docs/ONBOARDING_SCAN_DEPLOY.md`, `docs/SANDBOX_DEPLOY.md`, `docs/DASHBOARD_DEPLOY.md`). Staging operator order (exact `NEXT_PUBLIC_*`, rebuild, cold-start wake): [`docs/STAGING_COMPANIONS.md`](docs/STAGING_COMPANIONS.md). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart. Static security baseline (HTML CSP + referrer; HTTP-only header gap on this host): [`docs/security/static-security-baseline.md`](docs/security/static-security-baseline.md).
@@ -142,6 +144,7 @@ How it works · Features · AI receptionist · Create · **Dashboard (soon)** ·
 - `WEBSITE_ARCHITECTURE.md`
 - `PRODUCT_CLAIMS_REGISTER.md`
 - `WEBSITE_AGENT_BOARD.md`
+- [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md) — onboarding path on `main` through #62 vs owner blockers
 - `WEBSITE_LAUNCH_CHECKLIST.md`
 - `WEBSITE_BACKLOG.md`
 - `WEBSITE_IA.md`
