@@ -310,9 +310,27 @@ export function createScanServer(options: ServerOptions = {}): http.Server {
   });
 }
 
+/** Loopback by default. Hosted companions must set `ONBOARDING_SCAN_HOST=0.0.0.0`. */
+export function resolveListenHost(env: NodeJS.ProcessEnv = process.env): string {
+  const host = env.ONBOARDING_SCAN_HOST?.trim();
+  return host || DEFAULT_HOST;
+}
+
+/**
+ * Prefer `ONBOARDING_SCAN_PORT` (local compose / docs), else `PORT` (Render and
+ * other PaaS inject this). Invalid values fall back to 8788.
+ */
+export function resolveListenPort(env: NodeJS.ProcessEnv = process.env): number {
+  const raw = env.ONBOARDING_SCAN_PORT?.trim() || env.PORT?.trim();
+  if (!raw) return DEFAULT_PORT;
+  const port = Number(raw);
+  if (!Number.isInteger(port) || port <= 0 || port > 65535) return DEFAULT_PORT;
+  return port;
+}
+
 export function listenScanServer(options: ServerOptions = {}): http.Server {
-  const host = options.host ?? process.env.ONBOARDING_SCAN_HOST ?? DEFAULT_HOST;
-  const port = Number(options.port ?? process.env.ONBOARDING_SCAN_PORT ?? DEFAULT_PORT);
+  const host = options.host ?? resolveListenHost();
+  const port = options.port ?? resolveListenPort();
   const server = createScanServer(options);
   const enabled = options.ingestEnabled ?? isWebIngestEnabled();
 

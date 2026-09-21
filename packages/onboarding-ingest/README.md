@@ -26,11 +26,11 @@ Missing keys are left empty. The client **does not invent** crawl results. If th
 | --- | --- | --- |
 | `ONBOARDING_WEB_INGEST` | `false` | Master switch. When not `true`/`1`, `POST /v1/onboarding/scan` returns `503 scan_disabled` and does not fetch. |
 | `ONBOARDING_SANDBOX_CALL` | `false` | Unused here. Health reports `sandboxCall: false`. Sandbox test-call is `packages/sandbox-test-call`. |
-| `ONBOARDING_SCAN_HOST` | `127.0.0.1` | Bind address (keep loopback unless you intend otherwise) |
-| `ONBOARDING_SCAN_PORT` | `8788` | Listen port |
-| `ONBOARDING_SCAN_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS allow origin for the static site |
+| `ONBOARDING_SCAN_HOST` | `127.0.0.1` | Bind address (keep loopback unless you intend otherwise). Hosted companions must use `0.0.0.0`. |
+| `ONBOARDING_SCAN_PORT` | `8788` | Listen port. If unset, `PORT` is used (Render injects this). |
+| `ONBOARDING_SCAN_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS allow origin for the static site. One origin string; unset to allow seahorse-app and chapelgate staging together. |
 
-See also `docs/ONBOARDING_SCAN_CONTRACT.md` in the website repo.
+See also `docs/ONBOARDING_SCAN_CONTRACT.md` and the $0 host runbook `docs/ONBOARDING_SCAN_DEPLOY.md`.
 
 ## Run locally
 
@@ -78,7 +78,7 @@ NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/v1/onboarding/scan np
 npx serve out
 ```
 
-DigitalOcean static hosting cannot run this process. Leave `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` empty there until a separate host runs this service. No new paid infra is required: run the same Node file on any existing loopback, staging VM, or free-tier process.
+DigitalOcean static hosting cannot run this process. Staging `/create` needs a **separate** free-tier service (Render web service, not the frozen voice app) and a DigitalOcean **rebuild** after setting `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`. Runbook: `docs/ONBOARDING_SCAN_DEPLOY.md`. No paid plan is required.
 
 ## SSRF rules (enforced)
 

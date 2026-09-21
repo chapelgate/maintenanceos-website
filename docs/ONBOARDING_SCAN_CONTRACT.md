@@ -76,11 +76,13 @@ The client treats any non-OK HTTP status as `scan_failed` and does not invent fi
 
 Same expectation as `docs/FORM_ENDPOINT_CONTRACT.md`: `OPTIONS` → 204; allow `POST, OPTIONS` and `Content-Type, Accept`.
 
+Staging `/create` is cross-origin (DigitalOcean static → Render companion). Unset `ONBOARDING_SCAN_CORS_ORIGIN` echoes the browser `Origin` so `https://seahorse-app-4oasq.ondigitalocean.app` and a chapelgate custom origin both work. A single configured origin locks to that origin only. Details: `docs/ONBOARDING_SCAN_DEPLOY.md`.
+
 ## Feature flags
 
 - `ONBOARDING_WEB_INGEST=false` (default) — service may listen for `/health`, but scan is off.
 - `ONBOARDING_SANDBOX_CALL` — unused by this scan service (health still reports `sandboxCall: false`). Sandbox test-call is `packages/sandbox-test-call` (`SANDBOX_TEST_CALL_ENABLED`; this name is accepted there as an alias).
-- Marketing `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` — empty on DigitalOcean static by default.
+- Marketing `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` — empty on DigitalOcean static by default. To point staging `/create` at a hosted companion, set the absolute `https://…/v1/onboarding/scan` URL on App Platform and **rebuild** (static export inlines `NEXT_PUBLIC_*`). Runbook: `docs/ONBOARDING_SCAN_DEPLOY.md`.
 
 ## Claims
 
