@@ -92,6 +92,66 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /contact copy aligned; still not a support desk/);
   assert.match(matrix, /Security \/ trust marketing vs certifications/);
   assert.match(matrix, /security copy aligned; still not certified/);
+  assert.match(matrix, /Cookie \/ consent banner vs analytics/);
+  assert.match(matrix, /cookies copy aligned; still DRAFT, still no analytics/);
+});
+
+test("cookies stay DRAFT-honest with no banner, no invented analytics, no GA cert", () => {
+  const page = read("src/app/cookies/page.tsx");
+  const stub = read("src/components/CookieSettingsStub.tsx");
+  const privacy = read("src/app/privacy/page.tsx");
+  const faqs = read("src/content/faqs.ts");
+  const faqPage = read("src/app/faq/page.tsx");
+  const llms = read("public/llms.txt");
+  const llmsFull = read("public/llms-full.txt");
+  const nextConfig = read("next.config.ts");
+
+  assert.match(page, /DRAFT FOR LEGAL REVIEW|LegalDraftBanner/);
+  assert.match(page, /Cookie Policy \(Draft\)/);
+  assert.match(page, /no site-wide consent banner/i);
+  assert.match(page, /None currently — no vendor, no tags/);
+  assert.match(page, /If added later, off\s+until consent/);
+  assert.match(page, /not a Google Analytics, PECR,\s+or GDPR compliance certification/i);
+  assert.match(page, /\/privacy\/#website-url-ingest/);
+  assert.match(page, /href="\/privacy\/"/);
+  assert.doesNotMatch(page, /prepared but inactive/i);
+  assert.doesNotMatch(page, /aligned with MOS Privacy/i);
+  assert.doesNotMatch(page, /agreed with MOS Privacy/i);
+  assert.doesNotMatch(page, /Active as implemented/i);
+  assert.doesNotMatch(page, /Google Analytics certified/i);
+  assert.doesNotMatch(page, /PECR compliant/i);
+  assert.doesNotMatch(page, /GDPR compliant/i);
+
+  assert.match(stub, /No site-wide banner/);
+  assert.match(stub, /Consent UI TBD/);
+  assert.match(
+    stub,
+    /not a Google\s+Analytics, PECR, or GDPR compliance certification/i,
+  );
+  assert.doesNotMatch(stub, /gtag|googletagmanager/i);
+
+  assert.match(privacy, /No analytics or marketing tags are loaded today/);
+  assert.match(privacy, /Cookie Policy \(Draft\)/);
+
+  assert.match(faqs, /question: "Do you use cookies or a consent banner\?"/);
+  assert.match(faqs, /no site-wide cookie or consent banner/i);
+  assert.match(faqs, /No analytics or marketing tags are loaded/);
+  assert.match(faqs, /not a Google Analytics, PECR, or GDPR compliance certification/);
+  assert.match(
+    faqs,
+    /question: "Do you use cookies or a consent banner\?"[\s\S]*relatedHref: "\/cookies\/"/,
+  );
+  assert.match(faqs, /Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW/);
+
+  assert.match(faqPage, /cookies/);
+
+  assert.match(llms, /no site-wide consent banner/);
+  assert.match(llms, /no analytics or marketing tags today/);
+  assert.match(llms, /not a Google Analytics \/ PECR \/ GDPR compliance certification/);
+  assert.match(llmsFull, /no site-wide consent banner/);
+  assert.match(llmsFull, /no analytics or marketing tags today/);
+  assert.match(llmsFull, /not a GA \/ PECR \/ GDPR compliance certification/);
+  assert.match(nextConfig, /output:\s*["']export["']/);
 });
 
 test("security stays claims-safe with SSRF-safe scan and no cert theatre", () => {
@@ -231,6 +291,8 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
   assert.match(faqs, /not commercially generally available/);
   assert.match(faqs, /How do I contact you\?/);
   assert.match(faqs, /not a GA support desk/);
+  assert.match(faqs, /Do you use cookies or a consent banner\?/);
+  assert.match(faqs, /no site-wide cookie or consent banner/);
   assert.doesNotMatch(faqs, /always-on phone line is live/i);
   assert.doesNotMatch(faqs, /your number is ready/i);
   assert.doesNotMatch(faqs, /commercially generally available now/i);
