@@ -37,14 +37,26 @@ test("default scripted benchmark passes pack fixtures and skips barge-in", () =>
 });
 
 test("scorer fails invented clock time on missing hours", () => {
-  const lie: ReplyFn = () => ({
+  const invented: ReplyFn = () => ({
     speaker: "receptionist",
     text: "We're open 09:00–17:00 every day.",
     source: "missing",
   });
-  const scored = scoreScenario(scenario("missing-hours"), lie);
+  const scored = scoreScenario(scenario("missing-hours"), invented);
   assert.equal(scored.status, "FAIL");
-  assert.match(scored.reason ?? "", /invented clock time|honest missing hours/);
+  assert.match(
+    scored.reason ?? "",
+    /invented clock time|honest missing hours|expected not sure/,
+  );
+
+  const clockWhileHonest: ReplyFn = () => ({
+    speaker: "receptionist",
+    text: "I'm not sure — opening hours are not on file. Try 09:00–17:00.",
+    source: "missing",
+  });
+  const clocked = scoreScenario(scenario("missing-hours"), clockWhileHonest);
+  assert.equal(clocked.status, "FAIL");
+  assert.match(clocked.reason ?? "", /invented clock time/);
 });
 
 test("scorer fails a live-call success lie even when hours are cited", () => {
