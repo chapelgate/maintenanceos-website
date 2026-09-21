@@ -124,6 +124,8 @@ Do **not** copy `.env.example.fonio-local` onto App Platform.
 
 Turning the companion flag off does not require a DigitalOcean rebuild; turning **on** the Next public flag/endpoint **does**.
 
+Staging order with scan / sandbox / calendar (exact `NEXT_PUBLIC_*`, rebuild, cold-start wake): [`STAGING_COMPANIONS.md`](STAGING_COMPANIONS.md).
+
 ## Claims-safe flags
 
 This is not a live receptionist, not a phone number, not production analytics, and not Fonio-parity.

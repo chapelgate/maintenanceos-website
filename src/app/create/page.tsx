@@ -21,7 +21,7 @@ const steps = [
   },
   {
     title: "Review the draft",
-    body: "You edit business name, greeting, hours, services, and FAQs before anything is stored.",
+    body: "You edit business name, greeting, hours, services, and FAQs before anything is stored. Copied fields show where they came from and how confident the scan was. Empty fields were not invented.",
   },
   {
     title: "Submit early access",

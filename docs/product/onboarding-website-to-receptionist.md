@@ -83,7 +83,7 @@ POST /v1/onboarding/jobs/{jobId}/promote
 - `CUSTOMER_DASHBOARD_ENABLED` — enable dashboard companion (default off)
 - `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` — show `/dashboard` SAMPLE store (default off)
 
-Local loopback demo (flags on for that process only): `docs/FONIO_LOCAL_E2E.md`. Staging HTTPS companions (separate Render free web services): `docs/ONBOARDING_SCAN_DEPLOY.md`, `docs/SANDBOX_DEPLOY.md`, `docs/DASHBOARD_DEPLOY.md`. Not production Fonio-parity; leave flags off on DigitalOcean static hosting until the operator sets `NEXT_PUBLIC_*` and rebuilds.
+Local loopback demo (flags on for that process only): `docs/FONIO_LOCAL_E2E.md`. Staging HTTPS companions (separate Render free web services): `docs/ONBOARDING_SCAN_DEPLOY.md`, `docs/SANDBOX_DEPLOY.md`, `docs/DASHBOARD_DEPLOY.md`. Operator checklist (DigitalOcean env + rebuild + wake order): `docs/STAGING_COMPANIONS.md`. Not production Fonio-parity; leave flags off on DigitalOcean static hosting until the operator sets `NEXT_PUBLIC_*` and rebuilds.
 
 ## Claims-safe marketing copy
 

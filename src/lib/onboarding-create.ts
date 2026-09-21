@@ -104,6 +104,35 @@ export type DraftFieldMeta = {
 
 export type ScanDraftFieldMeta = Partial<Record<keyof ReceptionistDraft, DraftFieldMeta>>;
 
+/** Human labels for mapped `fieldMeta.source` values. Unknown sources stay unlabelled. */
+export const FIELD_META_SOURCE_LABELS: Record<string, string> = {
+  jsonld: "JSON-LD",
+  microdata: "schema.org microdata",
+  meta: "page metadata",
+  title: "page title",
+  heading: "labelled heading",
+  nav: "navigation links",
+  pattern: "visible text pattern",
+  contact_link: "phone/email links",
+  details: "FAQ accordion",
+};
+
+/**
+ * Per-field review hint for `/create` draft step.
+ * Returns null when provenance is missing or the field is empty — never invents a value.
+ */
+export function scanFieldReviewHint(
+  meta: DraftFieldMeta | undefined,
+  fieldValue: string | undefined,
+): string | null {
+  if (!meta) return null;
+  if (typeof fieldValue !== "string" || !fieldValue.trim()) return null;
+  const source = FIELD_META_SOURCE_LABELS[meta.source];
+  if (!source) return null;
+  const check = meta.confidence === "low" ? " — check this" : "";
+  return `Scan copied this from ${source} (${meta.confidence} confidence${check}). Untrusted page text — not a live receptionist.`;
+}
+
 /** Optional provenance. Unknown keys/values are dropped — never inferred. */
 export function mapScanFieldMeta(body: unknown): ScanDraftFieldMeta {
   if (!body || typeof body !== "object" || Array.isArray(body)) return {};

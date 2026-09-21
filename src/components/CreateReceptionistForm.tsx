@@ -10,6 +10,8 @@ import {
   isValidEmail,
   normalisePublicUrl,
   requestOnboardingScan,
+  scanFieldReviewHint,
+  type DraftFieldMeta,
   type ReceptionistDraft,
   type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
@@ -47,35 +49,52 @@ function scanNoteFor(progress: Progress): string {
 
 const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
 
-const SOURCE_LABEL: Record<string, string> = {
-  jsonld: "JSON-LD",
-  microdata: "schema.org microdata",
-  meta: "page metadata",
-  title: "page title",
-  heading: "labelled heading",
-  nav: "navigation links",
-  pattern: "visible text pattern",
-  contact_link: "phone/email links",
-  details: "FAQ accordion",
-};
-
-function provenanceSummary(fieldMeta: ScanDraftFieldMeta): string | null {
-  const parts: string[] = [];
-  const labels: { key: keyof ReceptionistDraft; label: string }[] = [
-    { key: "businessName", label: "name" },
-    { key: "greeting", label: "greeting" },
-    { key: "hours", label: "hours" },
-    { key: "services", label: "services" },
-    { key: "faqs", label: "FAQs" },
-  ];
-  for (const item of labels) {
-    const meta = fieldMeta[item.key];
-    if (!meta) continue;
-    const source = SOURCE_LABEL[meta.source] ?? meta.source;
-    const caution = meta.confidence === "low" ? ", check this" : "";
-    parts.push(`${item.label} from ${source} (${meta.confidence}${caution})`);
-  }
-  return parts.length ? parts.join("; ") : null;
+function DraftReviewField({
+  label,
+  value,
+  onChange,
+  meta,
+  hintId,
+  rows,
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  meta: DraftFieldMeta | undefined;
+  hintId: string;
+  rows?: number;
+  placeholder?: string;
+}) {
+  const hint = scanFieldReviewHint(meta, value);
+  const describedBy = hint ? hintId : undefined;
+  return (
+    <label className="block text-sm">
+      <span className="font-medium text-ink">{label}</span>
+      {rows ? (
+        <textarea
+          rows={rows}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          aria-describedby={describedBy}
+          className={FIELD_CLASS}
+        />
+      ) : (
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          aria-describedby={describedBy}
+          className={FIELD_CLASS}
+        />
+      )}
+      {hint ? (
+        <p id={hintId} className="mt-1 text-xs text-muted">
+          {hint}
+        </p>
+      ) : null}
+    </label>
+  );
 }
 
 /**
@@ -100,6 +119,11 @@ export function CreateReceptionistForm({
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
   const errorId = useId();
   const progressId = useId();
+  const businessNameHintId = useId();
+  const greetingHintId = useId();
+  const hoursHintId = useId();
+  const servicesHintId = useId();
+  const faqsHintId = useId();
 
   useEffect(() => {
     onDraftChange?.(draft);
@@ -445,62 +469,52 @@ export function CreateReceptionistForm({
         >
           <p className="text-sm text-muted">
             {progress === "scanned"
-              ? "Edit anything the scan returned. Empty fields were not invented."
+              ? "Edit anything the scan returned. Empty fields were not invented. Where the scan copied a value, a source and confidence hint appears under that field."
               : progress === "queued"
                 ? "These fields are a draft for early access. The business name is from your website address, not from a crawl."
                 : "Complete what you can. We did not invent crawl content for this site."}
           </p>
-          {progress === "scanned" && provenanceSummary(fieldMeta) ? (
-            <p className="mt-2 text-xs text-muted">
-              Scan provenance (untrusted page text): {provenanceSummary(fieldMeta)}.
-            </p>
-          ) : null}
           <div className="mt-4 grid gap-4">
-            <label className="block text-sm">
-              <span className="font-medium text-ink">Business name</span>
-              <input
-                value={draft.businessName}
-                onChange={(e) => updateDraft("businessName", e.target.value)}
-                className={FIELD_CLASS}
-              />
-            </label>
-            <label className="block text-sm">
-              <span className="font-medium text-ink">Greeting</span>
-              <textarea
-                rows={3}
-                value={draft.greeting}
-                onChange={(e) => updateDraft("greeting", e.target.value)}
-                placeholder="How should the receptionist introduce the business? (draft only)"
-                className={FIELD_CLASS}
-              />
-            </label>
-            <label className="block text-sm">
-              <span className="font-medium text-ink">Hours</span>
-              <textarea
-                rows={2}
-                value={draft.hours}
-                onChange={(e) => updateDraft("hours", e.target.value)}
-                className={FIELD_CLASS}
-              />
-            </label>
-            <label className="block text-sm">
-              <span className="font-medium text-ink">Services</span>
-              <textarea
-                rows={3}
-                value={draft.services}
-                onChange={(e) => updateDraft("services", e.target.value)}
-                className={FIELD_CLASS}
-              />
-            </label>
-            <label className="block text-sm">
-              <span className="font-medium text-ink">FAQs</span>
-              <textarea
-                rows={4}
-                value={draft.faqs}
-                onChange={(e) => updateDraft("faqs", e.target.value)}
-                className={FIELD_CLASS}
-              />
-            </label>
+            <DraftReviewField
+              label="Business name"
+              value={draft.businessName}
+              onChange={(value) => updateDraft("businessName", value)}
+              meta={fieldMeta.businessName}
+              hintId={businessNameHintId}
+            />
+            <DraftReviewField
+              label="Greeting"
+              value={draft.greeting}
+              onChange={(value) => updateDraft("greeting", value)}
+              meta={fieldMeta.greeting}
+              hintId={greetingHintId}
+              rows={3}
+              placeholder="How should the receptionist introduce the business? (draft only)"
+            />
+            <DraftReviewField
+              label="Hours"
+              value={draft.hours}
+              onChange={(value) => updateDraft("hours", value)}
+              meta={fieldMeta.hours}
+              hintId={hoursHintId}
+              rows={2}
+            />
+            <DraftReviewField
+              label="Services"
+              value={draft.services}
+              onChange={(value) => updateDraft("services", value)}
+              meta={fieldMeta.services}
+              hintId={servicesHintId}
+              rows={3}
+            />
+            <DraftReviewField
+              label="FAQs"
+              value={draft.faqs}
+              onChange={(value) => updateDraft("faqs", value)}
+              meta={fieldMeta.faqs}
+              hintId={faqsHintId}
+              rows={4}
+            />
           </div>
           <div className="mt-5 flex flex-wrap gap-3">
             <button

@@ -95,7 +95,7 @@ DigitalOcean static hosting cannot run this process. Staging `/create` needs a *
 - Copy values that are present in JSON-LD, schema.org microdata, obvious meta/title, a clearly labelled hours/services/FAQ block, conservative visible-text patterns, navigation labels, or `tel:`/`mailto:` links.
 - Do **not** invent a receptionist greeting, hours, services, or FAQs when extract fails.
 - Failures return `{ "ok": false, "error": "…", "message": "…", "warnings": […] }` with no draft.
-- Optional `fieldMeta` records **provenance + confidence** (`high` JSON-LD/microdata, `medium` labelled blocks, `low` nav/pattern). `/create` still maps only the five draft strings; unknown keys are ignored.
+- Optional `fieldMeta` records **provenance + confidence** (`high` JSON-LD/microdata, `medium` labelled blocks, `low` nav/pattern). `/create` still maps only the five draft strings; unknown keys are ignored. Draft review shows source + confidence as a hint on filled fields only — never as invented values.
 
 ## Extract limits
 
