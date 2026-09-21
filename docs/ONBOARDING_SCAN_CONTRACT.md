@@ -1,7 +1,7 @@
 # Onboarding scan contract (v0)
 
 **Status:** v0 — companion service for the static `/create` funnel  
-**Consumers:** `src/lib/onboarding-create.ts`, `src/components/CreateReceptionistForm.tsx`  
+**Consumers:** `src/lib/onboarding-create.ts`, `src/components/CreateReceptionistLaterSteps.tsx`  
 **Implementation:** `packages/onboarding-ingest` (`npm run onboarding-scan`)
 
 This marketing site is a **static export** (`output: 'export'`). There are **no Next.js API routes**. `/create` posts from the browser to `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` when that value is an absolute `http:` or `https:` URL. If the variable is empty, the client queues crawl honestly and **must not invent** extracted content.

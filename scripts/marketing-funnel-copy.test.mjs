@@ -13,7 +13,10 @@ function read(rel) {
 test("how-it-works matches the /create stepper labels", () => {
   const flow = read("src/components/HowItWorksFlow.tsx");
   const page = read("src/app/how-it-works/page.tsx");
-  const create = read("src/lib/onboarding-create.ts");
+  const create = [
+    read("src/lib/onboarding-create.ts"),
+    read("src/lib/onboarding-create-core.ts"),
+  ].join("\n");
 
   assert.match(create, /label: "Website"/);
   assert.match(create, /label: "Check"/);
@@ -80,7 +83,10 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
 test("demo page names the website-to-pack path and does not book a live phone", () => {
   const page = read("src/app/demo/page.tsx");
   const tabs = read("src/components/DemoConversionTabs.tsx");
-  const create = read("src/lib/onboarding-create.ts");
+  const create = [
+    read("src/lib/onboarding-create.ts"),
+    read("src/lib/onboarding-create-core.ts"),
+  ].join("\n");
 
   assert.match(create, /label: "Website"/);
   assert.match(page, /CREATE_JOURNEY_STEPS/);

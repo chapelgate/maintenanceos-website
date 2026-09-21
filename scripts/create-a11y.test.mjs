@@ -10,8 +10,16 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
+function readCreateFormGraph() {
+  return [
+    read("src/components/CreateReceptionistForm.tsx"),
+    read("src/components/CreateReceptionistLaterSteps.tsx"),
+    read("src/components/CreateJourneyStepper.tsx"),
+  ].join("\n");
+}
+
 test("/create stepper exposes current step beyond colour", () => {
-  const form = read("src/components/CreateReceptionistForm.tsx");
+  const form = readCreateFormGraph();
   assert.match(form, /aria-label="Create receptionist steps"/);
   assert.match(form, /aria-current=\{current \? "step" : undefined\}/);
   assert.match(form, /createJourneyStepStatusLabel/);
@@ -22,7 +30,7 @@ test("/create stepper exposes current step beyond colour", () => {
 });
 
 test("/create fields keep visible labels and tie errors with aria-describedby", () => {
-  const form = read("src/components/CreateReceptionistForm.tsx");
+  const form = readCreateFormGraph();
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
   assert.match(form, /Business website URL \(required\)/);
   assert.match(form, /Email \(required\)/);
@@ -35,7 +43,7 @@ test("/create fields keep visible labels and tie errors with aria-describedby", 
 });
 
 test("/create primary next actions stay in DOM order and are marked", () => {
-  const form = read("src/components/CreateReceptionistForm.tsx");
+  const form = readCreateFormGraph();
   const globals = read("src/app/globals.css");
   assert.equal((form.match(/data-create-primary-action=""/g) || []).length, 4);
   assert.match(globals, /button:focus-visible/);
@@ -43,7 +51,7 @@ test("/create primary next actions stay in DOM order and are marked", () => {
 });
 
 test("empty hours and services stay textual for AT", () => {
-  const form = read("src/components/CreateReceptionistForm.tsx");
+  const form = readCreateFormGraph();
   const lib = read("src/lib/onboarding-create.ts");
   assert.match(form, /Empty — not on file/);
   assert.match(form, /emptyHoursOrServicesNote\("hours"/);

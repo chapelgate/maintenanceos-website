@@ -2,7 +2,7 @@
 
 **Status:** v0 — pure builder for `/create` + sandbox session consume  
 **Implementation:** `packages/receptionist-draft` (`buildReceptionistDraft`)  
-**Consumers:** `src/components/CreateReceptionistForm.tsx`, `packages/sandbox-test-call`
+**Consumers:** `src/components/CreateReceptionistLaterSteps.tsx`, `packages/sandbox-test-call`
 
 This marketing site is a **static export** (`output: 'export'`). There are **no Next.js API routes**. Generation is a **pure function** (client + sandbox companion). No new hosted service and no feature flag are required.
 
