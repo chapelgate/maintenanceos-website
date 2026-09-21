@@ -15,8 +15,8 @@ const STAGE_COPY = [
   {
     id: "check",
     short: "Scan if configured — otherwise queue the crawl",
-    body: "If a scan service is configured we ask it for a draft. If not, the crawl is queued. We do not invent extracted hours, services, or FAQs.",
-    note: "Website scan is under testing. Staging often queues the crawl honestly.",
+    body: "If a scan service is configured we ask the SSRF-safe companion for a draft. If not, the crawl is queued. We do not invent extracted hours, services, or FAQs.",
+    note: "SSRF-safe website scan is under testing — not a live knowledge crawl. Staging often queues the crawl honestly.",
   },
   {
     id: "review",

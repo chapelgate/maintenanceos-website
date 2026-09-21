@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Security",
   description:
-    "MaintenanceOS trust posture: tenant isolation, human clearance, and audit evidence by design. No ISO, SOC 2, or other certification claims. Pre-launch.",
+    "Tenant isolation, human clearance, and audit evidence by design. SSRF-safe website scan is under test — not a live crawl. No ISO, SOC 2, or bank-grade claims. Legal pages are DRAFT. Product interest starts at /create.",
   path: "/security/",
 });
 
@@ -16,7 +16,7 @@ export default function SecurityPage() {
       <PageHero
         eyebrow="Trust · Pre-launch"
         title="Security and accountability by design"
-        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. We do not claim ISO, SOC 2, or any other certification we have not earned."
+        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. Website scan is designed to be SSRF-safe and is under test — not a live knowledge crawl. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
       />
 
       <TrustPillars />
@@ -50,6 +50,11 @@ export default function SecurityPage() {
             The receptionist must not invent bookings, dispatches, refunds, or
             safety assurances.
           </li>
+          <li>
+            Website scan is designed to be SSRF-safe (HTTPS, private-IP deny,
+            redirect re-check) and is flagged off by default. Staging often
+            queues the crawl. Not a live Fonio-parity knowledge crawl.
+          </li>
         </ul>
       </section>
 
@@ -70,6 +75,10 @@ export default function SecurityPage() {
               No ISO 27001, SOC 2, Cyber Essentials, or other certifications —
               we have not earned them, and we will not invent seals, badges, or
               auditor names.
+            </li>
+            <li>
+              No bank-grade, military-grade, or enterprise-grade marketing
+              fluff.
             </li>
             <li>
               No fake uptime percentages, customer logos, awards, or named case
@@ -118,9 +127,10 @@ export default function SecurityPage() {
           Privacy and legal
         </h2>
         <p className="mt-3 text-muted">
-          Marketing-site privacy and legal pages are drafts for counsel — not
-          final policy. Product trust (this page) is separate from those
-          drafts.
+          Marketing-site privacy, cookies, and terms are{" "}
+          <strong>DRAFT FOR LEGAL REVIEW</strong> — scaffolds only, not final
+          policy or legal advice. Product trust (this page) is separate from
+          those drafts.
         </p>
         <p className="mt-4 text-sm text-muted">
           <a
@@ -150,8 +160,8 @@ export default function SecurityPage() {
           Talk through the controls
         </h2>
         <p className="mt-2 text-muted">
-          Pre-launch — start from your website, or request an early-access
-          briefing. We will not present a fake certificate pack.
+          Product interest starts at Create from website. An early-access
+          briefing is secondary. We will not present a fake certificate pack.
         </p>
         <CtaPair
           className="mt-6"

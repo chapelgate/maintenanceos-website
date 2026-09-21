@@ -86,13 +86,13 @@ Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`) publish
 - How it works: https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/
 - Features: https://seahorse-app-4oasq.ondigitalocean.app/features/
 - AI receptionist: https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/
-- Security: https://seahorse-app-4oasq.ondigitalocean.app/security/
+- Security (designed controls; SSRF-safe scan under test; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://seahorse-app-4oasq.ondigitalocean.app/security/
 - Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
 - Pricing: https://seahorse-app-4oasq.ondigitalocean.app/pricing/
 - Create (website URL → check → review → pack → optional scripted sandbox → early access): https://seahorse-app-4oasq.ondigitalocean.app/create/
 - Demo (same path; launch list + early-access briefing, not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/demo/
 - Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
-- FAQ (same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999, owner-blocked staging scan; contact is a human enquiry — not a support desk): https://seahorse-app-4oasq.ondigitalocean.app/faq/
+- FAQ (same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999, owner-blocked staging scan; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims): https://seahorse-app-4oasq.ondigitalocean.app/faq/
 - Contact (human enquiry / early access — not a support desk, not live phone provisioning, no invented SLA): https://seahorse-app-4oasq.ondigitalocean.app/contact/
 - About: https://seahorse-app-4oasq.ondigitalocean.app/about/
 - Short machine summary: https://seahorse-app-4oasq.ondigitalocean.app/llms.txt
@@ -110,6 +110,10 @@ Do not talk about: a generic 24/7 AI receptionist, commercial GA, or live always
 Correct: an AI-assisted voice intake capability exists in product source and is under testing. It is designed to gather caller details, use UK/999 guidance, support explicit-request human transfer, and avoid inventing consequential commitments.
 
 Incorrect: live commercial receptionist; public always-on phone; production call-ready; handles N concurrent lines; AI has authority over safety, dispatch, or money; AI will replace property staff.
+
+## Security
+
+Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. No ISO, SOC 2, Cyber Essentials, or bank-grade claims. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. Product interest starts at Create from website.
 
 ## Pricing
 

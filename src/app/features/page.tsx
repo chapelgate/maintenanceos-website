@@ -65,7 +65,7 @@ const groups = [
       {
         title: "Sandbox path",
         items: [
-          "Website scan companion — copies draft fields when a scan endpoint is configured; otherwise the crawl is queued. Empty fields were not invented. Not a live Fonio-parity knowledge crawl.",
+          "SSRF-safe website scan companion — copies draft fields when a scan endpoint is configured; otherwise the crawl is queued. Empty fields were not invented. Not a live Fonio-parity knowledge crawl.",
           "Knowledge pack + system prompt from the reviewed /create draft. Missing hours or services stay missing. Not a live tenant or trained knowledge base.",
           "Pack-aware scripted sandbox test call — flagged, off by default. Answers from the stored pack; missing fields stay not on file. Not a live customer phone. Frozen telephony unused.",
         ],
@@ -119,7 +119,7 @@ const notOnThisSite = [
   "Commercially live / generally available product",
   "Public always-on customer phone receptionist",
   "Public customer portal, account login, or billing GA",
-  "ISO / SOC 2 / other certifications we have not earned",
+  "ISO / SOC 2 / bank-grade / other certifications we have not earned",
   "Fake uptime, logos, awards, or reviews",
   "Payment, refund, or client-money execution",
 ] as const;
