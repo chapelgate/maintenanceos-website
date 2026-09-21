@@ -1,4 +1,4 @@
-import { googleEnvCredentials, exchangeRefreshToken } from "./oauth.ts";
+import { exchangeRefreshToken, resolveGoogleCredentials, GOOGLE_TOKEN_URL } from "./oauth.ts";
 import { computeFreeSlots, parseInstant, validateRange } from "./slots.ts";
 import {
   calendarFailure,
@@ -15,7 +15,6 @@ import {
   type RescheduleBookingInput,
 } from "./types.ts";
 
-const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const API = "https://www.googleapis.com/calendar/v3";
 const DEFAULT_TITLE = "ReceptionistOS adapter test";
 
@@ -74,22 +73,28 @@ export function createGoogleCalendarAdapter(deps: AdapterDeps = {}): CalendarAda
   const fetchFn: FetchLike = deps.fetch ?? fetch;
   let cachedToken: { value: string; exp: number } | null = null;
 
-  async function accessToken(): Promise<CalendarResult<string>> {
-    const creds = googleEnvCredentials(env);
+  async function requireCreds() {
+    const creds = await resolveGoogleCredentials(env, deps.tokenStore);
     if (!creds) {
       return calendarFailure(
         "not_configured",
-        "Google Calendar OAuth env is not set (GOOGLE_CALENDAR_CLIENT_ID, GOOGLE_CALENDAR_CLIENT_SECRET, GOOGLE_CALENDAR_REFRESH_TOKEN). No booking was created.",
+        "Google Calendar OAuth is not configured (GOOGLE_CALENDAR_CLIENT_ID, GOOGLE_CALENDAR_CLIENT_SECRET, plus GOOGLE_CALENDAR_REFRESH_TOKEN or a token stored via /oauth/google/callback). No booking was created.",
       );
     }
+    return calendarSuccess(creds);
+  }
+
+  async function accessToken(): Promise<CalendarResult<string>> {
+    const creds = await requireCreds();
+    if (!creds.ok) return creds;
     if (cachedToken && cachedToken.exp > Date.now() + 5_000) {
       return calendarSuccess(cachedToken.value);
     }
     const token = await exchangeRefreshToken({
-      tokenUrl: TOKEN_URL,
-      clientId: creds.clientId,
-      clientSecret: creds.clientSecret,
-      refreshToken: creds.refreshToken,
+      tokenUrl: GOOGLE_TOKEN_URL,
+      clientId: creds.data.clientId,
+      clientSecret: creds.data.clientSecret,
+      refreshToken: creds.data.refreshToken,
       fetch: fetchFn,
     });
     if (!token.ok) return token;
@@ -140,16 +145,14 @@ export function createGoogleCalendarAdapter(deps: AdapterDeps = {}): CalendarAda
       }
       const token = await accessToken();
       if (!token.ok) return token;
-      const creds = googleEnvCredentials(env);
-      if (!creds) {
-        return calendarFailure("not_configured", "Google Calendar OAuth env is not set.");
-      }
+      const creds = await requireCreds();
+      if (!creds.ok) return creds;
       try {
         const res = await api("POST", "/freeBusy", token.data, {
           timeMin: range.from.toISOString(),
           timeMax: range.to.toISOString(),
           timeZone: input.timezone || "Europe/London",
-          items: [{ id: creds.calendarId }],
+          items: [{ id: creds.data.calendarId }],
         });
         if (res.status >= 400) {
           return calendarFailure(
@@ -161,7 +164,7 @@ export function createGoogleCalendarAdapter(deps: AdapterDeps = {}): CalendarAda
           computeFreeSlots({
             from: range.from,
             to: range.to,
-            busy: busyFromFreeBusy(res.json, creds.calendarId),
+            busy: busyFromFreeBusy(res.json, creds.data.calendarId),
             slotMinutes: input.durationMinutes,
             timezone: input.timezone,
             now: deps.now?.() ?? new Date(),
@@ -186,16 +189,14 @@ export function createGoogleCalendarAdapter(deps: AdapterDeps = {}): CalendarAda
       }
       const token = await accessToken();
       if (!token.ok) return token;
-      const creds = googleEnvCredentials(env);
-      if (!creds) {
-        return calendarFailure("not_configured", "Google Calendar OAuth env is not set.");
-      }
+      const creds = await requireCreds();
+      if (!creds.ok) return creds;
       const timezone = input.timezone || "Europe/London";
       const title = input.title?.trim() || DEFAULT_TITLE;
       try {
         const res = await api(
           "POST",
-          `/calendars/${encodeURIComponent(creds.calendarId)}/events`,
+          `/calendars/${encodeURIComponent(creds.data.calendarId)}/events`,
           token.data,
           {
             summary: title,
@@ -235,14 +236,12 @@ export function createGoogleCalendarAdapter(deps: AdapterDeps = {}): CalendarAda
       }
       const token = await accessToken();
       if (!token.ok) return token;
-      const creds = googleEnvCredentials(env);
-      if (!creds) {
-        return calendarFailure("not_configured", "Google Calendar OAuth env is not set.");
-      }
+      const creds = await requireCreds();
+      if (!creds.ok) return creds;
       try {
         const res = await api(
           "DELETE",
-          `/calendars/${encodeURIComponent(creds.calendarId)}/events/${encodeURIComponent(id)}`,
+          `/calendars/${encodeURIComponent(creds.data.calendarId)}/events/${encodeURIComponent(id)}`,
           token.data,
         );
         if (res.status === 404) {
@@ -288,15 +287,13 @@ export function createGoogleCalendarAdapter(deps: AdapterDeps = {}): CalendarAda
       }
       const token = await accessToken();
       if (!token.ok) return token;
-      const creds = googleEnvCredentials(env);
-      if (!creds) {
-        return calendarFailure("not_configured", "Google Calendar OAuth env is not set.");
-      }
+      const creds = await requireCreds();
+      if (!creds.ok) return creds;
       const timezone = input.timezone || "Europe/London";
       try {
         const res = await api(
           "PATCH",
-          `/calendars/${encodeURIComponent(creds.calendarId)}/events/${encodeURIComponent(id)}`,
+          `/calendars/${encodeURIComponent(creds.data.calendarId)}/events/${encodeURIComponent(id)}`,
           token.data,
           {
             start: { dateTime: start.toISOString(), timeZone: timezone },

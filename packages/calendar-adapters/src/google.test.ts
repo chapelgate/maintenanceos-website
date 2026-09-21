@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createGoogleCalendarAdapter } from "./google.ts";
 import { googleAuthorizationUrl } from "./oauth.ts";
+import { createMemoryTokenStore } from "./tokens.ts";
 
 const ENV = {
   GOOGLE_CALENDAR_CLIENT_ID: "client",
@@ -121,8 +122,48 @@ test("google adapter returns a booking only when the API returns an id", async (
 });
 
 test("googleAuthorizationUrl documents offline calendar scopes", () => {
-  const url = googleAuthorizationUrl("cid", "http://127.0.0.1:8789/oauth/google");
+  const url = googleAuthorizationUrl("cid", "http://127.0.0.1:8789/oauth/google/callback");
   assert.match(url, /accounts\.google\.com/);
   assert.match(url, /access_type=offline/);
   assert.match(url, /calendar\.events/);
+});
+
+test("google adapter uses token-store refresh token when env refresh is unset", async () => {
+  const store = createMemoryTokenStore({
+    provider: "google",
+    refreshToken: "stored-refresh",
+  });
+  const fetchFn: typeof fetch = async (input, init) => {
+    const url = String(input);
+    const method = (init?.method ?? "GET").toUpperCase();
+    if (url.includes("/token")) {
+      return new Response(JSON.stringify({ access_token: "tok" }), { status: 200 });
+    }
+    if (method === "POST" && url.includes("/events")) {
+      return new Response(
+        JSON.stringify({
+          id: "evt_store",
+          summary: "Stored",
+          start: { dateTime: "2026-09-21T08:00:00.000Z" },
+          end: { dateTime: "2026-09-21T08:30:00.000Z" },
+        }),
+        { status: 200 },
+      );
+    }
+    return new Response("{}", { status: 404 });
+  };
+  const adapter = createGoogleCalendarAdapter({
+    env: {
+      GOOGLE_CALENDAR_CLIENT_ID: "client",
+      GOOGLE_CALENDAR_CLIENT_SECRET: "secret",
+    },
+    tokenStore: store,
+    fetch: fetchFn,
+  });
+  const booked = await adapter.createBooking({
+    start: "2026-09-21T08:00:00.000Z",
+    end: "2026-09-21T08:30:00.000Z",
+  });
+  assert.equal(booked.ok, true);
+  if (booked.ok) assert.equal(booked.data.id, "evt_store");
 });

@@ -2,7 +2,9 @@
  * Claims-safe calendar client for the static /create journey.
  * Talks to packages/calendar-adapters over an absolute URL, or an in-browser
  * mock when the public flag is on and no endpoint is configured.
- * Never invents a booking id.
+ * Companion Google OAuth (GET /oauth/google/start → /callback + local token
+ * store) is process-local. Unset credentials → not_configured; never invent a
+ * booking id. Do not treat staging mock as live Google Calendar.
  */
 
 export type CalendarSlot = {
