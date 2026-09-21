@@ -1,13 +1,14 @@
 # Render Blueprint — free companions (onboarding scan, sandbox test-call,
-# mock calendar adapters). Distinct service names. New web services only.
+# mock calendar adapters, customer dashboard). Distinct service names.
+# New web services only.
 #
 # Not a DigitalOcean App Platform spec (marketing stays static `output: 'export'`).
 # Not maintenanceos-redteam / production voice. Create *new* web services.
 # $0: every service below sets plan to free. Do not upgrade these to Starter.
 #
 # Apply from the Render Dashboard (New → Blueprint) or create each web service
-# by hand using docs/ONBOARDING_SCAN_DEPLOY.md and docs/SANDBOX_DEPLOY.md.
-# Flags stay off until an operator enables them in the dashboard.
+# by hand using docs/ONBOARDING_SCAN_DEPLOY.md, docs/SANDBOX_DEPLOY.md, and
+# docs/DASHBOARD_DEPLOY.md. Flags stay off until an operator enables them.
 
 services:
   - type: web
@@ -75,3 +76,27 @@ services:
         value: "mock"
       # Leave CALENDAR_ADAPTERS_CORS_ORIGIN unset to echo the browser Origin.
       # See docs/SANDBOX_DEPLOY.md (calendar section).
+
+  - type: web
+    name: maintenanceos-customer-dashboard
+    runtime: docker
+    plan: free
+    dockerfilePath: ./packages/customer-dashboard/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - packages/customer-dashboard/**
+        - render.yaml
+    envVars:
+      - key: CUSTOMER_DASHBOARD_HOST
+        value: "0.0.0.0"
+      # Off until an operator intentionally enables SAMPLE list/detail.
+      - key: CUSTOMER_DASHBOARD_ENABLED
+        value: "false"
+      # Hosted rows stay SAMPLE / DEMO. Do not present as production analytics.
+      - key: CUSTOMER_DASHBOARD_DEMO_DATA
+        value: "true"
+      # Leave CUSTOMER_DASHBOARD_CORS_ORIGIN unset to echo the browser Origin
+      # (seahorse-app + chapelgate staging both work). See docs/DASHBOARD_DEPLOY.md.

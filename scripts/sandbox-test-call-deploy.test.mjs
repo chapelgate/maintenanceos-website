@@ -23,7 +23,7 @@ test("render.yaml adds free sandbox + mock calendar companions, not voice", () =
   assert.match(yaml, /SANDBOX_TEST_CALL_ENABLED[\s\S]*value:\s*"false"/);
   assert.match(yaml, /CALENDAR_ADAPTERS_ENABLED[\s\S]*value:\s*"false"/);
   assert.match(yaml, /CALENDAR_ADAPTER_PROVIDER[\s\S]*value:\s*"mock"/);
-  assert.equal((yaml.match(/^\s+plan:\s*free$/gm) || []).length, 3);
+  assert.equal((yaml.match(/^\s+plan:\s*free$/gm) || []).length, 4);
   assert.doesNotMatch(yaml, /name:\s*maintenanceos-redteam/);
   assert.doesNotMatch(yaml, /plan:\s*starter/i);
   assert.doesNotMatch(yaml, /SECRET|TOKEN|PASSWORD|API_KEY/);

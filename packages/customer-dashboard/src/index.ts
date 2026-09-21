@@ -44,4 +44,6 @@ export {
   handleDashboardRequest,
   listenDashboardServer,
   resetRateLimitForTests,
+  resolveListenHost,
+  resolveListenPort,
 } from "./server.ts";

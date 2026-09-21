@@ -110,7 +110,7 @@ NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT=http://127.0.0.1:8791/v1/dashboard \
   npm run dev
 ```
 
-Leave both public vars unset/false on DigitalOcean static hosting. `/dashboard` then says **Customer dashboard — coming / under testing** and never presents sample rows as live production metrics. If the public flag is on and the endpoint is empty, the page uses an in-browser mock labelled **SAMPLE / DEMO**. An empty store (`CUSTOMER_DASHBOARD_DEMO_DATA=false`, or the in-browser “Empty store” control) invents no customers.
+Leave both public vars unset/false on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/DASHBOARD_DEPLOY.md`) — then set `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` and `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT` and **rebuild**. `/dashboard` then says **Customer dashboard — coming / under testing** until that rebuild. If the public flag is on and the endpoint is empty, the page uses an in-browser mock labelled **SAMPLE / DEMO**. An empty store (`CUSTOMER_DASHBOARD_DEMO_DATA=false`, or the in-browser “Empty store” control) invents no customers. Hosted rows stay SAMPLE / DEMO — never present them as live production analytics.
 
 Nav shows **Dashboard (soon)** when the public flag is off, and **Dashboard** when it is on. Do not wire this to frozen live telephony.
 
@@ -130,7 +130,7 @@ This is **not** production Fonio-parity and **must not** be copied onto DigitalO
 
 ### DigitalOcean App Platform (static)
 
-Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / companion Dockerfiles on App Platform; those are loopback e2e or the **separate** Render free companions (`docs/ONBOARDING_SCAN_DEPLOY.md`, `docs/SANDBOX_DEPLOY.md`). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart.
+Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / companion Dockerfiles on App Platform; those are loopback e2e or the **separate** Render free companions (`docs/ONBOARDING_SCAN_DEPLOY.md`, `docs/SANDBOX_DEPLOY.md`, `docs/DASHBOARD_DEPLOY.md`). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart.
 
 ## Desktop navigation (IA v0.2)
 
