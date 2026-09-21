@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
+import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = funnelPageMetadata("home");
@@ -42,6 +44,7 @@ const honestyItems = [
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={funnelPageJsonLd("home")} />
       {/* 1. Hero — UX journey entry */}
       <section className="border-b border-border bg-surface px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">

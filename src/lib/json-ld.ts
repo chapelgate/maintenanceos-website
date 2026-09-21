@@ -1,8 +1,11 @@
 import { faqItems } from "@/content/faqs";
-import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 import { siteConfig } from "@/config/site";
+import { funnelPageCopy } from "@/lib/page-meta";
+import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
 export type JsonLdRecord = Record<string, unknown>;
+
+export type FunnelJsonLdPage = keyof typeof funnelPageCopy;
 
 function orgId(): string {
   return `${getCanonicalSiteUrl()}/#organization`;
@@ -41,7 +44,7 @@ function websiteNode(): JsonLdRecord {
 
 /**
  * SoftwareApplication for a pre-launch product.
- * Availability is PreOrder; no ratings, reviews, or in-stock offers.
+ * Accurate as product identity only: no telephone, ratings, reviews, or offers.
  */
 function softwareApplicationNode(): JsonLdRecord {
   return {
@@ -56,20 +59,52 @@ function softwareApplicationNode(): JsonLdRecord {
     inLanguage: siteConfig.locale,
     countriesSupported: "GB",
     publisher: { "@id": orgId() },
-    offers: {
-      "@type": "Offer",
-      url: absoluteUrl("/pricing/"),
-      availability: "https://schema.org/PreOrder",
-      category: "Pre-launch early access",
-    },
   };
 }
 
-/** Organization + WebSite + pre-launch SoftwareApplication graph for the root layout. */
+function webPageNode(page: FunnelJsonLdPage): JsonLdRecord {
+  const copy = funnelPageCopy[page];
+  const url = absoluteUrl(copy.path);
+  const name =
+    "absoluteTitle" in copy && copy.absoluteTitle
+      ? copy.absoluteTitle
+      : copy.title;
+
+  return {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name,
+    description: copy.description,
+    inLanguage: siteConfig.locale,
+    isPartOf: { "@id": websiteId() },
+    about: { "@id": softwareId() },
+    publisher: { "@id": orgId() },
+  };
+}
+
+/** Organization + WebSite graph for the root layout (every exported page). */
 export function marketingJsonLd(): JsonLdRecord {
   return {
     "@context": "https://schema.org",
-    "@graph": [organizationNode(), websiteNode(), softwareApplicationNode()],
+    "@graph": [organizationNode(), websiteNode()],
+  };
+}
+
+/**
+ * Claims-safe graph for home and key funnel pages.
+ * Organization + WebSite + WebPage, plus SoftwareApplication (no offers).
+ * Copy comes from funnelPageCopy so titles stay aligned with SEO meta.
+ */
+export function funnelPageJsonLd(page: FunnelJsonLdPage): JsonLdRecord {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationNode(),
+      websiteNode(),
+      webPageNode(page),
+      softwareApplicationNode(),
+    ],
   };
 }
 

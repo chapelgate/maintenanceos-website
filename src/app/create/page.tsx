@@ -2,7 +2,9 @@ import {
   CalendarConnectSection,
   CreateJourneySection,
 } from "@/components/create-funnel-islands";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("create");
@@ -37,6 +39,7 @@ const steps = [
 export default function CreateReceptionistPage() {
   return (
     <>
+      <JsonLd data={funnelPageJsonLd("create")} />
       <PageHero
         eyebrow="Early access · Pre-launch"
         title="Turn your business website into an AI receptionist"

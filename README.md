@@ -20,7 +20,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 - **No Next.js API routes** (incompatible with static export)
 - Provider-independent lead adapter (`src/lib/lead-adapter.ts`) posts JSON to `NEXT_PUBLIC_FORM_ENDPOINT` when that value is an absolute `http(s)` URL; otherwise a local success stub. Success UI **never claims email was sent**.
 - Contract: [`docs/FORM_ENDPOINT_CONTRACT.md`](docs/FORM_ENDPOINT_CONTRACT.md). Local stub: `npm run form-stub` (`scripts/form-stub-server.mjs`)
-- AI / search discoverability: `public/llms.txt`, `public/llms-full.txt`, JSON-LD (Organization, WebSite, pre-launch SoftwareApplication, FAQPage on `/faq/`), `src/app/robots.ts` (allows major AI crawlers), `src/app/sitemap.ts`
+- AI / search discoverability: `public/llms.txt`, `public/llms-full.txt`, JSON-LD (Organization + WebSite on every page; WebPage + claims-safe SoftwareApplication on `/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`; FAQPage on `/faq/`; no telephone, ratings, or offers), `src/app/robots.ts` (allows major AI crawlers), `src/app/sitemap.ts`
 
 ## Quick start
 

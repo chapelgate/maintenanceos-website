@@ -12,6 +12,7 @@
 - [x] Marketing `/how-it-works` + `/features` match Website → Check → Review → Pack (HAVE / UNDER TEST / COMING for sandbox, calendars, live phone)
 - [x] Marketing `/demo` + leftover “book a demo / see it live” CTAs point primary to `/create/`; human demo is secondary early-access (not a live phone)
 - [x] Funnel-page titles / descriptions / OG name Website → Check → Review → Pack → optional sandbox → early access (not a live phone / always-on / GA)
+- [x] Claims-safe JSON-LD on home + funnel pages (Organization + WebSite + WebPage + SoftwareApplication; no live phone / always-on / GA / aggregateRating / fake offers)
 - [ ] SCM access for Cursor cloud agents on private website repo
 
 ## Phase 1 — Website → sandbox receptionist (P0)
