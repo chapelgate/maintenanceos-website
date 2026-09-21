@@ -14,7 +14,7 @@
 ## Phase 1 — Website → sandbox receptionist (P0)
 
 - [x] SSRF-safe website ingestion module (feature-flagged companion; **PARTIAL / UNDER TEST**; off by default; staging endpoint often unset; live scan on staging not evidenced)
-- [x] Calendar adapter package + mock + Google OAuth start/callback scaffold (**PARTIAL**; M365 stub; flagged off; not live on staging)
+- [x] Calendar adapter package + mock + Google OAuth start/callback scaffold + M365 / Outlook OAuth PARTIAL scaffold (flagged off; not live on staging)
 - [x] Claims-safe knowledge pack + system prompt from reviewed `/create` draft (**PARTIAL**; `packages/receptionist-draft`; `/create` preview; sandbox consume; missing fields stay missing; no live-phone claims)
 - Extract schema + review UI
 - Sandbox tenant create

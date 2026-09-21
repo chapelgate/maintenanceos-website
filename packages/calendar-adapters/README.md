@@ -31,6 +31,8 @@ Providers: `mock` (in-memory), `google` (Calendar API v3), `microsoft` (Microsof
 
 Google OAuth (local only; see section below): `GOOGLE_CALENDAR_CLIENT_ID`, `GOOGLE_CALENDAR_CLIENT_SECRET`, optional `GOOGLE_CALENDAR_REFRESH_TOKEN` / `GOOGLE_CALENDAR_REDIRECT_URI` / `GOOGLE_CALENDAR_TOKEN_FILE`.
 
+Microsoft 365 / Outlook OAuth (local only; see section below): `MICROSOFT_CALENDAR_CLIENT_ID`, `MICROSOFT_CALENDAR_CLIENT_SECRET`, optional `MICROSOFT_CALENDAR_REFRESH_TOKEN` / `MICROSOFT_CALENDAR_TENANT_ID` / `MICROSOFT_CALENDAR_REDIRECT_URI` / `MICROSOFT_CALENDAR_TOKEN_FILE`.
+
 Marketing UI uses a **separate** build-time flag, `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` (also default false). Static export inlines `NEXT_PUBLIC_*`. See repo `.env.example`, `docs/CALENDAR_ADAPTERS_CONTRACT.md`, and the $0 host runbook `docs/SANDBOX_DEPLOY.md` (calendar section). Hosted Render path is **mock** only.
 
 ## Run the mock adapter locally
@@ -126,33 +128,57 @@ Obtain a refresh token (loopback only):
 
 You can still paste an existing refresh token as `GOOGLE_CALENDAR_REFRESH_TOKEN` (env wins over the store).
 
-`GET /health` reports `googleOAuth.clientConfigured` / `tokenPresent` and always `googleCalendarLiveOnStaging: false`.
+`GET /health` reports `googleOAuth.clientConfigured` / `tokenPresent` and always `googleCalendarLiveOnStaging: false`. The same payload always has `microsoftCalendarLiveOnStaging: false`.
 
 When client id/secret or a refresh token is missing → **`not_configured`**. Token or API failure → `auth_failed` / `provider_error`. **No invented booking id.** Mock remains the factory default when `CALENDAR_ADAPTER_PROVIDER` is unset.
 
 `/create` talks to whatever this process was started with (`NEXT_PUBLIC_CALENDAR_ENDPOINT`). If this process is mock (local e2e / hosted Render), the panel is mock testing — not Google. If this process is `google` without tokens, slot/book return honest `not_configured`.
 
-## Microsoft 365 / Outlook (OAuth, operator-configured)
+## Microsoft 365 / Outlook (OAuth scaffold, operator-configured, local)
 
-App registration with `Calendars.ReadWrite` and `offline_access`. No paid Microsoft SKU is assumed beyond whatever mailbox the operator already has.
+Do **not** commit secrets. This is a **local / operator** scaffold — **PARTIAL**, not a live Microsoft 365 product. Staging `/create` with the hosted mock companion is **not** Outlook Calendar live. `CALENDAR_ADAPTER_PROVIDER` stays `mock` unless you intentionally set `microsoft` on this process.
+
+Create an Azure AD / Entra app registration (delegated `Calendars.ReadWrite` + `offline_access`). Authorized redirect URI (exact):
+
+`http://127.0.0.1:8789/oauth/microsoft/callback`
+
+If you change `CALENDAR_ADAPTERS_PORT`, set `MICROSOFT_CALENDAR_REDIRECT_URI` to match and register that URI on the app. No paid Microsoft SKU is assumed beyond whatever mailbox the operator already has.
 
 | Env | Notes |
 | --- | --- |
-| `MICROSOFT_CALENDAR_CLIENT_ID` | App (client) id |
-| `MICROSOFT_CALENDAR_CLIENT_SECRET` | Client secret |
-| `MICROSOFT_CALENDAR_REFRESH_TOKEN` | Offline refresh token |
+| `MICROSOFT_CALENDAR_CLIENT_ID` | App (client) id (required for Microsoft) |
+| `MICROSOFT_CALENDAR_CLIENT_SECRET` | Client secret (required for Microsoft) |
+| `MICROSOFT_CALENDAR_REFRESH_TOKEN` | Optional if you complete `/oauth/microsoft/callback` instead |
 | `MICROSOFT_CALENDAR_TENANT_ID` | Optional; default `common` |
+| `MICROSOFT_CALENDAR_REDIRECT_URI` | Optional; default `http://127.0.0.1:8789/oauth/microsoft/callback` |
+| `MICROSOFT_CALENDAR_TOKEN_FILE` | Optional file stub (e.g. `.data/microsoft-calendar-tokens.json`, gitignored). Unset = in-memory store (lost on process exit), or the shared `GOOGLE_CALENDAR_TOKEN_FILE` if that is set. |
 
-Helper: `microsoftAuthorizationUrl(clientId, redirectUri, tenant?)`.
+Start the companion with the **master flag on** and provider `microsoft`:
 
 ```bash
 CALENDAR_ADAPTERS_ENABLED=true \
 CALENDAR_ADAPTER_PROVIDER=microsoft \
 MICROSOFT_CALENDAR_CLIENT_ID=... \
 MICROSOFT_CALENDAR_CLIENT_SECRET=... \
-MICROSOFT_CALENDAR_REFRESH_TOKEN=... \
+MICROSOFT_CALENDAR_TOKEN_FILE=.data/microsoft-calendar-tokens.json \
   npm run calendar-adapters
 ```
+
+Obtain a refresh token (loopback only):
+
+1. Open **`http://127.0.0.1:8789/oauth/microsoft/start`** (302 to Microsoft, CSRF `state`).
+2. Microsoft redirects to **`http://127.0.0.1:8789/oauth/microsoft/callback?code=…&state=…`**.
+3. The companion exchanges the code (`grant_type=authorization_code`) and stores the refresh token in memory or `MICROSOFT_CALENDAR_TOKEN_FILE`. Tokens are never logged or committed.
+
+You can still paste an existing refresh token as `MICROSOFT_CALENDAR_REFRESH_TOKEN` (env wins over the store).
+
+Helper: `microsoftAuthorizationUrl(clientId, redirectUri, tenantOrOptions?)`.
+
+`GET /health` reports `microsoftOAuth.clientConfigured` / `tokenPresent` and always `microsoftCalendarLiveOnStaging: false`.
+
+When client id/secret or a refresh token is missing → **`not_configured`**. Token or Graph failure → `auth_failed` / `provider_error`. **No invented booking id.** Mock remains the factory default when `CALENDAR_ADAPTER_PROVIDER` is unset.
+
+`/create` talks to whatever this process was started with (`NEXT_PUBLIC_CALENDAR_ENDPOINT`). If this process is mock (local e2e / hosted Render), the panel is mock testing — not Microsoft 365. If this process is `microsoft` without tokens, slot/book return honest `not_configured`.
 
 ## Plug into ReceptionistOS
 
@@ -177,4 +203,4 @@ From repo root: `npm test` (includes `src/*.test.ts` here).
 node --experimental-strip-types --test packages/calendar-adapters/src/*.test.ts
 ```
 
-Coverage: flag default off, mock default when Google env is missing, mock contract (list / book / conflict / reschedule / cancel), Google OAuth start/callback + token store, Google/Microsoft `not_configured` + injected-fetch mapping, companion `503` when disabled.
+Coverage: flag default off, mock default when Google/Microsoft env is missing, mock contract (list / book / conflict / reschedule / cancel), Google/Microsoft OAuth start/callback + token store, Google/Microsoft `not_configured` + injected-fetch mapping, companion `503` when disabled.

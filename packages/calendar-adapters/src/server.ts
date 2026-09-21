@@ -15,12 +15,17 @@ import { isCalendarAdaptersEnabled, calendarProviderFromEnv } from "./flags.ts";
 import {
   GOOGLE_OAUTH_CALLBACK_PATH,
   GOOGLE_OAUTH_START_PATH,
+  MICROSOFT_OAUTH_CALLBACK_PATH,
+  MICROSOFT_OAUTH_START_PATH,
   handleGoogleOAuthCallback,
   handleGoogleOAuthStart,
+  handleMicrosoftOAuthCallback,
+  handleMicrosoftOAuthStart,
 } from "./oauth-http.ts";
 import {
   createMemoryOauthStateStore,
   googleOAuthStatus,
+  microsoftOAuthStatus,
   type OauthStateStore,
 } from "./oauth.ts";
 import { createTokenStoreFromEnv, type TokenStore } from "./tokens.ts";
@@ -203,6 +208,7 @@ export async function handleCalendarRequest(
 
   if (method === "GET" && pathname === "/health") {
     const google = await googleOAuthStatus(env, tokenStore);
+    const microsoft = await microsoftOAuthStatus(env, tokenStore);
     send(
       res,
       200,
@@ -214,11 +220,18 @@ export async function handleCalendarRequest(
         provider: calendarProviderFromEnv(env),
         telephony: false,
         googleCalendarLiveOnStaging: false,
+        microsoftCalendarLiveOnStaging: false,
         googleOAuth: {
           clientConfigured: google.clientConfigured,
           tokenPresent: google.tokenPresent,
           startPath: GOOGLE_OAUTH_START_PATH,
           callbackPath: GOOGLE_OAUTH_CALLBACK_PATH,
+        },
+        microsoftOAuth: {
+          clientConfigured: microsoft.clientConfigured,
+          tokenPresent: microsoft.tokenPresent,
+          startPath: MICROSOFT_OAUTH_START_PATH,
+          callbackPath: MICROSOFT_OAUTH_CALLBACK_PATH,
         },
         slotsPath: "/v1/calendar/slots",
       },
@@ -243,6 +256,34 @@ export async function handleCalendarRequest(
 
   if (method === "GET" && pathname === GOOGLE_OAUTH_CALLBACK_PATH) {
     const result = await handleGoogleOAuthCallback(req.url ?? "/", {
+      adaptersEnabled,
+      env,
+      tokenStore,
+      oauthStateStore,
+      fetch: options.fetch,
+      extraHeaders: corsHeaders(origin, configured),
+    });
+    res.writeHead(result.status, result.headers);
+    res.end(result.body);
+    return;
+  }
+
+  if (method === "GET" && pathname === MICROSOFT_OAUTH_START_PATH) {
+    const result = handleMicrosoftOAuthStart({
+      adaptersEnabled,
+      env,
+      tokenStore,
+      oauthStateStore,
+      fetch: options.fetch,
+      extraHeaders: corsHeaders(origin, configured),
+    });
+    res.writeHead(result.status, result.headers);
+    res.end(result.body);
+    return;
+  }
+
+  if (method === "GET" && pathname === MICROSOFT_OAUTH_CALLBACK_PATH) {
+    const result = await handleMicrosoftOAuthCallback(req.url ?? "/", {
       adaptersEnabled,
       env,
       tokenStore,
@@ -436,10 +477,13 @@ export function listenCalendarServer(options: ServerOptions = {}): http.Server {
     console.log(
       `[calendar-adapters] google oauth start http://${host}:${port}${GOOGLE_OAUTH_START_PATH}`,
     );
+    console.log(
+      `[calendar-adapters] microsoft oauth start http://${host}:${port}${MICROSOFT_OAUTH_START_PATH}`,
+    );
     console.log(`[calendar-adapters] CALENDAR_ADAPTERS_ENABLED=${enabled ? "true" : "false"}`);
     console.log(`[calendar-adapters] provider=${calendarProviderFromEnv()}`);
     console.log(
-      "[calendar-adapters] no telephony; mock default; Google Calendar is not live on staging",
+      "[calendar-adapters] no telephony; mock default; Google/Microsoft Calendar is not live on staging",
     );
   });
 

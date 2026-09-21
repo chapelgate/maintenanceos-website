@@ -99,7 +99,7 @@ Use a **public HTTPS** business URL on `/create/` (for example `https://example.
 | Scan mapped fields | Only returned strings are filled. Optional `fieldMeta` (source + confidence) is a **review hint** on filled fields. Empty keys stay empty. |
 | Scan empty / failed / unset | Queued, empty, or failed copy. **No invented draft.** Hostname may seed `businessName` only when crawl is not configured. |
 | Knowledge pack preview | After draft review, `/create` shows a claims-safe pack + system prompt. Missing hours/services stay missing. **Not** a live number or always-on receptionist. |
-| Calendar mock | Local/hosted adapter testing. **Not** a phone booking. Google/Microsoft stay `not_configured` without secrets (this checklist does not add secrets). Do **not** claim Google Calendar is live on staging; OAuth start/callback is loopback-only. |
+| Calendar mock | Local/hosted adapter testing. **Not** a phone booking. Google/Microsoft stay `not_configured` without secrets (this checklist does not add secrets). Do **not** claim Google or Microsoft 365 Calendar is live on staging; OAuth start/callback is loopback-only. `/health` reports `microsoftCalendarLiveOnStaging: false`. |
 | Sandbox scripted | `scripted_demo_complete`, `liveCall: false`. WebRTC / live: `not_configured` / `live_call_forbidden`. **Must not** show a successful live customer call. |
 | Dashboard | Labelled **SAMPLE / DEMO** rows only. Unknown ids stay `session_not_found`. **Must not** present production analytics. |
 | Submit early access | `create_receptionist` lead. No number provisioned. Thank-you copy **must not** say email was sent. |

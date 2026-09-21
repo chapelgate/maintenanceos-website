@@ -37,23 +37,46 @@ export {
   googleRedirectUriFromEnv,
   resolveGoogleCredentials,
   microsoftAuthorizationUrl,
+  microsoftClientFromEnv,
   microsoftEnvCredentials,
+  microsoftOAuthStatus,
+  microsoftRedirectUriFromEnv,
+  microsoftTokenUrl,
+  resolveMicrosoftCredentials,
   createMemoryOauthStateStore,
   GOOGLE_OAUTH_START_PATH,
   GOOGLE_OAUTH_CALLBACK_PATH,
   GOOGLE_TOKEN_URL,
+  MICROSOFT_OAUTH_START_PATH,
+  MICROSOFT_OAUTH_CALLBACK_PATH,
+  MICROSOFT_CALENDAR_SCOPE,
 } from "./oauth.ts";
 export {
   handleGoogleOAuthStart,
   handleGoogleOAuthCallback,
+  handleMicrosoftOAuthStart,
+  handleMicrosoftOAuthCallback,
 } from "./oauth-http.ts";
 export {
   createFileTokenStore,
   createMemoryTokenStore,
   createTokenStoreFromEnv,
 } from "./tokens.ts";
-export type { GoogleStoredTokens, TokenStore } from "./tokens.ts";
-export type { GoogleClientConfig, GoogleCredentials, OauthStateStore } from "./oauth.ts";
+export type {
+  CalendarTokenProvider,
+  GoogleStoredTokens,
+  MicrosoftStoredTokens,
+  StoredTokens,
+  TokenStore,
+} from "./tokens.ts";
+export type {
+  GoogleClientConfig,
+  GoogleCredentials,
+  MicrosoftAuthUrlOptions,
+  MicrosoftClientConfig,
+  MicrosoftCredentials,
+  OauthStateStore,
+} from "./oauth.ts";
 export {
   createCalendarServer,
   handleCalendarRequest,

@@ -177,7 +177,7 @@ Cold start: if the first curl hangs or 502s, `GET /health` until 200, then retry
 
 ## Optional: mock calendar-adapters on the same free blueprint
 
-Same pattern, **separate** service. Not voice. Not scan. Mock provider only on this hosted path — do not put Google/Microsoft credentials in Render env. Google OAuth start/callback (`/oauth/google/start`, `/oauth/google/callback`) is a **local loopback scaffold** (`packages/calendar-adapters/README.md`). Do not register a Render callback URI or claim Google Calendar is live on staging.
+Same pattern, **separate** service. Not voice. Not scan. Mock provider only on this hosted path — do not put Google/Microsoft credentials in Render env. Google / Microsoft OAuth start/callback (`/oauth/google/start`, `/oauth/microsoft/start`) is a **local loopback scaffold** (`packages/calendar-adapters/README.md`). Do not register a Render callback URI or claim Google or Microsoft 365 Calendar is live on staging. `/health` always has `googleCalendarLiveOnStaging: false` and `microsoftCalendarLiveOnStaging: false`.
 
 **Code:** `packages/calendar-adapters` (`npm run calendar-adapters`)  
 **Contract:** [`CALENDAR_ADAPTERS_CONTRACT.md`](CALENDAR_ADAPTERS_CONTRACT.md)  

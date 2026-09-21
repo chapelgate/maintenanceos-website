@@ -15,6 +15,8 @@ export function createCalendarAdapter(deps: AdapterDeps = {}): CalendarAdapter {
   if (provider === "google") {
     return createGoogleCalendarAdapter({ ...deps, env, tokenStore });
   }
-  if (provider === "microsoft") return createMicrosoftCalendarAdapter(deps);
+  if (provider === "microsoft") {
+    return createMicrosoftCalendarAdapter({ ...deps, env, tokenStore });
+  }
   return createMockCalendarAdapter(deps);
 }

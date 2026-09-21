@@ -93,7 +93,7 @@ export type AdapterDeps = {
   fetch?: FetchLike;
   now?: () => Date;
   enabled?: boolean;
-  /** Local Google OAuth token store (memory or file). Never commit contents. */
+  /** Local Google / Microsoft OAuth token store (memory or file). Never commit contents. */
   tokenStore?: TokenStore;
 };
 

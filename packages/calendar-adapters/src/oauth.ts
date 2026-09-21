@@ -7,6 +7,11 @@ export const GOOGLE_OAUTH_START_PATH = "/oauth/google/start";
 export const GOOGLE_OAUTH_CALLBACK_PATH = "/oauth/google/callback";
 export const DEFAULT_GOOGLE_OAUTH_CALLBACK =
   "http://127.0.0.1:8789/oauth/google/callback";
+export const MICROSOFT_OAUTH_START_PATH = "/oauth/microsoft/start";
+export const MICROSOFT_OAUTH_CALLBACK_PATH = "/oauth/microsoft/callback";
+export const DEFAULT_MICROSOFT_OAUTH_CALLBACK =
+  "http://127.0.0.1:8789/oauth/microsoft/callback";
+export const MICROSOFT_CALENDAR_SCOPE = "offline_access Calendars.ReadWrite";
 
 export type TokenExchangeInput = {
   tokenUrl: string;
@@ -23,6 +28,7 @@ export type AuthorizationCodeExchangeInput = {
   clientSecret: string;
   code: string;
   redirectUri: string;
+  scope?: string;
   fetch?: FetchLike;
 };
 
@@ -38,6 +44,25 @@ export type GoogleCredentials = {
   clientSecret: string;
   refreshToken: string;
   calendarId: string;
+};
+
+export type MicrosoftClientConfig = {
+  clientId: string;
+  clientSecret: string;
+  tenant: string;
+  redirectUri: string;
+};
+
+export type MicrosoftCredentials = {
+  clientId: string;
+  clientSecret: string;
+  refreshToken: string;
+  tenant: string;
+};
+
+export type MicrosoftAuthUrlOptions = {
+  tenant?: string;
+  state?: string;
 };
 
 export type OauthStateStore = {
@@ -138,6 +163,7 @@ export async function exchangeAuthorizationCode(
     redirect_uri: input.redirectUri,
     grant_type: "authorization_code",
   });
+  if (input.scope) body.set("scope", input.scope);
   const result = await postTokenForm(fetchFn, input.tokenUrl, body);
   if ("network" in result) {
     return calendarFailure(
@@ -200,12 +226,35 @@ export function googleAuthorizationUrl(
   return url.toString();
 }
 
-/** Operator helper: Microsoft identity authorize URL (Calendars.ReadWrite + offline_access). */
+/** Loopback callback unless `MICROSOFT_CALENDAR_REDIRECT_URI` is set. */
+export function microsoftRedirectUriFromEnv(
+  env: NodeJS.ProcessEnv = process.env,
+): string {
+  const explicit = env.MICROSOFT_CALENDAR_REDIRECT_URI?.trim();
+  if (explicit) return explicit;
+  const port = env.CALENDAR_ADAPTERS_PORT?.trim() || "8789";
+  return `http://127.0.0.1:${port}${MICROSOFT_OAUTH_CALLBACK_PATH}`;
+}
+
+export function microsoftTokenUrl(tenant = "common"): string {
+  return `https://login.microsoftonline.com/${encodeURIComponent(tenant)}/oauth2/v2.0/token`;
+}
+
+/**
+ * Operator helper: Microsoft identity authorize URL (Calendars.ReadWrite + offline_access).
+ * Third argument may be a tenant string (legacy) or `{ tenant, state }`.
+ */
 export function microsoftAuthorizationUrl(
   clientId: string,
   redirectUri: string,
-  tenant = "common",
+  tenantOrOptions: string | MicrosoftAuthUrlOptions = "common",
 ): string {
+  const tenant =
+    typeof tenantOrOptions === "string"
+      ? tenantOrOptions
+      : tenantOrOptions.tenant || "common";
+  const state =
+    typeof tenantOrOptions === "string" ? undefined : tenantOrOptions.state;
   const url = new URL(
     `https://login.microsoftonline.com/${encodeURIComponent(tenant)}/oauth2/v2.0/authorize`,
   );
@@ -213,7 +262,9 @@ export function microsoftAuthorizationUrl(
   url.searchParams.set("redirect_uri", redirectUri);
   url.searchParams.set("response_type", "code");
   url.searchParams.set("response_mode", "query");
-  url.searchParams.set("scope", "offline_access Calendars.ReadWrite");
+  url.searchParams.set("prompt", "consent");
+  url.searchParams.set("scope", MICROSOFT_CALENDAR_SCOPE);
+  if (state) url.searchParams.set("state", state);
   return url.toString();
 }
 
@@ -283,22 +334,72 @@ export async function googleOAuthStatus(
   return { clientConfigured, tokenPresent: Boolean(creds) };
 }
 
-export function microsoftEnvCredentials(env: NodeJS.ProcessEnv): {
-  clientId: string;
-  clientSecret: string;
-  refreshToken: string;
-  tenant: string;
-} | null {
+export function microsoftClientFromEnv(
+  env: NodeJS.ProcessEnv,
+): MicrosoftClientConfig | null {
   const clientId = env.MICROSOFT_CALENDAR_CLIENT_ID?.trim() ?? "";
   const clientSecret = env.MICROSOFT_CALENDAR_CLIENT_SECRET?.trim() ?? "";
-  const refreshToken = env.MICROSOFT_CALENDAR_REFRESH_TOKEN?.trim() ?? "";
-  if (!clientId || !clientSecret || !refreshToken) return null;
+  if (!clientId || !clientSecret) return null;
   return {
     clientId,
     clientSecret,
-    refreshToken,
     tenant: env.MICROSOFT_CALENDAR_TENANT_ID?.trim() || "common",
+    redirectUri: microsoftRedirectUriFromEnv(env),
   };
+}
+
+/** Env-only credentials (client + refresh token). Store tokens are resolved separately. */
+export function microsoftEnvCredentials(
+  env: NodeJS.ProcessEnv,
+): MicrosoftCredentials | null {
+  const client = microsoftClientFromEnv(env);
+  const refreshToken = env.MICROSOFT_CALENDAR_REFRESH_TOKEN?.trim() ?? "";
+  if (!client || !refreshToken) return null;
+  return {
+    clientId: client.clientId,
+    clientSecret: client.clientSecret,
+    refreshToken,
+    tenant: client.tenant,
+  };
+}
+
+/**
+ * Client id/secret from env; refresh token from env **or** the local token store.
+ * Missing either side → null (`not_configured`). Does not invent tokens.
+ */
+export async function resolveMicrosoftCredentials(
+  env: NodeJS.ProcessEnv,
+  store?: TokenStore,
+): Promise<MicrosoftCredentials | null> {
+  const client = microsoftClientFromEnv(env);
+  if (!client) return null;
+  const fromEnv = env.MICROSOFT_CALENDAR_REFRESH_TOKEN?.trim() ?? "";
+  if (fromEnv) {
+    return {
+      clientId: client.clientId,
+      clientSecret: client.clientSecret,
+      refreshToken: fromEnv,
+      tenant: client.tenant,
+    };
+  }
+  const stored = store ? await store.get("microsoft") : null;
+  const refreshToken = stored?.refreshToken?.trim() ?? "";
+  if (!refreshToken) return null;
+  return {
+    clientId: client.clientId,
+    clientSecret: client.clientSecret,
+    refreshToken,
+    tenant: stored?.tenant?.trim() || client.tenant,
+  };
+}
+
+export async function microsoftOAuthStatus(
+  env: NodeJS.ProcessEnv,
+  store?: TokenStore,
+): Promise<{ clientConfigured: boolean; tokenPresent: boolean }> {
+  const clientConfigured = microsoftClientFromEnv(env) !== null;
+  const creds = await resolveMicrosoftCredentials(env, store);
+  return { clientConfigured, tokenPresent: Boolean(creds) };
 }
 
 const DEFAULT_STATE_TTL_MS = 10 * 60 * 1000;

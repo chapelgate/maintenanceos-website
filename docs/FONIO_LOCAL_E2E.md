@@ -106,7 +106,7 @@ Use a public `https://` site (for example `https://example.com/`). Extract is be
 | Setup | What you should see |
 | --- | --- |
 | Public flag **off** (default) | **Calendar connect — coming / under testing.** No booked confirmation. |
-| Flag on + this stack (`CALENDAR_ADAPTER_PROVIDER=mock`) | **Calendar connect — local adapter testing.** Weekday 09:00–17:00 Europe/London gaps from the mock adapter. Reserving a slot tests the adapter. **Not** a phone booking and **not** Google/Microsoft unless you separately configure OAuth on the companion (never commit secrets). Google start/callback is loopback `http://127.0.0.1:8789/oauth/google/start` — do not claim Google is live on staging. |
+| Flag on + this stack (`CALENDAR_ADAPTER_PROVIDER=mock`) | **Calendar connect — local adapter testing.** Weekday 09:00–17:00 Europe/London gaps from the mock adapter. Reserving a slot tests the adapter. **Not** a phone booking and **not** Google/Microsoft unless you separately configure OAuth on the companion (never commit secrets). Google / Microsoft start/callback is loopback (`/oauth/google/start`, `/oauth/microsoft/start`) — do not claim either is live on staging. |
 | Flag on, endpoint empty | In-browser mock, labelled as local testing only. |
 
 ### `/create` — sandbox test call

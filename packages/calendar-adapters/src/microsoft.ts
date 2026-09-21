@@ -1,4 +1,8 @@
-import { exchangeRefreshToken, microsoftEnvCredentials } from "./oauth.ts";
+import {
+  exchangeRefreshToken,
+  microsoftTokenUrl,
+  resolveMicrosoftCredentials,
+} from "./oauth.ts";
 import { computeFreeSlots, parseInstant, validateRange } from "./slots.ts";
 import {
   calendarFailure,
@@ -82,22 +86,28 @@ export function createMicrosoftCalendarAdapter(
   const fetchFn: FetchLike = deps.fetch ?? fetch;
   let cachedToken: { value: string; exp: number } | null = null;
 
-  async function accessToken(): Promise<CalendarResult<string>> {
-    const creds = microsoftEnvCredentials(env);
+  async function requireCreds() {
+    const creds = await resolveMicrosoftCredentials(env, deps.tokenStore);
     if (!creds) {
       return calendarFailure(
         "not_configured",
-        "Microsoft 365 Calendar OAuth env is not set (MICROSOFT_CALENDAR_CLIENT_ID, MICROSOFT_CALENDAR_CLIENT_SECRET, MICROSOFT_CALENDAR_REFRESH_TOKEN). No booking was created.",
+        "Microsoft 365 Calendar OAuth is not configured (MICROSOFT_CALENDAR_CLIENT_ID, MICROSOFT_CALENDAR_CLIENT_SECRET, plus MICROSOFT_CALENDAR_REFRESH_TOKEN or a token stored via /oauth/microsoft/callback). No booking was created.",
       );
     }
+    return calendarSuccess(creds);
+  }
+
+  async function accessToken(): Promise<CalendarResult<string>> {
+    const creds = await requireCreds();
+    if (!creds.ok) return creds;
     if (cachedToken && cachedToken.exp > Date.now() + 5_000) {
       return calendarSuccess(cachedToken.value);
     }
     const token = await exchangeRefreshToken({
-      tokenUrl: `https://login.microsoftonline.com/${encodeURIComponent(creds.tenant)}/oauth2/v2.0/token`,
-      clientId: creds.clientId,
-      clientSecret: creds.clientSecret,
-      refreshToken: creds.refreshToken,
+      tokenUrl: microsoftTokenUrl(creds.data.tenant),
+      clientId: creds.data.clientId,
+      clientSecret: creds.data.clientSecret,
+      refreshToken: creds.data.refreshToken,
       scope: "https://graph.microsoft.com/.default",
       fetch: fetchFn,
     });

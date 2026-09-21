@@ -141,3 +141,22 @@ test("factory google provider without credentials is not_configured, not a fake 
     assert.match(booked.message, /No booking was created/);
   }
 });
+
+test("factory microsoft provider without credentials is not_configured, not a fake booking", async () => {
+  const adapter = createCalendarAdapter({
+    env: {
+      CALENDAR_ADAPTERS_ENABLED: "true",
+      CALENDAR_ADAPTER_PROVIDER: "microsoft",
+    },
+  });
+  assert.equal(adapter.provider, "microsoft");
+  const booked = await adapter.createBooking({
+    start: "2026-09-21T09:00:00.000Z",
+    end: "2026-09-21T09:30:00.000Z",
+  });
+  assert.equal(booked.ok, false);
+  if (!booked.ok) {
+    assert.equal(booked.error, "not_configured");
+    assert.match(booked.message, /No booking was created/);
+  }
+});

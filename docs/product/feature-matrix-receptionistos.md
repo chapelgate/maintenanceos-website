@@ -10,7 +10,7 @@ Synced conceptually with `docs/competitive/fonio-parity-matrix.md`. Use this for
 | R-04 | Sandbox tenant + assistant | P0 | PARTIAL (knowledge pack + system prompt draft via `packages/receptionist-draft` + `/create` preview; sandbox session stores pack; no tenant/promote; no live number) | Platform |
 | R-05 | Sandbox test call | P0 | PARTIAL (flagged `packages/sandbox-test-call`; pack-aware scripted demo; **not** a live phone; $0 Render runbook `docs/SANDBOX_DEPLOY.md`) | Voice (flagged) |
 | R-16 | Conversation benchmark | P0 | HAVE for scripted path (`npm run conversation-benchmark`); live-call barge-in SKIP/open; not voice-quality parity | Voice (flagged) |
-| R-06 | Calendar adapters | P0 | PARTIAL (flagged `packages/calendar-adapters`; mock default; Google OAuth start/callback scaffold; M365 / Microsoft env-token stub; optional $0 mock host in `docs/SANDBOX_DEPLOY.md`; not live Google on staging; no voice booking) | Integrations |
+| R-06 | Calendar adapters | P0 | PARTIAL (flagged `packages/calendar-adapters`; mock default; Google OAuth start/callback scaffold; M365 / Outlook OAuth PARTIAL scaffold — not live; optional $0 mock host in `docs/SANDBOX_DEPLOY.md`; `/health` never claims M365 live on staging; no voice booking) | Integrations |
 | R-07 | Customer dashboard (history/transcripts) | P0 | PARTIAL (flagged `/dashboard` + `packages/customer-dashboard`; SAMPLE/DEMO mock only; off by default; no live telephony; $0 Render runbook `docs/DASHBOARD_DEPLOY.md`) | App |
 | R-08 | Provenance KB | P0 | PLANNED | Platform |
 | R-09 | Human transfer config | P0 | PARTIAL (pilot) | Voice |
