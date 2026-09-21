@@ -1,0 +1,174 @@
+# Local Fonio-loop e2e companions ONLY.
+# Not a DigitalOcean App Platform spec. Do not point static hosting at this file.
+# Flags ON here are for loopback/demo. Repo defaults (and .env.example) stay OFF.
+#
+#   docker compose -f docker-compose.fonio-local.yml up --build
+#   docker compose -f docker-compose.fonio-local.yml --profile form-stub up
+#
+# The marketing site stays `output: 'export'`. Run Next separately:
+#   cp .env.example.fonio-local .env.local && npm run dev
+#
+# Bind publish is 127.0.0.1 so companions are not advertised on LAN.
+# Inside the container they listen on 0.0.0.0 so port mapping works.
+
+name: mos-fonio-local
+
+services:
+  onboarding-scan:
+    image: node:22-bookworm-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      ONBOARDING_WEB_INGEST: "true"
+      ONBOARDING_SCAN_HOST: "0.0.0.0"
+      ONBOARDING_SCAN_PORT: "8788"
+    command:
+      [
+        "node",
+        "--experimental-strip-types",
+        "packages/onboarding-ingest/src/server.ts",
+      ]
+    ports:
+      - "127.0.0.1:8788:8788"
+    init: true
+    restart: "no"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8788/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  calendar-adapters:
+    image: node:22-bookworm-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      CALENDAR_ADAPTERS_ENABLED: "true"
+      CALENDAR_ADAPTER_PROVIDER: mock
+      CALENDAR_ADAPTERS_HOST: "0.0.0.0"
+      CALENDAR_ADAPTERS_PORT: "8789"
+    command:
+      [
+        "node",
+        "--experimental-strip-types",
+        "packages/calendar-adapters/src/server.ts",
+      ]
+    ports:
+      - "127.0.0.1:8789:8789"
+    init: true
+    restart: "no"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8789/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  sandbox-test-call:
+    image: node:22-bookworm-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      SANDBOX_TEST_CALL_ENABLED: "true"
+      ONBOARDING_SANDBOX_CALL: "true"
+      SANDBOX_TEST_CALL_HOST: "0.0.0.0"
+      SANDBOX_TEST_CALL_PORT: "8790"
+    command:
+      [
+        "node",
+        "--experimental-strip-types",
+        "packages/sandbox-test-call/src/server.ts",
+      ]
+    ports:
+      - "127.0.0.1:8790:8790"
+    init: true
+    restart: "no"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8790/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  customer-dashboard:
+    image: node:22-bookworm-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      CUSTOMER_DASHBOARD_ENABLED: "true"
+      CUSTOMER_DASHBOARD_DEMO_DATA: "true"
+      CUSTOMER_DASHBOARD_HOST: "0.0.0.0"
+      CUSTOMER_DASHBOARD_PORT: "8791"
+    command:
+      [
+        "node",
+        "--experimental-strip-types",
+        "packages/customer-dashboard/src/server.ts",
+      ]
+    ports:
+      - "127.0.0.1:8791:8791"
+    init: true
+    restart: "no"
+    profiles: ["dashboard"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8791/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+  form-stub:
+    image: node:22-bookworm-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      FORM_STUB_HOST: "0.0.0.0"
+      FORM_STUB_PORT: "8787"
+    command: ["node", "scripts/form-stub-server.mjs"]
+    ports:
+      - "127.0.0.1:8787:8787"
+    init: true
+    restart: "no"
+    profiles: ["form-stub"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8787/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s

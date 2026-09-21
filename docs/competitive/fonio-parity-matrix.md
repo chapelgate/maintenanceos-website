@@ -1,6 +1,6 @@
 # Fonio parity matrix — ReceptionistOS / MaintenanceOS
 
-**Date:** 2026-09-20 (Europe/London)  
+**Date:** 2026-09-21 (Europe/London)  
 **Benchmark:** public Fonio site `https://www.fonio.ai/en/` (home, pricing, business AI phone assistant pages)  
 **Our surfaces:** `chapelgate/maintenanceos-website` (marketing) + `chapelgate/maintenanceos-v1-pilot` (product; live telephony path **frozen** per `CURRENT_STATUS.md`)  
 **Stance:** PRE-LAUNCH — no commercial GA claims.
@@ -22,7 +22,7 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 
 | FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
-| Enter business website URL to bootstrap assistant | Marketed (~30s create from website) | Claims-safe `/create` multi-step funnel (URL → check → draft → `create_receptionist` lead). No live number, no test-call button. | Wire scan service + sandbox tenant; do not claim 30s live phone | BUILD | P0 | PARTIAL (this PR: public create funnel) |
+| Enter business website URL to bootstrap assistant | Marketed (~30s create from website) | Claims-safe `/create` multi-step funnel (URL → check → draft → `create_receptionist` lead). Local e2e stack (`docs/FONIO_LOCAL_E2E.md`) can wire flagged companions on loopback. No live number. | Production-hosted engine + sandbox tenant; do not claim 30s live phone | BUILD | P0 | PARTIAL (public create funnel; local e2e orchestration) |
 | AI extracts company knowledge from site | Claimed | Review UI + optional `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` → `packages/onboarding-ingest` (`POST /v1/onboarding/scan`). SSRF (https-only, DNS + redirect re-check), robots + caps, extract of `businessName`/`greeting`/`hours`/`services`/`faqs`. Flag `ONBOARDING_WEB_INGEST` defaults off. If endpoint unset, crawl is queued — no invented results. | Not production-hosted; no sandbox tenant/promote yet | BUILD | P0 | PARTIAL (flagged local/staging scan service) |
 | Instant test call / “call my receptionist” | Marketed | Flagged `packages/sandbox-test-call` + `/create` panel (this PR). Default `SANDBOX_TEST_CALL_ENABLED=false`. Scripted / browser-mock demo against draft fields; WebRTC/live returns `not_configured` / `live_call_forbidden`. Not a live customer number; frozen telephony untouched. | Real media + sandbox tenant; do not claim Fonio voice quality | BUILD + REUSE pilot voice (later, flagged) | P0 | PARTIAL (this PR: flagged sandbox test-call foundation) |
 | No-code assistant setup | Claimed | Streamlit supervisor internal | Customer dashboard | BUILD | P0 | PARTIAL |
@@ -104,6 +104,7 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 - **PARTIAL (P0 sandbox test call):** flagged `packages/sandbox-test-call` + `/create` panel (this PR). Scripted demo only; no live number; frozen path untouched.  
 - **PARTIAL (P0 calendar):** flagged `packages/calendar-adapters` (mock + Google/Microsoft class); `/create` honest coming-soon unless local flag. Not customer-GA; no voice booking confirmation.  
 - **PARTIAL (P0 dashboard):** flagged `/dashboard` + `packages/customer-dashboard` (SAMPLE/DEMO history, transcript, bookings stub). Off by default; empty store invents nothing. Not customer-GA; no live telephony.  
+- **PARTIAL (local e2e orchestration):** `scripts/fonio-local-stack.sh` + `docker-compose.fonio-local.yml` + `.env.example.fonio-local` start scan/calendar/sandbox (dashboard optional) with flags ON for loopback only. Runbook: `docs/FONIO_LOCAL_E2E.md`. Smoke hits `/health` and asserts flags ON. **This is not production Fonio-parity.** DigitalOcean static `.env.example` stays flags-off / endpoints-empty.  
 - **MISSING (P0):** production website→receptionist engine; live/WebRTC media; modular KB productisation  
 
 **Do not modify frozen live telephony** until controlled-call gates in `CURRENT_STATUS.md` pass.

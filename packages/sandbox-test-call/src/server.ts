@@ -328,8 +328,14 @@ export async function handleSandboxRequest(
 }
 
 export function createSandboxServer(options: ServerOptions = {}): http.Server {
+  const sandboxEnabled = options.sandboxEnabled ?? isSandboxTestCallEnabled();
+  const shared: ServerOptions = {
+    ...options,
+    sandboxEnabled,
+    engine: options.engine ?? createSandboxEngine({ enabled: sandboxEnabled }),
+  };
   return http.createServer((req, res) => {
-    handleSandboxRequest(req, res, options).catch((err) => {
+    handleSandboxRequest(req, res, shared).catch((err) => {
       console.error("[sandbox-test-call] unhandled", err);
       if (!res.headersSent) {
         const origin = typeof req.headers.origin === "string" ? req.headers.origin : "";

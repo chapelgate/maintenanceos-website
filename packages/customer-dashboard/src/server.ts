@@ -209,8 +209,14 @@ export async function handleDashboardRequest(
 }
 
 export function createDashboardServer(options: ServerOptions = {}): http.Server {
+  const dashboardEnabled = options.dashboardEnabled ?? isCustomerDashboardEnabled();
+  const shared: ServerOptions = {
+    ...options,
+    dashboardEnabled,
+    store: options.store ?? createDashboardStore(dashboardCatalogKindFromEnv()),
+  };
   return http.createServer((req, res) => {
-    handleDashboardRequest(req, res, options).catch((err) => {
+    handleDashboardRequest(req, res, shared).catch((err) => {
       console.error("[customer-dashboard] unhandled", err);
       if (!res.headersSent) {
         const origin = typeof req.headers.origin === "string" ? req.headers.origin : "";

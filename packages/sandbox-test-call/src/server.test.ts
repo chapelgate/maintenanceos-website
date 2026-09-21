@@ -124,3 +124,30 @@ test("POST webrtc test-call returns not_configured, never a live success", async
     assert.equal(tested.liveCall, false);
   });
 });
+
+test("listen-shaped server keeps a sandbox session across create + scripted test", async () => {
+  await withServer({ sandboxEnabled: true }, async (base) => {
+    const createRes = await fetch(`${base}/v1/sandbox/sessions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ businessName: "Acme", greeting: "Hello" }),
+    });
+    const created = await createRes.json();
+    assert.equal(createRes.status, 200);
+    assert.equal(created.ok, true);
+
+    const testRes = await fetch(
+      `${base}/v1/sandbox/sessions/${created.data.id}/test-call`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode: "scripted" }),
+      },
+    );
+    const tested = await testRes.json();
+    assert.equal(testRes.status, 200);
+    assert.equal(tested.ok, true);
+    assert.equal(tested.data.status, "scripted_demo_complete");
+    assert.equal(tested.liveCall, false);
+  });
+});

@@ -107,3 +107,48 @@ test("POST slots/bookings use the mock adapter when enabled", async () => {
     assert.equal(conflict.error, "slot_unavailable");
   });
 });
+
+test("listen-shaped server keeps mock bookings across list + book + conflict", async () => {
+  await withServer({ adaptersEnabled: true }, async (base) => {
+    const slotsRes = await fetch(`${base}/v1/calendar/slots`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: "2026-09-28T00:00:00.000Z",
+        to: "2026-09-29T00:00:00.000Z",
+        timezone: "Europe/London",
+      }),
+    });
+    const slots = await slotsRes.json();
+    assert.equal(slotsRes.status, 200);
+    assert.ok(slots.data.length > 0);
+
+    const bookRes = await fetch(`${base}/v1/calendar/bookings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        start: slots.data[0].start,
+        end: slots.data[0].end,
+        timezone: "Europe/London",
+        title: "Persist test",
+      }),
+    });
+    const booked = await bookRes.json();
+    assert.equal(bookRes.status, 200);
+    assert.equal(booked.ok, true);
+    assert.ok(booked.data.id);
+
+    const again = await fetch(`${base}/v1/calendar/bookings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        start: slots.data[0].start,
+        end: slots.data[0].end,
+        timezone: "Europe/London",
+      }),
+    });
+    const conflict = await again.json();
+    assert.equal(again.status, 409);
+    assert.equal(conflict.error, "slot_unavailable");
+  });
+});

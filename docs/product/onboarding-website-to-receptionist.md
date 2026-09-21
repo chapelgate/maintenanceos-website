@@ -83,6 +83,8 @@ POST /v1/onboarding/jobs/{jobId}/promote
 - `CUSTOMER_DASHBOARD_ENABLED` — enable dashboard companion (default off)
 - `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` — show `/dashboard` SAMPLE store (default off)
 
+Local loopback demo (flags on for that process only): `docs/FONIO_LOCAL_E2E.md`. Not production Fonio-parity; leave flags off on DigitalOcean static hosting.
+
 ## Claims-safe marketing copy
 
 Allowed: “Preview how an AI receptionist could work for your site”, “Join launch list”, “Request early access”.  

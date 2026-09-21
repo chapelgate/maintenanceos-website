@@ -114,9 +114,23 @@ Leave both public vars unset/false on DigitalOcean static hosting. `/dashboard` 
 
 Nav shows **Dashboard (soon)** when the public flag is off, and **Dashboard** when it is on. Do not wire this to frozen live telephony.
 
+### Local Fonio e2e stack (loopback only)
+
+To demo the website→receptionist **loop shape** with companions flagged on locally, see [`docs/FONIO_LOCAL_E2E.md`](docs/FONIO_LOCAL_E2E.md). Env names: [`.env.example.fonio-local`](.env.example.fonio-local).
+
+```bash
+./scripts/fonio-local-stack.sh up     # scan 8788 + calendar 8789 + sandbox 8790 + dashboard 8791
+cp .env.example.fonio-local .env.local
+npm run dev                          # then open /create/ (and optional /dashboard/)
+npm run fonio-local-smoke
+./scripts/fonio-local-stack.sh down
+```
+
+This is **not** production Fonio-parity and **must not** be copied onto DigitalOcean static hosting. Default `.env.example` flags stay off. Optional Compose: `docker compose -f docker-compose.fonio-local.yml up`.
+
 ### DigitalOcean App Platform (static)
 
-Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets.
+Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local` or `docker-compose.fonio-local.yml` on App Platform; those are loopback e2e only.
 
 ## Desktop navigation (IA v0.2)
 
