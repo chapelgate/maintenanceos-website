@@ -13,7 +13,7 @@ function read(rel) {
 test("deploy path stays App Platform static export — no invented header hosts", () => {
   const config = read("next.config.ts");
   assert.match(config, /output:\s*["']export["']/);
-  assert.doesNotMatch(config, /\bheaders\s*\(/);
+  assert.doesNotMatch(config, /^\s*(async\s+)?headers\s*[:(]/m);
   assert.match(config, /static-security-headers/);
 
   assert.equal(fs.existsSync(path.join(ROOT, "app.yaml")), false);
@@ -21,6 +21,22 @@ test("deploy path stays App Platform static export — no invented header hosts"
   assert.equal(fs.existsSync(path.join(ROOT, "public/_headers")), false);
   assert.equal(fs.existsSync(path.join(ROOT, "vercel.json")), false);
   assert.equal(fs.existsSync(path.join(ROOT, "netlify.toml")), false);
+});
+
+test("exported HTML carries CSP http-equiv and referrer when out/ exists", () => {
+  const pages = ["out/index.html", "out/create/index.html", "out/dashboard/index.html"];
+  const present = pages.filter((rel) => fs.existsSync(path.join(ROOT, rel)));
+  if (present.length === 0) {
+    return;
+  }
+  for (const rel of present) {
+    const html = read(rel);
+    assert.match(html, /http-equiv="Content-Security-Policy"/);
+    assert.match(html, /script-src/);
+    assert.match(html, /unsafe-inline/);
+    assert.doesNotMatch(html, /unsafe-eval/);
+    assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/);
+  }
 });
 
 test("root layout and metadata apply the HTML-honored baseline", () => {
