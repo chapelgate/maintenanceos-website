@@ -1,7 +1,7 @@
 # Form endpoint contract (v1)
 
 **Status:** v1 — provider-independent  
-**Consumers:** `src/lib/lead-adapter.ts`, `src/components/LeadCaptureForm.tsx`, `src/components/CreateReceptionistForm.tsx`  
+**Consumers:** `src/lib/lead-adapter.ts`, `src/components/LeadCaptureForm.tsx`, `src/components/CreateReceptionistLaterSteps.tsx`  
 **Local stub:** `scripts/form-stub-server.mjs` (`npm run form-stub`)
 
 This marketing site is a **static export** (`output: 'export'` in `next.config.ts`). There are **no Next.js API routes**. Lead capture posts from the browser to `NEXT_PUBLIC_FORM_ENDPOINT`. If that variable is empty, the client returns a local success stub and **must not claim that email was sent**.

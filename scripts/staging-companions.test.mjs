@@ -55,7 +55,10 @@ test("site.ts public env names match the staging companions checklist", () => {
 });
 
 test("create draft review surfaces fieldMeta as per-field hints", () => {
-  const form = read("src/components/CreateReceptionistForm.tsx");
+  const form = [
+    read("src/components/CreateReceptionistForm.tsx"),
+    read("src/components/CreateReceptionistLaterSteps.tsx"),
+  ].join("\n");
   assert.match(form, /scanFieldReviewHint/);
   assert.match(form, /DraftReviewField/);
   assert.match(form, /ReceptionistDraftPreview/);

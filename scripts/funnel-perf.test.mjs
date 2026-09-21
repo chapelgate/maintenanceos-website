@@ -24,15 +24,32 @@ test("SiteHeader stays a server component with Escape on native details", () => 
   assert.match(header, /dangerouslySetInnerHTML/);
 });
 
+test("/create first-load form defers scan and pack steps", () => {
+  const form = read("src/components/CreateReceptionistForm.tsx");
+  assert.match(form, /next\/dynamic/);
+  assert.match(form, /CreateReceptionistLaterSteps/);
+  assert.match(form, /ssr:\s*false/);
+  assert.doesNotMatch(form, /requestOnboardingScan/);
+  assert.doesNotMatch(form, /buildCreateLeadMessage/);
+  assert.doesNotMatch(form, /submitLead/);
+  assert.doesNotMatch(form, /siteConfig/);
+  assert.doesNotMatch(form, /ReceptionistDraftPreview/);
+});
+
 test("/create default path does not import companion client islands", () => {
   const page = read("src/app/create/page.tsx");
   const islands = read("src/components/create-funnel-islands.tsx");
   const enabled = read("src/components/create-funnel-islands.enabled.tsx");
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
   const config = read("next.config.ts");
 
   assert.doesNotMatch(page, /from ["']@\/components\/CreateJourney["']/);
   assert.doesNotMatch(page, /from ["']@\/components\/CalendarConnectPanel["']/);
   assert.doesNotMatch(page, /from ["']@\/components\/SandboxTestCallPanel["']/);
+
+  assert.doesNotMatch(later, /from ["']@\/components\/CreateJourney["']/);
+  assert.doesNotMatch(later, /from ["']@\/components\/CalendarConnectPanel["']/);
+  assert.doesNotMatch(later, /from ["']@\/components\/SandboxTestCallPanel["']/);
 
   assert.doesNotMatch(islands, /from ["']@\/components\/CreateJourney["']/);
   assert.doesNotMatch(islands, /from ["']@\/components\/CalendarConnectPanel["']/);
