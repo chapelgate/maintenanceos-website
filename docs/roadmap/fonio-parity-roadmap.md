@@ -1,25 +1,27 @@
 # Fonio parity roadmap
 
 **Benchmark:** Fonio public product (fonio.ai). Fonio is the **minimum** bar, not the ceiling.  
-**Constraint:** frozen live telephony until controlled-call gates pass.
+**Constraint:** frozen live telephony until controlled-call gates pass.  
+**Verified through:** website `main` including PR **#44**. Live always-on phone remains **MISSING / frozen** — do not claim live.
 
 ## Phase 0 — Foundations (this PR / docs)
 
 - [x] Competitive parity matrix
 - [x] Architecture + onboarding + threat model + test plans (docs)
-- [x] Claims-safe `/create` marketing funnel (preview / waitlist OK)
+- [x] Claims-safe `/create` multi-step funnel **EXISTS** (not MISSING; preview / waitlist — not a live phone)
 - [ ] SCM access for Cursor cloud agents on private website repo
 
 ## Phase 1 — Website → sandbox receptionist (P0)
 
-- [x] SSRF-safe website ingestion module (feature-flagged companion; off by default)
-- [x] Calendar adapter package + mock + Google OAuth start/callback scaffold (flagged off; not live on staging)
-- [x] Claims-safe knowledge pack + system prompt from reviewed `/create` draft (`packages/receptionist-draft`; `/create` preview; sandbox consume; missing fields stay missing; no live-phone claims)
+- [x] SSRF-safe website ingestion module (feature-flagged companion; **PARTIAL / UNDER TEST**; off by default; staging endpoint often unset; live scan on staging not evidenced)
+- [x] Calendar adapter package + mock + Google OAuth start/callback scaffold (**PARTIAL**; M365 stub; flagged off; not live on staging)
+- [x] Claims-safe knowledge pack + system prompt from reviewed `/create` draft (**PARTIAL**; `packages/receptionist-draft`; `/create` preview; sandbox consume; missing fields stay missing; no live-phone claims)
 - Extract schema + review UI
 - Sandbox tenant create
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)
-- [x] Scripted sandbox demo answers from stored knowledge pack / system prompt (missing fields not on file; still not live voice)
-- [x] Scripted conversation benchmark fixtures + scorer (`npm run conversation-benchmark`; hours/services from pack; UK 999; no invented bookings / live-call success; barge-in skipped)
+- [x] Scripted sandbox demo answers from stored knowledge pack / system prompt (**PARTIAL**; missing fields not on file; still not live voice)
+- [x] Scripted conversation benchmark fixtures + scorer (**HAVE** for scripted path: `npm run conversation-benchmark`; hours/services from pack; UK 999; no invented bookings / live-call success). Live-call barge-in **SKIP / open**.
+- [ ] Live always-on customer phone (still **MISSING / frozen** — do not claim live)
 - [x] Flagged customer dashboard foundation (history / transcript / bookings stubs; SAMPLE only)
 - [x] Local e2e orchestration (stack script + compose + runbook; flags on locally only; not production Fonio-parity)
 - [x] $0 scan companion deploy path (Render free web service + `docs/ONBOARDING_SCAN_DEPLOY.md`; ingest off until configured; DO rebuild required for `NEXT_PUBLIC_*`)
@@ -52,4 +54,4 @@
 
 ## Definition of done (mission)
 
-A working loop: **URL → knowledge → receptionist → voice test → dashboard**, with Fonio matrix P0 items at HAVE or honest PARTIAL, and no frozen-path regressions.
+A working loop: **URL → knowledge → receptionist → voice test → dashboard**, with Fonio matrix P0 items at HAVE or honest PARTIAL, and no frozen-path regressions. Scripted conversation benchmark HAVE does **not** mean live-call or always-on phone.

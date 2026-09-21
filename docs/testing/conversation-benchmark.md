@@ -1,7 +1,8 @@
 # Conversation quality benchmark (vs Fonio-class)
 
 **Purpose:** side-by-side eval before claiming parity.  
-**Method:** fixed scenario set; score independently; no cherry-picking marketing demos.
+**Method:** fixed scenario set; score independently; no cherry-picking marketing demos.  
+**Status (main through #44):** **HAVE** for the pack-aware scripted path. Live-call barge-in is **SKIP / open**. Not a live always-on phone and not Fonio voice-quality parity.
 
 ## Scripted sandbox runner (this repo)
 

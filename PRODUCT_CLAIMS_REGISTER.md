@@ -60,6 +60,11 @@
 | V-01 | AI receptionist (Gemini Live primary) in source | Capability under testing — not live commercial service |
 | V-10 | Live human-transfer answer / no-answer on carrier | Historical mixed outcomes; retest open |
 | R-02 / R-03 | Public / production hosting | Doc conflict: CURRENT_STATUS vs FINALISATION on DO host identity; API loopback-only per CURRENT_STATUS — do not market public production |
+| F-01 | Public `/create` multi-step website→receptionist funnel | Funnel **EXISTS** in this repo (not MISSING). Early-access / preview only — not a live receptionist. Keep UNDER TEST as a productised website-to-assistant until live scan on staging is evidenced. |
+| F-02 | SSRF-safe scan companion extracts company knowledge from a URL | PARTIAL / UNDER TEST. Flagged `packages/onboarding-ingest`; `ONBOARDING_WEB_INGEST` off by default; staging `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` often unset (queued crawl). Do not claim live Fonio-parity scan. |
+| F-03 | Knowledge pack + system prompt from reviewed `/create` draft | PARTIAL. `packages/receptionist-draft` + `/create` preview. Missing fields stay missing. Not a live tenant / RAG KB. UNDER TEST until live scan on staging is evidenced. |
+| F-04 | Pack-aware scripted sandbox test call | PARTIAL. Flagged scripted / browser-mock only — **not** a live phone. WebRTC/live forbidden. Frozen telephony unused. |
+| F-05 | Conversation quality vs Fonio | HAVE for the **scripted** path (`npm run conversation-benchmark`). Live-call barge-in SKIP/open. Passing the runner is not voice-quality parity. UNDER TEST for any customer-facing conversation-quality claim. |
 
 ## PLANNED
 
@@ -97,3 +102,5 @@ PRESENT_FACT: VERIFIED rows only
 COMMERCIALLY_LIVE: NO
 TELEPHONY_CONTROLLED_CALL: NO-GO
 ```
+
+**Fonio amendment (2026-09-21):** added website-repo rows **F-01–F-05** under UNDER TEST so `/create`, scan, knowledge pack, scripted sandbox, and conversation-benchmark claims stay non-present-fact until live scan on staging is evidenced. VERIFIED rows and the signature above are unchanged. Do not claim a live always-on phone.
