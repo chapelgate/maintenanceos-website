@@ -1,7 +1,7 @@
 # Fonio parity matrix — ReceptionistOS / MaintenanceOS
 
 **Date:** 2026-09-21 (Europe/London)  
-**Verified through:** `chapelgate/maintenanceos-website` `main` including merged PR **#47** (`/create` UX polish). UK/vertical industries copy in this refresh.  
+**Verified through:** `chapelgate/maintenanceos-website` `main` including merged PR **#48** (UK industries). Marketing `/how-it-works` + `/features` now match the `/create` stepper (Website → Check → Review → Pack).  
 **Benchmark:** public Fonio site `https://www.fonio.ai/en/` (home, pricing, business AI phone assistant pages)  
 **Our surfaces:** `chapelgate/maintenanceos-website` (marketing) + `chapelgate/maintenanceos-v1-pilot` (product; live telephony path **frozen** per `CURRENT_STATUS.md`)  
 **Stance:** PRE-LAUNCH — no commercial GA claims. Do **not** claim a live always-on phone.
@@ -98,11 +98,12 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 | FEATURE | FONIO | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
 | Polished commercial site | Yes | Pre-launch MOS site on DO free static | ReceptionistOS framing + create CTA | BUILD | P0 | PARTIAL |
+| How-it-works + Features vs `/create` funnel | Markets ~30s live assistant | **Were lagging:** `/how-it-works` still told intake → triage → oversight only; `/features` mixed “present in source” without HAVE / UNDER TEST / COMING for sandbox, calendars, live phone. **Now aligned:** `/how-it-works` uses Website → Check → Review → Pack; `/features` cards split HAVE (funnel exists) / UNDER TEST (sandbox, calendars) / COMING (live phone). Home CTA strip names the same path. | Keep marketing pages in lockstep when the funnel changes; do not claim live phone | BUILD | P0 | HAVE (narrative aligned; still not a live phone) |
 | Pricing page clarity | Strong | Soft pricing / request demo | Honest early pricing when ready | BUILD | P2 | PARTIAL |
 
 ## Summary counts (launch-relevant)
 
-- **HAVE:** industry *OS naming; UK safety posture in product source; public `/create` multi-step funnel **EXISTS** (not MISSING); conversation benchmark **scripted** path (`npm run conversation-benchmark`)  
+- **HAVE:** industry *OS naming; UK safety posture in product source; public `/create` multi-step funnel **EXISTS** (not MISSING); conversation benchmark **scripted** path (`npm run conversation-benchmark`); marketing `/how-it-works` + `/features` narrative now matches that funnel (was lagging after #47/#48)  
 - **PARTIAL (stronger) / SUPERIOR-in-positioning-only (UK vertical):** `/industries/*` copy now contrasts UK maintenance (999 vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money) with a generic AI receptionist. Product features remain under test — not a live always-on phone or GA. Do not claim product superiority beyond positioning.  
 - **PARTIAL:** voice telephony pilot (not public always-on); transfers; evidence; supervisor; marketing site  
 - **PARTIAL / UNDER TEST (P0 scan):** SSRF-safe `packages/onboarding-ingest` companion, flagged off by default. Staging `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` is **often unset** — `/create` then queues crawl honestly. Live scan on staging is not evidenced.  

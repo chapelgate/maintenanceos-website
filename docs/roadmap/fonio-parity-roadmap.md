@@ -2,13 +2,14 @@
 
 **Benchmark:** Fonio public product (fonio.ai). Fonio is the **minimum** bar, not the ceiling.  
 **Constraint:** frozen live telephony until controlled-call gates pass.  
-**Verified through:** website `main` including PR **#47**. Live always-on phone remains **MISSING / frozen** — do not claim live.
+**Verified through:** website `main` including PR **#48**, plus marketing `/how-it-works` + `/features` alignment to the `/create` funnel. Live always-on phone remains **MISSING / frozen** — do not claim live.
 
 ## Phase 0 — Foundations (this PR / docs)
 
 - [x] Competitive parity matrix
 - [x] Architecture + onboarding + threat model + test plans (docs)
 - [x] Claims-safe `/create` multi-step funnel **EXISTS** (not MISSING; preview / waitlist — not a live phone)
+- [x] Marketing `/how-it-works` + `/features` match Website → Check → Review → Pack (HAVE / UNDER TEST / COMING for sandbox, calendars, live phone)
 - [ ] SCM access for Cursor cloud agents on private website repo
 
 ## Phase 1 — Website → sandbox receptionist (P0)

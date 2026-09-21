@@ -54,7 +54,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Live human-transfer answer / no-answer on carrier — historical mixed outcomes; retest open
 - Public / production hosting of the product runtime — do not market as public production
 - Website `/dashboard` foundation — coming / under testing unless a local flag is on; SAMPLE / DEMO rows only, not live call history
-- Website `/create` multi-step funnel exists as an early-access preview (F-01). Not a live receptionist. Under testing as a productised website-to-assistant until live scan on staging is evidenced
+- Website `/create` multi-step funnel exists as an early-access preview (F-01). Marketing `/how-it-works` and `/features` now describe the same path (Website → Check → Review → Pack). Not a live receptionist. Under testing as a productised website-to-assistant until live scan on staging is evidenced
 - SSRF-safe website scan companion (F-02) — flagged, often unset on staging; do not claim a live knowledge crawl
 - Knowledge pack + system prompt draft (F-03) and pack-aware scripted sandbox (F-04) — under testing; not a live phone
 - Scripted conversation benchmark (F-05) exists for fixture scoring only. Live-call barge-in is open. Not Fonio voice-quality parity. No always-on live phone

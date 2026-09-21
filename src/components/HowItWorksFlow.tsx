@@ -1,29 +1,43 @@
 /**
- * How-it-works flow — COPY_PACK §B v3.2 diagram labels (unchanged).
- * Intake → Controlled triage → Human oversight.
+ * How-it-works flow — matches /create stepper (PR #47):
+ * Website → Check → Review → Pack.
  * CSS only; mobile vertical stepper; no AI-theatre animation.
  */
-const STAGES = [
+import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
+
+const STAGE_COPY = [
   {
-    id: "intake",
-    title: "Intake",
-    short: "Capture the call, don’t invent the job",
-    body: "The receptionist layer is designed to collect caller details and classify what it hears in UK property-maintenance language — including 999 guidance where relevant.",
-    note: "Voice intake is under testing for release — not offered here as a public always-on service.",
+    id: "website",
+    short: "Start with a public business URL",
+    body: "Paste a public site URL and an email so we can record the early access request. Checking the website does not assign a live phone number.",
+    note: "The public /create funnel exists today — early access only, not a live receptionist.",
   },
   {
-    id: "triage",
-    title: "Controlled triage",
-    short: "Deterministic rules decide what happens next",
-    body: "Tenant isolation, lifecycle transitions, safety latching, escalation queues, and approvals sit in server rules. Consequential actions are not left to the model.",
+    id: "check",
+    short: "Scan if configured — otherwise queue the crawl",
+    body: "If a scan service is configured we ask it for a draft. If not, the crawl is queued. We do not invent extracted hours, services, or FAQs.",
+    note: "Website scan is under testing. Staging often queues the crawl honestly.",
   },
   {
-    id: "oversight",
-    title: "Human oversight",
-    short: "Transfer and clearance when people need to decide",
-    body: "Explicit-request human transfer and human clearance keep judgement with your team. No autonomous dispatch, booking, or payment claims.",
+    id: "review",
+    short: "Edit the draft before anything is stored",
+    body: "You review business name, greeting, hours, services, and FAQs. Copied fields show where they came from and how confident the scan was. Empty fields were not invented.",
+  },
+  {
+    id: "pack",
+    short: "Preview a claims-safe knowledge pack",
+    body: "The reviewed draft becomes a knowledge pack and system prompt you can edit. Missing hours or services stay missing. Then you submit early access — no live number is assigned.",
+    note: "Optional scripted sandbox demo is under testing and off by default. It is not a live customer call.",
   },
 ] as const;
+
+const STAGES = CREATE_JOURNEY_STEPS.map((step, i) => {
+  const copy = STAGE_COPY[i];
+  if (!copy) {
+    throw new Error(`Missing how-it-works copy for ${step.label}`);
+  }
+  return { ...copy, title: step.label };
+});
 
 type Stage = (typeof STAGES)[number];
 
@@ -80,16 +94,24 @@ export function HowItWorksFlow() {
         id="flow-heading"
         className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
       >
-        Three stages property teams can trust
+        Website → Check → Review → Pack
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
-        AI assists at intake and classification. Authority for safety and
-        consequential actions stays with system rules and people.
+        The same steps as{" "}
+        <a
+          href="/create/"
+          className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
+        >
+          Create from website
+        </a>
+        . Typical shape: website URL → scan/draft → knowledge pack → optional
+        scripted sandbox → early access. We do not invent crawl results or a
+        live phone number.
       </p>
 
       <ol
-        className="mt-10 hidden md:grid md:grid-cols-3 md:gap-6"
-        aria-label="How MaintenanceOS is designed to work"
+        className="mt-10 hidden md:grid md:grid-cols-2 md:gap-6"
+        aria-label="How MaintenanceOS onboarding is designed to work"
       >
         {STAGES.map((stage, i) => (
           <li key={stage.id} className="relative flex flex-col">
@@ -99,7 +121,7 @@ export function HowItWorksFlow() {
             >
               <StageBody stage={stage} showBadge index={i} />
             </div>
-            {i < STAGES.length - 1 ? (
+            {i % 2 === 0 ? (
               <span
                 className="pointer-events-none absolute top-[2.75rem] -right-4 z-10 flex w-8 items-center justify-center text-accent"
                 aria-hidden="true"
@@ -121,7 +143,7 @@ export function HowItWorksFlow() {
 
       <ol
         className="relative mt-10 md:hidden"
-        aria-label="How MaintenanceOS is designed to work"
+        aria-label="How MaintenanceOS onboarding is designed to work"
       >
         {STAGES.map((stage, i) => (
           <li key={stage.id} className="relative flex gap-4 pb-8 last:pb-0">
