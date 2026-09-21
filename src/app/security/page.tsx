@@ -127,9 +127,10 @@ export default function SecurityPage() {
           Privacy and legal
         </h2>
         <p className="mt-3 text-muted">
-          Marketing-site privacy, cookies, and terms are DRAFT FOR LEGAL
-          REVIEW — scaffolds only, not final policy or legal advice. Product
-          trust (this page) is separate from those drafts.
+          Marketing-site privacy, cookies, and terms are{" "}
+          <strong>DRAFT FOR LEGAL REVIEW</strong> — scaffolds only, not final
+          policy or legal advice. Product trust (this page) is separate from
+          those drafts.
         </p>
         <p className="mt-4 text-sm text-muted">
           <a
