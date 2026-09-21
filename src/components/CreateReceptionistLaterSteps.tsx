@@ -277,7 +277,7 @@ export function CreateReceptionistLaterSteps({
   if (status === "success") {
     return (
       <div
-        className="rounded-md border border-border bg-surface p-6"
+        className="mos-glass p-6"
         role="status"
       >
         <p className="font-semibold text-ink">You are on the list</p>
@@ -296,7 +296,7 @@ export function CreateReceptionistLaterSteps({
 
   return (
     <div
-      className="rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="mos-glass p-6"
       data-lead-type="create_receptionist"
       data-create-step={step}
       data-create-next-action={nextAction}

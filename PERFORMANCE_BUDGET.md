@@ -21,7 +21,7 @@
 
 | Item | Before | After | Notes |
 |------|--------|-------|-------|
-| SiteHeader | `"use client"` (FE Shell #11) | Server + `<details>` | Preserves Shell amber CTA chrome (desktop outline Request early demo + solid Join launch list; mobile Join launch list + hamburger). Does not clobber Shell chrome. |
+| SiteHeader | `"use client"` (FE Shell #11) | Server + `<details>` | Frosted glass chrome (desktop outline Early access + solid Create from website; mobile Create + hamburger). Still not a layout client island. |
 | Content pages First Load JS | (header in client graph) | **103 kB** | Next build report |
 | Home / demo / contact First Load JS | — | **105 kB** | + form island |
 | Inter config | all default weights | `weight: ["400","600"]`, `display: "swap"` | Variable files still ~219 KB on disk; en-GB typically pulls ~latin preload + latin (~133 KB), not cyrillic/greek |
@@ -68,7 +68,7 @@ Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_P
 
 1. **Fonts:** `next/font` Inter, `subsets: ['latin']`, `display: 'swap'`, weights **400 + 600** only. Prefer `font-semibold` / `font-normal` over `font-medium` (500 not loaded as a discrete face). No extra families without Performance + Brand sign-off.
 2. **Images:** With `unoptimized`, always set `width`/`height` (or CSS aspect-ratio), compress before commit, prefer WebP, `loading="lazy"` below fold, `fetchPriority="high"` only for true LCP image.
-3. **JS:** Do not mark layout chrome `"use client"` for menus if CSS `<details>` works. Keep client islands on lead forms only when possible.
+3. **JS:** Do not mark layout chrome `"use client"` for menus if CSS `<details>` works. Keep client islands on lead forms plus the homepage `SiriOrbCloud` toggle. `/create` must use the CSS-only `CreateOrbAccent` — do not import the interactive orb there.
 4. **Third parties:** No analytics/chat/tag managers without Privacy + Performance review (consent-gated).
 5. **Measure:** Re-run `next build` and update this table when changing fonts, layout, or shared components. Lighthouse/CWV when staging URL exists.
 

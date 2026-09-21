@@ -7,7 +7,7 @@ export function SandboxTestCallComingSoon() {
 
   return (
     <section
-      className="rounded-md border border-border bg-surface p-5"
+      className="mos-glass p-5"
       data-sandbox-test-call="off"
       aria-labelledby="sandbox-test-call-heading"
       aria-describedby={comingCopyId}

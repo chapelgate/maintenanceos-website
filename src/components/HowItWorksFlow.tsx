@@ -116,8 +116,7 @@ export function HowItWorksFlow() {
         {STAGES.map((stage, i) => (
           <li key={stage.id} className="relative flex flex-col">
             <div
-              className="flex flex-1 flex-col rounded-[length:var(--mos-radius-lg)] border border-border bg-surface p-6"
-              style={{ boxShadow: "var(--mos-shadow)" }}
+              className="mos-glass flex flex-1 flex-col p-6"
             >
               <StageBody stage={stage} showBadge index={i} />
             </div>
@@ -157,8 +156,7 @@ export function HowItWorksFlow() {
               ) : null}
             </div>
             <div
-              className="flex-1 rounded-[length:var(--mos-radius-lg)] border border-border bg-surface p-4"
-              style={{ boxShadow: "var(--mos-shadow)" }}
+              className="mos-glass flex-1 p-4"
             >
               <StageBody stage={stage} showBadge={false} index={i} />
             </div>

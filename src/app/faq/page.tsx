@@ -26,7 +26,7 @@ export default function FaqPage() {
           {faqItems.map((item) => (
             <details
               key={item.question}
-              className="rounded-md border border-border bg-surface p-4"
+              className="mos-glass p-4"
             >
               <summary className="cursor-pointer font-semibold text-ink">
                 {item.question}

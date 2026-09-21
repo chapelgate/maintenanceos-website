@@ -3,6 +3,7 @@ import {
   CreateJourneySection,
 } from "@/components/create-funnel-islands";
 import { CreateIngestPrivacyNote } from "@/components/CreateIngestPrivacyNote";
+import { CreateOrbAccent } from "@/components/CreateOrbAccent";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { funnelPageJsonLd } from "@/lib/json-ld";
@@ -48,6 +49,7 @@ export default function CreateReceptionistPage() {
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <section aria-labelledby="create-form-heading">
+          <CreateOrbAccent />
           <h2
             id="create-form-heading"
             className="text-xl font-semibold text-ink"
@@ -86,7 +88,7 @@ export default function CreateReceptionistPage() {
         </section>
 
         <section
-          className="rounded-md border border-border bg-surface p-5 text-sm text-muted"
+          className="mos-glass p-5 text-sm text-muted"
           aria-labelledby="create-limits-heading"
         >
           <h2 id="create-limits-heading" className="text-base font-semibold text-ink">

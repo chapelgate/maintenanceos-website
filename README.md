@@ -2,7 +2,7 @@
 
 Truthful **pre-launch** marketing site for MaintenanceOS (not the product backend).
 
-**Brand System v0.1 APPROVED** — amber accent `#B45309`, ink `#0F172A`, paper `#F8FAFC`, Inter. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
+**Brand System v0.2** — luminous dusk + Siri-like orb/cloud. Functional CTA accent stays `#B45309` (AA). See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`. Do not regress to flat amber/paper cards.
 
 ## Stance
 

@@ -7,7 +7,7 @@ export function CalendarConnectComingSoon() {
 
   return (
     <section
-      className="rounded-md border border-border bg-surface p-5"
+      className="mos-glass p-5"
       data-calendar-adapters="off"
       aria-labelledby="calendar-connect-heading"
       aria-describedby={comingCopyId}

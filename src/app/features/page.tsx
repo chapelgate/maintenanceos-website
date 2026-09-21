@@ -143,7 +143,7 @@ export default function FeaturesPage() {
             {g.cards.map((card) => (
               <article
                 key={card.title}
-                className="rounded-lg border border-border bg-surface p-5"
+                className="mos-glass p-5"
               >
                 <h3 className="text-base font-semibold text-ink">{card.title}</h3>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-muted">

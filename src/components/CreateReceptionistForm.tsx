@@ -23,12 +23,12 @@ function loadLaterSteps() {
   return import("@/components/CreateReceptionistLaterSteps");
 }
 
-const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
+const FIELD_CLASS = "mt-1 w-full rounded-xl border border-border bg-white/80 px-3 py-2";
 
 function CreateLaterStepsFallback() {
   return (
     <div
-      className="rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="mos-glass p-6"
       data-lead-type="create_receptionist"
       data-create-step={2}
       data-create-next-action="Checking…"
@@ -140,7 +140,7 @@ export function CreateReceptionistForm({
   if (honeypotSuccess) {
     return (
       <div
-        className="rounded-md border border-border bg-surface p-6"
+        className="mos-glass p-6"
         role="status"
       >
         <p className="font-semibold text-ink">You are on the list</p>
@@ -174,7 +174,7 @@ export function CreateReceptionistForm({
 
   return (
     <div
-      className="rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="mos-glass p-6"
       data-lead-type="create_receptionist"
       data-create-step={1}
       data-create-next-action={createJourneyNextAction(1)}
@@ -260,7 +260,7 @@ export function CreateReceptionistForm({
         <button
           type="submit"
           data-create-primary-action=""
-          className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
+          className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
         >
           Check this website
         </button>

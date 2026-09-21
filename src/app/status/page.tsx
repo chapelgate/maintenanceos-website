@@ -39,7 +39,7 @@ export default function StatusPage() {
             </li>
           </ul>
         </section>
-        <p className="rounded-md border border-dashed border-border bg-surface p-4 text-sm">
+        <p className="mos-glass border-dashed p-4 text-sm">
           No fake uptime charts, incident timelines, or SLA badges are shown
           here. Metrics appear only when wired to real monitors.
         </p>

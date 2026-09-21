@@ -83,7 +83,7 @@ export function LeadCaptureForm({
     return (
       <div
         id={id}
-        className="rounded-md border border-border bg-surface p-6"
+        className="mos-glass p-6"
         role="status"
         data-lead-success={successMode}
       >
@@ -99,7 +99,7 @@ export function LeadCaptureForm({
     <form
       id={id}
       onSubmit={onSubmit}
-      className="relative overflow-hidden rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="mos-glass relative overflow-hidden p-6"
       noValidate
       data-lead-type={leadType}
     >
@@ -114,7 +114,7 @@ export function LeadCaptureForm({
             name="name"
             type="text"
             autoComplete="name"
-            className="mt-1 w-full rounded-md border border-border px-3 py-2"
+            className="mt-1 w-full rounded-xl border border-border bg-white/80 px-3 py-2"
           />
         </label>
         <label className="block text-sm">
@@ -126,7 +126,7 @@ export function LeadCaptureForm({
             autoComplete="email"
             aria-invalid={emailInvalid || undefined}
             aria-describedby={emailInvalid ? errorId : undefined}
-            className="mt-1 w-full rounded-md border border-border px-3 py-2"
+            className="mt-1 w-full rounded-xl border border-border bg-white/80 px-3 py-2"
           />
         </label>
         {showOrganisation ? (
@@ -136,7 +136,7 @@ export function LeadCaptureForm({
               name="organisation"
               type="text"
               autoComplete="organization"
-              className="mt-1 w-full rounded-md border border-border px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-border bg-white/80 px-3 py-2"
             />
           </label>
         ) : null}
@@ -144,7 +144,7 @@ export function LeadCaptureForm({
           <span className="font-medium text-ink">Role</span>
           <select
             name="role"
-            className="mt-1 w-full rounded-md border border-border px-3 py-2"
+            className="mt-1 w-full rounded-xl border border-border bg-white/80 px-3 py-2"
             defaultValue=""
           >
             <option value="" disabled>
@@ -168,7 +168,7 @@ export function LeadCaptureForm({
           <textarea
             name="message"
             rows={4}
-            className="mt-1 w-full rounded-md border border-border px-3 py-2"
+            className="mt-1 w-full rounded-xl border border-border bg-white/80 px-3 py-2"
           />
         </label>
       ) : null}
@@ -187,7 +187,7 @@ export function LeadCaptureForm({
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
+        className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
       >
         {status === "submitting" ? "Submitting…" : submitLabel}
       </button>

@@ -51,7 +51,7 @@ export default function PricingPage() {
           </ul>
         ) : (
           <div className="mx-auto max-w-2xl">
-            <div className="rounded-xl border border-border bg-surface p-8 text-center shadow-sm ring-1 ring-accent/15 sm:p-10">
+            <div className="mos-glass p-8 text-center ring-1 ring-accent/15 sm:p-10">
               <p className="text-xs font-semibold uppercase tracking-wide text-accent">
                 Pre-launch
               </p>

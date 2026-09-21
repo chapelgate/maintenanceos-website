@@ -2,10 +2,10 @@ import { footerNav, siteConfig } from "@/config/site";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-border bg-ink text-paper">
+    <footer className="mt-auto border-t border-white/10 bg-dusk text-on-dusk">
       <div className="mx-auto grid max-w-[70rem] gap-10 px-4 py-12 md:px-6 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="text-lg text-paper" aria-label={siteConfig.name}>
+          <p className="text-lg text-on-dusk" aria-label={siteConfig.name}>
             <span className="font-medium">Maintenance</span>
             <span className="font-semibold">OS</span>
           </p>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { SiriOrbCloud } from "@/components/SiriOrbCloud";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
@@ -45,18 +46,18 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={funnelPageJsonLd("home")} />
-      {/* 1. Hero — UX journey entry */}
-      <section className="border-b border-border bg-surface px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+      {/* 1. Hero — dusk canvas + Siri-like orb/cloud (not a live phone) */}
+      <section className="mos-hero-dusk px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
+        <div className="relative z-[2] mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
           <div>
-            <p className="inline-flex items-center rounded-md bg-accent-subtle px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
+            <p className="inline-flex items-center rounded-full bg-white/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-accent-luminous">
               Pre-launch · United Kingdom
             </p>
-            <h1 className="mt-5 text-4xl font-semibold tracking-tight text-ink sm:text-5xl sm:leading-[1.12]">
+            <h1 className="mt-5 text-4xl font-semibold tracking-tight text-on-dusk sm:text-5xl sm:leading-[1.12]">
               Maintenance calls, structured — without the model running your
               operation.
             </h1>
-            <p className="mt-5 text-lg leading-relaxed text-ink">
+            <p className="mt-5 text-lg leading-relaxed text-on-dusk">
               MaintenanceOS is a multi-tenant platform for UK landlords, letting
               agents, and property managers. An AI receptionist layer is designed
               to collect and classify what callers say (under testing);
@@ -64,52 +65,31 @@ export default function HomePage() {
             </p>
             <CtaPair
               className="mt-8"
+              tone="on-dusk"
               primaryHref="/create/"
               primaryLabel="Create from website"
               secondaryHref="/demo/#demo"
               secondaryLabel="Request early access"
             />
-            <p className="mt-5 text-sm leading-relaxed text-muted">
+            <p className="mt-5 text-sm leading-relaxed text-on-dusk-muted">
               Pilot-stage. Core controls are real; public always-on phone is not
               declared ready yet.{" "}
               <a
                 href="/how-it-works/"
-                className="font-medium text-accent underline-offset-4 hover:underline"
+                className="font-medium text-accent-luminous underline-offset-4 hover:underline"
               >
                 See how it works
               </a>
             </p>
           </div>
 
-          <div
-            className="rounded-xl border border-border bg-paper p-6 shadow-sm"
-            aria-hidden="true"
-          >
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <span className="text-sm font-semibold text-ink">Work orders</span>
-              <span className="rounded-md bg-accent-subtle px-2 py-0.5 text-xs font-medium text-accent">
-                Structure only
-              </span>
-            </div>
-            <ul className="mt-4 space-y-3">
-              {[
-                { label: "Intake", note: "Caller details classified" },
-                { label: "Safety latch", note: "Awaiting human clearance" },
-                { label: "Escalation", note: "Queue — rules decide next" },
-              ].map((row) => (
-                <li
-                  key={row.label}
-                  className="flex items-center justify-between rounded-lg border border-border bg-surface px-3 py-2.5"
-                >
-                  <span className="text-sm font-medium text-ink">{row.label}</span>
-                  <span className="text-xs text-muted">{row.note}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-xs text-muted">
-              Placeholder ops chrome — not live metrics.
-            </p>
-          </div>
+          <SiriOrbCloud
+            primaryHref="/create/"
+            primaryLabel="Create from website"
+            secondaryHref="/demo/#demo"
+            secondaryLabel="Request early access"
+            subtitle="Pilot-stage. Website URL to a draft pack — not a live phone."
+          />
         </div>
       </section>
 
@@ -119,7 +99,7 @@ export default function HomePage() {
           {pillars.map((pillar) => (
             <article
               key={pillar.title}
-              className="rounded-xl border border-border bg-surface p-6 sm:p-8"
+              className="mos-glass p-6 sm:p-8"
             >
               <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
                 {pillar.title}
@@ -139,7 +119,7 @@ export default function HomePage() {
       </section>
 
       {/* 3. Honesty — what we will not claim */}
-      <section className="border-y border-border bg-paper px-4 py-14 sm:px-6">
+      <section className="border-y border-white/50 bg-white/30 px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-3xl">
           <p className="text-center text-sm font-semibold uppercase tracking-wide text-accent">
             What we will not claim
@@ -159,8 +139,8 @@ export default function HomePage() {
       </section>
 
       {/* 4. Closing CTA band */}
-      <section className="bg-surface px-4 py-14 sm:px-6">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 rounded-xl border border-border bg-paper p-8 sm:flex-row sm:items-center sm:p-10">
+      <section className="px-4 py-14 sm:px-6">
+        <div className="mos-glass mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
           <div className="max-w-lg">
             <h2 className="text-xl font-semibold text-ink sm:text-2xl">
               Join the list or start from your website
@@ -187,7 +167,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. #join capture */}
-      <section id="join" className="border-t border-border bg-paper px-4 py-16 sm:px-6 sm:py-20">
+      <section id="join" className="border-t border-white/50 px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-xl">
           <h2 className="text-2xl font-semibold text-ink">Join launch list</h2>
           <p className="mt-2 text-muted">
