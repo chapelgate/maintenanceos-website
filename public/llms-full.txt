@@ -53,6 +53,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - AI receptionist (voice intake) — capability under testing, not a live commercial service
 - Live human-transfer answer / no-answer on carrier — historical mixed outcomes; retest open
 - Public / production hosting of the product runtime — do not market as public production
+- Website `/dashboard` foundation — coming / under testing unless a local flag is on; SAMPLE / DEMO rows only, not live call history
 
 ## NOT CLAIMED (omit; do not state as fact)
 
@@ -76,6 +77,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
 - Pricing: https://seahorse-app-4oasq.ondigitalocean.app/pricing/
 - Demo (launch list + early demo): https://seahorse-app-4oasq.ondigitalocean.app/demo/
+- Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
 - FAQ: https://seahorse-app-4oasq.ondigitalocean.app/faq/
 - Contact: https://seahorse-app-4oasq.ondigitalocean.app/contact/
 - About: https://seahorse-app-4oasq.ondigitalocean.app/about/

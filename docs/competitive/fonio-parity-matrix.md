@@ -64,8 +64,8 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 | FEATURE | FONIO | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
 | Recordings | Optional + delete | Policy-gated in pilot design | Customer controls | BUILD | P1 | PARTIAL |
-| Transcripts + email/SMS summary | Yes | Session/transcript primitives | Delivery channels | BUILD | P0 | PARTIAL |
-| Call history search | Dashboard | Supervisor tooling internal | Customer dashboard | BUILD | P0 | PARTIAL |
+| Transcripts + email/SMS summary | Yes | Session/transcript primitives + flagged `/dashboard` SAMPLE transcript view (`packages/customer-dashboard`). No email/SMS delivery. | Delivery channels | BUILD | P0 | PARTIAL (this PR: mock transcript view) |
+| Call history search | Dashboard | Flagged `/dashboard` + `packages/customer-dashboard` mock store (SAMPLE/DEMO labelled). `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` default false; off → coming / under testing. No live telephony history. | Not customer-GA; no live sessions; no search/analytics | BUILD | P0 | PARTIAL (this PR: flagged dashboard foundation) |
 | Analytics (answered, booked, transferred) | Yes | Not customer analytics | Event pipeline | BUILD | P1 | MISSING |
 
 ## Platform / enterprise
@@ -103,7 +103,8 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 - **PARTIAL (P0 onboarding):** public `/create` multi-step funnel + draft review; crawl only if scan endpoint configured (else queued / early access).  
 - **PARTIAL (P0 sandbox test call):** flagged `packages/sandbox-test-call` + `/create` panel (this PR). Scripted demo only; no live number; frozen path untouched.  
 - **PARTIAL (P0 calendar):** flagged `packages/calendar-adapters` (mock + Google/Microsoft class); `/create` honest coming-soon unless local flag. Not customer-GA; no voice booking confirmation.  
-- **MISSING (P0):** production website→receptionist engine; live/WebRTC media; customer dashboard; modular KB productisation  
+- **PARTIAL (P0 dashboard):** flagged `/dashboard` + `packages/customer-dashboard` (SAMPLE/DEMO history, transcript, bookings stub). Off by default; empty store invents nothing. Not customer-GA; no live telephony.  
+- **MISSING (P0):** production website→receptionist engine; live/WebRTC media; modular KB productisation  
 
 **Do not modify frozen live telephony** until controlled-call gates in `CURRENT_STATUS.md` pass.
 

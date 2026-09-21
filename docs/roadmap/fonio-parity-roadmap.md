@@ -16,8 +16,9 @@
 - [x] Calendar adapter package + mock + Google/Microsoft scaffolds (flagged off)
 - Extract schema + review UI
 - Sandbox tenant create
-- [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite; this PR)
-- Customer-facing call history / transcript for sandbox
+- [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)
+- [x] Flagged customer dashboard foundation (history / transcript / bookings stubs; SAMPLE only; this PR)
+- Customer-facing call history / transcript wired to a sandbox tenant
 
 ## Phase 2 — Core receptionist parity (P0–P1)
 

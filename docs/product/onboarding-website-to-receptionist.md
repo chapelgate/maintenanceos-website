@@ -80,6 +80,8 @@ POST /v1/onboarding/jobs/{jobId}/promote
 - `ONBOARDING_PUBLIC` — show `/create` publicly (default off until QA)
 - `CALENDAR_ADAPTERS_ENABLED` — enable calendar companion (default off)
 - `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` — show `/create` slot picker (default off)
+- `CUSTOMER_DASHBOARD_ENABLED` — enable dashboard companion (default off)
+- `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` — show `/dashboard` SAMPLE store (default off)
 
 ## Claims-safe marketing copy
 

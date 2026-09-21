@@ -10,6 +10,7 @@ export const marketingPaths: readonly string[] = [
   "/features/",
   "/ai-receptionist/",
   "/create/",
+  "/dashboard/",
   "/security/",
   "/industries/",
   ...industries.map((industry) => `/industries/${industry.slug}/`),

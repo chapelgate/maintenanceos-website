@@ -34,7 +34,7 @@ See [WEBSITE_IA.md](./WEBSITE_IA.md) for full hierarchy. Minimum routes:
 
 `/`, `/how-it-works`, `/features`, `/ai-receptionist`, `/industries/*`, `/security`, `/pricing`, `/demo`, `/contact`, `/about`, `/faq`, `/status` (architecture placeholder — no fake live metrics), `/privacy`, `/cookies`, `/terms`.
 
-Reserved stubs (no fake backends): account login, dashboard, onboarding, demo env, customer portal, API docs, billing, live status metrics.
+Reserved stubs (no fake backends): account login, onboarding, demo env, customer portal, API docs, billing, live status metrics. `/dashboard` is a flagged SAMPLE/DEMO foundation (off by default; coming / under testing in the default export) — not a live customer portal.
 
 ## Config and trust boundaries
 

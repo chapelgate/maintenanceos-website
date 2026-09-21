@@ -10,7 +10,7 @@ Synced conceptually with `docs/competitive/fonio-parity-matrix.md`. Use this for
 | R-04 | Sandbox tenant + assistant | P0 | PLANNED | Platform |
 | R-05 | Sandbox test call | P0 | PARTIAL (flagged `packages/sandbox-test-call`; `/create` coming-soon unless local flag; scripted stub only; no live number) | Voice (flagged) |
 | R-06 | Calendar adapters | P0 | PARTIAL (flagged `packages/calendar-adapters`; mock + Google/Microsoft OAuth scaffolds; `/create` coming-soon unless local flag; no voice booking) | Integrations |
-| R-07 | Customer dashboard (history/transcripts) | P0 | PLANNED | App |
+| R-07 | Customer dashboard (history/transcripts) | P0 | PARTIAL (flagged `/dashboard` + `packages/customer-dashboard`; SAMPLE/DEMO mock only; off by default; no live telephony) | App |
 | R-08 | Provenance KB | P0 | PLANNED | Platform |
 | R-09 | Human transfer config | P0 | PARTIAL (pilot) | Voice |
 | R-10 | Summaries email/SMS | P0 | PLANNED | Comms |

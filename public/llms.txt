@@ -38,3 +38,4 @@ There is no public always-on phone number to call on this site.
 - [Full claims-safe summary](https://seahorse-app-4oasq.ondigitalocean.app/llms-full.txt): VERIFIED vs under test vs not claimed
 - [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/)
 - [About](https://seahorse-app-4oasq.ondigitalocean.app/about/)
+- [Dashboard](https://seahorse-app-4oasq.ondigitalocean.app/dashboard/): coming / under testing — not a live customer portal or production call history
