@@ -5,8 +5,8 @@ export const dynamic = "force-static";
 
 /**
  * AI crawlers the owner wants able to read marketing pages and /llms.txt.
- * /llms.txt and /llms-full.txt describe the public funnel: website URL →
- * check → review → pack → optional scripted sandbox → early access.
+ * /llms.txt and /llms-full.txt describe the public funnel:
+ * website URL → check → review → pack → optional scripted sandbox → early access.
  * Those files must not claim live phone, always-on, GA, ratings, or invented crawls.
  * Staging scan is still owner-blocked (Render + DigitalOcean env).
  * Default `*` also allows indexing — there are no admin/private routes in this export.
