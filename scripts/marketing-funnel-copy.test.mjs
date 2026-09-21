@@ -167,9 +167,18 @@ test("create and legal scaffolds share the website-URL ingest privacy note", () 
   assert.match(copy, /Lead email is for early access only/);
   assert.match(copy, /not live telephony data processing/);
   assert.match(copy, /DRAFT FOR LEGAL REVIEW/);
-  assert.doesNotMatch(copy, /\bDPO\b/);
-  assert.doesNotMatch(copy, /data protection officer/i);
-  assert.doesNotMatch(copy, /GDPR compliant/i);
+  assert.doesNotMatch(
+    copy,
+    /export const CREATE_INGEST_PRIVACY_NOTE =[\s\S]*?\bDPO\b/,
+  );
+  assert.doesNotMatch(
+    copy,
+    /export const CREATE_INGEST_PRIVACY_NOTE =[\s\S]*data protection officer/i,
+  );
+  assert.doesNotMatch(
+    copy,
+    /export const CREATE_INGEST_PRIVACY_NOTE =[\s\S]*GDPR compliant/i,
+  );
 
   assert.doesNotMatch(note, /^["']use client["']/);
   assert.match(note, /CREATE_INGEST_PRIVACY_NOTE/);
@@ -185,6 +194,26 @@ test("create and legal scaffolds share the website-URL ingest privacy note", () 
   assert.match(terms, /not live telephony data/);
   assert.match(chrome, /\/create early-access/);
   assert.match(config, /output:\s*["']export["']/);
+  for (const [label, src] of [
+    ["create page", page],
+    ["privacy page", privacy],
+    ["cookies page", cookies],
+    ["terms page", terms],
+    ["legal chrome", chrome],
+    ["create note", note],
+  ]) {
+    assert.doesNotMatch(src, /\bDPO\b/, `${label} must not invent a DPO`);
+    assert.doesNotMatch(
+      src,
+      /data protection officer/i,
+      `${label} must not invent a data protection officer`,
+    );
+    assert.doesNotMatch(
+      src,
+      /GDPR compliant/i,
+      `${label} must not claim GDPR compliance`,
+    );
+  }
 });
 
 test("primary conversion CTAs point at /create, not a live phone demo", () => {

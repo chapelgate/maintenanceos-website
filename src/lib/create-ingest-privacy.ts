@@ -1,7 +1,7 @@
 /**
  * Claims-safe website-URL ingest privacy copy.
- * DRAFT FOR LEGAL REVIEW — scaffold wording only. Not counsel, not a DPO
- * statement, and not a finished GDPR processing record.
+ * DRAFT FOR LEGAL REVIEW — scaffold wording only. Not legal advice and not a
+ * finished processing record.
  */
 
 export const CREATE_INGEST_PRIVACY_DRAFT_LABEL = "DRAFT FOR LEGAL REVIEW";
