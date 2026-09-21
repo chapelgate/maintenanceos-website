@@ -27,7 +27,6 @@ export function ReceptionistDraftPreview({
   onReset: () => void;
 }) {
   const missing = result.knowledgePack.missing;
-  const limitationsHeadingId = useId();
   const packErrorId = useId();
 
   return (
@@ -41,9 +40,12 @@ export function ReceptionistDraftPreview({
       <section
         className="rounded-md border border-border bg-paper p-3"
         data-limitations="readonly"
-        aria-labelledby={limitationsHeadingId}
+        aria-labelledby="create-pack-limitations-heading"
       >
-        <h3 id={limitationsHeadingId} className="text-sm font-semibold text-ink">
+        <h3
+          id="create-pack-limitations-heading"
+          className="text-sm font-semibold text-ink"
+        >
           Honest limitations{" "}
           <span className="font-normal text-muted">(read-only)</span>
         </h3>

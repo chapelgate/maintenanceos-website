@@ -66,7 +66,8 @@ test("sandbox coming and limitations regions have labelled headings", () => {
   assert.match(sandbox, /aria-labelledby="sandbox-test-call-heading"/);
   assert.match(sandbox, /aria-describedby=\{comingCopyId\}/);
   assert.match(preview, /data-limitations="readonly"/);
-  assert.match(preview, /aria-labelledby=\{limitationsHeadingId\}/);
+  assert.match(preview, /id="create-pack-limitations-heading"/);
+  assert.match(preview, /aria-labelledby="create-pack-limitations-heading"/);
   assert.match(preview, /Honest limitations/);
   assert.match(calendar, /Calendar connect — coming \/ under testing/);
   assert.match(calendar, /aria-labelledby="calendar-connect-heading"/);
