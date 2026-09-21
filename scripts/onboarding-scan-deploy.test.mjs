@@ -39,7 +39,7 @@ test("onboarding-ingest Dockerfile matches npm run onboarding-scan", () => {
     /CMD \["node", "--experimental-strip-types", "packages\/onboarding-ingest\/src\/server\.ts"\]/,
   );
   assert.match(docker, /ONBOARDING_SCAN_HOST=0\.0\.0\.0/);
-  assert.doesNotMatch(docker, /ONBOARDING_WEB_INGEST=true/);
+  assert.doesNotMatch(docker, /^ENV ONBOARDING_WEB_INGEST=/m);
   assert.match(docker, /DigitalOcean App Platform/);
   assert.match(docker, /maintenanceos-redteam/);
 });
