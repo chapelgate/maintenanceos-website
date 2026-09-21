@@ -13,7 +13,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - AI receptionist: under testing and in development (historical validation calls only — not a public production voice service)
 - Public path: website URL → check → review → pack → optional scripted sandbox → early access
 - Conversion on this site: Create from website (primary), or Join launch list / Request early demo (human early-access briefing — not a live phone)
-- Staging website scan is still owner-blocked (Render companion + DigitalOcean env). Queued crawl only — do not invent crawl results
+- Staging website scan is still owner-blocked (DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild). Queued crawl only — do not invent crawl results
 - Do not describe this site as a live customer portal, billing product, or always-on telephony service
 
 ## Key pages
@@ -33,7 +33,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 
 - Live phone, always-on receptionist, or commercial general availability
 - Ratings, reviews, or aggregate scores
-- Invented crawl results (staging scan is owner-blocked: Render + DigitalOcean env)
+- Invented crawl results (staging scan is owner-blocked: DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild)
 - Invented tracking, a live consent banner, or Google Analytics / PECR / GDPR compliance certification
 
 ## Contact

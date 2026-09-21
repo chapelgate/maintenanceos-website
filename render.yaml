@@ -1,15 +1,20 @@
-# Render Blueprint — free companions (onboarding scan, sandbox test-call,
-# mock calendar adapters, customer dashboard). Distinct service names.
-# New web services only.
+# LEGACY / DO NOT USE
 #
-# Not a DigitalOcean App Platform spec (marketing stays static `output: 'export'`).
-# Not maintenanceos-redteam / production voice. Create *new* web services.
-# $0: every service below sets plan to free. Do not upgrade these to Starter.
+# Owner decision: do not apply this Blueprint. Do not create Render web
+# services for website companions. Do not open the Render dashboard for
+# onboarding-scan, sandbox, calendar, or dashboard.
 #
-# Apply from the Render Dashboard (New → Blueprint) or create each web service
-# by hand using docs/ONBOARDING_SCAN_DEPLOY.md, docs/SANDBOX_DEPLOY.md, and
-# docs/DASHBOARD_DEPLOY.md. Staging DigitalOcean env + rebuild + wake order:
-# docs/STAGING_COMPANIONS.md. Flags stay off until an operator enables them.
+# Onboarding scan runs on a DigitalOcean droplet:
+#   docs/ONBOARDING_SCAN_DEPLOY.md
+# Marketing stays DigitalOcean App Platform static (`output: 'export'`).
+# Staging DigitalOcean env + rebuild + health order:
+#   docs/STAGING_COMPANIONS.md
+# Readiness / owner blocker:
+#   docs/FONIO_WEBSITE_READINESS.md
+#
+# Not a DigitalOcean App Platform spec.
+# Not maintenanceos-redteam / production voice.
+# Historical Blueprint text only. Services below are not a deploy path.
 
 services:
   - type: web

@@ -1,5 +1,7 @@
 # Deploy sandbox test-call (+ optional mock calendar) on Render free
 
+**Do not apply `render.yaml` (legacy / do not use).** Owner decision: do not create new Render companions. Onboarding scan is a DigitalOcean droplet — [`ONBOARDING_SCAN_DEPLOY.md`](ONBOARDING_SCAN_DEPLOY.md).
+
 **Status:** operator runbook — $0 staging companions  
 **Code:** `packages/sandbox-test-call` (`npm run sandbox-test-call` → `node --experimental-strip-types packages/sandbox-test-call/src/server.ts`)  
 **Contract:** [`SANDBOX_TEST_CALL_CONTRACT.md`](SANDBOX_TEST_CALL_CONTRACT.md)  
@@ -8,7 +10,7 @@
 
 The marketing site stays `output: 'export'`. `/create` only talks to the companion when `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` is `true`/`1` **and** `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT` is an absolute `https:` URL baked in at **Next build time**. This companion is a **separate** Node process.
 
-Scan remains `docs/ONBOARDING_SCAN_DEPLOY.md` / service `maintenanceos-onboarding-scan`. Do not reuse that service for sandbox.
+Scan is a DigitalOcean droplet (`docs/ONBOARDING_SCAN_DEPLOY.md`, process `maintenanceos-onboarding-scan`). Do not reuse that process for sandbox.
 
 ## What you get
 

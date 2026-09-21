@@ -34,7 +34,7 @@ function isDevelopment(nodeEnv: CspEnv): boolean {
  * Enforcing CSP for the static funnel.
  * `'unsafe-inline'` is required for next/font style tags, JSON-LD, and the
  * header Escape script. Production omits `'unsafe-eval'`. `https:` connect/form
- * covers Render companions and NEXT_PUBLIC_FORM_ENDPOINT without pinning hosts.
+ * covers hosted companions and NEXT_PUBLIC_FORM_ENDPOINT without pinning hosts.
  * Loopback is for local e2e only. `frame-ancestors` is omitted here — it is
  * ignored in meta CSP and belongs on DESIRED_HTTP_HEADERS / HTTP_CSP.
  */

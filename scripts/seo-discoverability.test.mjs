@@ -73,7 +73,7 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   assert.match(text, /Do not use AGI/i);
   assert.match(text, funnelPath, "must name the verified public funnel");
   assert.match(text, /owner-blocked/);
-  assert.match(text, /Render companion \+ DigitalOcean env/);
+  assert.match(text, /DigitalOcean droplet \+ NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT \+ static rebuild/);
   assert.match(text, /do not invent crawl results/i);
   assert.match(text, /no telephone, aggregateRating, reviews, or offers/);
   assert.match(text, /robots\.txt allows major AI crawlers/);

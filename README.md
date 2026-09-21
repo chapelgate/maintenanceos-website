@@ -50,7 +50,7 @@ ONBOARDING_WEB_INGEST=true npm run onboarding-scan
 NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/v1/onboarding/scan npm run dev
 ```
 
-The client POSTs `{ "url" }` and copies only `businessName`, `greeting`, `hours`, `services`, and `faqs` when those strings are present. Fetch/extract failures return errors/warnings — nothing is invented. After draft review, `/create` builds a claims-safe knowledge pack + system prompt (`packages/receptionist-draft`; `docs/RECEPTIONIST_DRAFT_CONTRACT.md`) without a companion. Leave the Next env empty on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/ONBOARDING_SCAN_DEPLOY.md`) — then set `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` and **rebuild**. Do not put this process on the frozen Render voice app.
+The client POSTs `{ "url" }` and copies only `businessName`, `greeting`, `hours`, `services`, and `faqs` when those strings are present. Fetch/extract failures return errors/warnings — nothing is invented. After draft review, `/create` builds a claims-safe knowledge pack + system prompt (`packages/receptionist-draft`; `docs/RECEPTIONIST_DRAFT_CONTRACT.md`) without a companion. Leave the Next env empty on DigitalOcean static hosting until a **separate** DigitalOcean droplet companion is up (`docs/ONBOARDING_SCAN_DEPLOY.md`) — then set `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` and **rebuild**. Do not use Render. Do not put this process on the frozen voice app.
 
 ```bash
 # Terminal 1 — loopback stub (stores JSONL under .data/, never sends mail)
@@ -128,11 +128,11 @@ npm run fonio-local-smoke
 
 This is **not** production Fonio-parity and **must not** be copied onto DigitalOcean static hosting. Default `.env.example` flags stay off. Optional Compose: `docker compose -f docker-compose.fonio-local.yml up`.
 
-What is already on `main` through PR **#62** vs owner blockers (live scan, legal review, frozen telephony): [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). Website onboarding path is substantially ready; live phone parity is still open. Not a complete-vs-Fonio claim.
+What is already on `main` through PR **#64** vs owner blockers (live scan on a DigitalOcean droplet, legal review, frozen telephony): [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). Website onboarding path is substantially ready; live phone parity is still open. Not a complete-vs-Fonio claim. Do not use Render.
 
 ### DigitalOcean App Platform (static)
 
-Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / companion Dockerfiles on App Platform; those are loopback e2e or the **separate** Render free companions (`docs/ONBOARDING_SCAN_DEPLOY.md`, `docs/SANDBOX_DEPLOY.md`, `docs/DASHBOARD_DEPLOY.md`). Staging operator order (exact `NEXT_PUBLIC_*`, rebuild, cold-start wake): [`docs/STAGING_COMPANIONS.md`](docs/STAGING_COMPANIONS.md). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart. Static security baseline (HTML CSP + referrer; HTTP-only header gap on this host): [`docs/security/static-security-baseline.md`](docs/security/static-security-baseline.md).
+Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / companion Dockerfiles on App Platform; those are loopback e2e or the **separate** droplet companion (`docs/ONBOARDING_SCAN_DEPLOY.md`). `render.yaml` is **legacy / do not use**. Staging operator order (exact `NEXT_PUBLIC_*`, rebuild, health check): [`docs/STAGING_COMPANIONS.md`](docs/STAGING_COMPANIONS.md). Owner blocker: [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart. Static security baseline (HTML CSP + referrer; HTTP-only header gap on this host): [`docs/security/static-security-baseline.md`](docs/security/static-security-baseline.md).
 
 ## Desktop navigation (IA v0.2)
 
@@ -144,7 +144,7 @@ How it works · Features · AI receptionist · Create · **Dashboard (soon)** ·
 - `WEBSITE_ARCHITECTURE.md`
 - `PRODUCT_CLAIMS_REGISTER.md`
 - `WEBSITE_AGENT_BOARD.md`
-- [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md) — onboarding path on `main` through #62 vs owner blockers
+- [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md) — onboarding path on `main` through #64 vs owner blockers (droplet scan; do not use Render)
 - `WEBSITE_LAUNCH_CHECKLIST.md`
 - `WEBSITE_BACKLOG.md`
 - `WEBSITE_IA.md`

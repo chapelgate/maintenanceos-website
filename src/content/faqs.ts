@@ -29,7 +29,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "What happens if the website scan is not configured?",
     answer:
-      "If a scan service is not configured, the crawl is queued. We do not invent extracted hours, services, or FAQs. When a scan does run, it is designed to be SSRF-safe. Staging scan is still owner-blocked (Render companion + DigitalOcean env), so a queued crawl is the honest result — not a completed knowledge crawl.",
+      "If a scan service is not configured, the crawl is queued. We do not invent extracted hours, services, or FAQs. When a scan does run, it is designed to be SSRF-safe. Staging scan is still owner-blocked (DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild), so a queued crawl is the honest result — not a completed knowledge crawl.",
     relatedHref: "/how-it-works/",
     relatedLabel: "How it works",
   },

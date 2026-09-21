@@ -30,7 +30,7 @@
 - [ ] Live always-on customer phone (still **MISSING / frozen** — do not claim live)
 - [x] Flagged customer dashboard foundation (history / transcript / bookings stubs; SAMPLE only)
 - [x] Local e2e orchestration (stack script + compose + runbook; flags on locally only; not production Fonio-parity)
-- [x] $0 scan companion deploy path (Render free web service + `docs/ONBOARDING_SCAN_DEPLOY.md`; ingest off until configured; DO rebuild required for `NEXT_PUBLIC_*`)
+- [x] Scan companion deploy path (DigitalOcean droplet + `docs/ONBOARDING_SCAN_DEPLOY.md`; ingest off until configured; DO rebuild required for `NEXT_PUBLIC_*`; `render.yaml` legacy / do not use)
 - [x] $0 sandbox test-call deploy path (Render free web service + `docs/SANDBOX_DEPLOY.md`; flag off until configured; scripted/WebRTC honesty; optional mock calendar sibling; DO rebuild required for `NEXT_PUBLIC_*`)
 - [x] $0 customer-dashboard deploy path (Render free web service + `docs/DASHBOARD_DEPLOY.md`; flag off until configured; SAMPLE / DEMO only; DO rebuild required for `NEXT_PUBLIC_*`)
 - [x] Staging companions operator checklist (`docs/STAGING_COMPANIONS.md`; four runbooks; exact DigitalOcean `NEXT_PUBLIC_*`; rebuild; cold-start wake order; docs only)

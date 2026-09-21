@@ -82,7 +82,7 @@ The client treats any non-OK HTTP status as `scan_failed` and does not invent fi
 
 Same expectation as `docs/FORM_ENDPOINT_CONTRACT.md`: `OPTIONS` → 204; allow `POST, OPTIONS` and `Content-Type, Accept`.
 
-Staging `/create` is cross-origin (DigitalOcean static → Render companion). Unset `ONBOARDING_SCAN_CORS_ORIGIN` echoes the browser `Origin` so `https://seahorse-app-4oasq.ondigitalocean.app` and a chapelgate custom origin both work. A single configured origin locks to that origin only. Details: `docs/ONBOARDING_SCAN_DEPLOY.md`.
+Staging `/create` is cross-origin (DigitalOcean static → droplet companion). Unset `ONBOARDING_SCAN_CORS_ORIGIN` echoes the browser `Origin` so `https://seahorse-app-4oasq.ondigitalocean.app` and a chapelgate custom origin both work. A single configured origin locks to that origin only. Details: `docs/ONBOARDING_SCAN_DEPLOY.md`.
 
 ## Feature flags
 
