@@ -309,8 +309,14 @@ export async function handleCalendarRequest(
 }
 
 export function createCalendarServer(options: ServerOptions = {}): http.Server {
+  const adaptersEnabled = options.adaptersEnabled ?? isCalendarAdaptersEnabled();
+  const shared: ServerOptions = {
+    ...options,
+    adaptersEnabled,
+    adapter: options.adapter ?? createCalendarAdapter({ enabled: adaptersEnabled }),
+  };
   return http.createServer((req, res) => {
-    handleCalendarRequest(req, res, options).catch((err) => {
+    handleCalendarRequest(req, res, shared).catch((err) => {
       console.error("[calendar-adapters] unhandled", err);
       if (!res.headersSent) {
         const origin = typeof req.headers.origin === "string" ? req.headers.origin : "";

@@ -17,7 +17,8 @@
 - Extract schema + review UI
 - Sandbox tenant create
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)
-- [x] Flagged customer dashboard foundation (history / transcript / bookings stubs; SAMPLE only; this PR)
+- [x] Flagged customer dashboard foundation (history / transcript / bookings stubs; SAMPLE only)
+- [x] Local e2e orchestration (stack script + compose + runbook; flags on locally only; not production Fonio-parity)
 - Customer-facing call history / transcript wired to a sandbox tenant
 
 ## Phase 2 — Core receptionist parity (P0–P1)
