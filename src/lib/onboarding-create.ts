@@ -12,12 +12,12 @@ export {
   type CreateJourneyStepStatus,
   type CreateScanProgress,
   type ReceptionistDraft,
-} from "./onboarding-create-core";
+} from "./onboarding-create-core.ts";
 
 import type {
   CreateScanProgress,
   ReceptionistDraft,
-} from "./onboarding-create-core";
+} from "./onboarding-create-core.ts";
 
 const DRAFT_KEYS = [
   "businessName",

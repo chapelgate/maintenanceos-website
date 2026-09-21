@@ -29,10 +29,9 @@ test("/create first-load form defers scan and pack steps", () => {
   assert.match(form, /next\/dynamic/);
   assert.match(form, /CreateReceptionistLaterSteps/);
   assert.match(form, /ssr:\s*false/);
-  assert.doesNotMatch(form, /requestOnboardingScan/);
-  assert.doesNotMatch(form, /buildCreateLeadMessage/);
-  assert.doesNotMatch(form, /submitLead/);
-  assert.doesNotMatch(form, /siteConfig/);
+  assert.doesNotMatch(form, /from ["']@\/lib\/onboarding-create["']/);
+  assert.doesNotMatch(form, /from ["']@\/lib\/lead-adapter["']/);
+  assert.doesNotMatch(form, /from ["']@\/config\/site["']/);
   assert.doesNotMatch(form, /ReceptionistDraftPreview/);
 });
 

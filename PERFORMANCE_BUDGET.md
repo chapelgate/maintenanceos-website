@@ -1,7 +1,7 @@
 # PERFORMANCE_BUDGET.md — MaintenanceOS marketing site
 
 **Owner:** MOS FE Perf Impl (aligns with MOS Performance)  
-**Updated:** 2026-09-21T13:20 BST  
+**Updated:** 2026-09-21T14:00 BST  
 **Scope:** Static export (`output: 'export'`) for DigitalOcean App Platform free static.  
 **Images:** `images.unoptimized: true` — no Next image optimizer at runtime; treat every `<img>` / asset as fully downloaded bytes.
 
@@ -47,9 +47,22 @@ Default DigitalOcean flags (`NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PU
 | Inter | `400`/`600`, `display: swap`, latin preload | unchanged | Preload woff2 **48 KB**; other unicode-range files stay on disk, not in critical path |
 | Images in `public/` | none | none | Home image transfer still 0 (≤ 250 KB) |
 
-`/create` Next report remains **1 kB over** the 110 kB First Load target because the website→pack form is a required client island (shared 103 kB + 7.94 kB). Further cuts would be a form rewrite, not a funnel-chrome win.
+`/create` after #53 was **1 kB over** the 110 kB First Load target (shared 103 kB + 7.94 kB form island).
 
-Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED=true`) is **118 kB** First Load on `/create` (15.2 kB page) — expected; companions stay off the DigitalOcean default graph via `NormalModuleReplacementPlugin` / Turbopack alias.
+## Follow-up after funnel #53 (local `out/`, 2026-09-21)
+
+Default DigitalOcean flags still unset/false. Later check/review/pack steps are a `next/dynamic` chunk (`ssr: false`) prefetched after the URL island hydrates. Same claims and CTA labels.
+
+| Route | After #53 | After this pass | Budget |
+|-------|-----------|-----------------|--------|
+| `/`, `/contact` | 106 kB | **106 kB** | ≤ 110 |
+| `/demo` | 107 kB | **107 kB** | ≤ 110 |
+| `/how-it-works`, `/features` | 103 kB | **103 kB** | ≤ 110 |
+| `/create` | **111 kB** (7.94 kB page) | **106 kB** (3.7 kB page) | ≤ 110 |
+
+`/create` First Load is now **under** the 110 kB target. The leftover 3.7 kB page island is the URL/email step plus the shared stepper. Scan, pack preview, and lead-submit stay off the initial `create/index.html` script tags (async chunks remain on disk). This is a split, not a form rewrite: step 1 still hydrates immediately; step 2 already shows “Checking URL…” for 700 ms.
+
+Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED=true`) after #53 was **118 kB** First Load on `/create` (15.2 kB page) — expected; companions stay off the DigitalOcean default graph via `NormalModuleReplacementPlugin` / Turbopack alias.
 
 ## Standing rules for FE agents
 
@@ -66,10 +79,10 @@ Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_P
 - [x] Server SiteHeader via native `<details>` (Escape kept as a tiny inline script — no layout `"use client"`)
 - [x] Drop unused `/create` calendar + sandbox client islands from the default static export
 - [x] Defer `/create` pack-preview + `receptionist-draft` until after the URL/check steps
+- [x] Defer `/create` check/review/pack steps so default First Load JS is **106 kB** (≤ 110)
 
 ## Open work
 
 - [ ] Optional: self-host tighter latin-only Inter subset if critical-path fonts stay >100 KB on staging
 - [ ] Shared `MosImage` helper for unoptimized static export (width/height/lazy defaults)
 - [ ] Staging CWV / Lighthouse once DO URL exists
-- [ ] Optional: shave the remaining 1 kB on `/create` First Load (form island itself; do not pull companions back)
