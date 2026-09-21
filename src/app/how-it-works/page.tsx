@@ -1,6 +1,8 @@
 import { CtaPair } from "@/components/CtaPair";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("howItWorks");
@@ -23,6 +25,7 @@ const designedCallStages = [
 export default function HowItWorksPage() {
   return (
     <>
+      <JsonLd data={funnelPageJsonLd("howItWorks")} />
       <PageHero
         eyebrow="Pre-launch. Not a public live service yet."
         title="From your website URL to a sandbox receptionist pack."

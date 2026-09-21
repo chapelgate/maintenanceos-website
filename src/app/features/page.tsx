@@ -1,5 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("features");
@@ -125,6 +127,7 @@ const notOnThisSite = [
 export default function FeaturesPage() {
   return (
     <>
+      <JsonLd data={funnelPageJsonLd("features")} />
       <PageHero
         eyebrow="Capability map · Pre-launch"
         title="What MaintenanceOS includes — HAVE, UNDER TEST, COMING"

@@ -1,6 +1,8 @@
 import { CtaPair } from "@/components/CtaPair";
 import { DemoConversionTabs } from "@/components/DemoConversionTabs";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 
@@ -34,6 +36,7 @@ const pathSteps = [
 export default function DemoPage() {
   return (
     <>
+      <JsonLd data={funnelPageJsonLd("demo")} />
       <PageHero
         eyebrow="Pre-launch. Not a live phone."
         title="Start from your website URL."
