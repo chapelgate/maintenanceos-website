@@ -67,4 +67,44 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /Website → Check → Review → Pack/);
   assert.match(matrix, /HAVE \/ UNDER TEST \/ COMING/);
   assert.match(matrix, /narrative aligned; still not a live phone/);
+  assert.match(matrix, /Demo \/ “see it live” CTAs vs `\/create` funnel/);
+  assert.match(matrix, /demo CTAs aligned; still not a live phone/);
+});
+
+test("demo page names the website-to-pack path and does not book a live phone", () => {
+  const page = read("src/app/demo/page.tsx");
+  const tabs = read("src/components/DemoConversionTabs.tsx");
+  const create = read("src/lib/onboarding-create.ts");
+
+  assert.match(create, /label: "Website"/);
+  assert.match(page, /CREATE_JOURNEY_STEPS/);
+  assert.match(page, /Website → Check → Review → Pack/);
+  assert.match(page, /website URL → check → review draft → knowledge pack/);
+  assert.match(page, /optional scripted sandbox/);
+  assert.match(page, /Create from website/);
+  assert.match(page, /live number/);
+  assert.doesNotMatch(page, /See MaintenanceOS/);
+  assert.doesNotMatch(page, /Book a product walkthrough/);
+  assert.doesNotMatch(page, /Book a MaintenanceOS/);
+  assert.doesNotMatch(page, /commercially generally available/i);
+
+  assert.match(tabs, /Request early access/);
+  assert.match(tabs, /not live number provisioning/);
+  assert.match(tabs, /leadType="early_demo"/);
+});
+
+test("primary conversion CTAs point at /create, not a live phone demo", () => {
+  const pair = read("src/components/CtaPair.tsx");
+  const header = read("src/components/SiteHeader.tsx");
+  const home = read("src/app/page.tsx");
+  const industries = read("src/components/IndustryRolePage.tsx");
+
+  assert.match(pair, /primaryHref = "\/create\/"/);
+  assert.match(pair, /secondaryHref = "\/demo\/#demo"/);
+  assert.match(header, /href="\/create\/"/);
+  assert.match(header, /Create from website/);
+  assert.doesNotMatch(header, /See it live/i);
+  assert.match(home, /primaryHref="\/create\/"/);
+  assert.match(industries, /primaryHref="\/create\/"/);
+  assert.match(industries, /secondaryHref="\/demo\/#demo"/);
 });

@@ -11,7 +11,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - Website mode: pre-launch / early access
 - Product: under testing for release; not commercially live / not general availability
 - AI receptionist: under testing and in development (historical validation calls only — not a public production voice service)
-- Conversion on this site: Join launch list, or Request early demo
+- Conversion on this site: Create from website (primary), or Join launch list / Request early demo (human early-access briefing — not a live phone)
 - Do not describe this site as a live customer portal, billing product, or always-on telephony service
 
 ## Key pages
@@ -23,12 +23,14 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; no ISO/SOC 2 claims
 - [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
 - [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — request pricing / launching soon
-- [Demo](https://seahorse-app-4oasq.ondigitalocean.app/demo/): Join launch list or request an early demo (not a public live phone demo)
+- [Create](https://seahorse-app-4oasq.ondigitalocean.app/create/): Website URL → check → review draft → knowledge pack → optional scripted sandbox → early access — not a live phone
+- [Demo](https://seahorse-app-4oasq.ondigitalocean.app/demo/): Same path; Create from website, or Join launch list / Request early demo as a human briefing (not a public live phone demo)
 
 ## Contact
 
+- Create from website: https://seahorse-app-4oasq.ondigitalocean.app/create/
 - Join launch list: https://seahorse-app-4oasq.ondigitalocean.app/demo/#launch
-- Request early demo: https://seahorse-app-4oasq.ondigitalocean.app/demo/
+- Request early demo / early access: https://seahorse-app-4oasq.ondigitalocean.app/demo/#demo
 - General enquiries: https://seahorse-app-4oasq.ondigitalocean.app/contact/
 
 There is no public always-on phone number to call on this site.

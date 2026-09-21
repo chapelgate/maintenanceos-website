@@ -104,3 +104,5 @@ TELEPHONY_CONTROLLED_CALL: NO-GO
 ```
 
 **Fonio amendment (2026-09-21):** added website-repo rows **F-01–F-05** under UNDER TEST so `/create`, scan, knowledge pack, scripted sandbox, and conversation-benchmark claims stay non-present-fact until live scan on staging is evidenced. VERIFIED rows and the signature above are unchanged. Do not claim a live always-on phone.
+
+**Fonio amendment (2026-09-21, /demo CTAs):** the public primary CTA is now **Create from website** (`/create/`). Join launch list / Request early demo remain allowed secondary conversions. Request early demo is a human early-access briefing — not live number provisioning. VERIFIED rows and the signature above are unchanged.

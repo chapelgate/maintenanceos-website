@@ -79,10 +79,10 @@ export function IndustryRolePage({ role }: Props) {
 
         <section className="space-y-4 border-t border-border pt-8">
           <CtaPair
-            primaryHref="/demo/"
-            primaryLabel="Request early demo"
-            secondaryHref="/demo/#launch"
-            secondaryLabel="Join launch list"
+            primaryHref="/create/"
+            primaryLabel="Create from website"
+            secondaryHref="/demo/#demo"
+            secondaryLabel="Request early access"
           />
           <p className="text-sm text-muted">
             <a href="/industries/" className="text-accent underline">

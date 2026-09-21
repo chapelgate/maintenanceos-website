@@ -18,8 +18,9 @@ This site is not a commercially live product storefront.
 
 Allowed calls to action:
 
+- Create from website (public path: website URL → check → review → pack → optional scripted sandbox → early access)
 - Join launch list
-- Request early demo / request pricing
+- Request early demo / request early access / request pricing (human briefing — not live number provisioning)
 
 Not offered here:
 
@@ -80,7 +81,8 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Security: https://seahorse-app-4oasq.ondigitalocean.app/security/
 - Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
 - Pricing: https://seahorse-app-4oasq.ondigitalocean.app/pricing/
-- Demo (launch list + early demo): https://seahorse-app-4oasq.ondigitalocean.app/demo/
+- Create (website → pack → early access): https://seahorse-app-4oasq.ondigitalocean.app/create/
+- Demo (same path; launch list + early-access briefing, not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/demo/
 - Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
 - FAQ: https://seahorse-app-4oasq.ondigitalocean.app/faq/
 - Contact: https://seahorse-app-4oasq.ondigitalocean.app/contact/

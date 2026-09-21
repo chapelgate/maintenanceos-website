@@ -150,15 +150,15 @@ export default function SecurityPage() {
           Talk through the controls
         </h2>
         <p className="mt-2 text-muted">
-          Pre-launch — join the list or request an early demo. We will not
-          present a fake certificate pack.
+          Pre-launch — start from your website, or request an early-access
+          briefing. We will not present a fake certificate pack.
         </p>
         <CtaPair
           className="mt-6"
-          primaryHref="/demo/#launch"
-          primaryLabel="Join launch list"
-          secondaryHref="/demo/"
-          secondaryLabel="Request early demo"
+          primaryHref="/create/"
+          primaryLabel="Create from website"
+          secondaryHref="/demo/#demo"
+          secondaryLabel="Request early access"
         />
       </section>
     </>

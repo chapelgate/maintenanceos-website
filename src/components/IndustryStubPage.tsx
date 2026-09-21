@@ -31,17 +31,17 @@ export function IndustryStubPage({
           <a href="/security/" className="text-accent underline">
             Security
           </a>
-          . Ready to talk?{" "}
-          <a href="/demo/" className="text-accent underline">
-            Request early demo
+          . Start from a website URL:{" "}
+          <a href="/create/" className="text-accent underline">
+            Create from website
           </a>
           .
         </p>
         <CtaPair
-          primaryHref="/demo/"
-          primaryLabel="Request early demo"
-          secondaryHref="/demo/#launch"
-          secondaryLabel="Join launch list"
+          primaryHref="/create/"
+          primaryLabel="Create from website"
+          secondaryHref="/demo/#demo"
+          secondaryLabel="Request early access"
         />
       </div>
     </>

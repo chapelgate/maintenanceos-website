@@ -114,12 +114,12 @@ export default function CreateReceptionistPage() {
             </li>
           </ul>
           <p className="mt-3">
-            Prefer a briefing instead?{" "}
+            Prefer a human briefing instead?{" "}
             <a
-              href="/demo/"
+              href="/demo/#demo"
               className="font-medium text-accent underline-offset-4 hover:underline"
             >
-              Request an early demo
+              Request early access
             </a>
             .
           </p>
