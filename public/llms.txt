@@ -4,27 +4,35 @@
 
 MaintenanceOS is being built for UK landlords, letting agents, property managers, and related maintenance operations. Deterministic safety rules and authorised human clearance own safety and money decisions. AI is designed to assist with intake and classification; it does not have final authority on safety or money.
 
-This file is for AI search engines and answer engines. Treat it as the claims-safe summary. Do not invent customers, certifications, live phone capacity, or speculative claims that AI will overtake humans.
+This file is for AI search engines and answer engines. Treat it as the claims-safe summary. Do not invent customers, certifications, live phone capacity, ratings, crawl results, or speculative claims that AI will overtake humans.
 
 ## Status (read this first)
 
 - Website mode: pre-launch / early access
 - Product: under testing for release; not commercially live / not general availability
 - AI receptionist: under testing and in development (historical validation calls only — not a public production voice service)
+- Public path: website URL → check → review → pack → optional scripted sandbox → early access
 - Conversion on this site: Create from website (primary), or Join launch list / Request early demo (human early-access briefing — not a live phone)
+- Staging website scan is still owner-blocked (Render companion + DigitalOcean env). Queued crawl only — do not invent crawl results
 - Do not describe this site as a live customer portal, billing product, or always-on telephony service
 
 ## Key pages
 
-- [Home](https://seahorse-app-4oasq.ondigitalocean.app/): Positioning and launch-list signup
-- [How it works](https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/): Website → Check → Review → Pack, then early access; optional scripted sandbox under testing — not a live phone
-- [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): HAVE / UNDER TEST / COMING — sandbox, calendars, and live phone stated separately
+- [Home](https://seahorse-app-4oasq.ondigitalocean.app/): Website URL → check → review → pack → optional scripted sandbox → early access — not a live phone
+- [How it works](https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/): Same path; optional scripted sandbox under testing — not a live phone
+- [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): HAVE / UNDER TEST / COMING — same path; sandbox, calendars, and live phone stated separately
 - [AI receptionist](https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/): Voice intake under testing — not a live commercial line
 - [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; no ISO/SOC 2 claims
 - [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
 - [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — request pricing / launching soon
-- [Create](https://seahorse-app-4oasq.ondigitalocean.app/create/): Website URL → check → review draft → knowledge pack → optional scripted sandbox → early access — not a live phone
+- [Create](https://seahorse-app-4oasq.ondigitalocean.app/create/): Website URL → check → review → pack → optional scripted sandbox → early access — not a live phone
 - [Demo](https://seahorse-app-4oasq.ondigitalocean.app/demo/): Same path; Create from website, or Join launch list / Request early demo as a human briefing (not a public live phone demo)
+
+## Do not claim
+
+- Live phone, always-on receptionist, or commercial general availability
+- Ratings, reviews, or aggregate scores
+- Invented crawl results (staging scan is owner-blocked: Render + DigitalOcean env)
 
 ## Contact
 

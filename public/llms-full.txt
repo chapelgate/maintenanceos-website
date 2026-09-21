@@ -28,6 +28,8 @@ Not offered here:
 - Public always-on receptionist phone number
 - Self-serve “call our AI now” demo
 - Customer login, billing portal, or live status metrics
+- Ratings, reviews, or aggregate scores
+- Invented crawl results (staging scan is still owner-blocked: Render companion + DigitalOcean env)
 
 ## VERIFIED (present as product capability in source — still pre-launch, not “buy now live service”)
 
@@ -55,8 +57,8 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Live human-transfer answer / no-answer on carrier — historical mixed outcomes; retest open
 - Public / production hosting of the product runtime — do not market as public production
 - Website `/dashboard` foundation — coming / under testing unless a local flag is on; SAMPLE / DEMO rows only, not live call history
-- Website `/create` multi-step funnel exists as an early-access preview (F-01). Marketing `/how-it-works` and `/features` now describe the same path (Website → Check → Review → Pack). Not a live receptionist. Under testing as a productised website-to-assistant until live scan on staging is evidenced
-- SSRF-safe website scan companion (F-02) — flagged, often unset on staging; do not claim a live knowledge crawl
+- Website `/create` multi-step funnel exists as an early-access preview (F-01). Marketing `/how-it-works`, `/features`, `/demo`, and funnel-page SEO / JSON-LD now describe the same path (website URL → check → review → pack → optional scripted sandbox → early access). Not a live receptionist. Under testing as a productised website-to-assistant until live scan on staging is evidenced
+- SSRF-safe website scan companion (F-02) — flagged; staging scan is still owner-blocked (Render companion + DigitalOcean env). Queued crawl only — do not invent crawl results or claim a live knowledge crawl
 - Knowledge pack + system prompt draft (F-03) and pack-aware scripted sandbox (F-04) — under testing; not a live phone
 - Scripted conversation benchmark (F-05) exists for fixture scoring only. Live-call barge-in is open. Not Fonio voice-quality parity. No always-on live phone
 
@@ -69,19 +71,24 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Public customer portal / account login / billing GA
 - Live email / messaging / remote AI side effects as “live now”
 - Certifications (ISO, SOC 2, Cyber Essentials, or others)
-- Fake uptime percentages, customer logos, awards, reviews, or named case studies
+- Ratings, reviews, aggregateRating, or invented crawl results
+- Fake uptime percentages, customer logos, awards, or named case studies
 - That AI will overtake humans or run the operation unsupervised
+
+## Structured data and robots (claims-safe)
+
+Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`) publish Organization + WebSite + WebPage + SoftwareApplication JSON-LD from the same funnel copy. SoftwareApplication has no telephone, aggregateRating, reviews, or offers. robots.txt allows major AI crawlers to read marketing pages, `/llms.txt`, and this file. Do not treat schema or this file as evidence of a live phone, always-on line, general availability, ratings, or a completed staging crawl.
 
 ## Key URLs
 
-- Home: https://seahorse-app-4oasq.ondigitalocean.app/
+- Home (same path as Create): https://seahorse-app-4oasq.ondigitalocean.app/
 - How it works: https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/
 - Features: https://seahorse-app-4oasq.ondigitalocean.app/features/
 - AI receptionist: https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/
 - Security: https://seahorse-app-4oasq.ondigitalocean.app/security/
 - Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
 - Pricing: https://seahorse-app-4oasq.ondigitalocean.app/pricing/
-- Create (website → pack → early access): https://seahorse-app-4oasq.ondigitalocean.app/create/
+- Create (website URL → check → review → pack → optional scripted sandbox → early access): https://seahorse-app-4oasq.ondigitalocean.app/create/
 - Demo (same path; launch list + early-access briefing, not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/demo/
 - Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
 - FAQ: https://seahorse-app-4oasq.ondigitalocean.app/faq/
