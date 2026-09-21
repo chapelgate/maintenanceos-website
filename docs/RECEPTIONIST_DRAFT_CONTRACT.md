@@ -44,7 +44,7 @@ Omit a key rather than guess. `missing` lists the five draft keys that were empt
 
 ## `/create` UI
 
-After draft review (step 3), step 4 shows an **editable** pack + prompt preview and a **read-only** limitations list (pre-launch, no live number). Submit stores the pack on the early-access lead. The flagged sandbox panel may send pack + prompt on `POST /v1/sandbox/sessions`. If omitted, the companion builds them from draft fields.
+After draft review (step 3), step 4 shows a **compact** editable pack + prompt preview and a **read-only** limitations list (pre-launch, no live number). Submit stores the pack on the early-access lead. The flagged sandbox panel may send pack + prompt on `POST /v1/sandbox/sessions` (one-click scripted demo). If omitted, the companion builds them from draft fields.
 
 ## Sandbox consume
 

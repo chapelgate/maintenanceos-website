@@ -11,7 +11,7 @@
 4. Review screen: name, greeting, services, FAQs, hours (edit inline).
 5. Preview claims-safe knowledge pack + system prompt (edit inline). Missing fields stay missing.
 6. Choose voice + language (UK English default).
-7. **Call my receptionist** — sandbox test (feature-flagged; not fake).
+7. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone.
 8. Connect calendar / number / go-live checklist — calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). Not a live phone booking step.
 
 ## Failure modes (must handle)

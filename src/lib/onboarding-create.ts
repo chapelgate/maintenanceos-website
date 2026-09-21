@@ -29,6 +29,78 @@ export function isValidEmail(value: string): boolean {
   return EMAIL_RE.test(value.trim());
 }
 
+export type CreateJourneyStep = 1 | 2 | 3 | 4;
+
+export type CreateScanProgress =
+  | "checking"
+  | "scanning"
+  | "queued"
+  | "scanned"
+  | "scanned_empty"
+  | "scan_failed";
+
+/** Four-step /create funnel labels. Next-action names the button, not a live phone. */
+export const CREATE_JOURNEY_STEPS: {
+  step: CreateJourneyStep;
+  label: string;
+  nextAction: string;
+}[] = [
+  { step: 1, label: "Website", nextAction: "Check this website" },
+  { step: 2, label: "Check", nextAction: "Review draft" },
+  { step: 3, label: "Review", nextAction: "Preview knowledge pack" },
+  { step: 4, label: "Pack", nextAction: "Submit early access request" },
+];
+
+export function isCreateScanReady(progress: CreateScanProgress): boolean {
+  return (
+    progress === "queued" ||
+    progress === "scanned" ||
+    progress === "scanned_empty" ||
+    progress === "scan_failed"
+  );
+}
+
+export function createScanProgressTitle(progress: CreateScanProgress): string {
+  switch (progress) {
+    case "scanning":
+      return "Asking the scan service…";
+    case "queued":
+      return "Crawl queued — next: review a blank draft";
+    case "scanned":
+      return "Scan ready — next: review extracted fields";
+    case "scanned_empty":
+      return "Scan returned nothing — next: complete the draft";
+    case "scan_failed":
+      return "Scan failed — next: complete the draft";
+    case "checking":
+    default:
+      return "Checking URL…";
+  }
+}
+
+export function createJourneyNextAction(
+  step: CreateJourneyStep,
+  progress?: CreateScanProgress,
+): string {
+  if (step === 2 && progress && !isCreateScanReady(progress)) {
+    return "Checking…";
+  }
+  return CREATE_JOURNEY_STEPS[step - 1]?.nextAction ?? "Continue";
+}
+
+/**
+ * Visible empty-state for hours/services. Never a sample timetable or service list.
+ */
+export function emptyHoursOrServicesNote(
+  field: "hours" | "services",
+  value: string | undefined,
+): string | null {
+  if (typeof value === "string" && value.trim()) return null;
+  return field === "hours"
+    ? "Empty — not on file. Opening hours were not invented."
+    : "Empty — not on file. Services were not invented.";
+}
+
 export function normalisePublicUrl(raw: string): string | null {
   const trimmed = raw.trim();
   if (!trimmed) return null;

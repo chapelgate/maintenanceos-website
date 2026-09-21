@@ -114,7 +114,7 @@ Use a public `https://` site (for example `https://example.com/`). Extract is be
 | Setup | What you should see |
 | --- | --- |
 | Public flag **off** (default) | **Sandbox test call — under testing / coming.** No live number. |
-| Flag on + this stack | **Sandbox test call — local scripted demo.** Create session, then **Start scripted sandbox test**. Status `scripted_demo_complete`. Turns answer from the stored knowledge pack + system prompt. Missing pack fields are answered as not on file — never invented. Still not a live number. |
+| Flag on + this stack | **Sandbox test call — local scripted demo.** One click: **Run pack-aware scripted demo**. Status `scripted_demo_complete`. Turns answer from the stored knowledge pack + system prompt. Missing pack fields are answered as not on file — never invented. Still not a live number. |
 | WebRTC / live media | Honest **`not_configured`** / **`live_call_forbidden`**. The UI must not show a successful live customer call. Frozen production voice is untouched. Do not claim Fonio voice quality. |
 
 ### `/dashboard` (optional)

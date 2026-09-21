@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   mapSessionResponse,
   mapTestResponse,
+  requestSandboxScriptedDemo,
   requestSandboxSession,
   requestSandboxTest,
   resetBrowserSandboxMock,
@@ -116,6 +117,46 @@ test("in-browser mock creates a session and runs a scripted demo", async () => {
   assert.ok(tested.data.turns.some((turn) => turn.text.includes("Warm homes")));
   assert.ok(tested.data.turns.some((turn) => /Acme Plumbing/.test(turn.text) && /9-5/.test(turn.text)));
   assert.ok(tested.data.turns.some((turn) => /Boilers/.test(turn.text)));
+});
+
+test("requestSandboxScriptedDemo is one pack-aware click and stays off by default", async () => {
+  resetBrowserSandboxMock();
+  const disabled = await requestSandboxScriptedDemo({
+    enabled: false,
+    endpoint: "",
+    draft: {
+      businessName: "Acme Plumbing",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+  });
+  assert.equal(disabled.status, "disabled");
+
+  const demo = await requestSandboxScriptedDemo({
+    enabled: true,
+    endpoint: "",
+    draft: {
+      businessName: "Acme Plumbing",
+      greeting: "",
+      hours: "",
+      services: "Boilers",
+      faqs: "",
+    },
+  });
+  assert.equal(demo.status, "ok");
+  if (demo.status !== "ok") return;
+  assert.equal(demo.data.session.liveCall, false);
+  assert.equal(demo.data.session.liveNumber, null);
+  assert.equal(demo.data.test.status, "scripted_demo_complete");
+  assert.equal(demo.data.test.liveCall, false);
+  assert.ok(demo.data.test.turns.some((turn) => /Boilers/.test(turn.text)));
+  assert.ok(
+    demo.data.test.turns.some(
+      (turn) => /opening hours/i.test(turn.text) && /not on file/i.test(turn.text),
+    ),
+  );
 });
 
 test("in-browser scripted demo uses overlay pack and does not invent missing hours", async () => {
