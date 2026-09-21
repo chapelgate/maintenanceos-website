@@ -1,14 +1,9 @@
 import { CalendarConnectPanel } from "@/components/CalendarConnectPanel";
 import { CreateJourney } from "@/components/CreateJourney";
 import { PageHero } from "@/components/PageHero";
-import { contentPageMetadata } from "@/lib/page-meta";
+import { funnelPageMetadata } from "@/lib/page-meta";
 
-export const metadata = contentPageMetadata({
-  title: "Create your AI receptionist",
-  description:
-    "Paste your business website URL, review a draft, and request website-to-receptionist early access. Pre-launch — this form does not provision a live phone number.",
-  path: "/create/",
-});
+export const metadata = funnelPageMetadata("create");
 
 const steps = [
   {

@@ -1,13 +1,8 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
-import { contentPageMetadata } from "@/lib/page-meta";
+import { funnelPageMetadata } from "@/lib/page-meta";
 
-export const metadata = contentPageMetadata({
-  title: "Features",
-  description:
-    "HAVE / UNDER TEST / COMING map for MaintenanceOS: public website-to-pack funnel, flagged sandbox and calendars, and live phone still coming. Pre-launch — not commercial general availability.",
-  path: "/features/",
-});
+export const metadata = funnelPageMetadata("features");
 
 const groups = [
   {

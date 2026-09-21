@@ -1,14 +1,9 @@
 import { CtaPair } from "@/components/CtaPair";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
 import { PageHero } from "@/components/PageHero";
-import { contentPageMetadata } from "@/lib/page-meta";
+import { funnelPageMetadata } from "@/lib/page-meta";
 
-export const metadata = contentPageMetadata({
-  title: "How MaintenanceOS is designed to work — Website to knowledge pack",
-  description:
-    "Website → Check → Review → Pack, then early access. Optional scripted sandbox is under testing. Deterministic rules own safety and money. Pre-launch — not a live phone.",
-  path: "/how-it-works/",
-});
+export const metadata = funnelPageMetadata("howItWorks");
 
 const designedCallStages = [
   {

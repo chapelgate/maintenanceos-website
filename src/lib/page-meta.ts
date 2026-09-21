@@ -2,11 +2,52 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
-const defaultTitle = `${siteConfig.name} — Property maintenance operations`;
+/** Canonical public path named in funnel-page titles, descriptions, and OG. */
+export const FUNNEL_PATH_LABEL =
+  "Website → Check → Review → Pack → optional sandbox → early access";
+
+const FUNNEL_META_GUARD =
+  "Pre-launch — not a live phone, not always-on, not general availability.";
+
+const defaultTitle = `${siteConfig.name} — Website to knowledge pack`;
 
 function ogLocale(): string {
   return siteConfig.locale.replace("-", "_");
 }
+
+/**
+ * Claims-safe title/description for funnel routes.
+ * Path: website → check → review → pack → optional sandbox → early access.
+ * Do not imply a live phone, always-on line, or general availability.
+ */
+export const funnelPageCopy = {
+  home: {
+    title: "Website to knowledge pack for UK maintenance",
+    absoluteTitle: `${siteConfig.name} — Website to knowledge pack for UK maintenance`,
+    description: `${FUNNEL_PATH_LABEL}. For UK landlords, agents, and managers. ${FUNNEL_META_GUARD}`,
+    path: "/",
+  },
+  create: {
+    title: "Create from your website",
+    description: `${FUNNEL_PATH_LABEL}. Paste a public URL and review the draft. Pre-launch — not a live phone number; this form does not provision one.`,
+    path: "/create/",
+  },
+  demo: {
+    title: "Start from your website — or request early access",
+    description: `${FUNNEL_PATH_LABEL}. Create from your site, or request a human briefing. Pre-launch — not a live phone number.`,
+    path: "/demo/",
+  },
+  howItWorks: {
+    title: "How it works — website to pack",
+    description: `${FUNNEL_PATH_LABEL}. Optional scripted sandbox is under testing. Deterministic rules own safety and money. Pre-launch — not a live phone.`,
+    path: "/how-it-works/",
+  },
+  features: {
+    title: "Features — website to pack",
+    description: `HAVE / UNDER TEST / COMING: ${FUNNEL_PATH_LABEL}. Flagged sandbox and calendars; live phone still coming. Pre-launch — not a live phone or commercial general availability.`,
+    path: "/features/",
+  },
+} as const;
 
 /** Root metadata for the static marketing export. Indexable; copy stays pre-launch. */
 export function buildRootMetadata(): Metadata {
@@ -44,13 +85,17 @@ export function contentPageMetadata(opts: {
   title: string;
   description: string;
   path: string;
+  /** When set, document/OG/Twitter titles skip the `%s · MaintenanceOS` template. */
+  absoluteTitle?: string;
 }): Metadata {
   const path = opts.path.endsWith("/") ? opts.path : `${opts.path}/`;
   const canonical = absoluteUrl(path);
-  const ogTitle = `${opts.title} · ${siteConfig.name}`;
+  const ogTitle = opts.absoluteTitle ?? `${opts.title} · ${siteConfig.name}`;
 
   return {
-    title: opts.title,
+    title: opts.absoluteTitle
+      ? { absolute: opts.absoluteTitle }
+      : opts.title,
     description: opts.description,
     alternates: { canonical },
     openGraph: {
@@ -67,6 +112,12 @@ export function contentPageMetadata(opts: {
       description: opts.description,
     },
   };
+}
+
+export function funnelPageMetadata(
+  page: keyof typeof funnelPageCopy,
+): Metadata {
+  return contentPageMetadata(funnelPageCopy[page]);
 }
 
 export function industryRoleMetadata(
