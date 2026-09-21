@@ -12,7 +12,7 @@ Toward Fonio’s “call my receptionist” loop, without touching the frozen li
 
 | Action | Meaning |
 | --- | --- |
-| Create / describe session | In-memory sandbox session from draft fields: `businessName`, `greeting`, `hours`, `services`, `faqs`. `kind: "sandbox"`. `liveNumber` is always `null`. |
+| Create / describe session | In-memory sandbox session from draft fields: `businessName`, `greeting`, `hours`, `services`, `faqs`, plus a claims-safe `knowledgePack` + `systemPrompt` (`packages/receptionist-draft`). `kind: "sandbox"`. `liveNumber` is always `null`. |
 | Start scripted test | Deterministic transcript against those draft fields. Missing fields are stated as missing. Status is `scripted_demo_complete` only. |
 | WebRTC / live media | Returns `not_configured` (or `live_call_forbidden` for `live` / `twilio`). Never `ok: true` with `liveCall: true`. |
 

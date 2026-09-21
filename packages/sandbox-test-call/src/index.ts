@@ -6,7 +6,9 @@ export {
 export type {
   CreateSessionInput,
   EngineDeps,
+  KnowledgePack,
   ReceptionistDraft,
+  ReceptionistDraftResult,
   SandboxErrorCode,
   SandboxFailure,
   SandboxResult,

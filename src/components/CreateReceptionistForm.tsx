@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useId, useState } from "react";
+import { ReceptionistDraftPreview } from "@/components/ReceptionistDraftPreview";
 import { siteConfig } from "@/config/site";
 import { submitLead } from "@/lib/lead-adapter";
 import {
@@ -15,6 +16,13 @@ import {
   type ReceptionistDraft,
   type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
+import {
+  buildReceptionistDraft,
+  finalizeSystemPrompt,
+  limitationsFor,
+  normalizeKnowledgePack,
+  type ReceptionistDraftResult,
+} from "@/lib/receptionist-draft";
 
 type Step = 1 | 2 | 3 | 4;
 type Status = "idle" | "submitting" | "success" | "error";
@@ -103,8 +111,10 @@ function DraftReviewField({
  */
 export function CreateReceptionistForm({
   onDraftChange,
+  onReceptionistChange,
 }: {
   onDraftChange?: (draft: ReceptionistDraft) => void;
+  onReceptionistChange?: (built: ReceptionistDraftResult | null) => void;
 } = {}) {
   const [step, setStep] = useState<Step>(1);
   const [status, setStatus] = useState<Status>("idle");
@@ -117,6 +127,12 @@ export function CreateReceptionistForm({
   const [organisation, setOrganisation] = useState("");
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
+  const [receptionist, setReceptionist] = useState<ReceptionistDraftResult | null>(
+    null,
+  );
+  const [packText, setPackText] = useState("");
+  const [promptText, setPromptText] = useState("");
+  const [packError, setPackError] = useState<string | null>(null);
   const errorId = useId();
   const progressId = useId();
   const businessNameHintId = useId();
@@ -128,6 +144,17 @@ export function CreateReceptionistForm({
   useEffect(() => {
     onDraftChange?.(draft);
   }, [draft, onDraftChange]);
+
+  useEffect(() => {
+    onReceptionistChange?.(receptionist);
+  }, [receptionist, onReceptionistChange]);
+
+  function applyBuilt(built: ReceptionistDraftResult) {
+    setReceptionist(built);
+    setPackText(JSON.stringify(built.knowledgePack, null, 2));
+    setPromptText(built.systemPrompt);
+    setPackError(null);
+  }
 
   useEffect(() => {
     if (step !== 2) return;
@@ -218,6 +245,10 @@ export function CreateReceptionistForm({
     setOrganisation(String(fd.get("organisation") ?? "").trim());
     setDraft(EMPTY_RECEPTIONIST_DRAFT);
     setFieldMeta({});
+    setReceptionist(null);
+    setPackText("");
+    setPromptText("");
+    setPackError(null);
     setStatus("idle");
     setStep(2);
   }
@@ -235,6 +266,7 @@ export function CreateReceptionistForm({
         draft,
         scanNote: scanNoteFor(progress),
         fieldMeta,
+        receptionist,
       }),
       website: "",
     });
@@ -464,6 +496,7 @@ export function CreateReceptionistForm({
             e.preventDefault();
             setStatus("idle");
             setError(null);
+            applyBuilt(buildReceptionistDraft(draft));
             setStep(4);
           }}
         >
@@ -528,7 +561,7 @@ export function CreateReceptionistForm({
               type="submit"
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
             >
-              Review and submit
+              Preview receptionist draft
             </button>
           </div>
         </form>
@@ -536,10 +569,57 @@ export function CreateReceptionistForm({
 
       {step === 4 ? (
         <div>
-          <p className="text-sm text-muted">
-            We will store this as a website-to-receptionist early access lead.
-            Submitting does not provision a number, place a test call, or send
-            email.
+          {receptionist ? (
+            <ReceptionistDraftPreview
+              result={receptionist}
+              packText={packText}
+              promptText={promptText}
+              packError={packError}
+              onPackTextChange={(value) => {
+                setPackText(value);
+                try {
+                  const parsed: unknown = JSON.parse(value);
+                  const pack = normalizeKnowledgePack(parsed);
+                  if (!pack) {
+                    setPackError(
+                      "Knowledge pack JSON was not accepted. Missing fields stay missing; live-call flags cannot be set.",
+                    );
+                    return;
+                  }
+                  setPackError(null);
+                  setReceptionist({
+                    knowledgePack: pack,
+                    systemPrompt: finalizeSystemPrompt(promptText),
+                    limitations: limitationsFor(pack),
+                  });
+                } catch {
+                  setPackError(
+                    "Knowledge pack must be valid JSON. The last accepted pack will be used until this parses.",
+                  );
+                }
+              }}
+              onPromptTextChange={(value) => {
+                setPromptText(value);
+                setReceptionist((current) =>
+                  current
+                    ? {
+                        ...current,
+                        systemPrompt: finalizeSystemPrompt(value),
+                      }
+                    : current,
+                );
+              }}
+              onReset={() => {
+                applyBuilt(buildReceptionistDraft(draft));
+              }}
+            />
+          ) : null}
+          <p className="mt-6 text-sm text-muted">
+            We will store this as a website-to-receptionist early access lead,
+            including the knowledge pack and system prompt draft. Submitting
+            does not provision a number, place a test call, or send email. If
+            the sandbox panel below is enabled, it can use this pack for a
+            scripted demo only.
           </p>
           <dl className="mt-4 space-y-3 text-sm">
             <div>
@@ -551,9 +631,9 @@ export function CreateReceptionistForm({
               <dd className="text-muted">{email}</dd>
             </div>
             <div>
-              <dt className="font-medium text-ink">Draft</dt>
+              <dt className="font-medium text-ink">Reviewed draft</dt>
               <dd>
-                <pre className="mt-1 max-h-64 overflow-auto rounded-md border border-border bg-paper p-3 text-xs text-ink">
+                <pre className="mt-1 max-h-40 overflow-auto rounded-md border border-border bg-paper p-3 text-xs text-ink">
                   {JSON.stringify(draft, null, 2)}
                 </pre>
               </dd>
@@ -588,7 +668,8 @@ export function CreateReceptionistForm({
             </button>
           </div>
           <p className="mt-3 text-xs text-muted">
-            Pre-launch only. This is not a live telephony signup.
+            Pre-launch only. This is not a live telephony signup. No always-on
+            receptionist was created.
           </p>
         </div>
       ) : null}

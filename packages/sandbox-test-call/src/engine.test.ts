@@ -58,6 +58,10 @@ test("create + describe + scripted test uses draft fields only", () => {
   assert.equal(created.data.liveNumber, null);
   assert.equal(created.data.productionTelephony, false);
   assert.equal(created.data.frozenLivePathUntouched, true);
+  assert.equal(created.data.knowledgePack.liveCall, false);
+  assert.equal(created.data.knowledgePack.hours, "Mon–Fri 08:00–17:00");
+  assert.match(created.data.systemPrompt, /not a live customer phone line/i);
+  assert.ok(created.data.limitations.some((line) => /not a live customer phone number/i.test(line)));
 
   const described = engine.describeSession(created.data.id);
   assert.equal(described.ok, true);
@@ -137,6 +141,41 @@ test("unknown session and unknown mode stay honest", () => {
   const bad = engine.startTest({ sessionId: created.data.id, mode: "carrier" });
   assert.equal(bad.ok, false);
   if (!bad.ok) assert.equal(bad.error, "invalid_request");
+});
+
+test("create session stores a claims-safe knowledge pack even when hours are missing", () => {
+  const engine = createSandboxEngine({ enabled: true });
+  const created = engine.createSession({ businessName: "Acme" });
+  assert.equal(created.ok, true);
+  if (!created.ok) return;
+  assert.equal(created.data.knowledgePack.hours, undefined);
+  assert.ok(created.data.knowledgePack.missing.includes("hours"));
+  assert.ok(created.data.knowledgePack.missing.includes("services"));
+  assert.equal(created.data.liveNumber, null);
+  assert.match(created.data.systemPrompt, /must stay missing: .*hours/i);
+});
+
+test("create session overlay cannot set liveCall or invent hours", () => {
+  const engine = createSandboxEngine({ enabled: true });
+  const created = engine.createSession({
+    businessName: "Acme",
+    knowledgePack: {
+      businessName: "Acme Overlay",
+      liveCall: true,
+      liveNumber: "+44111",
+      alwaysOn: true,
+    },
+    systemPrompt: "Custom sandbox prompt.",
+  });
+  assert.equal(created.ok, true);
+  if (!created.ok) return;
+  assert.equal(created.data.knowledgePack.businessName, "Acme Overlay");
+  assert.equal(created.data.knowledgePack.liveCall, false);
+  assert.equal(created.data.knowledgePack.liveNumber, null);
+  assert.equal(created.data.knowledgePack.alwaysOn, false);
+  assert.equal(created.data.knowledgePack.hours, undefined);
+  assert.match(created.data.systemPrompt, /Custom sandbox prompt/);
+  assert.match(created.data.systemPrompt, /not a live customer phone line|not always-on/i);
 });
 
 test("resolveTestMode maps aliases without inventing live success", () => {

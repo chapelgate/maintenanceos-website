@@ -296,6 +296,8 @@ export async function handleSandboxRequest(
         hours: asString(body.hours),
         services: asString(body.services),
         faqs: asString(body.faqs),
+        knowledgePack: body.knowledgePack,
+        systemPrompt: body.systemPrompt,
       });
       send(res, statusFor(result), origin, result, configured);
       return;

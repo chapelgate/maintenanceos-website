@@ -128,3 +128,35 @@ test("buildCreateLeadMessage includes field meta when provided", () => {
   assert.match(message, /Field meta JSON/);
   assert.match(message, /"source": "jsonld"/);
 });
+
+test("buildCreateLeadMessage includes receptionist pack when provided", () => {
+  const message = buildCreateLeadMessage({
+    businessUrl: "https://example.com/",
+    scanNote: "scan_response_mapped",
+    draft: {
+      businessName: "Acme",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+    receptionist: {
+      knowledgePack: {
+        untrusted: true,
+        kind: "sandbox_knowledge_pack",
+        liveCall: false,
+        liveNumber: null,
+        alwaysOn: false,
+        productionTelephony: false,
+        businessName: "Acme",
+        missing: ["greeting", "hours", "services", "faqs"],
+      },
+      systemPrompt: "not a live customer phone line",
+      limitations: ["Pre-launch sandbox draft only — not a live customer phone number."],
+    },
+  });
+  assert.match(message, /Receptionist knowledge pack JSON/);
+  assert.match(message, /sandbox_knowledge_pack/);
+  assert.match(message, /not a live customer phone line/);
+  assert.match(message, /not a live customer phone number/);
+});

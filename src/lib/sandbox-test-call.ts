@@ -5,6 +5,12 @@
  * Never invents a successful live phone call.
  */
 
+import {
+  overlayReceptionistDraft,
+  type KnowledgePack,
+  type ReceptionistDraftResult,
+} from "./receptionist-draft.ts";
+
 export type ReceptionistDraft = {
   businessName: string;
   greeting: string;
@@ -18,6 +24,9 @@ export type SandboxSession = {
   kind: "sandbox";
   status: string;
   draft: ReceptionistDraft;
+  knowledgePack?: KnowledgePack;
+  systemPrompt?: string;
+  limitations?: string[];
   createdAt: string;
   liveCall: false;
   liveNumber: null;
@@ -93,6 +102,34 @@ export function normalizeClientDraft(input: unknown): ReceptionistDraft {
   };
 }
 
+function attachReceptionist(
+  draft: ReceptionistDraft,
+  overlay?: { knowledgePack?: unknown; systemPrompt?: unknown },
+): ReceptionistDraftResult {
+  return overlayReceptionistDraft(draft, overlay);
+}
+
+function sessionFromDraft(
+  id: string,
+  draft: ReceptionistDraft,
+  overlay?: { knowledgePack?: unknown; systemPrompt?: unknown },
+  createdAt = "",
+): SandboxSession {
+  const built = attachReceptionist(draft, overlay);
+  return {
+    id,
+    kind: "sandbox",
+    status: "ready",
+    draft,
+    knowledgePack: built.knowledgePack,
+    systemPrompt: built.systemPrompt,
+    limitations: built.limitations,
+    createdAt,
+    liveCall: false,
+    liveNumber: null,
+  };
+}
+
 function firstFaqPair(faqs: string): { question: string; answer: string } | null {
   const text = faqs.trim();
   if (!text) return null;
@@ -159,15 +196,12 @@ export function mapSessionResponse(body: unknown): SandboxSession | null {
   const id = asNonEmptyString(src.id);
   if (!id) return null;
   if (src.liveCall === true || src.liveNumber) return null;
-  return {
+  return sessionFromDraft(
     id,
-    kind: "sandbox",
-    status: asNonEmptyString(src.status) || "ready",
-    draft: normalizeClientDraft(src),
-    createdAt: asNonEmptyString(src.createdAt) || "",
-    liveCall: false,
-    liveNumber: null,
-  };
+    normalizeClientDraft(src),
+    { knowledgePack: src.knowledgePack, systemPrompt: src.systemPrompt },
+    asNonEmptyString(src.createdAt) || "",
+  );
 }
 
 export function mapTestResponse(body: unknown): SandboxTest | null {
@@ -223,17 +257,17 @@ export function resetBrowserSandboxMock(): void {
   browserMock.testSeq = 0;
 }
 
-function browserCreateSession(draft: ReceptionistDraft): SandboxOutcome<SandboxSession> {
+function browserCreateSession(
+  draft: ReceptionistDraft,
+  overlay?: { knowledgePack?: unknown; systemPrompt?: unknown },
+): SandboxOutcome<SandboxSession> {
   browserMock.seq += 1;
-  const session: SandboxSession = {
-    id: `browser_sandbox_${browserMock.seq}`,
-    kind: "sandbox",
-    status: "ready",
-    draft: { ...EMPTY_DRAFT, ...normalizeClientDraft(draft) },
-    createdAt: new Date().toISOString(),
-    liveCall: false,
-    liveNumber: null,
-  };
+  const session = sessionFromDraft(
+    `browser_sandbox_${browserMock.seq}`,
+    { ...EMPTY_DRAFT, ...normalizeClientDraft(draft) },
+    overlay,
+    new Date().toISOString(),
+  );
   browserMock.sessions.set(session.id, session);
   return { status: "ok", data: session };
 }
@@ -346,11 +380,17 @@ export async function requestSandboxSession(input: {
   enabled: boolean;
   endpoint: string;
   draft: ReceptionistDraft;
+  knowledgePack?: KnowledgePack;
+  systemPrompt?: string;
 }): Promise<SandboxOutcome<SandboxSession>> {
   if (!input.enabled) return { status: "disabled" };
   const endpoint = sandboxEndpointBase(input.endpoint);
   const draft = normalizeClientDraft(input.draft);
-  if (!endpoint) return browserCreateSession(draft);
+  const overlay = {
+    knowledgePack: input.knowledgePack,
+    systemPrompt: input.systemPrompt,
+  };
+  if (!endpoint) return browserCreateSession(draft, overlay);
   if (!isAbsoluteHttpUrl(endpoint)) {
     return {
       status: "error",
@@ -358,9 +398,12 @@ export async function requestSandboxSession(input: {
         "Sandbox endpoint is not a valid http(s) URL. Static export cannot use relative API routes. No live call was placed.",
     };
   }
+  const payload: Record<string, unknown> = { ...draft };
+  if (input.knowledgePack) payload.knowledgePack = input.knowledgePack;
+  if (input.systemPrompt) payload.systemPrompt = input.systemPrompt;
   return postSandbox(
     `${endpoint}/sessions`,
-    draft,
+    payload,
     mapSessionResponse,
     "The sandbox service did not return a session id. No live call was placed.",
   );

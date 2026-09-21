@@ -14,6 +14,7 @@
 
 - [x] SSRF-safe website ingestion module (feature-flagged companion; off by default)
 - [x] Calendar adapter package + mock + Google OAuth start/callback scaffold (flagged off; not live on staging)
+- [x] Claims-safe knowledge pack + system prompt from reviewed `/create` draft (`packages/receptionist-draft`; `/create` preview; sandbox consume; missing fields stay missing; no live-phone claims)
 - Extract schema + review UI
 - Sandbox tenant create
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)

@@ -99,7 +99,7 @@ These are what the existing UI already does. The stack does not invent a success
 | This local stack (endpoint set, ingest on) | Step 2: **Asking the configured scan service…** then either mapped fields, **scan responded but returned no extractable fields**, or a fetch/SSRF failure. Missing keys stay empty. Step 3: filled fields may show a `fieldMeta` source + confidence hint; empty fields stay empty. |
 | `http://localhost/…` or a private IP | Scan **rejects** (SSRF). The form must not fill a fake draft. |
 
-Use a public `https://` site (for example `https://example.com/`). Extract is best-effort untrusted page data, not a live receptionist.
+Use a public `https://` site (for example `https://example.com/`). Extract is best-effort untrusted page data, not a live receptionist. After draft review, `/create` shows a knowledge pack + system prompt preview (`packages/receptionist-draft`). Missing hours/services stay missing; the prompt must not claim a live number.
 
 ### `/create` — calendar
 
@@ -114,7 +114,7 @@ Use a public `https://` site (for example `https://example.com/`). Extract is be
 | Setup | What you should see |
 | --- | --- |
 | Public flag **off** (default) | **Sandbox test call — under testing / coming.** No live number. |
-| Flag on + this stack | **Sandbox test call — local scripted demo.** Create session, then **Start scripted sandbox test**. Status `scripted_demo_complete`. Missing draft fields are stated as missing. |
+| Flag on + this stack | **Sandbox test call — local scripted demo.** Create session, then **Start scripted sandbox test**. Status `scripted_demo_complete`. Missing draft fields are stated as missing. Session includes a claims-safe knowledge pack + system prompt (from `/create` preview or built from draft). |
 | WebRTC / live media | Honest **`not_configured`** / **`live_call_forbidden`**. The UI must not show a successful live customer call. Frozen production voice is untouched. Do not claim Fonio voice quality. |
 
 ### `/dashboard` (optional)

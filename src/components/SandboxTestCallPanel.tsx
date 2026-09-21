@@ -9,6 +9,7 @@ import {
   type SandboxSession,
   type SandboxTest,
 } from "@/lib/sandbox-test-call";
+import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
 
 type SessionState = "idle" | "submitting" | "ok" | "error";
 type TestState = "idle" | "submitting" | "ok" | "error";
@@ -27,8 +28,10 @@ const EMPTY_DRAFT: ReceptionistDraft = {
  */
 export function SandboxTestCallPanel({
   draft = EMPTY_DRAFT,
+  receptionist = null,
 }: {
   draft?: ReceptionistDraft;
+  receptionist?: ReceptionistDraftResult | null;
 }) {
   const enabled = siteConfig.sandboxTestCallEnabled;
   const endpoint = siteConfig.sandboxTestCallEndpoint.trim();
@@ -49,6 +52,8 @@ export function SandboxTestCallPanel({
       enabled,
       endpoint,
       draft,
+      knowledgePack: receptionist?.knowledgePack,
+      systemPrompt: receptionist?.systemPrompt,
     });
     if (outcome.status === "ok") {
       setSession(outcome.data);
@@ -143,7 +148,7 @@ export function SandboxTestCallPanel({
       </p>
       <p className="mt-2 text-sm text-muted">
         {hasDraftSignal
-          ? "The scripted demo will use the draft fields from the create journey (business name, greeting, hours, services, FAQs). Empty fields stay empty."
+          ? "The scripted demo will use the draft fields from the create journey (business name, greeting, hours, services, FAQs). If you previewed a knowledge pack, that pack and prompt are sent with the sandbox session. Empty fields stay empty."
           : "No draft fields have been entered yet. You can still create a sandbox session; missing answers will be stated as missing."}
       </p>
 

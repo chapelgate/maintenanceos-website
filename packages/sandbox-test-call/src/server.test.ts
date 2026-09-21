@@ -102,6 +102,8 @@ test("POST session + scripted test-call when enabled", async () => {
     assert.equal(createRes.status, 200);
     assert.equal(created.ok, true);
     assert.equal(created.data.liveNumber, null);
+    assert.equal(created.data.knowledgePack.liveCall, false);
+    assert.match(created.data.systemPrompt, /not a live customer phone line/i);
 
     const getRes = await fetch(`${base}/v1/sandbox/sessions/${created.data.id}`);
     const described = await getRes.json();

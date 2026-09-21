@@ -33,7 +33,9 @@ Content-Type: application/json
   "greeting": "Warm homes, honest quotes",
   "hours": "Mon–Fri 08:00–17:00",
   "services": "Boiler repair",
-  "faqs": "Q: Do you cover London?\nA: Yes, within the M25."
+  "faqs": "Q: Do you cover London?\nA: Yes, within the M25.",
+  "knowledgePack": { "untrusted": true, "kind": "sandbox_knowledge_pack", "liveCall": false, "liveNumber": null, "alwaysOn": false, "productionTelephony": false, "businessName": "Acme Plumbing", "missing": ["greeting"] },
+  "systemPrompt": "…"
 }
 ```
 
@@ -65,7 +67,7 @@ HTTP **200**:
 }
 ```
 
-Missing draft keys stay empty strings. The service must not invent greeting, hours, services, or FAQs.
+Missing draft keys stay empty strings. The service must not invent greeting, hours, services, or FAQs. Optional `knowledgePack` / `systemPrompt` are stored after claims-safe normalisation (`packages/receptionist-draft`). If omitted, they are built from the draft fields. `liveCall` stays false. See `docs/RECEPTIONIST_DRAFT_CONTRACT.md`.
 
 ## Describe session
 

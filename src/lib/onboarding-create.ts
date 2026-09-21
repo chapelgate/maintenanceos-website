@@ -233,6 +233,11 @@ export function buildCreateLeadMessage(input: {
   draft: ReceptionistDraft;
   scanNote: string;
   fieldMeta?: ScanDraftFieldMeta;
+  receptionist?: {
+    knowledgePack: unknown;
+    systemPrompt: string;
+    limitations: string[];
+  } | null;
 }): string {
   const parts = [
     "Website-to-receptionist early access request.",
@@ -243,6 +248,16 @@ export function buildCreateLeadMessage(input: {
   ];
   if (input.fieldMeta && Object.keys(input.fieldMeta).length) {
     parts.push("Field meta JSON:", JSON.stringify(input.fieldMeta, null, 2));
+  }
+  if (input.receptionist) {
+    parts.push(
+      "Receptionist knowledge pack JSON:",
+      JSON.stringify(input.receptionist.knowledgePack, null, 2),
+      "System prompt draft:",
+      input.receptionist.systemPrompt,
+      "Limitations:",
+      JSON.stringify(input.receptionist.limitations, null, 2),
+    );
   }
   return parts.join("\n");
 }

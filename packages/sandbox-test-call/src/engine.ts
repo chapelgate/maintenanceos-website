@@ -1,3 +1,4 @@
+import { overlayReceptionistDraft } from "../../receptionist-draft/src/index.ts";
 import { normalizeDraft } from "./draft.ts";
 import { isSandboxTestCallEnabled } from "./flags.ts";
 import { runScriptedDemo } from "./scripted.ts";
@@ -42,7 +43,12 @@ export function createSandboxEngine(deps: EngineDeps = {}) {
   return {
     createSession(input: CreateSessionInput = {}): SandboxResult<SandboxSession> {
       if (!enabled) return sandboxFailure("sandbox_disabled", DISABLED_MESSAGE);
-      const session = store.create(normalizeDraft(input), now());
+      const draft = normalizeDraft(input);
+      const built = overlayReceptionistDraft(draft, {
+        knowledgePack: input.knowledgePack,
+        systemPrompt: input.systemPrompt,
+      });
+      const session = store.create(draft, now(), built);
       return sandboxSuccess(session);
     },
 

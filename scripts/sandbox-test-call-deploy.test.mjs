@@ -42,6 +42,7 @@ test("sandbox-test-call Dockerfile matches npm run sandbox-test-call", () => {
     /CMD \["node", "--experimental-strip-types", "packages\/sandbox-test-call\/src\/server\.ts"\]/,
   );
   assert.match(docker, /SANDBOX_TEST_CALL_HOST=0\.0\.0\.0/);
+  assert.match(docker, /packages\/receptionist-draft\/src/);
   assert.doesNotMatch(docker, /^ENV SANDBOX_TEST_CALL_ENABLED=/m);
   assert.doesNotMatch(docker, /^ENV ONBOARDING_SANDBOX_CALL=/m);
   assert.match(docker, /DigitalOcean App Platform/);

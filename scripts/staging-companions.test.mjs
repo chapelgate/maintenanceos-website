@@ -54,6 +54,7 @@ test("create draft review surfaces fieldMeta as per-field hints", () => {
   const form = read("src/components/CreateReceptionistForm.tsx");
   assert.match(form, /scanFieldReviewHint/);
   assert.match(form, /DraftReviewField/);
+  assert.match(form, /ReceptionistDraftPreview/);
   assert.doesNotMatch(form, /Scan provenance \(untrusted page text\)/);
 });
 

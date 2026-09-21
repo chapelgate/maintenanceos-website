@@ -19,35 +19,36 @@ test("mapSessionResponse never invents an id or a live number", () => {
     }),
     null,
   );
-  assert.deepEqual(
-    mapSessionResponse({
-      ok: true,
-      data: {
-        id: "sandbox_sess_1",
-        kind: "sandbox",
-        status: "ready",
-        draft: { businessName: "Acme" },
-        createdAt: "2026-09-20T12:00:00.000Z",
-        liveCall: false,
-        liveNumber: null,
-      },
-    }),
-    {
+  const mapped = mapSessionResponse({
+    ok: true,
+    data: {
       id: "sandbox_sess_1",
       kind: "sandbox",
       status: "ready",
-      draft: {
-        businessName: "Acme",
-        greeting: "",
-        hours: "",
-        services: "",
-        faqs: "",
-      },
+      draft: { businessName: "Acme" },
       createdAt: "2026-09-20T12:00:00.000Z",
       liveCall: false,
       liveNumber: null,
     },
-  );
+  });
+  assert.ok(mapped);
+  assert.equal(mapped.id, "sandbox_sess_1");
+  assert.equal(mapped.kind, "sandbox");
+  assert.equal(mapped.status, "ready");
+  assert.deepEqual(mapped.draft, {
+    businessName: "Acme",
+    greeting: "",
+    hours: "",
+    services: "",
+    faqs: "",
+  });
+  assert.equal(mapped.createdAt, "2026-09-20T12:00:00.000Z");
+  assert.equal(mapped.liveCall, false);
+  assert.equal(mapped.liveNumber, null);
+  assert.equal(mapped.knowledgePack?.businessName, "Acme");
+  assert.equal(mapped.knowledgePack?.liveCall, false);
+  assert.ok(mapped.knowledgePack?.missing.includes("hours"));
+  assert.match(mapped.systemPrompt ?? "", /not a live customer phone line/i);
 });
 
 test("mapTestResponse rejects live-call payloads and missing ids", () => {
@@ -99,6 +100,8 @@ test("in-browser mock creates a session and runs a scripted demo", async () => {
   assert.match(session.data.id, /^browser_sandbox_/);
   assert.equal(session.data.liveNumber, null);
   assert.equal(session.data.liveCall, false);
+  assert.equal(session.data.knowledgePack?.hours, "9-5");
+  assert.match(session.data.systemPrompt ?? "", /not a live customer phone line/i);
 
   const tested = await requestSandboxTest({
     enabled: true,

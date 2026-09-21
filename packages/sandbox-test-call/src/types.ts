@@ -3,6 +3,11 @@
  * Never invent a live phone call: ok:true is only scripted / browser-mock.
  */
 
+import type {
+  KnowledgePack,
+  ReceptionistDraftResult,
+} from "../../receptionist-draft/src/index.ts";
+
 export const SANDBOX_TEST_MODES = ["scripted", "browser_mock", "webrtc", "live"] as const;
 export type SandboxTestMode = (typeof SANDBOX_TEST_MODES)[number];
 
@@ -13,6 +18,8 @@ export type ReceptionistDraft = {
   services: string;
   faqs: string;
 };
+
+export type { KnowledgePack, ReceptionistDraftResult };
 
 export type SandboxErrorCode =
   | "sandbox_disabled"
@@ -45,6 +52,9 @@ export type SandboxSession = {
   kind: "sandbox";
   status: "ready";
   draft: ReceptionistDraft;
+  knowledgePack: KnowledgePack;
+  systemPrompt: string;
+  limitations: string[];
   createdAt: string;
   liveCall: false;
   liveNumber: null;
@@ -80,7 +90,11 @@ export type SandboxTest = {
   frozenLivePathUntouched: true;
 };
 
-export type CreateSessionInput = Partial<ReceptionistDraft>;
+export type CreateSessionInput = Partial<ReceptionistDraft> & {
+  knowledgePack?: unknown;
+  systemPrompt?: unknown;
+  limitations?: unknown;
+};
 
 export type StartTestInput = {
   sessionId: string;
@@ -95,7 +109,11 @@ export type EngineDeps = {
 };
 
 export type SandboxStore = {
-  create(draft: ReceptionistDraft, now: Date): SandboxSession;
+  create(
+    draft: ReceptionistDraft,
+    now: Date,
+    built: ReceptionistDraftResult,
+  ): SandboxSession;
   get(id: string): SandboxSession | undefined;
   recordTest(test: SandboxTest): void;
   getTest(id: string): SandboxTest | undefined;
