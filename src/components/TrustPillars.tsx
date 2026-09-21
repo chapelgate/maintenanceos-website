@@ -40,7 +40,7 @@ export function TrustPillars() {
       <ul className="mt-10 grid gap-4 md:grid-cols-3">
         {PILLARS.map((pillar) => (
           <li key={pillar.id}>
-            <article className="flex h-full flex-col rounded-lg border border-border bg-surface p-5 shadow-[0_1px_2px_rgb(15_23_42_/_6%),0_8px_24px_rgb(15_23_42_/_6%)]">
+            <article className="mos-glass flex h-full flex-col p-5">
               <h3 className="text-lg font-semibold text-ink">{pillar.title}</h3>
               <p className="mt-1 text-sm font-medium text-accent">
                 {pillar.short}

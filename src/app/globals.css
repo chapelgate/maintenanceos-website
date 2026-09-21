@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 /*
- * Brand System v0.1 APPROVED (2026-09-17) — amber accent.
+ * Brand System v0.2 — Design council lock (2026-09-21).
+ * Light paper + amber accent. Orb is a SECONDARY “intake listening” cue.
+ * Glow is single-hue amber → peach/cream only. No dusk theme, no rainbow Siri blooms.
  * Source: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / ui-preview/tokens.css
- * Accent #B45309 · Ink #0F172A · Paper #F8FAFC · Inter
  */
 :root {
   /* Core (Brand / UI Visual System) */
@@ -17,6 +18,11 @@
   --color-accent-hover: #9a3412;
   --color-accent-subtle: #fef3c7;
   --color-on-accent: #ffffff;
+
+  /* Amber glow stops only — peach / cream. No cyan, violet, or black glyph. */
+  --glow-amber: #b45309;
+  --glow-peach: #f5c16c;
+  --glow-cream: #fffbeb;
 
   /* Functional — never colour-only */
   --color-ok: #15803d;
@@ -80,7 +86,8 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+summary:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
@@ -93,6 +100,15 @@ textarea:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .intake-orb,
+  .intake-orb::before {
+    animation: none !important;
+  }
+
+  .intake-cloud {
+    transition: none !important;
   }
 }
 
@@ -113,4 +129,142 @@ summary:focus-visible {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/*
+ * Ops glass — one blur layer, surface fill, thin line, brand shadow, 12px.
+ * Drop blur (keep fill + line + shadow) if frost ever fails AA.
+ */
+.mos-glass {
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--mos-shadow);
+  border-radius: var(--mos-radius-lg);
+}
+
+/* Soft amber wash for inner page heroes — gradient only, no extra blur layer. */
+.mos-page-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  background-image: radial-gradient(
+    ellipse 40% 80% at 100% 0%,
+    rgb(254 243 199 / 55%),
+    transparent 60%
+  );
+}
+
+/* ——— Intake listening orb (secondary affordance) ——— */
+
+.intake-orb-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.intake-orb-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 20rem);
+}
+
+.intake-orb {
+  position: relative;
+  z-index: 2;
+  width: 5.5rem;
+  height: 5.5rem;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: radial-gradient(
+    circle at 38% 32%,
+    var(--glow-cream) 0 16%,
+    #fde6c8 34%,
+    var(--glow-peach) 58%,
+    var(--glow-amber) 100%
+  );
+  box-shadow:
+    0 0 18px rgb(180 83 9 / 22%),
+    0 0 36px rgb(245 193 108 / 28%);
+  animation: intake-pulse 3.8s ease-in-out infinite;
+}
+
+.intake-orb::before {
+  content: "";
+  position: absolute;
+  inset: -28%;
+  border-radius: 50%;
+  z-index: -1;
+  background: radial-gradient(
+    circle,
+    rgb(245 193 108 / 38%),
+    rgb(180 83 9 / 0%) 70%
+  );
+  animation: intake-halo 4.4s ease-in-out infinite;
+}
+
+.intake-orb:hover {
+  box-shadow:
+    0 0 22px rgb(180 83 9 / 28%),
+    0 0 42px rgb(245 193 108 / 34%);
+}
+
+.intake-orb-stage.is-open .intake-orb {
+  animation: none;
+}
+
+.intake-cloud {
+  width: min(100%, 20rem);
+  margin-top: 0.75rem;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  text-align: left;
+  pointer-events: none;
+  transition:
+    opacity var(--mos-duration) var(--mos-easing),
+    max-height var(--mos-duration) var(--mos-easing);
+}
+
+.intake-orb-stage.is-open .intake-cloud {
+  max-height: 16rem;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.intake-cloud-inner {
+  padding: 1rem 1.1rem;
+}
+
+.intake-orb-caption {
+  margin: 0.65rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+@keyframes intake-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes intake-halo {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
 }

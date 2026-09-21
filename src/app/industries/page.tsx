@@ -30,7 +30,7 @@ export default function IndustriesPage() {
             <li key={ind.slug}>
               <a
                 href={`/industries/${ind.slug}/`}
-                className="block h-full rounded-lg border border-border bg-surface p-5 hover:border-accent"
+                className="mos-glass block h-full p-5 transition-shadow hover:shadow-[0_0_0_1px_var(--color-accent)]"
               >
                 <span className="font-semibold text-ink">{ind.productName}</span>
                 <span className="mt-1 block text-xs uppercase tracking-wide text-accent">

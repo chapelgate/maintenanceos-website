@@ -102,7 +102,7 @@ export default function AiReceptionistPage() {
           </p>
         </section>
 
-        <section className="rounded-md border border-border bg-surface p-5 text-sm text-muted">
+        <section className="mos-glass p-5 text-sm text-muted">
           <h2 className="text-base font-semibold text-ink">Where we are</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>

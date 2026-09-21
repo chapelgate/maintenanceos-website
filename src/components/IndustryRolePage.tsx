@@ -19,7 +19,7 @@ export function IndustryRolePage({ role }: Props) {
         lede={role.sub}
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
-        <p className="rounded-md border border-border bg-surface px-4 py-3 text-sm text-muted">
+        <p className="mos-glass px-4 py-3 text-sm text-muted">
           {honesty} Product line: <strong className="text-ink">{role.productName}</strong>{" "}
           under Chapelgate Technologies.
         </p>

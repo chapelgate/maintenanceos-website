@@ -1,7 +1,7 @@
 /**
- * MaintenanceOS design tokens — Brand System v0.1 (amber)
- * Source of truth: docs/website/BRAND_SYSTEM.md
- * For Front-End reuse (CSS modules / Tailwind theme mapping).
+ * MaintenanceOS design tokens — Brand System v0.2 (council lock)
+ * Light paper + amber accent. Orb glow is amber→peach→cream only.
+ * Source of truth: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / src/app/globals.css
  */
 
 :root {
@@ -12,9 +12,14 @@
   --mos-surface: #FFFFFF;
   --mos-line: #E2E8F0;
   --mos-accent: #B45309;
-  --mos-accent-hover: #D97706;
+  --mos-accent-hover: #9A3412;
   --mos-accent-subtle: #FEF3C7;
   --mos-on-accent: #FFFFFF;
+
+  /* Amber glow only */
+  --mos-glow-amber: #B45309;
+  --mos-glow-peach: #F5C16C;
+  --mos-glow-cream: #FFFBEB;
 
   /* Functional — never colour-only */
   --mos-ok: #15803D;
@@ -22,7 +27,7 @@
   --mos-critical: #B91C1C;
   --mos-info: #1D4ED8;
 
-  /* Elevation — Brand §6 one soft shadow */
+  /* Elevation — Brand one soft shadow */
   --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
 
   /* Radii */
@@ -55,19 +60,6 @@
 
   /* Layout */
   --mos-content-max: 70rem;
-}
-
-[data-theme="dark"] {
-  --mos-ink: #F8FAFC;
-  --mos-ink-muted: #94A3B8;
-  --mos-paper: #020617;
-  --mos-surface: #0F172A;
-  --mos-line: #1E293B;
-  --mos-accent: #F59E0B;
-  --mos-accent-hover: #FBBF24;
-  --mos-accent-subtle: #451A03;
-  --mos-on-accent: #0F172A;
-  --mos-shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 35%);
 }
 
 @media (prefers-reduced-motion: reduce) {

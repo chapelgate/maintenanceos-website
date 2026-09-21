@@ -36,7 +36,7 @@ export default function CustomerDashboardPage() {
         <CustomerDashboard />
 
         <section
-          className="rounded-md border border-border bg-surface p-5 text-sm text-muted"
+          className="mos-glass p-5 text-sm text-muted"
           aria-labelledby="dashboard-limits-heading"
         >
           <h2

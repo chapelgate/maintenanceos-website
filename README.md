@@ -2,7 +2,7 @@
 
 Truthful **pre-launch** marketing site for MaintenanceOS (not the product backend).
 
-**Brand System v0.1 APPROVED** — amber accent `#B45309`, ink `#0F172A`, paper `#F8FAFC`, Inter. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
+**Brand System v0.2 (council lock)** — light paper, amber accent `#B45309`, ops glass. The homepage orb is a secondary “intake listening” cue (amber→peach→cream only), not the brand mark and not a CTA. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
 
 ## Stance
 

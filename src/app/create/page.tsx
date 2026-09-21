@@ -86,7 +86,7 @@ export default function CreateReceptionistPage() {
         </section>
 
         <section
-          className="rounded-md border border-border bg-surface p-5 text-sm text-muted"
+          className="mos-glass p-5 text-sm text-muted"
           aria-labelledby="create-limits-heading"
         >
           <h2 id="create-limits-heading" className="text-base font-semibold text-ink">

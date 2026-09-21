@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { SiriOrbCloud } from "@/components/SiriOrbCloud";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
@@ -45,7 +46,7 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={funnelPageJsonLd("home")} />
-      {/* 1. Hero — UX journey entry */}
+      {/* 1. Hero — light paper; locked CTAs stay primary; orb is secondary */}
       <section className="border-b border-border bg-surface px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
           <div>
@@ -81,35 +82,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div
-            className="rounded-xl border border-border bg-paper p-6 shadow-sm"
-            aria-hidden="true"
-          >
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <span className="text-sm font-semibold text-ink">Work orders</span>
-              <span className="rounded-md bg-accent-subtle px-2 py-0.5 text-xs font-medium text-accent">
-                Structure only
-              </span>
-            </div>
-            <ul className="mt-4 space-y-3">
-              {[
-                { label: "Intake", note: "Caller details classified" },
-                { label: "Safety latch", note: "Awaiting human clearance" },
-                { label: "Escalation", note: "Queue — rules decide next" },
-              ].map((row) => (
-                <li
-                  key={row.label}
-                  className="flex items-center justify-between rounded-lg border border-border bg-surface px-3 py-2.5"
-                >
-                  <span className="text-sm font-medium text-ink">{row.label}</span>
-                  <span className="text-xs text-muted">{row.note}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-xs text-muted">
-              Placeholder ops chrome — not live metrics.
-            </p>
-          </div>
+          <SiriOrbCloud />
         </div>
       </section>
 
@@ -119,7 +92,7 @@ export default function HomePage() {
           {pillars.map((pillar) => (
             <article
               key={pillar.title}
-              className="rounded-xl border border-border bg-surface p-6 sm:p-8"
+              className="mos-glass p-6 sm:p-8"
             >
               <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
                 {pillar.title}
@@ -160,7 +133,7 @@ export default function HomePage() {
 
       {/* 4. Closing CTA band */}
       <section className="bg-surface px-4 py-14 sm:px-6">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 rounded-xl border border-border bg-paper p-8 sm:flex-row sm:items-center sm:p-10">
+        <div className="mos-glass mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
           <div className="max-w-lg">
             <h2 className="text-xl font-semibold text-ink sm:text-2xl">
               Join the list or start from your website

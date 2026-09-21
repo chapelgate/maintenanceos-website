@@ -21,7 +21,7 @@
 
 | Item | Before | After | Notes |
 |------|--------|-------|-------|
-| SiteHeader | `"use client"` (FE Shell #11) | Server + `<details>` | Preserves Shell amber CTA chrome (desktop outline Request early demo + solid Join launch list; mobile Join launch list + hamburger). Does not clobber Shell chrome. |
+| SiteHeader | `"use client"` (FE Shell #11) | Server + `<details>` | Preserves Shell amber CTA chrome (desktop outline Early access + solid Create from website; mobile Create + hamburger). Does not clobber Shell chrome. |
 | Content pages First Load JS | (header in client graph) | **103 kB** | Next build report |
 | Home / demo / contact First Load JS | — | **105 kB** | + form island |
 | Inter config | all default weights | `weight: ["400","600"]`, `display: "swap"` | Variable files still ~219 KB on disk; en-GB typically pulls ~latin preload + latin (~133 KB), not cyrillic/greek |
@@ -60,6 +60,8 @@ Default DigitalOcean flags still unset/false. Later check/review/pack steps are 
 | `/how-it-works`, `/features` | 103 kB | **103 kB** | ≤ 110 |
 | `/create` | **111 kB** (7.94 kB page) | **106 kB** (3.7 kB page) | ≤ 110 |
 
+Home after the council-lock orb pass: a small `SiriOrbCloud` island is allowed on `/` only. `/create` stays form-only — no interactive orb.
+
 `/create` First Load is now **under** the 110 kB target. The leftover 3.7 kB page island is the URL/email step plus the shared stepper. Scan, pack preview, and lead-submit stay off the initial `create/index.html` script tags (async chunks remain on disk). This is a split, not a form rewrite: step 1 still hydrates immediately; step 2 already shows “Checking URL…” for 700 ms.
 
 Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED=true`) after #53 was **118 kB** First Load on `/create` (15.2 kB page) — expected; companions stay off the DigitalOcean default graph via `NormalModuleReplacementPlugin` / Turbopack alias.
@@ -68,7 +70,7 @@ Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_P
 
 1. **Fonts:** `next/font` Inter, `subsets: ['latin']`, `display: 'swap'`, weights **400 + 600** only. Prefer `font-semibold` / `font-normal` over `font-medium` (500 not loaded as a discrete face). No extra families without Performance + Brand sign-off.
 2. **Images:** With `unoptimized`, always set `width`/`height` (or CSS aspect-ratio), compress before commit, prefer WebP, `loading="lazy"` below fold, `fetchPriority="high"` only for true LCP image.
-3. **JS:** Do not mark layout chrome `"use client"` for menus if CSS `<details>` works. Keep client islands on lead forms only when possible.
+3. **JS:** Do not mark layout chrome `"use client"` for menus if CSS `<details>` works. Keep client islands on lead forms plus the homepage `SiriOrbCloud` toggle (secondary intake cue only; ≤ ~15–20 kB gz). Do not import the interactive orb on `/create`.
 4. **Third parties:** No analytics/chat/tag managers without Privacy + Performance review (consent-gated).
 5. **Measure:** Re-run `next build` and update this table when changing fonts, layout, or shared components. Lighthouse/CWV when staging URL exists.
 

@@ -18,7 +18,7 @@ export default function ContactPage() {
         lede="Genuine human enquiries about MaintenanceOS. Product interest starts at Create from website. Launch-list and early-access briefings live on /demo. Not live phone provisioning, not a GA support desk, and no invented response SLA."
       />
       <div className="mx-auto max-w-xl space-y-8 px-4 py-12">
-        <aside className="rounded-md border border-border bg-surface p-4 text-sm text-muted">
+        <aside className="mos-glass p-4 text-sm text-muted">
           <p className="font-medium text-ink">Not sure which form to use?</p>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>
