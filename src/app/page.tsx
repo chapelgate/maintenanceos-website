@@ -1,31 +1,9 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
-import { contentPageMetadata } from "@/lib/page-meta";
+import { funnelPageMetadata } from "@/lib/page-meta";
 
-const homeTitle =
-  "MaintenanceOS — Property maintenance operations for UK landlords";
-const homeDescription =
-  "Multi-tenant platform for UK landlords, letting agents, and property managers. AI intake under testing; deterministic rules own safety and money. Pre-launch — join the launch list.";
-
-const homeMeta = contentPageMetadata({
-  title: "Property maintenance operations for UK landlords",
-  description: homeDescription,
-  path: "/",
-});
-
-export const metadata: Metadata = {
-  ...homeMeta,
-  title: { absolute: homeTitle },
-  openGraph: {
-    ...homeMeta.openGraph,
-    title: homeTitle,
-  },
-  twitter: {
-    ...homeMeta.twitter,
-    title: homeTitle,
-  },
-};
+export const metadata: Metadata = funnelPageMetadata("home");
 
 const pillars = [
   {

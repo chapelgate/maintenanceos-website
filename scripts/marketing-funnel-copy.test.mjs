@@ -31,6 +31,7 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.match(page, /scripted sandbox/);
   assert.match(page, /live phone number/);
   assert.match(page, /Create from website/);
+  assert.match(page, /funnelPageMetadata\("howItWorks"\)/);
   assert.doesNotMatch(page, /commercially generally available/i);
 });
 
@@ -44,6 +45,7 @@ test("features cards separate HAVE / UNDER TEST / COMING", () => {
   assert.match(page, /Calendar connect/);
   assert.match(page, /Live always-on customer phone/);
   assert.match(page, /Not a live receptionist or a 30-second phone number/);
+  assert.match(page, /funnelPageMetadata\("features"\)/);
   assert.doesNotMatch(page, /commercially generally available/i);
 });
 
@@ -59,6 +61,8 @@ test("home CTA strip names the website-to-pack path", () => {
   assert.match(page, /scripted sandbox/);
   assert.match(page, /Create from website/);
   assert.match(page, /No live phone demo/);
+  assert.match(page, /funnelPageMetadata\("home"\)/);
+  assert.doesNotMatch(page, /Property maintenance operations for UK landlords/);
 });
 
 test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
@@ -69,6 +73,8 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /narrative aligned; still not a live phone/);
   assert.match(matrix, /Demo \/ “see it live” CTAs vs `\/create` funnel/);
   assert.match(matrix, /demo CTAs aligned; still not a live phone/);
+  assert.match(matrix, /SEO titles \/ descriptions \/ OG vs `\/create` funnel/);
+  assert.match(matrix, /SEO meta aligned; still not a live phone/);
 });
 
 test("demo page names the website-to-pack path and does not book a live phone", () => {
@@ -83,6 +89,7 @@ test("demo page names the website-to-pack path and does not book a live phone", 
   assert.match(page, /optional scripted sandbox/);
   assert.match(page, /Create from website/);
   assert.match(page, /live number/);
+  assert.match(page, /funnelPageMetadata\("demo"\)/);
   assert.doesNotMatch(page, /See MaintenanceOS/);
   assert.doesNotMatch(page, /Book a product walkthrough/);
   assert.doesNotMatch(page, /Book a MaintenanceOS/);
@@ -91,6 +98,12 @@ test("demo page names the website-to-pack path and does not book a live phone", 
   assert.match(tabs, /Request early access/);
   assert.match(tabs, /not live number provisioning/);
   assert.match(tabs, /leadType="early_demo"/);
+});
+
+test("create page metadata comes from the shared funnel helper", () => {
+  const page = read("src/app/create/page.tsx");
+  assert.match(page, /funnelPageMetadata\("create"\)/);
+  assert.doesNotMatch(page, /Create your AI receptionist/);
 });
 
 test("primary conversion CTAs point at /create, not a live phone demo", () => {

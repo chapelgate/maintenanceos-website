@@ -1,15 +1,10 @@
 import { CtaPair } from "@/components/CtaPair";
 import { DemoConversionTabs } from "@/components/DemoConversionTabs";
 import { PageHero } from "@/components/PageHero";
-import { contentPageMetadata } from "@/lib/page-meta";
+import { funnelPageMetadata } from "@/lib/page-meta";
 import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 
-export const metadata = contentPageMetadata({
-  title: "Start from your website — or request early access",
-  description:
-    "Website URL → check → review draft → knowledge pack → optional scripted sandbox → early access. Pre-launch — not a live phone number.",
-  path: "/demo/",
-});
+export const metadata = funnelPageMetadata("demo");
 
 const FUNNEL_COPY = [
   "Paste a public site URL and an email so we can record the early access request.",
