@@ -1,6 +1,10 @@
 import { LegalDraftBanner } from "@/components/LegalDraftBanner";
 import { LegalPageChrome } from "@/components/LegalPageChrome";
 import { PageHero } from "@/components/PageHero";
+import {
+  CREATE_INGEST_PRIVACY_ANCHOR,
+  CREATE_INGEST_PRIVACY_NOTE,
+} from "@/lib/create-ingest-privacy";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -29,12 +33,17 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "personal-data",
     title: "Personal data we may collect",
-    body: "Categories only until verified: contact details from forms; technical / device data; cookie or similar technology data (see Cookies); and communications you send us.",
+    body: "Categories only until verified: contact details from forms; a public website URL you submit on /create; technical / device data; cookie or similar technology data (see Cookies); and communications you send us.",
   },
   {
     id: "how-collected",
     title: "How we collect data",
-    body: "Sources include forms you submit (launch_list, early_demo, contact), automatic site/technical data, and cookies if enabled — no invented third-party lists.",
+    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), automatic site/technical data, and cookies if enabled — plus public pages from a submitted website URL when a scan service is configured. No invented crawl and no invented third-party lists.",
+  },
+  {
+    id: CREATE_INGEST_PRIVACY_ANCHOR,
+    title: "Website URL ingest (/create)",
+    body: CREATE_INGEST_PRIVACY_NOTE,
   },
   {
     id: "purposes",
@@ -111,7 +120,12 @@ export default function PrivacyPage() {
         <LegalPageChrome noticeLabel="privacy notice" />
         <div className="space-y-10">
           {sections.map((s) => (
-            <section key={s.id} aria-labelledby={`privacy-${s.id}`}>
+            <section
+              key={s.id}
+              id={s.id}
+              className="scroll-mt-24"
+              aria-labelledby={`privacy-${s.id}`}
+            >
               <h2
                 id={`privacy-${s.id}`}
                 className="text-xl font-semibold text-ink"
@@ -119,6 +133,15 @@ export default function PrivacyPage() {
                 {s.title}
               </h2>
               <p className="mt-2 text-muted">{s.body}</p>
+              {s.id === "website-url-ingest" ? (
+                <p className="mt-2 text-muted">
+                  Related:{" "}
+                  <a href="/create/" className="text-accent underline">
+                    Create from website
+                  </a>
+                  .
+                </p>
+              ) : null}
               {s.id === "cookies" ? (
                 <p className="mt-2 text-muted">
                   Full detail:{" "}

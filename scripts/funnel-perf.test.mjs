@@ -37,6 +37,7 @@ test("/create first-load form defers scan and pack steps", () => {
 
 test("/create default path does not import companion client islands", () => {
   const page = read("src/app/create/page.tsx");
+  const form = read("src/components/CreateReceptionistForm.tsx");
   const islands = read("src/components/create-funnel-islands.tsx");
   const enabled = read("src/components/create-funnel-islands.enabled.tsx");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
@@ -45,6 +46,8 @@ test("/create default path does not import companion client islands", () => {
   assert.doesNotMatch(page, /from ["']@\/components\/CreateJourney["']/);
   assert.doesNotMatch(page, /from ["']@\/components\/CalendarConnectPanel["']/);
   assert.doesNotMatch(page, /from ["']@\/components\/SandboxTestCallPanel["']/);
+  assert.match(page, /CreateIngestPrivacyNote/);
+  assert.doesNotMatch(form, /CreateIngestPrivacyNote/);
 
   assert.doesNotMatch(later, /from ["']@\/components\/CreateJourney["']/);
   assert.doesNotMatch(later, /from ["']@\/components\/CalendarConnectPanel["']/);
