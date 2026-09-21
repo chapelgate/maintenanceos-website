@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import { REFERRER_POLICY } from "@/lib/static-security-headers";
 import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
 /** Canonical public path named in funnel-page titles, descriptions, and OG. */
@@ -62,6 +63,7 @@ export function buildRootMetadata(): Metadata {
     },
     description: siteConfig.description,
     applicationName: siteConfig.name,
+    referrer: REFERRER_POLICY,
     robots: { index: true, follow: true },
     alternates: { canonical: home },
     openGraph: {
