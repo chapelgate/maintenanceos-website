@@ -4,7 +4,7 @@ Synced conceptually with `docs/competitive/fonio-parity-matrix.md`. Use this for
 
 | ID | Feature | Priority | Status | Owner lane |
 | --- | --- | --- | --- | --- |
-| R-01 | Public `/create` funnel (claims-safe) | P0 | HAVE — multi-step funnel **EXISTS** (not MISSING); marketing `/how-it-works` + `/features` now match Website → Check → Review → Pack; local e2e can wire companions; no live phone | Website |
+| R-01 | Public `/create` funnel (claims-safe) | P0 | HAVE — multi-step funnel **EXISTS** (not MISSING); marketing `/how-it-works` + `/features` + `/demo` now match Website → Check → Review → Pack; primary CTA is `/create/`; human demo is secondary early-access; local e2e can wire companions; no live phone | Website |
 | R-02 | SSRF-safe web ingest | P0 | PARTIAL / UNDER TEST (flagged companion in `packages/onboarding-ingest`; DNS/redirect re-check; off by default; staging endpoint often unset; $0 Render runbook `docs/ONBOARDING_SCAN_DEPLOY.md`) | Platform |
 | R-03 | Knowledge extract + review UI | P0 | PARTIAL (editable draft; JSON-LD/microdata/heading/nav/hours-pattern/FAQ accordion + tel/mailto; per-field `fieldMeta` source/confidence review hints; invent-nothing on failure) | Platform |
 | R-04 | Sandbox tenant + assistant | P0 | PARTIAL (knowledge pack + system prompt draft via `packages/receptionist-draft` + `/create` preview; sandbox session stores pack; no tenant/promote; no live number) | Platform |

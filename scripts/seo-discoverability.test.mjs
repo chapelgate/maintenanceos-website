@@ -19,6 +19,7 @@ const keyPaths = [
   "/industries/",
   "/pricing/",
   "/demo/",
+  "/create/",
 ];
 
 const requiredPhrases = [

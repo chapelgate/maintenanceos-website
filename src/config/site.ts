@@ -140,6 +140,6 @@ export const footerNav = {
   convert: [
     { href: "/create/", label: "Create from website" },
     { href: "/demo/#launch", label: "Join launch list" },
-    { href: "/demo/", label: "Request early demo" },
+    { href: "/demo/#demo", label: "Request early access" },
   ],
 } as const;

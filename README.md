@@ -7,7 +7,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 ## Stance
 
 - `PUBLIC_LAUNCH` defaults to **false** (`NEXT_PUBLIC_PUBLIC_LAUNCH` / `src/config/site.ts`).
-- CTAs only: **Join launch list** / **Request early demo**.
+- CTAs: **Create from website** (primary public path) / **Join launch list** / **Request early demo** (secondary human briefing — not a live phone).
 - Never claim commercially live / GA / certified / production call-ready.
 - No fake social proof, dashboards-as-live-product, customers, or certifications.
 - Copy gated by `PRODUCT_CLAIMS_REGISTER.md`.
@@ -134,7 +134,7 @@ Point the static site at the `out/` directory produced by `npm run build`. Set e
 
 ## Desktop navigation (IA v0.2)
 
-How it works · Features · AI receptionist · Create · **Dashboard (soon)** · Security · **Pricing** · Industries (+ Join launch list CTA). `/demo` is the conversion canon (launch list + early demo tabs/sections). `/dashboard` is coming / under testing unless `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` is on.
+How it works · Features · AI receptionist · Create · **Dashboard (soon)** · Security · **Pricing** · Industries. Primary chrome CTA is **Create from website**. `/demo` is launch list + early-access briefing (not a live phone). `/dashboard` is coming / under testing unless `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` is on.
 
 ## Programme docs (repo root)
 

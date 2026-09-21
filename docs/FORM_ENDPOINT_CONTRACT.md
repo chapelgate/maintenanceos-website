@@ -15,7 +15,7 @@ Every conversion form uses `LeadCaptureForm` with one of:
 | `lead_type`            | Page                         | Intent                          |
 |------------------------|------------------------------|---------------------------------|
 | `launch_list`          | `/` (`#join`), `/demo/#launch` | Join launch list                |
-| `early_demo`           | `/demo/#demo`                | Request early demo              |
+| `early_demo`           | `/demo/#demo`                | Request early access (human briefing — not a live phone) |
 | `contact`              | `/contact/`                  | General enquiry                 |
 | `create_receptionist`  | `/create/`                   | Website→receptionist early access |
 

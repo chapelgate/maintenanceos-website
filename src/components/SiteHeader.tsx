@@ -6,7 +6,7 @@ import { industries, primaryNav, siteConfig } from "@/config/site";
 /**
  * Shell #11 chrome (wordmark, amber dual CTAs, hamburger) via native <details>.
  * Client only for Escape → close open details and return focus to summary.
- * CTA labels exact Copy pack: Join launch list / Request early demo.
+ * CTA labels: Create from website (primary) / Early access (secondary briefing).
  */
 function Wordmark() {
   return (
@@ -134,28 +134,28 @@ export function SiteHeader() {
             ),
           )}
 
-          <div className="ml-2 flex items-center gap-2">
+          <div className="ml-2 flex shrink-0 items-center gap-2">
             <a
-              href="/demo/"
-              className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
+              href="/demo/#demo"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
             >
-              Request early demo
+              Early access
             </a>
             <a
-              href="/demo/#launch"
-              className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
+              href="/create/"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
             >
-              Join launch list
+              Create from website
             </a>
           </div>
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
           <a
-            href="/demo/#launch"
-            className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
+            href="/create/"
+            className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
           >
-            Join launch list
+            Create
           </a>
           <details className="relative">
             <summary
@@ -219,10 +219,10 @@ export function SiteHeader() {
                 </li>
                 <li className="pt-2">
                   <a
-                    href="/demo/"
+                    href="/demo/#demo"
                     className="inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
                   >
-                    Request early demo
+                    Request early access
                   </a>
                 </li>
               </ul>

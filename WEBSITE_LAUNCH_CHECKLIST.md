@@ -27,7 +27,7 @@
 
 - [ ] Demo / waitlist / contact forms validate and store/queue leads — **Forms Engineer**
 - [ ] No unsolicited consequential outbound mail unless configured — **Forms + Privacy**
-- [ ] CTAs remain Join launch list / Request early demo until launch policy changes — **Conversion**
+- [ ] CTAs remain Create from website (primary) / Join launch list / Request early demo (secondary briefing) until launch policy changes — no live-phone “see it live” CTAs — **Conversion**
 
 ## Accessibility
 

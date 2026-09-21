@@ -13,9 +13,9 @@ export const faqItems: FaqItem[] = [
   {
     question: "Is MaintenanceOS commercially available now?",
     answer:
-      "No. The website is in pre-launch / early-access mode. Join the launch list or request an early demo. MaintenanceOS is not commercially generally available.",
-    relatedHref: "/demo/",
-    relatedLabel: "Join launch list or request an early demo",
+      "No. The website is in pre-launch / early-access mode. Start from your website on /create, join the launch list, or request an early-access briefing. MaintenanceOS is not commercially generally available, and this is not a live phone.",
+    relatedHref: "/create/",
+    relatedLabel: "Create from website",
   },
   {
     question: "Does AI make final safety or money decisions?",
@@ -37,8 +37,8 @@ export const faqItems: FaqItem[] = [
   {
     question: "When will pricing be published?",
     answer:
-      "Pricing is launching soon. Request pricing via an early demo while packages are prepared. There is no self-serve checkout on this site.",
-    relatedHref: "/demo/",
-    relatedLabel: "Request early demo",
+      "Pricing is launching soon. Request pricing via an early-access briefing while packages are prepared. There is no self-serve checkout on this site.",
+    relatedHref: "/demo/#demo",
+    relatedLabel: "Request early access",
   },
 ];

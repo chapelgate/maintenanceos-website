@@ -83,10 +83,10 @@ export default function HomePage() {
             </p>
             <CtaPair
               className="mt-8"
-              primaryHref="/#join"
-              primaryLabel="Join launch list"
-              secondaryHref="/demo/"
-              secondaryLabel="Request early demo"
+              primaryHref="/create/"
+              primaryLabel="Create from website"
+              secondaryHref="/demo/#demo"
+              secondaryLabel="Request early access"
             />
             <p className="mt-5 text-sm leading-relaxed text-muted">
               Pilot-stage. Core controls are real; public always-on phone is not
@@ -197,10 +197,10 @@ export default function HomePage() {
             </p>
           </div>
           <CtaPair
-            primaryHref="/demo/#launch"
-            primaryLabel="Join launch list"
-            secondaryHref="/demo/"
-            secondaryLabel="Request early demo"
+            primaryHref="/create/"
+            primaryLabel="Create from website"
+            secondaryHref="/demo/#demo"
+            secondaryLabel="Request early access"
           />
         </div>
       </section>

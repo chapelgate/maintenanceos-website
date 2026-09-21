@@ -88,7 +88,7 @@ export function DemoConversionTabs() {
           }
           onClick={() => select("demo")}
         >
-          Request early demo
+          Request early access
         </button>
       </div>
 
@@ -104,7 +104,7 @@ export function DemoConversionTabs() {
             <LeadCaptureForm
               leadType="launch_list"
               title="Join the launch list"
-              helper="Updates only. No instant live receptionist."
+              helper="Updates only. No instant live receptionist and no live number."
               submitLabel="Join launch list"
             />
           </div>
@@ -123,8 +123,8 @@ export function DemoConversionTabs() {
             <LeadCaptureForm
               leadType="early_demo"
               title="Request an early access briefing"
-              helper="Tell us your role and portfolio size. We’ll follow up with a walkthrough — no spam, no fake “instant live receptionist” claims."
-              submitLabel="Request early demo"
+              helper="A human briefing about fit and what is verified today — not live number provisioning. No spam, no fake “instant live receptionist” claims."
+              submitLabel="Request early access"
               showMessage
             />
           </div>

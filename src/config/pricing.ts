@@ -26,7 +26,7 @@ const prelaunch = {
   eyebrow: "Launching soon",
   title: "Pricing",
   lede:
-    "Public list pricing is not published yet. Request pricing or an early demo while we prepare launch.",
+    "Public list pricing is not published yet. Start from your website, or request pricing / early access while we prepare launch.",
   cardTitle: "Request pricing",
   cardBody:
     "MaintenanceOS is pre-launch. We will share packages suited to UK landlords, letting agents, and property managers when early access opens — no self-serve checkout on this site.",
@@ -36,12 +36,12 @@ const prelaunch = {
     "No self-serve checkout on this marketing site",
   ] as const,
   primaryCta: {
-    href: "/demo/#launch",
-    label: "Join launch list",
+    href: "/create/",
+    label: "Create from website",
   } satisfies PricingCta,
   secondaryCta: {
-    href: "/demo/",
-    label: "Request early demo",
+    href: "/demo/#demo",
+    label: "Request early access",
   } satisfies PricingCta,
 } as const;
 
@@ -63,12 +63,12 @@ const published = {
     "Human clearance stays on safety and money decisions",
   ] as const,
   primaryCta: {
-    href: "/demo/#launch",
-    label: "Join launch list",
+    href: "/create/",
+    label: "Create from website",
   } satisfies PricingCta,
   secondaryCta: {
-    href: "/demo/",
-    label: "Request early demo",
+    href: "/demo/#demo",
+    label: "Request early access",
   } satisfies PricingCta,
 } as const;
 

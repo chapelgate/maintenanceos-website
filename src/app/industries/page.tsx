@@ -46,8 +46,8 @@ export default function IndustriesPage() {
             Not sure which OS fits?
           </h2>
           <p className="text-muted">
-            Join the launch list with your role, or request an early demo
-            briefing on what is verified today.
+            Start from your website, join the launch list with your role, or
+            request an early-access briefing on what is verified today.
           </p>
           <CtaPair />
         </section>
