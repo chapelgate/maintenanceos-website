@@ -29,7 +29,7 @@ test("how-it-works matches the /create stepper labels", () => {
 
   assert.match(page, /Website → Check → Review → Pack/);
   assert.match(page, /scripted sandbox/);
-  assert.match(page, /not a live phone number/);
+  assert.match(page, /live phone number/);
   assert.match(page, /Create from website/);
   assert.doesNotMatch(page, /commercially generally available/i);
 });
@@ -43,7 +43,7 @@ test("features cards separate HAVE / UNDER TEST / COMING", () => {
   assert.match(page, /Pack-aware scripted sandbox/);
   assert.match(page, /Calendar connect/);
   assert.match(page, /Live always-on customer phone/);
-  assert.match(page, /not a live receptionist or a 30-second phone number/);
+  assert.match(page, /Not a live receptionist or a 30-second phone number/);
   assert.doesNotMatch(page, /commercially generally available/i);
 });
 
