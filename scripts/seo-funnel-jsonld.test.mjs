@@ -69,13 +69,24 @@ test("home and key funnel pages emit funnelPageJsonLd", () => {
   }
 });
 
-test("FAQ JSON-LD stays on /faq/ and does not invent ratings", () => {
+test("FAQ JSON-LD stays on /faq/ and uses the shared funnel answers", () => {
   const faqPage = read("src/app/faq/page.tsx");
   const helper = read("src/lib/json-ld.ts");
+  const faqs = read("src/content/faqs.ts");
   assert.match(faqPage, /faqPageJsonLd\(\)/);
   assert.match(helper, /export function faqPageJsonLd/);
   assert.match(helper, /"@type": "FAQPage"/);
+  assert.match(helper, /from ["']@\/content\/faqs["']/);
+  assert.match(helper, /faqItems\.map/);
   assert.doesNotMatch(helper, /aggregateRating/);
+  assert.match(
+    faqs,
+    /website URL → check → review → pack → optional scripted sandbox → early access/,
+  );
+  assert.match(faqs, /owner-blocked/);
+  assert.match(faqs, /Empty hours and services stay empty/);
+  assert.match(faqs, /999 guidance \(never 911\)/);
+  assert.doesNotMatch(faqs, /always-on phone line is live/i);
 });
 
 function collectKeys(value, into = new Set()) {
@@ -156,4 +167,50 @@ test("exported funnel HTML has claims-safe JSON-LD when out/ exists", () => {
     assert.doesNotMatch(serialized, /PreOrder/);
     assert.doesNotMatch(html, /gtag\(|googletagmanager|google-analytics/i);
   }
+});
+
+test("exported /faq/ HTML has claims-safe FAQPage JSON-LD when out/ exists", () => {
+  const rel = "out/faq/index.html";
+  if (!fs.existsSync(path.join(ROOT, rel))) {
+    return;
+  }
+
+  const html = read(rel);
+  const blocks = parseJsonLdBlocks(html);
+  assert.ok(blocks.length >= 2, `${rel} should have layout + FAQ JSON-LD`);
+
+  const types = new Set();
+  const keys = new Set();
+  for (const block of blocks) {
+    collectKeys(block, keys);
+    const graph = Array.isArray(block["@graph"]) ? block["@graph"] : [block];
+    for (const node of graph) {
+      if (typeof node["@type"] === "string") types.add(node["@type"]);
+    }
+  }
+
+  assert.ok(types.has("FAQPage"), `${rel} missing FAQPage`);
+  assert.ok(types.has("Organization"), `${rel} missing Organization`);
+  assert.ok(types.has("WebSite"), `${rel} missing WebSite`);
+  assert.equal(types.has("Offer"), false, `${rel} must not emit Offer`);
+
+  for (const forbidden of FORBIDDEN_SCHEMA_KEYS) {
+    assert.equal(
+      keys.has(forbidden),
+      false,
+      `${rel} must not include ${forbidden}`,
+    );
+  }
+
+  const serialized = JSON.stringify(blocks);
+  assert.match(
+    serialized,
+    /website URL → check → review → pack → optional scripted sandbox → early access/,
+  );
+  assert.match(serialized, /owner-blocked/);
+  assert.match(serialized, /Empty hours and services stay empty/);
+  assert.match(serialized, /999 guidance \(never 911\)/);
+  assert.match(serialized, /not a live phone/);
+  assert.doesNotMatch(serialized, /always-on phone line is live/i);
+  assert.doesNotMatch(html, /gtag\(|googletagmanager|google-analytics/i);
 });

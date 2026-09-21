@@ -46,6 +46,6 @@ There is no public always-on phone number to call on this site.
 ## Optional
 
 - [Full claims-safe summary](https://seahorse-app-4oasq.ondigitalocean.app/llms-full.txt): VERIFIED vs under test vs not claimed
-- [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/)
+- [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/): Same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999, owner-blocked staging scan
 - [About](https://seahorse-app-4oasq.ondigitalocean.app/about/)
 - [Dashboard](https://seahorse-app-4oasq.ondigitalocean.app/dashboard/): coming / under testing — not a live customer portal or production call history

@@ -82,6 +82,39 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /claims-safe JSON-LD; still not a live phone/);
   assert.match(matrix, /llms\.txt \/ llms-full\.txt vs `\/create` funnel/);
   assert.match(matrix, /llms files aligned; still not a live phone/);
+  assert.match(matrix, /FAQ \+ FAQPage JSON-LD vs `\/create` funnel/);
+  assert.match(matrix, /FAQ aligned; still not a live phone/);
+});
+
+test("FAQ copy names the verified funnel and stays claims-safe", () => {
+  const faqs = read("src/content/faqs.ts");
+  const page = read("src/app/faq/page.tsx");
+
+  assert.match(
+    faqs,
+    /website URL → check → review → pack → optional scripted sandbox → early access/,
+  );
+  assert.match(faqs, /not a live phone/);
+  assert.match(faqs, /no instant live number/);
+  assert.match(faqs, /no public always-on receptionist/);
+  assert.match(faqs, /crawl is queued/);
+  assert.match(faqs, /do not invent extracted hours/);
+  assert.match(faqs, /owner-blocked/);
+  assert.match(faqs, /Empty hours and services stay empty/);
+  assert.match(faqs, /999 guidance \(never 911\)/);
+  assert.match(faqs, /not commercially generally available/);
+  assert.doesNotMatch(faqs, /always-on phone line is live/i);
+  assert.doesNotMatch(faqs, /your number is ready/i);
+  assert.doesNotMatch(faqs, /commercially generally available now/i);
+
+  assert.match(page, /faqItems/);
+  assert.match(page, /faqPageJsonLd\(\)/);
+  assert.match(
+    page,
+    /website URL → check → review → pack → optional scripted sandbox → early access/,
+  );
+  assert.match(page, /Not a live phone/);
+  assert.doesNotMatch(page, /commercially generally available now/i);
 });
 
 test("demo page names the website-to-pack path and does not book a live phone", () => {
