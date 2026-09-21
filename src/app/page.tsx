@@ -95,7 +95,7 @@ export default function HomePage() {
                 href="/how-it-works/"
                 className="font-medium text-accent underline-offset-4 hover:underline"
               >
-                See how intake works
+                See how it works
               </a>
             </p>
           </div>
@@ -182,11 +182,18 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 rounded-xl border border-border bg-paper p-8 sm:flex-row sm:items-center sm:p-10">
           <div className="max-w-lg">
             <h2 className="text-xl font-semibold text-ink sm:text-2xl">
-              Join the list or request a briefing
+              Join the list or start from your website
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Early access is opening carefully. No live phone demo from this
-              site — a walkthrough of the operating model when you are ready.
+              Early access is opening carefully. The public path is website URL
+              → scan/draft → knowledge pack → optional scripted sandbox → early
+              access. No live phone demo from this site.{" "}
+              <a
+                href="/create/"
+                className="font-medium text-accent underline-offset-4 hover:underline"
+              >
+                Create from website
+              </a>
             </p>
           </div>
           <CtaPair

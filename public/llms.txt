@@ -17,8 +17,8 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 ## Key pages
 
 - [Home](https://seahorse-app-4oasq.ondigitalocean.app/): Positioning and launch-list signup
-- [How it works](https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/): Intake, controlled triage, human oversight
-- [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): Operations, safety controls, and audit trails (designed / under testing)
+- [How it works](https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/): Website → Check → Review → Pack, then early access; optional scripted sandbox under testing — not a live phone
+- [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): HAVE / UNDER TEST / COMING — sandbox, calendars, and live phone stated separately
 - [AI receptionist](https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/): Voice intake under testing — not a live commercial line
 - [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; no ISO/SOC 2 claims
 - [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
