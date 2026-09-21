@@ -10,17 +10,15 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
-test("render.yaml is a free scan companion, not voice and not DigitalOcean", () => {
+test("render.yaml is marked legacy and is not the scan deploy path", () => {
   const yaml = read("render.yaml");
+  assert.match(yaml, /LEGACY \/ DO NOT USE/);
+  assert.match(yaml, /do not apply this Blueprint/i);
+  assert.match(yaml, /docs\/ONBOARDING_SCAN_DEPLOY\.md/);
+  assert.match(yaml, /docs\/STAGING_COMPANIONS\.md/);
   assert.match(yaml, /Not a DigitalOcean App Platform spec/);
   assert.match(yaml, /Not maintenanceos-redteam/);
   assert.match(yaml, /name:\s*maintenanceos-onboarding-scan/);
-  assert.match(yaml, /runtime:\s*docker/);
-  assert.match(yaml, /plan:\s*free/);
-  assert.match(yaml, /healthCheckPath:\s*\/health/);
-  assert.match(yaml, /dockerfilePath:\s*\.\/packages\/onboarding-ingest\/Dockerfile/);
-  assert.match(yaml, /ONBOARDING_SCAN_HOST[\s\S]*value:\s*"0\.0\.0\.0"/);
-  assert.match(yaml, /ONBOARDING_WEB_INGEST[\s\S]*value:\s*"false"/);
   assert.doesNotMatch(yaml, /name:\s*maintenanceos-redteam/);
   assert.doesNotMatch(yaml, /plan:\s*starter/i);
   assert.doesNotMatch(yaml, /SECRET|TOKEN|PASSWORD|API_KEY/);
@@ -44,18 +42,25 @@ test("onboarding-ingest Dockerfile matches npm run onboarding-scan", () => {
   assert.match(docker, /maintenanceos-redteam/);
 });
 
-test("deploy runbook documents Free click, health, CORS, SSRF, and DO rebuild", () => {
+test("deploy runbook documents droplet, systemd or docker, health, CORS, and DO rebuild", () => {
   const doc = read("docs/ONBOARDING_SCAN_DEPLOY.md");
-  assert.match(doc, /Instance type:\*\* click \*\*Free\*\*/);
-  assert.match(doc, /Health Check Path:\*\* `\/health`/);
+  assert.match(doc, /DigitalOcean droplet/);
+  assert.match(doc, /do not use Render/i);
+  assert.match(doc, /systemd/);
+  assert.match(doc, /packages\/onboarding-ingest\/Dockerfile/);
+  assert.match(doc, /PORT/);
   assert.match(doc, /ONBOARDING_WEB_INGEST/);
+  assert.match(doc, /GET \/health/);
+  assert.match(doc, /POST \/v1\/onboarding\/scan/);
   assert.match(doc, /seahorse-app-4oasq\.ondigitalocean\.app/);
+  assert.match(doc, /ONBOARDING_SCAN_CORS_ORIGIN/);
   assert.match(doc, /NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
   assert.match(doc, /Force Rebuild/);
   assert.match(doc, /SSRF/);
   assert.match(doc, /maintenanceos-redteam/);
   assert.match(doc, /output: 'export'/);
-  assert.match(doc, /\/v1\/onboarding\/scan/);
+  assert.doesNotMatch(doc, /dashboard\.render\.com/);
+  assert.doesNotMatch(doc, /onrender\.com/);
 });
 
 test("next.config static export is unchanged by the companion deploy path", () => {

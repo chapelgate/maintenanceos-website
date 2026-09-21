@@ -146,6 +146,6 @@ Each line is `PASS`, `FAIL`, or `SKIP`. Required companions with flags still off
 - Not live WebRTC or Twilio; not a change to the frozen live voice path.
 - Not customer-GA calendar OAuth or voice booking confirmation.
 - Not a live customer portal or analytics.
-- Not enabled on DigitalOcean static hosting by default. Staging HTTPS scan is a **separate** Render free service: [`ONBOARDING_SCAN_DEPLOY.md`](ONBOARDING_SCAN_DEPLOY.md). Staging HTTPS sandbox (and optional mock calendar) is a **separate** Render free service: [`SANDBOX_DEPLOY.md`](SANDBOX_DEPLOY.md). Staging HTTPS dashboard is a **separate** Render free service: [`DASHBOARD_DEPLOY.md`](DASHBOARD_DEPLOY.md) (SAMPLE / DEMO only). One operator checklist for DigitalOcean env + rebuild + wake order: [`STAGING_COMPANIONS.md`](STAGING_COMPANIONS.md).
+- Not enabled on DigitalOcean static hosting by default. Staging HTTPS scan is a **separate** DigitalOcean droplet: [`ONBOARDING_SCAN_DEPLOY.md`](ONBOARDING_SCAN_DEPLOY.md). Do **not** apply `render.yaml`. Staging HTTPS sandbox / dashboard remain separate companions (`docs/SANDBOX_DEPLOY.md`, `docs/DASHBOARD_DEPLOY.md`) — SAMPLE / DEMO only for dashboard. Operator checklist: [`STAGING_COMPANIONS.md`](STAGING_COMPANIONS.md). Readiness / owner blocker: [`FONIO_WEBSITE_READINESS.md`](FONIO_WEBSITE_READINESS.md).
 
 Spend: none. No new paid infra, no scheduled GitHub Actions, no cron.

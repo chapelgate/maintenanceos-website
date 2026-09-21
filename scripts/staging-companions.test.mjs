@@ -31,16 +31,30 @@ test("staging companions checklist links the four runbooks and exact DO env", ()
   assert.match(doc, /maintenanceos-calendar-adapters/);
   assert.match(doc, /maintenanceos-customer-dashboard/);
   assert.match(doc, /output: 'export'/);
-  assert.match(doc, /15 minutes/);
+  assert.match(doc, /DigitalOcean droplet/);
+  assert.match(doc, /do not use Render/i);
   assert.match(doc, /maintenanceos-redteam/);
-  assert.match(doc, /does \*\*not\*\* create Render or DigitalOcean resources/);
+  assert.match(doc, /does \*\*not\*\* create DigitalOcean or Render resources/);
   assert.match(doc, /copy `\.env\.example\.fonio-local` onto App Platform/);
-  assert.match(doc, /Cold-start wake order/);
+  assert.match(doc, /Health-check order/);
   assert.match(doc, /review hint/);
   assert.match(doc, /Owner blocker \(not a code defect\)/);
   assert.match(doc, /not a website code defect/);
-  assert.match(doc, /Render free/);
+  assert.match(doc, /NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
   assert.match(doc, /NEXT_PUBLIC_\*/);
+});
+
+test("fonio website readiness names the droplet owner blocker", () => {
+  const doc = read("docs/FONIO_WEBSITE_READINESS.md");
+  assert.match(doc, /DigitalOcean droplet/);
+  assert.match(doc, /NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.match(doc, /output: 'export'/);
+  assert.match(doc, /do not use Render/i);
+  assert.match(doc, /Owner blocker/);
+  assert.match(doc, /not a website code defect/);
+  assert.match(doc, /seahorse-app-4oasq\.ondigitalocean\.app/);
+  assert.match(doc, /ONBOARDING_SCAN_DEPLOY\.md/);
+  assert.match(doc, /STAGING_COMPANIONS\.md/);
 });
 
 test("site.ts public env names match the staging companions checklist", () => {
@@ -70,8 +84,9 @@ test("next.config static export is unchanged by the staging companions checklist
   assert.match(text, /output:\s*["']export["']/);
 });
 
-test("render.yaml points operators at the staging companions checklist", () => {
+test("render.yaml is legacy and still points at the staging companions checklist", () => {
   const yaml = read("render.yaml");
+  assert.match(yaml, /LEGACY \/ DO NOT USE/);
   assert.match(yaml, /docs\/STAGING_COMPANIONS\.md/);
-  assert.equal((yaml.match(/^\s+plan:\s*free$/gm) || []).length, 4);
+  assert.match(yaml, /docs\/FONIO_WEBSITE_READINESS\.md/);
 });

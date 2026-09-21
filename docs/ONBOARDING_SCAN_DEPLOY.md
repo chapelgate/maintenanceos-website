@@ -1,11 +1,15 @@
-# Deploy the onboarding scan companion (Render free)
+# Deploy the onboarding scan companion (DigitalOcean droplet)
 
-**Status:** operator runbook — $0 staging companion  
+**Status:** operator runbook — DigitalOcean droplet companion  
 **Code:** `packages/onboarding-ingest` (`npm run onboarding-scan` → `node --experimental-strip-types packages/onboarding-ingest/src/server.ts`)  
 **Contract:** [`ONBOARDING_SCAN_CONTRACT.md`](ONBOARDING_SCAN_CONTRACT.md)  
-**Do not:** attach this to DigitalOcean static hosting, add a Next.js API route, or edit frozen live telephony (`maintenanceos-redteam` / production voice on Render).
+**Do not:** attach this to DigitalOcean App Platform **static** hosting, add a Next.js API route, apply `render.yaml`, open Render for a new companion, or edit frozen live telephony (`maintenanceos-redteam` / production voice).
 
-The marketing site stays `output: 'export'`. `/create` only crawls when `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` is an absolute `https:` URL baked in at **Next build time**. This companion is a **separate** Node process.
+The marketing site stays `output: 'export'` on DigitalOcean App Platform **static** (free). `/create` only crawls when `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` is an absolute `https:` URL baked in at **Next build time**. This companion is a **separate** Node process.
+
+**Owner decision: do not use Render.** `render.yaml` is **legacy / do not use**. There is no documented App Platform **web service** spec for companions — do not convert the static marketing app into one.
+
+This file does **not** create a droplet, DNS record, or certificate. Do not create paid cloud resources from an agent.
 
 ## What you get
 
@@ -14,64 +18,163 @@ The marketing site stays `output: 'export'`. `/create` only crawls when `NEXT_PU
 | Health | `GET /health` → 200 `{ ok, service: "maintenanceos-onboarding-scan", ingestEnabled, sandboxCall: false, scanPath }` even when crawl is off |
 | Scan | `POST /v1/onboarding/scan` with JSON `{ "url": "https://…" }` |
 | Local defaults | host `127.0.0.1`, port `8788` (`ONBOARDING_SCAN_HOST` / `ONBOARDING_SCAN_PORT`) |
-| Hosted listen | `ONBOARDING_SCAN_HOST=0.0.0.0` and Render’s injected `PORT` (the process also reads `PORT` if `ONBOARDING_SCAN_PORT` is unset) |
+| Hosted listen | `ONBOARDING_SCAN_HOST=0.0.0.0` inside Docker; `127.0.0.1` when a reverse proxy is on the same droplet. The process reads `PORT` if `ONBOARDING_SCAN_PORT` is unset. |
 | Master switch | `ONBOARDING_WEB_INGEST` — not `true`/`1` → `503 scan_disabled`, no fetch |
 
-## $0 host
+## Host
 
-Chapelgate already runs product/voice on Render. Create a **new** free web service from **this** repo. Do not open or change `maintenanceos-redteam-v2` (or any live voice service).
+Use a **small Ubuntu droplet** (22.04 or 24.04) that the operator already has or creates in the DigitalOcean Control Panel. A 1 GB / 1 vCPU droplet is enough for this Node process plus a reverse proxy.
 
-`render.yaml` sets `plan: free`. Render’s Blueprint default is **Starter** (paid) if `plan` is omitted — this file does not omit it.
+Do **not**:
 
-Free web services sleep after **15 minutes** idle. `/create` waits 15 seconds, so a cold POST may return “scan service is unavailable” and **must not invent** draft fields. Wake with `GET /health` (wait for HTTP 200) and retry. An existing $0 uptime ping to `/health` (not GitHub Actions cron) can prevent spin-down.
+- Point DigitalOcean App Platform static at this process, `packages/onboarding-ingest/Dockerfile`, or `docker-compose.fonio-local.yml`
+- Apply `render.yaml` or create a Render web service
+- Attach this process to frozen voice (`maintenanceos-redteam-v2`)
+- Commit secrets, API tokens, or a live phone number
 
-Do **not** add a payment method or raise a spend limit to keep this process up.
+Open firewall ports **22 / 80 / 443** only. Keep the Node listen port off the public internet (bind `127.0.0.1:8788` and reverse-proxy).
 
-## A. Dashboard clicks (authoritative for Free)
+## A. Docker on the droplet (preferred)
 
-Render still requires an explicit **Free** click in the UI even when a Blueprint exists.
+The existing companion image is the same process as `npm run onboarding-scan`. Build from the **website repo root**.
 
-1. Open [Render Dashboard](https://dashboard.render.com). Use the Chapelgate workspace that already hosts other MOS services.
-2. Top right: **New +** → **Web Service**.
-3. Connect GitHub repo `chapelgate/maintenanceos-website` (not the pilot/redteam repo).
-4. Fill the create form:
-   - **Name:** `maintenanceos-onboarding-scan` (this becomes `https://maintenanceos-onboarding-scan.onrender.com`)
-   - **Language / Runtime:** **Docker** (not Node native — native `npm install` would pull the whole marketing site)
-   - **Branch:** `main`
-   - **Region:** nearest to the DigitalOcean staging app is fine (Frankfurt is reasonable for UK)
-   - **Root directory:** leave empty (repo root)
-   - **Dockerfile path:** `packages/onboarding-ingest/Dockerfile`
-   - **Docker build context:** repo root `.` (default). The Dockerfile `COPY`s `packages/onboarding-ingest/…` from the repo root. Do not set context to `src/` (that is the Next app).
-   - **Instance type:** click **Free** (512 MB / 0.1 CPU). Do **not** click Starter or any paid size.
-5. **Advanced**:
-   - **Health Check Path:** `/health`
-   - Environment variables (no secrets):
+```bash
+# on the droplet, as a sudo-capable user
+sudo apt-get update
+sudo apt-get install -y git docker.io
+sudo usermod -aG docker "$USER"   # re-login after this
 
-     | Key | Value |
-     | --- | --- |
-     | `ONBOARDING_SCAN_HOST` | `0.0.0.0` |
-     | `ONBOARDING_WEB_INGEST` | `false` for the first deploy; `true` only when you intend public HTTPS crawl |
+sudo mkdir -p /opt/mos
+sudo chown "$USER":"$USER" /opt/mos
+cd /opt/mos
+git clone https://github.com/chapelgate/maintenanceos-website.git
+cd maintenanceos-website
+git checkout main
 
-   - Do **not** attach a disk, start command override, or secret file.
-6. Click **Create Web Service**. Wait until the deploy is live and `/health` returns 200.
-7. Copy the public URL (service page header, `https://<name>.onrender.com`). The scan path is:
+docker build -f packages/onboarding-ingest/Dockerfile -t mos-onboarding-scan .
+docker run -d --name mos-onboarding-scan --restart unless-stopped \
+  -p 127.0.0.1:8788:8788 \
+  -e PORT=8788 \
+  -e ONBOARDING_SCAN_HOST=0.0.0.0 \
+  -e ONBOARDING_WEB_INGEST=false \
+  mos-onboarding-scan
+```
 
-   `https://<name>.onrender.com/v1/onboarding/scan`
+Leave `ONBOARDING_SCAN_CORS_ORIGIN` **unset** so seahorse-app and a later chapelgate origin both work (see CORS below).
 
-8. When crawl should actually run: service **Environment** → **Add Environment Variable** → `ONBOARDING_WEB_INGEST` = `true` → **Save Changes** (redeploy). Confirm `GET /health` has `"ingestEnabled": true`.
+Confirm the process (still ingest-off):
 
-If the UI asks to upgrade the workspace or pick a paid instance, **stop**. Do not create this service on Starter.
+```bash
+curl -sS http://127.0.0.1:8788/health
+```
 
-## B. Blueprint (optional)
+Expect `"service":"maintenanceos-onboarding-scan"` and `"ingestEnabled":false`.
 
-After this file is on `main`:
+When crawl should actually run:
 
-1. **New +** → **Blueprint**.
-2. Select `chapelgate/maintenanceos-website`.
-3. Confirm the service name is `maintenanceos-onboarding-scan` and the instance plan is **Free**. Sibling free services (`maintenanceos-sandbox-test-call`, optional mock `maintenanceos-calendar-adapters`) are documented in `docs/SANDBOX_DEPLOY.md`; dashboard is `docs/DASHBOARD_DEPLOY.md` — still not frozen voice.
-4. Apply. Then still set `ONBOARDING_WEB_INGEST=true` in the dashboard when you want crawl (Blueprint keeps it `false`).
+```bash
+docker stop mos-onboarding-scan && docker rm mos-onboarding-scan
+docker run -d --name mos-onboarding-scan --restart unless-stopped \
+  -p 127.0.0.1:8788:8788 \
+  -e PORT=8788 \
+  -e ONBOARDING_SCAN_HOST=0.0.0.0 \
+  -e ONBOARDING_WEB_INGEST=true \
+  mos-onboarding-scan
+curl -sS http://127.0.0.1:8788/health   # "ingestEnabled": true
+```
 
-`buildFilter` skips deploys when only marketing `src/` / copy changes.
+Do not put secrets in the `docker run` line. There are no companion secrets.
+
+## B. systemd + Node 22 (no Docker)
+
+Use this only if Docker is unavailable. Node **22+** is required (`--experimental-strip-types`). Ubuntu 24.04 `apt` Node is often too old — install Node 22 from [NodeSource](https://github.com/nodesource/distributions) or use section A.
+
+```bash
+sudo mkdir -p /opt/mos
+sudo chown "$USER":"$USER" /opt/mos
+cd /opt/mos
+git clone https://github.com/chapelgate/maintenanceos-website.git
+cd maintenanceos-website
+```
+
+`/etc/systemd/system/mos-onboarding-scan.service`:
+
+```ini
+[Unit]
+Description=MaintenanceOS onboarding-scan companion
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/mos/maintenanceos-website
+Environment=NODE_ENV=production
+Environment=ONBOARDING_SCAN_HOST=127.0.0.1
+Environment=PORT=8788
+Environment=ONBOARDING_WEB_INGEST=false
+ExecStart=/usr/bin/node --experimental-strip-types packages/onboarding-ingest/src/server.ts
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now mos-onboarding-scan
+curl -sS http://127.0.0.1:8788/health
+```
+
+To enable crawl: set `ONBOARDING_WEB_INGEST=true` in the unit, then `sudo systemctl daemon-reload && sudo systemctl restart mos-onboarding-scan`. Confirm `GET /health` has `"ingestEnabled": true`.
+
+## Reverse proxy / HTTPS
+
+Staging `/create` is served on `https://seahorse-app-4oasq.ondigitalocean.app`. The browser will only `POST` an `https:` companion URL (mixed content is blocked). Put TLS in front of `127.0.0.1:8788`.
+
+Replace `<droplet-host>` with the droplet’s DNS name (operator-created). Do not commit that hostname as a required default in git.
+
+### Caddy (fewest clicks)
+
+```bash
+sudo apt-get install -y debian-keyring debian-archive-keyring apt-transport-https
+# install Caddy from the official apt repo, then:
+```
+
+`/etc/caddy/Caddyfile`:
+
+```
+<droplet-host> {
+  reverse_proxy 127.0.0.1:8788
+}
+```
+
+```bash
+sudo systemctl enable --now caddy
+curl -sS https://<droplet-host>/health
+```
+
+### nginx + Let’s Encrypt
+
+```nginx
+server {
+  listen 80;
+  server_name <droplet-host>;
+  location / {
+    proxy_pass http://127.0.0.1:8788;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
+```
+
+Then `certbot --nginx -d <droplet-host>`. Health and scan paths stay `/health` and `/v1/onboarding/scan` on the public host (no extra prefix).
+
+The public scan URL is:
+
+`https://<droplet-host>/v1/onboarding/scan`
 
 ## CORS (seahorse-app / chapelgate)
 
@@ -79,7 +182,7 @@ After this file is on `main`:
 
 | `ONBOARDING_SCAN_CORS_ORIGIN` | Effect |
 | --- | --- |
-| unset (recommended for staging) | Echo the request `Origin`, else `*`. Works for DigitalOcean staging `https://seahorse-app-4oasq.ondigitalocean.app` **and** a later chapelgate custom domain without a rebuild of *this* service. |
+| unset (recommended for staging) | Echo the request `Origin`, else `*`. Works for DigitalOcean staging `https://seahorse-app-4oasq.ondigitalocean.app` **and** a later chapelgate custom domain without a rebuild of *this* process. |
 | one exact origin, no trailing slash | Lock to that origin only. Example: `https://seahorse-app-4oasq.ondigitalocean.app`. A second origin (chapelgate production/staging) would fail CORS until you change this var. |
 
 The process supports **one** configured origin string (not a comma list). If both seahorse-app and a chapelgate origin must call scan while locked down, leave the var **unset**.
@@ -90,22 +193,22 @@ No cookies; `Access-Control-Allow-Credentials` is not used.
 
 Static export inlines `NEXT_PUBLIC_*` at `npm run build`. Changing the App Platform env **without a rebuild** leaves `/create` on the old (empty) endpoint, so the client keeps queuing crawl honestly.
 
-1. Confirm Render `GET https://<name>.onrender.com/health` is 200 and, when you want live extract, `"ingestEnabled": true`.
-2. DigitalOcean Control Panel → **Apps** → the maintenanceos-website static app (`seahorse-app-4oasq` today).
+1. Confirm droplet `GET https://<droplet-host>/health` is 200 and, when you want live extract, `"ingestEnabled": true`.
+2. DigitalOcean Control Panel → **Apps** → the maintenanceos-website **static** app (`seahorse-app-4oasq` today).
 3. **Settings** → **App-Level Environment Variables** → **Edit**.
 4. Add (do not encrypt — this URL is public in the JS bundle):
 
-   `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=https://<name>.onrender.com/v1/onboarding/scan`
+   `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=https://<droplet-host>/v1/onboarding/scan`
 
    Scope must include **build time**. App-level variables are visible at build and runtime.
 5. **Save**. If a deployment does not start: **Overview** → **Create Deployment** / **Force Rebuild and Deploy** (wording varies). A runtime-only restart is **not** enough.
-6. After the deploy, open staging `/create/`, enter a **public HTTPS** business URL, continue. The browser should `POST` the Render URL. Empty extract fields mean “not found”, not invented copy.
+6. After the deploy, open staging `/create/`, enter a **public HTTPS** business URL, continue. The browser should `POST` the droplet URL. Empty extract fields mean “not found”, not invented copy.
 
-Leave `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` empty in git (`.env.example`). Never commit Render URLs as required defaults.
+Leave `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` empty in git (`.env.example`). Never commit droplet hostnames or IPs as required defaults.
 
 Do **not** copy `.env.example.fonio-local` onto App Platform.
 
-Staging order with the other free companions (exact `NEXT_PUBLIC_*`, rebuild, cold-start wake): [`STAGING_COMPANIONS.md`](STAGING_COMPANIONS.md).
+Staging order with the other companions (exact `NEXT_PUBLIC_*`, rebuild, health check): [`STAGING_COMPANIONS.md`](STAGING_COMPANIONS.md). Website readiness / owner blocker: [`FONIO_WEBSITE_READINESS.md`](FONIO_WEBSITE_READINESS.md).
 
 ## SSRF and claims-safe flags
 
@@ -116,7 +219,7 @@ Guards already in process (unchanged):
 - HTTPS only; userinfo, localhost, private/reserved IPs, metadata hosts denied
 - DNS + redirect re-check on every hop
 - page/byte/time caps; robots.txt honoured
-- 20 POSTs / minute / connected IP (behind Render this is often the proxy — conservative, not per-browser)
+- 20 POSTs / minute / connected IP (behind a reverse proxy this is often the proxy — conservative, not per-browser)
 - Extracted strings are **untrusted data**; never telephony; never concatenated into a system prompt
 
 Keep the flag **false** until you intentionally want staging `/create` to crawl. Turning the flag off does not require a DigitalOcean rebuild; turning **on** the Next public endpoint **does**.
@@ -139,8 +242,8 @@ Expect `"service":"maintenanceos-onboarding-scan"` and `"ingestEnabled":true` wh
 ## Verify after deploy
 
 ```bash
-curl -sS https://<name>.onrender.com/health
-curl -sS -X POST https://<name>.onrender.com/v1/onboarding/scan \
+curl -sS https://<droplet-host>/health
+curl -sS -X POST https://<droplet-host>/v1/onboarding/scan \
   -H 'Content-Type: application/json' \
   -H 'Origin: https://seahorse-app-4oasq.ondigitalocean.app' \
   -d '{"url":"https://example.com/"}'

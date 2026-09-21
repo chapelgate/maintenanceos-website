@@ -317,8 +317,8 @@ export function resolveListenHost(env: NodeJS.ProcessEnv = process.env): string 
 }
 
 /**
- * Prefer `ONBOARDING_SCAN_PORT` (local compose / docs), else `PORT` (Render and
- * other PaaS inject this). Invalid values fall back to 8788.
+ * Prefer `ONBOARDING_SCAN_PORT` (local compose / docs), else `PORT` (droplet
+ * and other hosts inject this). Invalid values fall back to 8788.
  */
 export function resolveListenPort(env: NodeJS.ProcessEnv = process.env): number {
   const raw = env.ONBOARDING_SCAN_PORT?.trim() || env.PORT?.trim();

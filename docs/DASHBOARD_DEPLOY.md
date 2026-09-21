@@ -1,5 +1,7 @@
 # Deploy the customer-dashboard companion (Render free)
 
+**Do not apply `render.yaml` (legacy / do not use).** Owner decision: do not create new Render companions. Onboarding scan is a DigitalOcean droplet — [`ONBOARDING_SCAN_DEPLOY.md`](ONBOARDING_SCAN_DEPLOY.md).
+
 **Status:** operator runbook — $0 staging companion  
 **Code:** `packages/customer-dashboard` (`npm run customer-dashboard` → `node --experimental-strip-types packages/customer-dashboard/src/server.ts`)  
 **Contract:** [`CUSTOMER_DASHBOARD_CONTRACT.md`](CUSTOMER_DASHBOARD_CONTRACT.md)  

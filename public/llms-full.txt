@@ -30,7 +30,7 @@ Not offered here:
 - Self-serve “call our AI now” demo
 - Customer login, billing portal, or live status metrics
 - Ratings, reviews, or aggregate scores
-- Invented crawl results (staging scan is still owner-blocked: Render companion + DigitalOcean env)
+- Invented crawl results (staging scan is still owner-blocked: DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild)
 
 ## VERIFIED (present as product capability in source — still pre-launch, not “buy now live service”)
 
@@ -59,7 +59,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Public / production hosting of the product runtime — do not market as public production
 - Website `/dashboard` foundation — coming / under testing unless a local flag is on; SAMPLE / DEMO rows only, not live call history
 - Website `/create` multi-step funnel exists as an early-access preview (F-01). Marketing `/how-it-works`, `/features`, `/demo`, and funnel-page SEO / JSON-LD now describe the same path (website URL → check → review → pack → optional scripted sandbox → early access). Not a live receptionist. Under testing as a productised website-to-assistant until live scan on staging is evidenced
-- SSRF-safe website scan companion (F-02) — flagged; staging scan is still owner-blocked (Render companion + DigitalOcean env). Queued crawl only — do not invent crawl results or claim a live knowledge crawl
+- SSRF-safe website scan companion (F-02) — flagged; staging scan is still owner-blocked (DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild). Queued crawl only — do not invent crawl results or claim a live knowledge crawl
 - Knowledge pack + system prompt draft (F-03) and pack-aware scripted sandbox (F-04) — under testing; not a live phone
 - Scripted conversation benchmark (F-05) exists for fixture scoring only. Live-call barge-in is open. Not Fonio voice-quality parity. No always-on live phone
 
