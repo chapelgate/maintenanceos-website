@@ -30,6 +30,8 @@ export {
   createSandboxServer,
   handleSandboxRequest,
   listenSandboxServer,
+  resolveListenHost,
+  resolveListenPort,
   DEFAULT_HOST,
   DEFAULT_PORT,
 } from "./server.ts";

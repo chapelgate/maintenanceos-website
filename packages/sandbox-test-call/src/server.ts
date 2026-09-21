@@ -358,9 +358,27 @@ export function createSandboxServer(options: ServerOptions = {}): http.Server {
   });
 }
 
+/** Loopback by default. Hosted companions must set `SANDBOX_TEST_CALL_HOST=0.0.0.0`. */
+export function resolveListenHost(env: NodeJS.ProcessEnv = process.env): string {
+  const host = env.SANDBOX_TEST_CALL_HOST?.trim();
+  return host || DEFAULT_HOST;
+}
+
+/**
+ * Prefer `SANDBOX_TEST_CALL_PORT` (local compose / docs), else `PORT` (Render and
+ * other PaaS inject this). Invalid values fall back to 8790.
+ */
+export function resolveListenPort(env: NodeJS.ProcessEnv = process.env): number {
+  const raw = env.SANDBOX_TEST_CALL_PORT?.trim() || env.PORT?.trim();
+  if (!raw) return DEFAULT_PORT;
+  const port = Number(raw);
+  if (!Number.isInteger(port) || port <= 0 || port > 65535) return DEFAULT_PORT;
+  return port;
+}
+
 export function listenSandboxServer(options: ServerOptions = {}): http.Server {
-  const host = options.host ?? process.env.SANDBOX_TEST_CALL_HOST ?? DEFAULT_HOST;
-  const port = Number(options.port ?? process.env.SANDBOX_TEST_CALL_PORT ?? DEFAULT_PORT);
+  const host = options.host ?? resolveListenHost();
+  const port = options.port ?? resolveListenPort();
   const server = createSandboxServer(options);
   const enabled = options.sandboxEnabled ?? isSandboxTestCallEnabled();
 

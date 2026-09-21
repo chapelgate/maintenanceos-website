@@ -62,6 +62,7 @@ Do not hard-code a single LLM/voice vendor in product APIs. Pilot currently uses
 | Company site | DigitalOcean static + chapelgatetechnologies.com |
 | Product APIs / voice | Separate (pilot on Render today — freeze until gates) |
 | Ingestion / onboarding API | New **separate** Render free web service (`docs/ONBOARDING_SCAN_DEPLOY.md`); flag off until configured. Not DigitalOcean static, not frozen voice |
+| Sandbox test-call / mock calendar | New **separate** Render free web services (`docs/SANDBOX_DEPLOY.md`); flags off until configured. Not frozen voice |
 
 ## Related docs
 
@@ -70,3 +71,4 @@ Do not hard-code a single LLM/voice vendor in product APIs. Pilot currently uses
 - `docs/roadmap/fonio-parity-roadmap.md`
 - `docs/security/threat-model-onboarding-ingest.md`
 - `docs/ONBOARDING_SCAN_DEPLOY.md`
+- `docs/SANDBOX_DEPLOY.md`

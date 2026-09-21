@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createSandboxEngine } from "./engine.ts";
-import { createSandboxServer, resetRateLimitForTests } from "./server.ts";
+import {
+  createSandboxServer,
+  resetRateLimitForTests,
+  resolveListenHost,
+  resolveListenPort,
+  DEFAULT_HOST,
+  DEFAULT_PORT,
+} from "./server.ts";
 
 function listen(server: ReturnType<typeof createSandboxServer>): Promise<number> {
   return new Promise((resolve) => {
@@ -28,6 +35,24 @@ async function withServer(
     );
   }
 }
+
+test("resolveListenHost stays loopback unless SANDBOX_TEST_CALL_HOST is set", () => {
+  assert.equal(resolveListenHost({}), DEFAULT_HOST);
+  assert.equal(resolveListenHost({ SANDBOX_TEST_CALL_HOST: "0.0.0.0" }), "0.0.0.0");
+  assert.equal(resolveListenHost({ SANDBOX_TEST_CALL_HOST: "  " }), DEFAULT_HOST);
+});
+
+test("resolveListenPort prefers SANDBOX_TEST_CALL_PORT then PORT", () => {
+  assert.equal(resolveListenPort({}), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ SANDBOX_TEST_CALL_PORT: "8790" }), 8790);
+  assert.equal(resolveListenPort({ PORT: "10000" }), 10000);
+  assert.equal(
+    resolveListenPort({ SANDBOX_TEST_CALL_PORT: "8790", PORT: "10000" }),
+    8790,
+  );
+  assert.equal(resolveListenPort({ PORT: "not-a-port" }), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ SANDBOX_TEST_CALL_PORT: "-1" }), DEFAULT_PORT);
+});
 
 test("GET /health reports flag off and no telephony", async () => {
   await withServer({ sandboxEnabled: false }, async (base) => {

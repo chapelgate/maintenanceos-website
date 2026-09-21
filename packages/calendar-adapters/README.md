@@ -25,11 +25,11 @@ Providers: `mock` (in-memory), `google` (Calendar API v3), `microsoft` (Microsof
 | --- | --- | --- |
 | `CALENDAR_ADAPTERS_ENABLED` | `false` | Master switch. When not `true`/`1`, the factory returns a disabled adapter and the HTTP companion answers `503 calendar_disabled`. |
 | `CALENDAR_ADAPTER_PROVIDER` | `mock` | `mock` \| `google` \| `microsoft` |
-| `CALENDAR_ADAPTERS_HOST` | `127.0.0.1` | Companion bind address (keep loopback unless you intend otherwise) |
-| `CALENDAR_ADAPTERS_PORT` | `8789` | Companion listen port |
-| `CALENDAR_ADAPTERS_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS for the static site |
+| `CALENDAR_ADAPTERS_HOST` | `127.0.0.1` | Companion bind address (keep loopback unless you intend otherwise). Hosted companions must use `0.0.0.0`. |
+| `CALENDAR_ADAPTERS_PORT` | `8789` | Companion listen port. If unset, `PORT` is used (Render injects this). |
+| `CALENDAR_ADAPTERS_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS for the static site. One origin string; unset to allow seahorse-app and chapelgate staging together. |
 
-Marketing UI uses a **separate** build-time flag, `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` (also default false). Static export inlines `NEXT_PUBLIC_*`. See repo `.env.example` and `docs/CALENDAR_ADAPTERS_CONTRACT.md`.
+Marketing UI uses a **separate** build-time flag, `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` (also default false). Static export inlines `NEXT_PUBLIC_*`. See repo `.env.example`, `docs/CALENDAR_ADAPTERS_CONTRACT.md`, and the $0 host runbook `docs/SANDBOX_DEPLOY.md` (calendar section). Hosted Render path is **mock** only.
 
 ## Run the mock adapter locally
 
@@ -84,7 +84,7 @@ NEXT_PUBLIC_CALENDAR_ENDPOINT=http://127.0.0.1:8789/v1/calendar \
 
 If the public flag is on but the endpoint is empty, `/create` uses an **in-browser mock** labelled as local testing only. If the flag is off (default), the page says calendar connect is coming / under testing and does not show a booked confirmation.
 
-DigitalOcean static hosting cannot run this process. Leave both public vars empty there. No new paid infra: run the same Node file on loopback, a staging VM, or a free-tier process.
+DigitalOcean static hosting cannot run this process. Staging `/create` can use a **separate** free-tier mock service (Render web service, not the frozen voice app) after a DigitalOcean **rebuild** of `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT`. Runbook: `docs/SANDBOX_DEPLOY.md` (calendar section). No paid plan is required. Do not commit OAuth secrets.
 
 ## Google Calendar (OAuth, operator-configured)
 

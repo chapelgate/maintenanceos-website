@@ -76,7 +76,7 @@ NEXT_PUBLIC_CALENDAR_ENDPOINT=http://127.0.0.1:8789/v1/calendar \
   npm run dev
 ```
 
-Leave both public vars unset/false on DigitalOcean static hosting. `/create` then says **Calendar connect — coming / under testing** and never claims a booking. If the public flag is on and the endpoint is empty, the picker uses an in-browser mock labelled as local testing only.
+Leave both public vars unset/false on DigitalOcean static hosting until a **separate** free-tier mock companion is up (`docs/SANDBOX_DEPLOY.md`, calendar section) — then set `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT` and **rebuild**. `/create` then says **Calendar connect — coming / under testing** until that rebuild. If the public flag is on and the endpoint is empty, the picker uses an in-browser mock labelled as local testing only.
 
 Google Calendar / Microsoft 365: set OAuth env on the companion process only (see `packages/calendar-adapters/README.md`). No secrets in git. Do not wire this to frozen live telephony.
 
@@ -94,7 +94,7 @@ NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT=http://127.0.0.1:8790/v1/sandbox \
   npm run dev
 ```
 
-Leave both public vars unset/false on DigitalOcean static hosting. `/create` then says **Sandbox test call — under testing / coming** and never invents a live customer call. If the public flag is on and the endpoint is empty, the panel uses an in-browser scripted stub labelled as local testing only. Asking for WebRTC / live media returns `not_configured` — this is not production telephony and does not touch the frozen live voice path. Do not claim Fonio-parity voice quality.
+Leave both public vars unset/false on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/SANDBOX_DEPLOY.md`) — then set `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` and `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT` and **rebuild**. `/create` then says **Sandbox test call — under testing / coming** until that rebuild. If the public flag is on and the endpoint is empty, the panel uses an in-browser scripted stub labelled as local testing only. Asking for WebRTC / live media returns `not_configured` — this is not production telephony and does not touch the frozen live voice path. Do not claim Fonio-parity voice quality.
 
 ### Customer dashboard (call history / transcripts / bookings stub)
 
@@ -130,7 +130,7 @@ This is **not** production Fonio-parity and **must not** be copied onto DigitalO
 
 ### DigitalOcean App Platform (static)
 
-Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / `packages/onboarding-ingest/Dockerfile` on App Platform; those are loopback e2e or the **separate** Render scan companion. `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart.
+Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / companion Dockerfiles on App Platform; those are loopback e2e or the **separate** Render free companions (`docs/ONBOARDING_SCAN_DEPLOY.md`, `docs/SANDBOX_DEPLOY.md`). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart.
 
 ## Desktop navigation (IA v0.2)
 

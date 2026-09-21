@@ -114,5 +114,5 @@ Same expectation as `docs/FORM_ENDPOINT_CONTRACT.md`: `OPTIONS` → 204; allow `
 
 - `CALENDAR_ADAPTERS_ENABLED=false` (default) — companion may listen for `/health`, but mutations are off.
 - `CALENDAR_ADAPTER_PROVIDER=mock` (default) — or `google` / `microsoft`.
-- Marketing `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT` — empty / false on DigitalOcean static by default.
+- Marketing `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT` — empty / false on DigitalOcean static by default. Hosted mock companion (optional, same free Render blueprint as sandbox): `docs/SANDBOX_DEPLOY.md`. Rebuild DigitalOcean after setting `NEXT_PUBLIC_*`.
 - No live phone booking confirmation is exposed on this contract.

@@ -1,12 +1,13 @@
-# Render Blueprint — onboarding scan companion ONLY.
+# Render Blueprint — free companions (onboarding scan, sandbox test-call,
+# mock calendar adapters). Distinct service names. New web services only.
 #
 # Not a DigitalOcean App Platform spec (marketing stays static `output: 'export'`).
-# Not maintenanceos-redteam / production voice. Create a *new* web service.
-# $0: plan is `free`. Do not upgrade this service to Starter.
+# Not maintenanceos-redteam / production voice. Create *new* web services.
+# $0: every service below sets plan to free. Do not upgrade these to Starter.
 #
-# Apply from the Render Dashboard (New → Blueprint) or create the web service
-# by hand using docs/ONBOARDING_SCAN_DEPLOY.md. Crawl stays off until an
-# operator sets ONBOARDING_WEB_INGEST=true.
+# Apply from the Render Dashboard (New → Blueprint) or create each web service
+# by hand using docs/ONBOARDING_SCAN_DEPLOY.md and docs/SANDBOX_DEPLOY.md.
+# Flags stay off until an operator enables them in the dashboard.
 
 services:
   - type: web
@@ -29,3 +30,48 @@ services:
         value: "false"
       # Leave ONBOARDING_SCAN_CORS_ORIGIN unset to echo the browser Origin
       # (seahorse-app + chapelgate staging both work). See docs/ONBOARDING_SCAN_DEPLOY.md.
+
+  - type: web
+    name: maintenanceos-sandbox-test-call
+    runtime: docker
+    plan: free
+    dockerfilePath: ./packages/sandbox-test-call/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - packages/sandbox-test-call/**
+        - render.yaml
+    envVars:
+      - key: SANDBOX_TEST_CALL_HOST
+        value: "0.0.0.0"
+      # Off until an operator intentionally enables scripted sandbox sessions.
+      - key: SANDBOX_TEST_CALL_ENABLED
+        value: "false"
+      # Leave SANDBOX_TEST_CALL_CORS_ORIGIN unset to echo the browser Origin
+      # (seahorse-app + chapelgate staging both work). See docs/SANDBOX_DEPLOY.md.
+
+  - type: web
+    name: maintenanceos-calendar-adapters
+    runtime: docker
+    plan: free
+    dockerfilePath: ./packages/calendar-adapters/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - packages/calendar-adapters/**
+        - render.yaml
+    envVars:
+      - key: CALENDAR_ADAPTERS_HOST
+        value: "0.0.0.0"
+      # Off until an operator intentionally enables the mock adapter.
+      - key: CALENDAR_ADAPTERS_ENABLED
+        value: "false"
+      # Hosted path is mock-only. Do not add Google/Microsoft credentials here.
+      - key: CALENDAR_ADAPTER_PROVIDER
+        value: "mock"
+      # Leave CALENDAR_ADAPTERS_CORS_ORIGIN unset to echo the browser Origin.
+      # See docs/SANDBOX_DEPLOY.md (calendar section).

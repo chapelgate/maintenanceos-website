@@ -336,9 +336,27 @@ export function createCalendarServer(options: ServerOptions = {}): http.Server {
   });
 }
 
+/** Loopback by default. Hosted companions must set `CALENDAR_ADAPTERS_HOST=0.0.0.0`. */
+export function resolveListenHost(env: NodeJS.ProcessEnv = process.env): string {
+  const host = env.CALENDAR_ADAPTERS_HOST?.trim();
+  return host || DEFAULT_HOST;
+}
+
+/**
+ * Prefer `CALENDAR_ADAPTERS_PORT` (local compose / docs), else `PORT` (Render and
+ * other PaaS inject this). Invalid values fall back to 8789.
+ */
+export function resolveListenPort(env: NodeJS.ProcessEnv = process.env): number {
+  const raw = env.CALENDAR_ADAPTERS_PORT?.trim() || env.PORT?.trim();
+  if (!raw) return DEFAULT_PORT;
+  const port = Number(raw);
+  if (!Number.isInteger(port) || port <= 0 || port > 65535) return DEFAULT_PORT;
+  return port;
+}
+
 export function listenCalendarServer(options: ServerOptions = {}): http.Server {
-  const host = options.host ?? process.env.CALENDAR_ADAPTERS_HOST ?? DEFAULT_HOST;
-  const port = Number(options.port ?? process.env.CALENDAR_ADAPTERS_PORT ?? DEFAULT_PORT);
+  const host = options.host ?? resolveListenHost();
+  const port = options.port ?? resolveListenPort();
   const server = createCalendarServer(options);
   const enabled = options.adaptersEnabled ?? isCalendarAdaptersEnabled();
 
