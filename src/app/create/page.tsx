@@ -2,6 +2,7 @@ import {
   CalendarConnectSection,
   CreateJourneySection,
 } from "@/components/create-funnel-islands";
+import { CreateIngestPrivacyNote } from "@/components/CreateIngestPrivacyNote";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { funnelPageJsonLd } from "@/lib/json-ld";
@@ -62,6 +63,7 @@ export default function CreateReceptionistPage() {
           <div className="mt-6">
             <CreateJourneySection />
           </div>
+          <CreateIngestPrivacyNote />
         </section>
 
         <CalendarConnectSection />

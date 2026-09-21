@@ -30,7 +30,14 @@ export default function CookiesPage() {
             <p className="mt-2 text-muted">
               This draft explains cookies and similar technologies on the
               MaintenanceOS marketing site; it is pending legal and Privacy
-              sign-off.
+              sign-off. Website-URL ingest on /create is described in the{" "}
+              <a
+                href="/privacy/#website-url-ingest"
+                className="text-accent underline"
+              >
+                Privacy Policy (Draft)
+              </a>
+              ; it is not a cookie category.
             </p>
           </section>
 

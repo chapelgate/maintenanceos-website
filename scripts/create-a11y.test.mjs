@@ -72,6 +72,10 @@ test("sandbox coming and limitations regions have labelled headings", () => {
 
   assert.match(page, /aria-labelledby="create-limits-heading"/);
   assert.match(page, /id="create-limits-heading"/);
+  assert.match(page, /CreateIngestPrivacyNote/);
+  const privacyNote = read("src/components/CreateIngestPrivacyNote.tsx");
+  assert.match(privacyNote, /aria-labelledby="create-privacy-heading"/);
+  assert.match(privacyNote, /id="create-privacy-heading"/);
   assert.match(sandbox, /Sandbox test call — under testing \/ coming/);
   assert.match(sandbox, /aria-labelledby="sandbox-test-call-heading"/);
   assert.match(sandbox, /aria-describedby=\{comingCopyId\}/);

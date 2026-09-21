@@ -84,6 +84,8 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /llms files aligned; still not a live phone/);
   assert.match(matrix, /FAQ \+ FAQPage JSON-LD vs `\/create` funnel/);
   assert.match(matrix, /FAQ aligned; still not a live phone/);
+  assert.match(matrix, /Privacy note vs `\/create` website-URL ingest/);
+  assert.match(matrix, /privacy note aligned; still not live telephony data/);
 });
 
 test("FAQ copy names the verified funnel and stays claims-safe", () => {
@@ -147,6 +149,71 @@ test("create page metadata comes from the shared funnel helper", () => {
   const page = read("src/app/create/page.tsx");
   assert.match(page, /funnelPageMetadata\("create"\)/);
   assert.doesNotMatch(page, /Create your AI receptionist/);
+});
+
+test("create and legal scaffolds share the website-URL ingest privacy note", () => {
+  const copy = read("src/lib/create-ingest-privacy.ts");
+  const note = read("src/components/CreateIngestPrivacyNote.tsx");
+  const page = read("src/app/create/page.tsx");
+  const privacy = read("src/app/privacy/page.tsx");
+  const cookies = read("src/app/cookies/page.tsx");
+  const terms = read("src/app/terms/page.tsx");
+  const chrome = read("src/components/LegalPageChrome.tsx");
+  const config = read("next.config.ts");
+
+  assert.match(copy, /CREATE_INGEST_PRIVACY_NOTE/);
+  assert.match(copy, /public pages from the website URL you submit may be fetched/);
+  assert.match(copy, /do not invent crawl results/);
+  assert.match(copy, /Lead email is for early access only/);
+  assert.match(copy, /not live telephony data processing/);
+  assert.match(copy, /DRAFT FOR LEGAL REVIEW/);
+  assert.doesNotMatch(
+    copy,
+    /export const CREATE_INGEST_PRIVACY_NOTE =[\s\S]*?\bDPO\b/,
+  );
+  assert.doesNotMatch(
+    copy,
+    /export const CREATE_INGEST_PRIVACY_NOTE =[\s\S]*data protection officer/i,
+  );
+  assert.doesNotMatch(
+    copy,
+    /export const CREATE_INGEST_PRIVACY_NOTE =[\s\S]*GDPR compliant/i,
+  );
+
+  assert.doesNotMatch(note, /^["']use client["']/);
+  assert.match(note, /CREATE_INGEST_PRIVACY_NOTE/);
+  assert.match(note, /\/privacy\/#\$\{CREATE_INGEST_PRIVACY_ANCHOR\}/);
+
+  assert.match(page, /CreateIngestPrivacyNote/);
+  assert.match(privacy, /CREATE_INGEST_PRIVACY_NOTE/);
+  assert.match(privacy, /CREATE_INGEST_PRIVACY_ANCHOR/);
+  assert.match(privacy, /id=\{s\.id\}/);
+  assert.match(cookies, /\/privacy\/#website-url-ingest/);
+  assert.match(cookies, /not a cookie category/);
+  assert.match(terms, /lead email for early access only/);
+  assert.match(terms, /not live telephony data/);
+  assert.match(chrome, /\/create early-access/);
+  assert.match(config, /output:\s*["']export["']/);
+  for (const [label, src] of [
+    ["create page", page],
+    ["privacy page", privacy],
+    ["cookies page", cookies],
+    ["terms page", terms],
+    ["legal chrome", chrome],
+    ["create note", note],
+  ]) {
+    assert.doesNotMatch(src, /\bDPO\b/, `${label} must not invent a DPO`);
+    assert.doesNotMatch(
+      src,
+      /data protection officer/i,
+      `${label} must not invent a data protection officer`,
+    );
+    assert.doesNotMatch(
+      src,
+      /GDPR compliant/i,
+      `${label} must not claim GDPR compliance`,
+    );
+  }
 });
 
 test("primary conversion CTAs point at /create, not a live phone demo", () => {
