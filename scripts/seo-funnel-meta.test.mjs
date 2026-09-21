@@ -77,4 +77,9 @@ test("sitemap and robots already list the funnel routes", () => {
   assert.match(sitemap, /marketingPaths/);
   assert.match(robots, /allow: "\/"/);
   assert.match(robots, /sitemap: `\$\{origin\}\/sitemap\.xml`/);
+  assert.match(
+    robots,
+    /website URL → check → review → pack → optional scripted sandbox → early access/,
+  );
+  assert.match(robots, /owner-blocked/);
 });

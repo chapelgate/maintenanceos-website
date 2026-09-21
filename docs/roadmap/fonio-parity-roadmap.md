@@ -2,7 +2,7 @@
 
 **Benchmark:** Fonio public product (fonio.ai). Fonio is the **minimum** bar, not the ceiling.  
 **Constraint:** frozen live telephony until controlled-call gates pass.  
-**Verified through:** website `main` including PR **#49**, plus marketing `/demo` CTA alignment to the `/create` funnel. Live always-on phone remains **MISSING / frozen** — do not claim live.
+**Verified through:** website `main` including PR **#56** (claims-safe JSON-LD). Public funnel: website URL → check → review → pack → optional scripted sandbox → early access. Staging scan still owner-blocked. Live always-on phone remains **MISSING / frozen** — do not claim live.
 
 ## Phase 0 — Foundations (this PR / docs)
 
@@ -13,6 +13,7 @@
 - [x] Marketing `/demo` + leftover “book a demo / see it live” CTAs point primary to `/create/`; human demo is secondary early-access (not a live phone)
 - [x] Funnel-page titles / descriptions / OG name Website → Check → Review → Pack → optional sandbox → early access (not a live phone / always-on / GA)
 - [x] Claims-safe JSON-LD on home + funnel pages (Organization + WebSite + WebPage + SoftwareApplication; no live phone / always-on / GA / aggregateRating / fake offers)
+- [x] `llms.txt` / `llms-full.txt` name website URL → check → review → pack → optional scripted sandbox → early access (not a live phone / always-on / GA / ratings / invented crawl; staging scan owner-blocked)
 - [ ] SCM access for Cursor cloud agents on private website repo
 
 ## Phase 1 — Website → sandbox receptionist (P0)

@@ -80,6 +80,8 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /SEO meta aligned; still not a live phone/);
   assert.match(matrix, /JSON-LD on home \+ funnel pages/);
   assert.match(matrix, /claims-safe JSON-LD; still not a live phone/);
+  assert.match(matrix, /llms\.txt \/ llms-full\.txt vs `\/create` funnel/);
+  assert.match(matrix, /llms files aligned; still not a live phone/);
 });
 
 test("demo page names the website-to-pack path and does not book a live phone", () => {
