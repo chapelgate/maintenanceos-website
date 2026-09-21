@@ -6,7 +6,7 @@ import { industries, primaryNav, siteConfig } from "@/config/site";
 /**
  * Shell #11 chrome (wordmark, amber dual CTAs, hamburger) via native <details>.
  * Client only for Escape → close open details and return focus to summary.
- * CTA labels: Create from website (primary) / Request early access (secondary briefing).
+ * CTA labels: Create from website (primary) / Early access (secondary briefing).
  */
 function Wordmark() {
   return (
@@ -134,16 +134,16 @@ export function SiteHeader() {
             ),
           )}
 
-          <div className="ml-2 flex items-center gap-2">
+          <div className="ml-2 flex shrink-0 items-center gap-2">
             <a
               href="/demo/#demo"
-              className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
             >
-              Request early access
+              Early access
             </a>
             <a
               href="/create/"
-              className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
+              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
             >
               Create from website
             </a>
@@ -153,9 +153,9 @@ export function SiteHeader() {
         <div className="flex items-center gap-2 md:hidden">
           <a
             href="/create/"
-            className="inline-flex h-9 min-h-6 min-w-6 items-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
+            className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
           >
-            Create from website
+            Create
           </a>
           <details className="relative">
             <summary

@@ -103,6 +103,7 @@ test("primary conversion CTAs point at /create, not a live phone demo", () => {
   assert.match(pair, /secondaryHref = "\/demo\/#demo"/);
   assert.match(header, /href="\/create\/"/);
   assert.match(header, /Create from website/);
+  assert.match(header, /Early access/);
   assert.doesNotMatch(header, /See it live/i);
   assert.match(home, /primaryHref="\/create\/"/);
   assert.match(industries, /primaryHref="\/create\/"/);
