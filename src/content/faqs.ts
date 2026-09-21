@@ -64,4 +64,11 @@ export const faqItems: FaqItem[] = [
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },
+  {
+    question: "How do I contact you?",
+    answer:
+      "For product interest, start at Create from website. The contact form is for genuine human enquiries and early access — not live phone provisioning, not a GA support desk, and not an invented SLA. You can also join the launch list or request an early-access briefing on the demo page.",
+    relatedHref: "/create/",
+    relatedLabel: "Create from website",
+  },
 ];

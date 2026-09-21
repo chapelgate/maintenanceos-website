@@ -88,6 +88,40 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /privacy note aligned; still not live telephony data/);
   assert.match(matrix, /Pricing page clarity/);
   assert.match(matrix, /pricing copy aligned; still not published list prices/);
+  assert.match(matrix, /Contact \/ enquiry CTAs vs `\/create` funnel/);
+  assert.match(matrix, /contact copy aligned; still not a support desk/);
+});
+
+test("contact stays claims-safe as human enquiry, not a support desk", () => {
+  const page = read("src/app/contact/page.tsx");
+  const faqs = read("src/content/faqs.ts");
+  const llms = read("public/llms.txt");
+  const llmsFull = read("public/llms-full.txt");
+  const nextConfig = read("next.config.ts");
+
+  assert.match(page, /href="\/create\/"/);
+  assert.match(page, /Create from website/);
+  assert.match(page, /not live phone provisioning/);
+  assert.match(page, /not a GA support desk/);
+  assert.match(page, /no invented (response )?SLA/);
+  assert.match(page, /leadType="contact"/);
+  assert.doesNotMatch(page, /we reply within/i);
+  assert.doesNotMatch(page, /support ticket/i);
+  assert.doesNotMatch(page, /call us on/i);
+
+  assert.match(faqs, /question: "How do I contact you\?"/);
+  assert.match(faqs, /not a GA support desk/);
+  assert.match(faqs, /not an invented SLA/);
+  assert.match(
+    faqs,
+    /question: "How do I contact you\?"[\s\S]*relatedHref: "\/create\/"/,
+  );
+
+  assert.match(llms, /not a GA support desk/);
+  assert.match(llms, /no invented SLA/);
+  assert.match(llmsFull, /Contact form for genuine human enquiries/);
+  assert.match(llmsFull, /no invented SLA/);
+  assert.match(nextConfig, /output:\s*["']export["']/);
 });
 
 test("pricing stays claims-safe with Create CTA and coming telephony/calendar", () => {
@@ -147,6 +181,8 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
   assert.match(faqs, /Empty hours and services stay empty/);
   assert.match(faqs, /999 guidance \(never 911\)/);
   assert.match(faqs, /not commercially generally available/);
+  assert.match(faqs, /How do I contact you\?/);
+  assert.match(faqs, /not a GA support desk/);
   assert.doesNotMatch(faqs, /always-on phone line is live/i);
   assert.doesNotMatch(faqs, /your number is ready/i);
   assert.doesNotMatch(faqs, /commercially generally available now/i);

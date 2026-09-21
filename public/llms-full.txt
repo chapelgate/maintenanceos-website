@@ -21,6 +21,7 @@ Allowed calls to action:
 - Create from website (public path: website URL → check → review → pack → optional scripted sandbox → early access)
 - Join launch list
 - Request early demo / request early access / request pricing (human briefing — not live number provisioning)
+- Contact form for genuine human enquiries / early access (not a GA support desk, not live number provisioning, no invented SLA)
 
 Not offered here:
 
@@ -91,8 +92,8 @@ Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`) publish
 - Create (website URL → check → review → pack → optional scripted sandbox → early access): https://seahorse-app-4oasq.ondigitalocean.app/create/
 - Demo (same path; launch list + early-access briefing, not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/demo/
 - Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
-- FAQ (same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999, owner-blocked staging scan): https://seahorse-app-4oasq.ondigitalocean.app/faq/
-- Contact: https://seahorse-app-4oasq.ondigitalocean.app/contact/
+- FAQ (same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999, owner-blocked staging scan; contact is a human enquiry — not a support desk): https://seahorse-app-4oasq.ondigitalocean.app/faq/
+- Contact (human enquiry / early access — not a support desk, not live phone provisioning, no invented SLA): https://seahorse-app-4oasq.ondigitalocean.app/contact/
 - About: https://seahorse-app-4oasq.ondigitalocean.app/about/
 - Short machine summary: https://seahorse-app-4oasq.ondigitalocean.app/llms.txt
 
