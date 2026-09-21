@@ -118,6 +118,212 @@ function closingSource(systemPrompt?: string): ScriptedTurnSource {
   return "script";
 }
 
+const NOT_LIVE =
+  "This is a scripted sandbox, not a live phone line. Frozen production telephony is unused.";
+
+export type ScriptedIntent =
+  | "emergency"
+  | "booking"
+  | "price"
+  | "out_of_scope"
+  | "angry"
+  | "human"
+  | "after_hours"
+  | "hours"
+  | "services"
+  | "live_call"
+  | "unknown";
+
+function normalizeQuestion(text: string): string {
+  return text.toLowerCase().replace(/[?!.,]/g, "").replace(/\s+/g, " ").trim();
+}
+
+export function classifyCallerIntent(text: string): ScriptedIntent {
+  const t = text.toLowerCase();
+  if (
+    /\b(emergency|ambulance|fire brigade|gas leak)\b/.test(t) ||
+    /someone is hurt/.test(t) ||
+    /\b999\b/.test(t) ||
+    /\b911\b/.test(t) ||
+    /on fire|bleeding|collapsed/.test(t)
+  ) {
+    return "emergency";
+  }
+  if (/\b(book|booking|appointment|schedule|scheduled|slot|reschedule)\b/.test(t)) {
+    return "booking";
+  }
+  if (
+    /\b(price|prices|quote|quotes|cost|costs|ballpark|fee|fees|gbp|pounds?)\b/.test(
+      t,
+    ) ||
+    /how much/.test(t) ||
+    /£/.test(t)
+  ) {
+    return "price";
+  }
+  if (/\b(legal|medical|sue|suing|lawsuit|lawyer|solicitor|doctor|diagnos)/.test(t)) {
+    return "out_of_scope";
+  }
+  if (/\b(furious|ridiculous|angry|outraged|disgusted|fed up)\b/.test(t)) {
+    return "angry";
+  }
+  if (
+    /speak to (a )?(human|person)/.test(t) ||
+    /talk to (a )?(human|person|manager)/.test(t) ||
+    /\btransfer( me)?\b/.test(t) ||
+    /real (person|human)/.test(t)
+  ) {
+    return "human";
+  }
+  if (
+    /after[-\s]?hours/.test(t) ||
+    /you(?:'re| are) closed/.test(t) ||
+    /already closed|closed now/.test(t)
+  ) {
+    return "after_hours";
+  }
+  if (
+    /opening hours/.test(t) ||
+    /\bhours\b/.test(t) ||
+    /when (?:are you|do you) open/.test(t) ||
+    /what time/.test(t)
+  ) {
+    return "hours";
+  }
+  if (
+    /\bservices\b/.test(t) ||
+    /what do you (?:offer|do)/.test(t) ||
+    /what (?:work|jobs) do you/.test(t)
+  ) {
+    return "services";
+  }
+  if (
+    /live call/.test(t) ||
+    /diall?ed/.test(t) ||
+    /phone (?:call|line) connected/.test(t) ||
+    /webrtc/.test(t)
+  ) {
+    return "live_call";
+  }
+  return "unknown";
+}
+
+export function matchFaq(
+  pack: KnowledgePack,
+  callerText: string,
+): { question?: string; answer: string } | undefined {
+  const needle = normalizeQuestion(callerText);
+  if (!needle) return undefined;
+  for (const faq of pack.faqs ?? []) {
+    const question = normalizeQuestion(faq.question ?? "");
+    if (question && (needle.includes(question) || question.includes(needle))) {
+      return faq;
+    }
+  }
+  return undefined;
+}
+
+function policySource(systemPrompt?: string): ScriptedTurnSource {
+  return closingSource(systemPrompt);
+}
+
+/**
+ * One receptionist turn for a caller utterance. Used by the conversation
+ * benchmark. `runScriptedDemo` stays a fixed hours → services → FAQ script.
+ */
+export function scriptedReply(
+  callerText: string,
+  pack: unknown,
+  systemPrompt?: string,
+): ScriptedTurn {
+  const knowledge = safePack(pack);
+  const intent = classifyCallerIntent(callerText);
+
+  if (intent === "emergency") {
+    return {
+      speaker: "receptionist",
+      text: `If this is an emergency in the UK, call 999 now (not 911). I cannot dispatch anyone from this scripted sandbox. ${NOT_LIVE}`,
+      source: policySource(systemPrompt),
+    };
+  }
+  if (intent === "booking") {
+    return {
+      speaker: "receptionist",
+      text: `I cannot book an appointment from this scripted sandbox. Calendar booking is not connected here, and I will not invent a confirmed booking. ${NOT_LIVE}`,
+      source: policySource(systemPrompt),
+    };
+  }
+  if (intent === "price") {
+    return {
+      speaker: "receptionist",
+      text: `${missingOnFileReply("prices", systemPrompt)} I will not invent a quote. ${NOT_LIVE}`,
+      source: "missing",
+    };
+  }
+  if (intent === "out_of_scope") {
+    return {
+      speaker: "receptionist",
+      text: `I cannot give legal or medical advice. Please speak to a qualified professional. ${NOT_LIVE}`,
+      source: policySource(systemPrompt),
+    };
+  }
+  if (intent === "angry") {
+    return {
+      speaker: "receptionist",
+      text: `I'm sorry this has been frustrating. I cannot transfer you from this scripted sandbox. No live call was placed. ${NOT_LIVE}`,
+      source: policySource(systemPrompt),
+    };
+  }
+  if (intent === "human") {
+    return {
+      speaker: "receptionist",
+      text: `I cannot transfer you to speak to a person from this scripted sandbox. No live call was placed. ${NOT_LIVE}`,
+      source: policySource(systemPrompt),
+    };
+  }
+  if (intent === "after_hours") {
+    const hours = hoursTurn(knowledge, systemPrompt);
+    return {
+      speaker: "receptionist",
+      text: `${hours.text} I can note that you called after hours, but I cannot book a callback from this scripted sandbox. ${NOT_LIVE}`,
+      source: hours.source,
+    };
+  }
+  if (intent === "hours") {
+    return hoursTurn(knowledge, systemPrompt);
+  }
+  if (intent === "services") {
+    return servicesTurn(knowledge, systemPrompt);
+  }
+  if (intent === "live_call") {
+    return {
+      speaker: "receptionist",
+      text: `${NOT_LIVE} No live call was placed.`,
+      source: policySource(systemPrompt),
+    };
+  }
+
+  const faq = matchFaq(knowledge, callerText);
+  if (faq) {
+    return {
+      speaker: "receptionist",
+      text: faq.answer,
+      source: "knowledge.faqs",
+    };
+  }
+  if (/\bhours\b/i.test(callerText)) {
+    return hoursTurn(knowledge, systemPrompt);
+  }
+  if (/\bservices\b/i.test(callerText)) {
+    return servicesTurn(knowledge, systemPrompt);
+  }
+  return {
+    speaker: "receptionist",
+    text: missingOnFileReply("those details", systemPrompt),
+    source: "missing",
+  };
+}
+
 /**
  * Deterministic scripted demo against the session knowledge pack.
  * Follows the stored system prompt's missing-field rule. Never invents

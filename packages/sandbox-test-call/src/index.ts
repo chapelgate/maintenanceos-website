@@ -24,7 +24,31 @@ export type {
 } from "./types.ts";
 export { isSandboxTestCallEnabled } from "./flags.ts";
 export { asDraftString, firstFaqPair, normalizeDraft } from "./draft.ts";
-export { missingOnFileReply, runScriptedDemo } from "./scripted.ts";
+export {
+  classifyCallerIntent,
+  matchFaq,
+  missingOnFileReply,
+  runScriptedDemo,
+  scriptedReply,
+} from "./scripted.ts";
+export type { ScriptedIntent } from "./scripted.ts";
+export {
+  BENCHMARK_FOOTER,
+  BENCHMARK_SCENARIOS,
+  FULL_ACME,
+  defaultReplyFn,
+  formatBenchmarkReport,
+  runBenchmark,
+  scoreScenario,
+} from "./conversation-benchmark.ts";
+export type {
+  BenchmarkCheck,
+  BenchmarkReport,
+  BenchmarkScenario,
+  CheckResult,
+  ReplyFn,
+  ScenarioScore,
+} from "./conversation-benchmark.ts";
 export { createMemoryStore } from "./store.ts";
 export { createSandboxEngine, resolveTestMode } from "./engine.ts";
 export type { SandboxEngine } from "./engine.ts";
