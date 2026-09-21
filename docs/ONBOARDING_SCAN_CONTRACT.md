@@ -42,11 +42,17 @@ HTTP **200**:
     "faqs": "Q: Do you cover London?\nA: Yes, within the M25."
   },
   "warnings": ["untrusted_crawl_text"],
-  "sources": [{ "url": "https://acme.example/", "status": 200, "bytes": 1234 }]
+  "sources": [{ "url": "https://acme.example/", "status": 200, "bytes": 1234 }],
+  "fieldMeta": {
+    "businessName": { "source": "jsonld", "confidence": "high" },
+    "hours": { "source": "jsonld", "confidence": "high" }
+  }
 }
 ```
 
 The client maps **only** `businessName`, `greeting`, `hours`, `services`, `faqs` when they are non-empty strings. Fields may sit on the root or under `draft`. Unknown keys are ignored. Omit a field instead of guessing.
+
+`fieldMeta` is optional provenance (`jsonld` / `microdata` / `meta` / `title` / `heading` / `nav` / `pattern` / `contact_link` / `details`, plus `high` | `medium` | `low`). The current `/create` client may show it as a review hint; it must not fill empty draft fields from it.
 
 `untrusted: true` means every extracted string is page data, never system instructions.
 

@@ -11,6 +11,7 @@ import {
   normalisePublicUrl,
   requestOnboardingScan,
   type ReceptionistDraft,
+  type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
 
 type Step = 1 | 2 | 3 | 4;
@@ -46,6 +47,37 @@ function scanNoteFor(progress: Progress): string {
 
 const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
 
+const SOURCE_LABEL: Record<string, string> = {
+  jsonld: "JSON-LD",
+  microdata: "schema.org microdata",
+  meta: "page metadata",
+  title: "page title",
+  heading: "labelled heading",
+  nav: "navigation links",
+  pattern: "visible text pattern",
+  contact_link: "phone/email links",
+  details: "FAQ accordion",
+};
+
+function provenanceSummary(fieldMeta: ScanDraftFieldMeta): string | null {
+  const parts: string[] = [];
+  const labels: { key: keyof ReceptionistDraft; label: string }[] = [
+    { key: "businessName", label: "name" },
+    { key: "greeting", label: "greeting" },
+    { key: "hours", label: "hours" },
+    { key: "services", label: "services" },
+    { key: "faqs", label: "FAQs" },
+  ];
+  for (const item of labels) {
+    const meta = fieldMeta[item.key];
+    if (!meta) continue;
+    const source = SOURCE_LABEL[meta.source] ?? meta.source;
+    const caution = meta.confidence === "low" ? ", check this" : "";
+    parts.push(`${item.label} from ${source} (${meta.confidence}${caution})`);
+  }
+  return parts.length ? parts.join("; ") : null;
+}
+
 /**
  * Claims-safe website→receptionist early-access flow.
  * Business URL goes in `message` because `website` is the honeypot on submitLead.
@@ -65,6 +97,7 @@ export function CreateReceptionistForm({
   const [name, setName] = useState("");
   const [organisation, setOrganisation] = useState("");
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
+  const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
   const errorId = useId();
   const progressId = useId();
 
@@ -88,6 +121,7 @@ export function CreateReceptionistForm({
           ...EMPTY_RECEPTIONIST_DRAFT,
           businessName: hostnameBusinessHint(businessUrl),
         });
+        setFieldMeta({});
         setProgress("queued");
         return;
       }
@@ -98,6 +132,7 @@ export function CreateReceptionistForm({
       if (outcome.status === "ok") {
         const filled = Object.keys(outcome.draft).length > 0;
         setDraft({ ...EMPTY_RECEPTIONIST_DRAFT, ...outcome.draft });
+        setFieldMeta(outcome.fieldMeta);
         setProgress(filled ? "scanned" : "scanned_empty");
         return;
       }
@@ -106,10 +141,12 @@ export function CreateReceptionistForm({
           ...EMPTY_RECEPTIONIST_DRAFT,
           businessName: hostnameBusinessHint(businessUrl),
         });
+        setFieldMeta({});
         setProgress("queued");
         return;
       }
       setDraft(EMPTY_RECEPTIONIST_DRAFT);
+      setFieldMeta({});
       setScanDetail(outcome.message);
       setProgress("scan_failed");
     })();
@@ -156,6 +193,7 @@ export function CreateReceptionistForm({
     setName(String(fd.get("name") ?? "").trim());
     setOrganisation(String(fd.get("organisation") ?? "").trim());
     setDraft(EMPTY_RECEPTIONIST_DRAFT);
+    setFieldMeta({});
     setStatus("idle");
     setStep(2);
   }
@@ -172,6 +210,7 @@ export function CreateReceptionistForm({
         businessUrl,
         draft,
         scanNote: scanNoteFor(progress),
+        fieldMeta,
       }),
       website: "",
     });
@@ -411,6 +450,11 @@ export function CreateReceptionistForm({
                 ? "These fields are a draft for early access. The business name is from your website address, not from a crawl."
                 : "Complete what you can. We did not invent crawl content for this site."}
           </p>
+          {progress === "scanned" && provenanceSummary(fieldMeta) ? (
+            <p className="mt-2 text-xs text-muted">
+              Scan provenance (untrusted page text): {provenanceSummary(fieldMeta)}.
+            </p>
+          ) : null}
           <div className="mt-4 grid gap-4">
             <label className="block text-sm">
               <span className="font-medium text-ink">Business name</span>

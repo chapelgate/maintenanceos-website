@@ -145,3 +145,7 @@ curl -sS -X POST https://<name>.onrender.com/v1/onboarding/scan \
 ```
 
 With ingest off: HTTP 503 `scan_disabled`. With ingest on: 200 draft or a typed error — **no invented `draft`**.
+
+## Extract limits
+
+The companion **copies** public HTML (JSON-LD, meta, labelled blocks, conservative hours/nav/FAQ/`tel`/`mailto` patterns). It does not run page JavaScript and does not guess missing hours or services. Optional `fieldMeta` is provenance for review; `/create` still maps only `businessName`, `greeting`, `hours`, `services`, `faqs`. Details: `packages/onboarding-ingest/README.md`.

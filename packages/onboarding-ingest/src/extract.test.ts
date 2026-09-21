@@ -1,13 +1,25 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import {
   asUntrustedText,
   extractDraftFromHtml,
   extractJsonLd,
+  extractMicrodata,
   extractSameOriginHrefs,
+  extractServicesFromNav,
+  extractTelMailto,
   rankCandidateUrls,
   stripHtmlToText,
 } from "./extract.ts";
+
+const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
+
+function fixture(name: string): string {
+  return readFileSync(join(FIXTURES, name), "utf8");
+}
 
 const LOCAL_BUSINESS_HTML = `<!doctype html>
 <html>
@@ -56,7 +68,7 @@ test("extractJsonLd maps LocalBusiness + FAQPage without inventing extras", () =
 });
 
 test("extractDraftFromHtml happy-path shape matches /create draft keys", () => {
-  const { draft, warnings } = extractDraftFromHtml([
+  const { draft, warnings, fieldMeta } = extractDraftFromHtml([
     { url: "https://acme.example/", html: LOCAL_BUSINESS_HTML },
   ]);
   assert.deepEqual(Object.keys(draft).sort(), [
@@ -71,6 +83,8 @@ test("extractDraftFromHtml happy-path shape matches /create draft keys", () => {
   assert.equal(draft.hours, "Mo-Fr 08:00-17:00");
   assert.equal(draft.services, "Boiler repair\nEmergency leak stop");
   assert.equal(draft.faqs, "Q: Do you cover London?\nA: Yes, within the M25.");
+  assert.equal(fieldMeta.businessName?.source, "jsonld");
+  assert.equal(fieldMeta.hours?.confidence, "high");
   assert.ok(warnings.includes("untrusted_crawl_text"));
   assert.ok(!warnings.includes("greeting_not_found"));
 });
@@ -120,4 +134,104 @@ test("same-origin useful paths are ranked; off-origin ignored", () => {
   assert.ok(ranked.some((url) => url.includes("/services")));
   assert.equal(ranked.some((url) => url.includes("evil.example")), false);
   assert.equal(ranked.some((url) => url.includes("/pricing")), false);
+});
+
+test("fixture trades-no-jsonld: name, hours, nav services, details FAQ, tel/mailto", () => {
+  const html = fixture("trades-no-jsonld.html");
+  const { draft, warnings, fieldMeta } = extractDraftFromHtml([
+    { url: "https://riverside-heating.example/", html },
+  ]);
+  assert.equal(draft.businessName, "Riverside Heating");
+  assert.equal(draft.greeting, undefined);
+  assert.match(draft.hours ?? "", /Monday to Friday/i);
+  assert.match(draft.hours ?? "", /8:00am/i);
+  assert.match(draft.services ?? "", /Boiler repair/);
+  assert.match(draft.services ?? "", /Bathrooms/);
+  assert.match(draft.services ?? "", /Emergency leaks/);
+  assert.equal(/Home|About|Contact/.test(draft.services ?? ""), false);
+  assert.match(draft.faqs ?? "", /Do you cover Leeds\?/);
+  assert.match(draft.faqs ?? "", /Gas Safe/);
+  assert.match(draft.faqs ?? "", /0113 200 1111/);
+  assert.match(draft.faqs ?? "", /hello@riverside-heating\.example/);
+  assert.equal(fieldMeta.businessName?.source, "meta");
+  assert.equal(fieldMeta.services?.source, "nav");
+  assert.equal(fieldMeta.services?.confidence, "low");
+  assert.equal(fieldMeta.faqs?.source, "details");
+  assert.ok(warnings.includes("services_low_confidence"));
+  assert.ok(warnings.includes("contact_hints_from_page"));
+  assert.ok(warnings.includes("greeting_not_found"));
+  assert.ok(!warnings.includes("hours_not_found"));
+});
+
+test("fixture accordion + heading questions copy Q/A without inventing extras", () => {
+  const html = fixture("accordion-faq.html");
+  const { draft, fieldMeta } = extractDraftFromHtml([
+    { url: "https://oak-street.example/", html },
+  ]);
+  assert.equal(draft.businessName, "Oak Street Electrical");
+  assert.match(draft.faqs ?? "", /EV charger/);
+  assert.match(draft.faqs ?? "", /next working day/);
+  assert.equal(fieldMeta.faqs?.confidence, "medium");
+  assert.equal(draft.hours, undefined);
+  assert.equal(draft.services, undefined);
+});
+
+test("fixture microdata LocalBusiness maps name, slogan, hours, services, contact", () => {
+  const html = fixture("microdata-localbusiness.html");
+  const micro = extractMicrodata(html);
+  assert.equal(micro.businessName, "Hilltop Locksmiths");
+  assert.equal(micro.greeting, "Keys cut while you wait");
+  assert.match(micro.hours ?? "", /Mo-Sa 09:00-18:00/);
+  assert.match(micro.services ?? "", /Lock changes/);
+  const { draft, fieldMeta } = extractDraftFromHtml([
+    { url: "https://hilltop-locks.example/", html },
+  ]);
+  assert.equal(draft.businessName, "Hilltop Locksmiths");
+  assert.equal(draft.greeting, "Keys cut while you wait");
+  assert.equal(draft.hours, "Mo-Sa 09:00-18:00");
+  assert.match(draft.services ?? "", /UPVC door repair/);
+  assert.match(draft.faqs ?? "", /0161 555 0101/);
+  assert.equal(fieldMeta.businessName?.source, "microdata");
+  assert.equal(fieldMeta.hours?.confidence, "high");
+});
+
+test("fixture JSON-LD Plumber subtype + hours spec days array; no invented call-time", () => {
+  const html = fixture("jsonld-plumber.html");
+  const extracted = extractJsonLd(html);
+  assert.equal(extracted.businessName, "Leak Stop Ltd");
+  assert.match(extracted.hours ?? "", /Monday/);
+  assert.match(extracted.hours ?? "", /08:00–17:30/);
+  assert.match(extracted.services ?? "", /Burst pipe isolation/);
+  assert.ok(extracted.phones.some((value) => value.includes("161")));
+  const { draft } = extractDraftFromHtml([
+    { url: "https://leak-stop.example/", html },
+  ]);
+  assert.equal(draft.hours?.includes("3pm"), false);
+  assert.match(draft.faqs ?? "", /jobs@leak-stop\.example/);
+});
+
+test("fixture hours table under labelled heading; noise page invents nothing", () => {
+  const table = fixture("hours-table.html");
+  const { draft, fieldMeta } = extractDraftFromHtml([
+    { url: "https://canal-road.example/", html: table },
+  ]);
+  assert.equal(draft.businessName, "Canal Road Garage");
+  assert.match(draft.hours ?? "", /Monday/);
+  assert.match(draft.hours ?? "", /8:00am/);
+  assert.ok(
+    fieldMeta.hours?.source === "heading" || fieldMeta.hours?.source === "pattern",
+  );
+
+  const noise = fixture("hours-noise.html");
+  const empty = extractDraftFromHtml([
+    { url: "https://noise.example/", html: noise },
+  ]);
+  assert.equal(empty.draft.hours, undefined);
+  assert.equal(empty.draft.services, undefined);
+  assert.equal(empty.draft.faqs, undefined);
+  assert.equal(empty.draft.businessName, "Noise Example");
+  assert.equal(extractServicesFromNav(noise), undefined);
+  const links = extractTelMailto(noise);
+  assert.deepEqual(links.phones, []);
+  assert.deepEqual(links.emails, []);
 });
