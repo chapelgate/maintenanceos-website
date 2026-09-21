@@ -16,6 +16,9 @@ const enabledCreateIslands = path.join(
 );
 
 const nextConfig: NextConfig = {
+  // Static export for DigitalOcean App Platform. Do not add `headers()` —
+  // Next ignores it with `output: "export"`. Browser-honored baseline:
+  // src/lib/static-security-headers.ts and docs/security/static-security-baseline.md
   output: "export",
   trailingSlash: true,
   images: {

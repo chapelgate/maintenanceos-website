@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SkipLink } from "@/components/SkipLink";
 import { marketingJsonLd } from "@/lib/json-ld";
 import { buildRootMetadata } from "@/lib/page-meta";
+import { contentSecurityPolicy } from "@/lib/static-security-headers";
 import "./globals.css";
 
 const inter = Inter({
@@ -26,6 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-GB">
+      <head>
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content={contentSecurityPolicy()}
+        />
+      </head>
       <body
         className={`${inter.variable} flex min-h-screen flex-col font-sans antialiased`}
       >
