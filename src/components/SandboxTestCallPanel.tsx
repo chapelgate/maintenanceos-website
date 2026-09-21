@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { SandboxTestCallComingSoon } from "@/components/SandboxTestCallComingSoon";
 import { siteConfig } from "@/config/site";
 import {
   requestSandboxScriptedDemo,
@@ -43,7 +44,7 @@ export function SandboxTestCallPanel({
   const [session, setSession] = useState<SandboxSession | null>(null);
   const [tested, setTested] = useState<SandboxTest | null>(null);
   const statusId = useId();
-  const comingCopyId = useId();
+  const comingCopyId = "sandbox-test-call-enabled-copy";
 
   async function onRunScriptedDemo() {
     setSessionState("submitting");
@@ -122,29 +123,7 @@ export function SandboxTestCallPanel({
   }
 
   if (!enabled) {
-    return (
-      <section
-        className="rounded-md border border-border bg-surface p-5"
-        data-sandbox-test-call="off"
-        aria-labelledby="sandbox-test-call-heading"
-        aria-describedby={comingCopyId}
-      >
-        <h2
-          id="sandbox-test-call-heading"
-          className="text-base font-semibold text-ink"
-        >
-          Sandbox test call — under testing / coming
-        </h2>
-        <p id={comingCopyId} className="mt-2 text-sm text-muted">
-          A feature-flagged sandbox session lives in{" "}
-          <code className="text-xs">packages/sandbox-test-call</code> behind{" "}
-          <code className="text-xs">SANDBOX_TEST_CALL_ENABLED=false</code>{" "}
-          (default off). When enabled locally, a pack-aware scripted demo is
-          one click — still not a live customer phone number, not production
-          telephony, and the frozen live voice path is untouched.
-        </p>
-      </section>
-    );
+    return <SandboxTestCallComingSoon />;
   }
 
   const hasDraftSignal = Object.values(draft).some((value) => value.trim());

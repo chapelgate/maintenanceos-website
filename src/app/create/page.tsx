@@ -1,5 +1,7 @@
-import { CalendarConnectPanel } from "@/components/CalendarConnectPanel";
-import { CreateJourney } from "@/components/CreateJourney";
+import {
+  CalendarConnectSection,
+  CreateJourneySection,
+} from "@/components/create-funnel-islands";
 import { PageHero } from "@/components/PageHero";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
@@ -55,11 +57,11 @@ export default function CreateReceptionistPage() {
             It never places a live customer call.
           </p>
           <div className="mt-6">
-            <CreateJourney />
+            <CreateJourneySection />
           </div>
         </section>
 
-        <CalendarConnectPanel />
+        <CalendarConnectSection />
 
         <section aria-labelledby="create-steps-heading">
           <h2

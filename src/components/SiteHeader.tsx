@@ -1,13 +1,15 @@
-"use client";
-
-import { useEffect } from "react";
 import { industries, primaryNav, siteConfig } from "@/config/site";
 
 /**
  * Shell #11 chrome (wordmark, amber dual CTAs, hamburger) via native <details>.
- * Client only for Escape → close open details and return focus to summary.
+ * Server component (PERFORMANCE_BUDGET: no layout chrome `"use client"`).
+ * Escape → close open details and return focus to summary is a tiny inline
+ * script so content routes do not hydrate React for the header.
  * CTA labels: Create from website (primary) / Early access (secondary briefing).
  */
+
+const HEADER_DETAILS_ESCAPE = `document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;document.querySelectorAll("header details[open]").forEach(function(d){d.open=false;var s=d.querySelector("summary");s&&s.focus();});});`;
+
 function Wordmark() {
   return (
     <a href="/" className="text-lg text-ink" aria-label={siteConfig.name}>
@@ -50,22 +52,6 @@ function MenuIcon() {
 }
 
 export function SiteHeader() {
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key !== "Escape") return;
-      const openDetails = document.querySelectorAll<HTMLDetailsElement>(
-        "header details[open]",
-      );
-      openDetails.forEach((details) => {
-        details.open = false;
-        const summary = details.querySelector("summary");
-        summary?.focus();
-      });
-    }
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
-
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
       <div className="mx-auto flex h-16 max-w-[70rem] items-center justify-between gap-4 px-4 md:px-6">
@@ -230,6 +216,7 @@ export function SiteHeader() {
           </details>
         </div>
       </div>
+      <script dangerouslySetInnerHTML={{ __html: HEADER_DETAILS_ESCAPE }} />
     </header>
   );
 }

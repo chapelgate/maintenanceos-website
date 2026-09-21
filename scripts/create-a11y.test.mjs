@@ -56,21 +56,25 @@ test("empty hours and services stay textual for AT", () => {
 
 test("sandbox coming and limitations regions have labelled headings", () => {
   const page = read("src/app/create/page.tsx");
-  const sandbox = read("src/components/SandboxTestCallPanel.tsx");
+  const sandbox = read("src/components/SandboxTestCallComingSoon.tsx");
+  const sandboxPanel = read("src/components/SandboxTestCallPanel.tsx");
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
-  const calendar = read("src/components/CalendarConnectPanel.tsx");
+  const calendar = read("src/components/CalendarConnectComingSoon.tsx");
+  const calendarPanel = read("src/components/CalendarConnectPanel.tsx");
 
   assert.match(page, /aria-labelledby="create-limits-heading"/);
   assert.match(page, /id="create-limits-heading"/);
   assert.match(sandbox, /Sandbox test call — under testing \/ coming/);
   assert.match(sandbox, /aria-labelledby="sandbox-test-call-heading"/);
   assert.match(sandbox, /aria-describedby=\{comingCopyId\}/);
+  assert.match(sandboxPanel, /SandboxTestCallComingSoon/);
   assert.match(preview, /data-limitations="readonly"/);
   assert.match(preview, /id="create-pack-limitations-heading"/);
   assert.match(preview, /aria-labelledby="create-pack-limitations-heading"/);
   assert.match(preview, /Honest limitations/);
   assert.match(calendar, /Calendar connect — coming \/ under testing/);
   assert.match(calendar, /aria-labelledby="calendar-connect-heading"/);
+  assert.match(calendarPanel, /CalendarConnectComingSoon/);
 });
 
 test("static export setting is unchanged by create a11y polish", () => {
