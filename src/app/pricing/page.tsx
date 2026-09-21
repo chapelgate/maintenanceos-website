@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Pricing",
   description:
-    "Public list pricing is not published yet. Request pricing or join the launch list. Pre-launch — no self-serve checkout.",
+    "Public list pricing is not published yet. Create from website, or request pricing. Pre-launch — not a live phone, not general availability, no invented list prices.",
   path: "/pricing/",
 });
 
@@ -86,8 +86,8 @@ export default function PricingPage() {
                 secondaryLabel={pricing.secondaryCta.label}
               />
               <p className="mt-6 text-xs text-muted">
-                No self-serve checkout. Packages are shared on request while we
-                prepare launch.
+                No self-serve checkout. No live phone in a plan. Packages are
+                shared on request while we prepare launch.
               </p>
             </div>
           </div>

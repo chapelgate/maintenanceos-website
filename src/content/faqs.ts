@@ -60,8 +60,8 @@ export const faqItems: FaqItem[] = [
   {
     question: "When will pricing be published?",
     answer:
-      "Pricing is launching soon. Request pricing via an early-access briefing while packages are prepared. There is no self-serve checkout on this site.",
-    relatedHref: "/demo/#demo",
-    relatedLabel: "Request early access",
+      "Pricing is launching soon. There are no published list prices and no live phone included in a plan. Create from website, or request pricing via an early-access briefing. There is no self-serve checkout. Live telephony and calendar booking are coming / early access — not general availability.",
+    relatedHref: "/create/",
+    relatedLabel: "Create from website",
   },
 ];
