@@ -6,6 +6,7 @@ import {
   mapScanFieldMeta,
   mapScanResponse,
   normalisePublicUrl,
+  scanFieldReviewHint,
 } from "./onboarding-create.ts";
 
 test("normalisePublicUrl accepts public http(s) and rejects junk", () => {
@@ -63,6 +64,34 @@ test("mapScanFieldMeta copies only known provenance and ignores junk", () => {
       hours: { source: "jsonld", confidence: "high" },
       services: { source: "nav", confidence: "low" },
     },
+  );
+});
+
+test("scanFieldReviewHint is honest about missing provenance and empty fields", () => {
+  assert.equal(scanFieldReviewHint(undefined, "Acme"), null);
+  assert.equal(
+    scanFieldReviewHint({ source: "jsonld", confidence: "high" }, ""),
+    null,
+  );
+  assert.equal(
+    scanFieldReviewHint({ source: "jsonld", confidence: "high" }, "   "),
+    null,
+  );
+  assert.equal(
+    scanFieldReviewHint({ source: "invented", confidence: "high" }, "Acme"),
+    null,
+  );
+  assert.match(
+    scanFieldReviewHint({ source: "jsonld", confidence: "high" }, "Acme") ?? "",
+    /JSON-LD \(high confidence\)/,
+  );
+  assert.match(
+    scanFieldReviewHint({ source: "nav", confidence: "low" }, "Boilers") ?? "",
+    /navigation links \(low confidence — check this\)/,
+  );
+  assert.doesNotMatch(
+    scanFieldReviewHint({ source: "nav", confidence: "low" }, "Boilers") ?? "",
+    /invent/i,
   );
 });
 

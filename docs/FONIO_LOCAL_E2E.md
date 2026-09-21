@@ -96,7 +96,7 @@ These are what the existing UI already does. The stack does not invent a success
 | Setup | What you should see |
 | --- | --- |
 | Endpoint **empty** (default DO / `.env.example`) | After URL + email, step 2: **Website crawl is queued for early access.** Hostname may seed `businessName` only. No invented hours/services/FAQs. |
-| This local stack (endpoint set, ingest on) | Step 2: **Asking the configured scan service…** then either mapped fields, **scan responded but returned no extractable fields**, or a fetch/SSRF failure. Missing keys stay empty. |
+| This local stack (endpoint set, ingest on) | Step 2: **Asking the configured scan service…** then either mapped fields, **scan responded but returned no extractable fields**, or a fetch/SSRF failure. Missing keys stay empty. Step 3: filled fields may show a `fieldMeta` source + confidence hint; empty fields stay empty. |
 | `http://localhost/…` or a private IP | Scan **rejects** (SSRF). The form must not fill a fake draft. |
 
 Use a public `https://` site (for example `https://example.com/`). Extract is best-effort untrusted page data, not a live receptionist.
@@ -146,6 +146,6 @@ Each line is `PASS`, `FAIL`, or `SKIP`. Required companions with flags still off
 - Not live WebRTC or Twilio; not a change to the frozen live voice path.
 - Not customer-GA calendar OAuth or voice booking confirmation.
 - Not a live customer portal or analytics.
-- Not enabled on DigitalOcean static hosting by default. Staging HTTPS scan is a **separate** Render free service: [`ONBOARDING_SCAN_DEPLOY.md`](ONBOARDING_SCAN_DEPLOY.md). Staging HTTPS sandbox (and optional mock calendar) is a **separate** Render free service: [`SANDBOX_DEPLOY.md`](SANDBOX_DEPLOY.md). Staging HTTPS dashboard is a **separate** Render free service: [`DASHBOARD_DEPLOY.md`](DASHBOARD_DEPLOY.md) (SAMPLE / DEMO only).
+- Not enabled on DigitalOcean static hosting by default. Staging HTTPS scan is a **separate** Render free service: [`ONBOARDING_SCAN_DEPLOY.md`](ONBOARDING_SCAN_DEPLOY.md). Staging HTTPS sandbox (and optional mock calendar) is a **separate** Render free service: [`SANDBOX_DEPLOY.md`](SANDBOX_DEPLOY.md). Staging HTTPS dashboard is a **separate** Render free service: [`DASHBOARD_DEPLOY.md`](DASHBOARD_DEPLOY.md) (SAMPLE / DEMO only). One operator checklist for DigitalOcean env + rebuild + wake order: [`STAGING_COMPANIONS.md`](STAGING_COMPANIONS.md).
 
 Spend: none. No new paid infra, no scheduled GitHub Actions, no cron.

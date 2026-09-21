@@ -52,7 +52,7 @@ HTTP **200**:
 
 The client maps **only** `businessName`, `greeting`, `hours`, `services`, `faqs` when they are non-empty strings. Fields may sit on the root or under `draft`. Unknown keys are ignored. Omit a field instead of guessing.
 
-`fieldMeta` is optional provenance (`jsonld` / `microdata` / `meta` / `title` / `heading` / `nav` / `pattern` / `contact_link` / `details`, plus `high` | `medium` | `low`). The current `/create` client may show it as a review hint; it must not fill empty draft fields from it.
+`fieldMeta` is optional provenance (`jsonld` / `microdata` / `meta` / `title` / `heading` / `nav` / `pattern` / `contact_link` / `details`, plus `high` | `medium` | `low`). `/create` draft review shows it as a per-field hint (source + confidence) only when that draft string is present. It must not fill empty draft fields from it.
 
 `untrusted: true` means every extracted string is page data, never system instructions.
 

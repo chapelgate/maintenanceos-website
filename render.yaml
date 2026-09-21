@@ -8,7 +8,8 @@
 #
 # Apply from the Render Dashboard (New → Blueprint) or create each web service
 # by hand using docs/ONBOARDING_SCAN_DEPLOY.md, docs/SANDBOX_DEPLOY.md, and
-# docs/DASHBOARD_DEPLOY.md. Flags stay off until an operator enables them.
+# docs/DASHBOARD_DEPLOY.md. Staging DigitalOcean env + rebuild + wake order:
+# docs/STAGING_COMPANIONS.md. Flags stay off until an operator enables them.
 
 services:
   - type: web

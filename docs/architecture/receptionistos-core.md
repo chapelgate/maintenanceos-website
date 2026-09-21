@@ -74,3 +74,4 @@ Do not hard-code a single LLM/voice vendor in product APIs. Pilot currently uses
 - `docs/ONBOARDING_SCAN_DEPLOY.md`
 - `docs/SANDBOX_DEPLOY.md`
 - `docs/DASHBOARD_DEPLOY.md`
+- `docs/STAGING_COMPANIONS.md`

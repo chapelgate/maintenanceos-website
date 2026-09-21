@@ -105,6 +105,8 @@ Leave `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` empty in git (`.env.example`). Neve
 
 Do **not** copy `.env.example.fonio-local` onto App Platform.
 
+Staging order with the other free companions (exact `NEXT_PUBLIC_*`, rebuild, cold-start wake): [`STAGING_COMPANIONS.md`](STAGING_COMPANIONS.md).
+
 ## SSRF and claims-safe flags
 
 Enabling `ONBOARDING_WEB_INGEST=true` on a public host means **anyone who can hit `POST /v1/onboarding/scan` can ask this process to fetch a public HTTPS URL** (SSRF-guarded). Threat model: [`threat-model-onboarding-ingest.md`](security/threat-model-onboarding-ingest.md).
@@ -148,4 +150,4 @@ With ingest off: HTTP 503 `scan_disabled`. With ingest on: 200 draft or a typed 
 
 ## Extract limits
 
-The companion **copies** public HTML (JSON-LD, meta, labelled blocks, conservative hours/nav/FAQ/`tel`/`mailto` patterns). It does not run page JavaScript and does not guess missing hours or services. Optional `fieldMeta` is provenance for review; `/create` still maps only `businessName`, `greeting`, `hours`, `services`, `faqs`. Details: `packages/onboarding-ingest/README.md`.
+The companion **copies** public HTML (JSON-LD, meta, labelled blocks, conservative hours/nav/FAQ/`tel`/`mailto` patterns). It does not run page JavaScript and does not guess missing hours or services. Optional `fieldMeta` is provenance for review; `/create` shows source + confidence on filled fields only and still maps only `businessName`, `greeting`, `hours`, `services`, `faqs`. Details: `packages/onboarding-ingest/README.md`.
