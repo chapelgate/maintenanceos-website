@@ -26,14 +26,15 @@ const prelaunch = {
   eyebrow: "Launching soon",
   title: "Pricing",
   lede:
-    "Public list pricing is not published yet. Start from your website, or request pricing / early access while we prepare launch.",
+    "Public list pricing is not published yet. Start from your website, or request pricing / early access while we prepare launch. No live phone is included in a plan.",
   cardTitle: "Request pricing",
   cardBody:
-    "MaintenanceOS is pre-launch. We will share packages suited to UK landlords, letting agents, and property managers when early access opens — no self-serve checkout on this site.",
+    "MaintenanceOS is pre-launch — not generally available. We will share packages suited to UK landlords, letting agents, and property managers when early access opens — no self-serve checkout and no invented list prices on this site.",
   notes: [
     "Packages tailored to portfolio size and workflow",
     "Human clearance stays on safety and money decisions",
     "No self-serve checkout on this marketing site",
+    "Live phone and calendar booking: coming / early access — not included as a live plan",
   ] as const,
   primaryCta: {
     href: "/create/",
@@ -53,14 +54,15 @@ const published = {
   eyebrow: "",
   title: "Pricing",
   lede:
-    "Packages for UK landlords, letting agents, and property managers. No self-serve checkout on this site — request a quote if you need a tailored plan.",
+    "Packages for UK landlords, letting agents, and property managers. No self-serve checkout on this site — request a quote if you need a tailored plan. No live phone is included in a plan.",
   tiers: [] as PricingTier[],
   fallbackCardTitle: "Request a quote",
   fallbackCardBody:
-    "List packages are not on this page yet. Request pricing and we will share what fits your portfolio.",
+    "List packages are not on this page yet. Request pricing and we will share what fits your portfolio. No invented list prices, and no live phone included in a plan.",
   notes: [
     "Quote-led packaging — no invented list prices here",
     "Human clearance stays on safety and money decisions",
+    "Live phone and calendar booking: coming / early access — not included as a live plan",
   ] as const,
   primaryCta: {
     href: "/create/",

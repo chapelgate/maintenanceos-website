@@ -86,6 +86,48 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /FAQ aligned; still not a live phone/);
   assert.match(matrix, /Privacy note vs `\/create` website-URL ingest/);
   assert.match(matrix, /privacy note aligned; still not live telephony data/);
+  assert.match(matrix, /Pricing page clarity/);
+  assert.match(matrix, /pricing copy aligned; still not published list prices/);
+});
+
+test("pricing stays claims-safe with Create CTA and coming telephony/calendar", () => {
+  const config = read("src/config/pricing.ts");
+  const page = read("src/app/pricing/page.tsx");
+  const faqs = read("src/content/faqs.ts");
+  const llms = read("public/llms.txt");
+  const llmsFull = read("public/llms-full.txt");
+  const nextConfig = read("next.config.ts");
+
+  assert.match(config, /href: "\/create\/"/);
+  assert.match(config, /label: "Create from website"/);
+  assert.match(config, /coming \/ early access/);
+  assert.match(config, /calendar booking/);
+  assert.match(config, /No live phone is included in a plan/);
+  assert.match(config, /tiers: \[\] as PricingTier\[\]/);
+  assert.doesNotMatch(config, /£/);
+  assert.doesNotMatch(config, /generally available product/i);
+  assert.doesNotMatch(config, /commercially generally available/i);
+
+  assert.match(page, /primaryHref=\{pricing\.primaryCta\.href\}/);
+  assert.match(page, /Create from website/);
+  assert.match(page, /not a live phone/);
+  assert.match(page, /not general availability/);
+  assert.match(page, /No live phone in a plan/);
+  assert.doesNotMatch(page, /£/);
+  assert.doesNotMatch(page, /Request pricing or join the launch list/);
+
+  assert.match(faqs, /no live phone included in a plan/);
+  assert.match(faqs, /Live telephony and calendar booking are coming \/ early access/);
+  assert.match(
+    faqs,
+    /question: "When will pricing be published\?"[\s\S]*relatedHref: "\/create\/"/,
+  );
+
+  assert.match(llms, /No live phone in a plan/);
+  assert.match(llms, /telephony and calendar are coming \/ early access/);
+  assert.match(llmsFull, /no live phone included in a plan/);
+  assert.match(llmsFull, /No invented £ figures/);
+  assert.match(nextConfig, /output:\s*["']export["']/);
 });
 
 test("FAQ copy names the verified funnel and stays claims-safe", () => {

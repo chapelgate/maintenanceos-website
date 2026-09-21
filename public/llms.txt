@@ -24,7 +24,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - [AI receptionist](https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/): Voice intake under testing — not a live commercial line
 - [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; no ISO/SOC 2 claims
 - [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
-- [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — request pricing / launching soon
+- [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — Create from website, or request pricing. No live phone in a plan; telephony and calendar are coming / early access
 - [Create](https://seahorse-app-4oasq.ondigitalocean.app/create/): Website URL → check → review → pack → optional scripted sandbox → early access — not a live phone
 - [Demo](https://seahorse-app-4oasq.ondigitalocean.app/demo/): Same path; Create from website, or Join launch list / Request early demo as a human briefing (not a public live phone demo)
 
