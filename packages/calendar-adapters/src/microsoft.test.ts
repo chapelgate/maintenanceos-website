@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createMicrosoftCalendarAdapter } from "./microsoft.ts";
 import { microsoftAuthorizationUrl } from "./oauth.ts";
+import { createMemoryTokenStore } from "./tokens.ts";
 
 const ENV = {
   MICROSOFT_CALENDAR_CLIENT_ID: "client",
@@ -82,8 +83,54 @@ test("microsoft adapter cancel is not invented on 404", async () => {
 });
 
 test("microsoftAuthorizationUrl documents Graph calendar scopes", () => {
-  const url = microsoftAuthorizationUrl("cid", "http://127.0.0.1:8789/oauth/microsoft");
+  const url = microsoftAuthorizationUrl(
+    "cid",
+    "http://127.0.0.1:8789/oauth/microsoft/callback",
+  );
   assert.match(url, /login\.microsoftonline\.com\/common/);
   assert.match(url, /Calendars\.ReadWrite/);
   assert.match(url, /offline_access/);
+});
+
+test("microsoft adapter uses token-store refresh token when env refresh is unset", async () => {
+  const store = createMemoryTokenStore({
+    provider: "microsoft",
+    refreshToken: "stored-refresh",
+  });
+  const fetchFn: typeof fetch = async (input, init) => {
+    const url = String(input);
+    const method = (init?.method ?? "GET").toUpperCase();
+    if (url.includes("/token")) {
+      return new Response(JSON.stringify({ access_token: "tok" }), { status: 200 });
+    }
+    if (method === "POST" && url.includes("/me/events")) {
+      return new Response(
+        JSON.stringify({
+          id: "evt_store",
+          subject: "Stored",
+          start: { dateTime: "2026-09-21T08:00:00.000Z" },
+          end: { dateTime: "2026-09-21T08:30:00.000Z" },
+        }),
+        { status: 200 },
+      );
+    }
+    return new Response("{}", { status: 404 });
+  };
+  const adapter = createMicrosoftCalendarAdapter({
+    env: {
+      MICROSOFT_CALENDAR_CLIENT_ID: "client",
+      MICROSOFT_CALENDAR_CLIENT_SECRET: "secret",
+    },
+    tokenStore: store,
+    fetch: fetchFn,
+  });
+  const booked = await adapter.createBooking({
+    start: "2026-09-21T08:00:00.000Z",
+    end: "2026-09-21T08:30:00.000Z",
+  });
+  assert.equal(booked.ok, true);
+  if (booked.ok) {
+    assert.equal(booked.data.id, "evt_store");
+    assert.equal(booked.data.provider, "microsoft");
+  }
 });
