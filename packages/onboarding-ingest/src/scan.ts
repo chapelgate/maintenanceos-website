@@ -275,5 +275,8 @@ export async function runScan(
     draft: extracted.draft,
     warnings: [...new Set([...warnings, ...extracted.warnings])],
     sources,
+    ...(Object.keys(extracted.fieldMeta).length
+      ? { fieldMeta: extracted.fieldMeta }
+      : {}),
   };
 }

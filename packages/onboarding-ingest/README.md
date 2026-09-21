@@ -92,9 +92,27 @@ DigitalOcean static hosting cannot run this process. Staging `/create` needs a *
 
 ## Claims-safe extract
 
-- Copy values that are present in JSON-LD, obvious meta/title, or a clearly labelled hours/services/FAQ block.
+- Copy values that are present in JSON-LD, schema.org microdata, obvious meta/title, a clearly labelled hours/services/FAQ block, conservative visible-text patterns, navigation labels, or `tel:`/`mailto:` links.
 - Do **not** invent a receptionist greeting, hours, services, or FAQs when extract fails.
 - Failures return `{ "ok": false, "error": "…", "message": "…", "warnings": […] }` with no draft.
+- Optional `fieldMeta` records **provenance + confidence** (`high` JSON-LD/microdata, `medium` labelled blocks, `low` nav/pattern). `/create` still maps only the five draft strings; unknown keys are ignored.
+
+## Extract limits
+
+This is **HTML copy**, not an LLM knowledge builder and not Fonio-parity.
+
+| Limit | Behaviour |
+| --- | --- |
+| Pages | At most 5 public HTTPS documents already fetched (home + ranked about/services/faq/hours/contact). No JavaScript execution, no SPA hydration, no PDFs. |
+| Name | JSON-LD / LocalBusiness microdata, else `og:site_name`, else cleaned `<title>` / `h1`. Generic titles like “Home” are skipped. |
+| Greeting | Only an on-page slogan (`slogan` in JSON-LD/microdata). Meta description is **not** used as a greeting. |
+| Hours | JSON-LD `openingHours` / `openingHoursSpecification`, microdata, a labelled heading, else lines that include a weekday **and** a time range (or 24/7 + open/hours). A lone “call us at 3pm” is not hours. |
+| Services | JSON-LD offers, microdata `serviceType`, a labelled list/heading, else **two or more** non-generic nav labels. “Home / About / Contact” is not a service list. |
+| FAQs | JSON-LD `FAQPage`, `<details>`/`<summary>`, `aria-expanded` accordion, `dt`/`dd`, or two or more heading+answer pairs that look like questions. |
+| Contact | `tel:` / `mailto:` (and JSON-LD/microdata telephone/email) appended to the FAQs field as `Phone:` / `Email:` lines so the existing `/create` draft UI can show them. Not a new draft key. |
+| Missing | Key omitted. Empty means “not found”, never a guessed value. Low-confidence fields still need human review. |
+
+Crawled strings stay `untrusted: true`. Do not concatenate them into a system prompt.
 
 ## Tests
 
@@ -104,4 +122,4 @@ From repo root: `npm test` (includes `src/*.test.ts` here).
 node --experimental-strip-types --test packages/onboarding-ingest/src/*.test.ts
 ```
 
-Coverage: SSRF deny (localhost, private IPs, metadata, private DNS, redirect to metadata), feature flag off, robots `Disallow: /`, and happy-path draft shape (`businessName`, `hours`, `services`, `faqs`).
+Coverage: SSRF deny (localhost, private IPs, metadata, private DNS, redirect to metadata), feature flag off, robots `Disallow: /`, happy-path draft shape (`businessName`, `hours`, `services`, `faqs`), and HTML fixtures for JSON-LD/microdata/nav/hours/FAQ/contact heuristics.

@@ -177,6 +177,8 @@ test("runScan happy path returns /create draft fields only from fetched HTML", a
     assert.ok(result.warnings.includes("greeting_not_found"));
     assert.ok(result.sources.length >= 1);
     assert.ok(result.sources.length <= 5);
+    assert.equal(result.fieldMeta?.businessName?.source, "jsonld");
+    assert.equal(result.fieldMeta?.hours?.confidence, "high");
   }
 });
 

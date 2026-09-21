@@ -3,7 +3,13 @@ export {
   assertResolvedAddressesPublic,
   isProbablyPublicHostname,
 } from "./ssrf.ts";
-export { extractDraftFromHtml, asUntrustedText } from "./extract.ts";
+export {
+  extractDraftFromHtml,
+  asUntrustedText,
+  extractJsonLd,
+  extractMicrodata,
+  extractTelMailto,
+} from "./extract.ts";
 export { fetchPublicHttps } from "./fetch-safe.ts";
 export { isWebIngestEnabled, runScan } from "./scan.ts";
 export {
@@ -18,6 +24,10 @@ export {
 export type {
   PartialDraft,
   ReceptionistDraft,
+  DraftFieldMeta,
+  FieldMeta,
+  FieldSource,
+  FieldConfidence,
   ScanResult,
   ScanSuccess,
   ScanFailure,

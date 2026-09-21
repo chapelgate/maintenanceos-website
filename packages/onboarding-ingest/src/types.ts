@@ -26,6 +26,30 @@ export type ReceptionistDraft = {
 
 export type PartialDraft = Partial<ReceptionistDraft>;
 
+/** Where a draft string was copied from. Advisory only — never a system prompt. */
+export const FIELD_SOURCES = [
+  "jsonld",
+  "microdata",
+  "meta",
+  "title",
+  "heading",
+  "nav",
+  "pattern",
+  "contact_link",
+  "details",
+] as const;
+
+export type FieldSource = (typeof FIELD_SOURCES)[number];
+
+export type FieldConfidence = "high" | "medium" | "low";
+
+export type FieldMeta = {
+  confidence: FieldConfidence;
+  source: FieldSource;
+};
+
+export type DraftFieldMeta = Partial<Record<DraftKey, FieldMeta>>;
+
 export type ScanWarning = string;
 
 export type ScanPageSource = {
@@ -40,6 +64,8 @@ export type ScanSuccess = {
   draft: PartialDraft;
   warnings: ScanWarning[];
   sources: ScanPageSource[];
+  /** Optional provenance for filled draft keys. `/create` ignores unknown keys. */
+  fieldMeta?: DraftFieldMeta;
 };
 
 export type ScanFailure = {

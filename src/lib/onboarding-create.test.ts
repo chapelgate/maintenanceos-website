@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   buildCreateLeadMessage,
   hostnameBusinessHint,
+  mapScanFieldMeta,
   mapScanResponse,
   normalisePublicUrl,
 } from "./onboarding-create.ts";
@@ -46,6 +47,25 @@ test("mapScanResponse never invents fields", () => {
   );
 });
 
+test("mapScanFieldMeta copies only known provenance and ignores junk", () => {
+  assert.deepEqual(mapScanFieldMeta(null), {});
+  assert.deepEqual(mapScanFieldMeta({ draft: { businessName: "Acme" } }), {});
+  assert.deepEqual(
+    mapScanFieldMeta({
+      fieldMeta: {
+        hours: { source: "jsonld", confidence: "high" },
+        services: { source: "nav", confidence: "low" },
+        greeting: { source: "invented", confidence: "high" },
+        faqs: { source: "details", confidence: "maybe" },
+      },
+    }),
+    {
+      hours: { source: "jsonld", confidence: "high" },
+      services: { source: "nav", confidence: "low" },
+    },
+  );
+});
+
 test("buildCreateLeadMessage includes URL and draft JSON", () => {
   const message = buildCreateLeadMessage({
     businessUrl: "https://example.com/",
@@ -61,4 +81,21 @@ test("buildCreateLeadMessage includes URL and draft JSON", () => {
   assert.match(message, /Business URL: https:\/\/example.com\//);
   assert.match(message, /not_configured_queued/);
   assert.match(message, /"businessName": "example"/);
+});
+
+test("buildCreateLeadMessage includes field meta when provided", () => {
+  const message = buildCreateLeadMessage({
+    businessUrl: "https://example.com/",
+    scanNote: "scan_response_mapped",
+    draft: {
+      businessName: "Acme",
+      greeting: "",
+      hours: "Mo-Fr 08:00-17:00",
+      services: "",
+      faqs: "",
+    },
+    fieldMeta: { hours: { source: "jsonld", confidence: "high" } },
+  });
+  assert.match(message, /Field meta JSON/);
+  assert.match(message, /"source": "jsonld"/);
 });

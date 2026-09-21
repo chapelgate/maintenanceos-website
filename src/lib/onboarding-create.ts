@@ -84,6 +84,50 @@ export function mapScanResponse(body: unknown): Partial<ReceptionistDraft> {
   return out;
 }
 
+const FIELD_META_SOURCES = new Set([
+  "jsonld",
+  "microdata",
+  "meta",
+  "title",
+  "heading",
+  "nav",
+  "pattern",
+  "contact_link",
+  "details",
+]);
+const FIELD_META_CONFIDENCE = new Set(["high", "medium", "low"]);
+
+export type DraftFieldMeta = {
+  confidence: "high" | "medium" | "low";
+  source: string;
+};
+
+export type ScanDraftFieldMeta = Partial<Record<keyof ReceptionistDraft, DraftFieldMeta>>;
+
+/** Optional provenance. Unknown keys/values are dropped — never inferred. */
+export function mapScanFieldMeta(body: unknown): ScanDraftFieldMeta {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return {};
+  const raw = (body as { fieldMeta?: unknown }).fieldMeta;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const src = raw as Record<string, unknown>;
+  const out: ScanDraftFieldMeta = {};
+  for (const key of DRAFT_KEYS) {
+    const item = src[key];
+    if (!item || typeof item !== "object" || Array.isArray(item)) continue;
+    const rec = item as Record<string, unknown>;
+    const confidence =
+      typeof rec.confidence === "string" && FIELD_META_CONFIDENCE.has(rec.confidence)
+        ? (rec.confidence as DraftFieldMeta["confidence"])
+        : undefined;
+    const source =
+      typeof rec.source === "string" && FIELD_META_SOURCES.has(rec.source)
+        ? rec.source
+        : undefined;
+    if (confidence && source) out[key] = { confidence, source };
+  }
+  return out;
+}
+
 export function isAbsoluteHttpUrl(value: string): boolean {
   try {
     const url = new URL(value);
@@ -95,7 +139,7 @@ export function isAbsoluteHttpUrl(value: string): boolean {
 
 export type ScanOutcome =
   | { status: "disabled" }
-  | { status: "ok"; draft: Partial<ReceptionistDraft> }
+  | { status: "ok"; draft: Partial<ReceptionistDraft>; fieldMeta: ScanDraftFieldMeta }
   | { status: "error"; message: string };
 
 const SCAN_TIMEOUT_MS = 15_000;
@@ -139,7 +183,11 @@ export async function requestOnboardingScan(
           "The scan service could not process this URL. No crawl results were invented.",
       };
     }
-    return { status: "ok", draft: mapScanResponse(parsed) };
+    return {
+      status: "ok",
+      draft: mapScanResponse(parsed),
+      fieldMeta: mapScanFieldMeta(parsed),
+    };
   } catch {
     return {
       status: "error",
@@ -155,12 +203,17 @@ export function buildCreateLeadMessage(input: {
   businessUrl: string;
   draft: ReceptionistDraft;
   scanNote: string;
+  fieldMeta?: ScanDraftFieldMeta;
 }): string {
-  return [
+  const parts = [
     "Website-to-receptionist early access request.",
     `Business URL: ${input.businessUrl}`,
     `Scan: ${input.scanNote}`,
     "Draft JSON:",
     JSON.stringify(input.draft, null, 2),
-  ].join("\n");
+  ];
+  if (input.fieldMeta && Object.keys(input.fieldMeta).length) {
+    parts.push("Field meta JSON:", JSON.stringify(input.fieldMeta, null, 2));
+  }
+  return parts.join("\n");
 }
