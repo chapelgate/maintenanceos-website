@@ -68,7 +68,7 @@ After this file is on `main`:
 
 1. **New +** → **Blueprint**.
 2. Select `chapelgate/maintenanceos-website`.
-3. Confirm the service name is `maintenanceos-onboarding-scan` and the instance plan is **Free**. Sibling free services (`maintenanceos-sandbox-test-call`, optional mock `maintenanceos-calendar-adapters`) are documented in `docs/SANDBOX_DEPLOY.md` — still not frozen voice.
+3. Confirm the service name is `maintenanceos-onboarding-scan` and the instance plan is **Free**. Sibling free services (`maintenanceos-sandbox-test-call`, optional mock `maintenanceos-calendar-adapters`) are documented in `docs/SANDBOX_DEPLOY.md`; dashboard is `docs/DASHBOARD_DEPLOY.md` — still not frozen voice.
 4. Apply. Then still set `ONBOARDING_WEB_INGEST=true` in the dashboard when you want crawl (Blueprint keeps it `false`).
 
 `buildFilter` skips deploys when only marketing `src/` / copy changes.

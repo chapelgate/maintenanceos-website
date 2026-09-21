@@ -236,9 +236,27 @@ export function createDashboardServer(options: ServerOptions = {}): http.Server 
   });
 }
 
+/** Loopback by default. Hosted companions must set `CUSTOMER_DASHBOARD_HOST=0.0.0.0`. */
+export function resolveListenHost(env: NodeJS.ProcessEnv = process.env): string {
+  const host = env.CUSTOMER_DASHBOARD_HOST?.trim();
+  return host || DEFAULT_HOST;
+}
+
+/**
+ * Prefer `CUSTOMER_DASHBOARD_PORT` (local compose / docs), else `PORT` (Render and
+ * other PaaS inject this). Invalid values fall back to 8791.
+ */
+export function resolveListenPort(env: NodeJS.ProcessEnv = process.env): number {
+  const raw = env.CUSTOMER_DASHBOARD_PORT?.trim() || env.PORT?.trim();
+  if (!raw) return DEFAULT_PORT;
+  const port = Number(raw);
+  if (!Number.isInteger(port) || port <= 0 || port > 65535) return DEFAULT_PORT;
+  return port;
+}
+
 export function listenDashboardServer(options: ServerOptions = {}): http.Server {
-  const host = options.host ?? process.env.CUSTOMER_DASHBOARD_HOST ?? DEFAULT_HOST;
-  const port = Number(options.port ?? process.env.CUSTOMER_DASHBOARD_PORT ?? DEFAULT_PORT);
+  const host = options.host ?? resolveListenHost();
+  const port = options.port ?? resolveListenPort();
   const server = createDashboardServer(options);
   const enabled = options.dashboardEnabled ?? isCustomerDashboardEnabled();
 

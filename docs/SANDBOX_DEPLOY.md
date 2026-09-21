@@ -78,7 +78,7 @@ After this file is on `main`:
 
 1. **New +** → **Blueprint**.
 2. Select `chapelgate/maintenanceos-website`.
-3. Confirm service names `maintenanceos-onboarding-scan`, `maintenanceos-sandbox-test-call`, and optional `maintenanceos-calendar-adapters`, and that every instance plan is **Free**.
+3. Confirm service names `maintenanceos-onboarding-scan`, `maintenanceos-sandbox-test-call`, optional `maintenanceos-calendar-adapters`, and `maintenanceos-customer-dashboard`, and that every instance plan is **Free**. Dashboard clicks: `docs/DASHBOARD_DEPLOY.md`.
 4. Apply. Then still set `SANDBOX_TEST_CALL_ENABLED=true` in the dashboard when you want scripted sessions (Blueprint keeps it `false`).
 
 `buildFilter` skips sandbox deploys when only marketing `src/` / copy changes.

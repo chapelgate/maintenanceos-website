@@ -64,8 +64,8 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 | FEATURE | FONIO | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY | STATUS |
 | --- | --- | --- | --- | --- | --- | --- |
 | Recordings | Optional + delete | Policy-gated in pilot design | Customer controls | BUILD | P1 | PARTIAL |
-| Transcripts + email/SMS summary | Yes | Session/transcript primitives + flagged `/dashboard` SAMPLE transcript view (`packages/customer-dashboard`). No email/SMS delivery. | Delivery channels | BUILD | P0 | PARTIAL (this PR: mock transcript view) |
-| Call history search | Dashboard | Flagged `/dashboard` + `packages/customer-dashboard` mock store (SAMPLE/DEMO labelled). `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` default false; off → coming / under testing. No live telephony history. | Not customer-GA; no live sessions; no search/analytics | BUILD | P0 | PARTIAL (this PR: flagged dashboard foundation) |
+| Transcripts + email/SMS summary | Yes | Session/transcript primitives + flagged `/dashboard` SAMPLE transcript view (`packages/customer-dashboard`). No email/SMS delivery. Free-tier Render companion: `docs/DASHBOARD_DEPLOY.md`. | Delivery channels | BUILD | P0 | PARTIAL (mock transcript view + $0 host path) |
+| Call history search | Dashboard | Flagged `/dashboard` + `packages/customer-dashboard` mock store (SAMPLE/DEMO labelled). `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` default false; off → coming / under testing. No live telephony history. Free-tier Render companion: `docs/DASHBOARD_DEPLOY.md`. | Not customer-GA; no live sessions; no search/analytics | BUILD | P0 | PARTIAL (flagged dashboard foundation + $0 host path) |
 | Analytics (answered, booked, transferred) | Yes | Not customer analytics | Event pipeline | BUILD | P1 | MISSING |
 
 ## Platform / enterprise
@@ -103,10 +103,11 @@ Columns: **FEATURE | FONIO (public) | CURRENT | GAP | BUILD/BUY/REUSE | PRIORITY
 - **PARTIAL (P0 onboarding):** public `/create` multi-step funnel + draft review; crawl only if scan endpoint configured (else queued / early access).  
 - **PARTIAL (P0 sandbox test call):** flagged `packages/sandbox-test-call` + `/create` panel. Scripted demo only; no live number; frozen path untouched. Free-tier Render companion: `docs/SANDBOX_DEPLOY.md` (flag off until configured; DO rebuild for `NEXT_PUBLIC_*`).  
 - **PARTIAL (P0 calendar):** flagged `packages/calendar-adapters` (mock + Google/Microsoft class); `/create` honest coming-soon unless local/hosted flag. Optional mock service on the same free blueprint. Not customer-GA; no voice booking confirmation.  
-- **PARTIAL (P0 dashboard):** flagged `/dashboard` + `packages/customer-dashboard` (SAMPLE/DEMO history, transcript, bookings stub). Off by default; empty store invents nothing. Not customer-GA; no live telephony.  
+- **PARTIAL (P0 dashboard):** flagged `/dashboard` + `packages/customer-dashboard` (SAMPLE/DEMO history, transcript, bookings stub). Off by default; empty store invents nothing. Not customer-GA; no live telephony. Free-tier Render companion: `docs/DASHBOARD_DEPLOY.md` (flag off until configured; DO rebuild for `NEXT_PUBLIC_*`).  
 - **PARTIAL (local e2e orchestration):** `scripts/fonio-local-stack.sh` + `docker-compose.fonio-local.yml` + `.env.example.fonio-local` start scan/calendar/sandbox (dashboard optional) with flags ON for loopback only. Runbook: `docs/FONIO_LOCAL_E2E.md`. Smoke hits `/health` and asserts flags ON. **This is not production Fonio-parity.** DigitalOcean static `.env.example` stays flags-off / endpoints-empty.  
 - **PARTIAL (P0 scan host):** `render.yaml` + `docs/ONBOARDING_SCAN_DEPLOY.md` describe a **new** Render **free** web service for `packages/onboarding-ingest`. Operator click: instance type **Free**; ingest remains off until `ONBOARDING_WEB_INGEST=true`; DO `NEXT_PUBLIC_*` needs a rebuild. Not frozen telephony.  
 - **PARTIAL (P0 sandbox host):** `render.yaml` + `docs/SANDBOX_DEPLOY.md` describe **new** Render **free** web services `maintenanceos-sandbox-test-call` and optional mock `maintenanceos-calendar-adapters`. Distinct from scan and from frozen voice. Flags off until configured.  
+- **PARTIAL (P0 dashboard host):** `render.yaml` + `docs/DASHBOARD_DEPLOY.md` describe a **new** Render **free** web service `maintenanceos-customer-dashboard`. Distinct from scan, sandbox, calendar, and frozen voice. Flag off until configured. SAMPLE / DEMO only — not production analytics.  
 - **MISSING (P0):** production website→receptionist engine; live/WebRTC media; modular KB productisation  
 
 **Do not modify frozen live telephony** until controlled-call gates in `CURRENT_STATUS.md` pass.

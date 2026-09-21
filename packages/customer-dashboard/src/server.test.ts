@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createDashboardServer, resetRateLimitForTests } from "./server.ts";
+import {
+  createDashboardServer,
+  resetRateLimitForTests,
+  resolveListenHost,
+  resolveListenPort,
+  DEFAULT_HOST,
+  DEFAULT_PORT,
+} from "./server.ts";
 import { createDashboardStore } from "./store.ts";
 
 function listen(server: ReturnType<typeof createDashboardServer>): Promise<number> {
@@ -29,12 +36,31 @@ async function withServer(
   }
 }
 
+test("resolveListenHost stays loopback unless CUSTOMER_DASHBOARD_HOST is set", () => {
+  assert.equal(resolveListenHost({}), DEFAULT_HOST);
+  assert.equal(resolveListenHost({ CUSTOMER_DASHBOARD_HOST: "0.0.0.0" }), "0.0.0.0");
+  assert.equal(resolveListenHost({ CUSTOMER_DASHBOARD_HOST: "  " }), DEFAULT_HOST);
+});
+
+test("resolveListenPort prefers CUSTOMER_DASHBOARD_PORT then PORT", () => {
+  assert.equal(resolveListenPort({}), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ CUSTOMER_DASHBOARD_PORT: "8791" }), 8791);
+  assert.equal(resolveListenPort({ PORT: "10000" }), 10000);
+  assert.equal(
+    resolveListenPort({ CUSTOMER_DASHBOARD_PORT: "8791", PORT: "10000" }),
+    8791,
+  );
+  assert.equal(resolveListenPort({ PORT: "not-a-port" }), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ CUSTOMER_DASHBOARD_PORT: "-1" }), DEFAULT_PORT);
+});
+
 test("GET /health reports flag off and no telephony", async () => {
   await withServer({ dashboardEnabled: false }, async (base) => {
     const res = await fetch(`${base}/health`);
     const json = await res.json();
     assert.equal(res.status, 200);
     assert.equal(json.ok, true);
+    assert.equal(json.service, "maintenanceos-customer-dashboard");
     assert.equal(json.dashboardEnabled, false);
     assert.equal(json.telephony, false);
   });

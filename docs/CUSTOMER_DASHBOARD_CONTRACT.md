@@ -109,10 +109,13 @@ Uses the calendar-adapter booking fields (`id`, `provider`, `start`, `end`, `tim
 
 `OPTIONS` → 204; allow `GET, OPTIONS` and `Content-Type, Accept`.
 
+Staging `/dashboard` is cross-origin (DigitalOcean static → Render companion). Unset `CUSTOMER_DASHBOARD_CORS_ORIGIN` echoes the browser `Origin` so `https://seahorse-app-4oasq.ondigitalocean.app` and a chapelgate custom origin both work. A single configured origin locks to that origin only. Details: `docs/DASHBOARD_DEPLOY.md`.
+
 ## Feature flags
 
 - `CUSTOMER_DASHBOARD_ENABLED=false` (default) — companion may listen for `/health`, but list/detail are off.
 - `CUSTOMER_DASHBOARD_DEMO_DATA` — omit or `true` for SAMPLE rows; `false`/`0` for an empty store.
-- Marketing `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` and `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT` — empty / false on DigitalOcean static by default.
+- Marketing `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` and `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT` — empty / false on DigitalOcean static by default. To point staging `/dashboard` at a hosted companion, set the absolute `https://…/v1/dashboard` URL and the public flag on App Platform and **rebuild** (static export inlines `NEXT_PUBLIC_*`). Runbook: `docs/DASHBOARD_DEPLOY.md`.
 - If the public flag is on and the endpoint is empty, `/dashboard` uses an in-browser mock labelled SAMPLE / DEMO.
+- Hosted rows stay SAMPLE / DEMO. This contract does not expose production analytics.
 - No live telephony history is exposed on this contract.
