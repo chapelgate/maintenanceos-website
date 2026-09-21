@@ -1,0 +1,31 @@
+# Render Blueprint — onboarding scan companion ONLY.
+#
+# Not a DigitalOcean App Platform spec (marketing stays static `output: 'export'`).
+# Not maintenanceos-redteam / production voice. Create a *new* web service.
+# $0: plan is `free`. Do not upgrade this service to Starter.
+#
+# Apply from the Render Dashboard (New → Blueprint) or create the web service
+# by hand using docs/ONBOARDING_SCAN_DEPLOY.md. Crawl stays off until an
+# operator sets ONBOARDING_WEB_INGEST=true.
+
+services:
+  - type: web
+    name: maintenanceos-onboarding-scan
+    runtime: docker
+    plan: free
+    dockerfilePath: ./packages/onboarding-ingest/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - packages/onboarding-ingest/**
+        - render.yaml
+    envVars:
+      - key: ONBOARDING_SCAN_HOST
+        value: "0.0.0.0"
+      # Off until an operator intentionally enables crawl (dashboard or this value).
+      - key: ONBOARDING_WEB_INGEST
+        value: "false"
+      # Leave ONBOARDING_SCAN_CORS_ORIGIN unset to echo the browser Origin
+      # (seahorse-app + chapelgate staging both work). See docs/ONBOARDING_SCAN_DEPLOY.md.

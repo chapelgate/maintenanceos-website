@@ -1,0 +1,13 @@
+# Shrinks the Docker context for packages/onboarding-ingest/Dockerfile.
+# DigitalOcean static export does not use this file. Patterns with a leading
+# slash are repo-root only so packages/onboarding-ingest/src still copies.
+
+.git
+.github
+/.next
+/out
+/node_modules
+/.data
+/src
+/public
+/scripts

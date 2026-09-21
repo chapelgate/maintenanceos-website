@@ -3,6 +3,10 @@ import test from "node:test";
 import {
   createScanServer,
   resetRateLimitForTests,
+  resolveListenHost,
+  resolveListenPort,
+  DEFAULT_HOST,
+  DEFAULT_PORT,
 } from "./server.ts";
 import type { ScanResult } from "./types.ts";
 
@@ -31,6 +35,24 @@ async function withServer(
     );
   }
 }
+
+test("resolveListenHost stays loopback unless ONBOARDING_SCAN_HOST is set", () => {
+  assert.equal(resolveListenHost({}), DEFAULT_HOST);
+  assert.equal(resolveListenHost({ ONBOARDING_SCAN_HOST: "0.0.0.0" }), "0.0.0.0");
+  assert.equal(resolveListenHost({ ONBOARDING_SCAN_HOST: "  " }), DEFAULT_HOST);
+});
+
+test("resolveListenPort prefers ONBOARDING_SCAN_PORT then PORT", () => {
+  assert.equal(resolveListenPort({}), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ ONBOARDING_SCAN_PORT: "8788" }), 8788);
+  assert.equal(resolveListenPort({ PORT: "10000" }), 10000);
+  assert.equal(
+    resolveListenPort({ ONBOARDING_SCAN_PORT: "8788", PORT: "10000" }),
+    8788,
+  );
+  assert.equal(resolveListenPort({ PORT: "not-a-port" }), DEFAULT_PORT);
+  assert.equal(resolveListenPort({ ONBOARDING_SCAN_PORT: "-1" }), DEFAULT_PORT);
+});
 
 test("GET /health reports ingest flag and no sandbox call", async () => {
   await withServer({ ingestEnabled: false }, async (base) => {

@@ -10,6 +10,8 @@ export {
   createScanServer,
   handleScanRequest,
   listenScanServer,
+  resolveListenHost,
+  resolveListenPort,
   DEFAULT_HOST,
   DEFAULT_PORT,
 } from "./server.ts";

@@ -50,7 +50,7 @@ ONBOARDING_WEB_INGEST=true npm run onboarding-scan
 NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/v1/onboarding/scan npm run dev
 ```
 
-The client POSTs `{ "url" }` and copies only `businessName`, `greeting`, `hours`, `services`, and `faqs` when those strings are present. Fetch/extract failures return errors/warnings — nothing is invented. Leave the Next env empty on DigitalOcean static hosting until this process runs elsewhere.
+The client POSTs `{ "url" }` and copies only `businessName`, `greeting`, `hours`, `services`, and `faqs` when those strings are present. Fetch/extract failures return errors/warnings — nothing is invented. Leave the Next env empty on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/ONBOARDING_SCAN_DEPLOY.md`) — then set `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` and **rebuild**. Do not put this process on the frozen Render voice app.
 
 ```bash
 # Terminal 1 — loopback stub (stores JSONL under .data/, never sends mail)
@@ -130,7 +130,7 @@ This is **not** production Fonio-parity and **must not** be copied onto DigitalO
 
 ### DigitalOcean App Platform (static)
 
-Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local` or `docker-compose.fonio-local.yml` on App Platform; those are loopback e2e only.
+Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / `packages/onboarding-ingest/Dockerfile` on App Platform; those are loopback e2e or the **separate** Render scan companion. `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart.
 
 ## Desktop navigation (IA v0.2)
 

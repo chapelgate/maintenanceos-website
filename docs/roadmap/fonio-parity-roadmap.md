@@ -19,6 +19,7 @@
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)
 - [x] Flagged customer dashboard foundation (history / transcript / bookings stubs; SAMPLE only)
 - [x] Local e2e orchestration (stack script + compose + runbook; flags on locally only; not production Fonio-parity)
+- [x] $0 scan companion deploy path (Render free web service + `docs/ONBOARDING_SCAN_DEPLOY.md`; ingest off until configured; DO rebuild required for `NEXT_PUBLIC_*`)
 - Customer-facing call history / transcript wired to a sandbox tenant
 
 ## Phase 2 — Core receptionist parity (P0–P1)
