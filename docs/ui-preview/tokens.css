@@ -1,6 +1,6 @@
 /**
- * MaintenanceOS design tokens — Brand System v0.2 (council lock)
- * Light paper + amber accent. Orb glow is amber→peach→cream only.
+ * MaintenanceOS design tokens — Brand System v0.3 (council lock)
+ * Light paper + blue accent. Orb glow is #3B82F6 → sky → white only.
  * Source of truth: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / src/app/globals.css
  */
 
@@ -11,21 +11,21 @@
   --mos-paper: #F8FAFC;
   --mos-surface: #FFFFFF;
   --mos-line: #E2E8F0;
-  --mos-accent: #B45309;
-  --mos-accent-hover: #9A3412;
-  --mos-accent-subtle: #FEF3C7;
+  --mos-accent: #1D4ED8;
+  --mos-accent-hover: #1E40AF;
+  --mos-accent-subtle: #DBEAFE;
   --mos-on-accent: #FFFFFF;
 
-  /* Amber glow only */
-  --mos-glow-amber: #B45309;
-  --mos-glow-peach: #F5C16C;
-  --mos-glow-cream: #FFFBEB;
+  /* Blue glow only — dark #3B82F6 → sky → white */
+  --mos-glow-blue: #3B82F6;
+  --mos-glow-sky: #60A5FA;
+  --mos-glow-white: #EFF6FF;
 
-  /* Functional — never colour-only */
+  /* Functional — never colour-only. Warn stays warm; info ≠ accent. */
   --mos-ok: #15803D;
   --mos-warn: #92400E;
   --mos-critical: #B91C1C;
-  --mos-info: #1D4ED8;
+  --mos-info: #0369A1;
 
   /* Elevation — Brand one soft shadow */
   --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);

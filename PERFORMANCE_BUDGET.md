@@ -21,7 +21,7 @@
 
 | Item | Before | After | Notes |
 |------|--------|-------|-------|
-| SiteHeader | `"use client"` (FE Shell #11) | Server + `<details>` | Preserves Shell amber CTA chrome (desktop outline Early access + solid Create from website; mobile Create + hamburger). Does not clobber Shell chrome. |
+| SiteHeader | `"use client"` (FE Shell #11) | Server + `<details>` | Preserves Shell CTA chrome (desktop outline Early access + solid Create from website; mobile Create + hamburger). Does not clobber Shell chrome. |
 | Content pages First Load JS | (header in client graph) | **103 kB** | Next build report |
 | Home / demo / contact First Load JS | — | **105 kB** | + form island |
 | Inter config | all default weights | `weight: ["400","600"]`, `display: "swap"` | Variable files still ~219 KB on disk; en-GB typically pulls ~latin preload + latin (~133 KB), not cyrillic/greek |

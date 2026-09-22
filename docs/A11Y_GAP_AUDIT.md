@@ -17,7 +17,7 @@
 | Targets ≥24×24 CSS px | K7 | `SiteHeader.tsx`, `CtaPair.tsx`, `LeadCaptureForm.tsx` |
 | Focus rings 2px accent + offset | K2 | `globals.css` |
 | Email labelled “Email (required)”; `aria-invalid` + `aria-describedby` | F1–F4 | `LeadCaptureForm.tsx` |
-| Accent hover `#9A3412` (white label AA) | C1 | `globals.css` |
+| Accent hover `#1E40AF` (white label AA; retokened from amber) | C1 | `globals.css` |
 | eslint jsx-a11y critical rules + ignore `.next`/`out` | CI | `eslint.config.mjs` |
 
 ## P1 remaining

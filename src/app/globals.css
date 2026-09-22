@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 /*
- * Brand System v0.2 — Design council lock (2026-09-21).
- * Light paper + amber accent. Orb is a SECONDARY “intake listening” cue.
- * Glow is single-hue amber → peach/cream only. No dusk theme, no rainbow Siri blooms.
+ * Brand System v0.3 — Design council lock (2026-09-22).
+ * Light paper + blue accent. Orb is a SECONDARY “intake listening” cue.
+ * Glow is single-hue blue: #3B82F6 → sky → white. No dusk, teal, violet, or rainbow.
  * Source: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / ui-preview/tokens.css
  */
 :root {
@@ -13,22 +13,22 @@
   --color-paper: #f8fafc;
   --color-surface: #ffffff;
   --color-border: #e2e8f0;
-  --color-accent: #b45309;
-  /* Darkened from #D97706 — white labels stay ≥4.5:1 (CONTRAST_TOKEN_AUDIT) */
-  --color-accent-hover: #9a3412;
-  --color-accent-subtle: #fef3c7;
+  --color-accent: #1d4ed8;
+  /* White labels stay ≥4.5:1 on accent and hover (WCAG AA) */
+  --color-accent-hover: #1e40af;
+  --color-accent-subtle: #dbeafe;
   --color-on-accent: #ffffff;
 
-  /* Amber glow stops only — peach / cream. No cyan, violet, or black glyph. */
-  --glow-amber: #b45309;
-  --glow-peach: #f5c16c;
-  --glow-cream: #fffbeb;
+  /* Blue glow stops only — dark #3B82F6 → sky → white. No teal, violet, or black glyph. */
+  --glow-blue: #3b82f6;
+  --glow-sky: #60a5fa;
+  --glow-white: #eff6ff;
 
-  /* Functional — never colour-only */
+  /* Functional — never colour-only. Warn stays warm; info is distinct from accent. */
   --color-ok: #15803d;
   --color-warn: #92400e;
   --color-critical: #b91c1c;
-  --color-info: #1d4ed8;
+  --color-info: #0369a1;
   --color-warning-bg: #fffbeb;
   --color-warning-border: #f59e0b;
   --color-warning-text: #92400e;
@@ -50,6 +50,13 @@
   --mos-accent-hover: var(--color-accent-hover);
   --mos-accent-subtle: var(--color-accent-subtle);
   --mos-on-accent: var(--color-on-accent);
+  --mos-ok: var(--color-ok);
+  --mos-warn: var(--color-warn);
+  --mos-critical: var(--color-critical);
+  --mos-info: var(--color-info);
+  --mos-glow-blue: var(--glow-blue);
+  --mos-glow-sky: var(--glow-sky);
+  --mos-glow-white: var(--glow-white);
 }
 
 @theme inline {
@@ -62,6 +69,8 @@
   --color-muted: var(--color-muted);
   --color-border: var(--color-border);
   --color-surface: var(--color-surface);
+  --color-info: var(--color-info);
+  --color-warn: var(--color-warn);
   --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -144,7 +153,7 @@ summary:focus-visible {
   border-radius: var(--mos-radius-lg);
 }
 
-/* Soft amber wash for inner page heroes — gradient only, no extra blur layer. */
+/* Soft blue wash for inner page heroes — gradient only, no extra blur layer. */
 .mos-page-hero {
   position: relative;
   isolation: isolate;
@@ -153,7 +162,7 @@ summary:focus-visible {
   background-color: var(--color-surface);
   background-image: radial-gradient(
     ellipse 40% 80% at 100% 0%,
-    rgb(254 243 199 / 55%),
+    rgb(219 234 254 / 55%),
     transparent 60%
   );
 }
@@ -185,14 +194,14 @@ summary:focus-visible {
   cursor: pointer;
   background: radial-gradient(
     circle at 38% 32%,
-    var(--glow-cream) 0 16%,
-    #fde6c8 34%,
-    var(--glow-peach) 58%,
-    var(--glow-amber) 100%
+    var(--glow-white) 0 16%,
+    #bfdbfe 34%,
+    var(--glow-sky) 58%,
+    var(--glow-blue) 100%
   );
   box-shadow:
-    0 0 18px rgb(180 83 9 / 22%),
-    0 0 36px rgb(245 193 108 / 28%);
+    0 0 18px rgb(59 130 246 / 22%),
+    0 0 36px rgb(96 165 250 / 28%);
   animation: intake-pulse 3.8s ease-in-out infinite;
 }
 
@@ -204,16 +213,16 @@ summary:focus-visible {
   z-index: -1;
   background: radial-gradient(
     circle,
-    rgb(245 193 108 / 38%),
-    rgb(180 83 9 / 0%) 70%
+    rgb(96 165 250 / 38%),
+    rgb(59 130 246 / 0%) 70%
   );
   animation: intake-halo 4.4s ease-in-out infinite;
 }
 
 .intake-orb:hover {
   box-shadow:
-    0 0 22px rgb(180 83 9 / 28%),
-    0 0 42px rgb(245 193 108 / 34%);
+    0 0 22px rgb(59 130 246 / 28%),
+    0 0 42px rgb(96 165 250 / 34%);
 }
 
 .intake-orb-stage.is-open .intake-orb {
