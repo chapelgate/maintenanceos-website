@@ -108,7 +108,7 @@ export default function HowItWorksPage() {
               href="/features/"
               className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
             >
-              See HAVE / UNDER TEST / COMING
+              See VERIFIED / UNDER TEST
             </a>
           </p>
         </div>

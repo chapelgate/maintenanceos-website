@@ -45,7 +45,7 @@ export const funnelPageCopy = {
   },
   features: {
     title: "Features — website to pack",
-    description: `HAVE / UNDER TEST / COMING: ${FUNNEL_PATH_LABEL}. Flagged sandbox and calendars; live phone still coming. Pre-launch — not a live phone or commercial general availability.`,
+    description: `VERIFIED / UNDER TEST: ${FUNNEL_PATH_LABEL}. Flagged sandbox and calendars; live phone not on this site. Pre-launch — not a live phone or commercial general availability.`,
     path: "/features/",
   },
 } as const;
