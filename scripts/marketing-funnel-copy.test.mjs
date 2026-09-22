@@ -41,18 +41,28 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.doesNotMatch(page, /commercially generally available/i);
 });
 
-test("features cards separate HAVE / UNDER TEST / COMING", () => {
+test("features page renders inventory-driven VERIFIED / UNDER TEST cards", () => {
   const page = read("src/app/features/page.tsx");
-  assert.match(page, /heading: "HAVE"/);
-  assert.match(page, /heading: "UNDER TEST"/);
-  assert.match(page, /heading: "COMING"/);
-  assert.match(page, /Website → Check → Review → Pack/);
-  assert.match(page, /Pack-aware scripted sandbox/);
-  assert.match(page, /Calendar connect/);
-  assert.match(page, /Live always-on customer phone/);
-  assert.match(page, /Not a live receptionist or a 30-second phone number/);
+  const config = read("src/config/phone-ai-features.ts");
+  const copy = [page, config].join("\n");
+  assert.match(page, /phoneAiNotClaimed/);
+  assert.match(page, /marketingCardsByGroup/);
+  assert.match(copy, /Website → Check → Review → Pack/);
+  assert.match(page, /Create from website/);
+  assert.match(page, /Join launch list/);
   assert.match(page, /funnelPageMetadata\("features"\)/);
+  assert.match(page, /VERIFIED/);
+  assert.match(page, /UNDER TEST/);
+  assert.match(config, /id: "M-ONB-01"/);
+  assert.match(config, /id: "M-TEL-03"/);
+  assert.match(config, /MARKETING_CARD_HARD_COUNT/);
+  assert.match(config, /Not a live receptionist or a 30-second phone number/);
+  assert.doesNotMatch(config, /id: "M-TEL-04"/);
+  assert.doesNotMatch(config, /id: "M-CAL-01"/);
+  assert.doesNotMatch(page, /heading: "HAVE"/);
+  assert.doesNotMatch(page, /heading: "COMING"/);
   assert.doesNotMatch(page, /commercially generally available/i);
+  assert.doesNotMatch(page, /beats Fonio/i);
 });
 
 test("static export setting is unchanged", () => {
@@ -162,7 +172,10 @@ test("cookies stay DRAFT-honest with no banner, no invented analytics, no GA cer
 test("security stays claims-safe with SSRF-safe scan and no cert theatre", () => {
   const page = read("src/app/security/page.tsx");
   const faqs = read("src/content/faqs.ts");
-  const features = read("src/app/features/page.tsx");
+  const features = [
+    read("src/app/features/page.tsx"),
+    read("src/config/phone-ai-features.ts"),
+  ].join("\n");
   const home = read("src/app/page.tsx");
   const flow = read("src/components/HowItWorksFlow.tsx");
   const llms = read("public/llms.txt");

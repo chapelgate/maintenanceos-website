@@ -150,6 +150,7 @@ How it works · Features · AI receptionist · Create · **Dashboard (soon)** ·
 - `WEBSITE_BACKLOG.md`
 - `WEBSITE_IA.md`
 - `MISSION_BRIEF.md`
+- [`docs/competitive/PHONE_AI_FEATURE_INVENTORY.md`](docs/competitive/PHONE_AI_FEATURE_INVENTORY.md) — internal Phone AI inventory for MOS Product Investigator; `/features` promotes the short VERIFIED / UNDER TEST card set only
 
 ## Secrets
 
