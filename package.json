@@ -16,6 +16,7 @@
     "fonio-local-stack": "bash scripts/fonio-local-stack.sh",
     "fonio-local-smoke": "node scripts/fonio-local-smoke.mjs",
     "product-tour": "node scripts/product-tour/render.mjs",
+    "product-tour:remux": "node scripts/product-tour/render.mjs --remux",
     "test": "node --test scripts/*.test.mjs && node --experimental-strip-types --test packages/onboarding-ingest/src/*.test.ts packages/calendar-adapters/src/*.test.ts packages/sandbox-test-call/src/*.test.ts packages/customer-dashboard/src/*.test.ts packages/receptionist-draft/src/*.test.ts src/lib/*.test.ts"
   },
   "dependencies": {

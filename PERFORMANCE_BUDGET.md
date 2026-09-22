@@ -73,7 +73,7 @@ Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_P
 3. **JS:** Do not mark layout chrome `"use client"` for menus if CSS `<details>` works. Keep client islands on lead forms plus the homepage `SiriOrbCloud` toggle (secondary intake cue only; ≤ ~15–20 kB gz). Do not import the interactive orb on `/create`.
 4. **Third parties:** No analytics/chat/tag managers without Privacy + Performance review (consent-gated).
 5. **Measure:** Re-run `next build` and update this table when changing fonts, layout, or shared components. Lighthouse/CWV when staging URL exists.
-6. **Product tour:** Self-hosted `/media/product-tour.mp4` (720p / 45s / **0.33 MB**, ceiling ~8–12 MB). Home is a text link only. `/how-it-works/#product-tour` is below the flow, `preload="none"`, no autoplay. Residual: the poster WebP (~26 KB) may download when that page is parsed (not LCP on home; reserve 16:9 to avoid CLS). Do not preload the mp4.
+6. **Product tour:** Self-hosted `/media/product-tour.mp4` (720p / 45s / **0.95 MB** with Desmond AAC, soft ≤~3 MB, ceiling ~8–12 MB). Home is a text link only. `/how-it-works/#product-tour` is below the flow, `preload="none"`, no autoplay. Residual: the poster WebP (~26 KB) may download when that page is parsed (not LCP on home; reserve 16:9 to avoid CLS). Do not preload the mp4.
 
 ## Done this pass
 

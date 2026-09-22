@@ -3,13 +3,15 @@
  * Render the claims-safe product tour to public/media/.
  *
  * Pipeline: CSS storyboard (real /create + how-it-works chrome) →
- * headless Chrome screenshots → ffmpeg H.264 720p.
- * No paid AI video APIs. Higgsfield is not used.
+ * headless Chrome screenshots → ffmpeg H.264 720p → remux committed VO.
+ * No paid AI video APIs. Higgsfield is not used for the picture.
  *
  * Usage:
  *   node scripts/product-tour/render.mjs
  *   node scripts/product-tour/render.mjs --preview   # serve storyboard
+ *   node scripts/product-tour/render.mjs --remux     # keep H.264; remux Desmond VO
  */
+
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
 import { existsSync } from "node:fs";
@@ -22,11 +24,14 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const TOUR_DIR = path.join(ROOT, "scripts/product-tour");
 const OUT_DIR = path.join(ROOT, "public/media");
+const VO_PATH = path.join(TOUR_DIR, "vo/desmond.wav");
 const DURATION = 45;
 const FPS = 12;
 const WIDTH = 1280;
 const HEIGHT = 720;
 const MAX_BYTES = 12 * 1024 * 1024;
+const AAC_SOFT_CEILING = 5 * 1024 * 1024;
+const AAC_BITRATES = ["128k", "96k"];
 
 const CHROME =
   process.env.CHROME_PATH ||
@@ -279,16 +284,71 @@ async function encodeMp4() {
     poster,
   ]);
 
+  const aac = await remuxVoiceover(mp4);
+  await writeLastRender(mp4, { aac, source: "render" });
+}
+
+async function remuxVoiceover(mp4) {
+  if (!existsSync(VO_PATH)) {
+    throw new Error("missing scripts/product-tour/vo/desmond.wav");
+  }
+  if (!existsSync(mp4)) {
+    throw new Error("missing public/media/product-tour.mp4 — render first");
+  }
+  let used = AAC_BITRATES[0];
+  for (const bitrate of AAC_BITRATES) {
+    used = bitrate;
+    const tmp = `${mp4}.vo.tmp.mp4`;
+    await run("ffmpeg", [
+      "-y",
+      "-i",
+      mp4,
+      "-i",
+      VO_PATH,
+      "-filter_complex",
+      `[1:a]apad=whole_dur=${DURATION}[a]`,
+      "-map",
+      "0:v",
+      "-map",
+      "[a]",
+      "-c:v",
+      "copy",
+      "-c:a",
+      "aac",
+      "-b:a",
+      bitrate,
+      "-ac",
+      "2",
+      "-ar",
+      "48000",
+      "-shortest",
+      "-movflags",
+      "+faststart",
+      tmp,
+    ]);
+    await copyFile(tmp, mp4);
+    rmSync(tmp, { force: true });
+    const { size } = await stat(mp4);
+    if (size <= AAC_SOFT_CEILING) break;
+    process.stdout.write(
+      `  remux ${bitrate} is ${(size / (1024 * 1024)).toFixed(2)} MB — retrying lower AAC\n`,
+    );
+  }
+  return used;
+}
+
+async function writeLastRender(mp4, { aac, source }) {
   const { size } = await stat(mp4);
   const note = [
     `# Product tour media`,
     ``,
-    `- Duration: ${DURATION}s · ${WIDTH}×${HEIGHT} · ${FPS} fps · H.264 CRF 28 · no audio track`,
+    `- Duration: ${DURATION}s · ${WIDTH}×${HEIGHT} · ${FPS} fps · H.264 CRF 28 · AAC ${aac} (Desmond VO, pad/trim to picture — do not time-stretch)`,
     `- File: public/media/product-tour.mp4 (${(size / (1024 * 1024)).toFixed(2)} MB)`,
+    `- VO: scripts/product-tour/vo/desmond.wav (Higgsfield Seed Audio, voice Desmond, ~39.4s)`,
     `- Poster: public/media/product-tour.poster.webp (frame at 5.2s)`,
     `- Captions: public/media/product-tour.en-GB.vtt (en-GB)`,
-    `- Budget: ~8–12 MB. ${size <= MAX_BYTES ? "Within budget." : `OVER budget (${size} bytes) — re-encode with a higher CRF before commit.`}`,
-    `- Regenerated: ${new Date().toISOString()}`,
+    `- Budget: soft ≤~3 MB; AAC drop if over ~5 MB; ceiling ~8–12 MB. ${size <= MAX_BYTES ? "Within budget." : `OVER budget (${size} bytes) — re-encode with a higher CRF before commit.`}`,
+    `- Regenerated: ${new Date().toISOString()} (${source})`,
     ``,
   ].join("\n");
   await writeFile(path.join(TOUR_DIR, "LAST_RENDER.md"), note);
@@ -296,6 +356,12 @@ async function encodeMp4() {
   if (size > MAX_BYTES) {
     process.exitCode = 2;
   }
+}
+
+async function remuxOnly() {
+  const mp4 = path.join(OUT_DIR, "product-tour.mp4");
+  const aac = await remuxVoiceover(mp4);
+  await writeLastRender(mp4, { aac, source: "remux" });
 }
 
 async function preview() {
@@ -306,8 +372,14 @@ async function preview() {
 }
 
 const previewMode = process.argv.includes("--preview");
+const remuxMode = process.argv.includes("--remux");
 if (previewMode) {
   await preview();
+} else if (remuxMode) {
+  if (!existsSync(TOUR_DIR)) {
+    throw new Error("missing scripts/product-tour");
+  }
+  await remuxOnly();
 } else {
   if (!existsSync(TOUR_DIR)) {
     throw new Error("missing scripts/product-tour");
