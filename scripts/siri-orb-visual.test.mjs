@@ -53,24 +53,42 @@ test("create page does not sit an orb above the URL field", () => {
   assert.match(form, /Check this website/);
 });
 
-test("visual lock: light paper, amber-only glow, reduced-motion, static export", () => {
+test("visual lock: light paper, blue-only glow, reduced-motion, static export", () => {
   const globals = read("src/app/globals.css");
   const brand = read("BRAND_SYSTEM.md");
   const visual = read("UI_VISUAL_SYSTEM.md");
+  const tokens = read("docs/ui-preview/tokens.css");
   const config = read("next.config.ts");
   const header = read("src/components/SiteHeader.tsx");
+  const wordmark = header.match(/function Wordmark\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 
   assert.match(globals, /prefers-reduced-motion: reduce/);
   assert.match(globals, /\.intake-orb/);
-  assert.match(globals, /--color-accent:\s*#b45309/i);
-  assert.match(globals, /--color-accent-hover:\s*#9a3412/i);
+  assert.match(globals, /--color-accent:\s*#1d4ed8/i);
+  assert.match(globals, /--color-accent-hover:\s*#1e40af/i);
+  assert.match(globals, /--color-accent-subtle:\s*#dbeafe/i);
+  assert.match(globals, /--glow-blue:\s*#3b82f6/i);
+  assert.match(globals, /--glow-sky:\s*#60a5fa/i);
+  assert.match(globals, /--glow-white:\s*#eff6ff/i);
+  assert.match(globals, /--color-info:\s*#0369a1/i);
+  assert.match(globals, /--color-warn:\s*#92400e/i);
+  assert.match(globals, /--color-warning-border:\s*#f59e0b/i);
   assert.match(globals, /--color-paper:\s*#f8fafc/i);
   assert.match(globals, /outline: 2px solid var\(--color-accent\)/);
-  assert.doesNotMatch(globals, /#5eead4|#c4b5fd|#7dd3fc|#0b1224/i);
+  assert.doesNotMatch(globals, /--glow-amber|--glow-peach|--color-accent:\s*#b45309/i);
+  assert.doesNotMatch(globals, /#5eead4|#c4b5fd|#7dd3fc|#0b1224|#14b8a6|#8b5cf6/i);
   assert.doesNotMatch(globals, /conic-gradient/);
+  assert.match(tokens, /--mos-accent:\s*#1D4ED8/i);
+  assert.match(tokens, /--mos-info:\s*#0369A1/i);
+  assert.match(tokens, /--mos-warn:\s*#92400E/i);
   assert.match(brand, /council lock/);
+  assert.match(brand, /#1D4ED8/);
+  assert.match(brand, /#0369A1/);
   assert.match(visual, /secondary/);
   assert.match(visual, /Anti-patterns/);
+  assert.match(visual, /flat ink/);
   assert.match(config, /output:\s*["']export["']/);
   assert.doesNotMatch(header, /^["']use client["']/);
+  assert.match(wordmark, /text-ink/);
+  assert.doesNotMatch(wordmark, /text-accent|bg-accent|text-info/);
 });

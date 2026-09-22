@@ -1,12 +1,12 @@
-# Brand System v0.2 — light paper, amber accent (council lock)
+# Brand System v0.3 — light paper, blue accent (council lock)
 
-**Status:** Design council lock, 2026-09-21.  
+**Status:** Design council lock, 2026-09-22.  
 **Source of truth for tokens:** `src/app/globals.css` (mirrored in `docs/ui-preview/tokens.css`).  
 **Companion:** `UI_VISUAL_SYSTEM.md`.
 
 ## Intent
 
-Premium operations product on **light paper**. Amber `#B45309` is the only glow hue (amber → peach → cream). The orb is a **secondary “intake listening” cue**, not the brand mark and not a conversion control.
+Premium operations product on **light paper**. Blue `#1D4ED8` is the brand accent (CTAs, focus rings). Orb glow is a single blue hue (`#3B82F6` → sky → white). The orb is a **secondary “intake listening” cue**, not the brand mark and not a conversion control. The wordmark stays **flat ink** — no blue logo fill.
 
 Locked public CTAs stay primary: **Create from website** (`/create/`), **Join launch list**, **Request early demo / access**. Do not put those inside the orb or sit an orb above the `/create` URL field.
 
@@ -14,19 +14,19 @@ Locked public CTAs stay primary: **Create from website** (`/create/`), **Join la
 
 | Token | Value | Use |
 | --- | --- | --- |
-| Ink | `#0F172A` | Body text (AA on paper/surface) |
+| Ink | `#0F172A` | Body text and wordmark (AA on paper/surface) |
 | Muted | `#475569` | Secondary text |
 | Paper | `#F8FAFC` | Page canvas |
 | Surface | `#FFFFFF` | Cards, ops glass fill |
 | Line | `#E2E8F0` | Thin borders |
-| Accent | `#B45309` | CTA fill + glow root — white label ≥4.5:1 |
-| Accent hover | `#9A3412` | CTA hover (AA) |
-| Accent subtle | `#FEF3C7` | Soft peach/cream wash |
+| Accent | `#1D4ED8` | CTA fill + focus rings — white label ≥4.5:1 |
+| Accent hover | `#1E40AF` | CTA hover (AA) |
+| Accent subtle | `#DBEAFE` | Soft blue wash |
 | On-accent | `#FFFFFF` | Label on accent buttons |
 
-Glow stops (orb / hero wash only): `#B45309` → `#F5C16C` → `#FFFBEB`. **Reject** cyan, violet, rainbow Siri blooms, and black circular glyphs.
+Glow stops (orb / hero wash only): `#3B82F6` → `#60A5FA` → `#EFF6FF`. **Reject** amber, peach, teal, violet, rainbow Siri blooms, and black circular glyphs.
 
-Functional colours unchanged: ok `#15803D`, warn `#92400E`, critical `#B91C1C`, info `#1D4ED8`. Never colour-only.
+Functional colours: ok `#15803D`, warn `#92400E` (warm amber-family — do not recolour status/warn chips to blue), critical `#B91C1C`, info `#0369A1` (moved off `#1D4ED8` so it does not collide with accent). Never colour-only.
 
 ## Type
 

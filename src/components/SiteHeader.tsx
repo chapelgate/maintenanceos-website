@@ -1,7 +1,7 @@
 import { industries, primaryNav, siteConfig } from "@/config/site";
 
 /**
- * Shell #11 chrome (wordmark, amber dual CTAs, hamburger) via native <details>.
+ * Shell #11 chrome (flat-ink wordmark, blue dual CTAs, hamburger) via native <details>.
  * Server component (PERFORMANCE_BUDGET: no layout chrome `"use client"`).
  * Escape → close open details and return focus to summary is a tiny inline
  * script so content routes do not hydrate React for the header.
