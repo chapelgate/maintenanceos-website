@@ -24,18 +24,24 @@ test("product-tour media files exist and stay claims-safe", () => {
   const mp4 = path.join(ROOT, "public/media/product-tour.mp4");
   const poster = path.join(ROOT, "public/media/product-tour.poster.webp");
   const vttPath = path.join(ROOT, "public/media/product-tour.en-GB.vtt");
+  const vo = path.join(ROOT, "scripts/product-tour/vo/desmond.wav");
   assert.equal(fs.existsSync(mp4), true, "missing product-tour.mp4");
   assert.equal(fs.existsSync(poster), true, "missing product-tour.poster.webp");
   assert.equal(fs.existsSync(vttPath), true, "missing product-tour.en-GB.vtt");
+  assert.equal(fs.existsSync(vo), true, "missing scripts/product-tour/vo/desmond.wav");
 
   const mp4Size = fs.statSync(mp4).size;
-  assert.ok(mp4Size > 80_000, `mp4 too small (${mp4Size})`);
+  assert.ok(mp4Size > 400_000, `mp4 too small for voiced remux (${mp4Size})`);
   assert.ok(
-    mp4Size <= 15 * 1024 * 1024,
-    `mp4 over 15 MB residual ceiling (${mp4Size}) — document or re-encode`,
+    mp4Size <= 5 * 1024 * 1024,
+    `mp4 over 5 MB AAC soft ceiling (${mp4Size}) — drop VO bitrate before shipping`,
   );
   const header = fs.readFileSync(mp4, { encoding: null, flag: "r" }).subarray(4, 12);
   assert.equal(header.toString("ascii").includes("ftyp"), true);
+  const atoms = fs.readFileSync(mp4);
+  assert.equal(atoms.includes(Buffer.from("mp4a")), true, "mp4 missing AAC audio track");
+  const wavHeader = fs.readFileSync(vo).subarray(0, 4).toString("ascii");
+  assert.equal(wavHeader, "RIFF");
 
   const vtt = read("public/media/product-tour.en-GB.vtt");
   const story = read("scripts/product-tour/storyboard.html");
@@ -108,4 +114,13 @@ test("product-tour player is click-to-play and static-export safe", () => {
 
   assert.match(config, /output:\s*["']export["']/);
   assert.match(csp, /media-src 'self'/);
+
+  const render = read("scripts/product-tour/render.mjs");
+  const notes = read("scripts/product-tour/README.md");
+  assert.match(render, /--remux/);
+  assert.match(render, /vo\/desmond\.wav/);
+  assert.match(render, /apad=whole_dur=/);
+  assert.doesNotMatch(render, /atempo|rubberband|asetrate/);
+  assert.match(notes, /product-tour:remux/);
+  assert.match(notes, /do not time-stretch/i);
 });

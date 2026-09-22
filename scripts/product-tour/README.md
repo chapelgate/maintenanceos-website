@@ -1,7 +1,7 @@
 # Product tour (in-repo, claims-safe)
 
 Self-hosted HTML5 tour for `/how-it-works/#product-tour`.  
-**Not** a Higgsfield / paid AI-video asset. Chrome + ffmpeg only.
+**Not** a Higgsfield / paid AI-video asset. Chrome + ffmpeg for the picture; committed Desmond VO remuxed as AAC.
 
 ## Beats (locked)
 
@@ -24,17 +24,23 @@ Requires `ffmpeg` and Chrome (`google-chrome` / `google-chrome-stable`, or `CHRO
 
 ```bash
 npm run product-tour
+# remux only (keep existing H.264; pad/trim VO to 45s — do not time-stretch):
+npm run product-tour:remux
 # preview the storyboard in a browser:
 node scripts/product-tour/render.mjs --preview
 ```
 
 Writes:
 
-- `public/media/product-tour.mp4` — 1280×720, 12 fps, H.264 CRF 28, no audio, `+faststart`
+- `public/media/product-tour.mp4` — 1280×720, 12 fps, H.264 CRF 28, AAC voiceover, `+faststart`
 - `public/media/product-tour.poster.webp` — frame at 5.2s (URL typed)
 - `public/media/product-tour.en-GB.vtt` — copied from `captions.en-GB.vtt`
 
-Budget target is **~8–12 MB** (a ceiling, not a quota). The current encode is **~0.33 MB** because the tour is mostly static paper UI — do not pad the file. If `LAST_RENDER.md` reports over 12 MB, raise CRF (29–31) and re-run before commit. Do not add a scheduled GitHub Action for this.
+Voiceover source (committed):
+
+- `scripts/product-tour/vo/desmond.wav` — Higgsfield Seed Audio, voice **Desmond**, ~39.4s, claims-safe beats above (Visual Design Council + Positioning). Remux pads trailing silence to the 45s picture. Do not stretch speech. If the wav is replaced externally, run `npm run product-tour:remux`.
+
+Soft size target is **≤~3 MB**. If remux exceeds **~5 MB**, drop AAC to 96k before shipping. Picture ceiling remains **~8–12 MB** (raise CRF 29–31 if a full re-render exceeds that). Do not add a scheduled GitHub Action for this.
 
 ## Site wiring
 

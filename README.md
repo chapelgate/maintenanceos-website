@@ -16,7 +16,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 ## Stack
 
 - Next.js 15 App Router + TypeScript + Tailwind CSS v4
-- Product tour: in-repo CSS storyboard → Chrome → ffmpeg (`npm run product-tour`). Self-hosted on `/how-it-works/#product-tour`. No paid AI video.
+- Product tour: in-repo CSS storyboard → Chrome → ffmpeg, then remux committed Desmond VO (`npm run product-tour` / `npm run product-tour:remux`). Self-hosted on `/how-it-works/#product-tour`. No paid AI video.
 - **Static export** (`output: 'export'`) → `out/` for DigitalOcean App Platform static (or any static host)
 - **No Next.js API routes** (incompatible with static export)
 - Provider-independent lead adapter (`src/lib/lead-adapter.ts`) posts JSON to `NEXT_PUBLIC_FORM_ENDPOINT` when that value is an absolute `http(s)` URL; otherwise a local success stub. Success UI **never claims email was sent**.
