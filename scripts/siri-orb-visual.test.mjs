@@ -101,8 +101,8 @@ test("motion lock: CSS-only idle morph, menu fade, reduced-motion instant", () =
   const visual = read("UI_VISUAL_SYSTEM.md");
 
   assert.match(globals, /@keyframes intake-idle/);
-  assert.match(globals, /border-radius:\s*58% 42% 50% 50%/);
-  assert.match(globals, /translate3d\(2px, -3px, 0\) scale\(1\.02\)/);
+  assert.match(globals, /border-radius:\s*62% 38% 48% 52%/);
+  assert.match(globals, /translate3d\(5px, -6px, 0\) scale\(1\.035\)/);
   assert.match(globals, /@keyframes intake-halo/);
   assert.match(globals, /@keyframes intake-sheen/);
   assert.match(globals, /prefers-reduced-motion:\s*no-preference/);
