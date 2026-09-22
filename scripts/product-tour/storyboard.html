@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1280, height=720" />
+  <title>MaintenanceOS product tour storyboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --paper: #f8fafc;
+      --surface: #ffffff;
+      --line: #e2e8f0;
+      --accent: #1d4ed8;
+      --accent-hover: #1e40af;
+      --accent-subtle: #dbeafe;
+      --on-accent: #ffffff;
+      --ok: #15803d;
+      --warn: #92400e;
+      --shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+    }
+    .stage {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+      background: var(--paper);
+    }
+    .banner {
+      height: 30px;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.01em;
+    }
+    .header {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgb(255 255 255 / 95%);
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { font-size: 17px; color: var(--ink); text-decoration: none; }
+    .wordmark span:last-child { font-weight: 600; }
+    .nav { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .nav span { padding: 6px 8px; color: var(--ink); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--accent); color: var(--on-accent); }
+    .btn-outline { background: var(--surface); color: var(--ink); border-color: var(--line); }
+    .btn[data-disabled="1"] { opacity: 0.55; }
+    .scene {
+      display: none;
+      position: absolute;
+      inset: 86px 0 68px;
+      padding: 22px 36px 16px;
+    }
+    .scene.is-on { display: block; }
+    .hero-wash {
+      background:
+        radial-gradient(ellipse 40% 80% at 100% 0%, rgb(219 234 254 / 55%), transparent 60%),
+        var(--surface);
+    }
+    .eyebrow {
+      margin: 0 0 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .lede { margin: 8px 0 0; font-size: 14px; color: var(--muted); max-width: 62ch; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .stepper li { list-style: none; border-radius: 6px; padding: 6px 4px; color: var(--muted); }
+    .stepper .current { background: var(--accent-subtle); color: var(--ink); }
+    .stepper .done { color: var(--ink); }
+    .stepper small {
+      display: block;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .field { display: block; font-size: 13px; margin-top: 10px; }
+    .field span { font-weight: 600; }
+    .field .empty-tag { margin-left: 8px; font-weight: 400; color: var(--muted); }
+    .input {
+      margin-top: 4px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font: inherit;
+      color: var(--ink);
+      background: var(--surface);
+      min-height: 36px;
+    }
+    .input.dashed { border-style: dashed; }
+    .caret {
+      display: inline-block;
+      width: 1px;
+      height: 14px;
+      background: var(--accent);
+      margin-left: 1px;
+      vertical-align: -2px;
+    }
+    .hint { margin: 4px 0 0; font-size: 11px; color: var(--muted); }
+    .fine { margin: 8px 0 0; font-size: 11px; color: var(--muted); }
+    .row { display: flex; gap: 16px; }
+    .grow { flex: 1; min-width: 0; }
+    .progress {
+      height: 4px;
+      background: var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 14px 0 10px;
+    }
+    .progress > i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--accent);
+    }
+    .status-title { margin: 0; font-size: 16px; font-weight: 600; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 6px;
+      background: var(--accent-subtle);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+    }
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      white-space: pre;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      margin: 0;
+    }
+    .limits { font-size: 12px; color: var(--muted); margin: 0; padding-left: 16px; }
+    .limits li { margin: 3px 0; }
+    .callout {
+      border-left: 2px solid var(--accent);
+      padding-left: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .callout strong { color: var(--ink); }
+    .honesty li {
+      display: flex;
+      gap: 10px;
+      font-size: 16px;
+      margin: 8px 0;
+    }
+    .honesty i {
+      margin-top: 9px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex: none;
+    }
+    .caption-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 68px;
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+      padding: 10px 28px 12px;
+    }
+    .caption-kicker {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .caption-line { margin: 2px 0 0; font-size: 15px; color: var(--ink); }
+    ol, ul { margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="banner">Pre-launch / early access — MaintenanceOS is not commercially generally available yet.</div>
+    <header class="header">
+      <div class="wordmark"><span>Maintenance</span><span>OS</span></div>
+      <nav class="nav" aria-label="Primary">
+        <span>How it works</span>
+        <span>Features</span>
+        <span>Create</span>
+        <span class="btn btn-outline">Early access</span>
+        <span class="btn btn-primary">Create from website</span>
+      </nav>
+    </header>
+
+    <section class="scene hero-wash" data-scene="1">
+      <p class="eyebrow">Early access · Pre-launch</p>
+      <h1>Start with your website URL</h1>
+      <p class="lede">Paste a public site address. Checking this website does not scan a live phone line and does not create a receptionist.</p>
+      <div class="card" style="margin-top:14px;padding:16px 18px;">
+        <ol class="stepper">
+          <li class="current"><small>Step 1</small>Website</li>
+          <li><small>Step 2</small>Check</li>
+          <li><small>Step 3</small>Review</li>
+          <li><small>Step 4</small>Pack</li>
+        </ol>
+        <p class="fine">Next: Check this website</p>
+        <div class="row">
+          <label class="field grow">
+            <span>Business website URL (required)</span>
+            <div class="input" id="url-field"><span id="url-typed"></span><span class="caret" id="url-caret"></span></div>
+          </label>
+          <label class="field" style="width:280px">
+            <span>Email (required)</span>
+            <div class="input"></div>
+          </label>
+        </div>
+        <div style="margin-top:14px">
+          <span class="btn btn-primary">Check this website</span>
+        </div>
+        <p class="fine">Pre-launch capture only. No live phone number is assigned.</p>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="2">
+      <p class="eyebrow">Create from website · Check</p>
+      <h1>Scan if configured — otherwise queue the crawl</h1>
+      <p class="lede">We only accept a public website address here. Private or internal hosts are not fetched from this page.</p>
+      <div class="card" style="margin-top:14px;padding:16px 18px;">
+        <ol class="stepper">
+          <li class="done"><small>Step 1</small>Website</li>
+          <li class="current"><small>Step 2</small>Check</li>
+          <li><small>Step 3</small>Review</li>
+          <li><small>Step 4</small>Pack</li>
+        </ol>
+        <p class="status-title" id="scan-title">Checking URL…</p>
+        <div class="progress"><i id="scan-bar"></i></div>
+        <p class="lede" id="scan-body" style="margin-top:0">We do not invent extracted hours, services, or FAQs.</p>
+        <div style="margin-top:16px;display:flex;gap:10px">
+          <span class="btn btn-outline">Back</span>
+          <span class="btn btn-primary" id="scan-next" data-disabled="1">Checking…</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="3">
+      <p class="eyebrow">Create from website · Review → Pack</p>
+      <h1>Draft receptionist knowledge pack</h1>
+      <p class="lede">The business name is from the website address, not from a crawl. Empty fields were not invented.</p>
+      <div class="row" style="margin-top:12px;align-items:stretch">
+        <div class="card grow" style="padding:14px 16px">
+          <ol class="stepper">
+            <li class="done"><small>Step 1</small>Website</li>
+            <li class="done"><small>Step 2</small>Check</li>
+            <li class="current"><small>Step 3</small>Review</li>
+            <li><small>Step 4</small>Pack</li>
+          </ol>
+          <label class="field">
+            <span>Business name</span>
+            <div class="input">your business</div>
+            <p class="hint">Suggested from the website address only — not crawl output.</p>
+          </label>
+          <label class="field">
+            <span>Hours</span><span class="empty-tag">Empty — not on file</span>
+            <div class="input dashed"></div>
+            <p class="hint">Empty — not on file. Opening hours were not invented.</p>
+          </label>
+          <label class="field">
+            <span>Services</span><span class="empty-tag">Empty — not on file</span>
+            <div class="input dashed"></div>
+            <p class="hint">Empty — not on file. Services were not invented.</p>
+          </label>
+        </div>
+        <div class="card grow" style="padding:14px 16px">
+          <p style="margin:0 0 8px;font-size:13px;font-weight:600">Honest limitations <span style="font-weight:400;color:var(--muted)">(read-only)</span></p>
+          <ul class="limits">
+            <li>Pre-launch sandbox draft only — not a live customer phone number.</li>
+            <li>Not always-on production telephony; frozen live voice path is untouched.</li>
+            <li>Knowledge pack is untrusted draft data, not a trained knowledge base.</li>
+            <li>Missing (not invented): greeting, hours, services, faqs</li>
+          </ul>
+          <p style="margin:10px 0 6px;font-size:13px;font-weight:600">Knowledge pack (editable JSON)</p>
+          <pre class="mono">{
+  "untrusted": true,
+  "kind": "sandbox_knowledge_pack",
+  "liveCall": false,
+  "liveNumber": null,
+  "alwaysOn": false,
+  "businessName": "your business",
+  "missing": ["greeting", "hours", "services", "faqs"]
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene" data-scene="4">
+      <p class="eyebrow">How a call is designed to work</p>
+      <h1>AI collects and classifies. Rules own safety and money.</h1>
+      <p class="lede">After early access, the product is designed so AI assists at intake. Authority for safety and money stays with system rules and people.</p>
+      <div class="grid-3" style="margin-top:16px">
+        <article class="card" style="padding:16px">
+          <p class="pill">1 · Intake</p>
+          <h2 style="margin:10px 0 0;font-size:18px">Collect and classify</h2>
+          <p class="lede">Designed to collect caller details and classify what it hears in UK property-maintenance language — including 999 guidance where relevant. Voice intake is under testing.</p>
+        </article>
+        <article class="card" style="padding:16px">
+          <p class="pill">2 · Controlled triage</p>
+          <h2 style="margin:10px 0 0;font-size:18px">Rules hold the line</h2>
+          <p class="lede">Tenant isolation, lifecycle transitions, safety latching, escalation queues, and approvals sit in server rules. Consequential actions are not left to the model.</p>
+        </article>
+        <article class="card" style="padding:16px">
+          <p class="pill">3 · Human oversight</p>
+          <h2 style="margin:10px 0 0;font-size:18px">People keep judgement</h2>
+          <p class="lede">Explicit-request human transfer and human clearance keep judgement with your team. No autonomous dispatch, booking, or payment claims.</p>
+        </article>
+      </div>
+      <p class="callout" style="margin-top:16px"><strong>Status:</strong> Designed behaviour — not a live always-on line. The model does not override safety or execute money movement.</p>
+    </section>
+
+    <section class="scene" data-scene="5">
+      <p class="eyebrow">Built for UK property maintenance</p>
+      <h1>Operations language — not a generic chatbot.</h1>
+      <p class="lede">Multi-tenant properties, residents, contractors, work orders, jobs, and call sessions exist in product source. Capabilities are under testing for release.</p>
+      <div class="grid-4" style="margin-top:16px">
+        <article class="card" style="padding:16px">
+          <h2 style="margin:0;font-size:16px">Tenant-scoped ops</h2>
+          <p class="lede">Properties, residents, contractors, work orders / jobs, and communications stay scoped to the organisation.</p>
+        </article>
+        <article class="card" style="padding:16px">
+          <h2 style="margin:0;font-size:16px">UK 999 — never 911</h2>
+          <p class="lede">UK terminology and 999 emergency guidance in product source and regressions. Never 911.</p>
+        </article>
+        <article class="card" style="padding:16px">
+          <h2 style="margin:0;font-size:16px">Structured intake</h2>
+          <p class="lede">The receptionist layer is designed to collect caller details. It must not invent bookings, dispatches, or safety assurances.</p>
+        </article>
+        <article class="card" style="padding:16px">
+          <h2 style="margin:0;font-size:16px">Money stays out</h2>
+          <p class="lede">No payment, refund, compensation, fee-waiver, or client-money execution authority — for the model or automated movement.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="scene hero-wash" data-scene="6">
+      <p class="eyebrow">What we will not claim</p>
+      <h1>Not a public always-on live phone.</h1>
+      <p class="lede">Pilot-stage. Core controls are real; public always-on phone is not declared ready yet. Further controlled live testing is still required.</p>
+      <div class="row" style="margin-top:18px;align-items:flex-start">
+        <ul class="honesty grow">
+          <li><i></i>No fabricated customers, logos, or awards</li>
+          <li><i></i>No ISO, SOC 2, or bank-grade claims we have not earned</li>
+          <li><i></i>No “handles N concurrent lines” marketing numbers</li>
+          <li><i></i>No public live receptionist claim until that gate is cleared</li>
+        </ul>
+        <div class="card" style="width:360px;padding:18px">
+          <p style="margin:0;font-size:15px;font-weight:600">Next step on this site</p>
+          <p class="lede">Create from website — URL → check → review → pack → early access. No live phone demo from this tour.</p>
+          <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+            <span class="btn btn-primary">Create from website</span>
+            <span class="btn btn-outline">Request early access</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="caption-bar">
+      <p class="caption-kicker">Product tour · pre-launch</p>
+      <p class="caption-line" id="caption-line"></p>
+    </footer>
+  </div>
+  <script>
+    const CAPTIONS = [
+      [0, 7, "Paste a public company website URL. Early access only — not a live receptionist."],
+      [7, 14, "If a scan service is configured we ask it for a draft. If not, the crawl is queued — we do not invent extracted content."],
+      [14, 22, "Review the draft receptionist knowledge pack. Empty hours and services stay empty."],
+      [22, 30, "AI is designed to collect and classify. Deterministic rules own safety and money — not the model."],
+      [30, 37, "Built for UK maintenance operations, including 999 guidance — never 911."],
+      [37, 45, "Pre-launch. This is not a public always-on live phone line."],
+    ];
+    const URL = "https://your-business.co.uk";
+    const DURATION = 45;
+
+    function sceneFor(t) {
+      if (t < 7) return 1;
+      if (t < 14) return 2;
+      if (t < 22) return 3;
+      if (t < 30) return 4;
+      if (t < 37) return 5;
+      return 6;
+    }
+
+    function captionFor(t) {
+      for (const [start, end, text] of CAPTIONS) {
+        if (t >= start && t < end) return text;
+      }
+      return CAPTIONS[CAPTIONS.length - 1][2];
+    }
+
+    window.__seek = function seek(t) {
+      const time = Math.max(0, Math.min(DURATION, Number(t) || 0));
+      const scene = sceneFor(time);
+      document.querySelectorAll("[data-scene]").forEach((el) => {
+        el.classList.toggle("is-on", Number(el.getAttribute("data-scene")) === scene);
+      });
+      document.getElementById("caption-line").textContent = captionFor(time);
+
+      const typed = time < 1.1 ? "" : URL.slice(0, Math.min(URL.length, Math.floor(((time - 1.1) / 3.6) * URL.length)));
+      document.getElementById("url-typed").textContent = typed;
+      document.getElementById("url-caret").style.opacity = scene === 1 && typed.length < URL.length ? "1" : "0";
+
+      const scanLocal = time - 7;
+      const checking = scanLocal < 2.4;
+      document.getElementById("scan-title").textContent = checking
+        ? "Checking URL…"
+        : "Crawl queued — next: review a blank draft";
+      document.getElementById("scan-body").textContent = checking
+        ? "We only accept a public website address here. Private or internal hosts are not fetched from this page."
+        : "Website crawl is queued for early access. No scan endpoint is configured on this static site, so we will not invent crawl results. You can still review a blank draft.";
+      const pct = checking ? Math.min(100, (scanLocal / 2.4) * 100) : 100;
+      document.getElementById("scan-bar").style.width = pct + "%";
+      const next = document.getElementById("scan-next");
+      next.textContent = checking ? "Checking…" : "Review draft";
+      next.setAttribute("data-disabled", checking ? "1" : "0");
+    };
+
+    const params = new URLSearchParams(location.search);
+    if (params.has("t")) {
+      window.__seek(params.get("t"));
+    } else if (params.get("preview") === "1") {
+      let start = performance.now();
+      const loop = (now) => {
+        window.__seek(((now - start) / 1000) % DURATION);
+        requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    } else {
+      window.__seek(0);
+    }
+  </script>
+</body>
+</html>

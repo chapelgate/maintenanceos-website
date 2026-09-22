@@ -17,7 +17,7 @@ These ship in every page of the static export. Browsers honor them without a Nod
 | Content-Security-Policy (enforcing) | `<meta http-equiv="Content-Security-Policy">` in the root layout |
 | Referrer-Policy: `strict-origin-when-cross-origin` | Next metadata → `<meta name="referrer">` |
 
-Production CSP (no `unsafe-eval`): first-party Next scripts/styles, self-hosted `next/font` Inter, the header Escape script, JSON-LD, `img-src 'self' data:`, `connect-src` / `form-action` for `https:` companions and `NEXT_PUBLIC_FORM_ENDPOINT`, plus loopback for local e2e. Report-only was not used — this policy is meant not to break `/create`.
+Production CSP (no `unsafe-eval`): first-party Next scripts/styles, self-hosted `next/font` Inter, the header Escape script, JSON-LD, `img-src 'self' data:`, `media-src 'self'` (product-tour mp4/vtt), `connect-src` / `form-action` for `https:` companions and `NEXT_PUBLIC_FORM_ENDPOINT`, plus loopback for local e2e. Report-only was not used — this policy is meant not to break `/create`.
 
 `next dev` only adds `'unsafe-eval'` and `ws:` / `wss:` (HMR). That extra is not in the export.
 

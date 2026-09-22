@@ -16,6 +16,7 @@ test("production CSP allows the static funnel without unsafe-eval or third-party
   assert.match(csp, /style-src 'self' 'unsafe-inline'/);
   assert.match(csp, /font-src 'self'/);
   assert.match(csp, /img-src 'self' data:/);
+  assert.match(csp, /media-src 'self'/);
   assert.match(csp, /connect-src 'self' https: http:\/\/127\.0\.0\.1:\* http:\/\/localhost:\*/);
   assert.match(csp, /form-action 'self' https:/);
   assert.match(csp, /frame-src 'none'/);

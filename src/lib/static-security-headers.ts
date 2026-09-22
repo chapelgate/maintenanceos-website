@@ -51,6 +51,7 @@ export function contentSecurityPolicy(nodeEnv: CspEnv = process.env.NODE_ENV): s
     `script-src ${scriptSrc}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",
+    "media-src 'self'",
     "font-src 'self'",
     `connect-src ${connectSrc}`,
     "form-action 'self' https:",

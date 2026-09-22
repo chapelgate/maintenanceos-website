@@ -162,6 +162,34 @@ summary:focus-visible {
   border-radius: var(--mos-radius-lg);
 }
 
+/*
+ * Product tour player — paper card, thin line, 12px radius, blue play/progress.
+ * Native <video controls>; quieter than CtaPair. No autoplay.
+ */
+.product-tour-card {
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.product-tour-card video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: var(--color-paper);
+  accent-color: var(--color-accent);
+}
+
+.product-tour-card figcaption {
+  border-top: 1px solid var(--color-border);
+  padding: 0.65rem 1rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
 /* Soft blue wash for inner page heroes — gradient only, no extra blur layer. */
 .mos-page-hero {
   position: relative;

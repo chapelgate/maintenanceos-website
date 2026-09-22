@@ -35,6 +35,9 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.match(page, /live phone number/);
   assert.match(page, /Create from website/);
   assert.match(page, /funnelPageMetadata\("howItWorks"\)/);
+  assert.match(page, /id="product-tour"/);
+  assert.match(page, /<ProductTour/);
+  assert.match(page, /not a live phone demo/i);
   assert.doesNotMatch(page, /commercially generally available/i);
 });
 
@@ -65,6 +68,8 @@ test("home CTA strip names the website-to-pack path", () => {
   assert.match(page, /Create from website/);
   assert.match(page, /No live phone demo/);
   assert.match(page, /funnelPageMetadata\("home"\)/);
+  assert.match(page, /ProductTourWatchLink/);
+  assert.doesNotMatch(page, /<video/);
   assert.doesNotMatch(page, /Property maintenance operations for UK landlords/);
 });
 

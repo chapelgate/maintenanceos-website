@@ -40,7 +40,7 @@ Light PageHero wash only. **Never** place an orb above the URL field. Do not imp
 
 ## Motion / assets
 
-CSS-first (transform / opacity / filter; no springs). Header `<details>` open/close is 200ms fade+slide. No WebGL, no video, no paid Higgsfield hero assets. Client island must stay ≤ ~15–20 kB gz. No GSAP unless gated on `prefers-reduced-motion: no-preference`.
+CSS-first (transform / opacity / filter; no springs). Header `<details>` open/close is 200ms fade+slide. No WebGL, no paid Higgsfield **hero** assets. Home hero stays video-free. The only approved motion picture is the self-hosted click-to-play tour on `/how-it-works/#product-tour` (`public/media/`, regenerate with `npm run product-tour`). Client island must stay ≤ ~15–20 kB gz. No GSAP unless gated on `prefers-reduced-motion: no-preference`.
 
 ## Anti-patterns
 
