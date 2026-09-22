@@ -83,7 +83,7 @@ export const marketingFeatureStatusLabel = {
 export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
   {
     id: "M-ONB-01",
-    title: "Website → receptionist funnel",
+    title: "Website → draft knowledge pack",
     status: "UNDER_TEST",
     group: "onboarding",
     ukOpsLine:
