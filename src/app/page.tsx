@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { ProductTourWatchLink } from "@/components/ProductTour";
 import { SiriOrbCloud } from "@/components/SiriOrbCloud";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
@@ -70,6 +71,7 @@ export default function HomePage() {
               secondaryHref="/demo/#demo"
               secondaryLabel="Request early access"
             />
+            <ProductTourWatchLink className="mt-3" />
             <p className="mt-5 text-sm leading-relaxed text-muted">
               Pilot-stage. Core controls are real; public always-on phone is not
               declared ready yet.{" "}

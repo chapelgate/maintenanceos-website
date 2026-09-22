@@ -2,6 +2,7 @@ import { CtaPair } from "@/components/CtaPair";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { ProductTour } from "@/components/ProductTour";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
@@ -33,6 +34,27 @@ export default function HowItWorksPage() {
       />
 
       <HowItWorksFlow />
+
+      <section
+        id="product-tour"
+        aria-labelledby="product-tour-heading"
+        className="mx-auto max-w-3xl px-4 py-12 sm:py-16"
+      >
+        <h2
+          id="product-tour-heading"
+          className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+        >
+          Product tour
+        </h2>
+        <p className="mt-3 text-base leading-relaxed text-muted">
+          A short walkthrough of website → check → review → pack, then how
+          intake and rules are designed to work. Click to play — nothing
+          autoplays. Captions are English (UK). This is not a live phone demo.
+        </p>
+        <div className="mt-6">
+          <ProductTour />
+        </div>
+      </section>
 
       <section
         aria-labelledby="call-design-heading"
