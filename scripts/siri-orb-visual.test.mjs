@@ -92,3 +92,45 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
   assert.match(wordmark, /text-ink/);
   assert.doesNotMatch(wordmark, /text-accent|bg-accent|text-info/);
 });
+
+test("motion lock: CSS-only idle morph, menu fade, reduced-motion instant", () => {
+  const globals = read("src/app/globals.css");
+  const tokens = read("docs/ui-preview/tokens.css");
+  const header = read("src/components/SiteHeader.tsx");
+  const orb = read("src/components/SiriOrbCloud.tsx");
+  const visual = read("UI_VISUAL_SYSTEM.md");
+
+  assert.match(globals, /@keyframes intake-idle/);
+  assert.match(globals, /border-radius:\s*58% 42% 50% 50%/);
+  assert.match(globals, /translate3d\(2px, -3px, 0\) scale\(1\.02\)/);
+  assert.match(globals, /@keyframes intake-halo/);
+  assert.match(globals, /@keyframes intake-sheen/);
+  assert.match(globals, /prefers-reduced-motion:\s*no-preference/);
+  assert.match(globals, /--mos-duration-menu:\s*200ms/);
+  assert.match(globals, /--mos-duration-panel:\s*220ms/);
+  assert.match(globals, /\.site-menu-panel/);
+  assert.match(globals, /@starting-style/);
+  assert.match(tokens, /--mos-duration-menu:\s*200ms/);
+  assert.match(header, /site-menu-panel/);
+  assert.match(header, /site-nav-link/);
+  assert.match(header, /site-cta-outline/);
+  assert.match(visual, /calm morph/);
+  assert.match(visual, /Static orb \(no morph\/pulse\)/);
+
+  assert.doesNotMatch(globals, /from ["']gsap["']|gsap\.|@gsap/);
+  assert.doesNotMatch(orb, /from ["']gsap["']|gsap\./);
+  assert.doesNotMatch(header, /from ["']gsap["']|gsap\./);
+  assert.doesNotMatch(globals, /cubic-bezier\([^)]*[1-9]\.\d+/);
+  assert.doesNotMatch(globals, /\b(bounce|spring|elastic)\b/i);
+  assert.doesNotMatch(orb, /Press the glow to begin/);
+  assert.doesNotMatch(orb, /always-on phone/i);
+
+  assert.match(
+    globals,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.intake-orb::after[\s\S]*animation: none !important/,
+  );
+  assert.match(
+    globals,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.site-menu-panel[\s\S]*transition: none !important/,
+  );
+});

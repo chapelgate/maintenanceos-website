@@ -19,11 +19,11 @@ Buttons, focus rings, and in-panel links inherit the existing system: `rounded-m
 
 | State | Behaviour |
 | --- | --- |
-| Idle | Soft `#3B82F6`→sky→white orb; calm pulse only |
-| Press / Enter / Space | CSS expand into ops-glass cloud |
+| Idle | Soft `#3B82F6`→sky→white orb; calm morph / drift / glow pulse (CSS-only, secondary) |
+| Press / Enter / Space | CSS expand into ops-glass cloud (opacity + transform, 220ms ease) |
 | Panel copy | Short honesty + links to `/how-it-works/` and `/create/` |
-| Escape | Instant close; focus returns to the orb button |
-| `prefers-reduced-motion: reduce` | No idle pulse; instant open/close |
+| Escape | Close; focus returns to the orb button |
+| `prefers-reduced-motion: reduce` | Static orb (no morph/pulse); instant open/close for orb and menus |
 
 Do **not** nest `CtaPair`, the create funnel, or fake metrics in the glass. No GSAP unless gated on `prefers-reduced-motion: no-preference` (CSS-first is enough).
 
@@ -40,7 +40,7 @@ Light PageHero wash only. **Never** place an orb above the URL field. Do not imp
 
 ## Motion / assets
 
-CSS-first. No WebGL, no video, no paid Higgsfield hero assets. Client island must stay ≤ ~15–20 kB gz.
+CSS-first (transform / opacity / filter; no springs). Header `<details>` open/close is 200ms fade+slide. No WebGL, no video, no paid Higgsfield hero assets. Client island must stay ≤ ~15–20 kB gz. No GSAP unless gated on `prefers-reduced-motion: no-preference`.
 
 ## Anti-patterns
 

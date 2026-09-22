@@ -64,7 +64,7 @@ export function SiteHeader() {
           {primaryNav.map((item) =>
             "children" in item && item.children ? (
               <details key={item.href} className="relative">
-                <summary className="inline-flex h-9 min-h-6 min-w-6 cursor-pointer list-none items-center rounded-md px-2.5 text-sm font-medium text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
+                <summary className="site-nav-link inline-flex h-9 min-h-6 min-w-6 cursor-pointer list-none items-center rounded-md px-2.5 text-sm font-medium text-ink hover:text-accent [&::-webkit-details-marker]:hidden">
                   {item.label}
                   <svg
                     className="ml-1 opacity-60"
@@ -84,7 +84,7 @@ export function SiteHeader() {
                   </svg>
                 </summary>
                 <ul
-                  className="absolute left-0 top-full z-50 mt-2 min-w-[15rem] rounded-xl border border-border bg-surface py-2 shadow-[var(--mos-shadow)]"
+                  className="site-menu-panel absolute left-0 top-full z-50 mt-2 min-w-[15rem] rounded-xl border border-border bg-surface py-2 shadow-[var(--mos-shadow)]"
                   role="menu"
                 >
                   <li role="none">
@@ -113,7 +113,7 @@ export function SiteHeader() {
               <a
                 key={item.href}
                 href={item.href}
-                className="inline-flex h-9 min-h-6 items-center rounded-md px-2.5 text-sm font-medium text-ink transition-colors hover:text-accent"
+                className="site-nav-link inline-flex h-9 min-h-6 items-center rounded-md px-2.5 text-sm font-medium text-ink hover:text-accent"
               >
                 {item.label}
               </a>
@@ -123,7 +123,7 @@ export function SiteHeader() {
           <div className="ml-2 flex shrink-0 items-center gap-2">
             <a
               href="/demo/#demo"
-              className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
+              className="site-cta-outline inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink hover:border-accent hover:text-accent"
             >
               Early access
             </a>
@@ -151,7 +151,7 @@ export function SiteHeader() {
               <MenuIcon />
             </summary>
             <nav
-              className="absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,20rem)] rounded-xl border border-border bg-surface px-4 py-4 shadow-[var(--mos-shadow)] md:hidden"
+              className="site-menu-panel absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,20rem)] rounded-xl border border-border bg-surface px-4 py-4 shadow-[var(--mos-shadow)] md:hidden"
               aria-label="Mobile"
             >
               <ul className="flex flex-col gap-1">
@@ -206,7 +206,7 @@ export function SiteHeader() {
                 <li className="pt-2">
                   <a
                     href="/demo/#demo"
-                    className="inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
+                    className="site-cta-outline inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
                   >
                     Request early access
                   </a>

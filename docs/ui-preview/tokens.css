@@ -38,9 +38,11 @@
   --mos-focus-ring: 2px solid var(--mos-accent);
   --mos-focus-offset: 2px;
 
-  /* Motion */
+  /* Motion — opacity/transform/filter only; no springs */
   --mos-duration: 150ms;
   --mos-duration-slow: 200ms;
+  --mos-duration-menu: 200ms;
+  --mos-duration-panel: 220ms;
   --mos-easing: ease;
 
   /* Type */
@@ -66,5 +68,7 @@
   :root {
     --mos-duration: 0ms;
     --mos-duration-slow: 0ms;
+    --mos-duration-menu: 0ms;
+    --mos-duration-panel: 0ms;
   }
 }

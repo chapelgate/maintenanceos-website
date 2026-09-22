@@ -38,6 +38,9 @@
   --mos-radius: 8px;
   --mos-radius-lg: 12px;
   --mos-duration: 150ms;
+  --mos-duration-slow: 200ms;
+  --mos-duration-menu: 200ms;
+  --mos-duration-panel: 220ms;
   --mos-easing: ease;
 
   /* Aliases matching UI_VISUAL_SYSTEM --mos-* names */
@@ -112,12 +115,18 @@ summary:focus-visible {
   }
 
   .intake-orb,
-  .intake-orb::before {
+  .intake-orb::before,
+  .intake-orb::after {
     animation: none !important;
+    transform: none !important;
+    filter: none !important;
   }
 
-  .intake-cloud {
+  .intake-cloud,
+  .site-menu-panel,
+  header details::details-content {
     transition: none !important;
+    translate: none !important;
   }
 }
 
@@ -192,6 +201,7 @@ summary:focus-visible {
   padding: 0;
   border-radius: 50%;
   cursor: pointer;
+  contain: layout paint;
   background: radial-gradient(
     circle at 38% 32%,
     var(--glow-white) 0 16%,
@@ -202,21 +212,50 @@ summary:focus-visible {
   box-shadow:
     0 0 18px rgb(59 130 246 / 22%),
     0 0 36px rgb(96 165 250 / 28%);
-  animation: intake-pulse 3.8s ease-in-out infinite;
+  transition:
+    box-shadow var(--mos-duration) var(--mos-easing),
+    filter var(--mos-duration-panel) var(--mos-easing);
 }
 
 .intake-orb::before {
   content: "";
   position: absolute;
   inset: -28%;
-  border-radius: 50%;
+  border-radius: 58% 42% 50% 50% / 50% 46% 54% 50%;
   z-index: -1;
+  pointer-events: none;
   background: radial-gradient(
     circle,
     rgb(96 165 250 / 38%),
     rgb(59 130 246 / 0%) 70%
   );
-  animation: intake-halo 4.4s ease-in-out infinite;
+}
+
+.intake-orb::after {
+  content: "";
+  position: absolute;
+  inset: 14%;
+  border-radius: 46% 54% 48% 52% / 52% 46% 54% 48%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 36% 30%,
+    rgb(239 246 255 / 52%),
+    rgb(96 165 250 / 0%) 68%
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .intake-orb {
+    animation: intake-idle 7.2s ease-in-out infinite;
+  }
+
+  .intake-orb::before {
+    animation: intake-halo 5.2s ease-in-out infinite;
+  }
+
+  .intake-orb::after {
+    animation: intake-sheen 6.4s ease-in-out infinite;
+  }
 }
 
 .intake-orb:hover {
@@ -225,31 +264,57 @@ summary:focus-visible {
     0 0 42px rgb(96 165 250 / 34%);
 }
 
-.intake-orb-stage.is-open .intake-orb {
+.intake-orb-stage.is-open .intake-orb,
+.intake-orb-stage.is-open .intake-orb::before,
+.intake-orb-stage.is-open .intake-orb::after {
   animation: none;
 }
 
+.intake-orb-stage.is-open .intake-orb {
+  border-radius: 50%;
+  transform: none;
+  filter: brightness(0.96);
+}
+
 .intake-cloud {
+  display: grid;
+  grid-template-rows: 0fr;
   width: min(100%, 20rem);
   margin-top: 0.75rem;
-  max-height: 0;
   overflow: hidden;
   opacity: 0;
   text-align: left;
   pointer-events: none;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  transform: translate3d(0, -6px, 0);
   transition:
-    opacity var(--mos-duration) var(--mos-easing),
-    max-height var(--mos-duration) var(--mos-easing);
+    opacity var(--mos-duration-panel) var(--mos-easing),
+    transform var(--mos-duration-panel) var(--mos-easing),
+    grid-template-rows var(--mos-duration-panel) var(--mos-easing),
+    border-color var(--mos-duration-panel) var(--mos-easing),
+    box-shadow var(--mos-duration-panel) var(--mos-easing);
 }
 
 .intake-orb-stage.is-open .intake-cloud {
-  max-height: 16rem;
+  grid-template-rows: 1fr;
   opacity: 1;
+  transform: none;
   pointer-events: auto;
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: var(--mos-shadow);
 }
 
 .intake-cloud-inner {
-  padding: 1rem 1.1rem;
+  min-height: 0;
+  overflow: hidden;
+  padding-inline: 1.1rem;
+}
+
+.intake-orb-stage.is-open .intake-cloud-inner {
+  padding-block: 1rem;
 }
 
 .intake-orb-caption {
@@ -258,22 +323,114 @@ summary:focus-visible {
   color: var(--color-muted);
 }
 
-@keyframes intake-pulse {
+@keyframes intake-idle {
   0%,
   100% {
-    transform: scale(1);
+    border-radius: 50%;
+    transform: translate3d(0, 0, 0) scale(1);
   }
-  50% {
-    transform: scale(1.03);
+  34% {
+    border-radius: 58% 42% 50% 50% / 52% 46% 54% 48%;
+    transform: translate3d(2px, -3px, 0) scale(1.02);
+  }
+  68% {
+    border-radius: 44% 56% 48% 52% / 48% 54% 46% 52%;
+    transform: translate3d(-2px, 2px, 0) scale(1.015);
   }
 }
 
 @keyframes intake-halo {
   0%,
   100% {
-    opacity: 0.7;
+    opacity: 0.62;
+    transform: scale(1);
+    filter: blur(0);
   }
   50% {
     opacity: 1;
+    transform: scale(1.04);
+    filter: blur(0.4px);
+  }
+}
+
+@keyframes intake-sheen {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate3d(0, 0, 0);
+    border-radius: 46% 54% 48% 52% / 52% 46% 54% 48%;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate3d(3px, -2px, 0);
+    border-radius: 54% 46% 52% 48% / 48% 54% 46% 52%;
+  }
+}
+
+/* ——— Header / menu chrome (server <details>) ——— */
+
+.site-nav-link,
+.site-cta-outline {
+  transition:
+    color var(--mos-duration) var(--mos-easing),
+    border-color var(--mos-duration) var(--mos-easing),
+    translate var(--mos-duration) var(--mos-easing);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .site-nav-link:hover,
+  .site-cta-outline:hover {
+    translate: 0 -1px;
+  }
+}
+
+.site-menu-panel {
+  opacity: 0;
+  translate: 0 -8px;
+  transition:
+    opacity var(--mos-duration-menu) var(--mos-easing),
+    translate var(--mos-duration-menu) var(--mos-easing);
+}
+
+header details[open] .site-menu-panel {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  header details[open] .site-menu-panel {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+
+@supports selector(::details-content) {
+  header details::details-content {
+    opacity: 0;
+    translate: 0 -8px;
+    overflow: clip;
+    transition:
+      opacity var(--mos-duration-menu) var(--mos-easing),
+      translate var(--mos-duration-menu) var(--mos-easing),
+      content-visibility var(--mos-duration-menu);
+    transition-behavior: allow-discrete;
+  }
+
+  header details[open]::details-content {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  @starting-style {
+    header details[open]::details-content {
+      opacity: 0;
+      translate: 0 -8px;
+    }
+  }
+
+  header details[open] .site-menu-panel {
+    opacity: 1;
+    translate: none;
+    transition: none;
   }
 }
