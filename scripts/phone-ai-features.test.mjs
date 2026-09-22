@@ -29,32 +29,58 @@ function cardBlocks(config) {
   return config.slice(start, end);
 }
 
-test("inventory short card set exists and is not invented", () => {
+const ON_PAGE_IDS = [
+  "M-ONB-01",
+  "M-TEL-01",
+  "M-TEL-02",
+  "M-TEL-03",
+  "M-CAL-02",
+  "M-POST-01",
+  "M-UK-01",
+];
+
+const OFF_PAGE_IDS = [
+  "M-KNO-01",
+  "M-KNO-02",
+  "M-TEL-04",
+  "M-CAL-01",
+  "M-POST-02",
+  "M-UK-02",
+  "M-UK-03",
+  "M-UK-04",
+];
+
+test("inventory short card set is exactly 7 cards and is not invented", () => {
   const inventory = read("docs/competitive/PHONE_AI_FEATURE_INVENTORY.md");
   const config = read("src/config/phone-ai-features.ts");
-  for (const id of [
-    "M-ONB-01",
-    "M-KNO-01",
-    "M-KNO-02",
-    "M-TEL-01",
-    "M-TEL-02",
-    "M-TEL-03",
-    "M-TEL-04",
-    "M-CAL-01",
-    "M-CAL-02",
-    "M-POST-01",
-    "M-POST-02",
-    "M-UK-01",
-    "M-UK-02",
-    "M-UK-03",
-    "M-UK-04",
-  ]) {
+  const cards = cardBlocks(config);
+  for (const id of ON_PAGE_IDS) {
     assert.match(inventory, new RegExp(`\\| ${id} \\|`));
-    assert.match(config, new RegExp(`id: "${id}"`));
+    assert.match(cards, new RegExp(`id: "${id}"`));
   }
-  assert.match(inventory, /Short marketing card set/);
+  for (const id of OFF_PAGE_IDS) {
+    assert.match(inventory, new RegExp(`\\| ${id} \\|`));
+    assert.doesNotMatch(cards, new RegExp(`id: "${id}"`));
+  }
+  assert.match(inventory, /exactly 7/);
+  assert.match(inventory, /5 VERIFIED \+ 2 UNDER TEST/);
   assert.match(inventory, /NOT_ON_SITE/);
   assert.match(inventory, /Do not invent rows/);
+  assert.match(config, /MARKETING_CARD_HARD_COUNT/);
+});
+
+test("marketing cards are exactly 5 VERIFIED and 2 UNDER TEST", () => {
+  const config = read("src/config/phone-ai-features.ts");
+  const cards = cardBlocks(config);
+  const ids = [...cards.matchAll(/id: "(M-[A-Z]+-\d+)"/g)].map((m) => m[1]);
+  const statuses = [...cards.matchAll(/status: "(VERIFIED|UNDER_TEST|NOT_ON_SITE)"/g)].map(
+    (m) => m[1],
+  );
+  assert.deepEqual(ids, ON_PAGE_IDS);
+  assert.equal(ids.length, 7);
+  assert.equal(statuses.filter((s) => s === "VERIFIED").length, 5);
+  assert.equal(statuses.filter((s) => s === "UNDER_TEST").length, 2);
+  assert.equal(statuses.filter((s) => s === "NOT_ON_SITE").length, 0);
 });
 
 test("marketing cards never include NOT_ON_SITE as a present capability", () => {

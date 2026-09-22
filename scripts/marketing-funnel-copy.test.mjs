@@ -54,9 +54,11 @@ test("features page renders inventory-driven VERIFIED / UNDER TEST cards", () =>
   assert.match(page, /VERIFIED/);
   assert.match(page, /UNDER TEST/);
   assert.match(config, /id: "M-ONB-01"/);
-  assert.match(config, /Pack-aware scripted sandbox/);
-  assert.match(config, /Calendar connect/);
+  assert.match(config, /id: "M-TEL-03"/);
+  assert.match(config, /MARKETING_CARD_HARD_COUNT/);
   assert.match(config, /Not a live receptionist or a 30-second phone number/);
+  assert.doesNotMatch(config, /id: "M-TEL-04"/);
+  assert.doesNotMatch(config, /id: "M-CAL-01"/);
   assert.doesNotMatch(page, /heading: "HAVE"/);
   assert.doesNotMatch(page, /heading: "COMING"/);
   assert.doesNotMatch(page, /commercially generally available/i);

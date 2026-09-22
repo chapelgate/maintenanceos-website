@@ -37,7 +37,7 @@ export const featureGroupCopy = {
   },
   knowledge: {
     heading: "Knowledge",
-    lede: "Draft fields from a public site, then a claims-safe pack. Empty stays empty.",
+    lede: "Scan and pack stay under the funnel card. Empty fields stay empty.",
   },
   telephony: {
     heading: "Telephony",
@@ -45,15 +45,15 @@ export const featureGroupCopy = {
   },
   calendar_actions: {
     heading: "Calendar and actions",
-    lede: "Calendars stay under test. Rules — not the model — own safety and money.",
+    lede: "Rules — not the model — own safety and money. Live calendar book is not claimed.",
   },
   post_call: {
     heading: "Post-call",
-    lede: "Evidence in source; SAMPLE dashboard only. Not live analytics.",
+    lede: "Evidence in source. Not a live analytics dashboard.",
   },
   uk_vertical: {
     heading: "UK maintenance vertical",
-    lede: "999 versus jobs, no client-money, *OS naming. Trades packs remain under test.",
+    lede: "999 versus jobs. Not a generic always-on receptionist.",
   },
 } as const satisfies Record<
   FeatureGroupId,
@@ -77,7 +77,7 @@ export const marketingFeatureStatusLabel = {
 } as const;
 
 /**
- * Short marketing card set — VERIFIED and carefully UNDER_TEST only.
+ * Short marketing card set — exactly 7 (5 VERIFIED + 2 UNDER TEST).
  * IDs match docs/competitive/PHONE_AI_FEATURE_INVENTORY.md.
  */
 export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
@@ -90,32 +90,10 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
       "Start from a public UK maintenance website, review the draft, then a knowledge pack — early access only.",
     bullets: [
       "Public /create path: Website → Check → Review → Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number.",
+      "SSRF-safe website scan companion. Otherwise the crawl is queued. Empty fields stay empty. Not a live Fonio-parity knowledge crawl.",
+      "Knowledge pack + system prompt from the reviewed /create draft. Missing keys stay missing. Not a live tenant or trained knowledge base.",
     ],
-    sources: ["F-01"],
-  },
-  {
-    id: "M-KNO-01",
-    title: "Website knowledge extract",
-    status: "UNDER_TEST",
-    group: "knowledge",
-    ukOpsLine:
-      "When a scan endpoint is configured, draft hours and services can be copied from a public site — empty fields stay empty.",
-    bullets: [
-      "SSRF-safe website scan companion. Otherwise the crawl is queued. Not a live Fonio-parity knowledge crawl.",
-    ],
-    sources: ["F-02"],
-  },
-  {
-    id: "M-KNO-02",
-    title: "Knowledge pack from reviewed draft",
-    status: "UNDER_TEST",
-    group: "knowledge",
-    ukOpsLine:
-      "Reviewed name, hours, services, and FAQs become a claims-safe pack — missing keys stay missing.",
-    bullets: [
-      "Knowledge pack + system prompt from the reviewed /create draft. Not a live tenant or trained knowledge base.",
-    ],
-    sources: ["F-03"],
+    sources: ["F-01", "F-02", "F-03"],
   },
   {
     id: "M-TEL-01",
@@ -157,31 +135,6 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     sources: ["V-01"],
   },
   {
-    id: "M-TEL-04",
-    title: "Scripted sandbox and benchmark",
-    status: "UNDER_TEST",
-    group: "telephony",
-    ukOpsLine:
-      "A flagged, pack-aware scripted demo can answer from stored hours and services — never from invented live-call success.",
-    bullets: [
-      "Pack-aware scripted sandbox test call — flagged, off by default. Frozen telephony unused.",
-      "Scripted conversation benchmark exists for fixture scoring. Passing the runner is not voice-quality parity. Not a live customer phone.",
-    ],
-    sources: ["F-04", "F-05"],
-  },
-  {
-    id: "M-CAL-01",
-    title: "Calendar connect",
-    status: "UNDER_TEST",
-    group: "calendar_actions",
-    ukOpsLine:
-      "Flagged adapters (mock plus Google / Microsoft 365 OAuth scaffolds) — this site never invents a booked slot.",
-    bullets: [
-      "/create says coming / under testing unless a local flag is on. Not customer-GA; not live on staging. No voice booking confirmation.",
-    ],
-    sources: ["matrix calendar PARTIAL"],
-  },
-  {
     id: "M-CAL-02",
     title: "Rules own safety and money",
     status: "VERIFIED",
@@ -210,19 +163,6 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     sources: ["S-03", "O-02"],
   },
   {
-    id: "M-POST-02",
-    title: "Call history foundation",
-    status: "UNDER_TEST",
-    group: "post_call",
-    ukOpsLine:
-      "Flagged dashboard for SAMPLE transcripts and a bookings stub — off by default, never presented as live telephony history.",
-    bullets: [
-      "When the flag is off the page says coming / under testing.",
-      "SAMPLE / DEMO rows are labelled examples; an empty store does not invent customers.",
-    ],
-    sources: ["matrix dashboard PARTIAL"],
-  },
-  {
     id: "M-UK-01",
     title: "Emergency triage vs jobs",
     status: "VERIFIED",
@@ -235,42 +175,13 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     ],
     sources: ["V-02", "O-04", "O-05"],
   },
-  {
-    id: "M-UK-02",
-    title: "No client-money authority",
-    status: "VERIFIED",
-    group: "uk_vertical",
-    ukOpsLine:
-      "Quote and invoice checks may exist; payment, refund, compensation, fee-waiver, and client-money execution do not.",
-    bullets: [
-      "No client-money execution authority for the model or automated money movement.",
-    ],
-    sources: ["O-06"],
-  },
-  {
-    id: "M-UK-03",
-    title: "Industry *OS naming",
-    status: "VERIFIED",
-    group: "uk_vertical",
-    ukOpsLine:
-      "LandlordOS through HolidayLetOS name UK maintenance roles on this site — positioning, not a live phone per vertical.",
-    bullets: ["Industry *OS portfolio naming exists on /industries/*."],
-    sources: ["matrix UK HAVE"],
-  },
-  {
-    id: "M-UK-04",
-    title: "Maintenance trades language",
-    status: "UNDER_TEST",
-    group: "uk_vertical",
-    ukOpsLine:
-      "Industry pages contrast contractor-dispatch language and out-of-hours honesty with a generic receptionist. Product trades packs remain under test.",
-    bullets: [
-      "Out-of-hours capture is designed behaviour — not a public always-on phone.",
-      "Do not claim product superiority beyond positioning.",
-    ],
-    sources: ["matrix UK PARTIAL"],
-  },
 ] as const;
+
+export const MARKETING_CARD_HARD_COUNT = {
+  total: 7,
+  verified: 5,
+  underTest: 2,
+} as const;
 
 export type NotClaimedItem = {
   id: string;
@@ -344,6 +255,20 @@ export function isMarketingCardStatus(
 
 export function marketingCardsByGroup(group: FeatureGroupId) {
   return phoneAiMarketingCards.filter((card) => card.group === group);
+}
+
+export function marketingCardCounts() {
+  const verified = phoneAiMarketingCards.filter(
+    (card) => card.status === "VERIFIED",
+  ).length;
+  const underTest = phoneAiMarketingCards.filter(
+    (card) => card.status === "UNDER_TEST",
+  ).length;
+  return {
+    total: phoneAiMarketingCards.length,
+    verified,
+    underTest,
+  };
 }
 
 export const PHONE_AI_INVENTORY_DOC =
