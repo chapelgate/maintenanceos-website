@@ -10,24 +10,35 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
-test("home hero keeps locked CTAs primary; orb is secondary intake listening", () => {
+test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", () => {
   const home = read("src/app/page.tsx");
-  const orb = read("src/components/SiriOrbCloud.tsx");
+  const shell = read("src/components/ProductUiShell.tsx");
   const pair = read("src/components/CtaPair.tsx");
+  const orb = read("src/components/SiriOrbCloud.tsx");
 
-  assert.match(home, /SiriOrbCloud/);
+  assert.match(home, /ProductUiShell/);
+  assert.match(home, /mos-hero-atmosphere/);
   assert.match(home, /primaryHref="\/create\/"/);
   assert.match(home, /Create from website/);
   assert.match(home, /Request early access/);
   assert.match(home, /No live phone demo/);
+  assert.doesNotMatch(home, /SiriOrbCloud/);
   assert.doesNotMatch(home, /mos-hero-dusk/);
   assert.doesNotMatch(home, /tone="on-dusk"/);
-  assert.doesNotMatch(home, /Work orders/);
   assert.doesNotMatch(home, /Placeholder ops chrome/);
 
   assert.match(pair, /primaryHref = "\/create\/"/);
   assert.match(pair, /secondaryHref = "\/demo\/#demo"/);
   assert.doesNotMatch(pair, /tone/);
+
+  assert.match(shell, /FeatureStatusChip status="UNDER_TEST"/);
+  assert.match(shell, /Supervisor shell/);
+  assert.match(shell, /Mock labels only — no live counts/);
+  assert.match(shell, /WO-sample/);
+  assert.doesNotMatch(shell, /£/);
+  assert.doesNotMatch(shell, /\b\d{2,}%/);
+  assert.doesNotMatch(shell, /live (phone|DID|call)/i);
+  assert.doesNotMatch(shell, /amber-100|bg-amber/);
 
   assert.match(orb, /["']use client["']/);
   assert.match(orb, /aria-expanded=\{open\}/);
@@ -63,6 +74,7 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
   const wordmark = header.match(/function Wordmark\(\) \{[\s\S]*?\n\}/)?.[0] ?? "";
 
   assert.match(globals, /prefers-reduced-motion: reduce/);
+  assert.match(globals, /\.mos-hero-atmosphere/);
   assert.match(globals, /\.intake-orb/);
   assert.match(globals, /--color-accent:\s*#1d4ed8/i);
   assert.match(globals, /--color-accent-hover:\s*#1e40af/i);

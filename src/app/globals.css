@@ -192,7 +192,7 @@ summary:focus-visible {
 
 /*
  * Feature honesty chips — VERIFIED is solid subtle blue; UNDER TEST is
- * outline / warm-neutral. Colour is never the only signal.
+ * outline + mark (not amber-fill theatre). Colour is never the only signal.
  */
 .feature-status-chip {
   display: inline-flex;
@@ -357,6 +357,41 @@ summary:focus-visible {
     rgb(219 234 254 / 55%),
     transparent 60%
   );
+}
+
+/*
+ * Direction B (± light A atmosphere): paper canvas, subtle grid, restrained
+ * accent glow. Static CSS only — honour prefers-reduced-motion by staying still.
+ */
+.mos-hero-atmosphere {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--color-paper);
+}
+
+.mos-hero-atmosphere::before {
+  content: "" / "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px),
+    radial-gradient(
+      ellipse 55% 45% at 82% 8%,
+      rgb(219 234 254 / 72%),
+      transparent 68%
+    );
+  background-size: 3rem 3rem, 3rem 3rem, auto;
+  opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mos-hero-atmosphere::before {
+    opacity: 0.22;
+  }
 }
 
 /* ——— Intake listening orb (secondary affordance) ——— */

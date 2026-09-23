@@ -28,6 +28,7 @@ const STEPS = [
 export function HomeOnboardingSteps() {
   return (
     <section
+      id="path"
       aria-labelledby="home-onboarding-heading"
       className="border-b border-border bg-surface px-4 py-14 sm:px-6 sm:py-16"
     >
@@ -39,7 +40,7 @@ export function HomeOnboardingSteps() {
           How to start — three steps
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          Same public path as{" "}
+          The honest path in. Same public path as{" "}
           <a
             href="/create/"
             className="font-medium text-accent underline-offset-4 hover:underline"

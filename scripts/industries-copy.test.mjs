@@ -74,6 +74,22 @@ test("industry role page renders the shared UK-maintenance section", () => {
   assert.match(page, /not commercial general availability/);
 });
 
+test("home industries grid lists all eight UK verticals at equal weight", () => {
+  const home = read("src/app/page.tsx");
+  const grid = read("src/components/HomeIndustries.tsx");
+  assert.match(home, /HomeIndustries/);
+  assert.match(grid, /industryRoles\.map/);
+  assert.match(grid, /Equal weight/);
+  assert.doesNotMatch(grid, /featured vertical|most popular industry/i);
+  for (const slug of slugs) {
+    assert.match(
+      grid,
+      /industryRoles/,
+      `grid should iterate industryRoles including ${slug}`,
+    );
+  }
+});
+
 test("industries index contrasts UK maintenance with a generic receptionist", () => {
   const page = read("src/app/industries/page.tsx");
   assert.match(page, /emergency triage vs jobs/);

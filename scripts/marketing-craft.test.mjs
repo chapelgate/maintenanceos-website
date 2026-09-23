@@ -47,6 +47,7 @@ test("nav desktop labels stay wrap-safe single-line units", () => {
   assert.match(site, /label: "How it works"/);
   assert.match(site, /Dashboard \(soon\)/);
   assert.match(header, /min-h-16/);
+  assert.match(header, /sticky top-0/);
   assert.match(header, /flex-wrap/);
   assert.match(css, /\.site-nav-link[\s\S]*text-wrap: nowrap/);
   assert.match(css, /\.site-nav-link[\s\S]*white-space: nowrap/);
