@@ -1,4 +1,5 @@
 import { CtaPair } from "@/components/CtaPair";
+import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
 import { JsonLd } from "@/components/JsonLd";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
@@ -33,6 +34,10 @@ export default function HowItWorksPage() {
         title="From your website URL to a sandbox receptionist pack."
         lede="Website → Check → Review → Pack, then request early access. An optional scripted sandbox sits after the pack when a local flag is on. We do not invent crawl results, bookings, or a live phone number."
       />
+
+      <div className="mx-auto max-w-3xl px-4 pt-8">
+        <FunnelPathStrip />
+      </div>
 
       <HowItWorksFlow />
 

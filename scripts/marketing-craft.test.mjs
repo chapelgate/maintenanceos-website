@@ -71,9 +71,12 @@ test("home trust strip, tour caption, and role chips stay claims-safe", () => {
   assert.doesNotMatch(home, /<video/);
 
   assert.match(home, /HomeRoleChips/);
+  assert.match(home, /HomeOnboardingSteps/);
   assert.match(chips, /\/industries\/landlords\//);
   assert.match(chips, /\/industries\/letting-agents\//);
   assert.match(chips, /\/industries\/property-managers\//);
+  assert.match(chips, /\/industries\//);
+  assert.match(chips, /All 8 UK verticals/);
   assert.doesNotMatch(chips, /always-on|live phone|beats Fonio/i);
 });
 
@@ -150,6 +153,8 @@ test("HonestyBanner token is shared and optional vignettes stay scenarios", () =
   assert.match(features, /<HonestyBanner compact/);
   assert.match(vignettes, /Scenario: leaky tap/);
   assert.match(vignettes, /Scenario: no heat/);
+  assert.match(vignettes, /Scenario: access/);
+  assert.match(vignettes, /Scenario: contractor chase/);
   assert.match(vignettes, /Scenario: 999 latch/);
   const vignetteCopy = vignettes.slice(vignettes.indexOf("const SCENARIOS"));
   assert.doesNotMatch(vignetteCopy, /trusted by|customer quote/i);

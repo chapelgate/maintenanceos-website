@@ -1,5 +1,6 @@
 import { CtaPair } from "@/components/CtaPair";
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
+import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { HonestyBanner } from "@/components/HonestyBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
@@ -24,7 +25,8 @@ export default function FeaturesPage() {
         title="What MaintenanceOS includes — VERIFIED and UNDER TEST"
         lede="Short cards from the Phone AI inventory. VERIFIED is a product capability in source — still pre-launch, not a buy-now live service. UNDER TEST is designed or flagged — not general availability. Live phone stays not available. Nothing here claims commercial general availability or a public always-on phone line."
       />
-      <div className="mx-auto max-w-3xl space-y-12 px-4 py-12">
+      <div className="mx-auto max-w-5xl space-y-12 px-4 py-12">
+        <FunnelPathStrip />
         <HonestyBanner compact>
           Seven cards we can stand behind today — five VERIFIED, two UNDER TEST.
           Peer-common gaps stay off this page and are tracked with product.
@@ -49,7 +51,13 @@ export default function FeaturesPage() {
                   <p className="mt-2 text-sm text-muted">{UNDER_TEST_GROUP_HONESTY}</p>
                 ) : null}
               </div>
-              <div className="grid gap-4">
+              <div
+                className={
+                  cards.length > 1
+                    ? "grid gap-4 md:grid-cols-2"
+                    : "grid gap-4"
+                }
+              >
                 {cards.map((card) => {
                   if (!isMarketingCardStatus(card.status)) return null;
                   return (
@@ -62,11 +70,14 @@ export default function FeaturesPage() {
                       </div>
                       <p className="mt-3 text-sm text-ink">{card.ukOpsLine}</p>
                       {card.bullets && card.bullets.length > 0 ? (
-                        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
-                          {card.bullets.map((item) => (
-                            <li key={item}>{item}</li>
-                          ))}
-                        </ul>
+                        <details className="feature-learn-more mt-3">
+                          <summary>Learn more</summary>
+                          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
+                            {card.bullets.map((item) => (
+                              <li key={item}>{item}</li>
+                            ))}
+                          </ul>
+                        </details>
                       ) : null}
                     </article>
                   );

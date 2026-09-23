@@ -14,6 +14,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
+        eyebrow="Chapelgate · United Kingdom"
         title="About MaintenanceOS"
         lede="We are building operations software so UK property maintenance stays clear, accountable, and in control — a maintenance department as a service mindset for landlords, letting agents, and property managers."
       />
@@ -29,6 +30,12 @@ export default function AboutPage() {
             product is designed so AI does not hold final authority on safety
             or money.
           </p>
+          <p>
+            The commercial problem is familiar to UK ops teams: missed
+            maintenance calls, invented promises, and safety mixed with routine
+            jobs. The product is designed so a leaky tap stays a structured job
+            and 999 stays emergency services.
+          </p>
         </section>
 
         <section aria-labelledby="about-uk" className="space-y-4">
@@ -40,6 +47,17 @@ export default function AboutPage() {
             including UK emergency guidance terminology in the receptionist
             design. We describe capabilities carefully while the programme is
             still pre-launch.
+          </p>
+          <p>
+            Eight industry lines sit under Chapelgate Technologies on{" "}
+            <a
+              href="/industries/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Industries
+            </a>
+            . Those pages are positioning for UK verticals — not a claim that
+            each line is commercially available today.
           </p>
         </section>
 

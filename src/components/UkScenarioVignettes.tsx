@@ -1,5 +1,6 @@
 /**
  * Labelled UK maintenance scenarios — not testimonials, not live-call samples.
+ * Playbook cards (Smith/Rosie analogue) stay claims-safe product design.
  */
 const SCENARIOS = [
   {
@@ -9,6 +10,14 @@ const SCENARIOS = [
   {
     label: "Scenario: no heat",
     body: "Collect who, what, where, and access. Rules must not invent a booking, a slot, or “someone is on the way.”",
+  },
+  {
+    label: "Scenario: access",
+    body: "Who can let someone in, and when. Intake is designed to capture access — not to invent a contractor visit.",
+  },
+  {
+    label: "Scenario: contractor chase",
+    body: "Follow-up stays a structured job note. The model must not invent a dispatch, an ETA, or a promise that a van is coming.",
   },
   {
     label: "Scenario: 999 latch",
@@ -26,13 +35,13 @@ export function UkScenarioVignettes() {
         id="uk-scenarios-heading"
         className="text-xl font-semibold tracking-tight text-ink sm:text-2xl"
       >
-        UK maintenance scenarios
+        UK maintenance playbooks
       </h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
         Labelled scenarios from product design — not customer stories, not a live
-        phone sample.
+        phone sample. How intake is designed to treat common UK jobs.
       </p>
-      <ul className="mt-6 grid gap-3 md:grid-cols-3">
+      <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {SCENARIOS.map((item) => (
           <li key={item.label}>
             <article className="h-full rounded-xl border border-border bg-paper p-4">

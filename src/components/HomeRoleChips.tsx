@@ -1,5 +1,6 @@
 /**
  * Compact role chips — scan only, existing /industries/* routes, no new claims.
+ * Hub keeps eight UK verticals equal-weight; chips are a skim entry, not a collapse.
  */
 const ROLE_CHIPS = [
   { href: "/industries/landlords/", label: "Landlords", scan: "landlord" },
@@ -30,6 +31,9 @@ export function HomeRoleChips() {
           <span aria-hidden="true">{role.scan}</span>
         </a>
       ))}
+      <a href="/industries/" className="home-role-chip home-role-chip--all">
+        All 8 UK verticals
+      </a>
     </nav>
   );
 }
