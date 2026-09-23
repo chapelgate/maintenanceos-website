@@ -4,7 +4,7 @@ import { HOME_MEDIA } from "@/content/home-media";
 
 /**
  * Home hero visual — UK street photograph + secondary intake orb.
- * Create CTA stays in the copy column. ProductUiShell sits below the hero.
+ * Create CTA stays in the copy column. The labelled shell sits below the hero.
  */
 export function HomeHeroVisual() {
   return (

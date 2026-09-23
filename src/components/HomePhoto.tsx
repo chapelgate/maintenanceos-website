@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type HomePhotoProps = {
   src: string;
   alt: string;
@@ -8,8 +10,8 @@ type HomePhotoProps = {
 };
 
 /**
- * Static-export photograph. Width/height reserved for CLS.
- * Only the true LCP candidate gets fetchPriority=high; others lazy-load.
+ * Static-export photograph (`images.unoptimized`). Width/height reserved for CLS.
+ * Only the true LCP candidate is priority; others lazy-load.
  */
 export function HomePhoto({
   src,
@@ -20,15 +22,14 @@ export function HomePhoto({
   className = "",
 }: HomePhotoProps) {
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
       width={width}
       height={height}
+      unoptimized
       decoding="async"
-      {...(priority
-        ? { fetchPriority: "high" as const }
-        : { loading: "lazy" as const })}
+      priority={priority}
       className={className}
     />
   );
