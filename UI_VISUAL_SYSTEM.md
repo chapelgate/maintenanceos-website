@@ -11,7 +11,7 @@
 - **Paper / surface:** light (`#F8FAFC` / `#FFFFFF`). Home hero stays light so blue CTAs remain WCAG AA. Warmth is licensed photography, not a paper recolour.
 - **Ops glass** (`.mos-glass`): surface fill, 1px line (`--mos-line`), **one** `backdrop-filter` layer (≤12px blur), brand `--mos-shadow`, **12px** radius, ink type. Max **two** blur layers on a view (optional orb halo + panel).
 - **Page hero** (`.mos-page-hero`): warm surface + blue and cream wash (gradient only, no extra blur).
-- **Home atmosphere** (`.mos-hero-atmosphere`): linen canvas + restrained `#DBEAFE` and cream depth. CSS-only; quieter under `prefers-reduced-motion`. Not a dark theme.
+- **Home atmosphere** (`.mos-hero-atmosphere`): paper canvas + restrained `#DBEAFE` and cream depth. CSS-only; quieter under `prefers-reduced-motion`. Not a dark theme.
 
 Buttons, focus rings, and in-panel links inherit the existing system: `rounded-md`, `bg-accent` / outline secondary, `outline: 2px solid var(--color-accent)`.
 
