@@ -2,7 +2,7 @@
 
 Truthful **pre-launch** marketing site for MaintenanceOS (not the product backend).
 
-**Brand System v0.3 + Local warmth override (2026-09-23)** — light paper `#F8FAFC`, blue accent `#1D4ED8` / `#DBEAFE`. Homepage: paper-stage intake orb (1.4–1.6×) + captioned UK ops stills; labelled UNDER TEST supervisor shell sits below the hero. Wordmark stays flat ink. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
+**Brand System v0.3 + Local warmth override (2026-09-23)** — light paper `#F8FAFC`, blue accent `#1D4ED8` / `#DBEAFE`. Homepage: paper-stage intake orb (photo-footprint scale) + captioned UK ops stills; labelled UNDER TEST supervisor shell sits below the hero. Wordmark stays flat ink. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
 
 ## Stance
 

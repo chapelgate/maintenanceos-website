@@ -2,12 +2,12 @@
 
 Local (owner) asked for moving parts, real-life pictures, people on phones, less clinical SaaS. Atmosphere is borrowed from [relicvault.app](https://relicvault.app). Brand, copy, logo, constellation sky, and assets were **not** copied.
 
-Visual Design Council soft-cleared a 2026-09-23 delta: enlarge the hero orb ~1.4–1.6×, drop the luxury terrace still, and reuse a restrained glow on key section bands only.
+Visual Design Council soft-cleared a 2026-09-23 delta: drop the luxury terrace still (no replacement stock in that slot), grow the morphing orb to that 4:3 photo footprint on paper, and keep a restrained glow on key section bands only.
 
 ## What we adopted
 
 - Light paper stays `#F8FAFC`; warmth is photographic, not a recolour
-- Hero visual: paper / soft-gradient stage for the morphing blue orb (1.4–1.6× the 5.5rem idle size). No luxury terrace photograph
+- Hero visual: paper stage; the morphing blue orb fills the old 4:3 photo footprint. Soft `#DBEAFE` / `#3B82F6` cloud wash behind the orb only — no terrace still, no replacement stock in that slot
 - Lifestyle strip under the H1: person on a phone + tradesperson (labelled stock, not customers)
 - Cinematic street band of pale gabled houses (operational UK stock, not the terrace)
 - CSS-only band accents (`IntakeOrbAccent`) on key home sections and how-it-works / features / industries / pricing headers — not a second logo, not on every card, not on `/create`

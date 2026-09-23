@@ -397,50 +397,52 @@ summary:focus-visible {
     );
 }
 
-/* ——— Home photographic stage ——— */
+/* ——— Home hero orb stage (replaces the dropped terrace still) ——— */
 
 .home-hero-stage {
   position: relative;
 }
 
 .home-orb-stage {
+  container-type: inline-size;
   display: grid;
   place-items: center;
-  min-height: 18rem;
-  padding: 2.25rem 1.5rem 1.75rem;
+  min-height: 16.5rem;
+  padding: 2rem 1rem 1.5rem;
   border-radius: var(--mos-radius-lg);
   border: 1px solid var(--color-border);
   background-color: var(--color-paper);
-  background-image:
-    radial-gradient(
-      circle at 50% 42%,
-      rgb(219 234 254 / 72%),
-      transparent 58%
-    ),
-    radial-gradient(
-      ellipse 70% 45% at 50% 100%,
-      rgb(236 214 184 / 22%),
-      transparent 70%
-    );
-  box-shadow: var(--mos-shadow);
+  /* Soft single-hue blue cloud wash behind the orb only. No cream, no photo. */
+  background-image: radial-gradient(
+    circle at 50% 42%,
+    var(--color-accent-subtle) 0 22%,
+    rgb(59 130 246 / 28%) 48%,
+    rgb(219 234 254 / 0%) 72%
+  );
+}
+
+.home-orb-stage .intake-orb-wrap {
+  width: 100%;
+}
+
+.home-orb-stage .intake-orb-stage {
+  width: min(100%, 24rem);
 }
 
 .home-orb-stage .intake-orb {
-  /* 1.5× the 5.5rem idle orb — council fence 1.4–1.6× */
-  width: 8.25rem;
-  height: 8.25rem;
+  /* Fill the old photo footprint (lead frame was 16.5rem / 4:3). */
+  width: min(72cqi, 20rem);
+  height: min(72cqi, 20rem);
 }
 
-@media (min-width: 640px) {
-  .home-orb-stage {
-    min-height: 22rem;
-    padding-block: 3rem 2rem;
-  }
-
-  .home-orb-stage .intake-orb {
-    width: 8.8rem;
-    height: 8.8rem;
-  }
+.home-orb-stage .intake-orb::before {
+  inset: -22%;
+  background: radial-gradient(
+    circle,
+    rgb(219 234 254 / 70%),
+    rgb(59 130 246 / 28%) 42%,
+    rgb(59 130 246 / 0%) 70%
+  );
 }
 
 .home-photo-frame {

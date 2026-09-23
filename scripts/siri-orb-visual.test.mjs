@@ -194,12 +194,20 @@ test("home photographs are licensed stock, not customers or RelicVault assets", 
   assert.ok(!fs.existsSync(path.join(ROOT, "public/media/home/uk-terrace.webp")));
 });
 
-test("hero orb is 1.4–1.6× the idle 5.5rem size on its own paper stage", () => {
+test("hero orb fills the old photo footprint on paper with a blue-only wash", () => {
   const globals = read("src/app/globals.css");
-  assert.match(globals, /\.home-orb-stage \.intake-orb[\s\S]*width:\s*8\.25rem/);
-  assert.match(globals, /\.home-orb-stage \.intake-orb[\s\S]*width:\s*8\.8rem/);
+  const visual = read("src/components/HomeHeroVisual.tsx");
+  assert.match(globals, /\.home-orb-stage[\s\S]*min-height:\s*16\.5rem/);
+  assert.match(globals, /\.home-orb-stage \.intake-orb[\s\S]*min\(72cqi,\s*20rem\)/);
   assert.match(globals, /\.home-orb-stage[\s\S]*--color-paper/);
+  assert.match(globals, /\.home-orb-stage[\s\S]*--color-accent-subtle|219 234 254/);
+  assert.match(globals, /\.home-orb-stage[\s\S]*59 130 246/);
   assert.doesNotMatch(globals, /home-photo-frame--lead|home-hero-orb/);
+  assert.doesNotMatch(
+    globals,
+    /\.home-orb-stage[\s\S]{0,400}236 214 184/,
+  );
+  assert.doesNotMatch(visual, /HOME_MEDIA|HomePhoto|uk-terrace/);
 });
 
 test("restrained orb accents sit on key marketing bands, not cards or /create", () => {
