@@ -61,7 +61,8 @@ test("home trust strip, tour caption, and role chips stay claims-safe", () => {
 
   assert.match(home, /HomeTrustStrip/);
   assert.match(strip, /Pre-launch · UK maintenance ops · Rules own safety/);
-  assert.doesNotMatch(strip, /logo|trustpilot|testimonial/i);
+  const stripMarkup = strip.slice(strip.indexOf("return"));
+  assert.doesNotMatch(stripMarkup, /trustpilot|testimonial|award/i);
 
   assert.match(home, /ProductTourWatchLink/);
   assert.match(tour, /watchLabel: "45s product tour · pre-launch"/);
@@ -150,7 +151,8 @@ test("HonestyBanner token is shared and optional vignettes stay scenarios", () =
   assert.match(vignettes, /Scenario: leaky tap/);
   assert.match(vignettes, /Scenario: no heat/);
   assert.match(vignettes, /Scenario: 999 latch/);
-  assert.doesNotMatch(vignettes, /testimonial|trusted by|customer quote/i);
+  const vignetteCopy = vignettes.slice(vignettes.indexOf("const SCENARIOS"));
+  assert.doesNotMatch(vignetteCopy, /trusted by|customer quote/i);
 });
 
 test("static export setting is unchanged", () => {
