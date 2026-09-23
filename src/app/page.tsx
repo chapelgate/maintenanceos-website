@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { HonestyBanner } from "@/components/HonestyBanner";
+import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
 import { JsonLd } from "@/components/JsonLd";
@@ -53,8 +54,7 @@ export default function HomePage() {
               Pre-launch · United Kingdom
             </p>
             <h1 className="mt-5 text-4xl font-semibold tracking-tight text-ink sm:text-5xl sm:leading-[1.12]">
-              Maintenance calls, structured — without the model running your
-              operation.
+              UK maintenance operations. AI intake. Rules keep control.
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-ink">
               MaintenanceOS is a multi-tenant platform for UK landlords, letting
@@ -89,17 +89,32 @@ export default function HomePage() {
 
       <HomeTrustStrip />
 
+      <HomeOnboardingSteps />
+
       {/* 2. Value pillars */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="grid gap-6 md:grid-cols-2">
+      <section
+        aria-labelledby="home-why-heading"
+        className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20"
+      >
+        <h2
+          id="home-why-heading"
+          className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+        >
+          Why MaintenanceOS
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+          UK maintenance ops first. AI assists at intake. Rules and people own
+          safety and money. Still pre-launch — not a live always-on phone.
+        </p>
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
           {pillars.map((pillar) => (
             <article
               key={pillar.title}
               className="mos-glass p-6 sm:p-8"
             >
-              <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+              <h3 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
                 {pillar.title}
-              </h2>
+              </h3>
               <p className="mt-3 text-base leading-relaxed text-ink">{pillar.body}</p>
               <p className="mt-5 text-sm">
                 <a

@@ -3,6 +3,7 @@ import {
   CreateJourneySection,
 } from "@/components/create-funnel-islands";
 import { CreateIngestPrivacyNote } from "@/components/CreateIngestPrivacyNote";
+import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { funnelPageJsonLd } from "@/lib/json-ld";
@@ -47,6 +48,7 @@ export default function CreateReceptionistPage() {
         lede="Paste your site URL, review a draft, preview a sandbox receptionist pack, and request website-to-receptionist early access. Typical local shape: website → draft → pack → optional scripted sandbox demo. If no scan service is configured, the crawl is queued — we do not invent crawl results. This form does not place a live call or assign a phone number."
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
+        <FunnelPathStrip />
         <section aria-labelledby="create-form-heading">
           <h2
             id="create-form-heading"

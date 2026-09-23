@@ -14,7 +14,7 @@ export const siteConfig = {
   tagline:
     "Operations software for property maintenance — clear, accountable, in control.",
   description:
-    "Maintenance department as a service for UK landlords, letting agents, and property managers. Deterministic safety rules and human clearance; AI assists without final authority on safety or money.",
+    "Pre-launch operations software for UK landlords, letting agents, and property managers. Website to knowledge pack onboarding. Deterministic safety rules and human clearance; AI assists without final authority on safety or money. Not a live phone.",
   /** PRE-LAUNCH gate. Default false. */
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
   /**

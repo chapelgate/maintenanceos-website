@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
@@ -10,41 +11,70 @@ export const metadata: Metadata = contentPageMetadata({
   path: "/contact/",
 });
 
+const PATHS = [
+  {
+    href: "/create/",
+    label: "Create from website",
+    body: "Website URL → check → review → pack → early access. The primary product path.",
+  },
+  {
+    href: "/demo/#launch",
+    label: "Join launch list",
+    body: "Email updates when we open access. No fake urgency.",
+  },
+  {
+    href: "/demo/#demo",
+    label: "Request early access",
+    body: "A human briefing about fit and what is verified today — not a live phone number.",
+  },
+] as const;
+
 export default function ContactPage() {
   return (
     <>
       <PageHero
-        title="Contact"
+        eyebrow="United Kingdom · Pre-launch"
+        title="Talk to a person"
         lede="Genuine human enquiries about MaintenanceOS. Product interest starts at Create from website. Launch-list and early-access briefings live on /demo. Not live phone provisioning, not a GA support desk, and no invented response SLA."
       />
-      <div className="mx-auto max-w-xl space-y-8 px-4 py-12">
-        <aside className="mos-glass p-4 text-sm text-muted">
-          <p className="font-medium text-ink">Not sure which form to use?</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
-            <li>
-              <a href="/create/" className="text-accent underline">
-                Create from website
-              </a>{" "}
-              — website URL → check → review → pack → early access
-            </li>
-            <li>
-              <a href="/demo/#launch" className="text-accent underline">
-                Join launch list
-              </a>{" "}
-              — email updates when we open access
-            </li>
-            <li>
-              <a href="/demo/#demo" className="text-accent underline">
-                Request early access
-              </a>{" "}
-              — a human briefing, not a live phone number
-            </li>
-            <li>
-              This page — genuine human enquiries / early access. Not a
-              support desk, not live phone provisioning, no invented SLA
-            </li>
+      <div className="mx-auto max-w-3xl space-y-8 px-4 py-12">
+        <FunnelPathStrip />
+
+        <section aria-labelledby="contact-paths-heading">
+          <h2
+            id="contact-paths-heading"
+            className="text-lg font-semibold text-ink"
+          >
+            Choose the right path
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            Not sure which form to use? Start with product interest, then a
+            briefing if you want a person.
+          </p>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+            {PATHS.map((path) => (
+              <li key={path.href}>
+                <a
+                  href={path.href}
+                  className="mos-glass contact-path-card transition-shadow hover:shadow-[0_0_0_1px_var(--color-accent)]"
+                >
+                  <span className="font-semibold text-accent">{path.label}</span>
+                  <span className="mt-2 block text-sm text-muted">
+                    {path.body}
+                  </span>
+                </a>
+              </li>
+            ))}
           </ul>
-        </aside>
+          <p className="mt-4 text-sm text-muted">
+            Product interest starts at{" "}
+            <a href="/create/" className="text-accent underline">
+              Create from website
+            </a>
+            . This page — genuine human enquiries / early access. Not a support
+            desk, not live phone provisioning, no invented SLA.
+          </p>
+        </section>
 
         {/* contact lead_type — same LeadCaptureForm as launch_list / early_demo. */}
         <LeadCaptureForm

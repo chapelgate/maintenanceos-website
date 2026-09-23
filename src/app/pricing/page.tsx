@@ -1,4 +1,5 @@
 import { CtaPair } from "@/components/CtaPair";
+import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { PageHero } from "@/components/PageHero";
 import { getPricingConfig } from "@/config/pricing";
 import { contentPageMetadata } from "@/lib/page-meta";
@@ -10,6 +11,22 @@ export const metadata = contentPageMetadata({
   path: "/pricing/",
 });
 
+const designedToInclude = [
+  "Website → Check → Review → Pack onboarding (early access — not a live receptionist)",
+  "UK maintenance intake language and 999 guidance (never 911) in product source",
+  "Explicit-request human transfer in product source",
+  "Deterministic rules for safety, approvals, and money prohibitions",
+  "Multi-tenant ops objects in source: properties, residents, contractors, work orders, jobs",
+] as const;
+
+const notSoldAsLive = [
+  "No live always-on phone line in a plan",
+  "No self-serve checkout and no invented list prices",
+  "No invented list prices on this marketing site",
+  "Calendar booking and live telephony: coming / early access — not general availability",
+  "No ISO, SOC 2, or bank-grade certification claims",
+] as const;
+
 export default function PricingPage() {
   const pricing = getPricingConfig();
 
@@ -20,7 +37,9 @@ export default function PricingPage() {
         title={pricing.title}
         lede={pricing.lede}
       />
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
+      <div className="mx-auto max-w-5xl space-y-10 px-4 py-12 sm:py-16">
+        <FunnelPathStrip />
+
         {pricing.showTiers && "tiers" in pricing && pricing.tiers.length > 0 ? (
           <ul className="grid gap-6 md:grid-cols-3">
             {pricing.tiers.map((tier) => (
@@ -92,6 +111,55 @@ export default function PricingPage() {
             </div>
           </div>
         )}
+
+        <section
+          aria-labelledby="pricing-scope-heading"
+          className="grid gap-4 md:grid-cols-2"
+        >
+          <div className="mos-glass p-6">
+            <h2
+              id="pricing-scope-heading"
+              className="text-lg font-semibold text-ink"
+            >
+              Designed to include
+            </h2>
+            <p className="mt-2 text-sm text-muted">
+              Conceptual scope of the programme — still pre-launch, not a
+              buy-now live service.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-ink">
+              {designedToInclude.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span
+                    aria-hidden
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mos-glass p-6">
+            <h2 className="text-lg font-semibold text-ink">
+              Not sold as live yet
+            </h2>
+            <p className="mt-2 text-sm text-muted">
+              Explicit exclusions while we prepare launch. Request pricing — we
+              will not invent a plan card.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-ink">
+              {notSoldAsLive.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span
+                    aria-hidden
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-muted"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
       </div>
     </>
   );

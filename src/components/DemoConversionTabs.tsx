@@ -67,7 +67,7 @@ export function DemoConversionTabs() {
           tabIndex={tab === "launch" ? 0 : -1}
           className={
             tab === "launch"
-              ? "flex-1 rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-white"
+              ? "flex-1 rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-on-accent"
               : "flex-1 rounded-md px-4 py-2.5 text-sm font-semibold text-ink hover:bg-paper"
           }
           onClick={() => select("launch")}
@@ -83,7 +83,7 @@ export function DemoConversionTabs() {
           tabIndex={tab === "demo" ? 0 : -1}
           className={
             tab === "demo"
-              ? "flex-1 rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-white"
+              ? "flex-1 rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-on-accent"
               : "flex-1 rounded-md px-4 py-2.5 text-sm font-semibold text-ink hover:bg-paper"
           }
           onClick={() => select("demo")}

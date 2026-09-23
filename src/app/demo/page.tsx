@@ -1,5 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { DemoConversionTabs } from "@/components/DemoConversionTabs";
+import { FeatureStatusChip } from "@/components/FeatureStatusChip";
+import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { funnelPageJsonLd } from "@/lib/json-ld";
@@ -21,15 +23,17 @@ const pathSteps = [
     if (!body) {
       throw new Error(`Missing /demo copy for ${step.label}`);
     }
-    return { title: step.label, body };
+    return { title: step.label, body, status: "UNDER_TEST" as const };
   }),
   {
     title: "Optional scripted sandbox",
     body: "When a local flag is on, a pack-aware scripted demo can run against the stored knowledge pack. It is under testing and off by default. It is not a live customer call.",
+    status: "UNDER_TEST" as const,
   },
   {
     title: "Early access",
     body: "Submit the create form, join the launch list, or ask for a human briefing. None of these provision a live phone number.",
+    status: "UNDER_TEST" as const,
   },
 ];
 
@@ -42,6 +46,10 @@ export default function DemoPage() {
         title="Start from your website URL."
         lede="The honest path is website URL → check → review draft → knowledge pack → optional scripted sandbox → early access. Create from your site, or request a human briefing. This page does not assign a live number."
       />
+
+      <div className="mx-auto max-w-3xl px-4 pt-8">
+        <FunnelPathStrip />
+      </div>
 
       <section
         aria-labelledby="demo-path-heading"
@@ -64,15 +72,26 @@ export default function DemoPage() {
           . Website → Check → Review → Pack, then optional sandbox and early
           access. We do not invent crawl results or a live phone number.
         </p>
-        <ol className="mt-6 space-y-4">
+        <ol className="mt-6 space-y-3">
           {pathSteps.map((step, i) => (
             <li key={step.title}>
-              <p className="text-sm font-semibold text-ink">
-                {i + 1}. {step.title}
-              </p>
-              <p className="mt-1 text-sm leading-relaxed text-muted">
-                {step.body}
-              </p>
+              <article className="mos-glass bg-paper p-4 sm:p-5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent bg-paper text-sm font-semibold text-accent"
+                    aria-hidden="true"
+                  >
+                    {i + 1}
+                  </span>
+                  <h3 className="text-sm font-semibold text-ink">
+                    {step.title}
+                  </h3>
+                  <FeatureStatusChip status={step.status} />
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {step.body}
+                </p>
+              </article>
             </li>
           ))}
         </ol>

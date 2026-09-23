@@ -23,8 +23,8 @@ function ogLocale(): string {
  */
 export const funnelPageCopy = {
   home: {
-    title: "Website to knowledge pack for UK maintenance",
-    absoluteTitle: `${siteConfig.name} — Website to knowledge pack for UK maintenance`,
+    title: "UK maintenance operations — website to knowledge pack",
+    absoluteTitle: `${siteConfig.name} — UK maintenance operations — website to knowledge pack`,
     description: `${FUNNEL_PATH_LABEL}. For UK landlords, agents, and managers. ${FUNNEL_META_GUARD}`,
     path: "/",
   },

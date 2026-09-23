@@ -6,7 +6,7 @@ export function PreLaunchBanner() {
     <div className="bg-ink px-4 py-2 text-center text-sm text-paper">
       Pre-launch / early access — MaintenanceOS is not commercially generally
       available yet.{" "}
-      <a href="/demo/#launch" className="underline hover:text-accent-hover">
+      <a href="/demo/#launch" className="underline hover:text-white">
         Join the launch list
       </a>
     </div>

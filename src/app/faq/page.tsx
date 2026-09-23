@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
+import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { faqItems } from "@/content/faqs";
@@ -22,10 +23,12 @@ export default function FaqPage() {
         lede="Straight answers aligned with our product claims register. Same path as Create from website: website URL → check → review → pack → optional scripted sandbox → early access. No live phone, no invented crawl, no marketing spin on readiness."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
-        <div className="space-y-4">
+        <FunnelPathStrip />
+        <div className="space-y-3">
           {faqItems.map((item) => (
             <details
               key={item.question}
+              name="mos-site-faq"
               className="mos-glass p-4"
             >
               <summary className="cursor-pointer font-semibold text-ink">

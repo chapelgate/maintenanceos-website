@@ -31,7 +31,7 @@ const prelaunch = {
   cardBody:
     "MaintenanceOS is pre-launch — not generally available. We will share packages suited to UK landlords, letting agents, and property managers when early access opens — no self-serve checkout and no invented list prices on this site.",
   notes: [
-    "Packages tailored to portfolio size and workflow",
+    "Packages tailored to portfolio size and workflow — shared on request",
     "Human clearance stays on safety and money decisions",
     "No self-serve checkout on this marketing site",
     "Live phone and calendar booking: coming / early access — not included as a live plan",
