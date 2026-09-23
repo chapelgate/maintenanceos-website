@@ -2,7 +2,7 @@ import { FeatureStatusChip } from "@/components/FeatureStatusChip";
 
 /**
  * Skim-friendly 3-step start on home — Website → Review pack → Early access.
- * Deep-links to /create. UNDER TEST only. Not “go live in 30s”.
+ * Deep-links to /create. UNDER TEST only. Not an instant public receptionist.
  */
 const STEPS = [
   {

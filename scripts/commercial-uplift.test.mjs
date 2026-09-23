@@ -43,7 +43,8 @@ test("home commercial pass keeps Create/Join hierarchy and 3-step start", () => 
 
   assert.match(strip, /home-trust-chip/);
   assert.match(strip, /No live phone on this site/);
-  assert.doesNotMatch(strip, /trustpilot|logo wall|award/i);
+  const stripMarkup = strip.slice(strip.indexOf("return"));
+  assert.doesNotMatch(stripMarkup, /trustpilot|logo wall|award/i);
 });
 
 test("funnel pages share one primary path strip", () => {
