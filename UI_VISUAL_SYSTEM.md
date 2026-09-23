@@ -1,26 +1,27 @@
-# UI Visual System v0.3 — council lock
+# UI Visual System v0.3 — council lock + Local warmth override
 
-**Status:** Design council lock, 2026-09-22.  
+**Status:** Design council lock 2026-09-22; **Local owner override 2026-09-23** (RelicVault-*like* atmosphere: warm, human, photographic, moving).  
 **Do not** make the orb the brand mark or the primary conversion control.  
-**Do not** invent a dusk / dark-glass theme. If frost kills contrast, drop blur first.  
-**Do not** fill the wordmark with accent blue — it stays flat ink.
+**Do not** invent a dusk / dark-glass / constellation-sky theme. If frost kills contrast, drop blur first.  
+**Do not** fill the wordmark with accent blue — it stays flat ink.  
+**Do not** scrape RelicVault images or clone their copy, logo, or chrome.
 
 ## Surfaces
 
-- **Paper / surface:** light (`#F8FAFC` / `#FFFFFF`). Home hero stays light so blue CTAs remain WCAG AA.
+- **Paper / surface:** warm linen (`#F3EEE4` / `#FFFAF4`). Home hero stays light so blue CTAs remain WCAG AA.
 - **Ops glass** (`.mos-glass`): surface fill, 1px line (`--mos-line`), **one** `backdrop-filter` layer (≤12px blur), brand `--mos-shadow`, **12px** radius, ink type. Max **two** blur layers on a view (optional orb halo + panel).
-- **Page hero** (`.mos-page-hero`): light surface + a single blue wash (gradient only, no extra blur).
-- **Home atmosphere** (`.mos-hero-atmosphere`): paper canvas + optional light-A grid / restrained `#DBEAFE` glow. CSS-only, static; quieter under `prefers-reduced-motion`. Not a dark theme.
+- **Page hero** (`.mos-page-hero`): warm surface + blue and cream wash (gradient only, no extra blur).
+- **Home atmosphere** (`.mos-hero-atmosphere`): linen canvas + restrained `#DBEAFE` and cream depth. CSS-only; quieter under `prefers-reduced-motion`. Not a dark theme.
 
 Buttons, focus rings, and in-panel links inherit the existing system: `rounded-md`, `bg-accent` / outline secondary, `outline: 2px solid var(--color-accent)`.
 
-## Homepage hero proof (Visual Design Council, 2026-09-23)
+## Homepage hero proof (Local owner override, 2026-09-23)
 
-Direction **B — Premium modern SaaS** (± light A atmosphere only).
+Direction **warm photographic operations** on Direction B tokens (blue accent + labelled UNDER TEST shell). Atmosphere borrowed from RelicVault’s *feel* only — not their brand.
 
-`ProductUiShell` is the homepage proof: a labelled **UNDER TEST** supervisor-style frame. Use `FeatureStatusChip` (outline + mark). No invented metrics, logos, testimonials, live DID, or live-phone theatre.
+`HomeHeroVisual` is the homepage proof: licensed UK property / phone / trades stills, the labelled **UNDER TEST** `ProductUiShell`, and a secondary `SiriOrbCloud`. Use `FeatureStatusChip` (outline + mark). No invented metrics, logos, testimonials, live DID, or live-phone theatre.
 
-`SiriOrbCloud` remains a **tiny client island** (toggle + Escape + focus into panel + restore) if reused as a secondary “intake listening” cue — not the hero, not the brand mark, not a CTA. Do not import it on `/create`.
+`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus into panel + restore) restored as a secondary “intake listening” cue beside the photographs — not the hero, not the brand mark, not a CTA. Create stays the primary control. Do not import the orb on `/create`.
 
 | State | Behaviour |
 | --- | --- |
@@ -28,7 +29,7 @@ Direction **B — Premium modern SaaS** (± light A atmosphere only).
 | Press / Enter / Space | CSS expand into ops-glass cloud (opacity + transform, 220ms ease) |
 | Panel copy | Short honesty + links to `/how-it-works/` and `/create/` |
 | Escape | Close; focus returns to the orb button |
-| `prefers-reduced-motion: reduce` | Static orb (no morph/pulse); instant open/close for orb and menus |
+| `prefers-reduced-motion: reduce` | Static orb (no morph/pulse); instant open/close for orb and menus; home photo ken-burns and shell float off |
 
 Do **not** nest `CtaPair`, the create funnel, or fake metrics in the glass. No GSAP unless gated on `prefers-reduced-motion: no-preference` (CSS-first is enough).
 
@@ -45,7 +46,7 @@ Light PageHero wash only. **Never** place an orb above the URL field. Do not imp
 
 ## Motion / assets
 
-CSS-first (transform / opacity / filter; no springs). Header `<details>` open/close is 200ms fade+slide. No WebGL, no paid Higgsfield **hero** assets. Home hero stays video-free. The only approved motion picture is the self-hosted click-to-play tour on `/how-it-works/#product-tour` (`public/media/`, regenerate with `npm run product-tour`; remux Desmond VO with `npm run product-tour:remux`). Client island must stay ≤ ~15–20 kB gz. No GSAP unless gated on `prefers-reduced-motion: no-preference`.
+CSS-first (transform / opacity / filter; no springs). Header `<details>` open/close is 200ms fade+slide. Home photographs use a slow ken-burns only under `prefers-reduced-motion: no-preference`. No WebGL, no paid Higgsfield **hero** assets. Home hero stays video-free. The only approved motion picture is the self-hosted click-to-play tour on `/how-it-works/#product-tour` (`public/media/`, regenerate with `npm run product-tour`; remux Desmond VO with `npm run product-tour:remux`). Client island must stay ≤ ~15–20 kB gz. No GSAP unless gated on `prefers-reduced-motion: no-preference`. Licensed home stills live in `public/media/home/` (see `SOURCES.md`).
 
 ## Anti-patterns
 

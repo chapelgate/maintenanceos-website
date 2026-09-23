@@ -44,7 +44,7 @@ export function UkScenarioVignettes() {
       <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {SCENARIOS.map((item) => (
           <li key={item.label}>
-            <article className="h-full rounded-xl border border-border bg-paper p-4">
+            <article className="h-full rounded-[var(--mos-radius-lg)] border border-border bg-surface p-4 shadow-[var(--mos-shadow)]">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">
                 {item.label}
               </p>

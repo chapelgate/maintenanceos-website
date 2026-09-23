@@ -25,7 +25,7 @@ export function HomeIndustries() {
             <li key={ind.slug}>
               <a
                 href={`/industries/${ind.slug}/`}
-                className="block h-full rounded-lg border border-border bg-surface px-4 py-3.5 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(15_23_42_/_6%)] hover:border-accent hover:text-accent"
+                className="block h-full rounded-[var(--mos-radius-lg)] border border-border bg-surface px-4 py-4 text-sm font-semibold text-ink shadow-[var(--mos-shadow)] hover:border-accent hover:text-accent"
               >
                 {ind.label}
               </a>

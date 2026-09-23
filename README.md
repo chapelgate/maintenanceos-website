@@ -2,7 +2,7 @@
 
 Truthful **pre-launch** marketing site for MaintenanceOS (not the product backend).
 
-**Brand System v0.3 (council lock)** — light paper, blue accent `#1D4ED8` / `#DBEAFE`. Visual Design Council direction **B** (2026-09-23): homepage hero proof is a labelled UNDER TEST supervisor UI shell. Optional light-A grid/glow is CSS-only. Wordmark stays flat ink. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
+**Brand System v0.3 + Local warmth override (2026-09-23)** — warm linen paper `#F3EEE4`, blue accent `#1D4ED8` / `#DBEAFE`. Homepage hero is photographic UK ops stills + a labelled UNDER TEST supervisor UI shell + a secondary intake orb. Wordmark stays flat ink. See `BRAND_SYSTEM.md`, `UI_VISUAL_SYSTEM.md`, and `src/app/globals.css`.
 
 ## Stance
 

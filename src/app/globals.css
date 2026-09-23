@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 /*
- * Brand System v0.3 — Design council lock (2026-09-22).
- * Light paper + blue accent. Orb is a SECONDARY “intake listening” cue.
- * Glow is single-hue blue: #3B82F6 → sky → white. No dusk, teal, violet, or rainbow.
+ * Brand System v0.3 + Local owner override (2026-09-23).
+ * Warmer linen paper, still light so blue CTAs remain WCAG AA.
+ * Glow stays single-hue blue: #3B82F6 → sky → white. No dusk, teal, violet, or rainbow.
  * Source: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / ui-preview/tokens.css
  */
 :root {
-  /* Core (Brand / UI Visual System) */
+  /* Core (Brand / UI Visual System) — paper warmed by Local owner override */
   --color-ink: #0f172a;
-  --color-muted: #475569;
-  --color-paper: #f8fafc;
-  --color-surface: #ffffff;
-  --color-border: #e2e8f0;
+  --color-muted: #57534e;
+  --color-paper: #f3eee4;
+  --color-surface: #fffaf4;
+  --color-border: #e6dfd2;
   --color-accent: #1d4ed8;
   /* White labels stay ≥4.5:1 on accent and hover (WCAG AA) */
   --color-accent-hover: #1e40af;
@@ -33,8 +33,8 @@
   --color-warning-border: #f59e0b;
   --color-warning-text: #92400e;
 
-  /* Elevation / radii / motion (UI Visual System) */
-  --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
+  /* Elevation / radii / motion — slightly deeper, still paper-safe */
+  --mos-shadow: 0 1px 2px rgb(28 25 23 / 7%), 0 14px 36px rgb(28 25 23 / 9%);
   --mos-radius: 8px;
   --mos-radius-lg: 12px;
   --mos-duration: 150ms;
@@ -116,7 +116,9 @@ summary:focus-visible {
 
   .intake-orb,
   .intake-orb::before,
-  .intake-orb::after {
+  .intake-orb::after,
+  .home-photo-motion,
+  .home-hero-shell {
     animation: none !important;
     transform: none !important;
     filter: none !important;
@@ -345,23 +347,29 @@ summary:focus-visible {
   color: var(--color-muted);
 }
 
-/* Soft blue wash for inner page heroes — gradient only, no extra blur layer. */
+/* Soft blue + cream wash for inner page heroes — gradient only, no extra blur. */
 .mos-page-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
-  background-image: radial-gradient(
-    ellipse 40% 80% at 100% 0%,
-    rgb(219 234 254 / 55%),
-    transparent 60%
-  );
+  background-image:
+    radial-gradient(
+      ellipse 40% 80% at 100% 0%,
+      rgb(219 234 254 / 48%),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 50% 60% at 0% 100%,
+      rgb(236 214 184 / 28%),
+      transparent 70%
+    );
 }
 
 /*
- * Direction B (± light A atmosphere): paper canvas, subtle grid, restrained
- * accent glow. Static CSS only — honour prefers-reduced-motion by staying still.
+ * Home atmosphere — warm linen paper, soft blue + cream depth.
+ * No clinical grid. No dusk / constellation sky.
  */
 .mos-hero-atmosphere {
   position: relative;
@@ -377,20 +385,150 @@ summary:focus-visible {
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(var(--color-border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-border) 1px, transparent 1px),
     radial-gradient(
-      ellipse 55% 45% at 82% 8%,
-      rgb(219 234 254 / 72%),
+      ellipse 60% 50% at 88% 0%,
+      rgb(219 234 254 / 55%),
       transparent 68%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 6% 100%,
+      rgb(236 214 184 / 42%),
+      transparent 70%
     );
-  background-size: 3rem 3rem, 3rem 3rem, auto;
-  opacity: 0.4;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .mos-hero-atmosphere::before {
-    opacity: 0.22;
+/* ——— Home photographic stage ——— */
+
+.home-hero-stage {
+  position: relative;
+}
+
+.home-hero-photos {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 0.7rem;
+}
+
+.home-photo-frame {
+  overflow: hidden;
+  border-radius: var(--mos-radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--mos-shadow);
+  background: var(--color-surface);
+}
+
+.home-photo-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-photo-frame--lead {
+  grid-row: span 2;
+  min-height: 16.5rem;
+  aspect-ratio: 880 / 766;
+}
+
+.home-photo-frame--phone,
+.home-photo-frame--trade {
+  min-height: 7.5rem;
+  aspect-ratio: 640 / 426;
+}
+
+.home-hero-orb {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  margin-block: -1.25rem 0.25rem;
+}
+
+.home-hero-shell {
+  position: relative;
+  z-index: 2;
+}
+
+.home-life-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--color-paper);
+}
+
+.home-life-band-frame {
+  position: relative;
+  min-height: 16rem;
+  overflow: hidden;
+}
+
+.home-life-band-frame img {
+  display: block;
+  width: 100%;
+  height: 16rem;
+  object-fit: cover;
+}
+
+@media (min-width: 640px) {
+  .home-life-band-frame img {
+    height: 20rem;
+  }
+}
+
+.home-life-band-copy {
+  position: relative;
+  z-index: 1;
+  margin: -3.5rem 1rem 1.5rem;
+  max-width: 36rem;
+  padding: 1.25rem 1.4rem;
+}
+
+@media (min-width: 640px) {
+  .home-life-band-copy {
+    margin-inline: auto;
+    margin-block: -4.5rem 2rem;
+  }
+}
+
+.home-close-band {
+  background:
+    radial-gradient(
+      ellipse 70% 80% at 100% 50%,
+      rgb(219 234 254 / 36%),
+      transparent 62%
+    ),
+    var(--color-surface);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-photo-motion {
+    animation: home-photo-drift 28s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  .home-hero-shell {
+    animation: home-shell-float 9s ease-in-out infinite;
+  }
+}
+
+@keyframes home-photo-drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.1) translate3d(-1.6%, 1.2%, 0);
+  }
+}
+
+@keyframes home-shell-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -6px, 0);
   }
 }
 
