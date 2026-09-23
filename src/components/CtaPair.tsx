@@ -14,16 +14,16 @@ export function CtaPair({
   className = "",
 }: CtaPairProps) {
   return (
-    <div className={`flex flex-wrap gap-3 ${className}`}>
+    <div className={`flex flex-col gap-3 sm:flex-row sm:flex-wrap ${className}`}>
       <a
         href={primaryHref}
-        className="inline-flex min-h-11 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
+        className="inline-flex min-h-11 min-w-6 w-full items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover sm:w-auto"
       >
         {primaryLabel}
       </a>
       <a
         href={secondaryHref}
-        className="inline-flex min-h-11 min-w-6 items-center justify-center rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-ink hover:border-accent hover:text-accent"
+        className="inline-flex min-h-11 min-w-6 w-full items-center justify-center rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-ink hover:border-accent hover:text-accent sm:w-auto"
       >
         {secondaryLabel}
       </a>

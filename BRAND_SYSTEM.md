@@ -1,6 +1,6 @@
 # Brand System v0.3 — light paper, blue accent (council lock)
 
-**Status:** Design council lock, 2026-09-22.  
+**Status:** Design council lock, 2026-09-22. Visual Design Council direction **B** locked 2026-09-23 (paper + `#1D4ED8` / `#DBEAFE`; homepage hero is a labelled UNDER TEST UI shell).  
 **Source of truth for tokens:** `src/app/globals.css` (mirrored in `docs/ui-preview/tokens.css`).  
 **Companion:** `UI_VISUAL_SYSTEM.md`.
 

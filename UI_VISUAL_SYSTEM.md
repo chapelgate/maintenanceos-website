@@ -8,14 +8,19 @@
 ## Surfaces
 
 - **Paper / surface:** light (`#F8FAFC` / `#FFFFFF`). Home hero stays light so blue CTAs remain WCAG AA.
-- **Ops glass** (`.mos-glass`): surface fill, 1px line (`--mos-line`), **one** `backdrop-filter` layer (≤12px blur), brand `--mos-shadow`, **12px** radius, ink type. Max **two** blur layers on a view (orb halo + panel).
+- **Ops glass** (`.mos-glass`): surface fill, 1px line (`--mos-line`), **one** `backdrop-filter` layer (≤12px blur), brand `--mos-shadow`, **12px** radius, ink type. Max **two** blur layers on a view (optional orb halo + panel).
 - **Page hero** (`.mos-page-hero`): light surface + a single blue wash (gradient only, no extra blur).
+- **Home atmosphere** (`.mos-hero-atmosphere`): paper canvas + optional light-A grid / restrained `#DBEAFE` glow. CSS-only, static; quieter under `prefers-reduced-motion`. Not a dark theme.
 
 Buttons, focus rings, and in-panel links inherit the existing system: `rounded-md`, `bg-accent` / outline secondary, `outline: 2px solid var(--color-accent)`.
 
-## Orb → cloud (homepage only)
+## Homepage hero proof (Visual Design Council, 2026-09-23)
 
-`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus into panel + restore). Secondary affordance: **intake listening**.
+Direction **B — Premium modern SaaS** (± light A atmosphere only).
+
+`ProductUiShell` is the homepage proof: a labelled **UNDER TEST** supervisor-style frame. Use `FeatureStatusChip` (outline + mark). No invented metrics, logos, testimonials, live DID, or live-phone theatre.
+
+`SiriOrbCloud` remains a **tiny client island** (toggle + Escape + focus into panel + restore) if reused as a secondary “intake listening” cue — not the hero, not the brand mark, not a CTA. Do not import it on `/create`.
 
 | State | Behaviour |
 | --- | --- |
@@ -36,7 +41,7 @@ Light PageHero wash only. **Never** place an orb above the URL field. Do not imp
 - `SiteHeader` stays a **server** component (`<details>` + inline Escape).
 - Wordmark stays flat `text-ink` — no accent fill.
 - `CtaPair` stays the primary conversion control on the home hero.
-- Banner / footer stay ink-on-paper as on main — not a dusk theme.
+- Banner / footer stay ink-on-paper — not a dusk theme.
 
 ## Motion / assets
 
@@ -48,7 +53,7 @@ CSS-first (transform / opacity / filter; no springs). Header `<details>` open/cl
 - Rainbow / teal / violet blooms or black circular glyphs
 - Dark glass hero that breaks blue CTA contrast
 - Nesting `/create` steps inside the cloud
-- Fake work-order metrics as the hero visual
+- Fake work-order **metrics** as the hero visual (a labelled UNDER TEST shell is required)
 - Interactive orb on `/create`
 - Fake live-call UI, always-on phone, fabricated social proof
 - Recolouring semantic warn/status chips to brand blue

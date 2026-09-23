@@ -12,7 +12,7 @@ const HEADER_DETAILS_ESCAPE = `document.addEventListener("keydown",function(e){i
 
 function Wordmark() {
   return (
-    <a href="/" className="text-lg text-ink" aria-label={siteConfig.name}>
+    <a href="/" className="text-lg tracking-tight text-ink" aria-label={siteConfig.name}>
       <span className="font-medium">Maintenance</span>
       <span className="font-semibold">OS</span>
     </a>
@@ -53,8 +53,8 @@ function MenuIcon() {
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
-      <div className="mx-auto flex min-h-16 max-w-[70rem] flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 md:px-6">
+    <header className="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-md supports-[backdrop-filter]:bg-surface/80">
+      <div className="mx-auto flex min-h-14 max-w-[70rem] flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 md:min-h-16 md:px-6">
         <Wordmark />
 
         <nav

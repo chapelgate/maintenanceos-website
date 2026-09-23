@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { HonestyBanner } from "@/components/HonestyBanner";
+import { HomeIndustries } from "@/components/HomeIndustries";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
@@ -8,7 +9,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { ProductTourWatchLink } from "@/components/ProductTour";
-import { SiriOrbCloud } from "@/components/SiriOrbCloud";
+import { ProductUiShell } from "@/components/ProductUiShell";
 import { UkScenarioVignettes } from "@/components/UkScenarioVignettes";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
@@ -17,28 +18,22 @@ export const metadata: Metadata = funnelPageMetadata("home");
 
 const pillars = [
   {
-    title: "AI for intake. Rules for the operation.",
-    body: "The receptionist is designed to gather caller details and classify the issue (capability under testing). Lifecycle, safety latching, escalations, and approvals stay on deterministic server controls. The AI does not override safety or perform consequential actions on its own.",
-    href: "/how-it-works/",
-    link: "See how it works",
+    title: "Intake assistance",
+    body: "Designed to collect caller details and classify issues in UK property-maintenance language. Capability under testing — not a public always-on phone service.",
+    href: "/ai-receptionist/",
+    link: "AI receptionist",
   },
   {
-    title: "Built for UK property maintenance.",
-    body: "Multi-tenant properties, residents, contractors, work orders, jobs, communications, and call sessions — not a generic chatbot. Capabilities are present in product source and under testing for release. The receptionist capability is built for UK terminology — under testing, including 999 emergency guidance where relevant. It is designed to collect caller details.",
-    href: "/features/",
-    link: "Features",
-  },
-  {
-    title: "Money and safety stay out of the model’s hands.",
-    body: "No payment, refund, compensation, fee-waiver, or client-money execution authority. Emergency detection and human clearance are rule-driven. Critical safety paths are designed to latch until a person clears them.",
+    title: "Deterministic control",
+    body: "Safety latching, lifecycle, escalations, and approvals sit in server rules. The model does not override safety or money prohibitions.",
     href: "/security/",
     link: "Security",
   },
   {
-    title: "Human when it matters.",
-    body: "Callers can request a live transfer (explicit request). The system is designed not to invent bookings, dispatches, refunds, compensation, account information, or safety assurances. Voice intake remains under testing for release — not offered as a public always-on service. Prior validation calls have been used in testing; further controlled testing is underway.",
-    href: "/ai-receptionist/",
-    link: "AI receptionist",
+    title: "Human clearance",
+    body: "Critical paths are designed to require authorised human clearance. Explicit transfer requests keep judgement with your team.",
+    href: "/how-it-works/",
+    link: "See how it works",
   },
 ] as const;
 
@@ -46,21 +41,26 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={funnelPageJsonLd("home")} />
-      {/* 1. Hero — light paper; locked CTAs stay primary; orb is secondary */}
-      <section className="border-b border-border bg-surface px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
-          <div>
-            <p className="inline-flex items-center rounded-md bg-accent-subtle px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-accent">
-              Pre-launch · United Kingdom
+      {/* 1. Hero — paper + labelled UNDER TEST supervisor shell */}
+      <section
+        className="mos-hero-atmosphere border-b border-border px-4 py-12 sm:px-6 sm:py-16 lg:py-20"
+        aria-labelledby="hero-heading"
+      >
+        <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-5">
+            <p className="inline-flex items-center rounded-full bg-accent-subtle px-3 py-1 text-xs font-semibold text-accent">
+              Pre-launch · Under test · UK
             </p>
-            <h1 className="mt-5 text-4xl font-semibold tracking-tight text-ink sm:text-5xl sm:leading-[1.12]">
+            <h1
+              id="hero-heading"
+              className="mt-5 text-3xl font-semibold tracking-tight text-ink [text-wrap:balance] sm:text-4xl sm:leading-[1.12] lg:text-[2.75rem] lg:leading-[1.12]"
+            >
               UK maintenance operations. AI intake. Rules keep control.
             </h1>
-            <p className="mt-5 text-lg leading-relaxed text-ink">
-              MaintenanceOS is a multi-tenant platform for UK landlords, letting
-              agents, and property managers. An AI receptionist layer is designed
-              to collect and classify what callers say (under testing);
-              deterministic rules own safety, approvals, and money prohibitions.
+            <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
+              MaintenanceOS is a UK maintenance operations platform for
+              landlords, agents, and property teams. AI assists intake; rules
+              keep control of safety and money. Not generally available yet.
             </p>
             <CtaPair
               className="mt-8"
@@ -69,6 +69,9 @@ export default function HomePage() {
               secondaryHref="/demo/#demo"
               secondaryLabel="Request early access"
             />
+            <p className="mt-4 text-sm text-muted">
+              Funnel: Website → Review pack → Early access.
+            </p>
             <ProductTourWatchLink className="mt-3" />
             <HomeRoleChips />
             <p className="mt-5 text-sm leading-relaxed text-muted">
@@ -83,7 +86,9 @@ export default function HomePage() {
             </p>
           </div>
 
-          <SiriOrbCloud />
+          <div className="lg:col-span-7" id="product">
+            <ProductUiShell />
+          </div>
         </div>
       </section>
 
@@ -91,43 +96,51 @@ export default function HomePage() {
 
       <HomeOnboardingSteps />
 
-      {/* 2. Value pillars */}
+      {/* 2. Principles — AI for intake; rules for the operation */}
       <section
+        id="principles"
         aria-labelledby="home-why-heading"
-        className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20"
+        className="border-b border-border bg-surface px-4 py-14 sm:px-6 sm:py-20"
       >
-        <h2
-          id="home-why-heading"
-          className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
-        >
-          Why MaintenanceOS
-        </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          UK maintenance ops first. AI assists at intake. Rules and people own
-          safety and money. Still pre-launch — not a live always-on phone.
-        </p>
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {pillars.map((pillar) => (
-            <article
-              key={pillar.title}
-              className="mos-glass p-6 sm:p-8"
-            >
-              <h3 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-                {pillar.title}
-              </h3>
-              <p className="mt-3 text-base leading-relaxed text-ink">{pillar.body}</p>
-              <p className="mt-5 text-sm">
-                <a
-                  href={pillar.href}
-                  className="font-semibold text-accent underline-offset-4 hover:underline"
-                >
-                  {pillar.link}
-                </a>
-              </p>
-            </article>
-          ))}
+        <div className="mx-auto max-w-6xl">
+          <h2
+            id="home-why-heading"
+            className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+          >
+            AI for intake. Rules for the operation.
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+            Clear separation of assistance and authority — claims-safe for
+            pre-launch. UK maintenance ops first. Still not a live always-on
+            phone.
+          </p>
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {pillars.map((pillar) => (
+              <article
+                key={pillar.title}
+                className="rounded-[var(--mos-radius-lg)] border border-border bg-paper p-5 sm:p-6"
+              >
+                <h3 className="text-xl font-semibold tracking-tight text-ink">
+                  {pillar.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {pillar.body}
+                </p>
+                <p className="mt-5 text-sm">
+                  <a
+                    href={pillar.href}
+                    className="font-semibold text-accent underline-offset-4 hover:underline"
+                  >
+                    {pillar.link}
+                  </a>
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
+
+      <HomeIndustries />
 
       <UkScenarioVignettes />
 
