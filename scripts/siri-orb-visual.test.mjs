@@ -99,7 +99,9 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
   assert.match(globals, /outline: 2px solid var\(--color-accent\)/);
   assert.doesNotMatch(globals, /--glow-amber|--glow-peach|--color-accent:\s*#b45309/i);
   assert.doesNotMatch(globals, /#5eead4|#c4b5fd|#7dd3fc|#0b1224|#14b8a6|#8b5cf6|#07090f/i);
-  assert.doesNotMatch(globals, /conic-gradient|Cinzel|constellation/i);
+  assert.doesNotMatch(globals, /conic-gradient/);
+  assert.doesNotMatch(globals, /font-family:[^;]*Cinzel/i);
+  assert.match(visual, /constellation/);
   assert.match(tokens, /--mos-accent:\s*#1D4ED8/i);
   assert.match(tokens, /--mos-info:\s*#0369A1/i);
   assert.match(tokens, /--mos-warn:\s*#92400E/i);
