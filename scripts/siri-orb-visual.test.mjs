@@ -26,7 +26,9 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   assert.match(home, /Request early access/);
   assert.match(home, /No live phone demo/);
   assert.match(visual, /SiriOrbCloud/);
+  assert.match(visual, /home-orb-stage/);
   assert.doesNotMatch(visual, /ProductUiShell/);
+  assert.doesNotMatch(visual, /HOME_MEDIA|HomePhoto|uk-terrace/);
   assert.doesNotMatch(home, /mos-hero-dusk/);
   assert.doesNotMatch(home, /tone="on-dusk"/);
   assert.doesNotMatch(home, /Placeholder ops chrome/);
@@ -65,6 +67,8 @@ test("create page does not sit an orb above the URL field", () => {
 
   assert.doesNotMatch(page, /SiriOrbCloud/);
   assert.doesNotMatch(page, /CreateOrbAccent/);
+  assert.doesNotMatch(page, /IntakeOrbAccent/);
+  assert.doesNotMatch(page, /orbAccent/);
   assert.match(form, /Business website URL \(required\)/);
   assert.match(form, /data-create-primary-action=""/);
   assert.match(form, /Check this website/);
@@ -94,8 +98,10 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
   assert.match(globals, /--color-paper:\s*#f8fafc/i);
   assert.match(globals, /outline: 2px solid var\(--color-accent\)/);
   assert.doesNotMatch(globals, /--glow-amber|--glow-peach|--color-accent:\s*#b45309/i);
-  assert.doesNotMatch(globals, /#5eead4|#c4b5fd|#7dd3fc|#0b1224|#14b8a6|#8b5cf6/i);
+  assert.doesNotMatch(globals, /#5eead4|#c4b5fd|#7dd3fc|#0b1224|#14b8a6|#8b5cf6|#07090f/i);
   assert.doesNotMatch(globals, /conic-gradient/);
+  assert.doesNotMatch(globals, /font-family:[^;]*Cinzel/i);
+  assert.match(visual, /constellation/);
   assert.match(tokens, /--mos-accent:\s*#1D4ED8/i);
   assert.match(tokens, /--mos-info:\s*#0369A1/i);
   assert.match(tokens, /--mos-warn:\s*#92400E/i);
@@ -145,6 +151,10 @@ test("motion lock: CSS-only idle morph, menu fade, reduced-motion instant", () =
 
   assert.match(
     globals,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.intake-orb-accent[\s\S]*animation: none !important/,
+  );
+  assert.match(
+    globals,
     /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.intake-orb::after[\s\S]*animation: none !important/,
   );
   assert.match(
@@ -167,15 +177,65 @@ test("home photographs are licensed stock, not customers or RelicVault assets", 
   assert.match(media, /Pexels License/);
   assert.match(media, /Stock photograph/);
   assert.match(media, /Not a MaintenanceOS customer/);
-  assert.match(visual, /HOME_MEDIA/);
+  assert.doesNotMatch(media, /uk-terrace|5lJAQ8yjzCM|terrace/);
+  assert.match(visual, /home-orb-stage/);
+  assert.doesNotMatch(visual, /HOME_MEDIA|HomePhoto|uk-terrace/);
   assert.match(strip, /HOME_MEDIA/);
   assert.match(strip, /not testimonials/);
   assert.match(band, /HOME_MEDIA/);
-  assert.match(sources, /unsplash\.com\/photos\/5lJAQ8yjzCM/);
   assert.match(sources, /pexels\.com\/photo\/3760263/);
+  assert.match(sources, /unsplash\.com\/photos\/_2AlIm-F6pw/);
+  assert.doesNotMatch(sources, /5lJAQ8yjzCM/);
   assert.doesNotMatch(media, /relicvault/i);
   assert.doesNotMatch(visual, /trusted by|testimonial|10,000/i);
   assert.doesNotMatch(strip, /trusted by|our customers/i);
   assert.doesNotMatch(band, /trusted by|testimonial/i);
   assert.doesNotMatch(home, /relicvault/i);
+  assert.ok(!fs.existsSync(path.join(ROOT, "public/media/home/uk-terrace.webp")));
+});
+
+test("hero orb fills the old photo footprint on paper with a blue-only wash", () => {
+  const globals = read("src/app/globals.css");
+  const visual = read("src/components/HomeHeroVisual.tsx");
+  assert.match(globals, /\.home-orb-stage[\s\S]*min-height:\s*16\.5rem/);
+  assert.match(globals, /\.home-orb-stage \.intake-orb[\s\S]*min\(72cqi,\s*20rem\)/);
+  assert.match(globals, /\.home-orb-stage[\s\S]*--color-paper/);
+  assert.match(globals, /\.home-orb-stage[\s\S]*--color-accent-subtle|219 234 254/);
+  assert.match(globals, /\.home-orb-stage[\s\S]*59 130 246/);
+  assert.doesNotMatch(globals, /home-photo-frame--lead|home-hero-orb/);
+  assert.doesNotMatch(
+    globals,
+    /\.home-orb-stage[\s\S]{0,400}236 214 184/,
+  );
+  assert.doesNotMatch(visual, /HOME_MEDIA|HomePhoto|uk-terrace/);
+});
+
+test("restrained orb accents sit on key marketing bands, not cards or /create", () => {
+  const accent = read("src/components/IntakeOrbAccent.tsx");
+  const pageHero = read("src/components/PageHero.tsx");
+  const home = read("src/app/page.tsx");
+  const industries = read("src/components/HomeIndustries.tsx");
+  const steps = read("src/components/HomeOnboardingSteps.tsx");
+  const band = read("src/components/HomeLifeBand.tsx");
+  const how = read("src/app/how-it-works/page.tsx");
+  const features = read("src/app/features/page.tsx");
+  const industriesPage = read("src/app/industries/page.tsx");
+  const pricing = read("src/app/pricing/page.tsx");
+  const create = read("src/app/create/page.tsx");
+  const demo = read("src/app/demo/page.tsx");
+
+  assert.doesNotMatch(accent, /["']use client["']/);
+  assert.match(accent, /aria-hidden="true"/);
+  assert.match(pageHero, /orbAccent = false/);
+  assert.match(home, /IntakeOrbAccent/);
+  assert.match(industries, /IntakeOrbAccent/);
+  assert.match(steps, /IntakeOrbAccent/);
+  assert.match(band, /IntakeOrbAccent/);
+  assert.match(how, /orbAccent/);
+  assert.match(features, /orbAccent/);
+  assert.match(industriesPage, /orbAccent/);
+  assert.match(pricing, /orbAccent/);
+  assert.doesNotMatch(create, /orbAccent|IntakeOrbAccent|SiriOrbCloud/);
+  assert.doesNotMatch(demo, /orbAccent/);
+  assert.doesNotMatch(industries, /industryRoles\.map[\s\S]*IntakeOrbAccent/);
 });

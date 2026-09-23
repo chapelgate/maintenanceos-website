@@ -1,12 +1,22 @@
+import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
+
 type PageHeroProps = {
   title: string;
   lede: string;
   eyebrow?: string;
+  /** Restrained glow on key marketing headers only. Never on /create. */
+  orbAccent?: boolean;
 };
 
-export function PageHero({ title, lede, eyebrow }: PageHeroProps) {
+export function PageHero({
+  title,
+  lede,
+  eyebrow,
+  orbAccent = false,
+}: PageHeroProps) {
   return (
     <header className="mos-page-hero px-4 py-12 sm:py-16">
+      {orbAccent ? <IntakeOrbAccent size="header" /> : null}
       <div className="relative mx-auto max-w-3xl">
         {eyebrow ? (
           <p className="mb-2 text-sm font-medium uppercase tracking-wide text-accent">

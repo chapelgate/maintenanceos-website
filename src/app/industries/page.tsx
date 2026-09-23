@@ -17,6 +17,7 @@ export default function IndustriesPage() {
         eyebrow="Pre-launch · United Kingdom"
         title="One OS per industry."
         lede="Each role is its own product line under Chapelgate Technologies — industry name with OS on the end. Copy is written for UK property-maintenance operations (emergency triage vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money) — not a generic AI receptionist. Pilot-stage — not commercial general availability."
+        orbAccent
       />
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-12">
         <p className="max-w-3xl text-sm text-muted">

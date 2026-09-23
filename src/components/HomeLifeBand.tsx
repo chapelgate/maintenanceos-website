@@ -1,4 +1,5 @@
 import { HomePhoto } from "@/components/HomePhoto";
+import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 import { HOME_MEDIA } from "@/content/home-media";
 
 /**
@@ -21,21 +22,26 @@ export function HomeLifeBand() {
         />
       </div>
       <div className="home-life-band-copy mos-glass">
-        <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-          Stock photograph · UK street
-        </p>
-        <h2
-          id="home-life-heading"
-          className="mt-2 text-xl font-semibold tracking-tight text-ink sm:text-2xl"
-        >
-          Street, site, and desk — the same operation
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          MaintenanceOS is designed for UK property and maintenance teams who
-          work from a phone as often as a desk. This picture is licensed stock,
-          not a customer estate and not a live job. The public path is still
-          website → review pack → early access.
-        </p>
+        <div className="section-band-head">
+          <IntakeOrbAccent />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+              Stock photograph · UK street
+            </p>
+            <h2
+              id="home-life-heading"
+              className="mt-2 text-xl font-semibold tracking-tight text-ink sm:text-2xl"
+            >
+              Street, site, and desk — the same operation
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              MaintenanceOS is designed for UK property and maintenance teams who
+              work from a phone as often as a desk. This picture is licensed stock,
+              not a customer estate and not a live job. The public path is still
+              website → review pack → early access.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

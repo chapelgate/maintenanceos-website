@@ -33,6 +33,7 @@ export default function HowItWorksPage() {
         eyebrow="Pre-launch. Not a public live service yet."
         title="From your website URL to a sandbox receptionist pack."
         lede="Website → Check → Review → Pack, then request early access. An optional scripted sandbox sits after the pack when a local flag is on. We do not invent crawl results, bookings, or a live phone number."
+        orbAccent
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">

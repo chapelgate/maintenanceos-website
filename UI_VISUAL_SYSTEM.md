@@ -19,9 +19,11 @@ Buttons, focus rings, and in-panel links inherit the existing system: `rounded-m
 
 Direction **warm photographic operations** on Direction B tokens (blue accent + labelled UNDER TEST shell). Atmosphere borrowed from RelicVault’s *feel* only — not their brand.
 
-`HomeHeroVisual` is the hero photograph + secondary `SiriOrbCloud`. `HomeLifestyleStrip` sits under the H1 (people/phones, labelled stock). The labelled **UNDER TEST** `ProductUiShell` sits **below** the hero as honesty proof. Use `FeatureStatusChip` (outline + mark). No invented metrics, logos, testimonials, live DID, or live-phone theatre.
+`HomeHeroVisual` is a paper stage for a secondary `SiriOrbCloud` sized to the old 4:3 photo footprint. Soft `#DBEAFE` / `#3B82F6` wash behind the orb only. No luxury terrace photograph and no replacement stock in that slot. `HomeLifestyleStrip` sits under the H1 (people/phones, labelled stock). The labelled **UNDER TEST** `ProductUiShell` sits **below** the hero as honesty proof. Use `FeatureStatusChip` (outline + mark). No invented metrics, logos, testimonials, live DID, or live-phone theatre.
 
-`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus into panel + restore) restored as a secondary “intake listening” cue — not the brand mark, not a CTA, not “call the AI”. Create stays the primary control. Do not import the orb on `/create`.
+`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus into panel + restore) restored as a secondary “intake listening” cue — not the brand mark, not a CTA, not “call the AI”. Create stays the primary control. Do not import the interactive orb on `/create`.
+
+`IntakeOrbAccent` is a CSS-only decorative glow on key section bands and opted-in `PageHero` headers (how-it-works, features, industries, pricing). Not a second logo. Not on every card. Default `PageHero` has no accent.
 
 | State | Behaviour |
 | --- | --- |

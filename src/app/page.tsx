@@ -3,6 +3,7 @@ import { CtaPair } from "@/components/CtaPair";
 import { HonestyBanner } from "@/components/HonestyBanner";
 import { HomeHeroVisual } from "@/components/HomeHeroVisual";
 import { HomeIndustries } from "@/components/HomeIndustries";
+import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 import { HomeLifeBand } from "@/components/HomeLifeBand";
 import { HomeLifestyleStrip } from "@/components/HomeLifestyleStrip";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
@@ -124,17 +125,22 @@ export default function HomePage() {
         className="border-b border-border bg-surface px-4 py-14 sm:px-6 sm:py-20"
       >
         <div className="mx-auto max-w-6xl">
-          <h2
-            id="home-why-heading"
-            className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
-          >
-            AI for intake. Rules for the operation.
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-            Clear separation of assistance and authority — claims-safe for
-            pre-launch. UK maintenance ops first. Still not a live always-on
-            phone.
-          </p>
+          <div className="section-band-head">
+            <IntakeOrbAccent />
+            <div>
+              <h2
+                id="home-why-heading"
+                className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+              >
+                AI for intake. Rules for the operation.
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+                Clear separation of assistance and authority — claims-safe for
+                pre-launch. UK maintenance ops first. Still not a live always-on
+                phone.
+              </p>
+            </div>
+          </div>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {pillars.map((pillar) => (
               <article
@@ -172,21 +178,24 @@ export default function HomePage() {
       {/* 4. Closing CTA band — after the objection set, not per question */}
       <section className="home-close-band px-4 py-14 sm:px-6">
         <div className="mos-glass mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
-          <div className="max-w-lg">
-            <h2 className="text-xl font-semibold text-ink sm:text-2xl">
-              Join the list or start from your website
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
-              Early access is opening carefully. The public path is website URL
-              → scan/draft → knowledge pack → optional scripted sandbox → early
-              access. No live phone demo from this site.{" "}
-              <a
-                href="/create/"
-                className="font-medium text-accent underline-offset-4 hover:underline"
-              >
-                Create from website
-              </a>
-            </p>
+          <div className="section-band-head max-w-lg">
+            <IntakeOrbAccent />
+            <div>
+              <h2 className="text-xl font-semibold text-ink sm:text-2xl">
+                Join the list or start from your website
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                Early access is opening carefully. The public path is website URL
+                → scan/draft → knowledge pack → optional scripted sandbox → early
+                access. No live phone demo from this site.{" "}
+                <a
+                  href="/create/"
+                  className="font-medium text-accent underline-offset-4 hover:underline"
+                >
+                  Create from website
+                </a>
+              </p>
+            </div>
           </div>
           <CtaPair
             primaryHref="/create/"
