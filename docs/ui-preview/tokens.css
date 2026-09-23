@@ -7,10 +7,10 @@
 :root {
   /* Core */
   --mos-ink: #0F172A;
-  --mos-ink-muted: #57534E;
-  --mos-paper: #F3EEE4;
-  --mos-surface: #FFFAF4;
-  --mos-line: #E6DFD2;
+  --mos-ink-muted: #475569;
+  --mos-paper: #F8FAFC;
+  --mos-surface: #FFFFFF;
+  --mos-line: #E2E8F0;
   --mos-accent: #1D4ED8;
   --mos-accent-hover: #1E40AF;
   --mos-accent-subtle: #DBEAFE;
@@ -28,7 +28,7 @@
   --mos-info: #0369A1;
 
   /* Elevation — Brand one soft shadow */
-  --mos-shadow: 0 1px 2px rgb(28 25 23 / 7%), 0 14px 36px rgb(28 25 23 / 9%);
+  --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
 
   /* Radii */
   --mos-radius: 8px;

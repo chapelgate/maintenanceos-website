@@ -4,11 +4,13 @@ Local (owner) asked for moving parts, real-life pictures, people on phones, less
 
 ## What we adopted
 
-- Warm linen paper (`#F3EEE4`) and cream surface instead of sterile slate chrome
-- Photographic hero: UK brick houses + scaffolding, a person on a phone, a tradesperson at a wall box
-- A cinematic street band of pale gabled houses
-- CSS motion (slow photo ken-burns, soft shell float, existing orb morph)
-- Secondary `SiriOrbCloud` listening cue on the home visual — Create stays primary
+- Light paper stays `#F8FAFC`; warmth is photographic, not a recolour
+- Hero photograph: UK brick houses + scaffolding, with the morphing blue orb as a secondary visual
+- Lifestyle strip under the H1: person on a phone + tradesperson (labelled stock, not customers)
+- Cinematic street band of pale gabled houses
+- CSS motion (slow photo ken-burns + existing orb morph), gated on `prefers-reduced-motion`
+- Labelled UNDER TEST `ProductUiShell` **below** the hero as honesty proof
+- Create / Join stay louder than photos and motion
 
 ## What we deliberately did not copy
 
@@ -27,7 +29,7 @@ Under `prefers-reduced-motion: reduce`:
 
 - Orb idle morph / halo / sheen is off; panel open/close is instant
 - Header menu fade is instant
-- Home photo ken-burns and shell float are off (`animation: none`, `transform: none`)
+- Home photo ken-burns is off (`animation: none`, `transform: none`)
 - Funnel pages inherit the warmer tokens only — no orb, no new photography
 
 ## Conversion and honesty (unchanged)

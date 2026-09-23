@@ -8,7 +8,7 @@
 
 ## Surfaces
 
-- **Paper / surface:** warm linen (`#F3EEE4` / `#FFFAF4`). Home hero stays light so blue CTAs remain WCAG AA.
+- **Paper / surface:** light (`#F8FAFC` / `#FFFFFF`). Home hero stays light so blue CTAs remain WCAG AA. Warmth is licensed photography, not a paper recolour.
 - **Ops glass** (`.mos-glass`): surface fill, 1px line (`--mos-line`), **one** `backdrop-filter` layer (≤12px blur), brand `--mos-shadow`, **12px** radius, ink type. Max **two** blur layers on a view (optional orb halo + panel).
 - **Page hero** (`.mos-page-hero`): warm surface + blue and cream wash (gradient only, no extra blur).
 - **Home atmosphere** (`.mos-hero-atmosphere`): linen canvas + restrained `#DBEAFE` and cream depth. CSS-only; quieter under `prefers-reduced-motion`. Not a dark theme.
@@ -19,9 +19,9 @@ Buttons, focus rings, and in-panel links inherit the existing system: `rounded-m
 
 Direction **warm photographic operations** on Direction B tokens (blue accent + labelled UNDER TEST shell). Atmosphere borrowed from RelicVault’s *feel* only — not their brand.
 
-`HomeHeroVisual` is the homepage proof: licensed UK property / phone / trades stills, the labelled **UNDER TEST** `ProductUiShell`, and a secondary `SiriOrbCloud`. Use `FeatureStatusChip` (outline + mark). No invented metrics, logos, testimonials, live DID, or live-phone theatre.
+`HomeHeroVisual` is the hero photograph + secondary `SiriOrbCloud`. `HomeLifestyleStrip` sits under the H1 (people/phones, labelled stock). The labelled **UNDER TEST** `ProductUiShell` sits **below** the hero as honesty proof. Use `FeatureStatusChip` (outline + mark). No invented metrics, logos, testimonials, live DID, or live-phone theatre.
 
-`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus into panel + restore) restored as a secondary “intake listening” cue beside the photographs — not the hero, not the brand mark, not a CTA. Create stays the primary control. Do not import the orb on `/create`.
+`SiriOrbCloud` is a **tiny client island** (toggle + Escape + focus into panel + restore) restored as a secondary “intake listening” cue — not the brand mark, not a CTA, not “call the AI”. Create stays the primary control. Do not import the orb on `/create`.
 
 | State | Behaviour |
 | --- | --- |

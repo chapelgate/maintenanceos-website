@@ -4,9 +4,11 @@ import { HonestyBanner } from "@/components/HonestyBanner";
 import { HomeHeroVisual } from "@/components/HomeHeroVisual";
 import { HomeIndustries } from "@/components/HomeIndustries";
 import { HomeLifeBand } from "@/components/HomeLifeBand";
+import { HomeLifestyleStrip } from "@/components/HomeLifestyleStrip";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
+import { ProductUiShell } from "@/components/ProductUiShell";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
@@ -74,6 +76,7 @@ export default function HomePage() {
               Funnel: Website → Review pack → Early access.
             </p>
             <ProductTourWatchLink className="mt-3" />
+            <HomeLifestyleStrip />
             <HomeRoleChips />
             <p className="mt-5 text-sm leading-relaxed text-muted">
               Pilot-stage. Core controls are real; public always-on phone is not
@@ -90,6 +93,21 @@ export default function HomePage() {
           <div className="lg:col-span-7" id="product">
             <HomeHeroVisual />
           </div>
+        </div>
+      </section>
+
+      <section
+        className="border-b border-border bg-paper px-4 py-8 sm:px-6"
+        aria-labelledby="hero-shell-heading"
+      >
+        <div className="mx-auto max-w-6xl">
+          <h2
+            id="hero-shell-heading"
+            className="sr-only"
+          >
+            Supervisor shell · under test
+          </h2>
+          <ProductUiShell />
         </div>
       </section>
 

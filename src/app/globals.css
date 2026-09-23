@@ -7,12 +7,12 @@
  * Source: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / ui-preview/tokens.css
  */
 :root {
-  /* Core (Brand / UI Visual System) — paper warmed by Local owner override */
+  /* Core (Brand / UI Visual System) — paper stays #F8FAFC (council lock). */
   --color-ink: #0f172a;
-  --color-muted: #57534e;
-  --color-paper: #f3eee4;
-  --color-surface: #fffaf4;
-  --color-border: #e6dfd2;
+  --color-muted: #475569;
+  --color-paper: #f8fafc;
+  --color-surface: #ffffff;
+  --color-border: #e2e8f0;
   --color-accent: #1d4ed8;
   /* White labels stay ≥4.5:1 on accent and hover (WCAG AA) */
   --color-accent-hover: #1e40af;
@@ -33,8 +33,8 @@
   --color-warning-border: #f59e0b;
   --color-warning-text: #92400e;
 
-  /* Elevation / radii / motion — slightly deeper, still paper-safe */
-  --mos-shadow: 0 1px 2px rgb(28 25 23 / 7%), 0 14px 36px rgb(28 25 23 / 9%);
+  /* Elevation / radii / motion (UI Visual System) */
+  --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
   --mos-radius: 8px;
   --mos-radius-lg: 12px;
   --mos-duration: 150ms;
@@ -117,8 +117,7 @@ summary:focus-visible {
   .intake-orb,
   .intake-orb::before,
   .intake-orb::after,
-  .home-photo-motion,
-  .home-hero-shell {
+  .home-photo-motion {
     animation: none !important;
     transform: none !important;
     filter: none !important;
@@ -403,12 +402,6 @@ summary:focus-visible {
   position: relative;
 }
 
-.home-hero-photos {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 0.7rem;
-}
-
 .home-photo-frame {
   overflow: hidden;
   border-radius: var(--mos-radius-lg);
@@ -425,14 +418,22 @@ summary:focus-visible {
 }
 
 .home-photo-frame--lead {
-  grid-row: span 2;
   min-height: 16.5rem;
   aspect-ratio: 880 / 766;
 }
 
-.home-photo-frame--phone,
-.home-photo-frame--trade {
-  min-height: 7.5rem;
+.home-lifestyle-strip {
+  margin-top: 1.5rem;
+}
+
+.home-lifestyle-strip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.home-photo-frame--strip {
+  min-height: 6.5rem;
   aspect-ratio: 640 / 426;
 }
 
@@ -441,12 +442,7 @@ summary:focus-visible {
   z-index: 3;
   display: flex;
   justify-content: center;
-  margin-block: -1.25rem 0.25rem;
-}
-
-.home-hero-shell {
-  position: relative;
-  z-index: 2;
+  margin-block: -2.25rem 0;
 }
 
 .home-life-band {
@@ -505,10 +501,6 @@ summary:focus-visible {
     animation: home-photo-drift 28s ease-in-out infinite alternate;
     will-change: transform;
   }
-
-  .home-hero-shell {
-    animation: home-shell-float 9s ease-in-out infinite;
-  }
 }
 
 @keyframes home-photo-drift {
@@ -521,16 +513,6 @@ summary:focus-visible {
   }
 }
 
-@keyframes home-shell-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  50% {
-    transform: translate3d(0, -6px, 0);
-  }
-}
 
 /* ——— Intake listening orb (secondary affordance) ——— */
 

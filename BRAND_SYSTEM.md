@@ -1,12 +1,12 @@
 # Brand System v0.3 — warm paper, blue accent
 
-**Status:** Design council lock 2026-09-22, **Local owner override 2026-09-23**. Visual Design Council direction **B** (blue accent + labelled UNDER TEST shell) stays. Local asked for RelicVault-*like* warmth: photographic, human, moving — not a clinical B-flat SaaS chrome.  
+**Status:** Design council lock 2026-09-22, **Local owner override 2026-09-23** (atmosphere only). Visual Design Council soft-cleared RelicVault-like warmth with locked paper `#F8FAFC`, accent `#1D4ED8`, and a labelled UNDER TEST shell **below** the hero. Local asked for photographic, human, moving — not clinical B-flat chrome.  
 **Source of truth for tokens:** `src/app/globals.css` (mirrored in `docs/ui-preview/tokens.css`).  
 **Companion:** `UI_VISUAL_SYSTEM.md`.
 
 ## Intent
 
-UK maintenance operations product on **warm linen paper**. Blue `#1D4ED8` is the brand accent (CTAs, focus rings). Orb glow is a single blue hue (`#3B82F6` → sky → white). The orb is a **secondary “intake listening” cue** on the home hero visual — not the brand mark and not a conversion control. The wordmark stays **flat ink** — no blue logo fill.
+UK maintenance operations product on **light paper**. Blue `#1D4ED8` is the brand accent (CTAs, focus rings — louder than photos/motion). Orb glow is a single blue hue (`#3B82F6` → sky → white). The orb is a **secondary “intake listening” cue** on the home hero visual — not the brand mark and not a conversion control. The wordmark stays **flat ink** — no blue logo fill.
 
 Locked public CTAs stay primary: **Create from website** (`/create/`), **Join launch list**, **Request early demo / access**. Do not put those inside the orb or sit an orb above the `/create` URL field.
 
@@ -15,10 +15,10 @@ Locked public CTAs stay primary: **Create from website** (`/create/`), **Join la
 | Token | Value | Use |
 | --- | --- | --- |
 | Ink | `#0F172A` | Body text and wordmark (AA on paper/surface) |
-| Muted | `#57534E` | Secondary text (warmer stone) |
-| Paper | `#F3EEE4` | Warm linen page canvas — still light for blue CTA AA |
-| Surface | `#FFFAF4` | Cards, ops glass fill |
-| Line | `#E6DFD2` | Thin borders |
+| Muted | `#475569` | Secondary text |
+| Paper | `#F8FAFC` | Page canvas (council lock — warmth is photographic, not a recolour) |
+| Surface | `#FFFFFF` | Cards, ops glass fill |
+| Line | `#E2E8F0` | Thin borders |
 | Accent | `#1D4ED8` | CTA fill + focus rings — white label ≥4.5:1 |
 | Accent hover | `#1E40AF` | CTA hover (AA) |
 | Accent subtle | `#DBEAFE` | Soft blue wash |

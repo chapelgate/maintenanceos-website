@@ -18,13 +18,15 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   const orb = read("src/components/SiriOrbCloud.tsx");
 
   assert.match(home, /HomeHeroVisual/);
+  assert.match(home, /HomeLifestyleStrip/);
+  assert.match(home, /ProductUiShell/);
   assert.match(home, /mos-hero-atmosphere/);
   assert.match(home, /primaryHref="\/create\/"/);
   assert.match(home, /Create from website/);
   assert.match(home, /Request early access/);
   assert.match(home, /No live phone demo/);
   assert.match(visual, /SiriOrbCloud/);
-  assert.match(visual, /ProductUiShell/);
+  assert.doesNotMatch(visual, /ProductUiShell/);
   assert.doesNotMatch(home, /mos-hero-dusk/);
   assert.doesNotMatch(home, /tone="on-dusk"/);
   assert.doesNotMatch(home, /Placeholder ops chrome/);
@@ -89,7 +91,7 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
   assert.match(globals, /--color-info:\s*#0369a1/i);
   assert.match(globals, /--color-warn:\s*#92400e/i);
   assert.match(globals, /--color-warning-border:\s*#f59e0b/i);
-  assert.match(globals, /--color-paper:\s*#f3eee4/i);
+  assert.match(globals, /--color-paper:\s*#f8fafc/i);
   assert.match(globals, /outline: 2px solid var\(--color-accent\)/);
   assert.doesNotMatch(globals, /--glow-amber|--glow-peach|--color-accent:\s*#b45309/i);
   assert.doesNotMatch(globals, /#5eead4|#c4b5fd|#7dd3fc|#0b1224|#14b8a6|#8b5cf6/i);
@@ -156,6 +158,7 @@ test("motion lock: CSS-only idle morph, menu fade, reduced-motion instant", () =
 test("home photographs are licensed stock, not customers or RelicVault assets", () => {
   const media = read("src/content/home-media.ts");
   const visual = read("src/components/HomeHeroVisual.tsx");
+  const strip = read("src/components/HomeLifestyleStrip.tsx");
   const band = read("src/components/HomeLifeBand.tsx");
   const sources = read("public/media/home/SOURCES.md");
   const home = read("src/app/page.tsx");
@@ -165,11 +168,14 @@ test("home photographs are licensed stock, not customers or RelicVault assets", 
   assert.match(media, /Stock photograph/);
   assert.match(media, /Not a MaintenanceOS customer/);
   assert.match(visual, /HOME_MEDIA/);
+  assert.match(strip, /HOME_MEDIA/);
+  assert.match(strip, /not testimonials/);
   assert.match(band, /HOME_MEDIA/);
   assert.match(sources, /unsplash\.com\/photos\/5lJAQ8yjzCM/);
   assert.match(sources, /pexels\.com\/photo\/3760263/);
   assert.doesNotMatch(media, /relicvault/i);
   assert.doesNotMatch(visual, /trusted by|testimonial|10,000/i);
+  assert.doesNotMatch(strip, /trusted by|our customers/i);
   assert.doesNotMatch(band, /trusted by|testimonial/i);
   assert.doesNotMatch(home, /relicvault/i);
 });
