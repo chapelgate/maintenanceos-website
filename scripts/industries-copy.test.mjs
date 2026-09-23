@@ -80,7 +80,7 @@ test("home industries grid lists all eight UK verticals at equal weight", () => 
   assert.match(home, /HomeIndustries/);
   assert.match(grid, /industryRoles\.map/);
   assert.match(grid, /Equal weight/);
-  assert.doesNotMatch(grid, /preferred|featured vertical/i);
+  assert.doesNotMatch(grid, /featured vertical|most popular industry/i);
   for (const slug of slugs) {
     assert.match(
       grid,
