@@ -46,4 +46,4 @@ Soft size target is **≤~3 MB**. If remux exceeds **~5 MB**, drop AAC to 96k be
 
 - Player: `src/components/ProductTour.tsx` — native `<video controls preload="none">`, no autoplay, not muted.
 - Chrome: `.product-tour-card` in `globals.css` (paper, thin line, 12px, `accent-color` blue).
-- Home: compact **Watch product tour** text link under the hero CTAs only.
+- Home: compact **45s product tour · pre-launch** text link under the hero CTAs only.

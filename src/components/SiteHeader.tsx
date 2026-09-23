@@ -54,11 +54,11 @@ function MenuIcon() {
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80">
-      <div className="mx-auto flex h-16 max-w-[70rem] items-center justify-between gap-4 px-4 md:px-6">
+      <div className="mx-auto flex min-h-16 max-w-[70rem] flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 md:px-6">
         <Wordmark />
 
         <nav
-          className="hidden items-center gap-1 md:flex lg:gap-2"
+          className="hidden flex-wrap items-center gap-1 md:flex lg:gap-2"
           aria-label="Primary"
         >
           {primaryNav.map((item) =>

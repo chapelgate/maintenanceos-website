@@ -28,7 +28,7 @@ const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
 function CreateLaterStepsFallback() {
   return (
     <div
-      className="rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm"
       data-lead-type="create_receptionist"
       data-create-step={2}
       data-create-next-action="Checking…"
@@ -174,7 +174,7 @@ export function CreateReceptionistForm({
 
   return (
     <div
-      className="rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm"
       data-lead-type="create_receptionist"
       data-create-step={1}
       data-create-next-action={createJourneyNextAction(1)}

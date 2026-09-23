@@ -3,11 +3,13 @@
 import { useId } from "react";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
 
-const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
+const FIELD_CLASS =
+  "mt-1 w-full rounded-md border border-border bg-paper px-3 py-2";
 
 /**
  * Compact editable preview of the claims-safe knowledge pack + system prompt.
  * Limitations stay read-only so live-phone / always-on claims cannot be dropped.
+ * Empty / missing keys stay empty — never invent extract fields.
  */
 export function ReceptionistDraftPreview({
   result,
@@ -38,7 +40,7 @@ export function ReceptionistDraftPreview({
       </p>
 
       <section
-        className="rounded-md border border-border bg-paper p-3"
+        className="rounded-lg border border-border bg-paper p-3"
         data-limitations="readonly"
         aria-labelledby="create-pack-limitations-heading"
       >
@@ -56,18 +58,27 @@ export function ReceptionistDraftPreview({
         </ul>
         {missing.length ? (
           <p className="mt-2 text-xs text-muted">
-            Missing (not invented): {missing.join(", ")}
+            Missing (not invented):{" "}
+            {missing.map((key) => (
+              <span key={key} className="create-missing-chip">
+                {key}
+              </span>
+            ))}
           </p>
-        ) : null}
+        ) : (
+          <p className="mt-2 text-xs text-muted">
+            No empty extract fields in this draft — still not a live receptionist.
+          </p>
+        )}
       </section>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-3 lg:grid-cols-2">
         <label className="block text-sm">
           <span className="font-medium text-ink">
             Knowledge pack (editable JSON)
           </span>
           <textarea
-            rows={8}
+            rows={7}
             value={packText}
             onChange={(e) => onPackTextChange(e.target.value)}
             spellCheck={false}
@@ -81,7 +92,7 @@ export function ReceptionistDraftPreview({
             System prompt draft (editable)
           </span>
           <textarea
-            rows={8}
+            rows={7}
             value={promptText}
             onChange={(e) => onPromptTextChange(e.target.value)}
             spellCheck={false}

@@ -45,7 +45,10 @@ test("features page renders inventory-driven VERIFIED / UNDER TEST cards", () =>
   const page = read("src/app/features/page.tsx");
   const config = read("src/config/phone-ai-features.ts");
   const copy = [page, config].join("\n");
-  assert.match(page, /phoneAiNotClaimed/);
+  assert.doesNotMatch(page, /phoneAiNotClaimed/);
+  assert.doesNotMatch(page, /Explore all gaps/);
+  assert.match(page, /FeatureStatusChip/);
+  assert.match(page, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(page, /marketingCardsByGroup/);
   assert.match(copy, /Website → Check → Review → Pack/);
   assert.match(page, /Create from website/);
@@ -79,6 +82,9 @@ test("home CTA strip names the website-to-pack path", () => {
   assert.match(page, /No live phone demo/);
   assert.match(page, /funnelPageMetadata\("home"\)/);
   assert.match(page, /ProductTourWatchLink/);
+  assert.match(page, /HomeTrustStrip/);
+  assert.match(page, /HomeRoleChips/);
+  assert.match(page, /ObjectionFaq/);
   assert.doesNotMatch(page, /<video/);
   assert.doesNotMatch(page, /Property maintenance operations for UK landlords/);
 });
@@ -176,7 +182,10 @@ test("security stays claims-safe with SSRF-safe scan and no cert theatre", () =>
     read("src/app/features/page.tsx"),
     read("src/config/phone-ai-features.ts"),
   ].join("\n");
-  const home = read("src/app/page.tsx");
+  const home = [
+    read("src/app/page.tsx"),
+    read("src/components/HonestyBanner.tsx"),
+  ].join("\n");
   const flow = read("src/components/HowItWorksFlow.tsx");
   const llms = read("public/llms.txt");
   const llmsFull = read("public/llms-full.txt");

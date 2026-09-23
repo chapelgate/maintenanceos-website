@@ -76,6 +76,10 @@ export const marketingFeatureStatusLabel = {
   UNDER_TEST: "UNDER TEST",
 } as const;
 
+/** Muted honesty line under UNDER TEST groups on /features. */
+export const UNDER_TEST_GROUP_HONESTY =
+  "Not on site yet — tracked with product";
+
 /**
  * Short marketing card set — exactly 7 (5 VERIFIED + 2 UNDER TEST).
  * IDs match docs/competitive/PHONE_AI_FEATURE_INVENTORY.md.

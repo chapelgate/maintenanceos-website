@@ -7,5 +7,5 @@ export const PRODUCT_TOUR = {
   height: 720,
   caption: "Product tour · pre-launch",
   watchHref: "/how-it-works/#product-tour",
-  watchLabel: "Watch product tour",
+  watchLabel: "45s product tour · pre-launch",
 } as const;
