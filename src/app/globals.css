@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 /*
- * Brand System v0.3 — Design council lock (2026-09-22).
- * Light paper + blue accent. Orb is a SECONDARY “intake listening” cue.
- * Glow is single-hue blue: #3B82F6 → sky → white. No dusk, teal, violet, or rainbow.
+ * Brand System v0.3 + Local owner override (2026-09-23).
+ * Light paper #F8FAFC so blue CTAs remain WCAG AA. Warmth is photographic.
+ * Glow stays single-hue blue: #3B82F6 → sky → white. No dusk, teal, violet, or rainbow.
  * Source: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / ui-preview/tokens.css
  */
 :root {
-  /* Core (Brand / UI Visual System) */
+  /* Core (Brand / UI Visual System) — paper stays #F8FAFC (council lock). */
   --color-ink: #0f172a;
   --color-muted: #475569;
   --color-paper: #f8fafc;
@@ -116,7 +116,8 @@ summary:focus-visible {
 
   .intake-orb,
   .intake-orb::before,
-  .intake-orb::after {
+  .intake-orb::after,
+  .home-photo-motion {
     animation: none !important;
     transform: none !important;
     filter: none !important;
@@ -345,23 +346,29 @@ summary:focus-visible {
   color: var(--color-muted);
 }
 
-/* Soft blue wash for inner page heroes — gradient only, no extra blur layer. */
+/* Soft blue + cream wash for inner page heroes — gradient only, no extra blur. */
 .mos-page-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
-  background-image: radial-gradient(
-    ellipse 40% 80% at 100% 0%,
-    rgb(219 234 254 / 55%),
-    transparent 60%
-  );
+  background-image:
+    radial-gradient(
+      ellipse 40% 80% at 100% 0%,
+      rgb(219 234 254 / 48%),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 50% 60% at 0% 100%,
+      rgb(236 214 184 / 28%),
+      transparent 70%
+    );
 }
 
 /*
- * Direction B (± light A atmosphere): paper canvas, subtle grid, restrained
- * accent glow. Static CSS only — honour prefers-reduced-motion by staying still.
+ * Home atmosphere — paper #F8FAFC plus soft blue + cream depth.
+ * Warmth is photographic. No clinical grid. No dusk / constellation sky.
  */
 .mos-hero-atmosphere {
   position: relative;
@@ -377,22 +384,140 @@ summary:focus-visible {
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(var(--color-border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-border) 1px, transparent 1px),
     radial-gradient(
-      ellipse 55% 45% at 82% 8%,
-      rgb(219 234 254 / 72%),
+      ellipse 60% 50% at 88% 0%,
+      rgb(219 234 254 / 55%),
       transparent 68%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 6% 100%,
+      rgb(236 214 184 / 42%),
+      transparent 70%
     );
-  background-size: 3rem 3rem, 3rem 3rem, auto;
-  opacity: 0.4;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .mos-hero-atmosphere::before {
-    opacity: 0.22;
+/* ——— Home photographic stage ——— */
+
+.home-hero-stage {
+  position: relative;
+}
+
+.home-photo-frame {
+  overflow: hidden;
+  border-radius: var(--mos-radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--mos-shadow);
+  background: var(--color-surface);
+}
+
+.home-photo-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-photo-frame--lead {
+  min-height: 16.5rem;
+  /* Crop unused sky so brick + scaffold fill the frame (orb sits on houses). */
+  aspect-ratio: 4 / 3;
+}
+
+.home-photo-frame--lead img {
+  object-position: 50% 100%;
+}
+
+.home-lifestyle-strip {
+  margin-top: 1.5rem;
+}
+
+.home-lifestyle-strip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.home-photo-frame--strip {
+  min-height: 6.5rem;
+  aspect-ratio: 640 / 426;
+}
+
+.home-hero-orb {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  margin-block: -3.75rem 0;
+}
+
+.home-life-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--color-paper);
+}
+
+.home-life-band-frame {
+  position: relative;
+  min-height: 16rem;
+  overflow: hidden;
+}
+
+.home-life-band-frame img {
+  display: block;
+  width: 100%;
+  height: 16rem;
+  object-fit: cover;
+}
+
+@media (min-width: 640px) {
+  .home-life-band-frame img {
+    height: 20rem;
   }
 }
+
+.home-life-band-copy {
+  position: relative;
+  z-index: 1;
+  margin: -3.5rem 1rem 1.5rem;
+  max-width: 36rem;
+  padding: 1.25rem 1.4rem;
+}
+
+@media (min-width: 640px) {
+  .home-life-band-copy {
+    margin-inline: auto;
+    margin-block: -4.5rem 2rem;
+  }
+}
+
+.home-close-band {
+  background:
+    radial-gradient(
+      ellipse 70% 80% at 100% 50%,
+      rgb(219 234 254 / 36%),
+      transparent 62%
+    ),
+    var(--color-surface);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-photo-motion {
+    animation: home-photo-drift 28s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+}
+
+@keyframes home-photo-drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.1) translate3d(-1.6%, 1.2%, 0);
+  }
+}
+
 
 /* ——— Intake listening orb (secondary affordance) ——— */
 

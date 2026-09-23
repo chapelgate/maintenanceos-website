@@ -31,6 +31,9 @@ test("home commercial pass keeps Create/Join hierarchy and 3-step start", () => 
   assert.match(home, /secondaryLabel="Request early access"/);
   assert.match(home, /id="home-why-heading"/);
   assert.match(home, /HomeIndustries/);
+  assert.match(home, /HomeHeroVisual/);
+  assert.match(home, /HomeLifestyleStrip/);
+  assert.match(home, /HomeLifeBand/);
   assert.match(home, /ProductUiShell/);
   assert.match(home, /<h3 className="text-xl font-semibold tracking-tight text-ink/);
 
@@ -158,6 +161,10 @@ test("commercial pages do not introduce forbidden peer-copy claims", () => {
     "src/components/HomeTrustStrip.tsx",
     "src/components/HomeIndustries.tsx",
     "src/components/ProductUiShell.tsx",
+    "src/components/HomeHeroVisual.tsx",
+    "src/components/HomeLifestyleStrip.tsx",
+    "src/components/HomeLifeBand.tsx",
+    "src/content/home-media.ts",
     "src/components/UkScenarioVignettes.tsx",
     "src/components/FunnelPathStrip.tsx",
   ];

@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { HonestyBanner } from "@/components/HonestyBanner";
+import { HomeHeroVisual } from "@/components/HomeHeroVisual";
 import { HomeIndustries } from "@/components/HomeIndustries";
+import { HomeLifeBand } from "@/components/HomeLifeBand";
+import { HomeLifestyleStrip } from "@/components/HomeLifestyleStrip";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
+import { ProductUiShell } from "@/components/ProductUiShell";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { ProductTourWatchLink } from "@/components/ProductTour";
-import { ProductUiShell } from "@/components/ProductUiShell";
 import { UkScenarioVignettes } from "@/components/UkScenarioVignettes";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
@@ -41,7 +44,7 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={funnelPageJsonLd("home")} />
-      {/* 1. Hero — paper + labelled UNDER TEST supervisor shell */}
+      {/* 1. Hero — warm photographic stage + labelled UNDER TEST shell */}
       <section
         className="mos-hero-atmosphere border-b border-border px-4 py-12 sm:px-6 sm:py-16 lg:py-20"
         aria-labelledby="hero-heading"
@@ -73,6 +76,7 @@ export default function HomePage() {
               Funnel: Website → Review pack → Early access.
             </p>
             <ProductTourWatchLink className="mt-3" />
+            <HomeLifestyleStrip />
             <HomeRoleChips />
             <p className="mt-5 text-sm leading-relaxed text-muted">
               Pilot-stage. Core controls are real; public always-on phone is not
@@ -87,12 +91,29 @@ export default function HomePage() {
           </div>
 
           <div className="lg:col-span-7" id="product">
-            <ProductUiShell />
+            <HomeHeroVisual />
           </div>
         </div>
       </section>
 
+      <section
+        className="border-b border-border bg-paper px-4 py-8 sm:px-6"
+        aria-labelledby="hero-shell-heading"
+      >
+        <div className="mx-auto max-w-6xl">
+          <h2
+            id="hero-shell-heading"
+            className="sr-only"
+          >
+            Supervisor shell · under test
+          </h2>
+          <ProductUiShell />
+        </div>
+      </section>
+
       <HomeTrustStrip />
+
+      <HomeLifeBand />
 
       <HomeOnboardingSteps />
 
@@ -149,7 +170,7 @@ export default function HomePage() {
       <ObjectionFaq />
 
       {/* 4. Closing CTA band — after the objection set, not per question */}
-      <section className="bg-surface px-4 py-14 sm:px-6">
+      <section className="home-close-band px-4 py-14 sm:px-6">
         <div className="mos-glass mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
           <div className="max-w-lg">
             <h2 className="text-xl font-semibold text-ink sm:text-2xl">
