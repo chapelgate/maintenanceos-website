@@ -36,6 +36,7 @@ export default function PricingPage() {
         eyebrow={pricing.eyebrow || undefined}
         title={pricing.title}
         lede={pricing.lede}
+        orbAccent
       />
       <div className="mx-auto max-w-5xl space-y-10 px-4 py-12 sm:py-16">
         <FunnelPathStrip />

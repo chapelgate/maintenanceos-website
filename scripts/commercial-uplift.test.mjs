@@ -162,6 +162,8 @@ test("commercial pages do not introduce forbidden peer-copy claims", () => {
     "src/components/HomeIndustries.tsx",
     "src/components/ProductUiShell.tsx",
     "src/components/HomeHeroVisual.tsx",
+    "src/components/IntakeOrbAccent.tsx",
+    "src/components/PageHero.tsx",
     "src/components/HomeLifestyleStrip.tsx",
     "src/components/HomeLifeBand.tsx",
     "src/content/home-media.ts",

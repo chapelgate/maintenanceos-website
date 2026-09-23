@@ -1,4 +1,5 @@
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
+import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 
 /**
  * Skim-friendly 3-step start on home — Website → Review pack → Early access.
@@ -33,23 +34,28 @@ export function HomeOnboardingSteps() {
       className="border-b border-border bg-surface px-4 py-14 sm:px-6 sm:py-16"
     >
       <div className="mx-auto max-w-6xl">
-        <h2
-          id="home-onboarding-heading"
-          className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
-        >
-          How to start — three steps
-        </h2>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          The honest path in. Same public path as{" "}
-          <a
-            href="/create/"
-            className="font-medium text-accent underline-offset-4 hover:underline"
-          >
-            Create from website
-          </a>
-          : website URL → review a draft pack → early access. Optional scripted
-          sandbox stays under testing. No live phone demo.
-        </p>
+        <div className="section-band-head">
+          <IntakeOrbAccent />
+          <div>
+            <h2
+              id="home-onboarding-heading"
+              className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+            >
+              How to start — three steps
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+              The honest path in. Same public path as{" "}
+              <a
+                href="/create/"
+                className="font-medium text-accent underline-offset-4 hover:underline"
+              >
+                Create from website
+              </a>
+              : website URL → review a draft pack → early access. Optional scripted
+              sandbox stays under testing. No live phone demo.
+            </p>
+          </div>
+        </div>
         <ol className="mt-8 grid gap-4 md:grid-cols-3">
           {STEPS.map((step, i) => (
             <li key={step.title}>

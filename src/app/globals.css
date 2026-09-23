@@ -117,6 +117,7 @@ summary:focus-visible {
   .intake-orb,
   .intake-orb::before,
   .intake-orb::after,
+  .intake-orb-accent,
   .home-photo-motion {
     animation: none !important;
     transform: none !important;
@@ -402,6 +403,46 @@ summary:focus-visible {
   position: relative;
 }
 
+.home-orb-stage {
+  display: grid;
+  place-items: center;
+  min-height: 18rem;
+  padding: 2.25rem 1.5rem 1.75rem;
+  border-radius: var(--mos-radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-paper);
+  background-image:
+    radial-gradient(
+      circle at 50% 42%,
+      rgb(219 234 254 / 72%),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 70% 45% at 50% 100%,
+      rgb(236 214 184 / 22%),
+      transparent 70%
+    );
+  box-shadow: var(--mos-shadow);
+}
+
+.home-orb-stage .intake-orb {
+  /* 1.5× the 5.5rem idle orb — council fence 1.4–1.6× */
+  width: 8.25rem;
+  height: 8.25rem;
+}
+
+@media (min-width: 640px) {
+  .home-orb-stage {
+    min-height: 22rem;
+    padding-block: 3rem 2rem;
+  }
+
+  .home-orb-stage .intake-orb {
+    width: 8.8rem;
+    height: 8.8rem;
+  }
+}
+
 .home-photo-frame {
   overflow: hidden;
   border-radius: var(--mos-radius-lg);
@@ -417,16 +458,6 @@ summary:focus-visible {
   object-fit: cover;
 }
 
-.home-photo-frame--lead {
-  min-height: 16.5rem;
-  /* Crop unused sky so brick + scaffold fill the frame (orb sits on houses). */
-  aspect-ratio: 4 / 3;
-}
-
-.home-photo-frame--lead img {
-  object-position: 50% 100%;
-}
-
 .home-lifestyle-strip {
   margin-top: 1.5rem;
 }
@@ -440,14 +471,6 @@ summary:focus-visible {
 .home-photo-frame--strip {
   min-height: 6.5rem;
   aspect-ratio: 640 / 426;
-}
-
-.home-hero-orb {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  justify-content: center;
-  margin-block: -3.75rem 0;
 }
 
 .home-life-band {
@@ -501,7 +524,63 @@ summary:focus-visible {
     var(--color-surface);
 }
 
+.section-band-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.section-band-head .intake-orb-accent {
+  margin-top: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* Decorative listening-cue glow — not a logo, not a CTA, not on /create. */
+.intake-orb-accent {
+  display: block;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    var(--glow-white) 0 16%,
+    #bfdbfe 34%,
+    var(--glow-sky) 58%,
+    var(--glow-blue) 100%
+  );
+  box-shadow:
+    0 0 12px rgb(59 130 246 / 18%),
+    0 0 24px rgb(96 165 250 / 20%);
+}
+
+.intake-orb-accent--band {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.intake-orb-accent--header {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 0;
+  width: 3.25rem;
+  height: 3.25rem;
+  opacity: 0.72;
+}
+
+@media (min-width: 640px) {
+  .intake-orb-accent--header {
+    top: 1.75rem;
+    right: 2rem;
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .intake-orb-accent {
+    animation: intake-idle 5.6s ease-in-out infinite;
+  }
+
   .home-photo-motion {
     animation: home-photo-drift 28s ease-in-out infinite alternate;
     will-change: transform;

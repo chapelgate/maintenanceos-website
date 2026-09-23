@@ -13,15 +13,6 @@ export type HomeMediaItem = {
 };
 
 export const HOME_MEDIA = {
-  terrace: {
-    src: "/media/home/uk-terrace.webp",
-    alt: "Stock photograph: London brick houses beside scaffolding on a clear day. Not a MaintenanceOS customer or live job.",
-    width: 880,
-    height: 766,
-    photographer: "Samuel Regan-Asante",
-    sourceUrl: "https://unsplash.com/photos/5lJAQ8yjzCM",
-    license: "Unsplash License",
-  },
   phone: {
     src: "/media/home/office-phone.webp",
     alt: "Stock photograph: a person on a mobile phone at a desk with a laptop. Not a customer, not a live receptionist.",
@@ -42,7 +33,7 @@ export const HOME_MEDIA = {
   },
   row: {
     src: "/media/home/uk-row.webp",
-    alt: "Stock photograph: a row of pale gabled houses under a blue sky. Not a customer estate or live portfolio.",
+    alt: "Stock photograph: a row of pale gabled houses under a blue sky. Not a MaintenanceOS customer estate or live portfolio.",
     width: 1280,
     height: 1156,
     photographer: "Max",

@@ -6,9 +6,9 @@
 
 ## Intent
 
-UK maintenance operations product on **light paper**. Blue `#1D4ED8` is the brand accent (CTAs, focus rings — louder than photos/motion). Orb glow is a single blue hue (`#3B82F6` → sky → white). The orb is a **secondary “intake listening” cue** on the home hero visual — not the brand mark and not a conversion control. The wordmark stays **flat ink** — no blue logo fill.
+UK maintenance operations product on **light paper**. Blue `#1D4ED8` is the brand accent (CTAs, focus rings — louder than photos/motion). Orb glow is a single blue hue (`#3B82F6` → sky → white). The orb is a **secondary “intake listening” cue** on a paper hero stage (1.4–1.6× idle size) plus restrained band accents — not the brand mark and not a conversion control. The wordmark stays **flat ink** — no blue logo fill.
 
-Locked public CTAs stay primary: **Create from website** (`/create/`), **Join launch list**, **Request early demo / access**. Do not put those inside the orb or sit an orb above the `/create` URL field.
+Locked public CTAs stay primary: **Create from website** (`/create/`), **Join launch list**, **Request early demo / access**. Do not put those inside the orb or sit an orb above the `/create` URL field. Do not park the orb on a luxury terrace photograph.
 
 ## Colour
 

@@ -14,7 +14,7 @@
 | CLS | ≤ 0.1 | Reserve space for banners/nav; font `display: swap` + size-adjust |
 | First Load JS (Next report) | ≤ 110 kB | Shared chunks dominate |
 | Fonts (critical en-GB path) | ≤ 100 KB transfer | Browser skips unused unicode-range files |
-| Images (home) | ≤ 250 KB transfer | Four self-hosted WebPs in `public/media/home/`; width/height; one LCP `fetchPriority`; lazy below fold |
+| Images (home) | ≤ 250 KB transfer | Three self-hosted WebPs in `public/media/home/` (phone / trade / street); width/height; no terrace LCP; lazy below fold |
 | Client components | Lead forms only by default | CSS `<details>` for nav |
 
 ## Baseline → after first pass (local `out/`, 2026-09-17)
@@ -45,7 +45,7 @@ Default DigitalOcean flags (`NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PU
 | `/create` companion JS | Calendar + sandbox + `CreateJourney` in page chunk (52 KB uncompressed, includes `calendar-slot` / scripted demo) | Server coming-soon copy; companion modules aliased in only when a public flag is on | Default `create/index.html` does not reference those chunks |
 | Pack preview | Eager in `/create` page chunk | `next/dynamic` + deferred `receptionist-draft` | Async chunks exist on disk (~8 KB) but are not in initial `/create` script tags |
 | Inter | `400`/`600`, `display: swap`, latin preload | unchanged | Preload woff2 **48 KB**; other unicode-range files stay on disk, not in critical path |
-| Images in `public/` | none | four home WebPs (~188 KB) | LCP terrace + lazy phone/trade/row; see `public/media/home/SOURCES.md` |
+| Images in `public/` | none | three home WebPs (phone / trade / street; terrace dropped) | Hero LCP is paper + CSS orb; lifestyle/street stills lazy; see `public/media/home/SOURCES.md` |
 
 `/create` after #53 was **1 kB over** the 110 kB First Load target (shared 103 kB + 7.94 kB form island).
 
@@ -60,7 +60,7 @@ Default DigitalOcean flags still unset/false. Later check/review/pack steps are 
 | `/how-it-works`, `/features` | 103 kB | **103 kB** | ≤ 110 |
 | `/create` | **111 kB** (7.94 kB page) | **106 kB** (3.7 kB page) | ≤ 110 |
 
-Home hero proof is photographic stills + static `ProductUiShell`. A small `SiriOrbCloud` island is restored as a secondary listening cue on home only — not on `/create`.
+Home hero proof is a paper orb stage + static `ProductUiShell`. A small `SiriOrbCloud` island is restored as a secondary listening cue on home only — not on `/create`. Band accents are CSS-only (`IntakeOrbAccent`) and do not add First Load JS.
 
 `/create` First Load is now **under** the 110 kB target. The leftover 3.7 kB page island is the URL/email step plus the shared stepper. Scan, pack preview, and lead-submit stay off the initial `create/index.html` script tags (async chunks remain on disk). This is a split, not a form rewrite: step 1 still hydrates immediately; step 2 already shows “Checking URL…” for 700 ms.
 
