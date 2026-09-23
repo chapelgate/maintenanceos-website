@@ -102,11 +102,13 @@ test("features page copy omits forbidden present-fact claims", () => {
   const config = read("src/config/phone-ai-features.ts");
   const copy = [page, cardBlocks(config)].join("\n");
 
-  assert.match(page, /phoneAiNotClaimed/);
+  assert.doesNotMatch(page, /phoneAiNotClaimed/);
+  assert.doesNotMatch(page, /Explore all gaps/);
+  assert.match(page, /FeatureStatusChip/);
+  assert.match(page, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(page, /marketingCardsByGroup/);
   assert.match(page, /Create from website/);
   assert.match(page, /Join launch list/);
-  assert.match(page, /StatusChip/);
   assert.match(page, /VERIFIED/);
   assert.match(page, /UNDER TEST/);
   assert.doesNotMatch(page, /^["']use client["']/m);

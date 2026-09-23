@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
+import { HonestyBanner } from "@/components/HonestyBanner";
+import { HomeRoleChips } from "@/components/HomeRoleChips";
+import { HomeTrustStrip } from "@/components/HomeTrustStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { ProductTourWatchLink } from "@/components/ProductTour";
 import { SiriOrbCloud } from "@/components/SiriOrbCloud";
+import { UkScenarioVignettes } from "@/components/UkScenarioVignettes";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
@@ -36,13 +41,6 @@ const pillars = [
   },
 ] as const;
 
-const honestyItems = [
-  "No fabricated customers, logos, or awards",
-  "No ISO, SOC 2, or bank-grade claims we have not earned",
-  "No “handles N concurrent lines” marketing numbers",
-  "No public live receptionist claim until that gate is cleared",
-] as const;
-
 export default function HomePage() {
   return (
     <>
@@ -72,6 +70,7 @@ export default function HomePage() {
               secondaryLabel="Request early access"
             />
             <ProductTourWatchLink className="mt-3" />
+            <HomeRoleChips />
             <p className="mt-5 text-sm leading-relaxed text-muted">
               Pilot-stage. Core controls are real; public always-on phone is not
               declared ready yet.{" "}
@@ -87,6 +86,8 @@ export default function HomePage() {
           <SiriOrbCloud />
         </div>
       </section>
+
+      <HomeTrustStrip />
 
       {/* 2. Value pillars */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
@@ -113,27 +114,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. Honesty — what we will not claim */}
-      <section className="border-y border-border bg-paper px-4 py-14 sm:px-6">
-        <div className="mx-auto max-w-3xl">
-          <p className="text-center text-sm font-semibold uppercase tracking-wide text-accent">
-            What we will not claim
-          </p>
-          <ul className="mx-auto mt-6 max-w-xl space-y-3">
-            {honestyItems.map((item) => (
-              <li key={item} className="flex gap-3 text-base leading-relaxed text-ink">
-                <span
-                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-                  aria-hidden="true"
-                />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <UkScenarioVignettes />
 
-      {/* 4. Closing CTA band */}
+      <HonestyBanner />
+
+      <ObjectionFaq />
+
+      {/* 4. Closing CTA band — after the objection set, not per question */}
       <section className="bg-surface px-4 py-14 sm:px-6">
         <div className="mos-glass mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
           <div className="max-w-lg">

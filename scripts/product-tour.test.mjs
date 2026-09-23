@@ -96,7 +96,7 @@ test("product-tour player is click-to-play and static-export safe", () => {
   assert.match(lib, /Product tour · pre-launch/);
   assert.match(player, /PRODUCT_TOUR\.caption/);
   assert.match(lib, /watchHref: "\/how-it-works\/#product-tour"/);
-  assert.match(lib, /watchLabel: "Watch product tour"/);
+  assert.match(lib, /watchLabel: "45s product tour · pre-launch"/);
 
   assert.match(css, /\.product-tour-card/);
   assert.match(css, /border-radius: 12px/);

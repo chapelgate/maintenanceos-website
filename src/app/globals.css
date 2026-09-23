@@ -190,6 +190,124 @@ summary:focus-visible {
   color: var(--color-muted);
 }
 
+/*
+ * Feature honesty chips — VERIFIED is solid subtle blue; UNDER TEST is
+ * outline / warm-neutral. Colour is never the only signal.
+ */
+.feature-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: var(--mos-radius);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.feature-status-chip--verified {
+  border: 1px solid transparent;
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+.feature-status-chip--under-test {
+  border: 1px solid color-mix(in srgb, var(--color-warn) 35%, var(--color-border));
+  background: var(--color-paper);
+  color: var(--color-warn);
+}
+
+/* Compact home role chips — scan only, no new claims. */
+.home-role-chip {
+  display: inline-flex;
+  min-height: 1.5rem;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-paper);
+  padding: 0.2rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+.home-role-chip:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Muted paper accordion — exclusive <details name="mos-objection-faq">. */
+.objection-faq-item {
+  background: var(--color-paper);
+  border: 1px solid var(--color-border);
+  border-radius: var(--mos-radius);
+}
+
+.objection-faq-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.85rem 1rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.objection-faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.objection-faq-answer {
+  margin: 0;
+  padding: 0 1rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/*
+ * /create sticky step chrome. Sticks below SiteHeader (h-16).
+ * Scroll-state shadow is progressive enhancement.
+ */
+.create-journey-card {
+  overflow-anchor: none;
+}
+
+.create-step-chrome {
+  position: sticky;
+  top: 5.5rem;
+  z-index: 30;
+  container-type: scroll-state;
+  container-name: create-steps;
+  margin: -1.5rem -1.5rem 1rem;
+}
+
+.create-step-chrome-bar {
+  background: rgb(255 255 255 / 95%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem 1.5rem 0.65rem;
+}
+
+@container create-steps scroll-state(stuck: top) {
+  .create-step-chrome-bar {
+    box-shadow: var(--mos-shadow);
+  }
+}
+
+.create-missing-chip {
+  display: inline-flex;
+  margin-right: 0.35rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  padding: 0.1rem 0.45rem;
+  font-size: 0.7rem;
+  color: var(--color-muted);
+}
+
 /* Soft blue wash for inner page heroes — gradient only, no extra blur layer. */
 .mos-page-hero {
   position: relative;
@@ -399,6 +517,9 @@ summary:focus-visible {
 
 .site-nav-link,
 .site-cta-outline {
+  /* Wrap-safe desktop labels: “How it works”, “Dashboard (soon)” stay one line. */
+  white-space: nowrap;
+  text-wrap: nowrap;
   transition:
     color var(--mos-duration) var(--mos-easing),
     border-color var(--mos-duration) var(--mos-easing),

@@ -296,7 +296,7 @@ export function CreateReceptionistLaterSteps({
 
   return (
     <div
-      className="rounded-md border border-border bg-surface p-6 shadow-sm"
+      className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm"
       data-lead-type="create_receptionist"
       data-create-step={step}
       data-create-next-action={nextAction}

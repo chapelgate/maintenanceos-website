@@ -1,6 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
 import { JsonLd } from "@/components/JsonLd";
+import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { PageHero } from "@/components/PageHero";
 import { ProductTour } from "@/components/ProductTour";
 import { funnelPageJsonLd } from "@/lib/json-ld";
@@ -113,6 +114,8 @@ export default function HowItWorksPage() {
           </p>
         </div>
       </section>
+
+      <ObjectionFaq headingId="hiw-objection-faq-heading" />
 
       <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
         <CtaPair
