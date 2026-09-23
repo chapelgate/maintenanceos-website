@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 type HomePhotoProps = {
   src: string;
   alt: string;
@@ -10,8 +8,9 @@ type HomePhotoProps = {
 };
 
 /**
- * Static-export photograph (`images.unoptimized`). Width/height reserved for CLS.
- * Only the true LCP candidate is priority; others lazy-load.
+ * Static-export photograph. Width/height reserved for CLS.
+ * Raw <img> keeps next/image off the home First Load graph (≤110 kB).
+ * Only the true LCP candidate gets fetchPriority=high; others lazy-load.
  */
 export function HomePhoto({
   src,
@@ -22,14 +21,17 @@ export function HomePhoto({
   className = "",
 }: HomePhotoProps) {
   return (
-    <Image
+    // next/image would add ~5 kB to home First Load; export is unoptimized anyway.
+    // eslint-disable-next-line @next/next/no-img-element -- static export + JS budget
+    <img
       src={src}
       alt={alt}
       width={width}
       height={height}
-      unoptimized
       decoding="async"
-      priority={priority}
+      {...(priority
+        ? { fetchPriority: "high" as const }
+        : { loading: "lazy" as const })}
       className={className}
     />
   );
