@@ -58,8 +58,8 @@ function bodyOkFlag(body: unknown): boolean | null {
 
 /**
  * Static-friendly lead adapter.
- * Posts to NEXT_PUBLIC_FORM_ENDPOINT when set (see docs/FORM_ENDPOINT_CONTRACT.md).
- * Success never means a confirmation or notification email was sent.
+ * Posts to the configured production endpoint (NEXT_PUBLIC_FORM_ENDPOINT may override it).
+ * Success never means a visitor confirmation email was sent.
  */
 export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
   if (payload.website) {
@@ -96,8 +96,8 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
         organisation: payload.organisation?.trim() || undefined,
         role: payload.role?.trim() || undefined,
         message: payload.message?.trim() || undefined,
-        source: "maintenanceos-website",
-        public_launch: siteConfig.publicLaunch,
+        source_url:
+          typeof window !== "undefined" ? window.location.href : undefined,
       }),
     });
 
