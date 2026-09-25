@@ -8,6 +8,8 @@ This repository, `chapelgate/maintenanceos-v1-pilot`, is the single authoritativ
 
 Default branch: `main`.
 
+The public/pre-launch marketing website is deliberately separate: `chapelgate/maintenanceos-website`, authoritative release branch `main`. Its source/deployment/rollback record lives in that repository's `WEBSITE_SOURCE_OF_TRUTH.md`. Do not copy marketing-site code into this product repository, and do not create a second MaintenanceOS website to bridge the repos.
+
 The historical copy under `chapelgate/cloud-workers/jobs/maintenanceos` is a **deployment/validation copy only**. Canonical product changes belong here first, then must be deliberately synchronised to the deployment copy where Render still deploys from `cloud-workers`. Do not let `cloud-workers` become the product source of truth.
 
 ## Verified canonical state
@@ -28,7 +30,8 @@ The historical copy under `chapelgate/cloud-workers/jobs/maintenanceos` is a **d
 | MaintenanceOS (DO voice droplet) | DigitalOcean `maintenanceos-production-voice` `601962983` `165.227.227.9` | Created 2026-09-19T13:31:55Z; tags `temporary,ssh-recovery`. Caddy 308; SSH open. **Do not create another MOS droplet.** |
 | MaintenanceOS (DO recovery clone) | DigitalOcean `maintenanceos-recovery-clone-20260920` `602160871` | **GONE** from live inventory 2026-09-20T12:49:33Z after owner password reset 12:31Z. |
 | MaintenanceOS (DO phone staging) | DigitalOcean `maintenanceos-phone-staging` `602169737` `165.232.47.24` | Recreated 2026-09-20T13:06:46Z (prior `602165089` gone). Caddy 308; SSH open. **Do not create another MOS droplet.** |
-| MaintenanceOS (App Platform target) | `maintenanceos-london` | **Absent** from live App Platform list. Live $0 starter static site is `seahorse-app` / `maintenanceos-website`. |
+| MaintenanceOS (marketing website) | DigitalOcean App Platform static `seahorse-app-4oasq` | Canonical source: `chapelgate/maintenanceos-website` `main`; recorded staging origin `https://seahorse-app-4oasq.ondigitalocean.app`; website rollback/source record lives in `WEBSITE_SOURCE_OF_TRUTH.md` in that repo. |
+| MaintenanceOS (App Platform product target) | `maintenanceos-london` | **Absent** from the last live App Platform inventory recorded here. Do not confuse this product target with the static marketing website. |
 
 A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assumption is invalid. Do not deploy MaintenanceOS there, modify its routing/database/Caddy, or stop its containers.
 
