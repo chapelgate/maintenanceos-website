@@ -27,7 +27,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | F12 | Legal page scaffolds | DONE as drafts; legal review still required | Legal |
 | F13 | Privacy/cookie/consent finalisation | OPEN — legal review | Privacy |
 | F14 | SEO foundation | **DONE / LIVE VERIFIED — Step 7** | SEO |
-| F15 | WCAG 2.2 AA verification | OPEN | Accessibility |
+| F15 | WCAG 2.2 AA verification | **IMPLEMENTED — Step 47 live verification pending** | Accessibility |
 | F16 | Core Web Vitals/performance verification | **DONE / LIVE VERIFIED — Step 46** | Performance |
 | F17 | Security review / hosting-header gaps | OPEN | Security |
 | F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED — Step 9** — cookieless first-party measurement; no optional analytics tags currently loaded | Analytics |
@@ -184,3 +184,16 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Spend / reuse:** Lighthouse was used one-off from the official npm package and not added to project dependencies. No paid performance SaaS, browser service, new app, runner, or infrastructure was added.
 
 **Step 46 status:** **COMPLETE. No open blocker.**
+
+
+## Step 47 completion — accessibility
+
+- **Automated live baseline:** Lighthouse 13.5.0 accessibility audits on Home, Create, Contact, Demo, Pricing, and How it works all scored **100**.
+- **Issue found and fixed:** every audited page shared one zero-weight `label-content-name-mismatch` warning on the header wordmark. The visible text was `Maintenance OS by Chapelgate` while an unnecessary `aria-label` forced `MaintenanceOS by Chapelgate`. The `aria-label` was removed so the accessible name now derives from the visible text.
+- **WCAG 2.2-oriented controls:** skip link / bypass blocks, global focus-visible styles, sticky-header focus offsets, 24px+ target-size baseline, reduced-motion handling, `en-GB` language, form labels, image alternatives, keyboard Escape handling, and AA colour-contrast tokens are protected.
+- **Durable regression gate:** `npm run accessibility:check` runs the existing create-flow accessibility tests plus the new site-wide accessibility tests. Current result: **12/12 PASS**. Full repository tests and production static build also pass.
+- **Evidence:** `docs/STEP47_ACCESSIBILITY_BASELINE.md` and `scripts/site-accessibility.test.mjs`.
+
+**Evidence boundary:** automated tooling/source inspection cannot certify every WCAG 2.2 success criterion or substitute for a specialist assistive-technology audit. This step fixes every issue found by the automated live audit and establishes the engineering baseline; it does not claim external certification.
+
+**Step 47 status:** **IMPLEMENTED — pending final live audit of the wordmark fix.**

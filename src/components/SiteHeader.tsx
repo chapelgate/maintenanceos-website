@@ -15,7 +15,6 @@ function Wordmark() {
     <a
       href="/"
       className="inline-flex items-baseline text-lg tracking-tight text-ink"
-      aria-label={siteConfig.publicBrand}
     >
       <span className="font-medium">Maintenance</span>
       <span className="font-semibold">OS</span>
