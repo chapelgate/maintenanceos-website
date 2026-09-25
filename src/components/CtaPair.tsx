@@ -23,7 +23,7 @@ export function CtaPair({
       </a>
       <a
         href={secondaryHref}
-        className="inline-flex min-h-11 min-w-6 w-full items-center justify-center rounded-md border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-ink hover:border-accent hover:text-accent sm:w-auto"
+        className="inline-flex min-h-11 min-w-6 w-full items-center justify-center px-3 py-2.5 text-sm font-semibold text-accent underline decoration-border underline-offset-4 hover:decoration-accent sm:w-auto"
       >
         {secondaryLabel}
       </a>
