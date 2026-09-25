@@ -107,9 +107,10 @@ export function LeadCaptureForm({
         <h2 className="text-lg font-semibold text-ink">{title}</h2>
       ) : null}
       {helper ? <p className="mt-2 text-sm text-muted">{helper}</p> : null}
+      <p className="mt-2 text-xs text-muted">Only email is required. Everything else is optional.</p>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <label className="block text-sm">
-          <span className="font-medium text-ink">Name</span>
+          <span className="font-medium text-ink">Name (optional)</span>
           <input
             name="name"
             type="text"
@@ -131,7 +132,7 @@ export function LeadCaptureForm({
         </label>
         {showOrganisation ? (
           <label className="block text-sm">
-            <span className="font-medium text-ink">Organisation</span>
+            <span className="font-medium text-ink">Organisation (optional)</span>
             <input
               name="organisation"
               type="text"
@@ -141,7 +142,7 @@ export function LeadCaptureForm({
           </label>
         ) : null}
         <label className="block text-sm">
-          <span className="font-medium text-ink">Role</span>
+          <span className="font-medium text-ink">Role (optional)</span>
           <select
             name="role"
             className="mt-1 w-full rounded-md border border-border px-3 py-2"
@@ -164,7 +165,7 @@ export function LeadCaptureForm({
       </div>
       {showMessage ? (
         <label className="mt-4 block text-sm">
-          <span className="font-medium text-ink">Message</span>
+          <span className="font-medium text-ink">Message (optional)</span>
           <textarea
             name="message"
             rows={4}
