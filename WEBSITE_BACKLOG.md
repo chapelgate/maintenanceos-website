@@ -210,3 +210,14 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 - **Cost / reuse:** no new monitoring SaaS, scheduler, GitHub Actions job, app, database, runner, or telephony change.
 
 **Step 48 status:** **COMPLETE. No open blocker.**
+
+
+## Step 49 completion — release control
+
+- Safe pre-merge gate — **IMPLEMENTED**: `npm run release:preflight` requires a clean branch, full tests, production build, performance budget, accessibility gate, and a release marker matching branch HEAD.
+- Change control — **IMPLEMENTED**: production website changes remain PR-to-`main`; release identity is the Step-48 source SHA marker.
+- Rollback — **IMPLEMENTED**: `npm run rollback:plan -- <bad-sha>` produces a revert-only branch/PR plan. It does not mutate the repo itself and forbids shared-history reset/force-push.
+- Runtime isolation — **IMPLEMENTED**: website rollback instructions explicitly prohibit using voice/backend infrastructure to repair a marketing-site regression.
+- Reuse / spend — **PASS**: existing Git/GitHub, DigitalOcean deployment, performance, accessibility, release-marker and health-monitor controls are reused. No new service or paid runner.
+
+**Step 49 status:** **IMPLEMENTED — pending preflight + merged live deployment verification.**
