@@ -75,10 +75,10 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 - 4.2 safe demonstration call flow — **PASS, live verified**: existing CustomerDashboard runs in explicit `demoMode`, forces the existing local SAMPLE catalogue, uses no production endpoint, and automatically opens the first fictional transcript.
 - 4.3 visual call-to-work example — **PASS, live verified**: existing ProductTour + SAMPLE call/transcript + existing ProductUiShell are joined into one demo journey.
 - 4.4 summary, escalation, and operational workflow — **PASS, live verified**: live demo shows the SAMPLE call summary/transcript followed by the existing work-order shell with Human review and Rules hold states.
-- 4.5 mobile + desktop journey — **PASS**: local Edge rendered 390x844 and 1440x1000; live hydrated DOM checks passed at both widths with SAMPLE caller, boiler transcript, Human review, and Rules hold.
+- 4.5 mobile + desktop journey — **PASS, live verified**: Edge browser-protocol emulation forced a true 390x844 CSS mobile viewport with `documentElement.scrollWidth === 390`, proving zero horizontal overflow; the visual render was inspected and the header, headline, tour and next demo section fit correctly. The live hydrated demo also passed at desktop width with SAMPLE caller, boiler transcript, Human review, and Rules hold.
 
 **Reuse-first evidence:** repository search found all required demo assets already present. External GitHub candidates checked included nilbuild/driver.js, shipshapecode/shepherd, and katspaugh/wavesurfer.js. None was downloaded because each would duplicate existing capability and add dependency/runtime surface. See `docs/STEP4_DEMO_REUSE_DECISION.md`.
 
-**Verification:** source commit `0d3f901a49817adc434ac8036011a1449faed7bd`; focused Step-4 tests **30/30 PASS**; website tests **135/135 PASS**; full repository tests **185/185 PASS**; production static build **30/30 routes generated**; DigitalOcean deployment **PASS**; live mobile and desktop hydrated demo **PASS**.
+**Verification:** source commit `0d3f901a49817adc434ac8036011a1449faed7bd`; focused Step-4 tests **30/30 PASS**; website tests **135/135 PASS**; full repository tests **185/185 PASS**; production static build **30/30 routes generated**; DigitalOcean deployment **PASS**; true-390px mobile DOM width/overflow check **PASS**; inspected mobile render **PASS**; live desktop hydrated demo **PASS**.
 
 **Step 4 status:** **COMPLETE. No open blocker.**
