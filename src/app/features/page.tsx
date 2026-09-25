@@ -4,6 +4,7 @@ import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { HonestyBanner } from "@/components/HonestyBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import {
   FEATURE_GROUPS,
   featureGroupCopy,
@@ -26,6 +27,7 @@ export default function FeaturesPage() {
         lede="Start with the operational outcomes: collect maintenance details, keep safety and approvals in rules, escalate cases for human review, and retain a reviewable record. The capability labels below separate VERIFIED source-backed features from UNDER TEST work. Pre-launch — not a buy-now service or public always-on phone line."
         orbAccent
       />
+      <SafeAutomationModel compact />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-12">
         <FunnelPathStrip />
         <HonestyBanner compact>

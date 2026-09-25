@@ -1,6 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { TrustPillars } from "@/components/TrustPillars";
+import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -20,6 +21,8 @@ export default function SecurityPage() {
       />
 
       <TrustPillars />
+
+      <SafeAutomationModel />
 
       <section
         aria-labelledby="controls-heading"

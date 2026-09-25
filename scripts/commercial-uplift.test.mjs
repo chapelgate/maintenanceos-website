@@ -29,13 +29,13 @@ test("home commercial pass keeps Create/Join hierarchy and 3-step start", () => 
   assert.match(home, /HomeOnboardingSteps/);
   assert.match(home, /primaryHref="\/create\/"/);
   assert.match(home, /secondaryLabel="Request early access"/);
-  assert.match(home, /id="home-why-heading"/);
+  assert.match(home, /<SafeAutomationModel compact \/>/);
   assert.match(home, /HomeIndustries/);
   assert.match(home, /HomeHeroVisual/);
   assert.match(home, /HomeLifestyleStrip/);
   assert.match(home, /HomeLifeBand/);
   assert.match(home, /ProductUiShell/);
-  assert.match(home, /<h3 className="text-xl font-semibold tracking-tight text-ink/);
+  assert.match(home, /What your team gets/);
 
   assert.match(steps, /How to start — three steps/);
   assert.match(steps, /Website/);

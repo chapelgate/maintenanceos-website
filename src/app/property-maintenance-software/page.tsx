@@ -1,6 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { industryRoles } from "@/config/industries";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
@@ -17,6 +18,7 @@ export default function PropertyMaintenanceSoftwarePage() {
         lede="MaintenanceOS by Chapelgate is pre-launch property maintenance operations software for landlords, letting agents, property managers, maintenance firms, housing providers, facilities teams, councils, and holiday-let operators. AI assists intake; deterministic rules and authorised people retain control of safety, dispatch, and money."
         orbAccent
       />
+      <SafeAutomationModel compact />
       <div className="mx-auto max-w-4xl space-y-12 px-4 py-12">
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-ink">What property maintenance software means here</h2>
