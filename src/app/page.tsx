@@ -15,6 +15,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { ProductTourWatchLink } from "@/components/ProductTour";
+import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { UkScenarioVignettes } from "@/components/UkScenarioVignettes";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
@@ -40,26 +41,6 @@ const benefits = [
   },
 ] as const;
 
-const pillars = [
-  {
-    title: "AI-assisted intake",
-    body: "Designed to collect caller details and classify maintenance issues in UK terminology. Voice intake remains under testing — not a public always-on phone service.",
-    href: "/ai-receptionist/",
-    link: "AI receptionist",
-  },
-  {
-    title: "Rules own critical decisions",
-    body: "Safety latching, lifecycle, escalations, and approvals sit in server rules. The model does not override safety or money prohibitions.",
-    href: "/security/",
-    link: "Security",
-  },
-  {
-    title: "Human clearance",
-    body: "Critical paths are designed to require authorised human clearance. Explicit transfer requests keep judgement with your team.",
-    href: "/how-it-works/",
-    link: "See how it works",
-  },
-] as const;
 
 export default function HomePage() {
   return (
@@ -180,55 +161,7 @@ export default function HomePage() {
 
       <HomeOnboardingSteps />
 
-      {/* 2. Principles — AI for intake; rules for the operation */}
-      <section
-        id="principles"
-        aria-labelledby="home-why-heading"
-        className="border-b border-border bg-surface px-4 py-14 sm:px-6 sm:py-20"
-      >
-        <div className="mx-auto max-w-6xl">
-          <div className="section-band-head">
-            <IntakeOrbAccent />
-            <div>
-              <h2
-                id="home-why-heading"
-                className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
-              >
-                How MaintenanceOS keeps control behind the scenes.
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-                Underneath the customer outcomes, server rules — not the model —
-                own safety, lifecycle, escalations, and approvals. The AI
-                receptionist remains under testing and is not a public always-on
-                phone.
-              </p>
-            </div>
-          </div>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {pillars.map((pillar) => (
-              <article
-                key={pillar.title}
-                className="rounded-[var(--mos-radius-lg)] border border-border bg-paper p-5 sm:p-6"
-              >
-                <h3 className="text-xl font-semibold tracking-tight text-ink">
-                  {pillar.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {pillar.body}
-                </p>
-                <p className="mt-5 text-sm">
-                  <a
-                    href={pillar.href}
-                    className="font-semibold text-accent underline-offset-4 hover:underline"
-                  >
-                    {pillar.link}
-                  </a>
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <SafeAutomationModel compact />
 
       <HomeIndustries />
 

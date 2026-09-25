@@ -5,25 +5,12 @@ import { JsonLd } from "@/components/JsonLd";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { PageHero } from "@/components/PageHero";
 import { ProductTour } from "@/components/ProductTour";
+import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("howItWorks");
 
-const designedCallStages = [
-  {
-    title: "Intake",
-    body: "The receptionist layer is designed to collect caller details and classify what it hears in UK property-maintenance language — including 999 guidance where relevant. Voice intake is under testing — not a public always-on service.",
-  },
-  {
-    title: "Controlled triage",
-    body: "Tenant isolation, lifecycle transitions, safety latching, escalation queues, and approvals sit in server rules. Consequential actions are not left to the model.",
-  },
-  {
-    title: "Human oversight",
-    body: "Explicit-request human transfer and human clearance keep judgement with your team. No autonomous dispatch, booking, or payment claims.",
-  },
-] as const;
 
 export default function HowItWorksPage() {
   return (
@@ -63,35 +50,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section
-        aria-labelledby="call-design-heading"
-        className="mx-auto max-w-3xl px-4 py-12 sm:py-16"
-      >
-        <h2
-          id="call-design-heading"
-          className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
-        >
-          How a call is designed to work
-        </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted">
-          After early access, the product is designed so AI assists at intake
-          and classification. Authority for safety and money stays with system
-          rules and people. This is designed behaviour — not a live always-on
-          line.
-        </p>
-        <ol className="mt-8 space-y-6">
-          {designedCallStages.map((stage, i) => (
-            <li key={stage.title}>
-              <p className="text-lg font-semibold tracking-tight text-ink">
-                {i + 1}. {stage.title}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {stage.body}
-              </p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <SafeAutomationModel />
 
       <section
         aria-labelledby="honesty-heading"

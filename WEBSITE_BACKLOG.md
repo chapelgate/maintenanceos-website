@@ -20,7 +20,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | F5 | UX journeys visitor → trust → create/demo | **IMPLEMENTED / LIVE VERIFIED** — Steps 3–6 | UX |
 | F6 | UI component system | IMPLEMENTED baseline | UI |
 | F7 | Website repo scaffold | **DONE** — Next.js/TS/Tailwind in canonical repo | Front-End |
-| F8 | Claims-gated page copy | PARTIAL / live pre-launch copy exists | Copy |
+| F8 | Claims-gated page copy | **IMPLEMENTED BASELINE / SAFE-AUTOMATION CONSISTENT — Step 8** | Copy |
 | F9 | Industries/use-case pages | IMPLEMENTED baseline | Industries |
 | F10 | Production lead endpoint | **DONE** — existing Railway RSFM + audited Postgres + Resend notification | Forms |
 | F11 | Conversion optimisation | **DONE BASELINE / LIVE VERIFIED** — Step 6 | Conversion |
@@ -131,3 +131,20 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Reuse-first evidence:** existing metadata helpers, JSON-LD helpers, sitemap, robots, industry routes, footer navigation, `llms.txt`, `llms-full.txt`, and the current DigitalOcean static deployment were extended. Repository/estate search found no reusable SEO scheduler worth adding. No new app, database, paid SEO tool, GitHub Actions runner, domain purchase, or telephony change was introduced.
 
 **Step 7 status:** **COMPLETE. No open blocker.**
+
+
+## Step 8 completion — safe automation
+
+- 8.1 translate safety controls into plain English — **PASS**: one canonical public message now explains the boundary as `AI assists. Server rules control. Authorised people approve.` The wording is derived only from signed claims `V-03`, `V-04`, `O-03`, `O-04`, `O-05`, `O-06`, and `S-03`.
+- 8.2 explain what AI can automate — **PASS**: the shared model states that AI can collect caller/maintenance details, classify routine maintenance information in UK terminology, and prepare structured records for human-controlled follow-up. Voice intake remains explicitly under testing.
+- 8.3 explain approval / human intervention — **PASS**: the same model states that server rules own safety/lifecycle/approval boundaries, critical safety requires authorised human clearance, RED cases can enter HUMAN_REVIEW, and AI has no payment/refund/compensation/fee-waiver/client-money execution authority.
+- 8.4 simple visual AI + rules + human escalation — **PASS**: `SafeAutomationModel` renders the same three-stage visual from one shared config: Capture and structure → Enforce the boundaries → Clear consequential actions. The responsive source uses stacked cards below desktop, a three-column flow at `lg`, and desktop-only arrows; no diagram/animation dependency was added.
+- 8.5 consistent site-wide safe-automation message — **PASS, built and ready for live verification**: Home, How it works, AI receptionist, Security, Features, and Property maintenance software all reuse the same component. `llms.txt`, `llms-full.txt`, and the safety FAQ use the same boundary wording rather than parallel variants.
+
+**Reuse-first evidence:** repository search found the required controls already present in `TrustPillars`, Security, How it works, AI receptionist, homepage principles, the verified feature inventory, and industry copy. External GitHub search did not identify a reusable human-in-the-loop diagram dependency worth adding. The implementation centralises existing evidence in `src/config/safe-automation.ts` and one native React/Tailwind component. See `docs/STEP8_SAFE_AUTOMATION_MODEL.md`.
+
+**Verification before merge:** full repository tests **PASS**; production static build **PASS**; focused Step-8/value-proposition/commercial tests **PASS**; all six exported buyer pages contain the canonical safety model. Responsive layout behaviour is regression-tested in source. A local Edge screenshot harness returned blank frames on this laptop and is not counted as evidence.
+
+**Spend / isolation:** no new app, backend, database, diagram library, paid tool, GitHub Actions runner, or telephony/runtime change.
+
+**Step 8 status:** **IMPLEMENTED — pending final live rollout verification.**

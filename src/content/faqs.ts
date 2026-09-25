@@ -43,7 +43,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Does AI make final safety or money decisions?",
     answer:
-      "No. Deterministic safety rules override AI. Critical safety paths require human clearance. AI has no payment, refund, or client-money authority.",
+      "No. AI assists with intake. Deterministic server rules own safety, lifecycle, approvals, and money boundaries. Critical safety paths require authorised human clearance. AI has no payment, refund, or client-money authority.",
   },
   {
     question: "Is the AI receptionist live for production calls?",

@@ -34,7 +34,7 @@ Not offered here:
 
 ## VERIFIED (present as product capability in source — still pre-launch, not “buy now live service”)
 
-State these as designed product capabilities that exist in MaintenanceOS source. Do not imply a public production phone line or general availability.
+State these as designed product capabilities that exist in MaintenanceOS source. Do not imply a public production phone line or general availability. Canonical automation boundary: **AI assists. Server rules control. Authorised people approve.**
 
 - UK terminology and 999 (never 911) emergency guidance in product source and regressions
 - Receptionist is designed to collect caller details
