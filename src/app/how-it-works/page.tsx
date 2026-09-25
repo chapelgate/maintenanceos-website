@@ -31,8 +31,8 @@ export default function HowItWorksPage() {
       <JsonLd data={funnelPageJsonLd("howItWorks")} />
       <PageHero
         eyebrow="Pre-launch. Not a public live service yet."
-        title="From your website URL to a sandbox receptionist pack."
-        lede="Website → Check → Review → Pack, then request early access. An optional scripted sandbox sits after the pack when a local flag is on. We do not invent crawl results, bookings, or a live phone number."
+        title="From maintenance request to controlled follow-up."
+        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The pre-launch website path remains Website → Check → Review → Pack; an optional scripted sandbox can follow. We do not invent crawl results, bookings, or a live phone number."
         orbAccent
       />
 

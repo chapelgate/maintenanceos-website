@@ -22,8 +22,8 @@ export default function FeaturesPage() {
       <JsonLd data={funnelPageJsonLd("features")} />
       <PageHero
         eyebrow="Capability map · Pre-launch"
-        title="What MaintenanceOS includes — VERIFIED and UNDER TEST"
-        lede="Short cards from the Phone AI inventory. VERIFIED is a product capability in source — still pre-launch, not a buy-now live service. UNDER TEST is designed or flagged — not general availability. Live phone stays not available. Nothing here claims commercial general availability or a public always-on phone line."
+        title="What MaintenanceOS can do — and what is still being tested"
+        lede="Start with the operational outcomes: collect maintenance details, keep safety and approvals in rules, escalate cases for human review, and retain a reviewable record. The capability labels below separate VERIFIED source-backed features from UNDER TEST work. Pre-launch — not a buy-now service or public always-on phone line."
         orbAccent
       />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-12">

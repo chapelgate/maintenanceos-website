@@ -20,15 +20,34 @@ import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = funnelPageMetadata("home");
 
+const benefits = [
+  {
+    title: "Capture the request clearly",
+    body: "Collect caller details and maintenance context into structured operational records instead of relying on scattered notes.",
+  },
+  {
+    title: "Surface critical cases",
+    body: "Critical-safety latching and escalation queues keep RED cases on a controlled path to authorised human review.",
+  },
+  {
+    title: "Keep decisions with your team",
+    body: "AI does not override safety, lifecycle, or approval rules. Authorised people retain clearance of critical paths.",
+  },
+  {
+    title: "Keep work traceable",
+    body: "Work orders, communications, action evidence, and call-session records create a reviewable operational history.",
+  },
+] as const;
+
 const pillars = [
   {
-    title: "Intake assistance",
-    body: "Designed to collect caller details and classify issues in UK property-maintenance language. Capability under testing — not a public always-on phone service.",
+    title: "AI-assisted intake",
+    body: "Designed to collect caller details and classify maintenance issues in UK terminology. Voice intake remains under testing — not a public always-on phone service.",
     href: "/ai-receptionist/",
     link: "AI receptionist",
   },
   {
-    title: "Deterministic control",
+    title: "Rules own critical decisions",
     body: "Safety latching, lifecycle, escalations, and approvals sit in server rules. The model does not override safety or money prohibitions.",
     href: "/security/",
     link: "Security",
@@ -59,13 +78,18 @@ export default function HomePage() {
               id="hero-heading"
               className="mt-5 text-3xl font-semibold tracking-tight text-ink [text-wrap:balance] sm:text-4xl sm:leading-[1.12] lg:text-[2.75rem] lg:leading-[1.12]"
             >
-              UK maintenance operations. AI intake. Rules keep control.
+              Turn maintenance requests into clear, controlled work.
             </h1>
             <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-              MaintenanceOS by Chapelgate is pre-launch UK maintenance
-              operations software for landlords, agents, property managers, and
-              maintenance teams. AI assists intake; deterministic rules keep
-              control of safety and money. Not generally available yet.
+              MaintenanceOS by Chapelgate helps UK landlords, letting agents,
+              property managers, and maintenance teams capture maintenance
+              requests, structure the work, escalate critical cases, and keep
+              approvals with authorised people.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              AI assists intake. Server rules own safety, lifecycle, and
+              approvals. The AI receptionist capability is under testing; this
+              is not a public always-on phone service.
             </p>
             <CtaPair
               className="mt-8"
@@ -115,6 +139,40 @@ export default function HomePage() {
 
       <HomeTrustStrip />
 
+      <section
+        aria-labelledby="home-benefits-heading"
+        className="border-b border-border bg-paper px-4 py-12 sm:px-6 sm:py-16"
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold text-accent">What your team gets</p>
+            <h2
+              id="home-benefits-heading"
+              className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+            >
+              A clearer route from request to controlled follow-up.
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+              The customer outcome comes first. The technical controls sit
+              underneath it as proof, not as the sales pitch.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {benefits.map((benefit) => (
+              <article
+                key={benefit.title}
+                className="rounded-[var(--mos-radius-lg)] border border-border bg-surface p-5"
+              >
+                <h3 className="text-base font-semibold text-ink">{benefit.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {benefit.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <HomeLifeBand />
 
       <HomeOnboardingSteps />
@@ -133,11 +191,12 @@ export default function HomePage() {
                 id="home-why-heading"
                 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
               >
-                AI for intake. Rules for the operation.
+                How MaintenanceOS keeps control behind the scenes.
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-                Clear separation of assistance and authority — claims-safe for
-                pre-launch. UK maintenance ops first. Still not a live always-on
+                Underneath the customer outcomes, server rules — not the model —
+                own safety, lifecycle, escalations, and approvals. The AI
+                receptionist remains under testing and is not a public always-on
                 phone.
               </p>
             </div>

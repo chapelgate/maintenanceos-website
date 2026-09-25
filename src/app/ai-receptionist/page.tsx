@@ -39,8 +39,8 @@ export default function AiReceptionistPage() {
     <>
       <PageHero
         eyebrow="Under testing · In development"
-        title="AI receptionist for maintenance intake"
-        lede="An AI-assisted voice capability exists in product source and is under testing — not a live commercial service. We do not publish concurrent call numbers or claim production call-readiness."
+        title="Capture maintenance calls without handing control to the AI"
+        lede="The receptionist capability is being tested to collect caller details and classify maintenance requests in UK terminology. Server rules and authorised people retain control of safety and money. It is not a live commercial phone service."
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <section>

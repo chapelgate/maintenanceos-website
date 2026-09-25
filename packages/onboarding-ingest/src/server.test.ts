@@ -10,13 +10,30 @@ import {
 } from "./server.ts";
 import type { ScanResult } from "./types.ts";
 
+const FETCH_BLOCKED_TEST_PORTS = new Set([
+  1719, 1720, 1723, 2049, 3659, 4045, 4190, 5060, 5061, 6000, 6566,
+  6665, 6666, 6667, 6668, 6669, 6697, 10080,
+]);
+
 function listen(server: ReturnType<typeof createScanServer>): Promise<number> {
-  return new Promise((resolve) => {
-    server.listen(0, "127.0.0.1", () => {
-      const addr = server.address();
-      if (!addr || typeof addr === "string") throw new Error("no port");
-      resolve(addr.port);
-    });
+  return new Promise((resolve, reject) => {
+    const bind = () => {
+      server.once("error", reject);
+      server.listen(0, "127.0.0.1", () => {
+        server.removeListener("error", reject);
+        const addr = server.address();
+        if (!addr || typeof addr === "string") {
+          reject(new Error("no port"));
+          return;
+        }
+        if (FETCH_BLOCKED_TEST_PORTS.has(addr.port)) {
+          server.close((err) => (err ? reject(err) : bind()));
+          return;
+        }
+        resolve(addr.port);
+      });
+    };
+    bind();
   });
 }
 

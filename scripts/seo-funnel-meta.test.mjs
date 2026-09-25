@@ -31,7 +31,7 @@ test("shared funnel SEO copy names the real public path", () => {
 
 test("root fallback title no longer lags as generic operations copy", () => {
   const src = helper();
-  assert.match(src, /MaintenanceOS by Chapelgate/);
+  assert.match(src, /siteConfig\.publicBrand/);
   assert.match(src, /UK maintenance operations software/);
   assert.doesNotMatch(
     src,

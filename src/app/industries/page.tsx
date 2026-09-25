@@ -15,8 +15,8 @@ export default function IndustriesPage() {
     <>
       <PageHero
         eyebrow="Pre-launch · United Kingdom"
-        title="One OS per industry."
-        lede="Each role is its own product line under Chapelgate — industry name with OS on the end. Copy is written for UK property-maintenance operations (emergency triage vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money) — not a generic AI receptionist. Pilot-stage — not commercial general availability."
+        title="Maintenance workflows for the teams who run them."
+        lede="See how the same MaintenanceOS control model is framed for landlords, letting agents, property managers, and other UK maintenance roles: emergency triage vs jobs, contractor-dispatch language, out-of-hours honesty, and no client-money execution. Pilot-stage — not commercial general availability or a generic AI receptionist."
         orbAccent
       />
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-12">
