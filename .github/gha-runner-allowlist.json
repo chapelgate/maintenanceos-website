@@ -1,0 +1,59 @@
+{
+  "schema": "chapelgate.gha-runner-allowlist.v2",
+  "repository": "chapelgate/maintenanceos-v1-pilot",
+  "updated": "2026-09-24",
+  "target": "zero_github_hosted_compute",
+  "githubHostedAllowed": {},
+  "selfHosted": {
+    "requiredLabels": [
+      "self-hosted",
+      "linux",
+      "x64",
+      "chapelgate",
+      "estate-trusted"
+    ],
+    "allowedWorkflows": [
+      "*"
+    ],
+    "forbiddenEvents": [
+      "pull_request",
+      "pull_request_target"
+    ],
+    "reason": "Persistent DigitalOcean execution is trusted-estate only. Untrusted PR/fork code must not reach production hosts. GitHub-hosted compute target is \u00a30."
+  },
+  "paidRunnersRequireExplicitAllow": [
+    "ubuntu-latest",
+    "ubuntu-24.04",
+    "ubuntu-22.04",
+    "windows-latest",
+    "windows-2022",
+    "windows-2025",
+    "macos-latest",
+    "macos-13",
+    "macos-14",
+    "macos-15",
+    "ubuntu-latest-4-cores",
+    "ubuntu-latest-8-cores",
+    "ubuntu-latest-16-cores",
+    "ubuntu-4-core",
+    "ubuntu-8-core",
+    "ubuntu-16-core",
+    "ubuntu-32-core",
+    "ubuntu-64-core"
+  ],
+  "explicitPaidAllow": [],
+  "doNotEditWorkflows": [
+    "ee-front-door-deploy-inspect.yml",
+    "ee-front-door-fast-lane-proof.yml"
+  ],
+  "cronAllowlist": [
+    {
+      "workflow": "security-ci.yml",
+      "crons": [
+        "17 4 * * 1"
+      ]
+    }
+  ],
+  "requireTimeoutMinutes": true,
+  "forbidRetryLoops": true
+}

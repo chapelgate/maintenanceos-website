@@ -3,6 +3,7 @@
 name: Estate MOS live auth
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
@@ -17,7 +18,7 @@ jobs:
     if: >
       github.ref == 'refs/heads/main' &&
       contains(github.event.head_commit.message, '[execute-mos-live-auth]')
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
     timeout-minutes: 6
     permissions:
       contents: read

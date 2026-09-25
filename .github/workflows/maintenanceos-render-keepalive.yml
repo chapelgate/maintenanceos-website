@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   keepalive:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
     timeout-minutes: 4
     steps:
       - name: Keep controlled-call service warm

@@ -2,12 +2,6 @@ name: MaintenanceOS Security CI
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - 'requirements.txt'
-      - 'Dockerfile'
-      - '.github/workflows/security-ci.yml'
-      - '.github/workflows/cloud-ci.yml'
   push:
     branches: [main]
     paths:
@@ -27,7 +21,7 @@ permissions:
 
 jobs:
   security:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4

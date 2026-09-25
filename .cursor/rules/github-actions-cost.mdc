@@ -5,7 +5,19 @@ alwaysApply: true
 
 # GitHub Actions cost discipline
 
-Treat GitHub-hosted jobs as metered compute.
+GitHub is the control/source/audit plane only. Execution runs on existing DigitalOcean self-hosted capacity.
+
+**Paid GitHub-hosted compute target: £0.**
+
+Forbidden `runs-on` unless an explicit allowlist exception exists:
+
+- `ubuntu-latest` / `ubuntu-22.04` / `ubuntu-24.04`
+- `windows-latest` / `windows-20xx`
+- `macos-*`
+- larger GitHub runners / `*-cores`
+
+Required trusted jobs use `runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]`.
+Never attach `pull_request` or `pull_request_target` to a self-hosted workflow.
 
 - Dormant/stored code: no scheduled Actions.
 - Prefer event, webhook, relevant code-change, release or manual workflow_dispatch.
@@ -20,6 +32,6 @@ Treat GitHub-hosted jobs as metered compute.
 - No cron/polling "just in case".
 - Live-service uptime checks belong on the cheapest appropriate central monitor, not GitHub Actions, unless GitHub is genuinely required.
 - Autonomous agents wake for real work/events, not merely because a timer expired.
-- Do not raise spend limits to mask inefficient workflow design.
+- Do not raise spend limits. The existing hard-stop stays. Self-hosted minutes are not billed.
 
 Before every push ask: "Does this push contain enough completed, validated work to justify another CI run?"
