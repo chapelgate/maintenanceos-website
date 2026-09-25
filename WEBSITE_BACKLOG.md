@@ -54,3 +54,17 @@ Source-of-truth programme 1.1–1.5 is **complete**. The provider App Platform s
 **Live rollout:** **PASS — Step 2 complete.** Cache-bypassed verification on 2026-09-25 proved the new homepage title, visible `MaintenanceOS by Chapelgate` attribution, `Organization` / `WebSite` / `SoftwareApplication` structured data, UK-maintenance AI-receptionist metadata, and updated `llms.txt` on the existing DigitalOcean static app. `WB-001` is closed in `WEBSITE_EXTERNAL_BLOCKERS.md`.
 
 External observation: the bare `MaintenanceOS` name is crowded by unrelated products. The differentiating public identity is therefore mandatory. A future branded production domain remains a launch dependency; this step does not authorise domain spend or duplicate hosting.
+
+## Step 3 completion — sharpen the value proposition
+
+- 3.1 homepage headline around the customer problem/outcome — **PASS, live verified**: `Turn maintenance requests into clear, controlled work.`
+- 3.2 one-sentence explanation — **PASS, live verified** and locked in `VALUE_PROPOSITION.md`.
+- 3.3 strongest customer benefits — **PASS, live verified**: capture the request clearly; surface critical cases; keep decisions with your team; keep work traceable.
+- 3.4 customer benefits separated from technical architecture — **PASS, live verified**: `What your team gets` appears before `How MaintenanceOS keeps control behind the scenes`.
+- 3.5 major-page first-screen clarity — **PASS, live verified** across Home, AI receptionist, How it works, Features, Industries, Pricing, Demo, Security, and Contact.
+
+**Verification:** source commit `ecb0e69d39d35e2338adee06e21d993e3b1fffb3`; website regression tests **130/130 PASS**; full repository tests **185/185 PASS**; production static build **30/30 routes generated**; cache-bypassed DigitalOcean acceptance **PASS**.
+
+During verification an existing flaky onboarding-ingest test harness was also fixed: OS-assigned ports that the Fetch standard blocks are now rejected and rebound before local fetch tests run. No product runtime behaviour changed.
+
+**Step 3 status:** **COMPLETE. No open blocker.**
