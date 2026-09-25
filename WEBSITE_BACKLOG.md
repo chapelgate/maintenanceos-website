@@ -82,3 +82,18 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Verification:** source commit `0d3f901a49817adc434ac8036011a1449faed7bd`; focused Step-4 tests **30/30 PASS**; website tests **135/135 PASS**; full repository tests **185/185 PASS**; production static build **30/30 routes generated**; DigitalOcean deployment **PASS**; true-390px mobile DOM width/overflow check **PASS**; inspected mobile render **PASS**; live desktop hydrated demo **PASS**.
 
 **Step 4 status:** **COMPLETE. No open blocker.**
+
+
+## Step 5 completion — commercial proof and trust
+
+- 5.1 buyer-friendly proof from technical evidence — **PASS, live verified**: the homepage now has a dedicated `Proof we can show today` section that reuses the signed VERIFIED feature inventory rather than inventing new claims.
+- 5.2 reliability / performance claims only where evidenced — **PASS, live verified**: dated R-04 local acceptance and S-04 Cloud CI / Security CI baseline evidence are stated; uptime percentages, latency promises, SLAs, capacity and production-scale claims are explicitly excluded.
+- 5.3 sanitized realistic examples — **PASS, live verified**: the existing five UK maintenance playbooks remain labelled as scenarios from product design, not customer stories or live-call samples, and are linked from the proof section.
+- 5.4 testimonials / pilots / case studies — **PASS, gated**: a visible pilot / case-study evidence slot is present but stays `Awaiting publishable evidence` until there is a named evidence source, dated outcome, permission to publish, and claims review. No fabricated quote, logo, rating or testimonial was added.
+- 5.5 security / privacy / safety / human escalation trust — **PASS, live verified**: the proof section links the existing Security controls, draft Privacy notice, and Human review path; it states that server rules retain safety/lifecycle/approval authority, critical safety latches for authorised human review, and AI has no client-money execution authority.
+
+**Reuse-first evidence:** existing `phoneAiMarketingCards`, `FeatureStatusChip`, `TrustPillars`, `UkScenarioVignettes`, Security/Privacy/How-it-works pages, and the signed `PRODUCT_CLAIMS_REGISTER.md` were reused. External GitHub searches for generic trust/testimonial UI did not justify another dependency. No package, backend, infrastructure, GitHub Actions workflow or paid service was added. See `docs/STEP5_COMMERCIAL_PROOF_POLICY.md`.
+
+**Verification:** source merge `9b1e456e5fc64b61b51b3aa1a745a86f42cc7116`; source-level claims assertions **10/10 PASS**; existing DigitalOcean auto-deploy **PASS**; free live fetch of `#proof` and `#scenarios` **PASS**; live trust links resolve to `/security/`, `/privacy/`, and `/how-it-works/`. Successful live deployment also proves the static site compiled and published.
+
+**Step 5 status:** **COMPLETE. No open blocker.**
