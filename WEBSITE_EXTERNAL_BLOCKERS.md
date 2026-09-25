@@ -1,7 +1,7 @@
 # MaintenanceOS Website External Blockers
 
-**Owner:** MOS Website Manager  
-**Updated:** 2026-09-25  
+**Owner:** MOS Website Manager
+**Updated:** 2026-09-25
 **Rule:** Only genuine external/manual blockers belong here. Exhaust safe authorised alternatives first.
 
 ## OPEN
@@ -12,12 +12,12 @@ None.
 
 ### WB-001 — Existing DigitalOcean static app appeared not to have deployed Step 2
 
-**Scope:** Website Manager Step 2 — brand and discoverability live rollout  
-**Closed:** 2026-09-25  
+**Scope:** Website Manager Step 2 — brand and discoverability live rollout
+**Closed:** 2026-09-25
 **Resolution:** False deployment blocker caused by stale cached verification. The existing DigitalOcean static app was already serving the Step-2 build when fetched with explicit cache bypass.
 
-**Canonical Step-2 source commit:** `19dd1738ba9d029d8146cd23c029561483186a36`  
-**Existing app:** `maintenanceos-website` / `seahorse-app-4oasq`  
+**Canonical Step-2 source commit:** `19dd1738ba9d029d8146cd23c029561483186a36`
+**Existing app:** `maintenanceos-website` / `seahorse-app-4oasq`
 **Live origin:** `https://seahorse-app-4oasq.ondigitalocean.app`
 
 ### Live close evidence
