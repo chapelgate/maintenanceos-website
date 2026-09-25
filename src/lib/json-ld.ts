@@ -24,8 +24,8 @@ function organizationNode(): JsonLdRecord {
     "@type": "Organization",
     "@id": orgId(),
     name: siteConfig.publisherName,
-    url: absoluteUrl("/"),
-    description: `Publisher of ${siteConfig.name}, ${siteConfig.category}.`,
+    url: absoluteUrl("/about/"),
+    description: `Chapelgate develops ${siteConfig.name}, ${siteConfig.category}.`,
     brand: {
       "@type": "Brand",
       name: siteConfig.publicBrand,
@@ -69,7 +69,13 @@ function softwareApplicationNode(): JsonLdRecord {
       "Pre-launch UK maintenance operations software with AI-assisted intake. The AI receptionist capability is under testing. Deterministic rules and authorised human clearance keep control of safety and money. Not commercially generally available; not a public always-on phone service.",
     inLanguage: siteConfig.locale,
     countriesSupported: "GB",
+    keywords:
+      "UK maintenance operations software, AI maintenance receptionist, property maintenance intake, maintenance workflow software",
     publisher: { "@id": orgId() },
+    brand: {
+      "@type": "Brand",
+      name: siteConfig.publicBrand,
+    },
   };
 }
 
