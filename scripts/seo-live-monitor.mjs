@@ -9,7 +9,16 @@ const pages = [
 
 function firstMatch(html, pattern) { return html.match(pattern)?.[1]?.trim() || ""; }
 async function fetchText(url) {
-  const response = await fetch(url, { headers: { "user-agent": "MaintenanceOS-SEO-Monitor/1.0" }, redirect: "follow" });
+  const requestUrl =
+    url + (url.includes("?") ? "&" : "?") + "seo_check=" + Date.now();
+  const response = await fetch(requestUrl, {
+    headers: {
+      "user-agent": "MaintenanceOS-SEO-Monitor/1.0",
+      "cache-control": "no-cache",
+      pragma: "no-cache",
+    },
+    redirect: "follow",
+  });
   return { response, text: await response.text() };
 }
 
