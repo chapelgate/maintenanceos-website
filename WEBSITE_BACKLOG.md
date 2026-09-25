@@ -220,4 +220,6 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 - Runtime isolation — **IMPLEMENTED**: website rollback instructions explicitly prohibit using voice/backend infrastructure to repair a marketing-site regression.
 - Reuse / spend — **PASS**: existing Git/GitHub, DigitalOcean deployment, performance, accessibility, release-marker and health-monitor controls are reused. No new service or paid runner.
 
-**Step 49 status:** **IMPLEMENTED — pending preflight + merged live deployment verification.**
+**Verification:** PR #100 merged as `e113eb7d08c99910bb83b0eb3f5a96cbfa745c2a`. The clean-tree release preflight passed the full **185/185** repository tests, 31-page production build, Step-46 performance budget and Step-47 accessibility **12/12** gate. The existing DigitalOcean deployment then published that exact SHA in `/release.json`; `release:verify` returned `failures: []`, `ok: true`, followed by the reused health monitor checking **29 internal paths / 47 pages-assets** with zero failures.
+
+**Step 49 status:** **COMPLETE. No open blocker.**
