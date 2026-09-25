@@ -35,13 +35,15 @@ Repository history also records the same DigitalOcean static deployment relation
 
 The product repository independently recorded the same live starter-static site and host during estate reconciliation in commit `176a82799815b1677b5ea8a312eb8d16f3d17684`.
 
+Live host verification on 2026-09-25 fetched `https://seahorse-app-4oasq.ondigitalocean.app/` successfully. The rendered title and homepage copy match the canonical repository, including `UK maintenance operations. AI intake. Rules keep control.` This independently confirms that the recorded staging host is serving the MaintenanceOS marketing build.
+
 ## Branch rule
 
 `main` is the authoritative release source for the website.
 
 The currently connected DigitalOcean tool surface does not expose App Platform source-link metadata, so the provider-side branch selector cannot be independently read from this agent session. Do not invent a different branch. Any future provider-side change must verify that the App Platform static component tracks `chapelgate/maintenanceos-website` `main` before changing build/deploy settings.
 
-This limitation is a read-only provider-metadata gap, not permission to create another app.
+This limitation is a read-only provider-metadata gap, not permission to create another app. It is **non-blocking for Step 1** because the live host content matches the canonical source and the repository/deployment history independently names the same app. Re-read provider-side linkage only before a future hosting mutation.
 
 ## Duplicate check
 
