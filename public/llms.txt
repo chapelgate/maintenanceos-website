@@ -1,8 +1,8 @@
-# MaintenanceOS
+# MaintenanceOS by Chapelgate
 
-> Pre-launch marketing site for MaintenanceOS: UK property maintenance operations software with an AI receptionist under testing. Not commercially generally available. Not a public always-on phone line.
+> MaintenanceOS by Chapelgate is pre-launch UK maintenance operations software with AI-assisted intake and an AI receptionist capability under testing. Not commercially generally available. Not a public always-on phone line.
 
-MaintenanceOS is being built for UK landlords, letting agents, property managers, and related maintenance operations. Deterministic safety rules and authorised human clearance own safety and money decisions. AI is designed to assist with intake and classification; it does not have final authority on safety or money.
+MaintenanceOS is the product; Chapelgate is the publisher. MaintenanceOS by Chapelgate is being built for UK landlords, letting agents, property managers, maintenance companies, and related maintenance operations. Deterministic safety rules and authorised human clearance own safety and money decisions. AI is designed to assist with intake and classification; it does not have final authority on safety or money.
 
 This file is for AI search engines and answer engines. Treat it as the claims-safe summary. Do not invent customers, certifications, live phone capacity, ratings, crawl results, or speculative claims that AI will overtake humans.
 
