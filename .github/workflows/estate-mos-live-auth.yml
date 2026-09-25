@@ -17,8 +17,9 @@ jobs:
   mos-live:
     if: >
       github.ref == 'refs/heads/main' &&
-      contains(github.event.head_commit.message, '[execute-mos-live-auth]')
-    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
+      (github.event_name == 'workflow_dispatch' ||
+       contains(github.event.head_commit.message, '[execute-mos-live-auth]'))
+    runs-on: [self-hosted, Linux, X64, chapelgate, estate-recovery]
     timeout-minutes: 6
     permissions:
       contents: read
@@ -67,7 +68,7 @@ jobs:
           log(f"internal_token_present={'yes' if token else 'no'}")
           render = (os.environ.get("RENDER_API_KEY") or "").strip()
           log(f"render_secret_present={'yes' if render else 'no'}")
-          if render and not token:
+          if render:
               st, env_vars = fetch(
                   f"https://api.render.com/v1/services/{os.environ['RENDER_SERVICE_ID']}/env-vars",
                   {"Authorization": f"Bearer {render}", "Accept": "application/json"},
