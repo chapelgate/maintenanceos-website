@@ -64,6 +64,8 @@ test("SEO monitoring is zero-dependency and checks canonical technical signals",
   const pkg = read("package.json");
   const monitor = read("scripts/seo-live-monitor.mjs");
   assert.match(pkg, /"seo:monitor": "node scripts\/seo-live-monitor\.mjs"/);
+  assert.match(monitor, /seo_check=/);
+  assert.match(monitor, /cache-control/);
   assert.match(monitor, /canonical mismatch/);
   assert.match(monitor, /duplicate title/);
   assert.match(monitor, /duplicate description/);

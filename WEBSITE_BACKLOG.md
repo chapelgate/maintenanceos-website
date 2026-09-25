@@ -26,7 +26,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | F11 | Conversion optimisation | **DONE BASELINE / LIVE VERIFIED** — Step 6 | Conversion |
 | F12 | Legal page scaffolds | DONE as drafts; legal review still required | Legal |
 | F13 | Privacy/cookie/consent finalisation | OPEN — legal review | Privacy |
-| F14 | SEO foundation | IMPLEMENTED baseline; optimisation pending | SEO |
+| F14 | SEO foundation | **DONE / LIVE VERIFIED — Step 7** | SEO |
 | F15 | WCAG 2.2 AA verification | OPEN | Accessibility |
 | F16 | Core Web Vitals/performance verification | OPEN | Performance |
 | F17 | Security review / hosting-header gaps | OPEN | Security |
@@ -116,3 +116,18 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Spend / isolation:** no new app, droplet, database, hosting subscription, GitHub Actions runner, or telephony infrastructure was created. The new Resend credential is sending-only and domain-restricted; it is stored only in Railway runtime configuration, never in Git or client code.
 
 **Step 6 status:** **COMPLETE. No open blocker.**
+
+
+## Step 7 completion — SEO
+
+- 7.1 buyer-intent terms — **PASS**: current public-search research identified the useful UK commercial language around property maintenance software, maintenance management software, AI maintenance receptionist, and audience-specific maintenance software. The bare `MaintenanceOS` name is crowded by an unrelated live product, so search identity remains `MaintenanceOS by Chapelgate`.
+- 7.2 one intent per major landing page — **PASS**: `src/config/seo-intents.ts` and `docs/SEO_INTENT_MAP_2026-09-25.md` map one primary intent to Home, the core property-maintenance page, AI receptionist, Features, How it works, and each of the eight industry pages.
+- 7.3 core service / sector pages without duplication — **PASS, live verified**: one canonical `/property-maintenance-software/` page owns the broad non-brand category; the existing eight industry routes own their audience-specific intents. Close synonyms are deliberately consolidated instead of creating thin duplicate pages.
+- 7.4 technical SEO — **PASS, live verified**: sitemap, robots, self-canonicals, unique titles/descriptions, public-brand metadata, Organization/WebSite/WebPage/SoftwareApplication structured data, industry BreadcrumbList schema, internal links, and claims-safe `llms.txt` / `llms-full.txt` are present.
+- 7.5 SEO monitoring — **PASS**: `npm run seo:monitor` is a zero-dependency live monitor for HTTP status, missing/duplicate metadata, canonical mismatches, noindex, JSON-LD, sitemap inclusion, and robots/sitemap linkage. It cache-busts DigitalOcean checks to avoid false stale-deployment failures. Public-search indexing observations remain recorded in the dated SEO baseline; no paid rank tracker or duplicate monitoring service was created.
+
+**Verification:** Step-7 implementation PR #88 merged as `b2d5dc14fc69418ff1bdaff52e16d44679a2ab71`. Full repository tests **PASS**; production static build **PASS** with 31 static pages; exported SEO tests **20/20 PASS**. Cache-bypassed live acceptance on 2026-09-25 returned HTTP 200 for the new `/property-maintenance-software/` route, confirmed it in `sitemap.xml`, and the full live SEO monitor returned `failures: []`, `ok: true` across the core and eight industry pages.
+
+**Reuse-first evidence:** existing metadata helpers, JSON-LD helpers, sitemap, robots, industry routes, footer navigation, `llms.txt`, `llms-full.txt`, and the current DigitalOcean static deployment were extended. Repository/estate search found no reusable SEO scheduler worth adding. No new app, database, paid SEO tool, GitHub Actions runner, domain purchase, or telephony change was introduced.
+
+**Step 7 status:** **COMPLETE. No open blocker.**
