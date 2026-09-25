@@ -10,11 +10,14 @@ function envFlag(value: string | undefined, fallback = false): boolean {
 
 export const siteConfig = {
   name: "MaintenanceOS",
+  publicBrand: "MaintenanceOS by Chapelgate",
+  publisherName: "Chapelgate",
   shortName: "MOS",
+  category: "UK maintenance operations software with AI-assisted intake",
   tagline:
-    "Operations software for property maintenance — clear, accountable, in control.",
+    "UK maintenance operations software with AI-assisted intake — rules keep control.",
   description:
-    "Pre-launch operations software for UK landlords, letting agents, and property managers. Website to knowledge pack onboarding. Deterministic safety rules and human clearance; AI assists without final authority on safety or money. Not a live phone.",
+    "MaintenanceOS by Chapelgate is pre-launch UK maintenance operations software with AI-assisted intake for landlords, letting agents, property managers, and maintenance teams. Deterministic rules and authorised human clearance keep control of safety and money. The AI receptionist capability is under testing, not a public always-on phone service.",
   /** PRE-LAUNCH gate. Default false. */
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
   /**

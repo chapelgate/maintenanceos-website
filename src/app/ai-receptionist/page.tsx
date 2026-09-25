@@ -3,9 +3,9 @@ import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
-  title: "AI receptionist",
+  title: "AI receptionist for UK maintenance intake",
   description:
-    "AI receptionist for maintenance intake — under testing and in development. Not a live commercial voice service.",
+    "MaintenanceOS by Chapelgate includes an AI receptionist capability for UK maintenance intake that is under testing and in development. Deterministic rules keep control of safety and money. Not a live commercial voice service.",
   path: "/ai-receptionist/",
 });
 

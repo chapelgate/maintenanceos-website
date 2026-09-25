@@ -5,9 +5,12 @@ export function SiteFooter() {
     <footer className="mt-auto border-t border-border bg-surface text-ink">
       <div className="mx-auto grid max-w-[70rem] gap-10 px-4 py-12 md:px-6 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="text-lg text-ink" aria-label={siteConfig.name}>
+          <p className="text-lg text-ink" aria-label={siteConfig.publicBrand}>
             <span className="font-medium">Maintenance</span>
             <span className="font-semibold">OS</span>
+            <span className="ml-2 text-xs font-medium text-muted">
+              by Chapelgate
+            </span>
           </p>
           <p className="mt-2 text-sm text-muted">
             Built for UK maintenance operations. Pre-launch — not commercially
@@ -45,7 +48,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border px-4 py-4 md:px-6">
         <div className="mx-auto flex max-w-[70rem] flex-wrap items-center justify-between gap-3 text-sm text-muted">
-          <p>© {new Date().getFullYear()} Chapelgate · MaintenanceOS</p>
+          <p>© {new Date().getFullYear()} MaintenanceOS by Chapelgate</p>
           <div className="flex flex-wrap gap-4">
             {footerNav.convert.map((link) => (
               <a

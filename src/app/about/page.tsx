@@ -49,7 +49,7 @@ export default function AboutPage() {
             still pre-launch.
           </p>
           <p>
-            Eight industry lines sit under Chapelgate Technologies on{" "}
+            Eight industry lines sit under Chapelgate on{" "}
             <a
               href="/industries/"
               className="font-medium text-accent underline-offset-4 hover:underline"

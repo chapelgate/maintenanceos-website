@@ -62,9 +62,10 @@ export default function HomePage() {
               UK maintenance operations. AI intake. Rules keep control.
             </h1>
             <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-              MaintenanceOS is a UK maintenance operations platform for
-              landlords, agents, and property teams. AI assists intake; rules
-              keep control of safety and money. Not generally available yet.
+              MaintenanceOS by Chapelgate is pre-launch UK maintenance
+              operations software for landlords, agents, property managers, and
+              maintenance teams. AI assists intake; deterministic rules keep
+              control of safety and money. Not generally available yet.
             </p>
             <CtaPair
               className="mt-8"

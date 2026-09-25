@@ -10,7 +10,7 @@ export const FUNNEL_PATH_LABEL =
 const FUNNEL_META_GUARD =
   "Pre-launch — not a live phone, not always-on, not general availability.";
 
-const defaultTitle = `${siteConfig.name} — Website to knowledge pack`;
+const defaultTitle = `${siteConfig.publicBrand} — UK maintenance operations software`;
 
 function ogLocale(): string {
   return siteConfig.locale.replace("-", "_");
@@ -23,14 +23,14 @@ function ogLocale(): string {
  */
 export const funnelPageCopy = {
   home: {
-    title: "UK maintenance operations — website to knowledge pack",
-    absoluteTitle: `${siteConfig.name} — UK maintenance operations — website to knowledge pack`,
-    description: `${FUNNEL_PATH_LABEL}. For UK landlords, agents, and managers. ${FUNNEL_META_GUARD}`,
+    title: "UK maintenance operations software",
+    absoluteTitle: `${siteConfig.publicBrand} — UK maintenance operations software`,
+    description: `${siteConfig.publicBrand} is pre-launch UK maintenance operations software with AI-assisted intake for landlords, agents, managers, and maintenance teams. ${FUNNEL_PATH_LABEL}. ${FUNNEL_META_GUARD}`,
     path: "/",
   },
   create: {
-    title: "Create from your website",
-    description: `${FUNNEL_PATH_LABEL}. Paste a public URL and review the draft. Pre-launch — not a live phone number; this form does not provision one.`,
+    title: "Create maintenance intake from your website",
+    description: `${FUNNEL_PATH_LABEL}. Build and review a maintenance intake draft from a public business website. Pre-launch — not a live phone number; this form does not provision one.`,
     path: "/create/",
   },
   demo: {
@@ -39,12 +39,12 @@ export const funnelPageCopy = {
     path: "/demo/",
   },
   howItWorks: {
-    title: "How it works — website to pack",
+    title: "How MaintenanceOS works",
     description: `${FUNNEL_PATH_LABEL}. Optional scripted sandbox is under testing. Deterministic rules own safety and money. Pre-launch — not a live phone.`,
     path: "/how-it-works/",
   },
   features: {
-    title: "Features — website to pack",
+    title: "Maintenance operations software features",
     description: `VERIFIED / UNDER TEST: ${FUNNEL_PATH_LABEL}. Flagged sandbox and calendars; live phone not on this site. Pre-launch — not a live phone or commercial general availability.`,
     path: "/features/",
   },
@@ -59,10 +59,10 @@ export function buildRootMetadata(): Metadata {
     metadataBase: new URL(origin),
     title: {
       default: defaultTitle,
-      template: `%s · ${siteConfig.name}`,
+      template: `%s · ${siteConfig.publicBrand}`,
     },
     description: siteConfig.description,
-    applicationName: siteConfig.name,
+    applicationName: siteConfig.publicBrand,
     referrer: REFERRER_POLICY,
     robots: { index: true, follow: true },
     alternates: { canonical: home },
@@ -70,7 +70,7 @@ export function buildRootMetadata(): Metadata {
       type: "website",
       locale: ogLocale(),
       url: home,
-      siteName: siteConfig.name,
+      siteName: siteConfig.publicBrand,
       title: defaultTitle,
       description: siteConfig.description,
     },
@@ -92,7 +92,7 @@ export function contentPageMetadata(opts: {
 }): Metadata {
   const path = opts.path.endsWith("/") ? opts.path : `${opts.path}/`;
   const canonical = absoluteUrl(path);
-  const ogTitle = opts.absoluteTitle ?? `${opts.title} · ${siteConfig.name}`;
+  const ogTitle = opts.absoluteTitle ?? `${opts.title} · ${siteConfig.publicBrand}`;
 
   return {
     title: opts.absoluteTitle
@@ -104,7 +104,7 @@ export function contentPageMetadata(opts: {
       title: ogTitle,
       description: opts.description,
       url: canonical,
-      siteName: siteConfig.name,
+      siteName: siteConfig.publicBrand,
       locale: ogLocale(),
       type: "website",
     },

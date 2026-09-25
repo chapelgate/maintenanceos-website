@@ -4,6 +4,17 @@
 **Source of truth for tokens:** `src/app/globals.css` (mirrored in `docs/ui-preview/tokens.css`).  
 **Companion:** `UI_VISUAL_SYSTEM.md`.
 
+## Public naming
+
+- Product name: **MaintenanceOS**
+- Public/search identity: **MaintenanceOS by Chapelgate**
+- Publisher: **Chapelgate**
+- Category descriptor: **UK maintenance operations software with AI-assisted intake**
+- Use the bare product name inside product copy where natural; use **MaintenanceOS by Chapelgate** in site identity, metadata, structured data, search/AI summaries, and visible attribution.
+- Do not drift between `Chapelgate` and `Chapelgate Technologies` on this site unless a separate approved naming decision changes the publisher identity.
+
+Discoverability baseline and monitoring queries: [`docs/SEO_BRAND_BASELINE_2026-09-25.md`](docs/SEO_BRAND_BASELINE_2026-09-25.md).
+
 ## Intent
 
 UK maintenance operations product on **light paper**. Blue `#1D4ED8` is the brand accent (CTAs, focus rings — louder than photos/motion). Orb glow is a single blue hue (`#3B82F6` → sky → white). The orb is a **secondary “intake listening” cue** on a paper hero stage (sized to the old photo footprint) plus restrained band accents — not the brand mark and not a conversion control. The wordmark stays **flat ink** — no blue logo fill.

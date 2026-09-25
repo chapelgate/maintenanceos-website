@@ -41,3 +41,14 @@ This is the persistent website problem register. Do not create parallel problem 
 ## Step 1 completion
 
 Source-of-truth programme 1.1–1.5 is **complete**. The provider App Platform selector is not exposed by the current connector, but live-host verification plus repository/deployment history closes it as non-blocking. The authoritative release source remains `chapelgate/maintenanceos-website` `main`.
+
+
+## Step 2 completion — brand and discoverability
+
+- 2.1 exact public brand name and spelling — **PASS**: product `MaintenanceOS`; public/search identity `MaintenanceOS by Chapelgate`; publisher `Chapelgate`.
+- 2.2 category description — **PASS**: `UK maintenance operations software with AI-assisted intake`.
+- 2.3 page titles / metadata / visible attribution — **PASS** in source; all shared metadata uses the public brand and key pages use category/intent language.
+- 2.4 structured data — **PASS**: publisher/product/WebSite identity separated without ratings, reviews, offers, telephone, or certification claims.
+- 2.5 brand-search baseline / monitoring — **PASS**: `docs/SEO_BRAND_BASELINE_2026-09-25.md`.
+
+External observation: the bare `MaintenanceOS` name is crowded by unrelated products. The differentiating public identity is therefore mandatory. A future branded production domain remains a launch dependency; this step does not authorise domain spend or duplicate hosting.
