@@ -38,6 +38,10 @@ test("shared JSON-LD helper stays claims-safe and uses funnel copy", () => {
   assert.match(src, /"@type": "WebSite"/);
   assert.match(src, /"@type": "WebPage"/);
   assert.match(src, /"@type": "SoftwareApplication"/);
+  assert.match(src, /siteConfig\.publisherName/);
+  assert.match(src, /siteConfig\.publicBrand/);
+  assert.match(src, /alternateName/);
+  assert.match(src, /Property maintenance operations software/);
   assert.match(src, /Not commercially generally available/);
   assert.match(src, /not a public always-on phone service/);
   assert.doesNotMatch(src, /PreOrder/);
