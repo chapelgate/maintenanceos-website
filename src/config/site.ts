@@ -32,6 +32,13 @@ export const siteConfig = {
     process.env.NEXT_PUBLIC_FORM_ENDPOINT?.trim() ||
     "https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads",
   /**
+   * Privacy-minimised first-party measurement endpoint.
+   * Sends only bounded event type/path data; no visitor identifier or browser storage.
+   */
+  measurementEndpoint:
+    process.env.NEXT_PUBLIC_MEASUREMENT_ENDPOINT?.trim() ||
+    "https://rsfm-control-plane-production.up.railway.app/v1/public/website-events",
+  /**
    * Absolute URL of an optional onboarding scan service (POST `{ url }`).
    * Empty = no crawl; `/create` must not invent extracted content.
    * Static export cannot use relative Next.js API routes.

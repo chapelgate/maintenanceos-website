@@ -8,8 +8,10 @@ export function CookieSettingsStub() {
     <div className="mt-4 rounded-md border border-border bg-paper px-4 py-3 text-sm text-muted">
       <p className="font-medium text-accent">
         Consent UI TBD — draft expectations only. No site-wide banner and no
-        non-essential tags are loaded on this site today. This is not a Google
-        Analytics, PECR, or GDPR compliance certification.
+        non-essential cookies, browser-storage analytics, or marketing tags are
+        loaded today. Cookieless first-party operational measurement does not set
+        a visitor identifier. This is not a Google Analytics, PECR, or GDPR
+        compliance certification.
       </p>
       <ul className="mt-3 list-disc space-y-2 pl-5">
         <li>
@@ -20,8 +22,9 @@ export function CookieSettingsStub() {
           and behaviour.
         </li>
         <li>
-          <strong className="text-ink">Reject non-essential</strong> — default
-          UK/EEA posture: Essential only; Analytics and Marketing remain off.
+          <strong className="text-ink">Reject non-essential</strong> — intended
+          for optional cookies/storage if introduced. Today there are no analytics
+          or marketing cookies to switch on or off.
         </li>
         <li>
           <strong className="text-ink">Essential consent-preference storage</strong>{" "}

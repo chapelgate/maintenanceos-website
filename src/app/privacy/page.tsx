@@ -33,12 +33,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "personal-data",
     title: "Personal data we may collect",
-    body: "Categories only until verified: contact details from forms; a public website URL you submit on /create; technical / device data; cookie or similar technology data (see Cookies); and communications you send us.",
+    body: "Categories only until verified: contact details from forms; a public website URL you submit on /create; hosting/network technical data; privacy-minimised site-use events (event type and pathname only, plus bounded conversion target/lead type where relevant); cookie or similar technology data if introduced (see Cookies); and communications you send us. Stored website.event records exclude visitor identifiers, email, referrer, query string, user-agent, and fingerprints.",
   },
   {
     id: "how-collected",
     title: "How we collect data",
-    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), automatic site/technical data, and cookies if enabled — plus public pages from a submitted website URL when a scan service is configured. Marketing enquiries are sent to Chapelgate\'s existing Railway-hosted control plane, stored as audited operational lead records, and notify an operator through Resend for human follow-up. No invented crawl and no invented third-party lists.",
+    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), ordinary hosting/network technical data, and first-party cookieless operational measurement events — plus public pages from a submitted website URL when a scan service is configured. Marketing enquiries and bounded website events use Chapelgate\'s existing Railway-hosted control plane and Postgres store. Enquiries are stored as audited operational lead records; privacy-minimised website events are stored separately. Lead records notify an operator through Resend for human follow-up; aggregate weekly website reports reuse the same sending route. No invented crawl and no invented third-party lists.",
   },
   {
     id: CREATE_INGEST_PRIVACY_ANCHOR,
@@ -48,7 +48,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "purposes",
     title: "Why we use personal data (purposes)",
-    body: "Placeholder purposes: respond to enquiries and demo requests; operate and secure the site; measure site use only if consent-gated analytics are live; and improve content.",
+    body: "Placeholder purposes: respond to enquiries and demo requests; operate and secure the site; measure aggregate site use with privacy-minimised first-party events; monitor form/site errors; and improve content. Lawful-basis wording remains for counsel to confirm.",
   },
   {
     id: "lawful-bases",
@@ -58,12 +58,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "cookies",
     title: "Cookies and similar technologies",
-    body: "See the Cookie notice for categories and consent; this privacy page does not duplicate the cookie inventory. No analytics or marketing tags are loaded today.",
+    body: "See the Cookie notice for categories and consent. No analytics or marketing cookies and no third-party analytics tags are loaded today. First-party operational measurement is cookieless and does not use browser storage or a persistent visitor identifier.",
   },
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "Current marketing-form path uses DigitalOcean for the website, an existing Railway-hosted Chapelgate control plane and Postgres store for lead intake, and Resend for operator notification. Other processor categories remain subject to legal review; analytics is not enabled today.",
+    body: "Current website path uses DigitalOcean for the static site, an existing Railway-hosted Chapelgate control plane and Postgres store for lead intake plus privacy-minimised website events, and Resend for operator lead notifications and aggregate weekly reports. No third-party analytics vendor is used. Other processor categories remain subject to legal review.",
   },
   {
     id: "transfers",

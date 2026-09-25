@@ -81,7 +81,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Do you use cookies or a consent banner?",
     answer:
-      "There is no site-wide cookie or consent banner. No analytics or marketing tags are loaded on this site today, so there are no non-essential cookies to consent to. The cookie notice is DRAFT FOR LEGAL REVIEW — not final policy and not a Google Analytics, PECR, or GDPR compliance certification. If analytics is added later, it stays off until consent. Footer Cookie settings opens that draft notice, not a live preference centre.",
+      "There is no site-wide cookie or consent banner. No analytics or marketing cookies and no third-party analytics tags are loaded. The site uses cookieless first-party operational measurement with no persistent visitor identifier, referrer, query string, or user-agent stored in website event records. The cookie notice is DRAFT FOR LEGAL REVIEW — not final policy and not a Google Analytics, PECR, or GDPR compliance certification. Footer Cookie settings opens that draft notice, not a live preference centre.",
     relatedHref: "/cookies/",
     relatedLabel: "Cookie Policy (Draft)",
   },
