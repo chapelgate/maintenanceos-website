@@ -30,7 +30,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | F15 | WCAG 2.2 AA verification | OPEN | Accessibility |
 | F16 | Core Web Vitals/performance verification | OPEN | Performance |
 | F17 | Security review / hosting-header gaps | OPEN | Security |
-| F18 | Consent-gated analytics architecture | OPEN | Analytics |
+| F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED — Step 9** — cookieless first-party measurement; no optional analytics tags currently loaded | Analytics |
 | F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented | DevOps |
 | F20 | Automated functional tests | PARTIAL | QA |
 | F21 | Mobile/cross-browser QA | OPEN | QA |
@@ -148,3 +148,22 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Spend / isolation:** no new app, backend, database, diagram library, paid tool, GitHub Actions runner, or telephony/runtime change.
 
 **Step 8 status:** **COMPLETE. No open blocker.**
+
+
+## Step 9 completion — measurement
+
+- 9.1 define KPIs for traffic, demo interest, leads, and conversion — **PASS**: `docs/STEP9_MEASUREMENT.md` defines page views, conversion CTA clicks, lead-form starts, durable leads, early-access leads, lead/page-view rate, form errors, client errors, and broken-link health. No unique-user KPI is invented because there is deliberately no persistent visitor identifier.
+- 9.2 privacy-conscious analytics — **PASS, live verified**: measurement is first-party and cookieless. Browser events contain only a fixed event name, query-free pathname, optional fixed conversion target path, optional lead type for form lifecycle, and an ephemeral per-event retry id. The client uses no analytics cookie, localStorage/sessionStorage visitor id, referrer, user-agent, query string, error text, or fingerprint. DigitalOcean/Cloudflare may set operational edge cookies such as `__cf_bm`; the live Cookie draft explicitly distinguishes hosting/CDN operational cookies from analytics cookies.
+- 9.3 event tracking — **PASS, live verified**: allowed events are `page_view`, `cta_click`, `form_submit_start`, `form_submit_success`, `form_submit_error`, and `client_error`. The deployed Next.js bundle contains the production `website-events` endpoint plus `page_view` / `cta_click` logic. Production acceptance from the real DigitalOcean Origin returned durable references; retrying the same event id returned the same reference, proving idempotent retry handling. Query-bearing paths and unsupported event names returned **422**; an unapproved Origin returned **403**.
+- 9.4 failed-form, broken-link, and page-error monitoring — **PASS, live verified**: `npm run website:monitor` crawls the live sitemap/internal links/assets, rejects third-party script sources, checks the existing Railway control plane is Postgres-ready, and checks event-endpoint CORS. Post-deploy acceptance checked **29 internal paths / 47 pages and assets** with `failures: []`, `ok: true`. Form failures and generic client errors are counted without storing form values, exception text, or stacks.
+- 9.5 recurring website performance report — **PASS, live verified**: the existing Railway/Postgres/Resend path creates one durable `website.report.weekly` marker per previous UTC week. The first accepted anonymous event in a new week attempts the aggregate report; the idempotency marker prevents repeat sends and allows retry after failure. Live acceptance returned `weekly_report.status=already_sent` for **2026-W38** on multiple accepted events, proving the durable once-per-week marker is active.
+
+**Backend evidence:** `chapelgate/cloud-workers` Step-9 backend commit `e42f9db4600ea810a03bffea4060dbf943241d16`. Focused public metrics + lead tests **9/9 PASS**; wider RSFM control-plane/auth/rate-limit/metrics/lead group **24/24 PASS**. Production event acceptance returned durable references `3863afd0-258c-4696-ad26-4d19589cf929` and `4d4f73cb-a1e7-4313-b234-d9e3aa1ac5e1`; the retry reused the first reference.
+
+**Website evidence:** PR #92 merged as `f68cff70f374406c408f4403cb5bd0d2684302b5`. Full repository tests **PASS**; production static build **PASS**; focused measurement tests **PASS**. The live cookies/privacy/FAQ/`llms.txt`/`llms-full.txt` surfaces all state cookieless first-party measurement, no persistent visitor identifier, and no third-party analytics vendor. The deployed bundle was directly verified to contain the production measurement endpoint and event logic.
+
+**Reuse-first / spend evidence:** reused the existing DigitalOcean static site, Railway `rsfm-control-plane`, audited Postgres records, rate limiter, and sending-only Resend route. No new analytics SaaS, tracking pixel, cookie banner, scheduler, database, app, paid tool, GitHub Actions runner, or telephony/runtime service was created.
+
+**Legal boundary:** Privacy/Cookie/Terms remain drafts pending legal review. Step 9 verifies the implemented measurement architecture and its factual public description; it does not certify PECR/GDPR compliance.
+
+**Step 9 status:** **COMPLETE. No open blocker.**
