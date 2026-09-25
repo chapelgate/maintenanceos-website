@@ -31,7 +31,8 @@ test("shared funnel SEO copy names the real public path", () => {
 
 test("root fallback title no longer lags as generic operations copy", () => {
   const src = helper();
-  assert.match(src, /Website to knowledge pack/);
+  assert.match(src, /MaintenanceOS by Chapelgate/);
+  assert.match(src, /UK maintenance operations software/);
   assert.doesNotMatch(
     src,
     /defaultTitle = `\$\{siteConfig\.name\} — Property maintenance operations`/,
@@ -60,7 +61,7 @@ test("funnel pages use the shared helper for title / description / OG", () => {
 test("contentPageMetadata keeps OG and Twitter titles aligned", () => {
   const src = helper();
   assert.match(src, /absoluteTitle/);
-  assert.match(src, /ogTitle = opts\.absoluteTitle \?\? `\$\{opts\.title\} · \$\{siteConfig\.name\}`/);
+  assert.match(src, /ogTitle = opts\.absoluteTitle \?\? `\$\{opts\.title\} · \$\{siteConfig\.publicBrand\}`/);
   assert.match(src, /openGraph: \{/);
   assert.match(src, /twitter: \{/);
   assert.match(src, /title: ogTitle/);
