@@ -28,7 +28,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | F13 | Privacy/cookie/consent finalisation | OPEN — legal review | Privacy |
 | F14 | SEO foundation | **DONE / LIVE VERIFIED — Step 7** | SEO |
 | F15 | WCAG 2.2 AA verification | OPEN | Accessibility |
-| F16 | Core Web Vitals/performance verification | OPEN | Performance |
+| F16 | Core Web Vitals/performance verification | **DONE / LIVE VERIFIED — Step 46** | Performance |
 | F17 | Security review / hosting-header gaps | OPEN | Security |
 | F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED — Step 9** — cookieless first-party measurement; no optional analytics tags currently loaded | Analytics |
 | F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented | DevOps |
@@ -167,3 +167,20 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Legal boundary:** Privacy/Cookie/Terms remain drafts pending legal review. Step 9 verifies the implemented measurement architecture and its factual public description; it does not certify PECR/GDPR compliance.
 
 **Step 9 status:** **COMPLETE. No open blocker.**
+
+
+## Step 46 completion — performance
+
+- **Live Lighthouse baseline:** official Lighthouse 13.5.0 against the existing DigitalOcean site, using Edge 153. Home, Property maintenance software, and Contact were measured on both mobile and desktop profiles.
+- **Field-data boundary:** Google PageSpeed Insights returned HTTP 429 during the check, so no CrUX / real-user Core Web Vitals claim is made. Step 46 records Lighthouse lab metrics only.
+- **Mobile results:** Home performance 95, CLS 0, TBT 103ms; Property maintenance performance 98, LCP 2.258s, CLS 0, TBT 65ms; Contact performance 100, LCP 1.762s, CLS 0, TBT 19ms.
+- **Desktop results:** Home 99 / LCP 0.840s; Property maintenance 100 / LCP 0.417s; Contact 100 / LCP 0.433s; CLS 0 and TBT 0ms on all three.
+- **Home mobile repeat check:** first LCP 2.772s was repeated twice rather than treated as fact. Independent runs were 2.772s, 1.827s, and 1.828s; median **1.828s**, below the 2.5s good lab threshold. The LCP element is hero text, not an image.
+- **Regression budget:** `npm run performance:budget` checks every exported page after build. Current check covers 27 pages, largest raw initial JS is 485 KB and CSS 47 KB; ceilings are 525 KB JS and 120 KB CSS. Current result: `failures: []`, `ok: true`.
+- **No speculative optimisation:** because the repeated Home median is good and Lighthouse transfer is 175–306 KB across the measured pages, no font/render-path change was made merely to improve one noisy sample.
+
+**Evidence:** `docs/STEP46_PERFORMANCE_BASELINE.md` and `scripts/performance-budget.mjs`.
+
+**Spend / reuse:** Lighthouse was used one-off from the official npm package and not added to project dependencies. No paid performance SaaS, browser service, new app, runner, or infrastructure was added.
+
+**Step 46 status:** **COMPLETE. No open blocker.**
