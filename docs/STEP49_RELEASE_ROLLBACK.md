@@ -34,7 +34,7 @@ It requires a clean Git working tree and then runs, in order:
 5. release-marker check: generated `public/release.json` must match the exact branch HEAD;
 6. static export must contain `out/release.json`.
 
-The command is cross-platform: it uses `npm.cmd` on Windows and `npm` elsewhere.
+The command is cross-platform: when invoked through `npm run`, it executes the npm CLI through Node’s `npm_execpath` rather than relying on a platform-specific shell command.
 
 ## Change-control rule
 

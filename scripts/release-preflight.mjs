@@ -1,7 +1,11 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 
-const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
+const npmCli = process.env.npm_execpath;
+if (!npmCli) {
+  console.error("release preflight requires npm_execpath from an npm-run invocation");
+  process.exit(2);
+}
 
 function run(command, args, label) {
   const result = spawnSync(command, args, {
@@ -28,10 +32,10 @@ const head = execFileSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
 }).trim().toLowerCase();
 
-run(npmCommand, ["test"], "full test suite");
-run(npmCommand, ["run", "build"], "production static build");
-run(npmCommand, ["run", "performance:budget"], "performance budget");
-run(npmCommand, ["run", "accessibility:check"], "accessibility gate");
+run(process.execPath, [npmCli, "test"], "full test suite");
+run(process.execPath, [npmCli, "run", "build"], "production static build");
+run(process.execPath, [npmCli, "run", "performance:budget"], "performance budget");
+run(process.execPath, [npmCli, "run", "accessibility:check"], "accessibility gate");
 
 const marker = JSON.parse(fs.readFileSync("public/release.json", "utf8"));
 if (String(marker.commit || "").toLowerCase() !== head) {

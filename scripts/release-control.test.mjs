@@ -10,8 +10,9 @@ test("release preflight requires clean source and runs all local quality gates",
   assert.equal(pkg.scripts["release:preflight"], "node scripts/release-preflight.mjs");
   assert.equal(pkg.scripts["release:verify"], "node scripts/deployment-verifier.mjs");
   assert.match(src, /git", \["status", "--porcelain"\]/);
-  assert.match(src, /\["test"\]/);
-  assert.match(src, /\["run", "build"\]/);
+  assert.match(src, /npm_execpath/);
+  assert.match(src, /\[npmCli, "test"\]/);
+  assert.match(src, /\[npmCli, "run", "build"\]/);
   assert.match(src, /performance:budget/);
   assert.match(src, /accessibility:check/);
   assert.match(src, /release\.json/);
