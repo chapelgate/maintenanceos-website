@@ -1,4 +1,4 @@
-import { industries, primaryNav, siteConfig } from "@/config/site";
+import { industries, primaryNav } from "@/config/site";
 
 /**
  * Shell #11 chrome (flat-ink wordmark, blue dual CTAs, hamburger) via native <details>.
