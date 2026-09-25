@@ -1,7 +1,7 @@
 # SEO buyer-intent map — 2026-09-25
 
-**Owner:** MOS Website Manager  
-**Scope:** Step 7 — buyer-intent SEO, technical indexing, monitoring  
+**Owner:** MOS Website Manager
+**Scope:** Step 7 — buyer-intent SEO, technical indexing, monitoring
 **Cost rule:** no paid SEO tools, no paid rank tracker, no scheduled GitHub Actions
 
 ## Search observations
