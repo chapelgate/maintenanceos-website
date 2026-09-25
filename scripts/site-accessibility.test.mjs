@@ -44,13 +44,18 @@ test("shared navigation and CTA targets meet WCAG 2.2 minimum target size baseli
   assert.match(ctas, /min-h-11 min-w-6/);
 });
 
-test("wordmark accessible name comes from its visible text", () => {
+test("header and footer wordmark accessible names come from visible text", () => {
   const header = read("src/components/SiteHeader.tsx");
+  const footer = read("src/components/SiteFooter.tsx");
   const block = header.match(/function Wordmark\(\)[\s\S]*?\r?\n}\r?\n/)?.[0] ?? "";
   assert.match(block, /Maintenance/);
   assert.match(block, />OS</);
   assert.match(block, /by Chapelgate/);
   assert.doesNotMatch(block, /aria-label=/);
+  assert.match(footer, /Maintenance/);
+  assert.match(footer, /font-semibold">OS/);
+  assert.match(footer, /by Chapelgate/);
+  assert.doesNotMatch(footer, /aria-label=\{siteConfig\.publicBrand\}/);
 });
 
 test("all source img elements carry alt text", () => {
