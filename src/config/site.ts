@@ -27,8 +27,10 @@ export const siteConfig = {
    */
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "",
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? "local",
-  /** Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md. Empty = local stub. */
-  formEndpoint: process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? "",
+  /** Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md. Env override remains available. */
+  formEndpoint:
+    process.env.NEXT_PUBLIC_FORM_ENDPOINT?.trim() ||
+    "https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads",
   /**
    * Absolute URL of an optional onboarding scan service (POST `{ url }`).
    * Empty = no crawl; `/create` must not invent extracted content.
