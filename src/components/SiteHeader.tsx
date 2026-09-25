@@ -12,9 +12,16 @@ const HEADER_DETAILS_ESCAPE = `document.addEventListener("keydown",function(e){i
 
 function Wordmark() {
   return (
-    <a href="/" className="text-lg tracking-tight text-ink" aria-label={siteConfig.name}>
+    <a
+      href="/"
+      className="inline-flex items-baseline text-lg tracking-tight text-ink"
+      aria-label={siteConfig.publicBrand}
+    >
       <span className="font-medium">Maintenance</span>
       <span className="font-semibold">OS</span>
+      <span className="ml-2 text-xs font-medium tracking-normal text-muted">
+        by Chapelgate
+      </span>
     </a>
   );
 }
