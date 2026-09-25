@@ -7,7 +7,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Cookie Policy (Draft)",
   description:
-    "Draft cookie notice. No analytics or marketing tags today; no site-wide consent banner. Pending legal review — not final policy and not a compliance certification.",
+    "Draft cookie notice. No analytics or marketing cookies; cookieless first-party operational measurement only; no site-wide consent banner. Pending legal review — not final policy and not a compliance certification.",
   path: "/cookies/",
 });
 
@@ -17,7 +17,7 @@ export default function CookiesPage() {
       <PageHero
         eyebrow="Legal · Draft"
         title="Cookie Policy (Draft)"
-        lede="Draft cookie notice for the MaintenanceOS marketing website. Four categories (Essential, Preferences, Analytics, Marketing); inventory empty; no invented tags. Not a compliance certification."
+        lede="Draft cookie notice for the MaintenanceOS marketing website. No analytics or marketing cookies are configured; first-party operational measurement is cookieless and uses no persistent visitor identifier. Not a compliance certification."
       />
       <div className="mx-auto max-w-3xl px-4 py-12">
         <LegalDraftBanner />
@@ -117,8 +117,9 @@ export default function CookiesPage() {
                     </th>
                     <td className="py-2 pr-3">No</td>
                     <td className="py-2">
-                      None currently — no vendor, no tags. If added later, off
-                      until consent.
+                      No analytics cookie or third-party analytics tag. First-party
+                      cookieless operational measurement only; no browser storage
+                      or persistent visitor identifier.
                     </td>
                   </tr>
                   <tr>
@@ -170,10 +171,14 @@ export default function CookiesPage() {
               Analytics cookies
             </h2>
             <p className="mt-2 text-muted">
-              None currently. No vendor and no tags. If analytics is added
-              later, it is consent-gated and stays off until affirmative
-              consent; no PII in events. This is not a Google Analytics, PECR,
-              or GDPR compliance certification. [OWNER: provider TBD].
+              No analytics cookies are configured. First-party operational
+              measurement sends only bounded event type and pathname data to the
+              existing Chapelgate Railway control plane. It uses no cookies,
+              localStorage, sessionStorage, persistent visitor identifier,
+              referrer, query string, or user-agent in the stored event record.
+              There is no third-party analytics SDK or tag. This draft remains
+              pending legal review and is not a Google Analytics, PECR, or GDPR
+              compliance certification.
             </p>
           </section>
 
@@ -251,9 +256,12 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               There is no site-wide consent banner today because no
-              non-essential tags are loaded. A preference centre would be wired
-              only if analytics or other optional tags land; this page explains
-              expectations and is not a live consent manager.
+              non-essential cookies, browser-storage analytics, or marketing tags
+              are loaded. The first-party operational measurement described above
+              is cookieless and stores no persistent visitor identifier. A
+              preference centre would be wired only if optional storage or tags
+              are introduced; this page is still a draft, not a live consent
+              manager.
             </p>
             <CookieSettingsStub />
           </section>

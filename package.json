@@ -8,6 +8,7 @@
     "start": "npx serve out",
     "lint": "eslint",
     "seo:monitor": "node scripts/seo-live-monitor.mjs",
+    "website:monitor": "node scripts/website-health-monitor.mjs",
     "form-stub": "node scripts/form-stub-server.mjs",
     "onboarding-scan": "node --experimental-strip-types packages/onboarding-ingest/src/server.ts",
     "calendar-adapters": "node --experimental-strip-types packages/calendar-adapters/src/server.ts",

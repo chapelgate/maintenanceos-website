@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { PreLaunchBanner } from "@/components/PreLaunchBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { WebsiteMeasurement } from "@/components/WebsiteMeasurement";
 import { SkipLink } from "@/components/SkipLink";
 import { marketingJsonLd } from "@/lib/json-ld";
 import { buildRootMetadata } from "@/lib/page-meta";
@@ -37,6 +38,7 @@ export default function RootLayout({
         className={`${inter.variable} flex min-h-screen flex-col font-sans antialiased`}
       >
         <JsonLd data={marketingJsonLd()} />
+        <WebsiteMeasurement />
         <SkipLink />
         <PreLaunchBanner />
         <SiteHeader />

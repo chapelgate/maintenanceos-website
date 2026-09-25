@@ -94,8 +94,8 @@ Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/prope
 - Create (website URL → check → review → pack → optional scripted sandbox → early access): https://seahorse-app-4oasq.ondigitalocean.app/create/
 - Demo (same path; launch list + early-access briefing, not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/demo/
 - Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
-- FAQ (same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999, owner-blocked staging scan; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no site-wide cookie banner; no analytics tags today): https://seahorse-app-4oasq.ondigitalocean.app/faq/
-- Cookies (DRAFT FOR LEGAL REVIEW — no site-wide consent banner, no analytics or marketing tags today, no invented tracking, not a GA / PECR / GDPR compliance certification): https://seahorse-app-4oasq.ondigitalocean.app/cookies/
+- FAQ (same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only): https://seahorse-app-4oasq.ondigitalocean.app/faq/
+- Cookies (DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a GA / PECR / GDPR compliance certification): https://seahorse-app-4oasq.ondigitalocean.app/cookies/
 - Contact (human enquiry / early access — not a support desk, not live phone provisioning, no invented SLA): https://seahorse-app-4oasq.ondigitalocean.app/contact/
 - About: https://seahorse-app-4oasq.ondigitalocean.app/about/
 - Short machine summary: https://seahorse-app-4oasq.ondigitalocean.app/llms.txt
@@ -116,7 +116,7 @@ Incorrect: live commercial receptionist; public always-on phone; production call
 
 ## Security
 
-Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. No ISO, SOC 2, Cyber Essentials, or bank-grade claims. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. No site-wide consent banner and no analytics or marketing tags today. Not a Google Analytics, PECR, or GDPR compliance certification. Product interest starts at Create from website.
+Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. No ISO, SOC 2, Cyber Essentials, or bank-grade claims. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. No analytics or marketing cookies and no third-party analytics tag; cookieless first-party aggregate measurement uses no persistent visitor identifier. No site-wide consent banner. Not a Google Analytics, PECR, or GDPR compliance certification. Product interest starts at Create from website.
 
 ## Pricing
 

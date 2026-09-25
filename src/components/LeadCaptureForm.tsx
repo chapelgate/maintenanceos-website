@@ -3,6 +3,7 @@
 import { FormEvent, useId, useState } from "react";
 import type { LeadType } from "@/config/site";
 import { submitLead, type LeadSuccessMode } from "@/lib/lead-adapter";
+import { trackWebsiteEvent } from "@/lib/measurement";
 
 type LeadCaptureFormProps = {
   leadType: LeadType;
@@ -56,6 +57,10 @@ export function LeadCaptureForm({
     setStatus("submitting");
     setError(null);
     const fd = new FormData(e.currentTarget);
+    const website = String(fd.get("website") ?? "");
+    if (!website) {
+      trackWebsiteEvent({ event: "form_submit_start", leadType });
+    }
     const result = await submitLead({
       leadType,
       email: String(fd.get("email") ?? ""),
@@ -63,15 +68,21 @@ export function LeadCaptureForm({
       organisation: String(fd.get("organisation") ?? ""),
       role: String(fd.get("role") ?? ""),
       message: String(fd.get("message") ?? ""),
-      website: String(fd.get("website") ?? ""),
+      website,
     });
     if (!result.ok) {
+      if (!website) {
+        trackWebsiteEvent({ event: "form_submit_error", leadType });
+      }
       setError(
         result.error ||
           "We could not submit just now. Please try again shortly.",
       );
       setStatus("error");
       return;
+    }
+    if (!website) {
+      trackWebsiteEvent({ event: "form_submit_success", leadType });
     }
     setSuccessMode(result.mode);
     setStatus("success");

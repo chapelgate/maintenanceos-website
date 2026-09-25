@@ -114,10 +114,10 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /Security \/ trust marketing vs certifications/);
   assert.match(matrix, /security copy aligned; still not certified/);
   assert.match(matrix, /Cookie \/ consent banner vs analytics/);
-  assert.match(matrix, /cookies copy aligned; still DRAFT, still no analytics/);
+  assert.match(matrix, /cookies copy aligned; DRAFT; cookieless first-party measurement only/);
 });
 
-test("cookies stay DRAFT-honest with no banner, no invented analytics, no GA cert", () => {
+test("cookies stay DRAFT-honest with cookieless first-party measurement only", () => {
   const page = read("src/app/cookies/page.tsx");
   const stub = read("src/components/CookieSettingsStub.tsx");
   const privacy = read("src/app/privacy/page.tsx");
@@ -125,38 +125,36 @@ test("cookies stay DRAFT-honest with no banner, no invented analytics, no GA cer
   const faqPage = read("src/app/faq/page.tsx");
   const llms = read("public/llms.txt");
   const llmsFull = read("public/llms-full.txt");
+  const measurement = read("src/lib/measurement.ts");
   const nextConfig = read("next.config.ts");
 
   assert.match(page, /DRAFT FOR LEGAL REVIEW|LegalDraftBanner/);
   assert.match(page, /Cookie Policy \(Draft\)/);
   assert.match(page, /no site-wide consent banner/i);
-  assert.match(page, /None currently — no vendor, no tags/);
-  assert.match(page, /If added later, off\s+until consent/);
-  assert.match(page, /not a Google Analytics, PECR,\s+or GDPR compliance certification/i);
+  assert.match(page, /No analytics cookie or third-party analytics tag/);
+  assert.match(page, /cookieless operational measurement/);
+  assert.match(page, /no browser storage|uses no cookies/);
+  assert.match(page, /persistent visitor identifier/);
+  assert.match(page, /not a Google Analytics, PECR,[\s\S]*GDPR[\s\S]*compliance certification/i);
   assert.match(page, /\/privacy\/#website-url-ingest/);
   assert.match(page, /href="\/privacy\/"/);
   assert.doesNotMatch(page, /prepared but inactive/i);
-  assert.doesNotMatch(page, /aligned with MOS Privacy/i);
-  assert.doesNotMatch(page, /agreed with MOS Privacy/i);
-  assert.doesNotMatch(page, /Active as implemented/i);
-  assert.doesNotMatch(page, /Google Analytics certified/i);
-  assert.doesNotMatch(page, /PECR compliant/i);
-  assert.doesNotMatch(page, /GDPR compliant/i);
+  assert.doesNotMatch(page, /Google Analytics certified|PECR compliant|GDPR compliant/i);
 
   assert.match(stub, /No site-wide banner/);
-  assert.match(stub, /Consent UI TBD/);
-  assert.match(
-    stub,
-    /not a Google\s+Analytics, PECR, or GDPR compliance certification/i,
-  );
+  assert.match(stub, /Cookieless first-party operational measurement/);
+  assert.match(stub, /does not set\s+a visitor identifier/);
   assert.doesNotMatch(stub, /gtag|googletagmanager/i);
 
-  assert.match(privacy, /No analytics or marketing tags are loaded today/);
+  assert.match(privacy, /No analytics or marketing cookies/);
+  assert.match(privacy, /First-party operational measurement is cookieless/);
+  assert.match(privacy, /No third-party analytics vendor is used/);
   assert.match(privacy, /Cookie Policy \(Draft\)/);
 
   assert.match(faqs, /question: "Do you use cookies or a consent banner\?"/);
   assert.match(faqs, /no site-wide cookie or consent banner/i);
-  assert.match(faqs, /No analytics or marketing tags are loaded/);
+  assert.match(faqs, /cookieless first-party operational measurement/);
+  assert.match(faqs, /no persistent visitor identifier/);
   assert.match(faqs, /not a Google Analytics, PECR, or GDPR compliance certification/);
   assert.match(
     faqs,
@@ -166,12 +164,15 @@ test("cookies stay DRAFT-honest with no banner, no invented analytics, no GA cer
 
   assert.match(faqPage, /cookies/);
 
-  assert.match(llms, /no site-wide consent banner/);
-  assert.match(llms, /no analytics or marketing tags today/);
-  assert.match(llms, /not a Google Analytics \/ PECR \/ GDPR compliance certification/);
-  assert.match(llmsFull, /no site-wide consent banner/);
-  assert.match(llmsFull, /no analytics or marketing tags today/);
-  assert.match(llmsFull, /not a GA \/ PECR \/ GDPR compliance certification/);
+  assert.match(llms, /no analytics or marketing cookies/);
+  assert.match(llms, /no third-party analytics tag/);
+  assert.match(llms, /cookieless first-party aggregate measurement/);
+  assert.match(llmsFull, /no analytics or marketing cookies/);
+  assert.match(llmsFull, /no third-party analytics tag/);
+  assert.match(llmsFull, /cookieless first-party aggregate measurement/);
+
+  assert.doesNotMatch(measurement, /document\.cookie|window\.localStorage|window\.sessionStorage|globalThis\.localStorage/);
+  assert.doesNotMatch(measurement, /gtag|googletagmanager|posthog|mixpanel|segment|amplitude/i);
   assert.match(nextConfig, /output:\s*["']export["']/);
 });
 
