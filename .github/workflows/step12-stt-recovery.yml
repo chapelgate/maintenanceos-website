@@ -1,0 +1,107 @@
+name: Step 12 STT recovery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/step12-stt-recovery.yml"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  repair-stt:
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
+    timeout-minutes: 15
+    env:
+      TARGET_HOST: 134.209.189.117
+      ISSUE_NUMBER: "88"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Repair and physically verify Step 12.3
+        shell: bash
+        run: |
+          set -uo pipefail
+          OUT=/tmp/step12-stt-recovery.txt
+          : > "$OUT"
+          exec > >(tee -a "$OUT") 2>&1
+          echo "STEP12_3_AUTORECOVERY=start"
+          SSH_COMMON=(-o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new)
+          KEY=""
+          RC=0
+          for k in "$HOME/.ssh/maintenanceos_recovery_20260920" "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_rsa" "/root/.ssh/maintenanceos_recovery_20260920" "/root/.ssh/id_ed25519" "/root/.ssh/id_rsa"; do
+            if [ -f "$k" ] && ssh "${SSH_COMMON[@]}" -o IdentitiesOnly=yes -i "$k" root@"$TARGET_HOST" 'echo ssh_ok' >/dev/null 2>&1; then
+              KEY="$k"
+              break
+            fi
+          done
+          if [ -n "$KEY" ]; then
+            SSH=(ssh "${SSH_COMMON[@]}" -o IdentitiesOnly=yes -i "$KEY")
+            echo "ssh_access=key"
+          elif ssh "${SSH_COMMON[@]}" root@"$TARGET_HOST" 'echo ssh_ok' >/dev/null 2>&1; then
+            SSH=(ssh "${SSH_COMMON[@]}")
+            echo "ssh_access=default"
+          else
+            echo "ssh_access=FAIL"
+            STATUS=BLOCKED
+            RC=90
+          fi
+          if [ "$RC" -eq 0 ]; then
+            echo 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCnJvb3Q9UGF0aCgiL29wdC9tYWludGVuYW5jZW9zL2xvY2FsLXZvaWNlLWNhbmFyeSIpCmNvbXBvc2U9cm9vdC8iZG9ja2VyLWNvbXBvc2UubG9jYWwtdm9pY2UueW1sIgp4PWNvbXBvc2UucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpCmJhY2t1cD1jb21wb3NlLndpdGhfc3VmZml4KCIueW1sLnByZS1zdGVwMTItMy1maW5hbCIpCmlmIG5vdCBiYWNrdXAuZXhpc3RzKCk6CiAgICBiYWNrdXAud3JpdGVfdGV4dCh4LGVuY29kaW5nPSJ1dGYtOCIpCmxpbmVzPVtdCmZvciBsaW5lIGluIHguc3BsaXRsaW5lcygpOgogICAgaWYgIlNUVF9NT0RFTF9UVEw6IiBpbiBsaW5lIG9yICJQUkVMT0FEX01PREVMUzoiIGluIGxpbmU6CiAgICAgICAgY29udGludWUKICAgIGxpbmVzLmFwcGVuZChsaW5lKQp4PSJcbiIuam9pbihsaW5lcykrIlxuIgpzdGFydD14LmluZGV4KCIgIHZvaWNlLXN0dDoiKQplbmQ9eC5pbmRleCgiXG4gIHZvaWNlLWxsbToiLHN0YXJ0KQpibG9jaz14W3N0YXJ0OmVuZF0KaW1wb3J0IHJlCmJsb2NrPXJlLnN1YihyJyAgICAgIFdISVNQRVJfX0NQVV9USFJFQURTOiAiWzAtOV0rIicsJyAgICAgIFdISVNQRVJfX0NQVV9USFJFQURTOiAiNCInLGJsb2NrKQpibG9jaz1yZS5zdWIocicgICAgICBXSElTUEVSX19UVEw6ICJbXiJdKyInLCcgICAgICBXSElTUEVSX19UVEw6ICItMSInLGJsb2NrKQppZiAiV0hJU1BFUl9fVFRMOiIgbm90IGluIGJsb2NrOgogICAgYmxvY2s9YmxvY2sucmVwbGFjZSgnICAgICAgV0hJU1BFUl9fTlVNX1dPUktFUlM6ICIxIlxuJywnICAgICAgV0hJU1BFUl9fTlVNX1dPUktFUlM6ICIxIlxuICAgICAgV0hJU1BFUl9fVFRMOiAiLTEiXG4nKQpibG9jaz1yZS5zdWIocicgICAgY3B1czogWzAtOS5dKycsJyAgICBjcHVzOiAzLjUnLGJsb2NrLGNvdW50PTEpCng9eFs6c3RhcnRdK2Jsb2NrK3hbZW5kOl0KY29tcG9zZS53cml0ZV90ZXh0KHgsZW5jb2Rpbmc9InV0Zi04IikKbHY9cm9vdC8ibG9jYWxfdm9pY2UucHkiCnk9bHYucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpCmJsdj1sdi53aXRoX3N1ZmZpeCgiLnB5LnByZS1zdGVwMTItMy1maW5hbCIpCmlmIG5vdCBibHYuZXhpc3RzKCk6CiAgICBibHYud3JpdGVfdGV4dCh5LGVuY29kaW5nPSJ1dGYtOCIpCm9sZD0nICAgICAgICBkYXRhID0geyJtb2RlbCI6IG9zLmdldGVudigiTE9DQUxfVk9JQ0VfU1RUX01PREVMIiwgIlN5c3RyYW4vZmFzdGVyLXdoaXNwZXItdGlueS5lbiIpfVxuJwpuZXc9JycnICAgICAgICBkYXRhID0gewogICAgICAgICAgICAibW9kZWwiOiBvcy5nZXRlbnYoIkxPQ0FMX1ZPSUNFX1NUVF9NT0RFTCIsICJTeXN0cmFuL2Zhc3Rlci13aGlzcGVyLXRpbnkuZW4iKSwKICAgICAgICAgICAgImxhbmd1YWdlIjogb3MuZ2V0ZW52KCJMT0NBTF9WT0lDRV9TVFRfTEFOR1VBR0UiLCAiZW4iKSwKICAgICAgICAgICAgInJlc3BvbnNlX2Zvcm1hdCI6ICJqc29uIiwKICAgICAgICAgICAgInZhZF9maWx0ZXIiOiAiZmFsc2UiLAogICAgICAgIH0KJycnCmlmIG9sZCBpbiB5OgogICAgeT15LnJlcGxhY2Uob2xkLG5ldywxKQplbGlmICcidmFkX2ZpbHRlciI6ICJmYWxzZSInIG5vdCBpbiB5OgogICAgcmFpc2UgU3lzdGVtRXhpdCgiTE9DQUxfVk9JQ0VfU1RUX0JMT0NLX05PVF9GT1VORCIpCmx2LndyaXRlX3RleHQoeSxlbmNvZGluZz0idXRmLTgiKQpwcmludCgiUEFUQ0hfT0siKQo=' | base64 -d | "${SSH[@]}" root@"$TARGET_HOST" 'python3 -'
+            RC=$?
+          fi
+          if [ "$RC" -eq 0 ]; then
+            "${SSH[@]}" root@"$TARGET_HOST" 'set -e
+              cd /opt/maintenanceos/local-voice-canary
+              python3 -m py_compile local_voice.py
+              docker compose -f docker-compose.local-voice.yml up -d --force-recreate voice-stt
+              for i in $(seq 1 45); do
+                if curl -fsS http://127.0.0.1:8091/health >/dev/null; then break; fi
+                sleep 2
+              done
+              curl -fsS http://127.0.0.1:8091/health >/dev/null
+              curl -fsS -X POST http://127.0.0.1:8091/v1/models/Systran%2Ffaster-whisper-tiny.en >/tmp/step12-model-load.txt
+              docker build -q -t mos-local-candidate:step12-pocket .
+              python3 launch_canary.py
+              sleep 8
+              test "$(docker inspect mos-local-candidate --format "{{.State.Status}}")" = running
+              test "$(docker inspect mos-local-candidate --format "{{.State.Health.Status}}")" = healthy
+              docker inspect mos-local-voice-voice-stt-1 --format "{{range .Config.Env}}{{println .}}{{end}}" | grep -E "WHISPER__TTL=-1|WHISPER__CPU_THREADS=4|WHISPER__COMPUTE_TYPE=int8"
+              docker logs --tail 80 mos-local-voice-voice-stt-1 2>&1 | grep -m1 "WhisperConfig" || true'
+            RC=$?
+          fi
+          if [ "$RC" -eq 0 ]; then
+            echo 'aW1wb3J0IGFzeW5jaW8saHR0cHgsaW8sd2F2ZSx0aW1lLHN0YXRpc3RpY3MsanNvbgppbXBvcnQgZ2VtaW5pX3ZvaWNlIGFzIGd2CmFzeW5jIGRlZiBtYWluKCk6CiAgICBhc3luYyB3aXRoIGh0dHB4LkFzeW5jQ2xpZW50KHRpbWVvdXQ9NjApIGFzIGM6CiAgICAgICAgcj1hd2FpdCBjLnBvc3QoImh0dHA6Ly8xMjcuMC4wLjE6ODg5MC90dHMiLGRhdGE9eyJ0ZXh0IjoiSSBuZWVkIHRvIHJlcG9ydCBhIGJyb2tlbiBnYXRlLiIsInZvaWNlX3VybCI6ImFsYmEifSkKICAgICAgICByLnJhaXNlX2Zvcl9zdGF0dXMoKQogICAgICAgIHJhdz1yLmNvbnRlbnQKICAgICAgICBtPXJhdy5maW5kKGIiZGF0YSIpCiAgICAgICAgaWYgbSA8IDA6IHJhaXNlIFJ1bnRpbWVFcnJvcigicG9ja2V0X25vX3dhdl9kYXRhIikKICAgICAgICBwY20yND1yYXdbbSs4Ol0KICAgICAgICBwY20xNj1ndi5yZXNhbXBsZV9wY20xNihwY20yNCwyNDAwMCwxNjAwMCkKICAgICAgICBiPWlvLkJ5dGVzSU8oKQogICAgICAgIHdpdGggd2F2ZS5vcGVuKGIsIndiIikgYXMgdzoKICAgICAgICAgICAgdy5zZXRuY2hhbm5lbHMoMSk7IHcuc2V0c2FtcHdpZHRoKDIpOyB3LnNldGZyYW1lcmF0ZSgxNjAwMCk7IHcud3JpdGVmcmFtZXMocGNtMTYpCiAgICAgICAgd2F2PWIuZ2V0dmFsdWUoKQogICAgICAgIGRhdGE9eyJtb2RlbCI6IlN5c3RyYW4vZmFzdGVyLXdoaXNwZXItdGlueS5lbiIsImxhbmd1YWdlIjoiZW4iLCJ2YWRfZmlsdGVyIjoiZmFsc2UiLCJyZXNwb25zZV9mb3JtYXQiOiJqc29uIn0KICAgICAgICBhc3luYyBkZWYgb25jZShsYWJlbCk6CiAgICAgICAgICAgIHQ9dGltZS5wZXJmX2NvdW50ZXIoKQogICAgICAgICAgICB4PWF3YWl0IGMucG9zdCgiaHR0cDovLzEyNy4wLjAuMTo4MDkxL3YxL2F1ZGlvL3RyYW5zY3JpcHRpb25zIixkYXRhPWRhdGEsZmlsZXM9eyJmaWxlIjooInR1cm4ud2F2Iix3YXYsImF1ZGlvL3dhdiIpfSkKICAgICAgICAgICAgZHQ9KHRpbWUucGVyZl9jb3VudGVyKCktdCkqMTAwMAogICAgICAgICAgICB4LnJhaXNlX2Zvcl9zdGF0dXMoKQogICAgICAgICAgICB0ZXh0PSh4Lmpzb24oKS5nZXQoInRleHQiKSBvciAiIikuc3RyaXAoKQogICAgICAgICAgICBwcmludChsYWJlbCxyb3VuZChkdCwxKSx0ZXh0LGZsdXNoPVRydWUpCiAgICAgICAgICAgIHJldHVybiBkdCx0ZXh0CiAgICAgICAgYXdhaXQgb25jZSgid2FybXVwIikKICAgICAgICB2YWxzPVtdCiAgICAgICAgdGV4dHM9W10KICAgICAgICBmb3IgaSBpbiByYW5nZSg1KToKICAgICAgICAgICAgZHQsdHh0PWF3YWl0IG9uY2UoZiJydW57aSsxfSIpCiAgICAgICAgICAgIHZhbHMuYXBwZW5kKGR0KTsgdGV4dHMuYXBwZW5kKHR4dCkKICAgICAgICBtZWRpYW49c3RhdGlzdGljcy5tZWRpYW4odmFscykKICAgICAgICBhY2N1cmF0ZT1hbGwoImJyb2tlbiBnYXRlIiBpbiB0LmNhc2Vmb2xkKCkgZm9yIHQgaW4gdGV4dHMpCiAgICAgICAgcmVzdWx0PXsibWVkaWFuX21zIjpyb3VuZChtZWRpYW4sMSksIm1pbl9tcyI6cm91bmQobWluKHZhbHMpLDEpLCJtYXhfbXMiOnJvdW5kKG1heCh2YWxzKSwxKSwiYWNjdXJhdGUiOmFjY3VyYXRlLCJwYXNzIjphY2N1cmF0ZSBhbmQgbWVkaWFuPD0xMTAwfQogICAgICAgIHByaW50KCJCRU5DSF9SRVNVTFQiLGpzb24uZHVtcHMocmVzdWx0LHNvcnRfa2V5cz1UcnVlKSxmbHVzaD1UcnVlKQogICAgICAgIGlmIG5vdCByZXN1bHRbInBhc3MiXTogcmFpc2UgU3lzdGVtRXhpdCgyKQphc3luY2lvLnJ1bihtYWluKCkpCg==' | base64 -d | "${SSH[@]}" root@"$TARGET_HOST" 'cat > /tmp/step12_3_final_bench.py'
+            "${SSH[@]}" root@"$TARGET_HOST" 'docker exec -i mos-local-candidate python - < /tmp/step12_3_final_bench.py'
+            RC=$?
+          fi
+          if [ "$RC" -eq 0 ]; then
+            echo 'aW1wb3J0IGFzeW5jaW8sYmFzZTY0LGpzb24sb3Msc2VjcmV0cyx0aW1lLGh0dHB4LHNxbGl0ZTMKaW1wb3J0IGdlbWluaV92b2ljZSBhcyBndgphc3luYyBkZWYgc3ludGhfbXVsYXcodGV4dCk6CiAgICBhc3luYyB3aXRoIGh0dHB4LkFzeW5jQ2xpZW50KHRpbWVvdXQ9NjApIGFzIGM6CiAgICAgICAgcj1hd2FpdCBjLnBvc3QoImh0dHA6Ly8xMjcuMC4wLjE6ODg5MC90dHMiLGRhdGE9eyJ0ZXh0Ijp0ZXh0LCJ2b2ljZV91cmwiOiJhbGJhIn0pCiAgICAgICAgci5yYWlzZV9mb3Jfc3RhdHVzKCkKICAgIHJhdz1yLmNvbnRlbnQ7IG09cmF3LmZpbmQoYiJkYXRhIikKICAgIGlmIG08MDogcmFpc2UgUnVudGltZUVycm9yKCJwb2NrZXRfbm9fd2F2X2RhdGEiKQogICAgcmV0dXJuIGd2LnBjbTE2X3RvX211bGF3KGd2LnJlc2FtcGxlX3BjbTE2KHJhd1ttKzg6XSwyNDAwMCw4MDAwKSkKYXN5bmMgZGVmIG1haW4oKToKICAgIGltcG9ydCB3ZWJzb2NrZXRzCiAgICB0b2tlbj1vcy5lbnZpcm9uWyJMT0NBTF9WT0lDRV9DQU5BUllfVE9LRU4iXQogICAgc2lkPSJDQTEyMyIrc2VjcmV0cy50b2tlbl9oZXgoMTQpOyBzdHJlYW09Ik1aMTIzIitzZWNyZXRzLnRva2VuX2hleCgxMikKICAgIHVyaT0id3NzOi8vMTM0LTIwOS0xODktMTE3LnNzbGlwLmlvL3ZvaWNlL2NhbmFyeS1tZWRpYS8iK3Rva2VuCiAgICBjYWxsZXI9YXdhaXQgc3ludGhfbXVsYXcoIkkgbmVlZCB0byByZXBvcnQgYSBicm9rZW4gZ2F0ZS4iKQogICAgZnJhbWVzPVtjYWxsZXJbaTppKzE2MF0gZm9yIGkgaW4gcmFuZ2UoMCxsZW4oY2FsbGVyKSwxNjApIGlmIGxlbihjYWxsZXJbaTppKzE2MF0pPT0xNjBdCiAgICBzZXE9MQogICAgYXN5bmMgd2l0aCB3ZWJzb2NrZXRzLmNvbm5lY3QodXJpLG9wZW5fdGltZW91dD0xMCxjbG9zZV90aW1lb3V0PTMsbWF4X3NpemU9MioqMjApIGFzIHdzOgogICAgICAgIGF3YWl0IHdzLnNlbmQoanNvbi5kdW1wcyh7ImV2ZW50IjoiY29ubmVjdGVkIiwicHJvdG9jb2wiOiJDYWxsIiwidmVyc2lvbiI6IjEuMC4wIn0pKQogICAgICAgIHNlcSs9MQogICAgICAgIGF3YWl0IHdzLnNlbmQoanNvbi5kdW1wcyh7ImV2ZW50Ijoic3RhcnQiLCJzZXF1ZW5jZU51bWJlciI6c3RyKHNlcSksInN0YXJ0Ijp7InN0cmVhbVNpZCI6c3RyZWFtLCJhY2NvdW50U2lkIjpvcy5lbnZpcm9uWyJUV0lMSU9fQUNDT1VOVF9TSUQiXSwiY2FsbFNpZCI6c2lkLCJtZWRpYUZvcm1hdCI6eyJlbmNvZGluZyI6ImF1ZGlvL3gtbXVsYXciLCJzYW1wbGVSYXRlIjo4MDAwLCJjaGFubmVscyI6MX0sImN1c3RvbVBhcmFtZXRlcnMiOnsiZnJvbSI6Iis0NDAwMDAwMDAwMDAifX19KSkKICAgICAgICBkZWFkbGluZT10aW1lLnBlcmZfY291bnRlcigpKzUuMAogICAgICAgIHdoaWxlIHRpbWUucGVyZl9jb3VudGVyKCk8ZGVhZGxpbmU6CiAgICAgICAgICAgIHRyeTogYXdhaXQgYXN5bmNpby53YWl0X2Zvcih3cy5yZWN2KCksdGltZW91dD0wLjI1KQogICAgICAgICAgICBleGNlcHQgYXN5bmNpby5UaW1lb3V0RXJyb3I6IHBhc3MKICAgICAgICBmb3IgZnJhbWUgaW4gZnJhbWVzOgogICAgICAgICAgICBzZXErPTEKICAgICAgICAgICAgYXdhaXQgd3Muc2VuZChqc29uLmR1bXBzKHsiZXZlbnQiOiJtZWRpYSIsInNlcXVlbmNlTnVtYmVyIjpzdHIoc2VxKSwibWVkaWEiOnsidHJhY2siOiJpbmJvdW5kIiwiY2h1bmsiOnN0cihzZXEpLCJ0aW1lc3RhbXAiOnN0cigoc2VxLTIpKjIwKSwicGF5bG9hZCI6YmFzZTY0LmI2NGVuY29kZShmcmFtZSkuZGVjb2RlKCl9fSkpCiAgICAgICAgICAgIGF3YWl0IGFzeW5jaW8uc2xlZXAoMC4wMikKICAgICAgICBlb3M9dGltZS5wZXJmX2NvdW50ZXIoKQogICAgICAgIGFzeW5jIGRlZiBzZW5kX3NpbGVuY2UoKToKICAgICAgICAgICAgbm9ubG9jYWwgc2VxCiAgICAgICAgICAgIHBheWxvYWQ9YmFzZTY0LmI2NGVuY29kZShiIlx4ZmYiKjE2MCkuZGVjb2RlKCkKICAgICAgICAgICAgZm9yIF8gaW4gcmFuZ2UoMTAwKToKICAgICAgICAgICAgICAgIHNlcSs9MQogICAgICAgICAgICAgICAgYXdhaXQgd3Muc2VuZChqc29uLmR1bXBzKHsiZXZlbnQiOiJtZWRpYSIsInNlcXVlbmNlTnVtYmVyIjpzdHIoc2VxKSwibWVkaWEiOnsidHJhY2siOiJpbmJvdW5kIiwiY2h1bmsiOnN0cihzZXEpLCJ0aW1lc3RhbXAiOnN0cigoc2VxLTIpKjIwKSwicGF5bG9hZCI6cGF5bG9hZH19KSkKICAgICAgICAgICAgICAgIGF3YWl0IGFzeW5jaW8uc2xlZXAoMC4wMikKICAgICAgICBzdD1hc3luY2lvLmNyZWF0ZV90YXNrKHNlbmRfc2lsZW5jZSgpKQogICAgICAgIGZpcnN0PU5vbmUKICAgICAgICBkZWFkbGluZT10aW1lLnBlcmZfY291bnRlcigpKzgKICAgICAgICB3aGlsZSB0aW1lLnBlcmZfY291bnRlcigpPGRlYWRsaW5lOgogICAgICAgICAgICByYXc9YXdhaXQgYXN5bmNpby53YWl0X2Zvcih3cy5yZWN2KCksdGltZW91dD1tYXgoMC4xLGRlYWRsaW5lLXRpbWUucGVyZl9jb3VudGVyKCkpKQogICAgICAgICAgICBldnQ9anNvbi5sb2FkcyhyYXcpCiAgICAgICAgICAgIGlmIGV2dC5nZXQoImV2ZW50Iik9PSJtZWRpYSI6CiAgICAgICAgICAgICAgICBmaXJzdD0odGltZS5wZXJmX2NvdW50ZXIoKS1lb3MpKjEwMDAKICAgICAgICAgICAgICAgIGJyZWFrCiAgICAgICAgc3QuY2FuY2VsKCkKICAgICAgICB0cnk6IGF3YWl0IHN0CiAgICAgICAgZXhjZXB0IEJhc2VFeGNlcHRpb246IHBhc3MKICAgICAgICBzZXErPTEKICAgICAgICB0cnk6IGF3YWl0IHdzLnNlbmQoanNvbi5kdW1wcyh7ImV2ZW50Ijoic3RvcCIsInNlcXVlbmNlTnVtYmVyIjpzdHIoc2VxKSwic3RvcCI6eyJjYWxsU2lkIjpzaWR9fSkpCiAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbjogcGFzcwogICAgYXdhaXQgYXN5bmNpby5zbGVlcCgwLjUpCiAgICBjb249c3FsaXRlMy5jb25uZWN0KCIvYXBwL2RhdGEvbWFpbnRlbmFuY2Vvc192MS5kYiIpOyBjb24ucm93X2ZhY3Rvcnk9c3FsaXRlMy5Sb3cKICAgIGNzPWNvbi5leGVjdXRlKCJzZWxlY3QgaWQsdHJhbnNjcmlwdCBmcm9tIGNhbGxfc2Vzc2lvbnMgd2hlcmUgY2FsbF9zaWQ9PyIsKHNpZCwpKS5mZXRjaG9uZSgpCiAgICBldmVudHM9W10KICAgIGlmIGNzOgogICAgICAgIGZvciByIGluIGNvbi5leGVjdXRlKCJzZWxlY3QgZXZlbnQsZGV0YWlsLGNyZWF0ZWRfYXQgZnJvbSBjYWxsX2V2ZW50cyB3aGVyZSBjYWxsX3Nlc3Npb25faWQ9PyBvcmRlciBieSBpZCIsKGNzWyJpZCJdLCkpOgogICAgICAgICAgICBpZiByWyJldmVudCJdPT0iVk9JQ0VfVElNSU5HIjoKICAgICAgICAgICAgICAgIHRyeTogZXZlbnRzLmFwcGVuZChqc29uLmxvYWRzKHJbImRldGFpbCJdKSkKICAgICAgICAgICAgICAgIGV4Y2VwdCBFeGNlcHRpb246IHBhc3MKICAgIHN0dD1bZSBmb3IgZSBpbiBldmVudHMgaWYgZS5nZXQoInBoYXNlIik9PSJTVFRfRE9ORSJdCiAgICByZXBseT1bZSBmb3IgZSBpbiBldmVudHMgaWYgZS5nZXQoInBoYXNlIik9PSJSRVBMWV9GSVJTVF9BVURJTyJdCiAgICB0cmFuc2NyaXB0PWNzWyJ0cmFuc2NyaXB0Il0gaWYgY3MgZWxzZSAiIgogICAgcmVzdWx0PXsiY2FsbF9zaWRfdGFpbCI6c2lkWy04Ol0sImVvc190b19maXJzdF9yZXBseV9tcyI6cm91bmQoZmlyc3QsMSkgaWYgZmlyc3QgaXMgbm90IE5vbmUgZWxzZSBOb25lLCJzdHRfbXMiOnN0dFstMV0uZ2V0KCJkdXJhdGlvbl9tcyIpIGlmIHN0dCBlbHNlIE5vbmUsInRyYW5zY3JpcHRfb2siOiJicm9rZW4gZ2F0ZSIgaW4gdHJhbnNjcmlwdC5jYXNlZm9sZCgpIGFuZCAiZnVsbCBuYW1lIiBpbiB0cmFuc2NyaXB0LmNhc2Vmb2xkKCksInJlcGx5X2V2ZW50Ijpib29sKHJlcGx5KX0KICAgIHJlc3VsdFsicGFzcyJdPWJvb2woZmlyc3QgaXMgbm90IE5vbmUgYW5kIGZpcnN0PD0xODAwIGFuZCByZXN1bHRbInRyYW5zY3JpcHRfb2siXSBhbmQgcmVzdWx0WyJyZXBseV9ldmVudCJdIGFuZCAocmVzdWx0WyJzdHRfbXMiXSBpcyBub3QgTm9uZSBhbmQgcmVzdWx0WyJzdHRfbXMiXTw9MTIwMCkpCiAgICBwcmludCgiUFVCTElDX1JFU1VMVCIsanNvbi5kdW1wcyhyZXN1bHQsc29ydF9rZXlzPVRydWUpLGZsdXNoPVRydWUpCiAgICBpZiBub3QgcmVzdWx0WyJwYXNzIl06IHJhaXNlIFN5c3RlbUV4aXQoMykKYXN5bmNpby5ydW4obWFpbigpKQo=' | base64 -d | "${SSH[@]}" root@"$TARGET_HOST" 'cat > /tmp/step12_3_public_verify.py'
+            "${SSH[@]}" root@"$TARGET_HOST" 'docker exec -i mos-local-candidate python - < /tmp/step12_3_public_verify.py'
+            RC=$?
+          fi
+          if [ "$RC" -eq 0 ]; then
+            "${SSH[@]}" root@"$TARGET_HOST" 'cd /opt/maintenanceos/local-voice-canary && python3 scripts/verify_voice_candidate_integrity.py --evidence-dir docs/sovereign-voice --silero .sovereign-cache/silero/silero_vad.onnx --smart-turn .sovereign-cache/smart-turn/smart-turn-v3.2-cpu.onnx'
+            RC=$?
+          fi
+          if [ "$RC" -eq 0 ]; then STATUS=PASS; else STATUS=${STATUS:-FAIL}; fi
+          echo "STEP12_3_STATUS=$STATUS"
+          echo "exit_code=$RC"
+          python3 - <<'PY'
+          import json, os, urllib.request
+          body=open("/tmp/step12-stt-recovery.txt",encoding="utf-8",errors="replace").read()[-50000:]
+          status="UNKNOWN"
+          for line in body.splitlines():
+              if line.startswith("STEP12_3_STATUS="):
+                  status=line.split("=",1)[1]
+          text="STEP 12.3 automated estate recovery - "+status+"\n\n```text\n"+body+"\n```"
+          req=urllib.request.Request(
+              f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/issues/{os.environ['ISSUE_NUMBER']}/comments",
+              data=json.dumps({"body":text}).encode(),
+              headers={"Authorization":"Bearer "+os.environ["GH_TOKEN"],"Accept":"application/vnd.github+json","Content-Type":"application/json","X-GitHub-Api-Version":"2022-11-28"},
+              method="POST")
+          with urllib.request.urlopen(req,timeout=30) as r:
+              print("issue_comment_http="+str(r.status))
+          PY
+          exit "$RC"
