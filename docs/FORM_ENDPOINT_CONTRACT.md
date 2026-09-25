@@ -4,9 +4,9 @@
 **Consumers:** `src/lib/lead-adapter.ts`, `src/components/LeadCaptureForm.tsx`, `src/components/CreateReceptionistLaterSteps.tsx`  
 **Local stub:** `scripts/form-stub-server.mjs` (`npm run form-stub`)
 
-This marketing site is a **static export** (`output: 'export'` in `next.config.ts`). There are **no Next.js API routes**. Lead capture posts from the browser to `NEXT_PUBLIC_FORM_ENDPOINT`. If that variable is empty, the client returns a local success stub and **must not claim that email was sent**.
+This marketing site is a **static export** (`output: 'export'` in `next.config.ts`). There are **no Next.js API routes**. Lead capture posts from the browser to the production Railway lead endpoint by default. `NEXT_PUBLIC_FORM_ENDPOINT` remains an explicit build-time override. The local stub remains available for isolated development and **must not claim that email was sent**.
 
-Production hosting (for example DigitalOcean App Platform static) cannot run the local stub. Point `NEXT_PUBLIC_FORM_ENDPOINT` at any service that implements this contract (Formspree, a Cloudflare Worker, a DigitalOcean Function, etc.). The stub is for local development only and never sends mail.
+Production hosting (DigitalOcean App Platform static) cannot run the local stub. The current production receiver is `https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads`, reusing the existing Chapelgate RSFM control plane and audited Postgres store. `NEXT_PUBLIC_FORM_ENDPOINT` may override that absolute URL for controlled environments. The stub is for local development only and never sends mail.
 
 ## Lead types
 
@@ -24,12 +24,12 @@ Every conversion form uses `LeadCaptureForm` with one of:
 ## Request
 
 ```
-POST {NEXT_PUBLIC_FORM_ENDPOINT}
+POST {siteConfig.formEndpoint}
 Content-Type: application/json
 Accept: application/json
 ```
 
-`NEXT_PUBLIC_FORM_ENDPOINT` must be an **absolute** `http:` or `https:` URL (for local stub: `http://127.0.0.1:8787/leads`). Relative paths such as `/api/leads` are invalid on a static export.
+The effective form endpoint must be an **absolute** `http:` or `https:` URL (production default above; local stub: `http://127.0.0.1:8787/leads`). Relative paths such as `/api/leads` are invalid on a static export.
 
 ### JSON body
 
@@ -41,8 +41,7 @@ Accept: application/json
 | `organisation`   | no       | string    | Omitted if empty |
 | `role`           | no       | string    | Visitor-selected role slug |
 | `message`        | no       | string    | Used on early demo and contact |
-| `source`         | no       | string    | Client sends `maintenanceos-website` |
-| `public_launch`  | no       | boolean   | Current `PUBLIC_LAUNCH` flag |
+| `source_url`     | no       | string    | Current public page URL, used for operator context |
 | `website`        | no       | string    | **Honeypot.** If present and non-empty, accept and discard. Do not tip off bots. |
 
 The browser adapter does not send `website` when the honeypot is filled; it short-circuits locally. Endpoints should still treat a populated `website` field as spam.
@@ -56,8 +55,7 @@ Example:
   "name": "Alex Example",
   "organisation": "Example Lettings",
   "role": "letting_agent",
-  "source": "maintenanceos-website",
-  "public_launch": false
+  "source_url": "https://seahorse-app-4oasq.ondigitalocean.app/contact/"
 }
 ```
 
@@ -121,9 +119,9 @@ Suggested status codes:
 
 ## Email and claims
 
-- Implementing this contract means **accepting a JSON lead**, not sending mail.
-- Outbound / confirmation email is **out of scope** unless a separately reviewed mailer is configured later.
-- Client success states (`LeadCaptureForm`) must **never** claim that email was sent, including when `mode` is `accepted`.
+- The production endpoint persists the lead before requesting an operator notification through the existing Resend account.
+- `mode: accepted` means the lead was durably accepted and the operator-notification request was accepted by the mail provider; it does **not** mean a visitor confirmation email was sent.
+- Client success states (`LeadCaptureForm`) must **never** claim that a visitor confirmation email was sent.
 - The local stub logs JSON lines to disk and stdout only. It does not call SMTP, transactional APIs, or webhooks.
 
 ## Abuse controls (production)
@@ -132,7 +130,7 @@ Minimum expected of a real endpoint:
 
 - Drop honeypot (`website`) silently with 2xx + `queued_stub` or equivalent discard.
 - Cap body size (32 KiB is enough).
-- Rate-limit by IP.
+- Rate-limit public submissions. The current production route uses a global bucket plus a privacy-preserving hashed-email bucket.
 - Do not write leads into the product telephony / work-order systems (`WEBSITE_ARCHITECTURE.md`).
 
 ## Local stub
@@ -152,3 +150,15 @@ NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run dev
 | `FORM_STUB_DATA_FILE` | `.data/form-stub-leads.jsonl` | Append-only JSONL log (gitignored) |
 
 `GET /health` returns `{ "ok": true, "sends_email": false }`.
+
+
+## Current production implementation
+
+The current receiver is additive to the existing Chapelgate RSFM control plane. It does **not** write into the live telephony or work-order path.
+
+- Origin allowlist: MaintenanceOS DigitalOcean marketing origin only.
+- Storage: existing audited Postgres `rsfm_records`, `app_id=maintenanceos`, `kind=website.lead`.
+- Spam: honeypot plus bounded public rate limits.
+- Idempotency: duplicate retries reuse the same durable lead record.
+- Operator follow-up: sending-only Resend credential restricted to the already-verified Chapelgate sending domain.
+- Visitor acknowledgement: the form says the request was accepted and that a human will review it; it does not claim a confirmation email was sent.
