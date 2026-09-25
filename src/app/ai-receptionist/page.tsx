@@ -123,6 +123,10 @@ export default function AiReceptionistPage() {
 
         <p className="text-sm text-muted">
           See also{" "}
+          <a href="/property-maintenance-software/" className="text-accent underline">
+            Property maintenance software
+          </a>
+          ,{" "}
           <a href="/how-it-works/" className="text-accent underline">
             How it works
           </a>

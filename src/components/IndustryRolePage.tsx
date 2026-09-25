@@ -1,9 +1,12 @@
 import { CtaPair } from "@/components/CtaPair";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import {
   ukMaintenanceVsGeneric,
   type IndustryRole,
 } from "@/config/industries";
+import { getIndustrySeoIntent } from "@/config/seo-intents";
+import { industryPageJsonLd } from "@/lib/json-ld";
 
 const honesty =
   "Pilot-stage. Core controls are real; public always-on phone is not declared ready yet.";
@@ -11,8 +14,10 @@ const honesty =
 type Props = { role: IndustryRole };
 
 export function IndustryRolePage({ role }: Props) {
+  const seo = getIndustrySeoIntent(role.slug);
   return (
     <>
+      <JsonLd data={industryPageJsonLd(role.slug)} />
       <PageHero
         eyebrow={`${role.productName} · Industries`}
         title={role.title}
@@ -23,6 +28,20 @@ export function IndustryRolePage({ role }: Props) {
           {honesty} Product line: <strong className="text-ink">{role.productName}</strong>{" "}
           under Chapelgate Technologies.
         </p>
+
+        {seo ? (
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold text-ink">{seo.title}</h2>
+            <p className="text-muted">{seo.summary}</p>
+            <p className="text-sm text-muted">
+              Core category:{" "}
+              <a href="/property-maintenance-software/" className="text-accent underline">
+                property maintenance software
+              </a>
+              .
+            </p>
+          </section>
+        ) : null}
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold text-ink">

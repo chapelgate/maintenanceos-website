@@ -4,9 +4,9 @@ import { industryRoles } from "@/config/industries";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
-  title: "Industries",
+  title: "Property maintenance software by industry",
   description:
-    "Chapelgate industry OS lines for UK property-maintenance firms — emergency triage vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money. Pre-launch, not a generic AI receptionist.",
+    "MaintenanceOS by Chapelgate for UK landlords, letting agents, property managers, maintenance firms, housing providers, FM teams, councils, and holiday lets. Pre-launch; not a generic AI receptionist.",
   path: "/industries/",
 });
 

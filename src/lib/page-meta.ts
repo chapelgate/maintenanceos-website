@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import { getIndustrySeoIntent } from "@/config/seo-intents";
 import { REFERRER_POLICY } from "@/lib/static-security-headers";
 import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
@@ -47,6 +48,12 @@ export const funnelPageCopy = {
     title: "Maintenance operations software features",
     description: `VERIFIED / UNDER TEST: ${FUNNEL_PATH_LABEL}. Flagged sandbox and calendars; live phone not on this site. Pre-launch — not a live phone or commercial general availability.`,
     path: "/features/",
+  },
+  propertyMaintenanceSoftware: {
+    title: "Property maintenance software for UK teams",
+    absoluteTitle: `${siteConfig.publicBrand} — Property maintenance software for UK teams`,
+    description: `${siteConfig.publicBrand} is pre-launch property maintenance software for UK landlords, letting agents, property managers, maintenance firms, housing providers, FM teams, councils, and holiday lets. AI assists intake; rules and authorised people keep control.`,
+    path: "/property-maintenance-software/",
   },
 } as const;
 
@@ -140,9 +147,10 @@ export function industryRoleMetadata(
       path: "/industries/",
     });
   }
+  const seo = getIndustrySeoIntent(role.slug);
   return contentPageMetadata({
-    title: role.productName ?? role.label,
-    description: role.metaDescription,
+    title: seo?.title ?? role.productName ?? role.label,
+    description: seo ? `${seo.summary} Pre-launch.` : role.metaDescription,
     path: `/industries/${role.slug}/`,
   });
 }

@@ -14,6 +14,7 @@ const keyPaths = [
   "/",
   "/how-it-works/",
   "/features/",
+  "/property-maintenance-software/",
   "/ai-receptionist/",
   "/security/",
   "/industries/",

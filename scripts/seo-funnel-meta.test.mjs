@@ -46,6 +46,7 @@ test("funnel pages use the shared helper for title / description / OG", () => {
     "src/app/demo/page.tsx": "demo",
     "src/app/how-it-works/page.tsx": "howItWorks",
     "src/app/features/page.tsx": "features",
+    "src/app/property-maintenance-software/page.tsx": "propertyMaintenanceSoftware",
   };
   for (const [file, key] of Object.entries(pages)) {
     const src = read(file);
@@ -72,7 +73,7 @@ test("sitemap and robots already list the funnel routes", () => {
   const routes = read("src/config/routes.ts");
   const sitemap = read("src/app/sitemap.ts");
   const robots = read("src/app/robots.ts");
-  for (const route of ["/", "/how-it-works/", "/features/", "/create/", "/demo/"]) {
+  for (const route of ["/", "/how-it-works/", "/features/", "/property-maintenance-software/", "/create/", "/demo/"]) {
     assert.ok(routes.includes(`"${route}"`), `marketingPaths missing ${route}`);
   }
   assert.match(sitemap, /marketingPaths/);
