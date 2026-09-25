@@ -17,13 +17,13 @@ This is the persistent website problem register. Do not create parallel problem 
 | F2 | Positioning/value proposition optimisation | TODO | Positioning |
 | F3 | Brand optimisation | IN PROGRESS / implemented baseline exists | Brand |
 | F4 | Information architecture | IMPLEMENTED; further optimisation pending | IA |
-| F5 | UX journeys visitor → trust → create/demo | PARTIAL | UX |
+| F5 | UX journeys visitor → trust → create/demo | **IMPLEMENTED / LIVE VERIFIED** — Steps 3–6 | UX |
 | F6 | UI component system | IMPLEMENTED baseline | UI |
 | F7 | Website repo scaffold | **DONE** — Next.js/TS/Tailwind in canonical repo | Front-End |
 | F8 | Claims-gated page copy | PARTIAL / live pre-launch copy exists | Copy |
 | F9 | Industries/use-case pages | IMPLEMENTED baseline | Industries |
-| F10 | Production lead endpoint | TODO | Forms |
-| F11 | Conversion optimisation | TODO | Conversion |
+| F10 | Production lead endpoint | **DONE** — existing Railway RSFM + audited Postgres + Resend notification | Forms |
+| F11 | Conversion optimisation | **DONE BASELINE / LIVE VERIFIED** — Step 6 | Conversion |
 | F12 | Legal page scaffolds | DONE as drafts; legal review still required | Legal |
 | F13 | Privacy/cookie/consent finalisation | OPEN — legal review | Privacy |
 | F14 | SEO foundation | IMPLEMENTED baseline; optimisation pending | SEO |
@@ -97,3 +97,22 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Verification:** source merge `9b1e456e5fc64b61b51b3aa1a745a86f42cc7116`; source-level claims assertions **10/10 PASS**; existing DigitalOcean auto-deploy **PASS**; free live fetch of `#proof` and `#scenarios` **PASS**; live trust links resolve to `/security/`, `/privacy/`, and `/how-it-works/`. Successful live deployment also proves the static site compiled and published.
 
 **Step 5 status:** **COMPLETE. No open blocker.**
+
+
+## Step 6 completion — customer conversion
+
+- 6.1 primary conversion goal — **PASS**: `Create from website` at `/create/` is the canonical primary commercial action.
+- 6.2 one obvious action per important page — **PASS, live build**: shared `CtaPair` keeps the primary action filled and visually demotes secondary actions to a text-link treatment.
+- 6.3 short commercial enquiry/demo form — **PASS, live verified**: the shared `LeadCaptureForm` requires only email; name, organisation, role, and message are explicitly optional.
+- 6.4 forms connected to the existing workflow — **PASS, live verified**: the static DigitalOcean site now posts to the existing Railway `rsfm-control-plane`; leads are stored as audited, idempotent `maintenanceos / website.lead` Postgres records and notify the existing operator inbox through a sending-only Resend key restricted to the already-verified Chapelgate domain. No new service, database, host, or telephony path was created.
+- 6.5 visitor → lead → acknowledgement → follow-up — **PASS, live verified**: the actual public `/contact/` React form returned `data-lead-success="accepted"` and displayed the truthful acknowledgement `Your request was accepted into the lead queue. We will be in touch. No confirmation email was sent.` The matching operator notification was delivered with durable reference `40757fb5-b0a2-44b0-9085-7fb589d036b5` and the same live-form submission details.
+
+**Backend evidence:** `chapelgate/cloud-workers` merge `0da00736298b95f1edd3731431e3391b75803a59`; Railway deployment `322ad0c2-edd4-43c1-8296-ac339c3b765c` **SUCCESS**; `/ready` returned `{"ok":true,"backend":"postgres"}`. The public ingress is origin-allowlisted, honeypot protected, rate limited, durably stored before notification, and isolated from authenticated RSFM and live telephony routes.
+
+**Website evidence:** Step-6 conversion hierarchy merge `088880766ee3a6d2fc59fcc4bc708880026bb140`; production endpoint wiring merge `fed70e8ed87d2d4a13ea57905f740885e3616d5f`. Cache-bypassed live verification proved the updated lead-processing privacy wording and the deployed form. Browser acceptance proved the live form itself used the production endpoint successfully.
+
+**Reuse-first evidence:** existing `LeadCaptureForm`, `lead-adapter`, Railway `rsfm-control-plane`, Postgres record/audit store, Postgres rate limiter, and verified Resend domain were reused. FormSubmit, Web3Forms, StaticForms, Hatchable hosting, Netlify Forms, Vercel, and a new DigitalOcean service were investigated and rejected where they required new accounts, duplicate infrastructure, manual activation, unavailable deployment paths, or weaker control. The temporary FormSubmit probe was removed before permanent use.
+
+**Spend / isolation:** no new app, droplet, database, hosting subscription, GitHub Actions runner, or telephony infrastructure was created. The new Resend credential is sending-only and domain-restricted; it is stored only in Railway runtime configuration, never in Git or client code.
+
+**Step 6 status:** **COMPLETE. No open blocker.**
