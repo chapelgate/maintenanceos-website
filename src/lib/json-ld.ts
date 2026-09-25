@@ -23,9 +23,13 @@ function organizationNode(): JsonLdRecord {
   return {
     "@type": "Organization",
     "@id": orgId(),
-    name: siteConfig.name,
+    name: siteConfig.publisherName,
     url: absoluteUrl("/"),
-    description: siteConfig.description,
+    description: `Publisher of ${siteConfig.name}, ${siteConfig.category}.`,
+    brand: {
+      "@type": "Brand",
+      name: siteConfig.publicBrand,
+    },
     inLanguage: siteConfig.locale,
   };
 }
@@ -34,11 +38,16 @@ function websiteNode(): JsonLdRecord {
   return {
     "@type": "WebSite",
     "@id": websiteId(),
-    name: siteConfig.name,
+    name: siteConfig.publicBrand,
+    alternateName: siteConfig.name,
     url: absoluteUrl("/"),
     description: siteConfig.description,
     inLanguage: siteConfig.locale,
     publisher: { "@id": orgId() },
+    brand: {
+      "@type": "Brand",
+      name: siteConfig.publicBrand,
+    },
   };
 }
 
@@ -51,11 +60,13 @@ function softwareApplicationNode(): JsonLdRecord {
     "@type": "SoftwareApplication",
     "@id": softwareId(),
     name: siteConfig.name,
+    alternateName: siteConfig.publicBrand,
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "Property maintenance operations software",
     operatingSystem: "Web",
     url: absoluteUrl("/"),
     description:
-      "Pre-launch operations software for UK property maintenance. AI receptionist intake is under testing. Deterministic rules and human clearance own safety and money. Not commercially generally available; not a public always-on phone service.",
+      "Pre-launch UK maintenance operations software with AI-assisted intake. The AI receptionist capability is under testing. Deterministic rules and authorised human clearance keep control of safety and money. Not commercially generally available; not a public always-on phone service.",
     inLanguage: siteConfig.locale,
     countriesSupported: "GB",
     publisher: { "@id": orgId() },
