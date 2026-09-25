@@ -36,7 +36,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | F21 | Mobile/cross-browser QA | OPEN | QA |
 | F22 | Red team on staging | OPEN | Red Team |
 | F23 | Durable handoff/source-of-truth docs | **DONE for Step 1** — `WEBSITE_SOURCE_OF_TRUTH.md` | Documentation |
-| F24 | Final website DoD verification | **IN PROGRESS — Step 50 closed-loop release gate** | Final Verifier |
+| F24 | Final website DoD verification | **DONE — original 50-step engineering programme release verified; separate legal/security/red-team launch gates remain tracked** | Final Verifier |
 
 ## Step 1 completion
 
@@ -234,4 +234,8 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 - Verify — **IMPLEMENTED**: `manager:verify` requires an exact merge SHA and reuses Step-48 deployment verification.
 - Record — **IMPLEMENTED**: `manager:record` requires healthy monitor + passed preflight + verified deployment, then writes bounded local evidence and posts the durable release evidence to the PR.
 
-**Step 50 status:** **IMPLEMENTED — pending execution of the loop on this release.**
+**Execution evidence:** Step-50 implementation PR #102 merged as `910a12063af4a9eb2375be46f67c8f8567359ee5`. The manager loop then completed in order: monitor/detect **healthy** (website health 29 internal paths / 47 pages-assets, SEO monitor `failures: []`); repair **not required**; manager preflight **PASS** with the full **185/185** repository tests, 31-page static build, performance budget and accessibility **12/12**; DigitalOcean published the exact merge SHA in `/release.json`; manager verify returned `status: verified`; manager record posted the durable release evidence to PR #102 comment `#issuecomment-5840942994`. No alternate deploy path, force-push, manual hosting mutation, duplicate service, or telephony/runtime change was used.
+
+**Programme boundary:** this closes the original 50-step website engineering improvement programme. Separate items already tracked in this backlog — including final legal review, broader security review, mobile/cross-browser QA, and red-team work — remain separate launch/governance gates and are not falsely marked complete by Step 50.
+
+**Step 50 status:** **COMPLETE. No open blocker in the original 50-step engineering programme.**
