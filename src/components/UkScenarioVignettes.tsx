@@ -28,6 +28,7 @@ const SCENARIOS = [
 export function UkScenarioVignettes() {
   return (
     <section
+      id="scenarios"
       aria-labelledby="uk-scenarios-heading"
       className="mx-auto max-w-6xl px-4 py-12 sm:px-6"
     >
