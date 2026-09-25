@@ -55,7 +55,7 @@ The existing Render validation deployment remains untouched until the DigitalOce
 ## Secrets / USH (2026-09-19)
 
 - **Do not** inject `DIGITALOCEAN_TOKEN` into Cursor Cloud Agent secrets for MaintenanceOS.
-- DigitalOcean credentials belong in **USH encrypted vault** (`DO_USH_DEPLOY` on `https://68.183.44.222`).
+- DigitalOcean credentials belong in **USH encrypted vault** (`DO_USH_DEPLOY` on canonical production v2 `https://138.68.183.183`; v1 is standby only).
 - MOS identity is a **renewable Ed25519 workload keypair** (`ush_identity.py`), not a permanent copy of USH’s 3600s `issue_token()` bearer.
 - Short-lived USH bearers are minted via `POST /v1/auth/workload` and auto-refreshed before expiry; fail closed on renewal/revocation failure.
 - See `docs/migration/USH_IDENTITY_LIFECYCLE.md`. **Do not merge PR #57** until lifecycle tests stay green.

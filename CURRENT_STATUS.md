@@ -38,7 +38,7 @@ A previous debugging path mistook `167.99.202.163` for MaintenanceOS. That assum
 - `n2-secrets-retry` cancelled permanently — do not poll absent Resend / Twilio / DO tokens.
 - Resend is email-only and must not block voice/DO bring-up.
 - N=2 baseline evidence preserved under `docs/concurrency_100_evidence/`.
-- DigitalOcean credentials live in **USH** (`DO_USH_DEPLOY` on `https://68.183.44.222`) — **do not** inject `DIGITALOCEAN_TOKEN` into Cursor.
+- DigitalOcean credentials live in **USH** (`DO_USH_DEPLOY` on canonical production v2 `https://138.68.183.183`; v1 is standby only) — **do not** inject `DIGITALOCEAN_TOKEN` into Cursor.
 - MOS→USH identity must be **renewable** (Ed25519 workload key + bearer auto-refresh). Do not store 1h `issue_token` bearers as `USH_WORKLOAD_TOKEN`.
 - See `docs/migration/USH_IDENTITY_LIFECYCLE.md`. Do not merge PR #57 until lifecycle tests remain green.
 - **STOP:** no human bootstrap ask until identity lifecycle is accepted.
