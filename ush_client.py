@@ -10,7 +10,7 @@ Identity lifecycle (see ush_identity.py):
   Auto-refresh before expiry; fail closed on renewal/revocation failure
   NEVER persist issue_token() 3600s bearers as permanent USH_WORKLOAD_TOKEN
 
-Live control plane: https://68.183.44.222
+Live control plane: https://138.68.183.183
   /health → digitalocean registered, adapter_class=live_http, profile=DO_USH_DEPLOY
 """
 
