@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
+import { CommercialProof } from "@/components/CommercialProof";
 import { HonestyBanner } from "@/components/HonestyBanner";
 import { HomeHeroVisual } from "@/components/HomeHeroVisual";
 import { HomeIndustries } from "@/components/HomeIndustries";
@@ -172,6 +173,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <CommercialProof />
 
       <HomeLifeBand />
 
