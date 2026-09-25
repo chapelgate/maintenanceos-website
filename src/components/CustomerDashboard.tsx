@@ -22,9 +22,13 @@ type LoadState = "idle" | "loading" | "ready" | "error";
  * Honest customer dashboard. Default build: coming / under testing.
  * Flag on: SAMPLE / DEMO catalogue or an empty store that invents nothing.
  */
-export function CustomerDashboard() {
-  const enabled = siteConfig.customerDashboardEnabled;
-  const endpoint = siteConfig.customerDashboardEndpoint.trim();
+export function CustomerDashboard({
+  demoMode = false,
+}: {
+  demoMode?: boolean;
+} = {}) {
+  const enabled = siteConfig.customerDashboardEnabled || demoMode;
+  const endpoint = demoMode ? "" : siteConfig.customerDashboardEndpoint.trim();
   const usesCompanion = Boolean(endpoint);
   const [catalogKind, setCatalogKind] = useState<DashboardCatalogKind>("demo");
   const [loadState, setLoadState] = useState<LoadState>("idle");
@@ -62,6 +66,9 @@ export function CustomerDashboard() {
       }
       setSessions(sessionOutcome.data.sessions);
       setDisclaimer(sessionOutcome.data.disclaimer);
+      if (demoMode && sessionOutcome.data.sessions[0]) {
+        setSelectedId(sessionOutcome.data.sessions[0].id);
+      }
       if (bookingOutcome.status === "ok") {
         setBookings(bookingOutcome.data.bookings);
       } else if (bookingOutcome.status === "error") {
@@ -73,7 +80,7 @@ export function CustomerDashboard() {
     return () => {
       cancelled = true;
     };
-  }, [enabled, endpoint, catalogKind]);
+  }, [enabled, endpoint, catalogKind, demoMode]);
 
   useEffect(() => {
     if (!enabled || !selectedId) {
@@ -150,14 +157,16 @@ export function CustomerDashboard() {
           SAMPLE / DEMO — not live production metrics
         </h2>
         <p className="mt-2 text-sm text-[var(--color-warning-text)]">
-          The dashboard flag is on in this build only.{" "}
+          {demoMode
+            ? "This public demonstration uses the existing labelled in-browser SAMPLE catalogue."
+            : "The dashboard flag is on in this build only."}{" "}
           {usesCompanion
             ? "Rows come from the companion service (SAMPLE catalogue or empty store — whatever that process was started with)."
             : "No dashboard endpoint is configured, so this view uses an in-browser mock."}{" "}
           Nothing here is a live customer, a production KPI, or a telephony
           recording.
         </p>
-        {!usesCompanion ? (
+        {!usesCompanion && !demoMode ? (
           <fieldset className="mt-4">
             <legend className="text-sm font-medium text-ink">
               Local store

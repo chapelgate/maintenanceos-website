@@ -1,5 +1,6 @@
 import { CtaPair } from "@/components/CtaPair";
 import { DemoConversionTabs } from "@/components/DemoConversionTabs";
+import { DemoProof } from "@/components/DemoProof";
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
@@ -50,6 +51,8 @@ export default function DemoPage() {
       <div className="mx-auto max-w-3xl px-4 pt-8">
         <FunnelPathStrip />
       </div>
+
+      <DemoProof />
 
       <section
         aria-labelledby="demo-path-heading"

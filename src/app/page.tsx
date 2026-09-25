@@ -95,8 +95,8 @@ export default function HomePage() {
               className="mt-8"
               primaryHref="/create/"
               primaryLabel="Create from website"
-              secondaryHref="/demo/#demo"
-              secondaryLabel="Request early access"
+              secondaryHref="/demo/#see-it-work"
+              secondaryLabel="See it work"
             />
             <p className="mt-4 text-sm text-muted">
               Funnel: Website → Review pack → Early access.
