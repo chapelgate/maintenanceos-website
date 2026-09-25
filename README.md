@@ -13,6 +13,17 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 - Copy gated by `PRODUCT_CLAIMS_REGISTER.md`.
 - `NEXT_PUBLIC_SITE_URL` — absolute origin for canonical URLs, Open Graph, JSON-LD, sitemap, and robots (see `.env.example`). If unset at build, `src/lib/site-url.ts` falls back to the DigitalOcean staging host.
 
+## Source of truth
+
+- Canonical marketing repository: `chapelgate/maintenanceos-website`
+- Authoritative release branch: `main`
+- DigitalOcean App Platform static staging: `https://seahorse-app-4oasq.ondigitalocean.app`
+- Build: `npm run build` → `out/`
+- Canonical product/backend repository: `chapelgate/maintenanceos-v1-pilot` — not the marketing-site source
+- Full evidence, duplicate check and rollback pin: [`WEBSITE_SOURCE_OF_TRUTH.md`](WEBSITE_SOURCE_OF_TRUTH.md)
+
+Do not create a second MaintenanceOS marketing repository or hosting app to solve a documentation or deployment-metadata gap.
+
 ## Stack
 
 - Next.js 15 App Router + TypeScript + Tailwind CSS v4
