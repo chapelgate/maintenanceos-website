@@ -51,6 +51,8 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
     "must prohibit overtake-humans speculation",
   );
   assert.match(text, funnelPath, "must name the verified public funnel");
+  assert.match(text, /MaintenanceOS by Chapelgate/);
+  assert.match(text, /Chapelgate is the publisher/);
   assert.match(text, /Create from website/);
   assert.match(text, /owner-blocked/);
   assert.match(text, /do not invent crawl results/i);
@@ -65,6 +67,8 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
 test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   const text = readPublic("llms-full.txt");
   assert.match(text, /VERIFIED/);
+  assert.match(text, /MaintenanceOS by Chapelgate/);
+  assert.match(text, /Chapelgate is the publisher/);
   assert.match(text, /UNDER TEST/);
   assert.match(text, /NOT CLAIMED/);
   assert.match(text, /Join launch list/);
@@ -79,4 +83,16 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   assert.match(text, /robots\.txt allows major AI crawlers/);
   assert.match(text, /FAQPage JSON-LD/);
   assert.match(text, /empty hours\/services stay empty/);
+});
+
+
+test("public brand distinguishes product from publisher in source", () => {
+  const site = fs.readFileSync(path.join(root, "src", "config", "site.ts"), "utf8");
+  const schema = fs.readFileSync(path.join(root, "src", "lib", "json-ld.ts"), "utf8");
+  assert.match(site, /publicBrand: "MaintenanceOS by Chapelgate"/);
+  assert.match(site, /publisherName: "Chapelgate"/);
+  assert.match(site, /UK maintenance operations software with AI-assisted intake/);
+  assert.match(schema, /name: siteConfig\.publisherName/);
+  assert.match(schema, /name: siteConfig\.publicBrand/);
+  assert.match(schema, /alternateName: siteConfig\.publicBrand/);
 });
