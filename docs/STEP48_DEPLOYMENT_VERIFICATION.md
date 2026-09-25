@@ -43,3 +43,19 @@ This means deployment verification requires both:
 ## Cost / scheduling
 
 No new monitoring SaaS, cron service, GitHub Actions job, app, database, or runner is introduced. The checks are deterministic repo commands used by the Website Manager release loop. Recurring external scheduling is deliberately not duplicated here.
+
+
+## Live verification
+
+Implementation PR #98 merged as `d50225a92654317e72d27a0a17d4479af7339e7d`.
+
+The existing DigitalOcean deployment published:
+
+- `/release.json` HTTP 200;
+- schema `1`;
+- commit `d50225a92654317e72d27a0a17d4479af7339e7d`;
+- build timestamp `2026-09-25T19:16:44.974Z`.
+
+`EXPECTED_COMMIT=d50225a92654317e72d27a0a17d4479af7339e7d npm run deployment:verify` returned `failures: []`, `ok: true`, then the reused health monitor checked 29 internal paths / 47 pages and assets with `failures: []`, `ok: true`.
+
+Step 48 is therefore live-verified: the intended source revision and the healthy public deployment are proven together.

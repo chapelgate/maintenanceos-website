@@ -199,3 +199,14 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Final live verification:** PR #96 merged as `c780f12ec51aa1d93bcb998be10edd5e8ff55a1f`. Cache-bypassed live HTML returned zero `aria-label="MaintenanceOS by Chapelgate"` occurrences. Final Lighthouse 13.5.0 re-audits on Home and Contact both scored **100**, with **0** `label-content-name-mismatch` items.
 
 **Step 47 status:** **COMPLETE. No open blocker.**
+
+
+## Step 48 completion — automated uptime and deployment checks
+
+- **Uptime / integration check — PASS:** `npm run uptime:check` reuses the existing Step-9 live health monitor rather than creating another crawler. It checks sitemap pages, same-origin links/assets, absence of third-party scripts, Railway Postgres readiness, and public-event CORS.
+- **Exact deployment identity — PASS:** every production build generates ignored `public/release.json` from the source SHA. Builds fail if no verifiable SHA can be determined.
+- **Deployment gate — PASS, live verified:** `npm run deployment:verify` requires the live marker to match local `HEAD` or `EXPECTED_COMMIT`, then runs the live health monitor.
+- **Live evidence:** PR #98 merged as `d50225a92654317e72d27a0a17d4479af7339e7d`; live `/release.json` reports that exact SHA; deployment verification returned `failures: []`, `ok: true`; the reused health monitor checked 29 internal paths / 47 pages-assets with `failures: []`, `ok: true`.
+- **Cost / reuse:** no new monitoring SaaS, scheduler, GitHub Actions job, app, database, runner, or telephony change.
+
+**Step 48 status:** **COMPLETE. No open blocker.**
