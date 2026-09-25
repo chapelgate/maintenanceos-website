@@ -12,7 +12,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | B2 | `PRODUCT_CLAIMS_REGISTER` available in website repo | DONE | Documentation + Claims |
 | B3 | Prevent false commercial-live claims | ACTIVE STANDING RULE | All website work |
 | S1 | Prove website source/deployment/rollback chain | **DONE** — see `WEBSITE_SOURCE_OF_TRUTH.md` | Website Manager |
-| S1-EXT | Read back DigitalOcean App Platform provider-side repo/branch selector | **EXTERNAL METADATA GAP** — current DO connector exposes droplets, not Apps metadata; no rebuild/duplicate app allowed | DevOps |
+| S1-EXT | Read back DigitalOcean App Platform provider-side repo/branch selector | **CLOSED / NON-BLOCKING** — connector cannot expose Apps metadata, but live host content matches canonical source and deployment history names the same app. Recheck only before a hosting mutation; never create a duplicate app. | DevOps |
 | F1 | Product Investigator capability brief | TODO | Product Investigator |
 | F2 | Positioning/value proposition optimisation | TODO | Positioning |
 | F3 | Brand optimisation | IN PROGRESS / implemented baseline exists | Brand |
@@ -40,4 +40,4 @@ This is the persistent website problem register. Do not create parallel problem 
 
 ## Step 1 completion
 
-Source-of-truth programme 1.1–1.5 is complete except for the provider API read-only metadata gap S1-EXT. That gap must not trigger new infrastructure. The authoritative release source remains `chapelgate/maintenanceos-website` `main`.
+Source-of-truth programme 1.1–1.5 is **complete**. The provider App Platform selector is not exposed by the current connector, but live-host verification plus repository/deployment history closes it as non-blocking. The authoritative release source remains `chapelgate/maintenanceos-website` `main`.
