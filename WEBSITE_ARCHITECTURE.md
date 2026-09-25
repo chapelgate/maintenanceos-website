@@ -1,66 +1,76 @@
 # WEBSITE_ARCHITECTURE.md
 
-**Owner:** MOS Documentation (draft)  
-**Updated:** 2026-09-17T15:35 BST  
+**Owner:** MOS Website Manager  
+**Updated:** 2026-09-25  
 **Scope:** Marketing website only — not the MaintenanceOS product backend.  
 **Mode:** PRE-LAUNCH (`PUBLIC_LAUNCH=false`)
 
-## Open decisions
+## Settled architecture decisions
 
 | ID | Decision | State |
 |----|----------|-------|
-| D1 | Where website source lives (new chapelgate repo vs path inside pilot vs other) | OPEN — board B1 |
-| D2 | Hosting (e.g. Vercel) and staging URL | UNVERIFIED |
-| D3 | Lead-capture provider (email API, form SaaS, or queue-to-store) | OPEN — Forms Engineer |
-| D4 | Brand system v0.1 approval | AWAITING OWNER |
+| D1 | Website source location | **CLOSED** — `chapelgate/maintenanceos-website`, branch `main` |
+| D2 | Hosting and staging URL | **CLOSED** — DigitalOcean App Platform static; `https://seahorse-app-4oasq.ondigitalocean.app` |
+| D3 | Lead-capture provider | OPEN — provider-independent adapter exists; production endpoint still separate |
+| D4 | Brand system | IMPLEMENTED in repo; further commercial optimisation remains iterative |
+
+Authoritative deployment/source record: [`WEBSITE_SOURCE_OF_TRUTH.md`](./WEBSITE_SOURCE_OF_TRUTH.md).
 
 ## Relationship to product
 
 | Repo / artefact | Role |
 |-----------------|------|
-| `chapelgate/maintenanceos-v1-pilot` | Capability **evidence** only (README, ARCHITECTURE, CURRENT_STATUS, issues). Do not publish internal hosts/IPs. |
-| Website / marketing repo | **NOT FOUND** (2026-09-17). This docs pack lives at `/workspace/chapelgate-ops/docs/website/` until D1. |
+| `chapelgate/maintenanceos-website` | **Canonical marketing website source.** Next.js static export, content, SEO, lead UI and claims-safe website companions. |
+| `chapelgate/maintenanceos-v1-pilot` | **Canonical product/backend source.** Capability evidence, voice/runtime, safety/lifecycle rules and operational dashboard. Not the marketing-site source. |
+| `chapelgate/cloud-workers` | Shared/legacy infrastructure only. Not the website source. |
+| `chapelgate/chapelgate-technologies-website` | Separate corporate website. Not a MaintenanceOS website duplicate. |
 
-## Proposed stack
+## Stack
 
 - Next.js App Router, TypeScript, Tailwind CSS
-- Config module for `PUBLIC_LAUNCH`, pricing copy mode, feature flags
-- Provider-independent lead-capture **adapters** (swap implementation without rewriting pages)
-- Minimal client JS; prefer Server Components
+- Static export: `npm run build` → `out/`
+- DigitalOcean App Platform static hosting
+- Config module for public-launch state and feature flags
+- Provider-independent lead-capture adapters
+- Minimal client JS where possible
 
-## Page map (from mission brief + IA)
+## Page map
 
-See [WEBSITE_IA.md](./WEBSITE_IA.md) for full hierarchy. Minimum routes:
+Current routes include:
 
-`/`, `/how-it-works`, `/features`, `/ai-receptionist`, `/industries/*`, `/security`, `/pricing`, `/demo`, `/contact`, `/about`, `/faq`, `/status` (architecture placeholder — no fake live metrics), `/privacy`, `/cookies`, `/terms`.
-
-Reserved stubs (no fake backends): account login, onboarding, demo env, customer portal, API docs, billing, live status metrics. `/dashboard` is a flagged SAMPLE/DEMO foundation (off by default; coming / under testing in the default export) — not a live customer portal.
+`/`, `/how-it-works`, `/features`, `/ai-receptionist`, `/industries/*`, `/security`, `/pricing`, `/demo`, `/contact`, `/about`, `/faq`, `/status`, `/privacy`, `/cookies`, `/terms`, `/create`, and the claims-safe `/dashboard` foundation.
 
 ## Config and trust boundaries
 
 ```
 Browser
-  → Marketing site (Next.js)
-       → Lead adapter (validate → store/queue)
-       → Optional consent-gated analytics
-  ✗ No direct write into product telephony / work-order systems from marketing forms
-  ✗ No secrets in git; use env vars + `.env.example` only
-  ✗ No consequential outbound email unless explicitly configured and reviewed
+  → Marketing site (Next.js static export)
+       → Lead adapter (validate → external endpoint when configured)
+       → Optional flagged companion services
+  ✗ No direct write into frozen product telephony from marketing forms
+  ✗ No secrets in git
+  ✗ No invented product capabilities or commercial-live claims
 ```
 
 - **Claims gate:** copy and CTAs must match `PRODUCT_CLAIMS_REGISTER.md`.
-- **PUBLIC_LAUNCH:** when `false`, site presents waitlist/demo CTAs and pre-launch wording; when `true` (future), still must not invent capabilities — flip only after launch checklist.
+- **PUBLIC_LAUNCH:** remains false until launch gates explicitly pass.
+- **Product boundary:** marketing code does not replace backend safety or voice code.
 
-## Security posture (marketing site)
+## Security / accessibility / performance / SEO
 
-Headers/CSP, form CSRF/rate limits, dependency hygiene, XSS-safe rendering — owned by MOS Security; results land in `WEBSITE_SECURITY_REVIEW.md`.
+- Static security baseline: `docs/security/static-security-baseline.md`
+- Accessibility gap audit: `docs/A11Y_GAP_AUDIT.md`
+- Performance budget: `PERFORMANCE_BUDGET.md`
+- SEO: metadata, sitemap, robots, JSON-LD, `llms.txt` / `llms-full.txt`
 
-## Accessibility / performance / SEO
+## Deployment shape
 
-- WCAG 2.2 AA baseline: `WCAG_22_AA_BASELINE.md`
-- Performance: Core Web Vitals, page weight, font/image budget — MOS Performance
-- SEO: titles, meta, sitemap, robots, OG, structured data — MOS SEO Architect (no aggressive promo)
+- Source repository: `chapelgate/maintenanceos-website`
+- Authoritative release branch: `main`
+- Build command: `npm run build`
+- Output directory: `out/`
+- Host class: DigitalOcean App Platform static
+- Recorded staging host: `https://seahorse-app-4oasq.ondigitalocean.app`
+- Rollback pin and evidence: `WEBSITE_SOURCE_OF_TRUTH.md`
 
-## Deploy shape (target)
-
-Reproducible staging + production instructions owned by MOS DevOps once D1/D2 land. Until then: document locally as “staging URL unverified.”
+The connected DigitalOcean tool surface does not currently expose App Platform source-link metadata. Do not create another app to compensate; verify provider-side linkage before any future hosting mutation.
