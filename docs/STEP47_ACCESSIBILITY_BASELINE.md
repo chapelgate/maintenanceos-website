@@ -17,7 +17,7 @@ Official Lighthouse 13.5.0 accessibility audits were run against:
 
 All six scored **100**.
 
-The audits nevertheless surfaced the same zero-weight `label-content-name-mismatch` warning on every page. Root cause: the visible wordmark rendered “Maintenance OS by Chapelgate” while an unnecessary `aria-label` forced the accessible name to “MaintenanceOS by Chapelgate”. The `aria-label` was removed so the accessible name now comes from visible text.
+The audits nevertheless surfaced a shared zero-weight `label-content-name-mismatch` warning. Root cause: redundant accessible-name overrides on the wordmark while the visible text already supplied the name. The header override was removed first; final live verification then found and removed the same redundant override in the footer.
 
 ## WCAG 2.2-oriented controls verified in source
 
@@ -49,3 +49,7 @@ Automated tooling and source inspection cannot certify every WCAG 2.2 success cr
 ## Reuse / spend
 
 Existing accessibility controls and tests were reused. Lighthouse was used one-off from the official npm package and was not added to dependencies. No paid accessibility scanner, browser service, new app, or runner was created.
+
+## Final live verification
+
+PR #96 merged as `c780f12ec51aa1d93bcb998be10edd5e8ff55a1f`. Cache-bypassed live HTML contains zero `aria-label="MaintenanceOS by Chapelgate"` occurrences. Lighthouse 13.5.0 re-audits on Home and Contact both score **100**, with **0** `label-content-name-mismatch` items. The dedicated accessibility gate, full test suite, and production build all pass.
