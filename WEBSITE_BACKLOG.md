@@ -36,7 +36,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | F21 | Mobile/cross-browser QA | OPEN | QA |
 | F22 | Red team on staging | OPEN | Red Team |
 | F23 | Durable handoff/source-of-truth docs | **DONE for Step 1** — `WEBSITE_SOURCE_OF_TRUTH.md` | Documentation |
-| F24 | Final website DoD verification | OPEN | Final Verifier |
+| F24 | Final website DoD verification | **IN PROGRESS — Step 50 closed-loop release gate** | Final Verifier |
 
 ## Step 1 completion
 
@@ -223,3 +223,15 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Verification:** PR #100 merged as `e113eb7d08c99910bb83b0eb3f5a96cbfa745c2a`. The clean-tree release preflight passed the full **185/185** repository tests, 31-page production build, Step-46 performance budget and Step-47 accessibility **12/12** gate. The existing DigitalOcean deployment then published that exact SHA in `/release.json`; `release:verify` returned `failures: []`, `ok: true`, followed by the reused health monitor checking **29 internal paths / 47 pages-assets** with zero failures.
 
 **Step 49 status:** **COMPLETE. No open blocker.**
+
+
+## Step 50 completion — Website Manager closed loop
+
+- Monitor + detect — **IMPLEMENTED**: `manager:monitor` composes the existing website-health and SEO monitors and records `healthy` or `repair_required`.
+- Repair — **CONTROLLED**: a failing monitor stops the loop and requires the smallest evidence-backed repair before rechecking. A healthy site is explicitly not modified.
+- Test — **IMPLEMENTED**: `manager:preflight` reuses the Step-49 clean-tree release preflight.
+- Deploy — **CONTROLLED**: PR-to-`main` remains the only deployment trigger; the manager does not directly mutate DigitalOcean or shared Git history.
+- Verify — **IMPLEMENTED**: `manager:verify` requires an exact merge SHA and reuses Step-48 deployment verification.
+- Record — **IMPLEMENTED**: `manager:record` requires healthy monitor + passed preflight + verified deployment, then writes bounded local evidence and posts the durable release evidence to the PR.
+
+**Step 50 status:** **IMPLEMENTED — pending execution of the loop on this release.**

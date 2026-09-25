@@ -26,7 +26,11 @@
     "test": "node --test scripts/*.test.mjs && node --experimental-strip-types --test packages/onboarding-ingest/src/*.test.ts packages/calendar-adapters/src/*.test.ts packages/sandbox-test-call/src/*.test.ts packages/customer-dashboard/src/*.test.ts packages/receptionist-draft/src/*.test.ts src/lib/*.test.ts",
     "release:preflight": "node scripts/release-preflight.mjs",
     "release:verify": "node scripts/deployment-verifier.mjs",
-    "rollback:plan": "node scripts/rollback-plan.mjs"
+    "rollback:plan": "node scripts/rollback-plan.mjs",
+    "manager:monitor": "node scripts/website-manager-loop.mjs monitor",
+    "manager:preflight": "node scripts/website-manager-loop.mjs preflight",
+    "manager:verify": "node scripts/website-manager-loop.mjs verify",
+    "manager:record": "node scripts/website-manager-loop.mjs record"
   },
   "dependencies": {
     "react": "19.1.0",
