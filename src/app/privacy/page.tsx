@@ -38,7 +38,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "how-collected",
     title: "How we collect data",
-    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), automatic site/technical data, and cookies if enabled — plus public pages from a submitted website URL when a scan service is configured. No invented crawl and no invented third-party lists.",
+    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), automatic site/technical data, and cookies if enabled — plus public pages from a submitted website URL when a scan service is configured. Marketing enquiries are sent to Chapelgate\'s existing Railway-hosted control plane, stored as audited operational lead records, and notify an operator through Resend for human follow-up. No invented crawl and no invented third-party lists.",
   },
   {
     id: CREATE_INGEST_PRIVACY_ANCHOR,
@@ -63,7 +63,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "Recipient categories only until named: hosting/CDN; form or webhook processors; abuse-protection providers; analytics if enabled — [OWNER: name processors when chosen].",
+    body: "Current marketing-form path uses DigitalOcean for the website, an existing Railway-hosted Chapelgate control plane and Postgres store for lead intake, and Resend for operator notification. Other processor categories remain subject to legal review; analytics is not enabled today.",
   },
   {
     id: "transfers",
