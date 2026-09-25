@@ -123,6 +123,7 @@ export const footerNav = {
   product: [
     { href: "/how-it-works/", label: "How it works" },
     { href: "/features/", label: "Features" },
+    { href: "/property-maintenance-software/", label: "Property maintenance software" },
     { href: "/ai-receptionist/", label: "AI receptionist" },
     { href: "/create/", label: "Create receptionist" },
     { href: "/dashboard/", label: dashboardNavLabel },

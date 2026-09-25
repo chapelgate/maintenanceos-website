@@ -21,6 +21,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - [Home](https://seahorse-app-4oasq.ondigitalocean.app/): Website URL → check → review → pack → optional scripted sandbox → early access — not a live phone
 - [How it works](https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/): Same path; optional scripted sandbox under testing; click-to-play product tour (`#product-tour`) — not a live phone
 - [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): VERIFIED / UNDER TEST cards from the Phone AI inventory — same path; live phone not claimed
+- [Property maintenance software](https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/): Core UK property-maintenance software category page; distinct role pages link from here; pre-launch, no autonomous dispatch
 - [AI receptionist](https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/): Voice intake under testing — not a live commercial line
 - [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; SSRF-safe scan under test (not a live crawl); no ISO/SOC 2 or bank-grade claims; legal pages are DRAFT; product interest starts at /create
 - [Cookies](https://seahorse-app-4oasq.ondigitalocean.app/cookies/): DRAFT FOR LEGAL REVIEW — no site-wide consent banner, no analytics or marketing tags today, no invented tracking, not a Google Analytics / PECR / GDPR compliance certification

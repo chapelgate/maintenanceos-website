@@ -1,5 +1,7 @@
 import { faqItems } from "@/content/faqs";
 import { siteConfig } from "@/config/site";
+import { getIndustryRole } from "@/config/industries";
+import { getIndustrySeoIntent } from "@/config/seo-intents";
 import { funnelPageCopy } from "@/lib/page-meta";
 import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
@@ -70,7 +72,7 @@ function softwareApplicationNode(): JsonLdRecord {
     inLanguage: siteConfig.locale,
     countriesSupported: "GB",
     keywords:
-      "UK maintenance operations software, AI maintenance receptionist, property maintenance intake, maintenance workflow software",
+      "UK maintenance operations software, property maintenance software UK, maintenance management software UK, AI maintenance receptionist, property maintenance intake, maintenance workflow software",
     publisher: { "@id": orgId() },
     brand: {
       "@type": "Brand",
@@ -121,6 +123,41 @@ export function funnelPageJsonLd(page: FunnelJsonLdPage): JsonLdRecord {
       websiteNode(),
       webPageNode(page),
       softwareApplicationNode(),
+    ],
+  };
+}
+
+/** Audience-specific WebPage + SoftwareApplication + breadcrumbs for industry pages. */
+export function industryPageJsonLd(slug: string): JsonLdRecord {
+  const role = getIndustryRole(slug);
+  const seo = getIndustrySeoIntent(slug);
+  if (!role || !seo) {
+    throw new Error(`Unknown industry SEO slug: ${slug}`);
+  }
+
+  const url = absoluteUrl(`/industries/${slug}/`);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: seo.title,
+        description: `${seo.summary} Pre-launch.`,
+        inLanguage: siteConfig.locale,
+        isPartOf: { "@id": websiteId() },
+        about: { "@id": softwareId() },
+        publisher: { "@id": orgId() },
+      },
+      softwareApplicationNode(),
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Industries", item: absoluteUrl("/industries/") },
+          { "@type": "ListItem", position: 2, name: role.label, item: url },
+        ],
+      },
     ],
   };
 }

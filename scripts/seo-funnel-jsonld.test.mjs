@@ -16,6 +16,7 @@ const FUNNEL_PAGES = {
   "src/app/demo/page.tsx": "demo",
   "src/app/how-it-works/page.tsx": "howItWorks",
   "src/app/features/page.tsx": "features",
+  "src/app/property-maintenance-software/page.tsx": "propertyMaintenanceSoftware",
 };
 
 const FORBIDDEN_SCHEMA_KEYS = [
@@ -124,6 +125,7 @@ test("exported funnel HTML has claims-safe JSON-LD when out/ exists", () => {
     "out/demo/index.html": "demo",
     "out/how-it-works/index.html": "howItWorks",
     "out/features/index.html": "features",
+    "out/property-maintenance-software/index.html": "propertyMaintenanceSoftware",
   };
   const present = Object.keys(files).filter((rel) =>
     fs.existsSync(path.join(ROOT, rel)),

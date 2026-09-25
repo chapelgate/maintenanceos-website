@@ -8,6 +8,7 @@ export const marketingPaths: readonly string[] = [
   "/",
   "/how-it-works/",
   "/features/",
+  "/property-maintenance-software/",
   "/ai-receptionist/",
   "/create/",
   "/dashboard/",

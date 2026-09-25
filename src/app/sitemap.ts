@@ -8,6 +8,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return marketingPaths.map((path) => ({
     url: absoluteUrl(path),
     changeFrequency: "monthly" as const,
-    priority: path === "/" ? 1 : 0.6,
+    priority:
+      path === "/"
+        ? 1
+        : path === "/property-maintenance-software/"
+          ? 0.9
+          : path.startsWith("/industries/")
+            ? 0.7
+            : 0.6,
   }));
 }

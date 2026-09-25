@@ -79,13 +79,14 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 
 ## Structured data and robots (claims-safe)
 
-Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`) publish Organization + WebSite + WebPage + SoftwareApplication JSON-LD from the same funnel copy. SoftwareApplication has no telephone, aggregateRating, reviews, or offers. `/faq/` publishes FAQPage JSON-LD from the same answers as the page: website URL → check → review → pack → optional scripted sandbox → early access; queued crawl if scan unset; empty hours/services stay empty; UK 999; owner-blocked staging scan. robots.txt allows major AI crawlers to read marketing pages, `/llms.txt`, and this file. Do not treat schema or this file as evidence of a live phone, always-on line, general availability, ratings, or a completed staging crawl.
+Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/property-maintenance-software/`) publish Organization + WebSite + WebPage + SoftwareApplication JSON-LD from the same funnel copy. Industry pages publish audience-specific WebPage + SoftwareApplication + BreadcrumbList JSON-LD. SoftwareApplication has no telephone, aggregateRating, reviews, or offers. `/faq/` publishes FAQPage JSON-LD from the same answers as the page: website URL → check → review → pack → optional scripted sandbox → early access; queued crawl if scan unset; empty hours/services stay empty; UK 999; owner-blocked staging scan. robots.txt allows major AI crawlers to read marketing pages, `/llms.txt`, and this file. Do not treat schema or this file as evidence of a live phone, always-on line, general availability, ratings, or a completed staging crawl.
 
 ## Key URLs
 
 - Home (same path as Create): https://seahorse-app-4oasq.ondigitalocean.app/
 - How it works (includes click-to-play product tour at #product-tour — not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/
 - Features: https://seahorse-app-4oasq.ondigitalocean.app/features/
+- Property maintenance software (core non-brand category page): https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/
 - AI receptionist: https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/
 - Security (designed controls; SSRF-safe scan under test; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://seahorse-app-4oasq.ondigitalocean.app/security/
 - Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
