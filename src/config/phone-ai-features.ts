@@ -134,9 +134,9 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     ukOpsLine:
       "Voice intake exists in product source and is under testing — not a public always-on maintenance line.",
     bullets: [
-      "Gemini Live primary in product configuration. Not a live commercial always-on service.",
+      "Provider-aware voice runtime exists in canonical product source. Current commissioning also has a pinned local/self-hosted candidate, but neither path is approved as a public always-on service.",
     ],
-    sources: ["V-01"],
+    sources: ["V-01", "V-11"],
   },
   {
     id: "M-CAL-02",

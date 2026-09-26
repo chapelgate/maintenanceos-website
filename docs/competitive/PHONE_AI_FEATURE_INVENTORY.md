@@ -1,11 +1,11 @@
 # Phone AI feature inventory
 
-**Owner:** MOS Positioning (cards) · MOS Product Investigator (gaps)  
-**Date:** 2026-09-22  
-**Website:** `chapelgate/maintenanceos-website`  
+**Owner:** MOS Positioning (cards) · MOS Product Investigator (gaps)
+**Date:** 2026-09-26
+**Website:** `chapelgate/maintenanceos-website`
 **Stance:** PRE-LAUNCH — no commercial GA. Live always-on phone stays **NOT_ON_SITE / COMING**.
 
-This file is the source of truth for `/features` marketing cards. It was not in this repo; chapelgate docs repos were not readable from this agent. **Rows below are transcribed from signed sources only** — `PRODUCT_CLAIMS_REGISTER.md`, `docs/competitive/fonio-parity-matrix.md`, `public/llms-full.txt`, and the previous `/features` HAVE / UNDER TEST / COMING copy. **Do not invent rows.**
+This file is the source of truth for `/features` marketing cards. Product evidence was refreshed directly against canonical `chapelgate/maintenanceos-v1-pilot` `main` at `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8`, then bounded by `PRODUCT_CLAIMS_REGISTER.md`, `docs/competitive/fonio-parity-matrix.md`, and the existing website evidence. **Do not invent rows or promote commissioning evidence into a live-service claim.**
 
 On-page promotion uses the **short marketing card set** only. Hard count (Positioning / Product Investigator): **exactly 7 cards — 5 VERIFIED + 2 UNDER TEST**. Do not add cards. The P0/P1 gap matrix stays **off the marketing page**.
 
@@ -34,7 +34,7 @@ Copy **only these seven** into `src/config/phone-ai-features.ts`. One UK-ops lin
 | M-ONB-01 | onboarding | Website → draft knowledge pack | UNDER_TEST | Start from a public UK maintenance website, review the draft, then a knowledge pack — early access only. | Public `/create` path: Website → Check → Review → Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number. SSRF-safe website scan companion (F-02): queued crawl if unset; empty fields stay empty; not a live Fonio-parity knowledge crawl. Knowledge pack + system prompt from the reviewed draft (F-03): missing keys stay missing; not a live tenant. | F-01; F-02 and F-03 folded as bullets, not extra cards |
 | M-TEL-01 | telephony | UK caller intake | VERIFIED | Designed to collect caller details in UK maintenance language, with 999 guidance (never 911) and no invented bookings. | UK terminology and 999 emergency guidance in product source and regressions. Receptionist designed to collect caller details. Must not invent bookings, dispatches, refunds, compensation, account information, or safety assurances. | V-02; V-03; V-05 |
 | M-TEL-02 | telephony | Human transfer on request | VERIFIED | Callers can ask for a person; transfer is explicit-request-only in product source. | Shared policy across voice providers. Transfer quality on carrier remains under retest — not marketed as proven live. | V-04 (existence); V-10 (quality stays UNDER TEST, not a second card) |
-| M-TEL-03 | telephony | AI voice receptionist | UNDER_TEST | Voice intake exists in product source and is under testing — not a public always-on maintenance line. | Gemini Live primary in product configuration. Not a live commercial always-on service. | V-01 |
+| M-TEL-03 | telephony | AI voice receptionist | UNDER_TEST | Voice intake exists in product source and is under testing — not a public always-on maintenance line. | Provider-aware voice runtime exists in canonical product source. Current commissioning also has a pinned local/self-hosted candidate, but neither path is approved as a public always-on service. | V-01; V-11 |
 | M-CAL-02 | calendar/actions | Rules own safety and money | VERIFIED | Deterministic server rules own lifecycle, approvals, and money boundaries — the model cannot execute client-money or invent a van. | AI does not override safety, lifecycle, or approvals. Critical-safety latch requires authorised human clearance. Escalation / human-review queues for RED cases. No payment, refund, compensation, fee-waiver, or client-money execution. | O-03; O-04; O-05; O-06 |
 | M-POST-01 | post-call | Action evidence | VERIFIED | Affirmative operational claims are designed to need verified success evidence — not a live analytics dashboard. | Audit events and action-evidence patterns in product source. Tenant-scoped call-session records exist as part of the operating trail. | S-03; O-02 (call sessions) |
 | M-UK-01 | UK maintenance vertical | Emergency triage vs jobs | VERIFIED | 999 is emergency services; a leaky tap stays a structured job. Critical safety is designed to latch for a person. | UK/999 guidance locked in product source (never 911). Danger latches for a person; routine fabric stays structured intake. | V-02; O-04; O-05; industries positioning |
@@ -50,6 +50,7 @@ These stay in this file for MOS Product Investigator. They are **not** present-f
 | M-KNO-01 | Website knowledge extract | UNDER_TEST | Folded into M-ONB-01 bullets (F-02). Extra UNDER TEST card would break the 2-card cap. |
 | M-KNO-02 | Knowledge pack from reviewed draft | UNDER_TEST | Folded into M-ONB-01 bullets (F-03). |
 | M-TEL-04 | Scripted sandbox and benchmark | UNDER_TEST | Scripted path only; not a third UNDER TEST promo card. See F-04 / F-05 in the gap matrix. |
+| M-TEL-05 | Local/self-hosted voice commissioning candidate | UNDER_TEST | Product repo pins `CG-VOICE-0004` and its local TTS/ASR/VAD/turn stack for commissioning only. The source manifest explicitly says this is not final production acceptance. |
 | M-CAL-01 | Calendar connect | UNDER_TEST | Not a present-fact card. Live book/reschedule stays on the forbid list (N-09). |
 | M-POST-02 | Call history foundation | UNDER_TEST | SAMPLE dashboard only — not a promo card. |
 | M-UK-02 | No client-money authority | VERIFIED | Covered by M-CAL-02 (O-06). Extra VERIFIED card would break the 5-card cap. |
@@ -89,7 +90,7 @@ Do **not** render this matrix on `/features`. Track build work here and in `docs
 | --- | --- | --- | --- |
 | Public `/create` funnel | UNDER_TEST (F-01; matrix HAVE for existence) | P0 | Production-hosted engine + sandbox tenant; do not claim 30s live phone |
 | Knowledge pack → assistant prompt | UNDER_TEST (F-03; matrix PARTIAL) | P0 | Not a live tenant; not RAG / LLM knowledge builder |
-| AI extracts company knowledge from site | UNDER_TEST (F-02; matrix PARTIAL) | P0 | Live scan on staging not evidenced; owner-blocked droplet |
+| AI extracts company knowledge from site | UNDER_TEST (F-02; matrix PARTIAL) | P0 | Live scan on staging not evidenced; optional DigitalOcean companion is not enabled on the public staging build |
 | Instant test call / “call my receptionist” | UNDER_TEST (F-04; matrix PARTIAL) | P0 | Real media + sandbox tenant; not Fonio voice quality |
 | Conversation quality benchmark | UNDER_TEST for customer-facing claims (F-05; scripted HAVE) | P0 | Live-call barge-in SKIP/open; not voice-quality parity |
 | No-code assistant setup | NOT_ON_SITE (matrix PARTIAL — Streamlit internal) | P0 | Customer dashboard setup UX |
@@ -110,7 +111,8 @@ Do **not** render this matrix on `/features`. Track build work here and in `docs
 
 | Feature | Inventory status | Priority | Gap |
 | --- | --- | --- | --- |
-| Inbound AI answering (pilot source) | UNDER_TEST (V-01; matrix PARTIAL) | P0 | Productise behind flags; do not rewrite frozen path |
+| Inbound AI answering (pilot source) | UNDER_TEST (V-01; matrix PARTIAL) | P0 | Provider-aware runtime exists; controlled carrier proof and production acceptance remain open |
+| Local/self-hosted voice candidate | UNDER_TEST (V-11) | P0 | Commissioning pin only; benchmark and controlled-call evidence before any production promotion |
 | Always-on live customer phone | NOT_ON_SITE (MISSING / frozen) | P0 | Controlled-call evidence; do not claim live |
 | Outbound + campaigns | NOT_ON_SITE (MISSING) | P2 | Campaign engine |
 | Human / dept transfer | VERIFIED existence (V-04); quality UNDER TEST (V-10) | P0 | Dashboard config; carrier retest |

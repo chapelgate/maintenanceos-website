@@ -43,6 +43,7 @@ const OFF_PAGE_IDS = [
   "M-KNO-01",
   "M-KNO-02",
   "M-TEL-04",
+  "M-TEL-05",
   "M-CAL-01",
   "M-POST-02",
   "M-UK-02",

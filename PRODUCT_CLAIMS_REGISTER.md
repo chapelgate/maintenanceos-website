@@ -1,27 +1,48 @@
 # PRODUCT_CLAIMS_REGISTER.md — SIGNED (VERIFIED-ONLY APPROVAL)
 
-**Signer:** MOS Product Investigator  
-**Signed:** 2026-09-18 13:15 BST  
-**Product source:** `chapelgate/maintenanceos-v1-pilot` (`main`)  
-**Checkpoint:** `CURRENT_STATUS.md` dated 2026-09-14  
-**Also reviewed:** README.md, ARCHITECTURE.md, DECISION_BOOK.md, PILOT_CHECKLIST.md, STAGED_VOICE_INTEGRATION.md, FINALISATION_10_STEPS.md  
-**Website mode:** PRE-LAUNCH  
+**Signer:** MOS Product Investigator
+**Signed:** 2026-09-26
+**Product source:** `chapelgate/maintenanceos-v1-pilot` (`main`)
+**Product checkpoint:** `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8`
+**Current-status document reviewed:** `CURRENT_STATUS.md` dated 2026-09-20
+**Also reviewed:** `README.md`, `ARCHITECTURE.md`, `DECISION_BOOK.md`,
+`PILOT_CHECKLIST.md`, `FINALISATION_10_STEPS.md`,
+`STAGED_VOICE_INTEGRATION.md`, `CONTROLLED_GEMINI_CALL_RUNBOOK.md`,
+`docs/voice/CANDIDATE_PIN_MANIFEST.md`,
+`docs/voice/CLOUD_COST_EXIT_POLICY.md`, current voice/runtime source and targeted
+regressions.
+**Website mode:** PRE-LAUNCH
+
+## Audit evidence at this checkpoint
+
+- Python 3.13.15 targeted claims-control suite: **88 passed / 0 failed** across
+  explicit-transfer, live-defect, voice-action, Gemini-provider, tenant-isolation,
+  lifecycle, readiness and webhook-security tests.
+- Broad Windows run excluding the two Linux-`resource` concurrency modules:
+  **356 passed**; one POSIX file-mode assertion is not portable to NTFS and is not
+  used to promote any website claim.
+- Unfiltered Windows collection cannot execute the two Linux-only concurrency
+  modules because Python's `resource` module is not available on Windows.
+- Therefore this refresh does **not** promote concurrency, production hosting,
+  carrier quality or production voice to VERIFIED.
 
 ## Hard gates
 
-- **Commercially live / GA:** NOT AVAILABLE — never claim
-- **Telephony controlled Gemini call:** NOT AVAILABLE — **NO-GO**
-- **Present-fact marketing copy:** **VERIFIED rows only** (this section)
-- UNDER TEST / PLANNED / NOT AVAILABLE must not be stated as present commercial fact
+- **Commercially live / GA:** NOT AVAILABLE — never claim.
+- **Controlled carrier voice on a canonical production/pilot runtime:**
+  NOT AVAILABLE — **NO-GO**.
+- **Present-fact marketing copy:** **VERIFIED rows only**.
+- UNDER TEST / PLANNED / NOT AVAILABLE must not be stated as present commercial fact.
+- A source-code capability is not the same thing as a proven live service.
 
 ## Taxonomy
 
 | Status | Website use |
 |---|---|
-| **VERIFIED** | Only status approved as present fact (still PRE-LAUNCH product, not “buy now live service”) |
-| **UNDER TEST** | “Under testing / designed to” only — not GA |
-| **PLANNED** | Label as planned |
-| **NOT AVAILABLE** | Omit |
+| **VERIFIED** | Present product/source fact only. Still PRE-LAUNCH; never imply public production service. |
+| **UNDER TEST** | “Under testing / designed to” only — not GA or live proof. |
+| **PLANNED** | Label as planned. |
+| **NOT AVAILABLE** | Omit as a capability; may appear only in explicit “not claimed” language. |
 
 ---
 
@@ -29,88 +50,88 @@
 
 | ID | Claim | Evidence |
 |---|---|---|
-| V-02 | UK terminology and 999 (never 911) emergency guidance in product source and regressions | README; PR #25 lane; FINALISATION step 6; PILOT voice tests |
-| V-03 | Receptionist collects caller details (product design/source) | README |
-| V-04 | Explicit caller-request human transfer exists in source + CI (Gemini and OpenAI share policy) | CURRENT_STATUS: PR #25 merged `1f4ba147…` |
-| V-05 | Must not invent bookings, dispatches, refunds, compensation, account information, or safety assurances | README; voice_policy / action_evidence architecture |
-| V-06 | Historical real receptionist / validation calls have occurred (test/validation context only — not commercial GA) | README; CURRENT_STATUS; PILOT_CHECKLIST |
-| O-01 | Multi-tenant maintenance-operations system | README |
-| O-02 | Tenant-scoped properties, residents, contractors, work orders, jobs, communications, exports, action evidence, call sessions (in product source) | README |
-| O-03 | Deterministic server rules own safety, lifecycle, and approvals; AI does not override | README; ARCHITECTURE; DECISION_BOOK |
-| O-04 | Critical-safety latch requiring authorised human clearance | ARCHITECTURE |
-| O-05 | Escalation queues / HUMAN_REVIEW for RED cases | README; ARCHITECTURE; DECISION_BOOK |
-| O-06 | Quote/invoice checks exist; **no** payment, refund, compensation, fee-waiver, or client-money execution | README; DECISION_BOOK |
+| V-02 | UK terminology and 999 (never 911) emergency guidance exists in current product source and regressions | `gemini_voice.py`; README; FINALISATION step 6; targeted 2026-09-26 regression audit |
+| V-03 | Receptionist source collects caller details for structured maintenance intake | README; current voice source; targeted regressions |
+| V-04 | Explicit caller-request human transfer exists in source and regressions; ordinary technical failure must fail closed rather than auto-transfer | CURRENT_STATUS; `tests/test_explicit_transfer_only.py`; main hardening commits `11ed8ea…`, `7c3bf1b…` |
+| V-05 | Assistant policy must not invent bookings, dispatches, refunds, compensation, account information or safety assurances | README; `gemini_voice.py`; `voice_policy.py`; `action_evidence.py`; targeted 2026-09-26 audit |
+| V-06 | Historical real receptionist / validation calls have occurred in test/validation context only | README; CURRENT_STATUS; PILOT_CHECKLIST |
+| O-01 | Multi-tenant maintenance-operations system exists in canonical source | README |
+| O-02 | Tenant-scoped properties, residents, contractors, work orders, jobs, communications, exports, action evidence and call sessions exist in source | README; models/operations source |
+| O-03 | Deterministic server rules own safety, lifecycle and approvals; AI does not override them | README; ARCHITECTURE; DECISION_BOOK |
+| O-04 | Critical-safety latch requires authorised human clearance | ARCHITECTURE; lifecycle regressions |
+| O-05 | RED cases can enter escalation / HUMAN_REVIEW | README; ARCHITECTURE; DECISION_BOOK |
+| O-06 | Quote/invoice checks exist; **no** payment, refund, compensation, fee-waiver or client-money execution authority | README; DECISION_BOOK |
 | O-07 | Streamlit supervisor dashboard exists as internal supervisor tooling | README; ARCHITECTURE |
-| S-01 | Tenant isolation controls in source | ARCHITECTURE `tenant_security.py` |
-| S-02 | Twilio HTTP/WSS signature verification implemented in source | README |
-| S-03 | Audit events / action evidence; affirmative operational claims need verified success evidence | ARCHITECTURE `action_evidence.py` |
-| S-04 | Cloud CI and Security CI baseline pass on canonical application code | CURRENT_STATUS; FINALISATION step 2 |
-| R-04 | Local acceptance evidenced 2026-09-10: full pytest pass, local-closed readiness, SQLite backup/restore | PILOT_CHECKLIST |
+| S-01 | Tenant-isolation controls exist in source | ARCHITECTURE; `tenant_security.py`; current targeted isolation tests |
+| S-02 | Twilio HTTP/WSS signature-verification controls exist in source | README; webhook-security source/tests |
+| S-03 | Audit events / action evidence exist; affirmative operational claims require verified success evidence | ARCHITECTURE; `action_evidence.py` |
+| S-04 | Cloud CI and Security CI baseline historically passed on canonical application code | CURRENT_STATUS / FINALISATION step 2. This refresh does not turn later runner-policy commits into a fresh CI certification. |
+| R-04 | Local acceptance was evidenced on 2026-09-10: full pytest pass, local-closed readiness and SQLite backup/restore | PILOT_CHECKLIST |
+| R-06 | Current claims-control regressions passed at the exact 2026-09-26 product checkpoint | 88/88 targeted tests at `cc682c3e…` |
 
-**Wording rule for VERIFIED:** state as product capability that exists in MaintenanceOS. Do **not** imply commercially live phone line, public production access, or general availability.
+**Wording rule for VERIFIED:** state only that the capability/control exists in
+MaintenanceOS. Do **not** imply a commercially live phone line, public production
+access, current carrier quality, deployment readiness or general availability.
 
 ---
 
-# NOT APPROVED AS PRESENT FACT
+# NOT APPROVED AS PRESENT COMMERCIAL FACT
 
-## UNDER TEST (careful language only)
+## UNDER TEST
 
 | ID | Claim | Note |
 |---|---|---|
-| V-01 | AI receptionist (Gemini Live primary) in source | Capability under testing — not live commercial service |
-| V-10 | Live human-transfer answer / no-answer on carrier | Historical mixed outcomes; retest open |
-| R-02 / R-03 | Public / production hosting | Doc conflict: CURRENT_STATUS vs FINALISATION on DO host identity; API loopback-only per CURRENT_STATUS — do not market public production |
-| F-01 | Public `/create` multi-step website→receptionist funnel | Funnel **EXISTS** in this repo (not MISSING). Early-access / preview only — not a live receptionist. Keep UNDER TEST as a productised website-to-assistant until live scan on staging is evidenced. |
-| F-02 | SSRF-safe scan companion extracts company knowledge from a URL | PARTIAL / UNDER TEST. Flagged `packages/onboarding-ingest`; `ONBOARDING_WEB_INGEST` off by default; staging `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` often unset (queued crawl). Owner blocker: DigitalOcean droplet + public endpoint + static rebuild (`docs/FONIO_WEBSITE_READINESS.md`). Do not claim live Fonio-parity scan. |
-| F-03 | Knowledge pack + system prompt from reviewed `/create` draft | PARTIAL. `packages/receptionist-draft` + `/create` preview. Missing fields stay missing. Not a live tenant / RAG KB. UNDER TEST until live scan on staging is evidenced. |
-| F-04 | Pack-aware scripted sandbox test call | PARTIAL. Flagged scripted / browser-mock only — **not** a live phone. WebRTC/live forbidden. Frozen telephony unused. |
-| F-05 | Conversation quality vs Fonio | HAVE for the **scripted** path (`npm run conversation-benchmark`). Live-call barge-in SKIP/open. Passing the runner is not voice-quality parity. UNDER TEST for any customer-facing conversation-quality claim. |
+| V-01 | Provider-aware AI voice receptionist runtime exists in canonical source | Voice intake remains under testing. Current commissioning spans the existing provider-aware runtime and a pinned local/self-hosted candidate. This is not a public always-on service. |
+| V-10 | Live human-transfer answer / no-answer behaviour on carrier | Historical outcomes are mixed; fresh controlled carrier evidence remains required. |
+| V-11 | Pinned local/self-hosted voice commissioning candidate | `docs/voice/CANDIDATE_PIN_MANIFEST.md` pins `CG-VOICE-0004` / Kokoro + local ASR/VAD/turn components for commissioning. The manifest explicitly says this is **not final production acceptance**. |
+| R-02 / R-03 | Public / production hosting | Current product docs describe transitional voice infrastructure and require runtime re-verification. Do not market public production hosting from repository state alone. |
+| F-01 | Public `/create` multi-step website→receptionist funnel | Funnel exists in the website repo. Early-access / preview only — not a live receptionist. |
+| F-02 | SSRF-safe scan companion extracts company knowledge from a URL | PARTIAL / UNDER TEST. Flagged companion; off by default on public staging unless deliberately enabled and rebuilt. Do not claim live Fonio-parity knowledge crawl. |
+| F-03 | Knowledge pack + system prompt from reviewed `/create` draft | PARTIAL. Missing fields stay missing. Not a live tenant / RAG knowledge base. |
+| F-04 | Pack-aware scripted sandbox test call | PARTIAL. Scripted/browser-mock path only — **not** a live phone. |
+| F-05 | Conversation quality vs Fonio | Scripted benchmark exists. It is not live-call barge-in/voice-quality parity. |
 
 ## PLANNED
 
 | ID | Claim |
 |---|---|
-| R-05 | Production blockers (governance, SSO/MFA, pen test, legal, insurance, etc.) |
+| R-05 | Production blockers still include governance, SSO/MFA, penetration testing, legal/privacy/telecoms review, monitoring/failover and other production controls documented by the product repo. |
 
-## NOT AVAILABLE (omit / forbidden)
+## NOT AVAILABLE / FORBIDDEN AS A PRESENT CAPABILITY
 
 | ID | Claim |
 |---|---|
-| V-07 | Controlled Gemini call on canonical deployment — **NO-GO** |
-| V-08 | Public production voice / Twilio media streaming proven on canonical runtime |
+| V-07 | Controlled carrier call proven on the canonical current runtime — **NO-GO** until current runtime evidence passes |
+| V-08 | Public production voice / Twilio media streaming proven on the canonical runtime |
 | V-09 | Concurrent multi-line capacity numbers |
 | O-08 | Public customer portal / account login / billing GA |
 | O-09 | Live email / messaging / remote AI side effects as “live now” |
-| R-01 | Commercially generally available / production customer call pilot |
-| S-05 | Certifications (ISO, SOC2, etc.) |
-| S-06 | Fake uptime, logos, awards, reviews |
+| R-01 | Commercial general availability / production customer-call pilot |
+| S-05 | Certifications such as ISO or SOC 2 |
+| S-06 | Fake uptime, customer logos, awards, ratings, reviews or testimonials |
 
 ---
 
-## Required CTAs
+## Website-specific guardrails
 
-Join launch list / Request early demo. Pricing: request pricing / launching soon.
+- Primary CTA may be **Create from website** (`/create/`).
+- Join launch list / Request early demo remain secondary early-access conversions.
+- Pricing stays request-pricing / launching-soon unless a separate commercial gate is approved.
+- `/privacy`, `/cookies` and `/terms` remain DRAFT FOR LEGAL REVIEW.
+- Website scan, knowledge pack, scripted sandbox, calendar and SAMPLE dashboard
+  stay labelled honestly according to their flags/evidence.
+- Do not advertise voice-provider brands as a customer promise. Voice architecture
+  is still under commissioning and may change only through its own evidence gates.
 
 ## Signature
 
-```
+```text
 SIGNED-BY: MOS Product Investigator
-DATE: 2026-09-18T13:15:00+01:00
+DATE: 2026-09-26
 PRODUCT_REPO: chapelgate/maintenanceos-v1-pilot
+PRODUCT_CHECKPOINT: cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8
 WEBSITE_PATH: PRODUCT_CLAIMS_REGISTER.md
 PRESENT_FACT: VERIFIED rows only
 COMMERCIALLY_LIVE: NO
-TELEPHONY_CONTROLLED_CALL: NO-GO
+CONTROLLED_CARRIER_VOICE: NO-GO
 ```
-
-**Fonio amendment (2026-09-21):** added website-repo rows **F-01–F-05** under UNDER TEST so `/create`, scan, knowledge pack, scripted sandbox, and conversation-benchmark claims stay non-present-fact until live scan on staging is evidenced. VERIFIED rows and the signature above are unchanged. Do not claim a live always-on phone.
-
-**Fonio amendment (2026-09-21, /demo CTAs):** the public primary CTA is now **Create from website** (`/create/`). Join launch list / Request early demo remain allowed secondary conversions. Request early demo is a human early-access briefing — not live number provisioning. VERIFIED rows and the signature above are unchanged.
-
-**Fonio amendment (2026-09-21, /pricing):** `/pricing` stays request-pricing / launching soon. No live phone included in a plan, no GA, no invented £ figures. Primary CTA is Create from website (`/create/`). Telephony and calendar: early access / coming. VERIFIED rows and the signature above are unchanged.
-
-**Fonio amendment (2026-09-21, /contact):** `/contact` is for genuine human enquiries / early access. Primary path for product interest is Create from website (`/create/`). Not live phone provisioning, not a GA support desk, no invented SLAs. VERIFIED rows and the signature above are unchanged.
-
-**Fonio amendment (2026-09-21, /security):** `/security` stays a designed-control trust posture. SSRF-safe website scan is UNDER TEST (F-02) — not a live crawl. No ISO/SOC2/bank-grade claims (S-05). Legal pages remain DRAFT FOR LEGAL REVIEW. Product interest starts at Create from website (`/create/`). VERIFIED rows and the signature above are unchanged.
-
-**Fonio amendment (2026-09-21, /cookies):** `/cookies` stays a DRAFT FOR LEGAL REVIEW scaffold. No site-wide consent banner (no non-essential tags). No analytics or marketing tags today — not “prepared”. If analytics is added later, it stays off until consent. No invented tracking and no Google Analytics / PECR / GDPR compliance certification. Footer Cookie settings opens the draft notice, not a live preference centre. VERIFIED rows and the signature above are unchanged.
