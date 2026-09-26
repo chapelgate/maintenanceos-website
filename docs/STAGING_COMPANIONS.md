@@ -1,7 +1,7 @@
 # Staging companions checklist (DigitalOcean static + droplet)
 
-**Status:** operator checklist — docs only; this file does **not** create DigitalOcean or Render resources  
-**Staging host:** `https://seahorse-app-4oasq.ondigitalocean.app/`  
+**Status:** operator checklist — docs only; this file does **not** create DigitalOcean or Render resources
+**Staging host:** `https://seahorse-app-4oasq.ondigitalocean.app/`
 **Do not:** use Render, apply `render.yaml`, attach companions to DigitalOcean App Platform **static**, add Next.js API routes, copy `.env.example.fonio-local` onto App Platform, or edit frozen live telephony (`maintenanceos-redteam` / production voice).
 
 The marketing site stays `output: 'export'`. Companion URLs and flags are inlined at **`npm run build`**. A runtime-only App Platform restart is not enough.
@@ -58,7 +58,7 @@ Omit a row (or leave the public flag `false` / endpoint empty) for any companion
 
 Do **not** paste loopback URLs (`http://127.0.0.1:8788` …) onto App Platform.
 
-## Owner blocker (not a code defect)
+## Optional staging enablement (not a current code blocker)
 
 Live scan on staging is still an **owner** step. `/create` crawl code paths are ready and stay honest when the endpoint is unset.
 
@@ -84,13 +84,13 @@ A droplet does not sleep the way a free PaaS did. Still confirm `GET /health` is
 
 Check in the same order as the claims-safe loop (`URL → scan draft → calendar mock → scripted sandbox → SAMPLE dashboard`):
 
-1. **Scan** — `GET https://<droplet-host>/health`  
+1. **Scan** — `GET https://<droplet-host>/health`
    Expect `"service":"maintenanceos-onboarding-scan"`. For live extract, `"ingestEnabled": true`.
-2. **Mock calendar** (only if that sibling is hosted) — `GET https://<companion-host>/health`  
+2. **Mock calendar** (only if that sibling is hosted) — `GET https://<companion-host>/health`
    Expect `"service":"maintenanceos-calendar-adapters"`, `"telephony": false`. For slots, `"adaptersEnabled": true` and `"provider":"mock"`.
-3. **Sandbox test-call** (only if hosted) — `GET https://<companion-host>/health`  
+3. **Sandbox test-call** (only if hosted) — `GET https://<companion-host>/health`
    Expect `"service":"maintenanceos-sandbox-test-call"`, `"liveCall": false`. For scripted sessions, `"sandboxEnabled": true`.
-4. **Customer dashboard** (only if hosted) — `GET https://<companion-host>/health`  
+4. **Customer dashboard** (only if hosted) — `GET https://<companion-host>/health`
    Expect `"service":"maintenanceos-customer-dashboard"`, `"telephony": false`. For SAMPLE list/detail, `"dashboardEnabled": true` and `"catalogKind":"demo"`.
 
 Then open:

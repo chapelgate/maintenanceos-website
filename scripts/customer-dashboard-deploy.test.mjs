@@ -44,13 +44,13 @@ test("customer-dashboard Dockerfile matches npm run customer-dashboard", () => {
   assert.match(docker, /SAMPLE/);
 });
 
-test("dashboard deploy runbook documents Free click, CORS, DO rebuild, SAMPLE honesty", () => {
+test("dashboard deploy policy is DigitalOcean-only and keeps SAMPLE honesty", () => {
   const doc = read("docs/DASHBOARD_DEPLOY.md");
-  assert.match(doc, /Instance type:\*\* click \*\*Free\*\*/);
-  assert.match(doc, /Health Check Path:\*\* `\/health`/);
+  assert.match(doc, /do not use Render/i);
+  assert.match(doc, /DigitalOcean/);
+  assert.match(doc, /GET \/health/);
   assert.match(doc, /CUSTOMER_DASHBOARD_ENABLED/);
   assert.match(doc, /CUSTOMER_DASHBOARD_DEMO_DATA/);
-  assert.match(doc, /seahorse-app-4oasq\.ondigitalocean\.app/);
   assert.match(doc, /NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT/);
   assert.match(doc, /NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED/);
   assert.match(doc, /Force Rebuild/);
@@ -59,9 +59,9 @@ test("dashboard deploy runbook documents Free click, CORS, DO rebuild, SAMPLE ho
   assert.match(doc, /maintenanceos-redteam/);
   assert.match(doc, /output: 'export'/);
   assert.match(doc, /\/v1\/dashboard/);
-  assert.match(doc, /15 minutes/);
   assert.match(doc, /src\/config\/site\.ts/);
   assert.match(doc, /CUSTOMER_DASHBOARD_CORS_ORIGIN/);
+  assert.doesNotMatch(doc, /onrender\.com|Render Dashboard|New \+.*Web Service/i);
 });
 
 test("site.ts public env names match the dashboard deploy runbook", () => {

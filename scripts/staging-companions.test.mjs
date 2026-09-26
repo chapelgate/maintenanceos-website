@@ -38,19 +38,19 @@ test("staging companions checklist links the four runbooks and exact DO env", ()
   assert.match(doc, /copy `\.env\.example\.fonio-local` onto App Platform/);
   assert.match(doc, /Health-check order/);
   assert.match(doc, /review hint/);
-  assert.match(doc, /Owner blocker \(not a code defect\)/);
+  assert.match(doc, /Optional staging enablement \(not a current code blocker\)/);
   assert.match(doc, /not a website code defect/);
   assert.match(doc, /NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
   assert.match(doc, /NEXT_PUBLIC_\*/);
 });
 
-test("fonio website readiness names the droplet owner blocker", () => {
+test("fonio website readiness separates DigitalOcean enablement from code blockers", () => {
   const doc = read("docs/FONIO_WEBSITE_READINESS.md");
   assert.match(doc, /DigitalOcean droplet/);
   assert.match(doc, /NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
   assert.match(doc, /output: 'export'/);
   assert.match(doc, /do not use Render/i);
-  assert.match(doc, /Owner blocker/);
+  assert.ok(doc.includes("Launch / enablement dependencies"));
   assert.match(doc, /not a website code defect/);
   assert.match(doc, /seahorse-app-4oasq\.ondigitalocean\.app/);
   assert.match(doc, /ONBOARDING_SCAN_DEPLOY\.md/);

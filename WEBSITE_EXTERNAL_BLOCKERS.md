@@ -1,12 +1,14 @@
 # MaintenanceOS Website External Blockers
 
 **Owner:** MOS Website Manager
-**Updated:** 2026-09-25
+**Updated:** 2026-09-26
 **Rule:** Only genuine external/manual blockers belong here. Exhaust safe authorised alternatives first.
 
 ## OPEN
 
 None.
+
+Legal review, manual accessibility/cross-browser QA, red-team staging, product-evidence refresh, and the static-host response-header decision are launch/continuation gates tracked in `WEBSITE_BACKLOG.md` / `WEBSITE_LAUNCH_CHECKLIST.md`; they are not current external blockers to ordinary website engineering.
 
 ## CLOSED
 

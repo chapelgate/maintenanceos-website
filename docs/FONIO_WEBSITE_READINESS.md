@@ -1,9 +1,9 @@
-# Fonio website readiness (through #64)
+# Fonio website readiness
 
-**Verified through:** `chapelgate/maintenanceos-website` `main` including merged PR **#64** (claims-safe `/cookies`).  
+**Verified through:** `chapelgate/maintenanceos-website` `main` at Continuation Step 2 baseline; original #64 funnel work plus later live-verified website programme releases.
 **Stance:** PRE-LAUNCH. The **website onboarding path is substantially ready**. This is **not** a “complete vs Fonio” marketing claim. Live phone parity remains **open**.
 
-Use this note to separate **code already on main** from **owner blockers**. Detail lives in the linked runbooks — do not duplicate click-by-click deploy steps here.
+Use this note to separate **code already on main** from **launch / enablement dependencies**. Detail lives in the linked runbooks — do not duplicate click-by-click deploy steps here.
 
 **Owner decision: do not use Render.** `render.yaml` is **legacy / do not use**. Marketing stays DigitalOcean App Platform **static** free (`output: 'export'`). This file does **not** create DigitalOcean or Render resources.
 
@@ -33,7 +33,7 @@ Pages and discoverability name the same funnel. No live phone, always-on, GA, ra
 - `/faq` + FAQPage JSON-LD, `/pricing` (request pricing; Create CTA), `/contact` (human enquiry, not a support desk), `/security` (designed-control trust posture; SSRF-safe scan under test; no ISO / SOC 2 / bank-grade)
 - `/cookies` — DRAFT FOR LEGAL REVIEW; no site-wide consent banner; no analytics or marketing tags today; not a Google Analytics / PECR / GDPR compliance certification
 - SEO titles / OG, claims-safe JSON-LD, `llms.txt` / `llms-full.txt`
-- Accessibility baseline (`docs/A11Y_GAP_AUDIT.md`); default First Load JS **≤ 110 kB** (`PERFORMANCE_BUDGET.md`)
+- Accessibility baseline (`docs/STEP47_ACCESSIBILITY_BASELINE.md`); current Next 16 release budget **≤ 600 KB raw / ≤ 190 KB gzip initial first-party JS** (`PERFORMANCE_BUDGET.md`)
 - Static CSP **meta** + referrer (`docs/security/static-security-baseline.md`) — not HTTP security headers on App Platform static
 - `/create` + `/privacy` website-URL ingest note (**DRAFT FOR LEGAL REVIEW**)
 
@@ -41,7 +41,7 @@ Pages and discoverability name the same funnel. No live phone, always-on, GA, ra
 
 Staging host: `https://seahorse-app-4oasq.ondigitalocean.app/`. Staging `/create` is live and **claims-safe**. With the scan endpoint unset, crawl is queued. That is not a website code defect.
 
-## Owner blockers (not code defects)
+## Launch / enablement dependencies (not current engineering blockers)
 
 These are **not** missing website features. Do not open product PRs to “fix” them.
 
@@ -49,7 +49,7 @@ These are **not** missing website features. Do not open product PRs to “fix”
 2. **Legal review** — `/privacy`, `/cookies`, `/terms`, and the website-URL ingest note stay **DRAFT FOR LEGAL REVIEW** until counsel clears them. No invented DPO or GDPR sign-off. No invented analytics, consent banner, or Google Analytics / PECR / GDPR certification.
 3. **Frozen live telephony** — always-on customer phone stays **out of scope** until a controlled-call **GO**. Scripted sandbox HAVE is not live-call or Fonio voice parity. Do not touch the frozen voice path.
 
-Until blocker 1 happens, `/create` must queue crawl and invent nothing. That is expected — **not a website code defect**.
+Until dependency 1 is deliberately enabled, `/create` must queue crawl and invent nothing. That is expected — **not a website code defect**.
 
 ## Host split (do not collapse)
 
