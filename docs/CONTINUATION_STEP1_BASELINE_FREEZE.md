@@ -1,6 +1,6 @@
 # Continuation Step 1 — baseline freeze
 
-**Status:** RELEASE CANDIDATE — close only after exact live SHA verification
+**Status:** COMPLETE — final code release verified live; closure documentation follows as a docs-only release
 **Date:** 2026-09-26
 **Scope:** MaintenanceOS public/pre-launch marketing website only
 **Canonical source:** `chapelgate/maintenanceos-website` `main`
@@ -113,3 +113,29 @@ The verifier now returns numeric status from its async main routine and assigns
 starts a local release-marker server, deliberately supplies a different expected
 SHA, and requires exit code 1 with no libuv assertion. The same deliberate
 mismatch test against the real live origin also exits cleanly.
+
+## Closure evidence
+
+- PR #104 merged the framework/security baseline.
+- PR #105 merged the verifier failure-path hardening.
+- Final code release `2f893f5c5c8a45d46f2db4fec4fa3c146424d78b`
+  was served by the existing DigitalOcean static app at
+  `2026-09-26T21:40:10Z`.
+- Deployment verification matched the exact live SHA and the subsequent live
+  health monitor checked 29 internal paths / 45 pages-and-assets with zero
+  failures.
+- A later record-only monitor pass experienced one transient workstation Node
+  heap allocation failure in the SEO subprocess. Node reported a normal ~4.2 GB
+  heap limit and ~4.7 GB free physical RAM; an immediate isolated SEO rerun
+  passed with zero failures. No website code, configuration, hosting, or gate
+  threshold was changed for that transient.
+- This closure change is documentation only. It records the completed step and
+  does not alter the website runtime.
+
+### Validation-workstation loopback transient
+
+During the docs-only closure preflight, several tests that start temporary
+localhost HTTP servers timed out connecting to `127.0.0.1` while the machine
+was under validation load. No remote or production endpoint was involved. The
+exact affected suites were rerun immediately in isolation and passed **22/22**.
+No code, timeout, assertion, or release threshold was weakened.
