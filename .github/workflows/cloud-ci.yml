@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   primary-test:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
     timeout-minutes: 20
     outputs:
       container_changed: ${{ steps.changes.outputs.container_changed }}
@@ -130,7 +130,7 @@ jobs:
   staging-config:
     needs: primary-test
     if: needs.primary-test.outputs.staging_changed == 'true'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
     timeout-minutes: 10
     env:
       DATABASE_URL: postgresql+psycopg://maintenanceos:synthetic@db.invalid:5432/maintenanceos
@@ -157,7 +157,7 @@ jobs:
   container-build:
     needs: primary-test
     if: needs.primary-test.outputs.container_changed == 'true'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
