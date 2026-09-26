@@ -37,13 +37,15 @@ This is the persistent website problem register. Do not create parallel problem 
 | F22 | Red team on staging | OPEN | Red Team |
 | F23 | Durable handoff/source-of-truth docs | **DONE for Step 1** — `WEBSITE_SOURCE_OF_TRUTH.md` | Documentation |
 | F24 | Final website DoD verification | **DONE — original 50-step engineering programme release verified; separate legal/security/red-team launch gates remain tracked** | Final Verifier |
-| C1 | Continuation Step 1 — freeze/prove current baseline | **IN PROGRESS — implementation locally verified; exact merged live SHA still required before closure** | Website Manager |
+| C1 | Continuation Step 1 — freeze/prove current baseline | **DONE — final code release `2f893f5c5c8a45d46f2db4fec4fa3c146424d78b` verified live; closure evidence recorded in the continuation runbook and PR thread** | Website Manager |
 | C1-SEC | Next 15/PostCSS dependency advisories | **RESOLVED IN CANDIDATE** — Next 16.3.6 candidate audits at zero known vulnerabilities | Security + Front-End |
 | C1-LINT | Preserve lint as a release gate after Next 16 migration | **RESOLVED IN CANDIDATE** — explicit release-preflight lint + regression assertion | QA + Front-End |
 | C1-REACT | Four modern React effect-state lint findings | **RESOLVED IN CANDIDATE** — fixed without rule suppression | Front-End |
 | C1-PERF | Next 16 runtime exceeds legacy raw-only JS ceiling | **RESOLVED IN CANDIDATE** — measured before/after + dual 600 KB raw / 190 KB gzip gate | Performance |
 | C1-COMPAT | Newest-major toolchain compatibility | **NON-BLOCKING UPSTREAM HOLD** — current Next lint plugins require ESLint 9; current TypeScript lint tooling requires TS below 6.1 | Toolchain |
-| C1-VERIFY | Windows deployment-verifier mismatch path aborted through libuv assertion after awaited fetch | **RESOLVED IN CANDIDATE** — verifier returns an exit code instead of calling `process.exit()` during fetch cleanup; dedicated mismatch regression test added | Website Manager |
+| C1-VERIFY | Windows deployment-verifier mismatch path aborted through libuv assertion after awaited fetch | **RESOLVED / LIVE VERIFIED** — verifier returns an exit code instead of calling `process.exit()` during fetch cleanup; mismatch regression added and final live verification passed | Website Manager |
+| C1-SEO-OOM | One final-record SEO monitor run hit a transient Node heap allocation failure on the validation workstation | **RESOLVED / ENVIRONMENT TRANSIENT** — Node heap limit and free RAM were normal; immediate isolated rerun passed with zero SEO failures; no site/code change required | Website Manager |
+| C1-LOOPBACK | One docs-only preflight run timed out several localhost test servers on `127.0.0.1` | **RESOLVED / ENVIRONMENT TRANSIENT** — the exact failing loopback suites immediately reran 22/22 PASS; no production code or test thresholds changed | QA |
 
 ## Step 1 completion
 
