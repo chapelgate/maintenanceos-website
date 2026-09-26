@@ -1,10 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
+import zlib from "node:zlib";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUT = path.join(ROOT, "out");
 
-const JS_BUDGET = 525 * 1024;
+// Next 16 ships a larger raw framework runtime than Next 15. Guard both the
+// uncompressed payload and the network-relevant gzip size so upgrades cannot
+// hide transfer regressions behind a raised raw ceiling.
+const JS_RAW_BUDGET = 600 * 1024;
+const JS_GZIP_BUDGET = 190 * 1024;
 const CSS_BUDGET = 120 * 1024;
 
 if (!fs.existsSync(OUT)) {
@@ -25,11 +30,20 @@ walk(OUT);
 const failures = [];
 const rows = [];
 
-function localAssetBytes(urlPath) {
+function localAssetBuffer(urlPath) {
   const clean = urlPath.split("?")[0].split("#")[0];
-  if (!clean.startsWith("/")) return 0;
+  if (!clean.startsWith("/")) return null;
   const full = path.join(OUT, clean.replace(/^\/+/, ""));
-  return fs.existsSync(full) ? fs.statSync(full).size : 0;
+  return fs.existsSync(full) ? fs.readFileSync(full) : null;
+}
+
+function localAssetBytes(urlPath) {
+  return localAssetBuffer(urlPath)?.length ?? 0;
+}
+
+function localAssetGzipBytes(urlPath) {
+  const bytes = localAssetBuffer(urlPath);
+  return bytes ? zlib.gzipSync(bytes, { level: 9 }).length : 0;
 }
 
 for (const htmlFile of htmlFiles) {
@@ -49,12 +63,21 @@ for (const htmlFile of htmlFiles) {
   );
 
   const jsBytes = [...js].reduce((sum, src) => sum + localAssetBytes(src), 0);
+  const jsGzipBytes = [...js].reduce(
+    (sum, src) => sum + localAssetGzipBytes(src),
+    0,
+  );
   const cssBytes = [...css].reduce((sum, href) => sum + localAssetBytes(href), 0);
-  rows.push({ route, jsBytes, cssBytes });
+  rows.push({ route, jsBytes, jsGzipBytes, cssBytes });
 
-  if (jsBytes > JS_BUDGET) {
+  if (jsBytes > JS_RAW_BUDGET) {
     failures.push(
-      `${route}: initial first-party JS ${Math.round(jsBytes / 1024)} KB exceeds ${Math.round(JS_BUDGET / 1024)} KB`,
+      `${route}: initial first-party JS raw ${Math.round(jsBytes / 1024)} KB exceeds ${Math.round(JS_RAW_BUDGET / 1024)} KB`,
+    );
+  }
+  if (jsGzipBytes > JS_GZIP_BUDGET) {
+    failures.push(
+      `${route}: initial first-party JS gzip ${Math.round(jsGzipBytes / 1024)} KB exceeds ${Math.round(JS_GZIP_BUDGET / 1024)} KB`,
     );
   }
   if (cssBytes > CSS_BUDGET) {
@@ -70,10 +93,15 @@ for (const htmlFile of htmlFiles) {
 rows.sort((a, b) => b.jsBytes - a.jsBytes);
 console.log(JSON.stringify({
   checkedPages: rows.length,
-  budgets: { jsBytes: JS_BUDGET, cssBytes: CSS_BUDGET },
+  budgets: {
+    jsRawBytes: JS_RAW_BUDGET,
+    jsGzipBytes: JS_GZIP_BUDGET,
+    cssBytes: CSS_BUDGET,
+  },
   largestInitialJs: rows.slice(0, 5).map((r) => ({
     route: r.route,
-    jsKB: Math.round(r.jsBytes / 1024),
+    jsRawKB: Math.round(r.jsBytes / 1024),
+    jsGzipKB: Math.round(r.jsGzipBytes / 1024),
     cssKB: Math.round(r.cssBytes / 1024),
   })),
   failures,

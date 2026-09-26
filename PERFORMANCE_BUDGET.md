@@ -1,18 +1,18 @@
 # PERFORMANCE_BUDGET.md — MaintenanceOS marketing site
 
 **Owner:** MOS FE Perf Impl (aligns with MOS Performance)  
-**Updated:** 2026-09-21T14:00 BST  
+**Updated:** 2026-09-26T22:18 BST
 **Scope:** Static export (`output: 'export'`) for DigitalOcean App Platform free static.  
 **Images:** `images.unoptimized: true` — no Next image optimizer at runtime; treat every `<img>` / asset as fully downloaded bytes.
 
-## Targets (pre-staging; measure on real URL when live)
+## Current release targets
 
 | Metric | Target | Notes |
 |--------|--------|-------|
 | LCP | ≤ 2.5 s (good) | Text/hero; avoid late fonts and huge above-fold images |
 | INP | ≤ 200 ms | Minimal client JS; forms only where needed |
 | CLS | ≤ 0.1 | Reserve space for banners/nav; font `display: swap` + size-adjust |
-| First Load JS (Next report) | ≤ 110 kB | Shared chunks dominate |
+| Initial first-party JS | ≤ 600 KB raw **and** ≤ 190 KB gzip | Next 16 no longer emits the old comparable First Load JS table; `npm run performance:budget` enforces both raw and transfer-relevant gzip ceilings |
 | Fonts (critical en-GB path) | ≤ 100 KB transfer | Browser skips unused unicode-range files |
 | Images (home) | ≤ 250 KB transfer | Three self-hosted WebPs in `public/media/home/` (phone / trade / street); width/height; no terrace LCP; lazy below fold |
 | Client components | Lead forms only by default | CSS `<details>` for nav |
@@ -64,7 +64,21 @@ Home hero proof is a paper orb stage + static `ProductUiShell`. A small `SiriOrb
 
 `/create` First Load is now **under** the 110 kB target. The leftover 3.7 kB page island is the URL/email step plus the shared stepper. Scan, pack preview, and lead-submit stay off the initial `create/index.html` script tags (async chunks remain on disk). This is a split, not a form rewrite: step 1 still hydrates immediately; step 2 already shows “Checking URL…” for 700 ms.
 
-Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED=true`) after #53 was **118 kB** First Load on `/create` (15.2 kB page) — expected; companions stay off the DigitalOcean default graph via `NormalModuleReplacementPlugin` / Turbopack alias.
+Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED=true`) after #53 was **118 kB** First Load on `/create` (15.2 kB page) — historical Next 15 evidence. On Next 16 the optional companion swap is Turbopack-alias only; the default DigitalOcean graph keeps those islands off.
+
+## Continuation Step 1 — Next 16 recalibration (2026-09-26)
+
+The exact old release (`be5fc313…`, Next 15.5.25) and the isolated Next 16.3.6 candidate were both rebuilt from clean installs. On `/demo/`, the old export referenced **485 KB raw / 150 KB gzip** of first-party JavaScript; the Next 16 Turbopack export references **580 KB raw / 177 KB gzip**. The increase is framework/runtime cost, not a new third-party script.
+
+The gate was not removed. It now enforces **two** limits: **600 KB raw** and **190 KB gzip**, plus the existing 120 KB CSS ceiling and third-party-script prohibition. This leaves less raw headroom than the prior 525 KB ceiling left against the old 485 KB maximum, while adding a transfer-size guard that the old check lacked.
+
+Current Next 16 default-export maxima:
+- `/demo/`: 580 KB raw / 177 KB gzip / 48 KB CSS.
+- `/dashboard/`: 571 KB raw / 175 KB gzip / 48 KB CSS.
+- `/create/`: 567 KB raw / 174 KB gzip / 48 KB CSS.
+- No performance-budget failures.
+
+Do not raise either JS ceiling without a measured before/after comparison and a documented reason.
 
 ## Standing rules for FE agents
 
@@ -72,7 +86,7 @@ Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_P
 2. **Images:** With `unoptimized`, always set `width`/`height` (or CSS aspect-ratio), compress before commit, prefer WebP, `loading="lazy"` below fold, `fetchPriority="high"` only for true LCP image.
 3. **JS:** Do not mark layout chrome `"use client"` for menus if CSS `<details>` works. Keep client islands on lead forms and the tiny home orb. Homepage photographs + `ProductUiShell` stay server/static. Do not import the interactive orb on `/create`.
 4. **Third parties:** No analytics/chat/tag managers without Privacy + Performance review (consent-gated).
-5. **Measure:** Re-run `next build` and update this table when changing fonts, layout, or shared components. Lighthouse/CWV when staging URL exists.
+5. **Measure:** Re-run `next build` and `npm run performance:budget` when changing framework, fonts, layout, or shared components. Keep the live Lighthouse/CWV evidence in `docs/STEP46_PERFORMANCE_BASELINE.md` current when release behaviour changes.
 6. **Product tour:** Self-hosted `/media/product-tour.mp4` (720p / 45s / **0.95 MB** with Desmond AAC, soft ≤~3 MB, ceiling ~8–12 MB). Home is a text link only. `/how-it-works/#product-tour` is below the flow, `preload="none"`, no autoplay. Residual: the poster WebP (~26 KB) may download when that page is parsed (not LCP on home; reserve 16:9 to avoid CLS). Do not preload the mp4.
 
 ## Done this pass
@@ -88,5 +102,5 @@ Flagged-on local rebuild (`NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED=true` + `NEXT_P
 
 - [ ] Optional: self-host tighter latin-only Inter subset if critical-path fonts stay >100 KB on staging
 - [ ] Shared `MosImage` helper for unoptimized static export (width/height/lazy defaults)
-- [ ] Staging CWV / Lighthouse once DO URL exists
+- [x] Staging performance/Lighthouse baseline recorded — see `docs/STEP46_PERFORMANCE_BASELINE.md`
 - [x] Claims-safe product tour on `/how-it-works/#product-tour` (click-to-play, poster + en-GB captions; home watch-link only)

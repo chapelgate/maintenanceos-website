@@ -23,7 +23,9 @@ export function CalendarConnectPanel() {
   const enabled = siteConfig.calendarAdaptersEnabled;
   const endpoint = siteConfig.calendarEndpoint.trim();
   const usesCompanion = Boolean(endpoint);
-  const [loadState, setLoadState] = useState<LoadState>("idle");
+  const [loadState, setLoadState] = useState<LoadState>(() =>
+    enabled ? "loading" : "idle",
+  );
   const [bookState, setBookState] = useState<BookState>("idle");
   const [slots, setSlots] = useState<CalendarSlot[]>([]);
   const [selected, setSelected] = useState<string>("");
@@ -35,8 +37,6 @@ export function CalendarConnectPanel() {
     if (!enabled) return;
     let cancelled = false;
     const window = defaultSlotWindow();
-    setLoadState("loading");
-    setDetail(null);
     void requestCalendarSlots({
       enabled,
       endpoint,

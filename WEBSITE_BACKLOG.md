@@ -1,7 +1,7 @@
 # WEBSITE_BACKLOG.md
 
 **Owner:** MOS Website Manager  
-**Updated:** 2026-09-25  
+**Updated:** 2026-09-26
 **Source:** MISSION_BRIEF + current repository/deployment evidence
 
 This is the persistent website problem register. Do not create parallel problem lists for the same website work.
@@ -37,6 +37,12 @@ This is the persistent website problem register. Do not create parallel problem 
 | F22 | Red team on staging | OPEN | Red Team |
 | F23 | Durable handoff/source-of-truth docs | **DONE for Step 1** — `WEBSITE_SOURCE_OF_TRUTH.md` | Documentation |
 | F24 | Final website DoD verification | **DONE — original 50-step engineering programme release verified; separate legal/security/red-team launch gates remain tracked** | Final Verifier |
+| C1 | Continuation Step 1 — freeze/prove current baseline | **IN PROGRESS — implementation locally verified; exact merged live SHA still required before closure** | Website Manager |
+| C1-SEC | Next 15/PostCSS dependency advisories | **RESOLVED IN CANDIDATE** — Next 16.3.6 candidate audits at zero known vulnerabilities | Security + Front-End |
+| C1-LINT | Preserve lint as a release gate after Next 16 migration | **RESOLVED IN CANDIDATE** — explicit release-preflight lint + regression assertion | QA + Front-End |
+| C1-REACT | Four modern React effect-state lint findings | **RESOLVED IN CANDIDATE** — fixed without rule suppression | Front-End |
+| C1-PERF | Next 16 runtime exceeds legacy raw-only JS ceiling | **RESOLVED IN CANDIDATE** — measured before/after + dual 600 KB raw / 190 KB gzip gate | Performance |
+| C1-COMPAT | Newest-major toolchain compatibility | **NON-BLOCKING UPSTREAM HOLD** — current Next lint plugins require ESLint 9; current TypeScript lint tooling requires TS below 6.1 | Toolchain |
 
 ## Step 1 completion
 
@@ -239,3 +245,31 @@ During verification an existing flaky onboarding-ingest test harness was also fi
 **Programme boundary:** this closes the original 50-step website engineering improvement programme. Separate items already tracked in this backlog — including final legal review, broader security review, mobile/cross-browser QA, and red-team work — remain separate launch/governance gates and are not falsely marked complete by Step 50.
 
 **Step 50 status:** **COMPLETE. No open blocker in the original 50-step engineering programme.**
+
+## Continuation Step 1 — baseline freeze and current toolchain
+
+This continuation starts after the original 50-step programme. It does not reopen
+or renumber those completed steps.
+
+- Starting source/live pin — **PASS**: `main` and live `/release.json` both
+  resolved to `be5fc313a5eeec52b968481f0181ae1261b467d6` before changes.
+- Existing-site health — **PASS**: Website Manager health and SEO monitors had
+  zero failures; old-stack preflight passed 185/185 tests, build, performance,
+  and accessibility 12/12.
+- Dependency/security drift — **FOUND AND REPAIRED IN CANDIDATE**: Next 15.5.25
+  carried two npm audit findings through its PostCSS dependency. Next 16.3.6
+  candidate reports zero known npm vulnerabilities.
+- Release diagnostics — **HARDENED**: lint is now an explicit preflight gate
+  because Next 16 no longer runs lint as part of `next build`.
+- Modern React findings — **REPAIRED**: four effect-state findings fixed without
+  disabling the rule.
+- Performance regression handling — **PASS**: measured clean Next 15 vs Next 16
+  exports; retained a strict raw limit and added a gzip transfer limit rather
+  than silently weakening the gate.
+- Least privilege — **PASS**: no new credentials, services, hosting resources,
+  telephony changes, or approval for the pending transitive resolver postinstall.
+- Evidence/runbook — `docs/CONTINUATION_STEP1_BASELINE_FREEZE.md`.
+
+**Close condition:** merge through the normal PR path, verify the exact merged
+SHA is served by the existing DigitalOcean static app, run Website Manager
+post-deploy verification, then update C1 to DONE and record the final freeze SHA.

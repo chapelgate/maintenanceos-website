@@ -32,6 +32,7 @@ const head = execFileSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
 }).trim().toLowerCase();
 
+run(process.execPath, [npmCli, "run", "lint"], "eslint");
 run(process.execPath, [npmCli, "test"], "full test suite");
 run(process.execPath, [npmCli, "run", "build"], "production static build");
 run(process.execPath, [npmCli, "run", "performance:budget"], "performance budget");

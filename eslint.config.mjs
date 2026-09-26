@@ -1,28 +1,10 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  {
-    ignores: [
-      ".next/**",
-      "out/**",
-      "node_modules/**",
-      "packages/onboarding-ingest/**",
-      "packages/calendar-adapters/**",
-      "packages/sandbox-test-call/**",
-      "packages/receptionist-draft/**",
-      "next-env.d.ts",
-    ],
-  },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default defineConfig([
+  ...nextVitals,
+  ...nextTs,
   {
     rules: {
       "@next/next/no-html-link-for-pages": "off",
@@ -44,6 +26,14 @@ const eslintConfig = [
       "jsx-a11y/role-supports-aria-props": "error",
     },
   },
-];
-
-export default eslintConfig;
+  globalIgnores([
+    ".next/**",
+    "out/**",
+    "node_modules/**",
+    "packages/onboarding-ingest/**",
+    "packages/calendar-adapters/**",
+    "packages/sandbox-test-call/**",
+    "packages/receptionist-draft/**",
+    "next-env.d.ts",
+  ]),
+]);

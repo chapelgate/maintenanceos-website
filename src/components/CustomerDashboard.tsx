@@ -31,7 +31,9 @@ export function CustomerDashboard({
   const endpoint = demoMode ? "" : siteConfig.customerDashboardEndpoint.trim();
   const usesCompanion = Boolean(endpoint);
   const [catalogKind, setCatalogKind] = useState<DashboardCatalogKind>("demo");
-  const [loadState, setLoadState] = useState<LoadState>("idle");
+  const [loadState, setLoadState] = useState<LoadState>(() =>
+    enabled ? "loading" : "idle",
+  );
   const [detailState, setDetailState] = useState<LoadState>("idle");
   const [sessions, setSessions] = useState<CallSession[]>([]);
   const [bookings, setBookings] = useState<DashboardBooking[]>([]);
@@ -44,22 +46,26 @@ export function CustomerDashboard({
   useEffect(() => {
     if (!enabled) return;
     let cancelled = false;
-    setLoadState("loading");
-    setError(null);
-    setDetail(null);
-    setSelectedId("");
     void Promise.all([
       requestDashboardSessions({ enabled, endpoint, catalogKind }),
       requestDashboardBookings({ enabled, endpoint, catalogKind }),
     ]).then(([sessionOutcome, bookingOutcome]) => {
       if (cancelled) return;
       if (sessionOutcome.status === "disabled") {
+        setSessions([]);
+        setBookings([]);
+        setSelectedId("");
+        setDetail(null);
+        setDetailState("idle");
         setLoadState("idle");
         return;
       }
       if (sessionOutcome.status === "error") {
         setSessions([]);
         setBookings([]);
+        setSelectedId("");
+        setDetail(null);
+        setDetailState("idle");
         setError(sessionOutcome.message);
         setLoadState("error");
         return;
@@ -67,6 +73,8 @@ export function CustomerDashboard({
       setSessions(sessionOutcome.data.sessions);
       setDisclaimer(sessionOutcome.data.disclaimer);
       if (demoMode && sessionOutcome.data.sessions[0]) {
+        setDetail(null);
+        setDetailState("loading");
         setSelectedId(sessionOutcome.data.sessions[0].id);
       }
       if (bookingOutcome.status === "ok") {
@@ -83,13 +91,8 @@ export function CustomerDashboard({
   }, [enabled, endpoint, catalogKind, demoMode]);
 
   useEffect(() => {
-    if (!enabled || !selectedId) {
-      setDetail(null);
-      setDetailState("idle");
-      return;
-    }
+    if (!enabled || !selectedId) return;
     let cancelled = false;
-    setDetailState("loading");
     void requestDashboardSession({
       enabled,
       endpoint,
@@ -114,6 +117,27 @@ export function CustomerDashboard({
       cancelled = true;
     };
   }, [enabled, endpoint, selectedId, catalogKind]);
+
+  function selectCatalog(next: DashboardCatalogKind) {
+    if (next === catalogKind) return;
+    setCatalogKind(next);
+    setLoadState("loading");
+    setSessions([]);
+    setBookings([]);
+    setSelectedId("");
+    setDetail(null);
+    setDetailState("idle");
+    setDisclaimer("");
+    setError(null);
+  }
+
+  function selectSession(id: string) {
+    if (id === selectedId) return;
+    setSelectedId(id);
+    setDetail(null);
+    setDetailState("loading");
+    setError(null);
+  }
 
   if (!enabled) {
     return (
@@ -178,7 +202,7 @@ export function CustomerDashboard({
                   name="dashboard-catalog"
                   value="demo"
                   checked={catalogKind === "demo"}
-                  onChange={() => setCatalogKind("demo")}
+                  onChange={() => selectCatalog("demo")}
                 />
                 Labelled SAMPLE catalogue
               </label>
@@ -188,7 +212,7 @@ export function CustomerDashboard({
                   name="dashboard-catalog"
                   value="empty"
                   checked={catalogKind === "empty"}
-                  onChange={() => setCatalogKind("empty")}
+                  onChange={() => selectCatalog("empty")}
                 />
                 Empty store (no invented customers)
               </label>
@@ -227,7 +251,7 @@ export function CustomerDashboard({
                   <li key={session.id}>
                     <button
                       type="button"
-                      onClick={() => setSelectedId(session.id)}
+                      onClick={() => selectSession(session.id)}
                       className={`w-full rounded-md border px-3 py-3 text-left text-sm transition-colors ${
                         selected
                           ? "border-accent bg-accent-subtle text-ink"

@@ -26,7 +26,7 @@ Do not create a second MaintenanceOS marketing repository or hosting app to solv
 
 ## Stack
 
-- Next.js 15 App Router + TypeScript + Tailwind CSS v4
+- Next.js 16 App Router + React 19.3 + TypeScript 5.9 + Tailwind CSS v4
 - Product tour: in-repo CSS storyboard → Chrome → ffmpeg, then remux committed Desmond VO (`npm run product-tour` / `npm run product-tour:remux`). Self-hosted on `/how-it-works/#product-tour`. No paid AI video.
 - **Static export** (`output: 'export'`) → `out/` for DigitalOcean App Platform static (or any static host)
 - **No Next.js API routes** (incompatible with static export)

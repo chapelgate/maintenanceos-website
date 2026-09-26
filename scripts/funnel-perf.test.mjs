@@ -63,7 +63,9 @@ test("/create default path does not import companion client islands", () => {
   assert.match(enabled, /from ["']@\/components\/CreateJourney["']/);
   assert.match(enabled, /from ["']@\/components\/CalendarConnectPanel["']/);
   assert.match(config, /create-funnel-islands\.enabled/);
-  assert.match(config, /NormalModuleReplacementPlugin/);
+  assert.match(config, /turbopack/);
+  assert.match(config, /resolveAlias/);
+  assert.doesNotMatch(config, /NormalModuleReplacementPlugin|webpack:\s*\(/);
   assert.match(config, /NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED/);
   assert.match(config, /NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED/);
 });

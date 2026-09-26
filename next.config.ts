@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import path from "node:path";
 
 function publicFlag(value: string | undefined): boolean {
   return value === "true" || value === "1";
@@ -10,11 +9,6 @@ const createCompanionsEnabled =
   publicFlag(process.env.NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED) ||
   publicFlag(process.env.NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED);
 
-const enabledCreateIslands = path.join(
-  process.cwd(),
-  "src/components/create-funnel-islands.enabled.tsx",
-);
-
 const nextConfig: NextConfig = {
   // Static export for DigitalOcean App Platform. Do not add `headers()` —
   // Next ignores it with `output: "export"`. Browser-honored baseline:
@@ -23,19 +17,6 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
-  },
-  webpack: (config, { webpack }) => {
-    if (!createCompanionsEnabled) {
-      return config;
-    }
-    // Replace after resolve so `@/` path mapping cannot skip the swap.
-    config.plugins.push(
-      new webpack.NormalModuleReplacementPlugin(
-        /[/\\]create-funnel-islands\.tsx$/,
-        enabledCreateIslands,
-      ),
-    );
-    return config;
   },
   ...(createCompanionsEnabled
     ? {
