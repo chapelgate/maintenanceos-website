@@ -1,32 +1,39 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useId, useSyncExternalStore } from "react";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 
 type TabId = "launch" | "demo";
 
+const tabStoreEvent = "maintenanceos:demo-conversion-tab";
+
 function tabFromHash(): TabId {
-  if (typeof window === "undefined") return "launch";
   const hash = window.location.hash.replace(/^#/, "");
   return hash === "demo" ? "demo" : "launch";
 }
 
+function subscribeToTab(onStoreChange: () => void) {
+  window.addEventListener("hashchange", onStoreChange);
+  window.addEventListener(tabStoreEvent, onStoreChange);
+  return () => {
+    window.removeEventListener("hashchange", onStoreChange);
+    window.removeEventListener(tabStoreEvent, onStoreChange);
+  };
+}
+
 export function DemoConversionTabs() {
   const baseId = useId();
-  const [tab, setTab] = useState<TabId>("launch");
-
-  useEffect(() => {
-    setTab(tabFromHash());
-    const onHash = () => setTab(tabFromHash());
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
+  const tab = useSyncExternalStore(
+    subscribeToTab,
+    tabFromHash,
+    () => "launch",
+  );
 
   const select = useCallback((next: TabId) => {
-    setTab(next);
     const hash = next === "demo" ? "#demo" : "#launch";
     if (window.location.hash !== hash) {
       window.history.replaceState(null, "", `${window.location.pathname}${hash}`);
+      window.dispatchEvent(new Event(tabStoreEvent));
     }
   }, []);
 
