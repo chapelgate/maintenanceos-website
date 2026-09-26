@@ -88,7 +88,7 @@ NEXT_PUBLIC_CALENDAR_ENDPOINT=http://127.0.0.1:8789/v1/calendar \
   npm run dev
 ```
 
-Leave both public vars unset/false on DigitalOcean static hosting until a **separate** free-tier mock companion is up (`docs/SANDBOX_DEPLOY.md`, calendar section) — then set `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT` and **rebuild**. `/create` then says **Calendar connect — coming / under testing** until that rebuild. If the public flag is on and the endpoint is empty, the picker uses an in-browser mock labelled as local testing only.
+Leave both public vars unset/false on DigitalOcean static hosting until a **separate authorised DigitalOcean companion** is healthy (`docs/SANDBOX_DEPLOY.md`, calendar section) — then set `NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED` and `NEXT_PUBLIC_CALENDAR_ENDPOINT` and **rebuild**. `/create` then says **Calendar connect — coming / under testing** until that rebuild. If the public flag is on and the endpoint is empty, the picker uses an in-browser mock labelled as local testing only.
 
 Google Calendar / Microsoft 365: local OAuth scaffold on the companion only (`GET /oauth/google/start` → `/oauth/google/callback`; see `packages/calendar-adapters/README.md`). No secrets in git. Mock is the default when Google env is missing. Do not claim Google Calendar is live on staging. Do not wire this to frozen live telephony.
 
@@ -106,7 +106,7 @@ NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT=http://127.0.0.1:8790/v1/sandbox \
   npm run dev
 ```
 
-Leave both public vars unset/false on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/SANDBOX_DEPLOY.md`) — then set `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` and `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT` and **rebuild**. `/create` then says **Sandbox test call — under testing / coming** until that rebuild. If the public flag is on and the endpoint is empty, the panel uses an in-browser scripted stub labelled as local testing only. Asking for WebRTC / live media returns `not_configured` — this is not production telephony and does not touch the frozen live voice path. Do not claim Fonio-parity voice quality.
+Leave both public vars unset/false on DigitalOcean static hosting until a **separate authorised DigitalOcean companion** is healthy (`docs/SANDBOX_DEPLOY.md`) — then set `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED` and `NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT` and **rebuild**. `/create` then says **Sandbox test call — under testing / coming** until that rebuild. If the public flag is on and the endpoint is empty, the panel uses an in-browser scripted stub labelled as local testing only. Asking for WebRTC / live media returns `not_configured` — this is not production telephony and does not touch the frozen live voice path. Do not claim Fonio-parity voice quality.
 
 ### Customer dashboard (call history / transcripts / bookings stub)
 
@@ -122,7 +122,7 @@ NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT=http://127.0.0.1:8791/v1/dashboard \
   npm run dev
 ```
 
-Leave both public vars unset/false on DigitalOcean static hosting until a **separate** free-tier companion is up (`docs/DASHBOARD_DEPLOY.md`) — then set `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` and `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT` and **rebuild**. `/dashboard` then says **Customer dashboard — coming / under testing** until that rebuild. If the public flag is on and the endpoint is empty, the page uses an in-browser mock labelled **SAMPLE / DEMO**. An empty store (`CUSTOMER_DASHBOARD_DEMO_DATA=false`, or the in-browser “Empty store” control) invents no customers. Hosted rows stay SAMPLE / DEMO — never present them as live production analytics.
+Leave both public vars unset/false on DigitalOcean static hosting until a **separate authorised DigitalOcean companion** is healthy (`docs/DASHBOARD_DEPLOY.md`) — then set `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` and `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT` and **rebuild**. `/dashboard` then says **Customer dashboard — coming / under testing** until that rebuild. If the public flag is on and the endpoint is empty, the page uses an in-browser mock labelled **SAMPLE / DEMO**. An empty store (`CUSTOMER_DASHBOARD_DEMO_DATA=false`, or the in-browser “Empty store” control) invents no customers. Hosted rows stay SAMPLE / DEMO — never present them as live production analytics.
 
 Nav shows **Dashboard (soon)** when the public flag is off, and **Dashboard** when it is on. Do not wire this to frozen live telephony.
 
@@ -140,28 +140,32 @@ npm run fonio-local-smoke
 
 This is **not** production Fonio-parity and **must not** be copied onto DigitalOcean static hosting. Default `.env.example` flags stay off. Optional Compose: `docker compose -f docker-compose.fonio-local.yml up`.
 
-What is already on `main` through PR **#64** vs owner blockers (live scan on a DigitalOcean droplet, legal review, frozen telephony): [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). Website onboarding path is substantially ready; live phone parity is still open. Not a complete-vs-Fonio claim. Do not use Render.
+What is already on `main` through PR **#64** vs launch/enablement dependencies (optional live scan, legal review, frozen telephony): [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). Website onboarding path is substantially ready; live phone parity is still open. Not a complete-vs-Fonio claim. Do not use Render.
 
 ### DigitalOcean App Platform (static)
 
-Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local`, `docker-compose.fonio-local.yml`, or `render.yaml` / companion Dockerfiles on App Platform; those are loopback e2e or the **separate** droplet companion (`docs/ONBOARDING_SCAN_DEPLOY.md`). `render.yaml` is **legacy / do not use**. Staging operator order (exact `NEXT_PUBLIC_*`, rebuild, health check): [`docs/STAGING_COMPANIONS.md`](docs/STAGING_COMPANIONS.md). Owner blocker: [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart. Static security baseline (HTML CSP + referrer; HTTP-only header gap on this host): [`docs/security/static-security-baseline.md`](docs/security/static-security-baseline.md).
+Point the static site at the `out/` directory produced by `npm run build`. Set env vars from `.env.example` in the App Platform UI — never commit secrets. Do not use `.env.example.fonio-local` or `docker-compose.fonio-local.yml` on App Platform. `render.yaml` is **legacy / do not use**. Companion Dockerfiles are only for separately authorised companion hosts; never run them inside the static marketing app. Staging operator order (exact `NEXT_PUBLIC_*`, rebuild, health check): [`docs/STAGING_COMPANIONS.md`](docs/STAGING_COMPANIONS.md). Readiness/enablement: [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md). `NEXT_PUBLIC_*` changes require a rebuild, not a runtime-only restart. Static security baseline (HTML CSP + referrer; HTTP-only header gap on this host): [`docs/security/static-security-baseline.md`](docs/security/static-security-baseline.md).
 
 ## Desktop navigation (IA v0.2)
 
 How it works · Features · AI receptionist · Create · **Dashboard (soon)** · Security · **Pricing** · Industries. Primary chrome CTA is **Create from website**. `/demo` is launch list + early-access briefing (not a live phone). `/dashboard` is coming / under testing unless `NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED` is on.
 
-## Programme docs (repo root)
+## Programme docs
 
-- `CURSOR_HANDOFF.md`
-- `WEBSITE_ARCHITECTURE.md`
-- `PRODUCT_CLAIMS_REGISTER.md`
-- `WEBSITE_AGENT_BOARD.md`
-- [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md) — onboarding path on `main` through #64 vs owner blockers (droplet scan; do not use Render)
-- `WEBSITE_LAUNCH_CHECKLIST.md`
-- `WEBSITE_BACKLOG.md`
-- `WEBSITE_IA.md`
-- `MISSION_BRIEF.md`
-- [`docs/competitive/PHONE_AI_FEATURE_INVENTORY.md`](docs/competitive/PHONE_AI_FEATURE_INVENTORY.md) — internal Phone AI inventory for MOS Product Investigator; `/features` promotes the short VERIFIED / UNDER TEST card set only
+- `CURSOR_HANDOFF.md` — current thin operator handoff
+- `WEBSITE_ARCHITECTURE.md` — current architecture and host boundaries
+- `PRODUCT_CLAIMS_REGISTER.md` — signed public-claims gate
+- `WEBSITE_SECURITY_REVIEW.md` — current security roll-up and known host gap
+- `WEBSITE_LAUNCH_CHECKLIST.md` — launch-only gates
+- `WEBSITE_BACKLOG.md` — **single** persistent problem register
+- `WEBSITE_SOURCE_OF_TRUTH.md` — repository/deployment/rollback identity
+- `MISSION_BRIEF.md` — historical build brief
+- [`docs/STEP50_WEBSITE_MANAGER_LOOP.md`](docs/STEP50_WEBSITE_MANAGER_LOOP.md) — current monitor/test/deploy/verify/record loop
+- [`docs/SEO_INTENT_MAP_2026-09-25.md`](docs/SEO_INTENT_MAP_2026-09-25.md) — current IA/search-intent mapping
+- [`docs/FONIO_WEBSITE_READINESS.md`](docs/FONIO_WEBSITE_READINESS.md) — website onboarding readiness and launch/enablement dependencies
+- [`docs/competitive/PHONE_AI_FEATURE_INVENTORY.md`](docs/competitive/PHONE_AI_FEATURE_INVENTORY.md) — Product Investigator inventory
+
+The original mission brief named `WEBSITE_AGENT_BOARD.md`, `WEBSITE_TEST_RESULTS.md`, and `WEBSITE_IA.md`. They are not recreated as parallel state: ownership/status lives in the backlog, release evidence lives in the Website Manager/step evidence, and IA lives in the architecture + SEO intent map. `MAINTENANCEOS_WEBSITE_FINAL_REPORT.md` remains reserved for the final launch release candidate, not this pre-launch continuation.
 
 ## Secrets
 

@@ -1,10 +1,10 @@
 # WEBSITE_BACKLOG.md
 
-**Owner:** MOS Website Manager  
+**Owner:** MOS Website Manager
 **Updated:** 2026-09-26
 **Source:** MISSION_BRIEF + current repository/deployment evidence
 
-This is the persistent website problem register. Do not create parallel problem lists for the same website work.
+This is the single persistent website problem register. Do not create parallel problem lists for the same website work.
 
 | ID | Item | Status | Owner |
 |----|------|--------|-------|
@@ -13,30 +13,34 @@ This is the persistent website problem register. Do not create parallel problem 
 | B3 | Prevent false commercial-live claims | ACTIVE STANDING RULE | All website work |
 | S1 | Prove website source/deployment/rollback chain | **DONE** — see `WEBSITE_SOURCE_OF_TRUTH.md` | Website Manager |
 | S1-EXT | Read back DigitalOcean App Platform provider-side repo/branch selector | **CLOSED / NON-BLOCKING** — connector cannot expose Apps metadata, but live host content matches canonical source and deployment history names the same app. Recheck only before a hosting mutation; never create a duplicate app. | DevOps |
-| F1 | Product Investigator capability brief | TODO | Product Investigator |
-| F2 | Positioning/value proposition optimisation | TODO | Positioning |
-| F3 | Brand optimisation | IN PROGRESS / implemented baseline exists | Brand |
-| F4 | Information architecture | IMPLEMENTED; further optimisation pending | IA |
-| F5 | UX journeys visitor → trust → create/demo | **IMPLEMENTED / LIVE VERIFIED** — Steps 3–6 | UX |
-| F6 | UI component system | IMPLEMENTED baseline | UI |
+| F1 | Product Investigator capability baseline | **DONE BASELINE** — signed `PRODUCT_CLAIMS_REGISTER.md` + `docs/competitive/PHONE_AI_FEATURE_INVENTORY.md` exist | Product Investigator |
+| F1-REFRESH | Refresh product evidence against current `maintenanceos-v1-pilot` before expanding present-fact claims or launch | **OPEN — NEXT CONTINUATION STEP**; current signed register checkpoint is 2026-09-14/18 and remains the conservative claims gate until refreshed | Product Investigator |
+| F2 | Positioning/value proposition optimisation | **DONE BASELINE / LIVE VERIFIED** — canonical `VALUE_PROPOSITION.md`; original Step 3 complete | Positioning |
+| F3 | Brand optimisation | **DONE BASELINE / LIVE VERIFIED** — `BRAND_SYSTEM.md`; original Step 2 complete; future refinement is iterative, not a blocker | Brand |
+| F4 | Information architecture | **DONE BASELINE / LIVE VERIFIED** — current route map + `docs/SEO_INTENT_MAP_2026-09-25.md`; future refinement is iterative | IA |
+| F5 | UX journeys visitor → trust → create/demo | **DONE / LIVE VERIFIED** — original Steps 3–6 | UX |
+| F6 | UI component system | **DONE BASELINE** — shared visual/components system is implemented and covered by regression tests | UI |
 | F7 | Website repo scaffold | **DONE** — Next.js/TS/Tailwind in canonical repo | Front-End |
-| F8 | Claims-gated page copy | **IMPLEMENTED BASELINE / SAFE-AUTOMATION CONSISTENT — Step 8** | Copy |
-| F9 | Industries/use-case pages | IMPLEMENTED baseline | Industries |
+| F8 | Claims-gated page copy | **DONE BASELINE / LIVE VERIFIED** — current signed register + shared safe-automation model; original Step 8 | Copy |
+| F9 | Industries/use-case pages | **DONE / LIVE VERIFIED** — eight industry routes + distinct intent metadata; original Step 7 | Industries |
 | F10 | Production lead endpoint | **DONE** — existing Railway RSFM + audited Postgres + Resend notification | Forms |
-| F11 | Conversion optimisation | **DONE BASELINE / LIVE VERIFIED** — Step 6 | Conversion |
-| F12 | Legal page scaffolds | DONE as drafts; legal review still required | Legal |
-| F13 | Privacy/cookie/consent finalisation | OPEN — legal review | Privacy |
-| F14 | SEO foundation | **DONE / LIVE VERIFIED — Step 7** | SEO |
-| F15 | WCAG 2.2 AA verification | **DONE / LIVE VERIFIED — Step 47** | Accessibility |
-| F16 | Core Web Vitals/performance verification | **DONE / LIVE VERIFIED — Step 46** | Performance |
-| F17 | Security review / hosting-header gaps | OPEN | Security |
-| F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED — Step 9** — cookieless first-party measurement; no optional analytics tags currently loaded | Analytics |
-| F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented | DevOps |
-| F20 | Automated functional tests | PARTIAL | QA |
-| F21 | Mobile/cross-browser QA | OPEN | QA |
-| F22 | Red team on staging | OPEN | Red Team |
-| F23 | Durable handoff/source-of-truth docs | **DONE for Step 1** — `WEBSITE_SOURCE_OF_TRUTH.md` | Documentation |
-| F24 | Final website DoD verification | **DONE — original 50-step engineering programme release verified; separate legal/security/red-team launch gates remain tracked** | Final Verifier |
+| F11 | Conversion optimisation | **DONE BASELINE / LIVE VERIFIED** — original Step 6 | Conversion |
+| F12 | Legal page scaffolds | **DONE ENGINEERING** — privacy/cookies/terms remain visibly DRAFT FOR LEGAL REVIEW | Legal |
+| F13 | Privacy/cookie/consent implementation | **DONE BASELINE / LIVE VERIFIED** — cookieless first-party measurement; no optional analytics/marketing tags | Privacy |
+| F13-LEGAL | Counsel review/finalisation of privacy, cookies, terms, controller details, lawful bases and retention | **OPEN HUMAN LAUNCH GATE** — not an engineering blocker | Legal |
+| F14 | SEO foundation | **DONE / LIVE VERIFIED** — original Step 7 | SEO |
+| F15 | WCAG 2.2 AA-oriented engineering baseline | **DONE / LIVE VERIFIED** — original Step 47; automated/source baseline, not third-party certification | Accessibility |
+| F15-MANUAL | Full manual keyboard + assistive-technology accessibility pass | **OPEN LAUNCH QA** — automated baseline does not substitute for specialist/manual coverage | Accessibility + QA |
+| F16 | Performance / Core Web Vitals-oriented lab verification | **DONE / LIVE VERIFIED** — original Step 46; lab evidence, not field/CrUX claim | Performance |
+| F17 | Website security engineering review | **DONE BASELINE** — `WEBSITE_SECURITY_REVIEW.md` + static security baseline; dependency audit and secret-pattern scan clean on 2026-09-26 | Security |
+| F17-HEADERS | HTTP response-header / clickjacking protection on current static host | **OPEN LAUNCH RISK DECISION** — prove supported headers, explicitly accept residual risk, or separately review a hosting change; do not create duplicate hosting to make the checkbox green | Security + DevOps |
+| F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED** — original Step 9; cookieless first-party measurement | Analytics |
+| F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented; companion docs aligned to DO-only policy | DevOps |
+| F20 | Automated functional/release tests | **DONE BASELINE** — full repository tests + build + performance + accessibility + live health + exact release-SHA verification are release gates | QA |
+| F21 | Mobile/cross-browser QA | **PARTIAL** — true 390px Edge/mobile journey verified; broader browser/manual matrix remains open | QA |
+| F22 | Red team on staging | **OPEN LAUNCH QA** | Red Team |
+| F23 | Durable handoff/source-of-truth docs | **DONE** — `CURSOR_HANDOFF.md`, `WEBSITE_SOURCE_OF_TRUTH.md`, Website Manager loop | Documentation |
+| F24 | Original website engineering DoD verification | **DONE** — original 50-step programme release verified; separate continuation/launch gates remain tracked | Final Verifier |
 | C1 | Continuation Step 1 — freeze/prove current baseline | **DONE — final code release `2f893f5c5c8a45d46f2db4fec4fa3c146424d78b` verified live; closure evidence recorded in the continuation runbook and PR thread** | Website Manager |
 | C1-SEC | Next 15/PostCSS dependency advisories | **RESOLVED IN CANDIDATE** — Next 16.3.6 candidate audits at zero known vulnerabilities | Security + Front-End |
 | C1-LINT | Preserve lint as a release gate after Next 16 migration | **RESOLVED IN CANDIDATE** — explicit release-preflight lint + regression assertion | QA + Front-End |

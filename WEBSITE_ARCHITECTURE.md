@@ -1,8 +1,8 @@
 # WEBSITE_ARCHITECTURE.md
 
-**Owner:** MOS Website Manager  
-**Updated:** 2026-09-25  
-**Scope:** Marketing website only — not the MaintenanceOS product backend.  
+**Owner:** MOS Website Manager
+**Updated:** 2026-09-26
+**Scope:** Marketing website only — not the MaintenanceOS product backend.
 **Mode:** PRE-LAUNCH (`PUBLIC_LAUNCH=false`)
 
 ## Settled architecture decisions
@@ -11,8 +11,8 @@
 |----|----------|-------|
 | D1 | Website source location | **CLOSED** — `chapelgate/maintenanceos-website`, branch `main` |
 | D2 | Hosting and staging URL | **CLOSED** — DigitalOcean App Platform static; `https://seahorse-app-4oasq.ondigitalocean.app` |
-| D3 | Lead-capture provider | OPEN — provider-independent adapter exists; production endpoint still separate |
-| D4 | Brand system | IMPLEMENTED in repo; further commercial optimisation remains iterative |
+| D3 | Lead-capture provider | **CLOSED** — provider-independent browser adapter posts to the existing Railway control plane; audited Postgres storage + operator notification already live |
+| D4 | Brand system | **CLOSED BASELINE** — implemented and live; later commercial refinement is iterative work, not an unresolved architecture decision |
 
 Authoritative deployment/source record: [`WEBSITE_SOURCE_OF_TRUTH.md`](./WEBSITE_SOURCE_OF_TRUTH.md).
 

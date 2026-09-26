@@ -69,25 +69,24 @@ test("calendar-adapters Dockerfile is mock-only and flag-off", () => {
   assert.match(docker, /maintenanceos-redteam/);
 });
 
-test("sandbox deploy runbook documents Free click, CORS, DO rebuild, honesty", () => {
+test("sandbox deploy policy is DigitalOcean-only and claims-safe", () => {
   const doc = read("docs/SANDBOX_DEPLOY.md");
-  assert.match(doc, /Instance type:\*\* click \*\*Free\*\*/);
-  assert.match(doc, /Health Check Path:\*\* `\/health`/);
+  assert.match(doc, /do not use Render/i);
+  assert.match(doc, /DigitalOcean/);
+  assert.match(doc, /GET \/health/);
   assert.match(doc, /SANDBOX_TEST_CALL_ENABLED/);
-  assert.match(doc, /seahorse-app-4oasq\.ondigitalocean\.app/);
   assert.match(doc, /NEXT_PUBLIC_SANDBOX_TEST_CALL_ENDPOINT/);
   assert.match(doc, /NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED/);
-  assert.match(doc, /Force Rebuild/);
+  assert.match(doc, /rebuild/i);
   assert.match(doc, /not_configured/);
   assert.match(doc, /live_call_forbidden/);
   assert.match(doc, /maintenanceos-redteam/);
   assert.match(doc, /output: 'export'/);
   assert.match(doc, /\/v1\/sandbox/);
-  assert.match(doc, /15 minutes/);
   assert.match(doc, /CALENDAR_ADAPTERS_ENABLED/);
   assert.match(doc, /NEXT_PUBLIC_CALENDAR_ENDPOINT/);
-  assert.match(doc, /maintenanceos-calendar-adapters/);
   assert.match(doc, /src\/config\/site\.ts/);
+  assert.doesNotMatch(doc, /onrender\.com|Render Dashboard|New \+.*Web Service/i);
 });
 
 test("site.ts public env names match the sandbox deploy runbook", () => {
