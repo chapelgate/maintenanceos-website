@@ -99,3 +99,17 @@ DigitalOcean static app and the post-deploy Website Manager verification is
 green. The exact freeze SHA and verification result are recorded on the release
 PR. No second website, hosting app, telephony path, credential, or paid service
 is introduced by this step.
+
+## Post-merge verifier hardening
+
+The first verification attempt after PR #104 found the expected temporary deploy
+lag: DigitalOcean still served the rollback-anchor SHA. On Windows, that normal
+mismatch path also exposed a verifier cleanup defect: direct `process.exit()`
+after awaited `fetch()` could abort through a libuv `UV_HANDLE_CLOSING`
+assertion.
+
+The verifier now returns numeric status from its async main routine and assigns
+`process.exitCode` only after network cleanup can complete. A regression test
+starts a local release-marker server, deliberately supplies a different expected
+SHA, and requires exit code 1 with no libuv assertion. The same deliberate
+mismatch test against the real live origin also exits cleanly.

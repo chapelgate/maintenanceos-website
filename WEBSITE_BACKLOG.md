@@ -43,6 +43,7 @@ This is the persistent website problem register. Do not create parallel problem 
 | C1-REACT | Four modern React effect-state lint findings | **RESOLVED IN CANDIDATE** — fixed without rule suppression | Front-End |
 | C1-PERF | Next 16 runtime exceeds legacy raw-only JS ceiling | **RESOLVED IN CANDIDATE** — measured before/after + dual 600 KB raw / 190 KB gzip gate | Performance |
 | C1-COMPAT | Newest-major toolchain compatibility | **NON-BLOCKING UPSTREAM HOLD** — current Next lint plugins require ESLint 9; current TypeScript lint tooling requires TS below 6.1 | Toolchain |
+| C1-VERIFY | Windows deployment-verifier mismatch path aborted through libuv assertion after awaited fetch | **RESOLVED IN CANDIDATE** — verifier returns an exit code instead of calling `process.exit()` during fetch cleanup; dedicated mismatch regression test added | Website Manager |
 
 ## Step 1 completion
 
