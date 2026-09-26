@@ -11,7 +11,7 @@ This is a thin operator handoff, not a second backlog.
 
 1. Read `WEBSITE_SOURCE_OF_TRUTH.md`.
 2. Read `WEBSITE_BACKLOG.md` — it is the single persistent problem register.
-3. Read `PRODUCT_CLAIMS_REGISTER.md` before changing public claims.
+3. Read `PRODUCT_CLAIMS_REGISTER.md` before changing public claims. Current signed product checkpoint: `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8` (2026-09-26).
 4. Read `docs/STEP50_WEBSITE_MANAGER_LOOP.md` before a release.
 5. Keep `NEXT_PUBLIC_PUBLIC_LAUNCH=false` until the launch checklist is cleared.
 
@@ -56,4 +56,5 @@ agent board, or monitoring stack to work around a documentation gap.
 - accessibility: `docs/STEP47_ACCESSIBILITY_BASELINE.md`
 - exact deployment verification: `docs/STEP48_DEPLOYMENT_VERIFICATION.md`
 - rollback controls: `docs/STEP49_RELEASE_ROLLBACK.md`
+- product evidence refresh: `docs/CONTINUATION_STEP3_PRODUCT_EVIDENCE_REFRESH.md`
 - closed-loop release process: `docs/STEP50_WEBSITE_MANAGER_LOOP.md`

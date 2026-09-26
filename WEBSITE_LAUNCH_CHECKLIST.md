@@ -10,9 +10,10 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 
 ## Claims truth
 
-- [ ] Refresh `PRODUCT_CLAIMS_REGISTER.md` against the current
-  `maintenanceos-v1-pilot` before launch or any expansion of present-fact claims.
-  The existing signed register remains the conservative gate meanwhile.
+- [x] `PRODUCT_CLAIMS_REGISTER.md` refreshed on 2026-09-26 against exact
+  product checkpoint `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8`. Any later
+  product-source change still requires re-checking affected claims before launch
+  or expanding present-fact copy.
 - [x] Current website copy is regression-gated against VERIFIED / UNDER TEST /
   PLANNED boundaries.
 - [x] No commercially-live / GA / certification / fake-social-proof claims.
@@ -95,7 +96,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 ## PUBLIC_LAUNCH flip gate
 
 - [ ] Owner approval to set `NEXT_PUBLIC_PUBLIC_LAUNCH=true`.
-- [ ] Product evidence refresh complete; telephony/commercial gates revisited.
+- [x] Product evidence refresh complete; telephony/commercial gates revisited on 2026-09-26 and remain **NO-GO / PRE-LAUNCH**.
 - [ ] Legal drafts cleared by counsel.
 - [ ] Security response-header risk resolved/accepted.
 - [ ] Manual accessibility + cross-browser QA complete.
