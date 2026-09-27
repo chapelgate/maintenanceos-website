@@ -130,7 +130,7 @@ test("structured scanner facts flow into the blueprint without credentials or pr
   const serialised = JSON.stringify(blueprint);
   assert.doesNotMatch(
     serialised,
-    /"api[_-]?key"|"password"|"secret"|"token"|"provider"|twilio|gemini|ttnc/i,
+    /"api[_-]?key"|"password"|"secret"|"token"|"provider"|twilio|gemini|legacy_carrier/i,
   );
 });
 
