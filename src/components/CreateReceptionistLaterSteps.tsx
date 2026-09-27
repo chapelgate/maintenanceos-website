@@ -193,6 +193,7 @@ export function CreateReceptionistLaterSteps({
   const [packText, setPackText] = useState("");
   const [promptText, setPromptText] = useState("");
   const [packError, setPackError] = useState<string | null>(null);
+  const [configEditPending, setConfigEditPending] = useState(false);
   const errorId = useId();
   const progressId = useId();
   const businessNameHintId = useId();
@@ -374,6 +375,11 @@ export function CreateReceptionistLaterSteps({
 
   async function onSubmitLead() {
     clearError();
+    if (configEditPending) {
+      setError("Finish applying the latest configuration edit before submitting.");
+      setStatus("error");
+      return;
+    }
     if (packError) {
       setError("Fix the knowledge pack JSON before submitting this configuration.");
       setStatus("error");
@@ -798,9 +804,11 @@ export function CreateReceptionistLaterSteps({
               packError={packError}
               onPackTextChange={(value) => {
                 const editVersion = ++configEditVersionRef.current;
+                setConfigEditPending(true);
                 setReviewConfirmedIds([]);
                 setPackText(value);
                 if (!agentBlueprint) {
+                  setConfigEditPending(false);
                   setPackError(
                     "Agent control blueprint is missing. Pack edits cannot be accepted safely.",
                   );
@@ -815,6 +823,7 @@ export function CreateReceptionistLaterSteps({
                     const parsed: unknown = JSON.parse(value);
                     const pack = draftLib.normalizeKnowledgePack(parsed);
                     if (!pack) {
+                      setConfigEditPending(false);
                       setPackError(
                         "Knowledge pack JSON was not accepted. Missing fields stay missing; live-call flags cannot be set.",
                       );
@@ -850,7 +859,9 @@ export function CreateReceptionistLaterSteps({
                       systemPrompt: regeneratedPrompt,
                       limitations: configurationLib.agentLimitationsFor(pack),
                     });
+                    setConfigEditPending(false);
                   } catch {
+                    setConfigEditPending(false);
                     setPackError(
                       "Knowledge pack must be valid JSON. The last accepted pack will be used until this parses.",
                     );
@@ -859,9 +870,13 @@ export function CreateReceptionistLaterSteps({
               }}
               onPromptTextChange={(value) => {
                 const editVersion = ++configEditVersionRef.current;
+                setConfigEditPending(true);
                 setReviewConfirmedIds([]);
                 setPromptText(value);
-                if (!agentBlueprint) return;
+                if (!agentBlueprint) {
+                  setConfigEditPending(false);
+                  return;
+                }
                 void loadAgentConfiguration().then(
                   ({ finalizeAgentSystemPrompt }) => {
                     if (editVersion !== configEditVersionRef.current) return;
@@ -877,13 +892,23 @@ export function CreateReceptionistLaterSteps({
                           }
                         : current,
                     );
+                    setConfigEditPending(false);
                   },
-                );
+                ).catch(() => {
+                  if (editVersion !== configEditVersionRef.current) return;
+                  setConfigEditPending(false);
+                  setPromptText(receptionist?.systemPrompt ?? "");
+                  setError(
+                    "The prompt edit could not be applied safely. The previous stored configuration was retained.",
+                  );
+                });
               }}
               onReset={() => {
                 const editVersion = ++configEditVersionRef.current;
+                setConfigEditPending(true);
                 setReviewConfirmedIds([]);
                 if (!agentBlueprint) {
+                  setConfigEditPending(false);
                   setPackError(
                     "Agent control blueprint is missing. Configuration cannot be reset safely.",
                   );
@@ -898,6 +923,13 @@ export function CreateReceptionistLaterSteps({
                   setReviewConfirmedIds([]);
                   setAgentBlueprint(configuration.blueprint);
                   applyBuilt(configuration);
+                  setConfigEditPending(false);
+                }).catch(() => {
+                  if (editVersion !== configEditVersionRef.current) return;
+                  setConfigEditPending(false);
+                  setError(
+                    "The configuration reset could not be applied safely. The previous stored configuration was retained.",
+                  );
                 });
               }}
             />
@@ -937,11 +969,13 @@ export function CreateReceptionistLaterSteps({
             </div>
           </dl>
           <p id={reviewStatusId} className="mt-3 text-sm text-muted">
-            {review
-              ? review.record.complete
-                ? "All required customer-review confirmations are complete."
-                : `${review.record.missingIds.length} required review confirmation(s) remain.`
-              : "The customer review record is not ready."}
+            {configEditPending
+              ? "Applying the latest configuration edit…"
+              : review
+                ? review.record.complete
+                  ? "All required customer-review confirmations are complete."
+                  : `${review.record.missingIds.length} required review confirmation(s) remain.`
+                : "The customer review record is not ready."}
           </p>
           {error ? (
             <p id={errorId} className="mt-3 text-sm text-red-700" role="alert">
@@ -953,6 +987,7 @@ export function CreateReceptionistLaterSteps({
               type="button"
               onClick={() => {
                 configEditVersionRef.current += 1;
+                setConfigEditPending(false);
                 setReviewConfirmedIds([]);
                 setStatus("idle");
                 clearError();
@@ -966,6 +1001,7 @@ export function CreateReceptionistLaterSteps({
               type="button"
               disabled={
                 status === "submitting" ||
+                configEditPending ||
                 Boolean(packError) ||
                 !review?.record.complete
               }
