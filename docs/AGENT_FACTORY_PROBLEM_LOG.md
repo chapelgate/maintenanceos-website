@@ -163,3 +163,20 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **Root cause:** review-revision invalidation was correctly required, but an effect was the wrong React mechanism for resetting purely local component state.
 - **Fix:** remove the effect and key the sandbox panel by the exact review revision so React remounts the local sandbox UI naturally. Parent qualification state is still invalidated explicitly.
 - **Scope impact:** UI-state/reset logic only; no product runtime or telephony change.
+
+
+## 2026-09-27 — Step 7 sandbox qualification verification closure
+
+- **State:** CLOSED / VERIFIED.
+- Exact pre-closure engineering candidate: `d8250ec42281c5202e17329d482538646588692b`.
+- MaintenanceOS compatibility baseline: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- Focused Step-7 + adjacent TypeScript tests: 54/54 PASS.
+- Repository script suite: 216/216 PASS.
+- Package/runtime/source TypeScript suite: 249/249 PASS.
+- Changed-file ESLint: PASS.
+- Next.js 16.3.6 production build and TypeScript: PASS.
+- Static export: 30/30 routes generated.
+- Clean-tree check: PASS.
+- Sandbox qualification is companion-only, revision-bound and fail-closed; browser mock remains demonstration-only.
+- Successful qualification changes lifecycle only from `reviewed` to `sandbox_passed`.
+- No live phone call, number provisioning, provider/carrier, database, deployment or infrastructure mutation occurred.
