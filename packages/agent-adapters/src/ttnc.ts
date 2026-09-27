@@ -5,7 +5,7 @@ import type {
   TtncWebhookEvent,
 } from "./types.ts";
 
-const SIGNATURE = /^[0-9a-f]{64}$/;
+const SIGNATURE = /^[0-9a-fA-F]{64}$/;
 
 function xmlEscape(value: string): string {
   return value
