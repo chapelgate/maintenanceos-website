@@ -39,7 +39,7 @@ export const CREATE_JOURNEY_STEPS: {
   { step: 1, label: "Website", nextAction: "Check this website" },
   { step: 2, label: "Check", nextAction: "Choose agent" },
   { step: 3, label: "Choose", nextAction: "Review draft" },
-  { step: 4, label: "Review", nextAction: "Preview knowledge pack" },
+  { step: 4, label: "Review", nextAction: "Generate AI configuration" },
   { step: 5, label: "Pack", nextAction: "Submit early access request" },
 ];
 
