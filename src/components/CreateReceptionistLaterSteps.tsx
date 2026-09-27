@@ -316,6 +316,14 @@ export function CreateReceptionistLaterSteps({
       delete next[key];
       return next;
     });
+    setFactMeta((current) => {
+      const next = { ...current };
+      if (key === "businessName") delete next.businessName;
+      if (key === "hours") delete next.hours;
+      if (key === "services") delete next.services;
+      if (key === "faqs") delete next.faqs;
+      return next;
+    });
     setDraft((current) => ({ ...current, [key]: value }));
   }
 
