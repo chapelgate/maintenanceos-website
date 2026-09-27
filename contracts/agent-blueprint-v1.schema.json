@@ -1,0 +1,399 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:chapelgate:maintenanceos:agent-blueprint:v1",
+  "title": "MaintenanceOS AgentBlueprint v1",
+  "description": "Provider-neutral, least-privilege configuration contract for website-generated AI agents. Website-derived knowledge remains untrusted and credentials are never part of this object.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "blueprintId",
+    "createdAt",
+    "compatibility",
+    "identity",
+    "agent",
+    "knowledge",
+    "permissions",
+    "rules",
+    "integrations",
+    "privacy",
+    "lifecycle"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "blueprintId": {
+      "type": "string",
+      "pattern": "^abp_[A-Za-z0-9][A-Za-z0-9_-]{7,63}$"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "productBaselineSha",
+        "productBaselineDate",
+        "runtimeContract"
+      ],
+      "properties": {
+        "productBaselineSha": {
+          "const": "3093dcd94317b1a44f04e5d6851bb7ad50568665"
+        },
+        "productBaselineDate": {
+          "const": "2026-09-27"
+        },
+        "runtimeContract": {
+          "const": "maintenanceos-v1"
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "businessName",
+        "website"
+      ],
+      "properties": {
+        "businessName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "website": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "locations": {
+          "type": "array",
+          "maxItems": 50,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "contact": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "phone": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 254
+            }
+          }
+        }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "objective",
+        "greeting",
+        "language"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "receptionist",
+            "maintenance_desk",
+            "booking_assistant",
+            "customer_service",
+            "sales_enquiry",
+            "custom"
+          ]
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "greeting": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "language": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 35
+        },
+        "voiceProfile": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      }
+    },
+    "knowledge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "untrustedWebsiteContent"
+      ],
+      "properties": {
+        "untrustedWebsiteContent": {
+          "const": true
+        },
+        "services": {
+          "type": "array",
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "hours": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "faqs": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "question",
+              "answer"
+            ],
+            "properties": {
+              "question": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "answer": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "url",
+              "fields",
+              "sourceType",
+              "confidence"
+            ],
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              "fields": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "businessName",
+                    "website",
+                    "locations",
+                    "contact",
+                    "services",
+                    "hours",
+                    "faqs"
+                  ]
+                }
+              },
+              "sourceType": {
+                "enum": [
+                  "jsonld",
+                  "microdata",
+                  "meta",
+                  "title",
+                  "heading",
+                  "nav",
+                  "pattern",
+                  "contact_link",
+                  "details",
+                  "operator"
+                ]
+              },
+              "confidence": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low",
+                  "confirmed"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allow",
+        "deny"
+      ],
+      "properties": {
+        "allow": {
+          "$ref": "#/$defs/capabilities"
+        },
+        "deny": {
+          "$ref": "#/$defs/capabilities"
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unavailableInformation",
+        "humanTransfer",
+        "forbiddenActions"
+      ],
+      "properties": {
+        "unavailableInformation": {
+          "enum": [
+            "say_not_on_file",
+            "offer_human_route",
+            "take_message"
+          ]
+        },
+        "humanTransfer": {
+          "enum": [
+            "disabled",
+            "explicit_request",
+            "policy_only"
+          ]
+        },
+        "forbiddenActions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "financial_commitment",
+              "autonomous_dispatch",
+              "credential_disclosure",
+              "policy_override",
+              "unrestricted_external_action"
+            ]
+          }
+        }
+      }
+    },
+    "integrations": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "enabled"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "telephony",
+              "calendar",
+              "email",
+              "crm",
+              "sms"
+            ]
+          },
+          "connectorRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recordCalls",
+        "transcribeCalls",
+        "retentionDays"
+      ],
+      "properties": {
+        "recordCalls": {
+          "type": "boolean"
+        },
+        "transcribeCalls": {
+          "type": "boolean"
+        },
+        "retentionDays": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3650
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage"
+      ],
+      "properties": {
+        "stage": {
+          "enum": [
+            "draft",
+            "reviewed",
+            "sandbox_passed",
+            "provisioning",
+            "ready",
+            "active"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "capabilities": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "answer_information",
+          "take_message",
+          "create_maintenance_job",
+          "check_calendar",
+          "book_appointment",
+          "send_email",
+          "send_sms",
+          "transfer_call"
+        ]
+      }
+    }
+  },
+  "$comment": "Cross-field invariant enforced by runtime validator: a capability cannot appear in both permissions.allow and permissions.deny. Credential-like keys are also rejected recursively by runtime validation."
+}
