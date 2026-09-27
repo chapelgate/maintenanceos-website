@@ -119,6 +119,21 @@ export type DraftFieldMeta = {
 
 export type ScanDraftFieldMeta = Partial<Record<keyof ReceptionistDraft, DraftFieldMeta>>;
 
+export type ScanBusinessFacts = {
+  website?: string;
+  businessName?: string;
+  locations?: string[];
+  contact?: { phones?: string[]; emails?: string[] };
+  services?: string[];
+  hours?: string;
+  faqs?: Array<{ question: string; answer: string }>;
+};
+
+export type ScanBusinessFactKey = keyof ScanBusinessFacts;
+export type ScanBusinessFactMeta = Partial<
+  Record<ScanBusinessFactKey, { confidence: "high" | "medium" | "low"; source: string }>
+>;
+
 /** Human labels for mapped `fieldMeta.source` values. Unknown sources stay unlabelled. */
 export const FIELD_META_SOURCE_LABELS: Record<string, string> = {
   jsonld: "JSON-LD",
@@ -172,6 +187,121 @@ export function mapScanFieldMeta(body: unknown): ScanDraftFieldMeta {
   return out;
 }
 
+
+function scanFactString(value: unknown, max: number): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  return trimmed.slice(0, max);
+}
+
+function scanFactStringArray(value: unknown, maxItems: number, maxChars: number): string[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const out = value
+    .map((item) => scanFactString(item, maxChars))
+    .filter((item): item is string => Boolean(item));
+  const unique = [...new Set(out)].slice(0, maxItems);
+  return unique.length ? unique : undefined;
+}
+
+function scanFactHttpsUrl(value: unknown): string | undefined {
+  const text = scanFactString(value, 2048);
+  if (!text) return undefined;
+  try {
+    const url = new URL(text);
+    return url.protocol === "https:" && url.hostname ? url.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Allow-list structured scanner facts. Never copy unknown keys or credential-like material. */
+export function mapScanBusinessFacts(body: unknown): ScanBusinessFacts {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return {};
+  const raw = (body as { facts?: unknown }).facts;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const src = raw as Record<string, unknown>;
+  const out: ScanBusinessFacts = {};
+
+  const website = scanFactHttpsUrl(src.website);
+  if (website) out.website = website;
+
+  const businessName = scanFactString(src.businessName, 200);
+  if (businessName) out.businessName = businessName;
+
+  const locations = scanFactStringArray(src.locations, 16, 500);
+  if (locations) out.locations = locations;
+
+  const services = scanFactStringArray(src.services, 100, 300);
+  if (services) out.services = services;
+
+  const hours = scanFactString(src.hours, 2000);
+  if (hours) out.hours = hours;
+
+  if (src.contact && typeof src.contact === "object" && !Array.isArray(src.contact)) {
+    const contact = src.contact as Record<string, unknown>;
+    const phones = scanFactStringArray(contact.phones, 8, 80);
+    const emails = scanFactStringArray(contact.emails, 8, 120)?.filter(
+      (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+    );
+    if (phones?.length || emails?.length) {
+      out.contact = {
+        ...(phones?.length ? { phones } : {}),
+        ...(emails?.length ? { emails } : {}),
+      };
+    }
+  }
+
+  if (Array.isArray(src.faqs)) {
+    const faqs = src.faqs
+      .slice(0, 100)
+      .map((item) => {
+        if (!item || typeof item !== "object" || Array.isArray(item)) return null;
+        const rec = item as Record<string, unknown>;
+        const question = scanFactString(rec.question, 500);
+        const answer = scanFactString(rec.answer, 2000);
+        return question && answer ? { question, answer } : null;
+      })
+      .filter((item): item is { question: string; answer: string } => Boolean(item));
+    if (faqs.length) out.faqs = faqs;
+  }
+
+  return out;
+}
+
+const FACT_META_SOURCES = new Set([...FIELD_META_SOURCES, "fetched_url"]);
+
+/** Map only provenance attached to facts that survived structured-fact validation. */
+export function mapScanBusinessFactMeta(
+  body: unknown,
+  facts: ScanBusinessFacts = mapScanBusinessFacts(body),
+): ScanBusinessFactMeta {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return {};
+  const raw = (body as { factMeta?: unknown }).factMeta;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  const src = raw as Record<string, unknown>;
+  const out: ScanBusinessFactMeta = {};
+  const keys: ScanBusinessFactKey[] = [
+    "website", "businessName", "locations", "contact", "services", "hours", "faqs",
+  ];
+  for (const key of keys) {
+    if (facts[key] === undefined) continue;
+    const item = src[key];
+    if (!item || typeof item !== "object" || Array.isArray(item)) continue;
+    const rec = item as Record<string, unknown>;
+    const confidence =
+      typeof rec.confidence === "string" && FIELD_META_CONFIDENCE.has(rec.confidence)
+        ? (rec.confidence as "high" | "medium" | "low")
+        : undefined;
+    const source =
+      typeof rec.source === "string" && FACT_META_SOURCES.has(rec.source)
+        ? rec.source
+        : undefined;
+    if (confidence && source) out[key] = { confidence, source };
+  }
+  return out;
+}
+
 export function isAbsoluteHttpUrl(value: string): boolean {
   try {
     const url = new URL(value);
@@ -183,7 +313,13 @@ export function isAbsoluteHttpUrl(value: string): boolean {
 
 export type ScanOutcome =
   | { status: "disabled" }
-  | { status: "ok"; draft: Partial<ReceptionistDraft>; fieldMeta: ScanDraftFieldMeta }
+  | {
+      status: "ok";
+      draft: Partial<ReceptionistDraft>;
+      fieldMeta: ScanDraftFieldMeta;
+      facts: ScanBusinessFacts;
+      factMeta: ScanBusinessFactMeta;
+    }
   | { status: "error"; message: string };
 
 const SCAN_TIMEOUT_MS = 15_000;
@@ -227,10 +363,13 @@ export async function requestOnboardingScan(
           "The scan service could not process this URL. No crawl results were invented.",
       };
     }
+    const facts = mapScanBusinessFacts(parsed);
     return {
       status: "ok",
       draft: mapScanResponse(parsed),
       fieldMeta: mapScanFieldMeta(parsed),
+      facts,
+      factMeta: mapScanBusinessFactMeta(parsed, facts),
     };
   } catch {
     return {
