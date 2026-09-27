@@ -356,11 +356,13 @@ export function CreateReceptionistLaterSteps({
     }
     let reviewedBlueprint: AgentBlueprintV1;
     try {
-      reviewedBlueprint = finalizeAgentReview(
-        agentBlueprint,
-        review.requirements,
-        review.record,
-      );
+      reviewedBlueprint = finalizeAgentReview({
+        blueprint: agentBlueprint,
+        factMeta,
+        fieldMeta,
+        missing: receptionist?.knowledgePack.missing,
+        record: review.record,
+      });
     } catch (reviewError) {
       setError(
         reviewError instanceof Error
