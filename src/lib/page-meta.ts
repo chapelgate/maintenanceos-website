@@ -6,7 +6,7 @@ import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
 /** Canonical public path named in funnel-page titles, descriptions, and OG. */
 export const FUNNEL_PATH_LABEL =
-  "Website → Check → Review → Pack → optional sandbox → early access";
+  "Website → Check → Choose → Review → Pack → optional sandbox → early access";
 
 const FUNNEL_META_GUARD =
   "Pre-launch — not a live phone, not always-on, not general availability.";
