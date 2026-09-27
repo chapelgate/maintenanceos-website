@@ -98,7 +98,7 @@ def _send_resend_http(to, subject, body, sender, api_key):
     req=urllib.request.Request(
         os.getenv("RESEND_API_URL","https://api.resend.com/emails"),
         data=payload,
-        headers={"Authorization":f"Bearer {api_key}","Content-Type":"application/json"},
+        headers={"Authorization":f"Bearer {api_key}","Content-Type":"application/json","User-Agent":"MaintenanceOS/1.0"},
         method="POST",
     )
     try:
