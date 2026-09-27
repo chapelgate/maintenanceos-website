@@ -9,7 +9,7 @@ export function FunnelPathStrip({ className = "" }: { className?: string }) {
     >
       <p>
         <span className="font-semibold text-ink">One public path. </span>
-        Website → Check → Review → Pack → optional sandbox → early access.{" "}
+        Website → Check → Choose → Review → Pack → optional sandbox → early access.{" "}
         <a
           href="/create/"
           className="font-medium text-accent underline-offset-4 hover:underline"
