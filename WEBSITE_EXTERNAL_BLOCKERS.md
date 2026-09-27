@@ -6,7 +6,21 @@
 
 ## OPEN
 
-None.
+### WB-002 — App Platform component-only retirement lacks mutation authority
+
+**Scope:** Cost reduction only — retire paid `onboarding-scan` without deleting the free static website.
+**Opened:** 2026-09-28
+
+The live `/create` bundle currently references
+`https://seahorse-app-4oasq.ondigitalocean.app/onboarding-scan/v1/onboarding/scan`,
+so deleting the service before a static rebuild would regress website scan behaviour.
+
+All safe independent work is complete. Component-only fail-closed tooling and evidence are in
+`scripts/remove-onboarding-scan-service.py` and
+`docs/COST_CUT_ONBOARDING_SCAN_2026-09-28.md`.
+
+Remaining external requirement: an authorised DigitalOcean App Platform control path with
+`app:read` + `app:update`. Do not delete the whole app.
 
 Counsel review, manual accessibility/cross-browser QA, the static-host response-header risk decision, and owner public-launch approval are human launch gates tracked in `WEBSITE_BACKLOG.md` / `WEBSITE_LAUNCH_CHECKLIST.md`; they are not current external blockers to ordinary website engineering. Product-evidence refresh and the bounded staging red-team are complete.
 
