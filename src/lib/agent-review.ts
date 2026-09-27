@@ -8,6 +8,7 @@ import {
   type DraftFieldMeta,
   type ScanBusinessFactKey,
   type ScanBusinessFactMeta,
+  type ScanDraftFieldMeta,
 } from "./onboarding-create.ts";
 
 export const AGENT_REVIEW_VERSION = "1.0.0" as const;
@@ -54,6 +55,14 @@ const FACT_LABELS: Record<ScanBusinessFactKey, string> = {
   contact: "contact details",
   services: "services",
   hours: "opening hours",
+  faqs: "FAQs",
+};
+
+const DRAFT_FIELD_LABELS: Record<keyof ScanDraftFieldMeta, string> = {
+  businessName: "business name",
+  greeting: "greeting",
+  hours: "opening hours",
+  services: "services",
   faqs: "FAQs",
 };
 
@@ -175,6 +184,7 @@ export function applyReviewedIdentityToAgentBlueprint(
 export function buildAgentReviewRequirements(input: {
   blueprint: AgentBlueprintV1;
   factMeta?: ScanBusinessFactMeta;
+  fieldMeta?: ScanDraftFieldMeta;
   missing?: string[];
 }): AgentReviewRequirement[] {
   const blueprint = validateBlueprint(input.blueprint);
@@ -205,6 +215,22 @@ export function buildAgentReviewRequirements(input: {
       id: "fact:" + key,
       kind: "low_confidence",
       title: "Confirm " + FACT_LABELS[key],
+      detail:
+        "The scanner marked this as low confidence from " +
+        reviewSourceLabel(meta.source) +
+        ". Check or edit it before confirming.",
+    });
+  }
+
+  const structuredKeys = new Set(Object.keys(input.factMeta ?? {}));
+  for (const [key, meta] of Object.entries(input.fieldMeta ?? {}) as Array<
+    [keyof ScanDraftFieldMeta, NonNullable<ScanDraftFieldMeta[keyof ScanDraftFieldMeta]>]
+  >) {
+    if (meta.confidence !== "low" || structuredKeys.has(String(key))) continue;
+    requirements.push({
+      id: "field:" + String(key),
+      kind: "low_confidence",
+      title: "Confirm " + DRAFT_FIELD_LABELS[key],
       detail:
         "The scanner marked this as low confidence from " +
         reviewSourceLabel(meta.source) +
