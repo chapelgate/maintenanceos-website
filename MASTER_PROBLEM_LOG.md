@@ -32,7 +32,7 @@ Status: RESOLVED
 - Production routing, phone numbers, credentials and deployment were not changed.
 
 ## 2026-09-27 — Step 9 full-suite Windows collection mismatch
-Status: OPEN — LINUX VERIFICATION IN PROGRESS
+Status: RESOLVED — VERIFIED ON LINUX ESTATE RUNNER
 
 - Problem: the repository-wide pytest run cannot collect two existing concurrency tests on Windows because `concurrency_loadtest.py` imports the POSIX-only Python `resource` module.
 - Evidence: `tests/test_concurrency_ladder.py` and `tests/test_concurrency_red_team.py` fail at import with `ModuleNotFoundError: No module named 'resource'` before any Step 9 test executes.
