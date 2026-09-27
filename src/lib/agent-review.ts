@@ -344,6 +344,41 @@ export function buildAgentReviewRequirements(input: {
   return uniqueRequirements(requirements);
 }
 
+export function finalizeAgentReview(
+  blueprint: AgentBlueprintV1,
+  record: AgentReviewRecord,
+): AgentBlueprintV1 {
+  const trusted = validateBlueprint(blueprint);
+  const required = [...new Set(record.requiredIds)];
+  const confirmed = new Set(record.confirmedIds);
+  const complete =
+    record.version === AGENT_REVIEW_VERSION &&
+    record.complete === true &&
+    record.missingIds.length === 0 &&
+    required.every((id) => confirmed.has(id));
+
+  if (!complete) {
+    throw new Error(
+      "Agent review is incomplete; lifecycle cannot advance to reviewed.",
+    );
+  }
+
+  return validateBlueprint({
+    ...trusted,
+    permissions: {
+      allow: [...trusted.permissions.allow],
+      deny: [...trusted.permissions.deny],
+    },
+    rules: {
+      ...trusted.rules,
+      forbiddenActions: [...trusted.rules.forbiddenActions],
+    },
+    integrations: trusted.integrations.map((item) => ({ ...item })),
+    privacy: { ...trusted.privacy },
+    lifecycle: { stage: "reviewed" },
+  });
+}
+
 export function buildAgentReviewRecord(
   requirements: AgentReviewRequirement[],
   confirmedIds: readonly string[],
