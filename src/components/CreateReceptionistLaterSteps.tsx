@@ -356,7 +356,11 @@ export function CreateReceptionistLaterSteps({
     }
     let reviewedBlueprint: AgentBlueprintV1;
     try {
-      reviewedBlueprint = finalizeAgentReview(agentBlueprint, review.record);
+      reviewedBlueprint = finalizeAgentReview(
+        agentBlueprint,
+        review.requirements,
+        review.record,
+      );
     } catch (reviewError) {
       setError(
         reviewError instanceof Error
