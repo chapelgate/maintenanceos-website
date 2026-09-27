@@ -18,3 +18,19 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - Both authorised Desktop Commander devices are offline. GitHub repo has no existing workflow runner and this task will not add duplicate/paid CI solely for verification.
 - Code remains isolated on `agent-factory/step5-generate-agent-configuration`.
 - Step 5 must not merge or be described as frozen until focused tests, full tests, changed-file lint and production build pass on an execution runner.
+
+## 2026-09-27 — Step 5: trusted-marker collision could truncate later website data
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** if untrusted website/review text contained the literal trusted-control marker, initial prompt generation could treat that occurrence as a prior trusted tail and discard later untrusted data.
+- **Security effect:** no privilege escalation; trusted controls were still appended. The defect was data loss/integrity, not authority bypass.
+- **Fix:** initial configuration generation no longer strips marker-like text from untrusted data. Tail replacement is used only when re-finalising an editable prompt that may already contain a generated trusted tail.
+- **Regression:** website data containing the marker must remain present, with the real trusted tail still last.
+
+## 2026-09-27 — Step 5: edited pack and AgentBlueprint knowledge could diverge
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** editing accepted knowledge-pack JSON updated the preview/submitted pack but left AgentBlueprint identity/knowledge at the pre-edit version.
+- **Risk:** internally inconsistent saved configuration.
+- **Fix:** accepted pack edits now pass through `applyKnowledgePackToAgentBlueprint`; only identity/knowledge data is refreshed. Permissions, rules, integrations, privacy and agent type remain unchanged and the blueprint is revalidated.
+- **Regression:** edited business name/hours/services/FAQs must synchronise while all control-plane fields remain identical.
