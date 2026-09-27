@@ -110,6 +110,18 @@ export function ReceptionistDraftPreview({
         Website text cannot grant capabilities, alter escalation, or activate a live number.
       </p>
 
+      <details className="rounded-lg border border-border bg-paper p-3">
+        <summary className="cursor-pointer text-sm font-medium text-ink">
+          Final stored system prompt (read-only)
+        </summary>
+        <pre
+          className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
+          data-final-system-prompt="readonly"
+        >
+          {result.systemPrompt}
+        </pre>
+      </details>
+
       <button
         type="button"
         onClick={onReset}
