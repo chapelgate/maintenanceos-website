@@ -85,14 +85,14 @@ test("HIW step cards are a mos-glass number→title→status ladder", () => {
   const flow = read("src/components/HowItWorksFlow.tsx");
   assert.match(flow, /FeatureStatusChip/);
   assert.match(flow, /number → title → status/);
-  assert.match(flow, /Website → Check → Review → Pack/);
+  assert.match(flow, /Website → Check → Choose → Review → Pack/);
   assert.match(flow, /mos-glass/);
   assert.match(flow, /hiw-step-number/);
   assert.match(flow, /bg-paper/);
   assert.match(flow, /do not invent extracted hours/);
 });
 
-test("/create stepper chrome is sticky Website → Check → Review → Pack", () => {
+test("/create stepper chrome is sticky Website → Check → Choose → Review → Pack", () => {
   const stepper = read("src/components/CreateJourneyStepper.tsx");
   const css = read("src/app/globals.css");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
