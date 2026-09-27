@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import {
   validateAgentBlueprintV1,
   type AgentBlueprintV1,
@@ -20,6 +21,19 @@ import type {
   TwilioConnector,
 } from "./types.ts";
 import { ADAPTER_READINESS_VERSION } from "./types.ts";
+
+export function adapterBindingsHash(bindings: AdapterBinding[]): string {
+  const canonical = [...bindings]
+    .map((item) => ({ kind: item.kind, connectorRef: item.connectorRef }))
+    .sort((a, b) =>
+      a.kind === b.kind
+        ? a.connectorRef.localeCompare(b.connectorRef)
+        : a.kind.localeCompare(b.kind),
+    );
+  return createHash("sha256")
+    .update(JSON.stringify(canonical))
+    .digest("hex");
+}
 
 function readyBlueprint(blueprint: AgentBlueprintV1): AgentBlueprintV1 {
   const next = structuredClone(blueprint);
@@ -241,6 +255,7 @@ export async function prepareAdapterReadiness(input: {
     tenantRef: provisioning.tenantRef,
     createdAt: (input.now ?? (() => new Date()))().toISOString(),
     complete: true,
+    bindingsHash: adapterBindingsHash(sortedBindings),
     bindings: sortedBindings,
     checks,
     failedCheckIds: [],
