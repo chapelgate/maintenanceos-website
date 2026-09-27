@@ -419,6 +419,16 @@ export function buildCreateLeadMessage(input: {
     confirmedIds: string[];
     missingIds: string[];
   };
+  sandboxQualification?: {
+    version: string;
+    reviewRevisionId: string;
+    source: string;
+    sessionId: string;
+    testId: string;
+    complete: boolean;
+    checks: Array<{ id: string; ok: boolean }>;
+    failedCheckIds: string[];
+  };
   agentBlueprint?: unknown;
   receptionist?: {
     knowledgePack: unknown;
@@ -441,6 +451,12 @@ export function buildCreateLeadMessage(input: {
   }
   if (input.review) {
     parts.push("Customer review JSON:", JSON.stringify(input.review, null, 2));
+  }
+  if (input.sandboxQualification) {
+    parts.push(
+      "Sandbox qualification JSON:",
+      JSON.stringify(input.sandboxQualification, null, 2),
+    );
   }
   if (input.agentBlueprint) {
     parts.push("Agent blueprint JSON:", JSON.stringify(input.agentBlueprint, null, 2));
