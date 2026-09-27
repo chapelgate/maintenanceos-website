@@ -41,7 +41,7 @@ const REVIEWED_DRAFT = {
   faqs: "Q: Do you cover Wirral?\nA: Yes.",
 };
 
-test("all six agent types generate role-specific reviewed configurations", () => {
+test("all six agent types generate role-specific draft configurations", () => {
   for (const template of AGENT_TEMPLATES) {
     const original = blueprintFor(template.type);
     const result = buildAgentConfiguration({
@@ -49,7 +49,7 @@ test("all six agent types generate role-specific reviewed configurations", () =>
       reviewedDraft: REVIEWED_DRAFT,
     });
 
-    assert.equal(result.blueprint.lifecycle.stage, "reviewed", template.type);
+    assert.equal(result.blueprint.lifecycle.stage, "draft", template.type);
     assert.equal(result.blueprint.agent.type, template.type);
     assert.equal(result.blueprint.agent.objective, template.summary);
     assert.deepEqual(result.blueprint.permissions, original.permissions);
