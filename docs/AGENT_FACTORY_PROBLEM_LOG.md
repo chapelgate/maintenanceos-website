@@ -137,3 +137,19 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **Risk:** Step-4 generation and Step-5 pack/prompt/reset edits use dynamic imports. Without a pending gate, a customer could change input, navigate, or re-confirm while an older async result was still resolving.
 - **Fix:** all generation/edit operations share a monotonic version counter and `configEditPending` gate. Newer edits/back navigation invalidate older completions; review checkboxes and final submit are disabled while the latest change is unsettled.
 - **Regression:** `scripts/agent-review-wiring.test.mjs` locks the version/pending guards, stale-result rejection, provenance invalidation and regenerated protected prompt wiring.
+
+## 2026-09-27 — Step 5/6 execution verification closure
+
+- **State:** CLOSED / VERIFIED.
+- Real verifier: authorised Desktop Commander device `CG`.
+- Integrated candidate: `55fd405c022fe8dbac19860fcd68f36ba6f7ff40`.
+- Latest MaintenanceOS compatibility baseline: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- Focused TypeScript tests: 63/63 PASS.
+- Focused wiring/accessibility tests: 11/11 PASS.
+- Changed-file ESLint: PASS.
+- Full repository tests: 241/241 PASS.
+- Next.js 16.3.6 production build and TypeScript: PASS.
+- Static export: 30/30 routes generated.
+- Clean-tree check: PASS.
+- Verification found and repaired before closure: a schema-invalid prompt-pressure fixture, explicit checkbox accessibility association, and nullable submit-path TypeScript narrowing.
+- No live telephony/provider/carrier/database/infrastructure files were changed.
