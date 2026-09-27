@@ -312,6 +312,8 @@ export function CreateReceptionistLaterSteps({
     key: K,
     value: string,
   ) {
+    configEditVersionRef.current += 1;
+    setConfigEditPending(false);
     setReviewConfirmedIds([]);
     setFieldMeta((current) => {
       const next = { ...current };
@@ -333,6 +335,8 @@ export function CreateReceptionistLaterSteps({
     key: K,
     value: string,
   ) {
+    configEditVersionRef.current += 1;
+    setConfigEditPending(false);
     setReviewConfirmedIds([]);
     setFactMeta((current) => {
       const next = { ...current };
@@ -623,34 +627,49 @@ export function CreateReceptionistLaterSteps({
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            const editVersion = ++configEditVersionRef.current;
+            setConfigEditPending(true);
             setStatus("idle");
             clearError();
             if (!agentBlueprint) {
+              setConfigEditPending(false);
               setError("Agent control blueprint is missing. Choose an agent role again.");
               return;
             }
-            void loadAgentConfiguration().then(({ buildAgentConfiguration }) => {
-              try {
-                const identityBlueprint = applyReviewedIdentityToAgentBlueprint(
-                  agentBlueprint,
-                  identityReview,
-                );
-                const configuration = buildAgentConfiguration({
-                  blueprint: identityBlueprint,
-                  reviewedDraft: draft,
-                });
-                setReviewConfirmedIds([]);
-                setAgentBlueprint(configuration.blueprint);
-                applyBuilt(configuration);
-                setStep(5);
-              } catch (configurationError) {
+            void loadAgentConfiguration()
+              .then(({ buildAgentConfiguration }) => {
+                if (editVersion !== configEditVersionRef.current) return;
+                try {
+                  const identityBlueprint = applyReviewedIdentityToAgentBlueprint(
+                    agentBlueprint,
+                    identityReview,
+                  );
+                  const configuration = buildAgentConfiguration({
+                    blueprint: identityBlueprint,
+                    reviewedDraft: draft,
+                  });
+                  if (editVersion !== configEditVersionRef.current) return;
+                  setReviewConfirmedIds([]);
+                  setAgentBlueprint(configuration.blueprint);
+                  applyBuilt(configuration);
+                  setConfigEditPending(false);
+                  setStep(5);
+                } catch (configurationError) {
+                  setConfigEditPending(false);
+                  setError(
+                    configurationError instanceof Error
+                      ? configurationError.message
+                      : "The AI configuration could not be generated safely.",
+                  );
+                }
+              })
+              .catch(() => {
+                if (editVersion !== configEditVersionRef.current) return;
+                setConfigEditPending(false);
                 setError(
-                  configurationError instanceof Error
-                    ? configurationError.message
-                    : "The AI configuration could not be generated safely.",
+                  "The AI configuration module could not be loaded safely. No generated configuration was accepted.",
                 );
-              }
-            });
+              });
           }}
         >
           <p className="text-sm text-muted">
@@ -778,17 +797,22 @@ export function CreateReceptionistLaterSteps({
           <div className="mt-5 flex flex-wrap gap-3">
             <button
               type="button"
-              onClick={() => setStep(3)}
+              onClick={() => {
+                configEditVersionRef.current += 1;
+                setConfigEditPending(false);
+                setStep(3);
+              }}
               className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper"
             >
               Back
             </button>
             <button
               type="submit"
+              disabled={configEditPending}
               data-create-primary-action=""
-              className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
+              className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
             >
-              Generate AI configuration
+              {configEditPending ? "Generating…" : "Generate AI configuration"}
             </button>
           </div>
         </form>
@@ -823,6 +847,7 @@ export function CreateReceptionistLaterSteps({
                     const parsed: unknown = JSON.parse(value);
                     const pack = draftLib.normalizeKnowledgePack(parsed);
                     if (!pack) {
+                      setReviewConfirmedIds([]);
                       setConfigEditPending(false);
                       setPackError(
                         "Knowledge pack JSON was not accepted. Missing fields stay missing; live-call flags cannot be set.",
@@ -861,11 +886,19 @@ export function CreateReceptionistLaterSteps({
                     });
                     setConfigEditPending(false);
                   } catch {
+                    setReviewConfirmedIds([]);
                     setConfigEditPending(false);
                     setPackError(
                       "Knowledge pack must be valid JSON. The last accepted pack will be used until this parses.",
                     );
                   }
+                }).catch(() => {
+                  if (editVersion !== configEditVersionRef.current) return;
+                  setReviewConfirmedIds([]);
+                  setConfigEditPending(false);
+                  setPackError(
+                    "The knowledge-pack controls could not be loaded safely. The previous stored configuration was retained.",
+                  );
                 });
               }}
               onPromptTextChange={(value) => {
@@ -896,6 +929,7 @@ export function CreateReceptionistLaterSteps({
                   },
                 ).catch(() => {
                   if (editVersion !== configEditVersionRef.current) return;
+                  setReviewConfirmedIds([]);
                   setConfigEditPending(false);
                   setPromptText(receptionist?.systemPrompt ?? "");
                   setError(
@@ -926,6 +960,7 @@ export function CreateReceptionistLaterSteps({
                   setConfigEditPending(false);
                 }).catch(() => {
                   if (editVersion !== configEditVersionRef.current) return;
+                  setReviewConfirmedIds([]);
                   setConfigEditPending(false);
                   setError(
                     "The configuration reset could not be applied safely. The previous stored configuration was retained.",
@@ -948,6 +983,7 @@ export function CreateReceptionistLaterSteps({
                 blueprint={agentBlueprint}
                 requirements={review.requirements}
                 confirmedIds={reviewConfirmedIds}
+                disabled={configEditPending}
                 onToggle={(id, checked) => {
                   clearError();
                   setReviewConfirmedIds((current) => {
