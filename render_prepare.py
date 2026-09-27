@@ -6,7 +6,7 @@ import sys
 
 from provider_webhooks import (
     ProviderWebhookError,
-    configure_twilio_voice_webhook,
+    configure_phone_voice_webhook,
     emit_webhook_status,
     plan_twilio_voice_webhook,
 )
@@ -33,7 +33,7 @@ def _record_fail_closed_side_effects() -> None:
 def prepare_runtime(*, twilio_updater=None) -> dict[str, object]:
     tenant_id = ensure_synthetic_tenant()
     _record_fail_closed_side_effects()
-    webhook = configure_twilio_voice_webhook(twilio_updater=twilio_updater)
+    webhook = configure_phone_voice_webhook(provider_updater=twilio_updater)
     plan = plan_twilio_voice_webhook()
     readiness = readiness_report()
     return {

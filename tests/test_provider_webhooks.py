@@ -5,6 +5,7 @@ import render_prepare
 
 
 def _closed_env(monkeypatch):
+    monkeypatch.setenv("PHONE_PROVIDER", "twilio")
     monkeypatch.setenv("ENABLE_PUBLIC_PROVIDER_INGRESS", "false")
     monkeypatch.setenv("ENABLE_REALTIME_VOICE", "false")
     monkeypatch.setenv("VERIFY_TWILIO_SIGNATURES", "true")
@@ -107,3 +108,29 @@ def test_apply_helper_refuses_when_ingress_closed(monkeypatch):
     _closed_env(monkeypatch)
     with pytest.raises(pw.ProviderWebhookError, match="public provider ingress is not ready"):
         pw.apply_twilio_incoming_phone_voice_url()
+
+
+def test_phone_adapter_registry_is_explicit_and_allowlisted():
+    adapters = pw._phone_provider_adapters()
+    assert frozenset(adapters) == pw.SUPPORTED_PHONE_PROVIDERS
+    assert pw.SUPPORTED_PHONE_PROVIDERS == frozenset({"twilio"})
+    assert adapters["twilio"].name == "twilio"
+    assert callable(adapters["twilio"].configure_incoming_number)
+
+
+def test_phone_provider_adapter_normalises_name(monkeypatch):
+    monkeypatch.setenv("PHONE_PROVIDER", " TWILIO ")
+    assert pw.phone_provider() == "twilio"
+    assert pw.phone_provider_adapter().name == "twilio"
+    assert pw.phone_provider_adapter("unknown") is None
+
+
+def test_unknown_phone_provider_fails_closed_before_mutation(monkeypatch):
+    _live_ready_env(monkeypatch)
+    monkeypatch.setenv("PHONE_PROVIDER", "unknown-carrier")
+    calls = []
+
+    with pytest.raises(pw.ProviderWebhookError, match="Unsupported phone provider"):
+        pw.configure_phone_voice_webhook(provider_updater=lambda: calls.append("mutated"))
+
+    assert calls == []

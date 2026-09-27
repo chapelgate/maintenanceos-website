@@ -6,7 +6,7 @@ MaintenanceOS is a multi-tenant maintenance-operations system with deterministic
 
 ## Voice architecture
 
-Gemini Live is the primary configured realtime receptionist provider through `VOICE_PROVIDER=gemini`. OpenAI Realtime remains an optional fallback/legacy provider. The provider adapter sits outside the deterministic MaintenanceOS safety/lifecycle core.
+Gemini Live is the primary configured realtime receptionist provider through `VOICE_PROVIDER=gemini`. OpenAI Realtime remains an optional fallback/legacy provider. Realtime providers are selected through an explicit allowlisted adapter contract in `provider_runtime.py`; phone-carrier configuration is separately allowlisted through `PHONE_PROVIDER` in `provider_webhooks.py` (currently Twilio only). Both adapter boundaries sit outside the deterministic MaintenanceOS safety/lifecycle core and fail closed for unknown providers.
 
 The production container starts `asgi:app`. That entrypoint reuses the hardened FastAPI application in `api.py` and switches only the realtime voice transport through `provider_runtime.py`.
 
