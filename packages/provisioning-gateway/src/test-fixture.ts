@@ -13,12 +13,13 @@ import {
   requestSandboxScriptedDemo,
   resetBrowserSandboxMock,
 } from "../../../src/lib/sandbox-test-call.ts";
+import type { ProvisioningRequestInput } from "./types.ts";
 
 export async function validProvisioningEnvelope(input: {
   tenantRef?: string;
   greeting?: string;
   blueprintId?: string;
-} = {}): Promise<Record<string, unknown>> {
+} = {}): Promise<ProvisioningRequestInput> {
   const draft = {
     businessName: "Acme Plumbing",
     greeting:
@@ -99,5 +100,5 @@ export async function validProvisioningEnvelope(input: {
       session: demo.data.session,
       test: demo.data.test,
     },
-  };
+  } as unknown as ProvisioningRequestInput;
 }
