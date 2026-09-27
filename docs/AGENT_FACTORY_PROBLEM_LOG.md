@@ -246,3 +246,21 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **Reproduction:** after broadening TTNC number format, the use site referenced `PHONE_NUMBER` while the old `UK_OR_E164` declaration remained.
 - **Verifier evidence:** focused suite failed with `ReferenceError: PHONE_NUMBER is not defined`.
 - **Fix:** complete the declaration rename to the bounded international digit validator and rerun the unchanged suite.
+
+
+## 2026-09-27 — Step 9 provider adapter verification closure
+
+- **State:** CLOSED / VERIFIED.
+- Exact pre-closure engineering candidate: `b30cf5f54913467b0a70655fdfbf1076922b745b`.
+- MaintenanceOS compatibility baseline: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- Agent-adapter + provisioning focused tests: 39/39 PASS.
+- Architecture wiring tests: 6/6 PASS.
+- Repository script suite: 228/228 PASS.
+- Package/runtime/source suite: 288/288 PASS.
+- Changed Step-9 ESLint: PASS.
+- Next.js 16.3.6 production build and TypeScript: PASS.
+- Static export: 30/30 routes generated.
+- Clean-tree check: PASS.
+- TTNC webhook raw-body HMAC, provider swap, tenant-bound preparation, durable idempotency and Step-8 state migration are verified.
+- Successful preparation changes lifecycle only from `provisioning` to `ready`.
+- No TTNC API mutation, live phone route/call, external connector action, MaintenanceOS database mutation, deployment or public-launch change occurred.
