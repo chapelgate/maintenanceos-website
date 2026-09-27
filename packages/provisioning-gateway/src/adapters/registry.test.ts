@@ -36,14 +36,14 @@ test("registry accepts server-only Twilio, calendar and signed HTTPS connectors"
   assert.equal(registry.connectors.length, 3);
 });
 
-test("registry rejects TTNC, insecure URLs, duplicate refs and raw secret fields", () => {
+test("registry rejects unsupported legacy carrier, insecure URLs, duplicate refs and raw secret fields", () => {
   assert.throws(
     () =>
       parseAdapterRegistry({
         connectors: [
           {
             ref: "legacy",
-            provider: "ttnc",
+            provider: "legacy_carrier",
             kinds: ["telephony"],
           },
         ],
