@@ -48,7 +48,7 @@ _URGENCY = re.compile(
     re.IGNORECASE,
 )
 _CALLBACK = re.compile(
-    r"(?:callback|call\s*back|contact(?:\s+number)?|my\s+number|phone(?:\s+number)?)"
+    r"(?:callback|call\s*back|contact(?:\s+number)?|my\s+number|phone(?:\s+number)?|telephone(?:\s+number)?)"
     r"[:\s]+(\+?\d[\d\s()-]{7,}\d)",
     re.IGNORECASE,
 )
@@ -126,9 +126,10 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
     if confirmed_gate_area:
         gate_value, area_value = confirmed_gate_area[-1]
     else:
-        gate = _GATE_NUM.search(caller_text) or _GATE_NUM.search(full)
+        gate = _GATE_NUM.search(assistant_text) or _GATE_NUM.search(caller_text) or _GATE_NUM.search(full)
         gate_value = gate.group(1) if gate else ""
-        area_match = _AREA.search(caller_text) or _AREA.search(full)
+        # Never infer Wirral/Sefton from the receptionist merely asking the question.
+        area_match = _AREA.search(caller_text)
         area_value = area_match.group(1) if area_match else ""
 
     confirmed_name = re.findall(
@@ -137,7 +138,15 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         re.IGNORECASE,
     )
     raw_name = _NAME.search(caller_text)
-    name_value = confirmed_name[-1].strip() if confirmed_name else (raw_name.group(1).strip() if raw_name else "")
+    honorific_name = re.search(
+        r"\b(?:Mr|Mrs|Ms|Miss|Dr)\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){0,2})",
+        caller_text,
+    )
+    name_value = (
+        confirmed_name[-1].strip()
+        if confirmed_name
+        else (honorific_name.group(1).strip() if honorific_name else (raw_name.group(1).strip() if raw_name else ""))
+    )
 
     confirmed_callback = re.findall(
         r"\byour\s+(?:callback\s+|phone\s+)?number(?:'s|\s+is)\s+(\+?\d[\d\s()-]{7,}\d)",
@@ -150,14 +159,15 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
 
     confirmed_addresses = re.findall(
         r"\byour\s+address(?:'s|\s+is)\s+([^\.\n]{4,180})"
-        r"|\b(?:you're|you\s+are)\s+at\s+([^\.\n]{4,180})",
+        r"|\b(?:you're|you\s+are)\s+at\s+([^\.\n]{4,180})"
+        r"|\blocated\s+at\s+([^\.\n]{4,180})",
         assistant_text,
         re.IGNORECASE,
     )
     address = ""
     if confirmed_addresses:
-        pair = confirmed_addresses[-1]
-        address = (pair[0] or pair[1]).strip()
+        parts = confirmed_addresses[-1]
+        address = next((part.strip() for part in parts if part), "")
     if not address:
         for line in caller_lines:
             lowered = line.casefold()
@@ -167,7 +177,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
 
     postcode_match = re.search(
         r"\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b",
-        address or full,
+        f"{address}\n{full}",
         re.IGNORECASE,
     )
     postcode = ""
@@ -187,12 +197,27 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         r"\bthe\s+problem\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
         r"\breported\s+that\s+(.+?)(?:\s+on\s+gate\s+\d+|\.\s|$)",
         r"\bfault\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
+        r"\b((?:the\s+)?(?:lock|gate|hinge|cylinder)\s+is\s+(?:missing|broken|damaged|jammed|stuck)(?:\s+due\s+to\s+vandalism)?)",
     ]
     for pattern in fault_patterns:
         matches = re.findall(pattern, assistant_text, re.IGNORECASE)
         if matches:
             fault = matches[-1].strip(" ,.")
             break
+    if not fault:
+        # Prefer a clean receptionist confirmation sentence over garbled realtime STT.
+        for line in assistant_lines:
+            for sentence in re.split(r"(?<=[.!?])\s+", line):
+                if sentence.rstrip().endswith("?"):
+                    continue
+                if (
+                    re.search(r"\b(?:lock|gate|hinge|cylinder)\b", sentence, re.IGNORECASE)
+                    and re.search(r"\b(?:missing|broken|damaged|jammed|stuck|vandali[sz])\w*\b", sentence, re.IGNORECASE)
+                ):
+                    fault = sentence.strip(" ,.")
+                    break
+            if fault:
+                break
     if not fault:
         for line in caller_lines:
             if _REPAIR.search(line):
@@ -287,15 +312,30 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         re.IGNORECASE | re.DOTALL,
     ))
     if has_key:
+        phone_order_requested = bool(re.search(
+            r"\b(?:on|over)\s+the\s+phone\b|\bdo\s+it\s+on\s+the\s+phone\b",
+            full,
+            re.IGNORECASE,
+        ))
         lines.extend([
             "KEY ORDER / ENQUIRY",
             "===================",
-            f"Existing order/update requested: {'Yes' if existing_order else 'No'}",
-            f"New key order information requested: {'Yes' if new_key_order else 'No'}",
-            "Order updates: reply to the order confirmation email.",
-            "Delivery: Royal Mail; tracking is emailed when dispatched.",
-            "",
         ])
+        if existing_order:
+            lines.extend([
+                "Existing order/update requested: Yes",
+                "Order update route: reply to the order confirmation email.",
+                "Delivery: Royal Mail; tracking is emailed when dispatched.",
+            ])
+        if new_key_order:
+            lines.extend([
+                "New key order enquiry: Yes",
+                f"Telephone ordering requested: {'Yes' if phone_order_requested else 'No'}",
+                "Outcome: no key order was taken during the call; caller was directed to alleygates.co.uk.",
+            ])
+        if not existing_order and not new_key_order:
+            lines.append("Key enquiry noted; no order was taken during the call.")
+        lines.append("")
 
     if has_master_key:
         lines.extend([
@@ -310,7 +350,6 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     other_patterns = (
         r"car\s+blocking",
         r"leav(?:e|ing|es).*gate.*open",
-        r"vandali[sz]",
         r"neighbou?r",
     )
     for line in caller_lines:
