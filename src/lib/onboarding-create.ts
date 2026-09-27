@@ -413,6 +413,7 @@ export function buildCreateLeadMessage(input: {
   factMeta?: ScanBusinessFactMeta;
   review?: {
     version: string;
+    revisionId: string;
     complete: boolean;
     requiredIds: string[];
     confirmedIds: string[];
