@@ -59,3 +59,42 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **State:** FIX CANDIDATE — execution verification pending.
 - **Reproduction:** legacy knowledge-pack `missing` covered pack fields but not locations/contact details.
 - **Fix:** Step-6 review derives structured identity gaps directly from the validated AgentBlueprint and includes them in the mandatory missing-information acknowledgement.
+
+## 2026-09-27 — Step 6: review finaliser trusted caller-supplied requirement bookkeeping
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** the first Step-6 finaliser validated a review record against IDs supplied by the caller; an externally forged empty requirement set could weaken the lifecycle guard outside the normal UI path.
+- **Fix:** `finalizeAgentReview` now derives the current canonical requirement set internally from the validated blueprint, provenance and missing-data inputs, rebuilds canonical review evidence, and rejects any inconsistent record.
+- **Regression:** forged empty requirement records and records missing newly-required low-confidence/missing checks must fail.
+
+## 2026-09-27 — Step 6: review evidence was not bound to the exact AI output
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** checkbox IDs alone could remain structurally valid after prompt/pack content changed.
+- **Fix:** review records now carry a deterministic `revisionId` derived from the exact validated AgentBlueprint + knowledge pack + final system prompt. Lifecycle stage is normalised so the revision stays stable across the draft-to-reviewed transition.
+- **Note:** the revision ID is a stale-evidence/change detector, not a cryptographic authorization token.
+- **Regression:** changing prompt or pack after confirmation invalidates finalisation; reviewed lifecycle preserves the same revision.
+
+## 2026-09-27 — Step 6: edited values retained stale scanner provenance
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** after a customer changed a scanned value, the UI and persisted metadata could still describe the scanner source/confidence as though it supplied the edited value.
+- **Fix:** editing draft or structured identity fields clears the corresponding `fieldMeta`/`factMeta` provenance and all previous confirmations.
+
+## 2026-09-27 — Step 6: pack edits could leave stale embedded prompt business data
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** accepted knowledge-pack JSON edits updated the pack/blueprint but re-finalised the old prompt text, leaving its embedded business-data section stale.
+- **Fix:** accepted pack edits regenerate the complete role-specific system prompt from the updated pack, then require fresh review confirmations.
+
+## 2026-09-27 — Step 6: reviewed business-name edit could retain old default greeting
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** changing business name while leaving greeting blank could fall back to the pre-edit AgentBlueprint greeting containing the old business name.
+- **Fix:** blank greeting now regenerates from the selected role template and reviewed business name; explicit customer greeting still wins.
+
+## 2026-09-27 — Step 6: final stored prompt was not directly visible
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** the editor showed editable prompt content and explained trusted controls were re-applied, but did not display the exact final stored prompt.
+- **Fix:** add a read-only expandable final system-prompt view so the mandatory AI-output confirmation can cover the actual stored output.
