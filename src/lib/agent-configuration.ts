@@ -39,8 +39,8 @@ function reviewedKnowledgePack(
   draft: ReceptionistDraft,
 ): KnowledgePack {
   const pack = normalizeKnowledgePack({
-    businessName: draft.businessName || blueprint.identity.businessName,
-    greeting: draft.greeting || blueprint.agent.greeting,
+    businessName: draft.businessName.trim() || blueprint.identity.businessName,
+    greeting: draft.greeting.trim() || blueprint.agent.greeting,
     hours: draft.hours,
     services: draft.services,
     faqs: draft.faqs,
