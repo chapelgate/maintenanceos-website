@@ -57,7 +57,7 @@ function validBlueprint(): AgentBlueprintV1 {
         "unrestricted_external_action",
       ],
     },
-    integrations: [{ kind: "telephony", connectorRef: "ttnc_primary", enabled: false }],
+    integrations: [{ kind: "telephony", connectorRef: "telephony_primary", enabled: false }],
     privacy: { recordCalls: false, transcribeCalls: true, retentionDays: 30 },
     lifecycle: { stage: "draft" },
   };
