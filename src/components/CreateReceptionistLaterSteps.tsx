@@ -205,6 +205,7 @@ export function CreateReceptionistLaterSteps({
   const phoneHintId = useId();
   const emailHintId = useId();
   const reviewStatusId = useId();
+  const configEditVersionRef = useRef(0);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -796,6 +797,7 @@ export function CreateReceptionistLaterSteps({
               promptText={promptText}
               packError={packError}
               onPackTextChange={(value) => {
+                const editVersion = ++configEditVersionRef.current;
                 setReviewConfirmedIds([]);
                 setPackText(value);
                 if (!agentBlueprint) {
@@ -808,6 +810,7 @@ export function CreateReceptionistLaterSteps({
                   loadReceptionistDraft(),
                   loadAgentConfiguration(),
                 ]).then(([draftLib, configurationLib]) => {
+                  if (editVersion !== configEditVersionRef.current) return;
                   try {
                     const parsed: unknown = JSON.parse(value);
                     const pack = draftLib.normalizeKnowledgePack(parsed);
@@ -827,10 +830,19 @@ export function CreateReceptionistLaterSteps({
                         nextBlueprint,
                         pack,
                       );
+                    if (editVersion !== configEditVersionRef.current) return;
+                    setReviewConfirmedIds([]);
                     setPackError(null);
-                    // Raw pack edits replace the reviewed draft-field values, so
-                    // scanner provenance for those editable fields is no longer current.
+                    // Raw pack edits replace draft-field values. Preserve only
+                    // structured provenance for identity facts the pack cannot edit.
                     setFieldMeta({});
+                    setFactMeta((current) => {
+                      const next: ScanBusinessFactMeta = {};
+                      if (current.website) next.website = current.website;
+                      if (current.locations) next.locations = current.locations;
+                      if (current.contact) next.contact = current.contact;
+                      return next;
+                    });
                     setAgentBlueprint(nextBlueprint);
                     setPromptText(regeneratedPrompt);
                     setReceptionist({
@@ -846,11 +858,14 @@ export function CreateReceptionistLaterSteps({
                 });
               }}
               onPromptTextChange={(value) => {
+                const editVersion = ++configEditVersionRef.current;
                 setReviewConfirmedIds([]);
                 setPromptText(value);
                 if (!agentBlueprint) return;
                 void loadAgentConfiguration().then(
                   ({ finalizeAgentSystemPrompt }) => {
+                    if (editVersion !== configEditVersionRef.current) return;
+                    setReviewConfirmedIds([]);
                     setReceptionist((current) =>
                       current
                         ? {
@@ -866,6 +881,7 @@ export function CreateReceptionistLaterSteps({
                 );
               }}
               onReset={() => {
+                const editVersion = ++configEditVersionRef.current;
                 setReviewConfirmedIds([]);
                 if (!agentBlueprint) {
                   setPackError(
@@ -874,10 +890,12 @@ export function CreateReceptionistLaterSteps({
                   return;
                 }
                 void loadAgentConfiguration().then(({ buildAgentConfiguration }) => {
+                  if (editVersion !== configEditVersionRef.current) return;
                   const configuration = buildAgentConfiguration({
                     blueprint: agentBlueprint,
                     reviewedDraft: draft,
                   });
+                  setReviewConfirmedIds([]);
                   setAgentBlueprint(configuration.blueprint);
                   applyBuilt(configuration);
                 });
@@ -934,6 +952,8 @@ export function CreateReceptionistLaterSteps({
             <button
               type="button"
               onClick={() => {
+                configEditVersionRef.current += 1;
+                setReviewConfirmedIds([]);
                 setStatus("idle");
                 clearError();
                 setStep(4);
