@@ -69,49 +69,58 @@ test("accepts a strict v1 draft pinned to the current product baseline", () => {
 });
 
 test("fails closed on an older product baseline", () => {
-  const value = validBlueprint() as unknown as Record<string, any>;
-  value.compatibility.productBaselineSha = "cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8";
+  const value = structuredClone(validBlueprint()) as unknown as Record<string, unknown>;
+  const compatibility = value.compatibility as Record<string, unknown>;
+  compatibility.productBaselineSha = "cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8";
   const result = validateAgentBlueprintV1(value);
   assert.equal(result.ok, false);
   if (!result.ok) assert.match(result.errors.join("\n"), /unsupported product baseline/);
 });
 
 test("rejects unexpected fields instead of silently accepting drift", () => {
-  const value = validBlueprint() as unknown as Record<string, any>;
-  value.agent.provider = "gemini";
+  const value = structuredClone(validBlueprint()) as unknown as Record<string, unknown>;
+  const agent = value.agent as Record<string, unknown>;
+  agent.provider = "gemini";
   const result = validateAgentBlueprintV1(value);
   assert.equal(result.ok, false);
   if (!result.ok) assert.match(result.errors.join("\n"), /agent\.provider: unexpected field/);
 });
 
 test("rejects credential-like fields anywhere in the blueprint", () => {
-  const value = validBlueprint() as unknown as Record<string, any>;
-  value.integrations[0].api_key = "never-allowed";
+  const value = structuredClone(validBlueprint()) as unknown as Record<string, unknown>;
+  const integrations = value.integrations as Array<Record<string, unknown>>;
+  integrations[0].api_key = "never-allowed";
   const result = validateAgentBlueprintV1(value);
   assert.equal(result.ok, false);
   if (!result.ok) assert.match(result.errors.join("\n"), /credential-like fields are forbidden/);
 });
 
 test("requires crawled website knowledge to stay marked untrusted", () => {
-  const value = validBlueprint() as unknown as Record<string, any>;
-  value.knowledge.untrustedWebsiteContent = false;
+  const value = structuredClone(validBlueprint()) as unknown as Record<string, unknown>;
+  const knowledge = value.knowledge as Record<string, unknown>;
+  knowledge.untrustedWebsiteContent = false;
   const result = validateAgentBlueprintV1(value);
   assert.equal(result.ok, false);
   if (!result.ok) assert.match(result.errors.join("\n"), /must be true/);
 });
 
 test("prevents permission allow/deny ambiguity", () => {
-  const value = validBlueprint() as unknown as Record<string, any>;
-  value.permissions.allow.push("transfer_call");
+  const value = structuredClone(validBlueprint()) as unknown as Record<string, unknown>;
+  const permissions = value.permissions as Record<string, unknown>;
+  const allow = permissions.allow as string[];
+  allow.push("transfer_call");
   const result = validateAgentBlueprintV1(value);
   assert.equal(result.ok, false);
   if (!result.ok) assert.match(result.errors.join("\n"), /both allowed and denied/);
 });
 
 test("rejects non-HTTPS business and provenance URLs", () => {
-  const value = validBlueprint() as unknown as Record<string, any>;
-  value.identity.website = "http://example.com";
-  value.knowledge.sources[0].url = "http://example.com/source";
+  const value = structuredClone(validBlueprint()) as unknown as Record<string, unknown>;
+  const identity = value.identity as Record<string, unknown>;
+  const knowledge = value.knowledge as Record<string, unknown>;
+  const sources = knowledge.sources as Array<Record<string, unknown>>;
+  identity.website = "http://example.com";
+  sources[0].url = "http://example.com/source";
   const result = validateAgentBlueprintV1(value);
   assert.equal(result.ok, false);
   if (!result.ok) {
@@ -121,9 +130,11 @@ test("rejects non-HTTPS business and provenance URLs", () => {
 });
 
 test("rejects unknown capabilities and lifecycle states", () => {
-  const value = validBlueprint() as unknown as Record<string, any>;
-  value.permissions.allow = ["run_shell"];
-  value.lifecycle.stage = "live_without_test";
+  const value = structuredClone(validBlueprint()) as unknown as Record<string, unknown>;
+  const permissions = value.permissions as Record<string, unknown>;
+  const lifecycle = value.lifecycle as Record<string, unknown>;
+  permissions.allow = ["run_shell"];
+  lifecycle.stage = "live_without_test";
   const result = validateAgentBlueprintV1(value);
   assert.equal(result.ok, false);
   if (!result.ok) {
