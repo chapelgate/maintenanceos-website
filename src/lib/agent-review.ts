@@ -175,7 +175,10 @@ function normaliseLocations(value: string): string[] | undefined {
     .split(/\r?\n/)
     .map((item) => item.trim().replace(/\s+/g, " "))
     .filter(Boolean);
-  const unique = [...new Set(locations)].slice(0, 50);
+  const unique = [...new Set(locations)];
+  if (unique.length > 50) {
+    throw new Error("Reviewed locations must contain 50 entries or fewer.");
+  }
   if (unique.some((item) => item.length > 300)) {
     throw new Error("Each reviewed location must be 300 characters or fewer.");
   }
@@ -193,6 +196,12 @@ export function applyReviewedIdentityToAgentBlueprint(
 
   if (phone.length > 50) {
     throw new Error("Reviewed phone number must be 50 characters or fewer.");
+  }
+  if (phone) {
+    const digits = phone.replace(/\D/g, "");
+    if (!/^\+?[\d\s().-]+$/.test(phone) || digits.length < 8 || digits.length > 15) {
+      throw new Error("Reviewed phone number is invalid.");
+    }
   }
   if (email.length > 254 || (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
     throw new Error("Reviewed email address is invalid.");
