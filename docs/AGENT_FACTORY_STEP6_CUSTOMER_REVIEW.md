@@ -33,8 +33,8 @@
 - `/create` now retains `factMeta` instead of discarding structured provenance.
 - Review/edit now includes submitted website, business name, greeting, locations, phone, contact email, hours, services and FAQs.
 - Optional identity edits are revalidated through AgentBlueprint v1 and cannot change permissions, rules, integrations, privacy, role or compatibility.
-- Final review panel shows the exact saved identity plus blueprint allowed/denied capabilities, transfer policy, enabled integrations and call-data settings. The exact final stored system prompt is available read-only.
-- Draft/identity/pack/prompt/reset edits invalidate all previous review confirmations. Manual fact edits also clear stale scanner provenance.
+- Final review panel shows the exact saved identity plus blueprint allowed/denied capabilities, unavailable-information rule, forbidden actions, transfer policy, enabled integrations and call-data settings. The normalized final knowledge pack and exact final stored system prompt are available read-only.
+- Draft/identity/pack/prompt/reset edits invalidate all previous review confirmations. Manual fact edits clear stale scanner provenance, and a monotonic edit-generation guard rejects stale async callbacks.
 - Lead evidence now includes field provenance, structured fact provenance and the deterministic customer review record.
 - `finalizeAgentReview` independently derives canonical current requirements, rejects incomplete/inconsistent review evidence, and verifies the exact output revision before changing lifecycle.
 - Step-5 configuration generation was corrected to preserve `draft`; Step 6 owns the `reviewed` transition.
@@ -74,7 +74,7 @@ Any failure keeps Step 6 unmerged and unfrozen. The verifier must record the exa
 - Static scope/diff audit: COMPLETE.
 - Static security/lifecycle audit: COMPLETE.
 - Machine-checked static contract audit: **18/18 PASS** (review revision/provenance binding, canonical finalisation, draft-only lifecycle, edit invalidation, fail-closed submit, no provisioning/telephony path, accessibility regression presence).
-- Authorised Desktop Commander execution devices: OFFLINE at latest check.
+- Authorised Desktop Commander execution devices: OFFLINE at latest check. Local Node 22 is available, but the private GitHub connector does not expose a repository materialisation handoff to that execution container; credential-boundary bypass was intentionally not attempted.
 - Existing `cloud-workers` self-hosted Linux pool was inspected. Its approved queue is intentionally Python/control-plane-only and rejects arbitrary payload execution; using it for this Next.js repo would require scope/architecture drift, so it was not modified.
 - Focused real-repository Node tests: PENDING.
 - Full `npm test`: PENDING.
