@@ -153,3 +153,13 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - Clean-tree check: PASS.
 - Verification found and repaired before closure: a schema-invalid prompt-pressure fixture, explicit checkbox accessibility association, and nullable submit-path TypeScript narrowing.
 - No live telephony/provider/carrier/database/infrastructure files were changed.
+
+
+## 2026-09-27 — Step 7: effect-based sandbox reset violated React lint
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Reproduction:** initial Step-7 wiring synchronously reset multiple local sandbox UI states inside a React effect when the review revision changed.
+- **Verifier evidence:** changed-file ESLint rejected the pattern under `react-hooks/set-state-in-effect`.
+- **Root cause:** review-revision invalidation was correctly required, but an effect was the wrong React mechanism for resetting purely local component state.
+- **Fix:** remove the effect and key the sandbox panel by the exact review revision so React remounts the local sandbox UI naturally. Parent qualification state is still invalidated explicitly.
+- **Scope impact:** UI-state/reset logic only; no product runtime or telephony change.
