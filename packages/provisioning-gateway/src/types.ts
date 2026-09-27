@@ -4,6 +4,7 @@ import type {
   SandboxSession,
   SandboxTest,
 } from "../../../src/lib/sandbox-test-call.ts";
+import type { AdapterReadinessRecord } from "./adapters/types.ts";
 
 export const PROVISIONING_QUALIFICATION_VERSION =
   "agent_sandbox_qualification_v1" as const;
@@ -105,6 +106,8 @@ export type ProvisioningStore = {
   getIdempotency(scope: string): IdempotencyEntry | undefined;
   putIdempotency(scope: string, entry: IdempotencyEntry): void;
   getProvisioning(id: string): ProvisioningRecord | undefined;
+  getAdapterReadiness(provisioningId: string): AdapterReadinessRecord | undefined;
+  putAdapterReadiness(record: AdapterReadinessRecord): void;
 };
 
 export type ProvisioningPrincipal = {
