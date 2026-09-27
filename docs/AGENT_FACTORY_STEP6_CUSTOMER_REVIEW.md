@@ -73,7 +73,7 @@ Any failure keeps Step 6 unmerged and unfrozen. The verifier must record the exa
 
 - Static scope/diff audit: COMPLETE.
 - Static security/lifecycle audit: COMPLETE.
-- Machine-checked static contract audit: **18/18 PASS** (review revision/provenance binding, canonical finalisation, draft-only lifecycle, edit invalidation, fail-closed submit, no provisioning/telephony path, accessibility regression presence).
+- Machine-checked static contract audit: **31/31 PASS** (review revision/provenance binding, canonical finalisation, draft-only lifecycle, Step-4/5 async race rejection, pending-state submission blocking, edit invalidation, fail-closed submit, no provisioning/telephony path, accessibility/wiring regression presence).
 - Authorised Desktop Commander execution devices: OFFLINE at latest check. Local Node 22 is available, but the private GitHub connector does not expose a repository materialisation handoff to that execution container; credential-boundary bypass was intentionally not attempted.
 - Existing `cloud-workers` self-hosted Linux pool was inspected. Its approved queue is intentionally Python/control-plane-only and rejects arbitrary payload execution; using it for this Next.js repo would require scope/architecture drift, so it was not modified.
 - Focused real-repository Node tests: PENDING.
