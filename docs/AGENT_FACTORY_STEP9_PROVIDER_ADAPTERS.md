@@ -1,6 +1,6 @@
 # Agent Factory Step 9 — Provider Adapters
 
-**Status:** IMPLEMENTED CANDIDATE — full repository verification required before freeze  
+**Status:** VERIFIED — ready to freeze/save  
 **Scope:** prepare server-side phone/external connector bindings for a Step-8
 `provisioning` record, verify TTNC webhook authenticity, and advance only
 `provisioning -> ready`. Do not activate a carrier route or external action.
@@ -104,10 +104,18 @@ Step 9 generates a `SetApplication` XML activation plan but does not send it.
 
 ## Verification state
 
+- Exact pre-closure engineering candidate: `b30cf5f54913467b0a70655fdfbf1076922b745b`.
+- Real verifier: authorised Desktop Commander device `CG`.
 - Agent-adapter + provisioning focused tests: **39/39 PASS**.
 - Architecture wiring tests: **6/6 PASS**.
+- Repository script suite: **228/228 PASS**.
+- Package/runtime/source suite: **288/288 PASS**.
 - Changed Step-9 ESLint: **PASS**.
-- Full repository tests/build: PENDING final freeze gate.
+- TypeScript / Next.js 16.3.6 production build: **PASS**.
+- Static export: **30/30 routes generated**.
+- Clean-tree check: **PASS**.
+- Latest MaintenanceOS compatibility baseline rechecked before closure: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- No live TTNC API request, carrier route, phone call, external connector action, MaintenanceOS database mutation, deployment or public-launch change occurred.
 
 ## Non-scope
 
