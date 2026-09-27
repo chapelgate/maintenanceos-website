@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import http from "node:http";
 import test from "node:test";
+import {
+  MemoryConnectorRegistry,
+  MemoryTtncSecretRegistry,
+} from "../../agent-adapters/src/registry.ts";
 import { signProvisioningRequest } from "./auth.ts";
 import { createProvisioningServer } from "./server.ts";
 import { MemoryProvisioningStore } from "./store.ts";
@@ -75,6 +79,7 @@ function signedHeaders(
   body: string,
   nonce: string,
   idempotencyKey: string,
+  pathname = "/v1/provisioning/requests",
 ): Record<string, string> {
   const timestamp = String(NOW);
   return {
@@ -88,6 +93,7 @@ function signedHeaders(
       timestamp,
       nonce,
       idempotencyKey,
+      pathname,
       body,
     }),
   };
@@ -287,6 +293,106 @@ test("cross-tenant signed request is forbidden", async () => {
       });
       assert.equal(res.status, 403);
       assert.equal(res.body.error, "tenant_forbidden");
+    },
+  );
+});
+
+
+test("signed adapter preparation advances provisioning to ready without carrier mutation", async () => {
+  const store = new MemoryProvisioningStore();
+  const connectorRegistry = new MemoryConnectorRegistry([
+    {
+      ref: "phone-main",
+      kind: "telephony",
+      provider: "ttnc",
+      configured: true,
+      existingNumber: "02922716489",
+      callApplicationId: 999,
+      webhookUrl:
+        "https://agent.example/v1/telephony/ttnc/phone-main/webhook",
+    },
+    {
+      ref: "calendar-main",
+      kind: "calendar",
+      provider: "google-calendar-v2",
+      configured: true,
+    },
+  ]);
+  const ttncSecrets = new MemoryTtncSecretRegistry({
+    "phone-main": "0123456789abcdef0123456789abcdef",
+  });
+
+  await withServer(
+    {
+      enabled: true,
+      principal: PRINCIPAL,
+      store,
+      connectorRegistry,
+      ttncSecrets,
+      nowMs: () => NOW,
+      now: () => new Date("2026-09-27T19:45:00.000Z"),
+    },
+    async (base) => {
+      const envelope = await validProvisioningEnvelope();
+      const provisionBody = JSON.stringify(envelope);
+      const provisioned = await request(base, {
+        method: "POST",
+        headers: signedHeaders(
+          provisionBody,
+          "nonce_step9_provision1",
+          "idem_step9_provision1",
+        ),
+        body: provisionBody,
+      });
+      assert.equal(provisioned.status, 201);
+      const provisioningId = (
+        provisioned.body.data as Record<string, unknown>
+      ).provisioningId;
+      assert.equal(typeof provisioningId, "string");
+
+      const path = "/v1/provisioning/adapters/prepare";
+      const adapterBody = JSON.stringify({
+        provisioningId,
+        connectorRefs: ["phone-main", "calendar-main"],
+      });
+      const prepared = await request(base, {
+        method: "POST",
+        path,
+        headers: signedHeaders(
+          adapterBody,
+          "nonce_step9_prepare001",
+          "idem_step9_prepare1",
+          path,
+        ),
+        body: adapterBody,
+      });
+      assert.equal(prepared.status, 201);
+      const data = prepared.body.data as Record<string, unknown>;
+      assert.equal(data.status, "ready");
+      assert.equal(data.blueprintStage, "ready");
+      assert.equal(data.activationRequired, true);
+      assert.equal(data.replayed, false);
+      assert.doesNotMatch(
+        JSON.stringify(data),
+        /02922716489|SetApplication|0123456789abcdef/,
+      );
+
+      const replay = await request(base, {
+        method: "POST",
+        path,
+        headers: signedHeaders(
+          adapterBody,
+          "nonce_step9_prepare002",
+          "idem_step9_prepare1",
+          path,
+        ),
+        body: adapterBody,
+      });
+      assert.equal(replay.status, 200);
+      assert.equal(
+        (replay.body.data as Record<string, unknown>).replayed,
+        true,
+      );
     },
   );
 });
