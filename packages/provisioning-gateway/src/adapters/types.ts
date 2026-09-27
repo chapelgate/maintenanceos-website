@@ -58,6 +58,7 @@ export type AdapterReadinessRecord = {
   tenantRef: string;
   createdAt: string;
   complete: boolean;
+  bindingsHash: string;
   bindings: AdapterBinding[];
   checks: AdapterCheck[];
   failedCheckIds: string[];
