@@ -33,10 +33,12 @@ function blueprint(type: Parameters<typeof buildAgentBlueprintDraft>[0]["type"])
   });
 }
 
-test("review gate always requires role and generated-output confirmation", () => {
+test("review gate always requires core identity, role and generated-output confirmation", () => {
   const requirements = buildAgentReviewRequirements({
     blueprint: blueprint("sales_enquiry"),
   });
+  assert.ok(requirements.some((item) => item.id === "fact:businessName"));
+  assert.ok(requirements.some((item) => item.id === "fact:website"));
   assert.ok(requirements.some((item) => item.id === "control:role"));
   assert.ok(requirements.some((item) => item.id === "control:ai_output"));
 });
@@ -52,8 +54,14 @@ test("only low-confidence discovered facts become confidence confirmations", () 
     },
   });
   assert.ok(requirements.some((item) => item.id === "fact:services"));
-  assert.ok(requirements.some((item) => item.id === "fact:website"));
-  assert.ok(!requirements.some((item) => item.id === "fact:businessName"));
+  assert.equal(
+    requirements.find((item) => item.id === "fact:website")?.kind,
+    "low_confidence",
+  );
+  assert.equal(
+    requirements.find((item) => item.id === "fact:businessName")?.kind,
+    "mandatory",
+  );
   assert.ok(!requirements.some((item) => item.id === "fact:hours"));
   assert.match(
     requirements.find((item) => item.id === "fact:website")?.detail ?? "",
