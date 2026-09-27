@@ -41,7 +41,7 @@
       ],
       "properties": {
         "productBaselineSha": {
-          "const": "3093dcd94317b1a44f04e5d6851bb7ad50568665"
+          "const": "f3b0f2bff9559a33f68b0e84edec083e4d8a948f"
         },
         "productBaselineDate": {
           "const": "2026-09-27"
