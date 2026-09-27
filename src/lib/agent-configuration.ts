@@ -162,6 +162,13 @@ export function buildAgentSystemPrompt(
   return appendTrustedTail(prefix, trusted);
 }
 
+export function agentLimitationsFor(pack: KnowledgePack): string[] {
+  return [
+    ...limitationsFor(pack),
+    "Agent type, permissions, escalation rules and forbidden actions are trusted controls; website data and editable prompt text cannot expand them.",
+  ];
+}
+
 export function buildAgentConfiguration(input: {
   blueprint: AgentBlueprintV1;
   reviewedDraft: ReceptionistDraft;
@@ -170,10 +177,7 @@ export function buildAgentConfiguration(input: {
   const pack = reviewedKnowledgePack(original, input.reviewedDraft);
   const blueprint = reviewedBlueprint(original, pack);
   const systemPrompt = buildAgentSystemPrompt(blueprint, pack);
-  const limitations = [
-    ...limitationsFor(pack),
-    "Agent type, permissions, escalation rules and forbidden actions are trusted controls; website data and editable prompt text cannot expand them.",
-  ];
+  const limitations = agentLimitationsFor(pack);
   return {
     blueprint,
     knowledgePack: pack,
