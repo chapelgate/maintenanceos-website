@@ -145,6 +145,23 @@ test("structured facts expose contact and locations without changing legacy draf
   assert.match(result.draft.faqs ?? "", /hello@northdock\.example/);
 });
 
+
+test("structured phone facts dedupe UK local/international forms and reject labelled text", () => {
+  const html = `<html><head><script type="application/ld+json">
+    {
+      "@type":"LocalBusiness",
+      "name":"Phone Test Ltd",
+      "telephone":["+44 151 555 0199","0151 555 0199"]
+    }
+  </script></head><body>
+    <a href="tel:01515550199">Call 0151 555 0199</a>
+  </body></html>`;
+  const result = extractDraftFromHtml([
+    { url: "https://phone-test.example/", html },
+  ]);
+  assert.deepEqual(result.facts.contact?.phones, ["+44 151 555 0199"]);
+});
+
 test("structured facts reject invalid contact values instead of promoting them", () => {
   const html = `<html><head><script type="application/ld+json">
     {"@type":"LocalBusiness","name":"Bad Contact Co","telephone":"123","email":"not-an-email"}
