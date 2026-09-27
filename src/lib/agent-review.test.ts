@@ -171,6 +171,19 @@ test("review record fails closed until every current requirement is confirmed", 
   assert.deepEqual(complete.missingIds, []);
 });
 
+test("review evidence is deterministic regardless of checkbox order", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("sales_enquiry"),
+  });
+  const reversed = requirements.map((item) => item.id).reverse();
+  const record = buildAgentReviewRecord(requirements, reversed);
+  assert.deepEqual(
+    record.confirmedIds,
+    requirements.map((item) => item.id),
+  );
+  assert.equal(record.complete, true);
+});
+
 test("identity edits can change locations/contact but never control-plane fields", () => {
   const original = blueprint("maintenance_desk");
   const next = applyReviewedIdentityToAgentBlueprint(original, {
