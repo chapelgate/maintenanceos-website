@@ -92,7 +92,7 @@ function DraftReviewField({
 }: {
   label: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   meta?: DraftFieldMeta;
   hintId: string;
   rows?: number;
@@ -117,7 +117,9 @@ function DraftReviewField({
         <textarea
           rows={rows}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={
+            readOnly || !onChange ? undefined : (e) => onChange(e.target.value)
+          }
           placeholder={placeholder}
           aria-describedby={describedBy}
           readOnly={readOnly}
@@ -126,7 +128,9 @@ function DraftReviewField({
       ) : (
         <input
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={
+            readOnly || !onChange ? undefined : (e) => onChange(e.target.value)
+          }
           aria-describedby={describedBy}
           readOnly={readOnly}
           className={fieldClass}
@@ -604,7 +608,6 @@ export function CreateReceptionistLaterSteps({
             <DraftReviewField
               label="Website"
               value={facts.website ?? businessUrl}
-              onChange={() => {}}
               hintId={websiteHintId}
               hint={reviewFactHint(
                 factMeta.website,
