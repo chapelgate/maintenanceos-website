@@ -24,13 +24,13 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.match(create, /label: "Pack"/);
 
   assert.match(flow, /CREATE_JOURNEY_STEPS/);
-  assert.match(flow, /Website → Check → Review → Pack/);
+  assert.match(flow, /Website → Check → Choose → Review → Pack/);
   assert.match(flow, /do not invent extracted hours/);
   assert.match(flow, /scripted sandbox demo is under testing/);
   assert.match(flow, /not a live customer call/i);
   assert.doesNotMatch(flow, /always-on service/);
 
-  assert.match(page, /Website → Check → Review → Pack/);
+  assert.match(page, /Website → Check → Choose → Review → Pack/);
   assert.match(page, /scripted sandbox/);
   assert.match(page, /live phone number/);
   assert.match(page, /Create from website/);
@@ -50,7 +50,7 @@ test("features page renders inventory-driven VERIFIED / UNDER TEST cards", () =>
   assert.match(page, /FeatureStatusChip/);
   assert.match(page, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(page, /marketingCardsByGroup/);
-  assert.match(copy, /Website → Check → Review → Pack/);
+  assert.match(copy, /Website → Check → Choose → Review → Pack/);
   assert.match(page, /Create from website/);
   assert.match(page, /Join launch list/);
   assert.match(page, /funnelPageMetadata\("features"\)/);
@@ -92,7 +92,7 @@ test("home CTA strip names the website-to-pack path", () => {
 test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   const matrix = read("docs/competitive/fonio-parity-matrix.md");
   assert.match(matrix, /Were lagging/);
-  assert.match(matrix, /Website → Check → Review → Pack/);
+  assert.match(matrix, /Website → Check → Choose → Review → Pack/);
   assert.match(matrix, /HAVE \/ UNDER TEST \/ COMING/);
   assert.match(matrix, /narrative aligned; still not a live phone/);
   assert.match(matrix, /Demo \/ “see it live” CTAs vs `\/create` funnel/);
@@ -345,7 +345,7 @@ test("demo page names the website-to-pack path and does not book a live phone", 
 
   assert.match(create, /label: "Website"/);
   assert.match(page, /CREATE_JOURNEY_STEPS/);
-  assert.match(page, /Website → Check → Review → Pack/);
+  assert.match(page, /Website → Check → Choose → Review → Pack/);
   assert.match(page, /website URL → check → review draft → knowledge pack/);
   assert.match(page, /optional scripted sandbox/);
   assert.match(page, /Create from website/);
