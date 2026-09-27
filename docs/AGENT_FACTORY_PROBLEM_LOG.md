@@ -98,3 +98,22 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **State:** FIX CANDIDATE — execution verification pending.
 - **Reproduction:** the editor showed editable prompt content and explained trusted controls were re-applied, but did not display the exact final stored prompt.
 - **Fix:** add a read-only expandable final system-prompt view so the mandatory AI-output confirmation can cover the actual stored output.
+
+## 2026-09-27 — Step 6: stale review evidence could outlive configuration/provenance changes
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Risk:** checkbox IDs alone did not prove that the same blueprint, pack, protected prompt and provenance were still being reviewed after later edits.
+- **Fix:** deterministic review revision now binds blueprint + knowledge pack + protected system prompt + fact/field provenance + missing-data state. Finalisation recomputes the canonical revision and requirements.
+- **Boundary:** revision ID is a stale-change/audit fingerprint, not a server authentication signature.
+
+## 2026-09-27 — Step 6: review helpers accepted later lifecycle stages
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Risk:** a future caller could reuse edit/finalise helpers against a reviewed/provisioning/active blueprint.
+- **Fix:** customer identity edits and lifecycle finalisation now require `lifecycle.stage=draft`; non-draft inputs fail closed.
+
+## 2026-09-27 — Step 6: raw pack edits retained stale scanner provenance
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Risk:** customer-edited pack values could still be labelled with confidence metadata from the pre-edit scanner result.
+- **Fix:** accepted raw pack edits clear draft-field scanner provenance and regenerate the protected system prompt before review confirmations can be re-entered.
