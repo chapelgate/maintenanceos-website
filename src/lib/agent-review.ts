@@ -270,7 +270,12 @@ export function buildAgentReviewRequirements(input: {
     });
   }
 
-  const missing = [...new Set(input.missing ?? [])].filter(Boolean);
+  const missingSet = new Set((input.missing ?? []).filter(Boolean));
+  if (!blueprint.identity.locations?.length) missingSet.add("locations");
+  if (!blueprint.identity.contact?.phone && !blueprint.identity.contact?.email) {
+    missingSet.add("contact details");
+  }
+  const missing = [...missingSet];
   if (missing.length) {
     requirements.push({
       id: "control:missing_data",
