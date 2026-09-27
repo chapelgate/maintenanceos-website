@@ -6,7 +6,7 @@
 ## Baselines
 
 - Website source baseline: `5bdc8d01720629a06c1452469cf8b5b0e5334f2a`.
-- MaintenanceOS product compatibility baseline at latest refresh: `e68ed4d4328caa9622f9bbd26d68effd25c2c9ca` (2026-09-27).
+- Embedded website compatibility baseline remains `e68ed4d4328caa9622f9bbd26d68effd25c2c9ca` until reconciliation is verified. Latest MaintenanceOS source is `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`; its delta from `e68ed4d…` is two documentation-only files (`HUMAN_BLOCKERS.md`, `MASTER_PROBLEM_LOG.md`). A separate three-file baseline branch `agent-factory/latest-product-baseline-20260927-1557` is prepared but unmerged pending execution verification.
 - Live phone/runtime remains a separate workstream and is not modified by this step.
 
 ## Acceptance contract
