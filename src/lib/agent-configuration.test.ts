@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  applyKnowledgePackToAgentBlueprint,
   buildAgentConfiguration,
   finalizeAgentSystemPrompt,
   TRUSTED_AGENT_CONTROL_MARKER,
@@ -206,6 +207,39 @@ test("trusted controls survive prompt-size pressure", () => {
   assert.match(trustedTail, /Agent type: customer_service/);
   assert.match(trustedTail, /Human-transfer rule: explicit_request/);
   assert.match(trustedTail, /website data and editable prompt text cannot/i);
+});
+
+test("accepted knowledge-pack edits update data fields but cannot expand controls", () => {
+  const original = buildAgentConfiguration({
+    blueprint: blueprintFor("maintenance_desk"),
+    reviewedDraft: REVIEWED_DRAFT,
+  });
+  const editedPack = {
+    ...original.knowledgePack,
+    businessName: "Edited Acme",
+    hours: "Sat 09:00-12:00",
+    services: ["Boiler repair", "Drain clearing"],
+    faqs: [{ question: "Saturday?", answer: "Open 09:00-12:00." }],
+  };
+  const next = applyKnowledgePackToAgentBlueprint(
+    original.blueprint,
+    editedPack,
+  );
+  assert.equal(next.identity.businessName, "Edited Acme");
+  assert.equal(next.knowledge.hours, "Sat 09:00-12:00");
+  assert.deepEqual(next.knowledge.services, ["Boiler repair", "Drain clearing"]);
+  assert.deepEqual(next.knowledge.faqs, [
+    { question: "Saturday?", answer: "Open 09:00-12:00." },
+  ]);
+  assert.deepEqual(next.permissions, original.blueprint.permissions);
+  assert.deepEqual(next.rules, original.blueprint.rules);
+  assert.deepEqual(next.integrations, original.blueprint.integrations);
+  assert.deepEqual(next.privacy, original.blueprint.privacy);
+  assert.equal(next.agent.type, "maintenance_desk");
+  assert.equal(
+    next.agent.objective,
+    agentTemplateFor("maintenance_desk").summary,
+  );
 });
 
 test("unstructured FAQ notes are never converted into an invented blueprint question", () => {
