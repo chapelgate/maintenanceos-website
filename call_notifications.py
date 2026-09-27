@@ -181,12 +181,19 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         re.IGNORECASE,
     )
     standalone_name = None
+    leading_name = None
     for line in caller_lines:
         candidate = line.strip(" ,.")
         if re.fullmatch(r"[A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){1,3}", candidate, re.IGNORECASE):
             if not any(ch.isdigit() for ch in candidate):
                 standalone_name = candidate
                 break
+        match = re.match(
+            r"^\s*([A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){1,2})\s+\d",
+            line,
+        )
+        if match and leading_name is None:
+            leading_name = match.group(1).strip()
     name_value = (
         explicit_caller_names[-1].strip()
         if explicit_caller_names
@@ -199,7 +206,11 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                 else (
                     standalone_name
                     if standalone_name
-                    else (confirmed_name[-1].strip() if confirmed_name and readback_confirmed else "")
+                    else (
+                        leading_name
+                        if leading_name
+                        else (confirmed_name[-1].strip() if confirmed_name and readback_confirmed else "")
+                    )
                 )
             )
         )
