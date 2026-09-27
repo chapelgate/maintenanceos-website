@@ -10,6 +10,7 @@ import {
   applyReviewedIdentityToAgentBlueprint,
   buildAgentReviewRecord,
   buildAgentReviewRequirements,
+  finalizeAgentReview,
   reviewFactHint,
   type ReviewedIdentityDraft,
 } from "@/lib/agent-review";
@@ -353,6 +354,19 @@ export function CreateReceptionistLaterSteps({
       setStatus("error");
       return;
     }
+    let reviewedBlueprint: AgentBlueprintV1;
+    try {
+      reviewedBlueprint = finalizeAgentReview(agentBlueprint, review.record);
+    } catch (reviewError) {
+      setError(
+        reviewError instanceof Error
+          ? reviewError.message
+          : "The customer review could not be finalised safely.",
+      );
+      setStatus("error");
+      return;
+    }
+
     setStatus("submitting");
     const result = await submitLead({
       leadType: "create_receptionist",
@@ -366,7 +380,7 @@ export function CreateReceptionistLaterSteps({
         fieldMeta,
         factMeta,
         review: review.record,
-        agentBlueprint,
+        agentBlueprint: reviewedBlueprint,
         receptionist,
       }),
       website: "",
