@@ -5,12 +5,14 @@ import type {
   ProvisioningRecord,
   ProvisioningStore,
 } from "./types.ts";
+import type { AdapterReadinessRecord } from "./adapters/types.ts";
 
 type PersistedState = {
   version: 1;
   nonces: Record<string, number>;
   idempotency: Record<string, IdempotencyEntry>;
   provisionings: Record<string, ProvisioningRecord>;
+  adapterReadiness: Record<string, AdapterReadinessRecord>;
 };
 
 function emptyState(): PersistedState {
@@ -19,6 +21,7 @@ function emptyState(): PersistedState {
     nonces: {},
     idempotency: {},
     provisionings: {},
+    adapterReadiness: {},
   };
 }
 
@@ -62,6 +65,15 @@ export class MemoryProvisioningStore implements ProvisioningStore {
     const found = this.state.provisionings[id];
     return found ? clone(found) : undefined;
   }
+
+  getAdapterReadiness(provisioningId: string): AdapterReadinessRecord | undefined {
+    const found = this.state.adapterReadiness[provisioningId];
+    return found ? clone(found) : undefined;
+  }
+
+  putAdapterReadiness(record: AdapterReadinessRecord): void {
+    this.state.adapterReadiness[record.provisioningId] = clone(record);
+  }
 }
 
 function parseState(raw: string): PersistedState {
@@ -73,11 +85,19 @@ function parseState(raw: string): PersistedState {
     !parsed.idempotency ||
     typeof parsed.idempotency !== "object" ||
     !parsed.provisionings ||
-    typeof parsed.provisionings !== "object"
+    typeof parsed.provisionings !== "object" ||
+    (parsed.adapterReadiness !== undefined &&
+      (!parsed.adapterReadiness || typeof parsed.adapterReadiness !== "object"))
   ) {
     throw new Error("Provisioning gateway state file is invalid.");
   }
-  return parsed as PersistedState;
+  return {
+    version: 1,
+    nonces: parsed.nonces,
+    idempotency: parsed.idempotency,
+    provisionings: parsed.provisionings,
+    adapterReadiness: parsed.adapterReadiness ?? {},
+  };
 }
 
 export class FileProvisioningStore implements ProvisioningStore {
@@ -145,6 +165,16 @@ export class FileProvisioningStore implements ProvisioningStore {
   getProvisioning(id: string): ProvisioningRecord | undefined {
     const found = this.state.provisionings[id];
     return found ? clone(found) : undefined;
+  }
+
+  getAdapterReadiness(provisioningId: string): AdapterReadinessRecord | undefined {
+    const found = this.state.adapterReadiness[provisioningId];
+    return found ? clone(found) : undefined;
+  }
+
+  putAdapterReadiness(record: AdapterReadinessRecord): void {
+    this.state.adapterReadiness[record.provisioningId] = clone(record);
+    this.persist();
   }
 }
 
