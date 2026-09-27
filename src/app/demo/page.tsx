@@ -14,6 +14,7 @@ export const metadata = funnelPageMetadata("demo");
 const FUNNEL_COPY = [
   "Paste a public site URL and an email so we can record the early access request.",
   "If a scan service is configured we ask it for a draft. If not, the crawl is queued — we do not invent extracted hours or services.",
+  "Choose one bounded AI role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom. This does not activate a live agent.",
   "You edit the draft before anything is stored. Empty fields were not invented.",
   "The reviewed draft becomes a knowledge pack and system prompt. Missing hours or services stay missing.",
 ] as const;
@@ -45,7 +46,7 @@ export default function DemoPage() {
       <PageHero
         eyebrow="Pre-launch. Not a live phone."
         title="Start from your website URL."
-        lede="The honest path is website URL → check → review draft → knowledge pack → optional scripted sandbox → early access. Create from your site, or request a human briefing. This page does not assign a live number."
+        lede="The honest path is website URL → check → choose role → review draft → knowledge pack → optional scripted sandbox → early access. Create from your site, or request a human briefing. This page does not assign a live number."
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">
