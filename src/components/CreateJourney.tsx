@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { CreateReceptionistForm } from "@/components/CreateReceptionistForm";
 import { SandboxTestCallPanel } from "@/components/SandboxTestCallPanel";
 import {
@@ -8,6 +8,10 @@ import {
   type ReceptionistDraft,
 } from "@/lib/onboarding-create";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
+import type {
+  AgentSandboxQualificationResult,
+  AgentSandboxReviewSubject,
+} from "@/lib/agent-sandbox-qualification";
 
 /**
  * Lifts the /create draft and receptionist pack so the sandbox panel can
@@ -18,15 +22,34 @@ export function CreateJourney() {
   const [receptionist, setReceptionist] = useState<ReceptionistDraftResult | null>(
     null,
   );
+  const [reviewSubject, setReviewSubject] =
+    useState<AgentSandboxReviewSubject | null>(null);
+  const [sandboxQualification, setSandboxQualification] =
+    useState<AgentSandboxQualificationResult | null>(null);
+
+  const onReviewSubjectChange = useCallback(
+    (next: AgentSandboxReviewSubject | null) => {
+      setReviewSubject(next);
+      setSandboxQualification(null);
+    },
+    [],
+  );
 
   return (
     <>
       <CreateReceptionistForm
         onDraftChange={setDraft}
         onReceptionistChange={setReceptionist}
+        onReviewSubjectChange={onReviewSubjectChange}
+        sandboxQualification={sandboxQualification}
       />
       <div className="mt-6">
-        <SandboxTestCallPanel draft={draft} receptionist={receptionist} />
+        <SandboxTestCallPanel
+          draft={draft}
+          receptionist={receptionist}
+          reviewSubject={reviewSubject}
+          onQualificationChange={setSandboxQualification}
+        />
       </div>
     </>
   );
