@@ -1,6 +1,6 @@
 # Agent Factory Step 8 — Secure Provisioning Gateway
 
-**Status:** IMPLEMENTED CANDIDATE — full repository verification required before freeze  
+**Status:** VERIFIED — ready to freeze/save  
 **Scope:** create the authenticated, replay-safe, tenant-isolated server boundary
 from a verified `sandbox_passed` AgentBlueprint into the provisioning control
 plane. Do not attach telephony/integrations or activate a live agent.
@@ -78,12 +78,22 @@ plane. Do not attach telephony/integrations or activate a live agent.
 - Four explicit-`any` test casts failed lint. Fixed by typing the fixture as the
   real provisioning input.
 
-## Focused verification so far
+## Verification state
 
+- Exact pre-closure engineering candidate: `a6f1414098aad6de8b4910bf6386f63060b74dd1`.
+- Exact Git tree verified: `bba53436eafa21ab6b6fa2d89bb0978a5641e59b`.
+- Real verifier: authorised Desktop Commander device `CG`.
 - Gateway security/runtime tests: **19/19 PASS**.
 - Architecture wiring tests: **6/6 PASS**.
+- Repository script suite: **222/222 PASS**.
+- Package/runtime/source suite: **268/268 PASS**.
 - Changed-package ESLint: **PASS**.
-- Full repository tests/build: PENDING final freeze gate.
+- TypeScript / Next.js 16.3.6 production build: **PASS**.
+- Static export: **30/30 routes generated**.
+- Exact tree integrity before/after verification: **PASS**.
+- Latest MaintenanceOS compatibility baseline rechecked before freeze: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- No live telephony/provider/carrier/database/deployment/infrastructure mutation occurred.
+- Verifier DNS/thread exhaustion prevented a normal fetch, so the candidate was reconstructed from GitHub blobs and accepted only after its local Git tree hash exactly matched the GitHub commit tree.
 
 ## Non-scope
 
