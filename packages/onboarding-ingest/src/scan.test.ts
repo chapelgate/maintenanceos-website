@@ -182,6 +182,58 @@ test("runScan happy path returns /create draft fields only from fetched HTML", a
   }
 });
 
+
+test("runScan returns structured Agent Factory facts alongside the legacy draft", async () => {
+  const html = `<html><head><script type="application/ld+json">
+  {
+    "@type":"LocalBusiness",
+    "name":"Structured Test Ltd",
+    "telephone":"0151 555 0199",
+    "email":"hello@structured.example",
+    "address":{
+      "@type":"PostalAddress",
+      "streetAddress":"1 Test Street",
+      "addressLocality":"Liverpool",
+      "postalCode":"L1 1AA"
+    },
+    "areaServed":"Wirral",
+    "openingHours":"Mo-Fr 09:00-17:00",
+    "serviceType":"Repairs"
+  }
+  </script></head><body><h1>Structured Test Ltd</h1></body></html>`;
+
+  const result = await runScan("https://structured.example/", {
+    enabled: true,
+    ...pages({
+      "https://structured.example/robots.txt": robotsPage(
+        "https://structured.example/robots.txt",
+        "User-agent: *\nAllow: /\n",
+      ),
+      "https://structured.example/": htmlPage(
+        "https://structured.example/",
+        html,
+      ),
+    }),
+  });
+
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.equal(result.draft.businessName, "Structured Test Ltd");
+    assert.equal(result.facts?.website, "https://structured.example/");
+    assert.deepEqual(result.facts?.contact, {
+      phones: ["0151 555 0199"],
+      emails: ["hello@structured.example"],
+    });
+    assert.deepEqual(result.facts?.locations, [
+      "1 Test Street, Liverpool, L1 1AA",
+      "Wirral",
+    ]);
+    assert.deepEqual(result.facts?.services, ["Repairs"]);
+    assert.equal(result.factMeta?.contact?.source, "jsonld");
+    assert.equal(result.factMeta?.locations?.confidence, "high");
+  }
+});
+
 test("robots.txt Disallow: / is honoured and invents nothing", async () => {
   const result = await runScan("https://blocked.example/", {
     enabled: true,
