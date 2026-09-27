@@ -37,9 +37,11 @@ export function AgentTypeSelector({
                   value={template.type}
                   checked={checked}
                   onChange={() => onSelect(template.type)}
+                  aria-label={template.label}
                   className="mt-1"
                 />
                 <span>
+                  <span className="sr-only">Agent role: </span>
                   <span className="block font-medium text-ink">
                     {template.label}
                   </span>
