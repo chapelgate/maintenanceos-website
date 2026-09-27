@@ -26,6 +26,25 @@ export type ReceptionistDraft = {
 
 export type PartialDraft = Partial<ReceptionistDraft>;
 
+/** Structured facts for Agent Factory intake. Values remain untrusted until reviewed. */
+export type BusinessFacts = {
+  website?: string;
+  businessName?: string;
+  locations?: string[];
+  contact?: {
+    phones?: string[];
+    emails?: string[];
+  };
+  services?: string[];
+  hours?: string;
+  faqs?: Array<{ question: string; answer: string }>;
+};
+
+export type BusinessFactKey = keyof BusinessFacts;
+export type BusinessFactMeta = Partial<
+  Record<BusinessFactKey, FieldMeta | { confidence: FieldConfidence; source: "fetched_url" }>
+>;
+
 /** Where a draft string was copied from. Advisory only — never a system prompt. */
 export const FIELD_SOURCES = [
   "jsonld",
@@ -64,6 +83,10 @@ export type ScanSuccess = {
   draft: PartialDraft;
   warnings: ScanWarning[];
   sources: ScanPageSource[];
+  /** Structured Agent Factory facts; additive and backward-compatible with `draft`. */
+  facts?: BusinessFacts;
+  /** Provenance for structured facts. */
+  factMeta?: BusinessFactMeta;
   /** Optional provenance for filled draft keys. `/create` ignores unknown keys. */
   fieldMeta?: DraftFieldMeta;
 };

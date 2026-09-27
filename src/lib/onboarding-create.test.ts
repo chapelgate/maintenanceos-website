@@ -11,6 +11,8 @@ import {
   emptyHoursOrServicesNote,
   hostnameBusinessHint,
   isCreateScanReady,
+  mapScanBusinessFactMeta,
+  mapScanBusinessFacts,
   mapScanFieldMeta,
   mapScanResponse,
   normalisePublicUrl,
@@ -73,6 +75,74 @@ test("mapScanFieldMeta copies only known provenance and ignores junk", () => {
       services: { source: "nav", confidence: "low" },
     },
   );
+});
+
+
+test("mapScanBusinessFacts allow-lists structured intake and rejects malformed values", () => {
+  assert.deepEqual(mapScanBusinessFacts(null), {});
+  assert.deepEqual(
+    mapScanBusinessFacts({
+      facts: {
+        website: "https://acme.example/",
+        businessName: " Acme Plumbing ",
+        locations: [" Liverpool ", "Liverpool"],
+        contact: {
+          phones: ["+44 151 555 0100", "0151 555 0100", "Call 0151 555 0100"],
+          emails: ["hello@acme.example", "not-an-email"],
+          api_key: "must-not-map",
+        },
+        services: ["Boiler repair", "Boiler repair"],
+        hours: " Mon-Fri 08:00-17:00 ",
+        faqs: [
+          { question: "Do you cover Wirral?", answer: "Yes." },
+          { question: "", answer: "drop" },
+        ],
+        unexpected: "ignore",
+      },
+    }),
+    {
+      website: "https://acme.example/",
+      businessName: "Acme Plumbing",
+      locations: ["Liverpool"],
+      contact: {
+        phones: ["+44 151 555 0100"],
+        emails: ["hello@acme.example"],
+      },
+      services: ["Boiler repair"],
+      hours: "Mon-Fri 08:00-17:00",
+      faqs: [{ question: "Do you cover Wirral?", answer: "Yes." }],
+    },
+  );
+
+  assert.deepEqual(
+    mapScanBusinessFacts({
+      facts: { website: "http://acme.example/", contact: { emails: ["bad"] } },
+    }),
+    {},
+  );
+});
+
+test("mapScanBusinessFactMeta keeps provenance only for surviving facts", () => {
+  const body = {
+    facts: {
+      website: "https://acme.example/",
+      businessName: "Acme",
+      locations: ["Liverpool"],
+    },
+    factMeta: {
+      website: { source: "fetched_url", confidence: "high" },
+      businessName: { source: "jsonld", confidence: "high" },
+      locations: { source: "microdata", confidence: "medium" },
+      contact: { source: "contact_link", confidence: "high" },
+      services: { source: "invented", confidence: "high" },
+    },
+  };
+  const facts = mapScanBusinessFacts(body);
+  assert.deepEqual(mapScanBusinessFactMeta(body, facts), {
+    website: { source: "fetched_url", confidence: "high" },
+    businessName: { source: "jsonld", confidence: "high" },
+    locations: { source: "microdata", confidence: "medium" },
+  });
 });
 
 test("create journey steps name the next action without a live-phone claim", () => {
