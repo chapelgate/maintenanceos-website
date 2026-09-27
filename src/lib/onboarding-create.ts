@@ -410,6 +410,7 @@ export function buildCreateLeadMessage(input: {
   draft: ReceptionistDraft;
   scanNote: string;
   fieldMeta?: ScanDraftFieldMeta;
+  agentBlueprint?: unknown;
   receptionist?: {
     knowledgePack: unknown;
     systemPrompt: string;
@@ -425,6 +426,9 @@ export function buildCreateLeadMessage(input: {
   ];
   if (input.fieldMeta && Object.keys(input.fieldMeta).length) {
     parts.push("Field meta JSON:", JSON.stringify(input.fieldMeta, null, 2));
+  }
+  if (input.agentBlueprint) {
+    parts.push("Agent blueprint JSON:", JSON.stringify(input.agentBlueprint, null, 2));
   }
   if (input.receptionist) {
     parts.push(
