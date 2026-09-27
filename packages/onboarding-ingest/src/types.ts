@@ -28,7 +28,7 @@ export type PartialDraft = Partial<ReceptionistDraft>;
 
 /** Structured facts for Agent Factory intake. Values remain untrusted until reviewed. */
 export type BusinessFacts = {
-  website: string;
+  website?: string;
   businessName?: string;
   locations?: string[];
   contact?: {
