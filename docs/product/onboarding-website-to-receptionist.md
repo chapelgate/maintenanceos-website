@@ -13,7 +13,7 @@
 6. Choose voice + language (UK English default).
 7. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone. A browser mock is demonstration-only. When a configured sandbox companion returns the exact reviewed pack/prompt and deterministic scripted transcript, Step 7 can record qualification for that exact review revision and advance `reviewed → sandbox_passed`.
 8. Internal provisioning handoff — **not a browser step**. A trusted server-side caller may submit the complete reviewed/sandbox evidence to `packages/provisioning-gateway`; the gateway re-verifies Step 7, authenticates ownership, applies replay/idempotency controls and may advance only `sandbox_passed → provisioning`.
-9. Connect calendar / number / go-live checklist — deferred to Steps 9–10. Calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). This is not a live phone booking/activation step.
+9. Prepare phone/external adapters — **Step 9 implemented server-side**. A trusted provisioning record can bind stable connector refs for TTNC existing-number telephony plus calendar/email/CRM/SMS and advance only `provisioning → ready`. TTNC webhook HMAC is verified, but carrier/API mutation is not performed. Step 10 owns go-live commissioning and activation.
 
 ## Failure modes (must handle)
 
@@ -95,6 +95,21 @@ Internal companion: `packages/provisioning-gateway` (`npm run provisioning-gatew
 - it does **not** create/alter the frozen product database, attach a number, enable connectors, or activate an agent.
 
 There is intentionally no `NEXT_PUBLIC_PROVISIONING_*` flag and no direct browser call from `/create`.
+
+## Provider adapters (Step 9 implemented)
+
+Internal package: `packages/agent-adapters` (`npm run agent-adapters`). Contract: `docs/AGENT_ADAPTERS_CONTRACT.md`.
+
+- stable `connectorRef` lives in AgentBlueprint; provider identity stays server-side;
+- TTNC existing-number connector is the first telephony implementation;
+- TTNC `Webhook-Signature` is verified as raw-body HMAC-SHA256 using the server-only Application Secret Key;
+- Step 9 generates the documented TTNC `NoveroNumbers::SetApplication` XML plan but does not send it;
+- calendar/email/CRM/SMS use the same registry boundary;
+- authenticated adapter preparation remains behind the Step-8 provisioning gateway;
+- successful preparation advances only `provisioning → ready`;
+- `ready` is pre-activation state, not a live-service claim.
+
+There is intentionally no `NEXT_PUBLIC_TTNC_*`, `NEXT_PUBLIC_AGENT_ADAPTER_*` or browser carrier credential.
 
 ## Later API (sandbox promote — not implemented)
 
