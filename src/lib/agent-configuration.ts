@@ -167,6 +167,13 @@ export function buildAgentSystemPrompt(
   return appendTrustedTail(prefix, trusted, false);
 }
 
+export function applyKnowledgePackToAgentBlueprint(
+  blueprint: AgentBlueprintV1,
+  pack: KnowledgePack,
+): AgentBlueprintV1 {
+  return reviewedBlueprint(blueprint, pack);
+}
+
 export function agentLimitationsFor(pack: KnowledgePack): string[] {
   return [
     ...limitationsFor(pack),
