@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { SandboxTestCallComingSoon } from "@/components/SandboxTestCallComingSoon";
 import { siteConfig } from "@/config/site";
 import {
@@ -62,18 +62,6 @@ export function SandboxTestCallPanel({
   );
   const statusId = useId();
   const comingCopyId = "sandbox-test-call-enabled-copy";
-  const reviewRevisionId = reviewSubject?.reviewRecord.revisionId ?? null;
-
-  useEffect(() => {
-    setSessionState("idle");
-    setTestState("idle");
-    setSession(null);
-    setTested(null);
-    setDetail(null);
-    setQualificationState("idle");
-    setQualificationDetail(null);
-  }, [reviewRevisionId]);
-
   async function onRunScriptedDemo() {
     setSessionState("submitting");
     setTestState("submitting");
