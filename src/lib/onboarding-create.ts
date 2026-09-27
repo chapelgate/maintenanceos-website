@@ -204,6 +204,29 @@ function scanFactStringArray(value: unknown, maxItems: number, maxChars: number)
   return unique.length ? unique : undefined;
 }
 
+function scanFactPhones(value: unknown): string[] | undefined {
+  const raw = scanFactStringArray(value, 16, 80);
+  if (!raw) return undefined;
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const phone of raw) {
+    if (!/^\+?[\d\s().-]+$/.test(phone)) continue;
+    const digits = phone.replace(/\D/g, "");
+    if (digits.length < 8 || digits.length > 15) continue;
+    const key =
+      digits.startsWith("0044") && digits.length >= 12
+        ? "0" + digits.slice(4)
+        : digits.startsWith("44") && digits.length >= 11
+          ? "0" + digits.slice(2)
+          : digits;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(phone);
+    if (out.length >= 8) break;
+  }
+  return out.length ? out : undefined;
+}
+
 function scanFactHttpsUrl(value: unknown): string | undefined {
   const text = scanFactString(value, 2048);
   if (!text) return undefined;
@@ -240,7 +263,7 @@ export function mapScanBusinessFacts(body: unknown): ScanBusinessFacts {
 
   if (src.contact && typeof src.contact === "object" && !Array.isArray(src.contact)) {
     const contact = src.contact as Record<string, unknown>;
-    const phones = scanFactStringArray(contact.phones, 8, 80);
+    const phones = scanFactPhones(contact.phones);
     const emails = scanFactStringArray(contact.emails, 8, 120)?.filter(
       (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
     );
