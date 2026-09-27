@@ -223,3 +223,26 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - HMAC authentication, nonce replay protection, tenant scope and durable idempotency are verified.
 - Successful handoff changes lifecycle only from `sandbox_passed` to `provisioning`.
 - No direct MaintenanceOS database write, carrier/number, connector, live voice, deployment or public-launch mutation occurred.
+
+
+## 2026-09-27 — Step 9: provider metadata was initially over-constrained
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Finding:** the first connector-registry draft hard-coded one provider name for each non-telephony integration kind.
+- **Risk:** swapping calendar/email/CRM providers would have required a code/schema change rather than a registry change.
+- **Fix:** provider identity is now a bounded server-side registry value while AgentBlueprint stores only stable connectorRef + integration kind.
+- **Regression:** the same `calendar-main` connectorRef resolves to two different server-side providers while producing an identical ready AgentBlueprint.
+
+## 2026-09-27 — Step 9: strip-only TypeScript rejected secret-registry parameter property
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Reproduction:** first real Step-9 verifier run failed before registry/engine/server tests because the secret registry used a TypeScript constructor parameter property unsupported by Node strip-only execution.
+- **Fix:** replace it with an explicit typed class field and normal constructor assignment.
+- **Regression:** Step-9 adapter tests execute directly under the repository's existing `--experimental-strip-types` runtime.
+
+## 2026-09-27 — Step 9: number-validator rename left a stale declaration
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Reproduction:** after broadening TTNC number format, the use site referenced `PHONE_NUMBER` while the old `UK_OR_E164` declaration remained.
+- **Verifier evidence:** focused suite failed with `ReferenceError: PHONE_NUMBER is not defined`.
+- **Fix:** complete the declaration rename to the bounded international digit validator and rerun the unchanged suite.
