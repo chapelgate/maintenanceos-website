@@ -515,6 +515,7 @@ export function CreateReceptionistLaterSteps({
             onSelect={(type) => {
               setSelectedAgentType(type);
               setAgentBlueprint(null);
+              setReviewConfirmedIds([]);
               setAgentSelectionError(null);
             }}
           />
@@ -558,10 +559,15 @@ export function CreateReceptionistLaterSteps({
             }
             void loadAgentConfiguration().then(({ buildAgentConfiguration }) => {
               try {
+                const identityBlueprint = applyReviewedIdentityToAgentBlueprint(
+                  agentBlueprint,
+                  identityReview,
+                );
                 const configuration = buildAgentConfiguration({
-                  blueprint: agentBlueprint,
+                  blueprint: identityBlueprint,
                   reviewedDraft: draft,
                 });
+                setReviewConfirmedIds([]);
                 setAgentBlueprint(configuration.blueprint);
                 applyBuilt(configuration);
                 setStep(5);
@@ -589,11 +595,26 @@ export function CreateReceptionistLaterSteps({
           ) : null}
           <div className="mt-4 grid gap-4">
             <DraftReviewField
+              label="Website"
+              value={facts.website ?? businessUrl}
+              onChange={() => {}}
+              hintId={websiteHintId}
+              hint={reviewFactHint(
+                factMeta.website,
+                Boolean((facts.website ?? businessUrl).trim()),
+              )}
+              readOnly
+            />
+            <DraftReviewField
               label="Business name"
               value={draft.businessName}
               onChange={(value) => updateDraft("businessName", value)}
               meta={fieldMeta.businessName}
               hintId={businessNameHintId}
+              hint={reviewFactHint(
+                factMeta.businessName ?? fieldMeta.businessName,
+                Boolean(draft.businessName.trim()),
+              )}
             />
             <DraftReviewField
               label="Greeting"
@@ -601,8 +622,48 @@ export function CreateReceptionistLaterSteps({
               onChange={(value) => updateDraft("greeting", value)}
               meta={fieldMeta.greeting}
               hintId={greetingHintId}
+              hint={reviewFactHint(
+                fieldMeta.greeting,
+                Boolean(draft.greeting.trim()),
+              )}
               rows={3}
-              placeholder="How should the receptionist introduce the business? (draft only)"
+              placeholder="How should the AI agent introduce the business? (draft only)"
+            />
+            <DraftReviewField
+              label="Locations"
+              value={identityReview.locations}
+              onChange={(value) => updateIdentityReview("locations", value)}
+              hintId={locationsHintId}
+              hint={reviewFactHint(
+                factMeta.locations,
+                Boolean(identityReview.locations.trim()),
+              )}
+              rows={3}
+              emptyNote={
+                identityReview.locations.trim()
+                  ? null
+                  : "Empty — not on file. Locations were not invented."
+              }
+            />
+            <DraftReviewField
+              label="Phone"
+              value={identityReview.phone}
+              onChange={(value) => updateIdentityReview("phone", value)}
+              hintId={phoneHintId}
+              hint={reviewFactHint(
+                factMeta.contact,
+                Boolean(identityReview.phone.trim()),
+              )}
+            />
+            <DraftReviewField
+              label="Contact email"
+              value={identityReview.email}
+              onChange={(value) => updateIdentityReview("email", value)}
+              hintId={emailHintId}
+              hint={reviewFactHint(
+                factMeta.contact,
+                Boolean(identityReview.email.trim()),
+              )}
             />
             <DraftReviewField
               label="Hours"
@@ -610,6 +671,10 @@ export function CreateReceptionistLaterSteps({
               onChange={(value) => updateDraft("hours", value)}
               meta={fieldMeta.hours}
               hintId={hoursHintId}
+              hint={reviewFactHint(
+                factMeta.hours ?? fieldMeta.hours,
+                Boolean(draft.hours.trim()),
+              )}
               rows={2}
               emptyNote={emptyHoursOrServicesNote("hours", draft.hours)}
             />
@@ -619,6 +684,10 @@ export function CreateReceptionistLaterSteps({
               onChange={(value) => updateDraft("services", value)}
               meta={fieldMeta.services}
               hintId={servicesHintId}
+              hint={reviewFactHint(
+                factMeta.services ?? fieldMeta.services,
+                Boolean(draft.services.trim()),
+              )}
               rows={3}
               emptyNote={emptyHoursOrServicesNote("services", draft.services)}
             />
@@ -628,6 +697,10 @@ export function CreateReceptionistLaterSteps({
               onChange={(value) => updateDraft("faqs", value)}
               meta={fieldMeta.faqs}
               hintId={faqsHintId}
+              hint={reviewFactHint(
+                factMeta.faqs ?? fieldMeta.faqs,
+                Boolean(draft.faqs.trim()),
+              )}
               rows={4}
             />
           </div>
