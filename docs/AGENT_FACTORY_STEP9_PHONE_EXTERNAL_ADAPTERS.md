@@ -1,6 +1,6 @@
 # Agent Factory Step 9 — Phone and External Adapters
 
-**Status:** IMPLEMENTED CANDIDATE — full repository verification required before freeze  
+**Status:** VERIFIED — ready to freeze/save  
 **Scope:** bind the reviewed integration intents from the Step-8 provisioning record to server-side provider connectors, prove those connectors are ready, and advance lifecycle from `provisioning` to `ready`.
 
 ## Baselines
@@ -57,12 +57,19 @@ Primary sources:
 
 ## Verification state
 
-- Focused integrated Step-8/9 + review/selection suite: **65/65 PASS**.
-- Changed-file ESLint: **PASS** after removing one unused Twilio local.
-- Earlier production build/TypeScript on the Step-9 candidate path: **PASS**, static export **30/30**.
-- Full repository `npm test`: PENDING final freeze gate on the documented final candidate.
-- Final production build/static export: PENDING final freeze gate.
-- Exact tree integrity: PENDING final freeze gate.
+- Exact pre-closure engineering candidate: `2ce3027824e1ece05be760e5913ec3405fd93a03`.
+- Exact pre-closure Git tree: `90f8be32de2c12d0c08348dc060ae9492bad13f7`.
+- Real verifier: authorised Desktop Commander device `CG`.
+- Focused Step-8/9 + review/selection suite: **65/65 PASS**.
+- Repository script suite: **230/230 PASS**.
+- Package/runtime/source suite: **285/285 PASS**.
+- Changed-file ESLint: **PASS**.
+- TypeScript / Next.js 16.3.6 production build: **PASS**.
+- Static export: **30/30 routes generated**.
+- Whole-branch obsolete-carrier guard: **PASS**.
+- Latest MaintenanceOS compatibility baseline rechecked before closure: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- No live provider mutation was executed; all provider tests used injected/mock transports.
+- The existing verifier directory contained an unrelated untracked directory, so final freeze integrity will be proved in a fresh detached Git worktree rather than deleting unrelated local content.
 
 ## Non-scope
 
