@@ -48,7 +48,7 @@
 - Fail-closed incomplete review records.
 - Deterministic review evidence independent of checkbox order.
 - Reviewed lifecycle refuses incomplete/forged/stale-revision evidence.
-- Complete review changes lifecycle only and preserves all control-plane fields.
+- Complete review changes lifecycle only and preserves all control-plane fields; non-draft review/edit attempts are rejected.
 - Identity edits can add/remove locations/contact while preserving controls.
 - Invalid reviewed phone/email and overflowing location lists are rejected rather than silently accepted/truncated.
 - Accessible checkbox fieldset and disabled final submit until review complete.
