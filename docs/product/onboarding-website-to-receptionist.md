@@ -11,7 +11,7 @@
 4. Review screen: name, greeting, services, FAQs, hours (edit inline).
 5. Preview claims-safe knowledge pack + system prompt (edit inline). Missing fields stay missing.
 6. Choose voice + language (UK English default).
-7. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone.
+7. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone. A browser mock is demonstration-only. When a configured sandbox companion returns the exact reviewed pack/prompt and deterministic scripted transcript, Step 7 can record qualification for that exact review revision and advance `reviewed → sandbox_passed`.
 8. Connect calendar / number / go-live checklist — calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). Not a live phone booking step.
 
 ## Failure modes (must handle)
@@ -49,6 +49,18 @@ buildReceptionistDraft({ businessName, greeting, hours, services, faqs })
 `/create` shows an editable preview after draft review. Missing hours/services stay omitted. The generated prompt must not claim a live number or always-on service. Sandbox `POST /v1/sandbox/sessions` stores the pack + prompt (or builds them from draft fields).
 
 ## Sandbox test (v0 implemented)
+
+### Agent Factory Step 7 qualification
+
+The existing sandbox remains the execution surface. Step 7 adds a fail-closed qualification policy around it; it does not create another sandbox service.
+
+- only a complete Step-6 review revision can be qualified;
+- browser mock results never award `sandbox_passed`;
+- configured companion session must preserve the exact reviewed knowledge pack + protected prompt;
+- scripted test/session IDs, no-live-call fields and transcript must match;
+- edits invalidate previous qualification;
+- qualification is pre-launch audit evidence, not production authorization or provisioning.
+
 
 Companion: `packages/sandbox-test-call` (`npm run sandbox-test-call`). Contract: `docs/SANDBOX_TEST_CALL_CONTRACT.md`.
 
