@@ -45,6 +45,24 @@ test("/create agent selector is a bounded native radio group", () => {
   assert.match(templates, /type: "custom"/);
 });
 
+test("/create final review is explicit and fail-closed", () => {
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+  const gate = read("src/components/AgentReviewGate.tsx");
+  const review = read("src/lib/agent-review.ts");
+
+  assert.match(gate, /Final customer review/);
+  assert.match(gate, /<fieldset/);
+  assert.match(gate, /Required confirmations/);
+  assert.match(gate, /type="checkbox"/);
+  assert.match(later, /buildAgentReviewRecord/);
+  assert.match(later, /!review\?\.record\.complete/);
+  assert.match(later, /Boolean\(packError\)/);
+  assert.match(review, /fact:businessName/);
+  assert.match(review, /fact:website/);
+  assert.match(review, /low_confidence/);
+  assert.match(review, /consequential/);
+});
+
 test("/create fields keep visible labels and tie errors with aria-describedby", () => {
   const form = readCreateFormGraph();
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
