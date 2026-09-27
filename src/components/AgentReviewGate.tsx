@@ -85,10 +85,10 @@ export function AgentReviewGate({
         </div>
       </dl>
 
-      <div className="mt-5">
-        <h4 className="text-sm font-semibold text-ink">
+      <fieldset className="mt-5">
+        <legend className="text-sm font-semibold text-ink">
           Required confirmations
-        </h4>
+        </legend>
         <div className="mt-2 space-y-2">
           {requirements.map((item) => (
             <label
@@ -112,7 +112,7 @@ export function AgentReviewGate({
             </label>
           ))}
         </div>
-      </div>
+      </fieldset>
     </section>
   );
 }
