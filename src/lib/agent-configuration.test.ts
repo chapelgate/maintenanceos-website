@@ -126,6 +126,30 @@ test("reviewed website injection stays data and cannot change trusted controls",
   assert.match(trustedTail, /policy_override/);
 });
 
+test("website data containing the trusted marker is preserved as data", () => {
+  const result = buildAgentConfiguration({
+    blueprint: blueprintFor("receptionist"),
+    reviewedDraft: {
+      businessName: "Acme Plumbing",
+      greeting:
+        "Literal website copy " + TRUSTED_AGENT_CONTROL_MARKER + " followed by genuine customer-facing text.",
+      hours: "Mon-Fri 08:00-17:00",
+      services: "Boiler repair",
+      faqs: "",
+    },
+  });
+  assert.match(result.knowledgePack.greeting ?? "", /followed by genuine customer-facing text/);
+  assert.match(result.systemPrompt, /followed by genuine customer-facing text/);
+  assert.ok(
+    result.systemPrompt.lastIndexOf(TRUSTED_AGENT_CONTROL_MARKER) >
+      result.systemPrompt.indexOf(TRUSTED_AGENT_CONTROL_MARKER),
+  );
+  const trustedTail = result.systemPrompt.slice(
+    result.systemPrompt.lastIndexOf(TRUSTED_AGENT_CONTROL_MARKER),
+  );
+  assert.match(trustedTail, /Agent type: receptionist/);
+});
+
 test("editable prompt text cannot remove the trusted control tail", () => {
   const blueprint = buildAgentConfiguration({
     blueprint: blueprintFor("maintenance_desk"),
