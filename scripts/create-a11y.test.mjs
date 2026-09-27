@@ -29,6 +29,22 @@ test("/create stepper exposes current step beyond colour", () => {
   assert.doesNotMatch(form, /live (phone|number) was assigned/i);
 });
 
+test("/create agent selector is a bounded native radio group", () => {
+  const selector = read("src/components/AgentTypeSelector.tsx");
+  const templates = read("src/lib/agent-selection.ts");
+  assert.match(selector, /<fieldset>/);
+  assert.match(selector, /What do you want your AI to do\?/);
+  assert.match(selector, /type="radio"/);
+  assert.match(selector, /name="agent-type"/);
+  assert.match(selector, /AGENT_TEMPLATES\.map/);
+  assert.match(templates, /type: "receptionist"/);
+  assert.match(templates, /type: "maintenance_desk"/);
+  assert.match(templates, /type: "booking_assistant"/);
+  assert.match(templates, /type: "customer_service"/);
+  assert.match(templates, /type: "sales_enquiry"/);
+  assert.match(templates, /type: "custom"/);
+});
+
 test("/create fields keep visible labels and tie errors with aria-describedby", () => {
   const form = readCreateFormGraph();
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
