@@ -49,7 +49,16 @@ test("all six controlled templates build schema-valid AgentBlueprint v1 drafts",
     assert.equal(blueprint.agent.type, template.type);
     assert.equal(blueprint.lifecycle.stage, "draft");
     assert.equal(blueprint.knowledge.untrustedWebsiteContent, true);
-    assert.equal(blueprint.integrations.length, 0);
+    assert.deepEqual(
+      blueprint.integrations,
+      template.type === "booking_assistant"
+        ? [
+            { kind: "telephony", enabled: true },
+            { kind: "calendar", enabled: true },
+          ]
+        : [{ kind: "telephony", enabled: true }],
+      template.type,
+    );
     assert.equal(blueprint.privacy.recordCalls, false);
     assert.equal(blueprint.privacy.transcribeCalls, false);
     assert.equal(blueprint.privacy.retentionDays, 0);
