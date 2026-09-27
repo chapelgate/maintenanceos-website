@@ -1,0 +1,9 @@
+{
+  "name": "@maintenanceos/agent-adapters",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types src/server.ts",
+    "test": "node --experimental-strip-types --test src/*.test.ts"
+  }
+}
