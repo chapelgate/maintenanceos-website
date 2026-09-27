@@ -1,0 +1,48 @@
+{
+  "proposal": "EHPC-AIF-2026PG01-1300",
+  "resource": "LUMI-G",
+  "unit": "GPU-hour",
+  "ceiling": 5000,
+  "policy": "ceiling_not_target",
+  "billing_reference": {
+    "small_g_gpu_hours_per_gcd_hour": 0.5,
+    "standard_g_gpu_hours_per_node_hour": 4,
+    "source": "https://docs.lumi-supercomputer.eu/runjobs/lumi_env/billing/"
+  },
+  "phases": [
+    {
+      "name": "environment_shakedown_smoke",
+      "budget": 150
+    },
+    {
+      "name": "baselines",
+      "budget": 500
+    },
+    {
+      "name": "model_configuration_sweep",
+      "budget": 1600
+    },
+    {
+      "name": "robustness_safety",
+      "budget": 1300
+    },
+    {
+      "name": "efficiency_optimisation",
+      "budget": 700
+    },
+    {
+      "name": "repeatability_finalists",
+      "budget": 500
+    },
+    {
+      "name": "contingency",
+      "budget": 250
+    }
+  ],
+  "hard_stops": {
+    "live_personal_data": true,
+    "outside_maintenanceos_scope": true,
+    "material_run_before_smoke_pass": true,
+    "run_without_usage_evidence": true
+  }
+}
