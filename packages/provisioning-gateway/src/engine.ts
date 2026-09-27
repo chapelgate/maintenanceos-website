@@ -4,6 +4,9 @@ import {
   type AgentBlueprintV1,
 } from "../../../src/lib/agent-blueprint.ts";
 import {
+  qualifyAgentSandbox,
+} from "../../../src/lib/agent-sandbox-qualification.ts";
+import {
   PROVISIONING_QUALIFICATION_VERSION,
   REQUIRED_QUALIFICATION_CHECKS,
   provisioningFailure,
@@ -139,13 +142,13 @@ export function validateProvisioningRequest(
   | { ok: false; result: ProvisioningResult } {
   if (
     !isRecord(value) ||
-    !exactKeys(value, ["tenantRef", "blueprint", "qualification"])
+    !exactKeys(value, ["tenantRef", "blueprint", "qualification", "evidence"])
   ) {
     return {
       ok: false,
       result: provisioningFailure(
         "invalid_request",
-        "Provisioning request must contain only tenantRef, blueprint and qualification.",
+        "Provisioning request must contain only tenantRef, blueprint, qualification and evidence.",
       ),
     };
   }
@@ -180,12 +183,54 @@ export function validateProvisioningRequest(
   }
 
   const qualification = validateQualification(value.qualification);
-  if (!qualification) {
+  if (!qualification || !isRecord(value.evidence)) {
     return {
       ok: false,
       result: provisioningFailure(
         "qualification_required",
         "Complete companion sandbox qualification evidence is required.",
+      ),
+    };
+  }
+
+  const evidence = value.evidence as Record<string, unknown>;
+  if (!exactKeys(evidence, ["review", "session", "test"])) {
+    return {
+      ok: false,
+      result: provisioningFailure(
+        "qualification_required",
+        "Provisioning evidence shape is invalid.",
+      ),
+    };
+  }
+
+  try {
+    const canonical = qualifyAgentSandbox({
+      review: evidence.review as Parameters<typeof qualifyAgentSandbox>[0]["review"],
+      source: "companion",
+      session: evidence.session as Parameters<typeof qualifyAgentSandbox>[0]["session"],
+      test: evidence.test as Parameters<typeof qualifyAgentSandbox>[0]["test"],
+    });
+    if (
+      stableProvisioningJson(canonical.blueprint) !==
+        stableProvisioningJson(blueprint.value) ||
+      stableProvisioningJson(canonical.record) !==
+        stableProvisioningJson(qualification)
+    ) {
+      return {
+        ok: false,
+        result: provisioningFailure(
+          "qualification_required",
+          "Sandbox qualification does not match the supplied AgentBlueprint.",
+        ),
+      };
+    }
+  } catch {
+    return {
+      ok: false,
+      result: provisioningFailure(
+        "qualification_required",
+        "Sandbox qualification could not be recomputed from the supplied evidence.",
       ),
     };
   }
@@ -196,6 +241,11 @@ export function validateProvisioningRequest(
       tenantRef: value.tenantRef,
       blueprint: blueprint.value,
       qualification,
+      evidence: {
+        review: evidence.review as ProvisioningRequestInput["evidence"]["review"],
+        session: evidence.session as ProvisioningRequestInput["evidence"]["session"],
+        test: evidence.test as ProvisioningRequestInput["evidence"]["test"],
+      },
     },
   };
 }
