@@ -321,3 +321,35 @@ Caller: I think that the neighbor keeps vandalizing the lock.
 
 
 
+
+
+def test_cg31_confirmation_readback_wins_over_garbled_raw_stt():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: Vittorio Renoir di GK
+Assistant: You can order keys online at alleygates.co.uk. The current price is £22, which includes VAT and recorded delivery. Would you like to order one that way?
+Caller: No, I want to do it on the phone.
+Assistant: Okay, I understand. To arrange payment by cash or bank transfer you'll need to speak directly with our team. I can transfer you to one of them now if you like?
+Caller: Can you
+Assistant: Okay. Just
+Caller: I report I can report and navigate repair.
+Assistant: Yes, I can help with that. Can you tell me whether the gate is in Wirral or Sefton? Also, do you know the gate number and what's the problem with it? Then, if I could have your name, your address, and a contact number, I can get that reported for you. What are those details, please?
+Caller: number 625 Mr Andrew Carl 18 Brisbane Avenue Wallacia Wattle CH459JX Telephone number 0775226746 and the gate has been vandalized the lock is missing.
+Assistant: Thanks, Mr Carl. So, that's gate 625, located at 18 Brisbane Avenue. The lock is missing due to vandalism. I have your contact number and your address details. Your job reference is CG-000031. Someone will be able to look at it within 24 to 48 hours. Is there anything else I can help you with today?
+Caller: WhatsApp
+Assistant: Thank you for calling Chapel Gate. Goodbye, have a nice day.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000031")
+    subject, body = build_internal_email(details)
+
+    assert subject == "[REPAIR] Gate 625 - CG-000031"
+    assert "Resident Name: Andrew Carl" in body
+    assert "Contact Number: 0775226746" in body
+    assert "Address: 18 Brisbane Avenue" in body
+    assert "Postcode: CH45 9JX" in body
+    assert "Area: not collected" in body
+    assert "Fault Details: The lock is missing due to vandalism" in body
+    assert "New key order enquiry: Yes" in body
+    assert "Telephone ordering requested: Yes" in body
+    assert "Outcome: no key order was taken during the call; caller was directed to alleygates.co.uk." in body
+    assert "Order update route:" not in body
+    assert "number 625 Mr Andrew Carl" not in body.split("OTHER INFORMATION", 1)[1].split("FULL TRANSCRIPT", 1)[0]
