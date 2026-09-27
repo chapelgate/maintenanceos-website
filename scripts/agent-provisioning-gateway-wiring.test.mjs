@@ -30,7 +30,9 @@ test("gateway is server-only, has no CORS allow-origin, and rejects Origin", () 
   assert.match(server, /req\.headers\.origin/);
   assert.match(server, /browser_origin_forbidden/);
   assert.match(server, /productDatabaseAccess: false/);
-  assert.match(server, /providerMutation: false/);
+  assert.match(server, /providerMutationEnabled: adapterMutationsEnabled/);
+  assert.match(server, /ADAPTER_MUTATIONS_ENABLED/);
+  assert.match(server, /adapterMutationsEnabled && body\.mode === "apply"/);
 });
 
 test("gateway authenticates with HMAC, timestamp, nonce and constant-time compare", () => {
