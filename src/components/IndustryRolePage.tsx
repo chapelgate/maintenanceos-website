@@ -26,7 +26,7 @@ export function IndustryRolePage({ role }: Props) {
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <p className="mos-glass px-4 py-3 text-sm text-muted">
           {honesty} Product line: <strong className="text-ink">{role.productName}</strong>{" "}
-          under Chapelgate Technologies.
+          under Chapelgate.
         </p>
 
         {seo ? (
