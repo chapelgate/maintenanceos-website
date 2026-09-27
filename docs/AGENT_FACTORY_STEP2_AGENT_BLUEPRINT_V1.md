@@ -5,7 +5,7 @@
 ## Baselines
 
 - Website source: `chapelgate/maintenanceos-website` `2cc35d9f54536b02c808d91d3efb372655bc87af`
-- Product compatibility baseline: `chapelgate/maintenanceos-v1-pilot` `3093dcd94317b1a44f04e5d6851bb7ad50568665`
+- Product compatibility baseline: `chapelgate/maintenanceos-v1-pilot` `f3b0f2bff9559a33f68b0e84edec083e4d8a948f`
 - Product baseline date: 2026-09-27
 - JSON Schema: Draft 2020-12
 - OpenAPI: 3.2.1
@@ -41,7 +41,7 @@ This step defines the versioned AgentBlueprint contract only. It does not alter 
 - JSON Schema Draft 2020-12 meta-schema validation: PASS.
 - OpenAPI YAML parse: PASS.
 - GitHub base-to-branch diff: exactly five Step-2 files added; zero existing files modified.
-- Product baseline recheck before candidate verification: `3093dcd94317b1a44f04e5d6851bb7ad50568665` remained latest.
+- Product baseline recheck before candidate verification: `f3b0f2bff9559a33f68b0e84edec083e4d8a948f` remained latest.
 
 ## Acceptance
 
