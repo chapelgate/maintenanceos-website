@@ -266,6 +266,7 @@ test("buildCreateLeadMessage includes fact provenance and customer review eviden
     },
     review: {
       version: "1.0.0",
+      revisionId: "arv1_12345678",
       complete: true,
       requiredIds: ["control:role", "fact:services"],
       confirmedIds: ["control:role", "fact:services"],
@@ -275,6 +276,7 @@ test("buildCreateLeadMessage includes fact provenance and customer review eviden
   assert.match(message, /Fact meta JSON/);
   assert.match(message, /"confidence": "low"/);
   assert.match(message, /Customer review JSON/);
+  assert.match(message, /"revisionId": "arv1_12345678"/);
   assert.match(message, /"complete": true/);
   assert.match(message, /"fact:services"/);
 });
