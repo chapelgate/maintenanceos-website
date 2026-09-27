@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import os
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 from urllib.parse import urlsplit
 
 from webhook_security import public_provider_ingress_ready

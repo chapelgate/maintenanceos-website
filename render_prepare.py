@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import sys
 
+from idempotency import set_ai_side_effects
+from models import SessionLocal
 from provider_webhooks import (
     ProviderWebhookError,
     configure_phone_voice_webhook,
     emit_webhook_status,
     plan_twilio_voice_webhook,
 )
-from seed_synthetic_tenant import ensure_synthetic_tenant
-from idempotency import set_ai_side_effects
-from models import SessionLocal
 from readiness import report as readiness_report
+from seed_synthetic_tenant import ensure_synthetic_tenant
 
 SYNTHETIC_READY = "SYNTHETIC_VOICE_TENANT_READY"
 PREPARE_PASS = "RENDER_PREPARE_PASS"

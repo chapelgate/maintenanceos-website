@@ -45,3 +45,10 @@ Status: OBSERVED — NON-BLOCKING
 
 - Focused tests emit Starlette's existing `anyio.abc.BlockingPortal` deprecation warning.
 - No dependency upgrade is being mixed into Step 9 because that would expand scope and regression risk; retain as follow-up maintenance evidence.
+
+## 2026-09-27 — Step 9 static-quality import findings
+Status: RESOLVED
+
+- Problem: Ruff UP035 identified new `Callable`/`Awaitable` imports from `typing` instead of `collections.abc`, and I001 identified import ordering in `render_prepare.py`.
+- Resolution: moved runtime ABC imports to `collections.abc` and sorted the touched import block without changing behavior.
+- Verification: Ruff passes on every Step 9 Python file; focused adapter/provider/staged-route suite remains 29/29 PASS; `git diff --check` is clean.

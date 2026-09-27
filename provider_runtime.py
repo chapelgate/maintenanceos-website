@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from typing import Any, Awaitable, Callable
+from typing import Any
 
 import voice_bridge as openai_voice
 from gemini_voice import gemini_ready, handle_gemini_media_stream
