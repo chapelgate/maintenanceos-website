@@ -98,6 +98,22 @@ export function AgentReviewGate({
           </dd>
         </div>
         <div>
+          <dt className="font-medium text-ink">Unavailable-information rule</dt>
+          <dd className="text-muted">
+            {blueprint.rules.unavailableInformation.replaceAll("_", " ")}
+          </dd>
+        </div>
+        <div>
+          <dt className="font-medium text-ink">Forbidden actions</dt>
+          <dd className="text-muted">
+            {blueprint.rules.forbiddenActions.length
+              ? blueprint.rules.forbiddenActions
+                  .map(capabilityLabel)
+                  .join(", ")
+              : "None"}
+          </dd>
+        </div>
+        <div>
           <dt className="font-medium text-ink">Enabled integrations</dt>
           <dd className="text-muted">
             {enabledIntegrations.length
