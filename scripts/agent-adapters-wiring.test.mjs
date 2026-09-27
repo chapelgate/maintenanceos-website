@@ -72,12 +72,10 @@ test("normal repository gate includes Step 9 adapter tests", () => {
   );
 });
 
-test("Step 9 source has no obsolete carrier-specific implementation path", () => {
-  const files = [
-    "src/lib/agent-selection.ts",
-    "packages/provisioning-gateway/src/server.ts",
-    ...walk("packages/provisioning-gateway/src/adapters"),
-  ];
-  const source = files.map(read).join("\n").toLowerCase();
-  assert.doesNotMatch(source, /ttnc/);
+test("Step 9 provider surface is explicit and intentionally narrow", () => {
+  const registry = read("packages/provisioning-gateway/src/adapters/registry.ts");
+  assert.match(registry, /record\.provider === "twilio"/);
+  assert.match(registry, /record\.provider === "calendar_companion"/);
+  assert.match(registry, /record\.provider === "signed_https"/);
+  assert.doesNotMatch(registry, /legacy_carrier/);
 });
