@@ -39,7 +39,7 @@ test("canonical Step-7 evidence advances lifecycle only to provisioning", async 
 
 test("gateway recomputes Step-7 evidence and rejects blueprint tampering", async () => {
   const request = await validProvisioningEnvelope();
-  const tampered = structuredClone(request) as Record<string, any>;
+  const tampered = structuredClone(request);
   tampered.blueprint.agent.greeting = "Tampered after qualification";
   const parsed = validateProvisioningRequest(tampered);
   assert.equal(parsed.ok, false);
@@ -48,7 +48,7 @@ test("gateway recomputes Step-7 evidence and rejects blueprint tampering", async
 
 test("gateway rejects transcript/evidence tampering", async () => {
   const request = await validProvisioningEnvelope();
-  const tampered = structuredClone(request) as Record<string, any>;
+  const tampered = structuredClone(request);
   tampered.evidence.test.turns[0].text = "Different transcript";
   const parsed = validateProvisioningRequest(tampered);
   assert.equal(parsed.ok, false);
@@ -57,7 +57,7 @@ test("gateway rejects transcript/evidence tampering", async () => {
 
 test("only sandbox_passed blueprints can enter provisioning", async () => {
   const request = await validProvisioningEnvelope();
-  const wrong = structuredClone(request) as Record<string, any>;
+  const wrong = structuredClone(request);
   wrong.blueprint.lifecycle.stage = "reviewed";
   const parsed = validateProvisioningRequest(wrong);
   assert.equal(parsed.ok, false);
@@ -118,7 +118,7 @@ test("idempotent retry returns one provisioning id; changed content conflicts", 
 
 test("forged qualification summary without canonical evidence is rejected", async () => {
   const request = await validProvisioningEnvelope();
-  const forged = structuredClone(request) as Record<string, any>;
+  const forged = structuredClone(request);
   forged.qualification.testId = "sandbox_test_forged";
   const parsed = validateProvisioningRequest(forged);
   assert.equal(parsed.ok, false);
