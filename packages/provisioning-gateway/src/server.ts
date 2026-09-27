@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Internal-only MaintenanceOS Agent Factory provisioning gateway.
- * No browser CORS, no NEXT_PUBLIC config and no telephony/provider side effects.
+ * No browser CORS or NEXT_PUBLIC config. Provider mutation is disabled by
+ * default and additionally requires an authenticated request in explicit apply mode.
  */
 
 import http from "node:http";
