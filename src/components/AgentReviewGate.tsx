@@ -11,11 +11,13 @@ export function AgentReviewGate({
   requirements,
   confirmedIds,
   onToggle,
+  disabled = false,
 }: {
   blueprint: AgentBlueprintV1;
   requirements: AgentReviewRequirement[];
   confirmedIds: readonly string[];
   onToggle: (id: string, checked: boolean) => void;
+  disabled?: boolean;
 }) {
   const confirmed = new Set(confirmedIds);
   const enabledIntegrations = blueprint.integrations.filter((item) => item.enabled);
@@ -25,6 +27,7 @@ export function AgentReviewGate({
       className="rounded-lg border border-border bg-paper p-4"
       aria-labelledby="agent-review-heading"
       data-agent-review-gate=""
+      aria-busy={disabled || undefined}
     >
       <h3 id="agent-review-heading" className="text-base font-semibold text-ink">
         Final customer review
@@ -145,6 +148,7 @@ export function AgentReviewGate({
               <input
                 type="checkbox"
                 checked={confirmed.has(item.id)}
+                disabled={disabled}
                 onChange={(event) => onToggle(item.id, event.target.checked)}
                 className="mt-1"
               />
