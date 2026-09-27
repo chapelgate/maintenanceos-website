@@ -54,6 +54,10 @@ test("/create final review is explicit and fail-closed", () => {
   assert.match(gate, /<fieldset/);
   assert.match(gate, /Required confirmations/);
   assert.match(gate, /type="checkbox"/);
+  const preview = read("src/components/ReceptionistDraftPreview.tsx");
+  assert.match(preview, /Final stored system prompt \(read-only\)/);
+  assert.match(preview, /data-final-system-prompt="readonly"/);
+  assert.match(preview, /\{result\.systemPrompt\}/);
   assert.match(later, /buildAgentReviewRecord/);
   assert.match(later, /!review\?\.record\.complete/);
   assert.match(later, /Boolean\(packError\)/);
