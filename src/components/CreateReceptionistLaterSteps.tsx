@@ -636,7 +636,7 @@ export function CreateReceptionistLaterSteps({
               meta={fieldMeta.businessName}
               hintId={businessNameHintId}
               hint={reviewFactHint(
-                factMeta.businessName ?? fieldMeta.businessName,
+                fieldMeta.businessName,
                 Boolean(draft.businessName.trim()),
               )}
             />
@@ -696,7 +696,7 @@ export function CreateReceptionistLaterSteps({
               meta={fieldMeta.hours}
               hintId={hoursHintId}
               hint={reviewFactHint(
-                factMeta.hours ?? fieldMeta.hours,
+                fieldMeta.hours,
                 Boolean(draft.hours.trim()),
               )}
               rows={2}
@@ -709,7 +709,7 @@ export function CreateReceptionistLaterSteps({
               meta={fieldMeta.services}
               hintId={servicesHintId}
               hint={reviewFactHint(
-                factMeta.services ?? fieldMeta.services,
+                fieldMeta.services,
                 Boolean(draft.services.trim()),
               )}
               rows={3}
@@ -722,7 +722,7 @@ export function CreateReceptionistLaterSteps({
               meta={fieldMeta.faqs}
               hintId={faqsHintId}
               hint={reviewFactHint(
-                factMeta.faqs ?? fieldMeta.faqs,
+                fieldMeta.faqs,
                 Boolean(draft.faqs.trim()),
               )}
               rows={4}
