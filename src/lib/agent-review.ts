@@ -336,12 +336,21 @@ export function buildAgentReviewRequirements(input: {
   return uniqueRequirements(requirements);
 }
 
-export function finalizeAgentReview(
-  blueprint: AgentBlueprintV1,
-  requirements: AgentReviewRequirement[],
-  record: AgentReviewRecord,
-): AgentBlueprintV1 {
-  const trusted = validateBlueprint(blueprint);
+export function finalizeAgentReview(input: {
+  blueprint: AgentBlueprintV1;
+  factMeta?: ScanBusinessFactMeta;
+  fieldMeta?: ScanDraftFieldMeta;
+  missing?: string[];
+  record: AgentReviewRecord;
+}): AgentBlueprintV1 {
+  const trusted = validateBlueprint(input.blueprint);
+  const requirements = buildAgentReviewRequirements({
+    blueprint: trusted,
+    factMeta: input.factMeta,
+    fieldMeta: input.fieldMeta,
+    missing: input.missing,
+  });
+  const record = input.record;
   const canonical = buildAgentReviewRecord(requirements, record.confirmedIds);
   const sameRequired =
     JSON.stringify(record.requiredIds) === JSON.stringify(canonical.requiredIds);
