@@ -42,8 +42,9 @@
 
 ## Verification state
 
-- Static source/security audit: COMPLETE.
-- Focused execution tests: PENDING — authorised execution devices currently offline.
+- Static source/security audit: COMPLETE. Branch diff remains limited to Step-5 configuration logic/tests/UI wording/evidence.
+- Supplemental isolated generator harness: PASS; strict isolated TypeScript module check: PASS. These do not replace repository execution gates.
+- Focused real-repository execution tests: PENDING — authorised Desktop Commander devices are offline and no permitted workflow dispatch path is exposed for the active estate self-hosted runner pool.
 - Full repository tests: PENDING.
 - Changed-file ESLint: PENDING.
 - TypeScript/Next production build and 30-route static export: PENDING.
