@@ -5,6 +5,7 @@ import {
   applyReviewedIdentityToAgentBlueprint,
   buildAgentReviewRecord,
   buildAgentReviewRequirements,
+  finalizeAgentReview,
   identityDraftFromBlueprint,
   reviewFactHint,
 } from "./agent-review.ts";
@@ -182,6 +183,47 @@ test("review evidence is deterministic regardless of checkbox order", () => {
     requirements.map((item) => item.id),
   );
   assert.equal(record.complete, true);
+});
+
+test("lifecycle cannot advance on incomplete or forged review evidence", () => {
+  const draft = blueprint("maintenance_desk");
+  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const incomplete = buildAgentReviewRecord(requirements, ["control:role"]);
+
+  assert.throws(
+    () => finalizeAgentReview(draft, incomplete),
+    /incomplete/i,
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview(draft, {
+        ...incomplete,
+        complete: true,
+        missingIds: [],
+      }),
+    /incomplete/i,
+  );
+});
+
+test("complete review advances only lifecycle and preserves controls", () => {
+  const draft = blueprint("maintenance_desk");
+  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+  );
+  const reviewed = finalizeAgentReview(draft, record);
+
+  assert.equal(draft.lifecycle.stage, "draft");
+  assert.equal(reviewed.lifecycle.stage, "reviewed");
+  assert.deepEqual(reviewed.identity, draft.identity);
+  assert.deepEqual(reviewed.agent, draft.agent);
+  assert.deepEqual(reviewed.permissions, draft.permissions);
+  assert.deepEqual(reviewed.rules, draft.rules);
+  assert.deepEqual(reviewed.integrations, draft.integrations);
+  assert.deepEqual(reviewed.privacy, draft.privacy);
+  assert.deepEqual(reviewed.compatibility, draft.compatibility);
 });
 
 test("identity edits can change locations/contact but never control-plane fields", () => {
