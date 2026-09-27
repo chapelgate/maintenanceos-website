@@ -13,6 +13,18 @@ import {
   type ProvisioningAuthHeaders,
 } from "./auth.ts";
 import { provisionAgent } from "./engine.ts";
+import {
+  adapterBindingsHash,
+  prepareAdapterReadiness,
+  readinessMatchesProvisioning,
+} from "./adapters/engine.ts";
+import { loadAdapterRegistryFromEnv } from "./adapters/registry.ts";
+import { fetchAdapterTransport } from "./adapters/transport.ts";
+import type {
+  AdapterBinding,
+  AdapterRegistry,
+  AdapterTransport,
+} from "./adapters/types.ts";
 import { isProvisioningGatewayEnabled } from "./flags.ts";
 import {
   createProvisioningStoreFromEnv,
@@ -23,11 +35,13 @@ import type {
   ProvisioningStore,
 } from "./types.ts";
 import { provisioningFailure } from "./types.ts";
+import { INTEGRATION_KINDS, type IntegrationKind } from "../../../src/lib/agent-blueprint.ts";
 
 export const DEFAULT_HOST = "127.0.0.1";
 export const DEFAULT_PORT = 8792;
 export const MAX_BODY_BYTES = 256 * 1024;
 const REQUEST_PATH = "/v1/provisioning/requests";
+const ADAPTER_PATH = "/v1/provisioning/adapters/prepare";
 
 export type ProvisioningServerOptions = {
   host?: string;
@@ -37,6 +51,10 @@ export type ProvisioningServerOptions = {
   store?: ProvisioningStore;
   nowMs?: () => number;
   now?: () => Date;
+  env?: NodeJS.ProcessEnv;
+  adapterRegistry?: AdapterRegistry;
+  adapterTransport?: AdapterTransport;
+  adapterMutationsEnabled?: boolean;
 };
 
 function jsonHeaders(): Record<string, string> {
@@ -133,6 +151,70 @@ function parseBody(raw: Buffer): unknown {
   return JSON.parse(raw.toString("utf8"));
 }
 
+function adapterMutationsFromEnv(env: NodeJS.ProcessEnv): boolean {
+  const value = env.ADAPTER_MUTATIONS_ENABLED?.trim().toLowerCase();
+  return value === "true" || value === "1";
+}
+
+function parseAdapterBody(
+  value: unknown,
+): { provisioningId: string; bindings: AdapterBinding[] } | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const record = value as Record<string, unknown>;
+  const keys = Object.keys(record).sort();
+  if (
+    keys.length !== 2 ||
+    keys[0] !== "bindings" ||
+    keys[1] !== "provisioningId" ||
+    typeof record.provisioningId !== "string" ||
+    !/^prv_[0-9a-f]{24}$/.test(record.provisioningId) ||
+    !Array.isArray(record.bindings)
+  ) {
+    return null;
+  }
+  const bindings: AdapterBinding[] = [];
+  for (const item of record.bindings) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) return null;
+    const binding = item as Record<string, unknown>;
+    const bindingKeys = Object.keys(binding).sort();
+    if (
+      bindingKeys.length !== 2 ||
+      bindingKeys[0] !== "connectorRef" ||
+      bindingKeys[1] !== "kind" ||
+      typeof binding.kind !== "string" ||
+      !INTEGRATION_KINDS.includes(binding.kind as IntegrationKind) ||
+      typeof binding.connectorRef !== "string" ||
+      !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/.test(binding.connectorRef)
+    ) {
+      return null;
+    }
+    bindings.push({
+      kind: binding.kind as IntegrationKind,
+      connectorRef: binding.connectorRef,
+    });
+  }
+  return { provisioningId: record.provisioningId, bindings };
+}
+
+function adapterStatus(error: string): number {
+  switch (error) {
+    case "tenant_forbidden":
+      return 403;
+    case "invalid_bindings":
+    case "invalid_provisioning":
+      return 400;
+    case "connector_not_found":
+    case "connector_kind_mismatch":
+      return 422;
+    case "connector_not_configured":
+    case "adapter_not_ready":
+    case "provider_error":
+      return 503;
+    default:
+      return 500;
+  }
+}
+
 export async function handleProvisioningRequest(
   req: http.IncomingMessage,
   res: http.ServerResponse,
@@ -140,7 +222,10 @@ export async function handleProvisioningRequest(
 ): Promise<void> {
   const method = (req.method ?? "GET").toUpperCase();
   const pathname = pathnameOf(req);
-  const enabled = options.enabled ?? isProvisioningGatewayEnabled();
+  const env = options.env ?? process.env;
+  const enabled = options.enabled ?? isProvisioningGatewayEnabled(env);
+  const adapterMutationsEnabled =
+    options.adapterMutationsEnabled ?? adapterMutationsFromEnv(env);
   const principal =
     options.principal === undefined
       ? loadProvisioningPrincipalFromEnv()
@@ -155,14 +240,15 @@ export async function handleProvisioningRequest(
       authConfigured: Boolean(principal),
       browserAccess: false,
       telephony: false,
-      providerMutation: false,
+      providerMutationEnabled: adapterMutationsEnabled,
       productDatabaseAccess: false,
       requestPath: REQUEST_PATH,
+      adapterPath: ADAPTER_PATH,
     });
     return;
   }
 
-  if (pathname !== REQUEST_PATH) {
+  if (pathname !== REQUEST_PATH && pathname !== ADAPTER_PATH) {
     send(res, 404, { ok: false, error: "Not found." });
     return;
   }
@@ -258,6 +344,75 @@ export async function handleProvisioningRequest(
     return;
   }
 
+  if (pathname === ADAPTER_PATH) {
+    const body = parseAdapterBody(parsed);
+    if (!body) {
+      send(res, 400, {
+        ok: false,
+        error: "invalid_request",
+        message: "Adapter request must contain provisioningId and valid connector bindings.",
+      });
+      return;
+    }
+    const provisioning = store.getProvisioning(body.provisioningId);
+    if (!provisioning) {
+      send(res, 404, {
+        ok: false,
+        error: "invalid_provisioning",
+        message: "Provisioning record was not found.",
+      });
+      return;
+    }
+
+    const existing = store.getAdapterReadiness(body.provisioningId);
+    const requestedHash = adapterBindingsHash(body.bindings);
+    if (existing) {
+      if (
+        existing.bindingsHash === requestedHash &&
+        readinessMatchesProvisioning(existing, provisioning)
+      ) {
+        send(res, 200, { ok: true, data: existing, replayed: true });
+        return;
+      }
+      send(res, 409, {
+        ok: false,
+        error: "idempotency_conflict",
+        message: "Adapter readiness already exists for this provisioning record with different bindings.",
+      });
+      return;
+    }
+
+    let registry: AdapterRegistry;
+    try {
+      registry = options.adapterRegistry ?? loadAdapterRegistryFromEnv(env);
+    } catch {
+      send(res, 503, {
+        ok: false,
+        error: "connector_not_configured",
+        message: "Server-side adapter connector registry is not configured.",
+      });
+      return;
+    }
+
+    const prepared = await prepareAdapterReadiness({
+      provisioning,
+      principal: authenticated.principal,
+      bindings: body.bindings,
+      registry,
+      env,
+      transport: options.adapterTransport ?? fetchAdapterTransport,
+      mutationsEnabled: adapterMutationsEnabled,
+      now: options.now,
+    });
+    if (!prepared.ok) {
+      send(res, adapterStatus(prepared.error), prepared);
+      return;
+    }
+    store.putAdapterReadiness(prepared.record);
+    send(res, 201, { ok: true, data: prepared.record, replayed: false });
+    return;
+  }
+
   const result = provisionAgent({
     request: parsed,
     principal: authenticated.principal,
@@ -271,7 +426,7 @@ export async function handleProvisioningRequest(
 export function createProvisioningServer(
   options: ProvisioningServerOptions = {},
 ): http.Server {
-  const enabled = options.enabled ?? isProvisioningGatewayEnabled();
+  const enabled = options.enabled ?? isProvisioningGatewayEnabled(options.env ?? process.env);
   const principal =
     options.principal === undefined
       ? loadProvisioningPrincipalFromEnv()
@@ -324,7 +479,10 @@ export function listenProvisioningServer(
         port +
         REQUEST_PATH,
     );
-    console.log("[provisioning-gateway] browser access disabled; no telephony/provider mutation");
+    console.log(
+      "[provisioning-gateway] browser access disabled; adapter provider mutation=" +
+        String(options.adapterMutationsEnabled ?? adapterMutationsFromEnv(options.env ?? process.env)),
+    );
   });
   const shutdown = () => {
     server.close(() => process.exit(0));
