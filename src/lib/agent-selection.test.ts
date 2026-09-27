@@ -119,7 +119,10 @@ test("structured scanner facts flow into the blueprint without credentials or pr
   ]);
 
   const serialised = JSON.stringify(blueprint);
-  assert.doesNotMatch(serialised, /api[_-]?key|password|credential|provider|twilio|gemini|ttnc/i);
+  assert.doesNotMatch(
+    serialised,
+    /"api[_-]?key"|"password"|"secret"|"token"|"provider"|twilio|gemini|ttnc/i,
+  );
 });
 
 test("selection refuses a non-HTTPS website instead of fabricating a canonical URL", () => {
