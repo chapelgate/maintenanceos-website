@@ -124,6 +124,28 @@ test("missing facts are visible and become a mandatory acknowledgement", () => {
   assert.match(missing.detail, /hours, faqs/);
 });
 
+test("missing-data acknowledgement includes structured identity gaps", () => {
+  const base = blueprint("receptionist");
+  const withoutStructuredIdentity = {
+    ...base,
+    identity: {
+      businessName: base.identity.businessName,
+      website: base.identity.website,
+    },
+  };
+  const requirements = buildAgentReviewRequirements({
+    blueprint: withoutStructuredIdentity,
+    missing: ["hours"],
+  });
+  const missing = requirements.find(
+    (item) => item.id === "control:missing_data",
+  );
+  assert.ok(missing);
+  assert.match(missing.detail, /hours/);
+  assert.match(missing.detail, /locations/);
+  assert.match(missing.detail, /contact details/);
+});
+
 test("review record fails closed until every current requirement is confirmed", () => {
   const requirements = buildAgentReviewRequirements({
     blueprint: blueprint("maintenance_desk"),
