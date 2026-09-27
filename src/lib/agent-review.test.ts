@@ -414,6 +414,31 @@ test("identity review can deliberately remove discovered optional identity facts
   assert.equal(next.identity.businessName, original.identity.businessName);
 });
 
+test("invalid reviewed phone is rejected before configuration generation", () => {
+  assert.throws(
+    () =>
+      applyReviewedIdentityToAgentBlueprint(blueprint("receptionist"), {
+        locations: "Wirral",
+        phone: "call us maybe",
+        email: "",
+      }),
+    /phone number is invalid/i,
+  );
+});
+
+test("reviewed locations reject overflow instead of silently dropping entries", () => {
+  const locations = Array.from({ length: 51 }, (_, index) => "Location " + index).join("\n");
+  assert.throws(
+    () =>
+      applyReviewedIdentityToAgentBlueprint(blueprint("receptionist"), {
+        locations,
+        phone: "",
+        email: "",
+      }),
+    /50 entries or fewer/i,
+  );
+});
+
 test("invalid reviewed contact email is rejected before configuration generation", () => {
   assert.throws(
     () =>
