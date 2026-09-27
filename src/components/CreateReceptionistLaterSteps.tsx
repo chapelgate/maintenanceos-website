@@ -7,6 +7,7 @@ import { AgentTypeSelector } from "@/components/AgentTypeSelector";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
 import { siteConfig } from "@/config/site";
 import {
+  agentReviewRevision,
   applyReviewedIdentityToAgentBlueprint,
   buildAgentReviewRecord,
   buildAgentReviewRequirements,
@@ -329,9 +330,18 @@ export function CreateReceptionistLaterSteps({
       fieldMeta,
       missing: receptionist.knowledgePack.missing,
     });
+    const revisionId = agentReviewRevision({
+      blueprint: agentBlueprint,
+      knowledgePack: receptionist.knowledgePack,
+      systemPrompt: receptionist.systemPrompt,
+    });
     return {
       requirements,
-      record: buildAgentReviewRecord(requirements, reviewConfirmedIds),
+      record: buildAgentReviewRecord(
+        requirements,
+        reviewConfirmedIds,
+        revisionId,
+      ),
     };
   }
 
@@ -358,9 +368,11 @@ export function CreateReceptionistLaterSteps({
     try {
       reviewedBlueprint = finalizeAgentReview({
         blueprint: agentBlueprint,
+        knowledgePack: receptionist.knowledgePack,
+        systemPrompt: receptionist.systemPrompt,
         factMeta,
         fieldMeta,
-        missing: receptionist?.knowledgePack.missing,
+        missing: receptionist.knowledgePack.missing,
         record: review.record,
       });
     } catch (reviewError) {
