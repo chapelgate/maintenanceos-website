@@ -3,12 +3,7 @@ import type {
   IntegrationKind,
 } from "../../../src/lib/agent-blueprint.ts";
 
-export type ConnectorProvider =
-  | "ttnc"
-  | "calendar-adapters"
-  | "managed-email"
-  | "managed-crm"
-  | "managed-sms";
+export type ConnectorProvider = string;
 
 export type BaseConnectorDescriptor = {
   ref: string;
@@ -27,7 +22,6 @@ export type TtncConnectorDescriptor = BaseConnectorDescriptor & {
 
 export type GenericConnectorDescriptor = BaseConnectorDescriptor & {
   kind: Exclude<IntegrationKind, "telephony">;
-  provider: Exclude<ConnectorProvider, "ttnc">;
 };
 
 export type ConnectorDescriptor =
