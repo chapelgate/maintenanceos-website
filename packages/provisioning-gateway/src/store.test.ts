@@ -71,3 +71,59 @@ test("file store persists replay nonces and fails closed on corrupt state", () =
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+
+test("version-1 Step 8 state migrates without losing provisioning records", async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "mos-provisioning-"));
+  const file = path.join(dir, "state.json");
+  try {
+    const seedStore = new FileProvisioningStore(file);
+    const request = await validProvisioningEnvelope();
+    const created = provisionAgent({
+      request,
+      principal: PRINCIPAL,
+      idempotencyKey: "idem_store_migration",
+      store: seedStore,
+      now: () => new Date("2026-09-27T19:40:00.000Z"),
+    });
+    assert.equal(created.ok, true);
+    if (!created.ok) return;
+
+    const current = JSON.parse(fs.readFileSync(file, "utf8")) as Record<
+      string,
+      unknown
+    >;
+    const legacy = {
+      version: 1,
+      nonces: current.nonces,
+      idempotency: current.idempotency,
+      provisionings: current.provisionings,
+    };
+    fs.writeFileSync(file, JSON.stringify(legacy), "utf8");
+
+    const migrated = new FileProvisioningStore(file);
+    assert.ok(migrated.getProvisioning(created.data.provisioningId));
+    assert.equal(
+      migrated.getAdapterPreparation(created.data.provisioningId),
+      undefined,
+    );
+    assert.equal(
+      migrated.claimNonce(
+        "migration:scope",
+        "nonce_migration_12345",
+        3000,
+        2000,
+      ),
+      true,
+    );
+    const persisted = JSON.parse(fs.readFileSync(file, "utf8")) as Record<
+      string,
+      unknown
+    >;
+    assert.equal(persisted.version, 2);
+    assert.deepEqual(persisted.adapterIdempotency, {});
+    assert.deepEqual(persisted.adapterPreparations, {});
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
