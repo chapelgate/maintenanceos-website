@@ -4,6 +4,10 @@ import type {
   SandboxSession,
   SandboxTest,
 } from "../../../src/lib/sandbox-test-call.ts";
+import type {
+  AdapterPreparation,
+  PreparedAdapterBinding,
+} from "../../agent-adapters/src/types.ts";
 
 export const PROVISIONING_QUALIFICATION_VERSION =
   "agent_sandbox_qualification_v1" as const;
@@ -67,6 +71,35 @@ export type ProvisioningPublicReceipt = {
   replayed: boolean;
 };
 
+export type AdapterPreparationRequestInput = {
+  provisioningId: string;
+  connectorRefs: string[];
+};
+
+export type AdapterPreparationRecord = {
+  provisioningId: string;
+  tenantRef: string;
+  principalId: string;
+  idempotencyKey: string;
+  requestHash: string;
+  preparedAt: string;
+  status: "ready";
+  preparation: AdapterPreparation;
+};
+
+export type AdapterPreparationPublicReceipt = {
+  provisioningId: string;
+  tenantRef: string;
+  status: "ready";
+  blueprintStage: "ready";
+  preparedAt: string;
+  replayed: boolean;
+  activationRequired: true;
+  connectors: Array<
+    Pick<PreparedAdapterBinding, "kind" | "connectorRef" | "provider">
+  >;
+};
+
 export type ProvisioningErrorCode =
   | "gateway_disabled"
   | "auth_not_configured"
@@ -76,6 +109,8 @@ export type ProvisioningErrorCode =
   | "invalid_request"
   | "invalid_blueprint"
   | "qualification_required"
+  | "provisioning_not_found"
+  | "adapter_not_configured"
   | "idempotency_conflict"
   | "payload_too_large"
   | "browser_origin_forbidden"
@@ -90,7 +125,7 @@ export type ProvisioningFailure = {
 
 export type ProvisioningSuccess = {
   ok: true;
-  data: ProvisioningPublicReceipt;
+  data: ProvisioningPublicReceipt | AdapterPreparationPublicReceipt;
 };
 
 export type ProvisioningResult = ProvisioningSuccess | ProvisioningFailure;
@@ -100,11 +135,19 @@ export type IdempotencyEntry = {
   record: ProvisioningRecord;
 };
 
+export type AdapterIdempotencyEntry = {
+  requestHash: string;
+  record: AdapterPreparationRecord;
+};
+
 export type ProvisioningStore = {
   claimNonce(scope: string, nonce: string, expiresAtMs: number, nowMs: number): boolean;
   getIdempotency(scope: string): IdempotencyEntry | undefined;
   putIdempotency(scope: string, entry: IdempotencyEntry): void;
   getProvisioning(id: string): ProvisioningRecord | undefined;
+  getAdapterIdempotency(scope: string): AdapterIdempotencyEntry | undefined;
+  putAdapterIdempotency(scope: string, entry: AdapterIdempotencyEntry): void;
+  getAdapterPreparation(provisioningId: string): AdapterPreparationRecord | undefined;
 };
 
 export type ProvisioningPrincipal = {
