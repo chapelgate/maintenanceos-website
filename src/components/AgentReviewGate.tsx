@@ -44,6 +44,28 @@ export function AgentReviewGate({
           <dd className="break-all text-muted">{blueprint.identity.website}</dd>
         </div>
         <div>
+          <dt className="font-medium text-ink">Locations</dt>
+          <dd className="text-muted">
+            {blueprint.identity.locations?.length
+              ? blueprint.identity.locations.join(", ")
+              : "Not on file"}
+          </dd>
+        </div>
+        <div>
+          <dt className="font-medium text-ink">Contact details</dt>
+          <dd className="text-muted">
+            {blueprint.identity.contact?.phone ||
+            blueprint.identity.contact?.email
+              ? [
+                  blueprint.identity.contact?.phone,
+                  blueprint.identity.contact?.email,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")
+              : "Not on file"}
+          </dd>
+        </div>
+        <div>
           <dt className="font-medium text-ink">Agent role</dt>
           <dd className="text-muted">
             {agentTemplateFor(blueprint.agent.type).label}
