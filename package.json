@@ -11,6 +11,7 @@
     "website:monitor": "node scripts/website-health-monitor.mjs",
     "functional:smoke": "node scripts/functional-smoke.mjs",
     "browser:smoke": "node scripts/browser-viewport-smoke.mjs",
+    "security:live": "node scripts/live-security-audit.mjs",
     "uptime:check": "node scripts/website-health-monitor.mjs",
     "deployment:verify": "node scripts/deployment-verifier.mjs",
     "performance:budget": "node scripts/performance-budget.mjs",

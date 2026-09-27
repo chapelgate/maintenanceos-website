@@ -33,7 +33,7 @@ This is the single persistent website problem register. Do not create parallel p
 | F15-MANUAL | Full manual keyboard + assistive-technology accessibility pass | **OPEN LAUNCH QA** — automated baseline does not substitute for specialist/manual coverage | Accessibility + QA |
 | F16 | Performance / Core Web Vitals-oriented lab verification | **DONE / LIVE VERIFIED** — original Step 46; lab evidence, not field/CrUX claim | Performance |
 | F17 | Website security engineering review | **DONE BASELINE** — `WEBSITE_SECURITY_REVIEW.md` + static security baseline; dependency audit and secret-pattern scan clean on 2026-09-26 | Security |
-| F17-HEADERS | HTTP response-header / clickjacking protection on current static host | **OPEN LAUNCH RISK DECISION** — prove supported headers, explicitly accept residual risk, or separately review a hosting change; do not create duplicate hosting to make the checkbox green | Security + DevOps |
+| F17-HEADERS | HTTP response-header / clickjacking protection on current static host | **ENGINEERING INVESTIGATION COMPLETE / HUMAN LAUNCH RISK DECISION** — live audit confirms missing arbitrary response headers; current DO static spec exposes CORS rather than a proven arbitrary-header control; strict executable gate added; accept risk or separately review hosting/edge change before public launch | Security + DevOps |
 | F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED** — original Step 9; cookieless first-party measurement | Analytics |
 | F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented; companion docs aligned to DO-only policy | DevOps |
 | F20 | Automated functional/release tests | **DONE BASELINE** — full repository tests + build + performance + accessibility + live health + exact release-SHA verification are release gates | QA |
@@ -56,6 +56,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C5 | Continuation Step 5 — brand/UI consistency | **DONE IN CANDIDATE** — publisher identity normalised to Chapelgate; pricing CTA restored to shared accent token + 44px minimum target; regression added for naming/token drift | Brand + Front-End + Website Manager |
 | C6 | Continuation Step 6 — full functional QA | **DONE IN CANDIDATE** — zero-dependency exported-site + local lead-contract smoke added to release preflight; no production side effects | QA + Website Manager |
 | C7 | Continuation Step 7 — mobile/cross-browser QA | **DONE ENGINEERING IN CANDIDATE** — reusable real-Edge viewport smoke added for mobile/tablet/desktop; Safari/Firefox/manual AT remain explicit human launch coverage | QA + Front-End |
+| C8 | Continuation Step 8 — security hardening | **DONE ENGINEERING IN CANDIDATE** — live header inventory executable added; meta CSP/referrer verified; unsupported static-host response headers documented as explicit residual launch risk; no duplicate hosting | Security + DevOps + Website Manager |
 
 ## Step 1 completion
 
