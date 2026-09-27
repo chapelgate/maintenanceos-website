@@ -27,6 +27,7 @@ export type AgentReviewRequirement = {
 
 export type AgentReviewRecord = {
   version: typeof AGENT_REVIEW_VERSION;
+  revisionId: string;
   complete: boolean;
   requiredIds: string[];
   confirmedIds: string[];
@@ -38,6 +39,47 @@ export type ReviewedIdentityDraft = {
   phone: string;
   email: string;
 };
+
+export type AgentReviewSubject = {
+  blueprint: AgentBlueprintV1;
+  knowledgePack: unknown;
+  systemPrompt: string;
+};
+
+function stableReviewJson(value: unknown): string {
+  if (value === null || typeof value !== "object") {
+    return JSON.stringify(value) ?? "null";
+  }
+  if (Array.isArray(value)) {
+    return "[" + value.map(stableReviewJson).join(",") + "]";
+  }
+  const record = value as Record<string, unknown>;
+  const entries = Object.keys(record)
+    .sort()
+    .filter((key) => record[key] !== undefined)
+    .map((key) => JSON.stringify(key) + ":" + stableReviewJson(record[key]));
+  return "{" + entries.join(",") + "}";
+}
+
+function fnv1a32(value: string): string {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash.toString(16).padStart(8, "0");
+}
+
+export function agentReviewRevision(subject: AgentReviewSubject): string {
+  const blueprint = validateBlueprint(subject.blueprint);
+  const canonical = stableReviewJson({
+    blueprint,
+    knowledgePack: subject.knowledgePack,
+    systemPrompt: subject.systemPrompt,
+  });
+  return "arv1_" + fnv1a32(canonical);
+}
+
 
 const CONSEQUENTIAL_CAPABILITIES = new Set<AgentCapability>([
   "create_maintenance_job",
@@ -338,6 +380,8 @@ export function buildAgentReviewRequirements(input: {
 
 export function finalizeAgentReview(input: {
   blueprint: AgentBlueprintV1;
+  knowledgePack: unknown;
+  systemPrompt: string;
   factMeta?: ScanBusinessFactMeta;
   fieldMeta?: ScanDraftFieldMeta;
   missing?: string[];
@@ -351,7 +395,17 @@ export function finalizeAgentReview(input: {
     missing: input.missing,
   });
   const record = input.record;
-  const canonical = buildAgentReviewRecord(requirements, record.confirmedIds);
+  const revisionId = agentReviewRevision({
+    blueprint: trusted,
+    knowledgePack: input.knowledgePack,
+    systemPrompt: input.systemPrompt,
+  });
+  const canonical = buildAgentReviewRecord(
+    requirements,
+    record.confirmedIds,
+    revisionId,
+  );
+  const sameRevision = record.revisionId === canonical.revisionId;
   const sameRequired =
     JSON.stringify(record.requiredIds) === JSON.stringify(canonical.requiredIds);
   const sameConfirmed =
@@ -362,6 +416,7 @@ export function finalizeAgentReview(input: {
     record.version === AGENT_REVIEW_VERSION &&
     record.complete === true &&
     canonical.complete &&
+    sameRevision &&
     sameRequired &&
     sameConfirmed &&
     sameMissing;
@@ -391,7 +446,11 @@ export function finalizeAgentReview(input: {
 export function buildAgentReviewRecord(
   requirements: AgentReviewRequirement[],
   confirmedIds: readonly string[],
+  revisionId: string,
 ): AgentReviewRecord {
+  if (!/^arv1_[0-9a-f]{8}$/.test(revisionId)) {
+    throw new Error("Agent review revision ID is invalid.");
+  }
   const requiredIds = requirements.map((item) => item.id);
   const submitted = new Set(confirmedIds);
   const confirmed = requiredIds.filter((id) => submitted.has(id));
@@ -399,6 +458,7 @@ export function buildAgentReviewRecord(
   const missingIds = requiredIds.filter((id) => !confirmedSet.has(id));
   return {
     version: AGENT_REVIEW_VERSION,
+    revisionId,
     complete: missingIds.length === 0,
     requiredIds,
     confirmedIds: confirmed,
