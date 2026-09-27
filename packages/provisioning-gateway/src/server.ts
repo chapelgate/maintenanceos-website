@@ -8,10 +8,19 @@ import http from "node:http";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import {
+  loadConnectorRegistryFromEnv,
+  loadTtncSecretRegistryFromEnv,
+} from "../../agent-adapters/src/registry.ts";
+import type {
+  ConnectorRegistry,
+  TtncSecretRegistry,
+} from "../../agent-adapters/src/types.ts";
+import {
   authenticateProvisioningRequest,
   loadProvisioningPrincipalFromEnv,
   type ProvisioningAuthHeaders,
 } from "./auth.ts";
+import { prepareProvisioningAdapters } from "./adapters.ts";
 import { provisionAgent } from "./engine.ts";
 import { isProvisioningGatewayEnabled } from "./flags.ts";
 import {
@@ -28,6 +37,7 @@ export const DEFAULT_HOST = "127.0.0.1";
 export const DEFAULT_PORT = 8792;
 export const MAX_BODY_BYTES = 256 * 1024;
 const REQUEST_PATH = "/v1/provisioning/requests";
+const ADAPTER_PREPARE_PATH = "/v1/provisioning/adapters/prepare";
 
 export type ProvisioningServerOptions = {
   host?: string;
@@ -35,6 +45,8 @@ export type ProvisioningServerOptions = {
   enabled?: boolean;
   principal?: ProvisioningPrincipal | null;
   store?: ProvisioningStore;
+  connectorRegistry?: ConnectorRegistry;
+  ttncSecrets?: TtncSecretRegistry;
   nowMs?: () => number;
   now?: () => Date;
 };
@@ -112,10 +124,13 @@ function statusFor(result: ProvisioningResult): number {
     case "tenant_forbidden":
     case "browser_origin_forbidden":
       return 403;
+    case "provisioning_not_found":
+      return 404;
     case "idempotency_conflict":
       return 409;
     case "invalid_blueprint":
     case "qualification_required":
+    case "adapter_not_configured":
       return 422;
     case "payload_too_large":
       return 413;
@@ -157,12 +172,14 @@ export async function handleProvisioningRequest(
       telephony: false,
       providerMutation: false,
       productDatabaseAccess: false,
+      adapterPreparation: true,
       requestPath: REQUEST_PATH,
+      adapterPreparePath: ADAPTER_PREPARE_PATH,
     });
     return;
   }
 
-  if (pathname !== REQUEST_PATH) {
+  if (pathname !== REQUEST_PATH && pathname !== ADAPTER_PREPARE_PATH) {
     send(res, 404, { ok: false, error: "Not found." });
     return;
   }
@@ -258,13 +275,26 @@ export async function handleProvisioningRequest(
     return;
   }
 
-  const result = provisionAgent({
-    request: parsed,
-    principal: authenticated.principal,
-    idempotencyKey: authenticated.idempotencyKey,
-    store,
-    now: options.now,
-  });
+  const result =
+    pathname === ADAPTER_PREPARE_PATH
+      ? prepareProvisioningAdapters({
+          request: parsed,
+          principal: authenticated.principal,
+          idempotencyKey: authenticated.idempotencyKey,
+          store,
+          registry:
+            options.connectorRegistry ?? loadConnectorRegistryFromEnv(),
+          ttncSecrets:
+            options.ttncSecrets ?? loadTtncSecretRegistryFromEnv(),
+          now: options.now,
+        })
+      : provisionAgent({
+          request: parsed,
+          principal: authenticated.principal,
+          idempotencyKey: authenticated.idempotencyKey,
+          store,
+          now: options.now,
+        });
   send(res, statusFor(result), result);
 }
 
@@ -277,7 +307,18 @@ export function createProvisioningServer(
       ? loadProvisioningPrincipalFromEnv()
       : options.principal;
   const store = options.store ?? createProvisioningStoreFromEnv();
-  const shared = { ...options, enabled, principal, store };
+  const connectorRegistry =
+    options.connectorRegistry ?? loadConnectorRegistryFromEnv();
+  const ttncSecrets =
+    options.ttncSecrets ?? loadTtncSecretRegistryFromEnv();
+  const shared = {
+    ...options,
+    enabled,
+    principal,
+    store,
+    connectorRegistry,
+    ttncSecrets,
+  };
 
   return http.createServer((req, res) => {
     handleProvisioningRequest(req, res, shared).catch((error) => {
@@ -324,7 +365,12 @@ export function listenProvisioningServer(
         port +
         REQUEST_PATH,
     );
-    console.log("[provisioning-gateway] browser access disabled; no telephony/provider mutation");
+    console.log(
+      "[provisioning-gateway] adapter preparation " + ADAPTER_PREPARE_PATH,
+    );
+    console.log(
+      "[provisioning-gateway] browser access disabled; adapters prepare only; no telephony/provider mutation",
+    );
   });
   const shutdown = () => {
     server.close(() => process.exit(0));
