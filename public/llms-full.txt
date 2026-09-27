@@ -30,7 +30,7 @@ Not offered here:
 - Self-serve “call our AI now” demo
 - Customer login, billing portal, or live status metrics
 - Ratings, reviews, or aggregate scores
-- Invented crawl results (staging scan is still owner-blocked: DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild)
+- Invented crawl results (public staging scan is not enabled; queued crawl is the expected fallback)
 
 ## VERIFIED (present as product capability in source — still pre-launch, not “buy now live service”)
 
@@ -59,14 +59,14 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Public / production hosting of the product runtime — do not market as public production
 - Website `/dashboard` foundation — coming / under testing unless a local flag is on; SAMPLE / DEMO rows only, not live call history
 - Website `/create` multi-step funnel exists as an early-access preview (F-01). Marketing `/how-it-works`, `/features`, `/demo`, and funnel-page SEO / JSON-LD now describe the same path (website URL → check → review → pack → optional scripted sandbox → early access). Not a live receptionist. Under testing as a productised website-to-assistant until live scan on staging is evidenced
-- SSRF-safe website scan companion (F-02) — flagged; staging scan is still owner-blocked (DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild). Queued crawl only — do not invent crawl results or claim a live knowledge crawl
+- SSRF-safe website scan companion (F-02) — flagged and off on public staging. Queued crawl is the expected fallback — do not invent crawl results or claim a live knowledge crawl
 - Knowledge pack + system prompt draft (F-03) and pack-aware scripted sandbox (F-04) — under testing; not a live phone
-- Scripted conversation benchmark (F-05) exists for fixture scoring only. Live-call barge-in is open. Not Fonio voice-quality parity. No always-on live phone
+- Scripted conversation benchmark (F-05) exists for fixture scoring only. Live-call barge-in remains open. It is not evidence of live voice-quality parity or an always-on phone service
 
 ## NOT CLAIMED (omit; do not state as fact)
 
 - Commercially generally available / production customer call pilot
-- Controlled production Gemini call on a canonical deployment
+- Controlled carrier call proven on the current canonical runtime
 - Public production voice / Twilio media streaming proven on canonical runtime
 - Concurrent multi-line capacity numbers
 - Public customer portal / account login / billing GA
@@ -79,7 +79,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 
 ## Structured data and robots (claims-safe)
 
-Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/property-maintenance-software/`) publish Organization + WebSite + WebPage + SoftwareApplication JSON-LD from the same funnel copy. Industry pages publish audience-specific WebPage + SoftwareApplication + BreadcrumbList JSON-LD. SoftwareApplication has no telephone, aggregateRating, reviews, or offers. `/faq/` publishes FAQPage JSON-LD from the same answers as the page: website URL → check → review → pack → optional scripted sandbox → early access; queued crawl if scan unset; empty hours/services stay empty; UK 999; owner-blocked staging scan. robots.txt allows major AI crawlers to read marketing pages, `/llms.txt`, and this file. Do not treat schema or this file as evidence of a live phone, always-on line, general availability, ratings, or a completed staging crawl.
+Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/property-maintenance-software/`) publish Organization + WebSite + WebPage + SoftwareApplication JSON-LD from the same funnel copy. Industry pages publish audience-specific WebPage + SoftwareApplication + BreadcrumbList JSON-LD. SoftwareApplication has no telephone, aggregateRating, reviews, or offers. `/faq/` publishes FAQPage JSON-LD from the same answers as the page: website URL → check → review → pack → optional scripted sandbox → early access; queued crawl if scan unset; empty hours/services stay empty; UK 999; public staging scan is not enabled. robots.txt allows major AI crawlers to read marketing pages, `/llms.txt`, and this file. Do not treat schema or this file as evidence of a live phone, always-on line, general availability, ratings, or a completed staging crawl.
 
 ## Key URLs
 

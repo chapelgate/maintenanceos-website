@@ -1,13 +1,13 @@
 # MaintenanceOS value proposition
 
 **Owner:** MOS Website Manager
-**Updated:** 2026-09-25
-**Status:** Canonical website messaging for Step 3
+**Updated:** 2026-09-27
+**Status:** Canonical website messaging; Continuation Step 4 refinement
 **Claims source:** PRODUCT_CLAIMS_REGISTER.md
 
 ## One-sentence explanation
 
-**MaintenanceOS by Chapelgate helps UK landlords, letting agents, property managers, and maintenance teams capture maintenance requests, structure the work, escalate critical cases, and keep approvals with authorised people.**
+**MaintenanceOS by Chapelgate helps UK property and maintenance teams turn incoming repair reports into structured work: capture the facts, separate critical cases from routine jobs, and keep consequential decisions with authorised people.**
 
 This is the canonical plain-English explanation. The product remains pre-launch. The AI receptionist capability is under testing and must not be presented as a public always-on phone service.
 

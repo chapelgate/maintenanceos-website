@@ -35,6 +35,7 @@ const head = execFileSync("git", ["rev-parse", "HEAD"], {
 run(process.execPath, [npmCli, "run", "lint"], "eslint");
 run(process.execPath, [npmCli, "test"], "full test suite");
 run(process.execPath, [npmCli, "run", "build"], "production static build");
+run(process.execPath, [npmCli, "run", "functional:smoke"], "functional export smoke");
 run(process.execPath, [npmCli, "run", "performance:budget"], "performance budget");
 run(process.execPath, [npmCli, "run", "accessibility:check"], "accessibility gate");
 

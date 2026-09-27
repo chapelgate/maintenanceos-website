@@ -62,7 +62,7 @@ export default function PricingPage() {
                 ) : null}
                 <a
                   href={tier.cta.href}
-                  className="mt-6 inline-flex items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover"
+                  className="mt-6 inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
                 >
                   {tier.cta.label}
                 </a>

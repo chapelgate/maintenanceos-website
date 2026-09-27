@@ -26,7 +26,7 @@ export const funnelPageCopy = {
   home: {
     title: "UK maintenance operations software",
     absoluteTitle: `${siteConfig.publicBrand} — UK maintenance operations software`,
-    description: `${siteConfig.publicBrand} is pre-launch UK maintenance operations software with AI-assisted intake for landlords, agents, managers, and maintenance teams. ${FUNNEL_PATH_LABEL}. ${FUNNEL_META_GUARD}`,
+    description: `${siteConfig.publicBrand} is pre-launch UK maintenance operations software for property and maintenance teams, turning repair reports into structured work while rules and authorised people keep control. ${FUNNEL_PATH_LABEL}. ${FUNNEL_META_GUARD}`,
     path: "/",
   },
   create: {

@@ -12,7 +12,7 @@ test("homepage leads with customer outcome before architecture", () => {
   assert.match(page, /Turn maintenance requests into clear, controlled work\./);
   assert.match(
     page,
-    /helps UK landlords, letting agents,[\s\S]*capture maintenance[\s\S]*structure the work[\s\S]*escalate critical cases[\s\S]*approvals with authorised people/,
+    /helps UK property and maintenance[\s\S]*incoming repair reports[\s\S]*separate critical cases from routine jobs[\s\S]*consequential decisions with authorised people/,
   );
   assert.match(page, /What your team gets/);
   assert.match(page, /Capture the request clearly/);
@@ -73,4 +73,6 @@ test("major-page first screens retain honesty and no invented live service", () 
   assert.doesNotMatch(joined, /24\/7 AI receptionist/i);
   assert.doesNotMatch(joined, /live always-on receptionist/i);
   assert.doesNotMatch(joined, /guaranteed/i);
+  assert.doesNotMatch(joined, /Gemini/i);
+  assert.doesNotMatch(joined, /Fonio/i);
 });

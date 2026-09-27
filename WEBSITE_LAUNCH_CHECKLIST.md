@@ -1,7 +1,7 @@
 # WEBSITE_LAUNCH_CHECKLIST.md
 
 **Owner:** MOS Website Manager + Final Verifier
-**Updated:** 2026-09-26
+**Updated:** 2026-09-27
 **Mode:** PRE-LAUNCH
 **Rule:** Do **not** set `NEXT_PUBLIC_PUBLIC_LAUNCH=true` until every launch-only gate below is cleared.
 
@@ -61,11 +61,11 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 
 - [x] `WEBSITE_SECURITY_REVIEW.md` filled.
 - [x] HTML CSP / referrer policy and form-abuse controls reviewed.
-- [x] Dependency audit: 0 known vulnerabilities at 2026-09-26 reconciliation.
-- [x] Common committed-secret pattern scan clean at 2026-09-26 reconciliation.
+- [x] Dependency audit: 0 known vulnerabilities at 2026-09-27 final engineering RC.
+- [x] Common committed-secret pattern scan clean at 2026-09-27 final engineering RC.
 - [ ] Resolve or explicitly accept the documented HTTP response-header /
   clickjacking gap on the current static host before public launch.
-- [ ] Staging red-team report reviewed with no unfixed critical/high launch blockers.
+- [x] Bounded automated staging red-team report reviewed on 2026-09-27 with no failures or identified critical/high public-surface blockers; not represented as an independent penetration test.
 
 ## Performance
 
@@ -91,7 +91,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
   companion must use a separately authorised DigitalOcean process.
 - [x] Automated repository/release test baseline is green.
 - [ ] Broader cross-browser/manual mobile matrix complete.
-- [ ] Red-team staging pass complete.
+- [x] Bounded automated staging red-team pass complete; independent penetration testing remains a separate product/launch assurance decision.
 
 ## PUBLIC_LAUNCH flip gate
 
@@ -100,8 +100,8 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 - [ ] Legal drafts cleared by counsel.
 - [ ] Security response-header risk resolved/accepted.
 - [ ] Manual accessibility + cross-browser QA complete.
-- [ ] Red-team report reviewed; no unfixed critical/high launch blockers.
-- [ ] Final release-candidate verifier/DoD sign-off.
+- [x] Bounded staging red-team report reviewed; no unfixed critical/high public-website blockers identified by that scope.
+- [x] Final engineering release-candidate verifier/DoD sign-off passed on 2026-09-27; public-launch human gates remain open.
 - [ ] `MAINTENANCEOS_WEBSITE_FINAL_REPORT.md` generated from that final launch RC.
 
 Until these are all clear, the site remains truthful **PRE-LAUNCH**.

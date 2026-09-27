@@ -56,7 +56,7 @@ export default function SecurityPage() {
           <li>
             Website scan is designed to be SSRF-safe (HTTPS, private-IP deny,
             redirect re-check) and is flagged off by default. Staging often
-            queues the crawl. Not a live Fonio-parity knowledge crawl.
+            queues the crawl. Not a live production knowledge crawl.
           </li>
         </ul>
       </section>

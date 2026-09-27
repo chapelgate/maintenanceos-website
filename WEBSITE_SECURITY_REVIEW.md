@@ -1,6 +1,6 @@
 # MaintenanceOS website security review
 
-**Updated:** 2026-09-26
+**Updated:** 2026-09-27
 **Scope:** public/pre-launch marketing website and its website-only companion contracts
 **Status:** engineering review complete; one known hosting-header gap remains open for launch review
 
@@ -37,14 +37,31 @@ protection is the remaining documented hosting gap. Do not add fake meta tags,
 `public/_headers`, incompatible Next `headers()`, a duplicate hosting app, or
 a Node service merely to make the checklist look green.
 
+## 2026-09-27 live re-verification
+
+A cache-bypassed live header audit confirmed that the current DigitalOcean static
+origin returns none of the desired arbitrary security response headers above.
+The exported HTML still carries the enforcing meta CSP and referrer policy.
+
+Current DigitalOcean App Platform documentation exposes static-site CORS controls,
+but no supported arbitrary response-header field for this static component shape.
+DigitalOcean also documents that App Platform does not itself emit HSTS; the
+current `.ondigitalocean.app` hostname benefits from browser HSTS preload because
+the `.app` TLD is preloaded. That is transport behaviour, not an HSTS-header claim.
+
+Executable verification: `npm run security:live`.
+
 ## Launch disposition
 
-This gap does not justify mutating the current healthy staging architecture in
-a documentation pass. Before public launch, Security/DevOps must either:
+Engineering investigation is complete. This gap does not justify mutating the
+current healthy static architecture or adding duplicate infrastructure. Before
+public launch, the residual response-header/clickjacking risk must either:
 
-1. prove a supported response-header configuration on the existing hosting path; or
-2. explicitly accept the residual static-host risk for launch; or
-3. move hosting only through a separately reviewed architecture change.
+1. be explicitly accepted by the launch owner/security reviewer; or
+2. be resolved through a separately reviewed supported hosting/edge change.
+
+Do not mark arbitrary HTTP security headers as live until the strict executable
+gate (`REQUIRE_SECURITY_HEADERS=1 npm run security:live`) actually passes.
 
 ## Evidence
 

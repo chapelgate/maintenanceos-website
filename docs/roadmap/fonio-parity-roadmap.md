@@ -56,7 +56,7 @@
 
 - MaintenanceOS / trades packs (job intake, SLA language, UK safety) — marketing `/industries/*` now **PARTIAL (stronger) / SUPERIOR-in-positioning-only**; product packs still under test
 - Property / letting templates
-- Industry *OS portfolio under Chapelgate Technologies
+- Industry *OS portfolio under Chapelgate
 
 ## Definition of done (mission)
 

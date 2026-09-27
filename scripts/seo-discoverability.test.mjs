@@ -55,13 +55,13 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
   assert.match(text, /MaintenanceOS by Chapelgate/);
   assert.match(text, /Chapelgate is the publisher/);
   assert.match(text, /Create from website/);
-  assert.match(text, /owner-blocked/);
+  assert.match(text, /public staging website scan is not enabled/i);
   assert.match(text, /do not invent crawl results/i);
   assert.match(text, /not a live phone/i);
   assert.match(text, /not commercially generally available/i);
   assert.match(text, /Do not claim/i);
   assert.match(text, /Ratings, reviews, or aggregate scores/);
-  assert.match(text, /\[FAQ\].*owner-blocked staging scan/);
+  assert.match(text, /\[FAQ\].*public staging scan is not enabled/);
   assert.doesNotMatch(text, /always-on phone line is live/i);
 });
 
@@ -77,8 +77,8 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   assert.match(text, /do not claim that AI will overtake humans/i);
   assert.match(text, /Do not use AGI/i);
   assert.match(text, funnelPath, "must name the verified public funnel");
-  assert.match(text, /owner-blocked/);
-  assert.match(text, /DigitalOcean droplet \+ NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT \+ static rebuild/);
+  assert.match(text, /public staging scan is not enabled/i);
+  assert.doesNotMatch(text, /owner-blocked|Gemini|Fonio/i);
   assert.match(text, /do not invent crawl results/i);
   assert.match(text, /no telephone, aggregateRating, reviews, or offers/);
   assert.match(text, /robots\.txt allows major AI crawlers/);

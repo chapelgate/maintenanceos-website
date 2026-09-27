@@ -1,7 +1,7 @@
 # WEBSITE_BACKLOG.md
 
 **Owner:** MOS Website Manager
-**Updated:** 2026-09-26
+**Updated:** 2026-09-27
 **Source:** MISSION_BRIEF + current repository/deployment evidence
 
 This is the single persistent website problem register. Do not create parallel problem lists for the same website work.
@@ -32,13 +32,13 @@ This is the single persistent website problem register. Do not create parallel p
 | F15 | WCAG 2.2 AA-oriented engineering baseline | **DONE / LIVE VERIFIED** — original Step 47; automated/source baseline, not third-party certification | Accessibility |
 | F15-MANUAL | Full manual keyboard + assistive-technology accessibility pass | **OPEN LAUNCH QA** — automated baseline does not substitute for specialist/manual coverage | Accessibility + QA |
 | F16 | Performance / Core Web Vitals-oriented lab verification | **DONE / LIVE VERIFIED** — original Step 46; lab evidence, not field/CrUX claim | Performance |
-| F17 | Website security engineering review | **DONE BASELINE** — `WEBSITE_SECURITY_REVIEW.md` + static security baseline; dependency audit and secret-pattern scan clean on 2026-09-26 | Security |
-| F17-HEADERS | HTTP response-header / clickjacking protection on current static host | **OPEN LAUNCH RISK DECISION** — prove supported headers, explicitly accept residual risk, or separately review a hosting change; do not create duplicate hosting to make the checkbox green | Security + DevOps |
+| F17 | Website security engineering review | **DONE BASELINE** — `WEBSITE_SECURITY_REVIEW.md` + static security baseline; dependency audit and secret-pattern scan clean on 2026-09-27 | Security |
+| F17-HEADERS | HTTP response-header / clickjacking protection on current static host | **ENGINEERING INVESTIGATION COMPLETE / HUMAN LAUNCH RISK DECISION** — live audit confirms missing arbitrary response headers; current DO static spec exposes CORS rather than a proven arbitrary-header control; strict executable gate added; accept risk or separately review hosting/edge change before public launch | Security + DevOps |
 | F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED** — original Step 9; cookieless first-party measurement | Analytics |
 | F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented; companion docs aligned to DO-only policy | DevOps |
 | F20 | Automated functional/release tests | **DONE BASELINE** — full repository tests + build + performance + accessibility + live health + exact release-SHA verification are release gates | QA |
 | F21 | Mobile/cross-browser QA | **PARTIAL** — true 390px Edge/mobile journey verified; broader browser/manual matrix remains open | QA |
-| F22 | Red team on staging | **OPEN LAUNCH QA** | Red Team |
+| F22 | Red team on staging | **DONE AUTOMATED / BOUNDED** — 2026-09-27 public-surface red-team regression passed 0 failures under an 18-request budget; this is not an independent penetration test | Red Team |
 | F23 | Durable handoff/source-of-truth docs | **DONE** — `CURSOR_HANDOFF.md`, `WEBSITE_SOURCE_OF_TRUTH.md`, Website Manager loop | Documentation |
 | F24 | Original website engineering DoD verification | **DONE** — original 50-step programme release verified; separate continuation/launch gates remain tracked | Final Verifier |
 | C1 | Continuation Step 1 — freeze/prove current baseline | **DONE — final code release `2f893f5c5c8a45d46f2db4fec4fa3c146424d78b` verified live; closure evidence recorded in the continuation runbook and PR thread** | Website Manager |
@@ -52,6 +52,18 @@ This is the single persistent website problem register. Do not create parallel p
 | C1-LOOPBACK | One docs-only preflight run timed out several localhost test servers on `127.0.0.1` | **RESOLVED / ENVIRONMENT TRANSIENT** — the exact failing loopback suites immediately reran 22/22 PASS; no production code or test thresholds changed | QA |
 | C3 | Continuation Step 3 — refresh website product evidence against current canonical MaintenanceOS source | **DONE IN CANDIDATE** — exact product checkpoint pinned; claims register re-signed; provider-specific marketing wording removed; commissioning-only local voice candidate kept UNDER TEST; no live/GA promotion | Product Investigator + Website Manager |
 | C3-PRODUCT-WIN | Broad product pytest on Windows cannot execute Linux `resource` concurrency modules and reports POSIX-mode semantics differently on NTFS | **NON-BLOCKING ENVIRONMENT LIMIT** — claims promotion relies on 88/88 targeted control regressions; broad Windows run still passed 356 tests and no concurrency/production claim was promoted | Product Investigator + QA |
+| C4 | Continuation Step 4 — positioning/message refinement | **DONE IN CANDIDATE** — buyer message sharpened around structured UK maintenance intake, critical-vs-routine separation, human authority and traceability; public provider/competitor wording removed; no capability claim promoted | Positioning + Website Manager |
+| C5 | Continuation Step 5 — brand/UI consistency | **DONE IN CANDIDATE** — publisher identity normalised to Chapelgate; pricing CTA restored to shared accent token + 44px minimum target; regression added for naming/token drift | Brand + Front-End + Website Manager |
+| C6 | Continuation Step 6 — full functional QA | **DONE IN CANDIDATE** — zero-dependency exported-site + local lead-contract smoke added to release preflight; no production side effects | QA + Website Manager |
+| C7 | Continuation Step 7 — mobile/cross-browser QA | **DONE ENGINEERING IN CANDIDATE** — reusable real-Edge viewport smoke added for mobile/tablet/desktop; Safari/Firefox/manual AT remain explicit human launch coverage | QA + Front-End |
+| C8 | Continuation Step 8 — security hardening | **DONE ENGINEERING IN CANDIDATE** — live header inventory executable added; meta CSP/referrer verified; unsupported static-host response headers documented as explicit residual launch risk; no duplicate hosting | Security + DevOps + Website Manager |
+| C9 | Continuation Step 9 — red-team public staging | **DONE IN CANDIDATE** — bounded 18-request live staging red-team passed 0 failures; sensitive paths/methods/reflection/redirect/error leakage/CORS checked without destructive activity | Red Team + Defender |
+| C10 | Continuation Step 10 — accessibility verification | **DONE ENGINEERING IN CANDIDATE** — 12/12 source/export checks + 18/18 real-Edge viewport checks pass; manual AT/Safari remains explicit human launch QA | Accessibility + QA |
+| C11 | Continuation Step 11 — performance verification | **DONE IN CANDIDATE** — 28 exported pages pass 600 KB raw / 190 KB gzip JS and 120 KB CSS budgets; no field-CWV claim | Performance + Website Manager |
+| C12 | Continuation Step 12 — SEO/machine discovery verification | **DONE IN CANDIDATE** — llms/search metadata aligned to current provider-neutral positioning; stale owner-blocked/provider/competitor language removed; currentness regression added | SEO + Product Investigator |
+| C13 | Continuation Step 13 — conversion path acceptance | **DONE IN CANDIDATE** — 9/9 conversion regressions, production control-plane readiness/CORS and local 26-route lead smoke pass; no duplicate production lead created | Conversion + Forms + Website Manager |
+| C14 | Continuation Step 14 — legal/launch gate separation | **DONE IN CANDIDATE** — human legal/manual-browser/security-risk/owner approvals separated from completed engineering; public launch default false; regression prevents checkbox/compliance theatre | Website Manager + Gate Owners |
+| C15 | Continuation Step 15 — final engineering RC/freeze | **ENGINEERING RC PASS / RELEASE PENDING** — exact candidate passed 205/205 website tests, 185/185 package/runtime tests, build, functional, browser, security, bounded red-team, conversion, SEO, audit and secret gates; close operationally only after PR merge + exact DigitalOcean merge-SHA verification + durable PR record | Website Manager + Final Verifier |
 
 ## Step 1 completion
 

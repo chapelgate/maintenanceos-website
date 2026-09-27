@@ -34,7 +34,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Landlords",
     card: "LandlordOS — UK emergency triage vs jobs; no invented vans or client-money.",
     title: "LandlordOS — maintenance calls that become structured work.",
-    sub: "For UK landlords who need caller details captured clearly, 999 separated from jobs, safety paths that latch for a person, and no AI authority over money or dispatches. Pre-launch product line under Chapelgate Technologies. Not a live always-on phone.",
+    sub: "For UK landlords who need caller details captured clearly, 999 separated from jobs, safety paths that latch for a person, and no AI authority over money or dispatches. Pre-launch product line under Chapelgate. Not a live always-on phone.",
     job: [
       "Out-of-hours or missed maintenance calls when you cannot pick up — notes must stay honest, not invented.",
       "Residents mix danger with routine repairs; 999 is emergency services, a job is work to schedule.",
@@ -60,7 +60,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Letting agents",
     card: "LettingAgentOS — portfolio intake with 999-vs-jobs triage; rules stay in charge.",
     title: "LettingAgentOS — portfolio maintenance intake without the model running the agency.",
-    sub: "For UK letting agents who need consistent caller capture across landlords and tenants, 999 separated from jobs, and rules — not improvisation — owning safety, dispatch language, and money boundaries. Pre-launch product line under Chapelgate Technologies. Not a live always-on phone.",
+    sub: "For UK letting agents who need consistent caller capture across landlords and tenants, 999 separated from jobs, and rules — not improvisation — owning safety, dispatch language, and money boundaries. Pre-launch product line under Chapelgate. Not a live always-on phone.",
     job: [
       "High call volume across many properties; out-of-hours notes get lost between phones and inboxes.",
       "Tenants and landlords both calling — roles and permissions must stay clear.",
@@ -86,7 +86,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Property managers",
     card: "PropertyManagerOS — multi-tenant ops with 999-vs-jobs triage; no autonomous dispatch.",
     title: "PropertyManagerOS — multi-tenant maintenance ops with AI for intake, rules for the operation.",
-    sub: "For UK property managers who run properties, residents, contractors, and work orders and need accountable emergency triage without autonomous dispatch or client-money authority. Pre-launch product line under Chapelgate Technologies. Not a live always-on phone.",
+    sub: "For UK property managers who run properties, residents, contractors, and work orders and need accountable emergency triage without autonomous dispatch or client-money authority. Pre-launch product line under Chapelgate. Not a live always-on phone.",
     job: [
       "Coordinating jobs across sites without a single structured intake spine — including out-of-hours reports.",
       "Safety-critical reports that must not be “handled” by a model alone; 999 is not a work order.",
@@ -139,7 +139,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Housing associations",
     card: "HousingAssociationOS — 999-vs-jobs latch and escalation; no client-money or invented dispatch.",
     title: "HousingAssociationOS — accountable intake for housing maintenance.",
-    sub: "For UK housing associations and housing providers who need structured reporting, 999 separated from jobs, safety latching, and escalation queues without over-claiming live voice GA. Pre-launch product line under Chapelgate Technologies. Not a live always-on phone.",
+    sub: "For UK housing associations and housing providers who need structured reporting, 999 separated from jobs, safety latching, and escalation queues without over-claiming live voice GA. Pre-launch product line under Chapelgate. Not a live always-on phone.",
     job: [
       "Vulnerable residents and safety-critical fabric issues need clear escalation — 999 is not a contractor job.",
       "Out-of-hours phone reports still drop unstructured detail; capture must stay honest.",
@@ -164,7 +164,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Facilities management",
     card: "FacilitiesOS — 999-vs-jobs site triage; no autonomous dispatch or client-money.",
     title: "FacilitiesOS — site maintenance triage with clearance and audit in the loop.",
-    sub: "For UK facilities management teams coordinating sites, contractors, and urgent reports — AI for capture, rules and people for consequential steps. Pre-launch product line under Chapelgate Technologies. Not a live always-on phone.",
+    sub: "For UK facilities management teams coordinating sites, contractors, and urgent reports — AI for capture, rules and people for consequential steps. Pre-launch product line under Chapelgate. Not a live always-on phone.",
     job: [
       "Mixed urgent and routine reports across sites, including out-of-hours.",
       "Need for consistent classification before a contractor moves — 999 is not a work order.",
@@ -189,7 +189,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Councils",
     card: "CouncilOS — controlled 999-vs-jobs intake; no invented dispatch or client-money.",
     title: "CouncilOS — controlled maintenance intake for public-sector teams.",
-    sub: "For council and local-authority maintenance contacts evaluating early access — honest about pilot stage, strict about 999-vs-jobs, contractor-dispatch language, and money boundaries. Pre-launch product line under Chapelgate Technologies. Not a live always-on phone.",
+    sub: "For council and local-authority maintenance contacts evaluating early access — honest about pilot stage, strict about 999-vs-jobs, contractor-dispatch language, and money boundaries. Pre-launch product line under Chapelgate. Not a live always-on phone.",
     job: [
       "Public callers expect clarity; systems must not over-promise a contractor or a live always-on line.",
       "Emergency wording must follow UK practice (999), not improvised or US scripts.",
@@ -215,7 +215,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Holiday lets",
     card: "HolidayLetOS — out-of-hours guest reports structured; 999 vs jobs, no invented engineer.",
     title: "HolidayLetOS — guest maintenance calls, structured — without autonomous dispatch.",
-    sub: "For UK holiday-let operators who get out-of-hours guest reports and need clear capture, 999 separated from jobs, and human handover — not a model inventing engineer visits or a live always-on guest line. Pre-launch product line under Chapelgate Technologies.",
+    sub: "For UK holiday-let operators who get out-of-hours guest reports and need clear capture, 999 separated from jobs, and human handover — not a model inventing engineer visits or a live always-on guest line. Pre-launch product line under Chapelgate.",
     job: [
       "Guests calling about boilers, access, leaks — often outside office hours.",
       "Risk of anyone promising a contractor visit or compensation on the spot.",
