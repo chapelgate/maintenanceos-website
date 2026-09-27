@@ -36,6 +36,14 @@ export function AgentReviewGate({
 
       <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
         <div>
+          <dt className="font-medium text-ink">Business name</dt>
+          <dd className="text-muted">{blueprint.identity.businessName}</dd>
+        </div>
+        <div>
+          <dt className="font-medium text-ink">Business website</dt>
+          <dd className="break-all text-muted">{blueprint.identity.website}</dd>
+        </div>
+        <div>
           <dt className="font-medium text-ink">Agent role</dt>
           <dd className="text-muted">
             {agentTemplateFor(blueprint.agent.type).label}
@@ -52,7 +60,7 @@ export function AgentReviewGate({
           <dd className="text-muted">{blueprint.agent.objective}</dd>
         </div>
         <div>
-          <dt className="font-medium text-ink">Allowed capabilities</dt>
+          <dt className="font-medium text-ink">Blueprint allowed capabilities</dt>
           <dd className="text-muted">
             {blueprint.permissions.allow.length
               ? blueprint.permissions.allow.map(capabilityLabel).join(", ")
@@ -60,7 +68,7 @@ export function AgentReviewGate({
           </dd>
         </div>
         <div>
-          <dt className="font-medium text-ink">Denied capabilities</dt>
+          <dt className="font-medium text-ink">Blueprint denied capabilities</dt>
           <dd className="text-muted">
             {blueprint.permissions.deny.length
               ? blueprint.permissions.deny.map(capabilityLabel).join(", ")
