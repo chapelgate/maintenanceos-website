@@ -389,6 +389,15 @@ export function CreateReceptionistLaterSteps({
       setStatus("error");
       return;
     }
+    const currentBlueprint = agentBlueprint;
+    const currentReceptionist = receptionist;
+    if (!currentBlueprint || !currentReceptionist) {
+      setError(
+        "The generated AI configuration is missing. Generate it again before submitting.",
+      );
+      setStatus("error");
+      return;
+    }
     const review = currentReview();
     if (!review || !review.record.complete) {
       setError(
@@ -400,12 +409,12 @@ export function CreateReceptionistLaterSteps({
     let reviewedBlueprint: AgentBlueprintV1;
     try {
       reviewedBlueprint = finalizeAgentReview({
-        blueprint: agentBlueprint,
-        knowledgePack: receptionist.knowledgePack,
-        systemPrompt: receptionist.systemPrompt,
+        blueprint: currentBlueprint,
+        knowledgePack: currentReceptionist.knowledgePack,
+        systemPrompt: currentReceptionist.systemPrompt,
         factMeta,
         fieldMeta,
-        missing: receptionist.knowledgePack.missing,
+        missing: currentReceptionist.knowledgePack.missing,
         record: review.record,
       });
     } catch (reviewError) {
@@ -432,7 +441,7 @@ export function CreateReceptionistLaterSteps({
         factMeta,
         review: review.record,
         agentBlueprint: reviewedBlueprint,
-        receptionist,
+        receptionist: currentReceptionist,
       }),
       website: "",
     });
