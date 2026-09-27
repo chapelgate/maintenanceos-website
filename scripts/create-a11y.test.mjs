@@ -20,7 +20,7 @@ function readCreateFormGraph() {
 
 test("/create stepper exposes current step beyond colour", () => {
   const form = readCreateFormGraph();
-  assert.match(form, /aria-label="Create receptionist steps"/);
+  assert.match(form, /aria-label="Create AI agent steps"/);
   assert.match(form, /aria-current=\{current \? "step" : undefined\}/);
   assert.match(form, /createJourneyStepStatusLabel/);
   assert.match(form, /createJourneyStepAnnouncement/);
@@ -45,7 +45,7 @@ test("/create fields keep visible labels and tie errors with aria-describedby", 
 test("/create primary next actions stay in DOM order and are marked", () => {
   const form = readCreateFormGraph();
   const globals = read("src/app/globals.css");
-  assert.equal((form.match(/data-create-primary-action=""/g) || []).length, 4);
+  assert.equal((form.match(/data-create-primary-action=""/g) || []).length, 5);
   assert.match(globals, /button:focus-visible/);
   assert.match(globals, /outline: 2px solid var\(--color-accent\)/);
 });
