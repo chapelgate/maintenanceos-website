@@ -19,6 +19,7 @@ export async function validProvisioningEnvelope(input: {
   tenantRef?: string;
   greeting?: string;
   blueprintId?: string;
+  agentType?: Parameters<typeof buildAgentBlueprintDraft>[0]["type"];
 } = {}): Promise<ProvisioningRequestInput> {
   const draft = {
     businessName: "Acme Plumbing",
@@ -29,7 +30,7 @@ export async function validProvisioningEnvelope(input: {
     faqs: "Q: Do you cover Wirral?\nA: Yes.",
   };
   const selected = buildAgentBlueprintDraft({
-    type: "maintenance_desk",
+    type: input.agentType ?? "maintenance_desk",
     businessName: draft.businessName,
     businessUrl: "https://acme.example/",
     facts: {
