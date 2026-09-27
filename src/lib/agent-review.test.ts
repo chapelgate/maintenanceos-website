@@ -202,18 +202,34 @@ test("lifecycle cannot advance on incomplete or forged review evidence", () => {
   const incomplete = buildAgentReviewRecord(requirements, ["control:role"]);
 
   assert.throws(
-    () => finalizeAgentReview(draft, incomplete),
+    () => finalizeAgentReview(draft, requirements, incomplete),
     /incomplete/i,
   );
 
   assert.throws(
     () =>
-      finalizeAgentReview(draft, {
+      finalizeAgentReview(draft, requirements, {
         ...incomplete,
         complete: true,
         missingIds: [],
       }),
     /incomplete/i,
+  );
+});
+
+test("forged empty requirement record cannot bypass the canonical review gate", () => {
+  const draft = blueprint("maintenance_desk");
+  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  assert.throws(
+    () =>
+      finalizeAgentReview(draft, requirements, {
+        version: "1.0.0",
+        complete: true,
+        requiredIds: [],
+        confirmedIds: [],
+        missingIds: [],
+      }),
+    /incomplete|inconsistent/i,
   );
 });
 
@@ -224,7 +240,7 @@ test("complete review advances only lifecycle and preserves controls", () => {
     requirements,
     requirements.map((item) => item.id),
   );
-  const reviewed = finalizeAgentReview(draft, record);
+  const reviewed = finalizeAgentReview(draft, requirements, record);
 
   assert.equal(draft.lifecycle.stage, "draft");
   assert.equal(reviewed.lifecycle.stage, "reviewed");
