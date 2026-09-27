@@ -2,9 +2,12 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
+import { AgentTypeSelector } from "@/components/AgentTypeSelector";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
 import { siteConfig } from "@/config/site";
 import { submitLead } from "@/lib/lead-adapter";
+import { createAgentBlueprintDraft, agentTemplateFor } from "@/lib/agent-selection";
+import type { AgentBlueprintV1, AgentType } from "@/lib/agent-blueprint";
 import {
   EMPTY_RECEPTIONIST_DRAFT,
   createJourneyNextAction,
@@ -21,6 +24,7 @@ import {
   requestOnboardingScan,
   scanFieldReviewHint,
   type DraftFieldMeta,
+  type ScanBusinessFacts,
   type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
@@ -117,7 +121,7 @@ function DraftReviewField({
 }
 
 /**
- * Steps 2–4 of /create. Loaded after the URL/email island so First Load JS
+ * Steps 2–5 of /create. Loaded after the URL/email island so First Load JS
  * does not include scan, pack preview, or lead-submit code.
  */
 export function CreateReceptionistLaterSteps({
@@ -144,6 +148,10 @@ export function CreateReceptionistLaterSteps({
   const [scanDetail, setScanDetail] = useState<string | null>(null);
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
+  const [facts, setFacts] = useState<ScanBusinessFacts>({});
+  const [selectedAgentType, setSelectedAgentType] = useState<AgentType | null>(null);
+  const [agentBlueprint, setAgentBlueprint] = useState<AgentBlueprintV1 | null>(null);
+  const [agentSelectionError, setAgentSelectionError] = useState<string | null>(null);
   const [receptionist, setReceptionist] = useState<ReceptionistDraftResult | null>(
     null,
   );
@@ -179,7 +187,7 @@ export function CreateReceptionistLaterSteps({
   }
 
   useEffect(() => {
-    if (step < 3) return;
+    if (step < 4) return;
     void loadReceptionistDraft();
   }, [step]);
 
@@ -190,6 +198,10 @@ export function CreateReceptionistLaterSteps({
     (async () => {
       setProgress("checking");
       setScanDetail(null);
+      setFacts({});
+      setSelectedAgentType(null);
+      setAgentBlueprint(null);
+      setAgentSelectionError(null);
       await new Promise((resolve) => setTimeout(resolve, 700));
       if (cancelled) return;
 
@@ -200,6 +212,7 @@ export function CreateReceptionistLaterSteps({
           businessName: hostnameBusinessHint(businessUrl),
         });
         setFieldMeta({});
+        setFacts({});
         setProgress("queued");
         return;
       }
@@ -211,6 +224,7 @@ export function CreateReceptionistLaterSteps({
         const filled = Object.keys(outcome.draft).length > 0;
         setDraft({ ...EMPTY_RECEPTIONIST_DRAFT, ...outcome.draft });
         setFieldMeta(outcome.fieldMeta);
+        setFacts(outcome.facts);
         setProgress(filled ? "scanned" : "scanned_empty");
         return;
       }
@@ -225,6 +239,7 @@ export function CreateReceptionistLaterSteps({
       }
       setDraft(EMPTY_RECEPTIONIST_DRAFT);
       setFieldMeta({});
+      setFacts({});
       setScanDetail(outcome.message);
       setProgress("scan_failed");
     })();
@@ -258,6 +273,7 @@ export function CreateReceptionistLaterSteps({
         draft,
         scanNote: scanNoteFor(progress),
         fieldMeta,
+        agentBlueprint,
         receptionist,
       }),
       website: "",
@@ -282,10 +298,10 @@ export function CreateReceptionistLaterSteps({
       >
         <p className="font-semibold text-ink">You are on the list</p>
         <p className="mt-2 text-sm text-muted">
-          Thanks — we recorded your website-to-receptionist early access
-          request, including the draft you reviewed. No live phone number was
-          provisioned, no confirmation email was sent, and no always-on
-          receptionist was created.
+          Thanks — we recorded your website-to-AI-agent early access request,
+          including the role and draft you reviewed. No live phone number was
+          provisioned, no confirmation email was sent, and no live agent was
+          activated.
         </p>
       </div>
     );
@@ -304,7 +320,7 @@ export function CreateReceptionistLaterSteps({
       <CreateJourneyStepper step={step} headingRef={stepHeadingRef} />
       <p className="mb-6 text-sm text-muted">
         Next: {nextAction}
-        {step === 4
+        {step === 5
           ? ". Optional scripted sandbox demo is below when the local flag is on — not a live phone."
           : null}
       </p>
