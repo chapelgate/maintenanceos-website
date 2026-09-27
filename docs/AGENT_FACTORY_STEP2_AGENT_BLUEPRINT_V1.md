@@ -12,7 +12,7 @@
 
 ## Scope
 
-This step defines the versioned AgentBlueprint contract only. It does not alter the website UI, scanner, sandbox, provisioning, telephony, Twilio, Gemini, TTNC, databases, or the live MaintenanceOS phone path.
+This step defines the versioned AgentBlueprint contract only. It does not alter the website UI, scanner, sandbox, provisioning, telephony, Twilio, Gemini, legacy carrier, databases, or the live MaintenanceOS phone path.
 
 ## Contract rules
 
