@@ -141,30 +141,44 @@ export function AgentReviewGate({
           Required confirmations
         </legend>
         <div className="mt-2 space-y-2">
-          {requirements.map((item) => (
-            <label
-              key={item.id}
-              htmlFor={`${reviewId}-${item.id}`}
-              className="flex cursor-pointer gap-3 rounded-md border border-border bg-surface p-3 text-sm"
-              data-review-requirement={item.id}
-            >
-              <input
-                id={`${reviewId}-${item.id}`}
-                type="checkbox"
-                checked={confirmed.has(item.id)}
-                disabled={disabled}
-                onChange={(event) => onToggle(item.id, event.target.checked)}
-                className="mt-1"
-              />
-              <span>
-                <span className="block font-medium text-ink">{item.title}</span>
-                <span className="mt-0.5 block text-muted">{item.detail}</span>
-                <span className="mt-1 block text-xs uppercase tracking-wide text-muted">
-                  {item.kind.replaceAll("_", " ")}
+          {requirements.map((item) => {
+            const inputId = `${reviewId}-${item.id}`;
+            const titleId = `${inputId}-title`;
+            const detailId = `${inputId}-detail`;
+            const kindId = `${inputId}-kind`;
+            return (
+              <div
+                key={item.id}
+                className="flex gap-3 rounded-md border border-border bg-surface p-3 text-sm"
+                data-review-requirement={item.id}
+              >
+                <input
+                  id={inputId}
+                  type="checkbox"
+                  checked={confirmed.has(item.id)}
+                  disabled={disabled}
+                  aria-labelledby={titleId}
+                  aria-describedby={`${detailId} ${kindId}`}
+                  onChange={(event) => onToggle(item.id, event.target.checked)}
+                  className="mt-1"
+                />
+                <span>
+                  <span id={titleId} className="block font-medium text-ink">
+                    {item.title}
+                  </span>
+                  <span id={detailId} className="mt-0.5 block text-muted">
+                    {item.detail}
+                  </span>
+                  <span
+                    id={kindId}
+                    className="mt-1 block text-xs uppercase tracking-wide text-muted"
+                  >
+                    {item.kind.replaceAll("_", " ")}
+                  </span>
                 </span>
-              </span>
-            </label>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </fieldset>
     </section>
