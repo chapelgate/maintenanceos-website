@@ -45,9 +45,9 @@ function CreateLaterStepsFallback() {
 }
 
 /**
- * Claims-safe website→receptionist early-access flow.
+ * Claims-safe website→AI-agent early-access flow.
  * Business URL goes in `message` because `website` is the honeypot on submitLead.
- * Steps 2–4 load after the URL check so First Load JS stays the website island.
+ * Steps 2–5 load after the URL check so First Load JS stays the website island.
  */
 export function CreateReceptionistForm({
   onDraftChange,
@@ -145,10 +145,10 @@ export function CreateReceptionistForm({
       >
         <p className="font-semibold text-ink">You are on the list</p>
         <p className="mt-2 text-sm text-muted">
-          Thanks — we recorded your website-to-receptionist early access
-          request, including the draft you reviewed. No live phone number was
-          provisioned, no confirmation email was sent, and no always-on
-          receptionist was created.
+          Thanks — we recorded your website-to-AI-agent early access request,
+          including the draft you reviewed. No live phone number was
+          provisioned, no confirmation email was sent, and no live AI agent
+          was activated.
         </p>
       </div>
     );
