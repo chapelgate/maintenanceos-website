@@ -45,6 +45,7 @@ export function CreateJourney() {
       />
       <div className="mt-6">
         <SandboxTestCallPanel
+          key={reviewSubject?.reviewRecord.revisionId ?? "sandbox-unreviewed"}
           draft={draft}
           receptionist={receptionist}
           reviewSubject={reviewSubject}
