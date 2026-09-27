@@ -10,6 +10,10 @@ import {
   type ReceptionistDraft,
 } from "@/lib/onboarding-create-core";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
+import type {
+  AgentSandboxQualificationResult,
+  AgentSandboxReviewSubject,
+} from "@/lib/agent-sandbox-qualification";
 
 const CreateReceptionistLaterSteps = dynamic(
   () =>
@@ -52,9 +56,13 @@ function CreateLaterStepsFallback() {
 export function CreateReceptionistForm({
   onDraftChange,
   onReceptionistChange,
+  onReviewSubjectChange,
+  sandboxQualification,
 }: {
   onDraftChange?: (draft: ReceptionistDraft) => void;
   onReceptionistChange?: (built: ReceptionistDraftResult | null) => void;
+  onReviewSubjectChange?: (subject: AgentSandboxReviewSubject | null) => void;
+  sandboxQualification?: AgentSandboxQualificationResult | null;
 } = {}) {
   const [pastWebsite, setPastWebsite] = useState(false);
   const [honeypotSuccess, setHoneypotSuccess] = useState(false);
@@ -168,6 +176,8 @@ export function CreateReceptionistForm({
         }}
         onDraftChange={onDraftChange}
         onReceptionistChange={onReceptionistChange}
+        onReviewSubjectChange={onReviewSubjectChange}
+        sandboxQualification={sandboxQualification}
       />
     );
   }
