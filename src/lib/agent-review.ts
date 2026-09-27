@@ -349,8 +349,8 @@ export function buildAgentReviewRecord(
   confirmedIds: readonly string[],
 ): AgentReviewRecord {
   const requiredIds = requirements.map((item) => item.id);
-  const required = new Set(requiredIds);
-  const confirmed = [...new Set(confirmedIds)].filter((id) => required.has(id));
+  const submitted = new Set(confirmedIds);
+  const confirmed = requiredIds.filter((id) => submitted.has(id));
   const confirmedSet = new Set(confirmed);
   const missingIds = requiredIds.filter((id) => !confirmedSet.has(id));
   return {
