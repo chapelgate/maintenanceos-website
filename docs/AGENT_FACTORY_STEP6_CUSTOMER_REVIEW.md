@@ -33,10 +33,10 @@
 - `/create` now retains `factMeta` instead of discarding structured provenance.
 - Review/edit now includes submitted website, business name, greeting, locations, phone, contact email, hours, services and FAQs.
 - Optional identity edits are revalidated through AgentBlueprint v1 and cannot change permissions, rules, integrations, privacy, role or compatibility.
-- Final review panel shows the exact saved identity plus blueprint allowed/denied capabilities, transfer policy, enabled integrations and call-data settings.
-- Pack/prompt/reset edits invalidate all previous review confirmations.
+- Final review panel shows the exact saved identity plus blueprint allowed/denied capabilities, transfer policy, enabled integrations and call-data settings. The exact final stored system prompt is available read-only.
+- Draft/identity/pack/prompt/reset edits invalidate all previous review confirmations. Manual fact edits also clear stale scanner provenance.
 - Lead evidence now includes field provenance, structured fact provenance and the deterministic customer review record.
-- `finalizeAgentReview` rejects incomplete or internally inconsistent review evidence before changing lifecycle.
+- `finalizeAgentReview` independently derives canonical current requirements, rejects incomplete/inconsistent review evidence, and verifies the exact output revision before changing lifecycle.
 - Step-5 configuration generation was corrected to preserve `draft`; Step 6 owns the `reviewed` transition.
 
 ## Regression coverage written
@@ -47,12 +47,12 @@
 - Missing legacy pack facts plus structured locations/contact details.
 - Fail-closed incomplete review records.
 - Deterministic review evidence independent of checkbox order.
-- Reviewed lifecycle refuses incomplete/forged evidence.
+- Reviewed lifecycle refuses incomplete/forged/stale-revision evidence.
 - Complete review changes lifecycle only and preserves all control-plane fields.
 - Identity edits can add/remove locations/contact while preserving controls.
-- Invalid reviewed email is rejected.
+- Invalid reviewed phone/email and overflowing location lists are rejected rather than silently accepted/truncated.
 - Accessible checkbox fieldset and disabled final submit until review complete.
-- Review provenance/evidence persistence in the early-access lead message.
+- Review provenance/evidence persistence in the early-access lead message, including revision ID.
 
 ## Verification state
 
