@@ -720,8 +720,32 @@ function extractHeuristicFaqs(
 }
 
 function isPlausiblePhone(value: string): boolean {
-  const digits = value.replace(/\D/g, "");
+  const text = asUntrustedText(value, 80);
+  if (!/^\+?[\d\s().-]+$/.test(text)) return false;
+  const digits = text.replace(/\D/g, "");
   return digits.length >= 8 && digits.length <= 15;
+}
+
+function phoneIdentity(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (digits.startsWith("0044") && digits.length >= 12) return "0" + digits.slice(4);
+  if (digits.startsWith("44") && digits.length >= 11) return "0" + digits.slice(2);
+  return digits;
+}
+
+function dedupePhones(values: string[], max = 8): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const value of values) {
+    const text = asUntrustedText(value, 80);
+    if (!isPlausiblePhone(text)) continue;
+    const key = phoneIdentity(text);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(text);
+    if (out.length >= max) break;
+  }
+  return out;
 }
 
 function isPlausibleEmail(value: string): boolean {
@@ -1137,7 +1161,7 @@ export function extractDraftFromHtml(
 
   const cleanDraft = omitEmpty(draft);
   const uniqueLocations = [...new Set(locations.map((item) => asUntrustedText(item, 500)).filter(Boolean))].slice(0, 16);
-  const uniquePhones = [...new Set(phones.map((item) => asUntrustedText(item, 80)).filter(isPlausiblePhone))].slice(0, 8);
+  const uniquePhones = dedupePhones(phones, 8);
   const uniqueEmails = [...new Set(emails.map((item) => asUntrustedText(item, 120)).filter(isPlausibleEmail))].slice(0, 8);
   const facts: BusinessFacts = {};
   const factMeta: BusinessFactMeta = {};
