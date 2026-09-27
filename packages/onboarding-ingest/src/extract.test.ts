@@ -89,6 +89,73 @@ test("extractDraftFromHtml happy-path shape matches /create draft keys", () => {
   assert.ok(!warnings.includes("greeting_not_found"));
 });
 
+
+test("structured facts expose contact and locations without changing legacy draft keys", () => {
+  const html = `<!doctype html>
+  <html><head>
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"LocalBusiness",
+      "name":"North Dock Heating",
+      "telephone":"+44 151 555 0199",
+      "email":"hello@northdock.example",
+      "address":{
+        "@type":"PostalAddress",
+        "streetAddress":"10 Dock Road",
+        "addressLocality":"Liverpool",
+        "postalCode":"L1 1AA",
+        "addressCountry":"GB"
+      },
+      "areaServed":"Merseyside",
+      "openingHours":"Mo-Fr 08:00-17:00",
+      "serviceType":["Boiler repair","Heating maintenance"]
+    }
+    </script>
+  </head><body><h1>North Dock Heating</h1></body></html>`;
+  const result = extractDraftFromHtml([
+    { url: "https://northdock.example/", html },
+  ]);
+
+  assert.deepEqual(Object.keys(result.draft).sort(), [
+    "businessName",
+    "faqs",
+    "hours",
+    "services",
+  ]);
+  assert.equal(result.facts.website, "https://northdock.example/");
+  assert.equal(result.facts.businessName, "North Dock Heating");
+  assert.deepEqual(result.facts.contact, {
+    phones: ["+44 151 555 0199"],
+    emails: ["hello@northdock.example"],
+  });
+  assert.deepEqual(result.facts.locations, [
+    "10 Dock Road, Liverpool, L1 1AA, GB",
+    "Merseyside",
+  ]);
+  assert.deepEqual(result.facts.services, ["Boiler repair", "Heating maintenance"]);
+  assert.equal(result.facts.hours, "Mo-Fr 08:00-17:00");
+  assert.equal(result.factMeta.website?.source, "fetched_url");
+  assert.equal(result.factMeta.contact?.source, "jsonld");
+  assert.equal(result.factMeta.locations?.source, "jsonld");
+
+  // Existing /create draft stays backward-compatible: contacts remain only in
+  // its legacy FAQ-hint channel until a later UI step consumes structured facts.
+  assert.match(result.draft.faqs ?? "", /\+44 151 555 0199/);
+  assert.match(result.draft.faqs ?? "", /hello@northdock\.example/);
+});
+
+test("structured facts reject invalid contact values instead of promoting them", () => {
+  const html = `<html><head><script type="application/ld+json">
+    {"@type":"LocalBusiness","name":"Bad Contact Co","telephone":"123","email":"not-an-email"}
+  </script></head><body></body></html>`;
+  const result = extractDraftFromHtml([
+    { url: "https://bad-contact.example/", html },
+  ]);
+  assert.equal(result.facts.businessName, "Bad Contact Co");
+  assert.equal(result.facts.contact, undefined);
+});
+
 test("extractDraftFromHtml never invents missing fields", () => {
   const html = `<html><head><title></title></head><body><p>Hello</p></body></html>`;
   const { draft, warnings } = extractDraftFromHtml([
