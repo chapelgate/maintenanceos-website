@@ -61,6 +61,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C10 | Continuation Step 10 — accessibility verification | **DONE ENGINEERING IN CANDIDATE** — 12/12 source/export checks + 18/18 real-Edge viewport checks pass; manual AT/Safari remains explicit human launch QA | Accessibility + QA |
 | C11 | Continuation Step 11 — performance verification | **DONE IN CANDIDATE** — 28 exported pages pass 600 KB raw / 190 KB gzip JS and 120 KB CSS budgets; no field-CWV claim | Performance + Website Manager |
 | C12 | Continuation Step 12 — SEO/machine discovery verification | **DONE IN CANDIDATE** — llms/search metadata aligned to current provider-neutral positioning; stale owner-blocked/provider/competitor language removed; currentness regression added | SEO + Product Investigator |
+| C13 | Continuation Step 13 — conversion path acceptance | **DONE IN CANDIDATE** — 9/9 conversion regressions, production control-plane readiness/CORS and local 26-route lead smoke pass; no duplicate production lead created | Conversion + Forms + Website Manager |
 
 ## Step 1 completion
 
