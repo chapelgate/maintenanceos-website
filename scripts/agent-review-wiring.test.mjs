@@ -10,15 +10,24 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
-test("Step 6 rejects stale async configuration edits", () => {
+test("Step 6 rejects stale async generation and configuration edits", () => {
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+  const gate = read("src/components/AgentReviewGate.tsx");
 
   assert.match(later, /configEditVersionRef = useRef\(0\)/);
-  assert.match(later, /const editVersion = \+\+configEditVersionRef\.current/);
+  assert.match(later, /configEditPending, setConfigEditPending/);
   assert.ok(
-    (later.match(/editVersion !== configEditVersionRef\.current/g) || []).length >= 3,
+    (later.match(/const editVersion = \+\+configEditVersionRef\.current/g) || []).length >= 4,
+  );
+  assert.ok(
+    (later.match(/editVersion !== configEditVersionRef\.current/g) || []).length >= 5,
   );
   assert.match(later, /configEditVersionRef\.current \+= 1/);
+  assert.match(later, /disabled=\{configEditPending\}/);
+  assert.match(later, /Applying the latest configuration edit/);
+  assert.match(later, /Finish applying the latest configuration edit before submitting/);
+  assert.match(gate, /disabled=\{disabled\}/);
+  assert.match(gate, /aria-busy=\{disabled \|\| undefined\}/);
 });
 
 test("Step 6 invalidates confirmations and stale provenance after edits", () => {
