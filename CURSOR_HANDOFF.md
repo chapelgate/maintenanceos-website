@@ -20,6 +20,10 @@ This is a thin operator handoff, not a second backlog.
 ```bash
 npm run manager:monitor
 npm run manager:preflight
+npm run browser:smoke
+npm run security:live
+npm run redteam:staging
+npm run conversion:acceptance
 # merge through a PR into main
 EXPECTED_COMMIT=<merge-sha> npm run manager:verify
 WEBSITE_MANAGER_PR_NUMBER=<pr-number> npm run manager:record
@@ -57,4 +61,5 @@ agent board, or monitoring stack to work around a documentation gap.
 - exact deployment verification: `docs/STEP48_DEPLOYMENT_VERIFICATION.md`
 - rollback controls: `docs/STEP49_RELEASE_ROLLBACK.md`
 - product evidence refresh: `docs/CONTINUATION_STEP3_PRODUCT_EVIDENCE_REFRESH.md`
+- continuation engineering RC: `MAINTENANCEOS_WEBSITE_ENGINEERING_RC_REPORT.md`
 - closed-loop release process: `docs/STEP50_WEBSITE_MANAGER_LOOP.md`
