@@ -189,7 +189,7 @@ export function buildAgentReviewRequirements(input: {
   missing?: string[];
 }): AgentReviewRequirement[] {
   const blueprint = validateBlueprint(input.blueprint);
-  const businessNameMeta = input.factMeta?.businessName;
+  const businessNameMeta = input.fieldMeta?.businessName;
   const websiteMeta = input.factMeta?.website;
   const requirements: AgentReviewRequirement[] = [
     {
@@ -233,16 +233,9 @@ export function buildAgentReviewRequirements(input: {
     },
   ];
 
-  for (const [key, meta] of Object.entries(input.factMeta ?? {}) as Array<
-    [ScanBusinessFactKey, NonNullable<ScanBusinessFactMeta[ScanBusinessFactKey]>]
-  >) {
-    if (
-      meta.confidence !== "low" ||
-      key === "businessName" ||
-      key === "website"
-    ) {
-      continue;
-    }
+  for (const key of ["locations", "contact"] as const) {
+    const meta = input.factMeta?.[key];
+    if (!meta || meta.confidence !== "low") continue;
     requirements.push({
       id: "fact:" + key,
       kind: "low_confidence",
@@ -254,11 +247,10 @@ export function buildAgentReviewRequirements(input: {
     });
   }
 
-  const structuredKeys = new Set(Object.keys(input.factMeta ?? {}));
   for (const [key, meta] of Object.entries(input.fieldMeta ?? {}) as Array<
     [keyof ScanDraftFieldMeta, NonNullable<ScanDraftFieldMeta[keyof ScanDraftFieldMeta]>]
   >) {
-    if (meta.confidence !== "low" || structuredKeys.has(String(key))) continue;
+    if (meta.confidence !== "low" || key === "businessName") continue;
     requirements.push({
       id: "field:" + String(key),
       kind: "low_confidence",
