@@ -148,13 +148,14 @@ test("mapScanBusinessFactMeta keeps provenance only for surviving facts", () => 
 test("create journey steps name the next action without a live-phone claim", () => {
   assert.deepEqual(
     CREATE_JOURNEY_STEPS.map((item) => item.label),
-    ["Website", "Check", "Review", "Pack"],
+    ["Website", "Check", "Choose", "Review", "Pack"],
   );
   assert.equal(createJourneyNextAction(1), "Check this website");
   assert.equal(createJourneyNextAction(2, "checking"), "Checking…");
-  assert.equal(createJourneyNextAction(2, "scanned"), "Review draft");
-  assert.equal(createJourneyNextAction(3), "Preview knowledge pack");
-  assert.equal(createJourneyNextAction(4), "Submit early access request");
+  assert.equal(createJourneyNextAction(2, "scanned"), "Choose agent");
+  assert.equal(createJourneyNextAction(3), "Review draft");
+  assert.equal(createJourneyNextAction(4), "Preview knowledge pack");
+  assert.equal(createJourneyNextAction(5), "Submit early access request");
   assert.equal(isCreateScanReady("scanning"), false);
   assert.equal(isCreateScanReady("queued"), true);
   assert.match(createScanProgressTitle("queued"), /review a blank draft/i);
@@ -167,13 +168,14 @@ test("create journey steps name the next action without a live-phone claim", () 
 test("create journey stepper names current/completed without a live-phone claim", () => {
   assert.equal(createJourneyStepStatus(1, 1), "current");
   assert.equal(createJourneyStepStatus(1, 3), "completed");
-  assert.equal(createJourneyStepStatus(4, 2), "upcoming");
+  assert.equal(createJourneyStepStatus(5, 2), "upcoming");
   assert.equal(createJourneyStepStatusLabel("current"), "Current step");
   assert.equal(createJourneyStepStatusLabel("completed"), "Completed");
   assert.equal(createJourneyStepStatusLabel("upcoming"), "Not started");
-  assert.equal(createJourneyStepAnnouncement(1), "Step 1 of 4: Website");
-  assert.equal(createJourneyStepAnnouncement(3), "Step 3 of 4: Review");
-  assert.doesNotMatch(createJourneyStepAnnouncement(4), /live (phone|number|call)/i);
+  assert.equal(createJourneyStepAnnouncement(1), "Step 1 of 5: Website");
+  assert.equal(createJourneyStepAnnouncement(3), "Step 3 of 5: Choose");
+  assert.equal(createJourneyStepAnnouncement(4), "Step 4 of 5: Review");
+  assert.doesNotMatch(createJourneyStepAnnouncement(5), /live (phone|number|call)/i);
 });
 
 test("emptyHoursOrServicesNote stays empty and never uses sample copy", () => {
@@ -246,6 +248,29 @@ test("buildCreateLeadMessage includes field meta when provided", () => {
   });
   assert.match(message, /Field meta JSON/);
   assert.match(message, /"source": "jsonld"/);
+});
+
+test("buildCreateLeadMessage includes the selected AgentBlueprint when provided", () => {
+  const message = buildCreateLeadMessage({
+    businessUrl: "https://example.com/",
+    scanNote: "scan_response_mapped",
+    draft: {
+      businessName: "Acme",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+    agentBlueprint: {
+      schemaVersion: "1.0.0",
+      blueprintId: "abp_test0001",
+      agent: { type: "maintenance_desk" },
+      lifecycle: { stage: "draft" },
+    },
+  });
+  assert.match(message, /Agent blueprint JSON/);
+  assert.match(message, /"type": "maintenance_desk"/);
+  assert.match(message, /"stage": "draft"/);
 });
 
 test("buildCreateLeadMessage includes receptionist pack when provided", () => {

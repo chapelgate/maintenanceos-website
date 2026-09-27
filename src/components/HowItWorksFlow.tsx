@@ -1,6 +1,6 @@
 /**
  * How-it-works flow — matches /create stepper:
- * Website → Check → Review → Pack.
+ * Website → Check → Choose → Review → Pack.
  * Unified mos-glass ladder: number → title → status. CSS only; AA arrows/paper.
  */
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
@@ -20,6 +20,13 @@ const STAGE_COPY = [
     short: "Scan if configured — otherwise queue the crawl",
     body: "If a scan service is configured we ask the SSRF-safe companion for a draft. If not, the crawl is queued. We do not invent extracted hours, services, or FAQs.",
     note: "SSRF-safe website scan is under testing — not a live knowledge crawl. Staging often queues the crawl honestly.",
+    status: "UNDER_TEST",
+  },
+  {
+    id: "choose",
+    short: "Choose the job you want the AI to do",
+    body: "Pick one bounded starting role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom. The choice creates a draft AgentBlueprint; it does not activate a live agent.",
+    note: "Role selection is configuration only. Provider, phone number, credentials, and live routing stay untouched.",
     status: "UNDER_TEST",
   },
   {
@@ -127,7 +134,7 @@ export function HowItWorksFlow() {
         id="flow-heading"
         className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
       >
-        Website → Check → Review → Pack
+        Website → Check → Choose → Review → Pack
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
         The same steps as{" "}
@@ -137,8 +144,8 @@ export function HowItWorksFlow() {
         >
           Create from website
         </a>
-        . Typical shape: website URL → scan/draft → knowledge pack → optional
-        scripted sandbox → early access. We do not invent crawl results or a
+        . Typical shape: website URL → scan/draft → choose role → review →
+        knowledge pack → optional scripted sandbox → early access. We do not invent crawl results or a
         live phone number.
       </p>
 

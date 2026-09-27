@@ -8,7 +8,7 @@ import {
 } from "@/lib/onboarding-create-core";
 
 /**
- * Shared /create stepper. Sticky Website → Check → Review → Pack chrome.
+ * Shared /create stepper. Sticky Website → Check → Choose → Review → Pack chrome.
  * Lives in the first-load island on step 1 and again in the deferred
  * later-steps chunk — keep this file free of scan/lead imports.
  */
@@ -23,8 +23,8 @@ export function CreateJourneyStepper({
     <div className="create-step-chrome">
       <div className="create-step-chrome-bar">
         <ol
-          className="grid grid-cols-4 gap-2 text-center text-xs font-medium"
-          aria-label="Create receptionist steps"
+          className="grid grid-cols-5 gap-2 text-center text-xs font-medium"
+          aria-label="Create AI agent steps"
         >
           {CREATE_JOURNEY_STEPS.map((item) => {
             const statusForStep = createJourneyStepStatus(item.step, step);

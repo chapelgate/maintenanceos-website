@@ -12,7 +12,7 @@ export const metadata = contentPageMetadata({
 });
 
 const designedToInclude = [
-  "Website → Check → Review → Pack onboarding (early access — not a live receptionist)",
+  "Website → Check → Choose → Review → Pack onboarding (early access — not a live receptionist)",
   "UK maintenance intake language and 999 guidance (never 911) in product source",
   "Explicit-request human transfer in product source",
   "Deterministic rules for safety, approvals, and money prohibitions",

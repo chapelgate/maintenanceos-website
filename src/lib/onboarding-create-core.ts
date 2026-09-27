@@ -20,7 +20,7 @@ export function isValidEmail(value: string): boolean {
   return EMAIL_RE.test(value.trim());
 }
 
-export type CreateJourneyStep = 1 | 2 | 3 | 4;
+export type CreateJourneyStep = 1 | 2 | 3 | 4 | 5;
 
 export type CreateScanProgress =
   | "checking"
@@ -30,16 +30,17 @@ export type CreateScanProgress =
   | "scanned_empty"
   | "scan_failed";
 
-/** Four-step /create funnel labels. Next-action names the button, not a live phone. */
+/** Five-step /create funnel labels. Next-action names the button, not a live phone. */
 export const CREATE_JOURNEY_STEPS: {
   step: CreateJourneyStep;
   label: string;
   nextAction: string;
 }[] = [
   { step: 1, label: "Website", nextAction: "Check this website" },
-  { step: 2, label: "Check", nextAction: "Review draft" },
-  { step: 3, label: "Review", nextAction: "Preview knowledge pack" },
-  { step: 4, label: "Pack", nextAction: "Submit early access request" },
+  { step: 2, label: "Check", nextAction: "Choose agent" },
+  { step: 3, label: "Choose", nextAction: "Review draft" },
+  { step: 4, label: "Review", nextAction: "Preview knowledge pack" },
+  { step: 5, label: "Pack", nextAction: "Submit early access request" },
 ];
 
 export function isCreateScanReady(progress: CreateScanProgress): boolean {

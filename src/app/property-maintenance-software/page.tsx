@@ -55,7 +55,7 @@ export default function PropertyMaintenanceSoftwarePage() {
         </section>
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-ink">Current pre-launch path</h2>
-          <p className="text-muted">Website → Check → Review → Pack → optional sandbox → early access. The public website does not provision a live phone number and does not claim general availability.</p>
+          <p className="text-muted">Website → Check → Choose → Review → Pack → optional sandbox → early access. The public website does not provision a live phone number and does not claim general availability.</p>
           <p className="text-muted">
             For the AI-assisted call-intake layer specifically, see{" "}
             <a href="/ai-receptionist/" className="text-accent underline">AI receptionist for maintenance intake</a>.
