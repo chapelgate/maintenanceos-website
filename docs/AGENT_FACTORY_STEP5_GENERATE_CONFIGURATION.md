@@ -1,12 +1,12 @@
 # Agent Factory Step 5 — Generate AI Configuration
 
-**Status:** IMPLEMENTED CANDIDATE — execution verification required before merge/freeze
+**Status:** VERIFIED — execution gates passed on the integrated Step-6 verification candidate
 **Scope:** convert the selected Step-4 AgentBlueprint plus reviewed Step-3/4 business data into a role-specific, claims-safe AI configuration.
 
 ## Baselines
 
 - Website source baseline: `5bdc8d01720629a06c1452469cf8b5b0e5334f2a`.
-- Embedded website compatibility baseline remains `e68ed4d4328caa9622f9bbd26d68effd25c2c9ca` until reconciliation is verified. Latest MaintenanceOS source is `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`; its delta from `e68ed4d…` is two documentation-only files (`HUMAN_BLOCKERS.md`, `MASTER_PROBLEM_LOG.md`). A separate three-file baseline branch `agent-factory/latest-product-baseline-20260927-1557` is prepared but unmerged pending execution verification.
+- Compatibility baseline advanced to latest MaintenanceOS source `5eb0f92f2633e20e4d280835d3e6577e3f206c8b` (2026-09-27). The delta from the prior `e68ed4d…` checkpoint is documentation-only in the product repo.
 - Live phone/runtime remains a separate workstream and is not modified by this step.
 
 ## Acceptance contract
@@ -42,13 +42,14 @@
 
 ## Verification state
 
-- Static source/security audit: COMPLETE. Branch diff remains limited to Step-5 configuration logic/tests/UI wording/evidence.
-- Supplemental isolated generator harness: PASS; strict isolated TypeScript module check: PASS. These do not replace repository execution gates.
-- Focused real-repository execution tests: PENDING — authorised Desktop Commander devices are offline and no permitted workflow dispatch path is exposed for the active estate self-hosted runner pool.
-- Full repository tests: PENDING.
-- Changed-file ESLint: PENDING.
-- TypeScript/Next production build and 30-route static export: PENDING.
-- Merge/freeze: FORBIDDEN until all pending execution gates pass.
+- Focused AgentBlueprint/configuration/review suite: PASS on the real verifier.
+- Changed-file ESLint: PASS.
+- Full repository `npm test`: PASS — 241/241.
+- TypeScript / Next.js 16.3.6 production build: PASS.
+- Static export: PASS — 30/30 routes generated.
+- Clean-tree check: PASS.
+- Live phone/runtime files: untouched.
+- Step 5 is verified as part of the integrated Step-6 candidate.
 
 ## Non-scope
 
