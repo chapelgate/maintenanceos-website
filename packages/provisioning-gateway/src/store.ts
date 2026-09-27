@@ -1,24 +1,34 @@
 import fs from "node:fs";
 import path from "node:path";
 import type {
+  AdapterIdempotencyEntry,
+  AdapterPreparationRecord,
   IdempotencyEntry,
   ProvisioningRecord,
   ProvisioningStore,
 } from "./types.ts";
 
 type PersistedState = {
-  version: 1;
+  version: 2;
   nonces: Record<string, number>;
   idempotency: Record<string, IdempotencyEntry>;
   provisionings: Record<string, ProvisioningRecord>;
+  adapterIdempotency: Record<string, AdapterIdempotencyEntry>;
+  adapterPreparations: Record<string, AdapterPreparationRecord>;
 };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
 
 function emptyState(): PersistedState {
   return {
-    version: 1,
+    version: 2,
     nonces: {},
     idempotency: {},
     provisionings: {},
+    adapterIdempotency: {},
+    adapterPreparations: {},
   };
 }
 
@@ -62,22 +72,63 @@ export class MemoryProvisioningStore implements ProvisioningStore {
     const found = this.state.provisionings[id];
     return found ? clone(found) : undefined;
   }
+
+  getAdapterIdempotency(scope: string): AdapterIdempotencyEntry | undefined {
+    const found = this.state.adapterIdempotency[scope];
+    return found ? clone(found) : undefined;
+  }
+
+  putAdapterIdempotency(
+    scope: string,
+    entry: AdapterIdempotencyEntry,
+  ): void {
+    this.state.adapterIdempotency[scope] = clone(entry);
+    this.state.adapterPreparations[entry.record.provisioningId] =
+      clone(entry.record);
+  }
+
+  getAdapterPreparation(
+    provisioningId: string,
+  ): AdapterPreparationRecord | undefined {
+    const found = this.state.adapterPreparations[provisioningId];
+    return found ? clone(found) : undefined;
+  }
 }
 
 function parseState(raw: string): PersistedState {
-  const parsed = JSON.parse(raw) as Partial<PersistedState>;
+  const parsed = JSON.parse(raw) as unknown;
+  if (!isRecord(parsed)) {
+    throw new Error("Provisioning gateway state file is invalid.");
+  }
+
   if (
-    parsed.version !== 1 ||
-    !parsed.nonces ||
-    typeof parsed.nonces !== "object" ||
-    !parsed.idempotency ||
-    typeof parsed.idempotency !== "object" ||
-    !parsed.provisionings ||
-    typeof parsed.provisionings !== "object"
+    parsed.version === 1 &&
+    isRecord(parsed.nonces) &&
+    isRecord(parsed.idempotency) &&
+    isRecord(parsed.provisionings)
+  ) {
+    return {
+      version: 2,
+      nonces: parsed.nonces as Record<string, number>,
+      idempotency: parsed.idempotency as Record<string, IdempotencyEntry>,
+      provisionings: parsed.provisionings as Record<string, ProvisioningRecord>,
+      adapterIdempotency: {},
+      adapterPreparations: {},
+    };
+  }
+
+  if (
+    parsed.version !== 2 ||
+    !isRecord(parsed.nonces) ||
+    !isRecord(parsed.idempotency) ||
+    !isRecord(parsed.provisionings) ||
+    !isRecord(parsed.adapterIdempotency) ||
+    !isRecord(parsed.adapterPreparations)
   ) {
     throw new Error("Provisioning gateway state file is invalid.");
   }
-  return parsed as PersistedState;
+
+  return parsed as unknown as PersistedState;
 }
 
 export class FileProvisioningStore implements ProvisioningStore {
@@ -144,6 +195,28 @@ export class FileProvisioningStore implements ProvisioningStore {
 
   getProvisioning(id: string): ProvisioningRecord | undefined {
     const found = this.state.provisionings[id];
+    return found ? clone(found) : undefined;
+  }
+
+  getAdapterIdempotency(scope: string): AdapterIdempotencyEntry | undefined {
+    const found = this.state.adapterIdempotency[scope];
+    return found ? clone(found) : undefined;
+  }
+
+  putAdapterIdempotency(
+    scope: string,
+    entry: AdapterIdempotencyEntry,
+  ): void {
+    this.state.adapterIdempotency[scope] = clone(entry);
+    this.state.adapterPreparations[entry.record.provisioningId] =
+      clone(entry.record);
+    this.persist();
+  }
+
+  getAdapterPreparation(
+    provisioningId: string,
+  ): AdapterPreparationRecord | undefined {
+    const found = this.state.adapterPreparations[provisioningId];
     return found ? clone(found) : undefined;
   }
 }
