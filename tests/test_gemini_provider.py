@@ -47,6 +47,7 @@ def test_audio_conversion_shapes_are_bounded():
     assert all(0 <= value <= 255 for value in restored)
 
 
-def test_explicit_human_request_is_narrow():
-    assert gemini_voice._explicit_human_request("Please put me through to a person") is True
-    assert gemini_voice._explicit_human_request("The gate is dangerous") is False
+def test_transfer_is_emergency_only():
+    assert gemini_voice._emergency_transfer_requested("Please put me through to a person") is False
+    assert gemini_voice._emergency_transfer_requested("The gate is dangerous") is False
+    assert gemini_voice._emergency_transfer_requested("This is an emergency") is True

@@ -16,21 +16,22 @@ def test_gemini_prompt_is_uk_specific_and_forbids_911():
     assert "never say 911" in prompt
 
 
-def test_transfer_remains_explicit_caller_request_only():
-    positive = (
+def test_transfer_is_emergency_only_across_gemini_and_fallback():
+    routine = (
         "Please put me through to a person",
         "I want to speak to someone",
         "Please transfer me",
-    )
-    negative = (
-        "The gate is dangerous",
         "I have a complaint",
         "This is urgent",
     )
-    for text in positive:
-        assert gemini_voice._explicit_human_request(text) is True
-    for text in negative:
-        assert gemini_voice._explicit_human_request(text) is False
+    for text in routine:
+        assert gemini_voice._emergency_transfer_requested(text) is False
+        assert voice_bridge.requires_immediate_human_escalation(text)[0] is False
+
+    assert gemini_voice._emergency_transfer_requested("This is an emergency") is True
+    assert voice_bridge.requires_immediate_human_escalation(
+        "There is a dog trapped in the alley gate"
+    )[0] is True
 
 
 def test_twilio_fallback_uses_uk_language_and_configurable_voice(monkeypatch):

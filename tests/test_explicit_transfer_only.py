@@ -25,7 +25,7 @@ def test_gemini_explicit_request_uses_live_transfer_update():
 def test_gemini_transfer_requires_finished_transcription():
     source = inspect.getsource(gemini_voice.handle_gemini_media_stream)
     assert 'getattr(input_tx, "finished", None) is True' in source
-    assert source.index('finished') < source.index('_explicit_human_request(text)')
+    assert source.index('finished') < source.index('_emergency_transfer_requested(text)')
 
 def test_transfer_twiml_is_only_in_explicit_helper():
     stream_source = inspect.getsource(voice_bridge.inbound_stream_twiml)

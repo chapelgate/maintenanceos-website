@@ -141,16 +141,56 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
     full = transcript or ""
     readback_confirmed = _readback_clearly_confirmed(full)
 
-    gate = _GATE_NUM.search(caller_text)
-    if not gate:
-        for line in caller_lines:
-            bare = re.fullmatch(r"\D*(\d{1,5})\D*", line)
-            if bare:
-                gate = bare
-                break
-    if gate:
-        gate_value = gate.group(1)
-    else:
+    gate_value = ""
+    gate_words = {
+        "one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+        "six": "6", "seven": "7", "eight": "8", "nine": "9", "ten": "10",
+    }
+    last_assistant = ""
+    for raw_line in (full or "").splitlines():
+        line = raw_line.strip()
+        if line.casefold().startswith("assistant:"):
+            last_assistant = line.split(":", 1)[1].strip()
+            continue
+        if not line.casefold().startswith("caller:"):
+            continue
+        caller_line = line.split(":", 1)[1].strip()
+        correction_prompt = bool(re.search(
+            r"\bcorrect\s+gate\s+number\b|\bwhat(?:'s|\s+is)\s+the\s+correct\s+gate\s+number\b",
+            last_assistant,
+            re.IGNORECASE,
+        ))
+        if correction_prompt:
+            gate_value = ""
+
+        direct = _GATE_NUM.search(caller_line)
+        if direct:
+            gate_value = direct.group(1)
+            continue
+
+        bare = re.fullmatch(r"\D*(\d{1,5})\D*", caller_line)
+        if bare and re.search(
+            r"\bgate(?:\s+number)?\b|\bcorrect\s+gate\s+number\b",
+            last_assistant,
+            re.IGNORECASE,
+        ):
+            gate_value = bare.group(1)
+            continue
+
+        correction = re.search(
+            r"\b(?:gate\s+)?(?:number|no\.?)\s+(one|two|three|four|five|six|seven|eight|nine|ten|\d{1,5})\b",
+            caller_line,
+            re.IGNORECASE,
+        )
+        if correction and re.search(
+            r"\b(?:got|correct|wrong|actually|should\s+be|number)\b",
+            caller_line,
+            re.IGNORECASE,
+        ):
+            token = correction.group(1).casefold()
+            gate_value = gate_words.get(token, token)
+
+    if not gate_value and readback_confirmed:
         assistant_gate = _GATE_NUM.search(assistant_text)
         gate_value = assistant_gate.group(1) if assistant_gate else ""
 
@@ -169,60 +209,86 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         assistant_text,
         re.IGNORECASE,
     )
-    explicit_caller_names = re.findall(
-        r"\bmy\s+name\s+is\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3}?)(?=\s+(?:and\b|my\b)|[,.;\n]|$)",
-        caller_text,
-        re.IGNORECASE,
-    )
-    raw_name = _NAME.search(caller_text)
-    honorific_name = re.search(
-        r"\b(?:Mr|Mrs|Ms|Miss|Dr)\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3})",
-        caller_text,
-        re.IGNORECASE,
-    )
-    standalone_name = None
-    leading_name = None
-    for line in caller_lines:
+    name_wrong_idx = -1
+    for idx, line in enumerate(caller_lines):
+        if re.search(
+            r"(?:\bname\b.{0,30}\b(?:wrong|incorrect)\b|\b(?:wrong|incorrect)\b.{0,30}\bname\b|\byou\s+got\s+my\s+name\s+wrong\b)",
+            line,
+            re.IGNORECASE,
+        ):
+            name_wrong_idx = idx
+
+    def _name_candidate(line: str) -> str:
+        explicit = re.search(
+            r"\bmy\s+name\s+is\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3}?)(?=\s+(?:and\b|my\b)|[,.;\n]|$)",
+            line,
+        )
+        if explicit:
+            return explicit.group(1).strip()
+        honorific = re.search(
+            r"\b(?:Mr|Mrs|Ms|Miss|Dr)\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3})",
+            line,
+        )
+        if honorific:
+            return honorific.group(1).strip()
         candidate = line.strip(" ,.")
-        if re.fullmatch(r"[A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){1,3}", candidate, re.IGNORECASE):
-            if not any(ch.isdigit() for ch in candidate):
-                standalone_name = candidate
-                break
-        match = re.match(
+        if (
+            re.fullmatch(r"[A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){1,3}", candidate)
+            and not any(ch.isdigit() for ch in candidate)
+        ):
+            return candidate
+        leading = re.match(
             r"^\s*([A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){1,2})\s+\d",
             line,
         )
-        if match and leading_name is None:
-            leading_name = match.group(1).strip()
-    name_value = (
-        explicit_caller_names[-1].strip()
-        if explicit_caller_names
-        else (
-            honorific_name.group(1).strip()
-            if honorific_name
-            else (
-                raw_name.group(1).strip()
-                if raw_name
-                else (
-                    standalone_name
-                    if standalone_name
-                    else (
-                        leading_name
-                        if leading_name
-                        else (confirmed_name[-1].strip() if confirmed_name and readback_confirmed else "")
-                    )
-                )
-            )
-        )
-    )
+        if leading:
+            return leading.group(1).strip()
+        return ""
+
+    name_candidates = [
+        candidate
+        for idx, line in enumerate(caller_lines)
+        if idx > name_wrong_idx
+        for candidate in [_name_candidate(line)]
+        if candidate
+    ]
+    if name_wrong_idx < 0:
+        name_candidates = [
+            candidate
+            for line in caller_lines
+            for candidate in [_name_candidate(line)]
+            if candidate
+        ]
+    name_value = name_candidates[-1] if name_candidates else ""
+    if not name_value and name_wrong_idx < 0:
+        raw_name = _NAME.search(caller_text)
+        if raw_name:
+            name_value = raw_name.group(1).strip()
+    if not name_value and name_wrong_idx < 0 and confirmed_name and readback_confirmed:
+        name_value = confirmed_name[-1].strip()
+
+    phone_wrong_idx = -1
+    for idx, line in enumerate(caller_lines):
+        if re.search(
+            r"(?:\b(?:telephone|phone|contact)\b.{0,35}\b(?:wrong|incorrect)\b|\b(?:wrong|incorrect)\b.{0,35}\b(?:telephone|phone|contact)\b|\byou\s+got\s+(?:my\s+)?(?:telephone|phone|contact).*wrong\b)",
+            line,
+            re.IGNORECASE,
+        ):
+            phone_wrong_idx = idx
 
     caller_phone_candidates = []
-    for line in caller_lines:
+    for idx, line in enumerate(caller_lines):
+        if idx <= phone_wrong_idx:
+            continue
         for match in re.finditer(r"(?<!\d)(\+?\d[\d\s()-]{7,}\d)(?!\d)", line):
             raw = match.group(1).strip()
             digits = re.sub(r"\D", "", raw)
-            plausible = 10 <= len(digits) <= 15
-            if plausible:
+            plausible_uk = (
+                (digits.startswith("07") and len(digits) == 11)
+                or (digits.startswith("0") and not digits.startswith("07") and len(digits) in {10, 11})
+                or (digits.startswith("44") and len(digits) == 12)
+            )
+            if plausible_uk:
                 caller_phone_candidates.append(raw)
     callback_value = (
         re.sub(r"\s+", " ", caller_phone_candidates[-1]).strip()
@@ -287,13 +353,18 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         r"\b((?:the\s+)?keys?\s+(?:is|are)\s+spinning(?:\s+around)?)",
         r"\b(?:that's|that\s+is)\s+((?:a|an|the)\s+(?:damaged|broken|missing|jammed|stuck)\s+(?:lock|gate|hinge|cylinder))(?:\s+on\s+gate\s+\d+)?",
     ]
-    fault = ""
+    animal_fault = re.findall(
+        r"\b((?:a|the|my)?\s*(?:dog|cat|pet|animal)\s+(?:is\s+)?(?:stuck|trapped|caught|wedged)\s+(?:in|inside|by|behind)\s+(?:the\s+)?gate)\b",
+        caller_text,
+        re.IGNORECASE,
+    )
+    fault = animal_fault[-1].strip(" ,.") if animal_fault else ""
     caller_lock_fault = re.findall(
         r"\b(?:the\s+)?gate\s+(?:has|has\s+got|is\s+got)\s+((?:a|an|the)\s+(?:damaged|broken|missing|jammed|stuck)\s+lock)\b",
         caller_text,
         re.IGNORECASE,
     )
-    if caller_lock_fault:
+    if not fault and caller_lock_fault:
         fault = caller_lock_fault[-1].strip(" ,.")
     if not fault:
         for pattern in fault_patterns:
@@ -337,6 +408,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                 break
 
     urgency = _URGENCY.search(caller_text)
+    animal_emergency = bool(animal_fault)
     category = classify_call_category(full)
 
     return {
@@ -348,7 +420,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         "area": area_value,
         "gate_number": gate_value,
         "fault_or_request": fault,
-        "urgency": urgency.group(1) if urgency else "",
+        "urgency": "emergency - animal trapped" if animal_emergency else (urgency.group(1) if urgency else ""),
         "job_reference": job_reference,
         "transcript": full.strip()[:6000],
     }

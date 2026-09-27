@@ -343,7 +343,7 @@ Assistant: Thank you for calling Chapel Gate. Goodbye, have a nice day.
 
     assert subject == "[REPAIR] Gate 625 - CG-000031"
     assert "Resident Name: Andrew Carl" in body
-    assert "Contact Number: 0775226746" in body
+    assert "Contact Number: not collected" in body
     assert "Address: 18 Brisbane Avenue" in body
     assert "Postcode: CH45 9JX" in body
     assert "Area: not collected" in body
@@ -419,3 +419,54 @@ Assistant: Thank you for confirming. I'll get this processed for you now. Thank 
 
 
 
+
+
+def test_cg34_corrections_invalidate_old_values_and_flag_animal_emergency():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: I want to recall the date that not work them.
+Assistant: I'm sorry to hear that. Is the gate in Wirral or Sefton?
+Caller: ¿Puedo?
+Assistant: Thanks. And do you happen to know the gate number?
+Caller: 368
+Assistant: Thanks, I've got that. Can you tell me what the problem is with the gate?
+Caller: die Box doch gerne.
+Assistant: Could you please tell me your full name?
+Caller: Ja, am Schukal 1
+Assistant: Thanks. And can you give me your full address, including postcode?
+Caller: Brisbane Avenue, Walsee CHO59JX
+Assistant: Thank you. Lastly, could you provide your contact number?
+Caller: 2755726746
+Assistant: The gate is in Wirral, gate number 8111, with a lock fault. Your name is Andrew Carlin, and your contact number is 07755 222 6746. Is all of that correct?
+Caller: You've got my details wrong.
+Assistant: What needs correcting?
+Caller: Is a dog stuck in the gate?
+Assistant: Right, so the problem is a dog stuck in the gate. Is everything else correct?
+Caller: They call my name wrong.
+Assistant: Could you tell me your correct name?
+Caller: Andrew Cartwright
+Assistant: Your name is Andrew Cartwright. Is all of that correct now?
+Caller: I got the number one. You got my name wrong. You got the telephone number wrong.
+Assistant: What's the correct gate number?
+Caller: boboan
+Assistant: What's the correct name?
+Caller: interest rate
+Assistant: What's the correct telephone number?
+Caller: 277
+Caller: five treble two six seven four six
+Assistant: The gate is gate number 1 and your contact number is 07755 222 6746. Is all of that correct now?
+Caller: I think you got the telephone number wrong.
+Assistant: Could you repeat the correct telephone number?
+"""
+    details = extract_call_details(transcript, job_reference="CG-000034")
+    subject, body = build_internal_email(details)
+
+    assert subject == "[REPAIR] Gate not collected - CG-000034"
+    assert "Gate Number: not collected" in body
+    assert "Resident Name: not collected" in body
+    assert "Contact Number: not collected" in body
+    assert "Area: not collected" in body
+    assert "Fault Details: a dog stuck in the gate" in body
+    assert "Urgency: emergency - animal trapped" in body
+    head = body.split("FULL TRANSCRIPT", 1)[0]
+    assert "07755 222 6746" not in head
+    assert "2755726746" not in head

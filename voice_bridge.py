@@ -303,27 +303,41 @@ def _explicit_human_request(text: str) -> bool:
 
 
 def requires_immediate_human_escalation(text: str) -> tuple[bool, str, list]:
-    lowered = text.lower() if isinstance(text, str) else ""
-    # Alleygate-specific operational emergencies go to Chapelgate directly.
-    # Do this before generic maintenance classification so phrases such as
-    # "gate emergency" do not get treated as a reason to tell the caller to ring 999.
+    lowered = text.casefold() if isinstance(text, str) else ""
     gate_context = any(term in lowered for term in ("gate", "alley gate", "alleygate"))
-    gate_urgent = any(term in lowered for term in (
-        "emergency", "urgent", "urgently", "need someone now", "immediate",
-        "can't get through", "cannot get through", "can't get out", "cannot get out",
-        "locked in", "locked out", "stuck shut", "jammed shut",
+
+    animal_emergency = (
+        gate_context
+        and any(term in lowered for term in ("dog", "cat", "pet", "animal"))
+        and any(term in lowered for term in ("stuck", "trapped", "caught", "wedged"))
+    )
+    if animal_emergency:
+        return True, "animal_welfare_emergency", []
+
+    gate_emergency = gate_context and any(term in lowered for term in (
+        "this is an emergency",
+        "it's an emergency",
+        "it is an emergency",
+        "immediate danger",
+        "can't get out",
+        "cannot get out",
+        "locked in",
+        "gate is falling",
+        "gate has fallen",
+        "gate is hanging",
+        "about to fall",
+        "trapped by the gate",
+        "trapped behind the gate",
     ))
-    if gate_context and gate_urgent:
+    if gate_emergency:
         return True, "gate_emergency_handoff", []
+
     result = classify(text)
     if result["safety_flags"]:
         return True, "deterministic_safety", result["safety_flags"]
-    # A caller explicitly asking for a person may carry an internal reason such
-    # as COMPLAINT, but generic review/escalation flags alone never initiate a
-    # live transfer.
-    if _explicit_human_request(text):
-        flags = result.get("human_escalation_flags") or []
-        return True, "caller_requested_human", flags
+
+    # Routine requests for a person/manager are intentionally NOT live-transfer
+    # triggers. They use the website contact route unless an emergency exists.
     return False, "", []
 
 
@@ -331,7 +345,11 @@ def requires_human_escalation(text: str) -> tuple[bool, str]:
     escalate, reason, flags = requires_immediate_human_escalation(text)
     if escalate:
         return True, json.dumps(flags) if flags else reason
-    if classify(text)["human_review_required"]:
+    result = classify(text)
+    if result["human_review_required"]:
+        review_flags = result.get("human_escalation_flags") or []
+        if review_flags:
+            return True, json.dumps(review_flags)
         return True, "low_confidence_or_unknown_category"
     return False, ""
 
