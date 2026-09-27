@@ -335,3 +335,33 @@ test("buildCreateLeadMessage includes agent pack when provided", () => {
   assert.match(message, /not a live customer phone line/);
   assert.match(message, /not a live customer phone number/);
 });
+
+
+test("buildCreateLeadMessage includes sandbox qualification evidence", () => {
+  const message = buildCreateLeadMessage({
+    businessUrl: "https://example.com/",
+    scanNote: "scan_response_mapped",
+    draft: {
+      businessName: "Acme",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+    sandboxQualification: {
+      version: "agent_sandbox_qualification_v1",
+      reviewRevisionId: "arv1_12345678",
+      source: "companion",
+      sessionId: "sandbox_sess_1",
+      testId: "sandbox_test_1",
+      complete: true,
+      checks: [{ id: "companion_boundary", ok: true }],
+      failedCheckIds: [],
+    },
+  });
+  assert.match(message, /Sandbox qualification JSON/);
+  assert.match(message, /agent_sandbox_qualification_v1/);
+  assert.match(message, /"source": "companion"/);
+  assert.match(message, /"reviewRevisionId": "arv1_12345678"/);
+  assert.match(message, /"complete": true/);
+});
