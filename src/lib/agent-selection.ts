@@ -94,6 +94,21 @@ export function agentTemplateFor(type: AgentType): AgentTemplate {
 function deniedCapabilities(allowed: readonly AgentCapability[]): AgentCapability[] {
   return AGENT_CAPABILITIES.filter((capability) => !allowed.includes(capability));
 }
+function requiredIntegrationIntents(
+  template: AgentTemplate,
+): AgentBlueprintV1["integrations"] {
+  const integrations: AgentBlueprintV1["integrations"] = [
+    { kind: "telephony", enabled: true },
+  ];
+  if (
+    template.allow.includes("check_calendar") ||
+    template.allow.includes("book_appointment")
+  ) {
+    integrations.push({ kind: "calendar", enabled: true });
+  }
+  return integrations;
+}
+
 
 function cleanBusinessName(value: string): string {
   const cleaned = value.trim().replace(/\s+/g, " ");
@@ -171,7 +186,7 @@ export function buildAgentBlueprintDraft(input: {
       humanTransfer: template.humanTransfer,
       forbiddenActions: [...SAFE_FORBIDDEN_ACTIONS],
     },
-    integrations: [],
+    integrations: requiredIntegrationIntents(template),
     privacy: {
       recordCalls: false,
       transcribeCalls: false,
