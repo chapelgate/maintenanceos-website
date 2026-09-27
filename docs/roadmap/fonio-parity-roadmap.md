@@ -24,6 +24,7 @@
 - [x] Claims-safe knowledge pack + system prompt from reviewed `/create` draft (**PARTIAL**; `packages/receptionist-draft`; `/create` preview; sandbox consume; missing fields stay missing; no live-phone claims)
 - Extract schema + review UI
 - [x] Secure server-only provisioning gateway foundation (**Step 8**): authenticated tenant-scoped `sandbox_passed → provisioning` control record, replay/idempotency protected; no live product DB/telephony/integration activation
+- [x] Provider-adapter preparation foundation (**Step 9**): TTNC existing-number plan + signed webhook verification and provider-neutral calendar/email/CRM/SMS connector refs; `provisioning → ready` only; no external activation
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)
 - [x] Scripted sandbox demo answers from stored knowledge pack / system prompt (**PARTIAL**; missing fields not on file; still not live voice)
 - [x] Scripted conversation benchmark fixtures + scorer (**HAVE** for scripted path: `npm run conversation-benchmark`; hours/services from pack; UK 999; no invented bookings / live-call success). Live-call barge-in **SKIP / open**.
