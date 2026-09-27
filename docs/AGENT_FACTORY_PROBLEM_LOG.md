@@ -223,3 +223,31 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - HMAC authentication, nonce replay protection, tenant scope and durable idempotency are verified.
 - Successful handoff changes lifecycle only from `sandbox_passed` to `provisioning`.
 - No direct MaintenanceOS database write, carrier/number, connector, live voice, deployment or public-launch mutation occurred.
+
+
+## 2026-09-27 — Step 9: integration intent was absent before customer review
+
+- **State:** CLOSED / VERIFIED FIX CANDIDATE.
+- **Finding:** AgentBlueprint drafts previously started with `integrations: []`, so a later adapter step could have assigned telephony/calendar after review without the customer having reviewed the integration intent.
+- **Fix:** current voice-agent templates now declare `telephony` intent at draft creation; booking assistants additionally declare `calendar` intent. Step-6 review already treats enabled integrations as consequential confirmations.
+- **Boundary:** operational connector refs and credentials are still excluded from the reviewed blueprint and remain server-side.
+
+## 2026-09-27 — Step 9: direct Twilio URL readiness could be false when another route owner is configured
+
+- **State:** CLOSED / VERIFIED FIX CANDIDATE.
+- **Finding:** Twilio documents that number-level `voice_url` is ignored when a Voice Application or trunk owns voice routing, and `sms_url` is ignored when a Messaging Application owns SMS routing.
+- **Fix:** readiness inspects those route-owner fields first and fails closed rather than reporting a number-level webhook as effective.
+- **Regression:** Voice Application, trunk and Messaging Application ownership all fail readiness.
+
+## 2026-09-27 — Step 9: provider mutation needed a second explicit safety latch
+
+- **State:** CLOSED / VERIFIED FIX CANDIDATE.
+- **Finding:** a server environment mutation flag alone would make a configuration mistake too consequential for a live phone-number route.
+- **Fix:** provider changes require both server `ADAPTER_MUTATIONS_ENABLED=true` and an authenticated signed request with `mode:"apply"`. `mode:"verify"` is non-mutating even when the server flag is enabled.
+- **Regression:** mismatched Twilio routing in verify mode performs GET inspection only and returns `adapter_not_ready`.
+
+## 2026-09-27 — Step 9: Twilio readiness probe contained an unused local
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Finding:** changed-file ESLint reported one unused local in the first Twilio probe implementation.
+- **Fix:** removed the unused variable. No runtime behavior changed.
