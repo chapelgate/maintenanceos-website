@@ -566,7 +566,7 @@ export function CreateReceptionistLaterSteps({
               data-create-primary-action=""
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
             >
-              Preview knowledge pack
+              Generate AI configuration
             </button>
           </div>
         </form>
