@@ -2,9 +2,17 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
+import { AgentReviewGate } from "@/components/AgentReviewGate";
 import { AgentTypeSelector } from "@/components/AgentTypeSelector";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
 import { siteConfig } from "@/config/site";
+import {
+  applyReviewedIdentityToAgentBlueprint,
+  buildAgentReviewRecord,
+  buildAgentReviewRequirements,
+  reviewFactHint,
+  type ReviewedIdentityDraft,
+} from "@/lib/agent-review";
 import { submitLead } from "@/lib/lead-adapter";
 import { createAgentBlueprintDraft, agentTemplateFor } from "@/lib/agent-selection";
 import type { AgentBlueprintV1, AgentType } from "@/lib/agent-blueprint";
@@ -25,6 +33,7 @@ import {
   scanFieldReviewHint,
   type DraftFieldMeta,
   type ScanBusinessFacts,
+  type ScanBusinessFactMeta,
   type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
@@ -46,6 +55,12 @@ function loadAgentConfiguration() {
 }
 
 type Status = "idle" | "submitting" | "success" | "error";
+
+const EMPTY_IDENTITY_REVIEW: ReviewedIdentityDraft = {
+  locations: "",
+  phone: "",
+  email: "",
+};
 
 function scanNoteFor(progress: CreateScanProgress): string {
   switch (progress) {
@@ -72,17 +87,21 @@ function DraftReviewField({
   rows,
   placeholder,
   emptyNote,
+  hint: explicitHint,
+  readOnly = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
-  meta: DraftFieldMeta | undefined;
+  meta?: DraftFieldMeta;
   hintId: string;
   rows?: number;
   placeholder?: string;
   emptyNote?: string | null;
+  hint?: string | null;
+  readOnly?: boolean;
 }) {
-  const hint = emptyNote || scanFieldReviewHint(meta, value);
+  const hint = emptyNote || explicitHint || scanFieldReviewHint(meta, value);
   const describedBy = hint ? hintId : undefined;
   const empty = !value.trim() && Boolean(emptyNote);
   const fieldClass = empty ? `${FIELD_CLASS} border-dashed` : FIELD_CLASS;
@@ -101,6 +120,7 @@ function DraftReviewField({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           aria-describedby={describedBy}
+          readOnly={readOnly}
           className={fieldClass}
         />
       ) : (
@@ -108,6 +128,7 @@ function DraftReviewField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           aria-describedby={describedBy}
+          readOnly={readOnly}
           className={fieldClass}
         />
       )}
