@@ -346,7 +346,7 @@ test("demo page names the website-to-pack path and does not book a live phone", 
   assert.match(create, /label: "Website"/);
   assert.match(page, /CREATE_JOURNEY_STEPS/);
   assert.match(page, /Website → Check → Choose → Review → Pack/);
-  assert.match(page, /website URL → check → review draft → knowledge pack/);
+  assert.match(page, /website URL → check → choose role → review draft → knowledge pack/);
   assert.match(page, /optional scripted sandbox/);
   assert.match(page, /Create from website/);
   assert.match(page, /live number/);
