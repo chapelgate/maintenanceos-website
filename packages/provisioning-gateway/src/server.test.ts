@@ -473,6 +473,7 @@ test("adapter endpoint never mutates a mismatched Twilio route by default", asyn
       const adapterPath = "/v1/provisioning/adapters/prepare";
       const adapterBody = JSON.stringify({
         provisioningId,
+        mode: "verify",
         bindings: [{ kind: "telephony", connectorRef: "twilio_primary" }],
       });
       const result = await request(base, {
