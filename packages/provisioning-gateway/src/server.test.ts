@@ -493,3 +493,84 @@ test("adapter endpoint never mutates a mismatched Twilio route by default", asyn
     },
   );
 });
+
+
+test("verify mode cannot mutate even when server mutation flag is enabled", async () => {
+  const store = new MemoryProvisioningStore();
+  const methods: string[] = [];
+  const registry = {
+    connectors: [{
+      ref: "twilio_primary",
+      provider: "twilio" as const,
+      kinds: ["telephony"] as ["telephony"],
+      accountSid: "AC" + "a".repeat(32),
+      incomingPhoneNumberSid: "PN" + "b".repeat(32),
+      publicBaseUrl: "https://voice.example.com/",
+      apiKeyEnv: "TWILIO_API_KEY",
+      apiSecretEnv: "TWILIO_API_SECRET",
+    }],
+  };
+  await withServer(
+    {
+      enabled: true,
+      principal: PRINCIPAL,
+      store,
+      nowMs: () => NOW,
+      adapterMutationsEnabled: true,
+      env: {
+        TWILIO_API_KEY: "SK" + "c".repeat(32),
+        TWILIO_API_SECRET: "server-secret-value",
+      },
+      adapterRegistry: registry,
+      adapterTransport: async (input) => {
+        methods.push(input.method);
+        return {
+          status: 200,
+          body: JSON.stringify({
+            voice_url: "https://old.example.com/voice",
+            voice_method: "POST",
+            voice_application_sid: null,
+            trunk_sid: null,
+          }),
+        };
+      },
+    },
+    async (base) => {
+      const envelope = await validProvisioningEnvelope({
+        blueprintId: "abp_step9server003",
+      });
+      const provisionBody = JSON.stringify(envelope);
+      const provisioned = await request(base, {
+        method: "POST",
+        headers: signedHeaders(
+          provisionBody,
+          "nonce_step9_verifysafe1",
+          "idem_step9_verifysafe1",
+        ),
+        body: provisionBody,
+      });
+      const provisioningId = (provisioned.body.data as Record<string, unknown>)
+        .provisioningId as string;
+      const adapterPath = "/v1/provisioning/adapters/prepare";
+      const adapterBody = JSON.stringify({
+        provisioningId,
+        mode: "verify",
+        bindings: [{ kind: "telephony", connectorRef: "twilio_primary" }],
+      });
+      const result = await request(base, {
+        method: "POST",
+        path: adapterPath,
+        headers: signedHeaders(
+          adapterBody,
+          "nonce_step9_verifysafe2",
+          "idem_step9_verifysafe2",
+          adapterPath,
+        ),
+        body: adapterBody,
+      });
+      assert.equal(result.status, 503);
+      assert.equal(result.body.error, "adapter_not_ready");
+      assert.deepEqual(methods, ["GET"]);
+    },
+  );
+});
