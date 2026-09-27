@@ -100,77 +100,124 @@ def _caller_lines(transcript: str) -> list[str]:
     return lines
 
 
+def _assistant_lines(transcript: str) -> list[str]:
+    lines = []
+    for raw in (transcript or "").splitlines():
+        line = raw.strip()
+        if line.casefold().startswith("assistant:"):
+            lines.append(line.split(":", 1)[1].strip())
+    return lines
+
+
 def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, Any]:
     caller_lines = _caller_lines(transcript)
+    assistant_lines = _assistant_lines(transcript)
     caller_text = "\n".join(caller_lines)
+    assistant_text = "\n".join(assistant_lines)
     full = transcript or ""
 
-    gate = _GATE_NUM.search(caller_text) or _GATE_NUM.search(full)
-
-    confirmed_areas = re.findall(
-        r"\bgate\s+\d{1,5}\s+in\s+(Wirral|Sefton)\b",
-        full,
+    # Prefer the assistant's explicit read-back: it is the structured confirmation
+    # the caller heard, and is usually cleaner than realtime STT fragments.
+    confirmed_gate_area = re.findall(
+        r"\bgate\s+(\d{1,5})\s+in\s+(Wirral|Sefton)\b",
+        assistant_text,
         re.IGNORECASE,
     )
-    area_match = _AREA.search(caller_text)
-    area_value = confirmed_areas[-1] if confirmed_areas else (area_match.group(1) if area_match else "")
+    if confirmed_gate_area:
+        gate_value, area_value = confirmed_gate_area[-1]
+    else:
+        gate = _GATE_NUM.search(caller_text) or _GATE_NUM.search(full)
+        gate_value = gate.group(1) if gate else ""
+        area_match = _AREA.search(caller_text) or _AREA.search(full)
+        area_value = area_match.group(1) if area_match else ""
 
-    urgency = _URGENCY.search(caller_text)
-
-    callback = _CALLBACK.search(caller_text)
-    if not callback:
-        callback = re.search(
-            r"\b(?:my|your)\s+(?:phone\s+)?number(?:\s+is)?\s*[:\-]?\s*(\+?\d[\d\s()-]{7,}\d)",
-            full,
-            re.IGNORECASE,
-        )
-
-    name = _NAME.search(caller_text)
     confirmed_name = re.findall(
-        r"\byour\s+name(?:'s|\s+is)\s+([^,\n]{2,80})(?=,|\n|$)",
-        full,
+        r"\byour\s+name(?:'s|\s+is)\s+([^,\.\n]{2,80})",
+        assistant_text,
         re.IGNORECASE,
     )
-    name_value = confirmed_name[-1].strip() if confirmed_name else (name.group(1).strip() if name else "")
+    raw_name = _NAME.search(caller_text)
+    name_value = confirmed_name[-1].strip() if confirmed_name else (raw_name.group(1).strip() if raw_name else "")
+
+    confirmed_callback = re.findall(
+        r"\byour\s+(?:callback\s+|phone\s+)?number(?:'s|\s+is)\s+(\+?\d[\d\s()-]{7,}\d)",
+        assistant_text,
+        re.IGNORECASE,
+    )
+    raw_callback = _CALLBACK.search(caller_text)
+    callback_value = confirmed_callback[-1] if confirmed_callback else (raw_callback.group(1) if raw_callback else "")
+    callback_value = re.sub(r"\s+", " ", callback_value).strip()
 
     confirmed_addresses = re.findall(
-        r"\b(?:you're|you\s+are)\s+at\s+([^\.\n]{4,160})",
-        full,
+        r"\byour\s+address(?:'s|\s+is)\s+([^\.\n]{4,180})"
+        r"|\b(?:you're|you\s+are)\s+at\s+([^\.\n]{4,180})",
+        assistant_text,
         re.IGNORECASE,
     )
-    address = confirmed_addresses[-1].strip() if confirmed_addresses else ""
+    address = ""
+    if confirmed_addresses:
+        pair = confirmed_addresses[-1]
+        address = (pair[0] or pair[1]).strip()
     if not address:
         for line in caller_lines:
             lowered = line.casefold()
-            if any(k in lowered for k in ("address", "live at", "i live", "postcode", "road", "street", "avenue", "close", "lane")):
+            if any(k in lowered for k in ("address", "live at", "i live", "postcode", "road", "street", "avenue", "close", "lane", "way", "grove")):
                 address = line
                 break
 
+    postcode_match = re.search(
+        r"\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b",
+        address or full,
+        re.IGNORECASE,
+    )
+    postcode = ""
+    if postcode_match:
+        compact = re.sub(r"\s+", "", postcode_match.group(1)).upper()
+        postcode = compact[:-3] + " " + compact[-3:]
+        if address:
+            address = re.sub(
+                re.escape(postcode_match.group(1)),
+                "",
+                address,
+                flags=re.IGNORECASE,
+            ).strip(" ,")
+
     fault = ""
-    for line in caller_lines:
-        if _REPAIR.search(line):
-            fault = line
+    fault_patterns = [
+        r"\bthe\s+problem\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
+        r"\breported\s+that\s+(.+?)(?:\s+on\s+gate\s+\d+|\.\s|$)",
+        r"\bfault\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
+    ]
+    for pattern in fault_patterns:
+        matches = re.findall(pattern, assistant_text, re.IGNORECASE)
+        if matches:
+            fault = matches[-1].strip(" ,.")
             break
     if not fault:
         for line in caller_lines:
+            if _REPAIR.search(line):
+                fault = line.strip()
+                break
+    if not fault:
+        for line in caller_lines:
             if "problem" in line.casefold() or "issue" in line.casefold():
-                fault = line
+                fault = line.strip()
                 break
 
+    urgency = _URGENCY.search(caller_text)
     category = classify_call_category(full)
-    summary_bits = [ln for ln in caller_lines if ln][:8]
 
     return {
         "category": category,
         "caller_name": name_value,
-        "callback_number": re.sub(r"\s+", " ", callback.group(1)).strip() if callback else "",
+        "callback_number": callback_value,
         "caller_address": address,
+        "postcode": postcode,
         "area": area_value,
-        "gate_number": gate.group(1) if gate else "",
+        "gate_number": gate_value,
         "fault_or_request": fault,
         "urgency": urgency.group(1) if urgency else "",
         "job_reference": job_reference,
-        "summary": " | ".join(summary_bits)[:800],
         "transcript": full.strip()[:6000],
     }
 
@@ -180,21 +227,28 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     job_ref = details.get("job_reference") or "unknown"
     transcript = details.get("transcript") or ""
     caller_lines = _caller_lines(transcript)
-    caller_text = "\n".join(caller_lines)
-    topic_text = caller_text or transcript
+    full = transcript
 
-    has_repair = bool(_REPAIR.search(topic_text)) or category == CATEGORY_REPAIR
-    has_master_key = bool(_MASTER_KEY.search(topic_text)) or category == CATEGORY_MASTER_KEY
-    ordinary_key_text = _MASTER_KEY.sub("", topic_text)
+    # A clean confirmed repair read-back outranks later secondary enquiries.
+    has_repair = bool(details.get("fault_or_request")) or bool(_REPAIR.search(full))
+    has_master_key = bool(_MASTER_KEY.search(full)) or category == CATEGORY_MASTER_KEY
+
+    ordinary_key_text = _MASTER_KEY.sub("", full)
     key_order_signal = re.compile(
-        r"(?:\border(?:ed|ing)?\b.*\bkeys?\b|\bkeys?\b.*\b(?:order(?:ed|ing)?|delivery|tracking|website|email|buy|purchase)\b)",
-        re.IGNORECASE,
+        r"(?:\border(?:ed|ing)?\b.*\bkeys?\b"
+        r"|\bkeys?\b.*\b(?:order(?:ed|ing)?|delivery|tracking|website|email|buy|purchase)\b"
+        r"|confirmation\s+email.*order\s+number"
+        r"|keys?\s+are\s+sent\s+by\s+royal\s+mail"
+        r"|tracking\s+(?:info|information).*dispatch"
+        r"|keys?\s+are\s+currently\s+(?:£\s*)?22"
+        r"|order.*online.*alleygates\.co\.uk)",
+        re.IGNORECASE | re.DOTALL,
     )
     has_key = bool(_KEY.search(ordinary_key_text) or key_order_signal.search(ordinary_key_text)) or category == CATEGORY_KEY
 
     gate = details.get("gate_number") or "not collected"
     if has_repair:
-        subject = f"[REPAIR] Gate {gate} — {job_ref}"
+        subject = f"[REPAIR] Gate {gate} - {job_ref}"
     elif has_key:
         subject = f"[KEY REQUEST] Alley-gate key enquiry {job_ref}"
     elif has_master_key:
@@ -202,93 +256,82 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     else:
         subject = f"[CALL REVIEW] Chapelgate phone call {job_ref}"
 
-    caller_detail_lines = [
-        f"Caller name: {details.get('caller_name') or 'not collected'}",
-        f"Callback number: {details.get('callback_number') or 'not collected'}",
-        f"Caller address: {details.get('caller_address') or 'not collected'}",
-    ]
-
     lines: list[str] = []
 
     if has_repair:
         lines.extend([
-            "ALLEY GATE REPAIR JOB",
-            "=====================",
-            f"Job / reference: {job_ref}",
-            f"Gate number: {gate}",
-            f"Area: {details.get('area') or 'not collected'}",
-            f"Fault reported: {details.get('fault_or_request') or 'not collected'}",
-            f"Urgency: {details.get('urgency') or 'not collected'}",
-            *caller_detail_lines,
+            "Chapelgate Alleygate Repair Call Report",
+            "======================================",
             "",
+            f"Job ID: {job_ref}",
+            f"Gate Number: {gate}",
+            f"Resident Name: {details.get('caller_name') or 'not collected'}",
+            f"Contact Number: {details.get('callback_number') or 'not collected'}",
+            f"Address: {details.get('caller_address') or 'not collected'}",
+            f"Postcode: {details.get('postcode') or 'not collected'}",
+            f"Area: {details.get('area') or 'not collected'}",
+            f"Fault Details: {details.get('fault_or_request') or 'not collected'}",
         ])
+        if details.get("urgency"):
+            lines.append(f"Urgency: {details['urgency']}")
+        lines.append("")
 
-    key_notes = [
-        line for line in caller_lines
-        if re.search(r"\bkeys?\b", line, re.IGNORECASE) and not _MASTER_KEY.search(line)
-    ][:6]
+    existing_order = bool(re.search(
+        r"(?:already\s+ordered|confirmation\s+email.*order\s+number|reply\s+to\s+that\s+email|royal\s+mail|tracking\s+(?:info|information))",
+        full,
+        re.IGNORECASE | re.DOTALL,
+    ))
+    new_key_order = bool(re.search(
+        r"(?:order.*online.*alleygates\.co\.uk|keys?\s+are\s+currently\s+(?:£\s*)?22|key\s+orders?\s+are\s+placed)",
+        full,
+        re.IGNORECASE | re.DOTALL,
+    ))
     if has_key:
-        existing_order = any(
-            re.search(r"\b(?:already\s+ordered|ordered\s+(?:a|the)?\s*key|existing\s+order)\b", line, re.IGNORECASE)
-            for line in caller_lines
-        )
         lines.extend([
             "KEY ORDER / ENQUIRY",
             "===================",
-            "KEY / RESIDENT KEY ENQUIRY",
-            f"Job / reference: {job_ref}",
-            f"Order status: {'Existing order mentioned' if existing_order else 'Key enquiry'}",
+            f"Existing order/update requested: {'Yes' if existing_order else 'No'}",
+            f"New key order information requested: {'Yes' if new_key_order else 'No'}",
+            "Order updates: reply to the order confirmation email.",
+            "Delivery: Royal Mail; tracking is emailed when dispatched.",
+            "",
         ])
-        if not has_repair:
-            lines.extend(caller_detail_lines)
-        lines.append("Caller notes:")
-        lines.extend([f"- {line}" for line in key_notes] or ["- No additional key-order wording captured"])
-        lines.append("")
 
-    master_notes = [line for line in caller_lines if _MASTER_KEY.search(line)][:4]
     if has_master_key:
         lines.extend([
             "MASTER-KEY ENQUIRY",
             "==================",
-            "RESTRICTED MASTER-KEY APPLICATION",
-            f"Job / reference: {job_ref}",
-            "Status: Application interest only - approval is not guaranteed.",
-        ])
-        if not has_repair and not has_key:
-            lines.extend(caller_detail_lines)
-        lines.append("Caller notes:")
-        lines.extend([f"- {line}" for line in master_notes] or ["- Master-key interest detected"])
-        lines.append("")
-
-    if not (has_repair or has_key or has_master_key):
-        lines.extend([
-            "CALL REVIEW",
-            "===========",
-            f"Job / reference: {job_ref}",
-            *caller_detail_lines,
+            "Restricted application enquiry only - approval is not guaranteed.",
+            "Application route: info@alleygates.co.uk from an official organisation/work email.",
             "",
         ])
 
-    topics = []
-    if has_repair:
-        topics.append("Repair")
-    if has_key:
-        topics.append("Key order / enquiry")
-    if has_master_key:
-        topics.append("Master-key enquiry")
+    other_notes = []
+    other_patterns = (
+        r"car\s+blocking",
+        r"leav(?:e|ing|es).*gate.*open",
+        r"vandali[sz]",
+        r"neighbou?r",
+    )
+    for line in caller_lines:
+        if any(re.search(pattern, line, re.IGNORECASE) for pattern in other_patterns):
+            other_notes.append(line)
 
     lines.extend([
         "OTHER INFORMATION",
         "=================",
-        f"Detected topics: {', '.join(topics) if topics else 'General call review'}",
-        "",
-        "Concise call summary:",
-        details.get("summary") or "(empty)",
+    ])
+    if other_notes:
+        lines.extend([f"- {line}" for line in other_notes])
+    else:
+        lines.append("- No additional operational information captured.")
+    lines.extend([
         "",
         "FULL TRANSCRIPT",
         "===============",
         transcript or "(empty)",
     ])
+
     return subject, "\n".join(lines)
 
 

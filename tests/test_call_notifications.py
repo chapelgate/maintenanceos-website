@@ -1,4 +1,4 @@
-import os
+﻿import os
 
 import pytest
 from sqlalchemy import create_engine
@@ -39,7 +39,7 @@ def _factory():
 
 def test_categories_distinguish_repair_key_and_master_key():
     assert classify_call_category("The alley gate lock is broken and needs repair") == CATEGORY_REPAIR
-    assert classify_call_category("I want to order a key from the website for £22") == CATEGORY_KEY
+    assert classify_call_category("I want to order a key from the website for Â£22") == CATEGORY_KEY
     assert classify_call_category("I need a master key for our housing association") == CATEGORY_MASTER_KEY
     subject, body = build_internal_email(
         extract_call_details(
@@ -49,18 +49,18 @@ def test_categories_distinguish_repair_key_and_master_key():
         | {"category": CATEGORY_REPAIR}
     )
     assert "[REPAIR]" in subject
-    assert "Gate number: 42" in body
+    assert "Gate Number: 42" in body
     assert "Wirral" in body
     master_subject, master_body = build_internal_email(
         {"category": CATEGORY_MASTER_KEY, "job_reference": "CG-1", "summary": "x", "transcript": "y"}
     )
     assert "MASTER KEY APPLICATION" in master_subject
-    assert "RESTRICTED MASTER-KEY APPLICATION" in master_body
+    assert "MASTER-KEY ENQUIRY" in master_body
     key_subject, key_body = build_internal_email(
         {"category": CATEGORY_KEY, "job_reference": "CG-2", "summary": "x", "transcript": "y"}
     )
     assert "[KEY REQUEST]" in key_subject
-    assert "KEY / RESIDENT KEY" in key_body
+    assert "KEY ORDER / ENQUIRY" in key_body
 
 
 def test_close_call_sends_idempotent_internal_email(monkeypatch):
@@ -263,15 +263,61 @@ Caller: I want your master key.
     details = extract_call_details(transcript, job_reference="CG-000028")
     subject, body = build_internal_email(details)
     assert subject.startswith("[REPAIR]")
-    assert "ALLEY GATE REPAIR JOB" in body
+    assert "Chapelgate Alleygate Repair Call Report" in body
     assert "KEY ORDER / ENQUIRY" in body
     assert "MASTER-KEY ENQUIRY" in body
-    assert body.index("ALLEY GATE REPAIR JOB") < body.index("KEY ORDER / ENQUIRY") < body.index("MASTER-KEY ENQUIRY")
-    assert "Gate number: 921" in body
+    assert body.index("Chapelgate Alleygate Repair Call Report") < body.index("KEY ORDER / ENQUIRY") < body.index("MASTER-KEY ENQUIRY")
+    assert "Gate Number: 921" in body
     assert "Area: Sefton" in body
-    assert "Fault reported: The lock's broken on gate 921." in body
-    assert "Caller name: Andrew Cartwright" in body
-    assert "Callback number: 07755 226746" in body
-    assert "Caller address: 18 Brisbane Avenue, Wallasey" in body
-    assert "Caller address: Assistant:" not in body
+    assert "Fault Details: The lock's broken on gate 921." in body
+    assert "Resident Name: Andrew Cartwright" in body
+    assert "Contact Number: 07755 226746" in body
+    assert "Address: 18 Brisbane Avenue, Wallasey" in body
+    assert "Address: Assistant:" not in body
     assert "FULL TRANSCRIPT" in body
+
+
+def test_live_garbled_call_uses_confirmed_repair_readback_and_separates_topics():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: sweet potato and alligator we pass
+Assistant: Right, I can help with that. Is the gate in Wirral or Sefton?
+Caller: world
+Assistant: Got it. And do you know the gate number?
+Caller: 21
+Assistant: Thanks. Can you tell me what the problem is with the gate?
+Caller: Yes, it's got a uh soap stock in the walk.
+Assistant: I see. Could you also tell me your name, your callback number, and your own address?
+Caller: Yes, that's the car right there. 75227746. My address is 20 Wexford Way, Widnes, CH459JX.
+Assistant: Thank you. So, just to confirm, the problem is an alley gate with a key stuck in the lock, at gate 21 in Wirral. And your details are that your name's Mick, your number is 07752227746, and your address is 24 Wexford Way, Wirral, CH45 9JX. Your job reference is CG-000030. Is there anything else I can help with?
+Caller: Yes, can I have all the master key as well?
+Assistant: I understand. Master keys are restricted, so they're not ordered through the website. To apply for one, you'll need to email info@alleygates.co.uk from an official organisation or work email.
+Caller: I've already ordered the cake. What's holding us up? How long will it take?
+Assistant: Right, you should have received a confirmation email with your order number. If you want an update, just reply to that email. Keys are sent by Royal Mail, and tracking info is emailed when it's dispatched.
+Caller: I also want to order, okay?
+Assistant: You can do that online at alleygates.co.uk. Keys are currently Â£22, including VAT and recorded delivery.
+Caller: There's a car blocking the alleyway.
+Caller: Yeah, so we keep leaving the gates open.
+Caller: I think that the neighbor keeps vandalizing the lock.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000030")
+    subject, body = build_internal_email(details)
+
+    assert subject == "[REPAIR] Gate 21 - CG-000030"
+    assert "Chapelgate Alleygate Repair Call Report" in body
+    assert "Job ID: CG-000030" in body
+    assert "Gate Number: 21" in body
+    assert "Resident Name: Mick" in body
+    assert "Contact Number: 07752227746" in body
+    assert "Address: 24 Wexford Way, Wirral" in body
+    assert "Postcode: CH45 9JX" in body
+    assert "Fault Details: an alley gate with a key stuck in the lock" in body
+    assert "KEY ORDER / ENQUIRY" in body
+    assert "MASTER-KEY ENQUIRY" in body
+    assert body.index("Chapelgate Alleygate Repair Call Report") < body.index("KEY ORDER / ENQUIRY") < body.index("MASTER-KEY ENQUIRY")
+    assert "car blocking the alleyway" in body
+    assert "vandalizing the lock" in body
+    assert body.index("OTHER INFORMATION") < body.index("FULL TRANSCRIPT")
+
+
+
+
