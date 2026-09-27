@@ -82,8 +82,10 @@ function parseState(raw: string): PersistedState {
 
 export class FileProvisioningStore implements ProvisioningStore {
   private state: PersistedState;
+  private readonly filePath: string;
 
-  constructor(private readonly filePath: string) {
+  constructor(filePath: string) {
+    this.filePath = filePath;
     if (fs.existsSync(filePath)) {
       this.state = parseState(fs.readFileSync(filePath, "utf8"));
     } else {
