@@ -54,6 +54,21 @@
 - Accessible checkbox fieldset and disabled final submit until review complete.
 - Review provenance/evidence persistence in the early-access lead message, including revision ID.
 
+## Exact execution gate
+
+Run from a clean checkout of this branch with the lockfile unchanged:
+
+```bash
+npm ci --no-audit --no-fund
+node --experimental-strip-types --test src/lib/agent-review.test.ts src/lib/agent-configuration.test.ts src/lib/agent-selection.test.ts src/lib/agent-blueprint.test.ts src/lib/onboarding-create.test.ts
+node --test scripts/agent-review-wiring.test.mjs scripts/create-a11y.test.mjs
+npx --no-install eslint --no-ignore src/lib/agent-review.ts src/lib/agent-review.test.ts src/lib/agent-configuration.ts src/lib/agent-configuration.test.ts src/components/AgentReviewGate.tsx src/components/CreateReceptionistLaterSteps.tsx src/components/ReceptionistDraftPreview.tsx src/lib/onboarding-create.ts src/lib/onboarding-create.test.ts scripts/agent-review-wiring.test.mjs scripts/create-a11y.test.mjs
+npm test
+npm run build
+```
+
+Any failure keeps Step 6 unmerged and unfrozen. The verifier must record the exact commit SHA and command results.
+
 ## Verification state
 
 - Static scope/diff audit: COMPLETE.
