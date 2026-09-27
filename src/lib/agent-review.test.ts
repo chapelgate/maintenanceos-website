@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { buildAgentBlueprintDraft } from "./agent-selection.ts";
 import {
+  agentReviewRevision,
   applyReviewedIdentityToAgentBlueprint,
   buildAgentReviewRecord,
   buildAgentReviewRequirements,
@@ -11,6 +12,24 @@ import {
 } from "./agent-review.ts";
 
 const CREATED_AT = "2026-09-27T16:30:00.000Z";
+
+const TEST_REVISION = "arv1_12345678";
+
+function reviewSubject(currentBlueprint: ReturnType<typeof blueprint>) {
+  return {
+    knowledgePack: { kind: "test-review-pack", businessName: currentBlueprint.identity.businessName },
+    systemPrompt: "test reviewed system prompt",
+  };
+}
+
+function revisionFor(currentBlueprint: ReturnType<typeof blueprint>): string {
+  const subject = reviewSubject(currentBlueprint);
+  return agentReviewRevision({
+    blueprint: currentBlueprint,
+    knowledgePack: subject.knowledgePack,
+    systemPrompt: subject.systemPrompt,
+  });
+}
 
 function blueprint(type: Parameters<typeof buildAgentBlueprintDraft>[0]["type"]) {
   return buildAgentBlueprintDraft({
@@ -166,10 +185,11 @@ test("review record fails closed until every current requirement is confirmed", 
     },
     missing: ["faqs"],
   });
-  const partial = buildAgentReviewRecord(requirements, [
-    "control:role",
-    "unknown:stale",
-  ]);
+  const partial = buildAgentReviewRecord(
+    requirements,
+    ["control:role", "unknown:stale"],
+    TEST_REVISION,
+  );
   assert.equal(partial.complete, false);
   assert.ok(!partial.confirmedIds.includes("unknown:stale"));
   assert.ok(partial.missingIds.includes("control:ai_output"));
@@ -178,6 +198,7 @@ test("review record fails closed until every current requirement is confirmed", 
   const complete = buildAgentReviewRecord(
     requirements,
     requirements.map((item) => item.id),
+    TEST_REVISION,
   );
   assert.equal(complete.complete, true);
   assert.deepEqual(complete.missingIds, []);
@@ -188,7 +209,7 @@ test("review evidence is deterministic regardless of checkbox order", () => {
     blueprint: blueprint("sales_enquiry"),
   });
   const reversed = requirements.map((item) => item.id).reverse();
-  const record = buildAgentReviewRecord(requirements, reversed);
+  const record = buildAgentReviewRecord(requirements, reversed, TEST_REVISION);
   assert.deepEqual(
     record.confirmedIds,
     requirements.map((item) => item.id),
@@ -199,10 +220,20 @@ test("review evidence is deterministic regardless of checkbox order", () => {
 test("lifecycle cannot advance on incomplete or forged review evidence", () => {
   const draft = blueprint("maintenance_desk");
   const requirements = buildAgentReviewRequirements({ blueprint: draft });
-  const incomplete = buildAgentReviewRecord(requirements, ["control:role"]);
+  const subject = reviewSubject(draft);
+  const incomplete = buildAgentReviewRecord(
+    requirements,
+    ["control:role"],
+    revisionFor(draft),
+  );
 
   assert.throws(
-    () => finalizeAgentReview({ blueprint: draft, record: incomplete }),
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        record: incomplete,
+      }),
     /incomplete/i,
   );
 
@@ -210,6 +241,7 @@ test("lifecycle cannot advance on incomplete or forged review evidence", () => {
     () =>
       finalizeAgentReview({
         blueprint: draft,
+        ...subject,
         record: {
           ...incomplete,
           complete: true,
@@ -222,13 +254,15 @@ test("lifecycle cannot advance on incomplete or forged review evidence", () => {
 
 test("forged empty requirement record cannot bypass the canonical review gate", () => {
   const draft = blueprint("maintenance_desk");
-  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const subject = reviewSubject(draft);
   assert.throws(
     () =>
       finalizeAgentReview({
         blueprint: draft,
+        ...subject,
         record: {
           version: "1.0.0",
+          revisionId: revisionFor(draft),
           complete: true,
           requiredIds: [],
           confirmedIds: [],
@@ -244,15 +278,18 @@ test("finalizer independently derives low-confidence and missing requirements", 
   const incompleteRequirements = buildAgentReviewRequirements({
     blueprint: draft,
   });
+  const subject = reviewSubject(draft);
   const incompleteRecord = buildAgentReviewRecord(
     incompleteRequirements,
     incompleteRequirements.map((item) => item.id),
+    revisionFor(draft),
   );
 
   assert.throws(
     () =>
       finalizeAgentReview({
         blueprint: draft,
+        ...subject,
         factMeta: {
           locations: { source: "details", confidence: "low" },
         },
@@ -266,11 +303,17 @@ test("finalizer independently derives low-confidence and missing requirements", 
 test("complete review advances only lifecycle and preserves controls", () => {
   const draft = blueprint("maintenance_desk");
   const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const subject = reviewSubject(draft);
   const record = buildAgentReviewRecord(
     requirements,
     requirements.map((item) => item.id),
+    revisionFor(draft),
   );
-  const reviewed = finalizeAgentReview({ blueprint: draft, record });
+  const reviewed = finalizeAgentReview({
+    blueprint: draft,
+    ...subject,
+    record,
+  });
 
   assert.equal(draft.lifecycle.stage, "draft");
   assert.equal(reviewed.lifecycle.stage, "reviewed");
