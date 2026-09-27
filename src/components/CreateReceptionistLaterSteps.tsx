@@ -601,12 +601,18 @@ export function CreateReceptionistLaterSteps({
                       );
                       return;
                     }
+                    const nextBlueprint =
+                      configurationLib.applyKnowledgePackToAgentBlueprint(
+                        agentBlueprint,
+                        pack,
+                      );
                     setPackError(null);
+                    setAgentBlueprint(nextBlueprint);
                     setReceptionist({
                       knowledgePack: pack,
                       systemPrompt: configurationLib.finalizeAgentSystemPrompt(
                         promptText,
-                        agentBlueprint,
+                        nextBlueprint,
                       ),
                       limitations: configurationLib.agentLimitationsFor(pack),
                     });
