@@ -130,3 +130,10 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **State:** FIX CANDIDATE — execution verification pending.
 - **Reproduction:** unknown pack keys are dropped by normalization and trusted prompt controls are appended after editing, but the editable textareas alone did not show those exact stored results.
 - **Fix:** expose read-only `Final normalized knowledge pack` and `Final stored system prompt` views for the mandatory AI-output review.
+
+## 2026-09-27 — Step 6: async generation/edit race could submit stale configuration
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Risk:** Step-4 generation and Step-5 pack/prompt/reset edits use dynamic imports. Without a pending gate, a customer could change input, navigate, or re-confirm while an older async result was still resolving.
+- **Fix:** all generation/edit operations share a monotonic version counter and `configEditPending` gate. Newer edits/back navigation invalidate older completions; review checkboxes and final submit are disabled while the latest change is unsettled.
+- **Regression:** `scripts/agent-review-wiring.test.mjs` locks the version/pending guards, stale-result rejection, provenance invalidation and regenerated protected prompt wiring.
