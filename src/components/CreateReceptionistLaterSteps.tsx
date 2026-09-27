@@ -825,6 +825,9 @@ export function CreateReceptionistLaterSteps({
                         pack,
                       );
                     setPackError(null);
+                    // Raw pack edits replace the reviewed draft-field values, so
+                    // scanner provenance for those editable fields is no longer current.
+                    setFieldMeta({});
                     setAgentBlueprint(nextBlueprint);
                     setPromptText(regeneratedPrompt);
                     setReceptionist({
