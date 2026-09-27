@@ -44,29 +44,40 @@ test("review gate always requires core identity, role and generated-output confi
   assert.ok(requirements.some((item) => item.id === "control:ai_output"));
 });
 
-test("only low-confidence discovered facts become confidence confirmations", () => {
+test("low-confidence confirmations follow the provenance of the actual reviewed values", () => {
   const requirements = buildAgentReviewRequirements({
     blueprint: blueprint("sales_enquiry"),
     factMeta: {
       businessName: { source: "jsonld", confidence: "high" },
       services: { source: "nav", confidence: "low" },
-      hours: { source: "details", confidence: "medium" },
       website: { source: "fetched_url", confidence: "low" },
+      locations: { source: "details", confidence: "low" },
+    },
+    fieldMeta: {
+      businessName: { source: "heading", confidence: "low" },
+      services: { source: "heading", confidence: "low" },
+      hours: { source: "details", confidence: "medium" },
     },
   });
-  assert.ok(requirements.some((item) => item.id === "fact:services"));
   assert.equal(
     requirements.find((item) => item.id === "fact:website")?.kind,
     "low_confidence",
   );
   assert.equal(
     requirements.find((item) => item.id === "fact:businessName")?.kind,
-    "mandatory",
+    "low_confidence",
   );
-  assert.ok(!requirements.some((item) => item.id === "fact:hours"));
+  assert.ok(requirements.some((item) => item.id === "fact:locations"));
+  assert.ok(requirements.some((item) => item.id === "field:services"));
+  assert.ok(!requirements.some((item) => item.id === "fact:services"));
+  assert.ok(!requirements.some((item) => item.id === "field:hours"));
   assert.match(
     requirements.find((item) => item.id === "fact:website")?.detail ?? "",
     /submitted website URL/,
+  );
+  assert.match(
+    requirements.find((item) => item.id === "fact:businessName")?.detail ?? "",
+    /heading/,
   );
 });
 
