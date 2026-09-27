@@ -73,7 +73,9 @@ Any failure keeps Step 6 unmerged and unfrozen. The verifier must record the exa
 
 - Static scope/diff audit: COMPLETE.
 - Static security/lifecycle audit: COMPLETE.
+- Machine-checked static contract audit: **18/18 PASS** (review revision/provenance binding, canonical finalisation, draft-only lifecycle, edit invalidation, fail-closed submit, no provisioning/telephony path, accessibility regression presence).
 - Authorised Desktop Commander execution devices: OFFLINE at latest check.
+- Existing `cloud-workers` self-hosted Linux pool was inspected. Its approved queue is intentionally Python/control-plane-only and rejects arbitrary payload execution; using it for this Next.js repo would require scope/architecture drift, so it was not modified.
 - Focused real-repository Node tests: PENDING.
 - Full `npm test`: PENDING.
 - Changed-file ESLint: PENDING.
