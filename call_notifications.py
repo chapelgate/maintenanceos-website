@@ -49,7 +49,7 @@ _URGENCY = re.compile(
 )
 _CALLBACK = re.compile(
     r"(?:callback|call\s*back|contact(?:\s+number)?|my\s+number|phone(?:\s+number)?|telephone(?:\s+number)?)"
-    r"[:\s]+(\+?\d[\d\s()-]{7,}\d)",
+    r"[:\s]+(?:is\s+)?(\+?\d[\d\s()-]{7,}\d)",
     re.IGNORECASE,
 )
 _NAME = re.compile(
@@ -137,19 +137,31 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         assistant_text,
         re.IGNORECASE,
     )
+    explicit_caller_names = re.findall(
+        r"\bmy\s+name\s+is\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3})",
+        caller_text,
+        re.IGNORECASE,
+    )
     raw_name = _NAME.search(caller_text)
     honorific_name = re.search(
-        r"\b(?:Mr|Mrs|Ms|Miss|Dr)\s+([A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){0,2})",
+        r"\b(?:Mr|Mrs|Ms|Miss|Dr)\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3})",
         caller_text,
+        re.IGNORECASE,
     )
+    # A caller's explicit self-correction ("My name is ...") outranks an
+    # earlier assistant read-back that the caller subsequently corrected.
     name_value = (
-        confirmed_name[-1].strip()
-        if confirmed_name
-        else (honorific_name.group(1).strip() if honorific_name else (raw_name.group(1).strip() if raw_name else ""))
+        explicit_caller_names[-1].strip()
+        if explicit_caller_names
+        else (
+            confirmed_name[-1].strip()
+            if confirmed_name
+            else (honorific_name.group(1).strip() if honorific_name else (raw_name.group(1).strip() if raw_name else ""))
+        )
     )
 
     confirmed_callback = re.findall(
-        r"\byour\s+(?:callback\s+|phone\s+)?number(?:'s|\s+is)\s+(\+?\d[\d\s()-]{7,}\d)",
+        r"\byour\s+(?:callback\s+|phone\s+|contact\s+)?number(?:'s|\s+is)\s+(\+?\d[\d\s()-]{7,}\d)",
         assistant_text,
         re.IGNORECASE,
     )
@@ -198,6 +210,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         r"\breported\s+that\s+(.+?)(?:\s+on\s+gate\s+\d+|\.\s|$)",
         r"\bfault\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
         r"\b((?:the\s+)?(?:lock|gate|hinge|cylinder)\s+is\s+(?:missing|broken|damaged|jammed|stuck)(?:\s+due\s+to\s+vandalism)?)",
+        r"\b((?:the\s+)?keys?\s+(?:is|are)\s+spinning(?:\s+around)?)",
     ]
     for pattern in fault_patterns:
         matches = re.findall(pattern, assistant_text, re.IGNORECASE)
@@ -211,8 +224,8 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                 if sentence.rstrip().endswith("?"):
                     continue
                 if (
-                    re.search(r"\b(?:lock|gate|hinge|cylinder)\b", sentence, re.IGNORECASE)
-                    and re.search(r"\b(?:missing|broken|damaged|jammed|stuck|vandali[sz])\w*\b", sentence, re.IGNORECASE)
+                    re.search(r"\b(?:lock|gate|hinge|cylinder|keys?)\b", sentence, re.IGNORECASE)
+                    and re.search(r"\b(?:missing|broken|damaged|jammed|stuck|spinning|vandali[sz])\w*\b", sentence, re.IGNORECASE)
                 ):
                     fault = sentence.strip(" ,.")
                     break

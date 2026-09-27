@@ -353,3 +353,29 @@ Assistant: Thank you for calling Chapel Gate. Goodbye, have a nice day.
     assert "Outcome: no key order was taken during the call; caller was directed to alleygates.co.uk." in body
     assert "Order update route:" not in body
     assert "number 625 Mr Andrew Carl" not in body.split("OTHER INFORMATION", 1)[1].split("FULL TRANSCRIPT", 1)[0]
+
+
+def test_cg32_caller_correction_and_confirmed_contact_are_authoritative():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: need to report for navigate repair
+Assistant: Okay, I can help with that. Is the gate in Wirral or Sefton? And do you know the gate number?
+Caller: then it's gate 421.
+Assistant: Thanks. And what's the problem with it, please? Also, may I have your name, contact number, and your full address, please?
+Assistant: Okay, thanks. And your name, contact number, and your address, please?
+Caller: The address is 18 Brisbane Avenue. Wallacey. Wirral. CH45 9JX.
+Caller: My telephone number is 07752226746.
+Assistant: Thanks. Just to confirm then: it's gate number 421 and the keys are spinning around. Your name is Tony, and you're at 18 Brisbane Avenue, Wallasey, Wirral, CH45 9JX. Your contact number is 07752 226746. And we've got the job reference CG-000032. Is all that correct?
+Caller: My name is Andrew Cartwright.
+Assistant: My apologies, Andrew Cartwright. Thanks for correcting that. Is everything else correct though?
+Caller: Yes.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000032")
+    subject, body = build_internal_email(details)
+
+    assert subject == "[REPAIR] Gate 421 - CG-000032"
+    assert "Resident Name: Andrew Cartwright" in body
+    assert "Contact Number: 07752 226746" in body
+    assert "Address: 18 Brisbane Avenue, Wallasey, Wirral" in body
+    assert "Postcode: CH45 9JX" in body
+    assert "Area: Wirral" in body
+    assert "Fault Details: the keys are spinning around" in body
