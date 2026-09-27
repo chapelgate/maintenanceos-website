@@ -250,6 +250,35 @@ test("buildCreateLeadMessage includes field meta when provided", () => {
   assert.match(message, /"source": "jsonld"/);
 });
 
+test("buildCreateLeadMessage includes fact provenance and customer review evidence", () => {
+  const message = buildCreateLeadMessage({
+    businessUrl: "https://example.com/",
+    scanNote: "scan_response_mapped",
+    draft: {
+      businessName: "Acme",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+    factMeta: {
+      services: { source: "nav", confidence: "low" },
+    },
+    review: {
+      version: "1.0.0",
+      complete: true,
+      requiredIds: ["control:role", "fact:services"],
+      confirmedIds: ["control:role", "fact:services"],
+      missingIds: [],
+    },
+  });
+  assert.match(message, /Fact meta JSON/);
+  assert.match(message, /"confidence": "low"/);
+  assert.match(message, /Customer review JSON/);
+  assert.match(message, /"complete": true/);
+  assert.match(message, /"fact:services"/);
+});
+
 test("buildCreateLeadMessage includes the selected AgentBlueprint when provided", () => {
   const message = buildCreateLeadMessage({
     businessUrl: "https://example.com/",
