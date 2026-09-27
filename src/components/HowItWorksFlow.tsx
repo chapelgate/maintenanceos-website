@@ -1,6 +1,6 @@
 /**
  * How-it-works flow — matches /create stepper:
- * Website → Check → Review → Pack.
+ * Website → Check → Choose → Review → Pack.
  * Unified mos-glass ladder: number → title → status. CSS only; AA arrows/paper.
  */
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
@@ -127,7 +127,7 @@ export function HowItWorksFlow() {
         id="flow-heading"
         className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
       >
-        Website → Check → Review → Pack
+        Website → Check → Choose → Review → Pack
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
         The same steps as{" "}
