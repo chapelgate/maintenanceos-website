@@ -4,7 +4,7 @@ Only genuine human/external blockers belong here. Engineering defects belong in 
 
 ## Open
 
-- None for Steps 5–6.
+- None for Steps 5–7.
 
 ## Closed
 
