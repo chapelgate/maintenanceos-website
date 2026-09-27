@@ -108,8 +108,6 @@ export async function probeTwilioConnector(input: {
   const env = input.env ?? process.env;
   const apiKey = env[input.connector.apiKeyEnv]?.trim() ?? "";
   const apiSecret = env[input.connector.apiSecretEnv] ?? "";
-  const checks: AdapterProbeResult["checks"] = [];
-
   if (!apiKey || !apiSecret) {
     return {
       ok: false,
