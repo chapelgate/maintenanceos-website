@@ -44,7 +44,7 @@ function parseConnector(value: unknown): ConnectorDescriptor | null {
         "webhookUrl",
       ]) ||
       typeof value.existingNumber !== "string" ||
-      !UK_OR_E164.test(value.existingNumber) ||
+      !PHONE_NUMBER.test(value.existingNumber) ||
       !Number.isInteger(value.callApplicationId) ||
       Number(value.callApplicationId) <= 0 ||
       typeof value.webhookUrl !== "string"
