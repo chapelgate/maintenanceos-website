@@ -88,7 +88,8 @@ function reviewedBlueprint(
     },
     integrations: blueprint.integrations.map((item) => ({ ...item })),
     privacy: { ...blueprint.privacy },
-    lifecycle: { stage: "reviewed" },
+    // Step 6 owns the review transition. Configuration generation alone is not review.
+    lifecycle: { stage: blueprint.lifecycle.stage },
   };
 
   return validateBlueprint(next);
