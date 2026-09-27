@@ -38,9 +38,14 @@ function reviewedKnowledgePack(
   blueprint: AgentBlueprintV1,
   draft: ReceptionistDraft,
 ): KnowledgePack {
+  const businessName =
+    draft.businessName.trim() || blueprint.identity.businessName;
+  const defaultGreeting = agentTemplateFor(blueprint.agent.type).greeting(
+    businessName,
+  );
   const pack = normalizeKnowledgePack({
-    businessName: draft.businessName.trim() || blueprint.identity.businessName,
-    greeting: draft.greeting.trim() || blueprint.agent.greeting,
+    businessName,
+    greeting: draft.greeting.trim() || defaultGreeting,
     hours: draft.hours,
     services: draft.services,
     faqs: draft.faqs,
@@ -71,6 +76,7 @@ function reviewedBlueprint(
       ...blueprint.agent,
       // Behaviour is selected from trusted code, never copied from website text.
       objective: template.summary,
+      ...(pack.greeting ? { greeting: pack.greeting } : {}),
     },
     knowledge: {
       untrustedWebsiteContent: true,
