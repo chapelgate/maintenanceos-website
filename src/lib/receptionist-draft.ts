@@ -7,6 +7,7 @@ export {
   overlayReceptionistDraft,
   parseFaqs,
   parseServices,
+  MAX_PROMPT,
   TRUSTED_CONSTRAINTS_MARKER,
   TRUSTED_SANDBOX_CONSTRAINTS,
 } from "../../packages/receptionist-draft/src/index.ts";
