@@ -434,6 +434,41 @@ test("complete review advances only lifecycle and preserves controls", () => {
   );
 });
 
+test("customer review helpers reject non-draft blueprints", () => {
+  const original = blueprint("receptionist");
+  const reviewed = {
+    ...original,
+    lifecycle: { stage: "reviewed" as const },
+  };
+
+  assert.throws(
+    () =>
+      applyReviewedIdentityToAgentBlueprint(reviewed, {
+        locations: "Wirral",
+        phone: "",
+        email: "",
+      }),
+    /require a draft/i,
+  );
+
+  const requirements = buildAgentReviewRequirements({ blueprint: original });
+  const subject = reviewSubject(original);
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    revisionFor(original),
+  );
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: reviewed,
+        ...subject,
+        record,
+      }),
+    /Only a draft AgentBlueprint/i,
+  );
+});
+
 test("identity edits can change locations/contact but never control-plane fields", () => {
   const original = blueprint("maintenance_desk");
   const next = applyReviewedIdentityToAgentBlueprint(original, {
