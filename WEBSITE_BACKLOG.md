@@ -55,6 +55,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C4 | Continuation Step 4 — positioning/message refinement | **DONE IN CANDIDATE** — buyer message sharpened around structured UK maintenance intake, critical-vs-routine separation, human authority and traceability; public provider/competitor wording removed; no capability claim promoted | Positioning + Website Manager |
 | C5 | Continuation Step 5 — brand/UI consistency | **DONE IN CANDIDATE** — publisher identity normalised to Chapelgate; pricing CTA restored to shared accent token + 44px minimum target; regression added for naming/token drift | Brand + Front-End + Website Manager |
 | C6 | Continuation Step 6 — full functional QA | **DONE IN CANDIDATE** — zero-dependency exported-site + local lead-contract smoke added to release preflight; no production side effects | QA + Website Manager |
+| C7 | Continuation Step 7 — mobile/cross-browser QA | **DONE ENGINEERING IN CANDIDATE** — reusable real-Edge viewport smoke added for mobile/tablet/desktop; Safari/Firefox/manual AT remain explicit human launch coverage | QA + Front-End |
 
 ## Step 1 completion
 
