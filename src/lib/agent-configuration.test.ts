@@ -127,6 +127,44 @@ test("reviewed website injection stays data and cannot change trusted controls",
   assert.match(trustedTail, /policy_override/);
 });
 
+test("reviewed business-name edit regenerates a blank default greeting consistently", () => {
+  const original = blueprintFor("maintenance_desk");
+  const result = buildAgentConfiguration({
+    blueprint: original,
+    reviewedDraft: {
+      businessName: "New Name Services",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+  });
+  assert.equal(result.blueprint.identity.businessName, "New Name Services");
+  assert.equal(
+    result.knowledgePack.greeting,
+    "Thank you for calling New Name Services. How can I help with your maintenance enquiry?",
+  );
+  assert.equal(result.blueprint.agent.greeting, result.knowledgePack.greeting);
+  assert.doesNotMatch(result.knowledgePack.greeting ?? "", /Acme Plumbing/);
+});
+
+test("explicit reviewed greeting is preserved after a business-name edit", () => {
+  const result = buildAgentConfiguration({
+    blueprint: blueprintFor("receptionist"),
+    reviewedDraft: {
+      businessName: "New Name Services",
+      greeting: "Welcome to New Name. What can we help with?",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+  });
+  assert.equal(
+    result.blueprint.agent.greeting,
+    "Welcome to New Name. What can we help with?",
+  );
+});
+
 test("whitespace-only reviewed identity fields fall back to trusted blueprint defaults", () => {
   const original = blueprintFor("booking_assistant");
   const result = buildAgentConfiguration({
