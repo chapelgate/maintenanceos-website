@@ -155,8 +155,9 @@ export function applyReviewedIdentityToAgentBlueprint(
   const next: AgentBlueprintV1 = {
     ...trusted,
     identity: {
-      ...trusted.identity,
-      ...(locations ? { locations } : { locations: undefined }),
+      businessName: trusted.identity.businessName,
+      website: trusted.identity.website,
+      ...(locations ? { locations } : {}),
       ...(phone || email
         ? {
             contact: {
@@ -164,7 +165,7 @@ export function applyReviewedIdentityToAgentBlueprint(
               ...(email ? { email } : {}),
             },
           }
-        : { contact: undefined }),
+        : {}),
     },
     permissions: {
       allow: [...trusted.permissions.allow],
