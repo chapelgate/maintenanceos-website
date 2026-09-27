@@ -247,3 +247,31 @@ def test_mock_email_is_not_marked_sent(monkeypatch):
     assert result["reason"] == "live_email_disabled"
     with factory() as session:
         assert session.query(CommunicationDelivery).one().status == "FAILED"
+
+
+def test_mixed_repair_key_master_email_is_sectioned_and_repair_first():
+    transcript = """Assistant: How can we help?
+Caller: The lock's broken on gate 921.
+Assistant: Is that Wirral or Sefton?
+Caller: Sefton.
+Assistant: Could you give me your details?
+Caller: My name is Andrew Cartwright and my number is 07755 226746. I live at 18 Brisbane Avenue, Wallasey.
+Assistant: So gate 921 in Sefton, your name's Andrew Cartwright, your number is 07755 226746, and you're at 18 Brisbane Avenue, Wallasey.
+Caller: I've ordered the key already. How do I get an update?
+Caller: I want your master key.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000028")
+    subject, body = build_internal_email(details)
+    assert subject.startswith("[REPAIR]")
+    assert "ALLEY GATE REPAIR JOB" in body
+    assert "KEY ORDER / ENQUIRY" in body
+    assert "MASTER-KEY ENQUIRY" in body
+    assert body.index("ALLEY GATE REPAIR JOB") < body.index("KEY ORDER / ENQUIRY") < body.index("MASTER-KEY ENQUIRY")
+    assert "Gate number: 921" in body
+    assert "Area: Sefton" in body
+    assert "Fault reported: The lock's broken on gate 921." in body
+    assert "Caller name: Andrew Cartwright" in body
+    assert "Callback number: 07755 226746" in body
+    assert "Caller address: 18 Brisbane Avenue, Wallasey" in body
+    assert "Caller address: Assistant:" not in body
+    assert "FULL TRANSCRIPT" in body
