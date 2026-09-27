@@ -353,6 +353,9 @@ export function CreateReceptionistLaterSteps({
       blueprint: agentBlueprint,
       knowledgePack: receptionist.knowledgePack,
       systemPrompt: receptionist.systemPrompt,
+      factMeta,
+      fieldMeta,
+      missing: receptionist.knowledgePack.missing,
     });
     return {
       requirements,
