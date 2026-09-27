@@ -154,7 +154,7 @@ test("create journey steps name the next action without a live-phone claim", () 
   assert.equal(createJourneyNextAction(2, "checking"), "Checking…");
   assert.equal(createJourneyNextAction(2, "scanned"), "Choose agent");
   assert.equal(createJourneyNextAction(3), "Review draft");
-  assert.equal(createJourneyNextAction(4), "Preview knowledge pack");
+  assert.equal(createJourneyNextAction(4), "Generate AI configuration");
   assert.equal(createJourneyNextAction(5), "Submit early access request");
   assert.equal(isCreateScanReady("scanning"), false);
   assert.equal(isCreateScanReady("queued"), true);
