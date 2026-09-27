@@ -26,12 +26,12 @@
 - The trusted tail is always placed last and space is reserved for it before the `MAX_PROMPT` limit is applied.
 - Re-finalising edited prompt text replaces any previous trusted tail and re-appends current validated controls.
 - Initial website data is not scanned for/removing the trusted marker, so marker-like literal website text remains data rather than causing data loss.
-- Reviewed configurations advance lifecycle from `draft` to `reviewed`; no later lifecycle state is granted.
+- Configuration generation keeps lifecycle at `draft`. Step 6 owns the only transition to `reviewed`, after complete customer-review evidence.
 - Pack edits synchronise only blueprint identity/knowledge and revalidate the result; control fields stay unchanged.
 
 ## Regression coverage written
 
-- All six agent types generate role-specific reviewed configurations.
+- All six agent types generate role-specific draft configurations.
 - Malicious website/review text containing `ignore previous instructions`, permission names, transfer requests and policy-override text remains inert business data.
 - Editable prompt text cannot remove the trusted control tail.
 - Trusted-tail regeneration does not duplicate the real control block.
