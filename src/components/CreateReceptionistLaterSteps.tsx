@@ -41,6 +41,10 @@ function loadReceptionistDraft() {
   return import("@/lib/receptionist-draft");
 }
 
+function loadAgentConfiguration() {
+  return import("@/lib/agent-configuration");
+}
+
 type Status = "idle" | "submitting" | "success" | "error";
 
 function scanNoteFor(progress: CreateScanProgress): string {
@@ -189,6 +193,7 @@ export function CreateReceptionistLaterSteps({
   useEffect(() => {
     if (step < 4) return;
     void loadReceptionistDraft();
+    void loadAgentConfiguration();
   }, [step]);
 
   useEffect(() => {
@@ -469,9 +474,26 @@ export function CreateReceptionistLaterSteps({
             e.preventDefault();
             setStatus("idle");
             clearError();
-            void loadReceptionistDraft().then(({ buildReceptionistDraft }) => {
-              applyBuilt(buildReceptionistDraft(draft));
-              setStep(5);
+            if (!agentBlueprint) {
+              setError("Agent control blueprint is missing. Choose an agent role again.");
+              return;
+            }
+            void loadAgentConfiguration().then(({ buildAgentConfiguration }) => {
+              try {
+                const configuration = buildAgentConfiguration({
+                  blueprint: agentBlueprint,
+                  reviewedDraft: draft,
+                });
+                setAgentBlueprint(configuration.blueprint);
+                applyBuilt(configuration);
+                setStep(5);
+              } catch (configurationError) {
+                setError(
+                  configurationError instanceof Error
+                    ? configurationError.message
+                    : "The AI configuration could not be generated safely.",
+                );
+              }
             });
           }}
         >
@@ -482,6 +504,11 @@ export function CreateReceptionistLaterSteps({
                 ? "These fields are a draft for early access. The business name is from your website address, not from a crawl."
                 : "Complete what you can. We did not invent crawl content for this site."}
           </p>
+          {error ? (
+            <p id={errorId} className="mt-3 text-sm text-red-700" role="alert">
+              {error}
+            </p>
+          ) : null}
           <div className="mt-4 grid gap-4">
             <DraftReviewField
               label="Business name"
@@ -555,51 +582,74 @@ export function CreateReceptionistLaterSteps({
               packError={packError}
               onPackTextChange={(value) => {
                 setPackText(value);
-                void loadReceptionistDraft().then(
-                  ({
-                    finalizeSystemPrompt,
-                    limitationsFor,
-                    normalizeKnowledgePack,
-                  }) => {
-                    try {
-                      const parsed: unknown = JSON.parse(value);
-                      const pack = normalizeKnowledgePack(parsed);
-                      if (!pack) {
-                        setPackError(
-                          "Knowledge pack JSON was not accepted. Missing fields stay missing; live-call flags cannot be set.",
-                        );
-                        return;
-                      }
-                      setPackError(null);
-                      setReceptionist({
-                        knowledgePack: pack,
-                        systemPrompt: finalizeSystemPrompt(promptText),
-                        limitations: limitationsFor(pack),
-                      });
-                    } catch {
+                if (!agentBlueprint) {
+                  setPackError(
+                    "Agent control blueprint is missing. Pack edits cannot be accepted safely.",
+                  );
+                  return;
+                }
+                void Promise.all([
+                  loadReceptionistDraft(),
+                  loadAgentConfiguration(),
+                ]).then(([draftLib, configurationLib]) => {
+                  try {
+                    const parsed: unknown = JSON.parse(value);
+                    const pack = draftLib.normalizeKnowledgePack(parsed);
+                    if (!pack) {
                       setPackError(
-                        "Knowledge pack must be valid JSON. The last accepted pack will be used until this parses.",
+                        "Knowledge pack JSON was not accepted. Missing fields stay missing; live-call flags cannot be set.",
                       );
+                      return;
                     }
-                  },
-                );
+                    setPackError(null);
+                    setReceptionist({
+                      knowledgePack: pack,
+                      systemPrompt: configurationLib.finalizeAgentSystemPrompt(
+                        promptText,
+                        agentBlueprint,
+                      ),
+                      limitations: configurationLib.agentLimitationsFor(pack),
+                    });
+                  } catch {
+                    setPackError(
+                      "Knowledge pack must be valid JSON. The last accepted pack will be used until this parses.",
+                    );
+                  }
+                });
               }}
               onPromptTextChange={(value) => {
                 setPromptText(value);
-                void loadReceptionistDraft().then(({ finalizeSystemPrompt }) => {
-                  setReceptionist((current) =>
-                    current
-                      ? {
-                          ...current,
-                          systemPrompt: finalizeSystemPrompt(value),
-                        }
-                      : current,
-                  );
-                });
+                if (!agentBlueprint) return;
+                void loadAgentConfiguration().then(
+                  ({ finalizeAgentSystemPrompt }) => {
+                    setReceptionist((current) =>
+                      current
+                        ? {
+                            ...current,
+                            systemPrompt: finalizeAgentSystemPrompt(
+                              value,
+                              agentBlueprint,
+                            ),
+                          }
+                        : current,
+                    );
+                  },
+                );
               }}
               onReset={() => {
-                void loadReceptionistDraft().then(({ buildReceptionistDraft }) => {
-                  applyBuilt(buildReceptionistDraft(draft));
+                if (!agentBlueprint) {
+                  setPackError(
+                    "Agent control blueprint is missing. Configuration cannot be reset safely.",
+                  );
+                  return;
+                }
+                void loadAgentConfiguration().then(({ buildAgentConfiguration }) => {
+                  const configuration = buildAgentConfiguration({
+                    blueprint: agentBlueprint,
+                    reviewedDraft: draft,
+                  });
+                  setAgentBlueprint(configuration.blueprint);
+                  applyBuilt(configuration);
                 });
               }}
             />
