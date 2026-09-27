@@ -418,7 +418,7 @@ export function buildCreateLeadMessage(input: {
   } | null;
 }): string {
   const parts = [
-    "Website-to-receptionist early access request.",
+    "Website-to-AI-agent early access request.",
     `Business URL: ${input.businessUrl}`,
     `Scan: ${input.scanNote}`,
     "Draft JSON:",
@@ -432,7 +432,7 @@ export function buildCreateLeadMessage(input: {
   }
   if (input.receptionist) {
     parts.push(
-      "Receptionist knowledge pack JSON:",
+      "Agent knowledge pack JSON:",
       JSON.stringify(input.receptionist.knowledgePack, null, 2),
       "System prompt draft:",
       input.receptionist.systemPrompt,
