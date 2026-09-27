@@ -59,6 +59,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C8 | Continuation Step 8 — security hardening | **DONE ENGINEERING IN CANDIDATE** — live header inventory executable added; meta CSP/referrer verified; unsupported static-host response headers documented as explicit residual launch risk; no duplicate hosting | Security + DevOps + Website Manager |
 | C9 | Continuation Step 9 — red-team public staging | **DONE IN CANDIDATE** — bounded 18-request live staging red-team passed 0 failures; sensitive paths/methods/reflection/redirect/error leakage/CORS checked without destructive activity | Red Team + Defender |
 | C10 | Continuation Step 10 — accessibility verification | **DONE ENGINEERING IN CANDIDATE** — 12/12 source/export checks + 18/18 real-Edge viewport checks pass; manual AT/Safari remains explicit human launch QA | Accessibility + QA |
+| C11 | Continuation Step 11 — performance verification | **DONE IN CANDIDATE** — 28 exported pages pass 600 KB raw / 190 KB gzip JS and 120 KB CSS budgets; no field-CWV claim | Performance + Website Manager |
 
 ## Step 1 completion
 
