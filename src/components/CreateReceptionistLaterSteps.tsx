@@ -39,6 +39,11 @@ import {
   type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
+import {
+  qualificationMatchesReview,
+  type AgentSandboxQualificationResult,
+  type AgentSandboxReviewSubject,
+} from "@/lib/agent-sandbox-qualification";
 
 const ReceptionistDraftPreview = dynamic(
   () =>
@@ -163,6 +168,8 @@ export function CreateReceptionistLaterSteps({
   onBackToWebsite,
   onDraftChange,
   onReceptionistChange,
+  onReviewSubjectChange,
+  sandboxQualification,
 }: {
   businessUrl: string;
   email: string;
@@ -171,6 +178,8 @@ export function CreateReceptionistLaterSteps({
   onBackToWebsite: () => void;
   onDraftChange?: (draft: ReceptionistDraft) => void;
   onReceptionistChange?: (built: ReceptionistDraftResult | null) => void;
+  onReviewSubjectChange?: (subject: AgentSandboxReviewSubject | null) => void;
+  sandboxQualification?: AgentSandboxQualificationResult | null;
 }) {
   const [step, setStep] = useState<CreateJourneyStep>(2);
   const [status, setStatus] = useState<Status>("idle");
@@ -220,6 +229,64 @@ export function CreateReceptionistLaterSteps({
   useEffect(() => {
     onReceptionistChange?.(receptionist);
   }, [receptionist, onReceptionistChange]);
+
+  useEffect(() => {
+    if (!onReviewSubjectChange) return;
+    if (
+      configEditPending ||
+      packError ||
+      !agentBlueprint ||
+      !receptionist
+    ) {
+      onReviewSubjectChange(null);
+      return;
+    }
+    try {
+      const requirements = buildAgentReviewRequirements({
+        blueprint: agentBlueprint,
+        factMeta,
+        fieldMeta,
+        missing: receptionist.knowledgePack.missing,
+      });
+      const revisionId = agentReviewRevision({
+        blueprint: agentBlueprint,
+        knowledgePack: receptionist.knowledgePack,
+        systemPrompt: receptionist.systemPrompt,
+        factMeta,
+        fieldMeta,
+        missing: receptionist.knowledgePack.missing,
+      });
+      const reviewRecord = buildAgentReviewRecord(
+        requirements,
+        reviewConfirmedIds,
+        revisionId,
+      );
+      if (!reviewRecord.complete) {
+        onReviewSubjectChange(null);
+        return;
+      }
+      onReviewSubjectChange({
+        blueprint: agentBlueprint,
+        knowledgePack: receptionist.knowledgePack,
+        systemPrompt: receptionist.systemPrompt,
+        factMeta,
+        fieldMeta,
+        missing: receptionist.knowledgePack.missing,
+        reviewRecord,
+      });
+    } catch {
+      onReviewSubjectChange(null);
+    }
+  }, [
+    agentBlueprint,
+    configEditPending,
+    factMeta,
+    fieldMeta,
+    onReviewSubjectChange,
+    packError,
+    receptionist,
+    reviewConfirmedIds,
+  ]);
 
   function applyBuilt(built: ReceptionistDraftResult) {
     setReceptionist(built);
@@ -427,6 +494,25 @@ export function CreateReceptionistLaterSteps({
       return;
     }
 
+    const qualificationRequired = siteConfig.sandboxTestCallEnabled;
+    if (
+      qualificationRequired &&
+      !qualificationMatchesReview(
+        sandboxQualification,
+        review.record.revisionId,
+        reviewedBlueprint,
+      )
+    ) {
+      setError(
+        "Run sandbox qualification for this exact reviewed configuration before submitting.",
+      );
+      setStatus("error");
+      return;
+    }
+    const submissionBlueprint = qualificationRequired
+      ? sandboxQualification!.blueprint
+      : reviewedBlueprint;
+
     setStatus("submitting");
     const result = await submitLead({
       leadType: "create_receptionist",
@@ -440,7 +526,10 @@ export function CreateReceptionistLaterSteps({
         fieldMeta,
         factMeta,
         review: review.record,
-        agentBlueprint: reviewedBlueprint,
+        sandboxQualification: siteConfig.sandboxTestCallEnabled
+          ? sandboxQualification?.record
+          : undefined,
+        agentBlueprint: submissionBlueprint,
         receptionist: currentReceptionist,
       }),
       website: "",
@@ -1018,7 +1107,14 @@ export function CreateReceptionistLaterSteps({
               ? "Applying the latest configuration edit…"
               : review
                 ? review.record.complete
-                  ? "All required customer-review confirmations are complete."
+                  ? siteConfig.sandboxTestCallEnabled
+                    ? qualificationMatchesReview(
+                        sandboxQualification,
+                        review.record.revisionId,
+                      )
+                      ? "Customer review and sandbox qualification are complete."
+                      : "Customer review is complete. Run sandbox qualification below before submitting."
+                    : "All required customer-review confirmations are complete."
                   : `${review.record.missingIds.length} required review confirmation(s) remain.`
                 : "The customer review record is not ready."}
           </p>
@@ -1048,7 +1144,12 @@ export function CreateReceptionistLaterSteps({
                 status === "submitting" ||
                 configEditPending ||
                 Boolean(packError) ||
-                !review?.record.complete
+                !review?.record.complete ||
+                (siteConfig.sandboxTestCallEnabled &&
+                  !qualificationMatchesReview(
+                    sandboxQualification,
+                    review?.record.revisionId ?? "",
+                  ))
               }
               aria-describedby={reviewStatusId}
               data-create-primary-action=""
