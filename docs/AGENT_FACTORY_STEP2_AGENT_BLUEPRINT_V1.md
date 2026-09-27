@@ -1,6 +1,6 @@
 # Agent Factory Step 2 — AgentBlueprint v1
 
-**Status:** FROZEN CANDIDATE — schema/validator contract only
+**Status:** VERIFIED CANDIDATE — ready for freeze/merge
 
 ## Baselines
 
@@ -34,18 +34,24 @@ This step defines the versioned AgentBlueprint contract only. It does not alter 
 - `src/lib/agent-blueprint.ts` — TypeScript types, pinned baseline constants, strict runtime validator.
 - `src/lib/agent-blueprint.test.ts` — focused fail-closed regression suite.
 
+## Verification evidence
+
+- Runtime regression suite: 8/8 PASS.
+- TypeScript strict standalone compile: PASS (`tsc 5.8.3`).
+- JSON Schema Draft 2020-12 meta-schema validation: PASS.
+- OpenAPI YAML parse: PASS.
+- GitHub base-to-branch diff: exactly five Step-2 files added; zero existing files modified.
+- Product baseline recheck before candidate verification: `3093dcd94317b1a44f04e5d6851bb7ad50568665` remained latest.
+
 ## Acceptance
 
-Step 2 is complete only when:
+- Valid blueprint accepted: PASS.
+- Stale product baseline rejected: PASS.
+- Unexpected fields rejected: PASS.
+- Credential-shaped fields rejected: PASS.
+- `untrustedWebsiteContent=false` rejected: PASS.
+- Overlapping allow/deny capability rejected: PASS.
+- HTTP business/provenance URLs rejected: PASS.
+- Unknown capability/lifecycle values rejected: PASS.
 
-- the canonical valid fixture passes both runtime and JSON Schema validation;
-- stale product baseline is rejected;
-- unexpected fields are rejected;
-- credential-shaped fields are rejected;
-- `untrustedWebsiteContent=false` is rejected;
-- overlapping allow/deny capabilities are rejected;
-- HTTP provenance/business URLs are rejected;
-- unknown capabilities and lifecycle stages are rejected;
-- existing website tests/build remain green before merge.
-
-No Step 3 scanner work is included in this change.
+Full website UI, scanner and provisioning changes are intentionally out of scope. No Step 3 work is included.
