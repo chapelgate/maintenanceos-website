@@ -244,14 +244,22 @@ test("regenerating an edited prompt replaces rather than duplicates the trusted 
 });
 
 test("trusted controls survive prompt-size pressure", () => {
+  const services = Array.from(
+    { length: 14 },
+    (_, index) => "Service " + index + " " + "S".repeat(270),
+  ).join("\n");
+  const faqs = [
+    "Q: " + "Q".repeat(450) + "\nA: " + "A".repeat(1450),
+    "Q: " + "R".repeat(450) + "\nA: " + "B".repeat(1450),
+  ].join("\n");
   const result = buildAgentConfiguration({
     blueprint: blueprintFor("customer_service"),
     reviewedDraft: {
       businessName: "Acme",
-      greeting: "G".repeat(4000),
-      hours: "H".repeat(4000),
-      services: "S".repeat(4000),
-      faqs: "Q: " + "Q".repeat(2000) + "\nA: " + "A".repeat(4000),
+      greeting: "G".repeat(490),
+      hours: "H".repeat(1990),
+      services,
+      faqs,
     },
   });
   assert.ok(result.systemPrompt.length <= MAX_PROMPT);
