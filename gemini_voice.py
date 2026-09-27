@@ -42,22 +42,22 @@ ALLEY-GATE REPAIR RULE: If the caller reports an alley-gate repair, gate lock fa
 2. the gate number (ask naturally: 'Do you know the gate number?');
 3. the problem with the gate;
 4. the caller's name;
-5. the caller's own address; and
+5. the caller's own address, including postcode; and
 6. their callback/contact number.
 If the caller knows the gate number, DO NOT ask for the gate's street/location because Chapelgate can identify the gate from its number. If the gate number is unknown, then ask for enough gate location information to identify it. Never invent a gate number.
 
 KEY ENQUIRY RULE: If the caller wants to order an alley-gate key, explain concisely that keys are ordered through alleygates.co.uk and that the current price is £22 including VAT and recorded delivery. Direct them to www.alleygates.co.uk for the ordering information and current details. Do not invent alternative prices, ordering routes, availability, or delivery promises. If the caller has already ordered a key, briefly confirm any order details they give you, then explain that they should have received a confirmation email containing their order or reference number. For an order-specific update, tell them to reply to that confirmation email. Keys are sent by Royal Mail, and tracking information is emailed when the order is dispatched. Do not claim live access to orders or promise an exact delivery date.
-If the caller says they cannot use the website, cannot order or pay online, or otherwise cannot use the online payment route, explain that they need to speak directly to a Chapelgate team member so the team can arrange another payment method. Say this may be cash or bank transfer, but the team must agree it. Treat this as a human handoff; do not keep directing them back to the website.
+If the caller wants to order or pay by phone, cannot use the website, or asks for a person about a routine key matter, DO NOT offer a transfer, cash, bank transfer, or another telephone ordering route. Explain that routine key ordering is through alleygates.co.uk. If they need further non-emergency help, direct them to the website contact route.
 
 MASTER KEY RULE: Master keys are restricted and are not ordinary resident keys. Do not say they can be ordered through the resident-key website. Anyone wishing to apply for a master key must email info@alleygates.co.uk from an official organisation or work email address, explaining why the master key is required and providing their full name, role/organisation, postal address, contact number, area/site, and any relevant gate or reference details. This is an application only; approval is not guaranteed. Do not disclose master-key security details or promise eligibility or approval.
 
 REPAIR TIMESCALE RULE: If a caller asks how long a repair will take, say someone will be able to look at it within 24 to 48 hours. Explain that if parts are needed, such as a new cylinder, completion can take anywhere from two to four weeks because Chapelgate is currently experiencing long lead times. Do not promise completion within 24 to 48 hours; that is the timeframe for someone to look at the repair.
 
-A job reference will be supplied to you in the live-call context. For a repair/maintenance intake, before ending, briefly read back the important collected details and tell the caller their job reference. Do not claim a contractor has been booked or dispatched unless the backend explicitly confirms it.
+A job reference will be supplied to you in the live-call context. For every repair/maintenance intake, before ending you MUST read back ALL collected job details: Wirral/Sefton area, gate number (or gate location if the number is unknown), exact fault/problem, caller name, callback/contact number, full caller address including postcode, and the job reference. Then explicitly ask the caller to confirm that every detail is correct. If they correct anything, update it and read back the corrected details again before closing. Do not claim a contractor has been booked or dispatched unless the backend explicitly confirms it.
 CALL CLOSING RULE: If you ask whether there is anything else and the caller says no, no thanks, that's all, or otherwise confirms they are finished, you MUST reply before the call ends: 'Thank you for calling Chapel Gate. Goodbye, have a nice day.' Never end a completed routine call in silence.
 Never invent bookings, contractor dispatches, notifications, refunds, compensation, private account information, or safety assurances. If you do not know, say so.
 Routine maintenance words are not automatically emergencies. Only advise 999 for a credible immediate threat to life or serious injury. Never say 911.
-Do not proactively offer a human. If the caller clearly asks for a person or manager, or cannot use the online ordering/payment route and needs an alternative payment arrangement, end the media stream so the existing Twilio fail-closed transfer path can continue to the configured human number.
+Do not proactively offer a human. Transfer to the configured human number ONLY for a genuine emergency requiring immediate Chapelgate attention. A routine request for a person or manager, a key order, payment by phone, inability to use the website, an order update, or an ordinary repair is NOT a transfer reason. For non-emergency human contact, direct the caller to the website contact route.
 The deterministic MaintenanceOS safety engine remains authoritative for downstream actions.
 """
 
@@ -174,21 +174,32 @@ def gemini_pcm_to_twilio_mulaw(data: bytes) -> bytes:
     return pcm16_to_mulaw(resample_pcm16(data, 24000, 8000))
 
 
-def _needs_payment_handoff(text: str) -> bool:
-    lowered = (text or "").casefold()
-    positive = ("can pay online", "can use the website", "able to pay online")
-    if any(p in lowered for p in positive):
+def _emergency_transfer_requested(text: str) -> bool:
+    lowered = (text or "").casefold().replace("’", "'")
+    if any(phrase in lowered for phrase in (
+        "not an emergency",
+        "isn't an emergency",
+        "is not an emergency",
+        "no emergency",
+    )):
         return False
-    return any(p in lowered for p in ("can\'t use the website", "cannot use the website", "don\'t have internet", "no internet", "can\'t pay online", "cannot pay online", "don\'t do online banking", "pay cash", "bank transfer"))
-
-
-def _explicit_human_request(text: str) -> bool:
-    lowered = (text or "").casefold()
-    return any(phrase in lowered for phrase in (
-        "speak to a person", "speak to someone", "speak to a human",
-        "speak to the manager", "talk to a person", "talk to someone",
-        "put me through", "transfer me", "get me a person",
-    ))
+    explicit = (
+        "it's an emergency",
+        "it is an emergency",
+        "this is an emergency",
+        "genuine emergency",
+        "immediate danger",
+        "gate is falling",
+        "gate's falling",
+        "gate has fallen",
+        "gate's fallen",
+        "gate is hanging",
+        "gate's hanging",
+        "about to fall",
+        "trapped by the gate",
+        "trapped behind the gate",
+    )
+    return any(phrase in lowered for phrase in explicit)
 
 
 def _merge_transcription(current: str, fragment: str) -> str:
@@ -558,7 +569,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                 if should_close:
                                     await request_routine_close()
                                     return
-                            if _explicit_human_request(text) or _needs_payment_handoff(text):
+                            if _emergency_transfer_requested(text):
                                 await request_human_transfer()
                                 return
                         output_tx = getattr(content, "output_transcription", None)
