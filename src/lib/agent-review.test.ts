@@ -61,6 +61,25 @@ test("only low-confidence discovered facts become confidence confirmations", () 
   );
 });
 
+test("low-confidence draft-only fields are required without duplicating structured facts", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("receptionist"),
+    factMeta: {
+      businessName: { source: "jsonld", confidence: "low" },
+    },
+    fieldMeta: {
+      businessName: { source: "heading", confidence: "low" },
+      greeting: { source: "heading", confidence: "low" },
+    },
+  });
+  assert.equal(
+    requirements.filter((item) => item.id === "fact:businessName").length,
+    1,
+  );
+  assert.ok(requirements.some((item) => item.id === "field:greeting"));
+  assert.ok(!requirements.some((item) => item.id === "field:businessName"));
+});
+
 test("consequential permissions and human transfer require explicit confirmation", () => {
   const maintenance = buildAgentReviewRequirements({
     blueprint: blueprint("maintenance_desk"),
