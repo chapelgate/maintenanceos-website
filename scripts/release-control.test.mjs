@@ -14,6 +14,7 @@ test("release preflight requires clean source and runs all local quality gates",
   assert.match(src, /\[npmCli, "run", "lint"\]/);
   assert.match(src, /\[npmCli, "test"\]/);
   assert.match(src, /\[npmCli, "run", "build"\]/);
+  assert.match(src, /functional:smoke/);
   assert.match(src, /performance:budget/);
   assert.match(src, /accessibility:check/);
   assert.match(src, /release\.json/);

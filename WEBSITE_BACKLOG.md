@@ -54,6 +54,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C3-PRODUCT-WIN | Broad product pytest on Windows cannot execute Linux `resource` concurrency modules and reports POSIX-mode semantics differently on NTFS | **NON-BLOCKING ENVIRONMENT LIMIT** — claims promotion relies on 88/88 targeted control regressions; broad Windows run still passed 356 tests and no concurrency/production claim was promoted | Product Investigator + QA |
 | C4 | Continuation Step 4 — positioning/message refinement | **DONE IN CANDIDATE** — buyer message sharpened around structured UK maintenance intake, critical-vs-routine separation, human authority and traceability; public provider/competitor wording removed; no capability claim promoted | Positioning + Website Manager |
 | C5 | Continuation Step 5 — brand/UI consistency | **DONE IN CANDIDATE** — publisher identity normalised to Chapelgate; pricing CTA restored to shared accent token + 44px minimum target; regression added for naming/token drift | Brand + Front-End + Website Manager |
+| C6 | Continuation Step 6 — full functional QA | **DONE IN CANDIDATE** — zero-dependency exported-site + local lead-contract smoke added to release preflight; no production side effects | QA + Website Manager |
 
 ## Step 1 completion
 

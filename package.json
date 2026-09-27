@@ -9,6 +9,7 @@
     "lint": "eslint",
     "seo:monitor": "node scripts/seo-live-monitor.mjs",
     "website:monitor": "node scripts/website-health-monitor.mjs",
+    "functional:smoke": "node scripts/functional-smoke.mjs",
     "uptime:check": "node scripts/website-health-monitor.mjs",
     "deployment:verify": "node scripts/deployment-verifier.mjs",
     "performance:budget": "node scripts/performance-budget.mjs",
