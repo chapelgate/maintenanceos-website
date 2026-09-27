@@ -196,6 +196,9 @@ export function applyReviewedIdentityToAgentBlueprint(
   draft: ReviewedIdentityDraft,
 ): AgentBlueprintV1 {
   const trusted = validateBlueprint(blueprint);
+  if (trusted.lifecycle.stage !== "draft") {
+    throw new Error("Customer review edits require a draft AgentBlueprint.");
+  }
   const locations = normaliseLocations(draft.locations);
   const phone = draft.phone.trim();
   const email = draft.email.trim();
@@ -407,6 +410,9 @@ export function finalizeAgentReview(input: {
   record: AgentReviewRecord;
 }): AgentBlueprintV1 {
   const trusted = validateBlueprint(input.blueprint);
+  if (trusted.lifecycle.stage !== "draft") {
+    throw new Error("Only a draft AgentBlueprint can advance through customer review.");
+  }
   const requirements = buildAgentReviewRequirements({
     blueprint: trusted,
     factMeta: input.factMeta,
