@@ -1,6 +1,6 @@
 # Agent Factory Step 7 — Sandbox Qualification
 
-**Status:** IMPLEMENTED CANDIDATE — full repository verification required before freeze  
+**Status:** VERIFIED — ready to freeze/save  
 **Scope:** qualify the exact Step-6 reviewed AI configuration in the existing scripted sandbox and advance lifecycle from `reviewed` to `sandbox_passed` only on complete, current evidence.
 
 ## Baselines
@@ -61,9 +61,16 @@
 
 ## Verification state
 
-- Focused Step-7 + adjacent TypeScript suite: **54/54 PASS** on authorised verifier `CG`.
-- Changed-file ESLint: **PASS** after replacing a React effect-state reset with keyed remounting.
+- Exact verified candidate before evidence-only closure: `d8250ec42281c5202e17329d482538646588692b`.
+- Real verifier: authorised Desktop Commander device `CG`.
+- Focused Step-7 + adjacent TypeScript suite: **54/54 PASS**.
+- Step-7 wiring regressions: **6/6 PASS** within the repository script suite.
+- Repository script suite: **216/216 PASS**.
+- Package/runtime/source TypeScript suite: **249/249 PASS**.
+- Changed-file ESLint: **PASS**.
 - TypeScript / Next.js 16.3.6 production build: **PASS**.
 - Static export: **30/30 routes generated**.
-- Full repository `npm test`: PENDING final freeze gate.
-- Final clean-tree check: PENDING final freeze gate.
+- Clean-tree check: **PASS**.
+- Latest MaintenanceOS compatibility baseline rechecked before freeze: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- No telephony/provider/carrier/database/deployment/infrastructure files changed.
+- One React-quality defect was found by the real verifier and repaired before closure: effect-based local reset was replaced with review-revision keyed remounting.
