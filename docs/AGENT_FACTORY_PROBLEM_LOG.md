@@ -117,3 +117,16 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **State:** FIX CANDIDATE — execution verification pending.
 - **Risk:** customer-edited pack values could still be labelled with confidence metadata from the pre-edit scanner result.
 - **Fix:** accepted raw pack edits clear draft-field scanner provenance and regenerate the protected system prompt before review confirmations can be re-entered.
+
+## 2026-09-27 — Step 6: asynchronous pack/prompt edits could commit stale state
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** dynamic import callbacks for pack/prompt/reset edits had no generation guard, so an older callback could theoretically commit after a newer edit; confirmations cleared only at edit start could also be re-selected before the async commit.
+- **Fix:** one monotonic `configEditVersionRef` rejects stale callbacks; current commits clear confirmations again, and leaving the Pack step invalidates outstanding callbacks.
+- **Regression:** `scripts/agent-review-wiring.test.mjs` locks the guard and stale-provenance/reset wiring.
+
+## 2026-09-27 — Step 6: editable views could differ from normalized stored output
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** unknown pack keys are dropped by normalization and trusted prompt controls are appended after editing, but the editable textareas alone did not show those exact stored results.
+- **Fix:** expose read-only `Final normalized knowledge pack` and `Final stored system prompt` views for the mandatory AI-output review.
