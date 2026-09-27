@@ -293,9 +293,9 @@ export function buildAgentReviewRequirements(input: {
       kind: "consequential",
       title: "Confirm capability",
       detail:
-        "This role is permitted to " +
+        "The blueprint allows this capability: " +
         (CAPABILITY_LABELS[capability] ?? capability.replaceAll("_", " ")) +
-        ".",
+        ". This does not mean a live connector or phone service is active.",
     });
   }
 
@@ -305,9 +305,9 @@ export function buildAgentReviewRequirements(input: {
       kind: "consequential",
       title: "Confirm human-transfer policy",
       detail:
-        "Human transfer policy is " +
+        "Blueprint human-transfer policy is " +
         blueprint.rules.humanTransfer.replaceAll("_", " ") +
-        ".",
+        ". No live telephony is activated by this review.",
     });
   }
 
