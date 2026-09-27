@@ -169,3 +169,41 @@ creation.
 
 No code may bypass this boundary by giving a browser/model direct product
 database, carrier, provider or administrative credentials.
+
+
+## Step 9 adapter preparation
+
+`POST /v1/provisioning/adapters/prepare`
+
+This endpoint uses the same server-to-server HMAC/timestamp/nonce authentication
+and tenant-bound principal as initial provisioning.
+
+Request:
+
+```json
+{
+  "provisioningId": "prv_...",
+  "connectorRefs": ["phone-main", "calendar-main"]
+}
+```
+
+The referenced Step-8 provisioning record must exist and be owned by the same
+principal/tenant. Connector refs are resolved only through the server-side
+Agent Adapter registry.
+
+On success the gateway creates a durable adapter-preparation record and returns
+a bounded receipt with connector kind/ref/provider metadata. It does not return
+TTNC number, generated TTNC XML or secrets.
+
+Lifecycle:
+
+`provisioning -> ready`
+
+Adapter preparation has its own idempotency scope. Exact retry with a fresh
+nonce returns the existing readiness record; reusing the key for different
+connector content returns HTTP 409.
+
+Step-8 version-1 state files are migrated to version 2 with empty Step-9 adapter
+maps; existing provisioning/idempotency/nonces are preserved.
+
+See `docs/AGENT_ADAPTERS_CONTRACT.md`.
