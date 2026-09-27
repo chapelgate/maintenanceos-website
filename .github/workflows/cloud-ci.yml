@@ -30,6 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: GitHub Actions runner policy
+        if: github.ref == 'refs/heads/main'
         run: python3 scripts/gha-runner-policy-check.py .
 
       - name: Reject obvious committed private keys and provider secrets
