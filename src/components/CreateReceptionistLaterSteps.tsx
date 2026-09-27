@@ -303,7 +303,30 @@ export function CreateReceptionistLaterSteps({
     key: K,
     value: string,
   ) {
+    setReviewConfirmedIds([]);
     setDraft((current) => ({ ...current, [key]: value }));
+  }
+
+  function updateIdentityReview<K extends keyof ReviewedIdentityDraft>(
+    key: K,
+    value: string,
+  ) {
+    setReviewConfirmedIds([]);
+    setIdentityReview((current) => ({ ...current, [key]: value }));
+  }
+
+  function currentReview() {
+    if (!agentBlueprint || !receptionist) return null;
+    const requirements = buildAgentReviewRequirements({
+      blueprint: agentBlueprint,
+      factMeta,
+      fieldMeta,
+      missing: receptionist.knowledgePack.missing,
+    });
+    return {
+      requirements,
+      record: buildAgentReviewRecord(requirements, reviewConfirmedIds),
+    };
   }
 
   function clearError() {
@@ -312,6 +335,14 @@ export function CreateReceptionistLaterSteps({
 
   async function onSubmitLead() {
     clearError();
+    const review = currentReview();
+    if (!review || !review.record.complete) {
+      setError(
+        "Complete every required review confirmation before submitting this configuration.",
+      );
+      setStatus("error");
+      return;
+    }
     setStatus("submitting");
     const result = await submitLead({
       leadType: "create_receptionist",
@@ -323,6 +354,8 @@ export function CreateReceptionistLaterSteps({
         draft,
         scanNote: scanNoteFor(progress),
         fieldMeta,
+        factMeta,
+        review: review.record,
         agentBlueprint,
         receptionist,
       }),
