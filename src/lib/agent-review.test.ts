@@ -250,6 +250,58 @@ test("review evidence is invalidated when reviewed output changes", () => {
   );
 });
 
+test("review evidence is invalidated when provenance or missing-data evidence changes", () => {
+  const draft = blueprint("receptionist");
+  const subject = reviewSubject(draft);
+  const requirements = buildAgentReviewRequirements({
+    blueprint: draft,
+    fieldMeta: {
+      services: { source: "nav", confidence: "low" },
+    },
+    missing: ["faqs"],
+  });
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    agentReviewRevision({
+      blueprint: draft,
+      ...subject,
+      fieldMeta: {
+        services: { source: "nav", confidence: "low" },
+      },
+      missing: ["faqs"],
+    }),
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        fieldMeta: {
+          services: { source: "heading", confidence: "low" },
+        },
+        missing: ["faqs"],
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        fieldMeta: {
+          services: { source: "nav", confidence: "low" },
+        },
+        missing: ["hours", "faqs"],
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+});
+
 test("review record rejects malformed revision identifiers", () => {
   const requirements = buildAgentReviewRequirements({
     blueprint: blueprint("sales_enquiry"),
