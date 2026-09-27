@@ -58,6 +58,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C7 | Continuation Step 7 — mobile/cross-browser QA | **DONE ENGINEERING IN CANDIDATE** — reusable real-Edge viewport smoke added for mobile/tablet/desktop; Safari/Firefox/manual AT remain explicit human launch coverage | QA + Front-End |
 | C8 | Continuation Step 8 — security hardening | **DONE ENGINEERING IN CANDIDATE** — live header inventory executable added; meta CSP/referrer verified; unsupported static-host response headers documented as explicit residual launch risk; no duplicate hosting | Security + DevOps + Website Manager |
 | C9 | Continuation Step 9 — red-team public staging | **DONE IN CANDIDATE** — bounded 18-request live staging red-team passed 0 failures; sensitive paths/methods/reflection/redirect/error leakage/CORS checked without destructive activity | Red Team + Defender |
+| C10 | Continuation Step 10 — accessibility verification | **DONE ENGINEERING IN CANDIDATE** — 12/12 source/export checks + 18/18 real-Edge viewport checks pass; manual AT/Safari remains explicit human launch QA | Accessibility + QA |
 
 ## Step 1 completion
 
