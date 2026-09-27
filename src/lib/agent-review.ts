@@ -73,7 +73,11 @@ function fnv1a32(value: string): string {
 export function agentReviewRevision(subject: AgentReviewSubject): string {
   const blueprint = validateBlueprint(subject.blueprint);
   const canonical = stableReviewJson({
-    blueprint,
+    blueprint: {
+      ...blueprint,
+      // Review evidence follows the configuration across draft -> reviewed.
+      lifecycle: { stage: "draft" },
+    },
     knowledgePack: subject.knowledgePack,
     systemPrompt: subject.systemPrompt,
   });
