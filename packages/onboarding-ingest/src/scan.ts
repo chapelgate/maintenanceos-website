@@ -275,6 +275,8 @@ export async function runScan(
     draft: extracted.draft,
     warnings: [...new Set([...warnings, ...extracted.warnings])],
     sources,
+    ...(Object.keys(extracted.facts).length ? { facts: extracted.facts } : {}),
+    ...(Object.keys(extracted.factMeta).length ? { factMeta: extracted.factMeta } : {}),
     ...(Object.keys(extracted.fieldMeta).length
       ? { fieldMeta: extracted.fieldMeta }
       : {}),
