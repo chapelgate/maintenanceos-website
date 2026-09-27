@@ -109,28 +109,60 @@ def _assistant_lines(transcript: str) -> list[str]:
     return lines
 
 
+def _readback_clearly_confirmed(transcript: str) -> bool:
+    lines = [line.strip() for line in (transcript or "").splitlines() if line.strip()]
+    confirmation_prompt = re.compile(
+        r"\b(?:is\s+all\s+of\s+that\s+correct|is\s+everything\s+(?:else\s+)?correct|is\s+that\s+correct)\b",
+        re.IGNORECASE,
+    )
+    clear_yes = re.compile(
+        r"^(?:yes|yeah|yep|correct|that's\s+right|that\s+is\s+right|that's\s+correct|that\s+is\s+correct)\b",
+        re.IGNORECASE,
+    )
+    for idx, line in enumerate(lines[:-1]):
+        if not line.casefold().startswith("assistant:") or not confirmation_prompt.search(line):
+            continue
+        for next_line in lines[idx + 1:]:
+            if next_line.casefold().startswith("assistant:"):
+                break
+            if next_line.casefold().startswith("caller:"):
+                reply = next_line.split(":", 1)[1].strip()
+                if clear_yes.search(reply):
+                    return True
+                break
+    return False
+
+
 def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, Any]:
     caller_lines = _caller_lines(transcript)
     assistant_lines = _assistant_lines(transcript)
     caller_text = "\n".join(caller_lines)
     assistant_text = "\n".join(assistant_lines)
     full = transcript or ""
+    readback_confirmed = _readback_clearly_confirmed(full)
 
-    # Prefer the assistant's explicit read-back: it is the structured confirmation
-    # the caller heard, and is usually cleaner than realtime STT fragments.
-    confirmed_gate_area = re.findall(
-        r"\bgate\s+(\d{1,5})\s+in\s+(Wirral|Sefton)\b",
-        assistant_text,
-        re.IGNORECASE,
-    )
-    if confirmed_gate_area:
-        gate_value, area_value = confirmed_gate_area[-1]
+    gate = _GATE_NUM.search(caller_text)
+    if not gate:
+        for line in caller_lines:
+            bare = re.fullmatch(r"\D*(\d{1,5})\D*", line)
+            if bare:
+                gate = bare
+                break
+    if gate:
+        gate_value = gate.group(1)
     else:
-        gate = _GATE_NUM.search(assistant_text) or _GATE_NUM.search(caller_text) or _GATE_NUM.search(full)
-        gate_value = gate.group(1) if gate else ""
-        # Never infer Wirral/Sefton from the receptionist merely asking the question.
-        area_match = _AREA.search(caller_text)
-        area_value = area_match.group(1) if area_match else ""
+        assistant_gate = _GATE_NUM.search(assistant_text)
+        gate_value = assistant_gate.group(1) if assistant_gate else ""
+
+    area_match = _AREA.search(caller_text)
+    area_value = area_match.group(1) if area_match else ""
+    if not area_value and readback_confirmed:
+        confirmed_area = re.findall(
+            r"\bgate\s+\d{1,5}\s+in\s+(Wirral|Sefton)\b",
+            assistant_text,
+            re.IGNORECASE,
+        )
+        area_value = confirmed_area[-1] if confirmed_area else ""
 
     confirmed_name = re.findall(
         r"\byour\s+name(?:'s|\s+is)\s+([^,\.\n]{2,80})",
@@ -138,7 +170,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         re.IGNORECASE,
     )
     explicit_caller_names = re.findall(
-        r"\bmy\s+name\s+is\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3})",
+        r"\bmy\s+name\s+is\s+([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3}?)(?=\s+(?:and\b|my\b)|[,.;\n]|$)",
         caller_text,
         re.IGNORECASE,
     )
@@ -148,26 +180,44 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         caller_text,
         re.IGNORECASE,
     )
-    # A caller's explicit self-correction ("My name is ...") outranks an
-    # earlier assistant read-back that the caller subsequently corrected.
+    standalone_name = None
+    for line in caller_lines:
+        candidate = line.strip(" ,.")
+        if re.fullmatch(r"[A-Z][A-Za-z'-]+(?:\s+[A-Z][A-Za-z'-]+){1,3}", candidate, re.IGNORECASE):
+            if not any(ch.isdigit() for ch in candidate):
+                standalone_name = candidate
+                break
     name_value = (
         explicit_caller_names[-1].strip()
         if explicit_caller_names
         else (
-            confirmed_name[-1].strip()
-            if confirmed_name
-            else (honorific_name.group(1).strip() if honorific_name else (raw_name.group(1).strip() if raw_name else ""))
+            honorific_name.group(1).strip()
+            if honorific_name
+            else (
+                raw_name.group(1).strip()
+                if raw_name
+                else (
+                    standalone_name
+                    if standalone_name
+                    else (confirmed_name[-1].strip() if confirmed_name and readback_confirmed else "")
+                )
+            )
         )
     )
 
-    confirmed_callback = re.findall(
-        r"\byour\s+(?:callback\s+|phone\s+|contact\s+)?number(?:'s|\s+is)\s+(\+?\d[\d\s()-]{7,}\d)",
-        assistant_text,
-        re.IGNORECASE,
+    caller_phone_candidates = []
+    for line in caller_lines:
+        for match in re.finditer(r"(?<!\d)(\+?\d[\d\s()-]{7,}\d)(?!\d)", line):
+            raw = match.group(1).strip()
+            digits = re.sub(r"\D", "", raw)
+            plausible = 10 <= len(digits) <= 15
+            if plausible:
+                caller_phone_candidates.append(raw)
+    callback_value = (
+        re.sub(r"\s+", " ", caller_phone_candidates[-1]).strip()
+        if caller_phone_candidates
+        else ""
     )
-    raw_callback = _CALLBACK.search(caller_text)
-    callback_value = confirmed_callback[-1] if confirmed_callback else (raw_callback.group(1) if raw_callback else "")
-    callback_value = re.sub(r"\s+", " ", callback_value).strip()
 
     confirmed_addresses = re.findall(
         r"\byour\s+address(?:'s|\s+is)\s+([^\.\n]{4,180})"
@@ -176,20 +226,34 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         assistant_text,
         re.IGNORECASE,
     )
-    address = ""
-    if confirmed_addresses:
-        parts = confirmed_addresses[-1]
-        address = next((part.strip() for part in parts if part), "")
-    if not address:
-        for line in caller_lines:
-            lowered = line.casefold()
-            if any(k in lowered for k in ("address", "live at", "i live", "postcode", "road", "street", "avenue", "close", "lane", "way", "grove")):
-                address = line
-                break
+    caller_address = ""
+    street_pattern = re.compile(
+        r"\b(\d{1,4}\s+[A-Za-z][A-Za-z' -]*\s+(?:Road|Street|Avenue|Way|Grove|Lane|Close)\b.*?)(?=\s+(?:telephone|phone|contact|callback)\b|\s+and\s+the\s+gate\b|$)",
+        re.IGNORECASE,
+    )
+    for line in caller_lines:
+        street = street_pattern.search(line)
+        if street:
+            caller_address = street.group(1).strip(" ,.")
+            break
+        lowered = line.casefold()
+        if any(k in lowered for k in ("my address", "i live at", "postcode")):
+            caller_address = line.strip()
+            break
 
+    address = caller_address
+    if readback_confirmed and confirmed_addresses:
+        parts = confirmed_addresses[-1]
+        confirmed_address = next((part.strip() for part in parts if part), "")
+        if confirmed_address:
+            address = confirmed_address
+
+    postcode_source = f"{caller_address}\n{caller_text}"
+    if readback_confirmed:
+        postcode_source += f"\n{address}\n{assistant_text}"
     postcode_match = re.search(
         r"\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b",
-        f"{address}\n{full}",
+        postcode_source,
         re.IGNORECASE,
     )
     postcode = ""
@@ -202,23 +266,47 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                 "",
                 address,
                 flags=re.IGNORECASE,
-            ).strip(" ,")
+            ).strip(" ,.")
 
-    fault = ""
     fault_patterns = [
         r"\bthe\s+problem\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
         r"\breported\s+that\s+(.+?)(?:\s+on\s+gate\s+\d+|\.\s|$)",
         r"\bfault\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
-        r"\b((?:the\s+)?(?:lock|gate|hinge|cylinder)\s+is\s+(?:missing|broken|damaged|jammed|stuck)(?:\s+due\s+to\s+vandalism)?)",
+        r"\b((?:the\s+)?(?:lock|gate|hinge|cylinder)(?:'s|\s+is)\s+(?:missing|broken|damaged|jammed|stuck)(?:\s+due\s+to\s+vandalism)?)",
         r"\b((?:the\s+)?keys?\s+(?:is|are)\s+spinning(?:\s+around)?)",
+        r"\b(?:that's|that\s+is)\s+((?:a|an|the)\s+(?:damaged|broken|missing|jammed|stuck)\s+(?:lock|gate|hinge|cylinder))(?:\s+on\s+gate\s+\d+)?",
     ]
-    for pattern in fault_patterns:
-        matches = re.findall(pattern, assistant_text, re.IGNORECASE)
-        if matches:
-            fault = matches[-1].strip(" ,.")
-            break
+    fault = ""
+    caller_lock_fault = re.findall(
+        r"\b(?:the\s+)?gate\s+(?:has|has\s+got|is\s+got)\s+((?:a|an|the)\s+(?:damaged|broken|missing|jammed|stuck)\s+lock)\b",
+        caller_text,
+        re.IGNORECASE,
+    )
+    if caller_lock_fault:
+        fault = caller_lock_fault[-1].strip(" ,.")
     if not fault:
-        # Prefer a clean receptionist confirmation sentence over garbled realtime STT.
+        for pattern in fault_patterns:
+            matches = re.findall(pattern, caller_text, re.IGNORECASE)
+            if matches:
+                fault = matches[-1].strip(" ,.")
+                break
+    if not fault:
+        for line in caller_lines:
+            simple = re.search(
+                r"\b((?:the\s+)?(?:gate|lock|hinge|cylinder|keys?)\s+(?:is|are|has|has\s+got)\s+.{0,50}?\b(?:damaged|broken|missing|jammed|stuck|spinning|vandali[sz])\w*\b[^.?!]*)",
+                line,
+                re.IGNORECASE,
+            )
+            if simple:
+                fault = simple.group(1).strip(" ,.")
+                break
+    if not fault:
+        for pattern in fault_patterns:
+            matches = re.findall(pattern, assistant_text, re.IGNORECASE)
+            if matches:
+                fault = matches[-1].strip(" ,.")
+                break
+    if not fault:
         for line in assistant_lines:
             for sentence in re.split(r"(?<=[.!?])\s+", line):
                 if sentence.rstrip().endswith("?"):
@@ -230,11 +318,6 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                     fault = sentence.strip(" ,.")
                     break
             if fault:
-                break
-    if not fault:
-        for line in caller_lines:
-            if _REPAIR.search(line):
-                fault = line.strip()
                 break
     if not fault:
         for line in caller_lines:

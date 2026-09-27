@@ -269,7 +269,7 @@ Caller: I want your master key.
     assert body.index("Chapelgate Alleygate Repair Call Report") < body.index("KEY ORDER / ENQUIRY") < body.index("MASTER-KEY ENQUIRY")
     assert "Gate Number: 921" in body
     assert "Area: Sefton" in body
-    assert "Fault Details: The lock's broken on gate 921." in body
+    assert "Fault Details: The lock's broken" in body
     assert "Resident Name: Andrew Cartwright" in body
     assert "Contact Number: 07755 226746" in body
     assert "Address: 18 Brisbane Avenue, Wallasey" in body
@@ -306,9 +306,9 @@ Caller: I think that the neighbor keeps vandalizing the lock.
     assert "Chapelgate Alleygate Repair Call Report" in body
     assert "Job ID: CG-000030" in body
     assert "Gate Number: 21" in body
-    assert "Resident Name: Mick" in body
-    assert "Contact Number: 07752227746" in body
-    assert "Address: 24 Wexford Way, Wirral" in body
+    assert "Resident Name: not collected" in body
+    assert "Contact Number: not collected" in body
+    assert "Address: 20 Wexford Way, Widnes" in body
     assert "Postcode: CH45 9JX" in body
     assert "Fault Details: an alley gate with a key stuck in the lock" in body
     assert "KEY ORDER / ENQUIRY" in body
@@ -347,7 +347,7 @@ Assistant: Thank you for calling Chapel Gate. Goodbye, have a nice day.
     assert "Address: 18 Brisbane Avenue" in body
     assert "Postcode: CH45 9JX" in body
     assert "Area: not collected" in body
-    assert "Fault Details: The lock is missing due to vandalism" in body
+    assert "Fault Details: the lock is missing" in body
     assert "New key order enquiry: Yes" in body
     assert "Telephone ordering requested: Yes" in body
     assert "Outcome: no key order was taken during the call; caller was directed to alleygates.co.uk." in body
@@ -374,8 +374,45 @@ Caller: Yes.
 
     assert subject == "[REPAIR] Gate 421 - CG-000032"
     assert "Resident Name: Andrew Cartwright" in body
-    assert "Contact Number: 07752 226746" in body
+    assert "Contact Number: 07752226746" in body
     assert "Address: 18 Brisbane Avenue, Wallasey, Wirral" in body
     assert "Postcode: CH45 9JX" in body
     assert "Area: Wirral" in body
     assert "Fault Details: the keys are spinning around" in body
+
+
+def test_cg33_never_uses_assistant_invented_phone_number():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: need to report the now we gave tweet there.
+Assistant: Okay, thank you. First, could you tell me whether the gate is in Wirral or Sefton? And do you know the gate number?
+Caller: tomorrow on S. Hold on, let me just find the
+Caller: 368
+Assistant: Thanks, I've got that. Can you tell me what the problem is with the gate? Also, may I have your name, your own address including postcode, and a contact number?
+Caller: Yeah, the gate is got a damaged lock.
+Assistant: Thank you. So, just to confirm, that's a damaged lock on gate 368 in Wirral. I still need your name, full address and a contact number, then I can process this for you.
+Caller: Andrew Top 1 70 18 Brisbane Avenue, Lawson, ACT, 2617 , Australia
+Assistant: Thank you. Just to make sure everything's correct, I have your details as Andrew Top, 18 Brisbane Avenue, Wallasey, Wirral, CH45 9DX, reporting a damaged lock on alley gate 368 in Wirral, and your contact number is 0795 1234567. The job reference is CG-000033. Is all of that correct?
+Caller: zeigen, wie sie meine Kontaktnummer auf dem Gerät haben.
+Assistant: Okay, my apologies. I must have misheard that. Could you please provide your contact number now, then?
+Caller: Where did you get the aluminum from?
+Assistant: I apologize for the confusion. I may have mistakenly noted that down. Could you please provide your correct contact number now?
+Caller: Ja. 775226746
+Assistant: Thank you. So I've updated that to 07752 26746. Is everything else correct now?
+Caller: répondre
+Assistant: Thank you for confirming. I'll get this processed for you now. Thank you for calling Chapel Gate. Goodbye, have a nice day.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000033")
+    subject, body = build_internal_email(details)
+
+    assert subject == "[REPAIR] Gate 368 - CG-000033"
+    assert "Resident Name: Andrew Top" in body
+    assert "Contact Number: not collected" in body
+    assert "Address: 18 Brisbane Avenue, Lawson, ACT, 2617 , Australia" in body
+    assert "Postcode: not collected" in body
+    assert "Area: not collected" in body
+    assert "0795 1234567" not in body.split("FULL TRANSCRIPT", 1)[0]
+    assert "07752 26746" not in body.split("FULL TRANSCRIPT", 1)[0]
+    assert "CH45 9DX" not in body.split("FULL TRANSCRIPT", 1)[0]
+    assert "Fault Details: the gate is got a damaged lock" in body
+
+
