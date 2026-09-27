@@ -1,4 +1,9 @@
 import type { AgentBlueprintV1 } from "../../../src/lib/agent-blueprint.ts";
+import type { AgentSandboxReviewSubject } from "../../../src/lib/agent-sandbox-qualification.ts";
+import type {
+  SandboxSession,
+  SandboxTest,
+} from "../../../src/lib/sandbox-test-call.ts";
 
 export const PROVISIONING_QUALIFICATION_VERSION =
   "agent_sandbox_qualification_v1" as const;
@@ -28,10 +33,17 @@ export type ProvisioningQualification = {
   failedCheckIds: [];
 };
 
+export type ProvisioningEvidence = {
+  review: AgentSandboxReviewSubject;
+  session: SandboxSession;
+  test: SandboxTest;
+};
+
 export type ProvisioningRequestInput = {
   tenantRef: string;
   blueprint: AgentBlueprintV1;
   qualification: ProvisioningQualification;
+  evidence: ProvisioningEvidence;
 };
 
 export type ProvisioningRecord = {
