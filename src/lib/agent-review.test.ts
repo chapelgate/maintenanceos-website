@@ -372,6 +372,14 @@ test("complete review advances only lifecycle and preserves controls", () => {
   assert.deepEqual(reviewed.integrations, draft.integrations);
   assert.deepEqual(reviewed.privacy, draft.privacy);
   assert.deepEqual(reviewed.compatibility, draft.compatibility);
+  assert.equal(
+    agentReviewRevision({
+      blueprint: reviewed,
+      knowledgePack: subject.knowledgePack,
+      systemPrompt: subject.systemPrompt,
+    }),
+    record.revisionId,
+  );
 });
 
 test("identity edits can change locations/contact but never control-plane fields", () => {
