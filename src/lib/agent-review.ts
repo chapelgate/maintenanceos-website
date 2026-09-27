@@ -338,20 +338,28 @@ export function buildAgentReviewRequirements(input: {
 
 export function finalizeAgentReview(
   blueprint: AgentBlueprintV1,
+  requirements: AgentReviewRequirement[],
   record: AgentReviewRecord,
 ): AgentBlueprintV1 {
   const trusted = validateBlueprint(blueprint);
-  const required = [...new Set(record.requiredIds)];
-  const confirmed = new Set(record.confirmedIds);
+  const canonical = buildAgentReviewRecord(requirements, record.confirmedIds);
+  const sameRequired =
+    JSON.stringify(record.requiredIds) === JSON.stringify(canonical.requiredIds);
+  const sameConfirmed =
+    JSON.stringify(record.confirmedIds) === JSON.stringify(canonical.confirmedIds);
+  const sameMissing =
+    JSON.stringify(record.missingIds) === JSON.stringify(canonical.missingIds);
   const complete =
     record.version === AGENT_REVIEW_VERSION &&
     record.complete === true &&
-    record.missingIds.length === 0 &&
-    required.every((id) => confirmed.has(id));
+    canonical.complete &&
+    sameRequired &&
+    sameConfirmed &&
+    sameMissing;
 
   if (!complete) {
     throw new Error(
-      "Agent review is incomplete; lifecycle cannot advance to reviewed.",
+      "Agent review is incomplete or inconsistent; lifecycle cannot advance to reviewed.",
     );
   }
 
