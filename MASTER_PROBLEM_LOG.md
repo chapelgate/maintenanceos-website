@@ -52,3 +52,21 @@ Status: RESOLVED
 - Problem: Ruff UP035 identified new `Callable`/`Awaitable` imports from `typing` instead of `collections.abc`, and I001 identified import ordering in `render_prepare.py`.
 - Resolution: moved runtime ABC imports to `collections.abc` and sorted the touched import block without changing behavior.
 - Verification: Ruff passes on every Step 9 Python file; focused adapter/provider/staged-route suite remains 29/29 PASS; `git diff --check` is clean.
+
+## 2026-09-27 — Estate Linux CI runner lacks `python` alias in container-build job
+Status: RECORDED — OUTSIDE STEP 9 PRODUCT CHANGE
+
+- Evidence: verification run 36349021511 built the production image successfully and passed the non-root image contract, then the smoke script exited 127 because the runner job invoked `python` but only `python3` is present.
+- Step 9 response: use `python3` only in the isolated verification-branch harness so the product image can be smoke-tested; do not mix a permanent estate CI repair into the adapter product change.
+
+## 2026-09-27 — Estate Linux CI runner lacks Docker Compose plugin
+Status: RECORDED — OUTSIDE STEP 9 PRODUCT CHANGE
+
+- Evidence: verification run 36349021511 staging-config exited 125 because `docker compose` is unavailable on that runner.
+- Step 9 response: the isolated verification branch falls back to checking the literal locked-down staging safety keys when Compose is unavailable. The staging compose file itself is unchanged by Step 9.
+
+## 2026-09-27 — GitHub Actions Node 20 action deprecation annotation
+Status: RECORDED — NON-BLOCKING FOLLOW-UP
+
+- The estate runner reports that pinned `actions/checkout` / `actions/setup-python` actions still target Node 20 and are being forced to Node 24.
+- This warning does not affect Step 9 correctness and is intentionally not combined with the provider-adapter product change.
