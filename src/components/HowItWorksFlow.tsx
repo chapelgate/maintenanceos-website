@@ -23,6 +23,13 @@ const STAGE_COPY = [
     status: "UNDER_TEST",
   },
   {
+    id: "choose",
+    short: "Choose the job you want the AI to do",
+    body: "Pick one bounded starting role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom. The choice creates a draft AgentBlueprint; it does not activate a live agent.",
+    note: "Role selection is configuration only. Provider, phone number, credentials, and live routing stay untouched.",
+    status: "UNDER_TEST",
+  },
+  {
     id: "review",
     short: "Edit the draft before anything is stored",
     body: "You review business name, greeting, hours, services, and FAQs. Copied fields show where they came from and how confident the scan was. Empty fields were not invented.",
@@ -137,8 +144,8 @@ export function HowItWorksFlow() {
         >
           Create from website
         </a>
-        . Typical shape: website URL → scan/draft → knowledge pack → optional
-        scripted sandbox → early access. We do not invent crawl results or a
+        . Typical shape: website URL → scan/draft → choose role → review →
+        knowledge pack → optional scripted sandbox → early access. We do not invent crawl results or a
         live phone number.
       </p>
 
