@@ -5,6 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { provisionAgent } from "./engine.ts";
 import { FileProvisioningStore } from "./store.ts";
+import { ADAPTER_READINESS_VERSION } from "./adapters/types.ts";
 import { validProvisioningEnvelope } from "./test-fixture.ts";
 
 const PRINCIPAL = {
@@ -30,6 +31,29 @@ test("file store persists idempotency and provisioning records across restart", 
     assert.equal(created.ok, true);
     if (!created.ok) return;
 
+    const provisioning = firstStore.getProvisioning(created.data.provisioningId);
+    assert.ok(provisioning);
+    const readyBlueprint = structuredClone(provisioning.blueprint);
+    readyBlueprint.lifecycle = { stage: "ready" };
+    firstStore.putAdapterReadiness({
+      version: ADAPTER_READINESS_VERSION,
+      provisioningId: provisioning.id,
+      tenantRef: provisioning.tenantRef,
+      createdAt: "2026-09-27T19:40:00.000Z",
+      complete: true,
+      bindingsHash: "a".repeat(64),
+      bindings: [{ kind: "telephony", connectorRef: "twilio_primary" }],
+      checks: [{
+        id: "twilio_routes_match",
+        kind: "telephony",
+        connectorRef: "twilio_primary",
+        ok: true,
+        detail: "ready",
+      }],
+      failedCheckIds: [],
+      blueprint: readyBlueprint,
+    });
+
     const secondStore = new FileProvisioningStore(file);
     const replay = provisionAgent({
       request,
@@ -42,6 +66,12 @@ test("file store persists idempotency and provisioning records across restart", 
     assert.equal(replay.data.replayed, true);
     assert.equal(replay.data.provisioningId, created.data.provisioningId);
     assert.ok(secondStore.getProvisioning(created.data.provisioningId));
+    const restoredReadiness = secondStore.getAdapterReadiness(
+      created.data.provisioningId,
+    );
+    assert.ok(restoredReadiness);
+    assert.equal(restoredReadiness.blueprint.lifecycle.stage, "ready");
+    assert.equal(restoredReadiness.bindings[0].connectorRef, "twilio_primary");
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
