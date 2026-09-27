@@ -270,10 +270,23 @@ export function qualifyAgentSandbox(input: {
 export function qualificationMatchesReview(
   result: AgentSandboxQualificationResult | null | undefined,
   reviewRevisionId: string,
+  reviewedBlueprint?: AgentBlueprintV1,
 ): result is AgentSandboxQualificationResult {
   if (!result || !result.record.complete) return false;
   if (result.record.reviewRevisionId !== reviewRevisionId) return false;
   if (result.record.source !== "companion") return false;
   const blueprint = validateAgentBlueprintV1(result.blueprint);
-  return blueprint.ok && blueprint.value.lifecycle.stage === "sandbox_passed";
+  if (!blueprint.ok || blueprint.value.lifecycle.stage !== "sandbox_passed") {
+    return false;
+  }
+  if (reviewedBlueprint) {
+    const expected = validateBlueprint(reviewedBlueprint);
+    if (expected.lifecycle.stage !== "reviewed") return false;
+    const qualifiedAsReviewed = {
+      ...blueprint.value,
+      lifecycle: { stage: "reviewed" as const },
+    };
+    if (!sameJson(qualifiedAsReviewed, expected)) return false;
+  }
+  return true;
 }
