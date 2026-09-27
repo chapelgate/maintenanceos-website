@@ -251,3 +251,43 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **State:** CLOSED / VERIFIED FIX.
 - **Finding:** changed-file ESLint reported one unused local in the first Twilio probe implementation.
 - **Fix:** removed the unused variable. No runtime behavior changed.
+
+
+## 2026-09-27 — Step 9: inherited obsolete carrier references survived in Step-2 fixtures
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Finding:** whole-repository carrier guard found one Step-2 documentation sentence and one generic blueprint-test connector fixture that still named an obsolete carrier.
+- **Fix:** replaced both with provider-neutral language/connector refs and reran a whole-branch guard.
+- **Result:** zero obsolete-carrier references in the verified Step-9 branch.
+
+## 2026-09-27 — Step 9: inherited blueprint tests contained explicit any
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Finding:** once the inherited blueprint test became part of the Step-9 changed set, strict ESLint exposed seven historical `any` casts.
+- **Fix:** replaced them with `Record<string, unknown>`, typed arrays and explicit nested records. Test behavior is unchanged.
+
+## 2026-09-27 — Step 9: Step-8 wiring regression expected obsolete health shape
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Finding:** full `npm test` correctly failed because a Step-8 source-wiring test still required the old hard-coded `providerMutation:false` field.
+- **Fix:** regression now asserts `providerMutationEnabled`, the server mutation flag, and the explicit signed `mode:"apply"` latch.
+- **Result:** full suite passes with the stronger Step-9 safety contract.
+
+## 2026-09-27 — Step 9 phone/external adapter verification closure
+
+- **State:** CLOSED / VERIFIED.
+- Exact pre-closure engineering candidate: `2ce3027824e1ece05be760e5913ec3405fd93a03`.
+- Exact pre-closure Git tree: `90f8be32de2c12d0c08348dc060ae9492bad13f7`.
+- MaintenanceOS compatibility baseline: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- Focused integrated suite: 65/65 PASS.
+- Repository script suite: 230/230 PASS.
+- Package/runtime/source suite: 285/285 PASS.
+- Changed-file ESLint: PASS.
+- Next.js 16.3.6 production build and TypeScript: PASS.
+- Static export: 30/30 routes generated.
+- Whole-branch obsolete-carrier guard: PASS.
+- Reviewed integration intent is established before review; operational connector refs remain server-side.
+- Twilio direct-route ownership conflicts fail closed; verify mode is non-mutating; apply mode requires the second server-side mutation latch.
+- Calendar readiness reuses the existing companion; email/CRM use signed HTTPS readiness.
+- Successful readiness changes lifecycle only from `provisioning` to `ready`.
+- No live call, phone-number purchase/port, provider mutation, runtime switch, deployment, public-launch or `active` transition occurred.
