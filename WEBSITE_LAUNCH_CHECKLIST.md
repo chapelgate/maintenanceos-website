@@ -1,7 +1,7 @@
 # WEBSITE_LAUNCH_CHECKLIST.md
 
 **Owner:** MOS Website Manager + Final Verifier
-**Updated:** 2026-09-26
+**Updated:** 2026-09-27
 **Mode:** PRE-LAUNCH
 **Rule:** Do **not** set `NEXT_PUBLIC_PUBLIC_LAUNCH=true` until every launch-only gate below is cleared.
 

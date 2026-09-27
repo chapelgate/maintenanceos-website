@@ -62,6 +62,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C11 | Continuation Step 11 — performance verification | **DONE IN CANDIDATE** — 28 exported pages pass 600 KB raw / 190 KB gzip JS and 120 KB CSS budgets; no field-CWV claim | Performance + Website Manager |
 | C12 | Continuation Step 12 — SEO/machine discovery verification | **DONE IN CANDIDATE** — llms/search metadata aligned to current provider-neutral positioning; stale owner-blocked/provider/competitor language removed; currentness regression added | SEO + Product Investigator |
 | C13 | Continuation Step 13 — conversion path acceptance | **DONE IN CANDIDATE** — 9/9 conversion regressions, production control-plane readiness/CORS and local 26-route lead smoke pass; no duplicate production lead created | Conversion + Forms + Website Manager |
+| C14 | Continuation Step 14 — legal/launch gate separation | **DONE IN CANDIDATE** — human legal/manual-browser/security-risk/owner approvals separated from completed engineering; public launch default false; regression prevents checkbox/compliance theatre | Website Manager + Gate Owners |
 
 ## Step 1 completion
 
