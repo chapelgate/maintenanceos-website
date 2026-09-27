@@ -311,6 +311,11 @@ export function CreateReceptionistLaterSteps({
     value: string,
   ) {
     setReviewConfirmedIds([]);
+    setFieldMeta((current) => {
+      const next = { ...current };
+      delete next[key];
+      return next;
+    });
     setDraft((current) => ({ ...current, [key]: value }));
   }
 
@@ -319,6 +324,12 @@ export function CreateReceptionistLaterSteps({
     value: string,
   ) {
     setReviewConfirmedIds([]);
+    setFactMeta((current) => {
+      const next = { ...current };
+      if (key === "locations") delete next.locations;
+      if (key === "phone" || key === "email") delete next.contact;
+      return next;
+    });
     setIdentityReview((current) => ({ ...current, [key]: value }));
   }
 
@@ -800,14 +811,17 @@ export function CreateReceptionistLaterSteps({
                         agentBlueprint,
                         pack,
                       );
+                    const regeneratedPrompt =
+                      configurationLib.buildAgentSystemPrompt(
+                        nextBlueprint,
+                        pack,
+                      );
                     setPackError(null);
                     setAgentBlueprint(nextBlueprint);
+                    setPromptText(regeneratedPrompt);
                     setReceptionist({
                       knowledgePack: pack,
-                      systemPrompt: configurationLib.finalizeAgentSystemPrompt(
-                        promptText,
-                        nextBlueprint,
-                      ),
+                      systemPrompt: regeneratedPrompt,
                       limitations: configurationLib.agentLimitationsFor(pack),
                     });
                   } catch {
