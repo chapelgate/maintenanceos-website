@@ -89,7 +89,7 @@ export function ReceptionistDraftPreview({
         </label>
         <label className="block text-sm">
           <span className="font-medium text-ink">
-            System prompt draft (editable)
+            Prompt content (editable — trusted controls re-applied separately)
           </span>
           <textarea
             rows={7}
