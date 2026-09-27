@@ -108,7 +108,13 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--confirm", default="")
+    parser.add_argument("--dependency-check-only", action="store_true")
     args = parser.parse_args()
+
+    if args.dependency_check_only:
+        referenced = live_bundle_references_target()
+        print(f"LIVE_BUNDLE_REFERENCES_TARGET={str(referenced).lower()}")
+        return 2 if referenced else 0
 
     token = os.environ.get("DIGITALOCEAN_TOKEN", "").strip()
     if not token:
