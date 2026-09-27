@@ -1,6 +1,6 @@
 export const AGENT_BLUEPRINT_SCHEMA_VERSION = "1.0.0" as const;
 export const AGENT_BLUEPRINT_PRODUCT_BASELINE_SHA =
-  "e68ed4d4328caa9622f9bbd26d68effd25c2c9ca" as const;
+  "5eb0f92f2633e20e4d280835d3e6577e3f206c8b" as const;
 export const AGENT_BLUEPRINT_PRODUCT_BASELINE_DATE = "2026-09-27" as const;
 
 export const AGENT_TYPES = [
