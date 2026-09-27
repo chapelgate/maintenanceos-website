@@ -1,7 +1,7 @@
 # MaintenanceOS Website — Continuation Engineering RC Report
 
 **Date:** 2026-09-27
-**Status:** ENGINEERING RELEASE CANDIDATE — PRE-LAUNCH
+**Status:** ENGINEERING RC VERIFIED — PRE-LAUNCH
 **Canonical repository:** `chapelgate/maintenanceos-website`
 **Release branch:** `main`
 **Product evidence checkpoint:** `chapelgate/maintenanceos-v1-pilot` `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8`
@@ -92,3 +92,28 @@ verification durably on the release PR.
 - owner explicitly approves `NEXT_PUBLIC_PUBLIC_LAUNCH=true`.
 
 Until those are cleared, the correct state is **PRE-LAUNCH**.
+
+
+## Final committed candidate verification
+
+The exact committed continuation candidate passed the full final engineering gate:
+
+- Website Manager live monitor: **29 internal paths / 45 pages-assets, 0 failures**;
+- website/source regression suite: **205/205 PASS**;
+- package/runtime suite: **185/185 PASS**;
+- Next.js 16.3.6 production static build: **30/30 routes generated**;
+- functional export smoke: **26 sitemap routes, 0 failures**;
+- performance budget: **28 pages, 0 failures**;
+- accessibility engineering gate: **12/12 PASS**;
+- real Microsoft Edge viewport smoke: **18/18 route/viewport checks PASS**;
+- live security audit: **PASS**, with the known static-host response-header gap
+  explicitly reported rather than hidden;
+- bounded public-staging red team: **0 failures / 18-request budget**;
+- conversion acceptance: **PASS**, production readiness 200, no production POST;
+- live SEO monitor: **0 failures**;
+- npm audit: **0 known vulnerabilities**;
+- common tracked-secret pattern scan: **clean**;
+- Git worktree: **clean**.
+
+The authoritative final merge/deployment SHA is intentionally recorded by the
+release PR + live `release.json` verification rather than embedded here.

@@ -3,6 +3,7 @@
 **Date:** 2026-09-27
 **Owner:** MOS Website Manager + Final Verifier
 **Programme:** Continuation Steps 1–15
+**Engineering RC status:** VERIFIED — release PR/deployment identity to be recorded outside source
 
 ## Rule
 
@@ -35,3 +36,27 @@ record, avoiding a self-referential commit loop.
 
 Completing this engineering RC does not flip public launch. Human-only launch
 gates remain in `WEBSITE_LAUNCH_CHECKLIST.md`.
+
+
+## Candidate verification result
+
+**PASS.** The exact committed engineering candidate passed:
+
+- Website Manager monitor/preflight;
+- 205/205 website/source tests;
+- 185/185 package/runtime tests;
+- 30-route production build;
+- 26-route functional smoke;
+- 28-page performance budget;
+- 12/12 accessibility checks;
+- 18/18 real-Edge viewport checks;
+- live security audit;
+- bounded staging red team with zero failures;
+- conversion acceptance with no production lead POST;
+- live SEO monitor;
+- zero-vulnerability dependency audit;
+- clean tracked-secret scan;
+- clean Git worktree.
+
+Operational closure is the release PR merge, exact live merge-SHA match, and
+durable Website Manager PR record.

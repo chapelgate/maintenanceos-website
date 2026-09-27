@@ -1,7 +1,7 @@
 # WEBSITE_BACKLOG.md
 
 **Owner:** MOS Website Manager
-**Updated:** 2026-09-26
+**Updated:** 2026-09-27
 **Source:** MISSION_BRIEF + current repository/deployment evidence
 
 This is the single persistent website problem register. Do not create parallel problem lists for the same website work.
@@ -32,7 +32,7 @@ This is the single persistent website problem register. Do not create parallel p
 | F15 | WCAG 2.2 AA-oriented engineering baseline | **DONE / LIVE VERIFIED** — original Step 47; automated/source baseline, not third-party certification | Accessibility |
 | F15-MANUAL | Full manual keyboard + assistive-technology accessibility pass | **OPEN LAUNCH QA** — automated baseline does not substitute for specialist/manual coverage | Accessibility + QA |
 | F16 | Performance / Core Web Vitals-oriented lab verification | **DONE / LIVE VERIFIED** — original Step 46; lab evidence, not field/CrUX claim | Performance |
-| F17 | Website security engineering review | **DONE BASELINE** — `WEBSITE_SECURITY_REVIEW.md` + static security baseline; dependency audit and secret-pattern scan clean on 2026-09-26 | Security |
+| F17 | Website security engineering review | **DONE BASELINE** — `WEBSITE_SECURITY_REVIEW.md` + static security baseline; dependency audit and secret-pattern scan clean on 2026-09-27 | Security |
 | F17-HEADERS | HTTP response-header / clickjacking protection on current static host | **ENGINEERING INVESTIGATION COMPLETE / HUMAN LAUNCH RISK DECISION** — live audit confirms missing arbitrary response headers; current DO static spec exposes CORS rather than a proven arbitrary-header control; strict executable gate added; accept risk or separately review hosting/edge change before public launch | Security + DevOps |
 | F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED** — original Step 9; cookieless first-party measurement | Analytics |
 | F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented; companion docs aligned to DO-only policy | DevOps |
@@ -63,7 +63,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C12 | Continuation Step 12 — SEO/machine discovery verification | **DONE IN CANDIDATE** — llms/search metadata aligned to current provider-neutral positioning; stale owner-blocked/provider/competitor language removed; currentness regression added | SEO + Product Investigator |
 | C13 | Continuation Step 13 — conversion path acceptance | **DONE IN CANDIDATE** — 9/9 conversion regressions, production control-plane readiness/CORS and local 26-route lead smoke pass; no duplicate production lead created | Conversion + Forms + Website Manager |
 | C14 | Continuation Step 14 — legal/launch gate separation | **DONE IN CANDIDATE** — human legal/manual-browser/security-risk/owner approvals separated from completed engineering; public launch default false; regression prevents checkbox/compliance theatre | Website Manager + Gate Owners |
-| C15 | Continuation Step 15 — final engineering RC/freeze | **FINAL VERIFICATION** — report and RC gates prepared; close only after clean final preflight, PR merge, exact DigitalOcean merge-SHA verification and durable release record | Website Manager + Final Verifier |
+| C15 | Continuation Step 15 — final engineering RC/freeze | **ENGINEERING RC PASS / RELEASE PENDING** — exact candidate passed 205/205 website tests, 185/185 package/runtime tests, build, functional, browser, security, bounded red-team, conversion, SEO, audit and secret gates; close operationally only after PR merge + exact DigitalOcean merge-SHA verification + durable PR record | Website Manager + Final Verifier |
 
 ## Step 1 completion
 

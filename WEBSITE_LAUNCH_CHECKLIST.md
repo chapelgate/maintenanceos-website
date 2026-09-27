@@ -61,8 +61,8 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 
 - [x] `WEBSITE_SECURITY_REVIEW.md` filled.
 - [x] HTML CSP / referrer policy and form-abuse controls reviewed.
-- [x] Dependency audit: 0 known vulnerabilities at 2026-09-26 reconciliation.
-- [x] Common committed-secret pattern scan clean at 2026-09-26 reconciliation.
+- [x] Dependency audit: 0 known vulnerabilities at 2026-09-27 final engineering RC.
+- [x] Common committed-secret pattern scan clean at 2026-09-27 final engineering RC.
 - [ ] Resolve or explicitly accept the documented HTTP response-header /
   clickjacking gap on the current static host before public launch.
 - [x] Bounded automated staging red-team report reviewed on 2026-09-27 with no failures or identified critical/high public-surface blockers; not represented as an independent penetration test.
@@ -101,7 +101,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 - [ ] Security response-header risk resolved/accepted.
 - [ ] Manual accessibility + cross-browser QA complete.
 - [x] Bounded staging red-team report reviewed; no unfixed critical/high public-website blockers identified by that scope.
-- [ ] Final release-candidate verifier/DoD sign-off.
+- [x] Final engineering release-candidate verifier/DoD sign-off passed on 2026-09-27; public-launch human gates remain open.
 - [ ] `MAINTENANCEOS_WEBSITE_FINAL_REPORT.md` generated from that final launch RC.
 
 Until these are all clear, the site remains truthful **PRE-LAUNCH**.
