@@ -14,7 +14,7 @@ import {
   type ReviewedIdentityDraft,
 } from "@/lib/agent-review";
 import { submitLead } from "@/lib/lead-adapter";
-import { createAgentBlueprintDraft, agentTemplateFor } from "@/lib/agent-selection";
+import { createAgentBlueprintDraft } from "@/lib/agent-selection";
 import type { AgentBlueprintV1, AgentType } from "@/lib/agent-blueprint";
 import {
   EMPTY_RECEPTIONIST_DRAFT,
@@ -198,6 +198,7 @@ export function CreateReceptionistLaterSteps({
   const locationsHintId = useId();
   const phoneHintId = useId();
   const emailHintId = useId();
+  const reviewStatusId = useId();
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -335,6 +336,11 @@ export function CreateReceptionistLaterSteps({
 
   async function onSubmitLead() {
     clearError();
+    if (packError) {
+      setError("Fix the knowledge pack JSON before submitting this configuration.");
+      setStatus("error");
+      return;
+    }
     const review = currentReview();
     if (!review || !review.record.complete) {
       setError(
@@ -392,6 +398,7 @@ export function CreateReceptionistLaterSteps({
 
   const stepReady = isCreateScanReady(progress);
   const nextAction = createJourneyNextAction(step, progress);
+  const review = currentReview();
 
   return (
     <div
@@ -732,6 +739,7 @@ export function CreateReceptionistLaterSteps({
               promptText={promptText}
               packError={packError}
               onPackTextChange={(value) => {
+                setReviewConfirmedIds([]);
                 setPackText(value);
                 if (!agentBlueprint) {
                   setPackError(
@@ -775,6 +783,7 @@ export function CreateReceptionistLaterSteps({
                 });
               }}
               onPromptTextChange={(value) => {
+                setReviewConfirmedIds([]);
                 setPromptText(value);
                 if (!agentBlueprint) return;
                 void loadAgentConfiguration().then(
@@ -794,6 +803,7 @@ export function CreateReceptionistLaterSteps({
                 );
               }}
               onReset={() => {
+                setReviewConfirmedIds([]);
                 if (!agentBlueprint) {
                   setPackError(
                     "Agent control blueprint is missing. Configuration cannot be reset safely.",
@@ -819,32 +829,39 @@ export function CreateReceptionistLaterSteps({
             the sandbox panel below is enabled, it can use this pack for a
             scripted demo only.
           </p>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div>
-              <dt className="font-medium text-ink">Agent role</dt>
-              <dd className="text-muted">
-                {selectedAgentType
-                  ? agentTemplateFor(selectedAgentType).label
-                  : "Not selected"}
-              </dd>
+          {agentBlueprint && review ? (
+            <div className="mt-5">
+              <AgentReviewGate
+                blueprint={agentBlueprint}
+                requirements={review.requirements}
+                confirmedIds={reviewConfirmedIds}
+                onToggle={(id, checked) => {
+                  clearError();
+                  setReviewConfirmedIds((current) => {
+                    if (checked) return [...new Set([...current, id])];
+                    return current.filter((item) => item !== id);
+                  });
+                }}
+              />
             </div>
+          ) : null}
+          <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
             <div>
-              <dt className="font-medium text-ink">Website</dt>
+              <dt className="font-medium text-ink">Website reviewed</dt>
               <dd className="break-all text-muted">{businessUrl}</dd>
             </div>
             <div>
-              <dt className="font-medium text-ink">Email</dt>
-              <dd className="text-muted">{email}</dd>
-            </div>
-            <div>
-              <dt className="font-medium text-ink">Reviewed draft</dt>
-              <dd>
-                <pre className="mt-1 max-h-40 overflow-auto rounded-md border border-border bg-paper p-3 text-xs text-ink">
-                  {JSON.stringify(draft, null, 2)}
-                </pre>
-              </dd>
+              <dt className="font-medium text-ink">Early-access email</dt>
+              <dd className="break-all text-muted">{email}</dd>
             </div>
           </dl>
+          <p id={reviewStatusId} className="mt-3 text-sm text-muted">
+            {review
+              ? review.record.complete
+                ? "All required customer-review confirmations are complete."
+                : `${review.record.missingIds.length} required review confirmation(s) remain.`
+              : "The customer review record is not ready."}
+          </p>
           {error ? (
             <p id={errorId} className="mt-3 text-sm text-red-700" role="alert">
               {error}
@@ -864,8 +881,12 @@ export function CreateReceptionistLaterSteps({
             </button>
             <button
               type="button"
-              disabled={status === "submitting"}
-              aria-describedby={error ? errorId : undefined}
+              disabled={
+                status === "submitting" ||
+                Boolean(packError) ||
+                !review?.record.complete
+              }
+              aria-describedby={reviewStatusId}
               data-create-primary-action=""
               onClick={() => void onSubmitLead()}
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
