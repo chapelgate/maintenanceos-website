@@ -33,6 +33,18 @@ Official references checked 2026-09-07:
 - https://www.twilio.com/docs/voice/twiml/stream
 - https://www.twilio.com/docs/usage/security
 
+## External Adapter Boundary
+
+- Realtime AI providers are selected only through the immutable allowlist in `provider_runtime.py`.
+  Gemini and OpenAI are the currently supported adapters; unknown values fail closed.
+- Phone carriers are selected only through the immutable allowlist in `provider_webhooks.py`.
+  Twilio is the only currently supported carrier; unknown values fail before webhook mutation.
+- Provider adapters sit outside deterministic MaintenanceOS safety, tenant and lifecycle rules.
+  Every supported realtime provider must pass the shared transport, signature, test-number,
+  application-secret and isolated-tenant readiness gate before it can be reported ready.
+- `ENABLE_PUBLIC_PROVIDER_INGRESS=false` and `ENABLE_REALTIME_VOICE=false` remain the safe defaults.
+  Adding an adapter does not authorise provider ingress, change a phone number, or make a call.
+
 ## Minimum Approved Sequence
 
 1. Freeze and verify the tested source/evidence; use only the synthetic tenant.

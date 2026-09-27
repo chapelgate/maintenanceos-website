@@ -10,7 +10,8 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Callable
+from collections.abc import Callable
+from dataclasses import dataclass
 from urllib.parse import urlsplit
 
 from webhook_security import public_provider_ingress_ready
@@ -20,6 +21,15 @@ READY_STATUS = "TWILIO_VOICE_WEBHOOK_READY"
 REFUSAL_MESSAGE = "Refusing Twilio webhook configuration: public provider ingress is not ready"
 INBOUND_PATH = "/voice/inbound"
 STATUS_PATH = "/voice/stream-status"
+SUPPORTED_PHONE_PROVIDERS = frozenset({"twilio"})
+
+
+@dataclass(frozen=True)
+class PhoneProviderAdapter:
+    """Allowlisted carrier boundary for provider-side phone-number configuration."""
+
+    name: str
+    configure_incoming_number: Callable[[], None]
 
 
 class ProviderWebhookError(RuntimeError):
@@ -83,6 +93,20 @@ def apply_twilio_incoming_phone_voice_url() -> None:
     )
 
 
+def phone_provider() -> str:
+    return os.getenv("PHONE_PROVIDER", "twilio").strip().lower()
+
+
+def _phone_provider_adapters() -> dict[str, PhoneProviderAdapter]:
+    return {
+        "twilio": PhoneProviderAdapter("twilio", apply_twilio_incoming_phone_voice_url),
+    }
+
+
+def phone_provider_adapter(name: str | None = None) -> PhoneProviderAdapter | None:
+    return _phone_provider_adapters().get((name or phone_provider()).strip().lower())
+
+
 def configure_twilio_voice_webhook(
     *,
     twilio_updater: Callable[[], None] | None = None,
@@ -108,6 +132,20 @@ def configure_twilio_voice_webhook(
     return result
 
 
+def configure_phone_voice_webhook(
+    *,
+    provider_updater: Callable[[], None] | None = None,
+) -> dict[str, object]:
+    adapter = phone_provider_adapter()
+    if adapter is None:
+        raise ProviderWebhookError(f"Unsupported phone provider: {phone_provider()}")
+    if adapter.name == "twilio":
+        return configure_twilio_voice_webhook(
+            twilio_updater=provider_updater or adapter.configure_incoming_number
+        )
+    raise ProviderWebhookError(f"Unsupported phone provider: {adapter.name}")
+
+
 def emit_webhook_status(result: dict[str, object], stream=None) -> None:
     out = stream or sys.stdout
     status = str(result.get("status") or "")
@@ -121,7 +159,7 @@ def emit_webhook_status(result: dict[str, object], stream=None) -> None:
 def main(argv: list[str] | None = None) -> int:
     del argv
     try:
-        result = configure_twilio_voice_webhook()
+        result = configure_phone_voice_webhook()
     except ProviderWebhookError as exc:
         print(str(exc), file=sys.stdout)
         return 1

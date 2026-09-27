@@ -18,3 +18,80 @@ Status: RESOLVED
 - Safety response: canary deletion was held.
 - Restore completed at 2026-09-27T15:47:44Z.
 - Verification: droplet 601962983 returned to active state before canary deletion proceeded.
+
+## 2026-09-27 — Step 9 provider boundary was implicit
+Status: RESOLVED
+
+- Problem: realtime AI selection used direct provider branching and phone-number configuration was directly Twilio-specific, increasing the risk that a future provider integration would modify shared runtime logic.
+- Constraint: preserve deterministic MaintenanceOS safety, tenant isolation, signatures, test-number gates and the accepted live telephone path.
+- Resolution: added immutable allowlisted realtime and phone-provider adapter contracts around the existing implementations; no provider implementation or deterministic core logic was replaced.
+- Fail-closed rule: unknown realtime providers close with WebSocket policy code 1008; unknown phone providers fail before provider-side webhook mutation.
+- Safe defaults remain `ENABLE_PUBLIC_PROVIDER_INGRESS=false` and `ENABLE_REALTIME_VOICE=false`.
+- Focused baseline before change: 20/20 tests passed.
+- Focused post-change acceptance: 29/29 tests passed.
+- Production routing, phone numbers, credentials and deployment were not changed.
+
+## 2026-09-27 — Step 9 full-suite Windows collection mismatch
+Status: RESOLVED — VERIFIED ON LINUX ESTATE RUNNER
+
+- Problem: the repository-wide pytest run cannot collect two existing concurrency tests on Windows because `concurrency_loadtest.py` imports the POSIX-only Python `resource` module.
+- Evidence: `tests/test_concurrency_ladder.py` and `tests/test_concurrency_red_team.py` fail at import with `ModuleNotFoundError: No module named 'resource'` before any Step 9 test executes.
+- WSL is installed only as a relay with no bash distribution; Docker Desktop Linux engine is not running.
+- Response: do not weaken or skip the concurrency tests; verify the complete suite on the existing Linux estate runner lane instead.
+- This is an execution-environment mismatch, not evidence of a Step 9 regression.
+
+## 2026-09-27 — Existing TestClient deprecation warning
+Status: OBSERVED — NON-BLOCKING
+
+- Focused tests emit Starlette's existing `anyio.abc.BlockingPortal` deprecation warning.
+- No dependency upgrade is being mixed into Step 9 because that would expand scope and regression risk; retain as follow-up maintenance evidence.
+
+## 2026-09-27 — Step 9 static-quality import findings
+Status: RESOLVED
+
+- Problem: Ruff UP035 identified new `Callable`/`Awaitable` imports from `typing` instead of `collections.abc`, and I001 identified import ordering in `render_prepare.py`.
+- Resolution: moved runtime ABC imports to `collections.abc` and sorted the touched import block without changing behavior.
+- Verification: Ruff passes on every Step 9 Python file; focused adapter/provider/staged-route suite remains 29/29 PASS; `git diff --check` is clean.
+
+## 2026-09-27 — Estate Linux CI runner lacks `python` alias in container-build job
+Status: RECORDED — OUTSIDE STEP 9 PRODUCT CHANGE
+
+- Evidence: verification run 36349021511 built the production image successfully and passed the non-root image contract, then the smoke script exited 127 because the runner job invoked `python` but only `python3` is present.
+- Step 9 response: use `python3` only in the isolated verification-branch harness so the product image can be smoke-tested; do not mix a permanent estate CI repair into the adapter product change.
+
+## 2026-09-27 — Estate Linux CI runner lacks Docker Compose plugin
+Status: RECORDED — OUTSIDE STEP 9 PRODUCT CHANGE
+
+- Evidence: verification run 36349021511 staging-config exited 125 because `docker compose` is unavailable on that runner.
+- Step 9 response: the isolated verification branch falls back to checking the literal locked-down staging safety keys when Compose is unavailable. The staging compose file itself is unchanged by Step 9.
+
+## 2026-09-27 — GitHub Actions Node 20 action deprecation annotation
+Status: RECORDED — NON-BLOCKING FOLLOW-UP
+
+- The estate runner reports that pinned `actions/checkout` / `actions/setup-python` actions still target Node 20 and are being forced to Node 24.
+- This warning does not affect Step 9 correctness and is intentionally not combined with the provider-adapter product change.
+
+## 2026-09-27 — Step 9 Linux whole-repository verification closure
+Status: RESOLVED
+
+- Tested product SHA: `1f372e0a705eb03f4ce8f0e43fe22ff9b8caa20b` on estate Linux CI run `36349495565`, attempt 2.
+- Python 3.13 deterministic suite: 389 passed, 1 deselected, 16 pre-existing warnings.
+- TLS/WSS transport probe: PASS on attempt 1.
+- Python 3.12 compatibility suite: 389 passed, 1 deselected, 16 pre-existing warnings.
+- Staging safety assertions: PASS; provider ingress, realtime voice, live email, live messaging and remote AI side-effect enable remain disabled.
+- Production container: build PASS; non-root runtime PASS; `/health` smoke PASS; metadata generation PASS.
+- Therefore the earlier Windows `resource` collection mismatch is closed by equivalent whole-repository Linux verification rather than by weakening tests.
+
+## 2026-09-27 — Estate runner transient cancellation during Step 9 verification
+Status: RESOLVED BY RETRY, NO PRODUCT CHANGE
+
+- Run `36349495565` attempt 1 received an executor cancellation immediately after all 389 deterministic tests had passed.
+- Retry attempt 2 on the exact same SHA completed the deterministic suite, TLS/WSS probe and Python 3.12 compatibility suite successfully.
+- No code change was made in response to the transient cancellation.
+
+## 2026-09-27 — GitHub artifact storage quota exhausted
+Status: RECORDED — NON-BLOCKING TO STEP 9
+
+- Container verification completed successfully through build, non-root check, `/health` smoke and metadata generation.
+- The subsequent `actions/upload-artifact` step failed because GitHub reported the repository/account artifact storage quota is full and recalculates usage every 6–12 hours.
+- This occurred after all product/container acceptance gates and does not alter runtime correctness. No destructive artifact deletion was performed as part of this narrow Step 9 change.

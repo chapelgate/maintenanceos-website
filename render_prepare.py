@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import sys
 
+from idempotency import set_ai_side_effects
+from models import SessionLocal
 from provider_webhooks import (
     ProviderWebhookError,
-    configure_twilio_voice_webhook,
+    configure_phone_voice_webhook,
     emit_webhook_status,
     plan_twilio_voice_webhook,
 )
-from seed_synthetic_tenant import ensure_synthetic_tenant
-from idempotency import set_ai_side_effects
-from models import SessionLocal
 from readiness import report as readiness_report
+from seed_synthetic_tenant import ensure_synthetic_tenant
 
 SYNTHETIC_READY = "SYNTHETIC_VOICE_TENANT_READY"
 PREPARE_PASS = "RENDER_PREPARE_PASS"
@@ -33,7 +33,7 @@ def _record_fail_closed_side_effects() -> None:
 def prepare_runtime(*, twilio_updater=None) -> dict[str, object]:
     tenant_id = ensure_synthetic_tenant()
     _record_fail_closed_side_effects()
-    webhook = configure_twilio_voice_webhook(twilio_updater=twilio_updater)
+    webhook = configure_phone_voice_webhook(provider_updater=twilio_updater)
     plan = plan_twilio_voice_webhook()
     readiness = readiness_report()
     return {
