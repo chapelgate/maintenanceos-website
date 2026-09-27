@@ -410,6 +410,14 @@ export function buildCreateLeadMessage(input: {
   draft: ReceptionistDraft;
   scanNote: string;
   fieldMeta?: ScanDraftFieldMeta;
+  factMeta?: ScanBusinessFactMeta;
+  review?: {
+    version: string;
+    complete: boolean;
+    requiredIds: string[];
+    confirmedIds: string[];
+    missingIds: string[];
+  };
   agentBlueprint?: unknown;
   receptionist?: {
     knowledgePack: unknown;
@@ -426,6 +434,12 @@ export function buildCreateLeadMessage(input: {
   ];
   if (input.fieldMeta && Object.keys(input.fieldMeta).length) {
     parts.push("Field meta JSON:", JSON.stringify(input.fieldMeta, null, 2));
+  }
+  if (input.factMeta && Object.keys(input.factMeta).length) {
+    parts.push("Fact meta JSON:", JSON.stringify(input.factMeta, null, 2));
+  }
+  if (input.review) {
+    parts.push("Customer review JSON:", JSON.stringify(input.review, null, 2));
   }
   if (input.agentBlueprint) {
     parts.push("Agent blueprint JSON:", JSON.stringify(input.agentBlueprint, null, 2));
