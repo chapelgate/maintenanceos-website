@@ -65,7 +65,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 - [x] Common committed-secret pattern scan clean at 2026-09-26 reconciliation.
 - [ ] Resolve or explicitly accept the documented HTTP response-header /
   clickjacking gap on the current static host before public launch.
-- [ ] Staging red-team report reviewed with no unfixed critical/high launch blockers.
+- [x] Bounded automated staging red-team report reviewed on 2026-09-27 with no failures or identified critical/high public-surface blockers; not represented as an independent penetration test.
 
 ## Performance
 
@@ -91,7 +91,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
   companion must use a separately authorised DigitalOcean process.
 - [x] Automated repository/release test baseline is green.
 - [ ] Broader cross-browser/manual mobile matrix complete.
-- [ ] Red-team staging pass complete.
+- [x] Bounded automated staging red-team pass complete; independent penetration testing remains a separate product/launch assurance decision.
 
 ## PUBLIC_LAUNCH flip gate
 
@@ -100,7 +100,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 - [ ] Legal drafts cleared by counsel.
 - [ ] Security response-header risk resolved/accepted.
 - [ ] Manual accessibility + cross-browser QA complete.
-- [ ] Red-team report reviewed; no unfixed critical/high launch blockers.
+- [x] Bounded staging red-team report reviewed; no unfixed critical/high public-website blockers identified by that scope.
 - [ ] Final release-candidate verifier/DoD sign-off.
 - [ ] `MAINTENANCEOS_WEBSITE_FINAL_REPORT.md` generated from that final launch RC.
 

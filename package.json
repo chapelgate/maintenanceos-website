@@ -12,6 +12,7 @@
     "functional:smoke": "node scripts/functional-smoke.mjs",
     "browser:smoke": "node scripts/browser-viewport-smoke.mjs",
     "security:live": "node scripts/live-security-audit.mjs",
+    "redteam:staging": "node scripts/staging-red-team.mjs",
     "uptime:check": "node scripts/website-health-monitor.mjs",
     "deployment:verify": "node scripts/deployment-verifier.mjs",
     "performance:budget": "node scripts/performance-budget.mjs",

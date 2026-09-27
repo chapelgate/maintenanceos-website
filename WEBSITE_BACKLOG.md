@@ -38,7 +38,7 @@ This is the single persistent website problem register. Do not create parallel p
 | F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented; companion docs aligned to DO-only policy | DevOps |
 | F20 | Automated functional/release tests | **DONE BASELINE** — full repository tests + build + performance + accessibility + live health + exact release-SHA verification are release gates | QA |
 | F21 | Mobile/cross-browser QA | **PARTIAL** — true 390px Edge/mobile journey verified; broader browser/manual matrix remains open | QA |
-| F22 | Red team on staging | **OPEN LAUNCH QA** | Red Team |
+| F22 | Red team on staging | **DONE AUTOMATED / BOUNDED** — 2026-09-27 public-surface red-team regression passed 0 failures under an 18-request budget; this is not an independent penetration test | Red Team |
 | F23 | Durable handoff/source-of-truth docs | **DONE** — `CURSOR_HANDOFF.md`, `WEBSITE_SOURCE_OF_TRUTH.md`, Website Manager loop | Documentation |
 | F24 | Original website engineering DoD verification | **DONE** — original 50-step programme release verified; separate continuation/launch gates remain tracked | Final Verifier |
 | C1 | Continuation Step 1 — freeze/prove current baseline | **DONE — final code release `2f893f5c5c8a45d46f2db4fec4fa3c146424d78b` verified live; closure evidence recorded in the continuation runbook and PR thread** | Website Manager |
@@ -57,6 +57,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C6 | Continuation Step 6 — full functional QA | **DONE IN CANDIDATE** — zero-dependency exported-site + local lead-contract smoke added to release preflight; no production side effects | QA + Website Manager |
 | C7 | Continuation Step 7 — mobile/cross-browser QA | **DONE ENGINEERING IN CANDIDATE** — reusable real-Edge viewport smoke added for mobile/tablet/desktop; Safari/Firefox/manual AT remain explicit human launch coverage | QA + Front-End |
 | C8 | Continuation Step 8 — security hardening | **DONE ENGINEERING IN CANDIDATE** — live header inventory executable added; meta CSP/referrer verified; unsupported static-host response headers documented as explicit residual launch risk; no duplicate hosting | Security + DevOps + Website Manager |
+| C9 | Continuation Step 9 — red-team public staging | **DONE IN CANDIDATE** — bounded 18-request live staging red-team passed 0 failures; sensitive paths/methods/reflection/redirect/error leakage/CORS checked without destructive activity | Red Team + Defender |
 
 ## Step 1 completion
 
