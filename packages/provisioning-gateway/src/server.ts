@@ -158,14 +158,20 @@ function adapterMutationsFromEnv(env: NodeJS.ProcessEnv): boolean {
 
 function parseAdapterBody(
   value: unknown,
-): { provisioningId: string; bindings: AdapterBinding[] } | null {
+): {
+  provisioningId: string;
+  bindings: AdapterBinding[];
+  mode: "verify" | "apply";
+} | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const record = value as Record<string, unknown>;
   const keys = Object.keys(record).sort();
   if (
-    keys.length !== 2 ||
+    keys.length !== 3 ||
     keys[0] !== "bindings" ||
-    keys[1] !== "provisioningId" ||
+    keys[1] !== "mode" ||
+    keys[2] !== "provisioningId" ||
+    (record.mode !== "verify" && record.mode !== "apply") ||
     typeof record.provisioningId !== "string" ||
     !/^prv_[0-9a-f]{24}$/.test(record.provisioningId) ||
     !Array.isArray(record.bindings)
@@ -193,7 +199,11 @@ function parseAdapterBody(
       connectorRef: binding.connectorRef,
     });
   }
-  return { provisioningId: record.provisioningId, bindings };
+  return {
+    provisioningId: record.provisioningId,
+    bindings,
+    mode: record.mode as "verify" | "apply",
+  };
 }
 
 function adapterStatus(error: string): number {
@@ -350,7 +360,7 @@ export async function handleProvisioningRequest(
       send(res, 400, {
         ok: false,
         error: "invalid_request",
-        message: "Adapter request must contain provisioningId and valid connector bindings.",
+        message: "Adapter request must contain provisioningId, mode and valid connector bindings.",
       });
       return;
     }
@@ -401,7 +411,7 @@ export async function handleProvisioningRequest(
       registry,
       env,
       transport: options.adapterTransport ?? fetchAdapterTransport,
-      mutationsEnabled: adapterMutationsEnabled,
+      mutationsEnabled: adapterMutationsEnabled && body.mode === "apply",
       now: options.now,
     });
     if (!prepared.ok) {
