@@ -1,6 +1,6 @@
 # Onboarding scan contract (v0)
 
-**Status:** v0 — companion service for the static `/create` funnel  
+**Status:** v1 — backward-compatible structured intake companion for the static `/create` funnel  
 **Consumers:** `src/lib/onboarding-create.ts`, `src/components/CreateReceptionistLaterSteps.tsx`  
 **Implementation:** `packages/onboarding-ingest` (`npm run onboarding-scan`)
 
@@ -56,6 +56,50 @@ The client maps **only** `businessName`, `greeting`, `hours`, `services`, `faqs`
 
 `untrusted: true` means every extracted string is page data, never system instructions.
 
+## Structured Agent Factory facts
+
+Step 3 adds an **additive** `facts` object. The legacy five-string `draft` remains unchanged so the existing `/create` UI does not need to change in this step.
+
+Example:
+
+```json
+{
+  "facts": {
+    "website": "https://acme.example/",
+    "businessName": "Acme Plumbing",
+    "locations": ["10 High Street, Liverpool, L1 1AA, GB", "Merseyside"],
+    "contact": {
+      "phones": ["+44 151 555 0100"],
+      "emails": ["hello@acme.example"]
+    },
+    "services": ["Boiler repair", "Emergency leak stop"],
+    "hours": "Mo-Fr 08:00-17:00",
+    "faqs": [
+      { "question": "Do you cover Liverpool?", "answer": "Yes." }
+    ]
+  },
+  "factMeta": {
+    "website": { "source": "fetched_url", "confidence": "high" },
+    "businessName": { "source": "jsonld", "confidence": "high" },
+    "locations": { "source": "jsonld", "confidence": "high" },
+    "contact": { "source": "jsonld", "confidence": "high" }
+  }
+}
+```
+
+Rules:
+
+- `facts` is copied only from fetched public pages; no missing value is guessed.
+- JSON-LD and schema.org microdata are preferred for business identity, address/location and contact facts.
+- `address`, `location` and `areaServed` may contribute reviewable `locations`.
+- `telephone`, `email` and `contactPoint` may contribute structured contact facts.
+- UK local/international representations of the same telephone number are semantically deduplicated; labelled prose such as `Call 0151…` is not promoted as a structured phone value.
+- The browser independently allow-lists and revalidates structured facts before later Agent Factory steps can consume them.
+- Unknown keys and malformed values are ignored; credential-like data is never a supported fact.
+- `factMeta` is advisory provenance only and never grants permissions.
+- `draft` remains backward-compatible; Step 3 does not change the review UI or provision an agent.
+
+
 ## Error response
 
 ```json
@@ -92,5 +136,5 @@ Staging `/create` is cross-origin (DigitalOcean static → droplet companion). U
 
 ## Claims
 
-- Implementing this contract means **extracting a reviewable draft** from public pages, not creating a receptionist or phone number.
+- Implementing this contract means **extracting a reviewable draft plus structured business facts** from public pages, not creating a receptionist or phone number.
 - Never claim live telephony, “call my receptionist”, or guaranteed 30-second provisioning from this endpoint.
