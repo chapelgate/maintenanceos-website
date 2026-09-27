@@ -127,6 +127,24 @@ test("reviewed website injection stays data and cannot change trusted controls",
   assert.match(trustedTail, /policy_override/);
 });
 
+test("whitespace-only reviewed identity fields fall back to trusted blueprint defaults", () => {
+  const original = blueprintFor("booking_assistant");
+  const result = buildAgentConfiguration({
+    blueprint: original,
+    reviewedDraft: {
+      businessName: "   ",
+      greeting: "   ",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+  });
+  assert.equal(result.knowledgePack.businessName, original.identity.businessName);
+  assert.equal(result.knowledgePack.greeting, original.agent.greeting);
+  assert.equal(result.blueprint.identity.businessName, original.identity.businessName);
+  assert.equal(result.blueprint.agent.greeting, original.agent.greeting);
+});
+
 test("website data containing the trusted marker is preserved as data", () => {
   const result = buildAgentConfiguration({
     blueprint: blueprintFor("receptionist"),
