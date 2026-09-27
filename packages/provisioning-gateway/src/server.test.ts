@@ -358,6 +358,7 @@ test("adapter endpoint prepares the reviewed Twilio intent and replays immutably
       const adapterPath = "/v1/provisioning/adapters/prepare";
       const adapterBody = JSON.stringify({
         provisioningId,
+        mode: "verify",
         bindings: [{ kind: "telephony", connectorRef: "twilio_primary" }],
       });
       const prepared = await request(base, {
@@ -394,6 +395,7 @@ test("adapter endpoint prepares the reviewed Twilio intent and replays immutably
 
       const changedBody = JSON.stringify({
         provisioningId,
+        mode: "verify",
         bindings: [{ kind: "telephony", connectorRef: "other_twilio" }],
       });
       const changed = await request(base, {
