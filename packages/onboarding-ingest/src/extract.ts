@@ -6,6 +6,8 @@
  */
 
 import type {
+  BusinessFactMeta,
+  BusinessFacts,
   DraftFieldMeta,
   FieldConfidence,
   FieldSource,
@@ -328,6 +330,49 @@ function collectContact(
   }
 }
 
+
+function countryText(value: unknown): string | undefined {
+  const direct = stringField(value);
+  if (direct) return direct;
+  const rec = asRecord(value);
+  if (!rec) return undefined;
+  return stringField(rec.name);
+}
+
+function formatPostalAddress(value: unknown): string | undefined {
+  const direct = stringField(value);
+  if (direct) return direct;
+  const rec = asRecord(value);
+  if (!rec) return undefined;
+  const parts = [
+    stringField(rec.streetAddress),
+    stringField(rec.addressLocality),
+    stringField(rec.addressRegion),
+    stringField(rec.postalCode),
+    countryText(rec.addressCountry),
+  ].filter((item): item is string => Boolean(item));
+  return parts.length ? asUntrustedText(parts.join(", "), 500) : undefined;
+}
+
+function locationText(value: unknown): string | undefined {
+  const direct = stringField(value);
+  if (direct) return direct;
+  const rec = asRecord(value);
+  if (!rec) return undefined;
+  return formatPostalAddress(rec.address) || formatPostalAddress(rec) || stringField(rec.name);
+}
+
+function collectLocations(rec: Record<string, unknown>, into: string[]): void {
+  for (const key of ["address", "location", "areaServed"]) {
+    const value = rec[key];
+    const list = Array.isArray(value) ? value : value !== undefined ? [value] : [];
+    for (const item of list) {
+      const text = locationText(item);
+      if (text) into.push(text);
+    }
+  }
+}
+
 function isBusinessNode(rec: Record<string, unknown>): boolean {
   const types = typesOf(rec);
   if (types.some((t) => BUSINESS_TYPES.has(t) || t.includes("business"))) {
@@ -353,6 +398,7 @@ export type JsonLdExtract = {
   hours?: string;
   services?: string;
   faqs?: string;
+  locations: string[];
   phones: string[];
   emails: string[];
 };
@@ -366,6 +412,7 @@ export function extractJsonLd(html: string): JsonLdExtract {
   const hours: string[] = [];
   const services: string[] = [];
   const faqs: string[] = [];
+  const locations: string[] = [];
   const phones: string[] = [];
   const emails: string[] = [];
 
@@ -377,6 +424,7 @@ export function extractJsonLd(html: string): JsonLdExtract {
       collectHours(rec, hours);
       collectServices(rec, services);
       collectContact(rec, phones, emails);
+      collectLocations(rec, locations);
     }
     if (types.includes("contactpoint")) {
       collectContact(rec, phones, emails);
@@ -394,6 +442,7 @@ export function extractJsonLd(html: string): JsonLdExtract {
     hours: unique(hours).join("\n") || undefined,
     services: unique(services).join("\n") || undefined,
     faqs: unique(faqs).join("\n\n") || undefined,
+    locations: unique(locations),
     phones: unique(phones),
     emails: unique(emails),
   };
@@ -439,6 +488,7 @@ export type MicrodataExtract = {
   greeting?: string;
   hours?: string;
   services?: string;
+  locations: string[];
   phones: string[];
   emails: string[];
 };
@@ -446,6 +496,17 @@ export type MicrodataExtract = {
 export function extractMicrodata(html: string): MicrodataExtract {
   const scoped = businessMicrodataSlice(html);
   const hoursSrc = scoped ?? html;
+  const addressParts = [
+    itempropValues(hoursSrc, "streetAddress")[0],
+    itempropValues(hoursSrc, "addressLocality")[0],
+    itempropValues(hoursSrc, "addressRegion")[0],
+    itempropValues(hoursSrc, "postalCode")[0],
+    itempropValues(hoursSrc, "addressCountry")[0],
+  ].filter((item): item is string => Boolean(item));
+  const locations = [
+    ...(addressParts.length ? [asUntrustedText(addressParts.join(", "), 500)] : []),
+    ...itempropValues(hoursSrc, "areaServed"),
+  ].filter(Boolean);
   const name = scoped
     ? itempropValues(scoped, "name")[0]
     : undefined;
@@ -457,6 +518,7 @@ export function extractMicrodata(html: string): MicrodataExtract {
     greeting: slogan,
     hours,
     services,
+    locations: [...new Set(locations)].slice(0, 16),
     phones: itempropValues(html, "telephone").slice(0, 4),
     emails: itempropValues(html, "email").slice(0, 4),
   };
@@ -794,9 +856,38 @@ function setField(
   fieldMeta[key] = { source, confidence };
 }
 
+function parseFaqFacts(value: string | undefined): Array<{ question: string; answer: string }> | undefined {
+  if (!value) return undefined;
+  const pairs: Array<{ question: string; answer: string }> = [];
+  const re = /Q:\s*([^\n]+)\nA:\s*([\s\S]*?)(?=\n\n(?:Q:|Phone:|Email:)|$)/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(value)) && pairs.length < 100) {
+    const question = asUntrustedText(match[1], 500);
+    const answer = asUntrustedText(match[2], 2000);
+    if (question && answer) pairs.push({ question, answer });
+  }
+  return pairs.length ? pairs : undefined;
+}
+
+function splitFactLines(value: string | undefined, maxItems = 100): string[] | undefined {
+  if (!value) return undefined;
+  const items = value
+    .split(/\n+/)
+    .map((item) => asUntrustedText(item, 300))
+    .filter(Boolean);
+  const unique = [...new Set(items)].slice(0, maxItems);
+  return unique.length ? unique : undefined;
+}
+
 export function extractDraftFromHtml(
   pages: { url: string; html: string }[],
-): { draft: PartialDraft; warnings: string[]; fieldMeta: DraftFieldMeta } {
+): {
+  draft: PartialDraft;
+  warnings: string[];
+  fieldMeta: DraftFieldMeta;
+  facts: BusinessFacts;
+  factMeta: BusinessFactMeta;
+} {
   const draft: PartialDraft = {};
   const warnings: string[] = [];
   const fieldMeta: DraftFieldMeta = {};
@@ -805,8 +896,11 @@ export function extractDraftFromHtml(
   const jsonLdFaqs: string[] = [];
   const microHours: string[] = [];
   const microServices: string[] = [];
+  const locations: string[] = [];
   const phones: string[] = [];
   const emails: string[] = [];
+  let locationMeta: BusinessFactMeta["locations"];
+  let contactMeta: BusinessFactMeta["contact"];
 
   for (const page of pages) {
     const jsonLd = extractJsonLd(page.html);
@@ -815,6 +909,13 @@ export function extractDraftFromHtml(
     if (jsonLd.hours) jsonLdHours.push(jsonLd.hours);
     if (jsonLd.services) jsonLdServices.push(jsonLd.services);
     if (jsonLd.faqs) jsonLdFaqs.push(jsonLd.faqs);
+    if (jsonLd.locations.length) {
+      locations.push(...jsonLd.locations);
+      locationMeta ||= { source: "jsonld", confidence: "high" };
+    }
+    if (jsonLd.phones.length || jsonLd.emails.length) {
+      contactMeta ||= { source: "jsonld", confidence: "high" };
+    }
     phones.push(...jsonLd.phones);
     emails.push(...jsonLd.emails);
 
@@ -827,10 +928,20 @@ export function extractDraftFromHtml(
     }
     if (micro.hours) microHours.push(micro.hours);
     if (micro.services) microServices.push(micro.services);
+    if (micro.locations.length) {
+      locations.push(...micro.locations);
+      locationMeta ||= { source: "microdata", confidence: "high" };
+    }
+    if (micro.phones.length || micro.emails.length) {
+      contactMeta ||= { source: "microdata", confidence: "high" };
+    }
     phones.push(...micro.phones);
     emails.push(...micro.emails);
 
     const links = extractTelMailto(page.html);
+    if ((links.phones.length || links.emails.length) && !contactMeta) {
+      contactMeta = { source: "contact_link", confidence: "medium" };
+    }
     phones.push(...links.phones);
     emails.push(...links.emails);
   }
@@ -1024,7 +1135,61 @@ export function extractDraftFromHtml(
   }
   warnings.push("untrusted_crawl_text");
 
-  return { draft: omitEmpty(draft), warnings, fieldMeta: omitEmptyMeta(fieldMeta, draft) };
+  const cleanDraft = omitEmpty(draft);
+  const uniqueLocations = [...new Set(locations.map((item) => asUntrustedText(item, 500)).filter(Boolean))].slice(0, 16);
+  const uniquePhones = [...new Set(phones.map((item) => asUntrustedText(item, 80)).filter(isPlausiblePhone))].slice(0, 8);
+  const uniqueEmails = [...new Set(emails.map((item) => asUntrustedText(item, 120)).filter(isPlausibleEmail))].slice(0, 8);
+  const facts: BusinessFacts = {};
+  const factMeta: BusinessFactMeta = {};
+  const website = pages[0]?.url;
+  if (website) {
+    try {
+      const parsed = new URL(website);
+      if (parsed.protocol === "https:") {
+        facts.website = parsed.toString();
+        factMeta.website = { source: "fetched_url", confidence: "high" };
+      }
+    } catch {
+      // Fetched URL provenance is optional; never invent it.
+    }
+  }
+  if (cleanDraft.businessName) {
+    facts.businessName = cleanDraft.businessName;
+    if (fieldMeta.businessName) factMeta.businessName = fieldMeta.businessName;
+  }
+  if (uniqueLocations.length) {
+    facts.locations = uniqueLocations;
+    if (locationMeta) factMeta.locations = locationMeta;
+  }
+  if (uniquePhones.length || uniqueEmails.length) {
+    facts.contact = {
+      ...(uniquePhones.length ? { phones: uniquePhones } : {}),
+      ...(uniqueEmails.length ? { emails: uniqueEmails } : {}),
+    };
+    if (contactMeta) factMeta.contact = contactMeta;
+  }
+  const services = splitFactLines(cleanDraft.services);
+  if (services) {
+    facts.services = services;
+    if (fieldMeta.services) factMeta.services = fieldMeta.services;
+  }
+  if (cleanDraft.hours) {
+    facts.hours = cleanDraft.hours;
+    if (fieldMeta.hours) factMeta.hours = fieldMeta.hours;
+  }
+  const faqs = parseFaqFacts(cleanDraft.faqs);
+  if (faqs) {
+    facts.faqs = faqs;
+    if (fieldMeta.faqs) factMeta.faqs = fieldMeta.faqs;
+  }
+
+  return {
+    draft: cleanDraft,
+    warnings,
+    fieldMeta: omitEmptyMeta(fieldMeta, cleanDraft),
+    facts,
+    factMeta,
+  };
 }
 
 function uniqueJoin(items: string[], sep = "\n"): string | undefined {
