@@ -5,7 +5,7 @@ import type {
 } from "./types.ts";
 
 const REF = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
-const UK_OR_E164 = /^(?:\+?44\d{9,10}|0\d{9,10})$/;
+const PHONE_NUMBER = /^\+?\d{7,15}$/;
 const PROVIDER = /^[a-z0-9][a-z0-9._-]{1,63}$/;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
