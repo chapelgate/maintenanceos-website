@@ -1,3 +1,4 @@
+import { useId } from "react";
 import type { AgentBlueprintV1 } from "@/lib/agent-blueprint";
 import type { AgentReviewRequirement } from "@/lib/agent-review";
 import { agentTemplateFor } from "@/lib/agent-selection";
@@ -20,6 +21,7 @@ export function AgentReviewGate({
   disabled?: boolean;
 }) {
   const confirmed = new Set(confirmedIds);
+  const reviewId = useId();
   const enabledIntegrations = blueprint.integrations.filter((item) => item.enabled);
 
   return (
@@ -142,10 +144,12 @@ export function AgentReviewGate({
           {requirements.map((item) => (
             <label
               key={item.id}
+              htmlFor={`${reviewId}-${item.id}`}
               className="flex cursor-pointer gap-3 rounded-md border border-border bg-surface p-3 text-sm"
               data-review-requirement={item.id}
             >
               <input
+                id={`${reviewId}-${item.id}`}
                 type="checkbox"
                 checked={confirmed.has(item.id)}
                 disabled={disabled}
