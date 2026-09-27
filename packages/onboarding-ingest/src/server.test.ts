@@ -154,6 +154,19 @@ test("POST scan happy path returns draft shape /create already maps", async () =
     },
     warnings: ["greeting_not_found", "untrusted_crawl_text"],
     sources: [{ url: "https://acme.example/", status: 200, bytes: 120 }],
+    facts: {
+      website: "https://acme.example/",
+      businessName: "Acme Plumbing",
+      contact: { phones: ["+44 151 555 0100"], emails: ["hello@acme.example"] },
+      services: ["Boiler repair"],
+      hours: "Mo-Fr 08:00-17:00",
+      faqs: [{ question: "Do you cover London?", answer: "Yes, within the M25." }],
+    },
+    factMeta: {
+      website: { source: "fetched_url", confidence: "high" },
+      businessName: { source: "jsonld", confidence: "high" },
+      contact: { source: "jsonld", confidence: "high" },
+    },
   };
 
   await withServer(
@@ -182,6 +195,12 @@ test("POST scan happy path returns draft shape /create already maps", async () =
       assert.equal(json.draft.services, "Boiler repair");
       assert.match(json.draft.faqs, /Do you cover London/);
       assert.equal(json.draft.greeting, undefined);
+      assert.equal(json.facts.website, "https://acme.example/");
+      assert.deepEqual(json.facts.contact, {
+        phones: ["+44 151 555 0100"],
+        emails: ["hello@acme.example"],
+      });
+      assert.equal(json.factMeta.contact.source, "jsonld");
       assert.equal(res.headers.get("access-control-allow-origin"), "http://localhost:3000");
     },
   );
