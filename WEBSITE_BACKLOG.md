@@ -52,6 +52,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C1-LOOPBACK | One docs-only preflight run timed out several localhost test servers on `127.0.0.1` | **RESOLVED / ENVIRONMENT TRANSIENT** — the exact failing loopback suites immediately reran 22/22 PASS; no production code or test thresholds changed | QA |
 | C3 | Continuation Step 3 — refresh website product evidence against current canonical MaintenanceOS source | **DONE IN CANDIDATE** — exact product checkpoint pinned; claims register re-signed; provider-specific marketing wording removed; commissioning-only local voice candidate kept UNDER TEST; no live/GA promotion | Product Investigator + Website Manager |
 | C3-PRODUCT-WIN | Broad product pytest on Windows cannot execute Linux `resource` concurrency modules and reports POSIX-mode semantics differently on NTFS | **NON-BLOCKING ENVIRONMENT LIMIT** — claims promotion relies on 88/88 targeted control regressions; broad Windows run still passed 356 tests and no concurrency/production claim was promoted | Product Investigator + QA |
+| C4 | Continuation Step 4 — positioning/message refinement | **DONE IN CANDIDATE** — buyer message sharpened around structured UK maintenance intake, critical-vs-routine separation, human authority and traceability; public provider/competitor wording removed; no capability claim promoted | Positioning + Website Manager |
 
 ## Step 1 completion
 

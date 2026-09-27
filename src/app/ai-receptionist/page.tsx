@@ -20,7 +20,7 @@ const callFlow = [
 const ukSafety = [
   "Designed for UK terminology and 999 emergency guidance",
   "Regression tests in product source lock UK/999 behaviour and never-911 wording",
-  "Live-carrier retest is still required for corrected accent and emergency wording on the current deployment",
+  "Live-carrier retest is still required for voice quality, emergency wording, interruption, and transfer behaviour",
 ];
 
 const humanTransfer = [
@@ -112,8 +112,8 @@ export default function AiReceptionistPage() {
               commercial general availability
             </li>
             <li>
-              Controlled Gemini / carrier testing on the current DigitalOcean
-              deployment remains gated — not available as &ldquo;live now&rdquo;
+              Controlled carrier testing on the current voice candidate remains
+              gated — not available as &ldquo;live now&rdquo;
             </li>
             <li>
               Architecture for concurrent operations is being developed — we

@@ -24,7 +24,7 @@ export default function IndustriesPage() {
           Eight UK verticals, equal weight. Pilot-stage. Core controls are real;
           public always-on phone is not declared ready yet. These pages describe
           intended use for UK maintenance firms — not named customer case
-          studies, fabricated testimonials, or a Fonio-class “live 24/7
+          studies, fabricated testimonials, or a generic “live 24/7
           receptionist” claim.
         </p>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

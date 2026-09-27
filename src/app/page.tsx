@@ -63,15 +63,15 @@ export default function HomePage() {
               Turn maintenance requests into clear, controlled work.
             </h1>
             <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-              MaintenanceOS by Chapelgate helps UK landlords, letting agents,
-              property managers, and maintenance teams capture maintenance
-              requests, structure the work, escalate critical cases, and keep
-              approvals with authorised people.
+              MaintenanceOS by Chapelgate helps UK property and maintenance
+              teams turn incoming repair reports into structured work: capture
+              the facts, separate critical cases from routine jobs, and keep
+              consequential decisions with authorised people.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              AI assists intake. Server rules own safety, lifecycle, and
-              approvals. The AI receptionist capability is under testing; this
-              is not a public always-on phone service.
+              AI assists intake. Server rules and authorised people control
+              what happens next. Voice remains under testing, so this site does
+              not present an always-on phone service.
             </p>
             <CtaPair
               className="mt-8"
