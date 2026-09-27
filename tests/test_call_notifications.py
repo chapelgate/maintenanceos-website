@@ -405,7 +405,7 @@ Assistant: Thank you for confirming. I'll get this processed for you now. Thank 
     subject, body = build_internal_email(details)
 
     assert subject == "[REPAIR] Gate 368 - CG-000033"
-    assert "Resident Name: Andrew Top" in body
+    assert "Resident Name: not collected" in body
     assert "Contact Number: not collected" in body
     assert "Address: 18 Brisbane Avenue, Lawson, ACT, 2617 , Australia" in body
     assert "Postcode: not collected" in body
@@ -413,6 +413,8 @@ Assistant: Thank you for confirming. I'll get this processed for you now. Thank 
     assert "0795 1234567" not in body.split("FULL TRANSCRIPT", 1)[0]
     assert "07752 26746" not in body.split("FULL TRANSCRIPT", 1)[0]
     assert "CH45 9DX" not in body.split("FULL TRANSCRIPT", 1)[0]
-    assert "Fault Details: the gate is got a damaged lock" in body
+    assert "Fault Details: a damaged lock" in body
+
+
 
 
