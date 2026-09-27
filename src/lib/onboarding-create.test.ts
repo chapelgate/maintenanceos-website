@@ -273,7 +273,7 @@ test("buildCreateLeadMessage includes the selected AgentBlueprint when provided"
   assert.match(message, /"stage": "draft"/);
 });
 
-test("buildCreateLeadMessage includes receptionist pack when provided", () => {
+test("buildCreateLeadMessage includes agent pack when provided", () => {
   const message = buildCreateLeadMessage({
     businessUrl: "https://example.com/",
     scanNote: "scan_response_mapped",
@@ -299,7 +299,7 @@ test("buildCreateLeadMessage includes receptionist pack when provided", () => {
       limitations: ["Pre-launch sandbox draft only — not a live customer phone number."],
     },
   });
-  assert.match(message, /Receptionist knowledge pack JSON/);
+  assert.match(message, /Agent knowledge pack JSON/);
   assert.match(message, /sandbox_knowledge_pack/);
   assert.match(message, /not a live customer phone line/);
   assert.match(message, /not a live customer phone number/);
