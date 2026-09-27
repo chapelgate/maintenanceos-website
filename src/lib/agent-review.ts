@@ -44,6 +44,9 @@ export type AgentReviewSubject = {
   blueprint: AgentBlueprintV1;
   knowledgePack: unknown;
   systemPrompt: string;
+  factMeta?: ScanBusinessFactMeta;
+  fieldMeta?: ScanDraftFieldMeta;
+  missing?: string[];
 };
 
 function stableReviewJson(value: unknown): string {
@@ -80,6 +83,9 @@ export function agentReviewRevision(subject: AgentReviewSubject): string {
     },
     knowledgePack: subject.knowledgePack,
     systemPrompt: subject.systemPrompt,
+    factMeta: subject.factMeta ?? {},
+    fieldMeta: subject.fieldMeta ?? {},
+    missing: [...new Set(subject.missing ?? [])].sort(),
   });
   return "arv1_" + fnv1a32(canonical);
 }
@@ -412,6 +418,9 @@ export function finalizeAgentReview(input: {
     blueprint: trusted,
     knowledgePack: input.knowledgePack,
     systemPrompt: input.systemPrompt,
+    factMeta: input.factMeta,
+    fieldMeta: input.fieldMeta,
+    missing: input.missing,
   });
   const canonical = buildAgentReviewRecord(
     requirements,
