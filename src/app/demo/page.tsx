@@ -72,7 +72,7 @@ export default function DemoPage() {
           >
             Create from website
           </a>
-          . Website → Check → Review → Pack, then optional sandbox and early
+          . Website → Check → Choose → Review → Pack, then optional sandbox and early
           access. We do not invent crawl results or a live phone number.
         </p>
         <ol className="mt-6 space-y-3">
