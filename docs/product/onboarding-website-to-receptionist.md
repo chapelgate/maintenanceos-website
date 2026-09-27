@@ -12,7 +12,8 @@
 5. Preview claims-safe knowledge pack + system prompt (edit inline). Missing fields stay missing.
 6. Choose voice + language (UK English default).
 7. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone. A browser mock is demonstration-only. When a configured sandbox companion returns the exact reviewed pack/prompt and deterministic scripted transcript, Step 7 can record qualification for that exact review revision and advance `reviewed → sandbox_passed`.
-8. Connect calendar / number / go-live checklist — calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). Not a live phone booking step.
+8. Internal provisioning handoff — **not a browser step**. A trusted server-side caller may submit the complete reviewed/sandbox evidence to `packages/provisioning-gateway`; the gateway re-verifies Step 7, authenticates ownership, applies replay/idempotency controls and may advance only `sandbox_passed → provisioning`.
+9. Connect calendar / number / go-live checklist — deferred to Steps 9–10. Calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). This is not a live phone booking/activation step.
 
 ## Failure modes (must handle)
 
@@ -79,6 +80,21 @@ POST /v1/sandbox/sessions/{id}/test-call
 ```
 
 `SANDBOX_TEST_CALL_ENABLED` defaults to **false**. Scripted turns read the stored session knowledge pack and follow the system prompt’s missing-field rule. This is not a live customer number.
+
+## Secure provisioning gateway (Step 8 implemented)
+
+Internal companion: `packages/provisioning-gateway` (`npm run provisioning-gateway`). Contract: `docs/PROVISIONING_GATEWAY_CONTRACT.md`.
+
+- disabled by default;
+- server-to-server only; browser Origin is rejected and there is no provisioning CORS surface;
+- HMAC + timestamp + one-time nonce + idempotency key required;
+- authenticated principal is tenant-scoped;
+- only a schema-valid `sandbox_passed` AgentBlueprint is eligible;
+- gateway recomputes the complete Step-7 review/session/test qualification and requires an exact match;
+- accepted handoff creates a durable provisioning control record and changes lifecycle only to `provisioning`;
+- it does **not** create/alter the frozen product database, attach a number, enable connectors, or activate an agent.
+
+There is intentionally no `NEXT_PUBLIC_PROVISIONING_*` flag and no direct browser call from `/create`.
 
 ## Later API (sandbox promote — not implemented)
 
