@@ -132,10 +132,14 @@ function stripPriorControlTail(text: string): string {
   return index >= 0 ? text.slice(0, index).trimEnd() : text.trim();
 }
 
-function appendTrustedTail(prefix: string, blueprint: AgentBlueprintV1): string {
+function appendTrustedTail(
+  prefix: string,
+  blueprint: AgentBlueprintV1,
+  replacePriorTail: boolean,
+): string {
   const tail = controlBlock(blueprint);
   const separator = "\n\n";
-  const safePrefix = stripPriorControlTail(prefix);
+  const safePrefix = replacePriorTail ? stripPriorControlTail(prefix) : prefix.trim();
   const prefixLimit = Math.max(0, MAX_PROMPT - separator.length - tail.length);
   return safePrefix.slice(0, prefixLimit) + separator + tail;
 }
@@ -144,7 +148,7 @@ export function finalizeAgentSystemPrompt(
   text: string,
   blueprint: AgentBlueprintV1,
 ): string {
-  return appendTrustedTail(text, validateBlueprint(blueprint));
+  return appendTrustedTail(text, validateBlueprint(blueprint), true);
 }
 
 export function buildAgentSystemPrompt(
@@ -160,7 +164,7 @@ export function buildAgentSystemPrompt(
     JSON.stringify(pack, null, 2),
     "[End MaintenanceOS untrusted business data]",
   ].join("\n\n");
-  return appendTrustedTail(prefix, trusted);
+  return appendTrustedTail(prefix, trusted, false);
 }
 
 export function agentLimitationsFor(pack: KnowledgePack): string[] {
