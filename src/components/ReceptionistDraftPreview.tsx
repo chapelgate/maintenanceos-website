@@ -112,6 +112,18 @@ export function ReceptionistDraftPreview({
 
       <details className="rounded-lg border border-border bg-paper p-3">
         <summary className="cursor-pointer text-sm font-medium text-ink">
+          Final normalized knowledge pack (read-only)
+        </summary>
+        <pre
+          className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
+          data-final-knowledge-pack="readonly"
+        >
+          {JSON.stringify(result.knowledgePack, null, 2)}
+        </pre>
+      </details>
+
+      <details className="rounded-lg border border-border bg-paper p-3">
+        <summary className="cursor-pointer text-sm font-medium text-ink">
           Final stored system prompt (read-only)
         </summary>
         <pre
