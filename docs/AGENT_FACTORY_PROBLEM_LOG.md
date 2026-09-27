@@ -203,3 +203,23 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **Finding:** changed-package ESLint rejected four `any` casts in adversarial gateway tests.
 - **Fix:** type the reusable fixture as the real `ProvisioningRequestInput` and mutate its known fields directly.
 - **Scope impact:** tests only; no runtime behaviour changed.
+
+
+## 2026-09-27 — Step 8 provisioning gateway verification closure
+
+- **State:** CLOSED / VERIFIED.
+- Exact pre-closure engineering candidate: `a6f1414098aad6de8b4910bf6386f63060b74dd1`.
+- Exact verified Git tree: `bba53436eafa21ab6b6fa2d89bb0978a5641e59b`.
+- MaintenanceOS compatibility baseline: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`.
+- Gateway security/runtime tests: 19/19 PASS.
+- Architecture wiring tests: 6/6 PASS.
+- Repository script suite: 222/222 PASS.
+- Package/runtime/source suite: 268/268 PASS.
+- Changed-package ESLint: PASS.
+- Next.js 16.3.6 production build and TypeScript: PASS.
+- Static export: 30/30 routes generated.
+- Exact tree integrity before/after verification: PASS.
+- Qualification evidence is recomputed server-side before provisioning; forged/mismatched evidence fails closed.
+- HMAC authentication, nonce replay protection, tenant scope and durable idempotency are verified.
+- Successful handoff changes lifecycle only from `sandbox_passed` to `provisioning`.
+- No direct MaintenanceOS database write, carrier/number, connector, live voice, deployment or public-launch mutation occurred.
