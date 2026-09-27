@@ -180,3 +180,26 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - Sandbox qualification is companion-only, revision-bound and fail-closed; browser mock remains demonstration-only.
 - Successful qualification changes lifecycle only from `reviewed` to `sandbox_passed`.
 - No live phone call, number provisioning, provider/carrier, database, deployment or infrastructure mutation occurred.
+
+
+## 2026-09-27 — Step 8: qualification summary was not enough to bind the provisioning request
+
+- **State:** CLOSED / VERIFIED FIX CANDIDATE.
+- **Finding:** an initial gateway design could validate a `sandbox_passed` blueprint and a structurally complete qualification summary independently, but could not prove that both came from the same reviewed pack/prompt/session/transcript.
+- **Risk:** a trusted caller could accidentally or maliciously pair valid-looking evidence with a different blueprint.
+- **Fix:** Step 8 now requires the full Step-7 review/session/test evidence and re-runs `qualifyAgentSandbox` server-side. The canonical resulting blueprint and qualification record must match the submitted values exactly before provisioning can start.
+- **Regression:** blueprint tampering, transcript tampering and forged qualification summaries fail with `qualification_required`.
+
+## 2026-09-27 — Step 8: strip-only TypeScript rejected parameter-property syntax
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Reproduction:** first real Node verifier run failed before tests because `constructor(private readonly filePath: string)` is unsupported by Node strip-only TypeScript execution.
+- **Fix:** use an explicit typed class field plus normal constructor assignment. No transpiler, runtime flag or dependency added.
+- **Regression:** gateway TypeScript test suite executes directly under the repository's existing `--experimental-strip-types` path.
+
+## 2026-09-27 — Step 8: adversarial tests used explicit any
+
+- **State:** CLOSED / VERIFIED FIX.
+- **Finding:** changed-package ESLint rejected four `any` casts in adversarial gateway tests.
+- **Fix:** type the reusable fixture as the real `ProvisioningRequestInput` and mutate its known fields directly.
+- **Scope impact:** tests only; no runtime behaviour changed.
