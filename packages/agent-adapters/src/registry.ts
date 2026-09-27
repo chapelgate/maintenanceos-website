@@ -6,6 +6,7 @@ import type {
 
 const REF = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const UK_OR_E164 = /^(?:\+?44\d{9,10}|0\d{9,10})$/;
+const PROVIDER = /^[a-z0-9][a-z0-9._-]{1,63}$/;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -59,14 +60,10 @@ function parseConnector(value: unknown): ConnectorDescriptor | null {
     return structuredClone(value) as ConnectorDescriptor;
   }
 
-  const expectedProvider: Record<string, string> = {
-    calendar: "calendar-adapters",
-    email: "managed-email",
-    crm: "managed-crm",
-    sms: "managed-sms",
-  };
   if (
-    expectedProvider[value.kind] !== value.provider ||
+    !["calendar", "email", "crm", "sms"].includes(value.kind) ||
+    !PROVIDER.test(value.provider) ||
+    value.provider === "ttnc" ||
     !exactKeys(value, ["ref", "kind", "provider", "configured"])
   ) {
     return null;
