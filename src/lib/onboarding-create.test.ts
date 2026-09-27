@@ -87,7 +87,7 @@ test("mapScanBusinessFacts allow-lists structured intake and rejects malformed v
         businessName: " Acme Plumbing ",
         locations: [" Liverpool ", "Liverpool"],
         contact: {
-          phones: ["0151 555 0100", "0151 555 0100"],
+          phones: ["+44 151 555 0100", "0151 555 0100", "Call 0151 555 0100"],
           emails: ["hello@acme.example", "not-an-email"],
           api_key: "must-not-map",
         },
@@ -105,7 +105,7 @@ test("mapScanBusinessFacts allow-lists structured intake and rejects malformed v
       businessName: "Acme Plumbing",
       locations: ["Liverpool"],
       contact: {
-        phones: ["0151 555 0100"],
+        phones: ["+44 151 555 0100"],
         emails: ["hello@acme.example"],
       },
       services: ["Boiler repair"],
