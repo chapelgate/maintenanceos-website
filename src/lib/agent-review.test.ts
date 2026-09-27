@@ -180,7 +180,7 @@ test("missing-data acknowledgement includes structured identity gaps", () => {
 test("review record fails closed until every current requirement is confirmed", () => {
   const requirements = buildAgentReviewRequirements({
     blueprint: blueprint("maintenance_desk"),
-    factMeta: {
+    fieldMeta: {
       services: { source: "nav", confidence: "low" },
     },
     missing: ["faqs"],
@@ -193,7 +193,7 @@ test("review record fails closed until every current requirement is confirmed", 
   assert.equal(partial.complete, false);
   assert.ok(!partial.confirmedIds.includes("unknown:stale"));
   assert.ok(partial.missingIds.includes("control:ai_output"));
-  assert.ok(partial.missingIds.includes("fact:services"));
+  assert.ok(partial.missingIds.includes("field:services"));
 
   const complete = buildAgentReviewRecord(
     requirements,
@@ -215,6 +215,54 @@ test("review evidence is deterministic regardless of checkbox order", () => {
     requirements.map((item) => item.id),
   );
   assert.equal(record.complete, true);
+});
+
+test("review evidence is invalidated when reviewed output changes", () => {
+  const draft = blueprint("sales_enquiry");
+  const subject = reviewSubject(draft);
+  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    revisionFor(draft),
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        knowledgePack: subject.knowledgePack,
+        systemPrompt: subject.systemPrompt + " changed",
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        knowledgePack: { ...subject.knowledgePack, changed: true },
+        systemPrompt: subject.systemPrompt,
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+});
+
+test("review record rejects malformed revision identifiers", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("sales_enquiry"),
+  });
+  assert.throws(
+    () =>
+      buildAgentReviewRecord(
+        requirements,
+        requirements.map((item) => item.id),
+        "not-a-review-revision",
+      ),
+    /revision ID is invalid/i,
+  );
 });
 
 test("lifecycle cannot advance on incomplete or forged review evidence", () => {
