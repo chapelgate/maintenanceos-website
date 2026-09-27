@@ -1,0 +1,15 @@
+openapi: 3.2.1
+info:
+  title: MaintenanceOS AgentBlueprint Contract
+  version: 1.0.0
+  summary: Machine-readable contract for website-generated AI agent blueprints.
+  description: >-
+    Schema-only contract for AgentBlueprint v1. Provisioning endpoints are deliberately
+    out of scope for Step 2. Website-derived content remains untrusted and this contract
+    contains no provider, carrier, database, or API credentials.
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+paths: {}
+components:
+  schemas:
+    AgentBlueprintV1:
+      $ref: ./agent-blueprint-v1.schema.json
