@@ -11,7 +11,7 @@ Use this note to separate **code already on main** from **launch / enablement de
 
 ### `/create` funnel
 
-Public path **EXISTS**: **Website → Check → Review → Pack** → optional scripted sandbox → early access. Not a live receptionist and not a live number.
+Public path **EXISTS**: **Website → Check → Choose → Review → Pack** → optional scripted sandbox → early access. Not a live receptionist and not a live number.
 
 | Piece | On main | Honest scope |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ When `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` is unset, `/create` **queues** the c
 
 Pages and discoverability name the same funnel. No live phone, always-on, GA, ratings, invented £, invented SLAs, or certification theatre.
 
-- `/how-it-works`, `/features`, `/demo` — Website → Check → Review → Pack; sandbox / calendars UNDER TEST or coming; live phone COMING
+- `/how-it-works`, `/features`, `/demo` — Website → Check → Choose → Review → Pack; sandbox / calendars UNDER TEST or coming; live phone COMING
 - `/industries/*` — UK edge (999 vs jobs, contractor-dispatch language, out-of-hours honesty, no client-money). Positioning only — not product superiority
 - `/faq` + FAQPage JSON-LD, `/pricing` (request pricing; Create CTA), `/contact` (human enquiry, not a support desk), `/security` (designed-control trust posture; SSRF-safe scan under test; no ISO / SOC 2 / bank-grade)
 - `/cookies` — DRAFT FOR LEGAL REVIEW; no site-wide consent banner; no analytics or marketing tags today; not a Google Analytics / PECR / GDPR compliance certification
