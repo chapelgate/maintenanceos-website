@@ -188,7 +188,32 @@ export function buildAgentReviewRequirements(input: {
   missing?: string[];
 }): AgentReviewRequirement[] {
   const blueprint = validateBlueprint(input.blueprint);
+  const businessNameMeta = input.factMeta?.businessName;
+  const websiteMeta = input.factMeta?.website;
   const requirements: AgentReviewRequirement[] = [
+    {
+      id: "fact:businessName",
+      kind:
+        businessNameMeta?.confidence === "low" ? "low_confidence" : "mandatory",
+      title: "Confirm business name",
+      detail:
+        businessNameMeta?.confidence === "low"
+          ? "The scanner marked the business name as low confidence from " +
+            reviewSourceLabel(businessNameMeta.source) +
+            ". Check or edit it before confirming."
+          : "Confirm the reviewed business name is correct.",
+    },
+    {
+      id: "fact:website",
+      kind: websiteMeta?.confidence === "low" ? "low_confidence" : "mandatory",
+      title: "Confirm website",
+      detail:
+        websiteMeta?.confidence === "low"
+          ? "The scanner marked the website as low confidence from " +
+            reviewSourceLabel(websiteMeta.source) +
+            ". Check it before confirming."
+          : "Confirm this is the correct business website.",
+    },
     {
       id: "control:role",
       kind: "mandatory",
@@ -210,7 +235,13 @@ export function buildAgentReviewRequirements(input: {
   for (const [key, meta] of Object.entries(input.factMeta ?? {}) as Array<
     [ScanBusinessFactKey, NonNullable<ScanBusinessFactMeta[ScanBusinessFactKey]>]
   >) {
-    if (meta.confidence !== "low") continue;
+    if (
+      meta.confidence !== "low" ||
+      key === "businessName" ||
+      key === "website"
+    ) {
+      continue;
+    }
     requirements.push({
       id: "fact:" + key,
       kind: "low_confidence",
