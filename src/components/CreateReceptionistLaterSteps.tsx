@@ -173,7 +173,11 @@ export function CreateReceptionistLaterSteps({
   const [scanDetail, setScanDetail] = useState<string | null>(null);
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
+  const [factMeta, setFactMeta] = useState<ScanBusinessFactMeta>({});
   const [facts, setFacts] = useState<ScanBusinessFacts>({});
+  const [identityReview, setIdentityReview] =
+    useState<ReviewedIdentityDraft>(EMPTY_IDENTITY_REVIEW);
+  const [reviewConfirmedIds, setReviewConfirmedIds] = useState<string[]>([]);
   const [selectedAgentType, setSelectedAgentType] = useState<AgentType | null>(null);
   const [agentBlueprint, setAgentBlueprint] = useState<AgentBlueprintV1 | null>(null);
   const [agentSelectionError, setAgentSelectionError] = useState<string | null>(null);
@@ -190,6 +194,10 @@ export function CreateReceptionistLaterSteps({
   const hoursHintId = useId();
   const servicesHintId = useId();
   const faqsHintId = useId();
+  const websiteHintId = useId();
+  const locationsHintId = useId();
+  const phoneHintId = useId();
+  const emailHintId = useId();
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -225,6 +233,9 @@ export function CreateReceptionistLaterSteps({
       setProgress("checking");
       setScanDetail(null);
       setFacts({});
+      setFactMeta({});
+      setIdentityReview(EMPTY_IDENTITY_REVIEW);
+      setReviewConfirmedIds([]);
       setSelectedAgentType(null);
       setAgentBlueprint(null);
       setAgentSelectionError(null);
@@ -238,7 +249,9 @@ export function CreateReceptionistLaterSteps({
           businessName: hostnameBusinessHint(businessUrl),
         });
         setFieldMeta({});
+        setFactMeta({});
         setFacts({});
+        setIdentityReview(EMPTY_IDENTITY_REVIEW);
         setProgress("queued");
         return;
       }
@@ -250,7 +263,13 @@ export function CreateReceptionistLaterSteps({
         const filled = Object.keys(outcome.draft).length > 0;
         setDraft({ ...EMPTY_RECEPTIONIST_DRAFT, ...outcome.draft });
         setFieldMeta(outcome.fieldMeta);
+        setFactMeta(outcome.factMeta);
         setFacts(outcome.facts);
+        setIdentityReview({
+          locations: outcome.facts.locations?.join("\n") ?? "",
+          phone: outcome.facts.contact?.phones?.[0] ?? "",
+          email: outcome.facts.contact?.emails?.[0] ?? "",
+        });
         setProgress(filled ? "scanned" : "scanned_empty");
         return;
       }
@@ -260,12 +279,17 @@ export function CreateReceptionistLaterSteps({
           businessName: hostnameBusinessHint(businessUrl),
         });
         setFieldMeta({});
+        setFactMeta({});
+        setFacts({});
+        setIdentityReview(EMPTY_IDENTITY_REVIEW);
         setProgress("queued");
         return;
       }
       setDraft(EMPTY_RECEPTIONIST_DRAFT);
       setFieldMeta({});
+      setFactMeta({});
       setFacts({});
+      setIdentityReview(EMPTY_IDENTITY_REVIEW);
       setScanDetail(outcome.message);
       setProgress("scan_failed");
     })();
