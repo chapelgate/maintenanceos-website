@@ -34,3 +34,28 @@ Persistent engineering problem record for the website Agent Factory. Append evid
 - **Risk:** internally inconsistent saved configuration.
 - **Fix:** accepted pack edits now pass through `applyKnowledgePackToAgentBlueprint`; only identity/knowledge data is refreshed. Permissions, rules, integrations, privacy and agent type remain unchanged and the blueprint is revalidated.
 - **Regression:** edited business name/hours/services/FAQs must synchronise while all control-plane fields remain identical.
+
+## 2026-09-27 — Step 6: scanner provenance was discarded by the create UI
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** onboarding scan returned `factMeta`, but `/create` stored only `facts` and `fieldMeta`; structured source/confidence was not available to final review.
+- **Fix:** retain `factMeta`, show source/confidence on review fields, and persist it with the review evidence.
+
+## 2026-09-27 — Step 6: no mandatory customer confirmation gate
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** generated pack/prompt could be submitted as an early-access lead without explicit confirmation of business identity, low-confidence facts, consequential capabilities, missing data or generated AI output.
+- **Fix:** pure fail-closed review policy plus accessible checkbox gate; edits invalidate previous confirmations and final submission is disabled until current requirements are complete.
+
+## 2026-09-27 — Step 6: lifecycle marked reviewed before review
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** Step-5 generation set `lifecycle.stage=reviewed` immediately after configuration generation, before customer confirmation.
+- **Risk:** a future provisioning consumer could mistake generated-but-unchecked configuration for reviewed configuration.
+- **Fix:** configuration generation now preserves `draft`; only `finalizeAgentReview` may advance to `reviewed`, and it rejects incomplete or forged review evidence.
+
+## 2026-09-27 — Step 6: structured identity gaps were absent from missing-data acknowledgement
+
+- **State:** FIX CANDIDATE — execution verification pending.
+- **Reproduction:** legacy knowledge-pack `missing` covered pack fields but not locations/contact details.
+- **Fix:** Step-6 review derives structured identity gaps directly from the validated AgentBlueprint and includes them in the mandatory missing-information acknowledgement.
