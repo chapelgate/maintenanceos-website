@@ -1,14 +1,13 @@
 # Agent Factory Step 6 — Customer Review / Edit Gate
 
-**Status:** IMPLEMENTED CANDIDATE — execution verification required before merge/freeze
+**Status:** VERIFIED — ready to freeze/save
 **Scope:** make customer review mandatory before any future provisioning path may treat an AgentBlueprint as reviewed.
 
 ## Baselines
 
 - Source branch: `agent-factory/step6-customer-review-gate`.
 - Parent Step-5 candidate: `f076b896b38d8b1cbcf26a53c52f5fe715732369`.
-- Embedded MaintenanceOS compatibility baseline remains `e68ed4d4328caa9622f9bbd26d68effd25c2c9ca` pending the separate verified baseline reconciliation.
-- Latest MaintenanceOS source at refresh: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`; delta from `e68ed4d…` is documentation only.
+- MaintenanceOS compatibility baseline: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b` (latest source on 2026-09-27; product delta from `e68ed4d…` is documentation only).
 - Live telephony/runtime is not modified.
 
 ## Acceptance contract
@@ -71,16 +70,19 @@ Any failure keeps Step 6 unmerged and unfrozen. The verifier must record the exa
 
 ## Verification state
 
-- Static scope/diff audit: COMPLETE.
-- Static security/lifecycle audit: COMPLETE.
-- Machine-checked static contract audit: **31/31 PASS** (review revision/provenance binding, canonical finalisation, draft-only lifecycle, Step-4/5 async race rejection, pending-state submission blocking, edit invalidation, fail-closed submit, no provisioning/telephony path, accessibility/wiring regression presence).
-- Authorised Desktop Commander execution devices: OFFLINE at latest check. Local Node 22 is available, but the private GitHub connector does not expose a repository materialisation handoff to that execution container; credential-boundary bypass was intentionally not attempted.
-- Existing `cloud-workers` self-hosted Linux pool was inspected. Its approved queue is intentionally Python/control-plane-only and rejects arbitrary payload execution; using it for this Next.js repo would require scope/architecture drift, so it was not modified.
-- Focused real-repository Node tests: PENDING.
-- Full `npm test`: PENDING.
-- Changed-file ESLint: PENDING.
-- `npm run build` / Next.js static export: PENDING.
-- Merge/freeze: FORBIDDEN until all pending execution gates pass.
+- Static scope/diff audit: PASS.
+- Static security/lifecycle audit: PASS.
+- Machine-checked static contract audit: 31/31 PASS.
+- Focused TypeScript tests: PASS — 63/63.
+- Focused wiring/accessibility tests: PASS — 11/11.
+- Changed-file ESLint: PASS.
+- Full repository `npm test`: PASS — 241/241.
+- TypeScript / Next.js 16.3.6 production build: PASS.
+- Static export: PASS — 30/30 routes generated.
+- Clean-tree check: PASS.
+- Real verifier: authorised Desktop Commander device `CG`.
+- Verification found and repaired three issues before closure: one schema-invalid pressure-test fixture, one checkbox accessibility association defect, and one nullable submit-path TypeScript defect.
+- No telephony/provider/carrier/database/infrastructure files changed.
 
 ## Non-scope
 
