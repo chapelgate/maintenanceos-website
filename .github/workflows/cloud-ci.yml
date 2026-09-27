@@ -30,7 +30,6 @@ jobs:
           fetch-depth: 0
 
       - name: GitHub Actions runner policy
-        if: github.ref == 'refs/heads/main'
         run: python3 scripts/gha-runner-policy-check.py .
 
       - name: Reject obvious committed private keys and provider secrets
@@ -141,17 +140,7 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Validate locked-down staging compose configuration
-        shell: bash
-        run: |
-          set -euo pipefail
-          if docker compose version >/dev/null 2>&1; then
-            docker compose -f docker-compose.staging.yml config > staging-compose-rendered.yml
-          elif command -v docker-compose >/dev/null 2>&1; then
-            docker-compose -f docker-compose.staging.yml config > staging-compose-rendered.yml
-          else
-            # Verification-only branch fallback: the runner lacks Compose; the safety keys below are literal.
-            cp docker-compose.staging.yml staging-compose-rendered.yml
-          fi
+        run: docker compose -f docker-compose.staging.yml config > staging-compose-rendered.yml
       - name: Assert provider ingress and live channels remain disabled
         shell: bash
         run: |
@@ -187,7 +176,7 @@ jobs:
             -e DATABASE_URL=sqlite:////tmp/maintenanceos-smoke.db \
             maintenanceos:${{ github.sha }}
           trap 'docker logs maintenanceos-smoke || true; docker stop maintenanceos-smoke || true' EXIT
-          python3 - <<'PY'
+          python - <<'PY'
           import json
           import time
           import urllib.request

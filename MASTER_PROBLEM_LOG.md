@@ -70,3 +70,28 @@ Status: RECORDED — NON-BLOCKING FOLLOW-UP
 
 - The estate runner reports that pinned `actions/checkout` / `actions/setup-python` actions still target Node 20 and are being forced to Node 24.
 - This warning does not affect Step 9 correctness and is intentionally not combined with the provider-adapter product change.
+
+## 2026-09-27 — Step 9 Linux whole-repository verification closure
+Status: RESOLVED
+
+- Tested product SHA: `1f372e0a705eb03f4ce8f0e43fe22ff9b8caa20b` on estate Linux CI run `36349495565`, attempt 2.
+- Python 3.13 deterministic suite: 389 passed, 1 deselected, 16 pre-existing warnings.
+- TLS/WSS transport probe: PASS on attempt 1.
+- Python 3.12 compatibility suite: 389 passed, 1 deselected, 16 pre-existing warnings.
+- Staging safety assertions: PASS; provider ingress, realtime voice, live email, live messaging and remote AI side-effect enable remain disabled.
+- Production container: build PASS; non-root runtime PASS; `/health` smoke PASS; metadata generation PASS.
+- Therefore the earlier Windows `resource` collection mismatch is closed by equivalent whole-repository Linux verification rather than by weakening tests.
+
+## 2026-09-27 — Estate runner transient cancellation during Step 9 verification
+Status: RESOLVED BY RETRY, NO PRODUCT CHANGE
+
+- Run `36349495565` attempt 1 received an executor cancellation immediately after all 389 deterministic tests had passed.
+- Retry attempt 2 on the exact same SHA completed the deterministic suite, TLS/WSS probe and Python 3.12 compatibility suite successfully.
+- No code change was made in response to the transient cancellation.
+
+## 2026-09-27 — GitHub artifact storage quota exhausted
+Status: RECORDED — NON-BLOCKING TO STEP 9
+
+- Container verification completed successfully through build, non-root check, `/health` smoke and metadata generation.
+- The subsequent `actions/upload-artifact` step failed because GitHub reported the repository/account artifact storage quota is full and recalculates usage every 6–12 hours.
+- This occurred after all product/container acceptance gates and does not alter runtime correctness. No destructive artifact deletion was performed as part of this narrow Step 9 change.
