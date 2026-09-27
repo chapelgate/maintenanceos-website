@@ -90,7 +90,11 @@ export class MemoryConnectorRegistry implements ConnectorRegistry {
 }
 
 export class MemoryTtncSecretRegistry implements TtncSecretRegistry {
-  constructor(private readonly secrets: Record<string, string>) {}
+  private readonly secrets: Record<string, string>;
+
+  constructor(secrets: Record<string, string>) {
+    this.secrets = { ...secrets };
+  }
 
   getWebhookSecret(ref: string): string | undefined {
     const secret = this.secrets[ref];
