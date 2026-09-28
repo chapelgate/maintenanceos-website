@@ -150,8 +150,8 @@ test("listen-shaped server keeps mock bookings across list + book + conflict", a
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "2026-09-28T00:00:00.000Z",
-        to: "2026-09-29T00:00:00.000Z",
+        from: "2030-01-07T00:00:00.000Z",
+        to: "2030-01-08T00:00:00.000Z",
         timezone: "Europe/London",
       }),
     });
