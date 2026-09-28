@@ -40,7 +40,7 @@ The effective form endpoint must be an **absolute** `http:` or `https:` URL (pro
 | `name`           | no       | string    | Omitted if empty |
 | `organisation`   | no       | string    | Omitted if empty |
 | `role`           | no       | string    | Visitor-selected role slug |
-| `message`        | no       | string    | Used on early demo/contact and the reviewed `/create` configuration; production receiver permits up to 64 KiB |
+| `message`        | no       | string    | Used on early demo/contact and the reviewed `/create` configuration; production receiver permits up to 65,536 characters |
 | `source_url`     | no       | string    | Current public page URL, used for operator context |
 | `submission_id`  | no       | string    | Stable 8–128 character per-journey idempotency key; `/create` sends one |
 | `website`        | no       | string    | **Honeypot.** If present and non-empty, accept and discard. Do not tip off bots. |
@@ -137,7 +137,7 @@ Suggested status codes:
 Minimum expected of a real endpoint:
 
 - Drop honeypot (`website`) silently with 2xx + `queued_stub` or equivalent discard.
-- Keep public bodies bounded. The production `/create` message is capped at 64 KiB because it includes the reviewed blueprint, knowledge pack and protected prompt; smaller forms remain far below that.
+- Keep public bodies bounded. The production `/create` message is capped at 65,536 characters because it includes the reviewed blueprint, knowledge pack and protected prompt; smaller forms remain far below that.
 - Rate-limit public submissions. The current production route uses a global bucket plus a privacy-preserving hashed-email bucket.
 - Do not write leads into the product telephony / work-order systems (`WEBSITE_ARCHITECTURE.md`).
 
