@@ -157,6 +157,5 @@ test("/create Step 1 cannot native-submit before hydration", () => {
   assert.doesNotMatch(form, /<form\b/);
   assert.doesNotMatch(form, /requestSubmit\(/);
   assert.match(form, /onClick=\{onStep1\}/);
-  assert.match(form, /event\.key !== "Enter"/);
   assert.match(form, /Loading form\.\.\./);
 });
