@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { FormEvent, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
 import {
   createJourneyNextAction,
@@ -28,6 +28,10 @@ function loadLaterSteps() {
 }
 
 const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
+
+const HYDRATION_SUBSCRIBE = () => () => {};
+const HYDRATED_CLIENT_SNAPSHOT = () => true;
+const HYDRATED_SERVER_SNAPSHOT = () => false;
 
 function CreateLaterStepsFallback() {
   return (
@@ -64,6 +68,11 @@ export function CreateReceptionistForm({
   onReviewSubjectChange?: (subject: AgentSandboxReviewSubject | null) => void;
   sandboxQualification?: AgentSandboxQualificationResult | null;
 } = {}) {
+  const hydrated = useSyncExternalStore(
+    HYDRATION_SUBSCRIBE,
+    HYDRATED_CLIENT_SNAPSHOT,
+    HYDRATED_SERVER_SNAPSHOT,
+  );
   const [pastWebsite, setPastWebsite] = useState(false);
   const [honeypotSuccess, setHoneypotSuccess] = useState(false);
   const [status, setStatus] = useState<"idle" | "error">("idle");
@@ -76,6 +85,7 @@ export function CreateReceptionistForm({
   const [name, setName] = useState("");
   const [organisation, setOrganisation] = useState("");
   const errorId = useId();
+  const formRef = useRef<HTMLFormElement>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const businessUrlRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -192,7 +202,7 @@ export function CreateReceptionistForm({
       <CreateJourneyStepper step={1} headingRef={stepHeadingRef} />
       <p className="mb-6 text-sm text-muted">Next: {createJourneyNextAction(1)}</p>
 
-      <form onSubmit={onStep1} noValidate className="relative overflow-hidden">
+      <form ref={formRef} onSubmit={onStep1} noValidate className="relative overflow-hidden">
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm sm:col-span-2">
             <span className="font-medium text-ink">
@@ -268,11 +278,14 @@ export function CreateReceptionistForm({
           </p>
         ) : null}
         <button
-          type="submit"
+          type="button"
+          disabled={!hydrated}
           data-create-primary-action=""
-          className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
+          data-create-hydrated={hydrated ? "true" : "false"}
+          onClick={() => formRef.current?.requestSubmit()}
+          className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:cursor-wait disabled:opacity-60"
         >
-          Check this website
+          {hydrated ? "Check this website" : "Loading form..."}
         </button>
         <p className="mt-3 text-xs text-muted">
           Pre-launch capture only. Checking this website does not scan a live

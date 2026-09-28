@@ -47,3 +47,14 @@ test("endpoint contract documents durable storage, idempotency and operator noti
   assert.match(contract, /sending-only Resend credential/);
   assert.match(contract, /does \*\*not\*\* write into the live telephony/);
 });
+
+test("create journey distinguishes production delivery from preview receiver", () => {
+  const site = read("src/config/site.ts");
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+  assert.match(site, /export const PRODUCTION_FORM_ENDPOINT/);
+  assert.match(later, /siteConfig\.formEndpoint === PRODUCTION_FORM_ENDPOINT/);
+  assert.match(later, /Request submitted successfully/);
+  assert.match(later, /You will not receive an automatic confirmation email/);
+  assert.match(later, /Test submission completed/);
+  assert.match(later, /No production lead was created and no email was sent/);
+});

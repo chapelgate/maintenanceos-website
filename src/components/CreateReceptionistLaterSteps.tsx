@@ -6,7 +6,7 @@ import { AgentCustomerConfiguration } from "@/components/AgentCustomerConfigurat
 import { AgentReviewGate } from "@/components/AgentReviewGate";
 import { AgentTypeSelector } from "@/components/AgentTypeSelector";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
-import { siteConfig } from "@/config/site";
+import { PRODUCTION_FORM_ENDPOINT, siteConfig } from "@/config/site";
 import {
   agentReviewRevision,
   applyReviewedIdentityToAgentBlueprint,
@@ -211,6 +211,8 @@ export function CreateReceptionistLaterSteps({
   const [promptText, setPromptText] = useState("");
   const [packError, setPackError] = useState<string | null>(null);
   const [configEditPending, setConfigEditPending] = useState(false);
+  const usesProductionLeadReceiver =
+    siteConfig.formEndpoint === PRODUCTION_FORM_ENDPOINT;
   const errorId = useId();
   const progressId = useId();
   const businessNameHintId = useId();
@@ -571,12 +573,15 @@ export function CreateReceptionistLaterSteps({
         className="rounded-md border border-border bg-surface p-6"
         role="status"
       >
-        <p className="font-semibold text-ink">You are on the list</p>
+        <p className="font-semibold text-ink">
+          {usesProductionLeadReceiver
+            ? "Request submitted successfully"
+            : "Test submission completed"}
+        </p>
         <p className="mt-2 text-sm text-muted">
-          Thanks — we recorded your website-to-AI-agent early access request,
-          including the role and draft you reviewed. No live phone number was
-          provisioned, no confirmation email was sent, and no live agent was
-          activated.
+          {usesProductionLeadReceiver
+            ? "Your website-to-AI-agent request was accepted for human follow-up. You will not receive an automatic confirmation email. No live phone number was provisioned and no live agent was activated."
+            : "This preview used the test receiver. No production lead was created and no email was sent. No live phone number was provisioned and no live agent was activated."}
         </p>
       </div>
     );
@@ -1218,8 +1223,10 @@ export function CreateReceptionistLaterSteps({
             </button>
           </div>
           <p className="mt-3 text-xs text-muted">
-            Pre-launch only. This is not a live telephony signup. No live AI
-            agent was activated.
+            {usesProductionLeadReceiver
+              ? "Production lead intake: successful submission is accepted for human follow-up. You will not receive an automatic confirmation email."
+              : "Test preview: submission uses a test receiver. No production lead is created and no email is sent."}
+            {" "}No live AI agent is activated here.
           </p>
         </div>
       ) : null}

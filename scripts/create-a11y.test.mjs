@@ -145,3 +145,15 @@ test("static export setting is unchanged by create a11y polish", () => {
   const config = read("next.config.ts");
   assert.match(config, /output:\s*["']export["']/);
 });
+
+test("/create Step 1 cannot native-submit before hydration", () => {
+  const form = read("src/components/CreateReceptionistForm.tsx");
+  assert.match(form, /useSyncExternalStore\(/);
+  assert.match(form, /HYDRATED_SERVER_SNAPSHOT = \(\) => false/);
+  assert.match(form, /HYDRATED_CLIENT_SNAPSHOT = \(\) => true/);
+  assert.match(form, /type="button"/);
+  assert.match(form, /disabled=\{!hydrated\}/);
+  assert.match(form, /data-create-hydrated=\{hydrated \? "true" : "false"\}/);
+  assert.match(form, /formRef\.current\?\.requestSubmit\(\)/);
+  assert.match(form, /Loading form\.\.\./);
+});
