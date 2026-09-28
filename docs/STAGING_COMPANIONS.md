@@ -114,7 +114,7 @@ Use a **public HTTPS** business URL on `/create/` (for example `https://example.
 | Calendar mock | Local/hosted adapter testing. **Not** a phone booking. Google/Microsoft stay `not_configured` without secrets (this checklist does not add secrets). Do **not** claim Google or Microsoft 365 Calendar is live on staging; OAuth start/callback is loopback-only. `/health` reports `microsoftCalendarLiveOnStaging: false`. |
 | Sandbox scripted | `scripted_demo_complete`, `liveCall: false`. WebRTC / live: `not_configured` / `live_call_forbidden`. **Must not** show a successful live customer call. |
 | Dashboard | Labelled **SAMPLE / DEMO** rows only. Unknown ids stay `session_not_found`. **Must not** present production analytics. |
-| Submit early access | `create_receptionist` lead. No number provisioned. Thank-you copy **must not** say email was sent. |
+| Submit early access | `create_receptionist` lead. No number provisioned. A durable receipt shows the request reference and reports customer confirmation-email handoff as accepted or failed; it must never claim inbox delivery. |
 
 ## What this still is not
 
