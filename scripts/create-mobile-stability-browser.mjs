@@ -135,7 +135,8 @@ const scanner = http.createServer(async (req, res) => {
 });
 
 function exportedFile(urlPath) {
-  const clean = decodeURIComponent(urlPath.split("?")[0]).replace(/^\\/+/, "");
+  const decoded = decodeURIComponent(urlPath.split("?")[0]);
+  const clean = decoded.startsWith("/") ? decoded.slice(1) : decoded;
   if (!clean) return path.join(OUT, "index.html");
   const direct = path.join(OUT, clean);
   if (fs.existsSync(direct) && fs.statSync(direct).isFile()) return direct;
