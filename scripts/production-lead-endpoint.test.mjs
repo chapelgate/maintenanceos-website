@@ -24,10 +24,12 @@ test("lead adapter sends the current page URL and preserves accepted semantics",
   assert.doesNotMatch(adapter, /source: "maintenanceos-website"/);
 });
 
-test("accepted UI remains truthful about visitor email", () => {
+test("accepted UI requires and reports provider-accepted visitor confirmation", () => {
   const form = read("src/components/LeadCaptureForm.tsx");
   assert.match(form, /accepted into the lead queue/);
-  assert.match(form, /No confirmation email was sent/);
+  assert.match(form, /confirmation email was accepted by the mail provider/);
+  assert.match(form, /result\.confirmationEmail !== "accepted"/);
+  assert.match(form, /Reference:/);
   assert.match(form, /Only email is required\. Everything else is optional\./);
 });
 
@@ -54,7 +56,9 @@ test("create journey distinguishes production delivery from preview receiver", (
   assert.match(site, /export const PRODUCTION_FORM_ENDPOINT/);
   assert.match(later, /siteConfig\.formEndpoint === PRODUCTION_FORM_ENDPOINT/);
   assert.match(later, /Request submitted successfully/);
-  assert.match(later, /You will not receive an automatic confirmation email/);
+  assert.match(later, /confirmation email was accepted by the mail provider/);
+  assert.match(later, /result\.confirmationEmail !== "accepted"/);
+  assert.match(later, /receiptReference/);
   assert.match(later, /Test submission completed/);
-  assert.match(later, /No production lead was created and no email was sent/);
+  assert.match(later, /preview receiver accepted the test submission/);
 });

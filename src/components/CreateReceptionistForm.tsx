@@ -1,8 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { FormEvent, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
+import { CreateReceptionistLaterSteps } from "@/components/CreateReceptionistLaterSteps";
 import {
   createJourneyNextAction,
   isValidEmail,
@@ -15,42 +15,11 @@ import type {
   AgentSandboxReviewSubject,
 } from "@/lib/agent-sandbox-qualification";
 
-const CreateReceptionistLaterSteps = dynamic(
-  () =>
-    import("@/components/CreateReceptionistLaterSteps").then(
-      (module) => module.CreateReceptionistLaterSteps,
-    ),
-  { ssr: false, loading: CreateLaterStepsFallback },
-);
-
-function loadLaterSteps() {
-  return import("@/components/CreateReceptionistLaterSteps");
-}
-
 const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
 
 const HYDRATION_SUBSCRIBE = () => () => {};
 const HYDRATED_CLIENT_SNAPSHOT = () => true;
 const HYDRATED_SERVER_SNAPSHOT = () => false;
-
-function CreateLaterStepsFallback() {
-  return (
-    <div
-      className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm"
-      data-lead-type="create_receptionist"
-      data-create-step={2}
-      data-create-next-action="Checking…"
-    >
-      <CreateJourneyStepper step={2} headingRef={null} />
-      <p className="mb-6 text-sm text-muted">Next: Checking…</p>
-      <p className="font-medium text-ink">Checking URL…</p>
-      <p className="mt-3 text-sm text-muted">
-        We only accept a public website address here. Private or internal hosts
-        are not fetched from this page.
-      </p>
-    </div>
-  );
-}
 
 /**
  * Claims-safe website→AI-agent early-access flow.
@@ -90,10 +59,6 @@ export function CreateReceptionistForm({
   const businessUrlRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const didMountStep = useRef(false);
-
-  useEffect(() => {
-    void loadLaterSteps();
-  }, []);
 
   useEffect(() => {
     if (!didMountStep.current) {

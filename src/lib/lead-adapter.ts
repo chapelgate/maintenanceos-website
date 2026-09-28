@@ -10,6 +10,7 @@ export type LeadPayload = {
   message?: string;
   /** Honeypot — must stay empty */
   website?: string;
+  submissionId?: string;
 };
 
 /**
@@ -20,7 +21,12 @@ export type LeadPayload = {
 export type LeadSuccessMode = "local_stub" | "queued_stub" | "accepted";
 
 export type LeadResult =
-  | { ok: true; mode: LeadSuccessMode }
+  | {
+      ok: true;
+      mode: LeadSuccessMode;
+      reference?: string;
+      confirmationEmail?: "accepted";
+    }
   | { ok: false; error: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,6 +46,23 @@ function parseMode(body: unknown): LeadSuccessMode | null {
   if (mode === "queued_stub" || mode === "local_stub") return "queued_stub";
   if (mode === "accepted" || mode === "submitted") return "accepted";
   return null;
+}
+
+
+function parseReference(body: unknown): string | null {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  const reference = (body as { reference?: unknown }).reference;
+  return typeof reference === "string" && reference.trim()
+    ? reference.trim()
+    : null;
+}
+
+function parseConfirmationEmail(body: unknown): "accepted" | null {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  return (body as { confirmation_email?: unknown }).confirmation_email ===
+    "accepted"
+    ? "accepted"
+    : null;
 }
 
 function parseError(body: unknown): string | null {
@@ -98,6 +121,7 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
         message: payload.message?.trim() || undefined,
         source_url:
           typeof window !== "undefined" ? window.location.href : undefined,
+        submission_id: payload.submissionId?.trim() || undefined,
       }),
     });
 
@@ -129,7 +153,12 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
       };
     }
 
-    return { ok: true, mode: parseMode(parsed) ?? "accepted" };
+    return {
+      ok: true,
+      mode: parseMode(parsed) ?? "accepted",
+      reference: parseReference(parsed) ?? undefined,
+      confirmationEmail: parseConfirmationEmail(parsed) ?? undefined,
+    };
   } catch {
     return {
       ok: false,

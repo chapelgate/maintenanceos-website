@@ -79,17 +79,19 @@ HTTP **200**, **201**, or **202**. Body **should** be JSON:
 ```json
 {
   "ok": true,
-  "mode": "accepted"
+  "mode": "accepted",
+  "reference": "durable-record-id",
+  "confirmation_email": "accepted"
 }
 ```
 
 | `mode`         | Meaning | UI rule |
 |----------------|---------|---------|
-| `accepted`     | Lead stored or queued by a real provider | Thank-you copy may say the request was accepted. **Never** say a confirmation or notification email was sent. |
+| `accepted`     | Lead stored by the production provider | Production UI success additionally requires a durable `reference` and `confirmation_email: "accepted"`. |
 | `queued_stub`  | Stored only by a stub/queue with no delivery | Thank-you copy must say **no email was sent**. |
 | `submitted`    | **Deprecated alias** of `accepted` | Treat as `accepted`. Do not interpret as “email sent”. |
 
-If the body is empty, non-JSON, or omits `mode`, the client treats HTTP 2xx as `accepted` and still **must not claim email was sent**.
+If the body is empty, non-JSON, or omits the receipt/confirmation fields, the adapter may parse HTTP 2xx as `accepted`, but production UI must show an incomplete-receipt error rather than a success claim.
 
 The local stub always returns `"mode": "queued_stub"` and `"sends_email": false`.
 
@@ -120,8 +122,9 @@ Suggested status codes:
 ## Email and claims
 
 - The production endpoint persists the lead before requesting an operator notification through the existing Resend account.
-- `mode: accepted` means the lead was durably accepted and the operator-notification request was accepted by the mail provider; it does **not** mean a visitor confirmation email was sent.
-- Client success states (`LeadCaptureForm`) must **never** claim that a visitor confirmation email was sent.
+- It then requests a separate minimal customer acknowledgement to the submitted email address and stores its provider message ID/status on the same durable lead record.
+- Production success requires `reference` plus `confirmation_email: "accepted"`. "Accepted" means the mail provider accepted the message for delivery; it is not a claim that the recipient inbox has already delivered or displayed it.
+- Retries reuse the client `submission_id` and must not intentionally resend operator/customer mail already marked sent.
 - The local stub logs JSON lines to disk and stdout only. It does not call SMTP, transactional APIs, or webhooks.
 
 ## Abuse controls (production)
@@ -161,4 +164,4 @@ The current receiver is additive to the existing Chapelgate RSFM control plane. 
 - Spam: honeypot plus bounded public rate limits.
 - Idempotency: duplicate retries reuse the same durable lead record.
 - Operator follow-up: sending-only Resend credential restricted to the already-verified Chapelgate sending domain.
-- Visitor acknowledgement: the form says the request was accepted and that a human will review it; it does not claim a confirmation email was sent.
+- Visitor acknowledgement: a minimal confirmation email is requested after durable storage; the browser receives the durable reference and provider-acceptance status.

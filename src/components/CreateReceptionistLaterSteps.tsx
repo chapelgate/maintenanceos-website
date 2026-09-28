@@ -190,6 +190,7 @@ export function CreateReceptionistLaterSteps({
   const [step, setStep] = useState<CreateJourneyStep>(2);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [receiptReference, setReceiptReference] = useState<string | null>(null);
   const [progress, setProgress] = useState<CreateScanProgress>("checking");
   const [scanDetail, setScanDetail] = useState<string | null>(null);
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
@@ -226,6 +227,7 @@ export function CreateReceptionistLaterSteps({
   const emailHintId = useId();
   const reviewStatusId = useId();
   const configEditVersionRef = useRef(0);
+  const submissionIdRef = useRef<string | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const errorRef = useRef<HTMLParagraphElement>(null);
 
@@ -535,6 +537,11 @@ export function CreateReceptionistLaterSteps({
       : reviewedBlueprint;
 
     setStatus("submitting");
+    if (!submissionIdRef.current) {
+      submissionIdRef.current =
+        globalThis.crypto?.randomUUID?.() ??
+        `web-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+    }
     const result = await submitLead({
       leadType: "create_receptionist",
       email,
@@ -554,6 +561,7 @@ export function CreateReceptionistLaterSteps({
         receptionist: currentReceptionist,
       }),
       website: "",
+      submissionId: submissionIdRef.current,
     });
 
     if (!result.ok) {
@@ -564,7 +572,99 @@ export function CreateReceptionistLaterSteps({
       setStatus("error");
       return;
     }
+    if (
+      result.mode === "accepted" &&
+      (!result.reference || result.confirmationEmail !== "accepted")
+    ) {
+      setError(
+        "Your request reached the server, but a complete receipt and confirmation-email acknowledgement were not returned. Please retry; the same submission reference will be reused.",
+      );
+      setStatus("error");
+      return;
+    }
+
+    setReceiptReference(result.reference ?? null);
     setStatus("success");
+  }
+
+  function advanceAgentSelection() {
+    clearError();
+    setAgentSelectionError(null);
+    if (!selectedAgentType) {
+      setAgentSelectionError("Choose one agent role to continue.");
+      return;
+    }
+    try {
+      const blueprint = createAgentBlueprintDraft({
+        type: selectedAgentType,
+        businessName: draft.businessName || hostnameBusinessHint(businessUrl),
+        businessUrl,
+        facts,
+      });
+      setAgentBlueprint(blueprint);
+      setCustomerConfiguration(customerConfigurationForBlueprint(blueprint));
+      setStep(4);
+    } catch (selectionError) {
+      setAgentBlueprint(null);
+      setAgentSelectionError(
+        selectionError instanceof Error
+          ? selectionError.message
+          : "The selected agent could not be prepared safely.",
+      );
+    }
+  }
+
+  function generateReviewedConfiguration() {
+    const editVersion = ++configEditVersionRef.current;
+    setConfigEditPending(true);
+    setStatus("idle");
+    clearError();
+    if (!agentBlueprint || !customerConfiguration) {
+      setConfigEditPending(false);
+      setError("Agent configuration is missing. Choose the agent role again.");
+      setStatus("error");
+      return;
+    }
+    void loadAgentConfiguration()
+      .then(({ buildAgentConfiguration }) => {
+        if (editVersion !== configEditVersionRef.current) return;
+        try {
+          const configuredBlueprint = applyCustomerAgentConfiguration(
+            agentBlueprint,
+            customerConfiguration,
+          );
+          const identityBlueprint = applyReviewedIdentityToAgentBlueprint(
+            configuredBlueprint,
+            identityReview,
+          );
+          const configuration = buildAgentConfiguration({
+            blueprint: identityBlueprint,
+            reviewedDraft: draft,
+          });
+          if (editVersion !== configEditVersionRef.current) return;
+          setReviewConfirmedIds([]);
+          setAgentBlueprint(configuration.blueprint);
+          applyBuilt(configuration);
+          setConfigEditPending(false);
+          setStep(5);
+        } catch (configurationError) {
+          setConfigEditPending(false);
+          setError(
+            configurationError instanceof Error
+              ? configurationError.message
+              : "The AI configuration could not be generated safely.",
+          );
+          setStatus("error");
+        }
+      })
+      .catch(() => {
+        if (editVersion !== configEditVersionRef.current) return;
+        setConfigEditPending(false);
+        setError(
+          "The AI configuration module could not be loaded safely. No generated configuration was accepted.",
+        );
+        setStatus("error");
+      });
   }
 
   if (status === "success") {
@@ -580,9 +680,14 @@ export function CreateReceptionistLaterSteps({
         </p>
         <p className="mt-2 text-sm text-muted">
           {usesProductionLeadReceiver
-            ? "Your website-to-AI-agent request was accepted for human follow-up. You will not receive an automatic confirmation email. No live phone number was provisioned and no live agent was activated."
-            : "This preview used the test receiver. No production lead was created and no email was sent. No live phone number was provisioned and no live agent was activated."}
+            ? "Your website-to-AI-agent request was durably accepted and a confirmation email was accepted by the mail provider. No live phone number was provisioned and no live agent was activated."
+            : "This preview receiver accepted the test submission. No live phone number was provisioned and no live agent was activated."}
         </p>
+        {receiptReference ? (
+          <p className="mt-3 text-sm font-medium text-ink">
+            Reference: <span className="font-mono">{receiptReference}</span>
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -680,37 +785,7 @@ export function CreateReceptionistLaterSteps({
       ) : null}
 
       {step === 3 ? (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            clearError();
-            setAgentSelectionError(null);
-            if (!selectedAgentType) {
-              setAgentSelectionError("Choose one agent role to continue.");
-              return;
-            }
-            try {
-              const blueprint = createAgentBlueprintDraft({
-                type: selectedAgentType,
-                businessName: draft.businessName || hostnameBusinessHint(businessUrl),
-                businessUrl,
-                facts,
-              });
-              setAgentBlueprint(blueprint);
-              setCustomerConfiguration(
-                customerConfigurationForBlueprint(blueprint),
-              );
-              setStep(4);
-            } catch (selectionError) {
-              setAgentBlueprint(null);
-              setAgentSelectionError(
-                selectionError instanceof Error
-                  ? selectionError.message
-                  : "The selected agent could not be prepared safely.",
-              );
-            }
-          }}
-        >
+        <div>
           <AgentTypeSelector
             selected={selectedAgentType}
             onSelect={(type) => {
@@ -738,72 +813,20 @@ export function CreateReceptionistLaterSteps({
               Back
             </button>
             <button
-              type="submit"
+              type="button"
               disabled={!selectedAgentType}
               data-create-primary-action=""
+              onClick={advanceAgentSelection}
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
             >
               Configure agent
             </button>
           </div>
-        </form>
+        </div>
       ) : null}
 
       {step === 4 ? (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const editVersion = ++configEditVersionRef.current;
-            setConfigEditPending(true);
-            setStatus("idle");
-            clearError();
-            if (!agentBlueprint || !customerConfiguration) {
-              setConfigEditPending(false);
-              setError(
-                "Agent configuration is missing. Choose the agent role again.",
-              );
-              return;
-            }
-            void loadAgentConfiguration()
-              .then(({ buildAgentConfiguration }) => {
-                if (editVersion !== configEditVersionRef.current) return;
-                try {
-                  const configuredBlueprint = applyCustomerAgentConfiguration(
-                    agentBlueprint,
-                    customerConfiguration,
-                  );
-                  const identityBlueprint = applyReviewedIdentityToAgentBlueprint(
-                    configuredBlueprint,
-                    identityReview,
-                  );
-                  const configuration = buildAgentConfiguration({
-                    blueprint: identityBlueprint,
-                    reviewedDraft: draft,
-                  });
-                  if (editVersion !== configEditVersionRef.current) return;
-                  setReviewConfirmedIds([]);
-                  setAgentBlueprint(configuration.blueprint);
-                  applyBuilt(configuration);
-                  setConfigEditPending(false);
-                  setStep(5);
-                } catch (configurationError) {
-                  setConfigEditPending(false);
-                  setError(
-                    configurationError instanceof Error
-                      ? configurationError.message
-                      : "The AI configuration could not be generated safely.",
-                  );
-                }
-              })
-              .catch(() => {
-                if (editVersion !== configEditVersionRef.current) return;
-                setConfigEditPending(false);
-                setError(
-                  "The AI configuration module could not be loaded safely. No generated configuration was accepted.",
-                );
-              });
-          }}
-        >
+        <div>
           <p className="text-sm text-muted">
             Configure the selected role, then review the business information
             that will be used to generate the final pack. Voice is stored as a
@@ -970,15 +993,16 @@ export function CreateReceptionistLaterSteps({
               Back
             </button>
             <button
-              type="submit"
+              type="button"
               disabled={configEditPending}
               data-create-primary-action=""
+              onClick={generateReviewedConfiguration}
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
             >
               {configEditPending ? "Generating…" : "Generate reviewed configuration"}
             </button>
           </div>
-        </form>
+        </div>
       ) : null}
 
       {step === 5 ? (
@@ -1224,8 +1248,8 @@ export function CreateReceptionistLaterSteps({
           </div>
           <p className="mt-3 text-xs text-muted">
             {usesProductionLeadReceiver
-              ? "Production lead intake: successful submission is accepted for human follow-up. You will not receive an automatic confirmation email."
-              : "Test preview: submission uses a test receiver. No production lead is created and no email is sent."}
+              ? "Production lead intake: success requires durable acceptance, a receipt reference, and confirmation-email acceptance from the backend."
+              : "Test preview: success still requires the receiver to return a receipt reference and confirmation-email acknowledgement."}
             {" "}No live AI agent is activated here.
           </p>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useId, useState } from "react";
+import { FormEvent, useId, useRef, useState } from "react";
 import type { LeadType } from "@/config/site";
 import { submitLead, type LeadSuccessMode } from "@/lib/lead-adapter";
 import { trackWebsiteEvent } from "@/lib/measurement";
@@ -16,7 +16,7 @@ type LeadCaptureFormProps = {
 };
 
 function successCopy(mode: LeadSuccessMode): { title: string; body: string } {
-  // All success paths must stay truthful: accepting a lead ≠ sending email.
+  // Success copy distinguishes local stubs from provider-accepted confirmation email.
   if (mode === "local_stub") {
     return {
       title: "Thank you",
@@ -31,7 +31,7 @@ function successCopy(mode: LeadSuccessMode): { title: string; body: string } {
   }
   return {
     title: "Thank you",
-    body: "Your request was accepted into the lead queue. We will be in touch. No confirmation email was sent.",
+    body: "Your request was accepted into the lead queue and a confirmation email was accepted by the mail provider. We will be in touch.",
   };
 }
 
@@ -50,6 +50,8 @@ export function LeadCaptureForm({
   const [successMode, setSuccessMode] =
     useState<LeadSuccessMode>("local_stub");
   const [error, setError] = useState<string | null>(null);
+  const [receiptReference, setReceiptReference] = useState<string | null>(null);
+  const submissionIdRef = useRef<string | null>(null);
   const errorId = useId();
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -61,6 +63,11 @@ export function LeadCaptureForm({
     if (!website) {
       trackWebsiteEvent({ event: "form_submit_start", leadType });
     }
+    if (!website && !submissionIdRef.current) {
+      submissionIdRef.current =
+        globalThis.crypto?.randomUUID?.() ??
+        `web-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+    }
     const result = await submitLead({
       leadType,
       email: String(fd.get("email") ?? ""),
@@ -69,6 +76,7 @@ export function LeadCaptureForm({
       role: String(fd.get("role") ?? ""),
       message: String(fd.get("message") ?? ""),
       website,
+      submissionId: submissionIdRef.current ?? undefined,
     });
     if (!result.ok) {
       if (!website) {
@@ -81,9 +89,22 @@ export function LeadCaptureForm({
       setStatus("error");
       return;
     }
+    if (
+      !website &&
+      result.mode === "accepted" &&
+      (!result.reference || result.confirmationEmail !== "accepted")
+    ) {
+      trackWebsiteEvent({ event: "form_submit_error", leadType });
+      setError(
+        "Your request reached the server, but a complete receipt and confirmation-email acknowledgement were not returned. Please retry.",
+      );
+      setStatus("error");
+      return;
+    }
     if (!website) {
       trackWebsiteEvent({ event: "form_submit_success", leadType });
     }
+    setReceiptReference(result.reference ?? null);
     setSuccessMode(result.mode);
     setStatus("success");
     e.currentTarget.reset();
@@ -100,6 +121,11 @@ export function LeadCaptureForm({
       >
         <p className="font-semibold text-ink">{copy.title}</p>
         <p className="mt-2 text-sm text-muted">{copy.body}</p>
+        {receiptReference ? (
+          <p className="mt-3 text-sm font-medium text-ink">
+            Reference: <span className="font-mono">{receiptReference}</span>
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -204,7 +230,7 @@ export function LeadCaptureForm({
         {status === "submitting" ? "Submitting…" : submitLabel}
       </button>
       <p className="mt-3 text-xs text-muted">
-        Pre-launch capture only. Submitting this form does not send you email.
+        Pre-launch capture only. Production success includes a confirmation email accepted by the mail provider.
         Legal pages are drafts pending review.
       </p>
     </form>
