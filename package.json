@@ -19,7 +19,7 @@
     "performance:budget": "node scripts/performance-budget.mjs",
     "accessibility:check": "node --test scripts/site-accessibility.test.mjs scripts/create-a11y.test.mjs",
     "form-stub": "node scripts/form-stub-server.mjs",
-    "onboarding-scan": "node --experimental-strip-types packages/onboarding-ingest/src/server.ts",
+    "onboarding-scan": "node --use-system-ca --experimental-strip-types packages/onboarding-ingest/src/server.ts",
     "calendar-adapters": "node --experimental-strip-types packages/calendar-adapters/src/server.ts",
     "sandbox-test-call": "node --experimental-strip-types packages/sandbox-test-call/src/server.ts",
     "conversation-benchmark": "node --experimental-strip-types packages/sandbox-test-call/src/conversation-benchmark.ts",

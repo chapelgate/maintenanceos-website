@@ -29,12 +29,12 @@ test("onboarding-ingest Dockerfile matches npm run onboarding-scan", () => {
   const pkg = JSON.parse(read("package.json"));
   assert.equal(
     pkg.scripts["onboarding-scan"],
-    "node --experimental-strip-types packages/onboarding-ingest/src/server.ts",
+    "node --use-system-ca --experimental-strip-types packages/onboarding-ingest/src/server.ts",
   );
   assert.match(docker, /FROM node:22-bookworm-slim/);
   assert.match(
     docker,
-    /CMD \["node", "--experimental-strip-types", "packages\/onboarding-ingest\/src\/server\.ts"\]/,
+    /CMD \["node", "--use-system-ca", "--experimental-strip-types", "packages\/onboarding-ingest\/src\/server\.ts"\]/,
   );
   assert.match(docker, /ONBOARDING_SCAN_HOST=0\.0\.0\.0/);
   assert.doesNotMatch(docker, /^ENV ONBOARDING_WEB_INGEST=/m);

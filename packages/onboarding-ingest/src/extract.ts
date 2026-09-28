@@ -28,7 +28,7 @@ const ALL_HOURS_RE =
 
 const GENERIC_NAME_RE = /^(home|welcome|untitled|index|website)$/i;
 const GENERIC_NAV_RE =
-  /^(home|homepage|about(?: us)?|our story|contact(?: us)?|blog|news|privacy(?: policy)?|terms(?: of (?:service|use)?)?|login|log in|sign in|sign up|register|cart|basket|checkout|faqs?|gallery|testimonials?|reviews?|careers?|jobs?|book now|get a quote|request a quote|menu|skip to (?:content|main)|cookies?|(?:our )?services)$/i;
+  /^(home|homepage|about(?: us)?|our story|contact(?: us)?|get in touch|stay in touch|support us|connect|links|residents?|blog|news|privacy(?: policy)?|terms(?: of (?:service|use)?)?|login|log in|sign in|sign up|register|cart|basket|checkout|faqs?|gallery|testimonials?|reviews?|careers?|jobs?|book now|get a quote|request a quote|menu|skip to (?:content|main)|cookies?|(?:our )?services)$/i;
 const CTA_QUESTION_RE = /^(ready to|get started|cookie|subscribe|sign up)/i;
 
 const BUSINESS_ITEMTYPE_RE =
@@ -585,7 +585,13 @@ function extractHoursFromVisibleText(html: string): string | undefined {
   let m: RegExpExecArray | null;
   while ((m = day.exec(text))) {
     const window = text.slice(m.index, m.index + 90).replace(/\s+/g, " ").trim();
-    const snippet = (window.split(/[.|]/)[0] ?? window).trim().slice(0, 140);
+    const range = TIME_RANGE_RE.exec(window);
+    if (!range) continue;
+    const rangeEnd = (range.index ?? 0) + range[0].length;
+    const snippet = asUntrustedText(
+      window.slice(0, rangeEnd).replaceAll("�", "–"),
+      140,
+    );
     if (looksLikeHoursPattern(snippet)) hits.push(snippet);
     if (hits.length >= 12) break;
   }
@@ -593,7 +599,16 @@ function extractHoursFromVisibleText(html: string): string | undefined {
     const all = text.match(ALL_HOURS_RE);
     if (all?.[0]) hits.push(asUntrustedText(all[0]));
   }
-  return uniqueJoin(hits);
+  const distinct = hits.filter(
+    (item, index, all) =>
+      !all.some(
+        (other, otherIndex) =>
+          otherIndex != index &&
+          other.length > item.length &&
+          other.toLowerCase().includes(item.toLowerCase()),
+      ),
+  );
+  return uniqueJoin(distinct);
 }
 
 function extractNavBlocks(html: string): string[] {
@@ -621,12 +636,39 @@ export function extractServicesFromNav(html: string): string | undefined {
       if (label.length < 2 || label.length > 60) continue;
       if (GENERIC_NAV_RE.test(label)) continue;
       if (/https?:/i.test(label)) continue;
+      if (isPlausiblePhone(label) || isPlausibleEmail(label)) continue;
       labels.push(label);
     }
   }
   const unique = [...new Set(labels)].slice(0, 12);
   if (unique.length < 2) return undefined;
   return unique.join("\n");
+}
+
+function extractServiceSubheadings(html: string): string | undefined {
+  const heading =
+    /<h([1-3])\b[^>]*>\s*(?:our\s+)?(?:services?|accomm?odation|housing options?|support services?|what we (?:do|offer|provide))\s*<\/h\1>/i;
+  const m = heading.exec(html);
+  if (!m || m.index === undefined) return undefined;
+  const level = Number(m[1]);
+  const after = html.slice(
+    m.index + m[0].length,
+    m.index + m[0].length + 16_000,
+  );
+  const next = after.search(new RegExp(`<h[1-${level}]\\b`, "i"));
+  const section = after.slice(0, next === -1 ? after.length : next);
+  const labels = [
+    ...section.matchAll(/<h([2-4])\b[^>]*>([\s\S]*?)<\/h\1>/gi),
+  ]
+    .map((item) => innerText(item[2]))
+    .filter(
+      (item) =>
+        item.length >= 2 &&
+        item.length <= 80 &&
+        !GENERIC_NAV_RE.test(item),
+    );
+  const unique = [...new Set(labels)].slice(0, 24);
+  return unique.length >= 2 ? unique.join("\n") : undefined;
 }
 
 function looksLikeQuestion(text: string): boolean {
@@ -789,6 +831,94 @@ function safeDecode(raw: string): string {
   }
 }
 
+const UK_POSTCODE_RE =
+  /\b(?:GIR\s?0AA|[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/i;
+
+function headingSectionHtml(
+  html: string,
+  headingRe: RegExp,
+  maxChars = 8000,
+): string | undefined {
+  const heading = new RegExp(
+    `<h([1-4])\\b[^>]*>\\s*(${headingRe.source})\\s*</h\\1>`,
+    "i",
+  );
+  const m = heading.exec(html);
+  if (!m || m.index === undefined) return undefined;
+  const level = Number(m[1]);
+  const after = html.slice(
+    m.index + m[0].length,
+    m.index + m[0].length + maxChars,
+  );
+  const next = after.search(new RegExp(`<h[1-${level}]\\b`, "i"));
+  return after.slice(0, next === -1 ? after.length : next);
+}
+
+function visibleBlocks(fragment: string): string[] {
+  const blocks: string[] = [];
+  for (const match of fragment.matchAll(
+    /<(p|address|li)\b[^>]*>([\s\S]*?)<\/\1>/gi,
+  )) {
+    const text = innerText(match[2]);
+    if (text) blocks.push(text);
+  }
+  return blocks;
+}
+
+function visiblePhoneCandidates(text: string): string[] {
+  const matches =
+    text.match(/(?:\+?44\s?(?:\(0\)\s?)?|0)[\d\s().-]{7,}\d/g) ?? [];
+  return dedupePhones(matches, 8);
+}
+
+function visibleEmailCandidates(text: string): string[] {
+  const matches =
+    text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi) ?? [];
+  return [
+    ...new Set(
+      matches
+        .map((item) => asUntrustedText(item, 120))
+        .filter(isPlausibleEmail),
+    ),
+  ].slice(0, 8);
+}
+
+/**
+ * Conservative fallback for ordinary visible contact blocks when a site does
+ * not use schema.org, tel:, or mailto:. Values are copied only when they
+ * visibly match a phone/email/UK-postcode pattern.
+ */
+export function extractVisibleContactSection(html: string): {
+  phones: string[];
+  emails: string[];
+  locations: string[];
+} {
+  const fragment = headingSectionHtml(
+    html,
+    /contact us|contact details|get in touch|find us/,
+  );
+  if (!fragment) return { phones: [], emails: [], locations: [] };
+
+  const blocks = visibleBlocks(fragment);
+  const phones = dedupePhones(
+    blocks.flatMap((block) => visiblePhoneCandidates(block)),
+    8,
+  );
+  const emails = [
+    ...new Set(blocks.flatMap((block) => visibleEmailCandidates(block))),
+  ].slice(0, 8);
+  const locations = [
+    ...new Set(
+      blocks
+        .filter((block) => UK_POSTCODE_RE.test(block))
+        .map((block) => asUntrustedText(block, 500))
+        .filter((block) => block.length >= 8 && block.length <= 500),
+    ),
+  ].slice(0, 16);
+
+  return { phones, emails, locations };
+}
+
 function formatContactHints(phones: string[], emails: string[]): string | undefined {
   const lines: string[] = [];
   for (const phone of [...new Set(phones)].slice(0, 4)) {
@@ -838,10 +968,15 @@ export function extractSameOriginHrefs(
 
 const USEFUL_PATH = [
   { re: /\/(about|about-us|our-story)\/?$/i, weight: 10 },
-  { re: /\/(services|our-services|what-we-do)\/?$/i, weight: 10 },
+  { re: /\/(services|our-services|what-we-do|what-we-offer)\/?$/i, weight: 10 },
+  {
+    re: /\/(living-with-us|supported-housing|housing-options|accommodation|our-accommodation)\/?$/i,
+    weight: 9,
+  },
   { re: /\/(faq|faqs|frequently-asked-questions)\/?$/i, weight: 10 },
   { re: /\/(hours|opening-hours|openinghours|times)\/?$/i, weight: 9 },
-  { re: /\/(contact|contact-us)\/?$/i, weight: 6 },
+  { re: /\/(contact|contact-us)\/?$/i, weight: 8 },
+  { re: /\/(residents|rough-sleeping|report-rough-sleeping)\/?$/i, weight: 5 },
 ];
 
 export function rankCandidateUrls(urls: string[], origin: URL): string[] {
@@ -854,6 +989,10 @@ export function rankCandidateUrls(urls: string[], origin: URL): string[] {
         return { raw, weight: 0 };
       }
       if (url.origin !== origin.origin) return { raw, weight: 0 };
+      url.hash = "";
+      // Query variants of the same content waste a bounded crawl slot.
+      // Crawl the canonical path once so another useful page can be scanned.
+      url.search = "";
       const path = url.pathname.replace(/\/+$/, "") || "/";
       const originPath = origin.pathname.replace(/\/+$/, "") || "/";
       if (path === "/" || path === originPath) {
@@ -968,6 +1107,20 @@ export function extractDraftFromHtml(
     }
     phones.push(...links.phones);
     emails.push(...links.emails);
+
+    const visibleContact = extractVisibleContactSection(page.html);
+    if (visibleContact.locations.length && !locationMeta) {
+      locationMeta = { source: "heading", confidence: "medium" };
+    }
+    if (
+      (visibleContact.phones.length || visibleContact.emails.length) &&
+      !contactMeta
+    ) {
+      contactMeta = { source: "heading", confidence: "medium" };
+    }
+    locations.push(...visibleContact.locations);
+    phones.push(...visibleContact.phones);
+    emails.push(...visibleContact.emails);
   }
 
   if (!draft.businessName) {
@@ -1077,10 +1230,26 @@ export function extractDraftFromHtml(
     for (const page of pages) {
       const section = headingSection(
         page.html,
-        /our services|services we offer|what we do|what we offer|our work|services/,
+        /our services|services we offer|what we do|what we offer|what we provide|our work|housing options|support services|services/,
       );
       if (section && (section.split("\n").length >= 2 || section.length >= 24)) {
         setField(draft, fieldMeta, "services", section, "heading", "medium");
+        break;
+      }
+    }
+  }
+  if (!draft.services) {
+    for (const page of pages) {
+      const fromHeadings = extractServiceSubheadings(page.html);
+      if (fromHeadings) {
+        setField(
+          draft,
+          fieldMeta,
+          "services",
+          fromHeadings,
+          "heading",
+          "medium",
+        );
         break;
       }
     }

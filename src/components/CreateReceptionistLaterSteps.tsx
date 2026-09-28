@@ -225,10 +225,20 @@ export function CreateReceptionistLaterSteps({
   const reviewStatusId = useId();
   const configEditVersionRef = useRef(0);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     stepHeadingRef.current?.focus();
   }, [step]);
+
+  useEffect(() => {
+    if (status !== "error" || !error) return;
+    const frame = requestAnimationFrame(() => {
+      errorRef.current?.focus({ preventScroll: true });
+      errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [status, error]);
 
   useEffect(() => {
     onDraftChange?.(draft);
@@ -822,7 +832,13 @@ export function CreateReceptionistLaterSteps({
                 : "Complete what you can. We did not invent crawl content for this site."}
           </p>
           {error ? (
-            <p id={errorId} className="mt-3 text-sm text-red-700" role="alert">
+            <p
+              ref={errorRef}
+              id={errorId}
+              tabIndex={-1}
+              className="mt-3 text-sm text-red-700"
+              role="alert"
+            >
               {error}
             </p>
           ) : null}
@@ -1163,7 +1179,13 @@ export function CreateReceptionistLaterSteps({
                 : "The customer review record is not ready."}
           </p>
           {error ? (
-            <p id={errorId} className="mt-3 text-sm text-red-700" role="alert">
+            <p
+              ref={errorRef}
+              id={errorId}
+              tabIndex={-1}
+              className="mt-3 text-sm text-red-700"
+              role="alert"
+            >
               {error}
             </p>
           ) : null}
@@ -1184,17 +1206,7 @@ export function CreateReceptionistLaterSteps({
             </button>
             <button
               type="button"
-              disabled={
-                status === "submitting" ||
-                configEditPending ||
-                Boolean(packError) ||
-                !review?.record.complete ||
-                (siteConfig.sandboxTestCallEnabled &&
-                  !qualificationMatchesReview(
-                    sandboxQualification,
-                    review?.record.revisionId ?? "",
-                  ))
-              }
+              disabled={status === "submitting"}
               aria-describedby={reviewStatusId}
               data-create-primary-action=""
               onClick={() => void onSubmitLead()}

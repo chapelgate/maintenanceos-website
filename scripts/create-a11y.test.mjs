@@ -62,8 +62,19 @@ test("/create final review is explicit and fail-closed", () => {
   assert.match(preview, /data-final-system-prompt="readonly"/);
   assert.match(preview, /\{result\.systemPrompt\}/);
   assert.match(later, /buildAgentReviewRecord/);
-  assert.match(later, /!review\?\.record\.complete/);
-  assert.match(later, /Boolean\(packError\)/);
+  assert.match(
+    later,
+    /Complete every required review confirmation before submitting this configuration\./,
+  );
+  assert.match(
+    later,
+    /Fix the knowledge pack JSON before submitting this configuration\./,
+  );
+  assert.match(later, /disabled=\{status === "submitting"\}/);
+  assert.match(
+    later,
+    /scrollIntoView\(\{ behavior: "smooth", block: "center" \}\)/,
+  );
   assert.match(review, /fact:businessName/);
   assert.match(review, /fact:website/);
   assert.match(review, /low_confidence/);

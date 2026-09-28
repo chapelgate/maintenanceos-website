@@ -5,7 +5,7 @@
 # (legacy / do not use).
 #
 # Same process as repo-root `npm run onboarding-scan`:
-#   node --experimental-strip-types packages/onboarding-ingest/src/server.ts
+#   node --use-system-ca --experimental-strip-types packages/onboarding-ingest/src/server.ts
 #
 # Build from the website repo root:
 #   docker build -f packages/onboarding-ingest/Dockerfile -t mos-onboarding-scan .
@@ -30,4 +30,4 @@ EXPOSE 8788
 HEALTHCHECK --interval=10s --timeout=3s --start-period=8s --retries=6 \
   CMD node -e "const p=process.env.ONBOARDING_SCAN_PORT||process.env.PORT||'8788'; fetch('http://127.0.0.1:'+p+'/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
-CMD ["node", "--experimental-strip-types", "packages/onboarding-ingest/src/server.ts"]
+CMD ["node", "--use-system-ca", "--experimental-strip-types", "packages/onboarding-ingest/src/server.ts"]

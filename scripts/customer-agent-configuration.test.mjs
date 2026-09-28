@@ -41,3 +41,17 @@ test("configuration uses approved role maxima and cannot expand permissions", ()
   assert.match(config, /Requested action is not available for this agent role/);
   assert.match(config, /Human transfer is not available for this agent role/);
 });
+
+
+test("final submit is clickable so unmet review requirements fail visibly", () => {
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+  assert.match(later, /disabled=\{status === "submitting"\}/);
+  assert.match(
+    later,
+    /Complete every required review confirmation before submitting this configuration\./,
+  );
+  assert.doesNotMatch(
+    later,
+    /disabled=\{[\s\S]{0,500}!review\?\.record\.complete/,
+  );
+});
