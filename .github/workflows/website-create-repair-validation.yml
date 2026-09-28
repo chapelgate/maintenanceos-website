@@ -35,8 +35,10 @@ jobs:
             npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts src/lib/lead-adapter.test.ts;
             npm run accessibility:check;
             npx tsc --noEmit;
-            npm run build;
-            BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
+            NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:18788/scan NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:18789/leads npm run build;
+            test "$(find out -name index.html -type f | wc -l)" -eq 30;
+            BROWSER_PATH=/usr/bin/chromium npm run browser:smoke;
+            BROWSER_PATH=/usr/bin/chromium node scripts/create-mobile-browser-acceptance.mjs
           '
       - name: Patch integrity
         run: git diff --check e976d086652ce5b4e8ce51cf32e535d2e450db92..HEAD
