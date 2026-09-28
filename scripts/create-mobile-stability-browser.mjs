@@ -251,7 +251,7 @@ async function waitFor(cdp, expression, timeout = 15000) {
     if (cdp.handlerError) throw cdp.handlerError;
     try {
       if (await evalValue(cdp, expression)) return;
-    } catch (error) {
+    } catch {
       if (cdp.handlerError) throw cdp.handlerError;
     }
     await delay(100);
