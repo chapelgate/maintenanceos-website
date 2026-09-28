@@ -17,7 +17,7 @@ export const LEAD_TYPES = new Set([
   "contact",
   "create_receptionist",
 ]);
-export const MAX_BODY_BYTES = 32 * 1024;
+export const MAX_BODY_BYTES = 96 * 1024;
 export const DEFAULT_HOST = "127.0.0.1";
 export const DEFAULT_PORT = 8787;
 
