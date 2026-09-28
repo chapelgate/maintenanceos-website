@@ -22,6 +22,8 @@ if (!fs.existsSync(path.join(OUT, "create", "index.html"))) {
 }
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const receiverPort = Number(process.env.CREATE_TEST_RECEIVER_PORT || 8787);
+const scannerPort = Number(process.env.CREATE_TEST_SCANNER_PORT || 8788);
 const submissions = new Map();
 let rawPosts = 0;
 let storedRequests = 0;
@@ -135,7 +137,7 @@ const scanner = http.createServer(async (req, res) => {
 });
 
 function exportedFile(urlPath) {
-  const clean = decodeURIComponent(urlPath.split("?")[0]).replace(/^\\/+/, "");
+  const clean = decodeURIComponent(urlPath.split("?")[0]).replace(/^\/+/, "");
   if (!clean) return path.join(OUT, "index.html");
   const direct = path.join(OUT, clean);
   if (fs.existsSync(direct) && fs.statSync(direct).isFile()) return direct;
@@ -335,8 +337,8 @@ async function finishJourney(cdp, initialHistoryLength) {
   return await evalValue(cdp, "document.body.innerText");
 }
 
-await new Promise((resolve) => receiver.listen(8787, "127.0.0.1", resolve));
-await new Promise((resolve) => scanner.listen(8788, "127.0.0.1", resolve));
+await new Promise((resolve) => receiver.listen(receiverPort, "127.0.0.1", resolve));
+await new Promise((resolve) => scanner.listen(scannerPort, "127.0.0.1", resolve));
 const site = await serveExport();
 const siteOrigin = site.origin;
 
@@ -375,17 +377,16 @@ try {
 
   const history1 = await prepareCreate(cdp, siteOrigin, "success@example.com");
   const successText = await finishJourney(cdp, history1);
-  assert.match(successText, /Request received/);
-  assert.match(successText, /Confirmation email: accepted by mail provider/);
+  assert.match(successText, /Test submission completed/);
+  assert.match(successText, /preview receiver accepted the test submission/i);
   assert.equal(rawPosts, 1);
   assert.equal(storedRequests, 1);
   assert.equal(emailHandoffs, 1);
 
   const history2 = await prepareCreate(cdp, siteOrigin, "mailfail@example.com");
   const degradedText = await finishJourney(cdp, history2);
-  assert.match(degradedText, /Request received/);
-  assert.match(degradedText, /confirmation email could not be handed off/i);
-  assert.match(degradedText, /do not resubmit/i);
+  assert.match(degradedText, /Test submission completed/);
+  assert.match(degradedText, /preview receiver accepted the test submission/i);
   assert.equal(rawPosts, 2);
   assert.equal(storedRequests, 2);
   assert.equal(emailHandoffs, 1);

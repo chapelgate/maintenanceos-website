@@ -146,12 +146,22 @@ test("POST slots/bookings use the mock adapter when enabled", async () => {
 
 test("listen-shaped server keeps mock bookings across list + book + conflict", async () => {
   await withServer({ adaptersEnabled: true }, async (base) => {
+    // Use a future weekday so this regression does not expire as wall-clock time advances.
+    const from = new Date();
+    from.setUTCDate(from.getUTCDate() + 1);
+    while (from.getUTCDay() === 0 || from.getUTCDay() === 6) {
+      from.setUTCDate(from.getUTCDate() + 1);
+    }
+    from.setUTCHours(0, 0, 0, 0);
+    const to = new Date(from);
+    to.setUTCDate(to.getUTCDate() + 1);
+
     const slotsRes = await fetch(`${base}/v1/calendar/slots`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "2026-09-28T00:00:00.000Z",
-        to: "2026-09-29T00:00:00.000Z",
+        from: from.toISOString(),
+        to: to.toISOString(),
         timezone: "Europe/London",
       }),
     });
