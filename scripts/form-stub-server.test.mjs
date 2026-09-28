@@ -120,6 +120,25 @@ test("POST /leads create_receptionist type is accepted", async () => {
   });
 });
 
+test("POST /leads accepts reviewed create payload above legacy 32 KiB cap", async () => {
+  await withServer(async ({ base, dataFile }) => {
+    const message = "x".repeat(60 * 1024);
+    const res = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lead_type: "create_receptionist",
+        email: "ops@example.com",
+        message,
+        submission_id: "create-stub-large-001",
+      }),
+    });
+    assert.equal(res.status, 200);
+    assert.equal((await res.json()).mode, "queued_stub");
+    const stored = JSON.parse(fs.readFileSync(dataFile, "utf8").trim());
+    assert.equal(stored.message.length, message.length);
+  });
+});
 test("POST /leads contact type is accepted", async () => {
   await withServer(async ({ base }) => {
     const res = await fetch(`${base}/leads`, {
