@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
-import { CommercialProof } from "@/components/CommercialProof";\nimport { CustomerAgentOffers } from "@/components/CustomerAgentOffers";
+import { CommercialProof } from "@/components/CommercialProof";
+import { CustomerAgentOffers } from "@/components/CustomerAgentOffers";
 import { HonestyBanner } from "@/components/HonestyBanner";
 import { HomeHeroVisual } from "@/components/HomeHeroVisual";
 import { HomeIndustries } from "@/components/HomeIndustries";
@@ -155,7 +156,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <CustomerAgentOffers />\n\n      <CommercialProof />
+      <CustomerAgentOffers />
+
+      <CommercialProof />
 
       <HomeLifeBand />
 
