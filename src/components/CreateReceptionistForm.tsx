@@ -24,7 +24,7 @@ const HYDRATED_SERVER_SNAPSHOT = () => false;
 /**
  * Claims-safe website→AI-agent early-access flow.
  * Business URL goes in `message` because `website` is the honeypot on submitLead.
- * Steps 2–5 load after the URL check so First Load JS stays the website island.
+ * Step 1 cannot submit natively before hydration; the full customer journey ships in one reliable client bundle.
  */
 export function CreateReceptionistForm({
   onDraftChange,
