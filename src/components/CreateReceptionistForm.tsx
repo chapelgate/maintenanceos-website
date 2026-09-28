@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
 import { CreateReceptionistLaterSteps } from "@/components/CreateReceptionistLaterSteps";
 import {
@@ -54,10 +54,12 @@ export function CreateReceptionistForm({
   const [name, setName] = useState("");
   const [organisation, setOrganisation] = useState("");
   const errorId = useId();
-  const formRef = useRef<HTMLFormElement>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const businessUrlRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
+  const organisationRef = useRef<HTMLInputElement>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const didMountStep = useRef(false);
 
   useEffect(() => {
@@ -85,17 +87,16 @@ export function CreateReceptionistForm({
     setErrorField(null);
   }
 
-  function onStep1(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function onStep1() {
+    if (!hydrated) return;
     clearError();
-    const fd = new FormData(e.currentTarget);
 
-    if (String(fd.get("website") ?? "").trim()) {
+    if ((honeypotRef.current?.value ?? "").trim()) {
       setHoneypotSuccess(true);
       return;
     }
 
-    const nextUrl = normalisePublicUrl(String(fd.get("businessUrl") ?? ""));
+    const nextUrl = normalisePublicUrl(businessUrlRef.current?.value ?? "");
     if (!nextUrl) {
       setError(
         "Enter a valid public website URL (for example https://example.com).",
@@ -104,7 +105,7 @@ export function CreateReceptionistForm({
       setStatus("error");
       return;
     }
-    const nextEmail = String(fd.get("email") ?? "").trim();
+    const nextEmail = (emailRef.current?.value ?? "").trim();
     if (!isValidEmail(nextEmail)) {
       setError("Please enter a valid email address.");
       setErrorField("email");
@@ -114,8 +115,8 @@ export function CreateReceptionistForm({
 
     setBusinessUrl(nextUrl);
     setEmail(nextEmail);
-    setName(String(fd.get("name") ?? "").trim());
-    setOrganisation(String(fd.get("organisation") ?? "").trim());
+    setName((nameRef.current?.value ?? "").trim());
+    setOrganisation((organisationRef.current?.value ?? "").trim());
     setStatus("idle");
     setPastWebsite(true);
   }
@@ -167,7 +168,14 @@ export function CreateReceptionistForm({
       <CreateJourneyStepper step={1} headingRef={stepHeadingRef} />
       <p className="mb-6 text-sm text-muted">Next: {createJourneyNextAction(1)}</p>
 
-      <form ref={formRef} onSubmit={onStep1} noValidate className="relative overflow-hidden">
+      <div
+        className="relative overflow-hidden"
+        onKeyDown={(event) => {
+          if (event.key !== "Enter" || !hydrated) return;
+          event.preventDefault();
+          onStep1();
+        }}
+      >
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm sm:col-span-2">
             <span className="font-medium text-ink">
@@ -192,6 +200,7 @@ export function CreateReceptionistForm({
           <label className="block text-sm">
             <span className="font-medium text-ink">Name</span>
             <input
+              ref={nameRef}
               name="name"
               type="text"
               autoComplete="name"
@@ -218,6 +227,7 @@ export function CreateReceptionistForm({
           <label className="block text-sm sm:col-span-2">
             <span className="font-medium text-ink">Organisation</span>
             <input
+              ref={organisationRef}
               name="organisation"
               type="text"
               autoComplete="organization"
@@ -230,6 +240,7 @@ export function CreateReceptionistForm({
           <label>
             Website
             <input
+              ref={honeypotRef}
               name="website"
               type="text"
               tabIndex={-1}
@@ -247,7 +258,7 @@ export function CreateReceptionistForm({
           disabled={!hydrated}
           data-create-primary-action=""
           data-create-hydrated={hydrated ? "true" : "false"}
-          onClick={() => formRef.current?.requestSubmit()}
+          onClick={onStep1}
           className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:cursor-wait disabled:opacity-60"
         >
           {hydrated ? "Check this website" : "Loading form..."}
@@ -256,7 +267,7 @@ export function CreateReceptionistForm({
           Pre-launch capture only. Checking this website does not scan a live
           phone line and does not create a receptionist.
         </p>
-      </form>
+      </div>
     </div>
   );
 }

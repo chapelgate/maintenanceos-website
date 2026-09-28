@@ -55,10 +55,13 @@ test("create journey distinguishes production delivery from preview receiver", (
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
   assert.match(site, /export const PRODUCTION_FORM_ENDPOINT/);
   assert.match(later, /siteConfig\.formEndpoint === PRODUCTION_FORM_ENDPOINT/);
-  assert.match(later, /Request submitted successfully/);
+  assert.match(later, /Request received/);
   assert.match(later, /confirmation email was accepted by the mail provider/);
+  assert.match(later, /confirmation email could not be handed off/);
+  assert.match(later, /submissionInFlightRef/);
   assert.match(later, /usesProductionLeadReceiver[\s\S]{0,160}result\.mode === "accepted"/);
   assert.match(later, /result\.confirmationEmail !== "accepted"/);
+  assert.match(later, /result\.confirmationEmail !== "failed"/);
   assert.match(later, /receiptReference/);
   assert.match(later, /Test submission completed/);
   assert.match(later, /preview receiver accepted the test submission/);

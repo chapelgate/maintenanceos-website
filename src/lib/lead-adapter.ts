@@ -25,7 +25,7 @@ export type LeadResult =
       ok: true;
       mode: LeadSuccessMode;
       reference?: string;
-      confirmationEmail?: "accepted";
+      confirmationEmail?: "accepted" | "failed";
     }
   | { ok: false; error: string };
 
@@ -57,18 +57,22 @@ function parseReference(body: unknown): string | null {
     : null;
 }
 
-function parseConfirmationEmail(body: unknown): "accepted" | null {
+function parseConfirmationEmail(body: unknown): "accepted" | "failed" | null {
   if (!body || typeof body !== "object" || Array.isArray(body)) return null;
-  return (body as { confirmation_email?: unknown }).confirmation_email ===
-    "accepted"
-    ? "accepted"
-    : null;
+  const value = (body as { confirmation_email?: unknown }).confirmation_email;
+  return value === "accepted" || value === "failed" ? value : null;
 }
 
 function parseError(body: unknown): string | null {
   if (!body || typeof body !== "object" || Array.isArray(body)) return null;
-  const error = (body as { error?: unknown }).error;
-  return typeof error === "string" && error.trim() ? error.trim() : null;
+  const record = body as { error?: unknown; detail?: unknown };
+  const error =
+    typeof record.error === "string"
+      ? record.error
+      : typeof record.detail === "string"
+        ? record.detail
+        : null;
+  return error && error.trim() ? error.trim() : null;
 }
 
 function bodyOkFlag(body: unknown): boolean | null {

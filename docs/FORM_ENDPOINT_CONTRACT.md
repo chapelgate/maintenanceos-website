@@ -40,7 +40,7 @@ The effective form endpoint must be an **absolute** `http:` or `https:` URL (pro
 | `name`           | no       | string    | Omitted if empty |
 | `organisation`   | no       | string    | Omitted if empty |
 | `role`           | no       | string    | Visitor-selected role slug |
-| `message`        | no       | string    | Used on early demo and contact |
+| `message`        | no       | string    | Bounded configuration/lead payload; production receiver accepts up to 64,000 characters |
 | `source_url`     | no       | string    | Current public page URL, used for operator context |
 | `website`        | no       | string    | **Honeypot.** If present and non-empty, accept and discard. Do not tip off bots. |
 
@@ -87,7 +87,7 @@ HTTP **200**, **201**, or **202**. Body **should** be JSON:
 
 | `mode`         | Meaning | UI rule |
 |----------------|---------|---------|
-| `accepted`     | Lead stored by the production provider | Production UI success additionally requires a durable `reference` and `confirmation_email: "accepted"`. |
+| `accepted`     | Lead stored by the production provider | Production UI requires a durable `reference`; `confirmation_email` is `"accepted"` or `"failed"` so a stored request is never discarded because mail handoff failed. |
 | `queued_stub`  | Stored only by a stub/queue with no delivery | Thank-you copy must say **no email was sent**. |
 | `submitted`    | **Deprecated alias** of `accepted` | Treat as `accepted`. Do not interpret as “email sent”. |
 
@@ -123,7 +123,7 @@ Suggested status codes:
 
 - The production endpoint persists the lead before requesting an operator notification through the existing Resend account.
 - It then requests a separate minimal customer acknowledgement to the submitted email address and stores its provider message ID/status on the same durable lead record.
-- Production success requires `reference` plus `confirmation_email: "accepted"`. "Accepted" means the mail provider accepted the message for delivery; it is not a claim that the recipient inbox has already delivered or displayed it.
+- A durable production receipt requires `reference`. `confirmation_email: "accepted"` means the mail provider accepted the acknowledgement for delivery; `"failed"` means the request is still stored but the acknowledgement handoff failed. The UI must say this explicitly and must not ask the customer to resubmit a stored request.
 - Retries reuse the client `submission_id` and must not intentionally resend operator/customer mail already marked sent.
 - The local stub logs JSON lines to disk and stdout only. It does not call SMTP, transactional APIs, or webhooks.
 
@@ -132,7 +132,7 @@ Suggested status codes:
 Minimum expected of a real endpoint:
 
 - Drop honeypot (`website`) silently with 2xx + `queued_stub` or equivalent discard.
-- Cap body size (32 KiB is enough).
+- Keep public lead bodies bounded. The current receiver bounds the configuration message at 64,000 characters and remains rate-limited.
 - Rate-limit public submissions. The current production route uses a global bucket plus a privacy-preserving hashed-email bucket.
 - Do not write leads into the product telephony / work-order systems (`WEBSITE_ARCHITECTURE.md`).
 

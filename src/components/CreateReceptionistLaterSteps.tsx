@@ -191,6 +191,7 @@ export function CreateReceptionistLaterSteps({
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [receiptReference, setReceiptReference] = useState<string | null>(null);
+  const [receiptEmailStatus, setReceiptEmailStatus] = useState<"accepted" | "failed" | null>(null);
   const [progress, setProgress] = useState<CreateScanProgress>("checking");
   const [scanDetail, setScanDetail] = useState<string | null>(null);
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
@@ -228,6 +229,7 @@ export function CreateReceptionistLaterSteps({
   const reviewStatusId = useId();
   const configEditVersionRef = useRef(0);
   const submissionIdRef = useRef<string | null>(null);
+  const submissionInFlightRef = useRef(false);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const errorRef = useRef<HTMLParagraphElement>(null);
 
@@ -536,6 +538,8 @@ export function CreateReceptionistLaterSteps({
       ? sandboxQualification!.blueprint
       : reviewedBlueprint;
 
+    if (submissionInFlightRef.current) return;
+    submissionInFlightRef.current = true;
     setStatus("submitting");
     if (!submissionIdRef.current) {
       submissionIdRef.current =
@@ -565,6 +569,7 @@ export function CreateReceptionistLaterSteps({
     });
 
     if (!result.ok) {
+      submissionInFlightRef.current = false;
       setError(
         result.error ||
           "We could not submit just now. Please try again shortly.",
@@ -575,16 +580,20 @@ export function CreateReceptionistLaterSteps({
     if (
       usesProductionLeadReceiver &&
       result.mode === "accepted" &&
-      (!result.reference || result.confirmationEmail !== "accepted")
+      (!result.reference ||
+        (result.confirmationEmail !== "accepted" &&
+          result.confirmationEmail !== "failed"))
     ) {
+      submissionInFlightRef.current = false;
       setError(
-        "Your request reached the server, but a complete receipt and confirmation-email acknowledgement were not returned. Please retry; the same submission reference will be reused.",
+        "Your request reached the server, but a complete durable receipt was not returned. Please retry; the same submission reference will be reused.",
       );
       setStatus("error");
       return;
     }
 
     setReceiptReference(result.reference ?? null);
+    setReceiptEmailStatus(result.confirmationEmail ?? null);
     setStatus("success");
   }
 
@@ -676,18 +685,23 @@ export function CreateReceptionistLaterSteps({
         data-create-submit-state="success"
       >
         <p className="font-semibold text-ink">
-          {usesProductionLeadReceiver
-            ? "Request submitted successfully"
-            : "Test submission completed"}
+          {usesProductionLeadReceiver ? "Request received" : "Test submission completed"}
         </p>
         <p className="mt-2 text-sm text-muted">
           {usesProductionLeadReceiver
-            ? "Your website-to-AI-agent request was durably accepted and a confirmation email was accepted by the mail provider. No live phone number was provisioned and no live agent was activated."
+            ? receiptEmailStatus === "failed"
+              ? "Your website-to-AI-agent request was durably recorded, but the confirmation email could not be handed off. Your request is still saved; do not resubmit. No live phone number was provisioned and no live agent was activated."
+              : "Your website-to-AI-agent request was durably recorded and a confirmation email was accepted by the mail provider. No live phone number was provisioned and no live agent was activated."
             : "This preview receiver accepted the test submission. This preview does not send a confirmation email. No live phone number was provisioned and no live agent was activated."}
         </p>
         {receiptReference ? (
           <p className="mt-3 text-sm font-medium text-ink">
             Reference: <span className="font-mono">{receiptReference}</span>
+          </p>
+        ) : null}
+        {usesProductionLeadReceiver ? (
+          <p className="mt-2 text-sm text-muted">
+            Confirmation email: {receiptEmailStatus === "failed" ? "not sent" : "accepted by mail provider"}
           </p>
         ) : null}
       </div>
