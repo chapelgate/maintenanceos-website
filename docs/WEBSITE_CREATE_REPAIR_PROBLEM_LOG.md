@@ -30,3 +30,7 @@ Scope: MaintenanceOS website `/create` integration only. No live phone-line, Twi
 ## Failed / unavailable approaches
 - Railway AI-agent diagnostic was unavailable because its usage limit was reached; direct service config/source/log inspection supplied the required evidence instead.
 - Local Desktop Commander and Opera browser connectors were offline during initial diagnosis, so the possibly uncommitted local hydration experiment has not been overwritten or assumed present.
+
+## Candidate branch checkpoint
+- Website candidate branch: `website/mobile-submit-email-20260928`.
+- Frozen rollback remains `e976d086652ce5b4e8ce51cf32e535d2e450db92`; no force-update or edits were made to the frozen branch.
