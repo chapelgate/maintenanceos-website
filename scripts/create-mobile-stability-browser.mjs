@@ -22,12 +22,15 @@ if (!fs.existsSync(path.join(OUT, "create", "index.html"))) {
 }
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const productionContractMode = process.env.CREATE_TEST_PRODUCTION_CONTRACT === "1";
+const productionLeadUrl = "https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads";
 const receiverPort = Number(process.env.CREATE_TEST_RECEIVER_PORT || 8787);
 const scannerPort = Number(process.env.CREATE_TEST_SCANNER_PORT || 8788);
 const submissions = new Map();
 let rawPosts = 0;
 let storedRequests = 0;
 let emailHandoffs = 0;
+const receiverResponseCodes = [];
 
 function sendJson(res, status, body, origin) {
   res.writeHead(status, {
@@ -180,6 +183,8 @@ class Cdp {
     this.nextId = 1;
     this.pending = new Map();
     this.events = [];
+    this.fetchHandler = null;
+    this.handlerError = null;
     ws.addEventListener("message", (event) => {
       const msg = JSON.parse(String(event.data));
       if (msg.id && this.pending.has(msg.id)) {
@@ -189,8 +194,16 @@ class Cdp {
         else item.resolve(msg.result);
         return;
       }
+      if (msg.method === "Fetch.requestPaused" && this.fetchHandler) {
+        Promise.resolve(this.fetchHandler(msg.params)).catch((error) => {
+          this.handlerError = error;
+        });
+      }
       if (msg.method) this.events.push(msg);
     });
+  }
+  setFetchHandler(handler) {
+    this.fetchHandler = handler;
   }
   send(method, params = {}) {
     const id = this.nextId++;
@@ -235,11 +248,15 @@ async function evalValue(cdp, expression) {
 async function waitFor(cdp, expression, timeout = 15000) {
   const deadline = Date.now() + timeout;
   while (Date.now() < deadline) {
+    if (cdp.handlerError) throw cdp.handlerError;
     try {
       if (await evalValue(cdp, expression)) return;
-    } catch {}
+    } catch (error) {
+      if (cdp.handlerError) throw cdp.handlerError;
+    }
     await delay(100);
   }
+  if (cdp.handlerError) throw cdp.handlerError;
   throw new Error("timed out waiting for: " + expression);
 }
 
@@ -257,6 +274,79 @@ async function clickPrimary(cdp, doubleTap = false) {
     "(() => { const b=document.querySelector('[data-create-primary-action]');" +
     "if(!b)return false;b.click();" + (doubleTap ? "b.click();" : "") + "return true;})()";
   assert.equal(await evalValue(cdp, expression), true);
+}
+
+async function fulfillProductionLeadRequest(cdp, params, siteOrigin) {
+  const request = params.request || {};
+  if (request.url !== productionLeadUrl) {
+    await cdp.send("Fetch.continueRequest", { requestId: params.requestId });
+    return;
+  }
+
+  const corsHeaders = [
+    { name: "access-control-allow-origin", value: siteOrigin },
+    { name: "access-control-allow-methods", value: "POST, OPTIONS" },
+    { name: "access-control-allow-headers", value: "Content-Type, Accept" },
+    { name: "cache-control", value: "no-store" },
+  ];
+  if (request.method === "OPTIONS") {
+    await cdp.send("Fetch.fulfillRequest", {
+      requestId: params.requestId,
+      responseCode: 204,
+      responseHeaders: corsHeaders,
+    });
+    return;
+  }
+
+  assert.equal(request.method, "POST");
+  rawPosts += 1;
+  const body = JSON.parse(request.postData || "{}");
+  const submissionId = String(body.submission_id || "");
+  assert.match(submissionId, /^[A-Za-z0-9_.:-]{8,128}$/);
+  assert.ok(String(body.message || "").length > 3000, "create payload must exceed old 3,000-char limit");
+
+  let record = submissions.get(submissionId);
+  if (!record) {
+    storedRequests += 1;
+    const failedEmail = String(body.email || "").toLowerCase() === "mailfail@example.com";
+    record = {
+      reference: "test-" + submissionId.slice(0, 12),
+      confirmation: failedEmail ? "failed" : "accepted",
+    };
+    submissions.set(submissionId, record);
+    if (!failedEmail) emailHandoffs += 1;
+  }
+
+  const degraded = record.confirmation === "failed";
+  receiverResponseCodes.push(degraded ? 202 : 200);
+  const payload = degraded
+    ? {
+        ok: true,
+        mode: "accepted",
+        success: true,
+        message: "Request received; confirmation email is temporarily unavailable.",
+        reference: record.reference,
+        confirmation_email: "failed",
+      }
+    : {
+        ok: true,
+        mode: "accepted",
+        success: true,
+        message: "Thanks — your request has been received. A human will review it.",
+        reference: record.reference,
+        confirmation_email: "accepted",
+      };
+
+  await delay(250);
+  await cdp.send("Fetch.fulfillRequest", {
+    requestId: params.requestId,
+    responseCode: degraded ? 202 : 200,
+    responseHeaders: [
+      ...corsHeaders,
+      { name: "content-type", value: "application/json; charset=utf-8" },
+    ],
+    body: Buffer.from(JSON.stringify(payload)).toString("base64"),
+  });
 }
 
 async function prepareCreate(cdp, siteOrigin, email, businessUrl = "https://alleygates.co.uk") {
@@ -337,7 +427,9 @@ async function finishJourney(cdp, initialHistoryLength) {
   return await evalValue(cdp, "document.body.innerText");
 }
 
-await new Promise((resolve) => receiver.listen(receiverPort, "127.0.0.1", resolve));
+if (!productionContractMode) {
+  await new Promise((resolve) => receiver.listen(receiverPort, "127.0.0.1", resolve));
+}
 await new Promise((resolve) => scanner.listen(scannerPort, "127.0.0.1", resolve));
 const site = await serveExport();
 const siteOrigin = site.origin;
@@ -363,6 +455,12 @@ try {
   await cdp.send("Page.enable");
   await cdp.send("Runtime.enable");
   await cdp.send("Network.enable");
+  if (productionContractMode) {
+    cdp.setFetchHandler((params) => fulfillProductionLeadRequest(cdp, params, siteOrigin));
+    await cdp.send("Fetch.enable", {
+      patterns: [{ urlPattern: productionLeadUrl + "*", requestStage: "Request" }],
+    });
+  }
   await cdp.send("Emulation.setDeviceMetricsOverride", {
     width: 390, height: 844, deviceScaleFactor: 3, mobile: true
   });
@@ -377,16 +475,28 @@ try {
 
   const history1 = await prepareCreate(cdp, siteOrigin, "success@example.com");
   const successText = await finishJourney(cdp, history1);
-  assert.match(successText, /Test submission completed/);
-  assert.match(successText, /preview receiver accepted the test submission/i);
+  if (productionContractMode) {
+    assert.match(successText, /Request received/);
+    assert.match(successText, /confirmation email was accepted by the mail provider/i);
+  } else {
+    assert.match(successText, /Test submission completed/);
+    assert.match(successText, /preview receiver accepted the test submission/i);
+  }
   assert.equal(rawPosts, 1);
   assert.equal(storedRequests, 1);
   assert.equal(emailHandoffs, 1);
 
   const history2 = await prepareCreate(cdp, siteOrigin, "mailfail@example.com");
   const degradedText = await finishJourney(cdp, history2);
-  assert.match(degradedText, /Test submission completed/);
-  assert.match(degradedText, /preview receiver accepted the test submission/i);
+  if (productionContractMode) {
+    assert.match(degradedText, /Request received/);
+    assert.match(degradedText, /confirmation email could not be handed off/i);
+    assert.match(degradedText, /do not resubmit/i);
+    assert.deepEqual(receiverResponseCodes, [200, 202]);
+  } else {
+    assert.match(degradedText, /Test submission completed/);
+    assert.match(degradedText, /preview receiver accepted the test submission/i);
+  }
   assert.equal(rawPosts, 2);
   assert.equal(storedRequests, 2);
   assert.equal(emailHandoffs, 1);
@@ -410,6 +520,8 @@ try {
     ok: true,
     browser: BROWSER,
     siteOrigin,
+    productionContractMode,
+    receiverResponseCodes,
     mobileViewport: "390x844@3",
     cpuThrottle: 6,
     networkLatencyMs: 250,
@@ -423,7 +535,7 @@ try {
 } finally {
   try { if (cdp) cdp.ws.close(); } catch {}
   child.kill("SIGTERM");
-  receiver.close();
+  if (!productionContractMode) receiver.close();
   scanner.close();
   site.server.close();
   await delay(300);
