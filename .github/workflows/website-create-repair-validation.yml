@@ -19,8 +19,10 @@ jobs:
           persist-credentials: false
       - name: Node, build and Chromium validation in isolated container
         run: |
-          docker run --rm --shm-size=1g -v "$PWD:/work" -w /work node:24-bookworm bash -lc '
+          docker run --rm --shm-size=1g -v "$PWD:/src:ro" node:24-bookworm bash -lc '
             set -euo pipefail;
+            cp -a /src /work;
+            cd /work;
             apt-get update -qq;
             DEBIAN_FRONTEND=noninteractive apt-get install -y -qq chromium >/dev/null;
             node --version;
