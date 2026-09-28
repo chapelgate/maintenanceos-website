@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
+import { AgentCustomerConfiguration } from "@/components/AgentCustomerConfiguration";
 import { AgentReviewGate } from "@/components/AgentReviewGate";
 import { AgentTypeSelector } from "@/components/AgentTypeSelector";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
@@ -15,6 +16,11 @@ import {
   reviewFactHint,
   type ReviewedIdentityDraft,
 } from "@/lib/agent-review";
+import {
+  applyCustomerAgentConfiguration,
+  customerConfigurationForBlueprint,
+  type CustomerAgentConfiguration,
+} from "@/lib/agent-customer-configuration";
 import { submitLead } from "@/lib/lead-adapter";
 import { createAgentBlueprintDraft } from "@/lib/agent-selection";
 import type { AgentBlueprintV1, AgentType } from "@/lib/agent-blueprint";
@@ -195,6 +201,8 @@ export function CreateReceptionistLaterSteps({
   const [reviewConfirmedIds, setReviewConfirmedIds] = useState<string[]>([]);
   const [selectedAgentType, setSelectedAgentType] = useState<AgentType | null>(null);
   const [agentBlueprint, setAgentBlueprint] = useState<AgentBlueprintV1 | null>(null);
+  const [customerConfiguration, setCustomerConfiguration] =
+    useState<CustomerAgentConfiguration | null>(null);
   const [agentSelectionError, setAgentSelectionError] = useState<string | null>(null);
   const [receptionist, setReceptionist] = useState<ReceptionistDraftResult | null>(
     null,
@@ -314,6 +322,7 @@ export function CreateReceptionistLaterSteps({
       setReviewConfirmedIds([]);
       setSelectedAgentType(null);
       setAgentBlueprint(null);
+      setCustomerConfiguration(null);
       setAgentSelectionError(null);
       await new Promise((resolve) => setTimeout(resolve, 700));
       if (cancelled) return;
@@ -673,6 +682,9 @@ export function CreateReceptionistLaterSteps({
                 facts,
               });
               setAgentBlueprint(blueprint);
+              setCustomerConfiguration(
+                customerConfigurationForBlueprint(blueprint),
+              );
               setStep(4);
             } catch (selectionError) {
               setAgentBlueprint(null);
@@ -689,6 +701,7 @@ export function CreateReceptionistLaterSteps({
             onSelect={(type) => {
               setSelectedAgentType(type);
               setAgentBlueprint(null);
+              setCustomerConfiguration(null);
               setReviewConfirmedIds([]);
               setAgentSelectionError(null);
             }}
@@ -729,17 +742,23 @@ export function CreateReceptionistLaterSteps({
             setConfigEditPending(true);
             setStatus("idle");
             clearError();
-            if (!agentBlueprint) {
+            if (!agentBlueprint || !customerConfiguration) {
               setConfigEditPending(false);
-              setError("Agent control blueprint is missing. Choose an agent role again.");
+              setError(
+                "Agent configuration is missing. Choose the agent role again.",
+              );
               return;
             }
             void loadAgentConfiguration()
               .then(({ buildAgentConfiguration }) => {
                 if (editVersion !== configEditVersionRef.current) return;
                 try {
-                  const identityBlueprint = applyReviewedIdentityToAgentBlueprint(
+                  const configuredBlueprint = applyCustomerAgentConfiguration(
                     agentBlueprint,
+                    customerConfiguration,
+                  );
+                  const identityBlueprint = applyReviewedIdentityToAgentBlueprint(
+                    configuredBlueprint,
                     identityReview,
                   );
                   const configuration = buildAgentConfiguration({
@@ -771,6 +790,31 @@ export function CreateReceptionistLaterSteps({
           }}
         >
           <p className="text-sm text-muted">
+            Configure the selected role, then review the business information
+            that will be used to generate the final pack. Voice is stored as a
+            preference only; this website step cannot alter a live phone line.
+          </p>
+          {agentBlueprint && customerConfiguration ? (
+            <div className="mt-5">
+              <AgentCustomerConfiguration
+                blueprint={agentBlueprint}
+                configuration={customerConfiguration}
+                onChange={(configuration) => {
+                  configEditVersionRef.current += 1;
+                  setConfigEditPending(false);
+                  setStatus("idle");
+                  setReviewConfirmedIds([]);
+                  setCustomerConfiguration(configuration);
+                }}
+              />
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-red-700" role="alert">
+              Agent configuration is unavailable. Go back and choose the role
+              again.
+            </p>
+          )}
+          <p className="mt-5 text-sm text-muted">
             {progress === "scanned"
               ? "Edit anything the scan returned. Empty fields were not invented. Where the scan copied a value, a source and confidence hint appears under that field."
               : progress === "queued"
@@ -910,7 +954,7 @@ export function CreateReceptionistLaterSteps({
               data-create-primary-action=""
               className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
             >
-              {configEditPending ? "Generating…" : "Generate AI configuration"}
+              {configEditPending ? "Generating…" : "Generate reviewed configuration"}
             </button>
           </div>
         </form>
