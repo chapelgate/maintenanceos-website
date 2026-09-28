@@ -1,0 +1,45 @@
+name: Website Create repair validation
+
+on:
+  push:
+    branches:
+      - website/mobile-submit-email-20260928
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Runtime versions
+        run: node --version && npm --version
+      - name: Install
+        run: npm ci
+      - name: Focused Create repair tests
+        run: |
+          node scripts/create-mobile-submit.test.mjs
+          node --experimental-strip-types --test src/lib/lead-adapter.test.ts
+          node --test scripts/form-stub-server.test.mjs scripts/create-a11y.test.mjs scripts/customer-agent-configuration.test.mjs
+      - name: Full repository tests
+        run: npm test
+      - name: Changed-file lint
+        run: npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts src/lib/lead-adapter.test.ts
+      - name: Accessibility regression
+        run: npm run accessibility:check
+      - name: TypeScript
+        run: npx tsc --noEmit
+      - name: Production static build
+        run: npm run build
+      - name: Browser viewport smoke
+        run: npm run browser:smoke
+      - name: Static route count
+        run: |
+          test "$(find out -name index.html -type f | wc -l)" -eq 30
+      - name: Whitespace and patch integrity
+        run: git diff --check e976d086652ce5b4e8ce51cf32e535d2e450db92..HEAD
