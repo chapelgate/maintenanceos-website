@@ -12,6 +12,11 @@ import {
   type SandboxTest,
 } from "@/lib/sandbox-test-call";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
+import {
+  qualifyAgentSandbox,
+  type AgentSandboxQualificationResult,
+  type AgentSandboxReviewSubject,
+} from "@/lib/agent-sandbox-qualification";
 
 type SessionState = "idle" | "submitting" | "ok" | "error";
 type TestState = "idle" | "submitting" | "ok" | "error";
@@ -31,9 +36,15 @@ const EMPTY_DRAFT: ReceptionistDraft = {
 export function SandboxTestCallPanel({
   draft = EMPTY_DRAFT,
   receptionist = null,
+  reviewSubject = null,
+  onQualificationChange,
 }: {
   draft?: ReceptionistDraft;
   receptionist?: ReceptionistDraftResult | null;
+  reviewSubject?: AgentSandboxReviewSubject | null;
+  onQualificationChange?: (
+    result: AgentSandboxQualificationResult | null,
+  ) => void;
 }) {
   const enabled = siteConfig.sandboxTestCallEnabled;
   const endpoint = siteConfig.sandboxTestCallEndpoint.trim();
@@ -43,14 +54,22 @@ export function SandboxTestCallPanel({
   const [detail, setDetail] = useState<string | null>(null);
   const [session, setSession] = useState<SandboxSession | null>(null);
   const [tested, setTested] = useState<SandboxTest | null>(null);
+  const [qualificationState, setQualificationState] = useState<
+    "idle" | "ok" | "error"
+  >("idle");
+  const [qualificationDetail, setQualificationDetail] = useState<string | null>(
+    null,
+  );
   const statusId = useId();
   const comingCopyId = "sandbox-test-call-enabled-copy";
-
   async function onRunScriptedDemo() {
     setSessionState("submitting");
     setTestState("submitting");
     setDetail(null);
     setTested(null);
+    setQualificationState("idle");
+    setQualificationDetail(null);
+    onQualificationChange?.(null);
     const outcome = await requestSandboxScriptedDemo({
       enabled,
       endpoint,
@@ -63,6 +82,39 @@ export function SandboxTestCallPanel({
       setTested(outcome.data.test);
       setSessionState("ok");
       setTestState("ok");
+
+      if (!reviewSubject) {
+        setQualificationDetail(
+          "Scripted demo passed, but the exact customer review is not complete yet. Complete review before qualification.",
+        );
+        return;
+      }
+      if (!usesCompanion) {
+        setQualificationDetail(
+          "Browser scripted demo passed. It is demo-only and cannot award sandbox qualification; a configured sandbox companion is required.",
+        );
+        return;
+      }
+      try {
+        const qualification = qualifyAgentSandbox({
+          review: reviewSubject,
+          source: "companion",
+          session: outcome.data.session,
+          test: outcome.data.test,
+        });
+        setQualificationState("ok");
+        setQualificationDetail(
+          "Sandbox qualification passed for this exact reviewed configuration. No live phone call or production number was used.",
+        );
+        onQualificationChange?.(qualification);
+      } catch (qualificationError) {
+        setQualificationState("error");
+        setQualificationDetail(
+          qualificationError instanceof Error
+            ? qualificationError.message
+            : "Sandbox qualification failed closed.",
+        );
+      }
       return;
     }
     setSession(null);
@@ -77,6 +129,9 @@ export function SandboxTestCallPanel({
   }
 
   async function onTryWebrtc() {
+    onQualificationChange?.(null);
+    setQualificationState("idle");
+    setQualificationDetail(null);
     setSessionState("submitting");
     setTestState("idle");
     setDetail(null);
@@ -173,7 +228,9 @@ export function SandboxTestCallPanel({
         >
           {testState === "submitting"
             ? "Running scripted demo…"
-            : "Run pack-aware scripted demo"}
+            : usesCompanion && reviewSubject
+              ? "Run sandbox qualification"
+              : "Run pack-aware scripted demo"}
         </button>
         <button
           type="button"
@@ -211,6 +268,22 @@ export function SandboxTestCallPanel({
             ))}
           </ol>
         </div>
+      ) : null}
+
+      {qualificationDetail ? (
+        <p
+          className={
+            qualificationState === "error"
+              ? "mt-4 text-sm text-red-700"
+              : qualificationState === "ok"
+                ? "mt-4 text-sm font-medium text-ink"
+                : "mt-4 text-sm text-muted"
+          }
+          role={qualificationState === "error" ? "alert" : "status"}
+          data-sandbox-qualification={qualificationState}
+        >
+          {qualificationDetail}
+        </p>
       ) : null}
 
       {sessionState === "error" || testState === "error" ? (

@@ -5,14 +5,14 @@
 ## Baselines
 
 - Website source: `chapelgate/maintenanceos-website` `2cc35d9f54536b02c808d91d3efb372655bc87af`
-- Product compatibility baseline: `chapelgate/maintenanceos-v1-pilot` `e68ed4d4328caa9622f9bbd26d68effd25c2c9ca`
+- Product compatibility baseline: `chapelgate/maintenanceos-v1-pilot` `5eb0f92f2633e20e4d280835d3e6577e3f206c8b`
 - Product baseline date: 2026-09-27
 - JSON Schema: Draft 2020-12
 - OpenAPI: 3.2.1
 
 ## Scope
 
-This step defines the versioned AgentBlueprint contract only. It does not alter the website UI, scanner, sandbox, provisioning, telephony, Twilio, Gemini, TTNC, databases, or the live MaintenanceOS phone path.
+This step defines the versioned AgentBlueprint contract only. It does not alter the website UI, scanner, sandbox, provisioning, telephony, Twilio, Gemini, legacy carrier, databases, or the live MaintenanceOS phone path.
 
 ## Contract rules
 
@@ -41,7 +41,7 @@ This step defines the versioned AgentBlueprint contract only. It does not alter 
 - JSON Schema Draft 2020-12 meta-schema validation: PASS.
 - OpenAPI YAML parse: PASS.
 - GitHub base-to-branch diff: exactly five Step-2 files added; zero existing files modified.
-- Product baseline recheck before candidate verification: `e68ed4d4328caa9622f9bbd26d68effd25c2c9ca` remained latest.
+- Product baseline recheck before candidate verification: `5eb0f92f2633e20e4d280835d3e6577e3f206c8b` remained latest.
 
 ## Acceptance
 

@@ -1,0 +1,563 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { buildAgentBlueprintDraft } from "./agent-selection.ts";
+import {
+  agentReviewRevision,
+  applyReviewedIdentityToAgentBlueprint,
+  buildAgentReviewRecord,
+  buildAgentReviewRequirements,
+  finalizeAgentReview,
+  identityDraftFromBlueprint,
+  reviewFactHint,
+} from "./agent-review.ts";
+
+const CREATED_AT = "2026-09-27T16:30:00.000Z";
+
+const TEST_REVISION = "arv1_12345678";
+
+function reviewSubject(currentBlueprint: ReturnType<typeof blueprint>) {
+  return {
+    knowledgePack: { kind: "test-review-pack", businessName: currentBlueprint.identity.businessName },
+    systemPrompt: "test reviewed system prompt",
+  };
+}
+
+function revisionFor(currentBlueprint: ReturnType<typeof blueprint>): string {
+  const subject = reviewSubject(currentBlueprint);
+  return agentReviewRevision({
+    blueprint: currentBlueprint,
+    knowledgePack: subject.knowledgePack,
+    systemPrompt: subject.systemPrompt,
+  });
+}
+
+function blueprint(type: Parameters<typeof buildAgentBlueprintDraft>[0]["type"]) {
+  return buildAgentBlueprintDraft({
+    type,
+    businessName: "Acme Plumbing",
+    businessUrl: "https://acme.example/",
+    facts: {
+      website: "https://acme.example/",
+      businessName: "Acme Plumbing",
+      locations: ["Wirral"],
+      contact: {
+        phones: ["0151 555 0100"],
+        emails: ["hello@acme.example"],
+      },
+      services: ["Boiler repair"],
+      hours: "Mon-Fri 08:00-17:00",
+      faqs: [{ question: "Do you cover Wirral?", answer: "Yes." }],
+    },
+    blueprintId: "abp_step6test0001",
+    createdAt: CREATED_AT,
+  });
+}
+
+test("review gate always requires core identity, role and generated-output confirmation", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("sales_enquiry"),
+  });
+  assert.ok(requirements.some((item) => item.id === "fact:businessName"));
+  assert.ok(requirements.some((item) => item.id === "fact:website"));
+  assert.ok(requirements.some((item) => item.id === "control:role"));
+  assert.ok(requirements.some((item) => item.id === "control:ai_output"));
+});
+
+test("low-confidence confirmations follow the provenance of the actual reviewed values", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("sales_enquiry"),
+    factMeta: {
+      businessName: { source: "jsonld", confidence: "high" },
+      services: { source: "nav", confidence: "low" },
+      website: { source: "fetched_url", confidence: "low" },
+      locations: { source: "details", confidence: "low" },
+    },
+    fieldMeta: {
+      businessName: { source: "heading", confidence: "low" },
+      services: { source: "heading", confidence: "low" },
+      hours: { source: "details", confidence: "medium" },
+    },
+  });
+  assert.equal(
+    requirements.find((item) => item.id === "fact:website")?.kind,
+    "low_confidence",
+  );
+  assert.equal(
+    requirements.find((item) => item.id === "fact:businessName")?.kind,
+    "low_confidence",
+  );
+  assert.ok(requirements.some((item) => item.id === "fact:locations"));
+  assert.ok(requirements.some((item) => item.id === "field:services"));
+  assert.ok(!requirements.some((item) => item.id === "fact:services"));
+  assert.ok(!requirements.some((item) => item.id === "field:hours"));
+  assert.match(
+    requirements.find((item) => item.id === "fact:website")?.detail ?? "",
+    /submitted website URL/,
+  );
+  assert.match(
+    requirements.find((item) => item.id === "fact:businessName")?.detail ?? "",
+    /heading/,
+  );
+});
+
+test("low-confidence draft-only fields are required without duplicating structured facts", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("receptionist"),
+    factMeta: {
+      businessName: { source: "jsonld", confidence: "low" },
+    },
+    fieldMeta: {
+      businessName: { source: "heading", confidence: "low" },
+      greeting: { source: "heading", confidence: "low" },
+    },
+  });
+  assert.equal(
+    requirements.filter((item) => item.id === "fact:businessName").length,
+    1,
+  );
+  assert.ok(requirements.some((item) => item.id === "field:greeting"));
+  assert.ok(!requirements.some((item) => item.id === "field:businessName"));
+});
+
+test("consequential permissions and human transfer require explicit confirmation", () => {
+  const maintenance = buildAgentReviewRequirements({
+    blueprint: blueprint("maintenance_desk"),
+  });
+  assert.ok(
+    maintenance.some(
+      (item) => item.id === "capability:create_maintenance_job",
+    ),
+  );
+  assert.ok(
+    maintenance.some((item) => item.id === "capability:transfer_call"),
+  );
+  assert.ok(maintenance.some((item) => item.id === "rule:human_transfer"));
+  assert.ok(
+    !maintenance.some((item) => item.id === "capability:answer_information"),
+  );
+  assert.ok(!maintenance.some((item) => item.id === "capability:take_message"));
+
+  const sales = buildAgentReviewRequirements({
+    blueprint: blueprint("sales_enquiry"),
+  });
+  assert.ok(!sales.some((item) => item.id === "rule:human_transfer"));
+});
+
+test("missing facts are visible and become a mandatory acknowledgement", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("receptionist"),
+    missing: ["hours", "faqs", "hours"],
+  });
+  const missing = requirements.find(
+    (item) => item.id === "control:missing_data",
+  );
+  assert.ok(missing);
+  assert.match(missing.detail, /hours, faqs/);
+});
+
+test("missing-data acknowledgement includes structured identity gaps", () => {
+  const base = blueprint("receptionist");
+  const withoutStructuredIdentity = {
+    ...base,
+    identity: {
+      businessName: base.identity.businessName,
+      website: base.identity.website,
+    },
+  };
+  const requirements = buildAgentReviewRequirements({
+    blueprint: withoutStructuredIdentity,
+    missing: ["hours"],
+  });
+  const missing = requirements.find(
+    (item) => item.id === "control:missing_data",
+  );
+  assert.ok(missing);
+  assert.match(missing.detail, /hours/);
+  assert.match(missing.detail, /locations/);
+  assert.match(missing.detail, /contact details/);
+});
+
+test("review record fails closed until every current requirement is confirmed", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("maintenance_desk"),
+    fieldMeta: {
+      services: { source: "nav", confidence: "low" },
+    },
+    missing: ["faqs"],
+  });
+  const partial = buildAgentReviewRecord(
+    requirements,
+    ["control:role", "unknown:stale"],
+    TEST_REVISION,
+  );
+  assert.equal(partial.complete, false);
+  assert.ok(!partial.confirmedIds.includes("unknown:stale"));
+  assert.ok(partial.missingIds.includes("control:ai_output"));
+  assert.ok(partial.missingIds.includes("field:services"));
+
+  const complete = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    TEST_REVISION,
+  );
+  assert.equal(complete.complete, true);
+  assert.deepEqual(complete.missingIds, []);
+});
+
+test("review evidence is deterministic regardless of checkbox order", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("sales_enquiry"),
+  });
+  const reversed = requirements.map((item) => item.id).reverse();
+  const record = buildAgentReviewRecord(requirements, reversed, TEST_REVISION);
+  assert.deepEqual(
+    record.confirmedIds,
+    requirements.map((item) => item.id),
+  );
+  assert.equal(record.complete, true);
+});
+
+test("review evidence is invalidated when reviewed output changes", () => {
+  const draft = blueprint("sales_enquiry");
+  const subject = reviewSubject(draft);
+  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    revisionFor(draft),
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        knowledgePack: subject.knowledgePack,
+        systemPrompt: subject.systemPrompt + " changed",
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        knowledgePack: { ...subject.knowledgePack, changed: true },
+        systemPrompt: subject.systemPrompt,
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+});
+
+test("review evidence is invalidated when provenance or missing-data evidence changes", () => {
+  const draft = blueprint("receptionist");
+  const subject = reviewSubject(draft);
+  const requirements = buildAgentReviewRequirements({
+    blueprint: draft,
+    fieldMeta: {
+      services: { source: "nav", confidence: "low" },
+    },
+    missing: ["faqs"],
+  });
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    agentReviewRevision({
+      blueprint: draft,
+      ...subject,
+      fieldMeta: {
+        services: { source: "nav", confidence: "low" },
+      },
+      missing: ["faqs"],
+    }),
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        fieldMeta: {
+          services: { source: "heading", confidence: "low" },
+        },
+        missing: ["faqs"],
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        fieldMeta: {
+          services: { source: "nav", confidence: "low" },
+        },
+        missing: ["hours", "faqs"],
+        record,
+      }),
+    /incomplete|inconsistent/i,
+  );
+});
+
+test("review record rejects malformed revision identifiers", () => {
+  const requirements = buildAgentReviewRequirements({
+    blueprint: blueprint("sales_enquiry"),
+  });
+  assert.throws(
+    () =>
+      buildAgentReviewRecord(
+        requirements,
+        requirements.map((item) => item.id),
+        "not-a-review-revision",
+      ),
+    /revision ID is invalid/i,
+  );
+});
+
+test("lifecycle cannot advance on incomplete or forged review evidence", () => {
+  const draft = blueprint("maintenance_desk");
+  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const subject = reviewSubject(draft);
+  const incomplete = buildAgentReviewRecord(
+    requirements,
+    ["control:role"],
+    revisionFor(draft),
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        record: incomplete,
+      }),
+    /incomplete/i,
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        record: {
+          ...incomplete,
+          complete: true,
+          missingIds: [],
+        },
+      }),
+    /incomplete/i,
+  );
+});
+
+test("forged empty requirement record cannot bypass the canonical review gate", () => {
+  const draft = blueprint("maintenance_desk");
+  const subject = reviewSubject(draft);
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        record: {
+          version: "1.0.0",
+          revisionId: revisionFor(draft),
+          complete: true,
+          requiredIds: [],
+          confirmedIds: [],
+          missingIds: [],
+        },
+      }),
+    /incomplete|inconsistent/i,
+  );
+});
+
+test("finalizer independently derives low-confidence and missing requirements", () => {
+  const draft = blueprint("receptionist");
+  const incompleteRequirements = buildAgentReviewRequirements({
+    blueprint: draft,
+  });
+  const subject = reviewSubject(draft);
+  const incompleteRecord = buildAgentReviewRecord(
+    incompleteRequirements,
+    incompleteRequirements.map((item) => item.id),
+    revisionFor(draft),
+  );
+
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: draft,
+        ...subject,
+        factMeta: {
+          locations: { source: "details", confidence: "low" },
+        },
+        missing: ["faqs"],
+        record: incompleteRecord,
+      }),
+    /incomplete|inconsistent/i,
+  );
+});
+
+test("complete review advances only lifecycle and preserves controls", () => {
+  const draft = blueprint("maintenance_desk");
+  const requirements = buildAgentReviewRequirements({ blueprint: draft });
+  const subject = reviewSubject(draft);
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    revisionFor(draft),
+  );
+  const reviewed = finalizeAgentReview({
+    blueprint: draft,
+    ...subject,
+    record,
+  });
+
+  assert.equal(draft.lifecycle.stage, "draft");
+  assert.equal(reviewed.lifecycle.stage, "reviewed");
+  assert.deepEqual(reviewed.identity, draft.identity);
+  assert.deepEqual(reviewed.agent, draft.agent);
+  assert.deepEqual(reviewed.permissions, draft.permissions);
+  assert.deepEqual(reviewed.rules, draft.rules);
+  assert.deepEqual(reviewed.integrations, draft.integrations);
+  assert.deepEqual(reviewed.privacy, draft.privacy);
+  assert.deepEqual(reviewed.compatibility, draft.compatibility);
+  assert.equal(
+    agentReviewRevision({
+      blueprint: reviewed,
+      knowledgePack: subject.knowledgePack,
+      systemPrompt: subject.systemPrompt,
+    }),
+    record.revisionId,
+  );
+});
+
+test("customer review helpers reject non-draft blueprints", () => {
+  const original = blueprint("receptionist");
+  const reviewed = {
+    ...original,
+    lifecycle: { stage: "reviewed" as const },
+  };
+
+  assert.throws(
+    () =>
+      applyReviewedIdentityToAgentBlueprint(reviewed, {
+        locations: "Wirral",
+        phone: "",
+        email: "",
+      }),
+    /require a draft/i,
+  );
+
+  const requirements = buildAgentReviewRequirements({ blueprint: original });
+  const subject = reviewSubject(original);
+  const record = buildAgentReviewRecord(
+    requirements,
+    requirements.map((item) => item.id),
+    revisionFor(original),
+  );
+  assert.throws(
+    () =>
+      finalizeAgentReview({
+        blueprint: reviewed,
+        ...subject,
+        record,
+      }),
+    /Only a draft AgentBlueprint/i,
+  );
+});
+
+test("identity edits can change locations/contact but never control-plane fields", () => {
+  const original = blueprint("maintenance_desk");
+  const next = applyReviewedIdentityToAgentBlueprint(original, {
+    locations: "Liverpool\nWirral\nLiverpool",
+    phone: "0151 555 9999",
+    email: "ops@acme.example",
+  });
+  assert.deepEqual(next.identity.locations, ["Liverpool", "Wirral"]);
+  assert.deepEqual(next.identity.contact, {
+    phone: "0151 555 9999",
+    email: "ops@acme.example",
+  });
+  assert.deepEqual(next.permissions, original.permissions);
+  assert.deepEqual(next.rules, original.rules);
+  assert.deepEqual(next.integrations, original.integrations);
+  assert.deepEqual(next.privacy, original.privacy);
+  assert.deepEqual(next.agent, original.agent);
+});
+
+test("identity review can deliberately remove discovered optional identity facts", () => {
+  const original = blueprint("receptionist");
+  const next = applyReviewedIdentityToAgentBlueprint(original, {
+    locations: "",
+    phone: "",
+    email: "",
+  });
+  assert.equal(next.identity.locations, undefined);
+  assert.equal(next.identity.contact, undefined);
+  assert.equal(next.identity.website, original.identity.website);
+  assert.equal(next.identity.businessName, original.identity.businessName);
+});
+
+test("invalid reviewed phone is rejected before configuration generation", () => {
+  assert.throws(
+    () =>
+      applyReviewedIdentityToAgentBlueprint(blueprint("receptionist"), {
+        locations: "Wirral",
+        phone: "call us maybe",
+        email: "",
+      }),
+    /phone number is invalid/i,
+  );
+});
+
+test("reviewed locations reject overflow instead of silently dropping entries", () => {
+  const locations = Array.from({ length: 51 }, (_, index) => "Location " + index).join("\n");
+  assert.throws(
+    () =>
+      applyReviewedIdentityToAgentBlueprint(blueprint("receptionist"), {
+        locations,
+        phone: "",
+        email: "",
+      }),
+    /50 entries or fewer/i,
+  );
+});
+
+test("invalid reviewed contact email is rejected before configuration generation", () => {
+  assert.throws(
+    () =>
+      applyReviewedIdentityToAgentBlueprint(blueprint("receptionist"), {
+        locations: "Wirral",
+        phone: "",
+        email: "not-an-email",
+      }),
+    /invalid/i,
+  );
+});
+
+test("review fact hint makes low confidence explicit without inventing provenance", () => {
+  assert.equal(reviewFactHint(undefined, true), null);
+  assert.equal(
+    reviewFactHint({ source: "jsonld", confidence: "low" }, false),
+    null,
+  );
+  assert.match(
+    reviewFactHint({ source: "nav", confidence: "low" }, true) ?? "",
+    /low confidence; explicit confirmation is required/i,
+  );
+  assert.match(
+    reviewFactHint({ source: "jsonld", confidence: "high" }, true) ?? "",
+    /high confidence/i,
+  );
+});
+
+test("identity draft mirrors only the current blueprint identity", () => {
+  assert.deepEqual(identityDraftFromBlueprint(blueprint("receptionist")), {
+    locations: "Wirral",
+    phone: "0151 555 0100",
+    email: "hello@acme.example",
+  });
+});

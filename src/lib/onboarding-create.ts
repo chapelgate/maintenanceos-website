@@ -410,6 +410,25 @@ export function buildCreateLeadMessage(input: {
   draft: ReceptionistDraft;
   scanNote: string;
   fieldMeta?: ScanDraftFieldMeta;
+  factMeta?: ScanBusinessFactMeta;
+  review?: {
+    version: string;
+    revisionId: string;
+    complete: boolean;
+    requiredIds: string[];
+    confirmedIds: string[];
+    missingIds: string[];
+  };
+  sandboxQualification?: {
+    version: string;
+    reviewRevisionId: string;
+    source: string;
+    sessionId: string;
+    testId: string;
+    complete: boolean;
+    checks: Array<{ id: string; ok: boolean }>;
+    failedCheckIds: string[];
+  };
   agentBlueprint?: unknown;
   receptionist?: {
     knowledgePack: unknown;
@@ -418,7 +437,7 @@ export function buildCreateLeadMessage(input: {
   } | null;
 }): string {
   const parts = [
-    "Website-to-receptionist early access request.",
+    "Website-to-AI-agent early access request.",
     `Business URL: ${input.businessUrl}`,
     `Scan: ${input.scanNote}`,
     "Draft JSON:",
@@ -427,12 +446,24 @@ export function buildCreateLeadMessage(input: {
   if (input.fieldMeta && Object.keys(input.fieldMeta).length) {
     parts.push("Field meta JSON:", JSON.stringify(input.fieldMeta, null, 2));
   }
+  if (input.factMeta && Object.keys(input.factMeta).length) {
+    parts.push("Fact meta JSON:", JSON.stringify(input.factMeta, null, 2));
+  }
+  if (input.review) {
+    parts.push("Customer review JSON:", JSON.stringify(input.review, null, 2));
+  }
+  if (input.sandboxQualification) {
+    parts.push(
+      "Sandbox qualification JSON:",
+      JSON.stringify(input.sandboxQualification, null, 2),
+    );
+  }
   if (input.agentBlueprint) {
     parts.push("Agent blueprint JSON:", JSON.stringify(input.agentBlueprint, null, 2));
   }
   if (input.receptionist) {
     parts.push(
-      "Receptionist knowledge pack JSON:",
+      "Agent knowledge pack JSON:",
       JSON.stringify(input.receptionist.knowledgePack, null, 2),
       "System prompt draft:",
       input.receptionist.systemPrompt,

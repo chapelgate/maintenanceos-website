@@ -24,11 +24,15 @@ test("SiteHeader stays a server component with Escape on native details", () => 
   assert.match(header, /dangerouslySetInnerHTML/);
 });
 
-test("/create first-load form defers scan and pack steps", () => {
+test("/create keeps the customer journey in one reliable client bundle", () => {
   const form = read("src/components/CreateReceptionistForm.tsx");
-  assert.match(form, /next\/dynamic/);
-  assert.match(form, /CreateReceptionistLaterSteps/);
-  assert.match(form, /ssr:\s*false/);
+  assert.match(
+    form,
+    /from ["']@\/components\/CreateReceptionistLaterSteps["']/,
+  );
+  assert.doesNotMatch(form, /next\/dynamic/);
+  assert.doesNotMatch(form, /loadLaterSteps/);
+  assert.doesNotMatch(form, /CreateLaterStepsFallback/);
   assert.doesNotMatch(form, /from ["']@\/lib\/onboarding-create["']/);
   assert.doesNotMatch(form, /from ["']@\/lib\/lead-adapter["']/);
   assert.doesNotMatch(form, /from ["']@\/config\/site["']/);

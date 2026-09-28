@@ -24,10 +24,12 @@ test("lead adapter sends the current page URL and preserves accepted semantics",
   assert.doesNotMatch(adapter, /source: "maintenanceos-website"/);
 });
 
-test("accepted UI remains truthful about visitor email", () => {
+test("accepted UI requires and reports provider-accepted visitor confirmation", () => {
   const form = read("src/components/LeadCaptureForm.tsx");
   assert.match(form, /accepted into the lead queue/);
-  assert.match(form, /No confirmation email was sent/);
+  assert.match(form, /confirmation email was accepted by the mail provider/);
+  assert.match(form, /result\.confirmationEmail !== "accepted"/);
+  assert.match(form, /Reference:/);
   assert.match(form, /Only email is required\. Everything else is optional\./);
 });
 
@@ -46,4 +48,24 @@ test("endpoint contract documents durable storage, idempotency and operator noti
   assert.match(contract, /Idempotency/);
   assert.match(contract, /sending-only Resend credential/);
   assert.match(contract, /does \*\*not\*\* write into the live telephony/);
+});
+
+test("create journey distinguishes production delivery from preview receiver", () => {
+  const site = read("src/config/site.ts");
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+  assert.match(site, /export const PRODUCTION_FORM_ENDPOINT/);
+  assert.match(later, /siteConfig\.formEndpoint === PRODUCTION_FORM_ENDPOINT/);
+  assert.match(later, /Request received/);
+  assert.match(later, /confirmation email was accepted by the mail provider/);
+  assert.match(later, /confirmation email could not be handed off/);
+  assert.match(later, /submissionInFlightRef/);
+  assert.match(later, /usesProductionLeadReceiver[\s\S]{0,160}result\.mode === "accepted"/);
+  assert.match(later, /result\.confirmationEmail !== "accepted"/);
+  assert.match(later, /result\.confirmationEmail !== "failed"/);
+  assert.match(later, /receiptReference/);
+  assert.match(later, /Test submission completed/);
+  assert.match(later, /preview receiver accepted the test submission/);
+  assert.match(later, /preview does not send a confirmation email/);
+  assert.match(later, /data-create-submit-state=\{status\}/);
+  assert.match(later, /data-create-submit-state="success"/);
 });

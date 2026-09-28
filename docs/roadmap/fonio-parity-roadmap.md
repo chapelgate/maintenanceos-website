@@ -9,9 +9,9 @@
 - [x] Competitive parity matrix
 - [x] Architecture + onboarding + threat model + test plans (docs)
 - [x] Claims-safe `/create` multi-step funnel **EXISTS** (not MISSING; preview / waitlist — not a live phone)
-- [x] Marketing `/how-it-works` + `/features` match Website → Check → Choose → Review → Pack (HAVE / UNDER TEST / COMING for sandbox, calendars, live phone)
+- [x] Marketing `/how-it-works` + `/features` match Website → Check → Choose → Configure → Review & Pack (HAVE / UNDER TEST / COMING for sandbox, calendars, live phone)
 - [x] Marketing `/demo` + leftover “book a demo / see it live” CTAs point primary to `/create/`; human demo is secondary early-access (not a live phone)
-- [x] Funnel-page titles / descriptions / OG name Website → Check → Choose → Review → Pack → optional sandbox → early access (not a live phone / always-on / GA)
+- [x] Funnel-page titles / descriptions / OG name Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access (not a live phone / always-on / GA)
 - [x] Claims-safe JSON-LD on home + funnel pages (Organization + WebSite + WebPage + SoftwareApplication; no live phone / always-on / GA / aggregateRating / fake offers)
 - [x] `llms.txt` / `llms-full.txt` name website URL → check → review → pack → optional scripted sandbox → early access (not a live phone / always-on / GA / ratings / invented crawl; staging scan owner-blocked)
 - [x] `/faq/` + FAQPage JSON-LD name the same path (no live phone / always-on / instant live number / GA; crawl not invented if scan unset; empty hours/services stay empty; UK 999; staging scan owner-blocked)
@@ -23,7 +23,8 @@
 - [x] Calendar adapter package + mock + Google OAuth start/callback scaffold + M365 / Outlook OAuth PARTIAL scaffold (flagged off; not live on staging)
 - [x] Claims-safe knowledge pack + system prompt from reviewed `/create` draft (**PARTIAL**; `packages/receptionist-draft`; `/create` preview; sandbox consume; missing fields stay missing; no live-phone claims)
 - Extract schema + review UI
-- Sandbox tenant create
+- [x] Secure server-only provisioning gateway foundation (**Step 8**): authenticated tenant-scoped `sandbox_passed → provisioning` control record, replay/idempotency protected; no live product DB/telephony/integration activation
+- [x] Server-only phone/external adapter readiness (**Step 9**): reviewed telephony intent + booking-calendar intent; Twilio route verification with two-key mutation latch; existing calendar companion reuse; signed-HTTPS email/CRM readiness; durable `provisioning → ready`; no live activation
 - [x] Optional sandbox test call foundation (flagged scripted/browser-mock; no production path rewrite)
 - [x] Scripted sandbox demo answers from stored knowledge pack / system prompt (**PARTIAL**; missing fields not on file; still not live voice)
 - [x] Scripted conversation benchmark fixtures + scorer (**HAVE** for scripted path: `npm run conversation-benchmark`; hours/services from pack; UK 999; no invented bookings / live-call success). Live-call barge-in **SKIP / open**.

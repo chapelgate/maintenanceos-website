@@ -319,3 +319,82 @@ test("fixture hours table under labelled heading; noise page invents nothing", (
   assert.deepEqual(links.phones, []);
   assert.deepEqual(links.emails, []);
 });
+
+test("nav extraction excludes phone and email labels from services", () => {
+  const html = `<nav><a href="/install">Alley Gate Installation</a><a href="/cctv">CCTV</a><a href="tel:01512308476">0151 230 8476</a><a href="mailto:info@example.com">info@example.com</a></nav>`;
+  assert.equal(extractServicesFromNav(html), "Alley Gate Installation\nCCTV");
+});
+
+test("visible hours pattern stops at the time range and drops trailing page copy", () => {
+  const html = `<p>Monday - Friday 9am-5pm) 0151 649 9718 Safeguarding Forum is committed to safeguarding our Service</p>`;
+  const { draft } = extractDraftFromHtml([{ url: "https://hours.example/", html }]);
+  assert.equal(draft.hours, "Monday - Friday 9am-5pm");
+  assert.equal(draft.hours?.includes("Safeguarding"), false);
+});
+
+test("visible contact block pre-fills address and phone without schema or tel links", () => {
+  const home = `
+    <html><head><title>Forum Housing — Building Lives</title></head><body>
+      <nav>
+        <a href="/about/">About Us</a>
+        <a href="/living-with-us/">Living With Us</a>
+        <a href="/contact-us/">Get In Touch</a>
+        <a href="/support-us/">Support Us</a>
+      </nav>
+      <h3>Contact Us</h3>
+      <p>Forum Housing Association,<br>24-28 Hamilton Street,<br>Birkenhead,<br>Wirral CH41 1AL</p>
+      <p>0151 649 9718<br><a href="/contact-us/">Get In Touch Form</a></p>
+    </body></html>
+  `;
+  const contact = `
+    <html><body>
+      <h2>Contact Us</h2>
+      <p>Head Office ( Monday - Friday 9am-5pm) 0151 649 9718</p>
+    </body></html>
+  `;
+  const living = `
+    <html><body>
+      <h2>Our Accomodation</h2>
+      <h4>Caroline Place</h4>
+      <h4>Supported Lodgings</h4>
+      <h4>Curzon House</h4>
+    </body></html>
+  `;
+  const result = extractDraftFromHtml([
+    { url: "https://forum.example/", html: home },
+    { url: "https://forum.example/living-with-us/", html: living },
+    { url: "https://forum.example/contact-us/", html: contact },
+  ]);
+
+  assert.deepEqual(result.facts.contact?.phones, ["0151 649 9718"]);
+  assert.deepEqual(result.facts.locations, [
+    "Forum Housing Association, 24-28 Hamilton Street, Birkenhead, Wirral CH41 1AL",
+  ]);
+  assert.equal(result.factMeta.contact?.source, "heading");
+  assert.equal(result.factMeta.locations?.source, "heading");
+  assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
+  assert.equal(result.draft.hours?.includes("0151"), false);
+  assert.match(result.draft.services ?? "", /Caroline Place/);
+  assert.match(result.draft.services ?? "", /Supported Lodgings/);
+  assert.equal(result.fieldMeta.services?.source, "heading");
+});
+
+test("candidate ranking removes query duplicates and keeps richer public detail pages", () => {
+  const ranked = rankCandidateUrls(
+    [
+      "https://forum.example/contact-us/?subject=volunteering",
+      "https://forum.example/contact-us/",
+      "https://forum.example/living-with-us/",
+      "https://forum.example/residents/",
+    ],
+    new URL("https://forum.example/"),
+  );
+
+  assert.equal(
+    ranked.filter((url) => url.includes("/contact-us/")).length,
+    1,
+  );
+  assert.ok(ranked.includes("https://forum.example/living-with-us/"));
+  assert.ok(ranked.includes("https://forum.example/residents/"));
+  assert.equal(ranked.some((url) => url.includes("?subject=")), false);
+});

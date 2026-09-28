@@ -1,8 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
+import { CreateReceptionistLaterSteps } from "@/components/CreateReceptionistLaterSteps";
 import {
   createJourneyNextAction,
   isValidEmail,
@@ -10,39 +10,16 @@ import {
   type ReceptionistDraft,
 } from "@/lib/onboarding-create-core";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
-
-const CreateReceptionistLaterSteps = dynamic(
-  () =>
-    import("@/components/CreateReceptionistLaterSteps").then(
-      (module) => module.CreateReceptionistLaterSteps,
-    ),
-  { ssr: false, loading: CreateLaterStepsFallback },
-);
-
-function loadLaterSteps() {
-  return import("@/components/CreateReceptionistLaterSteps");
-}
+import type {
+  AgentSandboxQualificationResult,
+  AgentSandboxReviewSubject,
+} from "@/lib/agent-sandbox-qualification";
 
 const FIELD_CLASS = "mt-1 w-full rounded-md border border-border px-3 py-2";
 
-function CreateLaterStepsFallback() {
-  return (
-    <div
-      className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm"
-      data-lead-type="create_receptionist"
-      data-create-step={2}
-      data-create-next-action="Checking…"
-    >
-      <CreateJourneyStepper step={2} headingRef={null} />
-      <p className="mb-6 text-sm text-muted">Next: Checking…</p>
-      <p className="font-medium text-ink">Checking URL…</p>
-      <p className="mt-3 text-sm text-muted">
-        We only accept a public website address here. Private or internal hosts
-        are not fetched from this page.
-      </p>
-    </div>
-  );
-}
+const HYDRATION_SUBSCRIBE = () => () => {};
+const HYDRATED_CLIENT_SNAPSHOT = () => true;
+const HYDRATED_SERVER_SNAPSHOT = () => false;
 
 /**
  * Claims-safe website→AI-agent early-access flow.
@@ -52,10 +29,19 @@ function CreateLaterStepsFallback() {
 export function CreateReceptionistForm({
   onDraftChange,
   onReceptionistChange,
+  onReviewSubjectChange,
+  sandboxQualification,
 }: {
   onDraftChange?: (draft: ReceptionistDraft) => void;
   onReceptionistChange?: (built: ReceptionistDraftResult | null) => void;
+  onReviewSubjectChange?: (subject: AgentSandboxReviewSubject | null) => void;
+  sandboxQualification?: AgentSandboxQualificationResult | null;
 } = {}) {
+  const hydrated = useSyncExternalStore(
+    HYDRATION_SUBSCRIBE,
+    HYDRATED_CLIENT_SNAPSHOT,
+    HYDRATED_SERVER_SNAPSHOT,
+  );
   const [pastWebsite, setPastWebsite] = useState(false);
   const [honeypotSuccess, setHoneypotSuccess] = useState(false);
   const [status, setStatus] = useState<"idle" | "error">("idle");
@@ -70,12 +56,11 @@ export function CreateReceptionistForm({
   const errorId = useId();
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const businessUrlRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
+  const organisationRef = useRef<HTMLInputElement>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const didMountStep = useRef(false);
-
-  useEffect(() => {
-    void loadLaterSteps();
-  }, []);
 
   useEffect(() => {
     if (!didMountStep.current) {
@@ -102,17 +87,16 @@ export function CreateReceptionistForm({
     setErrorField(null);
   }
 
-  function onStep1(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function onStep1() {
+    if (!hydrated) return;
     clearError();
-    const fd = new FormData(e.currentTarget);
 
-    if (String(fd.get("website") ?? "").trim()) {
+    if ((honeypotRef.current?.value ?? "").trim()) {
       setHoneypotSuccess(true);
       return;
     }
 
-    const nextUrl = normalisePublicUrl(String(fd.get("businessUrl") ?? ""));
+    const nextUrl = normalisePublicUrl(businessUrlRef.current?.value ?? "");
     if (!nextUrl) {
       setError(
         "Enter a valid public website URL (for example https://example.com).",
@@ -121,7 +105,7 @@ export function CreateReceptionistForm({
       setStatus("error");
       return;
     }
-    const nextEmail = String(fd.get("email") ?? "").trim();
+    const nextEmail = (emailRef.current?.value ?? "").trim();
     if (!isValidEmail(nextEmail)) {
       setError("Please enter a valid email address.");
       setErrorField("email");
@@ -131,8 +115,8 @@ export function CreateReceptionistForm({
 
     setBusinessUrl(nextUrl);
     setEmail(nextEmail);
-    setName(String(fd.get("name") ?? "").trim());
-    setOrganisation(String(fd.get("organisation") ?? "").trim());
+    setName((nameRef.current?.value ?? "").trim());
+    setOrganisation((organisationRef.current?.value ?? "").trim());
     setStatus("idle");
     setPastWebsite(true);
   }
@@ -168,6 +152,8 @@ export function CreateReceptionistForm({
         }}
         onDraftChange={onDraftChange}
         onReceptionistChange={onReceptionistChange}
+        onReviewSubjectChange={onReviewSubjectChange}
+        sandboxQualification={sandboxQualification}
       />
     );
   }
@@ -182,7 +168,7 @@ export function CreateReceptionistForm({
       <CreateJourneyStepper step={1} headingRef={stepHeadingRef} />
       <p className="mb-6 text-sm text-muted">Next: {createJourneyNextAction(1)}</p>
 
-      <form onSubmit={onStep1} noValidate className="relative overflow-hidden">
+      <div className="relative overflow-hidden">
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm sm:col-span-2">
             <span className="font-medium text-ink">
@@ -196,6 +182,11 @@ export function CreateReceptionistForm({
               autoComplete="url"
               required
               defaultValue={businessUrl}
+              onKeyDown={(event) => {
+                if (event.key !== "Enter" || !hydrated) return;
+                event.preventDefault();
+                onStep1();
+              }}
               placeholder="https://your-business.co.uk"
               aria-invalid={errorField === "businessUrl" || undefined}
               aria-describedby={
@@ -207,6 +198,7 @@ export function CreateReceptionistForm({
           <label className="block text-sm">
             <span className="font-medium text-ink">Name</span>
             <input
+              ref={nameRef}
               name="name"
               type="text"
               autoComplete="name"
@@ -233,6 +225,7 @@ export function CreateReceptionistForm({
           <label className="block text-sm sm:col-span-2">
             <span className="font-medium text-ink">Organisation</span>
             <input
+              ref={organisationRef}
               name="organisation"
               type="text"
               autoComplete="organization"
@@ -245,6 +238,7 @@ export function CreateReceptionistForm({
           <label>
             Website
             <input
+              ref={honeypotRef}
               name="website"
               type="text"
               tabIndex={-1}
@@ -258,17 +252,20 @@ export function CreateReceptionistForm({
           </p>
         ) : null}
         <button
-          type="submit"
+          type="button"
+          disabled={!hydrated}
           data-create-primary-action=""
-          className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
+          data-create-hydrated={hydrated ? "true" : "false"}
+          onClick={onStep1}
+          className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:cursor-wait disabled:opacity-60"
         >
-          Check this website
+          {hydrated ? "Check this website" : "Loading form..."}
         </button>
         <p className="mt-3 text-xs text-muted">
           Pre-launch capture only. Checking this website does not scan a live
           phone line and does not create a receptionist.
         </p>
-      </form>
+      </div>
     </div>
   );
 }

@@ -8,6 +8,9 @@ function envFlag(value: string | undefined, fallback = false): boolean {
   return value === "true" || value === "1";
 }
 
+export const PRODUCTION_FORM_ENDPOINT =
+  "https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads";
+
 export const siteConfig = {
   name: "MaintenanceOS",
   publicBrand: "MaintenanceOS by Chapelgate",
@@ -29,8 +32,7 @@ export const siteConfig = {
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? "local",
   /** Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md. Env override remains available. */
   formEndpoint:
-    process.env.NEXT_PUBLIC_FORM_ENDPOINT?.trim() ||
-    "https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads",
+    process.env.NEXT_PUBLIC_FORM_ENDPOINT?.trim() || PRODUCTION_FORM_ENDPOINT,
   /**
    * Privacy-minimised first-party measurement endpoint.
    * Sends only bounded event type/path data; no visitor identifier or browser storage.

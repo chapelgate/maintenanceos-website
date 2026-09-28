@@ -30,7 +30,7 @@ export type CreateScanProgress =
   | "scanned_empty"
   | "scan_failed";
 
-/** Five-step /create funnel labels. Next-action names the button, not a live phone. */
+/** Five-step /create funnel labels. Configuration remains website-only until later commissioning. */
 export const CREATE_JOURNEY_STEPS: {
   step: CreateJourneyStep;
   label: string;
@@ -38,9 +38,9 @@ export const CREATE_JOURNEY_STEPS: {
 }[] = [
   { step: 1, label: "Website", nextAction: "Check this website" },
   { step: 2, label: "Check", nextAction: "Choose agent" },
-  { step: 3, label: "Choose", nextAction: "Review draft" },
-  { step: 4, label: "Review", nextAction: "Preview knowledge pack" },
-  { step: 5, label: "Pack", nextAction: "Submit early access request" },
+  { step: 3, label: "Choose", nextAction: "Configure agent" },
+  { step: 4, label: "Configure", nextAction: "Generate reviewed configuration" },
+  { step: 5, label: "Review & Pack", nextAction: "Submit early access request" },
 ];
 
 export function isCreateScanReady(progress: CreateScanProgress): boolean {

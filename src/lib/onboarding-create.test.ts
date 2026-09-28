@@ -148,13 +148,13 @@ test("mapScanBusinessFactMeta keeps provenance only for surviving facts", () => 
 test("create journey steps name the next action without a live-phone claim", () => {
   assert.deepEqual(
     CREATE_JOURNEY_STEPS.map((item) => item.label),
-    ["Website", "Check", "Choose", "Review", "Pack"],
+    ["Website", "Check", "Choose", "Configure", "Review & Pack"],
   );
   assert.equal(createJourneyNextAction(1), "Check this website");
   assert.equal(createJourneyNextAction(2, "checking"), "Checking…");
   assert.equal(createJourneyNextAction(2, "scanned"), "Choose agent");
-  assert.equal(createJourneyNextAction(3), "Review draft");
-  assert.equal(createJourneyNextAction(4), "Preview knowledge pack");
+  assert.equal(createJourneyNextAction(3), "Configure agent");
+  assert.equal(createJourneyNextAction(4), "Generate reviewed configuration");
   assert.equal(createJourneyNextAction(5), "Submit early access request");
   assert.equal(isCreateScanReady("scanning"), false);
   assert.equal(isCreateScanReady("queued"), true);
@@ -174,7 +174,7 @@ test("create journey stepper names current/completed without a live-phone claim"
   assert.equal(createJourneyStepStatusLabel("upcoming"), "Not started");
   assert.equal(createJourneyStepAnnouncement(1), "Step 1 of 5: Website");
   assert.equal(createJourneyStepAnnouncement(3), "Step 3 of 5: Choose");
-  assert.equal(createJourneyStepAnnouncement(4), "Step 4 of 5: Review");
+  assert.equal(createJourneyStepAnnouncement(4), "Step 4 of 5: Configure");
   assert.doesNotMatch(createJourneyStepAnnouncement(5), /live (phone|number|call)/i);
 });
 
@@ -250,6 +250,37 @@ test("buildCreateLeadMessage includes field meta when provided", () => {
   assert.match(message, /"source": "jsonld"/);
 });
 
+test("buildCreateLeadMessage includes fact provenance and customer review evidence", () => {
+  const message = buildCreateLeadMessage({
+    businessUrl: "https://example.com/",
+    scanNote: "scan_response_mapped",
+    draft: {
+      businessName: "Acme",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+    factMeta: {
+      services: { source: "nav", confidence: "low" },
+    },
+    review: {
+      version: "1.0.0",
+      revisionId: "arv1_12345678",
+      complete: true,
+      requiredIds: ["control:role", "fact:services"],
+      confirmedIds: ["control:role", "fact:services"],
+      missingIds: [],
+    },
+  });
+  assert.match(message, /Fact meta JSON/);
+  assert.match(message, /"confidence": "low"/);
+  assert.match(message, /Customer review JSON/);
+  assert.match(message, /"revisionId": "arv1_12345678"/);
+  assert.match(message, /"complete": true/);
+  assert.match(message, /"fact:services"/);
+});
+
 test("buildCreateLeadMessage includes the selected AgentBlueprint when provided", () => {
   const message = buildCreateLeadMessage({
     businessUrl: "https://example.com/",
@@ -273,7 +304,7 @@ test("buildCreateLeadMessage includes the selected AgentBlueprint when provided"
   assert.match(message, /"stage": "draft"/);
 });
 
-test("buildCreateLeadMessage includes receptionist pack when provided", () => {
+test("buildCreateLeadMessage includes agent pack when provided", () => {
   const message = buildCreateLeadMessage({
     businessUrl: "https://example.com/",
     scanNote: "scan_response_mapped",
@@ -299,8 +330,38 @@ test("buildCreateLeadMessage includes receptionist pack when provided", () => {
       limitations: ["Pre-launch sandbox draft only — not a live customer phone number."],
     },
   });
-  assert.match(message, /Receptionist knowledge pack JSON/);
+  assert.match(message, /Agent knowledge pack JSON/);
   assert.match(message, /sandbox_knowledge_pack/);
   assert.match(message, /not a live customer phone line/);
   assert.match(message, /not a live customer phone number/);
+});
+
+
+test("buildCreateLeadMessage includes sandbox qualification evidence", () => {
+  const message = buildCreateLeadMessage({
+    businessUrl: "https://example.com/",
+    scanNote: "scan_response_mapped",
+    draft: {
+      businessName: "Acme",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+    sandboxQualification: {
+      version: "agent_sandbox_qualification_v1",
+      reviewRevisionId: "arv1_12345678",
+      source: "companion",
+      sessionId: "sandbox_sess_1",
+      testId: "sandbox_test_1",
+      complete: true,
+      checks: [{ id: "companion_boundary", ok: true }],
+      failedCheckIds: [],
+    },
+  });
+  assert.match(message, /Sandbox qualification JSON/);
+  assert.match(message, /agent_sandbox_qualification_v1/);
+  assert.match(message, /"source": "companion"/);
+  assert.match(message, /"reviewRevisionId": "arv1_12345678"/);
+  assert.match(message, /"complete": true/);
 });

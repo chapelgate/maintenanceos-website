@@ -33,7 +33,7 @@ export type FeatureGroupId = (typeof FEATURE_GROUPS)[number];
 export const featureGroupCopy = {
   onboarding: {
     heading: "Onboarding",
-    lede: "Website → Check → Choose → Review → Pack. Early access — not a live receptionist.",
+    lede: "Website → Check → Choose → Configure → Review & Pack. Early access — not a live receptionist.",
   },
   knowledge: {
     heading: "Knowledge",
@@ -93,7 +93,7 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     ukOpsLine:
       "Start from a public UK maintenance website, review the draft, then a knowledge pack — early access only.",
     bullets: [
-      "Public /create path: Website → Check → Choose → Review → Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number.",
+      "Public /create path: Website → Check → Choose → Configure → Review & Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number.",
       "SSRF-safe website scan companion. Otherwise the crawl is queued. Empty fields stay empty. Not a live Fonio-parity knowledge crawl.",
       "Knowledge pack + system prompt from the reviewed /create draft. Missing keys stay missing. Not a live tenant or trained knowledge base.",
     ],

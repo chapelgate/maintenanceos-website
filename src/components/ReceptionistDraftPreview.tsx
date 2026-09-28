@@ -7,7 +7,7 @@ const FIELD_CLASS =
   "mt-1 w-full rounded-md border border-border bg-paper px-3 py-2";
 
 /**
- * Compact editable preview of the claims-safe knowledge pack + system prompt.
+ * Compact editable preview of the claims-safe agent knowledge pack + system prompt.
  * Limitations stay read-only so live-phone / always-on claims cannot be dropped.
  * Empty / missing keys stay empty — never invent extract fields.
  */
@@ -34,9 +34,9 @@ export function ReceptionistDraftPreview({
   return (
     <div data-receptionist-draft="preview" className="space-y-3">
       <p className="text-sm text-muted">
-        Sandbox receptionist draft from the fields you reviewed — not a live
-        number, not always-on, and not a trained knowledge base. Empty facts
-        stay empty.
+        Sandbox AI-agent configuration from the fields and role you reviewed —
+        not a live number, not always-on, and not a trained knowledge base.
+        Empty facts stay empty.
       </p>
 
       <section
@@ -67,7 +67,7 @@ export function ReceptionistDraftPreview({
           </p>
         ) : (
           <p className="mt-2 text-xs text-muted">
-            No empty extract fields in this draft — still not a live receptionist.
+            No empty extract fields in this draft — still not a live AI agent.
           </p>
         )}
       </section>
@@ -89,7 +89,7 @@ export function ReceptionistDraftPreview({
         </label>
         <label className="block text-sm">
           <span className="font-medium text-ink">
-            System prompt draft (editable)
+            Prompt content (editable — trusted controls re-applied separately)
           </span>
           <textarea
             rows={7}
@@ -106,16 +106,40 @@ export function ReceptionistDraftPreview({
         </p>
       ) : null}
       <p className="text-xs text-muted">
-        Trusted constraints are re-applied on submit and sandbox session create.
-        This page will not claim a live number.
+        Trusted AgentBlueprint controls are re-applied after prompt or pack edits.
+        Website text cannot grant capabilities, alter escalation, or activate a live number.
       </p>
+
+      <details className="rounded-lg border border-border bg-paper p-3">
+        <summary className="cursor-pointer text-sm font-medium text-ink">
+          Final normalized knowledge pack (read-only)
+        </summary>
+        <pre
+          className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
+          data-final-knowledge-pack="readonly"
+        >
+          {JSON.stringify(result.knowledgePack, null, 2)}
+        </pre>
+      </details>
+
+      <details className="rounded-lg border border-border bg-paper p-3">
+        <summary className="cursor-pointer text-sm font-medium text-ink">
+          Final stored system prompt (read-only)
+        </summary>
+        <pre
+          className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
+          data-final-system-prompt="readonly"
+        >
+          {result.systemPrompt}
+        </pre>
+      </details>
 
       <button
         type="button"
         onClick={onReset}
         className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper"
       >
-        Reset pack from reviewed draft
+        Reset configuration from reviewed draft
       </button>
     </div>
   );

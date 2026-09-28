@@ -1,6 +1,6 @@
 /**
  * How-it-works flow — matches /create stepper:
- * Website → Check → Choose → Review → Pack.
+ * Website → Check → Choose → Configure → Review & Pack.
  * Unified mos-glass ladder: number → title → status. CSS only; AA arrows/paper.
  */
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
@@ -30,16 +30,16 @@ const STAGE_COPY = [
     status: "UNDER_TEST",
   },
   {
-    id: "review",
-    short: "Edit the draft before anything is stored",
-    body: "You review business name, greeting, hours, services, and FAQs. Copied fields show where they came from and how confident the scan was. Empty fields were not invented.",
-    note: "Empty extract fields stay empty — we do not invent crawl results.",
+    id: "configure",
+    short: "Configure the agent within the selected role",
+    body: "Choose a voice preference, narrow the approved role actions, set human-transfer behaviour where the role permits it, and review the business facts and greeting.",
+    note: "Configuration can only narrow the selected role. It cannot add unsupported permissions or alter live phone routing.",
     status: "UNDER_TEST",
   },
   {
-    id: "pack",
-    short: "Preview a claims-safe knowledge pack",
-    body: "The reviewed draft becomes a knowledge pack and system prompt you can edit. Missing hours or services stay missing. Then you submit early access — no live number is assigned.",
+    id: "review_pack",
+    short: "Review the final configuration and pack",
+    body: "The reviewed configuration becomes a knowledge pack and protected system prompt. Missing hours or services stay missing, and required customer confirmations must be complete before early-access submission.",
     note: "Optional scripted sandbox demo is under testing and off by default. It is not a live customer call.",
     status: "UNDER_TEST",
   },
@@ -134,7 +134,7 @@ export function HowItWorksFlow() {
         id="flow-heading"
         className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
       >
-        Website → Check → Choose → Review → Pack
+        Website → Check → Choose → Configure → Review & Pack
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
         The same steps as{" "}

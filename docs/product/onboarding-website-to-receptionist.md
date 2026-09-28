@@ -8,11 +8,11 @@
 1. Land on marketing site with CTA: **Turn your business website into an AI receptionist**.
 2. `/create` — enter business URL (+ optional email).
 3. Progress UI: resolving → fetching → extracting → creating sandbox.
-4. Review screen: name, greeting, services, FAQs, hours (edit inline).
-5. Preview claims-safe knowledge pack + system prompt (edit inline). Missing fields stay missing.
-6. Choose voice + language (UK English default).
-7. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone.
-8. Connect calendar / number / go-live checklist — calendar adapters exist in `packages/calendar-adapters` (flag default off; `/create` shows coming / under testing unless enabled locally). Not a live phone booking step.
+4. Configure the selected role: voice preference, supported actions, human-transfer behaviour, name, greeting, services, FAQs, and hours. Configuration can only narrow the selected role.
+5. Review the claims-safe knowledge pack + protected system prompt. Missing fields stay missing and required confirmations must be complete.
+6. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone. A browser mock is demonstration-only. When a configured sandbox companion returns the exact reviewed pack/prompt and deterministic scripted transcript, Step 7 can record qualification for that exact review revision and advance `reviewed → sandbox_passed`.
+8. Internal provisioning handoff — **not a browser step**. A trusted server-side caller may submit the complete reviewed/sandbox evidence to `packages/provisioning-gateway`; the gateway re-verifies Step 7, authenticates ownership, applies replay/idempotency controls and may advance only `sandbox_passed → provisioning`.
+9. Adapter readiness — **Step 9 implemented as an internal/server-only gate**. The reviewed blueprint declares telephony intent (and calendar intent for booking assistants) before review. The existing provisioning gateway binds those reviewed intents to server-side connectors and may advance only `provisioning → ready` after readiness proof. Twilio is the telephony/SMS adapter; the existing calendar companion is reused for Google/Microsoft readiness; email/CRM use a signed-HTTPS health contract. Provider mutation is OFF by default and additionally requires an authenticated `mode:"apply"` request. This is not live activation; Step 10 owns commissioning and `ready → active`.
 
 ## Failure modes (must handle)
 
@@ -50,6 +50,18 @@ buildReceptionistDraft({ businessName, greeting, hours, services, faqs })
 
 ## Sandbox test (v0 implemented)
 
+### Agent Factory Step 7 qualification
+
+The existing sandbox remains the execution surface. Step 7 adds a fail-closed qualification policy around it; it does not create another sandbox service.
+
+- only a complete Step-6 review revision can be qualified;
+- browser mock results never award `sandbox_passed`;
+- configured companion session must preserve the exact reviewed knowledge pack + protected prompt;
+- scripted test/session IDs, no-live-call fields and transcript must match;
+- edits invalidate previous qualification;
+- qualification is pre-launch audit evidence, not production authorization or provisioning.
+
+
 Companion: `packages/sandbox-test-call` (`npm run sandbox-test-call`). Contract: `docs/SANDBOX_TEST_CALL_CONTRACT.md`.
 
 ```
@@ -67,6 +79,38 @@ POST /v1/sandbox/sessions/{id}/test-call
 ```
 
 `SANDBOX_TEST_CALL_ENABLED` defaults to **false**. Scripted turns read the stored session knowledge pack and follow the system prompt’s missing-field rule. This is not a live customer number.
+
+## Secure provisioning gateway (Step 8 implemented)
+
+Internal companion: `packages/provisioning-gateway` (`npm run provisioning-gateway`). Contract: `docs/PROVISIONING_GATEWAY_CONTRACT.md`.
+
+- disabled by default;
+- server-to-server only; browser Origin is rejected and there is no provisioning CORS surface;
+- HMAC + timestamp + one-time nonce + idempotency key required;
+- authenticated principal is tenant-scoped;
+- only a schema-valid `sandbox_passed` AgentBlueprint is eligible;
+- gateway recomputes the complete Step-7 review/session/test qualification and requires an exact match;
+- accepted handoff creates a durable provisioning control record and changes lifecycle only to `provisioning`;
+- it does **not** create/alter the frozen product database, attach a number, enable connectors, or activate an agent.
+
+There is intentionally no `NEXT_PUBLIC_PROVISIONING_*` flag and no direct browser call from `/create`.
+
+## Phone and external adapter readiness (Step 9 implemented)
+
+Step 9 extends the same internal provisioning gateway; it does not create a second control plane.
+
+- reviewed integration intent is part of the AgentBlueprint before Step-6 confirmation;
+- current voice-agent templates require telephony intent; booking assistants additionally require calendar intent;
+- operational connector refs and credential values remain server-side readiness evidence;
+- `POST /v1/provisioning/adapters/prepare` uses the same HMAC/timestamp/nonce and tenant-scope boundary as Step 8;
+- Twilio readiness verifies the configured IncomingPhoneNumber routes against the existing MaintenanceOS `/voice/inbound` and `/messaging/inbound` endpoints;
+- if a Twilio application or trunk owns routing, direct number-level URL readiness fails closed;
+- verify mode is always non-mutating; provider update requires both the server mutation flag and signed `mode:"apply"`;
+- calendar readiness reuses `packages/calendar-adapters` and requires a configured Google/Microsoft provider; mock never qualifies;
+- successful readiness changes lifecycle only from `provisioning` to `ready`;
+- no number purchase/port, live call, runtime switch or `active` transition occurs in Step 9.
+
+Contract: `docs/AGENT_FACTORY_STEP9_PHONE_EXTERNAL_ADAPTERS.md` and `docs/AGENT_ADAPTER_CONNECTORS_CONTRACT.md`.
 
 ## Later API (sandbox promote — not implemented)
 

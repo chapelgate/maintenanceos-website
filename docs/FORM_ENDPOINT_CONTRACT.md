@@ -40,7 +40,7 @@ The effective form endpoint must be an **absolute** `http:` or `https:` URL (pro
 | `name`           | no       | string    | Omitted if empty |
 | `organisation`   | no       | string    | Omitted if empty |
 | `role`           | no       | string    | Visitor-selected role slug |
-| `message`        | no       | string    | Used on early demo and contact |
+| `message`        | no       | string    | Bounded configuration/lead payload; production receiver accepts up to 64,000 characters |
 | `source_url`     | no       | string    | Current public page URL, used for operator context |
 | `website`        | no       | string    | **Honeypot.** If present and non-empty, accept and discard. Do not tip off bots. |
 
@@ -79,17 +79,19 @@ HTTP **200**, **201**, or **202**. Body **should** be JSON:
 ```json
 {
   "ok": true,
-  "mode": "accepted"
+  "mode": "accepted",
+  "reference": "durable-record-id",
+  "confirmation_email": "accepted"
 }
 ```
 
 | `mode`         | Meaning | UI rule |
 |----------------|---------|---------|
-| `accepted`     | Lead stored or queued by a real provider | Thank-you copy may say the request was accepted. **Never** say a confirmation or notification email was sent. |
+| `accepted`     | Lead stored by the production provider | Production UI requires a durable `reference`; `confirmation_email` is `"accepted"` or `"failed"` so a stored request is never discarded because mail handoff failed. |
 | `queued_stub`  | Stored only by a stub/queue with no delivery | Thank-you copy must say **no email was sent**. |
 | `submitted`    | **Deprecated alias** of `accepted` | Treat as `accepted`. Do not interpret as “email sent”. |
 
-If the body is empty, non-JSON, or omits `mode`, the client treats HTTP 2xx as `accepted` and still **must not claim email was sent**.
+If the body is empty, non-JSON, or omits the receipt/confirmation fields, the adapter may parse HTTP 2xx as `accepted`, but production UI must show an incomplete-receipt error rather than a success claim.
 
 The local stub always returns `"mode": "queued_stub"` and `"sends_email": false`.
 
@@ -120,8 +122,9 @@ Suggested status codes:
 ## Email and claims
 
 - The production endpoint persists the lead before requesting an operator notification through the existing Resend account.
-- `mode: accepted` means the lead was durably accepted and the operator-notification request was accepted by the mail provider; it does **not** mean a visitor confirmation email was sent.
-- Client success states (`LeadCaptureForm`) must **never** claim that a visitor confirmation email was sent.
+- It then requests a separate minimal customer acknowledgement to the submitted email address and stores its provider message ID/status on the same durable lead record.
+- A durable production receipt requires `reference`. `confirmation_email: "accepted"` means the mail provider accepted the acknowledgement for delivery; `"failed"` means the request is still stored but the acknowledgement handoff failed. The UI must say this explicitly and must not ask the customer to resubmit a stored request.
+- Retries reuse the client `submission_id` and must not intentionally resend operator/customer mail already marked sent.
 - The local stub logs JSON lines to disk and stdout only. It does not call SMTP, transactional APIs, or webhooks.
 
 ## Abuse controls (production)
@@ -129,7 +132,7 @@ Suggested status codes:
 Minimum expected of a real endpoint:
 
 - Drop honeypot (`website`) silently with 2xx + `queued_stub` or equivalent discard.
-- Cap body size (32 KiB is enough).
+- Keep public lead bodies bounded. The current receiver bounds the configuration message at 64,000 characters and remains rate-limited.
 - Rate-limit public submissions. The current production route uses a global bucket plus a privacy-preserving hashed-email bucket.
 - Do not write leads into the product telephony / work-order systems (`WEBSITE_ARCHITECTURE.md`).
 
@@ -161,4 +164,4 @@ The current receiver is additive to the existing Chapelgate RSFM control plane. 
 - Spam: honeypot plus bounded public rate limits.
 - Idempotency: duplicate retries reuse the same durable lead record.
 - Operator follow-up: sending-only Resend credential restricted to the already-verified Chapelgate sending domain.
-- Visitor acknowledgement: the form says the request was accepted and that a human will review it; it does not claim a confirmation email was sent.
+- Visitor acknowledgement: a minimal confirmation email is requested after durable storage; the browser receives the durable reference and provider-acceptance status.

@@ -45,6 +45,42 @@ test("/create agent selector is a bounded native radio group", () => {
   assert.match(templates, /type: "custom"/);
 });
 
+test("/create final review is explicit and fail-closed", () => {
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+  const gate = read("src/components/AgentReviewGate.tsx");
+  const review = read("src/lib/agent-review.ts");
+
+  assert.match(gate, /Final customer review/);
+  assert.match(gate, /<fieldset/);
+  assert.match(gate, /Required confirmations/);
+  assert.match(gate, /type="checkbox"/);
+  const preview = read("src/components/ReceptionistDraftPreview.tsx");
+  assert.match(preview, /Final normalized knowledge pack \(read-only\)/);
+  assert.match(preview, /data-final-knowledge-pack="readonly"/);
+  assert.match(preview, /JSON\.stringify\(result\.knowledgePack, null, 2\)/);
+  assert.match(preview, /Final stored system prompt \(read-only\)/);
+  assert.match(preview, /data-final-system-prompt="readonly"/);
+  assert.match(preview, /\{result\.systemPrompt\}/);
+  assert.match(later, /buildAgentReviewRecord/);
+  assert.match(
+    later,
+    /Complete every required review confirmation before submitting this configuration\./,
+  );
+  assert.match(
+    later,
+    /Fix the knowledge pack JSON before submitting this configuration\./,
+  );
+  assert.match(later, /disabled=\{status === "submitting"\}/);
+  assert.match(
+    later,
+    /scrollIntoView\(\{ behavior: "smooth", block: "center" \}\)/,
+  );
+  assert.match(review, /fact:businessName/);
+  assert.match(review, /fact:website/);
+  assert.match(review, /low_confidence/);
+  assert.match(review, /consequential/);
+});
+
 test("/create fields keep visible labels and tie errors with aria-describedby", () => {
   const form = readCreateFormGraph();
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
@@ -108,4 +144,19 @@ test("sandbox coming and limitations regions have labelled headings", () => {
 test("static export setting is unchanged by create a11y polish", () => {
   const config = read("next.config.ts");
   assert.match(config, /output:\s*["']export["']/);
+});
+
+test("/create Step 1 cannot native-submit before hydration", () => {
+  const form = read("src/components/CreateReceptionistForm.tsx");
+  assert.match(form, /useSyncExternalStore\(/);
+  assert.match(form, /HYDRATED_SERVER_SNAPSHOT = \(\) => false/);
+  assert.match(form, /HYDRATED_CLIENT_SNAPSHOT = \(\) => true/);
+  assert.match(form, /type="button"/);
+  assert.match(form, /disabled=\{!hydrated\}/);
+  assert.match(form, /data-create-hydrated=\{hydrated \? "true" : "false"\}/);
+  assert.doesNotMatch(form, /<form\b/);
+  assert.doesNotMatch(form, /requestSubmit\(/);
+  assert.match(form, /onClick=\{onStep1\}/);
+  assert.match(form, /event\.key !== "Enter"/);
+  assert.match(form, /Loading form\.\.\./);
 });

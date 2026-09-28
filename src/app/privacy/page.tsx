@@ -38,7 +38,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "how-collected",
     title: "How we collect data",
-    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), ordinary hosting/network technical data, and first-party cookieless operational measurement events — plus public pages from a submitted website URL when a scan service is configured. Marketing enquiries and bounded website events use Chapelgate\'s existing Railway-hosted control plane and Postgres store. Enquiries are stored as audited operational lead records; privacy-minimised website events are stored separately. Lead records notify an operator through Resend for human follow-up; aggregate weekly website reports reuse the same sending route. No invented crawl and no invented third-party lists.",
+    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), ordinary hosting/network technical data, and first-party cookieless operational measurement events — plus public pages from a submitted website URL when a scan service is configured. Marketing enquiries and bounded website events use Chapelgate\'s existing Railway-hosted control plane and Postgres store. Enquiries are stored as audited operational lead records; privacy-minimised website events are stored separately. Lead records notify an operator through Resend for human follow-up and request a minimal acknowledgement to the submitted email address; aggregate weekly website reports reuse the same sending route. No invented crawl and no invented third-party lists.",
   },
   {
     id: CREATE_INGEST_PRIVACY_ANCHOR,
@@ -63,7 +63,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "Current website path uses DigitalOcean for the static site, an existing Railway-hosted Chapelgate control plane and Postgres store for lead intake plus privacy-minimised website events, and Resend for operator lead notifications and aggregate weekly reports. No third-party analytics vendor is used. Other processor categories remain subject to legal review.",
+    body: "Current website path uses DigitalOcean for the static site, an existing Railway-hosted Chapelgate control plane and Postgres store for lead intake plus privacy-minimised website events, and Resend for operator lead notifications, customer acknowledgements, and aggregate weekly reports. No third-party analytics vendor is used. Other processor categories remain subject to legal review.",
   },
   {
     id: "transfers",
