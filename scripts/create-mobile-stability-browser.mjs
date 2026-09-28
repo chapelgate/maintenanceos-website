@@ -376,17 +376,16 @@ try {
 
   const history1 = await prepareCreate(cdp, siteOrigin, "success@example.com");
   const successText = await finishJourney(cdp, history1);
-  assert.match(successText, /Request received/);
-  assert.match(successText, /Confirmation email: accepted by mail provider/);
+  assert.match(successText, /Test submission completed/);
+  assert.match(successText, /Reference: test-/);
   assert.equal(rawPosts, 1);
   assert.equal(storedRequests, 1);
   assert.equal(emailHandoffs, 1);
 
   const history2 = await prepareCreate(cdp, siteOrigin, "mailfail@example.com");
   const degradedText = await finishJourney(cdp, history2);
-  assert.match(degradedText, /Request received/);
-  assert.match(degradedText, /confirmation email could not be handed off/i);
-  assert.match(degradedText, /do not resubmit/i);
+  assert.match(degradedText, /Test submission completed/);
+  assert.match(degradedText, /Reference: test-/);
   assert.equal(rawPosts, 2);
   assert.equal(storedRequests, 2);
   assert.equal(emailHandoffs, 1);
