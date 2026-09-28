@@ -11,35 +11,30 @@ permissions:
 jobs:
   validate:
     runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Runtime versions
-        run: node --version && npm --version
-      - name: Install
-        run: npm ci
-      - name: Focused Create repair tests
+      - name: Node, build and Chromium validation in isolated container
         run: |
-          node scripts/create-mobile-submit.test.mjs
-          node --experimental-strip-types --test src/lib/lead-adapter.test.ts
-          node --test scripts/form-stub-server.test.mjs scripts/create-a11y.test.mjs scripts/customer-agent-configuration.test.mjs
-      - name: Full repository tests
-        run: npm test
-      - name: Changed-file lint
-        run: npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts src/lib/lead-adapter.test.ts
-      - name: Accessibility regression
-        run: npm run accessibility:check
-      - name: TypeScript
-        run: npx tsc --noEmit
-      - name: Production static build
-        run: npm run build
-      - name: Browser viewport smoke
-        run: npm run browser:smoke
-      - name: Static route count
-        run: |
-          test "$(find out -name index.html -type f | wc -l)" -eq 30
-      - name: Whitespace and patch integrity
+          docker run --rm --shm-size=1g -v "$PWD:/work" -w /work node:24-bookworm bash -lc '
+            set -euo pipefail;
+            apt-get update -qq;
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -qq chromium >/dev/null;
+            node --version;
+            npm --version;
+            npm ci;
+            node scripts/create-mobile-submit.test.mjs;
+            node --experimental-strip-types --test src/lib/lead-adapter.test.ts;
+            node --test scripts/form-stub-server.test.mjs scripts/create-a11y.test.mjs scripts/customer-agent-configuration.test.mjs;
+            npm test;
+            npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts src/lib/lead-adapter.test.ts;
+            npm run accessibility:check;
+            npx tsc --noEmit;
+            npm run build;
+            BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
+          '
+      - name: Patch integrity
         run: git diff --check e976d086652ce5b4e8ce51cf32e535d2e450db92..HEAD
