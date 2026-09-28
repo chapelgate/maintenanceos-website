@@ -1,5 +1,5 @@
-import type { LeadType } from "@/config/site";
-import { siteConfig } from "@/config/site";
+import type { LeadType } from "../config/site.ts";
+import { siteConfig } from "../config/site.ts";
 
 export type LeadPayload = {
   leadType: LeadType;
