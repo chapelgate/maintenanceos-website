@@ -573,6 +573,7 @@ export function CreateReceptionistLaterSteps({
       return;
     }
     if (
+      usesProductionLeadReceiver &&
       result.mode === "accepted" &&
       (!result.reference || result.confirmationEmail !== "accepted")
     ) {
@@ -672,6 +673,7 @@ export function CreateReceptionistLaterSteps({
       <div
         className="rounded-md border border-border bg-surface p-6"
         role="status"
+        data-create-submit-state="success"
       >
         <p className="font-semibold text-ink">
           {usesProductionLeadReceiver
@@ -681,7 +683,7 @@ export function CreateReceptionistLaterSteps({
         <p className="mt-2 text-sm text-muted">
           {usesProductionLeadReceiver
             ? "Your website-to-AI-agent request was durably accepted and a confirmation email was accepted by the mail provider. No live phone number was provisioned and no live agent was activated."
-            : "This preview receiver accepted the test submission. No live phone number was provisioned and no live agent was activated."}
+            : "This preview receiver accepted the test submission. This preview does not send a confirmation email. No live phone number was provisioned and no live agent was activated."}
         </p>
         {receiptReference ? (
           <p className="mt-3 text-sm font-medium text-ink">
@@ -702,6 +704,7 @@ export function CreateReceptionistLaterSteps({
       data-lead-type="create_receptionist"
       data-create-step={step}
       data-create-next-action={nextAction}
+      data-create-submit-state={status}
     >
       <CreateJourneyStepper step={step} headingRef={stepHeadingRef} />
       <p className="mb-6 text-sm text-muted">
