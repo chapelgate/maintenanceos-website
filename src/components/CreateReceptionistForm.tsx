@@ -168,14 +168,7 @@ export function CreateReceptionistForm({
       <CreateJourneyStepper step={1} headingRef={stepHeadingRef} />
       <p className="mb-6 text-sm text-muted">Next: {createJourneyNextAction(1)}</p>
 
-      <div
-        className="relative overflow-hidden"
-        onKeyDown={(event) => {
-          if (event.key !== "Enter" || !hydrated) return;
-          event.preventDefault();
-          onStep1();
-        }}
-      >
+      <div className="relative overflow-hidden">
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm sm:col-span-2">
             <span className="font-medium text-ink">
