@@ -10,18 +10,28 @@ export type LeadPayload = {
   message?: string;
   /** Honeypot — must stay empty */
   website?: string;
+  /** Stable per-journey identifier used for durable idempotency. */
+  submissionId?: string;
 };
 
 /**
  * `local_stub` — no endpoint configured (client-only).
  * `queued_stub` — endpoint stored the lead without delivery (local stub).
- * `accepted` — endpoint accepted the lead. Never means email was sent.
+ * `accepted` — endpoint durably accepted the lead. Email status is separate.
  */
 export type LeadSuccessMode = "local_stub" | "queued_stub" | "accepted";
 
-export type LeadResult =
-  | { ok: true; mode: LeadSuccessMode }
-  | { ok: false; error: string };
+export type LeadConfirmationEmailStatus = "accepted" | "failed" | "not_confirmed";
+
+export type LeadAcceptedResult = {
+  ok: true;
+  mode: LeadSuccessMode;
+  reference?: string;
+  confirmationEmail: LeadConfirmationEmailStatus;
+  warning?: string;
+};
+
+export type LeadResult = LeadAcceptedResult | { ok: false; error: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -42,10 +52,38 @@ function parseMode(body: unknown): LeadSuccessMode | null {
   return null;
 }
 
-function parseError(body: unknown): string | null {
+function parseTextField(body: unknown, key: string): string | null {
   if (!body || typeof body !== "object" || Array.isArray(body)) return null;
-  const error = (body as { error?: unknown }).error;
-  return typeof error === "string" && error.trim() ? error.trim() : null;
+  const value = (body as Record<string, unknown>)[key];
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function parseError(body: unknown): string | null {
+  return parseTextField(body, "error") ?? parseTextField(body, "detail");
+}
+
+function acceptedAfterDeliveryFailure(
+  detail: string | null,
+): LeadAcceptedResult | null {
+  if (detail === "lead recorded; customer confirmation is temporarily unavailable") {
+    return {
+      ok: true,
+      mode: "accepted",
+      confirmationEmail: "failed",
+      warning:
+        "Your request was recorded, but the confirmation email could not be handed off. Do not submit it again.",
+    };
+  }
+  if (detail === "lead recorded; operator notification is temporarily unavailable") {
+    return {
+      ok: true,
+      mode: "accepted",
+      confirmationEmail: "not_confirmed",
+      warning:
+        "Your request was recorded, but the internal notification workflow is temporarily unavailable. Do not submit it again.",
+    };
+  }
+  return null;
 }
 
 function bodyOkFlag(body: unknown): boolean | null {
@@ -59,12 +97,22 @@ function bodyOkFlag(body: unknown): boolean | null {
 /**
  * Static-friendly lead adapter.
  * Posts to the configured production endpoint (NEXT_PUBLIC_FORM_ENDPOINT may override it).
- * Success never means a visitor confirmation email was sent.
+ * Email success is claimed only when the receiver explicitly reports provider handoff.
  */
+export function createLeadSubmissionId(): string {
+  const randomUuid = globalThis.crypto?.randomUUID?.bind(globalThis.crypto);
+  if (randomUuid) return `create-${randomUuid()}`;
+  return `create-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 14)}`;
+}
+
 export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
   if (payload.website) {
     // Honeypot tripped — pretend success without claiming email.
-    return { ok: true, mode: "local_stub" };
+    return {
+      ok: true,
+      mode: "local_stub",
+      confirmationEmail: "not_confirmed",
+    };
   }
 
   const email = payload.email.trim();
@@ -74,7 +122,11 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
 
   const endpoint = siteConfig.formEndpoint.trim();
   if (!endpoint) {
-    return { ok: true, mode: "local_stub" };
+    return {
+      ok: true,
+      mode: "local_stub",
+      confirmationEmail: "not_confirmed",
+    };
   }
 
   if (!isAbsoluteHttpUrl(endpoint)) {
@@ -98,6 +150,7 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
         message: payload.message?.trim() || undefined,
         source_url:
           typeof window !== "undefined" ? window.location.href : undefined,
+        submission_id: payload.submissionId?.trim() || undefined,
       }),
     });
 
@@ -109,6 +162,12 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
       } catch {
         parsed = null;
       }
+    }
+
+    const detail = parseTextField(parsed, "detail");
+    if (!res.ok) {
+      const acceptedFailure = acceptedAfterDeliveryFailure(detail);
+      if (acceptedFailure) return acceptedFailure;
     }
 
     if (bodyOkFlag(parsed) === false) {
@@ -129,7 +188,14 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
       };
     }
 
-    return { ok: true, mode: parseMode(parsed) ?? "accepted" };
+    const confirmation = parseTextField(parsed, "confirmation_email");
+    return {
+      ok: true,
+      mode: parseMode(parsed) ?? "accepted",
+      reference: parseTextField(parsed, "reference") ?? undefined,
+      confirmationEmail:
+        confirmation === "accepted" ? "accepted" : "not_confirmed",
+    };
   } catch {
     return {
       ok: false,

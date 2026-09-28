@@ -21,7 +21,11 @@ import {
   customerConfigurationForBlueprint,
   type CustomerAgentConfiguration,
 } from "@/lib/agent-customer-configuration";
-import { submitLead } from "@/lib/lead-adapter";
+import {
+  createLeadSubmissionId,
+  submitLead,
+  type LeadAcceptedResult,
+} from "@/lib/lead-adapter";
 import { createAgentBlueprintDraft } from "@/lib/agent-selection";
 import type { AgentBlueprintV1, AgentType } from "@/lib/agent-blueprint";
 import {
@@ -211,6 +215,8 @@ export function CreateReceptionistLaterSteps({
   const [promptText, setPromptText] = useState("");
   const [packError, setPackError] = useState<string | null>(null);
   const [configEditPending, setConfigEditPending] = useState(false);
+  const [submissionReceipt, setSubmissionReceipt] =
+    useState<LeadAcceptedResult | null>(null);
   const errorId = useId();
   const progressId = useId();
   const businessNameHintId = useId();
@@ -224,6 +230,8 @@ export function CreateReceptionistLaterSteps({
   const emailHintId = useId();
   const reviewStatusId = useId();
   const configEditVersionRef = useRef(0);
+  const submissionIdRef = useRef<string | null>(null);
+  const submitLockedRef = useRef(false);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const errorRef = useRef<HTMLParagraphElement>(null);
 
@@ -464,6 +472,7 @@ export function CreateReceptionistLaterSteps({
   }
 
   async function onSubmitLead() {
+    if (submitLockedRef.current) return;
     clearError();
     if (configEditPending) {
       setError("Finish applying the latest configuration edit before submitting.");
@@ -532,6 +541,8 @@ export function CreateReceptionistLaterSteps({
       ? sandboxQualification!.blueprint
       : reviewedBlueprint;
 
+    submitLockedRef.current = true;
+    submissionIdRef.current ??= createLeadSubmissionId();
     setStatus("submitting");
     const result = await submitLead({
       leadType: "create_receptionist",
@@ -552,9 +563,11 @@ export function CreateReceptionistLaterSteps({
         receptionist: currentReceptionist,
       }),
       website: "",
+      submissionId: submissionIdRef.current,
     });
 
     if (!result.ok) {
+      submitLockedRef.current = false;
       setError(
         result.error ||
           "We could not submit just now. Please try again shortly.",
@@ -562,20 +575,47 @@ export function CreateReceptionistLaterSteps({
       setStatus("error");
       return;
     }
+    setSubmissionReceipt(result);
     setStatus("success");
   }
 
-  if (status === "success") {
+  if (status === "success" && submissionReceipt) {
+    const productionAccepted = submissionReceipt.mode === "accepted";
     return (
       <div
         className="rounded-md border border-border bg-surface p-6"
         role="status"
+        aria-live="polite"
+        data-create-success=""
       >
-        <p className="font-semibold text-ink">You are on the list</p>
+        <p className="font-semibold text-ink">Request received</p>
         <p className="mt-2 text-sm text-muted">
-          Thanks — we recorded your website-to-AI-agent early access request,
-          including the role and draft you reviewed. No live phone number was
-          provisioned, no confirmation email was sent, and no live agent was
+          {productionAccepted
+            ? "Your website-to-AI-agent request has been recorded. You do not need to submit it again."
+            : "This test request was accepted locally. It was not handed to the production receiver."}
+        </p>
+        {submissionReceipt.reference ? (
+          <p className="mt-3 text-sm text-ink">
+            Reference:{" "}
+            <span className="font-mono">{submissionReceipt.reference}</span>
+          </p>
+        ) : null}
+        <p className="mt-3 text-sm text-muted">
+          {submissionReceipt.confirmationEmail === "accepted"
+            ? `Confirmation email: accepted for delivery to ${email}.`
+            : submissionReceipt.confirmationEmail === "failed"
+              ? "Confirmation email: delivery handoff failed. Your request remains recorded."
+              : productionAccepted
+                ? "Confirmation email: the receiver did not confirm a delivery handoff. Your request remains recorded."
+                : "Confirmation email: not sent by the local test path."}
+        </p>
+        {submissionReceipt.warning ? (
+          <p className="mt-3 text-sm text-amber-800" role="alert">
+            {submissionReceipt.warning}
+          </p>
+        ) : null}
+        <p className="mt-3 text-xs text-muted">
+          No live phone number was provisioned and no live AI agent was
           activated.
         </p>
       </div>
@@ -1130,8 +1170,9 @@ export function CreateReceptionistLaterSteps({
           <p className="mt-6 text-sm text-muted">
             We will store this as a website-to-AI-agent early access lead,
             including the selected AgentBlueprint, knowledge pack and system
-            prompt draft. Submitting does not provision a number, place a test
-            call, or send email. If
+            prompt draft. After durable acceptance, the existing email service
+            will attempt a confirmation receipt. Submitting does not provision
+            a number or place a test call. If
             the sandbox panel below is enabled, it can use this pack for a
             scripted demo only.
           </p>

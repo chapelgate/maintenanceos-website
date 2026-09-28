@@ -40,8 +40,9 @@ The effective form endpoint must be an **absolute** `http:` or `https:` URL (pro
 | `name`           | no       | string    | Omitted if empty |
 | `organisation`   | no       | string    | Omitted if empty |
 | `role`           | no       | string    | Visitor-selected role slug |
-| `message`        | no       | string    | Used on early demo and contact |
+| `message`        | no       | string    | Used on early demo/contact and the reviewed `/create` configuration; production receiver permits up to 64 KiB |
 | `source_url`     | no       | string    | Current public page URL, used for operator context |
+| `submission_id`  | no       | string    | Stable 8–128 character per-journey idempotency key; `/create` sends one |
 | `website`        | no       | string    | **Honeypot.** If present and non-empty, accept and discard. Do not tip off bots. |
 
 The browser adapter does not send `website` when the honeypot is filled; it short-circuits locally. Endpoints should still treat a populated `website` field as spam.
@@ -79,13 +80,17 @@ HTTP **200**, **201**, or **202**. Body **should** be JSON:
 ```json
 {
   "ok": true,
-  "mode": "accepted"
+  "mode": "accepted",
+  "reference": "durable-record-id",
+  "confirmation_email": "accepted"
 }
 ```
 
+`reference` identifies the durable stored request when the production receiver provides one. `confirmation_email: "accepted"` means the existing email provider accepted the visitor confirmation handoff; the client must not infer this from HTTP 2xx alone.
+
 | `mode`         | Meaning | UI rule |
 |----------------|---------|---------|
-| `accepted`     | Lead stored or queued by a real provider | Thank-you copy may say the request was accepted. **Never** say a confirmation or notification email was sent. |
+| `accepted`     | Lead durably accepted by the production receiver | Thank-you copy may say the request was recorded. Claim confirmation-email handoff only when `confirmation_email` explicitly equals `accepted`. |
 | `queued_stub`  | Stored only by a stub/queue with no delivery | Thank-you copy must say **no email was sent**. |
 | `submitted`    | **Deprecated alias** of `accepted` | Treat as `accepted`. Do not interpret as “email sent”. |
 
@@ -104,7 +109,9 @@ HTTP 4xx/5xx (or 200 with `"ok": false`):
 }
 ```
 
-`error` is optional; the client falls back to a generic retry message. Do not include stack traces or secrets.
+`error` is optional; FastAPI receivers may instead return a bounded string `detail`. The client falls back to a generic retry message. Do not include stack traces or secrets.
+
+The production receiver records the lead **before** mail handoff. If it returns `503` with `detail: "lead recorded; customer confirmation is temporarily unavailable"` or `detail: "lead recorded; operator notification is temporarily unavailable"`, the client treats the request as accepted, keeps the success state on screen, and reports the delivery failure without asking the visitor to resubmit.
 
 Suggested status codes:
 
@@ -113,15 +120,16 @@ Suggested status codes:
 | 400 | Invalid JSON, missing `email` / `lead_type`, malformed email |
 | 404 | Unknown path |
 | 405 | Method not allowed |
-| 413 | Body larger than 32 KiB |
+| 413 | Request exceeds the receiver body limit |
 | 429 | Rate limited (recommended for production) |
 | 500 | Unexpected failure |
 
 ## Email and claims
 
-- The production endpoint persists the lead before requesting an operator notification through the existing Resend account.
-- `mode: accepted` means the lead was durably accepted and the operator-notification request was accepted by the mail provider; it does **not** mean a visitor confirmation email was sent.
-- Client success states (`LeadCaptureForm`) must **never** claim that a visitor confirmation email was sent.
+- The production endpoint persists the lead before requesting mail delivery through the existing Resend account.
+- Operator notification and visitor confirmation are separate delivery handoffs. `/create` reports confirmation success only when the receiver returns `confirmation_email: "accepted"`.
+- A mail failure after storage must never erase or disguise the durable request. The `/create` success state remains on screen and tells the visitor not to resubmit.
+- Local/test stubs must not claim visitor email delivery unless they actually perform and report a provider handoff.
 - The local stub logs JSON lines to disk and stdout only. It does not call SMTP, transactional APIs, or webhooks.
 
 ## Abuse controls (production)
@@ -129,7 +137,7 @@ Suggested status codes:
 Minimum expected of a real endpoint:
 
 - Drop honeypot (`website`) silently with 2xx + `queued_stub` or equivalent discard.
-- Cap body size (32 KiB is enough).
+- Keep public bodies bounded. The production `/create` message is capped at 64 KiB because it includes the reviewed blueprint, knowledge pack and protected prompt; smaller forms remain far below that.
 - Rate-limit public submissions. The current production route uses a global bucket plus a privacy-preserving hashed-email bucket.
 - Do not write leads into the product telephony / work-order systems (`WEBSITE_ARCHITECTURE.md`).
 
@@ -161,4 +169,4 @@ The current receiver is additive to the existing Chapelgate RSFM control plane. 
 - Spam: honeypot plus bounded public rate limits.
 - Idempotency: duplicate retries reuse the same durable lead record.
 - Operator follow-up: sending-only Resend credential restricted to the already-verified Chapelgate sending domain.
-- Visitor acknowledgement: the form says the request was accepted and that a human will review it; it does not claim a confirmation email was sent.
+- Visitor acknowledgement: `/create` shows the durable reference when returned and reports confirmation-email provider handoff separately.
