@@ -148,13 +148,13 @@ test("mapScanBusinessFactMeta keeps provenance only for surviving facts", () => 
 test("create journey steps name the next action without a live-phone claim", () => {
   assert.deepEqual(
     CREATE_JOURNEY_STEPS.map((item) => item.label),
-    ["Website", "Check", "Choose", "Review", "Pack"],
+    ["Website", "Check", "Choose", "Configure", "Review & Pack"],
   );
   assert.equal(createJourneyNextAction(1), "Check this website");
   assert.equal(createJourneyNextAction(2, "checking"), "Checking…");
   assert.equal(createJourneyNextAction(2, "scanned"), "Choose agent");
-  assert.equal(createJourneyNextAction(3), "Review draft");
-  assert.equal(createJourneyNextAction(4), "Generate AI configuration");
+  assert.equal(createJourneyNextAction(3), "Configure agent");
+  assert.equal(createJourneyNextAction(4), "Generate reviewed configuration");
   assert.equal(createJourneyNextAction(5), "Submit early access request");
   assert.equal(isCreateScanReady("scanning"), false);
   assert.equal(isCreateScanReady("queued"), true);
@@ -174,7 +174,7 @@ test("create journey stepper names current/completed without a live-phone claim"
   assert.equal(createJourneyStepStatusLabel("upcoming"), "Not started");
   assert.equal(createJourneyStepAnnouncement(1), "Step 1 of 5: Website");
   assert.equal(createJourneyStepAnnouncement(3), "Step 3 of 5: Choose");
-  assert.equal(createJourneyStepAnnouncement(4), "Step 4 of 5: Review");
+  assert.equal(createJourneyStepAnnouncement(4), "Step 4 of 5: Configure");
   assert.doesNotMatch(createJourneyStepAnnouncement(5), /live (phone|number|call)/i);
 });
 

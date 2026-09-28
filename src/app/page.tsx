@@ -82,7 +82,7 @@ export default function HomePage() {
               secondaryLabel="See it work"
             />
             <p className="mt-4 text-sm text-muted">
-              Funnel: Website → Check → Choose role → Review → Pack → Early access.
+              Funnel: Website → Check → Choose role → Configure → Review & Pack → Early access.
             </p>
             <ProductTourWatchLink className="mt-3" />
             <HomeLifestyleStrip />

@@ -46,7 +46,7 @@ export default function DemoPage() {
       <PageHero
         eyebrow="Pre-launch. Not a live phone."
         title="Start from your website URL."
-        lede="The honest path is website URL → check → choose role → review draft → knowledge pack → optional scripted sandbox → early access. Create from your site, or request a human briefing. This page does not assign a live number."
+        lede="The honest path is website URL → check → choose role → configure → review & pack → optional scripted sandbox → early access. Create from your site, or request a human briefing. This page does not assign a live number."
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">
@@ -73,7 +73,7 @@ export default function DemoPage() {
           >
             Create from website
           </a>
-          . Website → Check → Choose → Review → Pack, then optional sandbox and early
+          . Website → Check → Choose → Configure → Review & Pack, then optional sandbox and early
           access. We do not invent crawl results or a live phone number.
         </p>
         <ol className="mt-6 space-y-3">

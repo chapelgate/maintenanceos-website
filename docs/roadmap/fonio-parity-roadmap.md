@@ -9,9 +9,9 @@
 - [x] Competitive parity matrix
 - [x] Architecture + onboarding + threat model + test plans (docs)
 - [x] Claims-safe `/create` multi-step funnel **EXISTS** (not MISSING; preview / waitlist — not a live phone)
-- [x] Marketing `/how-it-works` + `/features` match Website → Check → Choose → Review → Pack (HAVE / UNDER TEST / COMING for sandbox, calendars, live phone)
+- [x] Marketing `/how-it-works` + `/features` match Website → Check → Choose → Configure → Review & Pack (HAVE / UNDER TEST / COMING for sandbox, calendars, live phone)
 - [x] Marketing `/demo` + leftover “book a demo / see it live” CTAs point primary to `/create/`; human demo is secondary early-access (not a live phone)
-- [x] Funnel-page titles / descriptions / OG name Website → Check → Choose → Review → Pack → optional sandbox → early access (not a live phone / always-on / GA)
+- [x] Funnel-page titles / descriptions / OG name Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access (not a live phone / always-on / GA)
 - [x] Claims-safe JSON-LD on home + funnel pages (Organization + WebSite + WebPage + SoftwareApplication; no live phone / always-on / GA / aggregateRating / fake offers)
 - [x] `llms.txt` / `llms-full.txt` name website URL → check → review → pack → optional scripted sandbox → early access (not a live phone / always-on / GA / ratings / invented crawl; staging scan owner-blocked)
 - [x] `/faq/` + FAQPage JSON-LD name the same path (no live phone / always-on / instant live number / GA; crawl not invented if scan unset; empty hours/services stay empty; UK 999; staging scan owner-blocked)

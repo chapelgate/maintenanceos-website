@@ -8,10 +8,9 @@
 1. Land on marketing site with CTA: **Turn your business website into an AI receptionist**.
 2. `/create` — enter business URL (+ optional email).
 3. Progress UI: resolving → fetching → extracting → creating sandbox.
-4. Review screen: name, greeting, services, FAQs, hours (edit inline).
-5. Preview claims-safe knowledge pack + system prompt (edit inline). Missing fields stay missing.
-6. Choose voice + language (UK English default).
-7. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone. A browser mock is demonstration-only. When a configured sandbox companion returns the exact reviewed pack/prompt and deterministic scripted transcript, Step 7 can record qualification for that exact review revision and advance `reviewed → sandbox_passed`.
+4. Configure the selected role: voice preference, supported actions, human-transfer behaviour, name, greeting, services, FAQs, and hours. Configuration can only narrow the selected role.
+5. Review the claims-safe knowledge pack + protected system prompt. Missing fields stay missing and required confirmations must be complete.
+6. Optional sandbox test — flagged; one-click pack-aware scripted demo when on. Not a live phone. A browser mock is demonstration-only. When a configured sandbox companion returns the exact reviewed pack/prompt and deterministic scripted transcript, Step 7 can record qualification for that exact review revision and advance `reviewed → sandbox_passed`.
 8. Internal provisioning handoff — **not a browser step**. A trusted server-side caller may submit the complete reviewed/sandbox evidence to `packages/provisioning-gateway`; the gateway re-verifies Step 7, authenticates ownership, applies replay/idempotency controls and may advance only `sandbox_passed → provisioning`.
 9. Adapter readiness — **Step 9 implemented as an internal/server-only gate**. The reviewed blueprint declares telephony intent (and calendar intent for booking assistants) before review. The existing provisioning gateway binds those reviewed intents to server-side connectors and may advance only `provisioning → ready` after readiness proof. Twilio is the telephony/SMS adapter; the existing calendar companion is reused for Google/Microsoft readiness; email/CRM use a signed-HTTPS health contract. Provider mutation is OFF by default and additionally requires an authenticated `mode:"apply"` request. This is not live activation; Step 10 owns commissioning and `ready → active`.
 

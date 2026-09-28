@@ -8,7 +8,7 @@ import {
 } from "@/lib/onboarding-create-core";
 
 /**
- * Shared /create stepper. Sticky Website → Check → Choose → Review → Pack chrome.
+ * Shared /create stepper. Sticky Website → Check → Choose → Configure → Review & Pack chrome.
  * Lives in the first-load island on step 1 and again in the deferred
  * later-steps chunk — keep this file free of scan/lead imports.
  */

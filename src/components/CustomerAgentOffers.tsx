@@ -18,9 +18,9 @@ export function CustomerAgentOffers() {
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
             These are the same controlled starting roles used in the setup
-            journey. Pick one after we check your website, then review the
-            greeting, business knowledge and allowed behaviour before anything
-            can move toward activation.
+            journey. Pick one after we check your website, then configure the greeting, voice
+            preference, supported actions and human-transfer behaviour before
+            reviewing the business knowledge and final pack.
           </p>
         </div>
 

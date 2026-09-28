@@ -14,7 +14,8 @@ export function AgentTypeSelector({
         What do you want your AI to do?
       </legend>
       <p className="mt-2 text-sm text-muted">
-        Choose one starting role. This sets bounded capabilities only; it does
+        Choose one starting role. On the next step you can configure its voice
+        preference, supported actions and human-transfer behaviour. This does
         not provision a phone number or activate an agent.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">

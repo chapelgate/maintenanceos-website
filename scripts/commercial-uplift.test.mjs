@@ -55,7 +55,7 @@ test("home commercial pass keeps Create/Join hierarchy and 3-step start", () => 
 test("funnel pages share one primary path strip", () => {
   const strip = read("src/components/FunnelPathStrip.tsx");
   assert.match(strip, /One public path/);
-  assert.match(strip, /Website → Check → Choose → Review → Pack → optional sandbox → early access/);
+  assert.match(strip, /Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access/);
   assert.match(strip, /href="\/create\/"/);
   assert.match(strip, /does not assign a live phone number/);
 

@@ -13,7 +13,7 @@ test("public home offers the same controlled agent roles used by setup", () => {
   const selector = read("src/components/AgentTypeSelector.tsx");
 
   assert.match(home, /<CustomerAgentOffers \/>/);
-  assert.match(home, /Website → Check → Choose role → Review → Pack → Early access/);
+  assert.match(home, /Website → Check → Choose role → Configure → Review & Pack → Early access/);
   assert.match(offers, /AGENT_TEMPLATES\.map/);
   assert.match(selector, /AGENT_TEMPLATES\.map/);
   assert.match(offers, /Choose what you want the AI to do/);
