@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
-import { CommercialProof } from "@/components/CommercialProof";
+import { CommercialProof } from "@/components/CommercialProof";\nimport { CustomerAgentOffers } from "@/components/CustomerAgentOffers";
 import { HonestyBanner } from "@/components/HonestyBanner";
 import { HomeHeroVisual } from "@/components/HomeHeroVisual";
 import { HomeIndustries } from "@/components/HomeIndustries";
@@ -81,7 +81,7 @@ export default function HomePage() {
               secondaryLabel="See it work"
             />
             <p className="mt-4 text-sm text-muted">
-              Funnel: Website → Review pack → Early access.
+              Funnel: Website → Check → Choose role → Review → Pack → Early access.
             </p>
             <ProductTourWatchLink className="mt-3" />
             <HomeLifestyleStrip />
@@ -155,7 +155,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <CommercialProof />
+      <CustomerAgentOffers />\n\n      <CommercialProof />
 
       <HomeLifeBand />
 
