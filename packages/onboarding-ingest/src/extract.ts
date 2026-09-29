@@ -16,7 +16,7 @@ import type {
 
 export const MAX_FIELD_CHARS = 4000;
 export const USER_AGENT =
-  "MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)";
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 MaintenanceOS-OnboardingScan/0.1";
 
 const DAY_RE =
   /\b(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays?|weekends?)\b/i;
