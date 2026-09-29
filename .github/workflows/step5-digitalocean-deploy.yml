@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
+    runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
       DO_APP_ID: 98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661
@@ -22,13 +22,13 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Guard exact reviewed source
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD^)" = "$EXPECTED_SOURCE_SHA"\n          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/step5-digitalocean-deploy.yml"
+          git cat-file -e "$EXPECTED_SOURCE_SHA^{commit}"\n          changed="$(git diff --name-only "$EXPECTED_SOURCE_SHA" HEAD)"\n          test "$changed" = ".github/workflows/step5-digitalocean-deploy.yml"
 
       - name: Validate token and app without printing credentials
         shell: bash
