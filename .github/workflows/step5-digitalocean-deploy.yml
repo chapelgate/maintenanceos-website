@@ -22,13 +22,13 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-          fetch-depth: 1
+          fetch-depth: 2
 
       - name: Guard exact reviewed source
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE_SHA"
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_SOURCE_SHA"\n          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/step5-digitalocean-deploy.yml"
 
       - name: Validate token and app without printing credentials
         shell: bash
