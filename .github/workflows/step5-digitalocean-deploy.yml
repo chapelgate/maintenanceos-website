@@ -1,0 +1,97 @@
+name: Step 5 DigitalOcean App Platform deploy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: maintenanceos-website-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
+    timeout-minutes: 25
+    env:
+      DO_APP_ID: 98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661
+      PUBLIC_CREATE_URL: https://seahorse-app-4oasq.ondigitalocean.app/create/
+      EXPECTED_SOURCE_SHA: 34823a6f71528e2c5da834b93125cb36427a07ff
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+
+      - name: Guard exact reviewed source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "$EXPECTED_SOURCE_SHA"\n          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/step5-digitalocean-deploy.yml"
+
+      - name: Validate token and app without printing credentials
+        shell: bash
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$DIGITALOCEAN_ACCESS_TOKEN"
+          code="$(curl -sS -o /tmp/do-app.json -w '%{http_code}'             -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN"             "https://api.digitalocean.com/v2/apps/$DO_APP_ID")"
+          test "$code" = "200"
+          python3 - <<'PY'
+          import json, os
+          app=json.load(open('/tmp/do-app.json'))['app']
+          assert app['id']==os.environ['DO_APP_ID']
+          print('Validated existing DigitalOcean app:', app.get('spec',{}).get('name','<unnamed>'))
+          PY
+
+      - name: Trigger deployment of existing app
+        id: deploy
+        shell: bash
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          code="$(curl -sS -o /tmp/deploy.json -w '%{http_code}' -X POST             -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN"             -H "Content-Type: application/json"             -d '{"force_build":true}'             "https://api.digitalocean.com/v2/apps/$DO_APP_ID/deployments")"
+          case "$code" in 200|201|202) ;; *) cat /tmp/deploy.json; exit 1;; esac
+          DEPLOYMENT_ID="$(python3 -c "import json; print(json.load(open('/tmp/deploy.json'))['deployment']['id'])")"
+          test -n "$DEPLOYMENT_ID"
+          echo "deployment_id=$DEPLOYMENT_ID" >> "$GITHUB_OUTPUT"
+          echo "Triggered deployment $DEPLOYMENT_ID"
+
+      - name: Wait for deployment
+        shell: bash
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          DEPLOYMENT_ID: ${{ steps.deploy.outputs.deployment_id }}
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 80); do
+            curl -sS -o /tmp/status.json               -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN"               "https://api.digitalocean.com/v2/apps/$DO_APP_ID/deployments/$DEPLOYMENT_ID"
+            phase="$(python3 -c "import json; print(json.load(open('/tmp/status.json'))['deployment']['phase'])")"
+            echo "Deployment phase: $phase"
+            case "$phase" in
+              ACTIVE) exit 0 ;;
+              ERROR|CANCELED|SUPERSEDED) exit 1 ;;
+            esac
+            sleep 10
+          done
+          echo "Deployment timed out"
+          exit 1
+
+      - name: Verify public create page repaired
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="$PUBLIC_CREATE_URL?step5=$(date +%s)"
+          curl -fsSL --retry 6 --retry-delay 5 -H 'Cache-Control: no-cache' "$url" -o /tmp/create.html
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('/tmp/create.html').read_text(errors='replace')
+          if '<form' in html.lower():
+              raise SystemExit('FAIL: public /create still contains a native form')
+          if 'Check this website' not in html:
+              raise SystemExit('FAIL: expected create journey content missing')
+          print('PASS: public /create serves repaired non-native-form Step 1')
+          PY
