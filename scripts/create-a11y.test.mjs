@@ -172,7 +172,7 @@ test("/create uses the same-origin on-demand scanner without reviving the retire
   const config = read("src/config/site.ts");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
   const scan = read("packages/onboarding-ingest/packages/website/scan/index.ts");
-  assert.match(config, /onboardingScanEndpoint:\s*"\/api\/onboarding-scan"/);
+  assert.match(config, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   assert.doesNotMatch(config, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
   assert.match(later, /requestOnboardingScan\(endpoint, businessUrl\)/);
   assert.match(scan, /runScan\(url, \{ enabled: true \}\)/);
