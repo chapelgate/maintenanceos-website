@@ -23,3 +23,15 @@ A genuine human/authority blocker remains for deploying the verified stalled-tur
 - Blocker: no authenticated non-destructive write path to that host is available to the current authorised principals. SSH is reachable but rejects the estate runner key; GitHub repo/environment deploy secrets are absent; the DigitalOcean connector cannot execute commands inside an existing droplet.
 - Exact human action required: restore or provide an authorised existing-host deployment credential/path for droplet `601962983` (preferably add the estate runner's deployment public key to the live host or restore the estate's approved MOS deployment identity). Do not paste private keys, Twilio credentials, Gemini credentials, or DigitalOcean tokens into chat.
 - Once that authorised path exists, deploy only tag `maintenanceos-stalled-turn-hotfix-20260930`, restart `maintenanceos.service`, verify `/health`, place one controlled PSTN call, and roll back immediately if greeting/turn recovery regresses.
+
+
+### 2026-09-30 — final authorised-path exhaustion evidence
+
+The blocker above has now been independently re-proved rather than assumed.
+
+- Connected Desktop Commander device `CG` was checked without requesting or exposing credentials: no SSH-agent identity was available, no local public deployment key was present, and BatchMode probes to `cg-automation@165.227.227.9` and `root@165.227.227.9` both returned SSH exit 255.
+- A temporary isolated GitHub diagnostic branch `diag/mos-existing-ssh-path-20260930` ran on the existing `chapelgate-pool-mos` / `estate-trusted` runner.
+- Diagnostic run `36746015189` completed successfully and proved: no SSH authentication agent, no public key in the runner user's `~/.ssh`, `cg-automation` authentication = no, `root` authentication = no.
+- No production mutation was attempted by the diagnostic. The accepted live droplet remains unchanged.
+- The frozen product tag still resolves exactly to `51da30f1ab5f5060c280150d9b90869bfab9ec57`; comparison against accepted baseline `4f5bb42cbb267ad040273932a97e9090425496de` is exactly one commit and changes only `gemini_voice.py` plus `tests/test_gemini_latency_tuning.py`.
+- Therefore no remaining safe machine-only deployment route is available through the currently authorised DigitalOcean, GitHub runner, or connected Desktop Commander paths. Rebuild/reset/credential-reset/duplicate-host workarounds remain rejected because they would increase production risk instead of repairing the missing deployment identity.
