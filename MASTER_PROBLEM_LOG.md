@@ -70,3 +70,26 @@ Require exactly 28 exported `index.html` files and separately require `out/robot
 
 Verification:
 The corrected route-shape assertion passed in independent verification: exactly 28 exported `index.html` files plus `out/robots.txt` and `out/sitemap.xml`, matching the 30 routes reported by Next.js. The complete browser/mobile acceptance sequence then passed. The earlier PowerShell `npm.ps1` execution-policy issue was bypassed with `npm.cmd`; it occurred before product execution and required no product change.
+
+
+## MOS-WEB-CI-002 — DigitalOcean deploy workflow was pinned to an obsolete source SHA
+Status: FIXED / DEPLOYMENT VERIFICATION PENDING
+Opened: 2026-09-30
+
+Problem:
+The existing manual DigitalOcean App Platform deployment workflow was hard-pinned to website source SHA `34823a6f71528e2c5da834b93125cb36427a07ff`. After the verified commercial-create repair merged to `main`, the live static host remained on older SHA `77524c5082a77c094bf966843e71480f273d4c5f`, and the deployment workflow could not safely deploy the current reviewed source.
+
+Root cause:
+The Step-5 deployment workflow was implemented as a one-off exact-SHA guard rather than a reusable exact-SHA deployment gate.
+
+Surgical fix:
+- require an explicit `expected_source_sha` workflow-dispatch input;
+- fail closed unless the workflow is dispatched against `main` and checked-out HEAD exactly equals that SHA;
+- reuse the existing DigitalOcean App Platform app and existing repository secret only;
+- after deployment, require live `release.json` to equal the authorised SHA;
+- retain the public `/create` non-native-form acceptance check.
+
+No new app, droplet, credential, hosting provider, or deployment path was created.
+
+Verification:
+Workflow source reviewed and repository diff will be checked before merge. Final closure requires a successful dispatch against the merged exact SHA and independent live readback of `release.json`.
