@@ -40,7 +40,9 @@ jobs:
             npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts
             npx tsc --noEmit
             NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan npm run build
-            test "$(find out -name index.html -type f | wc -l)" -eq 30
+            test "$(find out -name index.html -type f | wc -l)" -eq 28
+            test -f out/robots.txt
+            test -f out/sitemap.xml
             BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
             BROWSER_PATH=/usr/bin/chromium NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan node scripts/create-mobile-stability-browser.mjs
           '
