@@ -231,3 +231,20 @@ Verification (integrated branch `ea0d961aa3de3697a41d50fe61ce947a251b0cab`):
 
 Verification diagnostic note:
 The first integrated mobile rerun used an export built without the harness-only `NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads` override. Instrumentation proved the UI correctly reported `Network error`, the local receiver saw `rawPosts=0`, and no runtime exception occurred. Rebuilding with the documented local receiver override made the unchanged application test pass. No application fix was required for that verification-environment error.
+## MOS-WEB-TEST-001 — Windows Edge teardown could false-fail successful mobile acceptance
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+The mobile browser acceptance completed the product journey successfully and emitted `ok: true`, but one Windows run exited 1 because the temporary Edge profile was still locked during teardown (`EPERM`). That could falsely classify a successful `/create` acceptance as a product failure.
+
+Root cause:
+The harness requested browser termination, waited a fixed 300 ms, then removed the profile. Edge can keep the profile locked briefly after the parent process is asked to exit.
+
+Surgical test-only fix:
+- wait for the spawned browser process to exit, bounded to 2 seconds;
+- increase profile-removal retries to 10 with a 200 ms retry delay;
+- do not change application, network, lead, scan, telephony, or provider behaviour.
+
+Verification:
+The repaired harness passed twice consecutively on the scan-retirement candidate, each with exit code 0, `ok=true`, `rawPosts=2`, `storedRequests=2`, `emailHandoffs=1`, `submissions=2`, 390x844@3 mobile emulation, 6x CPU throttle and 250 ms latency. The fix was then rebased cleanly onto current `main`.
