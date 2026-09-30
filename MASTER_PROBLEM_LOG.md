@@ -331,3 +331,61 @@ Evidence and resolution:
   boundaries remain explicit.
 
 No public capability was promoted by this refresh.
+
+
+## MOS-WEB-CLAIMS-002 — Retired public website crawl remained in customer-facing copy
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+The paid/public onboarding-scan path had been safely retired, but several public
+surfaces still described a website scan as configurable, queued or under test.
+That created a claims inconsistency: source and provider state said no public
+crawl, while Create, Demo, FAQ, Security, How It Works, privacy/terms drafts,
+AI-readable summaries and product-tour copy could still imply one.
+
+Root cause:
+Provider retirement and source-level fail-closed work were completed before all
+derived marketing/legal/SEO copy contracts were reconciled. Existing regression
+tests then correctly exposed their own stale expectations for the former scan
+state.
+
+Surgical fix:
+- define one public invariant: the submitted website URL is a setup hint; the
+  current public site does not fetch or crawl submitted pages; missing business
+  facts stay empty until reviewed or supplied;
+- reconcile Create, Demo, FAQ/FAQPage, Security, How It Works, homepage,
+  Features inventory/card, privacy/terms draft copy, llms.txt, llms-full.txt,
+  product-tour captions/storyboard and comparison evidence to that invariant;
+- leave dormant/non-public scan implementation code in place rather than
+  deleting unrelated source capability;
+- update existing truth-contract tests instead of re-enabling the retired crawl;
+- keep product voice/commercial status conservative at current product checkpoint
+  `498ad82dd87631814195d447d89458480b117951`.
+
+Verification on exact application candidate
+`700c9f233da0608c6ec7a68eca094405d4d17b69`:
+- current-product targeted claims/safety suite: **196/196 PASS** at product SHA
+  `498ad82dd87631814195d447d89458480b117951`;
+- website source/script suite: **242/242 PASS**;
+- website runtime/package suite: **294/294 PASS**;
+- accessibility: **16/16 PASS**;
+- ESLint: PASS;
+- Next.js **16.3.8** production static build: PASS;
+- dependency audit at moderate threshold: PASS;
+- adversarial build deliberately supplied the obsolete
+  `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`; exact retired endpoint search in
+  exported `out/`: **0 matches**;
+- exported stale-claim search for former SSRF-safe/configurable/queued scan
+  wording: **0 matches**;
+- real Microsoft Edge viewport matrix: **18/18 PASS** across
+  mobile/tablet/desktop;
+- throttled mobile `/create` acceptance: PASS at 390x844@3, 6x CPU throttle,
+  250 ms latency and 1.4 s JS delay;
+- durable lead evidence: 2 raw posts, 2 stored requests, 2 submissions and
+  1 email handoff;
+- `git diff --check`: PASS.
+
+No telephony, provider routing, pricing, public-launch flag or paid
+infrastructure was changed by this repair.
