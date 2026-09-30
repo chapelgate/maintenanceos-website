@@ -381,6 +381,7 @@ Verification on exact application candidate
   wording: **0 matches**;
 - real Microsoft Edge viewport matrix: **18/18 PASS** across
   mobile/tablet/desktop;
+- Firefox/WebKit cross-engine matrix: **36/36 PASS**, 0 page errors and 0 console errors;
 - throttled mobile `/create` acceptance: PASS at 390x844@3, 6x CPU throttle,
   250 ms latency and 1.4 s JS delay;
 - durable lead evidence: 2 raw posts, 2 stored requests, 2 submissions and
