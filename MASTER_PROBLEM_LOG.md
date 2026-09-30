@@ -116,3 +116,22 @@ The existing DigitalOcean App Platform native auto-deploy path remained operatio
 
 Future handling:
 Do not spend or add infrastructure merely to silence this condition. If a future release genuinely requires manual force rebuild while hosted Actions remain unavailable, reuse an authorised trusted self-hosted execution path or restore Actions budget through normal account administration.
+
+
+## MOS-WEB-COST-002 — Provider build variable could reintroduce paid onboarding-scan dependency
+Status: FIXED / VERIFICATION PENDING
+Opened: 2026-09-30
+
+Problem:
+Although source supported an empty-endpoint queued fallback, `siteConfig.onboardingScanEndpoint` still read `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`. A provider-level build variable could therefore continue compiling the paid App Platform onboarding-scan URL into the public browser bundle.
+
+Root cause:
+Cost retirement depended on mutable provider configuration instead of a source-level fail-closed boundary.
+
+Surgical fix:
+- make the public client onboarding scan endpoint unconditionally empty;
+- preserve the existing claims-safe queued early-access path;
+- add a source regression test proving `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` cannot be compiled into the public client through site config.
+
+Scope:
+No telephony, lead receipt, pricing, legal, provisioning, public-launch, or customer-data behaviour changed. This intentionally removes only the live website-crawl request from the public client.
