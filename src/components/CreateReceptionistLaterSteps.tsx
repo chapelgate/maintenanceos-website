@@ -737,37 +737,37 @@ export function CreateReceptionistLaterSteps({
           >
             <p className="font-medium text-ink">{createScanProgressTitle(progress)}</p>
             <p>
-              We only accept a public website address here. Private or internal
-              hosts are not fetched from this page.
+              We only accept a public website address here. This public site
+              validates the address but does not fetch or crawl its pages.
             </p>
             {progress === "scanning" ? (
-              <p>Asking the configured scan service for this URL…</p>
+              <p>Checking the website setup for this URL…</p>
             ) : null}
             {progress === "queued" ? (
               <p>
-                Website crawl is queued for early access. No scan endpoint is
-                configured on this static site, so we will not invent crawl
-                results. You can still review a blank draft — the business name
-                is suggested from the website address only.
+                Website review is queued for early access. This public site
+                does not crawl submitted pages, so missing business facts stay
+                empty until reviewed or supplied. You can still review a blank
+                draft — the business name is suggested from the website address only.
               </p>
             ) : null}
             {progress === "scanned" ? (
               <p>
-                A scan response was received. Only fields the service returned
-                are filled. Please review them — this is not a live receptionist
-                and no phone number was assigned.
+                A draft response was received. Only fields supplied by that
+                response are filled. Please review them — this is not a live
+                receptionist and no phone number was assigned.
               </p>
             ) : null}
             {progress === "scanned_empty" ? (
               <p>
-                The scan service responded but returned no extractable fields.
-                Nothing was invented. You can complete the draft yourself.
+                No draft fields were supplied. Nothing was invented. You can
+                complete the draft yourself.
               </p>
             ) : null}
             {progress === "scan_failed" ? (
               <p>
                 {scanDetail ??
-                  "The scan service could not be reached. No crawl results were invented."}
+                  "The optional draft service could not be reached. No business facts were invented."}
               </p>
             ) : null}
           </div>
