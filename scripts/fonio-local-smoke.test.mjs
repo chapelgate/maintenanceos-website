@@ -166,8 +166,10 @@ test(".env.example keeps companion flags off for DigitalOcean static", () => {
 test(".env.example.fonio-local lists the exact NEXT_PUBLIC endpoints /create and /dashboard use", () => {
   const text = fs.readFileSync(path.join(ROOT, ".env.example.fonio-local"), "utf8");
   const site = fs.readFileSync(path.join(ROOT, "src/config/site.ts"), "utf8");
+  assert.match(text, /^NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=/m);
+  assert.match(site, /onboardingScanEndpoint:\s*""/);
+  assert.doesNotMatch(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
   const expected = [
-    "NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT",
     "NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED",
     "NEXT_PUBLIC_CALENDAR_ENDPOINT",
     "NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED",
