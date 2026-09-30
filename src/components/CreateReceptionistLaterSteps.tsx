@@ -690,10 +690,21 @@ export function CreateReceptionistLaterSteps({
         <p className="mt-2 text-sm text-muted">
           {usesProductionLeadReceiver
             ? receiptEmailStatus === "failed"
-              ? "Your website-to-AI-agent request was durably recorded, but the confirmation email could not be handed off. Your request is still saved; do not resubmit. No live phone number was provisioned and no live agent was activated."
-              : "Your website-to-AI-agent request was durably recorded and a confirmation email was accepted by the mail provider. No live phone number was provisioned and no live agent was activated."
-            : "This preview receiver accepted the test submission. This preview does not send a confirmation email. No live phone number was provisioned and no live agent was activated."}
+              ? "Your setup was durably saved, but the confirmation email could not be handed off. Your setup is still saved; do not resubmit."
+              : "Your setup was durably saved and a confirmation email was accepted by the mail provider."
+            : "This preview receiver accepted the saved setup. This preview does not send a confirmation email."}
         </p>
+        <button
+          type="button"
+          onClick={() =>
+            document
+              .getElementById("interactive-receptionist-demo")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" })
+          }
+          className="mt-4 inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
+        >
+          Try your receptionist
+        </button>
         {receiptReference ? (
           <p className="mt-3 text-sm font-medium text-ink">
             Reference: <span className="font-mono">{receiptReference}</span>
@@ -724,7 +735,7 @@ export function CreateReceptionistLaterSteps({
       <p className="mb-6 text-sm text-muted">
         Next: {nextAction}
         {step === 5
-          ? ". Optional scripted sandbox demo is below when the local flag is on — not a live phone."
+          ? ". Test the reviewed configuration in the interactive browser demo below, then save it if you want an emailed reference."
           : null}
       </p>
 
@@ -1174,12 +1185,11 @@ export function CreateReceptionistLaterSteps({
             />
           ) : null}
           <p className="mt-6 text-sm text-muted">
-            We will store this as a website-to-AI-agent early access lead,
-            including the selected AgentBlueprint, knowledge pack and system
-            prompt draft. Submitting records the request and asks the existing
-            mail provider to send a confirmation email. It does not provision a
-            number, place a test call, or activate a live agent. If the sandbox
-            panel below is enabled, it can use this pack for a scripted demo only.
+            Your reviewed receptionist configuration is ready to try in the
+            interactive browser demo below. The demo uses this knowledge pack
+            and the same deterministic safety rules, but it does not dial a
+            phone number or touch the live telephone service. Saving the setup
+            is optional and sends you a durable reference by email.
           </p>
           {agentBlueprint && review ? (
             <div className="mt-5">
@@ -1218,8 +1228,8 @@ export function CreateReceptionistLaterSteps({
                         sandboxQualification,
                         review.record.revisionId,
                       )
-                      ? "Customer review and sandbox qualification are complete."
-                      : "Customer review is complete. Run sandbox qualification below before submitting."
+                      ? "Customer review and configuration verification are complete."
+                      : "Customer review is complete. Run configuration verification below before saving."
                     : "All required customer-review confirmations are complete."
                   : `${review.record.missingIds.length} required review confirmation(s) remain.`
                 : "The customer review record is not ready."}
@@ -1252,22 +1262,33 @@ export function CreateReceptionistLaterSteps({
             </button>
             <button
               type="button"
-              disabled={status === "submitting"}
               aria-describedby={reviewStatusId}
               data-create-primary-action=""
-              onClick={() => void onSubmitLead()}
-              className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
+              onClick={() =>
+                document
+                  .getElementById("interactive-receptionist-demo")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" })
+              }
+              className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
             >
-              {status === "submitting"
-                ? "Submitting…"
-                : createJourneyNextAction(5)}
+              {createJourneyNextAction(5)}
+            </button>
+            <button
+              type="button"
+              disabled={status === "submitting"}
+              aria-describedby={reviewStatusId}
+              onClick={() => void onSubmitLead()}
+              className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
+            >
+              {status === "submitting" ? "Saving…" : "Save setup & email reference"}
             </button>
           </div>
           <p className="mt-3 text-xs text-muted">
+            The interactive demo runs in this browser from the reviewed pack.
             {usesProductionLeadReceiver
-              ? "Production lead intake: success requires durable acceptance, a receipt reference, and confirmation-email acceptance from the backend."
-              : "Test preview: success still requires the receiver to return a receipt reference and confirmation-email acknowledgement."}
-            {" "}No live AI agent is activated here.
+              ? " Saving the setup uses the production lead receiver and requires durable acceptance plus a receipt reference."
+              : " Saving the setup uses the preview receiver and still requires a durable receipt reference."}
+            {" "}No live telephone line is changed here.
           </p>
         </div>
       ) : null}
