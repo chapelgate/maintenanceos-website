@@ -242,3 +242,53 @@ Surgical test-only fix:
 
 Verification:
 The repaired harness passed twice consecutively on the scan-retirement candidate, each with exit code 0, `ok=true`, `rawPosts=2`, `storedRequests=2`, `emailHandoffs=1`, `submissions=2`, 390x844@3 mobile emulation, 6x CPU throttle and 250 ms latency. The fix was then rebased cleanly onto current `main`.
+
+## MOS-WEB-SEC-001 — Next.js production dependency lagged the current security patch
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+Production was pinned to `next` and `eslint-config-next` 16.3.6 while stable 16.3.8 was published on 2026-09-30 during the current Next.js security-release window.
+
+Surgical fix:
+- update only `next` from 16.3.6 to 16.3.8;
+- update the matched `eslint-config-next` package from 16.3.6 to 16.3.8;
+- leave React, TypeScript, ESLint major version, Playwright, hosting, telephony and application behaviour unchanged.
+
+Verification:
+- npm install/audit: 0 vulnerabilities;
+- source suite: 241/241 PASS;
+- runtime/package suite: 294/294 PASS;
+- accessibility: 16/16 PASS;
+- lint: 0 errors after removing one independently confirmed dead import;
+- production build: Next.js 16.3.8, TypeScript PASS, 30/30 static routes;
+- Edge browser matrix: 18/18 PASS;
+- Firefox/WebKit browser matrix: 36/36 PASS with 0 page errors and 0 console errors;
+- adversarial retired-scan build: 0 endpoint matches;
+- throttled mobile acceptance: PASS, 2/2 submissions, 2 stored requests and 1 email handoff.
+
+## MOS-WEB-DEV-001 — Disposable verification worktree lost Git metadata
+Status: RESOLVED / VERIFICATION WORKSPACE RECREATED
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+A disposable Next.js patch worktree later failed the release-marker preflight because its `.git` pointer referenced an earlier common checkout that had already been removed. `git rev-parse HEAD` reproduced the failure, so the build could not prove its source commit.
+
+Resolution:
+The damaged worktree was not repaired or trusted. A fresh clone of exact `main` SHA `2601ed0b57efe6af8aaf0f4ef491775b2762d46e` was created, the two-package patch was reapplied, and every release-quality gate was rerun from that valid checkout.
+
+## MOS-WEB-LINT-001 — Conversion acceptance script retained an unused assert import
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+ESLint reported one warning because `scripts/conversion-acceptance.mjs` imported `node:assert/strict` but never used it.
+
+Surgical fix:
+Remove only the dead import. No acceptance logic or runtime behaviour changed.
+
+Verification:
+Final lint rerun completed with 0 errors and 0 warnings; the full 241/241 + 294/294 repository suites also passed after the cleanup.
