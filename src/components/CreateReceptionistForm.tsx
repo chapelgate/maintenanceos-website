@@ -289,8 +289,8 @@ export function CreateReceptionistForm({
           {hydrated ? "Check this website" : "Loading form..."}
         </button>
         <p className="mt-3 text-xs text-muted">
-          Pre-launch capture only. Checking this website does not scan a live
-          phone line and does not create a receptionist.
+          Pre-launch capture only. Checking the address does not crawl website
+          pages, place a call, or create a live receptionist.
         </p>
       </div>
     </div>

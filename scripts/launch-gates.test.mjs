@@ -41,8 +41,8 @@ test("launch checklist keeps human gates open instead of inventing completion", 
 
 test("human launch gates are not mislabeled as engineering blockers", () => {
   const blockers = read("WEBSITE_EXTERNAL_BLOCKERS.md");
-  assert.match(blockers, /WB-002 — App Platform component-only retirement lacks mutation authority/);
-  assert.match(blockers, /not current external blockers to ordinary website engineering/);
+  assert.match(blockers, /## OPEN[\s\S]*No external blocker currently prevents ordinary website engineering/);
+  assert.match(blockers, /## CLOSED[\s\S]*WB-002 — App Platform component-only onboarding-scan retirement/);
   assert.doesNotMatch(blockers, /^### .*counsel/im);
   assert.doesNotMatch(blockers, /^### .*accessibility/im);
   assert.doesNotMatch(blockers, /^### .*owner public-launch/im);

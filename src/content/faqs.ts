@@ -27,16 +27,16 @@ export const faqItems: FaqItem[] = [
     relatedLabel: "Create from website",
   },
   {
-    question: "What happens if the website scan is not configured?",
+    question: "Does the public site crawl my website?",
     answer:
-      "If a scan service is not configured, the crawl is queued. We do not invent extracted hours, services, or FAQs. When a scan does run, it is designed to be SSRF-safe. Staging scan is still owner-blocked (DigitalOcean droplet + NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT + static rebuild), so a queued crawl is the honest result — not a completed knowledge crawl.",
+      "No. The current public /create path records the website address as a setup hint and does not fetch or crawl its pages. Missing hours, services, and FAQs stay empty until you review or supply them. The former scan companion is retired from the public website path.",
     relatedHref: "/how-it-works/",
     relatedLabel: "How it works",
   },
   {
-    question: "If hours or services are missing from the scan, do you fill them in?",
+    question: "If hours or services are missing, do you fill them in?",
     answer:
-      "No. Empty hours and services stay empty. You review the draft, then a claims-safe knowledge pack is built from fields that are actually present. Missing facts stay missing — we do not invent crawl results, bookings, or a live phone number.",
+      "No. Empty hours and services stay empty. You review the draft, then a claims-safe knowledge pack is built from fields that are actually present. Missing facts stay missing — we do not invent business details, bookings, or a live phone number.",
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },
@@ -74,7 +74,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Are you ISO or SOC 2 certified?",
     answer:
-      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
+      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. The current public setup path does not crawl submitted websites. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },

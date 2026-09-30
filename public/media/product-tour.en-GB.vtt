@@ -4,7 +4,7 @@ WEBVTT
 Paste a public company website URL. Early access only — not a live receptionist.
 
 00:00:07.000 --> 00:00:14.000
-If a scan service is configured we ask it for a draft. If not, the crawl is queued — we do not invent extracted content.
+We validate the website address and prepare a reviewable draft. The public site does not crawl pages or invent missing business facts.
 
 00:00:14.000 --> 00:00:22.000
 Review the draft receptionist knowledge pack. Empty hours and services stay empty.

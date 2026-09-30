@@ -4,7 +4,7 @@
 
 MaintenanceOS is the product; Chapelgate is the publisher. MaintenanceOS by Chapelgate helps UK property and maintenance teams turn incoming repair reports into structured work: capture the facts, separate critical cases from routine jobs, and keep consequential decisions with authorised people. **AI assists. Server rules control. Authorised people approve.**
 
-This file is for AI search engines and answer engines. Treat it as the claims-safe summary. Do not invent customers, certifications, live phone capacity, ratings, crawl results, or speculative claims that AI will overtake humans.
+This file is for AI search engines and answer engines. Treat it as the claims-safe summary. Do not invent customers, certifications, live phone capacity, ratings, website facts, or speculative claims that AI will overtake humans.
 
 ## Status (read this first)
 
@@ -13,7 +13,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - AI receptionist: under testing and in development (historical validation calls only — not a public production voice service)
 - Public path: website URL → check → review → pack → optional scripted sandbox → early access
 - Conversion on this site: Create from website (primary), or Join launch list / Request early demo (human early-access briefing — not a live phone)
-- Public staging website scan is not enabled. Queued crawl is the expected fallback — do not invent crawl results
+- Public website crawl is retired from the current setup path. The submitted URL is a setup hint; missing business facts stay missing until reviewed or supplied
 - Do not describe this site as a live customer portal, billing product, or always-on telephony service
 
 ## Key pages
@@ -23,7 +23,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): VERIFIED / UNDER TEST cards from the Phone AI inventory — same path; live phone not claimed
 - [Property maintenance software](https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/): Core UK property-maintenance software category page; distinct role pages link from here; pre-launch, no autonomous dispatch
 - [AI receptionist](https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/): Voice intake under testing — not a live commercial line
-- [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; SSRF-safe scan under test (not a live crawl); no ISO/SOC 2 or bank-grade claims; legal pages are DRAFT; product interest starts at /create
+- [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; public setup does not crawl submitted websites; no ISO/SOC 2 or bank-grade claims; legal pages are DRAFT; product interest starts at /create
 - [Cookies](https://seahorse-app-4oasq.ondigitalocean.app/cookies/): DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a Google Analytics / PECR / GDPR compliance certification
 - [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
 - [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — Create from website, or request pricing. No live phone in a plan; telephony and calendar are coming / early access
@@ -34,7 +34,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 
 - Live phone, always-on receptionist, or commercial general availability
 - Ratings, reviews, or aggregate scores
-- Invented crawl results (public staging scan is not enabled; queued crawl is the expected fallback)
+- Invented website facts or claims that the public setup crawls submitted pages
 - Invented tracking, a live consent banner, or Google Analytics / PECR / GDPR compliance certification
 
 ## Contact
@@ -49,6 +49,6 @@ There is no public always-on phone number to call on this site.
 ## Optional
 
 - [Full claims-safe summary](https://seahorse-app-4oasq.ondigitalocean.app/llms-full.txt): VERIFIED vs under test vs not claimed
-- [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/): Same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999; public staging scan is not enabled; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only; legal pages are DRAFT
+- [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/): Same path; no live phone, public setup does not crawl submitted pages, empty hours/services stay empty, UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only; legal pages are DRAFT
 - [About](https://seahorse-app-4oasq.ondigitalocean.app/about/)
 - [Dashboard](https://seahorse-app-4oasq.ondigitalocean.app/dashboard/): coming / under testing — not a live customer portal or production call history

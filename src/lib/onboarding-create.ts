@@ -32,15 +32,15 @@ const MAX_DRAFT_FIELD = 4000;
 export function createScanProgressTitle(progress: CreateScanProgress): string {
   switch (progress) {
     case "scanning":
-      return "Asking the scan service…";
+      return "Checking website setup…";
     case "queued":
-      return "Crawl queued — next: review a blank draft";
+      return "Website review queued — next: review a blank draft";
     case "scanned":
-      return "Scan ready — next: review extracted fields";
+      return "Draft ready — next: review supplied fields";
     case "scanned_empty":
-      return "Scan returned nothing — next: complete the draft";
+      return "No draft fields supplied — next: complete the draft";
     case "scan_failed":
-      return "Scan failed — next: complete the draft";
+      return "Website check unavailable — next: complete the draft";
     case "checking":
     default:
       return "Checking URL…";

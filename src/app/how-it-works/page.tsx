@@ -19,7 +19,7 @@ export default function HowItWorksPage() {
       <PageHero
         eyebrow="Pre-launch. Not a public live service yet."
         title="From maintenance request to controlled follow-up."
-        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The pre-launch website path remains Website → Check → Choose → Configure → Review & Pack; an optional scripted sandbox can follow. We do not invent crawl results, bookings, or a live phone number."
+        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The pre-launch website path remains Website → Check → Choose → Configure → Review & Pack; an optional scripted sandbox can follow. We do not invent missing business facts, bookings, or a live phone number."
         orbAccent
       />
 

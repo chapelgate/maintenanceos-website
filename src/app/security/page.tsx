@@ -7,7 +7,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Security",
   description:
-    "Tenant isolation, human clearance, and audit evidence by design. SSRF-safe website scan is under test — not a live crawl. No ISO, SOC 2, or bank-grade claims. Legal pages are DRAFT. Product interest starts at /create.",
+    "Tenant isolation, human clearance, and audit evidence by design. The public setup path does not crawl submitted websites. No ISO, SOC 2, or bank-grade claims. Legal pages are DRAFT. Product interest starts at /create.",
   path: "/security/",
 });
 
@@ -17,7 +17,7 @@ export default function SecurityPage() {
       <PageHero
         eyebrow="Trust · Pre-launch"
         title="Security and accountability by design"
-        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. Website scan is designed to be SSRF-safe and is under test — not a live knowledge crawl. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
+        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. The current public setup path records a website address but does not crawl its pages. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
       />
 
       <TrustPillars />
@@ -54,9 +54,9 @@ export default function SecurityPage() {
             safety assurances.
           </li>
           <li>
-            Website scan is designed to be SSRF-safe (HTTPS, private-IP deny,
-            redirect re-check) and is flagged off by default. Staging often
-            queues the crawl. Not a live production knowledge crawl.
+            The current public setup path does not fetch or crawl submitted
+            website pages. The former scan companion is retired from the public
+            website path; missing business facts stay missing until reviewed.
           </li>
         </ul>
       </section>

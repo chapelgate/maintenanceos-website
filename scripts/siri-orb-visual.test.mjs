@@ -24,7 +24,7 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   assert.match(home, /primaryHref="\/create\/"/);
   assert.match(home, /Create from website/);
   assert.match(home, /Request early access/);
-  assert.match(home, /No live phone demo/);
+  assert.match(home, /no live phone demo/i);
   assert.match(visual, /SiriOrbCloud/);
   assert.match(visual, /home-orb-stage/);
   assert.doesNotMatch(visual, /ProductUiShell/);

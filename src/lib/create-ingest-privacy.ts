@@ -12,4 +12,4 @@ export const CREATE_INGEST_PRIVACY_ANCHOR = "website-url-ingest";
 
 /** Shared sentence for /create and legal scaffolds. */
 export const CREATE_INGEST_PRIVACY_NOTE =
-  "If a scan service is configured, public pages from the website URL you submit may be fetched to draft business details. We do not invent crawl results. Lead email is for early access only. This is not live telephony data processing.";
+  "The website URL you submit is stored with the early-access request and used as a setup hint. The current public site does not fetch or crawl its pages. Missing business facts stay missing until reviewed or supplied. Lead email is for early access only. This is not live telephony data processing.";

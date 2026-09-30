@@ -37,7 +37,7 @@ export const featureGroupCopy = {
   },
   knowledge: {
     heading: "Knowledge",
-    lede: "Scan and pack stay under the funnel card. Empty fields stay empty.",
+    lede: "Draft pack stays review-led. Public website crawl is retired; empty fields stay empty.",
   },
   telephony: {
     heading: "Telephony",
@@ -87,14 +87,14 @@ export const UNDER_TEST_GROUP_HONESTY =
 export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
   {
     id: "M-ONB-01",
-    title: "Website → draft knowledge pack",
+    title: "Website-guided draft pack",
     status: "UNDER_TEST",
     group: "onboarding",
     ukOpsLine:
-      "Start from a public UK maintenance website, review the draft, then a knowledge pack — early access only.",
+      "Enter a public website address, review and complete the draft, then prepare a knowledge pack — early access only.",
     bullets: [
       "Public /create path: Website → Check → Choose → Configure → Review & Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number.",
-      "SSRF-safe website scan companion. Otherwise the crawl is queued. Empty fields stay empty. Not a live Fonio-parity knowledge crawl.",
+      "The public site does not crawl the website. It uses the no-crawl review fallback; missing fields stay empty until they are reviewed or supplied.",
       "Knowledge pack + system prompt from the reviewed /create draft. Missing keys stay missing. Not a live tenant or trained knowledge base.",
     ],
     sources: ["F-01", "F-02", "F-03"],

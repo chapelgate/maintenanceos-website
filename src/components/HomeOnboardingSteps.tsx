@@ -14,7 +14,7 @@ const STEPS = [
   },
   {
     title: "Review pack",
-    body: "Edit the draft. Empty hours or services stay empty — we do not invent crawl results.",
+    body: "Edit the draft. Empty hours or services stay empty — missing business facts are not invented.",
     href: "/create/",
     link: "See the review step",
   },

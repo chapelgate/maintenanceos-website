@@ -185,8 +185,9 @@ export default function HomePage() {
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">
                 Early access is opening carefully. The public path is website URL
-                → scan/draft → knowledge pack → optional scripted sandbox → early
-                access. No live phone demo from this site.{" "}
+                → validate/draft → knowledge pack → optional scripted sandbox →
+                early access. The site does not crawl submitted pages and offers
+                no live phone demo.{" "}
                 <a
                   href="/create/"
                   className="font-medium text-accent underline-offset-4 hover:underline"

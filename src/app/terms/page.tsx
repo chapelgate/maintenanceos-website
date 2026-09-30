@@ -39,7 +39,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "lead-forms",
     title: "Lead forms and communications",
-    body: "Submit accurate information on launch-list, demo, contact, and /create early-access forms; we may contact you about that request subject to the privacy notice. Website-URL ingest (public pages if a scan is configured; no invented crawl; lead email for early access only; not live telephony data) is described in the Privacy notice (Draft).",
+    body: "Submit accurate information on launch-list, demo, contact, and /create early-access forms; we may contact you about that request subject to the privacy notice. Website-URL setup stores the submitted address as part of the early-access request; the current public site does not crawl its pages. Lead email is for early access only and this is not live telephony data. See the Privacy notice (Draft).",
   },
   {
     id: "acceptable-use",
