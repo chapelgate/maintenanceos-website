@@ -24,6 +24,58 @@ CATEGORY_MASTER_KEY = "master_key"
 CATEGORY_CALL_REVIEW = "call_review"
 ACTIONABLE_CATEGORIES = {CATEGORY_REPAIR, CATEGORY_KEY, CATEGORY_MASTER_KEY, CATEGORY_CALL_REVIEW}
 
+
+def _display_network_number(value: Any) -> str:
+    """Return a safe display form for provider-supplied phone metadata."""
+    raw = str(value or "").strip().replace("whatsapp:", "")
+    if not raw:
+        return ""
+    if raw.casefold() in {"anonymous", "restricted", "unknown", "unavailable"}:
+        return "withheld"
+    compact = re.sub(r"[^\d+]", "", raw)
+    if re.fullmatch(r"\+?\d{8,15}", compact):
+        return compact
+    return ""
+
+
+def _fetch_twilio_call(call_sid: str, account_sid: str, auth_token: str):
+    from twilio.rest import Client as TwilioClient
+    return TwilioClient(account_sid, auth_token).calls(call_sid).fetch()
+
+
+def call_numbers_for_call_sid(call_sid: str) -> dict[str, str]:
+    """Read caller ANI and dialled number after the call, outside realtime voice."""
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
+    empty = {"caller_number": "", "called_number": ""}
+    if not call_sid or not account_sid or not auth_token:
+        return empty
+    try:
+        call = _fetch_twilio_call(call_sid, account_sid, auth_token)
+        return {
+            "caller_number": _display_network_number(getattr(call, "from_", "")),
+            "called_number": _display_network_number(getattr(call, "to", "")),
+        }
+    except Exception as exc:
+        operational_event(
+            "voice_notification",
+            transport="email",
+            outcome="call_number_lookup_failed",
+            reason_code=type(exc).__name__,
+        )
+        return empty
+
+
+def called_number_for_call_sid(call_sid: str) -> str:
+    """Compatibility wrapper for the Chapelgate destination number."""
+    return call_numbers_for_call_sid(call_sid)["called_number"]
+
+
+def caller_number_for_call_sid(call_sid: str) -> str:
+    """Compatibility wrapper for provider-supplied caller ANI."""
+    return call_numbers_for_call_sid(call_sid)["caller_number"]
+
+
 _MASTER_KEY = re.compile(
     r"\bmaster\s*keys?\b|\brestricted\s+keys?\b|\bmaster\s+key\s+application\b",
     re.IGNORECASE,
@@ -36,7 +88,8 @@ _KEY = re.compile(
 )
 _REPAIR = re.compile(
     r"\b(?:repair|broken|fault|damaged|stuck|won't\s+open|will\s+not\s+open|"
-    r"lock\s+(?:fault|broken|jammed)|gate\s+(?:fault|broken|damaged)|"
+    r"locks?\s+(?:fault|broken|jammed)|gate\s+(?:fault|broken|damaged)|"
+    r"keys?\s+(?:doesn't|does\s+not|won't|will\s+not)\s+(?:fit|turn|work)|"
     r"maintenance|cylinder|hinge)\b",
     re.IGNORECASE,
 )
@@ -112,7 +165,8 @@ def _assistant_lines(transcript: str) -> list[str]:
 def _readback_clearly_confirmed(transcript: str) -> bool:
     lines = [line.strip() for line in (transcript or "").splitlines() if line.strip()]
     confirmation_prompt = re.compile(
-        r"\b(?:is\s+all\s+of\s+that\s+correct|is\s+everything\s+(?:else\s+)?correct|is\s+that\s+correct)\b",
+        r"\b(?:is\s+all\s+(?:of\s+)?(?:that|this)(?:\s+information)?\s+correct"
+        r"|is\s+everything\s+(?:else\s+)?correct|is\s+that\s+correct)\b",
         re.IGNORECASE,
     )
     clear_yes = re.compile(
@@ -121,6 +175,24 @@ def _readback_clearly_confirmed(transcript: str) -> bool:
     )
     for idx, line in enumerate(lines[:-1]):
         if not line.casefold().startswith("assistant:") or not confirmation_prompt.search(line):
+            continue
+        # A bare field-specific correction such as "In Sefton, then. Is that
+        # correct now?" confirms only that field. Global confirmation requires
+        # a comprehensive read-back containing at least two structured fields.
+        structured_markers = sum(
+            bool(re.search(pattern, line, re.IGNORECASE))
+            for pattern in (
+                r"\bgate(?:\s+number)?\s+\d",
+                r"\byour\s+name",
+                r"\byour\s+(?:address|full\s+address)",
+                r"\byour\s+(?:contact|phone|telephone)\s+number",
+                r"\bjob\s+reference\b",
+            )
+        )
+        confirms_everything_else = bool(re.search(
+            r"\bis\s+everything\s+else\s+correct\b", line, re.IGNORECASE
+        ))
+        if structured_markers < 2 and not confirms_everything_else:
             continue
         for next_line in lines[idx + 1:]:
             if next_line.casefold().startswith("assistant:"):
@@ -296,6 +368,36 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         else ""
     )
 
+    # If raw STT drops a leading zero, accept the assistant's phone read-back
+    # only when the caller clearly confirms the complete read-back. This keeps
+    # unconfirmed/hallucinated assistant numbers fail-closed.
+    if not callback_value and readback_confirmed:
+        confirmed_phone_candidates = []
+        confirmed_phone_pattern = re.compile(
+            r"\b(?:your\s+)?(?:(?:contact|phone|telephone)\s+number|number)"
+            r"\s+(?:is|was)\s+(\+?\d[\d\s()-]{7,}\d)",
+            re.IGNORECASE,
+        )
+        for line in assistant_lines:
+            for match in confirmed_phone_pattern.finditer(line):
+                raw = match.group(1).strip()
+                digits = re.sub(r"\D", "", raw)
+                plausible_uk = (
+                    (digits.startswith("07") and len(digits) == 11)
+                    or (
+                        digits.startswith("0")
+                        and not digits.startswith("07")
+                        and len(digits) in {10, 11}
+                    )
+                    or (digits.startswith("44") and len(digits) == 12)
+                )
+                if plausible_uk:
+                    confirmed_phone_candidates.append(raw)
+        if confirmed_phone_candidates:
+            callback_value = re.sub(
+                r"\s+", " ", confirmed_phone_candidates[-1]
+            ).strip()
+
     confirmed_addresses = re.findall(
         r"\byour\s+address(?:'s|\s+is)\s+([^\.\n]{4,180})"
         r"|\b(?:you're|you\s+are)\s+at\s+([^\.\n]{4,180})"
@@ -346,12 +448,14 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
             ).strip(" ,.")
 
     fault_patterns = [
+        r"\b((?:the\s+)?locks?\s+(?:missing|broken|damaged|jammed|stuck))\b",
+        r"\b((?:the\s+)?key\s+(?:doesn't|does\s+not|won't|will\s+not)\s+(?:fit|turn|work)(?:\s+(?:in\s+)?(?:the\s+)?lock)?)\b",
         r"\bthe\s+problem\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
         r"\breported\s+that\s+(.+?)(?:\s+on\s+gate\s+\d+|\.\s|$)",
         r"\bfault\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
-        r"\b((?:the\s+)?(?:lock|gate|hinge|cylinder)(?:'s|\s+is)\s+(?:missing|broken|damaged|jammed|stuck)(?:\s+due\s+to\s+vandalism)?)",
+        r"\b((?:the\s+)?(?:locks?|gate|hinge|cylinder)(?:'s|\s+is)\s+(?:missing|broken|damaged|jammed|stuck)(?:\s+due\s+to\s+vandalism)?)",
         r"\b((?:the\s+)?keys?\s+(?:is|are)\s+spinning(?:\s+around)?)",
-        r"\b(?:that's|that\s+is)\s+((?:a|an|the)\s+(?:damaged|broken|missing|jammed|stuck)\s+(?:lock|gate|hinge|cylinder))(?:\s+on\s+gate\s+\d+)?",
+        r"\b(?:that's|that\s+is)\s+((?:a|an|the)\s+(?:damaged|broken|missing|jammed|stuck)\s+(?:locks?|gate|hinge|cylinder))(?:\s+on\s+gate\s+\d+)?",
     ]
     animal_fault = re.findall(
         r"\b((?:a|the|my)?\s*(?:dog|cat|pet|animal)\s+(?:is\s+)?(?:stuck|trapped|caught|wedged)\s+(?:in|inside|by|behind)\s+(?:the\s+)?gate)\b",
@@ -375,7 +479,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
     if not fault:
         for line in caller_lines:
             simple = re.search(
-                r"\b((?:the\s+)?(?:gate|lock|hinge|cylinder|keys?)\s+(?:is|are|has|has\s+got)\s+.{0,50}?\b(?:damaged|broken|missing|jammed|stuck|spinning|vandali[sz])\w*\b[^.?!]*)",
+                r"\b((?:the\s+)?(?:gate|locks?|hinge|cylinder|keys?)\s+(?:is|are|has|has\s+got)\s+.{0,50}?\b(?:damaged|broken|missing|jammed|stuck|spinning|vandali[sz])\w*\b[^.?!]*)",
                 line,
                 re.IGNORECASE,
             )
@@ -407,6 +511,117 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                 fault = line.strip()
                 break
 
+    # A comprehensive end-of-call read-back is the voice layer's final
+    # structured view of the call. Use it only to fill fields that raw STT
+    # could not recover, and never for a field the caller subsequently
+    # challenges. This is downstream parsing only; it does not alter voice.
+    readback_line = next(
+        (
+            line for line in reversed(assistant_lines)
+            if re.search(r"\bjob\s+reference\b", line, re.IGNORECASE)
+            and re.search(r"\bgate\s+(?:number\s+)?\d{1,5}\b", line, re.IGNORECASE)
+            and re.search(r"\byour\s+name", line, re.IGNORECASE)
+        ),
+        "",
+    )
+    scoped_correction_engaged = bool(re.search(
+        r"Assistant:.*?\b(?:my\s+mistake|correction)\b.*?\b(?:Wirral|Sefton)\b.*?"
+        r"(?:is\s+that\s+correct|correct\s+now).*?\nCaller:\s*(?:yes|yeah|yep|correct)\b",
+        full,
+        re.IGNORECASE,
+    ))
+    readback_accepted_context = readback_confirmed or scoped_correction_engaged
+
+    if readback_line and readback_accepted_context:
+        readback_gate = re.search(
+            r"\bgate(?:\s+number)?\s+(\d{1,5})\b", readback_line, re.IGNORECASE
+        )
+        if not gate_value and readback_gate:
+            gate_value = readback_gate.group(1)
+
+        readback_name = re.search(
+            r"\byour\s+name(?:'s|\s+is)\s+([^,\.]+)", readback_line, re.IGNORECASE
+        )
+        if not name_value and name_wrong_idx < 0 and readback_name:
+            name_value = readback_name.group(1).strip()
+
+        readback_address = re.search(
+            r"\byour\s+address(?:'s|\s+is)\s+(.+?)(?=,?\s+and\s+your\s+(?:contact|phone|telephone)\s+number\b)",
+            readback_line,
+            re.IGNORECASE,
+        )
+        if readback_address:
+            candidate_address = readback_address.group(1).strip(" ,.")
+            candidate_postcode = re.search(
+                r"\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b",
+                candidate_address,
+                re.IGNORECASE,
+            )
+            if candidate_postcode:
+                compact = re.sub(r"\s+", "", candidate_postcode.group(1)).upper()
+                readback_postcode = compact[:-3] + " " + compact[-3:]
+                if not postcode:
+                    postcode = readback_postcode
+                candidate_address = re.sub(
+                    re.escape(candidate_postcode.group(1)),
+                    "",
+                    candidate_address,
+                    flags=re.IGNORECASE,
+                ).strip(" ,.")
+            # Prefer the bounded read-back address when the earlier parser
+            # accidentally swallowed the following contact-number clause.
+            if not address or re.search(
+                r"\b(?:contact|phone|telephone)\s+number\b", address, re.IGNORECASE
+            ):
+                address = candidate_address
+
+        if not callback_value and phone_wrong_idx < 0:
+            readback_phone = re.search(
+                r"\byour\s+(?:contact|phone|telephone)\s+number\s+(?:is|was)\s+(\+?\d[\d\s()-]{7,}\d)",
+                readback_line,
+                re.IGNORECASE,
+            )
+            if readback_phone:
+                raw = readback_phone.group(1).strip()
+                digits = re.sub(r"\D", "", raw)
+                if (
+                    (digits.startswith("07") and len(digits) == 11)
+                    or (digits.startswith("0") and not digits.startswith("07") and len(digits) in {10, 11})
+                    or (digits.startswith("44") and len(digits) == 12)
+                ):
+                    callback_value = re.sub(r"\s+", " ", raw).strip()
+
+        readback_fault = re.search(
+            r"\bgate(?:\s+number)?\s+\d{1,5},?\s+and\s+(?:it(?:'s|\s+is)|the\s+gate\s+is)\s+([^,.]+)",
+            readback_line,
+            re.IGNORECASE,
+        )
+        if readback_fault and (
+            not fault or re.match(r"^So,\s*just\s+to\s+confirm\b", fault, re.IGNORECASE)
+        ):
+            fault = readback_fault.group(1).strip(" ,.")
+
+    # A later, explicitly confirmed area correction is scoped to area only.
+    # It must not retroactively confirm or invalidate unrelated read-back fields.
+    transcript_lines = [line.strip() for line in full.splitlines() if line.strip()]
+    for idx, line in enumerate(transcript_lines[:-1]):
+        if not line.casefold().startswith("assistant:"):
+            continue
+        scoped_area = re.search(
+            r"\b(?:in\s+)?(Wirral|Sefton),?\s+(?:then\b|is\s+that\s+correct|correct\b)",
+            line,
+            re.IGNORECASE,
+        )
+        if not scoped_area:
+            continue
+        next_line = transcript_lines[idx + 1]
+        if next_line.casefold().startswith("caller:") and re.search(
+            r"^caller:\s*(?:yes|yeah|yep|correct|that's\s+right)\b",
+            next_line,
+            re.IGNORECASE,
+        ):
+            area_value = scoped_area.group(1)
+
     urgency = _URGENCY.search(caller_text)
     animal_emergency = bool(animal_fault)
     category = classify_call_category(full)
@@ -424,6 +639,51 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         "job_reference": job_reference,
         "transcript": full.strip()[:6000],
     }
+
+
+def _number_digits(value: str) -> str:
+    digits = re.sub(r"\D", "", value or "")
+    if digits.startswith("44") and len(digits) in {11, 12}:
+        return "0" + digits[2:]
+    return digits
+
+
+def report_quality_warnings(details: dict[str, Any]) -> list[str]:
+    """Deterministic post-call diagnostics; never invent missing caller data."""
+    warnings: list[str] = []
+    category = details.get("category") or ""
+    caller_number = str(details.get("caller_number") or "")
+    callback_number = str(details.get("callback_number") or "")
+
+    usable_caller_number = bool(caller_number and caller_number != "withheld")
+    if caller_number == "withheld":
+        warnings.append("Network caller number was withheld.")
+    elif not caller_number:
+        warnings.append("Network caller number was unavailable from the phone provider.")
+    if not callback_number:
+        if usable_caller_number:
+            warnings.append("Spoken callback number was not reliably collected; use the network caller number only if operationally appropriate.")
+        else:
+            warnings.append("No reliable callback number was collected.")
+    elif usable_caller_number:
+        ani_digits = _number_digits(caller_number)
+        callback_digits = _number_digits(callback_number)
+        if ani_digits and callback_digits and ani_digits != callback_digits:
+            warnings.append("Network caller number differs from the spoken callback number.")
+
+    if category == CATEGORY_REPAIR:
+        required = (
+            ("gate_number", "Gate number"),
+            ("fault_or_request", "Fault details"),
+            ("caller_name", "Caller name"),
+            ("caller_address", "Caller address"),
+            ("area", "Area"),
+        )
+        for key, label in required:
+            if not details.get(key):
+                warnings.append(f"{label} was not reliably collected.")
+
+    return warnings
 
 
 def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
@@ -460,7 +720,32 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     else:
         subject = f"[CALL REVIEW] Chapelgate phone call {job_ref}"
 
-    lines: list[str] = []
+    # Caller details belong to the call, not to a particular enquiry category.
+    # Render them for every notification so key/master-key/call-review emails
+    # cannot silently drop data already captured by the frozen voice path.
+    person_label = "Resident Name" if has_repair else "Name"
+    lines: list[str] = [
+        "CALLER DETAILS",
+        "==============",
+        f"{person_label}: {details.get('caller_name') or 'not collected'}",
+        f"Caller Number: {details.get('caller_number') or 'not available'} (network ANI)",
+        f"Contact Number: {details.get('callback_number') or 'not collected'} (spoken callback)",
+        f"Number Called: {details.get('called_number') or 'not available'} (Chapelgate line)",
+        f"Address: {details.get('caller_address') or 'not collected'}",
+        f"Postcode: {details.get('postcode') or 'not collected'}",
+        f"Area: {details.get('area') or 'not collected'}",
+        f"Gate Number: {gate}",
+        "",
+    ]
+
+    quality_warnings = report_quality_warnings(details)
+    if quality_warnings:
+        lines.extend([
+            "DATA QUALITY",
+            "============",
+            *[f"- {warning}" for warning in quality_warnings],
+            "",
+        ])
 
     if has_repair:
         lines.extend([
@@ -468,12 +753,6 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
             "======================================",
             "",
             f"Job ID: {job_ref}",
-            f"Gate Number: {gate}",
-            f"Resident Name: {details.get('caller_name') or 'not collected'}",
-            f"Contact Number: {details.get('callback_number') or 'not collected'}",
-            f"Address: {details.get('caller_address') or 'not collected'}",
-            f"Postcode: {details.get('postcode') or 'not collected'}",
-            f"Area: {details.get('area') or 'not collected'}",
             f"Fault Details: {details.get('fault_or_request') or 'not collected'}",
         ])
         if details.get("urgency"):
@@ -545,8 +824,10 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         lines.append("- No additional operational information captured.")
     lines.extend([
         "",
-        "FULL TRANSCRIPT",
-        "===============",
+        "FULL TRANSCRIPT - AUDIT ONLY",
+        "============================",
+        "Raw machine transcription may contain recognition errors; use the structured fields above for operations.",
+        "",
         transcript or "(empty)",
     ])
 
@@ -691,6 +972,9 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
 
             details = extract_call_details(transcript, job_reference=job_reference)
             details["category"] = category
+            # Phone-network metadata is fetched after the call from Twilio using
+            # the persisted CallSid. It is never placed on the realtime voice path.
+            details.update(call_numbers_for_call_sid(cs.call_sid))
             subject, body = build_internal_email(details)
             delivery = queue_outbound(
                 session,

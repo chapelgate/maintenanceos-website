@@ -125,3 +125,20 @@ Status: VERIFIED HUMAN/AUTHORITY BLOCKER — PRODUCT HOTFIX REMAINS FROZEN
 - The verified hotfix remains exactly one commit ahead of the accepted live baseline and touches only the stalled-turn implementation plus its regression tests.
 - No destructive recovery, password reset, rebuild, restore, replacement droplet, provider reroute or credential exposure was attempted.
 - Next executable action remains restoring an approved existing-host deployment identity. After that, deploy only the frozen tag, restart the service, verify health, then reproduce the original caller turn on a controlled real PSTN call before closing this problem.
+
+
+## 2026-09-30 — MaintenanceOS post-call email quality and caller ANI
+Status: RESOLVED — VERIFIED AGAINST CURRENT MAIN; GOLDEN VOICE PATH UNTOUCHED
+
+- Symptom: internal MaintenanceOS/SOS emails were technically delivered but were poor operational reports: repeated fields, transcript-heavy content, and no clear originating caller number.
+- Root cause: post-call formatting relied too heavily on transcript parsing and the downstream Twilio lookup retrieved only the Chapelgate destination number.
+- Fix: post-call metadata now retrieves both Twilio caller ANI and the Chapelgate number dialled from the persisted CallSid after the call. The realtime voice/webhook/media path is unchanged.
+- Email field provenance is explicit: Caller Number = network ANI; Contact Number = spoken callback; Number Called = Chapelgate line.
+- Missing, invalid or withheld ANI fails closed. Withheld ANI is never suggested as a callback route.
+- UK +44/local 0 forms are canonicalised before callback comparison.
+- Repair parsing now handles common caller wording including `locks broken` and `key won't fit the lock` before assistant fallback.
+- Job-card output no longer duplicates the same name/address/gate fields. The raw transcript remains only as audit evidence with a recognition-error warning.
+- Immutable verified product blobs: `call_notifications.py=1fdb6238852836f7cf3b02959c343b2a1e5ebaac`; `tests/test_call_notifications.py=589ba3308b822722c936e614f2ad97878f93c9ba`.
+- Original isolated verification run `36760682433` passed focused post-call/email/voice tests, full Python 3.13 regression, TLS/WSS route regression, and full Python 3.12 regression.
+- Current-main reconciliation run `36762089062` passed the same focused, full Python 3.13, TLS/WSS and Python 3.12 gates before promotion.
+- Reconciliation proof: current main had no changes to the email product files since their common ancestor, so only the verified email implementation/tests were replayed; unrelated newer main commits were preserved.

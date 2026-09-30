@@ -63,6 +63,29 @@ def test_categories_distinguish_repair_key_and_master_key():
     assert "KEY ORDER / ENQUIRY" in key_body
 
 
+def test_key_email_always_renders_captured_caller_details():
+    details = {
+        "category": CATEGORY_KEY,
+        "job_reference": "CG-000039",
+        "caller_name": "Andrew Cartwright",
+        "callback_number": "07755 226746",
+        "caller_address": "18 Brisbane Avenue, Wallasey",
+        "postcode": "CH45 9JX",
+        "area": "Wirral",
+        "gate_number": "421",
+        "transcript": "Caller: I need to order a key from the website.",
+    }
+    subject, body = build_internal_email(details)
+    assert "[KEY REQUEST]" in subject
+    assert "CALLER DETAILS" in body
+    assert "Name: Andrew Cartwright" in body
+    assert "Contact Number: 07755 226746" in body
+    assert "Address: 18 Brisbane Avenue, Wallasey" in body
+    assert "Postcode: CH45 9JX" in body
+    assert "Area: Wirral" in body
+    assert "Gate Number: 421" in body
+
+
 def test_close_call_sends_idempotent_internal_email(monkeypatch):
     factory = _factory()
     monkeypatch.setattr(voice_bridge, "SessionLocal", factory)
@@ -470,3 +493,211 @@ Assistant: Could you repeat the correct telephone number?
     head = body.split("FULL TRANSCRIPT", 1)[0]
     assert "07755 222 6746" not in head
     assert "2755726746" not in head
+
+def test_cg41_confirmed_readback_recovers_dropped_leading_zero_phone():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: We need to pull the alligator up here.
+Assistant: Okay, and is the gate in Wirral or Sefton?
+Caller: Boom.
+Assistant: Thanks. Now, could you give me the gate number, please?
+Caller: 829
+Assistant: Thank you. And what's wrong with the gate?
+Caller: just for fun stock short
+Assistant: Right. Now, can I have your full name, please?
+Caller: David Jones
+Assistant: Thanks, David. And what's your full address, please, including postcode?
+Caller: 22 May Avenue, Wirral, CH45 9JW
+Assistant: Thank you. And finally, what's your contact telephone number, please?
+Caller: 1512308476
+Assistant: Thanks. Let me just read back those details. You've reported a problem with the alley gate at 22 May Avenue in Wirral, gate number 829, that it's stuck shut. Your name is David Jones, and your full address is 22 May Avenue, Wirral, CH45 9JW, and your contact number is 01512308476. Your job reference is CG-000041. Is all that information correct, or is there anything else I can help you with?
+Caller: Yes, that is correct.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000041")
+    subject, body = build_internal_email(details)
+    assert details["callback_number"] == "01512308476"
+    assert subject == "[REPAIR] Gate 829 - CG-000041"
+    assert "Contact Number: 01512308476" in body
+
+def test_cg42_scoped_area_correction_preserves_final_voice_readback():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: I might not be able to get to my way, I think.
+Assistant: I see. Is that gate in Wirral or Sefton?
+Caller: Ja.
+Assistant: And could you please tell me the gate number?
+Caller: 骑 车 。
+Assistant: Thank you. What's wrong with the gate, please?
+Caller: stock short
+Assistant: Right. And what's your full name, please?
+Caller: Change my
+Assistant: Thanks. Could you give me your full address, including postcode, please?
+Caller: 15 Colchester Road
+Assistant: And what's your callback telephone
+Caller: Get the ones.
+Assistant: Thank you. And what's your contact telephone number?
+Caller: 224XY
+Assistant: Thanks. And what's your contact telephone number, please?
+Caller: 112308476
+Assistant: Thanks. So, just to confirm, the gate is in Wirral, gate number 122, and it's stuck shut. Your name's James May, your address is 15 Colchester Road, PR22 4XY, and your contact number is 01123 08476. Your job reference is CG-000042. Someone will be able to look at it within 24 to 48 hours. Is there anything else?
+Caller: und sanften
+Assistant: Ah, my mistake, thank you. In Sefton, then. Is that correct now?
+Caller: Yes.
+Assistant: Right. Anything else I can help you with?
+Caller: chat
+Assistant: Thank you for calling Chapel Gate. Goodbye, have a nice day.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000042")
+    subject, body = build_internal_email(details)
+
+    assert details["gate_number"] == "122"
+    assert details["caller_name"] == "James May"
+    assert details["callback_number"] == "01123 08476"
+    assert details["caller_address"] == "15 Colchester Road"
+    assert details["postcode"] == "PR22 4XY"
+    assert details["area"] == "Sefton"
+    assert details["fault_or_request"] == "stuck shut"
+    assert subject == "[REPAIR] Gate 122 - CG-000042"
+    assert "Resident Name: James May" in body
+    assert "Contact Number: 01123 08476" in body
+    assert "Address: 15 Colchester Road" in body
+    assert "Postcode: PR22 4XY" in body
+    assert "Area: Sefton" in body
+    assert "Fault Details: stuck shut" in body
+
+def test_common_lock_and_key_fault_wording_classifies_as_repair():
+    assert classify_call_category("Caller: locks broken") == CATEGORY_REPAIR
+    assert classify_call_category("Caller: my key won't fit the lock") == CATEGORY_REPAIR
+
+
+def test_email_renders_network_caller_callback_and_number_called():
+    details = {
+        "category": CATEGORY_REPAIR,
+        "job_reference": "CG-000043",
+        "caller_name": "Test Caller",
+        "caller_number": "+447700900123",
+        "callback_number": "01512308476",
+        "called_number": "+441512345678",
+        "caller_address": "1 Test Road",
+        "postcode": "CH45 9AA",
+        "area": "Wirral",
+        "gate_number": "123",
+        "fault_or_request": "stuck shut",
+        "transcript": "Caller: test",
+    }
+    _, body = build_internal_email(details)
+    assert "Caller Number: +447700900123 (network ANI)" in body
+    assert "Contact Number: 01512308476 (spoken callback)" in body
+    assert "Number Called: +441512345678 (Chapelgate line)" in body
+    assert "Network caller number differs from the spoken callback number." in body
+
+
+def test_call_numbers_lookup_fails_closed_without_credentials(monkeypatch):
+    monkeypatch.delenv("TWILIO_ACCOUNT_SID", raising=False)
+    monkeypatch.delenv("TWILIO_AUTH_TOKEN", raising=False)
+    assert call_notifications.call_numbers_for_call_sid("CA-test") == {
+        "caller_number": "",
+        "called_number": "",
+    }
+
+
+def test_call_numbers_lookup_returns_caller_ani_and_destination(monkeypatch):
+    monkeypatch.setenv("TWILIO_ACCOUNT_SID", "AC-test")
+    monkeypatch.setenv("TWILIO_AUTH_TOKEN", "token-test")
+
+    class FakeCall:
+        from_ = "+447700900123"
+        to = "+442922716489"
+
+    monkeypatch.setattr(
+        call_notifications,
+        "_fetch_twilio_call",
+        lambda _sid, _account, _token: FakeCall(),
+    )
+
+    assert call_notifications.call_numbers_for_call_sid("CA-test") == {
+        "caller_number": "+447700900123",
+        "called_number": "+442922716489",
+    }
+
+
+def test_report_quality_treats_equivalent_phone_formatting_as_same_number():
+    warnings = call_notifications.report_quality_warnings(
+        {
+            "category": CATEGORY_KEY,
+            "caller_number": "+44 7700 900123",
+            "callback_number": "07700900123",
+        }
+    )
+    assert "Network caller number differs from the spoken callback number." not in warnings
+
+
+def test_report_quality_withheld_ani_never_suggests_callback_use():
+    warnings = call_notifications.report_quality_warnings(
+        {
+            "category": CATEGORY_KEY,
+            "caller_number": "withheld",
+            "callback_number": "",
+        }
+    )
+    assert "Network caller number was withheld." in warnings
+    assert "No reliable callback number was collected." in warnings
+    assert not any("use the network caller number" in item for item in warnings)
+
+
+def test_repair_email_job_card_does_not_duplicate_operational_fields():
+    details = {
+        "category": CATEGORY_REPAIR,
+        "job_reference": "CG-000099",
+        "caller_name": "Jane Smith",
+        "caller_number": "+447700900111",
+        "callback_number": "07700900111",
+        "called_number": "+442922716489",
+        "caller_address": "9 Example Road",
+        "postcode": "CH45 1AA",
+        "area": "Wirral",
+        "gate_number": "99",
+        "fault_or_request": "lock broken",
+        "transcript": "Caller: the lock is broken",
+    }
+    _, body = build_internal_email(details)
+    assert body.count("Resident Name: Jane Smith") == 1
+    assert body.count("Contact Number: 07700900111") == 1
+    assert body.count("Address: 9 Example Road") == 1
+    assert body.count("Postcode: CH45 1AA") == 1
+    assert body.count("Area: Wirral") == 1
+    assert body.count("Gate Number: 99") == 1
+    assert "FULL TRANSCRIPT - AUDIT ONLY" in body
+    assert "Raw machine transcription may contain recognition errors" in body
+
+
+def test_report_quality_uses_network_number_when_callback_not_collected():
+    warnings = call_notifications.report_quality_warnings(
+        {
+            "category": CATEGORY_REPAIR,
+            "caller_number": "+447700900123",
+            "callback_number": "",
+            "caller_name": "Test Caller",
+            "caller_address": "1 Test Road",
+            "area": "Wirral",
+            "gate_number": "123",
+            "fault_or_request": "lock broken",
+        }
+    )
+    assert any("Spoken callback number was not reliably collected" in item for item in warnings)
+    assert not any("Network caller number was unavailable" in item for item in warnings)
+
+
+def test_plural_lock_fault_prefers_caller_wording_over_wrong_assistant_area():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: I need to report a gate repair.
+Assistant: Is the gate in Wirral or Sefton?
+Caller: Wirral.
+Assistant: What is the gate number?
+Caller: 428
+Assistant: What is wrong with the gate?
+Caller: locks broken
+Assistant: Thanks. Your gate number is 428, your name is Test Caller, your address is 1 Test Road, and your contact number is 01512308476. The job reference is CG-000044. Just to confirm, you're reporting a broken lock on gate number 428 in Sefton. Is all of that correct?
+Caller: Yes.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000044")
+    assert details["area"] == "Wirral"
+    assert details["fault_or_request"].casefold() == "locks broken"

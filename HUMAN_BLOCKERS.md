@@ -35,3 +35,8 @@ The blocker above has now been independently re-proved rather than assumed.
 - No production mutation was attempted by the diagnostic. The accepted live droplet remains unchanged.
 - The frozen product tag still resolves exactly to `51da30f1ab5f5060c280150d9b90869bfab9ec57`; comparison against accepted baseline `4f5bb42cbb267ad040273932a97e9090425496de` is exactly one commit and changes only `gemini_voice.py` plus `tests/test_gemini_latency_tuning.py`.
 - Therefore no remaining safe machine-only deployment route is available through the currently authorised DigitalOcean, GitHub runner, or connected Desktop Commander paths. Rebuild/reset/credential-reset/duplicate-host workarounds remain rejected because they would increase production risk instead of repairing the missing deployment identity.
+
+
+## 2026-09-30 — Post-call email production commissioning
+
+The post-call email/report code is fully verified and safe for canonical source promotion. A separate live commissioning blocker remains: existing authenticated SSH to the accepted MaintenanceOS runtime is unavailable, and no authorised remote-exec path exposed by the connected DigitalOcean tooling can write the running host. Do not bypass access controls, rebuild the golden phone host, reset credentials, or reroute the live number merely to deploy this formatter-only change. Commission it when an already-authorised runtime deployment identity/path is restored.
