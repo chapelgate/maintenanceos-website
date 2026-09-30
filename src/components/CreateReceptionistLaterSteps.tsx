@@ -1176,10 +1176,10 @@ export function CreateReceptionistLaterSteps({
           <p className="mt-6 text-sm text-muted">
             We will store this as a website-to-AI-agent early access lead,
             including the selected AgentBlueprint, knowledge pack and system
-            prompt draft. Submitting does not provision a number, place a test
-            call, or send email. If
-            the sandbox panel below is enabled, it can use this pack for a
-            scripted demo only.
+            prompt draft. Submitting records the request and asks the existing
+            mail provider to send a confirmation email. It does not provision a
+            number, place a test call, or activate a live agent. If the sandbox
+            panel below is enabled, it can use this pack for a scripted demo only.
           </p>
           {agentBlueprint && review ? (
             <div className="mt-5">
