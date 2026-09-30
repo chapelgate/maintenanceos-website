@@ -20,7 +20,9 @@ test("voice evidence stays commissioning-only and current live defect remains ex
   const config = read("src/config/phone-ai-features.ts");
 
   assert.match(claims, /\| V-11 \| Pinned local\/self-hosted voice commissioning candidate \|/);
-  assert.match(claims, /not final production acceptance/i);\n  assert.match(claims, /greet-then-stall/i);\n  assert.match(claims, /not deployed/i);
+  assert.match(claims, /not final production acceptance/i);
+  assert.match(claims, /greet-then-stall/i);
+  assert.match(claims, /not deployed/i);
   assert.match(inventory, /M-TEL-05/);
   assert.match(inventory, /not final production acceptance/i);
   assert.doesNotMatch(config, /id: "M-TEL-05"/);
