@@ -41,12 +41,10 @@ export const siteConfig = {
     process.env.NEXT_PUBLIC_MEASUREMENT_ENDPOINT?.trim() ||
     "https://rsfm-control-plane-production.up.railway.app/v1/public/website-events",
   /**
-   * Hosted website crawl is intentionally disabled in the public client.
-   * Keep this empty so provider build variables cannot reintroduce the retired
-   * paid onboarding-scan dependency. `/create` uses its claims-safe queued
-   * early-access path and must not invent extracted content.
+   * Same-origin on-demand website scanner routed to DigitalOcean Functions.
+   * There is no always-on scanner container.
    */
-  onboardingScanEndpoint: "",
+  onboardingScanEndpoint: "/api/onboarding-scan",
   /**
    * Build-time gate for the /create calendar panel. Default false.
    * Companion process uses CALENDAR_ADAPTERS_ENABLED (not inlined here).

@@ -11,7 +11,7 @@ export const metadata: Metadata = contentPageMetadata({
   title: "FAQ",
   description:
 
-    "Website URL → check → configure → review → interactive receptionist demo → optional save. Straight answers on scan honesty, empty hours/services, UK 999, pricing, contact, security, and cookies. Pre-launch. Not a live phone.",
+    "Website URL → website learning → review → configure → browser voice preview → optional save. Straight answers on extracted facts, empty hours/services, UK 999, pricing, contact, security, and cookies. Pre-launch. Not a live public phone.",
 
   path: "/faq/",
 });
@@ -23,7 +23,7 @@ export default function FaqPage() {
       <PageHero
         title="Frequently asked questions"
 
-        lede="Same path as Create from website: website URL → check → configure → review → interactive receptionist demo → optional save. No live phone, no invented crawl, and no engineering test-harness wording."
+        lede="Same path as Create from website: website URL → website learning → review → configure → browser voice preview → optional save. No live public phone, no invented website facts, and no engineering test-harness wording."
 
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">

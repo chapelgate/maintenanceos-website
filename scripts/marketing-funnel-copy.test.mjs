@@ -26,20 +26,20 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.match(flow, /CREATE_JOURNEY_STEPS/);
 
   assert.match(flow, /Website → Check → Choose → Configure → Review & Try/);
-  assert.match(flow, /missing hours, services, or FAQs stay empty/);
-  assert.match(flow, /interactive receptionist demo is available after review/);
-  assert.match(flow, /not a live telephone call/i);
+  assert.match(flow, /missing hours, services, or FAQs stay empty/i);
+  assert.match(flow, /browser voice receptionist is available after review/i);
+  assert.match(flow, /not a live public telephone call/i);
 
   assert.doesNotMatch(flow, /always-on service/);
 
   assert.match(page, /Website → Check → Choose → Configure → Review & Try/);
-  assert.match(page, /interactive receptionist demo/);
-  assert.match(page, /live phone number/);
+  assert.match(page, /browser voice receptionist/i);
+  assert.match(page, /live phone number|live public phone number/);
   assert.match(page, /Create from website/);
   assert.match(page, /funnelPageMetadata\("howItWorks"\)/);
   assert.match(page, /id="product-tour"/);
   assert.match(page, /<ProductTour/);
-  assert.match(page, /not a live phone demo/i);
+  assert.match(page, /not a live public phone number/i);
   assert.doesNotMatch(page, /commercially generally available/i);
 });
 
@@ -104,7 +104,7 @@ test("Fonio matrix records the current interactive create funnel", () => {
   assert.match(matrix, /live telephony remains separately commissioned/i);
   assert.match(matrix, /llms\.txt \/ llms-full\.txt vs \/create funnel/);
   assert.match(matrix, /FAQ \+ FAQPage JSON-LD vs \/create funnel/);
-  assert.match(matrix, /not a live phone/);
+  assert.match(matrix, /not a live (public )?phone/i);
 
 });
 
@@ -151,7 +151,7 @@ test("cookies stay DRAFT-honest with cookieless first-party measurement only", (
     faqs,
     /question: "Do you use cookies or a consent banner\?"[\s\S]*relatedHref: "\/cookies\/"/,
   );
-  assert.match(faqs, /Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW/);
+  assert.match(faqs, /Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW/);
 
   assert.match(faqPage, /cookies/);
 
@@ -167,7 +167,7 @@ test("cookies stay DRAFT-honest with cookieless first-party measurement only", (
   assert.match(nextConfig, /output:\s*["']export["']/);
 });
 
-test("security stays claims-safe with retired public crawl and no cert theatre", () => {
+test("security stays claims-safe with bounded website learning and no cert theatre", () => {
   const page = read("src/app/security/page.tsx");
   const faqs = read("src/content/faqs.ts");
   const features = [
@@ -185,8 +185,8 @@ test("security stays claims-safe with retired public crawl and no cert theatre",
 
   assert.match(page, /primaryHref="\/create\/"/);
   assert.match(page, /Create from website/);
-  assert.match(page, /does not crawl submitted websites|does not crawl its pages/);
-  assert.match(page, /former scan companion is retired/);
+  assert.match(page, /Website learning reads only a small, bounded set of public HTTPS/);
+  assert.match(page, /private\/internal addresses[\s\S]*blocked/);
   assert.match(page, /No ISO 27001, SOC 2/);
   assert.match(page, /No bank-grade/);
   assert.match(page, /DRAFT FOR LEGAL REVIEW/);
@@ -198,7 +198,7 @@ test("security stays claims-safe with retired public crawl and no cert theatre",
   assert.match(faqs, /question: "Are you ISO or SOC 2 certified\?"/);
   assert.match(faqs, /bank-grade security/);
 
-  assert.match(faqs, /does not crawl submitted websites/);
+  assert.match(faqs, /Website learning is read-only, bounded and SSRF-guarded/);
 
   assert.match(faqs, /DRAFT FOR LEGAL REVIEW/);
   assert.match(
@@ -207,14 +207,14 @@ test("security stays claims-safe with retired public crawl and no cert theatre",
   );
 
 
-  assert.match(features, /public site does not crawl the submitted website/i);
+  assert.match(features, /bounded, read-only website learning/i);
   assert.match(features, /bank-grade/);
   assert.match(home, /No ISO, SOC 2, or bank-grade claims/);
-  assert.match(flow, /public website crawl is retired/i);
-  assert.match(flow, /does not claim extracted website knowledge/i);
+  assert.match(flow, /Website learning is read-only, bounded, robots-aware and SSRF-guarded/i);
+  assert.match(flow, /Extracted facts are reviewable/i);
 
 
-  assert.match(llms, /public setup does not crawl submitted websites/i);
+  assert.match(llms, /website learning is bounded, read-only and SSRF-guarded/i);
   assert.match(llms, /no ISO\/SOC 2 or bank-grade claims/);
   assert.match(llms, /legal pages are DRAFT/);
   assert.match(llmsFull, /## Security/);
@@ -275,7 +275,7 @@ test("pricing stays claims-safe with Create CTA and coming telephony/calendar", 
 
   assert.match(page, /primaryHref=\{pricing\.primaryCta\.href\}/);
   assert.match(page, /Create from website/);
-  assert.match(page, /not a live phone/);
+  assert.match(page, /not a live (public )?phone/i);
   assert.match(page, /not general availability/);
   assert.match(page, /No live phone in a plan/);
   assert.doesNotMatch(page, /£/);
@@ -301,15 +301,15 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
 
   assert.match(
     faqs,
-    /website URL → check → configure → review → interactive receptionist demo → optional save/,
+    /website URL .* website learning .* review .* configure .* browser voice preview .* optional save/,
   );
-  assert.match(faqs, /not a live phone/);
+  assert.match(faqs, /not a live (public )?phone/);
   assert.match(faqs, /no instant live number/);
   assert.match(faqs, /no public always-on receptionist/);
 
-  assert.match(faqs, /does not fetch or crawl its pages/);
-  assert.match(faqs, /Missing hours, services, and FAQs stay empty/);
-  assert.match(faqs, /former scan companion is retired/);
+  assert.match(faqs, /read(s)? a small, bounded set of public HTTPS pages/i);
+  assert.match(faqs, /missing facts stay empty rather than being invented/i);
+  assert.match(faqs, /robots\.txt is honoured/);
 
   assert.match(faqs, /Empty hours and services stay empty/);
   assert.match(faqs, /999 guidance \(never 911\)/);
@@ -326,9 +326,9 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
   assert.match(page, /faqPageJsonLd\(\)/);
   assert.match(
     page,
-    /website URL → check → configure → review → interactive receptionist demo → optional save/,
+    /website URL .* website learning .* review .* configure .* browser voice preview .* optional save/,
   );
-  assert.match(page, /Not a live phone/);
+  assert.match(page, /Not a live (public )?phone/);
   assert.doesNotMatch(page, /commercially generally available now/i);
 });
 
@@ -375,10 +375,11 @@ test("create and legal scaffolds share the website-URL setup privacy note", () =
   const config = read("next.config.ts");
 
   assert.match(copy, /CREATE_INGEST_PRIVACY_NOTE/);
-  assert.match(copy, /website URL you submit is stored with the early-access request/);
-  assert.match(copy, /does not fetch or crawl its pages/);
-  assert.match(copy, /Lead email is for early access only/);
-  assert.match(copy, /not live telephony data processing/);
+  assert.match(copy, /reads a small, bounded set of public HTTPS pages/);
+  assert.match(copy, /Private and internal network targets are blocked/);
+  assert.match(copy, /robots\.txt is honoured/);
+  assert.match(copy, /only stored when you choose Save setup/);
+  assert.match(copy, /browser voice preview does not activate or alter live telephony/);
   assert.match(copy, /DRAFT FOR LEGAL REVIEW/);
   assert.doesNotMatch(
     copy,
@@ -403,8 +404,8 @@ test("create and legal scaffolds share the website-URL setup privacy note", () =
   assert.match(privacy, /id=\{s\.id\}/);
   assert.match(cookies, /\/privacy\/#website-url-ingest/);
   assert.match(cookies, /not a cookie category/);
-  assert.match(terms, /lead email is for early access only/i);
-  assert.match(terms, /not live telephony data/);
+  assert.match(terms, /website learning reads a small, bounded set of public HTTPS pages/i);
+  assert.match(terms, /browser voice preview does not activate live telephony/i);
   assert.match(chrome, /\/create early-access/);
   assert.match(config, /output:\s*["']export["']/);
   for (const [label, src] of [

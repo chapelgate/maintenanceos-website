@@ -14,7 +14,7 @@ export const metadata = funnelPageMetadata("demo");
 const FUNNEL_COPY = [
 
   "Enter your public website and email to prepare the receptionist preview.",
-  "We validate the URL. The hosted crawl is disabled, so missing business details stay blank rather than being invented.",
+  "We read a small, bounded set of public pages and extract business facts for review. Missing details stay blank rather than being invented.",
   "Choose one bounded AI role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom.",
   "Configure the role, review the business details, and generate the controlled knowledge pack.",
   "Press Try your receptionist and ask your own caller questions in the browser.",

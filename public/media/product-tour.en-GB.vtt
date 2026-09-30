@@ -4,7 +4,7 @@ WEBVTT
 Paste a public company website URL. Early access only — not a live receptionist.
 
 00:00:07.000 --> 00:00:14.000
-We validate the website address and prepare a reviewable draft. The public site does not crawl pages or invent missing business facts.
+We read a small, bounded set of public pages and prepare reviewable business facts. Missing facts are not invented.
 
 00:00:14.000 --> 00:00:22.000
 Review the draft receptionist knowledge pack. Empty hours and services stay empty.

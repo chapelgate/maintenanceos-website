@@ -60,15 +60,19 @@ test("production and capacity claims remain forbidden", () => {
 });
 
 
-test("retired public scan cannot reappear as a present feature", () => {
+test("retired paid scan service stays retired while bounded website learning returns serverless", () => {
   const claims = read("PRODUCT_CLAIMS_REGISTER.md");
   const inventory = read("docs/competitive/PHONE_AI_FEATURE_INVENTORY.md");
-  const config = read("src/config/phone-ai-features.ts");
+  const site = read("src/config/site.ts");
+  const scan = read("packages/onboarding-ingest/packages/website/scan/index.ts");
+  const project = read("packages/onboarding-ingest/project.yml");
   const blockers = read("WEBSITE_EXTERNAL_BLOCKERS.md");
 
   assert.match(claims, /NON-PUBLIC \/ RETIRED FROM THE CURRENT WEBSITE PATH/);
-  assert.match(inventory, /M-KNO-01[\s\S]*NOT_ON_SITE/);
-  assert.match(config, /public site does not crawl the submitted website/i);
-  assert.doesNotMatch(config, /SSRF-safe website scan companion/);
+  assert.match(inventory, /M-KNO-01/);
+  assert.match(site, /onboardingScanEndpoint:\s*"\/api\/onboarding-scan"/);
+  assert.doesNotMatch(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.match(scan, /runScan\(url, \{ enabled: true \}\)/);
+  assert.match(project, /runtime:\s*nodejs:22/);
   assert.match(blockers, /## CLOSED[\s\S]*WB-002/);
 });

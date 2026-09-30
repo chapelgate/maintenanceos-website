@@ -61,7 +61,7 @@ test("/create default path includes the public journey but code-splits the inter
   assert.equal(islands.includes("@/components/CreateJourney"), true);
   assert.equal(islands.includes("@/components/CalendarConnectPanel"), false);
   assert.equal(islands.includes("SandboxTestCallComingSoon"), false);
-  assert.equal(islands.includes("CalendarConnectComingSoon"), true);
+  assert.equal(islands.includes("CalendarConnectComingSoon"), false);
 
   assert.equal(journey.includes("next/dynamic"), true);
   assert.equal(journey.includes('import("@/components/SandboxTestCallPanel")'), true);

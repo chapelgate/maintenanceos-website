@@ -355,11 +355,12 @@ export async function requestOnboardingScan(
 ): Promise<ScanOutcome> {
   const trimmed = endpoint.trim();
   if (!trimmed) return { status: "disabled" };
-  if (!isAbsoluteHttpUrl(trimmed)) {
+  const sameOriginPath = trimmed.startsWith("/") && !trimmed.startsWith("//");
+  if (!sameOriginPath && !isAbsoluteHttpUrl(trimmed)) {
     return {
       status: "error",
       message:
-        "Scan endpoint is not a valid http(s) URL. Static export cannot use relative API routes. No crawl results were invented.",
+        "Scan endpoint is not a valid same-origin path or http(s) URL. No crawl results were invented.",
     };
   }
 

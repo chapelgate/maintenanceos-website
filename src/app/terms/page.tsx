@@ -39,7 +39,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "lead-forms",
     title: "Lead forms and communications",
-    body: "Submit accurate information on launch-list, demo, contact, and /create early-access forms; we may contact you about that request subject to the privacy notice. Website-URL setup stores the submitted address as part of the early-access request; the current public site does not crawl its pages. Lead email is for early access only and this is not live telephony data. See the Privacy notice (Draft).",
+    body: "Submit accurate information on launch-list, demo, contact, and /create forms; we may contact you about that request subject to the privacy notice. When requested on /create, website learning reads a small, bounded set of public HTTPS pages to extract reviewable business facts. Missing facts are not invented and the browser voice preview does not activate live telephony. See the Privacy notice (Draft).",
   },
   {
     id: "acceptable-use",

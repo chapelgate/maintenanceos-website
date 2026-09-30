@@ -12,15 +12,15 @@ const STAGE_COPY = [
     id: "website",
     short: "Start with a public business URL",
     body: "Paste a public site URL and email to prepare the receptionist preview. Checking the website does not assign a live phone number.",
-    note: "The public /create funnel exists today and ends in an interactive browser receptionist preview.",
+    note: "The public /create funnel exists today and ends in a browser voice receptionist preview.",
     status: "UNDER_TEST",
   },
   {
     id: "check",
 
     short: "Validate the URL and prepare a reviewable draft",
-    body: "We validate the public URL and use its hostname only as a setup hint. This public site does not crawl pages; missing hours, services, or FAQs stay empty until reviewed or supplied.",
-    note: "Public website crawl is retired from this path. The Check step validates the address; it does not claim extracted website knowledge.",
+    body: "We read a small, bounded set of public HTTPS pages and extract reviewable business facts. Missing hours, services, or FAQs stay empty when they are not found.",
+    note: "Website learning is read-only, bounded, robots-aware and SSRF-guarded. Extracted facts are reviewable before the receptionist uses them.",
 
     status: "UNDER_TEST",
   },
@@ -41,8 +41,8 @@ const STAGE_COPY = [
   {
     id: "review_pack",
     short: "Review the final configuration and pack",
-    body: "The reviewed configuration becomes a knowledge pack and protected system prompt. Missing hours or services stay missing, and the reviewed configuration becomes the input to the interactive browser demo.",
-    note: "The interactive receptionist demo is available after review. It uses the generated knowledge pack in the browser and is not a live telephone call.",
+    body: "The reviewed configuration becomes a knowledge pack and protected system prompt. Missing hours or services stay missing, and the reviewed configuration becomes the input to the browser voice preview.",
+    note: "The browser voice receptionist is available after review. Speak through the browser microphone and hear the response aloud when browser voice is supported; it is not a live public telephone call.",
     status: "UNDER_TEST",
   },
 ] as const satisfies readonly {

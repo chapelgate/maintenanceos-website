@@ -13,7 +13,7 @@ test("machine-readable public summaries track current positioning and gates", ()
     llms,
     /helps UK property and maintenance teams turn incoming repair reports into structured work/,
   );
-  assert.match(combined, /public website crawl is retired|public setup does not crawl submitted/i);
+  assert.match(combined, /website learning.*bounded|bounded.*website learning/i);
   assert.match(full, /Controlled carrier call proven on the current canonical runtime/);
   assert.doesNotMatch(combined, /Gemini/i);
   assert.doesNotMatch(combined, /Fonio/i);

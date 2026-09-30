@@ -31,8 +31,7 @@ const requiredPhrases = [
   "not commercially",
 ];
 
-const funnelPath =
-  /website URL → check → review → pack → optional scripted sandbox → early access/;
+const funnelPath = /website URL .* website learning .* review .* configure .* browser voice preview .* optional save/;
 
 test("llms.txt exists with claims-safe conversion and key URLs", () => {
   const text = readPublic("llms.txt");
@@ -55,13 +54,13 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
   assert.match(text, /MaintenanceOS by Chapelgate/);
   assert.match(text, /Chapelgate is the publisher/);
   assert.match(text, /Create from website/);
-  assert.match(text, /public website crawl is retired/i);
-  assert.match(text, /missing business facts stay missing/i);
+  assert.match(text, /bounded set of public HTTPS pages/i);
+  assert.match(text, /missing (business )?facts stay missing/i);
   assert.match(text, /not a live phone/i);
   assert.match(text, /not commercially generally available/i);
   assert.match(text, /Do not claim/i);
   assert.match(text, /Ratings, reviews, or aggregate scores/);
-  assert.match(text, /\[FAQ\].*public setup does not crawl submitted pages/);
+  assert.match(text, /\[FAQ\].*bounded public website learning/i);
   assert.doesNotMatch(text, /always-on phone line is live/i);
 });
 
@@ -77,9 +76,9 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   assert.match(text, /do not claim that AI will overtake humans/i);
   assert.match(text, /Do not use AGI/i);
   assert.match(text, funnelPath, "must name the verified public funnel");
-  assert.match(text, /public website crawl is retired/i);
+  assert.match(text, /bounded, read-only, SSRF-guarded on-demand scanner/i);
   assert.doesNotMatch(text, /owner-blocked|Gemini|Fonio/i);
-  assert.match(text, /do not claim website knowledge extraction/i);
+  assert.match(text, /missing facts empty rather than inventing them/i);
   assert.match(text, /no telephone, aggregateRating, reviews, or offers/);
   assert.match(text, /robots\.txt allows major AI crawlers/);
   assert.match(text, /FAQPage JSON-LD/);

@@ -117,7 +117,7 @@ test("contact, about, and faq stay professional and claims-safe", () => {
   assert.doesNotMatch(about, /trusted by/i);
 
   assert.match(faq, /name="mos-site-faq"/);
-  assert.match(faq, /Not a live phone/);
+  assert.match(faq, /Not a live (public )?phone/);
 });
 
 test("features inventory uses compact cards with searchable details", () => {
@@ -132,7 +132,7 @@ test("SEO helper stays funnel-aligned and claims-safe", () => {
   const meta = read("src/lib/page-meta.ts");
   assert.match(meta, /UK maintenance operations software/);
   assert.match(meta, /FUNNEL_PATH_LABEL/);
-  assert.match(meta, /not a live phone/);
+  assert.match(meta, /not a live (public )?phone/i);
   assert.match(meta, /not always-on/);
   assert.match(meta, /not general availability/);
   assert.doesNotMatch(meta, /24\/7/);
