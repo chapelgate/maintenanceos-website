@@ -160,7 +160,7 @@ test("create journey steps name the next action without a live-phone claim", () 
   assert.equal(isCreateScanReady("queued"), true);
 
   assert.match(createScanProgressTitle("queued"), /review the draft/i);
-  assert.match(createScanProgressTitle("scanned"), /review extracted fields/i);
+  assert.match(createScanProgressTitle("scanned"), /review supplied fields/i);
 
   for (const item of CREATE_JOURNEY_STEPS) {
     assert.doesNotMatch(item.nextAction, /live (phone|number|call)/i);
