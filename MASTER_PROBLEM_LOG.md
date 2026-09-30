@@ -24,7 +24,7 @@ Evidence: `docs/COST_CUT_ONBOARDING_SCAN_2026-09-28.md`.
 
 
 ## MOS-WEB-COMM-001 — Final create-step copy contradicted receipt-backed production behaviour
-Status: FIXED / VERIFICATION PENDING
+Status: RESOLVED / VERIFIED
 Opened: 2026-09-30
 
 Problem:
@@ -39,11 +39,24 @@ Surgical fix:
 - add a source regression assertion preventing the contradictory wording from returning.
 
 Verification:
-Pending branch release-gate execution. No telephony, provider, provisioning, pricing, legal, or launch-flag behaviour changed.
+Independent verification on branch candidate `ddfb93ac6eb74076622b436b2a2c6f2ffac0a6e1` passed:
+- repository test suites: 238/238 source-script tests plus 294/294 package/runtime/source tests;
+- accessibility gate: 15/15;
+- ESLint on the touched runtime path: PASS;
+- TypeScript `--noEmit`: PASS;
+- Next.js 16.3.6 production build: PASS, 30/30 routes generated;
+- exported route shape: 28 HTML/index routes + `robots.txt` + `sitemap.xml`;
+- Edge real-browser viewport smoke: PASS across mobile/tablet/desktop route matrix;
+- throttled mobile create acceptance: PASS at 390x844@3, 6x CPU throttle, 250 ms network latency and 1.4 s JS delay;
+- duplicate-submit/idempotency evidence: 2 raw posts -> 2 stored requests, no duplicate store;
+- receipt/email-hand-off paths exercised, including one intentionally degraded mail handoff;
+- `git diff --check`: PASS.
+
+No telephony, provider, provisioning, pricing, legal, or public-launch behaviour changed.
 
 
 ## MOS-WEB-CI-001 — Website repair verifier counted non-HTML routes as index.html
-Status: FIXED / VERIFICATION PENDING
+Status: RESOLVED / VERIFIED
 Opened: 2026-09-30
 
 Problem:
@@ -56,4 +69,4 @@ Surgical fix:
 Require exactly 28 exported `index.html` files and separately require `out/robots.txt` plus `out/sitemap.xml`. This preserves the intended 30-route coverage without weakening the gate.
 
 Verification:
-Pending rerun on the corrected branch. The earlier PowerShell `npm.ps1` execution-policy issue was bypassed with `npm.cmd`; it occurred before product execution and required no product change.
+The corrected route-shape assertion passed in independent verification: exactly 28 exported `index.html` files plus `out/robots.txt` and `out/sitemap.xml`, matching the 30 routes reported by Next.js. The complete browser/mobile acceptance sequence then passed. The earlier PowerShell `npm.ps1` execution-policy issue was bypassed with `npm.cmd`; it occurred before product execution and required no product change.
