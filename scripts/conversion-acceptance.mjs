@@ -1,4 +1,3 @@
-import assert from "node:assert/strict";
 import fs from "node:fs";
 
 const site = fs.readFileSync("src/config/site.ts", "utf8");
