@@ -21,3 +21,22 @@ Completed independent work:
 - documented the exact safe cutover order.
 
 Evidence: `docs/COST_CUT_ONBOARDING_SCAN_2026-09-28.md`.
+
+
+## MOS-WEB-COMM-001 — Final create-step copy contradicted receipt-backed production behaviour
+Status: FIXED / VERIFICATION PENDING
+Opened: 2026-09-30
+
+Problem:
+The final /create explanatory copy stated that submission did not send email, while the production lead path now requires a durable receipt and a confirmation-email acknowledgement from the existing mail provider.
+
+Root cause:
+The functional mobile/durable-receipt repair was converged to main after the earlier stacked branch work, but one explanatory paragraph retained the pre-receipt wording.
+
+Surgical fix:
+- align the paragraph with the existing production behaviour;
+- retain the explicit boundary that submission does not provision a number, place a test call, or activate a live agent;
+- add a source regression assertion preventing the contradictory wording from returning.
+
+Verification:
+Pending branch release-gate execution. No telephony, provider, provisioning, pricing, legal, or launch-flag behaviour changed.
