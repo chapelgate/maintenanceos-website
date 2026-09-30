@@ -231,6 +231,7 @@ Verification (integrated branch `ea0d961aa3de3697a41d50fe61ce947a251b0cab`):
 
 Verification diagnostic note:
 The first integrated mobile rerun used an export built without the harness-only `NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads` override. Instrumentation proved the UI correctly reported `Network error`, the local receiver saw `rawPosts=0`, and no runtime exception occurred. Rebuilding with the documented local receiver override made the unchanged application test pass. No application fix was required for that verification-environment error.
+
 ## MOS-WEB-TEST-001 — Windows Edge teardown could false-fail successful mobile acceptance
 Status: RESOLVED / VERIFIED
 Opened: 2026-09-30
