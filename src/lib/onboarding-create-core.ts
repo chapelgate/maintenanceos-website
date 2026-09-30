@@ -40,7 +40,7 @@ export const CREATE_JOURNEY_STEPS: {
   { step: 2, label: "Check", nextAction: "Choose agent" },
   { step: 3, label: "Choose", nextAction: "Configure agent" },
   { step: 4, label: "Configure", nextAction: "Generate reviewed configuration" },
-  { step: 5, label: "Review & Pack", nextAction: "Submit early access request" },
+  { step: 5, label: "Review & Try", nextAction: "Try your receptionist" },
 ];
 
 export function isCreateScanReady(progress: CreateScanProgress): boolean {
