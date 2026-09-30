@@ -791,3 +791,73 @@ def test_manual_review_required_when_network_and_spoken_numbers_disagree():
         "callback_number": "07700900999",
     }
     assert call_notifications.report_requires_review(details) is True
+
+
+
+def test_report_frontloads_action_without_duplicating_operational_fields():
+    details = {
+        "category": CATEGORY_REPAIR,
+        "job_reference": "CG-000301",
+        "caller_name": "Test Caller",
+        "caller_number": "+447700900301",
+        "callback_number": "07700900301",
+        "called_number": "+442922716489",
+        "caller_address": "1 Test Road",
+        "postcode": "CH45 9AA",
+        "area": "Wirral",
+        "gate_number": "301",
+        "fault_or_request": "lock broken",
+        "transcript": "Caller: lock broken",
+    }
+    _, body = build_internal_email(details)
+    assert body.startswith("ACTION\n======\nReady for operational processing.")
+    assert body.count("Gate Number: 301") == 1
+    assert body.count("Fault Details: lock broken") == 1
+
+
+def test_report_frontloads_manual_review_when_data_is_uncertain():
+    details = {
+        "category": CATEGORY_REPAIR,
+        "job_reference": "CG-000302",
+        "caller_name": "Test Caller",
+        "caller_number": "+447700900302",
+        "callback_number": "",
+        "called_number": "+442922716489",
+        "caller_address": "1 Test Road",
+        "postcode": "CH45 9AA",
+        "area": "Wirral",
+        "gate_number": "302",
+        "fault_or_request": "lock broken",
+        "transcript": "Caller: lock broken",
+    }
+    _, body = build_internal_email(details)
+    assert body.startswith("ACTION\n======\nManual review required before acting.")
+
+
+def test_html_report_is_semantic_escaped_and_has_plain_text_equivalent():
+    details = {
+        "category": CATEGORY_REPAIR,
+        "job_reference": "CG-000303",
+        "caller_name": "A <Caller>",
+        "caller_number": "+447700900303",
+        "callback_number": "07700900303",
+        "called_number": "+442922716489",
+        "caller_address": "1 Test & Example Road",
+        "postcode": "CH45 9AA",
+        "area": "Wirral",
+        "gate_number": "303",
+        "fault_or_request": "lock <broken>",
+        "transcript": "Caller: lock <broken>",
+    }
+    subject, body = build_internal_email(details)
+    html_body = call_notifications.build_internal_email_html(subject, body)
+
+    assert '<html lang="en" dir="ltr">' in html_body
+    assert "<title>" in html_body
+    assert html_body.count("<h1") == 1
+    assert "<h2" in html_body
+    assert "A &lt;Caller&gt;" in html_body
+    assert "1 Test &amp; Example Road" in html_body
+    assert "lock &lt;broken&gt;" in html_body
+    assert "<pre" in html_body
+    assert "FULL TRANSCRIPT" in html_body

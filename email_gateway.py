@@ -93,12 +93,34 @@ def fetch_unseen():
     im.close();im.logout()
     return rows
 
-def _send_resend_http(to, subject, body, sender, api_key):
-    payload=json.dumps({"from":sender,"to":[to],"subject":subject,"text":body}).encode("utf-8")
+def _send_resend_http(
+    to,
+    subject,
+    body,
+    sender,
+    api_key,
+    *,
+    html_body=None,
+    idempotency_key=None,
+):
+    payload_data={"from":sender,"to":[to],"subject":subject,"text":body}
+    if html_body:
+        payload_data["html"]=html_body
+    headers={
+        "Authorization":f"Bearer {api_key}",
+        "Content-Type":"application/json",
+        "User-Agent":"MaintenanceOS/1.0",
+    }
+    if idempotency_key:
+        key=str(idempotency_key).strip()
+        if not 1 <= len(key) <= 256:
+            raise ValueError("invalid_resend_idempotency_key")
+        headers["Idempotency-Key"]=key
+    payload=json.dumps(payload_data).encode("utf-8")
     req=urllib.request.Request(
         os.getenv("RESEND_API_URL","https://api.resend.com/emails"),
         data=payload,
-        headers={"Authorization":f"Bearer {api_key}","Content-Type":"application/json","User-Agent":"MaintenanceOS/1.0"},
+        headers=headers,
         method="POST",
     )
     try:
@@ -109,7 +131,15 @@ def _send_resend_http(to, subject, body, sender, api_key):
         raise RuntimeError(f"resend_http_{exc.code}") from None
     return {"mock":False,"message_id":str(data.get("id") or f"<resend-{uuid.uuid4()}@api>"),"provider":"resend_https"}
 
-def send_email(to,subject,body,*,allow_smtp_fallback=False):
+def send_email(
+    to,
+    subject,
+    body,
+    *,
+    html_body=None,
+    idempotency_key=None,
+    allow_smtp_fallback=False,
+):
     """Send live mail without making SMTP a voice-call critical path.
 
     Prefer Resend HTTPS whenever an existing Resend credential is available.
@@ -122,14 +152,30 @@ def send_email(to,subject,body,*,allow_smtp_fallback=False):
     resend_key=_resend_api_key()
     # Pilot fail-safe path: Resend HTTPS first, independent of EMAIL_MODE mock default.
     if pilot_resend_ready() and resend_key and sender:
-        return _send_resend_http(to,subject,body,sender,resend_key)
+        return _send_resend_http(
+            to,
+            subject,
+            body,
+            sender,
+            resend_key,
+            html_body=html_body,
+            idempotency_key=idempotency_key,
+        )
     if os.getenv("EMAIL_MODE","mock")!="imap_smtp":
         return {"mock":True,"message_id":f"<mock-{uuid.uuid4()}@maintenanceos>"}
     if not live_email_enabled():
         raise RuntimeError("Live email is disabled")
     user=os.getenv("SMTP_USERNAME","").strip()
     if resend_key and sender:
-        return _send_resend_http(to,subject,body,sender,resend_key)
+        return _send_resend_http(
+            to,
+            subject,
+            body,
+            sender,
+            resend_key,
+            html_body=html_body,
+            idempotency_key=idempotency_key,
+        )
     if not allow_smtp_fallback:
         raise RuntimeError("resend_https_required")
     if not smtp_configured():
@@ -141,6 +187,8 @@ def send_email(to,subject,body,*,allow_smtp_fallback=False):
     use_ssl=os.getenv("SMTP_USE_SSL","false").lower()=="true"
     msg=EmailMessage();msg["From"]=sender;msg["To"]=to;msg["Subject"]=subject
     mid=f"<maintenanceos-{uuid.uuid4()}@local>";msg["Message-ID"]=mid;msg.set_content(body)
+    if html_body:
+        msg.add_alternative(html_body, subtype="html")
     if use_ssl:
         with smtplib.SMTP_SSL(host,port,timeout=10) as s:
             s.login(user,pw);s.send_message(msg)

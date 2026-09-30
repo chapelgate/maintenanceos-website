@@ -6,6 +6,7 @@ undo persistence. Duplicate Twilio stop/close callbacks are idempotent.
 
 from __future__ import annotations
 
+import html
 import os
 import re
 from typing import Any
@@ -794,6 +795,90 @@ def report_requires_review(details: dict[str, Any]) -> bool:
     return False
 
 
+def build_internal_email_html(subject: str, body: str) -> str:
+    """Render the deterministic plain-text report as accessible semantic HTML."""
+    rows = (body or "").splitlines()
+    parts = [
+        "<!doctype html>",
+        '<html lang="en" dir="ltr">',
+        "<head>",
+        '<meta charset="utf-8">',
+        f"<title>{html.escape(subject)}</title>",
+        "</head>",
+        '<body style="font-family:Arial,Helvetica,sans-serif;line-height:1.5;margin:0;padding:0;color:#1f2937;background:#ffffff;">',
+        '<div lang="en" dir="ltr" style="max-width:680px;margin:0 auto;padding:24px;">',
+        f'<h1 style="font-size:22px;line-height:1.25;margin:0 0 20px;">{html.escape(subject)}</h1>',
+    ]
+
+    idx = 0
+    in_list = False
+    transcript_mode = False
+
+    def close_list() -> None:
+        nonlocal in_list
+        if in_list:
+            parts.append("</ul>")
+            in_list = False
+
+    while idx < len(rows):
+        line = rows[idx]
+        next_line = rows[idx + 1] if idx + 1 < len(rows) else ""
+
+        if line and next_line and set(next_line) == {"="}:
+            close_list()
+            parts.append(
+                f'<h2 style="font-size:17px;line-height:1.3;margin:24px 0 8px;">'
+                f'{html.escape(line)}</h2>'
+            )
+            transcript_mode = line.casefold().startswith("full transcript")
+            idx += 2
+            continue
+
+        if transcript_mode:
+            close_list()
+            remainder = "\n".join(rows[idx:]).strip()
+            if remainder:
+                parts.append(
+                    '<pre style="white-space:pre-wrap;word-wrap:break-word;'
+                    'font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.45;'
+                    'background:#f6f8fa;padding:12px;border-radius:6px;">'
+                    + html.escape(remainder)
+                    + "</pre>"
+                )
+            break
+
+        if not line.strip():
+            close_list()
+            idx += 1
+            continue
+
+        if line.startswith("- "):
+            if not in_list:
+                parts.append('<ul style="padding-left:22px;margin:6px 0 12px;">')
+                in_list = True
+            parts.append(f"<li>{html.escape(line[2:])}</li>")
+            idx += 1
+            continue
+
+        close_list()
+        if ": " in line:
+            label, value = line.split(": ", 1)
+            parts.append(
+                '<p style="margin:4px 0;"><strong>'
+                + html.escape(label)
+                + ":</strong> "
+                + html.escape(value)
+                + "</p>"
+            )
+        else:
+            parts.append(f'<p style="margin:6px 0;">{html.escape(line)}</p>')
+        idx += 1
+
+    close_list()
+    parts.extend(["</div>", "</body>", "</html>"])
+    return "\n".join(parts)
+
+
 def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     category = details.get("category") or "unknown"
     job_ref = details.get("job_reference") or "unknown"
@@ -835,11 +920,23 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     else:
         subject = f"[CALL REVIEW] Chapelgate phone call {job_ref}"
 
+    quality_warnings = report_quality_warnings(details)
+    review_required = report_requires_review(details)
+
+    # Front-load the operational action. Keep it deterministic and concise so
+    # the inbox can be scanned quickly without trusting raw machine transcript.
+    lines: list[str] = [
+        "ACTION",
+        "======",
+        "Manual review required before acting." if review_required else "Ready for operational processing.",
+        "",
+    ]
+
     # Caller details belong to the call, not to a particular enquiry category.
     # Render them for every notification so key/master-key/call-review emails
     # cannot silently drop data already captured by the frozen voice path.
     person_label = "Resident Name" if has_repair else "Name"
-    lines: list[str] = [
+    lines.extend([
         "CALLER DETAILS",
         "==============",
         f"{person_label}: {details.get('caller_name') or 'not collected'}",
@@ -851,10 +948,8 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         f"Area: {details.get('area') or 'not collected'}",
         f"Gate Number: {gate}",
         "",
-    ]
+    ])
 
-    quality_warnings = report_quality_warnings(details)
-    review_required = report_requires_review(details)
     if quality_warnings or review_required:
         lines.extend([
             "REVIEW / DATA QUALITY",
@@ -1133,7 +1228,19 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
                 reason_code=category,
             )
             # Never allow a 30s SMTP timeout on the call-completion path.
-            send_result = send_email(recipient, subject, body, allow_smtp_fallback=False)
+            # Resend idempotency protects the provider boundary as well as the
+            # existing database action claim, so a timeout/retry cannot duplicate
+            # the same logical call report within the provider's retention window.
+            html_body = build_internal_email_html(subject, body)
+            provider_idempotency_key = f"maintenanceos-call-report/{call_session_id}"
+            send_result = send_email(
+                recipient,
+                subject,
+                body,
+                html_body=html_body,
+                idempotency_key=provider_idempotency_key,
+                allow_smtp_fallback=False,
+            )
             provider_ref = str(send_result.get("message_id") or "")[:200]
             if send_result.get("mock"):
                 with SessionLocal() as session:
