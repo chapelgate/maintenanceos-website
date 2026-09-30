@@ -185,3 +185,33 @@ Verification:
 - acceptance preserved same-page navigation, durable/idempotent submissions and the degraded-email path.
 
 This repair changes loading boundaries only. It does not change telephony, provisioning, lead semantics, launch flags or hosting topology.
+
+## MOS-WEB-COST-002 — Provider build variable could reintroduce paid onboarding-scan dependency
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+Although source supported an empty-endpoint queued fallback, `siteConfig.onboardingScanEndpoint` still read `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`. A provider-level build variable could therefore continue compiling the paid App Platform onboarding-scan URL into the public browser bundle.
+
+Root cause:
+Cost retirement depended on mutable provider configuration instead of a source-level fail-closed boundary.
+
+Surgical fix:
+- make the public client onboarding scan endpoint unconditionally empty;
+- preserve the existing claims-safe queued early-access path;
+- add a source regression test proving `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` cannot be compiled into the public client through site config.
+
+Scope:
+No telephony, lead receipt, pricing, legal, provisioning, public-launch, or customer-data behaviour changed. This intentionally removes only the live website-crawl request from the public client.
+Verification (integrated branch `ea0d961aa3de3697a41d50fe61ce947a251b0cab`):
+- current `main` `c6de587e1d25b98c6851510fec8c92a5c221e159` was integrated before final verification; the only merge conflict was this master problem log and both records were preserved;
+- dependency install completed with 0 vulnerabilities;
+- full repository source suite: 241/241 PASS;
+- runtime/package suite: 294/294 PASS;
+- adversarial production build with obsolete `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=https://seahorse-app-4oasq.ondigitalocean.app/onboarding-scan/v1/onboarding/scan` intentionally set: PASS on Next.js 16.3.6, TypeScript PASS, 30/30 static routes generated;
+- exact `rg -F "onboarding-scan/v1/onboarding/scan" out` proof: no matches, expected rg exit code 1;
+- mobile `/create` acceptance on the same export with the documented local test lead receiver override: PASS at 390x844@3, 6x CPU throttle, 250 ms network latency and 1.4 s JS delay; `rawPosts=2`, `storedRequests=2`, `emailHandoffs=1`;
+- `git diff --check`: PASS.
+
+Verification diagnostic note:
+The first integrated mobile rerun used an export built without the harness-only `NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads` override. Instrumentation proved the UI correctly reported `Network error`, the local receiver saw `rawPosts=0`, and no runtime exception occurred. Rebuilding with the documented local receiver override made the unchanged application test pass. No application fix was required for that verification-environment error.

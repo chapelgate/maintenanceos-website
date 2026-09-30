@@ -160,3 +160,13 @@ test("/create Step 1 cannot native-submit before hydration", () => {
   assert.match(form, /event\.key !== "Enter"/);
   assert.match(form, /Loading form\.\.\./);
 });
+
+
+test("/create public client cannot compile the retired paid onboarding scan endpoint", () => {
+  const config = read("src/config/site.ts");
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+  assert.match(config, /onboardingScanEndpoint:\s*""/);
+  assert.doesNotMatch(config, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.match(later, /if \(!endpoint\)/);
+  assert.match(later, /setProgress\("queued"\)/);
+});
