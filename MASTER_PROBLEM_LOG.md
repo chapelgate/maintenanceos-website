@@ -142,3 +142,12 @@ Status: RESOLVED — VERIFIED AGAINST CURRENT MAIN; GOLDEN VOICE PATH UNTOUCHED
 - Original isolated verification run `36760682433` passed focused post-call/email/voice tests, full Python 3.13 regression, TLS/WSS route regression, and full Python 3.12 regression.
 - Current-main reconciliation run `36762089062` passed the same focused, full Python 3.13, TLS/WSS and Python 3.12 gates before promotion.
 - Reconciliation proof: current main had no changes to the email product files since their common ancestor, so only the verified email implementation/tests were replayed; unrelated newer main commits were preserved.
+
+
+## 2026-09-30 — Main CI blocked by estate-recovery runner policy
+Status: RESOLVED — POLICY CHECK VERIFIED
+
+- Post-merge MaintenanceOS Cloud CI run `36762801791` stopped before product tests because `.github/workflows/estate-mos-live-auth.yml` selected `estate-recovery` but omitted the repository-required `estate-trusted` self-hosted runner label.
+- This failure predated and was unrelated to the post-call email product change.
+- Surgical fix: preserved the existing `estate-recovery` selector and added `estate-trusted`; no workflow steps, secrets, permissions, triggers, product code, deployment targets or phone routing changed.
+- Local repository policy validation: `python scripts/gha-runner-policy-check.py .` PASS; 7 workflows scanned; hosted compute target remains £0.

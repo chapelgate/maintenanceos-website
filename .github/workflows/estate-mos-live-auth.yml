@@ -19,7 +19,7 @@ jobs:
       github.ref == 'refs/heads/main' &&
       (github.event_name == 'workflow_dispatch' ||
        contains(github.event.head_commit.message, '[execute-mos-live-auth]'))
-    runs-on: [self-hosted, Linux, X64, chapelgate, estate-recovery]
+    runs-on: [self-hosted, Linux, X64, chapelgate, estate-trusted, estate-recovery]
     timeout-minutes: 6
     permissions:
       contents: read
