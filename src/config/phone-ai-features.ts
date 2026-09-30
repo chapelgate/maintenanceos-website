@@ -38,7 +38,7 @@ export const featureGroupCopy = {
   knowledge: {
     heading: "Knowledge",
 
-    lede: "Draft pack stays review-led. Public website crawl is retired; empty fields stay empty.",
+    lede: "Website learning stays review-led and read-only; extracted facts are reviewable and missing fields stay empty.",
 
   },
   telephony: {
@@ -97,7 +97,7 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
       "Start from a public UK maintenance website, review the draft, then try the generated receptionist interactively in the browser — early access only.",
     bullets: [
       "Public /create path: Website → Check → Choose → Configure → Review & Try, with an optional saved reference. The browser demo exists today; it is not a live phone number.",
-      "The public site does not crawl the submitted website. Empty fields stay empty until reviewed or supplied; no live knowledge crawl is claimed.",
+      "The public /create path uses bounded, read-only website learning to extract reviewable public business facts. Empty fields stay empty when facts are not found.",
 
       "Knowledge pack + system prompt from the reviewed /create draft. Missing keys stay missing. Not a live tenant or trained knowledge base.",
     ],

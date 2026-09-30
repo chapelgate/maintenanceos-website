@@ -310,7 +310,7 @@
     <section class="scene" data-scene="3">
       <p class="eyebrow">Create from website · Review → Pack</p>
       <h1>Draft receptionist knowledge pack</h1>
-      <p class="lede">The business name is from the website address, not from a crawl. Empty fields were not invented.</p>
+      <p class="lede">Website learning extracted public business facts for review. Missing fields were not invented.</p>
       <div class="row" style="margin-top:12px;align-items:stretch">
         <div class="card grow" style="padding:14px 16px">
           <ol class="stepper">
@@ -435,7 +435,7 @@
   <script>
     const CAPTIONS = [
       [0, 7, "Paste a public company website URL. Early access only — not a live receptionist."],
-      [7, 14, "We validate the website address and prepare a reviewable draft. The public site does not crawl pages or invent missing business facts."],
+      [7, 14, "We read a small, bounded set of public pages and prepare reviewable business facts. Missing facts are not invented."],
       [14, 22, "Review the draft receptionist knowledge pack. Empty hours and services stay empty."],
       [22, 30, "AI is designed to collect and classify. Deterministic rules own safety and money — not the model."],
       [30, 37, "Built for UK maintenance operations, including 999 guidance — never 911."],
@@ -476,10 +476,10 @@
       const checking = scanLocal < 2.4;
       document.getElementById("scan-title").textContent = checking
         ? "Checking URL…"
-        : "Crawl queued — next: review a blank draft";
+        : "Website learning complete — next: review the extracted facts";
       document.getElementById("scan-body").textContent = checking
         ? "We only accept a public website address here. Private or internal hosts are not fetched from this page."
-        : "Website review is queued for early access. This public site does not crawl submitted pages, so missing business facts stay empty until reviewed or supplied. You can still review a blank draft.";
+        : "Website learning reads a small, bounded set of public pages. Missing business facts stay empty when they are not found, and all extracted facts remain reviewable.";
       const pct = checking ? Math.min(100, (scanLocal / 2.4) * 100) : 100;
       document.getElementById("scan-bar").style.width = pct + "%";
       const next = document.getElementById("scan-next");

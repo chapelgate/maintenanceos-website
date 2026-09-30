@@ -1,7 +1,13 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
+import {
+  browserVoiceSupport,
+  speakBrowserText,
+  startBrowserSpeechRecognition,
+  type BrowserRecognitionSession,
+} from "@/lib/browser-voice";
 import {
   requestSandboxScriptedDemo,
   runBrowserInteractiveReply,
@@ -80,22 +86,60 @@ export function SandboxTestCallPanel({
   const [qualificationDetail, setQualificationDetail] = useState<string | null>(
     null,
   );
+  const [voiceState, setVoiceState] = useState<
+    "idle" | "listening" | "speaking" | "error"
+  >("idle");
+  const [voiceDetail, setVoiceDetail] = useState<string | null>(null);
+  const recognitionRef = useRef<BrowserRecognitionSession | null>(null);
   const inputId = useId();
+
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.stop();
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  async function speakReply(text: string) {
+    if (!browserVoiceSupport().synthesis) return;
+    setVoiceState("speaking");
+    await speakBrowserText(text, { lang: "en-GB" });
+    setVoiceState("idle");
+  }
 
   function startDemo() {
     if (!receptionist) return;
-    setTurns([openingTurn(receptionist)]);
+    const opening = openingTurn(receptionist);
+    const support = browserVoiceSupport();
+    setTurns([opening]);
     setCallerText("");
+    setVoiceDetail(
+      support.synthesis
+        ? null
+        : "Spoken replies are unavailable in this browser, so answers will appear in the transcript.",
+    );
     setStarted(true);
+    if (support.synthesis) {
+      void speakReply(opening.text);
+    }
   }
 
   function endDemo() {
+    recognitionRef.current?.stop();
+    recognitionRef.current = null;
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    setVoiceState("idle");
+    setVoiceDetail(null);
     setStarted(false);
     setCallerText("");
     setTurns([]);
   }
 
-  function sendCallerTurn(value = callerText) {
+  async function sendCallerTurn(value = callerText, speak = true) {
     const text = value.trim();
     if (!text || !receptionist) return;
     const reply = runBrowserInteractiveReply(
@@ -109,6 +153,51 @@ export function SandboxTestCallPanel({
       reply,
     ]);
     setCallerText("");
+    if (speak && browserVoiceSupport().synthesis) {
+      await speakReply(reply.text);
+    } else {
+      setVoiceState("idle");
+      if (speak) {
+        setVoiceDetail(
+          "Spoken replies are unavailable in this browser, so answers will appear in the transcript.",
+        );
+      }
+    }
+  }
+
+  async function startListening() {
+    if (!receptionist || voiceState === "listening") return;
+    const support = browserVoiceSupport();
+    setVoiceDetail(null);
+    if (!support.recognition) {
+      setVoiceState("error");
+      setVoiceDetail(
+        "Voice input is not available in this browser. You can still type below.",
+      );
+      return;
+    }
+
+    if (support.synthesis) window.speechSynthesis.cancel();
+    recognitionRef.current?.stop();
+    const session = startBrowserSpeechRecognition("en-GB");
+    recognitionRef.current = session;
+    setVoiceState("listening");
+    setVoiceDetail("Listening…");
+
+    try {
+      const transcript = await session.result;
+      recognitionRef.current = null;
+      setCallerText(transcript);
+      setVoiceDetail(`Heard: “${transcript}”`);
+      await sendCallerTurn(transcript, true);
+      if (support.synthesis) setVoiceDetail(null);
+    } catch {
+      recognitionRef.current = null;
+      setVoiceState("error");
+      setVoiceDetail(
+        "I could not hear that clearly. Tap the microphone and try again, or type below.",
+      );
+    }
   }
 
   async function runQualification() {
@@ -177,10 +266,10 @@ export function SandboxTestCallPanel({
         Try your receptionist
       </h2>
       <p className="mt-2 text-sm text-muted">
-        Test the receptionist you just configured. Ask your own caller questions
-        and see how it answers from the reviewed knowledge pack and safety rules.
-        This browser demo does not dial a phone number or touch the live telephone
-        service.
+        Start a browser voice call with the receptionist you just configured.
+        Speak naturally and hear its answer aloud from the reviewed knowledge
+        pack and safety rules. This preview does not dial a phone number or touch
+        the live telephone service.
       </p>
 
       {!receptionist ? (
@@ -198,7 +287,7 @@ export function SandboxTestCallPanel({
           onClick={startDemo}
           className="mt-4 inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
         >
-          Start demo call
+          Start voice call
         </button>
       ) : (
         <div className="mt-5">
@@ -224,12 +313,54 @@ export function SandboxTestCallPanel({
             ))}
           </div>
 
+          <div
+            className="mt-4 rounded-md border border-border bg-paper p-4"
+            data-voice-preview=""
+          >
+            <p className="text-sm font-medium text-ink">
+              Talk to your receptionist
+            </p>
+            <p className="mt-1 text-xs text-muted">
+              Tap the microphone, speak after the prompt, and the receptionist
+              will answer aloud when browser voice is available.
+            </p>
+            <button
+              type="button"
+              data-voice-call-action=""
+              disabled={
+                voiceState === "listening" || voiceState === "speaking"
+              }
+              onClick={() => void startListening()}
+              className="mt-3 inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
+            >
+              {voiceState === "listening"
+                ? "Listening…"
+                : voiceState === "speaking"
+                  ? "Receptionist speaking…"
+                  : "Tap to speak"}
+            </button>
+            {voiceDetail ? (
+              <p
+                className={
+                  voiceState === "error"
+                    ? "mt-2 text-xs text-red-700"
+                    : "mt-2 text-xs text-muted"
+                }
+                role={voiceState === "error" ? "alert" : "status"}
+                data-voice-status={voiceState}
+              >
+                {voiceDetail}
+              </p>
+            ) : null}
+
+          </div>
+
           <div className="mt-4 flex flex-wrap gap-2" aria-label="Example caller questions">
             {QUICK_PROMPTS.map((prompt) => (
               <button
                 key={prompt}
                 type="button"
-                onClick={() => sendCallerTurn(prompt)}
+                onClick={() => void sendCallerTurn(prompt)}
                 className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-ink hover:bg-paper"
               >
                 {prompt}
@@ -238,7 +369,7 @@ export function SandboxTestCallPanel({
           </div>
 
           <label htmlFor={inputId} className="mt-4 block text-sm font-medium text-ink">
-            What would the caller say?
+            Or type what the caller would say
           </label>
           <div className="mt-1 flex gap-2">
             <input
@@ -248,7 +379,7 @@ export function SandboxTestCallPanel({
               onKeyDown={(event) => {
                 if (event.key !== "Enter") return;
                 event.preventDefault();
-                sendCallerTurn();
+                void sendCallerTurn();
               }}
               placeholder="e.g. What time are you open?"
               className="min-w-0 flex-1 rounded-md border border-border px-3 py-2 text-sm"
@@ -256,7 +387,7 @@ export function SandboxTestCallPanel({
             <button
               type="button"
               disabled={!callerText.trim()}
-              onClick={() => sendCallerTurn()}
+              onClick={() => void sendCallerTurn()}
               className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-50"
             >
               Send
@@ -268,7 +399,7 @@ export function SandboxTestCallPanel({
             onClick={endDemo}
             className="mt-4 text-sm font-medium text-accent underline-offset-4 hover:underline"
           >
-            End demo call
+            End voice call
           </button>
         </div>
       )}

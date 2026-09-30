@@ -48,7 +48,7 @@ test("product-tour media files exist and stay claims-safe", () => {
   const captionsSrc = read("scripts/product-tour/captions.en-GB.vtt");
   assert.match(vtt, /^WEBVTT/m);
   assert.match(vtt, /Paste a public company website URL/);
-  assert.match(vtt, /public site does not crawl pages/i);
+  assert.match(vtt, /small, bounded set of public pages/i);
   assert.match(vtt, /Empty hours and services stay empty/);
   assert.match(vtt, /rules own safety and money/i);
   assert.match(vtt, /999 guidance — never 911/);
@@ -56,7 +56,7 @@ test("product-tour media files exist and stay claims-safe", () => {
   assert.equal(vtt, captionsSrc);
 
   assert.match(story, /your-business\.co\.uk/);
-  assert.match(story, /Crawl queued/);
+  assert.match(story, /Website learning complete/);
   assert.match(story, /Empty — not on file/);
   assert.match(story, /sandbox_knowledge_pack/);
   assert.match(story, /Rules own safety and money/);
@@ -105,7 +105,7 @@ test("product-tour player is click-to-play and static-export safe", () => {
   assert.match(hiw, /id="product-tour"/);
   assert.match(hiw, /<ProductTour/);
   assert.match(hiw, /Click to play/);
-  assert.match(hiw, /not a live phone demo/i);
+  assert.match(hiw, /not a live public phone number/i);
   assert.doesNotMatch(hiw, /<video/);
 
   assert.match(home, /ProductTourWatchLink/);

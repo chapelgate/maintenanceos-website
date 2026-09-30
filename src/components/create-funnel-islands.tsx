@@ -1,4 +1,3 @@
-import { CalendarConnectComingSoon } from "@/components/CalendarConnectComingSoon";
 import { CreateJourney } from "@/components/CreateJourney";
 
 /**
@@ -14,5 +13,5 @@ export function CreateJourneySection() {
 }
 
 export function CalendarConnectSection() {
-  return <CalendarConnectComingSoon />;
+  return null;
 }

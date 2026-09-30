@@ -20,7 +20,7 @@ export default function HowItWorksPage() {
         eyebrow="Pre-launch. Not a public live service yet."
         title="From maintenance request to controlled follow-up."
 
-        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The website path is Website → Check → Choose → Configure → Review & Try, followed by an optional saved reference. We do not invent crawl results, bookings, or a live phone number."
+        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The website path is Website → Check → Choose → Configure → Review & Try, followed by an optional saved reference. Website learning only uses extracted public facts; it does not invent bookings or a live phone number."
 
         orbAccent
       />
@@ -43,9 +43,10 @@ export default function HowItWorksPage() {
           Product tour
         </h2>
         <p className="mt-3 text-base leading-relaxed text-muted">
-          A short walkthrough of website → check → review → pack, then how
+          A short walkthrough of website learning → review → pack, then how
           intake and rules are designed to work. Click to play — nothing
-          autoplays. Captions are English (UK). This is not a live phone demo.
+          autoplays. Captions are English (UK). The browser voice call is tested
+          separately in Create and is not a live public phone number.
         </p>
         <div className="mt-6">
           <ProductTour />
@@ -66,9 +67,12 @@ export default function HowItWorksPage() {
             Designed so marketing never outruns the product.
           </h2>
           <p className="mt-3 text-base leading-relaxed text-muted">
-            Calendar connection is not active in the public preview. The interactive receptionist demo is available after the reviewed configuration is generated. Live always-on phone remains coming — frozen production
-            telephony is not used here. Further controlled live testing is
-            still required before we claim a public always-on receptionist.
+            The browser voice receptionist is available after the reviewed
+            configuration is generated. It uses the browser microphone and
+            spoken replies when supported. Live always-on phone remains
+            separate — frozen production telephony is not used here. Further
+            controlled live testing is still required before we claim a public
+            always-on receptionist.
           </p>
           <p className="mt-6 text-sm">
             <a

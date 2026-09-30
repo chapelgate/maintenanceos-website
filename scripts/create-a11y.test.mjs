@@ -118,8 +118,8 @@ test("interactive receptionist and limitations regions have labelled headings", 
   const page = read("src/app/create/page.tsx");
   const demo = read("src/components/SandboxTestCallPanel.tsx");
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
-  const calendar = read("src/components/CalendarConnectComingSoon.tsx");
-  const calendarPanel = read("src/components/CalendarConnectPanel.tsx");
+  const islands = read("src/components/create-funnel-islands.tsx");
+  const enabledIslands = read("src/components/create-funnel-islands.enabled.tsx");
 
   assert.match(page, /aria-labelledby="create-limits-heading"/);
   assert.match(page, /id="create-limits-heading"/);
@@ -131,16 +131,20 @@ test("interactive receptionist and limitations regions have labelled headings", 
   assert.match(demo, /aria-labelledby="interactive-receptionist-heading"/);
   assert.match(demo, /id="interactive-receptionist-heading"/);
   assert.match(demo, /data-demo-transcript=""/);
+  assert.match(demo, /data-voice-call-action=""/);
+  assert.match(demo, /data-voice-status=\{voiceState\}/);
+  assert.match(demo, /Start voice call/);
+  assert.match(demo, /Or type what the caller would say/);
   assert.match(demo, /htmlFor=\{inputId\}/);
-  assert.match(demo, /What would the caller say\?/);
   assert.doesNotMatch(demo, /SandboxTestCallComingSoon/);
   assert.match(preview, /data-limitations="readonly"/);
   assert.match(preview, /id="create-pack-limitations-heading"/);
   assert.match(preview, /aria-labelledby="create-pack-limitations-heading"/);
   assert.match(preview, /Honest limitations/);
-  assert.match(calendar, /Calendar connection — preview coming soon/);
-  assert.match(calendar, /aria-labelledby="calendar-connect-heading"/);
-  assert.match(calendarPanel, /CalendarConnectComingSoon/);
+  assert.match(islands, /export function CalendarConnectSection\(\) \{/);
+  assert.match(islands, /return null/);
+  assert.doesNotMatch(islands, /CalendarConnectComingSoon/);
+  assert.match(enabledIslands, /CalendarConnectPanel/);
 });
 
 test("static export setting is unchanged by create a11y polish", () => {
@@ -164,11 +168,13 @@ test("/create Step 1 cannot native-submit before hydration", () => {
 });
 
 
-test("/create public client cannot compile the retired paid onboarding scan endpoint", () => {
+test("/create uses the same-origin on-demand scanner without reviving the retired paid endpoint", () => {
   const config = read("src/config/site.ts");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
-  assert.match(config, /onboardingScanEndpoint:\s*""/);
+  const scan = read("packages/onboarding-ingest/packages/website/scan/index.ts");
+  assert.match(config, /onboardingScanEndpoint:\s*"\/api\/onboarding-scan"/);
   assert.doesNotMatch(config, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
-  assert.match(later, /if \(!endpoint\)/);
-  assert.match(later, /setProgress\("queued"\)/);
+  assert.match(later, /requestOnboardingScan\(endpoint, businessUrl\)/);
+  assert.match(scan, /runScan\(url, \{ enabled: true \}\)/);
+  assert.match(scan, /rate_limited/);
 });

@@ -19,7 +19,7 @@ const steps = [
   {
     title: "Check the URL",
 
-    body: "We validate the public URL and use its hostname only as a setup hint. The public site does not crawl pages; missing details stay empty until reviewed or supplied.",
+    body: "We read a small, bounded set of public pages and extract business facts for you to review. Missing details stay empty rather than being invented.",
 
   },
   {
@@ -48,7 +48,7 @@ export default function CreateReceptionistPage() {
 
         eyebrow="Create your receptionist · Preview"
         title="Turn your business website into an AI receptionist"
-        lede="Paste your site URL, configure the receptionist, review the knowledge pack, then press Try your receptionist and ask your own caller questions in the browser. You can optionally save the setup and receive a reference by email. The browser demo does not dial a phone number or touch the live telephone service."
+        lede="Paste your site URL, let MaintenanceOS learn the public business facts, review the receptionist, then start a browser voice call and speak to it. You can optionally save the setup and receive a reference by email. The preview does not change your live telephone service."
 
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
@@ -61,9 +61,9 @@ export default function CreateReceptionistPage() {
             Start with your website URL
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Next: check the URL, choose the role, configure the receptionist,
-            review the pack, then try it interactively in the browser. Saving the
-            setup and emailing a reference is optional.
+            Next: read the public website, review the extracted facts, configure
+            the receptionist, then start a browser voice call. Saving the setup
+            and emailing a reference is optional.
           </p>
           <div className="mt-6">
             <CreateJourneySection />
@@ -98,27 +98,23 @@ export default function CreateReceptionistPage() {
             Honest limits
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
-            <li>The interactive browser receptionist is available here; live telephone calling remains a separate commissioning path</li>
             <li>
-              This public site does not crawl the submitted website. The URL
-              is used as a setup hint; missing business facts stay empty until
-              reviewed or supplied
+              Website learning is read-only, limited to a small set of public
+              HTTPS pages, honours robots.txt, and blocks private or internal
+              network targets.
             </li>
             <li>
-              This page does not claim a 30-second live phone number or commercial
-              always-on service
+              Extracted facts are shown for review. If opening hours, services
+              or other details are not found, they stay missing rather than being
+              invented.
             </li>
             <li>
-              Calendar connection is not active in the public preview yet; this page never invents a booked confirmation
+              The voice call runs in your browser using the reviewed knowledge
+              pack. It does not assign or dial a public telephone number.
             </li>
             <li>
-              The receptionist knowledge pack on this page is a preview configuration built from reviewed fields. Missing hours or services stay missing.
-            </li>
-            <li>
-              The interactive receptionist demo runs in the browser from the reviewed pack. It never invents a live customer phone number
-            </li>
-            <li>
-              The live telephone service is isolated from this browser demo and is not changed by anything on this page.
+              The live telephone service remains isolated and is not changed by
+              anything on this page.
             </li>
           </ul>
           <p className="mt-3">

@@ -1,0 +1,10 @@
+packages:
+  - name: website
+    functions:
+      - name: scan
+        runtime: nodejs:22
+        web: true
+        limits:
+          timeout: 15000
+          memory: 256
+          logs: 64

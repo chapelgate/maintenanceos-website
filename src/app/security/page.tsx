@@ -8,7 +8,7 @@ export const metadata = contentPageMetadata({
   title: "Security",
   description:
 
-    "Tenant isolation, human clearance, and audit evidence by design. The public setup path does not crawl submitted websites. No ISO, SOC 2, or bank-grade claims. Legal pages are DRAFT. Product interest starts at /create.",
+    "Tenant isolation, human clearance, and audit evidence by design. Website learning is bounded, read-only and SSRF-guarded. No ISO, SOC 2, or bank-grade claims. Legal pages are DRAFT. Product interest starts at /create.",
 
   path: "/security/",
 });
@@ -20,7 +20,7 @@ export default function SecurityPage() {
         eyebrow="Trust · Pre-launch"
         title="Security and accountability by design"
 
-        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. The current public setup path records a website address but does not crawl its pages. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
+        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. Website learning reads only bounded public HTTPS pages behind SSRF and redirect guards. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
 
       />
 
@@ -58,11 +58,10 @@ export default function SecurityPage() {
             safety assurances.
           </li>
           <li>
-
-            The current public setup path does not fetch or crawl submitted
-            website pages. The former scan companion is retired from the public
-            website path; missing business facts stay missing until reviewed.
-
+            Website learning reads only a small, bounded set of public HTTPS
+            pages. DNS and redirects are re-checked, private/internal addresses
+            are blocked, robots.txt is honoured, and missing facts are not
+            invented.
           </li>
         </ul>
       </section>

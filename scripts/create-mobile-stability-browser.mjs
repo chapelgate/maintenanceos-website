@@ -34,6 +34,35 @@ function exportedFile(urlPath) {
 
 function serveExport() {
   const server = http.createServer(async (req, res) => {
+    const pathname = new URL(req.url || "/", "http://127.0.0.1").pathname;
+    if (pathname === "/api/onboarding-scan" && req.method === "POST") {
+      res.writeHead(200, {
+        "content-type": "application/json; charset=utf-8",
+        "cache-control": "no-store",
+      });
+      res.end(JSON.stringify({
+        ok: true,
+        untrusted: true,
+        draft: {
+          businessName: "Alley Gates",
+          services: "Alley Gate Installation\nCCTV\nSecurity Fencing\nWindow Boarding\nAlley Gate Keys",
+          faqs: "Phone: 0151 230 8476\nEmail: info@alleygates.co.uk",
+        },
+        warnings: ["hours_not_found", "untrusted_crawl_text"],
+        sources: [{ url: "https://alleygates.co.uk/", status: 200, bytes: 90928 }],
+        facts: {
+          website: "https://alleygates.co.uk/",
+          businessName: "Alley Gates",
+          locations: ["18 Brisbane Avenue Wallasey Merseyside CH45 9JX"],
+          contact: {
+            phones: ["0151 230 8476"],
+            emails: ["info@alleygates.co.uk"],
+          },
+          services: ["Alley Gate Installation", "CCTV", "Security Fencing", "Window Boarding", "Alley Gate Keys"],
+        },
+      }));
+      return;
+    }
     const file = exportedFile(req.url || "/");
     if (!file) {
       res.writeHead(404, { "content-type": "text/plain" });
@@ -163,6 +192,16 @@ async function setByLabel(cdp, labelText, value) {
   assert.equal(await evalValue(cdp, expression), true, "missing field: " + labelText);
 }
 
+async function valueByLabel(cdp, labelText) {
+  return evalValue(cdp, `(() => {
+    const label = Array.from(document.querySelectorAll("label")).find((item) =>
+      (item.querySelector("span")?.textContent || "").trim().startsWith(${JSON.stringify(labelText)})
+    );
+    const el = label?.querySelector("input,textarea");
+    return el?.value ?? "";
+  })()`);
+}
+
 async function clickPrimary(cdp) {
   assert.equal(await evalValue(cdp, `(() => {
     const b = document.querySelector("[data-create-primary-action]");
@@ -177,6 +216,14 @@ function leadRequests(cdp) {
     if (event.method !== "Network.requestWillBeSent") return false;
     const url = event.params?.request?.url || "";
     return url.includes("/v1/public/website-leads") || url.includes("127.0.0.1:8787/leads");
+  });
+}
+
+function scanRequests(cdp) {
+  return cdp.events.filter((event) => {
+    if (event.method !== "Network.requestWillBeSent") return false;
+    const url = event.params?.request?.url || "";
+    return url.includes("/api/onboarding-scan");
   });
 }
 
@@ -208,6 +255,63 @@ try {
     deviceScaleFactor: 3,
     mobile: true,
   });
+  await cdp.send("Page.addScriptToEvaluateOnNewDocument", {
+    source: `
+      window.__spokenReplies = [];
+      class FakeSpeechSynthesisUtterance {
+        constructor(text) {
+          this.text = text;
+          this.lang = "";
+          this.rate = 1;
+          this.onend = null;
+          this.onerror = null;
+        }
+      }
+      class FakeSpeechRecognition {
+        constructor() {
+          this.lang = "en-GB";
+          this.continuous = false;
+          this.interimResults = false;
+          this.maxAlternatives = 1;
+          this.onresult = null;
+          this.onerror = null;
+          this.onend = null;
+        }
+        start() {
+          setTimeout(() => {
+            this.onresult?.({
+              results: [[{ transcript: "What services do you offer?" }]],
+            });
+            this.onend?.();
+          }, 20);
+        }
+        stop() { this.onend?.(); }
+        abort() { this.onend?.(); }
+      }
+      Object.defineProperty(window, "SpeechSynthesisUtterance", {
+        configurable: true,
+        value: FakeSpeechSynthesisUtterance,
+      });
+      Object.defineProperty(window, "SpeechRecognition", {
+        configurable: true,
+        value: FakeSpeechRecognition,
+      });
+      Object.defineProperty(window, "webkitSpeechRecognition", {
+        configurable: true,
+        value: FakeSpeechRecognition,
+      });
+      Object.defineProperty(window, "speechSynthesis", {
+        configurable: true,
+        value: {
+          cancel() {},
+          speak(utterance) {
+            window.__spokenReplies.push(utterance.text);
+            setTimeout(() => utterance.onend?.(), 10);
+          },
+        },
+      });
+    `,
+  });
 
   await cdp.send("Page.navigate", { url: site.origin + "/create/" });
   await waitFor(cdp, `document.querySelector("[data-create-hydrated]")?.getAttribute("data-create-hydrated") === "true"`, 20000);
@@ -222,6 +326,7 @@ try {
 
   await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "2"`);
   await waitFor(cdp, `(() => { const b=document.querySelector("[data-create-primary-action]"); return Boolean(b && !b.disabled); })()`, 10000);
+  assert.equal(scanRequests(cdp).length, 1, "website learning must call the same-origin scanner exactly once");
   await clickPrimary(cdp);
 
   await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "3"`);
@@ -230,9 +335,14 @@ try {
   await clickPrimary(cdp);
 
   await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "4"`);
+  assert.equal(await valueByLabel(cdp, "Business name"), "Alley Gates");
+  const learnedServices = await valueByLabel(cdp, "Services");
+  assert.match(learnedServices, /Alley Gate Installation/);
+  assert.match(learnedServices, /CCTV/);
+  assert.equal(await valueByLabel(cdp, "Phone"), "0151 230 8476");
+  assert.equal(await valueByLabel(cdp, "Contact email"), "info@alleygates.co.uk");
   await setByLabel(cdp, "Greeting", "Thank you for calling Alley Gates. How can I help?");
   await setByLabel(cdp, "Hours", "Monday-Friday 09:00-17:00");
-  await setByLabel(cdp, "Services", "Alley Gate Installation\nGate Repairs");
   await clickPrimary(cdp);
 
   await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "5"`, 15000);
@@ -243,29 +353,32 @@ try {
   await clickPrimary(cdp);
   assert.equal(leadRequests(cdp).length, 0, "Try your receptionist must not submit a lead");
 
-  await waitFor(cdp, `Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).some((b) => b.textContent?.trim() === "Start demo call")`);
+  await waitFor(cdp, `Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).some((b) => b.textContent?.trim() === "Start voice call")`);
   assert.equal(await evalValue(cdp, `(() => {
-    const b = Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).find((item) => item.textContent?.trim() === "Start demo call");
+    const b = Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).find((item) => item.textContent?.trim() === "Start voice call");
     if (!b) return false;
     b.click();
     return true;
   })()`), true);
 
   await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("Thank you for calling Alley Gates")`);
-  await setControl(cdp, '#interactive-receptionist-demo input[placeholder="e.g. What time are you open?"]', "What services do you offer?");
+  await waitFor(cdp, `Array.isArray(window.__spokenReplies) && window.__spokenReplies.some((text) => text.includes("Thank you for calling Alley Gates"))`);
+  await waitFor(cdp, `(() => { const b = document.querySelector("[data-voice-call-action]"); return Boolean(b && !b.disabled); })()`);
   assert.equal(await evalValue(cdp, `(() => {
-    const b = Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).find((item) => item.textContent?.trim() === "Send");
+    const b = document.querySelector("[data-voice-call-action]");
     if (!b || b.disabled) return false;
     b.click();
     return true;
   })()`), true);
 
+  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("What services do you offer?")`);
   await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("Alley Gate Installation")`);
+  await waitFor(cdp, `window.__spokenReplies.some((text) => text.includes("Alley Gate Installation"))`);
   const transcript = await evalValue(cdp, `document.querySelector("[data-demo-transcript]")?.innerText || ""`);
   assert.match(transcript, /What services do you offer\?/);
   assert.match(transcript, /Alley Gate Installation/);
-  assert.match(transcript, /Gate Repairs/);
-  assert.equal(leadRequests(cdp).length, 0, "interactive demo must remain independent of lead/email submission");
+  assert.match(transcript, /CCTV/);
+  assert.equal(leadRequests(cdp).length, 0, "interactive voice preview must remain independent of lead/email submission");
   assert.equal(await evalValue(cdp, `Boolean(document.querySelector('[data-create-submit-state="success"]'))`), false);
 
   const exceptions = cdp.events.filter((event) => event.method === "Runtime.exceptionThrown");
@@ -277,9 +390,11 @@ try {
     siteOrigin: site.origin,
     viewport: "390x844@3",
     primaryAction: "Try your receptionist",
-    interactiveDemo: true,
+    websiteLearning: scanRequests(cdp).length === 1,
+    voiceCall: true,
     callerQuestion: "What services do you offer?",
-    packAwareReply: /Alley Gate Installation/.test(transcript) && /Gate Repairs/.test(transcript),
+    packAwareReply: /Alley Gate Installation/.test(transcript) && /CCTV/.test(transcript),
+    spokenReply: await evalValue(cdp, `window.__spokenReplies.some((text) => text.includes("Alley Gate Installation"))`),
     leadRequestsBeforeOptionalSave: leadRequests(cdp).length,
     runtimeExceptions: exceptions.length,
   }));

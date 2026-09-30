@@ -1,7 +1,7 @@
 /**
  * Claims-safe FAQ copy shared by /faq/ and FAQPage JSON-LD.
  * Expand only with Claims Verifier / Copy sign-off.
- * Path: website URL → check → configure → review → interactive receptionist demo → optional save.
+ * Path: website URL → website learning → review → configure → browser voice preview → optional save.
  * Do not imply a live phone, always-on line, instant live number, or GA.
  */
 export type FaqItem = {
@@ -15,7 +15,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Is MaintenanceOS commercially available now?",
     answer:
-      "No. The website is in pre-launch mode, with an interactive browser receptionist preview available on /create. The public path is website URL → check → configure → review → interactive receptionist demo → optional save. You can optionally save the setup or request a human briefing. MaintenanceOS is not commercially generally available, and this is not a live phone.",
+      "No. The website is in pre-launch mode, with a browser voice receptionist preview available on /create. The public path is website URL → website learning → review → configure → browser voice preview → optional save. You can optionally save the setup or request a human briefing. MaintenanceOS is not commercially generally available, and this is not a live public phone line.",
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },
@@ -30,7 +30,7 @@ export const faqItems: FaqItem[] = [
     question: "Does the public site crawl my website?",
     answer:
 
-      "No. The current public /create path records the website address as a setup hint and does not fetch or crawl its pages. Missing hours, services, and FAQs stay empty until you review or supply them. The former scan companion is retired from the public website path.",
+      "Yes, when you use /create we read a small, bounded set of public HTTPS pages to extract reviewable business facts such as services, contact details and hours when they are present. Private or internal network targets are blocked, robots.txt is honoured, and missing facts stay empty rather than being invented.",
 
     relatedHref: "/how-it-works/",
     relatedLabel: "How it works",
@@ -77,7 +77,7 @@ export const faqItems: FaqItem[] = [
     question: "Are you ISO or SOC 2 certified?",
     answer:
 
-      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. The current public setup path does not crawl submitted websites. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
+      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website learning is read-only, bounded and SSRF-guarded. Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
 
     relatedHref: "/create/",
     relatedLabel: "Create from website",

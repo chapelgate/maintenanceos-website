@@ -85,9 +85,9 @@ test("FAQ JSON-LD stays on /faq/ and uses the shared funnel answers", () => {
   assert.match(helper, /faqItems\.map/);
   assert.doesNotMatch(helper, /aggregateRating/);
 
-  assert.match(faqs, /interactive receptionist demo/);
+  assert.match(faqs, /browser receptionist preview|browser voice preview|interactive browser receptionist preview/);
   assert.match(faqs, /optional save/);
-  assert.match(faqs, /does not fetch or crawl its pages/i);
+  assert.match(faqs, /small, bounded set of public HTTPS pages/i);
 
   assert.match(faqs, /Empty hours and services stay empty/);
   assert.match(faqs, /999 guidance \(never 911\)/);
@@ -210,13 +210,13 @@ test("exported /faq/ HTML has claims-safe FAQPage JSON-LD when out/ exists", () 
 
   const serialized = JSON.stringify(blocks);
 
-  assert.match(serialized, /interactive receptionist demo/);
+  assert.match(serialized, /browser receptionist preview|browser voice preview|interactive browser receptionist preview/);
   assert.match(serialized, /optional save/);
-  assert.match(serialized, /does not fetch or crawl its pages/i);
+  assert.match(serialized, /small, bounded set of public HTTPS pages/i);
 
   assert.match(serialized, /Empty hours and services stay empty/);
   assert.match(serialized, /999 guidance \(never 911\)/);
-  assert.match(serialized, /not a live phone/);
+  assert.match(serialized, /not a live (public )?phone/);
   assert.doesNotMatch(serialized, /always-on phone line is live/i);
   assert.doesNotMatch(html, /gtag\(|googletagmanager|google-analytics/i);
 });

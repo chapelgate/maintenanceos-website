@@ -1,4 +1,3 @@
-import { CalendarConnectComingSoon } from "@/components/CalendarConnectComingSoon";
 import { CalendarConnectPanel } from "@/components/CalendarConnectPanel";
 import { CreateJourney } from "@/components/CreateJourney";
 import { siteConfig } from "@/config/site";
@@ -13,7 +12,7 @@ export function CreateJourneySection() {
 
 export function CalendarConnectSection() {
   if (!siteConfig.calendarAdaptersEnabled) {
-    return <CalendarConnectComingSoon />;
+    return null;
   }
 
   return <CalendarConnectPanel />;

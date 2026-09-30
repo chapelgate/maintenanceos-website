@@ -750,26 +750,23 @@ export function CreateReceptionistLaterSteps({
           >
             <p className="font-medium text-ink">{createScanProgressTitle(progress)}</p>
             <p>
-              We only accept a public website address here. This public site
-              validates the address but does not fetch or crawl its pages.
+              We only accept a public HTTPS business website. Website learning
+              reads a small, bounded set of public pages and blocks private or
+              internal network targets.
             </p>
             {progress === "scanning" ? (
-              <p>Checking the website setup for this URL…</p>
+              <p>Reading the public website and extracting reviewable facts…</p>
             ) : null}
             {progress === "queued" ? (
               <p>
-
-                The hosted website crawl is disabled on this public preview.
-                Review the business details manually; missing facts stay blank.
-                The business name is suggested from the website address only.
-
+                Website learning is temporarily unavailable. You can still
+                review the business details manually; missing facts stay blank.
               </p>
             ) : null}
             {progress === "scanned" ? (
               <p>
-                A draft response was received. Only fields supplied by that
-                response are filled. Please review them — this is not a live
-                receptionist and no phone number was assigned.
+                Website learning completed. Only facts found on the public
+                pages are filled; review them before the receptionist uses them.
               </p>
             ) : null}
             {progress === "scanned_empty" ? (
@@ -781,7 +778,7 @@ export function CreateReceptionistLaterSteps({
             {progress === "scan_failed" ? (
               <p>
                 {scanDetail ??
-                  "The optional draft service could not be reached. No business facts were invented."}
+                  "Website learning could not be reached. No business facts were invented."}
               </p>
             ) : null}
           </div>
@@ -887,8 +884,8 @@ export function CreateReceptionistLaterSteps({
             {progress === "scanned"
               ? "Edit anything the scan returned. Empty fields were not invented. Where the scan copied a value, a source and confidence hint appears under that field."
               : progress === "queued"
-                ? "These fields are a draft for early access. The business name is from your website address, not from a crawl."
-                : "Complete what you can. We did not invent crawl content for this site."}
+                ? "Website learning was unavailable, so review and complete the business details manually."
+                : "Complete what you can. Missing website facts were not invented."}
           </p>
           {error ? (
             <p
