@@ -390,3 +390,41 @@ Verification on exact application candidate
 
 No telephony, provider routing, pricing, public-launch flag or paid
 infrastructure was changed by this repair.
+
+## MOS-WEB-CREATE-002 ? /create ended in email instead of an interactive receptionist preview
+Status: RESOLVED / VERIFIED CANDIDATE
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+A real user acceptance test showed that completing `/create` led primarily to a saved early-access request and confirmation email. The expected product journey was to configure the receptionist and then immediately interact with it in a call-style test surface. Public pages also exposed engineering language such as "sandbox" and "under test" that made a working preview look unfinished.
+
+Root cause:
+The public funnel had been designed around early-access lead capture. A deterministic pack-aware conversation engine already existed, but its browser demo was hidden behind the sandbox feature flag and exposed only a fixed scripted transcript. The final primary action therefore submitted the lead instead of demonstrating the configured receptionist.
+
+Surgical fix:
+- reuse the existing deterministic `scriptedReply` conversation engine; no new AI provider, service, droplet or telephony route;
+- expose a public browser-only `Try your receptionist` interaction after configuration, with typed caller questions and pack-aware replies;
+- make `Save setup & email reference` a separate secondary action so trying the receptionist does not send an email;
+- keep live telephony completely isolated and continue to state that the browser preview does not dial a number;
+- require both the engineering sandbox flag and a configured hosted companion endpoint before sandbox qualification can gate a saved setup, so the public browser demo can never award `sandbox_passed` or unlock provisioning;
+- code-split the interactive demo so `/create` retains its performance boundary;
+- replace customer-visible "UNDER TEST" / "sandbox" language with `PREVIEW` / plain customer wording while retaining internal evidence status identifiers;
+- retire the obsolete public coming-soon sandbox component and update the existing mobile browser acceptance test to exercise the real interactive path.
+
+Verification candidate evidence:
+- complete repository source tests: PASS;
+- runtime/package/library tests: 294/294 PASS;
+- accessibility: 16/16 PASS;
+- TypeScript: PASS;
+- ESLint across `src`, `scripts`, and `packages`: PASS;
+- Next.js 16.3.8 production build: PASS, 30/30 static routes, 28 HTML pages plus robots/sitemap;
+- Edge browser viewport matrix: 18/18 PASS across mobile/tablet/desktop and six critical routes;
+- mobile real-browser `/create` acceptance at 390x844@3: PASS;
+- acceptance proved primary action `Try your receptionist`, successful caller question `What services do you offer?`, pack-aware reply containing configured Alley Gate services, zero lead/email requests before optional Save, and zero runtime exceptions;
+- rendered visible-text audit across exported HTML: 0 visitor-visible occurrences of `under test`, `under testing`, or `sandbox`;
+- `git diff --check`: PASS;
+- live telephony, carrier routing, provisioning adapters and provider credentials were not modified.
+
+Cross-engine note:
+The pre-existing Firefox/WebKit smoke runner did not return a fresh result on the authorised Windows verifier during this candidate run and had no active browser child when inspected. This was treated as a verifier-environment issue, not product evidence. The prior frozen cross-engine baseline remains green; the release-critical current change is additionally covered by the successful real Edge mobile interactive acceptance and Edge 18/18 viewport matrix.

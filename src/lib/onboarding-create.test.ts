@@ -148,18 +148,20 @@ test("mapScanBusinessFactMeta keeps provenance only for surviving facts", () => 
 test("create journey steps name the next action without a live-phone claim", () => {
   assert.deepEqual(
     CREATE_JOURNEY_STEPS.map((item) => item.label),
-    ["Website", "Check", "Choose", "Configure", "Review & Pack"],
+    ["Website", "Check", "Choose", "Configure", "Review & Try"],
   );
   assert.equal(createJourneyNextAction(1), "Check this website");
   assert.equal(createJourneyNextAction(2, "checking"), "Checking…");
   assert.equal(createJourneyNextAction(2, "scanned"), "Choose agent");
   assert.equal(createJourneyNextAction(3), "Configure agent");
   assert.equal(createJourneyNextAction(4), "Generate reviewed configuration");
-  assert.equal(createJourneyNextAction(5), "Submit early access request");
+  assert.equal(createJourneyNextAction(5), "Try your receptionist");
   assert.equal(isCreateScanReady("scanning"), false);
   assert.equal(isCreateScanReady("queued"), true);
-  assert.match(createScanProgressTitle("queued"), /review a blank draft/i);
+
+  assert.match(createScanProgressTitle("queued"), /review the draft/i);
   assert.match(createScanProgressTitle("scanned"), /review supplied fields/i);
+
   for (const item of CREATE_JOURNEY_STEPS) {
     assert.doesNotMatch(item.nextAction, /live (phone|number|call)/i);
   }

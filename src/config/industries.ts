@@ -42,10 +42,10 @@ export const industryRoles: IndustryRole[] = [
       "Wanting a system that respects UK emergency guidance (999), not US defaults or generic receptionist scripts.",
     ],
     fits: [
-      "Intake: AI receptionist layer is designed to collect caller details and classify issues in UK maintenance language — under testing, not a public always-on line.",
+      "Intake: AI receptionist layer is designed to collect caller details and classify issues in UK maintenance language — in preview, not a public always-on line.",
       "Emergency triage vs jobs: deterministic rules own lifecycle, escalations, and approvals. Critical safety paths are designed to latch until a person clears them.",
       "Contractor dispatch language: callers can request a live transfer (explicit request). The system is designed not to invent bookings, dispatches, refunds, or safety assurances.",
-      "Ops objects: multi-tenant properties, residents, contractors, work orders, jobs, and communications exist in product source and are under testing for release.",
+      "Ops objects: multi-tenant properties, residents, contractors, work orders, jobs, and communications exist in product source and are in preview for release.",
     ],
     safety:
       "No payment, refund, compensation, fee-waiver, or client-money execution authority. See Security for tenant isolation and audit framing.",
@@ -69,7 +69,7 @@ export const industryRoles: IndustryRole[] = [
     ],
     fits: [
       "Multi-tenant maintenance-operations design: properties, residents, contractors, work orders, jobs, communications.",
-      "AI is designed to collect and classify in UK maintenance language; server rules own consequential decisions — under testing, not a public always-on line.",
+      "AI is designed to collect and classify in UK maintenance language; server rules own consequential decisions — in preview, not a public always-on line.",
       "Emergency triage vs jobs: escalation queues / human review are part of the designed control model; 999 guidance is locked in product source.",
       "Explicit-request human transfer supported in source; quality still under retest. No invented contractor dispatch.",
       "Quotes/invoices checks may exist in product; no payment, refund, or client-money authority — never marketed as billing automation.",
@@ -96,7 +96,7 @@ export const industryRoles: IndustryRole[] = [
     fits: [
       "Verified-in-source multi-tenant system spanning work orders, properties, residents, contractors, jobs, communications.",
       "Deterministic safety/lifecycle rules override AI. UK/999 guidance is locked in product source.",
-      "Critical safety latch requiring human clearance. Intake under testing — not a public always-on line.",
+      "Critical safety latch requiring human clearance. Intake is in preview — not a public always-on line.",
       "Streamlit supervisor dashboard exists as internal supervisor tooling — not presented as a public customer portal GA.",
       "Customer portal / public account login: not available as GA. No invented bookings or dispatches.",
     ],
@@ -121,17 +121,17 @@ export const industryRoles: IndustryRole[] = [
       "Need for clear escalation when safety, access, or out-of-hours cover is unclear — without auto-committing vans, slots, or fees.",
     ],
     fits: [
-      "Emergency triage vs jobs: UK/999 guidance is locked in product source. Danger is designed to latch for a person; routine fabric issues stay structured intake — under testing, not a public always-on line.",
-      "Contractor dispatch language: work orders, jobs, contractors, and communications are first-class in the product model (under testing for release). Rules block invented bookings or “van is on the way.”",
+      "Emergency triage vs jobs: UK/999 guidance is locked in product source. Danger is designed to latch for a person; routine fabric issues stay structured intake — in preview, not a public always-on line.",
+      "Contractor dispatch language: work orders, jobs, contractors, and communications are first-class in the product model (in preview for release). Rules block invented bookings or “van is on the way.”",
       "Out-of-hours honesty: intake is designed to collect caller details when staff cannot pick up. That is not a live 24/7 commercial phone or GA receptionist.",
-      "Human transfer on explicit request keeps consequential commitments with people. Voice layer: built for UK terminology — under testing.",
+      "Human transfer on explicit request keeps consequential commitments with people. Voice layer: built for UK terminology — in preview.",
     ],
     safety:
       "No payment, refund, compensation, fee-waiver, or client-money execution. Safety latch and human clearance. See Security.",
     willNotClaim:
       "No contractor marketplace pitch. No “we dispatch your team automatically.” No “24/7 live always-on phone.” No invented SLA percentages. No general availability.",
     metaDescription:
-      "MaintenanceOS — UK emergency triage vs jobs and contractor-dispatch language, without invented vans or client-money. Under testing.",
+      "MaintenanceOS — UK emergency triage vs jobs and contractor-dispatch language, without invented vans or client-money. Preview.",
   },
   {
     slug: "housing-associations",
@@ -150,7 +150,7 @@ export const industryRoles: IndustryRole[] = [
       "Deterministic rules override AI on safety/lifecycle. Critical safety latch requiring human clearance.",
       "Emergency triage vs jobs: escalation queues / human review in the designed control model.",
       "Must-not-invent controls for bookings, dispatches, refunds, compensation, account info, and safety assurances.",
-      "UK/999 guidance in source and regression tests — framed as designed behaviour; live-carrier retest still required. Voice under testing — not a public always-on line.",
+      "UK/999 guidance in source and regression tests — framed as designed behaviour; live-carrier retest still required. Voice in commissioning preview — not a public always-on line.",
     ],
     safety: "No client-money or compensation execution. No ISO/SOC2 claims. See Security.",
     willNotClaim:
@@ -174,7 +174,7 @@ export const industryRoles: IndustryRole[] = [
     fits: [
       "Multi-tenant properties, contractors, work orders, jobs, communications.",
       "Controlled emergency triage vs jobs via deterministic server rules. UK/999 guidance in product source.",
-      "Audit events / action evidence as designed trust capability. Intake under testing — not a public always-on line.",
+      "Audit events / action evidence as designed trust capability. Intake is in preview — not a public always-on line.",
       "Human oversight for transfer and clearance; no autonomous dispatch story and no client-money authority.",
     ],
     safety: "Money prohibitions apply — no payment, refund, compensation, or client-money execution. See Security.",
@@ -197,7 +197,7 @@ export const industryRoles: IndustryRole[] = [
       "Procurement-sensitive evaluation: no fake readiness or certifications. Need human clearance on critical safety paths.",
     ],
     fits: [
-      "Built for UK terminology — under testing (including 999 guidance where relevant). Not a public always-on line.",
+      "Built for UK terminology — in preview (including 999 guidance where relevant). Not a public always-on line.",
       "Deterministic safety latch and escalation queues — emergency triage vs jobs.",
       "Explicit-request human transfer; no inventing of contractor dispatch, safety assurances, or compensation.",
       "Pre-launch only: join list / early demo briefing — not a live public service claim.",
@@ -223,9 +223,9 @@ export const industryRoles: IndustryRole[] = [
       "Want UK-appropriate emergency guidance if a guest describes danger, without a generic 24/7 receptionist claim.",
     ],
     fits: [
-      "Out-of-hours honesty: intake designed to collect caller details and classify issues (voice under testing — not a public always-on line).",
+      "Out-of-hours honesty: intake designed to collect caller details and classify issues (voice in commissioning preview — not a public always-on line).",
       "Emergency triage vs jobs: rules own safety latch, escalations, approvals; AI must not invent dispatches, bookings, refunds, or compensation.",
-      "Multi-tenant properties and communications model supports property-scoped ops (under testing for release).",
+      "Multi-tenant properties and communications model supports property-scoped ops (in preview for release).",
       "Explicit-request human transfer when a person must decide. No client-money authority.",
     ],
     safety: "No payment, refund, compensation, or client-money execution authority. See Security.",

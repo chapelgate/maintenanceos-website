@@ -21,7 +21,7 @@ test("create journey exposes bounded customer agent configuration", () => {
   assert.match(panel, /type="checkbox"/);
   assert.match(panel, /type="radio"/);
   assert.match(core, /label: "Configure"/);
-  assert.match(core, /label: "Review & Pack"/);
+  assert.match(core, /label: "Review & Try"/);
 });
 
 test("website configuration is explicitly isolated from live phone routing", () => {

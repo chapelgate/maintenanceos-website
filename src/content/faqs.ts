@@ -1,7 +1,7 @@
 /**
  * Claims-safe FAQ copy shared by /faq/ and FAQPage JSON-LD.
  * Expand only with Claims Verifier / Copy sign-off.
- * Path: website URL → check → review → pack → optional scripted sandbox → early access.
+ * Path: website URL → check → configure → review → interactive receptionist demo → optional save.
  * Do not imply a live phone, always-on line, instant live number, or GA.
  */
 export type FaqItem = {
@@ -15,7 +15,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Is MaintenanceOS commercially available now?",
     answer:
-      "No. The website is in pre-launch / early-access mode. The public path is website URL → check → review → pack → optional scripted sandbox → early access. You can also join the launch list or request an early-access briefing. MaintenanceOS is not commercially generally available, and this is not a live phone.",
+      "No. The website is in pre-launch mode, with an interactive browser receptionist preview available on /create. The public path is website URL → check → configure → review → interactive receptionist demo → optional save. You can optionally save the setup or request a human briefing. MaintenanceOS is not commercially generally available, and this is not a live phone.",
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },
@@ -29,7 +29,9 @@ export const faqItems: FaqItem[] = [
   {
     question: "Does the public site crawl my website?",
     answer:
+
       "No. The current public /create path records the website address as a setup hint and does not fetch or crawl its pages. Missing hours, services, and FAQs stay empty until you review or supply them. The former scan companion is retired from the public website path.",
+
     relatedHref: "/how-it-works/",
     relatedLabel: "How it works",
   },
@@ -48,7 +50,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Is the AI receptionist live for production calls?",
     answer:
-      "It is under testing and in development. Prior validation calls have occurred in a test context only. We do not claim commercial general availability, a public always-on phone line, an instant live number, or concurrent capacity numbers.",
+      "The browser receptionist is available as an interactive preview. Live telephone voice remains in commissioning preview. We do not claim commercial general availability, a public always-on phone line, an instant live number, or concurrent capacity numbers.",
     relatedHref: "/ai-receptionist/",
     relatedLabel: "AI receptionist",
   },
@@ -74,7 +76,9 @@ export const faqItems: FaqItem[] = [
   {
     question: "Are you ISO or SOC 2 certified?",
     answer:
+
       "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. The current public setup path does not crawl submitted websites. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
+
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },

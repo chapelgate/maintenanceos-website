@@ -23,15 +23,15 @@ export default function FeaturesPage() {
       <JsonLd data={funnelPageJsonLd("features")} />
       <PageHero
         eyebrow="Capability map · Pre-launch"
-        title="What MaintenanceOS can do — and what is still being tested"
-        lede="Start with the operational outcomes: collect maintenance details, keep safety and approvals in rules, escalate cases for human review, and retain a reviewable record. The capability labels below separate VERIFIED source-backed features from UNDER TEST work. Pre-launch — not a buy-now service or public always-on phone line."
+        title="What MaintenanceOS can do — and what is in preview"
+        lede="Start with the operational outcomes: collect maintenance details, keep safety and approvals in rules, escalate cases for human review, and retain a reviewable record. The capability labels below separate VERIFIED source-backed features from PREVIEW work. Pre-launch — not a buy-now service or public always-on phone line."
         orbAccent
       />
       <SafeAutomationModel compact />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-12">
         <FunnelPathStrip />
         <HonestyBanner compact>
-          Seven cards we can stand behind today — five VERIFIED, two UNDER TEST.
+          Seven cards we can stand behind today — five VERIFIED, two PREVIEW.
           Peer-common gaps stay off this page and are tracked with product.
         </HonestyBanner>
 

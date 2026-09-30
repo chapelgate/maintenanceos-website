@@ -52,7 +52,7 @@ export function HomeOnboardingSteps() {
                 Create from website
               </a>
               : website URL → review a draft pack → early access. Optional scripted
-              sandbox stays under testing. No live phone demo.
+              interactive receptionist preview is available after review. The live phone line remains separate.
             </p>
           </div>
         </div>

@@ -17,7 +17,7 @@ export function IndustryStubPage({
       <PageHero
         eyebrow="Industries"
         title={title}
-        lede={`${audience} MaintenanceOS is designed to keep intake, triage, and contractor coordination accountable — under testing, not commercially GA.`}
+        lede={`${audience} MaintenanceOS is designed to keep intake, triage, and contractor coordination accountable — in preview, not commercially GA.`}
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
         <h2 className="text-xl font-semibold text-ink">Focus areas</h2>

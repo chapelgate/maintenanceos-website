@@ -68,7 +68,7 @@ test("retired public scan cannot reappear as a present feature", () => {
 
   assert.match(claims, /NON-PUBLIC \/ RETIRED FROM THE CURRENT WEBSITE PATH/);
   assert.match(inventory, /M-KNO-01[\s\S]*NOT_ON_SITE/);
-  assert.match(config, /public site does not crawl the website/i);
+  assert.match(config, /public site does not crawl the submitted website/i);
   assert.doesNotMatch(config, /SSRF-safe website scan companion/);
   assert.match(blockers, /## CLOSED[\s\S]*WB-002/);
 });

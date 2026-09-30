@@ -14,27 +14,29 @@ export const metadata = funnelPageMetadata("create");
 const steps = [
   {
     title: "Share your website",
-    body: "Enter a public site URL and an email so we can record the early access request.",
+    body: "Enter your public site URL and email so we can prepare a receptionist preview you can test in the browser.",
   },
   {
     title: "Check the URL",
+
     body: "We validate the public URL and use its hostname only as a setup hint. The public site does not crawl pages; missing details stay empty until reviewed or supplied.",
+
   },
   {
     title: "Review the draft",
     body: "You edit business name, greeting, hours, services, and FAQs before anything is stored. The business name may start from the website-address hint; missing fields are not invented.",
   },
   {
-    title: "Preview the receptionist pack",
-    body: "We turn the reviewed draft into a claims-safe knowledge pack and system prompt. You can edit them. Missing hours or services stay missing. This is not a live number and not always-on.",
+    title: "Build the receptionist",
+    body: "We turn the reviewed details into a knowledge pack and controlled receptionist configuration. You can edit it, and missing information stays missing.",
   },
   {
-    title: "Submit early access",
-    body: "We queue an early access lead with your URL, draft JSON, knowledge pack, and prompt. No live phone number is assigned.",
+    title: "Try your receptionist",
+    body: "Start the interactive receptionist demo and ask your own caller questions against the configuration you just reviewed.",
   },
   {
-    title: "Optional sandbox test (flagged)",
-    body: "A sandbox test-call panel sits after the draft. Off by default it says under testing / coming. When enabled locally, one click runs a pack-aware scripted demo against your knowledge pack — not a live customer number.",
+    title: "Save your setup (optional)",
+    body: "If you want a record of the setup, save it and we will email you the durable reference. Saving is separate from the interactive demo.",
   },
 ] as const;
 
@@ -43,9 +45,11 @@ export default function CreateReceptionistPage() {
     <>
       <JsonLd data={funnelPageJsonLd("create")} />
       <PageHero
-        eyebrow="Early access · Pre-launch"
-        title="Start your AI receptionist setup from your website address"
-        lede="Paste your site URL, review and complete the draft, preview a sandbox receptionist pack, and request early access. The URL is a setup hint; this public site does not crawl its pages or invent missing business facts. This form does not place a live call or assign a phone number."
+
+        eyebrow="Create your receptionist · Preview"
+        title="Turn your business website into an AI receptionist"
+        lede="Paste your site URL, configure the receptionist, review the knowledge pack, then press Try your receptionist and ask your own caller questions in the browser. You can optionally save the setup and receive a reference by email. The browser demo does not dial a phone number or touch the live telephone service."
+
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <FunnelPathStrip />
@@ -57,10 +61,9 @@ export default function CreateReceptionistPage() {
             Start with your website URL
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Next: check the URL, review the draft, preview the knowledge pack,
-            then request early access. The sandbox panel below stays off unless
-            a local flag is on — then a pack-aware scripted demo is one click.
-            It never places a live customer call.
+            Next: check the URL, choose the role, configure the receptionist,
+            review the pack, then try it interactively in the browser. Saving the
+            setup and emailing a reference is optional.
           </p>
           <div className="mt-6">
             <CreateJourneySection />
@@ -95,7 +98,7 @@ export default function CreateReceptionistPage() {
             Honest limits
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
-            <li>AI voice and receptionist behaviour remain under testing</li>
+            <li>The interactive browser receptionist is available here; live telephone calling remains a separate commissioning path</li>
             <li>
               This public site does not crawl the submitted website. The URL
               is used as a setup hint; missing business facts stay empty until
@@ -106,21 +109,16 @@ export default function CreateReceptionistPage() {
               always-on service
             </li>
             <li>
-              Calendar connect is coming / under testing unless a local adapter
-              flag is on — this page never invents a booked confirmation
+              Calendar connection is not active in the public preview yet; this page never invents a booked confirmation
             </li>
             <li>
-              The receptionist knowledge pack on this page is a sandbox draft
-              from reviewed fields — not a live number, not always-on, and not a
-              trained knowledge base. Missing hours or services stay missing.
+              The receptionist knowledge pack on this page is a preview configuration built from reviewed fields. Missing hours or services stay missing.
             </li>
             <li>
-              Sandbox test call is under testing / coming unless a local flag is
-              on — this page never invents a live customer phone number
+              The interactive receptionist demo runs in the browser from the reviewed pack. It never invents a live customer phone number
             </li>
             <li>
-              Live telephony changes stay gated until controlled-call criteria
-              pass. The frozen production voice path is not used here.
+              The live telephone service is isolated from this browser demo and is not changed by anything on this page.
             </li>
           </ul>
           <p className="mt-3">

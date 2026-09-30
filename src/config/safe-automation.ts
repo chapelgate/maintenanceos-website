@@ -7,7 +7,7 @@ export const safeAutomationStages = [
     eyebrow: "AI assists",
     title: "Capture and structure",
     body:
-      "AI can collect caller details, structure maintenance requests, classify routine issues, and prepare information for follow-up. Voice intake remains under testing.",
+      "AI can collect caller details, structure maintenance requests, classify routine issues, and prepare information for follow-up. Voice intake remains in commissioning preview.",
   },
   {
     id: "rules-control",

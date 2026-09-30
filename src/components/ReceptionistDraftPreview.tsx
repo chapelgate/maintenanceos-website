@@ -34,7 +34,7 @@ export function ReceptionistDraftPreview({
   return (
     <div data-receptionist-draft="preview" className="space-y-3">
       <p className="text-sm text-muted">
-        Sandbox AI-agent configuration from the fields and role you reviewed —
+        Preview AI-agent configuration from the fields and role you reviewed —
         not a live number, not always-on, and not a trained knowledge base.
         Empty facts stay empty.
       </p>

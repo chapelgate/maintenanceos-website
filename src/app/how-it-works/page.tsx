@@ -19,7 +19,9 @@ export default function HowItWorksPage() {
       <PageHero
         eyebrow="Pre-launch. Not a public live service yet."
         title="From maintenance request to controlled follow-up."
-        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The pre-launch website path remains Website → Check → Choose → Configure → Review & Pack; an optional scripted sandbox can follow. We do not invent missing business facts, bookings, or a live phone number."
+
+        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The website path is Website → Check → Choose → Configure → Review & Try, followed by an optional saved reference. We do not invent crawl results, bookings, or a live phone number."
+
         orbAccent
       />
 
@@ -64,8 +66,7 @@ export default function HowItWorksPage() {
             Designed so marketing never outruns the product.
           </h2>
           <p className="mt-3 text-base leading-relaxed text-muted">
-            Calendar connect and the scripted sandbox are under testing and off
-            by default. Live always-on phone remains coming — frozen production
+            Calendar connection is not active in the public preview. The interactive receptionist demo is available after the reviewed configuration is generated. Live always-on phone remains coming — frozen production
             telephony is not used here. Further controlled live testing is
             still required before we claim a public always-on receptionist.
           </p>
@@ -74,7 +75,7 @@ export default function HowItWorksPage() {
               href="/features/"
               className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
             >
-              See VERIFIED / UNDER TEST
+              See VERIFIED / PREVIEW
             </a>
           </p>
         </div>

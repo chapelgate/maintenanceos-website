@@ -19,7 +19,7 @@ import {
 type LoadState = "idle" | "loading" | "ready" | "error";
 
 /**
- * Honest customer dashboard. Default build: coming / under testing.
+ * Honest customer dashboard. Default build: preview coming soon.
  * Flag on: SAMPLE / DEMO catalogue or an empty store that invents nothing.
  */
 export function CustomerDashboard({
@@ -150,7 +150,7 @@ export function CustomerDashboard({
           id="dashboard-coming-heading"
           className="text-base font-semibold text-ink"
         >
-          Customer dashboard — coming / under testing
+          Customer dashboard — preview coming soon
         </h2>
         <p className="mt-2 text-sm text-muted">
           Call history, transcripts, and booking stubs live in{" "}

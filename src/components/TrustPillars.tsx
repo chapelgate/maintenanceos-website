@@ -7,7 +7,7 @@ const PILLARS = [
     id: "tenant-isolation",
     title: "Tenant isolation",
     short: "Boundaries between organisations",
-    body: "Designed as a first-class trust boundary so one organisation's data and actions stay inside its tenant. Multi-tenant operations exist in product source and are under testing — not commercially generally available.",
+    body: "Designed as a first-class trust boundary so one organisation's data and actions stay inside its tenant. Multi-tenant operations exist in product source and are in preview — not commercially generally available.",
   },
   {
     id: "human-clearance",
@@ -34,7 +34,7 @@ export function TrustPillars() {
       </h2>
       <p className="mt-2 max-w-2xl text-muted">
         Three controls we can describe from product design and source. We
-        describe them as designed and under testing — never as certified or
+        describe them as designed and in preview — never as certified or
         generally available.
       </p>
       <ul className="mt-10 grid gap-4 md:grid-cols-3">

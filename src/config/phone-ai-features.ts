@@ -15,7 +15,7 @@ export type FeatureStatus = (typeof FEATURE_STATUSES)[number];
 /** Legacy HAVE / COMING labels from the pre-inventory features page. */
 export const legacyStatusMap = {
   VERIFIED: "HAVE",
-  UNDER_TEST: "UNDER TEST",
+  UNDER_TEST: "PREVIEW",
   NOT_ON_SITE: "COMING",
 } as const satisfies Record<FeatureStatus, string>;
 
@@ -33,11 +33,13 @@ export type FeatureGroupId = (typeof FEATURE_GROUPS)[number];
 export const featureGroupCopy = {
   onboarding: {
     heading: "Onboarding",
-    lede: "Website → Check → Choose → Configure → Review & Pack. Early access — not a live receptionist.",
+    lede: "Website → Check → Choose → Configure → Review & Try. Interactive browser preview; live telephone remains separate.",
   },
   knowledge: {
     heading: "Knowledge",
+
     lede: "Draft pack stays review-led. Public website crawl is retired; empty fields stay empty.",
+
   },
   telephony: {
     heading: "Telephony",
@@ -73,12 +75,12 @@ export type PhoneAiFeatureCard = {
 
 export const marketingFeatureStatusLabel = {
   VERIFIED: "VERIFIED",
-  UNDER_TEST: "UNDER TEST",
+  UNDER_TEST: "PREVIEW",
 } as const;
 
 /** Muted honesty line under UNDER TEST groups on /features. */
 export const UNDER_TEST_GROUP_HONESTY =
-  "Not on site yet — tracked with product";
+  "Preview status — usable where shown without claiming a public always-on phone service.";
 
 /**
  * Short marketing card set — exactly 7 (5 VERIFIED + 2 UNDER TEST).
@@ -91,10 +93,12 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     status: "UNDER_TEST",
     group: "onboarding",
     ukOpsLine:
-      "Enter a public website address, review and complete the draft, then prepare a knowledge pack — early access only.",
+
+      "Start from a public UK maintenance website, review the draft, then try the generated receptionist interactively in the browser — early access only.",
     bullets: [
-      "Public /create path: Website → Check → Choose → Configure → Review & Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number.",
-      "The public site does not crawl the website. It uses the no-crawl review fallback; missing fields stay empty until they are reviewed or supplied.",
+      "Public /create path: Website → Check → Choose → Configure → Review & Try, with an optional saved reference. The browser demo exists today; it is not a live phone number.",
+      "The public site does not crawl the submitted website. Empty fields stay empty until reviewed or supplied; no live knowledge crawl is claimed.",
+
       "Knowledge pack + system prompt from the reviewed /create draft. Missing keys stay missing. Not a live tenant or trained knowledge base.",
     ],
     sources: ["F-01", "F-02", "F-03"],
@@ -132,7 +136,7 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     status: "UNDER_TEST",
     group: "telephony",
     ukOpsLine:
-      "Voice intake exists in product source and is under testing — not a public always-on maintenance line.",
+      "Voice intake exists in product source and remains in commissioning preview — not a public always-on maintenance line.",
     bullets: [
       "Provider-aware voice runtime exists in canonical product source. Current commissioning also has a pinned local/self-hosted candidate, but neither path is approved as a public always-on service.",
     ],

@@ -20,7 +20,7 @@ export const siteConfig = {
   tagline:
     "UK maintenance operations software with AI-assisted intake — rules keep control.",
   description:
-    "MaintenanceOS by Chapelgate is pre-launch UK maintenance operations software for property and maintenance teams. It turns incoming repair reports into structured work, separates critical cases from routine jobs, and keeps consequential decisions with authorised people. Voice remains under testing, not a public always-on phone service.",
+    "MaintenanceOS by Chapelgate is pre-launch UK maintenance operations software for property and maintenance teams. It turns incoming repair reports into structured work, separates critical cases from routine jobs, and keeps consequential decisions with authorised people. Voice remains in commissioning preview, not a public always-on phone service.",
   /** PRE-LAUNCH gate. Default false. */
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
   /**

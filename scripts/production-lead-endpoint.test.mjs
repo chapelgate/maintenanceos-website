@@ -64,9 +64,9 @@ test("create journey distinguishes production delivery from preview receiver", (
   assert.match(later, /result\.confirmationEmail !== "failed"/);
   assert.match(later, /receiptReference/);
   assert.match(later, /Test submission completed/);
-  assert.match(later, /preview receiver accepted the test submission/);
+  assert.match(later, /preview receiver accepted the saved setup/);
   assert.match(later, /preview does not send a confirmation email/);
-  assert.match(later, /asks the existing[\s\S]{0,120}mail provider to send a confirmation email/);
+  assert.match(later, /Saving the setup uses the production lead receiver/);
   assert.doesNotMatch(later, /Submitting does not[\s\S]{0,120}send email/);
   assert.match(later, /data-create-submit-state=\{status\}/);
   assert.match(later, /data-create-submit-state="success"/);

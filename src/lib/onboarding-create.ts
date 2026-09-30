@@ -34,7 +34,9 @@ export function createScanProgressTitle(progress: CreateScanProgress): string {
     case "scanning":
       return "Checking website setup…";
     case "queued":
-      return "Website review queued — next: review a blank draft";
+
+      return "Website check complete ? next: review the draft";
+
     case "scanned":
       return "Draft ready — next: review supplied fields";
     case "scanned_empty":

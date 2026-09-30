@@ -11,7 +11,7 @@ import {
   type KnowledgePack,
   type ReceptionistDraftResult,
 } from "./receptionist-draft.ts";
-import { runScriptedDemo } from "../../packages/sandbox-test-call/src/scripted.ts";
+import { runScriptedDemo, scriptedReply } from "../../packages/sandbox-test-call/src/scripted.ts";
 
 export type ReceptionistDraft = {
   businessName: string;
@@ -137,6 +137,19 @@ export function runBrowserScriptedDemo(
   systemPrompt?: string,
 ): ScriptedTurn[] {
   return runScriptedDemo(pack, systemPrompt);
+}
+
+/**
+ * One deterministic receptionist reply for the public interactive browser demo.
+ * Uses the reviewed knowledge pack and trusted policy tail. It never places a
+ * phone call or invents live integrations.
+ */
+export function runBrowserInteractiveReply(
+  callerText: string,
+  pack: unknown,
+  systemPrompt?: string,
+): ScriptedTurn {
+  return scriptedReply(callerText, pack, systemPrompt);
 }
 
 /** Map only a confirmed sandbox session. Missing id → null (not invented). */

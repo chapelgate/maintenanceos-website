@@ -50,7 +50,7 @@ export function IndustryRolePage({ role }: Props) {
           <p className="text-muted">
             Generic receptionist tools answer phones. {role.productName} is
             written for UK property-maintenance operations. Positioning only —
-            voice remains under testing; not commercial general availability.
+            voice remains in commissioning preview; not commercial general availability.
           </p>
           <ul className="list-disc space-y-2 pl-5 text-muted">
             {ukMaintenanceVsGeneric.map((item) => (

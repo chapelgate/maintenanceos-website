@@ -39,7 +39,7 @@ export function ProductUiShell() {
   return (
     <figure
       className="product-ui-shell overflow-hidden rounded-[var(--mos-radius-lg)] border border-border bg-surface shadow-[var(--mos-shadow)]"
-      aria-label="Product UI shell mock — under test, not live"
+      aria-label="Product UI shell mock — preview, not live"
     >
       <figcaption className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-paper px-4 py-2.5">
         <div className="flex items-center gap-2">

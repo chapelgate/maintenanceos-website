@@ -111,7 +111,7 @@ test("features page copy omits forbidden present-fact claims", () => {
   assert.match(page, /Create from website/);
   assert.match(page, /Join launch list/);
   assert.match(page, /VERIFIED/);
-  assert.match(page, /UNDER TEST/);
+  assert.match(page, /PREVIEW/);
   assert.doesNotMatch(page, /^["']use client["']/m);
 
   for (const banned of FORBIDDEN_PRESENT_CLAIMS) {
