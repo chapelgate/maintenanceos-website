@@ -30,7 +30,7 @@ Not offered here:
 - Self-serve “call our AI now” demo
 - Customer login, billing portal, or live status metrics
 - Ratings, reviews, or aggregate scores
-- Invented crawl results (public staging scan is not enabled; queued crawl is the expected fallback)
+- Invented website facts or claims that the public setup crawls submitted pages
 
 ## VERIFIED (present as product capability in source — still pre-launch, not “buy now live service”)
 
@@ -58,8 +58,8 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Live human-transfer answer / no-answer on carrier — historical mixed outcomes; retest open
 - Public / production hosting of the product runtime — do not market as public production
 - Website `/dashboard` foundation — coming / under testing unless a local flag is on; SAMPLE / DEMO rows only, not live call history
-- Website `/create` multi-step funnel exists as an early-access preview (F-01). Marketing `/how-it-works`, `/features`, `/demo`, and funnel-page SEO / JSON-LD now describe the same path (website URL → check → review → pack → optional scripted sandbox → early access). Not a live receptionist. Under testing as a productised website-to-assistant until live scan on staging is evidenced
-- SSRF-safe website scan companion (F-02) — flagged and off on public staging. Queued crawl is the expected fallback — do not invent crawl results or claim a live knowledge crawl
+- Website `/create` multi-step funnel exists as an early-access preview (F-01). Marketing `/how-it-works`, `/features`, `/demo`, and funnel-page SEO / JSON-LD describe the same path (website URL → check → review → pack → optional scripted sandbox → early access). Not a live receptionist. The submitted URL is a setup hint; public website crawl is retired from this path
+- Website scan companion package (F-02) remains source-only / non-public. The public `/create` path does not crawl submitted pages; do not claim website knowledge extraction
 - Knowledge pack + system prompt draft (F-03) and pack-aware scripted sandbox (F-04) — under testing; not a live phone
 - Scripted conversation benchmark (F-05) exists for fixture scoring only. Live-call barge-in remains open. It is not evidence of live voice-quality parity or an always-on phone service
 
@@ -79,7 +79,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 
 ## Structured data and robots (claims-safe)
 
-Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/property-maintenance-software/`) publish Organization + WebSite + WebPage + SoftwareApplication JSON-LD from the same funnel copy. Industry pages publish audience-specific WebPage + SoftwareApplication + BreadcrumbList JSON-LD. SoftwareApplication has no telephone, aggregateRating, reviews, or offers. `/faq/` publishes FAQPage JSON-LD from the same answers as the page: website URL → check → review → pack → optional scripted sandbox → early access; queued crawl if scan unset; empty hours/services stay empty; UK 999; public staging scan is not enabled. robots.txt allows major AI crawlers to read marketing pages, `/llms.txt`, and this file. Do not treat schema or this file as evidence of a live phone, always-on line, general availability, ratings, or a completed staging crawl.
+Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/property-maintenance-software/`) publish Organization + WebSite + WebPage + SoftwareApplication JSON-LD from the same funnel copy. Industry pages publish audience-specific WebPage + SoftwareApplication + BreadcrumbList JSON-LD. SoftwareApplication has no telephone, aggregateRating, reviews, or offers. `/faq/` publishes FAQPage JSON-LD from the same answers as the page: website URL → check → review → pack → optional scripted sandbox → early access; public setup does not crawl submitted pages; empty hours/services stay empty; UK 999. robots.txt allows major AI crawlers to read marketing pages, `/llms.txt`, and this file. Do not treat schema or this file as evidence of a live phone, always-on line, general availability, ratings, or a completed staging crawl.
 
 ## Key URLs
 
@@ -88,13 +88,13 @@ Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/prope
 - Features: https://seahorse-app-4oasq.ondigitalocean.app/features/
 - Property maintenance software (core non-brand category page): https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/
 - AI receptionist: https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/
-- Security (designed controls; SSRF-safe scan under test; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://seahorse-app-4oasq.ondigitalocean.app/security/
+- Security (designed controls; public setup does not crawl submitted websites; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://seahorse-app-4oasq.ondigitalocean.app/security/
 - Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
 - Pricing: https://seahorse-app-4oasq.ondigitalocean.app/pricing/
 - Create (website URL → check → review → pack → optional scripted sandbox → early access): https://seahorse-app-4oasq.ondigitalocean.app/create/
 - Demo (same path; launch list + early-access briefing, not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/demo/
 - Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
-- FAQ (same path; no live phone, no invented crawl if scan unset, empty hours/services stay empty, UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only): https://seahorse-app-4oasq.ondigitalocean.app/faq/
+- FAQ (same path; no live phone, public setup does not crawl submitted pages, empty hours/services stay empty, UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only): https://seahorse-app-4oasq.ondigitalocean.app/faq/
 - Cookies (DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a GA / PECR / GDPR compliance certification): https://seahorse-app-4oasq.ondigitalocean.app/cookies/
 - Contact (human enquiry / early access — not a support desk, not live phone provisioning, no invented SLA): https://seahorse-app-4oasq.ondigitalocean.app/contact/
 - About: https://seahorse-app-4oasq.ondigitalocean.app/about/
@@ -116,7 +116,7 @@ Incorrect: live commercial receptionist; public always-on phone; production call
 
 ## Security
 
-Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website scan is SSRF-safe and under test — not a live knowledge crawl. No ISO, SOC 2, Cyber Essentials, or bank-grade claims. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. No analytics or marketing cookies and no third-party analytics tag; cookieless first-party aggregate measurement uses no persistent visitor identifier. No site-wide consent banner. Not a Google Analytics, PECR, or GDPR compliance certification. Product interest starts at Create from website.
+Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. The current public setup path does not crawl submitted website pages. No ISO, SOC 2, Cyber Essentials, or bank-grade claims. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. No analytics or marketing cookies and no third-party analytics tag; cookieless first-party aggregate measurement uses no persistent visitor identifier. No site-wide consent banner. Not a Google Analytics, PECR, or GDPR compliance certification. Product interest starts at Create from website.
 
 ## Pricing
 
