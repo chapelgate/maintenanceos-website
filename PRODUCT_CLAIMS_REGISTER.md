@@ -1,10 +1,12 @@
 # PRODUCT_CLAIMS_REGISTER.md — SIGNED (VERIFIED-ONLY APPROVAL)
 
 **Signer:** MOS Product Investigator
-**Signed:** 2026-09-26
+**Signed:** 2026-09-30
 **Product source:** `chapelgate/maintenanceos-v1-pilot` (`main`)
-**Product checkpoint:** `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8`
-**Current-status document reviewed:** `CURRENT_STATUS.md` dated 2026-09-20
+**Product checkpoint:** `498ad82dd87631814195d447d89458480b117951`
+**Current product status reviewed:** `MASTER_PROBLEM_LOG.md` and `HUMAN_BLOCKERS.md`
+through 2026-09-30. `CURRENT_STATUS.md` is retained as historical context but is
+older than the current live voice incident evidence.
 **Also reviewed:** `README.md`, `ARCHITECTURE.md`, `DECISION_BOOK.md`,
 `PILOT_CHECKLIST.md`, `FINALISATION_10_STEPS.md`,
 `STAGED_VOICE_INTEGRATION.md`, `CONTROLLED_GEMINI_CALL_RUNBOOK.md`,
@@ -15,16 +17,22 @@ regressions.
 
 ## Audit evidence at this checkpoint
 
-- Python 3.13.15 targeted claims-control suite: **88 passed / 0 failed** across
-  explicit-transfer, live-defect, voice-action, Gemini-provider, tenant-isolation,
-  lifecycle, readiness and webhook-security tests.
-- Broad Windows run excluding the two Linux-`resource` concurrency modules:
-  **356 passed**; one POSIX file-mode assertion is not portable to NTFS and is not
-  used to promote any website claim.
-- Unfiltered Windows collection cannot execute the two Linux-only concurrency
-  modules because Python's `resource` module is not available on Windows.
+- Current product `main` is **30 commits ahead** of the prior website claims
+  checkpoint. The changed claim-bearing areas are concentrated in voice turn
+  recovery, provider adapters/webhooks and call notifications; deterministic
+  maintenance controls were rechecked rather than assumed.
+- Python 3.13 targeted claims/safety suite on exact product SHA
+  `498ad82dd87631814195d447d89458480b117951`: **196 passed / 0 failed** across
+  explicit transfer, live-defect regression, voice-action claims, Gemini provider
+  and voice policy, provider adapter/webhook contracts, webhook security,
+  tenant isolation, lifecycle integrity, readiness profiles, decision rules,
+  invoice rules, state-machine controls and local acceptance.
+- Current product evidence records a real Gemini call that greeted, then stalled
+  after caller speech on the accepted live host. A narrow stalled-turn hotfix is
+  independently verified but **not deployed** because the accepted host currently
+  lacks an authorised non-destructive deployment identity.
 - Therefore this refresh does **not** promote concurrency, production hosting,
-  carrier quality or production voice to VERIFIED.
+  carrier quality, current live voice quality or production voice to VERIFIED.
 
 ## Hard gates
 
@@ -67,7 +75,7 @@ regressions.
 | S-03 | Audit events / action evidence exist; affirmative operational claims require verified success evidence | ARCHITECTURE; `action_evidence.py` |
 | S-04 | Cloud CI and Security CI baseline historically passed on canonical application code | CURRENT_STATUS / FINALISATION step 2. This refresh does not turn later runner-policy commits into a fresh CI certification. |
 | R-04 | Local acceptance was evidenced on 2026-09-10: full pytest pass, local-closed readiness and SQLite backup/restore | PILOT_CHECKLIST |
-| R-06 | Current claims-control regressions passed at the exact 2026-09-26 product checkpoint | 88/88 targeted tests at `cc682c3e…` |
+| R-06 | Current claims-control regressions passed at the exact 2026-09-30 product checkpoint | 196/196 targeted tests at `498ad82d…` |
 
 **Wording rule for VERIFIED:** state only that the capability/control exists in
 MaintenanceOS. Do **not** imply a commercially live phone line, public production
@@ -81,12 +89,12 @@ access, current carrier quality, deployment readiness or general availability.
 
 | ID | Claim | Note |
 |---|---|---|
-| V-01 | Provider-aware AI voice receptionist runtime exists in canonical source | Voice intake remains under testing. Current commissioning spans the existing provider-aware runtime and a pinned local/self-hosted candidate. This is not a public always-on service. |
+| V-01 | Provider-aware AI voice receptionist runtime exists in canonical source | Voice intake remains under testing. The accepted live Gemini/Gacrux host currently has a documented greet-then-stall defect after caller speech; the verified stalled-turn hotfix is frozen but not deployed. This is not a public always-on service. |
 | V-10 | Live human-transfer answer / no-answer behaviour on carrier | Historical outcomes are mixed; fresh controlled carrier evidence remains required. |
 | V-11 | Pinned local/self-hosted voice commissioning candidate | `docs/voice/CANDIDATE_PIN_MANIFEST.md` pins `CG-VOICE-0004` / Kokoro + local ASR/VAD/turn components for commissioning. The manifest explicitly says this is **not final production acceptance**. |
-| R-02 / R-03 | Public / production hosting | Current product docs describe transitional voice infrastructure and require runtime re-verification. Do not market public production hosting from repository state alone. |
+| R-02 / R-03 | Public / production hosting | The accepted voice host is identifiable and healthy at the HTTP layer, but current real-call turn recovery is not accepted. Repository state and a verified undeployed hotfix do not prove a production-ready public voice service. |
 | F-01 | Public `/create` multi-step website→receptionist funnel | Funnel exists in the website repo. Early-access / preview only — not a live receptionist. |
-| F-02 | SSRF-safe scan companion extracts company knowledge from a URL | PARTIAL / UNDER TEST. Flagged companion; off by default on public staging unless deliberately enabled and rebuilt. Do not claim live Fonio-parity knowledge crawl. |
+| F-02 | SSRF-safe scan companion package exists in source | NON-PUBLIC / RETIRED FROM THE CURRENT WEBSITE PATH. The public `/create` client is source-pinned to the zero-scan queued fallback and the paid provider component has been removed. Do not claim a live website knowledge crawl. |
 | F-03 | Knowledge pack + system prompt from reviewed `/create` draft | PARTIAL. Missing fields stay missing. Not a live tenant / RAG knowledge base. |
 | F-04 | Pack-aware scripted sandbox test call | PARTIAL. Scripted/browser-mock path only — **not** a live phone. |
 | F-05 | Conversation quality vs Fonio | Scripted benchmark exists. It is not live-call barge-in/voice-quality parity. |
@@ -127,9 +135,9 @@ access, current carrier quality, deployment readiness or general availability.
 
 ```text
 SIGNED-BY: MOS Product Investigator
-DATE: 2026-09-26
+DATE: 2026-09-30
 PRODUCT_REPO: chapelgate/maintenanceos-v1-pilot
-PRODUCT_CHECKPOINT: cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8
+PRODUCT_CHECKPOINT: 498ad82dd87631814195d447d89458480b117951
 WEBSITE_PATH: PRODUCT_CLAIMS_REGISTER.md
 PRESENT_FACT: VERIFIED rows only
 COMMERCIALLY_LIVE: NO
