@@ -1,11 +1,11 @@
 # Phone AI feature inventory
 
 **Owner:** MOS Positioning (cards) · MOS Product Investigator (gaps)
-**Date:** 2026-09-26
+**Date:** 2026-09-30
 **Website:** `chapelgate/maintenanceos-website`
 **Stance:** PRE-LAUNCH — no commercial GA. Live always-on phone stays **NOT_ON_SITE / COMING**.
 
-This file is the source of truth for `/features` marketing cards. Product evidence was refreshed directly against canonical `chapelgate/maintenanceos-v1-pilot` `main` at `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8`, then bounded by `PRODUCT_CLAIMS_REGISTER.md`, `docs/competitive/fonio-parity-matrix.md`, and the existing website evidence. **Do not invent rows or promote commissioning evidence into a live-service claim.**
+This file is the source of truth for `/features` marketing cards. Product evidence was refreshed directly against canonical `chapelgate/maintenanceos-v1-pilot` `main` at `498ad82dd87631814195d447d89458480b117951`, then bounded by `PRODUCT_CLAIMS_REGISTER.md`, `docs/competitive/fonio-parity-matrix.md`, and the existing website evidence. **Do not invent rows or promote commissioning evidence into a live-service claim.**
 
 On-page promotion uses the **short marketing card set** only. Hard count (Positioning / Product Investigator): **exactly 7 cards — 5 VERIFIED + 2 UNDER TEST**. Do not add cards. The P0/P1 gap matrix stays **off the marketing page**.
 
@@ -17,7 +17,7 @@ On-page promotion uses the **short marketing card set** only. Hard count (Positi
 | **UNDER_TEST** | Careful “UNDER TEST / designed to” card. Not GA. | HAVE/PARTIAL website-repo rows F-01–F-05; calendar + dashboard PARTIAL |
 | **NOT_ON_SITE** | Forbid list / “Not claimed” only. Never a present-capability card. | COMING, MISSING, NOT AVAILABLE |
 
-**HAVE** on the Fonio matrix is not automatic VERIFIED. Website-repo funnel/scan/pack/sandbox/benchmark rows stay **UNDER_TEST** (F-01–F-05) until live scan on staging is evidenced.
+**HAVE** on the Fonio matrix is not automatic VERIFIED. The website funnel/pack/sandbox/benchmark rows remain bounded by the claims register. The former public scan companion is retired from the current website path and is not a present capability.
 
 ## Groups
 
@@ -31,7 +31,7 @@ Copy **only these seven** into `src/config/phone-ai-features.ts`. One UK-ops lin
 
 | ID | Group | Title | Status | UK-ops line | Bullets (optional) | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| M-ONB-01 | onboarding | Website → draft knowledge pack | UNDER_TEST | Start from a public UK maintenance website, review the draft, then a knowledge pack — early access only. | Public `/create` path: Website → Check → Choose → Configure → Review & Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number. SSRF-safe website scan companion (F-02): queued crawl if unset; empty fields stay empty; not a live Fonio-parity knowledge crawl. Knowledge pack + system prompt from the reviewed draft (F-03): missing keys stay missing; not a live tenant. | F-01; F-02 and F-03 folded as bullets, not extra cards |
+| M-ONB-01 | onboarding | Website-guided draft pack | UNDER_TEST | Enter a public website address, review and complete the draft, then prepare a knowledge pack — early access only. | Public `/create` path: Website → Check → Choose → Configure → Review & Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number. Public website crawl is retired: the current path uses the zero-scan queued fallback and missing fields stay empty until reviewed or supplied. Knowledge pack + system prompt from the reviewed draft (F-03): missing keys stay missing; not a live tenant. | F-01; F-02 boundary; F-03 |
 | M-TEL-01 | telephony | UK caller intake | VERIFIED | Designed to collect caller details in UK maintenance language, with 999 guidance (never 911) and no invented bookings. | UK terminology and 999 emergency guidance in product source and regressions. Receptionist designed to collect caller details. Must not invent bookings, dispatches, refunds, compensation, account information, or safety assurances. | V-02; V-03; V-05 |
 | M-TEL-02 | telephony | Human transfer on request | VERIFIED | Callers can ask for a person; transfer is explicit-request-only in product source. | Shared policy across voice providers. Transfer quality on carrier remains under retest — not marketed as proven live. | V-04 (existence); V-10 (quality stays UNDER TEST, not a second card) |
 | M-TEL-03 | telephony | AI voice receptionist | UNDER_TEST | Voice intake exists in product source and is under testing — not a public always-on maintenance line. | Provider-aware voice runtime exists in canonical product source. Current commissioning also has a pinned local/self-hosted candidate, but neither path is approved as a public always-on service. | V-01; V-11 |
@@ -47,7 +47,7 @@ These stay in this file for MOS Product Investigator. They are **not** present-f
 
 | ID | Title | Status | Why off-page |
 | --- | --- | --- | --- |
-| M-KNO-01 | Website knowledge extract | UNDER_TEST | Folded into M-ONB-01 bullets (F-02). Extra UNDER TEST card would break the 2-card cap. |
+| M-KNO-01 | Website knowledge extract | NOT_ON_SITE | Public website crawl was retired from the current `/create` path. Do not market extraction as available; F-02 remains only as a historical/source boundary. |
 | M-KNO-02 | Knowledge pack from reviewed draft | UNDER_TEST | Folded into M-ONB-01 bullets (F-03). |
 | M-TEL-04 | Scripted sandbox and benchmark | UNDER_TEST | Scripted path only; not a third UNDER TEST promo card. See F-04 / F-05 in the gap matrix. |
 | M-TEL-05 | Local/self-hosted voice commissioning candidate | UNDER_TEST | Product repo pins `CG-VOICE-0004` and its local TTS/ASR/VAD/turn stack for commissioning only. The source manifest explicitly says this is not final production acceptance. |
