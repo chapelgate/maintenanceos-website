@@ -29,14 +29,24 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Guard exact main and live release
+      - name: Guard exact live application source
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           $remoteMain = ((git ls-remote origin refs/heads/main) -split "`t")[0]
-          if ($remoteMain -ne $env:EXPECTED_SOURCE_SHA) { throw "main drift: $remoteMain != $env:EXPECTED_SOURCE_SHA" }
+          $localHead = (git rev-parse HEAD).Trim()
+          if ($remoteMain -ne $localHead) { throw "main drift: remote $remoteMain != checked-out $localHead" }
+          git cat-file -e ($env:EXPECTED_SOURCE_SHA + '^{commit}')
+          if ($LASTEXITCODE -ne 0) { throw 'expected live source SHA is not available in checkout' }
+          $changed = @(git diff --name-only $env:EXPECTED_SOURCE_SHA HEAD)
+          $unexpected = @($changed | Where-Object { $_ -ne '.github/workflows/step5-digitalocean-deploy.yml' })
+          if ($unexpected.Count -gt 0) { throw ('application-source drift since live SHA: ' + ($unexpected -join ', ')) }
+          if ($changed.Count -gt 1) { throw ('unexpected workflow diff shape: ' + ($changed -join ', ')) }
           $release = Invoke-RestMethod -Headers @{ 'Cache-Control'='no-cache' } -Uri ($env:PUBLIC_BASE_URL + '/release.json?provider_retire=' + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
           if ($release.commit -ne $env:EXPECTED_SOURCE_SHA) { throw "live release drift: $($release.commit) != $env:EXPECTED_SOURCE_SHA" }
+          Write-Output ('CURRENT_MAIN_SHA=' + $localHead)
+          Write-Output ('LIVE_APPLICATION_SHA=' + $release.commit)
+          Write-Output ('NON_APP_DIFF=' + ($changed -join ','))
           python scripts/remove-onboarding-scan-service.py --dependency-check-only
           if ($LASTEXITCODE -ne 0) { throw 'live bundle still references paid onboarding scan' }
 
