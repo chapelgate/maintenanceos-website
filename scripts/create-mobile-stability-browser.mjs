@@ -283,7 +283,19 @@ try {
   }));
 } finally {
   try { cdp?.ws?.close(); } catch {}
-  try { child.kill(); } catch {}
+  const browserExited = child.exitCode === null
+    ? new Promise((resolve) => child.once("exit", resolve))
+    : Promise.resolve();
+  if (child.exitCode === null) {
+    try { child.kill("SIGTERM"); } catch {}
+  }
+  await Promise.race([browserExited, delay(2000)]);
   await new Promise((resolve) => site.server.close(resolve));
-  rmSync(profile, { recursive: true, force: true });
+  await delay(300);
+  rmSync(profile, {
+    recursive: true,
+    force: true,
+    maxRetries: 10,
+    retryDelay: 200,
+  });
 }
