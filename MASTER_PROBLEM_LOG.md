@@ -159,3 +159,29 @@ Surgical fix:
 Verification:
 Corrected Firefox/WebKit matrix reports 0 page errors and 0 console errors;
 all 36 checks pass. Existing Edge matrix remains 18/18 PASS.
+
+## MOS-WEB-PERF-001 — Current main exceeded the existing /create release budget
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+Fresh-clone release preflight on current `main` SHA `a11a55b170f9832d5ea3013cce47fe1a7279df33` failed the unchanged performance gate. `/create/` measured 628 KB raw initial first-party JavaScript and 191 KB gzip against the existing 600 KB / 190 KB limits.
+
+Root-cause evidence:
+The same failure reproduced on an untouched fresh clone of `main`, proving the new Playwright QA dependency was not the cause. Repository history showed that later create steps had previously been code-split, but the boundary was removed during the September 28 mobile convergence. The documented mobile root cause was native form navigation before hydration; the current entry step already removes the native form and disables its action until hydration.
+
+Surgical fix:
+- restore only the `CreateReceptionistLaterSteps` dynamic boundary;
+- retain the current hydration-safe non-native Step 1 and all current mobile safeguards;
+- provide a bounded Step-2 loading fallback that keeps the visitor on `/create/`;
+- update the performance regression to require the split and the hydration protections together;
+- do not raise either performance budget.
+
+Verification:
+- `/create/` initial JS reduced from 628 KB raw / 191 KB gzip to 567 KB raw / 174 KB gzip;
+- unchanged 600 KB raw / 190 KB gzip release budgets PASS;
+- source/accessibility regressions for the create entry PASS;
+- the original real-browser mobile stability acceptance passed at 390x844@3, 6x CPU throttle, 250 ms latency and 1.4 s JS delay;
+- acceptance preserved same-page navigation, durable/idempotent submissions and the degraded-email path.
+
+This repair changes loading boundaries only. It does not change telephony, provisioning, lead semantics, launch flags or hosting topology.
