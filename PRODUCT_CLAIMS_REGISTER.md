@@ -94,7 +94,7 @@ access, current carrier quality, deployment readiness or general availability.
 | V-11 | Pinned local/self-hosted voice commissioning candidate | `docs/voice/CANDIDATE_PIN_MANIFEST.md` pins `CG-VOICE-0004` / Kokoro + local ASR/VAD/turn components for commissioning. The manifest explicitly says this is **not final production acceptance**. |
 | R-02 / R-03 | Public / production hosting | The accepted voice host is identifiable and healthy at the HTTP layer, but current real-call turn recovery is not accepted. Repository state and a verified undeployed hotfix do not prove a production-ready public voice service. |
 | F-01 | Public `/create` multi-step website→receptionist funnel | Funnel exists in the website repo. Early-access / preview only — not a live receptionist. |
-| F-02 | SSRF-safe scan companion package exists in source | NON-PUBLIC / RETIRED FROM THE CURRENT WEBSITE PATH. The public `/create` client is source-pinned to the zero-scan queued fallback and the paid provider component has been removed. Do not claim a live website knowledge crawl. |
+| F-02 | SSRF-safe scan companion package exists in source | NON-PUBLIC / RETIRED FROM THE CURRENT WEBSITE PATH. The public `/create` client is source-pinned to the no-crawl review fallback and the paid provider component has been removed. Do not claim a live website knowledge crawl. |
 | F-03 | Knowledge pack + system prompt from reviewed `/create` draft | PARTIAL. Missing fields stay missing. Not a live tenant / RAG knowledge base. |
 | F-04 | Pack-aware scripted sandbox test call | PARTIAL. Scripted/browser-mock path only — **not** a live phone. |
 | F-05 | Conversation quality vs Fonio | Scripted benchmark exists. It is not live-call barge-in/voice-quality parity. |
