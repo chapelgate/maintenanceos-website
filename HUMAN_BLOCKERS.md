@@ -1,22 +1,19 @@
 # MaintenanceOS Website Human Blockers
 
-## HB-001 — App Platform mutation authority for component-only retirement
-Status: OPEN
-Date: 2026-09-28
+## HB-001 — Refresh DigitalOcean App Platform credential for component-only retirement
+Status: OPEN — SINGLE BLOCKER FOR MOS-WEB-COST-001
+Date: 2026-09-30
 
 Exact blocker:
-No currently connected tool can GET/PUT the DigitalOcean App Platform spec for app
-`98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661`.
+The public website is already safely decoupled from `onboarding-scan`, but the existing GitHub repository secret `DIGITALOCEAN_ACCESS_TOKEN` is not accepted by DigitalOcean for App Platform access. Guarded retirement run `36746304812` passed source/live/dependency/unit guards, then the first App Platform GET failed with `HTTP Error 401: Unauthorized`. No provider mutation occurred and `/onboarding-scan/health` remains 200.
 
 Required human action (one of these, not both):
-- provide/connect an App Platform-capable DigitalOcean control path to ChatGPT; or
-- create a narrowly scoped DigitalOcean API token with `app:read` and `app:update` and make it available to the authorised execution environment without pasting it into chat.
+- replace/refresh the GitHub repository secret `DIGITALOCEAN_ACCESS_TOKEN` with a valid narrowly scoped token that can read and update App Platform app `98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661`; or
+- connect an equivalent authorised DigitalOcean App Platform control path.
 
-Do not delete the whole `seahorse-app`.
-Do not delete `onboarding-scan` before the static `/create` bundle no longer references it.
+Do not paste the token into chat. Do not delete the whole `seahorse-app`. The former browser-dependency safety blocker is already cleared: the live public bundle does not reference the paid scan endpoint and `/create` uses the queued/no-invented-data fallback.
 
-Once authority exists, run the guarded cutover documented in
-`docs/COST_CUT_ONBOARDING_SCAN_2026-09-28.md`.
+After the credential is refreshed, rerun the existing guarded Step-5 retirement workflow against the exact deployed application SHA. It will preserve unrelated App Platform components and automatically restore the old spec if post-change verification fails.
 
 ## HB-002 — Physical Safari/iOS and manual assistive-technology launch QA
 Status: OPEN LAUNCH-ONLY HUMAN GATE
