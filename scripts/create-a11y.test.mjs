@@ -114,10 +114,9 @@ test("empty hours and services stay textual for AT", () => {
   assert.doesNotMatch(lib, /Mon–Fri 09:00/);
 });
 
-test("sandbox coming and limitations regions have labelled headings", () => {
+test("interactive receptionist and limitations regions have labelled headings", () => {
   const page = read("src/app/create/page.tsx");
-  const sandbox = read("src/components/SandboxTestCallComingSoon.tsx");
-  const sandboxPanel = read("src/components/SandboxTestCallPanel.tsx");
+  const demo = read("src/components/SandboxTestCallPanel.tsx");
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
   const calendar = read("src/components/CalendarConnectComingSoon.tsx");
   const calendarPanel = read("src/components/CalendarConnectPanel.tsx");
@@ -128,10 +127,13 @@ test("sandbox coming and limitations regions have labelled headings", () => {
   const privacyNote = read("src/components/CreateIngestPrivacyNote.tsx");
   assert.match(privacyNote, /aria-labelledby="create-privacy-heading"/);
   assert.match(privacyNote, /id="create-privacy-heading"/);
-  assert.match(sandbox, /Sandbox test call — under testing \/ coming/);
-  assert.match(sandbox, /aria-labelledby="sandbox-test-call-heading"/);
-  assert.match(sandbox, /aria-describedby=\{comingCopyId\}/);
-  assert.match(sandboxPanel, /SandboxTestCallComingSoon/);
+  assert.match(demo, /id="interactive-receptionist-demo"/);
+  assert.match(demo, /aria-labelledby="interactive-receptionist-heading"/);
+  assert.match(demo, /id="interactive-receptionist-heading"/);
+  assert.match(demo, /data-demo-transcript=""/);
+  assert.match(demo, /htmlFor=\{inputId\}/);
+  assert.match(demo, /What would the caller say\?/);
+  assert.doesNotMatch(demo, /SandboxTestCallComingSoon/);
   assert.match(preview, /data-limitations="readonly"/);
   assert.match(preview, /id="create-pack-limitations-heading"/);
   assert.match(preview, /aria-labelledby="create-pack-limitations-heading"/);
