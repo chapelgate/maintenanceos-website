@@ -7,7 +7,7 @@ export const dynamic = "force-static";
  * AI crawlers the owner wants able to read marketing pages and /llms.txt.
  * /llms.txt and /llms-full.txt describe the public funnel:
  * website URL → check → review → pack → optional scripted sandbox → early access.
- * Those files must not claim live phone, always-on, GA, ratings, or invented crawls.
+ * Those files must not claim live phone, always-on, GA, ratings, or invented business facts.
  * Customer website crawl is retired from the public setup path; this robots file only controls crawlers reading this marketing site.
  * Default `*` also allows indexing — there are no admin/private routes in this export.
  */
