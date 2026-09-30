@@ -1,15 +1,11 @@
 "use client";
 
 import { useId, useState } from "react";
-import { SandboxTestCallComingSoon } from "@/components/SandboxTestCallComingSoon";
 import { siteConfig } from "@/config/site";
 import {
   requestSandboxScriptedDemo,
-  requestSandboxSession,
-  requestSandboxTest,
-  type ReceptionistDraft,
-  type SandboxSession,
-  type SandboxTest,
+  runBrowserInteractiveReply,
+  type ScriptedTurn,
 } from "@/lib/sandbox-test-call";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
 import {
@@ -18,278 +14,294 @@ import {
   type AgentSandboxReviewSubject,
 } from "@/lib/agent-sandbox-qualification";
 
-type SessionState = "idle" | "submitting" | "ok" | "error";
-type TestState = "idle" | "submitting" | "ok" | "error";
+const QUICK_PROMPTS = [
+  "What are your opening hours?",
+  "What services do you offer?",
+  "Can you book me an appointment tomorrow?",
+  "I want to speak to a human.",
+] as const;
 
-const EMPTY_DRAFT: ReceptionistDraft = {
-  businessName: "",
-  greeting: "",
-  hours: "",
-  services: "",
-  faqs: "",
-};
+function openingTurn(receptionist: ReceptionistDraftResult): ScriptedTurn {
+  const pack = receptionist.knowledgePack;
+  if (pack.greeting?.trim()) {
+    return {
+      speaker: "receptionist",
+      text: pack.greeting.trim(),
+      source: "knowledge.greeting",
+    };
+  }
+  if (pack.businessName?.trim()) {
+    return {
+      speaker: "receptionist",
+      text: `Hello, you're through to ${pack.businessName.trim()}. How can I help?`,
+      source: "knowledge.businessName",
+    };
+  }
+  return {
+    speaker: "receptionist",
+    text: "Hello, you're through to your receptionist preview. How can I help?",
+    source: "missing",
+  };
+}
 
 /**
- * Honest sandbox test-call panel for /create.
- * Default: under testing / coming. Flag on: scripted demo against a stub.
+ * Public call-style browser demo for the reviewed receptionist configuration.
+ *
+ * This is deliberately isolated from production telephony. It uses the same
+ * deterministic pack-aware reply engine as the qualification benchmark, so a
+ * visitor can test their own reviewed setup without a phone number, provider,
+ * microphone permission, or live voice dependency.
+ *
+ * A configured companion can still perform engineering qualification behind
+ * the existing feature flag, but that is secondary to the customer demo.
  */
 export function SandboxTestCallPanel({
-  draft = EMPTY_DRAFT,
   receptionist = null,
   reviewSubject = null,
   onQualificationChange,
 }: {
-  draft?: ReceptionistDraft;
+  draft?: unknown;
   receptionist?: ReceptionistDraftResult | null;
   reviewSubject?: AgentSandboxReviewSubject | null;
   onQualificationChange?: (
     result: AgentSandboxQualificationResult | null,
   ) => void;
 }) {
-  const enabled = siteConfig.sandboxTestCallEnabled;
   const endpoint = siteConfig.sandboxTestCallEndpoint.trim();
-  const usesCompanion = Boolean(endpoint);
-  const [sessionState, setSessionState] = useState<SessionState>("idle");
-  const [testState, setTestState] = useState<TestState>("idle");
-  const [detail, setDetail] = useState<string | null>(null);
-  const [session, setSession] = useState<SandboxSession | null>(null);
-  const [tested, setTested] = useState<SandboxTest | null>(null);
+  const qualificationEnabled =
+    siteConfig.sandboxTestCallEnabled && Boolean(endpoint) && Boolean(reviewSubject);
+
+  const [started, setStarted] = useState(false);
+  const [callerText, setCallerText] = useState("");
+  const [turns, setTurns] = useState<ScriptedTurn[]>([]);
   const [qualificationState, setQualificationState] = useState<
-    "idle" | "ok" | "error"
+    "idle" | "submitting" | "ok" | "error"
   >("idle");
   const [qualificationDetail, setQualificationDetail] = useState<string | null>(
     null,
   );
-  const statusId = useId();
-  const comingCopyId = "sandbox-test-call-enabled-copy";
-  async function onRunScriptedDemo() {
-    setSessionState("submitting");
-    setTestState("submitting");
-    setDetail(null);
-    setTested(null);
-    setQualificationState("idle");
-    setQualificationDetail(null);
-    onQualificationChange?.(null);
-    const outcome = await requestSandboxScriptedDemo({
-      enabled,
-      endpoint,
-      draft,
-      knowledgePack: receptionist?.knowledgePack,
-      systemPrompt: receptionist?.systemPrompt,
-    });
-    if (outcome.status === "ok") {
-      setSession(outcome.data.session);
-      setTested(outcome.data.test);
-      setSessionState("ok");
-      setTestState("ok");
+  const inputId = useId();
 
-      if (!reviewSubject) {
-        setQualificationDetail(
-          "Scripted demo passed, but the exact customer review is not complete yet. Complete review before qualification.",
-        );
-        return;
-      }
-      if (!usesCompanion) {
-        setQualificationDetail(
-          "Browser scripted demo passed. It is demo-only and cannot award sandbox qualification; a configured sandbox companion is required.",
-        );
-        return;
-      }
-      try {
-        const qualification = qualifyAgentSandbox({
-          review: reviewSubject,
-          source: "companion",
-          session: outcome.data.session,
-          test: outcome.data.test,
-        });
-        setQualificationState("ok");
-        setQualificationDetail(
-          "Sandbox qualification passed for this exact reviewed configuration. No live phone call or production number was used.",
-        );
-        onQualificationChange?.(qualification);
-      } catch (qualificationError) {
-        setQualificationState("error");
-        setQualificationDetail(
-          qualificationError instanceof Error
-            ? qualificationError.message
-            : "Sandbox qualification failed closed.",
-        );
-      }
-      return;
-    }
-    setSession(null);
-    setTested(null);
-    setSessionState("error");
-    setTestState("error");
-    setDetail(
-      outcome.status === "disabled"
-        ? "Sandbox test call is off in this build. No live call was placed."
-        : outcome.message,
-    );
+  function startDemo() {
+    if (!receptionist) return;
+    setTurns([openingTurn(receptionist)]);
+    setCallerText("");
+    setStarted(true);
   }
 
-  async function onTryWebrtc() {
-    onQualificationChange?.(null);
-    setQualificationState("idle");
+  function endDemo() {
+    setStarted(false);
+    setCallerText("");
+    setTurns([]);
+  }
+
+  function sendCallerTurn(value = callerText) {
+    const text = value.trim();
+    if (!text || !receptionist) return;
+    const reply = runBrowserInteractiveReply(
+      text,
+      receptionist.knowledgePack,
+      receptionist.systemPrompt,
+    );
+    setTurns((current) => [
+      ...current,
+      { speaker: "caller", text, source: "caller" },
+      reply,
+    ]);
+    setCallerText("");
+  }
+
+  async function runQualification() {
+    if (!qualificationEnabled || !reviewSubject || !receptionist) return;
+    setQualificationState("submitting");
     setQualificationDetail(null);
-    setSessionState("submitting");
-    setTestState("idle");
-    setDetail(null);
-    setTested(null);
-    const created = await requestSandboxSession({
-      enabled,
+    onQualificationChange?.(null);
+
+    const outcome = await requestSandboxScriptedDemo({
+      enabled: true,
       endpoint,
-      draft,
-      knowledgePack: receptionist?.knowledgePack,
-      systemPrompt: receptionist?.systemPrompt,
+      draft: {
+        businessName: receptionist.knowledgePack.businessName ?? "",
+        greeting: receptionist.knowledgePack.greeting ?? "",
+        hours: receptionist.knowledgePack.hours ?? "",
+        services: receptionist.knowledgePack.services?.join("\n") ?? "",
+        faqs:
+          receptionist.knowledgePack.faqs
+            ?.map((faq) => `Q: ${faq.question}\nA: ${faq.answer}`)
+            .join("\n\n") ?? "",
+      },
+      knowledgePack: receptionist.knowledgePack,
+      systemPrompt: receptionist.systemPrompt,
     });
-    if (created.status !== "ok") {
-      setSession(null);
-      setSessionState("error");
-      setTestState("error");
-      setDetail(
-        created.status === "disabled"
-          ? "Sandbox test call is off in this build. No live call was placed."
-          : created.message,
+
+    if (outcome.status !== "ok") {
+      setQualificationState("error");
+      setQualificationDetail(
+        "Configuration verification could not complete. The public interactive demo remains available and no live phone line was touched.",
       );
       return;
     }
-    setSession(created.data);
-    setSessionState("ok");
-    setTestState("submitting");
-    const outcome = await requestSandboxTest({
-      enabled,
-      endpoint,
-      sessionId: created.data.id,
-      mode: "webrtc",
-    });
-    if (outcome.status === "ok") {
-      setTested(outcome.data);
-      setTestState("ok");
-      return;
+
+    try {
+      const qualification = qualifyAgentSandbox({
+        review: reviewSubject,
+        source: "companion",
+        session: outcome.data.session,
+        test: outcome.data.test,
+      });
+      setQualificationState("ok");
+      setQualificationDetail(
+        "Configuration verification passed for this exact reviewed setup.",
+      );
+      onQualificationChange?.(qualification);
+    } catch {
+      setQualificationState("error");
+      setQualificationDetail(
+        "Configuration verification failed closed. No live phone line was touched.",
+      );
     }
-    setTestState("error");
-    setTested(null);
-    setDetail(
-      outcome.status === "disabled"
-        ? "Sandbox test call is off in this build. No live call was placed."
-        : outcome.message,
-    );
   }
-
-  if (!enabled) {
-    return <SandboxTestCallComingSoon />;
-  }
-
-  const hasDraftSignal = Object.values(draft).some((value) => value.trim());
 
   return (
     <section
-      className="rounded-md border border-border bg-surface p-5"
-      data-sandbox-test-call="on"
-      data-sandbox-source={usesCompanion ? "companion" : "browser-mock"}
-      aria-labelledby="sandbox-test-call-heading"
-      aria-describedby={comingCopyId}
+      id="interactive-receptionist-demo"
+      className="scroll-mt-28 rounded-md border border-border bg-surface p-5"
+      data-sandbox-test-call={started ? "interactive" : "ready"}
+      data-interactive-receptionist-demo=""
+      aria-labelledby="interactive-receptionist-heading"
     >
       <h2
-        id="sandbox-test-call-heading"
+        id="interactive-receptionist-heading"
         className="text-base font-semibold text-ink"
       >
-        Sandbox test call — local scripted demo
+        Try your receptionist
       </h2>
-      <p id={comingCopyId} className="mt-2 text-sm text-muted">
-        This control is enabled in this build only.{" "}
-        {usesCompanion
-          ? "Sessions come from the companion service on loopback / staging."
-          : "No sandbox endpoint is configured, so this uses an in-browser scripted stub."}{" "}
-        It is not a live customer phone number, not production telephony, and it
-        does not touch the frozen live voice path. Voice quality is not claimed
-        as Fonio-parity.
-      </p>
       <p className="mt-2 text-sm text-muted">
-        {hasDraftSignal
-          ? "One click runs a pack-aware scripted demo from the stored knowledge pack (name, hours, services, FAQs). Missing facts stay not on file — never invented. This is still not a live phone call."
-          : "No draft fields yet. One click still runs the scripted demo; missing pack facts are answered as not on file."}
+        Test the receptionist you just configured. Ask your own caller questions
+        and see how it answers from the reviewed knowledge pack and safety rules.
+        This browser demo does not dial a phone number or touch the live telephone
+        service.
       </p>
 
-      <div id={statusId} className="mt-4 space-y-2 text-sm text-muted" aria-live="polite">
-        {sessionState === "submitting" && testState !== "submitting" ? (
-          <p>Creating sandbox session…</p>
-        ) : null}
-        {testState === "submitting" ? <p>Running pack-aware scripted demo…</p> : null}
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-3">
-        <button
-          type="button"
-          disabled={sessionState === "submitting" || testState === "submitting"}
-          onClick={() => void onRunScriptedDemo()}
-          className="inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-4 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60"
-        >
-          {testState === "submitting"
-            ? "Running scripted demo…"
-            : usesCompanion && reviewSubject
-              ? "Run sandbox qualification"
-              : "Run pack-aware scripted demo"}
-        </button>
-        <button
-          type="button"
-          disabled={sessionState === "submitting" || testState === "submitting"}
-          onClick={() => void onTryWebrtc()}
-          className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
-        >
-          WebRTC / live media (not configured)
-        </button>
-      </div>
-
-      {sessionState === "ok" && session ? (
-        <p className="mt-4 text-sm text-ink" role="status">
-          Sandbox session <code className="text-xs">{session.id}</code> is ready.
-          Live number: none. Production telephony: no.
-        </p>
-      ) : null}
-
-      {testState === "ok" && tested ? (
-        <div className="mt-4" role="status">
-          <p className="text-sm text-ink">
-            Scripted demo <code className="text-xs">{tested.id}</code> finished
-            with status <code className="text-xs">{tested.status}</code>. This
-            was not a live phone call.
+      {!receptionist ? (
+        <div className="mt-4 rounded-md border border-dashed border-border bg-paper p-4">
+          <p className="text-sm font-medium text-ink">
+            Complete the configuration above to unlock the demo.
           </p>
-          <ol className="mt-3 space-y-2 text-sm text-muted">
-            {tested.turns.map((turn, index) => (
-              <li key={`${tested.id}-${index}`}>
-                <span className="font-medium text-ink">
-                  {turn.speaker === "caller" ? "Caller" : "Draft receptionist"}
-                  :
-                </span>{" "}
-                {turn.text}
-              </li>
-            ))}
-          </ol>
+          <p className="mt-1 text-sm text-muted">
+            Once the reviewed pack is generated, the test button appears here.
+          </p>
         </div>
-      ) : null}
-
-      {qualificationDetail ? (
-        <p
-          className={
-            qualificationState === "error"
-              ? "mt-4 text-sm text-red-700"
-              : qualificationState === "ok"
-                ? "mt-4 text-sm font-medium text-ink"
-                : "mt-4 text-sm text-muted"
-          }
-          role={qualificationState === "error" ? "alert" : "status"}
-          data-sandbox-qualification={qualificationState}
+      ) : !started ? (
+        <button
+          type="button"
+          onClick={startDemo}
+          className="mt-4 inline-flex min-h-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
         >
-          {qualificationDetail}
-        </p>
-      ) : null}
+          Start demo call
+        </button>
+      ) : (
+        <div className="mt-5">
+          <div
+            className="max-h-[28rem] space-y-3 overflow-y-auto rounded-md border border-border bg-paper p-4"
+            aria-live="polite"
+            data-demo-transcript=""
+          >
+            {turns.map((turn, index) => (
+              <div
+                key={`${turn.speaker}-${index}`}
+                className={
+                  turn.speaker === "caller"
+                    ? "ml-auto max-w-[88%] rounded-lg bg-accent px-3 py-2 text-sm text-on-accent"
+                    : "mr-auto max-w-[88%] rounded-lg border border-border bg-surface px-3 py-2 text-sm text-ink"
+                }
+              >
+                <span className="sr-only">
+                  {turn.speaker === "caller" ? "Caller" : "Receptionist"}:
+                </span>
+                {turn.text}
+              </div>
+            ))}
+          </div>
 
-      {sessionState === "error" || testState === "error" ? (
-        <p className="mt-4 text-sm text-red-700" role="alert">
-          {detail ?? "The sandbox service did not confirm this action. No live call was placed."}
-        </p>
+          <div className="mt-4 flex flex-wrap gap-2" aria-label="Example caller questions">
+            {QUICK_PROMPTS.map((prompt) => (
+              <button
+                key={prompt}
+                type="button"
+                onClick={() => sendCallerTurn(prompt)}
+                className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-ink hover:bg-paper"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+
+          <label htmlFor={inputId} className="mt-4 block text-sm font-medium text-ink">
+            What would the caller say?
+          </label>
+          <div className="mt-1 flex gap-2">
+            <input
+              id={inputId}
+              value={callerText}
+              onChange={(event) => setCallerText(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key !== "Enter") return;
+                event.preventDefault();
+                sendCallerTurn();
+              }}
+              placeholder="e.g. What time are you open?"
+              className="min-w-0 flex-1 rounded-md border border-border px-3 py-2 text-sm"
+            />
+            <button
+              type="button"
+              disabled={!callerText.trim()}
+              onClick={() => sendCallerTurn()}
+              className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-50"
+            >
+              Send
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={endDemo}
+            className="mt-4 text-sm font-medium text-accent underline-offset-4 hover:underline"
+          >
+            End demo call
+          </button>
+        </div>
+      )}
+
+      {qualificationEnabled ? (
+        <details className="mt-5 border-t border-border pt-4">
+          <summary className="cursor-pointer text-xs font-medium text-muted">
+            Engineering configuration verification
+          </summary>
+          <button
+            type="button"
+            disabled={qualificationState === "submitting"}
+            onClick={() => void runQualification()}
+            className="mt-3 inline-flex min-h-6 items-center justify-center rounded-md border border-border px-3 py-2 text-xs font-medium text-ink hover:bg-paper disabled:opacity-60"
+          >
+            {qualificationState === "submitting"
+              ? "Verifying…"
+              : "Verify reviewed configuration"}
+          </button>
+          {qualificationDetail ? (
+            <p
+              className={
+                qualificationState === "error"
+                  ? "mt-2 text-xs text-red-700"
+                  : "mt-2 text-xs text-muted"
+              }
+              role={qualificationState === "error" ? "alert" : "status"}
+              data-sandbox-qualification={qualificationState}
+            >
+              {qualificationDetail}
+            </p>
+          ) : null}
+        </details>
       ) : null}
     </section>
   );
