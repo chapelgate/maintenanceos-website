@@ -42,3 +42,6 @@ next-env.d.ts
 # local form stub (never commit captured leads)
 .data/
 .website-manager/
+
+# local cross-engine browser diagnostics
+.browser-cross-engine/
