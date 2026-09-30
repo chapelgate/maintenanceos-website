@@ -27,14 +27,14 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// index.ts
+// packages/onboarding-ingest/packages/website/scan/index.ts
 var index_exports = {};
 __export(index_exports, {
   main: () => main
 });
 module.exports = __toCommonJS(index_exports);
 
-// ../../../src/extract.ts
+// packages/onboarding-ingest/src/extract.ts
 var MAX_FIELD_CHARS = 4e3;
 var USER_AGENT = "MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)";
 var DAY_RE = /\b(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays?|weekends?)\b/i;
@@ -1174,11 +1174,11 @@ function omitEmptyMeta(fieldMeta, draft) {
   return out;
 }
 
-// ../../../src/fetch-safe.ts
+// packages/onboarding-ingest/src/fetch-safe.ts
 var import_promises = __toESM(require("node:dns/promises"), 1);
 var import_node_https = __toESM(require("node:https"), 1);
 
-// ../../../src/ssrf.ts
+// packages/onboarding-ingest/src/ssrf.ts
 var BLOCKED_HOSTNAMES = /* @__PURE__ */ new Set([
   "localhost",
   "localhost.localdomain",
@@ -1319,7 +1319,7 @@ function assertResolvedAddressesPublic(addresses) {
   return { ok: true };
 }
 
-// ../../../src/types.ts
+// packages/onboarding-ingest/src/types.ts
 var ScanError = class extends Error {
   constructor(code, message, httpStatus = 400) {
     super(message);
@@ -1329,7 +1329,7 @@ var ScanError = class extends Error {
   }
 };
 
-// ../../../src/fetch-safe.ts
+// packages/onboarding-ingest/src/fetch-safe.ts
 var DEFAULT_MAX_REDIRECTS = 4;
 var DEFAULT_PAGE_TIMEOUT_MS = 4e3;
 var DEFAULT_MAX_BYTES_PER_PAGE = 256 * 1024;
@@ -1450,7 +1450,11 @@ async function fetchPublicHttps(raw, options = {}) {
     if (!ipCheck.ok) {
       throw new ScanError(ipCheck.reason, ssrfMessage(ipCheck.reason), 400);
     }
-    const response2 = await get(allow.url, addresses[0], {
+    const orderedAddresses = [
+      ...addresses.filter((address) => Boolean(parseIPv4Literal(address))),
+      ...addresses.filter((address) => !parseIPv4Literal(address))
+    ];
+    const response2 = await get(allow.url, orderedAddresses[0], {
       timeoutMs,
       maxBytes
     });
@@ -1506,7 +1510,7 @@ function isHtmlOrText(contentType) {
   return type.includes("text/html") || type.includes("application/xhtml") || type.includes("text/plain") || type.includes("application/xml") || type.includes("text/xml");
 }
 
-// ../../../src/scan.ts
+// packages/onboarding-ingest/src/scan.ts
 var MAX_PAGES = 5;
 var MAX_TOTAL_BYTES = 768 * 1024;
 var TOTAL_DEADLINE_MS = 12e3;
@@ -1726,7 +1730,7 @@ async function runScan(rawUrl, options = {}) {
   };
 }
 
-// index.ts
+// packages/onboarding-ingest/packages/website/scan/index.ts
 var RATE_WINDOW_MS = 6e4;
 var RATE_MAX = 20;
 var rateBuckets = /* @__PURE__ */ new Map();
