@@ -391,8 +391,8 @@ try {
   assert.equal(storedRequests, 2);
   assert.equal(emailHandoffs, 1);
 
-  await prepareCreate(cdp, siteOrigin, "scan@example.com", "https://scan-fail.example");
-  await waitFor(cdp, "document.body.innerText.includes('The scan service could not process this URL')", 20000);
+  await prepareCreate(cdp, siteOrigin, "queued@example.com", "https://scan-fail.example");
+  await waitFor(cdp, "document.body.innerText.includes('Website crawl is queued for early access')", 20000);
   await waitFor(cdp, "!document.querySelector('[data-create-primary-action]')?.disabled");
   await clickPrimary(cdp);
   await waitFor(cdp, "document.querySelector('[data-create-step]')?.getAttribute('data-create-step') === '3'");
