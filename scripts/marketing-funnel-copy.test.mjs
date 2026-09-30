@@ -25,7 +25,7 @@ test("how-it-works matches the /create stepper labels", () => {
 
   assert.match(flow, /CREATE_JOURNEY_STEPS/);
   assert.match(flow, /Website → Check → Choose → Configure → Review & Pack/);
-  assert.match(flow, /do not invent extracted hours/);
+  assert.match(flow, /missing hours, services, or FAQs stay empty/);
   assert.match(flow, /scripted sandbox demo is under testing/);
   assert.match(flow, /not a live customer call/i);
   assert.doesNotMatch(flow, /always-on service/);
@@ -79,7 +79,7 @@ test("home CTA strip names the website-to-pack path", () => {
   assert.match(page, /knowledge pack/);
   assert.match(page, /scripted sandbox/);
   assert.match(page, /Create from website/);
-  assert.match(page, /No live phone demo/);
+  assert.match(page, /no live phone demo/i);
   assert.match(page, /funnelPageMetadata\("home"\)/);
   assert.match(page, /ProductTourWatchLink/);
   assert.match(page, /HomeTrustStrip/);
@@ -105,7 +105,7 @@ test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
   assert.match(matrix, /llms files aligned; still not a live phone/);
   assert.match(matrix, /FAQ \+ FAQPage JSON-LD vs `\/create` funnel/);
   assert.match(matrix, /FAQ aligned; still not a live phone/);
-  assert.match(matrix, /Privacy note vs `\/create` website-URL ingest/);
+  assert.match(matrix, /Privacy note vs `\/create` website-URL setup/);
   assert.match(matrix, /privacy note aligned; still not live telephony data/);
   assert.match(matrix, /Pricing page clarity/);
   assert.match(matrix, /pricing copy aligned; still not published list prices/);
@@ -367,7 +367,7 @@ test("create page metadata comes from the shared funnel helper", () => {
   assert.doesNotMatch(page, /Create your AI receptionist/);
 });
 
-test("create and legal scaffolds share the website-URL ingest privacy note", () => {
+test("create and legal scaffolds share the website-URL setup privacy note", () => {
   const copy = read("src/lib/create-ingest-privacy.ts");
   const note = read("src/components/CreateIngestPrivacyNote.tsx");
   const page = read("src/app/create/page.tsx");
@@ -406,7 +406,7 @@ test("create and legal scaffolds share the website-URL ingest privacy note", () 
   assert.match(privacy, /id=\{s\.id\}/);
   assert.match(cookies, /\/privacy\/#website-url-ingest/);
   assert.match(cookies, /not a cookie category/);
-  assert.match(terms, /lead email for early access only/);
+  assert.match(terms, /lead email is for early access only/i);
   assert.match(terms, /not live telephony data/);
   assert.match(chrome, /\/create early-access/);
   assert.match(config, /output:\s*["']export["']/);
