@@ -165,3 +165,21 @@ Status: CODE COMPLETE / LIVE COMMISSIONING BLOCKED BY EXISTING ACCESS PATH
 - Estate runner diagnostic run `36763673477` confirms `durable_workload_identity_present=false`, `ready_for_do_provision=false`, and broker return code 4.
 - Canonical USH machine-access registry contains verified targets for HLO, Cheap Trips, and USH itself only. MaintenanceOS is not yet a verified target for `cg-automation-live-lease`.
 - Safe autonomous routes are exhausted. Do not create a replacement SSH identity, reset root credentials, rebuild/restore the live droplet, expose a DigitalOcean token, or reroute the golden phone line merely to deploy this formatter-only change.
+
+
+## 2026-09-30 — Post-call email expert pass 2
+Status: RESOLVED — VERIFIED AND FROZEN; GOLDEN VOICE PATH UNTOUCHED
+
+- Expert lenses applied: telephony metadata/provenance, backend data integrity, operations readability, privacy/security, and adversarial QA.
+- Residual defect after pass 1: assistant wording could still influence category/section detection because classification and key/repair topic checks searched the full transcript.
+- Fix: classification and report-section detection now use caller-originated evidence only. Assistant prompts/instructions no longer create repair/key/master-key facts.
+- Bounded exceptions preserve useful context without reopening broad trust: a caller reply to a specific key-order prompt can establish key-order intent; a comprehensive structured read-back can supply a fault only when explicitly confirmed or left unchallenged. Personal identity/contact fields still require the higher confirmation standard.
+- Repair faults become the primary operational category when a vetted fault exists; secondary key/master-key enquiries remain separate sections.
+- Specific physical faults such as `lock is missing` outrank generic vandalism context. A detailed structured fault can replace a generic vandalism note but cannot override a specific caller-reported physical fault.
+- Caller-number wording now states `network caller ID; not identity-verified`.
+- Added deterministic manual-review gate: missing spoken callback, conflicting network/spoken numbers, call-review classification, or incomplete repair fields require manual review.
+- Added adversarial tests proving assistant-only words cannot classify a call, unconfirmed assistant faults are not promoted, assistant key scripts do not create key sections, and phone-number conflicts/missing callbacks trigger review.
+- Focused local regression: 80 passed.
+- Independent estate-runner verification run `36778405541`, attempt 2, on product SHA `8c7ab6eb831d16e6d26fdf0de8dfd58ca7289353`: focused post-call/email/voice PASS; full Python 3.13 deterministic regression PASS (407 passed, 1 deselected); TLS/WSS route PASS; Python 3.12 compatibility PASS.
+- Attempt 1 on the same SHA passed focused, full Python 3.13 and TLS/WSS, then the self-hosted runner received a shutdown signal while unpacking the Python 3.12 cache. No product test failed; the exact-SHA rerun passed.
+- Immutable tag: `maintenanceos-post-call-email-expert2-20260930-8c7ab6e`.

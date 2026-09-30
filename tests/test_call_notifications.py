@@ -584,7 +584,7 @@ def test_email_renders_network_caller_callback_and_number_called():
         "transcript": "Caller: test",
     }
     _, body = build_internal_email(details)
-    assert "Caller Number: +447700900123 (network ANI)" in body
+    assert "Caller Number: +447700900123 (network caller ID; not identity-verified)" in body
     assert "Contact Number: 01512308476 (spoken callback)" in body
     assert "Number Called: +441512345678 (Chapelgate line)" in body
     assert "Network caller number differs from the spoken callback number." in body
@@ -701,3 +701,93 @@ Caller: Yes.
     details = extract_call_details(transcript, job_reference="CG-000044")
     assert details["area"] == "Wirral"
     assert details["fault_or_request"].casefold() == "locks broken"
+
+
+def test_assistant_words_do_not_classify_a_call():
+    transcript = """Assistant: Is this about a repair, a key order, or a master key?
+Caller: No, sorry, wrong number.
+Assistant: No problem. Goodbye.
+"""
+    assert classify_call_category(transcript) is None
+
+
+def test_unconfirmed_assistant_fault_is_never_promoted_to_structured_fault():
+    transcript = """Assistant: Thank you for calling Chapel Gate.
+Caller: I need help with my gate.
+Assistant: Is the lock broken?
+Caller: I don't know.
+Assistant: So that is a broken lock on gate 428 in Sefton.
+Caller: No, I didn't say that.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000201")
+    assert details["fault_or_request"] == ""
+    assert details["category"] is None
+
+
+def test_assistant_key_script_does_not_add_key_section_to_repair_email():
+    transcript = """Assistant: Thank you for calling Chapel Gate.
+Caller: The lock is broken on gate 428.
+Assistant: If you need keys, orders are placed online at alleygates.co.uk and keys are sent by Royal Mail.
+Caller: My name is Test Caller.
+"""
+    details = extract_call_details(transcript, job_reference="CG-000202")
+    details.update({
+        "caller_number": "+447700900202",
+        "called_number": "+442922716489",
+        "callback_number": "07700900202",
+        "caller_address": "1 Test Road",
+        "postcode": "CH45 9AA",
+        "area": "Wirral",
+        "gate_number": "428",
+        "category": CATEGORY_REPAIR,
+    })
+    _, body = build_internal_email(details)
+    assert "Chapelgate Alleygate Repair Call Report" in body
+    assert "KEY ORDER / ENQUIRY" not in body
+
+
+def test_manual_review_required_when_callback_is_missing_even_with_network_caller_id():
+    details = {
+        "category": CATEGORY_REPAIR,
+        "job_reference": "CG-000203",
+        "caller_name": "Test Caller",
+        "caller_number": "+447700900203",
+        "callback_number": "",
+        "called_number": "+442922716489",
+        "caller_address": "1 Test Road",
+        "postcode": "CH45 9AA",
+        "area": "Wirral",
+        "gate_number": "203",
+        "fault_or_request": "lock broken",
+        "transcript": "Caller: lock broken",
+    }
+    assert call_notifications.report_requires_review(details) is True
+    _, body = build_internal_email(details)
+    assert "Manual Review Required: YES" in body
+
+
+def test_manual_review_not_required_for_complete_matching_repair_intake():
+    details = {
+        "category": CATEGORY_REPAIR,
+        "job_reference": "CG-000204",
+        "caller_name": "Test Caller",
+        "caller_number": "+447700900204",
+        "callback_number": "07700900204",
+        "called_number": "+442922716489",
+        "caller_address": "1 Test Road",
+        "postcode": "CH45 9AA",
+        "area": "Wirral",
+        "gate_number": "204",
+        "fault_or_request": "lock broken",
+        "transcript": "Caller: lock broken",
+    }
+    assert call_notifications.report_requires_review(details) is False
+
+
+def test_manual_review_required_when_network_and_spoken_numbers_disagree():
+    details = {
+        "category": CATEGORY_KEY,
+        "caller_number": "+447700900205",
+        "callback_number": "07700900999",
+    }
+    assert call_notifications.report_requires_review(details) is True

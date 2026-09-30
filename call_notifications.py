@@ -127,7 +127,8 @@ def internal_notification_email() -> str:
 
 
 def classify_call_category(transcript: str) -> str | None:
-    text = transcript or ""
+    """Classify from caller-originated text only; assistant prompts are not facts."""
+    text = "\n".join(_caller_lines(transcript))
     if _MASTER_KEY.search(text):
         return CATEGORY_MASTER_KEY
     if _KEY.search(text):
@@ -202,6 +203,65 @@ def _readback_clearly_confirmed(transcript: str) -> bool:
                 if clear_yes.search(reply):
                     return True
                 break
+    return False
+
+
+def _caller_key_order_intent_from_turn_context(transcript: str) -> bool:
+    """Recognise caller intent only when replying to a specific key-order prompt."""
+    previous_assistant = ""
+    for raw in (transcript or "").splitlines():
+        line = raw.strip()
+        if line.casefold().startswith("assistant:"):
+            previous_assistant = line.split(":", 1)[1].strip()
+            continue
+        if not line.casefold().startswith("caller:"):
+            continue
+        caller = line.split(":", 1)[1].strip()
+        assistant_key_context = bool(re.search(
+            r"\b(?:keys?|alleygates\.co\.uk|order\s+one|order\s+keys?|key\s+order|£\s*22)\b",
+            previous_assistant,
+            re.IGNORECASE,
+        ))
+        caller_order_intent = bool(re.search(
+            r"\b(?:want\s+to\s+(?:order|buy)|want\s+one|order\s+(?:one|it)|"
+            r"do\s+it\s+(?:on|over)\s+the\s+phone|on\s+the\s+phone|"
+            r"also\s+want\s+to\s+order)\b",
+            caller,
+            re.IGNORECASE,
+        ))
+        if assistant_key_context and caller_order_intent:
+            return True
+    return False
+
+
+def _structured_readback_unchallenged(transcript: str, readback_line: str) -> bool:
+    """Allow a comprehensive 'just to confirm' readback only if caller moves on without correcting it."""
+    if not readback_line or not re.search(
+        r"\b(?:just\s+to\s+confirm|you(?:'ve|\s+have)\s+reported|the\s+problem\s+is)\b",
+        readback_line,
+        re.IGNORECASE,
+    ):
+        return False
+    lines = [line.strip() for line in (transcript or "").splitlines() if line.strip()]
+    target = f"Assistant: {readback_line}"
+    try:
+        idx = lines.index(target)
+    except ValueError:
+        return False
+    for next_line in lines[idx + 1:]:
+        if next_line.casefold().startswith("assistant:"):
+            break
+        if not next_line.casefold().startswith("caller:"):
+            continue
+        reply = next_line.split(":", 1)[1].strip()
+        if re.search(
+            r"\b(?:wrong|incorrect|mistake|not\s+correct|didn(?:'t|\s+not)\s+say|"
+            r"you\s+got\s+.+\s+wrong)\b|^no\b",
+            reply,
+            re.IGNORECASE,
+        ):
+            return False
+        return True
     return False
 
 
@@ -487,24 +547,14 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                 fault = simple.group(1).strip(" ,.")
                 break
     if not fault:
-        for pattern in fault_patterns:
-            matches = re.findall(pattern, assistant_text, re.IGNORECASE)
-            if matches:
-                fault = matches[-1].strip(" ,.")
-                break
-    if not fault:
-        for line in assistant_lines:
-            for sentence in re.split(r"(?<=[.!?])\s+", line):
-                if sentence.rstrip().endswith("?"):
-                    continue
-                if (
-                    re.search(r"\b(?:lock|gate|hinge|cylinder|keys?)\b", sentence, re.IGNORECASE)
-                    and re.search(r"\b(?:missing|broken|damaged|jammed|stuck|spinning|vandali[sz])\w*\b", sentence, re.IGNORECASE)
-                ):
-                    fault = sentence.strip(" ,.")
-                    break
-            if fault:
-                break
+        caller_vandalism_fault = re.findall(
+            r"\b((?:someone|they|he|she|the\s+neighbou?r|my\s+neighbou?r)?\s*"
+            r"(?:keeps?\s+)?vandali[sz](?:ing|ed|es)?\s+(?:the\s+)?(?:lock|gate))\b",
+            caller_text,
+            re.IGNORECASE,
+        )
+        if caller_vandalism_fault:
+            fault = caller_vandalism_fault[-1].strip(" ,.")
     if not fault:
         for line in caller_lines:
             if "problem" in line.casefold() or "issue" in line.casefold():
@@ -531,6 +581,10 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         re.IGNORECASE,
     ))
     readback_accepted_context = readback_confirmed or scoped_correction_engaged
+    fault_readback_context = (
+        readback_accepted_context
+        or _structured_readback_unchallenged(full, readback_line)
+    )
 
     if readback_line and readback_accepted_context:
         readback_gate = re.search(
@@ -591,15 +645,43 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
                 ):
                     callback_value = re.sub(r"\s+", " ", raw).strip()
 
-        readback_fault = re.search(
-            r"\bgate(?:\s+number)?\s+\d{1,5},?\s+and\s+(?:it(?:'s|\s+is)|the\s+gate\s+is)\s+([^,.]+)",
-            readback_line,
-            re.IGNORECASE,
-        )
-        if readback_fault and (
-            not fault or re.match(r"^So,\s*just\s+to\s+confirm\b", fault, re.IGNORECASE)
-        ):
-            fault = readback_fault.group(1).strip(" ,.")
+
+    if readback_line and fault_readback_context:
+            readback_fault = re.search(
+                r"\bgate(?:\s+number)?\s+\d{1,5},?\s+and\s+(?:it(?:'s|\s+is)|the\s+gate\s+is)\s+([^,.]+)",
+                readback_line,
+                re.IGNORECASE,
+            )
+            if not readback_fault:
+                readback_fault = re.search(
+                    r"\bgate(?:\s+number)?\s+\d{1,5}\s+and\s+((?:the\s+)?keys?\s+(?:is|are)\s+spinning(?:\s+around)?)",
+                    readback_line,
+                    re.IGNORECASE,
+                )
+            if not readback_fault:
+                readback_fault = re.search(
+                    r"\bgate(?:\s+number)?\s+\d{1,5},?\s+that\s+it(?:'s|\s+is)\s+([^,.]+)",
+                    readback_line,
+                    re.IGNORECASE,
+                )
+            if not readback_fault:
+                readback_fault = re.search(
+                    r"\bthe\s+problem\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d{1,5}\b)",
+                    readback_line,
+                    re.IGNORECASE,
+                )
+            if not readback_fault:
+                readback_fault = re.search(
+                    r"\breport(?:ing|ed)\s+(.+?)\s+on\s+(?:alley\s+)?gate\s+\d{1,5}\b",
+                    readback_line,
+                    re.IGNORECASE,
+                )
+            if readback_fault and (
+                not fault
+                or re.match(r"^So,\s*just\s+to\s+confirm\b", fault, re.IGNORECASE)
+                or re.search(r"\bvandali[sz]\w*\b", fault, re.IGNORECASE)
+            ):
+                fault = readback_fault.group(1).strip(" ,.")
 
     # A later, explicitly confirmed area correction is scoped to area only.
     # It must not retroactively confirm or invalidate unrelated read-back fields.
@@ -625,6 +707,8 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
     urgency = _URGENCY.search(caller_text)
     animal_emergency = bool(animal_fault)
     category = classify_call_category(full)
+    if fault:
+        category = CATEGORY_REPAIR
 
     return {
         "category": category,
@@ -686,18 +770,44 @@ def report_quality_warnings(details: dict[str, Any]) -> list[str]:
     return warnings
 
 
+def report_requires_review(details: dict[str, Any]) -> bool:
+    """Return True when operations should inspect the call before acting."""
+    category = details.get("category") or ""
+    caller_number = str(details.get("caller_number") or "")
+    callback_number = str(details.get("callback_number") or "")
+    usable_caller_number = bool(caller_number and caller_number != "withheld")
+
+    if category in {"", CATEGORY_CALL_REVIEW}:
+        return True
+    if not callback_number:
+        # Caller ID is useful context but is not a confirmed preferred callback.
+        return True
+    if usable_caller_number:
+        ani_digits = _number_digits(caller_number)
+        callback_digits = _number_digits(callback_number)
+        if ani_digits and callback_digits and ani_digits != callback_digits:
+            return True
+    if category == CATEGORY_REPAIR:
+        for key in ("gate_number", "fault_or_request", "caller_name", "caller_address", "area"):
+            if not details.get(key):
+                return True
+    return False
+
+
 def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     category = details.get("category") or "unknown"
     job_ref = details.get("job_reference") or "unknown"
     transcript = details.get("transcript") or ""
     caller_lines = _caller_lines(transcript)
+    caller_text = "\n".join(caller_lines)
     full = transcript
 
-    # A clean confirmed repair read-back outranks later secondary enquiries.
-    has_repair = bool(details.get("fault_or_request")) or bool(_REPAIR.search(full))
-    has_master_key = bool(_MASTER_KEY.search(full)) or category == CATEGORY_MASTER_KEY
+    # Report sections are driven by caller-originated evidence or already-vetted
+    # structured fields. Assistant prompts/instructions are never category evidence.
+    has_repair = bool(details.get("fault_or_request")) or bool(_REPAIR.search(caller_text))
+    has_master_key = bool(_MASTER_KEY.search(caller_text)) or category == CATEGORY_MASTER_KEY
 
-    ordinary_key_text = _MASTER_KEY.sub("", full)
+    ordinary_key_text = _MASTER_KEY.sub("", caller_text)
     key_order_signal = re.compile(
         r"(?:\border(?:ed|ing)?\b.*\bkeys?\b"
         r"|\bkeys?\b.*\b(?:order(?:ed|ing)?|delivery|tracking|website|email|buy|purchase)\b"
@@ -708,7 +818,12 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         r"|order.*online.*alleygates\.co\.uk)",
         re.IGNORECASE | re.DOTALL,
     )
-    has_key = bool(_KEY.search(ordinary_key_text) or key_order_signal.search(ordinary_key_text)) or category == CATEGORY_KEY
+    contextual_key_intent = _caller_key_order_intent_from_turn_context(full)
+    has_key = (
+        bool(_KEY.search(ordinary_key_text) or key_order_signal.search(ordinary_key_text))
+        or contextual_key_intent
+        or category == CATEGORY_KEY
+    )
 
     gate = details.get("gate_number") or "not collected"
     if has_repair:
@@ -728,7 +843,7 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         "CALLER DETAILS",
         "==============",
         f"{person_label}: {details.get('caller_name') or 'not collected'}",
-        f"Caller Number: {details.get('caller_number') or 'not available'} (network ANI)",
+        f"Caller Number: {details.get('caller_number') or 'not available'} (network caller ID; not identity-verified)",
         f"Contact Number: {details.get('callback_number') or 'not collected'} (spoken callback)",
         f"Number Called: {details.get('called_number') or 'not available'} (Chapelgate line)",
         f"Address: {details.get('caller_address') or 'not collected'}",
@@ -739,10 +854,12 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     ]
 
     quality_warnings = report_quality_warnings(details)
-    if quality_warnings:
+    review_required = report_requires_review(details)
+    if quality_warnings or review_required:
         lines.extend([
-            "DATA QUALITY",
-            "============",
+            "REVIEW / DATA QUALITY",
+            "=====================",
+            f"Manual Review Required: {'YES' if review_required else 'NO'}",
             *[f"- {warning}" for warning in quality_warnings],
             "",
         ])
@@ -761,18 +878,18 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
 
     existing_order = bool(re.search(
         r"(?:already\s+ordered|confirmation\s+email.*order\s+number|reply\s+to\s+that\s+email|royal\s+mail|tracking\s+(?:info|information))",
-        full,
+        caller_text,
         re.IGNORECASE | re.DOTALL,
     ))
     new_key_order = bool(re.search(
         r"(?:order.*online.*alleygates\.co\.uk|keys?\s+are\s+currently\s+(?:£\s*)?22|key\s+orders?\s+are\s+placed)",
-        full,
+        caller_text,
         re.IGNORECASE | re.DOTALL,
-    ))
+    )) or contextual_key_intent
     if has_key:
         phone_order_requested = bool(re.search(
             r"\b(?:on|over)\s+the\s+phone\b|\bdo\s+it\s+on\s+the\s+phone\b",
-            full,
+            caller_text,
             re.IGNORECASE,
         ))
         lines.extend([
