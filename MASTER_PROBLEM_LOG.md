@@ -242,3 +242,39 @@ Surgical test-only fix:
 
 Verification:
 The repaired harness passed twice consecutively on the scan-retirement candidate, each with exit code 0, `ok=true`, `rawPosts=2`, `storedRequests=2`, `emailHandoffs=1`, `submissions=2`, 390x844@3 mobile emulation, 6x CPU throttle and 250 ms latency. The fix was then rebased cleanly onto current `main`.
+
+
+## MOS-WEB-CLAIMS-001 — Product claims checkpoint lagged current MaintenanceOS source
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+The website claims register remained signed against product checkpoint
+`cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8` from 2026-09-26 while canonical
+`chapelgate/maintenanceos-v1-pilot` had advanced 30 commits to
+`498ad82dd87631814195d447d89458480b117951`. Those commits include voice turn
+recovery, provider adapter/webhook and call-notification changes plus current live
+incident evidence, so the earlier checkpoint could not be treated as launch-current.
+
+Evidence and resolution:
+- exact product `main` pinned at `498ad82dd87631814195d447d89458480b117951`;
+- diff from the prior claims checkpoint reviewed: 30 commits, with claim-bearing
+  runtime changes concentrated in voice/provider/notification paths;
+- current `MASTER_PROBLEM_LOG.md`, `HUMAN_BLOCKERS.md`, `README.md` and
+  `STAGED_VOICE_INTEGRATION.md` reviewed;
+- targeted current-product claims/safety suite: **196 passed / 0 failed** across
+  explicit transfer, live-defect regression, voice-action claims, Gemini provider
+  and policy, provider adapter/webhook contracts, webhook security, tenant
+  isolation, lifecycle integrity, readiness, decision rules, invoice rules,
+  state-machine controls and local acceptance;
+- current live voice evidence explicitly records a greet-then-stall real-call
+  defect on the accepted host; the narrow hotfix is verified but undeployed due
+  to missing authorised host deployment identity;
+- website voice/production status therefore remains **NO-GO / PRE-LAUNCH**;
+- the retired public onboarding-scan path is no longer represented as a live or
+  available website crawl capability;
+- launch checklist, backlog claims checkpoint and external-blocker register were
+  reconciled to the same current evidence.
+
+No public capability was promoted by this refresh.
