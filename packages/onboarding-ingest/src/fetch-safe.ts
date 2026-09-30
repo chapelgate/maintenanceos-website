@@ -168,7 +168,16 @@ export async function fetchPublicHttps(
       throw new ScanError(ipCheck.reason, ssrfMessage(ipCheck.reason), 400);
     }
 
-    const response = await get(allow.url, addresses[0]!, {
+    // Prefer IPv4 when a hostname publishes both address families.
+    // Some public hosting/CDN stacks expose equivalent A + AAAA records but
+    // apply different edge policy to serverless IPv6 egress. We still validate
+    // every resolved address as public before choosing the connection target.
+    const orderedAddresses = [
+      ...addresses.filter((address) => Boolean(parseIPv4Literal(address))),
+      ...addresses.filter((address) => !parseIPv4Literal(address)),
+    ];
+
+    const response = await get(allow.url, orderedAddresses[0]!, {
       timeoutMs,
       maxBytes,
     });
