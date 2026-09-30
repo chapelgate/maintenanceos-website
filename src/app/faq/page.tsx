@@ -10,7 +10,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata: Metadata = contentPageMetadata({
   title: "FAQ",
   description:
-    "Website URL → check → review → pack → optional scripted sandbox → early access. Straight answers on scan honesty, empty hours/services, UK 999, pricing, contact, security, and cookies — aligned with our product claims register. Pre-launch. Not a live phone.",
+    "Website URL → check → review → pack → optional scripted sandbox → early access. Straight answers on the no-crawl setup boundary, empty hours/services, UK 999, pricing, contact, security, and cookies — aligned with our product claims register. Pre-launch. Not a live phone.",
   path: "/faq/",
 });
 
