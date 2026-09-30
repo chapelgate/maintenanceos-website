@@ -158,8 +158,10 @@ test("create journey steps name the next action without a live-phone claim", () 
   assert.equal(createJourneyNextAction(5), "Try your receptionist");
   assert.equal(isCreateScanReady("scanning"), false);
   assert.equal(isCreateScanReady("queued"), true);
+
   assert.match(createScanProgressTitle("queued"), /review the draft/i);
   assert.match(createScanProgressTitle("scanned"), /review extracted fields/i);
+
   for (const item of CREATE_JOURNEY_STEPS) {
     assert.doesNotMatch(item.nextAction, /live (phone|number|call)/i);
   }

@@ -185,7 +185,9 @@ export default function HomePage() {
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">
                 Early access is opening carefully. The public path is website URL
+
                 → reviewed configuration → interactive receptionist demo → optional saved reference. No live phone demo from this site.{" "}
+
                 <a
                   href="/create/"
                   className="font-medium text-accent underline-offset-4 hover:underline"

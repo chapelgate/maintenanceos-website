@@ -12,11 +12,13 @@ import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 export const metadata = funnelPageMetadata("demo");
 
 const FUNNEL_COPY = [
+
   "Enter your public website and email to prepare the receptionist preview.",
   "We validate the URL. The hosted crawl is disabled, so missing business details stay blank rather than being invented.",
   "Choose one bounded AI role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom.",
   "Configure the role, review the business details, and generate the controlled knowledge pack.",
   "Press Try your receptionist and ask your own caller questions in the browser.",
+
 ] as const;
 
 const pathSteps = [
@@ -68,8 +70,10 @@ export default function DemoPage() {
           >
             Create from website
           </a>
+
           . Website → Check → Choose → Configure → Review &amp; Try, then
           optional save. This browser preview does not assign a live number.
+
         </p>
         <ol className="mt-6 space-y-3">
           {pathSteps.map((step, i) => (

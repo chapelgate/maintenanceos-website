@@ -19,7 +19,9 @@ export default function HowItWorksPage() {
       <PageHero
         eyebrow="Pre-launch. Not a public live service yet."
         title="From maintenance request to controlled follow-up."
+
         lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The website path is Website → Check → Choose → Configure → Review & Try, followed by an optional saved reference. We do not invent crawl results, bookings, or a live phone number."
+
         orbAccent
       />
 

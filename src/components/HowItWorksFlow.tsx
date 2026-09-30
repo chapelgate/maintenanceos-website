@@ -17,9 +17,11 @@ const STAGE_COPY = [
   },
   {
     id: "check",
-    short: "Scan if configured — otherwise queue the crawl",
-    body: "The public site validates the URL. The hosted crawl is disabled, so missing business details stay blank rather than being invented.",
-    note: "The hosted scan is disabled on the public site; no live knowledge crawl is claimed.",
+
+    short: "Validate the URL and prepare a reviewable draft",
+    body: "We validate the public URL and use its hostname only as a setup hint. This public site does not crawl pages; missing hours, services, or FAQs stay empty until reviewed or supplied.",
+    note: "Public website crawl is retired from this path. The Check step validates the address; it does not claim extracted website knowledge.",
+
     status: "UNDER_TEST",
   },
   {
@@ -144,8 +146,10 @@ export function HowItWorksFlow() {
         >
           Create from website
         </a>
+
         . Typical shape: website URL → validate → choose role → configure →
         review → interactive receptionist demo → optional save. We do not invent crawl results or a
+
         live phone number.
       </p>
 

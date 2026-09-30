@@ -27,16 +27,18 @@ export const faqItems: FaqItem[] = [
     relatedLabel: "Create from website",
   },
   {
-    question: "What happens if the website scan is not configured?",
+    question: "Does the public site crawl my website?",
     answer:
-      "The hosted website crawl is disabled on the public site. We validate the URL; missing business details stay blank, and we do not invent extracted hours, services, or FAQs.",
+
+      "No. The current public /create path records the website address as a setup hint and does not fetch or crawl its pages. Missing hours, services, and FAQs stay empty until you review or supply them. The former scan companion is retired from the public website path.",
+
     relatedHref: "/how-it-works/",
     relatedLabel: "How it works",
   },
   {
-    question: "If hours or services are missing from the scan, do you fill them in?",
+    question: "If hours or services are missing, do you fill them in?",
     answer:
-      "No. Empty hours and services stay empty. You review the draft, then a claims-safe knowledge pack is built from fields that are actually present. Missing facts stay missing — we do not invent crawl results, bookings, or a live phone number.",
+      "No. Empty hours and services stay empty. You review the draft, then a claims-safe knowledge pack is built from fields that are actually present. Missing facts stay missing — we do not invent business details, bookings, or a live phone number.",
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },
@@ -74,7 +76,9 @@ export const faqItems: FaqItem[] = [
   {
     question: "Are you ISO or SOC 2 certified?",
     answer:
-      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. The hosted website-scan companion is disabled on the public site; no live knowledge crawl is claimed. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
+
+      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. The current public setup path does not crawl submitted websites. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
+
     relatedHref: "/create/",
     relatedLabel: "Create from website",
   },

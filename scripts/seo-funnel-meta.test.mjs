@@ -83,5 +83,5 @@ test("sitemap and robots already list the funnel routes", () => {
     robots,
     /website URL → check → review → pack → optional scripted sandbox → early access/,
   );
-  assert.match(robots, /owner-blocked/);
+  assert.match(robots, /Customer website crawl is retired/);
 });

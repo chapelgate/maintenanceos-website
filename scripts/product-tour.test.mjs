@@ -48,7 +48,7 @@ test("product-tour media files exist and stay claims-safe", () => {
   const captionsSrc = read("scripts/product-tour/captions.en-GB.vtt");
   assert.match(vtt, /^WEBVTT/m);
   assert.match(vtt, /Paste a public company website URL/);
-  assert.match(vtt, /do not invent extracted content/);
+  assert.match(vtt, /public site does not crawl pages/i);
   assert.match(vtt, /Empty hours and services stay empty/);
   assert.match(vtt, /rules own safety and money/i);
   assert.match(vtt, /999 guidance — never 911/);

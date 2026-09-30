@@ -18,11 +18,13 @@ const steps = [
   },
   {
     title: "Check the URL",
-    body: "We validate the public URL and prepare a safe draft. The retired hosted crawl is not used, so missing business details stay blank until you review them.",
+
+    body: "We validate the public URL and use its hostname only as a setup hint. The public site does not crawl pages; missing details stay empty until reviewed or supplied.",
+
   },
   {
     title: "Review the draft",
-    body: "You edit business name, greeting, hours, services, and FAQs before anything is stored. Copied fields show where they came from and how confident the scan was. Empty fields were not invented.",
+    body: "You edit business name, greeting, hours, services, and FAQs before anything is stored. The business name may start from the website-address hint; missing fields are not invented.",
   },
   {
     title: "Build the receptionist",
@@ -43,9 +45,11 @@ export default function CreateReceptionistPage() {
     <>
       <JsonLd data={funnelPageJsonLd("create")} />
       <PageHero
+
         eyebrow="Create your receptionist · Preview"
         title="Turn your business website into an AI receptionist"
         lede="Paste your site URL, configure the receptionist, review the knowledge pack, then press Try your receptionist and ask your own caller questions in the browser. You can optionally save the setup and receive a reference by email. The browser demo does not dial a phone number or touch the live telephone service."
+
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <FunnelPathStrip />
@@ -96,8 +100,9 @@ export default function CreateReceptionistPage() {
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>The interactive browser receptionist is available here; live telephone calling remains a separate commissioning path</li>
             <li>
-              Website crawl is queued unless an external scan endpoint is
-              configured — this page will not invent extracted content
+              This public site does not crawl the submitted website. The URL
+              is used as a setup hint; missing business facts stay empty until
+              reviewed or supplied
             </li>
             <li>
               This page does not claim a 30-second live phone number or commercial

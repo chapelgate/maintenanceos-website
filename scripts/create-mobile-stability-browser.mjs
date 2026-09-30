@@ -212,10 +212,12 @@ try {
   await cdp.send("Page.navigate", { url: site.origin + "/create/" });
   await waitFor(cdp, `document.querySelector("[data-create-hydrated]")?.getAttribute("data-create-hydrated") === "true"`, 20000);
 
+
   await setControl(cdp, 'input[name="businessUrl"]', "https://alleygates.co.uk");
   await setControl(cdp, 'input[name="name"]', "Interactive Acceptance");
   await setControl(cdp, 'input[name="email"]', "interactive@example.com");
   await setControl(cdp, 'input[name="organisation"]', "Chapelgate");
+
   await clickPrimary(cdp);
 
   await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "2"`);

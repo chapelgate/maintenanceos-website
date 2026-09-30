@@ -293,6 +293,104 @@ Remove only the dead import. No acceptance logic or runtime behaviour changed.
 Verification:
 Final lint rerun completed with 0 errors and 0 warnings; the full 241/241 + 294/294 repository suites also passed after the cleanup.
 
+
+## MOS-WEB-CLAIMS-001 — Product claims checkpoint lagged current MaintenanceOS source
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+The website claims register remained signed against product checkpoint
+`cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8` from 2026-09-26 while canonical
+`chapelgate/maintenanceos-v1-pilot` had advanced 30 commits to
+`498ad82dd87631814195d447d89458480b117951`. Those commits include voice turn
+recovery, provider adapter/webhook and call-notification changes plus current live
+incident evidence, so the earlier checkpoint could not be treated as launch-current.
+
+Evidence and resolution:
+- exact product `main` pinned at `498ad82dd87631814195d447d89458480b117951`;
+- diff from the prior claims checkpoint reviewed: 30 commits, with claim-bearing
+  runtime changes concentrated in voice/provider/notification paths;
+- current `MASTER_PROBLEM_LOG.md`, `HUMAN_BLOCKERS.md`, `README.md` and
+  `STAGED_VOICE_INTEGRATION.md` reviewed;
+- targeted current-product claims/safety suite: **196 passed / 0 failed** across
+  explicit transfer, live-defect regression, voice-action claims, Gemini provider
+  and policy, provider adapter/webhook contracts, webhook security, tenant
+  isolation, lifecycle integrity, readiness, decision rules, invoice rules,
+  state-machine controls and local acceptance;
+- current live voice evidence explicitly records a greet-then-stall real-call
+  defect on the accepted host; the narrow hotfix is verified but undeployed due
+  to missing authorised host deployment identity;
+- website voice/production status therefore remains **NO-GO / PRE-LAUNCH**;
+- the retired public onboarding-scan path is no longer represented as a live or
+  available website crawl capability;
+- launch checklist, backlog claims checkpoint and external-blocker register were
+  reconciled to the same current evidence;
+- a source regression now checks that the claims register, launch checklist and
+  backlog share the same product SHA and that voice NO-GO / scan-retirement
+  boundaries remain explicit.
+
+No public capability was promoted by this refresh.
+
+
+## MOS-WEB-CLAIMS-002 — Retired public website crawl remained in customer-facing copy
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+Resolved: 2026-09-30
+
+Problem:
+The paid/public onboarding-scan path had been safely retired, but several public
+surfaces still described a website scan as configurable, queued or under test.
+That created a claims inconsistency: source and provider state said no public
+crawl, while Create, Demo, FAQ, Security, How It Works, privacy/terms drafts,
+AI-readable summaries and product-tour copy could still imply one.
+
+Root cause:
+Provider retirement and source-level fail-closed work were completed before all
+derived marketing/legal/SEO copy contracts were reconciled. Existing regression
+tests then correctly exposed their own stale expectations for the former scan
+state.
+
+Surgical fix:
+- define one public invariant: the submitted website URL is a setup hint; the
+  current public site does not fetch or crawl submitted pages; missing business
+  facts stay empty until reviewed or supplied;
+- reconcile Create, Demo, FAQ/FAQPage, Security, How It Works, homepage,
+  Features inventory/card, privacy/terms draft copy, llms.txt, llms-full.txt,
+  product-tour captions/storyboard and comparison evidence to that invariant;
+- leave dormant/non-public scan implementation code in place rather than
+  deleting unrelated source capability;
+- update existing truth-contract tests instead of re-enabling the retired crawl;
+- keep product voice/commercial status conservative at current product checkpoint
+  `498ad82dd87631814195d447d89458480b117951`.
+
+Verification on exact application candidate
+`700c9f233da0608c6ec7a68eca094405d4d17b69`:
+- current-product targeted claims/safety suite: **196/196 PASS** at product SHA
+  `498ad82dd87631814195d447d89458480b117951`;
+- website source/script suite: **242/242 PASS**;
+- website runtime/package suite: **294/294 PASS**;
+- accessibility: **16/16 PASS**;
+- ESLint: PASS;
+- Next.js **16.3.8** production static build: PASS;
+- dependency audit at moderate threshold: PASS;
+- adversarial build deliberately supplied the obsolete
+  `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT`; exact retired endpoint search in
+  exported `out/`: **0 matches**;
+- exported stale-claim search for former SSRF-safe/configurable/queued scan
+  wording: **0 matches**;
+- real Microsoft Edge viewport matrix: **18/18 PASS** across
+  mobile/tablet/desktop;
+- Firefox/WebKit cross-engine matrix: **36/36 PASS**, 0 page errors and 0 console errors;
+- throttled mobile `/create` acceptance: PASS at 390x844@3, 6x CPU throttle,
+  250 ms latency and 1.4 s JS delay;
+- durable lead evidence: 2 raw posts, 2 stored requests, 2 submissions and
+  1 email handoff;
+- `git diff --check`: PASS.
+
+No telephony, provider routing, pricing, public-launch flag or paid
+infrastructure was changed by this repair.
+
 ## MOS-WEB-CREATE-002 ? /create ended in email instead of an interactive receptionist preview
 Status: RESOLVED / VERIFIED CANDIDATE
 Opened: 2026-09-30

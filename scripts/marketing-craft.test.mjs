@@ -89,7 +89,9 @@ test("HIW step cards are a mos-glass number→title→status ladder", () => {
   assert.match(flow, /mos-glass/);
   assert.match(flow, /hiw-step-number/);
   assert.match(flow, /bg-paper/);
-  assert.match(flow, /missing business details stay blank/);
+
+  assert.match(flow, /missing hours, services, or FAQs stay empty/);
+
 });
 
 test("/create stepper chrome is sticky Website to Review & Try", () => {
@@ -102,8 +104,10 @@ test("/create stepper chrome is sticky Website to Review & Try", () => {
   assert.match(stepper, /CREATE_JOURNEY_STEPS/);
   assert.match(css, /\.create-step-chrome/);
   assert.match(css, /position: sticky/);
+
   assert.match(later, /hosted website crawl is disabled/i);
   assert.match(later, /missing facts stay blank/i);
+
   assert.match(preview, /Empty facts/);
   assert.match(preview, /create-missing-chip/);
   assert.doesNotMatch(later, /Mon–Fri 09:00/);
