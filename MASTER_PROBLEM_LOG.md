@@ -116,3 +116,46 @@ The existing DigitalOcean App Platform native auto-deploy path remained operatio
 
 Future handling:
 Do not spend or add infrastructure merely to silence this condition. If a future release genuinely requires manual force rebuild while hosted Actions remain unavailable, reuse an authorised trusted self-hosted execution path or restore Actions budget through normal account administration.
+
+## MOS-WEB-QA-001 — Browser QA covered only Edge/Chromium
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+The durable browser gate exercised Microsoft Edge only. The backlog therefore
+could not close the autonomous portion of broader browser-engine QA.
+
+Surgical fix:
+- add Playwright 1.63.0 as a pinned dev-only dependency;
+- add Firefox 155.0 and WebKit 26.6 smoke coverage for the same six critical
+  routes and 390/768/1440 viewport classes;
+- capture page errors, console errors, horizontal overflow, route structure,
+  `/create/` non-native-form behaviour, JSON results and failure screenshots;
+- retain the existing Edge CDP gate instead of replacing working coverage.
+
+Verification:
+Edge 18/18 PASS; Firefox/WebKit 36/36 PASS; zero cross-engine failures.
+Evidence: `docs/CROSS_ENGINE_BROWSER_QA_2026-09-30.md`.
+
+## MOS-WEB-QA-002 — Local browser smoke could emit production measurement traffic
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+The local exported-site browser build contains the production cookieless
+measurement endpoint by default. Initial WebKit QA exposed localhost CORS
+rejections and showed that browser smoke could create test measurement traffic.
+
+Root cause:
+Browser QA isolated the website files but did not isolate the outbound bounded
+measurement request.
+
+Surgical fix:
+- Playwright fulfils only the website-events request with a synthetic local 202;
+- Edge CDP blocks only `*/v1/public/website-events`;
+- production lead submission is not intercepted or exercised;
+- source tests lock both isolation controls.
+
+Verification:
+Corrected Firefox/WebKit matrix reports 0 page errors and 0 console errors;
+all 36 checks pass. Existing Edge matrix remains 18/18 PASS.

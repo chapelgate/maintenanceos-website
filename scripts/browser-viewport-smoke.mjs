@@ -163,6 +163,10 @@ try {
   cdp = await connectCdp(debugPort);
   await cdp.send("Page.enable");
   await cdp.send("Runtime.enable");
+  await cdp.send("Network.enable");
+  await cdp.send("Network.setBlockedURLs", {
+    urls: ["*://*/v1/public/website-events"],
+  });
 
   for (const viewport of viewports) {
     await cdp.send("Emulation.setDeviceMetricsOverride", {

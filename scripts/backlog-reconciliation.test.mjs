@@ -10,7 +10,7 @@ test("backlog has one truthful set of continuation and launch gates", () => {
   assert.match(backlog, /F13-LEGAL/);
   assert.match(backlog, /F15-MANUAL/);
   assert.match(backlog, /F17-HEADERS/);
-  assert.match(backlog, /F21[\s\S]*PARTIAL/);
+  assert.match(backlog, /F21[\s\S]*DONE ENGINEERING[\s\S]*physical Safari\/iOS/);
   assert.match(backlog, /F22[\s\S]*DONE AUTOMATED \/ BOUNDED/);
   assert.match(backlog, /single persistent website problem register/i);
 });
@@ -21,6 +21,8 @@ test("launch checklist separates completed engineering from human launch gates",
   assert.match(checklist, /Do \*\*not\*\* set .*PUBLIC_LAUNCH=true/);
   assert.match(checklist, /\[ \] Counsel final review/);
   assert.match(checklist, /\[ \] Full manual keyboard/);
+  assert.match(checklist, /\[x\] Automated cross-engine matrix complete/);
+  assert.match(checklist, /\[ \] Physical Safari\/iOS/);
   assert.match(checklist, /\[x\] Bounded automated staging red-team report/);
   assert.match(checklist, /\[ \] Security response-header risk resolved\/accepted/);
   assert.match(checklist, /\[ \] Owner approval/);
