@@ -94,7 +94,7 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
       "Enter a public website address, review and complete the draft, then prepare a knowledge pack — early access only.",
     bullets: [
       "Public /create path: Website → Check → Choose → Configure → Review & Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number.",
-      "The public site does not crawl the website. It uses the zero-scan queued fallback; missing fields stay empty until they are reviewed or supplied.",
+      "The public site does not crawl the website. It uses the no-crawl review fallback; missing fields stay empty until they are reviewed or supplied.",
       "Knowledge pack + system prompt from the reviewed /create draft. Missing keys stay missing. Not a live tenant or trained knowledge base.",
     ],
     sources: ["F-01", "F-02", "F-03"],
