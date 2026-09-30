@@ -207,11 +207,9 @@ test("exported /faq/ HTML has claims-safe FAQPage JSON-LD when out/ exists", () 
   }
 
   const serialized = JSON.stringify(blocks);
-  assert.match(
-    serialized,
-    /website URL → check → review → pack → optional scripted sandbox → early access/,
-  );
-  assert.match(serialized, /owner-blocked/);
+  assert.match(serialized, /interactive receptionist demo/);
+  assert.match(serialized, /optional save/);
+  assert.match(serialized, /hosted website crawl is disabled/i);
   assert.match(serialized, /Empty hours and services stay empty/);
   assert.match(serialized, /999 guidance \(never 911\)/);
   assert.match(serialized, /not a live phone/);
