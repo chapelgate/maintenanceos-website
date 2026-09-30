@@ -1,6 +1,6 @@
 # Onboarding Scan Cost Retirement — 2026-09-28
 
-Status: **BLOCKED AT PROVIDER MUTATION / SAFETY PROOF COMPLETE**
+Status: **WEBSITE DECOUPLED / PROVIDER DELETION BLOCKED BY INVALID CREDENTIAL**
 
 ## Narrow scope
 Remove only the paid DigitalOcean App Platform service `onboarding-scan` from app `seahorse-app` while preserving the free static MaintenanceOS website and the frozen MaintenanceOS telephone runtime.
@@ -19,14 +19,10 @@ Live route checks:
 - `/onboarding-scan/health` => 200 JSON with `service=maintenanceos-onboarding-scan` and `ingestEnabled=true`;
 - `/onboarding-scan/v1/onboarding/scan` => 405 on GET, proving the service route exists.
 
-## Critical dependency finding
-The deployed static browser bundle currently contains the absolute endpoint:
+## Critical dependency finding — resolved at website boundary
+The public `/create` client no longer compiles or calls the paid onboarding-scan endpoint. Source fixes were merged in PR #130, an adversarial build with the obsolete provider variable set contained no endpoint match, and live browser verification observed the queued zero-scan path with no `/onboarding-scan/` request.
 
-`https://seahorse-app-4oasq.ondigitalocean.app/onboarding-scan/v1/onboarding/scan`
-
-Therefore deleting the service **now** would break the live `/create` website-scan flow.
-
-This is separate from MaintenanceOS telephony. The frozen phone runtime is not hosted by this App Platform service.
+The paid provider component itself still exists: `/onboarding-scan/health` returns 200. Deleting it is now safe from the website-dependency perspective, subject only to valid provider mutation authority.
 
 ## Canonical architecture
 The website source already supports a claims-safe queued fallback when the scan endpoint is unset. Repository documentation also defines the intended hosted scan as a separate companion and explicitly separates it from frozen telephony.
@@ -45,8 +41,8 @@ The website source already supports a claims-safe queued fallback when the scan 
 `scripts/remove-onboarding-scan-service.py` implements the provider-side fail-closed portion. It defaults to dry-run, refuses while the live bundle references the service, refuses if no static site remains, requires exactly one target service, requires an exact apply confirmation string, and restores the original spec if post-change health fails.
 
 ## Current blocker
-The connected DigitalOcean integration does not expose App Platform GET/PUT operations. The authorised machine has no `doctl`, no DigitalOcean token in environment/config, and no repository DigitalOcean API secret. Plugin discovery found no separate App Platform-capable DigitalOcean integration.
+The repository now has an existing `DIGITALOCEAN_ACCESS_TOKEN` secret and the guarded retirement workflow can execute on an authorised self-hosted runner. However, DigitalOcean rejects that credential: guarded run `36746304812` passed live-source, dependency and unit guards, then the first App Platform GET failed with `HTTP Error 401: Unauthorized`. Apply was skipped and no provider mutation occurred.
 
-A scoped DigitalOcean token with `app:read` + `app:update`, or an authenticated App Platform control surface accessible to the agent, is required to execute the final mutation.
+The remaining action is to replace/refresh that repository secret with a valid token authorised for App Platform read/update on app `98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661`, or connect an equivalent App Platform-capable authorised control path. Do not paste the token into chat.
 
-No destructive action was taken.
+Once valid authority exists, rerun the existing Step-5 retirement workflow against the exact deployed application SHA. It performs target-only removal, preservation checks and automatic rollback on failed post-change verification.

@@ -1,27 +1,43 @@
 # MaintenanceOS Website Master Problem Log
 
-## MOS-WEB-COST-001 — Paid App Platform onboarding-scan cannot yet be retired safely
-Status: BLOCKED / SAFE MUTATION PATH PREPARED
+## MOS-WEB-COST-001 — Paid App Platform onboarding-scan provider component remains billable
+Status: BLOCKED / WEBSITE DECOUPLED / PROVIDER CREDENTIAL INVALID
 Opened: 2026-09-28
 
 Problem:
-DigitalOcean App Platform service `onboarding-scan` carries a recurring $5/month target cost inside `seahorse-app`.
+DigitalOcean App Platform service `onboarding-scan` still exists inside `seahorse-app` and remains the approximately $5/month retirement target.
 
-Root cause / safety finding:
-The live static `/create` bundle currently calls the paid service directly at
-`https://seahorse-app-4oasq.ondigitalocean.app/onboarding-scan/v1/onboarding/scan`.
-Deleting the component before removing that compiled dependency would regress the website scan flow.
+Current safety state:
+The public website is now fully decoupled from that service. Source-owned `siteConfig.onboardingScanEndpoint` is unconditionally empty, so an obsolete provider build variable cannot compile the paid endpoint back into the public client.
 
-Completed independent work:
-- verified live static and service routes;
-- verified the paid component from the DigitalOcean invoice;
-- verified frozen MaintenanceOS telephony is outside this App Platform component;
-- exhausted current DigitalOcean connector, local CLI/config, GitHub-secret and plugin-control paths;
-- added fail-closed component-retirement tooling and regression tests;
-- documented the exact safe cutover order.
+Verified evidence:
+- PR #130 merged the source-level retirement at `e8e7ce16c49435beb00c3516b122d64664a259f1`;
+- adversarial production build with the obsolete `NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT` deliberately set: PASS;
+- exact `rg -F "onboarding-scan/v1/onboarding/scan" out`: no matches / expected exit code 1;
+- full integrated suites: 241/241 repository tests, 294/294 runtime/package tests, 16/16 accessibility;
+- throttled mobile `/create` acceptance: PASS at 390x844@3, 6x CPU throttle, 250 ms latency and 1.4 s JS delay;
+- live App Platform release was verified on application SHA `4e896a5b4dcf2c8231b34bab3071b5ac68e36751`;
+- live dependency guard reports `LIVE_BUNDLE_REFERENCES_TARGET=false`;
+- live browser journey reaches the queued zero-scan path with business name `alleygates`, locations/phone/contact email/services empty, zero `/onboarding-scan/` requests and zero page errors;
+- live `/` and `/create/` return 200;
+- live `/onboarding-scan/health` still returns 200, proving the paid provider component has not yet been removed.
+
+Provider mutation evidence:
+- the repository secret `DIGITALOCEAN_ACCESS_TOKEN` exists and is injected only as a masked workflow secret;
+- guarded retirement run `36746304812` passed exact-live-source validation, the live dependency check, and provider-retirement unit tests;
+- its provider dry-run then failed on the first App Platform GET with `HTTP Error 401: Unauthorized`;
+- apply and post-change steps were skipped, so no DigitalOcean spec mutation occurred;
+- an earlier independent guarded attempt `36745604197` reached the same 401 before mutation;
+- DigitalOcean connector access available to this estate exposes no App Platform GET/PUT operation; no valid local `doctl`/token or environment-scoped alternative is available;
+- temporary one-shot runner/workflow experiments created during verification were cleaned up; no droplet, replacement server or paid infrastructure was created;
+- MaintenanceOS telephony was not touched.
+
+Remaining blocker:
+Replace/refresh the repository secret `DIGITALOCEAN_ACCESS_TOKEN` with a valid token authorised to read and update App Platform app `98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661`, or connect an equivalent authorised App Platform control path. Do not paste the token into chat.
+
+Once valid authority exists, rerun the existing guarded Step-5 provider-retirement workflow against the exact deployed application SHA. It is designed to remove only `onboarding-scan` and its ingress, preserve unrelated components, verify `/` and `/create/`, require scan health to stop returning 200, and restore the original spec automatically on failed post-change verification.
 
 Evidence: `docs/COST_CUT_ONBOARDING_SCAN_2026-09-28.md`.
-
 
 ## MOS-WEB-COMM-001 — Final create-step copy contradicted receipt-backed production behaviour
 Status: RESOLVED / VERIFIED
