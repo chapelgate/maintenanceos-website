@@ -17,9 +17,9 @@ const STAGE_COPY = [
   },
   {
     id: "check",
-    short: "Scan if configured — otherwise queue the crawl",
-    body: "If a scan service is configured we ask the SSRF-safe companion for a draft. If not, the crawl is queued. We do not invent extracted hours, services, or FAQs.",
-    note: "SSRF-safe website scan is under testing — not a live knowledge crawl. Staging often queues the crawl honestly.",
+    short: "Validate the URL and prepare a reviewable draft",
+    body: "We validate the public URL and use its hostname only as a setup hint. This public site does not crawl pages; missing hours, services, or FAQs stay empty until reviewed or supplied.",
+    note: "Public website crawl is retired from this path. The Check step validates the address; it does not claim extracted website knowledge.",
     status: "UNDER_TEST",
   },
   {
@@ -144,8 +144,8 @@ export function HowItWorksFlow() {
         >
           Create from website
         </a>
-        . Typical shape: website URL → scan/draft → choose role → review →
-        knowledge pack → optional scripted sandbox → early access. We do not invent crawl results or a
+        . Typical shape: website URL → validate/draft → choose role → review →
+        knowledge pack → optional scripted sandbox → early access. We do not invent missing business facts or a
         live phone number.
       </p>
 
