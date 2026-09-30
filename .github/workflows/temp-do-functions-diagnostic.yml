@@ -1,0 +1,123 @@
+name: Temp DO Functions Diagnostic
+
+on:
+  push:
+    branches:
+      - ops/do-functions-diagnostic-20260930
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      DO_APP_ID: 98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661
+      TARGET_SHA: aec296faccdbfd66af3a447c352e997f76651fb5
+    steps:
+      - name: Read App Platform function state
+        shell: bash
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$DIGITALOCEAN_ACCESS_TOKEN"
+          api="https://api.digitalocean.com/v2/apps/$DO_APP_ID"
+          auth=(-H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN")
+          curl -fsS "${auth[@]}" "$api" -o /tmp/app.json
+          curl -fsS "${auth[@]}" "$api/deployments?per_page=20" -o /tmp/deployments.json
+          python3 - <<'PY'
+          import json, os
+          app=json.load(open('/tmp/app.json'))['app']
+          spec=app.get('spec') or {}
+          print('SPEC_FUNCTIONS='+json.dumps([{
+              'name':f.get('name'),
+              'source_dir':f.get('source_dir'),
+              'github':{k:(f.get('github') or {}).get(k) for k in ('repo','branch','deploy_on_push')}
+          } for f in spec.get('functions') or []],separators=(',',':')))
+          print('SPEC_INGRESS='+json.dumps((spec.get('ingress') or {}).get('rules') or [],separators=(',',':')))
+          for label,key in [('ACTIVE','active_deployment'),('IN_PROGRESS','in_progress_deployment')]:
+              d=app.get(key) or {}
+              print(label+'='+json.dumps({
+                  'id':d.get('id'),'phase':d.get('phase'),'cause':d.get('cause'),
+                  'functions':[{
+                    'name':x.get('name'),'source_commit_hash':x.get('source_commit_hash'),
+                    'namespace':x.get('namespace')
+                  } for x in d.get('functions') or []],
+                  'progress':d.get('progress')
+              },separators=(',',':')))
+          deps=json.load(open('/tmp/deployments.json')).get('deployments') or []
+          rows=[]
+          for d in deps[:12]:
+              rows.append({
+                'id':d.get('id'),'phase':d.get('phase'),'cause':d.get('cause'),
+                'functions':[{
+                  'name':x.get('name'),'source_commit_hash':x.get('source_commit_hash'),
+                  'namespace':x.get('namespace')
+                } for x in d.get('functions') or []],
+                'progress':d.get('progress')
+              })
+          print('RECENT='+json.dumps(rows,separators=(',',':')))
+          target=os.environ['TARGET_SHA']
+          candidates=[d for d in deps if any((x.get('source_commit_hash') or '')==target for x in (d.get('functions') or []))]
+          chosen=(candidates[0] if candidates else next((d for d in deps if d.get('functions')),None))
+          if chosen:
+              f=(chosen.get('functions') or [{}])[0]
+              print('LOG_TARGET='+str(chosen.get('id',''))+'|'+str(f.get('name','')))
+          else:
+              print('LOG_TARGET=|')
+          PY
+          target="$(python3 - <<'PY'
+          import json,os
+          deps=json.load(open('/tmp/deployments.json')).get('deployments') or []
+          want=os.environ['TARGET_SHA']
+          candidates=[d for d in deps if any((x.get('source_commit_hash') or '')==want for x in (d.get('functions') or []))]
+          chosen=(candidates[0] if candidates else next((d for d in deps if d.get('functions')),None))
+          if chosen:
+              f=(chosen.get('functions') or [{}])[0]
+              print(str(chosen.get('id',''))+' '+str(f.get('name','')))
+          else: print(' ')
+          PY
+          )"
+          dep_id="${target%% *}"
+          comp="${target#* }"
+          if [ -n "$dep_id" ] && [ -n "$comp" ]; then
+            code="$(curl -sS -o /tmp/meta.json -w '%{http_code}' "${auth[@]}" "$api/deployments/$dep_id/components/$comp/logs?type=BUILD&follow=false" || true)"
+            echo "BUILD_LOG_META_HTTP=$code"
+            if [ "$code" = "200" ]; then
+              python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/meta.json'))
+          print('BUILD_LOG_META_KEYS='+','.join(sorted(x.keys())))
+          urls=[]
+          for key in ('url','live_url'):
+              if x.get(key): urls.append(x[key])
+          for key in ('historic_urls','historic_logs'):
+              for item in x.get(key) or []:
+                  if isinstance(item,str): urls.append(item)
+                  elif isinstance(item,dict):
+                      for k in ('url','download_url'):
+                          if item.get(k): urls.append(item[k])
+          urls=list(dict.fromkeys(urls))
+          open('/tmp/urls.txt','w').write('\n'.join(urls))
+          print('BUILD_LOG_URL_COUNT='+str(len(urls)))
+          PY
+              : >/tmp/build.log
+              while IFS= read -r url; do
+                [ -n "$url" ] || continue
+                curl -fsSL --max-time 20 "$url" >>/tmp/build.log || true
+                printf '\n' >>/tmp/build.log
+              done </tmp/urls.txt
+              echo "BUILD_LOG_SAFE_TAIL_BEGIN"
+              python3 - <<'PY'
+          from pathlib import Path
+          import re
+          lines=Path('/tmp/build.log').read_text(errors='replace').splitlines() if Path('/tmp/build.log').exists() else []
+          sensitive=re.compile(r'(authorization:|token=|password=|secret=)',re.I)
+          for line in [x for x in lines if not sensitive.search(x)][-180:]:
+              print(line[:1800])
+          PY
+              echo "BUILD_LOG_SAFE_TAIL_END"
+            fi
+          fi
