@@ -72,7 +72,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Public customer portal / account login / billing GA
 - Live email / messaging / remote AI side effects as “live now”
 - Certifications (ISO, SOC 2, Cyber Essentials, or others)
-- Ratings, reviews, aggregateRating, or invented crawl results
+- Ratings, reviews, aggregateRating, or invented website facts
 - Invented tracking, a live consent banner, or Google Analytics / PECR / GDPR compliance certification
 - Fake uptime percentages, customer logos, awards, or named case studies
 - That AI will overtake humans or run the operation unsupervised
