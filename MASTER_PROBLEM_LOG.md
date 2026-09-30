@@ -73,7 +73,7 @@ The corrected route-shape assertion passed in independent verification: exactly 
 
 
 ## MOS-WEB-CI-002 — DigitalOcean deploy workflow was pinned to an obsolete source SHA
-Status: FIXED / DEPLOYMENT VERIFICATION PENDING
+Status: RESOLVED / LIVE DEPLOY VERIFIED
 Opened: 2026-09-30
 
 Problem:
@@ -92,4 +92,27 @@ Surgical fix:
 No new app, droplet, credential, hosting provider, or deployment path was created.
 
 Verification:
-Workflow source reviewed and repository diff will be checked before merge. Final closure requires a successful dispatch against the merged exact SHA and independent live readback of `release.json`.
+- workflow-only repair diff passed `git diff --check` and was merged as `e3d3b03f7c90d9fa3f2c59009cdccfc4b0506df3`;
+- the manual workflow dispatch for that exact SHA did not start because GitHub reported an Actions-budget block before any workflow step executed;
+- the existing DigitalOcean App Platform native auto-deploy path independently rebuilt from `main`;
+- cache-bypassed live `release.json` then reported exact commit `e3d3b03f7c90d9fa3f2c59009cdccfc4b0506df3` with build time `2026-09-30T14:44:14.451Z`;
+- live `/create/` retained the expected "Check this website" journey and no native `<form>` regression.
+
+The current release therefore deployed through the existing native App Platform path. The exact-SHA manual workflow remains a guarded fallback when hosted Actions execution is available.
+
+
+## MOS-WEB-CI-003 — GitHub-hosted Actions budget blocks manual deployment fallback
+Status: RECORDED / NON-BLOCKING TO CURRENT RELEASE
+Opened: 2026-09-30
+
+Problem:
+Manual deployment run `36731230936` for exact source `e3d3b03f7c90d9fa3f2c59009cdccfc4b0506df3` failed before any job step started. GitHub check annotation: "The job was not started because an Actions budget is preventing further use."
+
+Impact:
+The hosted-runner manual force-rebuild fallback cannot currently execute. No product test or DigitalOcean API step failed, and no secret was exposed.
+
+Current-release resolution:
+The existing DigitalOcean App Platform native auto-deploy path remained operational and deployed the exact same `main` SHA, independently verified through live `release.json`. Therefore this quota condition does not block the current website release.
+
+Future handling:
+Do not spend or add infrastructure merely to silence this condition. If a future release genuinely requires manual force rebuild while hosted Actions remain unavailable, reuse an authorised trusted self-hosted execution path or restore Actions budget through normal account administration.
