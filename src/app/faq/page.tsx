@@ -20,7 +20,7 @@ export default function FaqPage() {
       <JsonLd data={faqPageJsonLd()} />
       <PageHero
         title="Frequently asked questions"
-        lede="Straight answers aligned with our product claims register. Same path as Create from website: website URL → check → review → pack → optional scripted sandbox → early access. No live phone, no invented crawl, no marketing spin on readiness."
+        lede="Straight answers aligned with our product claims register. Same path as Create from website: website URL → check → review → pack → optional scripted sandbox → early access. No live phone, no invented business facts, no marketing spin on readiness."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
         <FunnelPathStrip />
