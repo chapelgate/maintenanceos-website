@@ -35,7 +35,7 @@ function exportedFile(urlPath) {
 function serveExport() {
   const server = http.createServer(async (req, res) => {
     const pathname = new URL(req.url || "/", "http://127.0.0.1").pathname;
-    if (pathname === "/api/onboarding-scan" && req.method === "POST") {
+    if (pathname === "/api/website/scan" && req.method === "POST") {
       res.writeHead(200, {
         "content-type": "application/json; charset=utf-8",
         "cache-control": "no-store",
@@ -223,7 +223,7 @@ function scanRequests(cdp) {
   return cdp.events.filter((event) => {
     if (event.method !== "Network.requestWillBeSent") return false;
     const url = event.params?.request?.url || "";
-    return url.includes("/api/onboarding-scan");
+    return url.includes("/api/website/scan");
   });
 }
 

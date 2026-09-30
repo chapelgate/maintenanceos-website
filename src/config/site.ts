@@ -44,7 +44,7 @@ export const siteConfig = {
    * Same-origin on-demand website scanner routed to DigitalOcean Functions.
    * There is no always-on scanner container.
    */
-  onboardingScanEndpoint: "/api/onboarding-scan",
+  onboardingScanEndpoint: "/api/website/scan",
   /**
    * Build-time gate for the /create calendar panel. Default false.
    * Companion process uses CALENDAR_ADAPTERS_ENABLED (not inlined here).
