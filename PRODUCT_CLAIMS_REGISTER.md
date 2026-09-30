@@ -126,8 +126,9 @@ access, current carrier quality, deployment readiness or general availability.
 - Join launch list / Request early demo remain secondary early-access conversions.
 - Pricing stays request-pricing / launching-soon unless a separate commercial gate is approved.
 - `/privacy`, `/cookies` and `/terms` remain DRAFT FOR LEGAL REVIEW.
-- Website scan, knowledge pack, scripted sandbox, calendar and SAMPLE dashboard
-  stay labelled honestly according to their flags/evidence.
+- Website-address setup, knowledge pack, scripted sandbox, calendar and SAMPLE
+  dashboard stay labelled honestly according to their evidence. Public website
+  crawl is retired from the current /create path and must not be presented as available.
 - Do not advertise voice-provider brands as a customer promise. Voice architecture
   is still under commissioning and may change only through its own evidence gates.
 
