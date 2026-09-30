@@ -95,3 +95,20 @@ Status: RECORDED — NON-BLOCKING TO STEP 9
 - Container verification completed successfully through build, non-root check, `/health` smoke and metadata generation.
 - The subsequent `actions/upload-artifact` step failed because GitHub reported the repository/account artifact storage quota is full and recalculates usage every 6–12 hours.
 - This occurred after all product/container acceptance gates and does not alter runtime correctness. No destructive artifact deletion was performed as part of this narrow Step 9 change.
+
+
+## 2026-09-30 — Live Gemini call greets then stalls silent
+Status: ROOT CAUSE ISOLATED — HOTFIX VERIFIED — LIVE DEPLOY BLOCKED
+
+- Symptom: owner placed a real call to the accepted MaintenanceOS test number; the initial Gemini/Gacrux greeting played, then the call went silent after caller speech.
+- Live runtime remained healthy at `https://165-227-227-9.sslip.io/health` with HTTP 200 and realtime voice enabled.
+- DigitalOcean action history shows no reboot, restore, rebuild or other host mutation on droplet `601962983` since 2026-09-27, ruling out same-day infrastructure drift.
+- Accepted live baseline: commit/evidence `4f5bb42cbb267ad040273932a97e9090425496de`, host marker `ROLLBACK_PRE_PR69_AFTER_LIVE_REJECTION`, Gemini/Gacrux.
+- The frozen live baseline predates commit `330d042596bcb38c870aa1e4660105c791e1f98d` (`fix(voice): recover stalled response turns`), which adds a bounded no-response watchdog after a finished caller turn. It also predates the later safer 600 ms Gemini VAD default from `d6cc4148413ce4b309081e158dd0f4e881a78a16`.
+- Narrow backport created from the accepted baseline only: `51da30f` on branch `hotfix/mos-stalled-turn-20260930`, tag `maintenanceos-stalled-turn-hotfix-20260930`. Product changes are limited to `gemini_voice.py` and `tests/test_gemini_latency_tuning.py`.
+- Local focused voice verification: 55 passed. Wider Windows regression: 359 passed with one unrelated Windows POSIX-permission assertion.
+- Independent Linux estate verification run `36716049092`: focused voice regression PASS; full deterministic regression PASS with 373 passed, 1 deselected, 16 pre-existing warnings.
+- The failed earlier Linux run `36715807296` did not exercise product tests; it stopped at a pre-existing runner-policy check. A test-only rerun isolated that infrastructure issue and proved the product patch.
+- No live deployment was made during investigation.
+- Safe production-write routes were exhausted: DigitalOcean connector has no remote-exec capability; the estate runner reaches the private/public SSH ports but root authentication is denied; repository/environment Action secret inventory is empty from the authorised GitHub principal.
+- Do not rebuild, restore, reset credentials or replace the accepted live droplet merely to force this hotfix onto production. Preserve rollback and use an authenticated existing-host deployment lane.
