@@ -392,7 +392,7 @@ No telephony, provider routing, pricing, public-launch flag or paid
 infrastructure was changed by this repair.
 
 ## MOS-WEB-CREATE-002 ? /create ended in email instead of an interactive receptionist preview
-Status: RESOLVED / VERIFIED CANDIDATE
+Status: RESOLVED / VERIFIED LIVE
 Opened: 2026-09-30
 Resolved: 2026-09-30
 
@@ -425,6 +425,14 @@ Verification candidate evidence:
 - rendered visible-text audit across exported HTML: 0 visitor-visible occurrences of `under test`, `under testing`, or `sandbox`;
 - `git diff --check`: PASS;
 - live telephony, carrier routing, provisioning adapters and provider credentials were not modified.
+
+Live release verification:
+- PR #139 merged exact verified head cbf07ffff47ed327d9b0ea63fbb9910002142c75 into main as 358027a9d76ffd05d9686384c55a17220176ce5b;
+- DigitalOcean App Platform native auto-deploy converged to release marker 358027a9d76ffd05d9686384c55a17220176ce5b, built 2026-09-30T20:08:12.798Z;
+- live / and /create/ both returned HTTP 200;
+- live Edge mobile acceptance on the public URL passed: Try your receptionist, caller question What services do you offer?, pack-aware answer, 0 production lead/email requests before optional Save, 0 runtime exceptions;
+- live sitemap audit covered 26 public URLs with 0 visitor-visible under test, under testing, or sandbox wording;
+- all 7 scripts referenced by live /create/ were checked and contained 0 references to the retired onboarding-scan/v1/onboarding/scan endpoint.
 
 Cross-engine note:
 The pre-existing Firefox/WebKit smoke runner did not return a fresh result on the authorised Windows verifier during this candidate run and had no active browser child when inspected. This was treated as a verifier-environment issue, not product evidence. The prior frozen cross-engine baseline remains green; the release-critical current change is additionally covered by the successful real Edge mobile interactive acceptance and Edge 18/18 viewport matrix.
