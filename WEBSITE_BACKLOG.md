@@ -1,7 +1,7 @@
 # WEBSITE_BACKLOG.md
 
 **Owner:** MOS Website Manager
-**Updated:** 2026-09-27
+**Updated:** 2026-09-30
 **Source:** MISSION_BRIEF + current repository/deployment evidence
 
 This is the single persistent website problem register. Do not create parallel problem lists for the same website work.
@@ -37,7 +37,7 @@ This is the single persistent website problem register. Do not create parallel p
 | F18 | Consent-gated analytics architecture | **DONE BASELINE / LIVE VERIFIED** — original Step 9; cookieless first-party measurement | Analytics |
 | F19 | Staging deploy documentation | **DONE** — DigitalOcean static staging documented; companion docs aligned to DO-only policy | DevOps |
 | F20 | Automated functional/release tests | **DONE BASELINE** — full repository tests + build + performance + accessibility + live health + exact release-SHA verification are release gates | QA |
-| F21 | Mobile/cross-browser QA | **PARTIAL** — true 390px Edge/mobile journey verified; broader browser/manual matrix remains open | QA |
+| F21 | Mobile/cross-browser QA | **DONE ENGINEERING / MANUAL HARDWARE GATE REMAINS** — Edge plus Playwright Firefox/WebKit now cover six buyer-critical routes at 390px, 768px and 1440px (54 route/engine/viewport checks total); physical Safari/iOS and manual AT/keyboard coverage remain launch-only human QA | QA |
 | F22 | Red team on staging | **DONE AUTOMATED / BOUNDED** — 2026-09-27 public-surface red-team regression passed 0 failures under an 18-request budget; this is not an independent penetration test | Red Team |
 | F23 | Durable handoff/source-of-truth docs | **DONE** — `CURSOR_HANDOFF.md`, `WEBSITE_SOURCE_OF_TRUTH.md`, Website Manager loop | Documentation |
 | F24 | Original website engineering DoD verification | **DONE** — original 50-step programme release verified; separate continuation/launch gates remain tracked | Final Verifier |
@@ -55,7 +55,7 @@ This is the single persistent website problem register. Do not create parallel p
 | C4 | Continuation Step 4 — positioning/message refinement | **DONE IN CANDIDATE** — buyer message sharpened around structured UK maintenance intake, critical-vs-routine separation, human authority and traceability; public provider/competitor wording removed; no capability claim promoted | Positioning + Website Manager |
 | C5 | Continuation Step 5 — brand/UI consistency | **DONE IN CANDIDATE** — publisher identity normalised to Chapelgate; pricing CTA restored to shared accent token + 44px minimum target; regression added for naming/token drift | Brand + Front-End + Website Manager |
 | C6 | Continuation Step 6 — full functional QA | **DONE IN CANDIDATE** — zero-dependency exported-site + local lead-contract smoke added to release preflight; no production side effects | QA + Website Manager |
-| C7 | Continuation Step 7 — mobile/cross-browser QA | **DONE ENGINEERING IN CANDIDATE** — reusable real-Edge viewport smoke added for mobile/tablet/desktop; Safari/Firefox/manual AT remain explicit human launch coverage | QA + Front-End |
+| C7 | Continuation Step 7 — mobile/cross-browser QA | **DONE ENGINEERING / EXTENDED 2026-09-30** — existing real-Edge mobile/tablet/desktop smoke retained; dev-only Playwright Firefox + WebKit matrix adds the same six critical routes across 390px/768px/1440px with console/page-error capture and failure screenshots; physical Safari/iOS/manual AT remain explicit human launch coverage | QA + Front-End |
 | C8 | Continuation Step 8 — security hardening | **DONE ENGINEERING IN CANDIDATE** — live header inventory executable added; meta CSP/referrer verified; unsupported static-host response headers documented as explicit residual launch risk; no duplicate hosting | Security + DevOps + Website Manager |
 | C9 | Continuation Step 9 — red-team public staging | **DONE IN CANDIDATE** — bounded 18-request live staging red-team passed 0 failures; sensitive paths/methods/reflection/redirect/error leakage/CORS checked without destructive activity | Red Team + Defender |
 | C10 | Continuation Step 10 — accessibility verification | **DONE ENGINEERING IN CANDIDATE** — 12/12 source/export checks + 18/18 real-Edge viewport checks pass; manual AT/Safari remains explicit human launch QA | Accessibility + QA |

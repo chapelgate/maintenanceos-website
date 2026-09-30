@@ -36,7 +36,9 @@
     "manager:preflight": "node scripts/website-manager-loop.mjs preflight",
     "manager:verify": "node scripts/website-manager-loop.mjs verify",
     "manager:record": "node scripts/website-manager-loop.mjs record",
-    "provisioning-gateway": "node --experimental-strip-types packages/provisioning-gateway/src/server.ts"
+    "provisioning-gateway": "node --experimental-strip-types packages/provisioning-gateway/src/server.ts",
+    "browser:cross": "node scripts/browser-cross-engine-smoke.mjs",
+    "browser:install": "playwright install firefox webkit"
   },
   "dependencies": {
     "next": "16.3.6",
@@ -50,6 +52,7 @@
     "@types/react-dom": "19.3.0",
     "eslint": "9.39.5",
     "eslint-config-next": "16.3.6",
+    "playwright": "1.63.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

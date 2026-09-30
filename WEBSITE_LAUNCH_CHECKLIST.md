@@ -1,7 +1,7 @@
 # WEBSITE_LAUNCH_CHECKLIST.md
 
 **Owner:** MOS Website Manager + Final Verifier
-**Updated:** 2026-09-27
+**Updated:** 2026-09-30
 **Mode:** PRE-LAUNCH
 **Rule:** Do **not** set `NEXT_PUBLIC_PUBLIC_LAUNCH=true` until every launch-only gate below is cleared.
 
@@ -90,7 +90,8 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 - [x] Companion deployment policy says **do not use Render**; any future hosted
   companion must use a separately authorised DigitalOcean process.
 - [x] Automated repository/release test baseline is green.
-- [ ] Broader cross-browser/manual mobile matrix complete.
+- [x] Automated cross-engine matrix complete: Edge + Firefox + WebKit across six buyer-critical routes at mobile/tablet/desktop widths.
+- [ ] Physical Safari/iOS plus manual mobile/keyboard/assistive-technology pass recorded before public launch.
 - [x] Bounded automated staging red-team pass complete; independent penetration testing remains a separate product/launch assurance decision.
 
 ## PUBLIC_LAUNCH flip gate

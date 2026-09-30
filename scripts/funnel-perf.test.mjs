@@ -24,15 +24,15 @@ test("SiteHeader stays a server component with Escape on native details", () => 
   assert.match(header, /dangerouslySetInnerHTML/);
 });
 
-test("/create keeps the customer journey in one reliable client bundle", () => {
+test("/create defers later steps without weakening the hydration-safe entry", () => {
   const form = read("src/components/CreateReceptionistForm.tsx");
-  assert.match(
-    form,
-    /from ["']@\/components\/CreateReceptionistLaterSteps["']/,
-  );
-  assert.doesNotMatch(form, /next\/dynamic/);
-  assert.doesNotMatch(form, /loadLaterSteps/);
-  assert.doesNotMatch(form, /CreateLaterStepsFallback/);
+  assert.match(form, /next\/dynamic/);
+  assert.match(form, /import\(["']@\/components\/CreateReceptionistLaterSteps["']\)/);
+  assert.match(form, /ssr:\s*false/);
+  assert.match(form, /CreateLaterStepsFallback/);
+  assert.match(form, /useSyncExternalStore/);
+  assert.match(form, /disabled=\{!hydrated\}/);
+  assert.doesNotMatch(form, /<form\b/);
   assert.doesNotMatch(form, /from ["']@\/lib\/onboarding-create["']/);
   assert.doesNotMatch(form, /from ["']@\/lib\/lead-adapter["']/);
   assert.doesNotMatch(form, /from ["']@\/config\/site["']/);

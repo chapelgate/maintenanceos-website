@@ -116,3 +116,72 @@ The existing DigitalOcean App Platform native auto-deploy path remained operatio
 
 Future handling:
 Do not spend or add infrastructure merely to silence this condition. If a future release genuinely requires manual force rebuild while hosted Actions remain unavailable, reuse an authorised trusted self-hosted execution path or restore Actions budget through normal account administration.
+
+## MOS-WEB-QA-001 — Browser QA covered only Edge/Chromium
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+The durable browser gate exercised Microsoft Edge only. The backlog therefore
+could not close the autonomous portion of broader browser-engine QA.
+
+Surgical fix:
+- add Playwright 1.63.0 as a pinned dev-only dependency;
+- add Firefox 155.0 and WebKit 26.6 smoke coverage for the same six critical
+  routes and 390/768/1440 viewport classes;
+- capture page errors, console errors, horizontal overflow, route structure,
+  `/create/` non-native-form behaviour, JSON results and failure screenshots;
+- retain the existing Edge CDP gate instead of replacing working coverage.
+
+Verification:
+Edge 18/18 PASS; Firefox/WebKit 36/36 PASS; zero cross-engine failures.
+Evidence: `docs/CROSS_ENGINE_BROWSER_QA_2026-09-30.md`.
+
+## MOS-WEB-QA-002 — Local browser smoke could emit production measurement traffic
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+The local exported-site browser build contains the production cookieless
+measurement endpoint by default. Initial WebKit QA exposed localhost CORS
+rejections and showed that browser smoke could create test measurement traffic.
+
+Root cause:
+Browser QA isolated the website files but did not isolate the outbound bounded
+measurement request.
+
+Surgical fix:
+- Playwright fulfils only the website-events request with a synthetic local 202;
+- Edge CDP blocks only `*/v1/public/website-events`;
+- production lead submission is not intercepted or exercised;
+- source tests lock both isolation controls.
+
+Verification:
+Corrected Firefox/WebKit matrix reports 0 page errors and 0 console errors;
+all 36 checks pass. Existing Edge matrix remains 18/18 PASS.
+
+## MOS-WEB-PERF-001 — Current main exceeded the existing /create release budget
+Status: RESOLVED / VERIFIED
+Opened: 2026-09-30
+
+Problem:
+Fresh-clone release preflight on current `main` SHA `a11a55b170f9832d5ea3013cce47fe1a7279df33` failed the unchanged performance gate. `/create/` measured 628 KB raw initial first-party JavaScript and 191 KB gzip against the existing 600 KB / 190 KB limits.
+
+Root-cause evidence:
+The same failure reproduced on an untouched fresh clone of `main`, proving the new Playwright QA dependency was not the cause. Repository history showed that later create steps had previously been code-split, but the boundary was removed during the September 28 mobile convergence. The documented mobile root cause was native form navigation before hydration; the current entry step already removes the native form and disables its action until hydration.
+
+Surgical fix:
+- restore only the `CreateReceptionistLaterSteps` dynamic boundary;
+- retain the current hydration-safe non-native Step 1 and all current mobile safeguards;
+- provide a bounded Step-2 loading fallback that keeps the visitor on `/create/`;
+- update the performance regression to require the split and the hydration protections together;
+- do not raise either performance budget.
+
+Verification:
+- `/create/` initial JS reduced from 628 KB raw / 191 KB gzip to 567 KB raw / 174 KB gzip;
+- unchanged 600 KB raw / 190 KB gzip release budgets PASS;
+- source/accessibility regressions for the create entry PASS;
+- the original real-browser mobile stability acceptance passed at 390x844@3, 6x CPU throttle, 250 ms latency and 1.4 s JS delay;
+- acceptance preserved same-page navigation, durable/idempotent submissions and the degraded-email path.
+
+This repair changes loading boundaries only. It does not change telephony, provisioning, lead semantics, launch flags or hosting topology.
