@@ -10,10 +10,11 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 
 ## Claims truth
 
-- [x] `PRODUCT_CLAIMS_REGISTER.md` refreshed on 2026-09-26 against exact
-  product checkpoint `cc682c3e5dc5a50e6d8ea695767b3e0f1f6f09c8`. Any later
-  product-source change still requires re-checking affected claims before launch
-  or expanding present-fact copy.
+- [x] `PRODUCT_CLAIMS_REGISTER.md` refreshed on 2026-09-30 against exact
+  product checkpoint `498ad82dd87631814195d447d89458480b117951`.
+  Current targeted claims/safety verification is 196/196 PASS. The current live
+  voice greet-then-stall defect and undeployed verified hotfix are explicitly
+  reflected; no voice/GA claim was promoted.
 - [x] Current website copy is regression-gated against VERIFIED / UNDER TEST /
   PLANNED boundaries.
 - [x] No commercially-live / GA / certification / fake-social-proof claims.
@@ -97,7 +98,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 ## PUBLIC_LAUNCH flip gate
 
 - [ ] Owner approval to set `NEXT_PUBLIC_PUBLIC_LAUNCH=true`.
-- [x] Product evidence refresh complete; telephony/commercial gates revisited on 2026-09-26 and remain **NO-GO / PRE-LAUNCH**.
+- [x] Product evidence refresh complete; telephony/commercial gates revisited on 2026-09-30 at product SHA `498ad82d…` and remain **NO-GO / PRE-LAUNCH**.
 - [ ] Legal drafts cleared by counsel.
 - [ ] Security response-header risk resolved/accepted.
 - [ ] Manual accessibility + cross-browser QA complete.
