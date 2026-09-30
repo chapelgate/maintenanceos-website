@@ -88,7 +88,7 @@ test("FAQ JSON-LD stays on /faq/ and uses the shared funnel answers", () => {
     faqs,
     /website URL → check → review → pack → optional scripted sandbox → early access/,
   );
-  assert.match(faqs, /owner-blocked/);
+  assert.match(faqs, /does not fetch or crawl its pages/);
   assert.match(faqs, /Empty hours and services stay empty/);
   assert.match(faqs, /999 guidance \(never 911\)/);
   assert.doesNotMatch(faqs, /always-on phone line is live/i);
@@ -213,7 +213,7 @@ test("exported /faq/ HTML has claims-safe FAQPage JSON-LD when out/ exists", () 
     serialized,
     /website URL → check → review → pack → optional scripted sandbox → early access/,
   );
-  assert.match(serialized, /owner-blocked/);
+  assert.match(serialized, /does not fetch or crawl its pages/);
   assert.match(serialized, /Empty hours and services stay empty/);
   assert.match(serialized, /999 guidance \(never 911\)/);
   assert.match(serialized, /not a live phone/);
