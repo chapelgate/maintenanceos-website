@@ -861,3 +861,60 @@ def test_html_report_is_semantic_escaped_and_has_plain_text_equivalent():
     assert "lock &lt;broken&gt;" in html_body
     assert "<pre" in html_body
     assert "FULL TRANSCRIPT" in html_body
+
+
+
+def test_dispatch_uses_twilio_callsid_for_restore_safe_email_identity(monkeypatch):
+    factory = _factory()
+    monkeypatch.setattr(call_notifications, "SessionLocal", factory)
+    monkeypatch.setenv("INTERNAL_NOTIFICATION_EMAIL", "andy@chapelgatehome.uk")
+    monkeypatch.setenv("EMAIL_MODE", "imap_smtp")
+    monkeypatch.setenv("ENABLE_LIVE_EMAIL", "true")
+    monkeypatch.setenv("SMTP_HOST", "smtp.example.test")
+    monkeypatch.setenv("SMTP_USERNAME", "user")
+    monkeypatch.setenv("SMTP_PASSWORD", "pass")
+    monkeypatch.setenv("SMTP_FROM", "noreply@example.test")
+
+    captured = {}
+    monkeypatch.setattr(
+        call_notifications,
+        "send_email",
+        lambda to, subject, body, **kwargs: captured.update(
+            {"to": to, "subject": subject, "body": body, "kwargs": kwargs}
+        )
+        or {"mock": False, "message_id": "restore-safe-1"},
+    )
+    monkeypatch.setattr(
+        call_notifications,
+        "call_numbers_for_call_sid",
+        lambda _sid: {
+            "caller_number": "+447700900777",
+            "called_number": "+442922716489",
+        },
+    )
+
+    call_sid = "CA0123456789abcdef0123456789abcdef"
+    with factory() as session:
+        client = Client(name="Restore-safe tenant")
+        session.add(client)
+        session.flush()
+        session.add(Property(client_id=client.id, address="Synthetic", postcode="ZZ1 1ZZ"))
+        session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="Restore"))
+        call = CallSession(
+            call_sid=call_sid,
+            caller="sha256:abc",
+            transcript="Caller: the lock is broken on gate 827.",
+        )
+        session.add(call)
+        session.flush()
+        session.add(CallSessionTenant(call_session_id=call.id, client_id=client.id))
+        session.commit()
+        call_id = call.id
+
+    result = dispatch_internal_call_email(call_id)
+
+    assert result["sent"] is True
+    assert captured["kwargs"]["idempotency_key"] == f"maintenanceos-call-report/{call_sid}"
+    assert f"Provider Call ID: {call_sid} (Twilio CallSid)" in captured["body"]
+    assert "Call Started: " in captured["body"]
+    assert captured["body"].count(f"Provider Call ID: {call_sid}") == 1

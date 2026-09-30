@@ -943,6 +943,8 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         f"Caller Number: {details.get('caller_number') or 'not available'} (network caller ID; not identity-verified)",
         f"Contact Number: {details.get('callback_number') or 'not collected'} (spoken callback)",
         f"Number Called: {details.get('called_number') or 'not available'} (Chapelgate line)",
+        f"Provider Call ID: {details.get('provider_call_id') or 'not available'} (Twilio CallSid)",
+        f"Call Started: {details.get('call_started_at') or 'not available'}",
         f"Address: {details.get('caller_address') or 'not collected'}",
         f"Postcode: {details.get('postcode') or 'not collected'}",
         f"Area: {details.get('area') or 'not collected'}",
@@ -1187,6 +1189,15 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
             # Phone-network metadata is fetched after the call from Twilio using
             # the persisted CallSid. It is never placed on the realtime voice path.
             details.update(call_numbers_for_call_sid(cs.call_sid))
+            # CallSid is Twilio's unique call-resource identifier. Keep it in the
+            # internal report so database/snapshot rollback cannot make two calls
+            # operationally indistinguishable when a local numeric ID is reused.
+            details["provider_call_id"] = cs.call_sid
+            if cs.started_at:
+                started = cs.started_at.isoformat(timespec="seconds")
+                details["call_started_at"] = (
+                    f"{started}Z" if cs.started_at.tzinfo is None else started
+                )
             subject, body = build_internal_email(details)
             delivery = queue_outbound(
                 session,
@@ -1232,7 +1243,7 @@ def dispatch_internal_call_email(call_session_id: int) -> dict[str, Any]:
             # existing database action claim, so a timeout/retry cannot duplicate
             # the same logical call report within the provider's retention window.
             html_body = build_internal_email_html(subject, body)
-            provider_idempotency_key = f"maintenanceos-call-report/{call_session_id}"
+            provider_idempotency_key = f"maintenanceos-call-report/{cs.call_sid}"
             send_result = send_email(
                 recipient,
                 subject,
