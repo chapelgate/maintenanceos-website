@@ -1,30 +1,45 @@
 # MaintenanceOS Website External Blockers
 
 **Owner:** MOS Website Manager
-**Updated:** 2026-09-27
+**Updated:** 2026-09-30
 **Rule:** Only genuine external/manual blockers belong here. Exhaust safe authorised alternatives first.
 
 ## OPEN
 
-### WB-002 — App Platform component-only retirement lacks mutation authority
+No external blocker currently prevents ordinary website engineering.
 
-**Scope:** Cost reduction only — retire paid `onboarding-scan` without deleting the free static website.
-**Opened:** 2026-09-28
-
-The live `/create` bundle currently references
-`https://seahorse-app-4oasq.ondigitalocean.app/onboarding-scan/v1/onboarding/scan`,
-so deleting the service before a static rebuild would regress website scan behaviour.
-
-All safe independent work is complete. Component-only fail-closed tooling and evidence are in
-`scripts/remove-onboarding-scan-service.py` and
-`docs/COST_CUT_ONBOARDING_SCAN_2026-09-28.md`.
-
-Remaining external requirement: an authorised DigitalOcean App Platform control path with
-`app:read` + `app:update`. Do not delete the whole app.
-
-Counsel review, manual accessibility/cross-browser QA, the static-host response-header risk decision, and owner public-launch approval are human launch gates tracked in `WEBSITE_BACKLOG.md` / `WEBSITE_LAUNCH_CHECKLIST.md`; they are not current external blockers to ordinary website engineering. Product-evidence refresh and the bounded staging red-team are complete.
+Counsel review, physical Safari/iOS and manual assistive-technology QA, the
+static-host response-header risk decision, and owner public-launch approval remain
+human launch gates tracked in `WEBSITE_BACKLOG.md`, `HUMAN_BLOCKERS.md` and
+`WEBSITE_LAUNCH_CHECKLIST.md`.
 
 ## CLOSED
+
+### WB-002 — App Platform component-only onboarding-scan retirement
+
+**Scope:** Cost reduction only — retire paid `onboarding-scan` without deleting the static website.
+**Opened:** 2026-09-28
+**Closed:** 2026-09-30
+**Resolution:** The public `/create` client was first made source-level fail-closed
+to the zero-scan queued fallback. The paid DigitalOcean App Platform
+`onboarding-scan` service and its ingress rule were then removed through a
+target-scoped, rollback-protected workflow using an existing authorised estate
+credential.
+
+Close evidence:
+- public bundle no longer referenced the retired endpoint before provider mutation;
+- DigitalOcean preflight found exactly one target service and one target ingress rule;
+- post-update App Platform spec retained static site `maintenanceos-website` and
+  reported no remaining service;
+- live `/` and `/create/` remained HTTP 200;
+- live `/onboarding-scan/health` transitioned from 200 to 404;
+- independent read-only App Platform verification returned `SERVICES=`;
+- final website `main` and live release converged on
+  `2601ed0b57efe6af8aaf0f4ef491775b2762d46e`;
+- no replacement server, droplet or paid infrastructure was created.
+
+Evidence: `MASTER_PROBLEM_LOG.md` and
+`docs/COST_CUT_ONBOARDING_SCAN_2026-09-28.md`.
 
 ### WB-001 — Existing DigitalOcean static app appeared not to have deployed Step 2
 
