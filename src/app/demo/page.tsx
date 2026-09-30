@@ -13,7 +13,7 @@ export const metadata = funnelPageMetadata("demo");
 
 const FUNNEL_COPY = [
   "Paste a public site URL and an email so we can record the early access request.",
-  "If a scan service is configured we ask it for a draft. If not, the crawl is queued — we do not invent extracted hours or services.",
+  "We validate the website address and prepare a reviewable draft. The public site does not crawl pages, so missing hours or services stay empty until supplied.",
   "Choose one bounded AI role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom. This does not activate a live agent.",
   "You edit the draft before anything is stored. Empty fields were not invented.",
   "The reviewed draft becomes a knowledge pack and system prompt. Missing hours or services stay missing.",
@@ -74,7 +74,7 @@ export default function DemoPage() {
             Create from website
           </a>
           . Website → Check → Choose → Configure → Review & Pack, then optional sandbox and early
-          access. We do not invent crawl results or a live phone number.
+          access. We do not invent missing business facts or a live phone number.
         </p>
         <ol className="mt-6 space-y-3">
           {pathSteps.map((step, i) => (
