@@ -21,17 +21,17 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.match(create, /label: "Website"/);
   assert.match(create, /label: "Check"/);
   assert.match(create, /label: "Configure"/);
-  assert.match(create, /label: "Review & Pack"/);
+  assert.match(create, /label: "Review & Try"/);
 
   assert.match(flow, /CREATE_JOURNEY_STEPS/);
-  assert.match(flow, /Website → Check → Choose → Configure → Review & Pack/);
-  assert.match(flow, /do not invent extracted hours/);
-  assert.match(flow, /scripted sandbox demo is under testing/);
-  assert.match(flow, /not a live customer call/i);
+  assert.match(flow, /Website → Check → Choose → Configure → Review & Try/);
+  assert.match(flow, /missing business details stay blank/);
+  assert.match(flow, /interactive receptionist demo is available after review/);
+  assert.match(flow, /not a live telephone call/i);
   assert.doesNotMatch(flow, /always-on service/);
 
-  assert.match(page, /Website → Check → Choose → Configure → Review & Pack/);
-  assert.match(page, /scripted sandbox/);
+  assert.match(page, /Website → Check → Choose → Configure → Review & Try/);
+  assert.match(page, /interactive receptionist demo/);
   assert.match(page, /live phone number/);
   assert.match(page, /Create from website/);
   assert.match(page, /funnelPageMetadata\("howItWorks"\)/);
@@ -41,7 +41,7 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.doesNotMatch(page, /commercially generally available/i);
 });
 
-test("features page renders inventory-driven VERIFIED / UNDER TEST cards", () => {
+test("features page renders inventory-driven VERIFIED / PREVIEW cards", () => {
   const page = read("src/app/features/page.tsx");
   const config = read("src/config/phone-ai-features.ts");
   const copy = [page, config].join("\n");
@@ -50,16 +50,16 @@ test("features page renders inventory-driven VERIFIED / UNDER TEST cards", () =>
   assert.match(page, /FeatureStatusChip/);
   assert.match(page, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(page, /marketingCardsByGroup/);
-  assert.match(copy, /Website → Check → Choose → Configure → Review & Pack/);
+  assert.match(copy, /Website → Check → Choose → Configure → Review & Try/);
   assert.match(page, /Create from website/);
   assert.match(page, /Join launch list/);
   assert.match(page, /funnelPageMetadata\("features"\)/);
   assert.match(page, /VERIFIED/);
-  assert.match(page, /UNDER TEST/);
+  assert.match(page, /PREVIEW/);
   assert.match(config, /id: "M-ONB-01"/);
   assert.match(config, /id: "M-TEL-03"/);
   assert.match(config, /MARKETING_CARD_HARD_COUNT/);
-  assert.match(config, /Not a live receptionist or a 30-second phone number/);
+  assert.match(config, /browser demo exists today/);
   assert.doesNotMatch(config, /id: "M-TEL-04"/);
   assert.doesNotMatch(config, /id: "M-CAL-01"/);
   assert.doesNotMatch(page, /heading: "HAVE"/);
@@ -76,8 +76,7 @@ test("static export setting is unchanged", () => {
 test("home CTA strip names the website-to-pack path", () => {
   const page = read("src/app/page.tsx");
   assert.match(page, /website URL/);
-  assert.match(page, /knowledge pack/);
-  assert.match(page, /scripted sandbox/);
+  assert.match(page, /interactive receptionist demo/);
   assert.match(page, /Create from website/);
   assert.match(page, /No live phone demo/);
   assert.match(page, /funnelPageMetadata\("home"\)/);
@@ -89,32 +88,20 @@ test("home CTA strip names the website-to-pack path", () => {
   assert.doesNotMatch(page, /Property maintenance operations for UK landlords/);
 });
 
-test("Fonio matrix notes marketing pages had lagged the create funnel", () => {
+test("Fonio matrix records the current interactive create funnel", () => {
   const matrix = read("docs/competitive/fonio-parity-matrix.md");
+  assert.match(matrix, /Website marketing/);
   assert.match(matrix, /Were lagging/);
-  assert.match(matrix, /Website → Check → Choose → Configure → Review & Pack/);
-  assert.match(matrix, /HAVE \/ UNDER TEST \/ COMING/);
-  assert.match(matrix, /narrative aligned; still not a live phone/);
-  assert.match(matrix, /Demo \/ “see it live” CTAs vs `\/create` funnel/);
-  assert.match(matrix, /demo CTAs aligned; still not a live phone/);
-  assert.match(matrix, /SEO titles \/ descriptions \/ OG vs `\/create` funnel/);
-  assert.match(matrix, /SEO meta aligned; still not a live phone/);
-  assert.match(matrix, /JSON-LD on home \+ funnel pages/);
-  assert.match(matrix, /claims-safe JSON-LD; still not a live phone/);
-  assert.match(matrix, /llms\.txt \/ llms-full\.txt vs `\/create` funnel/);
-  assert.match(matrix, /llms files aligned; still not a live phone/);
-  assert.match(matrix, /FAQ \+ FAQPage JSON-LD vs `\/create` funnel/);
-  assert.match(matrix, /FAQ aligned; still not a live phone/);
-  assert.match(matrix, /Privacy note vs `\/create` website-URL ingest/);
-  assert.match(matrix, /privacy note aligned; still not live telephony data/);
-  assert.match(matrix, /Pricing page clarity/);
-  assert.match(matrix, /pricing copy aligned; still not published list prices/);
-  assert.match(matrix, /Contact \/ enquiry CTAs vs `\/create` funnel/);
-  assert.match(matrix, /contact copy aligned; still not a support desk/);
-  assert.match(matrix, /Security \/ trust marketing vs certifications/);
-  assert.match(matrix, /security copy aligned; still not certified/);
-  assert.match(matrix, /Cookie \/ consent banner vs analytics/);
-  assert.match(matrix, /cookies copy aligned; DRAFT; cookieless first-party measurement only/);
+  assert.match(matrix, /Review & Try/);
+  assert.match(matrix, /optional save/);
+  assert.match(matrix, /interactive browser receptionist preview/);
+  assert.match(matrix, /hosted onboarding-scan companion is retired/);
+  assert.match(matrix, /missing business details stay blank/);
+  assert.match(matrix, /VERIFIED \/ PREVIEW/);
+  assert.match(matrix, /live telephony remains separately commissioned/i);
+  assert.match(matrix, /llms\.txt \/ llms-full\.txt vs \/create funnel/);
+  assert.match(matrix, /FAQ \+ FAQPage JSON-LD vs \/create funnel/);
+  assert.match(matrix, /not a live phone/);
 });
 
 test("cookies stay DRAFT-honest with cookieless first-party measurement only", () => {
@@ -206,18 +193,18 @@ test("security stays claims-safe with SSRF-safe scan and no cert theatre", () =>
 
   assert.match(faqs, /question: "Are you ISO or SOC 2 certified\?"/);
   assert.match(faqs, /bank-grade security/);
-  assert.match(faqs, /SSRF-safe and under test/);
+  assert.match(faqs, /hosted website-scan companion is disabled/i);
   assert.match(faqs, /DRAFT FOR LEGAL REVIEW/);
   assert.match(
     faqs,
     /question: "Are you ISO or SOC 2 certified\?"[\s\S]*relatedHref: "\/create\/"/,
   );
 
-  assert.match(features, /SSRF-safe website scan companion/);
+  assert.match(features, /hosted website-scan companion is disabled/i);
   assert.match(features, /bank-grade/);
   assert.match(home, /No ISO, SOC 2, or bank-grade claims/);
-  assert.match(flow, /SSRF-safe companion/);
-  assert.match(flow, /not a live knowledge crawl/);
+  assert.match(flow, /hosted scan is disabled/i);
+  assert.match(flow, /no live knowledge crawl is claimed/);
 
   assert.match(llms, /SSRF-safe scan under test/);
   assert.match(llms, /no ISO\/SOC 2 or bank-grade claims/);
@@ -306,14 +293,14 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
 
   assert.match(
     faqs,
-    /website URL → check → review → pack → optional scripted sandbox → early access/,
+    /website URL → check → configure → review → interactive receptionist demo → optional save/,
   );
   assert.match(faqs, /not a live phone/);
   assert.match(faqs, /no instant live number/);
   assert.match(faqs, /no public always-on receptionist/);
-  assert.match(faqs, /crawl is queued/);
-  assert.match(faqs, /do not invent extracted hours/);
-  assert.match(faqs, /owner-blocked/);
+  assert.match(faqs, /hosted website crawl is disabled/i);
+  assert.match(faqs, /missing business details stay blank/);
+  assert.doesNotMatch(faqs, /owner-blocked/);
   assert.match(faqs, /Empty hours and services stay empty/);
   assert.match(faqs, /999 guidance \(never 911\)/);
   assert.match(faqs, /not commercially generally available/);
@@ -329,7 +316,7 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
   assert.match(page, /faqPageJsonLd\(\)/);
   assert.match(
     page,
-    /website URL → check → review → pack → optional scripted sandbox → early access/,
+    /website URL → check → configure → review → interactive receptionist demo → optional save/,
   );
   assert.match(page, /Not a live phone/);
   assert.doesNotMatch(page, /commercially generally available now/i);
@@ -345,9 +332,9 @@ test("demo page names the website-to-pack path and does not book a live phone", 
 
   assert.match(create, /label: "Website"/);
   assert.match(page, /CREATE_JOURNEY_STEPS/);
-  assert.match(page, /Website → Check → Choose → Configure → Review & Pack/);
-  assert.match(page, /website URL → check → choose role → configure → review & pack/);
-  assert.match(page, /optional scripted sandbox/);
+  assert.match(page, /Review &amp; Try/);
+  assert.match(page, /website URL → check → choose role → configure → review/);
+  assert.match(page, /optional save/);
   assert.match(page, /Create from website/);
   assert.match(page, /live number/);
   assert.match(page, /funnelPageMetadata\("demo"\)/);

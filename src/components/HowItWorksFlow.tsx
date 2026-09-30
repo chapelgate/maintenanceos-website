@@ -1,6 +1,6 @@
 /**
  * How-it-works flow — matches /create stepper:
- * Website → Check → Choose → Configure → Review & Pack.
+ * Website → Check → Choose → Configure → Review & Try.
  * Unified mos-glass ladder: number → title → status. CSS only; AA arrows/paper.
  */
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
@@ -11,15 +11,15 @@ const STAGE_COPY = [
   {
     id: "website",
     short: "Start with a public business URL",
-    body: "Paste a public site URL and an email so we can record the early access request. Checking the website does not assign a live phone number.",
-    note: "The public /create funnel exists today — early access only, not a live receptionist.",
+    body: "Paste a public site URL and email to prepare the receptionist preview. Checking the website does not assign a live phone number.",
+    note: "The public /create funnel exists today and ends in an interactive browser receptionist preview.",
     status: "UNDER_TEST",
   },
   {
     id: "check",
     short: "Scan if configured — otherwise queue the crawl",
-    body: "If a scan service is configured we ask the SSRF-safe companion for a draft. If not, the crawl is queued. We do not invent extracted hours, services, or FAQs.",
-    note: "SSRF-safe website scan is under testing — not a live knowledge crawl. Staging often queues the crawl honestly.",
+    body: "The public site validates the URL. The hosted crawl is disabled, so missing business details stay blank rather than being invented.",
+    note: "The hosted scan is disabled on the public site; no live knowledge crawl is claimed.",
     status: "UNDER_TEST",
   },
   {
@@ -39,8 +39,8 @@ const STAGE_COPY = [
   {
     id: "review_pack",
     short: "Review the final configuration and pack",
-    body: "The reviewed configuration becomes a knowledge pack and protected system prompt. Missing hours or services stay missing, and required customer confirmations must be complete before early-access submission.",
-    note: "Optional scripted sandbox demo is under testing and off by default. It is not a live customer call.",
+    body: "The reviewed configuration becomes a knowledge pack and protected system prompt. Missing hours or services stay missing, and the reviewed configuration becomes the input to the interactive browser demo.",
+    note: "The interactive receptionist demo is available after review. It uses the generated knowledge pack in the browser and is not a live telephone call.",
     status: "UNDER_TEST",
   },
 ] as const satisfies readonly {
@@ -134,7 +134,7 @@ export function HowItWorksFlow() {
         id="flow-heading"
         className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
       >
-        Website → Check → Choose → Configure → Review & Pack
+        Website → Check → Choose → Configure → Review & Try
       </h2>
       <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
         The same steps as{" "}
@@ -144,8 +144,8 @@ export function HowItWorksFlow() {
         >
           Create from website
         </a>
-        . Typical shape: website URL → scan/draft → choose role → review →
-        knowledge pack → optional scripted sandbox → early access. We do not invent crawl results or a
+        . Typical shape: website URL → validate → choose role → configure →
+        review → interactive receptionist demo → optional save. We do not invent crawl results or a
         live phone number.
       </p>
 

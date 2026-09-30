@@ -18,7 +18,7 @@ const OBJECTION_QUESTIONS = [
   "Why only seven features on /features?",
 ];
 
-test("FeatureStatusChip encodes VERIFIED solid blue and UNDER TEST outline", () => {
+test("FeatureStatusChip encodes VERIFIED solid blue and PREVIEW outline", () => {
   const chip = read("src/components/FeatureStatusChip.tsx");
   const css = read("src/app/globals.css");
   const features = read("src/app/features/page.tsx");
@@ -33,7 +33,7 @@ test("FeatureStatusChip encodes VERIFIED solid blue and UNDER TEST outline", () 
   assert.match(css, /color: var\(--color-warn\)/);
   assert.match(features, /<FeatureStatusChip status=\{card\.status\}/);
   assert.match(features, /UNDER_TEST_GROUP_HONESTY/);
-  assert.match(config, /Not on site yet — tracked with product/);
+  assert.match(config, /Preview status/);
   assert.doesNotMatch(features, /phoneAiNotClaimed/);
   assert.doesNotMatch(features, /Explore all gaps/);
   assert.doesNotMatch(features, /ObjectionFaq/);
@@ -85,14 +85,14 @@ test("HIW step cards are a mos-glass number→title→status ladder", () => {
   const flow = read("src/components/HowItWorksFlow.tsx");
   assert.match(flow, /FeatureStatusChip/);
   assert.match(flow, /number → title → status/);
-  assert.match(flow, /Website → Check → Choose → Configure → Review & Pack/);
+  assert.match(flow, /Website .* Review & Try/);
   assert.match(flow, /mos-glass/);
   assert.match(flow, /hiw-step-number/);
   assert.match(flow, /bg-paper/);
-  assert.match(flow, /do not invent extracted hours/);
+  assert.match(flow, /missing business details stay blank/);
 });
 
-test("/create stepper chrome is sticky Website → Check → Choose → Configure → Review & Pack", () => {
+test("/create stepper chrome is sticky Website to Review & Try", () => {
   const stepper = read("src/components/CreateJourneyStepper.tsx");
   const css = read("src/app/globals.css");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
@@ -102,8 +102,8 @@ test("/create stepper chrome is sticky Website → Check → Choose → Configur
   assert.match(stepper, /CREATE_JOURNEY_STEPS/);
   assert.match(css, /\.create-step-chrome/);
   assert.match(css, /position: sticky/);
-  assert.match(later, /Website crawl is queued/);
-  assert.match(later, /will not invent crawl/);
+  assert.match(later, /hosted website crawl is disabled/i);
+  assert.match(later, /missing facts stay blank/i);
   assert.match(preview, /Empty facts/);
   assert.match(preview, /create-missing-chip/);
   assert.doesNotMatch(later, /Mon–Fri 09:00/);
@@ -120,9 +120,9 @@ test("objection FAQ pack is on home and how-it-works, not features", () => {
   for (const question of OBJECTION_QUESTIONS) {
     assert.match(faqs, new RegExp(question.replace(/[?()]/g, "\\$&")));
   }
-  assert.match(faqs, /UNDER TEST/);
+  assert.match(faqs, /PREVIEW/);
   assert.match(faqs, /never 911/);
-  assert.match(faqs, /5 VERIFIED \+ 2 UNDER TEST/);
+  assert.match(faqs, /5 VERIFIED \+ 2 PREVIEW/);
   assert.match(faqs, /tracked with product/);
   assert.doesNotMatch(faqs, /relatedHref/);
 

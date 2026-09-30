@@ -39,39 +39,43 @@ test("/create defers later steps without weakening the hydration-safe entry", ()
   assert.doesNotMatch(form, /ReceptionistDraftPreview/);
 });
 
-test("/create default path does not import companion client islands", () => {
+test("/create default path includes the public journey but code-splits the interactive demo", () => {
   const page = read("src/app/create/page.tsx");
   const form = read("src/components/CreateReceptionistForm.tsx");
+  const journey = read("src/components/CreateJourney.tsx");
   const islands = read("src/components/create-funnel-islands.tsx");
   const enabled = read("src/components/create-funnel-islands.enabled.tsx");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
   const config = read("next.config.ts");
 
-  assert.doesNotMatch(page, /from ["']@\/components\/CreateJourney["']/);
-  assert.doesNotMatch(page, /from ["']@\/components\/CalendarConnectPanel["']/);
-  assert.doesNotMatch(page, /from ["']@\/components\/SandboxTestCallPanel["']/);
+  assert.equal(page.includes("@/components/CreateJourney"), false);
+  assert.equal(page.includes("@/components/CalendarConnectPanel"), false);
+  assert.equal(page.includes("@/components/SandboxTestCallPanel"), false);
   assert.match(page, /CreateIngestPrivacyNote/);
   assert.doesNotMatch(form, /CreateIngestPrivacyNote/);
 
-  assert.doesNotMatch(later, /from ["']@\/components\/CreateJourney["']/);
-  assert.doesNotMatch(later, /from ["']@\/components\/CalendarConnectPanel["']/);
-  assert.doesNotMatch(later, /from ["']@\/components\/SandboxTestCallPanel["']/);
+  assert.equal(later.includes('from "@/components/CreateJourney"'), false);
+  assert.equal(later.includes('from "@/components/CalendarConnectPanel"'), false);
+  assert.equal(later.includes('from "@/components/SandboxTestCallPanel"'), false);
 
-  assert.doesNotMatch(islands, /from ["']@\/components\/CreateJourney["']/);
-  assert.doesNotMatch(islands, /from ["']@\/components\/CalendarConnectPanel["']/);
-  assert.doesNotMatch(islands, /from ["']@\/components\/SandboxTestCallPanel["']/);
-  assert.match(islands, /CreateReceptionistForm/);
-  assert.match(islands, /SandboxTestCallComingSoon/);
-  assert.match(islands, /CalendarConnectComingSoon/);
+  assert.equal(islands.includes("@/components/CreateJourney"), true);
+  assert.equal(islands.includes("@/components/CalendarConnectPanel"), false);
+  assert.equal(islands.includes("SandboxTestCallComingSoon"), false);
+  assert.equal(islands.includes("CalendarConnectComingSoon"), true);
 
-  assert.match(enabled, /from ["']@\/components\/CreateJourney["']/);
-  assert.match(enabled, /from ["']@\/components\/CalendarConnectPanel["']/);
-  assert.match(config, /create-funnel-islands\.enabled/);
-  assert.match(config, /turbopack/);
-  assert.match(config, /resolveAlias/);
+  assert.equal(journey.includes("next/dynamic"), true);
+  assert.equal(journey.includes('import("@/components/SandboxTestCallPanel")'), true);
+  assert.match(journey, /ssr:\s*false/);
+  assert.equal(journey.includes('from "@/components/SandboxTestCallPanel"'), false);
+
+  assert.equal(enabled.includes("@/components/CreateJourney"), true);
+  assert.equal(enabled.includes("@/components/CalendarConnectPanel"), true);
+  assert.equal(config.includes("create-funnel-islands.enabled"), true);
+  assert.equal(config.includes("turbopack"), true);
+  assert.equal(config.includes("resolveAlias"), true);
   assert.doesNotMatch(config, /NormalModuleReplacementPlugin|webpack:\s*\(/);
-  assert.match(config, /NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED/);
-  assert.match(config, /NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED/);
+  assert.equal(config.includes("NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED"), true);
+  assert.equal(config.includes("NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED"), true);
 });
 
 test("root layout does not mark chrome as a client island", () => {

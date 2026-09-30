@@ -12,11 +12,11 @@ import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 export const metadata = funnelPageMetadata("demo");
 
 const FUNNEL_COPY = [
-  "Paste a public site URL and an email so we can record the early access request.",
-  "If a scan service is configured we ask it for a draft. If not, the crawl is queued — we do not invent extracted hours or services.",
-  "Choose one bounded AI role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom. This does not activate a live agent.",
-  "You edit the draft before anything is stored. Empty fields were not invented.",
-  "The reviewed draft becomes a knowledge pack and system prompt. Missing hours or services stay missing.",
+  "Enter your public website and email to prepare the receptionist preview.",
+  "We validate the URL. The hosted crawl is disabled, so missing business details stay blank rather than being invented.",
+  "Choose one bounded AI role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom.",
+  "Configure the role, review the business details, and generate the controlled knowledge pack.",
+  "Press Try your receptionist and ask your own caller questions in the browser.",
 ] as const;
 
 const pathSteps = [
@@ -28,13 +28,8 @@ const pathSteps = [
     return { title: step.label, body, status: "UNDER_TEST" as const };
   }),
   {
-    title: "Optional scripted sandbox",
-    body: "When a local flag is on, a pack-aware scripted demo can run against the stored knowledge pack. It is under testing and off by default. It is not a live customer call.",
-    status: "UNDER_TEST" as const,
-  },
-  {
-    title: "Early access",
-    body: "Submit the create form, join the launch list, or ask for a human briefing. None of these provision a live phone number.",
+    title: "Save setup (optional)",
+    body: "Save the reviewed setup if you want a durable reference emailed to you. Saving is separate from the interactive demo.",
     status: "UNDER_TEST" as const,
   },
 ];
@@ -44,9 +39,9 @@ export default function DemoPage() {
     <>
       <JsonLd data={funnelPageJsonLd("demo")} />
       <PageHero
-        eyebrow="Pre-launch. Not a live phone."
+        eyebrow="Interactive product preview"
         title="Start from your website URL."
-        lede="The honest path is website URL → check → choose role → configure → review & pack → optional scripted sandbox → early access. Create from your site, or request a human briefing. This page does not assign a live number."
+        lede="See the real website journey: website URL → check → choose role → configure → review and try. The interactive demo uses the reviewed knowledge pack in your browser. Saving the setup is optional and the live telephone service is separate."
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">
@@ -73,8 +68,8 @@ export default function DemoPage() {
           >
             Create from website
           </a>
-          . Website → Check → Choose → Configure → Review & Pack, then optional sandbox and early
-          access. We do not invent crawl results or a live phone number.
+          . Website → Check → Choose → Configure → Review &amp; Try, then
+          optional save. This browser preview does not assign a live number.
         </p>
         <ol className="mt-6 space-y-3">
           {pathSteps.map((step, i) => (
@@ -105,7 +100,7 @@ export default function DemoPage() {
           primaryHref="/create/"
           primaryLabel="Create from website"
           secondaryHref="#demo"
-          secondaryLabel="Request early access"
+          secondaryLabel="Request a human briefing"
         />
       </section>
 
@@ -117,8 +112,8 @@ export default function DemoPage() {
           What this is not
         </h2>
         <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
-          <li>Not a self-serve “call our AI now” public demo.</li>
-          <li>Not live number provisioning or a public always-on line.</li>
+          <li>Not a live telephone call or a public always-on phone line.</li>
+          <li>Not live number provisioning.</li>
           <li>Not a production telephony GO.</li>
           <li>Not a promise of autonomous job booking or payments.</li>
         </ul>
@@ -135,11 +130,10 @@ export default function DemoPage() {
           Prefer a human briefing?
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          Join the launch list or request early access below. This is a human
-          follow-up — not live number provisioning.
+          Use the briefing form below if you want to talk through the product
+          with a person. This is separate from live number provisioning.
         </p>
       </section>
-      {/* launch_list + early_demo both render LeadCaptureForm inside DemoConversionTabs. */}
       <DemoConversionTabs />
     </>
   );

@@ -34,7 +34,7 @@ export default function PropertyMaintenanceSoftwarePage() {
           <h2 className="text-2xl font-semibold text-ink">Maintenance management without invented commitments</h2>
           <p className="text-muted">
             The product model includes properties, residents, contractors, work orders, jobs, and
-            communications. AI-assisted intake is under testing. Deterministic server rules own
+            communications. AI-assisted intake is available as a product preview. Deterministic server rules own
             lifecycle, safety boundaries, and prohibited money actions. The system must not invent
             a booking, engineer visit, refund, safety assurance, or “someone is on the way”.
           </p>
@@ -55,7 +55,7 @@ export default function PropertyMaintenanceSoftwarePage() {
         </section>
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-ink">Current pre-launch path</h2>
-          <p className="text-muted">Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access. The public website does not provision a live phone number and does not claim general availability.</p>
+          <p className="text-muted">Website → Check → Choose → Configure → Review & Try → optional save → browser preview. The public website does not provision a live phone number and does not claim general availability.</p>
           <p className="text-muted">
             For the AI-assisted call-intake layer specifically, see{" "}
             <a href="/ai-receptionist/" className="text-accent underline">AI receptionist for maintenance intake</a>.

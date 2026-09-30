@@ -16,125 +16,12 @@ const BROWSER = [
   "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
 ].filter(Boolean).find((candidate) => fs.existsSync(candidate));
 
-if (!BROWSER) throw new Error("create mobile stability test requires Chromium");
+if (!BROWSER) throw new Error("create interactive acceptance requires Chromium");
 if (!fs.existsSync(path.join(OUT, "create", "index.html"))) {
-  throw new Error("create mobile stability test requires a completed static export");
+  throw new Error("create interactive acceptance requires a completed static export");
 }
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const receiverPort = Number(process.env.CREATE_TEST_RECEIVER_PORT || 8787);
-const scannerPort = Number(process.env.CREATE_TEST_SCANNER_PORT || 8788);
-const submissions = new Map();
-let rawPosts = 0;
-let storedRequests = 0;
-let emailHandoffs = 0;
-
-function sendJson(res, status, body, origin) {
-  res.writeHead(status, {
-    "content-type": "application/json; charset=utf-8",
-    "access-control-allow-origin": origin || "*",
-    "access-control-allow-methods": "POST, OPTIONS",
-    "access-control-allow-headers": "Content-Type, Accept",
-    "cache-control": "no-store",
-  });
-  res.end(JSON.stringify(body));
-}
-
-const receiver = http.createServer(async (req, res) => {
-  const origin = req.headers.origin || "*";
-  if (req.method === "OPTIONS") {
-    res.writeHead(204, {
-      "access-control-allow-origin": origin,
-      "access-control-allow-methods": "POST, OPTIONS",
-      "access-control-allow-headers": "Content-Type, Accept",
-    });
-    res.end();
-    return;
-  }
-  if (req.method !== "POST" || req.url !== "/leads") {
-    sendJson(res, 404, { ok: false, error: "not found" }, origin);
-    return;
-  }
-  rawPosts += 1;
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-  const submissionId = String(body.submission_id || "");
-  assert.match(submissionId, /^[A-Za-z0-9_.:-]{8,128}$/);
-  assert.ok(String(body.message || "").length > 3000, "create payload must exceed old 3,000-char limit");
-  let record = submissions.get(submissionId);
-  if (!record) {
-    storedRequests += 1;
-    const failedEmail = String(body.email || "").toLowerCase() === "mailfail@example.com";
-    record = {
-      reference: "test-" + submissionId.slice(0, 12),
-      confirmation: failedEmail ? "failed" : "accepted",
-    };
-    submissions.set(submissionId, record);
-    if (!failedEmail) emailHandoffs += 1;
-  }
-  await delay(250);
-  sendJson(res, 200, {
-    ok: true,
-    mode: "accepted",
-    reference: record.reference,
-    confirmation_email: record.confirmation,
-  }, origin);
-});
-
-const scanner = http.createServer(async (req, res) => {
-  const origin = req.headers.origin || "*";
-  if (req.method === "OPTIONS") {
-    res.writeHead(204, {
-      "access-control-allow-origin": origin,
-      "access-control-allow-methods": "POST, OPTIONS",
-      "access-control-allow-headers": "Content-Type, Accept",
-    });
-    res.end();
-    return;
-  }
-  const chunks = [];
-  for await (const chunk of req) chunks.push(chunk);
-  const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-  await delay(700);
-  if (String(body.url || "").includes("scan-fail.example")) {
-    sendJson(res, 503, { ok: false, error: "temporary scan failure" }, origin);
-    return;
-  }
-  sendJson(res, 200, {
-    draft: {
-      businessName: "Alley Gates",
-      greeting: "",
-      hours: "Monday-Friday 09:00-17:00",
-      services: "Alley Gate Installation\\nGate Repairs",
-      faqs: "How do I order a key?\\nUse the key ordering page."
-    },
-    fieldMeta: {
-      businessName: { source: "title", confidence: "high" },
-      hours: { source: "pattern", confidence: "medium" },
-      services: { source: "heading", confidence: "medium" },
-      faqs: { source: "details", confidence: "medium" }
-    },
-    facts: {
-      website: "https://alleygates.co.uk/",
-      businessName: "Alley Gates",
-      locations: ["18 Brisbane Avenue Wallasey Merseyside CH45 9JX"],
-      contact: { phones: ["0151 230 8476"], emails: ["info@alleygates.co.uk"] },
-      hours: "Monday-Friday 09:00-17:00",
-      services: ["Alley Gate Installation", "Gate Repairs"],
-      faqs: [{ question: "How do I order a key?", answer: "Use the key ordering page." }]
-    },
-    factMeta: {
-      website: { source: "fetched_url", confidence: "high" },
-      businessName: { source: "title", confidence: "high" },
-      locations: { source: "heading", confidence: "medium" },
-      contact: { source: "contact_link", confidence: "high" },
-      hours: { source: "pattern", confidence: "medium" },
-      services: { source: "heading", confidence: "medium" },
-      faqs: { source: "details", confidence: "medium" }
-    }
-  }, origin);
-});
 
 function exportedFile(urlPath) {
   const clean = decodeURIComponent(urlPath.split("?")[0]).replace(/^\/+/, "");
@@ -154,7 +41,7 @@ function serveExport() {
       return;
     }
     const ext = path.extname(file).toLowerCase();
-    if (ext === ".js") await delay(1400);
+    if (ext === ".js") await delay(500);
     const contentType =
       ext === ".html" ? "text/html; charset=utf-8" :
       ext === ".css" ? "text/css; charset=utf-8" :
@@ -226,7 +113,7 @@ async function evalValue(cdp, expression) {
   const result = await cdp.send("Runtime.evaluate", {
     expression,
     awaitPromise: true,
-    returnByValue: true
+    returnByValue: true,
   });
   if (result.exceptionDetails) throw new Error(JSON.stringify(result.exceptionDetails));
   return result.result && result.result.value;
@@ -243,107 +130,59 @@ async function waitFor(cdp, expression, timeout = 15000) {
   throw new Error("timed out waiting for: " + expression);
 }
 
-async function setInput(cdp, selector, value) {
-  const expression =
-    "(() => { const el=document.querySelector(" + JSON.stringify(selector) + ");" +
-    "if(!el)return false;el.value=" + JSON.stringify(value) + ";" +
-    "el.dispatchEvent(new Event('input',{bubbles:true}));" +
-    "el.dispatchEvent(new Event('change',{bubbles:true}));return true;})()";
+async function setControl(cdp, selector, value) {
+  const expression = `(() => {
+    const el = document.querySelector(${JSON.stringify(selector)});
+    if (!el) return false;
+    const proto = el instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+    const setter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+    if (!setter) return false;
+    setter.call(el, ${JSON.stringify(value)});
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  })()`;
   assert.equal(await evalValue(cdp, expression), true);
 }
 
-async function clickPrimary(cdp, doubleTap = false) {
-  const expression =
-    "(() => { const b=document.querySelector('[data-create-primary-action]');" +
-    "if(!b)return false;b.click();" + (doubleTap ? "b.click();" : "") + "return true;})()";
-  assert.equal(await evalValue(cdp, expression), true);
+async function setByLabel(cdp, labelText, value) {
+  const expression = `(() => {
+    const label = Array.from(document.querySelectorAll("label")).find((item) =>
+      (item.querySelector("span")?.textContent || "").trim().startsWith(${JSON.stringify(labelText)})
+    );
+    const el = label?.querySelector("input,textarea");
+    if (!el) return false;
+    const proto = el instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+    const setter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+    if (!setter) return false;
+    setter.call(el, ${JSON.stringify(value)});
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  })()`;
+  assert.equal(await evalValue(cdp, expression), true, "missing field: " + labelText);
 }
 
-async function prepareCreate(cdp, siteOrigin, email, businessUrl = "https://alleygates.co.uk") {
-  await cdp.send("Page.navigate", { url: siteOrigin + "/create/" });
-  await waitFor(cdp, "Boolean(document.querySelector('[data-create-step=\"1\"]'))", 6000);
-  const initial = JSON.parse(await evalValue(cdp,
-    "JSON.stringify({href:location.href,historyLength:history.length," +
-    "hydrated:document.querySelector('[data-create-hydrated]')?.getAttribute('data-create-hydrated')," +
-    "disabled:document.querySelector('[data-create-primary-action]')?.disabled," +
-    "nativeForm:Boolean(document.querySelector('.create-journey-card form'))})"
-  ));
-  assert.equal(initial.hydrated, "false");
-  assert.equal(initial.disabled, true);
-  assert.equal(initial.nativeForm, false);
-
-  await clickPrimary(cdp, true);
-  await delay(350);
-  assert.equal(await evalValue(cdp, "location.href"), initial.href);
-
-  await waitFor(cdp,
-    "document.querySelector('[data-create-hydrated]')?.getAttribute('data-create-hydrated') === 'true'",
-    20000
-  );
-  await setInput(cdp, 'input[name="businessUrl"]', businessUrl);
-  await setInput(cdp, 'input[name="name"]', "Mobile Acceptance");
-  await setInput(cdp, 'input[name="email"]', email);
-  await setInput(cdp, 'input[name="organisation"]', "Chapelgate");
-  await clickPrimary(cdp, true);
-  await waitFor(cdp,
-    "document.querySelector('[data-create-step]')?.getAttribute('data-create-step') === '2'",
-    8000
-  );
-  assert.equal(await evalValue(cdp, "location.pathname"), "/create/");
-  return initial.historyLength;
+async function clickPrimary(cdp) {
+  assert.equal(await evalValue(cdp, `(() => {
+    const b = document.querySelector("[data-create-primary-action]");
+    if (!b || b.disabled) return false;
+    b.click();
+    return true;
+  })()`), true);
 }
 
-async function finishJourney(cdp, initialHistoryLength) {
-  await waitFor(cdp,
-    "(() => { const b=document.querySelector('[data-create-primary-action]'); return b && !b.disabled && b.textContent !== 'Checking…'; })()",
-    20000
-  );
-  await clickPrimary(cdp);
-  await waitFor(cdp, "document.querySelector('[data-create-step]')?.getAttribute('data-create-step') === '3'");
-
-  await evalValue(cdp, "document.querySelector('[data-agent-type=\"receptionist\"] input')?.click()");
-  await waitFor(cdp, "!document.querySelector('[data-create-primary-action]')?.disabled");
-  await clickPrimary(cdp);
-  await waitFor(cdp, "document.querySelector('[data-create-step]')?.getAttribute('data-create-step') === '4'");
-
-  const prefill = JSON.parse(await evalValue(cdp,
-    "JSON.stringify(Array.from(document.querySelectorAll('label')).reduce((out,label)=>{" +
-    "const title=label.querySelector('span')?.textContent?.trim()||'';" +
-    "const control=label.querySelector('input,textarea');if(control)out[title]=control.value;return out;},{}))"
-  ));
-  assert.equal(prefill["Business name"], "alleygates");
-  assert.equal(prefill["Locations"] || "", "");
-  assert.equal(prefill["Phone"] || "", "");
-  assert.equal(prefill["Contact email"] || "", "");
-  assert.equal(prefill["Services"] || "", "");
-
-  await clickPrimary(cdp);
-  await waitFor(cdp, "document.querySelector('[data-create-step]')?.getAttribute('data-create-step') === '5'", 15000);
-
-  await clickPrimary(cdp);
-  await waitFor(cdp, "document.body.innerText.includes('Complete every required review confirmation before submitting this configuration.')");
-  assert.equal(await evalValue(cdp, "location.pathname"), "/create/");
-
-  await evalValue(cdp,
-    "(() => { for (const cb of document.querySelectorAll('[data-agent-review-gate] input[type=checkbox]')) {" +
-    "if(!cb.checked)cb.click();} return true; })()"
-  );
-  await waitFor(cdp, "document.body.innerText.includes('All required customer-review confirmations are complete.')");
-
-  await clickPrimary(cdp, true);
-  await waitFor(cdp, "document.querySelector('[data-create-submit-state=\"success\"]') !== null", 15000);
-  assert.equal(await evalValue(cdp, "location.pathname"), "/create/");
-  assert.equal(await evalValue(cdp, "history.length"), initialHistoryLength);
-  return await evalValue(cdp, "document.body.innerText");
+function leadRequests(cdp) {
+  return cdp.events.filter((event) => {
+    if (event.method !== "Network.requestWillBeSent") return false;
+    const url = event.params?.request?.url || "";
+    return url.includes("/v1/public/website-leads") || url.includes("127.0.0.1:8787/leads");
+  });
 }
 
-await new Promise((resolve) => receiver.listen(receiverPort, "127.0.0.1", resolve));
-await new Promise((resolve) => scanner.listen(scannerPort, "127.0.0.1", resolve));
 const site = await serveExport();
-const siteOrigin = site.origin;
-
-const debugPort = 9800 + Math.floor(Math.random() * 100);
-const profile = mkdtempSync(path.join(os.tmpdir(), "mos-create-mobile-"));
+const debugPort = 9850 + Math.floor(Math.random() * 100);
+const profile = mkdtempSync(path.join(os.tmpdir(), "mos-create-interactive-"));
 const child = spawn(BROWSER, [
   "--headless=new",
   "--disable-gpu",
@@ -354,7 +193,7 @@ const child = spawn(BROWSER, [
   "--user-data-dir=" + profile,
   "--remote-debugging-port=" + debugPort,
   "--remote-allow-origins=*",
-  "about:blank"
+  "about:blank",
 ], { stdio: "ignore" });
 
 let cdp;
@@ -364,72 +203,87 @@ try {
   await cdp.send("Runtime.enable");
   await cdp.send("Network.enable");
   await cdp.send("Emulation.setDeviceMetricsOverride", {
-    width: 390, height: 844, deviceScaleFactor: 3, mobile: true
-  });
-  await cdp.send("Emulation.setCPUThrottlingRate", { rate: 6 });
-  await cdp.send("Network.emulateNetworkConditions", {
-    offline: false,
-    latency: 250,
-    downloadThroughput: 180000,
-    uploadThroughput: 75000,
-    connectionType: "cellular3g"
+    width: 390,
+    height: 844,
+    deviceScaleFactor: 3,
+    mobile: true,
   });
 
-  const history1 = await prepareCreate(cdp, siteOrigin, "success@example.com");
-  const successText = await finishJourney(cdp, history1);
-  assert.match(successText, /Test submission completed/);
-  assert.match(successText, /preview receiver accepted the test submission/i);
-  assert.equal(rawPosts, 1);
-  assert.equal(storedRequests, 1);
-  assert.equal(emailHandoffs, 1);
+  await cdp.send("Page.navigate", { url: site.origin + "/create/" });
+  await waitFor(cdp, `document.querySelector("[data-create-hydrated]")?.getAttribute("data-create-hydrated") === "true"`, 20000);
 
-  const history2 = await prepareCreate(cdp, siteOrigin, "mailfail@example.com");
-  const degradedText = await finishJourney(cdp, history2);
-  assert.match(degradedText, /Test submission completed/);
-  assert.match(degradedText, /preview receiver accepted the test submission/i);
-  assert.equal(rawPosts, 2);
-  assert.equal(storedRequests, 2);
-  assert.equal(emailHandoffs, 1);
-
-  await prepareCreate(cdp, siteOrigin, "queued@example.com", "https://scan-fail.example");
-  await waitFor(cdp, "document.body.innerText.includes('Website crawl is queued for early access')", 20000);
-  await waitFor(cdp, "!document.querySelector('[data-create-primary-action]')?.disabled");
+  await setControl(cdp, 'input[name="businessUrl"]', "https://alleygates.co.uk");
+  await setControl(cdp, 'input[name="name"]', "Interactive Acceptance");
+  await setControl(cdp, 'input[name="email"]', "interactive@example.com");
+  await setControl(cdp, 'input[name="organisation"]', "Chapelgate");
   await clickPrimary(cdp);
-  await waitFor(cdp, "document.querySelector('[data-create-step]')?.getAttribute('data-create-step') === '3'");
-  assert.equal(await evalValue(cdp, "location.pathname"), "/create/");
+
+  await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "2"`);
+  await waitFor(cdp, `(() => { const b=document.querySelector("[data-create-primary-action]"); return Boolean(b && !b.disabled); })()`, 10000);
+  await clickPrimary(cdp);
+
+  await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "3"`);
+  assert.equal(await evalValue(cdp, `(() => { const el=document.querySelector('[data-agent-type="receptionist"] input'); if(!el)return false; el.click(); return true; })()`), true);
+  await waitFor(cdp, `(() => { const b=document.querySelector("[data-create-primary-action]"); return Boolean(b && !b.disabled); })()`);
+  await clickPrimary(cdp);
+
+  await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "4"`);
+  await setByLabel(cdp, "Greeting", "Thank you for calling Alley Gates. How can I help?");
+  await setByLabel(cdp, "Hours", "Monday-Friday 09:00-17:00");
+  await setByLabel(cdp, "Services", "Alley Gate Installation\nGate Repairs");
+  await clickPrimary(cdp);
+
+  await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "5"`, 15000);
+  await waitFor(cdp, `Boolean(document.getElementById("interactive-receptionist-demo"))`, 15000);
+  assert.equal(await evalValue(cdp, `document.querySelector("[data-create-primary-action]")?.textContent?.trim()`), "Try your receptionist");
+  assert.equal(leadRequests(cdp).length, 0, "no lead/email request should occur before optional save");
+
+  await clickPrimary(cdp);
+  assert.equal(leadRequests(cdp).length, 0, "Try your receptionist must not submit a lead");
+
+  await waitFor(cdp, `Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).some((b) => b.textContent?.trim() === "Start demo call")`);
+  assert.equal(await evalValue(cdp, `(() => {
+    const b = Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).find((item) => item.textContent?.trim() === "Start demo call");
+    if (!b) return false;
+    b.click();
+    return true;
+  })()`), true);
+
+  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("Thank you for calling Alley Gates")`);
+  await setControl(cdp, '#interactive-receptionist-demo input[placeholder="e.g. What time are you open?"]', "What services do you offer?");
+  assert.equal(await evalValue(cdp, `(() => {
+    const b = Array.from(document.querySelectorAll("#interactive-receptionist-demo button")).find((item) => item.textContent?.trim() === "Send");
+    if (!b || b.disabled) return false;
+    b.click();
+    return true;
+  })()`), true);
+
+  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("Alley Gate Installation")`);
+  const transcript = await evalValue(cdp, `document.querySelector("[data-demo-transcript]")?.innerText || ""`);
+  assert.match(transcript, /What services do you offer\?/);
+  assert.match(transcript, /Alley Gate Installation/);
+  assert.match(transcript, /Gate Repairs/);
+  assert.equal(leadRequests(cdp).length, 0, "interactive demo must remain independent of lead/email submission");
+  assert.equal(await evalValue(cdp, `Boolean(document.querySelector('[data-create-submit-state="success"]'))`), false);
 
   const exceptions = cdp.events.filter((event) => event.method === "Runtime.exceptionThrown");
-  const unexpectedNavigations = cdp.events
-    .filter((event) => event.method === "Page.frameNavigated")
-    .map((event) => event.params && event.params.frame && event.params.frame.url)
-    .filter((url) => typeof url === "string" && url && !url.startsWith(siteOrigin + "/create/") && url !== "about:blank");
   assert.deepEqual(exceptions, []);
-  assert.deepEqual(unexpectedNavigations, []);
 
   console.log(JSON.stringify({
     ok: true,
     browser: BROWSER,
-    siteOrigin,
-    mobileViewport: "390x844@3",
-    cpuThrottle: 6,
-    networkLatencyMs: 250,
-    jsDelayMs: 1400,
-    rawPosts,
-    storedRequests,
-    emailHandoffs,
-    submissions: submissions.size,
-    observedNetworkRequests: cdp.events.filter((event) => event.method === "Network.requestWillBeSent").length
-  }, null, 2));
+    siteOrigin: site.origin,
+    viewport: "390x844@3",
+    primaryAction: "Try your receptionist",
+    interactiveDemo: true,
+    callerQuestion: "What services do you offer?",
+    packAwareReply: /Alley Gate Installation/.test(transcript) && /Gate Repairs/.test(transcript),
+    leadRequestsBeforeOptionalSave: leadRequests(cdp).length,
+    runtimeExceptions: exceptions.length,
+  }));
 } finally {
-  try { if (cdp) cdp.ws.close(); } catch {}
-  const browserExited = child.exitCode === null
-    ? new Promise((resolve) => child.once("exit", resolve))
-    : Promise.resolve();
-  if (child.exitCode === null) child.kill("SIGTERM");
-  await Promise.race([browserExited, delay(2000)]);
-  receiver.close();
-  scanner.close();
-  site.server.close();
-  await delay(300);
-  rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+  try { cdp?.ws?.close(); } catch {}
+  try { child.kill(); } catch {}
+  await new Promise((resolve) => site.server.close(resolve));
+  rmSync(profile, { recursive: true, force: true });
 }

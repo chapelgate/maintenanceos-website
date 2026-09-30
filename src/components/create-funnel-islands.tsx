@@ -1,23 +1,16 @@
 import { CalendarConnectComingSoon } from "@/components/CalendarConnectComingSoon";
-import { CreateReceptionistForm } from "@/components/CreateReceptionistForm";
-import { SandboxTestCallComingSoon } from "@/components/SandboxTestCallComingSoon";
+import { CreateJourney } from "@/components/CreateJourney";
 
 /**
- * Default /create islands for DigitalOcean static export (companion flags off).
- * Do not import CreateJourney, CalendarConnectPanel, or SandboxTestCallPanel
- * from this file — Next includes those client modules in First Load JS if they
- * appear anywhere in the page graph. Flagged-on local builds resolve this
- * module to `create-funnel-islands.enabled.tsx` via next.config.
+ * Default /create islands for the DigitalOcean static export.
+ *
+ * The customer-facing interactive receptionist preview is part of the normal
+ * journey. Its heavier conversation module is dynamically loaded inside
+ * CreateJourney. Hosted calendar/live-media companions remain separate and off
+ * unless their own reviewed flags are enabled.
  */
 export function CreateJourneySection() {
-  return (
-    <>
-      <CreateReceptionistForm />
-      <div className="mt-6">
-        <SandboxTestCallComingSoon />
-      </div>
-    </>
-  );
+  return <CreateJourney />;
 }
 
 export function CalendarConnectSection() {

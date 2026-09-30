@@ -58,7 +58,7 @@ export function SiriOrbCloud() {
               Intake listening
             </p>
             <p className="mt-2 text-sm leading-relaxed text-ink">
-              A listening cue for structured intake — under testing. Not a live
+              A listening cue for structured intake — preview only. Not a live
               receptionist, not always-on, and not a conversion control.
             </p>
             <p className="mt-3 text-sm">
@@ -79,7 +79,7 @@ export function SiriOrbCloud() {
           </div>
         </div>
       </div>
-      <p className="intake-orb-caption">Intake listening · under testing</p>
+      <p className="intake-orb-caption">Intake listening · preview</p>
     </div>
   );
 }

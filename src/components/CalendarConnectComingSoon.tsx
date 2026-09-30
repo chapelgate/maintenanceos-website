@@ -16,7 +16,7 @@ export function CalendarConnectComingSoon() {
         id="calendar-connect-heading"
         className="text-base font-semibold text-ink"
       >
-        Calendar connect — coming / under testing
+        Calendar connection — preview coming soon
       </h2>
       <p id={comingCopyId} className="mt-2 text-sm text-muted">
         Google Calendar and Microsoft 365 adapters live in{" "}

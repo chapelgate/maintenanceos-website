@@ -21,7 +21,7 @@ test("Step 7 invalidates qualification when the review revision changes", () => 
   assert.match(journey, /setSandboxQualification\(null\)/);
   assert.match(
     journey,
-    /key=\{reviewSubject\?\.reviewRecord\.revisionId \?\? "sandbox-unreviewed"\}/,
+    /key=\{reviewSubject\?\.reviewRecord\.revisionId \?\? "preview-unreviewed"\}/,
   );
   assert.match(journey, /onReviewSubjectChange=\{onReviewSubjectChange\}/);
   assert.match(journey, /sandboxQualification=\{sandboxQualification\}/);
@@ -37,17 +37,24 @@ test("Step 7 exposes only a complete current review to sandbox qualification", (
 
 test("Step 7 blocks enabled-flow submit until current qualification matches", () => {
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
-  assert.match(later, /const qualificationRequired = siteConfig\.sandboxTestCallEnabled/);
+  assert.match(
+    later,
+    /const qualificationRequired =[\s\S]*siteConfig\.sandboxTestCallEnabled[\s\S]*siteConfig\.sandboxTestCallEndpoint\.trim/,
+  );
   assert.match(later, /qualificationMatchesReview\(/);
-  assert.match(later, /Run sandbox qualification for this exact reviewed configuration/);
-  assert.match(later, /sandboxQualification: siteConfig\.sandboxTestCallEnabled/);
+  assert.match(later, /Run configuration verification for this exact reviewed configuration before saving/);
+  assert.match(later, /sandboxQualification: qualificationRequired/);
   assert.match(later, /agentBlueprint: submissionBlueprint/);
 });
 
-test("browser mock remains demo-only and cannot unlock qualification", () => {
+test("public browser demo remains demo-only and cannot unlock qualification", () => {
   const panel = read("src/components/SandboxTestCallPanel.tsx");
-  assert.match(panel, /if \(!usesCompanion\) \{/);
-  assert.match(panel, /demo-only and cannot award sandbox qualification/);
+  assert.match(panel, /runBrowserInteractiveReply/);
+  assert.match(
+    panel,
+    /siteConfig\.sandboxTestCallEnabled && Boolean\(endpoint\) && Boolean\(reviewSubject\)/,
+  );
+  assert.match(panel, /requestSandboxScriptedDemo/);
   assert.match(panel, /source: "companion"/);
   assert.match(panel, /onQualificationChange\?\.\(qualification\)/);
 });

@@ -138,7 +138,7 @@ test("interactive receptionist and limitations regions have labelled headings", 
   assert.match(preview, /id="create-pack-limitations-heading"/);
   assert.match(preview, /aria-labelledby="create-pack-limitations-heading"/);
   assert.match(preview, /Honest limitations/);
-  assert.match(calendar, /Calendar connect — coming \/ under testing/);
+  assert.match(calendar, /Calendar connection — preview coming soon/);
   assert.match(calendar, /aria-labelledby="calendar-connect-heading"/);
   assert.match(calendarPanel, /CalendarConnectComingSoon/);
 });

@@ -1,8 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useCallback, useState } from "react";
 import { CreateReceptionistForm } from "@/components/CreateReceptionistForm";
-import { SandboxTestCallPanel } from "@/components/SandboxTestCallPanel";
 import {
   EMPTY_RECEPTIONIST_DRAFT,
   type ReceptionistDraft,
@@ -13,9 +13,37 @@ import type {
   AgentSandboxReviewSubject,
 } from "@/lib/agent-sandbox-qualification";
 
+const InteractiveReceptionistDemo = dynamic(
+  () =>
+    import("@/components/SandboxTestCallPanel").then(
+      (module) => module.SandboxTestCallPanel,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <section
+        className="rounded-md border border-border bg-surface p-5"
+        aria-labelledby="interactive-demo-loading-heading"
+        aria-busy="true"
+      >
+        <h2
+          id="interactive-demo-loading-heading"
+          className="text-base font-semibold text-ink"
+        >
+          Try your receptionist
+        </h2>
+        <p className="mt-2 text-sm text-muted">
+          Preparing the interactive browser demo…
+        </p>
+      </section>
+    ),
+  },
+);
+
 /**
- * Lifts the /create draft and receptionist pack so the sandbox panel can
- * consume reviewed fields after the draft step without Next API routes.
+ * Owns the reviewed /create state shared with the public interactive demo.
+ * The demo is code-split so adding it to the default DigitalOcean journey does
+ * not move the conversation engine into the initial /create JavaScript budget.
  */
 export function CreateJourney() {
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
@@ -44,8 +72,8 @@ export function CreateJourney() {
         sandboxQualification={sandboxQualification}
       />
       <div className="mt-6">
-        <SandboxTestCallPanel
-          key={reviewSubject?.reviewRecord.revisionId ?? "sandbox-unreviewed"}
+        <InteractiveReceptionistDemo
+          key={reviewSubject?.reviewRecord.revisionId ?? "preview-unreviewed"}
           draft={draft}
           receptionist={receptionist}
           reviewSubject={reviewSubject}

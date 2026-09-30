@@ -55,7 +55,7 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-5">
             <p className="inline-flex items-center rounded-full bg-accent-subtle px-3 py-1 text-xs font-semibold text-accent">
-              Pre-launch · Under test · UK
+              Pre-launch · UK preview
             </p>
             <h1
               id="hero-heading"
@@ -71,7 +71,7 @@ export default function HomePage() {
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted">
               AI assists intake. Server rules and authorised people control
-              what happens next. Voice remains under testing, so this site does
+              what happens next. Voice remains in commissioning preview, so this site does
               not present an always-on phone service.
             </p>
             <CtaPair
@@ -82,7 +82,7 @@ export default function HomePage() {
               secondaryLabel="See it work"
             />
             <p className="mt-4 text-sm text-muted">
-              Funnel: Website → Check → Choose role → Configure → Review & Pack → Early access.
+              Funnel: Website → Check → Choose role → Configure → Review & Try → optional save.
             </p>
             <ProductTourWatchLink className="mt-3" />
             <HomeLifestyleStrip />
@@ -114,7 +114,7 @@ export default function HomePage() {
             id="hero-shell-heading"
             className="sr-only"
           >
-            Supervisor shell · under test
+            Supervisor shell · preview
           </h2>
           <ProductUiShell />
         </div>
@@ -185,8 +185,7 @@ export default function HomePage() {
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">
                 Early access is opening carefully. The public path is website URL
-                → scan/draft → knowledge pack → optional scripted sandbox → early
-                access. No live phone demo from this site.{" "}
+                → reviewed configuration → interactive receptionist demo → optional saved reference. No live phone demo from this site.{" "}
                 <a
                   href="/create/"
                   className="font-medium text-accent underline-offset-4 hover:underline"

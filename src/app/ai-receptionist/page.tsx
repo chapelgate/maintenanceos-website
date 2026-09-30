@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "AI receptionist for UK maintenance intake",
   description:
-    "MaintenanceOS by Chapelgate includes an AI receptionist capability for UK maintenance intake that is under testing and in development. Deterministic rules keep control of safety and money. Not a live commercial voice service.",
+    "MaintenanceOS by Chapelgate includes an AI receptionist capability for UK maintenance intake that is available as a product preview. Deterministic rules keep control of safety and money. Not a live commercial voice service.",
   path: "/ai-receptionist/",
 });
 
@@ -39,9 +39,9 @@ export default function AiReceptionistPage() {
   return (
     <>
       <PageHero
-        eyebrow="Under testing · In development"
+        eyebrow="AI receptionist · Voice preview"
         title="Capture maintenance calls without handing control to the AI"
-        lede="The receptionist capability is being tested to collect caller details and classify maintenance requests in UK terminology. Server rules and authorised people retain control of safety and money. It is not a live commercial phone service."
+        lede="The receptionist capability is in preview for collecting caller details and classifying maintenance requests in UK terminology. Server rules and authorised people retain control of safety and money. It is not a live commercial phone service."
       />
       <SafeAutomationModel compact />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
@@ -50,8 +50,7 @@ export default function AiReceptionistPage() {
             How a call is designed to work
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Designed behaviour under testing — not evidence of live commercial
-            operations.
+            Preview behaviour — the live telephone service remains separately commissioned.
           </p>
           <ol className="mt-4 list-decimal space-y-2 pl-5 text-muted">
             {callFlow.map((step) => (

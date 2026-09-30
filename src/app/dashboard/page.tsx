@@ -7,10 +7,10 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: siteConfig.customerDashboardEnabled
     ? "Customer dashboard (SAMPLE / DEMO)"
-    : "Customer dashboard — coming / under testing",
+    : "Customer dashboard — preview coming soon",
   description: siteConfig.customerDashboardEnabled
     ? "Local SAMPLE / DEMO call history, transcripts, and booking stubs. Not live production metrics or a customer portal."
-    : "Customer dashboard for call history and transcripts is coming / under testing. Not a live customer portal.",
+    : "Customer dashboard for call history and transcripts is planned for a later preview. Not a live customer portal.",
   path: "/dashboard/",
 });
 
@@ -20,16 +20,16 @@ export default function CustomerDashboardPage() {
   return (
     <>
       <PageHero
-        eyebrow={enabled ? "Local testing · Pre-launch" : "Coming / under testing · Pre-launch"}
+        eyebrow={enabled ? "Local preview · Pre-launch" : "Preview coming soon · Pre-launch"}
         title={
           enabled
             ? "Customer dashboard — SAMPLE / DEMO foundation"
-            : "Customer dashboard — coming / under testing"
+            : "Customer dashboard — preview coming soon"
         }
         lede={
           enabled
             ? "Call history, a mock transcript, and a bookings stub for local ReceptionistOS testing. Rows are labelled SAMPLE / DEMO. This is not a live customer portal and is not wired to frozen telephony."
-            : "A customer dashboard for sandbox call history and transcripts is being built behind a feature flag. This page does not show live metrics, invent customers, or attach a phone line."
+            : "A customer dashboard for preview call history and transcripts is being built behind a feature flag. This page does not show live metrics, invent customers, or attach a phone line."
         }
       />
       <div className="mx-auto max-w-5xl space-y-10 px-4 py-12">

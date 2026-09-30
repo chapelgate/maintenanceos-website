@@ -43,7 +43,7 @@ test("major buyer pages state a plain outcome in the first-screen source", () =>
   const cases = {
     "src/app/ai-receptionist/page.tsx": /Capture maintenance calls without handing control to the AI/,
     "src/app/how-it-works/page.tsx": /From maintenance request to controlled follow-up/,
-    "src/app/features/page.tsx": /What MaintenanceOS can do — and what is still being tested/,
+    "src/app/features/page.tsx": /What MaintenanceOS can do.*what is in preview/,
     "src/app/industries/page.tsx": /Maintenance workflows for the teams who run them/,
     "src/app/pricing/page.tsx": /title=\{pricing\.title\}/,
     "src/app/demo/page.tsx": /Start from your website URL/,
@@ -69,7 +69,7 @@ test("major-page first screens retain honesty and no invented live service", () 
   ];
   const joined = files.map(read).join("\n");
   assert.match(joined, /pre-launch/i);
-  assert.match(joined, /under testing/i);
+  assert.match(joined, /preview/i);
   assert.doesNotMatch(joined, /24\/7 AI receptionist/i);
   assert.doesNotMatch(joined, /live always-on receptionist/i);
   assert.doesNotMatch(joined, /guaranteed/i);

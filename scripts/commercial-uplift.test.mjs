@@ -55,7 +55,7 @@ test("home commercial pass keeps Create/Join hierarchy and 3-step start", () => 
 test("funnel pages share one primary path strip", () => {
   const strip = read("src/components/FunnelPathStrip.tsx");
   assert.match(strip, /One public path/);
-  assert.match(strip, /Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access/);
+  assert.match(strip, /Website → Check → Choose → Configure → Review & Try → optional save/);
   assert.match(strip, /href="\/create\/"/);
   assert.match(strip, /does not assign a live phone number/);
 
@@ -91,7 +91,7 @@ test("demo ladder does not imply a live always-on DID", () => {
   const page = read("src/app/demo/page.tsx");
   assert.match(page, /FeatureStatusChip/);
   assert.match(page, /What this is not/);
-  assert.match(page, /Not a self-serve “call our AI now”/);
+  assert.match(page, /Not a live telephone call/);
   assert.match(page, /does not assign a live number/);
   assert.doesNotMatch(page, /call \+/);
   assert.doesNotMatch(page, /DID/);

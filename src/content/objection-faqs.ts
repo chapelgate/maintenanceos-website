@@ -12,7 +12,7 @@ export const objectionFaqItems: readonly ObjectionFaqItem[] = [
   {
     question: "Is there a live always-on phone line I can call now?",
     answer:
-      "No. Voice intake exists in product source and is UNDER TEST. Public always-on commercial phone is not on this site until controlled-call gates pass. Path today: Create from website or Join launch list — not “call the AI now.”",
+      "No. Voice intake exists in product source and remains in commissioning preview. Public always-on commercial phone is not on this site until controlled-call gates pass. Path today: Create from website or Join launch list — not “call the AI now.”",
   },
   {
     question: "Can it book or reschedule calendar appointments?",
@@ -32,6 +32,6 @@ export const objectionFaqItems: readonly ObjectionFaqItem[] = [
   {
     question: "Why only seven features on /features?",
     answer:
-      "Those are the cards we can stand behind today (5 VERIFIED + 2 UNDER TEST). Peer-common gaps stay off the marketing page and are tracked with product — honesty over a bigger checklist.",
+      "Those are the cards we can stand behind today (5 VERIFIED + 2 PREVIEW). Peer-common gaps stay off the marketing page and are tracked with product — honesty over a bigger checklist.",
   },
 ];

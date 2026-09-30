@@ -215,6 +215,9 @@ export function CreateReceptionistLaterSteps({
   const [configEditPending, setConfigEditPending] = useState(false);
   const usesProductionLeadReceiver =
     siteConfig.formEndpoint === PRODUCTION_FORM_ENDPOINT;
+  const qualificationRequired =
+    siteConfig.sandboxTestCallEnabled &&
+    Boolean(siteConfig.sandboxTestCallEndpoint.trim());
   const errorId = useId();
   const progressId = useId();
   const businessNameHintId = useId();
@@ -519,7 +522,6 @@ export function CreateReceptionistLaterSteps({
       return;
     }
 
-    const qualificationRequired = siteConfig.sandboxTestCallEnabled;
     if (
       qualificationRequired &&
       !qualificationMatchesReview(
@@ -529,7 +531,7 @@ export function CreateReceptionistLaterSteps({
       )
     ) {
       setError(
-        "Run sandbox qualification for this exact reviewed configuration before submitting.",
+        "Run configuration verification for this exact reviewed configuration before saving.",
       );
       setStatus("error");
       return;
@@ -558,7 +560,7 @@ export function CreateReceptionistLaterSteps({
         fieldMeta,
         factMeta,
         review: review.record,
-        sandboxQualification: siteConfig.sandboxTestCallEnabled
+        sandboxQualification: qualificationRequired
           ? sandboxQualification?.record
           : undefined,
         agentBlueprint: submissionBlueprint,
@@ -756,10 +758,9 @@ export function CreateReceptionistLaterSteps({
             ) : null}
             {progress === "queued" ? (
               <p>
-                Website crawl is queued for early access. No scan endpoint is
-                configured on this static site, so we will not invent crawl
-                results. You can still review a blank draft — the business name
-                is suggested from the website address only.
+                The hosted website crawl is disabled on this public preview.
+                Review the business details manually; missing facts stay blank.
+                The business name is suggested from the website address only.
               </p>
             ) : null}
             {progress === "scanned" ? (
@@ -1223,7 +1224,7 @@ export function CreateReceptionistLaterSteps({
               ? "Applying the latest configuration edit…"
               : review
                 ? review.record.complete
-                  ? siteConfig.sandboxTestCallEnabled
+                  ? qualificationRequired
                     ? qualificationMatchesReview(
                         sandboxQualification,
                         review.record.revisionId,
