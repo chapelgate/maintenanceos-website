@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import fs, { mkdtempSync, rmSync } from "node:fs";
 import http from "node:http";
 import os from "node:os";
@@ -406,13 +406,43 @@ try {
   if (child.exitCode === null) {
     try { child.kill("SIGTERM"); } catch {}
   }
-  await Promise.race([browserExited, delay(2000)]);
+  await Promise.race([browserExited, delay(2500)]);
+  if (child.exitCode === null) {
+    if (process.platform === "win32") {
+      try {
+        spawnSync("taskkill", ["/PID", String(child.pid), "/T", "/F"], {
+          stdio: "ignore",
+        });
+      } catch {}
+    } else {
+      try { child.kill("SIGKILL"); } catch {}
+    }
+    await delay(500);
+  }
   await new Promise((resolve) => site.server.close(resolve));
-  await delay(300);
-  rmSync(profile, {
-    recursive: true,
-    force: true,
-    maxRetries: 10,
-    retryDelay: 200,
-  });
+  let cleaned = false;
+  for (let attempt = 1; attempt <= 8; attempt += 1) {
+    try {
+      rmSync(profile, {
+        recursive: true,
+        force: true,
+        maxRetries: 5,
+        retryDelay: 200,
+      });
+      cleaned = true;
+      break;
+    } catch (error) {
+      if (attempt === 8) {
+        console.warn(
+          "Browser acceptance passed, but temporary profile cleanup was deferred:",
+          error instanceof Error ? error.message : String(error),
+        );
+        break;
+      }
+      await delay(300);
+    }
+  }
+  if (!cleaned && fs.existsSync(profile)) {
+    console.warn("Temporary browser profile remains for OS cleanup:", profile);
+  }
 }
