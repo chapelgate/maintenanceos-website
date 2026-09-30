@@ -151,3 +151,17 @@ Status: RESOLVED — POLICY CHECK VERIFIED
 - This failure predated and was unrelated to the post-call email product change.
 - Surgical fix: preserved the existing `estate-recovery` selector and added `estate-trusted`; no workflow steps, secrets, permissions, triggers, product code, deployment targets or phone routing changed.
 - Local repository policy validation: `python scripts/gha-runner-policy-check.py .` PASS; 7 workflows scanned; hosted compute target remains £0.
+
+
+### 2026-09-30 — post-call commissioning path exhaustion
+Status: CODE COMPLETE / LIVE COMMISSIONING BLOCKED BY EXISTING ACCESS PATH
+
+- Canonical `main` commit `5aece8505e9d3019ee4e3e0f7f146c11c3953137` passed MaintenanceOS Cloud CI run `36763122681` end-to-end: runner policy, secret scan, dependency checks, compile, deterministic Python 3.13 suite, TLS/WSS probe, and Python 3.12 compatibility all PASS.
+- Public live health at `https://165-227-227-9.sslip.io/health` remained HTTP healthy with `realtime_voice=true`, `active_calls=0`, and `main_number_changed=false`.
+- DigitalOcean inventory confirms the prior MOS production droplet ID `602169737` no longer exists. The only MaintenanceOS droplet currently present is `601962983 maintenanceos-production-voice-rollback` at `165.227.227.9`.
+- Existing laptop MaintenanceOS SSH key: `165.232.47.24` timed out; `165.227.227.9` rejected authentication. No mutation occurred.
+- USH production health is OK at `138.68.183.183`; DigitalOcean adapter `DO_USH_DEPLOY` is registered and kill switch is false.
+- Local and trusted-estate-runner read-only USH checks both report `USH_DURABLE_IDENTITY_REQUIRED`; no durable MaintenanceOS workload identity is present.
+- Estate runner diagnostic run `36763673477` confirms `durable_workload_identity_present=false`, `ready_for_do_provision=false`, and broker return code 4.
+- Canonical USH machine-access registry contains verified targets for HLO, Cheap Trips, and USH itself only. MaintenanceOS is not yet a verified target for `cg-automation-live-lease`.
+- Safe autonomous routes are exhausted. Do not create a replacement SSH identity, reset root credentials, rebuild/restore the live droplet, expose a DigitalOcean token, or reroute the golden phone line merely to deploy this formatter-only change.

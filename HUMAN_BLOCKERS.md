@@ -40,3 +40,16 @@ The blocker above has now been independently re-proved rather than assumed.
 ## 2026-09-30 — Post-call email production commissioning
 
 The post-call email/report code is fully verified and safe for canonical source promotion. A separate live commissioning blocker remains: existing authenticated SSH to the accepted MaintenanceOS runtime is unavailable, and no authorised remote-exec path exposed by the connected DigitalOcean tooling can write the running host. Do not bypass access controls, rebuild the golden phone host, reset credentials, or reroute the live number merely to deploy this formatter-only change. Commission it when an already-authorised runtime deployment identity/path is restored.
+
+
+## 2026-09-30 — Restore the existing MaintenanceOS deployment identity
+
+This is the only remaining blocker for the post-call email change. Product code is merged to canonical `main` and fully green in CI; the live phone runtime has deliberately not been touched.
+
+Required human/admin action:
+1. Restore the **existing** estate machine-access path for MaintenanceOS; do not generate a new routine SSH key.
+2. Enrol droplet `601962983` / `165.227.227.9` as a verified MaintenanceOS target for the canonical USH identity `cg-automation-live-lease` using the existing `cg-automation` account and the already-authorised central key.
+3. Bootstrap/restore the renewable `maintenanceos-v1-pilot` USH workload identity in the authorised admin environment using `scripts/ush_establish_mos_identity.py` with the USH bootstrap credential available there. Do not put `DIGITALOCEAN_TOKEN`, SSH private keys, or bootstrap secrets into chat, source control, or Cursor.
+4. Once that existing authority path is restored, deploy only canonical `main`, verify `/health`, confirm `main_number_changed=false`, and test one controlled post-call email before declaring live commissioning complete.
+
+Evidence: laptop SSH authentication failed; trusted-runner USH diagnostic run `36763673477` reports `USH_DURABLE_IDENTITY_REQUIRED`; canonical USH machine registry currently has no MaintenanceOS target.
