@@ -18,11 +18,11 @@ const steps = [
   },
   {
     title: "Check the URL",
-    body: "If a scan service is configured we ask it for a draft. If not, the crawl is queued — we do not invent extracted content.",
+    body: "We validate the public URL and use its hostname only as a setup hint. The public site does not crawl pages; missing details stay empty until reviewed or supplied.",
   },
   {
     title: "Review the draft",
-    body: "You edit business name, greeting, hours, services, and FAQs before anything is stored. Copied fields show where they came from and how confident the scan was. Empty fields were not invented.",
+    body: "You edit business name, greeting, hours, services, and FAQs before anything is stored. The business name may start from the website-address hint; missing fields are not invented.",
   },
   {
     title: "Preview the receptionist pack",
@@ -44,8 +44,8 @@ export default function CreateReceptionistPage() {
       <JsonLd data={funnelPageJsonLd("create")} />
       <PageHero
         eyebrow="Early access · Pre-launch"
-        title="Turn your business website into an AI receptionist"
-        lede="Paste your site URL, review a draft, preview a sandbox receptionist pack, and request website-to-receptionist early access. Typical local shape: website → draft → pack → optional scripted sandbox demo. If no scan service is configured, the crawl is queued — we do not invent crawl results. This form does not place a live call or assign a phone number."
+        title="Start your AI receptionist setup from your website address"
+        lede="Paste your site URL, review and complete the draft, preview a sandbox receptionist pack, and request early access. The URL is a setup hint; this public site does not crawl its pages or invent missing business facts. This form does not place a live call or assign a phone number."
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <FunnelPathStrip />
@@ -97,8 +97,9 @@ export default function CreateReceptionistPage() {
           <ul className="mt-3 list-disc space-y-2 pl-5">
             <li>AI voice and receptionist behaviour remain under testing</li>
             <li>
-              Website crawl is queued unless an external scan endpoint is
-              configured — this page will not invent extracted content
+              This public site does not crawl the submitted website. The URL
+              is used as a setup hint; missing business facts stay empty until
+              reviewed or supplied
             </li>
             <li>
               This page does not claim a 30-second live phone number or commercial
