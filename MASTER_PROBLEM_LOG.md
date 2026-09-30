@@ -112,3 +112,16 @@ Status: ROOT CAUSE ISOLATED — HOTFIX VERIFIED — LIVE DEPLOY BLOCKED
 - No live deployment was made during investigation.
 - Safe production-write routes were exhausted: DigitalOcean connector has no remote-exec capability; the estate runner reaches the private/public SSH ports but root authentication is denied; repository/environment Action secret inventory is empty from the authorised GitHub principal.
 - Do not rebuild, restore, reset credentials or replace the accepted live droplet merely to force this hotfix onto production. Preserve rollback and use an authenticated existing-host deployment lane.
+
+
+### 2026-09-30 — deployment-path exhaustion verification
+Status: VERIFIED HUMAN/AUTHORITY BLOCKER — PRODUCT HOTFIX REMAINS FROZEN
+
+- Existing connected Windows device was tested read-only for an already-installed SSH deployment identity; none was available and both `cg-automation` and `root` BatchMode probes failed with exit 255.
+- Existing estate-trusted runner was tested on isolated diagnostic branch `diag/mos-existing-ssh-path-20260930`.
+- First diagnostic run `36745932316` exposed a test-harness defect: implicit shell `-e` aborted on the expected failed SSH probe before the result could be recorded. The diagnostic only was corrected; production and product code were untouched.
+- Corrected run `36746015189` PASS: runner `chapelgate-pool-mos` had no SSH agent and no public key under the runner user's `~/.ssh`; authentication to the accepted host failed for both `cg-automation` and `root`.
+- Hotfix tag `maintenanceos-stalled-turn-hotfix-20260930` was re-read and is identical to product SHA `51da30f1ab5f5060c280150d9b90869bfab9ec57`.
+- The verified hotfix remains exactly one commit ahead of the accepted live baseline and touches only the stalled-turn implementation plus its regression tests.
+- No destructive recovery, password reset, rebuild, restore, replacement droplet, provider reroute or credential exposure was attempted.
+- Next executable action remains restoring an approved existing-host deployment identity. After that, deploy only the frozen tag, restart the service, verify health, then reproduce the original caller turn on a controlled real PSTN call before closing this problem.
