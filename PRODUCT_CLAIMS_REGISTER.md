@@ -58,10 +58,10 @@ regressions.
 
 | ID | Claim | Evidence |
 |---|---|---|
-| V-02 | UK terminology and 999 (never 911) emergency guidance exists in current product source and regressions | `gemini_voice.py`; README; FINALISATION step 6; targeted 2026-09-26 regression audit |
+| V-02 | UK terminology and 999 (never 911) emergency guidance exists in current product source and regressions | `gemini_voice.py`; README; FINALISATION step 6; targeted 2026-09-30 regression audit |
 | V-03 | Receptionist source collects caller details for structured maintenance intake | README; current voice source; targeted regressions |
 | V-04 | Explicit caller-request human transfer exists in source and regressions; ordinary technical failure must fail closed rather than auto-transfer | CURRENT_STATUS; `tests/test_explicit_transfer_only.py`; main hardening commits `11ed8ea…`, `7c3bf1b…` |
-| V-05 | Assistant policy must not invent bookings, dispatches, refunds, compensation, account information or safety assurances | README; `gemini_voice.py`; `voice_policy.py`; `action_evidence.py`; targeted 2026-09-26 audit |
+| V-05 | Assistant policy must not invent bookings, dispatches, refunds, compensation, account information or safety assurances | README; `gemini_voice.py`; `voice_policy.py`; `action_evidence.py`; targeted 2026-09-30 audit |
 | V-06 | Historical real receptionist / validation calls have occurred in test/validation context only | README; CURRENT_STATUS; PILOT_CHECKLIST |
 | O-01 | Multi-tenant maintenance-operations system exists in canonical source | README |
 | O-02 | Tenant-scoped properties, residents, contractors, work orders, jobs, communications, exports, action evidence and call sessions exist in source | README; models/operations source |
