@@ -1,3 +1,39 @@
+"use strict";
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// index.ts
+var index_exports = {};
+__export(index_exports, {
+  main: () => main
+});
+module.exports = __toCommonJS(index_exports);
+
 // ../../../src/extract.ts
 var MAX_FIELD_CHARS = 4e3;
 var USER_AGENT = "MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)";
@@ -1139,8 +1175,8 @@ function omitEmptyMeta(fieldMeta, draft) {
 }
 
 // ../../../src/fetch-safe.ts
-import dns from "node:dns/promises";
-import https from "node:https";
+var import_promises = __toESM(require("node:dns/promises"), 1);
+var import_node_https = __toESM(require("node:https"), 1);
 
 // ../../../src/ssrf.ts
 var BLOCKED_HOSTNAMES = /* @__PURE__ */ new Set([
@@ -1309,7 +1345,7 @@ async function defaultLookup(hostname) {
   if (parseIPv4Literal(host) || host.includes(":")) {
     return [host];
   }
-  const records = await dns.lookup(host, { all: true, verbatim: true });
+  const records = await import_promises.default.lookup(host, { all: true, verbatim: true });
   return [...new Set(records.map((row) => row.address))];
 }
 function httpsGetToIp(url, ip, opts) {
@@ -1323,7 +1359,7 @@ function httpsGetToIp(url, ip, opts) {
       "Accept-Encoding": "identity",
       Connection: "close"
     };
-    const req = https.request(
+    const req = import_node_https.default.request(
       {
         host: ip,
         port,
@@ -1782,6 +1818,7 @@ async function main(event = {}) {
     );
   }
 }
-export {
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
   main
-};
+});

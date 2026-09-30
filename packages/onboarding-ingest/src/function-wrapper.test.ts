@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import { createRequire } from "node:module";
+import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { main } from "../packages/website/scan/index.ts";
+
+const require = createRequire(import.meta.url);
+const here = path.dirname(fileURLToPath(import.meta.url));
+const functionDir = path.resolve(here, "../packages/website/scan");
 
 test("serverless scan rejects non-POST requests", async () => {
   const result = await main({ http: { method: "GET", headers: {} } });
@@ -33,4 +41,39 @@ test("serverless scan exposes CORS preflight without crawling", async () => {
     "https://seahorse-app-4oasq.ondigitalocean.app",
   );
   assert.equal(result.headers["Access-Control-Allow-Methods"], "POST, OPTIONS");
+});
+
+test("deployed Functions artifact is prebuilt-only and loadable", async () => {
+  assert.equal(
+    fs.existsSync(path.join(functionDir, "package.json")),
+    false,
+    "package.json would trigger an unsupported remote function build",
+  );
+  assert.equal(
+    fs.existsSync(path.join(functionDir, "build.sh")),
+    false,
+    "build.sh would trigger a remote function build",
+  );
+  assert.equal(
+    fs.readFileSync(path.join(functionDir, ".include"), "utf8").trim(),
+    "bundle.cjs",
+  );
+
+  const project = fs.readFileSync(
+    path.resolve(here, "../project.yml"),
+    "utf8",
+  );
+  assert.match(project, /main:\s*bundle\.cjs/);
+
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    main: typeof main;
+  };
+  assert.equal(typeof deployed.main, "function");
+
+  const privateTarget = await deployed.main({
+    http: { method: "POST", headers: {} },
+    url: "https://127.0.0.1/private",
+  });
+  assert.equal(privateTarget.statusCode, 400);
+  assert.equal(privateTarget.body.ok, false);
 });
