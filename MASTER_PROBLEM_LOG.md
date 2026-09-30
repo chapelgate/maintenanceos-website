@@ -40,3 +40,20 @@ Surgical fix:
 
 Verification:
 Pending branch release-gate execution. No telephony, provider, provisioning, pricing, legal, or launch-flag behaviour changed.
+
+
+## MOS-WEB-CI-001 — Website repair verifier counted non-HTML routes as index.html
+Status: FIXED / VERIFICATION PENDING
+Opened: 2026-09-30
+
+Problem:
+The dedicated website integration repair workflow required 30 exported `index.html` files. The current Next.js static build correctly generates 30 routes, but only 28 are HTML/index routes; `robots.txt` and `sitemap.xml` are machine-readable non-HTML routes.
+
+Evidence:
+Independent Windows verification on exact branch SHA generated all 30 Next.js routes and 28 `index.html` files, then failed only at the incorrect route-count assertion.
+
+Surgical fix:
+Require exactly 28 exported `index.html` files and separately require `out/robots.txt` plus `out/sitemap.xml`. This preserves the intended 30-route coverage without weakening the gate.
+
+Verification:
+Pending rerun on the corrected branch. The earlier PowerShell `npm.ps1` execution-policy issue was bypassed with `npm.cmd`; it occurred before product execution and required no product change.
