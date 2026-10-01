@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { isPathAllowed, isWebIngestEnabled, parseRobotsTxt, runScan } from "./scan.ts";
+import {
+  isPathAllowed,
+  isReaderChallengePage,
+  isWebIngestEnabled,
+  parseRobotsTxt,
+  runScan,
+} from "./scan.ts";
 import type { HttpGetFn, LookupFn, SafeHttpResponse } from "./types.ts";
 
 function htmlPage(url: string, html: string, status = 200): SafeHttpResponse {
@@ -193,6 +199,21 @@ test("runScan augments a thin client-rendered shell from one bounded same-origin
   }
 });
 
+test("Reader challenge detection rejects verification interstitials without rejecting business pages", () => {
+  assert.equal(
+    isReaderChallengePage(
+      "<html><head><title>Security Verification</title></head><body>Please verify you are human. CAPTCHA required.</body></html>",
+    ),
+    true,
+  );
+  assert.equal(
+    isReaderChallengePage(
+      "<html><head><title>ABC Security</title></head><body><h1>Security Verification Services</h1><p>We verify alarm systems for customers.</p></body></html>",
+    ),
+    false,
+  );
+});
+
 test("runScan can recover a bot-challenged public site through the bounded reader fallback", async () => {
   const readerHtml = `<!doctype html><html><head>
     <title>Alley Gates | Local Installation & Maintenance Specialists</title>
@@ -240,6 +261,7 @@ test("runScan can recover a bot-challenged public site through the bounded reade
       readerCalls += 1;
       assert.equal(url.hostname, "r.jina.ai");
       assert.equal(opts.headers?.["X-Respond-With"], "html");
+      assert.equal(opts.headers?.["X-No-Cache"], "true");
       assert.equal(opts.headers?.Accept, "text/html");
       return htmlPage(url.toString(), readerHtml);
     },
@@ -256,6 +278,41 @@ test("runScan can recover a bot-challenged public site through the bounded reade
     assert.ok(result.warnings.includes("http_401"));
     assert.ok(result.warnings.includes("reader_fallback_used"));
     assert.equal(result.sources[0]?.url, "https://alleygates.example/");
+  }
+});
+
+test("runScan rejects a Reader security challenge instead of learning it", async () => {
+  const direct = pages({
+    "https://challenged.example/robots.txt": {
+      status: 401,
+      headers: { "content-type": "text/html" },
+      body: "bot challenge",
+      url: new URL("https://challenged.example/robots.txt"),
+    },
+    "https://challenged.example/": {
+      status: 401,
+      headers: { "content-type": "text/html" },
+      body: "bot challenge",
+      url: new URL("https://challenged.example/"),
+    },
+  });
+
+  const result = await runScan("https://challenged.example/", {
+    enabled: true,
+    ...direct,
+    readerFallback: true,
+    readerLookup: async () => ["203.0.113.11"],
+    readerGet: async (url) =>
+      htmlPage(
+        url.toString(),
+        "<html><head><title>Security Verification</title></head><body>Please verify you are human. CAPTCHA required.</body></html>",
+      ),
+  });
+
+  assert.equal(result.ok, false);
+  if (!result.ok) {
+    assert.equal(result.error, "fetch_failed");
+    assert.ok(result.warnings.includes("reader_challenge_rejected"));
   }
 });
 
