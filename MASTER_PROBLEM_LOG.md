@@ -436,3 +436,33 @@ Live release verification:
 
 Cross-engine note:
 The pre-existing Firefox/WebKit smoke runner did not return a fresh result on the authorised Windows verifier during this candidate run and had no active browser child when inspected. This was treated as a verifier-environment issue, not product evidence. The prior frozen cross-engine baseline remains green; the release-critical current change is additionally covered by the successful real Edge mobile interactive acceptance and Edge 18/18 viewport matrix.
+
+
+## MOS-WEB-CREATE-003 — Restored website learning and browser voice preview required live convergence proof
+Status: RESOLVED / VERIFIED LIVE
+Opened: 2026-10-01
+Resolved: 2026-10-01
+
+Problem:
+After the interactive /create release was frozen, later intentional work restored on-demand website learning through the same-origin DigitalOcean Function and repaired its production route. The combined production journey therefore needed a fresh black-box proof that website learning, review, receptionist generation, and browser voice interaction still converged together without reintroducing customer-facing engineering language, lead side effects, or telephony changes.
+
+Verification on exact live application SHA `ef3697eb285092b7db360cb54939d156e5e8461d`:
+- live `/release.json` matched that exact `main` SHA;
+- live `/create/` returned HTTP 200;
+- visitor-visible text audit found 0 occurrences of `sandbox`, `under test`, or `under testing`;
+- same-origin `POST /api/website/scan` against `https://example.com` returned HTTP 200 with `Example Domain` plus source/confidence provenance;
+- a target-specific `https://alleygates.co.uk` scan returned fail-closed HTTP 422 with `http_401`; a second public target succeeded, proving the scanner service itself was available and the Alley Gates result was a remote-site refusal rather than scanner outage;
+- real Microsoft Edge headless mobile acceptance at 390x844@3 completed website learning -> role selection -> reviewed configuration -> `Try your receptionist` -> `Start voice call`;
+- deterministic browser speech QA asked `What services do you offer?`;
+- the spoken and transcript replies both used the reviewed `Boiler repairs` / `Emergency plumbing` service data;
+- production lead/email requests before optional Save: 0;
+- runtime exceptions: 0;
+- live telephone service, carrier routing, provisioning adapters, and provider credentials were not modified.
+
+Debugging/reuse decision:
+The existing reviewed CDP acceptance harness was reused for the live black-box run instead of adding a duplicate browser-testing stack. No new service, runner, paid model, package, or infrastructure was introduced.
+
+Freeze:
+This evidence record is merged through normal PR change control. After the record-only merge is published by the existing DigitalOcean native auto-deploy path, the exact deployed merge SHA must be rechecked and the live black-box acceptance rerun before creating freeze tag `maintenanceos-website-create-scan-voice-live-20261001`.
+
+Evidence: `docs/CREATE_LIVE_BLACKBOX_2026-10-01.md`.
