@@ -281,6 +281,86 @@ test("runScan can recover a bot-challenged public site through the bounded reade
   }
 });
 
+test("runScan recovers a direct TLS/fetch failure with a bounded same-origin reader crawl", async () => {
+  const forumHome = `<!doctype html><html><head>
+    <title>Forum Housing – Building Lives – Enabling Change</title>
+  </head><body>
+    <nav>
+      <a href="/about/">About Us</a>
+      <a href="/living-with-us/">Living With Us</a>
+      <a href="/contact-us/">Contact Us</a>
+    </nav>
+    <h2>About Forum Housing</h2>
+    <p>Forum Housing Association – Providing Person Centred Supported Housing for over 50 years</p>
+  </body></html>`;
+
+  const forumAbout = `<html><body>
+    <h1>About Forum Housing</h1>
+    <p>We provide person centred supported housing across Wirral, Cheshire and Warrington.</p>
+  </body></html>`;
+
+  const forumLiving = `<html><body>
+    <h2>Our Accomodation</h2>
+    <h4>Caroline Place</h4>
+    <h4>Supported Lodgings</h4>
+    <h4>Curzon House</h4>
+  </body></html>`;
+
+  const forumContact = `<html><body>
+    <h2>Contact Us</h2>
+    <p>Head Office ( Monday - Friday 9am-5pm) 0151 649 9718</p>
+  </body></html>`;
+
+  let readerCalls = 0;
+  const result = await runScan("https://forum.example/", {
+    enabled: true,
+    readerFallback: true,
+    lookup: async () => ["203.0.113.10"],
+    get: async () => {
+      throw new Error("unable to get local issuer certificate");
+    },
+    readerLookup: async (hostname) => {
+      assert.equal(hostname, "r.jina.ai");
+      return ["203.0.113.11"];
+    },
+    readerGet: async (url, _ip, opts) => {
+      readerCalls += 1;
+      assert.equal(opts.headers?.["X-Respond-With"], "html");
+      const target = url.toString();
+      if (target.includes("/living-with-us/")) {
+        return htmlPage(target, forumLiving);
+      }
+      if (target.includes("/contact-us/")) {
+        return htmlPage(target, forumContact);
+      }
+      if (target.includes("/about/")) {
+        return htmlPage(target, forumAbout);
+      }
+      return htmlPage(target, forumHome);
+    },
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(readerCalls, 4);
+  if (result.ok) {
+    assert.match(result.draft.businessName ?? "", /Forum Housing/);
+    assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
+    assert.match(result.draft.services ?? "", /Caroline Place/);
+    assert.match(result.draft.services ?? "", /Supported Lodgings/);
+    assert.match(result.draft.faqs ?? "", /0151 649 9718/);
+    assert.ok(result.warnings.includes("fetch_failed"));
+    assert.ok(result.warnings.includes("reader_fallback_used"));
+    assert.equal(
+      result.sources.some((source) => source.url.endsWith("/living-with-us/")),
+      true,
+    );
+    assert.equal(
+      result.sources.some((source) => source.url.endsWith("/contact-us/")),
+      true,
+    );
+  }
+});
+
 test("runScan rejects a Reader security challenge instead of learning it", async () => {
   const direct = pages({
     "https://challenged.example/robots.txt": {
