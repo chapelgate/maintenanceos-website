@@ -9,6 +9,7 @@
 
 import dns from "node:dns/promises";
 import https from "node:https";
+import { isIP } from "node:net";
 import {
   allowPublicHttpsUrl,
   assertResolvedAddressesPublic,
@@ -68,14 +69,34 @@ export function httpsGetToIp(
       Connection: "close",
     };
 
+    const hostname = url.hostname.replace(/^\[|\]$/g, "");
+    const family = isIP(ip);
+    if (family !== 4 && family !== 6) {
+      reject(new ScanError("fetch_failed", "Resolved target was not an IP address.", 422));
+      return;
+    }
+
     const req = https.request(
       {
-        host: ip,
+        // Keep the original hostname as the HTTP/TLS authority, but pin Node's
+        // DNS lookup to the public address that was already validated above.
+        // This preserves SSRF rebinding protection without routing the request
+        // through a raw-IP virtual host.
+        hostname,
         port,
+        family,
+        autoSelectFamily: false,
         path: `${url.pathname}${url.search}`,
         method: "GET",
-        servername: url.hostname.replace(/^\[|\]$/g, ""),
+        servername: hostname,
         headers,
+        lookup: (_hostname, options, callback) => {
+          if (typeof options === "object" && options !== null && options.all) {
+            callback(null, [{ address: ip, family }]);
+            return;
+          }
+          callback(null, ip, family);
+        },
         timeout: opts.timeoutMs,
       },
       (res) => {

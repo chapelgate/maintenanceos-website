@@ -3,7 +3,13 @@
  * Returns only fields extracted from fetched pages. Never invents copy.
  */
 
-import { extractDraftFromHtml, extractSameOriginHrefs, rankCandidateUrls } from "./extract.ts";
+import {
+  extractDraftFromHtml,
+  extractSameOriginHrefs,
+  extractSameOriginScriptSrcs,
+  extractStructuredBusinessHtmlFromScript,
+  rankCandidateUrls,
+} from "./extract.ts";
 import {
   DEFAULT_MAX_BYTES_PER_PAGE,
   DEFAULT_MAX_REDIRECTS,
@@ -23,6 +29,8 @@ import {
 export const MAX_PAGES = 5;
 export const MAX_TOTAL_BYTES = 768 * 1024;
 export const TOTAL_DEADLINE_MS = 12_000;
+export const MAX_STATIC_SCRIPT_ASSETS = 1;
+export const MAX_STATIC_SCRIPT_BYTES = 640 * 1024;
 export const OUR_USER_AGENT_TOKEN = "MaintenanceOS-OnboardingScan";
 
 export function isWebIngestEnabled(
@@ -268,7 +276,92 @@ export async function runScan(
     };
   }
 
-  const extracted = extractDraftFromHtml(pages);
+  let extracted = extractDraftFromHtml(pages);
+
+  // Some public business sites deliberately ship a tiny static HTML shell and
+  // compile schema.org business facts into their own same-origin JavaScript.
+  // When the normal HTML crawl is thin, inspect (never execute) one bounded
+  // same-origin asset and feed only explicit LocalBusiness literals back
+  // through the existing claims-safe extractor.
+  if (
+    (!extracted.draft.hours || !extracted.draft.services) &&
+    pages.length > 0 &&
+    remaining() >= 500 &&
+    totalBytes < MAX_TOTAL_BYTES
+  ) {
+    const firstPage = pages[0]!;
+    let firstUrl: URL | null = null;
+    try {
+      firstUrl = new URL(firstPage.url);
+    } catch {
+      firstUrl = null;
+    }
+
+    if (firstUrl) {
+      const scriptUrls = extractSameOriginScriptSrcs(firstPage.html, firstUrl)
+        .slice(0, MAX_STATIC_SCRIPT_ASSETS);
+
+      for (const scriptUrl of scriptUrls) {
+        if (remaining() < 400 || totalBytes >= MAX_TOTAL_BYTES) break;
+
+        let parsed: URL;
+        try {
+          parsed = new URL(scriptUrl);
+        } catch {
+          continue;
+        }
+        if (!isPathAllowed(robots, parsed.pathname || "/")) {
+          warnings.push("robots_skipped_script");
+          continue;
+        }
+
+        const remainingBytes = MAX_TOTAL_BYTES - totalBytes;
+        if (remainingBytes < 1024) break;
+
+        try {
+          const res = await fetchPublicHttps(scriptUrl, {
+            lookup: options.lookup,
+            get: options.get,
+            remainingMs: remaining(),
+            timeoutMs: DEFAULT_PAGE_TIMEOUT_MS,
+            maxBytes: Math.min(MAX_STATIC_SCRIPT_BYTES, remainingBytes),
+            maxRedirects: DEFAULT_MAX_REDIRECTS,
+          });
+          if (res.status >= 400) {
+            warnings.push(`script_http_${res.status}`);
+            continue;
+          }
+
+          const type = Object.entries(res.headers).find(
+            ([key]) => key.toLowerCase() === "content-type",
+          )?.[1] ?? "";
+          if (
+            !/(?:java|ecma)script/i.test(type) &&
+            !/\.m?js$/i.test(res.url.pathname)
+          ) {
+            warnings.push("skipped_non_script_asset");
+            continue;
+          }
+
+          const bytes = Buffer.byteLength(res.body, "utf8");
+          totalBytes += bytes;
+          const synthetic = extractStructuredBusinessHtmlFromScript(res.body);
+          if (!synthetic) continue;
+
+          sources.push({ url: res.url.toString(), status: res.status, bytes });
+          pages.push({ url: res.url.toString(), html: synthetic });
+          warnings.push("static_script_schema_fallback");
+          extracted = extractDraftFromHtml(pages);
+          break;
+        } catch (err) {
+          warnings.push(
+            err instanceof ScanError ? `script_${err.code}` : "script_fetch_failed",
+          );
+        }
+      }
+    }
+  }
+
   return {
     ok: true,
     untrusted: true,
