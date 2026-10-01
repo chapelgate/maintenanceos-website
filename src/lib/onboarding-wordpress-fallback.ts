@@ -304,7 +304,6 @@ export async function requestWordPressRestFallback(
     method: "GET",
     mode: "cors",
     credentials: "omit",
-    cache: "no-store",
     redirect: "follow",
     referrerPolicy: "no-referrer",
     signal: controller.signal,
