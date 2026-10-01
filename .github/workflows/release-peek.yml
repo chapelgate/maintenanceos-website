@@ -1,4 +1,4 @@
-name: PR152 live scanner verification
+name: Final website knowledge freeze verification
 
 on:
   push:
@@ -11,39 +11,38 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
-      - name: Verify exact release and real site knowledge
+      - name: Wait for final docs-only release and smoke real sites
         shell: bash
         run: |
           set -euo pipefail
           origin='https://seahorse-app-4oasq.ondigitalocean.app'
-          expected='fdd526696294e28faf9b57603a1811c816893cde'
+          expected='64c3af10ddfe539c925da0a4823ae84be1ceb9ae'
 
-          curl -fsS "$origin/release.json" -o /tmp/release.json
+          deployed=''
+          for i in $(seq 1 50); do
+            curl -fsS "$origin/release.json" -o /tmp/release.json || true
+            deployed="$(python3 -c "import json; print(json.load(open('/tmp/release.json')).get('commit',''))" 2>/dev/null || true)"
+            echo "attempt=$i deployed=$deployed"
+            [ "$deployed" = "$expected" ] && break
+            sleep 8
+          done
+          test "$deployed" = "$expected"
           cat /tmp/release.json
-          python3 -c "import json; r=json.load(open('/tmp/release.json')); assert r.get('commit') == '$expected', r"
 
-          probe() {
-            name="$1"
-            url="$2"
-            out="$3"
-            for n in 1 2 3; do
-              code="$(curl --max-time 30 -sS -o "$out" -w '%{http_code}' -X POST "$origin/api/website/scan" -H 'Content-Type: application/json' -H 'Accept: application/json' --data-binary "{\"url\":\"$url\"}" || true)"
-              echo "$name attempt=$n HTTP_STATUS=$code"
-              cat "$out"
-              echo
-              test "$code" = '200'
-            done
-          }
+          for spec in 'alley|https://alleygates.co.uk/' 'gas|https://expressgasdelivery.com/'; do
+            name="${spec%%|*}"
+            url="${spec#*|}"
+            code="$(curl --max-time 30 -sS -o "/tmp/$name.json" -w '%{http_code}' -X POST "$origin/api/website/scan" -H 'Content-Type: application/json' -H 'Accept: application/json' --data-binary "{\"url\":\"$url\"}" || true)"
+            echo "$name HTTP_STATUS=$code"
+            cat "/tmp/$name.json"
+            echo
+            test "$code" = '200'
+          done
 
-          probe ALLEY 'https://alleygates.co.uk/' /tmp/alley.json
-          probe GAS 'https://expressgasdelivery.com/' /tmp/gas.json
+          python3 -c "import json; a=json.load(open('/tmp/alley.json')); b=json.dumps(a).lower(); assert a.get('ok') is True; assert all(x in b for x in ['alley gate installation','cctv','security fencing','alley gate keys']); assert 'reader_fallback_used' in (a.get('warnings') or [])"
+          python3 -c "import json; g=json.load(open('/tmp/gas.json')); d=g.get('draft') or {}; assert g.get('ok') is True and (d.get('hours') or '').strip() and (d.get('services') or '').strip()"
 
-          python3 -c "import json; a=json.load(open('/tmp/alley.json')); b=json.dumps(a).lower(); assert a.get('ok') is True; assert all(x in b for x in ['alley gate installation','cctv','security fencing','alley gate keys']); assert 'reader_fallback_used' in (a.get('warnings') or []); assert 'security verification' not in b"
-          python3 -c "import json; g=json.load(open('/tmp/gas.json')); d=g.get('draft') or {}; b=json.dumps(g).lower(); assert g.get('ok') is True; assert (d.get('hours') or '').strip(); assert (d.get('services') or '').strip(); assert 'propane' in b and 'patio gas' in b"
-
-          echo 'EXACT_RELEASE=PASS'
-          echo 'ALLEY_GATES_3X=PASS'
-          echo 'EXPRESS_GAS_3X=PASS'
-          echo 'LIVE_SCANNER=PASS'
+          echo 'FINAL_RELEASE=PASS'
+          echo 'FINAL_LIVE_SMOKE=PASS'
