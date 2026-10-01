@@ -1,0 +1,54 @@
+name: Temporary live knowledge verification
+
+on:
+  push:
+    branches:
+      - verify/live-knowledge-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Wait for exact production website release
+        env:
+          EXPECTED_SHA: 0fcfcfa7d4fed2d3b6700c8f59d8a8654b8bd62c
+          ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
+        run: |
+          set -euo pipefail
+          matched=0
+          for i in $(seq 1 90); do
+            body="$(curl -fsS --max-time 10 "$ORIGIN/release.json" || true)"
+            live_sha="$(printf '%s' "$body" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).commit||"")}catch{console.log("")}})')"
+            echo "release_attempt=$i live_sha=${live_sha:-unavailable}"
+            if [ "$live_sha" = "$EXPECTED_SHA" ]; then
+              matched=1
+              break
+            fi
+            sleep 10
+          done
+          test "$matched" = 1
+          echo "LIVE_RELEASE_SHA=PASS"
+
+      - name: Probe real Alley Gates website scan
+        env:
+          ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
+        run: |
+          set -euo pipefail
+          code="$(curl -sS --max-time 30 -o /tmp/scan.json -w '%{http_code}' -X POST "$ORIGIN/api/website/scan" -H 'Content-Type: application/json' --data '{"url":"https://alleygates.co.uk/"}')"
+          echo "scan_http=$code"
+          cat /tmp/scan.json
+          test "$code" = 200
+          node - /tmp/scan.json <<'NODE'
+          const fs=require('fs');
+          const j=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+          const text=JSON.stringify(j);
+          if(!j.ok) throw new Error('scan not ok');
+          if(!/Alley Gates/i.test(text)) throw new Error('business name missing');
+          if(!/(Alley Gate Installation|CCTV|Security Fencing|Alley Gate Keys)/i.test(text)) throw new Error('useful website-derived service knowledge missing');
+          console.log('LIVE_ALLEYGATES_SCAN=PASS');
+          console.log('LIVE_SCAN_HAS_KEYS='+(/Alley Gate Keys|keys/i.test(text)?'1':'0'));
+          NODE
