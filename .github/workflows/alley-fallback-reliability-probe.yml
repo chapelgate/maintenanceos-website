@@ -1,0 +1,53 @@
+name: Alley fallback reliability probe
+
+on:
+  push:
+    branches:
+      - diag/live-create-real-browser-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Sample live Alley Gates scanner reliability
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin='https://seahorse-app-4oasq.ondigitalocean.app'
+          pass=0
+          fail=0
+          : > /tmp/results.tsv
+          for i in $(seq 1 8); do
+            start="$(date +%s%3N)"
+            code="$(curl --max-time 18 -sS -o /tmp/body -w '%{http_code}'               -X POST "$origin/api/website/scan"               -H 'Content-Type: application/json'               -H 'Accept: application/json'               --data-binary '{"url":"https://alleygates.co.uk/"}' || true)"
+            end="$(date +%s%3N)"
+            ms=$((end-start))
+            warnings="$(python3 - <<'PY'
+          import json
+          try:
+              b=json.load(open('/tmp/body'))
+              print(','.join(b.get('warnings') or []))
+          except Exception:
+              print('unparseable')
+          PY
+          )"
+            ok="$(python3 - <<'PY'
+          import json
+          try:
+              b=json.load(open('/tmp/body'))
+              print('1' if b.get('ok') is True else '0')
+          except Exception:
+              print('0')
+          PY
+          )"
+            printf '%s\t%s\t%s\t%s\t%s\n' "$i" "$code" "$ok" "$ms" "$warnings" | tee -a /tmp/results.tsv
+            if [ "$code" = 200 ] && [ "$ok" = 1 ]; then pass=$((pass+1)); else fail=$((fail+1)); fi
+            sleep 1
+          done
+          echo "PASS_COUNT=$pass"
+          echo "FAIL_COUNT=$fail"
+          cat /tmp/results.tsv
