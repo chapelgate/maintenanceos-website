@@ -1585,10 +1585,9 @@ async function fetchPublicHttps(raw, options = {}) {
     if (!ipCheck.ok) {
       throw new ScanError(ipCheck.reason, ssrfMessage(ipCheck.reason), 400);
     }
-    const orderedAddresses = [
-      ...addresses.filter((address) => Boolean(parseIPv4Literal(address))),
-      ...addresses.filter((address) => !parseIPv4Literal(address))
-    ];
+    const ipv4Addresses = addresses.filter((address) => Boolean(parseIPv4Literal(address)));
+    const ipv6Addresses = addresses.filter((address) => !parseIPv4Literal(address));
+    const orderedAddresses = ipv4Addresses.length ? ipv4Addresses : ipv6Addresses;
     let response2 = null;
     let lastError = null;
     const addressAttemptsStarted = Date.now();

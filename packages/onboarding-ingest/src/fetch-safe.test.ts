@@ -72,31 +72,44 @@ test("fetchPublicHttps prefers public IPv4 when DNS also returns IPv6", async ()
   assert.deepEqual(seen, ["185.151.30.131"]);
 });
 
-test("fetchPublicHttps retries another validated address after an edge auth rejection", async () => {
+test("fetchPublicHttps does not switch to IPv6 after an IPv4 edge auth rejection", async () => {
   const seen: string[] = [];
   const res = await fetchPublicHttps("https://edge-policy.example/", {
     lookup: async () => ["2a07:7800::131", "185.151.30.131"],
     get: async (url, ip) => {
       seen.push(ip);
-      if (ip === "185.151.30.131") {
-        return {
-          status: 401,
-          headers: { "content-type": "text/html" },
-          body: "edge rejected",
-          url,
-        };
+      if (ip.includes(":")) {
+        throw new Error("IPv6 must not be attempted while public IPv4 exists");
       }
+      return {
+        status: 401,
+        headers: { "content-type": "text/html" },
+        body: "edge rejected",
+        url,
+      };
+    },
+  });
+  assert.equal(res.status, 401);
+  assert.equal(res.body, "edge rejected");
+  assert.deepEqual(seen, ["185.151.30.131"]);
+});
+
+test("fetchPublicHttps still supports an IPv6-only public hostname", async () => {
+  const seen: string[] = [];
+  const res = await fetchPublicHttps("https://ipv6-only.example/", {
+    lookup: async () => ["2a07:7800::131"],
+    get: async (url, ip) => {
+      seen.push(ip);
       return {
         status: 200,
         headers: { "content-type": "text/html" },
-        body: "<html>fallback edge ok</html>",
+        body: "<html>ipv6 only ok</html>",
         url,
       };
     },
   });
   assert.equal(res.status, 200);
-  assert.match(res.body, /fallback edge ok/);
-  assert.deepEqual(seen, ["185.151.30.131", "2a07:7800::131"]);
+  assert.deepEqual(seen, ["2a07:7800::131"]);
 });
 
 test("fetchPublicHttps returns the body when DNS and HTTPS stay public", async () => {

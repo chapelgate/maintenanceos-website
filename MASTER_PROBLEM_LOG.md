@@ -531,3 +531,14 @@ Website scanner and browser receptionist preview only. Do not modify, exercise, 
 Verification required before RESOLVED:
 full repository regression, exact generated function-bundle check, merge, website/function deployment through the existing path, then live black-box scans and /create browser answers for both a normal HTML site and a client-rendered SPA.
 
+### 2026-10-01 live deployment follow-up
+Status: LIVE PARTIAL — Express Gas PASS; Alley Gates runtime fault isolated
+
+Post-merge black-box proof against deployed commit d174d4451dca32ad402a4ba1a268b739734f18e5:
+- Express Gas Delivery: PASS three consecutive live scans. Opening hours and services were recovered from the bounded same-origin static script fallback.
+- Alley Gates: DigitalOcean Functions returned a platform-level HTTP 400 before the scanner could emit its typed response.
+- Reproduction isolated the crash path to pinned Node TLS when the address retry falls from IPv4 to IPv6: Node throws from TLSSocket.setServername on the pinned IPv6 construction path.
+- Surgical follow-up: when validated public IPv4 addresses exist, retry only those addresses. Do not cross address families after an application-level 401/403. IPv6 remains available for genuinely IPv6-only hosts through the existing abstraction/tests.
+
+Hard boundary remains unchanged: website scanner/browser preview only. No MaintenanceOS production telephony, carrier routing, phone numbers, provider credentials, production voice runtime or golden phone line may be changed or exercised.
+
