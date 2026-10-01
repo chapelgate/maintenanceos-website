@@ -1,4 +1,4 @@
-name: Reader anti-bot browser-engine probe
+name: Reader auto no-cache reliability probe
 
 on:
   push:
@@ -11,9 +11,9 @@ permissions:
 jobs:
   peek:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 7
     steps:
-      - name: Compare Reader auto and browser engines
+      - name: Compare cached and no-cache Reader auto mode
         shell: bash
         run: |
           set -euo pipefail
@@ -22,18 +22,16 @@ jobs:
           probe() {
             label="$1"; shift
             echo "=== $label ==="
-            code="$(curl --max-time 45 -sS -o /tmp/body -D /tmp/head -w '%{http_code}' "$@" "$url" || true)"
+            code="$(curl --max-time 35 -sS -o /tmp/body -D /tmp/head -w '%{http_code}' "$@" "$url" || true)"
             echo "HTTP_STATUS=$code BYTES=$(wc -c </tmp/body)"
-            sed -n '1,25p' /tmp/head
             for needle in 'Security Verification' 'ALLEY GATE KEYS' 'Alley Gate Installation' 'CCTV' 'Security Fencing'; do
               printf '%s=' "$needle"
               grep -F -i -q "$needle" /tmp/body && echo YES || echo NO
             done
-            echo "--- FIRST 500 ---"
-            head -c 500 /tmp/body
-            echo
+            echo "TITLE=$(grep -oi -m1 '<title>[^<]*</title>' /tmp/body || true)"
           }
 
-          probe AUTO_HTML             -H 'X-Respond-With: html'             -H 'Accept: text/html'
-
-          probe BROWSER_HTML             -H 'X-Respond-With: html'             -H 'X-Engine: browser'             -H 'X-No-Cache: true'             -H 'Accept: text/html'
+          for i in 1 2 3; do
+            probe "AUTO_CACHED_$i"               -H 'X-Respond-With: html'               -H 'Accept: text/html'
+            probe "AUTO_NOCACHE_$i"               -H 'X-Respond-With: html'               -H 'X-No-Cache: true'               -H 'Accept: text/html'
+          done
