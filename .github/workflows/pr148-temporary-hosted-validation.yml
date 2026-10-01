@@ -24,7 +24,7 @@ jobs:
       - name: Validate exact PR candidate in isolated container
         run: |
           set -euo pipefail
-          docker run --rm --shm-size=1g -v "$PWD:/src:ro" node:24-bookworm bash -lc '
+          docker run --rm --shm-size=1g -e SOURCE_COMMIT_HASH="$GITHUB_SHA" -v "$PWD:/src:ro" node:24-bookworm bash -lc '
             set -euo pipefail
             cp -a /src /work
             cd /work
