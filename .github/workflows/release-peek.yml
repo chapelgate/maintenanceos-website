@@ -11,70 +11,39 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 8
     steps:
-      - name: Wait for exact release and verify real business sites
+      - name: Verify exact release and real site knowledge
         shell: bash
         run: |
           set -euo pipefail
           origin='https://seahorse-app-4oasq.ondigitalocean.app'
           expected='fdd526696294e28faf9b57603a1811c816893cde'
 
-          deployed=''
-          for i in $(seq 1 60); do
-            curl -fsS "$origin/release.json" -o /tmp/release.json || true
-            deployed="$(python3 - <<'PY'
-import json
-try:
-    print(json.load(open('/tmp/release.json')).get('commit',''))
-except Exception:
-    print('')
-PY
-)"
-            echo "release_attempt=$i deployed=$deployed"
-            [ "$deployed" = "$expected" ] && break
-            sleep 10
-          done
-          test "$deployed" = "$expected"
+          curl -fsS "$origin/release.json" -o /tmp/release.json
           cat /tmp/release.json
+          python3 -c "import json; r=json.load(open('/tmp/release.json')); assert r.get('commit') == '$expected', r"
 
-          scan() {
-            name="$1"; url="$2"; out="$3"
-            for i in 1 2 3; do
-              code="$(curl --max-time 30 -sS -o "$out" -D /tmp/head -w '%{http_code}'                 -X POST "$origin/api/website/scan"                 -H 'Content-Type: application/json'                 -H 'Accept: application/json'                 --data-binary "{\"url\":\"$url\"}" || true)"
-              echo "$name attempt=$i HTTP_STATUS=$code"
+          probe() {
+            name="$1"
+            url="$2"
+            out="$3"
+            for n in 1 2 3; do
+              code="$(curl --max-time 30 -sS -o "$out" -w '%{http_code}' -X POST "$origin/api/website/scan" -H 'Content-Type: application/json' -H 'Accept: application/json' --data-binary "{\"url\":\"$url\"}" || true)"
+              echo "$name attempt=$n HTTP_STATUS=$code"
               cat "$out"
               echo
               test "$code" = '200'
-              sleep 1
             done
           }
 
-          scan ALLEY 'https://alleygates.co.uk/' /tmp/alley.json
-          scan GAS 'https://expressgasdelivery.com/' /tmp/gas.json
+          probe ALLEY 'https://alleygates.co.uk/' /tmp/alley.json
+          probe GAS 'https://expressgasdelivery.com/' /tmp/gas.json
 
-          python3 - <<'PY'
-import json
-alley=json.load(open('/tmp/alley.json'))
-gas=json.load(open('/tmp/gas.json'))
+          python3 -c "import json; a=json.load(open('/tmp/alley.json')); b=json.dumps(a).lower(); assert a.get('ok') is True; assert all(x in b for x in ['alley gate installation','cctv','security fencing','alley gate keys']); assert 'reader_fallback_used' in (a.get('warnings') or []); assert 'security verification' not in b"
+          python3 -c "import json; g=json.load(open('/tmp/gas.json')); d=g.get('draft') or {}; b=json.dumps(g).lower(); assert g.get('ok') is True; assert (d.get('hours') or '').strip(); assert (d.get('services') or '').strip(); assert 'propane' in b and 'patio gas' in b"
 
-assert alley.get('ok') is True, alley
-ab=json.dumps(alley).lower()
-for term in ('alley gate installation','cctv','security fencing','alley gate keys'):
-    assert term in ab, (term, alley)
-assert 'reader_fallback_used' in (alley.get('warnings') or []), alley
-assert 'security verification' not in ab, alley
-
-assert gas.get('ok') is True, gas
-gd=gas.get('draft') or {}
-assert (gd.get('hours') or '').strip(), gas
-assert (gd.get('services') or '').strip(), gas
-gb=json.dumps(gas).lower()
-for term in ('propane','patio gas'):
-    assert term in gb, (term, gas)
-
-print('EXACT_RELEASE=PASS')
-print('ALLEY_GATES_3X=PASS')
-print('EXPRESS_GAS_3X=PASS')
-print('LIVE_SCANNER=PASS')
-PY
+          echo 'EXACT_RELEASE=PASS'
+          echo 'ALLEY_GATES_3X=PASS'
+          echo 'EXPRESS_GAS_3X=PASS'
+          echo 'LIVE_SCANNER=PASS'
