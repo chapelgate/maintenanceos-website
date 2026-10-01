@@ -13,25 +13,74 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Discover public SPA data endpoints
+      - name: Compare Node pinned transport forms
         shell: bash
         run: |
           set -euo pipefail
-          ua='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
-          js='https://expressgasdelivery.com/static/js/main.79e19d85.js'
-          curl -sS -A "$ua" -o /tmp/js "$js"
+          node <<'NODE'
+          const https = require('node:https');
+          const tls = require('node:tls');
+          const ip='185.151.30.131';
+          const host='alleygates.co.uk';
+          const headers={
+            'User-Agent':'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)',
+            'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1',
+            'Accept-Language':'en-GB,en;q=0.8',
+            'Accept-Encoding':'identity',
+            'Connection':'close'
+          };
 
-          python3 - <<'PY'
-          import re
-          text=open('/tmp/js','r',encoding='utf-8',errors='replace').read()
-          urls=sorted(set(re.findall(r'https?://[^"\x27\\<> )]+', text)))
-          for u in urls[:300]:
-              print(u[:500])
-          print('URL_COUNT',len(urls))
-          print('--- LIKELY TOKENS ---')
-          for token in ['firebase','firestore','supabase','api/','axios','fetch(','products','opening','hours','deliveryAreas','businessHours']:
-              hits=[m.start() for m in re.finditer(re.escape(token),text,re.I)]
-              print(token, len(hits))
-              for i in hits[:5]:
-                  print(text[max(0,i-180):i+400])
-          PY
+          function run(label, extra) {
+            return new Promise(resolve => {
+              console.log('=== '+label+' ===');
+              const req=https.request({
+                hostname: host,
+                port:443,
+                path:'/',
+                method:'GET',
+                servername:host,
+                headers,
+                timeout:8000,
+                ...extra,
+              },res=>{
+                let body='';
+                res.setEncoding('utf8');
+                res.on('data',c=>body+=c);
+                res.on('end',()=>{
+                  console.log('STATUS='+res.statusCode);
+                  console.log('SERVER='+(res.headers.server||''));
+                  console.log('BODY='+body.slice(0,120).replace(/\s+/g,' '));
+                  resolve();
+                });
+              });
+              req.on('timeout',()=>req.destroy(new Error('timeout')));
+              req.on('error',e=>{console.log('ERROR='+e.message);resolve();});
+              req.end();
+            });
+          }
+
+          await run('HOSTNAME NORMAL',{});
+          await run('PINNED LOOKUP',{
+            lookup:(hostname, options, callback)=>{
+              console.log('LOOKUP_OPTIONS',JSON.stringify(options));
+              if (options && typeof options === 'object' && options.all) {
+                callback(null,[{address:ip,family:4}]);
+              } else {
+                callback(null,ip,4);
+              }
+            },
+            autoSelectFamily:false,
+          });
+          await run('PINNED TLS SOCKET',{
+            createConnection:(options, callback)=>{
+              const socket=tls.connect({
+                host:ip,
+                port:443,
+                servername:host,
+                ALPNProtocols:['http/1.1'],
+              },()=>callback(null,socket));
+              socket.on('error',err=>callback(err));
+              return socket;
+            },
+          });
+          NODE
