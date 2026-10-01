@@ -168,19 +168,46 @@ export async function fetchPublicHttps(
       throw new ScanError(ipCheck.reason, ssrfMessage(ipCheck.reason), 400);
     }
 
-    // Prefer IPv4 when a hostname publishes both address families.
-    // Some public hosting/CDN stacks expose equivalent A + AAAA records but
-    // apply different edge policy to serverless IPv6 egress. We still validate
-    // every resolved address as public before choosing the connection target.
+    // Prefer IPv4, but do not make one CDN/hosting edge authoritative.
+    // Every resolved address has already passed the public-IP guard. If a
+    // chosen edge rejects the hostname with 401/403, or the connection itself
+    // fails, try the next validated address before declaring the page
+    // unavailable. This preserves the original IPv4 preference while avoiding
+    // false scan failures caused by edge-specific policy.
     const orderedAddresses = [
       ...addresses.filter((address) => Boolean(parseIPv4Literal(address))),
       ...addresses.filter((address) => !parseIPv4Literal(address)),
     ];
 
-    const response = await get(allow.url, orderedAddresses[0]!, {
-      timeoutMs,
-      maxBytes,
-    });
+    let response: SafeHttpResponse | null = null;
+    let lastError: unknown = null;
+    const addressAttemptsStarted = Date.now();
+
+    for (const address of orderedAddresses) {
+      const elapsed = Date.now() - addressAttemptsStarted;
+      const attemptTimeoutMs = Math.max(250, timeoutMs - elapsed);
+      if (elapsed >= timeoutMs) break;
+
+      try {
+        const candidate = await get(allow.url, address, {
+          timeoutMs: attemptTimeoutMs,
+          maxBytes,
+        });
+        response = candidate;
+        if (candidate.status !== 401 && candidate.status !== 403) break;
+      } catch (err) {
+        lastError = err;
+      }
+    }
+
+    if (!response) {
+      if (lastError instanceof ScanError) throw lastError;
+      throw new ScanError(
+        "fetch_failed",
+        lastError instanceof Error ? lastError.message : "Fetch failed.",
+        422,
+      );
+    }
 
     if (response.status >= 300 && response.status < 400) {
       const location = header(response.headers, "location");

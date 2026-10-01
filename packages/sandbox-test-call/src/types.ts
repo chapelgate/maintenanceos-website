@@ -69,6 +69,7 @@ export type ScriptedTurnSource =
   | "knowledge.hours"
   | "knowledge.services"
   | "knowledge.faqs"
+  | "knowledge.summary"
   | "systemPrompt"
   | "missing";
 
