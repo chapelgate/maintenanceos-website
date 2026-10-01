@@ -7,6 +7,7 @@ import {
   requestSandboxSession,
   requestSandboxTest,
   resetBrowserSandboxMock,
+  runBrowserInteractiveReply,
   runBrowserScriptedDemo,
 } from "./sandbox-test-call.ts";
 
@@ -251,6 +252,48 @@ test("runBrowserScriptedDemo does not invent missing pack answers", () => {
   assert.ok(turns.some((turn) => /Acme Plumbing/.test(turn.text)));
   assert.ok(turns.some((turn) => /not sure/i.test(turn.text) && /opening hours/i.test(turn.text) && /not on file/i.test(turn.text)));
   assert.ok(turns.some((turn) => /not a live phone call/i.test(turn.text)));
+});
+
+test("public browser replies are pack-aware and hide engineering terminology", () => {
+  const pack = {
+    untrusted: true,
+    kind: "sandbox_knowledge_pack" as const,
+    liveCall: false as const,
+    liveNumber: null,
+    alwaysOn: false as const,
+    productionTelephony: false as const,
+    businessName: "Express Gas Delivery",
+    services: ["Propane Gas Cylinders", "Patio Gas"],
+    missing: ["greeting", "hours", "faqs"] as const,
+  };
+
+  const services = runBrowserInteractiveReply(
+    "What do you do?",
+    pack,
+  );
+  assert.equal(services.source, "knowledge.services");
+  assert.match(services.text, /Propane Gas Cylinders/);
+  assert.doesNotMatch(services.text, /scripted sandbox|frozen production telephony/i);
+
+  const human = runBrowserInteractiveReply(
+    "I want to speak to a human.",
+    pack,
+  );
+  assert.match(human.text, /can't transfer this browser preview/i);
+  assert.doesNotMatch(
+    human.text,
+    /scripted sandbox|frozen production telephony|knowledge pack/i,
+  );
+
+  const missing = runBrowserInteractiveReply(
+    "What are your opening hours?",
+    pack,
+  );
+  assert.match(missing.text, /opening hours/i);
+  assert.doesNotMatch(
+    missing.text,
+    /scripted sandbox|frozen production telephony|knowledge pack/i,
+  );
 });
 
 test("runBrowserScriptedDemo with pack name+hours mentions both", () => {
