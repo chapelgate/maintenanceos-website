@@ -138,6 +138,89 @@ function normalizeQuestion(text: string): string {
   return text.toLowerCase().replace(/[?!.,]/g, "").replace(/\s+/g, " ").trim();
 }
 
+const MATCH_STOP_WORDS = new Set([
+  "about",
+  "after",
+  "also",
+  "are",
+  "can",
+  "company",
+  "could",
+  "does",
+  "for",
+  "from",
+  "have",
+  "help",
+  "how",
+  "need",
+  "our",
+  "please",
+  "some",
+  "the",
+  "this",
+  "what",
+  "with",
+  "would",
+  "your",
+]);
+
+function knowledgeTokens(text: string): string[] {
+  return normalizeQuestion(text)
+    .split(" ")
+    .map((token) => token.replace(/[^a-z0-9'-]/g, ""))
+    .filter(
+      (token) =>
+        token.length >= 3 &&
+        !MATCH_STOP_WORDS.has(token),
+    );
+}
+
+function tokenOverlapScore(left: string, right: string): number {
+  const leftTokens = new Set(knowledgeTokens(left));
+  if (!leftTokens.size) return 0;
+  const rightTokens = new Set(knowledgeTokens(right));
+  let score = 0;
+  for (const token of leftTokens) {
+    if (rightTokens.has(token)) score += 1;
+  }
+  return score;
+}
+
+function matchService(
+  pack: KnowledgePack,
+  callerText: string,
+): string | undefined {
+  let best: string | undefined;
+  let bestScore = 0;
+  for (const service of pack.services ?? []) {
+    const score = tokenOverlapScore(callerText, service);
+    if (score > bestScore) {
+      best = service;
+      bestScore = score;
+    }
+  }
+  return bestScore > 0 ? best : undefined;
+}
+
+function knowledgeSummaryTurn(pack: KnowledgePack): ScriptedTurn {
+  const parts: string[] = [];
+  if (pack.businessName) parts.push(`business name: ${pack.businessName}`);
+  if (pack.hours) parts.push(`opening hours: ${pack.hours}`);
+  if (pack.services?.length) {
+    parts.push(`services: ${pack.services.join(", ")}`);
+  }
+  if (pack.faqs?.length) {
+    parts.push(`${pack.faqs.length} reviewed FAQ${pack.faqs.length === 1 ? "" : "s"}`);
+  }
+  return {
+    speaker: "receptionist",
+    text: parts.length
+      ? `The reviewed knowledge I have on file includes ${parts.join("; ")}.`
+      : "I do not have any reviewed website facts on file yet.",
+    source: parts.length ? "knowledge.summary" : "missing",
+  };
+}
+
 export function classifyCallerIntent(text: string): ScriptedIntent {
   const t = text.toLowerCase();
   if (
@@ -214,13 +297,26 @@ export function matchFaq(
 ): { question?: string; answer: string } | undefined {
   const needle = normalizeQuestion(callerText);
   if (!needle) return undefined;
+
+  let best:
+    | { faq: { question?: string; answer: string }; score: number }
+    | undefined;
+
   for (const faq of pack.faqs ?? []) {
     const question = normalizeQuestion(faq.question ?? "");
     if (question && (needle.includes(question) || question.includes(needle))) {
       return faq;
     }
+
+    const score = Math.max(
+      tokenOverlapScore(callerText, faq.question ?? ""),
+      tokenOverlapScore(callerText, faq.answer),
+    );
+    if (score >= 2 && (!best || score > best.score)) {
+      best = { faq, score };
+    }
   }
-  return undefined;
+  return best?.faq;
 }
 
 function policySource(systemPrompt?: string): ScriptedTurnSource {
@@ -303,6 +399,10 @@ export function scriptedReply(
     };
   }
 
+  if (/\bknowledge\s+pack\b|\bwhat (?:do|have) you know\b/i.test(callerText)) {
+    return knowledgeSummaryTurn(knowledge);
+  }
+
   const faq = matchFaq(knowledge, callerText);
   if (faq) {
     return {
@@ -311,6 +411,18 @@ export function scriptedReply(
       source: "knowledge.faqs",
     };
   }
+
+  const matchedService = matchService(knowledge, callerText);
+  if (matchedService) {
+    return {
+      speaker: "receptionist",
+      text: knowledge.businessName
+        ? `${matchedService} is listed among ${knowledge.businessName}'s reviewed services.`
+        : `${matchedService} is listed in the reviewed services.`,
+      source: "knowledge.services",
+    };
+  }
+
   if (/\bhours\b/i.test(callerText)) {
     return hoursTurn(knowledge, systemPrompt);
   }
