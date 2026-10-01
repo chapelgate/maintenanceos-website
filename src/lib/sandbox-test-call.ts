@@ -11,7 +11,11 @@ import {
   type KnowledgePack,
   type ReceptionistDraftResult,
 } from "./receptionist-draft.ts";
-import { runScriptedDemo, scriptedReply } from "../../packages/sandbox-test-call/src/scripted.ts";
+import {
+  classifyCallerIntent,
+  runScriptedDemo,
+  scriptedReply,
+} from "../../packages/sandbox-test-call/src/scripted.ts";
 
 export type ReceptionistDraft = {
   businessName: string;
@@ -149,7 +153,72 @@ export function runBrowserInteractiveReply(
   pack: unknown,
   systemPrompt?: string,
 ): ScriptedTurn {
-  return scriptedReply(callerText, pack, systemPrompt);
+  const reply = scriptedReply(callerText, pack, systemPrompt);
+  const intent = classifyCallerIntent(callerText);
+
+  // Keep engineering terminology inside qualification/benchmark paths. The
+  // public browser receptionist should sound like the configured receptionist,
+  // while remaining explicit about capabilities that the preview does not have.
+  if (intent === "human") {
+    return {
+      ...reply,
+      text:
+        "I can't transfer this browser preview to a person. Please contact the business directly if you need to speak to someone.",
+    };
+  }
+  if (intent === "booking") {
+    return {
+      ...reply,
+      text:
+        "I can't confirm an appointment from this browser preview because calendar booking is not connected here.",
+    };
+  }
+  if (intent === "emergency") {
+    return {
+      ...reply,
+      text:
+        "If this is an emergency in the UK, call 999 now (not 911). I can't dispatch emergency services from this browser preview.",
+    };
+  }
+  if (intent === "angry") {
+    return {
+      ...reply,
+      text:
+        "I'm sorry this has been frustrating. I can't transfer this browser preview to a person.",
+    };
+  }
+  if (intent === "after_hours") {
+    return {
+      ...reply,
+      text: reply.text
+        .replace(/from this scripted sandbox/gi, "from this browser preview")
+        .replace(
+          /This is a scripted sandbox, not a live phone line\. Frozen production telephony is unused\./gi,
+          "This browser preview cannot arrange a callback.",
+        )
+        .replace(/No live call was placed\./gi, ""),
+    };
+  }
+  if (intent === "live_call") {
+    return {
+      ...reply,
+      text: "This browser preview does not place or transfer phone calls.",
+    };
+  }
+
+  return {
+    ...reply,
+    text: reply.text
+      .replace(/in this knowledge pack/gi, "in the information I have available")
+      .replace(/from this scripted sandbox/gi, "from this browser preview")
+      .replace(
+        /This is a scripted sandbox, not a live phone line\. Frozen production telephony is unused\./gi,
+        "This browser preview does not place or transfer phone calls.",
+      )
+      .replace(/No live call was placed\./gi, "No phone call was placed.")
+      .replace(/\s{2,}/g, " ")
+      .trim(),
+  };
 }
 
 /** Map only a confirmed sandbox session. Missing id → null (not invented). */

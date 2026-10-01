@@ -632,3 +632,57 @@ Golden-line boundary:
 
 No human blocker remains for MOS-WEB-CREATE-005.
 
+## MOS-WEB-CREATE-006 — Live browser receptionist can answer from an empty/stale pack after a successful website scan
+Status: OPEN / LIVE USER REPRODUCTION
+Opened: 2026-10-01
+
+User-visible evidence:
+- Real iPhone production /create journey showed the browser receptionist replying "services are not on file in this knowledge pack" to both "What do you do" and "What services do you offer?".
+- The same transcript exposed internal engineering phrases including "scripted sandbox" and "Frozen production telephony is unused." to the customer.
+
+Required production behaviour:
+- The receptionist preview must consume the exact reviewed knowledge pack generated from the current live website scan.
+- A successful scan that includes services must not result in a preview whose services are missing.
+- If the scan fails or yields a thin pack, the UI must make that state explicit and must not imply the website was learned successfully.
+- Customer-facing replies may explain that transfers/bookings are unavailable in the browser preview, but must not expose internal implementation language such as "scripted sandbox", "frozen production telephony", provider internals or engineering verification terminology.
+
+Verification required before RESOLVED:
+- real, non-stubbed browser acceptance against the deployed /create page and production /api/website/scan route;
+- scanner response, Step 4 reviewed Services field, generated Step 5 knowledge pack and interactive reply must all contain the same expected service;
+- repeat against Express Gas Delivery and Alley Gates;
+- natural questions "What do you do?" and "What services do you offer?" must both return pack-aware answers;
+- human-transfer request must return concise customer-safe browser-preview wording;
+- zero runtime exceptions and zero lead/email submission before optional Save;
+- full repository regression, accessibility, TypeScript and production build;
+- exact deployed release identity and live mobile re-verification.
+
+Hard boundary:
+Website scanner and browser preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
+
+### 2026-10-01 root-cause and candidate evidence
+Status: FIX CANDIDATE / PRE-MERGE PASS
+
+Root-cause clarification:
+- A true, non-stubbed Chromium 390x844 run against the deployed production /create and live /api/website/scan route proved that a fresh Express Gas journey preserves the same services through scanner response -> Step 4 review -> Step 5 normalized knowledge pack -> interactive receptionist reply.
+- The fresh live transcript answered "What services do you offer?" with "Express Gas Delivery offers Propane Gas Cylinders, Patio Gas, Helium Balloons, Gas Engineering."
+- Therefore the user screenshot showing an empty services pack was from an already-running browser journey whose in-memory React state pre-dated the scanner deployment, not a reproducible current Step 4 -> Step 5 data-loss defect.
+- A separate confirmed product defect remained: the public browser receptionist exposed engineering-only language such as "scripted sandbox", "knowledge pack" and "frozen production telephony".
+
+Surgical candidate:
+- Keep the deterministic pack-aware engine and all internal qualification/benchmark language unchanged.
+- Sanitize only the public browser reply adapter.
+- Human, booking, emergency, angry, after-hours and live-call intents now use concise customer-safe browser-preview wording.
+- Generic public replies no longer expose "scripted sandbox", "frozen production telephony" or "knowledge pack" implementation terminology.
+
+Pre-merge verification:
+- Targeted browser-preview tests PASS.
+- Full repository regression: 310/310 PASS.
+- Accessibility: 16/16 PASS.
+- ESLint and TypeScript PASS.
+- Next.js 16.3.8 production build PASS; 30/30 routes generated.
+- Fresh real-browser Express Gas production flow PASS end-to-end with the exact live scanner and pack-aware service reply.
+- One Alley Gates reader_timeout was observed during a live-browser run; an immediate controlled reliability sample then passed 8/8, HTTP 200 each time (624-2685 ms). No timeout widening or retry churn is justified by current evidence.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
