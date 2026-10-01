@@ -1,0 +1,92 @@
+name: Reader fallback candidate validation
+
+on:
+  push:
+    branches:
+      - fix/scanner-bot-challenge-reader-fallback-20261001
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reader-fallback-candidate
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+
+      - name: Targeted scanner tests
+        run: |
+          set -euo pipefail
+          node --experimental-strip-types --test             packages/onboarding-ingest/src/fetch-safe.test.ts             packages/onboarding-ingest/src/scan.test.ts             packages/onboarding-ingest/src/extract.test.ts             packages/onboarding-ingest/src/function-wrapper.test.ts
+
+      - name: Full repository regression
+        run: |
+          set -euo pipefail
+          npm test
+          npm run accessibility:check
+          npx tsc --noEmit
+          npx eslint             packages/onboarding-ingest/src/fetch-safe.ts             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/fetch-safe.test.ts             packages/onboarding-ingest/src/scan.test.ts
+          NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run build
+          test "$(find out -name index.html -type f | wc -l)" -ge 28
+          test -f out/robots.txt
+          test -f out/sitemap.xml
+
+      - name: Real public Reader fallback acceptance
+        run: |
+          set -euo pipefail
+          node --experimental-strip-types --input-type=module <<'NODE'
+          import { runScan } from './packages/onboarding-ingest/src/scan.ts';
+
+          const result = await runScan('https://alleygates.co.uk/', {
+            enabled: true,
+            readerFallback: true,
+            lookup: async () => ['203.0.113.10'],
+            get: async (url) => ({
+              status: 401,
+              headers: { 'content-type': 'text/html' },
+              body: 'forced direct bot challenge',
+              url,
+            }),
+          });
+
+          console.log(JSON.stringify(result));
+          if (!result.ok) throw new Error('reader fallback failed: ' + JSON.stringify(result));
+          const blob = JSON.stringify(result).toLowerCase();
+          for (const term of ['alley gate', 'cctv', 'security fencing']) {
+            if (!blob.includes(term)) throw new Error('missing ' + term + ': ' + JSON.stringify(result));
+          }
+          if (!result.warnings.includes('reader_fallback_used')) {
+            throw new Error('reader fallback provenance missing');
+          }
+          NODE
+
+      - name: Generate exact DigitalOcean Function bundle
+        run: |
+          set -euo pipefail
+          npx --yes esbuild@0.25.10             packages/onboarding-ingest/packages/website/scan/index.ts             --bundle             --platform=node             --format=cjs             --target=node22             --outfile=packages/onboarding-ingest/packages/website/scan/bundle.cjs
+          node --experimental-strip-types --test packages/onboarding-ingest/src/function-wrapper.test.ts
+
+      - name: Commit generated bundle when needed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- packages/onboarding-ingest/packages/website/scan/bundle.cjs; then
+            echo "BUNDLE_CURRENT=PASS"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add packages/onboarding-ingest/packages/website/scan/bundle.cjs
+          git commit -m "build: refresh scanner bundle for reader fallback"
+          git push
