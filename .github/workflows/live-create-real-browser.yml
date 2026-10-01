@@ -107,12 +107,15 @@ jobs:
             await page.locator('[data-create-step="4"] [data-create-primary-action]').click();
             await page.waitForSelector('[data-create-step="5"]');
 
-            const packText = await page.locator('textarea').evaluateAll(els => els.map(e => e.value).find(v => v.includes('sandbox_knowledge_pack')) || '');
+            await page.waitForSelector('[data-receptionist-draft="preview"]', {timeout:15000});
+            await page.waitForSelector('[data-final-knowledge-pack="readonly"]', {timeout:15000});
+            const packText = await page.locator('[data-final-knowledge-pack="readonly"]').innerText();
             console.log(name+'_PACK='+packText);
             if (!packText.toLowerCase().includes(expectedService.toLowerCase())) {
-              throw new Error(name+' Step 5 knowledge pack lost services');
+              throw new Error(name+' Step 5 knowledge pack lost services: '+packText);
             }
 
+            await page.getByRole('button',{name:'Start voice call'}).waitFor({state:'visible'});
             await page.getByRole('button',{name:'Start voice call'}).click();
             await page.getByRole('button',{name:'What services do you offer?'}).click();
             await page.waitForFunction(
