@@ -13,28 +13,45 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Probe live website scanner only
+      - name: Probe Alley Gates edge behavior read-only
         shell: bash
         run: |
           set -euo pipefail
           origin="https://seahorse-app-4oasq.ondigitalocean.app"
 
-          echo "=== RELEASE ==="
-          curl -sS -D /tmp/release.h -o /tmp/release.b "$origin/release.json" || true
-          cat /tmp/release.h || true
-          cat /tmp/release.b || true
+          echo "=== LIVE SCAN RESPONSE ==="
+          curl -sS -D /tmp/scan.h -o /tmp/scan.b \
+            -X POST "$origin/api/website/scan" \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json' \
+            --data-binary '{"url":"https://alleygates.co.uk/"}' || true
+          cat /tmp/scan.h
+          cat /tmp/scan.b
           echo
 
-          for target in "https://example.com/" "https://alleygates.co.uk/"; do
-            echo "=== TARGET: $target ==="
-            status="$(curl -sS -o /tmp/scan.b -D /tmp/scan.h -w '%{http_code}' \
-              -X POST "$origin/api/website/scan" \
-              -H 'Content-Type: application/json' \
-              -H 'Accept: application/json' \
-              --data-binary "{\"url\":\"$target\"}" || true)"
-            echo "HTTP_STATUS=$status"
-            cat /tmp/scan.h || true
-            echo "--- BODY ---"
-            cat /tmp/scan.b || true
+          echo "=== DNS ==="
+          getent ahosts alleygates.co.uk || true
+          getent ahosts www.alleygates.co.uk || true
+
+          probe() {
+            label="$1"; url="$2"; ua="$3"
+            echo "=== $label ==="
+            code="$(curl -L --max-redirs 4 --connect-timeout 8 --max-time 20 \
+              -sS -o /tmp/body -D /tmp/head -w '%{http_code}' \
+              -A "$ua" "$url" || true)"
+            echo "HTTP_STATUS=$code"
+            sed -n '1,40p' /tmp/head
+            echo "--- BODY FIRST 800 ---"
+            head -c 800 /tmp/body || true
             echo
-          done
+          }
+
+          scanner='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
+          browser='Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'
+
+          probe "APEX SCANNER UA" "https://alleygates.co.uk/" "$scanner"
+          probe "APEX BROWSER UA" "https://alleygates.co.uk/" "$browser"
+          probe "WWW SCANNER UA" "https://www.alleygates.co.uk/" "$scanner"
+          probe "WWW BROWSER UA" "https://www.alleygates.co.uk/" "$browser"
+          probe "ROBOTS SCANNER UA" "https://alleygates.co.uk/robots.txt" "$scanner"
+          probe "ROBOTS BROWSER UA" "https://alleygates.co.uk/robots.txt" "$browser"
