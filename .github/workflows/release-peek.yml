@@ -1,4 +1,4 @@
-name: Reader HTML fallback probe
+name: Reader anti-bot browser-engine probe
 
 on:
   push:
@@ -11,22 +11,29 @@ permissions:
 jobs:
   peek:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
     steps:
-      - name: Probe Reader rendered HTML mode
+      - name: Compare Reader auto and browser engines
         shell: bash
         run: |
           set -euo pipefail
           url='https://r.jina.ai/https://alleygates.co.uk/'
-          code="$(curl --max-time 35 -sS -o /tmp/body -D /tmp/head -w '%{http_code}'             -H 'X-Respond-With: html'             -H 'Accept: text/html'             "$url" || true)"
-          echo "HTTP_STATUS=$code"
-          sed -n '1,30p' /tmp/head
-          echo "BYTES=$(wc -c </tmp/body)"
-          for needle in 'ALLEY GATE KEYS' 'Wirral Alley Gate Key' 'CCTV' 'Security Fencing' 'Alley Gate Installation'; do
-            echo "--- $needle ---"
-            grep -F -i -m 3 -C 1 "$needle" /tmp/body || true
-          done
-          echo "--- FIRST 1200 ---"
-          head -c 1200 /tmp/body
-          echo
-          test "$code" = '200'
+
+          probe() {
+            label="$1"; shift
+            echo "=== $label ==="
+            code="$(curl --max-time 45 -sS -o /tmp/body -D /tmp/head -w '%{http_code}' "$@" "$url" || true)"
+            echo "HTTP_STATUS=$code BYTES=$(wc -c </tmp/body)"
+            sed -n '1,25p' /tmp/head
+            for needle in 'Security Verification' 'ALLEY GATE KEYS' 'Alley Gate Installation' 'CCTV' 'Security Fencing'; do
+              printf '%s=' "$needle"
+              grep -F -i -q "$needle" /tmp/body && echo YES || echo NO
+            done
+            echo "--- FIRST 500 ---"
+            head -c 500 /tmp/body
+            echo
+          }
+
+          probe AUTO_HTML             -H 'X-Respond-With: html'             -H 'Accept: text/html'
+
+          probe BROWSER_HTML             -H 'X-Respond-With: html'             -H 'X-Engine: browser'             -H 'X-No-Cache: true'             -H 'Accept: text/html'
