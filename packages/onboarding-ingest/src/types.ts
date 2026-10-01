@@ -112,7 +112,11 @@ export type LookupFn = (hostname: string) => Promise<string[]>;
 export type HttpGetFn = (
   url: URL,
   ip: string,
-  opts: { timeoutMs: number; maxBytes: number },
+  opts: {
+    timeoutMs: number;
+    maxBytes: number;
+    headers?: Record<string, string>;
+  },
 ) => Promise<SafeHttpResponse>;
 
 export type ScanDeps = {
