@@ -128,6 +128,41 @@ test("scriptedReply cites pack hours and services", () => {
   assert.match(services.text, /Power flushing/);
 });
 
+test("scriptedReply answers natural service questions from reviewed website knowledge", () => {
+  const pack = {
+    businessName: "Alley Gates",
+    services: [
+      "Alley Gate Installation",
+      "CCTV",
+      "Security Fencing",
+      "Replacement alley gate keys",
+    ],
+    faqs: [
+      {
+        question: "How do I order replacement alley gate keys?",
+        answer: "Replacement keys can be ordered through the website key-order page.",
+      },
+    ],
+  };
+
+  const company = scriptedReply("What does your company do?", pack);
+  assert.equal(company.source, "knowledge.services");
+  assert.match(company.text, /Alley Gate Installation/);
+  assert.match(company.text, /CCTV/);
+
+  const keys = scriptedReply(
+    "I need to order some alligator keys how do I go about this",
+    pack,
+  );
+  assert.equal(keys.source, "knowledge.faqs");
+  assert.match(keys.text, /ordered through the website/i);
+
+  const summary = scriptedReply("What is on your knowledge pack?", pack);
+  assert.equal(summary.source, "knowledge.summary");
+  assert.match(summary.text, /Alley Gates/);
+  assert.match(summary.text, /Replacement alley gate keys/);
+});
+
 test("scriptedReply missing hours stays honest and invents no clock", () => {
   const hours = scriptedReply("What are your opening hours?", {
     businessName: "Acme Plumbing",
