@@ -277,6 +277,8 @@ test("runScan can recover a bot-challenged public site through the bounded reade
     assert.match(result.draft.services ?? "", /Alley Gate Keys/);
     assert.ok(result.warnings.includes("http_401"));
     assert.ok(result.warnings.includes("reader_fallback_used"));
+    assert.ok(result.warnings.includes("reader_challenge_retry"));
+    assert.equal(result.warnings.includes("reader_challenge_rejected"), false);
     assert.equal(result.sources[0]?.url, "https://alleygates.example/");
   }
 });
@@ -312,6 +314,7 @@ test("runScan recovers a direct TLS/fetch failure with a bounded same-origin rea
   </body></html>`;
 
   let readerCalls = 0;
+  let contactCalls = 0;
   const result = await runScan("https://forum.example/", {
     enabled: true,
     readerFallback: true,
@@ -331,6 +334,13 @@ test("runScan recovers a direct TLS/fetch failure with a bounded same-origin rea
         return htmlPage(target, forumLiving);
       }
       if (target.includes("/contact-us/")) {
+        contactCalls += 1;
+        if (contactCalls === 1) {
+          return htmlPage(
+            target,
+            "<html><head><title>Security Verification</title></head><body>Please verify you are human. CAPTCHA required.</body></html>",
+          );
+        }
         return htmlPage(target, forumContact);
       }
       if (target.includes("/about/")) {
@@ -341,7 +351,8 @@ test("runScan recovers a direct TLS/fetch failure with a bounded same-origin rea
   });
 
   assert.equal(result.ok, true);
-  assert.equal(readerCalls, 4);
+  assert.equal(readerCalls, 5);
+  assert.equal(contactCalls, 2);
   if (result.ok) {
     assert.match(result.draft.businessName ?? "", /Forum Housing/);
     assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
