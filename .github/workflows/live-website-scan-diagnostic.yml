@@ -13,45 +13,58 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Probe Alley Gates edge behavior read-only
+      - name: Reproduce scanner transport exactly
         shell: bash
         run: |
           set -euo pipefail
-          origin="https://seahorse-app-4oasq.ondigitalocean.app"
-
-          echo "=== LIVE SCAN RESPONSE ==="
-          curl -sS -D /tmp/scan.h -o /tmp/scan.b \
-            -X POST "$origin/api/website/scan" \
-            -H 'Content-Type: application/json' \
-            -H 'Accept: application/json' \
-            --data-binary '{"url":"https://alleygates.co.uk/"}' || true
-          cat /tmp/scan.h
-          cat /tmp/scan.b
-          echo
-
-          echo "=== DNS ==="
-          getent ahosts alleygates.co.uk || true
-          getent ahosts www.alleygates.co.uk || true
+          scanner='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
+          ip='185.151.30.131'
 
           probe() {
-            label="$1"; url="$2"; ua="$3"
+            label="$1"; shift
             echo "=== $label ==="
-            code="$(curl -L --max-redirs 4 --connect-timeout 8 --max-time 20 \
-              -sS -o /tmp/body -D /tmp/head -w '%{http_code}' \
-              -A "$ua" "$url" || true)"
+            code="$(curl --connect-timeout 5 --max-time 10 -sS -o /tmp/body -D /tmp/head -w '%{http_code}' "$@" || true)"
             echo "HTTP_STATUS=$code"
-            sed -n '1,40p' /tmp/head
-            echo "--- BODY FIRST 800 ---"
-            head -c 800 /tmp/body || true
+            sed -n '1,30p' /tmp/head
+            echo "--- BODY FIRST 300 ---"
+            head -c 300 /tmp/body || true
             echo
           }
 
-          scanner='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
-          browser='Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1'
+          probe "CURL DEFAULT" -A "$scanner" https://alleygates.co.uk/
+          probe "CURL HTTP1 HOSTNAME" --http1.1 -A "$scanner" https://alleygates.co.uk/
+          probe "CURL HTTP1 PINNED" --http1.1 --resolve "alleygates.co.uk:443:$ip" -A "$scanner" https://alleygates.co.uk/
 
-          probe "APEX SCANNER UA" "https://alleygates.co.uk/" "$scanner"
-          probe "APEX BROWSER UA" "https://alleygates.co.uk/" "$browser"
-          probe "WWW SCANNER UA" "https://www.alleygates.co.uk/" "$scanner"
-          probe "WWW BROWSER UA" "https://www.alleygates.co.uk/" "$browser"
-          probe "ROBOTS SCANNER UA" "https://alleygates.co.uk/robots.txt" "$scanner"
-          probe "ROBOTS BROWSER UA" "https://alleygates.co.uk/robots.txt" "$browser"
+          echo "=== NODE HTTPS PINNED ==="
+          node <<'NODE'
+          const https = require('node:https');
+          const ip = '185.151.30.131';
+          const req = https.request({
+            host: ip,
+            port: 443,
+            path: '/',
+            method: 'GET',
+            servername: 'alleygates.co.uk',
+            headers: {
+              Host: 'alleygates.co.uk',
+              'User-Agent': 'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)',
+              Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1',
+              'Accept-Language': 'en-GB,en;q=0.8',
+              'Accept-Encoding': 'identity',
+              Connection: 'close'
+            },
+            timeout: 8000
+          }, res => {
+            let body='';
+            res.setEncoding('utf8');
+            res.on('data', c => body += c);
+            res.on('end', () => {
+              console.log('STATUS='+res.statusCode);
+              console.log(JSON.stringify(res.headers, null, 2));
+              console.log(body.slice(0,300));
+            });
+          });
+          req.on('timeout',()=>req.destroy(new Error('timeout')));
+          req.on('error',err=>{ console.error(err); process.exitCode=1; });
+          req.end();
+          NODE
