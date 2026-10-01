@@ -1,0 +1,40 @@
+name: Live website scan diagnostic
+
+on:
+  push:
+    branches:
+      - diag/live-website-scan-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Probe live website scanner only
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin="https://seahorse-app-4oasq.ondigitalocean.app"
+
+          echo "=== RELEASE ==="
+          curl -sS -D /tmp/release.h -o /tmp/release.b "$origin/release.json" || true
+          cat /tmp/release.h || true
+          cat /tmp/release.b || true
+          echo
+
+          for target in "https://example.com/" "https://alleygates.co.uk/"; do
+            echo "=== TARGET: $target ==="
+            status="$(curl -sS -o /tmp/scan.b -D /tmp/scan.h -w '%{http_code}' \
+              -X POST "$origin/api/website/scan" \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json' \
+              --data-binary "{\"url\":\"$target\"}" || true)"
+            echo "HTTP_STATUS=$status"
+            cat /tmp/scan.h || true
+            echo "--- BODY ---"
+            cat /tmp/scan.b || true
+            echo
+          done
