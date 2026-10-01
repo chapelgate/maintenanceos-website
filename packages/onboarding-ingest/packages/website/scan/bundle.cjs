@@ -1489,6 +1489,8 @@ function httpsGetToIp(url, ip, opts) {
         // through a raw-IP virtual host.
         hostname,
         port,
+        family,
+        autoSelectFamily: false,
         path: `${url.pathname}${url.search}`,
         method: "GET",
         servername: hostname,
