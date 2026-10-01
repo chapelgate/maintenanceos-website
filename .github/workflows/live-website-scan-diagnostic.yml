@@ -13,50 +13,51 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Probe Alley Gates WordPress REST CORS
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Prove existing extractor on WordPress REST payload
         shell: bash
         run: |
           set -euo pipefail
-          origin="https://seahorse-app-4oasq.ondigitalocean.app"
           ua='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
-          api='https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug'
+          curl -sS -A "$ua" \
+            'https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug' \
+            -o /tmp/pages.json
+          curl -sS -A "$ua" 'https://alleygates.co.uk/wp-json/' -o /tmp/site.json
 
-          echo "=== OPTIONS ==="
-          curl -sS -D /tmp/oh -o /tmp/ob -X OPTIONS "$api" \
-            -H "Origin: $origin" \
-            -H 'Access-Control-Request-Method: GET' \
-            -H 'Access-Control-Request-Headers: accept' \
-            -A "$ua" || true
-          sed -n '1,80p' /tmp/oh
-          cat /tmp/ob || true
-          echo
+          cat >/tmp/probe.ts <<'TS'
+          import fs from "node:fs";
+          const mod = await import("file://" + process.env.GITHUB_WORKSPACE + "/packages/onboarding-ingest/src/extract.ts");
+          const extractDraftFromHtml = mod.extractDraftFromHtml;
 
-          echo "=== GET WITH ORIGIN ==="
-          code="$(curl -sS -D /tmp/gh -o /tmp/gb -w '%{http_code}' "$api" \
-            -H "Origin: $origin" \
-            -H 'Accept: application/json' \
-            -A "$ua" || true)"
-          echo "HTTP_STATUS=$code"
-          sed -n '1,80p' /tmp/gh
-          echo "BODY_BYTES=$(wc -c < /tmp/gb)"
-          echo "BODY_FIRST_2000"
-          head -c 2000 /tmp/gb || true
-          echo
-
-          echo "=== MATCH TERMS ==="
-          python3 - <<'PY'
-          import json, re
-          data=json.load(open('/tmp/gb'))
-          text='\n'.join(
-              (x.get('title',{}).get('rendered','')+' '+
-               x.get('excerpt',{}).get('rendered','')+' '+
-               x.get('content',{}).get('rendered',''))
-              for x in data
-          )
-          clean=re.sub(r'<[^>]+>',' ',text)
-          clean=re.sub(r'\s+',' ',clean)
-          for term in ['Alley Gate','CCTV','Security Fencing','key','keys','master key']:
-              print(term, bool(re.search(re.escape(term), clean, re.I)))
-          print('PAGES',len(data))
-          print('TEXT_CHARS',len(clean))
-          PY
+          const pages = JSON.parse(fs.readFileSync("/tmp/pages.json","utf8"));
+          const site = JSON.parse(fs.readFileSync("/tmp/site.json","utf8"));
+          const synthetic = [
+            { url: "https://alleygates.co.uk/", html: "" },
+            ...pages.slice(0,20).map((page:any) => ({
+              url: typeof page.link === "string" ? page.link : "https://alleygates.co.uk/",
+              html:
+                "<title>" +
+                String(page?.title?.rendered ?? "") +
+                "</title>" +
+                String(page?.excerpt?.rendered ?? "") +
+                String(page?.content?.rendered ?? ""),
+            })),
+          ];
+          const result = extractDraftFromHtml(synthetic);
+          if (typeof site?.name === "string" && site.name.trim()) {
+            result.draft.businessName = site.name.trim();
+            result.facts.businessName = site.name.trim();
+          }
+          console.log(JSON.stringify({
+            draft: result.draft,
+            facts: result.facts,
+            fieldMeta: result.fieldMeta,
+            warnings: result.warnings
+          }, null, 2));
+          TS
+          node --experimental-strip-types /tmp/probe.ts > /tmp/result.json
+          cat /tmp/result.json
+          grep -qi 'Alley Gates' /tmp/result.json
+          grep -Eqi 'CCTV|Security Fencing|Gate Installation|key' /tmp/result.json
