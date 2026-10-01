@@ -13,10 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          persist-credentials: false
-      - name: Prove existing extractor on WordPress REST payload
+      - name: Inventory public WordPress business pages
         shell: bash
         run: |
           set -euo pipefail
@@ -24,40 +21,22 @@ jobs:
           curl -sS -A "$ua" \
             'https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug' \
             -o /tmp/pages.json
-          curl -sS -A "$ua" 'https://alleygates.co.uk/wp-json/' -o /tmp/site.json
-
-          cat >/tmp/probe.ts <<'TS'
-          import fs from "node:fs";
-          const mod = await import("file://" + process.env.GITHUB_WORKSPACE + "/packages/onboarding-ingest/src/extract.ts");
-          const extractDraftFromHtml = mod.extractDraftFromHtml;
-
-          const pages = JSON.parse(fs.readFileSync("/tmp/pages.json","utf8"));
-          const site = JSON.parse(fs.readFileSync("/tmp/site.json","utf8"));
-          const synthetic = [
-            { url: "https://alleygates.co.uk/", html: "" },
-            ...pages.slice(0,20).map((page:any) => ({
-              url: typeof page.link === "string" ? page.link : "https://alleygates.co.uk/",
-              html:
-                "<title>" +
-                String(page?.title?.rendered ?? "") +
-                "</title>" +
-                String(page?.excerpt?.rendered ?? "") +
-                String(page?.content?.rendered ?? ""),
-            })),
-          ];
-          const result = extractDraftFromHtml(synthetic);
-          if (typeof site?.name === "string" && site.name.trim()) {
-            result.draft.businessName = site.name.trim();
-            result.facts.businessName = site.name.trim();
-          }
-          console.log(JSON.stringify({
-            draft: result.draft,
-            facts: result.facts,
-            fieldMeta: result.fieldMeta,
-            warnings: result.warnings
-          }, null, 2));
-          TS
-          node --experimental-strip-types /tmp/probe.ts > /tmp/result.json
-          cat /tmp/result.json
-          grep -qi 'Alley Gates' /tmp/result.json
-          grep -Eqi 'CCTV|Security Fencing|Gate Installation|key' /tmp/result.json
+          python3 - <<'PY'
+          import html, json, re
+          pages=json.load(open('/tmp/pages.json'))
+          for p in pages:
+              title=html.unescape(re.sub(r'<[^>]+>',' ',p.get('title',{}).get('rendered','')))
+              body=' '.join([
+                  p.get('excerpt',{}).get('rendered',''),
+                  p.get('content',{}).get('rendered','')
+              ])
+              body=html.unescape(re.sub(r'<script\b[\s\S]*?</script>',' ',body,flags=re.I))
+              body=html.unescape(re.sub(r'<style\b[\s\S]*?</style>',' ',body,flags=re.I))
+              body=html.unescape(re.sub(r'<[^>]+>',' ',body))
+              body=re.sub(r'\s+',' ',body).strip()
+              print('---')
+              print('SLUG',p.get('slug'))
+              print('TITLE',title.strip())
+              print('LINK',p.get('link'))
+              print('TEXT',body[:1200])
+          PY
