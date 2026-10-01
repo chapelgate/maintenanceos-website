@@ -1468,11 +1468,12 @@ function httpsGetToIp(url, ip, opts) {
   return new Promise((resolve, reject) => {
     const port = url.port ? Number(url.port) : 443;
     const headers = {
-      Host: url.host,
       "User-Agent": USER_AGENT,
       Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1",
       "Accept-Language": "en-GB,en;q=0.8",
       "Accept-Encoding": "identity",
+      ...opts.headers ?? {},
+      Host: url.host,
       Connection: "close"
     };
     const hostname = url.hostname.replace(/^\[|\]$/g, "");
@@ -1585,8 +1586,12 @@ async function fetchPublicHttps(raw, options = {}) {
     if (!ipCheck.ok) {
       throw new ScanError(ipCheck.reason, ssrfMessage(ipCheck.reason), 400);
     }
-    const ipv4Addresses = addresses.filter((address) => Boolean(parseIPv4Literal(address)));
-    const ipv6Addresses = addresses.filter((address) => !parseIPv4Literal(address));
+    const ipv4Addresses = addresses.filter(
+      (address) => Boolean(parseIPv4Literal(address))
+    );
+    const ipv6Addresses = addresses.filter(
+      (address) => !parseIPv4Literal(address)
+    );
     const orderedAddresses = ipv4Addresses.length ? ipv4Addresses : ipv6Addresses;
     let response2 = null;
     let lastError = null;
@@ -1598,7 +1603,8 @@ async function fetchPublicHttps(raw, options = {}) {
       try {
         const candidate = await get(allow.url, address, {
           timeoutMs: attemptTimeoutMs,
-          maxBytes
+          maxBytes,
+          headers: options.headers
         });
         response2 = candidate;
         if (candidate.status !== 401 && candidate.status !== 403) break;
@@ -1672,6 +1678,9 @@ var MAX_TOTAL_BYTES = 768 * 1024;
 var TOTAL_DEADLINE_MS = 12e3;
 var MAX_STATIC_SCRIPT_ASSETS = 1;
 var MAX_STATIC_SCRIPT_BYTES = 640 * 1024;
+var READER_FALLBACK_ORIGIN = "https://r.jina.ai";
+var READER_FALLBACK_TIMEOUT_MS = 9e3;
+var READER_FALLBACK_MAX_BYTES = 256 * 1024;
 var OUR_USER_AGENT_TOKEN = "MaintenanceOS-OnboardingScan";
 function isWebIngestEnabled(env = process.env) {
   const value = env.ONBOARDING_WEB_INGEST;
@@ -1757,6 +1766,21 @@ async function loadRobots(origin, deps, remainingMs) {
     return { allow: [], disallow: [], unavailable: true };
   }
 }
+function isReaderChallengePage(html) {
+  const title = /<title[^>]*>\s*([^<]{1,160})\s*<\/title>/i.exec(html)?.[1]?.trim() ?? "";
+  if (/^security verification$/i.test(title)) return true;
+  const text = html.replace(/<script\b[\s\S]*?<\/script>/gi, " ").replace(/<style\b[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").toLowerCase();
+  const challengeMarkers = [
+    "verify you are human",
+    "verify you're human",
+    "verify you\u2019re human",
+    "checking your browser",
+    "security verification",
+    "captcha"
+  ];
+  const markerCount = challengeMarkers.filter((marker) => text.includes(marker)).length;
+  return markerCount >= 2;
+}
 async function runScan(rawUrl, options = {}) {
   const enabled = options.enabled ?? isWebIngestEnabled();
   if (!enabled) {
@@ -1783,6 +1807,7 @@ async function runScan(rawUrl, options = {}) {
   const sources = [];
   const pages = [];
   let totalBytes = 0;
+  const readerFallbackEnabled = options.readerFallback ?? (!options.lookup && !options.get);
   const robots = await loadRobots(allow.url, options, remaining());
   if (robots.unavailable) warnings.push("robots_unavailable");
   if (!isPathAllowed(robots, allow.url.pathname || "/")) {
@@ -1865,6 +1890,51 @@ async function runScan(rawUrl, options = {}) {
         };
       }
       warnings.push(err instanceof ScanError ? err.code : "fetch_failed");
+    }
+  }
+  if (!pages.length && readerFallbackEnabled && (warnings.includes("http_401") || warnings.includes("http_403")) && remaining() >= 1e3) {
+    const readerUrl = `${READER_FALLBACK_ORIGIN}/${allow.url.toString()}`;
+    try {
+      const res = await fetchPublicHttps(readerUrl, {
+        lookup: options.readerLookup,
+        get: options.readerGet,
+        remainingMs: remaining(),
+        timeoutMs: Math.min(READER_FALLBACK_TIMEOUT_MS, remaining()),
+        maxBytes: Math.min(
+          READER_FALLBACK_MAX_BYTES,
+          MAX_TOTAL_BYTES - totalBytes
+        ),
+        maxRedirects: 2,
+        headers: {
+          Accept: "text/html",
+          "X-Respond-With": "html",
+          "X-No-Cache": "true"
+        }
+      });
+      if (res.status >= 400) {
+        warnings.push(`reader_http_${res.status}`);
+      } else if (!/<(?:html|head|body)\b/i.test(res.body)) {
+        warnings.push("reader_non_html");
+      } else if (isReaderChallengePage(res.body)) {
+        warnings.push("reader_challenge_rejected");
+      } else {
+        const bytes = Buffer.byteLength(res.body, "utf8");
+        totalBytes += bytes;
+        sources.push({
+          url: allow.url.toString(),
+          status: 200,
+          bytes
+        });
+        pages.push({
+          url: allow.url.toString(),
+          html: res.body
+        });
+        warnings.push("reader_fallback_used");
+      }
+    } catch (err) {
+      warnings.push(
+        err instanceof ScanError ? `reader_${err.code}` : "reader_fetch_failed"
+      );
     }
   }
   if (!pages.length) {
