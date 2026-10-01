@@ -42,32 +42,16 @@ jobs:
             BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
             BROWSER_PATH=/usr/bin/chromium node scripts/create-mobile-stability-browser.mjs
 
-            node --experimental-strip-types --input-type=module <<'"'"'NODE'"'"'
-            import assert from "node:assert/strict";
-            import { mapWordPressRestFallback } from "./src/lib/onboarding-wordpress-fallback.ts";
-            const headers = {
-              "User-Agent": "MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)",
-              Accept: "application/json",
-            };
-            const [siteRes, pagesRes] = await Promise.all([
-              fetch("https://alleygates.co.uk/wp-json/", { headers }),
-              fetch("https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug", { headers }),
-            ]);
-            assert.equal(siteRes.status, 200);
-            assert.equal(pagesRes.status, 200);
-            const mapped = mapWordPressRestFallback(
-              "https://alleygates.co.uk/",
-              await siteRes.json(),
-              await pagesRes.json(),
-            );
-            assert.ok(mapped);
-            const json = JSON.stringify(mapped);
-            assert.match(json, /Alley Gates/i);
-            assert.match(json, /Alley Gate Installation/i);
-            assert.match(json, /CCTV/i);
-            assert.match(json, /Security Fencing/i);
-            assert.match(json, /keys are made to order/i);
-            assert.match(json, /https:\/\/alleygates\.co\.uk\/shop\//i);
-            console.log("LIVE_WORDPRESS_FALLBACK_MAPPING=PASS");
-            NODE
+            printf "%s\\n" \
+              "import assert from 'node:assert/strict';" \
+              "import { mapWordPressRestFallback } from './src/lib/onboarding-wordpress-fallback.ts';" \
+              "const headers = { 'User-Agent': 'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)', Accept: 'application/json' };" \
+              "const [siteRes, pagesRes] = await Promise.all([fetch('https://alleygates.co.uk/wp-json/', { headers }), fetch('https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug', { headers })]);" \
+              "assert.equal(siteRes.status, 200); assert.equal(pagesRes.status, 200);" \
+              "const mapped = mapWordPressRestFallback('https://alleygates.co.uk/', await siteRes.json(), await pagesRes.json()); assert.ok(mapped);" \
+              "const json = JSON.stringify(mapped);" \
+              "assert.match(json, /Alley Gates/i); assert.match(json, /Alley Gate Installation/i); assert.match(json, /CCTV/i); assert.match(json, /Security Fencing/i); assert.match(json, /keys are made to order/i); assert.match(json, /https:\\/\\/alleygates\\.co\\.uk\\/shop\\//i);" \
+              "console.log('LIVE_WORDPRESS_FALLBACK_MAPPING=PASS');" \
+              > /tmp/pr149-live-check.mjs
+            node --experimental-strip-types /tmp/pr149-live-check.mjs
           '
