@@ -740,3 +740,40 @@ Golden-line boundary:
 Human blockers:
 - None.
 
+## MOS-WEB-CREATE-007 — Valid public sites with incomplete TLS chains can bypass website learning
+Status: FIX CANDIDATE / NOT YET LIVE VERIFIED
+Opened: 2026-10-01
+
+User-visible evidence:
+- A fresh iPhone /create test against https://forumhousing.co.uk/ produced a receptionist named for Forum Housing but opening-hours and services questions still returned missing-information replies.
+
+Production reproduction:
+- Deployed release d07e7fd1450c6edd758b9d90ccaece6e88ff3221 returned HTTP 422 for https://forumhousing.co.uk/ with warnings ["robots_unavailable","fetch_failed"].
+- A clean GitHub-hosted Ubuntu runner failed verified HTTPS with curl error 60: unable to get local issuer certificate.
+- OpenSSL showed the site serving forumhousing.co.uk -> Let's Encrypt YR1, but chain verification terminated with verify code 20 because the local trust path to the newer ISRG Root YR was unavailable.
+- The existing bounded reader endpoint returned HTTP 200 and the real Forum Housing public HTML, including supported-housing/support-services text, address and phone. TLS verification was not disabled.
+
+Root cause:
+- The production scanner's reader fallback was restricted to HTTP 401/403 direct failures. A direct TLS/network fetch failure therefore stopped before the already-approved claims-safe reader recovery path.
+- Reader fallback also fetched only the entry page, whereas the normal direct crawler follows a bounded set of useful same-origin pages. That asymmetry can leave hours/services on contact/accommodation pages undiscovered.
+
+Surgical fix:
+- Keep strict TLS verification. Do not add rejectUnauthorized=false, insecure curl, custom CA exceptions or per-site bypasses.
+- Allow the existing public reader fallback when the direct crawl has no pages because of fetch_failed, in addition to 401/403.
+- Keep the fallback bounded: public HTTPS only, same origin only, robots-aware, byte/time budgets unchanged, maximum four reader pages.
+- Rank and fetch the same useful same-origin page classes already used by the normal crawler, so contact/living/services pages can populate the same claims-safe extractors.
+- Do not add headless-browser infrastructure or paid model dependencies.
+
+Acceptance before RESOLVED:
+- targeted scanner unit tests, including direct TLS/fetch failure -> reader home/about/living/contact recovery;
+- existing 401/403 reader and challenge-rejection tests remain green;
+- full repository regression, accessibility, ESLint, TypeScript and production build;
+- regenerated prebuilt DigitalOcean Function bundle matches source;
+- exact deployed release identity;
+- live Forum Housing scan HTTP 200 with useful services and, if present on the site's own crawled pages, hours/contact facts;
+- fresh mobile /create journey answers "What do you do?" / "What services do you offer?" from Forum Housing's reviewed website facts;
+- no runtime exceptions and no lead/email submit before optional Save.
+
+Golden-line boundary:
+Website scanner/browser preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
+
