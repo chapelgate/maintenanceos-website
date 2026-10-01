@@ -542,3 +542,32 @@ Post-merge black-box proof against deployed commit d174d4451dca32ad402a4ba1a268b
 
 Hard boundary remains unchanged: website scanner/browser preview only. No MaintenanceOS production telephony, carrier routing, phone numbers, provider credentials, production voice runtime or golden phone line may be changed or exercised.
 
+### 2026-10-01 bot-challenge fallback candidate
+Status: FIX CANDIDATE / NOT YET LIVE VERIFIED
+
+Further evidence:
+- Alley Gates resolves to 20i Limited infrastructure. 20i documents that StackProtect can return HTTP 401 to remote crawlers and third-party applications when the request/IP is classified as bot-like or suspicious.
+- The deployed MaintenanceOS scanner consistently receives 401 across the Alley Gates homepage, www host, contact page and public WordPress API paths.
+- A public Reader probe returns the real Alley Gates page content, including Alley Gate Installation, CCTV, Security Fencing, Alley Gate Keys and the key delivery notice.
+- Reader HTML mode returns the rendered document, allowing the existing claims-safe extractor to be reused without adding a second knowledge parser.
+
+Candidate design:
+- Keep direct SSRF-safe scanner as the primary and unchanged path.
+- Invoke a public Reader fallback only when no page was fetched and the direct target returned HTTP 401 or 403.
+- Public HTTPS target validation must already have succeeded before fallback.
+- Cap fallback to one request, 9 seconds and 256 KiB.
+- Request rendered HTML only and feed it through the existing extractor; never execute returned scripts.
+- Record reader_fallback_used in warnings/provenance.
+- No API key, paid model, new server or duplicate infrastructure.
+- Any Reader failure or rate limit leaves the existing typed fetch failure intact.
+
+External dependency evidence:
+- Jina Reader documents r.jina.ai as a URL-to-content reader, free for basic anonymous use, production-capable, with an unauthenticated rate limit.
+- Only the public business URL is sent to the Reader endpoint. No phone-line data, customer credentials or private configuration are sent.
+
+Hard boundary remains unchanged:
+Website scanner/browser receptionist preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
+
+Verification required before RESOLVED:
+full repository regression; exact function-bundle regeneration; real Reader fallback acceptance with a forced direct 401; merge; exact release identity; live Alley Gates scan with useful knowledge; live Express Gas regression; browser /create answer check; then freeze.
+
