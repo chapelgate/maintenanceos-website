@@ -11,76 +11,36 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
-      - name: Compare Node pinned transport forms
+      - name: Read website App Platform deployment wiring only
         shell: bash
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: |
           set -euo pipefail
-          node <<'NODE'
-          const https = require('node:https');
-          const tls = require('node:tls');
-          const ip='185.151.30.131';
-          const host='alleygates.co.uk';
-          const headers={
-            'User-Agent':'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)',
-            'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1',
-            'Accept-Language':'en-GB,en;q=0.8',
-            'Accept-Encoding':'identity',
-            'Connection':'close'
-          };
-
-          function run(label, extra) {
-            return new Promise(resolve => {
-              console.log('=== '+label+' ===');
-              const req=https.request({
-                hostname: host,
-                port:443,
-                path:'/',
-                method:'GET',
-                servername:host,
-                headers,
-                timeout:8000,
-                ...extra,
-              },res=>{
-                let body='';
-                res.setEncoding('utf8');
-                res.on('data',c=>body+=c);
-                res.on('end',()=>{
-                  console.log('STATUS='+res.statusCode);
-                  console.log('SERVER='+(res.headers.server||''));
-                  console.log('BODY='+body.slice(0,120).replace(/\s+/g,' '));
-                  resolve();
-                });
-              });
-              req.on('timeout',()=>req.destroy(new Error('timeout')));
-              req.on('error',e=>{console.log('ERROR='+e.message);resolve();});
-              req.end();
-            });
-          }
-
-          await run('HOSTNAME NORMAL',{});
-          await run('PINNED LOOKUP',{
-            lookup:(hostname, options, callback)=>{
-              console.log('LOOKUP_OPTIONS',JSON.stringify(options));
-              if (options && typeof options === 'object' && options.all) {
-                callback(null,[{address:ip,family:4}]);
-              } else {
-                callback(null,ip,4);
-              }
-            },
-            autoSelectFamily:false,
-          });
-          await run('PINNED TLS SOCKET',{
-            createConnection:(options, callback)=>{
-              const socket=tls.connect({
-                host:ip,
-                port:443,
-                servername:host,
-                ALPNProtocols:['http/1.1'],
-              },()=>callback(null,socket));
-              socket.on('error',err=>callback(err));
-              return socket;
-            },
-          });
-          NODE
+          test -n "$DIGITALOCEAN_ACCESS_TOKEN"
+          app_id="98e3a9c0-3b3c-48eb-ac72-2b13ffbe2661"
+          api="https://api.digitalocean.com/v2/apps/$app_id"
+          curl -fsS -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" "$api" -o /tmp/app.json
+          python3 - <<'PY'
+          import json
+          app=json.load(open('/tmp/app.json'))['app']
+          spec=app.get('spec') or {}
+          print('APP_ID='+str(app.get('id')))
+          print('APP_NAME='+str(spec.get('name')))
+          print('STATIC_SITES='+json.dumps([
+            {'name':x.get('name'),'github':{k:(x.get('github') or {}).get(k) for k in ('repo','branch','deploy_on_push')}}
+            for x in spec.get('static_sites') or []
+          ],separators=(',',':')))
+          print('FUNCTIONS='+json.dumps([
+            {'name':x.get('name'),'source_dir':x.get('source_dir'),'github':{k:(x.get('github') or {}).get(k) for k in ('repo','branch','deploy_on_push')}}
+            for x in spec.get('functions') or []
+          ],separators=(',',':')))
+          active=app.get('active_deployment') or {}
+          print('ACTIVE='+json.dumps({
+            'id':active.get('id'),'phase':active.get('phase'),
+            'functions':[{'name':x.get('name'),'source_commit_hash':x.get('source_commit_hash'),'namespace':x.get('namespace')} for x in active.get('functions') or []],
+            'static_sites':[{'name':x.get('name'),'source_commit_hash':x.get('source_commit_hash')} for x in active.get('static_sites') or []],
+          },separators=(',',':')))
+          PY
