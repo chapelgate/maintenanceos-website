@@ -11,37 +11,75 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
-      - name: Wait for exact production website release
+      - name: Check out exact merged website source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 0fcfcfa7d4fed2d3b6700c8f59d8a8654b8bd62c
+          persist-credentials: false
+
+      - name: Verify exact production website release
         env:
           EXPECTED_SHA: 0fcfcfa7d4fed2d3b6700c8f59d8a8654b8bd62c
           ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
         run: |
           set -euo pipefail
-          matched=0
-          for i in $(seq 1 90); do
-            body="$(curl -fsS --max-time 10 "$ORIGIN/release.json" || true)"
-            live_sha="$(printf '%s' "$body" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).commit||"")}catch{console.log("")}})')"
-            echo "release_attempt=$i live_sha=${live_sha:-unavailable}"
-            if [ "$live_sha" = "$EXPECTED_SHA" ]; then
-              matched=1
-              break
-            fi
-            sleep 10
-          done
-          test "$matched" = 1
+          body="$(curl -fsS --max-time 10 "$ORIGIN/release.json")"
+          live_sha="$(printf '%s' "$body" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).commit||""))')"
+          echo "live_sha=$live_sha"
+          test "$live_sha" = "$EXPECTED_SHA"
           echo "LIVE_RELEASE_SHA=PASS"
+
+      - name: Deploy exact website scan Function only
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DIGITALOCEAN_ACCESS_TOKEN:-}" ]; then
+            echo 'DO_FUNCTION_AUTH=UNAVAILABLE'
+            exit 21
+          fi
+          echo 'DO_FUNCTION_AUTH=AVAILABLE'
+          curl -fsSL https://github.com/digitalocean/doctl/releases/download/v1.175.0/doctl-1.175.0-linux-amd64.tar.gz -o /tmp/doctl.tgz
+          tar -xzf /tmp/doctl.tgz -C /tmp
+          sudo install -m 0755 /tmp/doctl /usr/local/bin/doctl
+          doctl auth init --access-token "$DIGITALOCEAN_ACCESS_TOKEN" >/dev/null
+          doctl serverless install >/dev/null
+          mapfile -t namespace_ids < <(doctl serverless namespaces list --format ID --no-header | awk 'NF{print $1}')
+          echo "namespace_count=${#namespace_ids[@]}"
+          target=''
+          matches=0
+          for ns in "${namespace_ids[@]}"; do
+            doctl serverless connect "$ns" >/dev/null
+            if doctl serverless functions list --format Name --no-header | grep -qx 'website/scan'; then
+              target="$ns"
+              matches=$((matches+1))
+            fi
+          done
+          echo "website_scan_namespace_matches=$matches"
+          test "$matches" = 1
+          doctl serverless connect "$target" >/dev/null
+          doctl serverless deploy packages/onboarding-ingest --include website/scan
+          doctl serverless functions get website/scan --url >/tmp/scan-url.txt
+          test -s /tmp/scan-url.txt
+          echo 'DO_WEBSITE_SCAN_DEPLOY=PASS'
 
       - name: Probe real Alley Gates website scan
         env:
           ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
         run: |
           set -euo pipefail
-          code="$(curl -sS --max-time 30 -o /tmp/scan.json -w '%{http_code}' -X POST "$ORIGIN/api/website/scan" -H 'Content-Type: application/json' --data '{"url":"https://alleygates.co.uk/"}')"
-          echo "scan_http=$code"
+          ok=0
+          for i in $(seq 1 20); do
+            code="$(curl -sS --max-time 30 -o /tmp/scan.json -w '%{http_code}' -X POST "$ORIGIN/api/website/scan" -H 'Content-Type: application/json' --data '{"url":"https://alleygates.co.uk/"}')"
+            echo "scan_attempt=$i scan_http=$code"
+            if [ "$code" = 200 ]; then ok=1; break; fi
+            cat /tmp/scan.json || true
+            sleep 5
+          done
           cat /tmp/scan.json
-          test "$code" = 200
+          test "$ok" = 1
           node - /tmp/scan.json <<'NODE'
           const fs=require('fs');
           const j=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
