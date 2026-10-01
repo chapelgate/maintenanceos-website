@@ -764,6 +764,121 @@ function cleanedTitleName(html) {
 function isGenericName(name) {
   return GENERIC_NAME_RE.test(name.trim());
 }
+function extractSameOriginScriptSrcs(html, pageUrl) {
+  const srcs = [];
+  const re = /<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;
+  let m;
+  while (m = re.exec(html)) {
+    const raw = m[1]?.trim();
+    if (!raw) continue;
+    let next;
+    try {
+      next = new URL(raw, pageUrl);
+    } catch {
+      continue;
+    }
+    if (next.protocol !== "https:") continue;
+    if (next.hostname !== pageUrl.hostname) continue;
+    next.hash = "";
+    srcs.push(next.toString());
+  }
+  return [...new Set(srcs)].slice(0, 4);
+}
+function decodeJsStringBody(raw) {
+  try {
+    return asUntrustedText(JSON.parse(`"${raw}"`), 500);
+  } catch {
+    return void 0;
+  }
+}
+function quotedJsStrings(fragment, limit = 64) {
+  const out = [];
+  const re = /"((?:\\.|[^"\\])*)"/g;
+  let match;
+  while ((match = re.exec(fragment)) && out.length < limit) {
+    const value = decodeJsStringBody(match[1] ?? "");
+    if (value) out.push(value);
+  }
+  return out;
+}
+function extractStructuredBusinessHtmlFromScript(script) {
+  const localBusiness = /["@']?@type["@']?\s*:\s*["']LocalBusiness["']/gi;
+  const regions = [];
+  let marker;
+  while ((marker = localBusiness.exec(script)) && regions.length < 3) {
+    regions.push(
+      script.slice(
+        Math.max(0, marker.index - 1e3),
+        Math.min(script.length, marker.index + 14e3)
+      )
+    );
+  }
+  if (!regions.length) return void 0;
+  const hours = [];
+  const services = [];
+  const phones = [];
+  const emails = [];
+  let businessName = "";
+  for (const region of regions) {
+    if (!businessName) {
+      const nameMatch = /\bname\s*:\s*"((?:\\.|[^"\\])*)"/i.exec(region);
+      const name = nameMatch?.[1] ? decodeJsStringBody(nameMatch[1]) : void 0;
+      if (name && !GENERIC_NAV_RE.test(name)) businessName = name;
+    }
+    for (const match of region.matchAll(
+      /\bopeningHours\s*:\s*\[([\s\S]{1,2000}?)\]/gi
+    )) {
+      hours.push(...quotedJsStrings(match[1] ?? "", 24));
+    }
+    for (const match of region.matchAll(
+      /\bitemOffered\s*:\s*\{[\s\S]{0,500}?\bname\s*:\s*"((?:\\.|[^"\\])*)"/gi
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value && !GENERIC_NAV_RE.test(value)) services.push(value);
+    }
+    for (const match of region.matchAll(
+      /\bserviceType\s*:\s*"((?:\\.|[^"\\])*)"/gi
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value) services.push(value);
+    }
+    for (const match of region.matchAll(
+      /\btelephone\s*:\s*"((?:\\.|[^"\\])*)"/gi
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value && isPlausiblePhone(value)) phones.push(value);
+    }
+    for (const match of region.matchAll(
+      /\bemail\s*:\s*"((?:\\.|[^"\\])*)"/gi
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value && isPlausibleEmail(value)) emails.push(value);
+    }
+  }
+  const cleanHours = [...new Set(hours)].slice(0, 14);
+  const cleanServices = [...new Set(services)].slice(0, 24);
+  const cleanPhones = [...new Set(phones)].slice(0, 4);
+  const cleanEmails = [...new Set(emails)].slice(0, 4);
+  if (!businessName && !cleanHours.length && !cleanServices.length && !cleanPhones.length && !cleanEmails.length) {
+    return void 0;
+  }
+  const record = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness"
+  };
+  if (businessName) record.name = businessName;
+  if (cleanHours.length) record.openingHours = cleanHours;
+  if (cleanServices.length) {
+    record.makesOffer = cleanServices.map((name) => ({
+      itemOffered: { "@type": "Service", name }
+    }));
+  }
+  if (cleanPhones.length === 1) record.telephone = cleanPhones[0];
+  else if (cleanPhones.length > 1) record.telephone = cleanPhones;
+  if (cleanEmails.length === 1) record.email = cleanEmails[0];
+  else if (cleanEmails.length > 1) record.email = cleanEmails;
+  return `<script type="application/ld+json">${JSON.stringify(record)}</script>`;
+}
 function extractSameOriginHrefs(html, pageUrl) {
   const hrefs = [];
   const re = /<a\b[^>]*href=["']([^"'#]+)["']/gi;
@@ -1177,6 +1292,7 @@ function omitEmptyMeta(fieldMeta, draft) {
 // packages/onboarding-ingest/src/fetch-safe.ts
 var import_promises = __toESM(require("node:dns/promises"), 1);
 var import_node_https = __toESM(require("node:https"), 1);
+var import_node_net = require("node:net");
 
 // packages/onboarding-ingest/src/ssrf.ts
 var BLOCKED_HOSTNAMES = /* @__PURE__ */ new Set([
@@ -1359,14 +1475,31 @@ function httpsGetToIp(url, ip, opts) {
       "Accept-Encoding": "identity",
       Connection: "close"
     };
+    const hostname = url.hostname.replace(/^\[|\]$/g, "");
+    const family = (0, import_node_net.isIP)(ip);
+    if (family !== 4 && family !== 6) {
+      reject(new ScanError("fetch_failed", "Resolved target was not an IP address.", 422));
+      return;
+    }
     const req = import_node_https.default.request(
       {
-        host: ip,
+        // Keep the original hostname as the HTTP/TLS authority, but pin Node's
+        // DNS lookup to the public address that was already validated above.
+        // This preserves SSRF rebinding protection without routing the request
+        // through a raw-IP virtual host.
+        hostname,
         port,
         path: `${url.pathname}${url.search}`,
         method: "GET",
-        servername: url.hostname.replace(/^\[|\]$/g, ""),
+        servername: hostname,
         headers,
+        lookup: (_hostname, options, callback) => {
+          if (typeof options === "object" && options !== null && options.all) {
+            callback(null, [{ address: ip, family }]);
+            return;
+          }
+          callback(null, ip, family);
+        },
         timeout: opts.timeoutMs
       },
       (res) => {
@@ -1536,6 +1669,8 @@ function isHtmlOrText(contentType) {
 var MAX_PAGES = 5;
 var MAX_TOTAL_BYTES = 768 * 1024;
 var TOTAL_DEADLINE_MS = 12e3;
+var MAX_STATIC_SCRIPT_ASSETS = 1;
+var MAX_STATIC_SCRIPT_BYTES = 640 * 1024;
 var OUR_USER_AGENT_TOKEN = "MaintenanceOS-OnboardingScan";
 function isWebIngestEnabled(env = process.env) {
   const value = env.ONBOARDING_WEB_INGEST;
@@ -1739,7 +1874,68 @@ async function runScan(rawUrl, options = {}) {
       warnings: warnings.length ? warnings : ["no_pages_fetched"]
     };
   }
-  const extracted = extractDraftFromHtml(pages);
+  let extracted = extractDraftFromHtml(pages);
+  if ((!extracted.draft.hours || !extracted.draft.services) && pages.length > 0 && remaining() >= 500 && totalBytes < MAX_TOTAL_BYTES) {
+    const firstPage = pages[0];
+    let firstUrl = null;
+    try {
+      firstUrl = new URL(firstPage.url);
+    } catch {
+      firstUrl = null;
+    }
+    if (firstUrl) {
+      const scriptUrls = extractSameOriginScriptSrcs(firstPage.html, firstUrl).slice(0, MAX_STATIC_SCRIPT_ASSETS);
+      for (const scriptUrl of scriptUrls) {
+        if (remaining() < 400 || totalBytes >= MAX_TOTAL_BYTES) break;
+        let parsed;
+        try {
+          parsed = new URL(scriptUrl);
+        } catch {
+          continue;
+        }
+        if (!isPathAllowed(robots, parsed.pathname || "/")) {
+          warnings.push("robots_skipped_script");
+          continue;
+        }
+        const remainingBytes = MAX_TOTAL_BYTES - totalBytes;
+        if (remainingBytes < 1024) break;
+        try {
+          const res = await fetchPublicHttps(scriptUrl, {
+            lookup: options.lookup,
+            get: options.get,
+            remainingMs: remaining(),
+            timeoutMs: DEFAULT_PAGE_TIMEOUT_MS,
+            maxBytes: Math.min(MAX_STATIC_SCRIPT_BYTES, remainingBytes),
+            maxRedirects: DEFAULT_MAX_REDIRECTS
+          });
+          if (res.status >= 400) {
+            warnings.push(`script_http_${res.status}`);
+            continue;
+          }
+          const type = Object.entries(res.headers).find(
+            ([key]) => key.toLowerCase() === "content-type"
+          )?.[1] ?? "";
+          if (!/(?:java|ecma)script/i.test(type) && !/\.m?js$/i.test(res.url.pathname)) {
+            warnings.push("skipped_non_script_asset");
+            continue;
+          }
+          const bytes = Buffer.byteLength(res.body, "utf8");
+          totalBytes += bytes;
+          const synthetic = extractStructuredBusinessHtmlFromScript(res.body);
+          if (!synthetic) continue;
+          sources.push({ url: res.url.toString(), status: res.status, bytes });
+          pages.push({ url: res.url.toString(), html: synthetic });
+          warnings.push("static_script_schema_fallback");
+          extracted = extractDraftFromHtml(pages);
+          break;
+        } catch (err) {
+          warnings.push(
+            err instanceof ScanError ? `script_${err.code}` : "script_fetch_failed"
+          );
+        }
+      }
+    }
+  }
   return {
     ok: true,
     untrusted: true,
