@@ -13,58 +13,59 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Reproduce scanner transport exactly
+      - name: Prove hostname-plus-pinned-lookup transport
         shell: bash
         run: |
           set -euo pipefail
-          scanner='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
-          ip='185.151.30.131'
-
-          probe() {
-            label="$1"; shift
-            echo "=== $label ==="
-            code="$(curl --connect-timeout 5 --max-time 10 -sS -o /tmp/body -D /tmp/head -w '%{http_code}' "$@" || true)"
-            echo "HTTP_STATUS=$code"
-            sed -n '1,30p' /tmp/head
-            echo "--- BODY FIRST 300 ---"
-            head -c 300 /tmp/body || true
-            echo
-          }
-
-          probe "CURL DEFAULT" -A "$scanner" https://alleygates.co.uk/
-          probe "CURL HTTP1 HOSTNAME" --http1.1 -A "$scanner" https://alleygates.co.uk/
-          probe "CURL HTTP1 PINNED" --http1.1 --resolve "alleygates.co.uk:443:$ip" -A "$scanner" https://alleygates.co.uk/
-
-          echo "=== NODE HTTPS PINNED ==="
           node <<'NODE'
           const https = require('node:https');
-          const ip = '185.151.30.131';
-          const req = https.request({
-            host: ip,
-            port: 443,
-            path: '/',
-            method: 'GET',
-            servername: 'alleygates.co.uk',
-            headers: {
-              Host: 'alleygates.co.uk',
-              'User-Agent': 'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)',
-              Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1',
-              'Accept-Language': 'en-GB,en;q=0.8',
-              'Accept-Encoding': 'identity',
-              Connection: 'close'
-            },
-            timeout: 8000
-          }, res => {
-            let body='';
-            res.setEncoding('utf8');
-            res.on('data', c => body += c);
-            res.on('end', () => {
-              console.log('STATUS='+res.statusCode);
-              console.log(JSON.stringify(res.headers, null, 2));
-              console.log(body.slice(0,300));
+
+          function probe(label, options) {
+            return new Promise(resolve => {
+              console.log('=== '+label+' ===');
+              const req = https.request({
+                ...options,
+                port: 443,
+                path: '/',
+                method: 'GET',
+                headers: {
+                  'User-Agent': 'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)',
+                  Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1',
+                  'Accept-Language': 'en-GB,en;q=0.8',
+                  'Accept-Encoding': 'identity',
+                  Connection: 'close'
+                },
+                timeout: 8000
+              }, res => {
+                let body='';
+                res.setEncoding('utf8');
+                res.on('data', c => body += c);
+                res.on('end', () => {
+                  console.log('STATUS='+res.statusCode);
+                  console.log('SERVER='+(res.headers.server||''));
+                  console.log('VIA='+(res.headers['x-via']||''));
+                  console.log(body.slice(0,120).replace(/\s+/g,' '));
+                  resolve();
+                });
+              });
+              req.on('timeout',()=>req.destroy(new Error('timeout')));
+              req.on('error',err=>{ console.log('ERROR='+err.message); resolve(); });
+              req.end();
             });
-          });
-          req.on('timeout',()=>req.destroy(new Error('timeout')));
-          req.on('error',err=>{ console.error(err); process.exitCode=1; });
-          req.end();
+          }
+
+          (async () => {
+            const ip='185.151.30.131';
+            await probe('HOSTNAME DEFAULT DNS', { hostname: 'alleygates.co.uk' });
+            await probe('HOSTNAME PINNED LOOKUP', {
+              hostname: 'alleygates.co.uk',
+              servername: 'alleygates.co.uk',
+              lookup: (_hostname, _options, callback) => callback(null, ip, 4)
+            });
+            await probe('RAW IP WITH HOST/SNI', {
+              host: ip,
+              servername: 'alleygates.co.uk',
+              headers: undefined
+            });
+          })();
           NODE
