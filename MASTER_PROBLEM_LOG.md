@@ -686,3 +686,57 @@ Pre-merge verification:
 Golden-line boundary:
 No MaintenanceOS production telephony, carrier routing, live number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
 
+### 2026-10-01 production closure — MOS-WEB-CREATE-006
+Status: RESOLVED / LIVE VERIFIED / FROZEN
+
+Verified application SHA:
+- 1f8e6b34e35a68e52ea179b4332bb5c2be6117dc
+
+Freeze branch:
+- freeze/browser-preview-pack-aware-live-20261001
+
+Exact live-release evidence:
+- release.json matched 1f8e6b34e35a68e52ea179b4332bb5c2be6117dc before customer-journey acceptance.
+- Fresh Chromium mobile viewport 390x844@3 used the deployed /create page and the real production /api/website/scan route; no stubbed scanner was used.
+
+Express Gas Delivery:
+- Scanner returned HTTP 200 with Propane Gas Cylinders, Patio Gas, Helium Balloons and Gas Engineering.
+- Step 4 Services retained those facts.
+- Step 5 normalized knowledge pack retained those facts.
+- "What services do you offer?" returned a pack-aware answer.
+- "What do you do?" returned a pack-aware answer.
+- Human-transfer request used customer-safe browser-preview wording.
+- Engineering terminology leak: 0.
+- Lead/email submissions before optional Save: 0.
+- Runtime exceptions: 0.
+
+Alley Gates:
+- Scanner returned HTTP 200 with Alley Gate Installation, CCTV, Security Fencing, Window Boarding, Alley Gate Keys and other reviewed site facts.
+- Step 4 Services retained the scanned facts.
+- Step 5 normalized knowledge pack retained the scanned facts.
+- "What services do you offer?" returned a pack-aware answer.
+- "What do you do?" returned a pack-aware answer.
+- Human-transfer request used customer-safe browser-preview wording.
+- Engineering terminology leak: 0.
+- Lead/email submissions before optional Save: 0.
+- Runtime exceptions: 0.
+- Reader fallback provenance remained explicit and bounded.
+
+Regression evidence:
+- Public browser wording regression tests PASS.
+- Full repository regression: 310/310 PASS.
+- Accessibility: 16/16 PASS.
+- ESLint and TypeScript PASS.
+- Next.js 16.3.8 production build PASS; 30/30 routes generated.
+- Controlled Alley Gates fallback reliability sample: 8/8 HTTP 200 after one earlier transient reader timeout; no latency-increasing retry or timeout change was introduced.
+
+Root cause conclusion:
+- The user screenshot showing missing services came from an already-running browser journey whose in-memory state pre-dated the scanner deployment. A fresh deployed journey preserves services end-to-end.
+- The confirmed code defect was customer-facing exposure of internal engineering language. The fix is confined to the public browser reply adapter; the deterministic pack-aware engine and internal qualification benchmarks remain unchanged.
+
+Golden-line boundary:
+- No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed during this repair.
+
+Human blockers:
+- None.
+
