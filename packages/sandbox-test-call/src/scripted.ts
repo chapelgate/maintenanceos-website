@@ -276,6 +276,7 @@ export function classifyCallerIntent(text: string): ScriptedIntent {
   if (
     /\bservices\b/.test(t) ||
     /what do you (?:offer|do)/.test(t) ||
+    /what does (?:your|the) company do/.test(t) ||
     /what (?:work|jobs) do you/.test(t)
   ) {
     return "services";
