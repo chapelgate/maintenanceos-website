@@ -1,4 +1,4 @@
-name: PR150 live black-box verification
+name: PR151 live black-box verification
 
 on:
   push:
@@ -11,64 +11,72 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: Trace Node pinned lookup behavior for public hosts
+      - name: Wait for exact deployment and verify both real sites
         shell: bash
         run: |
           set -euo pipefail
-          node <<'NODE'
-          const dns = require('node:dns').promises;
-          const https = require('node:https');
-          const { isIP } = require('node:net');
+          origin="https://seahorse-app-4oasq.ondigitalocean.app"
+          expected="c16c647858613fc07f77eb4947eae88460654db8"
 
-          async function trace(hostname) {
-            console.log('=== '+hostname+' ===');
-            const records = await dns.lookup(hostname,{all:true,verbatim:true});
-            console.log('DNS='+JSON.stringify(records));
-            for (const rec of records) {
-              const ip=rec.address;
-              const family=isIP(ip);
-              await new Promise(resolve => {
-                const req=https.request({
-                  hostname,
-                  port:443,
-                  path:'/',
-                  method:'GET',
-                  family,
-                  autoSelectFamily:false,
-                  servername:hostname,
-                  headers:{
-                    Host:hostname,
-                    'User-Agent':'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)',
-                    Accept:'text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1',
-                    'Accept-Language':'en-GB,en;q=0.8',
-                    'Accept-Encoding':'identity',
-                    Connection:'close'
-                  },
-                  lookup:(h,options,cb)=>{
-                    console.log('LOOKUP host='+h+' ip='+ip+' family='+family+' options='+JSON.stringify(options));
-                    if (typeof options === 'object' && options && options.all) {
-                      cb(null,[{address:ip,family}]);
-                    } else {
-                      cb(null,ip,family);
-                    }
-                  },
-                  timeout:5000
-                },res=>{
-                  let n=0;
-                  res.on('data',c=>n+=c.length);
-                  res.on('end',()=>{console.log('RESULT ip='+ip+' status='+res.statusCode+' bytes='+n+' server='+(res.headers.server||''));resolve();});
-                });
-                req.on('timeout',()=>req.destroy(new Error('timeout')));
-                req.on('error',e=>{console.log('ERROR ip='+ip+' '+e.message);resolve();});
-                req.end();
-              });
-            }
+          echo "=== WAIT FOR RELEASE ==="
+          deployed=""
+          for i in $(seq 1 60); do
+            curl -fsS "$origin/release.json" -o /tmp/release.json || true
+            deployed="$(python3 - <<'PY'
+          import json
+          try:
+              print(json.load(open('/tmp/release.json')).get('commit',''))
+          except Exception:
+              print('')
+          PY
+          )"
+            echo "attempt=$i deployed=$deployed"
+            if [ "$deployed" = "$expected" ]; then
+              break
+            fi
+            sleep 10
+          done
+          test "$deployed" = "$expected"
+          cat /tmp/release.json
+          echo
+
+          probe() {
+            name="$1"; url="$2"; outfile="$3"
+            echo "=== $name ==="
+            for i in 1 2 3; do
+              status="$(curl -sS -o "$outfile" -D /tmp/head -w '%{http_code}'                 -X POST "$origin/api/website/scan"                 -H 'Content-Type: application/json'                 -H 'Accept: application/json'                 --data-binary "{\"url\":\"$url\"}" || true)"
+              echo "ATTEMPT=$i HTTP_STATUS=$status"
+              cat "$outfile"
+              echo
+              test "$status" = "200"
+            done
           }
 
-          (async()=>{
-            await trace('example.com');
-            await trace('alleygates.co.uk');
-          })().catch(e=>{console.error(e);process.exit(1)});
-          NODE
+          probe "ALLEY GATES" "https://alleygates.co.uk/" /tmp/alley.json
+          probe "EXPRESS GAS" "https://expressgasdelivery.com/" /tmp/gas.json
+
+          python3 - <<'PY'
+          import json
+          alley=json.load(open('/tmp/alley.json'))
+          gas=json.load(open('/tmp/gas.json'))
+
+          assert alley.get('ok') is True, alley
+          alley_blob=json.dumps(alley).lower()
+          for term in ['alley gate','cctv','security fencing']:
+              assert term in alley_blob, (term, alley)
+
+          assert gas.get('ok') is True, gas
+          gd=gas.get('draft') or {}
+          assert (gd.get('hours') or '').strip(), gas
+          assert (gd.get('services') or '').strip(), gas
+          gas_blob=json.dumps(gas).lower()
+          for term in ['propane','patio gas']:
+              assert term in gas_blob, (term, gas)
+
+          print('DEPLOYED_COMMIT_VERIFIED=PASS')
+          print('ALLEY_GATE_KNOWLEDGE=PASS')
+          print('EXPRESS_GAS_KNOWLEDGE=PASS')
+          print('LIVE_SCANNER_BLACK_BOX=PASS')
+          PY
