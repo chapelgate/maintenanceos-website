@@ -82,7 +82,7 @@ jobs:
             --outfile=packages/onboarding-ingest/packages/website/scan/bundle.cjs
           node --experimental-strip-types --test packages/onboarding-ingest/src/function-wrapper.test.ts
       - name: Commit generated function bundle once
-        if: \${{ github.actor != 'github-actions[bot]' }}
+        if: ${{ github.actor != 'github-actions[bot]' }}
         run: |
           set -euo pipefail
           if git diff --quiet -- packages/onboarding-ingest/packages/website/scan/bundle.cjs; then
