@@ -591,3 +591,44 @@ Merge, deploy the exact candidate, verify the release marker, then black-box All
 Golden-line boundary:
 No production telephony, carrier routing, live phone numbers, provider credentials, production voice runtime or MaintenanceOS golden phone line was modified or exercised.
 
+### 2026-10-01 production closure — MOS-WEB-CREATE-005
+Status: RESOLVED / LIVE VERIFIED / FROZEN CANDIDATE
+
+Verified production code SHA:
+- fdd526696294e28faf9b57603a1811c816893cde
+
+Live black-box evidence against the exact deployed release:
+- release.json matched fdd526696294e28faf9b57603a1811c816893cde.
+- Alley Gates live scanner: PASS 3/3, HTTP 200 each time.
+- Alley Gates recovered: businessName Alley Gates; Alley Gate Installation; CCTV; Security Fencing; Window Boarding; Alley Gate Keys; Sefton Alley Gates; Wirral Alley Gate Keys; public contact details.
+- Alley Gates fallback provenance included reader_fallback_used; Security Verification challenge content was absent.
+- Express Gas Delivery live scanner: PASS 3/3, HTTP 200 each time.
+- Express Gas preserved real hours and services including Propane Gas Cylinders, Patio Gas, Helium Balloons and Gas Engineering.
+
+Live mobile customer-journey evidence:
+- Production /create tested in Chromium at 390x844@3.
+- Website learning used the real same-origin production scanner.
+- Customer journey reached Try your receptionist.
+- Browser voice preview question: "What services do you offer?"
+- Pack-aware reply: PASS, including Alley Gate Installation and CCTV.
+- Spoken reply: PASS.
+- Lead/email submissions before optional Save: 0.
+- Runtime exceptions: 0.
+
+Regression evidence:
+- Targeted scanner/function tests PASS.
+- Full repository regression: 307/307 PASS.
+- Accessibility: 16/16 PASS.
+- TypeScript and production build PASS; 30/30 routes generated.
+- Exact DigitalOcean Function bundle regenerated and wrapper tests 4/4 PASS.
+
+Root cause:
+- 20i StackProtect returns HTTP 401 to DigitalOcean egress for Alley Gates, independently reproduced from Chapelgate droplet 605203160 in lon1 with x-stackprotect-id on homepage and robots.txt.
+- The direct SSRF-safe scanner remains primary.
+- A tightly bounded public-reader fallback is used only after direct 401/403, with public-URL validation, byte/time caps, no-cache, challenge-page rejection, no script execution and graceful failure.
+
+Golden-line boundary:
+- No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed as part of this repair.
+
+No human blocker remains for MOS-WEB-CREATE-005.
+
