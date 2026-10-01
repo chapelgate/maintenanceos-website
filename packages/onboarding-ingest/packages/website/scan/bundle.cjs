@@ -1918,32 +1918,42 @@ async function runScan(rawUrl, options = {}) {
       if (remainingBytes < 1024) break;
       const readerUrl = `${READER_FALLBACK_ORIGIN}/${targetUrl.toString()}`;
       try {
-        const res = await fetchPublicHttps(readerUrl, {
-          lookup: options.readerLookup,
-          get: options.readerGet,
-          remainingMs: remaining(),
-          timeoutMs: Math.min(READER_FALLBACK_TIMEOUT_MS, remaining()),
-          maxBytes: Math.min(READER_FALLBACK_MAX_BYTES, remainingBytes),
-          maxRedirects: 2,
-          headers: {
-            Accept: "text/html",
-            "X-Respond-With": "html",
-            "X-No-Cache": "true"
+        let acceptedBody = null;
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          const res = await fetchPublicHttps(readerUrl, {
+            lookup: options.readerLookup,
+            get: options.readerGet,
+            remainingMs: remaining(),
+            timeoutMs: Math.min(READER_FALLBACK_TIMEOUT_MS, remaining()),
+            maxBytes: Math.min(READER_FALLBACK_MAX_BYTES, remainingBytes),
+            maxRedirects: 2,
+            headers: {
+              Accept: "text/html",
+              "X-Respond-With": "html",
+              "X-No-Cache": "true"
+            }
+          });
+          if (res.status >= 400) {
+            warnings.push(`reader_http_${res.status}`);
+            break;
           }
-        });
-        if (res.status >= 400) {
-          warnings.push(`reader_http_${res.status}`);
-          continue;
+          if (!/<(?:html|head|body)\b/i.test(res.body)) {
+            warnings.push("reader_non_html");
+            break;
+          }
+          if (isReaderChallengePage(res.body)) {
+            if (attempt === 0 && remaining() >= 1e3) {
+              warnings.push("reader_challenge_retry");
+              continue;
+            }
+            warnings.push("reader_challenge_rejected");
+            break;
+          }
+          acceptedBody = res.body;
+          break;
         }
-        if (!/<(?:html|head|body)\b/i.test(res.body)) {
-          warnings.push("reader_non_html");
-          continue;
-        }
-        if (isReaderChallengePage(res.body)) {
-          warnings.push("reader_challenge_rejected");
-          continue;
-        }
-        const bytes = Buffer.byteLength(res.body, "utf8");
+        if (!acceptedBody) continue;
+        const bytes = Buffer.byteLength(acceptedBody, "utf8");
         totalBytes += bytes;
         sources.push({
           url: targetUrl.toString(),
@@ -1952,11 +1962,11 @@ async function runScan(rawUrl, options = {}) {
         });
         pages.push({
           url: targetUrl.toString(),
-          html: res.body
+          html: acceptedBody
         });
         if (pages.length === 1) {
           const extra = rankCandidateUrls(
-            extractSameOriginHrefs(res.body, targetUrl),
+            extractSameOriginHrefs(acceptedBody, targetUrl),
             allow.url
           );
           for (const href of extra) {
