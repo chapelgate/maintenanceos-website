@@ -51,7 +51,13 @@ function serviceTitleFromPage(page: WordPressPage): string | null {
 function usefulExtractionPage(page: WordPressPage): boolean {
   const title = cleanRenderedText(page.title?.rendered);
   const slug = asText((page as { slug?: unknown }).slug).toLowerCase();
-  if (slug === "home" || slug === "homepage") return true;
+  if (
+    slug === "home" ||
+    slug === "homepage" ||
+    /^(?:home|homepage)$/i.test(title)
+  ) {
+    return true;
+  }
   if (/faq|frequently-asked/.test(slug)) return true;
   return Boolean(serviceTitleFromPage(page));
 }
