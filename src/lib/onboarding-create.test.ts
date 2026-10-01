@@ -18,6 +18,10 @@ import {
   normalisePublicUrl,
   scanFieldReviewHint,
 } from "./onboarding-create.ts";
+import {
+  isWordPressFallbackEligible,
+  mapWordPressRestFallback,
+} from "./onboarding-wordpress-fallback.ts";
 
 test("normalisePublicUrl accepts public http(s) and rejects junk", () => {
   assert.equal(normalisePublicUrl("example.co.uk"), "https://example.co.uk/");
@@ -36,6 +40,86 @@ test("hostnameBusinessHint uses the first label only", () => {
     "acme plumbing",
   );
   assert.equal(hostnameBusinessHint("https://example.com"), "example");
+});
+
+test("WordPress browser fallback is gated by an already validated server fetch failure", () => {
+  assert.equal(
+    isWordPressFallbackEligible(422, { error: "fetch_failed" }),
+    true,
+  );
+  assert.equal(
+    isWordPressFallbackEligible(400, { error: "fetch_failed" }),
+    false,
+  );
+  assert.equal(
+    isWordPressFallbackEligible(422, { error: "non_public_resolved_ip" }),
+    false,
+  );
+  assert.equal(isWordPressFallbackEligible(500, null), false);
+});
+
+test("WordPress public REST payload maps Alley Gates knowledge without invention", () => {
+  const result = mapWordPressRestFallback(
+    "https://alleygates.co.uk/",
+    { name: "Alley Gates" },
+    [
+      {
+        link: "https://alleygates.co.uk/",
+        title: { rendered: "Homepage" },
+        excerpt: { rendered: "" },
+        content: {
+          rendered:
+            "<h2>Our Services</h2>" +
+            "<p>Alley Gate Installation</p>" +
+            "<p>CCTV</p>" +
+            "<p>Security Fencing</p>" +
+            "<h2>Alley Gate Keys</h2>" +
+            "<p>Alley gate keys are made to order.</p>",
+        },
+      },
+    ],
+  );
+
+  assert.ok(result);
+  const body = result as {
+    draft: Record<string, string>;
+    facts: {
+      website?: string;
+      businessName?: string;
+      services?: string[];
+    };
+    fieldMeta: Record<string, { source?: string; confidence?: string }>;
+    warnings: string[];
+  };
+  assert.equal(body.draft.businessName, "Alley Gates");
+  assert.match(body.draft.services ?? "", /Alley Gate Installation/i);
+  assert.match(body.draft.services ?? "", /CCTV/i);
+  assert.match(body.draft.services ?? "", /Security Fencing/i);
+  assert.equal(body.facts.website, "https://alleygates.co.uk/");
+  assert.equal(body.facts.businessName, "Alley Gates");
+  assert.ok(body.facts.services?.some((item) => /CCTV/i.test(item)));
+  assert.equal(body.fieldMeta.businessName?.source, "wordpress_rest");
+  assert.equal(body.fieldMeta.businessName?.confidence, "high");
+  assert.ok(body.warnings.includes("wordpress_rest_browser_fallback"));
+});
+
+test("WordPress public REST fallback refuses non-HTTPS and empty page data", () => {
+  assert.equal(
+    mapWordPressRestFallback(
+      "http://alleygates.co.uk/",
+      { name: "Alley Gates" },
+      [{ content: { rendered: "<p>Alley gates</p>" } }],
+    ),
+    null,
+  );
+  assert.equal(
+    mapWordPressRestFallback(
+      "https://alleygates.co.uk/",
+      { name: "Alley Gates" },
+      [],
+    ),
+    null,
+  );
 });
 
 test("mapScanResponse never invents fields", () => {
