@@ -632,3 +632,30 @@ Golden-line boundary:
 
 No human blocker remains for MOS-WEB-CREATE-005.
 
+## MOS-WEB-CREATE-006 — Live browser receptionist can answer from an empty/stale pack after a successful website scan
+Status: OPEN / LIVE USER REPRODUCTION
+Opened: 2026-10-01
+
+User-visible evidence:
+- Real iPhone production /create journey showed the browser receptionist replying "services are not on file in this knowledge pack" to both "What do you do" and "What services do you offer?".
+- The same transcript exposed internal engineering phrases including "scripted sandbox" and "Frozen production telephony is unused." to the customer.
+
+Required production behaviour:
+- The receptionist preview must consume the exact reviewed knowledge pack generated from the current live website scan.
+- A successful scan that includes services must not result in a preview whose services are missing.
+- If the scan fails or yields a thin pack, the UI must make that state explicit and must not imply the website was learned successfully.
+- Customer-facing replies may explain that transfers/bookings are unavailable in the browser preview, but must not expose internal implementation language such as "scripted sandbox", "frozen production telephony", provider internals or engineering verification terminology.
+
+Verification required before RESOLVED:
+- real, non-stubbed browser acceptance against the deployed /create page and production /api/website/scan route;
+- scanner response, Step 4 reviewed Services field, generated Step 5 knowledge pack and interactive reply must all contain the same expected service;
+- repeat against Express Gas Delivery and Alley Gates;
+- natural questions "What do you do?" and "What services do you offer?" must both return pack-aware answers;
+- human-transfer request must return concise customer-safe browser-preview wording;
+- zero runtime exceptions and zero lead/email submission before optional Save;
+- full repository regression, accessibility, TypeScript and production build;
+- exact deployed release identity and live mobile re-verification.
+
+Hard boundary:
+Website scanner and browser preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
+
