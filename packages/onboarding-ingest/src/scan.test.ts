@@ -193,6 +193,109 @@ test("runScan augments a thin client-rendered shell from one bounded same-origin
   }
 });
 
+test("runScan can recover a bot-challenged public site through the bounded reader fallback", async () => {
+  const readerHtml = `<!doctype html><html><head>
+    <title>Alley Gates | Local Installation & Maintenance Specialists</title>
+    <script type="application/ld+json">
+    {
+      "@type":"LocalBusiness",
+      "name":"Alley Gates",
+      "makesOffer":[
+        {"itemOffered":{"name":"Alley Gate Installation"}},
+        {"itemOffered":{"name":"CCTV"}},
+        {"itemOffered":{"name":"Security Fencing"}},
+        {"itemOffered":{"name":"Alley Gate Keys"}}
+      ]
+    }
+    </script>
+  </head><body>
+    <p>ALLEY GATE KEYS ARE MADE TO ORDER AND CAN TAKE UP TO SIX WEEKS TO BE DELIVERED.</p>
+  </body></html>`;
+
+  const direct = pages({
+    "https://alleygates.example/robots.txt": {
+      status: 401,
+      headers: { "content-type": "text/html" },
+      body: "bot challenge",
+      url: new URL("https://alleygates.example/robots.txt"),
+    },
+    "https://alleygates.example/": {
+      status: 401,
+      headers: { "content-type": "text/html" },
+      body: "bot challenge",
+      url: new URL("https://alleygates.example/"),
+    },
+  });
+
+  let readerCalls = 0;
+  const result = await runScan("https://alleygates.example/", {
+    enabled: true,
+    ...direct,
+    readerFallback: true,
+    readerLookup: async (hostname) => {
+      assert.equal(hostname, "r.jina.ai");
+      return ["203.0.113.11"];
+    },
+    readerGet: async (url, _ip, opts) => {
+      readerCalls += 1;
+      assert.equal(url.hostname, "r.jina.ai");
+      assert.equal(opts.headers?.["X-Respond-With"], "html");
+      assert.equal(opts.headers?.Accept, "text/html");
+      return htmlPage(url.toString(), readerHtml);
+    },
+  });
+
+  assert.equal(readerCalls, 1);
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.equal(result.draft.businessName, "Alley Gates");
+    assert.match(result.draft.services ?? "", /Alley Gate Installation/);
+    assert.match(result.draft.services ?? "", /CCTV/);
+    assert.match(result.draft.services ?? "", /Security Fencing/);
+    assert.match(result.draft.services ?? "", /Alley Gate Keys/);
+    assert.ok(result.warnings.includes("http_401"));
+    assert.ok(result.warnings.includes("reader_fallback_used"));
+    assert.equal(result.sources[0]?.url, "https://alleygates.example/");
+  }
+});
+
+test("runScan leaves the direct failure typed when reader fallback cannot help", async () => {
+  const direct = pages({
+    "https://blocked.example/robots.txt": {
+      status: 403,
+      headers: { "content-type": "text/html" },
+      body: "blocked",
+      url: new URL("https://blocked.example/robots.txt"),
+    },
+    "https://blocked.example/": {
+      status: 403,
+      headers: { "content-type": "text/html" },
+      body: "blocked",
+      url: new URL("https://blocked.example/"),
+    },
+  });
+
+  const result = await runScan("https://blocked.example/", {
+    enabled: true,
+    ...direct,
+    readerFallback: true,
+    readerLookup: async () => ["203.0.113.11"],
+    readerGet: async (url) => ({
+      status: 429,
+      headers: { "content-type": "text/plain" },
+      body: "rate limited",
+      url,
+    }),
+  });
+
+  assert.equal(result.ok, false);
+  if (!result.ok) {
+    assert.equal(result.error, "fetch_failed");
+    assert.ok(result.warnings.includes("http_403"));
+    assert.ok(result.warnings.includes("reader_http_429"));
+  }
+});
+
 test("runScan happy path returns /create draft fields only from fetched HTML", async () => {
   const fixtures = pages({
     "https://acme.example/robots.txt": robotsPage(
