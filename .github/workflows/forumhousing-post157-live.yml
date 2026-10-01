@@ -1,0 +1,182 @@
+name: Forum Housing post-157 live acceptance
+
+on:
+  push:
+    branches:
+      - diag/forumhousing-post157-live
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      - name: Wait for exact merged release
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin='https://seahorse-app-4oasq.ondigitalocean.app'
+          expected='ae01f9e42d13c03a8d70e82cfa9d7000199a7f21'
+          deployed=''
+          for i in $(seq 1 72); do
+            curl -fsS "$origin/release.json" -o /tmp/release.json || true
+            deployed="$(node -e "try{console.log(require('/tmp/release.json').commit||'')}catch(e){console.log('')}")"
+            echo "attempt=$i deployed=$deployed"
+            if [ "$deployed" = "$expected" ]; then break; fi
+            sleep 10
+          done
+          test "$deployed" = "$expected"
+          cat /tmp/release.json
+
+      - name: Live Forum Housing scanner proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin='https://seahorse-app-4oasq.ondigitalocean.app'
+          code="$(curl --max-time 45 -sS -o /tmp/forum.json -D /tmp/forum.h -w '%{http_code}'             -X POST "$origin/api/website/scan"             -H 'Content-Type: application/json'             -H 'Accept: application/json'             --data-binary '{"url":"https://forumhousing.co.uk/"}' || true)"
+          echo "HTTP_STATUS=$code"
+          cat /tmp/forum.h
+          cat /tmp/forum.json
+          echo
+          test "$code" = '200'
+          node <<'NODE'
+          const fs=require('node:fs');
+          const r=JSON.parse(fs.readFileSync('/tmp/forum.json','utf8'));
+          if(r.ok !== true) throw new Error(JSON.stringify(r));
+          const services=(r.draft?.services||'').toLowerCase();
+          if(!services.includes('supported lodgings')) {
+            throw new Error('Forum Housing services were not recovered: '+JSON.stringify(r));
+          }
+          const hours=(r.draft?.hours||'').toLowerCase();
+          if(!hours.includes('monday') || !hours.includes('friday') || !/9\s*(?:am|:00)/i.test(hours) || !/5\s*(?:pm|:00)/i.test(hours)) {
+            throw new Error('Forum Housing own-site hours were not recovered: '+JSON.stringify(r));
+          }
+          if(!r.warnings?.includes('reader_fallback_used')) {
+            throw new Error('Expected bounded reader provenance missing');
+          }
+          console.log('FORUM_LIVE_SCANNER=PASS');
+          NODE
+
+      - name: Fresh mobile create journey uses Forum Housing facts
+        shell: bash
+        env:
+          LIVE_ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
+        run: |
+          set -euo pipefail
+          cat > .forum-live.mjs <<'NODE'
+          import { chromium } from 'playwright';
+
+          const origin=process.env.LIVE_ORIGIN;
+          const browser=await chromium.launch({
+            headless:true,
+            executablePath:'/usr/bin/google-chrome',
+            args:['--no-sandbox','--disable-dev-shm-usage'],
+          });
+          const context=await browser.newContext({
+            viewport:{width:390,height:844},
+            deviceScaleFactor:3,
+            isMobile:true,
+          });
+          const page=await context.newPage();
+          const exceptions=[];
+          const unexpectedPosts=[];
+          page.on('pageerror', e=>exceptions.push(String(e)));
+          page.on('request', req=>{
+            if(req.method()==='POST' && !req.url().includes('/api/website/scan')){
+              unexpectedPosts.push(req.url());
+            }
+          });
+
+          try {
+            await page.goto(origin+'/create/',{waitUntil:'networkidle',timeout:45000});
+            await page.locator('input[name="businessUrl"]').fill('https://forumhousing.co.uk/');
+            await page.locator('input[name="name"]').fill('Forum Live Acceptance');
+            await page.locator('input[name="email"]').fill('forum-live-acceptance@example.com');
+            await page.locator('input[name="organisation"]').fill('Forum Housing');
+
+            const scanPromise=page.waitForResponse(
+              r=>r.url().includes('/api/website/scan') && r.request().method()==='POST',
+              {timeout:60000},
+            );
+            await page.locator('[data-create-primary-action]').click();
+            const scanResponse=await scanPromise;
+            const scan=await scanResponse.json();
+            console.log('SCAN='+JSON.stringify(scan));
+            if(scanResponse.status()!==200 || scan.ok!==true) throw new Error('live scan failed');
+            const scanServices=(scan.draft?.services||'').toLowerCase();
+            const scanHours=(scan.draft?.hours||'').toLowerCase();
+            if(!scanServices.includes('supported lodgings')) throw new Error('scan missing Forum services');
+            if(!scanHours.includes('monday') || !scanHours.includes('friday')) throw new Error('scan missing Forum hours');
+
+            await page.waitForSelector('[data-create-step="2"]');
+            await page.waitForFunction(()=>{
+              const b=document.querySelector('[data-create-step="2"] [data-create-primary-action]');
+              return b && !b.disabled && (b.textContent||'').trim()!=='Checking…';
+            },null,{timeout:60000});
+            await page.locator('[data-create-step="2"] [data-create-primary-action]').click();
+
+            await page.waitForSelector('[data-create-step="3"]');
+            await page.locator('[data-agent-type="receptionist"] input').check();
+            await page.locator('[data-create-step="3"] [data-create-primary-action]').click();
+
+            await page.waitForSelector('[data-create-step="4"]');
+            const services=await page.getByLabel('Services').inputValue();
+            const hours=await page.getByLabel('Hours').inputValue();
+            console.log('STEP4_SERVICES='+JSON.stringify(services));
+            console.log('STEP4_HOURS='+JSON.stringify(hours));
+            if(!/supported lodgings/i.test(services)) throw new Error('Step 4 lost services');
+            if(!/monday/i.test(hours) || !/friday/i.test(hours)) throw new Error('Step 4 lost hours');
+
+            const greeting=page.getByLabel('Greeting');
+            if(!(await greeting.inputValue()).trim()){
+              await greeting.fill('Thank you for calling Forum Housing. How can I help?');
+            }
+            await page.locator('[data-create-step="4"] [data-create-primary-action]').click();
+
+            await page.waitForSelector('[data-create-step="5"]');
+            await page.waitForSelector('[data-final-knowledge-pack="readonly"]',{state:'attached',timeout:15000});
+            const pack=(await page.locator('[data-final-knowledge-pack="readonly"]').textContent())||'';
+            console.log('PACK='+pack);
+            if(!/supported lodgings/i.test(pack)) throw new Error('Step 5 lost services');
+            if(!/monday/i.test(pack) || !/friday/i.test(pack)) throw new Error('Step 5 lost hours');
+
+            await page.getByRole('button',{name:'Start voice call'}).click();
+
+            await page.getByRole('button',{name:'What services do you offer?'}).click();
+            await page.waitForFunction(
+              ()=>/supported lodgings/i.test(document.querySelector('[data-demo-transcript]')?.textContent||''),
+              null,{timeout:15000},
+            );
+
+            await page.getByRole('button',{name:'What are your opening hours?'}).click();
+            await page.waitForFunction(
+              ()=>/monday/i.test(document.querySelector('[data-demo-transcript]')?.textContent||''),
+              null,{timeout:15000},
+            );
+
+            const transcript=await page.locator('[data-demo-transcript]').innerText();
+            console.log('TRANSCRIPT='+JSON.stringify(transcript));
+            if(/scripted sandbox|frozen production telephony|knowledge pack/i.test(transcript)){
+              throw new Error('engineering terminology leaked');
+            }
+            if(exceptions.length) throw new Error('page errors: '+exceptions.join(' | '));
+            if(unexpectedPosts.length) throw new Error('unexpected pre-save POSTs: '+unexpectedPosts.join(', '));
+            console.log('FORUM_MOBILE_CREATE=PASS');
+          } finally {
+            await context.close();
+            await browser.close();
+          }
+          NODE
+          node .forum-live.mjs
