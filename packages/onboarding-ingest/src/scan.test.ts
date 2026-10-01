@@ -277,8 +277,7 @@ test("runScan can recover a bot-challenged public site through the bounded reade
     assert.match(result.draft.services ?? "", /Alley Gate Keys/);
     assert.ok(result.warnings.includes("http_401"));
     assert.ok(result.warnings.includes("reader_fallback_used"));
-    assert.ok(result.warnings.includes("reader_challenge_retry"));
-    assert.equal(result.warnings.includes("reader_challenge_rejected"), false);
+    assert.equal(result.warnings.includes("reader_challenge_retry"), false);
     assert.equal(result.sources[0]?.url, "https://alleygates.example/");
   }
 });
@@ -361,6 +360,8 @@ test("runScan recovers a direct TLS/fetch failure with a bounded same-origin rea
     assert.match(result.draft.faqs ?? "", /0151 649 9718/);
     assert.ok(result.warnings.includes("fetch_failed"));
     assert.ok(result.warnings.includes("reader_fallback_used"));
+    assert.ok(result.warnings.includes("reader_challenge_retry"));
+    assert.equal(result.warnings.includes("reader_challenge_rejected"), false);
     assert.equal(
       result.sources.some((source) => source.url.endsWith("/living-with-us/")),
       true,
