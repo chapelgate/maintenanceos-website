@@ -1,4 +1,4 @@
-name: Alley Gates live path probe
+name: Alley Gates reader fallback probe
 
 on:
   push:
@@ -13,16 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Probe Alley Gates public paths through live scanner
+      - name: Probe public reader fallback only
         shell: bash
         run: |
           set -euo pipefail
-          origin='https://seahorse-app-4oasq.ondigitalocean.app'
-          for url in             'https://alleygates.co.uk/'             'https://alleygates.co.uk/robots.txt'             'https://alleygates.co.uk/wp-json/'             'https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=1&_fields=link,title,content,excerpt,slug'             'https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=5&_fields=link,title,content,excerpt,slug'
+          for target in             'https://alleygates.co.uk/'             'https://expressgasdelivery.com/'
           do
-            echo "=== $url ==="
-            code="$(curl --max-time 30 -sS -o /tmp/body -w '%{http_code}'               -X POST "$origin/api/website/scan"               -H 'Content-Type: application/json'               -H 'Accept: application/json'               --data-binary "{\"url\":\"$url\"}" || true)"
+            echo "=== $target ==="
+            encoded="https://r.jina.ai/$target"
+            code="$(curl --max-time 30 -sS -o /tmp/body -D /tmp/head -w '%{http_code}'               -H 'Accept: text/plain' "$encoded" || true)"
             echo "HTTP_STATUS=$code"
-            cat /tmp/body
+            sed -n '1,25p' /tmp/head
+            echo "--- BODY FIRST 4000 ---"
+            head -c 4000 /tmp/body || true
             echo
           done
