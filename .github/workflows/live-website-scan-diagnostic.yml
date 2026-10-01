@@ -13,30 +13,34 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Inventory public WordPress business pages
+      - name: Probe Express Gas raw site and live scanner
         shell: bash
         run: |
           set -euo pipefail
           ua='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
-          curl -sS -A "$ua" \
-            'https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug' \
-            -o /tmp/pages.json
-          python3 - <<'PY'
-          import html, json, re
-          pages=json.load(open('/tmp/pages.json'))
-          for p in pages:
-              title=html.unescape(re.sub(r'<[^>]+>',' ',p.get('title',{}).get('rendered','')))
-              body=' '.join([
-                  p.get('excerpt',{}).get('rendered',''),
-                  p.get('content',{}).get('rendered','')
-              ])
-              body=html.unescape(re.sub(r'<script\b[\s\S]*?</script>',' ',body,flags=re.I))
-              body=html.unescape(re.sub(r'<style\b[\s\S]*?</style>',' ',body,flags=re.I))
-              body=html.unescape(re.sub(r'<[^>]+>',' ',body))
-              body=re.sub(r'\s+',' ',body).strip()
-              print('---')
-              print('SLUG',p.get('slug'))
-              print('TITLE',title.strip())
-              print('LINK',p.get('link'))
-              print('TEXT',body[:1200])
-          PY
+          origin='https://seahorse-app-4oasq.ondigitalocean.app'
+          target='https://expressgasdelivery.com/'
+
+          echo '=== LIVE SCANNER ==='
+          curl -sS -D /tmp/sh -o /tmp/sb -X POST "$origin/api/website/scan" \
+            -H 'Content-Type: application/json' -H 'Accept: application/json' \
+            --data-binary '{"url":"https://expressgasdelivery.com/"}' || true
+          cat /tmp/sh
+          cat /tmp/sb
+          echo
+
+          echo '=== RAW HOME ==='
+          curl -L --max-redirs 4 --connect-timeout 8 --max-time 25 -sS -A "$ua" \
+            -D /tmp/h -o /tmp/b "$target"
+          wc -c /tmp/b
+          sed -n '1,30p' /tmp/h
+          for needle in 'Business Hours' 'Opening Times' 'Our Services' 'Butane Gas' 'Propane Gas' 'Free Local Delivery'; do
+            echo "--- $needle ---"
+            grep -F -i -m 3 -C 2 "$needle" /tmp/b || true
+          done
+
+          echo '=== WORDPRESS API ==='
+          code="$(curl -sS -A "$ua" -o /tmp/wp -w '%{http_code}' 'https://expressgasdelivery.com/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug' || true)"
+          echo "WP_STATUS=$code"
+          head -c 2000 /tmp/wp || true
+          echo
