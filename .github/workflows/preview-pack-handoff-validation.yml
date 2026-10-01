@@ -41,4 +41,6 @@ jobs:
           NEXT_PUBLIC_FORM_ENDPOINT: http://127.0.0.1:8787/leads
         run: |
           npm run build
-          test "$(find out -name index.html -type f | wc -l)" -ge 30
+          test "$(find out -name index.html -type f | wc -l)" -ge 28
+          test -f out/robots.txt
+          test -f out/sitemap.xml
