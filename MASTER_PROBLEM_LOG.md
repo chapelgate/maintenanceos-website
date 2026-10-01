@@ -466,3 +466,29 @@ Freeze:
 This evidence record is merged through normal PR change control. After the record-only merge is published by the existing DigitalOcean native auto-deploy path, the exact deployed merge SHA must be rechecked and the live black-box acceptance rerun before creating freeze tag `maintenanceos-website-create-scan-voice-live-20261001`.
 
 Evidence: `docs/CREATE_LIVE_BLACKBOX_2026-10-01.md`.
+
+## MOS-WEB-CREATE-004 — Website knowledge scan can fail on one CDN edge and empty the receptionist pack
+Status: FIX CANDIDATE / NOT YET LIVE VERIFIED
+Opened: 2026-10-01
+
+Problem:
+A real iPhone /create test against Alley Gates produced a greeting but no usable website-derived knowledge. Questions about the company, services and keys fell through to the generic "not on file" response.
+
+Root cause evidence:
+- PR #144 had previously verified the exact prebuilt scanner against https://alleygates.co.uk/ with HTTP 200 and extracted Alley Gates, installation, CCTV, security fencing and keys.
+- A later networking change preferred only the first IPv4 address for dual-stack hosts.
+- The subsequent live convergence evidence recorded Alley Gates failing with HTTP 401 while another public target still succeeded.
+- The scanner therefore treated one validated hosting/CDN edge as authoritative and discarded otherwise available website knowledge.
+
+Surgical fix:
+- Preserve IPv4 preference.
+- After DNS and SSRF validation of every resolved address, fail over to the next validated address when a connection fails or an edge returns HTTP 401/403.
+- Keep the existing redirect, byte, page, timeout, robots and public-IP protections.
+- Update the prebuilt DigitalOcean Function bundle and add a regression test for IPv4 401 -> IPv6 200 failover.
+
+Hard boundary:
+Website scanner and browser preview only. Do not modify, exercise, reroute or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials or the golden phone line.
+
+Verification required before RESOLVED:
+repository tests, TypeScript/build guards, PR validation, merge, DigitalOcean deployment identity, live Alley Gates scan returning useful website-derived fields, then a real /create browser question whose reply comes from that scanned knowledge.
+
