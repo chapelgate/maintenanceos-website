@@ -1460,7 +1460,7 @@ async function fetchPublicHttps(raw, options = {}) {
     for (const address of orderedAddresses) {
       const elapsed = Date.now() - addressAttemptsStarted;
       const attemptTimeoutMs = Math.max(250, timeoutMs - elapsed);
-      if (elapsed >= timeoutMs && response2) break;
+      if (elapsed >= timeoutMs) break;
       try {
         const candidate = await get(allow.url, address, {
           timeoutMs: attemptTimeoutMs,
