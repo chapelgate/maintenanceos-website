@@ -9,6 +9,8 @@ import {
   extractJsonLd,
   extractMicrodata,
   extractSameOriginHrefs,
+  extractSameOriginScriptSrcs,
+  extractStructuredBusinessHtmlFromScript,
   extractServicesFromNav,
   extractTelMailto,
   rankCandidateUrls,
@@ -203,6 +205,37 @@ test("script and style text do not leak into extracted copy", () => {
 test("asUntrustedText strips controls and caps length", () => {
   assert.equal(asUntrustedText("  hello\u0000\u0007world  "), "helloworld");
   assert.equal(asUntrustedText("x".repeat(5000)).length, 4000);
+});
+
+test("thin SPA shell can recover explicit LocalBusiness facts from its own static bundle", () => {
+  const shell = `<html><head><title>Express Gas Delivery - Gas Cylinders & Equipment</title>
+    <script defer src="/static/js/main.abc123.js"></script>
+  </head><body><div id="root"></div></body></html>`;
+  assert.deepEqual(
+    extractSameOriginScriptSrcs(
+      shell,
+      new URL("https://expressgasdelivery.example/"),
+    ),
+    ["https://expressgasdelivery.example/static/js/main.abc123.js"],
+  );
+
+  const bundle = `const schema={"@context":"https://schema.org","@type":"LocalBusiness",name:"Express Gas Delivery",telephone:"0151 487 0570",openingHours:["Mo-Fr 08:00-16:00","Sa 08:00-14:00"],hasOfferCatalog:{"@type":"OfferCatalog",itemListElement:[{"@type":"Offer",itemOffered:{"@type":"Product",name:"Propane Gas Cylinders"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Patio Gas"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Beer Gas"}}]}};`;
+  const synthetic = extractStructuredBusinessHtmlFromScript(bundle);
+  assert.ok(synthetic);
+
+  const result = extractDraftFromHtml([
+    { url: "https://expressgasdelivery.example/", html: shell },
+    {
+      url: "https://expressgasdelivery.example/static/js/main.abc123.js",
+      html: synthetic!,
+    },
+  ]);
+  assert.equal(result.draft.businessName, "Express Gas Delivery");
+  assert.match(result.draft.hours ?? "", /Mo-Fr 08:00-16:00/);
+  assert.match(result.draft.services ?? "", /Propane Gas Cylinders/);
+  assert.match(result.draft.services ?? "", /Patio Gas/);
+  assert.match(result.draft.services ?? "", /Beer Gas/);
+  assert.deepEqual(result.facts.contact?.phones, ["0151 487 0570"]);
 });
 
 test("same-origin useful paths are ranked; off-origin ignored", () => {
