@@ -6,7 +6,7 @@ on:
       - fix/scanner-rich-public-sites-20261001
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: scanner-rich-site-candidate
@@ -15,62 +15,92 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - name: Unit, type and claims-safe validation
+
+      - name: Full repository regression
         run: |
           set -euo pipefail
-          node --experimental-strip-types --test \
+          npm test
+          npm run accessibility:check
+          npx tsc --noEmit
+          npx eslint \
+            packages/onboarding-ingest/src/fetch-safe.ts \
+            packages/onboarding-ingest/src/extract.ts \
+            packages/onboarding-ingest/src/scan.ts \
             packages/onboarding-ingest/src/fetch-safe.test.ts \
             packages/onboarding-ingest/src/extract.test.ts \
-            packages/onboarding-ingest/src/scan.test.ts \
-            packages/onboarding-ingest/src/function-wrapper.test.ts
-          npx tsc --noEmit
-      - name: Real public-site acceptance through candidate source
+            packages/onboarding-ingest/src/scan.test.ts
+          npm run build
+
+      - name: Browser and mobile regression
+        run: |
+          set -euo pipefail
+          BROWSER_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$BROWSER_PATH"
+          export BROWSER_PATH
+          npm run browser:smoke
+          NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads \
+          NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan \
+            node scripts/create-mobile-stability-browser.mjs
+
+      - name: Repeated real public-site acceptance
         run: |
           set -euo pipefail
           node --experimental-strip-types --input-type=module <<'NODE'
           import { runScan } from './packages/onboarding-ingest/src/scan.ts';
 
-          const cases = [
-            {
-              url: 'https://alleygates.co.uk/',
-              assert(result) {
-                const blob = JSON.stringify(result);
-                if (!result.ok) throw new Error('Alley Gates scan failed: ' + blob);
-                if (!/Alley|CCTV|Security|Gate|key/i.test(result.draft.services ?? result.draft.faqs ?? '')) {
-                  throw new Error('Alley Gates useful knowledge missing: ' + blob);
-                }
-              },
-            },
-            {
-              url: 'https://expressgasdelivery.com/',
-              assert(result) {
-                const blob = JSON.stringify(result);
-                if (!result.ok) throw new Error('Express Gas scan failed: ' + blob);
-                if (!result.draft.hours) throw new Error('Express Gas hours missing: ' + blob);
-                if (!/Propane|Patio|Beer Gas|Gas Cylinders/i.test(result.draft.services ?? '')) {
-                  throw new Error('Express Gas services missing: ' + blob);
-                }
-              },
-            },
-          ];
+          function assertAlley(result) {
+            const blob = JSON.stringify(result);
+            if (!result.ok) throw new Error('Alley Gates scan failed: ' + blob);
+            const knowledge = [result.draft.services, result.draft.faqs].filter(Boolean).join('\n');
+            if (!/Alley Gate Installation/i.test(knowledge)) {
+              throw new Error('Alley Gate Installation missing: ' + blob);
+            }
+            if (!/CCTV/i.test(knowledge) || !/Security Fencing/i.test(knowledge)) {
+              throw new Error('Alley Gates service knowledge incomplete: ' + blob);
+            }
+            if (!/Alley Gate Keys/i.test(knowledge)) {
+              throw new Error('Alley Gate Keys missing: ' + blob);
+            }
+          }
 
-          for (const item of cases) {
-            const result = await runScan(item.url, { enabled: true });
-            console.log(item.url, JSON.stringify(result, null, 2));
-            item.assert(result);
+          function assertExpress(result) {
+            const blob = JSON.stringify(result);
+            if (!result.ok) throw new Error('Express Gas scan failed: ' + blob);
+            if (!/Mo-Fr 08:00-16:00/i.test(result.draft.hours ?? '')) {
+              throw new Error('Express Gas opening hours missing: ' + blob);
+            }
+            if (!/Propane Gas Cylinders/i.test(result.draft.services ?? '')) {
+              throw new Error('Express Gas propane service missing: ' + blob);
+            }
+            if (!/Patio Gas/i.test(result.draft.services ?? '')) {
+              throw new Error('Express Gas patio service missing: ' + blob);
+            }
+          }
+
+          for (let iteration = 1; iteration <= 3; iteration += 1) {
+            console.log('ITERATION', iteration);
+            const alley = await runScan('https://alleygates.co.uk/', { enabled: true });
+            console.log('ALLEY', JSON.stringify(alley));
+            assertAlley(alley);
+
+            const express = await runScan('https://expressgasdelivery.com/', { enabled: true });
+            console.log('EXPRESS', JSON.stringify(express));
+            assertExpress(express);
           }
           NODE
-      - name: Build exact DigitalOcean Functions artifact
+
+      - name: Exact DigitalOcean Function artifact check
         run: |
           set -euo pipefail
           npx --yes esbuild@0.25.10 \
@@ -79,18 +109,7 @@ jobs:
             --platform=node \
             --format=cjs \
             --target=node22 \
-            --outfile=packages/onboarding-ingest/packages/website/scan/bundle.cjs
+            --outfile=/tmp/scan-bundle.cjs
+          cmp /tmp/scan-bundle.cjs packages/onboarding-ingest/packages/website/scan/bundle.cjs
           node --experimental-strip-types --test packages/onboarding-ingest/src/function-wrapper.test.ts
-      - name: Commit generated function bundle once
-        if: ${{ github.actor != 'github-actions[bot]' }}
-        run: |
-          set -euo pipefail
-          if git diff --quiet -- packages/onboarding-ingest/packages/website/scan/bundle.cjs; then
-            echo "bundle already current"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add packages/onboarding-ingest/packages/website/scan/bundle.cjs
-          git commit -m "build: refresh scanner function bundle for rich public sites"
-          git push
+          git diff --exit-code
