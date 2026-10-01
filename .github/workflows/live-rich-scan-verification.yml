@@ -1,0 +1,72 @@
+name: Live rich scanner verification
+
+on:
+  push:
+    branches:
+      - verify/rich-scan-live-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Wait for exact production release
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin="https://seahorse-app-4oasq.ondigitalocean.app"
+          expected="d174d4451dca32ad402a4ba1a268b739734f18e5"
+          matched=0
+          for i in $(seq 1 90); do
+            body="$(curl -fsS --max-time 10 "$origin/release.json" || true)"
+            live_sha="$(printf '%s' "$body" | python3 -c 'import sys,json; s=sys.stdin.read(); print((json.loads(s).get("commit") if s else "") or "")' 2>/dev/null || true)"
+            echo "release_attempt=$i live_sha=${live_sha:-unavailable}"
+            if [ "$live_sha" = "$expected" ]; then matched=1; break; fi
+            sleep 10
+          done
+          test "$matched" = 1
+          echo "LIVE_RELEASE_SHA=PASS"
+
+      - name: Verify live Alley Gates knowledge
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin="https://seahorse-app-4oasq.ondigitalocean.app"
+          code="$(curl -sS --max-time 35 -o /tmp/alley.json -w '%{http_code}' -X POST "$origin/api/website/scan" -H 'Content-Type: application/json' -H 'Accept: application/json' --data-binary '{"url":"https://alleygates.co.uk/"}')"
+          echo "ALLEY_HTTP=$code"
+          cat /tmp/alley.json
+          test "$code" = 200
+          python3 - <<'PY'
+          import json,re
+          j=json.load(open('/tmp/alley.json'))
+          text=json.dumps(j)
+          assert j.get('ok') is True
+          for value in ['Alley Gates','Alley Gate Installation','CCTV','Security Fencing','Alley Gate Keys']:
+              assert value.lower() in text.lower(), value
+          print('LIVE_ALLEYGATES_SCAN=PASS')
+          PY
+
+      - name: Verify live Express Gas knowledge
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin="https://seahorse-app-4oasq.ondigitalocean.app"
+          code="$(curl -sS --max-time 35 -o /tmp/express.json -w '%{http_code}' -X POST "$origin/api/website/scan" -H 'Content-Type: application/json' -H 'Accept: application/json' --data-binary '{"url":"https://expressgasdelivery.com/"}')"
+          echo "EXPRESS_HTTP=$code"
+          cat /tmp/express.json
+          test "$code" = 200
+          python3 - <<'PY'
+          import json
+          j=json.load(open('/tmp/express.json'))
+          assert j.get('ok') is True
+          d=j.get('draft') or {}
+          assert 'Mo-Fr 08:00-16:00' in (d.get('hours') or '')
+          s=d.get('services') or ''
+          for value in ['Propane Gas Cylinders','Patio Gas','Gas Engineering']:
+              assert value in s, value
+          assert '0151 487 0570' in json.dumps(j)
+          print('LIVE_EXPRESS_SCAN=PASS')
+          PY
