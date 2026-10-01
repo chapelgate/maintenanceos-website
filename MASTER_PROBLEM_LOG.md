@@ -571,3 +571,23 @@ Website scanner/browser receptionist preview only. Do not modify, exercise, rero
 Verification required before RESOLVED:
 full repository regression; exact function-bundle regeneration; real Reader fallback acceptance with a forced direct 401; merge; exact release identity; live Alley Gates scan with useful knowledge; live Express Gas regression; browser /create answer check; then freeze.
 
+### 2026-10-01 reader fallback pre-merge acceptance
+Status: PRE-MERGE PASS / LIVE VERIFICATION PENDING
+
+Evidence:
+- DigitalOcean lon1 runner 605203160 independently reproduced Alley Gates HTTP 401 with x-stackprotect-id on both homepage and robots.txt, confirming the fault is 20i StackProtect blocking DigitalOcean egress rather than the MaintenanceOS extractor.
+- Anonymous Reader auto-mode with rendered HTML and X-No-Cache returned the real Alley Gates page 6/6 probes, including Alley Gate Installation, CCTV, Security Fencing and Alley Gate Keys.
+- Candidate rejects Security Verification / human-verification interstitials instead of learning them.
+- Targeted scanner/function tests PASS.
+- Full repository regression PASS: 307/307.
+- Accessibility PASS: 16/16.
+- TypeScript and production build PASS: 30/30 routes generated.
+- Forced-direct-401 real-source fallback acceptance PASS with Alley Gates business identity and useful services recovered.
+- Exact DigitalOcean Function bundle regenerated and wrapper tests PASS 4/4.
+
+Remaining gate:
+Merge, deploy the exact candidate, verify the release marker, then black-box Alley Gates and Express Gas through the live /api/website/scan route and browser /create path.
+
+Golden-line boundary:
+No production telephony, carrier routing, live phone numbers, provider credentials, production voice runtime or MaintenanceOS golden phone line was modified or exercised.
+
