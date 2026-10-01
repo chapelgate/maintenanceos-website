@@ -516,11 +516,14 @@ Surgical fix:
 - Rebuild and verify the precompiled DigitalOcean Function bundle from the exact source.
 
 Candidate verification:
-- Targeted scanner/extractor/function tests: PASS.
-- TypeScript: PASS.
-- Real Alley Gates candidate scan: PASS; business identity, contact/location and services including Alley Gate Installation, CCTV, Security Fencing and Alley Gate Keys were recovered.
-- Real Express Gas Delivery candidate scan: PASS; opening hours and services including Propane Gas Cylinders, Patio Gas, Helium Balloons and Gas Engineering were recovered from its bounded same-origin static bundle.
-- Function wrapper after bundle rebuild: PASS.
+- Full repository tests: 303/303 PASS.
+- Accessibility: 16/16 PASS.
+- TypeScript and production build: PASS; 30/30 static routes generated.
+- Browser viewport smoke: 18/18 checks PASS across mobile, tablet and desktop.
+- 390x844 browser /create -> website learning -> reviewed configuration -> browser voice preview: PASS; pack-aware spoken reply, zero lead submissions, zero runtime exceptions.
+- Real Alley Gates candidate scan: PASS three consecutive times; business identity, contact/location and services including Alley Gate Installation, CCTV, Security Fencing and Alley Gate Keys were recovered.
+- Real Express Gas Delivery candidate scan: PASS three consecutive times; opening hours and services including Propane Gas Cylinders, Patio Gas, Helium Balloons and Gas Engineering were recovered from its bounded same-origin static bundle.
+- Exact regenerated DigitalOcean Function bundle matched the committed artifact byte-for-byte; function wrapper 4/4 PASS.
 
 Hard boundary:
 Website scanner and browser receptionist preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
