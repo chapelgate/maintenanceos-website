@@ -154,6 +154,29 @@ export type RunScanOptions = ScanDeps & {
   readerGet?: HttpGetFn;
 };
 
+export function isReaderChallengePage(html: string): boolean {
+  const title = /<title[^>]*>\s*([^<]{1,160})\s*<\/title>/i.exec(html)?.[1]?.trim() ?? "";
+  if (/^security verification$/i.test(title)) return true;
+
+  const text = html
+    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+
+  const challengeMarkers = [
+    "verify you are human",
+    "verify you're human",
+    "verify you’re human",
+    "checking your browser",
+    "security verification",
+    "captcha",
+  ];
+  const markerCount = challengeMarkers.filter((marker) => text.includes(marker)).length;
+  return markerCount >= 2;
+}
+
 export async function runScan(
   rawUrl: string,
   options: RunScanOptions = {},
@@ -302,6 +325,7 @@ export async function runScan(
         headers: {
           Accept: "text/html",
           "X-Respond-With": "html",
+          "X-No-Cache": "true",
         },
       });
 
@@ -309,6 +333,8 @@ export async function runScan(
         warnings.push(`reader_http_${res.status}`);
       } else if (!/<(?:html|head|body)\b/i.test(res.body)) {
         warnings.push("reader_non_html");
+      } else if (isReaderChallengePage(res.body)) {
+        warnings.push("reader_challenge_rejected");
       } else {
         const bytes = Buffer.byteLength(res.body, "utf8");
         totalBytes += bytes;
