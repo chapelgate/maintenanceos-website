@@ -475,17 +475,23 @@ Problem:
 A real iPhone /create test against Alley Gates produced a greeting but no usable website-derived knowledge. Questions about the company, services and keys fell through to the generic "not on file" response.
 
 Root cause evidence:
-- PR #144 had previously verified the exact prebuilt scanner against https://alleygates.co.uk/ with HTTP 200 and extracted Alley Gates, installation, CCTV, security fencing and keys.
-- A later networking change preferred only the first IPv4 address for dual-stack hosts.
-- The subsequent live convergence evidence recorded Alley Gates failing with HTTP 401 while another public target still succeeded.
-- The scanner therefore treated one validated hosting/CDN edge as authoritative and discarded otherwise available website knowledge.
+- PR #144 had previously verified the prebuilt scanner extracting Alley Gates, installation, CCTV, security fencing and keys.
+- PR #148 repaired address failover and natural browser-preview questions, but the user's post-deploy iPhone test still failed at Step 2 before a knowledge pack existed.
+- the exact live release marker was confirmed as PR #148 merge SHA `0fcfcfa7d4fed2d3b6700c8f59d8a8654b8bd62c`;
+- live `/api/website/scan` returned HTTP 200 for `https://example.com/` but HTTP 422 for every tested Alley Gates path with `robots_unavailable` + `http_401`;
+- homepage, robots.txt, wp-sitemap.xml, wp-json and www all failed identically only through DigitalOcean Functions egress;
+- the same Alley Gates homepage and robots.txt returned HTTP 200 from a clean external runner using the scanner user-agent, proving the public site and scanner identity were valid;
+- Alley Gates' public WordPress REST endpoint explicitly returned CORS permission for the MaintenanceOS production origin and exposed 19 public pages containing Alley Gate Installation, CCTV, Security Fencing and key-order information.
+The remaining defect is therefore provider-path-specific fetch refusal between DigitalOcean Functions and the Alley Gates StackCDN/StackProtect path, not missing website content or a broken /create deployment.
 
 Surgical fix:
-- Preserve IPv4 preference.
-- After DNS and SSRF validation of every resolved address, fail over to the next validated address when a connection fails or an edge returns HTTP 401/403.
-- Keep the existing redirect, byte, page, timeout, robots and public-IP protections.
-- Update the prebuilt DigitalOcean Function bundle and add a regression test for IPv4 401 -> alternate validated address 200 failover.
-- In the browser-only preview, match natural caller wording against reviewed FAQs/services and provide a safe summary when the caller explicitly asks what knowledge is on file. Replies remain deterministic and can only quote reviewed pack content.
+- keep the existing DigitalOcean Function as the primary scanner and preserve all URL/DNS/SSRF, redirect, robot, size and timeout controls;
+- invoke a browser WordPress REST fallback only after the primary scanner returns the exact already-validated `422 fetch_failed` condition;
+- browser fallback is same-site only, HTTPS only, CORS-authorised, credential-free, bounded to 20 public pages / bounded JSON sizes / a fixed timeout, and never proxies or bypasses access controls;
+- reuse the existing deterministic extractor for untrusted public content;
+- derive services only from explicit public business-page titles while excluding account/cart/policy/generic pages;
+- copy key-order guidance only when explicit public key/order/delivery text exists, with the online shop URL only when that same-origin public link is present;
+- retain the PR #148 natural browser-preview matching so customer questions can use the recovered reviewed facts.
 
 Hard boundary:
 Website scanner and browser preview only. Do not modify, exercise, reroute or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials or the golden phone line.
