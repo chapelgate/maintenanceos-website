@@ -45,13 +45,17 @@ jobs:
       - name: Browser and mobile regression
         run: |
           set -euo pipefail
-          BROWSER_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
-          test -n "$BROWSER_PATH"
-          export BROWSER_PATH
-          npm run browser:smoke
-          NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads \
-          NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan \
-            node scripts/create-mobile-stability-browser.mjs
+          docker run --rm --shm-size=1g \
+            -v "$PWD:/work" -w /work node:24-bookworm bash -lc '
+              set -euo pipefail
+              apt-get update -qq
+              DEBIAN_FRONTEND=noninteractive apt-get install -y -qq chromium >/dev/null
+              export BROWSER_PATH=/usr/bin/chromium
+              npm run browser:smoke
+              NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads \
+              NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan \
+                node scripts/create-mobile-stability-browser.mjs
+            '
 
       - name: Repeated real public-site acceptance
         run: |
