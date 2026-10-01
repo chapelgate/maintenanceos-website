@@ -28,7 +28,7 @@ jobs:
           LIVE_ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
         run: |
           set -euo pipefail
-          cat > /tmp/live-create.mjs <<'NODE'
+          cat > .live-create.mjs <<'NODE'
           import { chromium } from 'playwright';
 
           const origin = process.env.LIVE_ORIGIN;
@@ -134,4 +134,4 @@ jobs:
             await browser.close();
           }
           NODE
-          node /tmp/live-create.mjs
+          node .live-create.mjs
