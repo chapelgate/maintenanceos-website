@@ -13,65 +13,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Prove safe pinned lookup versus current raw-IP form
+      - name: Probe same-domain paths through live DigitalOcean function
         shell: bash
         run: |
           set -euo pipefail
-          node <<'NODE'
-          const https = require('node:https');
-          const ip='185.151.30.131';
-          const baseHeaders = {
-            'User-Agent': 'MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)',
-            Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1',
-            'Accept-Language': 'en-GB,en;q=0.8',
-            'Accept-Encoding': 'identity',
-            Connection: 'close'
-          };
-
-          function probe(label, options) {
-            return new Promise(resolve => {
-              console.log('=== '+label+' ===');
-              const req = https.request({
-                port: 443,
-                path: '/',
-                method: 'GET',
-                timeout: 8000,
-                ...options,
-              }, res => {
-                let body='';
-                res.setEncoding('utf8');
-                res.on('data', c => body += c);
-                res.on('end', () => {
-                  console.log('STATUS='+res.statusCode);
-                  console.log('SERVER='+(res.headers.server||''));
-                  console.log('VIA='+(res.headers['x-via']||''));
-                  console.log('BODY='+body.slice(0,100).replace(/\s+/g,' '));
-                  resolve();
-                });
-              });
-              req.on('timeout',()=>req.destroy(new Error('timeout')));
-              req.on('error',err=>{ console.log('ERROR='+err.message); resolve(); });
-              req.end();
-            });
-          }
-
-          (async () => {
-            await probe('CURRENT RAW IP + HOST + SNI', {
-              host: ip,
-              servername: 'alleygates.co.uk',
-              headers: { Host: 'alleygates.co.uk', ...baseHeaders }
-            });
-            await probe('HOSTNAME + VALIDATED IP LOOKUP', {
-              hostname: 'alleygates.co.uk',
-              servername: 'alleygates.co.uk',
-              headers: baseHeaders,
-              lookup: (_hostname, options, callback) => {
-                if (options && options.all) {
-                  callback(null, [{ address: ip, family: 4 }]);
-                } else {
-                  callback(null, ip, 4);
-                }
-              }
-            });
-          })();
-          NODE
+          endpoint="https://seahorse-app-4oasq.ondigitalocean.app/api/website/scan"
+          for target in \
+            "https://alleygates.co.uk/" \
+            "https://alleygates.co.uk/robots.txt" \
+            "https://alleygates.co.uk/wp-sitemap.xml" \
+            "https://alleygates.co.uk/wp-json/" \
+            "https://www.alleygates.co.uk/"; do
+            echo "=== $target ==="
+            code="$(curl -sS -o /tmp/b -D /tmp/h -w '%{http_code}' \
+              -X POST "$endpoint" \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json' \
+              --data-binary "{\"url\":\"$target\"}" || true)"
+            echo "HTTP_STATUS=$code"
+            sed -n '1,20p' /tmp/h
+            cat /tmp/b
+            echo
+          done
