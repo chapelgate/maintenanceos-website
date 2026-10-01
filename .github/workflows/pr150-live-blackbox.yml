@@ -1,0 +1,77 @@
+name: PR150 live black-box verification
+
+on:
+  push:
+    branches:
+      - diag/post-pr150-live-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify deployed website scanner
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin="https://seahorse-app-4oasq.ondigitalocean.app"
+
+          echo "=== RELEASE ==="
+          curl -fsS "$origin/release.json" -o /tmp/release.json
+          cat /tmp/release.json
+          echo
+          python3 - <<'PY'
+          import json
+          r=json.load(open('/tmp/release.json'))
+          expected='d174d4451dca32ad402a4ba1a268b739734f18e5'
+          print('DEPLOYED_COMMIT='+str(r.get('commit')))
+          assert r.get('commit') == expected, (r.get('commit'), expected)
+          PY
+
+          probe() {
+            name="$1"
+            url="$2"
+            outfile="$3"
+            echo "=== $name ==="
+            status="$(curl -sS -o "$outfile" -w '%{http_code}' \
+              -X POST "$origin/api/website/scan" \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json' \
+              --data-binary "{\"url\":\"$url\"}")"
+            echo "HTTP_STATUS=$status"
+            cat "$outfile"
+            echo
+            test "$status" = "200"
+          }
+
+          probe "EXAMPLE" "https://example.com/" /tmp/example.json
+          probe "ALLEY GATES" "https://alleygates.co.uk/" /tmp/alley.json
+          probe "EXPRESS GAS" "https://expressgasdelivery.com/" /tmp/gas.json
+
+          python3 - <<'PY'
+          import json
+
+          alley=json.load(open('/tmp/alley.json'))
+          gas=json.load(open('/tmp/gas.json'))
+
+          assert alley.get('ok') is True
+          alley_blob=json.dumps(alley).lower()
+          required_alley=['alley gate','cctv','security fencing']
+          for term in required_alley:
+              assert term in alley_blob, term
+
+          assert gas.get('ok') is True
+          draft=gas.get('draft') or {}
+          assert (draft.get('hours') or '').strip(), draft
+          assert (draft.get('services') or '').strip(), draft
+          gas_blob=json.dumps(gas).lower()
+          for term in ['propane','patio gas']:
+              assert term in gas_blob, term
+
+          print('ALLEY_GATE_KNOWLEDGE=PASS')
+          print('EXPRESS_GAS_KNOWLEDGE=PASS')
+          print('LIVE_SCANNER_BLACK_BOX=PASS')
+          PY
