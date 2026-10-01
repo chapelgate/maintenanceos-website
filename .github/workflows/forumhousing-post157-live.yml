@@ -94,9 +94,13 @@ jobs:
           const unexpectedPosts=[];
           page.on('pageerror', e=>exceptions.push(String(e)));
           page.on('request', req=>{
-            if(req.method()==='POST' && !req.url().includes('/api/website/scan')){
-              unexpectedPosts.push(req.url());
-            }
+            if(req.method()!=='POST') return;
+            const url=req.url();
+            if(url.includes('/api/website/scan')) return;
+            // Existing privacy-minimised measurement is expected and is not a
+            // lead/email/save side effect.
+            if(url.includes('/v1/public/website-events')) return;
+            unexpectedPosts.push(url);
           });
 
           try {
