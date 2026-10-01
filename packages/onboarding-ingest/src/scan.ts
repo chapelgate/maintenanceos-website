@@ -21,6 +21,8 @@ import {
 import { allowPublicHttpsUrl } from "./ssrf.ts";
 import {
   ScanError,
+  type HttpGetFn,
+  type LookupFn,
   type ScanDeps,
   type ScanPageSource,
   type ScanResult,
@@ -31,6 +33,9 @@ export const MAX_TOTAL_BYTES = 768 * 1024;
 export const TOTAL_DEADLINE_MS = 12_000;
 export const MAX_STATIC_SCRIPT_ASSETS = 1;
 export const MAX_STATIC_SCRIPT_BYTES = 640 * 1024;
+export const READER_FALLBACK_ORIGIN = "https://r.jina.ai";
+export const READER_FALLBACK_TIMEOUT_MS = 9_000;
+export const READER_FALLBACK_MAX_BYTES = 256 * 1024;
 export const OUR_USER_AGENT_TOKEN = "MaintenanceOS-OnboardingScan";
 
 export function isWebIngestEnabled(
@@ -140,7 +145,37 @@ async function loadRobots(
 export type RunScanOptions = ScanDeps & {
   enabled?: boolean;
   now?: () => number;
+  /**
+   * Public reader fallback is production-default but opt-in for dependency-
+   * injected tests so mocked direct fetches never cause accidental network I/O.
+   */
+  readerFallback?: boolean;
+  readerLookup?: LookupFn;
+  readerGet?: HttpGetFn;
 };
+
+export function isReaderChallengePage(html: string): boolean {
+  const title = /<title[^>]*>\s*([^<]{1,160})\s*<\/title>/i.exec(html)?.[1]?.trim() ?? "";
+  if (/^security verification$/i.test(title)) return true;
+
+  const text = html
+    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+
+  const challengeMarkers = [
+    "verify you are human",
+    "verify you're human",
+    "verify you’re human",
+    "checking your browser",
+    "security verification",
+    "captcha",
+  ];
+  const markerCount = challengeMarkers.filter((marker) => text.includes(marker)).length;
+  return markerCount >= 2;
+}
 
 export async function runScan(
   rawUrl: string,
@@ -175,6 +210,8 @@ export async function runScan(
   const sources: ScanPageSource[] = [];
   const pages: { url: string; html: string }[] = [];
   let totalBytes = 0;
+  const readerFallbackEnabled =
+    options.readerFallback ?? (!options.lookup && !options.get);
 
   const robots = await loadRobots(allow.url, options, remaining());
   if (robots.unavailable) warnings.push("robots_unavailable");
@@ -264,6 +301,60 @@ export async function runScan(
         };
       }
       warnings.push(err instanceof ScanError ? err.code : "fetch_failed");
+    }
+  }
+
+  if (
+    !pages.length &&
+    readerFallbackEnabled &&
+    (warnings.includes("http_401") || warnings.includes("http_403")) &&
+    remaining() >= 1_000
+  ) {
+    const readerUrl = `${READER_FALLBACK_ORIGIN}/${allow.url.toString()}`;
+    try {
+      const res = await fetchPublicHttps(readerUrl, {
+        lookup: options.readerLookup,
+        get: options.readerGet,
+        remainingMs: remaining(),
+        timeoutMs: Math.min(READER_FALLBACK_TIMEOUT_MS, remaining()),
+        maxBytes: Math.min(
+          READER_FALLBACK_MAX_BYTES,
+          MAX_TOTAL_BYTES - totalBytes,
+        ),
+        maxRedirects: 2,
+        headers: {
+          Accept: "text/html",
+          "X-Respond-With": "html",
+          "X-No-Cache": "true",
+        },
+      });
+
+      if (res.status >= 400) {
+        warnings.push(`reader_http_${res.status}`);
+      } else if (!/<(?:html|head|body)\b/i.test(res.body)) {
+        warnings.push("reader_non_html");
+      } else if (isReaderChallengePage(res.body)) {
+        warnings.push("reader_challenge_rejected");
+      } else {
+        const bytes = Buffer.byteLength(res.body, "utf8");
+        totalBytes += bytes;
+        sources.push({
+          url: allow.url.toString(),
+          status: 200,
+          bytes,
+        });
+        pages.push({
+          url: allow.url.toString(),
+          html: res.body,
+        });
+        warnings.push("reader_fallback_used");
+      }
+    } catch (err) {
+      warnings.push(
+        err instanceof ScanError
+          ? `reader_${err.code}`
+          : "reader_fetch_failed",
+      );
     }
   }
 

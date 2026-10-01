@@ -112,6 +112,31 @@ test("fetchPublicHttps still supports an IPv6-only public hostname", async () =>
   assert.deepEqual(seen, ["2a07:7800::131"]);
 });
 
+test("fetchPublicHttps forwards bounded caller headers without allowing Host override", async () => {
+  let received: Record<string, string> | undefined;
+  const res = await fetchPublicHttps("https://reader.example/page", {
+    lookup: async () => ["203.0.113.9"],
+    headers: {
+      Accept: "text/html",
+      "X-Respond-With": "html",
+    },
+    get: async (url, _ip, opts) => {
+      received = opts.headers;
+      return {
+        status: 200,
+        headers: { "content-type": "text/html" },
+        body: "<html>reader ok</html>",
+        url,
+      };
+    },
+  });
+  assert.equal(res.status, 200);
+  assert.deepEqual(received, {
+    Accept: "text/html",
+    "X-Respond-With": "html",
+  });
+});
+
 test("fetchPublicHttps returns the body when DNS and HTTPS stay public", async () => {
   const res = await fetchPublicHttps("https://ok.example/about", {
     lookup: async () => ["203.0.113.9"],

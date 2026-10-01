@@ -34,6 +34,7 @@ export type FetchSafeOptions = {
   maxBytes?: number;
   maxRedirects?: number;
   remainingMs?: number;
+  headers?: Record<string, string>;
 };
 
 function header(headers: Record<string, string>, name: string): string {
@@ -56,16 +57,21 @@ export async function defaultLookup(hostname: string): Promise<string[]> {
 export function httpsGetToIp(
   url: URL,
   ip: string,
-  opts: { timeoutMs: number; maxBytes: number },
+  opts: {
+    timeoutMs: number;
+    maxBytes: number;
+    headers?: Record<string, string>;
+  },
 ): Promise<SafeHttpResponse> {
   return new Promise((resolve, reject) => {
     const port = url.port ? Number(url.port) : 443;
     const headers: Record<string, string | number> = {
-      Host: url.host,
       "User-Agent": USER_AGENT,
       Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1",
       "Accept-Language": "en-GB,en;q=0.8",
       "Accept-Encoding": "identity",
+      ...(opts.headers ?? {}),
+      Host: url.host,
       Connection: "close",
     };
 
@@ -225,6 +231,7 @@ export async function fetchPublicHttps(
         const candidate = await get(allow.url, address, {
           timeoutMs: attemptTimeoutMs,
           maxBytes,
+          headers: options.headers,
         });
         response = candidate;
         if (candidate.status !== 401 && candidate.status !== 403) break;
