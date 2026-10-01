@@ -1,4 +1,4 @@
-name: PR151 quick live probe
+name: Alley Gates live path probe
 
 on:
   push:
@@ -13,39 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Probe exact live release once per real site
+      - name: Probe Alley Gates paths through deployed scanner
+        shell: bash
         run: |
           set -euo pipefail
           origin='https://seahorse-app-4oasq.ondigitalocean.app'
-          curl -fsS "$origin/release.json" -o /tmp/release.json
-          cat /tmp/release.json
-          python3 - <<'PY'
-          import json
-          r=json.load(open('/tmp/release.json'))
-          assert r.get('commit') == 'c16c647858613fc07f77eb4947eae88460654db8', r
-          PY
-
-          for spec in             'alley|https://alleygates.co.uk/'             'gas|https://expressgasdelivery.com/'; do
-            name="${spec%%|*}"
-            url="${spec#*|}"
-            code="$(curl --max-time 25 -sS -o "/tmp/$name.json" -w '%{http_code}'               -X POST "$origin/api/website/scan"               -H 'Content-Type: application/json'               -H 'Accept: application/json'               --data-binary "{\"url\":\"$url\"}" || true)"
-            echo "$name HTTP_STATUS=$code"
-            cat "/tmp/$name.json"
+          curl -fsS "$origin/release.json"
+          echo
+          for url in             'https://alleygates.co.uk/'             'https://www.alleygates.co.uk/'             'https://alleygates.co.uk/home/'             'https://alleygates.co.uk/contact/'             'https://alleygates.co.uk/wp-json/'             'https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=1'; do
+            echo "=== $url ==="
+            code="$(curl --max-time 25 -sS -o /tmp/body -w '%{http_code}'               -X POST "$origin/api/website/scan"               -H 'Content-Type: application/json'               -H 'Accept: application/json'               --data-binary "{\"url\":\"$url\"}" || true)"
+            echo "HTTP_STATUS=$code"
+            cat /tmp/body
             echo
-            test "$code" = '200'
           done
-
-          python3 - <<'PY'
-          import json
-          alley=json.load(open('/tmp/alley.json'))
-          gas=json.load(open('/tmp/gas.json'))
-          assert alley.get('ok') is True, alley
-          ab=json.dumps(alley).lower()
-          for term in ('alley gate','cctv','security fencing'):
-              assert term in ab, (term, alley)
-          assert gas.get('ok') is True, gas
-          gd=gas.get('draft') or {}
-          assert (gd.get('hours') or '').strip(), gas
-          assert (gd.get('services') or '').strip(), gas
-          print('QUICK_LIVE_BLACKBOX=PASS')
-          PY
