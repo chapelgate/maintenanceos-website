@@ -1,4 +1,4 @@
-name: Forum Housing live scanner diagnostic
+name: Forum Housing contact reader diagnostic
 
 on:
   push:
@@ -13,31 +13,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Prove TLS failure and bounded reader recovery
+      - name: Probe Forum contact page reader stability
         shell: bash
         run: |
           set -euo pipefail
-          target='https://forumhousing.co.uk/'
-          ua='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
-
-          echo '=== DIRECT VERIFIED HTTPS ==='
-          code="$(curl -L --max-redirs 4 --connect-timeout 8 --max-time 20 -sS             -A "$ua" -o /tmp/direct -D /tmp/direct.h -w '%{http_code}' "$target" || true)"
-          echo "DIRECT_STATUS=$code"
-          cat /tmp/direct.h || true
-          echo
-
-          echo '=== CERTIFICATE CHAIN DIAGNOSTIC ==='
-          timeout 15 openssl s_client -connect forumhousing.co.uk:443 -servername forumhousing.co.uk -showcerts </dev/null 2>&1 |             sed -n '1,140p' || true
-
-          echo '=== EXISTING PUBLIC READER FALLBACK ==='
+          target='https://forumhousing.co.uk/contact-us/'
           reader="https://r.jina.ai/$target"
-          rcode="$(curl --max-time 30 -sS -o /tmp/reader -D /tmp/reader.h -w '%{http_code}'             -H 'Accept: text/html'             -H 'X-Respond-With: html'             -H 'X-No-Cache: true' "$reader" || true)"
-          echo "READER_STATUS=$rcode"
-          sed -n '1,30p' /tmp/reader.h || true
-          wc -c /tmp/reader || true
-          echo '--- READER FACTS ---'
-          for needle in             'Forum Housing Association'             'supported housing'             'support services'             'Wirral'             'Cheshire'             'Warrington'             '0151 649 9718'
-          do
-            echo "--- $needle ---"
-            grep -F -i -m 3 -C 2 "$needle" /tmp/reader || true
+
+          for i in 1 2 3 4 5; do
+            echo "=== ATTEMPT $i ==="
+            code="$(curl --max-time 30 -sS -o "/tmp/body$i" -D "/tmp/head$i" -w '%{http_code}'               -H 'Accept: text/html'               -H 'X-Respond-With: html'               -H 'X-No-Cache: true' "$reader" || true)"
+            echo "HTTP_STATUS=$code"
+            sed -n '1,25p' "/tmp/head$i" || true
+            echo "TITLE:"
+            grep -Eio -m 1 '<title[^>]*>[^<]+' "/tmp/body$i" || true
+            echo "HOURS:"
+            grep -Ei -m 8 -C 2 'Monday|Friday|9am|9:00|opening|Head Office' "/tmp/body$i" || true
+            echo "CHALLENGE MARKERS:"
+            grep -Ei -m 8 -C 1 'verify you are human|checking your browser|security verification|captcha' "/tmp/body$i" || true
+            echo "BYTES=$(wc -c < "/tmp/body$i" 2>/dev/null || echo 0)"
           done
