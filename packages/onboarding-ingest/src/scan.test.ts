@@ -12,6 +12,15 @@ function htmlPage(url: string, html: string, status = 200): SafeHttpResponse {
   };
 }
 
+function scriptPage(url: string, body: string): SafeHttpResponse {
+  return {
+    status: 200,
+    headers: { "content-type": "text/javascript; charset=utf-8" },
+    body,
+    url: new URL(url),
+  };
+}
+
 function robotsPage(url: string, body: string): SafeHttpResponse {
   return {
     status: 200,
@@ -141,6 +150,45 @@ test("runScan denies private DNS answers and private redirects", async () => {
   if (!redirect.ok) {
     assert.ok(
       redirect.error === "non_public_host" || redirect.warnings.includes("ssrf_denied"),
+    );
+  }
+});
+
+test("runScan augments a thin client-rendered shell from one bounded same-origin script", async () => {
+  const shell = `<!doctype html><html><head>
+    <title>Express Gas Delivery - Gas Cylinders & Equipment</title>
+    <script defer src="/static/js/main.abc123.js"></script>
+  </head><body><div id="root"></div></body></html>`;
+  const bundle = `const schema={"@context":"https://schema.org","@type":"LocalBusiness",name:"Express Gas Delivery",telephone:"0151 487 0570",openingHours:["Mo-Fr 08:00-16:00","Sa 08:00-14:00"],hasOfferCatalog:{"@type":"OfferCatalog",itemListElement:[{"@type":"Offer",itemOffered:{"@type":"Product",name:"Propane Gas Cylinders"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Patio Gas"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Beer Gas"}}]}};`;
+
+  const result = await runScan("https://expressgasdelivery.example/", {
+    enabled: true,
+    ...pages({
+      "https://expressgasdelivery.example/robots.txt": robotsPage(
+        "https://expressgasdelivery.example/robots.txt",
+        "User-agent: *\nAllow: /\n",
+      ),
+      "https://expressgasdelivery.example/": htmlPage(
+        "https://expressgasdelivery.example/",
+        shell,
+      ),
+      "https://expressgasdelivery.example/static/js/main.abc123.js": scriptPage(
+        "https://expressgasdelivery.example/static/js/main.abc123.js",
+        bundle,
+      ),
+    }),
+  });
+
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.equal(result.draft.businessName, "Express Gas Delivery");
+    assert.match(result.draft.hours ?? "", /Mo-Fr 08:00-16:00/);
+    assert.match(result.draft.services ?? "", /Propane Gas Cylinders/);
+    assert.match(result.draft.services ?? "", /Beer Gas/);
+    assert.ok(result.warnings.includes("static_script_schema_fallback"));
+    assert.equal(
+      result.sources.some((source) => source.url.includes("/static/js/main.abc123.js")),
+      true,
     );
   }
 });
