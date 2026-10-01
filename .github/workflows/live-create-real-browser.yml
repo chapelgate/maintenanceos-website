@@ -1,0 +1,137 @@
+name: Live create real-browser acceptance
+
+on:
+  push:
+    branches:
+      - diag/live-create-real-browser-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Exercise live /create with the real production scanner
+        shell: bash
+        env:
+          LIVE_ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
+        run: |
+          set -euo pipefail
+          cat > /tmp/live-create.mjs <<'NODE'
+          import { chromium } from 'playwright';
+
+          const origin = process.env.LIVE_ORIGIN;
+          const browser = await chromium.launch({
+            headless: true,
+            executablePath: '/usr/bin/google-chrome',
+            args: ['--no-sandbox','--disable-dev-shm-usage'],
+          });
+
+          async function runCase({name,url,expectedService}) {
+            const context = await browser.newContext({
+              viewport: { width: 390, height: 844 },
+              deviceScaleFactor: 3,
+              isMobile: true,
+            });
+            const page = await context.newPage();
+            const exceptions = [];
+            page.on('pageerror', e => exceptions.push(String(e)));
+
+            let scanJson = null;
+            page.on('response', async response => {
+              if (!response.url().includes('/api/website/scan')) return;
+              try {
+                scanJson = await response.json();
+                console.log(name+'_SCAN_STATUS='+response.status());
+                console.log(name+'_SCAN_JSON='+JSON.stringify(scanJson));
+              } catch {}
+            });
+
+            await page.goto(origin + '/create/', { waitUntil: 'networkidle', timeout: 45000 });
+            await page.locator('input[name="businessUrl"]').fill(url);
+            await page.locator('input[name="name"]').fill('Live Browser Acceptance');
+            await page.locator('input[name="email"]').fill('live-browser-acceptance@example.com');
+            await page.locator('input[name="organisation"]').fill('Chapelgate');
+            await page.locator('[data-create-primary-action]').click();
+
+            const card = page.locator('[data-create-step]');
+            await card.waitFor({state:'visible'});
+            await page.waitForFunction(() => {
+              const el=document.querySelector('[data-create-step]');
+              return el?.getAttribute('data-create-step') === '2';
+            });
+            const step2 = page.locator('[data-create-step="2"]');
+            await step2.locator('[data-create-primary-action]').waitFor({state:'visible'});
+            await page.waitForFunction(() => {
+              const b=document.querySelector('[data-create-step="2"] [data-create-primary-action]');
+              return b && !b.disabled && (b.textContent||'').trim() !== 'Checking…';
+            }, null, {timeout:45000});
+            if (!scanJson?.ok) throw new Error(name+' scanner did not return ok: '+JSON.stringify(scanJson));
+            if (!JSON.stringify(scanJson).toLowerCase().includes(expectedService.toLowerCase())) {
+              throw new Error(name+' scanner missing expected service '+expectedService);
+            }
+            await step2.locator('[data-create-primary-action]').click();
+
+            await page.waitForSelector('[data-create-step="3"]');
+            await page.locator('[data-agent-type="receptionist"] input').check();
+            await page.locator('[data-create-step="3"] [data-create-primary-action]').click();
+
+            await page.waitForSelector('[data-create-step="4"]');
+            const services = page.getByLabel('Services');
+            const servicesValue = await services.inputValue();
+            console.log(name+'_STEP4_SERVICES='+JSON.stringify(servicesValue));
+            if (!servicesValue.toLowerCase().includes(expectedService.toLowerCase())) {
+              throw new Error(name+' Step 4 lost services: '+servicesValue);
+            }
+
+            const greeting = page.getByLabel('Greeting');
+            if (!(await greeting.inputValue()).trim()) {
+              await greeting.fill('Thank you for calling '+name+'. How can I help?');
+            }
+            const hours = page.getByLabel('Hours');
+            if (!(await hours.inputValue()).trim()) {
+              await hours.fill('Monday-Friday 09:00-17:00');
+            }
+
+            await page.locator('[data-create-step="4"] [data-create-primary-action]').click();
+            await page.waitForSelector('[data-create-step="5"]');
+
+            const packText = await page.locator('textarea').evaluateAll(els => els.map(e => e.value).find(v => v.includes('sandbox_knowledge_pack')) || '');
+            console.log(name+'_PACK='+packText);
+            if (!packText.toLowerCase().includes(expectedService.toLowerCase())) {
+              throw new Error(name+' Step 5 knowledge pack lost services');
+            }
+
+            await page.getByRole('button',{name:'Start voice call'}).click();
+            await page.getByRole('button',{name:'What services do you offer?'}).click();
+            await page.waitForFunction(
+              expected => (document.querySelector('[data-demo-transcript]')?.textContent||'').toLowerCase().includes(expected.toLowerCase()),
+              expectedService,
+              {timeout:15000}
+            );
+            const transcript = await page.locator('[data-demo-transcript]').innerText();
+            console.log(name+'_TRANSCRIPT='+JSON.stringify(transcript));
+            if (exceptions.length) throw new Error(name+' page exceptions: '+exceptions.join(' | '));
+            console.log(name+'_LIVE_FLOW=PASS');
+            await context.close();
+          }
+
+          try {
+            await runCase({name:'Express Gas Delivery',url:'https://expressgasdelivery.com/',expectedService:'Propane Gas Cylinders'});
+            await runCase({name:'Alley Gates',url:'https://alleygates.co.uk/',expectedService:'Alley Gate Installation'});
+          } finally {
+            await browser.close();
+          }
+          NODE
+          node /tmp/live-create.mjs
