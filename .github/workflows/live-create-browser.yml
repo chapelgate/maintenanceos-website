@@ -1,0 +1,45 @@
+name: PR152 live create browser acceptance
+
+on:
+  push:
+    branches:
+      - diag/post-pr150-live-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Run existing mobile create acceptance against production
+        env:
+          LIVE_ORIGIN: https://seahorse-app-4oasq.ondigitalocean.app
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp scripts/create-mobile-stability-browser.mjs /tmp/live-create-browser.mjs
+
+          python3 - <<'PY'
+          p='/tmp/live-create-browser.mjs'
+          s=open(p,encoding='utf-8').read()
+          s=s.replace(
+            'if (!fs.existsSync(path.join(OUT, "create", "index.html"))) {\n  throw new Error("create interactive acceptance requires a completed static export");\n}',
+            'if (!process.env.LIVE_ORIGIN) throw new Error("LIVE_ORIGIN required");'
+          )
+          s=s.replace(
+            'const site = await serveExport();',
+            'const site = { origin: process.env.LIVE_ORIGIN, server: { close(resolve) { resolve(); } } };'
+          )
+          open(p,'w',encoding='utf-8').write(s)
+          PY
+
+          node /tmp/live-create-browser.mjs
