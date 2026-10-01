@@ -942,6 +942,154 @@ function isGenericName(name: string): boolean {
   return GENERIC_NAME_RE.test(name.trim());
 }
 
+export function extractSameOriginScriptSrcs(
+  html: string,
+  pageUrl: URL,
+): string[] {
+  const srcs: string[] = [];
+  const re = /<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    const raw = m[1]?.trim();
+    if (!raw) continue;
+    let next: URL;
+    try {
+      next = new URL(raw, pageUrl);
+    } catch {
+      continue;
+    }
+    if (next.protocol !== "https:") continue;
+    if (next.hostname !== pageUrl.hostname) continue;
+    next.hash = "";
+    srcs.push(next.toString());
+  }
+  return [...new Set(srcs)].slice(0, 4);
+}
+
+function decodeJsStringBody(raw: string): string | undefined {
+  try {
+    return asUntrustedText(JSON.parse(`"${raw}"`), 500);
+  } catch {
+    return undefined;
+  }
+}
+
+function quotedJsStrings(fragment: string, limit = 64): string[] {
+  const out: string[] = [];
+  const re = /"((?:\\.|[^"\\])*)"/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(fragment)) && out.length < limit) {
+    const value = decodeJsStringBody(match[1] ?? "");
+    if (value) out.push(value);
+  }
+  return out;
+}
+
+/**
+ * Extract only explicit schema-like LocalBusiness literals from a public,
+ * same-origin client bundle. The script is never executed.
+ *
+ * This is intentionally narrow: it exists for static SPA shells where the
+ * business facts that will be rendered are compiled into the site's own JS.
+ */
+export function extractStructuredBusinessHtmlFromScript(
+  script: string,
+): string | undefined {
+  const localBusiness = /["@']?@type["@']?\s*:\s*["']LocalBusiness["']/gi;
+  const regions: string[] = [];
+  let marker: RegExpExecArray | null;
+  while ((marker = localBusiness.exec(script)) && regions.length < 3) {
+    regions.push(
+      script.slice(
+        Math.max(0, marker.index - 1000),
+        Math.min(script.length, marker.index + 14_000),
+      ),
+    );
+  }
+  if (!regions.length) return undefined;
+
+  const hours: string[] = [];
+  const services: string[] = [];
+  const phones: string[] = [];
+  const emails: string[] = [];
+  let businessName = "";
+
+  for (const region of regions) {
+    if (!businessName) {
+      const nameMatch = /\bname\s*:\s*"((?:\\.|[^"\\])*)"/i.exec(region);
+      const name = nameMatch?.[1] ? decodeJsStringBody(nameMatch[1]) : undefined;
+      if (name && !GENERIC_NAV_RE.test(name)) businessName = name;
+    }
+
+    for (const match of region.matchAll(
+      /\bopeningHours\s*:\s*\[([\s\S]{1,2000}?)\]/gi,
+    )) {
+      hours.push(...quotedJsStrings(match[1] ?? "", 24));
+    }
+
+    for (const match of region.matchAll(
+      /\bitemOffered\s*:\s*\{[\s\S]{0,500}?\bname\s*:\s*"((?:\\.|[^"\\])*)"/gi,
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value && !GENERIC_NAV_RE.test(value)) services.push(value);
+    }
+
+    for (const match of region.matchAll(
+      /\bserviceType\s*:\s*"((?:\\.|[^"\\])*)"/gi,
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value) services.push(value);
+    }
+
+    for (const match of region.matchAll(
+      /\btelephone\s*:\s*"((?:\\.|[^"\\])*)"/gi,
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value && isPlausiblePhone(value)) phones.push(value);
+    }
+
+    for (const match of region.matchAll(
+      /\bemail\s*:\s*"((?:\\.|[^"\\])*)"/gi,
+    )) {
+      const value = decodeJsStringBody(match[1] ?? "");
+      if (value && isPlausibleEmail(value)) emails.push(value);
+    }
+  }
+
+  const cleanHours = [...new Set(hours)].slice(0, 14);
+  const cleanServices = [...new Set(services)].slice(0, 24);
+  const cleanPhones = [...new Set(phones)].slice(0, 4);
+  const cleanEmails = [...new Set(emails)].slice(0, 4);
+
+  if (
+    !businessName &&
+    !cleanHours.length &&
+    !cleanServices.length &&
+    !cleanPhones.length &&
+    !cleanEmails.length
+  ) {
+    return undefined;
+  }
+
+  const record: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+  };
+  if (businessName) record.name = businessName;
+  if (cleanHours.length) record.openingHours = cleanHours;
+  if (cleanServices.length) {
+    record.makesOffer = cleanServices.map((name) => ({
+      itemOffered: { "@type": "Service", name },
+    }));
+  }
+  if (cleanPhones.length === 1) record.telephone = cleanPhones[0];
+  else if (cleanPhones.length > 1) record.telephone = cleanPhones;
+  if (cleanEmails.length === 1) record.email = cleanEmails[0];
+  else if (cleanEmails.length > 1) record.email = cleanEmails;
+
+  return `<script type="application/ld+json">${JSON.stringify(record)}</script>`;
+}
+
 export function extractSameOriginHrefs(
   html: string,
   pageUrl: URL,
