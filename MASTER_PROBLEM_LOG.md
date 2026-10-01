@@ -484,7 +484,8 @@ Surgical fix:
 - Preserve IPv4 preference.
 - After DNS and SSRF validation of every resolved address, fail over to the next validated address when a connection fails or an edge returns HTTP 401/403.
 - Keep the existing redirect, byte, page, timeout, robots and public-IP protections.
-- Update the prebuilt DigitalOcean Function bundle and add a regression test for IPv4 401 -> IPv6 200 failover.
+- Update the prebuilt DigitalOcean Function bundle and add a regression test for IPv4 401 -> alternate validated address 200 failover.
+- In the browser-only preview, match natural caller wording against reviewed FAQs/services and provide a safe summary when the caller explicitly asks what knowledge is on file. Replies remain deterministic and can only quote reviewed pack content.
 
 Hard boundary:
 Website scanner and browser preview only. Do not modify, exercise, reroute or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials or the golden phone line.
