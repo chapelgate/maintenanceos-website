@@ -1,0 +1,73 @@
+name: PR149 temporary hosted validation
+
+on:
+  push:
+    branches:
+      - fix/browser-wordpress-scan-fallback-20261001
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr149-temporary-hosted-validation
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate exact candidate in isolated container
+        run: |
+          set -euo pipefail
+          docker run --rm --shm-size=1g -e SOURCE_COMMIT_HASH="$GITHUB_SHA" -v "$PWD:/src:ro" node:24-bookworm bash -lc '
+            set -euo pipefail
+            cp -a /src /work
+            cd /work
+            apt-get update -qq
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -qq chromium >/dev/null
+            npm ci
+            npm test
+            npm run accessibility:check
+            npx eslint src/lib/onboarding-create.ts src/lib/onboarding-wordpress-fallback.ts src/lib/onboarding-create.test.ts
+            npx tsc --noEmit
+            npm run build
+            test "$(find out -name index.html -type f | wc -l)" -ge 28
+            test -f out/robots.txt
+            test -f out/sitemap.xml
+            BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
+            BROWSER_PATH=/usr/bin/chromium node scripts/create-mobile-stability-browser.mjs
+
+            node --experimental-strip-types --input-type=module <<'"'"'NODE'"'"'
+            import assert from "node:assert/strict";
+            import { mapWordPressRestFallback } from "./src/lib/onboarding-wordpress-fallback.ts";
+            const headers = {
+              "User-Agent": "MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)",
+              Accept: "application/json",
+            };
+            const [siteRes, pagesRes] = await Promise.all([
+              fetch("https://alleygates.co.uk/wp-json/", { headers }),
+              fetch("https://alleygates.co.uk/wp-json/wp/v2/pages?per_page=20&_fields=link,title,content,excerpt,slug", { headers }),
+            ]);
+            assert.equal(siteRes.status, 200);
+            assert.equal(pagesRes.status, 200);
+            const mapped = mapWordPressRestFallback(
+              "https://alleygates.co.uk/",
+              await siteRes.json(),
+              await pagesRes.json(),
+            );
+            assert.ok(mapped);
+            const json = JSON.stringify(mapped);
+            assert.match(json, /Alley Gates/i);
+            assert.match(json, /Alley Gate Installation/i);
+            assert.match(json, /CCTV/i);
+            assert.match(json, /Security Fencing/i);
+            assert.match(json, /keys are made to order/i);
+            assert.match(json, /https:\/\/alleygates\.co\.uk\/shop\//i);
+            console.log("LIVE_WORDPRESS_FALLBACK_MAPPING=PASS");
+            NODE
+          '
