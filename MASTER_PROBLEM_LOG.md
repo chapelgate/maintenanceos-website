@@ -777,3 +777,24 @@ Acceptance before RESOLVED:
 Golden-line boundary:
 Website scanner/browser preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
 
+### MOS-WEB-CREATE-007 — live follow-up after PR #156
+Status: FIX CANDIDATE / FINAL LIVE RECHECK REQUIRED
+
+Production evidence on exact deployed application SHA 74c5b88637899578a6e87eaacfb181ea78e35b8c:
+- Forum Housing changed from HTTP 422/no pages to HTTP 200 with real reviewed website facts.
+- Services recovered live: Caroline Place, Supported Lodgings, Curzon House, Ash Villas, Haven House, Market Wells, Move On, The Beacon, The Bridge, The Houses, The Links, The Lock and The Quays.
+- Contact/location recovered live: 0151 649 9718 and Forum Housing Association, 24-28 Hamilton Street, Birkenhead, Wirral CH41 1AL.
+- Opening hours remained missing because the fourth bounded reader page, /contact-us/, was transiently classified as a verification interstitial during that scan.
+- An independent controlled probe of /contact-us/ then returned HTTP 200 five times out of five with no challenge markers and the site's own text: "Head Office ( Monday – Friday 9am-5pm) 0151 649 9718".
+
+Surgical follow-up:
+- Retry exactly once only when a reader response is identified as a verification/challenge page.
+- Do not retry ordinary HTTP failures, widen global timeouts, disable TLS verification, or add a site-specific exception.
+- The retry remains inside the existing total deadline, byte ceiling, HTTPS-only and same-origin limits.
+- A regression test forces the first Forum contact fetch to be a challenge and the second to contain the real hours; it proves hours/services/contact recovery and that a persistent challenge is still rejected.
+- Validation gate passed: targeted scanner/function tests, full repository regression, accessibility, ESLint, TypeScript and production build.
+- The prebuilt DigitalOcean Function bundle was regenerated only after the green gate.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
