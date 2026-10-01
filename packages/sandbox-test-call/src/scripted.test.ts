@@ -174,6 +174,26 @@ test("scriptedReply missing hours stays honest and invents no clock", () => {
   assert.doesNotMatch(hours.text, /\d{1,2}:\d{2}/);
 });
 
+
+test("scriptedReply keeps browser-preview limitations customer-safe", () => {
+  const prompts = [
+    "I want to speak to a human.",
+    "Can you book me an appointment tomorrow?",
+    "Is this a live call?",
+    "I'm furious and want a manager.",
+  ];
+  for (const prompt of prompts) {
+    const reply = scriptedReply(prompt, ACME_PACK);
+    assert.doesNotMatch(
+      reply.text,
+      /scripted sandbox|sandbox draft|frozen production telephony|production telephony|webrtc/i,
+    );
+  }
+  const human = scriptedReply("I want to speak to a human.", ACME_PACK);
+  assert.match(human.text, /browser preview/i);
+  assert.match(human.text, /cannot place or transfer a telephone call/i);
+});
+
 test("scriptedReply emergency uses UK 999 not 911 and does not dispatch", () => {
   const reply = scriptedReply(
     "This is an emergency — there's a gas leak and someone is hurt.",
