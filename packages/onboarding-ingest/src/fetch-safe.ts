@@ -195,10 +195,22 @@ export async function fetchPublicHttps(
     // fails, try the next validated address before declaring the page
     // unavailable. This preserves the original IPv4 preference while avoiding
     // false scan failures caused by edge-specific policy.
-    const orderedAddresses = [
-      ...addresses.filter((address) => Boolean(parseIPv4Literal(address))),
-      ...addresses.filter((address) => !parseIPv4Literal(address)),
-    ];
+    const ipv4Addresses = addresses.filter((address) =>
+      Boolean(parseIPv4Literal(address)),
+    );
+    const ipv6Addresses = addresses.filter(
+      (address) => !parseIPv4Literal(address),
+    );
+
+    // Stay within one address family for a fetch attempt. A valid HTTP 401/403
+    // from an IPv4 edge is an application response, not a reason to switch to
+    // IPv6. Some serverless Node/TLS runtimes throw while constructing pinned
+    // IPv6 sockets, which can escape the normal typed scanner response.
+    // If public IPv4 exists, exhaust those addresses only; IPv6 remains the
+    // fallback for genuinely IPv6-only public hosts.
+    const orderedAddresses = ipv4Addresses.length
+      ? ipv4Addresses
+      : ipv6Addresses;
 
     let response: SafeHttpResponse | null = null;
     let lastError: unknown = null;
