@@ -1454,10 +1454,32 @@ async function fetchPublicHttps(raw, options = {}) {
       ...addresses.filter((address) => Boolean(parseIPv4Literal(address))),
       ...addresses.filter((address) => !parseIPv4Literal(address))
     ];
-    const response2 = await get(allow.url, orderedAddresses[0], {
-      timeoutMs,
-      maxBytes
-    });
+    let response2 = null;
+    let lastError = null;
+    const addressAttemptsStarted = Date.now();
+    for (const address of orderedAddresses) {
+      const elapsed = Date.now() - addressAttemptsStarted;
+      const attemptTimeoutMs = Math.max(250, timeoutMs - elapsed);
+      if (elapsed >= timeoutMs && response2) break;
+      try {
+        const candidate = await get(allow.url, address, {
+          timeoutMs: attemptTimeoutMs,
+          maxBytes
+        });
+        response2 = candidate;
+        if (candidate.status !== 401 && candidate.status !== 403) break;
+      } catch (err) {
+        lastError = err;
+      }
+    }
+    if (!response2) {
+      if (lastError instanceof ScanError) throw lastError;
+      throw new ScanError(
+        "fetch_failed",
+        lastError instanceof Error ? lastError.message : "Fetch failed.",
+        422
+      );
+    }
     if (response2.status >= 300 && response2.status < 400) {
       const location = header(response2.headers, "location");
       if (!location) {
