@@ -1,4 +1,4 @@
-name: Reader auto no-cache reliability probe
+name: PR152 live scanner verification
 
 on:
   push:
@@ -9,29 +9,72 @@ permissions:
   contents: read
 
 jobs:
-  peek:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 7
+    timeout-minutes: 15
     steps:
-      - name: Compare cached and no-cache Reader auto mode
+      - name: Wait for exact release and verify real business sites
         shell: bash
         run: |
           set -euo pipefail
-          url='https://r.jina.ai/https://alleygates.co.uk/'
+          origin='https://seahorse-app-4oasq.ondigitalocean.app'
+          expected='fdd526696294e28faf9b57603a1811c816893cde'
 
-          probe() {
-            label="$1"; shift
-            echo "=== $label ==="
-            code="$(curl --max-time 35 -sS -o /tmp/body -D /tmp/head -w '%{http_code}' "$@" "$url" || true)"
-            echo "HTTP_STATUS=$code BYTES=$(wc -c </tmp/body)"
-            for needle in 'Security Verification' 'ALLEY GATE KEYS' 'Alley Gate Installation' 'CCTV' 'Security Fencing'; do
-              printf '%s=' "$needle"
-              grep -F -i -q "$needle" /tmp/body && echo YES || echo NO
+          deployed=''
+          for i in $(seq 1 60); do
+            curl -fsS "$origin/release.json" -o /tmp/release.json || true
+            deployed="$(python3 - <<'PY'
+import json
+try:
+    print(json.load(open('/tmp/release.json')).get('commit',''))
+except Exception:
+    print('')
+PY
+)"
+            echo "release_attempt=$i deployed=$deployed"
+            [ "$deployed" = "$expected" ] && break
+            sleep 10
+          done
+          test "$deployed" = "$expected"
+          cat /tmp/release.json
+
+          scan() {
+            name="$1"; url="$2"; out="$3"
+            for i in 1 2 3; do
+              code="$(curl --max-time 30 -sS -o "$out" -D /tmp/head -w '%{http_code}'                 -X POST "$origin/api/website/scan"                 -H 'Content-Type: application/json'                 -H 'Accept: application/json'                 --data-binary "{\"url\":\"$url\"}" || true)"
+              echo "$name attempt=$i HTTP_STATUS=$code"
+              cat "$out"
+              echo
+              test "$code" = '200'
+              sleep 1
             done
-            echo "TITLE=$(grep -oi -m1 '<title>[^<]*</title>' /tmp/body || true)"
           }
 
-          for i in 1 2 3; do
-            probe "AUTO_CACHED_$i"               -H 'X-Respond-With: html'               -H 'Accept: text/html'
-            probe "AUTO_NOCACHE_$i"               -H 'X-Respond-With: html'               -H 'X-No-Cache: true'               -H 'Accept: text/html'
-          done
+          scan ALLEY 'https://alleygates.co.uk/' /tmp/alley.json
+          scan GAS 'https://expressgasdelivery.com/' /tmp/gas.json
+
+          python3 - <<'PY'
+import json
+alley=json.load(open('/tmp/alley.json'))
+gas=json.load(open('/tmp/gas.json'))
+
+assert alley.get('ok') is True, alley
+ab=json.dumps(alley).lower()
+for term in ('alley gate installation','cctv','security fencing','alley gate keys'):
+    assert term in ab, (term, alley)
+assert 'reader_fallback_used' in (alley.get('warnings') or []), alley
+assert 'security verification' not in ab, alley
+
+assert gas.get('ok') is True, gas
+gd=gas.get('draft') or {}
+assert (gd.get('hours') or '').strip(), gas
+assert (gd.get('services') or '').strip(), gas
+gb=json.dumps(gas).lower()
+for term in ('propane','patio gas'):
+    assert term in gb, (term, gas)
+
+print('EXACT_RELEASE=PASS')
+print('ALLEY_GATES_3X=PASS')
+print('EXPRESS_GAS_3X=PASS')
+print('LIVE_SCANNER=PASS')
+PY
