@@ -1,3 +1,8 @@
+import {
+  isWordPressFallbackEligible,
+  requestWordPressRestFallback,
+} from "./onboarding-wordpress-fallback.ts";
+
 export {
   CREATE_JOURNEY_STEPS,
   EMPTY_RECEPTIONIST_DRAFT,
@@ -111,6 +116,7 @@ const FIELD_META_SOURCES = new Set([
   "pattern",
   "contact_link",
   "details",
+  "wordpress_rest",
 ]);
 const FIELD_META_CONFIDENCE = new Set(["high", "medium", "low"]);
 
@@ -147,6 +153,7 @@ export const FIELD_META_SOURCE_LABELS: Record<string, string> = {
   pattern: "visible text pattern",
   contact_link: "phone/email links",
   details: "FAQ accordion",
+  wordpress_rest: "WordPress public API",
 };
 
 /**
@@ -383,6 +390,19 @@ export async function requestOnboardingScan(
       }
     }
     if (!res.ok) {
+      if (isWordPressFallbackEligible(res.status, parsed)) {
+        const fallback = await requestWordPressRestFallback(url);
+        if (fallback) {
+          const facts = mapScanBusinessFacts(fallback);
+          return {
+            status: "ok",
+            draft: mapScanResponse(fallback),
+            fieldMeta: mapScanFieldMeta(fallback),
+            facts,
+            factMeta: mapScanBusinessFactMeta(fallback, facts),
+          };
+        }
+      }
       return {
         status: "error",
         message:
