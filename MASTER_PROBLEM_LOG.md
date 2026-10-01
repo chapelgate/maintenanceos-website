@@ -493,3 +493,38 @@ Website scanner and browser preview only. Do not modify, exercise, reroute or re
 Verification required before RESOLVED:
 repository tests, TypeScript/build guards, PR validation, merge, DigitalOcean deployment identity, live Alley Gates scan returning useful website-derived fields, then a real /create browser question whose reply comes from that scanned knowledge.
 
+## MOS-WEB-CREATE-005 — Public website scan can produce an unusably thin receptionist knowledge pack
+Status: FIX CANDIDATE / NOT YET LIVE VERIFIED
+Opened: 2026-10-01
+
+Problem:
+Two real iPhone /create tests exposed the same product-level failure in different forms.
+- Alley Gates: Step 2 reported "Website check unavailable" and no knowledge pack was available.
+- Express Gas Delivery: the scanner copied only the document title, so the receptionist said opening hours and services were not on file even though the public website displays them.
+
+Root cause evidence:
+- The live scanner route itself was healthy: example.com returned HTTP 200, while Alley Gates returned a typed fetch failure.
+- Alley Gates was publicly reachable with the scanner user-agent, including robots.txt, but the prior low-level Node transport could fail when connecting through a raw/pinned address. The corrected transport keeps the original hostname as HTTP/TLS authority while pinning DNS to an already SSRF-validated public address.
+- Express Gas Delivery is a client-rendered static SPA. Its HTML is only a small shell with a JavaScript asset, so the existing HTML-only extractor saw the title but not the rendered business facts.
+- Its same-origin public JavaScript contains explicit schema.org LocalBusiness facts, including opening hours, services and telephone numbers.
+
+Surgical fix:
+- Preserve HTTPS-only input, DNS/public-IP validation on every hop, redirect checks, robots handling, byte/page/time limits and no execution of untrusted page code.
+- Pin the validated public IP through the original hostname instead of making the IP address the HTTP/TLS authority.
+- If the normal HTML crawl is thin, inspect at most one same-origin public JavaScript asset, capped at 640 KiB, without executing it.
+- Promote only explicit LocalBusiness-style fields (openingHours, itemOffered/serviceType, telephone and email) and pass them back through the existing claims-safe extractor.
+- Rebuild and verify the precompiled DigitalOcean Function bundle from the exact source.
+
+Candidate verification:
+- Targeted scanner/extractor/function tests: PASS.
+- TypeScript: PASS.
+- Real Alley Gates candidate scan: PASS; business identity, contact/location and services including Alley Gate Installation, CCTV, Security Fencing and Alley Gate Keys were recovered.
+- Real Express Gas Delivery candidate scan: PASS; opening hours and services including Propane Gas Cylinders, Patio Gas, Helium Balloons and Gas Engineering were recovered from its bounded same-origin static bundle.
+- Function wrapper after bundle rebuild: PASS.
+
+Hard boundary:
+Website scanner and browser receptionist preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
+
+Verification required before RESOLVED:
+full repository regression, exact generated function-bundle check, merge, website/function deployment through the existing path, then live black-box scans and /create browser answers for both a normal HTML site and a client-rendered SPA.
+
