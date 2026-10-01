@@ -1681,6 +1681,7 @@ var MAX_STATIC_SCRIPT_BYTES = 640 * 1024;
 var READER_FALLBACK_ORIGIN = "https://r.jina.ai";
 var READER_FALLBACK_TIMEOUT_MS = 9e3;
 var READER_FALLBACK_MAX_BYTES = 256 * 1024;
+var MAX_READER_PAGES = 4;
 var OUR_USER_AGENT_TOKEN = "MaintenanceOS-OnboardingScan";
 function isWebIngestEnabled(env = process.env) {
   const value = env.ONBOARDING_WEB_INGEST;
@@ -1892,50 +1893,85 @@ async function runScan(rawUrl, options = {}) {
       warnings.push(err instanceof ScanError ? err.code : "fetch_failed");
     }
   }
-  if (!pages.length && readerFallbackEnabled && (warnings.includes("http_401") || warnings.includes("http_403")) && remaining() >= 1e3) {
-    const readerUrl = `${READER_FALLBACK_ORIGIN}/${allow.url.toString()}`;
-    try {
-      const res = await fetchPublicHttps(readerUrl, {
-        lookup: options.readerLookup,
-        get: options.readerGet,
-        remainingMs: remaining(),
-        timeoutMs: Math.min(READER_FALLBACK_TIMEOUT_MS, remaining()),
-        maxBytes: Math.min(
-          READER_FALLBACK_MAX_BYTES,
-          MAX_TOTAL_BYTES - totalBytes
-        ),
-        maxRedirects: 2,
-        headers: {
-          Accept: "text/html",
-          "X-Respond-With": "html",
-          "X-No-Cache": "true"
+  const readerEligibleFailure = warnings.includes("http_401") || warnings.includes("http_403") || warnings.includes("fetch_failed");
+  if (!pages.length && readerFallbackEnabled && readerEligibleFailure && remaining() >= 1e3) {
+    const readerQueue = [allow.url.toString()];
+    const readerSeen = /* @__PURE__ */ new Set();
+    while (readerQueue.length && pages.length < MAX_READER_PAGES && remaining() >= 1e3 && totalBytes < MAX_TOTAL_BYTES) {
+      const target = readerQueue.shift();
+      if (!target || readerSeen.has(target)) continue;
+      readerSeen.add(target);
+      let targetUrl;
+      try {
+        targetUrl = new URL(target);
+      } catch {
+        continue;
+      }
+      if (targetUrl.protocol !== "https:" || targetUrl.origin !== allow.url.origin) {
+        continue;
+      }
+      if (!isPathAllowed(robots, targetUrl.pathname || "/")) {
+        warnings.push("robots_skipped_reader_path");
+        continue;
+      }
+      const remainingBytes = MAX_TOTAL_BYTES - totalBytes;
+      if (remainingBytes < 1024) break;
+      const readerUrl = `${READER_FALLBACK_ORIGIN}/${targetUrl.toString()}`;
+      try {
+        const res = await fetchPublicHttps(readerUrl, {
+          lookup: options.readerLookup,
+          get: options.readerGet,
+          remainingMs: remaining(),
+          timeoutMs: Math.min(READER_FALLBACK_TIMEOUT_MS, remaining()),
+          maxBytes: Math.min(READER_FALLBACK_MAX_BYTES, remainingBytes),
+          maxRedirects: 2,
+          headers: {
+            Accept: "text/html",
+            "X-Respond-With": "html",
+            "X-No-Cache": "true"
+          }
+        });
+        if (res.status >= 400) {
+          warnings.push(`reader_http_${res.status}`);
+          continue;
         }
-      });
-      if (res.status >= 400) {
-        warnings.push(`reader_http_${res.status}`);
-      } else if (!/<(?:html|head|body)\b/i.test(res.body)) {
-        warnings.push("reader_non_html");
-      } else if (isReaderChallengePage(res.body)) {
-        warnings.push("reader_challenge_rejected");
-      } else {
+        if (!/<(?:html|head|body)\b/i.test(res.body)) {
+          warnings.push("reader_non_html");
+          continue;
+        }
+        if (isReaderChallengePage(res.body)) {
+          warnings.push("reader_challenge_rejected");
+          continue;
+        }
         const bytes = Buffer.byteLength(res.body, "utf8");
         totalBytes += bytes;
         sources.push({
-          url: allow.url.toString(),
+          url: targetUrl.toString(),
           status: 200,
           bytes
         });
         pages.push({
-          url: allow.url.toString(),
+          url: targetUrl.toString(),
           html: res.body
         });
-        warnings.push("reader_fallback_used");
+        if (pages.length === 1) {
+          const extra = rankCandidateUrls(
+            extractSameOriginHrefs(res.body, targetUrl),
+            allow.url
+          );
+          for (const href of extra) {
+            if (!readerSeen.has(href) && readerQueue.length + pages.length < MAX_READER_PAGES) {
+              readerQueue.push(href);
+            }
+          }
+        }
+      } catch (err) {
+        warnings.push(
+          err instanceof ScanError ? `reader_${err.code}` : "reader_fetch_failed"
+        );
       }
-    } catch (err) {
-      warnings.push(
-        err instanceof ScanError ? `reader_${err.code}` : "reader_fetch_failed"
-      );
     }
+    if (pages.length) warnings.push("reader_fallback_used");
   }
   if (!pages.length) {
     return {
