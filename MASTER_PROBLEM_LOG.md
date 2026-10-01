@@ -778,7 +778,7 @@ Golden-line boundary:
 Website scanner/browser preview only. Do not modify, exercise, reroute, restart or redeploy MaintenanceOS production telephony, carrier routing, live numbers, provider credentials, production voice runtime or the golden phone line.
 
 ### MOS-WEB-CREATE-007 — live follow-up after PR #156
-Status: FIX CANDIDATE / FINAL LIVE RECHECK REQUIRED
+Status: RESOLVED / LIVE VERIFIED / FROZEN
 
 Production evidence on exact deployed application SHA 74c5b88637899578a6e87eaacfb181ea78e35b8c:
 - Forum Housing changed from HTTP 422/no pages to HTTP 200 with real reviewed website facts.
@@ -797,4 +797,13 @@ Surgical follow-up:
 
 Golden-line boundary:
 No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+### MOS-WEB-CREATE-007 — final closure
+Verified application SHA: ae01f9e42d13c03a8d70e82cfa9d7000199a7f21
+Freeze branch: freeze/forumhousing-reader-recovery-live-20261001
+Live acceptance run: 36938473528 — PASS
+
+The deployed scanner returned Forum Housing services and its own published opening hours. A fresh mobile-sized /create journey preserved those facts through review, normalized configuration and receptionist replies. Runtime exceptions were zero and no lead/save submission occurred before the optional Save action. Strict TLS and the bounded reader controls remain in force.
+
+Golden-line boundary remained intact throughout. Human blockers: none.
 
