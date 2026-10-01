@@ -41,7 +41,7 @@ export function missingOnFileReply(
   ) {
     return `I'm not sure — ${fieldLabel} are not on file. I do not have that information.`;
   }
-  return `I'm not sure — ${fieldLabel} are not on file in this knowledge pack.`;
+  return `I'm not sure — ${fieldLabel} are not on file in the reviewed business information.`;
 }
 
 function includesName(text: string, name: string): boolean {
@@ -118,8 +118,8 @@ function closingSource(systemPrompt?: string): ScriptedTurnSource {
   return "script";
 }
 
-const NOT_LIVE =
-  "This is a scripted sandbox, not a live phone line. Frozen production telephony is unused.";
+const BROWSER_PREVIEW_ONLY =
+  "This browser preview cannot place or transfer a telephone call.";
 
 export type ScriptedIntent =
   | "emergency"
@@ -339,42 +339,42 @@ export function scriptedReply(
   if (intent === "emergency") {
     return {
       speaker: "receptionist",
-      text: `If this is an emergency in the UK, call 999 now (not 911). I cannot dispatch anyone from this scripted sandbox. ${NOT_LIVE}`,
+      text: "If this is an emergency in the UK, call 999 now (not 911). I cannot dispatch emergency services from this browser preview.",
       source: policySource(systemPrompt),
     };
   }
   if (intent === "booking") {
     return {
       speaker: "receptionist",
-      text: `I cannot book an appointment from this scripted sandbox. Calendar booking is not connected here, and I will not invent a confirmed booking. ${NOT_LIVE}`,
+      text: "I cannot book an appointment from this browser preview because calendar booking is not connected. I will not invent a confirmed booking.",
       source: policySource(systemPrompt),
     };
   }
   if (intent === "price") {
     return {
       speaker: "receptionist",
-      text: `${missingOnFileReply("prices", systemPrompt)} I will not invent a quote. ${NOT_LIVE}`,
+      text: `${missingOnFileReply("prices", systemPrompt)} I will not invent a quote.`,
       source: "missing",
     };
   }
   if (intent === "out_of_scope") {
     return {
       speaker: "receptionist",
-      text: `I cannot give legal or medical advice. Please speak to a qualified professional. ${NOT_LIVE}`,
+      text: "I cannot give legal or medical advice. Please speak to a qualified professional.",
       source: policySource(systemPrompt),
     };
   }
   if (intent === "angry") {
     return {
       speaker: "receptionist",
-      text: `I'm sorry this has been frustrating. I cannot transfer you from this scripted sandbox. No live call was placed. ${NOT_LIVE}`,
+      text: `I'm sorry this has been frustrating. ${BROWSER_PREVIEW_ONLY} Please contact the business directly if you need a person.`,
       source: policySource(systemPrompt),
     };
   }
   if (intent === "human") {
     return {
       speaker: "receptionist",
-      text: `I cannot transfer you to speak to a person from this scripted sandbox. No live call was placed. ${NOT_LIVE}`,
+      text: `${BROWSER_PREVIEW_ONLY} Please contact the business directly if you need to speak to a person.`,
       source: policySource(systemPrompt),
     };
   }
@@ -382,7 +382,7 @@ export function scriptedReply(
     const hours = hoursTurn(knowledge, systemPrompt);
     return {
       speaker: "receptionist",
-      text: `${hours.text} I can note that you called after hours, but I cannot book a callback from this scripted sandbox. ${NOT_LIVE}`,
+      text: `${hours.text} I cannot arrange a callback from this browser preview.`,
       source: hours.source,
     };
   }
@@ -395,7 +395,7 @@ export function scriptedReply(
   if (intent === "live_call") {
     return {
       speaker: "receptionist",
-      text: `${NOT_LIVE} No live call was placed.`,
+      text: BROWSER_PREVIEW_ONLY,
       source: policySource(systemPrompt),
     };
   }
