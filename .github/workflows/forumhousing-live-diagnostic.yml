@@ -1,0 +1,61 @@
+name: Forum Housing live scanner diagnostic
+
+on:
+  push:
+    branches:
+      - diag/forumhousing-live-20261001
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Probe live scanner and raw public site
+        shell: bash
+        run: |
+          set -euo pipefail
+          origin='https://seahorse-app-4oasq.ondigitalocean.app'
+          target='https://forumhousing.co.uk/'
+
+          echo '=== LIVE RELEASE ==='
+          curl -fsS "$origin/release.json"
+          echo
+
+          echo '=== LIVE SCANNER ==='
+          code="$(curl --max-time 40 -sS -o /tmp/scan -D /tmp/scan.h -w '%{http_code}'             -X POST "$origin/api/website/scan"             -H 'Content-Type: application/json'             -H 'Accept: application/json'             --data-binary '{"url":"https://forumhousing.co.uk/"}' || true)"
+          echo "HTTP_STATUS=$code"
+          cat /tmp/scan.h
+          cat /tmp/scan
+          echo
+
+          echo '=== RAW HOME ==='
+          ua='MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)'
+          curl -L --max-redirs 4 --connect-timeout 8 --max-time 25 -sS -A "$ua"             -D /tmp/raw.h -o /tmp/raw "$target"
+          wc -c /tmp/raw
+          sed -n '1,30p' /tmp/raw.h
+          for needle in             'About Forum Housing'             'supported housing'             'support services'             'Living With Forum Housing'             '0151 649 9718'             '24-28 Hamilton Street'
+          do
+            echo "--- $needle ---"
+            grep -F -i -m 5 -C 3 "$needle" /tmp/raw || true
+          done
+
+          echo '=== SAME-ORIGIN LINKS OF INTEREST ==='
+          python3 - <<'PY'
+          from bs4 import BeautifulSoup
+          from urllib.parse import urljoin, urlparse
+          html=open('/tmp/raw','r',encoding='utf-8',errors='replace').read()
+          soup=BeautifulSoup(html,'html.parser')
+          seen=[]
+          for a in soup.find_all('a',href=True):
+              u=urljoin('https://forumhousing.co.uk/',a['href'])
+              if urlparse(u).netloc.endswith('forumhousing.co.uk'):
+                  txt=' '.join(a.stripped_strings)
+                  if any(k in (txt+' '+u).lower() for k in ['about','accommodation','living','support','contact','housing']):
+                      if (txt,u) not in seen:
+                          seen.append((txt,u))
+          for txt,u in seen[:80]:
+              print(repr(txt),u)
+          PY
