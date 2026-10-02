@@ -3,11 +3,13 @@ import test from "node:test";
 import {
   DEFAULT_MAX_DOCUMENT_TEXT_CHARS,
   ingestScannerV2Document,
+  ingestScannerV2ManifestDocuments,
   isScannerV2DocumentContentType,
   isScannerV2SupportedDocumentUrl,
   isScannerV2UnsupportedDocumentContentType,
   isScannerV2UnsupportedTextDocumentUrl,
 } from "./scanner-v2-documents.ts";
+import { answerGroundedReceptionistQuestion } from "./scanner-v2-grounding.ts";
 import { InMemoryBm25CorpusIndex } from "./scanner-v2-retrieval.ts";
 import { ScanError } from "./types.ts";
 import type {
@@ -444,3 +446,205 @@ test("no-extension PDF can be identified from trusted response signature + MIME"
   assert.equal(result.kind, "pdf");
   assert.match(result.page.visibleText, /24 months/i);
 });
+
+test("Stage 8 manifest pass converts discovered PDF/TXT into corpus evidence and leaves unsupported Office explicit PARTIAL", async () => {
+  const pdfUrl = "https://acme.example/gate-installation.pdf";
+  const txtUrl = "https://acme.example/returns.txt";
+  const docxUrl = "https://acme.example/legacy-policy.docx";
+  const pdfFact =
+    "The bespoke gate installation lead time is six weeks after final approval.";
+
+  const result = await ingestScannerV2ManifestDocuments(
+    {
+      crawlId: "crawl-stage8",
+      origin: "https://acme.example",
+      state: "DISCOVERING",
+      discovered: 4,
+      queued: 0,
+      fetched: 1,
+      duplicate: 0,
+      policySkipped: 3,
+      robotsSkipped: 0,
+      unresolved: 0,
+      urls: [
+        {
+          url: "https://acme.example/",
+          canonicalUrl: "https://acme.example/",
+          status: "fetched",
+          discoveryReason: "submitted",
+        },
+        {
+          url: pdfUrl,
+          status: "policy_skipped",
+          discoveryReason: "document",
+          discoveredFrom: "https://acme.example/guides",
+          reason: "content_type_not_stage2_html",
+        },
+        {
+          url: txtUrl,
+          status: "policy_skipped",
+          discoveryReason: "document",
+          discoveredFrom: "https://acme.example/policies",
+          reason: "content_type_not_stage2_html",
+        },
+        {
+          url: docxUrl,
+          status: "policy_skipped",
+          discoveryReason: "document",
+          discoveredFrom: "https://acme.example/policies",
+          reason: "content_type_not_stage2_html",
+        },
+      ],
+    },
+    {
+      ...fixtures({
+        [pdfUrl]: binaryResponse({
+          url: pdfUrl,
+          bytes: buildPdf(pdfFact),
+          type: "application/pdf",
+        }),
+        [txtUrl]: binaryResponse({
+          url: txtUrl,
+          bytes:
+            "Unused replacement keys may be returned within 14 days with proof of purchase.",
+          type: "text/plain",
+        }),
+      }),
+      parseTimeoutMs: 10_000,
+      fetchedAt: "2026-10-02T18:58:00.000Z",
+    },
+  );
+
+  assert.equal(result.attempted, 3);
+  assert.equal(result.succeeded, 2);
+  assert.equal(result.pages.length, 2);
+  assert.ok(result.chunks.length >= 2);
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.ok(result.warnings.includes("unsupported_document"));
+
+  const pdfRow = result.manifest.urls.find((row) => row.url === pdfUrl);
+  assert.equal(pdfRow?.status, "fetched");
+  assert.equal(pdfRow?.reason, undefined);
+  assert.ok(pdfRow?.contentHash);
+
+  const txtRow = result.manifest.urls.find((row) => row.url === txtUrl);
+  assert.equal(txtRow?.status, "fetched");
+
+  const docxRow = result.manifest.urls.find((row) => row.url === docxUrl);
+  assert.equal(docxRow?.status, "unresolved");
+  assert.equal(docxRow?.reason, "unsupported_document");
+
+  const pdfPage = result.pages.find((page) => page.canonicalUrl === pdfUrl);
+  assert.equal(pdfPage?.fetchMode, "document");
+  assert.equal(pdfPage?.discoveredFrom, "https://acme.example/guides");
+  assert.match(pdfPage?.visibleText ?? "", /six weeks/i);
+});
+
+test("Stage 8 PDF-only fact reaches the grounded receptionist with exact source provenance", async () => {
+  const pdfUrl = "https://acme.example/deep/installation-guide.pdf";
+  const fact =
+    "Bespoke alley gate installation normally takes six weeks after final design approval.";
+
+  const batch = await ingestScannerV2ManifestDocuments(
+    {
+      crawlId: "crawl-pdf-grounding",
+      origin: "https://acme.example",
+      state: "DISCOVERING",
+      discovered: 1,
+      queued: 0,
+      fetched: 0,
+      duplicate: 0,
+      policySkipped: 1,
+      robotsSkipped: 0,
+      unresolved: 0,
+      urls: [
+        {
+          url: pdfUrl,
+          status: "policy_skipped",
+          discoveryReason: "document",
+          discoveredFrom: "https://acme.example/guides",
+          reason: "content_type_not_stage2_html",
+        },
+      ],
+    },
+    {
+      ...fixtures({
+        [pdfUrl]: binaryResponse({
+          url: pdfUrl,
+          bytes: buildPdf(fact),
+          type: "application/pdf",
+        }),
+      }),
+      parseTimeoutMs: 10_000,
+    },
+  );
+
+  assert.equal(batch.incomplete, false);
+  assert.equal(batch.manifest.state, "DISCOVERING");
+  assert.equal(batch.manifest.fetched, 1);
+
+  const index = new InMemoryBm25CorpusIndex();
+  await index.index(batch.manifest.crawlId, batch.chunks);
+  const answer = await answerGroundedReceptionistQuestion(
+    "How long does bespoke alley gate installation take after design approval?",
+    {
+      crawlId: batch.manifest.crawlId,
+      index,
+    },
+  );
+
+  assert.equal(answer.supportStatus, "supported");
+  assert.equal(answer.source, "corpus.extractive");
+  assert.deepEqual(answer.sourceUrls, [pdfUrl]);
+  assert.equal(answer.retrievedChunkIds.length, 1);
+  assert.match(answer.text, /six weeks/i);
+  assert.match(answer.text, /design approval/i);
+});
+
+test("Stage 8 truncated document keeps useful chunks but forces manifest PARTIAL", async () => {
+  const url = "https://acme.example/large.txt";
+  const batch = await ingestScannerV2ManifestDocuments(
+    {
+      crawlId: "crawl-doc-limit",
+      origin: "https://acme.example",
+      state: "DISCOVERING",
+      discovered: 1,
+      queued: 0,
+      fetched: 0,
+      duplicate: 0,
+      policySkipped: 1,
+      robotsSkipped: 0,
+      unresolved: 0,
+      urls: [
+        {
+          url,
+          status: "policy_skipped",
+          discoveryReason: "document",
+          reason: "content_type_not_stage2_html",
+        },
+      ],
+    },
+    {
+      maxTextChars: 1_024,
+      ...fixtures({
+        [url]: binaryResponse({
+          url,
+          bytes: "Useful public service condition. ".repeat(200),
+          type: "text/plain",
+        }),
+      }),
+    },
+  );
+
+  assert.equal(batch.pages.length, 1);
+  assert.ok(batch.chunks.length >= 1);
+  assert.equal(batch.incomplete, true);
+  assert.equal(batch.manifest.state, "PARTIAL");
+  assert.equal(batch.manifest.unresolved, 1);
+  const row = batch.manifest.urls[0];
+  assert.equal(row?.status, "unresolved");
+  assert.equal(row?.reason, "document_limit_reached");
+  assert.ok(row?.contentHash);
+});
+
