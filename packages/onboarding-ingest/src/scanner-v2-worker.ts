@@ -279,13 +279,10 @@ export async function createScannerV2Job(input: {
   retryLimit?: number;
 }): Promise<CrawlJob> {
   const createdAt = input.createdAt ?? new Date().toISOString();
-  const retryLimit = Math.max(
-    1,
-    Math.min(
-      10,
-      Math.trunc(input.retryLimit ?? DEFAULT_WORKER_RETRY_LIMIT),
-    ),
-  );
+  const requestedRetryLimit = input.retryLimit;
+  const retryLimit = Number.isFinite(requestedRetryLimit)
+    ? Math.max(1, Math.min(10, Math.trunc(requestedRetryLimit as number)))
+    : DEFAULT_WORKER_RETRY_LIMIT;
   const existing = await input.store.getJob(input.crawlId);
   if (existing) return existing;
 
@@ -307,15 +304,6 @@ export async function createScannerV2Job(input: {
     });
   }
   return job;
-}
-
-function terminalStatus(status: CrawlUrlDisposition["status"]): boolean {
-  return (
-    status === "fetched" ||
-    status === "duplicate" ||
-    status === "policy_skipped" ||
-    status === "robots_skipped"
-  );
 }
 
 function safeErrorReason(error: unknown): string {
@@ -374,14 +362,14 @@ export async function runScannerV2WorkerBatch(input: {
   const job = await input.store.getJob(input.crawlId);
   if (!job) throw new Error("scanner_v2_job_not_found");
 
-  const batchSize = Math.max(
-    1,
-    Math.min(64, Math.trunc(input.batchSize ?? DEFAULT_WORKER_BATCH_SIZE)),
-  );
-  const leaseMs = Math.max(
-    1_000,
-    Math.min(15 * 60_000, Math.trunc(input.leaseMs ?? DEFAULT_WORKER_LEASE_MS)),
-  );
+  const requestedBatchSize = input.batchSize;
+  const requestedLeaseMs = input.leaseMs;
+  const batchSize = Number.isFinite(requestedBatchSize)
+    ? Math.max(1, Math.min(64, Math.trunc(requestedBatchSize as number)))
+    : DEFAULT_WORKER_BATCH_SIZE;
+  const leaseMs = Number.isFinite(requestedLeaseMs)
+    ? Math.max(1_000, Math.min(15 * 60_000, Math.trunc(requestedLeaseMs as number)))
+    : DEFAULT_WORKER_LEASE_MS;
   const now = input.now ?? (() => new Date());
 
   let attempted = 0;
@@ -421,9 +409,13 @@ export async function runScannerV2WorkerBatch(input: {
       });
 
       let status = outcome.disposition;
-      let canonicalUrl = outcome.canonicalUrl;
+      let canonicalUrl = outcome.canonicalUrl ?? outcome.page?.canonicalUrl;
       let reason = outcome.reason;
       let page = outcome.page;
+
+      if (status === "fetched" && !page) {
+        throw new Error("fetched_outcome_missing_page");
+      }
 
       if (page) {
         const sameHash = (await input.store.listPages(job.crawlId)).find(
@@ -493,6 +485,3 @@ export async function runScannerV2WorkerBatch(input: {
   };
 }
 
-export async function resetScannerV2JobRoot(root: string): Promise<void> {
-  await rm(resolve(root), { recursive: true, force: true });
-}
