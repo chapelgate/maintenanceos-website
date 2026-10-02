@@ -178,3 +178,25 @@ test("/create uses the same-origin on-demand scanner without reviving the retire
   assert.match(scan, /runScan\(url, \{ enabled: true \}\)/);
   assert.match(scan, /rate_limited/);
 });
+
+
+test("Scanner V2 operational status is explicit and accessible", () => {
+  const status = read("src/components/ScannerV2CrawlStatus.tsx");
+  const later = read("src/components/CreateReceptionistLaterSteps.tsx");
+
+  assert.match(status, /aria-labelledby="scanner-v2-status-heading"/);
+  assert.match(status, /role="status"/);
+  assert.match(status, /aria-live="polite"/);
+  assert.match(status, /data-scanner-v2-state=\{status\.state\}/);
+  assert.match(status, /data-scanner-v2-completeness=\{status\.completeness\}/);
+  assert.match(status, /Discovered/);
+  assert.match(status, /Fetched/);
+  assert.match(status, /Unresolved/);
+  assert.match(status, /Last scan/);
+  assert.match(status, /Partial: some website content could not be fully processed/);
+  assert.match(status, /must not be presented as having learned the whole site/);
+  assert.match(status, /<details/);
+  assert.match(status, /View crawl sources/);
+  assert.match(later, /scannerV2Status\?: ScannerV2OperationalStatus \| null/);
+  assert.match(later, /<ScannerV2CrawlStatus status=\{scannerV2Status\}/);
+});
