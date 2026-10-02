@@ -14,8 +14,16 @@ concurrency:
 
 jobs:
   canary:
+    strategy:
+      fail-fast: false
+      matrix:
+        site:
+          - Alley Gates
+          - Express Gas Delivery
+          - Forum Housing
+          - MaintenanceOS
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -30,4 +38,5 @@ jobs:
       - name: Run real-site whole-corpus canary
         env:
           STAGE12_RELEASE_SHA: ${{ github.sha }}
+          STAGE12_CASE: ${{ matrix.site }}
         run: node --experimental-strip-types scripts/scanner-v2-stage12-real-canary.ts
