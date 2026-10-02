@@ -655,7 +655,7 @@ test("Stage 2 HTML link flows through frontier, Stage 8 PDF ingest, retrieval an
   const origin = "https://acme.example";
   const pdfUrl = origin + "/deep/installation-guide.pdf";
   const fact =
-    "Document-only fact: bespoke alley gate installation normally takes six weeks after final design approval.";
+    "Document-only fact: bespoke alley gate installation normally takes six weeks after final design approval confirmation.";
 
   const lookup: LookupFn = async () => ["203.0.113.10"];
   const htmlGet: HttpGetFn = async (url) => {
