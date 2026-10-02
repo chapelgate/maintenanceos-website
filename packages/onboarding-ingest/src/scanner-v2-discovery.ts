@@ -6,18 +6,24 @@ import {
 import { extractSameOriginHrefs } from "./extract.ts";
 import { allowPublicHttpsUrl } from "./ssrf.ts";
 import { buildCrawlManifest } from "./scanner-v2-foundation.ts";
-import type {
-  CrawlManifest,
-  CrawlUrlDisposition,
-  HttpGetFn,
-  LookupFn,
-  ScanPageSource,
+import { isPathAllowed, parseRobotsTxt, type RobotsRules } from "./scan.ts";
+import {
+  ScanError,
+  type CrawlManifest,
+  type CrawlUrlDisposition,
+  type HttpGetFn,
+  type LookupFn,
+  type ScanPageSource,
 } from "./types.ts";
 
 export const DEFAULT_MAX_SITEMAP_DOCUMENTS = 64;
+export const DEFAULT_MAX_SITEMAP_DEPTH = 4;
 export const DEFAULT_MAX_DISCOVERED_URLS = 10_000;
+export const DEFAULT_MAX_HTML_PAGES = 10_000;
 export const DEFAULT_MAX_SITEMAP_BYTES = 512 * 1024;
+export const DEFAULT_MAX_HTML_BYTES = 512 * 1024;
 export const DEFAULT_SITEMAP_TIMEOUT_MS = 5_000;
+export const DEFAULT_HTML_TIMEOUT_MS = 5_000;
 
 export type SitemapKind = "urlset" | "sitemapindex" | "unknown";
 
@@ -34,8 +40,12 @@ export type ParsedSitemap = {
 export type ScannerV2DiscoveryResult = {
   manifest: CrawlManifest;
   sitemapSources: ScanPageSource[];
+  pageSources: ScanPageSource[];
   sitemapDocuments: number;
   sitemapUrlsDiscovered: number;
+  htmlPagesFetched: number;
+  htmlLinksDiscovered: number;
+  urlsDroppedByLimit: number;
   warnings: string[];
   limitReached: boolean;
   incomplete: boolean;
@@ -45,9 +55,13 @@ export type ScannerV2DiscoveryOptions = {
   lookup?: LookupFn;
   get?: HttpGetFn;
   maxSitemapDocuments?: number;
+  maxSitemapDepth?: number;
   maxDiscoveredUrls?: number;
+  maxHtmlPages?: number;
   maxSitemapBytes?: number;
+  maxHtmlBytes?: number;
   sitemapTimeoutMs?: number;
+  htmlTimeoutMs?: number;
 };
 
 function decodeXml(value: string): string {
@@ -98,6 +112,10 @@ export function parseSitemapXml(xml: string): ParsedSitemap {
   return { kind: root, entries };
 }
 
+/**
+ * Sitemap records are parsed independently from robots user-agent groups.
+ * This deliberately leaves the existing V1 robots parser semantics untouched.
+ */
 export function parseRobotsSitemaps(
   body: string,
   baseOrigin: URL,
@@ -146,6 +164,16 @@ function normalizeDiscoveredUrl(
   return allow.url.toString();
 }
 
+function displayRejectedUrl(raw: string, origin: URL): string {
+  try {
+    const parsed = new URL(raw, origin);
+    parsed.hash = "";
+    return parsed.toString();
+  } catch {
+    return raw.trim() || "invalid-url";
+  }
+}
+
 export function discoverHtmlLinks(input: {
   html: string;
   pageUrl: string;
@@ -181,6 +209,7 @@ class UrlAccumulator {
   private readonly rows = new Map<string, CrawlUrlDisposition>();
   private readonly maxUrls: number;
   limitReached = false;
+  droppedByLimit = 0;
 
   constructor(maxUrls: number) {
     this.maxUrls = maxUrls;
@@ -190,21 +219,44 @@ class UrlAccumulator {
     if (this.rows.has(row.url)) return false;
     if (this.rows.size >= this.maxUrls) {
       this.limitReached = true;
+      this.droppedByLimit += 1;
       return false;
     }
-    this.rows.set(row.url, row);
+    this.rows.set(row.url, structuredClone(row));
     return true;
   }
 
+  update(
+    url: string,
+    patch: Partial<Omit<CrawlUrlDisposition, "url" | "discoveryReason">>,
+  ): void {
+    const current = this.rows.get(url);
+    if (!current) return;
+    this.rows.set(url, { ...current, ...structuredClone(patch) });
+  }
+
+  get(url: string): CrawlUrlDisposition | undefined {
+    const row = this.rows.get(url);
+    return row ? structuredClone(row) : undefined;
+  }
+
   values(): CrawlUrlDisposition[] {
-    return [...this.rows.values()];
+    return [...this.rows.values()].map((row) => structuredClone(row));
   }
 }
 
-async function fetchRobotsForSitemaps(
+type RobotsDiscovery = {
+  body: string;
+  rules: RobotsRules;
+  source?: ScanPageSource;
+  warning?: string;
+  incomplete: boolean;
+};
+
+async function fetchRobotsForDiscovery(
   origin: URL,
   options: ScannerV2DiscoveryOptions,
-): Promise<{ body: string; source?: ScanPageSource; warning?: string }> {
+): Promise<RobotsDiscovery> {
   const url = new URL("/robots.txt", origin);
   try {
     const response = await fetchPublicHttps(url.toString(), {
@@ -217,20 +269,70 @@ async function fetchRobotsForSitemaps(
       maxBytes: 64 * 1024,
       maxRedirects: 2,
     });
-    if (response.status >= 400) {
-      return { body: "", warning: `robots_http_${response.status}` };
+
+    if (response.status === 404 || response.status === 410) {
+      return {
+        body: "",
+        rules: parseRobotsTxt(""),
+        warning: "robots_not_found",
+        incomplete: false,
+      };
     }
+    if (response.status >= 400) {
+      return {
+        body: "",
+        rules: parseRobotsTxt(""),
+        warning: `robots_http_${response.status}`,
+        incomplete: true,
+      };
+    }
+
     return {
       body: response.body,
+      rules: parseRobotsTxt(response.body),
       source: {
         url: response.url.toString(),
         status: response.status,
         bytes: Buffer.byteLength(response.body, "utf8"),
       },
+      incomplete: false,
     };
   } catch {
-    return { body: "", warning: "robots_unavailable" };
+    return {
+      body: "",
+      rules: parseRobotsTxt(""),
+      warning: "robots_unavailable",
+      incomplete: true,
+    };
   }
+}
+
+function responseContentType(
+  headers: Record<string, string>,
+): string {
+  return (
+    Object.entries(headers).find(
+      ([key]) => key.toLowerCase() === "content-type",
+    )?.[1] ?? ""
+  );
+}
+
+function isHtmlType(contentType: string): boolean {
+  return /(?:text\/html|application\/xhtml\+xml)/i.test(contentType);
+}
+
+function isPlainTextType(contentType: string): boolean {
+  return /^text\/plain\b/i.test(contentType);
+}
+
+function terminalHttpDisposition(status: number): {
+  status: "policy_skipped" | "unresolved";
+  reason: string;
+} {
+  if ([401, 403, 404, 410].includes(status)) {
+    return { status: "policy_skipped", reason: `http_${status}` };
+  }
+  return { status: "unresolved", reason: `http_${status}` };
 }
 
 export async function discoverScannerV2Frontier(
@@ -245,15 +347,24 @@ export async function discoverScannerV2Frontier(
   const origin = new URL(initial.url.origin);
   const maxSitemapDocuments =
     options.maxSitemapDocuments ?? DEFAULT_MAX_SITEMAP_DOCUMENTS;
+  const maxSitemapDepth =
+    options.maxSitemapDepth ?? DEFAULT_MAX_SITEMAP_DEPTH;
   const maxDiscoveredUrls =
     options.maxDiscoveredUrls ?? DEFAULT_MAX_DISCOVERED_URLS;
+  const maxHtmlPages =
+    options.maxHtmlPages ?? DEFAULT_MAX_HTML_PAGES;
   const maxSitemapBytes =
     options.maxSitemapBytes ?? DEFAULT_MAX_SITEMAP_BYTES;
+  const maxHtmlBytes =
+    options.maxHtmlBytes ?? DEFAULT_MAX_HTML_BYTES;
   const sitemapTimeoutMs =
     options.sitemapTimeoutMs ?? DEFAULT_SITEMAP_TIMEOUT_MS;
+  const htmlTimeoutMs =
+    options.htmlTimeoutMs ?? DEFAULT_HTML_TIMEOUT_MS;
 
   const warnings: string[] = [];
   const sitemapSources: ScanPageSource[] = [];
+  const pageSources: ScanPageSource[] = [];
   const urls = new UrlAccumulator(maxDiscoveredUrls);
   urls.add({
     url: initial.url.toString(),
@@ -261,19 +372,24 @@ export async function discoverScannerV2Frontier(
     discoveryReason: "submitted",
   });
 
-  const robots = await fetchRobotsForSitemaps(origin, options);
+  const robots = await fetchRobotsForDiscovery(origin, options);
   if (robots.warning) warnings.push(robots.warning);
   if (robots.source) sitemapSources.push(robots.source);
 
+  let discoveryIncomplete = robots.incomplete;
   const declared = parseRobotsSitemaps(robots.body, origin);
-  const sitemapQueue =
+  const sitemapQueue: Array<{ url: string; depth: number; declared: boolean }> =
     declared.length > 0
-      ? [...declared]
-      : [new URL("/sitemap.xml", origin).toString()];
+      ? declared.map((url) => ({ url, depth: 0, declared: true }))
+      : [{
+          url: new URL("/sitemap.xml", origin).toString(),
+          depth: 0,
+          declared: false,
+        }];
   const sitemapSeen = new Set<string>();
 
   let sitemapUrlsDiscovered = 0;
-  let discoveryIncomplete = false;
+
   while (sitemapQueue.length > 0) {
     if (sitemapSeen.size >= maxSitemapDocuments) {
       warnings.push("sitemap_document_limit");
@@ -282,11 +398,18 @@ export async function discoverScannerV2Frontier(
     }
 
     const next = sitemapQueue.shift();
-    if (!next || sitemapSeen.has(next)) continue;
+    if (!next || sitemapSeen.has(next.url)) continue;
 
-    const normalizedSitemap = normalizeDiscoveredUrl(next, origin);
+    if (next.depth > maxSitemapDepth) {
+      warnings.push("sitemap_depth_limit");
+      discoveryIncomplete = true;
+      continue;
+    }
+
+    const normalizedSitemap = normalizeDiscoveredUrl(next.url, origin);
     if (!normalizedSitemap) {
       warnings.push("sitemap_url_rejected");
+      if (next.declared) discoveryIncomplete = true;
       continue;
     }
     sitemapSeen.add(normalizedSitemap);
@@ -307,7 +430,7 @@ export async function discoverScannerV2Frontier(
     }
 
     if (response.status === 404 || response.status === 410) {
-      if (declared.length === 0 && sitemapSeen.size === 1) {
+      if (!next.declared && next.depth === 0 && sitemapSeen.size === 1) {
         warnings.push("sitemap_not_found");
       } else {
         warnings.push(`sitemap_http_${response.status}`);
@@ -321,10 +444,7 @@ export async function discoverScannerV2Frontier(
       continue;
     }
 
-    const type =
-      Object.entries(response.headers).find(
-        ([key]) => key.toLowerCase() === "content-type",
-      )?.[1] ?? "";
+    const type = responseContentType(response.headers);
     if (
       type &&
       !/(?:xml|text\/plain|application\/octet-stream)/i.test(type)
@@ -359,9 +479,21 @@ export async function discoverScannerV2Frontier(
         const normalized = normalizeDiscoveredUrl(entry.loc, origin);
         if (!normalized) {
           warnings.push("sitemap_child_rejected");
+          discoveryIncomplete = true;
           continue;
         }
-        if (!sitemapSeen.has(normalized)) sitemapQueue.push(normalized);
+        if (next.depth >= maxSitemapDepth) {
+          warnings.push("sitemap_depth_limit");
+          discoveryIncomplete = true;
+          continue;
+        }
+        if (!sitemapSeen.has(normalized)) {
+          sitemapQueue.push({
+            url: normalized,
+            depth: next.depth + 1,
+            declared: true,
+          });
+        }
       }
       continue;
     }
@@ -370,6 +502,14 @@ export async function discoverScannerV2Frontier(
       const normalized = normalizeDiscoveredUrl(entry.loc, origin);
       if (!normalized) {
         warnings.push("sitemap_page_rejected");
+        urls.add({
+          url: displayRejectedUrl(entry.loc, origin),
+          status: "policy_skipped",
+          discoveryReason: "sitemap",
+          discoveredFrom: response.url.toString(),
+          reason: "sitemap_page_rejected",
+          ...(entry.lastmod ? { sitemapLastModified: entry.lastmod } : {}),
+        });
         continue;
       }
       const added = urls.add({
@@ -383,10 +523,147 @@ export async function discoverScannerV2Frontier(
     }
   }
 
-  if (urls.limitReached) warnings.push("discovered_url_limit");
+  if (urls.limitReached) {
+    warnings.push("discovered_url_limit");
+    discoveryIncomplete = true;
+  }
 
-  const requestedState =
-    urls.limitReached || discoveryIncomplete ? "PARTIAL" : "DISCOVERING";
+  // Walk every accepted same-origin HTML page so a deep page reachable only by
+  // internal links joins the same frontier as sitemap-discovered pages.
+  const pageQueue = urls
+    .values()
+    .filter((row) => row.status === "queued")
+    .map((row) => row.url);
+  const pageQueued = new Set(pageQueue);
+  const pageAttempted = new Set<string>();
+  let htmlPagesFetched = 0;
+  let htmlLinksDiscovered = 0;
+
+  while (pageQueue.length > 0) {
+    if (pageAttempted.size >= maxHtmlPages) {
+      warnings.push("html_page_limit");
+      discoveryIncomplete = true;
+      break;
+    }
+
+    const pageUrl = pageQueue.shift();
+    if (!pageUrl || pageAttempted.has(pageUrl)) continue;
+    pageAttempted.add(pageUrl);
+
+    const current = urls.get(pageUrl);
+    if (!current || current.status !== "queued") continue;
+
+    let parsed: URL;
+    try {
+      parsed = new URL(pageUrl);
+    } catch {
+      urls.update(pageUrl, {
+        status: "unresolved",
+        reason: "invalid_queued_url",
+      });
+      discoveryIncomplete = true;
+      continue;
+    }
+
+    if (!isPathAllowed(robots.rules, parsed.pathname || "/")) {
+      urls.update(pageUrl, {
+        status: "robots_skipped",
+        reason: "robots_disallow",
+      });
+      continue;
+    }
+
+    let response;
+    try {
+      response = await fetchPublicHttps(pageUrl, {
+        lookup: options.lookup,
+        get: options.get,
+        timeoutMs: htmlTimeoutMs,
+        maxBytes: maxHtmlBytes,
+        maxRedirects: DEFAULT_MAX_REDIRECTS,
+      });
+    } catch (error) {
+      urls.update(pageUrl, {
+        status: "unresolved",
+        reason:
+          error instanceof ScanError
+            ? error.code
+            : "fetch_failed",
+      });
+      discoveryIncomplete = true;
+      continue;
+    }
+
+    if (response.url.origin !== origin.origin) {
+      urls.update(pageUrl, {
+        status: "policy_skipped",
+        reason: "cross_origin_redirect",
+      });
+      warnings.push("cross_origin_redirect");
+      continue;
+    }
+
+    if (response.status >= 400) {
+      const terminal = terminalHttpDisposition(response.status);
+      urls.update(pageUrl, terminal);
+      if (terminal.status === "unresolved") discoveryIncomplete = true;
+      continue;
+    }
+
+    const contentType = responseContentType(response.headers);
+    const bytes = Buffer.byteLength(response.body, "utf8");
+    pageSources.push({
+      url: response.url.toString(),
+      status: response.status,
+      bytes,
+    });
+
+    if (!isHtmlType(contentType) && !isPlainTextType(contentType)) {
+      urls.update(pageUrl, {
+        status: "policy_skipped",
+        reason: "content_type_not_stage2_html",
+      });
+      continue;
+    }
+
+    urls.update(pageUrl, {
+      status: "fetched",
+      canonicalUrl: response.url.toString(),
+      fetchedAt: new Date().toISOString(),
+    });
+
+    if (!isHtmlType(contentType)) continue;
+
+    htmlPagesFetched += 1;
+    const discovered = discoverHtmlLinks({
+      html: response.body,
+      pageUrl: response.url.toString(),
+      origin: origin.origin,
+    });
+
+    for (const row of discovered) {
+      const added = urls.add(row);
+      if (!added) continue;
+      htmlLinksDiscovered += 1;
+      if (!pageQueued.has(row.url)) {
+        pageQueued.add(row.url);
+        pageQueue.push(row.url);
+      }
+    }
+
+    if (urls.limitReached) {
+      warnings.push("discovered_url_limit");
+      discoveryIncomplete = true;
+      break;
+    }
+  }
+
+  // If a page limit stopped the walk, queued rows remain visibly queued and
+  // therefore cannot later be mistaken for a COMPLETE manifest.
+  const stillQueued = urls.values().some((row) => row.status === "queued");
+  if (stillQueued) discoveryIncomplete = true;
+
+  const requestedState = discoveryIncomplete ? "PARTIAL" : "DISCOVERING";
   const manifest = buildCrawlManifest({
     crawlId: "scanner-v2-discovery",
     origin: origin.origin,
@@ -397,10 +674,14 @@ export async function discoverScannerV2Frontier(
   return {
     manifest,
     sitemapSources,
+    pageSources,
     sitemapDocuments: sitemapSeen.size,
     sitemapUrlsDiscovered,
+    htmlPagesFetched,
+    htmlLinksDiscovered,
+    urlsDroppedByLimit: urls.droppedByLimit,
     warnings: [...new Set(warnings)],
     limitReached: urls.limitReached,
-    incomplete: discoveryIncomplete || urls.limitReached,
+    incomplete: discoveryIncomplete,
   };
 }
