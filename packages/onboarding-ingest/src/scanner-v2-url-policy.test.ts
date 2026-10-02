@@ -5,6 +5,7 @@ import {
   DEFAULT_MAX_PATH_DEPTH,
   DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
   extractScannerV2CanonicalLink,
+  isScannerV2NonTextAssetUrl,
   normalizeScannerV2Url,
   ScannerV2FrontierTrapGuard,
 } from "./scanner-v2-url-policy.ts";
@@ -224,3 +225,24 @@ test("caller-supplied trap ceilings cannot exceed reviewed hard maxima", () => {
     );
   }
 });
+
+test("non-text asset classification excludes media/static binaries but keeps supported text documents", () => {
+  for (const url of [
+    "https://acme.example/gallery/photo.jpg",
+    "https://acme.example/assets/logo.svg?version=2",
+    "https://acme.example/video/demo.mp4",
+    "https://acme.example/fonts/site.woff2",
+    "https://acme.example/archive.zip",
+  ]) {
+    assert.equal(isScannerV2NonTextAssetUrl(url), true, url);
+  }
+  for (const url of [
+    "https://acme.example/services",
+    "https://acme.example/guide.pdf",
+    "https://acme.example/facts.txt",
+    "https://acme.example/prices.csv",
+  ]) {
+    assert.equal(isScannerV2NonTextAssetUrl(url), false, url);
+  }
+});
+
