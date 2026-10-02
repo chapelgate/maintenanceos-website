@@ -107,6 +107,25 @@ for (const [caseIndex, item] of selectedCases.entries()) {
           unresolvedRows: result.manifest.urls
             .filter((row) => row.status === "unresolved")
             .slice(0, 25),
+          policyReasonCounts: Object.fromEntries(
+            [...new Set(
+              result.manifest.urls
+                .filter((row) => row.status === "policy_skipped")
+                .map((row) => row.reason ?? "unspecified"),
+            )]
+              .sort()
+              .map((reason) => [
+                reason,
+                result.manifest.urls.filter(
+                  (row) =>
+                    row.status === "policy_skipped" &&
+                    (row.reason ?? "unspecified") === reason,
+                ).length,
+              ]),
+          ),
+          policyRows: result.manifest.urls
+            .filter((row) => row.status === "policy_skipped")
+            .slice(0, 25),
         }),
     );
 
