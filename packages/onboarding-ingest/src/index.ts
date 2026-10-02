@@ -161,6 +161,14 @@ export {
   buildCrawlManifest,
   InMemoryScannerV2Store,
 } from "./scanner-v2-foundation.ts";
+export {
+  SCANNER_V2_STATUS_SOURCE_PREVIEW_LIMIT,
+  projectScannerV2OperationalStatus,
+} from "./scanner-v2-status.ts";
+export type {
+  ScannerV2Completeness,
+  ScannerV2OperationalStatus,
+} from "./scanner-v2-status.ts";
 export type {
   CorpusStore,
   FrontierStore,
