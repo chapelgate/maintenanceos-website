@@ -57,8 +57,17 @@ const cases = [
   },
 ];
 
+const requestedCase = process.env.STAGE12_CASE?.trim();
+const selectedCases = requestedCase
+  ? cases.filter((item) => item.name === requestedCase)
+  : cases;
+assert.ok(
+  selectedCases.length > 0,
+  "No Stage 12 canary case matched STAGE12_CASE=" + String(requestedCase),
+);
+
 const allResults = [];
-for (const [caseIndex, item] of cases.entries()) {
+for (const [caseIndex, item] of selectedCases.entries()) {
   const root = await mkdtemp(join(tmpdir(), "scanner-v2-stage12-canary-"));
   try {
     const crawlId =
