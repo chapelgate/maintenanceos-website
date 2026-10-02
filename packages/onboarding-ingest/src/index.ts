@@ -71,6 +71,22 @@ export type {
   CorpusIndexStats,
 } from "./scanner-v2-retrieval.ts";
 export {
+  answerGroundedReceptionistQuestion,
+  verifyGroundedSynthesis,
+  DEFAULT_GROUNDED_RETRIEVAL_LIMIT,
+  MAX_GROUNDED_ANSWER_CHARS,
+} from "./scanner-v2-grounding.ts";
+export type {
+  GroundedValue,
+  GroundedFaq,
+  ReceptionistGroundingFacts,
+  GroundedEvidence,
+  GroundedAnswerSource,
+  GroundedReceptionistAnswer,
+  GroundedSynthesizer,
+  GroundedAnswerOptions,
+} from "./scanner-v2-grounding.ts";
+export {
   SCANNER_V2_ENV,
   isScannerV2Enabled,
   stableContentHash,

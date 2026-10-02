@@ -1036,3 +1036,62 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+### 2026-10-02 Scanner V2 Stage 6 grounding
+Status: COMPLETE / VERIFIED / READY TO MERGE
+
+Implemented:
+- exact structured-fact lookup before arbitrary corpus retrieval;
+- deterministic Stage 5 BM25 corpus search for arbitrary site questions;
+- bounded retrieval admission so weak one-term matches cannot become claims for unrelated multi-term questions;
+- deterministic extractive answer selection directly from retrieved evidence;
+- source trace with canonical URL and chunk ID for every corpus-supported answer;
+- honest not-found response with zero invented evidence;
+- optional synthesizer interface that receives retrieved evidence only;
+- conservative synthesis verifier rejects unsupported meaningful words or numeric claims and falls back to exact extractive evidence;
+- bounded deterministic FAQ inflection matching;
+- legacy five-field summary remains compatibility/exact-fact input rather than arbitrary-question source of truth.
+
+Defects caught and repaired before merge:
+- "email address" was initially shadowed by generic address/location intent;
+- FAQ matching missed simple inflections;
+- weak one-term retrieval could answer an unrelated multi-term question;
+- deep corpus and structured-FAQ acceptance cases were separated instead of weakening either path.
+
+Verification:
+- exact tested source SHA: 8fa959e6663519686f7d406bdb7f1a6c640138d3;
+- GitHub Actions run 37043573681 / job 110959410228: PASS;
+- targeted Stage 4-6 suite: 23/23 PASS;
+- full repository regression: 375/375 PASS;
+- accessibility: 16/16 PASS;
+- TypeScript: PASS;
+- production Next.js build: PASS, 30/30 routes;
+- Scanner V1 runtime unchanged: PASS;
+- current browser-preview runtime unchanged: PASS;
+- golden phone line change surface: 0.
+
+Deep-question acceptance:
+- 10 deep-site questions outside the five-field summary passed;
+- each corpus answer is an exact evidence substring;
+- each corpus answer carries the exact source URL and chunk ID;
+- unsupported question returns not_found with no fabricated trace.
+
+Independent NVIDIA review:
+- openai/gpt-oss-20b: PASS in Evolution Engine run 37043711861 / job 110959809793 at USD 0 marginal cost;
+- nvidia/nemotron-3.5-lightning-30b-a3b: PASS on bounded 90-second retry in run 37044026017 / job 110960855013 at USD 0 marginal cost;
+- initial Nemotron 45-second attempt timed out before verdict and was not treated as a code failure;
+- raw hosted-model output retained: 0;
+- production NVIDIA scope enabled: 0;
+- NVIDIA lane remained review/reasoning only, not toolful code execution.
+
+Evidence:
+- docs/SCANNER_V2_STAGE6_EVIDENCE_20261002.md
+
+Release boundary:
+Stage 6 remains additive and Scanner V2 is still off the production /create route. The next authorised boundary is Stage 7 bounded JavaScript rendering escalation.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+
