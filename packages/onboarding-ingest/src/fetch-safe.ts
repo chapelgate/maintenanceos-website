@@ -452,7 +452,11 @@ export async function fetchPublicHttpsBytes(
       );
     }
 
-    if (response.status >= 300 && response.status < 400) {
+    if (
+      response.status >= 300 &&
+      response.status < 400 &&
+      response.status !== 304
+    ) {
       const location = header(response.headers, "location");
       if (!location) {
         throw new ScanError(
@@ -592,7 +596,11 @@ export async function fetchPublicHttps(
       );
     }
 
-    if (response.status >= 300 && response.status < 400) {
+    if (
+      response.status >= 300 &&
+      response.status < 400 &&
+      response.status !== 304
+    ) {
       const location = header(response.headers, "location");
       if (!location) {
         throw new ScanError(
@@ -613,6 +621,13 @@ export async function fetchPublicHttps(
         next = new URL(location, allow.url);
       } catch {
         throw new ScanError("invalid_url", "Redirect Location was not a valid URL.", 400);
+      }
+      if (options.allowedOrigin && next.origin !== options.allowedOrigin) {
+        throw new ScanError(
+          "cross_origin_redirect",
+          "The page redirected outside the submitted website.",
+          422,
+        );
       }
       current = next.toString();
       continue;

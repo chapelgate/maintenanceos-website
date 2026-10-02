@@ -1258,3 +1258,50 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+### 2026-10-02 Scanner V2 Stage 10 incremental refresh
+Status: COMPLETE / VERIFIED / READY TO FREEZE
+
+Implemented:
+- persisted ETag / Last-Modified / sitemap lastmod / content-hash refresh chain;
+- conditional GET revalidation with terminal HTTP 304 handling;
+- exact prior page/chunk reuse for unchanged 304 responses;
+- changed 200 pages re-extracted without rewriting unrelated page chunks;
+- prior fetched pages absent from new discovery requeued once for deletion confirmation;
+- confirmed 404/410 tombstones remove content from the new crawl only;
+- immutable prior COMPLETE crawl retained until atomic cutover;
+- file-backed active-crawl pointer with compare-and-swap protection;
+- PARTIAL / queued / unresolved refreshes cannot publish;
+- stale refresh cannot overwrite a newer active corpus;
+- conditional redirects restricted to the original site origin;
+- no new database/service or paid model dependency.
+
+Verification:
+- exact verified candidate SHA: bed28e24d0ed41ce2ffdd34855b2c562f2dc587c;
+- GitHub Actions run 37067940082 / job 111040430128: PASS;
+- full repository regression: 410/410 PASS;
+- accessibility: 16/16 PASS;
+- TypeScript: PASS;
+- production Next.js build: PASS, 30/30 routes;
+- CREATE_AND_PHONE_SURFACE_UNCHANGED=PASS;
+- STAGE10_REFRESH_CONTRACT_PRESENT=PASS.
+
+Independent NVIDIA review:
+- Evolution Engine run 37067996767 / job 111040478296: PASS;
+- openai/gpt-oss-20b: REVIEW PASS;
+- nvidia/nemotron-3.5-lightning-30b-a3b: REVIEW PASS;
+- included/free development capacity, marginal cost USD 0;
+- first Nemotron attempt timed out at the existing execution boundary and was not treated as a review verdict; bounded retry passed;
+- NVIDIA remained reasoning/review only.
+
+Evidence:
+- docs/SCANNER_V2_STAGE10_EVIDENCE_20261002.md
+
+Release boundary:
+Stage 10 remains additive and Scanner V2 remains off production /create. Stage 11 UI/operational state is the next authorised boundary.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+
