@@ -209,6 +209,9 @@ export type CrawlUrlDisposition = {
   sitemapLastModified?: string;
   contentHash?: string;
   fetchedAt?: string;
+  /** Stage 9 resumable execution metadata. Additive; absent on legacy manifests. */
+  retryCount?: number;
+  lastAttemptAt?: string;
 };
 
 export type CrawlPage = {
@@ -258,3 +261,14 @@ export type CrawlLease = {
   expiresAt: string;
 };
 
+
+
+export type CrawlJob = {
+  crawlId: string;
+  origin: string;
+  state: CrawlState;
+  releaseSha: string;
+  createdAt: string;
+  updatedAt: string;
+  retryLimit: number;
+};
