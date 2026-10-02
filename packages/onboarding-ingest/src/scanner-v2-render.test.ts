@@ -118,7 +118,7 @@ test(
       shell,
       { browserType: chromium, lookup, get },
     );
-    assert.equal(first.ok, true);
+    assert.equal(first.ok, true, JSON.stringify(first));
     if (!first.ok) return;
 
     assert.match(first.html, /Rendered Services/);
