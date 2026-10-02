@@ -136,8 +136,11 @@ function stem(token: string): string {
 }
 
 function canonicalToken(token: string): string {
-  const lower = stem(normalizeUnicode(token));
-  return SYNONYM_CANONICAL.get(lower) ?? lower;
+  const raw = normalizeUnicode(token);
+  const direct = SYNONYM_CANONICAL.get(raw);
+  if (direct) return direct;
+  const stemmed = stem(raw);
+  return SYNONYM_CANONICAL.get(stemmed) ?? stemmed;
 }
 
 function tokenize(value: string): string[] {
