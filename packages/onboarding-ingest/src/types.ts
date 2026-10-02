@@ -136,3 +136,102 @@ export class ScanError extends Error {
     this.httpStatus = httpStatus;
   }
 }
+
+/**
+ * Scanner V2 additive corpus/manifest types.
+ *
+ * These are deliberately not wired into runScan yet. Scanner V1 remains the
+ * production compatibility path until V2 independently passes its acceptance
+ * gate. Crawl content stays untrusted data.
+ */
+export type CrawlState =
+  | "DISCOVERING"
+  | "CRAWLING"
+  | "INDEXING"
+  | "COMPLETE"
+  | "PARTIAL"
+  | "FAILED";
+
+export type CrawlUrlStatus =
+  | "queued"
+  | "fetched"
+  | "duplicate"
+  | "policy_skipped"
+  | "robots_skipped"
+  | "unresolved";
+
+export type CrawlDiscoveryReason =
+  | "submitted"
+  | "robots_sitemap"
+  | "sitemap"
+  | "html_link"
+  | "rendered_link"
+  | "canonical"
+  | "document"
+  | "cms_public_data";
+
+export type CrawlFetchMode =
+  | "http"
+  | "static_data"
+  | "rendered"
+  | "reader"
+  | "document";
+
+export type CrawlUrlDisposition = {
+  url: string;
+  canonicalUrl?: string;
+  status: CrawlUrlStatus;
+  discoveryReason: CrawlDiscoveryReason;
+  discoveredFrom?: string;
+  reason?: string;
+  contentHash?: string;
+  fetchedAt?: string;
+};
+
+export type CrawlPage = {
+  requestedUrl: string;
+  canonicalUrl: string;
+  title?: string;
+  headings: string[];
+  visibleText: string;
+  structuredFacts: Record<string, unknown>;
+  contentType: string;
+  fetchMode: CrawlFetchMode;
+  contentHash: string;
+  discoveredFrom?: string;
+  fetchedAt: string;
+  etag?: string;
+  lastModified?: string;
+};
+
+export type CorpusChunk = {
+  id: string;
+  canonicalUrl: string;
+  title?: string;
+  headingPath: string[];
+  text: string;
+  ordinal: number;
+  contentHash: string;
+};
+
+export type CrawlManifest = {
+  crawlId: string;
+  origin: string;
+  state: CrawlState;
+  discovered: number;
+  queued: number;
+  fetched: number;
+  duplicate: number;
+  policySkipped: number;
+  robotsSkipped: number;
+  unresolved: number;
+  urls: CrawlUrlDisposition[];
+};
+
+export type CrawlLease = {
+  crawlId: string;
+  leaseKey: string;
+  owner: string;
+  expiresAt: string;
+};
+

@@ -894,3 +894,49 @@ Scanner V2 is website-ingest/browser-preview only. No MaintenanceOS production t
 
 Human blockers:
 None at design stage.
+
+### 2026-10-02 Scanner V2 Stage 0/1 foundation
+Status: COMPLETE / VERIFIED / READY TO MERGE
+
+Stage 0:
+- Scanner V1 baseline frozen at repository SHA a71507d2f02f7219ffa685bb3acbb6722a8a84ff on freeze/scanner-v1-baseline-20261002.
+- Exact V1 limits, success/failure response schema and the Alley Gates / Express Gas / Forum Housing regressions are recorded in docs/SCANNER_V1_BASELINE_20261002.md.
+- ONBOARDING_SCANNER_V2 is explicit opt-in and defaults OFF.
+- The V2 flag is not read by runScan, server routing or the public website at this stage.
+
+Stage 1:
+- Added CrawlState, CrawlUrlDisposition, CrawlPage, CorpusChunk, CrawlManifest and CrawlLease.
+- Added CorpusStore, FrontierStore and CrawlLeaseStore interfaces.
+- Added an isolated in-memory implementation for deterministic tests.
+- Added stable SHA-256 content/chunk identities; chunk identity is crawl-independent.
+- Added manifest accounting that refuses to represent queued or unresolved URLs as COMPLETE.
+- Existing ScanSuccess / ScanFailure and the legacy five-field draft contract remain compatible.
+
+Deterministic verification:
+- GitHub Actions run 37016375572: PASS.
+- Scanner V1 + V2 foundation tests: PASS.
+- Full repository regression: 317/317 PASS.
+- Accessibility: 16/16 PASS.
+- TypeScript: PASS.
+- Production Next.js 16.3.8 build: PASS, 30/30 routes generated.
+- SCANNER_V2_DEFAULT_OFF=PASS.
+- SCANNER_V1_RUNTIME_SOURCE_UNCHANGED=PASS for scan.ts, fetch-safe.ts, extract.ts and the prebuilt DigitalOcean function bundle.
+- GOLDEN_PHONE_LINE_CHANGE_SURFACE=0.
+
+Independent NVIDIA review:
+- Evolution Engine run 37016681515 used existing included/free NVIDIA development capacity.
+- nvidia-gpt-oss: REVIEW PASS, live execution, marginal cost USD 0.
+- nvidia-nemotron: REVIEW PASS, live execution, marginal cost USD 0.
+- SCANNER_V2_NVIDIA_TWO_MODEL_REVIEW=PASS.
+- No raw hosted-model output was retained by the NVIDIA adapter.
+
+Next authorised implementation boundary:
+- Stage 2 only: sitemap + frontier discovery behind the still-default-off Scanner V2 path.
+- V1 remains production/rollback behaviour until later V2 acceptance gates pass.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+
