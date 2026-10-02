@@ -341,3 +341,31 @@ test("grounded synthesis verifier rejects new numbers and unsupported claim word
     false,
   );
 });
+
+test("grounding uses an evidence heading instead of unrelated body text when only the heading answers the query", async () => {
+  const index = new InMemoryBm25CorpusIndex();
+  const chunk: CorpusChunk = {
+    id: "beer-gas-heading",
+    canonicalUrl: "https://example.com/gases",
+    title: "Gas products",
+    headingPath: ["Products", "Beer Gas"],
+    text: "Hobbyweld Logo",
+    ordinal: 0,
+    contentHash: "hash-beer-gas",
+  };
+  await index.index("heading-evidence", [chunk]);
+
+  const answer = await answerGroundedReceptionistQuestion(
+    "Do you supply beer gas?",
+    {
+      crawlId: "heading-evidence",
+      index,
+    },
+  );
+
+  assert.equal(answer.supportStatus, "supported");
+  assert.match(answer.text, /beer gas/i);
+  assert.doesNotMatch(answer.text, /^Hobbyweld Logo$/i);
+  assert.deepEqual(answer.sourceUrls, ["https://example.com/gases"]);
+});
+\n
