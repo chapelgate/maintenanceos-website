@@ -33,25 +33,49 @@ function manifest(
 }
 
 test("status projection renders all six operational states", () => {
-  const cases: Array<[CrawlManifest["state"], string]> = [
-    ["DISCOVERING", "Discovering website"],
-    ["CRAWLING", "Crawling 1/2 pages"],
-    ["INDEXING", "Indexing 1 fetched pages"],
-    ["COMPLETE", "Website knowledge complete"],
-    ["PARTIAL", "Website knowledge partial"],
-    ["FAILED", "Website knowledge failed"],
+  const cases: Array<{
+    state: CrawlManifest["state"];
+    statuses: CrawlManifest["urls"][number]["status"][];
+    label: string;
+  }> = [
+    {
+      state: "DISCOVERING",
+      statuses: ["queued"],
+      label: "Discovering website",
+    },
+    {
+      state: "CRAWLING",
+      statuses: ["fetched", "queued"],
+      label: "Crawling 1/2 pages",
+    },
+    {
+      state: "INDEXING",
+      statuses: ["fetched"],
+      label: "Indexing 1 fetched pages",
+    },
+    {
+      state: "COMPLETE",
+      statuses: ["fetched"],
+      label: "Website knowledge complete",
+    },
+    {
+      state: "PARTIAL",
+      statuses: ["fetched", "unresolved"],
+      label: "Website knowledge partial",
+    },
+    {
+      state: "FAILED",
+      statuses: ["unresolved"],
+      label: "Website knowledge failed",
+    },
   ];
 
-  for (const [state, label] of cases) {
-    const statuses =
-      state === "COMPLETE" ? ["fetched"] as const : ["fetched", "queued"] as const;
+  for (const item of cases) {
     const value = projectScannerV2OperationalStatus({
-      manifest: manifest(state, [...statuses]),
+      manifest: manifest(item.state, item.statuses),
     });
-    assert.equal(value.label, state === "COMPLETE" ? label : value.label);
-    if (state !== "COMPLETE" && state !== "PARTIAL" && state !== "FAILED") {
-      assert.match(value.label, new RegExp(label.split(" ")[0]!, "i"));
-    }
+    assert.equal(value.state, item.state);
+    assert.equal(value.label, item.label);
   }
 });
 
