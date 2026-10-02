@@ -191,6 +191,16 @@ function normalizeDiscoveredUrl(
   return result.ok ? result.url : null;
 }
 
+function displayRejectedUrl(raw: string, origin: URL): string {
+  try {
+    const parsed = new URL(raw, origin);
+    parsed.hash = "";
+    return parsed.toString();
+  } catch {
+    return raw.trim() || "invalid-url";
+  }
+}
+
 export function discoverHtmlLinks(input: {
   html: string;
   pageUrl: string;
