@@ -236,3 +236,15 @@ export type {
   ScannerV2ProcessUrl,
   ScannerV2WorkerBatchResult,
 } from "./scanner-v2-worker.ts";
+
+export {
+  DEFAULT_STAGE12_MAX_BATCHES,
+  DEFAULT_STAGE12_BATCH_SIZE,
+  createScannerV2InitialProcessor,
+  runScannerV2Pipeline,
+} from "./scanner-v2-pipeline.ts";
+export type {
+  ScannerV2InitialProcessorOptions,
+  ScannerV2PipelineOptions,
+  ScannerV2PipelineResult,
+} from "./scanner-v2-pipeline.ts";
