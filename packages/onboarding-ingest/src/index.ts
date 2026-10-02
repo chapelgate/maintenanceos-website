@@ -61,6 +61,16 @@ export type {
   FrontierTrapDecision,
 } from "./scanner-v2-url-policy.ts";
 export {
+  InMemoryBm25CorpusIndex,
+  DEFAULT_SEARCH_LIMIT,
+  MAX_SEARCH_LIMIT,
+} from "./scanner-v2-retrieval.ts";
+export type {
+  CorpusIndex,
+  CorpusSearchHit,
+  CorpusIndexStats,
+} from "./scanner-v2-retrieval.ts";
+export {
   SCANNER_V2_ENV,
   isScannerV2Enabled,
   stableContentHash,
