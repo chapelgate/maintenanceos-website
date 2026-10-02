@@ -386,7 +386,17 @@ test(
     const first = await renderOnce();
     assert.equal(first.ok, true, JSON.stringify(first));
     if (!first.ok) return;
-    assert.match(first.html, /Rendered-only emergency alley gate repair/);
+    assert.match(
+      first.html,
+      /Rendered-only emergency alley gate repair/,
+      JSON.stringify({
+        seen,
+        blockedRequests: first.blockedRequests,
+        warnings: first.warnings,
+        observedRequests: first.observedRequests,
+        totalFetchedBytes: first.totalFetchedBytes,
+      }),
+    );
     assert.match(first.html, /data-cookie-before="no"/);
     assert.ok(
       first.links.some(
