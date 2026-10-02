@@ -184,6 +184,8 @@ export type CrawlUrlDisposition = {
   discoveryReason: CrawlDiscoveryReason;
   discoveredFrom?: string;
   reason?: string;
+  /** Optional sitemap lastmod hint; advisory until a representation is fetched. */
+  sitemapLastModified?: string;
   contentHash?: string;
   fetchedAt?: string;
 };
