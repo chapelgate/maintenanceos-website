@@ -247,3 +247,55 @@ test("Stage 12 pipeline never upgrades incomplete discovery to COMPLETE", async 
   assert.equal(result.discovery.incomplete, true);
   assert.equal(result.manifest.state, "PARTIAL");
 });
+
+test("Stage 12 processor policy-skips linked non-text assets without fetching them", async () => {
+  const origin = "https://assets.example";
+  let imageFetches = 0;
+  const get: HttpGetFn = async (url) => {
+    if (url.pathname === "/robots.txt") {
+      return response(
+        url.toString(),
+        "User-agent: *\\nAllow: /",
+        "text/plain",
+      );
+    }
+    if (url.pathname === "/sitemap.xml") {
+      return response(url.toString(), "missing", "text/plain", 404);
+    }
+    if (url.pathname === "/") {
+      return response(
+        url.toString(),
+        '<html><body><a href="/photo.jpg">Full image</a><p>Public business information.</p></body></html>',
+      );
+    }
+    if (url.pathname === "/photo.jpg") {
+      imageFetches += 1;
+      throw new Error("image must not be fetched as a text page");
+    }
+    return response(url.toString(), "missing", "text/plain", 404);
+  };
+
+  const result = await runScannerV2Pipeline({
+    store: await tempStore(),
+    origin,
+    releaseSha: "stage12-asset-sha",
+    crawlId: "stage12-asset",
+    discovery: {
+      lookup: async () => ["203.0.113.10"],
+      get,
+    },
+    processor: {
+      lookup: async () => ["203.0.113.10"],
+      get,
+      readerFallback: false,
+    },
+  });
+
+  assert.equal(imageFetches, 0);
+  const asset = result.manifest.urls.find(
+    (row) => row.url === "https://assets.example/photo.jpg",
+  );
+  assert.equal(asset?.status, "policy_skipped");
+  assert.equal(asset?.reason, "non_text_asset");
+});
+\n
