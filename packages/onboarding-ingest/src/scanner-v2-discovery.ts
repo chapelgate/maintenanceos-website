@@ -377,6 +377,7 @@ export async function discoverScannerV2Frontier(
         status: "queued",
         discoveryReason: "sitemap",
         discoveredFrom: response.url.toString(),
+        ...(entry.lastmod ? { sitemapLastModified: entry.lastmod } : {}),
       });
       if (added) sitemapUrlsDiscovered += 1;
     }
