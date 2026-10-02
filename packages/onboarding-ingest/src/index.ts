@@ -10,7 +10,11 @@ export {
   extractMicrodata,
   extractTelMailto,
 } from "./extract.ts";
-export { fetchPublicHttps } from "./fetch-safe.ts";
+export {
+  fetchPublicHttps,
+  fetchPublicHttpsBytes,
+  httpsGetBytesToIp,
+} from "./fetch-safe.ts";
 export { isWebIngestEnabled, runScan } from "./scan.ts";
 export {
   extractScannerV2Page,
@@ -76,6 +80,37 @@ export {
   DEFAULT_GROUNDED_RETRIEVAL_LIMIT,
   MAX_GROUNDED_ANSWER_CHARS,
 } from "./scanner-v2-grounding.ts";
+export {
+  ingestScannerV2Document,
+  ingestScannerV2ManifestDocuments,
+  pdfJsScannerV2Parser,
+  isScannerV2SupportedDocumentUrl,
+  isScannerV2UnsupportedTextDocumentUrl,
+  isScannerV2DocumentContentType,
+  isScannerV2UnsupportedDocumentContentType,
+  DEFAULT_DOCUMENT_FETCH_TIMEOUT_MS,
+  MAX_DOCUMENT_FETCH_TIMEOUT_MS,
+  DEFAULT_DOCUMENT_PARSE_TIMEOUT_MS,
+  MAX_DOCUMENT_PARSE_TIMEOUT_MS,
+  DEFAULT_MAX_DOCUMENT_BYTES,
+  MAX_DOCUMENT_BYTES,
+  DEFAULT_MAX_DOCUMENT_TEXT_CHARS,
+  MAX_DOCUMENT_TEXT_CHARS,
+  DEFAULT_MAX_PDF_PAGES,
+  MAX_PDF_PAGES,
+} from "./scanner-v2-documents.ts";
+export type {
+  ScannerV2DocumentKind,
+  ScannerV2PdfPage,
+  ScannerV2PdfParseResult,
+  ScannerV2PdfParser,
+  ScannerV2DocumentSuccess,
+  ScannerV2DocumentFailure,
+  ScannerV2DocumentResult,
+  ScannerV2DocumentOptions,
+  ScannerV2DocumentBatchResult,
+  ScannerV2DocumentBatchOptions,
+} from "./scanner-v2-documents.ts";
 export {
   decideScannerV2RenderEscalation,
   renderScannerV2Page,
@@ -150,6 +185,8 @@ export type {
   ScanResult,
   ScanSuccess,
   ScanFailure,
+  SafeBinaryHttpResponse,
+  BinaryHttpGetFn,
   CrawlState,
   CrawlUrlStatus,
   CrawlDiscoveryReason,
