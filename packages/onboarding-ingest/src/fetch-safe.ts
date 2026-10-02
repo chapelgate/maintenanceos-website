@@ -452,7 +452,11 @@ export async function fetchPublicHttpsBytes(
       );
     }
 
-    if (response.status >= 300 && response.status < 400) {
+    if (
+      response.status >= 300 &&
+      response.status < 400 &&
+      response.status !== 304
+    ) {
       const location = header(response.headers, "location");
       if (!location) {
         throw new ScanError(
@@ -592,7 +596,11 @@ export async function fetchPublicHttps(
       );
     }
 
-    if (response.status >= 300 && response.status < 400) {
+    if (
+      response.status >= 300 &&
+      response.status < 400 &&
+      response.status !== 304
+    ) {
       const location = header(response.headers, "location");
       if (!location) {
         throw new ScanError(
