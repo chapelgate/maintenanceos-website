@@ -1,6 +1,6 @@
 # Scanner V2 Stage 9 — Resumable Worker Execution Evidence
 
-Status: DETERMINISTIC GATE PASS / NVIDIA REVIEW PENDING
+Status: COMPLETE / VERIFIED / READY TO FREEZE
 Date: 2026-10-02
 Tested source SHA: `41b5928559b5180512c6250c5d7a10b5a49110b4`
 Baseline: Scanner V2 Stage 8 merge `84b8a622ffa7cce60487c56dd3de3ef1c5c6efae`
@@ -87,14 +87,18 @@ Explicit evidence:
 
 ## Independent NVIDIA review
 
-Pending exact hardened-candidate review on included/free development capacity.
-
-Required before merge/freeze:
-- openai/gpt-oss-20b live review PASS;
-- nvidia/nemotron-3.5-lightning-30b-a3b live review PASS;
-- marginal cost USD 0;
+Exact hardened-candidate review:
+- Evolution Engine run: `37058625581`;
+- job: `111009408595`;
+- conclusion: PASS;
+- `openai/gpt-oss-20b`: live review PASS;
+- `nvidia/nemotron-3.5-lightning-30b-a3b`: live review PASS;
+- both model calls reported marginal cost USD 0;
+- `NVIDIA_STAGE9_TWO_MODEL_REVIEW=PASS`;
 - raw hosted-model output retained: 0;
 - production NVIDIA scope enabled: 0.
+
+The first review attempt on the self-hosted critical runner never reached either model because `npm ci` was OOM-killed with exit 137. No Scanner V2/model verdict was taken from that infrastructure failure. The exact same included/free review was rerun on a clean GitHub-hosted CI runner and passed without changing the NVIDIA model adapters, development scope or cost controls.
 
 ## Release boundary
 
