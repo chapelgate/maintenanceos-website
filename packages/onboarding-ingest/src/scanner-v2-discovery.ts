@@ -19,6 +19,10 @@ import {
 } from "./scanner-v2-url-policy.ts";
 import { isPathAllowed, parseRobotsTxt, type RobotsRules } from "./scan.ts";
 import {
+  decideScannerV2RenderEscalation,
+  type ScannerV2RenderResult,
+} from "./scanner-v2-renderer.ts";
+import {
   ScanError,
   type CrawlManifest,
   type CrawlUrlDisposition,
@@ -60,6 +64,10 @@ export type ScannerV2DiscoveryResult = {
   warnings: string[];
   limitReached: boolean;
   incomplete: boolean;
+  renderAttempts: number;
+  renderedPages: number;
+  renderedLinksDiscovered: number;
+  renderFailures: number;
 };
 
 export type ScannerV2DiscoveryOptions = {
@@ -74,6 +82,12 @@ export type ScannerV2DiscoveryOptions = {
   maxHtmlBytes?: number;
   sitemapTimeoutMs?: number;
   htmlTimeoutMs?: number;
+  /**
+   * Optional Stage 7 renderer. Dependency injection keeps the discovery engine
+   * usable in runtimes without a browser while the V2 worker supplies the
+   * reviewed Playwright implementation.
+   */
+  renderPage?: (url: string, rawHtml: string) => Promise<ScannerV2RenderResult>;
   maxPathDepth?: number;
   maxQueryVariantsPerSignature?: number;
   maxCalendarVariantsPerFamily?: number;
@@ -195,6 +209,7 @@ export function discoverHtmlLinks(input: {
   pageUrl: string;
   origin: string;
   maxPathDepth?: number;
+  discoveryReason?: "html_link" | "rendered_link";
 }): CrawlUrlDisposition[] {
   let page: URL;
   let origin: URL;
@@ -218,7 +233,7 @@ export function discoverHtmlLinks(input: {
     out.push({
       url: normalized,
       status: "queued",
-      discoveryReason: "html_link",
+      discoveryReason: input.discoveryReason ?? "html_link",
       discoveredFrom: page.toString(),
     });
   }
@@ -716,6 +731,10 @@ export async function discoverScannerV2Frontier(
   let htmlFetchAttempts = 0;
   let htmlPagesFetched = 0;
   let htmlLinksDiscovered = 0;
+  let renderAttempts = 0;
+  let renderedPages = 0;
+  let renderedLinksDiscovered = 0;
+  let renderFailures = 0;
 
   while (pageQueue.length > 0) {
     const pageUrl = pageQueue.shift();
@@ -825,9 +844,59 @@ export async function discoverScannerV2Frontier(
       continue;
     }
 
-    const effectiveUrl = finalUrlPolicy.url;
+    let effectiveUrl = finalUrlPolicy.url;
     const fetchedAt = new Date().toISOString();
-    const contentHash = stableContentHash(response.body);
+    let workingHtml = response.body;
+    let workingPageUrl = response.url.toString();
+    let linkDiscoveryReason: "html_link" | "rendered_link" = "html_link";
+
+    if (
+      isHtmlType(contentType) &&
+      options.renderPage &&
+      decideScannerV2RenderEscalation({ rawHtml: response.body }).render
+    ) {
+      renderAttempts += 1;
+      const rendered = await options.renderPage(
+        response.url.toString(),
+        response.body,
+      );
+      if (!rendered.ok) {
+        renderFailures += 1;
+        discoveryIncomplete = true;
+        warnings.push(`render_${rendered.reason}`);
+        urls.update(pageUrl, {
+          status: "unresolved",
+          reason: `render_${rendered.reason}`,
+          fetchedAt,
+        });
+        continue;
+      }
+
+      const renderedPolicy = normalizeScannerV2Url(rendered.finalUrl, origin, {
+        maxPathDepth,
+        applyContentPolicy: true,
+      });
+      if (!renderedPolicy.ok) {
+        renderFailures += 1;
+        discoveryIncomplete = true;
+        warnings.push("render_final_url_rejected");
+        urls.update(pageUrl, {
+          status: "unresolved",
+          reason: "render_final_url_rejected",
+          fetchedAt,
+        });
+        continue;
+      }
+
+      renderedPages += 1;
+      effectiveUrl = renderedPolicy.url;
+      workingHtml = rendered.html;
+      workingPageUrl = rendered.finalUrl;
+      linkDiscoveryReason = "rendered_link";
+      for (const warning of rendered.warnings) warnings.push(warning);
+    }
+
+    const contentHash = stableContentHash(workingHtml);
 
     if (effectiveUrl !== pageUrl) {
       const existingFinal = urls.get(effectiveUrl);
@@ -864,8 +933,8 @@ export async function discoverScannerV2Frontier(
 
     if (isHtmlType(contentType)) {
       const canonical = extractScannerV2CanonicalLink({
-        html: response.body,
-        pageUrl: response.url.toString(),
+        html: workingHtml,
+        pageUrl: workingPageUrl,
         origin: origin.origin,
         maxPathDepth,
       });
@@ -959,14 +1028,21 @@ export async function discoverScannerV2Frontier(
     if (!isHtmlType(contentType)) continue;
 
     htmlPagesFetched += 1;
-    const hrefs = extractSameOriginHrefs(response.body, response.url);
+    const hrefs = extractSameOriginHrefs(
+      workingHtml,
+      new URL(workingPageUrl),
+    );
     for (const href of hrefs) {
       const admitted = admitPageCandidate(href, {
-        discoveryReason: "html_link",
+        discoveryReason: linkDiscoveryReason,
         discoveredFrom: effectiveUrl,
       });
       if (!admitted?.added) continue;
-      htmlLinksDiscovered += 1;
+      if (linkDiscoveryReason === "rendered_link") {
+        renderedLinksDiscovered += 1;
+      } else {
+        htmlLinksDiscovered += 1;
+      }
       if (!pageQueued.has(admitted.url)) {
         pageQueued.add(admitted.url);
         pageQueue.push(admitted.url);
@@ -1005,5 +1081,9 @@ export async function discoverScannerV2Frontier(
     warnings: [...new Set(warnings)],
     limitReached: urls.limitReached,
     incomplete: discoveryIncomplete,
+    renderAttempts,
+    renderedPages,
+    renderedLinksDiscovered,
+    renderFailures,
   };
 }
