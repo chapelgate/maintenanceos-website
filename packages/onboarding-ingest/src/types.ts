@@ -116,6 +116,10 @@ export type HttpGetFn = (
     timeoutMs: number;
     maxBytes: number;
     headers?: Record<string, string>;
+    /** Opt-in response gzip decoding. Default false preserves Scanner V1. */
+    acceptCompressed?: boolean;
+    /** Hard ceiling after decompression when acceptCompressed is true. */
+    maxDecompressedBytes?: number;
   },
 ) => Promise<SafeHttpResponse>;
 
@@ -184,6 +188,8 @@ export type CrawlUrlDisposition = {
   discoveryReason: CrawlDiscoveryReason;
   discoveredFrom?: string;
   reason?: string;
+  /** Optional sitemap lastmod hint; advisory until a representation is fetched. */
+  sitemapLastModified?: string;
   contentHash?: string;
   fetchedAt?: string;
 };

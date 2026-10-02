@@ -940,3 +940,50 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+### 2026-10-02 Scanner V2 Stage 2 discovery
+Status: COMPLETE / VERIFIED / READY TO MERGE
+
+Implemented:
+- robots Sitemap directives parsed independently from robots user-agent groups;
+- same-origin sitemap and recursive sitemap-index discovery;
+- full same-origin HTML-link frontier walk from every accepted page;
+- explicit per-URL accounting for fetched, policy-skipped, robots-skipped and unresolved work;
+- hard sitemap-document, sitemap-depth, URL-count, HTML-page, byte and timeout ceilings;
+- duplicate sitemap refs deduped before budget accounting;
+- sitemap lastmod provenance retained;
+- bounded gzip sitemap support with post-decompression ceiling and typed decode failures;
+- all sitemap/page requests remain on the existing public-HTTPS DNS/SSRF/redirect-pinned fetch path.
+
+Verification:
+- Exact verified source SHA: 9374e43df33a5f7bbb5a819e0e3b92c238f95f0b.
+- GitHub Actions run 37021989111 / job 110887488035: PASS.
+- Scanner package tests: 86/86 PASS.
+- Full repository regression: 336/336 PASS.
+- Accessibility: 16/16 PASS.
+- TypeScript: PASS.
+- Production Next.js build: PASS; 30/30 routes.
+- SCANNER_V2_DEFAULT_OFF=PASS.
+- SCANNER_V1_SCAN_EXTRACT_BUNDLE_UNCHANGED=PASS.
+- SCANNER_V1_FETCH_COMPRESSION_DEFAULT_OFF=PASS.
+- GOLDEN_PHONE_LINE_CHANGE_SURFACE=0.
+
+Independent NVIDIA review:
+- Evolution Engine run 37022470896 / job 110888706873: PASS.
+- openai/gpt-oss-20b: PASS.
+- nvidia/nemotron-3.5-lightning-30b-a3b: PASS.
+- included/free development capacity only;
+- raw model output retained: 0;
+- production scope enabled: 0.
+
+Evidence:
+- docs/SCANNER_V2_STAGE2_EVIDENCE_20261002.md
+
+Release boundary:
+Stage 2 is additive and Scanner V2 remains default-off. The live /create path still uses Scanner V1. Stage 3 canonicalization/crawl-trap control is the next authorised boundary.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+

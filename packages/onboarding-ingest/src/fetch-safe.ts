@@ -10,6 +10,7 @@
 import dns from "node:dns/promises";
 import https from "node:https";
 import { isIP } from "node:net";
+import { gunzipSync } from "node:zlib";
 import {
   allowPublicHttpsUrl,
   assertResolvedAddressesPublic,
@@ -35,6 +36,10 @@ export type FetchSafeOptions = {
   maxRedirects?: number;
   remainingMs?: number;
   headers?: Record<string, string>;
+  /** Opt-in gzip response support. Default false preserves Scanner V1. */
+  acceptCompressed?: boolean;
+  /** Hard ceiling after decompression when acceptCompressed is true. */
+  maxDecompressedBytes?: number;
 };
 
 function header(headers: Record<string, string>, name: string): string {
@@ -43,6 +48,68 @@ function header(headers: Record<string, string>, name: string): string {
     if (key.toLowerCase() === want) return value;
   }
   return "";
+}
+
+export function decodeResponseBodyForText(input: {
+  body: Buffer;
+  url: URL;
+  headers: Record<string, string>;
+  acceptCompressed?: boolean;
+  maxDecompressedBytes: number;
+}): Buffer {
+  if (!input.acceptCompressed) return input.body;
+
+  const encoding = header(input.headers, "content-encoding").toLowerCase();
+  const contentType = header(input.headers, "content-type").toLowerCase();
+  const gzipFile =
+    /(?:application\/gzip|application\/x-gzip)/i.test(contentType) ||
+    /\.gz$/i.test(input.url.pathname);
+
+  if (encoding && encoding !== "identity" && encoding !== "gzip") {
+    throw new ScanError(
+      "unsupported_content_encoding",
+      "The response used an unsupported content encoding.",
+      422,
+    );
+  }
+
+  let payload = input.body;
+  if (encoding === "gzip" || gzipFile) {
+    try {
+      payload = gunzipSync(payload, {
+        maxOutputLength: input.maxDecompressedBytes,
+      });
+    } catch (error) {
+      const code =
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error
+          ? String((error as { code?: unknown }).code ?? "")
+          : "";
+      const message =
+        error instanceof Error ? error.message : String(error);
+      const tooLarge =
+        code === "ERR_BUFFER_TOO_LARGE" ||
+        /max(?:imum)? output|larger than|too large/i.test(message);
+      throw new ScanError(
+        tooLarge ? "response_too_large" : "content_decode_failed",
+        tooLarge
+          ? "The decompressed response exceeded the allowed size."
+          : "The compressed response could not be decoded as gzip.",
+        422,
+      );
+    }
+  }
+
+  if (payload.length > input.maxDecompressedBytes) {
+    throw new ScanError(
+      "response_too_large",
+      "The decompressed response exceeded the allowed size.",
+      422,
+    );
+  }
+
+  return payload;
 }
 
 export async function defaultLookup(hostname: string): Promise<string[]> {
@@ -61,6 +128,8 @@ export function httpsGetToIp(
     timeoutMs: number;
     maxBytes: number;
     headers?: Record<string, string>;
+    acceptCompressed?: boolean;
+    maxDecompressedBytes?: number;
   },
 ): Promise<SafeHttpResponse> {
   return new Promise((resolve, reject) => {
@@ -69,7 +138,7 @@ export function httpsGetToIp(
       "User-Agent": USER_AGENT,
       Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1",
       "Accept-Language": "en-GB,en;q=0.8",
-      "Accept-Encoding": "identity",
+      "Accept-Encoding": opts.acceptCompressed ? "gzip, identity" : "identity",
       ...(opts.headers ?? {}),
       Host: url.host,
       Connection: "close",
@@ -129,10 +198,25 @@ export function httpsGetToIp(
             if (typeof value === "string") rawHeaders[key] = value;
             else if (Array.isArray(value)) rawHeaders[key] = value.join(", ");
           }
+          let payload: Buffer;
+          try {
+            payload = decodeResponseBodyForText({
+              body: Buffer.concat(chunks),
+              url,
+              headers: rawHeaders,
+              acceptCompressed: opts.acceptCompressed,
+              maxDecompressedBytes:
+                opts.maxDecompressedBytes ?? opts.maxBytes,
+            });
+          } catch (error) {
+            reject(error);
+            return;
+          }
+
           resolve({
             status: res.statusCode ?? 0,
             headers: rawHeaders,
-            body: Buffer.concat(chunks).toString("utf8"),
+            body: payload.toString("utf8"),
             url,
           });
         });
@@ -232,6 +316,8 @@ export async function fetchPublicHttps(
           timeoutMs: attemptTimeoutMs,
           maxBytes,
           headers: options.headers,
+          acceptCompressed: options.acceptCompressed,
+          maxDecompressedBytes: options.maxDecompressedBytes,
         });
         response = candidate;
         if (candidate.status !== 401 && candidate.status !== 403) break;
