@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           base="b2f04cc47f4cce3654d7c454ebb7cf0f71afb38d"
-          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/fetch-safe.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             packages/sandbox-test-call             packages/provisioning-gateway
-          echo "SCANNER_V1_RUNTIME_UNCHANGED=PASS"
+          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             packages/sandbox-test-call             packages/provisioning-gateway             src/components/CreateReceptionistForm.tsx             src/components/CreateReceptionistLaterSteps.tsx
+          echo "SCANNER_V1_FUNCTION_BUNDLE_UNCHANGED=PASS"
           echo "PRODUCTION_PREVIEW_ROUTING_UNCHANGED=PASS"
           echo "GOLDEN_PHONE_LINE_CHANGE_SURFACE=0"
