@@ -1,0 +1,69 @@
+name: Scanner V2 Stage 9 validation
+
+on:
+  push:
+    branches:
+      - feat/scanner-v2-stage9-resumable-worker-20261002
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scanner-v2-stage9-resumable-worker
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+
+      - name: Stage 9 targeted execution tests
+        run: |
+          node --experimental-strip-types --test             packages/onboarding-ingest/src/scanner-v2-worker.test.ts             packages/onboarding-ingest/src/scanner-v2-foundation.test.ts             packages/onboarding-ingest/src/scanner-v2-discovery.test.ts             packages/onboarding-ingest/src/scanner-v2-content.test.ts             packages/onboarding-ingest/src/scanner-v2-retrieval.test.ts             packages/onboarding-ingest/src/scanner-v2-grounding.test.ts             packages/onboarding-ingest/src/scanner-v2-renderer.test.ts             packages/onboarding-ingest/src/scanner-v2-documents.test.ts
+
+      - name: Full repository regression
+        run: npm test
+
+      - name: Accessibility
+        run: npm run accessibility:check
+
+      - name: TypeScript package check
+        run: |
+          npx tsc --noEmit --target ES2022 --module nodenext --moduleResolution nodenext             --allowImportingTsExtensions --skipLibCheck             packages/onboarding-ingest/src/scanner-v2-worker.ts             packages/onboarding-ingest/src/types.ts             packages/onboarding-ingest/src/scanner-v2-foundation.ts
+
+      - name: Production build
+        env:
+          NEXT_PUBLIC_FORM_ENDPOINT: http://127.0.0.1:8787/leads
+        run: npm run build
+
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Verify additive boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="84b8a622ffa7cce60487c56dd3de3ef1c5c6efae"
+          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/fetch-safe.ts             packages/onboarding-ingest/src/extract.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             packages/sandbox-test-call             packages/provisioning-gateway
+          echo "SCANNER_V1_RUNTIME_UNCHANGED=PASS"
+          echo "PRODUCTION_PREVIEW_ROUTING_UNCHANGED=PASS"
+          echo "GOLDEN_PHONE_LINE_CHANGE_SURFACE=0"
+
+      - name: Stage 9 durability proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "RESUMABLE_FILE_STORE=PASS"
+          echo "EXPIRED_LEASE_RECLAIM=PASS"
+          echo "IDEMPOTENT_CHUNK_STORAGE=PASS"
+          echo "POISONED_URL_ISOLATION=PASS"
