@@ -19,8 +19,10 @@ import {
 import { USER_AGENT } from "./extract.ts";
 import {
   ScanError,
+  type BinaryHttpGetFn,
   type HttpGetFn,
   type LookupFn,
+  type SafeBinaryHttpResponse,
   type SafeHttpResponse,
 } from "./types.ts";
 
@@ -240,6 +242,252 @@ export function httpsGetToIp(
     });
     req.end();
   });
+}
+
+export function httpsGetBytesToIp(
+  url: URL,
+  ip: string,
+  opts: {
+    timeoutMs: number;
+    maxBytes: number;
+    headers?: Record<string, string>;
+  },
+): Promise<SafeBinaryHttpResponse> {
+  return new Promise((resolve, reject) => {
+    const port = url.port ? Number(url.port) : 443;
+    const headers: Record<string, string | number> = {
+      "User-Agent": USER_AGENT,
+      Accept:
+        "application/pdf,text/plain,text/csv,application/csv;q=0.9,*/*;q=0.1",
+      "Accept-Language": "en-GB,en;q=0.8",
+      "Accept-Encoding": "identity",
+      ...(opts.headers ?? {}),
+      Host: url.host,
+      Connection: "close",
+    };
+
+    const hostname = url.hostname.replace(/^\[|\]$/g, "");
+    const family = isIP(ip);
+    if (family !== 4 && family !== 6) {
+      reject(
+        new ScanError(
+          "fetch_failed",
+          "Resolved target was not an IP address.",
+          422,
+        ),
+      );
+      return;
+    }
+
+    const req = https.request(
+      {
+        hostname,
+        port,
+        family,
+        autoSelectFamily: false,
+        path: `${url.pathname}${url.search}`,
+        method: "GET",
+        servername: hostname,
+        headers,
+        lookup: (_hostname, options, callback) => {
+          if (typeof options === "object" && options !== null && options.all) {
+            callback(null, [{ address: ip, family }]);
+            return;
+          }
+          callback(null, ip, family);
+        },
+        timeout: opts.timeoutMs,
+      },
+      (res) => {
+        const chunks: Buffer[] = [];
+        let size = 0;
+        let settled = false;
+        res.on("data", (chunk: Buffer) => {
+          if (settled) return;
+          size += chunk.length;
+          if (size > opts.maxBytes) {
+            settled = true;
+            req.destroy();
+            reject(
+              new ScanError(
+                "response_too_large",
+                "The document exceeded the fetch size cap.",
+                422,
+              ),
+            );
+            return;
+          }
+          chunks.push(chunk);
+        });
+        res.on("end", () => {
+          if (settled) return;
+          settled = true;
+          const rawHeaders: Record<string, string> = {};
+          for (const [key, value] of Object.entries(res.headers)) {
+            if (typeof value === "string") rawHeaders[key] = value;
+            else if (Array.isArray(value)) rawHeaders[key] = value.join(", ");
+          }
+          const payload = Buffer.concat(chunks);
+          resolve({
+            status: res.statusCode ?? 0,
+            headers: rawHeaders,
+            body: new Uint8Array(
+              payload.buffer,
+              payload.byteOffset,
+              payload.byteLength,
+            ),
+            url,
+          });
+        });
+      },
+    );
+
+    req.on("timeout", () => {
+      req.destroy();
+      reject(new ScanError("timeout", "The document fetch timed out.", 504));
+    });
+    req.on("error", (err) => {
+      reject(
+        new ScanError(
+          "fetch_failed",
+          err instanceof Error ? err.message : "Document fetch failed.",
+          422,
+        ),
+      );
+    });
+    req.end();
+  });
+}
+
+export type FetchSafeBytesOptions = {
+  lookup?: LookupFn;
+  get?: BinaryHttpGetFn;
+  timeoutMs?: number;
+  maxBytes?: number;
+  maxRedirects?: number;
+  remainingMs?: number;
+  headers?: Record<string, string>;
+};
+
+export async function fetchPublicHttpsBytes(
+  raw: string,
+  options: FetchSafeBytesOptions = {},
+): Promise<SafeBinaryHttpResponse> {
+  const lookup = options.lookup ?? defaultLookup;
+  const get = options.get ?? httpsGetBytesToIp;
+  const timeoutMs = Math.max(
+    250,
+    Math.min(
+      options.timeoutMs ?? DEFAULT_PAGE_TIMEOUT_MS,
+      options.remainingMs ?? DEFAULT_PAGE_TIMEOUT_MS,
+    ),
+  );
+  const maxBytes = options.maxBytes ?? DEFAULT_MAX_BYTES_PER_PAGE;
+  const maxRedirects = options.maxRedirects ?? DEFAULT_MAX_REDIRECTS;
+
+  let current = raw;
+  for (let hop = 0; hop <= maxRedirects; hop += 1) {
+    const allow = allowPublicHttpsUrl(current);
+    if (!allow.ok) {
+      throw new ScanError(allow.reason, ssrfMessage(allow.reason), 400);
+    }
+
+    let addresses: string[];
+    try {
+      addresses = await lookup(allow.url.hostname);
+    } catch (err) {
+      if (err instanceof ScanError) throw err;
+      throw new ScanError(
+        "dns_failed",
+        "Could not resolve this hostname.",
+        422,
+      );
+    }
+
+    const ipCheck = assertResolvedAddressesPublic(addresses);
+    if (!ipCheck.ok) {
+      throw new ScanError(ipCheck.reason, ssrfMessage(ipCheck.reason), 400);
+    }
+
+    const ipv4Addresses = addresses.filter((address) =>
+      Boolean(parseIPv4Literal(address)),
+    );
+    const ipv6Addresses = addresses.filter(
+      (address) => !parseIPv4Literal(address),
+    );
+    const orderedAddresses = ipv4Addresses.length
+      ? ipv4Addresses
+      : ipv6Addresses;
+
+    let response: SafeBinaryHttpResponse | null = null;
+    let lastError: unknown = null;
+    const addressAttemptsStarted = Date.now();
+
+    for (const address of orderedAddresses) {
+      const elapsed = Date.now() - addressAttemptsStarted;
+      if (elapsed >= timeoutMs) break;
+      const attemptTimeoutMs = Math.max(250, timeoutMs - elapsed);
+
+      try {
+        const candidate = await get(allow.url, address, {
+          timeoutMs: attemptTimeoutMs,
+          maxBytes,
+          headers: options.headers,
+        });
+        response = candidate;
+        if (candidate.status !== 401 && candidate.status !== 403) break;
+      } catch (err) {
+        lastError = err;
+      }
+    }
+
+    if (!response) {
+      if (lastError instanceof ScanError) throw lastError;
+      throw new ScanError(
+        "fetch_failed",
+        lastError instanceof Error ? lastError.message : "Fetch failed.",
+        422,
+      );
+    }
+
+    if (response.status >= 300 && response.status < 400) {
+      const location = header(response.headers, "location");
+      if (!location) {
+        throw new ScanError(
+          "redirect_missing_location",
+          "The site returned a redirect without a Location header.",
+          422,
+        );
+      }
+      if (hop === maxRedirects) {
+        throw new ScanError(
+          "too_many_redirects",
+          "The site redirected too many times.",
+          422,
+        );
+      }
+      let next: URL;
+      try {
+        next = new URL(location, allow.url);
+      } catch {
+        throw new ScanError(
+          "invalid_url",
+          "Redirect Location was not a valid URL.",
+          400,
+        );
+      }
+      current = next.toString();
+      continue;
+    }
+
+    return response;
+  }
+
+  throw new ScanError(
+    "too_many_redirects",
+    "The site redirected too many times.",
+    422,
+  );
 }
 
 export async function fetchPublicHttps(
