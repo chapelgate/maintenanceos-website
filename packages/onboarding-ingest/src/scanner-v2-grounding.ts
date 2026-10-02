@@ -75,10 +75,32 @@ function normalize(value: string): string {
   return value.normalize("NFKC").toLowerCase().replace(/\s+/g, " ").trim();
 }
 
+function matchStem(token: string): string {
+  if (token.length <= 4) return token;
+  if (token.endsWith("ies") && token.length > 5) {
+    return token.slice(0, -3) + "y";
+  }
+  if (token.endsWith("ing") && token.length > 6) {
+    let base = token.slice(0, -3);
+    if (base.length > 3 && base.at(-1) === base.at(-2)) base = base.slice(0, -1);
+    return base;
+  }
+  if (token.endsWith("ed") && token.length > 5) {
+    let base = token.slice(0, -2);
+    if (base.length > 3 && base.at(-1) === base.at(-2)) base = base.slice(0, -1);
+    return base;
+  }
+  if (token.endsWith("es") && token.length > 5) return token.slice(0, -2);
+  if (token.endsWith("s") && token.length > 4) return token.slice(0, -1);
+  return token;
+}
+
 function tokens(value: string): string[] {
   return (
     normalize(value).match(/[\p{L}\p{N}]+(?:[-'][\p{L}\p{N}]+)*/gu) ?? []
-  ).filter((token) => token.length >= 2 && !STOP.has(token));
+  )
+    .map(matchStem)
+    .filter((token) => token.length >= 2 && !STOP.has(token));
 }
 
 function uniqueUrls(values: readonly string[]): string[] {
@@ -115,14 +137,14 @@ function exactIntent(question: string):
     /\b(services?|what do you do|what does .* do|what do you offer|what work do you do)\b/.test(q)
   ) return "services";
   if (
-    /\b(address|addresses|location|locations|where are you|where is .* based)\b/.test(q)
-  ) return "locations";
+    /\b(email|e-mail|email address|contact email)\b/.test(q)
+  ) return "emails";
   if (
     /\b(phone|telephone|number|call you|contact number)\b/.test(q)
   ) return "phones";
   if (
-    /\b(email|e-mail|email address|contact email)\b/.test(q)
-  ) return "emails";
+    /\b(address|addresses|location|locations|where are you|where is .* based)\b/.test(q)
+  ) return "locations";
   return null;
 }
 
@@ -338,8 +360,17 @@ export async function answerGroundedReceptionistQuestion(
   const hits = await options.index.search(options.crawlId, question, limit);
   if (!hits.length) return notFound();
 
-  const evidence = evidenceFromHits(hits);
-  const extractive = chooseExtractiveSpan(question, hits);
+  const meaningfulQueryTerms = new Set(tokens(question)).size;
+  const requiredTermMatches = meaningfulQueryTerms >= 3 ? 2 : 1;
+  const supportedHits = hits.filter(
+    (hit) =>
+      hit.matchedIdentifiers.length > 0 ||
+      hit.matchedTerms.length >= requiredTermMatches,
+  );
+  if (!supportedHits.length) return notFound();
+
+  const evidence = evidenceFromHits(supportedHits);
+  const extractive = chooseExtractiveSpan(question, supportedHits);
   if (!extractive) return notFound();
 
   if (options.synthesizer) {
@@ -355,8 +386,8 @@ export async function answerGroundedReceptionistQuestion(
         text: synthesized.trim().slice(0, MAX_GROUNDED_ANSWER_CHARS),
         supportStatus: "supported",
         source: "corpus.synthesized",
-        sourceUrls: uniqueUrls(hits.map((hit) => hit.canonicalUrl)),
-        retrievedChunkIds: hits.map((hit) => hit.chunkId),
+        sourceUrls: uniqueUrls(supportedHits.map((hit) => hit.canonicalUrl)),
+        retrievedChunkIds: supportedHits.map((hit) => hit.chunkId),
         evidence,
       };
     }
