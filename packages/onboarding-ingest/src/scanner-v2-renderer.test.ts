@@ -115,7 +115,7 @@ test("secure renderer proxy blocks mutation/private/media/analytics requests whi
     });
     assert.deepEqual(privateRequest, {
       action: "abort",
-      reason: "fetch_failed",
+      reason: "network_policy_denied",
       incomplete: true,
     });
 
@@ -186,7 +186,7 @@ test("secure renderer proxy blocks mutation/private/media/analytics requests whi
     result.blockedRequests.some(
       (item) =>
         item.url === "https://127.0.0.1/private" &&
-        item.reason === "fetch_failed",
+        item.reason === "network_policy_denied",
     ),
     true,
   );
