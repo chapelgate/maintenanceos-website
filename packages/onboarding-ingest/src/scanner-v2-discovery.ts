@@ -54,6 +54,7 @@ export type ScannerV2DiscoveryResult = {
 export type ScannerV2DiscoveryOptions = {
   lookup?: LookupFn;
   get?: HttpGetFn;
+  /** Test callers may lower ceilings; values are clamped to hard maxima. */
   maxSitemapDocuments?: number;
   maxSitemapDepth?: number;
   maxDiscoveredUrls?: number;
@@ -63,6 +64,19 @@ export type ScannerV2DiscoveryOptions = {
   sitemapTimeoutMs?: number;
   htmlTimeoutMs?: number;
 };
+
+function boundedInt(
+  value: number | undefined,
+  fallback: number,
+  minimum: number,
+  maximum: number,
+): number {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(
+    maximum,
+    Math.max(minimum, Math.trunc(value as number)),
+  );
+}
 
 function decodeXml(value: string): string {
   return value
@@ -345,22 +359,54 @@ export async function discoverScannerV2Frontier(
   }
 
   const origin = new URL(initial.url.origin);
-  const maxSitemapDocuments =
-    options.maxSitemapDocuments ?? DEFAULT_MAX_SITEMAP_DOCUMENTS;
-  const maxSitemapDepth =
-    options.maxSitemapDepth ?? DEFAULT_MAX_SITEMAP_DEPTH;
-  const maxDiscoveredUrls =
-    options.maxDiscoveredUrls ?? DEFAULT_MAX_DISCOVERED_URLS;
-  const maxHtmlPages =
-    options.maxHtmlPages ?? DEFAULT_MAX_HTML_PAGES;
-  const maxSitemapBytes =
-    options.maxSitemapBytes ?? DEFAULT_MAX_SITEMAP_BYTES;
-  const maxHtmlBytes =
-    options.maxHtmlBytes ?? DEFAULT_MAX_HTML_BYTES;
-  const sitemapTimeoutMs =
-    options.sitemapTimeoutMs ?? DEFAULT_SITEMAP_TIMEOUT_MS;
-  const htmlTimeoutMs =
-    options.htmlTimeoutMs ?? DEFAULT_HTML_TIMEOUT_MS;
+  const maxSitemapDocuments = boundedInt(
+    options.maxSitemapDocuments,
+    DEFAULT_MAX_SITEMAP_DOCUMENTS,
+    1,
+    DEFAULT_MAX_SITEMAP_DOCUMENTS,
+  );
+  const maxSitemapDepth = boundedInt(
+    options.maxSitemapDepth,
+    DEFAULT_MAX_SITEMAP_DEPTH,
+    0,
+    DEFAULT_MAX_SITEMAP_DEPTH,
+  );
+  const maxDiscoveredUrls = boundedInt(
+    options.maxDiscoveredUrls,
+    DEFAULT_MAX_DISCOVERED_URLS,
+    1,
+    DEFAULT_MAX_DISCOVERED_URLS,
+  );
+  const maxHtmlPages = boundedInt(
+    options.maxHtmlPages,
+    DEFAULT_MAX_HTML_PAGES,
+    1,
+    DEFAULT_MAX_HTML_PAGES,
+  );
+  const maxSitemapBytes = boundedInt(
+    options.maxSitemapBytes,
+    DEFAULT_MAX_SITEMAP_BYTES,
+    1024,
+    DEFAULT_MAX_SITEMAP_BYTES,
+  );
+  const maxHtmlBytes = boundedInt(
+    options.maxHtmlBytes,
+    DEFAULT_MAX_HTML_BYTES,
+    1024,
+    DEFAULT_MAX_HTML_BYTES,
+  );
+  const sitemapTimeoutMs = boundedInt(
+    options.sitemapTimeoutMs,
+    DEFAULT_SITEMAP_TIMEOUT_MS,
+    250,
+    DEFAULT_SITEMAP_TIMEOUT_MS,
+  );
+  const htmlTimeoutMs = boundedInt(
+    options.htmlTimeoutMs,
+    DEFAULT_HTML_TIMEOUT_MS,
+    250,
+    DEFAULT_HTML_TIMEOUT_MS,
+  );
 
   const warnings: string[] = [];
   const sitemapSources: ScanPageSource[] = [];
