@@ -298,4 +298,4 @@ test("Stage 12 processor policy-skips linked non-text assets without fetching th
   assert.equal(asset?.status, "policy_skipped");
   assert.equal(asset?.reason, "non_text_asset");
 });
-\n
+
