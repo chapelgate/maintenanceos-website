@@ -18,6 +18,7 @@ import {
 } from "./scanner-v2-content.ts";
 import {
   extractScannerV2CanonicalLink,
+  isScannerV2NonTextAssetUrl,
 } from "./scanner-v2-url-policy.ts";
 import {
   decideScannerV2RenderEscalation,
