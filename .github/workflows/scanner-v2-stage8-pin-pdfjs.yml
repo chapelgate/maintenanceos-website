@@ -1,0 +1,40 @@
+name: Stage 8 dependency pin
+
+on:
+  push:
+    branches:
+      - feat/scanner-v2-stage8-documents-20261002
+
+permissions:
+  contents: write
+
+jobs:
+  pin:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: feat/scanner-v2-stage8-documents-20261002
+          persist-credentials: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - name: Pin official PDF.js distribution
+        run: npm install --save-exact pdfjs-dist@6.3.289
+      - name: Commit dependency manifests only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff -- package.json package-lock.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "DEPENDENCY_ALREADY_PINNED=PASS"
+            exit 0
+          fi
+          git commit -m "chore: pin pdfjs-dist 6.3.289 for Scanner V2 documents"
+          git push origin HEAD:feat/scanner-v2-stage8-documents-20261002
