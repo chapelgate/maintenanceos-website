@@ -538,16 +538,11 @@ export async function discoverScannerV2Frontier(
     .map((row) => row.url);
   const pageQueued = new Set(pageQueue);
   const pageAttempted = new Set<string>();
+  let htmlFetchAttempts = 0;
   let htmlPagesFetched = 0;
   let htmlLinksDiscovered = 0;
 
   while (pageQueue.length > 0) {
-    if (pageAttempted.size >= maxHtmlPages) {
-      warnings.push("html_page_limit");
-      discoveryIncomplete = true;
-      break;
-    }
-
     const pageUrl = pageQueue.shift();
     if (!pageUrl || pageAttempted.has(pageUrl)) continue;
     pageAttempted.add(pageUrl);
@@ -574,6 +569,13 @@ export async function discoverScannerV2Frontier(
       });
       continue;
     }
+
+    if (htmlFetchAttempts >= maxHtmlPages) {
+      warnings.push("html_page_limit");
+      discoveryIncomplete = true;
+      break;
+    }
+    htmlFetchAttempts += 1;
 
     let response;
     try {
