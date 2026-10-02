@@ -22,6 +22,10 @@ function response(
   };
 }
 
+function html(url: string, body = "<html><body>ok</body></html>"): SafeHttpResponse {
+  return response(url, body, "text/html; charset=utf-8");
+}
+
 function fixtures(map: Record<string, SafeHttpResponse>): {
   lookup: LookupFn;
   get: HttpGetFn;
@@ -34,11 +38,23 @@ function fixtures(map: Record<string, SafeHttpResponse>): {
   };
 }
 
-function urlset(urls: string[]): string {
+function urlset(
+  urls: Array<string | { loc: string; lastmod?: string }>,
+): string {
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...urls.map((url) => "<url><loc>" + url.replaceAll("&", "&amp;") + "</loc></url>"),
+    ...urls.map((value) => {
+      const item = typeof value === "string" ? { loc: value } : value;
+      const loc = item.loc.replaceAll("&", "&amp;");
+      return (
+        "<url><loc>" +
+        loc +
+        "</loc>" +
+        (item.lastmod ? "<lastmod>" + item.lastmod + "</lastmod>" : "") +
+        "</url>"
+      );
+    }),
     "</urlset>",
   ].join("");
 }
@@ -79,13 +95,16 @@ test("parseSitemapXml parses urlsets, indexes, CDATA, lastmod and entities", () 
   });
 });
 
-test("parseRobotsSitemaps is case-insensitive, deduplicates and stays same-origin HTTPS", () => {
+test("parseRobotsSitemaps is independent of groups, case-insensitive and same-origin HTTPS only", () => {
   const origin = new URL("https://acme.example/");
   assert.deepEqual(
     parseRobotsSitemaps(
       [
-        "User-agent: *",
+        "User-agent: blocked-bot",
+        "Disallow: /",
         "Sitemap: https://acme.example/sitemap.xml",
+        "User-agent: *",
+        "Allow: /",
         "sItEmAp: /sitemap.xml # duplicate",
         "SITEMAP: https://acme.example/extra.xml",
         "Sitemap: https://other.example/cross-origin.xml",
@@ -100,7 +119,7 @@ test("parseRobotsSitemaps is case-insensitive, deduplicates and stays same-origi
   );
 });
 
-test("discoverScannerV2Frontier recursively accounts for more than 100 sitemap pages", async () => {
+test("integrated discovery exhausts 100+ sitemap pages and a link-only deep page", async () => {
   const first = Array.from(
     { length: 60 },
     (_, i) => "https://acme.example/page-" + String(i + 1).padStart(3, "0"),
@@ -110,29 +129,48 @@ test("discoverScannerV2Frontier recursively accounts for more than 100 sitemap p
     (_, i) => "https://acme.example/page-" + String(i + 61).padStart(3, "0"),
   );
 
-  const result = await discoverScannerV2Frontier("https://acme.example/", {
-    ...fixtures({
-      "https://acme.example/robots.txt": response(
-        "https://acme.example/robots.txt",
-        "User-agent: *\nAllow: /\nSitemap: https://acme.example/sitemap-index.xml",
-        "text/plain",
-      ),
-      "https://acme.example/sitemap-index.xml": response(
-        "https://acme.example/sitemap-index.xml",
-        sitemapIndex([
-          "https://acme.example/pages-a.xml",
-          "https://acme.example/pages-b.xml",
-        ]),
-      ),
-      "https://acme.example/pages-a.xml": response(
+  const map: Record<string, SafeHttpResponse> = {
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "User-agent: *\nAllow: /\nSitemap: https://acme.example/sitemap-index.xml",
+      "text/plain",
+    ),
+    "https://acme.example/sitemap-index.xml": response(
+      "https://acme.example/sitemap-index.xml",
+      sitemapIndex([
         "https://acme.example/pages-a.xml",
-        urlset(first),
-      ),
-      "https://acme.example/pages-b.xml": response(
         "https://acme.example/pages-b.xml",
-        urlset(second),
-      ),
-    }),
+      ]),
+    ),
+    "https://acme.example/pages-a.xml": response(
+      "https://acme.example/pages-a.xml",
+      urlset(first),
+    ),
+    "https://acme.example/pages-b.xml": response(
+      "https://acme.example/pages-b.xml",
+      urlset(second),
+    ),
+    "https://acme.example/": html(
+      "https://acme.example/",
+      '<html><body><a href="/page-001">First</a></body></html>',
+    ),
+    "https://acme.example/link-only/deep": html(
+      "https://acme.example/link-only/deep",
+      "<html><body>deep fact</body></html>",
+    ),
+  };
+
+  for (const [index, url] of [...first, ...second].entries()) {
+    map[url] = html(
+      url,
+      index === 0
+        ? '<html><body><a href="/link-only/deep">Link-only deep page</a></body></html>'
+        : "<html><body>business page</body></html>",
+    );
+  }
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures(map),
   });
 
   assert.equal(result.incomplete, false);
@@ -140,22 +178,23 @@ test("discoverScannerV2Frontier recursively accounts for more than 100 sitemap p
   assert.equal(result.manifest.state, "DISCOVERING");
   assert.equal(result.sitemapDocuments, 3);
   assert.equal(result.sitemapUrlsDiscovered, 120);
-  assert.equal(result.manifest.discovered, 121);
-  assert.equal(result.manifest.queued, 121);
+  assert.equal(result.htmlPagesFetched, 122);
+  assert.equal(result.htmlLinksDiscovered, 1);
+  assert.equal(result.manifest.discovered, 122);
+  assert.equal(result.manifest.fetched, 122);
+  assert.equal(result.manifest.queued, 0);
   assert.equal(result.manifest.unresolved, 0);
-  assert.ok(
-    result.manifest.urls.some((row) => row.url === "https://acme.example/page-120"),
+  assert.equal(result.urlsDroppedByLimit, 0);
+
+  const deep = result.manifest.urls.find(
+    (row) => row.url === "https://acme.example/link-only/deep",
   );
-  assert.ok(
-    result.manifest.urls.some(
-      (row) =>
-        row.url === "https://acme.example/page-120" &&
-        row.discoveryReason === "sitemap",
-    ),
-  );
+  assert.equal(deep?.status, "fetched");
+  assert.equal(deep?.discoveryReason, "html_link");
+  assert.equal(deep?.discoveredFrom, "https://acme.example/page-001");
 });
 
-test("sitemap discovery preserves lastmod as an advisory frontier hint", async () => {
+test("sitemap discovery preserves lastmod after the page reaches a terminal state", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     ...fixtures({
       "https://acme.example/robots.txt": response(
@@ -165,7 +204,17 @@ test("sitemap discovery preserves lastmod as an advisory frontier hint", async (
       ),
       "https://acme.example/sitemap.xml": response(
         "https://acme.example/sitemap.xml",
-        '<urlset><url><loc>https://acme.example/pricing</loc><lastmod>2026-10-02</lastmod></url></urlset>',
+        urlset([
+          {
+            loc: "https://acme.example/pricing",
+            lastmod: "2026-10-02",
+          },
+        ]),
+      ),
+      "https://acme.example/": html("https://acme.example/"),
+      "https://acme.example/pricing": html(
+        "https://acme.example/pricing",
+        "<html><body>Pricing</body></html>",
       ),
     }),
   });
@@ -173,10 +222,11 @@ test("sitemap discovery preserves lastmod as an advisory frontier hint", async (
   const pricing = result.manifest.urls.find(
     (row) => row.url === "https://acme.example/pricing",
   );
+  assert.equal(pricing?.status, "fetched");
   assert.equal(pricing?.sitemapLastModified, "2026-10-02");
 });
 
-test("sitemap discovery rejects private and cross-origin URLs before frontier admission", async () => {
+test("sitemap private, cross-origin and insecure page URLs are visibly policy-skipped", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     ...fixtures({
       "https://acme.example/robots.txt": response(
@@ -193,45 +243,81 @@ test("sitemap discovery rejects private and cross-origin URLs before frontier ad
           "http://acme.example/insecure",
         ]),
       ),
+      "https://acme.example/": html("https://acme.example/"),
+      "https://acme.example/public": html("https://acme.example/public"),
     }),
   });
 
-  assert.equal(result.manifest.discovered, 2);
+  assert.equal(result.manifest.discovered, 5);
+  assert.equal(result.manifest.fetched, 2);
+  assert.equal(result.manifest.policySkipped, 3);
+  assert.equal(result.manifest.unresolved, 0);
   assert.ok(
-    result.manifest.urls.some((row) => row.url === "https://acme.example/public"),
-  );
-  assert.equal(
-    result.manifest.urls.some((row) => row.url.includes("127.0.0.1")),
-    false,
+    result.manifest.urls.some(
+      (row) =>
+        row.url === "https://127.0.0.1/private" &&
+        row.status === "policy_skipped" &&
+        row.reason === "sitemap_page_rejected",
+    ),
   );
   assert.ok(result.warnings.includes("sitemap_page_rejected"));
 });
 
-test("discovery safety ceiling yields explicit PARTIAL instead of silent truncation", async () => {
-  const pages = Array.from(
-    { length: 20 },
-    (_, i) => "https://acme.example/service-" + (i + 1),
-  );
+test("robots disallow is applied to integrated HTML frontier without fetching the page", async () => {
+  let privateFetches = 0;
+  const base = fixtures({
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "User-agent: *\nDisallow: /private\nSitemap: https://acme.example/sitemap.xml",
+      "text/plain",
+    ),
+    "https://acme.example/sitemap.xml": response(
+      "https://acme.example/sitemap.xml",
+      urlset([
+        "https://acme.example/public",
+        "https://acme.example/private/details",
+      ]),
+    ),
+    "https://acme.example/": html("https://acme.example/"),
+    "https://acme.example/public": html("https://acme.example/public"),
+  });
+
   const result = await discoverScannerV2Frontier("https://acme.example/", {
-    maxDiscoveredUrls: 5,
+    lookup: base.lookup,
+    get: async (url, ip, opts) => {
+      if (url.pathname.startsWith("/private")) privateFetches += 1;
+      return base.get(url, ip, opts);
+    },
+  });
+
+  assert.equal(privateFetches, 0);
+  const privateRow = result.manifest.urls.find((row) =>
+    row.url.includes("/private/details"),
+  );
+  assert.equal(privateRow?.status, "robots_skipped");
+  assert.equal(privateRow?.reason, "robots_disallow");
+});
+
+test("sitemap nesting-depth ceiling yields explicit PARTIAL", async () => {
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxSitemapDepth: 0,
     ...fixtures({
       "https://acme.example/robots.txt": response(
         "https://acme.example/robots.txt",
-        "Sitemap: https://acme.example/sitemap.xml",
+        "Sitemap: https://acme.example/index.xml",
         "text/plain",
       ),
-      "https://acme.example/sitemap.xml": response(
-        "https://acme.example/sitemap.xml",
-        urlset(pages),
+      "https://acme.example/index.xml": response(
+        "https://acme.example/index.xml",
+        sitemapIndex(["https://acme.example/nested.xml"]),
       ),
+      "https://acme.example/": html("https://acme.example/"),
     }),
   });
 
-  assert.equal(result.limitReached, true);
   assert.equal(result.incomplete, true);
   assert.equal(result.manifest.state, "PARTIAL");
-  assert.equal(result.manifest.discovered, 5);
-  assert.ok(result.warnings.includes("discovered_url_limit"));
+  assert.ok(result.warnings.includes("sitemap_depth_limit"));
 });
 
 test("sitemap document ceiling yields explicit PARTIAL", async () => {
@@ -250,6 +336,7 @@ test("sitemap document ceiling yields explicit PARTIAL", async () => {
           "https://acme.example/b.xml",
         ]),
       ),
+      "https://acme.example/": html("https://acme.example/"),
     }),
   });
 
@@ -258,7 +345,66 @@ test("sitemap document ceiling yields explicit PARTIAL", async () => {
   assert.ok(result.warnings.includes("sitemap_document_limit"));
 });
 
-test("missing conventional sitemap does not invent incompleteness when none was declared", async () => {
+test("URL safety ceiling is explicit and reports dropped frontier candidates", async () => {
+  const pages = Array.from(
+    { length: 20 },
+    (_, i) => "https://acme.example/service-" + (i + 1),
+  );
+  const map: Record<string, SafeHttpResponse> = {
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "Sitemap: https://acme.example/sitemap.xml",
+      "text/plain",
+    ),
+    "https://acme.example/sitemap.xml": response(
+      "https://acme.example/sitemap.xml",
+      urlset(pages),
+    ),
+    "https://acme.example/": html("https://acme.example/"),
+  };
+  for (const url of pages) map[url] = html(url);
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxDiscoveredUrls: 5,
+    ...fixtures(map),
+  });
+
+  assert.equal(result.limitReached, true);
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.equal(result.manifest.discovered, 5);
+  assert.ok(result.urlsDroppedByLimit > 0);
+  assert.ok(result.warnings.includes("discovered_url_limit"));
+});
+
+test("HTML-page safety ceiling leaves queued evidence and returns PARTIAL", async () => {
+  const links = Array.from(
+    { length: 10 },
+    (_, i) => '<a href="/p-' + (i + 1) + '">Page</a>',
+  ).join("");
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxHtmlPages: 1,
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        "<html><body>" + links + "</body></html>",
+      ),
+    }),
+  });
+
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.equal(result.manifest.fetched, 1);
+  assert.equal(result.manifest.queued, 10);
+  assert.ok(result.warnings.includes("html_page_limit"));
+});
+
+test("missing conventional sitemap is not incomplete when robots is available and no sitemap was declared", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     ...fixtures({
       "https://acme.example/robots.txt": response(
@@ -266,16 +412,18 @@ test("missing conventional sitemap does not invent incompleteness when none was 
         "User-agent: *\nAllow: /",
         "text/plain",
       ),
+      "https://acme.example/": html("https://acme.example/"),
     }),
   });
 
   assert.equal(result.incomplete, false);
   assert.equal(result.manifest.state, "DISCOVERING");
   assert.equal(result.manifest.discovered, 1);
+  assert.equal(result.manifest.fetched, 1);
   assert.ok(result.warnings.includes("sitemap_not_found"));
 });
 
-test("declared sitemap fetch failure is explicit PARTIAL", async () => {
+test("declared sitemap fetch failure is explicit PARTIAL while HTML discovery still proceeds", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     lookup: async () => ["203.0.113.10"],
     get: async (url) => {
@@ -286,16 +434,33 @@ test("declared sitemap fetch failure is explicit PARTIAL", async () => {
           "text/plain",
         );
       }
-      throw new Error("synthetic network failure");
+      if (url.pathname === "/") {
+        return html(
+          url.toString(),
+          '<html><body><a href="/deep">Deep</a></body></html>',
+        );
+      }
+      if (url.pathname === "/deep") {
+        return html(url.toString(), "<html><body>deep</body></html>");
+      }
+      throw new Error("synthetic sitemap network failure");
     },
   });
 
   assert.equal(result.incomplete, true);
   assert.equal(result.manifest.state, "PARTIAL");
+  assert.equal(result.manifest.fetched, 2);
   assert.ok(result.warnings.includes("sitemap_fetch_failed"));
+  assert.ok(
+    result.manifest.urls.some(
+      (row) =>
+        row.url === "https://acme.example/deep" &&
+        row.discoveryReason === "html_link",
+    ),
+  );
 });
 
-test("HTML-link discovery reaches link-only deep pages and rejects external/insecure links", () => {
+test("HTML-link helper normalises fragments and rejects external/insecure links", () => {
   const home = discoverHtmlLinks({
     origin: "https://acme.example",
     pageUrl: "https://acme.example/",
