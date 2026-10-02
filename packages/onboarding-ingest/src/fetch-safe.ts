@@ -622,6 +622,13 @@ export async function fetchPublicHttps(
       } catch {
         throw new ScanError("invalid_url", "Redirect Location was not a valid URL.", 400);
       }
+      if (options.allowedOrigin && next.origin !== options.allowedOrigin) {
+        throw new ScanError(
+          "cross_origin_redirect",
+          "The page redirected outside the submitted website.",
+          422,
+        );
+      }
       current = next.toString();
       continue;
     }
