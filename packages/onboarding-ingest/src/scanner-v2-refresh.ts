@@ -50,6 +50,10 @@ export type ScannerV2RefreshSeed = {
   inheritedForConfirmation: number;
 };
 
+function canonicalOrigin(value: string): string {
+  return new URL(value).origin;
+}
+
 function headerValue(
   headers: Record<string, string>,
   name: string,
@@ -225,6 +229,7 @@ export async function createScannerV2RefreshProcessor(input: {
       maxBytes: options.maxBytes ?? DEFAULT_MAX_BYTES_PER_PAGE,
       maxRedirects: options.maxRedirects ?? DEFAULT_MAX_REDIRECTS,
       headers: conditionalHeaders,
+      allowedOrigin: previousJob.origin,
     });
 
     if (response.status === 304) {
@@ -352,7 +357,7 @@ export class FileScannerV2VersionStore implements ScannerV2VersionStore {
   }
 
   private key(origin: string): string {
-    return stableContentHash(origin);
+    return stableContentHash(canonicalOrigin(origin));
   }
 
   private pointerPath(origin: string): string {
@@ -413,7 +418,7 @@ export class FileScannerV2VersionStore implements ScannerV2VersionStore {
     next: ScannerV2RefreshVersion;
     expectedPreviousCrawlId?: string | null;
   }): Promise<boolean> {
-    const origin = input.next.origin;
+    const origin = canonicalOrigin(input.next.origin);
     if (!(await this.acquireCommitLock(origin))) return false;
 
     try {
@@ -457,7 +462,7 @@ export async function commitScannerV2CrawlVersion(input: {
   }
 
   const next: ScannerV2RefreshVersion = {
-    origin: job.origin,
+    origin: canonicalOrigin(job.origin),
     crawlId: job.crawlId,
     releaseSha: job.releaseSha,
     committedAt: input.committedAt ?? new Date().toISOString(),
