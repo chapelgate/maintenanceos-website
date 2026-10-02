@@ -3,6 +3,7 @@ import {
   fetchPublicHttps,
 } from "./fetch-safe.ts";
 import { extractSameOriginHrefs } from "./extract.ts";
+import { allowPublicHttpsUrl } from "./ssrf.ts";
 import { normalizeScannerV2Url } from "./scanner-v2-url-policy.ts";
 import type { ScannerV2PageInput } from "./scanner-v2-content.ts";
 import type {
@@ -543,6 +544,11 @@ export async function renderScannerV2Page(
     if (requestUrl.protocol !== "https:") {
       return abort(request, "network_policy_denied", true);
     }
+    const networkPolicy = allowPublicHttpsUrl(requestUrl.toString());
+    if (!networkPolicy.ok) {
+      return abort(request, "network_policy_denied", true);
+    }
+    requestUrl = networkPolicy.url;
 
     const origin = requestUrl.origin;
     if (!origins.has(origin) && origins.size >= maxOrigins) {
@@ -592,6 +598,7 @@ export async function renderScannerV2Page(
 
   const backend = options.backend ?? playwrightScannerV2BrowserBackend;
   let rendered: ScannerV2BrowserBackendResult;
+  let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
   try {
     rendered = await Promise.race([
       backend({
@@ -601,7 +608,7 @@ export async function renderScannerV2Page(
         handleRequest,
       }),
       new Promise<never>((_resolve, reject) => {
-        setTimeout(
+        timeoutHandle = setTimeout(
           () => reject(new Error("scanner_v2_render_timeout")),
           timeoutMs,
         );
@@ -620,6 +627,8 @@ export async function renderScannerV2Page(
       blockedRequests,
       warnings: [...new Set(warnings)],
     };
+  } finally {
+    if (timeoutHandle) clearTimeout(timeoutHandle);
   }
 
   if (fatalReason) {
