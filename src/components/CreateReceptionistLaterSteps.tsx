@@ -6,6 +6,7 @@ import { AgentCustomerConfiguration } from "@/components/AgentCustomerConfigurat
 import { AgentReviewGate } from "@/components/AgentReviewGate";
 import { AgentTypeSelector } from "@/components/AgentTypeSelector";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
+import { ScannerV2CrawlStatus } from "@/components/ScannerV2CrawlStatus";
 import { PRODUCTION_FORM_ENDPOINT, siteConfig } from "@/config/site";
 import {
   agentReviewRevision,
@@ -45,6 +46,7 @@ import {
   type ScanDraftFieldMeta,
 } from "@/lib/onboarding-create";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
+import type { ScannerV2OperationalStatus } from "../../packages/onboarding-ingest/src/scanner-v2-status";
 import {
   qualificationMatchesReview,
   type AgentSandboxQualificationResult,
@@ -176,6 +178,7 @@ export function CreateReceptionistLaterSteps({
   onReceptionistChange,
   onReviewSubjectChange,
   sandboxQualification,
+  scannerV2Status,
 }: {
   businessUrl: string;
   email: string;
@@ -186,6 +189,8 @@ export function CreateReceptionistLaterSteps({
   onReceptionistChange?: (built: ReceptionistDraftResult | null) => void;
   onReviewSubjectChange?: (subject: AgentSandboxReviewSubject | null) => void;
   sandboxQualification?: AgentSandboxQualificationResult | null;
+  /** Stage 11 additive status surface. Production V2 routing remains Stage 12. */
+  scannerV2Status?: ScannerV2OperationalStatus | null;
 }) {
   const [step, setStep] = useState<CreateJourneyStep>(2);
   const [status, setStatus] = useState<Status>("idle");
@@ -782,6 +787,11 @@ export function CreateReceptionistLaterSteps({
               </p>
             ) : null}
           </div>
+          {scannerV2Status ? (
+            <div className="mt-4">
+              <ScannerV2CrawlStatus status={scannerV2Status} />
+            </div>
+          ) : null}
           <div className="mt-5 flex flex-wrap gap-3">
             <button
               type="button"
