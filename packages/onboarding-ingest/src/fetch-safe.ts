@@ -79,10 +79,23 @@ export function decodeResponseBodyForText(input: {
       payload = gunzipSync(payload, {
         maxOutputLength: input.maxDecompressedBytes,
       });
-    } catch {
+    } catch (error) {
+      const code =
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error
+          ? String((error as { code?: unknown }).code ?? "")
+          : "";
+      const message =
+        error instanceof Error ? error.message : String(error);
+      const tooLarge =
+        code === "ERR_BUFFER_TOO_LARGE" ||
+        /max(?:imum)? output|larger than|too large/i.test(message);
       throw new ScanError(
-        "response_too_large",
-        "The decompressed response exceeded the allowed size or was not valid gzip.",
+        tooLarge ? "response_too_large" : "content_decode_failed",
+        tooLarge
+          ? "The decompressed response exceeded the allowed size."
+          : "The compressed response could not be decoded as gzip.",
         422,
       );
     }
