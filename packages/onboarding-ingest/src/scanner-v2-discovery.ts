@@ -14,6 +14,7 @@ import {
   DEFAULT_MAX_PATH_DEPTH,
   DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
   extractScannerV2CanonicalLink,
+  isScannerV2NonTextAssetUrl,
   normalizeScannerV2Url,
   ScannerV2FrontierTrapGuard,
 } from "./scanner-v2-url-policy.ts";
@@ -481,6 +482,23 @@ export async function discoverScannerV2Frontier(
         >
       >,
   ): { url: string; added: boolean } | null {
+    if (isScannerV2NonTextAssetUrl(raw)) {
+      const display = displayRejectedUrl(raw, origin);
+      urls.add({
+        url: display,
+        status: "policy_skipped",
+        discoveryReason: metadata.discoveryReason,
+        ...(metadata.discoveredFrom
+          ? { discoveredFrom: metadata.discoveredFrom }
+          : {}),
+        ...(metadata.sitemapLastModified
+          ? { sitemapLastModified: metadata.sitemapLastModified }
+          : {}),
+        reason: "non_text_asset",
+      });
+      return null;
+    }
+
     const normalized = normalizeScannerV2Url(raw, origin, {
       maxPathDepth,
       applyContentPolicy: true,
