@@ -308,6 +308,19 @@ export async function renderScannerV2Page(
     await context.clearCookies();
     const page = await context.newPage();
     page.setDefaultTimeout(timeoutMs);
+    page.on("pageerror", (error) => {
+      warnings.push(
+        "render_page_error:" +
+          String(error instanceof Error ? error.message : error).slice(0, 240),
+      );
+    });
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        warnings.push(
+          "render_console_error:" + message.text().slice(0, 240),
+        );
+      }
+    });
 
     await page.goto(rawUrl, {
       waitUntil: "domcontentloaded",
@@ -325,6 +338,13 @@ export async function renderScannerV2Page(
       })
       .catch(() => undefined);
     await fetchSerial;
+    await page
+      .waitForFunction(
+        () => Boolean(document.body?.innerText.trim()),
+        undefined,
+        { timeout: Math.min(1_500, timeoutMs) },
+      )
+      .catch(() => undefined);
 
     if (fatalReason) {
       return {
