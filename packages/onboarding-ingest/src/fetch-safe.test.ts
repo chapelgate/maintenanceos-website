@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { fetchPublicHttps } from "./fetch-safe.ts";
+import { gzipSync } from "node:zlib";
+import { decodeResponseBodyForText, fetchPublicHttps } from "./fetch-safe.ts";
 import { ScanError } from "./types.ts";
 
 test("fetchPublicHttps rejects http and private literals without connecting", async () => {
@@ -153,3 +154,73 @@ test("fetchPublicHttps returns the body when DNS and HTTPS stay public", async (
   assert.equal(res.status, 200);
   assert.match(res.body, /<title>Ok<\/title>/);
 });
+
+test("bounded gzip decoding supports .xml.gz and enforces decompressed size", () => {
+  const xml = Buffer.from(
+    '<urlset><url><loc>https://acme.example/a</loc></url></urlset>',
+    "utf8",
+  );
+  const compressed = gzipSync(xml);
+
+  const decoded = decodeResponseBodyForText({
+    body: compressed,
+    url: new URL("https://acme.example/sitemap.xml.gz"),
+    headers: { "content-type": "application/gzip" },
+    acceptCompressed: true,
+    maxDecompressedBytes: 1024,
+  });
+  assert.equal(decoded.toString("utf8"), xml.toString("utf8"));
+
+  assert.throws(
+    () =>
+      decodeResponseBodyForText({
+        body: compressed,
+        url: new URL("https://acme.example/sitemap.xml.gz"),
+        headers: { "content-type": "application/gzip" },
+        acceptCompressed: true,
+        maxDecompressedBytes: 8,
+      }),
+    (err: unknown) =>
+      err instanceof ScanError && err.code === "response_too_large",
+  );
+});
+
+test("compressed response support is opt-in and propagated only when requested", async () => {
+  let defaultAcceptCompressed: boolean | undefined;
+  let requestedAcceptCompressed: boolean | undefined;
+  let requestedMaxDecompressedBytes: number | undefined;
+
+  await fetchPublicHttps("https://plain.example/", {
+    lookup: async () => ["203.0.113.9"],
+    get: async (url, _ip, opts) => {
+      defaultAcceptCompressed = opts.acceptCompressed;
+      return {
+        status: 200,
+        headers: { "content-type": "text/plain" },
+        body: "plain",
+        url,
+      };
+    },
+  });
+
+  await fetchPublicHttps("https://gzip.example/sitemap.xml.gz", {
+    lookup: async () => ["203.0.113.9"],
+    acceptCompressed: true,
+    maxDecompressedBytes: 4096,
+    get: async (url, _ip, opts) => {
+      requestedAcceptCompressed = opts.acceptCompressed;
+      requestedMaxDecompressedBytes = opts.maxDecompressedBytes;
+      return {
+        status: 200,
+        headers: { "content-type": "application/xml" },
+        body: "<urlset></urlset>",
+        url,
+      };
+    },
+  });
+
+  assert.equal(defaultAcceptCompressed, undefined);
+  assert.equal(requestedAcceptCompressed, true);
+  assert.equal(requestedMaxDecompressedBytes, 4096);
+});
+
