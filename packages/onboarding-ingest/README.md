@@ -25,6 +25,7 @@ Missing keys are left empty. The client **does not invent** crawl results. If th
 | Env | Default | Purpose |
 | --- | --- | --- |
 | `ONBOARDING_WEB_INGEST` | `false` | Master switch. When not `true`/`1`, `POST /v1/onboarding/scan` returns `503 scan_disabled` and does not fetch. |
+| `ONBOARDING_SCANNER_V2` | `false` | Scanner V2 foundation flag. Stage 0/1 introduces only additive corpus/manifest contracts; `runScan` remains Scanner V1 until later V2 stages pass their acceptance gates. |
 | `ONBOARDING_SANDBOX_CALL` | `false` | Unused here. Health reports `sandboxCall: false`. Sandbox test-call is `packages/sandbox-test-call`. |
 | `ONBOARDING_SCAN_HOST` | `127.0.0.1` | Bind address (keep loopback unless you intend otherwise). Hosted companions must use `0.0.0.0`. |
 | `ONBOARDING_SCAN_PORT` | `8788` | Listen port. If unset, `PORT` is used (droplet / other hosts). |
