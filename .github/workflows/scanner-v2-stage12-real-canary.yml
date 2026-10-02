@@ -1,0 +1,33 @@
+name: Scanner V2 Stage 12 real-site canary
+
+on:
+  push:
+    branches:
+      - feat/scanner-v2-stage12-canary-20261002
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scanner-v2-stage12-real-site-canary
+  cancel-in-progress: true
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium for bounded Scanner V2 rendering
+        run: npx playwright install --with-deps chromium
+      - name: Run real-site whole-corpus canary
+        env:
+          STAGE12_RELEASE_SHA: ${{ github.sha }}
+        run: node --experimental-strip-types scripts/scanner-v2-stage12-real-canary.ts
