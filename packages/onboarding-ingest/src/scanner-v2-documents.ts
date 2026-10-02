@@ -30,6 +30,9 @@ export const DEFAULT_MAX_PDF_PAGES = 500;
 export const MAX_PDF_PAGES = 1_000;
 export const DEFAULT_DOCUMENT_CHUNK_CHARS = 1_400;
 export const DEFAULT_DOCUMENT_CHUNK_OVERLAP = 120;
+export const PDF_WORKER_MAX_OLD_SPACE_MB = 256;
+export const PDF_WORKER_MAX_YOUNG_SPACE_MB = 32;
+export const PDF_WORKER_STACK_MB = 8;
 
 export type ScannerV2DocumentKind = "pdf" | "text" | "csv";
 
@@ -409,6 +412,11 @@ export const pdfJsScannerV2Parser: ScannerV2PdfParser = async (
   return await new Promise<ScannerV2PdfParseResult>((resolve, reject) => {
     const worker = new Worker(PDF_WORKER_SOURCE, {
       eval: true,
+      resourceLimits: {
+        maxOldGenerationSizeMb: PDF_WORKER_MAX_OLD_SPACE_MB,
+        maxYoungGenerationSizeMb: PDF_WORKER_MAX_YOUNG_SPACE_MB,
+        stackSizeMb: PDF_WORKER_STACK_MB,
+      },
       workerData: {
         bytes,
         maxPages: options.maxPages,
