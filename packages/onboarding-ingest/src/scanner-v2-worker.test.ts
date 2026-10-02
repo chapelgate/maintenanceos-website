@@ -384,3 +384,71 @@ test("worker refuses to commit after its lease expires during processing", async
   assert.equal((await store.listChunks("fence")).length, 0);
   assert.equal((await store.getUrl("fence", url))?.status, "queued");
 });
+
+test("worker persists newly discovered rendered links without rewinding existing terminal rows", async () => {
+  const { store } = await tempStore();
+  const root = "https://acme.example/app";
+  const existing = "https://acme.example/already-done";
+  const renderedOnly = "https://acme.example/rendered-only";
+
+  await createScannerV2Job({
+    store,
+    crawlId: "rendered-frontier",
+    origin: "https://acme.example",
+    releaseSha: "sha-stage12",
+    urls: [
+      queued(root),
+      {
+        url: existing,
+        status: "fetched",
+        discoveryReason: "sitemap",
+        canonicalUrl: existing,
+      },
+    ],
+  });
+
+  const first = await runScannerV2WorkerBatch({
+    store,
+    crawlId: "rendered-frontier",
+    workerId: "worker-a",
+    batchSize: 1,
+    processUrl: async ({ url }) => ({
+      disposition: "fetched",
+      ...pageFor(url.url, "app shell rendered content"),
+      discoveredUrls: [
+        {
+          url: renderedOnly,
+          status: "queued",
+          discoveryReason: "rendered_link",
+          discoveredFrom: root,
+        },
+        {
+          url: existing,
+          status: "queued",
+          discoveryReason: "rendered_link",
+          discoveredFrom: root,
+        },
+      ],
+    }),
+  });
+
+  assert.equal(first.hasMoreWork, true);
+  assert.equal((await store.getUrl("rendered-frontier", existing))?.status, "fetched");
+  const discovered = await store.getUrl("rendered-frontier", renderedOnly);
+  assert.equal(discovered?.status, "queued");
+  assert.equal(discovered?.discoveryReason, "rendered_link");
+  assert.equal(discovered?.discoveredFrom, root);
+
+  const second = await runScannerV2WorkerBatch({
+    store,
+    crawlId: "rendered-frontier",
+    workerId: "worker-b",
+    processUrl: async ({ url }) => ({
+      disposition: "fetched",
+      ...pageFor(url.url, "rendered deep page"),
+    }),
+  });
+  assert.equal(second.state, "COMPLETE");
+  assert.equal(second.manifest.fetched, 3);
+});
+
