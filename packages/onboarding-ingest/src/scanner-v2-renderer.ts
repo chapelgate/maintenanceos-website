@@ -182,6 +182,11 @@ export function decideScannerV2RenderEscalation(input: {
 }): ScannerV2RenderEscalationDecision {
   const text = visibleText(input.rawHtml);
   const scripts = [...input.rawHtml.matchAll(/<script\b[^>]*>/gi)].length;
+  const meaningfulBlocks = [
+    ...input.rawHtml.matchAll(
+      /<(?:p|li|article|section|table|details|address)\b[^>]*>[\s\S]*?<\/(?:p|li|article|section|table|details|address)>/gi,
+    ),
+  ].filter((match) => visibleText(match[0]).length >= 40).length;
   const hasAppRoot =
     /<(?:div|main)\b[^>]*(?:id|data-app|data-reactroot)=["'][^"']*(?:root|app|application)[^"']*["'][^>]*>\s*<\/(?:div|main)>/i.test(
       input.rawHtml,
@@ -193,7 +198,7 @@ export function decideScannerV2RenderEscalation(input: {
   if (scripts > 0 && hasAppRoot && text.length < 400) {
     return { render: true, reason: "app_shell" };
   }
-  if (scripts > 0 && text.length < 180) {
+  if (scripts > 0 && text.length < 180 && meaningfulBlocks === 0) {
     return { render: true, reason: "thin_html" };
   }
   if (
