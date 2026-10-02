@@ -1147,3 +1147,58 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+### 2026-10-02 Scanner V2 Stage 8 public document ingestion
+Status: COMPLETE / VERIFIED / READY TO FREEZE
+
+Implemented:
+- separate DNS-pinned public-IP/SSRF-safe binary HTTPS fetch path without altering Scanner V1;
+- same-origin redirect enforcement for document fetches;
+- PDF, TXT and CSV ingestion into standard CrawlPage/CorpusChunk records with exact source provenance;
+- manifest post-pass so Stage 2 discovery stays stable while linked documents become corpus evidence;
+- exact pdfjs-dist 6.3.289 pin;
+- PDF MIME/signature verification;
+- NUL-bearing binary-text rejection;
+- parser page/text/time ceilings;
+- Node PDF worker memory ceilings (256 MiB old generation, 32 MiB young generation, 8 MiB stack);
+- unsupported Office formats, parser failures and truncation remain explicit PARTIAL evidence;
+- PDF-only facts flow through Stage 5 retrieval into Stage 6 grounded receptionist answers.
+
+Verification:
+- exact tested source SHA: 31e9b39f53b2721d560f1ce1928f0f777fa6dca4;
+- full GitHub Actions run 37056249496 / job 111001562480: PASS;
+- narrow Stage 8 run 37056249518 / job 111001563365: PASS;
+- dependency pin run 37056249462 / job 111001561801: PASS;
+- targeted Stage 8/fetch/retrieval/grounding: 42/42 PASS;
+- full repository regression: 397/397 PASS;
+- accessibility: 16/16 PASS;
+- TypeScript and production build: PASS;
+- 30/30 static routes generated;
+- production dependency audit: 0 vulnerabilities;
+- HTML link -> Stage 2 frontier -> PDF -> Stage 8 ingest -> corpus -> receptionist grounding: PASS;
+- private DNS and cross-origin document redirects: blocked;
+- parser failure/timeout/truncation/unsupported Office: explicit PARTIAL;
+- Scanner V1 runtime unchanged: PASS;
+- production telephony change surface: 0;
+- golden phone line change surface: 0.
+
+Independent NVIDIA review:
+- Evolution Engine run 37055976541 / job 111000667729: PASS;
+- openai/gpt-oss-20b: live review PASS at USD 0 marginal cost;
+- nvidia/nemotron-3.5-lightning-30b-a3b: live review PASS at USD 0 marginal cost;
+- NVIDIA_STAGE8_TWO_MODEL_REVIEW=PASS;
+- raw hosted-model output retained: 0;
+- production NVIDIA scope enabled: 0;
+- NVIDIA lane remained reasoning/review only.
+
+Evidence:
+- docs/SCANNER_V2_STAGE8_EVIDENCE_20261002.md
+
+Release boundary:
+Stage 8 remains additive and Scanner V2 is still off production /create. The next authorised boundary is Stage 9 resumable worker execution.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+
