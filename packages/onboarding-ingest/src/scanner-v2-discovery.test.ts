@@ -165,7 +165,7 @@ test("integrated discovery exhausts 100+ sitemap pages and a link-only deep page
       url,
       index === 0
         ? '<html><body><a href="/link-only/deep">Link-only deep page</a></body></html>'
-        : "<html><body>business page</body></html>",
+        : `<html><body>business page ${index + 1}</body></html>`,
     );
   }
 
@@ -217,8 +217,11 @@ test("sitemap fetch explicitly requests bounded compressed responses", async () 
           "application/gzip",
         );
       }
-      if (url.pathname === "/" || url.pathname === "/service") {
-        return html(url.toString());
+      if (url.pathname === "/") {
+        return html(url.toString(), "<html><body>Home</body></html>");
+      }
+      if (url.pathname === "/service") {
+        return html(url.toString(), "<html><body>Service</body></html>");
       }
       return response(url.toString(), "missing", "text/plain", 404);
     },
@@ -285,8 +288,14 @@ test("sitemap private, cross-origin and insecure page URLs are visibly policy-sk
           "http://acme.example/insecure",
         ]),
       ),
-      "https://acme.example/": html("https://acme.example/"),
-      "https://acme.example/public": html("https://acme.example/public"),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        "<html><body>Home</body></html>",
+      ),
+      "https://acme.example/public": html(
+        "https://acme.example/public",
+        "<html><body>Public page</body></html>",
+      ),
     }),
   });
 
@@ -320,8 +329,14 @@ test("robots disallow is applied to integrated HTML frontier without fetching th
         "https://acme.example/private/details",
       ]),
     ),
-    "https://acme.example/": html("https://acme.example/"),
-    "https://acme.example/public": html("https://acme.example/public"),
+    "https://acme.example/": html(
+      "https://acme.example/",
+      "<html><body>Home</body></html>",
+    ),
+    "https://acme.example/public": html(
+      "https://acme.example/public",
+      "<html><body>Public page</body></html>",
+    ),
   });
 
   const result = await discoverScannerV2Frontier("https://acme.example/", {
@@ -775,7 +790,10 @@ test("faceted-query explosion is bounded, visible and forces PARTIAL", async () 
   };
   for (const colour of ["red", "blue"]) {
     const url = `https://acme.example/products?colour=${colour}&size=m`;
-    map[url] = html(url, "<html><body>Product variant</body></html>");
+    map[url] = html(
+      url,
+      `<html><body>Product variant ${colour}</body></html>`,
+    );
   }
 
   const result = await discoverScannerV2Frontier("https://acme.example/", {
