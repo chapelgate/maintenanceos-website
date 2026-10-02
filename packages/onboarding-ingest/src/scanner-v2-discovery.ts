@@ -195,6 +195,7 @@ export function discoverHtmlLinks(input: {
   pageUrl: string;
   origin: string;
   maxPathDepth?: number;
+  discoveryReason?: "html_link" | "rendered_link";
 }): CrawlUrlDisposition[] {
   let page: URL;
   let origin: URL;
@@ -218,7 +219,7 @@ export function discoverHtmlLinks(input: {
     out.push({
       url: normalized,
       status: "queued",
-      discoveryReason: "html_link",
+      discoveryReason: input.discoveryReason ?? "html_link",
       discoveredFrom: page.toString(),
     });
   }
