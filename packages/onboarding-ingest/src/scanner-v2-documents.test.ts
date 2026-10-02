@@ -9,13 +9,16 @@ import {
   isScannerV2UnsupportedDocumentContentType,
   isScannerV2UnsupportedTextDocumentUrl,
 } from "./scanner-v2-documents.ts";
+import { discoverScannerV2Frontier } from "./scanner-v2-discovery.ts";
 import { answerGroundedReceptionistQuestion } from "./scanner-v2-grounding.ts";
 import { InMemoryBm25CorpusIndex } from "./scanner-v2-retrieval.ts";
 import { ScanError } from "./types.ts";
 import type {
   BinaryHttpGetFn,
+  HttpGetFn,
   LookupFn,
   SafeBinaryHttpResponse,
+  SafeHttpResponse,
 } from "./types.ts";
 
 function binaryResponse(input: {
@@ -646,5 +649,109 @@ test("Stage 8 truncated document keeps useful chunks but forces manifest PARTIAL
   assert.equal(row?.status, "unresolved");
   assert.equal(row?.reason, "document_limit_reached");
   assert.ok(row?.contentHash);
+});
+
+test("Stage 2 HTML link flows through frontier, Stage 8 PDF ingest, retrieval and receptionist grounding", async () => {
+  const origin = "https://acme.example";
+  const pdfUrl = origin + "/deep/installation-guide.pdf";
+  const fact =
+    "Document-only fact: bespoke alley gate installation normally takes six weeks after final design approval.";
+
+  const lookup: LookupFn = async () => ["203.0.113.10"];
+  const htmlGet: HttpGetFn = async (url) => {
+    if (url.pathname === "/robots.txt") {
+      return {
+        status: 200,
+        headers: { "content-type": "text/plain" },
+        body: "User-agent: *\nAllow: /",
+        url,
+      };
+    }
+    if (url.pathname === "/sitemap.xml") {
+      return {
+        status: 404,
+        headers: { "content-type": "text/plain" },
+        body: "not found",
+        url,
+      };
+    }
+    if (url.pathname === "/") {
+      return {
+        status: 200,
+        headers: { "content-type": "text/html; charset=utf-8" },
+        body:
+          '<html><body><h1>Acme</h1><a href="/deep/installation-guide.pdf">Installation guide</a></body></html>',
+        url,
+      };
+    }
+    if (url.pathname === "/deep/installation-guide.pdf") {
+      return {
+        status: 200,
+        headers: { "content-type": "application/pdf" },
+        body: "%PDF-1.4 binary-placeholder-for-discovery",
+        url,
+      };
+    }
+    return {
+      status: 404,
+      headers: { "content-type": "text/plain" },
+      body: "missing",
+      url,
+    };
+  };
+
+  const discovery = await discoverScannerV2Frontier(origin + "/", {
+    lookup,
+    get: htmlGet,
+  });
+
+  const before = discovery.manifest.urls.find((row) => row.url === pdfUrl);
+  assert.ok(before, "Stage 2 must retain the linked PDF in the manifest");
+  assert.equal(before?.discoveryReason, "html_link");
+  assert.equal(before?.status, "policy_skipped");
+  assert.equal(before?.reason, "content_type_not_stage2_html");
+
+  const batch = await ingestScannerV2ManifestDocuments(discovery.manifest, {
+    lookup,
+    get: async (url) =>
+      url.toString() === pdfUrl
+        ? binaryResponse({
+            url: pdfUrl,
+            bytes: buildPdf(fact),
+            type: "application/pdf",
+          })
+        : binaryResponse({
+            url: url.toString(),
+            bytes: "missing",
+            type: "text/plain",
+            status: 404,
+          }),
+    parseTimeoutMs: 10_000,
+  });
+
+  const after = batch.manifest.urls.find((row) => row.url === pdfUrl);
+  assert.equal(after?.status, "fetched");
+  assert.equal(after?.reason, undefined);
+  assert.equal(batch.succeeded, 1);
+  assert.equal(batch.incomplete, false);
+  assert.ok(batch.chunks.some((chunk) => chunk.canonicalUrl === pdfUrl));
+
+  const index = new InMemoryBm25CorpusIndex();
+  await index.index(batch.manifest.crawlId, batch.chunks);
+
+  const answer = await answerGroundedReceptionistQuestion(
+    "How long does bespoke alley gate installation take after final design approval?",
+    {
+      crawlId: batch.manifest.crawlId,
+      index,
+    },
+  );
+
+  assert.equal(answer.supportStatus, "supported");
+  assert.equal(answer.source, "corpus.extractive");
+  assert.deepEqual(answer.sourceUrls, [pdfUrl]);
+  assert.equal(answer.retrievedChunkIds.length, 1);
+  assert.match(answer.text, /six weeks/i);
+  assert.match(answer.text, /final design approval/i);
 });
 
