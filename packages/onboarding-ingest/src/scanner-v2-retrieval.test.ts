@@ -96,6 +96,9 @@ test("Stage 5 deterministic synonym normalization covers bounded paraphrases", a
 
   const cost = await index.search("crawl-2", "How much does the call-out cost?");
   assert.equal(cost[0]?.chunkId, "price");
+
+  const pricing = await index.search("crawl-2", "Show me the pricing");
+  assert.equal(pricing[0]?.chunkId, "price");
 });
 
 test("title and heading matches outrank body-only matches", async () => {
