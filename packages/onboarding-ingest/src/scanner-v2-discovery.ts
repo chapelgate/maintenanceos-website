@@ -421,6 +421,8 @@ export async function discoverScannerV2Frontier(
         get: options.get,
         timeoutMs: sitemapTimeoutMs,
         maxBytes: maxSitemapBytes,
+        maxDecompressedBytes: maxSitemapBytes,
+        acceptCompressed: true,
         maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
     } catch {
@@ -447,7 +449,7 @@ export async function discoverScannerV2Frontier(
     const type = responseContentType(response.headers);
     if (
       type &&
-      !/(?:xml|text\/plain|application\/octet-stream)/i.test(type)
+      !/(?:xml|text\/plain|application\/octet-stream|application\/gzip|application\/x-gzip)/i.test(type)
     ) {
       warnings.push("sitemap_content_type_rejected");
       discoveryIncomplete = true;
