@@ -155,6 +155,27 @@ test("discoverScannerV2Frontier recursively accounts for more than 100 sitemap p
   );
 });
 
+test("sitemap discovery preserves lastmod as an advisory frontier hint", async () => {
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "Sitemap: https://acme.example/sitemap.xml",
+        "text/plain",
+      ),
+      "https://acme.example/sitemap.xml": response(
+        "https://acme.example/sitemap.xml",
+        '<urlset><url><loc>https://acme.example/pricing</loc><lastmod>2026-10-02</lastmod></url></urlset>',
+      ),
+    }),
+  });
+
+  const pricing = result.manifest.urls.find(
+    (row) => row.url === "https://acme.example/pricing",
+  );
+  assert.equal(pricing?.sitemapLastModified, "2026-10-02");
+});
+
 test("sitemap discovery rejects private and cross-origin URLs before frontier admission", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     ...fixtures({
