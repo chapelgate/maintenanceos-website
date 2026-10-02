@@ -815,28 +815,171 @@ export async function discoverScannerV2Frontier(
       continue;
     }
 
-    urls.update(pageUrl, {
-      status: "fetched",
-      canonicalUrl: response.url.toString(),
-      fetchedAt: new Date().toISOString(),
-    });
+    const finalUrlPolicy = normalizeScannerV2Url(
+      response.url.toString(),
+      origin,
+      {
+        maxPathDepth,
+        applyContentPolicy: true,
+      },
+    );
+    if (!finalUrlPolicy.ok) {
+      urls.update(pageUrl, {
+        status: "policy_skipped",
+        reason: finalUrlPolicy.reason,
+      });
+      if (finalUrlPolicy.incomplete) {
+        discoveryIncomplete = true;
+        warnings.push(finalUrlPolicy.reason);
+      }
+      continue;
+    }
+
+    const effectiveUrl = finalUrlPolicy.url;
+    const fetchedAt = new Date().toISOString();
+    const contentHash = stableContentHash(response.body);
+
+    if (effectiveUrl !== pageUrl) {
+      const existingFinal = urls.get(effectiveUrl);
+      if (existingFinal) {
+        urls.update(effectiveUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          fetchedAt,
+          contentHash,
+        });
+      } else {
+        urls.add({
+          url: effectiveUrl,
+          status: "fetched",
+          discoveryReason: "canonical",
+          discoveredFrom: pageUrl,
+          canonicalUrl: effectiveUrl,
+          fetchedAt,
+          contentHash,
+        });
+      }
+      urls.update(pageUrl, {
+        status: "duplicate",
+        canonicalUrl: effectiveUrl,
+        reason: "redirect_canonical",
+        contentHash,
+        fetchedAt,
+      });
+    }
+
+    let canonicalTarget = effectiveUrl;
+    let canonicalReason: "rel_canonical" | "content_hash_duplicate" | null =
+      null;
+
+    if (isHtmlType(contentType)) {
+      const canonical = extractScannerV2CanonicalLink({
+        html: response.body,
+        pageUrl: response.url.toString(),
+        origin: origin.origin,
+        maxPathDepth,
+      });
+      if (canonical?.ok && canonical.url !== effectiveUrl) {
+        const admittedCanonical = admitPageCandidate(canonical.url, {
+          discoveryReason: "canonical",
+          discoveredFrom: effectiveUrl,
+        });
+        if (admittedCanonical) {
+          canonicalTarget = admittedCanonical.url;
+          canonicalReason = "rel_canonical";
+          if (
+            admittedCanonical.added &&
+            !pageQueued.has(admittedCanonical.url)
+          ) {
+            pageQueued.add(admittedCanonical.url);
+            pageQueue.push(admittedCanonical.url);
+          }
+        }
+      } else if (canonical && !canonical.ok) {
+        warnings.push("canonical_rejected");
+      }
+    }
+
+    if (!canonicalReason) {
+      const existingOwner = contentOwnerByHash.get(contentHash);
+      if (existingOwner && existingOwner !== effectiveUrl) {
+        canonicalTarget = existingOwner;
+        canonicalReason = "content_hash_duplicate";
+      } else {
+        contentOwnerByHash.set(contentHash, effectiveUrl);
+      }
+    } else {
+      contentOwnerByHash.set(contentHash, canonicalTarget);
+    }
+
+    if (canonicalReason) {
+      const existingEffective = urls.get(effectiveUrl);
+      if (existingEffective) {
+        urls.update(effectiveUrl, {
+          status: "duplicate",
+          canonicalUrl: canonicalTarget,
+          reason: canonicalReason,
+          contentHash,
+          fetchedAt,
+        });
+      } else {
+        urls.add({
+          url: effectiveUrl,
+          status: "duplicate",
+          discoveryReason: "canonical",
+          discoveredFrom: pageUrl,
+          canonicalUrl: canonicalTarget,
+          reason: canonicalReason,
+          contentHash,
+          fetchedAt,
+        });
+      }
+      if (pageUrl !== effectiveUrl) {
+        urls.update(pageUrl, {
+          status: "duplicate",
+          canonicalUrl: canonicalTarget,
+          reason:
+            canonicalReason === "rel_canonical"
+              ? "redirect_then_rel_canonical"
+              : "redirect_then_content_hash_duplicate",
+          contentHash,
+          fetchedAt,
+        });
+      }
+    } else {
+      const existingEffective = urls.get(effectiveUrl);
+      if (existingEffective) {
+        urls.update(effectiveUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          contentHash,
+          fetchedAt,
+        });
+      }
+      if (pageUrl === effectiveUrl) {
+        urls.update(pageUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          contentHash,
+          fetchedAt,
+        });
+      }
+    }
 
     if (!isHtmlType(contentType)) continue;
 
     htmlPagesFetched += 1;
-    const discovered = discoverHtmlLinks({
-      html: response.body,
-      pageUrl: response.url.toString(),
-      origin: origin.origin,
-    });
-
-    for (const row of discovered) {
-      const added = urls.add(row);
-      if (!added) continue;
+    const hrefs = extractSameOriginHrefs(response.body, response.url);
+    for (const href of hrefs) {
+      const admitted = admitPageCandidate(href, {
+        discoveryReason: "html_link",
+        discoveredFrom: effectiveUrl,
+      });
+      if (!admitted?.added) continue;
       htmlLinksDiscovered += 1;
-      if (!pageQueued.has(row.url)) {
-        pageQueued.add(row.url);
-        pageQueue.push(row.url);
+      if (!pageQueued.has(admitted.url)) {
+        pageQueued.add(admitted.url);
+        pageQueue.push(admitted.url);
       }
     }
 
