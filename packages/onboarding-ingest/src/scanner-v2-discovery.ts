@@ -423,22 +423,63 @@ export async function discoverScannerV2Frontier(
     250,
     DEFAULT_HTML_TIMEOUT_MS,
   );
+  const maxPathDepth = boundedInt(
+    options.maxPathDepth,
+    DEFAULT_MAX_PATH_DEPTH,
+    1,
+    DEFAULT_MAX_PATH_DEPTH,
+  );
+  const maxQueryVariantsPerSignature = boundedInt(
+    options.maxQueryVariantsPerSignature,
+    DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+    1,
+    DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+  );
+  const maxCalendarVariantsPerFamily = boundedInt(
+    options.maxCalendarVariantsPerFamily,
+    DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+    1,
+    DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+  );
 
   const warnings: string[] = [];
   const sitemapSources: ScanPageSource[] = [];
   const pageSources: ScanPageSource[] = [];
   const urls = new UrlAccumulator(maxDiscoveredUrls);
+  const trapGuard = new ScannerV2FrontierTrapGuard({
+    maxQueryVariantsPerSignature,
+    maxCalendarVariantsPerFamily,
+  });
+  const contentOwnerByHash = new Map<string, string>();
+  let discoveryIncomplete = false;
+
+  const root = normalizeScannerV2Url(initial.url.toString(), origin, {
+    maxPathDepth,
+    applyContentPolicy: true,
+  });
+  if (!root.ok) {
+    throw new Error(`scanner_v2_discovery_policy:${root.reason}`);
+  }
+  if (root.aliasUrl) {
+    urls.add({
+      url: root.aliasUrl,
+      canonicalUrl: root.url,
+      status: "duplicate",
+      discoveryReason: "submitted",
+      reason: "normalized_url_variant",
+    });
+  }
   urls.add({
-    url: initial.url.toString(),
+    url: root.url,
     status: "queued",
     discoveryReason: "submitted",
   });
+  trapGuard.evaluate(root.url);
 
   const robots = await fetchRobotsForDiscovery(origin, options);
   if (robots.warning) warnings.push(robots.warning);
   if (robots.source) sitemapSources.push(robots.source);
-
-  let discoveryIncomplete = robots.incomplete;
+  discoveryIncomplete = discoveryIncomplete || robots.incomplete;
   const declared = parseRobotsSitemaps(robots.body, origin);
   const sitemapQueue: Array<{ url: string; depth: number; declared: boolean }> =
     declared.length > 0
