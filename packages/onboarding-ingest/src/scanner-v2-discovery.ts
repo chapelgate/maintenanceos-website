@@ -5,7 +5,18 @@ import {
 } from "./fetch-safe.ts";
 import { extractSameOriginHrefs } from "./extract.ts";
 import { allowPublicHttpsUrl } from "./ssrf.ts";
-import { buildCrawlManifest } from "./scanner-v2-foundation.ts";
+import {
+  buildCrawlManifest,
+  stableContentHash,
+} from "./scanner-v2-foundation.ts";
+import {
+  DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+  DEFAULT_MAX_PATH_DEPTH,
+  DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+  extractScannerV2CanonicalLink,
+  normalizeScannerV2Url,
+  ScannerV2FrontierTrapGuard,
+} from "./scanner-v2-url-policy.ts";
 import { isPathAllowed, parseRobotsTxt, type RobotsRules } from "./scan.ts";
 import {
   ScanError,
@@ -63,6 +74,9 @@ export type ScannerV2DiscoveryOptions = {
   maxHtmlBytes?: number;
   sitemapTimeoutMs?: number;
   htmlTimeoutMs?: number;
+  maxPathDepth?: number;
+  maxQueryVariantsPerSignature?: number;
+  maxCalendarVariantsPerFamily?: number;
 };
 
 function boundedInt(
@@ -164,34 +178,23 @@ export function parseRobotsSitemaps(
 function normalizeDiscoveredUrl(
   raw: string,
   origin: URL,
+  options: {
+    maxPathDepth?: number;
+    applyContentPolicy?: boolean;
+  } = {},
 ): string | null {
-  let url: URL;
-  try {
-    url = new URL(raw, origin);
-  } catch {
-    return null;
-  }
-  url.hash = "";
-  if (url.protocol !== "https:" || url.origin !== origin.origin) return null;
-  const allow = allowPublicHttpsUrl(url.toString());
-  if (!allow.ok) return null;
-  return allow.url.toString();
-}
-
-function displayRejectedUrl(raw: string, origin: URL): string {
-  try {
-    const parsed = new URL(raw, origin);
-    parsed.hash = "";
-    return parsed.toString();
-  } catch {
-    return raw.trim() || "invalid-url";
-  }
+  const result = normalizeScannerV2Url(raw, origin, {
+    maxPathDepth: options.maxPathDepth,
+    applyContentPolicy: options.applyContentPolicy,
+  });
+  return result.ok ? result.url : null;
 }
 
 export function discoverHtmlLinks(input: {
   html: string;
   pageUrl: string;
   origin: string;
+  maxPathDepth?: number;
 }): CrawlUrlDisposition[] {
   let page: URL;
   let origin: URL;
@@ -206,7 +209,10 @@ export function discoverHtmlLinks(input: {
   const out: CrawlUrlDisposition[] = [];
   const seen = new Set<string>();
   for (const href of extractSameOriginHrefs(input.html, page)) {
-    const normalized = normalizeDiscoveredUrl(href, origin);
+    const normalized = normalizeDiscoveredUrl(href, origin, {
+      maxPathDepth: input.maxPathDepth,
+      applyContentPolicy: true,
+    });
     if (!normalized || seen.has(normalized)) continue;
     seen.add(normalized);
     out.push({
@@ -407,22 +413,149 @@ export async function discoverScannerV2Frontier(
     250,
     DEFAULT_HTML_TIMEOUT_MS,
   );
+  const maxPathDepth = boundedInt(
+    options.maxPathDepth,
+    DEFAULT_MAX_PATH_DEPTH,
+    1,
+    DEFAULT_MAX_PATH_DEPTH,
+  );
+  const maxQueryVariantsPerSignature = boundedInt(
+    options.maxQueryVariantsPerSignature,
+    DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+    1,
+    DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+  );
+  const maxCalendarVariantsPerFamily = boundedInt(
+    options.maxCalendarVariantsPerFamily,
+    DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+    1,
+    DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+  );
 
   const warnings: string[] = [];
   const sitemapSources: ScanPageSource[] = [];
   const pageSources: ScanPageSource[] = [];
   const urls = new UrlAccumulator(maxDiscoveredUrls);
+  const trapGuard = new ScannerV2FrontierTrapGuard({
+    maxQueryVariantsPerSignature,
+    maxCalendarVariantsPerFamily,
+  });
+  const contentOwnerByHash = new Map<string, string>();
+  let discoveryIncomplete = false;
+
+  const root = normalizeScannerV2Url(initial.url.toString(), origin, {
+    maxPathDepth,
+    applyContentPolicy: true,
+  });
+  if (!root.ok) {
+    throw new Error(`scanner_v2_discovery_policy:${root.reason}`);
+  }
+  if (root.aliasUrl) {
+    urls.add({
+      url: root.aliasUrl,
+      canonicalUrl: root.url,
+      status: "duplicate",
+      discoveryReason: "submitted",
+      reason: "normalized_url_variant",
+    });
+  }
   urls.add({
-    url: initial.url.toString(),
+    url: root.url,
     status: "queued",
     discoveryReason: "submitted",
   });
+  trapGuard.evaluate(root.url);
 
   const robots = await fetchRobotsForDiscovery(origin, options);
   if (robots.warning) warnings.push(robots.warning);
   if (robots.source) sitemapSources.push(robots.source);
+  discoveryIncomplete = discoveryIncomplete || robots.incomplete;
 
-  let discoveryIncomplete = robots.incomplete;
+  function admitPageCandidate(
+    raw: string,
+    metadata: Pick<CrawlUrlDisposition, "discoveryReason"> &
+      Partial<
+        Pick<
+          CrawlUrlDisposition,
+          "discoveredFrom" | "sitemapLastModified"
+        >
+      >,
+  ): { url: string; added: boolean } | null {
+    const normalized = normalizeScannerV2Url(raw, origin, {
+      maxPathDepth,
+      applyContentPolicy: true,
+    });
+
+    if (!normalized.ok) {
+      urls.add({
+        url: normalized.displayUrl,
+        status: "policy_skipped",
+        discoveryReason: metadata.discoveryReason,
+        ...(metadata.discoveredFrom
+          ? { discoveredFrom: metadata.discoveredFrom }
+          : {}),
+        ...(metadata.sitemapLastModified
+          ? { sitemapLastModified: metadata.sitemapLastModified }
+          : {}),
+        reason: normalized.reason,
+      });
+      if (normalized.incomplete) {
+        discoveryIncomplete = true;
+        warnings.push(normalized.reason);
+      }
+      return null;
+    }
+
+    const trap = trapGuard.evaluate(normalized.url);
+    if (!trap.ok) {
+      urls.add({
+        url: normalized.url,
+        status: "policy_skipped",
+        discoveryReason: metadata.discoveryReason,
+        ...(metadata.discoveredFrom
+          ? { discoveredFrom: metadata.discoveredFrom }
+          : {}),
+        ...(metadata.sitemapLastModified
+          ? { sitemapLastModified: metadata.sitemapLastModified }
+          : {}),
+        reason: trap.reason,
+      });
+      discoveryIncomplete = true;
+      warnings.push(trap.reason);
+      return null;
+    }
+
+    const added = urls.add({
+      url: normalized.url,
+      status: "queued",
+      discoveryReason: metadata.discoveryReason,
+      ...(metadata.discoveredFrom
+        ? { discoveredFrom: metadata.discoveredFrom }
+        : {}),
+      ...(metadata.sitemapLastModified
+        ? { sitemapLastModified: metadata.sitemapLastModified }
+        : {}),
+    });
+
+    if (normalized.aliasUrl && normalized.aliasUrl !== normalized.url) {
+      urls.add({
+        url: normalized.aliasUrl,
+        canonicalUrl: normalized.url,
+        status: "duplicate",
+        discoveryReason: metadata.discoveryReason,
+        ...(metadata.discoveredFrom
+          ? { discoveredFrom: metadata.discoveredFrom }
+          : {}),
+        ...(metadata.sitemapLastModified
+          ? { sitemapLastModified: metadata.sitemapLastModified }
+          : {}),
+        reason: "normalized_url_variant",
+      });
+    }
+
+    return { url: normalized.url, added };
+  }
+
   const declared = parseRobotsSitemaps(robots.body, origin);
   const sitemapQueue: Array<{ url: string; depth: number; declared: boolean }> =
     declared.length > 0
@@ -440,7 +573,10 @@ export async function discoverScannerV2Frontier(
     const next = sitemapQueue.shift();
     if (!next) continue;
 
-    const normalizedSitemap = normalizeDiscoveredUrl(next.url, origin);
+    const normalizedSitemap = normalizeDiscoveredUrl(next.url, origin, {
+      maxPathDepth,
+      applyContentPolicy: false,
+    });
     if (!normalizedSitemap) {
       warnings.push("sitemap_url_rejected");
       if (next.declared) discoveryIncomplete = true;
@@ -525,7 +661,10 @@ export async function discoverScannerV2Frontier(
 
     if (parsed.kind === "sitemapindex") {
       for (const entry of parsed.entries) {
-        const normalized = normalizeDiscoveredUrl(entry.loc, origin);
+        const normalized = normalizeDiscoveredUrl(entry.loc, origin, {
+          maxPathDepth,
+          applyContentPolicy: false,
+        });
         if (!normalized) {
           warnings.push("sitemap_child_rejected");
           discoveryIncomplete = true;
@@ -548,27 +687,16 @@ export async function discoverScannerV2Frontier(
     }
 
     for (const entry of parsed.entries) {
-      const normalized = normalizeDiscoveredUrl(entry.loc, origin);
-      if (!normalized) {
-        warnings.push("sitemap_page_rejected");
-        urls.add({
-          url: displayRejectedUrl(entry.loc, origin),
-          status: "policy_skipped",
-          discoveryReason: "sitemap",
-          discoveredFrom: response.url.toString(),
-          reason: "sitemap_page_rejected",
-          ...(entry.lastmod ? { sitemapLastModified: entry.lastmod } : {}),
-        });
-        continue;
-      }
-      const added = urls.add({
-        url: normalized,
-        status: "queued",
+      const admitted = admitPageCandidate(entry.loc, {
         discoveryReason: "sitemap",
         discoveredFrom: response.url.toString(),
         ...(entry.lastmod ? { sitemapLastModified: entry.lastmod } : {}),
       });
-      if (added) sitemapUrlsDiscovered += 1;
+      if (!admitted) {
+        warnings.push("sitemap_page_rejected");
+        continue;
+      }
+      if (admitted.added) sitemapUrlsDiscovered += 1;
     }
   }
 
@@ -677,28 +805,171 @@ export async function discoverScannerV2Frontier(
       continue;
     }
 
-    urls.update(pageUrl, {
-      status: "fetched",
-      canonicalUrl: response.url.toString(),
-      fetchedAt: new Date().toISOString(),
-    });
+    const finalUrlPolicy = normalizeScannerV2Url(
+      response.url.toString(),
+      origin,
+      {
+        maxPathDepth,
+        applyContentPolicy: true,
+      },
+    );
+    if (!finalUrlPolicy.ok) {
+      urls.update(pageUrl, {
+        status: "policy_skipped",
+        reason: finalUrlPolicy.reason,
+      });
+      if (finalUrlPolicy.incomplete) {
+        discoveryIncomplete = true;
+        warnings.push(finalUrlPolicy.reason);
+      }
+      continue;
+    }
+
+    const effectiveUrl = finalUrlPolicy.url;
+    const fetchedAt = new Date().toISOString();
+    const contentHash = stableContentHash(response.body);
+
+    if (effectiveUrl !== pageUrl) {
+      const existingFinal = urls.get(effectiveUrl);
+      if (existingFinal) {
+        urls.update(effectiveUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          fetchedAt,
+          contentHash,
+        });
+      } else {
+        urls.add({
+          url: effectiveUrl,
+          status: "fetched",
+          discoveryReason: "canonical",
+          discoveredFrom: pageUrl,
+          canonicalUrl: effectiveUrl,
+          fetchedAt,
+          contentHash,
+        });
+      }
+      urls.update(pageUrl, {
+        status: "duplicate",
+        canonicalUrl: effectiveUrl,
+        reason: "redirect_canonical",
+        contentHash,
+        fetchedAt,
+      });
+    }
+
+    let canonicalTarget = effectiveUrl;
+    let canonicalReason: "rel_canonical" | "content_hash_duplicate" | null =
+      null;
+
+    if (isHtmlType(contentType)) {
+      const canonical = extractScannerV2CanonicalLink({
+        html: response.body,
+        pageUrl: response.url.toString(),
+        origin: origin.origin,
+        maxPathDepth,
+      });
+      if (canonical?.ok && canonical.url !== effectiveUrl) {
+        const admittedCanonical = admitPageCandidate(canonical.url, {
+          discoveryReason: "canonical",
+          discoveredFrom: effectiveUrl,
+        });
+        if (admittedCanonical) {
+          canonicalTarget = admittedCanonical.url;
+          canonicalReason = "rel_canonical";
+          if (
+            admittedCanonical.added &&
+            !pageQueued.has(admittedCanonical.url)
+          ) {
+            pageQueued.add(admittedCanonical.url);
+            pageQueue.push(admittedCanonical.url);
+          }
+        }
+      } else if (canonical && !canonical.ok) {
+        warnings.push("canonical_rejected");
+      }
+    }
+
+    if (!canonicalReason) {
+      const existingOwner = contentOwnerByHash.get(contentHash);
+      if (existingOwner && existingOwner !== effectiveUrl) {
+        canonicalTarget = existingOwner;
+        canonicalReason = "content_hash_duplicate";
+      } else {
+        contentOwnerByHash.set(contentHash, effectiveUrl);
+      }
+    } else {
+      contentOwnerByHash.set(contentHash, canonicalTarget);
+    }
+
+    if (canonicalReason) {
+      const existingEffective = urls.get(effectiveUrl);
+      if (existingEffective) {
+        urls.update(effectiveUrl, {
+          status: "duplicate",
+          canonicalUrl: canonicalTarget,
+          reason: canonicalReason,
+          contentHash,
+          fetchedAt,
+        });
+      } else {
+        urls.add({
+          url: effectiveUrl,
+          status: "duplicate",
+          discoveryReason: "canonical",
+          discoveredFrom: pageUrl,
+          canonicalUrl: canonicalTarget,
+          reason: canonicalReason,
+          contentHash,
+          fetchedAt,
+        });
+      }
+      if (pageUrl !== effectiveUrl) {
+        urls.update(pageUrl, {
+          status: "duplicate",
+          canonicalUrl: canonicalTarget,
+          reason:
+            canonicalReason === "rel_canonical"
+              ? "redirect_then_rel_canonical"
+              : "redirect_then_content_hash_duplicate",
+          contentHash,
+          fetchedAt,
+        });
+      }
+    } else {
+      const existingEffective = urls.get(effectiveUrl);
+      if (existingEffective) {
+        urls.update(effectiveUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          contentHash,
+          fetchedAt,
+        });
+      }
+      if (pageUrl === effectiveUrl) {
+        urls.update(pageUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          contentHash,
+          fetchedAt,
+        });
+      }
+    }
 
     if (!isHtmlType(contentType)) continue;
 
     htmlPagesFetched += 1;
-    const discovered = discoverHtmlLinks({
-      html: response.body,
-      pageUrl: response.url.toString(),
-      origin: origin.origin,
-    });
-
-    for (const row of discovered) {
-      const added = urls.add(row);
-      if (!added) continue;
+    const hrefs = extractSameOriginHrefs(response.body, response.url);
+    for (const href of hrefs) {
+      const admitted = admitPageCandidate(href, {
+        discoveryReason: "html_link",
+        discoveredFrom: effectiveUrl,
+      });
+      if (!admitted?.added) continue;
       htmlLinksDiscovered += 1;
-      if (!pageQueued.has(row.url)) {
-        pageQueued.add(row.url);
-        pageQueue.push(row.url);
+      if (!pageQueued.has(admitted.url)) {
+        pageQueued.add(admitted.url);
+        pageQueue.push(admitted.url);
       }
     }
 
