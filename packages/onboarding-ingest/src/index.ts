@@ -56,6 +56,7 @@ export {
   DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
   normalizeScannerV2Url,
   extractScannerV2CanonicalLink,
+  isScannerV2NonTextAssetUrl,
   ScannerV2FrontierTrapGuard,
 } from "./scanner-v2-url-policy.ts";
 export type {
