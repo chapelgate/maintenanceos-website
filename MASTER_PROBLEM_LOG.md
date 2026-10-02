@@ -807,3 +807,40 @@ The deployed scanner returned Forum Housing services and its own published openi
 
 Golden-line boundary remained intact throughout. Human blockers: none.
 
+## MOS-WEB-SCANNER-V2-001 — Scanner summary architecture cannot satisfy whole-site receptionist knowledge
+Status: DESIGN COMPLETE / IMPLEMENTATION NOT STARTED
+Opened: 2026-10-02
+
+User requirement:
+The receptionist must retain and answer from the details across the public website, not only opening hours, business name and a short services summary.
+
+Confirmed architectural gap:
+- packages/onboarding-ingest/src/scan.ts is a bounded summary crawler: MAX_PAGES=5, MAX_TOTAL_BYTES=768 KiB, TOTAL_DEADLINE_MS=12s, MAX_READER_PAGES=4.
+- The current downstream knowledge pack projects the crawl into businessName/greeting/hours/services/faqs.
+- This is structurally incapable of proving whole-site coverage or answering arbitrary deep-page questions.
+
+Expert review:
+Six disciplines were applied: crawler/search architecture, JavaScript rendering, structured-data extraction, retrieval/indexing, SSRF/web security and production reliability. Recommendations are grounded in RFC 9309, Sitemaps.org, Google Search Central crawler/rendering guidance, OWASP SSRF guidance, WHATWG URL parsing, Playwright isolation, Schema.org LocalBusiness, SQLite FTS5/BM25 and RFC 9110 validators.
+
+Adopted redesign:
+- Replace summary-only source of truth with a whole-site page/chunk corpus and crawl manifest.
+- Discover through robots sitemap directives, sitemap indexes, recursive same-site links, rendered links, canonical targets and linked public documents.
+- Preserve raw verified HTTPS as first fetch path, then bounded rendering/reader fallbacks without weakening TLS or SSRF controls.
+- Account explicitly for every discovered URL.
+- COMPLETE is legal only when the frontier is exhausted, unresolved=0, indexing is complete and no safety/resource limit was reached.
+- PARTIAL is mandatory for any unresolved page, unsupported document, timeout, challenge or safety ceiling.
+- Index full content with deterministic full-text/BM25 retrieval; keep structured facts as a compatibility/exact-answer layer.
+- Add optional local/free semantic reranking later; no paid embedding dependency for baseline correctness.
+- Make crawling resumable/incremental using content hashes plus HTTP validators.
+- The browser receptionist must retrieve supporting corpus chunks for arbitrary questions and preserve source URLs in trace.
+
+Design artifacts:
+- docs/SCANNER_V2_WHOLE_SITE_ARCHITECTURE.md
+- docs/SCANNER_V2_ACCEPTANCE.md
+
+Implementation rule:
+Do not "fix" this by merely increasing MAX_PAGES/MAX_BYTES/timeout. Implement the stages in the architecture document and do not declare Scanner V2 production-ready until the acceptance document passes.
+
+Golden-line boundary:
+Scanner V2 is website ingest/browser-preview only. No MaintenanceOS live telephony, carrier routing, phone number, provider credentials, production voice runtime or golden phone line may be modified, exercised, rerouted, restarted or redeployed by this work.
+
