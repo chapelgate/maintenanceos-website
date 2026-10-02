@@ -80,7 +80,7 @@ test(
             "const root=document.getElementById('root');",
             "const cookieBefore=document.cookie.includes('carry=1')?'yes':'no';",
             "document.cookie='carry=1; SameSite=Lax';",
-            "fetch('/api/data').then(r=>r.json()).then(d=>{",
+            "fetch('https://api.acme.example/data').then(r=>r.json()).then(d=>{",
             "root.innerHTML='<h1>'+d.name+'</h1><p>'+d.fact+'</p><a href=\"/deep\">Deep detail</a>';",
             "root.setAttribute('data-cookie-before',cookieBefore);",
             "});",
@@ -91,15 +91,19 @@ test(
           "application/javascript; charset=utf-8",
         );
       }
-      if (url.pathname === "/api/data") {
-        return response(
-          url.toString(),
-          JSON.stringify({
+      if (url.hostname === "api.acme.example" && url.pathname === "/data") {
+        return {
+          status: 200,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+            "access-control-allow-origin": "https://acme.example",
+          },
+          body: JSON.stringify({
             name: "Rendered Services",
             fact: "Emergency alley gate key replacement is available by prior arrangement.",
           }),
-          "application/json; charset=utf-8",
-        );
+          url,
+        };
       }
       if (url.pathname === "/deep") {
         return response(
@@ -136,8 +140,12 @@ test(
       first.blockedRequests.some(
         (row) =>
           row.url.startsWith("https://169.254.169.254/") &&
-          row.reason === "cross_origin",
+          row.reason === "network_policy_denied",
       ),
+    );
+    assert.ok(
+      calls.some((row) => row.url === "https://api.acme.example/data"),
+      "public cross-origin API should be fetched through the SSRF-safe proxy",
     );
     assert.equal(
       calls.some((row) => row.url.includes("/submit")),
