@@ -46,7 +46,7 @@ const cases = [
   },
   {
     name: "MaintenanceOS",
-    origin: "https://maintenanceos.co.uk/",
+    origin: "https://seahorse-app-4oasq.ondigitalocean.app/",
     questions: [
       "What does MaintenanceOS do?",
       "What industries do you support?",
