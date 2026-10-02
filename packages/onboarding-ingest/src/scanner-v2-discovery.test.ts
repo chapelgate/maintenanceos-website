@@ -368,6 +368,31 @@ test("sitemap nesting-depth ceiling yields explicit PARTIAL", async () => {
   assert.ok(result.warnings.includes("sitemap_depth_limit"));
 });
 
+test("duplicate sitemap references do not consume document budget", async () => {
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxSitemapDocuments: 1,
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "Sitemap: https://acme.example/index.xml",
+        "text/plain",
+      ),
+      "https://acme.example/index.xml": response(
+        "https://acme.example/index.xml",
+        sitemapIndex([
+          "https://acme.example/index.xml",
+          "https://acme.example/index.xml",
+        ]),
+      ),
+      "https://acme.example/": html("https://acme.example/"),
+    }),
+  });
+
+  assert.equal(result.sitemapDocuments, 1);
+  assert.equal(result.incomplete, false);
+  assert.equal(result.warnings.includes("sitemap_document_limit"), false);
+});
+
 test("sitemap document ceiling yields explicit PARTIAL", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     maxSitemapDocuments: 1,
