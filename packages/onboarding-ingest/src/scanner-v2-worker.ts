@@ -64,6 +64,7 @@ export interface ScannerV2JobStore {
   listUrls(crawlId: string): Promise<CrawlUrlDisposition[]>;
   getUrl(crawlId: string, url: string): Promise<CrawlUrlDisposition | undefined>;
   upsertUrl(crawlId: string, disposition: CrawlUrlDisposition): Promise<void>;
+  getLease(crawlId: string, leaseKey: string): Promise<CrawlLease | undefined>;
   listPages(crawlId: string): Promise<CrawlPage[]>;
   putPage(crawlId: string, page: CrawlPage): Promise<void>;
   listChunks(crawlId: string): Promise<CorpusChunk[]>;
@@ -93,10 +94,13 @@ async function readJson<T>(path: string): Promise<T | undefined> {
 async function atomicWriteJson(path: string, value: unknown): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
   const temp = `${path}.tmp-${process.pid}-${Date.now()}`;
-  await writeFile(temp, JSON.stringify(value, null, 2) + "\n", {
-    encoding: "utf8",
-    mode: 0o600,
-  });
+  const handle = await open(temp, "w", 0o600);
+  try {
+    await handle.writeFile(JSON.stringify(value, null, 2) + "\n", "utf8");
+    await handle.sync();
+  } finally {
+    await handle.close();
+  }
   await rename(temp, path);
 }
 
@@ -232,6 +236,7 @@ export class FileScannerV2JobStore implements ScannerV2JobStore {
         const handle = await open(path, "wx", 0o600);
         try {
           await handle.writeFile(JSON.stringify(lease) + "\n", "utf8");
+          await handle.sync();
         } finally {
           await handle.close();
         }
@@ -254,6 +259,15 @@ export class FileScannerV2JobStore implements ScannerV2JobStore {
       }
     }
     return false;
+  }
+
+  async getLease(
+    crawlId: string,
+    leaseKey: string,
+  ): Promise<CrawlLease | undefined> {
+    return readJson<CrawlLease>(
+      this.recordPath(crawlId, "leases", leaseKey),
+    );
   }
 
   async releaseLease(
@@ -284,20 +298,31 @@ export async function createScannerV2Job(input: {
     ? Math.max(1, Math.min(10, Math.trunc(requestedRetryLimit as number)))
     : DEFAULT_WORKER_RETRY_LIMIT;
   const existing = await input.store.getJob(input.crawlId);
-  if (existing) return existing;
+  if (
+    existing &&
+    (existing.origin !== input.origin ||
+      existing.releaseSha !== input.releaseSha)
+  ) {
+    throw new Error("scanner_v2_job_identity_mismatch");
+  }
 
-  const job: CrawlJob = {
-    crawlId: input.crawlId,
-    origin: input.origin,
-    state: "CRAWLING",
-    releaseSha: input.releaseSha,
-    createdAt,
-    updatedAt: createdAt,
-    retryLimit,
-  };
-  await input.store.putJob(job);
+  const job: CrawlJob =
+    existing ?? {
+      crawlId: input.crawlId,
+      origin: input.origin,
+      state: "CRAWLING",
+      releaseSha: input.releaseSha,
+      createdAt,
+      updatedAt: createdAt,
+      retryLimit,
+    };
+  if (!existing) await input.store.putJob(job);
 
+  // Re-running creation is also crash recovery for a process that wrote the
+  // job record but died while seeding the frontier. Existing terminal rows are
+  // never overwritten by the original queued seed.
   for (const row of input.urls) {
+    if (await input.store.getUrl(input.crawlId, row.url)) continue;
     await input.store.upsertUrl(input.crawlId, {
       ...row,
       retryCount: row.retryCount ?? 0,
@@ -407,6 +432,24 @@ export async function runScannerV2WorkerBatch(input: {
         url: structuredClone(current),
         workerId: input.workerId,
       });
+
+      // A slow worker must never commit after its lease expired or was
+      // reassigned. Check both owner and exact lease generation immediately
+      // before durable writes.
+      const commitTime = now();
+      const activeLease = await input.store.getLease(
+        job.crawlId,
+        current.url,
+      );
+      if (
+        !activeLease ||
+        activeLease.owner !== input.workerId ||
+        activeLease.expiresAt !== lease.expiresAt ||
+        Date.parse(activeLease.expiresAt) <= commitTime.getTime()
+      ) {
+        deferred += 1;
+        continue;
+      }
 
       let status = outcome.disposition;
       let canonicalUrl = outcome.canonicalUrl ?? outcome.page?.canonicalUrl;
