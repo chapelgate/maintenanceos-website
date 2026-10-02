@@ -480,6 +480,92 @@ export async function discoverScannerV2Frontier(
   if (robots.warning) warnings.push(robots.warning);
   if (robots.source) sitemapSources.push(robots.source);
   discoveryIncomplete = discoveryIncomplete || robots.incomplete;
+
+  function admitPageCandidate(
+    raw: string,
+    metadata: Pick<CrawlUrlDisposition, "discoveryReason"> &
+      Partial<
+        Pick<
+          CrawlUrlDisposition,
+          "discoveredFrom" | "sitemapLastModified"
+        >
+      >,
+  ): { url: string; added: boolean } | null {
+    const normalized = normalizeScannerV2Url(raw, origin, {
+      maxPathDepth,
+      applyContentPolicy: true,
+    });
+
+    if (!normalized.ok) {
+      urls.add({
+        url: normalized.displayUrl,
+        status: "policy_skipped",
+        discoveryReason: metadata.discoveryReason,
+        ...(metadata.discoveredFrom
+          ? { discoveredFrom: metadata.discoveredFrom }
+          : {}),
+        ...(metadata.sitemapLastModified
+          ? { sitemapLastModified: metadata.sitemapLastModified }
+          : {}),
+        reason: normalized.reason,
+      });
+      if (normalized.incomplete) {
+        discoveryIncomplete = true;
+        warnings.push(normalized.reason);
+      }
+      return null;
+    }
+
+    const trap = trapGuard.evaluate(normalized.url);
+    if (!trap.ok) {
+      urls.add({
+        url: normalized.url,
+        status: "policy_skipped",
+        discoveryReason: metadata.discoveryReason,
+        ...(metadata.discoveredFrom
+          ? { discoveredFrom: metadata.discoveredFrom }
+          : {}),
+        ...(metadata.sitemapLastModified
+          ? { sitemapLastModified: metadata.sitemapLastModified }
+          : {}),
+        reason: trap.reason,
+      });
+      discoveryIncomplete = true;
+      warnings.push(trap.reason);
+      return null;
+    }
+
+    const added = urls.add({
+      url: normalized.url,
+      status: "queued",
+      discoveryReason: metadata.discoveryReason,
+      ...(metadata.discoveredFrom
+        ? { discoveredFrom: metadata.discoveredFrom }
+        : {}),
+      ...(metadata.sitemapLastModified
+        ? { sitemapLastModified: metadata.sitemapLastModified }
+        : {}),
+    });
+
+    if (normalized.aliasUrl && normalized.aliasUrl !== normalized.url) {
+      urls.add({
+        url: normalized.aliasUrl,
+        canonicalUrl: normalized.url,
+        status: "duplicate",
+        discoveryReason: metadata.discoveryReason,
+        ...(metadata.discoveredFrom
+          ? { discoveredFrom: metadata.discoveredFrom }
+          : {}),
+        ...(metadata.sitemapLastModified
+          ? { sitemapLastModified: metadata.sitemapLastModified }
+          : {}),
+        reason: "normalized_url_variant",
+      });
+    }
+
+    return { url: normalized.url, added };
+  }
+
   const declared = parseRobotsSitemaps(robots.body, origin);
   const sitemapQueue: Array<{ url: string; depth: number; declared: boolean }> =
     declared.length > 0
