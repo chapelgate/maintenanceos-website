@@ -86,7 +86,7 @@ test("Stage 4 extracts full visible business content and excludes executable/non
     "Acme Heating engineer van",
     "Emergency call-outs are assessed individually and are not guaranteed.",
   ]) {
-    assert.match(result.page.visibleText, new RegExp(text.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\$&")));
+    assert.ok(result.page.visibleText.includes(text), text);
   }
 
   assert.doesNotMatch(result.page.visibleText, /SCRIPT SHOULD NEVER ENTER CORPUS/);
