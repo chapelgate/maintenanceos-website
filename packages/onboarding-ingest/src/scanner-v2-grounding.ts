@@ -257,15 +257,18 @@ function chooseExtractiveSpan(
 }
 
 function evidenceFromHits(hits: readonly CorpusSearchHit[]): GroundedEvidence[] {
-  return hits.map((hit) => ({
-    chunkId: hit.chunkId,
-    canonicalUrl: hit.canonicalUrl,
-    // Headings are indexed evidence too. Include them in the trace so a safe
-    // heading fallback (for example a product/service name above an image)
-    // remains an exact substring of the evidence exposed to the verifier.
-    text: [...hit.headingPath, hit.text].filter(Boolean).join("\n"),
-    score: hit.score,
-  }));
+  return hits.map((hit) => {
+    const heading = hit.headingPath.filter(Boolean).join(" — ").trim();
+    return {
+      chunkId: hit.chunkId,
+      canonicalUrl: hit.canonicalUrl,
+      // Headings are indexed evidence too. Use the same representation as the
+      // extractive heading fallback so every returned answer is literally
+      // present in the evidence trace.
+      text: [heading, hit.text].filter(Boolean).join("\n"),
+      score: hit.score,
+    };
+  });
 }
 
 function claimTokens(value: string): string[] {
