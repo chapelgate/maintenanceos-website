@@ -300,3 +300,160 @@ test("normal content does not render when raw HTML is already sufficient", async
   }
   assert.equal(called, false);
 });
+
+const browserEnabled = process.env.SCANNER_V2_BROWSER_TEST === "1";
+
+test(
+  "real Chromium recovers app-shell facts, isolates state and blocks unsafe requests",
+  { skip: !browserEnabled },
+  async () => {
+    const seen: string[] = [];
+    const lookup: LookupFn = async (hostname) => {
+      if (
+        hostname === "fixture.example" ||
+        hostname === "api.fixture.example"
+      ) {
+        return ["203.0.113.10"];
+      }
+      throw new Error("unexpected lookup " + hostname);
+    };
+    const get: HttpGetFn = async (url) => {
+      seen.push(url.toString());
+      if (url.hostname === "fixture.example" && url.pathname === "/") {
+        return response(
+          url.toString(),
+          '<!doctype html><html><head><title>Fixture</title><script src="/app.js"></script></head><body><div id="root"></div></body></html>',
+        );
+      }
+      if (
+        url.hostname === "fixture.example" &&
+        url.pathname === "/app.js"
+      ) {
+        return response(
+          url.toString(),
+          [
+            "const root=document.getElementById('root');",
+            "const before=document.cookie.includes('carry=1')?'yes':'no';",
+            "root.setAttribute('data-cookie-before',before);",
+            "root.innerHTML='<main><h1>Rendered Services</h1><p>Rendered-only emergency alley gate repair is available by prior arrangement.</p><a href=\"/deep\">Deep detail</a></main>';",
+            "document.cookie='carry=1; SameSite=Lax';",
+            "fetch('https://api.fixture.example/data').catch(()=>{});",
+            "fetch('/submit',{method:'POST',body:'must-not-send'}).catch(()=>{});",
+            "fetch('https://169.254.169.254/latest/meta-data').catch(()=>{});",
+          ].join(""),
+          "text/javascript; charset=utf-8",
+        );
+      }
+      if (
+        url.hostname === "api.fixture.example" &&
+        url.pathname === "/data"
+      ) {
+        return {
+          status: 200,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+            "access-control-allow-origin": "*",
+          },
+          body: '{"ok":true}',
+          url,
+        };
+      }
+      if (
+        url.hostname === "fixture.example" &&
+        url.pathname === "/deep"
+      ) {
+        return response(
+          url.toString(),
+          "<html><body><p>Deep public detail.</p></body></html>",
+        );
+      }
+      throw new Error("unexpected safe fetch " + url.toString());
+    };
+
+    const shell =
+      '<!doctype html><html><head><title>Fixture</title><script src="/app.js"></script></head><body><div id="root"></div></body></html>';
+
+    async function renderOnce() {
+      return renderScannerV2Page("https://fixture.example/", {
+        rawHtml: shell,
+        lookup,
+        get,
+        settleMs: 400,
+        timeoutMs: 10_000,
+      });
+    }
+
+    const first = await renderOnce();
+    assert.equal(first.ok, true, JSON.stringify(first));
+    if (!first.ok) return;
+    assert.match(first.html, /Rendered-only emergency alley gate repair/);
+    assert.match(first.html, /data-cookie-before="no"/);
+    assert.ok(
+      first.links.some(
+        (row) =>
+          row.url === "https://fixture.example/deep" &&
+          row.discoveryReason === "rendered_link",
+      ),
+    );
+    assert.ok(seen.includes("https://api.fixture.example/data"));
+    assert.equal(seen.some((url) => url.includes("/submit")), false);
+    assert.equal(
+      seen.some((url) => url.includes("169.254.169.254")),
+      false,
+    );
+    assert.ok(
+      first.blockedRequests.some(
+        (row) =>
+          row.url === "https://fixture.example/submit" &&
+          row.reason === "mutation_method",
+      ),
+    );
+    assert.ok(
+      first.blockedRequests.some(
+        (row) =>
+          row.url.startsWith("https://169.254.169.254/") &&
+          row.reason === "network_policy_denied",
+      ),
+    );
+
+    const second = await renderOnce();
+    assert.equal(second.ok, true, JSON.stringify(second));
+    if (second.ok) {
+      assert.match(second.html, /data-cookie-before="no"/);
+      assert.doesNotMatch(second.html, /data-cookie-before="yes"/);
+    }
+  },
+);
+
+test(
+  "real Chromium fails closed before connecting when DNS resolves private",
+  { skip: !browserEnabled },
+  async () => {
+    let getCalls = 0;
+    const result = await renderScannerV2Page(
+      "https://private-dns.example/",
+      {
+        rawHtml:
+          '<html><head><script src="/app.js"></script></head><body><div id="root"></div></body></html>',
+        lookup: async () => ["127.0.0.1"],
+        get: async (url) => {
+          getCalls += 1;
+          return response(url.toString(), "must not be fetched");
+        },
+        timeoutMs: 3_000,
+      },
+    );
+
+    assert.equal(result.ok, false);
+    assert.equal(getCalls, 0);
+    if (!result.ok) {
+      assert.equal(result.incomplete, true);
+      assert.ok(
+        result.blockedRequests.some(
+          (row) => row.reason === "fetch_failed",
+        ),
+      );
+    }
+  },
+);
+
