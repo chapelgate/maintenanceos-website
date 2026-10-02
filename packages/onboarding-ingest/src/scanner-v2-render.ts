@@ -4,9 +4,10 @@ import {
   DEFAULT_PAGE_TIMEOUT_MS,
   fetchPublicHttps,
 } from "./fetch-safe.ts";
-import { discoverHtmlLinks } from "./scanner-v2-discovery.ts";
+import { extractSameOriginHrefs } from "./extract.ts";
+import { normalizeScannerV2Url } from "./scanner-v2-url-policy.ts";
 import { extractScannerV2Page, type ScannerV2PageExtraction } from "./scanner-v2-content.ts";
-import type { HttpGetFn, LookupFn, ScanError } from "./types.ts";
+import type { HttpGetFn, LookupFn } from "./types.ts";
 
 export const DEFAULT_RENDER_TIMEOUT_MS = 12_000;
 export const DEFAULT_RENDER_NETWORK_BYTES = 2 * 1024 * 1024;
@@ -341,12 +342,27 @@ export async function renderScannerV2Page(
       };
     }
 
-    const links = discoverHtmlLinks({
-      html,
-      pageUrl: page.url(),
-      origin,
-      discoveryReason: "rendered_link",
-    }).map((row) => row.url);
+    const renderedPageUrl = new URL(page.url());
+    const renderedOrigin = new URL(origin);
+    const links = [
+      ...new Set(
+        extractSameOriginHrefs(html, renderedPageUrl)
+          .map((href) =>
+            normalizeScannerV2Url(href, renderedOrigin, {
+              applyContentPolicy: true,
+            }),
+          )
+          .filter(
+            (
+              value,
+            ): value is Extract<
+              ReturnType<typeof normalizeScannerV2Url>,
+              { ok: true }
+            > => value.ok,
+          )
+          .map((value) => value.url),
+      ),
+    ];
 
     if (blockedRequests.length) warnings.push("render_subrequests_blocked");
 
