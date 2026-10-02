@@ -306,26 +306,81 @@ test("content-hash duplicate collapses to the first canonical page and stores no
   assert.equal(duplicate?.reason, "content_hash_duplicate");
 });
 
-test("job creation is idempotent and never overwrites release identity", async () => {
+test("job creation heals partial frontier seeding but rejects identity drift", async () => {
   const { store } = await tempStore();
+  const seed = [
+    queued("https://acme.example/a"),
+    queued("https://acme.example/b"),
+    queued("https://acme.example/c"),
+  ];
   const first = await createScannerV2Job({
     store,
     crawlId: "same-job",
     origin: "https://acme.example",
     releaseSha: "sha-original",
-    urls: [queued("https://acme.example/a")],
+    urls: [seed[0]!],
     createdAt: "2026-10-02T20:00:00.000Z",
   });
-  const second = await createScannerV2Job({
+
+  // Simulate a crash after job.json and only the first frontier row existed.
+  const resumed = await createScannerV2Job({
     store,
     crawlId: "same-job",
-    origin: "https://evil.example",
-    releaseSha: "sha-overwrite",
-    urls: [queued("https://evil.example/")],
+    origin: "https://acme.example",
+    releaseSha: "sha-original",
+    urls: seed,
     createdAt: "2026-10-02T21:00:00.000Z",
   });
+  assert.deepEqual(resumed, first);
+  assert.equal((await store.listUrls("same-job")).length, 3);
 
-  assert.deepEqual(second, first);
-  assert.equal(second.releaseSha, "sha-original");
-  assert.equal((await store.listUrls("same-job")).length, 1);
+  await assert.rejects(
+    () =>
+      createScannerV2Job({
+        store,
+        crawlId: "same-job",
+        origin: "https://evil.example",
+        releaseSha: "sha-overwrite",
+        urls: [queued("https://evil.example/")],
+      }),
+    /scanner_v2_job_identity_mismatch/,
+  );
+  assert.equal((await store.getJob("same-job"))?.releaseSha, "sha-original");
+});
+
+test("worker refuses to commit after its lease expires during processing", async () => {
+  const { store } = await tempStore();
+  const url = "https://acme.example/slow";
+  await createScannerV2Job({
+    store,
+    crawlId: "fence",
+    origin: "https://acme.example",
+    releaseSha: "sha-stage9",
+    urls: [queued(url)],
+  });
+
+  const times = [
+    new Date("2026-10-02T20:00:00.000Z"),
+    new Date("2026-10-02T20:00:02.500Z"),
+    new Date("2026-10-02T20:00:03.000Z"),
+  ];
+  let index = 0;
+  const result = await runScannerV2WorkerBatch({
+    store,
+    crawlId: "fence",
+    workerId: "slow-worker",
+    leaseMs: 1_000,
+    processUrl: async ({ url: row }) => ({
+      disposition: "fetched",
+      ...pageFor(row.url, "slow result must not commit"),
+    }),
+    now: () => times[Math.min(index++, times.length - 1)]!,
+  });
+
+  assert.equal(result.completed, 0);
+  assert.equal(result.deferred, 1);
+  assert.equal(result.hasMoreWork, true);
+  assert.equal((await store.listPages("fence")).length, 0);
+  assert.equal((await store.listChunks("fence")).length, 0);
+  assert.equal((await store.getUrl("fence", url))?.status, "queued");
 });
