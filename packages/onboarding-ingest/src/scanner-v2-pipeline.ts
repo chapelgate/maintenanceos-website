@@ -53,6 +53,7 @@ import {
   READER_FALLBACK_ORIGIN,
   READER_FALLBACK_TIMEOUT_MS,
 } from "./scan.ts";
+import { ScanError } from "./types.ts";
 import type {
   BinaryHttpGetFn,
   CrawlManifest,
@@ -60,7 +61,6 @@ import type {
   CrawlUrlDisposition,
   HttpGetFn,
   LookupFn,
-  ScanError,
 } from "./types.ts";
 
 export const DEFAULT_STAGE12_MAX_BATCHES = 10_000;
