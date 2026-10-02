@@ -924,12 +924,17 @@ test("Stage 7 renders only a thin app shell and adds rendered links to the front
       assert.equal(rawHtml, shell);
       return {
         ok: true,
-        url,
+        finalUrl: url,
         html:
           '<html><body><h1>Rendered Services</h1><p>Rendered public service details.</p><a href="/deep-rendered">Deep rendered page</a></body></html>',
-        links: ["https://acme.example/deep-rendered"],
-        requests: 3,
-        bytes: 1024,
+        links: [{
+          url: "https://acme.example/deep-rendered",
+          status: "queued",
+          discoveryReason: "rendered_link",
+          discoveredFrom: url,
+        }],
+        observedRequests: 3,
+        totalFetchedBytes: 1024,
         blockedRequests: [],
         warnings: [],
       };
@@ -968,8 +973,9 @@ test("Stage 7 render failure is explicit PARTIAL and never treats the raw shell 
     renderPage: async () => ({
       ok: false,
       reason: "render_timeout",
-      requests: 2,
-      bytes: 100,
+      incomplete: true,
+      observedRequests: 2,
+      totalFetchedBytes: 100,
       blockedRequests: [],
       warnings: ["render_timeout"],
     }),
