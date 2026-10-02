@@ -5,7 +5,18 @@ import {
 } from "./fetch-safe.ts";
 import { extractSameOriginHrefs } from "./extract.ts";
 import { allowPublicHttpsUrl } from "./ssrf.ts";
-import { buildCrawlManifest } from "./scanner-v2-foundation.ts";
+import {
+  buildCrawlManifest,
+  stableContentHash,
+} from "./scanner-v2-foundation.ts";
+import {
+  DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+  DEFAULT_MAX_PATH_DEPTH,
+  DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+  extractScannerV2CanonicalLink,
+  normalizeScannerV2Url,
+  ScannerV2FrontierTrapGuard,
+} from "./scanner-v2-url-policy.ts";
 import { isPathAllowed, parseRobotsTxt, type RobotsRules } from "./scan.ts";
 import {
   ScanError,
@@ -63,6 +74,9 @@ export type ScannerV2DiscoveryOptions = {
   maxHtmlBytes?: number;
   sitemapTimeoutMs?: number;
   htmlTimeoutMs?: number;
+  maxPathDepth?: number;
+  maxQueryVariantsPerSignature?: number;
+  maxCalendarVariantsPerFamily?: number;
 };
 
 function boundedInt(
@@ -164,18 +178,16 @@ export function parseRobotsSitemaps(
 function normalizeDiscoveredUrl(
   raw: string,
   origin: URL,
+  options: {
+    maxPathDepth?: number;
+    applyContentPolicy?: boolean;
+  } = {},
 ): string | null {
-  let url: URL;
-  try {
-    url = new URL(raw, origin);
-  } catch {
-    return null;
-  }
-  url.hash = "";
-  if (url.protocol !== "https:" || url.origin !== origin.origin) return null;
-  const allow = allowPublicHttpsUrl(url.toString());
-  if (!allow.ok) return null;
-  return allow.url.toString();
+  const result = normalizeScannerV2Url(raw, origin, {
+    maxPathDepth: options.maxPathDepth,
+    applyContentPolicy: options.applyContentPolicy,
+  });
+  return result.ok ? result.url : null;
 }
 
 function displayRejectedUrl(raw: string, origin: URL): string {
