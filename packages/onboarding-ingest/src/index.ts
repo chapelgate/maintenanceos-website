@@ -13,6 +13,19 @@ export {
 export { fetchPublicHttps } from "./fetch-safe.ts";
 export { isWebIngestEnabled, runScan } from "./scan.ts";
 export {
+  extractScannerV2Page,
+  buildScannerV2Corpus,
+  DEFAULT_MAX_CHUNK_CHARS,
+  DEFAULT_CHUNK_OVERLAP_CHARS,
+} from "./scanner-v2-content.ts";
+export type {
+  ScannerV2PageInput,
+  ScannerV2ContentBlockKind,
+  ScannerV2ContentBlock,
+  ScannerV2PageExtraction,
+  ScannerV2Corpus,
+} from "./scanner-v2-content.ts";
+export {
   discoverScannerV2Frontier,
   discoverHtmlLinks,
   parseRobotsSitemaps,
