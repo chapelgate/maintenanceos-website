@@ -1,0 +1,32 @@
+name: Scanner V2 Stage 8 narrow validation
+
+on:
+  push:
+    branches:
+      - feat/scanner-v2-stage8-documents-20261002
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scanner-v2-stage8-narrow
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Stage 8 document and fetch tests
+        run: |
+          node --experimental-strip-types --test             packages/onboarding-ingest/src/scanner-v2-documents.test.ts             packages/onboarding-ingest/src/fetch-safe.test.ts
+      - name: Stage 8 TypeScript
+        run: npx tsc --noEmit
