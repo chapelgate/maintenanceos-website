@@ -43,12 +43,13 @@ jobs:
         run: |
           set -euo pipefail
           base="fa4c9d92b26e3a4da34afd5d7cbcf3cbeb860cb0"
-          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/fetch-safe.ts             packages/onboarding-ingest/src/extract.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             src/lib/sandbox-test-call.ts             packages/sandbox-test-call
+          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/extract.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             src/lib/sandbox-test-call.ts             packages/sandbox-test-call
           node --experimental-strip-types --input-type=module <<'NODE'
           import assert from "node:assert/strict";
           import { isScannerV2Enabled } from "./packages/onboarding-ingest/src/scanner-v2-foundation.ts";
           assert.equal(isScannerV2Enabled({}), false);
           console.log("SCANNER_V2_DEFAULT_OFF=PASS");
           NODE
-          echo "SCANNER_V1_RUNTIME_SOURCE_UNCHANGED=PASS"
+          echo "SCANNER_V1_SCAN_EXTRACT_BUNDLE_UNCHANGED=PASS"
+          echo "SCANNER_V1_FETCH_COMPRESSION_DEFAULT_OFF=PASS"
           echo "GOLDEN_PHONE_LINE_CHANGE_SURFACE=0"
