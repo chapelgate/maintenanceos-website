@@ -4,6 +4,17 @@ export const DEFAULT_MAX_PATH_DEPTH = 16;
 export const DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE = 64;
 export const DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY = 24;
 
+const NON_TEXT_ASSET_PATH =
+  /\.(?:avif|bmp|css|eot|gif|ico|jpe?g|m4a|m4v|mov|mp3|mp4|mpeg|mpg|ogg|otf|png|svg|tiff?|ts|ttf|webm|webp|woff2?|zip|gz|rar|7z)$/i;
+
+export function isScannerV2NonTextAssetUrl(rawUrl: string): boolean {
+  try {
+    return NON_TEXT_ASSET_PATH.test(new URL(rawUrl).pathname);
+  } catch {
+    return false;
+  }
+}
+
 const TRACKING_PARAM_NAMES = new Set([
   "dclid",
   "fbclid",
