@@ -44,6 +44,7 @@ export type ScannerV2RenderResult =
         | "not_needed"
         | "render_timeout"
         | "render_failed"
+        | "render_no_content"
         | "dom_too_large"
         | "network_budget"
         | "request_limit";
@@ -339,6 +340,20 @@ export async function renderScannerV2Page(
         bytes,
         blockedRequests,
         warnings: ["dom_too_large"],
+      };
+    }
+
+    if (
+      shouldRenderScannerV2Page(html) &&
+      visibleText(html).length <= visibleText(rawHtml).length
+    ) {
+      return {
+        ok: false,
+        reason: "render_no_content",
+        requests,
+        bytes,
+        blockedRequests,
+        warnings: ["render_no_content"],
       };
     }
 
