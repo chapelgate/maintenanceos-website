@@ -1,7 +1,7 @@
 # Scanner V2 Stage 6 Evidence — Source-Grounded Receptionist
 
 Date: 2026-10-02
-Status: CODE + TEST GATE PASS / NVIDIA REVIEW PENDING
+Status: COMPLETE / VERIFIED / READY TO MERGE
 Exact tested source SHA: 8fa959e6663519686f7d406bdb7f1a6c640138d3
 
 ## Implemented
@@ -77,6 +77,29 @@ For every supported corpus answer:
 - exactly traced source URL is returned;
 - exactly traced chunk ID is returned;
 - unsupported questions return not_found with no evidence claims.
+
+## Independent NVIDIA review
+
+Existing included/free NVIDIA development capacity was used for independent review only.
+
+- GPT-OSS review:
+  - Evolution Engine run 37043711861 / job 110959809793
+  - provider: nvidia-gpt-oss
+  - model: openai/gpt-oss-20b
+  - review: PASS
+  - marginal cost: USD 0
+- Nemotron review:
+  - initial 45-second attempt timed out before verdict; this was a lane timeout, not a product-test failure;
+  - bounded retry used a 90-second review window;
+  - Evolution Engine run 37044026017 / job 110960855013
+  - provider: nvidia-nemotron
+  - model: nvidia/nemotron-3.5-lightning-30b-a3b
+  - review: PASS
+  - marginal cost: USD 0
+- raw hosted-model output retained: 0
+- production NVIDIA scope enabled: 0
+
+The NVIDIA lane was used strictly for review/reasoning. It was not treated as a toolful code executor.
 
 ## Model/cost policy
 
