@@ -844,3 +844,54 @@ Do not "fix" this by merely increasing MAX_PAGES/MAX_BYTES/timeout. Implement th
 Golden-line boundary:
 Scanner V2 is website ingest/browser-preview only. No MaintenanceOS live telephony, carrier routing, phone number, provider credentials, production voice runtime or golden phone line may be modified, exercised, rerouted, restarted or redeployed by this work.
 
+## MOS-WEB-CREATE-008 — Scanner summary architecture cannot answer whole-site questions
+Status: DESIGN COMPLETE / READY FOR BUILD
+Opened: 2026-10-02
+
+User-visible problem:
+- The live receptionist can now recover opening hours and headline services, but still fails on detailed questions whose answers exist elsewhere on the submitted website.
+- The required product behaviour is no longer a shallow onboarding summary. MaintenanceOS needs a source-grounded knowledge corpus covering the entire publicly accessible in-scope business website.
+
+Verified architectural limitation in current production source:
+- MAX_PAGES = 5
+- MAX_TOTAL_BYTES = 768 KiB
+- TOTAL_DEADLINE_MS = 12 seconds
+- MAX_READER_PAGES = 4
+- one bounded same-origin static-script fallback
+- canonical receptionist knowledge reduced to businessName, greeting, hours, services and FAQs
+
+Root cause:
+The current scanner was intentionally designed as a fast, bounded fact extractor. It cannot honestly prove whole-site discovery, retain deep-page content, ingest documents, render arbitrary client-side pages, report page-level completeness or retrieve arbitrary site facts at question time.
+
+Approved redesign:
+- docs/SCANNER_V2_WHOLE_SITE_ARCHITECTURE.md
+- docs/SCANNER_V2_EXPERT_EVIDENCE_REVIEW.md
+- docs/SCANNER_V2_ACCEPTANCE.md
+- docs/SCANNER_V2_IMPLEMENTATION_PLAN.md
+
+Core architectural decision:
+Replace "small crawl -> five summary fields" with:
+1. resumable whole-site discovery/corpus building with exact per-URL accounting;
+2. structured high-confidence fact extraction;
+3. full page/document text chunking with provenance;
+4. deterministic lexical retrieval baseline (BM25/full-text);
+5. bounded JavaScript rendering escalation;
+6. source-grounded receptionist answers from retrieved corpus evidence;
+7. explicit COMPLETE/PARTIAL/FAILED crawl semantics;
+8. incremental recrawl using validators/content hashes.
+
+Non-negotiable correctness rule:
+A crawl is COMPLETE only when the discovery frontier is exhausted and every discovered in-scope canonical URL is accounted for as fetched, duplicate or policy-skipped with zero unresolved resources. Reaching a safety/resource ceiling produces PARTIAL, never a silent/truncated success.
+
+Security:
+Strict TLS, robots compliance, redirect revalidation, public-IP/SSRF protection, same-site policy, byte/time ceilings and no-form-submission rules remain mandatory across HTTP fetch, sitemap discovery, renderer subrequests, reader fallback and document ingestion.
+
+Implementation:
+Build additively behind Scanner V2 feature gating. Preserve current Scanner V1 as rollback until deterministic fixtures, real-site deep-question tests, full repository regression and exact deployed-SHA mobile acceptance pass.
+
+Golden-line boundary:
+Scanner V2 is website-ingest/browser-preview only. No MaintenanceOS production telephony, carrier routing, live number, provider credential, production voice runtime or golden phone line may be modified, exercised, rerouted, restarted or redeployed as part of this work.
+
+Human blockers:
+None at design stage.
+
