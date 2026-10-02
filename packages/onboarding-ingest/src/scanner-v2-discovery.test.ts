@@ -325,6 +325,7 @@ test("robots disallow is applied to integrated HTML frontier without fetching th
   });
 
   const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxHtmlPages: 2,
     lookup: base.lookup,
     get: async (url, ip, opts) => {
       if (url.pathname.startsWith("/private")) privateFetches += 1;
@@ -333,6 +334,11 @@ test("robots disallow is applied to integrated HTML frontier without fetching th
   });
 
   assert.equal(privateFetches, 0);
+  assert.equal(
+    result.manifest.urls.find((row) => row.url === "https://acme.example/public")?.status,
+    "fetched",
+  );
+  assert.equal(result.warnings.includes("html_page_limit"), false);
   const privateRow = result.manifest.urls.find((row) =>
     row.url.includes("/private/details"),
   );
