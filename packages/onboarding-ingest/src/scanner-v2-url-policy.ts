@@ -333,26 +333,26 @@ export class ScannerV2FrontierTrapGuard {
     maxQueryVariantsPerSignature?: number;
     maxCalendarVariantsPerFamily?: number;
   } = {}) {
-    this.maxQueryVariants = Math.max(
-      1,
-      Math.min(
-        DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
-        Math.trunc(
-          options.maxQueryVariantsPerSignature ??
+    const requestedQuery = options.maxQueryVariantsPerSignature;
+    const requestedCalendar = options.maxCalendarVariantsPerFamily;
+    this.maxQueryVariants = Number.isFinite(requestedQuery)
+      ? Math.max(
+          1,
+          Math.min(
             DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
-        ),
-      ),
-    );
-    this.maxCalendarVariants = Math.max(
-      1,
-      Math.min(
-        DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
-        Math.trunc(
-          options.maxCalendarVariantsPerFamily ??
+            Math.trunc(requestedQuery as number),
+          ),
+        )
+      : DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE;
+    this.maxCalendarVariants = Number.isFinite(requestedCalendar)
+      ? Math.max(
+          1,
+          Math.min(
             DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
-        ),
-      ),
-    );
+            Math.trunc(requestedCalendar as number),
+          ),
+        )
+      : DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY;
   }
 
   evaluate(rawUrl: string): FrontierTrapDecision {
