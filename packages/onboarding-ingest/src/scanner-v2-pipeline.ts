@@ -126,6 +126,17 @@ function isPlainText(contentType: string): boolean {
   return /^text\/plain\b/i.test(contentType);
 }
 
+const NON_TEXT_ASSET_PATH =
+  /\.(?:avif|bmp|css|eot|gif|ico|jpe?g|m4a|m4v|mov|mp3|mp4|mpeg|mpg|ogg|otf|png|svg|tiff?|ts|ttf|webm|webp|woff2?|zip|gz|rar|7z)$/i;
+
+export function isScannerV2NonTextAssetUrl(rawUrl: string): boolean {
+  try {
+    return NON_TEXT_ASSET_PATH.test(new URL(rawUrl).pathname);
+  } catch {
+    return false;
+  }
+}
+
 function escapeHtml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
@@ -320,6 +331,16 @@ export function createScannerV2InitialProcessor(
   const origin = new URL(options.origin).origin;
 
   return async ({ url }) => {
+    if (
+      isScannerV2NonTextAssetUrl(url.url) &&
+      !isScannerV2SupportedDocumentUrl(url.url)
+    ) {
+      return {
+        disposition: "policy_skipped",
+        reason: "non_text_asset",
+      };
+    }
+
     if (isScannerV2UnsupportedTextDocumentUrl(url.url)) {
       return {
         disposition: "unresolved",
