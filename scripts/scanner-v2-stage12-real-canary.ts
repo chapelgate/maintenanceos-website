@@ -15,44 +15,44 @@ const cases = [
     name: "Alley Gates",
     origin: "https://alleygates.co.uk/",
     questions: [
-      "What services do you offer?",
-      "How do I order replacement alley gate keys?",
-      "Do you provide CCTV?",
-      "Do you provide security fencing?",
-      "How long can replacement keys take?",
+      { question: "What services do you offer?", expectedAny: ["alley gate", "cctv", "security fencing"] },
+      { question: "How do I order replacement alley gate keys?", expectedAny: ["key"] },
+      { question: "Do you provide CCTV?", expectedAny: ["cctv"] },
+      { question: "Do you provide security fencing?", expectedAny: ["security fencing"] },
+      { question: "How long can replacement keys take?", expectedAny: ["week"] },
     ],
   },
   {
     name: "Express Gas Delivery",
     origin: "https://expressgasdelivery.com/",
     questions: [
-      "What services do you offer?",
-      "What are your opening hours?",
-      "Do you supply propane gas cylinders?",
-      "Do you supply patio gas?",
-      "Do you supply beer gas?",
+      { question: "What services do you offer?", expectedAny: ["gas"] },
+      { question: "What are your opening hours?", expectedAny: ["08:00", "8:00"] },
+      { question: "Do you supply propane gas cylinders?", expectedAny: ["propane"] },
+      { question: "Do you supply patio gas?", expectedAny: ["patio"] },
+      { question: "Do you supply beer gas?", expectedAny: ["beer"] },
     ],
   },
   {
     name: "Forum Housing",
     origin: "https://forumhousing.co.uk/",
     questions: [
-      "What services do you offer?",
-      "What are your opening hours?",
-      "What support do you provide?",
-      "How can someone contact you?",
-      "What housing help is available?",
+      { question: "What services do you offer?", expectedAny: ["support", "housing", "accommodation"] },
+      { question: "What are your opening hours?", expectedAny: ["9", "09:00", "5pm", "17:00"] },
+      { question: "What support do you provide?", expectedAny: ["support"] },
+      { question: "How can someone contact you?", expectedAny: ["contact", "phone", "telephone", "email"] },
+      { question: "What housing help is available?", expectedAny: ["housing", "support", "accommodation"] },
     ],
   },
   {
     name: "MaintenanceOS",
     origin: "https://seahorse-app-4oasq.ondigitalocean.app/",
     questions: [
-      "What does MaintenanceOS do?",
-      "What industries do you support?",
-      "What does the AI receptionist do?",
-      "How does MaintenanceOS handle property maintenance?",
-      "What security information is published?",
+      { question: "What does MaintenanceOS do?", expectedAny: ["maintenance", "property"] },
+      { question: "What industries do you support?", expectedAny: ["landlord", "housing", "maintenance", "property"] },
+      { question: "What does the AI receptionist do?", expectedAny: ["receptionist"] },
+      { question: "How does MaintenanceOS handle property maintenance?", expectedAny: ["maintenance"] },
+      { question: "What security information is published?", expectedAny: ["security"] },
     ],
   },
 ];
@@ -89,35 +89,25 @@ for (const [caseIndex, item] of selectedCases.entries()) {
       },
     });
 
-    const answers = [];
-    for (const question of item.questions) {
-      const answer = await result.answer(question);
-      answers.push({
-        question,
-        supportStatus: answer.supportStatus,
-        source: answer.source,
-        text: answer.text,
-        sourceUrls: answer.sourceUrls,
-        chunkIds: answer.retrievedChunkIds,
-      });
-      assert.equal(
-        answer.supportStatus,
-        "supported",
-        item.name + " failed supported question: " + question + "\n" + JSON.stringify(answer),
-      );
-      assert.ok(
-        answer.sourceUrls.length > 0,
-        item.name + " answer lacks source URL: " + question,
-      );
-    }
-
-    const unknown = await result.answer(
-      "What is the managing director's favourite colour and childhood nickname?",
-    );
-    assert.equal(
-      unknown.supportStatus,
-      "not_found",
-      item.name + " invented an unsupported personal fact",
+    console.log(
+      "STAGE12_PRE_ANSWER=" +
+        JSON.stringify({
+          name: item.name,
+          state: result.manifest.state,
+          discovered: result.manifest.discovered,
+          fetched: result.manifest.fetched,
+          duplicate: result.manifest.duplicate,
+          policySkipped: result.manifest.policySkipped,
+          robotsSkipped: result.manifest.robotsSkipped,
+          unresolved: result.manifest.unresolved,
+          queued: result.manifest.queued,
+          pageCount: result.pageCount,
+          chunkCount: result.chunkCount,
+          warnings: result.warnings,
+          unresolvedRows: result.manifest.urls
+            .filter((row) => row.status === "unresolved")
+            .slice(0, 25),
+        }),
     );
 
     assert.equal(
@@ -142,6 +132,48 @@ for (const [caseIndex, item] of selectedCases.entries()) {
     assert.ok(result.pageCount > 0);
     assert.ok(result.chunkCount > 0);
     assert.equal(result.indexStats.documentCount, result.chunkCount);
+
+    const answers = [];
+    for (const check of item.questions) {
+      const answer = await result.answer(check.question);
+      answers.push({
+        question: check.question,
+        supportStatus: answer.supportStatus,
+        source: answer.source,
+        text: answer.text,
+        sourceUrls: answer.sourceUrls,
+        chunkIds: answer.retrievedChunkIds,
+      });
+      assert.equal(
+        answer.supportStatus,
+        "supported",
+        item.name + " failed supported question: " + check.question + "\n" + JSON.stringify(answer),
+      );
+      assert.ok(
+        answer.sourceUrls.length > 0,
+        item.name + " answer lacks source URL: " + check.question,
+      );
+      const answerText = answer.text.toLowerCase();
+      assert.ok(
+        check.expectedAny.some((value) => answerText.includes(value.toLowerCase())),
+        item.name +
+          " answer did not actually address the question: " +
+          check.question +
+          "\nexpected one of " +
+          JSON.stringify(check.expectedAny) +
+          "\nanswer=" +
+          answer.text,
+      );
+    }
+
+    const unknown = await result.answer(
+      "What is the managing director's favourite colour and childhood nickname?",
+    );
+    assert.equal(
+      unknown.supportStatus,
+      "not_found",
+      item.name + " invented an unsupported personal fact",
+    );
 
     const deepSources = new Set(
       answers
