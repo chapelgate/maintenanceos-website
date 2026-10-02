@@ -368,4 +368,4 @@ test("grounding uses an evidence heading instead of unrelated body text when onl
   assert.doesNotMatch(answer.text, /^Hobbyweld Logo$/i);
   assert.deepEqual(answer.sourceUrls, ["https://example.com/gases"]);
 });
-\n
+
