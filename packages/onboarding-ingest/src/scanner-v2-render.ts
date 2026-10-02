@@ -315,9 +315,15 @@ export async function renderScannerV2Page(
     });
 
     // Give already-loaded application scripts a short deterministic window to
-    // settle without waiting for analytics or external resources (which are
-    // blocked above).
+    // settle without waiting indefinitely for analytics or external resources
+    // (which are blocked above). Network-idle is best-effort and bounded.
     await page.waitForTimeout(150);
+    await fetchSerial;
+    await page
+      .waitForLoadState("networkidle", {
+        timeout: Math.min(2_000, timeoutMs),
+      })
+      .catch(() => undefined);
     await fetchSerial;
 
     if (fatalReason) {
