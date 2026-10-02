@@ -70,6 +70,19 @@ test("path-depth ceiling is fail-closed and callers cannot raise the reviewed ma
   assert.equal(lowered.ok, false);
 });
 
+test("sitemap-document URLs are governed by sitemap ceilings, not content path-depth policy", () => {
+  const deepSitemap =
+    "https://acme.example/" +
+    Array.from({ length: DEFAULT_MAX_PATH_DEPTH + 8 }, (_, i) => "s" + i).join("/") +
+    "/sitemap.xml";
+
+  const result = normalizeScannerV2Url(deepSitemap, ORIGIN, {
+    maxPathDepth: 2,
+    applyContentPolicy: false,
+  });
+  assert.equal(result.ok, true);
+});
+
 test("sitemap-document normalization can bypass business endpoint policy without bypassing origin/security", () => {
   const sitemap = normalizeScannerV2Url(
     "https://acme.example/admin/sitemap.xml?utm_source=x",
