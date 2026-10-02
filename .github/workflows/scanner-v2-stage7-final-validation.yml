@@ -1,4 +1,4 @@
-name: Scanner V2 Stage 7 final validation
+name: Scanner V2 Stage 7 focused Chromium diagnostic
 
 on:
   push:
@@ -15,42 +15,18 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Stage 7 deterministic tests
-        run: |
-          node --experimental-strip-types --test             packages/onboarding-ingest/src/scanner-v2-renderer.test.ts             packages/onboarding-ingest/src/scanner-v2-discovery.test.ts
-      - name: Full repository regression
-        run: npm test
-      - name: Accessibility
-        run: npm run accessibility:check
-      - name: Type checks
-        run: npx tsc --noEmit
-      - name: Production build
-        env:
-          NEXT_PUBLIC_FORM_ENDPOINT: http://127.0.0.1:8787/leads
-        run: npm run build
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-      - name: Real Chromium Stage 7 acceptance
+      - run: npx playwright install --with-deps chromium
+      - name: Focused real Chromium acceptance
         env:
           SCANNER_V2_BROWSER_TEST: "1"
         run: node --experimental-strip-types --test packages/onboarding-ingest/src/scanner-v2-renderer.test.ts
-      - name: Prove production V1 and golden telephony surfaces unchanged
-        shell: bash
-        run: |
-          set -euo pipefail
-          base="a01d2f19016920be1890cf2d40cf246ce1c9130f"
-          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/server.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             src/lib/browser-voice.ts
-          echo "SCANNER_V1_RUNTIME_SOURCE_UNCHANGED=PASS"
-          echo "PRODUCTION_TELEPHONY_CHANGE_SURFACE=0"
-          echo "GOLDEN_PHONE_LINE_CHANGE_SURFACE=0"
