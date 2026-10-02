@@ -260,7 +260,10 @@ function evidenceFromHits(hits: readonly CorpusSearchHit[]): GroundedEvidence[] 
   return hits.map((hit) => ({
     chunkId: hit.chunkId,
     canonicalUrl: hit.canonicalUrl,
-    text: hit.text,
+    // Headings are indexed evidence too. Include them in the trace so a safe
+    // heading fallback (for example a product/service name above an image)
+    // remains an exact substring of the evidence exposed to the verifier.
+    text: [...hit.headingPath, hit.text].filter(Boolean).join("\n"),
     score: hit.score,
   }));
 }
