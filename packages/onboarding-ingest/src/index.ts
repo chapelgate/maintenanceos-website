@@ -200,6 +200,21 @@ export type {
 } from "./types.ts";
 
 export {
+  buildScannerV2ConditionalHeaders,
+  buildScannerV2RefreshSeed,
+  createScannerV2RefreshJob,
+  createScannerV2RefreshProcessor,
+  FileScannerV2VersionStore,
+  commitScannerV2CrawlVersion,
+} from "./scanner-v2-refresh.ts";
+export type {
+  ScannerV2RefreshVersion,
+  ScannerV2RefreshOptions,
+  ScannerV2RefreshSeed,
+  ScannerV2VersionStore,
+} from "./scanner-v2-refresh.ts";
+
+export {
   DEFAULT_WORKER_BATCH_SIZE,
   DEFAULT_WORKER_LEASE_MS,
   DEFAULT_WORKER_RETRY_LIMIT,
