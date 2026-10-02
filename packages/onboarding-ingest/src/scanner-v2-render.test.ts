@@ -29,7 +29,7 @@ function response(
 }
 
 test("render escalation is conservative: content-rich HTML stays on raw path", () => {
-  const rich = `<!doctype html><html><body><main><h1>Services</h1><p>${"Detailed public business information. ".repeat(18)}</p><script src="/app.js"></script></main></body></html>`;
+  const rich = `<!doctype html><html><body><main><h1>Services</h1><p>${"Detailed public business information. ".repeat(18)}</p><script defer src="/app.js"></script></main></body></html>`;
   assert.equal(shouldRenderScannerV2Page(rich), false);
 
   const shell = '<!doctype html><html><head><script defer src="/app.js"></script></head><body><div id="root"></div></body></html>';
@@ -70,7 +70,7 @@ test(
       if (url.pathname === "/") {
         return response(
           url.toString(),
-          '<!doctype html><html><head><title>Acme</title><script src="/app.js"></script></head><body><div id="root"></div></body></html>',
+          '<!doctype html><html><head><title>Acme</title><script defer src="/app.js"></script></head><body><div id="root"></div></body></html>',
         );
       }
       if (url.pathname === "/app.js") {
@@ -111,7 +111,7 @@ test(
     };
 
     const shell =
-      '<!doctype html><html><head><title>Acme</title><script src="/app.js"></script></head><body><div id="root"></div></body></html>';
+      '<!doctype html><html><head><title>Acme</title><script defer src="/app.js"></script></head><body><div id="root"></div></body></html>';
 
     const first = await renderScannerV2Page(
       "https://acme.example/",
@@ -189,7 +189,7 @@ test(
     let getCalls = 0;
     const result = await renderScannerV2Page(
       "https://acme.example/",
-      '<html><head><script src="/app.js"></script></head><body><div id="root"></div></body></html>',
+      '<html><head><script defer src="/app.js"></script></head><body><div id="root"></div></body></html>',
       {
         browserType: chromium,
         lookup: async () => ["127.0.0.1"],
