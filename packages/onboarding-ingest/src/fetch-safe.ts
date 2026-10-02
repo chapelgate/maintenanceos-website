@@ -367,6 +367,8 @@ export type FetchSafeBytesOptions = {
   maxRedirects?: number;
   remainingMs?: number;
   headers?: Record<string, string>;
+  /** Optional same-origin boundary enforced before following a redirect. */
+  allowedOrigin?: string;
 };
 
 export async function fetchPublicHttpsBytes(
@@ -474,6 +476,13 @@ export async function fetchPublicHttpsBytes(
           "invalid_url",
           "Redirect Location was not a valid URL.",
           400,
+        );
+      }
+      if (options.allowedOrigin && next.origin !== options.allowedOrigin) {
+        throw new ScanError(
+          "cross_origin_redirect",
+          "The document redirected outside the submitted website.",
+          422,
         );
       }
       current = next.toString();
