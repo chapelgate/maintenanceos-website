@@ -198,15 +198,27 @@ function chooseExtractiveSpan(
     | undefined;
 
   for (const hit of hits) {
-    // Headings are part of the indexed evidence and may carry the exact
-    // service/product name even when the nearby body is only an image alt or
-    // short label. Consider them as extractive evidence instead of allowing a
-    // high BM25 hit score to turn an unrelated body fragment into the answer.
+    const bodyCandidates = sentenceCandidates(hit.text);
+    const bodyHasQueryEvidence = bodyCandidates.some((candidate) => {
+      const candidateTokens = new Set(tokens(candidate));
+      const overlap = [...qTokens].some((token) => candidateTokens.has(token));
+      const identifiers = hit.matchedIdentifiers.some((identifier) =>
+        normalize(candidate).replace(/[\s().-]+/g, "").includes(identifier),
+      );
+      return overlap || identifiers;
+    });
+
+    // Prefer body evidence whenever it actually overlaps the question because
+    // it usually contains the useful detail (instructions, prices, timings).
+    // Only fall back to a matched heading when the body itself has no query
+    // evidence, such as a product heading above a logo/image-alt fragment.
     const heading = hit.headingPath.filter(Boolean).join(" — ").trim();
-    const candidates = [
-      ...(heading ? [heading] : []),
-      ...sentenceCandidates(hit.text),
-    ];
+    const candidates = bodyHasQueryEvidence
+      ? bodyCandidates
+      : heading
+        ? [heading]
+        : bodyCandidates;
+
     for (const [ordinal, candidate] of candidates.entries()) {
       if (!candidate) continue;
       const cTokens = new Set(tokens(candidate));
