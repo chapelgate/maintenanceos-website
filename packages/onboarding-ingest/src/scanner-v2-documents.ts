@@ -4,6 +4,7 @@ import {
   fetchPublicHttpsBytes,
 } from "./fetch-safe.ts";
 import {
+  buildCrawlManifest,
   stableChunkId,
   stableContentHash,
 } from "./scanner-v2-foundation.ts";
@@ -11,7 +12,9 @@ import { normalizeScannerV2Url } from "./scanner-v2-url-policy.ts";
 import type {
   BinaryHttpGetFn,
   CorpusChunk,
+  CrawlManifest,
   CrawlPage,
+  CrawlUrlDisposition,
   LookupFn,
 } from "./types.ts";
 
@@ -776,3 +779,131 @@ export async function ingestScannerV2Document(
     warnings,
   };
 }
+
+export type ScannerV2DocumentBatchResult = {
+  manifest: CrawlManifest;
+  pages: CrawlPage[];
+  chunks: CorpusChunk[];
+  sources: ScannerV2DocumentSuccess["source"][];
+  attempted: number;
+  succeeded: number;
+  warnings: string[];
+  incomplete: boolean;
+};
+
+export type ScannerV2DocumentBatchOptions = Omit<
+  ScannerV2DocumentOptions,
+  "origin" | "discoveredFrom"
+>;
+
+/**
+ * Stage 8 manifest integration.
+ *
+ * Stage 2/3 already discover same-origin links and retain every URL disposition.
+ * This pass consumes only explicit document candidates from that manifest,
+ * avoiding any change to the stable HTML discovery loop.
+ */
+export async function ingestScannerV2ManifestDocuments(
+  manifest: CrawlManifest,
+  options: ScannerV2DocumentBatchOptions = {},
+): Promise<ScannerV2DocumentBatchResult> {
+  const rows = manifest.urls.map((row) => structuredClone(row));
+  const pages: CrawlPage[] = [];
+  const chunks: CorpusChunk[] = [];
+  const sources: ScannerV2DocumentSuccess["source"][] = [];
+  const warnings: string[] = [];
+  let attempted = 0;
+  let succeeded = 0;
+  let incomplete = manifest.state === "PARTIAL" || manifest.unresolved > 0;
+
+  const replaceRow = (
+    url: string,
+    patch: Partial<Omit<CrawlUrlDisposition, "url" | "discoveryReason">>,
+  ) => {
+    const index = rows.findIndex((row) => row.url === url);
+    if (index < 0) return;
+    rows[index] = { ...rows[index]!, ...structuredClone(patch) };
+  };
+
+  for (const row of rows) {
+    if (isScannerV2UnsupportedTextDocumentUrl(row.url)) {
+      attempted += 1;
+      incomplete = true;
+      warnings.push("unsupported_document");
+      replaceRow(row.url, {
+        status: "unresolved",
+        reason: "unsupported_document",
+      });
+      continue;
+    }
+
+    if (!isScannerV2SupportedDocumentUrl(row.url)) continue;
+    attempted += 1;
+
+    const result = await ingestScannerV2Document(row.url, {
+      origin: manifest.origin,
+      ...options,
+      ...(row.discoveredFrom ? { discoveredFrom: row.discoveredFrom } : {}),
+    });
+
+    if (!result.ok) {
+      incomplete = incomplete || result.incomplete;
+      warnings.push(...result.warnings, result.reason);
+      replaceRow(row.url, {
+        status: result.incomplete ? "unresolved" : "policy_skipped",
+        reason: result.reason,
+      });
+      continue;
+    }
+
+    succeeded += 1;
+    pages.push(result.page);
+    chunks.push(...result.chunks);
+    sources.push(result.source);
+    warnings.push(...result.warnings);
+
+    if (!result.complete) {
+      incomplete = true;
+      replaceRow(row.url, {
+        status: "unresolved",
+        canonicalUrl: result.page.canonicalUrl,
+        reason: "document_limit_reached",
+        contentHash: result.page.contentHash,
+        fetchedAt: result.page.fetchedAt,
+      });
+      continue;
+    }
+
+    replaceRow(row.url, {
+      status: "fetched",
+      canonicalUrl: result.page.canonicalUrl,
+      reason: undefined,
+      contentHash: result.page.contentHash,
+      fetchedAt: result.page.fetchedAt,
+    });
+  }
+
+  const requestedState =
+    incomplete
+      ? "PARTIAL"
+      : manifest.state === "COMPLETE"
+        ? "COMPLETE"
+        : manifest.state;
+
+  return {
+    manifest: buildCrawlManifest({
+      crawlId: manifest.crawlId,
+      origin: manifest.origin,
+      requestedState,
+      urls: rows,
+    }),
+    pages,
+    chunks,
+    sources,
+    attempted,
+    succeeded,
+    warnings: [...new Set(warnings)],
+    incomplete,
+  };
+}
+
