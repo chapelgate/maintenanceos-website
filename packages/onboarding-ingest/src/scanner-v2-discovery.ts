@@ -38,6 +38,7 @@ export type ScannerV2DiscoveryResult = {
   sitemapUrlsDiscovered: number;
   warnings: string[];
   limitReached: boolean;
+  incomplete: boolean;
 };
 
 export type ScannerV2DiscoveryOptions = {
@@ -269,9 +270,11 @@ export async function discoverScannerV2Frontier(
   const sitemapSeen = new Set<string>();
 
   let sitemapUrlsDiscovered = 0;
+  let discoveryIncomplete = false;
   while (sitemapQueue.length > 0) {
     if (sitemapSeen.size >= maxSitemapDocuments) {
       warnings.push("sitemap_document_limit");
+      discoveryIncomplete = true;
       break;
     }
 
@@ -296,6 +299,7 @@ export async function discoverScannerV2Frontier(
       });
     } catch {
       warnings.push("sitemap_fetch_failed");
+      discoveryIncomplete = true;
       continue;
     }
 
@@ -304,11 +308,13 @@ export async function discoverScannerV2Frontier(
         warnings.push("sitemap_not_found");
       } else {
         warnings.push(`sitemap_http_${response.status}`);
+        discoveryIncomplete = true;
       }
       continue;
     }
     if (response.status >= 400) {
       warnings.push(`sitemap_http_${response.status}`);
+      discoveryIncomplete = true;
       continue;
     }
 
@@ -321,12 +327,14 @@ export async function discoverScannerV2Frontier(
       !/(?:xml|text\/plain|application\/octet-stream)/i.test(type)
     ) {
       warnings.push("sitemap_content_type_rejected");
+      discoveryIncomplete = true;
       continue;
     }
 
     const bytes = Buffer.byteLength(response.body, "utf8");
     if (bytes > maxSitemapBytes) {
       warnings.push("sitemap_byte_limit");
+      discoveryIncomplete = true;
       continue;
     }
 
@@ -339,6 +347,7 @@ export async function discoverScannerV2Frontier(
     const parsed = parseSitemapXml(response.body);
     if (parsed.kind === "unknown") {
       warnings.push("sitemap_invalid_xml");
+      discoveryIncomplete = true;
       continue;
     }
 
@@ -360,19 +369,20 @@ export async function discoverScannerV2Frontier(
         warnings.push("sitemap_page_rejected");
         continue;
       }
-      sitemapUrlsDiscovered += 1;
-      urls.add({
+      const added = urls.add({
         url: normalized,
         status: "queued",
         discoveryReason: "sitemap",
         discoveredFrom: response.url.toString(),
       });
+      if (added) sitemapUrlsDiscovered += 1;
     }
   }
 
   if (urls.limitReached) warnings.push("discovered_url_limit");
 
-  const requestedState = urls.limitReached ? "PARTIAL" : "DISCOVERING";
+  const requestedState =
+    urls.limitReached || discoveryIncomplete ? "PARTIAL" : "DISCOVERING";
   const manifest = buildCrawlManifest({
     crawlId: "scanner-v2-discovery",
     origin: origin.origin,
@@ -387,5 +397,6 @@ export async function discoverScannerV2Frontier(
     sitemapUrlsDiscovered,
     warnings: [...new Set(warnings)],
     limitReached: urls.limitReached,
+    incomplete: discoveryIncomplete || urls.limitReached,
   };
 }
