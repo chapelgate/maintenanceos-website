@@ -204,6 +204,7 @@ export function discoverHtmlLinks(input: {
   html: string;
   pageUrl: string;
   origin: string;
+  maxPathDepth?: number;
 }): CrawlUrlDisposition[] {
   let page: URL;
   let origin: URL;
@@ -218,7 +219,10 @@ export function discoverHtmlLinks(input: {
   const out: CrawlUrlDisposition[] = [];
   const seen = new Set<string>();
   for (const href of extractSameOriginHrefs(input.html, page)) {
-    const normalized = normalizeDiscoveredUrl(href, origin);
+    const normalized = normalizeDiscoveredUrl(href, origin, {
+      maxPathDepth: input.maxPathDepth,
+      applyContentPolicy: true,
+    });
     if (!normalized || seen.has(normalized)) continue;
     seen.add(normalized);
     out.push({
