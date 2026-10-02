@@ -127,7 +127,15 @@ test("Stage 12 pipeline composes sitemap discovery, rendering, documents, corpus
     },
   });
 
-  assert.equal(result.manifest.state, "COMPLETE");
+  assert.equal(
+    result.manifest.state,
+    "COMPLETE",
+    JSON.stringify({
+      discoveryIncomplete: result.discovery.incomplete,
+      warnings: result.discovery.warnings,
+      manifest: result.manifest,
+    }),
+  );
   assert.equal(result.manifest.queued, 0);
   assert.equal(result.manifest.unresolved, 0);
   assert.ok(result.pageCount >= 5);
@@ -203,7 +211,15 @@ test("Stage 12 pipeline can recover a 403 business page through the existing rea
     },
   });
 
-  assert.equal(result.manifest.state, "COMPLETE");
+  assert.equal(
+    result.manifest.state,
+    "COMPLETE",
+    JSON.stringify({
+      discoveryIncomplete: result.discovery.incomplete,
+      warnings: result.discovery.warnings,
+      manifest: result.manifest,
+    }),
+  );
   const answer = await result.answer("How can I order replacement keys?");
   assert.equal(answer.supportStatus, "supported");
   assert.match(answer.text, /website key-order page/i);
