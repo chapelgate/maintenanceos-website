@@ -185,8 +185,11 @@ function extractBoilerplate(
   const cleanedHtml = html.replace(pattern, (_full, rawKind: string, inner: string) => {
     const text = normalizeText(inner);
     if (text) {
+      const tag = rawKind.toLowerCase();
+      const kind: "navigation" | "footer" | "header" =
+        tag === "nav" ? "navigation" : tag === "footer" ? "footer" : "header";
       blocks.push({
-        kind: rawKind.toLowerCase() as "navigation" | "footer" | "header",
+        kind,
         text,
         headingPath: [],
         boilerplate: true,
@@ -550,9 +553,11 @@ function extractPageInternal(input: ScannerV2PageInput): ScannerV2PageExtraction
   const mainHtml = boilerplate.cleanedHtml;
   const contentBlocks = structuredBlocks(mainHtml);
   const boilerplateBlocks = boilerplate.blocks;
+  const headings = pageHeadings(input.html);
   const allVisible = [
     ...boilerplateBlocks.map((block) => block.text),
-    ...visibleLines(mainHtml),
+    ...headings,
+    ...contentBlocks.map((block) => block.text),
   ]
     .map((line) => line.trim())
     .filter(Boolean);
@@ -571,7 +576,7 @@ function extractPageInternal(input: ScannerV2PageInput): ScannerV2PageExtraction
     requestedUrl: requested.toString(),
     canonicalUrl: safeCanonical,
     ...(extractTitle(input.html) ? { title: extractTitle(input.html) } : {}),
-    headings: pageHeadings(input.html),
+    headings,
     visibleText,
     structuredFacts,
     contentType: input.contentType ?? "text/html",
