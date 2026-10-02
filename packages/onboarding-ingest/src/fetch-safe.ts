@@ -42,6 +42,8 @@ export type FetchSafeOptions = {
   acceptCompressed?: boolean;
   /** Hard ceiling after decompression when acceptCompressed is true. */
   maxDecompressedBytes?: number;
+  /** Optional same-origin boundary enforced before following a redirect. */
+  allowedOrigin?: string;
 };
 
 function header(headers: Record<string, string>, name: string): string {
@@ -147,11 +149,12 @@ export function httpsGetToIp(
     };
 
     const hostname = url.hostname.replace(/^\[|\]$/g, "");
-    const family = isIP(ip);
-    if (family !== 4 && family !== 6) {
+    const detectedFamily = isIP(ip);
+    if (detectedFamily !== 4 && detectedFamily !== 6) {
       reject(new ScanError("fetch_failed", "Resolved target was not an IP address.", 422));
       return;
     }
+    const family: 4 | 6 = detectedFamily === 6 ? 6 : 4;
 
     const req = https.request(
       {
@@ -162,7 +165,6 @@ export function httpsGetToIp(
         hostname,
         port,
         family,
-        autoSelectFamily: false,
         path: `${url.pathname}${url.search}`,
         method: "GET",
         servername: hostname,
@@ -267,8 +269,8 @@ export function httpsGetBytesToIp(
     };
 
     const hostname = url.hostname.replace(/^\[|\]$/g, "");
-    const family = isIP(ip);
-    if (family !== 4 && family !== 6) {
+    const detectedFamily = isIP(ip);
+    if (detectedFamily !== 4 && detectedFamily !== 6) {
       reject(
         new ScanError(
           "fetch_failed",
@@ -278,13 +280,13 @@ export function httpsGetBytesToIp(
       );
       return;
     }
+    const family: 4 | 6 = detectedFamily === 6 ? 6 : 4;
 
     const req = https.request(
       {
         hostname,
         port,
         family,
-        autoSelectFamily: false,
         path: `${url.pathname}${url.search}`,
         method: "GET",
         servername: hostname,
