@@ -55,6 +55,38 @@ test("fetchPublicHttps re-checks DNS and redirect targets", async () => {
   );
 });
 
+test("fetchPublicHttps can enforce a same-origin redirect boundary", async () => {
+  await assert.rejects(
+    () =>
+      fetchPublicHttps("https://acme.example/start", {
+        allowedOrigin: "https://acme.example",
+        lookup: async () => ["203.0.113.9"],
+        get: async (url) => ({
+          status: 302,
+          headers: { location: "https://other.example/final" },
+          body: "",
+          url,
+        }),
+      }),
+    (err: unknown) =>
+      err instanceof ScanError && err.code === "cross_origin_redirect",
+  );
+});
+
+test("fetchPublicHttps returns HTTP 304 as a terminal conditional response", async () => {
+  const response = await fetchPublicHttps("https://acme.example/page", {
+    lookup: async () => ["203.0.113.9"],
+    get: async (url) => ({
+      status: 304,
+      headers: { etag: '"v1"' },
+      body: "",
+      url,
+    }),
+  });
+  assert.equal(response.status, 304);
+  assert.equal(response.headers.etag, '"v1"');
+});
+
 test("fetchPublicHttps prefers public IPv4 when DNS also returns IPv6", async () => {
   const seen: string[] = [];
   const res = await fetchPublicHttps("https://dualstack.example/", {
