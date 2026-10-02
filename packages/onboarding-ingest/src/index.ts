@@ -18,9 +18,13 @@ export {
   parseRobotsSitemaps,
   parseSitemapXml,
   DEFAULT_MAX_SITEMAP_DOCUMENTS,
+  DEFAULT_MAX_SITEMAP_DEPTH,
   DEFAULT_MAX_DISCOVERED_URLS,
+  DEFAULT_MAX_HTML_PAGES,
   DEFAULT_MAX_SITEMAP_BYTES,
+  DEFAULT_MAX_HTML_BYTES,
   DEFAULT_SITEMAP_TIMEOUT_MS,
+  DEFAULT_HTML_TIMEOUT_MS,
 } from "./scanner-v2-discovery.ts";
 export type {
   SitemapKind,
