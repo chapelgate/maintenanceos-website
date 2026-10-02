@@ -1,4 +1,4 @@
-import type { BrowserType, Route } from "playwright";
+import type { Browser, BrowserType, Route } from "playwright";
 import {
   DEFAULT_MAX_REDIRECTS,
   DEFAULT_PAGE_TIMEOUT_MS,
@@ -300,7 +300,7 @@ export async function renderScannerV2Page(
 
   const browserType =
     options.browserType ?? (await import("playwright")).chromium;
-  let browser;
+  let browser: Browser;
   try {
     browser = await browserType.launch({
       headless: true,
