@@ -585,3 +585,291 @@ test("HTML-link helper normalises fragments and rejects external/insecure links"
   assert.equal(deep[0]?.discoveryReason, "html_link");
   assert.equal(deep[0]?.discoveredFrom, "https://acme.example/about");
 });
+
+test("integrated discovery collapses tracking/query-order variants while retaining duplicate provenance", async () => {
+  const canonical = "https://acme.example/services?a=1&b=2";
+  let canonicalFetches = 0;
+  const base = fixtures({
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "User-agent: *\nAllow: /",
+      "text/plain",
+    ),
+    "https://acme.example/": html(
+      "https://acme.example/",
+      [
+        '<a href="/services?b=2&utm_source=newsletter&a=1">One</a>',
+        '<a href="/services?gclid=abc&a=1&b=2">Two</a>',
+      ].join(""),
+    ),
+    [canonical]: html(canonical, "<html><body>Services</body></html>"),
+  });
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    lookup: base.lookup,
+    get: async (url, ip, opts) => {
+      if (url.toString() === canonical) canonicalFetches += 1;
+      return base.get(url, ip, opts);
+    },
+  });
+
+  assert.equal(result.incomplete, false);
+  assert.equal(canonicalFetches, 1);
+  assert.equal(result.htmlLinksDiscovered, 1);
+  assert.equal(result.manifest.fetched, 2);
+  assert.equal(result.manifest.duplicate, 2);
+
+  const aliases = result.manifest.urls.filter(
+    (row) => row.reason === "normalized_url_variant",
+  );
+  assert.equal(aliases.length, 2);
+  assert.ok(aliases.every((row) => row.canonicalUrl === canonical));
+  assert.ok(
+    result.manifest.urls.some(
+      (row) => row.url === canonical && row.status === "fetched",
+    ),
+  );
+});
+
+test("integrated discovery honours same-origin rel=canonical and retains the alias row", async () => {
+  const alias = "https://acme.example/alias";
+  const canonical = "https://acme.example/canonical";
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        '<html><body><a href="/alias">Alias</a></body></html>',
+      ),
+      [alias]: html(
+        alias,
+        '<html><head><link rel="canonical" href="/canonical"></head><body>Alias copy</body></html>',
+      ),
+      [canonical]: html(
+        canonical,
+        "<html><body>Canonical copy</body></html>",
+      ),
+    }),
+  });
+
+  assert.equal(result.incomplete, false);
+  const aliasRow = result.manifest.urls.find((row) => row.url === alias);
+  assert.equal(aliasRow?.status, "duplicate");
+  assert.equal(aliasRow?.canonicalUrl, canonical);
+  assert.equal(aliasRow?.reason, "rel_canonical");
+
+  const canonicalRow = result.manifest.urls.find(
+    (row) => row.url === canonical,
+  );
+  assert.equal(canonicalRow?.status, "fetched");
+  assert.equal(canonicalRow?.canonicalUrl, canonical);
+});
+
+test("integrated discovery content-hash deduplicates identical pages deterministically", async () => {
+  const a = "https://acme.example/a";
+  const b = "https://acme.example/b";
+  const duplicateBody = "<html><body><h1>Same representation</h1></body></html>";
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        '<html><body><a href="/a">A</a><a href="/b">B</a></body></html>',
+      ),
+      [a]: html(a, duplicateBody),
+      [b]: html(b, duplicateBody),
+    }),
+  });
+
+  assert.equal(result.incomplete, false);
+  assert.equal(
+    result.manifest.urls.find((row) => row.url === a)?.status,
+    "fetched",
+  );
+  const bRow = result.manifest.urls.find((row) => row.url === b);
+  assert.equal(bRow?.status, "duplicate");
+  assert.equal(bRow?.canonicalUrl, a);
+  assert.equal(bRow?.reason, "content_hash_duplicate");
+  assert.ok(bRow?.contentHash);
+});
+
+test("blocked/admin/search/session endpoints are policy-skipped without network fetch", async () => {
+  const forbidden = [
+    "https://acme.example/admin/users",
+    "https://acme.example/checkout",
+    "https://acme.example/search?q=boilers",
+    "https://acme.example/catalog?sessionid=abc",
+  ];
+  let forbiddenFetches = 0;
+  const base = fixtures({
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "User-agent: *\nAllow: /",
+      "text/plain",
+    ),
+    "https://acme.example/": html(
+      "https://acme.example/",
+      [
+        '<a href="/admin/users">Admin</a>',
+        '<a href="/checkout">Checkout</a>',
+        '<a href="/search?q=boilers">Search</a>',
+        '<a href="/catalog?sessionid=abc">Session</a>',
+        '<a href="/public">Public</a>',
+      ].join(""),
+    ),
+    "https://acme.example/public": html(
+      "https://acme.example/public",
+      "<html><body>Public</body></html>",
+    ),
+  });
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    lookup: base.lookup,
+    get: async (url, ip, opts) => {
+      if (forbidden.includes(url.toString())) forbiddenFetches += 1;
+      return base.get(url, ip, opts);
+    },
+  });
+
+  assert.equal(forbiddenFetches, 0);
+  assert.equal(result.incomplete, false);
+  for (const url of forbidden) {
+    const row = result.manifest.urls.find((item) => item.url === url);
+    assert.equal(row?.status, "policy_skipped", url);
+  }
+  assert.equal(
+    result.manifest.urls.find(
+      (row) => row.url === "https://acme.example/public",
+    )?.status,
+    "fetched",
+  );
+});
+
+test("faceted-query explosion is bounded, visible and forces PARTIAL", async () => {
+  const links = Array.from(
+    { length: 5 },
+    (_, i) =>
+      '<a href="/products?colour=' +
+      ["red", "blue", "green", "black", "white"][i] +
+      '&size=m">Variant</a>',
+  ).join("");
+  const map: Record<string, SafeHttpResponse> = {
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "User-agent: *\nAllow: /",
+      "text/plain",
+    ),
+    "https://acme.example/": html(
+      "https://acme.example/",
+      "<html><body>" + links + "</body></html>",
+    ),
+  };
+  for (const colour of ["red", "blue"]) {
+    const url = `https://acme.example/products?colour=${colour}&size=m`;
+    map[url] = html(url, "<html><body>Product variant</body></html>");
+  }
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxQueryVariantsPerSignature: 2,
+    ...fixtures(map),
+  });
+
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.ok(result.warnings.includes("query_variant_limit"));
+  assert.equal(
+    result.manifest.urls.filter(
+      (row) => row.reason === "query_variant_limit",
+    ).length,
+    3,
+  );
+  assert.equal(
+    result.manifest.urls.filter(
+      (row) => row.url.includes("/products?") && row.status === "fetched",
+    ).length,
+    2,
+  );
+});
+
+test("calendar/date loop is bounded and forces PARTIAL instead of exhausting the frontier", async () => {
+  const dates = ["01", "02", "03", "04", "05"];
+  const links = dates
+    .map(
+      (day) =>
+        `<a href="/events/2026/10/${day}">Day ${day}</a>`,
+    )
+    .join("");
+  const map: Record<string, SafeHttpResponse> = {
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "User-agent: *\nAllow: /",
+      "text/plain",
+    ),
+    "https://acme.example/": html(
+      "https://acme.example/",
+      "<html><body>" + links + "</body></html>",
+    ),
+  };
+  for (const day of dates.slice(0, 2)) {
+    const url = `https://acme.example/events/2026/10/${day}`;
+    map[url] = html(url, "<html><body>Calendar day</body></html>");
+  }
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxCalendarVariantsPerFamily: 2,
+    ...fixtures(map),
+  });
+
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.ok(result.warnings.includes("calendar_variant_limit"));
+  assert.equal(
+    result.manifest.urls.filter(
+      (row) => row.reason === "calendar_variant_limit",
+    ).length,
+    3,
+  );
+});
+
+test("path-depth policy records skipped deep URLs and forces PARTIAL", async () => {
+  const deep = "https://acme.example/a/b/c";
+  let deepFetches = 0;
+  const base = fixtures({
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "User-agent: *\nAllow: /",
+      "text/plain",
+    ),
+    "https://acme.example/": html(
+      "https://acme.example/",
+      '<html><body><a href="/a/b/c">Deep</a></body></html>',
+    ),
+  });
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxPathDepth: 2,
+    lookup: base.lookup,
+    get: async (url, ip, opts) => {
+      if (url.toString() === deep) deepFetches += 1;
+      return base.get(url, ip, opts);
+    },
+  });
+
+  assert.equal(deepFetches, 0);
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.ok(result.warnings.includes("path_depth_limit"));
+  const row = result.manifest.urls.find((item) => item.url === deep);
+  assert.equal(row?.status, "policy_skipped");
+  assert.equal(row?.reason, "path_depth_limit");
+});
+
