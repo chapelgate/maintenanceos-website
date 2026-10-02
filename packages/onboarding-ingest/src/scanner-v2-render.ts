@@ -88,12 +88,12 @@ function bounded(
 
 function visibleText(html: string): string {
   return html
-    .replace(/<!--[\\s\\S]*?-->/g, " ")
-    .replace(/<script\b[sS]*?<\/script>/gi, " ")
-    .replace(/<style\b[sS]*?<\/style>/gi, " ")
-    .replace(/<noscript\b[sS]*?<\/noscript>/gi, " ")
-    .replace(/<template\b[sS]*?<\/template>/gi, " ")
-    .replace(/<svg\b[sS]*?<\/svg>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+    .replace(/<noscript\b[\s\S]*?<\/noscript>/gi, " ")
+    .replace(/<template\b[\s\S]*?<\/template>/gi, " ")
+    .replace(/<svg\b[\s\S]*?<\/svg>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;|&#160;/gi, " ")
     .replace(/\s+/g, " ")
