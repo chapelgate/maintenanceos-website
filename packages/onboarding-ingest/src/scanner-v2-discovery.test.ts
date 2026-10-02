@@ -346,6 +346,35 @@ test("robots disallow is applied to integrated HTML frontier without fetching th
   assert.equal(privateRow?.reason, "robots_disallow");
 });
 
+test("callers cannot raise the reviewed sitemap-depth ceiling", async () => {
+  const map: Record<string, SafeHttpResponse> = {
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "Sitemap: https://acme.example/index-0.xml",
+      "text/plain",
+    ),
+    "https://acme.example/": html("https://acme.example/"),
+  };
+  for (let depth = 0; depth <= 4; depth += 1) {
+    map[`https://acme.example/index-${depth}.xml`] = response(
+      `https://acme.example/index-${depth}.xml`,
+      sitemapIndex([
+        `https://acme.example/index-${depth + 1}.xml`,
+      ]),
+    );
+  }
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxSitemapDepth: 999_999,
+    ...fixtures(map),
+  });
+
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.ok(result.warnings.includes("sitemap_depth_limit"));
+  assert.equal(result.sitemapDocuments, 5);
+});
+
 test("sitemap nesting-depth ceiling yields explicit PARTIAL", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     maxSitemapDepth: 0,
