@@ -1202,3 +1202,59 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+### 2026-10-02 Scanner V2 Stage 9 resumable worker execution
+Status: COMPLETE / VERIFIED / READY TO FREEZE
+
+Implemented:
+- durable file-backed crawl job state on the existing worker filesystem;
+- persisted crawl ID, origin, release SHA, timestamps, retry limit and URL dispositions;
+- bounded worker batches with explicit next-batch scheduling;
+- per-URL exclusive leases with expiry/reclaim;
+- crash recovery across process/store recreation;
+- idempotent page/chunk persistence;
+- content-hash duplicate collapse;
+- retry accounting and retry exhaustion -> unresolved/PARTIAL;
+- poisoned URL isolation;
+- crawl ID identity pinning;
+- crash-healing initial frontier seeding;
+- pre-commit lease fencing for expired/reassigned workers;
+- fetched outcomes require durable page evidence.
+
+Deterministic verification:
+- exact tested source SHA: 41b5928559b5180512c6250c5d7a10b5a49110b4;
+- GitHub Actions run 37057845550 / job 111006838002: PASS;
+- targeted Scanner V2 suite: 81/81 PASS;
+- scanner/package group: 242/242 PASS;
+- full repository regression: 404/404 PASS;
+- accessibility: 16/16 PASS;
+- TypeScript: PASS;
+- production Next.js build: PASS, 30/30 routes;
+- production dependency audit: 0 vulnerabilities;
+- Scanner V1 runtime unchanged: PASS;
+- production browser-preview routing unchanged: PASS;
+- golden phone line change surface: 0.
+
+Independent NVIDIA review:
+- Evolution Engine run 37058625581 / job 111009408595: PASS;
+- openai/gpt-oss-20b: live review PASS at USD 0 marginal cost;
+- nvidia/nemotron-3.5-lightning-30b-a3b: live review PASS at USD 0 marginal cost;
+- NVIDIA_STAGE9_TWO_MODEL_REVIEW=PASS;
+- raw hosted-model output retained: 0;
+- production NVIDIA scope enabled: 0;
+- initial self-hosted review attempt failed before model execution because npm ci was OOM-killed (exit 137); no verdict was taken from that infrastructure failure.
+
+Operational boundary:
+The included Stage 9 adapter is durable on one existing worker filesystem. Scanner V2 remains off production routing and this stage does not claim shared multi-host storage. The worker contract remains storage-implementation independent.
+
+Evidence:
+- docs/SCANNER_V2_STAGE9_EVIDENCE_20261002.md
+
+Next authorised engineering boundary:
+- Stage 10 incremental refresh using ETag, Last-Modified, sitemap lastmod and content hashes.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+
