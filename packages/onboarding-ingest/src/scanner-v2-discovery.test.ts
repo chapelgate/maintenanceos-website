@@ -194,6 +194,48 @@ test("integrated discovery exhausts 100+ sitemap pages and a link-only deep page
   assert.equal(deep?.discoveredFrom, "https://acme.example/page-001");
 });
 
+test("sitemap fetch explicitly requests bounded compressed responses", async () => {
+  let compressedRequested = false;
+  let maxDecompressedBytes: number | undefined;
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    lookup: async () => ["203.0.113.10"],
+    maxSitemapBytes: 2048,
+    get: async (url, _ip, opts) => {
+      if (url.pathname === "/robots.txt") {
+        return response(
+          url.toString(),
+          "Sitemap: https://acme.example/sitemap.xml.gz",
+          "text/plain",
+        );
+      }
+      if (url.pathname === "/sitemap.xml.gz") {
+        compressedRequested = opts.acceptCompressed === true;
+        maxDecompressedBytes = opts.maxDecompressedBytes;
+        return response(
+          url.toString(),
+          urlset(["https://acme.example/service"]),
+          "application/gzip",
+        );
+      }
+      if (url.pathname === "/" || url.pathname === "/service") {
+        return html(url.toString());
+      }
+      return response(url.toString(), "missing", "text/plain", 404);
+    },
+  });
+
+  assert.equal(compressedRequested, true);
+  assert.equal(maxDecompressedBytes, 2048);
+  assert.equal(result.incomplete, false);
+  assert.ok(
+    result.manifest.urls.some(
+      (row) =>
+        row.url === "https://acme.example/service" &&
+        row.status === "fetched",
+    ),
+  );
+});
+
 test("sitemap discovery preserves lastmod after the page reaches a terminal state", async () => {
   const result = await discoverScannerV2Frontier("https://acme.example/", {
     ...fixtures({
