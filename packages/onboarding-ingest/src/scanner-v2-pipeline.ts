@@ -54,11 +54,13 @@ import {
   READER_FALLBACK_TIMEOUT_MS,
 } from "./scan.ts";
 import type {
+  BinaryHttpGetFn,
   CrawlManifest,
   CrawlPage,
   CrawlUrlDisposition,
   HttpGetFn,
   LookupFn,
+  ScanError,
 } from "./types.ts";
 
 export const DEFAULT_STAGE12_MAX_BATCHES = 10_000;
@@ -71,6 +73,7 @@ export type ScannerV2InitialProcessorOptions = {
   readerLookup?: LookupFn;
   readerGet?: HttpGetFn;
   readerFallback?: boolean;
+  documentGet?: BinaryHttpGetFn;
   renderBackend?: ScannerV2BrowserBackend;
   renderTimeoutMs?: number;
   maxPathDepth?: number;
@@ -323,7 +326,7 @@ export function createScannerV2InitialProcessor(
       const document = await ingestScannerV2Document(url.url, {
         origin,
         lookup: options.lookup,
-        get: options.get as never,
+        ...(options.documentGet ? { get: options.documentGet } : {}),
         ...(url.discoveredFrom ? { discoveredFrom: url.discoveredFrom } : {}),
         ...(options.document ?? {}),
       });
@@ -361,12 +364,29 @@ export function createScannerV2InitialProcessor(
         maxRedirects: DEFAULT_MAX_REDIRECTS,
         allowedOrigin: origin,
       });
-    } catch {
+    } catch (error) {
+      if (
+        error instanceof ScanError &&
+        [
+          "http_not_allowed",
+          "unsupported_scheme",
+          "userinfo_not_allowed",
+          "non_public_host",
+          "non_public_resolved_ip",
+          "cross_origin_redirect",
+          "invalid_url",
+        ].includes(error.code)
+      ) {
+        return {
+          disposition: "policy_skipped",
+          reason: error.code,
+        };
+      }
       const reader = await fetchViaReader(url.url, options);
       if (!reader) {
         return {
           disposition: "unresolved",
-          reason: "fetch_failed",
+          reason: error instanceof ScanError ? error.code : "fetch_failed",
         };
       }
       readerWarnings = reader.warnings;
@@ -556,6 +576,12 @@ export async function runScannerV2Pipeline(
 
   const processor = createScannerV2InitialProcessor({
     origin,
+    ...(options.discovery?.lookup && !options.processor?.lookup
+      ? { lookup: options.discovery.lookup }
+      : {}),
+    ...(options.discovery?.get && !options.processor?.get
+      ? { get: options.discovery.get }
+      : {}),
     ...(options.processor ?? {}),
   });
 
