@@ -196,4 +196,20 @@ export type {
   CorpusChunk,
   CrawlManifest,
   CrawlLease,
+  CrawlJob,
 } from "./types.ts";
+
+export {
+  DEFAULT_WORKER_BATCH_SIZE,
+  DEFAULT_WORKER_LEASE_MS,
+  DEFAULT_WORKER_RETRY_LIMIT,
+  FileScannerV2JobStore,
+  createScannerV2Job,
+  runScannerV2WorkerBatch,
+} from "./scanner-v2-worker.ts";
+export type {
+  ScannerV2JobStore,
+  ScannerV2ProcessResult,
+  ScannerV2ProcessUrl,
+  ScannerV2WorkerBatchResult,
+} from "./scanner-v2-worker.ts";
