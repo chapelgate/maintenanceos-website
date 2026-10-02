@@ -303,13 +303,22 @@ test("sitemap private, cross-origin and insecure page URLs are visibly policy-sk
   assert.equal(result.manifest.fetched, 2);
   assert.equal(result.manifest.policySkipped, 3);
   assert.equal(result.manifest.unresolved, 0);
-  assert.ok(
-    result.manifest.urls.some(
-      (row) =>
-        row.url === "https://127.0.0.1/private" &&
-        row.status === "policy_skipped" &&
-        row.reason === "sitemap_page_rejected",
-    ),
+  const rejected = new Map(
+    result.manifest.urls
+      .filter((row) => row.status === "policy_skipped")
+      .map((row) => [row.url, row.reason]),
+  );
+  assert.equal(
+    rejected.get("https://127.0.0.1/private"),
+    "cross_origin",
+  );
+  assert.equal(
+    rejected.get("https://other.example/cross-origin"),
+    "cross_origin",
+  );
+  assert.equal(
+    rejected.get("http://acme.example/insecure"),
+    "insecure_scheme",
   );
   assert.ok(result.warnings.includes("sitemap_page_rejected"));
 });
