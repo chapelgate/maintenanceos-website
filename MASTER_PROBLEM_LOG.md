@@ -1095,3 +1095,55 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+### 2026-10-02 Scanner V2 Stage 7 rendering
+Status: COMPLETE / VERIFIED / READY TO FREEZE
+
+Implemented:
+- deterministic JavaScript-render escalation only for thin/app-shell HTML or explicit extractor-empty evidence;
+- fresh non-persistent Playwright Chromium context for each render;
+- service workers blocked and downloads disabled;
+- browser requests intercepted and fetched through the existing DNS-pinned public-IP/SSRF-safe HTTPS path;
+- mutation methods, private/non-public targets, media/font/image resources and known analytics blocked;
+- hard request/origin/per-resource/aggregate-byte/DOM/time ceilings;
+- rendered links re-enter Stage 3 URL/canonical/trap policy with rendered_link provenance;
+- rendered DOM feeds Stage 4 extraction as fetchMode=rendered;
+- renderer failures/limits remain unresolved/PARTIAL.
+
+Verification:
+- exact candidate SHA: 8fcdfb62bd61448444fd6a6e5912d6bff45af464;
+- merge SHA: a01d2f19016920be1890cf2d40cf246ce1c9130f;
+- GitHub Actions run 37048104369 / job 110974444412: PASS;
+- targeted Stage 7 suite: 6/6 PASS;
+- full repository regression: 381/381 PASS;
+- accessibility: 16/16 PASS;
+- TypeScript and production build: PASS;
+- real Chromium app-shell recovery: PASS;
+- private-network block: PASS;
+- mutation-method block: PASS;
+- BrowserContext isolation across repeated renders: PASS;
+- rendered-link frontier: PASS;
+- Scanner V1 runtime unchanged: PASS;
+- production telephony change surface: 0;
+- golden phone line change surface: 0.
+
+Independent NVIDIA review:
+- Evolution Engine run 37048355702 / job 110975268302: PASS;
+- openai/gpt-oss-20b: live review PASS at USD 0 marginal cost;
+- nvidia/nemotron-3.5-lightning-30b-a3b: live review PASS at USD 0 marginal cost;
+- NVIDIA_STAGE7_TWO_MODEL_REVIEW=PASS;
+- raw hosted-model output retained: 0;
+- production NVIDIA scope enabled: 0;
+- NVIDIA lane remained reasoning/review only.
+
+Evidence:
+- docs/SCANNER_V2_STAGE7_EVIDENCE_20261002.md
+
+Release boundary:
+Stage 7 remains additive and Scanner V2 is still off production /create. The next authorised boundary is Stage 8 public document ingestion.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+
