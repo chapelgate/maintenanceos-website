@@ -1,0 +1,146 @@
+name: Scanner V2 Stage 7 renderer validation
+
+on:
+  push:
+    branches:
+      - feat/scanner-v2-stage7-renderer-20261002
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scanner-v2-stage7-renderer
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Targeted Stage 7 tests
+        run: node --experimental-strip-types --test packages/onboarding-ingest/src/scanner-v2-renderer.test.ts
+      - name: Full repository regression
+        run: npm test
+      - name: Accessibility
+        run: npm run accessibility:check
+      - name: Static and type checks
+        run: npx tsc --noEmit
+      - name: Production build
+        env:
+          NEXT_PUBLIC_FORM_ENDPOINT: http://127.0.0.1:8787/leads
+        run: npm run build
+      - name: Install Chromium for real renderer acceptance
+        run: npx playwright install --with-deps chromium
+      - name: Real Chromium app-shell/security/isolation acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > .stage7-browser-acceptance.mjs <<'NODE'
+          import assert from 'node:assert/strict';
+          import {
+            decideScannerV2RenderEscalation,
+            renderScannerV2Page,
+            renderResultToPageInput,
+            extractScannerV2Page,
+          } from './packages/onboarding-ingest/src/index.ts';
+
+          const shell = '<!doctype html><html><head><title>Fixture</title></head><body><div id="root"></div><script src="/app.js"></script></body></html>';
+          const fact = 'Rendered-only emergency repair service covers the whole Wirral.';
+          assert.equal(shell.includes(fact), false);
+          assert.deepEqual(decideScannerV2RenderEscalation({rawHtml:shell}), {render:true,reason:'app_shell'});
+
+          const lookup = async (hostname) => {
+            if (hostname === 'fixture.example') return ['203.0.113.10'];
+            throw new Error('unexpected lookup '+hostname);
+          };
+
+          const get = async (url) => {
+            if (url.hostname !== 'fixture.example') {
+              throw new Error('unexpected outbound host '+url.hostname);
+            }
+            if (url.pathname === '/') {
+              return {
+                status: 200,
+                headers: {'content-type':'text/html; charset=utf-8'},
+                body: shell,
+                url,
+              };
+            }
+            if (url.pathname === '/app.js') {
+              return {
+                status: 200,
+                headers: {'content-type':'text/javascript; charset=utf-8'},
+                body: `
+                  const before = document.cookie;
+                  document.cookie = 'scanner_v2_isolation=1; path=/';
+                  document.getElementById('root').innerHTML =
+                    '<main><h1>Emergency repairs</h1><p>${fact}</p><p id="isolation">' +
+                    (before ? 'LEAKED_BROWSER_STATE' : 'CLEAN_BROWSER_STATE') +
+                    '</p><a href="/deep-service">Deep service</a></main>';
+                  fetch('https://127.0.0.1/latest/meta-data').catch(() => {});
+                  fetch('/mutate', { method: 'POST', body: 'must-not-send' }).catch(() => {});
+                `,
+                url,
+              };
+            }
+            return {
+              status: 404,
+              headers: {'content-type':'text/plain'},
+              body: 'not found',
+              url,
+            };
+          };
+
+          async function renderOnce() {
+            const result = await renderScannerV2Page('https://fixture.example/', {
+              rawHtml: shell,
+              lookup,
+              get,
+              timeoutMs: 10000,
+              settleMs: 400,
+            });
+            assert.equal(result.ok, true, JSON.stringify(result));
+            assert.match(result.html, /Rendered-only emergency repair service/);
+            assert.match(result.html, /CLEAN_BROWSER_STATE/);
+            assert.doesNotMatch(result.html, /LEAKED_BROWSER_STATE/);
+            assert.ok(result.links.some(row => row.url === 'https://fixture.example/deep-service' && row.discoveryReason === 'rendered_link'));
+            assert.ok(result.blockedRequests.some(item => item.url.includes('127.0.0.1') && item.reason === 'network_policy_denied'));
+            assert.ok(result.blockedRequests.some(item => item.url.endsWith('/mutate') && item.reason === 'mutation_method'));
+            const extracted = extractScannerV2Page(renderResultToPageInput({
+              requestedUrl:'https://fixture.example/',
+              result,
+              fetchedAt:'2026-10-02T18:30:00.000Z',
+            }));
+            assert.equal(extracted.page.fetchMode, 'rendered');
+            assert.match(extracted.page.visibleText, /Rendered-only emergency repair service/);
+            assert.ok(extracted.chunks.some(chunk => /Rendered-only emergency repair service/.test(chunk.text)));
+            return result;
+          }
+
+          await renderOnce();
+          await renderOnce();
+          console.log('STAGE7_APP_SHELL_RENDER=PASS');
+          console.log('STAGE7_PRIVATE_NETWORK_BLOCK=PASS');
+          console.log('STAGE7_MUTATION_BLOCK=PASS');
+          console.log('STAGE7_CONTEXT_ISOLATION=PASS');
+          console.log('STAGE7_RENDERED_LINK_FRONTIER=PASS');
+          NODE
+          node --experimental-strip-types .stage7-browser-acceptance.mjs
+      - name: Prove production Scanner V1 and telephony surfaces unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="c7225ce3e09de80101c37e6976d8f71432bf5b73"
+          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/server.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             src/lib/browser-voice.ts
+          echo "SCANNER_V1_RUNTIME_SOURCE_UNCHANGED=PASS"
+          echo "PRODUCTION_TELEPHONY_CHANGE_SURFACE=0"
+          echo "GOLDEN_PHONE_LINE_CHANGE_SURFACE=0"

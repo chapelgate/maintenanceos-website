@@ -76,6 +76,38 @@ export {
   DEFAULT_GROUNDED_RETRIEVAL_LIMIT,
   MAX_GROUNDED_ANSWER_CHARS,
 } from "./scanner-v2-grounding.ts";
+export {
+  decideScannerV2RenderEscalation,
+  renderScannerV2Page,
+  playwrightScannerV2BrowserBackend,
+  renderFailureDisposition,
+  renderResultToPageInput,
+  DEFAULT_RENDER_TIMEOUT_MS,
+  MAX_RENDER_TIMEOUT_MS,
+  DEFAULT_RENDER_MAX_DOM_BYTES,
+  MAX_RENDER_DOM_BYTES,
+  DEFAULT_RENDER_MAX_TOTAL_BYTES,
+  MAX_RENDER_TOTAL_BYTES,
+  DEFAULT_RENDER_MAX_RESOURCE_BYTES,
+  MAX_RENDER_REQUESTS,
+  MAX_RENDER_ORIGINS,
+  DEFAULT_RENDER_SETTLE_MS,
+  MAX_RENDER_SETTLE_MS,
+} from "./scanner-v2-renderer.ts";
+export type {
+  ScannerV2RenderEscalationReason,
+  ScannerV2RenderEscalationDecision,
+  ScannerV2RenderRequest,
+  ScannerV2RenderResourceResult,
+  ScannerV2RenderBlockedRequest,
+  ScannerV2BrowserBackendInput,
+  ScannerV2BrowserBackendResult,
+  ScannerV2BrowserBackend,
+  ScannerV2RenderOptions,
+  ScannerV2RenderSuccess,
+  ScannerV2RenderFailure,
+  ScannerV2RenderResult,
+} from "./scanner-v2-renderer.ts";
 export type {
   GroundedValue,
   GroundedFaq,
