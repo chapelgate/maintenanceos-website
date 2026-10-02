@@ -34,6 +34,20 @@ export type {
   ScannerV2DiscoveryOptions,
 } from "./scanner-v2-discovery.ts";
 export {
+  DEFAULT_MAX_PATH_DEPTH,
+  DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+  DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+  normalizeScannerV2Url,
+  extractScannerV2CanonicalLink,
+  ScannerV2FrontierTrapGuard,
+} from "./scanner-v2-url-policy.ts";
+export type {
+  ScannerV2UrlPolicyReason,
+  ScannerV2UrlPolicyResult,
+  ScannerV2UrlPolicyOptions,
+  FrontierTrapDecision,
+} from "./scanner-v2-url-policy.ts";
+export {
   SCANNER_V2_ENV,
   isScannerV2Enabled,
   stableContentHash,
