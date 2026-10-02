@@ -482,6 +482,36 @@ export const pdfJsScannerV2Parser: ScannerV2PdfParser = async (
   });
 };
 
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+): Promise<T> {
+  return await new Promise<T>((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error("document_parse_timeout"));
+    }, timeoutMs);
+    timer.unref?.();
+
+    promise.then(
+      (value) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
 function failure(
   url: string,
   reason: string,
@@ -638,13 +668,16 @@ export async function ingestScannerV2Document(
   if (classified.kind === "pdf") {
     let parsed: ScannerV2PdfParseResult;
     try {
-      parsed = await (options.pdfParser ?? pdfJsScannerV2Parser)(
-        response.body,
-        {
-          timeoutMs: parseTimeoutMs,
-          maxPages: maxPdfPages,
-          maxTextChars,
-        },
+      parsed = await withTimeout(
+        (options.pdfParser ?? pdfJsScannerV2Parser)(
+          response.body,
+          {
+            timeoutMs: parseTimeoutMs,
+            maxPages: maxPdfPages,
+            maxTextChars,
+          },
+        ),
+        parseTimeoutMs,
       );
     } catch (error) {
       const reason =
