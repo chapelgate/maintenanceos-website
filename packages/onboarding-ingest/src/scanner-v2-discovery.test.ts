@@ -900,3 +900,120 @@ test("path-depth policy records skipped deep URLs and forces PARTIAL", async () 
   assert.equal(row?.reason, "path_depth_limit");
 });
 
+test("Stage 7 renders only a thin app shell and adds rendered links to the frontier", async () => {
+  let renderCalls = 0;
+  const shell =
+    '<html><head><script src="/app.js"></script></head><body><div id="root"></div></body></html>';
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html("https://acme.example/", shell),
+      "https://acme.example/deep-rendered": html(
+        "https://acme.example/deep-rendered",
+        "<html><body><p>Deep rendered-link detail is public.</p></body></html>",
+      ),
+    }),
+    renderPage: async (url, rawHtml) => {
+      renderCalls += 1;
+      assert.equal(url, "https://acme.example/");
+      assert.equal(rawHtml, shell);
+      return {
+        ok: true,
+        url,
+        html:
+          '<html><body><h1>Rendered Services</h1><p>Rendered public service details.</p><a href="/deep-rendered">Deep rendered page</a></body></html>',
+        links: ["https://acme.example/deep-rendered"],
+        requests: 3,
+        bytes: 1024,
+        blockedRequests: [],
+        warnings: [],
+      };
+    },
+  });
+
+  assert.equal(renderCalls, 1);
+  assert.equal(result.incomplete, false);
+  assert.equal(result.renderAttempts, 1);
+  assert.equal(result.renderedPages, 1);
+  assert.equal(result.renderFailures, 0);
+  assert.equal(result.renderedLinksDiscovered, 1);
+  assert.equal(result.manifest.queued, 0);
+
+  const deep = result.manifest.urls.find(
+    (row) => row.url === "https://acme.example/deep-rendered",
+  );
+  assert.equal(deep?.status, "fetched");
+  assert.equal(deep?.discoveryReason, "rendered_link");
+  assert.equal(deep?.discoveredFrom, "https://acme.example/");
+});
+
+test("Stage 7 render failure is explicit PARTIAL and never treats the raw shell as complete", async () => {
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        '<html><head><script src="/app.js"></script></head><body><div id="root"></div></body></html>',
+      ),
+    }),
+    renderPage: async () => ({
+      ok: false,
+      reason: "render_timeout",
+      requests: 2,
+      bytes: 100,
+      blockedRequests: [],
+      warnings: ["render_timeout"],
+    }),
+  });
+
+  assert.equal(result.incomplete, true);
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.equal(result.renderAttempts, 1);
+  assert.equal(result.renderFailures, 1);
+  assert.ok(result.warnings.includes("render_render_timeout"));
+  const root = result.manifest.urls.find(
+    (row) => row.url === "https://acme.example/",
+  );
+  assert.equal(root?.status, "unresolved");
+  assert.equal(root?.reason, "render_render_timeout");
+});
+
+test("Stage 7 does not invoke the renderer for content-rich HTML", async () => {
+  let renderCalls = 0;
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        "<html><body><h1>Business</h1><p>" +
+          "Detailed public business content. ".repeat(24) +
+          "</p></body></html>",
+      ),
+    }),
+    renderPage: async () => {
+      renderCalls += 1;
+      throw new Error("renderer must not be called");
+    },
+  });
+
+  assert.equal(renderCalls, 0);
+  assert.equal(result.incomplete, false);
+  assert.equal(result.renderAttempts, 0);
+  assert.equal(result.renderedPages, 0);
+  assert.equal(result.renderFailures, 0);
+  assert.equal(result.manifest.fetched, 1);
+});
+
