@@ -50,6 +50,55 @@ function header(headers: Record<string, string>, name: string): string {
   return "";
 }
 
+export function decodeResponseBodyForText(input: {
+  body: Buffer;
+  url: URL;
+  headers: Record<string, string>;
+  acceptCompressed?: boolean;
+  maxDecompressedBytes: number;
+}): Buffer {
+  if (!input.acceptCompressed) return input.body;
+
+  const encoding = header(input.headers, "content-encoding").toLowerCase();
+  const contentType = header(input.headers, "content-type").toLowerCase();
+  const gzipFile =
+    /(?:application\/gzip|application\/x-gzip)/i.test(contentType) ||
+    /\.gz$/i.test(input.url.pathname);
+
+  if (encoding && encoding !== "identity" && encoding !== "gzip") {
+    throw new ScanError(
+      "unsupported_content_encoding",
+      "The response used an unsupported content encoding.",
+      422,
+    );
+  }
+
+  let payload = input.body;
+  if (encoding === "gzip" || gzipFile) {
+    try {
+      payload = gunzipSync(payload, {
+        maxOutputLength: input.maxDecompressedBytes,
+      });
+    } catch {
+      throw new ScanError(
+        "response_too_large",
+        "The decompressed response exceeded the allowed size or was not valid gzip.",
+        422,
+      );
+    }
+  }
+
+  if (payload.length > input.maxDecompressedBytes) {
+    throw new ScanError(
+      "response_too_large",
+      "The decompressed response exceeded the allowed size.",
+      422,
+    );
+  }
+
+  return payload;
+}
+
 export async function defaultLookup(hostname: string): Promise<string[]> {
   const host = hostname.replace(/^\[|\]$/g, "");
   if (parseIPv4Literal(host) || host.includes(":")) {
@@ -136,56 +185,19 @@ export function httpsGetToIp(
             if (typeof value === "string") rawHeaders[key] = value;
             else if (Array.isArray(value)) rawHeaders[key] = value.join(", ");
           }
-          let payload = Buffer.concat(chunks);
-          if (opts.acceptCompressed) {
-            const encoding = header(rawHeaders, "content-encoding").toLowerCase();
-            const contentType = header(rawHeaders, "content-type").toLowerCase();
-            const gzipFile =
-              /(?:application\/gzip|application\/x-gzip)/i.test(contentType) ||
-              /\.gz$/i.test(url.pathname);
-
-            if (encoding && encoding !== "identity" && encoding !== "gzip") {
-              reject(
-                new ScanError(
-                  "unsupported_content_encoding",
-                  "The response used an unsupported content encoding.",
-                  422,
-                ),
-              );
-              return;
-            }
-
-            if (encoding === "gzip" || gzipFile) {
-              try {
-                payload = gunzipSync(payload, {
-                  maxOutputLength:
-                    opts.maxDecompressedBytes ?? opts.maxBytes,
-                });
-              } catch {
-                reject(
-                  new ScanError(
-                    "response_too_large",
-                    "The decompressed response exceeded the allowed size or was not valid gzip.",
-                    422,
-                  ),
-                );
-                return;
-              }
-            }
-
-            if (
-              payload.length >
-              (opts.maxDecompressedBytes ?? opts.maxBytes)
-            ) {
-              reject(
-                new ScanError(
-                  "response_too_large",
-                  "The decompressed response exceeded the allowed size.",
-                  422,
-                ),
-              );
-              return;
-            }
+          let payload: Buffer;
+          try {
+            payload = decodeResponseBodyForText({
+              body: Buffer.concat(chunks),
+              url,
+              headers: rawHeaders,
+              acceptCompressed: opts.acceptCompressed,
+              maxDecompressedBytes:
+                opts.maxDecompressedBytes ?? opts.maxBytes,
+            });
+          } catch (error) {
+            reject(error);
+            return;
           }
 
           resolve({
