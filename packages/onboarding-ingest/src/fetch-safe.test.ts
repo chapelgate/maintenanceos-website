@@ -185,6 +185,21 @@ test("bounded gzip decoding supports .xml.gz and enforces decompressed size", ()
   );
 });
 
+test("invalid gzip is typed separately from decompression limits", () => {
+  assert.throws(
+    () =>
+      decodeResponseBodyForText({
+        body: Buffer.from("not-gzip", "utf8"),
+        url: new URL("https://acme.example/sitemap.xml.gz"),
+        headers: { "content-type": "application/gzip" },
+        acceptCompressed: true,
+        maxDecompressedBytes: 1024,
+      }),
+    (err: unknown) =>
+      err instanceof ScanError && err.code === "content_decode_failed",
+  );
+});
+
 test("compressed response support is opt-in and propagated only when requested", async () => {
   let defaultAcceptCompressed: boolean | undefined;
   let requestedAcceptCompressed: boolean | undefined;
