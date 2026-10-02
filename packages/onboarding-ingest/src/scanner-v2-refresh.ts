@@ -1,4 +1,13 @@
 import {
+  mkdir,
+  open,
+  readFile,
+  rename,
+  rm,
+  stat,
+} from "node:fs/promises";
+import { dirname, join, resolve } from "node:path";
+import {
   DEFAULT_MAX_BYTES_PER_PAGE,
   DEFAULT_MAX_REDIRECTS,
   DEFAULT_PAGE_TIMEOUT_MS,
@@ -6,6 +15,7 @@ import {
   isHtmlOrText,
 } from "./fetch-safe.ts";
 import { extractScannerV2Page } from "./scanner-v2-content.ts";
+import { stableContentHash } from "./scanner-v2-foundation.ts";
 import {
   createScannerV2Job,
   type ScannerV2JobStore,
@@ -292,3 +302,176 @@ export async function createScannerV2RefreshProcessor(input: {
     };
   };
 }
+
+export interface ScannerV2VersionStore {
+  getActive(origin: string): Promise<ScannerV2RefreshVersion | undefined>;
+  compareAndSwapActive(input: {
+    next: ScannerV2RefreshVersion;
+    expectedPreviousCrawlId?: string | null;
+  }): Promise<boolean>;
+}
+
+async function readVersionJson(
+  path: string,
+): Promise<ScannerV2RefreshVersion | undefined> {
+  try {
+    return JSON.parse(await readFile(path, "utf8")) as ScannerV2RefreshVersion;
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code === "ENOENT") return undefined;
+    throw error;
+  }
+}
+
+async function atomicWriteVersion(
+  path: string,
+  value: ScannerV2RefreshVersion,
+): Promise<void> {
+  await mkdir(dirname(path), { recursive: true });
+  const temp = `${path}.tmp-${process.pid}-${Date.now()}`;
+  const handle = await open(temp, "w", 0o600);
+  try {
+    await handle.writeFile(JSON.stringify(value, null, 2) + "\n", "utf8");
+    await handle.sync();
+  } finally {
+    await handle.close();
+  }
+  await rename(temp, path);
+}
+
+export class FileScannerV2VersionStore implements ScannerV2VersionStore {
+  readonly root: string;
+  readonly lockStaleMs: number;
+
+  constructor(root: string, options: { lockStaleMs?: number } = {}) {
+    this.root = resolve(root);
+    this.lockStaleMs = Math.max(
+      5_000,
+      Math.min(5 * 60_000, options.lockStaleMs ?? 60_000),
+    );
+  }
+
+  private key(origin: string): string {
+    return stableContentHash(origin);
+  }
+
+  private pointerPath(origin: string): string {
+    return join(this.root, "active", this.key(origin) + ".json");
+  }
+
+  private lockPath(origin: string): string {
+    return join(this.root, "active", this.key(origin) + ".lock");
+  }
+
+  async getActive(
+    origin: string,
+  ): Promise<ScannerV2RefreshVersion | undefined> {
+    return readVersionJson(this.pointerPath(origin));
+  }
+
+  private async acquireCommitLock(origin: string): Promise<boolean> {
+    const path = this.lockPath(origin);
+    await mkdir(dirname(path), { recursive: true });
+
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const handle = await open(path, "wx", 0o600);
+        try {
+          await handle.writeFile(
+            JSON.stringify({
+              pid: process.pid,
+              createdAt: new Date().toISOString(),
+            }) + "\n",
+            "utf8",
+          );
+          await handle.sync();
+        } finally {
+          await handle.close();
+        }
+        return true;
+      } catch (error) {
+        const code = (error as NodeJS.ErrnoException).code;
+        if (code !== "EEXIST") throw error;
+        try {
+          const info = await stat(path);
+          if (Date.now() - info.mtimeMs > this.lockStaleMs) {
+            await rm(path, { force: true });
+            continue;
+          }
+        } catch (statError) {
+          const statCode = (statError as NodeJS.ErrnoException).code;
+          if (statCode === "ENOENT") continue;
+          throw statError;
+        }
+        return false;
+      }
+    }
+    return false;
+  }
+
+  async compareAndSwapActive(input: {
+    next: ScannerV2RefreshVersion;
+    expectedPreviousCrawlId?: string | null;
+  }): Promise<boolean> {
+    const origin = input.next.origin;
+    if (!(await this.acquireCommitLock(origin))) return false;
+
+    try {
+      const current = await this.getActive(origin);
+      if (input.expectedPreviousCrawlId !== undefined) {
+        const currentId = current?.crawlId ?? null;
+        if (currentId !== input.expectedPreviousCrawlId) return false;
+      }
+      await atomicWriteVersion(this.pointerPath(origin), input.next);
+      return true;
+    } finally {
+      await rm(this.lockPath(origin), { force: true });
+    }
+  }
+}
+
+/**
+ * Atomically publish one COMPLETE crawl as the active corpus version.
+ * PARTIAL/CRAWLING jobs can never replace the previously active corpus.
+ */
+export async function commitScannerV2CrawlVersion(input: {
+  jobStore: ScannerV2JobStore;
+  versionStore: ScannerV2VersionStore;
+  crawlId: string;
+  expectedPreviousCrawlId?: string | null;
+  committedAt?: string;
+}): Promise<ScannerV2RefreshVersion> {
+  const job = await input.jobStore.getJob(input.crawlId);
+  if (!job) throw new Error("scanner_v2_refresh_job_not_found");
+  if (job.state !== "COMPLETE") {
+    throw new Error("scanner_v2_refresh_commit_requires_complete");
+  }
+
+  const rows = await input.jobStore.listUrls(input.crawlId);
+  if (
+    rows.some(
+      (row) => row.status === "queued" || row.status === "unresolved",
+    )
+  ) {
+    throw new Error("scanner_v2_refresh_commit_manifest_not_complete");
+  }
+
+  const next: ScannerV2RefreshVersion = {
+    origin: job.origin,
+    crawlId: job.crawlId,
+    releaseSha: job.releaseSha,
+    committedAt: input.committedAt ?? new Date().toISOString(),
+  };
+
+  const committed = await input.versionStore.compareAndSwapActive({
+    next,
+    ...(input.expectedPreviousCrawlId !== undefined
+      ? { expectedPreviousCrawlId: input.expectedPreviousCrawlId }
+      : {}),
+  });
+  if (!committed) {
+    throw new Error("scanner_v2_refresh_commit_conflict");
+  }
+  return next;
+}
+
