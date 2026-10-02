@@ -5,24 +5,43 @@ import {
   fetchPublicHttps,
 } from "./fetch-safe.ts";
 import { extractSameOriginHrefs } from "./extract.ts";
+import { allowPublicHttpsUrl } from "./ssrf.ts";
+import {
+  extractScannerV2Page,
+  type ScannerV2PageExtraction,
+} from "./scanner-v2-content.ts";
 import { normalizeScannerV2Url } from "./scanner-v2-url-policy.ts";
-import { extractScannerV2Page, type ScannerV2PageExtraction } from "./scanner-v2-content.ts";
 import type { HttpGetFn, LookupFn } from "./types.ts";
 
 export const DEFAULT_RENDER_TIMEOUT_MS = 12_000;
-export const DEFAULT_RENDER_NETWORK_BYTES = 2 * 1024 * 1024;
-export const DEFAULT_RENDER_RESOURCE_BYTES = 512 * 1024;
+export const DEFAULT_RENDER_NETWORK_BYTES = 4 * 1024 * 1024;
+export const DEFAULT_RENDER_RESOURCE_BYTES = 1024 * 1024;
 export const DEFAULT_RENDER_DOM_CHARS = 1_000_000;
-export const DEFAULT_RENDER_MAX_REQUESTS = 96;
+export const DEFAULT_RENDER_MAX_REQUESTS = 120;
+export const DEFAULT_RENDER_MAX_ORIGINS = 12;
+export const DEFAULT_RENDER_SETTLE_MS = 300;
+
+const BLOCKED_RESOURCE_TYPES = new Set(["image", "media", "font"]);
+const ANALYTICS_HOSTS = [
+  /(^|\.)google-analytics\.com$/i,
+  /(^|\.)googletagmanager\.com$/i,
+  /(^|\.)doubleclick\.net$/i,
+  /(^|\.)hotjar\.com$/i,
+  /(^|\.)segment\.io$/i,
+] as const;
 
 export type ScannerV2RenderBlockedRequest = {
   url: string;
   reason:
-    | "cross_origin"
+    | "cross_origin_document"
     | "unsupported_scheme"
+    | "network_policy_denied"
     | "mutation_method"
     | "resource_type"
+    | "analytics"
+    | "websocket"
     | "request_limit"
+    | "origin_limit"
     | "network_budget"
     | "fetch_denied";
 };
@@ -47,7 +66,8 @@ export type ScannerV2RenderResult =
         | "render_no_content"
         | "dom_too_large"
         | "network_budget"
-        | "request_limit";
+        | "request_limit"
+        | "origin_limit";
       requests: number;
       bytes: number;
       blockedRequests: ScannerV2RenderBlockedRequest[];
@@ -63,6 +83,8 @@ export type ScannerV2RenderOptions = {
   maxResourceBytes?: number;
   maxDomChars?: number;
   maxRequests?: number;
+  maxOrigins?: number;
+  settleMs?: number;
 };
 
 export type ScannerV2RenderedExtraction =
@@ -88,34 +110,48 @@ function bounded(
 
 function visibleText(html: string): string {
   return html
-    .replace(/<!--[sS]*?-->/g, " ")
-    .replace(/<script\b[sS]*?<\/script>/gi, " ")
-    .replace(/<style\b[sS]*?<\/style>/gi, " ")
-    .replace(/<noscript\b[sS]*?<\/noscript>/gi, " ")
-    .replace(/<template\b[sS]*?<\/template>/gi, " ")
-    .replace(/<svg\b[sS]*?<\/svg>/gi, " ")
+    .replace(/<!--([\s\S]*?)-->/g, " ")
+    .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+    .replace(/<noscript\b[\s\S]*?<\/noscript>/gi, " ")
+    .replace(/<template\b[\s\S]*?<\/template>/gi, " ")
+    .replace(/<svg\b[\s\S]*?<\/svg>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;|&#160;/gi, " ")
+    .replace(/&amp;/gi, "&")
     .replace(/\s+/g, " ")
     .trim();
 }
 
+function meaningfulBlocks(html: string): number {
+  return [
+    ...html.matchAll(
+      /<(?:p|li|article|section|table|details|address)\b[^>]*>[\s\S]*?<\/(?:p|li|article|section|table|details|address)>/gi,
+    ),
+  ].filter((match) => visibleText(match[0]).length >= 40).length;
+}
+
 /**
- * Conservative escalation heuristic. Normal content-rich HTML stays on the
- * cheap deterministic HTTP path; rendering is reserved for obvious app shells.
+ * Conservative escalation heuristic. Content-rich HTML remains on the cheap
+ * deterministic HTTP path. Only genuine scripted shells or extractor-empty
+ * pages are eligible for browser rendering.
  */
 export function shouldRenderScannerV2Page(html: string): boolean {
   const text = visibleText(html);
   if (text.length >= 320) return false;
 
   const scriptSrcCount = [...html.matchAll(/<script\b[^>]*\bsrc\s*=/gi)].length;
+  const scriptCount = [...html.matchAll(/<script\b[^>]*>/gi)].length;
   const mountPoint =
     /<[^>]+\bid\s*=\s*["'](?:root|app|__next|__nuxt|svelte)["'][^>]*>/i.test(html) ||
     /<[^>]+\bdata-reactroot\b/i.test(html);
   const moduleScript =
     /<script\b[^>]*\btype\s*=\s*["']module["'][^>]*>/i.test(html);
+  const semanticBlocks = meaningfulBlocks(html);
 
-  return scriptSrcCount > 0 && (mountPoint || moduleScript || text.length < 120);
+  if (scriptCount > 0 && mountPoint && text.length < 400) return true;
+  if (scriptSrcCount > 0 && moduleScript && text.length < 220) return true;
+  return scriptCount > 0 && text.length < 120 && semanticBlocks === 0;
 }
 
 function filteredFulfillHeaders(
@@ -129,6 +165,7 @@ function filteredFulfillHeaders(
     "proxy-authenticate",
     "proxy-authorization",
     "set-cookie",
+    "set-cookie2",
     "transfer-encoding",
     "upgrade",
   ]);
@@ -139,9 +176,35 @@ function filteredFulfillHeaders(
   return out;
 }
 
+function selectedRequestHeaders(
+  headers: Record<string, string>,
+): Record<string, string> {
+  const allowed = new Set([
+    "accept",
+    "accept-language",
+    "content-type",
+    "origin",
+    "referer",
+  ]);
+  return Object.fromEntries(
+    Object.entries(headers).filter(([key]) =>
+      allowed.has(key.toLowerCase()),
+    ),
+  );
+}
+
 function failureReason(error: unknown): "render_timeout" | "render_failed" {
   const message = error instanceof Error ? error.message : String(error);
   return /timeout/i.test(message) ? "render_timeout" : "render_failed";
+}
+
+function isAnalytics(rawUrl: string): boolean {
+  try {
+    const hostname = new URL(rawUrl).hostname;
+    return ANALYTICS_HOSTS.some((pattern) => pattern.test(hostname));
+  } catch {
+    return false;
+  }
 }
 
 export async function renderScannerV2Page(
@@ -160,8 +223,37 @@ export async function renderScannerV2Page(
     };
   }
 
-  const target = new URL(rawUrl);
-  const origin = target.origin;
+  let target: URL;
+  try {
+    target = new URL(rawUrl);
+  } catch {
+    return {
+      ok: false,
+      reason: "render_failed",
+      requests: 0,
+      bytes: 0,
+      blockedRequests: [],
+      warnings: ["invalid_render_url"],
+    };
+  }
+  const initialPolicy = normalizeScannerV2Url(
+    target.toString(),
+    new URL(target.origin),
+    { applyContentPolicy: true },
+  );
+  if (!initialPolicy.ok) {
+    return {
+      ok: false,
+      reason: "render_failed",
+      requests: 0,
+      bytes: 0,
+      blockedRequests: [],
+      warnings: [initialPolicy.reason],
+    };
+  }
+  target = new URL(initialPolicy.url);
+  const targetOrigin = target.origin;
+
   const timeoutMs = bounded(
     options.timeoutMs,
     DEFAULT_RENDER_TIMEOUT_MS,
@@ -189,30 +281,61 @@ export async function renderScannerV2Page(
   const maxRequests = bounded(
     options.maxRequests,
     DEFAULT_RENDER_MAX_REQUESTS,
-    8,
+    1,
     DEFAULT_RENDER_MAX_REQUESTS,
   );
+  const maxOrigins = bounded(
+    options.maxOrigins,
+    DEFAULT_RENDER_MAX_ORIGINS,
+    1,
+    DEFAULT_RENDER_MAX_ORIGINS,
+  );
+  const settleMs = bounded(
+    options.settleMs,
+    DEFAULT_RENDER_SETTLE_MS,
+    0,
+    1_500,
+  );
+  const deadline = Date.now() + timeoutMs;
 
   const browserType =
     options.browserType ?? (await import("playwright")).chromium;
-  const browser = await browserType.launch({ headless: true });
+  let browser;
+  try {
+    browser = await browserType.launch({
+      headless: true,
+      timeout: timeoutMs,
+    });
+  } catch (error) {
+    return {
+      ok: false,
+      reason: failureReason(error),
+      requests: 0,
+      bytes: 0,
+      blockedRequests: [],
+      warnings: ["render_launch_failed"],
+    };
+  }
+
+  const blockedRequests: ScannerV2RenderBlockedRequest[] = [];
+  const warnings: string[] = [];
+  const origins = new Set<string>();
+  let requests = 0;
+  let bytes = 0;
+  let fatalReason:
+    | "network_budget"
+    | "request_limit"
+    | "origin_limit"
+    | null = null;
+
+  // Serialise proxied browser fetches so concurrent subresources cannot race
+  // aggregate byte/request budgets.
+  let fetchSerial: Promise<void> = Promise.resolve();
+
   const context = await browser.newContext({
     acceptDownloads: false,
     serviceWorkers: "block",
   });
-
-  let requests = 0;
-  let bytes = 0;
-  const warnings: string[] = [];
-  const blockedRequests: ScannerV2RenderBlockedRequest[] = [];
-  let fatalReason:
-    | "network_budget"
-    | "request_limit"
-    | null = null;
-
-  // Serialise SSRF-safe fetches so the aggregate transfer budget cannot be
-  // raced by concurrent browser subrequests.
-  let fetchSerial: Promise<void> = Promise.resolve();
 
   const block = async (
     route: Route,
@@ -222,13 +345,15 @@ export async function renderScannerV2Page(
     try {
       await route.abort("blockedbyclient");
     } catch {
-      // Route may already be closed because the page is shutting down.
+      // Route can already be closing during browser teardown.
     }
   };
 
   await context.route("**/*", async (route) => {
     const request = route.request();
     const requestUrl = request.url();
+    const method = request.method().toUpperCase();
+
     let parsed: URL;
     try {
       parsed = new URL(requestUrl);
@@ -241,46 +366,69 @@ export async function renderScannerV2Page(
       await block(route, "unsupported_scheme");
       return;
     }
-    if (parsed.origin !== origin) {
-      await block(route, "cross_origin");
+    if (
+      request.resourceType() === "document" &&
+      parsed.origin !== targetOrigin
+    ) {
+      await block(route, "cross_origin_document");
       return;
     }
-    if (!["GET", "HEAD"].includes(request.method().toUpperCase())) {
+    if (method !== "GET" && method !== "HEAD") {
       await block(route, "mutation_method");
       return;
     }
-    if (["image", "media", "font"].includes(request.resourceType())) {
+    if (BLOCKED_RESOURCE_TYPES.has(request.resourceType())) {
       await block(route, "resource_type");
       return;
     }
+    if (isAnalytics(requestUrl)) {
+      await block(route, "analytics");
+      return;
+    }
+
+    const policy = allowPublicHttpsUrl(parsed.toString());
+    if (!policy.ok) {
+      await block(route, "network_policy_denied");
+      return;
+    }
+    parsed = policy.url;
+
+    if (!origins.has(parsed.origin) && origins.size >= maxOrigins) {
+      fatalReason = "origin_limit";
+      await block(route, "origin_limit");
+      return;
+    }
+    origins.add(parsed.origin);
+
     if (requests >= maxRequests) {
       fatalReason = "request_limit";
       await block(route, "request_limit");
       return;
     }
-
     requests += 1;
 
     const current = fetchSerial.then(async () => {
-      const remaining = maxNetworkBytes - bytes;
-      if (remaining <= 0) {
+      const remainingBytes = maxNetworkBytes - bytes;
+      if (remainingBytes <= 0) {
         fatalReason = "network_budget";
         await block(route, "network_budget");
         return;
       }
+      const remainingMs = deadline - Date.now();
+      if (remainingMs <= 0) {
+        await block(route, "fetch_denied");
+        return;
+      }
 
       try {
-        const response = await fetchPublicHttps(requestUrl, {
+        const response = await fetchPublicHttps(parsed.toString(), {
           lookup: options.lookup,
           get: options.get,
-          timeoutMs: Math.min(DEFAULT_PAGE_TIMEOUT_MS, timeoutMs),
-          maxBytes: Math.min(maxResourceBytes, remaining),
+          remainingMs,
+          timeoutMs: Math.min(DEFAULT_PAGE_TIMEOUT_MS, remainingMs),
+          maxBytes: Math.min(maxResourceBytes, remainingBytes),
           maxRedirects: DEFAULT_MAX_REDIRECTS,
-          headers: {
-            Accept:
-              request.headers().accept ??
-              "text/html,application/javascript,application/json,text/plain,*/*;q=0.1",
-          },
+          headers: selectedRequestHeaders(await request.allHeaders()),
         });
         const bodyBytes = Buffer.byteLength(response.body, "utf8");
         if (bytes + bodyBytes > maxNetworkBytes) {
@@ -293,7 +441,7 @@ export async function renderScannerV2Page(
         await route.fulfill({
           status: response.status,
           headers: filteredFulfillHeaders(response.headers),
-          body: request.method().toUpperCase() === "HEAD" ? "" : response.body,
+          body: method === "HEAD" ? "" : response.body,
         });
       } catch {
         await block(route, "fetch_denied");
@@ -304,24 +452,30 @@ export async function renderScannerV2Page(
     await current;
   });
 
+  if ("routeWebSocket" in context) {
+    const routeWebSocket = context.routeWebSocket.bind(context);
+    await routeWebSocket("**/*", async (socket) => {
+      blockedRequests.push({ url: socket.url(), reason: "websocket" });
+      await socket.close();
+    });
+  }
+
   try {
     await context.clearCookies();
     const page = await context.newPage();
     page.setDefaultTimeout(timeoutMs);
+    page.setDefaultNavigationTimeout(timeoutMs);
 
-    await page.goto(rawUrl, {
+    await page.goto(target.toString(), {
       waitUntil: "domcontentloaded",
       timeout: timeoutMs,
     });
 
-    // Give already-loaded application scripts a short deterministic window to
-    // settle without waiting indefinitely for analytics or external resources
-    // (which are blocked above). Network-idle is best-effort and bounded.
-    await page.waitForTimeout(150);
+    if (settleMs > 0) await page.waitForTimeout(settleMs);
     await fetchSerial;
     await page
       .waitForLoadState("networkidle", {
-        timeout: Math.min(2_000, timeoutMs),
+        timeout: Math.min(2_000, Math.max(250, deadline - Date.now())),
       })
       .catch(() => undefined);
     await fetchSerial;
@@ -364,7 +518,7 @@ export async function renderScannerV2Page(
     }
 
     const renderedPageUrl = new URL(page.url());
-    const renderedOrigin = new URL(origin);
+    const renderedOrigin = new URL(targetOrigin);
     const links = [
       ...new Set(
         extractSameOriginHrefs(html, renderedPageUrl)
