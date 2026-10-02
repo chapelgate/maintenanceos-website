@@ -391,20 +391,8 @@ export async function discoverScannerV2Frontier(
   let sitemapUrlsDiscovered = 0;
 
   while (sitemapQueue.length > 0) {
-    if (sitemapSeen.size >= maxSitemapDocuments) {
-      warnings.push("sitemap_document_limit");
-      discoveryIncomplete = true;
-      break;
-    }
-
     const next = sitemapQueue.shift();
-    if (!next || sitemapSeen.has(next.url)) continue;
-
-    if (next.depth > maxSitemapDepth) {
-      warnings.push("sitemap_depth_limit");
-      discoveryIncomplete = true;
-      continue;
-    }
+    if (!next) continue;
 
     const normalizedSitemap = normalizeDiscoveredUrl(next.url, origin);
     if (!normalizedSitemap) {
@@ -412,6 +400,19 @@ export async function discoverScannerV2Frontier(
       if (next.declared) discoveryIncomplete = true;
       continue;
     }
+    if (sitemapSeen.has(normalizedSitemap)) continue;
+
+    if (next.depth > maxSitemapDepth) {
+      warnings.push("sitemap_depth_limit");
+      discoveryIncomplete = true;
+      continue;
+    }
+    if (sitemapSeen.size >= maxSitemapDocuments) {
+      warnings.push("sitemap_document_limit");
+      discoveryIncomplete = true;
+      break;
+    }
+
     sitemapSeen.add(normalizedSitemap);
 
     let response;
