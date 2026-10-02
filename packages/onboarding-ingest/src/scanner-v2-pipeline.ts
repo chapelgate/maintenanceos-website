@@ -187,7 +187,12 @@ function seededRows(
         lastAttemptAt: undefined,
       };
     }
-    if (row.status === "fetched" || row.status === "unresolved") {
+    if (
+      row.status === "fetched" ||
+      row.status === "unresolved" ||
+      (row.status === "policy_skipped" &&
+        (row.reason === "http_401" || row.reason === "http_403"))
+    ) {
       return {
         ...row,
         status: "queued",
