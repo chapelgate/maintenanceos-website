@@ -96,7 +96,7 @@ test(
           status: 200,
           headers: {
             "content-type": "application/json; charset=utf-8",
-            "access-control-allow-origin": "https://acme.example",
+            "access-control-allow-origin": "*",
           },
           body: JSON.stringify({
             name: "Rendered Services",
