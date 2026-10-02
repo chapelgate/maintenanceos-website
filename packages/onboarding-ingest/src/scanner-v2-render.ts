@@ -88,7 +88,7 @@ function bounded(
 
 function visibleText(html: string): string {
   return html
-    .replace(/<!--[sS]*?-->/g, " ")
+    .replace(/<!--[\\s\\S]*?-->/g, " ")
     .replace(/<script\b[sS]*?<\/script>/gi, " ")
     .replace(/<style\b[sS]*?<\/style>/gi, " ")
     .replace(/<noscript\b[sS]*?<\/noscript>/gi, " ")
@@ -379,7 +379,7 @@ export async function renderScannerV2Page(
         requests,
         bytes,
         blockedRequests,
-        warnings: ["render_no_content"],
+        warnings: [...new Set([...warnings, "render_no_content"])],
       };
     }
 
