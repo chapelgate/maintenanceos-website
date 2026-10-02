@@ -36,6 +36,12 @@ export type ScannerV2ProcessResult = {
   canonicalUrl?: string;
   page?: CrawlPage;
   chunks?: CorpusChunk[];
+  /**
+   * Additional same-site frontier rows discovered while processing this URL,
+   * e.g. links that only exist after safe JavaScript rendering. The worker
+   * seeds missing rows only and never rewinds an existing terminal row.
+   */
+  discoveredUrls?: CrawlUrlDisposition[];
 };
 
 export type ScannerV2ProcessUrl = (input: {
@@ -476,6 +482,16 @@ export async function runScannerV2WorkerBatch(input: {
       if (page) await input.store.putPage(job.crawlId, page);
       if (outcome.chunks?.length && page) {
         await input.store.putChunks(job.crawlId, outcome.chunks);
+      }
+
+      for (const discovered of outcome.discoveredUrls ?? []) {
+        if (discovered.url === current.url) continue;
+        const existing = await input.store.getUrl(job.crawlId, discovered.url);
+        if (existing) continue;
+        await input.store.upsertUrl(job.crawlId, {
+          ...structuredClone(discovered),
+          retryCount: discovered.retryCount ?? 0,
+        });
       }
 
       await input.store.upsertUrl(job.crawlId, {
