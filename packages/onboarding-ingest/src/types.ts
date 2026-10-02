@@ -107,7 +107,24 @@ export type SafeHttpResponse = {
   url: URL;
 };
 
+export type SafeBinaryHttpResponse = {
+  status: number;
+  headers: Record<string, string>;
+  body: Uint8Array;
+  url: URL;
+};
+
 export type LookupFn = (hostname: string) => Promise<string[]>;
+
+export type BinaryHttpGetFn = (
+  url: URL,
+  ip: string,
+  opts: {
+    timeoutMs: number;
+    maxBytes: number;
+    headers?: Record<string, string>;
+  },
+) => Promise<SafeBinaryHttpResponse>;
 
 export type HttpGetFn = (
   url: URL,
