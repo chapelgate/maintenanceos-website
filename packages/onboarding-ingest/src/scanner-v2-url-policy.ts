@@ -173,8 +173,9 @@ export function normalizeScannerV2Url(
   parsed.hash = "";
 
   const segments = decodedPathSegments(parsed);
+  const applyContentPolicy = options.applyContentPolicy ?? true;
   const maxPathDepth = boundedPathDepth(options.maxPathDepth);
-  if (segments.length > maxPathDepth) {
+  if (applyContentPolicy && segments.length > maxPathDepth) {
     return {
       ok: false,
       displayUrl: parsed.toString(),
@@ -183,7 +184,6 @@ export function normalizeScannerV2Url(
     };
   }
 
-  const applyContentPolicy = options.applyContentPolicy ?? true;
   if (applyContentPolicy) {
     if (segments.some((segment) => BLOCKED_PATH_SEGMENTS.has(segment))) {
       return {
