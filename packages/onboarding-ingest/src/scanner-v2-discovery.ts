@@ -583,7 +583,10 @@ export async function discoverScannerV2Frontier(
     const next = sitemapQueue.shift();
     if (!next) continue;
 
-    const normalizedSitemap = normalizeDiscoveredUrl(next.url, origin);
+    const normalizedSitemap = normalizeDiscoveredUrl(next.url, origin, {
+      maxPathDepth,
+      applyContentPolicy: false,
+    });
     if (!normalizedSitemap) {
       warnings.push("sitemap_url_rejected");
       if (next.declared) discoveryIncomplete = true;
@@ -668,7 +671,10 @@ export async function discoverScannerV2Frontier(
 
     if (parsed.kind === "sitemapindex") {
       for (const entry of parsed.entries) {
-        const normalized = normalizeDiscoveredUrl(entry.loc, origin);
+        const normalized = normalizeDiscoveredUrl(entry.loc, origin, {
+          maxPathDepth,
+          applyContentPolicy: false,
+        });
         if (!normalized) {
           warnings.push("sitemap_child_rejected");
           discoveryIncomplete = true;
@@ -691,27 +697,16 @@ export async function discoverScannerV2Frontier(
     }
 
     for (const entry of parsed.entries) {
-      const normalized = normalizeDiscoveredUrl(entry.loc, origin);
-      if (!normalized) {
-        warnings.push("sitemap_page_rejected");
-        urls.add({
-          url: displayRejectedUrl(entry.loc, origin),
-          status: "policy_skipped",
-          discoveryReason: "sitemap",
-          discoveredFrom: response.url.toString(),
-          reason: "sitemap_page_rejected",
-          ...(entry.lastmod ? { sitemapLastModified: entry.lastmod } : {}),
-        });
-        continue;
-      }
-      const added = urls.add({
-        url: normalized,
-        status: "queued",
+      const admitted = admitPageCandidate(entry.loc, {
         discoveryReason: "sitemap",
         discoveredFrom: response.url.toString(),
         ...(entry.lastmod ? { sitemapLastModified: entry.lastmod } : {}),
       });
-      if (added) sitemapUrlsDiscovered += 1;
+      if (!admitted) {
+        warnings.push("sitemap_page_rejected");
+        continue;
+      }
+      if (admitted.added) sitemapUrlsDiscovered += 1;
     }
   }
 
