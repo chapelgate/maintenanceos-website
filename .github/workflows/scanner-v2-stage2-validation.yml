@@ -1,0 +1,54 @@
+name: Scanner V2 Stage 2 validation
+
+on:
+  push:
+    branches:
+      - feat/scanner-v2-stage2-discovery-20261002
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scanner-v2-stage2-discovery
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Scanner V1 and V2 package tests
+        run: node --experimental-strip-types --test packages/onboarding-ingest/src/*.test.ts
+      - name: Full repository regression
+        run: npm test
+      - name: Accessibility
+        run: npm run accessibility:check
+      - name: Static analysis
+        run: npx tsc --noEmit
+      - name: Production build
+        env:
+          NEXT_PUBLIC_FORM_ENDPOINT: http://127.0.0.1:8787/leads
+        run: npm run build
+      - name: Enforce Stage 2 safety boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="fa4c9d92b26e3a4da34afd5d7cbcf3cbeb860cb0"
+          git diff --exit-code "$base"...HEAD --             packages/onboarding-ingest/src/scan.ts             packages/onboarding-ingest/src/fetch-safe.ts             packages/onboarding-ingest/src/extract.ts             packages/onboarding-ingest/packages/website/scan/bundle.cjs             src/lib/sandbox-test-call.ts             packages/sandbox-test-call
+          node --experimental-strip-types --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+          import { isScannerV2Enabled } from "./packages/onboarding-ingest/src/scanner-v2-foundation.ts";
+          assert.equal(isScannerV2Enabled({}), false);
+          console.log("SCANNER_V2_DEFAULT_OFF=PASS");
+          NODE
+          echo "SCANNER_V1_RUNTIME_SOURCE_UNCHANGED=PASS"
+          echo "GOLDEN_PHONE_LINE_CHANGE_SURFACE=0"
