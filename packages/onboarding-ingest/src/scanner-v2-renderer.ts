@@ -70,16 +70,16 @@ export type ScannerV2RenderResourceResult =
       incomplete: boolean;
     };
 
+export type ScannerV2RenderAbortReason = Extract<
+  ScannerV2RenderResourceResult,
+  { action: "abort" }
+>["reason"];
+
 export type ScannerV2RenderBlockedRequest = {
   url: string;
   method: string;
   resourceType: string;
-  reason: ScannerV2RenderResourceResult extends {
-    action: "abort";
-    reason: infer R;
-  }
-    ? R
-    : never;
+  reason: ScannerV2RenderAbortReason;
 };
 
 export type ScannerV2BrowserBackendInput = {
