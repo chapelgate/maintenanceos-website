@@ -61,6 +61,22 @@ export type {
   FrontierTrapDecision,
 } from "./scanner-v2-url-policy.ts";
 export {
+  shouldRenderScannerV2Page,
+  renderScannerV2Page,
+  renderAndExtractScannerV2Page,
+  DEFAULT_RENDER_TIMEOUT_MS,
+  DEFAULT_RENDER_NETWORK_BYTES,
+  DEFAULT_RENDER_RESOURCE_BYTES,
+  DEFAULT_RENDER_DOM_CHARS,
+  DEFAULT_RENDER_MAX_REQUESTS,
+} from "./scanner-v2-render.ts";
+export type {
+  ScannerV2RenderBlockedRequest,
+  ScannerV2RenderResult,
+  ScannerV2RenderOptions,
+  ScannerV2RenderedExtraction,
+} from "./scanner-v2-render.ts";
+export {
   InMemoryBm25CorpusIndex,
   DEFAULT_SEARCH_LIMIT,
   MAX_SEARCH_LIMIT,
