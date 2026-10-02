@@ -179,9 +179,12 @@ export function discoverHtmlLinks(input: {
 
 class UrlAccumulator {
   private readonly rows = new Map<string, CrawlUrlDisposition>();
+  private readonly maxUrls: number;
   limitReached = false;
 
-  constructor(private readonly maxUrls: number) {}
+  constructor(maxUrls: number) {
+    this.maxUrls = maxUrls;
+  }
 
   add(row: CrawlUrlDisposition): boolean {
     if (this.rows.has(row.url)) return false;
