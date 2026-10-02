@@ -367,5 +367,9 @@ test("grounding uses an evidence heading instead of unrelated body text when onl
   assert.match(answer.text, /beer gas/i);
   assert.doesNotMatch(answer.text, /^Hobbyweld Logo$/i);
   assert.deepEqual(answer.sourceUrls, ["https://example.com/gases"]);
+  assert.ok(
+    answer.evidence[0]?.text.includes(answer.text),
+    "heading fallback must remain an exact evidence substring",
+  );
 });
 
