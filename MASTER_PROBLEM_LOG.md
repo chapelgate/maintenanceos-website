@@ -987,3 +987,52 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+### 2026-10-02 Scanner V2 Stage 5 retrieval
+Status: COMPLETE / VERIFIED / READY TO MERGE
+
+Implemented:
+- deterministic free/local CorpusIndex abstraction;
+- weighted BM25-style lexical ranking over Stage 4 chunks;
+- title > headings > body weighting;
+- exact identifier preservation/boost for phone, email, postcode, codes, percentages and explicit GBP values;
+- deterministic bounded synonym normalisation for common business queries;
+- exact-phrase bonus;
+- stable URL + ordinal + chunk-id tie breaking;
+- replacement-on-reindex semantics so stale chunks cannot accumulate;
+- search traces with chunk ID, canonical URL, heading path, text, score, matched terms and matched identifiers;
+- bounded debugging stats without new infrastructure or paid dependencies.
+
+Verification:
+- exact tested retrieval source SHA: bb71e4a3459d77e4402b8180e3d55e07fabf2ae1;
+- GitHub Actions run 37033571509 / job 110926372777: PASS;
+- targeted Scanner V2 suite: 53/53 PASS;
+- relevant scanner/package test group: 242/242 PASS;
+- full repository regression: 367/367 PASS;
+- accessibility: 16/16 PASS;
+- TypeScript: PASS;
+- production Next.js build: PASS, 30/30 routes;
+- Scanner V1 runtime source unchanged: PASS;
+- Scanner V2 production routing change: 0;
+- golden phone line change surface: 0.
+
+Independent NVIDIA review:
+- Evolution Engine run 37033414118 / job 110925622538: PASS;
+- nvidia-gpt-oss ranking review: PASS at USD 0 marginal cost;
+- nvidia-gpt-oss paraphrase/safety review: PASS at USD 0 marginal cost;
+- nvidia-nemotron ranking review: PASS at USD 0 marginal cost;
+- nvidia-nemotron paraphrase/safety review: PASS at USD 0 marginal cost;
+- SCANNER_V2_STAGE5_NVIDIA_REVIEW=PASS;
+- NVIDIA lane remained review/reasoning only; no claim of toolful code execution.
+
+Evidence:
+- docs/SCANNER_V2_STAGE5_EVIDENCE_20261002.md
+
+Release boundary:
+Stage 5 remains additive and Scanner V2 remains off the production /create route. The next authorised boundary is Stage 6 source-grounded receptionist corpus retrieval.
+
+Golden-line boundary:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed.
+
+Human blockers:
+None.
+
