@@ -198,7 +198,15 @@ function chooseExtractiveSpan(
     | undefined;
 
   for (const hit of hits) {
-    const candidates = sentenceCandidates(hit.text);
+    // Headings are part of the indexed evidence and may carry the exact
+    // service/product name even when the nearby body is only an image alt or
+    // short label. Consider them as extractive evidence instead of allowing a
+    // high BM25 hit score to turn an unrelated body fragment into the answer.
+    const heading = hit.headingPath.filter(Boolean).join(" — ").trim();
+    const candidates = [
+      ...(heading ? [heading] : []),
+      ...sentenceCandidates(hit.text),
+    ];
     for (const [ordinal, candidate] of candidates.entries()) {
       if (!candidate) continue;
       const cTokens = new Set(tokens(candidate));
@@ -209,6 +217,11 @@ function chooseExtractiveSpan(
         normalize(candidate).replace(/[\s().-]+/g, "").includes(identifier),
       ).length;
 
+      // A candidate must itself carry query evidence. The parent hit's BM25
+      // score alone is not enough: that previously allowed a heading match
+      // such as "Beer Gas" to return an unrelated body label like "Hobbyweld
+      // Logo".
+      if (overlap === 0 && identifiers === 0) continue;
       const score = overlap * 10 + identifiers * 25 + Math.min(hit.score, 20);
       if (
         !best ||
