@@ -1,5 +1,6 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
+import { VoiceInteractionPreview } from "@/components/VoiceInteractionPreview";
 import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { contentPageMetadata } from "@/lib/page-meta";
 
@@ -147,6 +148,7 @@ export default function AiReceptionistPage() {
         </p>
 
         <CtaPair />
+        <VoiceInteractionPreview />
       </div>
     </>
   );
