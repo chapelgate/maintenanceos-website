@@ -1,4 +1,4 @@
-name: Lane 2 source key bootstrap
+name: Lane 2 source stage
 on:
   push:
     branches: [ops/nvdl-lane2-worker-bootstrap-20261003]
@@ -6,21 +6,40 @@ on:
 permissions:
   contents: read
 jobs:
-  bootstrap:
-    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
-    timeout-minutes: 5
+  stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Create isolated Lane 2 source-transfer key
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: research/nvidia-maintenanceos-website-p0
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Stage exact research branch to Lane 2
         shell: bash
         run: |
           set -euo pipefail
           umask 077
-          install -d -m 700 "$HOME/.ssh"
-          key="$HOME/.ssh/maintenanceos-website-lane2-source"
-          if test ! -f "$key"; then
-            ssh-keygen -q -t ed25519 -N '' -C 'maintenanceos-website-lane2-source-20261003' -f "$key"
-          fi
-          chmod 600 "$key"
-          chmod 644 "$key.pub"
+          key="$RUNNER_TEMP/lane2_source_key"
+          ssh-keygen -q -t ed25519 -N '' -C 'maintenanceos-website-lane2-source-ephemeral' -f "$key"
           echo "LANE2_SOURCE_PUBLIC_KEY=$(cat "$key.pub")"
-          echo "LANE2_SOURCE_KEY_READY=PASS"
+          echo "LANE2_SOURCE_HEAD=$(git rev-parse HEAD)"
+          ready=0
+          for _ in $(seq 1 45); do
+            if ssh -i "$key" -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=4 cgr-nvdl2@161.35.40.154 'true' 2>/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 5
+          done
+          test "$ready" = 1
+          tar -czf - . | ssh -i "$key" -o BatchMode=yes -o StrictHostKeyChecking=accept-new cgr-nvdl2@161.35.40.154 '
+            set -euo pipefail
+            rm -rf /var/lib/chapelgate-nvdl2/maintenanceos-website
+            install -d -m 700 /var/lib/chapelgate-nvdl2/maintenanceos-website
+            tar -xzf - -C /var/lib/chapelgate-nvdl2/maintenanceos-website
+            cd /var/lib/chapelgate-nvdl2/maintenanceos-website
+            test "$(git branch --show-current)" = "research/nvidia-maintenanceos-website-p0"
+            test -z "$(git status --porcelain=v1 --untracked-files=all)"
+            echo "LANE2_WEBSITE_SOURCE_STAGE=PASS"
+          '
