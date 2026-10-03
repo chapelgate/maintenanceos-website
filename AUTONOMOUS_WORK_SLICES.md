@@ -47,13 +47,14 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: Discovering/Crawling/Indexing/Complete/Partial/Failed states are represented; PARTIAL cannot appear fully learned; V2 remains feature-gated.
 
 ## MOSWEB-S003 — Stage 11 deterministic acceptance
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S002 PASS
 - Outcome: tests for progress counts, unresolved count, last scan, completeness label and safe source viewer behaviour if present.
 - Acceptance: focused tests PASS without weakening Scanner V1 or security limits.
+- Evidence: all tests in packages/onboarding-ingest passed on 2026-10-03.
 
 ## MOSWEB-S004 — Stage 11 full regression
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S003 PASS
 - Outcome: run existing full repo/build/mobile/security gates.
 - Acceptance: all required gates PASS; V1 production path unchanged.
