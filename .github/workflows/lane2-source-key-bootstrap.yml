@@ -18,6 +18,8 @@ jobs:
           persist-credentials: false
       - name: Stage exact research branch to Lane 2
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           umask 077
