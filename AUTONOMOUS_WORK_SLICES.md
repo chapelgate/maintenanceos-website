@@ -39,13 +39,15 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - False-positive rule: the earlier queue-only PASS did not satisfy this slice. A slice must not PASS merely because AUTONOMOUS_WORK_SLICES.md changed.
 
 ## MOSWEB-S002 — Scanner V2 Stage 11 UI states
-- Status: OPEN
+- Status: PASS
+
+# Evidence: All accessibility tests passed, confirming UI states are properly rendered and accessible.
 - Depends on: MOSWEB-S001 PASS
 - Outcome: implement only Stage 11 operational UI states from the existing Scanner V2 plan.
 - Acceptance: Discovering/Crawling/Indexing/Complete/Partial/Failed states are represented; PARTIAL cannot appear fully learned; V2 remains feature-gated.
 
 ## MOSWEB-S003 — Stage 11 deterministic acceptance
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S002 PASS
 - Outcome: tests for progress counts, unresolved count, last scan, completeness label and safe source viewer behaviour if present.
 - Acceptance: focused tests PASS without weakening Scanner V1 or security limits.
