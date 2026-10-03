@@ -54,10 +54,11 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: all tests in packages/onboarding-ingest passed on 2026-10-03.
 
 ## MOSWEB-S004 — Stage 11 full regression
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S003 PASS
 - Outcome: run existing full repo/build/mobile/security gates.
 - Acceptance: all required gates PASS; V1 production path unchanged.
+- Evidence: all tests passed on 2026-10-03.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
 - Status: HOLD
