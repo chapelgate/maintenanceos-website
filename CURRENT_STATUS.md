@@ -108,7 +108,7 @@ Use only PASS or OPEN. Do not invent another checklist.
 
 ## Autonomous execution queue
 
-`AUTONOMOUS_WORK_SLICES.md` is the authoritative executable queue for autonomous work. The ten-step tracker below/above is a release ladder, not ten simultaneously executable goals. Execute only one READY slice and never initiate a live carrier call or phone-route change without its explicit human gate.
+`AUTONOMOUS_WORK_SLICES.md` is the authoritative executable queue for autonomous work. The ten-step tracker below/above is a release ladder, not ten simultaneously executable goals. Execute only one OPEN slice and never initiate a live carrier call or phone-route change without its explicit human gate.
 
 ## Immediate mission
 
