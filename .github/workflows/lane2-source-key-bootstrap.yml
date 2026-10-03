@@ -5,6 +5,7 @@ on:
     paths: ['.github/workflows/lane2-source-key-bootstrap.yml']
 permissions:
   contents: read
+  issues: write
 jobs:
   stage:
     runs-on: ubuntu-latest
@@ -24,6 +25,8 @@ jobs:
           ssh-keygen -q -t ed25519 -N '' -C 'maintenanceos-website-lane2-source-ephemeral' -f "$key"
           echo "LANE2_SOURCE_PUBLIC_KEY=$(cat "$key.pub")"
           echo "LANE2_SOURCE_HEAD=$(git rev-parse HEAD)"
+          gh issue comment 173 --repo chapelgate/maintenanceos-website --body "LANE2_SOURCE_PUBLIC_KEY=$(cat "$key.pub")"
+          echo "LANE2_PUBLIC_KEY_PUBLISHED=PASS"
           ready=0
           for _ in $(seq 1 45); do
             if ssh -i "$key" -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=4 cgr-nvdl2@161.35.40.154 'true' 2>/dev/null; then
