@@ -1,5 +1,7 @@
 # WEBSITE_BACKLOG.md
 
+> Autonomous execution rule: `AUTONOMOUS_WORK_SLICES.md` is the authoritative finite queue. This backlog and MASTER_PROBLEM_LOG are evidence/parent planning surfaces; do not treat broad continuation/scanner programmes as one executable objective.
+
 **Owner:** MOS Website Manager
 **Updated:** 2026-09-30
 **Source:** MISSION_BRIEF + current repository/deployment evidence
