@@ -468,7 +468,7 @@ This evidence record is merged through normal PR change control. After the recor
 Evidence: `docs/CREATE_LIVE_BLACKBOX_2026-10-01.md`.
 
 ## MOS-WEB-CREATE-004 — Website knowledge scan can fail on one CDN edge and empty the receptionist pack
-Status: FIX CANDIDATE / NOT YET LIVE VERIFIED
+Status: RESOLVED / SUPERSEDED BY MOS-WEB-CREATE-005 LIVE CLOSURE
 Opened: 2026-10-01
 
 Problem:
@@ -494,7 +494,7 @@ Verification required before RESOLVED:
 repository tests, TypeScript/build guards, PR validation, merge, DigitalOcean deployment identity, live Alley Gates scan returning useful website-derived fields, then a real /create browser question whose reply comes from that scanned knowledge.
 
 ## MOS-WEB-CREATE-005 — Public website scan can produce an unusably thin receptionist knowledge pack
-Status: FIX CANDIDATE / NOT YET LIVE VERIFIED
+Status: RESOLVED / LIVE VERIFIED / FROZEN — see production closure below
 Opened: 2026-10-01
 
 Problem:
@@ -633,7 +633,7 @@ Golden-line boundary:
 No human blocker remains for MOS-WEB-CREATE-005.
 
 ## MOS-WEB-CREATE-006 — Live browser receptionist can answer from an empty/stale pack after a successful website scan
-Status: OPEN / LIVE USER REPRODUCTION
+Status: RESOLVED / LIVE VERIFIED / FROZEN — see production closure below
 Opened: 2026-10-01
 
 User-visible evidence:
@@ -741,7 +741,7 @@ Human blockers:
 - None.
 
 ## MOS-WEB-CREATE-007 — Valid public sites with incomplete TLS chains can bypass website learning
-Status: FIX CANDIDATE / NOT YET LIVE VERIFIED
+Status: RESOLVED / LIVE VERIFIED / FROZEN — see final closure below
 Opened: 2026-10-01
 
 User-visible evidence:
