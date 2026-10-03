@@ -1,0 +1,26 @@
+name: Lane 2 source key bootstrap
+on:
+  push:
+    branches: [ops/nvdl-lane2-worker-bootstrap-20261003]
+    paths: ['.github/workflows/lane2-source-key-bootstrap.yml']
+permissions:
+  contents: read
+jobs:
+  bootstrap:
+    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
+    timeout-minutes: 5
+    steps:
+      - name: Create isolated Lane 2 source-transfer key
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          install -d -m 700 "$HOME/.ssh"
+          key="$HOME/.ssh/maintenanceos-website-lane2-source"
+          if test ! -f "$key"; then
+            ssh-keygen -q -t ed25519 -N '' -C 'maintenanceos-website-lane2-source-20261003' -f "$key"
+          fi
+          chmod 600 "$key"
+          chmod 644 "$key.pub"
+          echo "LANE2_SOURCE_PUBLIC_KEY=$(cat "$key.pub")"
+          echo "LANE2_SOURCE_KEY_READY=PASS"
