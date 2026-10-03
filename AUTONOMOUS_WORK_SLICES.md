@@ -34,7 +34,9 @@ Keep the working public website truthful and stable while completing Scanner V2 
 ## MOSWEB-S001 — Reconcile stale scanner problem statuses
 - Status: PASS
 - Outcome: MASTER_PROBLEM_LOG no longer presents already live-closed CREATE-004/005/006/007 as current executable work.
-- Acceptance: current closure evidence is preserved; no product code change.
+- Acceptance: top-level CREATE-004/005/006/007 status headers are reconciled against the closure evidence already present in MASTER_PROBLEM_LOG; CREATE-005/006/007 point to their live/final closures and CREATE-004 is explicitly recorded as superseded by the verified CREATE-005 closure. Current closure evidence is preserved; no product code change.
+- Evidence: research-branch MASTER_PROBLEM_LOG status reconciliation committed after the first queue-only PASS was identified as a false-positive acceptance.
+- False-positive rule: the earlier queue-only PASS did not satisfy this slice. A slice must not PASS merely because AUTONOMOUS_WORK_SLICES.md changed.
 
 ## MOSWEB-S002 — Scanner V2 Stage 11 UI states
 - Status: OPEN
