@@ -1,0 +1,79 @@
+# MaintenanceOS Website — Autonomous Work Slices
+
+## Execution contract
+
+This file is the **authoritative executable queue** for the autonomous worker. Strategic missions, roadmaps, problem histories and commercial plans remain context, but they are **not executable tasks** unless represented here as a finite slice.
+
+Statuses: `OPEN | IN_PROGRESS | PASS | BLOCKED | HUMAN_BLOCKED | HOLD`.
+
+Rules:
+1. Execute exactly one `OPEN` slice at a time; change it to `IN_PROGRESS` before work.
+2. A slice must have one primary outcome and explicit acceptance evidence.
+3. Research, planning, rereading, review, diagnosis and status reporting do not count as progress by themselves.
+4. Once the next safe action is known, execute it.
+5. If one attempt produces no measurable delta, change method. After two materially different no-progress attempts, record the exact blocker and mark the slice `BLOCKED`; do not loop.
+6. Do not start a `HOLD`, `HUMAN_BLOCKED` or parent milestone.
+7. When acceptance passes, record the evidence, mark `PASS`, then promote only the next dependency-satisfied slice to `OPEN`.
+8. A human-gated slice must not stall unrelated machine-solvable slices.
+9. Never create perpetual “monitor/improve/research” work. Monitoring or research must be a dated, finite snapshot with an output and stop condition.
+10. Goal Lock and the estate Progress Gate remain mandatory.
+
+## Evidence basis for this slicing pattern
+
+- Anthropic, *Building Effective AI Agents*: use workflow decomposition/sequential patterns where work can be cleanly separated; match architecture complexity to business value. https://resources.anthropic.com/building-effective-ai-agents
+- OpenAI, *A practical guide to building agents*: agent runs need explicit exit conditions; set failure/retry thresholds; start simple and add complexity only when justified. https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/
+- Microsoft, *Reduce autonomous agentic AI risk*: inadequate task adherence is a known agent risk; define clear boundaries and apply least action plus deterministic controls. https://learn.microsoft.com/en-us/security/zero-trust/sfi/manage-agentic-risk
+
+Reviewed: 2026-10-03.
+
+## Parent mission — NOT EXECUTABLE
+Keep the working public website truthful and stable while completing Scanner V2 as an additive, rollback-safe capability. The golden MaintenanceOS phone line is out of scope.
+
+## Ordered slices
+
+## MOSWEB-S001 — Reconcile stale scanner problem statuses
+- Status: OPEN
+- Outcome: MASTER_PROBLEM_LOG no longer presents already live-closed CREATE-004/005/006/007 as current executable work.
+- Acceptance: current closure evidence is preserved; no product code change.
+
+## MOSWEB-S002 — Scanner V2 Stage 11 UI states
+- Status: HOLD
+- Depends on: MOSWEB-S001 PASS
+- Outcome: implement only Stage 11 operational UI states from the existing Scanner V2 plan.
+- Acceptance: Discovering/Crawling/Indexing/Complete/Partial/Failed states are represented; PARTIAL cannot appear fully learned; V2 remains feature-gated.
+
+## MOSWEB-S003 — Stage 11 deterministic acceptance
+- Status: HOLD
+- Depends on: MOSWEB-S002 PASS
+- Outcome: tests for progress counts, unresolved count, last scan, completeness label and safe source viewer behaviour if present.
+- Acceptance: focused tests PASS without weakening Scanner V1 or security limits.
+
+## MOSWEB-S004 — Stage 11 full regression
+- Status: HOLD
+- Depends on: MOSWEB-S003 PASS
+- Outcome: run existing full repo/build/mobile/security gates.
+- Acceptance: all required gates PASS; V1 production path unchanged.
+
+## MOSWEB-S005 — Stage 12 deterministic fixture gate
+- Status: HOLD
+- Depends on: MOSWEB-S004 PASS
+- Outcome: run the existing Stage 12 step 1 only.
+- Acceptance: deterministic fixture suite passes on exact candidate.
+
+## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
+- Status: HOLD
+- Depends on: MOSWEB-S005 PASS
+- Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
+- Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
+
+## MOSWEB-S007 — Mobile deep-question acceptance
+- Status: HOLD
+- Depends on: MOSWEB-S006 PASS
+- Outcome: one mobile browser preview battery proves deep-page retrieval/source grounding.
+- Acceptance: supported answers cite/retrieve correct source; unsupported questions fail honestly; no production lead/save side effect unless test explicitly uses safe fixture path.
+
+## MOSWEB-S008 — Exact deployed-SHA freeze
+- Status: HOLD
+- Depends on: MOSWEB-S007 PASS
+- Outcome: complete remaining Stage 12 full gates, exact deployed SHA readback and freeze evidence.
+- Acceptance: V2 canary is proven stable before changing rollback assumptions; golden line untouched.
