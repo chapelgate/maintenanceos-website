@@ -1305,3 +1305,33 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+
+### 2026-10-03 Functional-first Phase 1 baseline acceptance
+Status: COMPLETE / VERIFIED / READY FOR PHASE 2
+
+Exact tested source:
+- research/nvidia-maintenanceos-website-p0 at 68ffdfb878b048ec61300e3ccca14a6db364504d.
+
+Verification:
+- locked dependency install: PASS;
+- full repository tests: 419/419 PASS, 0 failed, 0 skipped;
+- production Next.js build: PASS;
+- functional smoke: PASS, 26 sitemap routes, 0 failures;
+- Firefox + WebKit cross-engine acceptance on the existing authorised Windows machine: PASS;
+- cross-engine matrix: 2 engines x 3 viewports x 6 critical routes = 36/36 PASS;
+- critical routes: /, /create/, /demo/, /features/, /pricing/, /security/;
+- browser page errors: 0; browser console errors: 0; horizontal overflow failures: 0.
+
+Worker-runtime repair:
+- the existing NVDL runner Node 24/npm/npx runtime is reused via the owner service PATH;
+- repository node_modules are installed from package-lock.json with npm ci;
+- no new runtime service, runner, database, router, scheduler or framework was created;
+- the minimal NVDL Linux host does not contain the GUI/media library set required by Playwright Firefox/WebKit and the worker user has no passwordless sudo;
+- Playwright's generic Linux install-deps proposal would add hundreds of host packages, so it is deliberately not installed.
+
+Acceptance boundary:
+- NVDL may run unit, build and functional-smoke gates autonomously;
+- exact-SHA Firefox/WebKit acceptance remains required on the existing authorised Windows machine before merge/release of browser-sensitive changes;
+- this does not weaken the browser gate and does not change HB-002 physical Safari/iOS/manual assistive-technology launch QA;
+- Phase 2 website voice work may now proceed on the guarded research branch;
+- MaintenanceOS production telephony and the golden phone line remain untouched.
