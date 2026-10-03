@@ -169,4 +169,4 @@ The original mission brief named `WEBSITE_AGENT_BOARD.md`, `WEBSITE_TEST_RESULTS
 
 ## Secrets
 
-None in this repository. Use `.env.example` placeholders only.
+None in this repository. Use `.env.example` placeholders only. Next steps: manual Safari/iOS QA pending.
