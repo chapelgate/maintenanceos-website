@@ -106,6 +106,10 @@ Use only PASS or OPEN. Do not invent another checklist.
 9. OPEN — Fresh controlled carrier retest.
 10. OPEN — Final release decision.
 
+## Autonomous execution queue
+
+`AUTONOMOUS_WORK_SLICES.md` is the authoritative executable queue for autonomous work. The ten-step tracker below/above is a release ladder, not ten simultaneously executable goals. Execute only one READY slice and never initiate a live carrier call or phone-route change without its explicit human gate.
+
 ## Immediate mission
 
 Get MaintenanceOS demonstrably ready for Andrew to make **one** controlled real Twilio test call.
