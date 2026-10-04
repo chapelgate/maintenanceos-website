@@ -163,6 +163,27 @@ test("scriptedReply answers natural service questions from reviewed website know
   assert.match(summary.text, /Replacement alley gate keys/);
 });
 
+test("scriptedReply selects the duration sentence within grounded site evidence", () => {
+  const reply = scriptedReply(
+    "How long can a replacement alley gate key take to arrive?",
+    { businessName: "Alley Gates" },
+    undefined,
+    [{
+      url: "https://alleygates.co.uk/product/sefton-alley-gate-key/",
+      title: "Sefton Alley Gate Key",
+      headingPath: ["Sefton Alley Gate Key"],
+      text:
+        "To request a replacement alley gate key use the payment form below or contact 0151 321 1920. " +
+        "Please note, keys are ordered from a third party and from time of order the key can take up to 6 weeks to be delivered.",
+      contentHash: "duration-ranking-fixture",
+    }],
+  );
+
+  assert.equal(reply.source, "knowledge.site");
+  assert.match(reply.text, /6 weeks/i);
+  assert.doesNotMatch(reply.text, /contact 0151/i);
+});
+
 test("scriptedReply missing hours stays honest and invents no clock", () => {
   const hours = scriptedReply("What are your opening hours?", {
     businessName: "Acme Plumbing",

@@ -187,6 +187,19 @@ function tokenOverlapScore(left: string, right: string): number {
   return score;
 }
 
+function durationAnswerBonus(callerText: string, candidate: string): number {
+  const asksForDuration =
+    /\bhow long\b|\bwhen\b|\barriv(?:e|al|ing)?\b|\bdeliver(?:y|ed|ing)?\b/i.test(
+      callerText,
+    );
+  if (!asksForDuration) return 0;
+  return /\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:hours?|days?|weeks?|months?)\b/i.test(
+    candidate,
+  )
+    ? 3
+    : 0;
+}
+
 function matchService(
   pack: KnowledgePack,
   callerText: string,
@@ -345,9 +358,13 @@ function matchSiteKnowledge(
       .filter((part) => part.length >= 12 && part.length <= 600);
     const candidates = sentences.length ? sentences : [item.text.trim().slice(0, 600)];
     let answer = candidates[0] ?? "";
-    let answerScore = tokenOverlapScore(callerText, answer);
+    let answerScore =
+      tokenOverlapScore(callerText, answer) +
+      durationAnswerBonus(callerText, answer);
     for (const candidate of candidates.slice(1)) {
-      const score = tokenOverlapScore(callerText, candidate);
+      const score =
+        tokenOverlapScore(callerText, candidate) +
+        durationAnswerBonus(callerText, candidate);
       if (score > answerScore) {
         answer = candidate;
         answerScore = score;
