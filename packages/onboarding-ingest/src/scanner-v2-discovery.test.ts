@@ -194,6 +194,44 @@ test("integrated discovery exhausts 100+ sitemap pages and a link-only deep page
   assert.equal(deep?.discoveredFrom, "https://acme.example/page-001");
 });
 
+test("HTML discovery accepts modern large pages through bounded compression", async () => {
+  let sawCompressed = false;
+  let maxBytes: number | undefined;
+  let maxDecompressedBytes: number | undefined;
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxHtmlBytes: 999_999_999,
+    lookup: async () => ["203.0.113.10"],
+    get: async (url, _ip, opts) => {
+      if (url.pathname === "/robots.txt") {
+        return response(
+          url.toString(),
+          "User-agent: *\nAllow: /",
+          "text/plain",
+        );
+      }
+      if (url.pathname === "/sitemap.xml") {
+        return response(url.toString(), "missing", "text/plain", 404);
+      }
+      if (url.pathname === "/") {
+        sawCompressed = opts.acceptCompressed === true;
+        maxBytes = opts.maxBytes;
+        maxDecompressedBytes = opts.maxDecompressedBytes;
+        return html(
+          url.toString(),
+          "<html><body>" + "x".repeat(800 * 1024) + "</body></html>",
+        );
+      }
+      return response(url.toString(), "missing", "text/plain", 404);
+    },
+  });
+
+  assert.equal(sawCompressed, true);
+  assert.equal(maxBytes, 2 * 1024 * 1024);
+  assert.equal(maxDecompressedBytes, 2 * 1024 * 1024);
+  assert.equal(result.manifest.fetched, 1);
+  assert.equal(result.incomplete, false);
+});
+
 test("sitemap fetch explicitly requests bounded compressed responses", async () => {
   let compressedRequested = false;
   let maxDecompressedBytes: number | undefined;
