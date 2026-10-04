@@ -1,4 +1,6 @@
 import { runScan } from "../../../src/scan.ts";
+import { isScannerV2Enabled } from "../../../src/scanner-v2-foundation.ts";
+import { runScannerV2Scan } from "../../../src/scanner-v2-scan.ts";
 import type { ScanResult } from "../../../src/types.ts";
 
 type WebEvent = {
@@ -99,7 +101,12 @@ export async function main(event: WebEvent = {}) {
   }
 
   try {
-    const result = await runScan(url, { enabled: true });
+    const result = isScannerV2Enabled()
+      ? await runScannerV2Scan(url, {
+          enabled: true,
+          scannerV2Enabled: true,
+        })
+      : await runScan(url, { enabled: true });
     return response(statusFor(result), result, origin);
   } catch {
     return response(
