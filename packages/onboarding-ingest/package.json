@@ -5,5 +5,9 @@
   "scripts": {
     "start": "node --experimental-strip-types src/server.ts",
     "test": "node --experimental-strip-types --test src/*.test.ts"
+  },
+  "dependencies": {
+    "pdfjs-dist": "6.3.289",
+    "playwright": "1.63.0"
   }
 }
