@@ -17,6 +17,7 @@ Rules:
 8. Mark `PASS` only when the stated **substantive acceptance evidence** passes. A commit, build, deployment, file, heartbeat, or successful tool invocation is not acceptance unless the slice explicitly says it is.
 9. **Goal Lock:** the worker may decide **HOW** to satisfy the assigned outcome but may not broaden, reinterpret, replace, or extend **WHAT** the outcome is. No unsolicited refactors, redesigns, cleanup, speculative optimisation, or adjacent work.
 10. The worker's progress metric is **accepted slices**, not activity. Add no new service, queue, database, router, scheduler, watchdog, supervisor, critic, planner, model router, control plane, second harness, or multi-agent swarm. Continue autonomously until no eligible independent work remains.
+11. **NO RENDER — ESTATE RULE.** Do not use Render.com for deployment, hosting, fallback, preview, worker execution, or any new configuration. Existing historical `render.yaml` references are not an authorised deployment path. Reuse already-approved Chapelgate infrastructure only.
 
 ## Evidence basis for this slicing pattern
 
@@ -55,31 +56,97 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS — Stage 11 evidence records 419/419 tests, 17/17 accessibility and 30/30 build routes with V1 production unchanged.
 
 ## MOSWEB-S004A — Modern rendered-site market-parity coverage
-- Status: IN_PROGRESS
+- Status: PASS
 - Depends on: MOSWEB-S004 PASS
 - Outcome: close only the demonstrated current-market public-site coverage gaps before Stage 12: bounded lazy-loaded/scroll content, open Shadow DOM content and same-origin iframe discovery.
-- Acceptance: deterministic tests PASS; all browser-triggered requests remain inside existing SSRF/method/request/origin/byte/time controls; no CAPTCHA/paywall/auth bypass, proxy evasion, form automation, new service or paid dependency; golden line untouched.
+- Acceptance: PASS on merged main SHA `5993683d8d1d61a427e5eb07cd3e0e59829eb0a7`; exact candidate locally passed 425/425 tests, 17/17 accessibility, lint, TypeScript, 30/30 build routes, viewport smoke and 390x844 mobile interactive acceptance. Golden line untouched.
 
-## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: HOLD
+## MOSWEB-S005A — Stage 12 deterministic whole-site discovery fixture
+- Status: OPEN
 - Depends on: MOSWEB-S004A PASS
-- Outcome: run the existing Stage 12 step 1 only.
-- Acceptance: deterministic fixture suite passes on exact candidate.
+- Outcome: prove the existing deterministic fixture reaches 100+ sitemap pages plus link-only deep content with exact URL accounting.
+- Acceptance: discovery test PASS; frontier empty or every remaining URL explicitly terminal; no safety ceiling hidden as COMPLETE.
 
-## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
+## MOSWEB-S005B — Stage 12 modern-DOM fixture
 - Status: HOLD
-- Depends on: MOSWEB-S005 PASS
-- Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
-- Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
+- Depends on: MOSWEB-S005A PASS
+- Outcome: prove lazy-loaded content, open Shadow DOM text/links and same-origin iframe discovery enter the normal V2 corpus/frontier.
+- Acceptance: focused renderer/content/retrieval tests PASS under existing SSRF/request/origin/byte/time controls.
 
-## MOSWEB-S007 — Mobile deep-question acceptance
+## MOSWEB-S005C — Stage 12 document/deep-knowledge fixture
 - Status: HOLD
-- Depends on: MOSWEB-S006 PASS
-- Outcome: one mobile browser preview battery proves deep-page retrieval/source grounding.
-- Acceptance: supported answers cite/retrieve correct source; unsupported questions fail honestly; no production lead/save side effect unless test explicitly uses safe fixture path.
+- Depends on: MOSWEB-S005B PASS
+- Outcome: prove linked PDF/TXT/CSV and deep-page facts are retrievable with exact source provenance.
+- Acceptance: document ingestion + retrieval + grounded-answer tests PASS; unsupported document/fact remains PARTIAL/not_found.
 
-## MOSWEB-S008 — Exact deployed-SHA freeze
+## MOSWEB-S006A — V1 compatibility regression
 - Status: HOLD
-- Depends on: MOSWEB-S007 PASS
-- Outcome: complete remaining Stage 12 full gates, exact deployed SHA readback and freeze evidence.
-- Acceptance: V2 canary is proven stable before changing rollback assumptions; golden line untouched.
+- Depends on: MOSWEB-S005C PASS
+- Outcome: prove the existing V1 production compatibility path remains unchanged before canaries.
+- Acceptance: V1 scan/regression tests PASS; Scanner V2 remains feature-gated; no telephony change.
+
+## MOSWEB-S006B — Alley Gates real-site canary
+- Status: HOLD
+- Depends on: MOSWEB-S006A PASS
+- Outcome: run a bounded V2 read-only canary against alleygates.co.uk.
+- Acceptance: record discovered/fetched/skipped/unresolved counts; prove at least three non-homepage facts and five site-specific grounded questions; unknown question fails honestly.
+
+## MOSWEB-S006C — Express Gas real-site canary
+- Status: HOLD
+- Depends on: MOSWEB-S006B PASS
+- Outcome: run the same bounded read-only V2 canary against expressgasdelivery.com.
+- Acceptance: same evidence contract as MOSWEB-S006B.
+
+## MOSWEB-S006D — Forum Housing real-site canary
+- Status: HOLD
+- Depends on: MOSWEB-S006C PASS
+- Outcome: run the same bounded read-only V2 canary against forumhousing.co.uk.
+- Acceptance: same evidence contract as MOSWEB-S006B, including the previously difficult site path.
+
+## MOSWEB-S006E — Additional conventional-site canary
+- Status: HOLD
+- Depends on: MOSWEB-S006D PASS
+- Outcome: run one bounded V2 canary against an ordinary multi-page public business site selected only for coverage diversity.
+- Acceptance: same evidence contract as MOSWEB-S006B; no login, anti-bot bypass or mutation.
+
+## MOSWEB-S006F — Additional JS-heavy-site canary
+- Status: HOLD
+- Depends on: MOSWEB-S006E PASS
+- Outcome: run one bounded V2 canary against a public JS-heavy site to exercise safe render escalation.
+- Acceptance: rendered facts/links enter normal validation and retrieval; no form submission, auth/CAPTCHA bypass or cross-origin crawl.
+
+## MOSWEB-S007A — Mobile deep-question preview
+- Status: HOLD
+- Depends on: MOSWEB-S006F PASS
+- Outcome: prove a 390x844 mobile preview can answer supported deep-site questions from V2 evidence.
+- Acceptance: correct source-backed answers, zero runtime exceptions and zero lead/save side effect.
+
+## MOSWEB-S007B — Mobile unsupported-question honesty
+- Status: HOLD
+- Depends on: MOSWEB-S007A PASS
+- Outcome: prove unsupported mobile questions fail honestly rather than using stale/summary knowledge.
+- Acceptance: not_found/explicit uncertainty; no invented source, number, service or policy.
+
+## MOSWEB-S008A — Production V2 runtime reuse decision
+- Status: HOLD
+- Depends on: MOSWEB-S007B PASS
+- Outcome: identify and prove the smallest existing approved Chapelgate runtime that can execute V2 resumably.
+- Acceptance: REUSE ONLY; no new service/database/control plane; **NO RENDER**; golden phone runtime excluded; if no existing approved runtime satisfies requirements, record one blocker rather than creating infrastructure.
+
+## MOSWEB-S008B — Feature-gated production canary cutover
+- Status: HOLD
+- Depends on: MOSWEB-S008A PASS
+- Outcome: connect the existing /create scan path to V2 behind the existing explicit feature gate on the proven runtime.
+- Acceptance: V1 remains rollback path; exact canary tests PASS before wider enablement; no telephony/provider credential change.
+
+## MOSWEB-S008C — Exact deployed-SHA verification
+- Status: HOLD
+- Depends on: MOSWEB-S008B PASS
+- Outcome: run full production/browser/security gates and read back the exact deployed application SHA.
+- Acceptance: required gates PASS on the deployed candidate; public /create uses intended V2 canary path; no hidden V1 fallback when V2 reports COMPLETE.
+
+## MOSWEB-S008D — Final freeze
+- Status: HOLD
+- Depends on: MOSWEB-S008C PASS
+- Outcome: freeze the exact deployed SHA and acceptance evidence.
+- Acceptance: rollback point recorded; Scanner V2 canary stable; golden phone line untouched; no Render usage.
