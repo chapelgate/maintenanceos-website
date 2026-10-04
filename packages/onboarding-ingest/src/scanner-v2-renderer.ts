@@ -267,6 +267,42 @@ function selectedRequestHeaders(
   );
 }
 
+type ShadowSnapshot = {
+  text: string;
+  links: Array<{ href: string; text: string }>;
+};
+
+function escapeHtmlText(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+function escapeHtmlAttribute(value: string): string {
+  return escapeHtmlText(value).replaceAll('"', "&quot;");
+}
+
+function appendShadowSnapshots(html: string, snapshots: ShadowSnapshot[]): string {
+  if (!snapshots.length) return html;
+  const safe = snapshots
+    .map((snapshot) => {
+      const text = escapeHtmlText(snapshot.text);
+      const links = snapshot.links
+        .map(
+          (link) =>
+            `<a data-scanner-shadow-link="" href="${escapeHtmlAttribute(link.href)}">${escapeHtmlText(link.text)}</a>`,
+        )
+        .join(" ");
+      return `<section data-scanner-shadow-root="open">${text}${links ? ` ${links}` : ""}</section>`;
+    })
+    .join("");
+  const bodyClose = /<\/body\s*>/i;
+  return bodyClose.test(html)
+    ? html.replace(bodyClose, `${safe}</body>`)
+    : `${html}${safe}`;
+}
+
 function extractRenderedFrameUrls(html: string, pageUrl: URL): string[] {
   const urls: string[] = [];
   const re = /<(?:iframe|frame)\b[^>]*\bsrc\s*=\s*(?:["']([^"']+)["']|([^\s>]+))/gi;
@@ -441,33 +477,56 @@ export async function playwrightScannerV2BrowserBackend(
       }
 
       // Open Shadow DOM is public rendered page content but page.content()
-      // does not serialize it. Clone a bounded number of open shadow roots
-      // into inert light-DOM wrappers so existing extraction/chunking can see
-      // the same text and links. Closed shadow roots remain inaccessible.
-      if (input.maxShadowHosts > 0) {
-        await page.evaluate((maxHosts) => {
-          const queue = Array.from(document.querySelectorAll("*"));
-          let exposed = 0;
-          for (let index = 0; index < queue.length && exposed < maxHosts; index += 1) {
-            const element = queue[index];
-            const shadow = element.shadowRoot;
-            if (!shadow) continue;
-            const wrapper = document.createElement("div");
-            wrapper.setAttribute("data-scanner-shadow-root", "open");
-            for (const child of Array.from(shadow.childNodes)) {
-              wrapper.appendChild(child.cloneNode(true));
-            }
-            element.appendChild(wrapper);
-            queue.push(...Array.from(wrapper.querySelectorAll("*")));
-            exposed += 1;
-          }
-        }, input.maxShadowHosts);
-      }
+      // does not serialize it. Read a bounded snapshot of text + navigable
+      // links only. Do not clone nodes back into the live document: that could
+      // re-activate custom elements, scripts, frames or resource loads.
+      const shadowSnapshots: ShadowSnapshot[] =
+        input.maxShadowHosts > 0
+          ? await page.evaluate((maxHosts) => {
+              const queue = Array.from(document.querySelectorAll("*"));
+              const snapshots: ShadowSnapshot[] = [];
+              let exposed = 0;
+              for (
+                let index = 0;
+                index < queue.length && exposed < maxHosts;
+                index += 1
+              ) {
+                const element = queue[index];
+                const shadow = element.shadowRoot;
+                if (!shadow) continue;
+                queue.push(...Array.from(shadow.querySelectorAll("*")));
+
+                const text = (shadow.textContent ?? "")
+                  .replace(/\s+/g, " ")
+                  .trim();
+                const links = Array.from(
+                  shadow.querySelectorAll("a[href], iframe[src], frame[src]"),
+                )
+                  .slice(0, 64)
+                  .map((node) => {
+                    const href =
+                      node.getAttribute("href") ?? node.getAttribute("src") ?? "";
+                    return {
+                      href,
+                      text: (node.textContent ?? "").replace(/\s+/g, " ").trim(),
+                    };
+                  })
+                  .filter((link) => Boolean(link.href));
+                if (text || links.length) snapshots.push({ text, links });
+                exposed += 1;
+              }
+              return snapshots;
+            }, input.maxShadowHosts)
+          : [];
 
       await page.evaluate(() => window.scrollTo(0, 0));
+      const html = appendShadowSnapshots(
+        await page.content(),
+        shadowSnapshots,
+      );
 
       return {
-        html: await page.content(),
+        html,
         finalUrl: page.url(),
       };
     } finally {
