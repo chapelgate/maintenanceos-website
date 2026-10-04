@@ -77,6 +77,14 @@ export type ScanPageSource = {
   bytes: number;
 };
 
+export type ScanKnowledgeChunk = {
+  url: string;
+  title?: string;
+  headingPath: string[];
+  text: string;
+  contentHash: string;
+};
+
 export type ScanSuccess = {
   ok: true;
   untrusted: true;
@@ -89,6 +97,8 @@ export type ScanSuccess = {
   factMeta?: BusinessFactMeta;
   /** Optional provenance for filled draft keys. `/create` ignores unknown keys. */
   fieldMeta?: DraftFieldMeta;
+  knowledge?: ScanKnowledgeChunk[];
+  scannerV2?: ScannerV2ScanStatus;
 };
 
 export type ScanFailure = {
@@ -254,6 +264,18 @@ export type CrawlManifest = {
   urls: CrawlUrlDisposition[];
 };
 
+export type ScannerV2ScanStatus = {
+  state: CrawlState;
+  completeness: "in_progress" | "complete" | "partial" | "failed";
+  discovered: number;
+  fetched: number;
+  queued: number;
+  unresolved: number;
+  skipped: number;
+  fullyLearned: boolean;
+  lastScanAt?: string;
+};
+
 export type CrawlLease = {
   crawlId: string;
   leaseKey: string;
@@ -271,4 +293,6 @@ export type CrawlJob = {
   createdAt: string;
   updatedAt: string;
   retryLimit: number;
+  discoveryIncomplete?: boolean;
+  discoveryWarnings?: string[];
 };

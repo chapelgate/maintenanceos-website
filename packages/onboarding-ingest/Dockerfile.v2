@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/playwright:v1.63.0-noble
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY packages/onboarding-ingest ./packages/onboarding-ingest
+
+ENV NODE_ENV=production
+ENV ONBOARDING_SCAN_HOST=0.0.0.0
+ENV SCANNER_V2_STATE_DIR=/data/scanner-v2
+
+EXPOSE 8788
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=6 \
+  CMD node -e "const p=process.env.PORT||'8788'; fetch('http://127.0.0.1:'+p+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
+CMD ["node", "--use-system-ca", "--experimental-strip-types", "packages/onboarding-ingest/src/server.ts"]

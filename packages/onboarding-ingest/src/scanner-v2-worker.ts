@@ -290,6 +290,8 @@ export async function createScannerV2Job(input: {
   urls: readonly CrawlUrlDisposition[];
   createdAt?: string;
   retryLimit?: number;
+  discoveryIncomplete?: boolean;
+  discoveryWarnings?: string[];
 }): Promise<CrawlJob> {
   const createdAt = input.createdAt ?? new Date().toISOString();
   const requestedRetryLimit = input.retryLimit;
@@ -314,6 +316,10 @@ export async function createScannerV2Job(input: {
       createdAt,
       updatedAt: createdAt,
       retryLimit,
+      ...(input.discoveryIncomplete ? { discoveryIncomplete: true } : {}),
+      ...(input.discoveryWarnings?.length
+        ? { discoveryWarnings: [...new Set(input.discoveryWarnings)].slice(0, 64) }
+        : {}),
     };
   if (!existing) await input.store.putJob(job);
 
@@ -351,7 +357,7 @@ async function finaliseManifest(
 
   const state: CrawlState = hasQueued
     ? "CRAWLING"
-    : hasUnresolved
+    : hasUnresolved || job.discoveryIncomplete
       ? "PARTIAL"
       : "COMPLETE";
 

@@ -11,6 +11,8 @@ import http from "node:http";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { isWebIngestEnabled, runScan } from "./scan.ts";
+import { isScannerV2Enabled } from "./scanner-v2-foundation.ts";
+import { runScannerV2Runtime } from "./scanner-v2-runtime.ts";
 import { ScanError, type ScanResult } from "./types.ts";
 
 export const DEFAULT_HOST = "127.0.0.1";
@@ -172,6 +174,7 @@ export async function handleScanRequest(
         ingestEnabled,
         sandboxCall: false,
         scanPath: "/v1/onboarding/scan",
+        scannerV2Enabled: isScannerV2Enabled(),
       },
       configured,
     );
@@ -262,7 +265,12 @@ export async function handleScanRequest(
   try {
     const result = options.scan
       ? await options.scan(url)
-      : await runScan(url, { enabled: ingestEnabled });
+      : isScannerV2Enabled()
+        ? await runScannerV2Runtime(url, {
+            enabled: ingestEnabled,
+            v2Enabled: true,
+          })
+        : await runScan(url, { enabled: ingestEnabled });
     send(res, statusFor(result), origin, result, configured);
   } catch (err) {
     if (err instanceof ScanError) {
