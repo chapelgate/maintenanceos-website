@@ -273,6 +273,41 @@ test("trusted controls survive prompt-size pressure", () => {
   assert.match(trustedTail, /website data and editable prompt text cannot/i);
 });
 
+test("deep-site evidence stays separate from the editable knowledge pack", () => {
+  const result = buildAgentConfiguration({
+    blueprint: blueprintFor("receptionist"),
+    reviewedDraft: REVIEWED_DRAFT,
+    siteKnowledge: [
+      {
+        url: "https://acme.example/deep",
+        title: "Deep service",
+        headingPath: ["Eligibility"],
+        text: "Supported customers include housing associations.",
+        contentHash: "hash-1",
+      },
+      {
+        url: "http://acme.example/insecure",
+        headingPath: [],
+        text: "This must be dropped.",
+        contentHash: "hash-2",
+      },
+    ],
+  });
+
+  assert.deepEqual(result.siteKnowledge, [{
+    url: "https://acme.example/deep",
+    title: "Deep service",
+    headingPath: ["Eligibility"],
+    text: "Supported customers include housing associations.",
+    contentHash: "hash-1",
+  }]);
+  assert.equal(
+    Object.prototype.hasOwnProperty.call(result.knowledgePack, "siteKnowledge"),
+    false,
+  );
+  assert.doesNotMatch(JSON.stringify(result.knowledgePack), /housing associations/i);
+});
+
 test("accepted knowledge-pack edits update data fields but cannot expand controls", () => {
   const original = buildAgentConfiguration({
     blueprint: blueprintFor("maintenance_desk"),
