@@ -194,6 +194,38 @@ test("integrated discovery exhausts 100+ sitemap pages and a link-only deep page
   assert.equal(deep?.discoveredFrom, "https://acme.example/page-001");
 });
 
+test("HTML discovery retries one transient timeout and then succeeds", async () => {
+  let homeAttempts = 0;
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    lookup: async () => ["203.0.113.10"],
+    get: async (url) => {
+      if (url.pathname === "/robots.txt") {
+        return response(
+          url.toString(),
+          "User-agent: *\nAllow: /",
+          "text/plain",
+        );
+      }
+      if (url.pathname === "/sitemap.xml") {
+        return response(url.toString(), "missing", "text/plain", 404);
+      }
+      if (url.pathname === "/") {
+        homeAttempts += 1;
+        if (homeAttempts === 1) {
+          throw new ScanError("timeout", "synthetic timeout", 504);
+        }
+        return html(url.toString(), "<html><body>Recovered</body></html>");
+      }
+      return response(url.toString(), "missing", "text/plain", 404);
+    },
+  });
+
+  assert.equal(homeAttempts, 2);
+  assert.equal(result.manifest.fetched, 1);
+  assert.equal(result.manifest.unresolved, 0);
+  assert.equal(result.incomplete, false);
+});
+
 test("HTML discovery accepts modern large pages through bounded compression", async () => {
   let sawCompressed = false;
   let maxBytes: number | undefined;
