@@ -9,6 +9,7 @@ export type {
   DraftFieldKey,
   KnowledgeFaq,
   KnowledgePack,
+  SiteKnowledgeItem,
   ReceptionistDraftInput,
   ReceptionistDraftResult,
 } from "./types.ts";

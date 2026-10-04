@@ -44,6 +44,7 @@ import {
   type ScanBusinessFacts,
   type ScanBusinessFactMeta,
   type ScanDraftFieldMeta,
+  type ScanSiteKnowledgeItem,
 } from "@/lib/onboarding-create";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
 import type { ScannerV2OperationalStatus } from "../../packages/onboarding-ingest/src/scanner-v2-status";
@@ -203,6 +204,7 @@ export function CreateReceptionistLaterSteps({
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
   const [factMeta, setFactMeta] = useState<ScanBusinessFactMeta>({});
   const [facts, setFacts] = useState<ScanBusinessFacts>({});
+  const [siteKnowledge, setSiteKnowledge] = useState<ScanSiteKnowledgeItem[]>([]);
   const [identityReview, setIdentityReview] =
     useState<ReviewedIdentityDraft>(EMPTY_IDENTITY_REVIEW);
   const [reviewConfirmedIds, setReviewConfirmedIds] = useState<string[]>([]);
@@ -342,6 +344,7 @@ export function CreateReceptionistLaterSteps({
       setScanDetail(null);
       setFacts({});
       setFactMeta({});
+      setSiteKnowledge([]);
       setIdentityReview(EMPTY_IDENTITY_REVIEW);
       setReviewConfirmedIds([]);
       setSelectedAgentType(null);
@@ -360,6 +363,7 @@ export function CreateReceptionistLaterSteps({
         setFieldMeta({});
         setFactMeta({});
         setFacts({});
+        setSiteKnowledge([]);
         setIdentityReview(EMPTY_IDENTITY_REVIEW);
         setProgress("queued");
         return;
@@ -374,6 +378,7 @@ export function CreateReceptionistLaterSteps({
         setFieldMeta(outcome.fieldMeta);
         setFactMeta(outcome.factMeta);
         setFacts(outcome.facts);
+        setSiteKnowledge(outcome.siteKnowledge);
         setIdentityReview({
           locations: outcome.facts.locations?.join("\n") ?? "",
           phone: outcome.facts.contact?.phones?.[0] ?? "",
@@ -398,6 +403,7 @@ export function CreateReceptionistLaterSteps({
       setFieldMeta({});
       setFactMeta({});
       setFacts({});
+      setSiteKnowledge([]);
       setIdentityReview(EMPTY_IDENTITY_REVIEW);
       setScanDetail(outcome.message);
       setProgress("scan_failed");
@@ -657,6 +663,7 @@ export function CreateReceptionistLaterSteps({
           const configuration = buildAgentConfiguration({
             blueprint: identityBlueprint,
             reviewedDraft: draft,
+            siteKnowledge,
           });
           if (editVersion !== configEditVersionRef.current) return;
           setReviewConfirmedIds([]);
@@ -1178,6 +1185,7 @@ export function CreateReceptionistLaterSteps({
                   const configuration = buildAgentConfiguration({
                     blueprint: agentBlueprint,
                     reviewedDraft: draft,
+                    siteKnowledge,
                   });
                   setReviewConfirmedIds([]);
                   setAgentBlueprint(configuration.blueprint);

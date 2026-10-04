@@ -2,6 +2,7 @@ import {
   TRUSTED_CONSTRAINTS_MARKER,
   normalizeKnowledgePack,
   type KnowledgePack,
+  type SiteKnowledgeItem,
 } from "../../receptionist-draft/src/index.ts";
 import type { ScriptedTurn, ScriptedTurnSource } from "./types.ts";
 
@@ -320,6 +321,48 @@ export function matchFaq(
   return best?.faq;
 }
 
+function matchSiteKnowledge(
+  siteKnowledge: readonly SiteKnowledgeItem[] | undefined,
+  callerText: string,
+): { text: string; url: string } | undefined {
+  if (!siteKnowledge?.length) return undefined;
+  let best:
+    | { text: string; url: string; score: number }
+    | undefined;
+
+  for (const item of siteKnowledge) {
+    const context = [
+      item.title ?? "",
+      ...(item.headingPath ?? []),
+      item.text,
+    ].join(" ");
+    const itemScore = tokenOverlapScore(callerText, context);
+    if (itemScore < 2) continue;
+
+    const sentences = item.text
+      .split(/(?<=[.!?])\s+|\n+/)
+      .map((part) => part.trim())
+      .filter((part) => part.length >= 12 && part.length <= 600);
+    const candidates = sentences.length ? sentences : [item.text.trim().slice(0, 600)];
+    let answer = candidates[0] ?? "";
+    let answerScore = tokenOverlapScore(callerText, answer);
+    for (const candidate of candidates.slice(1)) {
+      const score = tokenOverlapScore(callerText, candidate);
+      if (score > answerScore) {
+        answer = candidate;
+        answerScore = score;
+      }
+    }
+
+    const score = itemScore + answerScore;
+    if (answer && (!best || score > best.score)) {
+      best = { text: answer, url: item.url, score };
+    }
+  }
+
+  return best ? { text: best.text, url: best.url } : undefined;
+}
+
 function policySource(systemPrompt?: string): ScriptedTurnSource {
   return closingSource(systemPrompt);
 }
@@ -332,6 +375,7 @@ export function scriptedReply(
   callerText: string,
   pack: unknown,
   systemPrompt?: string,
+  siteKnowledge?: readonly SiteKnowledgeItem[],
 ): ScriptedTurn {
   const knowledge = safePack(pack);
   const intent = classifyCallerIntent(callerText);
@@ -410,6 +454,15 @@ export function scriptedReply(
       speaker: "receptionist",
       text: faq.answer,
       source: "knowledge.faqs",
+    };
+  }
+
+  const siteEvidence = matchSiteKnowledge(siteKnowledge, callerText);
+  if (siteEvidence) {
+    return {
+      speaker: "receptionist",
+      text: siteEvidence.text,
+      source: "knowledge.site",
     };
   }
 

@@ -15,6 +15,7 @@ export type {
   DraftFieldKey,
   KnowledgeFaq,
   KnowledgePack,
+  SiteKnowledgeItem,
   ReceptionistDraftInput,
   ReceptionistDraftResult,
 } from "../../packages/receptionist-draft/src/index.ts";

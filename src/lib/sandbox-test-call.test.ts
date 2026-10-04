@@ -296,6 +296,44 @@ test("public browser replies are pack-aware and hide engineering terminology", (
   );
 });
 
+test("browser reply uses source-grounded deep-site evidence", () => {
+  const pack = {
+    untrusted: true,
+    kind: "sandbox_knowledge_pack" as const,
+    liveCall: false as const,
+    liveNumber: null,
+    alwaysOn: false as const,
+    productionTelephony: false as const,
+    businessName: "Alley Gates",
+    missing: ["greeting", "hours", "services", "faqs"] as const,
+  };
+  const siteKnowledge = [{
+    url: "https://alleygates.co.uk/installation/deep/",
+    title: "Heritage alley gate installation",
+    headingPath: ["Installation lead time"],
+    text: "Heritage alley gate installation normally takes six weeks after the confirmed survey.",
+    contentHash: "abc123",
+  }];
+
+  const reply = runBrowserInteractiveReply(
+    "How long does a heritage alley gate installation take?",
+    pack,
+    undefined,
+    siteKnowledge,
+  );
+  assert.equal(reply.source, "knowledge.site");
+  assert.match(reply.text, /six weeks/i);
+
+  const unrelated = runBrowserInteractiveReply(
+    "Do you repair spacecraft engines on Mars?",
+    pack,
+    undefined,
+    siteKnowledge,
+  );
+  assert.equal(unrelated.source, "missing");
+  assert.doesNotMatch(unrelated.text, /six weeks/i);
+});
+
 test("runBrowserScriptedDemo with pack name+hours mentions both", () => {
   const turns = runBrowserScriptedDemo({
     businessName: "Acme Plumbing",

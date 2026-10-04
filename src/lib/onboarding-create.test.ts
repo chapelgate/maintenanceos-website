@@ -15,6 +15,7 @@ import {
   mapScanBusinessFacts,
   mapScanFieldMeta,
   mapScanResponse,
+  mapScanSiteKnowledge,
   normalisePublicUrl,
   scanFieldReviewHint,
 } from "./onboarding-create.ts";
@@ -120,6 +121,39 @@ test("mapScanBusinessFacts allow-lists structured intake and rejects malformed v
     }),
     {},
   );
+});
+
+test("mapScanSiteKnowledge allow-lists bounded HTTPS evidence only", () => {
+  const mapped = mapScanSiteKnowledge({
+    knowledge: [
+      {
+        url: "https://acme.example/deep",
+        title: "Deep details",
+        headingPath: ["Service", "Eligibility"],
+        text: "The supported scheme is available to housing associations.",
+        contentHash: "hash-1",
+        secret: "drop-me",
+      },
+      {
+        url: "http://acme.example/insecure",
+        headingPath: [],
+        text: "Must be rejected.",
+        contentHash: "hash-2",
+      },
+      {
+        url: "https://acme.example/no-hash",
+        headingPath: [],
+        text: "Must be rejected.",
+      },
+    ],
+  });
+  assert.deepEqual(mapped, [{
+    url: "https://acme.example/deep",
+    title: "Deep details",
+    headingPath: ["Service", "Eligibility"],
+    text: "The supported scheme is available to housing associations.",
+    contentHash: "hash-1",
+  }]);
 });
 
 test("mapScanBusinessFactMeta keeps provenance only for surviving facts", () => {
