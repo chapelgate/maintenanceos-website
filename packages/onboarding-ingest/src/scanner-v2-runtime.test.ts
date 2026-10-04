@@ -100,13 +100,13 @@ test("persistent runtime resumes the same crawl identity from disk", async () =>
       };
     };
 
-    let tick = 0;
+    const firstTimes = [0, 500, 2_000];
     const first = await runPersistentScannerV2("https://acme.example/", {
       stateRoot: root,
       releaseSha: "release-a",
       batchSize: 1,
       requestMs: 1_000,
-      now: () => (tick++ === 0 ? 0 : 2_000),
+      now: () => firstTimes.shift() ?? 2_000,
       discover: discover as never,
       processUrl: processUrl as never,
     });
@@ -116,13 +116,13 @@ test("persistent runtime resumes the same crawl identity from disk", async () =>
     assert.equal(first.scannerV2?.fetched, 1);
     assert.equal(first.scannerV2?.resumed, false);
 
-    tick = 0;
+    const secondTimes = [0, 500, 500];
     const second = await runPersistentScannerV2("https://acme.example/", {
       stateRoot: root,
       releaseSha: "release-a",
       batchSize: 8,
       requestMs: 1_000,
-      now: () => (tick++ === 0 ? 0 : 500),
+      now: () => secondTimes.shift() ?? 500,
       discover: discover as never,
       processUrl: processUrl as never,
     });
