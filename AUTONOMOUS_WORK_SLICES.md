@@ -104,13 +104,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on merged main SHA `9c00d010acf5fce19cfc3508d7005e3a02923c91`. Direct fetch reproduced the strict TLS failure `unable to get local issuer certificate`; V2 reused the bounded public reader recovery without weakening TLS. Discovery accounted for 48 URLs: 4 safely recovered/fetched, 44 unresolved, 0 queued; state remained honestly PARTIAL with robots/sitemap failures and reader_fallback_used recorded. Five recovered source-backed questions passed across About, Living With Us and Residents; unrelated Mars question returned not_found.
 
 ## MOSWEB-S006E — Additional conventional-site canary
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S006D PASS
 - Outcome: run one bounded V2 canary against an ordinary multi-page public business site selected only for coverage diversity.
-- Acceptance: same evidence contract as MOSWEB-S006B; no login, anti-bot bypass or mutation.
+- Acceptance: PASS on main SHA `e55ec66dcb64c5591af6451185a82f109c7a8637` using independent public control site `www.wirralroofers.net`. Discovery accounted for 27 URLs: 23 fetched, 4 policy-skipped, 0 unresolved, 0 queued, no warnings. Five practical non-homepage questions passed from About/Roof Repairs/Guttering/Velux sources; unrelated Mars question returned not_found. No login, anti-bot bypass or mutation.
 
 ## MOSWEB-S006F — Additional JS-heavy-site canary
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S006E PASS
 - Outcome: run one bounded V2 canary against a public JS-heavy site to exercise safe render escalation.
 - Acceptance: rendered facts/links enter normal validation and retrieval; no form submission, auth/CAPTCHA bypass or cross-origin crawl.
