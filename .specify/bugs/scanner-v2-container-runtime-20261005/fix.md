@@ -6,6 +6,7 @@ Reuse the existing DigitalOcean canary branch changes exactly:
 2. Add its existing lockfile.
 3. Make the existing Dockerfile run `npm ci --omit=dev`.
 4. Install the Playwright Chromium shell in the image and set `PLAYWRIGHT_BROWSERS_PATH`.
-5. Change nothing in Scanner V2 application logic, routing, feature flags, production hosts or telephony.
+5. Reuse the existing website integration validator to build and smoke the companion image only when `packages/onboarding-ingest/**` changes.
+6. Change nothing in Scanner V2 application logic, routing, feature flags, production hosts or telephony.
 
 Rollback: revert this PR. The current production runtime/routing is unchanged by this slice.
