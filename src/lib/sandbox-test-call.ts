@@ -10,6 +10,7 @@ import {
   overlayReceptionistDraft,
   type KnowledgePack,
   type ReceptionistDraftResult,
+  type SiteKnowledgeItem,
 } from "./receptionist-draft.ts";
 import {
   classifyCallerIntent,
@@ -152,8 +153,9 @@ export function runBrowserInteractiveReply(
   callerText: string,
   pack: unknown,
   systemPrompt?: string,
+  siteKnowledge?: readonly SiteKnowledgeItem[],
 ): ScriptedTurn {
-  const reply = scriptedReply(callerText, pack, systemPrompt);
+  const reply = scriptedReply(callerText, pack, systemPrompt, siteKnowledge);
   const intent = classifyCallerIntent(callerText);
 
   // Keep engineering terminology inside qualification/benchmark paths. The
