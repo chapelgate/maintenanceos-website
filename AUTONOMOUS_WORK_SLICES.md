@@ -116,22 +116,22 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on main SHA `122eb84905af5607707b2d02b76d8e746b464748` using independent client-rendered business site `appcatalyst.org`. V2 correctly classified raw HTML as app_shell, then discovery fetched 21/21 rendered pages with 0 unresolved/queued and no warnings. Five facts available after browser rendering passed with exact sources (Tacos Miranda Stripe/Square, DoorDash Drive API, Biltapp runtime content, Standard App iOS/Android support, 25+ apps/30+ websites since 2019); unrelated Mars question returned not_found. No form submission, auth/CAPTCHA bypass or cross-origin crawl.
 
 ## MOSWEB-S007A — Mobile deep-question preview
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S006F PASS
 - Outcome: prove a 390x844 mobile preview can answer supported deep-site questions from V2 evidence.
-- Acceptance: correct source-backed answers, zero runtime exceptions and zero lead/save side effect.
+- Acceptance: PASS on candidate SHA `ad09ab2e03aec9a578941ec6017278a576de3c09` — 434/434 full tests, 17/17 accessibility, TypeScript and 30/30 production build passed; 390x844 voice preview answered the deep-site heritage alley-gate installation duration from V2 evidence, with spoken reply, 0 runtime exceptions and 0 lead/save requests.
 
 ## MOSWEB-S007B — Mobile unsupported-question honesty
-- Status: HOLD
+- Status: PASS
 - Depends on: MOSWEB-S007A PASS
 - Outcome: prove unsupported mobile questions fail honestly rather than using stale/summary knowledge.
-- Acceptance: not_found/explicit uncertainty; no invented source, number, service or policy.
+- Acceptance: PASS on candidate SHA `b2cf47ca0750833f9014889dbf4efe646dc5f5b2` — the same 390x844 preview asked an unrelated Mars/spacecraft question and returned explicit uncertainty; no invented source, number, service or policy; 0 runtime exceptions and 0 lead/save requests.
 
 ## MOSWEB-S008A — Production V2 runtime reuse decision
-- Status: HOLD
+- Status: HUMAN_BLOCKED
 - Depends on: MOSWEB-S007B PASS
 - Outcome: identify and prove the smallest existing approved Chapelgate runtime that can execute V2 resumably.
-- Acceptance: REUSE ONLY; no new service/database/control plane; **NO RENDER**; golden phone runtime excluded; if no existing approved runtime satisfies requirements, record one blocker rather than creating infrastructure.
+- Acceptance: BLOCKER RECORDED — no existing approved runtime satisfies resumable V2 without violating estate boundaries. DigitalOcean candidates are other products, estate-control infrastructure or the excluded golden phone stack. Railway's only healthy public service is the unrelated RSFM Python control plane; the generic runtime has no live deployment/domain/durable state, another runtime is failed, and the remaining worker is cron-only. No Render, new service, new database, or cross-project runtime coupling was introduced. Human approval is required to designate or provision an appropriate persistent runtime before S008B.
 
 ## MOSWEB-S008B — Feature-gated production canary cutover
 - Status: HOLD
