@@ -7,16 +7,16 @@ This file is the **authoritative executable queue** for the autonomous worker. S
 Statuses: `OPEN | IN_PROGRESS | PASS | BLOCKED | HUMAN_BLOCKED | HOLD`.
 
 Rules:
-1. Execute exactly one slice at a time. Multiple slices may be `OPEN`; only one may be `IN_PROGRESS`.
-2. Select the highest-priority eligible `OPEN` slice. File order is the default priority. A slice is eligible when every **genuine** safety/data dependency needed for its outcome or acceptance is satisfied.
-3. `Depends on` must represent a real requirement, not mere sequencing. Never bypass a human, safety, production, legal, spend, credential, destructive-action or project-specific gate.
-4. Before changing anything, reproduce or prove the gap. Prefer **ZERO CODE → REUSE → CONFIGURE → smallest safe code**. Planning, rereading, review and status text alone are not progress.
-5. If an attempt produces no measurable delta, change method. Exhaust safe materially different alternatives before marking `BLOCKED`, and record the blocker once.
-6. A `BLOCKED` or `HUMAN_BLOCKED` slice must not stall unrelated work. Immediately select the next eligible `OPEN` slice. If none exists, promote the highest-priority `HOLD` slice whose genuine dependencies are satisfied.
-7. Use `HUMAN_BLOCKED` only when a unique human action is genuinely required after authorised alternatives are exhausted. Keep the exact owner action in the existing human-blocker register; do not manufacture human blockers.
-8. Mark `PASS` only when the stated acceptance evidence passes. A commit, build, deployment or unit test is not acceptance unless the slice explicitly says it is.
-9. **Goal Lock:** the worker may decide **HOW** to satisfy the assigned outcome but may not broaden, reinterpret, replace or extend **WHAT** the outcome is. No unsolicited refactors, redesigns or speculative optimisation.
-10. Add no new service, queue, database, router, scheduler, watchdog, supervisor, model router, control plane, second harness or multi-agent swarm. Continue autonomously until no eligible independent work remains; then surface one consolidated genuine-blocker report.
+1. **Exactly one executable slice exists at a time.** Across this file, at most one slice may be `OPEN` or `IN_PROGRESS`; every other unfinished slice is `HOLD`, `BLOCKED`, or `HUMAN_BLOCKED`.
+2. The executable slice is the highest-priority eligible slice. File order is the default priority. A slice is eligible only when every **genuine** safety/data dependency needed for its outcome or acceptance is satisfied.
+3. `Depends on` represents a real requirement, not mere sequencing. Never bypass a human, safety, production, legal, spend, credential, destructive-action, or project-specific gate.
+4. Before changing anything, reproduce or prove the gap. Prefer **ZERO CODE → REUSE → CONFIGURE → smallest safe code**. Planning, rereading, review, diagnosis, heartbeat, commits, model calls, and status text alone are not progress.
+5. If an attempt produces no measurable delta toward acceptance, change method. Exhaust safe materially different alternatives within existing limits before marking `BLOCKED`; record the blocker once.
+6. When the executable slice reaches `PASS`, `BLOCKED`, or `HUMAN_BLOCKED`, the **persistent project worker** must re-read this same file and promote exactly one highest-priority eligible `HOLD` slice to `OPEN`. A bounded model/job run still stops at its own slice boundary; continuity happens by reusing the existing worker/controller, never by adding a scheduler, supervisor, queue, service, or second execution path.
+7. A blocked slice must not stall unrelated eligible work. Use `HUMAN_BLOCKED` only when a unique human action is genuinely required after authorised alternatives are exhausted. Continue all independent eligible work first, then surface one consolidated human-blocker report.
+8. Mark `PASS` only when the stated **substantive acceptance evidence** passes. A commit, build, deployment, file, heartbeat, or successful tool invocation is not acceptance unless the slice explicitly says it is.
+9. **Goal Lock:** the worker may decide **HOW** to satisfy the assigned outcome but may not broaden, reinterpret, replace, or extend **WHAT** the outcome is. No unsolicited refactors, redesigns, cleanup, speculative optimisation, or adjacent work.
+10. The worker's progress metric is **accepted slices**, not activity. Add no new service, queue, database, router, scheduler, watchdog, supervisor, critic, planner, model router, control plane, second harness, or multi-agent swarm. Continue autonomously until no eligible independent work remains.
 
 ## Evidence basis for this slicing pattern
 
