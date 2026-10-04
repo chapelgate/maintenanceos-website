@@ -24,19 +24,40 @@ def main() -> int:
     account = (os.getenv("TWILIO_ACCOUNT_SID") or "").strip()
     auth = (os.getenv("TWILIO_AUTH_TOKEN") or "").strip()
     target = (os.getenv("TWILIO_PHONE_NUMBER") or "").strip()
-    candidates = [
-        (os.getenv("TWILIO_FROM_NUMBER") or "").strip(),
-        (os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER") or "").strip(),
-    ]
-    source = next((x for x in candidates if x and x != target), "")
     if not account or not auth or not target:
         print(json.dumps({"PHONE_PROOF": "BLOCKED", "reason": "missing_existing_twilio_credentials"}))
         return 2
-    if not source:
-        print(json.dumps({"PHONE_PROOF": "BLOCKED", "reason": "no_distinct_existing_from_number"}))
-        return 3
 
     client = Client(account, auth)
+    golden = "+441514535238"
+    verified = {
+        (x.phone_number or "").strip()
+        for x in client.outgoing_caller_ids.list(limit=100)
+        if (x.phone_number or "").strip()
+    }
+    owned = {
+        (x.phone_number or "").strip()
+        for x in client.incoming_phone_numbers.list(limit=100)
+        if (x.phone_number or "").strip()
+    }
+    preferred = [
+        (os.getenv("TWILIO_FROM_NUMBER") or "").strip(),
+        (os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER") or "").strip(),
+    ]
+    candidates = preferred + sorted(verified | owned)
+    source = next(
+        (x for x in candidates if x and x not in {target, golden} and x in (verified | owned)),
+        "",
+    )
+    if not source:
+        print(json.dumps({
+            "PHONE_PROOF": "BLOCKED",
+            "reason": "no_safe_verified_from_number",
+            "safe_source_count": len((verified | owned) - {target, golden}),
+            "golden_line_touched": False,
+            "secret_values_logged": False,
+        }, sort_keys=True))
+        return 3
     matches = client.incoming_phone_numbers.list(phone_number=target, limit=10)
     exact = next((x for x in matches if (x.phone_number or "").strip() == target), None)
     if exact is None:
