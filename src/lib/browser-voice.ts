@@ -55,7 +55,7 @@ export function selectPreferredBrowserVoice<T extends BrowserVoiceCandidate>(
   const requestedLanguage = requested.split("-")[0] ?? requested;
 
   let best: { voice: T; score: number; index: number } | null = null;
-  voices.forEach((voice, index) => {
+  for (const [index, voice] of voices.entries()) {
     const locale = normalizedLocale(voice.lang);
     const language = locale.split("-")[0] ?? locale;
     let score = 0;
@@ -70,7 +70,7 @@ export function selectPreferredBrowserVoice<T extends BrowserVoiceCandidate>(
     if (!best || score > best.score || (score === best.score && index < best.index)) {
       best = { voice, score, index };
     }
-  });
+  }
   return best && best.score >= 0 ? best.voice : null;
 }
 
