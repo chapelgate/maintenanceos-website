@@ -207,6 +207,14 @@ function answerCueBonus(question: string, candidate: string): number {
     bonus += 35;
   }
 
+  const asksReturns = /\b(return|returns|refund|refunds|exchange|exchanges)\b/.test(q);
+  if (
+    asksReturns &&
+    /\b(return|returns|refund|refunds|faulty|exchange|exchanged)\b/.test(c)
+  ) {
+    bonus += 35;
+  }
+
   const asksEnumeration =
     /\b(what|which)\s+(?:types?|kinds?|styles?)\b/.test(q) ||
     /\bwhat\s+.*\s+do you offer\b/.test(q);
