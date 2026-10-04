@@ -28,8 +28,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Validate frozen website repair in isolated container
+        env:
+          SOURCE_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          docker run --rm --shm-size=1g -v "$PWD:/src:ro" node:24-bookworm bash -lc '
+          docker run --rm --shm-size=1g -e SOURCE_COMMIT_HASH -v "$PWD:/src:ro" node:24-bookworm bash -lc '
             set -euo pipefail
             cp -a /src /work
             cd /work
