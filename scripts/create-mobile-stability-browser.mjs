@@ -384,6 +384,34 @@ try {
   const transcript = await evalValue(cdp, `document.querySelector("[data-demo-transcript]")?.innerText || ""`);
   assert.match(transcript, /How long does a heritage alley gate installation take\?/);
   assert.match(transcript, /six weeks/i);
+
+  const unsupportedQuestion = "Do you repair spacecraft engines on Mars?";
+  assert.equal(await evalValue(cdp, `(() => {
+    const label = Array.from(document.querySelectorAll("label")).find((item) =>
+      (item.textContent || "").includes("Or type what the caller would say")
+    );
+    const input = label?.parentElement?.querySelector("input") || label?.nextElementSibling?.querySelector?.("input");
+    if (!input) return false;
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+    if (!setter) return false;
+    setter.call(input, ${JSON.stringify(unsupportedQuestion)});
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  })()`), true);
+  assert.equal(await evalValue(cdp, `(() => {
+    const buttons = Array.from(document.querySelectorAll("#interactive-receptionist-demo button"));
+    const send = buttons.find((button) => button.textContent?.trim() === "Send");
+    if (!send || send.disabled) return false;
+    send.click();
+    return true;
+  })()`), true);
+  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("Do you repair spacecraft engines on Mars?")`);
+  await waitFor(cdp, `/not sure|not on file|do not have that information/i.test(document.querySelector("[data-demo-transcript]")?.innerText || "")`);
+  const unsupportedTranscript = await evalValue(cdp, `document.querySelector("[data-demo-transcript]")?.innerText || ""`);
+  assert.match(unsupportedTranscript, /Do you repair spacecraft engines on Mars\?/);
+  assert.match(unsupportedTranscript, /not sure|not on file|do not have that information/i);
+  assert.doesNotMatch(unsupportedTranscript, /Mars.{0,80}(£|\$|€|\+?\d{7,}|service|policy)/i);
   assert.equal(leadRequests(cdp).length, 0, "interactive voice preview must remain independent of lead/email submission");
   assert.equal(await evalValue(cdp, `Boolean(document.querySelector('[data-create-submit-state="success"]'))`), false);
 
