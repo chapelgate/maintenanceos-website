@@ -1403,3 +1403,25 @@ Security dependency note:
 
 Invariant:
 No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed by this acceptance run.
+
+
+### 2026-10-04 MOSWEB-S005 — Stage 12 deterministic fixture gate
+Status: COMPLETE / VERIFIED
+
+Exact candidate:
+- research/nvidia-maintenanceos-website-p0 at `40f4965c86e75d67a9bf0aa5087244fb58392231`; product code is unchanged from the S004-verified candidate, with only durable S004 evidence/queue state added.
+
+Deterministic fixture execution:
+- command scope: all existing `packages/onboarding-ingest/src/scanner-v2-*.test.ts` tests;
+- result: 103/103 PASS, 0 failed, 0 skipped;
+- discovery: 100+ sitemap pages plus link-only deep pages reached;
+- canonical/tracking duplicates, robots policy, sitemap ceilings, URL ceilings, faceted/calendar traps and PARTIAL fail-closed behaviour: PASS;
+- JS rendering escalation and private/mutation/media/analytics request controls: PASS;
+- PDF/TXT/CSV ingestion, unsupported-document/PARTIAL behaviour, source-grounded document retrieval: PASS;
+- exact/deep retrieval, paraphrase/synonym handling, unsupported-question honesty and source traces: PASS;
+- ETag/Last-Modified refresh, 304 reuse, changed-page-only re-extraction and 410 tombstone behaviour: PASS;
+- durable worker resume, leases, idempotency, poisoned-URL isolation and content-hash dedupe: PASS;
+- all six Stage 11 status states plus COMPLETE->PARTIAL fail-closed checks: PASS.
+
+Invariant:
+No production website, telephony, carrier routing, live phone number, provider credential, voice runtime or golden phone line was modified or exercised by this deterministic local fixture gate.
