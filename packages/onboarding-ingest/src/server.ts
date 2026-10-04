@@ -11,6 +11,8 @@ import http from "node:http";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { isWebIngestEnabled, runScan } from "./scan.ts";
+import { isScannerV2Enabled } from "./scanner-v2-foundation.ts";
+import { runPersistentScannerV2 } from "./scanner-v2-runtime.ts";
 import { ScanError, type ScanResult } from "./types.ts";
 
 export const DEFAULT_HOST = "127.0.0.1";
@@ -30,6 +32,7 @@ export type ServerOptions = {
   host?: string;
   port?: number;
   ingestEnabled?: boolean;
+  scannerV2Enabled?: boolean;
   corsOrigin?: string;
   scan?: ScanHandler;
 };
@@ -154,6 +157,8 @@ export async function handleScanRequest(
   const method = (req.method ?? "GET").toUpperCase();
   const pathname = pathnameOf(req);
   const ingestEnabled = options.ingestEnabled ?? isWebIngestEnabled();
+  const scannerV2Enabled =
+    options.scannerV2Enabled ?? isScannerV2Enabled();
 
   if (method === "OPTIONS") {
     res.writeHead(204, corsHeaders(origin, configured));
@@ -170,6 +175,7 @@ export async function handleScanRequest(
         ok: true,
         service: "maintenanceos-onboarding-scan",
         ingestEnabled,
+        scannerV2Enabled,
         sandboxCall: false,
         scanPath: "/v1/onboarding/scan",
       },
@@ -262,7 +268,9 @@ export async function handleScanRequest(
   try {
     const result = options.scan
       ? await options.scan(url)
-      : await runScan(url, { enabled: ingestEnabled });
+      : scannerV2Enabled
+        ? await runPersistentScannerV2(url)
+        : await runScan(url, { enabled: ingestEnabled });
     send(res, statusFor(result), origin, result, configured);
   } catch (err) {
     if (err instanceof ScanError) {
@@ -338,6 +346,11 @@ export function listenScanServer(options: ServerOptions = {}): http.Server {
     console.log(`[onboarding-scan] listening on http://${host}:${port}/v1/onboarding/scan`);
     console.log(`[onboarding-scan] health    http://${host}:${port}/health`);
     console.log(`[onboarding-scan] ONBOARDING_WEB_INGEST=${enabled ? "true" : "false"}`);
+    console.log(
+      `[onboarding-scan] ONBOARDING_SCANNER_V2=${
+        (options.scannerV2Enabled ?? isScannerV2Enabled()) ? "true" : "false"
+      }`,
+    );
     console.log("[onboarding-scan] crawl text is untrusted data; no telephony; no invented fields");
   });
 
