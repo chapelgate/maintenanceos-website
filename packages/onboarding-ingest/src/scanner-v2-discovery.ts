@@ -32,7 +32,7 @@ export const DEFAULT_MAX_SITEMAP_DEPTH = 4;
 export const DEFAULT_MAX_DISCOVERED_URLS = 10_000;
 export const DEFAULT_MAX_HTML_PAGES = 10_000;
 export const DEFAULT_MAX_SITEMAP_BYTES = 512 * 1024;
-export const DEFAULT_MAX_HTML_BYTES = 512 * 1024;
+export const DEFAULT_MAX_HTML_BYTES = 2 * 1024 * 1024;
 export const DEFAULT_SITEMAP_TIMEOUT_MS = 5_000;
 export const DEFAULT_HTML_TIMEOUT_MS = 5_000;
 
@@ -759,6 +759,8 @@ export async function discoverScannerV2Frontier(
         get: options.get,
         timeoutMs: htmlTimeoutMs,
         maxBytes: maxHtmlBytes,
+        maxDecompressedBytes: maxHtmlBytes,
+        acceptCompressed: true,
         maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
     } catch (error) {
