@@ -13,6 +13,7 @@ import {
   normalizeKnowledgePack,
   type KnowledgePack,
   type ReceptionistDraftResult,
+  type SiteKnowledgeItem,
 } from "./receptionist-draft.ts";
 
 export const TRUSTED_AGENT_CONTROL_MARKER =
@@ -23,6 +24,57 @@ export const UNTRUSTED_BUSINESS_DATA_MARKER =
 export type AgentConfigurationResult = ReceptionistDraftResult & {
   blueprint: AgentBlueprintV1;
 };
+
+const MAX_SITE_KNOWLEDGE_ITEMS = 200;
+const MAX_SITE_KNOWLEDGE_TEXT = 1_800;
+const MAX_SITE_KNOWLEDGE_TOTAL = 300_000;
+
+function normaliseSiteKnowledge(
+  value: readonly SiteKnowledgeItem[] | undefined,
+): SiteKnowledgeItem[] | undefined {
+  if (!value?.length) return undefined;
+  const out: SiteKnowledgeItem[] = [];
+  const seen = new Set<string>();
+  let total = 0;
+
+  for (const item of value) {
+    if (out.length >= MAX_SITE_KNOWLEDGE_ITEMS || total >= MAX_SITE_KNOWLEDGE_TOTAL) {
+      break;
+    }
+    let url: URL;
+    try {
+      url = new URL(item.url);
+    } catch {
+      continue;
+    }
+    if (url.protocol !== "https:") continue;
+
+    const remaining = MAX_SITE_KNOWLEDGE_TOTAL - total;
+    const text = item.text.trim().slice(0, Math.min(MAX_SITE_KNOWLEDGE_TEXT, remaining));
+    if (!text) continue;
+    const contentHash = item.contentHash.trim().slice(0, 128);
+    if (!contentHash) continue;
+    const key = url.toString() + "\u0000" + contentHash;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    out.push({
+      url: url.toString(),
+      ...(item.title?.trim()
+        ? { title: item.title.trim().slice(0, 200) }
+        : {}),
+      headingPath: (item.headingPath ?? [])
+        .map((part) => part.trim().slice(0, 200))
+        .filter(Boolean)
+        .slice(0, 8),
+      text,
+      contentHash,
+    });
+    total += text.length;
+  }
+
+  return out.length ? out : undefined;
+}
 
 function validateBlueprint(value: unknown): AgentBlueprintV1 {
   const validation = validateAgentBlueprintV1(value);
@@ -191,16 +243,19 @@ export function agentLimitationsFor(pack: KnowledgePack): string[] {
 export function buildAgentConfiguration(input: {
   blueprint: AgentBlueprintV1;
   reviewedDraft: ReceptionistDraft;
+  siteKnowledge?: readonly SiteKnowledgeItem[];
 }): AgentConfigurationResult {
   const original = validateBlueprint(input.blueprint);
   const pack = reviewedKnowledgePack(original, input.reviewedDraft);
   const blueprint = reviewedBlueprint(original, pack);
   const systemPrompt = buildAgentSystemPrompt(blueprint, pack);
   const limitations = agentLimitationsFor(pack);
+  const siteKnowledge = normaliseSiteKnowledge(input.siteKnowledge);
   return {
     blueprint,
     knowledgePack: pack,
     systemPrompt,
     limitations,
+    ...(siteKnowledge ? { siteKnowledge } : {}),
   };
 }
