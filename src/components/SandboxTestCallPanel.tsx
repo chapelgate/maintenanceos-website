@@ -146,6 +146,7 @@ export function SandboxTestCallPanel({
       text,
       receptionist.knowledgePack,
       receptionist.systemPrompt,
+      receptionist.siteKnowledge,
     );
     setTurns((current) => [
       ...current,
