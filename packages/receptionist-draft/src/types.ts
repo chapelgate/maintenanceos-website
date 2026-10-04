@@ -24,6 +24,14 @@ export type KnowledgeFaq = {
   answer: string;
 };
 
+export type SiteKnowledgeItem = {
+  url: string;
+  title?: string;
+  headingPath: string[];
+  text: string;
+  contentHash: string;
+};
+
 export type KnowledgePack = {
   untrusted: true;
   kind: "sandbox_knowledge_pack";
@@ -43,6 +51,8 @@ export type ReceptionistDraftResult = {
   knowledgePack: KnowledgePack;
   systemPrompt: string;
   limitations: string[];
+  /** Bounded source-grounded Scanner V2 evidence for browser preview retrieval. */
+  siteKnowledge?: SiteKnowledgeItem[];
 };
 
 export const MAX_DRAFT_FIELD = 4000;
