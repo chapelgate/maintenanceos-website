@@ -1360,5 +1360,12 @@ Surgical resolution:
 Operational note:
 The owner service was stopped while the queue was being repaired to prevent a no-OPEN restart loop. It may be restarted only after the repaired queue contains exactly one OPEN slice.
 
+
+Follow-up on the same recovery:
+- The prompt-only no-queue-only-PASS rule was not sufficient: the worker again created local commits `eec78e5` and `34cab39` that advanced S004/S005 by changing only AUTONOMOUS_WORK_SLICES.md.
+- Those two commits were never pushed and were discarded by resetting the dedicated worker checkout to remote branch head `d00f21a`.
+- A deterministic local pre-commit guard is now installed in the dedicated MaintenanceOS Website worker checkout. When AUTONOMOUS_WORK_SLICES.md is staged, the hook rejects the commit if it is the only staged file, forcing substantive product or authoritative evidence to accompany any queue transition.
+- No repository product code, production deployment, telephony, provider credential or golden phone line was changed by this worker-control repair.
+
 Human blockers:
 None.
