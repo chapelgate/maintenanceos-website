@@ -1,0 +1,94 @@
+name: maintenanceos-website-owner bootstrap
+on:
+  push:
+    branches: [research/nvidia-maintenanceos-website-p0]
+    paths:
+      - '.github/workflows/maintenanceos-website-owner-bootstrap.yml'
+      - 'AUTONOMOUS_WORK_SLICES.md'
+permissions:
+  contents: read
+jobs:
+  bootstrap:
+    runs-on: [self-hosted, Linux, X64, chapelgate, nvdl, standalone]
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: research/nvidia-maintenanceos-website-p0
+          fetch-depth: 0
+          persist-credentials: false
+          path: source
+      - name: Install isolated website project owner
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$HOME/.local/share/chapelgate-nvdl-maintenanceos-website-worker"
+          target="$root/target"
+          source="$GITHUB_WORKSPACE/source"
+          evo="$HOME/.local/share/chapelgate-nvdl-evolution-engine-worker"
+          svc="$HOME/.config/systemd/user/maintenanceos-website-owner.service"
+          branch="research/nvidia-maintenanceos-website-p0"
+          uid="$(id -u)"
+          export XDG_RUNTIME_DIR="/run/user/$uid"
+          export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+
+          test -d "$source/.git"
+          test "$(git -C "$source" branch --show-current)" = "$branch"
+          test -f "$source/AUTONOMOUS_WORK_SLICES.md"
+          test -x "$evo/state/opencode/bin/opencode"
+          test -f "$evo/state/home/.local/share/opencode/auth.json"
+
+          systemctl --user stop maintenanceos-website-owner.service 2>/dev/null || true
+          rm -rf "$root"
+          mkdir -p "$root"
+          cp -a "$source" "$target"
+          mkdir -p "$root/state"
+          cp -a "$evo/state/opencode" "$root/state/opencode"
+          cp -a "$evo/state/home" "$root/state/home"
+
+          git -C "$target" config --unset-all http.https://github.com/.extraheader 2>/dev/null || true
+          git -C "$target" remote set-url origin https://github.com/chapelgate/maintenanceos-website.git
+          git -C "$target" config user.name "maintenanceos-website-owner"
+          git -C "$target" config user.email "maintenanceos-website-owner@users.noreply.github.com"
+
+          mkdir -p "$(dirname "$svc")"
+          cat >"$svc" <<EOF
+          [Unit]
+          Description=maintenanceos-website-owner autonomous bounded owner
+          After=network-online.target
+
+          [Service]
+          Type=simple
+          WorkingDirectory=$target
+          Environment=HOME=$root/state/home
+          RuntimeMaxSec=60min
+          ExecStart=$root/state/opencode/bin/opencode --pure run --auto --agent build --model nvidia/openai/gpt-oss-20b --format json --dir $target "MOS_WEBSITE_QUEUE_V2. Read AUTONOMOUS_WORK_SLICES.md first and obey its execution contract. MaintenanceOS Website only. Work only the single OPEN or IN_PROGRESS slice. Preserve the golden MaintenanceOS phone line and all telephony/provider/routing boundaries. Load broader history, plans and MASTER_PROBLEM_LOG.md only when the active slice requires their evidence. Do not redesign goals, governance or architecture. Reproduce/prove the active requirement, make the smallest safe change, run the exact acceptance and smallest relevant regression set, record evidence, update only the active slice status/evidence, and commit one coherent local result. If PASS, BLOCKED or HUMAN_BLOCKED, promote at most one highest-priority eligible HOLD slice exactly as the queue permits, then exit; systemd will start the next bounded cycle. No new service beyond this existing owner pattern, queue, database, scheduler, supervisor, watchdog, router, model router, second implementation or swarm. Do not push from this service; publication remains behind the existing authorised GitHub boundary."
+          Restart=always
+          RestartSec=30
+          KillMode=control-group
+
+          [Install]
+          WantedBy=default.target
+          EOF
+
+          systemctl --user daemon-reload
+          systemd-analyze --user verify maintenanceos-website-owner.service
+          systemctl --user enable maintenanceos-website-owner.service
+          systemctl --user start maintenanceos-website-owner.service
+
+          for _ in $(seq 1 25); do
+            state="$(systemctl --user is-active maintenanceos-website-owner.service 2>/dev/null || true)"
+            pid="$(systemctl --user show maintenanceos-website-owner.service -p MainPID --value 2>/dev/null || echo 0)"
+            if test "$state" = active && test "$pid" -gt 1 && tr '\0' ' ' <"/proc/$pid/cmdline" | grep -Fq 'MOS_WEBSITE_QUEUE_V2'; then break; fi
+            sleep 1
+          done
+          test "$(systemctl --user is-active maintenanceos-website-owner.service)" = active
+          test "$(systemctl --user is-enabled maintenanceos-website-owner.service)" = enabled
+          pid="$(systemctl --user show maintenanceos-website-owner.service -p MainPID --value)"
+          test "$pid" -gt 1
+          test "$(git -C "$target" branch --show-current)" = "$branch"
+          test -z "$(git -C "$target" status --porcelain=v1 --untracked-files=all)"
+          tr '\0' ' ' <"/proc/$pid/cmdline" | grep -Fq 'MOS_WEBSITE_QUEUE_V2'
+          echo "MOS_WEBSITE_QUEUE_V2=PASS"
+          echo "PID=$pid"
+          echo "HEAD=$(git -C "$target" rev-parse HEAD)"
