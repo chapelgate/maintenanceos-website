@@ -269,6 +269,26 @@ test("duration and price questions prefer answer-bearing sentences inside a retr
   assert.match(price.text, /£22\.00/i);
 });
 
+test("list questions prefer enumerated detail over generic type wording", async () => {
+  const corpus = buildScannerV2Corpus([
+    htmlPage(
+      "https://acme.example/fencing",
+      "Security fencing",
+      "Fencing options",
+      "We can offer different types of domestic and commercial fencing. We offer many fencing styles and designs including mesh fencing, palisade fencing, timber fencing, twin mesh fencing and bespoke fencing.",
+    ),
+  ]);
+  const index = new InMemoryBm25CorpusIndex();
+  await index.index("list-cue", corpus.chunks);
+
+  const answer = await answerGroundedReceptionistQuestion(
+    "What types of security fencing do you offer?",
+    { crawlId: "list-cue", index },
+  );
+  assert.equal(answer.supportStatus, "supported");
+  assert.match(answer.text, /including mesh fencing, palisade fencing, timber fencing/i);
+});
+
 test("unsupported question returns honest not-found and never invents evidence", async () => {
   const { index, facts } = await fixture();
   const answer = await answerGroundedReceptionistQuestion(
