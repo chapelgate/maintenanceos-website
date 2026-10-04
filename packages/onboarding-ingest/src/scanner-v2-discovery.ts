@@ -18,6 +18,7 @@ import {
   ScannerV2FrontierTrapGuard,
 } from "./scanner-v2-url-policy.ts";
 import { isPathAllowed, parseRobotsTxt, type RobotsRules } from "./scan.ts";
+import type { ScannerV2PageInput } from "./scanner-v2-content.ts";
 import {
   ScanError,
   type CrawlManifest,
@@ -77,6 +78,8 @@ export type ScannerV2DiscoveryOptions = {
   maxPathDepth?: number;
   maxQueryVariantsPerSignature?: number;
   maxCalendarVariantsPerFamily?: number;
+  /** Optional Stage 4 consumer. Called once for each unique fetched HTML page. */
+  onHtmlPage?: (page: ScannerV2PageInput) => void | Promise<void>;
 };
 
 function boundedInt(
@@ -993,6 +996,43 @@ export async function discoverScannerV2Frontier(
     if (!isHtmlType(contentType)) continue;
 
     htmlPagesFetched += 1;
+
+    if (options.onHtmlPage && !canonicalReason) {
+      try {
+        await options.onHtmlPage({
+          requestedUrl: pageUrl,
+          canonicalUrl: effectiveUrl,
+          html: response.body,
+          contentType: contentType || "text/html",
+          fetchMode: "http",
+          ...(current.discoveredFrom
+            ? { discoveredFrom: current.discoveredFrom }
+            : {}),
+          fetchedAt,
+          headers: response.headers,
+        });
+      } catch {
+        urls.update(effectiveUrl, {
+          status: "unresolved",
+          canonicalUrl: effectiveUrl,
+          reason: "html_page_consumer_failed",
+          contentHash,
+          fetchedAt,
+        });
+        if (pageUrl !== effectiveUrl) {
+          urls.update(pageUrl, {
+            status: "unresolved",
+            canonicalUrl: effectiveUrl,
+            reason: "html_page_consumer_failed",
+            contentHash,
+            fetchedAt,
+          });
+        }
+        warnings.push("html_page_consumer_failed");
+        discoveryIncomplete = true;
+      }
+    }
+
     const hrefs = extractSameOriginHrefs(response.body, response.url);
     for (const href of hrefs) {
       const admitted = admitPageCandidate(href, {
