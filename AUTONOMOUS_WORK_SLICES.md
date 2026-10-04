@@ -57,14 +57,14 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: docs/SCANNER_V2_STAGE11_EVIDENCE_20261002.md; targeted Stage 11 status/worker/refresh tests and full repository regression passed in run 37070051494 / job 111047123363.
 
 ## MOSWEB-S004 — Stage 11 full regression
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S003 PASS
 - Outcome: run existing full repo/build/mobile/security gates.
 - Acceptance: all required gates PASS; V1 production path unchanged.
-- Evidence boundary: Stage 11 run 37070051494 did not execute the explicit mobile/security gate set required by this slice. Re-run the existing S004 gate set on the current research branch; do not weaken acceptance.
+- Evidence: exact candidate 4dab4cee3fed155b88e7c34bfa27dcc387e39be0 passed release preflight (419/419 tests, build, functional smoke, performance, 17/17 accessibility), Edge 18/18 viewport smoke, deterministic 390x844@3 mobile /create acceptance, live security audit, bounded staging red-team and conversion acceptance. Durable details are recorded in MASTER_PROBLEM_LOG.md.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S004 PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
