@@ -64,14 +64,14 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: exact candidate 4dab4cee3fed155b88e7c34bfa27dcc387e39be0 passed release preflight (419/419 tests, build, functional smoke, performance, 17/17 accessibility), Edge 18/18 viewport smoke, deterministic 390x844@3 mobile /create acceptance, live security audit, bounded staging red-team and conversion acceptance. Durable details are recorded in MASTER_PROBLEM_LOG.md.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S004 PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
-- Prior PASS withdrawn: the queue-only advancement had no attached workflow run or authoritative Stage 12 evidence record. Execute only after MOSWEB-S004 passes.
+- Evidence: exact candidate 40f4965c86e75d67a9bf0aa5087244fb58392231 passed the complete existing Scanner V2 deterministic fixture suite: 103/103 PASS. Durable details are recorded in MASTER_PROBLEM_LOG.md.
 
 ## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S005 PASS
 - Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
 - Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
