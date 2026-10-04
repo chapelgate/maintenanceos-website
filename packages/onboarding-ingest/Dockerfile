@@ -14,7 +14,10 @@ FROM node:22-bookworm-slim
 
 WORKDIR /app
 
-COPY packages/onboarding-ingest/package.json ./packages/onboarding-ingest/package.json
+COPY packages/onboarding-ingest/package.json packages/onboarding-ingest/package-lock.json ./packages/onboarding-ingest/
+RUN npm ci --omit=dev --no-audit --no-fund --prefix packages/onboarding-ingest
+RUN PLAYWRIGHT_BROWSERS_PATH=/ms-playwright ./packages/onboarding-ingest/node_modules/.bin/playwright install --with-deps --only-shell chromium
+
 COPY packages/onboarding-ingest/src ./packages/onboarding-ingest/src
 
 # Public bind inside the container. On the droplet, publish 127.0.0.1:8788
@@ -22,6 +25,7 @@ COPY packages/onboarding-ingest/src ./packages/onboarding-ingest/src
 # Crawl stays off until ONBOARDING_WEB_INGEST=true.
 ENV NODE_ENV=production
 ENV ONBOARDING_SCAN_HOST=0.0.0.0
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 USER node
 
