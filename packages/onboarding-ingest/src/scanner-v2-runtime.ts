@@ -192,21 +192,6 @@ function terminalState(rows: CrawlManifest["urls"]): CrawlState {
   return "COMPLETE";
 }
 
-async function persistManifest(
-  store: FileScannerV2JobStore,
-  crawlId: string,
-  rows: CrawlManifest["urls"],
-): Promise<CrawlManifest> {
-  for (const row of rows) await store.upsertUrl(crawlId, row);
-  const persisted = await store.listUrls(crawlId);
-  return buildCrawlManifest({
-    crawlId,
-    origin: new URL(persisted[0]?.url ?? "https://invalid.example").origin,
-    requestedState: terminalState(persisted),
-    urls: persisted,
-  });
-}
-
 function manifestFor(
   crawlId: string,
   origin: string,
