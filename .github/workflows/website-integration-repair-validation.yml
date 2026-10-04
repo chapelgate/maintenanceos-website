@@ -6,6 +6,7 @@ on:
       - ci/website-integration-recovery-20260928
   pull_request:
     paths:
+      - ".github/workflows/website-integration-repair-validation.yml"
       - "src/components/CreateReceptionistForm.tsx"
       - "src/components/CreateReceptionistLaterSteps.tsx"
       - "src/lib/lead-adapter.ts"
