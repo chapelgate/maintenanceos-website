@@ -71,16 +71,20 @@ test("resolveListenPort prefers ONBOARDING_SCAN_PORT then PORT", () => {
   assert.equal(resolveListenPort({ ONBOARDING_SCAN_PORT: "-1" }), DEFAULT_PORT);
 });
 
-test("GET /health reports ingest flag and no sandbox call", async () => {
-  await withServer({ ingestEnabled: false }, async (base) => {
-    const res = await fetch(`${base}/health`);
-    const json = await res.json();
-    assert.equal(res.status, 200);
-    assert.equal(json.ok, true);
-    assert.equal(json.ingestEnabled, false);
-    assert.equal(json.sandboxCall, false);
-    assert.equal(json.scanPath, "/v1/onboarding/scan");
-  });
+test("GET /health reports ingest and Scanner V2 flags with no sandbox call", async () => {
+  await withServer(
+    { ingestEnabled: false, scannerV2Enabled: true },
+    async (base) => {
+      const res = await fetch(`${base}/health`);
+      const json = await res.json();
+      assert.equal(res.status, 200);
+      assert.equal(json.ok, true);
+      assert.equal(json.ingestEnabled, false);
+      assert.equal(json.scannerV2Enabled, true);
+      assert.equal(json.sandboxCall, false);
+      assert.equal(json.scanPath, "/v1/onboarding/scan");
+    },
+  );
 });
 
 test("POST scan is disabled when ONBOARDING_WEB_INGEST is off", async () => {
