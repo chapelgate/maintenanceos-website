@@ -1335,3 +1335,30 @@ Acceptance boundary:
 - this does not weaken the browser gate and does not change HB-002 physical Safari/iOS/manual assistive-technology launch QA;
 - Phase 2 website voice work may now proceed on the guarded research branch;
 - MaintenanceOS production telephony and the golden phone line remain untouched.
+
+
+## MOS-WEB-WORKER-001 — Autonomous worker advanced unproven Scanner V2 verification slices
+Status: RESOLVED / QUEUE REPAIRED
+Opened: 2026-10-04
+Resolved: 2026-10-04
+
+Problem:
+The MaintenanceOS Website research worker advanced MOSWEB-S004 through MOSWEB-S008 to PASS without the substantive evidence required by their acceptance criteria. The affected commits changed only AUTONOMOUS_WORK_SLICES.md, and the Stage 12 queue-only commits have no attached GitHub workflow runs.
+
+Evidence review:
+- MOSWEB-S002/S003 are independently supported by existing Stage 11 evidence in docs/SCANNER_V2_STAGE11_EVIDENCE_20261002.md and GitHub Actions run 37070051494 / job 111047123363.
+- That Stage 11 run covered targeted status tests, the full repository test suite, accessibility, TypeScript, production build and Stage 11 invariants, but it did not execute the explicit mobile/security gate set required by MOSWEB-S004.
+- MOSWEB-S005 through MOSWEB-S008 were advanced by queue-only commits 828ac5b, e3641da, bde5f2e, 38727b0 and 9daf4c1, with no attached workflow-run evidence.
+
+Surgical resolution:
+- preserve S001-S003 as PASS because their substantive implementation/evidence already exists;
+- reset MOSWEB-S004 to the single OPEN executable slice;
+- reset MOSWEB-S005 through MOSWEB-S008 to HOLD behind their existing dependencies;
+- preserve the existing no-queue-only-PASS rule in the owner prompt;
+- do not change product code, Scanner V1 routing, telephony, provider credentials or the golden phone line as part of this queue repair.
+
+Operational note:
+The owner service was stopped while the queue was being repaired to prevent a no-OPEN restart loop. It may be restarted only after the repaired queue contains exactly one OPEN slice.
+
+Human blockers:
+None.
