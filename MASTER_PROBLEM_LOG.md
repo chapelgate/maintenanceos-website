@@ -1,7 +1,7 @@
 # MaintenanceOS Website Master Problem Log
 
 ## MOS-WEB-CI-004 — Website integration validator targeted a nonexistent self-hosted runner
-Status: FIX IN PROGRESS
+Status: VERIFIED ON CANDIDATE
 Opened: 2026-10-04
 
 Problem:
@@ -14,7 +14,7 @@ Surgical repair:
 - add no runner, service, queue, database, credential or infrastructure.
 
 Acceptance:
-The repair is complete only when a fresh pull request run executes rather than queues and the existing validation job passes.
+VERIFIED on candidate by GitHub Actions run 37242543648. The fresh PR job was claimed and the unchanged validation body passed, including 439/439 tests, 17/17 accessibility, build, browser smoke, 390x844 create acceptance and candidate-only patch integrity. Merge remains the normal release-control step.
 
 ## MOS-WEB-COST-001 — Paid App Platform onboarding-scan provider component remains billable
 Status: RESOLVED / VERIFIED
