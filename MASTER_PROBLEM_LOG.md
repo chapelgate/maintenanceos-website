@@ -1425,3 +1425,52 @@ Deterministic fixture execution:
 
 Invariant:
 No production website, telephony, carrier routing, live phone number, provider credential, voice runtime or golden phone line was modified or exercised by this deterministic local fixture gate.
+
+
+## MOS-WEB-SCANNER-V2-CANARY-001 — Stage 12 real-site canary exposed V2 integration gaps
+Status: OPEN / REPRODUCED
+Opened: 2026-10-04
+
+Scope:
+MOSWEB-S006 real-site canary only. Scanner V2 remains default-off. No production routing, deployment or telephony change was made.
+
+Exact canary candidate:
+- research/nvidia-maintenanceos-website-p0 at `35267bddb4d715bf443de6fd144ed733ad0a66c4`;
+- disposable local canary harness composed the existing SSRF-safe discovery, raw-page extraction, bounded renderer, document ingestion, BM25 index and grounded-answer modules;
+- harness was not committed and did not add a service, database, queue or production endpoint.
+
+Observed evidence:
+1. Alley Gates
+   - V2: 55 URLs discovered, 18 fetched, 99 corpus chunks, 3+ deep URLs represented;
+   - five deep questions returned source-grounded corpus answers; unknown lunar-mining question correctly returned not_found;
+   - bounded 40-page canary ceiling left queued/unresolved work and correctly produced PARTIAL;
+   - V1 compatibility scan from this verifier timed out, so generic services were unavailable to the harness.
+2. Express Gas Delivery
+   - V1 compatibility scan still recovered real services from its static script bundle;
+   - V2 raw discovery collapsed SPA route shells to duplicates and retained only one raw corpus chunk;
+   - required JS-render escalation activated but failed closed with `render_byte_limit` under the default total-byte ceiling;
+   - therefore no deep-route V2 corpus was proven.
+3. Forum Housing
+   - V1 compatibility scan succeeded through the existing bounded reader fallback;
+   - V2 discovery had 0 fetched pages / 1 unresolved with robots/sitemap direct-fetch failures;
+   - V2 currently does not reuse the already-approved reader recovery path, so no V2 corpus was available.
+4. Chapelgate Home (candidate additional conventional site)
+   - direct robots/sitemap returned HTTP 403; V2 recorded PARTIAL/policy-skipped and produced no corpus;
+   - this site is unsuitable as the additional conventional canary unless reader recovery is composed into V2.
+5. TripCheap (candidate additional modern site)
+   - V2 discovered 51 URLs and produced 627 corpus chunks from 38 pages;
+   - five deep questions were source-grounded and the unknown question failed honestly;
+   - bounded 40-page canary ceiling correctly produced PARTIAL;
+   - generic `What do you do?` remained not_found because Stage 6 exact-service intent does not fall through to corpus retrieval when structured services are absent.
+
+Demonstrated blockers to MOSWEB-S006 acceptance:
+- V2 real-site execution lacks the bounded reader fallback already proven in V1, blocking Forum Housing and 403/TLS-challenged sites;
+- JS-heavy route shells can be content-hash-collapsed before render evidence is available, and Express Gas rendering currently hits the default aggregate byte ceiling;
+- exact structured service intent can return missing instead of consulting available corpus evidence when structured services are absent;
+- the first bounded canary used a deliberately low 40-page crawl cap; PARTIAL caused by that test ceiling is expected and must not be misclassified as product failure.
+
+Required repair boundary:
+Reuse existing modules only. Prefer configuration within reviewed hard limits first; where configuration cannot resolve the reproduced gap, make the smallest code change that composes existing V1 reader recovery / existing V2 renderer / existing corpus grounding. Do not add infrastructure or change the golden phone line.
+
+Human blockers:
+None.
