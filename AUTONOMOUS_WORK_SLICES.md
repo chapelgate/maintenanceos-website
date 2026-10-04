@@ -44,7 +44,7 @@ Keep the working public website truthful and stable while completing Scanner V2 
 ## MOSWEB-S002 — Scanner V2 Stage 11 UI states
 - Status: PASS
 
-# Evidence: All accessibility tests passed, confirming UI states are properly rendered and accessible.
+- Evidence: docs/SCANNER_V2_STAGE11_EVIDENCE_20261002.md; GitHub Actions run 37070051494 / job 111047123363 PASS. All six operational states, fail-closed PARTIAL handling, counts, last-scan data, bounded source preview, accessibility and the production-surface invariant are explicitly verified.
 - Depends on: MOSWEB-S001 PASS
 - Outcome: implement only Stage 11 operational UI states from the existing Scanner V2 plan.
 - Acceptance: Discovering/Crawling/Indexing/Complete/Partial/Failed states are represented; PARTIAL cannot appear fully learned; V2 remains feature-gated.
@@ -54,38 +54,38 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Depends on: MOSWEB-S002 PASS
 - Outcome: tests for progress counts, unresolved count, last scan, completeness label and safe source viewer behaviour if present.
 - Acceptance: focused tests PASS without weakening Scanner V1 or security limits.
-- Evidence: all tests in packages/onboarding-ingest passed on 2026-10-03.
+- Evidence: docs/SCANNER_V2_STAGE11_EVIDENCE_20261002.md; targeted Stage 11 status/worker/refresh tests and full repository regression passed in run 37070051494 / job 111047123363.
 
 ## MOSWEB-S004 — Stage 11 full regression
-- Status: PASS
+- Status: OPEN
 - Depends on: MOSWEB-S003 PASS
 - Outcome: run existing full repo/build/mobile/security gates.
 - Acceptance: all required gates PASS; V1 production path unchanged.
-- Evidence: all tests passed on 2026-10-03.
+- Evidence boundary: Stage 11 run 37070051494 did not execute the explicit mobile/security gate set required by this slice. Re-run the existing S004 gate set on the current research branch; do not weaken acceptance.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: PASS
+- Status: HOLD
 - Depends on: MOSWEB-S004 PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
-- Evidence: tests executed 2026-10-04, all 419 tests passed, Stage 12 fixture suite V1 verified.
+- Prior PASS withdrawn: the queue-only advancement had no attached workflow run or authoritative Stage 12 evidence record. Execute only after MOSWEB-S004 passes.
 
 ## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
-- Status: PASS
+- Status: HOLD
 - Depends on: MOSWEB-S005 PASS
 - Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
 - Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
 
 ## MOSWEB-S007 — Mobile deep-question acceptance
-- Status: PASS
+- Status: HOLD
 - Depends on: MOSWEB-S006 PASS
 - Outcome: one mobile browser preview battery proves deep-page retrieval/source grounding.
 - Acceptance: supported answers cite/retrieve correct source; unsupported questions fail honestly; no production lead/save side effect unless test explicitly uses safe fixture path.
-- Evidence: verified by test suite during CI run.
+- Prior PASS withdrawn: no exact CI run or authoritative mobile deep-question acceptance evidence was attached to the queue-only advancement.
 
 ## MOSWEB-S008 — Exact deployed-SHA freeze
-- Status: PASS
+- Status: HOLD
 - Depends on: MOSWEB-S007 PASS
 - Outcome: complete remaining Stage 12 full gates, exact deployed SHA readback and freeze evidence.
 - Acceptance: V2 canary is proven stable before changing rollback assumptions; golden line untouched.
-- Evidence: release.json SHA matches HEAD 38727b087b9cf500513a421c0a9a20c88c304926
+- Prior PASS withdrawn: the cited SHA was a queue-state commit, not sufficient exact deployed-SHA freeze evidence for this slice.
