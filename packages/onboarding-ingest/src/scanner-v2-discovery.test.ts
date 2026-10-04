@@ -194,6 +194,77 @@ test("integrated discovery exhausts 100+ sitemap pages and a link-only deep page
   assert.equal(deep?.discoveredFrom, "https://acme.example/page-001");
 });
 
+test("app-shell routes render before content-hash dedup and rendered links re-enter the frontier", async () => {
+  const shell =
+    '<html><body><div id="root"></div><script></script></body></html>';
+  const result = await discoverScannerV2Frontier(
+    "https://acme.example/",
+    {
+      ...fixtures({
+        "https://acme.example/robots.txt": response(
+          "https://acme.example/robots.txt",
+          "Sitemap: https://acme.example/sitemap.xml",
+          "text/plain",
+        ),
+        "https://acme.example/sitemap.xml": response(
+          "https://acme.example/sitemap.xml",
+          urlset(["https://acme.example/products/propane"]),
+        ),
+        "https://acme.example/": html("https://acme.example/", shell),
+        "https://acme.example/products/propane": html(
+          "https://acme.example/products/propane",
+          shell,
+        ),
+        "https://acme.example/contact": html(
+          "https://acme.example/contact",
+          shell,
+        ),
+      }),
+      renderBackend: async (input) => {
+        if (input.url.endsWith("/products/propane")) {
+          return {
+            finalUrl: input.url,
+            html: "<html><body><h1>Propane Cylinders</h1><p>47kg propane cylinders are available.</p></body></html>",
+          };
+        }
+        if (input.url.endsWith("/contact")) {
+          return {
+            finalUrl: input.url,
+            html: "<html><body><h1>Contact</h1><p>Call 0151 555 0100.</p></body></html>",
+          };
+        }
+        return {
+          finalUrl: input.url,
+          html: '<html><body><h1>Express Gas</h1><p>Free local gas delivery.</p><a href="/contact">Contact</a></body></html>',
+        };
+      },
+    },
+  );
+
+  assert.equal(result.incomplete, false);
+  assert.equal(result.manifest.fetched, 3);
+  assert.equal(result.manifest.duplicate, 0);
+  assert.equal(result.htmlLinksDiscovered, 1);
+  assert.equal(
+    result.manifest.urls.find(
+      (row) => row.url === "https://acme.example/products/propane",
+    )?.status,
+    "fetched",
+  );
+  assert.equal(
+    result.manifest.urls.find(
+      (row) => row.url === "https://acme.example/contact",
+    )?.status,
+    "fetched",
+  );
+  const hashes = new Set(
+    result.manifest.urls
+      .filter((row) => row.status === "fetched")
+      .map((row) => row.contentHash),
+  );
+  assert.equal(hashes.size, 3);
+});
+
 test("sitemap fetch explicitly requests bounded compressed responses", async () => {
   let compressedRequested = false;
   let maxDecompressedBytes: number | undefined;

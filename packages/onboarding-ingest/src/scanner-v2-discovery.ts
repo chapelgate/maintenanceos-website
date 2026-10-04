@@ -10,6 +10,11 @@ import {
   stableContentHash,
 } from "./scanner-v2-foundation.ts";
 import {
+  decideScannerV2RenderEscalation,
+  renderScannerV2Page,
+  type ScannerV2BrowserBackend,
+} from "./scanner-v2-renderer.ts";
+import {
   DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
   DEFAULT_MAX_PATH_DEPTH,
   DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
@@ -77,6 +82,8 @@ export type ScannerV2DiscoveryOptions = {
   maxPathDepth?: number;
   maxQueryVariantsPerSignature?: number;
   maxCalendarVariantsPerFamily?: number;
+  /** Deterministic test seam; production uses the reviewed Playwright backend. */
+  renderBackend?: ScannerV2BrowserBackend;
 };
 
 function boundedInt(
@@ -805,8 +812,39 @@ export async function discoverScannerV2Frontier(
       continue;
     }
 
+    let effectiveBody = response.body;
+    let effectiveResponseUrl = response.url;
+    let renderedLinks: CrawlUrlDisposition[] = [];
+
+    if (isHtmlType(contentType)) {
+      const renderDecision = decideScannerV2RenderEscalation({
+        rawHtml: response.body,
+      });
+      if (renderDecision.render) {
+        const rendered = await renderScannerV2Page(pageUrl, {
+          rawHtml: response.body,
+          lookup: options.lookup,
+          get: options.get,
+          ...(options.renderBackend ? { backend: options.renderBackend } : {}),
+          maxPathDepth,
+        });
+        if (!rendered.ok) {
+          urls.update(pageUrl, {
+            status: "unresolved",
+            reason: rendered.reason,
+          });
+          warnings.push(rendered.reason);
+          discoveryIncomplete = true;
+          continue;
+        }
+        effectiveBody = rendered.html;
+        effectiveResponseUrl = new URL(rendered.finalUrl);
+        renderedLinks = rendered.links;
+      }
+    }
+
     const finalUrlPolicy = normalizeScannerV2Url(
-      response.url.toString(),
+      effectiveResponseUrl.toString(),
       origin,
       {
         maxPathDepth,
@@ -827,7 +865,7 @@ export async function discoverScannerV2Frontier(
 
     const effectiveUrl = finalUrlPolicy.url;
     const fetchedAt = new Date().toISOString();
-    const contentHash = stableContentHash(response.body);
+    const contentHash = stableContentHash(effectiveBody);
 
     if (effectiveUrl !== pageUrl) {
       const existingFinal = urls.get(effectiveUrl);
@@ -864,8 +902,8 @@ export async function discoverScannerV2Frontier(
 
     if (isHtmlType(contentType)) {
       const canonical = extractScannerV2CanonicalLink({
-        html: response.body,
-        pageUrl: response.url.toString(),
+        html: effectiveBody,
+        pageUrl: effectiveResponseUrl.toString(),
         origin: origin.origin,
         maxPathDepth,
       });
@@ -959,8 +997,11 @@ export async function discoverScannerV2Frontier(
     if (!isHtmlType(contentType)) continue;
 
     htmlPagesFetched += 1;
-    const hrefs = extractSameOriginHrefs(response.body, response.url);
-    for (const href of hrefs) {
+    const hrefs = [
+      ...extractSameOriginHrefs(effectiveBody, effectiveResponseUrl),
+      ...renderedLinks.map((row) => row.url),
+    ];
+    for (const href of [...new Set(hrefs)]) {
       const admitted = admitPageCandidate(href, {
         discoveryReason: "html_link",
         discoveredFrom: effectiveUrl,
