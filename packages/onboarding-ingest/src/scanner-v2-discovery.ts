@@ -22,6 +22,7 @@ import {
   normalizeScannerV2Url,
   ScannerV2FrontierTrapGuard,
 } from "./scanner-v2-url-policy.ts";
+import type { ScannerV2PageInput } from "./scanner-v2-content.ts";
 import {
   isPathAllowed,
   isReaderChallengePage,
@@ -97,6 +98,10 @@ export type ScannerV2DiscoveryOptions = {
   readerFallback?: boolean;
   readerLookup?: LookupFn;
   readerGet?: HttpGetFn;
+  /** Runtime-only resume seam. Existing Stage 2 callers may omit it. */
+  resumeManifest?: CrawlManifest;
+  /** Runtime-only sink for accepted unique HTML pages. */
+  onHtmlPage?: (page: ScannerV2PageInput) => void | Promise<void>;
 };
 
 function boundedInt(
@@ -473,7 +478,23 @@ export async function discoverScannerV2Frontier(
   if (!root.ok) {
     throw new Error(`scanner_v2_discovery_policy:${root.reason}`);
   }
-  if (root.aliasUrl) {
+  if (options.resumeManifest) {
+    if (options.resumeManifest.origin !== origin.origin) {
+      throw new Error("scanner_v2_resume_origin_mismatch");
+    }
+    for (const row of options.resumeManifest.urls) {
+      urls.add(row);
+      if (row.contentHash && row.status === "fetched") {
+        contentOwnerByHash.set(
+          row.contentHash,
+          row.canonicalUrl ?? row.url,
+        );
+      }
+      if (row.status === "queued") trapGuard.evaluate(row.url);
+    }
+  }
+
+  if (root.aliasUrl && !urls.get(root.aliasUrl)) {
     urls.add({
       url: root.aliasUrl,
       canonicalUrl: root.url,
@@ -482,11 +503,13 @@ export async function discoverScannerV2Frontier(
       reason: "normalized_url_variant",
     });
   }
-  urls.add({
-    url: root.url,
-    status: "queued",
-    discoveryReason: "submitted",
-  });
+  if (!urls.get(root.url)) {
+    urls.add({
+      url: root.url,
+      status: "queued",
+      discoveryReason: "submitted",
+    });
+  }
   trapGuard.evaluate(root.url);
 
   const robots = await fetchRobotsForDiscovery(origin, options);
@@ -1060,6 +1083,45 @@ export async function discoverScannerV2Frontier(
     if (!isHtmlType(contentType)) continue;
 
     htmlPagesFetched += 1;
+
+    if (options.onHtmlPage && !canonicalReason) {
+      try {
+        await options.onHtmlPage({
+          requestedUrl: pageUrl,
+          canonicalUrl: effectiveUrl,
+          html: effectiveBody,
+          contentType: contentType || "text/html",
+          fetchMode:
+            effectiveBody === response.body ? "http" : "rendered",
+          ...(current.discoveredFrom
+            ? { discoveredFrom: current.discoveredFrom }
+            : {}),
+          fetchedAt,
+          headers: response.headers,
+        });
+      } catch {
+        urls.update(effectiveUrl, {
+          status: "unresolved",
+          canonicalUrl: effectiveUrl,
+          reason: "html_page_consumer_failed",
+          contentHash,
+          fetchedAt,
+        });
+        if (pageUrl !== effectiveUrl) {
+          urls.update(pageUrl, {
+            status: "unresolved",
+            canonicalUrl: effectiveUrl,
+            reason: "html_page_consumer_failed",
+            contentHash,
+            fetchedAt,
+          });
+        }
+        warnings.push("html_page_consumer_failed");
+        discoveryIncomplete = true;
+        continue;
+      }
+    }
+
     const hrefs = [
       ...extractSameOriginHrefs(effectiveBody, effectiveResponseUrl),
       ...renderedLinks.map((row) => row.url),
@@ -1089,7 +1151,16 @@ export async function discoverScannerV2Frontier(
   const stillQueued = urls.values().some((row) => row.status === "queued");
   if (stillQueued) discoveryIncomplete = true;
 
-  const requestedState = discoveryIncomplete ? "PARTIAL" : "DISCOVERING";
+  const runtimeMode = Boolean(options.resumeManifest || options.onHtmlPage);
+  const requestedState = runtimeMode
+    ? stillQueued
+      ? "CRAWLING"
+      : discoveryIncomplete
+        ? "PARTIAL"
+        : "COMPLETE"
+    : discoveryIncomplete
+      ? "PARTIAL"
+      : "DISCOVERING";
   const manifest = buildCrawlManifest({
     crawlId: "scanner-v2-discovery",
     origin: origin.origin,
