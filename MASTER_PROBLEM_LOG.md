@@ -1,5 +1,21 @@
 # MaintenanceOS Website Master Problem Log
 
+## MOS-WEB-CI-004 — Website integration validator targeted a nonexistent self-hosted runner
+Status: VERIFIED ON CANDIDATE
+Opened: 2026-10-04
+
+Problem:
+The website integration repair workflow targeted `[self-hosted, linux, x64, chapelgate, estate-trusted]`, but this repository currently has no registered self-hosted runners. Historical validation runs therefore remained queued indefinitely and could not provide acceptance evidence.
+
+Surgical repair:
+- reuse GitHub Actions already used by the repository;
+- change only the validation job runner to `ubuntu-latest`;
+- retain the existing Docker-isolated test command, time limit, permissions and acceptance checks;
+- add no runner, service, queue, database, credential or infrastructure.
+
+Acceptance:
+VERIFIED on candidate by GitHub Actions run 37242543648. The fresh PR job was claimed and the unchanged validation body passed, including 439/439 tests, 17/17 accessibility, build, browser smoke, 390x844 create acceptance and candidate-only patch integrity. Merge remains the normal release-control step.
+
 ## MOS-WEB-COST-001 — Paid App Platform onboarding-scan provider component remains billable
 Status: RESOLVED / VERIFIED
 Opened: 2026-09-28

@@ -6,6 +6,7 @@ on:
       - ci/website-integration-recovery-20260928
   pull_request:
     paths:
+      - ".github/workflows/website-integration-repair-validation.yml"
       - "src/components/CreateReceptionistForm.tsx"
       - "src/components/CreateReceptionistLaterSteps.tsx"
       - "src/lib/lead-adapter.ts"
@@ -19,7 +20,7 @@ permissions:
 
 jobs:
   validate:
-    runs-on: [self-hosted, linux, x64, chapelgate, estate-trusted]
+    runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -27,8 +28,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Validate frozen website repair in isolated container
+        env:
+          SOURCE_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          docker run --rm --shm-size=1g -v "$PWD:/src:ro" node:24-bookworm bash -lc '
+          docker run --rm --shm-size=1g -e SOURCE_COMMIT_HASH -v "$PWD:/src:ro" node:24-bookworm bash -lc '
             set -euo pipefail
             cp -a /src /work
             cd /work
@@ -47,4 +50,9 @@ jobs:
             BROWSER_PATH=/usr/bin/chromium NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan node scripts/create-mobile-stability-browser.mjs
           '
       - name: Patch integrity
-        run: git diff --check 7d519ca8bea09fc87b9d41be7ebf95f7baa6def0^..HEAD
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --check "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"
+          else
+            git diff --check "${{ github.event.before }}" "${{ github.sha }}"
+          fi
