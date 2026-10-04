@@ -309,6 +309,32 @@ test("returns questions prefer policy sentences over product-title overlap", asy
   assert.match(answer.text, /faulty|refund|exchanged/i);
 });
 
+test("named entity questions keep extractive spans anchored to the matching heading", async () => {
+  const corpus = buildScannerV2Corpus([
+    htmlPage(
+      "https://acme.example/stockists",
+      "Stockists",
+      "Need Gas Urgently? Here Are Some Other Local Stockists",
+      "These are independent suppliers who offer similar products and services.",
+    ),
+    {
+      requestedUrl: "https://acme.example/stockists",
+      html:
+        '<html><head><title>Stockists</title></head><body><main><h1>Need Gas Urgently? Here Are Some Other Local Stockists</h1><section><h2>McGreal\'s Garden Supplies</h2><p>Leasowe Rd, Wirral CH46 2RH</p><p>Services:</p><p>Patio Gas, Butane, Propane</p></section></main></body></html>',
+      fetchedAt: FETCHED_AT,
+    },
+  ]);
+  const index = new InMemoryBm25CorpusIndex();
+  await index.index("heading-cue", corpus.chunks);
+
+  const answer = await answerGroundedReceptionistQuestion(
+    "What gas products does McGreal's Garden Supplies offer?",
+    { crawlId: "heading-cue", index },
+  );
+  assert.equal(answer.supportStatus, "supported");
+  assert.match(answer.text, /Patio Gas, Butane, Propane/i);
+});
+
 test("unsupported question returns honest not-found and never invents evidence", async () => {
   const { index, facts } = await fixture();
   const answer = await answerGroundedReceptionistQuestion(
