@@ -1,0 +1,162 @@
+name: Scanner V2 DigitalOcean cutover
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/scanner-v2-do-cutover.yml"
+      - "specs/scanner-v2-do-cutover/**"
+      - "packages/onboarding-ingest/**"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "preflight or deploy"
+        required: true
+        default: preflight
+        type: choice
+        options:
+          - preflight
+          - deploy
+      expected_sha:
+        description: "Exact main SHA required for deploy"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  provider-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXPECTED_DROPLET_ID: "606110383"
+      EXPECTED_DROPLET_NAME: "maintenanceos-scanner-v2"
+      EXPECTED_DROPLET_IP: "178.128.171.45"
+      EXPECTED_APP_NAME: "seahorse-app"
+      EXPECTED_APP_ORIGIN: "https://seahorse-app-4oasq.ondigitalocean.app"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install official doctl
+        uses: digitalocean/action-doctl@3cb3953159719656269e044e0e24ca16dd2a690f
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Verify exact existing droplet
+        shell: bash
+        run: |
+          set -euo pipefail
+          row="$(doctl compute droplet get "$EXPECTED_DROPLET_ID" --format ID,Name,Status,PublicIPv4 --no-header)"
+          printf '%s\n' "$row"
+          read -r id name status public_ip <<<"$row"
+          [ "$id" = "$EXPECTED_DROPLET_ID" ]
+          [ "$name" = "$EXPECTED_DROPLET_NAME" ]
+          [ "$status" = "active" ]
+          [ "$public_ip" = "$EXPECTED_DROPLET_IP" ]
+
+      - name: Identify existing App Platform app and ingress
+        id: app
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t matches < <(
+            doctl apps list --format ID,Spec.Name,DefaultIngress --no-header |
+            awk -v name="$EXPECTED_APP_NAME" -v origin="$EXPECTED_APP_ORIGIN" '$2 == name || $3 == origin {print}'
+          )
+          [ "${#matches[@]}" -eq 1 ] || {
+            echo "::error::Expected exactly one existing MaintenanceOS App Platform app; found ${#matches[@]}."
+            exit 1
+          }
+          read -r app_id app_name app_origin <<<"${matches[0]}"
+          [ "$app_name" = "$EXPECTED_APP_NAME" ]
+          printf 'app_id=%s\n' "$app_id" >> "$GITHUB_OUTPUT"
+          doctl apps spec get "$app_id" --format json > "$RUNNER_TEMP/app-spec.json"
+          jq -c '{ingress:(.ingress // {}), functions:[(.functions // [])[] | {name,source_dir,routes}]}' "$RUNNER_TEMP/app-spec.json"
+
+      - name: Locate the one existing website scan Function
+        id: function
+        shell: bash
+        run: |
+          set -euo pipefail
+          doctl serverless install >/dev/null
+          mapfile -t namespaces < <(
+            doctl serverless namespaces list --format ID,Label,Region,Host --no-header
+          )
+          [ "${#namespaces[@]}" -gt 0 ] || {
+            echo "::error::No existing DigitalOcean Functions namespace found."
+            exit 1
+          }
+
+          found=0
+          found_id=""
+          found_label=""
+          found_host=""
+          found_url=""
+          for row in "${namespaces[@]}"; do
+            read -r ns_id ns_label ns_region ns_host <<<"$row"
+            doctl serverless connect "$ns_id" >/dev/null
+            functions="$(doctl serverless functions list website --format Function --no-header 2>/dev/null || true)"
+            if printf '%s\n' "$functions" | grep -Eq '(^|/)scan$'; then
+              found=$((found + 1))
+              found_id="$ns_id"
+              found_label="$ns_label"
+              found_host="$ns_host"
+              found_url="$(doctl serverless functions get website/scan --url)"
+            fi
+          done
+
+          [ "$found" -eq 1 ] || {
+            echo "::error::Expected exactly one existing namespace containing website/scan; found $found."
+            exit 1
+          }
+          printf 'namespace_id=%s\n' "$found_id" >> "$GITHUB_OUTPUT"
+          printf 'namespace_label=%s\n' "$found_label" >> "$GITHUB_OUTPUT"
+          printf 'namespace_host=%s\n' "$found_host" >> "$GITHUB_OUTPUT"
+          printf 'function_url=%s\n' "$found_url" >> "$GITHUB_OUTPUT"
+          printf 'Existing namespace: %s (%s)\n' "$found_label" "$found_id"
+          printf 'Existing function URL: %s\n' "$found_url"
+
+      - name: Black-box existing direct Function and same-origin route
+        shell: bash
+        env:
+          FUNCTION_URL: ${{ steps.function.outputs.function_url }}
+        run: |
+          set -euo pipefail
+          request='{"url":"https://example.com/"}'
+
+          direct_status="$(curl --silent --show-error --max-time 120             --output "$RUNNER_TEMP/direct.json" --write-out '%{http_code}'             --request POST "$FUNCTION_URL"             --header 'Content-Type: application/json'             --header "Origin: $EXPECTED_APP_ORIGIN"             --data "$request")"
+          echo "DIRECT_FUNCTION_STATUS=$direct_status"
+          jq -c '{ok,error,message,scannerV2,draft_keys:((.draft // {})|keys)}' "$RUNNER_TEMP/direct.json" || true
+
+          same_status="$(curl --silent --show-error --max-time 120             --output "$RUNNER_TEMP/same-origin.json" --write-out '%{http_code}'             --request POST "$EXPECTED_APP_ORIGIN/api/website/scan"             --header 'Content-Type: application/json'             --header "Origin: $EXPECTED_APP_ORIGIN"             --data "$request")"
+          echo "SAME_ORIGIN_STATUS=$same_status"
+          jq -c '{ok,error,message,code,scannerV2,draft_keys:((.draft // {})|keys)}' "$RUNNER_TEMP/same-origin.json" || true
+
+          {
+            echo "### Scanner V2 provider preflight"
+            echo "- droplet: $EXPECTED_DROPLET_ID / $EXPECTED_DROPLET_NAME / $EXPECTED_DROPLET_IP"
+            echo "- app: ${{ steps.app.outputs.app_id }}"
+            echo "- namespace: ${{ steps.function.outputs.namespace_id }}"
+            echo "- function: $FUNCTION_URL"
+            echo "- direct function HTTP: $direct_status"
+            echo "- same-origin HTTP: $same_status"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Deploy guard
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          [ -n "${{ inputs.expected_sha }}" ] || {
+            echo "::error::deploy requires expected_sha."
+            exit 1
+          }
+          [ "${{ inputs.expected_sha }}" = "${{ github.sha }}" ] || {
+            echo "::error::workflow ref SHA does not match expected_sha."
+            exit 1
+          }
+          echo "::error::Deploy implementation is intentionally locked until read-only provider preflight evidence is reviewed on this PR."
+          exit 1
