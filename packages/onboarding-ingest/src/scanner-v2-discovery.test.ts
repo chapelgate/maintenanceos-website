@@ -194,6 +194,60 @@ test("integrated discovery exhausts 100+ sitemap pages and a link-only deep page
   assert.equal(deep?.discoveredFrom, "https://acme.example/page-001");
 });
 
+test("HTML discovery streams each unique fetched page to the Stage 4 consumer once", async () => {
+  const consumed: string[] = [];
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        '<html><body><a href="/deep">Deep</a></body></html>',
+      ),
+      "https://acme.example/deep": html(
+        "https://acme.example/deep",
+        "<html><body>Deep fact</body></html>",
+      ),
+    }),
+    onHtmlPage: async (page) => {
+      consumed.push(page.canonicalUrl ?? page.requestedUrl);
+    },
+  });
+
+  assert.deepEqual(consumed.sort(), [
+    "https://acme.example/",
+    "https://acme.example/deep",
+  ]);
+  assert.equal(result.manifest.fetched, 2);
+  assert.equal(result.incomplete, false);
+});
+
+test("HTML consumer failure is visible and prevents COMPLETE", async () => {
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    ...fixtures({
+      "https://acme.example/robots.txt": response(
+        "https://acme.example/robots.txt",
+        "User-agent: *\nAllow: /",
+        "text/plain",
+      ),
+      "https://acme.example/": html(
+        "https://acme.example/",
+        "<html><body>Home</body></html>",
+      ),
+    }),
+    onHtmlPage: async () => {
+      throw new Error("synthetic consumer failure");
+    },
+  });
+
+  assert.equal(result.incomplete, true);
+  assert.ok(result.warnings.includes("html_page_consumer_failed"));
+  assert.equal(result.manifest.unresolved, 1);
+});
+
 test("HTML discovery retries one transient timeout and then succeeds", async () => {
   let homeAttempts = 0;
   const result = await discoverScannerV2Frontier("https://acme.example/", {
