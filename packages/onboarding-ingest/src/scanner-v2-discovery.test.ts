@@ -318,6 +318,39 @@ test("direct TLS-style fetch failure can use bounded public reader recovery with
   );
 });
 
+test("auth-blocked HTML pages reuse the bounded reader recovery path", async () => {
+  for (const status of [401, 403]) {
+    let readerCalls = 0;
+    const result = await discoverScannerV2Frontier("https://acme.example/", {
+      readerFallback: true,
+      lookup: async () => ["203.0.113.10"],
+      get: async (url) => {
+        if (url.pathname === "/robots.txt") {
+          return response(url.toString(), "User-agent: *\nAllow: /", "text/plain");
+        }
+        if (url.pathname === "/sitemap.xml") {
+          return response(url.toString(), "missing", "text/plain", 404);
+        }
+        return response(url.toString(), "auth required", "text/html", status);
+      },
+      readerLookup: async () => ["203.0.113.20"],
+      readerGet: async (url) => {
+        readerCalls += 1;
+        return html(
+          url.toString(),
+          "<html><body><h1>Recovered public business page</h1></body></html>",
+        );
+      },
+    });
+
+    assert.equal(result.manifest.fetched, 1);
+    assert.equal(result.manifest.unresolved, 0);
+    assert.equal(result.incomplete, false);
+    assert.equal(readerCalls, 1);
+    assert.ok(result.warnings.includes("reader_fallback_used"));
+  }
+});
+
 test("sitemap fetch explicitly requests bounded compressed responses", async () => {
   let compressedRequested = false;
   let maxDecompressedBytes: number | undefined;
