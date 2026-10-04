@@ -27,6 +27,37 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Validate Scanner V2 companion image when onboarding-ingest changes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if ! git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -q '^packages/onboarding-ingest/'; then
+            echo "Scanner companion unchanged; skipping image smoke."
+            exit 0
+          fi
+          image="mos-scanner-v2-candidate:${HEAD_SHA}"
+          docker build -f packages/onboarding-ingest/Dockerfile -t "$image" .
+          docker run --rm --workdir /app/packages/onboarding-ingest "$image" \
+            node -e '(async()=>{const {chromium}=await import("playwright");const browser=await chromium.launch({headless:true});await browser.close();await import("pdfjs-dist/legacy/build/pdf.mjs");console.log("scanner-v2-runtime-deps=ok")})().catch((error)=>{console.error(error);process.exit(1)})'
+          cid="$(docker run -d --rm -p 127.0.0.1:18788:8788 \
+            -e PORT=8788 \
+            -e ONBOARDING_WEB_INGEST=true \
+            -e ONBOARDING_SCANNER_V2=true \
+            "$image")"
+          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+          for attempt in $(seq 1 30); do
+            if health="$(curl --fail --silent --show-error http://127.0.0.1:18788/health 2>/dev/null)"; then
+              break
+            fi
+            sleep 1
+          done
+          printf '%s\n' "$health"
+          node -e 'const h=JSON.parse(process.argv[1]); if(h.ok!==true||h.ingestEnabled!==true||h.scannerV2Enabled!==true) process.exit(1)' "$health"
+          docker rm -f "$cid" >/dev/null
+          trap - EXIT
+
       - name: Validate frozen website repair in isolated container
         env:
           SOURCE_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
