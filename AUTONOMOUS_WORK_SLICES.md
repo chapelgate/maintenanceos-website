@@ -32,31 +32,37 @@ Keep the working public website truthful and stable while completing Scanner V2 
 ## Ordered slices
 
 ## MOSWEB-S001 — Reconcile stale scanner problem statuses
-- Status: OPEN
+- Status: PASS
 - Outcome: MASTER_PROBLEM_LOG no longer presents already live-closed CREATE-004/005/006/007 as current executable work.
-- Acceptance: current closure evidence is preserved; no product code change.
+- Acceptance: PASS — closure evidence remains in place; only stale headline statuses were reconciled.
 
 ## MOSWEB-S002 — Scanner V2 Stage 11 UI states
-- Status: HOLD
+- Status: PASS
 - Depends on: MOSWEB-S001 PASS
 - Outcome: implement only Stage 11 operational UI states from the existing Scanner V2 plan.
-- Acceptance: Discovering/Crawling/Indexing/Complete/Partial/Failed states are represented; PARTIAL cannot appear fully learned; V2 remains feature-gated.
+- Acceptance: PASS — Discovering/Crawling/Indexing/Complete/Partial/Failed are represented and PARTIAL cannot present as fully learned; V2 remains feature-gated.
 
 ## MOSWEB-S003 — Stage 11 deterministic acceptance
-- Status: HOLD
+- Status: PASS
 - Depends on: MOSWEB-S002 PASS
 - Outcome: tests for progress counts, unresolved count, last scan, completeness label and safe source viewer behaviour if present.
-- Acceptance: focused tests PASS without weakening Scanner V1 or security limits.
+- Acceptance: PASS — recorded Stage 11 focused acceptance passed.
 
 ## MOSWEB-S004 — Stage 11 full regression
-- Status: HOLD
+- Status: PASS
 - Depends on: MOSWEB-S003 PASS
 - Outcome: run existing full repo/build/mobile/security gates.
-- Acceptance: all required gates PASS; V1 production path unchanged.
+- Acceptance: PASS — Stage 11 evidence records 419/419 tests, 17/17 accessibility and 30/30 build routes with V1 production unchanged.
+
+## MOSWEB-S004A — Modern rendered-site market-parity coverage
+- Status: IN_PROGRESS
+- Depends on: MOSWEB-S004 PASS
+- Outcome: close only the demonstrated current-market public-site coverage gaps before Stage 12: bounded lazy-loaded/scroll content, open Shadow DOM content and same-origin iframe discovery.
+- Acceptance: deterministic tests PASS; all browser-triggered requests remain inside existing SSRF/method/request/origin/byte/time controls; no CAPTCHA/paywall/auth bypass, proxy evasion, form automation, new service or paid dependency; golden line untouched.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
 - Status: HOLD
-- Depends on: MOSWEB-S004 PASS
+- Depends on: MOSWEB-S004A PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
 
