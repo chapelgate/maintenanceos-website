@@ -62,13 +62,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on merged main SHA `5993683d8d1d61a427e5eb07cd3e0e59829eb0a7`; exact candidate locally passed 425/425 tests, 17/17 accessibility, lint, TypeScript, 30/30 build routes, viewport smoke and 390x844 mobile interactive acceptance. Golden line untouched.
 
 ## MOSWEB-S005A — Stage 12 deterministic whole-site discovery fixture
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S004A PASS
 - Outcome: prove the existing deterministic fixture reaches 100+ sitemap pages plus link-only deep content with exact URL accounting.
-- Acceptance: discovery test PASS; frontier empty or every remaining URL explicitly terminal; no safety ceiling hidden as COMPLETE.
+- Acceptance: PASS on main SHA `51312b8693b2951919d49b6b8bf9a2f88a78399e` — exact named fixture `integrated discovery exhausts 100+ sitemap pages and a link-only deep page` passed 1/1; 122 URLs fetched, including 120 sitemap pages plus root and link-only deep content, with no hidden ceiling.
 
 ## MOSWEB-S005B — Stage 12 modern-DOM fixture
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S005A PASS
 - Outcome: prove lazy-loaded content, open Shadow DOM text/links and same-origin iframe discovery enter the normal V2 corpus/frontier.
 - Acceptance: focused renderer/content/retrieval tests PASS under existing SSRF/request/origin/byte/time controls.
