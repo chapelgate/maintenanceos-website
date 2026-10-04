@@ -77,6 +77,22 @@ export type ScanPageSource = {
   bytes: number;
 };
 
+export type ScanKnowledgeChunk = {
+  url: string;
+  title?: string;
+  headingPath: string[];
+  text: string;
+  contentHash: string;
+};
+
+export type ScannerV2ScanSummary = {
+  state: "COMPLETE" | "PARTIAL";
+  discovered: number;
+  fetched: number;
+  unresolved: number;
+  knowledgeChunks: number;
+};
+
 export type ScanSuccess = {
   ok: true;
   untrusted: true;
@@ -89,6 +105,10 @@ export type ScanSuccess = {
   factMeta?: BusinessFactMeta;
   /** Optional provenance for filled draft keys. `/create` ignores unknown keys. */
   fieldMeta?: DraftFieldMeta;
+  /** Bounded, source-grounded Scanner V2 corpus for the browser preview. */
+  knowledge?: ScanKnowledgeChunk[];
+  /** Additive V2 completeness summary; V1 callers may omit it. */
+  scannerV2?: ScannerV2ScanSummary;
 };
 
 export type ScanFailure = {
