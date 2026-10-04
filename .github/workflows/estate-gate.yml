@@ -1,0 +1,11 @@
+name: Chapelgate Estate Gate
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  estate-gate:
+    uses: chapelgate/agent-skills/.github/workflows/estate-gate.yml@eaad988ae6fac76e9d91f815000f62d1b744b427
