@@ -1,0 +1,39 @@
+name: Instinct phone preflight
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TWILIO_ACCOUNT_SID: \${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: \${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_PHONE_NUMBER: \${{ secrets.TWILIO_PHONE_NUMBER }}
+    steps:
+      - name: Validate existing Twilio authority without calls
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=0
+          for n in TWILIO_ACCOUNT_SID TWILIO_AUTH_TOKEN TWILIO_PHONE_NUMBER; do
+            if [ -n "\${!n:-}" ]; then echo "$n=PRESENT"; else echo "$n=ABSENT"; missing=1; fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "PHONE_PREFLIGHT=BLOCKED_MISSING_EXISTING_CREDENTIALS"
+            exit 2
+          fi
+          code="$(curl -sS -o /tmp/twilio-account.json -w '%{http_code}' \
+            -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
+            "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID.json")"
+          echo "TWILIO_ACCOUNT_HTTP=$code"
+          test "$code" = "200"
+          python3 - <<'PY'
+import json
+x=json.load(open("/tmp/twilio-account.json"))
+assert x.get("status") in {"active","suspended","closed"}, x.get("status")
+print("TWILIO_ACCOUNT_RESPONSE=VALID")
+PY
+          rm -f /tmp/twilio-account.json
+          echo "PHONE_PREFLIGHT=PASS"
