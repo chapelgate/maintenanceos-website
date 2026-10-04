@@ -188,6 +188,28 @@ function sentenceCandidates(text: string): string[] {
   return out.length ? out : [normalized];
 }
 
+function answerCueBonus(question: string, candidate: string): number {
+  const q = normalize(question);
+  const c = normalize(candidate);
+  let bonus = 0;
+
+  const asksDuration =
+    /\b(how long|lead time|wait(?:ing)? time|take to|delivery time)\b/.test(q);
+  if (
+    asksDuration &&
+    /\b(?:up to\s+)?\d+(?:\.\d+)?\s*(?:hour|hours|day|days|week|weeks|month|months)\b/.test(c)
+  ) {
+    bonus += 35;
+  }
+
+  const asksPrice = /\b(how much|price|cost|fee|charge)\b/.test(q);
+  if (asksPrice && /£\s*\d+(?:[.,]\d{1,2})?/.test(c)) {
+    bonus += 35;
+  }
+
+  return bonus;
+}
+
 function chooseExtractiveSpan(
   question: string,
   hits: readonly CorpusSearchHit[],
@@ -209,7 +231,11 @@ function chooseExtractiveSpan(
         normalize(candidate).replace(/[\s().-]+/g, "").includes(identifier),
       ).length;
 
-      const score = overlap * 10 + identifiers * 25 + Math.min(hit.score, 20);
+      const score =
+        overlap * 10 +
+        identifiers * 25 +
+        answerCueBonus(question, candidate) +
+        Math.min(hit.score, 20);
       if (
         !best ||
         score > best.score ||
