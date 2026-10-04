@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { main } from "../packages/website/scan/index.ts";
+import { main, proxyPersistentScan } from "../packages/website/scan/index.ts";
 
 const require = createRequire(import.meta.url);
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -41,6 +41,47 @@ test("serverless scan exposes CORS preflight without crawling", async () => {
     "https://seahorse-app-4oasq.ondigitalocean.app",
   );
   assert.equal(result.headers["Access-Control-Allow-Methods"], "POST, OPTIONS");
+});
+
+test("persistent scan proxy forwards only the validated public URL", async () => {
+  const calls: Array<{ input: string; init?: RequestInit }> = [];
+  const fetcher = (async (input: string | URL | Request, init?: RequestInit) => {
+    calls.push({ input: String(input), init });
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        scannerV2: {
+          state: "COMPLETE",
+          discovered: 1,
+          fetched: 1,
+          unresolved: 0,
+          knowledgeChunks: 1,
+          resumed: false,
+          crawlId: "fixture",
+        },
+      }),
+      {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      },
+    );
+  }) as typeof fetch;
+
+  const result = await proxyPersistentScan(
+    "https://example.com/",
+    fetcher,
+    "https://scanner.example/v1/onboarding/scan",
+  );
+
+  assert.equal(result.statusCode, 200);
+  assert.equal((result.body as { ok?: unknown }).ok, true);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0]?.input, "https://scanner.example/v1/onboarding/scan");
+  assert.equal(calls[0]?.init?.method, "POST");
+  assert.deepEqual(JSON.parse(String(calls[0]?.init?.body)), {
+    url: "https://example.com/",
+  });
+  assert.ok(calls[0]?.init?.signal);
 });
 
 test("deployed Functions artifact is prebuilt-only and loadable", async () => {
