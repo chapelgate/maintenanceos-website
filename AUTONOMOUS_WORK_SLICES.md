@@ -61,7 +61,7 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: all tests passed on 2026-10-03.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S004 PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
