@@ -496,9 +496,32 @@ export async function playwrightScannerV2BrowserBackend(
                 if (!shadow) continue;
                 queue.push(...Array.from(shadow.querySelectorAll("*")));
 
-                const text = (shadow.textContent ?? "")
-                  .replace(/\s+/g, " ")
-                  .trim();
+                const textParts: string[] = [];
+                const walker = document.createTreeWalker(
+                  shadow,
+                  NodeFilter.SHOW_TEXT,
+                );
+                let textNode = walker.nextNode();
+                while (textNode) {
+                  let parent = textNode.parentElement;
+                  let blocked = false;
+                  while (parent) {
+                    if (
+                      ["SCRIPT", "STYLE", "NOSCRIPT", "TEMPLATE"].includes(
+                        parent.tagName,
+                      )
+                    ) {
+                      blocked = true;
+                      break;
+                    }
+                    parent = parent.parentElement;
+                  }
+                  if (!blocked && textNode.textContent) {
+                    textParts.push(textNode.textContent);
+                  }
+                  textNode = walker.nextNode();
+                }
+                const text = textParts.join(" ").replace(/\s+/g, " ").trim();
                 const links = Array.from(
                   shadow.querySelectorAll("a[href], iframe[src], frame[src]"),
                 )
