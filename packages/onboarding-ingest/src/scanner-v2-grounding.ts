@@ -207,6 +207,17 @@ function answerCueBonus(question: string, candidate: string): number {
     bonus += 35;
   }
 
+  const asksEnumeration =
+    /\b(what|which)\s+(?:types?|kinds?|styles?)\b/.test(q) ||
+    /\bwhat\s+.*\s+do you offer\b/.test(q);
+  const commaCount = (candidate.match(/,/g) ?? []).length;
+  if (
+    asksEnumeration &&
+    (/\b(?:including|include|such as)\b/i.test(candidate) || commaCount >= 2)
+  ) {
+    bonus += 30;
+  }
+
   return bonus;
 }
 
