@@ -1369,3 +1369,37 @@ Follow-up on the same recovery:
 
 Human blockers:
 None.
+
+
+### 2026-10-04 MOSWEB-S004 — Stage 11 full regression exact-candidate acceptance
+Status: COMPLETE / VERIFIED
+
+Exact candidate:
+- research/nvidia-maintenanceos-website-p0 at `4dab4cee3fed155b88e7c34bfa27dcc387e39be0`.
+
+Clean Windows verifier evidence:
+- fresh clone of the exact research-branch SHA;
+- `npm ci`: completed;
+- `npm run release:preflight`: PASS;
+- full repository regression: 419/419 PASS;
+- production Next.js 16.3.8 build: PASS;
+- functional smoke: PASS, sitemapRoutes=26, failures=0;
+- performance budget: PASS; /create initial JS 569 KB raw / 175 KB gzip under the unchanged 600 KB / 190 KB budgets;
+- accessibility: 17/17 PASS;
+- release marker: exact candidate SHA `4dab4cee3fed155b88e7c34bfa27dcc387e39be0`.
+
+Browser/mobile/security evidence on the same build/output:
+- Microsoft Edge browser viewport matrix: 18/18 PASS across 390x844 mobile, 768x1024 tablet and 1440x900 desktop on /, /create/, /demo/, /features/, /pricing/ and /security/;
+- no horizontal-overflow, missing-main, missing-h1, missing-focusable or missing-create-CTA failures;
+- deterministic mobile /create acceptance: PASS at 390x844@3; website learning=true; Try your receptionist reached; voice-call preview reached; pack-aware answer=true; spoken reply=true; zero lead requests before optional Save; zero runtime exceptions;
+- live security audit against the existing deployed website: PASS, HTTP 200, enforcing meta CSP present, referrer control present, failures=0;
+- bounded staging red-team: PASS, 18-request budget, sensitive paths non-public, unsafe methods rejected, no query reflection/open redirect/stack trace finding;
+- conversion acceptance: PASS; control-plane readiness HTTP 200; CORS checks passed; productionPostPerformed=false.
+
+Security dependency note:
+- the fresh full development install reported 5 high-severity npm-audit findings in development/optional tooling;
+- `npm audit --omit=dev --json` reported 0 production vulnerabilities (0 high, 0 critical, total 0);
+- no dependency change is justified inside this verification slice; the production runtime remains unaffected by those dev-only audit findings.
+
+Invariant:
+No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, production voice runtime or golden phone line was modified, exercised, rerouted, restarted or redeployed by this acceptance run.
