@@ -6,6 +6,6 @@ packages:
         main: main
         web: true
         limits:
-          timeout: 15000
-          memory: 256
+          timeout: 300000
+          memory: 512
           logs: 64
