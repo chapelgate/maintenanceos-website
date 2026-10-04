@@ -265,6 +265,59 @@ test("app-shell routes render before content-hash dedup and rendered links re-en
   assert.equal(hashes.size, 3);
 });
 
+test("direct TLS-style fetch failure can use bounded public reader recovery without weakening direct fetch", async () => {
+  let readerCalls = 0;
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    readerFallback: true,
+    lookup: async () => ["203.0.113.10"],
+    get: async (url) => {
+      if (url.pathname === "/robots.txt") {
+        return response(
+          url.toString(),
+          "User-agent: *\nAllow: /",
+          "text/plain",
+        );
+      }
+      if (url.pathname === "/sitemap.xml") {
+        return response(url.toString(), "missing", "text/plain", 404);
+      }
+      throw new Error("unable to get local issuer certificate");
+    },
+    readerLookup: async () => ["203.0.113.20"],
+    readerGet: async (url) => {
+      readerCalls += 1;
+      const target = decodeURIComponent(url.pathname.slice(1));
+      if (target === "https://acme.example/") {
+        return html(
+          url.toString(),
+          '<html><body><h1>Recovered Home</h1><a href="https://acme.example/deep">Deep</a></body></html>',
+        );
+      }
+      if (target === "https://acme.example/deep") {
+        return html(
+          url.toString(),
+          "<html><body><h1>Deep</h1><p>Recovered deep fact.</p></body></html>",
+        );
+      }
+      return response(url.toString(), "missing", "text/plain", 404);
+    },
+  });
+
+  assert.equal(result.incomplete, false);
+  assert.equal(result.manifest.fetched, 2);
+  assert.equal(result.manifest.unresolved, 0);
+  assert.equal(result.manifest.queued, 0);
+  assert.equal(readerCalls, 2);
+  assert.ok(result.warnings.includes("reader_fallback_used"));
+  assert.ok(
+    result.manifest.urls.some(
+      (row) =>
+        row.url === "https://acme.example/deep" &&
+        row.status === "fetched",
+    ),
+  );
+});
+
 test("sitemap fetch explicitly requests bounded compressed responses", async () => {
   let compressedRequested = false;
   let maxDecompressedBytes: number | undefined;
