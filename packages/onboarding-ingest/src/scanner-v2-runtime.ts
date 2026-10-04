@@ -273,10 +273,14 @@ export async function recoverScannerV2ReaderPage(
         },
       });
     } catch {
+      if (attempt === 0) continue;
       return null;
     }
 
-    if (reader.status >= 400) return null;
+    if (reader.status >= 400) {
+      if (attempt === 0) continue;
+      return null;
+    }
     if (!/<(?:html|head|body)\b/i.test(reader.body)) return null;
     if (isReaderChallengePage(reader.body)) {
       if (attempt === 0) continue;
