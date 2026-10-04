@@ -197,7 +197,7 @@ function answerCueBonus(question: string, candidate: string): number {
     /\b(how long|lead time|wait(?:ing)? time|take to|delivery time)\b/.test(q);
   if (
     asksDuration &&
-    /\b(?:up to\s+)?\d+(?:\.\d+)?\s*(?:hour|hours|day|days|week|weeks|month|months)\b/.test(c)
+    /\b(?:up to\s+)?(?:\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s*(?:hour|hours|day|days|week|weeks|month|months)\b/.test(c)
   ) {
     bonus += 35;
   }
