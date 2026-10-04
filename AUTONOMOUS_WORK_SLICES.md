@@ -55,13 +55,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS — Stage 11 evidence records 419/419 tests, 17/17 accessibility and 30/30 build routes with V1 production unchanged.
 
 ## MOSWEB-S004A — Modern rendered-site market-parity coverage
-- Status: IN_PROGRESS
+- Status: PASS
 - Depends on: MOSWEB-S004 PASS
 - Outcome: close only the demonstrated current-market public-site coverage gaps before Stage 12: bounded lazy-loaded/scroll content, open Shadow DOM content and same-origin iframe discovery.
-- Acceptance: deterministic tests PASS; all browser-triggered requests remain inside existing SSRF/method/request/origin/byte/time controls; no CAPTCHA/paywall/auth bypass, proxy evasion, form automation, new service or paid dependency; golden line untouched.
+- Acceptance: PASS on exact candidate SHA 215c409050ce9688777ee9bde3f0a6e776fcf4b6 — 425/425 repo tests, 17/17 accessibility, lint, TypeScript, production build, 30/30 static routes, 28 exported HTML pages, browser viewport smoke and 390x844 mobile receptionist acceptance all pass. No new service/database/paid dependency; golden line untouched.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S004A PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
