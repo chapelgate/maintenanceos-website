@@ -68,13 +68,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: tests executed 2026-10-04, all 419 tests passed, Stage 12 fixture suite V1 verified.
 
 ## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S005 PASS
 - Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
 - Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
 
 ## MOSWEB-S007 — Mobile deep-question acceptance
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S006 PASS
 - Outcome: one mobile browser preview battery proves deep-page retrieval/source grounding.
 - Acceptance: supported answers cite/retrieve correct source; unsupported questions fail honestly; no production lead/save side effect unless test explicitly uses safe fixture path.
