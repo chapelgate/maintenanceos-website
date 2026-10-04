@@ -412,6 +412,16 @@ async function buildDefaultProcessor(input: {
     if (response.url.origin !== input.origin.origin) {
       return { disposition: "policy_skipped", reason: "cross_origin_redirect" };
     }
+    if (
+      !readerRecovered &&
+      (response.status === 401 || response.status === 403)
+    ) {
+      const reader = await recoverScannerV2ReaderPage(url.url);
+      if (reader) {
+        response = reader;
+        readerRecovered = true;
+      }
+    }
     if (response.status === 404 || response.status === 410) {
       return {
         disposition: "policy_skipped",
@@ -444,12 +454,19 @@ async function buildDefaultProcessor(input: {
       if (renderDecision.render) {
         const rendered = await renderScannerV2Page(url.url, { rawHtml: body });
         if (!rendered.ok) {
-          throw new Error(rendered.reason);
+          const reader = await recoverScannerV2ReaderPage(url.url);
+          if (!reader) throw new Error(rendered.reason);
+          response = reader;
+          readerRecovered = true;
+          body = reader.body;
+          finalUrl = reader.url.toString();
+          fetchMode = "reader";
+        } else {
+          body = rendered.html;
+          finalUrl = rendered.finalUrl;
+          fetchMode = "rendered";
+          renderedLinks = rendered.links;
         }
-        body = rendered.html;
-        finalUrl = rendered.finalUrl;
-        fetchMode = "rendered";
-        renderedLinks = rendered.links;
       }
     }
 
