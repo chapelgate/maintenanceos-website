@@ -119,6 +119,39 @@ test("file-backed job survives store recreation and resumes to the same manifest
   assert.equal((await restarted.listChunks("resume")).length, 3);
 });
 
+test("terminal frontier with no fetched evidence stays PARTIAL", async () => {
+  const { store } = await tempStore();
+  await createScannerV2Job({
+    store,
+    crawlId: "empty-terminal",
+    origin: "https://acme.example",
+    releaseSha: "sha-stage9",
+    urls: [
+      {
+        url: "https://acme.example/",
+        status: "policy_skipped",
+        discoveryReason: "submitted",
+        reason: "http_401",
+      },
+    ],
+  });
+
+  const result = await runScannerV2WorkerBatch({
+    store,
+    crawlId: "empty-terminal",
+    workerId: "worker-a",
+    processUrl: async () => {
+      throw new Error("must_not_run");
+    },
+  });
+
+  assert.equal(result.attempted, 0);
+  assert.equal(result.state, "PARTIAL");
+  assert.equal(result.manifest.state, "PARTIAL");
+  assert.equal(result.manifest.fetched, 0);
+  assert.equal(result.hasMoreWork, false);
+});
+
 test("duplicate worker execution is idempotent by terminal URL state and stable chunk id", async () => {
   const { store } = await tempStore();
   const url = "https://acme.example/a";
