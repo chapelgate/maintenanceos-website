@@ -1,5 +1,4 @@
-import { runScan } from "../../../src/scan.ts";
-import type { ScanResult } from "../../../src/types.ts";
+import { allowPublicHttpsUrl } from "../../../src/ssrf.ts";
 
 type WebEvent = {
   http?: {
@@ -12,6 +11,9 @@ type WebEvent = {
 
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 20;
+const UPSTREAM_TIMEOUT_MS = 115_000;
+const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
+  "https://maintenanceos-scanner-v2-production.up.railway.app/v1/onboarding/scan";
 const rateBuckets = new Map<string, number[]>();
 
 function allowRate(ip: string, now = Date.now()): boolean {
@@ -42,22 +44,56 @@ function response(
   return { statusCode, headers, body };
 }
 
-function statusFor(result: ScanResult): number {
-  if (result.ok) return 200;
-  switch (result.error) {
-    case "scan_disabled":
-      return 503;
-    case "invalid_url":
-    case "http_not_allowed":
-    case "unsupported_scheme":
-    case "userinfo_not_allowed":
-    case "non_public_host":
-    case "non_public_resolved_ip":
-      return 400;
-    case "timeout":
-      return 504;
-    default:
-      return 422;
+export async function proxyPersistentScan(
+  url: string,
+  fetcher: typeof fetch = fetch,
+  endpoint =
+    process.env.SCANNER_V2_RUNTIME_URL?.trim() ||
+    DEFAULT_PERSISTENT_SCANNER_ENDPOINT,
+): Promise<{ statusCode: number; body: unknown }> {
+  try {
+    const upstream = await fetcher(endpoint, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url }),
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+    });
+
+    const text = await upstream.text();
+    let body: unknown;
+    try {
+      body = JSON.parse(text);
+    } catch {
+      return {
+        statusCode: 502,
+        body: {
+          ok: false,
+          error: "upstream_invalid_response",
+          message: "The persistent scan runtime returned an invalid response.",
+          warnings: ["upstream_invalid_response"],
+        },
+      };
+    }
+
+    return { statusCode: upstream.status, body };
+  } catch (error) {
+    const timedOut =
+      error instanceof Error &&
+      (error.name === "TimeoutError" || /timeout/i.test(error.message));
+    return {
+      statusCode: timedOut ? 504 : 502,
+      body: {
+        ok: false,
+        error: timedOut ? "timeout" : "upstream_unavailable",
+        message: timedOut
+          ? "The persistent scan runtime exceeded the bounded request time."
+          : "The persistent scan runtime is unavailable.",
+        warnings: [timedOut ? "timeout" : "upstream_unavailable"],
+      },
+    };
   }
 }
 
@@ -98,19 +134,20 @@ export async function main(event: WebEvent = {}) {
     );
   }
 
-  try {
-    const result = await runScan(url, { enabled: true });
-    return response(statusFor(result), result, origin);
-  } catch {
+  const allowed = allowPublicHttpsUrl(url);
+  if (!allowed.ok) {
     return response(
-      500,
+      400,
       {
         ok: false,
-        error: "internal_error",
-        message: "The scan service failed. No crawl results were invented.",
-        warnings: ["internal_error"],
+        error: allowed.reason,
+        message: "Only public HTTPS business websites can be scanned.",
+        warnings: [allowed.reason],
       },
       origin,
     );
   }
+
+  const result = await proxyPersistentScan(allowed.url.toString());
+  return response(result.statusCode, result.body, origin);
 }

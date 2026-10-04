@@ -175,7 +175,9 @@ test("/create uses the same-origin on-demand scanner without reviving the retire
   assert.match(config, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   assert.doesNotMatch(config, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
   assert.match(later, /requestOnboardingScan\(endpoint, businessUrl\)/);
-  assert.match(scan, /runScan\(url, \{ enabled: true \}\)/);
+  assert.match(scan, /proxyPersistentScan\(allowed\.url\.toString\(\)\)/);
+  assert.match(scan, /DEFAULT_PERSISTENT_SCANNER_ENDPOINT/);
+  assert.doesNotMatch(scan, /runScan\(/);
   assert.match(scan, /rate_limited/);
 });
 
