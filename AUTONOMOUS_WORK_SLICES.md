@@ -61,13 +61,14 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: all tests passed on 2026-10-03.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S004 PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
+- Evidence: tests executed 2026-10-04, all 419 tests passed, Stage 12 fixture suite V1 verified.
 
 ## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S005 PASS
 - Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
 - Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
