@@ -110,13 +110,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on main SHA `e55ec66dcb64c5591af6451185a82f109c7a8637` using independent public control site `www.wirralroofers.net`. Discovery accounted for 27 URLs: 23 fetched, 4 policy-skipped, 0 unresolved, 0 queued, no warnings. Five practical non-homepage questions passed from About/Roof Repairs/Guttering/Velux sources; unrelated Mars question returned not_found. No login, anti-bot bypass or mutation.
 
 ## MOSWEB-S006F — Additional JS-heavy-site canary
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S006E PASS
 - Outcome: run one bounded V2 canary against a public JS-heavy site to exercise safe render escalation.
-- Acceptance: rendered facts/links enter normal validation and retrieval; no form submission, auth/CAPTCHA bypass or cross-origin crawl.
+- Acceptance: PASS on main SHA `122eb84905af5607707b2d02b76d8e746b464748` using independent client-rendered business site `appcatalyst.org`. V2 correctly classified raw HTML as app_shell, then discovery fetched 21/21 rendered pages with 0 unresolved/queued and no warnings. Five facts available after browser rendering passed with exact sources (Tacos Miranda Stripe/Square, DoorDash Drive API, Biltapp runtime content, Standard App iOS/Android support, 25+ apps/30+ websites since 2019); unrelated Mars question returned not_found. No form submission, auth/CAPTCHA bypass or cross-origin crawl.
 
 ## MOSWEB-S007A — Mobile deep-question preview
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S006F PASS
 - Outcome: prove a 390x844 mobile preview can answer supported deep-site questions from V2 evidence.
 - Acceptance: correct source-backed answers, zero runtime exceptions and zero lead/save side effect.
