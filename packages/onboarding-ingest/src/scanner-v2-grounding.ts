@@ -239,6 +239,10 @@ function chooseExtractiveSpan(
     | undefined;
 
   for (const hit of hits) {
+    const headingTokens = new Set(tokens(hit.headingPath.join(" ")));
+    let headingOverlap = 0;
+    for (const token of qTokens) if (headingTokens.has(token)) headingOverlap += 1;
+
     const candidates = sentenceCandidates(hit.text);
     for (const [ordinal, candidate] of candidates.entries()) {
       if (!candidate) continue;
@@ -254,6 +258,7 @@ function chooseExtractiveSpan(
         overlap * 10 +
         identifiers * 25 +
         answerCueBonus(question, candidate) +
+        headingOverlap * 8 +
         Math.min(hit.score, 20);
       if (
         !best ||
