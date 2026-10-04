@@ -80,13 +80,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on main SHA `46d186f547ee7ed752cc4cb0eeef2a8c1d5c5d04` — 5/5 focused tests passed for TXT, CSV, PDF-only grounded facts, 10 deep-site source-backed questions and honest unsupported-question not_found.
 
 ## MOSWEB-S006A — V1 compatibility regression
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S005C PASS
 - Outcome: prove the existing V1 production compatibility path remains unchanged before canaries.
-- Acceptance: V1 scan/regression tests PASS; Scanner V2 remains feature-gated; no telephony change.
+- Acceptance: PASS on main SHA `96ac1dde9df017578dad64bc1e523cf02382d437` — 72/72 V1 extraction/fetch/wrapper/scan/server/SSRF/foundation tests passed; Scanner V2 default-off/explicit-opt-in invariant passed.
 
 ## MOSWEB-S006B — Alley Gates real-site canary
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S006A PASS
 - Outcome: run a bounded V2 read-only canary against alleygates.co.uk.
 - Acceptance: record discovered/fetched/skipped/unresolved counts; prove at least three non-homepage facts and five site-specific grounded questions; unknown question fails honestly.
