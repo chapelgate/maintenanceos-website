@@ -136,6 +136,14 @@ export type ScanBusinessFactMeta = Partial<
   Record<ScanBusinessFactKey, { confidence: "high" | "medium" | "low"; source: string }>
 >;
 
+export type ScanSiteKnowledgeItem = {
+  url: string;
+  title?: string;
+  headingPath: string[];
+  text: string;
+  contentHash: string;
+};
+
 /** Human labels for mapped `fieldMeta.source` values. Unknown sources stay unlabelled. */
 export const FIELD_META_SOURCE_LABELS: Record<string, string> = {
   jsonld: "JSON-LD",
@@ -294,6 +302,40 @@ export function mapScanBusinessFacts(body: unknown): ScanBusinessFacts {
   return out;
 }
 
+export function mapScanSiteKnowledge(body: unknown): ScanSiteKnowledgeItem[] {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return [];
+  const raw = (body as { knowledge?: unknown }).knowledge;
+  if (!Array.isArray(raw)) return [];
+  const out: ScanSiteKnowledgeItem[] = [];
+  const seen = new Set<string>();
+  let totalChars = 0;
+
+  for (const item of raw) {
+    if (out.length >= 200 || totalChars >= 300_000) break;
+    if (!item || typeof item !== "object" || Array.isArray(item)) continue;
+    const rec = item as Record<string, unknown>;
+    const url = scanFactHttpsUrl(rec.url);
+    const text = scanFactString(rec.text, Math.min(1_800, 300_000 - totalChars));
+    const contentHash = scanFactString(rec.contentHash, 128);
+    if (!url || !text || !contentHash) continue;
+    const key = url + "\u0000" + contentHash;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    const title = scanFactString(rec.title, 200);
+    const headingPath = scanFactStringArray(rec.headingPath, 8, 200) ?? [];
+    out.push({
+      url,
+      ...(title ? { title } : {}),
+      headingPath,
+      text,
+      contentHash,
+    });
+    totalChars += text.length;
+  }
+  return out;
+}
+
 const FACT_META_SOURCES = new Set([...FIELD_META_SOURCES, "fetched_url"]);
 
 /** Map only provenance attached to facts that survived structured-fact validation. */
@@ -344,6 +386,7 @@ export type ScanOutcome =
       fieldMeta: ScanDraftFieldMeta;
       facts: ScanBusinessFacts;
       factMeta: ScanBusinessFactMeta;
+      siteKnowledge: ScanSiteKnowledgeItem[];
     }
   | { status: "error"; message: string };
 
@@ -396,6 +439,7 @@ export async function requestOnboardingScan(
       fieldMeta: mapScanFieldMeta(parsed),
       facts,
       factMeta: mapScanBusinessFactMeta(parsed, facts),
+      siteKnowledge: mapScanSiteKnowledge(parsed),
     };
   } catch {
     return {
