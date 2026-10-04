@@ -22,7 +22,16 @@ import {
   normalizeScannerV2Url,
   ScannerV2FrontierTrapGuard,
 } from "./scanner-v2-url-policy.ts";
-import { isPathAllowed, parseRobotsTxt, type RobotsRules } from "./scan.ts";
+import {
+  isPathAllowed,
+  isReaderChallengePage,
+  MAX_READER_PAGES,
+  parseRobotsTxt,
+  READER_FALLBACK_MAX_BYTES,
+  READER_FALLBACK_ORIGIN,
+  READER_FALLBACK_TIMEOUT_MS,
+  type RobotsRules,
+} from "./scan.ts";
 import {
   ScanError,
   type CrawlManifest,
@@ -84,6 +93,10 @@ export type ScannerV2DiscoveryOptions = {
   maxCalendarVariantsPerFamily?: number;
   /** Deterministic test seam; production uses the reviewed Playwright backend. */
   renderBackend?: ScannerV2BrowserBackend;
+  /** Production-default only when direct fetch dependencies are not injected. */
+  readerFallback?: boolean;
+  readerLookup?: LookupFn;
+  readerGet?: HttpGetFn;
 };
 
 function boundedInt(
@@ -448,6 +461,9 @@ export async function discoverScannerV2Frontier(
     maxCalendarVariantsPerFamily,
   });
   const contentOwnerByHash = new Map<string, string>();
+  const readerFallbackEnabled =
+    options.readerFallback ?? (!options.lookup && !options.get);
+  let readerPagesUsed = 0;
   let discoveryIncomplete = false;
 
   const root = normalizeScannerV2Url(initial.url.toString(), origin, {
@@ -769,15 +785,62 @@ export async function discoverScannerV2Frontier(
         maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
     } catch (error) {
-      urls.update(pageUrl, {
-        status: "unresolved",
-        reason:
-          error instanceof ScanError
-            ? error.code
-            : "fetch_failed",
-      });
-      discoveryIncomplete = true;
-      continue;
+      let recovered = false;
+      if (readerFallbackEnabled && readerPagesUsed < MAX_READER_PAGES) {
+        const readerUrl = `${READER_FALLBACK_ORIGIN}/${pageUrl}`;
+        try {
+          for (let attempt = 0; attempt < 2; attempt += 1) {
+            const reader = await fetchPublicHttps(readerUrl, {
+              lookup: options.readerLookup,
+              get: options.readerGet,
+              timeoutMs: READER_FALLBACK_TIMEOUT_MS,
+              maxBytes: Math.min(
+                READER_FALLBACK_MAX_BYTES,
+                maxHtmlBytes,
+              ),
+              maxRedirects: 2,
+              headers: {
+                Accept: "text/html",
+                "X-Respond-With": "html",
+                "X-No-Cache": "true",
+              },
+            });
+            if (reader.status >= 400) break;
+            if (!/<(?:html|head|body)\b/i.test(reader.body)) break;
+            if (isReaderChallengePage(reader.body)) {
+              if (attempt === 0) continue;
+              break;
+            }
+
+            response = {
+              ...reader,
+              url: new URL(pageUrl),
+              headers: {
+                ...reader.headers,
+                "content-type": "text/html; charset=utf-8",
+              },
+            };
+            readerPagesUsed += 1;
+            warnings.push("reader_fallback_used");
+            recovered = true;
+            break;
+          }
+        } catch {
+          recovered = false;
+        }
+      }
+
+      if (!recovered || !response) {
+        urls.update(pageUrl, {
+          status: "unresolved",
+          reason:
+            error instanceof ScanError
+              ? error.code
+              : "fetch_failed",
+        });
+        discoveryIncomplete = true;
+        continue;
+      }
     }
 
     if (response.url.origin !== origin.origin) {
