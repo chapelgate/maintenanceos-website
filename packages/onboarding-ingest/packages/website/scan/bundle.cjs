@@ -480,12 +480,12 @@ function extractHoursFromVisibleText(html) {
   const day = new RegExp(DAY_RE.source, "gi");
   let m;
   while (m = day.exec(text)) {
-    const window = text.slice(m.index, m.index + 90).replace(/\s+/g, " ").trim();
-    const range = TIME_RANGE_RE.exec(window);
+    const window2 = text.slice(m.index, m.index + 90).replace(/\s+/g, " ").trim();
+    const range = TIME_RANGE_RE.exec(window2);
     if (!range) continue;
     const rangeEnd = (range.index ?? 0) + range[0].length;
     const snippet = asUntrustedText(
-      window.slice(0, rangeEnd).replaceAll("\uFFFD", "\u2013"),
+      window2.slice(0, rangeEnd).replaceAll("\uFFFD", "\u2013"),
       140
     );
     if (looksLikeHoursPattern(snippet)) hits.push(snippet);
@@ -1293,6 +1293,7 @@ function omitEmptyMeta(fieldMeta, draft) {
 var import_promises = __toESM(require("node:dns/promises"), 1);
 var import_node_https = __toESM(require("node:https"), 1);
 var import_node_net = require("node:net");
+var import_node_zlib = require("node:zlib");
 
 // packages/onboarding-ingest/src/ssrf.ts
 var BLOCKED_HOSTNAMES = /* @__PURE__ */ new Set([
@@ -1456,6 +1457,44 @@ function header(headers, name) {
   }
   return "";
 }
+function decodeResponseBodyForText(input) {
+  if (!input.acceptCompressed) return input.body;
+  const encoding = header(input.headers, "content-encoding").toLowerCase();
+  const contentType2 = header(input.headers, "content-type").toLowerCase();
+  const gzipFile = /(?:application\/gzip|application\/x-gzip)/i.test(contentType2) || /\.gz$/i.test(input.url.pathname);
+  if (encoding && encoding !== "identity" && encoding !== "gzip") {
+    throw new ScanError(
+      "unsupported_content_encoding",
+      "The response used an unsupported content encoding.",
+      422
+    );
+  }
+  let payload = input.body;
+  if (encoding === "gzip" || gzipFile) {
+    try {
+      payload = (0, import_node_zlib.gunzipSync)(payload, {
+        maxOutputLength: input.maxDecompressedBytes
+      });
+    } catch (error) {
+      const code = typeof error === "object" && error !== null && "code" in error ? String(error.code ?? "") : "";
+      const message = error instanceof Error ? error.message : String(error);
+      const tooLarge = code === "ERR_BUFFER_TOO_LARGE" || /max(?:imum)? output|larger than|too large/i.test(message);
+      throw new ScanError(
+        tooLarge ? "response_too_large" : "content_decode_failed",
+        tooLarge ? "The decompressed response exceeded the allowed size." : "The compressed response could not be decoded as gzip.",
+        422
+      );
+    }
+  }
+  if (payload.length > input.maxDecompressedBytes) {
+    throw new ScanError(
+      "response_too_large",
+      "The decompressed response exceeded the allowed size.",
+      422
+    );
+  }
+  return payload;
+}
 async function defaultLookup(hostname) {
   const host = hostname.replace(/^\[|\]$/g, "");
   if (parseIPv4Literal(host) || host.includes(":")) {
@@ -1471,7 +1510,7 @@ function httpsGetToIp(url, ip, opts) {
       "User-Agent": USER_AGENT,
       Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1",
       "Accept-Language": "en-GB,en;q=0.8",
-      "Accept-Encoding": "identity",
+      "Accept-Encoding": opts.acceptCompressed ? "gzip, identity" : "identity",
       ...opts.headers ?? {},
       Host: url.host,
       Connection: "close"
@@ -1529,10 +1568,23 @@ function httpsGetToIp(url, ip, opts) {
             if (typeof value === "string") rawHeaders[key] = value;
             else if (Array.isArray(value)) rawHeaders[key] = value.join(", ");
           }
+          let payload;
+          try {
+            payload = decodeResponseBodyForText({
+              body: Buffer.concat(chunks),
+              url,
+              headers: rawHeaders,
+              acceptCompressed: opts.acceptCompressed,
+              maxDecompressedBytes: opts.maxDecompressedBytes ?? opts.maxBytes
+            });
+          } catch (error) {
+            reject(error);
+            return;
+          }
           resolve({
             status: res.statusCode ?? 0,
             headers: rawHeaders,
-            body: Buffer.concat(chunks).toString("utf8"),
+            body: payload.toString("utf8"),
             url
           });
         });
@@ -1555,6 +1607,219 @@ function httpsGetToIp(url, ip, opts) {
     });
     req.end();
   });
+}
+function httpsGetBytesToIp(url, ip, opts) {
+  return new Promise((resolve, reject) => {
+    const port = url.port ? Number(url.port) : 443;
+    const headers = {
+      "User-Agent": USER_AGENT,
+      Accept: "application/pdf,text/plain,text/csv,application/csv;q=0.9,*/*;q=0.1",
+      "Accept-Language": "en-GB,en;q=0.8",
+      "Accept-Encoding": "identity",
+      ...opts.headers ?? {},
+      Host: url.host,
+      Connection: "close"
+    };
+    const hostname = url.hostname.replace(/^\[|\]$/g, "");
+    const family = (0, import_node_net.isIP)(ip);
+    if (family !== 4 && family !== 6) {
+      reject(
+        new ScanError(
+          "fetch_failed",
+          "Resolved target was not an IP address.",
+          422
+        )
+      );
+      return;
+    }
+    const req = import_node_https.default.request(
+      {
+        hostname,
+        port,
+        family,
+        autoSelectFamily: false,
+        path: `${url.pathname}${url.search}`,
+        method: "GET",
+        servername: hostname,
+        headers,
+        lookup: (_hostname, options, callback) => {
+          if (typeof options === "object" && options !== null && options.all) {
+            callback(null, [{ address: ip, family }]);
+            return;
+          }
+          callback(null, ip, family);
+        },
+        timeout: opts.timeoutMs
+      },
+      (res) => {
+        const chunks = [];
+        let size = 0;
+        let settled = false;
+        res.on("data", (chunk) => {
+          if (settled) return;
+          size += chunk.length;
+          if (size > opts.maxBytes) {
+            settled = true;
+            req.destroy();
+            reject(
+              new ScanError(
+                "response_too_large",
+                "The document exceeded the fetch size cap.",
+                422
+              )
+            );
+            return;
+          }
+          chunks.push(chunk);
+        });
+        res.on("end", () => {
+          if (settled) return;
+          settled = true;
+          const rawHeaders = {};
+          for (const [key, value] of Object.entries(res.headers)) {
+            if (typeof value === "string") rawHeaders[key] = value;
+            else if (Array.isArray(value)) rawHeaders[key] = value.join(", ");
+          }
+          const payload = Buffer.concat(chunks);
+          resolve({
+            status: res.statusCode ?? 0,
+            headers: rawHeaders,
+            body: new Uint8Array(
+              payload.buffer,
+              payload.byteOffset,
+              payload.byteLength
+            ),
+            url
+          });
+        });
+      }
+    );
+    req.on("timeout", () => {
+      req.destroy();
+      reject(new ScanError("timeout", "The document fetch timed out.", 504));
+    });
+    req.on("error", (err) => {
+      reject(
+        new ScanError(
+          "fetch_failed",
+          err instanceof Error ? err.message : "Document fetch failed.",
+          422
+        )
+      );
+    });
+    req.end();
+  });
+}
+async function fetchPublicHttpsBytes(raw, options = {}) {
+  const lookup = options.lookup ?? defaultLookup;
+  const get = options.get ?? httpsGetBytesToIp;
+  const timeoutMs = Math.max(
+    250,
+    Math.min(
+      options.timeoutMs ?? DEFAULT_PAGE_TIMEOUT_MS,
+      options.remainingMs ?? DEFAULT_PAGE_TIMEOUT_MS
+    )
+  );
+  const maxBytes = options.maxBytes ?? DEFAULT_MAX_BYTES_PER_PAGE;
+  const maxRedirects = options.maxRedirects ?? DEFAULT_MAX_REDIRECTS;
+  let current = raw;
+  for (let hop = 0; hop <= maxRedirects; hop += 1) {
+    const allow = allowPublicHttpsUrl(current);
+    if (!allow.ok) {
+      throw new ScanError(allow.reason, ssrfMessage(allow.reason), 400);
+    }
+    let addresses;
+    try {
+      addresses = await lookup(allow.url.hostname);
+    } catch (err) {
+      if (err instanceof ScanError) throw err;
+      throw new ScanError(
+        "dns_failed",
+        "Could not resolve this hostname.",
+        422
+      );
+    }
+    const ipCheck = assertResolvedAddressesPublic(addresses);
+    if (!ipCheck.ok) {
+      throw new ScanError(ipCheck.reason, ssrfMessage(ipCheck.reason), 400);
+    }
+    const ipv4Addresses = addresses.filter(
+      (address) => Boolean(parseIPv4Literal(address))
+    );
+    const ipv6Addresses = addresses.filter(
+      (address) => !parseIPv4Literal(address)
+    );
+    const orderedAddresses = ipv4Addresses.length ? ipv4Addresses : ipv6Addresses;
+    let response2 = null;
+    let lastError = null;
+    const addressAttemptsStarted = Date.now();
+    for (const address of orderedAddresses) {
+      const elapsed = Date.now() - addressAttemptsStarted;
+      if (elapsed >= timeoutMs) break;
+      const attemptTimeoutMs = Math.max(250, timeoutMs - elapsed);
+      try {
+        const candidate = await get(allow.url, address, {
+          timeoutMs: attemptTimeoutMs,
+          maxBytes,
+          headers: options.headers
+        });
+        response2 = candidate;
+        if (candidate.status !== 401 && candidate.status !== 403) break;
+      } catch (err) {
+        lastError = err;
+      }
+    }
+    if (!response2) {
+      if (lastError instanceof ScanError) throw lastError;
+      throw new ScanError(
+        "fetch_failed",
+        lastError instanceof Error ? lastError.message : "Fetch failed.",
+        422
+      );
+    }
+    if (response2.status >= 300 && response2.status < 400 && response2.status !== 304) {
+      const location = header(response2.headers, "location");
+      if (!location) {
+        throw new ScanError(
+          "redirect_missing_location",
+          "The site returned a redirect without a Location header.",
+          422
+        );
+      }
+      if (hop === maxRedirects) {
+        throw new ScanError(
+          "too_many_redirects",
+          "The site redirected too many times.",
+          422
+        );
+      }
+      let next;
+      try {
+        next = new URL(location, allow.url);
+      } catch {
+        throw new ScanError(
+          "invalid_url",
+          "Redirect Location was not a valid URL.",
+          400
+        );
+      }
+      if (options.allowedOrigin && next.origin !== options.allowedOrigin) {
+        throw new ScanError(
+          "cross_origin_redirect",
+          "The document redirected outside the submitted website.",
+          422
+        );
+      }
+      current = next.toString();
+      continue;
+    }
+    return response2;
+  }
+  throw new ScanError(
+    "too_many_redirects",
+    "The site redirected too many times.",
+    422
+  );
 }
 async function fetchPublicHttps(raw, options = {}) {
   const lookup = options.lookup ?? defaultLookup;
@@ -1604,7 +1869,9 @@ async function fetchPublicHttps(raw, options = {}) {
         const candidate = await get(allow.url, address, {
           timeoutMs: attemptTimeoutMs,
           maxBytes,
-          headers: options.headers
+          headers: options.headers,
+          acceptCompressed: options.acceptCompressed,
+          maxDecompressedBytes: options.maxDecompressedBytes
         });
         response2 = candidate;
         if (candidate.status !== 401 && candidate.status !== 403) break;
@@ -1620,7 +1887,7 @@ async function fetchPublicHttps(raw, options = {}) {
         422
       );
     }
-    if (response2.status >= 300 && response2.status < 400) {
+    if (response2.status >= 300 && response2.status < 400 && response2.status !== 304) {
       const location = header(response2.headers, "location");
       if (!location) {
         throw new ScanError(
@@ -1641,6 +1908,13 @@ async function fetchPublicHttps(raw, options = {}) {
         next = new URL(location, allow.url);
       } catch {
         throw new ScanError("invalid_url", "Redirect Location was not a valid URL.", 400);
+      }
+      if (options.allowedOrigin && next.origin !== options.allowedOrigin) {
+        throw new ScanError(
+          "cross_origin_redirect",
+          "The page redirected outside the submitted website.",
+          422
+        );
       }
       current = next.toString();
       continue;
@@ -1666,8 +1940,8 @@ function ssrfMessage(reason) {
       return "This URL is not allowed.";
   }
 }
-function isHtmlOrText(contentType) {
-  const type = contentType.toLowerCase();
+function isHtmlOrText(contentType2) {
+  const type = contentType2.toLowerCase();
   if (!type) return true;
   return type.includes("text/html") || type.includes("application/xhtml") || type.includes("text/plain") || type.includes("application/xml") || type.includes("text/xml");
 }
@@ -2065,6 +2339,2445 @@ async function runScan(rawUrl, options = {}) {
   };
 }
 
+// packages/onboarding-ingest/src/scanner-v2-foundation.ts
+var import_node_crypto = require("node:crypto");
+var SCANNER_V2_ENV = "ONBOARDING_SCANNER_V2";
+function isScannerV2Enabled(env = process.env) {
+  const value = env[SCANNER_V2_ENV];
+  return value === "true" || value === "1";
+}
+function sha256(parts) {
+  const hash = (0, import_node_crypto.createHash)("sha256");
+  for (const part of parts) {
+    hash.update(part, "utf8");
+    hash.update("\0", "utf8");
+  }
+  return hash.digest("hex");
+}
+function stableContentHash(text) {
+  return sha256([text.replace(/\r\n?/g, "\n")]);
+}
+function stableChunkId(canonicalUrl, ordinal, text) {
+  return sha256([
+    canonicalUrl,
+    String(ordinal),
+    stableContentHash(text)
+  ]);
+}
+function sortedDispositions(dispositions) {
+  return [...dispositions].sort(
+    (a, b) => a.url.localeCompare(b.url, "en", { sensitivity: "variant" })
+  );
+}
+function buildCrawlManifest(input) {
+  const urls = sortedDispositions(input.urls);
+  const counts = {
+    queued: urls.filter((item) => item.status === "queued").length,
+    fetched: urls.filter((item) => item.status === "fetched").length,
+    duplicate: urls.filter((item) => item.status === "duplicate").length,
+    policySkipped: urls.filter((item) => item.status === "policy_skipped").length,
+    robotsSkipped: urls.filter((item) => item.status === "robots_skipped").length,
+    unresolved: urls.filter((item) => item.status === "unresolved").length
+  };
+  const state = input.requestedState === "COMPLETE" && (counts.queued > 0 || counts.unresolved > 0) ? "PARTIAL" : input.requestedState;
+  return {
+    crawlId: input.crawlId,
+    origin: input.origin,
+    state,
+    discovered: urls.length,
+    ...counts,
+    urls
+  };
+}
+
+// packages/onboarding-ingest/src/scanner-v2-content.ts
+var DEFAULT_MAX_CHUNK_CHARS = 1400;
+var DEFAULT_CHUNK_OVERLAP_CHARS = 160;
+var BLOCK_BOUNDARY_RE = /<\/?(?:address|article|aside|blockquote|div|main|section|p|li|ol|ul|dl|dt|dd|table|thead|tbody|tfoot|tr|td|th|figure|figcaption|details|summary|header|footer|nav|h[1-6])\b[^>]*>/gi;
+var NAMED_ENTITIES = {
+  amp: "&",
+  apos: "'",
+  gt: ">",
+  lt: "<",
+  nbsp: " ",
+  quot: '"',
+  ndash: "\u2013",
+  mdash: "\u2014",
+  hellip: "\u2026",
+  pound: "\xA3"
+};
+function decodeHtmlEntities(value) {
+  return value.replace(
+    /&(?:#(\d+)|#x([0-9a-f]+)|([a-z][a-z0-9]+));/gi,
+    (_match, decimal, hex, named) => {
+      if (decimal) {
+        const code = Number.parseInt(decimal, 10);
+        return Number.isFinite(code) ? String.fromCodePoint(code) : " ";
+      }
+      if (hex) {
+        const code = Number.parseInt(hex, 16);
+        return Number.isFinite(code) ? String.fromCodePoint(code) : " ";
+      }
+      return named ? NAMED_ENTITIES[named.toLowerCase()] ?? " " : " ";
+    }
+  );
+}
+function normalizeText(value) {
+  return decodeHtmlEntities(
+    value.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, " ")
+  ).replace(/\u00a0/g, " ").replace(/[\t\f\v]+/g, " ").replace(/ *\n */g, "\n").replace(/[ ]{2,}/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+}
+function headerValue(headers, name) {
+  if (!headers) return void 0;
+  const entry = Object.entries(headers).find(
+    ([key]) => key.toLowerCase() === name.toLowerCase()
+  );
+  return entry?.[1]?.trim() || void 0;
+}
+function stableJson(value) {
+  if (value === null || typeof value !== "object") {
+    return JSON.stringify(value);
+  }
+  if (Array.isArray(value)) {
+    return "[" + value.map((item) => stableJson(item)).join(",") + "]";
+  }
+  const object = value;
+  return "{" + Object.keys(object).sort().map((key) => JSON.stringify(key) + ":" + stableJson(object[key])).join(",") + "}";
+}
+function extractTitle2(html) {
+  const value = /<title\b[^>]*>([\s\S]*?)<\/title>/i.exec(html)?.[1];
+  const text = value ? normalizeText(value) : "";
+  return text || void 0;
+}
+function attributeValue(tag, name) {
+  const quoted = new RegExp(
+    `\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`,
+    "i"
+  ).exec(tag);
+  if (quoted) return decodeHtmlEntities(quoted[1] ?? quoted[2] ?? "").trim() || void 0;
+  const bare = new RegExp(`\\b${name}\\s*=\\s*([^\\s>]+)`, "i").exec(tag);
+  return bare?.[1] ? decodeHtmlEntities(bare[1]).trim() : void 0;
+}
+function removeNonContentMarkup(html) {
+  return html.replace(/<!--([\s\S]*?)-->/g, " ").replace(/<script\b[\s\S]*?<\/script>/gi, " ").replace(/<style\b[\s\S]*?<\/style>/gi, " ").replace(/<noscript\b[\s\S]*?<\/noscript>/gi, " ").replace(/<template\b[\s\S]*?<\/template>/gi, " ").replace(/<svg\b[\s\S]*?<\/svg>/gi, " ");
+}
+function visibleLines(html) {
+  const text = decodeHtmlEntities(
+    removeNonContentMarkup(html).replace(/<br\s*\/?>/gi, "\n").replace(BLOCK_BOUNDARY_RE, "\n").replace(/<[^>]+>/g, " ")
+  ).replace(/\u00a0/g, " ").replace(/[\t\f\v]+/g, " ").replace(/[ ]{2,}/g, " ");
+  return text.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+}
+function extractBoilerplate(html) {
+  const blocks = [];
+  const pattern = /<(nav|footer|header)\b[^>]*>([\s\S]*?)<\/\1>/gi;
+  const cleanedHtml = html.replace(pattern, (_full, rawKind, inner) => {
+    const text = normalizeText(inner);
+    if (text) {
+      const tag = rawKind.toLowerCase();
+      const kind = tag === "nav" ? "navigation" : tag === "footer" ? "footer" : "header";
+      blocks.push({
+        kind,
+        text,
+        headingPath: [],
+        boilerplate: true,
+        atomic: false
+      });
+    }
+    return " ";
+  });
+  return { cleanedHtml, blocks };
+}
+function replaceStructuredRegions(html) {
+  let working = html;
+  working = working.replace(
+    /<details\b[^>]*>([\s\S]*?)<\/details>/gi,
+    (_full, inner) => {
+      const summaryMatch = /<summary\b[^>]*>([\s\S]*?)<\/summary>/i.exec(inner);
+      const question = summaryMatch?.[1] ? normalizeText(summaryMatch[1]) : "";
+      const withoutSummary = inner.replace(
+        /<summary\b[^>]*>[\s\S]*?<\/summary>/i,
+        " "
+      );
+      const answer = normalizeText(withoutSummary);
+      const combined = question && answer ? `Q: ${question}
+A: ${answer}` : question || answer;
+      return combined ? `<p data-scanner-kind="faq">${escapeForPseudoHtml(combined)}</p>` : " ";
+    }
+  );
+  working = working.replace(
+    /<table\b[^>]*>([\s\S]*?)<\/table>/gi,
+    (_full, inner) => {
+      const rows = [];
+      for (const match of inner.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
+        const cells = [
+          ...(match[1] ?? "").matchAll(
+            /<(?:th|td)\b[^>]*>([\s\S]*?)<\/(?:th|td)>/gi
+          )
+        ].map((cell) => normalizeText(cell[1] ?? "")).filter(Boolean);
+        if (cells.length) rows.push(cells.join(" | "));
+      }
+      return rows.map(
+        (row) => `<p data-scanner-kind="table_row">${escapeForPseudoHtml(row)}</p>`
+      ).join("");
+    }
+  );
+  working = working.replace(
+    /<dl\b[^>]*>([\s\S]*?)<\/dl>/gi,
+    (_full, inner) => {
+      const entries = [];
+      const terms = [
+        ...inner.matchAll(
+          /<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi
+        )
+      ];
+      for (const match of terms) {
+        const term = normalizeText(match[1] ?? "");
+        const description = normalizeText(match[2] ?? "");
+        if (term && description) entries.push(`${term}: ${description}`);
+      }
+      return entries.map(
+        (entry) => `<p data-scanner-kind="definition">${escapeForPseudoHtml(entry)}</p>`
+      ).join("");
+    }
+  );
+  working = working.replace(
+    /<figure\b[^>]*>([\s\S]*?)<\/figure>/gi,
+    (_full, inner) => {
+      const caption = /<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/i.exec(
+        inner
+      )?.[1];
+      const alt = /<img\b[^>]*>/i.exec(inner)?.[0];
+      const captionText = caption ? normalizeText(caption) : "";
+      const altText = alt ? attributeValue(alt, "alt") ?? "" : "";
+      const text = [captionText, altText && altText !== captionText ? altText : ""].filter(Boolean).join(" \u2014 ");
+      return text ? `<p data-scanner-kind="figure">${escapeForPseudoHtml(text)}</p>` : " ";
+    }
+  );
+  working = working.replace(/<img\b[^>]*>/gi, (tag) => {
+    const alt = attributeValue(tag, "alt");
+    return alt ? `<p data-scanner-kind="figure">${escapeForPseudoHtml(alt)}</p>` : " ";
+  });
+  return working;
+}
+function escapeForPseudoHtml(value) {
+  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+function extractHeadingRecords(html) {
+  const out = [];
+  for (const match of html.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi)) {
+    const text = normalizeText(match[2] ?? "");
+    if (!text) continue;
+    out.push({
+      level: Number(match[1]),
+      text,
+      index: match.index ?? 0
+    });
+  }
+  return out;
+}
+function blockKindFromTag(tag, attributes) {
+  const explicit = attributeValue(attributes, "data-scanner-kind");
+  if (explicit === "faq" || explicit === "table_row" || explicit === "definition" || explicit === "figure") {
+    return explicit;
+  }
+  if (tag === "li") return "list_item";
+  return "paragraph";
+}
+function structuredBlocks(html) {
+  const processed = replaceStructuredRegions(removeNonContentMarkup(html));
+  const headings = extractHeadingRecords(processed);
+  const events = headings.map((heading) => ({
+    type: "heading",
+    ...heading
+  }));
+  for (const match of processed.matchAll(
+    /<(p|li)\b([^>]*)>([\s\S]*?)<\/\1>/gi
+  )) {
+    const text = normalizeText(match[3] ?? "");
+    if (!text) continue;
+    const kind = blockKindFromTag(
+      (match[1] ?? "p").toLowerCase(),
+      match[2] ?? ""
+    );
+    events.push({
+      type: "block",
+      index: match.index ?? 0,
+      kind,
+      text,
+      atomic: kind === "faq" || kind === "table_row" || kind === "definition" || kind === "figure"
+    });
+  }
+  events.sort((a, b) => a.index - b.index);
+  const headingPath = [];
+  const blocks = [];
+  const represented = /* @__PURE__ */ new Set();
+  for (const event of events) {
+    if (event.type === "heading") {
+      headingPath.splice(event.level - 1);
+      headingPath[event.level - 1] = event.text;
+      continue;
+    }
+    const normalized = event.text.trim();
+    if (!normalized) continue;
+    represented.add(normalized.toLowerCase());
+    blocks.push({
+      kind: event.kind,
+      text: normalized,
+      headingPath: headingPath.filter(Boolean),
+      boilerplate: false,
+      atomic: event.atomic
+    });
+  }
+  for (const line of visibleLines(processed)) {
+    const key = line.toLowerCase();
+    if (represented.has(key)) continue;
+    if (headings.some((heading) => heading.text.toLowerCase() === key)) continue;
+    if (line.length < 12) continue;
+    represented.add(key);
+    blocks.push({
+      kind: "body",
+      text: line,
+      headingPath: [],
+      boilerplate: false,
+      atomic: false
+    });
+  }
+  return blocks;
+}
+function pageHeadings(html) {
+  const seen = /* @__PURE__ */ new Set();
+  const out = [];
+  for (const heading of extractHeadingRecords(removeNonContentMarkup(html))) {
+    const key = heading.text.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(heading.text);
+  }
+  return out;
+}
+function splitLongText(text, maxChars, overlapChars) {
+  if (text.length <= maxChars) return [text];
+  const chunks = [];
+  let start = 0;
+  while (start < text.length) {
+    let end = Math.min(text.length, start + maxChars);
+    if (end < text.length) {
+      const sentenceBreak = Math.max(
+        text.lastIndexOf(". ", end),
+        text.lastIndexOf("! ", end),
+        text.lastIndexOf("? ", end),
+        text.lastIndexOf("\n", end)
+      );
+      const wordBreak = text.lastIndexOf(" ", end);
+      const candidate = sentenceBreak > start + Math.floor(maxChars * 0.55) ? sentenceBreak + 1 : wordBreak > start + Math.floor(maxChars * 0.55) ? wordBreak : end;
+      end = candidate;
+    }
+    const piece = text.slice(start, end).trim();
+    if (piece) chunks.push(piece);
+    if (end >= text.length) break;
+    start = Math.max(end - overlapChars, start + 1);
+  }
+  return chunks;
+}
+function chunkBlocks(input) {
+  const maxChars = Math.max(
+    400,
+    Math.min(4e3, Math.trunc(input.maxChars ?? DEFAULT_MAX_CHUNK_CHARS))
+  );
+  const overlapChars = Math.max(
+    0,
+    Math.min(
+      Math.floor(maxChars / 3),
+      Math.trunc(input.overlapChars ?? DEFAULT_CHUNK_OVERLAP_CHARS)
+    )
+  );
+  const chunks = [];
+  let ordinal = 0;
+  let pendingText = "";
+  let pendingHeadingPath = [];
+  const emit = (text, headingPath) => {
+    for (const piece of splitLongText(text, maxChars, overlapChars)) {
+      const contentHash = stableContentHash(piece);
+      chunks.push({
+        id: stableChunkId(input.canonicalUrl, ordinal, piece),
+        canonicalUrl: input.canonicalUrl,
+        ...input.title ? { title: input.title } : {},
+        headingPath: [...headingPath],
+        text: piece,
+        ordinal,
+        contentHash
+      });
+      ordinal += 1;
+    }
+  };
+  const flush = () => {
+    if (!pendingText.trim()) return;
+    emit(pendingText.trim(), pendingHeadingPath);
+    pendingText = "";
+    pendingHeadingPath = [];
+  };
+  for (const block of input.blocks) {
+    if (block.boilerplate) continue;
+    if (block.atomic) {
+      flush();
+      emit(block.text, block.headingPath);
+      continue;
+    }
+    const sameHeading = pendingText && pendingHeadingPath.join("\0") === block.headingPath.join("\0");
+    const candidate = sameHeading ? pendingText + "\n" + block.text : block.text;
+    if (!sameHeading) flush();
+    if (sameHeading && candidate.length > maxChars) {
+      flush();
+    }
+    if (!pendingText) {
+      pendingHeadingPath = [...block.headingPath];
+      pendingText = block.text;
+    } else {
+      pendingText += "\n" + block.text;
+    }
+  }
+  flush();
+  return chunks;
+}
+function extractPageInternal(input) {
+  const requested = new URL(input.requestedUrl);
+  const canonical = new URL(input.canonicalUrl ?? input.requestedUrl);
+  const safeCanonical = canonical.toString();
+  const boilerplate = extractBoilerplate(input.html);
+  const mainHtml = boilerplate.cleanedHtml;
+  const contentBlocks = structuredBlocks(mainHtml);
+  const boilerplateBlocks = boilerplate.blocks;
+  const headings = pageHeadings(input.html);
+  const allVisible = [
+    ...boilerplateBlocks.map((block) => block.text),
+    ...headings,
+    ...contentBlocks.map((block) => block.text)
+  ].map((line) => line.trim()).filter(Boolean);
+  const visibleText2 = [...new Set(allVisible)].join("\n");
+  const extracted = extractDraftFromHtml([
+    { url: safeCanonical, html: input.html }
+  ]);
+  const structuredFacts = structuredClone(
+    extracted.facts
+  );
+  const contentHash = stableContentHash(
+    visibleText2 + "\n\0structured\0\n" + stableJson(structuredFacts)
+  );
+  const fetchedAt = input.fetchedAt ?? (/* @__PURE__ */ new Date()).toISOString();
+  const page = {
+    requestedUrl: requested.toString(),
+    canonicalUrl: safeCanonical,
+    ...extractTitle2(input.html) ? { title: extractTitle2(input.html) } : {},
+    headings,
+    visibleText: visibleText2,
+    structuredFacts,
+    contentType: input.contentType ?? "text/html",
+    fetchMode: input.fetchMode ?? "http",
+    contentHash,
+    ...input.discoveredFrom ? { discoveredFrom: input.discoveredFrom } : {},
+    fetchedAt,
+    ...headerValue(input.headers, "etag") ? { etag: headerValue(input.headers, "etag") } : {},
+    ...headerValue(input.headers, "last-modified") ? { lastModified: headerValue(input.headers, "last-modified") } : {}
+  };
+  return {
+    page,
+    contentBlocks,
+    boilerplateBlocks,
+    chunks: chunkBlocks({
+      canonicalUrl: safeCanonical,
+      title: page.title,
+      blocks: contentBlocks
+    })
+  };
+}
+function extractScannerV2Page(input) {
+  return extractPageInternal(input);
+}
+
+// packages/onboarding-ingest/src/scanner-v2-url-policy.ts
+var DEFAULT_MAX_PATH_DEPTH = 16;
+var DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE = 64;
+var DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY = 24;
+var TRACKING_PARAM_NAMES = /* @__PURE__ */ new Set([
+  "dclid",
+  "fbclid",
+  "gclid",
+  "gbraid",
+  "mc_cid",
+  "mc_eid",
+  "msclkid",
+  "twclid",
+  "wbraid",
+  "_ga",
+  "_gl"
+]);
+var SESSION_OR_TOKEN_PARAM = /^(?:sid|session|sessionid|session_id|phpsessid|jsessionid|aspsessionid|token|access_token|auth|auth_token|csrf|csrf_token|nonce)$/i;
+var BLOCKED_PATH_SEGMENTS = /* @__PURE__ */ new Set([
+  "admin",
+  "administrator",
+  "basket",
+  "cart",
+  "checkout",
+  "login",
+  "logout",
+  "my-account",
+  "account",
+  "wp-admin",
+  "wp-login.php"
+]);
+var SEARCH_PATH_SEGMENTS = /* @__PURE__ */ new Set([
+  "search",
+  "search-results",
+  "searchresults"
+]);
+var CALENDAR_QUERY_PARAMS = /* @__PURE__ */ new Set([
+  "calendar",
+  "date",
+  "day",
+  "month",
+  "year"
+]);
+function boundedPathDepth(value) {
+  if (!Number.isFinite(value)) return DEFAULT_MAX_PATH_DEPTH;
+  return Math.max(
+    1,
+    Math.min(DEFAULT_MAX_PATH_DEPTH, Math.trunc(value))
+  );
+}
+function decodedPathSegments(url) {
+  return url.pathname.split("/").filter(Boolean).map((segment) => {
+    try {
+      return decodeURIComponent(segment).toLowerCase();
+    } catch {
+      return segment.toLowerCase();
+    }
+  });
+}
+function isTrackingParam(name) {
+  const lower = name.toLowerCase();
+  return lower.startsWith("utm_") || TRACKING_PARAM_NAMES.has(lower);
+}
+function sortSearchParams(url) {
+  const entries = [...url.searchParams.entries()].sort(([ak, av], [bk, bv]) => {
+    const key = ak.localeCompare(bk, "en", { sensitivity: "variant" });
+    return key || av.localeCompare(bv, "en", { sensitivity: "variant" });
+  });
+  url.search = "";
+  for (const [key, value] of entries) url.searchParams.append(key, value);
+}
+function normalizeScannerV2Url(raw, origin, options = {}) {
+  let parsed;
+  try {
+    parsed = new URL(raw, origin);
+  } catch {
+    return {
+      ok: false,
+      displayUrl: raw.trim() || "invalid-url",
+      reason: "invalid_url",
+      incomplete: false
+    };
+  }
+  parsed.hash = "";
+  if (parsed.protocol !== "https:") {
+    return {
+      ok: false,
+      displayUrl: parsed.toString(),
+      reason: "insecure_scheme",
+      incomplete: false
+    };
+  }
+  if (parsed.origin !== origin.origin) {
+    return {
+      ok: false,
+      displayUrl: parsed.toString(),
+      reason: "cross_origin",
+      incomplete: false
+    };
+  }
+  const allowed = allowPublicHttpsUrl(parsed.toString());
+  if (!allowed.ok) {
+    return {
+      ok: false,
+      displayUrl: parsed.toString(),
+      reason: "non_public_url",
+      incomplete: false
+    };
+  }
+  parsed = new URL(allowed.url.toString());
+  parsed.hash = "";
+  const segments = decodedPathSegments(parsed);
+  const applyContentPolicy = options.applyContentPolicy ?? true;
+  const maxPathDepth = boundedPathDepth(options.maxPathDepth);
+  if (applyContentPolicy && segments.length > maxPathDepth) {
+    return {
+      ok: false,
+      displayUrl: parsed.toString(),
+      reason: "path_depth_limit",
+      incomplete: true
+    };
+  }
+  if (applyContentPolicy) {
+    if (segments.some((segment) => BLOCKED_PATH_SEGMENTS.has(segment))) {
+      return {
+        ok: false,
+        displayUrl: parsed.toString(),
+        reason: "blocked_path",
+        incomplete: false
+      };
+    }
+    if (segments.some((segment) => SEARCH_PATH_SEGMENTS.has(segment))) {
+      return {
+        ok: false,
+        displayUrl: parsed.toString(),
+        reason: "search_endpoint",
+        incomplete: false
+      };
+    }
+    for (const [name] of parsed.searchParams) {
+      if (SESSION_OR_TOKEN_PARAM.test(name)) {
+        return {
+          ok: false,
+          displayUrl: parsed.toString(),
+          reason: "session_or_token_parameter",
+          incomplete: false
+        };
+      }
+    }
+  }
+  const beforeTrackingRemoval = new URL(parsed.toString());
+  sortSearchParams(beforeTrackingRemoval);
+  const strippedTrackingParams = [];
+  for (const name of [...parsed.searchParams.keys()]) {
+    if (!isTrackingParam(name)) continue;
+    strippedTrackingParams.push(name);
+    parsed.searchParams.delete(name);
+  }
+  sortSearchParams(parsed);
+  const aliasUrl = beforeTrackingRemoval.toString();
+  const normalized = parsed.toString();
+  return {
+    ok: true,
+    url: normalized,
+    ...aliasUrl !== normalized ? { aliasUrl } : {},
+    strippedTrackingParams: [...new Set(strippedTrackingParams)].sort()
+  };
+}
+function attributeValue2(tag, name) {
+  const quoted = new RegExp(
+    `\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`,
+    "i"
+  ).exec(tag);
+  if (quoted) return quoted[1] ?? quoted[2] ?? void 0;
+  const bare = new RegExp(`\\b${name}\\s*=\\s*([^\\s>]+)`, "i").exec(tag);
+  return bare?.[1];
+}
+function extractScannerV2CanonicalLink(input) {
+  let page;
+  let origin;
+  try {
+    page = new URL(input.pageUrl);
+    origin = new URL(input.origin);
+  } catch {
+    return null;
+  }
+  for (const match of input.html.matchAll(/<link\b[^>]*>/gi)) {
+    const tag = match[0];
+    const rel = attributeValue2(tag, "rel");
+    if (!rel?.split(/\s+/).some((value) => value.toLowerCase() === "canonical")) {
+      continue;
+    }
+    const href = attributeValue2(tag, "href");
+    if (!href) continue;
+    return normalizeScannerV2Url(href, origin, {
+      maxPathDepth: input.maxPathDepth,
+      applyContentPolicy: true
+    });
+  }
+  return null;
+}
+function calendarFamily(url) {
+  const queryKeys = [...url.searchParams.keys()].map((key) => key.toLowerCase());
+  if (queryKeys.some((key) => CALENDAR_QUERY_PARAMS.has(key))) {
+    const copy2 = new URL(url.toString());
+    for (const key of [...copy2.searchParams.keys()]) {
+      if (CALENDAR_QUERY_PARAMS.has(key.toLowerCase())) {
+        copy2.searchParams.set(key, ":date");
+      }
+    }
+    sortSearchParams(copy2);
+    return copy2.toString();
+  }
+  const segments = url.pathname.split("/").filter(Boolean);
+  let foundYear = false;
+  const normalized = segments.map((segment) => {
+    if (/^(?:19|20|21)\d{2}$/.test(segment)) {
+      foundYear = true;
+      return ":year";
+    }
+    if (foundYear && /^(?:0?[1-9]|1[0-2])$/.test(segment)) return ":month";
+    if (foundYear && /^(?:0?[1-9]|[12]\d|3[01])$/.test(segment)) return ":day";
+    return segment;
+  });
+  if (!foundYear) return null;
+  const copy = new URL(url.toString());
+  copy.pathname = "/" + normalized.join("/");
+  return copy.toString();
+}
+function queryFamily(url) {
+  if ([...url.searchParams.keys()].length === 0) return null;
+  const keys = [...url.searchParams.keys()].map((key) => key.toLowerCase()).sort();
+  return `${url.origin}${url.pathname}?${keys.join("&")}`;
+}
+var ScannerV2FrontierTrapGuard = class {
+  constructor(options = {}) {
+    this.queryFamilies = /* @__PURE__ */ new Map();
+    this.calendarFamilies = /* @__PURE__ */ new Map();
+    const requestedQuery = options.maxQueryVariantsPerSignature;
+    const requestedCalendar = options.maxCalendarVariantsPerFamily;
+    this.maxQueryVariants = Number.isFinite(requestedQuery) ? Math.max(
+      1,
+      Math.min(
+        DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+        Math.trunc(requestedQuery)
+      )
+    ) : DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE;
+    this.maxCalendarVariants = Number.isFinite(requestedCalendar) ? Math.max(
+      1,
+      Math.min(
+        DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+        Math.trunc(requestedCalendar)
+      )
+    ) : DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY;
+  }
+  evaluate(rawUrl) {
+    const url = new URL(rawUrl);
+    const calendar = calendarFamily(url);
+    if (calendar) {
+      let variants = this.calendarFamilies.get(calendar);
+      if (!variants) {
+        variants = /* @__PURE__ */ new Set();
+        this.calendarFamilies.set(calendar, variants);
+      }
+      if (!variants.has(rawUrl) && variants.size >= this.maxCalendarVariants) {
+        return {
+          ok: false,
+          reason: "calendar_variant_limit",
+          incomplete: true
+        };
+      }
+      variants.add(rawUrl);
+    }
+    const query = queryFamily(url);
+    if (query) {
+      let variants = this.queryFamilies.get(query);
+      if (!variants) {
+        variants = /* @__PURE__ */ new Set();
+        this.queryFamilies.set(query, variants);
+      }
+      if (!variants.has(rawUrl) && variants.size >= this.maxQueryVariants) {
+        return {
+          ok: false,
+          reason: "query_variant_limit",
+          incomplete: true
+        };
+      }
+      variants.add(rawUrl);
+    }
+    return { ok: true };
+  }
+};
+
+// packages/onboarding-ingest/src/scanner-v2-discovery.ts
+var DEFAULT_MAX_SITEMAP_DOCUMENTS = 64;
+var DEFAULT_MAX_SITEMAP_DEPTH = 4;
+var DEFAULT_MAX_DISCOVERED_URLS = 1e4;
+var DEFAULT_MAX_HTML_PAGES = 1e4;
+var DEFAULT_MAX_SITEMAP_BYTES = 512 * 1024;
+var DEFAULT_MAX_HTML_BYTES = 2 * 1024 * 1024;
+var DEFAULT_SITEMAP_TIMEOUT_MS = 5e3;
+var DEFAULT_HTML_TIMEOUT_MS = 5e3;
+function boundedInt(value, fallback, minimum, maximum) {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(
+    maximum,
+    Math.max(minimum, Math.trunc(value))
+  );
+}
+function decodeXml(value) {
+  return value.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+}
+function tagText(xml, name) {
+  const match = new RegExp(
+    `<${name}\\b[^>]*>([\\s\\S]*?)<\\/${name}>`,
+    "i"
+  ).exec(xml);
+  const value = match?.[1] ? decodeXml(match[1]).trim() : "";
+  return value || void 0;
+}
+function parseSitemapXml(xml) {
+  const root = /<sitemapindex\b/i.test(xml) ? "sitemapindex" : /<urlset\b/i.test(xml) ? "urlset" : "unknown";
+  if (root === "unknown") return { kind: root, entries: [] };
+  const itemTag = root === "sitemapindex" ? "sitemap" : "url";
+  const items = [
+    ...xml.matchAll(
+      new RegExp(`<${itemTag}\\b[^>]*>([\\s\\S]*?)<\\/${itemTag}>`, "gi")
+    )
+  ];
+  const entries = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const item of items) {
+    const body = item[1] ?? "";
+    const loc = tagText(body, "loc");
+    if (!loc || seen.has(loc)) continue;
+    seen.add(loc);
+    const lastmod = tagText(body, "lastmod");
+    entries.push(lastmod ? { loc, lastmod } : { loc });
+  }
+  return { kind: root, entries };
+}
+function parseRobotsSitemaps(body, baseOrigin) {
+  const out = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const rawLine of body.split(/\r?\n/)) {
+    const line = rawLine.replace(/#.*$/, "").trim();
+    const match = /^sitemap\s*:\s*(\S.*?)\s*$/i.exec(line);
+    if (!match?.[1]) continue;
+    let url;
+    try {
+      url = new URL(match[1], baseOrigin);
+    } catch {
+      continue;
+    }
+    url.hash = "";
+    if (url.protocol !== "https:" || url.origin !== baseOrigin.origin) continue;
+    const allow = allowPublicHttpsUrl(url.toString());
+    if (!allow.ok) continue;
+    const canonical = allow.url.toString();
+    if (!seen.has(canonical)) {
+      seen.add(canonical);
+      out.push(canonical);
+    }
+  }
+  return out;
+}
+function normalizeDiscoveredUrl(raw, origin, options = {}) {
+  const result = normalizeScannerV2Url(raw, origin, {
+    maxPathDepth: options.maxPathDepth,
+    applyContentPolicy: options.applyContentPolicy
+  });
+  return result.ok ? result.url : null;
+}
+var UrlAccumulator = class {
+  constructor(maxUrls) {
+    this.rows = /* @__PURE__ */ new Map();
+    this.limitReached = false;
+    this.droppedByLimit = 0;
+    this.maxUrls = maxUrls;
+  }
+  add(row) {
+    if (this.rows.has(row.url)) return false;
+    if (this.rows.size >= this.maxUrls) {
+      this.limitReached = true;
+      this.droppedByLimit += 1;
+      return false;
+    }
+    this.rows.set(row.url, structuredClone(row));
+    return true;
+  }
+  update(url, patch) {
+    const current = this.rows.get(url);
+    if (!current) return;
+    this.rows.set(url, { ...current, ...structuredClone(patch) });
+  }
+  get(url) {
+    const row = this.rows.get(url);
+    return row ? structuredClone(row) : void 0;
+  }
+  values() {
+    return [...this.rows.values()].map((row) => structuredClone(row));
+  }
+};
+async function fetchRobotsForDiscovery(origin, options) {
+  const url = new URL("/robots.txt", origin);
+  try {
+    const response2 = await fetchPublicHttps(url.toString(), {
+      lookup: options.lookup,
+      get: options.get,
+      timeoutMs: Math.min(
+        options.sitemapTimeoutMs ?? DEFAULT_SITEMAP_TIMEOUT_MS,
+        DEFAULT_PAGE_TIMEOUT_MS
+      ),
+      maxBytes: 64 * 1024,
+      maxRedirects: 2
+    });
+    if (response2.status === 404 || response2.status === 410) {
+      return {
+        body: "",
+        rules: parseRobotsTxt(""),
+        warning: "robots_not_found",
+        incomplete: false
+      };
+    }
+    if (response2.status >= 400) {
+      return {
+        body: "",
+        rules: parseRobotsTxt(""),
+        warning: `robots_http_${response2.status}`,
+        incomplete: true
+      };
+    }
+    return {
+      body: response2.body,
+      rules: parseRobotsTxt(response2.body),
+      source: {
+        url: response2.url.toString(),
+        status: response2.status,
+        bytes: Buffer.byteLength(response2.body, "utf8")
+      },
+      incomplete: false
+    };
+  } catch {
+    return {
+      body: "",
+      rules: parseRobotsTxt(""),
+      warning: "robots_unavailable",
+      incomplete: true
+    };
+  }
+}
+function responseContentType(headers) {
+  return Object.entries(headers).find(
+    ([key]) => key.toLowerCase() === "content-type"
+  )?.[1] ?? "";
+}
+function isHtmlType(contentType2) {
+  return /(?:text\/html|application\/xhtml\+xml)/i.test(contentType2);
+}
+function isPlainTextType(contentType2) {
+  return /^text\/plain\b/i.test(contentType2);
+}
+async function fetchScannerV2DiscoveryPage(url, options) {
+  let firstError;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await fetchPublicHttps(url, {
+        lookup: options.lookup,
+        get: options.get,
+        timeoutMs: options.timeoutMs,
+        maxBytes: options.maxBytes,
+        maxDecompressedBytes: options.maxBytes,
+        acceptCompressed: true,
+        maxRedirects: DEFAULT_MAX_REDIRECTS
+      });
+    } catch (error) {
+      if (!(error instanceof ScanError) || !["timeout", "fetch_failed", "dns_failed"].includes(error.code) || attempt === 1) {
+        throw error;
+      }
+      firstError = error;
+    }
+  }
+  throw firstError;
+}
+function terminalHttpDisposition(status) {
+  if ([401, 403, 404, 410].includes(status)) {
+    return { status: "policy_skipped", reason: `http_${status}` };
+  }
+  return { status: "unresolved", reason: `http_${status}` };
+}
+async function discoverScannerV2Frontier(rawUrl, options = {}) {
+  const initial = allowPublicHttpsUrl(rawUrl);
+  if (!initial.ok) {
+    throw new Error(`scanner_v2_discovery_denied:${initial.reason}`);
+  }
+  const origin = new URL(initial.url.origin);
+  const maxSitemapDocuments = boundedInt(
+    options.maxSitemapDocuments,
+    DEFAULT_MAX_SITEMAP_DOCUMENTS,
+    1,
+    DEFAULT_MAX_SITEMAP_DOCUMENTS
+  );
+  const maxSitemapDepth = boundedInt(
+    options.maxSitemapDepth,
+    DEFAULT_MAX_SITEMAP_DEPTH,
+    0,
+    DEFAULT_MAX_SITEMAP_DEPTH
+  );
+  const maxDiscoveredUrls = boundedInt(
+    options.maxDiscoveredUrls,
+    DEFAULT_MAX_DISCOVERED_URLS,
+    1,
+    DEFAULT_MAX_DISCOVERED_URLS
+  );
+  const maxHtmlPages = boundedInt(
+    options.maxHtmlPages,
+    DEFAULT_MAX_HTML_PAGES,
+    1,
+    DEFAULT_MAX_HTML_PAGES
+  );
+  const maxSitemapBytes = boundedInt(
+    options.maxSitemapBytes,
+    DEFAULT_MAX_SITEMAP_BYTES,
+    1024,
+    DEFAULT_MAX_SITEMAP_BYTES
+  );
+  const maxHtmlBytes = boundedInt(
+    options.maxHtmlBytes,
+    DEFAULT_MAX_HTML_BYTES,
+    1024,
+    DEFAULT_MAX_HTML_BYTES
+  );
+  const sitemapTimeoutMs = boundedInt(
+    options.sitemapTimeoutMs,
+    DEFAULT_SITEMAP_TIMEOUT_MS,
+    250,
+    DEFAULT_SITEMAP_TIMEOUT_MS
+  );
+  const htmlTimeoutMs = boundedInt(
+    options.htmlTimeoutMs,
+    DEFAULT_HTML_TIMEOUT_MS,
+    250,
+    DEFAULT_HTML_TIMEOUT_MS
+  );
+  const maxPathDepth = boundedInt(
+    options.maxPathDepth,
+    DEFAULT_MAX_PATH_DEPTH,
+    1,
+    DEFAULT_MAX_PATH_DEPTH
+  );
+  const maxQueryVariantsPerSignature = boundedInt(
+    options.maxQueryVariantsPerSignature,
+    DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
+    1,
+    DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE
+  );
+  const maxCalendarVariantsPerFamily = boundedInt(
+    options.maxCalendarVariantsPerFamily,
+    DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
+    1,
+    DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY
+  );
+  const warnings = [];
+  const sitemapSources = [];
+  const pageSources = [];
+  const urls = new UrlAccumulator(maxDiscoveredUrls);
+  const trapGuard = new ScannerV2FrontierTrapGuard({
+    maxQueryVariantsPerSignature,
+    maxCalendarVariantsPerFamily
+  });
+  const contentOwnerByHash = /* @__PURE__ */ new Map();
+  let discoveryIncomplete = false;
+  const root = normalizeScannerV2Url(initial.url.toString(), origin, {
+    maxPathDepth,
+    applyContentPolicy: true
+  });
+  if (!root.ok) {
+    throw new Error(`scanner_v2_discovery_policy:${root.reason}`);
+  }
+  if (root.aliasUrl) {
+    urls.add({
+      url: root.aliasUrl,
+      canonicalUrl: root.url,
+      status: "duplicate",
+      discoveryReason: "submitted",
+      reason: "normalized_url_variant"
+    });
+  }
+  urls.add({
+    url: root.url,
+    status: "queued",
+    discoveryReason: "submitted"
+  });
+  trapGuard.evaluate(root.url);
+  const robots = await fetchRobotsForDiscovery(origin, options);
+  if (robots.warning) warnings.push(robots.warning);
+  if (robots.source) sitemapSources.push(robots.source);
+  discoveryIncomplete = discoveryIncomplete || robots.incomplete;
+  function admitPageCandidate(raw, metadata) {
+    const normalized = normalizeScannerV2Url(raw, origin, {
+      maxPathDepth,
+      applyContentPolicy: true
+    });
+    if (!normalized.ok) {
+      urls.add({
+        url: normalized.displayUrl,
+        status: "policy_skipped",
+        discoveryReason: metadata.discoveryReason,
+        ...metadata.discoveredFrom ? { discoveredFrom: metadata.discoveredFrom } : {},
+        ...metadata.sitemapLastModified ? { sitemapLastModified: metadata.sitemapLastModified } : {},
+        reason: normalized.reason
+      });
+      if (normalized.incomplete) {
+        discoveryIncomplete = true;
+        warnings.push(normalized.reason);
+      }
+      return null;
+    }
+    const trap = trapGuard.evaluate(normalized.url);
+    if (!trap.ok) {
+      urls.add({
+        url: normalized.url,
+        status: "policy_skipped",
+        discoveryReason: metadata.discoveryReason,
+        ...metadata.discoveredFrom ? { discoveredFrom: metadata.discoveredFrom } : {},
+        ...metadata.sitemapLastModified ? { sitemapLastModified: metadata.sitemapLastModified } : {},
+        reason: trap.reason
+      });
+      discoveryIncomplete = true;
+      warnings.push(trap.reason);
+      return null;
+    }
+    const added = urls.add({
+      url: normalized.url,
+      status: "queued",
+      discoveryReason: metadata.discoveryReason,
+      ...metadata.discoveredFrom ? { discoveredFrom: metadata.discoveredFrom } : {},
+      ...metadata.sitemapLastModified ? { sitemapLastModified: metadata.sitemapLastModified } : {}
+    });
+    if (normalized.aliasUrl && normalized.aliasUrl !== normalized.url) {
+      urls.add({
+        url: normalized.aliasUrl,
+        canonicalUrl: normalized.url,
+        status: "duplicate",
+        discoveryReason: metadata.discoveryReason,
+        ...metadata.discoveredFrom ? { discoveredFrom: metadata.discoveredFrom } : {},
+        ...metadata.sitemapLastModified ? { sitemapLastModified: metadata.sitemapLastModified } : {},
+        reason: "normalized_url_variant"
+      });
+    }
+    return { url: normalized.url, added };
+  }
+  const declared = parseRobotsSitemaps(robots.body, origin);
+  const sitemapQueue = declared.length > 0 ? declared.map((url) => ({ url, depth: 0, declared: true })) : [{
+    url: new URL("/sitemap.xml", origin).toString(),
+    depth: 0,
+    declared: false
+  }];
+  const sitemapSeen = /* @__PURE__ */ new Set();
+  let sitemapUrlsDiscovered = 0;
+  while (sitemapQueue.length > 0) {
+    const next = sitemapQueue.shift();
+    if (!next) continue;
+    const normalizedSitemap = normalizeDiscoveredUrl(next.url, origin, {
+      maxPathDepth,
+      applyContentPolicy: false
+    });
+    if (!normalizedSitemap) {
+      warnings.push("sitemap_url_rejected");
+      if (next.declared) discoveryIncomplete = true;
+      continue;
+    }
+    if (sitemapSeen.has(normalizedSitemap)) continue;
+    if (next.depth > maxSitemapDepth) {
+      warnings.push("sitemap_depth_limit");
+      discoveryIncomplete = true;
+      continue;
+    }
+    if (sitemapSeen.size >= maxSitemapDocuments) {
+      warnings.push("sitemap_document_limit");
+      discoveryIncomplete = true;
+      break;
+    }
+    sitemapSeen.add(normalizedSitemap);
+    let response2;
+    try {
+      response2 = await fetchPublicHttps(normalizedSitemap, {
+        lookup: options.lookup,
+        get: options.get,
+        timeoutMs: sitemapTimeoutMs,
+        maxBytes: maxSitemapBytes,
+        maxDecompressedBytes: maxSitemapBytes,
+        acceptCompressed: true,
+        maxRedirects: DEFAULT_MAX_REDIRECTS
+      });
+    } catch {
+      warnings.push("sitemap_fetch_failed");
+      discoveryIncomplete = true;
+      continue;
+    }
+    if (response2.status === 404 || response2.status === 410) {
+      if (!next.declared && next.depth === 0 && sitemapSeen.size === 1) {
+        warnings.push("sitemap_not_found");
+      } else {
+        warnings.push(`sitemap_http_${response2.status}`);
+        discoveryIncomplete = true;
+      }
+      continue;
+    }
+    if (response2.status >= 400) {
+      warnings.push(`sitemap_http_${response2.status}`);
+      discoveryIncomplete = true;
+      continue;
+    }
+    const type = responseContentType(response2.headers);
+    if (type && !/(?:xml|text\/plain|application\/octet-stream|application\/gzip|application\/x-gzip)/i.test(type)) {
+      warnings.push("sitemap_content_type_rejected");
+      discoveryIncomplete = true;
+      continue;
+    }
+    const bytes = Buffer.byteLength(response2.body, "utf8");
+    if (bytes > maxSitemapBytes) {
+      warnings.push("sitemap_byte_limit");
+      discoveryIncomplete = true;
+      continue;
+    }
+    sitemapSources.push({
+      url: response2.url.toString(),
+      status: response2.status,
+      bytes
+    });
+    const parsed = parseSitemapXml(response2.body);
+    if (parsed.kind === "unknown") {
+      warnings.push("sitemap_invalid_xml");
+      discoveryIncomplete = true;
+      continue;
+    }
+    if (parsed.kind === "sitemapindex") {
+      for (const entry of parsed.entries) {
+        const normalized = normalizeDiscoveredUrl(entry.loc, origin, {
+          maxPathDepth,
+          applyContentPolicy: false
+        });
+        if (!normalized) {
+          warnings.push("sitemap_child_rejected");
+          discoveryIncomplete = true;
+          continue;
+        }
+        if (next.depth >= maxSitemapDepth) {
+          warnings.push("sitemap_depth_limit");
+          discoveryIncomplete = true;
+          continue;
+        }
+        if (!sitemapSeen.has(normalized)) {
+          sitemapQueue.push({
+            url: normalized,
+            depth: next.depth + 1,
+            declared: true
+          });
+        }
+      }
+      continue;
+    }
+    for (const entry of parsed.entries) {
+      const admitted = admitPageCandidate(entry.loc, {
+        discoveryReason: "sitemap",
+        discoveredFrom: response2.url.toString(),
+        ...entry.lastmod ? { sitemapLastModified: entry.lastmod } : {}
+      });
+      if (!admitted) {
+        warnings.push("sitemap_page_rejected");
+        continue;
+      }
+      if (admitted.added) sitemapUrlsDiscovered += 1;
+    }
+  }
+  if (urls.limitReached) {
+    warnings.push("discovered_url_limit");
+    discoveryIncomplete = true;
+  }
+  const pageQueue = urls.values().filter((row) => row.status === "queued").map((row) => row.url);
+  const pageQueued = new Set(pageQueue);
+  const pageAttempted = /* @__PURE__ */ new Set();
+  let htmlFetchAttempts = 0;
+  let htmlPagesFetched = 0;
+  let htmlLinksDiscovered = 0;
+  while (pageQueue.length > 0) {
+    const pageUrl = pageQueue.shift();
+    if (!pageUrl || pageAttempted.has(pageUrl)) continue;
+    pageAttempted.add(pageUrl);
+    const current = urls.get(pageUrl);
+    if (!current || current.status !== "queued") continue;
+    let parsed;
+    try {
+      parsed = new URL(pageUrl);
+    } catch {
+      urls.update(pageUrl, {
+        status: "unresolved",
+        reason: "invalid_queued_url"
+      });
+      discoveryIncomplete = true;
+      continue;
+    }
+    if (!isPathAllowed(robots.rules, parsed.pathname || "/")) {
+      urls.update(pageUrl, {
+        status: "robots_skipped",
+        reason: "robots_disallow"
+      });
+      continue;
+    }
+    if (htmlFetchAttempts >= maxHtmlPages) {
+      warnings.push("html_page_limit");
+      discoveryIncomplete = true;
+      break;
+    }
+    htmlFetchAttempts += 1;
+    let response2;
+    try {
+      response2 = await fetchScannerV2DiscoveryPage(pageUrl, {
+        lookup: options.lookup,
+        get: options.get,
+        timeoutMs: htmlTimeoutMs,
+        maxBytes: maxHtmlBytes
+      });
+    } catch (error) {
+      urls.update(pageUrl, {
+        status: "unresolved",
+        reason: error instanceof ScanError ? error.code : "fetch_failed"
+      });
+      discoveryIncomplete = true;
+      continue;
+    }
+    if (response2.url.origin !== origin.origin) {
+      urls.update(pageUrl, {
+        status: "policy_skipped",
+        reason: "cross_origin_redirect"
+      });
+      warnings.push("cross_origin_redirect");
+      continue;
+    }
+    if (response2.status >= 400) {
+      const terminal = terminalHttpDisposition(response2.status);
+      urls.update(pageUrl, terminal);
+      if (terminal.status === "unresolved") discoveryIncomplete = true;
+      continue;
+    }
+    const contentType2 = responseContentType(response2.headers);
+    const bytes = Buffer.byteLength(response2.body, "utf8");
+    pageSources.push({
+      url: response2.url.toString(),
+      status: response2.status,
+      bytes
+    });
+    if (!isHtmlType(contentType2) && !isPlainTextType(contentType2)) {
+      urls.update(pageUrl, {
+        status: "policy_skipped",
+        reason: "content_type_not_stage2_html"
+      });
+      continue;
+    }
+    const finalUrlPolicy = normalizeScannerV2Url(
+      response2.url.toString(),
+      origin,
+      {
+        maxPathDepth,
+        applyContentPolicy: true
+      }
+    );
+    if (!finalUrlPolicy.ok) {
+      urls.update(pageUrl, {
+        status: "policy_skipped",
+        reason: finalUrlPolicy.reason
+      });
+      if (finalUrlPolicy.incomplete) {
+        discoveryIncomplete = true;
+        warnings.push(finalUrlPolicy.reason);
+      }
+      continue;
+    }
+    const effectiveUrl = finalUrlPolicy.url;
+    const fetchedAt = (/* @__PURE__ */ new Date()).toISOString();
+    const contentHash = stableContentHash(response2.body);
+    if (effectiveUrl !== pageUrl) {
+      const existingFinal = urls.get(effectiveUrl);
+      if (existingFinal) {
+        urls.update(effectiveUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          fetchedAt,
+          contentHash
+        });
+      } else {
+        urls.add({
+          url: effectiveUrl,
+          status: "fetched",
+          discoveryReason: "canonical",
+          discoveredFrom: pageUrl,
+          canonicalUrl: effectiveUrl,
+          fetchedAt,
+          contentHash
+        });
+      }
+      urls.update(pageUrl, {
+        status: "duplicate",
+        canonicalUrl: effectiveUrl,
+        reason: "redirect_canonical",
+        contentHash,
+        fetchedAt
+      });
+    }
+    let canonicalTarget = effectiveUrl;
+    let canonicalReason = null;
+    if (isHtmlType(contentType2)) {
+      const canonical = extractScannerV2CanonicalLink({
+        html: response2.body,
+        pageUrl: response2.url.toString(),
+        origin: origin.origin,
+        maxPathDepth
+      });
+      if (canonical?.ok && canonical.url !== effectiveUrl) {
+        const admittedCanonical = admitPageCandidate(canonical.url, {
+          discoveryReason: "canonical",
+          discoveredFrom: effectiveUrl
+        });
+        if (admittedCanonical) {
+          canonicalTarget = admittedCanonical.url;
+          canonicalReason = "rel_canonical";
+          if (admittedCanonical.added && !pageQueued.has(admittedCanonical.url)) {
+            pageQueued.add(admittedCanonical.url);
+            pageQueue.push(admittedCanonical.url);
+          }
+        }
+      } else if (canonical && !canonical.ok) {
+        warnings.push("canonical_rejected");
+      }
+    }
+    if (!canonicalReason) {
+      const existingOwner = contentOwnerByHash.get(contentHash);
+      if (existingOwner && existingOwner !== effectiveUrl) {
+        canonicalTarget = existingOwner;
+        canonicalReason = "content_hash_duplicate";
+      } else {
+        contentOwnerByHash.set(contentHash, effectiveUrl);
+      }
+    } else {
+      contentOwnerByHash.set(contentHash, canonicalTarget);
+    }
+    if (canonicalReason) {
+      const existingEffective = urls.get(effectiveUrl);
+      if (existingEffective) {
+        urls.update(effectiveUrl, {
+          status: "duplicate",
+          canonicalUrl: canonicalTarget,
+          reason: canonicalReason,
+          contentHash,
+          fetchedAt
+        });
+      } else {
+        urls.add({
+          url: effectiveUrl,
+          status: "duplicate",
+          discoveryReason: "canonical",
+          discoveredFrom: pageUrl,
+          canonicalUrl: canonicalTarget,
+          reason: canonicalReason,
+          contentHash,
+          fetchedAt
+        });
+      }
+      if (pageUrl !== effectiveUrl) {
+        urls.update(pageUrl, {
+          status: "duplicate",
+          canonicalUrl: canonicalTarget,
+          reason: canonicalReason === "rel_canonical" ? "redirect_then_rel_canonical" : "redirect_then_content_hash_duplicate",
+          contentHash,
+          fetchedAt
+        });
+      }
+    } else {
+      const existingEffective = urls.get(effectiveUrl);
+      if (existingEffective) {
+        urls.update(effectiveUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          contentHash,
+          fetchedAt
+        });
+      }
+      if (pageUrl === effectiveUrl) {
+        urls.update(pageUrl, {
+          status: "fetched",
+          canonicalUrl: effectiveUrl,
+          contentHash,
+          fetchedAt
+        });
+      }
+    }
+    if (!isHtmlType(contentType2)) continue;
+    htmlPagesFetched += 1;
+    if (options.onHtmlPage && !canonicalReason) {
+      try {
+        await options.onHtmlPage({
+          requestedUrl: pageUrl,
+          canonicalUrl: effectiveUrl,
+          html: response2.body,
+          contentType: contentType2 || "text/html",
+          fetchMode: "http",
+          ...current.discoveredFrom ? { discoveredFrom: current.discoveredFrom } : {},
+          fetchedAt,
+          headers: response2.headers
+        });
+      } catch {
+        urls.update(effectiveUrl, {
+          status: "unresolved",
+          canonicalUrl: effectiveUrl,
+          reason: "html_page_consumer_failed",
+          contentHash,
+          fetchedAt
+        });
+        if (pageUrl !== effectiveUrl) {
+          urls.update(pageUrl, {
+            status: "unresolved",
+            canonicalUrl: effectiveUrl,
+            reason: "html_page_consumer_failed",
+            contentHash,
+            fetchedAt
+          });
+        }
+        warnings.push("html_page_consumer_failed");
+        discoveryIncomplete = true;
+      }
+    }
+    const hrefs = extractSameOriginHrefs(response2.body, response2.url);
+    for (const href of hrefs) {
+      const admitted = admitPageCandidate(href, {
+        discoveryReason: "html_link",
+        discoveredFrom: effectiveUrl
+      });
+      if (!admitted?.added) continue;
+      htmlLinksDiscovered += 1;
+      if (!pageQueued.has(admitted.url)) {
+        pageQueued.add(admitted.url);
+        pageQueue.push(admitted.url);
+      }
+    }
+    if (urls.limitReached) {
+      warnings.push("discovered_url_limit");
+      discoveryIncomplete = true;
+      break;
+    }
+  }
+  const stillQueued = urls.values().some((row) => row.status === "queued");
+  if (stillQueued) discoveryIncomplete = true;
+  const requestedState = discoveryIncomplete ? "PARTIAL" : "DISCOVERING";
+  const manifest = buildCrawlManifest({
+    crawlId: "scanner-v2-discovery",
+    origin: origin.origin,
+    requestedState,
+    urls: urls.values()
+  });
+  return {
+    manifest,
+    sitemapSources,
+    pageSources,
+    sitemapDocuments: sitemapSeen.size,
+    sitemapUrlsDiscovered,
+    htmlPagesFetched,
+    htmlLinksDiscovered,
+    urlsDroppedByLimit: urls.droppedByLimit,
+    warnings: [...new Set(warnings)],
+    limitReached: urls.limitReached,
+    incomplete: discoveryIncomplete
+  };
+}
+
+// packages/onboarding-ingest/src/scanner-v2-documents.ts
+var import_node_worker_threads = require("node:worker_threads");
+var DEFAULT_DOCUMENT_FETCH_TIMEOUT_MS = 8e3;
+var MAX_DOCUMENT_FETCH_TIMEOUT_MS = 2e4;
+var DEFAULT_DOCUMENT_PARSE_TIMEOUT_MS = 8e3;
+var MAX_DOCUMENT_PARSE_TIMEOUT_MS = 2e4;
+var DEFAULT_MAX_DOCUMENT_BYTES = 8 * 1024 * 1024;
+var MAX_DOCUMENT_BYTES = 16 * 1024 * 1024;
+var DEFAULT_MAX_DOCUMENT_TEXT_CHARS = 2e6;
+var MAX_DOCUMENT_TEXT_CHARS = 4e6;
+var DEFAULT_MAX_PDF_PAGES = 500;
+var MAX_PDF_PAGES = 1e3;
+var DEFAULT_DOCUMENT_CHUNK_CHARS = 1400;
+var DEFAULT_DOCUMENT_CHUNK_OVERLAP = 120;
+var PDF_WORKER_MAX_OLD_SPACE_MB = 256;
+var PDF_WORKER_MAX_YOUNG_SPACE_MB = 32;
+var PDF_WORKER_STACK_MB = 8;
+var SUPPORTED_EXTENSIONS = /* @__PURE__ */ new Set([".pdf", ".txt", ".csv"]);
+var UNSUPPORTED_TEXT_DOCUMENT_EXTENSIONS = /* @__PURE__ */ new Set([
+  ".doc",
+  ".docx",
+  ".xls",
+  ".xlsx",
+  ".ppt",
+  ".pptx",
+  ".odt",
+  ".ods",
+  ".odp",
+  ".rtf"
+]);
+var OFFICE_MIME_RE = /(?:application\/(?:msword|rtf|vnd\.ms-|vnd\.openxmlformats-officedocument|vnd\.oasis\.opendocument))/i;
+function boundedInt2(value, fallback, minimum, maximum) {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.max(minimum, Math.min(maximum, Math.trunc(value)));
+}
+function contentType(headers) {
+  const value = Object.entries(headers).find(
+    ([key]) => key.toLowerCase() === "content-type"
+  )?.[1];
+  return (value ?? "").split(";", 1)[0].trim().toLowerCase();
+}
+function extension(url) {
+  const match = /\.[a-z0-9]{1,8}$/i.exec(url.pathname);
+  return match?.[0]?.toLowerCase() ?? "";
+}
+function isScannerV2SupportedDocumentUrl(rawUrl) {
+  try {
+    return SUPPORTED_EXTENSIONS.has(extension(new URL(rawUrl)));
+  } catch {
+    return false;
+  }
+}
+function isScannerV2UnsupportedTextDocumentUrl(rawUrl) {
+  try {
+    return UNSUPPORTED_TEXT_DOCUMENT_EXTENSIONS.has(
+      extension(new URL(rawUrl))
+    );
+  } catch {
+    return false;
+  }
+}
+function isScannerV2UnsupportedDocumentContentType(type) {
+  return OFFICE_MIME_RE.test(type);
+}
+function startsWithPdfMagic(bytes) {
+  if (bytes.byteLength < 5) return false;
+  return bytes[0] === 37 && bytes[1] === 80 && bytes[2] === 68 && bytes[3] === 70 && bytes[4] === 45;
+}
+function hasNulByte(bytes) {
+  const sample = bytes.subarray(0, Math.min(bytes.byteLength, 64 * 1024));
+  return sample.includes(0);
+}
+function classifyDocument(input) {
+  const ext = extension(input.url);
+  const type = input.type;
+  if (isScannerV2UnsupportedDocumentContentType(type)) {
+    return { ok: false, reason: "unsupported_document", incomplete: true };
+  }
+  if (UNSUPPORTED_TEXT_DOCUMENT_EXTENSIONS.has(ext)) {
+    return { ok: false, reason: "unsupported_document", incomplete: true };
+  }
+  const pdfClaimed = type === "application/pdf" || ext === ".pdf";
+  if (pdfClaimed) {
+    if (!startsWithPdfMagic(input.bytes)) {
+      return {
+        ok: false,
+        reason: "document_signature_mismatch",
+        incomplete: true
+      };
+    }
+    return { ok: true, kind: "pdf" };
+  }
+  const csvClaimed = type === "text/csv" || type === "application/csv" || ext === ".csv";
+  if (csvClaimed) {
+    if (hasNulByte(input.bytes)) {
+      return {
+        ok: false,
+        reason: "document_binary_text_rejected",
+        incomplete: true
+      };
+    }
+    return { ok: true, kind: "csv" };
+  }
+  const textClaimed = type === "text/plain" || ext === ".txt";
+  if (textClaimed) {
+    if (hasNulByte(input.bytes)) {
+      return {
+        ok: false,
+        reason: "document_binary_text_rejected",
+        incomplete: true
+      };
+    }
+    return { ok: true, kind: "text" };
+  }
+  return { ok: false, reason: "unsupported_document", incomplete: true };
+}
+function cleanText(value) {
+  return value.replace(/\r\n?/g, "\n").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n[ \t]+/g, "\n").replace(/[ \t]{2,}/g, " ").replace(/\n{4,}/g, "\n\n\n").trim();
+}
+function splitText(text, maxChars = DEFAULT_DOCUMENT_CHUNK_CHARS, overlapChars = DEFAULT_DOCUMENT_CHUNK_OVERLAP) {
+  if (text.length <= maxChars) return text ? [text] : [];
+  const out = [];
+  let start = 0;
+  while (start < text.length) {
+    let end = Math.min(text.length, start + maxChars);
+    if (end < text.length) {
+      const newline = text.lastIndexOf("\n", end);
+      const sentence = Math.max(
+        text.lastIndexOf(". ", end),
+        text.lastIndexOf("! ", end),
+        text.lastIndexOf("? ", end)
+      );
+      const word = text.lastIndexOf(" ", end);
+      const floor = start + Math.floor(maxChars * 0.55);
+      if (newline > floor) end = newline;
+      else if (sentence > floor) end = sentence + 1;
+      else if (word > floor) end = word;
+    }
+    const piece = text.slice(start, end).trim();
+    if (piece) out.push(piece);
+    if (end >= text.length) break;
+    start = Math.max(start + 1, end - overlapChars);
+  }
+  return out;
+}
+function chunksForText(input) {
+  const chunks = [];
+  let ordinal = 0;
+  for (const section of input.sections) {
+    for (const piece of splitText(section.text)) {
+      const hash = stableContentHash(piece);
+      chunks.push({
+        id: stableChunkId(input.canonicalUrl, ordinal, piece),
+        canonicalUrl: input.canonicalUrl,
+        ...input.title ? { title: input.title } : {},
+        headingPath: section.heading,
+        text: piece,
+        ordinal,
+        contentHash: hash
+      });
+      ordinal += 1;
+    }
+  }
+  return chunks;
+}
+function titleFromUrl(url) {
+  const name = url.pathname.split("/").filter(Boolean).at(-1);
+  if (!name) return void 0;
+  let decoded = name;
+  try {
+    decoded = decodeURIComponent(name);
+  } catch {
+  }
+  const stripped = decoded.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
+  return stripped || void 0;
+}
+var PDF_WORKER_SOURCE = String.raw`
+const { parentPort, workerData } = require("node:worker_threads");
+
+(async () => {
+  const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  const data = new Uint8Array(workerData.bytes);
+  const loadingTask = getDocument({
+    data,
+    isEvalSupported: false,
+    useWorkerFetch: false,
+    stopAtErrors: true,
+  });
+
+  try {
+    const pdf = await loadingTask.promise;
+    let title;
+    try {
+      const metadata = await pdf.getMetadata();
+      const candidate = metadata && metadata.info && metadata.info.Title;
+      if (typeof candidate === "string" && candidate.trim()) {
+        title = candidate.trim().slice(0, 500);
+      }
+    } catch {}
+
+    const pageLimit = Math.min(pdf.numPages, workerData.maxPages);
+    const pages = [];
+    let totalChars = 0;
+    let truncated = pdf.numPages > pageLimit;
+
+    for (let pageNumber = 1; pageNumber <= pageLimit; pageNumber += 1) {
+      const page = await pdf.getPage(pageNumber);
+      try {
+        const content = await page.getTextContent();
+        const strings = [];
+        for (const item of content.items || []) {
+          if (item && typeof item.str === "string" && item.str.trim()) {
+            strings.push(item.str.trim());
+          }
+        }
+        let text = strings.join(" ").replace(/\s+/g, " ").trim();
+        const remaining = workerData.maxTextChars - totalChars;
+        if (remaining <= 0) {
+          truncated = true;
+          break;
+        }
+        if (text.length > remaining) {
+          text = text.slice(0, remaining);
+          truncated = true;
+        }
+        totalChars += text.length;
+        pages.push({ pageNumber, text });
+        if (truncated) break;
+      } finally {
+        page.cleanup();
+      }
+    }
+
+    parentPort.postMessage({
+      ok: true,
+      title,
+      pages,
+      totalPages: pdf.numPages,
+      truncated,
+    });
+  } finally {
+    await loadingTask.destroy();
+  }
+})().catch((error) => {
+  parentPort.postMessage({
+    ok: false,
+    error:
+      error instanceof Error
+        ? error.message
+        : String(error),
+  });
+});
+`;
+var pdfJsScannerV2Parser = async (bytes, options) => {
+  return await new Promise((resolve, reject) => {
+    const worker = new import_node_worker_threads.Worker(PDF_WORKER_SOURCE, {
+      eval: true,
+      resourceLimits: {
+        maxOldGenerationSizeMb: PDF_WORKER_MAX_OLD_SPACE_MB,
+        maxYoungGenerationSizeMb: PDF_WORKER_MAX_YOUNG_SPACE_MB,
+        stackSizeMb: PDF_WORKER_STACK_MB
+      },
+      workerData: {
+        bytes,
+        maxPages: options.maxPages,
+        maxTextChars: options.maxTextChars
+      }
+    });
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      void worker.terminate();
+      reject(new Error("document_parse_timeout"));
+    }, options.timeoutMs);
+    timer.unref?.();
+    const finish = () => {
+      clearTimeout(timer);
+      void worker.terminate();
+    };
+    worker.once("message", (message) => {
+      if (settled) return;
+      settled = true;
+      finish();
+      if (typeof message === "object" && message !== null && "ok" in message && message.ok === true) {
+        const value = message;
+        resolve({
+          ...value.title ? { title: value.title } : {},
+          pages: Array.isArray(value.pages) ? value.pages : [],
+          totalPages: Number(value.totalPages ?? 0),
+          truncated: value.truncated === true
+        });
+        return;
+      }
+      const detail = typeof message === "object" && message !== null && "error" in message ? String(message.error ?? "") : "";
+      reject(new Error(detail || "document_parse_failed"));
+    });
+    worker.once("error", (error) => {
+      if (settled) return;
+      settled = true;
+      finish();
+      reject(error);
+    });
+    worker.once("exit", (code) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      reject(
+        new Error(
+          code === 0 ? "document_parser_exited_without_result" : `document_parser_exit_${code}`
+        )
+      );
+    });
+  });
+};
+async function withTimeout(promise, timeoutMs) {
+  return await new Promise((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error("document_parse_timeout"));
+    }, timeoutMs);
+    timer.unref?.();
+    promise.then(
+      (value) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
+}
+function failure(url, reason, message, warnings = [], incomplete = true) {
+  return {
+    ok: false,
+    incomplete,
+    url,
+    reason,
+    message,
+    warnings: [...new Set(warnings)]
+  };
+}
+async function ingestScannerV2Document(rawUrl, options) {
+  let origin;
+  try {
+    origin = new URL(options.origin);
+  } catch {
+    return failure(rawUrl, "invalid_origin", "The crawl origin was invalid.");
+  }
+  const policy = normalizeScannerV2Url(rawUrl, origin, {
+    applyContentPolicy: true
+  });
+  if (!policy.ok) {
+    return failure(
+      policy.displayUrl,
+      policy.reason,
+      "The document URL was outside the Scanner V2 public-site policy.",
+      [policy.reason],
+      policy.incomplete
+    );
+  }
+  const fetchTimeoutMs = boundedInt2(
+    options.fetchTimeoutMs,
+    DEFAULT_DOCUMENT_FETCH_TIMEOUT_MS,
+    250,
+    MAX_DOCUMENT_FETCH_TIMEOUT_MS
+  );
+  const parseTimeoutMs = boundedInt2(
+    options.parseTimeoutMs,
+    DEFAULT_DOCUMENT_PARSE_TIMEOUT_MS,
+    250,
+    MAX_DOCUMENT_PARSE_TIMEOUT_MS
+  );
+  const maxBytes = boundedInt2(
+    options.maxBytes,
+    DEFAULT_MAX_DOCUMENT_BYTES,
+    1024,
+    MAX_DOCUMENT_BYTES
+  );
+  const maxTextChars = boundedInt2(
+    options.maxTextChars,
+    DEFAULT_MAX_DOCUMENT_TEXT_CHARS,
+    1024,
+    MAX_DOCUMENT_TEXT_CHARS
+  );
+  const maxPdfPages = boundedInt2(
+    options.maxPdfPages,
+    DEFAULT_MAX_PDF_PAGES,
+    1,
+    MAX_PDF_PAGES
+  );
+  let response2;
+  try {
+    response2 = await fetchPublicHttpsBytes(policy.url, {
+      lookup: options.lookup,
+      get: options.get,
+      timeoutMs: fetchTimeoutMs,
+      maxBytes,
+      maxRedirects: DEFAULT_MAX_REDIRECTS,
+      allowedOrigin: origin.origin
+    });
+  } catch (error) {
+    const reason = typeof error === "object" && error !== null && "code" in error ? String(error.code ?? "fetch_failed") : error instanceof Error ? error.message : "fetch_failed";
+    return failure(
+      policy.url,
+      reason,
+      "The public document could not be fetched safely.",
+      [reason]
+    );
+  }
+  if (response2.status >= 400) {
+    return failure(
+      response2.url.toString(),
+      `document_http_${response2.status}`,
+      "The public document returned an HTTP error.",
+      [`document_http_${response2.status}`]
+    );
+  }
+  const finalPolicy = normalizeScannerV2Url(response2.url.toString(), origin, {
+    applyContentPolicy: true
+  });
+  if (!finalPolicy.ok) {
+    return failure(
+      response2.url.toString(),
+      finalPolicy.reason,
+      "The fetched document resolved outside the Scanner V2 public-site policy.",
+      [finalPolicy.reason],
+      finalPolicy.incomplete
+    );
+  }
+  const type = contentType(response2.headers);
+  const classified = classifyDocument({
+    url: response2.url,
+    type,
+    bytes: response2.body
+  });
+  if (!classified.ok) {
+    return failure(
+      response2.url.toString(),
+      classified.reason,
+      classified.reason === "unsupported_document" ? "This public document format is not supported by Scanner V2 yet." : "The public document did not match its declared text-bearing format.",
+      [classified.reason],
+      classified.incomplete
+    );
+  }
+  const fetchedAt = options.fetchedAt ?? (/* @__PURE__ */ new Date()).toISOString();
+  const source = {
+    url: finalPolicy.url,
+    status: response2.status,
+    bytes: response2.body.byteLength,
+    contentType: type
+  };
+  let title = titleFromUrl(new URL(finalPolicy.url));
+  let visibleText2 = "";
+  let sections = [];
+  let complete = true;
+  const warnings = [];
+  if (classified.kind === "pdf") {
+    let parsed;
+    try {
+      parsed = await withTimeout(
+        (options.pdfParser ?? pdfJsScannerV2Parser)(
+          response2.body,
+          {
+            timeoutMs: parseTimeoutMs,
+            maxPages: maxPdfPages,
+            maxTextChars
+          }
+        ),
+        parseTimeoutMs
+      );
+    } catch (error) {
+      const reason = error instanceof Error && /timeout/i.test(error.message) ? "document_parse_timeout" : "document_parse_failed";
+      return failure(
+        finalPolicy.url,
+        reason,
+        "The PDF could not be parsed within the Scanner V2 safety boundary.",
+        [reason]
+      );
+    }
+    if (parsed.title) title = parsed.title;
+    sections = parsed.pages.map((page2) => ({
+      heading: ["PDF", `Page ${page2.pageNumber}`],
+      text: cleanText(page2.text)
+    })).filter((page2) => page2.text);
+    visibleText2 = sections.map((page2) => `${page2.heading.at(-1)}
+${page2.text}`).join("\n\n");
+    if (parsed.truncated) {
+      complete = false;
+      warnings.push("document_limit_reached");
+    }
+  } else {
+    const decoded = cleanText(new TextDecoder("utf-8").decode(response2.body));
+    if (decoded.length > maxTextChars) {
+      visibleText2 = decoded.slice(0, maxTextChars);
+      complete = false;
+      warnings.push("document_limit_reached");
+    } else {
+      visibleText2 = decoded;
+    }
+    sections = [
+      {
+        heading: [classified.kind === "csv" ? "CSV document" : "Text document"],
+        text: visibleText2
+      }
+    ];
+  }
+  if (!visibleText2.trim()) {
+    return failure(
+      finalPolicy.url,
+      "document_empty_text",
+      "The public document contained no extractable text.",
+      ["document_empty_text"]
+    );
+  }
+  const contentHash = stableContentHash(visibleText2);
+  const page = {
+    requestedUrl: policy.url,
+    canonicalUrl: finalPolicy.url,
+    ...title ? { title } : {},
+    headings: sections.map((section) => section.heading.at(-1) ?? "").filter(Boolean),
+    visibleText: visibleText2,
+    structuredFacts: {},
+    contentType: type || (classified.kind === "pdf" ? "application/pdf" : classified.kind === "csv" ? "text/csv" : "text/plain"),
+    fetchMode: "document",
+    contentHash,
+    ...options.discoveredFrom ? { discoveredFrom: options.discoveredFrom } : {},
+    fetchedAt,
+    ...response2.headers.etag ? { etag: response2.headers.etag } : {},
+    ...response2.headers["last-modified"] ? { lastModified: response2.headers["last-modified"] } : {}
+  };
+  const chunks = chunksForText({
+    canonicalUrl: page.canonicalUrl,
+    ...title ? { title } : {},
+    sections
+  });
+  return {
+    ok: true,
+    complete,
+    kind: classified.kind,
+    source,
+    page,
+    chunks,
+    warnings
+  };
+}
+async function ingestScannerV2ManifestDocuments(manifest, options = {}) {
+  const rows = manifest.urls.map((row) => structuredClone(row));
+  const pages = [];
+  const chunks = [];
+  const sources = [];
+  const warnings = [];
+  let attempted = 0;
+  let succeeded = 0;
+  let incomplete = manifest.state === "PARTIAL" || manifest.unresolved > 0;
+  const replaceRow = (url, patch) => {
+    const index = rows.findIndex((row) => row.url === url);
+    if (index < 0) return;
+    rows[index] = { ...rows[index], ...structuredClone(patch) };
+  };
+  for (const row of rows) {
+    if (isScannerV2UnsupportedTextDocumentUrl(row.url)) {
+      attempted += 1;
+      incomplete = true;
+      warnings.push("unsupported_document");
+      replaceRow(row.url, {
+        status: "unresolved",
+        reason: "unsupported_document"
+      });
+      continue;
+    }
+    if (!isScannerV2SupportedDocumentUrl(row.url)) continue;
+    attempted += 1;
+    const result = await ingestScannerV2Document(row.url, {
+      origin: manifest.origin,
+      ...options,
+      ...row.discoveredFrom ? { discoveredFrom: row.discoveredFrom } : {}
+    });
+    if (!result.ok) {
+      incomplete = incomplete || result.incomplete;
+      warnings.push(...result.warnings, result.reason);
+      replaceRow(row.url, {
+        status: result.incomplete ? "unresolved" : "policy_skipped",
+        reason: result.reason
+      });
+      continue;
+    }
+    succeeded += 1;
+    pages.push(result.page);
+    chunks.push(...result.chunks);
+    sources.push(result.source);
+    warnings.push(...result.warnings);
+    if (!result.complete) {
+      incomplete = true;
+      replaceRow(row.url, {
+        status: "unresolved",
+        canonicalUrl: result.page.canonicalUrl,
+        reason: "document_limit_reached",
+        contentHash: result.page.contentHash,
+        fetchedAt: result.page.fetchedAt
+      });
+      continue;
+    }
+    replaceRow(row.url, {
+      status: "fetched",
+      canonicalUrl: result.page.canonicalUrl,
+      reason: void 0,
+      contentHash: result.page.contentHash,
+      fetchedAt: result.page.fetchedAt
+    });
+  }
+  const requestedState = incomplete ? "PARTIAL" : manifest.state === "COMPLETE" ? "COMPLETE" : manifest.state;
+  return {
+    manifest: buildCrawlManifest({
+      crawlId: manifest.crawlId,
+      origin: manifest.origin,
+      requestedState,
+      urls: rows
+    }),
+    pages,
+    chunks,
+    sources,
+    attempted,
+    succeeded,
+    warnings: [...new Set(warnings)],
+    incomplete
+  };
+}
+
+// packages/onboarding-ingest/src/scanner-v2-renderer.ts
+var DEFAULT_RENDER_MAX_DOM_BYTES = 512 * 1024;
+var MAX_RENDER_DOM_BYTES = 1024 * 1024;
+var DEFAULT_RENDER_MAX_TOTAL_BYTES = 4 * 1024 * 1024;
+var MAX_RENDER_TOTAL_BYTES = 8 * 1024 * 1024;
+var DEFAULT_RENDER_MAX_RESOURCE_BYTES = 1024 * 1024;
+function visibleText(html) {
+  return html.replace(/<!--([\s\S]*?)-->/g, " ").replace(/<script\b[\s\S]*?<\/script>/gi, " ").replace(/<style\b[\s\S]*?<\/style>/gi, " ").replace(/<noscript\b[\s\S]*?<\/noscript>/gi, " ").replace(/<template\b[\s\S]*?<\/template>/gi, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/\s+/g, " ").trim();
+}
+function decideScannerV2RenderEscalation(input) {
+  const text = visibleText(input.rawHtml);
+  const scripts = [...input.rawHtml.matchAll(/<script\b[^>]*>/gi)].length;
+  const meaningfulBlocks = [
+    ...input.rawHtml.matchAll(
+      /<(?:p|li|article|section|table|details|address)\b[^>]*>[\s\S]*?<\/(?:p|li|article|section|table|details|address)>/gi
+    )
+  ].filter((match) => visibleText(match[0]).length >= 40).length;
+  const hasAppRoot = /<(?:div|main)\b[^>]*(?:id|data-app|data-reactroot)=["'][^"']*(?:root|app|application)[^"']*["'][^>]*>\s*<\/(?:div|main)>/i.test(
+    input.rawHtml
+  ) || /<div\b[^>]*id=["'](?:root|app|__next)["'][^>]*>\s*<\/div>/i.test(
+    input.rawHtml
+  );
+  if (scripts > 0 && hasAppRoot && text.length < 400) {
+    return { render: true, reason: "app_shell" };
+  }
+  if (scripts > 0 && text.length < 180 && meaningfulBlocks === 0) {
+    return { render: true, reason: "thin_html" };
+  }
+  if (Number.isFinite(input.extractedVisibleTextChars) && input.extractedVisibleTextChars === 0 && scripts > 0) {
+    return { render: true, reason: "extractor_empty" };
+  }
+  return { render: false, reason: "raw_html_sufficient" };
+}
+
+// packages/onboarding-ingest/src/scanner-v2-scan.ts
+var V2_LIVE_MAX_HTML_PAGES = 250;
+var V2_LIVE_MAX_DISCOVERED_URLS = 2500;
+var V2_LIVE_MAX_SITEMAP_DOCUMENTS = 32;
+var V2_SUMMARY_MAX_PAGES = 128;
+var V2_SUMMARY_MAX_HTML_BYTES = 32 * 1024 * 1024;
+var V2_RESPONSE_MAX_KNOWLEDGE_CHARS = 45e4;
+var V2_RESPONSE_MAX_KNOWLEDGE_CHUNKS = 300;
+function boundedInt3(value, fallback, minimum, maximum) {
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(maximum, Math.max(minimum, Math.trunc(value)));
+}
+function boundedKnowledge(chunks, maxChars, maxChunks) {
+  const out = [];
+  const seen = /* @__PURE__ */ new Set();
+  let chars = 0;
+  for (const chunk of chunks) {
+    if (out.length >= maxChunks || chars >= maxChars) break;
+    if (seen.has(chunk.id)) continue;
+    const remaining = maxChars - chars;
+    if (remaining < 80) break;
+    const text = chunk.text.trim().slice(0, remaining);
+    if (!text) continue;
+    seen.add(chunk.id);
+    out.push({
+      url: chunk.canonicalUrl,
+      ...chunk.title ? { title: chunk.title } : {},
+      headingPath: [...chunk.headingPath],
+      text,
+      contentHash: chunk.contentHash
+    });
+    chars += text.length;
+  }
+  return out;
+}
+async function recoverReaderPage(page, options) {
+  const readerUrl = `${READER_FALLBACK_ORIGIN}/${page.requestedUrl}`;
+  let lastReason = "reader_fetch_failed";
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const response2 = await fetchPublicHttps(readerUrl, {
+      lookup: options.readerLookup,
+      get: options.readerGet,
+      timeoutMs: READER_FALLBACK_TIMEOUT_MS,
+      maxBytes: READER_FALLBACK_MAX_BYTES,
+      maxRedirects: 2,
+      headers: {
+        Accept: "text/html",
+        "X-Respond-With": "html",
+        "X-No-Cache": "true"
+      }
+    });
+    if (response2.status >= 400) {
+      lastReason = `reader_http_${response2.status}`;
+      break;
+    }
+    if (!/<(?:html|head|body)\b/i.test(response2.body)) {
+      lastReason = "reader_non_html";
+      break;
+    }
+    if (isReaderChallengePage(response2.body)) {
+      lastReason = "reader_challenge_rejected";
+      if (attempt === 0) continue;
+      break;
+    }
+    return {
+      ...page,
+      html: response2.body,
+      fetchMode: "reader"
+    };
+  }
+  throw new Error(lastReason);
+}
+async function runScannerV2Scan(rawUrl, options = {}) {
+  const enabled = options.enabled ?? isWebIngestEnabled();
+  const v2Enabled = options.scannerV2Enabled ?? isScannerV2Enabled();
+  if (!enabled || !v2Enabled) {
+    return {
+      ok: false,
+      error: "scan_disabled",
+      message: "Scanner V2 is disabled. The Scanner V1 rollback path remains available.",
+      warnings: ["scan_disabled"]
+    };
+  }
+  const allow = allowPublicHttpsUrl(rawUrl);
+  if (!allow.ok) {
+    return {
+      ok: false,
+      error: allow.reason,
+      message: ssrfMessage(allow.reason),
+      warnings: ["ssrf_denied"]
+    };
+  }
+  const maxSummaryPages = boundedInt3(
+    options.maxSummaryPages,
+    V2_SUMMARY_MAX_PAGES,
+    1,
+    V2_SUMMARY_MAX_PAGES
+  );
+  const maxSummaryHtmlBytes = boundedInt3(
+    options.maxSummaryHtmlBytes,
+    V2_SUMMARY_MAX_HTML_BYTES,
+    1024,
+    V2_SUMMARY_MAX_HTML_BYTES
+  );
+  const maxKnowledgeChars = boundedInt3(
+    options.maxKnowledgeChars,
+    V2_RESPONSE_MAX_KNOWLEDGE_CHARS,
+    1024,
+    V2_RESPONSE_MAX_KNOWLEDGE_CHARS
+  );
+  const maxKnowledgeChunks = boundedInt3(
+    options.maxKnowledgeChunks,
+    V2_RESPONSE_MAX_KNOWLEDGE_CHUNKS,
+    1,
+    V2_RESPONSE_MAX_KNOWLEDGE_CHUNKS
+  );
+  const summaryPages = [];
+  const corpusChunks = [];
+  let summaryBytes = 0;
+  let summaryTruncated = false;
+  const adapterWarnings = [];
+  const readerFallbackEnabled = options.readerFallback ?? (!options.lookup && !options.get);
+  const consumePage = async (page) => {
+    let sourcePage = page;
+    const renderDecision = decideScannerV2RenderEscalation({
+      rawHtml: page.html
+    });
+    if (renderDecision.render) {
+      if (!readerFallbackEnabled) {
+        adapterWarnings.push("scanner_v2_render_required");
+        throw new Error("scanner_v2_render_required");
+      }
+      try {
+        sourcePage = await recoverReaderPage(page, options);
+        adapterWarnings.push("reader_fallback_used");
+      } catch (error) {
+        adapterWarnings.push(
+          error instanceof Error && error.message ? error.message : "reader_fetch_failed"
+        );
+        throw error;
+      }
+    }
+    const extracted2 = extractScannerV2Page(sourcePage);
+    corpusChunks.push(...extracted2.chunks);
+    const bytes = Buffer.byteLength(sourcePage.html, "utf8");
+    if (summaryPages.length < maxSummaryPages && summaryBytes + bytes <= maxSummaryHtmlBytes) {
+      summaryPages.push({
+        url: sourcePage.canonicalUrl ?? sourcePage.requestedUrl,
+        html: sourcePage.html
+      });
+      summaryBytes += bytes;
+    } else {
+      summaryTruncated = true;
+    }
+  };
+  const discovery = await discoverScannerV2Frontier(allow.url.toString(), {
+    ...options,
+    maxHtmlPages: Math.min(
+      options.maxHtmlPages ?? V2_LIVE_MAX_HTML_PAGES,
+      V2_LIVE_MAX_HTML_PAGES
+    ),
+    maxDiscoveredUrls: Math.min(
+      options.maxDiscoveredUrls ?? V2_LIVE_MAX_DISCOVERED_URLS,
+      V2_LIVE_MAX_DISCOVERED_URLS
+    ),
+    maxSitemapDocuments: Math.min(
+      options.maxSitemapDocuments ?? V2_LIVE_MAX_SITEMAP_DOCUMENTS,
+      V2_LIVE_MAX_SITEMAP_DOCUMENTS
+    ),
+    onHtmlPage: consumePage
+  });
+  const documents = await ingestScannerV2ManifestDocuments(
+    discovery.manifest,
+    options.documentOptions ?? {}
+  );
+  corpusChunks.push(...documents.chunks);
+  const extracted = extractDraftFromHtml(summaryPages);
+  const warnings = [
+    ...adapterWarnings,
+    ...discovery.warnings,
+    ...documents.warnings,
+    ...extracted.warnings
+  ];
+  const partial = discovery.incomplete || documents.incomplete;
+  if (partial) warnings.push("scanner_v2_partial");
+  if (summaryTruncated) warnings.push("scanner_v2_summary_truncated");
+  const knowledge = boundedKnowledge(
+    corpusChunks,
+    maxKnowledgeChars,
+    maxKnowledgeChunks
+  );
+  if (knowledge.length < corpusChunks.length) {
+    warnings.push("scanner_v2_response_knowledge_truncated");
+  }
+  const facts = {
+    ...extracted.facts,
+    website: extracted.facts.website ?? allow.url.toString()
+  };
+  const factMeta = {
+    ...extracted.factMeta,
+    website: extracted.factMeta.website ?? { confidence: "high", source: "fetched_url" }
+  };
+  const scannerV2 = {
+    state: partial ? "PARTIAL" : "COMPLETE",
+    discovered: documents.manifest.discovered,
+    fetched: documents.manifest.fetched,
+    unresolved: documents.manifest.unresolved,
+    knowledgeChunks: knowledge.length
+  };
+  if (summaryPages.length === 0 && knowledge.length === 0 && Object.keys(extracted.draft).length === 0) {
+    return {
+      ok: false,
+      error: "fetch_failed",
+      message: "No usable public website content could be indexed. No crawl results were invented.",
+      warnings: [...new Set(warnings.length ? warnings : ["no_pages_fetched"])]
+    };
+  }
+  return {
+    ok: true,
+    untrusted: true,
+    draft: extracted.draft,
+    warnings: [...new Set(warnings)],
+    sources: [
+      ...discovery.pageSources,
+      ...documents.sources.map((source) => ({
+        url: source.url,
+        status: source.status,
+        bytes: source.bytes
+      }))
+    ],
+    ...Object.keys(facts).length ? { facts } : {},
+    ...Object.keys(factMeta).length ? { factMeta } : {},
+    ...Object.keys(extracted.fieldMeta).length ? { fieldMeta: extracted.fieldMeta } : {},
+    ...knowledge.length ? { knowledge } : {},
+    scannerV2
+  };
+}
+
 // packages/onboarding-ingest/packages/website/scan/index.ts
 var RATE_WINDOW_MS = 6e4;
 var RATE_MAX = 20;
@@ -2142,7 +4855,10 @@ async function main(event = {}) {
     );
   }
   try {
-    const result = await runScan(url, { enabled: true });
+    const result = isScannerV2Enabled() ? await runScannerV2Scan(url, {
+      enabled: true,
+      scannerV2Enabled: true
+    }) : await runScan(url, { enabled: true });
     return response(statusFor(result), result, origin);
   } catch {
     return response(
