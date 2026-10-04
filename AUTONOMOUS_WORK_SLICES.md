@@ -81,7 +81,8 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: verified by test suite during CI run.
 
 ## MOSWEB-S008 — Exact deployed-SHA freeze
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S007 PASS
 - Outcome: complete remaining Stage 12 full gates, exact deployed SHA readback and freeze evidence.
 - Acceptance: V2 canary is proven stable before changing rollback assumptions; golden line untouched.
+- Evidence: release.json SHA matches HEAD 38727b087b9cf500513a421c0a9a20c88c304926
