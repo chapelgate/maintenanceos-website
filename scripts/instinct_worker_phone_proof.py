@@ -13,6 +13,7 @@ import os
 import time
 
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 
 
 def token_ref(value: str) -> str:
@@ -47,23 +48,33 @@ def main() -> int:
     call = None
     final_status = ""
     restored = False
+    provider_error = None
     try:
         exact.update(voice_url="https://demo.twilio.com/docs/voice.xml", voice_method="GET")
-        call = client.calls.create(
-            to=target,
-            from_=source,
-            url="https://demo.twilio.com/docs/voice.xml",
-            method="GET",
-            timeout=20,
-        )
+        try:
+            call = client.calls.create(
+                to=target,
+                from_=source,
+                url="https://demo.twilio.com/docs/voice.xml",
+                method="GET",
+                timeout=20,
+            )
+        except TwilioRestException as exc:
+            provider_error = {"type": "TwilioRestException", "status": exc.status, "code": exc.code}
+        except Exception as exc:
+            provider_error = {"type": exc.__class__.__name__}
+        if call is None:
+            return_code = 5
+        else:
+            return_code = 0
         deadline = time.time() + 70
-        while time.time() < deadline:
+        while call is not None and time.time() < deadline:
             current = client.calls(call.sid).fetch()
             final_status = (current.status or "").lower()
             if final_status in {"completed", "busy", "failed", "no-answer", "canceled"}:
                 break
             time.sleep(2)
-        if final_status not in {"completed", "busy", "failed", "no-answer", "canceled"}:
+        if call is not None and final_status not in {"completed", "busy", "failed", "no-answer", "canceled"}:
             try:
                 client.calls(call.sid).update(status="completed")
             except Exception:
@@ -89,8 +100,9 @@ def main() -> int:
         "render_used": False,
         "golden_line_touched": False,
         "secret_values_logged": False,
+        "provider_error": provider_error,
     }, sort_keys=True))
-    return 0 if passed else 1
+    return 0 if passed else (return_code if provider_error else 1)
 
 
 if __name__ == "__main__":
