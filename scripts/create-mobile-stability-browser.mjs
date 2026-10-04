@@ -50,6 +50,13 @@ function serveExport() {
         },
         warnings: ["hours_not_found", "untrusted_crawl_text"],
         sources: [{ url: "https://alleygates.co.uk/", status: 200, bytes: 90928 }],
+        knowledge: [{
+          url: "https://alleygates.co.uk/alley-gate-installation/",
+          title: "Heritage alley gate installation",
+          headingPath: ["Installation lead time"],
+          text: "Heritage alley gate installation normally takes six weeks after the confirmed survey.",
+          contentHash: "deep-mobile-v2-acceptance",
+        }],
         facts: {
           website: "https://alleygates.co.uk/",
           businessName: "Alley Gates",
@@ -280,7 +287,7 @@ try {
         start() {
           setTimeout(() => {
             this.onresult?.({
-              results: [[{ transcript: "What services do you offer?" }]],
+              results: [[{ transcript: "How long does a heritage alley gate installation take?" }]],
             });
             this.onend?.();
           }, 20);
@@ -371,13 +378,12 @@ try {
     return true;
   })()`), true);
 
-  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("What services do you offer?")`);
-  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("Alley Gate Installation")`);
-  await waitFor(cdp, `window.__spokenReplies.some((text) => text.includes("Alley Gate Installation"))`);
+  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("How long does a heritage alley gate installation take?")`);
+  await waitFor(cdp, `document.querySelector("[data-demo-transcript]")?.innerText.includes("six weeks")`);
+  await waitFor(cdp, `window.__spokenReplies.some((text) => text.includes("six weeks"))`);
   const transcript = await evalValue(cdp, `document.querySelector("[data-demo-transcript]")?.innerText || ""`);
-  assert.match(transcript, /What services do you offer\?/);
-  assert.match(transcript, /Alley Gate Installation/);
-  assert.match(transcript, /CCTV/);
+  assert.match(transcript, /How long does a heritage alley gate installation take\?/);
+  assert.match(transcript, /six weeks/i);
   assert.equal(leadRequests(cdp).length, 0, "interactive voice preview must remain independent of lead/email submission");
   assert.equal(await evalValue(cdp, `Boolean(document.querySelector('[data-create-submit-state="success"]'))`), false);
 
@@ -392,9 +398,9 @@ try {
     primaryAction: "Try your receptionist",
     websiteLearning: scanRequests(cdp).length === 1,
     voiceCall: true,
-    callerQuestion: "What services do you offer?",
-    packAwareReply: /Alley Gate Installation/.test(transcript) && /CCTV/.test(transcript),
-    spokenReply: await evalValue(cdp, `window.__spokenReplies.some((text) => text.includes("Alley Gate Installation"))`),
+    callerQuestion: "How long does a heritage alley gate installation take?",
+    packAwareReply: /six weeks/i.test(transcript),
+    spokenReply: await evalValue(cdp, `window.__spokenReplies.some((text) => text.includes("six weeks"))`),
     leadRequestsBeforeOptionalSave: leadRequests(cdp).length,
     runtimeExceptions: exceptions.length,
   }));
