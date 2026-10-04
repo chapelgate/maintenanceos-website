@@ -74,13 +74,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS — deterministic real-Playwright acceptance proved lazy-loaded text and open Shadow DOM text reached the normal extracted corpus and BM25 retrieval; same-origin iframe and Shadow DOM links re-entered the validated frontier; 2 observed requests, 0 blocked-request escapes.
 
 ## MOSWEB-S005C — Stage 12 document/deep-knowledge fixture
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S005B PASS
 - Outcome: prove linked PDF/TXT/CSV and deep-page facts are retrievable with exact source provenance.
-- Acceptance: document ingestion + retrieval + grounded-answer tests PASS; unsupported document/fact remains PARTIAL/not_found.
+- Acceptance: PASS on main SHA `46d186f547ee7ed752cc4cb0eeef2a8c1d5c5d04` — 5/5 focused tests passed for TXT, CSV, PDF-only grounded facts, 10 deep-site source-backed questions and honest unsupported-question not_found.
 
 ## MOSWEB-S006A — V1 compatibility regression
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S005C PASS
 - Outcome: prove the existing V1 production compatibility path remains unchanged before canaries.
 - Acceptance: V1 scan/regression tests PASS; Scanner V2 remains feature-gated; no telephony change.
