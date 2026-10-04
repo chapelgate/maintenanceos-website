@@ -92,13 +92,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on merged main SHA `dfceeba397703f294944850937109e7c431112ce`. Discovery accounted for 55 URLs: 18 fetched, 29 policy-skipped, 8 unresolved, 0 queued; state remained honestly PARTIAL because robots retrieval was unavailable and some sitemap URLs were rejected. Five real deep questions passed with exact non-homepage sources (delivery duration, £22 key price, Wirral landlord key responsibility, fencing styles, returns policy); unknown Mars question returned not_found. Canary exposed and closed three bounded extractive-ranking defects, each with full-suite regression coverage.
 
 ## MOSWEB-S006C — Express Gas real-site canary
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S006B PASS
 - Outcome: run the same bounded read-only V2 canary against expressgasdelivery.com.
-- Acceptance: same evidence contract as MOSWEB-S006B.
+- Acceptance: PASS on merged main SHA `b58179390531623af5a7073e659f7ab61b6ef140`. Discovery accounted for 17 URLs: 15 unique rendered pages fetched, 1 rel-canonical duplicate, 1 blocked cart path, 0 unresolved, 0 queued, no warnings. The canary reproduced and closed the app-shell-before-dedup integration defect and one heading-aware answer-ranking defect. Five source-backed deep questions passed (18kg propane use, 70/30 beer gas, short-term heater hire, McGreal's products, Manhattan heater clearance); unsupported diesel-engine question returned not_found.
 
 ## MOSWEB-S006D — Forum Housing real-site canary
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S006C PASS
 - Outcome: run the same bounded read-only V2 canary against forumhousing.co.uk.
 - Acceptance: same evidence contract as MOSWEB-S006B, including the previously difficult site path.
