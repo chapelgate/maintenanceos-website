@@ -1,6 +1,12 @@
 import { extractDraftFromHtml } from "./extract.ts";
-import { ssrfMessage } from "./fetch-safe.ts";
-import { isWebIngestEnabled } from "./scan.ts";
+import { fetchPublicHttps, ssrfMessage } from "./fetch-safe.ts";
+import {
+  isReaderChallengePage,
+  isWebIngestEnabled,
+  READER_FALLBACK_MAX_BYTES,
+  READER_FALLBACK_ORIGIN,
+  READER_FALLBACK_TIMEOUT_MS,
+} from "./scan.ts";
 import { allowPublicHttpsUrl } from "./ssrf.ts";
 import {
   extractScannerV2Page,
@@ -15,7 +21,10 @@ import {
   type ScannerV2DocumentBatchOptions,
 } from "./scanner-v2-documents.ts";
 import { isScannerV2Enabled } from "./scanner-v2-foundation.ts";
+import { decideScannerV2RenderEscalation } from "./scanner-v2-renderer.ts";
 import type {
+  HttpGetFn,
+  LookupFn,
   ScanKnowledgeChunk,
   ScanResult,
   ScannerV2ScanSummary,
@@ -40,6 +49,10 @@ export type RunScannerV2ScanOptions = Omit<
   maxSummaryHtmlBytes?: number;
   maxKnowledgeChars?: number;
   maxKnowledgeChunks?: number;
+  /** Reuse the existing public reader only when raw HTML is a thin/app shell. */
+  readerFallback?: boolean;
+  readerLookup?: LookupFn;
+  readerGet?: HttpGetFn;
 };
 
 function boundedInt(
@@ -87,6 +100,52 @@ function boundedKnowledge(
   }
 
   return out;
+}
+
+async function recoverReaderPage(
+  page: ScannerV2PageInput,
+  options: Pick<
+    RunScannerV2ScanOptions,
+    "readerLookup" | "readerGet"
+  >,
+): Promise<ScannerV2PageInput> {
+  const readerUrl = `${READER_FALLBACK_ORIGIN}/${page.requestedUrl}`;
+  let lastReason = "reader_fetch_failed";
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const response = await fetchPublicHttps(readerUrl, {
+      lookup: options.readerLookup,
+      get: options.readerGet,
+      timeoutMs: READER_FALLBACK_TIMEOUT_MS,
+      maxBytes: READER_FALLBACK_MAX_BYTES,
+      maxRedirects: 2,
+      headers: {
+        Accept: "text/html",
+        "X-Respond-With": "html",
+        "X-No-Cache": "true",
+      },
+    });
+    if (response.status >= 400) {
+      lastReason = `reader_http_${response.status}`;
+      break;
+    }
+    if (!/<(?:html|head|body)\b/i.test(response.body)) {
+      lastReason = "reader_non_html";
+      break;
+    }
+    if (isReaderChallengePage(response.body)) {
+      lastReason = "reader_challenge_rejected";
+      if (attempt === 0) continue;
+      break;
+    }
+    return {
+      ...page,
+      html: response.body,
+      fetchMode: "reader",
+    };
+  }
+
+  throw new Error(lastReason);
 }
 
 export async function runScannerV2Scan(
@@ -143,19 +202,44 @@ export async function runScannerV2Scan(
   const corpusChunks: ReturnType<typeof extractScannerV2Page>["chunks"] = [];
   let summaryBytes = 0;
   let summaryTruncated = false;
+  const adapterWarnings: string[] = [];
+  const readerFallbackEnabled =
+    options.readerFallback ?? (!options.lookup && !options.get);
 
   const consumePage = async (page: ScannerV2PageInput) => {
-    const extracted = extractScannerV2Page(page);
+    let sourcePage = page;
+    const renderDecision = decideScannerV2RenderEscalation({
+      rawHtml: page.html,
+    });
+    if (renderDecision.render) {
+      if (!readerFallbackEnabled) {
+        adapterWarnings.push("scanner_v2_render_required");
+        throw new Error("scanner_v2_render_required");
+      }
+      try {
+        sourcePage = await recoverReaderPage(page, options);
+        adapterWarnings.push("reader_fallback_used");
+      } catch (error) {
+        adapterWarnings.push(
+          error instanceof Error && error.message
+            ? error.message
+            : "reader_fetch_failed",
+        );
+        throw error;
+      }
+    }
+
+    const extracted = extractScannerV2Page(sourcePage);
     corpusChunks.push(...extracted.chunks);
 
-    const bytes = Buffer.byteLength(page.html, "utf8");
+    const bytes = Buffer.byteLength(sourcePage.html, "utf8");
     if (
       summaryPages.length < maxSummaryPages &&
       summaryBytes + bytes <= maxSummaryHtmlBytes
     ) {
       summaryPages.push({
-        url: page.canonicalUrl ?? page.requestedUrl,
-        html: page.html,
+        url: sourcePage.canonicalUrl ?? sourcePage.requestedUrl,
+        html: sourcePage.html,
       });
       summaryBytes += bytes;
     } else {
@@ -188,6 +272,7 @@ export async function runScannerV2Scan(
 
   const extracted = extractDraftFromHtml(summaryPages);
   const warnings = [
+    ...adapterWarnings,
     ...discovery.warnings,
     ...documents.warnings,
     ...extracted.warnings,
