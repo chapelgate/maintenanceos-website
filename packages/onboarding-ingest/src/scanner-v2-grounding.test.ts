@@ -289,6 +289,26 @@ test("list questions prefer enumerated detail over generic type wording", async 
   assert.match(answer.text, /including mesh fencing, palisade fencing, timber fencing/i);
 });
 
+test("returns questions prefer policy sentences over product-title overlap", async () => {
+  const corpus = buildScannerV2Corpus([
+    htmlPage(
+      "https://acme.example/keys",
+      "Keys",
+      "Key products",
+      "Wirral Alley Gate Key Wirral Alley Gate Key. Only if alley gate keys are proven to be faulty will they be collected and exchanged. At no point will any refund be given.",
+    ),
+  ]);
+  const index = new InMemoryBm25CorpusIndex();
+  await index.index("returns-cue", corpus.chunks);
+
+  const answer = await answerGroundedReceptionistQuestion(
+    "Can I return an alley gate key for a refund?",
+    { crawlId: "returns-cue", index },
+  );
+  assert.equal(answer.supportStatus, "supported");
+  assert.match(answer.text, /faulty|refund|exchanged/i);
+});
+
 test("unsupported question returns honest not-found and never invents evidence", async () => {
   const { index, facts } = await fixture();
   const answer = await answerGroundedReceptionistQuestion(
