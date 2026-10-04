@@ -2,21 +2,21 @@
 
 ## Execution contract
 
-This file is the **authoritative executable queue** for the autonomous worker. Strategic missions, roadmaps, problem histories and commercial plans remain context, but they are **not executable tasks** unless represented here as a finite slice.
+This file is the **authoritative executable queue** for the autonomous worker. Strategic missions, roadmaps, problem histories and commercial plans are context only.
 
 Statuses: `OPEN | IN_PROGRESS | PASS | BLOCKED | HUMAN_BLOCKED | HOLD`.
 
 Rules:
-1. Execute exactly one `OPEN` slice at a time; change it to `IN_PROGRESS` before work.
-2. A slice must have one primary outcome and explicit acceptance evidence.
-3. Research, planning, rereading, review, diagnosis and status reporting do not count as progress by themselves.
-4. Once the next safe action is known, execute it.
-5. If one attempt produces no measurable delta, change method. After two materially different no-progress attempts, record the exact blocker and mark the slice `BLOCKED`; do not loop.
-6. Do not start a `HOLD`, `HUMAN_BLOCKED` or parent milestone.
-7. When acceptance passes, record the evidence, mark `PASS`, then promote only the next dependency-satisfied slice to `OPEN`.
-8. A human-gated slice must not stall unrelated machine-solvable slices.
-9. Never create perpetual “monitor/improve/research” work. Monitoring or research must be a dated, finite snapshot with an output and stop condition.
-10. Goal Lock and the estate Progress Gate remain mandatory.
+1. Execute exactly one slice at a time. Multiple slices may be `OPEN`; only one may be `IN_PROGRESS`.
+2. Select the highest-priority eligible `OPEN` slice. File order is the default priority. A slice is eligible when every **genuine** safety/data dependency needed for its outcome or acceptance is satisfied.
+3. `Depends on` must represent a real requirement, not mere sequencing. Never bypass a human, safety, production, legal, spend, credential, destructive-action or project-specific gate.
+4. Before changing anything, reproduce or prove the gap. Prefer **ZERO CODE → REUSE → CONFIGURE → smallest safe code**. Planning, rereading, review and status text alone are not progress.
+5. If an attempt produces no measurable delta, change method. Exhaust safe materially different alternatives before marking `BLOCKED`, and record the blocker once.
+6. A `BLOCKED` or `HUMAN_BLOCKED` slice must not stall unrelated work. Immediately select the next eligible `OPEN` slice. If none exists, promote the highest-priority `HOLD` slice whose genuine dependencies are satisfied.
+7. Use `HUMAN_BLOCKED` only when a unique human action is genuinely required after authorised alternatives are exhausted. Keep the exact owner action in the existing human-blocker register; do not manufacture human blockers.
+8. Mark `PASS` only when the stated acceptance evidence passes. A commit, build, deployment or unit test is not acceptance unless the slice explicitly says it is.
+9. **Goal Lock:** the worker may decide **HOW** to satisfy the assigned outcome but may not broaden, reinterpret, replace or extend **WHAT** the outcome is. No unsolicited refactors, redesigns or speculative optimisation.
+10. Add no new service, queue, database, router, scheduler, watchdog, supervisor, model router, control plane, second harness or multi-agent swarm. Continue autonomously until no eligible independent work remains; then surface one consolidated genuine-blocker report.
 
 ## Evidence basis for this slicing pattern
 
