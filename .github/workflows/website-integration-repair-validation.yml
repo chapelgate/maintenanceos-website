@@ -50,4 +50,9 @@ jobs:
             BROWSER_PATH=/usr/bin/chromium NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan node scripts/create-mobile-stability-browser.mjs
           '
       - name: Patch integrity
-        run: git diff --check 7d519ca8bea09fc87b9d41be7ebf95f7baa6def0^..HEAD
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --check "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"
+          else
+            git diff --check "${{ github.event.before }}" "${{ github.sha }}"
+          fi
