@@ -1,0 +1,114 @@
+name: Instinct worker phone proof
+on:
+  workflow_dispatch:
+    inputs:
+      execute:
+        description: "Place one controlled call to the dedicated MOS test number"
+        required: true
+        default: "false"
+permissions:
+  contents: read
+concurrency:
+  group: instinct-worker-phone-proof
+  cancel-in-progress: false
+jobs:
+  phone-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+      TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+      TWILIO_HUMAN_TRANSFER_NUMBER: ${{ secrets.TWILIO_HUMAN_TRANSFER_NUMBER }}
+    steps:
+      - name: Refuse unless explicitly armed
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ inputs.execute }}" = "true" || { echo "PHONE_PROOF=NOT_ARMED"; exit 2; }
+      - name: Install existing Twilio client
+        run: python -m pip install --disable-pip-version-check --quiet 'twilio>=9,<10'
+      - name: Place one controlled test-number call and restore webhook
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os, time
+          from twilio.rest import Client
+
+          def ref(v):
+              return "sha256:" + hashlib.sha256((v or "").encode()).hexdigest()[:16]
+
+          account=(os.getenv("TWILIO_ACCOUNT_SID") or "").strip()
+          token=(os.getenv("TWILIO_AUTH_TOKEN") or "").strip()
+          target=(os.getenv("TWILIO_PHONE_NUMBER") or "").strip()
+          candidates=[
+              (os.getenv("TWILIO_FROM_NUMBER") or "").strip(),
+              (os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER") or "").strip(),
+          ]
+          source=next((x for x in candidates if x and x != target), "")
+          if not account or not token or not target:
+              raise SystemExit("PHONE_PROOF_BLOCKED: missing existing Twilio secrets")
+          if not source:
+              raise SystemExit("PHONE_PROOF_BLOCKED: no existing distinct verified From number")
+
+          client=Client(account, token)
+          matches=client.incoming_phone_numbers.list(phone_number=target, limit=10)
+          exact=next((x for x in matches if (x.phone_number or "").strip()==target), None)
+          if exact is None:
+              raise SystemExit("PHONE_PROOF_BLOCKED: dedicated test number not found in Twilio account")
+
+          original_url=exact.voice_url or ""
+          original_method=exact.voice_method or "POST"
+          call=None
+          final_status=""
+          restored=False
+          try:
+              exact.update(
+                  voice_url="https://demo.twilio.com/docs/voice.xml",
+                  voice_method="GET",
+              )
+              call=client.calls.create(
+                  to=target,
+                  from_=source,
+                  url="https://demo.twilio.com/docs/voice.xml",
+                  method="GET",
+                  timeout=20,
+              )
+              deadline=time.time()+70
+              while time.time()<deadline:
+                  current=client.calls(call.sid).fetch()
+                  final_status=(current.status or "").lower()
+                  if final_status in {"completed","busy","failed","no-answer","canceled"}:
+                      break
+                  time.sleep(2)
+              if final_status not in {"completed","busy","failed","no-answer","canceled"}:
+                  try:
+                      client.calls(call.sid).update(status="completed")
+                  except Exception:
+                      pass
+                  current=client.calls(call.sid).fetch()
+                  final_status=(current.status or "").lower()
+          finally:
+              exact.update(voice_url=original_url, voice_method=original_method)
+              check=client.incoming_phone_numbers(exact.sid).fetch()
+              restored=(check.voice_url or "")==original_url and (check.voice_method or "POST")==original_method
+
+          accepted=bool(call and getattr(call,"sid",None))
+          passed=accepted and final_status=="completed" and restored
+          print(json.dumps({
+              "PHONE_PROOF":"PASS" if passed else "FAIL",
+              "provider":"twilio",
+              "real_call_resource_created":accepted,
+              "terminal_status":final_status,
+              "test_number_ref":ref(target),
+              "from_number_ref":ref(source),
+              "call_ref":ref(call.sid if call else ""),
+              "test_number_webhook_restored":restored,
+              "render_used":False,
+              "golden_line_touched":False,
+              "secret_values_logged":False,
+          },sort_keys=True))
+          raise SystemExit(0 if passed else 1)
+          PY
