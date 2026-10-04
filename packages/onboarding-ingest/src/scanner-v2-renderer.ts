@@ -23,6 +23,12 @@ export const MAX_RENDER_REQUESTS = 120;
 export const MAX_RENDER_ORIGINS = 12;
 export const DEFAULT_RENDER_SETTLE_MS = 300;
 export const MAX_RENDER_SETTLE_MS = 1_500;
+export const DEFAULT_RENDER_MAX_SCROLL_STEPS = 6;
+export const MAX_RENDER_SCROLL_STEPS = 12;
+export const DEFAULT_RENDER_SCROLL_SETTLE_MS = 120;
+export const MAX_RENDER_SCROLL_SETTLE_MS = 500;
+export const DEFAULT_RENDER_MAX_SHADOW_HOSTS = 128;
+export const MAX_RENDER_SHADOW_HOSTS = 256;
 
 const BLOCKED_RESOURCE_TYPES = new Set(["image", "media", "font"]);
 const ANALYTICS_HOST_PATTERNS = [
@@ -86,6 +92,9 @@ export type ScannerV2BrowserBackendInput = {
   url: string;
   timeoutMs: number;
   settleMs: number;
+  maxScrollSteps: number;
+  scrollSettleMs: number;
+  maxShadowHosts: number;
   handleRequest: (
     request: ScannerV2RenderRequest,
   ) => Promise<ScannerV2RenderResourceResult>;
@@ -108,6 +117,9 @@ export type ScannerV2RenderOptions = {
   backend?: ScannerV2BrowserBackend;
   timeoutMs?: number;
   settleMs?: number;
+  maxScrollSteps?: number;
+  scrollSettleMs?: number;
+  maxShadowHosts?: number;
   maxDomBytes?: number;
   maxTotalBytes?: number;
   maxResourceBytes?: number;
@@ -255,6 +267,62 @@ function selectedRequestHeaders(
   );
 }
 
+type ShadowSnapshot = {
+  text: string;
+  links: Array<{ href: string; text: string }>;
+};
+
+function escapeHtmlText(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+function escapeHtmlAttribute(value: string): string {
+  return escapeHtmlText(value).replaceAll('"', "&quot;");
+}
+
+function appendShadowSnapshots(html: string, snapshots: ShadowSnapshot[]): string {
+  if (!snapshots.length) return html;
+  const safe = snapshots
+    .map((snapshot) => {
+      const text = escapeHtmlText(snapshot.text);
+      const links = snapshot.links
+        .map(
+          (link) =>
+            `<a data-scanner-shadow-link="" href="${escapeHtmlAttribute(link.href)}">${escapeHtmlText(link.text)}</a>`,
+        )
+        .join(" ");
+      return `<section data-scanner-shadow-root="open">${text}${links ? ` ${links}` : ""}</section>`;
+    })
+    .join("");
+  const bodyClose = /<\/body\s*>/i;
+  return bodyClose.test(html)
+    ? html.replace(bodyClose, `${safe}</body>`)
+    : `${html}${safe}`;
+}
+
+function extractRenderedFrameUrls(html: string, pageUrl: URL): string[] {
+  const urls: string[] = [];
+  const re = /<(?:iframe|frame)\b[^>]*\bsrc\s*=\s*(?:["']([^"']+)["']|([^\s>]+))/gi;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(html))) {
+    const raw = (match[1] ?? match[2] ?? "").trim();
+    if (!raw) continue;
+    let next: URL;
+    try {
+      next = new URL(raw, pageUrl);
+    } catch {
+      continue;
+    }
+    if (next.protocol !== "https:" || next.origin !== pageUrl.origin) continue;
+    next.hash = "";
+    urls.push(next.toString());
+  }
+  return [...new Set(urls)];
+}
+
 function renderLinks(input: {
   html: string;
   pageUrl: string;
@@ -272,7 +340,11 @@ function renderLinks(input: {
 
   const out: CrawlUrlDisposition[] = [];
   const seen = new Set<string>();
-  for (const href of extractSameOriginHrefs(input.html, page)) {
+  const candidates = [
+    ...extractSameOriginHrefs(input.html, page),
+    ...extractRenderedFrameUrls(input.html, page),
+  ];
+  for (const href of candidates) {
     const normalized = normalizeScannerV2Url(href, origin, {
       maxPathDepth: input.maxPathDepth,
       applyContentPolicy: true,
@@ -384,8 +456,100 @@ export async function playwrightScannerV2BrowserBackend(
         await page.waitForTimeout(input.settleMs);
       }
 
+      // Bounded scrolling exposes text loaded through IntersectionObserver or
+      // other viewport-driven lazy-loading. It never clicks, submits forms or
+      // bypasses the existing network policy: every resulting request still
+      // passes through handleRequest above.
+      for (let step = 0; step < input.maxScrollSteps; step += 1) {
+        const advanced = await page.evaluate(() => {
+          const root = document.scrollingElement ?? document.documentElement;
+          const current = window.scrollY;
+          const viewport = Math.max(window.innerHeight, 600);
+          const maxY = Math.max(0, root.scrollHeight - window.innerHeight);
+          if (current >= maxY) return false;
+          window.scrollTo(0, Math.min(maxY, current + viewport));
+          return true;
+        });
+        if (!advanced) break;
+        if (input.scrollSettleMs > 0) {
+          await page.waitForTimeout(input.scrollSettleMs);
+        }
+      }
+
+      // Open Shadow DOM is public rendered page content but page.content()
+      // does not serialize it. Read a bounded snapshot of text + navigable
+      // links only. Do not clone nodes back into the live document: that could
+      // re-activate custom elements, scripts, frames or resource loads.
+      const shadowSnapshots: ShadowSnapshot[] =
+        input.maxShadowHosts > 0
+          ? await page.evaluate((maxHosts) => {
+              const queue = Array.from(document.querySelectorAll("*"));
+              const snapshots: ShadowSnapshot[] = [];
+              let exposed = 0;
+              for (
+                let index = 0;
+                index < queue.length && exposed < maxHosts;
+                index += 1
+              ) {
+                const element = queue[index];
+                const shadow = element.shadowRoot;
+                if (!shadow) continue;
+                queue.push(...Array.from(shadow.querySelectorAll("*")));
+
+                const textParts: string[] = [];
+                const walker = document.createTreeWalker(
+                  shadow,
+                  NodeFilter.SHOW_TEXT,
+                );
+                let textNode = walker.nextNode();
+                while (textNode) {
+                  let parent = textNode.parentElement;
+                  let blocked = false;
+                  while (parent) {
+                    if (
+                      ["SCRIPT", "STYLE", "NOSCRIPT", "TEMPLATE"].includes(
+                        parent.tagName,
+                      )
+                    ) {
+                      blocked = true;
+                      break;
+                    }
+                    parent = parent.parentElement;
+                  }
+                  if (!blocked && textNode.textContent) {
+                    textParts.push(textNode.textContent);
+                  }
+                  textNode = walker.nextNode();
+                }
+                const text = textParts.join(" ").replace(/\s+/g, " ").trim();
+                const links = Array.from(
+                  shadow.querySelectorAll("a[href], iframe[src], frame[src]"),
+                )
+                  .slice(0, 64)
+                  .map((node) => {
+                    const href =
+                      node.getAttribute("href") ?? node.getAttribute("src") ?? "";
+                    return {
+                      href,
+                      text: (node.textContent ?? "").replace(/\s+/g, " ").trim(),
+                    };
+                  })
+                  .filter((link) => Boolean(link.href));
+                if (text || links.length) snapshots.push({ text, links });
+                exposed += 1;
+              }
+              return snapshots;
+            }, input.maxShadowHosts)
+          : [];
+
+      await page.evaluate(() => window.scrollTo(0, 0));
+      const html = appendShadowSnapshots(
+        await page.content(),
+        shadowSnapshots,
+      );
+
       return {
-        html: await page.content(),
+        html,
         finalUrl: page.url(),
       };
     } finally {
@@ -462,6 +626,24 @@ export async function renderScannerV2Page(
     DEFAULT_RENDER_SETTLE_MS,
     0,
     MAX_RENDER_SETTLE_MS,
+  );
+  const maxScrollSteps = boundedInt(
+    options.maxScrollSteps,
+    DEFAULT_RENDER_MAX_SCROLL_STEPS,
+    0,
+    MAX_RENDER_SCROLL_STEPS,
+  );
+  const scrollSettleMs = boundedInt(
+    options.scrollSettleMs,
+    DEFAULT_RENDER_SCROLL_SETTLE_MS,
+    0,
+    MAX_RENDER_SCROLL_SETTLE_MS,
+  );
+  const maxShadowHosts = boundedInt(
+    options.maxShadowHosts,
+    DEFAULT_RENDER_MAX_SHADOW_HOSTS,
+    0,
+    MAX_RENDER_SHADOW_HOSTS,
   );
   const maxDomBytes = boundedInt(
     options.maxDomBytes,
@@ -610,6 +792,9 @@ export async function renderScannerV2Page(
         url: normalized.url,
         timeoutMs,
         settleMs,
+        maxScrollSteps,
+        scrollSettleMs,
+        maxShadowHosts,
         handleRequest,
       }),
       new Promise<never>((_resolve, reject) => {

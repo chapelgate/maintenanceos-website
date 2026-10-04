@@ -192,6 +192,77 @@ test("secure renderer proxy blocks mutation/private/media/analytics requests whi
   );
 });
 
+test("rendered same-origin iframe sources re-enter the validated frontier", async () => {
+  const backend: ScannerV2BrowserBackend = async (input) => ({
+    finalUrl: input.url,
+    html:
+      '<html><body><iframe src="/embedded/deep-service"></iframe><iframe src="https://outside.example/ignored"></iframe></body></html>',
+  });
+
+  const result = await renderScannerV2Page("https://fixture.example/", {
+    rawHtml: '<html><body><div id="root"></div><script></script></body></html>',
+    backend,
+    lookup: async () => ["203.0.113.10"],
+    get: async (url) => response(url.toString(), "<html></html>"),
+    settleMs: 0,
+  });
+
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(
+    result.links.some(
+      (row) =>
+        row.url === "https://fixture.example/embedded/deep-service" &&
+        row.discoveryReason === "rendered_link",
+    ),
+    true,
+  );
+  assert.equal(
+    result.links.some((row) => row.url.includes("outside.example")),
+    false,
+  );
+});
+
+test("modern DOM coverage controls are bounded before browser execution", async () => {
+  const backend: ScannerV2BrowserBackend = async (input) => {
+    assert.equal(input.maxScrollSteps, 12);
+    assert.equal(input.scrollSettleMs, 500);
+    assert.equal(input.maxShadowHosts, 256);
+    return {
+      finalUrl: input.url,
+      html:
+        '<html><body><div data-scanner-shadow-root="open"><h2>Shadow service</h2><p>Shadow-only eligibility fact.</p></div></body></html>',
+    };
+  };
+
+  const result = await renderScannerV2Page("https://fixture.example/", {
+    rawHtml: '<html><body><div id="root"></div><script></script></body></html>',
+    backend,
+    maxScrollSteps: 999,
+    scrollSettleMs: 999,
+    maxShadowHosts: 999,
+    lookup: async () => ["203.0.113.10"],
+    get: async (url) => response(url.toString(), "<html></html>"),
+    settleMs: 0,
+  });
+
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  const extraction = extractScannerV2Page(
+    renderResultToPageInput({
+      requestedUrl: "https://fixture.example/",
+      result,
+      fetchedAt: "2026-10-04T12:00:00.000Z",
+    }),
+  );
+  assert.match(extraction.page.visibleText, /Shadow-only eligibility fact/);
+  assert.ok(
+    extraction.chunks.some((chunk) =>
+      /Shadow-only eligibility fact/.test(chunk.text),
+    ),
+  );
+});
+
 test("rendered result feeds Stage 4 extraction as fetchMode rendered", async () => {
   const backend: ScannerV2BrowserBackend = async () => ({
     finalUrl: "https://fixture.example/",
