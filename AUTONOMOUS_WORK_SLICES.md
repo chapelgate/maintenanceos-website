@@ -86,13 +86,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on main SHA `96ac1dde9df017578dad64bc1e523cf02382d437` — 72/72 V1 extraction/fetch/wrapper/scan/server/SSRF/foundation tests passed; Scanner V2 default-off/explicit-opt-in invariant passed.
 
 ## MOSWEB-S006B — Alley Gates real-site canary
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S006A PASS
 - Outcome: run a bounded V2 read-only canary against alleygates.co.uk.
-- Acceptance: record discovered/fetched/skipped/unresolved counts; prove at least three non-homepage facts and five site-specific grounded questions; unknown question fails honestly.
+- Acceptance: PASS on merged main SHA `dfceeba397703f294944850937109e7c431112ce`. Discovery accounted for 55 URLs: 18 fetched, 29 policy-skipped, 8 unresolved, 0 queued; state remained honestly PARTIAL because robots retrieval was unavailable and some sitemap URLs were rejected. Five real deep questions passed with exact non-homepage sources (delivery duration, £22 key price, Wirral landlord key responsibility, fencing styles, returns policy); unknown Mars question returned not_found. Canary exposed and closed three bounded extractive-ranking defects, each with full-suite regression coverage.
 
 ## MOSWEB-S006C — Express Gas real-site canary
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S006B PASS
 - Outcome: run the same bounded read-only V2 canary against expressgasdelivery.com.
 - Acceptance: same evidence contract as MOSWEB-S006B.
