@@ -390,7 +390,7 @@ export type ScanOutcome =
     }
   | { status: "error"; message: string };
 
-const SCAN_TIMEOUT_MS = 15_000;
+const SCAN_TIMEOUT_MS = 120_000;
 
 export async function requestOnboardingScan(
   endpoint: string,
