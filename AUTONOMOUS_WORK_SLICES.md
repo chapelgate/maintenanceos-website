@@ -61,13 +61,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on exact candidate SHA 215c409050ce9688777ee9bde3f0a6e776fcf4b6 — 425/425 repo tests, 17/17 accessibility, lint, TypeScript, production build, 30/30 static routes, 28 exported HTML pages, browser viewport smoke and 390x844 mobile receptionist acceptance all pass. No new service/database/paid dependency; golden line untouched.
 
 ## MOSWEB-S005 — Stage 12 deterministic fixture gate
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S004A PASS
 - Outcome: run the existing Stage 12 step 1 only.
 - Acceptance: deterministic fixture suite passes on exact candidate.
 
 ## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S005 PASS
 - Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
 - Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
