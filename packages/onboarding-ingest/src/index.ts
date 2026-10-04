@@ -17,6 +17,13 @@ export {
 } from "./fetch-safe.ts";
 export { isWebIngestEnabled, runScan } from "./scan.ts";
 export {
+  runScannerV2Scan,
+  V2_LIVE_MAX_HTML_PAGES,
+  V2_LIVE_MAX_DISCOVERED_URLS,
+  V2_LIVE_MAX_SITEMAP_DOCUMENTS,
+} from "./scanner-v2-scan.ts";
+export type { RunScannerV2ScanOptions } from "./scanner-v2-scan.ts";
+export {
   extractScannerV2Page,
   buildScannerV2Corpus,
   DEFAULT_MAX_CHUNK_CHARS,
