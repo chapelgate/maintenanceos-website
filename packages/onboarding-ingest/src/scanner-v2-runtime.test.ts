@@ -89,6 +89,31 @@ test("reader recovery keeps the original public target as provenance", async () 
   assert.match(recovered?.body ?? "", /Recovered public page/);
 });
 
+test("reader recovery retries one transient fetch failure", async () => {
+  let calls = 0;
+  const recovered = await recoverScannerV2ReaderPage(
+    "https://alleygates.example/window-boarding/",
+    {
+      lookup: async () => ["203.0.113.20"],
+      get: async (url) => {
+        calls += 1;
+        if (calls === 1) throw new Error("transient_reader_failure");
+        return {
+          status: 200,
+          headers: { "content-type": "text/html" },
+          body: "<html><body><h1>Window boarding</h1></body></html>",
+          url,
+        };
+      },
+    },
+  );
+
+  assert.equal(calls, 2);
+  assert.ok(recovered);
+  assert.equal(recovered?.status, 200);
+  assert.match(recovered?.body ?? "", /Window boarding/);
+});
+
 test("persistent runtime resumes the same crawl identity from disk", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-runtime-"));
   let discoveryCalls = 0;
