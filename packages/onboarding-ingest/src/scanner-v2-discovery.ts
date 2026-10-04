@@ -345,6 +345,41 @@ function isPlainTextType(contentType: string): boolean {
   return /^text\/plain\b/i.test(contentType);
 }
 
+async function fetchScannerV2DiscoveryPage(
+  url: string,
+  options: {
+    lookup?: LookupFn;
+    get?: HttpGetFn;
+    timeoutMs: number;
+    maxBytes: number;
+  },
+) {
+  let firstError: unknown;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await fetchPublicHttps(url, {
+        lookup: options.lookup,
+        get: options.get,
+        timeoutMs: options.timeoutMs,
+        maxBytes: options.maxBytes,
+        maxDecompressedBytes: options.maxBytes,
+        acceptCompressed: true,
+        maxRedirects: DEFAULT_MAX_REDIRECTS,
+      });
+    } catch (error) {
+      if (
+        !(error instanceof ScanError) ||
+        !["timeout", "fetch_failed", "dns_failed"].includes(error.code) ||
+        attempt === 1
+      ) {
+        throw error;
+      }
+      firstError = error;
+    }
+  }
+  throw firstError;
+}
+
 function terminalHttpDisposition(status: number): {
   status: "policy_skipped" | "unresolved";
   reason: string;
@@ -754,14 +789,11 @@ export async function discoverScannerV2Frontier(
 
     let response;
     try {
-      response = await fetchPublicHttps(pageUrl, {
+      response = await fetchScannerV2DiscoveryPage(pageUrl, {
         lookup: options.lookup,
         get: options.get,
         timeoutMs: htmlTimeoutMs,
         maxBytes: maxHtmlBytes,
-        maxDecompressedBytes: maxHtmlBytes,
-        acceptCompressed: true,
-        maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
     } catch (error) {
       urls.update(pageUrl, {
