@@ -242,6 +242,33 @@ test("structured FAQ is used before generic corpus search", async () => {
   assert.deepEqual(answer.retrievedChunkIds, []);
 });
 
+test("duration and price questions prefer answer-bearing sentences inside a retrieved chunk", async () => {
+  const corpus = buildScannerV2Corpus([
+    htmlPage(
+      "https://acme.example/keys",
+      "Keys",
+      "Key ordering",
+      "If a previous occupier did not provide the alley gate key, a landlord may need to provide one. Keys can take up to 6 weeks to be delivered, but are usually delivered within three weeks. A Wirral alley gate key costs £22.00.",
+    ),
+  ]);
+  const index = new InMemoryBm25CorpusIndex();
+  await index.index("cue-ranking", corpus.chunks);
+
+  const duration = await answerGroundedReceptionistQuestion(
+    "How long can an alley gate key take to arrive?",
+    { crawlId: "cue-ranking", index },
+  );
+  assert.equal(duration.supportStatus, "supported");
+  assert.match(duration.text, /up to 6 weeks/i);
+
+  const price = await answerGroundedReceptionistQuestion(
+    "How much does a Wirral alley gate key cost?",
+    { crawlId: "cue-ranking", index },
+  );
+  assert.equal(price.supportStatus, "supported");
+  assert.match(price.text, /£22\.00/i);
+});
+
 test("unsupported question returns honest not-found and never invents evidence", async () => {
   const { index, facts } = await fixture();
   const answer = await answerGroundedReceptionistQuestion(
