@@ -68,13 +68,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on main SHA `51312b8693b2951919d49b6b8bf9a2f88a78399e` — exact named fixture `integrated discovery exhausts 100+ sitemap pages and a link-only deep page` passed 1/1; 122 URLs fetched, including 120 sitemap pages plus root and link-only deep content, with no hidden ceiling.
 
 ## MOSWEB-S005B — Stage 12 modern-DOM fixture
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S005A PASS
 - Outcome: prove lazy-loaded content, open Shadow DOM text/links and same-origin iframe discovery enter the normal V2 corpus/frontier.
-- Acceptance: focused renderer/content/retrieval tests PASS under existing SSRF/request/origin/byte/time controls.
+- Acceptance: PASS — deterministic real-Playwright acceptance proved lazy-loaded text and open Shadow DOM text reached the normal extracted corpus and BM25 retrieval; same-origin iframe and Shadow DOM links re-entered the validated frontier; 2 observed requests, 0 blocked-request escapes.
 
 ## MOSWEB-S005C — Stage 12 document/deep-knowledge fixture
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S005B PASS
 - Outcome: prove linked PDF/TXT/CSV and deep-page facts are retrievable with exact source provenance.
 - Acceptance: document ingestion + retrieval + grounded-answer tests PASS; unsupported document/fact remains PARTIAL/not_found.
