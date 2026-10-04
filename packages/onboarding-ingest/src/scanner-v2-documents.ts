@@ -331,7 +331,7 @@ const PDF_WORKER_SOURCE = String.raw`
 const { parentPort, workerData } = require("node:worker_threads");
 
 (async () => {
-  const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  const { getDocument } = await import(workerData.pdfModuleUrl);
   const data = new Uint8Array(workerData.bytes);
   const loadingTask = getDocument({
     data,
@@ -419,6 +419,7 @@ export const pdfJsScannerV2Parser: ScannerV2PdfParser = async (
       },
       workerData: {
         bytes,
+        pdfModuleUrl: import.meta.resolve("pdfjs-dist/legacy/build/pdf.mjs"),
         maxPages: options.maxPages,
         maxTextChars: options.maxTextChars,
       },
