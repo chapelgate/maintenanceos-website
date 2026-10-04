@@ -17,6 +17,9 @@ Rules:
 8. A human-gated slice must not stall unrelated machine-solvable slices.
 9. Never create perpetual “monitor/improve/research” work. Monitoring or research must be a dated, finite snapshot with an output and stop condition.
 10. Goal Lock and the estate Progress Gate remain mandatory.
+11. **Acceptance is immutable during execution.** Do not weaken, replace, delete, or reinterpret the active slice's Outcome, Acceptance, Depends on, Evidence boundary, Forbidden scope, or Stop rule in order to pass it. Only Status and concise evidence may change unless the active slice explicitly requires a queue-definition change.
+12. **Worker governance is read-only during product execution.** While a product/release/repair slice is `OPEN` or `IN_PROGRESS`, do not edit AGENTS files, owner/worker scope, execution-policy wording, queue rules, roadmap structure, or acceptance definitions unless that exact governance change is the stated active slice. This prevents policy churn from masquerading as product progress.
+13. **Use just-in-time context.** A bounded run should start from the active slice, immutable project/safety rules, and only the files needed to execute or verify that slice. Future `HOLD` slices, broad roadmaps, historical ledgers, and benchmark material stay available on disk but are read only when the active slice actually requires them.
 
 ## Evidence basis for this slicing pattern
 
