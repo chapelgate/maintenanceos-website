@@ -784,6 +784,13 @@ export async function discoverScannerV2Frontier(
         maxBytes: maxHtmlBytes,
         maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
+      if (response.status === 401 || response.status === 403) {
+        throw new ScanError(
+          `http_${response.status}`,
+          `HTTP ${response.status}`,
+          response.status,
+        );
+      }
     } catch (error) {
       let recovered = false;
       if (readerFallbackEnabled && readerPagesUsed < MAX_READER_PAGES) {
