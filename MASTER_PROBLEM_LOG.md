@@ -1,5 +1,22 @@
 # MaintenanceOS Website Master Problem Log
 
+## MOS-WEB-SCANNER-009 — Scanner V2 companion image omitted required runtime packages
+Status: VERIFIED ON CANDIDATE
+Opened: 2026-10-05
+
+Problem:
+Scanner V2 source dynamically requires Playwright for bounded JavaScript rendering and pdfjs-dist for PDF ingestion, but the production-oriented onboarding-ingest package on main declared no dependencies and its Dockerfile installed no package dependencies. A built image could therefore not provide the full Scanner V2 runtime capabilities already implemented in source.
+
+Surgical repair:
+- reused the exact dependency setup from the existing DigitalOcean canary branch;
+- pinned Playwright 1.63.0 and pdfjs-dist 6.3.289 with the existing lockfile;
+- installed the Chromium shell in the existing companion image;
+- added a bounded image smoke to the existing integration validator only when onboarding-ingest changes;
+- no application-logic, routing, infrastructure or telephony change.
+
+Acceptance:
+VERIFIED on candidate `492466fd6510fda4144cfa1e3dbb66328d4e1949` by GitHub Actions run `37244539428`: image build PASS; Playwright/Chromium + PDF.js runtime smoke PASS; container health reported ingest and Scanner V2 enabled; onboarding-ingest 243/243 PASS; full repository 439/439 PASS; accessibility 17/17 PASS; build/browser/mobile and patch-integrity gates PASS.
+
 ## MOS-WEB-CI-004 — Website integration validator targeted a nonexistent self-hosted runner
 Status: VERIFIED ON CANDIDATE
 Opened: 2026-10-04
