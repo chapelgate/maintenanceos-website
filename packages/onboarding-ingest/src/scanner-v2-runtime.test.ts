@@ -4,7 +4,10 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { stableContentHash } from "./scanner-v2-foundation.ts";
-import { runPersistentScannerV2 } from "./scanner-v2-runtime.ts";
+import {
+  recoverScannerV2ReaderPage,
+  runPersistentScannerV2,
+} from "./scanner-v2-runtime.ts";
 import type {
   CrawlManifest,
   CrawlPage,
@@ -57,6 +60,34 @@ function seedManifest(origin: string): CrawlManifest {
     urls,
   };
 }
+
+test("reader recovery keeps the original public target as provenance", async () => {
+  let calls = 0;
+  const target = "https://forum.example/about";
+  const recovered = await recoverScannerV2ReaderPage(target, {
+    lookup: async (hostname) => {
+      assert.equal(hostname, "r.jina.ai");
+      return ["203.0.113.20"];
+    },
+    get: async (url) => {
+      calls += 1;
+      assert.equal(url.hostname, "r.jina.ai");
+      assert.match(url.pathname, /https:\/\/forum\.example\/about/);
+      return {
+        status: 200,
+        headers: { "content-type": "text/html" },
+        body: "<html><body><h1>Forum Housing</h1><p>Recovered public page.</p></body></html>",
+        url,
+      };
+    },
+  });
+
+  assert.equal(calls, 1);
+  assert.ok(recovered);
+  assert.equal(recovered?.url.toString(), target);
+  assert.equal(recovered?.headers["content-type"], "text/html; charset=utf-8");
+  assert.match(recovered?.body ?? "", /Recovered public page/);
+});
 
 test("persistent runtime resumes the same crawl identity from disk", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-runtime-"));

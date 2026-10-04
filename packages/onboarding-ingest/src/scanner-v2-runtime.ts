@@ -37,7 +37,11 @@ import {
 import { allowPublicHttpsUrl } from "./ssrf.ts";
 import {
   isPathAllowed,
+  isReaderChallengePage,
   parseRobotsTxt,
+  READER_FALLBACK_MAX_BYTES,
+  READER_FALLBACK_ORIGIN,
+  READER_FALLBACK_TIMEOUT_MS,
 } from "./scan.ts";
 import type {
   BusinessFacts,
@@ -46,7 +50,10 @@ import type {
   CrawlPage,
   CrawlState,
   CrawlUrlDisposition,
+  HttpGetFn,
+  LookupFn,
   ScanResult,
+  SafeHttpResponse,
 } from "./types.ts";
 
 export const DEFAULT_SCANNER_V2_STATE_ROOT = ".data/scanner-v2";
@@ -239,6 +246,57 @@ async function fetchRobotsRules(origin: URL) {
   }
 }
 
+export async function recoverScannerV2ReaderPage(
+  targetUrl: string,
+  options: {
+    lookup?: LookupFn;
+    get?: HttpGetFn;
+  } = {},
+): Promise<SafeHttpResponse | null> {
+  const allowed = allowPublicHttpsUrl(targetUrl);
+  if (!allowed.ok) return null;
+
+  const readerUrl = `${READER_FALLBACK_ORIGIN}/${allowed.url.toString()}`;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    let reader: SafeHttpResponse;
+    try {
+      reader = await fetchPublicHttps(readerUrl, {
+        lookup: options.lookup,
+        get: options.get,
+        timeoutMs: READER_FALLBACK_TIMEOUT_MS,
+        maxBytes: READER_FALLBACK_MAX_BYTES,
+        maxRedirects: 2,
+        headers: {
+          Accept: "text/html",
+          "X-Respond-With": "html",
+          "X-No-Cache": "true",
+        },
+      });
+    } catch {
+      return null;
+    }
+
+    if (reader.status >= 400) return null;
+    if (!/<(?:html|head|body)\b/i.test(reader.body)) return null;
+    if (isReaderChallengePage(reader.body)) {
+      if (attempt === 0) continue;
+      return null;
+    }
+
+    return {
+      ...reader,
+      status: 200,
+      url: new URL(allowed.url.toString()),
+      headers: {
+        ...reader.headers,
+        "content-type": "text/html; charset=utf-8",
+      },
+    };
+  }
+
+  return null;
+}
+
 async function buildDefaultProcessor(input: {
   store: ScannerV2JobStore;
   crawlId: string;
@@ -334,13 +392,22 @@ async function buildDefaultProcessor(input: {
       };
     }
 
-    const response = await fetchPublicHttps(url.url, {
-      timeoutMs: 8_000,
-      maxBytes: MAX_SCANNER_V2_HTML_BYTES,
-      maxDecompressedBytes: MAX_SCANNER_V2_HTML_BYTES,
-      acceptCompressed: true,
-      maxRedirects: DEFAULT_MAX_REDIRECTS,
-    });
+    let response: SafeHttpResponse;
+    let readerRecovered = false;
+    try {
+      response = await fetchPublicHttps(url.url, {
+        timeoutMs: 8_000,
+        maxBytes: MAX_SCANNER_V2_HTML_BYTES,
+        maxDecompressedBytes: MAX_SCANNER_V2_HTML_BYTES,
+        acceptCompressed: true,
+        maxRedirects: DEFAULT_MAX_REDIRECTS,
+      });
+    } catch (directError) {
+      const reader = await recoverScannerV2ReaderPage(url.url);
+      if (!reader) throw directError;
+      response = reader;
+      readerRecovered = true;
+    }
 
     if (response.url.origin !== input.origin.origin) {
       return { disposition: "policy_skipped", reason: "cross_origin_redirect" };
@@ -368,10 +435,11 @@ async function buildDefaultProcessor(input: {
 
     let body = response.body;
     let finalUrl = response.url.toString();
-    let fetchMode: "http" | "rendered" = "http";
+    let fetchMode: "http" | "rendered" | "reader" =
+      readerRecovered ? "reader" : "http";
     let renderedLinks: CrawlUrlDisposition[] = [];
 
-    if (type !== "text/plain") {
+    if (type !== "text/plain" && !readerRecovered) {
       const renderDecision = decideScannerV2RenderEscalation({ rawHtml: body });
       if (renderDecision.render) {
         const rendered = await renderScannerV2Page(url.url, { rawHtml: body });
@@ -501,6 +569,9 @@ async function runtimeResult(input: {
     ...urls
       .filter((row) => row.status === "unresolved" && row.reason)
       .map((row) => row.reason as string),
+    ...(pages.some((page) => page.fetchMode === "reader")
+      ? ["reader_fallback_used"]
+      : []),
     ...(job.state === "CRAWLING" ? ["scanner_v2_in_progress"] : []),
     ...(job.state === "PARTIAL" ? ["scanner_v2_partial"] : []),
   ]);
