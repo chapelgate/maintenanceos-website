@@ -82,16 +82,15 @@ async function loadBrowserVoices(timeoutMs = 350): Promise<SpeechSynthesisVoice[
 
   return await new Promise((resolve) => {
     let settled = false;
-    let timer: ReturnType<typeof setTimeout> | undefined;
     const finish = () => {
       if (settled) return;
       settled = true;
-      if (timer) clearTimeout(timer);
+      clearTimeout(timer);
       synthesis.removeEventListener("voiceschanged", finish);
       resolve(synthesis.getVoices());
     };
     synthesis.addEventListener("voiceschanged", finish);
-    timer = setTimeout(finish, timeoutMs);
+    const timer = setTimeout(finish, timeoutMs);
   });
 }
 
