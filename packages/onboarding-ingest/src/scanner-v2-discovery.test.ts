@@ -318,6 +318,79 @@ test("direct TLS-style fetch failure can use bounded public reader recovery with
   );
 });
 
+test("runtime resume skips terminal pages and continues queued frontier", async () => {
+  const calls = new Map<string, number>();
+  const consumed: string[] = [];
+  const get = async (url: URL) => {
+    calls.set(url.toString(), (calls.get(url.toString()) ?? 0) + 1);
+    if (url.pathname === "/robots.txt") {
+      return response(url.toString(), "User-agent: *\nAllow: /", "text/plain");
+    }
+    if (url.pathname === "/sitemap.xml") {
+      return response(url.toString(), "missing", "text/plain", 404);
+    }
+    if (url.pathname === "/") {
+      return html(
+        url.toString(),
+        '<html><body><a href="/deep">Deep</a></body></html>',
+      );
+    }
+    if (url.pathname === "/deep") {
+      return html(
+        url.toString(),
+        '<html><body><a href="/third">Third</a>Deep fact</body></html>',
+      );
+    }
+    if (url.pathname === "/third") {
+      return html(url.toString(), "<html><body>Third fact</body></html>");
+    }
+    return response(url.toString(), "missing", "text/plain", 404);
+  };
+
+  const first = await discoverScannerV2Frontier("https://acme.example/", {
+    lookup: async () => ["203.0.113.10"],
+    get,
+    maxHtmlPages: 1,
+    onHtmlPage: async (page) => {
+      consumed.push(page.canonicalUrl ?? page.requestedUrl);
+    },
+  });
+  assert.equal(first.manifest.state, "CRAWLING");
+  assert.equal(first.manifest.fetched, 1);
+  assert.equal(first.manifest.queued, 1);
+
+  const second = await discoverScannerV2Frontier("https://acme.example/", {
+    lookup: async () => ["203.0.113.10"],
+    get,
+    maxHtmlPages: 1,
+    resumeManifest: first.manifest,
+    onHtmlPage: async (page) => {
+      consumed.push(page.canonicalUrl ?? page.requestedUrl);
+    },
+  });
+  assert.equal(second.manifest.fetched, 2);
+  assert.equal(second.manifest.queued, 1);
+  assert.equal(calls.get("https://acme.example/"), 1);
+
+  const third = await discoverScannerV2Frontier("https://acme.example/", {
+    lookup: async () => ["203.0.113.10"],
+    get,
+    maxHtmlPages: 1,
+    resumeManifest: second.manifest,
+    onHtmlPage: async (page) => {
+      consumed.push(page.canonicalUrl ?? page.requestedUrl);
+    },
+  });
+  assert.equal(third.manifest.state, "COMPLETE");
+  assert.equal(third.manifest.fetched, 3);
+  assert.equal(third.manifest.queued, 0);
+  assert.deepEqual(consumed, [
+    "https://acme.example/",
+    "https://acme.example/deep",
+    "https://acme.example/third",
+  ]);
+});
+
 test("sitemap fetch explicitly requests bounded compressed responses", async () => {
   let compressedRequested = false;
   let maxDecompressedBytes: number | undefined;
