@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+from datetime import date
+
+import awaab_policy
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,3 +81,17 @@ def test_cpu_only_domains_never_seed_model_cases():
         if x["evaluation_lane"] == "cpu_only"
     }
     assert not (cpu_families & {x["family"] for x in rows})
+
+
+def test_release_map_awaab_dates_match_implemented_policy_core():
+    cfg = load(MAP)
+    rule = next(x for x in cfg["requirements"] if x["id"] == "REL-AWAAB-02")
+    assert date.fromisoformat(rule["effective_dates"]["phase1"]) == awaab_policy.PHASE_1_START
+    assert date.fromisoformat(rule["effective_dates"]["phase2"]) == awaab_policy.PHASE_2_START
+
+
+def test_release_map_requires_zero_gpu_pre_lumi_gate():
+    cfg = load(MAP)
+    gate = cfg["pre_lumi_release_gate"]
+    assert gate["command"] == "scripts/run_pre_lumi_release_gate.sh"
+    assert gate["expected_minimum_tests"] >= 90
