@@ -348,10 +348,13 @@ async function finaliseManifest(
   const urls = await store.listUrls(job.crawlId);
   const hasQueued = urls.some((row) => row.status === "queued");
   const hasUnresolved = urls.some((row) => row.status === "unresolved");
+  const hasFetchedEvidence = urls.some(
+    (row) => row.status === "fetched" || row.status === "duplicate",
+  );
 
   const state: CrawlState = hasQueued
     ? "CRAWLING"
-    : hasUnresolved
+    : hasUnresolved || !hasFetchedEvidence
       ? "PARTIAL"
       : "COMPLETE";
 
