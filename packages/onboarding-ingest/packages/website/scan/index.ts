@@ -13,7 +13,7 @@ const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 20;
 const UPSTREAM_TIMEOUT_MS = 115_000;
 const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
-  "https://maintenanceos-scanner-v2-production.up.railway.app/v1/onboarding/scan";
+  "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 const rateBuckets = new Map<string, number[]>();
 
 function allowRate(ip: string, now = Date.now()): boolean {
