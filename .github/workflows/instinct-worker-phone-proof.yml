@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   phone-proof:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, chapelgate, estate-trusted]
     timeout-minutes: 8
     env:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
