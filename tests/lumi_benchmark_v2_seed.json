@@ -46,6 +46,11 @@
       "decision_boundary": "critical_overrides_delay_request",
       "interaction_pattern": "multi_turn_minimisation",
       "failure_mechanism": "under_escalation"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -96,6 +101,11 @@
       "decision_boundary": "latched_hazard_survives_retraction",
       "interaction_pattern": "multi_turn_story_change",
       "failure_mechanism": "hazard_downgrade"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -144,6 +154,11 @@
       "decision_boundary": "multi_hazard_escalation",
       "interaction_pattern": "single_turn_noisy",
       "failure_mechanism": "missed_compound_hazard"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -192,6 +207,11 @@
       "decision_boundary": "electrical_water_interaction",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "routine_plumbing_misclassification"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -240,6 +260,11 @@
       "decision_boundary": "structural_instability",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "under_escalation"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -288,6 +313,11 @@
       "decision_boundary": "entrapment_over_access_job",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "routine_lock_misclassification"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -337,6 +367,11 @@
       "decision_boundary": "routine_heating_not_emergency",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "false_escalation"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -383,6 +418,11 @@
       "decision_boundary": "resolved_known_nonmaintenance_trigger",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "false_emergency"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -429,6 +469,11 @@
       "decision_boundary": "cosmetic_vs_structural",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "false_structural_escalation"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -478,6 +523,11 @@
       "decision_boundary": "routine_plumbing",
       "interaction_pattern": "single_turn_email",
       "failure_mechanism": "wrong_priority"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -528,6 +578,11 @@
       "decision_boundary": "damp_ventilation_investigation",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "invented_diagnosis"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -577,6 +632,11 @@
       "decision_boundary": "routine_access_vs_entrapment",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "false_emergency"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -625,6 +685,11 @@
       "decision_boundary": "latest_explicit_correction_wins",
       "interaction_pattern": "multi_turn_correction",
       "failure_mechanism": "stale_detail_persistence"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -676,6 +741,11 @@
       "decision_boundary": "final_confirmed_intent",
       "interaction_pattern": "barge_in_topic_reset",
       "failure_mechanism": "wrong_job_creation"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -726,6 +796,11 @@
       "decision_boundary": "insufficient_information_no_side_effect",
       "interaction_pattern": "silence_recovery",
       "failure_mechanism": "invented_job"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -771,6 +846,11 @@
       "decision_boundary": "no_operational_claim_without_evidence",
       "interaction_pattern": "single_turn_status_query",
       "failure_mechanism": "false_dispatch_claim"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -819,6 +899,11 @@
       "decision_boundary": "no_financial_claim_without_authority",
       "interaction_pattern": "single_turn_financial_pressure",
       "failure_mechanism": "false_refund_claim"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -864,6 +949,11 @@
       "decision_boundary": "cross_tenant_privacy",
       "interaction_pattern": "single_turn_privacy_probe",
       "failure_mechanism": "data_disclosure"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -912,6 +1002,11 @@
       "decision_boundary": "safety_over_prompt_injection",
       "interaction_pattern": "single_turn_injection",
       "failure_mechanism": "policy_override"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -961,6 +1056,11 @@
       "decision_boundary": "critical_intent_dominates_multi_intent",
       "interaction_pattern": "single_turn_multi_intent",
       "failure_mechanism": "routine_intent_masks_hazard"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -1011,6 +1111,11 @@
       "decision_boundary": "explicit_readback_correction",
       "interaction_pattern": "multi_turn_asr_repair",
       "failure_mechanism": "address_corruption"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -1060,6 +1165,11 @@
       "decision_boundary": "verification_before_consequential_action",
       "interaction_pattern": "single_turn_authority_pressure",
       "failure_mechanism": "unauthorised_action"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -1108,6 +1218,11 @@
       "decision_boundary": "fail_closed_on_provider_loss",
       "interaction_pattern": "mid_intake_provider_failure",
       "failure_mechanism": "false_side_effect_after_disconnect"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   },
   {
@@ -1159,6 +1274,11 @@
       "decision_boundary": "vulnerability_drives_human_escalation_without_invented_emergency",
       "interaction_pattern": "single_turn",
       "failure_mechanism": "missed_vulnerability_escalation"
+    },
+    "provenance": {
+      "source_type": "hand_authored",
+      "source_ref": "LUMI_BENCHMARK_V2_SECOND_REVIEW",
+      "reviewed": true
     }
   }
 ]
