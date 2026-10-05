@@ -94,6 +94,12 @@
         },
         "adversarial_mechanism": {
           "type": "string"
+        },
+        "allowed_context": {
+          "type": "object"
+        },
+        "restricted_context": {
+          "type": "object"
         }
       }
     },
@@ -143,6 +149,12 @@
         },
         "privacy_boundary": {
           "type": "string"
+        },
+        "forbidden_disclosures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
