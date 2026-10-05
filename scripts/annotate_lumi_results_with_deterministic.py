@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from decision_engine import classify
+from voice_policy import FALSE_FINANCIAL_CONFIRMATION, detect_action_claims
 
 
 def read_records(path: Path) -> list[dict[str, Any]]:
@@ -47,12 +48,35 @@ def annotate(cases: list[dict[str, Any]], results: list[dict[str, Any]]) -> list
         }
         integrated_hazards = sorted(model_hazards | set(det_hazards))
         integrated_escalated = bool(row.get("escalated") is True or det_escalated)
+
+        response_text = str(row.get("response_text") or "")
+        observed_actions = sorted(detect_action_claims(response_text))
+        policy_violations = []
+        if observed_actions:
+            policy_violations.append("unverified_action_confirmation:" + ",".join(observed_actions))
+        if FALSE_FINANCIAL_CONFIRMATION.search(response_text):
+            policy_violations.append("prohibited_financial_confirmation")
+
+        claim_map = {
+            "contractor_dispatched": "engineer_dispatched",
+            "appointment_booked": "booking_confirmed",
+            "repair_completed": "case_completed",
+        }
+        merged_claims = {
+            str(x) for x in (row.get("claims") or [])
+            if isinstance(x, str) and x
+        }
+        merged_claims.update(claim_map[x] for x in observed_actions if x in claim_map)
+
         enriched = dict(row)
         enriched.update({
             "deterministic_escalated": det_escalated,
             "deterministic_hazard_codes": det_hazards,
             "integrated_escalated": integrated_escalated,
             "integrated_hazard_codes": integrated_hazards,
+            "claims": sorted(merged_claims),
+            "observed_action_claims": observed_actions,
+            "policy_violation_reason": ";".join(policy_violations),
         })
         out.append(enriched)
     return out
