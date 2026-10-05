@@ -1,0 +1,37 @@
+{
+  "version": "2.0",
+  "scope": "EHPC-AIF-2026PG01-1300 / MaintenanceOS family",
+  "corpus": {
+    "development_threads": 12000,
+    "hidden_final_threads": 12000,
+    "min_hidden_critical_independent": 3000,
+    "uniqueness_rule": "No case counts as independent evidence when only identifiers, numbers, names, postcodes or cosmetic wording change.",
+    "family_disjoint_split": true
+  },
+  "gpu_policy": {
+    "environment_shakedown_smoke": 150,
+    "baselines": 500,
+    "model_configuration_sweep": 1600,
+    "robustness_safety": 1300,
+    "efficiency_optimisation": 700,
+    "repeatability_finalists": 500,
+    "contingency": 250,
+    "ceiling_not_target": true
+  },
+  "hard_gates": [
+    "critical emergency miss",
+    "deterministic safety bypass",
+    "cross-tenant/private-data exposure",
+    "unsupported operational claim",
+    "hidden-set contamination"
+  ],
+  "execution": [
+    "CPU qualify all deterministic logic and branch diffs first",
+    "Use paired cases across systems-under-test",
+    "Use successive halving for model/config candidates",
+    "Use small-g until whole-node cost efficiency is demonstrated",
+    "Use Slurm arrays for independent shards",
+    "Repeat identical cases only for finalist variance measurement",
+    "Record Git SHA, model/config digest, corpus digest, Slurm job ID, runtime and allocation delta"
+  ]
+}
