@@ -31,25 +31,26 @@
 
 ## Commercial-release tasks
 
-| ID | Control Room # | Work package | Owner/lane | Initial state | Depends on |
+| ID | Control Room # | Work package | Owner/lane | Current gate | Depends on |
 |---|---:|---|---|---|---|
 | CR-01 | 715 | Brand clearance evidence pack | GitHub research | AVAILABLE | — |
-| CR-02 | 716 | Provider rights & data-processing register | Cloud-1 | AVAILABLE | — |
-| CR-03 | 717 | DPIA factual data-flow pack | Cloud-2 | AVAILABLE | — |
-| CR-04 | 718 | Awaab statutory requirements matrix | GitHub research | AVAILABLE | — |
-| CR-05 | 719 | Production identity gap/reuse plan | Cloud-2 | AVAILABLE | — |
-| CR-06 | 720 | Data lifecycle gap/reuse plan | Cloud-3 | AVAILABLE | — |
-| CR-07 | 721 | Security & licence evidence baseline | Cloud-3 | AVAILABLE | — |
-| CR-08 | 722 | Website legal-source closure inventory | Cloud-1 | AVAILABLE | — |
-| CR-09 | 723 | Incident/observability acceptance matrix | Cloud-2 | AVAILABLE | — |
-| CR-10 | 724 | Awaab deterministic policy core + isolated tests | Worker pool | HELD | CR-03, CR-04 |
-| CR-11 | 725 | Data-lifecycle core + isolated tests | Worker pool | HELD | CR-03, CR-06 |
-| CR-12 | 726 | Identity-control core + isolated tests | Worker pool | HELD | CR-05 |
-| CR-13 | 727 | Integrate release controls + full regression | Single integration worker | HELD | CR-10, CR-11, CR-12 |
+| CR-04 | 718 | Awaab statutory requirements matrix | GitHub research | HELD in research lane | CR-01 |
+| CR-02 | 716 | Provider rights & data-processing register | GitHub research | HELD in research lane | CR-04 |
+| CR-03L | 737 | Local-model factual data inventory draft | Local Granite one-shot worker | **DONE** | — |
+| CR-03 | 717 | DPIA factual data-flow pack | Cloud-2 / normal owner | AVAILABLE | CR-03L (done) |
+| CR-05 | 719 | Production identity gap/reuse plan | Cloud-2 / normal owner | AVAILABLE | — |
+| CR-06 | 720 | Data lifecycle gap/reuse plan | Cloud-3 / normal owner; NVIDIA later | AVAILABLE | — |
+| CR-07 | 721 | Security & licence evidence baseline | Cloud-3 / normal owner; NVIDIA later | AVAILABLE | — |
+| CR-08 | 722 | Website legal-source closure inventory | Cloud-1 / normal owner | AVAILABLE | — |
+| CR-09 | 723 | Incident/observability acceptance matrix | Cloud-2 / normal owner | AVAILABLE | — |
+| CR-10 | 724 | Awaab deterministic policy core + isolated tests | Antigravity | HELD | CR-03, CR-04 + live Antigravity route |
+| CR-11 | 725 | Data-lifecycle core + isolated tests | NVIDIA Direct Worker | HELD | CR-03, CR-06 + project-scoped NVIDIA attachment |
+| CR-12 | 726 | Identity-control core + isolated tests | Antigravity | HELD | CR-05 + live Antigravity route |
+| CR-13 | 727 | Integrate release controls + full regression | MaintenanceOS Integration Worker | HELD — sole shared writer | CR-10, CR-11, CR-12 |
 | CR-14 | 728 | Customer trust-pack factual schedules | Worker pool | HELD | CR-02,03,07,08,09 + #685 |
 | CR-15 | 729 | Pen-test scope and RC test plan | GitHub research | HELD | CR-07, CR-13, CR-14 |
 | CR-16 | 730 | UK design-partner pilot pack/execution | MaintenanceOS | HELD | CR-13,14,15 + #18,#676 + H01-H04 |
-| CR-17 | 731 | Final commercial-release evidence audit | Overseer | HELD | CR-16 |
+| CR-17 | 731 | Final commercial-release evidence audit | Overseer / independent non-Claude review | HELD | CR-16 |
 | CR-H01 | 732 | LUMI result intake + exact candidate freeze | MaintenanceOS | BLOCKED on existing LUMI programme | Existing LUMI completion |
 | CR-H02 | 733 | Formal brand/trademark clearance decision | Andrew / IP counsel | HUMAN GATE | CR-01 |
 | CR-H03 | 734 | Counsel approval of launch legal pack | Andrew / UK tech-data counsel | HUMAN GATE | CR-14 |
@@ -60,10 +61,11 @@
 
 ### Wave A — available immediately
 These touch separate evidence/doc scopes and may run concurrently:
-- CR-01 / CR-04 — public legal/market research only.
-- CR-02 / CR-08 — provider and website legal-source facts only.
-- CR-03 / CR-05 / CR-09 — product data, identity and observability analysis only.
-- CR-06 / CR-07 — lifecycle and security/licence analysis only.
+- Research lane: CR-01 only; CR-04 then CR-02 unlock sequentially so the same research worker cannot duplicate/overlap itself.
+- Normal lane O1: CR-08 website legal-source facts.
+- Normal lane O2: CR-03 / CR-05 / CR-09 product data, identity and observability analysis. The allocator permits one claim per worker; additional normal workers may take these only if ownership is explicitly reassigned.
+- Normal lane O3 / NVIDIA-prep: CR-06 / CR-07 lifecycle and security/licence analysis.
+- CR-03L local-model factual structuring is already DONE and is evidence input to CR-03.
 - Existing #676 and #685 may also continue because they are separate acceptance/recovery evidence work.
 
 ### Wave B — isolated implementation
