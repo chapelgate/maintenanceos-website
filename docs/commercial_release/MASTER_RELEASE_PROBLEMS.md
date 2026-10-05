@@ -28,3 +28,11 @@ Live execution state is held in the Chapelgate AI Control Room project `Maintena
 - Control Room #687 is superseded by #685 plus the commercial-release register.
 - Existing SCA/SBOM tooling is reused; no second scanner/SBOM pipeline is authorised.
 - Existing Control Room allocator is reused; no second queue/dispatcher is authorised.
+
+
+## 2026-10-05 — Worker-lane execution problems and resolutions
+
+- **Local model long-input instability — RESOLVED AS OPERATING CONSTRAINT.** Existing Granite 4 Tiny models were recovered from `C:\Users\Andy\colibri\ollama-models`. A small inference passed. A combined long source prompt reset the isolated Ollama connection, while source-bounded chunks passed. Rule: local lane is one-shot, one small model at a time, `keep_alive=0`, bounded context, supplied evidence only. Weak/nonresponsive output is rejected. CR-03L completed with accepted source-bounded extracts at commit `a0b2b7c98556d35083bd66ab4eed52dcef696236`.
+- **NVIDIA persistent-owner auth drift — OPEN, NON-BLOCKING TO OTHER LANES.** Existing long-running owner-service OpenCode state returned 401 on an earlier live-state probe. Repository secret hygiene run `37373177203` passed and fresh bounded NVIDIA connectivity run `37373676926` returned HTTP 200 from `openai/gpt-oss-20b`, proving provider/account access is healthy. Do not copy stale owner authentication into new work. Use only a project-scoped approved attachment before CR-11 is claimed.
+- **Antigravity execution credential/path not currently wired — OPEN, HELD.** Direct Antigravity worker code and offline acceptance are proven, but the current NVDL/MaintenanceOS/cloud repository secret inventories do not expose its required Gemini/Google execution credential and the connected Windows environment has no such environment variable. Old example/reference files are not accepted as credentials. CR-10/CR-12 remain dependency-held and must not be marked in progress until the existing authorised Antigravity execution route is located or restored.
+- **Claude exclusion — OWNER CONSTRAINT, NOT A BLOCKER.** Claude/Claude Code/fallback/reviewer routes are excluded from this release programme by owner instruction. All allocations must fail closed rather than fall back to Claude.
