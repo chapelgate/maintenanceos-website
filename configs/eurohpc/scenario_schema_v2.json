@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MaintenanceOS LUMI Benchmark Scenario V2",
+  "type": "object",
+  "required": [
+    "id",
+    "split",
+    "family",
+    "context",
+    "input",
+    "expected",
+    "signature"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "split": {
+      "enum": [
+        "development",
+        "hidden_final"
+      ]
+    },
+    "family": {
+      "type": "string"
+    },
+    "context": {
+      "type": "object",
+      "required": [
+        "industry_os",
+        "caller_role",
+        "channel"
+      ],
+      "properties": {
+        "industry_os": {
+          "enum": [
+            "LandlordOS",
+            "LettingAgentOS",
+            "PropertyManagerOS",
+            "MaintenanceOS",
+            "HousingAssociationOS",
+            "FacilitiesOS",
+            "CouncilOS",
+            "HolidayLetOS"
+          ]
+        },
+        "caller_role": {
+          "type": "string"
+        },
+        "channel": {
+          "enum": [
+            "text",
+            "voice_transcript",
+            "email",
+            "api"
+          ]
+        },
+        "locale": {
+          "type": "string"
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "turns"
+      ],
+      "properties": {
+        "turns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "transcript_condition": {
+          "type": "string"
+        },
+        "missing_facts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "adversarial_mechanism": {
+          "type": "string"
+        }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "required": [
+        "priority",
+        "must_escalate",
+        "permitted_side_effects"
+      ],
+      "properties": {
+        "priority": {
+          "enum": [
+            "P1",
+            "P2",
+            "P3",
+            "P4",
+            "NONE"
+          ]
+        },
+        "must_escalate": {
+          "type": "boolean"
+        },
+        "hazard_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_information": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "permitted_side_effects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden_claims": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "privacy_boundary": {
+          "type": "string"
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": [
+        "causal_facts",
+        "decision_boundary",
+        "interaction_pattern"
+      ],
+      "properties": {
+        "causal_facts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision_boundary": {
+          "type": "string"
+        },
+        "interaction_pattern": {
+          "type": "string"
+        },
+        "failure_mechanism": {
+          "type": "string"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source_type": {
+          "enum": [
+            "hand_authored",
+            "backported_fixture",
+            "synthetic_generated"
+          ]
+        },
+        "source_ref": {
+          "type": "string"
+        },
+        "reviewed": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
