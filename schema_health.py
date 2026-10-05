@@ -8,6 +8,7 @@ REQUIRED_TABLES = {
     "approvals","appointments","contractor_availability","contractor_acceptances","contractor_attempts",
     "quotes","completion_evidence","resident_confirmations","invoices",
     "communications","communication_deliveries","unmatched_inbound","automation_jobs",
+    "data_lifecycle_holds","data_lifecycle_requests",
     "escalations","audit_events","tenant_boundaries","call_session_tenants",
     "critical_safety_states","incident_identities","channel_event_identities",
     "action_receipts","action_executions","invoice_identities","evidence_identities",

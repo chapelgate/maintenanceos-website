@@ -236,6 +236,32 @@ class AutomationJob(Base):
     status:Mapped[str]=mapped_column(String(30),default="PENDING")
     attempts:Mapped[int]=mapped_column(Integer,default=0)
 
+class DataLifecycleHold(Base):
+    __tablename__="data_lifecycle_holds"
+    id:Mapped[int]=mapped_column(Integer,primary_key=True)
+    client_id:Mapped[int]=mapped_column(ForeignKey("clients.id"),index=True)
+    scope:Mapped[str]=mapped_column(String(30),index=True)
+    scope_id:Mapped[str]=mapped_column(String(200),index=True)
+    reason:Mapped[str]=mapped_column(Text)
+    created_by:Mapped[str]=mapped_column(String(100))
+    active:Mapped[bool]=mapped_column(Boolean,default=True,index=True)
+    created_at:Mapped[datetime]=mapped_column(DateTime,default=utcnow)
+    released_at:Mapped[datetime|None]=mapped_column(DateTime,nullable=True)
+
+
+class DataLifecycleRequest(Base):
+    __tablename__="data_lifecycle_requests"
+    id:Mapped[int]=mapped_column(Integer,primary_key=True)
+    client_id:Mapped[int]=mapped_column(ForeignKey("clients.id"),index=True)
+    request_type:Mapped[str]=mapped_column(String(40),index=True)
+    subject_id:Mapped[str]=mapped_column(String(200),default="",index=True)
+    status:Mapped[str]=mapped_column(String(30),default="PENDING",index=True)
+    requested_by:Mapped[str]=mapped_column(String(100))
+    reason:Mapped[str]=mapped_column(Text,default="")
+    created_at:Mapped[datetime]=mapped_column(DateTime,default=utcnow)
+    completed_at:Mapped[datetime|None]=mapped_column(DateTime,nullable=True)
+
+
 class Escalation(Base):
     __tablename__="escalations"
     id:Mapped[int]=mapped_column(Integer,primary_key=True)

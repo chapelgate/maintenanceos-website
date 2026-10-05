@@ -57,6 +57,11 @@ def recover_stale_jobs(now=None):
 
 
 def _execute_job(session, job, work_order, now):
+    if job.job_type == "DATA_LIFECYCLE_SWEEP":
+        from lifecycle_runtime import execute_lifecycle_sweep
+
+        execute_lifecycle_sweep(session, job, now)
+        return
     if not work_order:
         return
     audit(session, work_order.id, "Job Controller", job.job_type, job.payload)
@@ -175,6 +180,13 @@ def run_due_jobs():
                     continue
                 work_order = session.get(WorkOrder, job.work_order_id) if job.work_order_id else None
                 client_id = work_order.client_id if work_order else None
+                if client_id is None and job.job_type == "DATA_LIFECYCLE_SWEEP":
+                    try:
+                        payload = json.loads(job.payload or "{}")
+                        candidate = payload.get("client_id")
+                        client_id = candidate if type(candidate) is int and candidate > 0 else None
+                    except json.JSONDecodeError:
+                        client_id = None
                 completed_receipt = session.query(ActionReceipt).filter_by(
                     scope="TIMER_JOB", action_key=str(job_id), client_id=client_id
                 ).first()
