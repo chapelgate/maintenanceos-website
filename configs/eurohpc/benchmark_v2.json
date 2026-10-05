@@ -1,12 +1,16 @@
 {
-  "version": "2.0",
+  "version": "2.1",
   "scope": "EHPC-AIF-2026PG01-1300 / MaintenanceOS family",
   "corpus": {
-    "development_threads": 12000,
-    "hidden_final_threads": 12000,
+    "development_threads_target": 8000,
+    "selection_validation_threads_target": 4000,
+    "hidden_final_threads_target": 12000,
+    "total_threads_ceiling": 24000,
     "min_hidden_critical_independent": 3000,
+    "count_policy": "Targets/ceilings, not quotas. Do not invent filler to hit a count; stop expansion when coverage and failure-family discovery saturate.",
     "uniqueness_rule": "No case counts as independent evidence when only identifiers, numbers, names, postcodes or cosmetic wording change.",
-    "family_disjoint_split": true
+    "family_disjoint_split": true,
+    "hidden_final_one_shot": true
   },
   "gpu_policy": {
     "environment_shakedown_smoke": 150,
@@ -33,5 +37,20 @@
     "Use Slurm arrays for independent shards",
     "Repeat identical cases only for finalist variance measurement",
     "Record Git SHA, model/config digest, corpus digest, Slurm job ID, runtime and allocation delta"
-  ]
+  ],
+  "statistics": {
+    "paired_case_comparison": true,
+    "practical_noninferiority_margins_required": true,
+    "report_per_family_and_overall": true,
+    "rule_of_three_policy": "Use only for zero-event estimates on genuinely independent Bernoulli-like cases; never apply across correlated synthetic siblings. Prefer per-family intervals and explicitly state assumptions.",
+    "selection_policy": "Use development for tuning, selection-validation for tournament decisions, and hidden-final only after finalists are frozen.",
+    "model_judge_policy": "Deterministic scoring for hard safety/action/privacy gates. Any model judge used for nuanced conversation quality must be calibrated against a human-adjudicated gold subset before influencing finalist selection."
+  },
+  "efficiency": {
+    "optimize": "GPU-hours per valid scored scenario",
+    "small_g_first": true,
+    "standard_g_only_after_measured_cost_improvement": true,
+    "bounded_slurm_arrays": true,
+    "record_queue_time_separately": true
+  }
 }
