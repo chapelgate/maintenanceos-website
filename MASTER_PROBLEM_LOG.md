@@ -1,5 +1,29 @@
 # MaintenanceOS Website Master Problem Log
 
+## MOS-WEB-SCANNER-010 — Live website scan Function route drift
+Status: RESOLVED / LIVE VERIFIED
+Opened: 2026-10-05
+Resolved: 2026-10-05
+
+Problem:
+Live same-origin `/api/website/scan` returned DigitalOcean `Incomplete web function path` before Scanner V2 upstream execution.
+
+Surgical repair:
+Restored the existing bundled Functions entrypoint in `packages/onboarding-ingest/project.yml` from `main` to the already-present `bundle.cjs`. No application logic or infrastructure was added.
+
+Acceptance:
+Local entrypoint smoke PASS; `.include` and manifest agree on `bundle.cjs`; live `OPTIONS /api/website/scan` recovered from HTTP 400 path failure to successful Function handling; invalid/private POSTs fail closed with HTTP 400. PR #194 merged as `aeb5392c0307f0524c7a5bc96f45f7288d896895`.
+
+## MOS-WEB-SCANNER-011 — Scanner V2 deployment access
+Status: HUMAN_BLOCKED
+Opened: 2026-10-05
+
+Problem:
+Dedicated DigitalOcean runtime `maintenanceos-scanner-v2` exists (droplet 606110383, 178.128.171.45), so runtime designation is no longer blocked. The accepted Scanner V2 release cannot yet be transferred because the authorised automation paths cannot authenticate to that host: the estate deploy key is rejected, the alternate GitHub key is malformed, and Desktop Commander explicitly blocks private-key SSH use. The matching DigitalOcean recovery identity exists locally but must not be exfiltrated.
+
+Next acceptance boundary:
+Authorise host access with the existing recovery identity, then reuse the preserved deployment script, verify HTTPS/health/persistence/restart/rollback, set the existing `SCANNER_V2_RUNTIME_URL`, run live black-box acceptance, and freeze. No new host/service/queue/database/router is authorised.
+
 ## MOS-WEB-SCANNER-009 — Scanner V2 companion image omitted required runtime packages
 Status: VERIFIED ON CANDIDATE
 Opened: 2026-10-05
