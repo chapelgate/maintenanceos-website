@@ -149,7 +149,7 @@ function allowPublicHttpsUrl(raw) {
 var RATE_WINDOW_MS = 6e4;
 var RATE_MAX = 20;
 var UPSTREAM_TIMEOUT_MS = 115e3;
-var DEFAULT_PERSISTENT_SCANNER_ENDPOINT = "https://maintenanceos-scanner-v2-production.up.railway.app/v1/onboarding/scan";
+var DEFAULT_PERSISTENT_SCANNER_ENDPOINT = "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 var rateBuckets = /* @__PURE__ */ new Map();
 function allowRate(ip, now = Date.now()) {
   const cutoff = now - RATE_WINDOW_MS;
