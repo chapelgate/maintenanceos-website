@@ -52,7 +52,7 @@ python3 - "$OUTDIR/results-$SLURM_JOB_ID.jsonl" <<'PY'
 import json, sys
 path=sys.argv[1]
 rows=[json.loads(x) for x in open(path, encoding="utf-8") if x.strip()]
-required={"priority":str,"escalated":bool,"hazard_codes":list,"requested_information":list,"actions":list,"claims":list,"privacy_breach":bool}
+required={"priority":str,"escalated":bool,"hazard_codes":list,"requested_information":list,"actions":list,"claims":list,"compliance_flags":list,"privacy_breach":bool}
 assert len(rows)==2, f"expected 2 rows, got {len(rows)}"
 for row in rows:
     assert not row.get("parse_error"), row
