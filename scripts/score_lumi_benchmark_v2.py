@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -28,6 +29,7 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
         "requested_information": list,
         "actions": list,
         "claims": list,
+        "compliance_flags": list,
         "privacy_breach": bool,
     }
     contract_errors = [
@@ -45,6 +47,19 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
     actual_actions = _set(actual.get("actions"))
     forbidden_claims = _set(expected.get("forbidden_claims"))
     actual_claims = _set(actual.get("claims"))
+    required_compliance = _set(expected.get("required_compliance_flags"))
+    actual_compliance = _set(actual.get("compliance_flags"))
+    missing_compliance = sorted(required_compliance - actual_compliance)
+    compliance_complete = not missing_compliance
+
+    response_text = str(actual.get("response_text") or "")
+    forbidden_response_hits = []
+    for pattern in expected.get("forbidden_response_regexes") or []:
+        try:
+            if re.search(str(pattern), response_text, re.IGNORECASE | re.DOTALL):
+                forbidden_response_hits.append(str(pattern))
+        except re.error:
+            forbidden_response_hits.append(f"INVALID_REGEX:{pattern}")
 
     must_escalate = expected.get("must_escalate") is True
     model_escalated = actual.get("escalated") is True
@@ -98,6 +113,8 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
         hard_fail_reasons.append("forbidden_operational_claim")
     if not privacy_ok:
         hard_fail_reasons.append("privacy_breach")
+    if forbidden_response_hits:
+        hard_fail_reasons.append("forbidden_response_pattern")
 
     hard_pass = not hard_fail_reasons
 
@@ -118,6 +135,9 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
         "claims_allowed": claims_allowed,
         "violated_forbidden_claims": violated_claims,
         "privacy_ok": privacy_ok,
+        "compliance_flags_complete": compliance_complete,
+        "missing_compliance_flags": missing_compliance,
+        "forbidden_response_hits": forbidden_response_hits,
         "contract_errors": contract_errors,
     }
 
@@ -155,6 +175,7 @@ def score_batch(cases: list[dict[str, Any]], results: list[dict[str, Any]]) -> d
     false_escalations = [r for r in rows if r.get("false_escalation")]
     priority_correct = sum(1 for r in rows if r.get("priority_correct") is True)
     required_complete = sum(1 for r in rows if r.get("required_info_complete") is True)
+    compliance_complete = sum(1 for r in rows if r.get("compliance_flags_complete") is True)
 
     family: defaultdict[str, Counter[str]] = defaultdict(Counter)
     for r in rows:
@@ -177,6 +198,7 @@ def score_batch(cases: list[dict[str, Any]], results: list[dict[str, Any]]) -> d
             "false_escalations": len(false_escalations),
             "priority_accuracy": (priority_correct / len(rows)) if rows else 0.0,
             "required_information_complete_rate": (required_complete / len(rows)) if rows else 0.0,
+            "compliance_flag_complete_rate": (compliance_complete / len(rows)) if rows else 0.0,
             "missing_results": len(missing_results),
             "unexpected_results": len(unexpected_results),
         },
