@@ -99,9 +99,10 @@ export function buildCrawlManifest(input: {
     unresolved: urls.filter((item) => item.status === "unresolved").length,
   };
 
+  const hasFetchedEvidence = counts.fetched > 0 || counts.duplicate > 0;
   const state =
     input.requestedState === "COMPLETE" &&
-    (counts.queued > 0 || counts.unresolved > 0)
+    (counts.queued > 0 || counts.unresolved > 0 || !hasFetchedEvidence)
       ? "PARTIAL"
       : input.requestedState;
 
