@@ -294,6 +294,51 @@
       "requirement": "Brand/trademark clearance is not an AI benchmark criterion.",
       "layer": "human_professional",
       "hard_gate": true
+    },
+    {
+      "id": "REL-DATA-03",
+      "release_tasks": [
+        "CR-03",
+        "CR-06",
+        "CR-11",
+        "CR-13"
+      ],
+      "requirement": "Verify that AI prompts, logs, alerts and error paths do not contain access codes or unnecessary full addresses/contact details; this is an application redaction/data-flow test, not a model-quality test.",
+      "layer": "cpu_release",
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-DPIA-01",
+      "release_tasks": [
+        "CR-03",
+        "CR-14",
+        "CR-H03"
+      ],
+      "requirement": "Lawful purpose/basis, transparency, controller/processor roles, international transfers, individual-rights handling and final DPIA/legal treatment require sourced factual evidence plus professional approval. LUMI cannot close this gate.",
+      "layer": "human_professional",
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES",
+        "ICO_AI_RIGHTS"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-VOICE-NOTICE-01",
+      "release_tasks": [
+        "CR-03",
+        "CR-13",
+        "CR-16",
+        "CR-H03"
+      ],
+      "requirement": "If call recording/transcription/monitoring is enabled for the release candidate, approved transparency/notice wording must be tested in the controlled telephony acceptance path. This must be deterministic/configured and must not depend on the LLM remembering to say it.",
+      "layer": "cpu_release",
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES"
+      ],
+      "hard_gate": true
     }
   ]
 }
