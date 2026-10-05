@@ -3,7 +3,7 @@ packages:
     functions:
       - name: scan
         runtime: nodejs:22
-        main: bundle.cjs
+        main: main
         web: true
         limits:
           timeout: 120000
