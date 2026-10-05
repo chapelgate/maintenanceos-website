@@ -79,6 +79,26 @@
     },
     "config_digest": {
       "type": "string"
+    },
+    "deterministic_escalated": {
+      "type": "boolean"
+    },
+    "deterministic_hazard_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "integrated_escalated": {
+      "type": "boolean"
+    },
+    "integrated_hazard_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
     }
   }
 }
