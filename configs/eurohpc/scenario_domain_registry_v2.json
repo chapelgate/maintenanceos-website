@@ -85,6 +85,15 @@
       "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
     },
     {
+      "domain": "false_emergency_lookalike",
+      "category": "near_miss",
+      "evaluation_lane": "gpu_model",
+      "development_family": "resolved_cooking_smoke_alarm",
+      "selection_validation_family": "steam_or_aerosol_alarm_known_source",
+      "hidden_final_family": "nonhazard_alarm_trigger_with_explicit_resolution",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
       "domain": "routine_heating",
       "category": "routine",
       "evaluation_lane": "gpu_model",
