@@ -15,3 +15,4 @@ Independent live diagnosis before the fix:
 - same-origin DigitalOcean Function POST returned platform HTTP 400 for both a valid public URL and a blocked private URL, isolating the fault to the Function entrypoint layer.
 
 Production telephony, provider credentials, carrier routing, voice runtime and the golden phone line were not modified or exercised by this fix.
+Estate Gate classification: BUG. Preflight completed; artifact path is this directory.
