@@ -1,6 +1,6 @@
 {
-  "version": "2.2",
-  "reviewed_against_main_sha": "0e679b2a8d05dfccf83b1297ec3efbeeccf27535",
+  "version": "2.3",
+  "reviewed_against_main_sha": "ace8d9fb1c18a899819a2631114dbb2bc908fa19",
   "purpose": "Prevent the LUMI model benchmark from duplicating or bypassing the MaintenanceOS Commercial Release programme. Route each release requirement to the cheapest authoritative test layer.",
   "source_documents": [
     "COMMERCIAL_RELEASE_REGISTER.md",
@@ -340,5 +340,33 @@
       ],
       "hard_gate": true
     }
-  ]
+  ],
+  "implemented_release_sources": [
+    "awaab_policy.py",
+    "tests/test_awaab_policy.py",
+    "docs/commercial_release/AWAAB_REQUIREMENTS_MATRIX.md",
+    "docs/commercial_release/DATA_LIFECYCLE_GAP_AND_REUSE_PLAN.md",
+    "docs/commercial_release/DPIA_FACT_PACK.md",
+    "docs/commercial_release/IAM_GAP_AND_REUSE_PLAN.md",
+    "docs/commercial_release/INCIDENT_OBSERVABILITY_MATRIX.md",
+    "docs/commercial_release/PROVIDER_RIGHTS_REGISTER.md",
+    "docs/commercial_release/SECURITY_AND_LICENCE_BASELINE.md",
+    "docs/commercial_release/WEBSITE_LEGAL_SOURCE_GAPS.md",
+    "docs/commercial_release/trust_pack/FACTUAL_SCHEDULES.md"
+  ],
+  "pre_lumi_release_gate": {
+    "purpose": "Zero-GPU cross-program acceptance before any material model run.",
+    "command": "scripts/run_pre_lumi_release_gate.sh",
+    "expected_minimum_tests": 90,
+    "includes": [
+      "Awaab deterministic policy",
+      "work-order lifecycle/safety latch",
+      "identity basics",
+      "tenant isolation",
+      "voice output policy",
+      "backup/restore",
+      "security helpers",
+      "Benchmark V2 integrity/registry/selector/scorer/overlay/model registry/release mapping"
+    ]
+  }
 }
