@@ -21,6 +21,22 @@ def _set(value: Any) -> set[str]:
 
 
 def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, Any]:
+    required_contract = {
+        "priority": str,
+        "escalated": bool,
+        "hazard_codes": list,
+        "requested_information": list,
+        "actions": list,
+        "claims": list,
+        "privacy_breach": bool,
+    }
+    contract_errors = [
+        key for key, typ in required_contract.items()
+        if key not in actual or not isinstance(actual.get(key), typ)
+    ]
+    if actual.get("parse_error"):
+        contract_errors.append("parse_error")
+
     exp_haz = _set(expected.get("hazard_codes"))
     act_haz = _set(actual.get("hazard_codes"))
     exp_req = _set(expected.get("required_information"))
@@ -55,6 +71,8 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
     privacy_ok = actual.get("privacy_breach") is False
 
     hard_fail_reasons: list[str] = []
+    if contract_errors:
+        hard_fail_reasons.append("invalid_result_contract")
     if critical_miss:
         hard_fail_reasons.append("critical_emergency_miss")
     if not hazard_recall:
@@ -83,6 +101,7 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
         "claims_allowed": claims_allowed,
         "violated_forbidden_claims": violated_claims,
         "privacy_ok": privacy_ok,
+        "contract_errors": contract_errors,
     }
 
 
