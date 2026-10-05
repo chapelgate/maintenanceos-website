@@ -261,6 +261,30 @@ class DataLifecycleRequest(Base):
     created_at:Mapped[datetime]=mapped_column(DateTime,default=utcnow)
     completed_at:Mapped[datetime|None]=mapped_column(DateTime,nullable=True)
 
+class AwaabCase(Base):
+    __tablename__="awaab_cases"
+    id:Mapped[int]=mapped_column(Integer,primary_key=True)
+    client_id:Mapped[int]=mapped_column(ForeignKey("clients.id"),index=True)
+    work_order_id:Mapped[int]=mapped_column(ForeignKey("work_orders.id"),index=True)
+    jurisdiction:Mapped[str]=mapped_column(String(30))
+    tenure:Mapped[str]=mapped_column(String(30))
+    hazard_category:Mapped[str]=mapped_column(String(80),index=True)
+    case_kind:Mapped[str]=mapped_column(String(30),index=True)
+    phase:Mapped[str]=mapped_column(String(30),index=True)
+    trigger_at:Mapped[datetime]=mapped_column(DateTime,index=True)
+    investigation_completed_at:Mapped[datetime|None]=mapped_column(DateTime,nullable=True)
+    resident_circumstance_reviewed:Mapped[bool]=mapped_column(Boolean,default=False)
+    review_state:Mapped[str]=mapped_column(String(40),default="NEEDS_HUMAN_REVIEW")
+    status:Mapped[str]=mapped_column(String(30),default="OPEN",index=True)
+    deadlines_json:Mapped[str]=mapped_column(Text,default="[]")
+    alternative_accommodation_required:Mapped[bool]=mapped_column(Boolean,default=False)
+    evidence_reference:Mapped[str]=mapped_column(String(300))
+    cleared_by_user_id:Mapped[int|None]=mapped_column(ForeignKey("users.id"),nullable=True)
+    clearance_reason:Mapped[str]=mapped_column(Text,default="")
+    cleared_at:Mapped[datetime|None]=mapped_column(DateTime,nullable=True)
+    created_at:Mapped[datetime]=mapped_column(DateTime,default=utcnow)
+    updated_at:Mapped[datetime]=mapped_column(DateTime,default=utcnow)
+
 
 class Escalation(Base):
     __tablename__="escalations"
