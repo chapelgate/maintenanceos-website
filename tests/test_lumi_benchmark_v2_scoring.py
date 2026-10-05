@@ -149,3 +149,12 @@ def test_forbidden_response_pattern_is_hard_failure():
     scored = mod.score_case(case["expected"], actual)
     assert scored["hard_pass"] is False
     assert "forbidden_response_pattern" in scored["hard_fail_reasons"]
+
+
+def test_deterministic_output_policy_violation_is_hard_failure():
+    case = seed_case(15)
+    actual = good_actual(case)
+    actual["policy_violation_reason"] = "unverified_action_confirmation:contractor_dispatched"
+    scored = mod.score_case(case["expected"], actual)
+    assert scored["hard_pass"] is False
+    assert "deterministic_output_policy_violation" in scored["hard_fail_reasons"]
