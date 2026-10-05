@@ -106,6 +106,16 @@
         "type": "string"
       },
       "uniqueItems": true
+    },
+    "observed_action_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "policy_violation_reason": {
+      "type": "string"
     }
   }
 }
