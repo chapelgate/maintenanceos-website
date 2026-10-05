@@ -128,13 +128,13 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Acceptance: PASS on candidate SHA `b2cf47ca0750833f9014889dbf4efe646dc5f5b2` — the same 390x844 preview asked an unrelated Mars/spacecraft question and returned explicit uncertainty; no invented source, number, service or policy; 0 runtime exceptions and 0 lead/save requests.
 
 ## MOSWEB-S008A — Production V2 runtime reuse decision
-- Status: HUMAN_BLOCKED
+- Status: PASS
 - Depends on: MOSWEB-S007B PASS
 - Outcome: identify and prove the smallest existing approved Chapelgate runtime that can execute V2 resumably.
-- Acceptance: BLOCKER RECORDED — no existing approved runtime satisfies resumable V2 without violating estate boundaries. DigitalOcean candidates are other products, estate-control infrastructure or the excluded golden phone stack. Railway's only healthy public service is the unrelated RSFM Python control plane; the generic runtime has no live deployment/domain/durable state, another runtime is failed, and the remaining worker is cron-only. No Render, new service, new database, or cross-project runtime coupling was introduced. Human approval is required to designate or provision an appropriate persistent runtime before S008B.
+- Acceptance: PASS — dedicated DigitalOcean runtime `maintenanceos-scanner-v2` exists (droplet 606110383, 178.128.171.45). No cross-project runtime reuse, Render, new queue, database or control plane is required.
 
 ## MOSWEB-S008B — Feature-gated production canary cutover
-- Status: HOLD
+- Status: HUMAN_BLOCKED
 - Depends on: MOSWEB-S008A PASS
 - Outcome: connect the existing /create scan path to V2 behind the existing explicit feature gate on the proven runtime.
 - Acceptance: V1 remains rollback path; exact canary tests PASS before wider enablement; no telephony/provider credential change.
