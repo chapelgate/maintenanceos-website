@@ -133,9 +133,18 @@ def validate_case(case: dict[str, Any], idx: int) -> list[str]:
             errors.append(f"{where}.expected.must_escalate must be boolean")
         if not isinstance(exp.get("permitted_side_effects"), list):
             errors.append(f"{where}.expected.permitted_side_effects must be list")
-        for key in ("hazard_codes", "required_information", "forbidden_claims"):
+        for key in ("hazard_codes", "required_information", "forbidden_claims", "required_compliance_flags", "forbidden_response_regexes"):
             if key in exp and not isinstance(exp[key], list):
                 errors.append(f"{where}.expected.{key} must be list")
+        if isinstance(exp.get("forbidden_response_regexes"), list):
+            for pattern in exp["forbidden_response_regexes"]:
+                if not isinstance(pattern, str):
+                    errors.append(f"{where}.expected.forbidden_response_regexes entries must be strings")
+                    continue
+                try:
+                    re.compile(pattern)
+                except re.error as exc:
+                    errors.append(f"{where}.expected.forbidden_response_regexes invalid regex {pattern!r}: {exc}")
 
     if isinstance(sig, dict):
         facts = sig.get("causal_facts")
