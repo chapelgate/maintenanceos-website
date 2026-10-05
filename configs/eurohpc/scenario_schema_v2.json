@@ -57,6 +57,9 @@
         },
         "locale": {
           "type": "string"
+        },
+        "reception_mode": {
+          "type": "boolean"
         }
       }
     },
