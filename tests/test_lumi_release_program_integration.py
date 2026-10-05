@@ -32,7 +32,7 @@ def test_all_gpu_release_domains_exist_in_registry():
 def test_release_program_keeps_statutory_and_lifecycle_controls_off_gpu():
     cfg = load(MAP)
     by_id = {x["id"]: x for x in cfg["requirements"]}
-    for rid in ("REL-AWAAB-02", "REL-DATA-02", "REL-IAM-02", "REL-COMPLAINT-02", "REL-OBS-01"):
+    for rid in ("REL-AWAAB-02", "REL-DATA-02", "REL-DATA-03", "REL-IAM-02", "REL-COMPLAINT-02", "REL-OBS-01", "REL-VOICE-NOTICE-01"):
         assert by_id[rid]["layer"] == "cpu_release"
 
 
@@ -46,7 +46,7 @@ def test_awaab_phase_dates_are_frozen_from_authoritative_guidance():
 def test_professional_gates_cannot_be_closed_by_lumi():
     cfg = load(MAP)
     professional = {x["id"] for x in cfg["requirements"] if x["layer"] == "human_professional"}
-    assert {"REL-PROVIDER-01", "REL-SECURITY-01", "REL-WEB-01", "REL-BRAND-01"} <= professional
+    assert {"REL-PROVIDER-01", "REL-SECURITY-01", "REL-WEB-01", "REL-BRAND-01", "REL-DPIA-01"} <= professional
 
 
 def test_release_integrated_seed_contains_expected_behavioural_families():
