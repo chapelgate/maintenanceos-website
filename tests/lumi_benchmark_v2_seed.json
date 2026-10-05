@@ -7,7 +7,8 @@
       "industry_os": "LandlordOS",
       "caller_role": "tenant",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -55,7 +56,8 @@
       "industry_os": "HousingAssociationOS",
       "caller_role": "resident",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -104,7 +106,8 @@
       "industry_os": "HolidayLetOS",
       "caller_role": "guest",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -151,7 +154,8 @@
       "industry_os": "FacilitiesOS",
       "caller_role": "site_manager",
       "channel": "text",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -198,7 +202,8 @@
       "industry_os": "CouncilOS",
       "caller_role": "resident",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -245,7 +250,8 @@
       "industry_os": "PropertyManagerOS",
       "caller_role": "concierge",
       "channel": "text",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -292,7 +298,8 @@
       "industry_os": "MaintenanceOS",
       "caller_role": "resident",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -340,7 +347,8 @@
       "industry_os": "HolidayLetOS",
       "caller_role": "guest",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -385,7 +393,8 @@
       "industry_os": "LandlordOS",
       "caller_role": "tenant",
       "channel": "text",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -430,7 +439,8 @@
       "industry_os": "LettingAgentOS",
       "caller_role": "tenant",
       "channel": "email",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -478,7 +488,8 @@
       "industry_os": "HousingAssociationOS",
       "caller_role": "resident",
       "channel": "text",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -527,7 +538,8 @@
       "industry_os": "CouncilOS",
       "caller_role": "resident",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -572,10 +584,11 @@
     "split": "development",
     "family": "reception_address_correction",
     "context": {
-      "industry_os": "ReceptionOS",
+      "industry_os": "LettingAgentOS",
       "caller_role": "tenant",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": true
     },
     "input": {
       "turns": [
@@ -619,10 +632,11 @@
     "split": "development",
     "family": "reception_interruption_repair",
     "context": {
-      "industry_os": "ReceptionOS",
+      "industry_os": "MaintenanceOS",
       "caller_role": "resident",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": true
     },
     "input": {
       "turns": [
@@ -669,10 +683,11 @@
     "split": "development",
     "family": "reception_silence_after_identity",
     "context": {
-      "industry_os": "ReceptionOS",
+      "industry_os": "LandlordOS",
       "caller_role": "tenant",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": true
     },
     "input": {
       "turns": [
@@ -721,7 +736,8 @@
       "industry_os": "PropertyManagerOS",
       "caller_role": "property_manager",
       "channel": "text",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -765,7 +781,8 @@
       "industry_os": "HolidayLetOS",
       "caller_role": "guest",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -812,7 +829,8 @@
       "industry_os": "LettingAgentOS",
       "caller_role": "tenant",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -856,7 +874,8 @@
       "industry_os": "MaintenanceOS",
       "caller_role": "resident",
       "channel": "email",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -903,7 +922,8 @@
       "industry_os": "FacilitiesOS",
       "caller_role": "site_manager",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -951,7 +971,8 @@
       "industry_os": "CouncilOS",
       "caller_role": "resident",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -1000,7 +1021,8 @@
       "industry_os": "PropertyManagerOS",
       "caller_role": "unknown_caller",
       "channel": "text",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
@@ -1045,10 +1067,11 @@
     "split": "development",
     "family": "provider_failure_mid_intake",
     "context": {
-      "industry_os": "ReceptionOS",
+      "industry_os": "HousingAssociationOS",
       "caller_role": "tenant",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": true
     },
     "input": {
       "turns": [
@@ -1095,7 +1118,8 @@
       "industry_os": "HousingAssociationOS",
       "caller_role": "resident",
       "channel": "voice_transcript",
-      "locale": "en-GB"
+      "locale": "en-GB",
+      "reception_mode": false
     },
     "input": {
       "turns": [
