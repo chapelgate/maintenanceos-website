@@ -1,0 +1,449 @@
+{
+  "version": "2.2",
+  "principle": "Each domain appears in all three evaluation splits through different scenario families. Families are disjoint across splits; domains are not. This preserves coverage while preventing prompt-family leakage.",
+  "hidden_policy": "Only hidden family IDs/coverage domains may live in the tuning repository. Hidden-final prompt text and labels are frozen separately and are not supplied to tuning or selection jobs.",
+  "domains": [
+    {
+      "domain": "gas_safety",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "gas_minimisation",
+      "selection_validation_family": "gas_source_ambiguity",
+      "hidden_final_family": "gas_retraction_after_initial_disclosure",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "carbon_monoxide",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "co_alarm_then_minimise",
+      "selection_validation_family": "co_symptoms_without_alarm",
+      "hidden_final_family": "co_conflicting_battery_story",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "fire_smoke",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "active_smoke_appliance",
+      "selection_validation_family": "burning_smell_uncertain_source",
+      "hidden_final_family": "smoke_then_false_reassurance",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "electrical",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "exposed_live_conductor",
+      "selection_validation_family": "intermittent_sparking",
+      "hidden_final_family": "electrical_hazard_with_safe_sounding_language",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "water_electric_interaction",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "water_through_light",
+      "selection_validation_family": "leak_near_consumer_unit",
+      "hidden_final_family": "water_electrical_story_change",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "structural",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "partial_ceiling_collapse",
+      "selection_validation_family": "progressive_sagging_cracking",
+      "hidden_final_family": "structural_damage_minimised_as_cosmetic",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "entrapment_access",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "child_locked_in_secure_area",
+      "selection_validation_family": "adult_trapped_by_failed_access",
+      "hidden_final_family": "entrapment_misdescribed_as_lock_repair",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "safeguarding_threat",
+      "category": "critical",
+      "evaluation_lane": "gpu_model",
+      "development_family": "vulnerable_person_risk",
+      "selection_validation_family": "threatening_caller_context",
+      "hidden_final_family": "safeguarding_hidden_inside_repair_story",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "routine_plumbing",
+      "category": "routine",
+      "evaluation_lane": "gpu_model",
+      "development_family": "progressive_tap_leak",
+      "selection_validation_family": "blocked_fixture_without_flood",
+      "hidden_final_family": "minor_leak_with_irrelevant_alarm_words",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "false_emergency_lookalike",
+      "category": "near_miss",
+      "evaluation_lane": "gpu_model",
+      "development_family": "resolved_cooking_smoke_alarm",
+      "selection_validation_family": "steam_or_aerosol_alarm_known_source",
+      "hidden_final_family": "nonhazard_alarm_trigger_with_explicit_resolution",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "routine_heating",
+      "category": "routine",
+      "evaluation_lane": "gpu_model",
+      "development_family": "boiler_noise_operational",
+      "selection_validation_family": "partial_heating_loss",
+      "hidden_final_family": "heating_fault_with_nonhazard_smell_metaphor",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "routine_access",
+      "category": "routine",
+      "evaluation_lane": "gpu_model",
+      "development_family": "stiff_lock_operable",
+      "selection_validation_family": "failed_internal_handle_no_entrapment",
+      "hidden_final_family": "access_fault_with_emergency_wording_but_no_trap",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "damp_mould",
+      "category": "routine",
+      "evaluation_lane": "gpu_model",
+      "development_family": "recurrent_mould_weak_ventilation",
+      "selection_validation_family": "condensation_vs_leak",
+      "hidden_final_family": "damp_report_with_vulnerability_context",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "building_fabric",
+      "category": "routine",
+      "evaluation_lane": "gpu_model",
+      "development_family": "stable_hairline_crack",
+      "selection_validation_family": "window_latch_weather_ingress",
+      "hidden_final_family": "roof_leak_without_electrical_contact",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "multi_intent_priority",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "safety_plus_routine",
+      "selection_validation_family": "repair_plus_human_request",
+      "hidden_final_family": "multiple_repairs_with_one_urgent_dimension",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "identity_address_correction",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "address_explicit_correction",
+      "selection_validation_family": "phone_number_readback_correction",
+      "hidden_final_family": "property_identifier_conflict_then_resolution",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "interruption_topic_reset",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "triple_topic_reset",
+      "selection_validation_family": "angry_barge_in_then_final_issue",
+      "hidden_final_family": "interruption_during_safety_disclosure",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "silence_abandonment",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "silence_before_issue",
+      "selection_validation_family": "abandon_after_partial_issue",
+      "hidden_final_family": "silence_after_critical_keyword",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "asr_transcript_corruption",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "number_homophone_correction",
+      "selection_validation_family": "postcode_token_corruption",
+      "hidden_final_family": "critical_keyword_partial_transcription",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "transfer_fallback",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "explicit_human_request",
+      "selection_validation_family": "transfer_unavailable_safe_fallback",
+      "hidden_final_family": "transfer_request_during_critical_case",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "provider_failure",
+      "category": "resilience",
+      "evaluation_lane": "hybrid_cpu_first",
+      "development_family": "provider_loss_before_identity",
+      "selection_validation_family": "provider_loss_after_hazard",
+      "hidden_final_family": "fallback_recovers_without_false_side_effect",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "cross_tenant_privacy",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "request_other_tenant_status",
+      "selection_validation_family": "similar_address_cross_property_probe",
+      "hidden_final_family": "portfolio_context_cross_client_probe",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "unverified_authority",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "authority_spoof_booking",
+      "selection_validation_family": "owner_claim_without_verification",
+      "hidden_final_family": "contractor_claims_manager_authority",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "false_dispatch_booking",
+      "category": "action_integrity",
+      "evaluation_lane": "gpu_model",
+      "development_family": "dispatch_status_pressure",
+      "selection_validation_family": "booking_confirmation_pressure",
+      "hidden_final_family": "availability_misrepresented_as_booking",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "false_financial_claim",
+      "category": "action_integrity",
+      "evaluation_lane": "gpu_model",
+      "development_family": "refund_confirmation_pressure",
+      "selection_validation_family": "compensation_demand",
+      "hidden_final_family": "payment_status_without_evidence",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "false_completion_resolution",
+      "category": "action_integrity",
+      "evaluation_lane": "gpu_model",
+      "development_family": "completion_claim_without_evidence",
+      "selection_validation_family": "caller_pushes_close_case",
+      "hidden_final_family": "resolved_claim_after_tool_failure",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "prompt_injection",
+      "category": "adversarial",
+      "evaluation_lane": "gpu_model",
+      "development_family": "direct_ignore_safety_instruction",
+      "selection_validation_family": "embedded_email_instruction",
+      "hidden_final_family": "roleplay_authority_override",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "duplicate_replay",
+      "category": "resilience",
+      "evaluation_lane": "cpu_only",
+      "development_family": "duplicate_callback_same_event",
+      "selection_validation_family": "replayed_tool_action",
+      "hidden_final_family": "reconnect_same_incident",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "concurrency_isolation",
+      "category": "resilience",
+      "evaluation_lane": "hybrid_cpu_first",
+      "development_family": "two_tenants_parallel_intake",
+      "selection_validation_family": "parallel_repair_and_transfer",
+      "hidden_final_family": "parallel_critical_and_routine_sessions",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "vulnerability_priority",
+      "category": "context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "heating_loss_vulnerable_resident",
+      "selection_validation_family": "mobility_issue_access_fault",
+      "hidden_final_family": "child_or_elderly_context_changes_escalation",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "industry_authority",
+      "category": "context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "letting_agent_multi_landlord_authority",
+      "selection_validation_family": "facilities_site_scope_authority",
+      "hidden_final_family": "council_or_housing_role_boundary",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "holidaylet_guest_context",
+      "category": "context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "guest_unfamiliar_with_property",
+      "selection_validation_family": "out_of_hours_guest_access",
+      "hidden_final_family": "guest_requests_compensation_during_repair",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "unknown_out_of_scope",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "unknown_request_clarify",
+      "selection_validation_family": "nonmaintenance_request_redirect",
+      "hidden_final_family": "ambiguous_request_without_invented_answer",
+      "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "awaab_damp_mould",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "damp_mould_vulnerability_significance",
+      "selection_validation_family": "damp_mould_recurrence_health_change",
+      "hidden_final_family": "damp_mould_household_risk_unseen",
+      "variant_rule": "Vary hazard evidence, household vulnerability and uncertainty; never count address/name/reference substitutions as new evidence."
+    },
+    {
+      "domain": "awaab_material_change",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "prior_hazard_material_change",
+      "selection_validation_family": "symptoms_worsen_after_prior_inspection",
+      "hidden_final_family": "hazard_severity_change_after_no_action",
+      "variant_rule": "A new case must introduce a materially different change in hazard severity, health effect or household circumstance."
+    },
+    {
+      "domain": "awaab_lifestyle_blame",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "damp_mould_lifestyle_blame_request",
+      "selection_validation_family": "ventilation_habits_blame_pressure",
+      "hidden_final_family": "household_behaviour_blame_trap",
+      "variant_rule": "The substantive variable is pressure to blame tenant behaviour; cosmetic paraphrases do not count."
+    },
+    {
+      "domain": "awaab_third_party_awareness",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "contractor_reports_hazard",
+      "selection_validation_family": "representative_reports_hazard",
+      "hidden_final_family": "cross_department_awareness_hazard",
+      "variant_rule": "Vary reporter authority and what the system may disclose; preserve the distinction between awareness and privacy entitlement."
+    },
+    {
+      "domain": "awaab_no_false_compliance_claim",
+      "category": "action_integrity",
+      "evaluation_lane": "gpu_model",
+      "development_family": "statutory_deadline_confirmation_without_workflow",
+      "selection_validation_family": "written_summary_claim_without_evidence",
+      "hidden_final_family": "alternative_accommodation_claim_without_evidence",
+      "variant_rule": "Each case must probe a distinct statutory/compliance action claim that lacks verified workflow evidence."
+    },
+    {
+      "domain": "data_minimisation",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "access_code_volunteered_unnecessary",
+      "selection_validation_family": "full_contact_details_echo_pressure",
+      "hidden_final_family": "sensitive_access_data_nonrepetition",
+      "variant_rule": "Use synthetic restricted values; each case must probe a different unnecessary disclosure or repetition channel."
+    },
+    {
+      "domain": "identity_uncertainty",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "unverified_caller_private_history",
+      "selection_validation_family": "matching_partial_details_not_verified",
+      "hidden_final_family": "social_engineering_identity_mix",
+      "variant_rule": "Vary identity evidence quality and requested private/consequential outcome."
+    },
+    {
+      "domain": "third_party_reporter_boundary",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "neighbour_reports_hazard_no_private_status",
+      "selection_validation_family": "caregiver_reports_issue_without_data_entitlement",
+      "hidden_final_family": "contractor_reports_issue_no_tenant_history",
+      "variant_rule": "Keep third-party reporting ability separate from access to resident/property private history."
+    },
+    {
+      "domain": "accessible_communication",
+      "category": "context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "requested_language_or_format",
+      "selection_validation_family": "hearing_or_readability_adjustment",
+      "hidden_final_family": "alternative_contact_format_need",
+      "variant_rule": "Vary the actual communication barrier or requested format, not demographic labels alone."
+    },
+    {
+      "domain": "complaint_recognition",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "explicit_complaint_during_repair_call",
+      "selection_validation_family": "dissatisfaction_requests_complaint",
+      "hidden_final_family": "complaint_embedded_in_multi_intent",
+      "variant_rule": "A case must alter complaint intent, repair context or escalation boundary, not merely tone."
+    },
+    {
+      "domain": "complaint_escalation_boundary",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "angry_complaint_no_refusal",
+      "selection_validation_family": "repeat_contact_complaint_no_dismissal",
+      "hidden_final_family": "vulnerable_complaint_escalation",
+      "variant_rule": "Vary the reason a model may be tempted to refuse/escalate incorrectly; do not count synonymous anger wording as new evidence."
+    },
+    {
+      "domain": "human_oversight_boundary",
+      "category": "governance",
+      "evaluation_lane": "gpu_model",
+      "development_family": "legal_entitlement_question_human_review",
+      "selection_validation_family": "consequential_dispute_human_review",
+      "hidden_final_family": "ambiguous_high_impact_decision_human_review",
+      "variant_rule": "Vary the significant/consequential decision requiring human authority; avoid generic uncertainty duplicates."
+    },
+    {
+      "domain": "awaab_statutory_clocks",
+      "category": "legal_workflow",
+      "evaluation_lane": "cpu_only",
+      "development_family": "awaab_phase1_clock_rules_cpu",
+      "selection_validation_family": "awaab_phase2_clock_rules_cpu",
+      "hidden_final_family": "awaab_clock_edge_cases_cpu",
+      "variant_rule": "Deterministic date/time/effective-scope tests only; never send these to a model."
+    },
+    {
+      "domain": "retention_legal_hold",
+      "category": "data_lifecycle",
+      "evaluation_lane": "cpu_only",
+      "development_family": "retention_delete_hold_cpu",
+      "selection_validation_family": "complaint_hold_prevents_delete_cpu",
+      "hidden_final_family": "retention_restore_export_isolation_cpu",
+      "variant_rule": "Deterministic lifecycle mechanics only; no GPU use."
+    },
+    {
+      "domain": "iam_enforcement",
+      "category": "identity",
+      "evaluation_lane": "cpu_only",
+      "development_family": "rbac_tenant_binding_cpu",
+      "selection_validation_family": "mfa_session_hold_cpu",
+      "hidden_final_family": "identity_release_authorisation_cpu",
+      "variant_rule": "Deterministic identity/session enforcement only; no GPU use."
+    },
+    {
+      "domain": "complaint_workflow",
+      "category": "legal_workflow",
+      "evaluation_lane": "cpu_only",
+      "development_family": "complaint_stage_records_cpu",
+      "selection_validation_family": "reasonable_adjustment_record_cpu",
+      "hidden_final_family": "complaint_remedy_audit_cpu",
+      "variant_rule": "Deterministic complaint workflow and recordkeeping only; no GPU use."
+    }
+  ],
+  "release_program_integration": "configs/eurohpc/release_program_test_map_v2.json"
+}

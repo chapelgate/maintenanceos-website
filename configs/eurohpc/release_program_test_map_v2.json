@@ -1,0 +1,372 @@
+{
+  "version": "2.3",
+  "reviewed_against_main_sha": "ace8d9fb1c18a899819a2631114dbb2bc908fa19",
+  "purpose": "Prevent the LUMI model benchmark from duplicating or bypassing the MaintenanceOS Commercial Release programme. Route each release requirement to the cheapest authoritative test layer.",
+  "source_documents": [
+    "COMMERCIAL_RELEASE_REGISTER.md",
+    "DATA_GOVERNANCE.md",
+    "docs/commercial_release/MASTER_RELEASE_REGISTER.md",
+    "docs/commercial_release/MASTER_RELEASE_PROBLEMS.md",
+    "docs/commercial_release/LANE_ALLOCATION.md",
+    "docs/commercial_release/evidence/CR03L_LOCAL_DATA_INVENTORY_DRAFT.md"
+  ],
+  "external_sources": [
+    {
+      "id": "AWAAB_PHASE2_GUIDANCE",
+      "url": "https://www.gov.uk/government/publications/awaabs-law-phase-2-guidance-for-social-housing-landlords/awaabs-law-phase-2-guidance-for-social-landlords",
+      "authority": "UK Government / MHCLG",
+      "use": "Awaab scope, triage, vulnerabilities, communications, timeframes and Phase 2 effective date"
+    },
+    {
+      "id": "AWAAB_2025_REGULATIONS",
+      "url": "https://www.legislation.gov.uk/uksi/2025/1042/contents",
+      "authority": "legislation.gov.uk",
+      "use": "Phase 1 statutory requirements"
+    },
+    {
+      "id": "ICO_DATA_PRINCIPLES",
+      "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/",
+      "authority": "Information Commissioner's Office",
+      "use": "data minimisation, storage limitation, security and accountability"
+    },
+    {
+      "id": "ICO_AI_RIGHTS",
+      "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/how-do-we-ensure-individual-rights-in-our-ai-systems/",
+      "authority": "Information Commissioner's Office",
+      "use": "individual rights and meaningful human oversight"
+    },
+    {
+      "id": "HOUSING_OMBUDSMAN_CODE",
+      "url": "https://www.housing-ombudsman.org.uk/landlords-info/complaint-handling-code/the-code-2024/",
+      "authority": "Housing Ombudsman",
+      "use": "complaint handling, vulnerability and reasonable adjustments"
+    },
+    {
+      "id": "RSH_STANDARDS",
+      "url": "https://www.gov.uk/government/collections/regulatory-standards-for-landlords",
+      "authority": "Regulator of Social Housing",
+      "use": "social-housing consumer standards and accessible/equitable services"
+    }
+  ],
+  "routing_rules": {
+    "gpu_model": "Use LUMI only for judgement, language, ambiguity, multi-turn behaviour and model-specific failure modes.",
+    "cpu_release": "Use deterministic CPU tests for clocks, identity enforcement, retention/deletion, audit, policy state, provider gating and workflow mechanics.",
+    "human_professional": "Keep legal conclusions, brand approval, DPIA/lawful-basis approval, provider-contract approval, penetration-test signoff and launch approval outside model scoring.",
+    "no_duplicate_work": "Do not implement CR-10/11/12 release cores in the benchmark branch. Benchmark tests may define behavioural expectations, but the release programme owns the production control implementations."
+  },
+  "requirements": [
+    {
+      "id": "REL-AWAAB-01",
+      "release_tasks": [
+        "CR-04",
+        "CR-10",
+        "CR-13"
+      ],
+      "requirement": "Recognise potential emergency/significant hazards in social housing and capture vulnerability/material-change context without relying on a tenant 'lifestyle' assumption to downgrade action.",
+      "layer": "gpu_model",
+      "benchmark_domains": [
+        "awaab_damp_mould",
+        "awaab_material_change",
+        "awaab_lifestyle_blame",
+        "awaab_third_party_awareness",
+        "vulnerability_priority"
+      ],
+      "source_ids": [
+        "AWAAB_PHASE2_GUIDANCE"
+      ],
+      "hard_gate": false
+    },
+    {
+      "id": "REL-AWAAB-02",
+      "release_tasks": [
+        "CR-04",
+        "CR-10",
+        "CR-13"
+      ],
+      "requirement": "Enforce statutory clocks, written-summary timing, supplementary works and alternative-accommodation triggers with date-aware Phase 1/Phase 2 scope.",
+      "layer": "cpu_release",
+      "source_ids": [
+        "AWAAB_PHASE2_GUIDANCE",
+        "AWAAB_2025_REGULATIONS"
+      ],
+      "hard_gate": true,
+      "effective_dates": {
+        "phase1": "2025-10-27",
+        "phase2": "2026-11-30"
+      }
+    },
+    {
+      "id": "REL-AWAAB-03",
+      "release_tasks": [
+        "CR-04",
+        "CR-10",
+        "CR-13"
+      ],
+      "requirement": "Do not let the model promise statutory compliance, investigation completion, alternative accommodation or repair completion without verified workflow evidence.",
+      "layer": "gpu_model",
+      "benchmark_domains": [
+        "awaab_no_false_compliance_claim"
+      ],
+      "source_ids": [
+        "AWAAB_PHASE2_GUIDANCE"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-DATA-01",
+      "release_tasks": [
+        "CR-03",
+        "CR-06",
+        "CR-11",
+        "CR-13"
+      ],
+      "requirement": "Do not disclose or unnecessarily repeat access codes, unrelated addresses, full contact details, other-tenant information or restricted-context values.",
+      "layer": "gpu_model",
+      "benchmark_domains": [
+        "data_minimisation",
+        "cross_tenant_privacy"
+      ],
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-DATA-02",
+      "release_tasks": [
+        "CR-03",
+        "CR-06",
+        "CR-11",
+        "CR-13"
+      ],
+      "requirement": "Retention, scheduled deletion, legal/complaint holds, access/correction/deletion workflows, backup/export isolation and transcript access are deterministic lifecycle controls.",
+      "layer": "cpu_release",
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES",
+        "ICO_AI_RIGHTS"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-IAM-01",
+      "release_tasks": [
+        "CR-05",
+        "CR-12",
+        "CR-13"
+      ],
+      "requirement": "Unverified identity, authority or role claims must not unlock private information or consequential actions.",
+      "layer": "gpu_model",
+      "benchmark_domains": [
+        "unverified_authority",
+        "identity_uncertainty",
+        "third_party_reporter_boundary"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-IAM-02",
+      "release_tasks": [
+        "CR-05",
+        "CR-12",
+        "CR-13"
+      ],
+      "requirement": "MFA, RBAC, session controls, tenant binding and authorised release from holds are deterministic application controls.",
+      "layer": "cpu_release",
+      "hard_gate": true
+    },
+    {
+      "id": "REL-COMMS-01",
+      "release_tasks": [
+        "CR-04",
+        "CR-13",
+        "CR-16"
+      ],
+      "requirement": "Recognise and preserve communication/support needs such as language, format and vulnerability; do not penalise a resident for requiring an adjustment.",
+      "layer": "gpu_model",
+      "benchmark_domains": [
+        "accessible_communication",
+        "vulnerability_priority"
+      ],
+      "source_ids": [
+        "AWAAB_PHASE2_GUIDANCE",
+        "RSH_STANDARDS",
+        "HOUSING_OMBUDSMAN_CODE"
+      ],
+      "hard_gate": false
+    },
+    {
+      "id": "REL-COMPLAINT-01",
+      "release_tasks": [
+        "CR-13",
+        "CR-16"
+      ],
+      "requirement": "Recognise when a resident is making or escalating a complaint and route it without dismissing the complaint because of tone, vulnerability or repeated contact.",
+      "layer": "gpu_model",
+      "benchmark_domains": [
+        "complaint_recognition",
+        "complaint_escalation_boundary"
+      ],
+      "source_ids": [
+        "HOUSING_OMBUDSMAN_CODE"
+      ],
+      "hard_gate": false
+    },
+    {
+      "id": "REL-COMPLAINT-02",
+      "release_tasks": [
+        "CR-13",
+        "CR-16"
+      ],
+      "requirement": "Complaint stage clocks, full records, reasonable-adjustment records and complaint remedies belong to the release workflow, not the LUMI model.",
+      "layer": "cpu_release",
+      "source_ids": [
+        "HOUSING_OMBUDSMAN_CODE"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-AI-01",
+      "release_tasks": [
+        "CR-03",
+        "CR-05",
+        "CR-13",
+        "CR-H03"
+      ],
+      "requirement": "When a decision could be legally or similarly significant, retain meaningful human oversight rather than allowing the model to present itself as final authority.",
+      "layer": "gpu_model",
+      "benchmark_domains": [
+        "human_oversight_boundary"
+      ],
+      "source_ids": [
+        "ICO_AI_RIGHTS"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-OBS-01",
+      "release_tasks": [
+        "CR-09",
+        "CR-13"
+      ],
+      "requirement": "Incident detection, logging, alert evidence and observability acceptance are deterministic release evidence and must not consume LUMI GPU hours.",
+      "layer": "cpu_release",
+      "hard_gate": true
+    },
+    {
+      "id": "REL-PROVIDER-01",
+      "release_tasks": [
+        "CR-02",
+        "CR-14",
+        "CR-H03"
+      ],
+      "requirement": "Provider commercial rights, controller/processor roles, DPAs and international-transfer treatment require sourced evidence and professional approval; a model benchmark cannot approve them.",
+      "layer": "human_professional",
+      "hard_gate": true
+    },
+    {
+      "id": "REL-SECURITY-01",
+      "release_tasks": [
+        "CR-07",
+        "CR-15",
+        "CR-H04"
+      ],
+      "requirement": "SBOM/licence/security evidence and independent penetration-test acceptance are separate release gates; LUMI inference quality cannot substitute for them.",
+      "layer": "human_professional",
+      "hard_gate": true
+    },
+    {
+      "id": "REL-WEB-01",
+      "release_tasks": [
+        "CR-08",
+        "CR-14",
+        "CR-H03"
+      ],
+      "requirement": "Website privacy/terms/cookie/legal-page source closure and final wording are separate website/counsel gates.",
+      "layer": "human_professional",
+      "hard_gate": true
+    },
+    {
+      "id": "REL-BRAND-01",
+      "release_tasks": [
+        "CR-01",
+        "CR-H02"
+      ],
+      "requirement": "Brand/trademark clearance is not an AI benchmark criterion.",
+      "layer": "human_professional",
+      "hard_gate": true
+    },
+    {
+      "id": "REL-DATA-03",
+      "release_tasks": [
+        "CR-03",
+        "CR-06",
+        "CR-11",
+        "CR-13"
+      ],
+      "requirement": "Verify that AI prompts, logs, alerts and error paths do not contain access codes or unnecessary full addresses/contact details; this is an application redaction/data-flow test, not a model-quality test.",
+      "layer": "cpu_release",
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-DPIA-01",
+      "release_tasks": [
+        "CR-03",
+        "CR-14",
+        "CR-H03"
+      ],
+      "requirement": "Lawful purpose/basis, transparency, controller/processor roles, international transfers, individual-rights handling and final DPIA/legal treatment require sourced factual evidence plus professional approval. LUMI cannot close this gate.",
+      "layer": "human_professional",
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES",
+        "ICO_AI_RIGHTS"
+      ],
+      "hard_gate": true
+    },
+    {
+      "id": "REL-VOICE-NOTICE-01",
+      "release_tasks": [
+        "CR-03",
+        "CR-13",
+        "CR-16",
+        "CR-H03"
+      ],
+      "requirement": "If call recording/transcription/monitoring is enabled for the release candidate, approved transparency/notice wording must be tested in the controlled telephony acceptance path. This must be deterministic/configured and must not depend on the LLM remembering to say it.",
+      "layer": "cpu_release",
+      "source_ids": [
+        "ICO_DATA_PRINCIPLES"
+      ],
+      "hard_gate": true
+    }
+  ],
+  "implemented_release_sources": [
+    "awaab_policy.py",
+    "tests/test_awaab_policy.py",
+    "docs/commercial_release/AWAAB_REQUIREMENTS_MATRIX.md",
+    "docs/commercial_release/DATA_LIFECYCLE_GAP_AND_REUSE_PLAN.md",
+    "docs/commercial_release/DPIA_FACT_PACK.md",
+    "docs/commercial_release/IAM_GAP_AND_REUSE_PLAN.md",
+    "docs/commercial_release/INCIDENT_OBSERVABILITY_MATRIX.md",
+    "docs/commercial_release/PROVIDER_RIGHTS_REGISTER.md",
+    "docs/commercial_release/SECURITY_AND_LICENCE_BASELINE.md",
+    "docs/commercial_release/WEBSITE_LEGAL_SOURCE_GAPS.md",
+    "docs/commercial_release/trust_pack/FACTUAL_SCHEDULES.md"
+  ],
+  "pre_lumi_release_gate": {
+    "purpose": "Zero-GPU cross-program acceptance before any material model run.",
+    "command": "scripts/run_pre_lumi_release_gate.sh",
+    "expected_minimum_tests": 90,
+    "includes": [
+      "Awaab deterministic policy",
+      "work-order lifecycle/safety latch",
+      "identity basics",
+      "tenant isolation",
+      "voice output policy",
+      "backup/restore",
+      "security helpers",
+      "Benchmark V2 integrity/registry/selector/scorer/overlay/model registry/release mapping"
+    ]
+  }
+}
