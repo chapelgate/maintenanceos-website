@@ -47,14 +47,29 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
     actual_claims = _set(actual.get("claims"))
 
     must_escalate = expected.get("must_escalate") is True
-    escalated = actual.get("escalated") is True
+    model_escalated = actual.get("escalated") is True
+    deterministic_escalated = actual.get("deterministic_escalated") is True
+    integrated_escalated = (
+        actual.get("integrated_escalated") is True
+        if "integrated_escalated" in actual
+        else (model_escalated or deterministic_escalated)
+    )
 
-    critical_miss = must_escalate and not escalated
-    false_escalation = (not must_escalate) and escalated
+    deterministic_haz = _set(actual.get("deterministic_hazard_codes"))
+    integrated_haz = (
+        _set(actual.get("integrated_hazard_codes"))
+        if "integrated_hazard_codes" in actual
+        else (act_haz | deterministic_haz)
+    )
+
+    model_critical_miss = must_escalate and not model_escalated
+    critical_miss = must_escalate and not integrated_escalated
+    false_escalation = (not must_escalate) and integrated_escalated
 
     priority_correct = actual.get("priority") == expected.get("priority")
-    hazard_recall = exp_haz.issubset(act_haz)
-    extra_hazards = sorted(act_haz - exp_haz)
+    model_hazard_recall = exp_haz.issubset(act_haz)
+    hazard_recall = exp_haz.issubset(integrated_haz)
+    extra_hazards = sorted(integrated_haz - exp_haz)
 
     missing_required_info = sorted(exp_req - act_req)
     required_info_complete = not missing_required_info
@@ -90,9 +105,11 @@ def score_case(expected: dict[str, Any], actual: dict[str, Any]) -> dict[str, An
         "hard_pass": hard_pass,
         "hard_fail_reasons": hard_fail_reasons,
         "critical_miss": critical_miss,
+        "model_critical_miss": model_critical_miss,
         "false_escalation": false_escalation,
         "priority_correct": priority_correct,
         "hazard_recall": hazard_recall,
+        "model_hazard_recall": model_hazard_recall,
         "extra_hazards": extra_hazards,
         "required_info_complete": required_info_complete,
         "missing_required_information": missing_required_info,
@@ -134,6 +151,7 @@ def score_batch(cases: list[dict[str, Any]], results: list[dict[str, Any]]) -> d
 
     hard_failures = [r for r in rows if not r["hard_pass"]]
     critical_misses = [r for r in rows if r.get("critical_miss")]
+    model_critical_misses = [r for r in rows if r.get("model_critical_miss")]
     false_escalations = [r for r in rows if r.get("false_escalation")]
     priority_correct = sum(1 for r in rows if r.get("priority_correct") is True)
     required_complete = sum(1 for r in rows if r.get("required_info_complete") is True)
@@ -155,6 +173,7 @@ def score_batch(cases: list[dict[str, Any]], results: list[dict[str, Any]]) -> d
             "cases": len(rows),
             "hard_failures": len(hard_failures),
             "critical_misses": len(critical_misses),
+            "model_critical_misses": len(model_critical_misses),
             "false_escalations": len(false_escalations),
             "priority_accuracy": (priority_correct / len(rows)) if rows else 0.0,
             "required_information_complete_rate": (required_complete / len(rows)) if rows else 0.0,
