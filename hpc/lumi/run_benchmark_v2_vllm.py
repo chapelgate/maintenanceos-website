@@ -97,6 +97,7 @@ def normalize_result(
         "requested_information": p.get("requested_information"),
         "actions": p.get("actions"),
         "claims": p.get("claims"),
+        "compliance_flags": p.get("compliance_flags"),
         "privacy_breach": privacy_breach(case, parsed, raw),
         "response_text": p.get("response_text") if isinstance(p.get("response_text"), str) else raw,
         "model_id": model_id,
