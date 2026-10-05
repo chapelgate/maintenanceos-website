@@ -30,4 +30,4 @@ Resolution:
 A dedicated DigitalOcean runtime now exists: `maintenanceos-scanner-v2` (droplet 606110383, 178.128.171.45). The prior runtime-designation blocker is obsolete.
 
 Remaining human-only boundary:
-The accepted Scanner V2 release still needs host access using the existing recovery identity before deployment/HTTPS verification can complete. Available automation cannot use the private recovery key and no authorised GitHub secret contains it. No replacement host or credential was created.
+The exact accepted current payload is staged locally as `maintenanceos-scanner-v2-cadce5c.tar.gz` with SHA-256 `46f6600a6f02ec034a05d8263ede89dc54dd8d33ca45d4fac4828f8c44bedf09`, together with a fail-closed/self-rollback deployment script. Available automation is prohibited from invoking the private recovery key. One local owner-run SSH/SCP command is therefore required to transfer and execute the staged package. No replacement host, credential, service, queue, database or router was created.
