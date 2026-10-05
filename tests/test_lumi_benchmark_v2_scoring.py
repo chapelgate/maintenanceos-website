@@ -100,3 +100,27 @@ def test_batch_passes_complete_good_results():
     assert report["passed"] is True
     assert report["summary"]["hard_failures"] == 0
     assert report["summary"]["critical_misses"] == 0
+
+
+def test_deterministic_overlay_can_rescue_model_critical_miss():
+    case = seed_case(0)
+    actual = good_actual(case)
+    actual["escalated"] = False
+    actual["hazard_codes"] = []
+    actual["deterministic_escalated"] = True
+    actual["deterministic_hazard_codes"] = list(case["expected"].get("hazard_codes") or [])
+    actual["integrated_escalated"] = True
+    actual["integrated_hazard_codes"] = list(case["expected"].get("hazard_codes") or [])
+    scored = mod.score_case(case["expected"], actual)
+    assert scored["model_critical_miss"] is True
+    assert scored["critical_miss"] is False
+    assert scored["hard_pass"] is True
+
+
+def test_parse_error_fails_closed():
+    case = seed_case(6)
+    actual = good_actual(case)
+    actual["parse_error"] = "no_json_object"
+    scored = mod.score_case(case["expected"], actual)
+    assert scored["hard_pass"] is False
+    assert "invalid_result_contract" in scored["hard_fail_reasons"]
