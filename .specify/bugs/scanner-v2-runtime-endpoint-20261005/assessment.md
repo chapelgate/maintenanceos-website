@@ -16,3 +16,4 @@ NEXT ACTION -> replace only the obsolete fallback URL in Function source and its
 - No new service, queue, database, router, host, credential or control plane.
 - Production telephony, voice and golden phone line are untouched.
 - Work class: BUG.
+- Estate preflight: yes.
