@@ -59,8 +59,8 @@ test("fonio website readiness separates DigitalOcean enablement from code blocke
 
 test("site.ts public env names match the staging companions checklist", () => {
   const site = read("src/config/site.ts");
-  assert.match(site, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
-  assert.doesNotMatch(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.match(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.doesNotMatch(site, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   assert.match(site, /NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED/);
   assert.match(site, /NEXT_PUBLIC_CALENDAR_ENDPOINT/);
   assert.match(site, /NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED/);

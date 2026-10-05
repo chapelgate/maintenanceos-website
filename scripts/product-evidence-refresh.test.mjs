@@ -60,21 +60,15 @@ test("production and capacity claims remain forbidden", () => {
 });
 
 
-test("retired paid scan service stays retired while bounded website learning returns serverless", () => {
+test("retired paid scan service stays retired while bounded website learning uses Scanner V2", () => {
   const claims = read("PRODUCT_CLAIMS_REGISTER.md");
   const inventory = read("docs/competitive/PHONE_AI_FEATURE_INVENTORY.md");
   const site = read("src/config/site.ts");
-  const scan = read("packages/onboarding-ingest/packages/website/scan/index.ts");
-  const project = read("packages/onboarding-ingest/project.yml");
   const blockers = read("WEBSITE_EXTERNAL_BLOCKERS.md");
 
   assert.match(claims, /NON-PUBLIC \/ RETIRED FROM THE CURRENT WEBSITE PATH/);
   assert.match(inventory, /M-KNO-01/);
-  assert.match(site, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
-  assert.doesNotMatch(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
-  assert.match(scan, /proxyPersistentScan\(allowed\.url\.toString\(\)\)/);
-  assert.match(scan, /DEFAULT_PERSISTENT_SCANNER_ENDPOINT/);
-  assert.doesNotMatch(scan, /runScan\(/);
-  assert.match(project, /runtime:\s*nodejs:22/);
+  assert.match(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.doesNotMatch(site, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   assert.match(blockers, /## CLOSED[\s\S]*WB-002/);
 });

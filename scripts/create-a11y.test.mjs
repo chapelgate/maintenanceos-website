@@ -168,17 +168,15 @@ test("/create Step 1 cannot native-submit before hydration", () => {
 });
 
 
-test("/create uses the same-origin on-demand scanner without reviving the retired paid endpoint", () => {
+test("/create uses the configured Scanner V2 endpoint without reviving the retired paid endpoint", () => {
   const config = read("src/config/site.ts");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
-  const scan = read("packages/onboarding-ingest/packages/website/scan/index.ts");
-  assert.match(config, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
-  assert.doesNotMatch(config, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.match(
+    config,
+    /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT\?\.trim\(\)/,
+  );
+  assert.doesNotMatch(config, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   assert.match(later, /requestOnboardingScan\(endpoint, businessUrl\)/);
-  assert.match(scan, /proxyPersistentScan\(allowed\.url\.toString\(\)\)/);
-  assert.match(scan, /DEFAULT_PERSISTENT_SCANNER_ENDPOINT/);
-  assert.doesNotMatch(scan, /runScan\(/);
-  assert.match(scan, /rate_limited/);
 });
 
 

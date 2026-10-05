@@ -41,10 +41,11 @@ export const siteConfig = {
     process.env.NEXT_PUBLIC_MEASUREMENT_ENDPOINT?.trim() ||
     "https://rsfm-control-plane-production.up.railway.app/v1/public/website-events",
   /**
-   * Same-origin on-demand website scanner routed to DigitalOcean Functions.
-   * There is no always-on scanner container.
+   * Build-time absolute HTTPS endpoint for the dedicated Scanner V2 runtime.
+   * Empty remains fail-closed; App Platform owns the public endpoint value.
    */
-  onboardingScanEndpoint: "/api/website/scan",
+  onboardingScanEndpoint:
+    process.env.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT?.trim() ?? "",
   /**
    * Build-time gate for the /create calendar panel. Default false.
    * Companion process uses CALENDAR_ADAPTERS_ENABLED (not inlined here).

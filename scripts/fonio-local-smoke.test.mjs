@@ -163,12 +163,12 @@ test(".env.example keeps companion flags off for DigitalOcean static", () => {
   assert.match(text, /^NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT=\s*$/m);
 });
 
-test(".env.example.fonio-local keeps local companions documented while public scan stays same-origin", () => {
+test(".env.example.fonio-local keeps local companions documented while public scan stays env-configured", () => {
   const text = fs.readFileSync(path.join(ROOT, ".env.example.fonio-local"), "utf8");
   const site = fs.readFileSync(path.join(ROOT, "src/config/site.ts"), "utf8");
   assert.match(text, /^NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=/m);
-  assert.match(site, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
-  assert.doesNotMatch(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.match(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
+  assert.doesNotMatch(site, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   const expected = [
     "NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED",
     "NEXT_PUBLIC_CALENDAR_ENDPOINT",
