@@ -10,6 +10,13 @@ import sys
 from dotenv import load_dotenv
 
 from configure_test_credentials import validate_credentials
+from commercial_release_controls import (
+    data_lifecycle_runtime_ready,
+    external_identity_configured,
+    external_identity_runtime_ready,
+    retention_policy_configured,
+    social_housing_runtime_ready,
+)
 from idempotency import ai_side_effects_enabled
 from ingress_security import rate_setting_valid
 from models import RuntimeControl,SessionLocal
@@ -152,6 +159,11 @@ CHECKS={
     "websocket_rate_limit_configured": lambda: rate_setting_valid("PUBLIC_WS_RATE_LIMIT_PER_MINUTE"),
     "voice_timing_configured": _voice_timing_valid,
     "staged_database_configured": _staged_database_configured,
+    "commercial_retention_policy": retention_policy_configured,
+    "commercial_data_lifecycle_runtime": data_lifecycle_runtime_ready,
+    "commercial_external_identity_config": external_identity_configured,
+    "commercial_external_identity_runtime": external_identity_runtime_ready,
+    "commercial_social_housing_runtime": social_housing_runtime_ready,
 }
 
 LOCAL_CLOSED_KEYS = (
@@ -177,6 +189,13 @@ CONTROLLED_CALL_CONFIG_KEYS = tuple(
     "public_provider_ingress" if key == "public_provider_ingress_disabled" else key
     for key in PUBLIC_TEST_CONFIG_KEYS
 )
+COMMERCIAL_RELEASE_KEYS = (
+    "commercial_retention_policy",
+    "commercial_data_lifecycle_runtime",
+    "commercial_external_identity_config",
+    "commercial_external_identity_runtime",
+    "commercial_social_housing_runtime",
+)
 
 
 def report():
@@ -188,6 +207,10 @@ def report():
     results["local_pre_live_ready"]=all(results[key] for key in LOCAL_CLOSED_KEYS)
     results["public_test_config_ready"]=all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and not results["realtime_voice_enabled"]
     results["controlled_call_config_ready"]=all(results[key] for key in CONTROLLED_CALL_CONFIG_KEYS) and results["voice_ready"]
+    results["commercial_release_ready"]=(
+        results["controlled_call_config_ready"]
+        and all(results[key] for key in COMMERCIAL_RELEASE_KEYS)
+    )
     results["live_ready"]=results["controlled_call_config_ready"]
     return results
 
@@ -195,6 +218,7 @@ PROFILE_KEYS = {
     "local-closed": "local_pre_live_ready",
     "public-test-config": "public_test_config_ready",
     "controlled-call-config": "controlled_call_config_ready",
+    "commercial-release": "commercial_release_ready",
 }
 
 if __name__=="__main__":

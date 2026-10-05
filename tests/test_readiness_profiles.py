@@ -28,3 +28,22 @@ def test_controlled_call_profile_requires_live_ingress_and_voice(monkeypatch):
     monkeypatch.setattr(readiness, "provider_ready", lambda: True)
     report = readiness.report()
     assert report["controlled_call_config_ready"] is True
+
+
+def test_commercial_release_profile_requires_all_commercial_gates(monkeypatch):
+    checks = _all_checks(True)
+    checks["commercial_data_lifecycle_runtime"] = lambda: False
+    monkeypatch.setattr(readiness, "CHECKS", checks)
+    monkeypatch.setattr(readiness, "provider_ready", lambda: True)
+    report = readiness.report()
+    assert report["controlled_call_config_ready"] is True
+    assert report["commercial_release_ready"] is False
+
+
+def test_commercial_release_profile_can_only_pass_when_controlled_and_commercial_gates_pass(monkeypatch):
+    checks = _all_checks(True)
+    monkeypatch.setattr(readiness, "CHECKS", checks)
+    monkeypatch.setattr(readiness, "provider_ready", lambda: True)
+    report = readiness.report()
+    assert report["commercial_release_ready"] is True
+    assert readiness.PROFILE_KEYS["commercial-release"] == "commercial_release_ready"
