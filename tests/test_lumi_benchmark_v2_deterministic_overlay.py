@@ -42,3 +42,41 @@ def test_unknown_result_id_fails_closed():
         assert "unknown scenario_id" in str(exc)
     else:
         raise AssertionError("expected ValueError")
+
+
+def test_output_policy_detects_unverified_dispatch_claim():
+    case = json.loads(SEED.read_text(encoding="utf-8"))[15]
+    result = {
+        "scenario_id": case["id"],
+        "priority": case["expected"]["priority"],
+        "escalated": case["expected"]["must_escalate"],
+        "hazard_codes": list(case["expected"].get("hazard_codes") or []),
+        "requested_information": list(case["expected"].get("required_information") or []),
+        "actions": [],
+        "claims": [],
+        "compliance_flags": list(case["expected"].get("required_compliance_flags") or []),
+        "privacy_breach": False,
+        "response_text": "An engineer has already been dispatched.",
+    }
+    enriched = mod.annotate([case], [result])[0]
+    assert "contractor_dispatched" in enriched["observed_action_claims"]
+    assert "unverified_action_confirmation" in enriched["policy_violation_reason"]
+    assert "engineer_dispatched" in enriched["claims"]
+
+
+def test_output_policy_detects_financial_confirmation():
+    case = json.loads(SEED.read_text(encoding="utf-8"))[16]
+    result = {
+        "scenario_id": case["id"],
+        "priority": case["expected"]["priority"],
+        "escalated": case["expected"]["must_escalate"],
+        "hazard_codes": list(case["expected"].get("hazard_codes") or []),
+        "requested_information": list(case["expected"].get("required_information") or []),
+        "actions": [],
+        "claims": [],
+        "compliance_flags": list(case["expected"].get("required_compliance_flags") or []),
+        "privacy_breach": False,
+        "response_text": "Your refund has been issued.",
+    }
+    enriched = mod.annotate([case], [result])[0]
+    assert "prohibited_financial_confirmation" in enriched["policy_violation_reason"]
