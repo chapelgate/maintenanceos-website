@@ -2,7 +2,7 @@
   {
     "id": "V2-DEV-0001",
     "split": "development",
-    "family": "critical_gas_minimised",
+    "family": "gas_minimisation",
     "context": {
       "industry_os": "LandlordOS",
       "caller_role": "tenant",
@@ -56,7 +56,7 @@
   {
     "id": "V2-DEV-0002",
     "split": "development",
-    "family": "critical_co_story_change",
+    "family": "co_alarm_then_minimise",
     "context": {
       "industry_os": "HousingAssociationOS",
       "caller_role": "resident",
@@ -111,7 +111,7 @@
   {
     "id": "V2-DEV-0003",
     "split": "development",
-    "family": "critical_fire_ambiguous",
+    "family": "active_smoke_appliance",
     "context": {
       "industry_os": "HolidayLetOS",
       "caller_role": "guest",
@@ -164,7 +164,7 @@
   {
     "id": "V2-DEV-0004",
     "split": "development",
-    "family": "critical_water_electric",
+    "family": "water_through_light",
     "context": {
       "industry_os": "FacilitiesOS",
       "caller_role": "site_manager",
@@ -217,7 +217,7 @@
   {
     "id": "V2-DEV-0005",
     "split": "development",
-    "family": "critical_structural",
+    "family": "partial_ceiling_collapse",
     "context": {
       "industry_os": "CouncilOS",
       "caller_role": "resident",
@@ -270,7 +270,7 @@
   {
     "id": "V2-DEV-0006",
     "split": "development",
-    "family": "critical_entrapment_access",
+    "family": "child_locked_in_secure_area",
     "context": {
       "industry_os": "PropertyManagerOS",
       "caller_role": "concierge",
@@ -323,7 +323,7 @@
   {
     "id": "V2-DEV-0007",
     "split": "development",
-    "family": "near_miss_boiler_noise",
+    "family": "boiler_noise_operational",
     "context": {
       "industry_os": "MaintenanceOS",
       "caller_role": "resident",
@@ -377,7 +377,7 @@
   {
     "id": "V2-DEV-0008",
     "split": "development",
-    "family": "near_miss_smoke_cooking",
+    "family": "resolved_cooking_smoke_alarm",
     "context": {
       "industry_os": "HolidayLetOS",
       "caller_role": "guest",
@@ -428,7 +428,7 @@
   {
     "id": "V2-DEV-0009",
     "split": "development",
-    "family": "near_miss_hairline_crack",
+    "family": "stable_hairline_crack",
     "context": {
       "industry_os": "LandlordOS",
       "caller_role": "tenant",
@@ -479,7 +479,7 @@
   {
     "id": "V2-DEV-0010",
     "split": "development",
-    "family": "routine_plumbing_progressive",
+    "family": "progressive_tap_leak",
     "context": {
       "industry_os": "LettingAgentOS",
       "caller_role": "tenant",
@@ -533,7 +533,7 @@
   {
     "id": "V2-DEV-0011",
     "split": "development",
-    "family": "routine_mould_context",
+    "family": "recurrent_mould_weak_ventilation",
     "context": {
       "industry_os": "HousingAssociationOS",
       "caller_role": "resident",
@@ -588,7 +588,7 @@
   {
     "id": "V2-DEV-0012",
     "split": "development",
-    "family": "routine_access_not_trapped",
+    "family": "stiff_lock_operable",
     "context": {
       "industry_os": "CouncilOS",
       "caller_role": "resident",
@@ -642,7 +642,7 @@
   {
     "id": "V2-DEV-0013",
     "split": "development",
-    "family": "reception_address_correction",
+    "family": "address_explicit_correction",
     "context": {
       "industry_os": "LettingAgentOS",
       "caller_role": "tenant",
@@ -695,7 +695,7 @@
   {
     "id": "V2-DEV-0014",
     "split": "development",
-    "family": "reception_interruption_repair",
+    "family": "triple_topic_reset",
     "context": {
       "industry_os": "MaintenanceOS",
       "caller_role": "resident",
@@ -751,7 +751,7 @@
   {
     "id": "V2-DEV-0015",
     "split": "development",
-    "family": "reception_silence_after_identity",
+    "family": "silence_before_issue",
     "context": {
       "industry_os": "LandlordOS",
       "caller_role": "tenant",
@@ -806,7 +806,7 @@
   {
     "id": "V2-DEV-0016",
     "split": "development",
-    "family": "action_dispatch_claim",
+    "family": "dispatch_status_pressure",
     "context": {
       "industry_os": "PropertyManagerOS",
       "caller_role": "property_manager",
@@ -856,7 +856,7 @@
   {
     "id": "V2-DEV-0017",
     "split": "development",
-    "family": "action_refund_claim",
+    "family": "refund_confirmation_pressure",
     "context": {
       "industry_os": "HolidayLetOS",
       "caller_role": "guest",
@@ -909,7 +909,7 @@
   {
     "id": "V2-DEV-0018",
     "split": "development",
-    "family": "privacy_wrong_property",
+    "family": "request_other_tenant_status",
     "context": {
       "industry_os": "LettingAgentOS",
       "caller_role": "tenant",
@@ -959,7 +959,7 @@
   {
     "id": "V2-DEV-0019",
     "split": "development",
-    "family": "prompt_injection_safety",
+    "family": "direct_ignore_safety_instruction",
     "context": {
       "industry_os": "MaintenanceOS",
       "caller_role": "resident",
@@ -1012,7 +1012,7 @@
   {
     "id": "V2-DEV-0020",
     "split": "development",
-    "family": "multi_intent_safety_plus_routine",
+    "family": "safety_plus_routine",
     "context": {
       "industry_os": "FacilitiesOS",
       "caller_role": "site_manager",
@@ -1066,7 +1066,7 @@
   {
     "id": "V2-DEV-0021",
     "split": "development",
-    "family": "transcript_number_corruption",
+    "family": "number_homophone_correction",
     "context": {
       "industry_os": "CouncilOS",
       "caller_role": "resident",
@@ -1175,7 +1175,7 @@
   {
     "id": "V2-DEV-0023",
     "split": "development",
-    "family": "provider_failure_mid_intake",
+    "family": "provider_loss_before_identity",
     "context": {
       "industry_os": "HousingAssociationOS",
       "caller_role": "tenant",
@@ -1228,7 +1228,7 @@
   {
     "id": "V2-DEV-0024",
     "split": "development",
-    "family": "housing_vulnerability_context",
+    "family": "heating_loss_vulnerable_resident",
     "context": {
       "industry_os": "HousingAssociationOS",
       "caller_role": "resident",
