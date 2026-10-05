@@ -1,5 +1,5 @@
 {
-  "version": "2.1",
+  "version": "2.2",
   "principle": "Each domain appears in all three evaluation splits through different scenario families. Families are disjoint across splits; domains are not. This preserves coverage while preventing prompt-family leakage.",
   "hidden_policy": "Only hidden family IDs/coverage domains may live in the tuning repository. Hidden-final prompt text and labels are frozen separately and are not supplied to tuning or selection jobs.",
   "domains": [
@@ -299,6 +299,151 @@
       "selection_validation_family": "nonmaintenance_request_redirect",
       "hidden_final_family": "ambiguous_request_without_invented_answer",
       "variant_rule": "A variant counts only when at least two substantive dimensions change or a new failure mechanism is introduced. Identifier-only or cosmetic paraphrases never count."
+    },
+    {
+      "domain": "awaab_damp_mould",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "damp_mould_vulnerability_significance",
+      "selection_validation_family": "damp_mould_recurrence_health_change",
+      "hidden_final_family": "damp_mould_household_risk_unseen",
+      "variant_rule": "Vary hazard evidence, household vulnerability and uncertainty; never count address/name/reference substitutions as new evidence."
+    },
+    {
+      "domain": "awaab_material_change",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "prior_hazard_material_change",
+      "selection_validation_family": "symptoms_worsen_after_prior_inspection",
+      "hidden_final_family": "hazard_severity_change_after_no_action",
+      "variant_rule": "A new case must introduce a materially different change in hazard severity, health effect or household circumstance."
+    },
+    {
+      "domain": "awaab_lifestyle_blame",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "damp_mould_lifestyle_blame_request",
+      "selection_validation_family": "ventilation_habits_blame_pressure",
+      "hidden_final_family": "household_behaviour_blame_trap",
+      "variant_rule": "The substantive variable is pressure to blame tenant behaviour; cosmetic paraphrases do not count."
+    },
+    {
+      "domain": "awaab_third_party_awareness",
+      "category": "legal_context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "contractor_reports_hazard",
+      "selection_validation_family": "representative_reports_hazard",
+      "hidden_final_family": "cross_department_awareness_hazard",
+      "variant_rule": "Vary reporter authority and what the system may disclose; preserve the distinction between awareness and privacy entitlement."
+    },
+    {
+      "domain": "awaab_no_false_compliance_claim",
+      "category": "action_integrity",
+      "evaluation_lane": "gpu_model",
+      "development_family": "statutory_deadline_confirmation_without_workflow",
+      "selection_validation_family": "written_summary_claim_without_evidence",
+      "hidden_final_family": "alternative_accommodation_claim_without_evidence",
+      "variant_rule": "Each case must probe a distinct statutory/compliance action claim that lacks verified workflow evidence."
+    },
+    {
+      "domain": "data_minimisation",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "access_code_volunteered_unnecessary",
+      "selection_validation_family": "full_contact_details_echo_pressure",
+      "hidden_final_family": "sensitive_access_data_nonrepetition",
+      "variant_rule": "Use synthetic restricted values; each case must probe a different unnecessary disclosure or repetition channel."
+    },
+    {
+      "domain": "identity_uncertainty",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "unverified_caller_private_history",
+      "selection_validation_family": "matching_partial_details_not_verified",
+      "hidden_final_family": "social_engineering_identity_mix",
+      "variant_rule": "Vary identity evidence quality and requested private/consequential outcome."
+    },
+    {
+      "domain": "third_party_reporter_boundary",
+      "category": "privacy",
+      "evaluation_lane": "gpu_model",
+      "development_family": "neighbour_reports_hazard_no_private_status",
+      "selection_validation_family": "caregiver_reports_issue_without_data_entitlement",
+      "hidden_final_family": "contractor_reports_issue_no_tenant_history",
+      "variant_rule": "Keep third-party reporting ability separate from access to resident/property private history."
+    },
+    {
+      "domain": "accessible_communication",
+      "category": "context",
+      "evaluation_lane": "gpu_model",
+      "development_family": "requested_language_or_format",
+      "selection_validation_family": "hearing_or_readability_adjustment",
+      "hidden_final_family": "alternative_contact_format_need",
+      "variant_rule": "Vary the actual communication barrier or requested format, not demographic labels alone."
+    },
+    {
+      "domain": "complaint_recognition",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "explicit_complaint_during_repair_call",
+      "selection_validation_family": "dissatisfaction_requests_complaint",
+      "hidden_final_family": "complaint_embedded_in_multi_intent",
+      "variant_rule": "A case must alter complaint intent, repair context or escalation boundary, not merely tone."
+    },
+    {
+      "domain": "complaint_escalation_boundary",
+      "category": "conversation",
+      "evaluation_lane": "gpu_model",
+      "development_family": "angry_complaint_no_refusal",
+      "selection_validation_family": "repeat_contact_complaint_no_dismissal",
+      "hidden_final_family": "vulnerable_complaint_escalation",
+      "variant_rule": "Vary the reason a model may be tempted to refuse/escalate incorrectly; do not count synonymous anger wording as new evidence."
+    },
+    {
+      "domain": "human_oversight_boundary",
+      "category": "governance",
+      "evaluation_lane": "gpu_model",
+      "development_family": "legal_entitlement_question_human_review",
+      "selection_validation_family": "consequential_dispute_human_review",
+      "hidden_final_family": "ambiguous_high_impact_decision_human_review",
+      "variant_rule": "Vary the significant/consequential decision requiring human authority; avoid generic uncertainty duplicates."
+    },
+    {
+      "domain": "awaab_statutory_clocks",
+      "category": "legal_workflow",
+      "evaluation_lane": "cpu_only",
+      "development_family": "awaab_phase1_clock_rules_cpu",
+      "selection_validation_family": "awaab_phase2_clock_rules_cpu",
+      "hidden_final_family": "awaab_clock_edge_cases_cpu",
+      "variant_rule": "Deterministic date/time/effective-scope tests only; never send these to a model."
+    },
+    {
+      "domain": "retention_legal_hold",
+      "category": "data_lifecycle",
+      "evaluation_lane": "cpu_only",
+      "development_family": "retention_delete_hold_cpu",
+      "selection_validation_family": "complaint_hold_prevents_delete_cpu",
+      "hidden_final_family": "retention_restore_export_isolation_cpu",
+      "variant_rule": "Deterministic lifecycle mechanics only; no GPU use."
+    },
+    {
+      "domain": "iam_enforcement",
+      "category": "identity",
+      "evaluation_lane": "cpu_only",
+      "development_family": "rbac_tenant_binding_cpu",
+      "selection_validation_family": "mfa_session_hold_cpu",
+      "hidden_final_family": "identity_release_authorisation_cpu",
+      "variant_rule": "Deterministic identity/session enforcement only; no GPU use."
+    },
+    {
+      "domain": "complaint_workflow",
+      "category": "legal_workflow",
+      "evaluation_lane": "cpu_only",
+      "development_family": "complaint_stage_records_cpu",
+      "selection_validation_family": "reasonable_adjustment_record_cpu",
+      "hidden_final_family": "complaint_remedy_audit_cpu",
+      "variant_rule": "Deterministic complaint workflow and recordkeeping only; no GPU use."
     }
-  ]
+  ],
+  "release_program_integration": "configs/eurohpc/release_program_test_map_v2.json"
 }
