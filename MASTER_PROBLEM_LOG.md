@@ -22,7 +22,7 @@ Problem:
 Dedicated DigitalOcean runtime `maintenanceos-scanner-v2` exists (droplet 606110383, 178.128.171.45), so runtime designation is no longer blocked. The accepted Scanner V2 release cannot yet be transferred because the authorised automation paths cannot authenticate to that host: the estate deploy key is rejected, the alternate GitHub key is malformed, and Desktop Commander explicitly blocks private-key SSH use. The matching DigitalOcean recovery identity exists locally but must not be exfiltrated.
 
 Next acceptance boundary:
-Authorise host access with the existing recovery identity, then reuse the preserved deployment script, verify HTTPS/health/persistence/restart/rollback, set the existing `SCANNER_V2_RUNTIME_URL`, run live black-box acceptance, and freeze. No new host/service/queue/database/router is authorised.
+The exact accepted main payload `cadce5cf66740984aefb81c290265abe45c7ecd0` is pre-staged locally as `maintenanceos-scanner-v2-cadce5c.tar.gz` (SHA-256 `46f6600a6f02ec034a05d8263ede89dc54dd8d33ca45d4fac4828f8c44bedf09`) with a fail-closed deployment script that asserts the frozen `da3a982` rollback image, builds before replacement, automatically restores rollback on failed health, restart-proves the new container and only inspects existing HTTPS infrastructure. The sole remaining access step is one owner-run local SSH/SCP invocation using the existing recovery identity. After that, verify/reuse existing HTTPS only, set the existing `SCANNER_V2_RUNTIME_URL`, run live black-box acceptance, and freeze. No new host/service/queue/database/router is authorised.
 
 ## MOS-WEB-SCANNER-009 — Scanner V2 companion image omitted required runtime packages
 Status: VERIFIED ON CANDIDATE
