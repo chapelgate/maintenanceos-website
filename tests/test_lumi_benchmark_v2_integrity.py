@@ -22,9 +22,9 @@ def load_seed():
 def test_seed_corpus_passes_integrity_gate():
     report = mod.validate_corpus(load_seed())
     assert report["passed"] is True, report["errors"]
-    assert report["summary"]["cases"] == 24
-    assert report["summary"]["unique_signatures"] == 24
-    assert report["summary"]["families"] == 24
+    assert report["summary"]["cases"] == 36
+    assert report["summary"]["unique_signatures"] == 36
+    assert report["summary"]["families"] == 36
 
 
 def test_duplicate_substantive_signature_fails():
