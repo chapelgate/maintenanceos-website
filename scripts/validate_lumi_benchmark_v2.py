@@ -9,6 +9,7 @@ or scenario-family leakage across evaluation splits.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -223,6 +224,14 @@ def validate_corpus(cases: list[dict[str, Any]]) -> dict[str, Any]:
                     f"(surface={similarity:.3f}, substantive_dimensions_changed={dimension_diff})"
                 )
 
+    canonical_bytes = json.dumps(_canon(cases), sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    corpus_sha256 = hashlib.sha256(canonical_bytes).hexdigest()
+    split_digests = {}
+    for split in sorted(ALLOWED_SPLITS):
+        subset = [x for x in cases if isinstance(x, dict) and x.get("split") == split]
+        payload = json.dumps(_canon(subset), sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+        split_digests[split] = hashlib.sha256(payload).hexdigest()
+
     split_counts = Counter(str(c.get("split")) for c in cases if isinstance(c, dict))
     os_counts = Counter((c.get("context") or {}).get("industry_os") for c in cases if isinstance(c, dict))
     priority_counts = Counter((c.get("expected") or {}).get("priority") for c in cases if isinstance(c, dict))
@@ -244,6 +253,8 @@ def validate_corpus(cases: list[dict[str, Any]]) -> dict[str, Any]:
             "split_counts": dict(split_counts),
             "industry_os_counts": dict(os_counts),
             "priority_counts": dict(priority_counts),
+            "corpus_sha256": corpus_sha256,
+            "split_sha256": split_digests,
         },
     }
 
