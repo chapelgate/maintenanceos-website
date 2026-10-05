@@ -104,7 +104,7 @@ test("deployed Functions artifact is prebuilt-only and loadable", async () => {
     path.resolve(here, "../project.yml"),
     "utf8",
   );
-  assert.match(project, /main:\s*main/);
+  assert.match(project, /main:\s*bundle\.cjs/);
 
   const deployed = require(path.join(functionDir, "bundle.cjs")) as {
     main: typeof main;
