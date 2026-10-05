@@ -140,16 +140,28 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Validate locked-down staging compose configuration
-        run: docker compose -f docker-compose.staging.yml config > staging-compose-rendered.yml
-      - name: Assert provider ingress and live channels remain disabled
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'ENABLE_PUBLIC_PROVIDER_INGRESS: "false"' staging-compose-rendered.yml
-          grep -q 'ENABLE_REALTIME_VOICE: "false"' staging-compose-rendered.yml
-          grep -q 'ENABLE_LIVE_EMAIL: "false"' staging-compose-rendered.yml
-          grep -q 'ENABLE_LIVE_MESSAGING: "false"' staging-compose-rendered.yml
-          grep -q 'ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE: "false"' staging-compose-rendered.yml
+          if docker compose version >/dev/null 2>&1; then
+            docker compose -f docker-compose.staging.yml config > staging-compose-rendered.yml
+            target=staging-compose-rendered.yml
+            echo 'STAGING_COMPOSE_VALIDATION=rendered'
+          elif command -v docker-compose >/dev/null 2>&1; then
+            docker-compose -f docker-compose.staging.yml config > staging-compose-rendered.yml
+            target=staging-compose-rendered.yml
+            echo 'STAGING_COMPOSE_VALIDATION=rendered-legacy'
+          else
+            target=docker-compose.staging.yml
+            echo 'STAGING_COMPOSE_VALIDATION=source-contract'
+          fi
+          grep -q 'ENABLE_PUBLIC_PROVIDER_INGRESS: "false"' "$target"
+          grep -q 'ENABLE_REALTIME_VOICE: "false"' "$target"
+          grep -q 'ENABLE_LIVE_EMAIL: "false"' "$target"
+          grep -q 'ENABLE_LIVE_MESSAGING: "false"' "$target"
+          grep -q 'ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE: "false"' "$target"
+          grep -q 'DATABASE_DEPLOYMENT_MODE: managed_test' "$target"
+          grep -q 'DATABASE_TLS_REQUIRED: "true"' "$target"
       - name: Remove rendered config containing synthetic values
         if: always()
         run: rm -f staging-compose-rendered.yml
@@ -176,7 +188,7 @@ jobs:
             -e DATABASE_URL=sqlite:////tmp/maintenanceos-smoke.db \
             maintenanceos:${{ github.sha }}
           trap 'docker logs maintenanceos-smoke || true; docker stop maintenanceos-smoke || true' EXIT
-          python - <<'PY'
+          python3 - <<'PY'
           import json
           import time
           import urllib.request
