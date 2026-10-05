@@ -78,6 +78,26 @@ test("COMPLETE is downgraded to PARTIAL when any URL is queued or unresolved", (
   assert.equal(manifest.unresolved, 1);
 });
 
+test("COMPLETE is downgraded when terminal rows contain no fetched evidence", () => {
+  const manifest = buildCrawlManifest({
+    crawlId: "crawl-empty",
+    origin: "https://example.com",
+    requestedState: "COMPLETE",
+    urls: [
+      {
+        url: "https://example.com/",
+        status: "policy_skipped",
+        discoveryReason: "submitted",
+        reason: "http_401",
+      },
+    ],
+  });
+
+  assert.equal(manifest.state, "PARTIAL");
+  assert.equal(manifest.fetched, 0);
+  assert.equal(manifest.policySkipped, 1);
+});
+
 test("COMPLETE is allowed only after every discovered URL has a terminal disposition", () => {
   const manifest = buildCrawlManifest({
     crawlId: "crawl-2",
