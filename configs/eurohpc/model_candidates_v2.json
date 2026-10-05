@@ -1,0 +1,99 @@
+{
+  "version": "2.1",
+  "selection_rule": "No candidate enters a material run until it passes a <=30 minute compatibility/load/structured-output preflight. Failure exits early; no repeated debugging on GPU unless the failure has a clear reversible fix.",
+  "common": {
+    "max_model_len_initial": 4096,
+    "decoding": "deterministic_or_low_variance_first",
+    "structured_output_required": true,
+    "batch_sizes_to_profile": [
+      1,
+      4,
+      16,
+      32
+    ],
+    "initial_partition": "small-g",
+    "scale_rule": "Only scale GCD count after measured GPU-hours per valid scored scenario improves."
+  },
+  "candidates": [
+    {
+      "id": "qwen3-8b",
+      "model": "Qwen/Qwen3-8B",
+      "license": "Apache-2.0",
+      "tier": "A",
+      "initial_gcds": 1,
+      "role": "small baseline",
+      "source": "https://huggingface.co/Qwen/Qwen3-8B",
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html"
+    },
+    {
+      "id": "qwen3-14b",
+      "model": "Qwen/Qwen3-14B",
+      "license": "Apache-2.0",
+      "tier": "A",
+      "initial_gcds": 1,
+      "role": "mid-size baseline",
+      "source": "https://huggingface.co/Qwen/Qwen3-14B",
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html"
+    },
+    {
+      "id": "phi-4",
+      "model": "microsoft/phi-4",
+      "license": "MIT",
+      "tier": "A",
+      "initial_gcds": 1,
+      "role": "compact alternative architecture",
+      "source": "https://huggingface.co/microsoft/phi-4",
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html"
+    },
+    {
+      "id": "mistral-small-3.1-24b",
+      "model": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "license": "Apache-2.0",
+      "tier": "A",
+      "initial_gcds": 1,
+      "role": "larger dense instruction baseline",
+      "source": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
+      "note": "Memory/load preflight must prove one-GCD viability at the benchmark context length."
+    },
+    {
+      "id": "qwen3-30b-a3b-instruct",
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "license": "Apache-2.0",
+      "tier": "B",
+      "initial_gcds": 1,
+      "role": "MoE challenger",
+      "source": "https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
+      "note": "If one-GCD load fails cleanly, try two GCDs once; do not spend repeated GPU time debugging."
+    },
+    {
+      "id": "gpt-oss-20b",
+      "model": "openai/gpt-oss-20b",
+      "license": "Apache-2.0",
+      "tier": "B",
+      "initial_gcds": 1,
+      "role": "architecture challenger",
+      "source": "https://huggingface.co/openai/gpt-oss-20b",
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
+      "note": "ROCm documentation includes GPT-OSS, but MI250X lacks newer MXFP4 hardware support; preflight must establish a viable precision/path before any tournament spend."
+    },
+    {
+      "id": "qwen3-32b",
+      "model": "Qwen/Qwen3-32B",
+      "license": "Apache-2.0",
+      "tier": "C",
+      "initial_gcds": 2,
+      "role": "large dense ceiling challenger",
+      "source": "https://huggingface.co/Qwen/Qwen3-32B",
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
+      "note": "Only admit after smaller candidates establish a quality gap worth paying for; two-GCD or measured quantised path."
+    }
+  ],
+  "excluded_by_default": [
+    "Models requiring unclear/non-commercial terms",
+    "Models needing more than two GCDs before smaller candidates show an unresolved quality gap",
+    "Models with no reproducible ROCm/LUMI-compatible load path",
+    "Remote proprietary APIs, because they do not use the awarded LUMI GPU allocation"
+  ]
+}
