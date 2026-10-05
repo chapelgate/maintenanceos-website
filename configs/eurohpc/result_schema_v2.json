@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MaintenanceOS LUMI Benchmark Result V2",
+  "type": "object",
+  "required": [
+    "scenario_id",
+    "priority",
+    "escalated",
+    "hazard_codes",
+    "requested_information",
+    "actions",
+    "claims",
+    "privacy_breach"
+  ],
+  "properties": {
+    "scenario_id": {
+      "type": "string"
+    },
+    "priority": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "NONE"
+      ]
+    },
+    "escalated": {
+      "type": "boolean"
+    },
+    "hazard_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "requested_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "privacy_breach": {
+      "type": "boolean"
+    },
+    "response_text": {
+      "type": "string"
+    },
+    "latency_ms": {
+      "type": "number",
+      "minimum": 0
+    },
+    "input_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "output_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "model_id": {
+      "type": "string"
+    },
+    "config_digest": {
+      "type": "string"
+    }
+  }
+}
