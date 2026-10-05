@@ -23,7 +23,8 @@
       "initial_gcds": 1,
       "role": "small baseline",
       "source": "https://huggingface.co/Qwen/Qwen3-8B",
-      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html"
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
+      "rocm_status": "amd_rocm_vllm_benchmark_documented"
     },
     {
       "id": "qwen3-14b",
@@ -33,7 +34,8 @@
       "initial_gcds": 1,
       "role": "mid-size baseline",
       "source": "https://huggingface.co/Qwen/Qwen3-14B",
-      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html"
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
+      "rocm_status": "generic_transformers_vllm_preflight_required"
     },
     {
       "id": "phi-4",
@@ -43,7 +45,8 @@
       "initial_gcds": 1,
       "role": "compact alternative architecture",
       "source": "https://huggingface.co/microsoft/phi-4",
-      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html"
+      "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
+      "rocm_status": "amd_rocm_vllm_benchmark_documented"
     },
     {
       "id": "mistral-small-3.1-24b",
@@ -54,7 +57,8 @@
       "role": "larger dense instruction baseline",
       "source": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503",
       "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
-      "note": "Memory/load preflight must prove one-GCD viability at the benchmark context length."
+      "note": "Memory/load preflight must prove one-GCD viability at the benchmark context length.",
+      "rocm_status": "generic_vllm_preflight_required"
     },
     {
       "id": "qwen3-30b-a3b-instruct",
@@ -65,7 +69,8 @@
       "role": "MoE challenger",
       "source": "https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507",
       "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
-      "note": "If one-GCD load fails cleanly, try two GCDs once; do not spend repeated GPU time debugging."
+      "note": "If one-GCD load fails cleanly, try two GCDs once; do not spend repeated GPU time debugging.",
+      "rocm_status": "amd_rocm_qwen3_moe_family_documented"
     },
     {
       "id": "gpt-oss-20b",
@@ -76,7 +81,8 @@
       "role": "architecture challenger",
       "source": "https://huggingface.co/openai/gpt-oss-20b",
       "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
-      "note": "ROCm documentation includes GPT-OSS, but MI250X lacks newer MXFP4 hardware support; preflight must establish a viable precision/path before any tournament spend."
+      "note": "ROCm documentation includes GPT-OSS, but MI250X lacks newer MXFP4 hardware support; preflight must establish a viable precision/path before any tournament spend.",
+      "rocm_status": "amd_rocm_vllm_documented_with_precision_hardware_caveat"
     },
     {
       "id": "qwen3-32b",
@@ -87,7 +93,8 @@
       "role": "large dense ceiling challenger",
       "source": "https://huggingface.co/Qwen/Qwen3-32B",
       "rocm_evidence": "https://rocm.docs.amd.com/en/docs-7.1.1/how-to/rocm-for-ai/inference/benchmark-docker/vllm.html",
-      "note": "Only admit after smaller candidates establish a quality gap worth paying for; two-GCD or measured quantised path."
+      "note": "Only admit after smaller candidates establish a quality gap worth paying for; two-GCD or measured quantised path.",
+      "rocm_status": "amd_rocm_vllm_benchmark_documented"
     }
   ],
   "excluded_by_default": [
@@ -95,5 +102,6 @@
     "Models needing more than two GCDs before smaller candidates show an unresolved quality gap",
     "Models with no reproducible ROCm/LUMI-compatible load path",
     "Remote proprietary APIs, because they do not use the awarded LUMI GPU allocation"
-  ]
+  ],
+  "evidence_note": "ROCm documentation supports several exact families, but an entry here is not assumed compatible with LUMI MI250X until the bounded preflight passes. Generic model cards prove license/model identity, not MI250X performance."
 }
