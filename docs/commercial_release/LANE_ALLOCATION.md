@@ -106,9 +106,9 @@ The local model may not research current law, decide lawful basis, approve legal
 ## Current runtime readiness
 
 - GitHub/NVDL self-hosted runner: available.
-- NVIDIA repository secret: verified present/valid by the existing secret-hygiene workflow; owner-service NVIDIA model authentication is being independently re-probed before allocation.
-- Direct Antigravity worker contract: offline acceptance passed; production/deploy/merge authority remains disabled.
-- Local Chapelgate model: inventory exists, but the current Ollama default model path is empty and the local gateway is currently stopped. Treat Lane L as unavailable until the existing model-store path is recovered; do not redownload models merely to satisfy this plan.
+- NVIDIA repository secret: verified by secret-hygiene run `37373177203`. Fresh bounded provider run `37373676926` passed HTTP 200 on `openai/gpt-oss-20b` plus the existing Nemotron fallback probe. Persistent owner-service auth remains stale/project-scoped, so CR-11 is reserved but not claimed until a safe MaintenanceOS attachment is proven.
+- Direct Antigravity worker contract: offline acceptance passed; production/deploy/merge authority remains disabled. Its live execution credential/path is not currently wired in the checked estate locations, so CR-10/CR-12 stay held until the existing authorised path is restored.
+- Local Chapelgate model: existing store recovered at `C:\\Users\\Andy\\colibri\\ollama-models`; `ibm/granite4:tiny-h-q2_K` and `tiny-h-q3_K_S` are present. Small bounded inference passed. Long combined prompts can reset the isolated server, so Lane L is one-shot/chunked only, one small model at a time with zero keep-alive. CR-03L completed successfully under that constraint.
 - Claude: intentionally unavailable to this programme by owner instruction.
 
 ## Allocation policy
