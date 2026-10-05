@@ -18,6 +18,7 @@
     "split": {
       "enum": [
         "development",
+        "selection_validation",
         "hidden_final"
       ]
     },
