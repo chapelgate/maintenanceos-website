@@ -155,6 +155,19 @@
           "items": {
             "type": "string"
           }
+        },
+        "required_compliance_flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "forbidden_response_regexes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
