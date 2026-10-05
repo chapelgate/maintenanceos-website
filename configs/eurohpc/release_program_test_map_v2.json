@@ -67,9 +67,9 @@
       "benchmark_domains": [
         "awaab_damp_mould",
         "awaab_material_change",
-        "awaab_vulnerability",
         "awaab_lifestyle_blame",
-        "awaab_third_party_awareness"
+        "awaab_third_party_awareness",
+        "vulnerability_priority"
       ],
       "source_ids": [
         "AWAAB_PHASE2_GUIDANCE"
@@ -124,8 +124,7 @@
       "layer": "gpu_model",
       "benchmark_domains": [
         "data_minimisation",
-        "cross_tenant_privacy",
-        "access_code_nonrepetition"
+        "cross_tenant_privacy"
       ],
       "source_ids": [
         "ICO_DATA_PRINCIPLES"
@@ -186,7 +185,6 @@
       "layer": "gpu_model",
       "benchmark_domains": [
         "accessible_communication",
-        "reasonable_adjustment_request",
         "vulnerability_priority"
       ],
       "source_ids": [
