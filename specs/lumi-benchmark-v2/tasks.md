@@ -9,11 +9,20 @@
 - [x] Deterministic balanced shard selector.
 - [x] Hard-gate scorer.
 - [x] Canonical deterministic safety overlay.
+- [x] Deterministic response-text policy violation detection.
 - [x] Common frozen benchmark prompt.
 - [x] Evidence-backed model candidate/preflight registry.
 - [x] Successive-halving tournament configuration.
 - [x] Offline vLLM runner.
 - [x] Bounded one-GCD model preflight Slurm job.
 - [x] No-GPU model staging helper.
-- [x] Unit tests for corpus integrity, registry, selector, scorer and safety overlay.
+- [x] Review current MaintenanceOS Commercial Release programme and DATA_GOVERNANCE requirements.
+- [x] Map release requirements to GPU-model / CPU-release / human-professional layers.
+- [x] Add release-relevant Awaab, privacy/minimisation, identity, complaint, accessibility and human-oversight behavioural cases.
+- [x] Keep statutory clocks, retention/legal holds, IAM/session, complaint workflow, observability and approved call-notice mechanics off GPU.
+- [x] Keep DPIA/lawful-basis, provider terms/transfers, brand/legal wording and independent security/launch approvals outside LUMI scoring.
+- [x] Merge current `main` commercial-release register into the benchmark branch.
+- [x] Dedicated Benchmark V2 tests green (39 passed).
+- [x] Seed integrity green (36 cases / 36 unique substantive signatures / zero warnings).
+- [x] Estate Gate green on the release-integrated branch.
 - [x] Persistent LUMI problem log updated.
