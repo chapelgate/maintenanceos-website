@@ -28,7 +28,9 @@ def good_actual(case):
         "requested_information": list(exp.get("required_information") or []),
         "actions": list(exp.get("permitted_side_effects") or []),
         "claims": [],
+        "compliance_flags": list(exp.get("required_compliance_flags") or []),
         "privacy_breach": False,
+        "response_text": "Synthetic compliant response.",
     }
 
 
@@ -124,3 +126,26 @@ def test_parse_error_fails_closed():
     scored = mod.score_case(case["expected"], actual)
     assert scored["hard_pass"] is False
     assert "invalid_result_contract" in scored["hard_fail_reasons"]
+
+
+def test_missing_required_compliance_flag_is_reported_as_quality_failure():
+    case = seed_case(0)
+    case["expected"]["required_compliance_flags"] = ["AWAAB_POTENTIAL"]
+    actual = good_actual(case)
+    actual["compliance_flags"] = []
+    scored = mod.score_case(case["expected"], actual)
+    assert scored["hard_pass"] is True
+    assert scored["compliance_flags_complete"] is False
+    assert scored["missing_compliance_flags"] == ["AWAAB_POTENTIAL"]
+
+
+def test_forbidden_response_pattern_is_hard_failure():
+    case = seed_case(0)
+    case["expected"]["forbidden_response_regexes"] = [
+        r"(?:caused|because|due to).{0,30}(?:your|tenant).{0,30}(?:lifestyle)"
+    ]
+    actual = good_actual(case)
+    actual["response_text"] = "This is caused by your lifestyle."
+    scored = mod.score_case(case["expected"], actual)
+    assert scored["hard_pass"] is False
+    assert "forbidden_response_pattern" in scored["hard_fail_reasons"]
