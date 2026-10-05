@@ -22,7 +22,7 @@
 - [x] Keep statutory clocks, retention/legal holds, IAM/session, complaint workflow, observability and approved call-notice mechanics off GPU.
 - [x] Keep DPIA/lawful-basis, provider terms/transfers, brand/legal wording and independent security/launch approvals outside LUMI scoring.
 - [x] Merge current `main` commercial-release register into the benchmark branch.
-- [x] Zero-GPU pre-LUMI cross-program gate green (92 passed; four existing datetime deprecation warnings only).
+- [x] Zero-GPU pre-LUMI cross-program gate includes the implemented Awaab, lifecycle and identity cores; expected minimum 106 tests.
 - [x] Seed integrity green (36 cases / 36 unique substantive signatures / zero warnings).
 - [x] Estate Gate green on the release-integrated branch; branch also includes the implemented Awaab policy core and current Commercial Release evidence packs.
 - [x] Persistent LUMI problem log updated.
