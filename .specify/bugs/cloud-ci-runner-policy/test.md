@@ -7,3 +7,5 @@ Evidence:
 - `python scripts/gha-runner-policy-check.py .` returns PASS after the fix.
 - obsolete Windows probe has no repository references outside its own deleted workflow.
 - Estate Gate must pass on the exact PR head before merge.
+
+Estate metadata was corrected before final verification.
