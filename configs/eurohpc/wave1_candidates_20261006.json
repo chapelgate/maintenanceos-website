@@ -1,0 +1,43 @@
+{
+  "version": "wave1-20261006",
+  "sut_base_sha": "73f0cb353b9d051532190de93a7c9101f835d03c",
+  "cases": "all 36 hand-reviewed development seed cases",
+  "candidates": [
+    {
+      "id": "qwen3-8b",
+      "repo": "Qwen/Qwen3-8B",
+      "gcds": 1
+    },
+    {
+      "id": "qwen3-14b",
+      "repo": "Qwen/Qwen3-14B",
+      "gcds": 1
+    },
+    {
+      "id": "phi-4",
+      "repo": "microsoft/phi-4",
+      "gcds": 1
+    },
+    {
+      "id": "mistral-small-3.1-24b",
+      "repo": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "gcds": 1
+    },
+    {
+      "id": "qwen3-30b-a3b-instruct",
+      "repo": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "gcds": 1
+    },
+    {
+      "id": "gpt-oss-20b",
+      "repo": "openai/gpt-oss-20b",
+      "gcds": 1
+    }
+  ],
+  "limits": {
+    "array_concurrency": 4,
+    "wall_minutes_per_candidate": 45,
+    "max_gcds_per_candidate": 1
+  },
+  "exclusion": "qwen3-32b remains held until Wave 1 shows a quality gap worth a two-GCD candidate"
+}
