@@ -20,6 +20,7 @@ candidates=(
   "gpt-oss-20b|openai/gpt-oss-20b"
 )
 
+failures=0
 for item in "${candidates[@]}"; do
   id="${item%%|*}"
   repo="${item#*|}"
@@ -30,14 +31,23 @@ for item in "${candidates[@]}"; do
     continue
   fi
   echo "STAGE_START $id $repo"
+  set +e
   SINGULARITYENV_HF_HOME="$HF_HOME" singularity run "$SIF" python - "$repo" "$dest" <<'PY'
 from huggingface_hub import snapshot_download
 import sys
 repo, dest = sys.argv[1], sys.argv[2]
 print(snapshot_download(repo_id=repo, local_dir=dest))
 PY
-  test -f "$dest/config.json"
-  echo "STAGE_PASS $id $(du -sh "$dest" | awk '{print $1}')"
+  rc=$?
+  set -e
+  if [ "$rc" -eq 0 ] && [ -f "$dest/config.json" ]; then
+    echo "STAGE_PASS $id $(du -sh "$dest" | awk '{print $1}')"
+  else
+    failures=$((failures+1))
+    echo "STAGE_FAIL $id rc=$rc"
+  fi
 done
 
-echo "WAVE1_MODEL_STAGE=PASS"
+echo "WAVE1_MODEL_STAGE_FAILURES=$failures"
+echo "WAVE1_MODEL_STAGE=COMPLETE"
+exit 0
