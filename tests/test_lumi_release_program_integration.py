@@ -94,4 +94,4 @@ def test_release_map_requires_zero_gpu_pre_lumi_gate():
     cfg = load(MAP)
     gate = cfg["pre_lumi_release_gate"]
     assert gate["command"] == "scripts/run_pre_lumi_release_gate.sh"
-    assert gate["expected_minimum_tests"] >= 106
+    assert gate["expected_minimum_tests"] >= 124

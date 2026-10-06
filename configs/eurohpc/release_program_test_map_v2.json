@@ -1,6 +1,6 @@
 {
-  "version": "2.4",
-  "reviewed_against_main_sha": "f43eb4e0776da4b67c7b87dbbf109edbefb614d2",
+  "version": "2.5",
+  "reviewed_against_main_sha": "d01f6bc238b24c100c7ddfcf9030e3e4f8c4e3cd",
   "purpose": "Prevent the LUMI model benchmark from duplicating or bypassing the MaintenanceOS Commercial Release programme. Route each release requirement to the cheapest authoritative test layer.",
   "source_documents": [
     "COMMERCIAL_RELEASE_REGISTER.md",
@@ -356,12 +356,20 @@
     "data_lifecycle.py",
     "tests/test_data_lifecycle_core.py",
     "identity_contract.py",
-    "tests/test_identity_contract_core.py"
+    "tests/test_identity_contract_core.py",
+    "awaab_runtime.py",
+    "tests/test_awaab_runtime.py",
+    "lifecycle_runtime.py",
+    "tests/test_lifecycle_runtime.py",
+    "commercial_release_controls.py",
+    "tests/test_commercial_release_controls.py",
+    "docs/commercial_release/MANAGED_IDP_DECISION.md",
+    "docs/commercial_release/IDENTITY_ROUTE_SELECTION.md"
   ],
   "pre_lumi_release_gate": {
     "purpose": "Zero-GPU cross-program acceptance before any material model run.",
     "command": "scripts/run_pre_lumi_release_gate.sh",
-    "expected_minimum_tests": 106,
+    "expected_minimum_tests": 124,
     "includes": [
       "Awaab deterministic policy",
       "work-order lifecycle/safety latch",
@@ -372,7 +380,11 @@
       "security helpers",
       "Benchmark V2 integrity/registry/selector/scorer/overlay/model registry/release mapping",
       "data lifecycle fail-closed/hold/tenant-scope core",
-      "provider-neutral identity/RBAC/MFA/session contract core"
+      "provider-neutral identity/RBAC/MFA/session contract core",
+      "persisted Awaab statutory workflow",
+      "tenant-scoped lifecycle runtime",
+      "fail-closed commercial release configuration controls",
+      "managed IdP route decision remains outside GPU scoring until runtime adapter is proven"
     ]
   }
 }
