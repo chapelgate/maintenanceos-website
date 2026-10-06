@@ -128,3 +128,15 @@ Write-scope rule: this document records evidence only. It does not add code, con
 `GAP`: CR-09 production acceptance cannot pass on local logging/database audit alone. It passes as a planning artifact only when the above gaps are accepted into the commercial release problem register and no new monitoring service is added during this slice.
 
 `UNKNOWN`: Exact production observability provider, retention durations, alert routing tool, managed database backup/PITR settings, and legal/privacy-approved evidence retention classes are not evidenced by inspected repository source and are not invented here.
+
+
+## 2026-10-06 — redaction regression evidence update
+
+The earlier CR-09 gap stating that no dedicated structured-logging redaction regression existed is now partially closed.
+
+Current canonical evidence:
+- `tests/test_operational_logging.py` added on `main` by `bfe0b84e5a362322f1b831f99059d015c451b00e`;
+- the test covers sensitive-key redaction, bearer/API-key/email/phone/provider-ID value scrubbing, the existing safe-field allowlist, fail-closed disabled logging, and event-name normalization/formatter-time scrubbing;
+- the change was tests/evidence only and did not add a log sink, provider, service, phone-line change or runtime behavior.
+
+This does **not** close CR-09 overall. Central log collection, alert delivery/acknowledgement, end-to-end correlation, tamper-resistant evidence retention and production recovery/incident drills remain separate release evidence requirements.
