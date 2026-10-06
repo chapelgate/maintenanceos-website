@@ -81,6 +81,13 @@ jobs:
         if: steps.dep.outputs.run_audit == 'true'
         run: cyclonedx-py requirements requirements.txt --output-format JSON --output-file sbom-python.json
 
+      - name: Record exact resolved Python package set
+        if: steps.dep.outputs.run_audit == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip freeze --all | LC_ALL=C sort > resolved-python-packages.txt
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: steps.dep.outputs.run_audit == 'true'
         with:
@@ -88,6 +95,7 @@ jobs:
           path: |
             pip-audit.json
             sbom-python.json
+            resolved-python-packages.txt
           if-no-files-found: warn
           retention-days: 7
 
