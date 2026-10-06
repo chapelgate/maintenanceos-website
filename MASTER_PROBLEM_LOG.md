@@ -208,3 +208,13 @@ Status: RESOLVED BY PERSISTENCE STRATEGY CHANGE
 - A disposable local Git checkout unexpectedly returned to a clean state without a Git reflog reset and removed untracked patch helpers.
 - No product commit was lost because the accepted edits had not yet been promoted.
 - Mitigation: all accepted release slices are now committed directly to the isolated GitHub branch `fix/post-call-email-quality-20261006-v2`; local machines are used only for disposable verification clones.
+
+
+### 2026-10-06 — adversarial short-number false positive
+Status: RESOLVED BEFORE LIVE TEST
+
+- Adversarial verification against canonical main proved that generic phrases such as `order number 1234` and `invoice number 1079` could be promoted to gate numbers by the newly broadened recovery path.
+- This was treated as a real correctness defect, not accepted as a trade-off for higher extraction recall.
+- Fix: generic `number N` extraction now requires explicit gate/correction context from the caller or the immediately preceding assistant prompt. The special phonetic gate anchor needed by CG-000082 (`geht's Nummer 1079`) remains supported.
+- Regression tests prove order, invoice and reference numbers do not populate `gate_number`, while `Assistant: What is the gate number? / Caller: number 625` still does.
+- Focused canonical verification after the repair: 46 passed. Worker-mirror verification: 44 passed.

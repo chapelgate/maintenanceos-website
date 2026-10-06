@@ -972,3 +972,21 @@ Caller: keeper will not go in. And the gates are still open."""
     assert "Warwick Road" in html_body
     assert "keeper will not go in" in html_body
     assert "<pre" in html_body
+
+
+def test_generic_order_or_invoice_numbers_are_not_promoted_to_gate_numbers():
+    cases = [
+        "Caller: My order number 1234. I need a key.",
+        "Caller: Invoice number 1079. I need a key.",
+        "Caller: Reference number 625. I need an update.",
+    ]
+    for transcript in cases:
+        details = extract_call_details(transcript, job_reference="ADV-NUMBER")
+        assert details["gate_number"] == "", transcript
+
+
+def test_number_only_reply_after_gate_prompt_still_recovers_gate():
+    transcript = """Assistant: What is the gate number?
+Caller: number 625"""
+    details = extract_call_details(transcript, job_reference="ADV-GATE")
+    assert details["gate_number"] == "625"

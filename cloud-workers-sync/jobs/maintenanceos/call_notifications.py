@@ -306,13 +306,12 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         # bounded gate/number anchor is present; never promote arbitrary digits.
         noisy_gate = re.search(
             r"\b(?:gate(?:'s|s)?|get(?:'s|s)?|gets|gait|geht(?:'s|s)?|kate)\s*"
-            r"(?:(?:number|nummer|no\.?)\s*)?(\d{1,5})\b"
-            r"|\b(?:number|nummer)\s+(\d{1,5})\b",
+            r"(?:(?:number|nummer|no\.?)\s*)?(\d{1,5})\b",
             caller_line,
             re.IGNORECASE,
         )
         if noisy_gate:
-            gate_value = next(group for group in noisy_gate.groups() if group)
+            gate_value = noisy_gate.group(1)
             continue
 
         bare = re.fullmatch(r"\D*(\d{1,5})\D*", caller_line)
@@ -329,11 +328,16 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
             caller_line,
             re.IGNORECASE,
         )
-        if correction and re.search(
-            r"\b(?:got|correct|wrong|actually|should\s+be|number)\b",
-            caller_line,
-            re.IGNORECASE,
-        ):
+        correction_context = bool(
+            re.search(
+                r"\b(?:got|correct|wrong|actually|should\s+be)\b",
+                caller_line,
+                re.IGNORECASE,
+            )
+            or re.search(r"\bgate(?:\s+number)?\b", caller_line, re.IGNORECASE)
+            or re.search(r"\bgate(?:\s+number)?\b", last_assistant, re.IGNORECASE)
+        )
+        if correction and correction_context:
             token = correction.group(1).casefold()
             gate_value = gate_words.get(token, token)
 
