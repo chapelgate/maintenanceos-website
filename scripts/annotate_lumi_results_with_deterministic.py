@@ -13,8 +13,11 @@ import json
 from pathlib import Path
 from typing import Any
 
-from decision_engine import classify
-from voice_policy import FALSE_FINANCIAL_CONFIRMATION, detect_action_claims
+try:
+    from decision_engine import classify
+    from voice_policy import FALSE_FINANCIAL_CONFIRMATION, detect_action_claims
+except (ImportError, ModuleNotFoundError):
+    from lumi_policy_adapter_v2 import classify, FALSE_FINANCIAL_CONFIRMATION, detect_action_claims
 
 
 def read_records(path: Path) -> list[dict[str, Any]]:
