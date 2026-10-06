@@ -70,3 +70,37 @@ Exact human/admin action required after canonical CI is green:
 2. Do not paste private SSH keys, Twilio credentials, Resend credentials, USH bootstrap secrets or DigitalOcean tokens into chat.
 3. Once the approved path is restored, deploy only the email/reporting files from canonical main, restart the existing service through that approved path, verify health and unchanged golden-line markers, then place the next controlled call to **+44 2922 716489**.
 4. Do not change or reroute the golden production phone line as part of this release.
+
+
+## 2026-10-06 — Commercial release external/human gates after machine reconciliation
+
+### CR-13B managed identity provider configuration
+Status: GENUINE ADMIN/PROVIDER BLOCKER
+
+Auth0 is the selected managed IdP for the first design-partner release, but the actual tenant/application/API configuration is not available to the current authorised machine paths.
+
+Exact action required:
+1. Create or approve the MaintenanceOS Auth0 tenant/subscription and application/API.
+2. Record only NON-SECRET configuration facts through the approved config path: Auth0 domain/issuer, API audience, application/client ID, exact namespaced tenant/organisation claim, exact namespaced role claim, exact MFA/assurance claim and values, a real token/session correlation identifier, access-token lifetime/revocation/session policy, and allowed callback/logout/origin URLs.
+3. Do not place Auth0 client secrets, signing keys, management tokens, passwords or private keys in GitHub/chat.
+4. After those facts exist, rebuild the adapter from current `main`, enforce MFA/tenant/role/session requirements through the existing fail-closed identity contract, run HIGH_RISK Estate Gate and Linux regression, then live-verify against the configured Auth0 tenant.
+
+Tracked in GitHub issue #137.
+
+### Production recovery evidence
+Status: GENUINE RELEASE/INFRASTRUCTURE BLOCKER
+
+The repository has a complete recovery test plan and local SQLite proof, but no executed production-like managed PostgreSQL backup/PITR restore drill for the release candidate.
+
+Exact action required before commercial release:
+1. Nominate/configure the approved production-like managed PostgreSQL target and backup mode.
+2. Authorise the isolated synthetic-data restore/PITR/migration-rollback drill defined in `docs/commercial_release/ROLLBACK_RECOVERY_PROOF_PLAN.md`.
+3. Retain measured recovery evidence and independent review.
+4. Do not treat the existing live-droplet snapshots as proof of database PITR.
+
+This blocker does not require changing or rerouting the golden phone line.
+
+### Existing MaintenanceOS deployment identity
+Status: STILL OPEN
+
+The previously recorded existing-host authority blocker for droplet `601962983` remains authoritative. Restore the approved `cg-automation-live-lease` / USH MaintenanceOS deployment path rather than creating ad-hoc credentials or rebuilding the host.

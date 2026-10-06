@@ -218,3 +218,15 @@ Status: RESOLVED BEFORE LIVE TEST
 - Fix: generic `number N` extraction now requires explicit gate/correction context from the caller or the immediately preceding assistant prompt. The special phonetic gate anchor needed by CG-000082 (`geht's Nummer 1079`) remains supported.
 - Regression tests prove order, invoice and reference numbers do not populate `gate_number`, while `Assistant: What is the gate number? / Caller: number 625` still does.
 - Focused canonical verification after the repair: 46 passed. Worker-mirror verification: 44 passed.
+
+
+## 2026-10-06 — Commercial-release continuation reconciliation
+Status: MACHINE WORK RECONCILED TO CURRENT SAFE BOUNDARY — EXTERNAL/HUMAN RELEASE GATES REMAIN
+
+- Canonical email/reporting repair for CG-000082 is merged. The follow-up Chapelgate governance defect was repaired by PR #136; Estate Gate run `37497507725` passed and the evidence-only fix merged as `4adf550dd7f1ef7cc684aac0e6150397e3b4350e`.
+- The email repair remains source/CI evidence only until it is deployed through the already-approved MaintenanceOS existing-host path and proved by one controlled test-number call. No golden-line routing or voice runtime was changed.
+- CR-13A lifecycle runtime and CR-13C Awaab runtime are already present on canonical `main`. Their old worker branches are stale/diverged history and must not be re-run or wholesale-merged.
+- CR-13B managed identity remains blocked on real provider configuration. `docs/commercial_release/MANAGED_IDP_DECISION.md` selects Auth0 Essentials, but no real Chapelgate Auth0 tenant/application/API values are proven in source.
+- The stale branch `worker/cr13b-auth0-staging-20261006` is not release-ready: review found that required MFA/assurance is collected but not enforced by its adapter path, and it fabricates a local session identifier when a real revocation-correlatable identifier is absent. It is also behind current `main`. Do not merge it wholesale.
+- Current DigitalOcean inventory confirms live MaintenanceOS droplet `601962983` is active and has preserved rollback snapshots, but the droplet currently reports no scheduled backup IDs/window. This does not prove managed-database backup/PITR. The existing `docs/commercial_release/ROLLBACK_RECOVERY_PROOF_PLAN.md` explicitly remains a plan: a production-like managed PostgreSQL restore/PITR/migration rollback drill with measured evidence is still required before commercial release.
+- No new service, queue, database, router, worker type, control plane, production host, or phone route was created during this reconciliation.
