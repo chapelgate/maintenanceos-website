@@ -183,3 +183,28 @@ Status: RESOLVED — VERIFIED AND FROZEN; GOLDEN VOICE PATH UNTOUCHED
 - Independent estate-runner verification run `36778405541`, attempt 2, on product SHA `8c7ab6eb831d16e6d26fdf0de8dfd58ca7289353`: focused post-call/email/voice PASS; full Python 3.13 deterministic regression PASS (407 passed, 1 deselected); TLS/WSS route PASS; Python 3.12 compatibility PASS.
 - Attempt 1 on the same SHA passed focused, full Python 3.13 and TLS/WSS, then the self-hosted runner received a shutdown signal while unpacking the Python 3.12 cache. No product test failed; the exact-SHA rerun passed.
 - Immutable tag: `maintenanceos-post-call-email-expert2-20260930-8c7ab6e`.
+
+
+## 2026-10-06 — CG-000082 post-call email regression, stale worker mirror and job-card redesign
+Status: CODE VERIFIED — CANONICAL MERGE/CI PENDING; LIVE TEST DEPLOYMENT ACCESS RECHECKED
+
+- Real failure: CG-000082 contained caller evidence for gate 1079, Warwick Road, a keeper that would not engage, and gates still open, but the received email failed to promote those facts and used an old transcript-heavy layout.
+- Deployment/version finding: the canonical root email implementation was materially newer than the live-looking output, while `cloud-workers-sync/jobs/maintenanceos/call_notifications.py` and `email_gateway.py` were stale copies. This created a repeatable route for old email behaviour to be reintroduced even after the canonical source had been fixed.
+- Fix boundary: post-call email/reporting only. No Twilio routing, realtime voice, voice model, greeting, barge-in, transfer, provider voice code or golden-line file is changed.
+- Extraction fix: bounded noisy-STT recovery recognises gate-number anchors such as the observed `geht's Nummer 1079`; street-only alley locations such as `Warwick Road`; keeper engagement faults; and an explicit current-state `Gate remains open` condition. Arbitrary standalone numbers are not promoted.
+- Data-integrity fix: postcode is now part of the repair completeness/review gate. Missing name, spoken callback, postcode or area remains missing and is surfaced under Needs Confirmation rather than fabricated.
+- Email UX fix: scan-first subject/status, job summary, caller details, confirmation/data-quality block, provider metadata and transcript-at-bottom audit section. HTML remains escaped and has a plain-text equivalent.
+- External benchmark recorded in `docs/POST_CALL_EMAIL_QUALITY_20261006.md`: PagerDuty, ServiceNow, Zendesk and Intercom notification patterns were compared and reduced to the smallest compatible operational design.
+- Drift fix: canonical email code/tests are mirrored into `cloud-workers-sync`; `tests/test_post_call_email_sync.py` now fails if those email mirrors diverge again.
+- Exact CG-000082 regression fixture proves gate 1079, Warwick Road, keeper fault and open-gate state while refusing to invent name, spoken callback, postcode or area.
+- Focused canonical verification: 44 passed. Mirrored worker verification: 42 passed.
+- Broad Windows verification: 500 passed; the only runnable failure is the existing Unix-mode `0600` assertion on Windows. Two additional concurrency modules cannot collect on Windows because Python's POSIX `resource` module is unavailable. These are platform constraints, not email failures; Linux CI remains the final whole-repository gate.
+- Diff audit: only post-call email code, email worker mirrors, tests, sync manifest and benchmark/problem documentation changed. No voice file is present in the change set.
+- Current authorised deployment-path recheck: direct existing-host SSH remains unavailable; repository Actions secrets/variables are empty; the read-only USH broker reports `USH_NETWORK`, `durable_workload_identity_present=false`, and `ready_for_do_provision=false`. No credential reset, rebuild, restore, duplicate host or phone reroute was attempted.
+
+### 2026-10-06 — local verification worktree volatility
+Status: RESOLVED BY PERSISTENCE STRATEGY CHANGE
+
+- A disposable local Git checkout unexpectedly returned to a clean state without a Git reflog reset and removed untracked patch helpers.
+- No product commit was lost because the accepted edits had not yet been promoted.
+- Mitigation: all accepted release slices are now committed directly to the isolated GitHub branch `fix/post-call-email-quality-20261006-v2`; local machines are used only for disposable verification clones.

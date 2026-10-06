@@ -53,3 +53,20 @@ Required human/admin action:
 4. Once that existing authority path is restored, deploy only canonical `main`, verify `/health`, confirm `main_number_changed=false`, and test one controlled post-call email before declaring live commissioning complete.
 
 Evidence: laptop SSH authentication failed; trusted-runner USH diagnostic run `36763673477` reports `USH_DURABLE_IDENTITY_REQUIRED`; canonical USH machine registry currently has no MaintenanceOS target.
+
+
+## 2026-10-06 — CG-000082 email release live test-number deployment
+
+The email-only release can be merged and fully verified without touching the golden phone line. A genuine existing-host authority blocker remains for putting the new formatter onto the running MaintenanceOS test path.
+
+Current evidence:
+- existing-host BatchMode SSH authentication to droplet `601962983` is unavailable from the connected authorised desktop;
+- GitHub repository Actions exposes no deployment secret or variable names;
+- the current read-only USH broker reports `USH_NETWORK`, no durable MaintenanceOS workload identity, and `ready_for_do_provision=false`;
+- connected DigitalOcean tooling can inspect/manage droplet lifecycle but exposes no authorised command-execution channel inside this existing host.
+
+Exact human/admin action required after canonical CI is green:
+1. Restore the **existing approved MaintenanceOS deployment identity/path** for droplet `601962983` / `165.227.227.9`; prefer restoring the canonical `cg-automation-live-lease` / USH target rather than creating an ad-hoc credential.
+2. Do not paste private SSH keys, Twilio credentials, Resend credentials, USH bootstrap secrets or DigitalOcean tokens into chat.
+3. Once the approved path is restored, deploy only the email/reporting files from canonical main, restart the existing service through that approved path, verify health and unchanged golden-line markers, then place the next controlled call to **+44 2922 716489**.
+4. Do not change or reroute the golden production phone line as part of this release.

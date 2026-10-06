@@ -301,6 +301,20 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
             gate_value = direct.group(1)
             continue
 
+        # Real PSTN STT can distort "gate number" into a phonetically close
+        # phrase (for example "geht's Nummer 1079"). Recover only when a
+        # bounded gate/number anchor is present; never promote arbitrary digits.
+        noisy_gate = re.search(
+            r"\b(?:gate(?:'s|s)?|get(?:'s|s)?|gets|gait|geht(?:'s|s)?|kate)\s*"
+            r"(?:(?:number|nummer|no\.?)\s*)?(\d{1,5})\b"
+            r"|\b(?:number|nummer)\s+(\d{1,5})\b",
+            caller_line,
+            re.IGNORECASE,
+        )
+        if noisy_gate:
+            gate_value = next(group for group in noisy_gate.groups() if group)
+            continue
+
         bare = re.fullmatch(r"\D*(\d{1,5})\D*", caller_line)
         if bare and re.search(
             r"\bgate(?:\s+number)?\b|\bcorrect\s+gate\s+number\b",
@@ -468,13 +482,22 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
     )
     caller_address = ""
     street_pattern = re.compile(
-        r"\b(\d{1,4}\s+[A-Za-z][A-Za-z' -]*\s+(?:Road|Street|Avenue|Way|Grove|Lane|Close)\b.*?)(?=\s+(?:telephone|phone|contact|callback)\b|\s+and\s+the\s+gate\b|$)",
+        r"\b(\d{1,4}\s+[A-Za-z][A-Za-z' -]*\s+(?:Road|Street|Avenue|Way|Grove|Lane|Close|Drive|Court|Place|Crescent|Gardens|Park|Terrace|View|Walk|Rise|Square|Hill|Vale)\b.*?)(?=\s+(?:telephone|phone|contact|callback)\b|\s+and\s+the\s+gate\b|$)",
         re.IGNORECASE,
+    )
+    street_only_pattern = re.compile(
+        r"\b([A-Z][A-Za-z'-]*(?:\s+[A-Z][A-Za-z'-]*){0,3}\s+"
+        r"(?:Road|Street|Avenue|Way|Grove|Lane|Close|Drive|Court|Place|Crescent|Gardens|Park|Terrace|View|Rise|Square|Hill|Vale))\b"
     )
     for line in caller_lines:
         street = street_pattern.search(line)
         if street:
             caller_address = street.group(1).strip(" ,.")
+            break
+        # Alley-gate callers frequently give only the street name.
+        street_only = street_only_pattern.search(line)
+        if street_only:
+            caller_address = street_only.group(1).strip(" ,.")
             break
         lowered = line.casefold()
         if any(k in lowered for k in ("my address", "i live at", "postcode")):
@@ -509,6 +532,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
             ).strip(" ,.")
 
     fault_patterns = [
+        r"\b((?:the\s+)?keeper\s+(?:will\s+not|won't|doesn't|does\s+not|cannot|can't)\s+(?:go|fit|engage|latch)(?:\s+in)?)\b",
         r"\b((?:the\s+)?locks?\s+(?:missing|broken|damaged|jammed|stuck))\b",
         r"\b((?:the\s+)?key\s+(?:doesn't|does\s+not|won't|will\s+not)\s+(?:fit|turn|work)(?:\s+(?:in\s+)?(?:the\s+)?lock)?)\b",
         r"\bthe\s+problem\s+is\s+(.+?)(?:,\s*(?:at\s+)?gate\s+\d+|\.\s|$)",
@@ -707,8 +731,14 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
 
     urgency = _URGENCY.search(caller_text)
     animal_emergency = bool(animal_fault)
+    open_gate = bool(re.search(
+        r"\b(?:the\s+)?gates?\s+(?:is|are|remains?|stays?)\s+(?:still\s+)?open\b"
+        r"|\b(?:the\s+)?gates?\s+still\s+open\b",
+        caller_text,
+        re.IGNORECASE,
+    ))
     category = classify_call_category(full)
-    if fault:
+    if fault or open_gate:
         category = CATEGORY_REPAIR
 
     return {
@@ -720,6 +750,7 @@ def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, An
         "area": area_value,
         "gate_number": gate_value,
         "fault_or_request": fault,
+        "reported_condition": "Gate remains open" if open_gate else "",
         "urgency": "emergency - animal trapped" if animal_emergency else (urgency.group(1) if urgency else ""),
         "job_reference": job_reference,
         "transcript": full.strip()[:6000],
@@ -762,6 +793,7 @@ def report_quality_warnings(details: dict[str, Any]) -> list[str]:
             ("fault_or_request", "Fault details"),
             ("caller_name", "Caller name"),
             ("caller_address", "Caller address"),
+            ("postcode", "Postcode"),
             ("area", "Area"),
         )
         for key, label in required:
@@ -789,94 +821,173 @@ def report_requires_review(details: dict[str, Any]) -> bool:
         if ani_digits and callback_digits and ani_digits != callback_digits:
             return True
     if category == CATEGORY_REPAIR:
-        for key in ("gate_number", "fault_or_request", "caller_name", "caller_address", "area"):
+        for key in ("gate_number", "fault_or_request", "caller_name", "caller_address", "postcode", "area"):
             if not details.get(key):
                 return True
     return False
 
 
-def build_internal_email_html(subject: str, body: str) -> str:
-    """Render the deterministic plain-text report as accessible semantic HTML."""
+def _email_sections(body: str) -> list[tuple[str, list[str]]]:
+    """Parse the deterministic plain-text report into titled sections."""
     rows = (body or "").splitlines()
+    sections: list[tuple[str, list[str]]] = []
+    idx = 0
+    while idx < len(rows):
+        title = rows[idx].strip()
+        next_line = rows[idx + 1].strip() if idx + 1 < len(rows) else ""
+        if title and next_line and set(next_line) == {"="}:
+            idx += 2
+            content: list[str] = []
+            while idx < len(rows):
+                possible = rows[idx].strip()
+                underline = rows[idx + 1].strip() if idx + 1 < len(rows) else ""
+                if possible and underline and set(underline) == {"="}:
+                    break
+                content.append(rows[idx])
+                idx += 1
+            while content and not content[-1].strip():
+                content.pop()
+            sections.append((title, content))
+            continue
+        idx += 1
+    return sections
+
+
+def build_internal_email_html(subject: str, body: str) -> str:
+    """Render the text report as an accessible, scan-first operational job card."""
+    sections = _email_sections(body)
+    open_gate = "Reported Condition: Gate remains open" in (body or "")
+    review_required = "REVIEW BEFORE DISPATCH" in (body or "")
+    if open_gate:
+        accent = "#b42318"
+        banner_bg = "#fef3f2"
+        banner_text = "#912018"
+        status = "OPEN GATE - ATTENTION"
+    elif review_required:
+        accent = "#b54708"
+        banner_bg = "#fffaeb"
+        banner_text = "#7a2e0e"
+        status = "REVIEW REQUIRED"
+    else:
+        accent = "#067647"
+        banner_bg = "#ecfdf3"
+        banner_text = "#05603a"
+        status = "READY"
+
     parts = [
         "<!doctype html>",
         '<html lang="en" dir="ltr">',
         "<head>",
         '<meta charset="utf-8">',
+        '<meta name="viewport" content="width=device-width,initial-scale=1">',
         f"<title>{html.escape(subject)}</title>",
         "</head>",
-        '<body style="font-family:Arial,Helvetica,sans-serif;line-height:1.5;margin:0;padding:0;color:#1f2937;background:#ffffff;">',
-        '<div lang="en" dir="ltr" style="max-width:680px;margin:0 auto;padding:24px;">',
-        f'<h1 style="font-size:22px;line-height:1.25;margin:0 0 20px;">{html.escape(subject)}</h1>',
+        '<body style="margin:0;padding:0;background:#f3f4f6;color:#182230;font-family:Arial,Helvetica,sans-serif;line-height:1.45;">',
+        '<div lang="en" dir="ltr" style="display:none;max-height:0;overflow:hidden;color:transparent;">'
+        + html.escape(subject)
+        + "</div>",
+        '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f3f4f6;">',
+        '<tr><td align="center" style="padding:24px 12px;">',
+        '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:680px;background:#ffffff;border:1px solid #e4e7ec;border-radius:14px;overflow:hidden;">',
+        f'<tr><td style="padding:20px 24px 14px;border-top:5px solid {accent};">',
+        '<div style="font-size:12px;font-weight:700;letter-spacing:.08em;color:#475467;text-transform:uppercase;margin-bottom:7px;">Chapelgate · Call report</div>',
+        f'<h1 style="font-size:23px;line-height:1.25;margin:0;color:#101828;">{html.escape(subject)}</h1>',
+        "</td></tr>",
+        f'<tr><td style="padding:0 24px 16px;"><div style="background:{banner_bg};color:{banner_text};border-radius:9px;padding:11px 13px;font-size:13px;font-weight:700;">{html.escape(status)}</div></td></tr>',
     ]
 
-    idx = 0
-    in_list = False
-    transcript_mode = False
-
-    def close_list() -> None:
-        nonlocal in_list
-        if in_list:
-            parts.append("</ul>")
-            in_list = False
-
-    while idx < len(rows):
-        line = rows[idx]
-        next_line = rows[idx + 1] if idx + 1 < len(rows) else ""
-
-        if line and next_line and set(next_line) == {"="}:
-            close_list()
+    for title, rows in sections:
+        if title == "ACTION":
+            continue
+        transcript = title.startswith("FULL TRANSCRIPT")
+        muted = title in {"CALL METADATA", "FULL TRANSCRIPT - AUDIT ONLY"}
+        bg = "#f9fafb" if muted else "#ffffff"
+        parts.append(
+            f'<tr><td style="padding:0 24px 14px;"><section style="background:{bg};'
+            'border:1px solid #eaecf0;border-radius:10px;padding:15px 16px;">'
+        )
+        parts.append(
+            '<h2 style="font-size:12px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;'
+            'color:#475467;margin:0 0 10px;">'
+            + html.escape(title)
+            + "</h2>"
+        )
+        if transcript:
+            transcript_text = "\n".join(rows).strip()
             parts.append(
-                f'<h2 style="font-size:17px;line-height:1.3;margin:24px 0 8px;">'
-                f'{html.escape(line)}</h2>'
-            )
-            transcript_mode = line.casefold().startswith("full transcript")
-            idx += 2
-            continue
-
-        if transcript_mode:
-            close_list()
-            remainder = "\n".join(rows[idx:]).strip()
-            if remainder:
-                parts.append(
-                    '<pre style="white-space:pre-wrap;word-wrap:break-word;'
-                    'font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.45;'
-                    'background:#f6f8fa;padding:12px;border-radius:6px;">'
-                    + html.escape(remainder)
-                    + "</pre>"
-                )
-            break
-
-        if not line.strip():
-            close_list()
-            idx += 1
-            continue
-
-        if line.startswith("- "):
-            if not in_list:
-                parts.append('<ul style="padding-left:22px;margin:6px 0 12px;">')
-                in_list = True
-            parts.append(f"<li>{html.escape(line[2:])}</li>")
-            idx += 1
-            continue
-
-        close_list()
-        if ": " in line:
-            label, value = line.split(": ", 1)
-            parts.append(
-                '<p style="margin:4px 0;"><strong>'
-                + html.escape(label)
-                + ":</strong> "
-                + html.escape(value)
-                + "</p>"
+                '<pre style="margin:0;white-space:pre-wrap;word-wrap:break-word;'
+                'font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;'
+                'color:#667085;background:transparent;border:0;">'
+                + html.escape(transcript_text)
+                + "</pre>"
             )
         else:
-            parts.append(f'<p style="margin:6px 0;">{html.escape(line)}</p>')
-        idx += 1
+            in_list = False
+            for raw in rows:
+                line = raw.strip()
+                if not line:
+                    continue
+                if line.startswith("- "):
+                    if not in_list:
+                        parts.append('<ul style="margin:4px 0 0;padding-left:20px;color:#344054;">')
+                        in_list = True
+                    parts.append(f'<li style="margin:4px 0;">{html.escape(line[2:])}</li>')
+                    continue
+                if in_list:
+                    parts.append("</ul>")
+                    in_list = False
+                if ": " in line:
+                    label, value = line.split(": ", 1)
+                    parts.append(
+                        '<p style="margin:5px 0;font-size:14px;color:#344054;"><strong style="color:#101828;">'
+                        + html.escape(label)
+                        + ":</strong> "
+                        + html.escape(value)
+                        + "</p>"
+                    )
+                else:
+                    parts.append(f'<p style="margin:5px 0;font-size:14px;color:#344054;">{html.escape(line)}</p>')
+            if in_list:
+                parts.append("</ul>")
+        parts.append("</section></td></tr>")
 
-    close_list()
-    parts.extend(["</div>", "</body>", "</html>"])
+    parts.extend([
+        '<tr><td style="padding:4px 24px 22px;"><p style="margin:0;font-size:11px;line-height:1.4;color:#98a2b3;">'
+        'Structured fields are intended for operations. The transcript is retained only for audit because speech recognition can contain errors.'
+        '</p></td></tr>',
+        "</table></td></tr></table>",
+        "</body></html>",
+    ])
     return "\n".join(parts)
+
+
+def _subject_location(address: str) -> str:
+    """Keep the inbox subject compact without changing stored address evidence."""
+    first = (address or "").split(",", 1)[0].strip()
+    match = re.match(
+        r"^(.{1,80}?\b(?:Road|Street|Avenue|Way|Grove|Lane|Close|Drive|Court|Place|"
+        r"Crescent|Gardens|Park|Terrace|View|Rise|Square|Hill|Vale)\b)",
+        first,
+        re.IGNORECASE,
+    )
+    return (match.group(1).strip() if match else first)[:60]
+
+
+def _operational_next_step(details: dict[str, Any], *, review_required: bool) -> str:
+    """Return a bounded operational suggestion; never claim action already happened."""
+    fault = str(details.get("fault_or_request") or "").casefold()
+    condition = str(details.get("reported_condition") or "").casefold()
+    if review_required and "open" in condition:
+        return "Confirm the flagged fields, then allocate repair to secure the open gate."
+    if review_required:
+        return "Confirm the flagged fields before dispatch."
+    if "keeper" in fault:
+        return "Allocate repair to inspect the keeper/alignment and secure the gate."
+    if "lock" in fault:
+        return "Allocate repair to inspect the lock/closing mechanism and secure the gate."
+    if "open" in condition:
+        return "Allocate repair and secure the gate."
+    return "Allocate the repair for inspection."
 
 
 def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
@@ -887,9 +998,10 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
     caller_text = "\n".join(caller_lines)
     full = transcript
 
-    # Report sections are driven by caller-originated evidence or already-vetted
-    # structured fields. Assistant prompts/instructions are never category evidence.
-    has_repair = bool(details.get("fault_or_request")) or bool(_REPAIR.search(caller_text))
+    has_repair = (
+        bool(details.get("fault_or_request") or details.get("reported_condition"))
+        or bool(_REPAIR.search(caller_text))
+    )
     has_master_key = bool(_MASTER_KEY.search(caller_text)) or category == CATEGORY_MASTER_KEY
 
     ordinary_key_text = _MASTER_KEY.sub("", caller_text)
@@ -910,68 +1022,98 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         or category == CATEGORY_KEY
     )
 
-    gate = details.get("gate_number") or "not collected"
-    if has_repair:
-        subject = f"[REPAIR] Gate {gate} - {job_ref}"
-    elif has_key:
-        subject = f"[KEY REQUEST] Alley-gate key enquiry {job_ref}"
-    elif has_master_key:
-        subject = f"[MASTER KEY APPLICATION] Restricted enquiry {job_ref}"
-    else:
-        subject = f"[CALL REVIEW] Chapelgate phone call {job_ref}"
-
+    gate = str(details.get("gate_number") or "")
+    address = str(details.get("caller_address") or "")
+    condition = str(details.get("reported_condition") or "")
     quality_warnings = report_quality_warnings(details)
     review_required = report_requires_review(details)
 
-    # Front-load the operational action. Keep it deterministic and concise so
-    # the inbox can be scanned quickly without trusting raw machine transcript.
+    if has_repair:
+        repair_label = (
+            "[REPAIR][OPEN GATE]"
+            if condition.casefold() == "gate remains open"
+            else "[REPAIR]"
+        )
+        gate_label = f"Gate {gate}" if gate else "Gate details incomplete"
+        subject = f"{repair_label} {gate_label}"
+        if address:
+            subject += f" | {_subject_location(address)}"
+        subject += f" | {job_ref}"
+    elif has_key:
+        subject = f"[KEY REQUEST] Alley-gate key enquiry | {job_ref}"
+    elif has_master_key:
+        subject = f"[MASTER KEY APPLICATION] Restricted enquiry | {job_ref}"
+    else:
+        subject = f"[CALL REVIEW] Chapelgate phone call | {job_ref}"
+
     lines: list[str] = [
         "ACTION",
         "======",
-        "Manual review required before acting." if review_required else "Ready for operational processing.",
-        "",
+        "REVIEW BEFORE DISPATCH" if review_required else "READY FOR DISPATCH",
     ]
+    if condition:
+        lines.append(f"Reported condition: {condition}.")
+    if has_repair:
+        lines.append(f"Next step: {_operational_next_step(details, review_required=review_required)}")
+    lines.append("")
 
-    # Caller details belong to the call, not to a particular enquiry category.
-    # Render them for every notification so key/master-key/call-review emails
-    # cannot silently drop data already captured by the frozen voice path.
+    if has_repair:
+        lines.extend([
+            "JOB SUMMARY - Chapelgate Alleygate Repair Call Report",
+            "=====================================================",
+            f"Job ID: {job_ref}",
+        ])
+        if gate:
+            lines.append(f"Gate Number: {gate}")
+        if address:
+            lines.append(f"Address: {address}")
+        if details.get("postcode"):
+            lines.append(f"Postcode: {details['postcode']}")
+        if details.get("area"):
+            lines.append(f"Area: {details['area']}")
+        if details.get("fault_or_request"):
+            lines.append(f"Fault Details: {details['fault_or_request']}")
+        if condition:
+            lines.append(f"Reported Condition: {condition}")
+        if details.get("urgency"):
+            lines.append(f"Urgency: {details['urgency']}")
+        lines.append("")
+
     person_label = "Resident Name" if has_repair else "Name"
-    lines.extend([
-        "CALLER DETAILS",
-        "==============",
-        f"{person_label}: {details.get('caller_name') or 'not collected'}",
-        f"Caller Number: {details.get('caller_number') or 'not available'} (network caller ID; not identity-verified)",
-        f"Contact Number: {details.get('callback_number') or 'not collected'} (spoken callback)",
-        f"Number Called: {details.get('called_number') or 'not available'} (Chapelgate line)",
-        f"Provider Call ID: {details.get('provider_call_id') or 'not available'} (Twilio CallSid)",
-        f"Call Started: {details.get('call_started_at') or 'not available'}",
-        f"Address: {details.get('caller_address') or 'not collected'}",
-        f"Postcode: {details.get('postcode') or 'not collected'}",
-        f"Area: {details.get('area') or 'not collected'}",
-        f"Gate Number: {gate}",
-        "",
-    ])
+    lines.extend(["CALLER DETAILS", "=============="])
+    if details.get("caller_name"):
+        lines.append(f"{person_label}: {details['caller_name']}")
+    if details.get("caller_number"):
+        lines.append(
+            f"Caller Number: {details['caller_number']} "
+            "(network caller ID; not identity-verified)"
+        )
+    if details.get("callback_number"):
+        lines.append(f"Contact Number: {details['callback_number']} (spoken callback)")
+    lines.append("")
+
+    if not has_repair and any(
+        details.get(key) for key in ("caller_address", "postcode", "area", "gate_number")
+    ):
+        lines.extend(["LOCATION / GATE", "==============="])
+        if address:
+            lines.append(f"Address: {address}")
+        if details.get("postcode"):
+            lines.append(f"Postcode: {details['postcode']}")
+        if details.get("area"):
+            lines.append(f"Area: {details['area']}")
+        if gate:
+            lines.append(f"Gate Number: {gate}")
+        lines.append("")
 
     if quality_warnings or review_required:
         lines.extend([
-            "REVIEW / DATA QUALITY",
-            "=====================",
+            "NEEDS CONFIRMATION / DATA QUALITY",
+            "=================================",
             f"Manual Review Required: {'YES' if review_required else 'NO'}",
             *[f"- {warning}" for warning in quality_warnings],
             "",
         ])
-
-    if has_repair:
-        lines.extend([
-            "Chapelgate Alleygate Repair Call Report",
-            "======================================",
-            "",
-            f"Job ID: {job_ref}",
-            f"Fault Details: {details.get('fault_or_request') or 'not collected'}",
-        ])
-        if details.get("urgency"):
-            lines.append(f"Urgency: {details['urgency']}")
-        lines.append("")
 
     existing_order = bool(re.search(
         r"(?:already\s+ordered|confirmation\s+email.*order\s+number|reply\s+to\s+that\s+email|royal\s+mail|tracking\s+(?:info|information))",
@@ -989,10 +1131,7 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
             caller_text,
             re.IGNORECASE,
         ))
-        lines.extend([
-            "KEY ORDER / ENQUIRY",
-            "===================",
-        ])
+        lines.extend(["KEY ORDER / ENQUIRY", "==================="])
         if existing_order:
             lines.extend([
                 "Existing order/update requested: Yes",
@@ -1028,25 +1167,32 @@ def build_internal_email(details: dict[str, Any]) -> tuple[str, str]:
         if any(re.search(pattern, line, re.IGNORECASE) for pattern in other_patterns):
             other_notes.append(line)
 
-    lines.extend([
-        "OTHER INFORMATION",
-        "=================",
-    ])
+    lines.extend(["OTHER INFORMATION", "================="])
     if other_notes:
         lines.extend([f"- {line}" for line in other_notes])
     else:
         lines.append("- No additional operational information captured.")
+    lines.append("")
+
+    lines.extend(["CALL METADATA", "============="])
+    if details.get("called_number"):
+        lines.append(f"Number Called: {details['called_number']} (Chapelgate line)")
+    if details.get("provider_call_id"):
+        lines.append(
+            f"Provider Call ID: {details['provider_call_id']} (Twilio CallSid)"
+        )
+    if details.get("call_started_at"):
+        lines.append(f"Call Started: {details['call_started_at']}")
+    lines.append("")
+
     lines.extend([
-        "",
         "FULL TRANSCRIPT - AUDIT ONLY",
         "============================",
         "Raw machine transcription may contain recognition errors; use the structured fields above for operations.",
         "",
         transcript or "(empty)",
     ])
-
     return subject, "\n".join(lines)
-
 
 def _intake_property_id(session, client_id: int) -> int | None:
     prop = session.query(Property).filter_by(client_id=client_id).order_by(Property.id.asc()).first()

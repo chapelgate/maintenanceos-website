@@ -44,6 +44,7 @@ jobs/maintenanceos/sla.py
 jobs/maintenanceos/telephony_path_concurrency_probe.py
 jobs/maintenanceos/tenant_security.py
 jobs/maintenanceos/tests/test_call_notifications.py
+jobs/maintenanceos/tests/test_email_gateway_resend.py
 jobs/maintenanceos/tests/test_concurrency_ladder.py
 jobs/maintenanceos/tests/test_concurrency_red_team.py
 jobs/maintenanceos/tests/test_explicit_transfer_only.py

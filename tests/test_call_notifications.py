@@ -325,12 +325,14 @@ Caller: I think that the neighbor keeps vandalizing the lock.
     details = extract_call_details(transcript, job_reference="CG-000030")
     subject, body = build_internal_email(details)
 
-    assert subject == "[REPAIR] Gate 21 - CG-000030"
+    assert subject == "[REPAIR] Gate 21 | 20 Wexford Way | CG-000030"
     assert "Chapelgate Alleygate Repair Call Report" in body
     assert "Job ID: CG-000030" in body
     assert "Gate Number: 21" in body
-    assert "Resident Name: not collected" in body
-    assert "Contact Number: not collected" in body
+    assert "Resident Name: not collected" not in body
+    assert "Contact Number: not collected" not in body
+    assert "Caller name was not reliably collected." in body
+    assert "No reliable callback number was collected." in body
     assert "Address: 20 Wexford Way, Widnes" in body
     assert "Postcode: CH45 9JX" in body
     assert "Fault Details: an alley gate with a key stuck in the lock" in body
@@ -364,12 +366,14 @@ Assistant: Thank you for calling Chapel Gate. Goodbye, have a nice day.
     details = extract_call_details(transcript, job_reference="CG-000031")
     subject, body = build_internal_email(details)
 
-    assert subject == "[REPAIR] Gate 625 - CG-000031"
+    assert subject == "[REPAIR] Gate 625 | 18 Brisbane Avenue | CG-000031"
     assert "Resident Name: Andrew Carl" in body
-    assert "Contact Number: not collected" in body
+    assert "Contact Number: not collected" not in body
+    assert "No reliable callback number was collected." in body
     assert "Address: 18 Brisbane Avenue" in body
     assert "Postcode: CH45 9JX" in body
-    assert "Area: not collected" in body
+    assert "Area: not collected" not in body
+    assert "Area was not reliably collected." in body
     assert "Fault Details: the lock is missing" in body
     assert "New key order enquiry: Yes" in body
     assert "Telephone ordering requested: Yes" in body
@@ -395,7 +399,7 @@ Caller: Yes.
     details = extract_call_details(transcript, job_reference="CG-000032")
     subject, body = build_internal_email(details)
 
-    assert subject == "[REPAIR] Gate 421 - CG-000032"
+    assert subject == "[REPAIR] Gate 421 | 18 Brisbane Avenue | CG-000032"
     assert "Resident Name: Andrew Cartwright" in body
     assert "Contact Number: 07752226746" in body
     assert "Address: 18 Brisbane Avenue, Wallasey, Wirral" in body
@@ -427,12 +431,15 @@ Assistant: Thank you for confirming. I'll get this processed for you now. Thank 
     details = extract_call_details(transcript, job_reference="CG-000033")
     subject, body = build_internal_email(details)
 
-    assert subject == "[REPAIR] Gate 368 - CG-000033"
+    assert subject == "[REPAIR] Gate 368 | 18 Brisbane Avenue | CG-000033"
     assert "Resident Name: Andrew Top" in body
-    assert "Contact Number: not collected" in body
+    assert "Contact Number: not collected" not in body
+    assert "No reliable callback number was collected." in body
     assert "Address: 18 Brisbane Avenue, Lawson, ACT, 2617 , Australia" in body
-    assert "Postcode: not collected" in body
-    assert "Area: not collected" in body
+    assert "Postcode: not collected" not in body
+    assert "Postcode was not reliably collected." in body
+    assert "Area: not collected" not in body
+    assert "Area was not reliably collected." in body
     assert "0795 1234567" not in body.split("FULL TRANSCRIPT", 1)[0]
     assert "07752 26746" not in body.split("FULL TRANSCRIPT", 1)[0]
     assert "CH45 9DX" not in body.split("FULL TRANSCRIPT", 1)[0]
@@ -483,11 +490,15 @@ Assistant: Could you repeat the correct telephone number?
     details = extract_call_details(transcript, job_reference="CG-000034")
     subject, body = build_internal_email(details)
 
-    assert subject == "[REPAIR] Gate not collected - CG-000034"
-    assert "Gate Number: not collected" in body
-    assert "Resident Name: not collected" in body
-    assert "Contact Number: not collected" in body
-    assert "Area: not collected" in body
+    assert subject == "[REPAIR] Gate details incomplete | Brisbane Avenue | CG-000034"
+    assert "Gate Number: not collected" not in body
+    assert "Resident Name: not collected" not in body
+    assert "Contact Number: not collected" not in body
+    assert "Area: not collected" not in body
+    assert "Gate number was not reliably collected." in body
+    assert "Caller name was not reliably collected." in body
+    assert "No reliable callback number was collected." in body
+    assert "Area was not reliably collected." in body
     assert "Fault Details: a dog stuck in the gate" in body
     assert "Urgency: emergency - animal trapped" in body
     head = body.split("FULL TRANSCRIPT", 1)[0]
@@ -515,7 +526,7 @@ Caller: Yes, that is correct.
     details = extract_call_details(transcript, job_reference="CG-000041")
     subject, body = build_internal_email(details)
     assert details["callback_number"] == "01512308476"
-    assert subject == "[REPAIR] Gate 829 - CG-000041"
+    assert subject == "[REPAIR] Gate 829 | 22 May Avenue | CG-000041"
     assert "Contact Number: 01512308476" in body
 
 def test_cg42_scoped_area_correction_preserves_final_voice_readback():
@@ -555,7 +566,7 @@ Assistant: Thank you for calling Chapel Gate. Goodbye, have a nice day.
     assert details["postcode"] == "PR22 4XY"
     assert details["area"] == "Sefton"
     assert details["fault_or_request"] == "stuck shut"
-    assert subject == "[REPAIR] Gate 122 - CG-000042"
+    assert subject == "[REPAIR] Gate 122 | 15 Colchester Road | CG-000042"
     assert "Resident Name: James May" in body
     assert "Contact Number: 01123 08476" in body
     assert "Address: 15 Colchester Road" in body
@@ -810,7 +821,7 @@ def test_report_frontloads_action_without_duplicating_operational_fields():
         "transcript": "Caller: lock broken",
     }
     _, body = build_internal_email(details)
-    assert body.startswith("ACTION\n======\nReady for operational processing.")
+    assert body.startswith("ACTION\n======\nREADY FOR DISPATCH")
     assert body.count("Gate Number: 301") == 1
     assert body.count("Fault Details: lock broken") == 1
 
@@ -831,7 +842,7 @@ def test_report_frontloads_manual_review_when_data_is_uncertain():
         "transcript": "Caller: lock broken",
     }
     _, body = build_internal_email(details)
-    assert body.startswith("ACTION\n======\nManual review required before acting.")
+    assert body.startswith("ACTION\n======\nREVIEW BEFORE DISPATCH")
 
 
 def test_html_report_is_semantic_escaped_and_has_plain_text_equivalent():
@@ -918,3 +929,46 @@ def test_dispatch_uses_twilio_callsid_for_restore_safe_email_identity(monkeypatc
     assert f"Provider Call ID: {call_sid} (Twilio CallSid)" in captured["body"]
     assert "Call Started: " in captured["body"]
     assert captured["body"].count(f"Provider Call ID: {call_sid}") == 1
+
+
+def test_cg82_real_stt_regression_recovers_gate_street_keeper_and_open_state():
+    transcript = """Assistant: Hi, thank you for calling Chapel Gate. How can we help you today?
+Caller: Wie Paul von von Panda äh über so geht's Nummer 1079 äh Warwick Road.
+Caller: keeper will not go in. And the gates are still open."""
+    details = extract_call_details(transcript, job_reference="CG-000082")
+    details.update({
+        "caller_number": "+447700900082",
+        "called_number": "+442922716489",
+        "provider_call_id": "CA-cg82-regression",
+        "call_started_at": "2026-10-06T14:00:00Z",
+    })
+
+    assert details["gate_number"] == "1079"
+    assert details["caller_address"] == "Warwick Road"
+    assert details["fault_or_request"].casefold() == "keeper will not go in"
+    assert details["reported_condition"] == "Gate remains open"
+    assert details["caller_name"] == ""
+    assert details["callback_number"] == ""
+    assert details["postcode"] == ""
+    assert details["area"] == ""
+
+    subject, body = build_internal_email(details)
+    assert subject == "[REPAIR][OPEN GATE] Gate 1079 | Warwick Road | CG-000082"
+    assert "Gate Number: 1079" in body
+    assert "Address: Warwick Road" in body
+    assert "Fault Details: keeper will not go in" in body
+    assert "Reported Condition: Gate remains open" in body
+    assert "Caller Number: +447700900082" in body
+    assert "Number Called: +442922716489" in body
+    assert "Provider Call ID: CA-cg82-regression" in body
+    assert "Caller name was not reliably collected." in body
+    assert "Postcode was not reliably collected." in body
+    assert "Area was not reliably collected." in body
+    assert "Resident Name: not collected" not in body
+    assert "Postcode: not collected" not in body
+
+    html_body = call_notifications.build_internal_email_html(subject, body)
+    assert "OPEN GATE - ATTENTION" in html_body
+    assert "Warwick Road" in html_body
+    assert "keeper will not go in" in html_body
+    assert "<pre" in html_body
