@@ -1363,3 +1363,15 @@ No MaintenanceOS production telephony, carrier routing, live phone number, provi
 Human blockers:
 None.
 
+
+
+## 2026-10-06 — Scanner V2 deployment candidate reconciliation
+Status: SOURCE FIX VERIFIED / LIVE RUNTIME UPDATE STILL BLOCKED
+
+- PR #202 merged the zero-evidence completeness repair as `fe69aa7e25a18fa800e3728dd02046501de1db5f`.
+- PR head `09344b8390c30f67cbe244b887f535cc4220e4a3` passed Chapelgate Estate Gate run `37384917884` and Website integration repair validation run `37384916833`.
+- The repair prevents Scanner V2 from reporting COMPLETE when no fetched/duplicate evidence exists.
+- The previously staged deployment archive for `cadce5cf66740984aefb81c290265abe45c7ecd0` predates this correctness fix and is now an obsolete deployment candidate. It MUST NOT be used for the next Scanner V2 deployment.
+- The dedicated runtime remains droplet `606110383`; no replacement host/service is authorised.
+- A fresh deployment payload must be built from the exact accepted current candidate (at least `fe69aa7e25a18fa800e3728dd02046501de1db5f`, or a later separately verified main SHA) and then transferred only through the existing approved recovery identity.
+- Golden MaintenanceOS production telephony remains outside this website/scanner release boundary.
