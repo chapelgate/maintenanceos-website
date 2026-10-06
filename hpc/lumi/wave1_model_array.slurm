@@ -23,6 +23,7 @@ CASES="$ROOT/tests/lumi_benchmark_v2_seed.json"
 PROMPT="$ROOT/configs/eurohpc/benchmark_prompt_v2.txt"
 RUNNER="$ROOT/hpc/lumi/run_benchmark_v2_vllm.py"
 ANNOTATE="$ROOT/scripts/annotate_lumi_results_with_deterministic.py"
+POLICY_ADAPTER="$ROOT/scripts/lumi_policy_adapter_v2.py"
 SCORER="$ROOT/scripts/score_lumi_benchmark_v2.py"
 CANDIDATES="$ROOT/configs/eurohpc/wave1_candidates_20261006.json"
 
@@ -44,7 +45,7 @@ mkdir -p "$OUTDIR"
 
 START_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 START_EPOCH="$(date +%s)"
-CONFIG_DIGEST="$(cat "$PROMPT" "$CASES" "$RUNNER" "$ANNOTATE" "$SCORER" | sha256sum | awk '{print $1}')"
+CONFIG_DIGEST="$(cat "$PROMPT" "$CASES" "$RUNNER" "$ANNOTATE" "$POLICY_ADAPTER" "$SCORER" | sha256sum | awk '{print $1}')"
 
 {
   echo "wave=1"
@@ -61,7 +62,7 @@ CONFIG_DIGEST="$(cat "$PROMPT" "$CASES" "$RUNNER" "$ANNOTATE" "$SCORER" | sha256
   echo "config_digest=$CONFIG_DIGEST"
 } > "$OUTDIR/meta-$SLURM_JOB_ID.txt"
 
-for required in "$SIF" "$CASES" "$PROMPT" "$RUNNER" "$ANNOTATE" "$SCORER" "$MODEL_PATH/config.json"; do
+for required in "$SIF" "$CASES" "$PROMPT" "$RUNNER" "$ANNOTATE" "$POLICY_ADAPTER" "$SCORER" "$MODEL_PATH/config.json"; do
   test -r "$required" || { echo "MISSING_REQUIRED=$required" | tee -a "$OUTDIR/meta-$SLURM_JOB_ID.txt"; exit 10; }
 done
 
