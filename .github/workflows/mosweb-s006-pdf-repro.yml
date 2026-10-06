@@ -1,0 +1,20 @@
+name: MOSWEB S006 PDF reproduction
+on:
+  push:
+    branches: [verify/mosweb-s006-pdf-ci-20261006]
+    paths: ['.github/workflows/mosweb-s006-pdf-repro.yml']
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Focused PDF/document suite
+        run: node --experimental-strip-types --test packages/onboarding-ingest/src/scanner-v2-documents.test.ts
