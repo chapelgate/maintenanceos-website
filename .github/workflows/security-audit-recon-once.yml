@@ -1,0 +1,109 @@
+name: Security audit recon once
+
+on:
+  push:
+    branches: [ops/security-audit-recon-20261007]
+    paths:
+      - '.github/workflows/security-audit-recon-once.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact frozen audit target
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: db06cce8c57b1ac43b2cff6073016df01953a323
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Source-only security reconnaissance
+        shell: bash
+        env:
+          WORKER_ID: sec-audit-maintenanceos-web-01
+          TARGET_SHA: db06cce8c57b1ac43b2cff6073016df01953a323
+          TARGET_REPO: chapelgate/maintenanceos-website
+        run: |
+          set -euo pipefail
+          echo "WORKER_CLAIMED=$WORKER_ID"
+          echo "AUDIT_TARGET=$TARGET_REPO@$TARGET_SHA"
+          echo "RECON_SCAN_ACTIVE=1"
+          python3 - <<'PY'
+          import json, os, pathlib, re, subprocess
+          target=os.environ["TARGET_SHA"]
+          actual=subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()
+          if actual != target:
+              raise SystemExit(f"TARGET_SHA_MISMATCH:{actual}")
+          files=subprocess.check_output(["git","ls-files"],text=True).splitlines()
+          skip_parts={".git","node_modules","dist","build","coverage",".next",".venv","venv","vendor"}
+          exts={".py",".js",".jsx",".ts",".tsx",".mjs",".cjs",".json",".yml",".yaml",".toml",".ini",".cfg",".sql",".sh",".ps1",".html",".md",".env"}
+          name_re=re.compile(r"(auth|session|security|secret|token|permission|role|tenant|user|login|api|route|server|middleware|webhook|payment|upload|storage|database|\bdb\b|sql|prompt|agent|tool|ai|deploy|workflow|docker|caddy|nginx|config|env|crypto)",re.I)
+          rules=[
+            ("literal_credential", re.compile(r"(?i)(api[_-]?key|secret|password|passwd|token)\s*[:=]\s*['\"][^'\"]{8,}['\"]")),
+            ("private_key_marker", re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
+            ("python_eval_exec", re.compile(r"\b(?:eval|exec)\s*\(")),
+            ("shell_true", re.compile(r"shell\s*=\s*True")),
+            ("node_child_process", re.compile(r"(?:child_process|execSync|spawnSync|\bexec\s*\()")),
+            ("dangerous_html", re.compile(r"dangerouslySetInnerHTML")),
+            ("cors_wildcard", re.compile(r"(?i)(allow[_-]?origin|access-control-allow-origin).{0,40}\*")),
+            ("weak_tls", re.compile(r"(?i)(verify\s*=\s*False|rejectUnauthorized\s*:\s*false)")),
+          ]
+          surfaces={k:[] for k in ["auth","session","tenant_data","api","ai_tools","payments","uploads_storage","webhooks","deployment_secrets"]}
+          surface_patterns={
+            "auth":re.compile(r"auth|login|oauth|oidc|jwt|permission|role",re.I),
+            "session":re.compile(r"session|cookie|csrf",re.I),
+            "tenant_data":re.compile(r"tenant|database|\bdb\b|sql|storage|repository|model",re.I),
+            "api":re.compile(r"api|route|server|controller|handler|endpoint",re.I),
+            "ai_tools":re.compile(r"prompt|agent|llm|openai|anthropic|gemini|nvidia|tool",re.I),
+            "payments":re.compile(r"payment|stripe|billing|checkout",re.I),
+            "uploads_storage":re.compile(r"upload|file|blob|s3|storage",re.I),
+            "webhooks":re.compile(r"webhook|callback",re.I),
+            "deployment_secrets":re.compile(r"deploy|workflow|docker|caddy|nginx|secret|env|config",re.I),
+          }
+          sensitive=[]; hits=[]; scanned=0
+          for rel in files:
+              p=pathlib.Path(rel)
+              if any(part in skip_parts for part in p.parts):
+                  continue
+              if p.suffix.lower() not in exts and p.name not in {"Dockerfile","Caddyfile","Procfile","Makefile"}:
+                  continue
+              try:
+                  if p.stat().st_size>500_000: continue
+                  text=p.read_text(encoding="utf-8",errors="ignore")
+              except Exception:
+                  continue
+              scanned+=1
+              key=rel+"\n"+text[:2000]
+              if name_re.search(key): sensitive.append(rel)
+              for cat,pat in surface_patterns.items():
+                  if pat.search(key): surfaces[cat].append(rel)
+              for lineno,line in enumerate(text.splitlines(),1):
+                  for rule,pat in rules:
+                      if pat.search(line): hits.append({"rule":rule,"file":rel,"line":lineno})
+          for k in surfaces: surfaces[k]=sorted(set(surfaces[k]))[:100]
+          sensitive=sorted(set(sensitive))[:250]; hits=hits[:300]
+          out={"schema":"chapelgate.security-audit-recon.v1","worker":os.environ["WORKER_ID"],"repository":os.environ["TARGET_REPO"],"target_sha":target,"actual_sha":actual,"mode":"source-only-read-only","files_tracked":len(files),"files_scanned":scanned,"security_sensitive_files":sensitive,"surfaces":surfaces,"pattern_candidates":hits,"note":"Pattern candidates are leads, not confirmed vulnerabilities. AI finder and independent verifier remain required."}
+          pathlib.Path("security-audit-recon.json").write_text(json.dumps(out,indent=2)+"\n",encoding="utf-8")
+          lines=["# Security audit reconnaissance","",f"- Worker: `{out['worker']}`",f"- Target: `{out['repository']}@{target}`","- Mode: source-only / read-only","",f"Tracked files: {len(files)}; scanned text files: {scanned}; pattern leads: {len(hits)}.","","## Surfaces"]
+          for k,v in surfaces.items(): lines.append(f"- {k}: {len(v)} file(s)")
+          lines += ["","Pattern matches are unverified leads and must not be treated as vulnerabilities."]
+          pathlib.Path("security-audit-recon.md").write_text("\n".join(lines)+"\n",encoding="utf-8")
+          print(f"RECON_FILES_SCANNED={scanned}")
+          print(f"RECON_SECURITY_FILES={len(sensitive)}")
+          print(f"RECON_PATTERN_LEADS={len(hits)}")
+          print("WORKER_PROGRESS=RECON_EVIDENCE_CREATED")
+          PY
+          echo "WORKER_COMPLETE=$WORKER_ID"
+      - name: Upload recon evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sec-audit-maintenanceos-web-01-${{ github.run_id }}
+          path: |
+            security-audit-recon.json
+            security-audit-recon.md
+          if-no-files-found: error
+          retention-days: 14
