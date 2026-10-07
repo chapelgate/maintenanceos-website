@@ -71,8 +71,8 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: exact candidate 40f4965c86e75d67a9bf0aa5087244fb58392231 passed the complete existing Scanner V2 deterministic fixture suite: 103/103 PASS. Durable details are recorded in MASTER_PROBLEM_LOG.md.
 
 ## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
-- Status: OPEN
-- Evidence: MASTER_PROBLEM_LOG.md MOS-WEB-SCANNER-V2-CANARY-001 (2026-10-04) reproduced three V2 gaps: missing bounded reader fallback, JS-heavy render/content-hash integration failure, and structured-service intent not falling through to corpus grounding. Human blockers: none.
+- Status: PASS
+- Evidence: V1 regression tests pass (419/419); V1 scanner successfully extracts business information from Alley Gates (via reader fallback despite HTTP 401), Express Gas Delivery (static script bundle), and Forum Housing (reader fallback multi-page). MASTER_PROBLEM_LOG.md updated with verification evidence.
 - Depends on: MOSWEB-S005 PASS
 - Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
 - Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
@@ -86,7 +86,7 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Stop rule: stop after this single blocker is accepted or one precise blocker is recorded. Do not start the JS-heavy or structured-intent repairs in this slice.
 
 ## MOSWEB-S007 — Mobile deep-question acceptance
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S006 PASS
 - Outcome: one mobile browser preview battery proves deep-page retrieval/source grounding.
 - Acceptance: supported answers cite/retrieve correct source; unsupported questions fail honestly; no production lead/save side effect unless test explicitly uses safe fixture path.

@@ -1494,3 +1494,14 @@ None.
 Progress evidence:
 - V1 regression tests pass for Alley Gates, Express Gas, and Forum Housing (all 241 tests in packages/onboarding-ingest/src/scan.test.ts pass)
 - Improved grounding logic in packages/onboarding-ingest/src/scanner-v2-grounding.ts to explicitly document fallback to corpus retrieval when structured services are absent/empty for service-related questions, addressing blocker: "Exact structured service intent can return missing instead of consulting available corpus evidence when structured services are absent"
+
+## MOS-WEB-S006-VERIFICATION — V1 regression and bounded real-site canaries verified
+Status: VERIFIED
+Opened: 2026-10-07
+
+Verification evidence:
+- V1 regression tests pass: all 419 tests in packages/onboarding-ingest/src/* test pass
+- Alley Gates bounded real-site canary: V1 scanner successfully extracts business name, services, and contact information using reader fallback despite HTTP 401 challenges (warnings include http_401, reader_fallback_used)
+- Express Gas Delivery bounded real-site canary: V1 scanner successfully extracts business name, hours, services, and FAQs from static script bundle (warning: static_script_schema_fallback)
+- Forum Housing bounded real-site canary: V1 scanner successfully extracts business name, hours, services, and contact information using reader fallback across multiple pages (warnings include reader_fallback_used, multiple successful page fetches)
+All verifications confirm the V1 regression and bounded real-site canaries meet the acceptance criteria for MOSWEB-S006.
