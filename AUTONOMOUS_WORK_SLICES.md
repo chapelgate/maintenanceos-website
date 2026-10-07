@@ -51,14 +51,15 @@ Get MaintenanceOS demonstrably ready for one controlled real test call without t
 - Boundary: source/automated coverage is reconciled; no item above is declared live-fixed until its stated carrier evidence passes.
 
 ## MOS-S003 — Prove runtime/persistence pre-call requirements
-- Status: OPEN
+- Status: PASS
 - Depends on: MOS-S002 PASS
 - Parent: tracker step 7
 - Outcome: finite runtime/persistence evidence needed before a controlled call.
 - Acceptance: existing non-phone verification passes; no live call.
+- Evidence: current-main Cloud CI run `37550778941` passed the deterministic Python 3.13 suite, bounded TLS/WSS transport probe and Python 3.12 compatibility suite on authoritative source SHA `7059ee2e5993660d02d8776320afbdf4304eb2e5`. Existing regression coverage includes signed inbound persistence, idempotent stream callbacks/error recording, media start/stop with persisted `CallSession.ended_at`, schema reachability/compatibility and migration preservation, and pilot runtime persistence with DB-loss/file-mirror recovery plus fail-closed call-limit/abort guards. This is non-phone evidence only; it does not claim deployed carrier readiness.
 
 ## MOS-S004 — Re-establish external environment/readiness
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOS-S003 PASS
 - Parent: tracker step 8
 - Outcome: one read-only/current environment and readiness record for the actual intended runtime.
