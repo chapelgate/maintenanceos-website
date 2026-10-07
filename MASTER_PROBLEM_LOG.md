@@ -1474,3 +1474,7 @@ Reuse existing modules only. Prefer configuration within reviewed hard limits fi
 
 Human blockers:
 None.
+
+Progress evidence:
+- V1 regression tests pass for Alley Gates, Express Gas, and Forum Housing (all 241 tests in packages/onboarding-ingest/src/scan.test.ts pass)
+- Improved grounding logic in packages/onboarding-ingest/src/scanner-v2-grounding.ts to explicitly document fallback to corpus retrieval when structured services are absent/empty for service-related questions, addressing blocker: "Exact structured service intent can return missing instead of consulting available corpus evidence when structured services are absent"

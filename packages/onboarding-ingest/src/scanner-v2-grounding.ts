@@ -346,7 +346,7 @@ export async function answerGroundedReceptionistQuestion(
       faq.sourceUrls,
     );
   }
-
+  // If no structured intent matched or structured data was absent/empty, fall through to corpus retrieval.
   const limit = Number.isFinite(options.retrievalLimit)
     ? Math.max(
         1,
