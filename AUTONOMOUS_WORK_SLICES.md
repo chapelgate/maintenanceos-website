@@ -32,12 +32,13 @@ Get MaintenanceOS demonstrably ready for one controlled real test call without t
 ## Ordered slices
 
 ## MOS-S001 — Reconfirm current source regression baseline
-- Status: OPEN
+- Status: PASS
 - Outcome: current main passes the existing non-live unit/integration/security regression needed for pre-call work.
 - Acceptance: exact run evidence recorded; no carrier call and no phone-route mutation.
+- Evidence: authoritative main SHA `7059ee2e5993660d02d8776320afbdf4304eb2e5`; MaintenanceOS Cloud CI run `37550778941`, job `primary-test`, completed SUCCESS on 2026-10-07. Passed checkout, runner policy, committed-secret rejection, dependency consistency, source compilation, deterministic regression, bounded TLS/WSS transport probe, and Python 3.12 compatibility regression. No carrier-call step was executed by this evidence run.
 
 ## MOS-S002 — Reconcile open call-defect fixes
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOS-S001 PASS
 - Parent: tracker steps 3 and 5
 - Outcome: one matrix maps each previously observed live-call defect to current code fix + automated coverage + missing carrier evidence.
