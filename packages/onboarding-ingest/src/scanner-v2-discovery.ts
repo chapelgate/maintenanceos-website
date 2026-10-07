@@ -17,7 +17,14 @@ import {
   normalizeScannerV2Url,
   ScannerV2FrontierTrapGuard,
 } from "./scanner-v2-url-policy.ts";
-import { isPathAllowed, parseRobotsTxt, type RobotsRules } from "./scan.ts";
+import {
+  isPathAllowed,
+  parseRobotsTxt,
+  type RobotsRules,
+  READER_FALLBACK_ORIGIN,
+  READER_FALLBACK_TIMEOUT_MS,
+  READER_FALLBACK_MAX_BYTES,
+} from "./scan.ts";
 import {
   ScanError,
   type CrawlManifest,
@@ -980,30 +987,205 @@ export async function discoverScannerV2Frontier(
     }
   }
 
-  // If a page limit stopped the walk, queued rows remain visibly queued and
-  // therefore cannot later be mistaken for a COMPLETE manifest.
-  const stillQueued = urls.values().some((row) => row.status === "queued");
-  if (stillQueued) discoveryIncomplete = true;
+   // If a page limit stopped the walk, queued rows remain visibly queued and
+   // therefore cannot later be mistaken for a COMPLETE manifest.
+   const stillQueued = urls.values().some((row) => row.status === "queued");
+   if (stillQueued) discoveryIncomplete = true;
 
-  const requestedState = discoveryIncomplete ? "PARTIAL" : "DISCOVERING";
-  const manifest = buildCrawlManifest({
-    crawlId: "scanner-v2-discovery",
-    origin: origin.origin,
-    requestedState,
-    urls: urls.values(),
-  });
+   // Reader fallback: if direct discovery failed to fetch pages due to
+   // network/TLS issues, attempt to use the bounded reader recovery path
+   // to obtain useful content for bootstrap discovery.
+   const readerEligibleFailure = warnings.some((warning) =>
+     ["fetch_failed", "http_401", "http_403"].includes(warning),
+   );
+   const hasFetchFailures = warnings.some((warning) =>
+     warning.endsWith("_failed") || warning.includes("_fetch_failed") || 
+     warning === "fetch_failed" || warning === "sitemap_fetch_failed" ||
+     warning === "robots_fetch_failed" || warning === "robots_unavailable",
+   );
+   const hasMinimalResults = htmlPagesFetched === 0 && sitemapDocuments === 0;
+   
+   if (
+     hasMinimalResults &&
+     (readerEligibleFailure || hasFetchFailures) &&
+     remaining() >= 1_000 &&
+     totalBytes < MAX_TOTAL_BYTES
+   ) {
+     // Attempt reader fallback for the initial URL to bootstrap discovery
+     const readerQueue = [initial.url.toString()];
+     const readerSeen = new Set<string>();
+     const readerSources: ScanPageSource[] = [];
+     const readerPages: { url: string; html: string }[] = [];
+     let readerTotalBytes = 0;
 
-  return {
-    manifest,
-    sitemapSources,
-    pageSources,
-    sitemapDocuments: sitemapSeen.size,
-    sitemapUrlsDiscovered,
-    htmlPagesFetched,
-    htmlLinksDiscovered,
-    urlsDroppedByLimit: urls.droppedByLimit,
-    warnings: [...new Set(warnings)],
-    limitReached: urls.limitReached,
-    incomplete: discoveryIncomplete,
-  };
-}
+     while (
+       readerQueue.length &&
+       readerPages.length < MAX_READER_PAGES &&
+       remaining() >= 1_000 &&
+       readerTotalBytes < MAX_TOTAL_BYTES
+     ) {
+       const target = readerQueue.shift();
+       if (!target || readerSeen.has(target)) continue;
+       readerSeen.add(target);
+
+       let targetUrl: URL;
+       try {
+         targetUrl = new URL(target);
+       } catch {
+         continue;
+       }
+       if (
+         targetUrl.protocol !== "https:" ||
+         targetUrl.origin !== origin.origin
+       ) {
+         continue;
+       }
+       if (!isPathAllowed(robots.rules, targetUrl.pathname || "/")) {
+         warnings.push("robots_skipped_reader_path");
+         continue;
+       }
+
+       const remainingBytes = MAX_TOTAL_BYTES - readerTotalBytes;
+       if (remainingBytes < 1024) break;
+
+       const readerUrl = `${READER_FALLBACK_ORIGIN}/${targetUrl.toString()}`;
+       try {
+         let acceptedBody: string | null = null;
+
+         for (let attempt = 0; attempt < 2; attempt += 1) {
+           const res = await fetchPublicHttps(readerUrl, {
+             lookup: options.lookup,
+             get: options.get,
+             remainingMs: remaining(),
+             timeoutMs: Math.min(READER_FALLBACK_TIMEOUT_MS, remaining()),
+             maxBytes: Math.min(READER_FALLBACK_MAX_BYTES, remainingBytes),
+             maxRedirects: 2,
+             headers: {
+               Accept: "text/html",
+               "X-Respond-With": "html",
+               "X-No-Cache": "true",
+             },
+           });
+
+           if (res.status >= 400) {
+             warnings.push(`reader_http_${res.status}`);
+             break;
+           }
+           if (!/<(?:html|head|body)\b/i.test(res.body)) {
+             warnings.push("reader_non_html");
+             break;
+           }
+           if (isReaderChallengePage(res.body)) {
+             if (attempt === 0 && remaining() >= 1_000) {
+               warnings.push("reader_challenge_retry");
+               continue;
+             }
+             warnings.push("reader_challenge_rejected");
+             break;
+           }
+
+           acceptedBody = res.body;
+           break;
+         }
+
+         if (!acceptedBody) continue;
+
+         const bytes = Buffer.byteLength(acceptedBody, "utf8");
+         readerTotalBytes += bytes;
+         readerSources.push({
+           url: targetUrl.toString(),
+           status: 200,
+           bytes,
+         });
+         readerPages.push({
+           url: targetUrl.toString(),
+           html: acceptedBody,
+         });
+
+         if (readerPages.length === 1) {
+           const extra = rankCandidateUrls(
+             extractSameOriginHrefs(acceptedBody, targetUrl),
+             origin,
+           );
+           for (const href of extra) {
+             if (
+               !readerSeen.has(href) &&
+               readerQueue.length + readerPages.length < MAX_READER_PAGES
+             ) {
+               readerQueue.push(href);
+             }
+           }
+         }
+       } catch (err) {
+         warnings.push(
+           err instanceof ScanError
+             ? `reader_${err.code}`
+             : "reader_fetch_failed",
+         );
+       }
+     }
+
+     // If reader fallback succeeded, use it to bootstrap discovery
+     if (readerPages.length > 0) {
+       // Use reader-discovered content as the basis for discovery
+       const fetchedPages = readerPages.map(({ url, html }) => ({ url, html }));
+       // Reset discovery state and use reader content
+       urls.rows.clear();
+       urls.limitReached = false;
+       urls.droppedByLimit = 0;
+       
+       // Add the initial URL as fetched
+       urls.add({
+         url: initial.url.toString(),
+         status: "fetched",
+         discoveryReason: "reader_fallback",
+       });
+       
+       // Extract links from reader-discovered pages for further discovery
+       for (const { url, html } of fetchedPages) {
+         try {
+           const pageUrl = new URL(url);
+           if (pageUrl.origin === origin.origin && isPathAllowed(robots.rules, pageUrl.pathname || "/")) {
+             const hrefs = extractSameOriginHrefs(html, pageUrl);
+             for (const href of hrefs) {
+               const admitted = admitPageCandidate(href, {
+                 discoveryReason: "html_link",
+                 discoveredFrom: url,
+               });
+               if (admitted?.added) {
+                 // Successfully queued a link for discovery
+               }
+             }
+           }
+         } catch {
+           // Skip invalid URLs
+         }
+       }
+       
+       // Update result with reader fallback success
+       warnings.push("reader_fallback_used");
+     }
+   }
+
+   const requestedState = discoveryIncomplete ? "PARTIAL" : "DISCOVERING";
+   const manifest = buildCrawlManifest({
+     crawlId: "scanner-v2-discovery",
+     origin: origin.origin,
+     requestedState,
+     urls: urls.values(),
+   });
+
+   return {
+     manifest,
+     sitemapSources,
+     pageSources,
+     sitemapDocuments: sitemapSeen.size,
+     sitemapUrlsDiscovered,
+     htmlPagesFetched,
+     htmlLinksDiscovered,
+     urlsDroppedByLimit: urls.droppedByLimit,
+     warnings: [...new Set(warnings)],
+     limitReached: urls.limitReached,
+     incomplete: discoveryIncomplete,
+   };
+ }

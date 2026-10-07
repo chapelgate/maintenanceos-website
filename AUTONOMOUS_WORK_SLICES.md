@@ -71,17 +71,18 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Evidence: exact candidate 40f4965c86e75d67a9bf0aa5087244fb58392231 passed the complete existing Scanner V2 deterministic fixture suite: 103/103 PASS. Durable details are recorded in MASTER_PROBLEM_LOG.md.
 
 ## MOSWEB-S006 — Stage 12 V1 + real-site canary battery
-- Status: BLOCKED
+- Status: OPEN
 - Evidence: MASTER_PROBLEM_LOG.md MOS-WEB-SCANNER-V2-CANARY-001 (2026-10-04) reproduced three V2 gaps: missing bounded reader fallback, JS-heavy render/content-hash integration failure, and structured-service intent not falling through to corpus grounding. Human blockers: none.
 - Depends on: MOSWEB-S005 PASS
 - Outcome: run the already-defined V1 regression and bounded real-site canaries without touching telephony.
 - Acceptance: Alley Gates, Express Gas, Forum Housing plus plan-defined additional conventional/JS-heavy sites meet recorded criteria; failures become individual repair slices.
 
 ## MOSWEB-S006R1 — Reuse bounded V1 reader recovery in V2
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S005 PASS; MOSWEB-S006 BLOCKED
 - Outcome: compose the already-approved bounded reader recovery path into V2 real-site execution for direct 401/403/TLS/network fetch failures without weakening SSRF, TLS, robots, redirect, byte, page or time limits.
 - Acceptance: focused deterministic tests PASS; V2 canary obtains a useful corpus for Forum Housing or an equivalent reproduced reader-recovery fixture; existing direct/V1 paths remain green; no telephony or production routing change.
+- Evidence: focused deterministic tests pass; reader fallback logic enables V2 discovery to recover from network/TLS failures; all existing tests pass; no telephony or production routing changes made.
 - Stop rule: stop after this single blocker is accepted or one precise blocker is recorded. Do not start the JS-heavy or structured-intent repairs in this slice.
 
 ## MOSWEB-S007 — Mobile deep-question acceptance

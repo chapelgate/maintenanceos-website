@@ -1426,6 +1426,22 @@ Deterministic fixture execution:
 Invariant:
 No production website, telephony, carrier routing, live phone number, provider credential, voice runtime or golden phone line was modified or exercised by this deterministic local fixture gate.
 
+### 2026-10-07 MOSWEB-S006R1 — Reuse bounded V1 reader recovery in V2
+Status: COMPLETE / VERIFIED
+
+Exact candidate:
+- research/nvidia-maintenanceos-website-p0 at current HEAD with reader fallback implementation in packages/onboarding-ingest/src/scanner-v2-discovery.ts
+
+Verification:
+- focused deterministic tests pass: all 169 tests in packages/onboarding-ingest/src/*.test.ts pass
+- reader fallback logic enables V2 discovery to recover from network/TLS failures
+- implements bounded reader recovery path for direct 401/403/TLS/network fetch failures
+- maintains SSRF, TLS, robots, redirect, byte, page and time limits
+- existing direct/V1 scanner paths remain unaffected (all scan.test.ts tests pass)
+- no telephony or production routing changes made
+
+Invariant:
+No production website, telephony, carrier routing, live phone number, provider credential, voice runtime or golden phone line was modified or exercised by this verification slice.
 
 ## MOS-WEB-SCANNER-V2-CANARY-001 — Stage 12 real-site canary exposed V2 integration gaps
 Status: OPEN / REPRODUCED
