@@ -59,7 +59,8 @@ Get MaintenanceOS demonstrably ready for one controlled real test call without t
 - Evidence: current-main Cloud CI run `37550778941` passed the deterministic Python 3.13 suite, bounded TLS/WSS transport probe and Python 3.12 compatibility suite on authoritative source SHA `7059ee2e5993660d02d8776320afbdf4304eb2e5`. Existing regression coverage includes signed inbound persistence, idempotent stream callbacks/error recording, media start/stop with persisted `CallSession.ended_at`, schema reachability/compatibility and migration preservation, and pilot runtime persistence with DB-loss/file-mirror recovery plus fail-closed call-limit/abort guards. This is non-phone evidence only; it does not claim deployed carrier readiness.
 
 ## MOS-S004 — Re-establish external environment/readiness
-- Status: OPEN
+- Status: BLOCKED
+- Blocker (2026-10-08): live Twilio webhook and actual serving host not yet verified; historical DO production/USH droplets absent; rollback host and Render test services are not proven production. Do not touch golden phone route.
 - Depends on: MOS-S003 PASS
 - Parent: tracker step 8
 - Outcome: one read-only/current environment and readiness record for the actual intended runtime.
@@ -67,7 +68,7 @@ Get MaintenanceOS demonstrably ready for one controlled real test call without t
 
 ## MOS-S005 — Build pre-call acceptance checklist
 - Status: HOLD
-- Depends on: MOS-S004 PASS
+- Depends on: verified production endpoint for final carrier-specific details; prepare offline checklist independently under MOS-S011
 - Outcome: exact one-call script, expected behaviours, stop conditions, rollback/close-window action and evidence fields.
 - Acceptance: every criterion is observable during/after one call; no vague “sounds good” criterion.
 
@@ -100,3 +101,87 @@ Get MaintenanceOS demonstrably ready for one controlled real test call without t
 - Status: HOLD
 - Outcome: N=2 real probe is not part of call-readiness queue.
 - Activation: only after the controlled-call path is accepted and owner separately authorises the chargeable concurrency probe.
+
+
+## Overnight commercial readiness expansion — independent of S004; one canonical queue
+All slices below are documentation, analysis, static-code/test, or offline evidence work until the actual live host is proven. Do not claim live PASS. Do not create another queue, controller, worker type, service or infrastructure. Reuse existing repository, tests, CI and authorised workers. Do not modify the golden voice, carrier, routing, production deployment or secrets. All new slices are HOLD except MOS-S011. The canonical persistent worker advances one slice at a time; independent external analysis may run concurrently but cannot self-promote queue states. For each slice deliver a committed artifact, reproducible evidence, PASS/HOLD, and exact human blockers. No invented competitor capabilities or legal certification.
+
+## MOS-S011 — Competitor and market benchmark
+- Status: OPEN
+- Outcome: compare Moneypenny, BT AI Receptionist, Hey Jodie, Dialzara and relevant UK alternatives on verified current primary-source features, call accuracy, interruptions, escalation, reporting, integrations, privacy, trial/onboarding and price; identify realistic differentiated positioning.
+- Acceptance: sourced dated matrix, no fabricated scores, measurable target specification and gap register. No unsupported 'number one' claim.
+
+## MOS-S012 — Legal/privacy readiness pack
+- Status: HOLD
+- Outcome: draft UK GDPR/ICO assessment: roles, lawful bases, AI/recording disclosure, privacy notice, retention, DSAR, DPIA screening, subprocessors/transfers, DPA, breach plan, PECR applicability, consumer/business terms and legal-review checklist.
+- Acceptance: document pack with legal references, data-flow inventory, unresolved counsel decisions clearly HUMAN_BLOCKED; no assertion of legal approval.
+
+## MOS-S013 — Security threat model and access controls
+- Status: HOLD
+- Outcome: map authentication, USH/Twilio trust, webhook validation, least privilege, prompt injection, PII redaction, encryption, retention, dependency vulnerabilities, incident handling and backups.
+- Acceptance: static findings with reproducible proof and bounded safe fixes; no credential reads or production access changes.
+
+## MOS-S014 — Call taxonomy and conversation acceptance
+- Status: HOLD
+- Outcome: exhaustive scripted tests for repair, quote, keys, council, wrong number, silence, noisy STT, interruptions, ambiguous names/addresses, postcode, gate number, caller ANI, transfer requests and graceful goodbye.
+- Acceptance: runnable offline deterministic tests and pass/fail matrix; golden voice untouched.
+
+## MOS-S015 — Transcript, job card and email fidelity
+- Status: HOLD
+- Outcome: reconcile transcript to structured fields, correct negation (will/won't), no invented identity/address, called/calling numbers, consent, uncertainty and human review flags.
+- Acceptance: reproduce CG-000084-style failures using synthetic redacted fixtures and focused regressions; no real personal data committed.
+
+## MOS-S016 — Reliability, latency and fallback
+- Status: HOLD
+- Outcome: offline bounded stress, timeout, interruption, retry/idempotency, STT/LLM failure, duplicate callback, database outage, provider error and safe human fallback.
+- Acceptance: measurable CI results, latency/error budget and clear limitations; no live calls.
+
+## MOS-S017 — Accessibility and inclusive UK speech
+- Status: HOLD
+- Outcome: assess accents, speech impairment, dyslexia-friendly written follow-ups, hearing accessibility, multilingual handling and alternative human contact.
+- Acceptance: evidence-backed accessible scripts and test cases, no invented demographic performance.
+
+## MOS-S018 — Product configuration and onboarding
+- Status: HOLD
+- Outcome: reuse existing configuration to define customer setup, FAQs, call categories, working hours, escalation, number forwarding and reversible activation.
+- Acceptance: operator guide and sandbox/static validation; no customer provisioning or routing changes.
+
+## MOS-S019 — Commercial pricing and unit economics
+- Status: HOLD
+- Outcome: cost model for Twilio, voice/STT/LLM, compute, support, taxes, UK competitors, 70-call/month pilot and scale; transparent plans, fair-use and gross margin.
+- Acceptance: formulas with sourced inputs and sensitivity ranges; no invented API costs or financial commitments.
+
+## MOS-S020 — Sales, marketing and website handoff
+- Status: HOLD
+- Outcome: credible positioning, competitor comparison, homepage copy, demo script, procurement evidence, FAQs, SEO and no-unproven-claims rules; website owned by separate factory.
+- Acceptance: handoff only, no duplicate website worker, no publication without approval.
+
+## MOS-S021 — Operations, support and SLA
+- Status: HOLD
+- Outcome: runbook for service monitoring, incidents, backup/restore, call quality audit, ticket handling, customer support, escalation and change management.
+- Acceptance: executable tabletop checklist and owner-facing SOP; no new monitoring service.
+
+## MOS-S022 — Procurement and assurance pack
+- Status: HOLD
+- Outcome: UK public-sector supplier readiness, security questionnaire, accessibility, data-processing terms, insurance/certification gap register, modern slavery applicability and evidence wallet reuse.
+- Acceptance: evidence-based responses and explicit NOT CERTIFIED where applicable.
+
+## MOS-S023 — QA, regression and release evidence
+- Status: HOLD
+- Outcome: consolidate AT-01..AT-16, static security, dependency/license audit, test coverage, versioned release notes, rollback readiness and sign-off matrix.
+- Acceptance: reproducible CI links and explicit live-unverified entries; no false PASS.
+
+## MOS-S024 — Customer trial and conversion readiness
+- Status: HOLD
+- Outcome: trial terms, onboarding checklist, demo/sandbox flow, support boundaries, pilot success metrics, feedback, billing and cancellation journey.
+- Acceptance: draft end-to-end dry-run with owner/legal/production gates explicit.
+
+## MOS-S025 — Independent adversarial release audit
+- Status: HOLD
+- Outcome: try to disprove readiness against best competitors, abuse cases, legal gaps, failed speech capture, costs and operational risk; prioritised defects.
+- Acceptance: evidence-linked P0/P1/P2 register, no self-awarded readiness.
+
+## MOS-S026 — Final consolidated owner blocker and launch dossier
+- Status: HOLD
+- Outcome: consolidate completed independent work, exact owner decisions, live S004/S006/S007 gates, unresolved defects and market release criteria.
+- Acceptance: single concise GO/NO-GO dossier, no declaration of commercial release without live and legal gates.
