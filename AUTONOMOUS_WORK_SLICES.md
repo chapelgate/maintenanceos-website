@@ -38,14 +38,20 @@ Get MaintenanceOS demonstrably ready for one controlled real test call without t
 - Evidence: authoritative main SHA `7059ee2e5993660d02d8776320afbdf4304eb2e5`; MaintenanceOS Cloud CI run `37550778941`, job `primary-test`, completed SUCCESS on 2026-10-07. Passed checkout, runner policy, committed-secret rejection, dependency consistency, source compilation, deterministic regression, bounded TLS/WSS transport probe, and Python 3.12 compatibility regression. No carrier-call step was executed by this evidence run.
 
 ## MOS-S002 — Reconcile open call-defect fixes
-- Status: OPEN
+- Status: PASS
 - Depends on: MOS-S001 PASS
 - Parent: tracker steps 3 and 5
 - Outcome: one matrix maps each previously observed live-call defect to current code fix + automated coverage + missing carrier evidence.
 - Acceptance: no defect is declared fixed from memory.
+- Evidence matrix (repository evidence only; no live-fix claim inferred from memory):
+  - Live Gemini greet-then-stall after caller speech (2026-09-30): current source contains the bounded stalled-turn recovery path and its focused regression coverage in `gemini_voice.py` / `tests/test_gemini_latency_tuning.py`; historical Linux verification run `36716049092` passed the focused and deterministic regressions. **Missing carrier evidence:** a controlled real test-number call must still prove the current deployed runtime no longer stalls.
+  - Post-call email missing/poor caller ANI and operational structure (2026-09-30): current `call_notifications.py` reads both provider caller ANI and called number from CallSid and has canonical automated coverage in `tests/test_call_notifications.py`. Historical current-main reconciliation run `36762089062` passed focused/full/TLS-WSS/Python-3.12 gates. **Missing carrier evidence:** current deployed test-number call must prove provider metadata and received email end-to-end.
+  - CG-000082 noisy-STT/job-card regression (2026-10-06): canonical source contains bounded gate-number/noisy-STT recovery, Warwick Road/keeper/open-gate extraction and anti-fabrication rules; `tests/test_call_notifications.py` plus `tests/test_post_call_email_sync.py` cover canonical behaviour and prevent stale worker-mirror redeployment. The problem log records focused canonical 46 PASS and worker-mirror 44 PASS; the repair is merged on current main. **Missing carrier evidence:** one controlled test-number call must prove deployed email output; no golden-line inference is made.
+  - Routine transfer/UK emergency-language regressions: `tests/test_live_defect_regressions.py` proves routine requests do not trigger emergency transfer, genuine emergencies do, UK 999/never-911 policy is present, and transfer does not inject a second TTS voice. Current-main Cloud CI run `37550778941` passed the deterministic suite. **Missing carrier evidence:** transfer/no-answer behaviour remains a controlled-call acceptance item.
+- Boundary: source/automated coverage is reconciled; no item above is declared live-fixed until its stated carrier evidence passes.
 
 ## MOS-S003 — Prove runtime/persistence pre-call requirements
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOS-S002 PASS
 - Parent: tracker step 7
 - Outcome: finite runtime/persistence evidence needed before a controlled call.
