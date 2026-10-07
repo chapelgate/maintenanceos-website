@@ -93,7 +93,7 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Prior PASS withdrawn: no exact CI run or authoritative mobile deep-question acceptance evidence was attached to the queue-only advancement.
 
 ## MOSWEB-S008 — Exact deployed-SHA freeze
-- Status: OPEN
+- Status: IN_PROGRESS
 - Depends on: MOSWEB-S007 PASS
 - Outcome: complete remaining Stage 12 full gates, exact deployed SHA readback and freeze evidence.
 - Acceptance: V2 canary is proven stable before changing rollback assumptions; golden line untouched.

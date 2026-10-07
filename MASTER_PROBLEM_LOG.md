@@ -1506,6 +1506,10 @@ Verification evidence:
 - Forum Housing bounded real-site canary: V1 scanner successfully extracts business name, hours, services, and contact information using reader fallback across multiple pages (warnings include reader_fallback_used, multiple successful page fetches)
 All verifications confirm the V1 regression and bounded real-site canaries meet the acceptance criteria for MOSWEB-S006.
 
+## MOSWEB-S008 — Exact deployed-SHA freeze
+- Evidence: release preflight passed (243/243 source tests, 419/419 package/runtime/source tests, 17/17 accessibility tests); public/release.json shows commit f566a3b03b2e6949a1c7fa46881ae69bddaad645 matching HEAD; exact deployed SHA verified.
+- Invariant: No MaintenanceOS production telephony, carrier routing, live phone number, provider credential, voice runtime or golden phone line was modified or exercised by this verification slice.
+
 ## MOSWEB-S007 — Mobile deep-question acceptance evidence
 - Status: PASS
 - Evidence: Unit tests for scanner-v2-grounding.test.ts and scanner-v2-retrieval.test.ts pass, proving deep-page retrieval/source grounding and honest handling of unsupported questions.
