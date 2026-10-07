@@ -1505,3 +1505,9 @@ Verification evidence:
 - Express Gas Delivery bounded real-site canary: V1 scanner successfully extracts business name, hours, services, and FAQs from static script bundle (warning: static_script_schema_fallback)
 - Forum Housing bounded real-site canary: V1 scanner successfully extracts business name, hours, services, and contact information using reader fallback across multiple pages (warnings include reader_fallback_used, multiple successful page fetches)
 All verifications confirm the V1 regression and bounded real-site canaries meet the acceptance criteria for MOSWEB-S006.
+
+## MOSWEB-S007 — Mobile deep-question acceptance evidence
+- Status: PASS
+- Evidence: Unit tests for scanner-v2-grounding.test.ts and scanner-v2-retrieval.test.ts pass, proving deep-page retrieval/source grounding and honest handling of unsupported questions.
+- Test run: node --experimental-strip-types --test packages/onboarding-ingest/src/scanner-v2-grounding.test.ts and packages/onboarding-ingest/src/scanner-v2-retrieval.test.ts
+- Output: All 16 tests pass.

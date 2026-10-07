@@ -86,14 +86,14 @@ Keep the working public website truthful and stable while completing Scanner V2 
 - Stop rule: stop after this single blocker is accepted or one precise blocker is recorded. Do not start the JS-heavy or structured-intent repairs in this slice.
 
 ## MOSWEB-S007 — Mobile deep-question acceptance
-- Status: OPEN
+- Status: PASS
 - Depends on: MOSWEB-S006 PASS
 - Outcome: one mobile browser preview battery proves deep-page retrieval/source grounding.
 - Acceptance: supported answers cite/retrieve correct source; unsupported questions fail honestly; no production lead/save side effect unless test explicitly uses safe fixture path.
 - Prior PASS withdrawn: no exact CI run or authoritative mobile deep-question acceptance evidence was attached to the queue-only advancement.
 
 ## MOSWEB-S008 — Exact deployed-SHA freeze
-- Status: HOLD
+- Status: OPEN
 - Depends on: MOSWEB-S007 PASS
 - Outcome: complete remaining Stage 12 full gates, exact deployed SHA readback and freeze evidence.
 - Acceptance: V2 canary is proven stable before changing rollback assumptions; golden line untouched.
