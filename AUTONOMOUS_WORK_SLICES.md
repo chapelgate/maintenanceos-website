@@ -193,3 +193,11 @@ All slices below are documentation, analysis, static-code/test, or offline evide
 - PASS evidence required: correct test routing, no stall or unrequested transfer, correct gate 626, negation preserved, no invented identity, called/caller/callback separated, one durable job and one email per CallSid, safe goodbye, unchanged golden route. Mark each PASS/FAIL/NOT OBSERVED with redacted CallSid and timestamp.
 - Stop immediately on wrong route, unapproved transfer, golden voice change, or privacy concern; do not retry without new owner authorisation. Close window after one call and record source SHA, provider evidence and failure list.
 - This is checklist preparation only. MOS-S005 remains HOLD until live endpoint and rollback/stop conditions are verified; MOS-S006 remains HUMAN_BLOCKED; no live call was made.
+
+
+## Production migration evidence — 2026-10-08 (planning only)
+- Owner confirms public customer-facing number **0151 321 1920** belongs to TTNC and is forwarded to MaintenanceOS; TTNC number must be retained, not ported or changed during backend migration.
+- Twilio console screenshots show +441514535238 inbound POST to `https://maintenanceos-redteam-v2.onrender.com/voice/inbound` and status POST to `https://maintenanceos-redteam-v2.onrender.com/voice/stream-status`; backup webhook blank. **Not yet proven** TTNC forwards to this Twilio number; obtain TTNC forwarding record read-only.
+- Render service `srv-dahhskafngtc739pnplg` currently has live-labelled deployment `0cd2abfe07b8e17c9313cc3ebe64ba73f8d669fc` from 20 September; newer deploys failed build. Preserve current route and service for rollback.
+- DO droplet `601962983` (`165.227.227.9`) is explicitly rollback/temporary; do not promote it blindly. Test Twilio number +442922716489 appears to route to `165-227-227-9.sslip.io` but full path and health need verification.
+- Target: build and validate equivalent service on authorised DigitalOcean infrastructure, confirm voice, Twilio signatures, secrets, persistence, callbacks, email, interruptions, latency, cost, and rollback before any carrier cutover. Golden voice immutable. No cutover authorised by this planning note.
