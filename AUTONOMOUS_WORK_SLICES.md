@@ -185,3 +185,11 @@ All slices below are documentation, analysis, static-code/test, or offline evide
 - Status: HOLD
 - Outcome: consolidate completed independent work, exact owner decisions, live S004/S006/S007 gates, unresolved defects and market release criteria.
 - Acceptance: single concise GO/NO-GO dossier, no declaration of commercial release without live and legal gates.
+
+
+## MOS-S005 offline draft — NOT ACCEPTED / NO CARRIER AUTHORISATION
+- Preconditions: identify verified Twilio test-number webhook and serving host, match deployment SHA to tested source, confirm isolation from golden voice, obtain explicit owner one-call window and safe evidence handling.
+- Single scripted test: repair request; synthetic gate 625 and address 1 Test Road, CH45 9AA; say “keeper will not go into lock, gate remains open”; interrupt and correct gate to 626; request readback; finish call. Use no real resident data.
+- PASS evidence required: correct test routing, no stall or unrequested transfer, correct gate 626, negation preserved, no invented identity, called/caller/callback separated, one durable job and one email per CallSid, safe goodbye, unchanged golden route. Mark each PASS/FAIL/NOT OBSERVED with redacted CallSid and timestamp.
+- Stop immediately on wrong route, unapproved transfer, golden voice change, or privacy concern; do not retry without new owner authorisation. Close window after one call and record source SHA, provider evidence and failure list.
+- This is checklist preparation only. MOS-S005 remains HOLD until live endpoint and rollback/stop conditions are verified; MOS-S006 remains HUMAN_BLOCKED; no live call was made.
