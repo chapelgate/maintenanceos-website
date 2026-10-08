@@ -60,7 +60,7 @@ Get MaintenanceOS demonstrably ready for one controlled real test call without t
 
 ## MOS-S004 — Re-establish external environment/readiness
 - Status: BLOCKED
-- Blocker (2026-10-08): live Twilio webhook and actual serving host not yet verified; historical DO production/USH droplets absent; rollback host and Render test services are not proven production. Do not touch golden phone route.
+- Evidence update (2026-10-08): owner-provided screenshot of signed-in Twilio Inventory shows test +442922716489 active voice configuration beginning `https://165-227-227-9.sslip.io/voice/...`, consistent with the DO rollback IP 165.227.227.9; live +441514535238 configuration beginning `https://maintenanceos-redteam-v2.onre...`, apparently a Render endpoint. URLs are truncated in inventory and neither full webhook, deployment identity, endpoint health, nor carrier call success is verified. Keep BLOCKED until exact read-only number details and serving service are confirmed. Do not touch golden phone route.
 - Depends on: MOS-S003 PASS
 - Parent: tracker step 8
 - Outcome: one read-only/current environment and readiness record for the actual intended runtime.
