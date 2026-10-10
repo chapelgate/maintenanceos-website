@@ -9,10 +9,10 @@ const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
 test("homepage leads with customer outcome before architecture", () => {
   const page = read("src/app/page.tsx");
-  assert.match(page, /Turn maintenance requests into clear, controlled work\./);
+  assert.match(page, /AI for repair reports\. A person still clears anything flagged as dangerous\./);
   assert.match(
     page,
-    /helps UK property and maintenance[\s\S]*incoming repair reports[\s\S]*separate critical cases from routine jobs[\s\S]*consequential decisions with authorised people/,
+    /MaintenanceOS is repair intake for landlords, letting agents and housing providers\./,
   );
   assert.match(page, /What your team gets/);
   assert.match(page, /Capture the request clearly/);
@@ -44,10 +44,10 @@ test("major buyer pages state a plain outcome in the first-screen source", () =>
     "src/app/ai-receptionist/page.tsx": /Capture maintenance calls without handing control to the AI/,
     "src/app/how-it-works/page.tsx": /From maintenance request to controlled follow-up/,
     "src/app/features/page.tsx": /What MaintenanceOS can do.*what is in preview/,
-    "src/app/industries/page.tsx": /Maintenance workflows for the teams who run them/,
+    "src/app/industries/page.tsx": /Repair intake for the people who answer for repairs/,
     "src/app/pricing/page.tsx": /title=\{pricing\.title\}/,
     "src/app/demo/page.tsx": /Start from your website URL/,
-    "src/app/security/page.tsx": /Security and accountability by design/,
+    "src/app/security/page.tsx": /How we keep your data separate and your actions on record/,
     "src/app/contact/page.tsx": /Talk to a person/,
   };
   for (const [file, pattern] of Object.entries(cases)) {

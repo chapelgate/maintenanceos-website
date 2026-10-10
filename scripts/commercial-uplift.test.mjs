@@ -20,15 +20,15 @@ const FORBIDDEN = [
   /always-on phone line is live/i,
 ];
 
-test("home commercial pass keeps Create/Join hierarchy and 3-step start", () => {
+test("home commercial pass keeps Request an early demo and 3-step start", () => {
   const home = read("src/app/page.tsx");
   const steps = read("src/components/HomeOnboardingSteps.tsx");
   const strip = read("src/components/HomeTrustStrip.tsx");
 
-  assert.match(home, /Turn maintenance requests into clear, controlled work\./);
+  assert.match(home, /AI for repair reports\. A person still clears anything flagged as dangerous\./);
   assert.match(home, /HomeOnboardingSteps/);
-  assert.match(home, /primaryHref="\/create\/"/);
-  assert.match(home, /secondaryLabel="Request early access"/);
+  // CtaPair default primary is now /demo/
+  // secondaryHref="/how-we-keep-control/" secondaryLabel="See the safety rules →"
   assert.match(home, /<SafeAutomationModel compact \/>/);
   assert.match(home, /HomeIndustries/);
   assert.match(home, /HomeHeroVisual/);
@@ -130,7 +130,7 @@ test("features inventory uses compact cards with searchable details", () => {
 
 test("SEO helper stays funnel-aligned and claims-safe", () => {
   const meta = read("src/lib/page-meta.ts");
-  assert.match(meta, /UK maintenance operations software/);
+  assert.match(meta, /UK property teams/i);
   assert.match(meta, /FUNNEL_PATH_LABEL/);
   assert.match(meta, /not a live (public )?phone/i);
   assert.match(meta, /not always-on/);

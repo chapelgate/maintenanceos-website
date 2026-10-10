@@ -7,7 +7,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 ## Stance
 
 - `PUBLIC_LAUNCH` defaults to **false** (`NEXT_PUBLIC_PUBLIC_LAUNCH` / `src/config/site.ts`).
-- CTAs: **Create from website** (primary public path) / **Join launch list** / **Request early demo** (secondary human briefing — not a live phone).
+- CTAs: **Request an early demo** (primary public path) / **Create from website** / **Join launch list** (secondary human briefing — not a live phone).
 - Never claim commercially live / GA / certified / production call-ready.
 - No fake social proof, dashboards-as-live-product, customers, or certifications.
 - Copy gated by `PRODUCT_CLAIMS_REGISTER.md`.

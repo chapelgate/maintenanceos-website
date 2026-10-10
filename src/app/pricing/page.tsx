@@ -7,7 +7,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Pricing",
   description:
-    "Public list pricing is not published yet. Create from website, or request pricing. Pre-launch — not a live phone, not general availability, no invented list prices.",
+    "MaintenanceOS is pre-launch, so list prices aren't published yet. Request an early demo and we'll talk you through pricing. Not a live phone, not general availability.",
   path: "/pricing/",
 });
 

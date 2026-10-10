@@ -5,27 +5,28 @@ import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
-  title: "Contact",
+  absoluteTitle: "Contact MaintenanceOS",
+  title: "Contact MaintenanceOS",
   description:
-    "Genuine human enquiries and early access. Product interest starts at /create. Pre-launch — not live phone provisioning, not a GA support desk, no invented SLA.",
+    "Questions about MaintenanceOS, early access or the pilot partner programme? Get in touch and a person will reply.",
   path: "/contact/",
 });
 
 const PATHS = [
   {
-    href: "/create/",
-    label: "Create from website",
-    body: "Website URL → check → review → pack → early access. The primary product path.",
+    href: "/demo/",
+    label: "Request an early demo",
+    body: "See the rules working on a sample repair. The primary product path.",
+  },
+  {
+    href: "/how-we-keep-control/",
+    label: "See the safety rules",
+    body: "Read how we separate critical cases from routine jobs.",
   },
   {
     href: "/demo/#launch",
     label: "Join launch list",
     body: "Email updates when we open access. No fake urgency.",
-  },
-  {
-    href: "/demo/#demo",
-    label: "Request early access",
-    body: "A human briefing about fit and what is verified today — not a live phone number.",
   },
 ] as const;
 
@@ -35,7 +36,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="United Kingdom · Pre-launch"
         title="Talk to a person"
-        lede="Genuine human enquiries about MaintenanceOS. Product interest starts at Create from website. Launch-list and early-access briefings live on /demo. Not live phone provisioning, not a GA support desk, and no invented response SLA."
+        lede="Genuine human enquiries about MaintenanceOS. Product interest starts at Request an early demo. Launch-list and early-access briefings live on /demo. Not live phone provisioning, not a GA support desk, and no invented response SLA."
       />
       <div className="mx-auto max-w-3xl space-y-8 px-4 py-12">
         <FunnelPathStrip />
@@ -68,8 +69,8 @@ export default function ContactPage() {
           </ul>
           <p className="mt-4 text-sm text-muted">
             Product interest starts at{" "}
-            <a href="/create/" className="text-accent underline">
-              Create from website
+            <a href="/demo/" className="text-accent underline">
+              Request an early demo
             </a>
             . This page — genuine human enquiries / early access. Not a support
             desk, not live phone provisioning, no invented SLA.

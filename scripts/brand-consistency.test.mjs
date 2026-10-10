@@ -25,7 +25,7 @@ test("public source uses locked publisher identity", () => {
   assert.doesNotMatch(joined, /Chapelgate Technologies/);
 
   const site = read("src/config/site.ts");
-  assert.match(site, /publicBrand: "MaintenanceOS by Chapelgate"/);
+  assert.match(site, /publicBrand: "MaintenanceOS"/);
   assert.match(site, /publisherName: "Chapelgate"/);
 });
 
@@ -46,7 +46,7 @@ test("accent CTAs use the locked on-accent token and minimum target height", () 
 
 test("brand source remains the single public naming authority", () => {
   const brand = read("BRAND_SYSTEM.md");
-  assert.match(brand, /Public\/search identity: \*\*MaintenanceOS by Chapelgate\*\*/);
+  assert.match(brand, /Public\/search identity: \*\*MaintenanceOS\*\*/);
   assert.match(brand, /Publisher: \*\*Chapelgate\*\*/);
   assert.match(brand, /Do not drift between `Chapelgate` and `Chapelgate Technologies`/);
 });

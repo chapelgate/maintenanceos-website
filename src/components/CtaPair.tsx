@@ -7,10 +7,10 @@ type CtaPairProps = {
 };
 
 export function CtaPair({
-  primaryHref = "/create/",
-  primaryLabel = "Create from website",
-  secondaryHref = "/demo/#demo",
-  secondaryLabel = "Request early access",
+  primaryHref = "/demo/",
+  primaryLabel = "Request an early demo",
+  secondaryHref = "/how-we-keep-control/",
+  secondaryLabel = "See the safety rules",
   className = "",
 }: CtaPairProps) {
   return (

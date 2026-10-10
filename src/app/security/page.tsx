@@ -5,11 +5,9 @@ import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
-  title: "Security",
+  title: "Security and Data Separation",
   description:
-
-    "Tenant isolation, human clearance, and audit evidence by design. Website learning is bounded, read-only and SSRF-guarded. No ISO, SOC 2, or bank-grade claims. Legal pages are DRAFT. Product interest starts at /create.",
-
+    "How MaintenanceOS keeps each organisation's records apart, checks phone-provider requests and records actions. No certifications claimed. Pre-launch.",
   path: "/security/",
 });
 
@@ -18,10 +16,8 @@ export default function SecurityPage() {
     <>
       <PageHero
         eyebrow="Trust · Pre-launch"
-        title="Security and accountability by design"
-
+        title="How we keep your data separate and your actions on record"
         lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. Website learning reads only bounded public HTTPS pages behind SSRF and redirect guards. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
-
       />
 
       <TrustPillars />
@@ -168,15 +164,15 @@ export default function SecurityPage() {
           Talk through the controls
         </h2>
         <p className="mt-2 text-muted">
-          Product interest starts at Create from website. An early-access
+          Product interest starts at Request an early demo. An early-access
           briefing is secondary. We will not present a fake certificate pack.
         </p>
         <CtaPair
           className="mt-6"
-          primaryHref="/create/"
-          primaryLabel="Create from website"
-          secondaryHref="/demo/#demo"
-          secondaryLabel="Request early access"
+          primaryHref="/demo/"
+          primaryLabel="Request an early demo"
+          secondaryHref="/how-we-keep-control/"
+          secondaryLabel="See the safety rules"
         />
       </section>
     </>

@@ -15,7 +15,7 @@ export default function PropertyMaintenanceSoftwarePage() {
       <PageHero
         eyebrow="United Kingdom · Pre-launch"
         title="Property maintenance software for UK teams."
-        lede="MaintenanceOS by Chapelgate is pre-launch property maintenance operations software for landlords, letting agents, property managers, maintenance firms, housing providers, facilities teams, councils, and holiday-let operators. AI assists intake; deterministic rules and authorised people retain control of safety, dispatch, and money."
+        lede="MaintenanceOS is pre-launch property maintenance operations software for landlords, letting agents, property managers, maintenance firms, housing providers, facilities teams, councils, and holiday-let operators. AI assists intake; deterministic rules and authorised people retain control of safety, dispatch, and money."
         orbAccent
       />
       <SafeAutomationModel compact />

@@ -4,9 +4,9 @@ import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
-  title: "About",
+  title: "About MaintenanceOS",
   description:
-    "Why Chapelgate is building MaintenanceOS for UK property maintenance — deterministic safety rules, human clearance, and AI that assists without final authority on safety or money. Pre-launch.",
+    "Why MaintenanceOS is built the way it is: fixed safety rules, an authorised person on anything flagged as dangerous, and an AI that never has the final say.",
   path: "/about/",
 });
 
@@ -15,7 +15,7 @@ export default function AboutPage() {
     <>
       <PageHero
         eyebrow="Chapelgate · United Kingdom"
-        title="About MaintenanceOS"
+        title="Why MaintenanceOS is built the way it is"
         lede="We are building operations software so UK property maintenance stays clear, accountable, and in control — a maintenance department as a service mindset for landlords, letting agents, and property managers."
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12 text-muted">

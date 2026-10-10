@@ -5,7 +5,7 @@ import { industries, primaryNav } from "@/config/site";
  * Server component (PERFORMANCE_BUDGET: no layout chrome `"use client"`).
  * Escape → close open details and return focus to summary is a tiny inline
  * script so content routes do not hydrate React for the header.
- * CTA labels: Create from website (primary) / Early access (secondary briefing).
+ * CTA label: Request an early demo (single primary, /demo/).
  */
 
 const HEADER_DETAILS_ESCAPE = `document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;document.querySelectorAll("header details[open]").forEach(function(d){d.open=false;var s=d.querySelector("summary");s&&s.focus();});});`;
@@ -18,9 +18,6 @@ function Wordmark() {
     >
       <span className="font-medium">Maintenance</span>
       <span className="font-semibold">OS</span>
-      <span className="ml-2 text-xs font-medium tracking-normal text-muted">
-        by Chapelgate
-      </span>
     </a>
   );
 }
@@ -128,26 +125,26 @@ export function SiteHeader() {
 
           <div className="ml-2 flex shrink-0 items-center gap-2">
             <a
-              href="/demo/#demo"
+              href="/how-we-keep-control/"
               className="site-cta-outline inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink hover:border-accent hover:text-accent"
             >
-              Early access
+              Safety rules
             </a>
             <a
-              href="/create/"
+              href="/demo/"
               className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
             >
-              Create from website
+              Request an early demo
             </a>
           </div>
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
           <a
-            href="/create/"
+            href="/demo/"
             className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
           >
-            Create
+            Request an early demo
           </a>
           <details className="relative">
             <summary
@@ -211,10 +208,10 @@ export function SiteHeader() {
                 </li>
                 <li className="pt-2">
                   <a
-                    href="/demo/#demo"
+                    href="/how-we-keep-control/"
                     className="site-cta-outline inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
                   >
-                    Request early access
+                    See the safety rules
                   </a>
                 </li>
               </ul>

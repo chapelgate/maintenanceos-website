@@ -11,7 +11,7 @@ export const FUNNEL_PATH_LABEL =
 const FUNNEL_META_GUARD =
   "Pre-launch — not a live phone, not always-on, not general availability.";
 
-const defaultTitle = `${siteConfig.publicBrand} — UK maintenance operations software`;
+const defaultTitle = `MaintenanceOS`;
 
 function ogLocale(): string {
   return siteConfig.locale.replace("-", "_");
@@ -24,35 +24,35 @@ function ogLocale(): string {
  */
 export const funnelPageCopy = {
   home: {
-    title: "UK maintenance operations software",
-    absoluteTitle: `${siteConfig.publicBrand} — UK maintenance operations software`,
-    description: `${siteConfig.publicBrand} is pre-launch UK maintenance operations software for property and maintenance teams, turning repair reports into structured work while rules and authorised people keep control. ${FUNNEL_PATH_LABEL}. ${FUNNEL_META_GUARD}`,
+    title: "Repair Intake With Safety Rules for UK Teams",
+    absoluteTitle: "MaintenanceOS | Repair Intake With Safety Rules for UK Teams",
+    description: "Repair intake for UK property teams. The AI takes the details; fixed rules and an authorised person decide anything dangerous. Pre-launch, not always-on: request a demo.",
     path: "/",
   },
   create: {
-    title: "Create maintenance intake from your website",
-    description: `${FUNNEL_PATH_LABEL}. Build and review a maintenance intake draft from a public business website. Pre-launch — not a live phone number; this form does not provision one.`,
+    title: "Try Website Set-up (Preview)",
+    description: `Preview how MaintenanceOS would draft your repair-intake set-up from your business details. A preview only: it doesn't create a phone number. ${FUNNEL_META_GUARD}`,
     path: "/create/",
   },
   demo: {
-    title: "Start from your website — or request early access",
-    description: `${FUNNEL_PATH_LABEL}. Create from your site, or request a human briefing. Pre-launch — not a live phone number.`,
+    title: "Request an Early Demo",
+    description: "See a sample repair report go from first contact to safety latch to clearance, using sample data. Request an early demo of MaintenanceOS.",
     path: "/demo/",
   },
   howItWorks: {
-    title: "How MaintenanceOS works",
-    description: `${FUNNEL_PATH_LABEL}. Optional scripted sandbox is under testing. Deterministic rules own safety and money. Pre-launch — not a live phone.`,
+    title: "How MaintenanceOS Works: From Repair Report to Decision",
+    description: "How a repair report becomes a structured request, how safety-critical reports are held for an authorised person, and what's recorded along the way.",
     path: "/how-it-works/",
   },
   features: {
-    title: "Maintenance operations software features",
-    description: `VERIFIED / UNDER TEST: ${FUNNEL_PATH_LABEL}. Flagged sandbox and calendars; live phone not on this site. Pre-launch — not a live phone or commercial general availability.`,
+    title: "MaintenanceOS Features: What's Built and What's in Preview",
+    description: "What MaintenanceOS does today, from structured repair intake to safety latches and audit evidence, and what's still under testing. Plainly labelled.",
     path: "/features/",
   },
   propertyMaintenanceSoftware: {
-    title: "Property maintenance software for UK teams",
-    absoluteTitle: `${siteConfig.publicBrand} — Property maintenance software for UK teams`,
-    description: `${siteConfig.publicBrand} is pre-launch property maintenance software for UK landlords, letting agents, property managers, maintenance firms, housing providers, FM teams, councils, and holiday lets. AI assists intake; rules and authorised people keep control.`,
+    title: "Property Maintenance Software for UK Teams",
+    absoluteTitle: "Property Maintenance Software for UK Teams | MaintenanceOS",
+    description: "Pre-launch property maintenance software for UK landlords, agents, housing providers and maintenance firms. AI takes the details; rules and people keep control.",
     path: "/property-maintenance-software/",
   },
 } as const;
@@ -66,7 +66,7 @@ export function buildRootMetadata(): Metadata {
     metadataBase: new URL(origin),
     title: {
       default: defaultTitle,
-      template: `%s · ${siteConfig.publicBrand}`,
+      template: `%s | MaintenanceOS`,
     },
     description: siteConfig.description,
     applicationName: siteConfig.publicBrand,
@@ -80,11 +80,13 @@ export function buildRootMetadata(): Metadata {
       siteName: siteConfig.publicBrand,
       title: defaultTitle,
       description: siteConfig.description,
+      images: [absoluteUrl("/og-image.png")],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: defaultTitle,
       description: siteConfig.description,
+      images: [absoluteUrl("/og-image.png")],
     },
   };
 }
@@ -94,12 +96,12 @@ export function contentPageMetadata(opts: {
   title: string;
   description: string;
   path: string;
-  /** When set, document/OG/Twitter titles skip the `%s · MaintenanceOS` template. */
+  /** When set, document/OG/Twitter titles skip the `%s | MaintenanceOS` template. */
   absoluteTitle?: string;
 }): Metadata {
   const path = opts.path.endsWith("/") ? opts.path : `${opts.path}/`;
   const canonical = absoluteUrl(path);
-  const ogTitle = opts.absoluteTitle ?? `${opts.title} · ${siteConfig.publicBrand}`;
+  const ogTitle = opts.absoluteTitle ?? `${opts.title} | MaintenanceOS`;
 
   return {
     title: opts.absoluteTitle
@@ -114,11 +116,13 @@ export function contentPageMetadata(opts: {
       siteName: siteConfig.publicBrand,
       locale: ogLocale(),
       type: "website",
+      images: [absoluteUrl("/og-image.png")],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: ogTitle,
       description: opts.description,
+      images: [absoluteUrl("/og-image.png")],
     },
   };
 }
@@ -150,7 +154,7 @@ export function industryRoleMetadata(
   const seo = getIndustrySeoIntent(role.slug);
   return contentPageMetadata({
     title: seo?.title ?? role.productName ?? role.label,
-    description: seo ? `${seo.summary} Pre-launch.` : role.metaDescription,
+    description: seo ? `${seo.summary} Pre-launch, not always-on.` : role.metaDescription,
     path: `/industries/${role.slug}/`,
   });
 }

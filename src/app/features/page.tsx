@@ -90,12 +90,7 @@ export default function FeaturesPage() {
           );
         })}
 
-        <CtaPair
-          primaryHref="/create/"
-          primaryLabel="Create from website"
-          secondaryHref="/demo/#launch"
-          secondaryLabel="Join launch list"
-        />
+        <CtaPair primaryHref="/demo/" primaryLabel="Request an early demo" />
       </div>
     </>
   );

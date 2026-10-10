@@ -7,10 +7,10 @@
 ## Public naming
 
 - Product name: **MaintenanceOS**
-- Public/search identity: **MaintenanceOS by Chapelgate**
+- Public/search identity: **MaintenanceOS**
 - Publisher: **Chapelgate**
 - Category descriptor: **UK maintenance operations software with AI-assisted intake**
-- Use the bare product name inside product copy where natural; use **MaintenanceOS by Chapelgate** in site identity, metadata, structured data, search/AI summaries, and visible attribution.
+- Use the bare product name inside product copy where natural; use **MaintenanceOS** in site identity, metadata, titles, structured data and search/AI summaries (Andy Cartwright, 10 Oct 2026: "by Chapelgate" dropped from titles and logo). The registered company name stays in the footer copyright line and legal pages only.
 - Do not drift between `Chapelgate` and `Chapelgate Technologies` on this site unless a separate approved naming decision changes the publisher identity.
 
 Discoverability baseline and monitoring queries: [`docs/SEO_BRAND_BASELINE_2026-09-25.md`](docs/SEO_BRAND_BASELINE_2026-09-25.md).

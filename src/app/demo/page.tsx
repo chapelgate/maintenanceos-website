@@ -63,15 +63,8 @@ export default function DemoPage() {
           The public path
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          Same steps as{" "}
-          <a
-            href="/create/"
-            className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
-          >
-            Create from website
-          </a>
-
-          . Website → Check → Choose → Configure → Review &amp; Try, then
+          Same steps as <a href="/create/" className="text-accent underline">the website setup preview</a>:
+          Website → Check → Choose → Configure → Review &amp; Try, then
           optional save. This browser preview does not assign a live number.
 
         </p>
@@ -99,13 +92,7 @@ export default function DemoPage() {
           ))}
         </ol>
 
-        <CtaPair
-          className="mt-8"
-          primaryHref="/create/"
-          primaryLabel="Create from website"
-          secondaryHref="#demo"
-          secondaryLabel="Request a human briefing"
-        />
+        <CtaPair className="mt-8" />
       </section>
 
       <section
