@@ -4,6 +4,9 @@ import { getIndustrySeoIntent } from "@/config/seo-intents";
 import { REFERRER_POLICY } from "@/lib/static-security-headers";
 import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
+/** Static file URL: no trailing slash (absoluteUrl adds one for routes). */
+const OG_IMAGE_URL = () => `${getCanonicalSiteUrl().replace(/\/$/, "")}/og-image.png`;
+
 /** Canonical public path named in funnel-page titles, descriptions, and OG. */
 export const FUNNEL_PATH_LABEL =
   "Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access";
@@ -80,13 +83,13 @@ export function buildRootMetadata(): Metadata {
       siteName: siteConfig.publicBrand,
       title: defaultTitle,
       description: siteConfig.description,
-      images: [absoluteUrl("/og-image.png")],
+      images: [OG_IMAGE_URL()],
     },
     twitter: {
       card: "summary_large_image",
       title: defaultTitle,
       description: siteConfig.description,
-      images: [absoluteUrl("/og-image.png")],
+      images: [OG_IMAGE_URL()],
     },
   };
 }
@@ -116,13 +119,13 @@ export function contentPageMetadata(opts: {
       siteName: siteConfig.publicBrand,
       locale: ogLocale(),
       type: "website",
-      images: [absoluteUrl("/og-image.png")],
+      images: [OG_IMAGE_URL()],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: opts.description,
-      images: [absoluteUrl("/og-image.png")],
+      images: [OG_IMAGE_URL()],
     },
   };
 }

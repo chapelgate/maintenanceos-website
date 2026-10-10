@@ -1,4 +1,5 @@
 import { CtaPair } from "@/components/CtaPair";
+import { GasSafetyBlock } from "@/components/GasSafetyBlock";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import {
@@ -54,6 +55,13 @@ function renderContent(lines: string[]) {
   return elements;
 }
 
+const GAS_BLOCK_SLUGS = new Set([
+  "landlords",
+  "letting-agents",
+  "housing-associations",
+  "councils",
+]);
+
 export function IndustryRolePage({ role }: Props) {
   const seo = getIndustrySeoIntent(role.slug);
   const hasDraftSections = Boolean(role.sections && role.sections.length > 0);
@@ -69,6 +77,8 @@ export function IndustryRolePage({ role }: Props) {
         <p className="mos-glass px-4 py-3 text-sm text-muted">
           {honesty}
         </p>
+
+        {GAS_BLOCK_SLUGS.has(role.slug) ? <GasSafetyBlock /> : null}
 
         {!hasDraftSections && (
         <>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { JsonLd } from "@/components/JsonLd";
+import { GasSafetyStrip } from "@/components/GasSafetyStrip";
 import { PreLaunchBanner } from "@/components/PreLaunchBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -40,6 +41,7 @@ export default function RootLayout({
         <JsonLd data={marketingJsonLd()} />
         <WebsiteMeasurement />
         <SkipLink />
+        <GasSafetyStrip />
         <PreLaunchBanner />
         <SiteHeader />
         <main id="main" tabIndex={-1} className="flex-1 outline-none">

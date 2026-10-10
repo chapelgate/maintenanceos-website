@@ -73,6 +73,11 @@ export default function HomePage() {
               secondaryHref="/how-we-keep-control/"
               secondaryLabel="See the safety rules →"
             />
+            <p className="mt-4 text-sm text-muted">
+              <a href="/how-we-keep-control/#gas" className="font-medium text-ink underline underline-offset-2">
+                Smell gas? What to do right now →
+              </a>
+            </p>
           </div>
 
           <div className="lg:col-span-7" id="product">
