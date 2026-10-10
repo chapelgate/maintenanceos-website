@@ -74,6 +74,15 @@ class CapacityBackend(Protocol):
     def release(self, lease_id: str) -> None:
         ...
 
+    def has_call(self, *, call_sid: str = "", call_session_id: int = 0) -> bool:
+        with self._lock:
+            lease_id = None
+            if call_sid:
+                lease_id = self._by_call_sid.get(call_sid)
+            if not lease_id and call_session_id:
+                lease_id = self._by_session.get(call_session_id)
+            return bool(lease_id and lease_id in self._leases)
+
     def snapshot(self) -> CapacitySnapshot:
         ...
 
@@ -164,6 +173,15 @@ class ProcessLocalCapacityBackend:
                 if lease:
                     self._by_call_sid.pop(lease.call_sid, None)
                     self._by_session.pop(lease.call_session_id, None)
+
+    def has_call(self, *, call_sid: str = "", call_session_id: int = 0) -> bool:
+        with self._lock:
+            lease_id = None
+            if call_sid:
+                lease_id = self._by_call_sid.get(call_sid)
+            if not lease_id and call_session_id:
+                lease_id = self._by_session.get(call_session_id)
+            return bool(lease_id and lease_id in self._leases)
 
     def snapshot(self) -> CapacitySnapshot:
         with self._lock:
@@ -269,6 +287,19 @@ def admit_call(*, call_sid: str, call_session_id: int, client_id: int, tenant_id
     if not ok:
         raise CapacityRejected(reason)
     return lease
+
+
+def has_call_capacity_lease(*, call_sid: str = "", call_session_id: int = 0) -> bool:
+    """Return whether a process-local admission lease is still held for a call."""
+    return capacity_backend().has_call(call_sid=call_sid, call_session_id=call_session_id)
+
+
+def release_call_capacity_only(*, call_sid: str = "", call_session_id: int = 0) -> None:
+    """Release capacity without recording a completed pilot call.
+
+    Used when Twilio received stream TwiML but never opened the Media Stream.
+    """
+    capacity_backend().release_call(call_sid=call_sid, call_session_id=call_session_id)
 
 
 def release_call_lease(lease: CallLease | None = None, *, call_sid: str = "", call_session_id: int = 0) -> None:

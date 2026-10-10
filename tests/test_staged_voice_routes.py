@@ -21,6 +21,7 @@ from starlette.websockets import WebSocketDisconnect
 from twilio.request_validator import RequestValidator
 
 import api
+import call_capacity
 import channels
 import decision_engine
 import operations
@@ -220,6 +221,76 @@ def test_signed_inbound_route_fails_closed_to_human_fallback(staged_routes):
         assert len(calls) == 1
         assert calls[0].caller.startswith("sha256:")
         assert "+44" not in calls[0].caller
+
+
+def test_unclaimed_inbound_lease_is_released_without_media_stream(staged_routes, monkeypatch):
+    client, _ = staged_routes
+    call_capacity.reset_capacity_backend_for_tests()
+    monkeypatch.setenv("ENABLE_REALTIME_VOICE", "true")
+    monkeypatch.setattr(api, "provider_ready", lambda: True)
+
+    callbacks = []
+
+    class FakeTimer:
+        def __init__(self, _delay, callback):
+            self.callback = callback
+            self.daemon = False
+            callbacks.append(callback)
+
+        def start(self):
+            return None
+
+    monkeypatch.setattr(api.threading, "Timer", FakeTimer)
+    params = {
+        "CallSid": "CA-pending-no-stream",
+        "From": "+440000000051",
+        "To": "+440000000098",
+    }
+    response = _signed_post(client, "/voice/inbound", params)
+    assert response.status_code == 200
+    assert "<Stream" in response.text
+    assert call_capacity.capacity_snapshot().active_calls == 1
+    assert len(callbacks) == 1
+
+    callbacks[0]()
+
+    assert call_capacity.capacity_snapshot().active_calls == 0
+
+
+def test_pending_cleanup_never_releases_claimed_live_media_session(staged_routes, monkeypatch):
+    client, _ = staged_routes
+    call_capacity.reset_capacity_backend_for_tests()
+    monkeypatch.setenv("ENABLE_REALTIME_VOICE", "true")
+    monkeypatch.setattr(api, "provider_ready", lambda: True)
+
+    callbacks = []
+
+    class FakeTimer:
+        def __init__(self, _delay, callback):
+            self.callback = callback
+            self.daemon = False
+            callbacks.append(callback)
+
+        def start(self):
+            return None
+
+    monkeypatch.setattr(api.threading, "Timer", FakeTimer)
+    params = {
+        "CallSid": "CA-pending-live-stream",
+        "From": "+440000000051",
+        "To": "+440000000098",
+    }
+    response = _signed_post(client, "/voice/inbound", params)
+    stream_params = _stream_parameters(response.text)
+    call_session_id = int(stream_params["call_session_id"])
+    assert voice_bridge.claim_active_call_session(call_session_id)
+    assert call_capacity.capacity_snapshot().active_calls == 1
+
+    callbacks[0]()
+
+    assert call_capacity.capacity_snapshot().active_calls == 1
+    voice_bridge.release_active_call_session(call_session_id)
+    call_capacity.release_call_capacity_only(call_session_id=call_session_id)
 
 
 def test_signed_stream_callbacks_are_idempotent_and_record_errors(staged_routes):
@@ -435,21 +506,39 @@ def test_local_tls_https_and_wss_transport_reaches_actual_routes(
         assert not thread.is_alive()
 
 
-def test_actual_websocket_realtime_failure_closes_and_preserves_reason(staged_routes, monkeypatch):
+def test_actual_websocket_realtime_failure_soft_recovers_without_app_close(staged_routes, monkeypatch):
+    """Recoverable OpenAI errors must keep the Media Stream open (no Twilio 31921)."""
     client, session_factory = staged_routes
     fake_openai = FakeOpenAI(
         [{"type": "error", "error": {"code": "synthetic_upstream_failure"}}],
-        hold_open=False,
+        hold_open=True,
     )
     parameters = _create_streaming_call(client, monkeypatch, fake_openai)
+    monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0")
     with client.websocket_connect(
         "/voice/media-stream",
         headers={"X-Twilio-Signature": _signature(PUBLIC_STREAM)},
     ) as socket:
         socket.send_json({"event": "connected", "protocol": "Call", "version": "1.0.0"})
         socket.send_json(_start_event(parameters))
-        close = socket.receive()
-        assert close["type"] == "websocket.close"
+        # Allow soft-recover to record the interruption while the stream stays open.
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline:
+            with session_factory() as session:
+                call = session.query(CallSession).filter_by(call_sid="CA-synthetic-route").one()
+                summary = call.summary or ""
+                if "openai_realtime_error:synthetic_upstream_failure" in summary:
+                    break
+            time.sleep(0.01)
+        else:
+            raise AssertionError("soft-recover interruption was not recorded")
+        # Caller/Twilio still owns stream teardown — send stop (no application close).
+        socket.send_json({
+            "event": "stop",
+            "sequenceNumber": "3",
+            "streamSid": "MZ-synthetic-route",
+            "stop": {"callSid": "CA-synthetic-route", "accountSid": SYNTHETIC_ACCOUNT},
+        })
     with session_factory() as session:
         call = session.query(CallSession).filter_by(call_sid="CA-synthetic-route").one()
         assert call.ended_at is not None
