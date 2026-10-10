@@ -1,0 +1,15 @@
+# Tasks
+- [x] P0 register guardrail, README and BRAND_SYSTEM updated
+- [x] R1 hero slimmed and rulebook teaser added
+- [x] R2 `/how-we-keep-control/` route and sitemap entry
+- [x] R3–R8 sector pages (READY six only)
+- [x] R9 industries hub
+- [x] R10 SEO titles/descriptions for existing routes (HOLD rows unchanged)
+- [x] R11 nav relabels; Dashboard (soon) and xxxOS labels removed
+- [x] Single primary CTA "Request an early demo"
+- [x] "by Chapelgate" removed from hero, titles and logo (footer copyright and legal pages kept)
+- [x] P1 review material stripped; P2 no guide links; P3 Awaab's Law date re-checked
+- [x] LeadCaptureForm reset fix
+- [x] og:image / twitter:image site-wide, summary_large_image
+- [x] lint, tests (243/243) and build pass
+- [x] Expert review run and findings resolved
