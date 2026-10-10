@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 
 from idempotency import set_ai_side_effects
@@ -17,6 +18,15 @@ from seed_synthetic_tenant import ensure_synthetic_tenant
 
 SYNTHETIC_READY = "SYNTHETIC_VOICE_TENANT_READY"
 PREPARE_PASS = "RENDER_PREPARE_PASS"
+# Startup must never change live phone routing by default. Reconfiguring the
+# carrier voice webhook on every service start is opt-in only; the explicit,
+# operator-run path remains `python provider_webhooks.py`.
+STARTUP_WEBHOOK_FLAG = "ENABLE_STARTUP_TWILIO_WEBHOOK_CONFIG"
+STARTUP_WEBHOOK_SKIP_STATUS = "TWILIO_VOICE_WEBHOOK_SKIPPED_STARTUP_OPT_IN_DISABLED"
+STARTUP_WEBHOOK_SKIP_MESSAGE = (
+    "Startup Twilio webhook configuration is disabled "
+    f"({STARTUP_WEBHOOK_FLAG} is not true); phone routing left unchanged"
+)
 
 
 def _record_fail_closed_side_effects() -> None:
@@ -30,10 +40,26 @@ def _record_fail_closed_side_effects() -> None:
         session.commit()
 
 
+def startup_webhook_config_enabled() -> bool:
+    return os.getenv(STARTUP_WEBHOOK_FLAG, "false").strip().lower() == "true"
+
+
+def _startup_webhook(twilio_updater=None) -> dict[str, object]:
+    if not startup_webhook_config_enabled():
+        return {
+            "mutated": False,
+            "startup_opt_in": False,
+            "status": STARTUP_WEBHOOK_SKIP_STATUS,
+            "message": STARTUP_WEBHOOK_SKIP_MESSAGE,
+        }
+    result = configure_phone_voice_webhook(provider_updater=twilio_updater)
+    return {**result, "startup_opt_in": True}
+
+
 def prepare_runtime(*, twilio_updater=None) -> dict[str, object]:
     tenant_id = ensure_synthetic_tenant()
     _record_fail_closed_side_effects()
-    webhook = configure_phone_voice_webhook(provider_updater=twilio_updater)
+    webhook = _startup_webhook(twilio_updater)
     plan = plan_twilio_voice_webhook()
     readiness = readiness_report()
     return {
