@@ -38,16 +38,20 @@ Start with exactly: Hi, thank you for calling Chapel Gate. How can we help you t
 Listen fully before replying. Ask one useful question at a time and avoid sounding like a checklist.
 Keep replies short and responsive. Avoid long silent pauses between questions or pieces of information. If you need a moment to process something, use a brief natural acknowledgement such as 'Okay' or 'Thanks' rather than leaving the caller wondering whether the line has disconnected. Do not add unnecessary filler.
 
-For repair or maintenance enquiries, collect one field at a time. Never ask for the caller's name, address and telephone number in the same turn.
+For repair or maintenance enquiries, collect exactly one intake field at a time. Ask one question, wait for the caller's answer, then ask the next question. Never request two or more repair details in the same turn. Do not ask when the problem started or about urgency until the six core intake fields below have been collected, unless the caller reports an immediate safety emergency.
 
-ALLEY-GATE REPAIR RULE: If the caller reports an alley-gate repair, gate lock fault, damaged gate, or another problem with a Chapelgate alley gate, use this exact intake order:
-1. Ask whether the gate is in Wirral or Sefton and wait for the answer.
-2. Ask for the gate number and wait for the answer.
-3. Ask what is wrong with the gate and wait for the answer.
-4. Ask for the caller's full name ONLY and wait for the answer.
-5. Ask for the caller's own full address including postcode ONLY and wait for the answer.
-6. Ask for their callback/contact telephone number ONLY and wait for the answer.
-Never combine steps 4, 5 and 6 into one question. If any answer is unclear, incomplete or sounds mistranscribed, ask for that field again before moving on.
+ALLEY-GATE REPAIR RULE: If the caller reports an alley-gate repair, gate lock fault, damaged gate, or another problem with a Chapelgate alley gate, use this exact order:
+1. Ask whether the gate is in Wirral or Sefton. Wait for the answer.
+2. Ask for the gate number only. Wait for the answer.
+3. Ask what is wrong with the gate only. Wait for the answer.
+4. Ask for the caller's full name ONLY. Wait for the answer.
+5. Ask for the caller's own full address including postcode ONLY. Wait for the answer.
+6. Ask for the callback/contact telephone number ONLY. Wait for the answer.
+Never combine any of steps 1 to 6 in one turn. If an answer is unclear or incomplete, stay on that field and ask again before moving on. If the caller corrects a detail later, discard the old value, accept the corrected value, and use only the corrected value in the final read-back.
+
+CALL STATE / NO-GUESS RULE: Treat only information actually spoken by the caller during THIS call as source data. Never infer or manufacture an area, gate number, fault, name, address, postcode, telephone number, payment method, callback arrangement, order status, or other caller detail from your own earlier read-back, caller ID, records, examples, context or memory. If a caller says a field is wrong, not correct, made up, or says they never gave it, erase that field immediately and never repeat the rejected value. Ask only for that field again. If the correction is unclear, leave the field unknown and ask again; do not restore an older value. Do not treat unclear speech, unrelated words, background noise, or a response you do not confidently understand as confirmation.
+PHONE ACCURACY RULE: Repeat exactly the digits the caller actually supplied. Never prepend a zero, remove digits, insert digits, reorder digits, or turn one number into a different number. If the caller gives the number in chunks, you may join only those caller-spoken chunks. Read the resulting digits back and ask for confirmation.
+FAULT ACCURACY RULE: If the fault description is unclear, ask the caller to repeat it. Do not convert an unclear phrase into a specific fault such as a faulty lock.
 If the caller knows the gate number, DO NOT ask for the gate's street/location because Chapelgate can identify the gate from its number. If the gate number is unknown, then ask for enough gate location information to identify it. Never invent a gate number.
 PHONE PRIVACY / ACCURACY RULE: Never supply, infer, recall or guess a caller's telephone number from caller ID, records, previous calls, examples, context or memory. Only repeat a telephone number whose digits the caller has explicitly spoken during THIS call. If the digits are unclear, incomplete or implausibly short, say you did not catch the full number and ask them to repeat it. Read the number back and ask the caller to confirm it before treating it as collected.
 CORRECTION RULE: If the caller says any field is wrong, immediately discard that field's previous value. Never repeat the rejected value again. Ask only for the corrected field. A new value replaces the old value only when it is clearly understood. For telephone numbers, preserve exactly the digits the caller actually supplied; never add a leading zero, remove digits, reformat into a different number, or reconstruct a number from memory. If a corrected name is rejected again, ask the caller to spell the surname letter by letter, then repeat the corrected name slowly and ask for confirmation before continuing.
@@ -147,12 +151,12 @@ def resample_pcm16(data: bytes, src_rate: int, dst_rate: int) -> bytes:
 
 
 def _silence_duration_ms() -> int:
-    # Default 350ms keeps barge-in safe while shaving end-of-speech wait vs 450ms.
-    raw = os.getenv("GEMINI_SILENCE_DURATION_MS", "350").strip()
+    # 600ms gives complete speech turns more room while retaining responsive VAD.
+    raw = os.getenv("GEMINI_SILENCE_DURATION_MS", "600").strip()
     try:
         value = int(raw)
     except ValueError:
-        value = 350
+        value = 600
     return max(200, min(value, 1200))
 
 
@@ -351,6 +355,20 @@ def _merge_transcription(current: str, fragment: str) -> str:
     return f"{current} {fragment}".strip()
 
 
+def _response_watchdog_due(
+    *,
+    expected_generation: int,
+    current_generation: int,
+    response_generation: int,
+    last_input_age_ms: int,
+) -> bool:
+    return (
+        expected_generation == current_generation
+        and response_generation < expected_generation
+        and last_input_age_ms >= 1200
+    )
+
+
 def _normalize_utterance(text: str) -> str:
     lowered = (text or "").casefold().replace("’", "'").replace("‘", "'")
     cleaned = "".join(ch if ch.isalnum() or ch in {" ", "'"} else " " for ch in lowered)
@@ -540,6 +558,10 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             trusted_name = ""
             animal_emergency_pending = False
             name_correction_count = 0
+            turn_generation = 0
+            response_generation = 0
+            last_input_text_ms = int(time.monotonic() * 1000)
+            response_watchdog_task: asyncio.Task | None = None
             # Latency markers (no caller PII): speech ended → model audio → Twilio send.
             turn_latency = {
                 "caller_turn_ms": None,
@@ -662,6 +684,38 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                 "Do not invent or repeat an unverified value."
                             )
                         )
+            async def _response_watchdog(expected_generation: int) -> None:
+                await asyncio.sleep(7.0)
+                if stop_received.is_set() or transfer_required.is_set() or routine_close_requested.is_set():
+                    return
+                now_ms = int(time.monotonic() * 1000)
+                if not _response_watchdog_due(
+                    expected_generation=expected_generation,
+                    current_generation=turn_generation,
+                    response_generation=response_generation,
+                    last_input_age_ms=max(0, now_ms - last_input_text_ms),
+                ):
+                    return
+                operational_event(
+                    "voice_response_watchdog",
+                    transport="gemini",
+                    outcome="reprompt",
+                    duration_ms=max(0, now_ms - (turn_latency.get("caller_turn_ms") or now_ms)),
+                    reason_code="no_audio_after_finished_turn",
+                )
+                await session.send_realtime_input(
+                    text=(
+                        "The caller has finished speaking and is waiting for a reply. "
+                        "Respond now to their latest message. If it corrected a field, acknowledge "
+                        "the correction and use only caller-supplied information. Do not stay silent."
+                    )
+                )
+
+            def _arm_response_watchdog(expected_generation: int) -> None:
+                nonlocal response_watchdog_task
+                if response_watchdog_task and not response_watchdog_task.done():
+                    response_watchdog_task.cancel()
+                response_watchdog_task = asyncio.create_task(_response_watchdog(expected_generation))
 
             async def from_twilio() -> None:
                 nonlocal lifecycle_closed
@@ -712,6 +766,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                 nonlocal closing_prompt_seen, awaiting_field, correction_waiting
                 nonlocal correction_generation, correction_started_at, last_caller_transcription_at
                 nonlocal trusted_phone, trusted_name, animal_emergency_pending, name_correction_count
+                nonlocal turn_generation, response_generation, last_input_text_ms, response_watchdog_task
                 while not stop_received.is_set() and not transfer_required.is_set() and not routine_close_requested.is_set():
                     async for response in session.receive():
                         content = response.server_content
@@ -725,9 +780,11 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                         if input_tx and getattr(input_tx, "text", None):
                             text = str(input_tx.text)
                             last_caller_transcription_at = time.monotonic()
+                            last_input_text_ms = int(time.monotonic() * 1000)
                             transcript_buffers["caller"] = _merge_transcription(transcript_buffers["caller"], text)
                             finished = getattr(input_tx, "finished", None) is True
                             if finished:
+                                turn_generation += 1
                                 _mark("caller_turn_ms")
                                 turn_latency["gemini_turn_ms"] = None
                                 turn_latency["first_model_audio_ms"] = None
@@ -857,6 +914,7 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                 if should_close:
                                     await request_routine_close()
                                     return
+                                _arm_response_watchdog(turn_generation)
                             if _emergency_transfer_requested(text):
                                 await request_human_transfer()
                                 return
@@ -938,6 +996,9 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
                                         "streamSid": stream_sid,
                                         "media": {"payload": base64.b64encode(ulaw).decode("ascii")},
                                     })
+                                    response_generation = turn_generation
+                                    if response_watchdog_task and not response_watchdog_task.done():
+                                        response_watchdog_task.cancel()
                                     if turn_latency["first_twilio_audio_ms"] is None:
                                         _mark("first_twilio_audio_ms")
                         if getattr(content, "turn_complete", False) and animal_emergency_pending:
@@ -961,6 +1022,9 @@ async def handle_gemini_media_stream(websocket: WebSocket) -> None:
             watchdog_task.cancel()
             await asyncio.gather(*pending, return_exceptions=True)
             await asyncio.gather(watchdog_task, return_exceptions=True)
+            if response_watchdog_task and not response_watchdog_task.done():
+                response_watchdog_task.cancel()
+                await asyncio.gather(response_watchdog_task, return_exceptions=True)
     except Exception as exc:
         operational_event("gemini_voice_failure", transport="gemini", outcome=type(exc).__name__)
         if call_session_id:

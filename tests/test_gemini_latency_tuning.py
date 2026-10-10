@@ -78,3 +78,48 @@ def test_gemini_bridge_moves_close_work_off_event_loop():
     assert "await asyncio.to_thread(vb.record_transcript_segment" in source
     assert "deterministic_goodbye" in source
     assert "voice_turn_stage" in source
+
+
+def test_silence_duration_default_is_safe_value(monkeypatch):
+    monkeypatch.delenv("GEMINI_SILENCE_DURATION_MS", raising=False)
+    assert _silence_duration_ms() == 600
+
+
+def test_response_watchdog_only_reprompts_for_stalled_finished_turn():
+    from gemini_voice import _response_watchdog_due
+
+    assert _response_watchdog_due(
+        expected_generation=3,
+        current_generation=3,
+        response_generation=2,
+        last_input_age_ms=7000,
+    )
+    assert not _response_watchdog_due(
+        expected_generation=3,
+        current_generation=3,
+        response_generation=3,
+        last_input_age_ms=7000,
+    )
+    assert not _response_watchdog_due(
+        expected_generation=3,
+        current_generation=4,
+        response_generation=2,
+        last_input_age_ms=7000,
+    )
+    assert not _response_watchdog_due(
+        expected_generation=3,
+        current_generation=3,
+        response_generation=2,
+        last_input_age_ms=400,
+    )
+
+
+def test_live_bridge_has_bounded_no_response_watchdog():
+    import inspect
+    import gemini_voice
+
+    source = inspect.getsource(gemini_voice.handle_gemini_media_stream)
+    assert "await asyncio.sleep(7.0)" in source
+    assert "voice_response_watchdog" in source
+    assert "no_audio_after_finished_turn" in source
+    assert "Do not stay silent." in source
