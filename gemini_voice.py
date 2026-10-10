@@ -30,6 +30,8 @@ GEMINI_VOICE_DEFAULT = "Aoede"
 MAX_MEDIA_PAYLOAD_BYTES = 64 * 1024
 MAX_SEQUENCE_KEYS = 100_000
 
+from safety_messages import GAS_CO_SAFETY_RULE
+
 SYSTEM_PROMPT = """You are Chapelgate's telephone receptionist in the UK.
 Speak natural conversational British English: warm, concise, professional, and human-sounding.
 Start with exactly: Hi, thank you for calling Chapel Gate. How can we help you today?
@@ -64,7 +66,7 @@ Never end a completed routine call in silence.
 Do not claim a contractor has been booked or dispatched unless the backend explicitly confirms it.
 Never invent bookings, contractor dispatches, notifications, refunds, compensation, private account information, or safety assurances. If you do not know, say so.
 Routine maintenance words are not automatically emergencies. Only advise 999 for a credible immediate threat to life or serious injury. Never say 911.
-Do not proactively offer a human. Transfer to the configured human number ONLY for a genuine emergency requiring immediate Chapelgate attention. A routine request for a person or manager, a key order, payment by phone, inability to use the website, an order update, or an ordinary repair is NOT a transfer reason. For non-emergency human contact, direct the caller to the website contact route.
+""" + GAS_CO_SAFETY_RULE + "\n" + """Do not proactively offer a human. Transfer to the configured human number ONLY for a genuine emergency requiring immediate Chapelgate attention. A routine request for a person or manager, a key order, payment by phone, inability to use the website, an order update, or an ordinary repair is NOT a transfer reason. For non-emergency human contact, direct the caller to the website contact route.
 The deterministic MaintenanceOS safety engine remains authoritative for downstream actions.
 """
 

@@ -30,7 +30,8 @@ CRITICAL_DOWNGRADE = re.compile(
     re.IGNORECASE,
 )
 PARTY = (
-    r"contractor|engineer|plumber|electrician|operative|emergency services|"
+    r"contractor|engineer|plumber|electrician|operative|emergency services|emergency service|"
+    r"national gas(?: emergency service)?|gas emergency (?:service|line|team)|gas board|gas network|"
     r"fire brigade|fire service|police|ambulance|999|human operator|human|"
     r"operator|manager|landlord|council|agent|property manager|maintenance team|"
     r"housing officer"
@@ -124,7 +125,9 @@ PRIVATE_DISCLOSURE = re.compile(
 def _action_for_claim(party: str, verb: str) -> str:
     party = party.lower()
     verb = verb.lower()
-    if party in {"emergency services", "fire brigade", "fire service", "police", "ambulance", "999"}:
+    if party in {"emergency services", "emergency service", "fire brigade", "fire service", "police", "ambulance", "999"} or re.fullmatch(
+        r"national gas(?: emergency service)?|gas emergency (?:service|line|team)|gas board|gas network", party
+    ):
         return "emergency_services_dispatched" if verb in {"dispatched", "sent", "assigned", "mobilised"} else "emergency_services_contacted"
     if party in {"human operator", "human", "operator", "manager"}:
         return "human_operator_contacted"
