@@ -30,6 +30,7 @@ from tenant_security import bind_call_to_tenant,call_client_id,configured_voice_
 from voice_policy import authorize_model_action,validate_assistant_text,verified_actions_for_work_order
 from webhook_security import dedicated_test_number_ready,public_provider_ingress_ready,validate_twilio_websocket
 from call_capacity import release_call_lease
+from safety_messages import CO_SAFETY_ADVICE, GAS_CO_NOT_A_HANDOFF, GAS_CO_SAFETY_RULE, GAS_SAFETY_ADVICE
 
 
 SYSTEM_PROMPT = """You are Chapelgate's telephone receptionist for the Alleygates service in the UK.
@@ -51,7 +52,7 @@ For a routine alley-gate repair, do not require postcode identity verification b
 GATE EMERGENCY RULE:
 A caller describing a gate problem as urgent/emergency must be handed to the Chapelgate human number rather than being told to call 999 merely because a gate is broken, jammed, insecure, locked, or blocking access.
 Only mention 999 when the caller describes a credible immediate threat to life or serious injury, such as an active fire, serious medical emergency, or other genuine life-threatening situation. Never tell a UK caller to call 911.
-If the gate situation itself needs immediate Chapelgate attention, say briefly that you will put them through and allow the deterministic transfer path to handle it.
+""" + GAS_CO_SAFETY_RULE + "\n" + GAS_CO_NOT_A_HANDOFF + "\n" + """If the gate situation itself needs immediate Chapelgate attention, say briefly that you will put them through and allow the deterministic transfer path to handle it.
 
 RESIDENT KEY RULE:
 If the caller asks for "a key", "an alley-gate key", "a resident key", "a replacement key", or otherwise does not explicitly say "master key", treat it as an ordinary resident key enquiry.
@@ -220,6 +221,37 @@ def inbound_fallback_twiml(message: str, transfer_number: str = "") -> str:
         f"{dial}"
         "</Response>"
     )
+
+
+def safety_advice_for_flags(flags) -> str:
+    """Official gas / carbon monoxide caller-safety advice for the RED flags present (spec 4c)."""
+    codes = {f.get("code") for f in flags or [] if isinstance(f, dict)}
+    parts = []
+    if "GAS_SMELL" in codes:
+        parts.append(GAS_SAFETY_ADVICE)
+    if "CO" in codes:
+        parts.append(CO_SAFETY_ADVICE)
+    return " ".join(parts)
+
+
+def deterministic_safety_twiml(flags, transfer_number: str = "") -> str:
+    advice = safety_advice_for_flags(flags)
+    return inbound_fallback_twiml(advice, transfer_number) if advice else ""
+
+
+def _deliver_safety_advice(call_sid: str, twiml: str) -> bool:
+    """Redirect the live call to TwiML that speaks the safety advice.
+
+    Uses the same Twilio credentials and call-update pattern as
+    _request_live_human_transfer. Returns False when it cannot be attempted.
+    """
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID", "").strip()
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN", "").strip()
+    if not call_sid or not twiml or not account_sid or not auth_token:
+        return False
+    from twilio.rest import Client as TwilioClient
+    TwilioClient(account_sid, auth_token).calls(call_sid).update(twiml=twiml)
+    return True
 
 
 def _stream_token(call_session_id: int, call_sid: str) -> str:
@@ -997,6 +1029,26 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                             escalation_reason == "gate_emergency_handoff"
                             or _explicit_human_request(transcript)
                         )
+                        # Gas / CO: speak the official caller-safety advice before the
+                        # stream closes (spec product-change-gas-co 4c). One call update
+                        # only: if a live handoff was requested, the advice TwiML carries
+                        # the Dial and the separate live transfer is skipped.
+                        if escalation_reason == "deterministic_safety" and safety_advice_for_flags(_flags):
+                            advice_transfer_number = (
+                                os.getenv("TWILIO_HUMAN_TRANSFER_NUMBER", "").strip() if live_handoff else ""
+                            )
+                            advice_delivered = False
+                            with suppress(Exception):
+                                advice_delivered = await asyncio.to_thread(
+                                    _deliver_safety_advice,
+                                    call_sid,
+                                    deterministic_safety_twiml(_flags, advice_transfer_number),
+                                )
+                            if advice_delivered:
+                                live_handoff = False
+                            else:
+                                with suppress(Exception):
+                                    record_call_interruption(call_session_id, "safety_advice_delivery_failed")
                         await request_transfer(
                             escalation_reason or "deterministic_escalation",
                             already_recorded=True,
