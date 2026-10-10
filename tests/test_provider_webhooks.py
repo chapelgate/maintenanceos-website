@@ -60,7 +60,8 @@ def test_closed_mode_still_skips_if_realtime_flag_is_true(monkeypatch):
 
 def test_closed_mode_render_prepare_cli(monkeypatch, capsys):
     _closed_env(monkeypatch)
-    monkeypatch.setattr(render_prepare, "ensure_synthetic_tenant", lambda: 7)
+    monkeypatch.setenv(render_prepare.STARTUP_WEBHOOK_FLAG, "true")
+    _isolate_prepare(monkeypatch)
     assert render_prepare.main([]) == 0
     text = capsys.readouterr().out
     assert render_prepare.SYNTHETIC_READY in text
@@ -134,3 +135,66 @@ def test_unknown_phone_provider_fails_closed_before_mutation(monkeypatch):
         pw.configure_phone_voice_webhook(provider_updater=lambda: calls.append("mutated"))
 
     assert calls == []
+
+
+def _isolate_prepare(monkeypatch):
+    # Keep render_prepare tests independent of a pre-initialised local DB.
+    monkeypatch.setattr(render_prepare, "ensure_synthetic_tenant", lambda: 7)
+    monkeypatch.setattr(render_prepare, "_record_fail_closed_side_effects", lambda: None)
+
+
+def _boom():
+    raise AssertionError("startup must not touch carrier phone routing")
+
+
+def test_startup_webhook_config_is_off_by_default_even_when_live_ready(monkeypatch, capsys):
+    _live_ready_env(monkeypatch)
+    monkeypatch.delenv(render_prepare.STARTUP_WEBHOOK_FLAG, raising=False)
+    _isolate_prepare(monkeypatch)
+    monkeypatch.setattr(render_prepare, "configure_phone_voice_webhook", lambda **_: _boom())
+    report = render_prepare.prepare_runtime(twilio_updater=_boom)
+    assert report["webhook"]["mutated"] is False
+    assert report["webhook"]["startup_opt_in"] is False
+    assert report["webhook"]["status"] == render_prepare.STARTUP_WEBHOOK_SKIP_STATUS
+    assert render_prepare.main([]) == 0
+    text = capsys.readouterr().out
+    assert render_prepare.STARTUP_WEBHOOK_SKIP_STATUS in text
+    assert pw.READY_STATUS not in text
+    assert render_prepare.PREPARE_PASS in text
+
+
+def test_startup_opt_out_does_not_block_start_when_ingress_not_ready(monkeypatch, capsys):
+    _live_incomplete_env(monkeypatch)
+    monkeypatch.delenv(render_prepare.STARTUP_WEBHOOK_FLAG, raising=False)
+    _isolate_prepare(monkeypatch)
+    assert render_prepare.main([]) == 0
+    assert render_prepare.PREPARE_PASS in capsys.readouterr().out
+
+
+def test_startup_webhook_flag_only_accepts_explicit_true(monkeypatch):
+    for value in ("", "false", "0", "1", "yes", "on", " FALSE "):
+        monkeypatch.setenv(render_prepare.STARTUP_WEBHOOK_FLAG, value)
+        assert render_prepare.startup_webhook_config_enabled() is False
+    for value in ("true", " TRUE ", "True"):
+        monkeypatch.setenv(render_prepare.STARTUP_WEBHOOK_FLAG, value)
+        assert render_prepare.startup_webhook_config_enabled() is True
+
+
+def test_startup_opt_in_mutates_only_when_authorised_and_ready(monkeypatch):
+    _live_ready_env(monkeypatch)
+    monkeypatch.setenv(render_prepare.STARTUP_WEBHOOK_FLAG, "true")
+    _isolate_prepare(monkeypatch)
+    calls = []
+    report = render_prepare.prepare_runtime(twilio_updater=lambda: calls.append(1))
+    assert calls == [1]
+    assert report["webhook"]["mutated"] is True
+    assert report["webhook"]["startup_opt_in"] is True
+    assert report["webhook"]["status"] == pw.READY_STATUS
+
+
+def test_startup_opt_in_still_fails_closed_when_ingress_not_ready(monkeypatch):
+    _live_incomplete_env(monkeypatch)
+    monkeypatch.setenv(render_prepare.STARTUP_WEBHOOK_FLAG, "true")
+    _isolate_prepare(monkeypatch)
+    with pytest.raises(pw.ProviderWebhookError):
+        render_prepare.prepare_runtime(twilio_updater=_boom)

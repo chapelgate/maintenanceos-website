@@ -1,0 +1,3 @@
+# live-sync-5: startup step reconfigures the Twilio voice webhook on every restart
+Problem: main's render_prepare.py runs as systemd ExecStartPre on the live droplet. It calls configure_phone_voice_webhook(), which, whenever ENABLE_PUBLIC_PROVIDER_INGRESS=true (as on live) and ingress is ready, updates the Twilio incoming number's voice_url and status_callback through the Twilio API on every start. If ingress is NOT ready, it raises, render_prepare exits 1, and the service fails to start. Live's own render_prepare does not do this. So deploying main would (a) change live phone routing on every restart and (b) risk a voice-line outage if any readiness input regresses.
+Severity: high for deploy safety (live phone routing, an external side effect).
