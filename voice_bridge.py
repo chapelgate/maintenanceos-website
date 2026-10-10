@@ -124,6 +124,13 @@ def active_call_session_count() -> int:
         return len(_ACTIVE_CALL_SESSIONS)
 
 
+def is_active_call_session(call_session_id: int | None) -> bool:
+    if not call_session_id:
+        return False
+    with _ACTIVE_CALL_LOCK:
+        return call_session_id in _ACTIVE_CALL_SESSIONS
+
+
 UNVERIFIED_ACTION_FALLBACK = (
     "The automated response could not be verified. Do not assume that a contractor, "
     "emergency service, human operator, or other person has been contacted. If there is "
@@ -143,6 +150,136 @@ MAX_TRANSCRIPT_CHARS = 20_000
 MAX_MEDIA_PAYLOAD_BYTES = 64 * 1024
 MAX_BUFFERED_AUDIO_BYTES = 8 * 1024 * 1024
 MAX_SEQUENCE_KEYS = 100_000
+EXPECTED_GREETING = "Hi, thank you for calling Chapel Gate. How can we help you today?"
+# Only genuine handoffs / fatal bridge failures may close the Twilio Media Stream.
+# Application-initiated WS close is reported by Twilio as error 31921.
+HANDOFF_STREAM_END_REASONS = frozenset(
+    {
+        "caller_requested_human",
+        "gate_emergency_handoff",
+        # main-only RED reason: must still end the stream (never soft-recovered).
+        "animal_welfare_emergency",
+        "deterministic_escalation",
+        "deterministic_safety",
+        "deterministic_human_escalation",
+        "human_transfer_failed",
+        "voice_bridge_failure",
+        # Exhausted in-call provider recovery must fail cleanly (never indefinite silence).
+        "voice_provider_reconnect_exhausted",
+    }
+)
+# Recoverable OpenAI defects must keep the Media Stream open (Gemini keep-open model).
+SOFT_RECOVER_REASONS = frozenset(
+    {
+        "openai_transcription_timeout",
+        "openai_transcription_failed",
+        "openai_output_transcript_missing",
+        "openai_response_failed",
+        "initial_greeting_contract_failed",
+        "gate_postcode_contract_failed",
+        "resident_key_contract_failed",
+        "proactive_handoff_language_blocked",
+        "voice_transport_disconnected",
+        "voice_provider_reconnected",
+        "assistant_stream_aborted_mid_turn",
+    }
+)
+
+
+def provider_reconnect_limits() -> tuple[int, float]:
+    """Bounded in-call provider reconnect: (max_attempts, budget_seconds)."""
+    attempts = max(0, min(int(os.getenv("VOICE_PROVIDER_MAX_RECONNECTS", "2")), 5))
+    budget = max(1.0, min(float(os.getenv("VOICE_PROVIDER_RECONNECT_BUDGET_SECONDS", "8.0")), 20.0))
+    return attempts, budget
+
+
+def conversational_audio_may_stream(
+    *,
+    greeting_pending: bool,
+    turn_cleared: bool,
+    force_gated: bool,
+) -> bool:
+    """Low-risk path may release audio incrementally; high-risk stays fully gated."""
+    if force_gated:
+        return False
+    if greeting_pending:
+        return True
+    return bool(turn_cleared)
+
+
+def partial_assistant_text_is_high_risk(
+    text: str,
+    *,
+    critical_active: bool = False,
+    identity_verified: bool = False,
+    private_markers=(),
+) -> bool:
+    """Progressive abort signal while incremental audio is already on the wire."""
+    allowed, _reason = validate_assistant_text(
+        text or "",
+        critical_active=critical_active,
+        verified_actions=set(),
+        identity_verified=identity_verified,
+        private_markers=private_markers,
+    )
+    return not allowed
+
+
+def record_voice_latency_ms(kind: str, latency_ms: float, **extra) -> dict:
+    """Emit measured (not inferred) speech→audio latency evidence."""
+    payload = {
+        "kind": kind,
+        "latency_ms": round(float(latency_ms), 1),
+        "measured": True,
+        **extra,
+    }
+    operational_event(
+        "voice_latency_measured",
+        transport="openai",
+        outcome="measured",
+        reason_code=re.sub(r"[^a-zA-Z0-9_.-]", "_", kind)[:64],
+        latency_ms=payload["latency_ms"],
+    )
+    return payload
+
+
+def _normalize_spoken_text(text: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9 ]+", " ", (text or "").casefold()).split())
+
+
+def greeting_matches(transcript: str) -> bool:
+    """Allow minor Realtime phrasing drift without tearing down the Media Stream."""
+    normalised = _normalize_spoken_text(transcript)
+    expected = _normalize_spoken_text(EXPECTED_GREETING)
+    if normalised == expected:
+        return True
+    # Accept near-exact openings that still carry the Chapel Gate greeting contract.
+    return (
+        normalised.startswith("hi thank you for calling chapel gate")
+        and "how can we help" in normalised
+    )
+
+
+def ends_media_stream(reason: str) -> bool:
+    """Return True only when the Twilio Media Stream WebSocket should close."""
+    base = (reason or "").split(":", 1)[0]
+    if base in HANDOFF_STREAM_END_REASONS:
+        return True
+    if base in SOFT_RECOVER_REASONS:
+        return False
+    if base.startswith("assistant_policy_rejected"):
+        return False
+    if base.startswith("model_action_rejected"):
+        return False
+    if base.startswith("openai_realtime_error"):
+        return False
+    if base.startswith("voice_escalation_term"):
+        return True
+    if base.startswith("voice_bridge_failure"):
+        return True
+    # Default keep-open: unknown recoverable defects must not emit 31921.
+    return False
+
 
 
 class VoiceProtocolError(RuntimeError):
@@ -802,6 +939,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         call_sid = str(start.get("callSid") or "")
         openai_ws = await _connect_openai(f"maintenanceos-voice-call-{call_session_id}")
         await _configure_realtime(openai_ws)
+        provider = {"ws": openai_ws, "reconnecting": False}
         # The phone line is answered immediately by Twilio. Proactively create the
         # first assistant turn so callers hear a greeting instead of dead air.
         await openai_ws.send(json.dumps({
@@ -815,6 +953,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             },
         }))
         operational_event("openai_initial_greeting_requested", transport="openai", outcome="requested")
+        greeting_requested_at = time.monotonic()
 
         seen_sequences = set()
         transcript_parts = {}
@@ -825,6 +964,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         # Deterministic Alleygates dialogue guards. These stop the model from
         # drifting back to the generic property-maintenance flow observed live.
         greeting_pending = True
+        greeting_audio_started = False
         gate_repair_context = False
         resident_key_context = False
         master_key_context = False
@@ -832,14 +972,61 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
         existing_key_order_context = False
         correction_attempts = 0
         # There is no caller transcript before the initial greeting. Treat the
-        # greeting as a cleared turn so policy-validated greeting audio can flow.
-        # Any caller speech immediately flips this back to False below.
+        # greeting as a cleared turn so the pre-approved greeting can stream
+        # immediately. Any caller speech immediately flips this back to False below.
         turn_cleared = True
         turn_number = 0
+        force_gated_audio = False
+        stream_release_unlocked = False
+        partial_output_transcript = ""
+        audio_streamed_this_response = False
+        caller_speech_stopped_at = None
+        turn_first_audio_recorded = False
+        greeting_first_audio_recorded = False
+        latency_samples: list[dict] = []
         transcription_watchdog = None
         last_output_item = None
         last_output_started = None
         last_output_ms = 0
+        max_reconnects, reconnect_budget_s = provider_reconnect_limits()
+        reconnect_attempts = 0
+
+        async def _provider_send(payload: str) -> None:
+            ws = provider.get("ws")
+            if not ws or provider.get("reconnecting"):
+                return
+            await ws.send(payload)
+
+        async def _clear_assistant_buffers() -> None:
+            nonlocal assistant_text_validated, assistant_audio_bytes
+            nonlocal partial_output_transcript, audio_streamed_this_response
+            nonlocal stream_release_unlocked
+            assistant_audio.clear()
+            buffered_audio.clear()
+            assistant_audio_bytes = 0
+            assistant_text_validated = False
+            partial_output_transcript = ""
+            audio_streamed_this_response = False
+            stream_release_unlocked = False
+
+        async def soft_recover(reason: str, *, already_recorded: bool = False, instruction: str | None = None) -> None:
+            """Keep the Twilio Media Stream open; recover in-band like Gemini Live."""
+            await _clear_assistant_buffers()
+            if not already_recorded:
+                with suppress(Exception):
+                    record_call_interruption(call_session_id, reason)
+            operational_event(
+                "voice_soft_recover",
+                transport="openai",
+                outcome="keep_open",
+                reason_code=re.sub(r"[^a-zA-Z0-9_.-]", "_", reason)[:64],
+            )
+            if instruction and provider.get("ws") and not transfer_required.is_set() and not provider.get("reconnecting"):
+                with suppress(Exception):
+                    await _provider_send(json.dumps({
+                        "type": "response.create",
+                        "response": {"instructions": instruction},
+                    }))
 
         async def request_transfer(
             reason: str,
@@ -847,7 +1034,12 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             *,
             live_handoff: bool = False,
         ) -> None:
+            """Close the Media Stream only for genuine handoffs (Twilio 31921 path)."""
             if transfer_required.is_set():
+                return
+            # Soft-recoverable defects must never tear down the caller's Media Stream.
+            if not live_handoff and not ends_media_stream(reason):
+                await soft_recover(reason, already_recorded=already_recorded)
                 return
             transfer_required.set()
             transferred = False
@@ -866,6 +1058,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
 
         async def request_corrected_response(instruction: str) -> bool:
             nonlocal correction_attempts, assistant_text_validated, assistant_audio_bytes
+            nonlocal partial_output_transcript, audio_streamed_this_response
+            nonlocal stream_release_unlocked
             if correction_attempts >= 2:
                 return False
             correction_attempts += 1
@@ -873,7 +1067,10 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             buffered_audio.clear()
             assistant_audio_bytes = 0
             assistant_text_validated = False
-            await openai_ws.send(json.dumps({
+            partial_output_transcript = ""
+            audio_streamed_this_response = False
+            stream_release_unlocked = False
+            await _provider_send(json.dumps({
                 "type": "response.create",
                 "response": {"instructions": instruction},
             }))
@@ -886,13 +1083,47 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             return True
 
         async def send_twilio_media(payload: str) -> None:
+            nonlocal greeting_first_audio_recorded, turn_first_audio_recorded
+            nonlocal audio_streamed_this_response, greeting_audio_started
             await websocket.send_json({"event": "media", "streamSid": stream_sid, "media": {"payload": payload}})
+            audio_streamed_this_response = True
+            if greeting_pending and not greeting_first_audio_recorded:
+                greeting_audio_started = True
+                greeting_first_audio_recorded = True
+                sample = record_voice_latency_ms(
+                    "greeting_first_audio",
+                    (time.monotonic() - greeting_requested_at) * 1000.0,
+                    call_session_id=call_session_id,
+                )
+                latency_samples.append(sample)
+            elif (
+                not greeting_pending
+                and caller_speech_stopped_at is not None
+                and not turn_first_audio_recorded
+            ):
+                turn_first_audio_recorded = True
+                sample = record_voice_latency_ms(
+                    "turn_first_audio",
+                    (time.monotonic() - caller_speech_stopped_at) * 1000.0,
+                    call_session_id=call_session_id,
+                    turn_number=turn_number,
+                )
+                latency_samples.append(sample)
 
         async def fail_if_transcription_missing(expected_turn: int) -> None:
+            nonlocal turn_cleared
             timeout = max(1.0, min(float(os.getenv("VOICE_TRANSCRIPTION_TIMEOUT_SECONDS", "5.0")), 15.0))
             await asyncio.sleep(timeout)
             if expected_turn == turn_number and not turn_cleared:
-                await request_transfer("openai_transcription_timeout")
+                # Keep stream open — force a turn clear so audio can flow again.
+                turn_cleared = True
+                await soft_recover(
+                    "openai_transcription_timeout",
+                    instruction=(
+                        "The caller's last words were unclear. Briefly apologise and ask them "
+                        "to repeat what they need help with. Do not mention a transfer."
+                    ),
+                )
 
         async def from_twilio() -> None:
             media_received = False
@@ -920,7 +1151,9 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     if not decoded or len(decoded) > MAX_MEDIA_PAYLOAD_BYTES:
                         raise VoiceProtocolError("invalid_twilio_media")
                     media_received = True
-                    await openai_ws.send(json.dumps({"type": "input_audio_buffer.append", "audio": payload}))
+                    # Drop media during provider reconnect rather than tearing down Twilio.
+                    with suppress(Exception):
+                        await _provider_send(json.dumps({"type": "input_audio_buffer.append", "audio": payload}))
                 elif event_type == "dtmf" and str((event.get("dtmf") or {}).get("digit")) == "0":
                     await request_transfer("caller_requested_human", live_handoff=True)
                     return
@@ -928,7 +1161,7 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     stop_received.set()
                     if media_received:
                         with suppress(Exception):
-                            await openai_ws.send(json.dumps({"type": "input_audio_buffer.commit"}))
+                            await _provider_send(json.dumps({"type": "input_audio_buffer.commit"}))
                     grace = max(0.0, min(float(os.getenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "1.0")), 3.0))
                     await asyncio.sleep(grace)
                     close_call_session(call_session_id)
@@ -939,7 +1172,13 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
             nonlocal last_output_item, last_output_started, last_output_ms,assistant_audio_bytes
             nonlocal greeting_pending, gate_repair_context, resident_key_context, master_key_context
             nonlocal resident_key_first_answer_pending, existing_key_order_context, correction_attempts
-            async for raw in openai_ws:
+            nonlocal force_gated_audio, partial_output_transcript
+            nonlocal audio_streamed_this_response, caller_speech_stopped_at, turn_first_audio_recorded
+            nonlocal stream_release_unlocked
+            ws = provider.get("ws")
+            if not ws:
+                return
+            async for raw in ws:
                 if not websocket_event_within_limit(raw):
                     raise VoiceProtocolError("openai_event_too_large")
                 event = json.loads(raw)
@@ -950,6 +1189,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                 if event_type == "input_audio_buffer.speech_started":
                     turn_cleared = False
                     turn_number += 1
+                    turn_first_audio_recorded = False
+                    caller_speech_stopped_at = None
                     if transcription_watchdog:
                         transcription_watchdog.cancel()
                         transcription_watchdog = None
@@ -958,10 +1199,13 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     assistant_audio_bytes=0
                     assistant_text_validated=False
                     correction_attempts=0
+                    partial_output_transcript = ""
+                    audio_streamed_this_response = False
+                    stream_release_unlocked = False
                     await websocket.send_json({"event": "clear", "streamSid": stream_sid})
                     if last_output_item and last_output_ms > 0:
                         played_ms = min(last_output_ms, int((time.monotonic() - last_output_started) * 1000))
-                        await openai_ws.send(json.dumps({
+                        await _provider_send(json.dumps({
                             "type": "conversation.item.truncate",
                             "item_id": last_output_item,
                             "content_index": 0,
@@ -971,6 +1215,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                     last_output_started = None
                     last_output_ms = 0
                 elif event_type == "input_audio_buffer.speech_stopped":
+                    caller_speech_stopped_at = time.monotonic()
+                    turn_first_audio_recorded = False
                     if transcription_watchdog:
                         transcription_watchdog.cancel()
                     transcription_watchdog = asyncio.create_task(fail_if_transcription_missing(turn_number))
@@ -1064,8 +1310,15 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                         await send_twilio_media(payload)
                     buffered_audio.clear()
                 elif event_type == "conversation.item.input_audio_transcription.failed":
-                    await request_transfer("openai_transcription_failed")
-                    return
+                    turn_cleared = True
+                    await soft_recover(
+                        "openai_transcription_failed",
+                        instruction=(
+                            "Briefly apologise that you missed that, and ask the caller to repeat "
+                            "what they need help with. Do not mention a transfer."
+                        ),
+                    )
+                    continue
                 elif event_type in ("response.output_audio.delta", "response.audio.delta"):
                     payload = str(event.get("delta") or "")
                     if not payload:
@@ -1082,32 +1335,102 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                         last_output_item = item_id
                         last_output_started = time.monotonic()
                         last_output_ms = 0
+                        partial_output_transcript = ""
+                        audio_streamed_this_response = False
+                        stream_release_unlocked = False
                     last_output_ms += len(decoded) // 8
-                    assistant_audio.append(payload)
+                    # Pre-approved greeting streams immediately. Ordinary turns unlock only after
+                    # a safe transcript delta (or full transcript.done validation) so high-risk
+                    # / private / consequential claims never reach Twilio on the audio path.
+                    if conversational_audio_may_stream(
+                        greeting_pending=greeting_pending,
+                        turn_cleared=turn_cleared,
+                        force_gated=force_gated_audio,
+                    ) and (greeting_pending or stream_release_unlocked):
+                        await send_twilio_media(payload)
+                    else:
+                        assistant_audio.append(payload)
+                elif event_type in (
+                    "response.output_audio_transcript.delta",
+                    "response.audio_transcript.delta",
+                ):
+                    delta = str(event.get("delta") or "")
+                    if not delta:
+                        continue
+                    partial_output_transcript += delta
+                    if len(partial_output_transcript) > MAX_TRANSCRIPT_CHARS:
+                        raise VoiceProtocolError("output_transcript_too_large")
+                    with SessionLocal() as s:
+                        cs = s.get(CallSession, call_session_id)
+                        state = _summary_state(cs) if cs else {}
+                        critical = bool(state.get("safety_flags"))
+                        identity_verified, private_markers = _voice_disclosure_context(s, cs)
+                    if partial_assistant_text_is_high_risk(
+                        partial_output_transcript,
+                        critical_active=critical,
+                        identity_verified=identity_verified,
+                        private_markers=private_markers,
+                    ):
+                        force_gated_audio = True
+                        stream_release_unlocked = False
+                        if audio_streamed_this_response:
+                            await websocket.send_json({"event": "clear", "streamSid": stream_sid})
+                        assistant_audio.clear()
+                        assistant_audio_bytes = 0
+                        await soft_recover(
+                            "assistant_stream_aborted_mid_turn",
+                            instruction=(
+                                "Do not repeat the previous answer. Briefly continue helping without "
+                                "disclosing private details or unverified outcomes. Ask one short "
+                                "clarifying question if needed."
+                            ),
+                        )
+                        continue
+                    # Safe progressive transcript: unlock incremental audio for this turn.
+                    if (
+                        turn_cleared
+                        and not force_gated_audio
+                        and not greeting_pending
+                        and conversational_audio_may_stream(
+                            greeting_pending=False,
+                            turn_cleared=True,
+                            force_gated=False,
+                        )
+                    ):
+                        stream_release_unlocked = True
+                        if assistant_audio:
+                            for held in list(assistant_audio):
+                                await send_twilio_media(held)
+                            assistant_audio.clear()
+                            assistant_audio_bytes = 0
                 elif event_type == "response.output_audio_transcript.done":
                     transcript=str(event.get("transcript") or "")
                     if len(transcript)>MAX_TRANSCRIPT_CHARS:
                         raise VoiceProtocolError("output_transcript_too_large")
                     lowered_output = transcript.casefold()
-                    expected_greeting = "hi, thank you for calling chapel gate. how can we help you today?"
                     if greeting_pending:
-                        normalised = " ".join(
-                            re.sub(r"[^a-z0-9 ]+", " ", lowered_output).split()
-                        )
-                        expected_normalised = " ".join(
-                            re.sub(r"[^a-z0-9 ]+", " ", expected_greeting).split()
-                        )
-                        if normalised != expected_normalised:
+                        if not greeting_matches(transcript):
+                            if audio_streamed_this_response:
+                                await websocket.send_json({"event": "clear", "streamSid": stream_sid})
                             if await request_corrected_response(
                                 "Say exactly: Hi, thank you for calling Chapel Gate. "
                                 "How can we help you today? Say nothing else and then wait."
                             ):
                                 continue
-                            await request_transfer("initial_greeting_contract_failed")
-                            return
+                            greeting_pending = False
+                            await soft_recover(
+                                "initial_greeting_contract_failed",
+                                instruction=(
+                                    "Say exactly: Hi, thank you for calling Chapel Gate. "
+                                    "How can we help you today? Then wait for the caller."
+                                ),
+                            )
+                            continue
                         greeting_pending = False
 
                     if gate_repair_context and "postcode" in lowered_output:
+                        if audio_streamed_this_response:
+                            await websocket.send_json({"event": "clear", "streamSid": stream_sid})
                         if await request_corrected_response(
                             "This is an alley-gate repair. Do not ask for any postcode. "
                             "Ask for the caller's full name, their own address and callback number "
@@ -1115,8 +1438,16 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                             "and ask for the gate number."
                         ):
                             continue
-                        await request_transfer("gate_postcode_contract_failed")
-                        return
+                        await soft_recover(
+                            "gate_postcode_contract_failed",
+                            instruction=(
+                                "This is an alley-gate repair. Do not ask for any postcode. "
+                                "Ask for the caller's full name, their own address and callback number "
+                                "if not already collected, then ask whether the gate is in Wirral or Sefton "
+                                "and ask for the gate number."
+                            ),
+                        )
+                        continue
 
                     if existing_key_order_context and not master_key_context:
                         forbidden_existing_order = any(term in lowered_output for term in (
@@ -1152,6 +1483,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                             and "gate number" in lowered_output
                         )
                         if forbidden_resident_key or (resident_key_first_answer_pending and not required_resident_route):
+                            if audio_streamed_this_response:
+                                await websocket.send_json({"event": "clear", "streamSid": stream_sid})
                             if await request_corrected_response(
                                 "This is an ordinary resident alley-gate key enquiry. Keep the resident-key "
                                 "topic active and answer the caller's latest question directly. For the first "
@@ -1164,8 +1497,17 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                                 "and do not invent facts that are not in the supplied rules."
                             ):
                                 continue
-                            await request_transfer("resident_key_contract_failed")
-                            return
+                            # Routine key enquiries never transfer (prompt rule); recover in-call instead.
+                            await soft_recover(
+                                "resident_key_contract_failed",
+                                instruction=(
+                                    "Tell the caller to order an ordinary resident alley-gate key at "
+                                    "www.alleygates.co.uk for \u00a322 including VAT and recorded delivery, "
+                                    "and that they will need the gate number when ordering online. "
+                                    "Do not mention master keys, landlords, or housing providers."
+                                ),
+                            )
+                            continue
                         resident_key_first_answer_pending = False
 
                     transfer_language = any(phrase in lowered_output for phrase in (
@@ -1174,6 +1516,8 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                         "speak to someone", "speak to a person",
                     ))
                     if transfer_language:
+                        if audio_streamed_this_response:
+                            await websocket.send_json({"event": "clear", "streamSid": stream_sid})
                         if await request_corrected_response(
                             "Answer the caller directly. Do not mention a team member, human operator, "
                             "transfer, colleague, or putting the caller through. A transfer may only be "
@@ -1181,8 +1525,14 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                             "gate emergency, and those cases are handled deterministically."
                         ):
                             continue
-                        await request_transfer("proactive_handoff_language_blocked")
-                        return
+                        await soft_recover(
+                            "proactive_handoff_language_blocked",
+                            instruction=(
+                                "Answer the caller directly about their request. Do not mention a team "
+                                "member, transfer, or putting them through."
+                            ),
+                        )
+                        continue
 
                     with SessionLocal() as s:
                         cs=s.get(CallSession,call_session_id)
@@ -1198,14 +1548,27 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                         private_markers=private_markers,
                     )
                     if not allowed:
-                        assistant_audio.clear();buffered_audio.clear();assistant_audio_bytes=0
-                        await request_transfer(f"assistant_policy_rejected:{reason}")
-                        return
+                        if audio_streamed_this_response:
+                            await websocket.send_json({"event": "clear", "streamSid": stream_sid})
+                        force_gated_audio = True
+                        await soft_recover(
+                            f"assistant_policy_rejected:{reason}",
+                            instruction=(
+                                "Do not repeat the previous answer. Briefly continue helping without "
+                                "disclosing private details or unverified outcomes. Ask one short "
+                                "clarifying question if needed."
+                            ),
+                        )
+                        continue
                     record_transcript_segment(call_session_id, "Assistant", transcript)
                     assistant_text_validated=True
-                    if turn_cleared:
+                    # Flush any gated (non-streamed) audio that was held for policy.
+                    if turn_cleared and assistant_audio:
                         for payload in assistant_audio:await send_twilio_media(payload)
                         assistant_audio.clear();assistant_audio_bytes=0
+                    force_gated_audio = bool(critical)
+                    stream_release_unlocked = False
+                    partial_output_transcript = ""
                 elif event_type == "response.function_call_arguments.done":
                     with SessionLocal() as s:
                         cs=s.get(CallSession,call_session_id)
@@ -1219,41 +1582,165 @@ async def handle_twilio_media_stream(websocket: WebSocket) -> None:
                         )
                         s.commit()
                     if not allowed:
-                        await request_transfer(f"model_action_rejected:{reason}")
-                        return
+                        await soft_recover(
+                            f"model_action_rejected:{reason}",
+                            instruction=(
+                                "Continue helping the caller without claiming any system action was taken."
+                            ),
+                        )
+                        continue
                 elif event_type == "error":
                     error = event.get("error") or {}
                     code = re.sub(r"[^a-zA-Z0-9_.-]", "_", str(error.get("code") or "unknown"))[:64]
-                    await request_transfer(f"openai_realtime_error:{code}")
-                    return
+                    await soft_recover(
+                        f"openai_realtime_error:{code}",
+                        instruction=(
+                            "Briefly apologise for a short interruption and invite the caller to continue. "
+                            "Do not mention a transfer or technical error codes."
+                        ),
+                    )
+                    continue
                 elif event_type == "response.done":
                     if (event.get("response") or {}).get("status") in {"failed", "incomplete"}:
-                        await request_transfer("openai_response_failed")
-                        return
-                    if assistant_audio and not assistant_text_validated:
-                        assistant_audio.clear()
-                        await request_transfer("openai_output_transcript_missing")
-                        return
+                        await soft_recover(
+                            "openai_response_failed",
+                            instruction=(
+                                "Briefly apologise and ask the caller to continue with what they need. "
+                                "Do not mention a transfer."
+                            ),
+                        )
+                        continue
+                    if assistant_audio and not assistant_text_validated and not audio_streamed_this_response:
+                        await soft_recover("openai_output_transcript_missing")
+                        continue
+
+        async def _reconnect_provider() -> bool:
+            """Reconnect OpenAI on the same Twilio stream; never re-play the greeting."""
+            nonlocal openai_ws, reconnect_attempts, greeting_pending
+            if reconnect_attempts >= max_reconnects:
+                return False
+            reconnect_attempts += 1
+            provider["reconnecting"] = True
+            started = time.monotonic()
+            with suppress(Exception):
+                record_call_interruption(call_session_id, "voice_transport_disconnected")
+            operational_event(
+                "voice_provider_reconnect_attempt",
+                transport="openai",
+                outcome="attempt",
+                reason_code=f"attempt_{reconnect_attempts}",
+            )
+            old = provider.get("ws")
+            provider["ws"] = None
+            await _safe_close(old)
+            await _clear_assistant_buffers()
+            try:
+                remaining = reconnect_budget_s - (time.monotonic() - started)
+                if remaining <= 0:
+                    raise TimeoutError("reconnect_budget_exhausted")
+                new_ws = await asyncio.wait_for(
+                    _connect_openai(f"maintenanceos-voice-call-{call_session_id}"),
+                    timeout=remaining,
+                )
+                remaining = reconnect_budget_s - (time.monotonic() - started)
+                if remaining <= 0:
+                    await _safe_close(new_ws)
+                    raise TimeoutError("reconnect_budget_exhausted")
+                await asyncio.wait_for(_configure_realtime(new_ws), timeout=remaining)
+                # Same configured voice; never duplicate the opening greeting.
+                if greeting_pending and not greeting_audio_started:
+                    await new_ws.send(json.dumps({
+                        "type": "response.create",
+                        "response": {
+                            "instructions": (
+                                "Greet the caller now exactly: "
+                                "Hi, thank you for calling Chapel Gate. How can we help you today? "
+                                "Then wait for the caller to reply."
+                            )
+                        },
+                    }))
+                else:
+                    greeting_pending = False
+                    await new_ws.send(json.dumps({
+                        "type": "response.create",
+                        "response": {
+                            "instructions": (
+                                "The line briefly dropped. Briefly apologise once and invite the caller "
+                                "to continue. Do not repeat the opening greeting. Do not mention a transfer."
+                            )
+                        },
+                    }))
+                provider["ws"] = new_ws
+                openai_ws = new_ws
+                provider["reconnecting"] = False
+                operational_event(
+                    "voice_provider_reconnected",
+                    transport="openai",
+                    outcome="reconnected",
+                    reason_code=f"attempt_{reconnect_attempts}",
+                )
+                with suppress(Exception):
+                    record_call_interruption(call_session_id, "voice_provider_reconnected")
+                return True
+            except Exception:
+                provider["reconnecting"] = False
+                provider["ws"] = None
+                openai_ws = None
+                return False
 
         twilio_task = asyncio.create_task(from_twilio())
         openai_task = asyncio.create_task(from_openai())
-        done, pending = await asyncio.wait({twilio_task, openai_task}, return_when=asyncio.FIRST_COMPLETED)
-        if stop_received.is_set() and not twilio_task.done():
-            # A provider transport may close immediately after Twilio sends stop.
-            # Let the Twilio task finish its bounded transcript grace and persist call closure.
-            await twilio_task
-            done.add(twilio_task)
-            pending.discard(twilio_task)
-        for task in done:
-            error = task.exception()
-            if error:
-                raise error
-        if not stop_received.is_set() and not transfer_required.is_set():
-            await request_transfer("voice_transport_disconnected")
-        await _safe_close(openai_ws)
-        for task in pending:
-            task.cancel()
-        await asyncio.gather(*pending, return_exceptions=True)
+        while True:
+            done, pending = await asyncio.wait(
+                {twilio_task, openai_task},
+                return_when=asyncio.FIRST_COMPLETED,
+            )
+            if stop_received.is_set() and not twilio_task.done():
+                # A provider transport may close immediately after Twilio sends stop.
+                # Let the Twilio task finish its bounded transcript grace and persist call closure.
+                await twilio_task
+                done.add(twilio_task)
+                pending.discard(twilio_task)
+            for task in done:
+                error = task.exception()
+                if error:
+                    raise error
+
+            # Caller hangup / genuine handoff — exit without reconnect.
+            if twilio_task in done or transfer_required.is_set() or stop_received.is_set():
+                for task in pending:
+                    task.cancel()
+                await asyncio.gather(*pending, return_exceptions=True)
+                break
+
+            # Provider task ended first: bounded reconnect while Twilio stays open.
+            if openai_task in done and not stop_received.is_set() and not transfer_required.is_set():
+                recovered = await _reconnect_provider()
+                if recovered:
+                    openai_task = asyncio.create_task(from_openai())
+                    continue
+                # Fail cleanly — never leave the caller in indefinite silence.
+                await request_transfer("voice_provider_reconnect_exhausted", live_handoff=True)
+                if not twilio_task.done():
+                    twilio_task.cancel()
+                    with suppress(asyncio.CancelledError):
+                        await twilio_task
+                break
+
+            for task in pending:
+                task.cancel()
+            await asyncio.gather(*pending, return_exceptions=True)
+            break
+        if openai_ws is not None:
+            await _safe_close(openai_ws)
+        openai_ws = provider.get("ws")
+        if latency_samples:
+            operational_event(
+                "voice_latency_summary",
+                transport="openai",
+                outcome="measured",
+                reason_code=f"samples_{len(latency_samples)}",
+            )
     except Exception as exc:
         if call_session_id:
             await _safe_close(websocket,1000)
