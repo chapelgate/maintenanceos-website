@@ -16,7 +16,7 @@ import websockets
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
+from sqlalchemy.pool import NullPool
 from starlette.websockets import WebSocketDisconnect
 from twilio.request_validator import RequestValidator
 
@@ -70,11 +70,16 @@ class FakeOpenAI:
 
 
 @pytest.fixture
-def staged_routes(monkeypatch):
+def staged_routes(monkeypatch, tmp_path):
+    # Each session gets its own connection to a per-test SQLite file, as in
+    # production. A shared in-memory StaticPool connection let the test thread's
+    # session close() ROLLBACK the app thread's in-flight transaction (the
+    # TestClient runs the ASGI app in another thread), intermittently erasing
+    # writes such as the soft-recover interruption record.
     engine = create_engine(
-        "sqlite://",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
+        f"sqlite:///{tmp_path / 'staged_routes.db'}",
+        connect_args={"check_same_thread": False, "timeout": 15},
+        poolclass=NullPool,
     )
     testing_session = sessionmaker(bind=engine, expire_on_commit=False)
     Base.metadata.create_all(engine)
@@ -132,6 +137,7 @@ def staged_routes(monkeypatch):
     voice_bridge._ACTIVE_CALL_SESSIONS.clear()
     yield TestClient(api.app), testing_session
     voice_bridge._ACTIVE_CALL_SESSIONS.clear()
+    engine.dispose()
 
 
 def _signature(url, params=None):
