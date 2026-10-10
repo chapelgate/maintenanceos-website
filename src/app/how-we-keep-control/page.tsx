@@ -78,6 +78,64 @@ export default function HowWeKeepControlPage() {
       />
       
       <div className="mx-auto max-w-3xl space-y-12 px-4 py-12">
+        <section
+          id="gas"
+          aria-labelledby="gas-heading"
+          className="scroll-mt-24 rounded-[var(--mos-radius-lg)] border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] p-6 text-[var(--color-warning-text)]"
+        >
+          <h2 id="gas-heading" className="text-xl font-semibold">
+            If you smell gas right now
+          </h2>
+          <p className="mt-2 text-sm">
+            Public safety advice from the gas emergency service, Gas Safe
+            Register, HSE and the NHS. MaintenanceOS doesn&apos;t handle gas
+            emergencies, so act on these steps straight away.
+          </p>
+          <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-relaxed">
+            <li>
+              <strong>Get out and get fresh air.</strong> Open doors and windows
+              on your way if you can.
+            </li>
+            <li>
+              <strong>Don&apos;t use switches or flames.</strong> Don&apos;t turn
+              lights or electrical switches on or off, don&apos;t smoke and
+              don&apos;t strike matches.
+            </li>
+            <li>
+              <strong>Turn off the gas at the meter</strong> if it&apos;s safe to
+              reach. Don&apos;t go into a cellar or basement to do it.
+            </li>
+            <li>
+              <strong>Call the National Gas Emergency Service on{" "}
+              <a href="tel:0800111999" className="underline underline-offset-2">0800 111 999</a></strong>{" "}
+              (free). In Northern Ireland, call the NI Gas Emergency Service on{" "}
+              <a href="tel:0800002001" className="font-semibold underline underline-offset-2">0800 002 001</a>.
+              If someone is unwell or in danger, call{" "}
+              <a href="tel:999" className="font-semibold underline underline-offset-2">999</a>.
+            </li>
+          </ol>
+          <h3 className="mt-5 text-base font-semibold">Carbon monoxide: know the signs</h3>
+          <p className="mt-2 text-sm leading-relaxed">
+            You can&apos;t see, smell or taste carbon monoxide. Signs of poisoning
+            include headaches, dizziness, feeling sick, breathlessness, collapse and
+            loss of consciousness, and they can feel like flu or tiredness. If you
+            suspect it: turn off the appliance if it&apos;s safe to, open doors and
+            windows, go outside, and call the National Gas Emergency Service on{" "}
+            <a href="tel:0800111999" className="font-semibold underline underline-offset-2">0800 111 999</a>.
+            Don&apos;t go back inside until you&apos;ve been told it&apos;s safe. Call
+            NHS 111 for medical advice, or 999 if someone is finding it hard to
+            breathe, has suddenly become confused or has lost consciousness.
+          </p>
+          <p className="mt-3 text-xs">
+            Sources (checked 10 October 2026):{" "}
+            <a href="https://www.nationalgas.com/emergency-contacts" className="underline underline-offset-2">National Gas</a>,{" "}
+            <a href="https://www.gassaferegister.co.uk/gas-emergency/what-to-do-in-a-gas-emergency/" className="underline underline-offset-2">Gas Safe Register</a>,{" "}
+            <a href="https://www.hse.gov.uk/gas/domestic/faqs.htm" className="underline underline-offset-2">HSE</a>,{" "}
+            <a href="https://www.nhs.uk/conditions/carbon-monoxide-poisoning/" className="underline underline-offset-2">NHS</a> and{" "}
+            <a href="https://www.nidirect.gov.uk/articles/energy-power-supply-and-utilities" className="underline underline-offset-2">nidirect</a>.
+          </p>
+        </section>
+
         <section className="space-y-4 text-muted">
           <p>
             MaintenanceOS is built around one idea: the AI can take the details, but it doesn&apos;t get the final say on safety, job progress or approvals. Fixed rules do, and people do.
