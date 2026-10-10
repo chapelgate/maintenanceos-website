@@ -3,6 +3,7 @@ import hashlib
 import json
 import math
 import os
+import threading
 from contextlib import suppress
 from datetime import datetime
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
@@ -21,13 +22,21 @@ from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
 from channels import resident_by_phone,create_from_channel
 from identity import postcode_matches
 from readiness import report as readiness_report
-from call_capacity import CapacityRejected, admit_call, capacity_snapshot, release_call_lease
+from call_capacity import (
+    CapacityRejected,
+    admit_call,
+    capacity_snapshot,
+    has_call_capacity_lease,
+    release_call_capacity_only,
+    release_call_lease,
+)
 from voice_bridge import (
     create_call_session,
     inbound_fallback_twiml,
     inbound_stream_twiml,
     record_call_interruption,
     record_stream_status,
+    is_active_call_session,
 )
 from provider_runtime import handle_provider_media_stream, provider_ready
 load_dotenv()
@@ -362,6 +371,40 @@ async def messaging_inbound(request:Request):
                             event_key=str(form.get("MessageSid","") or f"message:{channel}:{phone}:{body}"))
     return Response('<?xml version="1.0" encoding="UTF-8"?><Response><Message>Thanks. Your report has been received for review.</Message></Response>',media_type="application/xml")
 
+def _schedule_pending_voice_lease_cleanup(call_sid: str, call_session_id: int) -> None:
+    """Free admission capacity if Twilio never opens the Media Stream.
+
+    This prevents signed probes, carrier failures, or interrupted TwiML handoff from
+    permanently consuming all call slots. A real Media Stream claims the session
+    immediately and is never released by this pending-admission timer.
+    """
+    try:
+        delay = float(os.getenv("VOICE_PENDING_LEASE_TIMEOUT_SECONDS", "30"))
+    except ValueError:
+        delay = 30.0
+    delay = max(10.0, min(delay, 120.0))
+
+    def cleanup() -> None:
+        try:
+            if (
+                has_call_capacity_lease(call_sid=call_sid, call_session_id=call_session_id)
+                and not is_active_call_session(call_session_id)
+            ):
+                release_call_capacity_only(
+                    call_sid=call_sid,
+                    call_session_id=call_session_id,
+                )
+                with suppress(Exception):
+                    record_call_interruption(call_session_id, "voice_stream_not_started")
+        except Exception:
+            # Capacity cleanup must never take the API process down.
+            pass
+
+    timer = threading.Timer(delay, cleanup)
+    timer.daemon = True
+    timer.start()
+
+
 @app.post("/voice/inbound")
 async def voice_inbound(request:Request):
     require_public_provider_ingress()
@@ -398,11 +441,12 @@ async def voice_inbound(request:Request):
             media_type="application/xml",
         )
     if not provider_ready():
-        release_call_lease(call_sid=call_sid, call_session_id=call_session_id)
+        release_call_capacity_only(call_sid=call_sid, call_session_id=call_session_id)
         with suppress(Exception):
             record_call_interruption(call_session_id,"voice_not_ready")
         msg="The automated service is unavailable."
         return Response(inbound_fallback_twiml(msg),media_type="application/xml")
+    _schedule_pending_voice_lease_cleanup(call_sid, call_session_id)
     return Response(inbound_stream_twiml(call_session_id,call_sid),media_type="application/xml")
 
 @app.post("/voice/stream-status")

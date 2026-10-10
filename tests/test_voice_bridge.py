@@ -142,8 +142,16 @@ def configure_bridge(monkeypatch, openai, observations=None):
     monkeypatch.setattr(voice_bridge, "record_call_interruption", lambda call_id, reason: observations.append(("interrupt", reason)))
     monkeypatch.setattr(voice_bridge, "close_call_session", lambda call_id: observations.append(("close", call_id)))
 
-    async def connect(_identifier):
-        return openai
+    if isinstance(openai, (list, tuple)):
+        queue = list(openai)
+
+        async def connect(_identifier):
+            if not queue:
+                return FakeOpenAI([], hold_open=False)
+            return queue.pop(0)
+    else:
+        async def connect(_identifier):
+            return openai
 
     monkeypatch.setattr(voice_bridge, "_connect_openai", connect)
     voice_bridge._ACTIVE_CALL_SESSIONS.clear()
@@ -582,19 +590,40 @@ def test_partial_transcript_is_not_safety_routed_before_completion(monkeypatch):
 @pytest.mark.parametrize(
     "events,expected_reason",
     [
-        ([], "voice_transport_disconnected"),
         ([{"type": "conversation.item.input_audio_transcription.failed"}], "openai_transcription_failed"),
         ([{"type": "error", "error": {"code": "upstream_failure"}}], "openai_realtime_error:upstream_failure"),
     ],
 )
-def test_openai_disconnect_or_failure_transfers(monkeypatch, events, expected_reason):
-    twilio = FakeTwilio(connected_start_events())
-    openai = FakeOpenAI(events, hold_open=False)
+def test_openai_disconnect_or_failure_soft_recovers_without_closing_media_stream(monkeypatch, events, expected_reason):
+    """Recoverable OpenAI defects must not emit Twilio 31921 (application WS close)."""
+    twilio = FakeTwilio(connected_start_events() + [
+        ({"event": "stop", "sequenceNumber": "3", "stop": {"callSid": "CA-test"}}, 0.05),
+    ])
+    # Keep OpenAI open after the soft-recover event so Twilio can send stop first.
+    openai = FakeOpenAI(events, hold_open=True)
     observations = configure_bridge(monkeypatch, openai)
+    monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0")
     asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
     assert ("interrupt", expected_reason) in observations
-    assert ("close", 7) in observations
+    assert not twilio.closed
+
+
+def test_openai_provider_drop_does_not_application_close_twilio_ws(monkeypatch):
+    """Recoverable provider drop reconnects in-call; exhaustion fails cleanly (no dead air)."""
+    first = FakeOpenAI([], hold_open=False)
+    second = FakeOpenAI([], hold_open=False)
+    third = FakeOpenAI([], hold_open=False)
+    twilio = FakeTwilio(connected_start_events())
+    observations = configure_bridge(monkeypatch, [first, second, third])
+    monkeypatch.setenv("VOICE_PROVIDER_MAX_RECONNECTS", "2")
+    monkeypatch.setattr(voice_bridge, "_request_live_human_transfer", lambda call_sid: True)
+    asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
+    reasons = [reason for kind, reason in observations if kind == "interrupt"]
+    assert "voice_transport_disconnected" in reasons
+    assert "voice_provider_reconnect_exhausted" in reasons
+    # Clean handoff close — not indefinite keep-open silence after provider loss.
     assert twilio.closed
+    assert twilio.close_code == 1000
 
 
 def test_barge_in_clears_twilio_and_truncates_openai(monkeypatch):
@@ -618,7 +647,7 @@ def test_barge_in_clears_twilio_and_truncates_openai(monkeypatch):
     assert not [item for item in twilio.sent if item.get("event") == "media"]
 
 
-def test_missing_output_transcript_discards_audio_and_transfers(monkeypatch):
+def test_missing_output_transcript_discards_audio_and_soft_recovers(monkeypatch):
     audio = base64.b64encode(b"a" * 160).decode()
     events = connected_start_events() + [
         ({"event": "stop", "sequenceNumber": "3", "stop": {"callSid": "CA-test"}}, .05),
@@ -630,9 +659,11 @@ def test_missing_output_transcript_discards_audio_and_transfers(monkeypatch):
     ])
     twilio = FakeTwilio(events)
     observations = configure_bridge(monkeypatch, openai)
+    monkeypatch.setenv("VOICE_TRANSCRIPT_GRACE_SECONDS", "0")
     asyncio.run(voice_bridge.handle_twilio_media_stream(twilio))
     assert not [item for item in twilio.sent if item.get("event") == "media"]
     assert ("interrupt", "openai_output_transcript_missing") in observations
+    assert not twilio.closed
 
 
 @pytest.mark.parametrize("verified,allowed", [(False, False), (True, True)])
