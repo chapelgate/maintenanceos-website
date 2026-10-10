@@ -49,7 +49,7 @@ export function HomeOnboardingSteps() {
                 href="/create/"
                 className="font-medium text-accent underline-offset-4 hover:underline"
               >
-                Create from website
+                the website setup preview
               </a>
               : website URL → review a draft pack → early access. Optional scripted
               interactive receptionist preview is available after review. The live phone line remains separate.

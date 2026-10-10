@@ -66,10 +66,10 @@ export function DemoProof() {
 
       <CtaPair
         className="mt-10"
-        primaryHref="/create/"
-        primaryLabel="Create from website"
-        secondaryHref="#demo"
-        secondaryLabel="Request early access"
+        primaryHref="/demo/#demo"
+        primaryLabel="Request an early demo"
+        secondaryHref="/create/"
+        secondaryLabel="Try the website setup preview"
       />
     </section>
   );

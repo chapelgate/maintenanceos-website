@@ -122,8 +122,8 @@ access, current carrier quality, deployment readiness or general availability.
 
 ## Website-specific guardrails
 
-- Primary CTA may be **Create from website** (`/create/`).
-- Join launch list / Request early demo remain secondary early-access conversions.
+- Primary CTA is **Request an early demo** (`/demo/`), on Andy Cartwright's decision of 10 Oct 2026.
+- **Create from website** and **Join launch list** become secondary early-access conversions.
 - Pricing stays request-pricing / launching-soon unless a separate commercial gate is approved.
 - `/privacy`, `/cookies` and `/terms` remain DRAFT FOR LEGAL REVIEW.
 - Website-address setup, knowledge pack, scripted sandbox, calendar and SAMPLE

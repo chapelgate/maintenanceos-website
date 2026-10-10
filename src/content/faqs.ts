@@ -17,14 +17,14 @@ export const faqItems: FaqItem[] = [
     answer:
       "No. The website is in pre-launch mode, with a browser voice receptionist preview available on /create. The public path is website URL → website learning → review → configure → browser voice preview → optional save. You can optionally save the setup or request a human briefing. MaintenanceOS is not commercially generally available, and this is not a live public phone line.",
     relatedHref: "/create/",
-    relatedLabel: "Create from website",
+    relatedLabel: "Try the website setup preview",
   },
   {
     question: "Does pasting a website URL give me a live phone number?",
     answer:
       "No. Checking a website does not assign a live phone number. There is no public always-on receptionist on this site, and no instant live number after you submit. Early access is a waitlist and human briefing — not live number provisioning.",
     relatedHref: "/create/",
-    relatedLabel: "Create from website",
+    relatedLabel: "Try the website setup preview",
   },
   {
     question: "Does the public site crawl my website?",
@@ -40,7 +40,7 @@ export const faqItems: FaqItem[] = [
     answer:
       "No. Empty hours and services stay empty. You review the draft, then a claims-safe knowledge pack is built from fields that are actually present. Missing facts stay missing — we do not invent business details, bookings, or a live phone number.",
     relatedHref: "/create/",
-    relatedLabel: "Create from website",
+    relatedLabel: "Try the website setup preview",
   },
   {
     question: "Does AI make final safety or money decisions?",
@@ -62,25 +62,25 @@ export const faqItems: FaqItem[] = [
   {
     question: "When will pricing be published?",
     answer:
-      "Pricing is launching soon. There are no published list prices and no live phone included in a plan. Create from website, or request pricing via an early-access briefing. There is no self-serve checkout. Live telephony and calendar booking are coming / early access — not general availability.",
-    relatedHref: "/create/",
-    relatedLabel: "Create from website",
+      "Pricing is launching soon. There are no published list prices and no live phone included in a plan. Request an early demo to talk pricing. There is no self-serve checkout. Live telephony and calendar booking are coming / early access — not general availability.",
+    relatedHref: "/demo/",
+    relatedLabel: "Request an early demo",
   },
   {
     question: "How do I contact you?",
     answer:
-      "For product interest, start at Create from website. The contact form is for genuine human enquiries and early access — not live phone provisioning, not a GA support desk, and not an invented SLA. You can also join the launch list or request an early-access briefing on the demo page.",
-    relatedHref: "/create/",
-    relatedLabel: "Create from website",
+      "For product interest, request an early demo. The contact form is for genuine human enquiries and early access — not live phone provisioning, not a GA support desk, and not an invented SLA. You can also join the launch list or request an early-access briefing on the demo page.",
+    relatedHref: "/demo/",
+    relatedLabel: "Request an early demo",
   },
   {
     question: "Are you ISO or SOC 2 certified?",
     answer:
 
-      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website learning is read-only, bounded and SSRF-guarded. Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW. For product interest, start at Create from website.",
+      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website learning is read-only, bounded and SSRF-guarded. Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW. For product interest, request an early demo.",
 
-    relatedHref: "/create/",
-    relatedLabel: "Create from website",
+    relatedHref: "/demo/",
+    relatedLabel: "Request an early demo",
   },
   {
     question: "Do you use cookies or a consent banner?",

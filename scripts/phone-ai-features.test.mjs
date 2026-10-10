@@ -108,8 +108,7 @@ test("features page copy omits forbidden present-fact claims", () => {
   assert.match(page, /FeatureStatusChip/);
   assert.match(page, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(page, /marketingCardsByGroup/);
-  assert.match(page, /Create from website/);
-  assert.match(page, /Join launch list/);
+  assert.match(page, /Request an early demo/);
   assert.match(page, /VERIFIED/);
   assert.match(page, /PREVIEW/);
   assert.doesNotMatch(page, /^["']use client["']/m);

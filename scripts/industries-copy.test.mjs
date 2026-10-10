@@ -90,6 +90,7 @@ test("home industries grid lists all eight UK verticals at equal weight", () => 
   }
 });
 
+
 test("industries index contrasts UK maintenance with a generic receptionist", () => {
   const page = read("src/app/industries/page.tsx");
   assert.match(page, /emergency triage vs jobs/);

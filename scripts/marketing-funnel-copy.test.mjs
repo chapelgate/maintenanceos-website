@@ -10,7 +10,7 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
-test("how-it-works matches the /create stepper labels", () => {
+test("how-it-works matches the /demo/ stepper labels", () => {
   const flow = read("src/components/HowItWorksFlow.tsx");
   const page = read("src/app/how-it-works/page.tsx");
   const create = [
@@ -35,7 +35,7 @@ test("how-it-works matches the /create stepper labels", () => {
   assert.match(page, /Website → Check → Choose → Configure → Review & Try/);
   assert.match(page, /browser voice receptionist/i);
   assert.match(page, /live phone number|live public phone number/);
-  assert.match(page, /Create from website/);
+  assert.match(page, /<CtaPair/);
   assert.match(page, /funnelPageMetadata\("howItWorks"\)/);
   assert.match(page, /id="product-tour"/);
   assert.match(page, /<ProductTour/);
@@ -53,8 +53,7 @@ test("features page renders inventory-driven VERIFIED / PREVIEW cards", () => {
   assert.match(page, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(page, /marketingCardsByGroup/);
   assert.match(copy, /Website → Check → Choose → Configure → Review & Try/);
-  assert.match(page, /Create from website/);
-  assert.match(page, /Join launch list/);
+  assert.match(page, /<CtaPair/);
   assert.match(page, /funnelPageMetadata\("features"\)/);
   assert.match(page, /VERIFIED/);
   assert.match(page, /PREVIEW/);
@@ -77,9 +76,7 @@ test("static export setting is unchanged", () => {
 
 test("home CTA strip names the website-to-pack path", () => {
   const page = read("src/app/page.tsx");
-  assert.match(page, /website URL/);
-  assert.match(page, /interactive receptionist demo/);
-  assert.match(page, /Create from website/);
+  assert.match(page, /<CtaPair/);
   assert.match(page, /no live phone demo/i);
   assert.match(page, /funnelPageMetadata\("home"\)/);
   assert.match(page, /ProductTourWatchLink/);
@@ -90,7 +87,7 @@ test("home CTA strip names the website-to-pack path", () => {
   assert.doesNotMatch(page, /Property maintenance operations for UK landlords/);
 });
 
-test("Fonio matrix records the current interactive create funnel", () => {
+test("Fonio matrix records the current interactive funnel", () => {
   const matrix = read("docs/competitive/fonio-parity-matrix.md");
   assert.match(matrix, /Website marketing/);
   assert.match(matrix, /Were lagging/);
@@ -183,14 +180,14 @@ test("security stays claims-safe with bounded website learning and no cert theat
   const llmsFull = read("public/llms-full.txt");
   const nextConfig = read("next.config.ts");
 
-  assert.match(page, /primaryHref="\/create\/"/);
-  assert.match(page, /Create from website/);
+  assert.match(page, /<CtaPair/);
+  assert.doesNotMatch(page, /primaryLabel="Create from website"/);
   assert.match(page, /Website learning reads only a small, bounded set of public HTTPS/);
   assert.match(page, /private\/internal addresses[\s\S]*blocked/);
   assert.match(page, /No ISO 27001, SOC 2/);
   assert.match(page, /No bank-grade/);
   assert.match(page, /DRAFT FOR LEGAL REVIEW/);
-  assert.match(page, /Product interest starts at Create from website/);
+  assert.match(page, /Product interest starts at Request an early demo/);
   assert.doesNotMatch(page, /bank-grade security we provide/i);
   assert.doesNotMatch(page, /ISO 27001 certified/i);
   assert.doesNotMatch(page, /SOC 2 Type/i);
@@ -203,7 +200,7 @@ test("security stays claims-safe with bounded website learning and no cert theat
   assert.match(faqs, /DRAFT FOR LEGAL REVIEW/);
   assert.match(
     faqs,
-    /question: "Are you ISO or SOC 2 certified\?"[\s\S]*relatedHref: "\/create\/"/,
+    /question: "Are you ISO or SOC 2 certified\?"[\s\S]*relatedHref: "\/demo\/"/,
   );
 
 
@@ -230,8 +227,7 @@ test("contact stays claims-safe as human enquiry, not a support desk", () => {
   const llmsFull = read("public/llms-full.txt");
   const nextConfig = read("next.config.ts");
 
-  assert.match(page, /href="\/create\/"/);
-  assert.match(page, /Create from website/);
+  assert.match(page, /<LeadCaptureForm/);
   assert.match(page, /not live phone provisioning/);
   assert.match(page, /not a GA support desk/);
   assert.match(page, /no invented (response )?SLA/);
@@ -245,7 +241,7 @@ test("contact stays claims-safe as human enquiry, not a support desk", () => {
   assert.match(faqs, /not an invented SLA/);
   assert.match(
     faqs,
-    /question: "How do I contact you\?"[\s\S]*relatedHref: "\/create\/"/,
+    /question: "How do I contact you\?"[\s\S]*relatedHref: "\/demo\/"/,
   );
 
   assert.match(llms, /not a GA support desk/);
@@ -255,7 +251,7 @@ test("contact stays claims-safe as human enquiry, not a support desk", () => {
   assert.match(nextConfig, /output:\s*["']export["']/);
 });
 
-test("pricing stays claims-safe with Create CTA and coming telephony/calendar", () => {
+test("pricing stays claims-safe with early demo CTA and coming telephony/calendar", () => {
   const config = read("src/config/pricing.ts");
   const page = read("src/app/pricing/page.tsx");
   const faqs = read("src/content/faqs.ts");
@@ -263,8 +259,8 @@ test("pricing stays claims-safe with Create CTA and coming telephony/calendar", 
   const llmsFull = read("public/llms-full.txt");
   const nextConfig = read("next.config.ts");
 
-  assert.match(config, /href: "\/create\/"/);
-  assert.match(config, /label: "Create from website"/);
+  assert.match(config, /href: "\/demo\/"/);
+  assert.match(config, /label: "Request an early demo"/);
   assert.match(config, /coming \/ early access/);
   assert.match(config, /calendar booking/);
   assert.match(config, /No live phone is included in a plan/);
@@ -273,19 +269,17 @@ test("pricing stays claims-safe with Create CTA and coming telephony/calendar", 
   assert.doesNotMatch(config, /generally available product/i);
   assert.doesNotMatch(config, /commercially generally available/i);
 
-  assert.match(page, /primaryHref=\{pricing\.primaryCta\.href\}/);
-  assert.match(page, /Create from website/);
+  assert.match(page, /<CtaPair/);
   assert.match(page, /not a live (public )?phone/i);
   assert.match(page, /not general availability/);
   assert.match(page, /No live phone in a plan/);
   assert.doesNotMatch(page, /£/);
-  assert.doesNotMatch(page, /Request pricing or join the launch list/);
 
   assert.match(faqs, /no live phone included in a plan/);
   assert.match(faqs, /Live telephony and calendar booking are coming \/ early access/);
   assert.match(
     faqs,
-    /question: "When will pricing be published\?"[\s\S]*relatedHref: "\/create\/"/,
+    /question: "When will pricing be published\?"[\s\S]*relatedHref: "\/demo\/"/,
   );
 
   assert.match(llms, /No live phone in a plan/);
@@ -345,7 +339,7 @@ test("demo page names the website-to-pack path and does not book a live phone", 
   assert.match(page, /Review &amp; Try/);
   assert.match(page, /website URL → check → choose role → configure → review/);
   assert.match(page, /optional save/);
-  assert.match(page, /Create from website/);
+  assert.match(page, /<CtaPair/);
   assert.match(page, /live number/);
   assert.match(page, /funnelPageMetadata\("demo"\)/);
   assert.doesNotMatch(page, /See MaintenanceOS/);
@@ -430,19 +424,18 @@ test("create and legal scaffolds share the website-URL setup privacy note", () =
   }
 });
 
-test("primary conversion CTAs point at /create, not a live phone demo", () => {
+test("primary conversion CTAs point at /demo/, not a live phone demo", () => {
   const pair = read("src/components/CtaPair.tsx");
   const header = read("src/components/SiteHeader.tsx");
   const home = read("src/app/page.tsx");
   const industries = read("src/components/IndustryRolePage.tsx");
 
-  assert.match(pair, /primaryHref = "\/create\/"/);
-  assert.match(pair, /secondaryHref = "\/demo\/#demo"/);
-  assert.match(header, /href="\/create\/"/);
-  assert.match(header, /Create from website/);
-  assert.match(header, /Early access/);
+  assert.match(pair, /primaryHref = "\/demo\/"/);
+  assert.match(pair, /secondaryHref = "\/how-we-keep-control\/"/);
+  assert.match(header, /href="\/demo\/"/);
+  assert.match(header, /Request an early demo/);
   assert.doesNotMatch(header, /See it live/i);
-  assert.match(home, /primaryHref="\/create\/"/);
-  assert.match(industries, /primaryHref="\/create\/"/);
-  assert.match(industries, /secondaryHref="\/demo\/#demo"/);
+  assert.match(home, /primaryHref="\/demo\/"/);
+  assert.match(industries, /primaryHref="\/demo\/"/);
+  assert.match(industries, /secondaryHref="\/how-we-keep-control\/"/);
 });

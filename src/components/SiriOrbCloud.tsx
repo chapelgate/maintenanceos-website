@@ -70,10 +70,10 @@ export function SiriOrbCloud() {
               </a>
               <span className="text-muted"> · </span>
               <a
-                href="/create/"
+                href="/demo/"
                 className="font-semibold text-accent underline-offset-4 hover:underline"
               >
-                Create from website
+                Request an early demo
               </a>
             </p>
           </div>

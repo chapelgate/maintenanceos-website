@@ -88,12 +88,7 @@ export default function HowItWorksPage() {
       <ObjectionFaq headingId="hiw-objection-faq-heading" />
 
       <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-        <CtaPair
-          primaryHref="/create/"
-          primaryLabel="Create from website"
-          secondaryHref="/demo/#launch"
-          secondaryLabel="Join launch list"
-        />
+        <CtaPair primaryHref="/demo/" primaryLabel="Request an early demo" />
       </div>
     </>
   );

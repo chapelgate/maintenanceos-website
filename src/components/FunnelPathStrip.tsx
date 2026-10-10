@@ -11,12 +11,19 @@ export function FunnelPathStrip({ className = "" }: { className?: string }) {
         <span className="font-semibold text-ink">One public path. </span>
         Website → Check → Choose → Configure → Review & Try → optional save.{" "}
         <a
+          href="/demo/"
+          className="font-medium text-accent underline-offset-4 hover:underline"
+        >
+          Request an early demo
+        </a>
+        , or{" "}
+        <a
           href="/create/"
           className="font-medium text-accent underline-offset-4 hover:underline"
         >
-          Create from website
-        </a>{" "}
-        is the primary start. This site does not assign a live phone number.
+          try the website setup preview
+        </a>
+        . This site does not assign a live phone number.
       </p>
     </aside>
   );

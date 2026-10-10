@@ -13,14 +13,14 @@ export const PRODUCTION_FORM_ENDPOINT =
 
 export const siteConfig = {
   name: "MaintenanceOS",
-  publicBrand: "MaintenanceOS by Chapelgate",
+  publicBrand: "MaintenanceOS",
   publisherName: "Chapelgate",
   shortName: "MOS",
   category: "UK maintenance operations software with AI-assisted intake",
   tagline:
     "UK maintenance operations software with AI-assisted intake — rules keep control.",
   description:
-    "MaintenanceOS by Chapelgate is pre-launch UK maintenance operations software for property and maintenance teams. It turns incoming repair reports into structured work, separates critical cases from routine jobs, and keeps consequential decisions with authorised people. Voice remains in commissioning preview, not a public always-on phone service.",
+    "MaintenanceOS is pre-launch UK maintenance operations software for property and maintenance teams. It turns incoming repair reports into structured work, separates critical cases from routine jobs, and keeps consequential decisions with authorised people. Voice remains in commissioning preview, not a public always-on phone service.",
   /** PRE-LAUNCH gate. Default false. */
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
   /**
@@ -92,10 +92,6 @@ export const siteConfig = {
   locale: "en-GB",
 } as const;
 
-export const dashboardNavLabel = siteConfig.customerDashboardEnabled
-  ? "Dashboard"
-  : "Dashboard (soon)";
-
 /** Conversion forms — always render via LeadCaptureForm. See docs/FORM_ENDPOINT_CONTRACT.md. */
 export type LeadType =
   | "launch_list"
@@ -105,37 +101,36 @@ export type LeadType =
 
 /** Industry nav — *OS product line names. */
 export const industries = [
-  { slug: "landlords", label: "LandlordOS" },
-  { slug: "letting-agents", label: "LettingAgentOS" },
-  { slug: "property-managers", label: "PropertyManagerOS" },
-  { slug: "maintenance-companies", label: "MaintenanceOS" },
-  { slug: "housing-associations", label: "HousingAssociationOS" },
-  { slug: "facilities-management", label: "FacilitiesOS" },
-  { slug: "councils", label: "CouncilOS" },
-  { slug: "holiday-lets", label: "HolidayLetOS" },
+  { slug: "landlords", label: "Landlords" },
+  { slug: "letting-agents", label: "Letting agents" },
+  { slug: "property-managers", label: "Property managers" },
+  { slug: "maintenance-companies", label: "Maintenance companies" },
+  { slug: "housing-associations", label: "Housing associations" },
+  { slug: "facilities-management", label: "Facilities management" },
+  { slug: "councils", label: "Councils" },
+  { slug: "holiday-lets", label: "Holiday lets" },
 ] as const;
 
 export const primaryNav = [
   { href: "/how-it-works/", label: "How it works" },
+  { href: "/how-we-keep-control/", label: "Safety rules" },
   { href: "/features/", label: "Features" },
-  { href: "/ai-receptionist/", label: "AI receptionist" },
-  { href: "/create/", label: "Create" },
-  { href: "/dashboard/", label: dashboardNavLabel },
+  { href: "/ai-receptionist/", label: "AI receptionist (preview)" },
   { href: "/security/", label: "Security" },
-  { href: "/industries/", label: "Industries", children: industries },
+  { href: "/industries/", label: "All sectors", children: industries },
   { href: "/pricing/", label: "Pricing" },
 ] as const;
 
 export const footerNav = {
   product: [
     { href: "/how-it-works/", label: "How it works" },
+    { href: "/how-we-keep-control/", label: "Safety rules" },
     { href: "/features/", label: "Features" },
     { href: "/property-maintenance-software/", label: "Property maintenance software" },
-    { href: "/ai-receptionist/", label: "AI receptionist" },
-    { href: "/create/", label: "Create receptionist" },
-    { href: "/dashboard/", label: dashboardNavLabel },
+    { href: "/ai-receptionist/", label: "AI receptionist (preview)" },
+    { href: "/create/", label: "Try website set-up (preview)" },
     { href: "/security/", label: "Security" },
-    { href: "/industries/", label: "Industries" },
+    { href: "/industries/", label: "All sectors" },
     { href: "/pricing/", label: "Pricing" },
   ],
   company: [
@@ -151,8 +146,7 @@ export const footerNav = {
     { href: "/terms/", label: "Terms" },
   ],
   convert: [
-    { href: "/create/", label: "Create from website" },
-    { href: "/demo/#launch", label: "Join launch list" },
-    { href: "/demo/#demo", label: "Request early access" },
+    { href: "/demo/", label: "Request an early demo" },
+    { href: "/create/", label: "Try website set-up (preview)" },
   ],
 } as const;

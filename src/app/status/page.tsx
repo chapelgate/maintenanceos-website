@@ -5,7 +5,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata: Metadata = contentPageMetadata({
   title: "Status",
   description:
-    "Architecture placeholder for a future MaintenanceOS public status surface. No live uptime metrics are shown here.",
+    "MaintenanceOS is pre-launch. There's no public production service yet, so no live status or uptime figures are shown here.",
   path: "/status/",
 });
 
@@ -14,7 +14,7 @@ export default function StatusPage() {
     <>
       <PageHero
         eyebrow="Placeholder"
-        title="Status architecture"
+        title="Service status"
         lede="This page describes how a future public status surface would work. It does not show live uptime metrics."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12 text-muted">

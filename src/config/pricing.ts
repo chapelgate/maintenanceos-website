@@ -37,8 +37,8 @@ const prelaunch = {
     "Live phone and calendar booking: coming / early access — not included as a live plan",
   ] as const,
   primaryCta: {
-    href: "/create/",
-    label: "Create from website",
+    href: "/demo/",
+    label: "Request an early demo",
   } satisfies PricingCta,
   secondaryCta: {
     href: "/demo/#demo",
@@ -65,8 +65,8 @@ const published = {
     "Live phone and calendar booking: coming / early access — not included as a live plan",
   ] as const,
   primaryCta: {
-    href: "/create/",
-    label: "Create from website",
+    href: "/demo/",
+    label: "Request an early demo",
   } satisfies PricingCta,
   secondaryCta: {
     href: "/demo/#demo",

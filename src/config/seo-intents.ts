@@ -17,29 +17,29 @@ export type IndustrySeoIntent = { title: string; primaryQuery: string; summary: 
 
 const industrySeoIntents: Record<string, IndustrySeoIntent> = {
   landlords: {
-    title: "Property maintenance software for UK landlords",
+    title: "Repair Reporting Software for UK Landlords",
     primaryQuery: "property maintenance software for UK landlords",
-    summary: "For landlords who need maintenance reports captured consistently and separated from safety emergencies, with human control over dispatch and money.",
+    summary: "Take tenant repair reports, keep anything dangerous in front of a person, and keep a record of what happened. Repair intake for UK landlords.",
   },
   "letting-agents": {
-    title: "Property maintenance software for UK letting agents",
+    title: "Repair Reporting for UK Letting Agents",
     primaryQuery: "property maintenance software for UK letting agents",
-    summary: "For letting agents coordinating maintenance across landlords, tenants, properties, and contractors without turning AI intake into autonomous agency decisions.",
+    summary: "Repair intake for letting agents: tenant reports captured, dangerous ones kept with a person, no invented promises, and a record you can show landlords.",
   },
   "property-managers": {
-    title: "Property maintenance software for UK property managers",
+    title: "Repair Intake for UK Property Managers",
     primaryQuery: "property maintenance software for UK property managers",
-    summary: "For property managers who need structured maintenance intake across multiple properties, clear escalation, and an auditable path from report to human-controlled action.",
+    summary: "Repair reports across many buildings, captured as structured requests, with dangerous ones kept with a person and a record of what happened. For UK property managers.",
   },
   "maintenance-companies": {
-    title: "Maintenance management software for UK maintenance companies",
+    title: "Call & Job Intake for UK Maintenance Companies",
     primaryQuery: "maintenance management software for UK maintenance companies",
-    summary: "For maintenance firms handling calls and work intake from landlords, agents, and residents, with UK emergency wording and no invented engineer dispatch.",
+    summary: "For maintenance firms taking repair calls from landlords, agents and residents: structured job intake, dangerous reports kept with a person, no invented dispatch.",
   },
   "housing-associations": {
-    title: "Housing maintenance software for UK housing providers",
+    title: "Repairs Reporting for Housing Associations",
     primaryQuery: "housing maintenance software UK",
-    summary: "For housing providers that need accountable maintenance reporting, safety escalation, and clear human clearance without invented compliance or dispatch claims.",
+    summary: "Repair intake for UK housing associations: reports captured as structured requests, safety-critical cases held for an authorised person, and an audit trail on the case.",
   },
   "facilities-management": {
     title: "Facilities maintenance software for UK FM teams",
@@ -47,9 +47,9 @@ const industrySeoIntents: Record<string, IndustrySeoIntent> = {
     summary: "For facilities teams coordinating sites, contractors, and urgent maintenance reports while keeping consequential decisions with rules and authorised people.",
   },
   councils: {
-    title: "Council maintenance software for UK public-sector teams",
+    title: "Repairs Reporting Software for UK Councils",
     primaryQuery: "council maintenance software UK",
-    summary: "For public-sector maintenance teams evaluating structured intake, UK emergency guidance, auditability, and human-controlled escalation.",
+    summary: "Repair intake for council housing and public-sector maintenance teams: structured capture, safety-critical cases held for an authorised officer, and an audit trail.",
   },
   "holiday-lets": {
     title: "Holiday let maintenance software for UK operators",

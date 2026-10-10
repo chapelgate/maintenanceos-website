@@ -21,9 +21,8 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   assert.match(home, /HomeLifestyleStrip/);
   assert.match(home, /ProductUiShell/);
   assert.match(home, /mos-hero-atmosphere/);
-  assert.match(home, /primaryHref="\/create\/"/);
-  assert.match(home, /Create from website/);
-  assert.match(home, /Request early access/);
+  assert.match(home, /primaryHref="\/demo\/"/);
+  assert.match(home, /Request an early demo/);
   assert.match(home, /no live phone demo/i);
   assert.match(visual, /SiriOrbCloud/);
   assert.match(visual, /home-orb-stage/);
@@ -35,8 +34,8 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   assert.doesNotMatch(visual, /CtaPair/);
   assert.doesNotMatch(visual, /Press the glow to begin/);
 
-  assert.match(pair, /primaryHref = "\/create\/"/);
-  assert.match(pair, /secondaryHref = "\/demo\/#demo"/);
+  assert.match(pair, /primaryHref = "\/demo\/"/);
+  assert.match(pair, /secondaryHref = "\/how-we-keep-control\/"/);
   assert.doesNotMatch(pair, /tone/);
 
   assert.match(shell, /FeatureStatusChip status="UNDER_TEST"/);
@@ -53,7 +52,7 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   assert.match(orb, /aria-controls=\{panelId\}/);
   assert.match(orb, /Escape/);
   assert.match(orb, /\/how-it-works\//);
-  assert.match(orb, /\/create\//);
+  assert.match(orb, /\/demo\//);
   assert.match(orb, /Intake listening/);
   assert.doesNotMatch(orb, /CtaPair/);
   assert.doesNotMatch(orb, /Press the glow to begin/);

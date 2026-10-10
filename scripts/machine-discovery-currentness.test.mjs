@@ -25,7 +25,7 @@ test("SEO description is provider-neutral and outcome-led", () => {
   const site = read("src/config/site.ts");
   const meta = read("src/lib/page-meta.ts");
   assert.match(site, /turns incoming repair reports into structured work/);
-  assert.match(meta, /turning repair reports into structured work/);
+  assert.match(meta, /The AI takes the details; fixed rules and an authorised person decide anything dangerous/);
   assert.doesNotMatch(site + meta, /Gemini|Fonio|Chapelgate Technologies/i);
 });
 

@@ -144,7 +144,7 @@ export function HowItWorksFlow() {
           href="/create/"
           className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
         >
-          Create from website
+          the website setup preview
         </a>
 
         . Typical shape: website URL → validate → choose role → configure →

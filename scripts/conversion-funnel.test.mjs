@@ -7,13 +7,13 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
-test("Create from website remains the canonical primary conversion", () => {
+test("Request an early demo remains the canonical primary conversion", () => {
   const cta = read("src/components/CtaPair.tsx");
   const header = read("src/components/SiteHeader.tsx");
   const doc = read("docs/STEP6_CONVERSION_FUNNEL.md");
-  assert.match(cta, /primaryHref = "\/create\//);
-  assert.match(cta, /primaryLabel = "Create from website"/);
-  assert.match(header, /href="\/create\/"/);
+  assert.match(cta, /primaryHref = "\/demo\//);
+  assert.match(cta, /primaryLabel = "Request an early demo"/);
+  assert.match(header, /href="\/demo\/"/);
   assert.match(doc, /primary website conversion is \*\*Create from website\*\*/);
 });
 

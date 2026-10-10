@@ -55,48 +55,24 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-5">
             <p className="inline-flex items-center rounded-full bg-accent-subtle px-3 py-1 text-xs font-semibold text-accent">
-              Pre-launch · UK preview
+              Pre-launch · in testing
             </p>
             <h1
               id="hero-heading"
               className="mt-5 text-3xl font-semibold tracking-tight text-ink [text-wrap:balance] sm:text-4xl sm:leading-[1.12] lg:text-[2.75rem] lg:leading-[1.12]"
             >
-              Turn maintenance requests into clear, controlled work.
+              AI for repair reports. A person still clears anything flagged as dangerous.
             </h1>
             <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-              MaintenanceOS by Chapelgate helps UK property and maintenance
-              teams turn incoming repair reports into structured work: capture
-              the facts, separate critical cases from routine jobs, and keep
-              consequential decisions with authorised people.
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              AI assists intake. Server rules and authorised people control
-              what happens next. Voice remains in commissioning preview, so this site does
-              not present an always-on phone service.
+              MaintenanceOS is repair intake for landlords, letting agents and housing providers.
             </p>
             <CtaPair
               className="mt-8"
-              primaryHref="/create/"
-              primaryLabel="Create from website"
-              secondaryHref="/demo/#see-it-work"
-              secondaryLabel="See it work"
+              primaryHref="/demo/"
+              primaryLabel="Request an early demo"
+              secondaryHref="/how-we-keep-control/"
+              secondaryLabel="See the safety rules →"
             />
-            <p className="mt-4 text-sm text-muted">
-              Funnel: Website → Check → Choose role → Configure → Review & Try → optional save.
-            </p>
-            <ProductTourWatchLink className="mt-3" />
-            <HomeLifestyleStrip />
-            <HomeRoleChips />
-            <p className="mt-5 text-sm leading-relaxed text-muted">
-              Pilot-stage. Core controls are real; public always-on phone is not
-              declared ready yet.{" "}
-              <a
-                href="/how-it-works/"
-                className="font-medium text-accent underline-offset-4 hover:underline"
-              >
-                See how it works
-              </a>
-            </p>
           </div>
 
           <div className="lg:col-span-7" id="product">
@@ -117,6 +93,37 @@ export default function HomePage() {
             Supervisor shell · preview
           </h2>
           <ProductUiShell />
+          <ProductTourWatchLink className="mt-4" />
+          <HomeLifestyleStrip />
+          <HomeRoleChips />
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="home-rulebook-heading"
+        className="border-b border-border bg-surface px-4 py-12 sm:px-6 sm:py-16"
+      >
+        <div className="mx-auto max-w-3xl">
+          <h2
+            id="home-rulebook-heading"
+            className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+          >
+            Repairs reporting, with the safety rules written down.
+          </h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
+            Fixed safety rules sit above the AI. If a report is flagged as dangerous, it stays with a person until someone authorised clears it. The assistant is built not to invent a booking, a dispatch or a promise that someone is on the way.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+            See what happens to a report flagged as dangerous, why only an authorised person can clear it, and what our AI is built never to promise a tenant. MaintenanceOS keeps reports flagged as dangerous with a person and leaves an audit trail on the job.
+          </p>
+          <p className="mt-5">
+            <a
+              href="/how-we-keep-control/"
+              className="text-sm font-semibold text-accent underline decoration-border underline-offset-4 hover:decoration-accent"
+            >
+              Read the safety rules →
+            </a>
+          </p>
         </div>
       </section>
 
@@ -181,37 +188,28 @@ export default function HomePage() {
             <IntakeOrbAccent />
             <div>
               <h2 className="text-xl font-semibold text-ink sm:text-2xl">
-                Join the list or start from your website
+                See the rules working on a sample repair.
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">
-                Early access is opening carefully. The public path is website URL
-
-                → reviewed configuration → interactive receptionist demo → optional saved reference. No live phone demo from this site.{" "}
-
-                <a
-                  href="/create/"
-                  className="font-medium text-accent underline-offset-4 hover:underline"
-                >
-                  Create from website
-                </a>
+                Early access is opening carefully. No live phone demo from this site.
               </p>
             </div>
           </div>
           <CtaPair
-            primaryHref="/create/"
-            primaryLabel="Create from website"
-            secondaryHref="/demo/#demo"
-            secondaryLabel="Request early access"
+            primaryHref="/demo/"
+            primaryLabel="Request an early demo"
+            secondaryHref="/demo/#see-it-work"
+            secondaryLabel="See it work"
           />
         </div>
       </section>
 
-      {/* 5. #join capture */}
+      {/* 5. #join capture — secondary path for launch updates */}
       <section id="join" className="border-t border-border bg-paper px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-xl">
-          <h2 className="text-2xl font-semibold text-ink">Join launch list</h2>
+          <h2 className="text-2xl font-semibold text-ink">Not ready for a demo? Get launch updates</h2>
           <p className="mt-2 text-muted">
-            Be notified when early access opens. No fake urgency — we are still
+            We&apos;ll email you when early access opens. No fake urgency — we are still
             pre-launch.
           </p>
           <div className="mt-6">

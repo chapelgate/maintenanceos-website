@@ -8,9 +8,6 @@ export function SiteFooter() {
           <p className="text-lg text-ink">
             <span className="font-medium">Maintenance</span>
             <span className="font-semibold">OS</span>
-            <span className="ml-2 text-xs font-medium text-muted">
-              by Chapelgate
-            </span>
           </p>
           <p className="mt-2 text-sm text-muted">
             Built for UK maintenance operations. Pre-launch — not commercially

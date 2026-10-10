@@ -33,15 +33,15 @@ export function IndustryStubPage({
           </a>
           . Start from a website URL:{" "}
           <a href="/create/" className="text-accent underline">
-            Create from website
+            website setup preview
           </a>
           .
         </p>
         <CtaPair
-          primaryHref="/create/"
-          primaryLabel="Create from website"
-          secondaryHref="/demo/#demo"
-          secondaryLabel="Request early access"
+          primaryHref="/demo/"
+          primaryLabel="Request an early demo"
+          secondaryHref="/how-we-keep-control/"
+          secondaryLabel="See the safety rules"
         />
       </div>
     </>

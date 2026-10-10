@@ -12,7 +12,7 @@ export const objectionFaqItems: readonly ObjectionFaqItem[] = [
   {
     question: "Is there a live always-on phone line I can call now?",
     answer:
-      "No. Voice intake exists in product source and remains in commissioning preview. Public always-on commercial phone is not on this site until controlled-call gates pass. Path today: Create from website or Join launch list — not “call the AI now.”",
+      "No. Voice intake exists in product source and remains in commissioning preview. Public always-on commercial phone is not on this site until controlled-call gates pass. Path today: request an early demo — not “call the AI now.”",
   },
   {
     question: "Can it book or reschedule calendar appointments?",

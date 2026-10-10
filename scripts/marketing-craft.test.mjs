@@ -45,7 +45,7 @@ test("nav desktop labels stay wrap-safe single-line units", () => {
   const css = read("src/app/globals.css");
 
   assert.match(site, /label: "How it works"/);
-  assert.match(site, /Dashboard \(soon\)/);
+  assert.match(site, /Safety rules/);
   assert.match(header, /min-h-16/);
   assert.match(header, /sticky top-0/);
   assert.match(header, /flex-wrap/);
@@ -139,10 +139,10 @@ test("objection FAQ pack is on home and how-it-works, not features", () => {
   assert.doesNotMatch(accordion, /Join launch list/);
 
   const homeCtaAfterFaq =
-    home.indexOf("<ObjectionFaq") < home.indexOf("Join the list or start from your website");
+    home.indexOf("<ObjectionFaq") < home.indexOf("See the rules working on a sample repair");
   assert.equal(homeCtaAfterFaq, true);
   const hiwCtaAfterFaq =
-    hiw.indexOf("<ObjectionFaq") < hiw.indexOf('secondaryLabel="Join launch list"');
+    hiw.indexOf("<ObjectionFaq") < hiw.indexOf('primaryLabel="Request an early demo"');
   assert.equal(hiwCtaAfterFaq, true);
 });
 

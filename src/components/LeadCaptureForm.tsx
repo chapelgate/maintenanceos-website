@@ -58,7 +58,8 @@ export function LeadCaptureForm({
     e.preventDefault();
     setStatus("submitting");
     setError(null);
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const website = String(fd.get("website") ?? "");
     if (!website) {
       trackWebsiteEvent({ event: "form_submit_start", leadType });
@@ -107,7 +108,7 @@ export function LeadCaptureForm({
     setReceiptReference(result.reference ?? null);
     setSuccessMode(result.mode);
     setStatus("success");
-    e.currentTarget.reset();
+    form.reset();
   }
 
   if (status === "success") {

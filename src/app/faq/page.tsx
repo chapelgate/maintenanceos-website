@@ -8,11 +8,10 @@ import { faqPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
-  title: "FAQ",
+  absoluteTitle: "MaintenanceOS FAQ: Safety, Data, Pricing and Status",
+  title: "MaintenanceOS FAQ: Safety, Data, Pricing and Status",
   description:
-
-    "Website URL → website learning → review → configure → browser voice preview → optional save. Straight answers on extracted facts, empty hours/services, UK 999, pricing, contact, security, and cookies. Pre-launch. Not a live public phone.",
-
+    "Straight answers about MaintenanceOS: what the AI will and won't do, what counts as safety-critical, how data is kept apart, cookies, pricing and launch status.",
   path: "/faq/",
 });
 
@@ -22,9 +21,7 @@ export default function FaqPage() {
       <JsonLd data={faqPageJsonLd()} />
       <PageHero
         title="Frequently asked questions"
-
-        lede="Same path as Create from website: website URL → website learning → review → configure → browser voice preview → optional save. No live public phone, no invented website facts, and no engineering test-harness wording."
-
+        lede="The website setup preview follows: website URL → website learning → review → configure → browser voice preview → optional save. Not a live phone, no invented website facts, and no engineering test-harness wording."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
         <FunnelPathStrip />
