@@ -117,3 +117,13 @@ The previously recorded existing-host authority blocker for droplet `601962983` 
   - `main`-only code includes `awaab_policy`, `awaab_runtime`, `lifecycle_runtime`, `identity_contract`, `data_lifecycle`, `commercial_release_controls` and `safety_messages`. `models.py` has 50 more lines on `main`, which is a schema difference against the live SQLite database.
   - Deploying `main` as-is would drop the live-only fixes and run new models against the live database. The live-only code in those other files must be reconciled into `main` first, one reviewed slice per file group.
 - `gemini_voice.py` reconciliation (stall watchdog from `51da30f`, 600 ms silence default, live call-handling rules) is in the PR for issue #147. The live host stays unchanged until Andy approves the route and the drift is reconciled.
+
+### 2026-10-10 (evening): Andy approved the mos-gemini laptop SSH route for voice deploys (temporary)
+- Decision: Andy approved the laptop root SSH route (`ssh mos-gemini` from CG to droplet 601962983, maintenanceos-production-voice-rollback) for voice deploys **for now**. This resolves the "Andy must decide" item in the 2026-10-10 laptop-SSH entry above.
+- Still to do: restore the least-privilege deploy lease route later and retire root SSH for deploys once it's back.
+- Conditions on any deploy over this route: reconciliation PRs merged, Linux Cloud CI green on main, main a safe superset of live, and no DB migration needed (if one is needed, stop and report to Andy). A full backup of /opt/maintenanceos/app and /etc/maintenanceos.env, a SHA version marker, a one-command rollback, a /health check and a few minutes of log watching are all required, with immediate rollback on any problem.
+- Status at time of writing: **not deployed**. Blockers:
+  1. Both self-hosted Cloud CI runners (chapelgate-pool-mos, chapelgate-pool2-mos) are offline. Run 38071853570 for b3c165e has been queued since 18:28 BST.
+  2. Drift is not fully reconciled. The post-call email design differs (main has the rebuilt verified-facts report, live has post_call_extractor plus the cg58 call_notifications), and a dozen other files have drifted.
+  3. Main's models add three tables (awaab_cases, data_lifecycle_holds, data_lifecycle_requests). init_db() on start would create them, which is an additive migration that Andy needs to decide on. See docs/migrations/2026-10-10-live-schema-plan.md.
+  4. Main's render_prepare.py configures the Twilio voice webhook on start; live's does not.
