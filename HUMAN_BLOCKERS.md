@@ -104,3 +104,16 @@ This blocker does not require changing or rerouting the golden phone line.
 Status: STILL OPEN
 
 The previously recorded existing-host authority blocker for droplet `601962983` remains authoritative. Restore the approved `cg-automation-live-lease` / USH MaintenanceOS deployment path rather than creating ad-hoc credentials or rebuilding the host.
+
+## 2026-10-10 - Laptop SSH route to the live voice host exists; decision needed (issue #147)
+
+- **Finding:** from laptop `CG`, the SSH alias `mos-gemini` now authenticates to droplet `601962983` (`165.227.227.9`, hostname `maintenanceos-production-voice-rollback`) as `root` in BatchMode. This contradicts the 2026-09-30 entries above, which recorded laptop SSH as failing.
+- **Use so far:** read-only only. One snapshot of `/opt/maintenanceos/app` was taken (database, `__pycache__` and `.cursor` excluded) and the temporary tarball was removed from `/tmp`. Nothing on the host was changed, restarted or deployed.
+- **Not the recorded approved path:** the entries above name the approved path as the `cg-automation-live-lease` / USH MaintenanceOS identity. A root key on the owner's laptop is not that path.
+- **Human decision required (Andy):** decide whether laptop `CG` â†’ `mos-gemini` (root) is an approved deployment route for this host. If yes, record it here with its scope (deploy, rollback, read-only telemetry) and keep the key on CG only. If no, keep it read-only or remove it, and continue restoring the USH path.
+- **Live host drift (blocks a safe deploy of `main`):** `/opt/maintenanceos/DEPLOYED_COMMIT` = `ROLLBACK_PRE_PR69_AFTER_LIVE_REJECTION`, and the app folder is not a git checkout. Compared with `main` @ `d6103f8`:
+  - 16 Python files differ.
+  - Live-only code exists in `voice_bridge.py` (+570/-210 lines: provider reconnect, soft recover, latency recording), `api.py` (pending voice-lease cleanup using `VOICE_PENDING_LEASE_TIMEOUT_SECONDS`, which is set in the live env), `call_capacity.py` (lease helpers) and `post_call_extractor.py` (live-only file).
+  - `main`-only code includes `awaab_policy`, `awaab_runtime`, `lifecycle_runtime`, `identity_contract`, `data_lifecycle`, `commercial_release_controls` and `safety_messages`. `models.py` has 50 more lines on `main`, which is a schema difference against the live SQLite database.
+  - Deploying `main` as-is would drop the live-only fixes and run new models against the live database. The live-only code in those other files must be reconciled into `main` first, one reviewed slice per file group.
+- `gemini_voice.py` reconciliation (stall watchdog from `51da30f`, 600 ms silence default, live call-handling rules) is in the PR for issue #147. The live host stays unchanged until Andy approves the route and the drift is reconciled.
