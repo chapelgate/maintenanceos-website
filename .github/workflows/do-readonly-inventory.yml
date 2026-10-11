@@ -1,0 +1,44 @@
+name: DO read-only inventory
+
+# Read-only DigitalOcean inventory for the Chapelgate estate execution manager (Eggbot).
+# Manual trigger only. GET requests only: no create, update, power or delete calls.
+# It reuses the existing repository secret DIGITALOCEAN_ACCESS_TOKEN; no new credential.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: do-readonly-inventory
+  cancel-in-progress: false
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read-only droplet, firewall and VPC inventory
+        env:
+          DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DO_TOKEN:-}" ]; then echo "RESULT=no_token_secret"; exit 1; fi
+          get() {
+            curl -sS --fail-with-body -H "Authorization: Bearer ${DO_TOKEN}" \
+              "https://api.digitalocean.com/v2$1"
+          }
+          echo "## account"
+          get /account | jq -r '.account | "status=\(.status) droplet_limit=\(.droplet_limit)"'
+          echo "## droplets (id | name | status | region | size | public_ipv4 | private_ipv4 | tags)"
+          get "/droplets?per_page=200" | jq -r '.droplets[] | [ .id, .name, .status, .region.slug, .size_slug,
+            ([.networks.v4[] | select(.type=="public") | .ip_address] | join(",")),
+            ([.networks.v4[] | select(.type=="private") | .ip_address] | join(",")),
+            (.tags | join(",")) ] | join(" | ")'
+          echo "## firewalls (name | status | inbound rules | droplet_ids | tags)"
+          get "/firewalls?per_page=200" | jq -r '.firewalls[] | [ .name, .status,
+            ([.inbound_rules[] | "\(.protocol)/\(.ports)<-\((.sources.addresses // []) + (.sources.tags // []) | join("+"))"] | join(" ; ")),
+            (.droplet_ids | map(tostring) | join(",")), (.tags | join(",")) ] | join(" | ")'
+          echo "## vpcs (name | region | ip_range)"
+          get "/vpcs?per_page=200" | jq -r '.vpcs[] | [ .name, .region, .ip_range ] | join(" | ")'
+          echo "RESULT=ok"
