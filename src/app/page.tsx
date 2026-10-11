@@ -26,19 +26,19 @@ export const metadata: Metadata = funnelPageMetadata("home");
 const benefits = [
   {
     title: "Capture the request clearly",
-    body: "Collect caller details and maintenance context into structured operational records instead of relying on scattered notes.",
+    body: "We write down what callers say. Important details stay tidy in one place.",
   },
   {
     title: "Surface critical cases",
-    body: "Critical-safety latching and escalation queues keep RED cases on a controlled path to authorised human review.",
+    body: "If a repair looks dangerous, we flag it. A real person must check it.",
   },
   {
     title: "Keep decisions with your team",
-    body: "AI does not override safety, lifecycle, or approval rules. Authorised people retain clearance of critical paths.",
+    body: "The computer does not make big choices. Your staff always have the final say.",
   },
   {
     title: "Keep work traceable",
-    body: "Work orders, communications, action evidence, and call-session records create a reviewable operational history.",
+    body: "See every note, call, and action. Nothing gets lost.",
   },
 ] as const;
 
@@ -113,13 +113,13 @@ export default function HomePage() {
             id="home-rulebook-heading"
             className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
           >
-            Repairs reporting, with the safety rules written down.
+            Safety rules always come first.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
-            Fixed safety rules sit above the AI. If a report is flagged as dangerous, it stays with a person until someone authorised clears it. The assistant is built not to invent a booking, a dispatch or a promise that someone is on the way.
+            Fixed safety rules guide the system. If a repair is dangerous, it stops. A real person must look at it and clear it.
           </p>
           <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            See what happens to a report flagged as dangerous, why only an authorised person can clear it, and what our AI is built never to promise a tenant. MaintenanceOS keeps reports flagged as dangerous with a person and leaves an audit trail on the job.
+            The assistant will never promise an arrival time or invent a booking. It keeps you safe and leaves a clear record on the job.
           </p>
           <p className="mt-5">
             <a
@@ -145,11 +145,10 @@ export default function HomePage() {
               id="home-benefits-heading"
               className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
             >
-              A clearer route from request to controlled follow-up.
+              Clear steps for every repair.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-              The customer outcome comes first. The technical controls sit
-              underneath it as proof, not as the sales pitch.
+              Simple steps keep your jobs safe and organised.
             </p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -193,10 +192,10 @@ export default function HomePage() {
             <IntakeOrbAccent />
             <div>
               <h2 className="text-xl font-semibold text-ink sm:text-2xl">
-                See the rules working on a sample repair.
+                See how our rules work.
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">
-                Early access is opening carefully. No live phone demo from this site.
+                See the rules working on a sample repair. Early access is opening carefully. No live phone demo from this site.
               </p>
             </div>
           </div>
@@ -212,9 +211,9 @@ export default function HomePage() {
       {/* 5. #join capture — secondary path for launch updates */}
       <section id="join" className="border-t border-border bg-paper px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-xl">
-          <h2 className="text-2xl font-semibold text-ink">Not ready for a demo? Get launch updates</h2>
+          <h2 className="text-2xl font-semibold text-ink">Get our launch updates</h2>
           <p className="mt-2 text-muted">
-            We&apos;ll email you when early access opens. No fake urgency — we are still
+            Not ready for a demo? We will email you when early access opens. We are still
             pre-launch.
           </p>
           <div className="mt-6">

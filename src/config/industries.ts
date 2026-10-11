@@ -33,12 +33,12 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS for landlords",
     label: "Landlords",
     card: "Landlords — UK emergency triage vs jobs; no invented vans or client-money.",
-    title: "Repair reporting for landlords who can't be on the phone all night",
+    title: "Repair reporting for busy landlords",
     sub: "If you let homes, you already know how repairs reach you. A text on a Sunday evening. A voicemail that just says \"it's leaking again\". A photo with no address. The work itself is rarely the hard part. The hard part is knowing, quickly and reliably, which report needs a person tonight and which can wait for Monday, and being able to show later what you were told and what you did.\n\nMaintenanceOS is repair intake built for that job. The AI takes the details. Fixed rules decide what happens next. A person still clears anything flagged as dangerous.",
     metaDescription: "Take tenant repair reports properly, keep anything dangerous in front of a person, and keep a record of what happened. Repair intake for UK landlords.",
     sections: [
       {
-        title: "What usually goes wrong with repair reports?",
+        title: "Common repair report problems",
         content: [
           "Most problems with repairs start before anyone picks up a tool.",
           "- **Details go missing.** Which property, which room, since when, getting worse or not. Without them, the first visit is a fact-finding trip.",
@@ -49,7 +49,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How does MaintenanceOS handle a repair report?",
+        title: "How we handle a report",
         content: [
           "**It takes the details properly.** The assistant collects the caller's details and turns what they say into a structured repair request, rather than a loose message you have to decode later.",
           "**Rules, not the AI, decide what happens next.** Safety, the progress of the job and approvals are decided by fixed rules on our server. The AI can't override them, however the conversation goes.",
@@ -59,7 +59,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "What will it never tell your tenant?",
+        title: "What we never tell tenants",
         content: [
           "This is the part tenants notice. The assistant must not invent:",
           "- a booking or appointment time",
@@ -72,21 +72,21 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "Does it matter if I only have a few properties?",
+        title: "Managing smaller property portfolios",
         content: [
           "The basics matter more, not less. A larger landlord usually has a repairs desk. A smaller one has a mobile phone and a day job. Your legal duties as a landlord are the same either way, and they stay with you whatever tools you use. What a tool can do is make sure reports are captured the same way every time, dangerous ones are put in front of you or the person you choose, and there's a record.",
           "In MaintenanceOS your properties, tenants, contractors, work orders, jobs and communications sit in your own organisation's space, kept apart from other organisations' records by isolation controls in the code that are covered by tests."
         ]
       },
       {
-        title: "What about Awaab's Law and the Renters' Rights Act?",
+        title: "New housing laws and rules",
         content: [
           "The government is consulting on how Awaab's Law should apply to private rented homes in England. Nothing is decided yet, and the consultation closes on 18 December 2026. We've summarised what's proposed in our guides.",
           "We won't tell you a tool makes you compliant, because none can. What helps, whatever the final rules say, is knowing when a report arrived, what it said and what happened next. That's what MaintenanceOS is designed to record."
         ]
       },
       {
-        title: "What have we tested so far?",
+        title: "What we have tested",
         content: [
           "At our 30 September 2026 product checkpoint, all 196 targeted claims-and-safety tests passed, covering explicit transfer, the \"never invent\" rules, organisation isolation, job lifecycle, decision rules and invoice rules among others. We won't publish uptime figures or reviews we haven't earned. These are targeted, automated tests run against the product code in a controlled test set-up, not on a live service. They show specific rules behaved as designed in testing, not that every rule will hold in every real situation, and voice intake is still under testing."
         ]
@@ -111,12 +111,12 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS for letting agents",
     label: "Letting agents",
     card: "Letting agents — portfolio intake with 999-vs-jobs triage; rules stay in charge.",
-    title: "Repair reports your landlords can trust, and your team doesn't have to chase",
+    title: "Trusted repair reports for agencies",
     sub: "A managed portfolio means you sit between two people who both expect answers. The tenant wants to know when it'll be fixed. The landlord wants to know why it's costing what it costs. In between are contractors, keys, access, approvals and a phone that keeps ringing after the office has closed.\n\nMaintenanceOS is repair intake designed for that position. The AI takes the details. Fixed rules decide what happens next. A person still clears anything flagged as dangerous. And nothing is promised to a tenant that hasn't actually happened.",
     metaDescription: "Repair intake for letting agents: tenant reports captured properly, dangerous ones kept with a person, no invented promises, and a record you can show landlords.",
     sections: [
       {
-        title: "Where does repair handling go wrong for agents?",
+        title: "Common repairs problems for agents",
         content: [
           "Ask anyone who has run a repairs line: the trouble is rarely the repair itself.",
           "- **The report arrives thin.** No property reference, no description that a contractor can work from, no sense of whether it's getting worse.",
@@ -127,7 +127,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How does MaintenanceOS handle a tenant's report?",
+        title: "How we handle tenant reports",
         content: [
           "**Consistent capture.** The assistant collects the caller's details and turns what they report into a structured repair request, the same way every time.",
           "**Rules decide, not the AI.** Safety, the progress of a job and approvals are decided by fixed rules on our server. The AI can't override them.",
@@ -137,7 +137,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "Why does \"no invented promises\" matter so much to an agent?",
+        title: "Why honest promises matter",
         content: [
           "Because you carry the blame for both sides. The assistant must not invent a booking or appointment time, a contractor dispatch, a refund, compensation, a waived fee, account information or a safety reassurance. If nothing has been arranged, it won't say it has. Not a live always-on phone.",
           "That protects your relationship with the tenant, who isn't told something false, and with the landlord, who isn't committed to a cost or a visit they haven't agreed. MaintenanceOS has no authority to move money at all (no client-money authority): quotes and invoices are checked, but there's no payment, refund or compensation in the system.",
@@ -145,21 +145,21 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How is our agency's data kept separate?",
+        title: "Keeping your agency data separate",
         content: [
           "MaintenanceOS is built for many organisations on one system. Your agency's properties, residents, contractors, work orders, jobs, communications, exports, action evidence and call records sit in your organisation's own space. Isolation controls are in the code and covered by tests, and requests from the phone provider are signature-checked so that fake ones are designed to be rejected.",
           "What we don't claim yet: per-landlord rule sets, landlord logins or a customer portal. In a demo we'll show you what's in place now and what's still being built."
         ]
       },
       {
-        title: "What's changing for landlords, and why it reaches you",
+        title: "Rules changing for landlords",
         content: [
           "The government is consulting on how Awaab's Law should apply to private rented homes in England. The consultation notes that where agents manage repairs, the landlord \"would remain ultimately liable\" and \"may need to establish new contractual agreements with their agent\". Nothing is decided, and the consultation closes on 18 December 2026.",
           "It's a good moment to review how repair reports reach you out of hours, how quickly they're logged, and who decides what's urgent. No tool makes an agency or a landlord compliant, and we won't suggest otherwise."
         ]
       },
       {
-        title: "What have we tested so far?",
+        title: "What we have tested",
         content: [
           "At our 30 September 2026 product checkpoint, all 196 targeted claims-and-safety tests passed, including explicit transfer, the \"never invent\" rules, organisation isolation, job lifecycle, decision rules and invoice rules. Local acceptance, including a full test pass and backup and restore, was evidenced on 10 September 2026. These are targeted, automated tests run against the product code in a controlled test set-up, not on a live service. They show specific rules behaved as designed in testing, not that every rule will hold in every real situation, and voice intake is still under testing."
         ]
@@ -184,12 +184,12 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS for property managers",
     label: "Property managers",
     card: "Property managers — multi-tenant ops with 999-vs-jobs triage; no autonomous dispatch.",
-    title: "One way of taking repair reports, across every building you manage",
+    title: "Consistent repair intake across buildings",
     sub: "Managing property means managing reports from people you rarely meet: residents, leaseholders, tenants of leaseholders, concierge staff, neighbours, the occasional passer-by who spotted water coming through a ceiling. Each building has its own contractors, its own access arrangements and its own history. The risk isn't that you don't care. It's that the way a report is taken depends on who happened to take it.\n\nMaintenanceOS gives you one consistent front door for repair reports. The AI takes the details. Fixed rules decide what happens next. A person still clears anything flagged as dangerous.",
     metaDescription: "Repair reports across many buildings, captured the same way, with dangerous ones kept with a person and a record of what happened. For UK property managers.",
     sections: [
       {
-        title: "What makes repair intake hard across a portfolio?",
+        title: "Handling repairs across many buildings",
         content: [
           "- **Many buildings, many callers.** The same leak can be reported by three flats in three different ways. Without structure, that becomes three jobs or none.",
           "- **Communal areas blur responsibility.** A report about a stairwell light, a door entry system or a roof leak needs to land with the right person for that building.",
@@ -198,7 +198,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How does MaintenanceOS handle a report?",
+        title: "How MaintenanceOS handles a report",
         content: [
           "**Structured from the first word.** The assistant collects the caller's details and turns what they report into a structured repair request, so the job starts with something a contractor can act on.",
           "**Rules own the decisions that matter.** Safety, the progress of a job and approvals are decided by fixed rules on our server. The AI can't override them, whichever building the call is about.",
@@ -208,7 +208,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "What will it never promise a resident?",
+        title: "What we never promise residents",
         content: [
           "The assistant must not invent a booking or appointment time, a contractor dispatch, a refund, compensation, a waived fee, account information or a safety reassurance. If nothing has been arranged, it won't say it has. Not a live always-on phone.",
           "That matters more in block management than almost anywhere. A promise made to one resident is repeated to the whole building by evening. MaintenanceOS also has no authority to spend: quotes and invoices go through checks, but there's no payment, refund or compensation execution in the system. (No client-money authority).",
@@ -216,21 +216,21 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How are records organised?",
+        title: "How records are organised",
         content: [
           "MaintenanceOS is built for many organisations on one system. Your organisation's properties, residents, contractors, work orders, jobs, communications, exports, action evidence and call records sit in your own space, kept apart from other organisations' by isolation controls in the code that are covered by tests. Requests from the phone provider are signature-checked.",
           "There's also an internal supervisor dashboard in the product, which we use to show sample work in a demo. We don't claim a customer portal or client logins today, and we won't until they exist."
         ]
       },
       {
-        title: "What about building safety and housing rules?",
+        title: "Building safety and housing rules",
         content: [
           "Your duties depend on the buildings you manage, who owns them and who lives in them, and they stay with you and your clients whatever software you use. We don't offer compliance promises.",
           "What we do publish is guidance with official sources. Each one is dated and says plainly that it isn't legal advice."
         ]
       },
       {
-        title: "What have we tested so far?",
+        title: "What we have tested",
         content: [
           "At our 30 September 2026 product checkpoint, all 196 targeted claims-and-safety tests passed, covering explicit transfer, the \"never invent\" rules, organisation isolation, job lifecycle, decision rules, invoice rules and state-machine controls. Our continuous-integration and security checks have historically passed on the application code too. These are targeted, automated tests run against the product code in a controlled test set-up, not on a live service. They show specific rules behaved as designed in testing, not that every rule will hold in every real situation, and voice intake is still under testing."
         ]
@@ -255,14 +255,14 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS",
     label: "Maintenance companies",
     card: "MaintenanceOS — UK emergency triage vs jobs; contractor-dispatch language, no invented vans.",
-    title: "Job intake for maintenance firms that won't promise an engineer you haven't sent",
+    title: "Job intake for maintenance firms",
     sub: "When you're the firm that does the work, the phone is both your lifeline and your biggest distraction. Calls come from landlords, letting agents, housing officers, residents and sometimes the resident's neighbour. Engineers are on jobs and can't answer. The office is stretched. And every call that's taken badly turns into a wasted visit, a missing part or an argument about what was promised.\n\nMaintenanceOS is job intake built for maintenance work, not a general-purpose call answerer. The AI takes the details. Fixed rules decide what happens next. A person still clears anything flagged as dangerous.",
     willNotClaim:
       "No contractor marketplace pitch. No “we dispatch your team automatically.” No always-on phone claim. No invented SLA percentages. No general availability.",
     metaDescription: "For maintenance firms taking repair calls from landlords, agents and residents: structured job intake, dangerous reports kept with a person, no invented dispatch.",
     sections: [
       {
-        title: "What does a badly taken job cost you?",
+        title: "Cost of badly taken jobs",
         content: [
           "- **A wasted first visit.** The engineer arrives with the wrong parts, because \"it's broken\" was all anyone wrote down.",
           "- **A promise you didn't make.** Someone told the caller an engineer was on the way. Now you're either sending one at a loss or explaining why you're not.",
@@ -271,7 +271,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How does MaintenanceOS take a job?",
+        title: "How MaintenanceOS takes a job",
         content: [
           "**It gathers what the engineer needs.** The assistant collects the caller's details and turns what they report into a structured repair request, so the job starts with a description someone can work from.",
           "**Rules make the decisions, not the AI.** Safety, the progress of the job and approvals are decided by fixed rules on our server. The AI can't override them.",
@@ -281,7 +281,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "Why \"no invented dispatch\" is the rule we care about most",
+        title: "Why we never invent visits",
         content: [
           "For a contractor, a false promise isn't just awkward. It's a cost. The assistant must not invent a booking or appointment time, a contractor or engineer dispatch, a refund, compensation, a waived fee, account information or a safety reassurance. If nothing has been arranged, it won't say it has. Not a live always-on phone.",
           "MaintenanceOS has no authority to move money either (no client-money authority). Quotes and invoices go through checks, but there's no payment, refund, compensation or fee-waiver execution in the system. Pricing decisions stay with you.",
@@ -289,21 +289,21 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "What do your clients get out of it?",
+        title: "What your clients get",
         content: [
           "Landlords, agents and housing providers who send you work increasingly want to know how reports are handled, especially out of hours. A firm that can explain its intake rules in plain English, and show a record of each job, is easier to trust with a contract. Our published safety rules are written to be shared with clients.",
           "We don't claim that MaintenanceOS makes you or your clients compliant with anything. Their legal duties stay with them, and yours stay with you."
         ]
       },
       {
-        title: "How are your records kept?",
+        title: "How records are kept",
         content: [
           "Your properties, residents, contractors, work orders, jobs, communications, exports, action evidence and call records sit in your organisation's own space. Isolation controls in the code keep each organisation's records apart and are covered by tests. Requests from the phone provider are signature-checked.",
           "We don't claim job scheduling, engineer apps, accounting links or a customer portal. In a demo we'll show what's in place now and what's still being built."
         ]
       },
       {
-        title: "What have we tested so far?",
+        title: "What we have tested",
         content: [
           "At our 30 September 2026 product checkpoint, all 196 targeted claims-and-safety tests passed, including the \"never invent\" rules, explicit transfer, job lifecycle, decision rules and invoice rules. Local acceptance, including backup and restore, was evidenced on 10 September 2026. These are targeted, automated tests run against the product code in a controlled test set-up, not on a live service. They show specific rules behaved as designed in testing, not that every rule will hold in every real situation, and voice intake is still under testing."
         ]
@@ -328,12 +328,12 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS for housing associations",
     label: "Housing associations",
     card: "Housing associations — 999-vs-jobs latch and escalation; no client-money or invented dispatch.",
-    title: "Repairs reporting that keeps dangerous cases in front of a person",
+    title: "Repair reports that protect residents",
     sub: "For a housing association, the repairs line is where trust with residents is won or lost. It's also where regulatory exposure starts. Since October 2025, Awaab's Law has set fixed timescales for social landlords in England to deal with emergency hazards and significant damp and mould. More hazards are due to come into scope. And when something goes wrong, the questions are always the same: when were you told, what were you told, and what did you do?\n\nMaintenanceOS is repair intake designed around those questions. The AI takes the details. Fixed rules decide what happens next. A person still clears anything flagged as dangerous. And consequential steps leave evidence.",
     metaDescription: "Repair intake for UK housing associations: reports captured consistently, safety-critical cases held for an authorised person, and an audit trail on the case.",
     sections: [
       {
-        title: "Where does repair intake put residents at risk?",
+        title: "Repair risks for residents",
         content: [
           "- **The first report isn't recognised for what it is.** A resident describes mould in a child's bedroom, or a smell near the boiler, in everyday words. If the person taking the call doesn't hear the risk, the clock starts without anyone noticing.",
           "- **Out-of-hours cover is thin.** Evenings and weekends rely on a call centre or an on-call rota with less context and less time.",
@@ -342,7 +342,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How does MaintenanceOS handle a resident's report?",
+        title: "Handling a resident report",
         content: [
           "**It captures the report properly.** The assistant collects the caller's details and turns what they say into a structured repair request, so the case starts with the facts.",
           "**Fixed rules decide, not the AI.** Safety, the progress of the case and approvals are decided by deterministic rules on our server. The AI can't override them, however the conversation goes.",
@@ -352,7 +352,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "What will it never say to a resident?",
+        title: "What we never tell residents",
         content: [
           "The assistant must not invent a booking or appointment time, a contractor dispatch, a refund, compensation, a waived fee, account information or a safety reassurance. If nothing has been arranged, it won't say it has. Not a live always-on phone.",
           "It has no authority to move money (no client-money authority). Quotes and invoices go through checks, but there's no payment, refund, compensation or fee-waiver execution in the system. A resident can ask to be transferred to a person (live transfer handling is still under testing), and a technical failure is built to fail safe rather than pass the call on unplanned."
@@ -366,14 +366,14 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How is our data kept separate?",
+        title: "How data is kept separate",
         content: [
           "MaintenanceOS is built for many organisations on one system. Your properties, residents, contractors, work orders, jobs, communications, exports, action evidence and call records sit in your organisation's own space. Isolation controls are in the code and covered by tests. Requests from the phone provider are signature-checked.",
           "We know housing providers ask about certifications, penetration testing and single sign-on. We don't hold certifications such as ISO 27001 or SOC 2, and items such as single sign-on, multi-factor authentication, penetration testing, monitoring and legal, privacy and telecoms review are still planned before production. We'd rather tell you that now than in procurement."
         ]
       },
       {
-        title: "What have we tested so far?",
+        title: "What we have tested",
         content: [
           "At our 30 September 2026 product checkpoint, all 196 targeted claims-and-safety tests passed, covering explicit transfer, the \"never invent\" rules, organisation isolation, case lifecycle, decision rules and invoice rules. Local acceptance, including a full test pass and backup and restore, was evidenced on 10 September 2026. These are targeted, automated tests run against the product code in a controlled test set-up, not on a live service. They show specific rules behaved as designed in testing, not that every rule will hold in every real situation, and voice intake is still under testing."
         ]
@@ -398,7 +398,7 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS for facilities teams",
     label: "Facilities management",
     card: "Facilities management — 999-vs-jobs site triage; no autonomous dispatch or client-money.",
-    title: "Facilities management — site maintenance triage with clearance and audit in the loop.",
+    title: "Site maintenance triage for teams",
     sub: "For UK facilities management teams coordinating sites, contractors, and urgent reports — AI for capture, rules and people for consequential steps. Pre-launch product line under Chapelgate. Not a live always-on phone.",
     job: [
       "Mixed urgent and routine reports across sites, including out-of-hours.",
@@ -423,12 +423,12 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS for councils",
     label: "Councils",
     card: "Councils — controlled 999-vs-jobs intake; no invented dispatch or client-money.",
-    title: "Repairs reporting for councils that need to show their working",
+    title: "Repairs reporting for UK councils",
     sub: "Council repairs teams answer to more people than most: tenants, councillors, the Housing Ombudsman, the Regulator of Social Housing, auditors and the local press. Every one of them eventually asks the same thing. What was reported, when, and what did the council do about it?\n\nMaintenanceOS is repair intake designed so that question has an answer. The AI takes the details. Fixed rules decide what happens next. A person still clears anything flagged as dangerous. And consequential steps leave evidence.",
     metaDescription: "Repair intake for council housing and public-sector maintenance teams: consistent capture, safety-critical cases held for an authorised officer, and an audit trail.",
     sections: [
       {
-        title: "Where do council repairs lines come under pressure?",
+        title: "Pressure on council repair lines",
         content: [
           "- **Volume and variety.** The same contact centre may take repairs, anti-social behaviour, estate issues and general enquiries, often from people who are upset or worried.",
           "- **Statutory clocks.** Council landlords in England have prescribed periods for some qualifying repairs under the secure tenants' Right to Repair scheme, and Awaab's Law sets fixed timescales for emergency hazards and significant damp and mould in social housing. Both depend on knowing when the council was told.",
@@ -437,7 +437,7 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "How does MaintenanceOS handle a report?",
+        title: "How MaintenanceOS handles a report",
         content: [
           "**Structured capture.** The assistant collects the caller's details and turns what they report into a structured repair request.",
           "**Deterministic rules, not AI judgement.** Safety, the progress of a job and approvals are decided by fixed rules on our server. The AI can't override them. For a public body, that means the logic can be written down, reviewed and explained.",
@@ -447,21 +447,21 @@ export const industryRoles: IndustryRole[] = [
         ]
       },
       {
-        title: "What will the AI never say to a tenant?",
+        title: "What we never tell tenants",
         content: [
           "The assistant must not invent a booking or appointment time, a contractor dispatch, a refund, compensation, a waived fee, account information or a safety reassurance. If nothing has been arranged, it won't say it has. Not a live always-on phone.",
           "There's no payment, refund, compensation or fee-waiver authority in the system; quotes and invoices go through checks only. (No client-money authority). A caller can ask to be transferred to a person (live transfer handling is still under testing), and a technical failure is built to fail safe."
         ]
       },
       {
-        title: "Will it help us meet the Right to Repair or Awaab's Law timescales?",
+        title: "Meeting statutory repair timescales",
         content: [
           "No software meets a statutory duty for you, and we won't claim that MaintenanceOS makes a council compliant. Your duties and your decisions stay with the council.",
           "What the timescales depend on is a reliable record of when a report arrived, what it said and what happened next. MaintenanceOS is designed to capture that."
         ]
       },
       {
-        title: "What should procurement know now?",
+        title: "What procurement should know now",
         content: [
           "We'd rather be plain about this than discover it at tender stage.",
           "- **Data separation.** MaintenanceOS is built for many organisations on one system. Your properties, residents, contractors, work orders, jobs, communications, exports, action evidence and call records sit in your organisation's own space, with isolation controls in the code covered by tests.",
@@ -493,7 +493,7 @@ export const industryRoles: IndustryRole[] = [
     productName: "MaintenanceOS for holiday lets",
     label: "Holiday lets",
     card: "Holiday lets — out-of-hours guest reports structured; 999 vs jobs, no invented engineer.",
-    title: "Holiday lets — guest maintenance calls, structured — without autonomous dispatch.",
+    title: "Maintenance intake for holiday lets",
     sub: "For UK holiday-let operators who get out-of-hours guest reports and need clear capture, 999 separated from jobs, and human handover — not a model inventing engineer visits or a live always-on guest line. Pre-launch product line under Chapelgate.",
     job: [
       "Guests calling about boilers, access, leaks — often outside office hours.",

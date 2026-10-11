@@ -55,6 +55,33 @@ function presentServices(value: unknown): string[] | undefined {
   return parsed.length ? parsed : undefined;
 }
 
+function presentStringArray(value: unknown): string[] | undefined {
+  if (typeof value === "string") {
+    const items = value
+      .split(/\r?\n/)
+      .map((item) => asDraftText(item))
+      .filter(Boolean);
+    const unique = [...new Set(items)].slice(0, 50);
+    return unique.length ? unique : undefined;
+  }
+  if (!Array.isArray(value)) return undefined;
+  const items = value.map((item) => asDraftText(item)).filter(Boolean);
+  const unique = [...new Set(items)].slice(0, 50);
+  return unique.length ? unique : undefined;
+}
+
+function presentContact(value: unknown): KnowledgePack["contact"] | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const src = value as Record<string, unknown>;
+  const phone = presentString(src.phone);
+  const email = presentString(src.email);
+  if (!phone && !email) return undefined;
+  return {
+    ...(phone ? { phone } : {}),
+    ...(email ? { email } : {}),
+  };
+}
+
 function missingFrom(pack: {
   businessName?: string;
   greeting?: string;
@@ -77,6 +104,8 @@ export function normalizeKnowledgePack(input: unknown): KnowledgePack | null {
   const src = input as Record<string, unknown>;
   const businessName = presentString(src.businessName);
   const greeting = presentString(src.greeting);
+  const locations = presentStringArray(src.locations);
+  const contact = presentContact(src.contact);
   const hours = presentString(src.hours);
   const services = presentServices(src.services);
   const faqs = presentFaqs(src.faqs);
@@ -91,6 +120,8 @@ export function normalizeKnowledgePack(input: unknown): KnowledgePack | null {
   };
   if (businessName) pack.businessName = businessName;
   if (greeting) pack.greeting = greeting;
+  if (locations) pack.locations = locations;
+  if (contact) pack.contact = contact;
   if (hours) pack.hours = hours;
   if (services) pack.services = services;
   if (faqs) pack.faqs = faqs;
@@ -178,11 +209,15 @@ export function buildReceptionistDraft(
   };
   const businessName = presentString(src.businessName);
   const greeting = presentString(src.greeting);
+  const locations = presentStringArray(src.locations);
+  const contact = presentContact(src.contact);
   const hours = presentString(src.hours);
   const services = presentServices(src.services);
   const faqs = presentFaqs(src.faqs);
   if (businessName) pack.businessName = businessName;
   if (greeting) pack.greeting = greeting;
+  if (locations) pack.locations = locations;
+  if (contact) pack.contact = contact;
   if (hours) pack.hours = hours;
   if (services) pack.services = services;
   if (faqs) pack.faqs = faqs;

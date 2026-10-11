@@ -1,0 +1,14 @@
+# Tasks
+- [x] Job 3: Fix receptionist preview to answer from entered/scraped website details (`locations`, `contact`, `company`)
+- [x] Job 3: Add explicit missing notice: "This is a preview and that detail has not been added yet."
+- [x] Job 3: Unit tests for receptionist draft and preview
+- [x] Job 1: Remove site-wide `GasSafetyStrip` from `src/app/layout.tsx`
+- [x] Job 1: Add footer link `"Smell gas? What to do"` to `/how-we-keep-control/#gas` in `src/components/SiteFooter.tsx`
+- [x] Job 1: Update and pass `scripts/gas-safety.test.mjs`
+- [x] Job 2: Simplify homepage headings (max 6 words) and reading age 9-11 copy
+- [x] Job 2: Simplify `/how-we-keep-control` headings and FAQs
+- [x] Job 2: Simplify industries index and role pages headings and copy
+- [x] Job 2: Standardise primary CTA button to `"Request an early demo"`
+- [x] Verification: `npm test` passes (448 tests)
+- [x] Verification: `npm run lint` passes
+- [x] Verification: `npm run build` succeeds (static export)

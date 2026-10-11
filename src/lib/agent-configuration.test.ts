@@ -357,3 +357,48 @@ test("unstructured FAQ notes are never converted into an invented blueprint ques
   ]);
   assert.equal(result.blueprint.knowledge.faqs, undefined);
 });
+
+test("buildAgentConfiguration preserves locations, contact, and falls back to blueprint knowledge", () => {
+  const original = buildAgentBlueprintDraft({
+    type: "receptionist",
+    businessName: "North Heating",
+    businessUrl: "https://northheating.example/",
+    facts: {
+      website: "https://northheating.example/",
+      businessName: "North Heating",
+      services: ["Boiler servicing", "Radiator repair"],
+      hours: "Mon-Fri 08:30-17:30",
+      locations: ["Sheffield", "Rotherham"],
+      contact: {
+        phones: ["0114 200 3000"],
+        emails: ["contact@northheating.example"],
+      },
+    },
+    blueprintId: "abp_loc_contact_01",
+    createdAt: CREATED_AT,
+  });
+
+  // When draft fields for hours and services are blank, it falls back to blueprint knowledge
+  const result = buildAgentConfiguration({
+    blueprint: original,
+    reviewedDraft: {
+      businessName: "",
+      greeting: "",
+      hours: "",
+      services: "",
+      faqs: "",
+    },
+  });
+
+  assert.equal(result.knowledgePack.hours, "Mon-Fri 08:30-17:30");
+  assert.deepEqual(result.knowledgePack.services, [
+    "Boiler servicing",
+    "Radiator repair",
+  ]);
+  assert.deepEqual(result.knowledgePack.locations, ["Sheffield", "Rotherham"]);
+  assert.deepEqual(result.knowledgePack.contact, {
+    phone: "0114 200 3000",
+    email: "contact@northheating.example",
+  });
+});
+

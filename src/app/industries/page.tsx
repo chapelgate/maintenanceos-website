@@ -15,8 +15,8 @@ export default function IndustriesPage() {
     <>
       <PageHero
         eyebrow="Pre-launch: MaintenanceOS is still under testing, and we're taking early-access requests."
-        title="Repair intake for the people who answer for repairs"
-        lede="Whoever you are, the rules are the same: the AI takes the details, fixed rules decide what happens next, and a person still clears anything flagged as dangerous. What changes is who's calling and what you need to show afterwards."
+        title="Repair intake for property teams"
+        lede="Repair intake for the people who answer for repairs. Every team gets the same safe setup. The AI writes down the repair details. Clear rules choose the next step. A real person always signs off dangerous jobs."
         orbAccent
       />
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-12">
@@ -35,10 +35,10 @@ export default function IndustriesPage() {
         </ul>
         <section className="max-w-3xl space-y-6 border-t border-border pt-10">
           <h2 className="text-xl font-semibold text-ink">
-            UK maintenance — not a generic AI receptionist
+            Built for UK maintenance
           </h2>
           <p className="text-muted">
-            What a public always-on phone is not:
+            UK maintenance — not a generic AI receptionist. What a public always-on phone is not:
           </p>
           <ul className="list-disc pl-5 space-y-2 text-muted text-sm">
             <li><strong>emergency triage vs jobs:</strong> UK/999 guidance is locked in product source.</li>

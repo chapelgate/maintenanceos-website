@@ -16,7 +16,13 @@ export type DraftFieldKey = (typeof DRAFT_FIELD_KEYS)[number];
 
 export type ReceptionistDraftInput = Partial<
   Record<DraftFieldKey, string | undefined | null>
->;
+> & {
+  locations?: string[] | string | null;
+  contact?: {
+    phone?: string | null;
+    email?: string | null;
+  } | null;
+};
 
 export type KnowledgeFaq = {
   /** Omitted when FAQ notes are unstructured — never invent a question. */
@@ -41,6 +47,11 @@ export type KnowledgePack = {
   productionTelephony: false;
   businessName?: string;
   greeting?: string;
+  locations?: string[];
+  contact?: {
+    phone?: string;
+    email?: string;
+  };
   hours?: string;
   services?: string[];
   faqs?: KnowledgeFaq[];

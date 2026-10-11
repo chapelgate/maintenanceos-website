@@ -344,3 +344,44 @@ test("runBrowserScriptedDemo with pack name+hours mentions both", () => {
   assert.match(hoursTurn.text, /Acme Plumbing/);
   assert.match(hoursTurn.text, /Mon–Fri 08:00–17:00/);
 });
+
+test("runBrowserInteractiveReply answers locations and contact and announces preview when missing", () => {
+  const pack = {
+    untrusted: true,
+    kind: "sandbox_knowledge_pack" as const,
+    liveCall: false as const,
+    liveNumber: null,
+    alwaysOn: false as const,
+    productionTelephony: false as const,
+    businessName: "Acme Heating",
+    locations: ["Leeds", "Bradford"],
+    contact: { phone: "0113 987 6543", email: "support@acme.example" },
+    missing: ["greeting", "hours", "services", "faqs"] as const,
+  };
+
+  const locReply = runBrowserInteractiveReply(
+    "Where are you based?",
+    pack,
+  );
+  assert.equal(locReply.source, "knowledge.locations");
+  assert.match(locReply.text, /Leeds/);
+  assert.match(locReply.text, /Bradford/);
+
+  const contactReply = runBrowserInteractiveReply(
+    "What is your phone number?",
+    pack,
+  );
+  assert.equal(contactReply.source, "knowledge.contact");
+  assert.match(contactReply.text, /0113 987 6543/);
+
+  const missingReply = runBrowserInteractiveReply(
+    "What are your opening hours?",
+    pack,
+  );
+  assert.equal(missingReply.source, "missing");
+  assert.match(
+    missingReply.text,
+    /This is a preview and that detail has not been added yet\./,
+  );
+});
+

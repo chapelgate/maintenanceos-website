@@ -373,8 +373,31 @@ export function CreateReceptionistLaterSteps({
       const outcome = await requestOnboardingScan(endpoint, businessUrl);
       if (cancelled) return;
       if (outcome.status === "ok") {
-        const filled = Object.keys(outcome.draft).length > 0;
-        setDraft({ ...EMPTY_RECEPTIONIST_DRAFT, ...outcome.draft });
+        const fallbackHours = outcome.facts.hours ?? "";
+        const fallbackServices = outcome.facts.services?.join("\n") ?? "";
+        const fallbackFaqs = outcome.facts.faqs
+          ? outcome.facts.faqs
+              .map((f) => `Q: ${f.question}\nA: ${f.answer}`)
+              .join("\n\n")
+          : "";
+        const nextDraft: ReceptionistDraft = {
+          businessName:
+            outcome.draft.businessName || outcome.facts.businessName || "",
+          greeting: outcome.draft.greeting || "",
+          hours: outcome.draft.hours || fallbackHours,
+          services: outcome.draft.services || fallbackServices,
+          faqs: outcome.draft.faqs || fallbackFaqs,
+        };
+        const filled = Boolean(
+          nextDraft.businessName ||
+            nextDraft.hours ||
+            nextDraft.services ||
+            nextDraft.faqs ||
+            outcome.facts.locations?.length ||
+            outcome.facts.contact?.phones?.length ||
+            outcome.facts.contact?.emails?.length,
+        );
+        setDraft(nextDraft);
         setFieldMeta(outcome.fieldMeta);
         setFactMeta(outcome.factMeta);
         setFacts(outcome.facts);
@@ -618,11 +641,21 @@ export function CreateReceptionistLaterSteps({
       return;
     }
     try {
+      const mergedFacts: ScanBusinessFacts = {
+        ...facts,
+        hours: facts.hours || draft.hours || undefined,
+        services:
+          facts.services?.length
+            ? facts.services
+            : draft.services
+              ? draft.services.split("\n").map((s) => s.trim()).filter(Boolean)
+              : undefined,
+      };
       const blueprint = createAgentBlueprintDraft({
         type: selectedAgentType,
         businessName: draft.businessName || hostnameBusinessHint(businessUrl),
         businessUrl,
-        facts,
+        facts: mergedFacts,
       });
       setAgentBlueprint(blueprint);
       setCustomerConfiguration(customerConfigurationForBlueprint(blueprint));

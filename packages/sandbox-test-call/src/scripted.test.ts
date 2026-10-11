@@ -230,3 +230,44 @@ test("scriptedReply ranks emergency above booking", () => {
   assert.match(reply.text, /\b999\b/);
   assert.match(reply.text, /cannot dispatch/i);
 });
+
+test("scriptedReply answers locations from pack", () => {
+  const reply = scriptedReply("Where are you located?", {
+    businessName: "Acme Plumbing",
+    locations: ["Manchester", "Salford"],
+  });
+  assert.equal(reply.source, "knowledge.locations");
+  assert.match(reply.text, /Manchester/);
+  assert.match(reply.text, /Salford/);
+});
+
+test("scriptedReply answers contact details from pack", () => {
+  const reply = scriptedReply("What is your phone number?", {
+    businessName: "Acme Plumbing",
+    contact: { phone: "0161 123 4567", email: "help@acme.example" },
+  });
+  assert.equal(reply.source, "knowledge.contact");
+  assert.match(reply.text, /0161 123 4567/);
+  assert.match(reply.text, /help@acme\.example/);
+});
+
+test("scriptedReply answers company intro from pack", () => {
+  const reply = scriptedReply("Who are you?", {
+    businessName: "Acme Plumbing",
+    greeting: "Welcome to Acme.",
+  });
+  assert.equal(reply.source, "knowledge.businessName");
+  assert.match(reply.text, /Acme Plumbing/);
+});
+
+test("scriptedReply missing facts includes preview notice", () => {
+  const reply = scriptedReply("What are your opening hours?", {
+    businessName: "Acme Plumbing",
+  });
+  assert.equal(reply.source, "missing");
+  assert.match(
+    reply.text,
+    /This is a preview and that detail has not been added yet\./,
+  );
+});
+

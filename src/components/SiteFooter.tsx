@@ -45,7 +45,15 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border px-4 py-4 md:px-6">
         <div className="mx-auto flex max-w-[70rem] flex-wrap items-center justify-between gap-3 text-sm text-muted">
-          <p>© {new Date().getFullYear()} MaintenanceOS by Chapelgate</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <p>© {new Date().getFullYear()} MaintenanceOS by Chapelgate</p>
+            <a
+              href="/how-we-keep-control/#gas"
+              className="text-xs text-muted underline hover:text-ink"
+            >
+              Smell gas? What to do
+            </a>
+          </div>
           <div className="flex flex-wrap gap-4">
             {footerNav.convert.map((link) => (
               <a

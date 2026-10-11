@@ -95,12 +95,26 @@ function reviewedKnowledgePack(
   const defaultGreeting = agentTemplateFor(blueprint.agent.type).greeting(
     businessName,
   );
+  const contact = blueprint.identity.contact
+    ? {
+        ...(blueprint.identity.contact.phone
+          ? { phone: blueprint.identity.contact.phone }
+          : {}),
+        ...(blueprint.identity.contact.email
+          ? { email: blueprint.identity.contact.email }
+          : {}),
+      }
+    : undefined;
   const pack = normalizeKnowledgePack({
     businessName,
     greeting: draft.greeting.trim() || defaultGreeting,
-    hours: draft.hours,
-    services: draft.services,
-    faqs: draft.faqs,
+    ...(blueprint.identity.locations?.length
+      ? { locations: blueprint.identity.locations }
+      : {}),
+    ...(contact && Object.keys(contact).length ? { contact } : {}),
+    hours: draft.hours.trim() || blueprint.knowledge.hours,
+    services: draft.services.trim() || blueprint.knowledge.services,
+    faqs: draft.faqs.trim() || blueprint.knowledge.faqs,
   });
   if (!pack) throw new Error("Reviewed knowledge pack could not be normalised.");
   return pack;
@@ -123,6 +137,8 @@ function reviewedBlueprint(
     identity: {
       ...blueprint.identity,
       ...(pack.businessName ? { businessName: pack.businessName } : {}),
+      ...(pack.locations?.length ? { locations: [...pack.locations] } : {}),
+      ...(pack.contact ? { contact: { ...pack.contact } } : {}),
     },
     agent: {
       ...blueprint.agent,

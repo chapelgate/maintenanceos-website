@@ -18,7 +18,13 @@ function emptyPack(): KnowledgePack {
       liveNumber: null,
       alwaysOn: false,
       productionTelephony: false,
-      missing: ["businessName", "greeting", "hours", "services", "faqs"],
+      missing: [
+        "businessName",
+        "greeting",
+        "hours",
+        "services",
+        "faqs",
+      ],
     }
   );
 }
@@ -40,9 +46,9 @@ export function missingOnFileReply(
     /do not have that information/i.test(prompt) ||
     /must stay missing/i.test(prompt)
   ) {
-    return `I'm not sure — ${fieldLabel} are not on file. I do not have that information.`;
+    return `I'm not sure — ${fieldLabel} are not on file. I do not have that information. This is a preview and that detail has not been added yet.`;
   }
-  return `I'm not sure — ${fieldLabel} are not on file in this knowledge pack.`;
+  return `I'm not sure — ${fieldLabel} are not on file in this knowledge pack. This is a preview and that detail has not been added yet.`;
 }
 
 function includesName(text: string, name: string): boolean {
@@ -109,6 +115,65 @@ function servicesTurn(
   };
 }
 
+function locationsTurn(
+  pack: KnowledgePack,
+  systemPrompt?: string,
+): ScriptedTurn {
+  if (pack.locations?.length) {
+    const listed = pack.locations.join(", ");
+    const text = pack.businessName
+      ? `${pack.businessName} covers or is located at: ${listed}.`
+      : `Locations on file: ${listed}.`;
+    return { speaker: "receptionist", text, source: "knowledge.locations" };
+  }
+  return {
+    speaker: "receptionist",
+    text: missingOnFileReply("locations", systemPrompt),
+    source: "missing",
+  };
+}
+
+function contactTurn(
+  pack: KnowledgePack,
+  systemPrompt?: string,
+): ScriptedTurn {
+  const parts: string[] = [];
+  if (pack.contact?.phone) {
+    parts.push(`phone ${pack.contact.phone}`);
+  }
+  if (pack.contact?.email) {
+    parts.push(`email ${pack.contact.email}`);
+  }
+  if (parts.length) {
+    const text = pack.businessName
+      ? `Contact details for ${pack.businessName}: ${parts.join(", ")}.`
+      : `Contact details on file: ${parts.join(", ")}.`;
+    return { speaker: "receptionist", text, source: "knowledge.contact" };
+  }
+  return {
+    speaker: "receptionist",
+    text: missingOnFileReply("contact details", systemPrompt),
+    source: "missing",
+  };
+}
+
+function companyTurn(
+  pack: KnowledgePack,
+  systemPrompt?: string,
+): ScriptedTurn {
+  if (pack.businessName) {
+    const text = pack.greeting
+      ? `You're speaking with the receptionist for ${pack.businessName}. ${pack.greeting}`
+      : `You're speaking with the receptionist for ${pack.businessName}.`;
+    return { speaker: "receptionist", text, source: "knowledge.businessName" };
+  }
+  return {
+    speaker: "receptionist",
+    text: missingOnFileReply("company details", systemPrompt),
+    source: "missing",
+  };
+}
+
 function closingSource(systemPrompt?: string): ScriptedTurnSource {
   if (
     typeof systemPrompt === "string" &&
@@ -132,6 +197,9 @@ export type ScriptedIntent =
   | "after_hours"
   | "hours"
   | "services"
+  | "locations"
+  | "contact"
+  | "company"
   | "live_call"
   | "unknown";
 
@@ -223,6 +291,15 @@ function knowledgeSummaryTurn(pack: KnowledgePack): ScriptedTurn {
   if (pack.services?.length) {
     parts.push(`services: ${pack.services.join(", ")}`);
   }
+  if (pack.locations?.length) {
+    parts.push(`locations: ${pack.locations.join(", ")}`);
+  }
+  if (pack.contact?.phone || pack.contact?.email) {
+    const contactParts: string[] = [];
+    if (pack.contact.phone) contactParts.push(`phone ${pack.contact.phone}`);
+    if (pack.contact.email) contactParts.push(`email ${pack.contact.email}`);
+    parts.push(`contact: ${contactParts.join(", ")}`);
+  }
   if (pack.faqs?.length) {
     parts.push(`${pack.faqs.length} reviewed FAQ${pack.faqs.length === 1 ? "" : "s"}`);
   }
@@ -230,7 +307,7 @@ function knowledgeSummaryTurn(pack: KnowledgePack): ScriptedTurn {
     speaker: "receptionist",
     text: parts.length
       ? `The reviewed knowledge I have on file includes ${parts.join("; ")}.`
-      : "I do not have any reviewed website facts on file yet.",
+      : "I do not have any reviewed website facts on file yet. This is a preview and that detail has not been added yet.",
     source: parts.length ? "knowledge.summary" : "missing",
   };
 }
@@ -294,6 +371,26 @@ export function classifyCallerIntent(text: string): ScriptedIntent {
     /what (?:work|jobs) do you/.test(t)
   ) {
     return "services";
+  }
+  if (
+    /\b(locations?|address|where are you|office|headquarters|postcode|area|areas)\b/.test(t) ||
+    /where (?:is|are) (?:you|your|the) (?:based|located|office)/.test(t) ||
+    /what areas? do you cover/.test(t)
+  ) {
+    return "locations";
+  }
+  if (
+    /\b(contact|phone|telephone|email|reach you|call you|get in touch)\b/.test(t) ||
+    /how can i (?:contact|call|reach|email)/.test(t) ||
+    /what(?:'s| is) your (?:number|phone|email)/.test(t)
+  ) {
+    return "contact";
+  }
+  if (
+    /\b(who are you|who is this|what company|company name|business name|who am i speaking with)\b/.test(t) ||
+    /tell me about (?:the|your) company/.test(t)
+  ) {
+    return "company";
   }
   if (
     /live call/.test(t) ||
@@ -453,6 +550,15 @@ export function scriptedReply(
   if (intent === "services") {
     return servicesTurn(knowledge, systemPrompt);
   }
+  if (intent === "locations") {
+    return locationsTurn(knowledge, systemPrompt);
+  }
+  if (intent === "contact") {
+    return contactTurn(knowledge, systemPrompt);
+  }
+  if (intent === "company") {
+    return companyTurn(knowledge, systemPrompt);
+  }
   if (intent === "live_call") {
     return {
       speaker: "receptionist",
@@ -489,7 +595,7 @@ export function scriptedReply(
       speaker: "receptionist",
       text: knowledge.businessName
         ? `${matchedService} is listed among ${knowledge.businessName}'s reviewed services.`
-        : `${matchedService} is listed in the reviewed services.`,
+        : `${matchedService} is listed in the reviewed services.` ,
       source: "knowledge.services",
     };
   }
@@ -499,6 +605,12 @@ export function scriptedReply(
   }
   if (/\bservices\b/i.test(callerText)) {
     return servicesTurn(knowledge, systemPrompt);
+  }
+  if (/\b(locations?|address|where are you)\b/i.test(callerText)) {
+    return locationsTurn(knowledge, systemPrompt);
+  }
+  if (/\b(contact|phone|telephone|email)\b/i.test(callerText)) {
+    return contactTurn(knowledge, systemPrompt);
   }
   return {
     speaker: "receptionist",

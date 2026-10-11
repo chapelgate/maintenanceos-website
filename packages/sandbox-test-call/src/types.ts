@@ -69,6 +69,8 @@ export type ScriptedTurnSource =
   | "knowledge.hours"
   | "knowledge.services"
   | "knowledge.faqs"
+  | "knowledge.locations"
+  | "knowledge.contact"
   | "knowledge.site"
   | "knowledge.summary"
   | "systemPrompt"

@@ -201,3 +201,26 @@ test("limitationsFor always includes pre-launch honesty", () => {
   assert.ok(lines.some((line) => /not a live customer phone number/i.test(line)));
   assert.equal(lines.some((line) => /missing/i.test(line)), false);
 });
+
+test("buildReceptionistDraft and normalizeKnowledgePack preserve locations and contact", () => {
+  const result = buildReceptionistDraft({
+    businessName: "Acme Plumbing",
+    locations: ["Leeds", "York"],
+    contact: { phone: "0113 123 4567", email: "info@acme.example" },
+  });
+  assert.deepEqual(result.knowledgePack.locations, ["Leeds", "York"]);
+  assert.deepEqual(result.knowledgePack.contact, {
+    phone: "0113 123 4567",
+    email: "info@acme.example",
+  });
+
+  const normalized = normalizeKnowledgePack({
+    businessName: "Acme Plumbing",
+    locations: "Leeds\nYork",
+    contact: { phone: "0113 123 4567" },
+  });
+  assert.ok(normalized);
+  assert.deepEqual(normalized.locations, ["Leeds", "York"]);
+  assert.deepEqual(normalized.contact, { phone: "0113 123 4567" });
+});
+

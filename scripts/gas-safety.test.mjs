@@ -12,7 +12,9 @@ const layout = read("src/app/layout.tsx");
 const role = read("src/components/IndustryRolePage.tsx");
 const home = read("src/app/page.tsx");
 
-test("site-wide strip carries the exact approved wording and tel links", () => {
+const footer = read("src/components/SiteFooter.tsx");
+
+test("site-wide strip is removed from layout and replaced with footer link", () => {
   assert.ok(
     flat(strip).includes(
       "Smell gas? Get out, don't use switches or flames, and call the National Gas Emergency Service on 0800 111 999. If someone is unwell or in danger, call 999.",
@@ -22,7 +24,10 @@ test("site-wide strip carries the exact approved wording and tel links", () => {
   assert.match(strip, /href="tel:999"/);
   assert.match(strip, /min-h-11/);
   assert.doesNotMatch(strip, /"use client"|useState|onClick/);
-  assert.match(layout, /<GasSafetyStrip \/>/);
+  assert.doesNotMatch(layout, /<GasSafetyStrip \/>/);
+  assert.doesNotMatch(layout, /GasSafetyStrip/);
+  assert.match(footer, /href="\/how-we-keep-control\/#gas"/);
+  assert.match(footer, /Smell gas\? What to do/);
 });
 
 test("rulebook opens with the gas section, NI number and CO signs", () => {

@@ -14,43 +14,43 @@ export const metadata: Metadata = contentPageMetadata({
 const faqItems = [
   {
     question: "Can the AI book a contractor or promise a time?",
-    answer: "No. The assistant is built not to invent bookings, appointment times or dispatches. If nothing has been arranged, it's built not to say it has."
+    answer: "No. The assistant will never invent a booking, an arrival time, or a visit. If nothing is booked, it says so plainly."
   },
   {
     question: "What happens if a tenant reports something dangerous?",
-    answer: "Reports our rules flag as dangerous can enter escalation and human review, and a critical-safety latch can only be cleared by an authorised person. Where life is in immediate danger, the assistant's guidance is to call 999."
+    answer: "Reports flagged as dangerous go straight to human review. Only an authorised person can clear them. If there is immediate danger to life, the guidance is to call 999 (never 911)."
   },
   {
     question: "Why isn't the list of safety-critical report types on this page?",
-    answer: "Because our product team hasn't signed it off in our claims register yet."
+    answer: "Because our product team has not signed it off in our claims register yet."
   },
   {
     question: "Can the AI override the safety rules?",
-    answer: "No. Safety, lifecycle and approvals are decided by fixed rules on our server, and the AI can't override them."
+    answer: "No. Fixed rules on our server control safety, job stages, and approvals. The AI cannot change them."
   },
   {
     question: "Who can clear a latched report? Can a contractor?",
-    answer: "An authorised person, not the AI and not the caller. Which roles count as authorised, including whether a contractor ever could, isn't published yet."
+    answer: "Only an authorised person. The computer cannot clear it, and neither can the caller. Which roles count as authorised is not published yet."
   },
   {
     question: "Can MaintenanceOS issue refunds or compensation?",
-    answer: "No. There's no payment, refund, compensation, fee-waiver or client-money authority in the system. Quotes and invoices are checked, not paid."
+    answer: "No. The system cannot make payments, refunds, or compensation. We never handle client money."
   },
   {
     question: "Can a caller ask for a person?",
-    answer: "Yes, they can ask to be transferred, but live transfer is still under testing, so we don't yet promise the call will reach someone. A technical fault is built to fail safe rather than pass the call on unplanned."
+    answer: "Yes. Callers can ask to be transferred. Live transfer is still under testing, so we do not promise every call will connect. If a fault happens, the system fails safe."
   },
   {
     question: "Is my data kept separate from other organisations'?",
-    answer: "Yes. Each organisation's records are kept in their own space, with tenant-isolation controls in the code that are covered by tests."
+    answer: "Yes. Each organisation has its own private space. Code checks and automated tests keep your data apart from other companies."
   },
   {
     question: "Is MaintenanceOS live?",
-    answer: "Not yet. We're pre-launch, and voice intake is still under testing. We'll say so plainly until that changes."
+    answer: "Not yet. We are pre-launch, and voice intake is still under testing. We say so plainly."
   },
   {
     question: "Does MaintenanceOS make us compliant with housing law?",
-    answer: "No software can do that for you. Your legal duties stay with you. MaintenanceOS is designed to capture reports, keep dangerous ones with a person and record what happened."
+    answer: "No software can make you compliant. Your legal duties stay with you. MaintenanceOS simply records jobs clearly and keeps danger with a person."
   }
 ];
 
@@ -73,8 +73,8 @@ export default function HowWeKeepControlPage() {
       <JsonLd data={jsonLd} />
       <PageHero
         eyebrow="Pre-launch: MaintenanceOS is still under testing, and we're taking early-access requests."
-        title="How MaintenanceOS handles a dangerous repair report"
-        lede="Anyone who has run a repairs line knows the call that keeps you up at night. It isn't the dripping tap. It's the one where something is dangerous and the person who took the message didn't realise."
+        title="How we handle dangerous repairs"
+        lede="When a repair looks dangerous, a real person must step in."
       />
       
       <div className="mx-auto max-w-3xl space-y-12 px-4 py-12">
@@ -147,7 +147,7 @@ export default function HowWeKeepControlPage() {
 
         <section aria-labelledby="who-decides" className="space-y-4">
           <h2 id="who-decides" className="text-xl font-semibold text-ink">
-            Who decides what happens to a report?
+            Who decides what happens next?
           </h2>
           <div className="space-y-4 text-muted">
             <p>Not the AI.</p>
@@ -162,7 +162,7 @@ export default function HowWeKeepControlPage() {
 
         <section aria-labelledby="step-by-step" className="space-y-4">
           <h2 id="step-by-step" className="text-xl font-semibold text-ink">
-            What happens to a report, step by step
+            What happens step by step
           </h2>
           <div className="space-y-4 text-muted">
             <p>
@@ -189,7 +189,7 @@ export default function HowWeKeepControlPage() {
 
         <section aria-labelledby="looks-dangerous" className="space-y-4">
           <h2 id="looks-dangerous" className="text-xl font-semibold text-ink">
-            What happens when a report looks dangerous?
+            When a report looks dangerous
           </h2>
           <div className="space-y-4 text-muted">
             <p>
@@ -249,7 +249,7 @@ export default function HowWeKeepControlPage() {
 
         <section aria-labelledby="never-promise" className="space-y-4">
           <h2 id="never-promise" className="text-xl font-semibold text-ink">
-            What will the AI never say or promise?
+            What the AI never promises
           </h2>
           <div className="space-y-4 text-muted">
             <p>
@@ -290,7 +290,7 @@ export default function HowWeKeepControlPage() {
 
         <section aria-labelledby="data-separation" className="space-y-4">
           <h2 id="data-separation" className="text-xl font-semibold text-ink">
-            How is each organisation&apos;s data kept separate?
+            How data stays separate
           </h2>
           <div className="space-y-4 text-muted">
             <p>
@@ -304,7 +304,7 @@ export default function HowWeKeepControlPage() {
 
         <section aria-labelledby="setup" className="space-y-4">
           <h2 id="setup" className="text-xl font-semibold text-ink">
-            What can you set up for your organisation?
+            What you can set up
           </h2>
           <div className="space-y-4 text-muted">
             <p>
@@ -375,10 +375,10 @@ export default function HowWeKeepControlPage() {
 
         <section className="space-y-4 border-t border-border pt-12 text-center">
           <h2 className="text-xl font-semibold text-ink">
-            See the rules working on a sample repair.
+            See how our rules work.
           </h2>
           <p className="text-muted mb-6">
-            In an early demo we&apos;ll take you through a sample report, from first contact to latch to clearance, using sample data.
+            See the rules working on a sample repair. In an early demo we&apos;ll take you through a sample report, from first contact to latch to clearance, using sample data.
           </p>
           <CtaPair />
         </section>

@@ -99,10 +99,10 @@ export function IndustryRolePage({ role }: Props) {
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold text-ink">
-            UK maintenance — not a generic AI receptionist
+            Built for UK maintenance
           </h2>
           <p className="text-muted">
-            Generic receptionist tools answer phones. {role.productName} is
+            UK maintenance — not a generic AI receptionist. Generic receptionist tools answer phones. {role.productName} is
             written for UK property-maintenance operations. Positioning only —
             voice remains in commissioning preview; not commercial general availability.
           </p>
