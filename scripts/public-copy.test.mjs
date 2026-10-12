@@ -68,3 +68,15 @@ test("what's live today appears at most once in each page file", () => {
     assert.ok(count <= 1, item.file);
   }
 });
+
+test("company number appears on legal pages", () => {
+  const legalPages = [
+    path.join(ROOT, "src/app/privacy/page.tsx"),
+    path.join(ROOT, "src/app/cookies/page.tsx"),
+    path.join(ROOT, "src/app/terms/page.tsx"),
+  ];
+  for (const filePath of legalPages) {
+    const text = fs.readFileSync(filePath, "utf8");
+    assert.ok(text.includes("12340004"), `${filePath} does not contain company number`);
+  }
+});

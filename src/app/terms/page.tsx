@@ -19,7 +19,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "who-we-are",
     title: "Who we are",
-    body: "[OWNER / COUNSEL] — same controller/operator identity placeholder as the privacy notice; do not invent legal entity details.",
+    body: "Chapelgate Limited (company number 12340004), registered office C/O Wainwrights Accountants, Faversham House, Wirral International Business Park, Old Hall Road, Bromborough, Wirral, CH62 3NX. Director: Andrew John Cartwright.",
   },
   {
     id: "acceptance",
@@ -59,12 +59,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "disclaimer",
     title: "Disclaimer of warranties",
-    body: "[COUNSEL: UK consumer/B2B fit] — informational site “as is” style disclaimer structure only; no invented warranties.",
+    body: "No service warranty is provided for the pre-launch marketing site. The site is provided on an “as is” basis.",
   },
   {
     id: "liability",
     title: "Limitation of liability",
-    body: "[COUNSEL] — caps and exclusions structure for counsel; do not invent figures.",
+    body: "Liability is capped at £100 for the free preview. Other limitations are subject to legal review.",
   },
   {
     id: "indemnity",
@@ -84,7 +84,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "governing-law",
     title: "Governing law and disputes",
-    body: "[COUNSEL: confirm] — placeholder for UK law and courts; do not invent venue details.",
+    body: "These terms are governed by the law of England and Wales.",
   },
   {
     id: "contact",

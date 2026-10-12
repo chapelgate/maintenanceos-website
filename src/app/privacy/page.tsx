@@ -23,7 +23,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "who-we-are",
     title: "Who we are (data controller)",
-    body: "[OWNER / COUNSEL: controller identity] — legal entity name, registered address, and ICO registration if applicable. Do not invent details.",
+    body: "Chapelgate Limited (company number 12340004), registered office C/O Wainwrights Accountants, Faversham House, Wirral International Business Park, Old Hall Road, Bromborough, Wirral, CH62 3NX. Director: Andrew John Cartwright. ICO registration: [ICO REG NO].",
   },
   {
     id: "scope",
@@ -53,7 +53,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "lawful-bases",
     title: "Lawful bases",
-    body: "[COUNSEL: map each purpose] — structure for consent, steps toward a contract, legitimate interests, and legal obligation as counsel directs.",
+    body: "Legitimate interests for enquiry emails and for a website URL submitted on /create.",
   },
   {
     id: "cookies",
@@ -63,7 +63,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "Current website path uses DigitalOcean for the static site. The previous Railway-hosted control plane is not in service, so lead intake and measurement events are not sent. No third-party analytics vendor is used. Other processor categories remain subject to legal review.",
+    body: "The website is hosted and processed by DigitalOcean. Transfers of personal data outside the UK/EEA are covered by the UK IDTA / UK Addendum. No third-party analytics vendor is used.",
   },
   {
     id: "transfers",
@@ -73,7 +73,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "retention",
     title: "How long we keep data",
-    body: "[OWNER / COUNSEL: periods] — retention placeholders by category; do not invent numbers.",
+    body: "Enquiry emails are retained for 12 months by default. Other retention periods are subject to legal review.",
   },
   {
     id: "protection",
@@ -83,12 +83,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "rights",
     title: "Your rights",
-    body: "[COUNSEL: confirm wording] — UK GDPR-style rights may include access, rectification, erasure, restriction, portability, objection, withdrawing consent, and complaint to the ICO (DRAFT).",
+    body: "You have the right to access, rectify, erase, restrict, and port your personal data, to object to processing, to withdraw consent (where applicable), and to complain to the Information Commissioner's Office (ICO).",
   },
   {
     id: "exercise-rights",
     title: "How to exercise your rights",
-    body: "[OWNER: inbox / SLA] — contact method and expected process placeholders for rights requests.",
+    body: "Email andy@chapelgatehome.uk with your request. We will respond within one month, as UK GDPR requires.",
   },
   {
     id: "children",
