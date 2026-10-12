@@ -5,7 +5,7 @@ export const PRODUCT_TOUR = {
   captions: "/media/product-tour.en-GB.vtt",
   width: 1280,
   height: 720,
-  caption: "Product tour · pre-launch",
+  caption: "Product tour · pre-launch · recorded narration, not the phone voice",
   watchHref: "/how-it-works/#product-tour",
   watchLabel: "45s product tour · pre-launch",
 } as const;

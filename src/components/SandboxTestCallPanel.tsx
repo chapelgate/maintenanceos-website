@@ -4,10 +4,14 @@ import { useEffect, useId, useRef, useState } from "react";
 import { siteConfig } from "@/config/site";
 import {
   browserVoiceSupport,
-  speakBrowserText,
   startBrowserSpeechRecognition,
   type BrowserRecognitionSession,
 } from "@/lib/browser-voice";
+import {
+  previewVoiceConfig,
+  speakReceptionistText,
+  stopSpokenPreview,
+} from "@/lib/preview-voice";
 import {
   requestSandboxScriptedDemo,
   runBrowserInteractiveReply,
@@ -96,32 +100,38 @@ export function SandboxTestCallPanel({
   useEffect(() => {
     return () => {
       recognitionRef.current?.stop();
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
+      stopSpokenPreview();
     };
   }, []);
 
   async function speakReply(text: string) {
-    if (!browserVoiceSupport().synthesis) return;
+    const canSpeak =
+      browserVoiceSupport().synthesis || previewVoiceConfig().mode === "preview";
+    if (!canSpeak) return;
     setVoiceState("speaking");
-    await speakBrowserText(text, { lang: "en-GB" });
+    const mode = await speakReceptionistText(text, { lang: "en-GB" });
     setVoiceState("idle");
+    if (mode === "unavailable") {
+      setVoiceDetail(
+        "Spoken replies are unavailable in this browser, so answers will appear in the transcript.",
+      );
+    }
   }
 
   function startDemo() {
     if (!receptionist) return;
     const opening = openingTurn(receptionist);
     const support = browserVoiceSupport();
+    const canSpeak = support.synthesis || previewVoiceConfig().mode === "preview";
     setTurns([opening]);
     setCallerText("");
     setVoiceDetail(
-      support.synthesis
+      canSpeak
         ? null
         : "Spoken replies are unavailable in this browser, so answers will appear in the transcript.",
     );
     setStarted(true);
-    if (support.synthesis) {
+    if (canSpeak) {
       void speakReply(opening.text);
     }
   }
@@ -129,9 +139,7 @@ export function SandboxTestCallPanel({
   function endDemo() {
     recognitionRef.current?.stop();
     recognitionRef.current = null;
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    }
+    stopSpokenPreview();
     setVoiceState("idle");
     setVoiceDetail(null);
     setStarted(false);
@@ -154,7 +162,9 @@ export function SandboxTestCallPanel({
       reply,
     ]);
     setCallerText("");
-    if (speak && browserVoiceSupport().synthesis) {
+    const canSpeak =
+      browserVoiceSupport().synthesis || previewVoiceConfig().mode === "preview";
+    if (speak && canSpeak) {
       await speakReply(reply.text);
     } else {
       setVoiceState("idle");
@@ -178,7 +188,7 @@ export function SandboxTestCallPanel({
       return;
     }
 
-    if (support.synthesis) window.speechSynthesis.cancel();
+    stopSpokenPreview();
     recognitionRef.current?.stop();
     const session = startBrowserSpeechRecognition("en-GB");
     recognitionRef.current = session;

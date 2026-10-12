@@ -94,6 +94,7 @@ test("product-tour player is click-to-play and static-export safe", () => {
   assert.match(player, /PRODUCT_TOUR\.captions/);
   assert.match(player, /srcLang="en-GB"/);
   assert.match(lib, /Product tour · pre-launch/);
+  assert.match(lib, /recorded narration, not the phone voice/);
   assert.match(player, /PRODUCT_TOUR\.caption/);
   assert.match(lib, /watchHref: "\/how-it-works\/#product-tour"/);
   assert.match(lib, /watchLabel: "45s product tour · pre-launch"/);
