@@ -669,10 +669,8 @@ summary:focus-visible {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .intake-orb {
-    animation: intake-idle 5.6s ease-in-out infinite;
-  }
-
+  /* The button stays still so its hit target does not move. Only the
+     decorative halo and sheen animate. */
   .intake-orb::before {
     animation: intake-halo 4.4s ease-in-out infinite;
   }
@@ -701,6 +699,8 @@ summary:focus-visible {
 }
 
 .intake-cloud {
+  position: relative;
+  z-index: 3;
   display: grid;
   grid-template-rows: 0fr;
   width: min(100%, 20rem);
@@ -739,6 +739,19 @@ summary:focus-visible {
 
 .intake-orb-stage.is-open .intake-cloud-inner {
   padding-block: 1rem;
+}
+
+.intake-orb-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.intake-orb-links a {
+  display: inline-flex;
+  white-space: nowrap;
 }
 
 .intake-orb-caption {
