@@ -8,7 +8,65 @@ import { industries, primaryNav } from "@/config/site";
  * CTA label: Request an early demo (single primary, /demo/).
  */
 
-const HEADER_DETAILS_ESCAPE = `document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;document.querySelectorAll("header details[open]").forEach(function(d){d.open=false;var s=d.querySelector("summary");s&&s.focus();});});`;
+const HEADER_DETAILS_ESCAPE = `(function() {
+  // Set CSS variable for header height
+  function updateHeaderHeight() {
+    const header = document.querySelector('header');
+    if (header) {
+      const headerHeight = header.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--header-height', \`\${headerHeight}px\`);
+    }
+  }
+  // Update on load and resize
+  updateHeaderHeight();
+  window.addEventListener('resize', updateHeaderHeight);
+  window.addEventListener('orientationchange', updateHeaderHeight);
+
+  // Handle toggle for mobile menu details to update aria-label and aria-expanded
+  document.addEventListener('toggle', function(e) {
+    if (e.target.matches('details.mobile-menu-details')) {
+      const summary = e.target.querySelector('summary');
+      if (summary) {
+        if (e.target.open) {
+          summary.setAttribute('aria-label', 'Close menu');
+          summary.setAttribute('aria-expanded', 'true');
+        } else {
+          summary.setAttribute('aria-label', 'Open menu');
+          summary.setAttribute('aria-expanded', 'false');
+        }
+      }
+    }
+  });
+
+  // Handle click outside to close open details elements
+  document.addEventListener('click', function(e) {
+    // If click is inside a details element, do nothing (let it handle its own state)
+    if (e.target.closest('details')) {
+      return;
+    }
+    // Close all open details elements in header and return focus to their summary
+    document.querySelectorAll('header details[open]').forEach(function(details) {
+      details.open = false;
+      const summary = details.querySelector('summary');
+      if (summary) {
+        summary.focus();
+      }
+    });
+  });
+
+  // Handle Escape key to close open details elements and return focus
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('header details[open]').forEach(function(details) {
+        details.open = false;
+        const summary = details.querySelector('summary');
+        if (summary) {
+          summary.focus();
+        }
+      });
+    }
+  });
+})();`
 
 function Wordmark() {
   return (
@@ -61,7 +119,7 @@ export function SiteHeader() {
         <Wordmark />
 
         <nav
-          className="hidden flex-wrap items-center gap-1 md:flex lg:gap-2"
+          className="hidden flex-wrap items-center gap-1 [min-width:1100px]:flex lg:gap-2"
           aria-label="Primary"
         >
           {primaryNav.map((item) =>
@@ -88,23 +146,20 @@ export function SiteHeader() {
                 </summary>
                 <ul
                   className="site-menu-panel absolute left-0 top-full z-50 mt-2 min-w-[15rem] rounded-xl border border-border bg-surface py-2 shadow-[var(--mos-shadow)]"
-                  role="menu"
                 >
-                  <li role="none">
+                  <li>
                     <a
                       href={item.href}
                       className="block px-4 py-2 text-sm font-medium text-ink hover:bg-paper"
-                      role="menuitem"
                     >
                       All industries
                     </a>
                   </li>
                   {industries.map((ind) => (
-                    <li key={ind.slug} role="none">
+                    <li key={ind.slug}>
                       <a
                         href={`/industries/${ind.slug}/`}
                         className="block px-4 py-2 text-sm text-muted hover:bg-paper hover:text-ink"
-                        role="menuitem"
                       >
                         {ind.label}
                       </a>
@@ -125,12 +180,6 @@ export function SiteHeader() {
 
           <div className="ml-2 flex shrink-0 items-center gap-2">
             <a
-              href="/how-we-keep-control/"
-              className="site-cta-outline inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md border border-border bg-surface px-3 text-sm font-semibold text-ink hover:border-accent hover:text-accent"
-            >
-              Safety rules
-            </a>
-            <a
               href="/demo/"
               className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
             >
@@ -139,14 +188,14 @@ export function SiteHeader() {
           </div>
         </nav>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center justify-between [min-width:1100px]:hidden">
           <a
             href="/demo/"
             className="inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
           >
             Request an early demo
           </a>
-          <details className="relative">
+          <details className="relative mobile-menu-details">
             <summary
               className="inline-flex h-9 w-9 min-h-6 min-w-6 cursor-pointer list-none items-center justify-center rounded-md border border-border text-ink [&::-webkit-details-marker]:hidden"
               aria-label="Open menu"
@@ -154,7 +203,7 @@ export function SiteHeader() {
               <MenuIcon />
             </summary>
             <nav
-              className="site-menu-panel absolute right-0 top-full z-50 mt-2 w-[min(100vw-2rem,20rem)] rounded-xl border border-border bg-surface px-4 py-4 shadow-[var(--mos-shadow)] md:hidden"
+              className="site-menu-panel absolute right-0 top-full z-50 mt-2 w-[min(100vw-1rem,20rem)] max-h-[calc(100dvh-var(--header-height))] overflow-y-auto rounded-xl border border-border bg-surface px-4 py-4 shadow-[var(--mos-shadow)]"
               aria-label="Mobile"
             >
               <ul className="flex flex-col gap-1">
@@ -218,8 +267,8 @@ export function SiteHeader() {
             </nav>
           </details>
         </div>
+        <script dangerouslySetInnerHTML={{ __html: HEADER_DETAILS_ESCAPE }} />
       </div>
-      <script dangerouslySetInnerHTML={{ __html: HEADER_DETAILS_ESCAPE }} />
-    </header>
-  );
+      </header>
+    );
 }
