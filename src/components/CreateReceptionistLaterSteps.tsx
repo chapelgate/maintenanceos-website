@@ -747,12 +747,12 @@ export function CreateReceptionistLaterSteps({
       data-create-submit-state={status}
     >
       <CreateJourneyStepper step={step} headingRef={stepHeadingRef} />
-      <p className="mb-6 text-sm text-muted">
-        Next: {nextAction}
-        {step === 5
-          ? ". Test the reviewed configuration in the interactive browser demo below, then save it if you want an emailed reference."
-          : null}
-      </p>
+       <p className="mb-6 text-sm text-muted">
+         Next: {nextAction}
+         {step === 5
+           ? ". Test the reviewed configuration in the interactive browser demo below."
+           : null}
+       </p>
 
       {step === 2 ? (
         <div>
