@@ -1,4 +1,14 @@
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 import { Worker } from "node:worker_threads";
+
+const require = createRequire(import.meta.url);
+
+function pdfStandardFontDataUrl(): string {
+  const root = dirname(require.resolve("pdfjs-dist/package.json"));
+  const dir = join(root, "standard_fonts");
+  return dir.endsWith("/") ? dir : `${dir}/`;
+}
 import {
   DEFAULT_MAX_REDIRECTS,
   fetchPublicHttpsBytes,
@@ -338,6 +348,7 @@ const { parentPort, workerData } = require("node:worker_threads");
     isEvalSupported: false,
     useWorkerFetch: false,
     stopAtErrors: true,
+    standardFontDataUrl: workerData.standardFontDataUrl,
   });
 
   try {
@@ -421,6 +432,7 @@ export const pdfJsScannerV2Parser: ScannerV2PdfParser = async (
         bytes,
         maxPages: options.maxPages,
         maxTextChars: options.maxTextChars,
+        standardFontDataUrl: pdfStandardFontDataUrl(),
       },
     });
 
@@ -431,7 +443,6 @@ export const pdfJsScannerV2Parser: ScannerV2PdfParser = async (
       void worker.terminate();
       reject(new Error("document_parse_timeout"));
     }, options.timeoutMs);
-    timer.unref?.();
 
     const finish = () => {
       clearTimeout(timer);
@@ -504,7 +515,6 @@ async function withTimeout<T>(
       settled = true;
       reject(new Error("document_parse_timeout"));
     }, timeoutMs);
-    timer.unref?.();
 
     promise.then(
       (value) => {
