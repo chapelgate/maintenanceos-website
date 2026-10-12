@@ -1,5 +1,9 @@
 name: Website integration repair validation
 
+concurrency:
+  group: website-integration-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -75,7 +79,8 @@ jobs:
             npx tsc --noEmit
             NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan npm run build
             # Next 16 emits both out/404/index.html and out/_not-found/index.html.
-            test "$(find out -name index.html -type f | wc -l)" -eq 29
+            # /accessibility/ is included. 30 is the current static page count.
+            test "$(find out -name index.html -type f | wc -l)" -eq 30
             test -f out/robots.txt
             test -f out/sitemap.xml
             BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
