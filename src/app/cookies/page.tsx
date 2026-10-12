@@ -27,18 +27,16 @@ export default function CookiesPage() {
             <h2 id="cookies-about" className="text-xl font-semibold text-ink">
               About this cookie notice
             </h2>
-            <p className="mt-2 text-muted">
-              This draft explains cookies and similar technologies on the
-              MaintenanceOS marketing site; it is pending legal and Privacy
-              sign-off. Website-URL ingest on /create is described in the{" "}
-              <a
-                href="/privacy/#website-url-ingest"
-                className="text-accent underline"
-              >
-                Privacy Policy (Draft)
-              </a>
-              ; it is not a cookie category.
-            </p>
+             <p className="mt-2 text-muted">
+               This draft explains cookies and similar technologies on the MaintenanceOS marketing site, operated by Chapelgate Limited (company number 12340004). It is pending legal and Privacy sign-off. Website-URL ingest on /create is described in the
+               <a
+                 href="/privacy/#website-url-ingest"
+                 className="text-accent underline"
+               >
+                 Privacy Policy (Draft)
+               </a>
+               ; it is not a cookie category.
+             </p>
           </section>
 
           <section aria-labelledby="cookies-what">

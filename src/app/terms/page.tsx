@@ -16,11 +16,11 @@ const sections: { id: string; title: string; body: string }[] = [
     title: "About these terms",
     body: "These draft terms cover access to and use of the public MaintenanceOS website; they are a scaffold for counsel, not a finished agreement.",
   },
-  {
-    id: "who-we-are",
-    title: "Who we are",
-    body: "[OWNER / COUNSEL] — same controller/operator identity placeholder as the privacy notice; do not invent legal entity details.",
-  },
+   {
+     id: "who-we-are",
+     title: "Who we are",
+     body: "Chapelgate Limited (company number 12340004), registered office C/O Wainwrights Accountants, Faversham House, Wirral International Business Park, Old Hall Road, Bromborough, Wirral, CH62 3NX. Director: Andrew John Cartwright.",
+   },
   {
     id: "acceptance",
     title: "Acceptance of terms",
@@ -56,16 +56,16 @@ const sections: { id: string; title: string; body: string }[] = [
     title: "Third-party links",
     body: "Links to external sites are for convenience and do not imply endorsement.",
   },
-  {
-    id: "disclaimer",
-    title: "Disclaimer of warranties",
-    body: "[COUNSEL: UK consumer/B2B fit] — informational site “as is” style disclaimer structure only; no invented warranties.",
-  },
-  {
-    id: "liability",
-    title: "Limitation of liability",
-    body: "[COUNSEL] — caps and exclusions structure for counsel; do not invent figures.",
-  },
+   {
+     id: "disclaimer",
+     title: "Disclaimer of warranties",
+     body: "No service warranty is provided for the pre-launch marketing site. The site is provided on an “as is” basis.",
+   },
+   {
+     id: "liability",
+     title: "Limitation of liability",
+     body: "Liability is capped at £100 for the free preview. Other limitations are subject to legal review.",
+   },
   {
     id: "indemnity",
     title: "Indemnity (if used)",
@@ -81,11 +81,11 @@ const sections: { id: string; title: string; body: string }[] = [
     title: "Changes to these terms",
     body: "[COUNSEL] — how updates take effect once a final version exists.",
   },
-  {
-    id: "governing-law",
-    title: "Governing law and disputes",
-    body: "[COUNSEL: confirm] — placeholder for UK law and courts; do not invent venue details.",
-  },
+   {
+     id: "governing-law",
+     title: "Governing law and disputes",
+     body: "These terms are governed by the law of England and Wales.",
+   },
   {
     id: "contact",
     title: "Contact",
