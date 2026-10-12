@@ -68,7 +68,7 @@ function softwareApplicationNode(): JsonLdRecord {
     operatingSystem: "Web",
     url: absoluteUrl("/"),
     description:
-      "Pre-launch UK maintenance operations software with AI-assisted intake. The AI receptionist capability is under testing. Deterministic rules and authorised human clearance keep control of safety and money. Not commercially generally available; not a public always-on phone service.",
+      "Pre-launch UK maintenance operations software with AI-assisted intake. The AI receptionist capability is under testing. Fixed rules and authorised human clearance keep control of safety and money. Not commercially generally available; not a public always-on phone service.",
     inLanguage: siteConfig.locale,
     countriesSupported: "GB",
     keywords:

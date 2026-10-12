@@ -21,9 +21,7 @@ export function HomeIndustries() {
             >
               Built for UK maintenance audiences
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
-              Equal weight — eight sectors, no ranking.
-            </p>
+            <p className="mt-2 text-sm text-muted">Equal weight.</p>
           </div>
         </div>
         <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">

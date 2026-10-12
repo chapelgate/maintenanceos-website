@@ -7,27 +7,27 @@ import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
  */
 const STEP_COPY = [
   {
-    body: "Paste a public business URL and an email. Checking a site does not assign a live phone number.",
+    body: "A public URL and an email. Checking a site does not assign a live phone number.",
     href: "/create/",
     link: "Start from your website",
   },
   {
-    body: "A bounded read of public pages. Missing details stay blank rather than being invented.",
+    body: "Missing details stay blank.",
     href: "/create/",
     link: "Check a website",
   },
   {
-    body: "Choose one bounded role. This step does not provision a phone number.",
+    body: "One role. No phone number is provisioned.",
     href: "/create/",
     link: "Choose a role",
   },
   {
-    body: "Review the business details. Empty hours or services stay empty.",
+    body: "Empty hours or services stay empty.",
     href: "/create/",
     link: "Configure the draft",
   },
   {
-    body: "Try the reviewed configuration in the browser. This does not assign a live number.",
+    body: "Try the reviewed draft in the browser.",
     href: "/create/",
     link: "Review and try",
   },
@@ -56,15 +56,14 @@ export function HomeOnboardingSteps() {
               How to start — five steps
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-              The honest path in. Same public path as{" "}
+              Same public path as{" "}
               <a
                 href="/create/"
                 className="font-medium text-accent underline-offset-4 hover:underline"
               >
                 the website setup preview
               </a>
-              : {CREATE_JOURNEY_STEPS.map((step) => step.label).join(" → ")}. The
-              live phone line remains separate.
+              : {CREATE_JOURNEY_STEPS.map((step) => step.label).join(" → ")}.
             </p>
           </div>
         </div>

@@ -39,8 +39,8 @@ export function UkScenarioVignettes() {
         UK maintenance playbooks
       </h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-        Labelled scenarios from product design — not customer stories, not a live
-        phone sample. How intake is designed to treat common UK jobs.
+        Labelled scenarios from product design — not customer stories, and not a
+        sample of a real call. How intake is designed to treat common UK jobs.
       </p>
       <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {SCENARIOS.map((item) => (

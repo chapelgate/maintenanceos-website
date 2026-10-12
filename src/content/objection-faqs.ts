@@ -22,7 +22,7 @@ export const objectionFaqItems: readonly ObjectionFaqItem[] = [
   {
     question: "Will MaintenanceOS invent bookings, dispatches, or refunds?",
     answer:
-      "No. Must not invent bookings, dispatches, refunds, compensation, account information, or safety assurances is VERIFIED in product source. Deterministic rules own safety and money — the model does not execute client-money or invent a van.",
+      "No. The product must not invent bookings, dispatches, refunds, compensation, account information, or safety assurances. Fixed rules own safety and money — the model does not execute client-money or invent a van.",
   },
   {
     question: "What about emergencies vs routine jobs (UK)?",
@@ -32,6 +32,6 @@ export const objectionFaqItems: readonly ObjectionFaqItem[] = [
   {
     question: "Why only seven features on /features?",
     answer:
-      "Those are the cards we can stand behind today (5 VERIFIED + 2 PREVIEW). Peer-common gaps stay off the marketing page and are tracked with product — honesty over a bigger checklist.",
+      "Those are the cards we can stand behind today: 4 VERIFIED and 3 PREVIEW. Items other products advertise stay off the marketing page.",
   },
 ];

@@ -32,13 +32,10 @@ export function HomeLifeBand() {
               id="home-life-heading"
               className="mt-2 text-xl font-semibold tracking-tight text-ink sm:text-2xl"
             >
-              Street, site, and desk — the same operation
+              The same operation
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              MaintenanceOS is designed for UK property and maintenance teams who
-              work from a phone as often as a desk. This picture is licensed stock,
-              not a customer estate and not a live job. The public path is still
-              website → review pack → early access.
+              Licensed stock of a UK street. Not a customer, and not a live job.
             </p>
           </div>
         </div>

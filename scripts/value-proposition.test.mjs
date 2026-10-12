@@ -19,11 +19,11 @@ test("homepage leads with customer outcome before architecture", () => {
   assert.match(page, /Surface critical cases/);
   assert.match(page, /Keep decisions with your team/);
   assert.match(page, /Keep work traceable/);
-  assert.match(page, /<SafeAutomationModel compact \/>/);
+  assert.match(page, /<SafeAutomationLink \/>/);
   assert.ok(
     page.indexOf("What your team gets") <
-      page.indexOf("<SafeAutomationModel compact />"),
-    "buyer benefits must appear before the shared safe-automation model",
+      page.indexOf("<SafeAutomationLink />"),
+    "buyer benefits must appear before the link to the safety controls",
   );
 });
 

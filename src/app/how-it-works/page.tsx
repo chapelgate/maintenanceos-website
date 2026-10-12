@@ -1,11 +1,12 @@
 import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
+import { UkScenarioVignettes } from "@/components/UkScenarioVignettes";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
 import { JsonLd } from "@/components/JsonLd";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { PageHero } from "@/components/PageHero";
 import { ProductTour } from "@/components/ProductTour";
-import { SafeAutomationModel } from "@/components/SafeAutomationModel";
+import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
@@ -31,6 +32,8 @@ export default function HowItWorksPage() {
 
       <HowItWorksFlow />
 
+      <UkScenarioVignettes />
+
       <section
         id="product-tour"
         aria-labelledby="product-tour-heading"
@@ -53,7 +56,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <SafeAutomationModel />
+      <SafeAutomationLink />
 
       <section
         aria-labelledby="honesty-heading"
@@ -85,7 +88,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <ObjectionFaq headingId="hiw-objection-faq-heading" />
+      <ObjectionFaq headingId="objections" />
 
       <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
         <CtaPair primaryHref="/demo/" primaryLabel="Request an early demo" />

@@ -15,7 +15,7 @@ const designedToInclude = [
   "Website → Check → Choose → Configure → Review & Try onboarding (early access — not a live receptionist)",
   "UK maintenance intake language and 999 guidance (never 911) in product source",
   "Explicit-request human transfer in product source",
-  "Deterministic rules for safety, approvals, and money prohibitions",
+  "Fixed rules for safety, approvals, and money prohibitions",
   "Multi-tenant ops objects in source: properties, residents, contractors, work orders, jobs",
 ] as const;
 
@@ -39,7 +39,7 @@ export default function PricingPage() {
         orbAccent
       />
       <div className="mx-auto max-w-5xl space-y-10 px-4 py-12 sm:py-16">
-        <FunnelPathStrip />
+        <FunnelPathStrip linked />
 
         {pricing.showTiers && "tiers" in pricing && pricing.tiers.length > 0 ? (
           <ul className="grid gap-6 md:grid-cols-3">

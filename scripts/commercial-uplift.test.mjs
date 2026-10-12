@@ -29,7 +29,7 @@ test("home commercial pass keeps Request an early demo and 3-step start", () => 
   assert.match(home, /HomeOnboardingSteps/);
   // CtaPair default primary is now /demo/
   // secondaryHref="/how-we-keep-control/" secondaryLabel="See the safety rules →"
-  assert.match(home, /<SafeAutomationModel compact \/>/);
+  assert.match(home, /<SafeAutomationLink \/>/);
   assert.match(home, /HomeIndustries/);
   assert.match(home, /HomeHeroVisual/);
   assert.match(home, /HomeLifestyleStrip/);

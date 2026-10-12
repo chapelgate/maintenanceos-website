@@ -4,7 +4,7 @@ import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { HonestyBanner } from "@/components/HonestyBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { SafeAutomationModel } from "@/components/SafeAutomationModel";
+import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import {
   FEATURE_GROUPS,
   featureGroupCopy,
@@ -30,21 +30,25 @@ export default function FeaturesPage() {
         lede="Start with the operational outcomes: collect maintenance details, keep safety and approvals in rules, escalate cases for human review, and retain a reviewable record. The capability labels below separate VERIFIED source-backed features from PREVIEW work. Pre-launch — not a buy-now service or public always-on phone line."
         orbAccent
       />
-      <SafeAutomationModel compact />
+      <SafeAutomationLink />
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-12">
-        <FunnelPathStrip />
-        <HonestyBanner compact>
-          {cardCounts.total} cards we can stand behind today — {cardCounts.verified}{" "}
-          {marketingFeatureStatusLabel.VERIFIED}, {cardCounts.underTest}{" "}
-          {marketingFeatureStatusLabel.UNDER_TEST}. Peer-common gaps stay off
-          this page and are tracked with product.
-        </HonestyBanner>
+        <FunnelPathStrip linked />
+        <section id="whats-live-today" aria-labelledby="whats-live-today-heading">
+          <h2 id="whats-live-today-heading" className="text-xl font-semibold text-ink">
+            {"What's live today"}
+          </h2>
+          <HonestyBanner compact>
+            {cardCounts.total} cards we can stand behind today — {cardCounts.verified}{" "}
+            {marketingFeatureStatusLabel.VERIFIED}, {cardCounts.underTest}{" "}
+            {marketingFeatureStatusLabel.UNDER_TEST}. {UNDER_TEST_GROUP_HONESTY}{" "}
+            Items other products advertise stay off this page.
+          </HonestyBanner>
+        </section>
 
         {FEATURE_GROUPS.map((groupId) => {
           const group = featureGroupCopy[groupId];
           const cards = marketingCardsByGroup(groupId);
           if (cards.length === 0) return null;
-          const hasUnderTest = cards.some((card) => card.status === "UNDER_TEST");
           return (
             <section key={groupId} className="space-y-4" aria-labelledby={`${groupId}-heading`}>
               <div>
@@ -55,9 +59,6 @@ export default function FeaturesPage() {
                   {group.heading}
                 </h2>
                 <p className="mt-1 text-sm text-muted">{group.lede}</p>
-                {hasUnderTest ? (
-                  <p className="mt-2 text-sm text-muted">{UNDER_TEST_GROUP_HONESTY}</p>
-                ) : null}
               </div>
               <div
                 className={

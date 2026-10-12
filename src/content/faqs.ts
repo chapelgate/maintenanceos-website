@@ -45,7 +45,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Does AI make final safety or money decisions?",
     answer:
-      "No. AI assists with intake. Deterministic server rules own safety, lifecycle, approvals, and money boundaries. Critical safety paths require authorised human clearance. AI has no payment, refund, or client-money authority.",
+      "No. AI assists with intake. Fixed server rules own safety, lifecycle, approvals, and money boundaries. Critical safety paths require authorised human clearance. AI has no payment, refund, or client-money authority.",
   },
   {
     question: "Is the AI receptionist live for production calls?",
@@ -77,7 +77,7 @@ export const faqItems: FaqItem[] = [
     question: "Are you ISO or SOC 2 certified?",
     answer:
 
-      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website learning is read-only, bounded and SSRF-guarded. Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW. For product interest, request an early demo.",
+      "No. We do not claim ISO, SOC 2, Cyber Essentials, or bank-grade security. Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website learning is read-only and bounded. Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW. For product interest, request an early demo.",
 
     relatedHref: "/demo/",
     relatedLabel: "Request an early demo",

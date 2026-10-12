@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { CommercialProof } from "@/components/CommercialProof";
 import { CustomerAgentOffers } from "@/components/CustomerAgentOffers";
-import { HonestyBanner } from "@/components/HonestyBanner";
 import { HomeHeroVisual } from "@/components/HomeHeroVisual";
 import { HomeIndustries } from "@/components/HomeIndustries";
 import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
@@ -14,10 +13,8 @@ import { HomeTrustStrip } from "@/components/HomeTrustStrip";
 import { ProductUiShell } from "@/components/ProductUiShell";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
-import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { ProductTourWatchLink } from "@/components/ProductTour";
-import { SafeAutomationModel } from "@/components/SafeAutomationModel";
-import { UkScenarioVignettes } from "@/components/UkScenarioVignettes";
+import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
@@ -26,19 +23,19 @@ export const metadata: Metadata = funnelPageMetadata("home");
 const benefits = [
   {
     title: "Capture the request clearly",
-    body: "Collect caller details and maintenance context into structured operational records instead of relying on scattered notes.",
+    body: "Caller details and the repair go into one record.",
   },
   {
     title: "Surface critical cases",
-    body: "Critical-safety latching and escalation queues keep RED cases on a controlled path to authorised human review.",
+    body: "Reports flagged as dangerous stay on a controlled path until an authorised person reviews them.",
   },
   {
     title: "Keep decisions with your team",
-    body: "AI does not override safety, lifecycle, or approval rules. Authorised people retain clearance of critical paths.",
+    body: "The AI does not override safety, lifecycle, or approval rules.",
   },
   {
     title: "Keep work traceable",
-    body: "Work orders, communications, action evidence, and call-session records create a reviewable operational history.",
+    body: "Work orders, messages, and action evidence stay on the job.",
   },
 ] as const;
 
@@ -113,13 +110,10 @@ export default function HomePage() {
             id="home-rulebook-heading"
             className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
           >
-            Repairs reporting, with the safety rules written down.
+            The safety rules, written down.
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
-            Fixed safety rules sit above the AI. If a report is flagged as dangerous, it stays with a person until someone authorised clears it. The assistant is built not to invent a booking, a dispatch or a promise that someone is on the way.
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            See what happens to a report flagged as dangerous, why only an authorised person can clear it, and what our AI is built never to promise a tenant. MaintenanceOS keeps reports flagged as dangerous with a person and leaves an audit trail on the job.
+            Fixed safety rules sit above the AI. A report flagged as dangerous stays with a person until someone authorised clears it. The assistant does not invent a booking, a dispatch, or a promise that someone is on the way.
           </p>
           <p className="mt-5">
             <a
@@ -145,12 +139,8 @@ export default function HomePage() {
               id="home-benefits-heading"
               className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
             >
-              A clearer route from request to controlled follow-up.
+              From the request to the record.
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-              The customer outcome comes first. The technical controls sit
-              underneath it as proof, not as the sales pitch.
-            </p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {benefits.map((benefit) => (
@@ -176,15 +166,18 @@ export default function HomePage() {
 
       <HomeOnboardingSteps />
 
-      <SafeAutomationModel compact />
+      <SafeAutomationLink />
 
       <HomeIndustries />
 
-      <UkScenarioVignettes />
-
-      <HonestyBanner />
-
-      <ObjectionFaq />
+      <p className="mx-auto max-w-6xl px-4 pb-8 text-sm text-muted sm:px-6">
+        <a
+          href="/how-it-works/#objections"
+          className="font-medium text-accent underline-offset-4 hover:underline"
+        >
+          Straight answers before you start
+        </a>
+      </p>
 
       {/* 4. Closing CTA band — after the objection set, not per question */}
       <section className="home-close-band px-4 py-14 sm:px-6">
@@ -196,7 +189,7 @@ export default function HomePage() {
                 See the rules working on a sample repair.
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">
-                Early access is opening carefully. No live phone demo from this site.
+                No live phone demo from this site.
               </p>
             </div>
           </div>

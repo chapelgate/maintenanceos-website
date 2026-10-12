@@ -23,7 +23,7 @@ export default function FaqPage() {
         lede="The website setup preview follows: website URL → website learning → review → configure → browser voice preview → optional save. Not a live phone, no invented website facts, and no engineering test-harness wording."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
-        <FunnelPathStrip />
+        <FunnelPathStrip linked />
         <div className="space-y-3">
           {faqItems.map((item) => (
             <details

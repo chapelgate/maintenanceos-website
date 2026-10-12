@@ -96,7 +96,7 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
 
       "Start from a public UK maintenance website, review the draft, then try the generated receptionist interactively in the browser — early access only.",
     bullets: [
-      "Public /create path: Website → Check → Choose → Configure → Review & Try, with an optional saved reference. The browser demo exists today; it is not a live phone number.",
+      "Public /create path: Website → Check → Choose → Configure → Review & Try, with an optional saved reference. The browser demo exists today. It does not assign a public phone number.",
       "The public /create path uses bounded, read-only website learning to extract reviewable public business facts. Empty fields stay empty when facts are not found.",
 
       "Knowledge pack + system prompt from the reviewed /create draft. Missing keys stay missing. Not a live tenant or trained knowledge base.",
@@ -148,11 +148,11 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     status: "VERIFIED",
     group: "calendar_actions",
     ukOpsLine:
-      "Deterministic server rules own lifecycle, approvals, and money boundaries — the model cannot execute client-money or invent a van.",
+      "Fixed server rules own lifecycle, approvals, and money boundaries — the model cannot execute client-money or invent a van.",
     bullets: [
       "AI does not override safety, lifecycle, or approvals.",
       "Critical-safety latch requires authorised human clearance.",
-      "Escalation / human-review queues for RED cases.",
+      "Escalation queues for a person to review reports flagged as dangerous.",
       "No payment, refund, compensation, fee-waiver, or client-money execution.",
     ],
     sources: ["O-03", "O-04", "O-05", "O-06"],

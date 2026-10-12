@@ -26,9 +26,9 @@ export function SafeAutomationModel({
           {SAFE_AUTOMATION_TAGLINE}
         </h2>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-          MaintenanceOS is designed to automate intake and preparation without
-          handing consequential authority to the model. These boundaries come
-          from the signed product-claims register and remain pre-launch.
+          MaintenanceOS collects and prepares a report. It does not give the
+          model authority over safety, money, or a dispatch. The product is
+          still pre-launch.
         </p>
 
         <ol className="mt-8 grid gap-4 lg:grid-cols-3">

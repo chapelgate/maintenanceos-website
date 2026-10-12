@@ -1,7 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { TrustPillars } from "@/components/TrustPillars";
-import { SafeAutomationModel } from "@/components/SafeAutomationModel";
+import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -17,12 +17,12 @@ export default function SecurityPage() {
       <PageHero
         eyebrow="Trust · Pre-launch"
         title="How we keep your data separate and your actions on record"
-        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. Website learning reads only bounded public HTTPS pages behind SSRF and redirect guards. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
+        lede="Tenant isolation, human clearance for critical safety, and a reviewable trail of actions. Website learning reads only a small set of public HTTPS pages, and private or internal addresses are blocked. We do not claim ISO, SOC 2, bank-grade security, or any other certification we have not earned."
       />
 
       <TrustPillars />
 
-      <SafeAutomationModel />
+      <SafeAutomationLink />
 
       <section
         aria-labelledby="controls-heading"
@@ -34,11 +34,11 @@ export default function SecurityPage() {
         <p className="text-muted">
           These sit in product source as designed behaviour. Live operational
           verification remains on the release checklist — we do not treat
-          source presence as a public certification.
+          source presence as a public certification. Local acceptance on 10 September 2026 included a full automated test pass, a closed local run, and a backup and restore check. Recorded build checks and security checks passed on the canonical application code. That is not an uptime percentage, latency guarantee, or SLA.
         </p>
         <ul className="list-disc space-y-2 pl-5 text-muted">
           <li>
-            Deterministic safety and lifecycle rules are designed to override
+            Fixed safety and lifecycle rules are designed to override
             AI suggestions.
           </li>
           <li>

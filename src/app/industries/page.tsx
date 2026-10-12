@@ -20,6 +20,9 @@ export default function IndustriesPage() {
         orbAccent
       />
       <div className="mx-auto max-w-6xl space-y-10 px-4 py-12">
+        <p id="core-safety" className="mos-glass px-4 py-3 text-sm text-muted">
+          Pre-launch · in testing. Core safety controls are built; a public always-on phone is not declared ready.
+        </p>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {industryRoles.map((ind) => (
             <li key={ind.slug}>

@@ -14,7 +14,7 @@ export const safeAutomationStages = [
     eyebrow: "Server rules control",
     title: "Enforce the boundaries",
     body:
-      "Deterministic rules own safety latches, lifecycle transitions, approvals, escalation states, and prohibited money actions. The model cannot override them.",
+      "Fixed rules on our server own safety latches, the progress of a job, approvals, escalation, and anything to do with money. The model cannot override them.",
   },
   {
     id: "people-approve",
@@ -34,7 +34,7 @@ export const aiMayAutomate = [
 export const humanOrRuleGate = [
   "Critical-safety clearance",
   "Lifecycle and approval transitions",
-  "Escalation / HUMAN_REVIEW for RED cases",
+  "Escalation for a person to review reports flagged as dangerous",
   "Any payment, refund, compensation, fee-waiver, or client-money action",
 ] as const;
 

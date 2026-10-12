@@ -43,7 +43,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Historical real receptionist / validation calls have occurred in a test/validation context only — not commercial GA
 - Multi-tenant maintenance-operations system
 - Tenant-scoped properties, residents, contractors, work orders, jobs, communications, exports, action evidence, call sessions (in product source)
-- Deterministic server rules own safety, lifecycle, and approvals; AI does not override
+- Fixed server rules own safety, lifecycle, and approvals; AI does not override
 - Critical-safety latch requiring authorised human clearance
 - Escalation queues / human review for serious cases
 - Quote/invoice checks may exist; no payment, refund, compensation, fee-waiver, or client-money execution
@@ -59,7 +59,7 @@ State these as designed product capabilities that exist in MaintenanceOS source.
 - Public / production hosting of the product runtime — do not market as public production
 - Website `/dashboard` foundation — coming / under testing unless a local flag is on; SAMPLE / DEMO rows only, not live call history
 - Website `/create` multi-step funnel exists as a browser voice preview (F-01). Marketing pages describe the same path: website URL → website learning → review → configure → browser voice preview → optional save. It is not a live public telephone line.
-- Website learning (F-02) is public on `/create` through a bounded, read-only, SSRF-guarded on-demand scanner. It honours robots.txt and leaves missing facts empty rather than inventing them.
+- Website learning (F-02) on `/create` reads a bounded, read-only set of public pages. It honours robots.txt and leaves missing facts empty rather than inventing them.
 - Knowledge pack + system prompt draft (F-03) and browser voice preview (F-04) are available on `/create`; the preview uses browser microphone/speech support and is not a live public telephone line
 - Scripted conversation benchmark (F-05) exists for fixture scoring only. Live-call barge-in remains open. It is not evidence of live voice-quality parity or an always-on phone service
 
@@ -84,11 +84,11 @@ Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/prope
 ## Key URLs
 
 - Home (same path as Create): https://seahorse-app-4oasq.ondigitalocean.app/
-- How it works (includes click-to-play product tour at #product-tour — not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/
+- How it works (includes click-to-play product tour at #product-tour — not a public phone call): https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/
 - Features: https://seahorse-app-4oasq.ondigitalocean.app/features/
 - Property maintenance software (core non-brand category page): https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/
 - AI receptionist: https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/
-- Security (designed controls; website learning is bounded, read-only and SSRF-guarded; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://seahorse-app-4oasq.ondigitalocean.app/security/
+- Security (designed controls; website learning is bounded and read-only; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://seahorse-app-4oasq.ondigitalocean.app/security/
 - Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
 - Pricing: https://seahorse-app-4oasq.ondigitalocean.app/pricing/
 - Create (website URL → website learning → review → configure → browser voice preview → optional save): https://seahorse-app-4oasq.ondigitalocean.app/create/
@@ -116,7 +116,7 @@ Incorrect: live commercial receptionist; public always-on phone; production call
 
 ## Security
 
-Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website learning is bounded, read-only, robots-aware and SSRF-guarded. No ISO, SOC 2, Cyber Essentials, or bank-grade claims. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. No analytics or marketing cookies and no third-party analytics tag; cookieless first-party aggregate measurement uses no persistent visitor identifier. No site-wide consent banner. Not a Google Analytics, PECR, or GDPR compliance certification. Product interest starts at Create from website.
+Tenant isolation, human clearance, and audit evidence exist in product source as designed controls. Website learning is bounded, read-only, and robots-aware. No ISO, SOC 2, Cyber Essentials, or bank-grade claims. Privacy, cookies, and terms are DRAFT FOR LEGAL REVIEW. No analytics or marketing cookies and no third-party analytics tag; cookieless first-party aggregate measurement uses no persistent visitor identifier. No site-wide consent banner. Not a Google Analytics, PECR, or GDPR compliance certification. Product interest starts at Create from website.
 
 ## Pricing
 

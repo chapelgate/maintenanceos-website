@@ -19,7 +19,7 @@ test("AI automation and human/rule gates are explicit", () => {
   const src = read("src/config/safe-automation.ts");
   assert.match(src, /Collect caller and maintenance details/);
   assert.match(src, /Critical-safety clearance/);
-  assert.match(src, /Escalation \/ HUMAN_REVIEW/);
+  assert.match(src, /Escalation for a person to review reports flagged as dangerous/);
   assert.match(src, /payment, refund, compensation, fee-waiver, or client-money/);
 });
 
@@ -42,8 +42,10 @@ test("visual model uses one shared config and no diagram dependency", () => {
   assert.doesNotMatch(pkg, /mermaid|reactflow|xyflow|d3|gojs/i);
 });
 
-test("major buyer pages reuse the same safe-automation component", () => {
-  const files = [
+test("the safety block is rendered in full once and linked elsewhere", () => {
+  const full = read("src/app/how-we-keep-control/page.tsx");
+  assert.match(full, /<SafeAutomationModel \/>/);
+  const linked = [
     "src/app/page.tsx",
     "src/app/how-it-works/page.tsx",
     "src/app/ai-receptionist/page.tsx",
@@ -51,10 +53,10 @@ test("major buyer pages reuse the same safe-automation component", () => {
     "src/app/features/page.tsx",
     "src/app/property-maintenance-software/page.tsx",
   ];
-  for (const file of files) {
+  for (const file of linked) {
     const src = read(file);
-    assert.match(src, /SafeAutomationModel/, file);
-    assert.match(src, /<SafeAutomationModel/, file);
+    assert.match(src, /<SafeAutomationLink/, file);
+    assert.doesNotMatch(src, /<SafeAutomationModel/, file);
   }
 });
 

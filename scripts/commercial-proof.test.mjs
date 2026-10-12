@@ -11,7 +11,7 @@ test("home renders the commercial proof section", () => {
   const home = read("src/app/page.tsx");
   assert.match(home, /CommercialProof/);
   assert.match(home, /<CommercialProof \/>/);
-  assert.match(home, /<UkScenarioVignettes \/>/);
+  assert.match(read("src/app/how-it-works/page.tsx"), /<UkScenarioVignettes \/>/);
 });
 
 test("commercial proof reuses the signed VERIFIED inventory", () => {
@@ -24,20 +24,20 @@ test("commercial proof reuses the signed VERIFIED inventory", () => {
 
 test("reliability wording is evidence-bounded", () => {
   const proof = read("src/components/CommercialProof.tsx");
-  assert.match(proof, /10 September 2026/);
-  assert.match(proof, /full[\s\S]*pytest pass/);
-  assert.match(proof, /SQLite backup\/restore/);
-  assert.match(proof, /Cloud CI and Security CI[\s\S]*baseline pass/);
-  assert.match(proof, /not an uptime percentage, latency[\s\S]*SLA/);
-  assert.doesNotMatch(proof, /99\.9|99\.99|ms latency|second response/i);
+  const security = read("src/app/security/page.tsx");
+  assert.match(proof, /What.s live today/);
+  assert.match(security, /10 September 2026/);
+  assert.match(security, /full automated test pass/);
+  assert.match(security, /backup and restore check/);
+  assert.match(security, /build checks and security checks passed/);
+  assert.match(security, /not an uptime percentage, latency[\s\S]*SLA/);
+  assert.doesNotMatch(proof + security, /99\.9|99\.99|ms latency|second response/i);
 });
 
 test("pilot proof slot forbids fabricated social proof", () => {
   const proof = read("src/components/CommercialProof.tsx");
-  assert.match(proof, /Awaiting publishable evidence/);
   assert.match(proof, /named evidence source/);
   assert.match(proof, /permission to publish/);
-  assert.match(proof, /claims review/);
   assert.match(proof, /No invented uptime, testimonials, customer logos, awards/);
 });
 

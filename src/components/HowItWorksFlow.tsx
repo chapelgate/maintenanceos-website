@@ -20,7 +20,7 @@ const STAGE_COPY = [
 
     short: "Validate the URL and prepare a reviewable draft",
     body: "We read a small, bounded set of public HTTPS pages and extract reviewable business facts. Missing hours, services, or FAQs stay empty when they are not found.",
-    note: "Website learning is read-only, bounded, robots-aware and SSRF-guarded. Extracted facts are reviewable before the receptionist uses them.",
+    note: "Website learning is read-only and bounded, and it follows robots.txt. Extracted facts are reviewable before the receptionist uses them.",
 
     status: "UNDER_TEST",
   },
