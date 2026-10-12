@@ -34,8 +34,7 @@ Verified 2026-10-11 against `main` (`973e57d`) and the live static site
 
 ## Next step
 
-Apply the approved website-only slices on `cursor/review-fixes-d039`: client
-zero-fetch failure, in-repo scanner reseed (droplet deploy stays blocked),
-unmount the gas strip, add a favicon, voice fallback behind configuration,
-PDF test fix, smallest safe audit upgrades, scan-proxy hardening, and `/about`
-wording. Leave the canonical host unchanged.
+Slices S0–S9 are in source on `cursor/review-fixes-d039`. Verify lint,
+typecheck, `npm test`, build, and a local smoke of the key routes. Open one
+pull request. MP-10 still waits on a domain. HB-004, HB-005, and HB-006 stay
+open. The braces audit chain has no safe non-major fix (MP-07).
