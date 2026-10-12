@@ -3,6 +3,8 @@
 import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
+import { agentTypeFromRoleSlug } from "@/lib/agent-selection";
+import type { AgentType } from "@/lib/agent-blueprint";
 import {
   createJourneyNextAction,
   isValidEmail,
@@ -30,18 +32,29 @@ const HYDRATION_SUBSCRIBE = () => () => {};
 const HYDRATED_CLIENT_SNAPSHOT = () => true;
 const HYDRATED_SERVER_SNAPSHOT = () => false;
 
+function presetRoleFromLocation(): AgentType | null {
+  if (typeof window === "undefined") return null;
+  return agentTypeFromRoleSlug(new URLSearchParams(window.location.search).get("role"));
+}
+
 function CreateLaterStepsFallback() {
+  const preset = presetRoleFromLocation();
+  const step = preset ? 3 : 2;
   return (
     <div
       className="rounded-md border border-border bg-surface p-6 shadow-sm"
       data-lead-type="create_receptionist"
-      data-create-step={2}
-      data-create-next-action="Checking…"
+      data-create-step={step}
+      data-create-next-action={preset ? "Choose a role" : "Checking…"}
       aria-busy="true"
     >
-      <CreateJourneyStepper step={2} headingRef={null} />
-      <p className="mb-6 text-sm text-muted">Next: Checking…</p>
-      <p className="font-medium text-ink">Loading the website check…</p>
+      <CreateJourneyStepper step={step} headingRef={null} />
+      <p className="mb-6 text-sm text-muted">
+        Next: {preset ? "Choose a role" : "Checking…"}
+      </p>
+      <p className="font-medium text-ink">
+        {preset ? "Loading the role choice…" : "Loading the website check…"}
+      </p>
       <p className="mt-3 text-sm text-muted">
         Your details stay on this page while the next step loads.
       </p>
@@ -71,6 +84,7 @@ export function CreateReceptionistForm({
     HYDRATED_SERVER_SNAPSHOT,
   );
   const [pastWebsite, setPastWebsite] = useState(false);
+  const [presetDismissed, setPresetDismissed] = useState(false);
   const [honeypotSuccess, setHoneypotSuccess] = useState(false);
   const [status, setStatus] = useState<"idle" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -98,6 +112,11 @@ export function CreateReceptionistForm({
     if (pastWebsite) return;
     stepHeadingRef.current?.focus();
   }, [pastWebsite]);
+
+  useEffect(() => {
+    if (!presetDismissed) return;
+    stepHeadingRef.current?.focus();
+  }, [presetDismissed]);
 
   useEffect(() => {
     if (status !== "error") return;
@@ -174,16 +193,25 @@ export function CreateReceptionistForm({
     );
   }
 
-  if (pastWebsite) {
+  const presetRole = hydrated ? presetRoleFromLocation() : null;
+  const showPreset = Boolean(presetRole) && !presetDismissed && !pastWebsite;
+
+  if (pastWebsite || showPreset) {
     return (
       <CreateReceptionistLaterSteps
         businessUrl={businessUrl}
         email={email}
         name={name}
         organisation={organisation}
+        initialStep={presetRole ? 3 : undefined}
+        initialAgentType={presetRole}
         onBackToWebsite={() => {
           setStatus("idle");
           clearError();
+          if (showPreset) {
+            setPresetDismissed(true);
+            return;
+          }
           setPastWebsite(false);
         }}
         onDraftChange={onDraftChange}

@@ -181,6 +181,8 @@ export function CreateReceptionistLaterSteps({
   onReviewSubjectChange,
   sandboxQualification,
   scannerV2Status,
+  initialStep,
+  initialAgentType = null,
 }: {
   businessUrl: string;
   email: string;
@@ -193,8 +195,11 @@ export function CreateReceptionistLaterSteps({
   sandboxQualification?: AgentSandboxQualificationResult | null;
   /** Stage 11 additive status surface. Production V2 routing remains Stage 12. */
   scannerV2Status?: ScannerV2OperationalStatus | null;
+  /** Deep link from a home role card. Omitted on the normal website-first path. */
+  initialStep?: CreateJourneyStep;
+  initialAgentType?: AgentType | null;
 }) {
-  const [step, setStep] = useState<CreateJourneyStep>(2);
+  const [step, setStep] = useState<CreateJourneyStep>(initialStep ?? 2);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [receiptReference, setReceiptReference] = useState<string | null>(null);
@@ -209,7 +214,9 @@ export function CreateReceptionistLaterSteps({
   const [identityReview, setIdentityReview] =
     useState<ReviewedIdentityDraft>(EMPTY_IDENTITY_REVIEW);
   const [reviewConfirmedIds, setReviewConfirmedIds] = useState<string[]>([]);
-  const [selectedAgentType, setSelectedAgentType] = useState<AgentType | null>(null);
+  const [selectedAgentType, setSelectedAgentType] = useState<AgentType | null>(
+    initialAgentType,
+  );
   const [agentBlueprint, setAgentBlueprint] = useState<AgentBlueprintV1 | null>(null);
   const [customerConfiguration, setCustomerConfiguration] =
     useState<CustomerAgentConfiguration | null>(null);
@@ -337,7 +344,7 @@ export function CreateReceptionistLaterSteps({
   }, [step]);
 
   useEffect(() => {
-    if (step !== 2) return;
+    if (step !== 2 || !businessUrl.trim()) return;
     let cancelled = false;
 
     (async () => {
@@ -348,7 +355,7 @@ export function CreateReceptionistLaterSteps({
       setSiteKnowledge([]);
       setIdentityReview(EMPTY_IDENTITY_REVIEW);
       setReviewConfirmedIds([]);
-      setSelectedAgentType(null);
+      if (!initialAgentType) setSelectedAgentType(null);
       setAgentBlueprint(null);
       setCustomerConfiguration(null);
       setAgentSelectionError(null);
@@ -413,7 +420,7 @@ export function CreateReceptionistLaterSteps({
     return () => {
       cancelled = true;
     };
-  }, [step, businessUrl]);
+  }, [step, businessUrl, initialAgentType]);
 
   function updateDraft<K extends keyof ReceptionistDraft>(
     key: K,
@@ -852,6 +859,10 @@ export function CreateReceptionistLaterSteps({
               type="button"
               onClick={() => {
                 setAgentSelectionError(null);
+                if (!businessUrl.trim()) {
+                  onBackToWebsite();
+                  return;
+                }
                 setStep(2);
               }}
               className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper"

@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   AGENT_TEMPLATES,
+  agentRoleSlug,
+  agentTypeFromRoleSlug,
   buildAgentBlueprintDraft,
 } from "./agent-selection.ts";
 import { validateAgentBlueprintV1 } from "./agent-blueprint.ts";
@@ -24,6 +26,27 @@ const BASE = {
     faqs: [{ question: "Do you cover Wirral?", answer: "Yes." }],
   },
 } as const;
+
+test("role slugs round-trip for every home card", () => {
+  assert.deepEqual(
+    AGENT_TEMPLATES.map((item) => agentRoleSlug(item.type)),
+    [
+      "receptionist",
+      "maintenance-desk",
+      "booking-assistant",
+      "customer-service",
+      "sales-enquiry",
+      "custom",
+    ],
+  );
+  for (const template of AGENT_TEMPLATES) {
+    assert.equal(agentTypeFromRoleSlug(agentRoleSlug(template.type)), template.type);
+  }
+  assert.equal(agentTypeFromRoleSlug("maintenance-desk"), "maintenance_desk");
+  assert.equal(agentTypeFromRoleSlug("nope"), null);
+  assert.equal(agentTypeFromRoleSlug(""), null);
+  assert.equal(agentTypeFromRoleSlug(null), null);
+});
 
 test("all six controlled templates build schema-valid AgentBlueprint v1 drafts", () => {
   assert.equal(AGENT_TEMPLATES.length, 6);

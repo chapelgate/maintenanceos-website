@@ -1,4 +1,4 @@
-import { AGENT_TEMPLATES } from "@/lib/agent-selection";
+import { AGENT_TEMPLATES, agentRoleSlug } from "@/lib/agent-selection";
 import type { AgentType } from "@/lib/agent-blueprint";
 
 const OFFER_LINE: Record<AgentType, string> = {
@@ -44,7 +44,7 @@ export function CustomerAgentOffers() {
                 {OFFER_LINE[template.type]}
               </p>
               <a
-                href="/create/"
+                href={`/create/?role=${agentRoleSlug(template.type)}`}
                 className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md border border-accent px-4 py-2.5 text-sm font-semibold text-accent hover:bg-accent-subtle"
               >
                 Choose {template.label}
