@@ -14,6 +14,7 @@ import {
 } from "./receptionist-draft.ts";
 import {
   classifyCallerIntent,
+  emergencyPublicAdvice,
   runScriptedDemo,
   scriptedReply,
 } from "../../packages/sandbox-test-call/src/scripted.ts";
@@ -178,8 +179,7 @@ export function runBrowserInteractiveReply(
   if (intent === "emergency") {
     return {
       ...reply,
-      text:
-        "If this is an emergency in the UK, call 999 now (not 911). I can't dispatch emergency services from this browser preview.",
+      text: `${emergencyPublicAdvice(callerText)} I can't dispatch emergency services from this browser preview.`,
     };
   }
   if (intent === "angry") {

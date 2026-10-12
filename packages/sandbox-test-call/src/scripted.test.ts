@@ -227,6 +227,139 @@ test("scriptedReply ranks emergency above booking", () => {
     "Please book me an emergency gas leak appointment, someone is hurt.",
     ACME_PACK,
   );
+  assert.match(reply.text, /0800 111 999/);
   assert.match(reply.text, /\b999\b/);
   assert.match(reply.text, /cannot dispatch/i);
+  assert.doesNotMatch(reply.text, /cannot book/i);
+});
+
+const GAS_PHRASES = [
+  "I can smell gas",
+  "I can smell gas in my kitchen",
+  "smell of gas",
+  "gas smell",
+  "I CAN SMELL GAS!",
+  "Smell of gas.",
+  "gas smell?",
+  "Smell gas?",
+  "This is an emergency — there's a gas leak and someone is hurt.",
+];
+
+const CARBON_MONOXIDE_PHRASES = [
+  "carbon monoxide",
+  "My carbon monoxide alarm is going off",
+  "CO alarm",
+  "C.O. alarm",
+  "Carbon Monoxide!",
+  "co alarm.",
+];
+
+const LEAVE_AND_CALL_999_PHRASES = [
+  "sparks",
+  "Sparks!",
+  "burning smell",
+  "burning smell.",
+  "water near the electrics",
+  "Water near the electrics!",
+  "water coming through the light fitting",
+  "There's water coming through the kitchen ceiling, right round the light fitting.",
+  "ceiling has collapsed",
+  "The ceiling has collapsed!",
+  "flooding",
+  "Flooding.",
+];
+
+test("gas phrases return the published National Gas emergency script before any other intent", () => {
+  for (const phrase of GAS_PHRASES) {
+    assert.equal(classifyCallerIntent(phrase), "emergency", phrase);
+    const reply = scriptedReply(phrase, ACME_PACK);
+    assert.match(reply.text, /Get out, don't use switches or flames/);
+    assert.match(reply.text, /National Gas Emergency Service on 0800 111 999/);
+    assert.match(reply.text, /If someone is unwell or in danger, call 999/);
+    assert.match(reply.text, /not 911/i);
+    assert.match(reply.text, /cannot dispatch/i);
+    assert.doesNotMatch(reply.text, /not on file|not sure/i);
+  }
+});
+
+test("carbon monoxide phrases return the published gas-emergency number and say to go outside", () => {
+  for (const phrase of CARBON_MONOXIDE_PHRASES) {
+    assert.equal(classifyCallerIntent(phrase), "emergency", phrase);
+    const reply = scriptedReply(phrase, ACME_PACK);
+    assert.match(reply.text, /go outside/);
+    assert.match(reply.text, /National Gas Emergency Service on 0800 111 999/);
+    assert.match(reply.text, /or 999 if someone is finding it hard to breathe/);
+    assert.match(reply.text, /not 911/i);
+    assert.doesNotMatch(reply.text, /not on file|not sure/i);
+  }
+});
+
+test("sparks, burning, water, collapse, and flooding say to get out and call 999", () => {
+  for (const phrase of LEAVE_AND_CALL_999_PHRASES) {
+    assert.equal(classifyCallerIntent(phrase), "emergency", phrase);
+    const reply = scriptedReply(phrase, ACME_PACK);
+    assert.match(reply.text, /Get out, don't use switches or flames/);
+    assert.match(reply.text, /call 999 now \(not 911\)/);
+    assert.match(reply.text, /cannot dispatch/i);
+    assert.doesNotMatch(reply.text, /0800 111 999/);
+    assert.doesNotMatch(reply.text, /not on file|not sure/i);
+  }
+});
+
+test("routine phrases still route normally and do not use the emergency script", () => {
+  const cases: Array<{ phrase: string; intent: string; pattern: RegExp }> = [
+    {
+      phrase: "What are your opening hours?",
+      intent: "hours",
+      pattern: /opening hours/i,
+    },
+    {
+      phrase: "What services do you offer?",
+      intent: "services",
+      pattern: /Boiler repair/,
+    },
+    {
+      phrase: "Can you book me an appointment tomorrow?",
+      intent: "booking",
+      pattern: /cannot book/i,
+    },
+    {
+      phrase: "I want to speak to a human.",
+      intent: "human",
+      pattern: /cannot transfer/i,
+    },
+    {
+      phrase: "How much is a tap washer?",
+      intent: "price",
+      pattern: /not on file/i,
+    },
+    {
+      phrase: "How much for a gas boiler service?",
+      intent: "price",
+      pattern: /not on file/i,
+    },
+    {
+      phrase: "What does your company do?",
+      intent: "services",
+      pattern: /Boiler repair/,
+    },
+    {
+      phrase: "The kitchen tap is dripping.",
+      intent: "unknown",
+      pattern: /not on file/i,
+    },
+    {
+      phrase: "Do you deliver propane gas cylinders?",
+      intent: "unknown",
+      pattern: /not on file/i,
+    },
+  ];
+
+  for (const item of cases) {
+    assert.equal(classifyCallerIntent(item.phrase), item.intent, item.phrase);
+    const reply = scriptedReply(item.phrase, ACME_PACK);
+    assert.match(reply.text, item.pattern, item.phrase);
+    assert.doesNotMatch(reply.text, /0800 111 999/);
+    assert.doesNotMatch(reply.text, /call 999 now/i);
+  }
 });

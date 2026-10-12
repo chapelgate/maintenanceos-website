@@ -122,6 +122,113 @@ function closingSource(systemPrompt?: string): ScriptedTurnSource {
 const NOT_LIVE =
   "This is a scripted sandbox, not a live phone line. Frozen production telephony is unused.";
 
+/**
+ * Public safety sentences already published on this website.
+ * GasSafetyStrip, without the "Smell gas?" label.
+ */
+export const GAS_EMERGENCY_ADVICE =
+  "Get out, don't use switches or flames, and call the National Gas Emergency Service on 0800 111 999. If someone is unwell or in danger, call 999.";
+
+/** Action sentences from the carbon monoxide section on /how-we-keep-control. */
+export const CARBON_MONOXIDE_EMERGENCY_ADVICE =
+  "If you suspect it: turn off the appliance if it's safe to, open doors and windows, go outside, and call the National Gas Emergency Service on 0800 111 999. Don't go back inside until you've been told it's safe. Call NHS 111 for medical advice, or 999 if someone is finding it hard to breathe, has suddenly become confused or has lost consciousness.";
+
+/** Existing UK emergency sentence used by this sandbox preview. */
+export const UK_999_ADVICE =
+  "If this is an emergency in the UK, call 999 now (not 911).";
+
+/** Leave-and-switches clause from the published gas sentence, before "and call". */
+export const LEAVE_PROPERTY_ADVICE = "Get out, don't use switches or flames";
+
+export type CallerHazard = "gas" | "carbon_monoxide" | "immediate";
+
+/**
+ * Lower-case, drop punctuation, and join initials such as "C.O." so
+ * case and punctuation variants hit the same hazard phrases.
+ */
+export function normalizeCallerText(text: string): string {
+  let current = text.toLowerCase();
+  let collapsed = current.replace(/([a-z])\.(?=[a-z])/g, "$1");
+  while (collapsed !== current) {
+    current = collapsed;
+    collapsed = current.replace(/([a-z])\.(?=[a-z])/g, "$1");
+  }
+  return collapsed.replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function matchesAny(text: string, patterns: readonly RegExp[]): boolean {
+  return patterns.some((pattern) => pattern.test(text));
+}
+
+const GAS_HAZARD = [
+  /\bsmells?(?:ing|ed)?(?: (?:of|the))? gas\b/,
+  /\bsmells? like gas\b/,
+  /\bgas smells?(?:ing|ed)?\b/,
+  /\bgas leaks?\b/,
+] as const;
+
+const CARBON_MONOXIDE_HAZARD = [
+  /\bcarbon monoxide\b/,
+  /\bco ?alarms?\b/,
+  /\bco ?detectors?\b/,
+  /\bco ?monitors?\b/,
+] as const;
+
+/** Physical hazards where the published advice is to get out, then call 999. */
+const LEAVE_PROPERTY_HAZARD = [
+  /\bsparks\b/,
+  /\bsparking\b/,
+  /\ba spark\b/,
+  /\belectrical sparks?\b/,
+  /\bburning smells?\b/,
+  /\bsmell of burning\b/,
+  /\bsmells? like burning\b/,
+  /\bsmells? burning\b/,
+  /\bsomething(?: is| s)? burning\b/,
+  /\bit s burning\b/,
+  /\bwater\b(?: \w+){0,12} \belectrics?\b/,
+  /\belectrics?\b(?: \w+){0,12} \bwater\b/,
+  /\blight fittings?\b/,
+  /\bflood(?:ing|ed|s)?\b/,
+  /\bcollaps(?:e|ed|ing)\b/,
+  /\bon fire\b/,
+] as const;
+
+const IMMEDIATE_HAZARD = [
+  ...LEAVE_PROPERTY_HAZARD,
+  /\bbleeding\b/,
+  /\b(?:emergency|ambulance|fire brigade)\b/,
+  /\bsomeone is hurt\b/,
+  /\b999\b/,
+  /\b911\b/,
+] as const;
+
+/**
+ * Website sandbox preview only. The golden phone line does not import this.
+ * Gas and carbon monoxide are checked before the generic emergency words so
+ * a smell of gas is not answered as a booking or a missing pack field.
+ */
+export function callerHazard(text: string): CallerHazard | null {
+  const normalized = normalizeCallerText(text);
+  if (!normalized) return null;
+  if (matchesAny(normalized, GAS_HAZARD)) return "gas";
+  if (matchesAny(normalized, CARBON_MONOXIDE_HAZARD)) return "carbon_monoxide";
+  if (matchesAny(normalized, IMMEDIATE_HAZARD)) return "immediate";
+  return null;
+}
+
+export function emergencyPublicAdvice(text: string): string {
+  const hazard = callerHazard(text);
+  if (hazard === "gas") return `${GAS_EMERGENCY_ADVICE} ${UK_999_ADVICE}`;
+  if (hazard === "carbon_monoxide") {
+    return `${CARBON_MONOXIDE_EMERGENCY_ADVICE} ${UK_999_ADVICE}`;
+  }
+  if (matchesAny(normalizeCallerText(text), LEAVE_PROPERTY_HAZARD)) {
+    return `${LEAVE_PROPERTY_ADVICE}. ${UK_999_ADVICE}`;
+  }
+  return UK_999_ADVICE;
+}
+
 export type ScriptedIntent =
   | "emergency"
   | "booking"
@@ -237,15 +344,7 @@ function knowledgeSummaryTurn(pack: KnowledgePack): ScriptedTurn {
 
 export function classifyCallerIntent(text: string): ScriptedIntent {
   const t = text.toLowerCase();
-  if (
-    /\b(emergency|ambulance|fire brigade|gas leak)\b/.test(t) ||
-    /someone is hurt/.test(t) ||
-    /\b999\b/.test(t) ||
-    /\b911\b/.test(t) ||
-    /on fire|bleeding|collapsed/.test(t)
-  ) {
-    return "emergency";
-  }
+  if (callerHazard(text)) return "emergency";
   if (/\b(book|booking|appointment|schedule|scheduled|slot|reschedule)\b/.test(t)) {
     return "booking";
   }
@@ -400,7 +499,7 @@ export function scriptedReply(
   if (intent === "emergency") {
     return {
       speaker: "receptionist",
-      text: `If this is an emergency in the UK, call 999 now (not 911). I cannot dispatch anyone from this scripted sandbox. ${NOT_LIVE}`,
+      text: `${emergencyPublicAdvice(callerText)} I cannot dispatch anyone from this scripted sandbox. ${NOT_LIVE}`,
       source: policySource(systemPrompt),
     };
   }

@@ -25,13 +25,20 @@ export type {
 export { isSandboxTestCallEnabled } from "./flags.ts";
 export { asDraftString, firstFaqPair, normalizeDraft } from "./draft.ts";
 export {
+  CARBON_MONOXIDE_EMERGENCY_ADVICE,
+  GAS_EMERGENCY_ADVICE,
+  LEAVE_PROPERTY_ADVICE,
+  UK_999_ADVICE,
+  callerHazard,
   classifyCallerIntent,
+  emergencyPublicAdvice,
   matchFaq,
   missingOnFileReply,
+  normalizeCallerText,
   runScriptedDemo,
   scriptedReply,
 } from "./scripted.ts";
-export type { ScriptedIntent } from "./scripted.ts";
+export type { CallerHazard, ScriptedIntent } from "./scripted.ts";
 export {
   BENCHMARK_FOOTER,
   BENCHMARK_SCENARIOS,
