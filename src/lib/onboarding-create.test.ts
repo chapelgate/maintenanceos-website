@@ -18,6 +18,8 @@ import {
   mapScanSiteKnowledge,
   normalisePublicUrl,
   scanFieldReviewHint,
+  isZeroFetchPartial,
+  ZERO_FETCH_PARTIAL_MESSAGE,
 } from "./onboarding-create.ts";
 
 test("normalisePublicUrl accepts public http(s) and rejects junk", () => {
@@ -400,4 +402,40 @@ test("buildCreateLeadMessage includes sandbox qualification evidence", () => {
   assert.match(message, /"source": "companion"/);
   assert.match(message, /"reviewRevisionId": "arv1_12345678"/);
   assert.match(message, /"complete": true/);
+});
+
+test("zero-fetch PARTIAL is a failed read, not an empty draft", () => {
+  const alleygatesStyle = {
+    ok: true,
+    draft: {},
+    warnings: ["scanner_v2_partial"],
+    scannerV2: {
+      state: "PARTIAL",
+      discovered: 1,
+      fetched: 0,
+      unresolved: 0,
+      knowledgeChunks: 0,
+      resumed: true,
+    },
+  };
+  assert.equal(isZeroFetchPartial(alleygatesStyle), true);
+  assert.equal(
+    isZeroFetchPartial({
+      ok: true,
+      scannerV2: { state: "COMPLETE", fetched: 1, resumed: false },
+    }),
+    false,
+  );
+  assert.equal(
+    isZeroFetchPartial({
+      ok: true,
+      scannerV2: { state: "PARTIAL", fetched: 2 },
+    }),
+    false,
+  );
+  assert.equal(isZeroFetchPartial({ ok: true, draft: {} }), false);
+  assert.doesNotMatch(ZERO_FETCH_PARTIAL_MESSAGE, /nothing found/i);
+  assert.doesNotMatch(ZERO_FETCH_PARTIAL_MESSAGE, /No draft fields were supplied/);
+  assert.match(ZERO_FETCH_PARTIAL_MESSAGE, /could not read any public pages/);
+  assert.match(ZERO_FETCH_PARTIAL_MESSAGE, /Nothing was invented/);
 });

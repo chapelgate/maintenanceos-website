@@ -49,15 +49,25 @@ export default function AboutPage() {
             still pre-launch.
           </p>
           <p>
-            Eight industry lines sit under Chapelgate on{" "}
+            MaintenanceOS is pre-launch. LandlordOS, LettingAgentOS,
+            PropertyManagerOS, HousingAssociationOS, FacilitiesOS, CouncilOS
+            and HolidayLetOS are separate planned products. They are not live
+            and not for sale. The{" "}
             <a
               href="/industries/"
               className="font-medium text-accent underline-offset-4 hover:underline"
             >
               Industries
+            </a>{" "}
+            pages describe MaintenanceOS audiences, not those products. The
+            wider Chapelgate programme is described at{" "}
+            <a
+              href="https://chapelgatetechnologies.com/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              chapelgatetechnologies.com
             </a>
-            . Those pages are positioning for UK verticals — not a claim that
-            each line is commercially available today.
+            .
           </p>
         </section>
 

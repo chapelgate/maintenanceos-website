@@ -372,7 +372,7 @@ test("create and legal scaffolds share the website-URL setup privacy note", () =
   assert.match(copy, /reads a small, bounded set of public HTTPS pages/);
   assert.match(copy, /Private and internal network targets are blocked/);
   assert.match(copy, /robots\.txt is honoured/);
-  assert.match(copy, /only stored when you choose Save setup/);
+  assert.match(copy, /is not stored while online enquiries are temporarily unavailable/);
   assert.match(copy, /browser voice preview does not activate or alter live telephony/);
   assert.match(copy, /DRAFT FOR LEGAL REVIEW/);
   assert.doesNotMatch(

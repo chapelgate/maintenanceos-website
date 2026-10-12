@@ -1,5 +1,6 @@
 import type { LeadType } from "@/config/site";
 import { siteConfig } from "@/config/site";
+import { ENQUIRY_UNAVAILABLE_MESSAGE } from "@/lib/public-enquiry";
 
 export type LeadPayload = {
   leadType: LeadType;
@@ -101,7 +102,7 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
 
   const endpoint = siteConfig.formEndpoint.trim();
   if (!endpoint) {
-    return { ok: true, mode: "local_stub" };
+    return { ok: false, error: ENQUIRY_UNAVAILABLE_MESSAGE };
   }
 
   if (!isAbsoluteHttpUrl(endpoint)) {

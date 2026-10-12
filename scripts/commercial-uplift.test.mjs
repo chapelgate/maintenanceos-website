@@ -113,6 +113,10 @@ test("contact, about, and faq stay professional and claims-safe", () => {
   assert.match(about, /Chapelgate/);
   assert.match(about, /United Kingdom/);
   assert.match(about, /do not invent team bios/);
+  assert.match(about, /separate planned products/);
+  assert.match(about, /not live/);
+  assert.match(about, /MaintenanceOS audiences/);
+  assert.doesNotMatch(about, /Eight industry lines sit under Chapelgate/);
   assert.doesNotMatch(about, /our team of \d+/i);
   assert.doesNotMatch(about, /trusted by/i);
 

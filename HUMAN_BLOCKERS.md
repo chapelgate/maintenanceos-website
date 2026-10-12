@@ -50,3 +50,75 @@ Exact next action:
 Verification already complete for PR #202:
 - Estate Gate run `37384917884`: PASS.
 - Website integration repair validation run `37384916833`: PASS.
+
+## HB-004 — Scanner V2 droplet still runs the pre-reseed runtime
+Status: OPEN
+Affected slice: S2 (zero-fetch resume reseed)
+
+Exact reason:
+The marketing-website repo can hold the reseed and skip-reason code, but the
+live scanner is the droplet `maintenanceos-scanner-v2` (droplet 606110383,
+178.128.171.45). This change must not SSH, SCP, or redeploy that host. A
+website merge does not update it. The previous owner instruction still
+forbids deploying the old `cadce5c` archive.
+
+What was attempted:
+In-repo source and unit tests only. No droplet call and no new host.
+
+Exact action Andrew needs to take:
+1. Use the existing approved recovery identity for droplet `606110383` only.
+2. After this website change is on `main` and its tests pass, deploy a fresh
+   payload built from that verified `main` SHA (not `cadce5c`, and not an
+   unverified intermediate).
+3. Keep the existing fail-closed/self-rollback method and HTTPS route.
+4. Check health, then a zero-fetch resume, before treating production scan as
+   repaired.
+5. Do not paste the recovery private key into chat or GitHub, and do not
+   create a replacement host.
+
+Other work can continue: yes. The website client can still treat a zero-fetch
+response as a failure without a droplet deploy.
+
+## HB-005 — Website-only Gemini/Gacrux preview credential
+Status: OPEN
+Affected slice: S5 (spoken voice on the website)
+
+Exact reason:
+`PRODUCT_CLAIMS_REGISTER.md` V-01 identifies the accepted golden-line voice as
+Gemini / Gacrux. This static site has no website-owned credential for that
+provider. The golden line's own keys must not be read or copied. A
+`NEXT_PUBLIC_` key would be published in the export.
+
+What was attempted:
+Configuration for a website-owned preview URL, with the existing browser
+en-GB voice when that URL is empty or fails. No provider key was added.
+
+Exact action Andrew needs to take:
+Provide a website-only speech preview URL that already holds a Gemini/Gacrux
+credential server-side, separate from the golden phone line. Set
+`NEXT_PUBLIC_VOICE_PREVIEW_ENDPOINT` for the website build (voice name
+defaults to `Gacrux`) and rebuild. Do not send the golden line's key.
+
+Other work can continue: yes. Visitors keep the browser voice until that URL
+exists.
+
+## HB-006 — Desmond product-tour soundtrack
+Status: OPEN
+Affected slice: S5 (tour voiceover)
+
+Exact reason:
+`public/media/product-tour.mp4` uses `scripts/product-tour/vo/desmond.wav`
+(Higgsfield Seed Audio, voice Desmond). Matching the golden-line voice means
+regenerating that recording with Gemini/Gacrux. This change must not fake
+audio, and HB-005's website-only provider access does not exist yet.
+
+What was attempted:
+The visible caption is flagged as recorded narration, not the phone voice.
+The wav and mp4 were left as committed.
+
+Exact action Andrew needs to take:
+When a website-owned Gacrux path exists, regenerate `desmond.wav` with that
+voice and run `npm run product-tour:remux`. Until then, leave the committed
+recording in place.
+
+Other work can continue: yes.

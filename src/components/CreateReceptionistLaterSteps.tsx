@@ -7,6 +7,7 @@ import { AgentReviewGate } from "@/components/AgentReviewGate";
 import { AgentTypeSelector } from "@/components/AgentTypeSelector";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
 import { ScannerV2CrawlStatus } from "@/components/ScannerV2CrawlStatus";
+import { EnquiryUnavailable } from "@/components/EnquiryUnavailable";
 import { PRODUCTION_FORM_ENDPOINT, siteConfig } from "@/config/site";
 import {
   agentReviewRevision,
@@ -1206,8 +1207,10 @@ export function CreateReceptionistLaterSteps({
             Your reviewed receptionist configuration is ready to try in the
             interactive browser demo below. The demo uses this knowledge pack
             and the same deterministic safety rules, but it does not dial a
-            phone number or touch the live telephone service. Saving the setup
-            is optional and sends you a durable reference by email.
+            phone number or touch the live telephone service.
+            {siteConfig.formEndpoint.trim()
+              ? " Saving the setup is optional and sends you a durable reference by email."
+              : " Saving the setup is unavailable because online enquiries are temporarily unavailable."}
           </p>
           {agentBlueprint && review ? (
             <div className="mt-5">
@@ -1291,21 +1294,30 @@ export function CreateReceptionistLaterSteps({
             >
               {createJourneyNextAction(5)}
             </button>
-            <button
-              type="button"
-              disabled={status === "submitting"}
-              aria-describedby={reviewStatusId}
-              onClick={() => void onSubmitLead()}
-              className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
-            >
-              {status === "submitting" ? "Saving…" : "Save setup & email reference"}
-            </button>
+            {siteConfig.formEndpoint.trim() ? (
+              <button
+                type="button"
+                disabled={status === "submitting"}
+                aria-describedby={reviewStatusId}
+                onClick={() => void onSubmitLead()}
+                className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
+              >
+                {status === "submitting" ? "Saving…" : "Save setup & email reference"}
+              </button>
+            ) : null}
           </div>
+          {siteConfig.formEndpoint.trim() ? null : (
+            <div className="mt-4">
+              <EnquiryUnavailable />
+            </div>
+          )}
           <p className="mt-3 text-xs text-muted">
             The interactive demo runs in this browser from the reviewed pack.
-            {usesProductionLeadReceiver
-              ? " Saving the setup uses the production lead receiver and requires durable acceptance plus a receipt reference."
-              : " Saving the setup uses the preview receiver and still requires a durable receipt reference."}
+            {siteConfig.formEndpoint.trim()
+              ? usesProductionLeadReceiver
+                ? " Saving the setup uses the production lead receiver and requires durable acceptance plus a receipt reference."
+                : " Saving the setup uses the preview receiver and still requires a durable receipt reference."
+              : " Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk."}
             {" "}No live telephone line is changed here.
           </p>
         </div>

@@ -390,6 +390,21 @@ export type ScanOutcome =
     }
   | { status: "error"; message: string };
 
+/**
+ * A durable crawl can return HTTP 200 with a PARTIAL manifest that fetched
+ * nothing. That is a failed read, not an empty-but-successful draft.
+ */
+export const ZERO_FETCH_PARTIAL_MESSAGE =
+  "The website check could not read any public pages, so no business facts were filled in. You can complete the draft yourself. Nothing was invented.";
+
+export function isZeroFetchPartial(body: unknown): boolean {
+  if (!body || typeof body !== "object") return false;
+  const scanner = (body as { scannerV2?: unknown }).scannerV2;
+  if (!scanner || typeof scanner !== "object") return false;
+  const record = scanner as { state?: unknown; fetched?: unknown };
+  return record.state === "PARTIAL" && record.fetched === 0;
+}
+
 const SCAN_TIMEOUT_MS = 120_000;
 
 export async function requestOnboardingScan(
@@ -431,6 +446,9 @@ export async function requestOnboardingScan(
         message:
           "The scan service could not process this URL. No crawl results were invented.",
       };
+    }
+    if (isZeroFetchPartial(parsed)) {
+      return { status: "error", message: ZERO_FETCH_PARTIAL_MESSAGE };
     }
     const facts = mapScanBusinessFacts(parsed);
     return {

@@ -39,6 +39,7 @@ Writes:
 Voiceover source (committed):
 
 - `scripts/product-tour/vo/desmond.wav` — Higgsfield Seed Audio, voice **Desmond**, ~39.4s, claims-safe beats above (Visual Design Council + Positioning). Remux pads trailing silence to the 45s picture. Do not stretch speech. If the wav is replaced externally, run `npm run product-tour:remux`.
+- This recording is not the golden-line voice (Gemini / Gacrux). Do not replace the wav until a website-owned preview path exists. See `HUMAN_BLOCKERS.md` HB-006. The on-page caption says it is recorded narration, not the phone voice.
 
 Soft size target is **≤~3 MB**. If remux exceeds **~5 MB**, drop AAC to 96k before shipping. Picture ceiling remains **~8–12 MB** (raise CRF 29–31 if a full re-render exceeds that). Do not add a scheduled GitHub Action for this.
 

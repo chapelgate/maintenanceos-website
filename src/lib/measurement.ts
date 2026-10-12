@@ -1,4 +1,5 @@
 import { siteConfig, type LeadType } from "@/config/site";
+import { usableHttpEndpoint } from "@/lib/public-enquiry";
 
 export type WebsiteEventType =
   | "page_view"
@@ -69,7 +70,7 @@ export function buildWebsiteEvent(
 export function trackWebsiteEvent(input: WebsiteEventInput): void {
   if (typeof window === "undefined") return;
 
-  const endpoint = siteConfig.measurementEndpoint.trim();
+  const endpoint = usableHttpEndpoint(siteConfig.measurementEndpoint);
   if (!endpoint || !validEndpoint(endpoint)) return;
 
   const body = JSON.stringify(

@@ -22,11 +22,14 @@ export function LegalPageChrome({ noticeLabel }: LegalPageChromeProps) {
       </p>
       <p>
         <span className="font-medium text-ink">Contact for this {noticeLabel}:</span>{" "}
-        [OWNER: email or form path] — until a dedicated address exists, use the{" "}
-        <a href="/contact/" className="text-accent underline">
-          contact form
+        <a href="mailto:andy@chapelgatehome.uk" className="text-accent underline">
+          andy@chapelgatehome.uk
         </a>
-        .
+        . Online enquiries are temporarily unavailable. The{" "}
+        <a href="/contact/" className="text-accent underline">
+          contact page
+        </a>{" "}
+        shows the same address.
       </p>
       <p>
         <span className="font-medium text-ink">Related:</span>{" "}

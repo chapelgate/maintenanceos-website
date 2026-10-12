@@ -225,3 +225,99 @@ test("release SHA creates a fresh durable crawl identity", async () => {
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("zero-fetch resume reseeds and surfaces the skip reason", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-zero-fetch-"));
+  let discoveryCalls = 0;
+  try {
+    const discover = async (rawUrl: string) => {
+      discoveryCalls += 1;
+      const origin = new URL(rawUrl).origin;
+      const skipped = discoveryCalls === 1;
+      return {
+        manifest: {
+          crawlId: "seed",
+          origin,
+          state: "PARTIAL" as const,
+          discovered: 1,
+          queued: skipped ? 0 : 1,
+          fetched: 0,
+          duplicate: 0,
+          policySkipped: skipped ? 1 : 0,
+          robotsSkipped: 0,
+          unresolved: 0,
+          urls: [
+            skipped
+              ? {
+                  url: `${origin}/`,
+                  status: "policy_skipped" as const,
+                  reason: "http_403",
+                  discoveryReason: "submitted" as const,
+                  retryCount: 0,
+                }
+              : {
+                  url: `${origin}/`,
+                  status: "queued" as const,
+                  discoveryReason: "submitted" as const,
+                  retryCount: 0,
+                },
+          ],
+        },
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: [],
+        limitReached: false,
+        incomplete: true,
+      };
+    };
+    const processUrl = async ({ url }: { url: CrawlUrlDisposition }) => {
+      const p = page(url.url, "Alley gate repairs");
+      return {
+        disposition: "fetched" as const,
+        canonicalUrl: p.canonicalUrl,
+        page: p,
+        chunks: [],
+      };
+    };
+
+    const first = await runPersistentScannerV2("https://alleygates.example/", {
+      stateRoot: root,
+      releaseSha: "release-a",
+      requestMs: 1_000,
+      now: () => 0,
+      discover: discover as never,
+      processUrl: processUrl as never,
+    });
+    assert.equal(first.ok, true);
+    if (!first.ok) return;
+    assert.equal(first.scannerV2?.fetched, 0);
+    assert.equal(first.scannerV2?.state, "PARTIAL");
+    assert.equal(first.scannerV2?.resumed, false);
+    assert.ok(first.warnings.includes("http_403"));
+    assert.ok(first.warnings.includes("scanner_v2_partial"));
+    assert.equal(discoveryCalls, 1);
+
+    const second = await runPersistentScannerV2("https://alleygates.example/", {
+      stateRoot: root,
+      releaseSha: "release-a",
+      requestMs: 1_000,
+      now: () => 0,
+      discover: discover as never,
+      processUrl: processUrl as never,
+    });
+    assert.equal(second.ok, true);
+    if (!second.ok) return;
+    assert.equal(discoveryCalls, 2);
+    assert.equal(second.scannerV2?.resumed, true);
+    assert.equal(second.scannerV2?.fetched, 1);
+    assert.equal(second.scannerV2?.state, "COMPLETE");
+    assert.equal(second.draft.businessName, "Acme Gates");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

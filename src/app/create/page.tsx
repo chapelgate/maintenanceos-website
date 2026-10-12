@@ -1,3 +1,4 @@
+import { EnquiryUnavailable } from "@/components/EnquiryUnavailable";
 import {
   CalendarConnectSection,
   CreateJourneySection,
@@ -36,7 +37,7 @@ const steps = [
   },
   {
     title: "Save your setup (optional)",
-    body: "If you want a record of the setup, save it and we will email you the durable reference. Saving is separate from the interactive demo.",
+    body: "Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk. The browser preview does not store the setup.",
   },
 ] as const;
 
@@ -48,7 +49,7 @@ export default function CreateReceptionistPage() {
 
         eyebrow="Create your receptionist · Preview"
         title="Turn your business website into an AI receptionist"
-        lede="Paste your site URL, let MaintenanceOS learn the public business facts, review the receptionist, then start a browser voice call and speak to it. You can optionally save the setup and receive a reference by email. The preview does not change your live telephone service."
+        lede="Paste your site URL, let MaintenanceOS learn the public business facts, review the receptionist, then start a browser voice call and speak to it. Online enquiries are temporarily unavailable, so the preview is not stored. It does not change your live telephone service."
 
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
@@ -62,9 +63,12 @@ export default function CreateReceptionistPage() {
           </h2>
           <p className="mt-2 text-sm text-muted">
             Next: read the public website, review the extracted facts, configure
-            the receptionist, then start a browser voice call. Saving the setup
-            and emailing a reference is optional.
+            the receptionist, then start a browser voice call. The preview stays
+            in this browser.
           </p>
+          <div className="mt-6">
+            <EnquiryUnavailable />
+          </div>
           <div className="mt-6">
             <CreateJourneySection />
           </div>

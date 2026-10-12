@@ -31,7 +31,7 @@ const pathSteps = [
   }),
   {
     title: "Save setup (optional)",
-    body: "Save the reviewed setup if you want a durable reference emailed to you. Saving is separate from the interactive demo.",
+    body: "Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk. The interactive demo does not store the setup.",
     status: "UNDER_TEST" as const,
   },
 ];
@@ -43,7 +43,7 @@ export default function DemoPage() {
       <PageHero
         eyebrow="Interactive product preview"
         title="Start from your website URL."
-        lede="See the real website journey: website URL → check → choose role → configure → review and try. The interactive demo uses the reviewed knowledge pack in your browser. Saving the setup is optional and the live telephone service is separate."
+        lede="See the real website journey: website URL → check → choose role → configure → review and try. The interactive demo uses the reviewed knowledge pack in your browser. Online enquiries are temporarily unavailable, and the live telephone service is separate."
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">
