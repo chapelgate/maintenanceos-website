@@ -91,6 +91,19 @@ export function agentTemplateFor(type: AgentType): AgentTemplate {
   return template;
 }
 
+/** Public URL slug for a role. Underscores become hyphens. */
+export function agentRoleSlug(type: AgentType): string {
+  return type.replaceAll("_", "-");
+}
+
+/** Map a `?role=` value back to a template, or null when it is not one of the six. */
+export function agentTypeFromRoleSlug(value: string | null | undefined): AgentType | null {
+  if (!value) return null;
+  const normalised = value.trim().toLowerCase().replaceAll("-", "_");
+  const template = AGENT_TEMPLATES.find((item) => item.type === normalised);
+  return template ? template.type : null;
+}
+
 function deniedCapabilities(allowed: readonly AgentCapability[]): AgentCapability[] {
   return AGENT_CAPABILITIES.filter((capability) => !allowed.includes(capability));
 }

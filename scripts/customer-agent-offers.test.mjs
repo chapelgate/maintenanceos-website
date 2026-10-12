@@ -16,7 +16,8 @@ test("public home offers the same controlled agent roles used by setup", () => {
   assert.match(offers, /AGENT_TEMPLATES\.map/);
   assert.match(selector, /AGENT_TEMPLATES\.map/);
   assert.match(offers, /Choose what you want the AI to do/);
-  assert.match(offers, /href="\/create\/"/);
+  assert.match(offers, /href=\{`\/create\/\?role=\$\{agentRoleSlug\(template\.type\)\}`\}/);
+  assert.match(offers, /agentRoleSlug/);
 });
 
 test("customer offer surface stays claims-safe", () => {
