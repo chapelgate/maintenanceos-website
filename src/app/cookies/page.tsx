@@ -27,16 +27,19 @@ export default function CookiesPage() {
             <h2 id="cookies-about" className="text-xl font-semibold text-ink">
               About this cookie notice
             </h2>
-              <p className="mt-2 text-muted">
-                This draft explains cookies and similar technologies on the MaintenanceOS marketing site, operated by Chapelgate Limited (company number 12340004). It is pending legal and Privacy sign-off. Website-URL ingest on /create is described in the{" "}
-                <a
-                  href="/privacy/#website-url-ingest"
-                  className="text-accent underline"
-                >
-                  Privacy Policy (Draft)
-                </a>
-                ; it is not a cookie category.
-              </p>
+            <p className="mt-2 text-muted">
+              This draft explains cookies and similar technologies on the
+              MaintenanceOS marketing site, operated by Chapelgate Limited
+              (company number 12340004). It is pending legal and Privacy
+              sign-off. Website-URL ingest on /create is described in the{" "}
+              <a
+                href="/privacy/#website-url-ingest"
+                className="text-accent underline"
+              >
+                Privacy Policy (Draft)
+              </a>
+              ; it is not a cookie category.
+            </p>
           </section>
 
           <section aria-labelledby="cookies-what">
@@ -56,8 +59,8 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               We use a four-category scaffold below, and only enable categories
-              that exist in the build. None of this is a finished counsel-approved
-              policy.
+              that exist in the build. None of this is a finished
+              counsel-approved policy.
             </p>
           </section>
 
@@ -69,9 +72,9 @@ export default function CookiesPage() {
               Cookie categories
             </h2>
             <p className="mt-2 text-muted">
-              Essential · Preferences · Analytics · Marketing. UK-style
-              default: non-essential off until affirmative consent. Lead-form
-              submit is operational, not an analytics cookie category.
+              Essential · Preferences · Analytics · Marketing. UK-style default:
+              non-essential off until affirmative consent. Lead-form submit is
+              operational, not an analytics cookie category.
             </p>
             <div className="mt-4 overflow-x-auto">
               <table className="w-full min-w-[36rem] border-collapse text-left text-sm">
@@ -80,10 +83,16 @@ export default function CookiesPage() {
                 </caption>
                 <thead>
                   <tr className="border-b border-border">
-                    <th scope="col" className="py-2 pr-3 font-semibold text-ink">
+                    <th
+                      scope="col"
+                      className="py-2 pr-3 font-semibold text-ink"
+                    >
                       Category
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-semibold text-ink">
+                    <th
+                      scope="col"
+                      className="py-2 pr-3 font-semibold text-ink"
+                    >
                       Required?
                     </th>
                     <th scope="col" className="py-2 font-semibold text-ink">
@@ -115,9 +124,9 @@ export default function CookiesPage() {
                     </th>
                     <td className="py-2 pr-3">No</td>
                     <td className="py-2">
-                      No analytics cookie or third-party analytics tag. First-party
-                      cookieless operational measurement only; no browser storage
-                      or persistent visitor identifier.
+                      No analytics cookie or third-party analytics tag.
+                      First-party cookieless operational measurement only; no
+                      browser storage or persistent visitor identifier.
                     </td>
                   </tr>
                   <tr>
@@ -170,14 +179,15 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               No analytics cookies are configured. First-party cookieless
-              operational measurement is built to record only bounded event
-              type and pathname data. It uses no cookies, localStorage,
+              operational measurement is built to record only bounded event type
+              and pathname data. It uses no cookies, localStorage,
               sessionStorage, persistent visitor identifier, referrer, query
               string, or user-agent in the stored event record. While no
-              measurement endpoint is configured, the beacon does not post.
-              The previous Railway-hosted control plane returns Application not found, so events are not sent there. There is no third-party
-              analytics SDK or tag. This draft remains pending legal review
-              and is not a Google Analytics, PECR, or GDPR compliance certification.
+              measurement endpoint is configured, the beacon does not post. The
+              previous Railway-hosted control plane returns Application not
+              found, so events are not sent there. There is no third-party
+              analytics SDK or tag. This draft remains pending legal review and
+              is not a Google Analytics, PECR, or GDPR compliance certification.
             </p>
           </section>
 
@@ -212,16 +222,28 @@ export default function CookiesPage() {
                 </caption>
                 <thead>
                   <tr className="border-b border-border">
-                    <th scope="col" className="py-2 pr-3 font-semibold text-ink">
+                    <th
+                      scope="col"
+                      className="py-2 pr-3 font-semibold text-ink"
+                    >
                       Name
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-semibold text-ink">
+                    <th
+                      scope="col"
+                      className="py-2 pr-3 font-semibold text-ink"
+                    >
                       Provider
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-semibold text-ink">
+                    <th
+                      scope="col"
+                      className="py-2 pr-3 font-semibold text-ink"
+                    >
                       Purpose
                     </th>
-                    <th scope="col" className="py-2 pr-3 font-semibold text-ink">
+                    <th
+                      scope="col"
+                      className="py-2 pr-3 font-semibold text-ink"
+                    >
                       Category
                     </th>
                     <th scope="col" className="py-2 font-semibold text-ink">
@@ -255,9 +277,9 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               There is no site-wide consent banner today because no
-              non-essential cookies, browser-storage analytics, or marketing tags
-              are loaded. The first-party operational measurement described above
-              is cookieless and stores no persistent visitor identifier. A
+              non-essential cookies, browser-storage analytics, or marketing
+              tags are loaded. The first-party operational measurement described
+              above is cookieless and stores no persistent visitor identifier. A
               preference centre would be wired only if optional storage or tags
               are introduced; this page is still a draft, not a live consent
               manager.
