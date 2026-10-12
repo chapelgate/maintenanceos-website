@@ -61,14 +61,13 @@ export function SiriOrbCloud() {
               A listening cue for structured intake — preview only. Not a live
               receptionist, not always-on, and not a conversion control.
             </p>
-            <p className="mt-3 text-sm">
+            <p className="intake-orb-links text-sm">
               <a
                 href="/how-it-works/"
                 className="font-semibold text-accent underline-offset-4 hover:underline"
               >
                 See how it works
               </a>
-              <span className="text-muted"> · </span>
               <a
                 href="/demo/"
                 className="font-semibold text-accent underline-offset-4 hover:underline"
