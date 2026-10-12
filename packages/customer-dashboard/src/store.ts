@@ -60,7 +60,7 @@ const DEMO_TRANSCRIPTS: Record<string, Transcript> = {
     turns: [
       {
         speaker: "assistant",
-        text: "SAMPLE: Hello, this is the ReceptionistOS demo desk. How can I help?",
+        text: "SAMPLE: Hello, this is the MaintenanceOS demo desk. How can I help?",
       },
       {
         speaker: "caller",
@@ -84,7 +84,7 @@ const DEMO_TRANSCRIPTS: Record<string, Transcript> = {
     turns: [
       {
         speaker: "assistant",
-        text: "SAMPLE: ReceptionistOS demo desk. I can take a message or connect you if you ask.",
+        text: "SAMPLE: MaintenanceOS demo desk. I can take a message or connect you if you ask.",
       },
       {
         speaker: "caller",

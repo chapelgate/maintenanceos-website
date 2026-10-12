@@ -26,7 +26,7 @@ export const siteConfig = {
   tagline:
     "UK maintenance operations software with AI-assisted intake — rules keep control.",
   description:
-    "MaintenanceOS is pre-launch UK maintenance operations software for property and maintenance teams. It turns incoming repair reports into structured work, separates critical cases from routine jobs, and keeps consequential decisions with authorised people. Voice remains in commissioning preview, not a public always-on phone service.",
+    "MaintenanceOS turns incoming repair reports into structured work. Dangerous cases stay with a person. Pre-launch, not a public always-on phone.",
   /** PRE-LAUNCH gate. Default false. */
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
   /**

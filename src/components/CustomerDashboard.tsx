@@ -153,10 +153,11 @@ export function CustomerDashboard({
           Customer dashboard — preview coming soon
         </h2>
         <p className="mt-2 text-sm text-muted">
-          Call history, transcripts, and booking stubs live in{" "}
-          <code className="text-xs">packages/customer-dashboard</code> behind{" "}
-          <code className="text-xs">NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED=false</code>{" "}
-          (default off). This page is not a live customer portal and does not
+          Call history and transcripts are not shown on this page.{" "}
+          <a href="/demo/#sample-dashboard" className="text-accent underline">
+            Open the SAMPLE dashboard
+          </a>{" "}
+          on the demo. This page is not a live customer portal and does not
           show production call metrics.
         </p>
       </section>

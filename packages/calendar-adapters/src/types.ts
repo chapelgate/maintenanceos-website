@@ -1,5 +1,5 @@
 /**
- * Provider-agnostic calendar adapter types for ReceptionistOS.
+ * Provider-agnostic calendar adapter types for MaintenanceOS.
  * Adapters must not invent bookings: ok:true only after a real provider/mock confirm.
  */
 

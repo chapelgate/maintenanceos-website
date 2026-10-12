@@ -21,8 +21,12 @@ test("public source uses locked publisher identity", () => {
   const srcFiles = walk(path.join(ROOT, "src")).filter((file) =>
     /\.(ts|tsx)$/.test(file),
   );
-  const joined = srcFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n");
+  const joined = srcFiles
+    .filter((file) => !file.endsWith(`${path.sep}json-ld.ts`))
+    .map((file) => fs.readFileSync(file, "utf8"))
+    .join("\n");
   assert.doesNotMatch(joined, /Chapelgate Technologies/);
+  assert.match(read("src/lib/json-ld.ts"), /name: "Chapelgate Technologies"/);
 
   const site = read("src/config/site.ts");
   assert.match(site, /publicBrand: "MaintenanceOS"/);

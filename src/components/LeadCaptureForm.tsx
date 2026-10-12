@@ -5,6 +5,7 @@ import type { LeadType } from "@/config/site";
 import { siteConfig } from "@/config/site";
 import { EnquiryUnavailable } from "@/components/EnquiryUnavailable";
 import { submitLead, type LeadSuccessMode } from "@/lib/lead-adapter";
+import { isValidEmail } from "@/lib/onboarding-create-core";
 import { trackWebsiteEvent } from "@/lib/measurement";
 
 type LeadCaptureFormProps = {
@@ -78,17 +79,38 @@ function LeadCaptureFormFields({
   const [successMode, setSuccessMode] =
     useState<LeadSuccessMode>("local_stub");
   const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [receiptReference, setReceiptReference] = useState<string | null>(null);
   const submissionIdRef = useRef<string | null>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const errorId = useId();
+  const emailErrorId = useId();
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus("submitting");
     setError(null);
+    setEmailError(null);
     const form = e.currentTarget;
     const fd = new FormData(form);
     const website = String(fd.get("website") ?? "");
+    if (website.trim()) {
+      setReceiptReference(null);
+      setSuccessMode("accepted");
+      setStatus("success");
+      return;
+    }
+    const email = String(fd.get("email") ?? "").trim();
+    if (!email || !isValidEmail(email)) {
+      setEmailError(
+        email
+          ? "Enter a valid email address."
+          : "Enter an email address.",
+      );
+      setStatus("error");
+      emailRef.current?.focus();
+      return;
+    }
+    setStatus("submitting");
     if (!website) {
       trackWebsiteEvent({ event: "form_submit_start", leadType });
     }
@@ -159,8 +181,6 @@ function LeadCaptureFormFields({
     );
   }
 
-  const emailInvalid = status === "error" && Boolean(error);
-
   return (
     <form
       id={id}
@@ -187,14 +207,20 @@ function LeadCaptureFormFields({
         <label className="block text-sm">
           <span className="font-medium text-ink">Email (required)</span>
           <input
+            ref={emailRef}
             name="email"
             type="email"
             required
             autoComplete="email"
-            aria-invalid={emailInvalid || undefined}
-            aria-describedby={emailInvalid ? errorId : undefined}
+            aria-invalid={emailError ? true : undefined}
+            aria-describedby={emailError ? emailErrorId : undefined}
             className="mt-1 w-full rounded-md border border-border px-3 py-2"
           />
+          {emailError ? (
+            <span id={emailErrorId} className="mt-1 block text-sm text-red-700" role="alert">
+              {emailError}
+            </span>
+          ) : null}
         </label>
         {showOrganisation ? (
           <label className="block text-sm">
@@ -239,7 +265,6 @@ function LeadCaptureFormFields({
           />
         </label>
       ) : null}
-      {/* Honeypot */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <label>
           Website

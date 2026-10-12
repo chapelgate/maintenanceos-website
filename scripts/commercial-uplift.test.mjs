@@ -37,10 +37,11 @@ test("home commercial pass keeps Request an early demo and 3-step start", () => 
   assert.match(home, /ProductUiShell/);
   assert.match(home, /What your team gets/);
 
-  assert.match(steps, /How to start — three steps/);
-  assert.match(steps, /Website/);
-  assert.match(steps, /Review pack/);
-  assert.match(steps, /Early access/);
+  assert.match(steps, /How to start — five steps/);
+  assert.match(steps, /CREATE_JOURNEY_STEPS/);
+  assert.match(steps, /step\.label/);
+  assert.doesNotMatch(steps, /Review & Pack/);
+  assert.doesNotMatch(steps, /Review pack/);
   assert.match(steps, /FeatureStatusChip status="UNDER_TEST"/);
   assert.match(steps, /href: "\/create\/"/);
   assert.doesNotMatch(steps, /go live/i);
@@ -55,7 +56,9 @@ test("home commercial pass keeps Request an early demo and 3-step start", () => 
 test("funnel pages share one primary path strip", () => {
   const strip = read("src/components/FunnelPathStrip.tsx");
   assert.match(strip, /One public path/);
-  assert.match(strip, /Website → Check → Choose → Configure → Review & Try → optional save/);
+  assert.match(strip, /CREATE_JOURNEY_STEPS/);
+  assert.doesNotMatch(strip, /→ optional save/);
+  assert.doesNotMatch(strip, /Review & Pack/);
   assert.match(strip, /href="\/create\/"/);
   assert.match(strip, /does not assign a live phone number/);
 

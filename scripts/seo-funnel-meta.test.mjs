@@ -17,7 +17,7 @@ test("shared funnel SEO copy names the real public path", () => {
   assert.match(src, /FUNNEL_PATH_LABEL/);
   assert.match(
     src,
-    /Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access/,
+    /Website → Check → Choose → Configure → Review & Try/,
   );
   assert.match(src, /funnelPageCopy/);
   assert.match(src, /funnelPageMetadata/);

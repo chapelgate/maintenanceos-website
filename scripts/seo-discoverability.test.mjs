@@ -98,7 +98,7 @@ test("public brand distinguishes product from publisher in source", () => {
   assert.match(site, /publicBrand: "MaintenanceOS"/);
   assert.match(site, /publisherName: "Chapelgate"/);
   assert.match(site, /UK maintenance operations software with AI-assisted intake/);
-  assert.match(schema, /name: siteConfig\.publisherName/);
+  assert.match(schema, /name: "Chapelgate Technologies"/);
   assert.match(schema, /name: siteConfig\.publicBrand/);
   assert.match(schema, /alternateName: siteConfig\.publicBrand/);
 });

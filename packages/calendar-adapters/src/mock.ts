@@ -13,7 +13,7 @@ import {
 } from "./types.ts";
 import { computeFreeSlots, overlaps, parseInstant, validateRange } from "./slots.ts";
 
-const DEFAULT_TITLE = "ReceptionistOS adapter test";
+const DEFAULT_TITLE = "MaintenanceOS adapter test";
 
 export function createMockCalendarAdapter(deps: AdapterDeps = {}): CalendarAdapter {
   const bookings = new Map<string, Booking>();

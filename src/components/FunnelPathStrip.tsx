@@ -1,7 +1,11 @@
+import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
+
 /**
  * Shared “one public path” strip — keeps /create, /demo, /pricing, /contact
  * pointing at the same claims-safe journey. Not a live phone.
  */
+const PUBLIC_STEPS = CREATE_JOURNEY_STEPS.map((step) => step.label).join(" → ");
+
 export function FunnelPathStrip({ className = "" }: { className?: string }) {
   return (
     <aside
@@ -9,7 +13,7 @@ export function FunnelPathStrip({ className = "" }: { className?: string }) {
     >
       <p>
         <span className="font-semibold text-ink">One public path. </span>
-        Website → Check → Choose → Configure → Review & Try → optional save.{" "}
+        {PUBLIC_STEPS}.{" "}
         <a
           href="/demo/"
           className="font-medium text-accent underline-offset-4 hover:underline"

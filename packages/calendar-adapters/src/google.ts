@@ -16,7 +16,7 @@ import {
 } from "./types.ts";
 
 const API = "https://www.googleapis.com/calendar/v3";
-const DEFAULT_TITLE = "ReceptionistOS adapter test";
+const DEFAULT_TITLE = "MaintenanceOS adapter test";
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;

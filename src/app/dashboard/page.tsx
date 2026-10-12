@@ -1,18 +1,22 @@
+import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { CustomerDashboard } from "@/components/CustomerDashboard";
 import { PageHero } from "@/components/PageHero";
 import { siteConfig } from "@/config/site";
 import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata = contentPageMetadata({
-  title: siteConfig.customerDashboardEnabled
-    ? "Customer dashboard (SAMPLE / DEMO)"
-    : "Customer dashboard — preview coming soon",
-  description: siteConfig.customerDashboardEnabled
-    ? "Local SAMPLE / DEMO call history, transcripts, and booking stubs. Not live production metrics or a customer portal."
-    : "Customer dashboard for call history and transcripts is planned for a later preview. Not a live customer portal.",
-  path: "/dashboard/",
-});
+export const metadata: Metadata = {
+  ...contentPageMetadata({
+    title: siteConfig.customerDashboardEnabled
+      ? "Customer dashboard (SAMPLE / DEMO)"
+      : "Customer dashboard — preview coming soon",
+    description: siteConfig.customerDashboardEnabled
+      ? "Local SAMPLE / DEMO call history, transcripts, and booking stubs. Not live production metrics or a customer portal."
+      : "Customer dashboard for call history and transcripts is planned for a later preview. Not a live customer portal.",
+    path: "/dashboard/",
+  }),
+  robots: { index: false, follow: false },
+};
 
 export default function CustomerDashboardPage() {
   const enabled = siteConfig.customerDashboardEnabled;
@@ -28,7 +32,7 @@ export default function CustomerDashboardPage() {
         }
         lede={
           enabled
-            ? "Call history, a mock transcript, and a bookings stub for local ReceptionistOS testing. Rows are labelled SAMPLE / DEMO. This is not a live customer portal and is not wired to frozen telephony."
+            ? "Call history, a mock transcript, and a bookings stub for local sample testing. Rows are labelled SAMPLE / DEMO. This is not a live customer portal and is not wired to frozen telephony."
             : "A customer dashboard for preview call history and transcripts is being built behind a feature flag. This page does not show live metrics, invent customers, or attach a phone line."
         }
       />
@@ -46,10 +50,7 @@ export default function CustomerDashboardPage() {
             Honest limits
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
-            <li>
-              Off by default via{" "}
-              <code className="text-xs">NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENABLED</code>
-            </li>
+            <li>The live sample catalogue is on the demo page, not this route.</li>
             <li>
               SAMPLE / DEMO rows are examples for local testing — never live
               production KPIs
@@ -65,7 +66,10 @@ export default function CustomerDashboardPage() {
             </li>
           </ul>
           <div className="mt-5">
-            <CtaPair />
+            <CtaPair
+              primaryHref="/demo/#sample-dashboard"
+              primaryLabel="Open the SAMPLE dashboard"
+            />
           </div>
         </section>
       </div>

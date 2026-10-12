@@ -21,20 +21,13 @@ const FUNNEL_COPY = [
 
 ] as const;
 
-const pathSteps = [
-  ...CREATE_JOURNEY_STEPS.map((step, i) => {
-    const body = FUNNEL_COPY[i];
-    if (!body) {
-      throw new Error(`Missing /demo copy for ${step.label}`);
-    }
-    return { title: step.label, body, status: "UNDER_TEST" as const };
-  }),
-  {
-    title: "Save setup (optional)",
-    body: "Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk. The interactive demo does not store the setup.",
-    status: "UNDER_TEST" as const,
-  },
-];
+const pathSteps = CREATE_JOURNEY_STEPS.map((step, i) => {
+  const body = FUNNEL_COPY[i];
+  if (!body) {
+    throw new Error(`Missing /demo copy for ${step.label}`);
+  }
+  return { title: step.label, body, status: "UNDER_TEST" as const };
+});
 
 export default function DemoPage() {
   return (
@@ -63,9 +56,9 @@ export default function DemoPage() {
           The public path
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          Same steps as <a href="/create/" className="text-accent underline">the website setup preview</a>:
-          Website → Check → Choose → Configure → Review &amp; Try, then
-          optional save. This browser preview does not assign a live number.
+          Same steps as <a href="/create/" className="text-accent underline">the website setup preview</a>:{" "}
+          {CREATE_JOURNEY_STEPS.map((step) => step.label).join(" → ")}. This
+          browser preview does not assign a live number.
 
         </p>
         <ol className="mt-6 space-y-3">

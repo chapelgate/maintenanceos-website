@@ -1,5 +1,5 @@
 /**
- * Claims-safe customer dashboard types for ReceptionistOS.
+ * Claims-safe customer dashboard types for MaintenanceOS.
  * Rows are either labelled SAMPLE/DEMO or absent. Never invent live customers.
  */
 

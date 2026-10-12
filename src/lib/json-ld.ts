@@ -25,7 +25,7 @@ function organizationNode(): JsonLdRecord {
   return {
     "@type": "Organization",
     "@id": orgId(),
-    name: siteConfig.publisherName,
+    name: "Chapelgate Technologies",
     url: absoluteUrl("/about/"),
     description: `Chapelgate develops ${siteConfig.name}, ${siteConfig.category}.`,
     brand: {
