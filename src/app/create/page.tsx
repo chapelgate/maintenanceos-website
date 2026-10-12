@@ -37,7 +37,7 @@ const steps = [
   },
   {
     title: "Save your setup (optional)",
-    body: "Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk. The browser preview does not store the setup.",
+    body: "Online enquiries are temporarily unavailable. Please use the email link above. The browser preview does not store the setup.",
   },
 ] as const;
 

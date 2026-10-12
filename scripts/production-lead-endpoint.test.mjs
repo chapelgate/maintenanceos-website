@@ -30,8 +30,18 @@ test("production lead endpoint does not fall back to the retired Railway host", 
   );
   assert.match(
     read("src/components/EnquiryUnavailable.tsx"),
-    /\{ENQUIRY_UNAVAILABLE_MESSAGE\}/,
+    /ENQUIRY_UNAVAILABLE_MESSAGE/,
   );
+});
+
+test("create enquiry address is not in the server HTML that Cloudflare rewrites", () => {
+  const enquiry = read("src/components/EnquiryUnavailable.tsx");
+  const create = read("src/app/create/page.tsx");
+  assert.match(enquiry, /useSyncExternalStore/);
+  assert.match(enquiry, /serverSnapshot = \(\) => false/);
+  assert.match(enquiry, /addressReady\s*\?\s*ENQUIRY_UNAVAILABLE_MESSAGE/);
+  assert.doesNotMatch(create, /andy@chapelgatehome\.uk/);
+  assert.match(create, /Please use the email link above/);
 });
 
 test("lead adapter sends the current page URL and preserves accepted semantics", () => {
