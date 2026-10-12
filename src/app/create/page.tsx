@@ -53,7 +53,7 @@ export default function CreateReceptionistPage() {
 
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
-        <FunnelPathStrip />
+        <FunnelPathStrip linked />
         <section aria-labelledby="create-form-heading">
           <h2
             id="create-form-heading"

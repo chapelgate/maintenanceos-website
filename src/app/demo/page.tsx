@@ -40,7 +40,7 @@ export default function DemoPage() {
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">
-        <FunnelPathStrip />
+        <FunnelPathStrip linked />
       </div>
 
       <DemoProof />

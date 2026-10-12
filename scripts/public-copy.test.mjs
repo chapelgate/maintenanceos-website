@@ -1,0 +1,70 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+function walk(dir, acc = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) walk(full, acc);
+    else if (/\.(tsx?|txt|vtt)$/.test(entry.name) && !entry.name.endsWith(".test.ts")) acc.push(full);
+  }
+  return acc;
+}
+
+function visible(source) {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/(^|[^:])\/\/.*$/gm, "$1");
+}
+
+const files = [
+  ...walk(path.join(ROOT, "src")),
+  ...walk(path.join(ROOT, "public")),
+].map((file) => ({ file, text: visible(fs.readFileSync(file, "utf8")) }));
+
+const joined = files.map((item) => item.text).join("\n");
+
+test("public copy drops internal jargon", () => {
+  const forbidden = [
+    /product-claims register/i,
+    /\bHUMAN_REVIEW\b/,
+    /\bdeterministic\b/i,
+    /\bpytest\b/i,
+    /\bSSRF\b/,
+    /Cloud CI/,
+    /\bSQLite\b/i,
+    /Peer-common/,
+    /\bRED\b/,
+  ];
+  for (const pattern of forbidden) {
+    for (const item of files) {
+      assert.doesNotMatch(item.text, pattern, `${item.file} matches ${pattern}`);
+    }
+  }
+});
+
+test("repeated blocks stay in full once", () => {
+  const pages = files.filter((item) => item.file.includes(`${path.sep}src${path.sep}app${path.sep}`) && item.file.endsWith("page.tsx"));
+  const fullSafety = pages.filter((item) => /<SafeAutomationModel\b/.test(item.text));
+  assert.deepEqual(fullSafety.map((item) => path.relative(ROOT, item.file)), [
+    "src/app/how-we-keep-control/page.tsx",
+  ]);
+  const fullStrip = pages.filter((item) => /<FunnelPathStrip\s*\/>/.test(item.text));
+  assert.deepEqual(fullStrip.map((item) => path.relative(ROOT, item.file)), [
+    "src/app/how-it-works/page.tsx",
+  ]);
+  const core = joined.match(/Core safety controls are built/g) ?? [];
+  assert.equal(core.length, 1);
+});
+
+test("what's live today appears at most once in each page file", () => {
+  const pages = files.filter((item) => item.file.endsWith("page.tsx"));
+  for (const item of pages) {
+    const count = item.text.match(/What's live today/g)?.length ?? 0;
+    assert.ok(count <= 1, item.file);
+  }
+});

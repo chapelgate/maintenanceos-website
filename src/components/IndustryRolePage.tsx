@@ -9,9 +9,6 @@ import {
 import { getIndustrySeoIntent } from "@/config/seo-intents";
 import { industryPageJsonLd } from "@/lib/json-ld";
 
-const honesty =
-  "Pre-launch · in testing. Core safety controls are built; a public always-on phone is not declared ready.";
-
 type Props = { role: IndustryRole };
 
 function parseBold(text: string) {
@@ -74,8 +71,10 @@ export function IndustryRolePage({ role }: Props) {
         lede={role.sub}
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
-        <p className="mos-glass px-4 py-3 text-sm text-muted">
-          {honesty}
+        <p className="text-sm text-muted">
+          <a href="/industries/#core-safety" className="font-medium text-accent underline-offset-4 hover:underline">
+            Pre-launch status
+          </a>
         </p>
 
         {GAS_BLOCK_SLUGS.has(role.slug) ? <GasSafetyBlock /> : null}

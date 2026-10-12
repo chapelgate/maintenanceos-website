@@ -1,7 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { SafeAutomationModel } from "@/components/SafeAutomationModel";
+import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { industryRoles } from "@/config/industries";
 import { funnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
@@ -15,10 +15,10 @@ export default function PropertyMaintenanceSoftwarePage() {
       <PageHero
         eyebrow="United Kingdom · Pre-launch"
         title="Property maintenance software for UK teams."
-        lede="MaintenanceOS is pre-launch property maintenance operations software for landlords, letting agents, property managers, maintenance firms, housing providers, facilities teams, councils, and holiday-let operators. AI assists intake; deterministic rules and authorised people retain control of safety, dispatch, and money."
+        lede="MaintenanceOS is pre-launch property maintenance software for UK landlords, agents, housing providers and maintenance firms. The AI takes the details. Fixed rules and authorised people keep control of safety, dispatch, and money."
         orbAccent
       />
-      <SafeAutomationModel compact />
+      <SafeAutomationLink />
       <div className="mx-auto max-w-4xl space-y-12 px-4 py-12">
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold text-ink">What property maintenance software means here</h2>
@@ -34,7 +34,7 @@ export default function PropertyMaintenanceSoftwarePage() {
           <h2 className="text-2xl font-semibold text-ink">Maintenance management without invented commitments</h2>
           <p className="text-muted">
             The product model includes properties, residents, contractors, work orders, jobs, and
-            communications. AI-assisted intake is available as a product preview. Deterministic server rules own
+            communications. AI-assisted intake is available as a product preview. Fixed server rules own
             lifecycle, safety boundaries, and prohibited money actions. The system must not invent
             a booking, engineer visit, refund, safety assurance, or “someone is on the way”.
           </p>

@@ -38,7 +38,7 @@ export default function ContactPage() {
         lede="Genuine human enquiries about MaintenanceOS. Product interest starts at Request an early demo. Launch-list and early-access briefings live on /demo. Not live phone provisioning, not a GA support desk, and no invented response SLA."
       />
       <div className="mx-auto max-w-3xl space-y-8 px-4 py-12">
-        <FunnelPathStrip />
+        <FunnelPathStrip linked />
 
         <section aria-labelledby="contact-paths-heading">
           <h2

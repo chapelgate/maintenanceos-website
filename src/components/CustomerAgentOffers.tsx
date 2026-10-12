@@ -1,4 +1,14 @@
 import { AGENT_TEMPLATES } from "@/lib/agent-selection";
+import type { AgentType } from "@/lib/agent-blueprint";
+
+const OFFER_LINE: Record<AgentType, string> = {
+  receptionist: "Messages, and a transfer when someone asks.",
+  maintenance_desk: "A structured repair job from the call.",
+  booking_assistant: "Questions about appointments.",
+  customer_service: "Support questions and a message.",
+  sales_enquiry: "Qualified enquiries, with no commitments.",
+  custom: "A safe starting point you refine next.",
+};
 
 export function CustomerAgentOffers() {
   return (
@@ -9,19 +19,12 @@ export function CustomerAgentOffers() {
     >
       <div className="mx-auto max-w-6xl">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold text-accent">Choose what you want the AI to do</p>
           <h2
             id="agent-offers-heading"
-            className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+            className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
           >
-            Start with the role that matches your business.
+            Choose what you want the AI to do
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-            These are the same controlled starting roles used in the setup
-            journey. Pick one after we check your website, then configure the greeting, voice
-            preference, supported actions and human-transfer behaviour before
-            reviewing the business knowledge and final pack.
-          </p>
         </div>
 
         <ul className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -38,7 +41,7 @@ export function CustomerAgentOffers() {
                 </span>
               </div>
               <p className="mt-3 grow text-sm leading-relaxed text-muted">
-                {template.summary}
+                {OFFER_LINE[template.type]}
               </p>
               <a
                 href="/create/"

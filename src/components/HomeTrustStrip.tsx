@@ -12,10 +12,7 @@ const TRUST_CHIPS = [
 export function HomeTrustStrip() {
   return (
     <div className="home-trust-strip border-b border-border bg-paper px-4 py-3 sm:px-6">
-      <p className="mx-auto max-w-6xl text-center text-sm leading-relaxed text-muted">
-        Pre-launch · UK maintenance ops · Rules own safety &amp; money
-      </p>
-      <ul className="mx-auto mt-2 flex max-w-6xl flex-wrap items-center justify-center gap-2">
+      <ul className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-2">
         {TRUST_CHIPS.map((chip) => (
           <li key={chip}>
             <span className="home-trust-chip">{chip}</span>

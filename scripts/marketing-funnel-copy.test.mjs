@@ -82,7 +82,7 @@ test("home CTA strip names the website-to-pack path", () => {
   assert.match(page, /ProductTourWatchLink/);
   assert.match(page, /HomeTrustStrip/);
   assert.match(page, /HomeRoleChips/);
-  assert.match(page, /ObjectionFaq/);
+  assert.match(page, /how-it-works\/#objections/);
   assert.doesNotMatch(page, /<video/);
   assert.doesNotMatch(page, /Property maintenance operations for UK landlords/);
 });
@@ -195,7 +195,7 @@ test("security stays claims-safe with bounded website learning and no cert theat
   assert.match(faqs, /question: "Are you ISO or SOC 2 certified\?"/);
   assert.match(faqs, /bank-grade security/);
 
-  assert.match(faqs, /Website learning is read-only, bounded and SSRF-guarded/);
+  assert.match(faqs, /Website learning is read-only and bounded/);
 
   assert.match(faqs, /DRAFT FOR LEGAL REVIEW/);
   assert.match(
@@ -207,11 +207,11 @@ test("security stays claims-safe with bounded website learning and no cert theat
   assert.match(features, /bounded, read-only website learning/i);
   assert.match(features, /bank-grade/);
   assert.match(home, /No ISO, SOC 2, or bank-grade claims/);
-  assert.match(flow, /Website learning is read-only, bounded, robots-aware and SSRF-guarded/i);
+  assert.match(flow, /Website learning is read-only and bounded, and it follows robots\.txt/i);
   assert.match(flow, /Extracted facts are reviewable/i);
 
 
-  assert.match(llms, /website learning is bounded, read-only and SSRF-guarded/i);
+  assert.match(llms, /website learning is bounded and read-only/i);
   assert.match(llms, /no ISO\/SOC 2 or bank-grade claims/);
   assert.match(llms, /legal pages are DRAFT/);
   assert.match(llmsFull, /## Security/);

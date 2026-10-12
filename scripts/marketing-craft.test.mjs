@@ -61,7 +61,9 @@ test("home trust strip, tour caption, and role chips stay claims-safe", () => {
   const watch = read("src/components/ProductTour.tsx");
 
   assert.match(home, /HomeTrustStrip/);
-  assert.match(strip, /Pre-launch · UK maintenance ops · Rules own safety/);
+  assert.match(strip, /Pre-launch/);
+  assert.match(strip, /UK maintenance ops/);
+  assert.match(strip, /Rules own safety/);
   const stripMarkup = strip.slice(strip.indexOf("return"));
   assert.doesNotMatch(stripMarkup, /trustpilot|testimonial|award/i);
 
@@ -126,11 +128,10 @@ test("objection FAQ pack is on home and how-it-works, not features", () => {
   }
   assert.match(faqs, /PREVIEW/);
   assert.match(faqs, /never 911/);
-  assert.match(faqs, /5 VERIFIED \+ 2 PREVIEW/);
-  assert.match(faqs, /tracked with product/);
+  assert.match(faqs, /4 VERIFIED and 3 PREVIEW/);
   assert.doesNotMatch(faqs, /relatedHref/);
 
-  assert.match(home, /<ObjectionFaq/);
+  assert.match(home, /href="\/how-it-works\/#objections"/);
   assert.match(hiw, /<ObjectionFaq/);
   assert.doesNotMatch(features, /ObjectionFaq/);
   assert.match(accordion, /name="mos-objection-faq"/);
@@ -139,7 +140,8 @@ test("objection FAQ pack is on home and how-it-works, not features", () => {
   assert.doesNotMatch(accordion, /Join launch list/);
 
   const homeCtaAfterFaq =
-    home.indexOf("<ObjectionFaq") < home.indexOf("See the rules working on a sample repair");
+    home.indexOf('href="/how-it-works/#objections"') <
+    home.indexOf("See the rules working on a sample repair");
   assert.equal(homeCtaAfterFaq, true);
   const hiwCtaAfterFaq =
     hiw.indexOf("<ObjectionFaq") < hiw.indexOf('primaryLabel="Request an early demo"');
@@ -154,7 +156,8 @@ test("HonestyBanner token is shared and optional vignettes stay scenarios", () =
 
   assert.match(banner, /export function HonestyBanner/);
   assert.match(banner, /No ISO, SOC 2, or bank-grade claims/);
-  assert.match(home, /<HonestyBanner/);
+  assert.match(read("src/components/CommercialProof.tsx"), /No ISO, SOC 2, or bank-grade claims/);
+  assert.match(home, /<CommercialProof/);
   assert.match(features, /<HonestyBanner compact/);
   assert.match(vignettes, /Scenario: leaky tap/);
   assert.match(vignettes, /Scenario: no heat/);

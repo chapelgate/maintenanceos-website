@@ -82,7 +82,7 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   assert.match(text, /do not claim that AI will overtake humans/i);
   assert.match(text, /Do not use AGI/i);
   assert.match(text, funnelPath, "must name the verified public funnel");
-  assert.match(text, /bounded, read-only, SSRF-guarded on-demand scanner/i);
+  assert.match(text, /bounded, read-only set of public pages/i);
   assert.doesNotMatch(text, /owner-blocked|Gemini|Fonio/i);
   assert.match(text, /missing facts empty rather than inventing them/i);
   assert.match(text, /no telephone, aggregateRating, reviews, or offers/);

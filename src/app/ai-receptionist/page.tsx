@@ -1,6 +1,6 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
-import { SafeAutomationModel } from "@/components/SafeAutomationModel";
+import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -43,7 +43,7 @@ export default function AiReceptionistPage() {
         title="Capture maintenance calls without handing control to the AI"
         lede="The receptionist capability is in preview for collecting caller details and classifying maintenance requests in UK terminology. Server rules and authorised people retain control of safety and money. It is not a live commercial phone service."
       />
-      <SafeAutomationModel compact />
+      <SafeAutomationLink />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <section>
           <h2 className="text-xl font-semibold text-ink">
@@ -90,7 +90,7 @@ export default function AiReceptionistPage() {
             ))}
           </ul>
           <p className="mt-3 text-sm text-muted">
-            Deterministic safety rules and human clearance sit above voice
+            Fixed safety rules and human clearance sit above voice
             assist. See{" "}
             <a href="/security/" className="text-accent underline">
               Security

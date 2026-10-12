@@ -6,9 +6,29 @@ import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
  */
 const PUBLIC_STEPS = CREATE_JOURNEY_STEPS.map((step) => step.label).join(" → ");
 
-export function FunnelPathStrip({ className = "" }: { className?: string }) {
+export function FunnelPathStrip({
+  className = "",
+  linked = false,
+}: {
+  className?: string;
+  linked?: boolean;
+}) {
+  if (linked) {
+    return (
+      <p className={`text-sm leading-relaxed text-muted ${className}`.trim()}>
+        <a
+          href="/how-it-works/#public-path"
+          className="font-medium text-accent underline-offset-4 hover:underline"
+        >
+          See the setup path
+        </a>
+      </p>
+    );
+  }
+
   return (
     <aside
+      id="public-path"
       className={`mos-glass px-4 py-3 text-sm leading-relaxed text-muted ${className}`.trim()}
     >
       <p>

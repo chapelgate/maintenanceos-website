@@ -25,7 +25,7 @@ export default function AboutPage() {
           </h2>
           <p>
             Chapelgate is developing MaintenanceOS so intake, triage, and
-            follow-through stay auditable. Deterministic safety rules and human
+            follow-through stay auditable. Fixed safety rules and human
             clearance for critical decisions sit above AI assistance — the
             product is designed so AI does not hold final authority on safety
             or money.

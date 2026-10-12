@@ -345,7 +345,7 @@ export const industryRoles: IndustryRole[] = [
         title: "How does MaintenanceOS handle a resident's report?",
         content: [
           "**It captures the report properly.** The assistant collects the caller's details and turns what they say into a structured repair request, so the case starts with the facts.",
-          "**Fixed rules decide, not the AI.** Safety, the progress of the case and approvals are decided by deterministic rules on our server. The AI can't override them, however the conversation goes.",
+          "**Fixed rules decide, not the AI.** Safety, the progress of the case and approvals are decided by fixed rules on our server. The AI can't override them, however the conversation goes.",
           "**Safety-critical reports are held for a person.** Reports our rules flag as safety-critical can enter escalation and human review. They're latched, and only an authorised person can clear them. Our safety rules page explains how this works, and why the list of report types isn't published yet.",
           "**999, never 911.** Where there's an immediate danger to life, the assistant's guidance is 999, never 911.",
           "**An audit trail on the case.** Consequential actions leave audit evidence, and the system only reports something as done when there's evidence it succeeded."
@@ -408,7 +408,7 @@ export const industryRoles: IndustryRole[] = [
     ],
     fits: [
       "Multi-tenant properties, contractors, work orders, jobs, communications.",
-      "Controlled emergency triage vs jobs via deterministic server rules. UK/999 guidance in product source.",
+      "Controlled emergency triage vs jobs via fixed server rules. UK/999 guidance in product source.",
       "Audit events / action evidence as designed trust capability. Intake is in preview — not a public always-on line.",
       "Human oversight for transfer and clearance; no autonomous dispatch story and no client-money authority.",
     ],
@@ -440,7 +440,7 @@ export const industryRoles: IndustryRole[] = [
         title: "How does MaintenanceOS handle a report?",
         content: [
           "**Structured capture.** The assistant collects the caller's details and turns what they report into a structured repair request.",
-          "**Deterministic rules, not AI judgement.** Safety, the progress of a job and approvals are decided by fixed rules on our server. The AI can't override them. For a public body, that means the logic can be written down, reviewed and explained.",
+          "**Fixed rules, not AI judgement.** Safety, the progress of a job and approvals are decided by fixed rules on our server. The AI can't override them. For a public body, that means the logic can be written down, reviewed and explained.",
           "**Safety-critical cases held for an officer.** Reports our rules flag as safety-critical can enter escalation and human review. They're latched until an authorised person clears them. Our safety rules page explains how this works, and why the list of report types isn't published yet.",
           "**999, never 911.** Where there's an immediate danger to life, the assistant's guidance is 999, never 911.",
           "**Evidence on the record.** Consequential actions leave audit evidence, and the system only reports something as done when there's evidence it succeeded."

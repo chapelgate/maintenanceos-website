@@ -23,7 +23,7 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): VERIFIED / PREVIEW cards from the Phone AI inventory — same path; live public phone not claimed
 - [Property maintenance software](https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/): Core UK property-maintenance software category page; distinct role pages link from here; pre-launch, no autonomous dispatch
 - [AI receptionist](https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/): Voice intake under testing — not a live commercial line
-- [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; website learning is bounded, read-only and SSRF-guarded; no ISO/SOC 2 or bank-grade claims; legal pages are DRAFT; product interest starts at /create
+- [Security](https://seahorse-app-4oasq.ondigitalocean.app/security/): Tenant isolation, human clearance, audit evidence; website learning is bounded and read-only; no ISO/SOC 2 or bank-grade claims; legal pages are DRAFT; product interest starts at /create
 - [Cookies](https://seahorse-app-4oasq.ondigitalocean.app/cookies/): DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a Google Analytics / PECR / GDPR compliance certification
 - [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
 - [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — Create from website, or request pricing. No live phone in a plan; telephony and calendar are coming / early access
@@ -49,6 +49,6 @@ There is no public always-on phone number to call on this site.
 ## Optional
 
 - [Full claims-safe summary](https://seahorse-app-4oasq.ondigitalocean.app/llms-full.txt): VERIFIED vs under test vs not claimed
-- [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/): Same path; browser voice preview is not a live phone number; bounded public website learning extracts reviewable facts and leaves missing hours/services empty; UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only; legal pages are DRAFT
+- [FAQ](https://seahorse-app-4oasq.ondigitalocean.app/faq/): Same path; browser voice preview is not a public phone number; bounded public website learning extracts reviewable facts and leaves missing hours/services empty; UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only; legal pages are DRAFT
 - [About](https://seahorse-app-4oasq.ondigitalocean.app/about/)
 - [Dashboard](https://seahorse-app-4oasq.ondigitalocean.app/dashboard/): coming / under testing — not a live customer portal or production call history

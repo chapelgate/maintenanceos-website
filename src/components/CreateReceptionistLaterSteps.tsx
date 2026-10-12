@@ -1206,7 +1206,7 @@ export function CreateReceptionistLaterSteps({
           <p className="mt-6 text-sm text-muted">
             Your reviewed receptionist configuration is ready to try in the
             interactive browser demo below. The demo uses this knowledge pack
-            and the same deterministic safety rules, but it does not dial a
+            and the same fixed safety rules, but it does not dial a
             phone number or touch the live telephone service.
             {siteConfig.formEndpoint.trim()
               ? " Saving the setup is optional and sends you a durable reference by email."

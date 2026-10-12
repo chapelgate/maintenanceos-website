@@ -13,7 +13,7 @@ const PILLARS = [
     id: "human-clearance",
     title: "Human clearance",
     short: "People decide consequential safety",
-    body: "A critical safety latch requires a person before consequential action. Deterministic safety and lifecycle rules override AI. Escalation queues are designed for human review — not unsupervised autonomy.",
+    body: "A critical safety latch requires a person before consequential action. Fixed safety and lifecycle rules override AI. Escalation queues are designed for human review — not unsupervised autonomy.",
   },
   {
     id: "audit-evidence",

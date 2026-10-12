@@ -78,7 +78,9 @@ export function ProductUiShell() {
         <div className="p-4 sm:p-5">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-sm font-semibold text-ink">Work orders</h2>
-            <p className="text-xs text-muted">Mock labels only — no live counts</p>
+            <p className="text-xs text-muted">
+              Mock labels only — no live counts. No invented throughput, SLA, or revenue figures.
+            </p>
           </div>
           <div className="overflow-x-auto rounded-lg border border-border">
             <table className="min-w-full text-left text-xs sm:text-sm">
@@ -108,10 +110,6 @@ export function ProductUiShell() {
               </tbody>
             </table>
           </div>
-          <p className="mt-3 text-xs leading-relaxed text-muted">
-            Structural preview of a supervisor workspace. Status chips are
-            illustrative. No invented throughput, SLA, or revenue figures.
-          </p>
         </div>
       </div>
     </figure>

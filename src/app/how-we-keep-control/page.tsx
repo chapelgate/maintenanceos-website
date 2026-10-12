@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
+import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
@@ -22,7 +23,7 @@ const faqItems = [
   },
   {
     question: "Why isn't the list of safety-critical report types on this page?",
-    answer: "Because our product team hasn't signed it off in our claims register yet."
+    answer: "That list is not published yet."
   },
   {
     question: "Can the AI override the safety rules?",
@@ -76,7 +77,7 @@ export default function HowWeKeepControlPage() {
         title="How MaintenanceOS handles a dangerous repair report"
         lede="Anyone who has run a repairs line knows the call that keeps you up at night. It isn't the dripping tap. It's the one where something is dangerous and the person who took the message didn't realise."
       />
-      
+      <SafeAutomationModel />
       <div className="mx-auto max-w-3xl space-y-12 px-4 py-12">
         <section
           id="gas"
@@ -152,7 +153,7 @@ export default function HowWeKeepControlPage() {
           <div className="space-y-4 text-muted">
             <p>Not the AI.</p>
             <p>
-              In MaintenanceOS, the AI&apos;s job is language. It listens to or reads what someone reports and turns it into a structured repair request. What happens next is decided by deterministic rules on our server: how safe it is, where it sits in the job&apos;s lifecycle, and whether it needs approval. The AI can&apos;t override those rules, however the conversation goes.
+              In MaintenanceOS, the AI&apos;s job is language. It listens to or reads what someone reports and turns it into a structured repair request. What happens next is decided by fixed rules on our server: how safe it is, where it sits in the job&apos;s lifecycle, and whether it needs approval. The AI can&apos;t override those rules, however the conversation goes.
             </p>
             <p>
               That&apos;s deliberate. Language models are good at understanding people. They shouldn&apos;t be the last line of defence on a dangerous report.
