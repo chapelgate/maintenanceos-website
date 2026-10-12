@@ -7,13 +7,31 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
-test("production lead endpoint reuses the existing Railway control plane", () => {
+test("production lead endpoint does not fall back to the retired Railway host", () => {
   const site = read("src/config/site.ts");
+  const form = read("src/components/LeadCaptureForm.tsx");
+  const enquiry = read("src/lib/public-enquiry.ts");
   assert.match(
     site,
     /https:\/\/rsfm-control-plane-production\.up\.railway\.app\/v1\/public\/website-leads/,
   );
-  assert.match(site, /NEXT_PUBLIC_FORM_ENDPOINT\?\.trim\(\) \|\|/);
+  assert.match(site, /usableHttpEndpoint\(process\.env\.NEXT_PUBLIC_FORM_ENDPOINT\)/);
+  assert.doesNotMatch(site, /NEXT_PUBLIC_FORM_ENDPOINT\?\.trim\(\) \|\|/);
+  assert.match(enquiry, /andy@chapelgatehome\.uk/);
+  assert.match(
+    enquiry,
+    /Online enquiries are temporarily unavailable\. Please email andy@chapelgatehome\.uk\./,
+  );
+  assert.match(form, /EnquiryUnavailable/);
+  assert.match(form, /!siteConfig\.formEndpoint\.trim\(\)/);
+  assert.match(
+    read("src/components/EnquiryUnavailable.tsx"),
+    /mailto:\$\{PUBLIC_ENQUIRY_EMAIL\}/,
+  );
+  assert.match(
+    read("src/components/EnquiryUnavailable.tsx"),
+    /\{ENQUIRY_UNAVAILABLE_MESSAGE\}/,
+  );
 });
 
 test("lead adapter sends the current page URL and preserves accepted semantics", () => {
@@ -35,9 +53,9 @@ test("accepted UI requires and reports provider-accepted visitor confirmation", 
 
 test("draft privacy notice describes the real lead path without claiming final legal review", () => {
   const privacy = read("src/app/privacy/page.tsx");
-  assert.match(privacy, /Railway-hosted control plane/);
-  assert.match(privacy, /audited operational lead records/);
-  assert.match(privacy, /Resend for human follow-up|Resend for operator notification/);
+  assert.match(privacy, /Railway-hosted control plane returns Application not found/);
+  assert.match(privacy, /does not post leads or events there/);
+  assert.match(privacy, /andy@chapelgatehome\.uk/);
   assert.match(privacy, /pending legal review|Pending legal review|DRAFT|Draft/);
 });
 

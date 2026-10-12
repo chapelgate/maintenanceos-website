@@ -69,7 +69,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "How do I contact you?",
     answer:
-      "For product interest, request an early demo. The contact form is for genuine human enquiries and early access — not live phone provisioning, not a GA support desk, and not an invented SLA. You can also join the launch list or request an early-access briefing on the demo page.",
+      "For product interest, request an early demo. Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk. That address is for genuine human enquiries and early access — not live phone provisioning, not a GA support desk, and not an invented SLA.",
     relatedHref: "/demo/",
     relatedLabel: "Request an early demo",
   },

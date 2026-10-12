@@ -3,13 +3,19 @@
  * Flip PUBLIC_LAUNCH only after WEBSITE_LAUNCH_CHECKLIST.md is complete.
  */
 
+import { usableHttpEndpoint } from "@/lib/public-enquiry";
+
 function envFlag(value: string | undefined, fallback = false): boolean {
   if (value === undefined || value === "") return fallback;
   return value === "true" || value === "1";
 }
 
+/** Retired receiver. It returns 404 Application not found and must not be the fallback. */
 export const PRODUCTION_FORM_ENDPOINT =
   "https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads";
+
+export const RETIRED_MEASUREMENT_ENDPOINT =
+  "https://rsfm-control-plane-production.up.railway.app/v1/public/website-events";
 
 export const siteConfig = {
   name: "MaintenanceOS",
@@ -30,16 +36,19 @@ export const siteConfig = {
    */
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "",
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? "local",
-  /** Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md. Env override remains available. */
-  formEndpoint:
-    process.env.NEXT_PUBLIC_FORM_ENDPOINT?.trim() || PRODUCTION_FORM_ENDPOINT,
+  /**
+   * Absolute URL implementing docs/FORM_ENDPOINT_CONTRACT.md.
+   * Empty, or the retired Railway host, means the honest mailto fallback.
+   * A build-time NEXT_PUBLIC_FORM_ENDPOINT can point at a working receiver.
+   */
+  formEndpoint: usableHttpEndpoint(process.env.NEXT_PUBLIC_FORM_ENDPOINT),
   /**
    * Privacy-minimised first-party measurement endpoint.
-   * Sends only bounded event type/path data; no visitor identifier or browser storage.
+   * Empty, or the retired Railway host, sends nothing (no CORS request).
    */
-  measurementEndpoint:
-    process.env.NEXT_PUBLIC_MEASUREMENT_ENDPOINT?.trim() ||
-    "https://rsfm-control-plane-production.up.railway.app/v1/public/website-events",
+  measurementEndpoint: usableHttpEndpoint(
+    process.env.NEXT_PUBLIC_MEASUREMENT_ENDPOINT,
+  ),
   /**
    * Same-origin on-demand website scanner routed to DigitalOcean Functions.
    * There is no always-on scanner container.

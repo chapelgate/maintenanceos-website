@@ -38,7 +38,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "how-collected",
     title: "How we collect data",
-    body: "Sources include forms you submit (launch_list, early_demo, contact, create_receptionist), a small bounded set of public HTTPS pages fetched when you ask /create to learn from a website, ordinary hosting/network technical data, and first-party cookieless operational measurement events. Website content is used only to extract reviewable business facts; private/internal targets are blocked and missing facts are not invented. Marketing enquiries and bounded website events use Chapelgate\'s existing Railway-hosted control plane and Postgres store. Enquiries are stored as audited operational lead records; privacy-minimised website events are stored separately. Lead records notify an operator through Resend for human follow-up and request a minimal acknowledgement to the submitted email address; aggregate weekly website reports reuse the same sending route. No invented business data and no invented third-party lists.",
+    body: "Sources include a public website URL you submit on /create, ordinary hosting/network technical data, and any email you send us directly. Website content is used only to extract reviewable business facts; private/internal targets are blocked and missing facts are not invented. Online enquiry forms and the measurement beacon are temporarily unavailable: the previous Railway-hosted control plane returns Application not found, so this site does not post leads or events there and does not claim a submission was stored. Please email andy@chapelgatehome.uk. No invented business data and no invented third-party lists.",
   },
   {
     id: CREATE_INGEST_PRIVACY_ANCHOR,
@@ -63,7 +63,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "Current website path uses DigitalOcean for the static site, an existing Railway-hosted Chapelgate control plane and Postgres store for lead intake plus privacy-minimised website events, and Resend for operator lead notifications, customer acknowledgements, and aggregate weekly reports. No third-party analytics vendor is used. Other processor categories remain subject to legal review.",
+    body: "Current website path uses DigitalOcean for the static site. The previous Railway-hosted control plane is not in service, so lead intake and measurement events are not sent. No third-party analytics vendor is used. Other processor categories remain subject to legal review.",
   },
   {
     id: "transfers",
@@ -103,7 +103,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "contact",
     title: "Contact us",
-    body: "Privacy contact is [OWNER: email] until confirmed; meanwhile use the contact form for pre-launch enquiries.",
+    body: "Privacy contact is andy@chapelgatehome.uk. Online enquiries are temporarily unavailable.",
   },
 ];
 

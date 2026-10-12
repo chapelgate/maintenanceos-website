@@ -21,5 +21,9 @@ if they conflict.
 6. **No new service, queue, or dependency** unless a patch upgrade is required
    to clear an advisory without a major-version migration. Do not downgrade
    `eslint-config-next` to 14.x.
-7. **One branch and one pull request** for slices S0–S9, each slice its own
+7. **One branch and one pull request** for slices S0–S10, each slice its own
    commit.
+8. **Dead Railway lead host is not called.** The existing operator mailbox
+   `andy@chapelgatehome.uk` (lead notification destination already in
+   `docs/WEBSITE_INTEGRATION_PROBLEM_LOG_2026-09-28.md`) is the public mailto
+   fallback. No new inbox was invented and no replacement service was added.

@@ -89,7 +89,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "contact",
     title: "Contact",
-    body: "Operator contact is [OWNER: details] until confirmed; use the contact form for pre-launch enquiries.",
+    body: "Operator contact is andy@chapelgatehome.uk. Online enquiries are temporarily unavailable.",
   },
 ];
 

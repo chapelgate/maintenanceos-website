@@ -2,6 +2,8 @@
 
 import { FormEvent, useId, useRef, useState } from "react";
 import type { LeadType } from "@/config/site";
+import { siteConfig } from "@/config/site";
+import { EnquiryUnavailable } from "@/components/EnquiryUnavailable";
 import { submitLead, type LeadSuccessMode } from "@/lib/lead-adapter";
 import { trackWebsiteEvent } from "@/lib/measurement";
 
@@ -36,6 +38,32 @@ function successCopy(mode: LeadSuccessMode): { title: string; body: string } {
 }
 
 export function LeadCaptureForm({
+  leadType,
+  title,
+  helper,
+  submitLabel = "Submit",
+  showMessage = false,
+  showOrganisation = true,
+  id,
+}: LeadCaptureFormProps) {
+  if (!siteConfig.formEndpoint.trim()) {
+    return <EnquiryUnavailable id={id} title={title} helper={helper} />;
+  }
+
+  return (
+    <LeadCaptureFormFields
+      leadType={leadType}
+      title={title}
+      helper={helper}
+      submitLabel={submitLabel}
+      showMessage={showMessage}
+      showOrganisation={showOrganisation}
+      id={id}
+    />
+  );
+}
+
+function LeadCaptureFormFields({
   leadType,
   title,
   helper,
