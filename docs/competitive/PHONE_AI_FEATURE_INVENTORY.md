@@ -7,7 +7,7 @@
 
 This file is the source of truth for `/features` marketing cards. Product evidence was refreshed directly against canonical `chapelgate/maintenanceos-v1-pilot` `main` at `498ad82dd87631814195d447d89458480b117951`, then bounded by `PRODUCT_CLAIMS_REGISTER.md`, `docs/competitive/fonio-parity-matrix.md`, and the existing website evidence. **Do not invent rows or promote commissioning evidence into a live-service claim.**
 
-On-page promotion uses the **short marketing card set** only. Hard count (Positioning / Product Investigator): **exactly 7 cards — 5 VERIFIED + 2 UNDER TEST**. Do not add cards. The P0/P1 gap matrix stays **off the marketing page**.
+On-page promotion uses the **short marketing card set** only. Hard count (Positioning / Product Investigator): **exactly 7 cards — 4 VERIFIED + 3 UNDER TEST**. Do not add cards. The P0/P1 gap matrix stays **off the marketing page**.
 
 ## Status taxonomy
 
@@ -33,13 +33,13 @@ Copy **only these seven** into `src/config/phone-ai-features.ts`. One UK-ops lin
 | --- | --- | --- | --- | --- | --- | --- |
 | M-ONB-01 | onboarding | Website-guided draft pack | UNDER_TEST | Enter a public website address, review and complete the draft, then prepare a knowledge pack — early access only. | Public `/create` path: Website → Check → Choose → Configure → Review & Pack, then an early-access lead. Exists today. Not a live receptionist or a 30-second phone number. Public website crawl is retired: the current path uses the no-crawl review fallback and missing fields stay empty until reviewed or supplied. Knowledge pack + system prompt from the reviewed draft (F-03): missing keys stay missing; not a live tenant. | F-01; F-02 boundary; F-03 |
 | M-TEL-01 | telephony | UK caller intake | VERIFIED | Designed to collect caller details in UK maintenance language, with 999 guidance (never 911) and no invented bookings. | UK terminology and 999 emergency guidance in product source and regressions. Receptionist designed to collect caller details. Must not invent bookings, dispatches, refunds, compensation, account information, or safety assurances. | V-02; V-03; V-05 |
-| M-TEL-02 | telephony | Human transfer on request | VERIFIED | Callers can ask for a person; transfer is explicit-request-only in product source. | Shared policy across voice providers. Transfer quality on carrier remains under retest — not marketed as proven live. | V-04 (existence); V-10 (quality stays UNDER TEST, not a second card) |
+| M-TEL-02 | telephony | Human transfer on request | UNDER_TEST | Callers can ask for a person; transfer is explicit-request-only in product source. | Shared policy across voice providers. Transfer quality on carrier remains under retest — not marketed as proven live. | V-04 (existence); V-10 (quality stays UNDER TEST, not a second card) |
 | M-TEL-03 | telephony | AI voice receptionist | UNDER_TEST | Voice intake exists in product source and is under testing — not a public always-on maintenance line. | Provider-aware voice runtime exists in canonical product source. Current commissioning also has a pinned local/self-hosted candidate, but neither path is approved as a public always-on service. | V-01; V-11 |
 | M-CAL-02 | calendar/actions | Rules own safety and money | VERIFIED | Deterministic server rules own lifecycle, approvals, and money boundaries — the model cannot execute client-money or invent a van. | AI does not override safety, lifecycle, or approvals. Critical-safety latch requires authorised human clearance. Escalation / human-review queues for RED cases. No payment, refund, compensation, fee-waiver, or client-money execution. | O-03; O-04; O-05; O-06 |
 | M-POST-01 | post-call | Action evidence | VERIFIED | Affirmative operational claims are designed to need verified success evidence — not a live analytics dashboard. | Audit events and action-evidence patterns in product source. Tenant-scoped call-session records exist as part of the operating trail. | S-03; O-02 (call sessions) |
 | M-UK-01 | UK maintenance vertical | Emergency triage vs jobs | VERIFIED | 999 is emergency services; a leaky tap stays a structured job. Critical safety is designed to latch for a person. | UK/999 guidance locked in product source (never 911). Danger latches for a person; routine fabric stays structured intake. | V-02; O-04; O-05; industries positioning |
 
-Count: **M-TEL-01, M-TEL-02, M-CAL-02, M-POST-01, M-UK-01** = 5 VERIFIED. **M-ONB-01, M-TEL-03** = 2 UNDER TEST.
+Count: **M-TEL-01, M-CAL-02, M-POST-01, M-UK-01** = 4 VERIFIED. **M-ONB-01, M-TEL-03, M-TEL-02** = 3 UNDER TEST.
 
 ### Inventory rows not promoted on `/features`
 

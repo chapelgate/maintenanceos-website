@@ -64,13 +64,13 @@ test("inventory short card set is exactly 7 cards and is not invented", () => {
     assert.doesNotMatch(cards, new RegExp(`id: "${id}"`));
   }
   assert.match(inventory, /exactly 7/);
-  assert.match(inventory, /5 VERIFIED \+ 2 UNDER TEST/);
+  assert.match(inventory, /4 VERIFIED \+ 3 UNDER TEST/);
   assert.match(inventory, /NOT_ON_SITE/);
   assert.match(inventory, /Do not invent rows/);
   assert.match(config, /MARKETING_CARD_HARD_COUNT/);
 });
 
-test("marketing cards are exactly 5 VERIFIED and 2 UNDER TEST", () => {
+test("marketing cards are exactly 4 VERIFIED and 3 UNDER TEST", () => {
   const config = read("src/config/phone-ai-features.ts");
   const cards = cardBlocks(config);
   const ids = [...cards.matchAll(/id: "(M-[A-Z]+-\d+)"/g)].map((m) => m[1]);
@@ -79,8 +79,8 @@ test("marketing cards are exactly 5 VERIFIED and 2 UNDER TEST", () => {
   );
   assert.deepEqual(ids, ON_PAGE_IDS);
   assert.equal(ids.length, 7);
-  assert.equal(statuses.filter((s) => s === "VERIFIED").length, 5);
-  assert.equal(statuses.filter((s) => s === "UNDER_TEST").length, 2);
+  assert.equal(statuses.filter((s) => s === "VERIFIED").length, 4);
+  assert.equal(statuses.filter((s) => s === "UNDER_TEST").length, 3);
   assert.equal(statuses.filter((s) => s === "NOT_ON_SITE").length, 0);
 });
 

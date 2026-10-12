@@ -120,7 +120,7 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
   {
     id: "M-TEL-02",
     title: "Human transfer on request",
-    status: "VERIFIED",
+    status: "UNDER_TEST",
     group: "telephony",
     ukOpsLine:
       "Callers can ask for a person; transfer is explicit-request-only in product source.",
