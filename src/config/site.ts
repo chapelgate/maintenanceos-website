@@ -33,6 +33,8 @@ export const siteConfig = {
    * Absolute origin for canonical / OG / JSON-LD / sitemap.
    * Empty at build → fallback in `src/lib/site-url.ts`
    * (`https://seahorse-app-4oasq.ondigitalocean.app`).
+   * The intended production host is a separate constant there and is not
+   * read until NEXT_PUBLIC_SITE_URL is set after DNS resolves.
    */
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "",
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? "local",
@@ -147,6 +149,7 @@ export const footerNav = {
     { href: "/contact/", label: "Contact" },
     { href: "/faq/", label: "FAQ" },
     { href: "/status/", label: "Status" },
+    { href: "/accessibility/", label: "Accessibility" },
   ],
   legal: [
     { href: "/privacy/", label: "Privacy" },

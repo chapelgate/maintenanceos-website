@@ -5,7 +5,7 @@
 
 ## Happy path (customer)
 
-1. Land on marketing site with CTA: **Turn your business website into an AI receptionist**.
+1. Land on marketing site with CTA: **Turn your business website into a repair-intake preview**.
 2. `/create` — enter business URL (+ optional email).
 3. Progress UI: resolving → fetching → extracting → creating sandbox.
 4. Configure the selected role: voice preference, supported actions, human-transfer behaviour, name, greeting, services, FAQs, and hours. Configuration can only narrow the selected role.

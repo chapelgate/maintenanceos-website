@@ -7,6 +7,16 @@ import { siteConfig } from "@/config/site";
 export const FALLBACK_SITE_URL =
   "https://seahorse-app-4oasq.ondigitalocean.app";
 
+/**
+ * Host Andrew asked for, once DNS for this name serves this export.
+ * getCanonicalSiteUrl() does not read this constant. Canonical, Open Graph,
+ * sitemap, and JSON-LD stay on NEXT_PUBLIC_SITE_URL, or FALLBACK_SITE_URL
+ * when that variable is empty. Do not set NEXT_PUBLIC_SITE_URL to this
+ * value until the name resolves.
+ */
+export const INTENDED_PRODUCTION_SITE_URL =
+  "https://maintenanceos.chapelgatetechnologies.com";
+
 /** Canonical origin without a trailing slash. */
 export function getCanonicalSiteUrl(): string {
   const raw = siteConfig.siteUrl.trim();

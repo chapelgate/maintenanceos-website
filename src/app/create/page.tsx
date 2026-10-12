@@ -15,7 +15,7 @@ export const metadata = funnelPageMetadata("create");
 const steps = [
   {
     title: "Share your website",
-    body: "Enter your public site URL and email so we can prepare a receptionist preview you can test in the browser.",
+    body: "Enter your public site URL and email so we can prepare a repair-intake preview you can test in the browser.",
   },
   {
     title: "Check the URL",
@@ -47,9 +47,9 @@ export default function CreateReceptionistPage() {
       <JsonLd data={funnelPageJsonLd("create")} />
       <PageHero
 
-        eyebrow="Create your receptionist · Preview"
-        title="Turn your business website into an AI receptionist"
-        lede="Paste your site URL, let MaintenanceOS learn the public business facts, review the receptionist, then start a browser voice call and speak to it. Online enquiries are temporarily unavailable, so the preview is not stored. It does not change your live telephone service."
+        eyebrow="Repair intake · Preview"
+        title="Turn your business website into a repair-intake preview"
+        lede="Paste your site URL so MaintenanceOS can read public facts for a repair-intake preview, review them, then try a browser voice call. Online enquiries are temporarily unavailable, so the preview is not stored. It does not change your live telephone service, book viewings, or write into a CRM."
 
       />
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">

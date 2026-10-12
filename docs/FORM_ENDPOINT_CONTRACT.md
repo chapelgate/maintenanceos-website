@@ -4,9 +4,9 @@
 **Consumers:** `src/lib/lead-adapter.ts`, `src/components/LeadCaptureForm.tsx`, `src/components/CreateReceptionistLaterSteps.tsx`  
 **Local stub:** `scripts/form-stub-server.mjs` (`npm run form-stub`)
 
-This marketing site is a **static export** (`output: 'export'` in `next.config.ts`). There are **no Next.js API routes**. Lead capture posts from the browser to the production Railway lead endpoint by default. `NEXT_PUBLIC_FORM_ENDPOINT` remains an explicit build-time override. The local stub remains available for isolated development and **must not claim that email was sent**.
+This marketing site is a **static export** (`output: 'export'` in `next.config.ts`). There are **no Next.js API routes**. While `NEXT_PUBLIC_FORM_ENDPOINT` is empty, the public site does not post leads. Visitors use the mailto fallback. The retired Railway URL `https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads` returns Application not found and must not be called. `NEXT_PUBLIC_FORM_ENDPOINT` remains an explicit build-time override for a later HTTPS receiver that meets this contract. The local stub remains available for isolated development and **must not claim that email was sent**.
 
-Production hosting (DigitalOcean App Platform static) cannot run the local stub. The current production receiver is `https://rsfm-control-plane-production.up.railway.app/v1/public/website-leads`, reusing the existing Chapelgate RSFM control plane and audited Postgres store. `NEXT_PUBLIC_FORM_ENDPOINT` may override that absolute URL for controlled environments. The stub is for local development only and never sends mail.
+Production hosting (DigitalOcean App Platform static) cannot run the local stub. A replacement receiver, if one is supplied, has to meet the storage and notification rules below. The retired host is not that receiver. The stub is for local development only and never sends mail.
 
 ## Lead types
 
@@ -132,8 +132,8 @@ Suggested status codes:
 Minimum expected of a real endpoint:
 
 - Drop honeypot (`website`) silently with 2xx + `queued_stub` or equivalent discard.
-- Keep public lead bodies bounded. The current receiver bounds the configuration message at 64,000 characters and remains rate-limited.
-- Rate-limit public submissions. The current production route uses a global bucket plus a privacy-preserving hashed-email bucket.
+- Keep public lead bodies bounded. A production receiver should bound the configuration message (the retired receiver used 64,000 characters) and stay rate-limited.
+- Rate-limit public submissions. The retired production route used a global bucket plus a privacy-preserving hashed-email bucket.
 - Do not write leads into the product telephony / work-order systems (`WEBSITE_ARCHITECTURE.md`).
 
 ## Local stub
@@ -155,9 +155,11 @@ NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run dev
 `GET /health` returns `{ "ok": true, "sends_email": false }`.
 
 
-## Current production implementation
+## Retired Railway implementation (not live)
 
-The current receiver is additive to the existing Chapelgate RSFM control plane. It does **not** write into the live telephony or work-order path.
+The public path is email until an HTTPS endpoint that meets this contract is configured. The retired receiver was additive to the Chapelgate RSFM control plane. It does **not** write into the live telephony or work-order path. That host now returns Application not found. Do not call it.
+
+Historical notes from that receiver, not a claim that a store is live today:
 
 - Origin allowlist: MaintenanceOS DigitalOcean marketing origin only.
 - Storage: existing audited Postgres `rsfm_records`, `app_id=maintenanceos`, `kind=website.lead`.
