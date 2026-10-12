@@ -84,6 +84,42 @@ test("persistent scan proxy forwards only the validated public URL", async () =>
   assert.ok(calls[0]?.init?.signal);
 });
 
+test("scan proxy rejects an oversized URL before upstream and rate-limits repeats", async () => {
+  const oversized = await main({
+    http: {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.23" },
+    },
+    url: `https://example.com/${"a".repeat(2100)}`,
+  });
+  assert.equal(oversized.statusCode, 400);
+  assert.equal(oversized.body.error, "url_too_long");
+
+  const event = {
+    http: {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.21" },
+    },
+    url: "https://127.0.0.1/private",
+  };
+  const codes: number[] = [];
+  for (let i = 0; i < 4; i += 1) {
+    const result = await main(event);
+    codes.push(result.statusCode);
+  }
+  assert.deepEqual(codes, [400, 400, 400, 429]);
+
+  const otherClient = await main({
+    http: {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.31" },
+    },
+    url: "https://127.0.0.1/private",
+  });
+  assert.equal(otherClient.statusCode, 400);
+  assert.equal(otherClient.body.ok, false);
+});
+
 test("deployed Functions artifact is prebuilt-only and loadable", async () => {
   assert.equal(
     fs.existsSync(path.join(functionDir, "package.json")),
@@ -117,4 +153,28 @@ test("deployed Functions artifact is prebuilt-only and loadable", async () => {
   });
   assert.equal(privateTarget.statusCode, 400);
   assert.equal(privateTarget.body.ok, false);
+
+  const oversized = await deployed.main({
+    http: {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.24" },
+    },
+    url: `https://example.com/${"a".repeat(2100)}`,
+  });
+  assert.equal(oversized.statusCode, 400);
+  assert.equal(oversized.body.error, "url_too_long");
+
+  const limited = {
+    http: {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.22" },
+    },
+    url: "https://127.0.0.1/private",
+  };
+  const codes: number[] = [];
+  for (let i = 0; i < 4; i += 1) {
+    const result = await deployed.main(limited);
+    codes.push(result.statusCode);
+  }
+  assert.deepEqual(codes, [400, 400, 400, 429]);
 });

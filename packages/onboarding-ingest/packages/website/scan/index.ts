@@ -9,23 +9,42 @@ type WebEvent = {
   url?: unknown;
 };
 
+const MAX_SCAN_URL_LENGTH = 2048;
 const RATE_WINDOW_MS = 60_000;
-const RATE_MAX = 20;
+const RATE_MAX = 8;
+const HOST_RATE_MAX = 3;
 const UPSTREAM_TIMEOUT_MS = 115_000;
 const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
   "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 const rateBuckets = new Map<string, number[]>();
 
-function allowRate(ip: string, now = Date.now()): boolean {
+function pruneRateBuckets(now: number): void {
   const cutoff = now - RATE_WINDOW_MS;
-  const previous = (rateBuckets.get(ip) ?? []).filter((stamp) => stamp > cutoff);
-  if (previous.length >= RATE_MAX) {
-    rateBuckets.set(ip, previous);
+  for (const [key, stamps] of rateBuckets) {
+    const fresh = stamps.filter((stamp) => stamp > cutoff);
+    if (fresh.length === 0) rateBuckets.delete(key);
+    else if (fresh.length !== stamps.length) rateBuckets.set(key, fresh);
+  }
+}
+
+function allowRate(key: string, max: number, now = Date.now()): boolean {
+  const cutoff = now - RATE_WINDOW_MS;
+  const previous = (rateBuckets.get(key) ?? []).filter((stamp) => stamp > cutoff);
+  if (previous.length >= max) {
+    rateBuckets.set(key, previous);
     return false;
   }
   previous.push(now);
-  rateBuckets.set(ip, previous);
+  rateBuckets.set(key, previous);
   return true;
+}
+
+function hostnameOf(url: string): string {
+  try {
+    return new URL(url).hostname.toLowerCase();
+  } catch {
+    return "";
+  }
 }
 
 function response(
@@ -109,17 +128,6 @@ export async function main(event: WebEvent = {}) {
   if (method !== "POST") {
     return response(405, { ok: false, error: "method_not_allowed" }, origin);
   }
-  if (!allowRate(clientIp)) {
-    return response(
-      429,
-      {
-        ok: false,
-        error: "rate_limited",
-        message: "Too many scan requests. Try again shortly.",
-      },
-      origin,
-    );
-  }
 
   const url = typeof event.url === "string" ? event.url.trim() : "";
   if (!url) {
@@ -133,8 +141,44 @@ export async function main(event: WebEvent = {}) {
       origin,
     );
   }
+  if (url.length > MAX_SCAN_URL_LENGTH) {
+    return response(
+      400,
+      {
+        ok: false,
+        error: "url_too_long",
+        message: "The website address is too long to scan.",
+      },
+      origin,
+    );
+  }
 
   const allowed = allowPublicHttpsUrl(url);
+  const now = Date.now();
+  pruneRateBuckets(now);
+  if (!allowRate(`ip:${clientIp}`, RATE_MAX, now)) {
+    return response(
+      429,
+      {
+        ok: false,
+        error: "rate_limited",
+        message: "Too many scan requests. Try again shortly.",
+      },
+      origin,
+    );
+  }
+  const host = hostnameOf(url);
+  if (host && !allowRate(`host:${clientIp}|${host}`, HOST_RATE_MAX, now)) {
+    return response(
+      429,
+      {
+        ok: false,
+        error: "rate_limited",
+        message: "Too many scan requests for this website. Try again shortly.",
+      },
+      origin,
+    );
+  }
   if (!allowed.ok) {
     return response(
       400,
