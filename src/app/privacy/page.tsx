@@ -85,11 +85,11 @@ const sections: { id: string; title: string; body: string }[] = [
     title: "Your rights",
     body: "You have the right to access, rectify, erase, restrict, and port your personal data, to object to processing, to withdraw consent (where applicable), and to complain to the Information Commissioner's Office (ICO).",
   },
-  {
-    id: "exercise-rights",
-    title: "How to exercise your rights",
-    body: "[OWNER: inbox / SLA] — contact method and expected process placeholders for rights requests.",
-  },
+     {
+       id: "exercise-rights",
+       title: "How to exercise your rights",
+       body: "Email andy@chapelgatehome.uk with your request. We will respond within one month, as UK GDPR requires.",
+     },
   {
     id: "children",
     title: "Children",

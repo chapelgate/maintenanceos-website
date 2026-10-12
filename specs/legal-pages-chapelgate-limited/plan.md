@@ -1,0 +1,1 @@
+Plan: Update legal pages (privacy, cookies, terms) with Chapelgate Limited's public details, add test for company number, and leave ICO registration placeholder.
