@@ -82,6 +82,15 @@ test("marketing cards are exactly 4 VERIFIED and 3 UNDER TEST", () => {
   assert.equal(statuses.filter((s) => s === "VERIFIED").length, 4);
   assert.equal(statuses.filter((s) => s === "UNDER_TEST").length, 3);
   assert.equal(statuses.filter((s) => s === "NOT_ON_SITE").length, 0);
+
+  const page = read("src/app/features/page.tsx");
+  assert.match(page, /marketingCardCounts\(\)/);
+  assert.match(page, /marketingFeatureStatusLabel\.VERIFIED/);
+  assert.match(page, /marketingFeatureStatusLabel\.UNDER_TEST/);
+  assert.doesNotMatch(page, /five VERIFIED/);
+  assert.doesNotMatch(page, /two PREVIEW/);
+  assert.match(config, /VERIFIED: "VERIFIED"/);
+  assert.match(config, /UNDER_TEST: "PREVIEW"/);
 });
 
 test("marketing cards never include NOT_ON_SITE as a present capability", () => {

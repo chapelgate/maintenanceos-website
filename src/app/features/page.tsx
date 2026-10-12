@@ -9,7 +9,9 @@ import {
   FEATURE_GROUPS,
   featureGroupCopy,
   isMarketingCardStatus,
+  marketingCardCounts,
   marketingCardsByGroup,
+  marketingFeatureStatusLabel,
   UNDER_TEST_GROUP_HONESTY,
 } from "@/config/phone-ai-features";
 import { funnelPageJsonLd } from "@/lib/json-ld";
@@ -18,6 +20,7 @@ import { funnelPageMetadata } from "@/lib/page-meta";
 export const metadata = funnelPageMetadata("features");
 
 export default function FeaturesPage() {
+  const cardCounts = marketingCardCounts();
   return (
     <>
       <JsonLd data={funnelPageJsonLd("features")} />
@@ -31,8 +34,10 @@ export default function FeaturesPage() {
       <div className="mx-auto max-w-5xl space-y-12 px-4 py-12">
         <FunnelPathStrip />
         <HonestyBanner compact>
-          Seven cards we can stand behind today — five VERIFIED, two PREVIEW.
-          Peer-common gaps stay off this page and are tracked with product.
+          {cardCounts.total} cards we can stand behind today — {cardCounts.verified}{" "}
+          {marketingFeatureStatusLabel.VERIFIED}, {cardCounts.underTest}{" "}
+          {marketingFeatureStatusLabel.UNDER_TEST}. Peer-common gaps stay off
+          this page and are tracked with product.
         </HonestyBanner>
 
         {FEATURE_GROUPS.map((groupId) => {
