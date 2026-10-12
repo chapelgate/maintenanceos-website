@@ -750,7 +750,7 @@ export function CreateReceptionistLaterSteps({
       <p className="mb-6 text-sm text-muted">
         Next: {nextAction}
         {step === 5
-          ? ". Test the reviewed configuration in the interactive browser demo below, then save it if you want an emailed reference."
+          ? ". Test the reviewed configuration in the interactive browser demo below."
           : null}
       </p>
 
