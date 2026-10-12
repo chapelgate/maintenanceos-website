@@ -83,6 +83,10 @@ html {
   scroll-padding-top: 5.5rem;
 }
 
+.demo-conversion-tabs {
+  scroll-margin-top: 5.5rem;
+}
+
 #main {
   scroll-margin-top: 5.5rem;
 }

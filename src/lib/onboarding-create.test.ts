@@ -17,20 +17,49 @@ import {
   mapScanResponse,
   mapScanSiteKnowledge,
   normalisePublicUrl,
+  unsafePublicUrlMessage,
+  UNSAFE_WEBSITE_URL_MESSAGE,
   scanFieldReviewHint,
   isZeroFetchPartial,
   ZERO_FETCH_PARTIAL_MESSAGE,
 } from "./onboarding-create.ts";
 
-test("normalisePublicUrl accepts public http(s) and rejects junk", () => {
+test("normalisePublicUrl accepts public https and rejects junk", () => {
   assert.equal(normalisePublicUrl("example.co.uk"), "https://example.co.uk/");
   assert.equal(
     normalisePublicUrl("https://trades.example.com/contact"),
     "https://trades.example.com/contact",
   );
+  assert.equal(normalisePublicUrl("https://172.15.0.1/"), "https://172.15.0.1/");
+  assert.equal(normalisePublicUrl("https://172.32.0.1/"), "https://172.32.0.1/");
   assert.equal(normalisePublicUrl("localhost"), null);
   assert.equal(normalisePublicUrl("not a url"), null);
   assert.equal(normalisePublicUrl(""), null);
+});
+
+test("unsafe website URLs are refused before a public https URL is accepted", () => {
+  const refused = [
+    "http://example.com",
+    "http://example.com/contact",
+    "https://10.1.2.3/",
+    "http://10.0.0.1",
+    "https://192.168.1.20/admin",
+    "https://172.16.0.1/",
+    "https://172.31.255.255/",
+    "https://127.0.0.1/",
+    "http://127.1.2.3",
+    "localhost",
+    "http://localhost",
+    "https://localhost/create",
+  ];
+  for (const value of refused) {
+    assert.equal(normalisePublicUrl(value), null, value);
+    assert.equal(unsafePublicUrlMessage(value), UNSAFE_WEBSITE_URL_MESSAGE, value);
+  }
+  assert.equal(unsafePublicUrlMessage("https://example.com"), null);
+  assert.equal(unsafePublicUrlMessage("not a url"), null);
+  assert.match(UNSAFE_WEBSITE_URL_MESSAGE, /https:\/\//);
+  assert.match(UNSAFE_WEBSITE_URL_MESSAGE, /localhost/);
 });
 
 test("hostnameBusinessHint uses the first label only", () => {
