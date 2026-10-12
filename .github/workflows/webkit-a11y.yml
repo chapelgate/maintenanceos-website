@@ -1,0 +1,44 @@
+name: WebKit Accessibility Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  webkit-a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '>=20.9.0'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install webkit
+      - name: Build static export
+        run: npm run build
+      - name: Start local server
+        run: npx serve out -l 3000 &
+        # Wait for server to be ready
+        - name: Wait for server
+          run: |
+            for i in {1..30}; do
+              if curl -s http://localhost:3000/ > /dev/null; then
+                echo "Server is ready"
+                break
+              fi
+              sleep 1
+            done
+      - name: Run WebKit accessibility tests
+        run: npx playwright test tests/webkit-a11y/
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: webkit-a11y-report
+          path: playwright-report/
