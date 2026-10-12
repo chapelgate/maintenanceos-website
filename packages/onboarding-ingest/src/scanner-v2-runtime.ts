@@ -567,7 +567,13 @@ async function runtimeResult(input: {
   const knowledge = knowledgeFromChunks(chunks);
   const warnings = unique([
     ...urls
-      .filter((row) => row.status === "unresolved" && row.reason)
+      .filter(
+        (row) =>
+          (row.status === "unresolved" ||
+            row.status === "policy_skipped" ||
+            row.status === "robots_skipped") &&
+          row.reason,
+      )
       .map((row) => row.reason as string),
     ...(pages.some((page) => page.fetchMode === "reader")
       ? ["reader_fallback_used"]
@@ -630,8 +636,23 @@ export async function runPersistentScannerV2(
   const store = options.store ?? new FileScannerV2JobStore(stateRoot);
   const existing = await store.getJob(crawlId);
   const resumed = Boolean(existing);
+  let needsSeed = !existing;
 
-  if (!existing) {
+  if (existing) {
+    const priorUrls = await store.listUrls(crawlId);
+    const hasFetchedEvidence = priorUrls.some(
+      (row) => row.status === "fetched" || row.status === "duplicate",
+    );
+    const reset = (
+      store as { resetZeroEvidenceRecords?: (id: string) => Promise<void> }
+    ).resetZeroEvidenceRecords;
+    if (!hasFetchedEvidence && typeof reset === "function") {
+      await reset.call(store, crawlId);
+      needsSeed = true;
+    }
+  }
+
+  if (needsSeed) {
     await seedJob({
       store,
       crawlId,

@@ -161,6 +161,19 @@ export class FileScannerV2JobStore implements ScannerV2JobStore {
     return readJson<CrawlJob>(this.jobPath(crawlId));
   }
 
+  /**
+   * Drop frontier records for a crawl that stored no fetched or duplicate
+   * evidence. The job identity file stays, so the next seed can replace
+   * terminal skips such as policy_skipped. Callers decide when a reseed is
+   * safe; this only removes the JSON buckets.
+   */
+  async resetZeroEvidenceRecords(crawlId: string): Promise<void> {
+    const dir = this.crawlDir(crawlId);
+    for (const bucket of ["urls", "pages", "chunks", "leases"] as const) {
+      await rm(join(dir, bucket), { recursive: true, force: true });
+    }
+  }
+
   async listUrls(crawlId: string): Promise<CrawlUrlDisposition[]> {
     return (
       await listJsonFiles<CrawlUrlDisposition>(
