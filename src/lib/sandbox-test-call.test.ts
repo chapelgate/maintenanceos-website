@@ -1,5 +1,11 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
+import {
+  CARBON_MONOXIDE_EMERGENCY_ADVICE,
+  GAS_EMERGENCY_ADVICE,
+  LEAVE_PROPERTY_ADVICE,
+} from "../../packages/sandbox-test-call/src/scripted.ts";
 import {
   mapSessionResponse,
   mapTestResponse,
@@ -332,6 +338,59 @@ test("browser reply uses source-grounded deep-site evidence", () => {
   );
   assert.equal(unrelated.source, "missing");
   assert.doesNotMatch(unrelated.text, /six weeks/i);
+});
+
+test("preview emergency sentences are copied from the published gas and carbon monoxide pages", () => {
+  const flat = (source: string) =>
+    source
+      .replace(/\{" "\}/g, " ")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&apos;/g, "'")
+      .replace(/\s+/g, " ")
+      .replace(/ ([.,])/g, "$1");
+  const strip = flat(readFileSync("src/components/GasSafetyStrip.tsx", "utf8"));
+  const rulebook = flat(readFileSync("src/app/how-we-keep-control/page.tsx", "utf8"));
+  assert.ok(strip.includes(GAS_EMERGENCY_ADVICE));
+  assert.ok(strip.includes(LEAVE_PROPERTY_ADVICE));
+  assert.ok(rulebook.includes(CARBON_MONOXIDE_EMERGENCY_ADVICE));
+});
+
+test("browser preview gives the published emergency script before a missing-field answer", () => {
+  const pack = {
+    businessName: "Acme Plumbing",
+    hours: "Mon–Fri 08:00–17:00",
+    services: ["Boiler repair"],
+  };
+  const gas = runBrowserInteractiveReply(
+    "I can smell gas in my kitchen",
+    pack,
+  );
+  assert.match(gas.text, /National Gas Emergency Service on 0800 111 999/);
+  assert.match(gas.text, /Get out, don't use switches or flames/);
+  assert.match(gas.text, /call 999/);
+  assert.match(gas.text, /can't dispatch emergency services from this browser preview/);
+  assert.doesNotMatch(gas.text, /not on file|not sure|scripted sandbox/i);
+
+  const co = runBrowserInteractiveReply(
+    "My carbon monoxide alarm is going off",
+    pack,
+  );
+  assert.match(co.text, /0800 111 999/);
+  assert.match(co.text, /go outside/);
+  assert.match(co.text, /999/);
+  assert.doesNotMatch(co.text, /not on file|not sure/i);
+
+  const fitting = runBrowserInteractiveReply(
+    "There's water coming through the kitchen ceiling, right round the light fitting.",
+    pack,
+  );
+  assert.match(fitting.text, /Get out, don't use switches or flames/);
+  assert.match(fitting.text, /call 999 now \(not 911\)/);
+  assert.doesNotMatch(fitting.text, /0800 111 999|not on file/i);
+
+  const hours = runBrowserInteractiveReply("What are your opening hours?", pack);
+  assert.match(hours.text, /Mon–Fri 08:00–17:00/);
+  assert.doesNotMatch(hours.text, /0800 111 999|call 999 now/i);
 });
 
 test("runBrowserScriptedDemo with pack name+hours mentions both", () => {
