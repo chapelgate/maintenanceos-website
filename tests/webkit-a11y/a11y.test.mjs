@@ -41,43 +41,34 @@ test.describe('WebKit accessibility checks', () => {
         // Wait for page to load
         await page.waitForLoadState('networkidle');
         
-        // Find a menu button - we'll look for a button with aria-label containing "menu" or "open"
-        // or a button that controls a menu (has aria-controls and aria-haspopup)
-        const menuButton = page.locator('button[aria-label*="menu" i], button[aria-label*="open" i], button[aria-haspopup="true"]');
-        // If we find such a button, test it
-        if (await menuButton.count() > 0) {
-          const button = menuButton.first();
-          // Ensure the button is visible
-          await expect(button).toBeVisible();
+        // Find a visible header summary (the menu trigger)
+        const summaryLocator = page.locator('header details > summary').filter({ visible: true });
+        // If we find such a summary, test it
+        if (await summaryLocator.count() > 0) {
+          const summary = summaryLocator.first();
+          // Ensure the summary is visible
+          await expect(summary).toBeVisible();
           
-          // Check initial state: menu closed
-          const isExpandedInitially = await button.getAttribute('aria-expanded') === 'true';
-          // We expect the menu to be closed initially (common pattern)
-          // But we don't fail if it's open, we just note the state
+          // Get the parent details element
+          const details = summary.locator('xpath=..');
+          
+          // Check initial state: menu closed (details does not have open attribute)
+          const isOpenInitially = await details.getAttribute('open') !== null;
+          // We don't fail if it's open initially, we just note the state
           
           // Open menu with Enter
-          await button.focus();
-          await button.press('Enter');
-          // Wait for menu to open
-          await page.waitForTimeout(100);
-          // Check that aria-expanded is now true
-          await expect(button).toHaveAttribute('aria-expanded', 'true');
-          // The controlled element should be visible
-          const controlsId = await button.getAttribute('aria-controls');
-          if (controlsId) {
-            const controlledElement = page.locator(`#${controlsId}`);
-            await expect(controlledElement).toBeVisible();
-          }
+          await summary.focus();
+          await summary.press('Enter');
+          // Wait for menu to open - we'll use expect to wait for the attribute change
+          await expect(details).toHaveAttribute('open');
+          // Also check that the summary has aria-expanded="true"
+          await expect(summary).toHaveAttribute('aria-expanded', 'true');
           
           // Close menu with Escape
-          await button.press('Escape');
-          await page.waitForTimeout(100);
-          // Check that aria-expanded is now false
-          await expect(button).toHaveAttribute('aria-expanded', 'false');
-          if (controlsId) {
-            const controlledElement = page.locator(`#${controlsId}`);
-            await expect(controlledElement).toBeHidden();
-          }
+          await summary.press('Escape');
+          // Wait for menu to close
+          await expect(details).not.toHaveAttribute('open');
+          await expect(summary).toHaveAttribute('aria-expanded', 'false');
         }
         
         // Tab through the page and check focus visibility
