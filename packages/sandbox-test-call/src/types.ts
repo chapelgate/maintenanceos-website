@@ -1,5 +1,5 @@
 /**
- * Sandbox test-call types for ReceptionistOS.
+ * Sandbox test-call types for MaintenanceOS.
  * Never invent a live phone call: ok:true is only scripted / browser-mock.
  */
 

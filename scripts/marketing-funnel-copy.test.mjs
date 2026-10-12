@@ -335,10 +335,11 @@ test("demo page names the website-to-pack path and does not book a live phone", 
   ].join("\n");
 
   assert.match(create, /label: "Website"/);
+  assert.match(create, /label: "Review & Try"/);
   assert.match(page, /CREATE_JOURNEY_STEPS/);
-  assert.match(page, /Review &amp; Try/);
   assert.match(page, /website URL → check → choose role → configure → review/);
-  assert.match(page, /optional save/);
+  assert.doesNotMatch(page, /optional save/);
+  assert.doesNotMatch(page, /Review & Pack/);
   assert.match(page, /<CtaPair/);
   assert.match(page, /live number/);
   assert.match(page, /funnelPageMetadata\("demo"\)/);

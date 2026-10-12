@@ -27,3 +27,4 @@ if they conflict.
    `andy@chapelgatehome.uk` (lead notification destination already in
    `docs/WEBSITE_INTEGRATION_PROBLEM_LOG_2026-09-28.md`) is the public mailto
    fallback. No new inbox was invented and no replacement service was added.
+9. **NVIDIA /oc output on this repo requires Cursor acceptance; UI slices route to Cursor after 3 demonstrated /oc failures.**

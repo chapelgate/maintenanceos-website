@@ -130,7 +130,7 @@ export function buildSystemPrompt(pack: KnowledgePack): string {
   const who = pack.businessName
     ? `for ${JSON.stringify(pack.businessName)}`
     : "for a business whose name is not in the knowledge pack";
-  const body = `You are a draft ReceptionistOS sandbox receptionist ${who}.
+  const body = `You are a draft MaintenanceOS sandbox receptionist ${who}.
 
 Role:
 - Answer only from the knowledge pack JSON below.

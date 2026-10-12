@@ -5,10 +5,9 @@ import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
-  absoluteTitle: "Contact MaintenanceOS",
-  title: "Contact MaintenanceOS",
+  title: "Contact",
   description:
-    "Questions about MaintenanceOS, early access or the pilot partner programme? Get in touch and a person will reply.",
+    "Questions about MaintenanceOS, early access or the pilot partner programme? A person will reply.",
   path: "/contact/",
 });
 

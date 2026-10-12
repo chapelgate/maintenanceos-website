@@ -7,7 +7,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Cookie Policy (Draft)",
   description:
-    "Draft cookie notice. No analytics or marketing cookies; cookieless first-party operational measurement only; no site-wide consent banner. Pending legal review — not final policy and not a compliance certification.",
+    "Draft cookie notice. No analytics or marketing cookies, and no site-wide consent banner. Pending legal review.",
   path: "/cookies/",
 });
 

@@ -9,10 +9,7 @@ const OG_IMAGE_URL = () => `${getCanonicalSiteUrl().replace(/\/$/, "")}/og-image
 
 /** Canonical public path named in funnel-page titles, descriptions, and OG. */
 export const FUNNEL_PATH_LABEL =
-  "Website → Check → Choose → Configure → Review & Pack → optional sandbox → early access";
-
-const FUNNEL_META_GUARD =
-  "Pre-launch — not a live phone, not always-on, not general availability.";
+  "Website → Check → Choose → Configure → Review & Try";
 
 const defaultTitle = `MaintenanceOS`;
 
@@ -28,13 +25,14 @@ function ogLocale(): string {
 export const funnelPageCopy = {
   home: {
     title: "Repair Intake With Safety Rules for UK Teams",
-    absoluteTitle: "MaintenanceOS | Repair Intake With Safety Rules for UK Teams",
-    description: "Repair intake for UK property teams. The AI takes the details; fixed rules and an authorised person decide anything dangerous. Pre-launch, not always-on: request a demo.",
+    absoluteTitle: "Repair Intake With Safety Rules for UK Teams | MaintenanceOS",
+    description: "The AI takes the details; fixed rules and an authorised person decide anything dangerous. For UK property teams. Pre-launch, not a live phone, not always-on.",
     path: "/",
   },
   create: {
     title: "Try Website Set-up (Preview)",
-    description: `Preview how MaintenanceOS would draft your repair-intake set-up from your business details. A preview only: it doesn't create a phone number. ${FUNNEL_META_GUARD}`,
+    description:
+      "Preview a repair-intake draft from your business details. It does not create a phone number. Pre-launch, not always-on, not general availability.",
     path: "/create/",
   },
   demo: {

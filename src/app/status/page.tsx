@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata: Metadata = contentPageMetadata({
-  title: "Status",
-  description:
-    "MaintenanceOS is pre-launch. There's no public production service yet, so no live status or uptime figures are shown here.",
-  path: "/status/",
-});
+export const metadata: Metadata = {
+  ...contentPageMetadata({
+    title: "Status",
+    description:
+      "MaintenanceOS is pre-launch. There's no public production service yet, so no live status or uptime figures are shown here.",
+    path: "/status/",
+  }),
+  robots: { index: false, follow: false },
+};
 
 export default function StatusPage() {
   return (

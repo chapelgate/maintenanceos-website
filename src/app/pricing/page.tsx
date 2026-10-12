@@ -7,12 +7,12 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Pricing",
   description:
-    "MaintenanceOS is pre-launch, so list prices aren't published yet. Request an early demo and we'll talk you through pricing. Not a live phone, not general availability.",
+    "List prices are not published yet. Request an early demo to talk through pricing. Pre-launch, not a live phone.",
   path: "/pricing/",
 });
 
 const designedToInclude = [
-  "Website → Check → Choose → Configure → Review & Pack onboarding (early access — not a live receptionist)",
+  "Website → Check → Choose → Configure → Review & Try onboarding (early access — not a live receptionist)",
   "UK maintenance intake language and 999 guidance (never 911) in product source",
   "Explicit-request human transfer in product source",
   "Deterministic rules for safety, approvals, and money prohibitions",

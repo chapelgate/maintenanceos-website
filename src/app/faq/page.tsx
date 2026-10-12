@@ -8,10 +8,9 @@ import { faqPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
-  absoluteTitle: "MaintenanceOS FAQ: Safety, Data, Pricing and Status",
-  title: "MaintenanceOS FAQ: Safety, Data, Pricing and Status",
+  title: "FAQ: Safety, Data, Pricing and Status",
   description:
-    "Straight answers about MaintenanceOS: what the AI will and won't do, what counts as safety-critical, how data is kept apart, cookies, pricing and launch status.",
+    "What the AI will and won't do, what counts as safety-critical, how data is kept apart, cookies, pricing and launch status.",
   path: "/faq/",
 });
 

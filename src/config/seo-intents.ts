@@ -19,42 +19,42 @@ const industrySeoIntents: Record<string, IndustrySeoIntent> = {
   landlords: {
     title: "Repair Reporting Software for UK Landlords",
     primaryQuery: "property maintenance software for UK landlords",
-    summary: "Take tenant repair reports, keep anything dangerous in front of a person, and keep a record of what happened. Repair intake for UK landlords.",
+    summary: "Tenant repair reports for UK landlords, with dangerous cases kept in front of a person.",
   },
   "letting-agents": {
     title: "Repair Reporting for UK Letting Agents",
     primaryQuery: "property maintenance software for UK letting agents",
-    summary: "Repair intake for letting agents: tenant reports captured, dangerous ones kept with a person, no invented promises, and a record you can show landlords.",
+    summary: "Letting-agent repair intake. Dangerous reports stay with a person. No invented promises.",
   },
   "property-managers": {
     title: "Repair Intake for UK Property Managers",
     primaryQuery: "property maintenance software for UK property managers",
-    summary: "Repair reports across many buildings, captured as structured requests, with dangerous ones kept with a person and a record of what happened. For UK property managers.",
+    summary: "Repair reports across many buildings, with dangerous cases kept with a person.",
   },
   "maintenance-companies": {
     title: "Call & Job Intake for UK Maintenance Companies",
     primaryQuery: "maintenance management software for UK maintenance companies",
-    summary: "For maintenance firms taking repair calls from landlords, agents and residents: structured job intake, dangerous reports kept with a person, no invented dispatch.",
+    summary: "Structured job intake for UK maintenance firms. Dangerous reports stay with a person.",
   },
   "housing-associations": {
     title: "Repairs Reporting for Housing Associations",
     primaryQuery: "housing maintenance software UK",
-    summary: "Repair intake for UK housing associations: reports captured as structured requests, safety-critical cases held for an authorised person, and an audit trail on the case.",
+    summary: "Housing-association repair intake. Safety-critical cases stay with an authorised person.",
   },
   "facilities-management": {
     title: "Facilities maintenance software for UK FM teams",
     primaryQuery: "facilities maintenance software UK",
-    summary: "For facilities teams coordinating sites, contractors, and urgent maintenance reports while keeping consequential decisions with rules and authorised people.",
+    summary: "Facilities teams capture urgent reports. Consequential decisions stay with people.",
   },
   councils: {
     title: "Repairs Reporting Software for UK Councils",
     primaryQuery: "council maintenance software UK",
-    summary: "Repair intake for council housing and public-sector maintenance teams: structured capture, safety-critical cases held for an authorised officer, and an audit trail.",
+    summary: "Council repair intake. Safety-critical cases stay with an authorised officer.",
   },
   "holiday-lets": {
     title: "Holiday let maintenance software for UK operators",
     primaryQuery: "holiday let maintenance software UK",
-    summary: "For holiday-let operators who need out-of-hours guest maintenance reports captured clearly without invented engineer visits, refunds, or autonomous dispatch.",
+    summary: "Out-of-hours guest reports for holiday lets, without invented visits or refunds.",
   },
 };
 

@@ -20,7 +20,7 @@ import {
 } from "./types.ts";
 
 const GRAPH = "https://graph.microsoft.com/v1.0";
-const DEFAULT_TITLE = "ReceptionistOS adapter test";
+const DEFAULT_TITLE = "MaintenanceOS adapter test";
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;

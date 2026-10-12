@@ -37,7 +37,7 @@ export function DemoProof() {
         </div>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10" id="sample-dashboard">
         <h3 className="text-lg font-semibold text-ink">
           2. Inspect a labelled sample call, summary and transcript
         </h3>
