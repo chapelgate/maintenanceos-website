@@ -29,7 +29,7 @@ const prelaunch = {
     "Public list pricing is not published yet. Start from your website, or request pricing / early access while we prepare launch. No live phone is included in a plan.",
   cardTitle: "Request pricing",
   cardBody:
-    "MaintenanceOS is pre-launch — not generally available. We will share packages suited to UK landlords, letting agents, and property managers when early access opens — no self-serve checkout and no invented list prices on this site.",
+    "MaintenanceOS is pre-launch — not generally available. We will share packages suited to UK landlords, letting agents, and property managers when early access opens — no self-serve checkout and no published price list on this site.",
   notes: [
     "Packages tailored to portfolio size and workflow — shared on request",
     "Human clearance stays on safety and money decisions",
@@ -58,9 +58,9 @@ const published = {
   tiers: [] as PricingTier[],
   fallbackCardTitle: "Request a quote",
   fallbackCardBody:
-    "List packages are not on this page yet. Request pricing and we will share what fits your portfolio. No invented list prices, and no live phone included in a plan.",
+    "List packages are not on this page yet. Request pricing and we will share what fits your portfolio. No price list is published, and no live phone is included in a plan.",
   notes: [
-    "Quote-led packaging — no invented list prices here",
+    "Quote-led packaging — prices are shared on request",
     "Human clearance stays on safety and money decisions",
     "Live phone and calendar booking: coming / early access — not included as a live plan",
   ] as const,
