@@ -188,6 +188,37 @@ test("finalizeSystemPrompt re-attaches trusted constraints", () => {
   assert.equal(already.split(TRUSTED_CONSTRAINTS_MARKER).length, 2);
 });
 
+test("customer-facing limitations avoid internal product jargon", () => {
+  const pack = normalizeKnowledgePack({
+    businessName: "Acme",
+    greeting: "Hi",
+    hours: "9-5",
+    services: ["Boilers"],
+    faqs: [{ question: "Q?", answer: "A." }],
+  });
+  assert.ok(pack);
+  const result = buildReceptionistDraft({
+    businessName: "Acme",
+    greeting: "Hi",
+    hours: "9-5",
+    services: "Boilers",
+    faqs: "Q? A.",
+  });
+  const banned = [
+    /Fonio/,
+    /frozen live voice/,
+    /WebRTC/,
+    /AgentBlueprint/,
+    /MANDATORY/,
+    /CONSEQUENTIAL/,
+  ];
+  for (const text of [...limitationsFor(pack), result.systemPrompt]) {
+    for (const pattern of banned) {
+      assert.doesNotMatch(text, pattern);
+    }
+  }
+});
+
 test("limitationsFor always includes pre-launch honesty", () => {
   const pack = normalizeKnowledgePack({
     businessName: "Acme",

@@ -14,10 +14,10 @@ import {
 
 const CORE_LIMITATIONS = [
   "Pre-launch sandbox draft only — not a live customer phone number.",
-  "Not always-on production telephony; frozen live voice path is untouched.",
+  "Not always-on production telephony. The live telephone service is not changed.",
   "Knowledge pack is untrusted draft data, not a trained knowledge base.",
-  "Scripted / sandbox test-call path only; WebRTC and live media are not configured.",
-  "Do not claim Fonio-parity voice quality or a 30-second live number.",
+  "Browser preview only. A live media call is not configured.",
+  "Do not claim parity with another product's voice quality, or a 30-second live number.",
 ] as const;
 
 function presentString(value: unknown): string | undefined {

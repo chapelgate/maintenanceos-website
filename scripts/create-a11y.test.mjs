@@ -141,6 +141,9 @@ test("interactive receptionist and limitations regions have labelled headings", 
   assert.match(preview, /id="create-pack-limitations-heading"/);
   assert.match(preview, /aria-labelledby="create-pack-limitations-heading"/);
   assert.match(preview, /Honest limitations/);
+  assert.match(preview, /Technical details/);
+  assert.doesNotMatch(preview, /AgentBlueprint/);
+  assert.doesNotMatch(preview, /Fonio|frozen live voice|WebRTC|MANDATORY|CONSEQUENTIAL/);
   assert.match(islands, /export function CalendarConnectSection\(\) \{/);
   assert.match(islands, /return null/);
   assert.doesNotMatch(islands, /CalendarConnectComingSoon/);

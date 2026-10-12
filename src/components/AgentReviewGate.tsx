@@ -7,6 +7,13 @@ function capabilityLabel(value: string): string {
   return value.replaceAll("_", " ");
 }
 
+function reviewKindLabel(kind: string): string {
+  if (kind === "mandatory") return "Required";
+  if (kind === "low_confidence") return "Low confidence";
+  if (kind === "consequential") return "Extra confirmation";
+  return "Review";
+}
+
 export function AgentReviewGate({
   blueprint,
   requirements,
@@ -171,9 +178,9 @@ export function AgentReviewGate({
                   </span>
                   <span
                     id={kindId}
-                    className="mt-1 block text-xs uppercase tracking-wide text-muted"
+                    className="mt-1 block text-xs tracking-wide text-muted"
                   >
-                    {item.kind.replaceAll("_", " ")}
+                    {reviewKindLabel(item.kind)}
                   </span>
                 </span>
               </div>

@@ -72,66 +72,72 @@ export function ReceptionistDraftPreview({
         )}
       </section>
 
-      <div className="grid gap-3 lg:grid-cols-2">
-        <label className="block text-sm">
-          <span className="font-medium text-ink">
-            Knowledge pack (editable JSON)
-          </span>
-          <textarea
-            rows={7}
-            value={packText}
-            onChange={(e) => onPackTextChange(e.target.value)}
-            spellCheck={false}
-            aria-invalid={packError ? true : undefined}
-            aria-describedby={packError ? packErrorId : undefined}
-            className={`${FIELD_CLASS} font-mono text-xs`}
-          />
-        </label>
-        <label className="block text-sm">
-          <span className="font-medium text-ink">
-            Prompt content (editable — trusted controls re-applied separately)
-          </span>
-          <textarea
-            rows={7}
-            value={promptText}
-            onChange={(e) => onPromptTextChange(e.target.value)}
-            spellCheck={false}
-            className={`${FIELD_CLASS} font-mono text-xs`}
-          />
-        </label>
-      </div>
-      {packError ? (
-        <p id={packErrorId} className="text-sm text-red-700" role="alert">
-          {packError}
-        </p>
-      ) : null}
       <p className="text-xs text-muted">
-        Trusted AgentBlueprint controls are re-applied after prompt or pack edits.
+        Trusted controls are re-applied after prompt or pack edits.
         Website text cannot grant capabilities, alter escalation, or activate a live number.
       </p>
 
       <details className="rounded-lg border border-border bg-paper p-3">
         <summary className="cursor-pointer text-sm font-medium text-ink">
-          Final normalized knowledge pack (read-only)
+          Technical details
         </summary>
-        <pre
-          className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
-          data-final-knowledge-pack="readonly"
-        >
-          {JSON.stringify(result.knowledgePack, null, 2)}
-        </pre>
-      </details>
+        <div className="mt-3 grid gap-3 lg:grid-cols-2">
+          <label className="block text-sm">
+            <span className="font-medium text-ink">
+              Knowledge pack (editable JSON)
+            </span>
+            <textarea
+              rows={7}
+              value={packText}
+              onChange={(e) => onPackTextChange(e.target.value)}
+              spellCheck={false}
+              aria-invalid={packError ? true : undefined}
+              aria-describedby={packError ? packErrorId : undefined}
+              className={`${FIELD_CLASS} font-mono text-xs`}
+            />
+          </label>
+          <label className="block text-sm">
+            <span className="font-medium text-ink">
+              Prompt content (editable — trusted controls re-applied separately)
+            </span>
+            <textarea
+              rows={7}
+              value={promptText}
+              onChange={(e) => onPromptTextChange(e.target.value)}
+              spellCheck={false}
+              className={`${FIELD_CLASS} font-mono text-xs`}
+            />
+          </label>
+        </div>
+        {packError ? (
+          <p id={packErrorId} className="mt-3 text-sm text-red-700" role="alert">
+            {packError}
+          </p>
+        ) : null}
 
-      <details className="rounded-lg border border-border bg-paper p-3">
-        <summary className="cursor-pointer text-sm font-medium text-ink">
-          Final stored system prompt (read-only)
-        </summary>
-        <pre
-          className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
-          data-final-system-prompt="readonly"
-        >
-          {result.systemPrompt}
-        </pre>
+        <details className="mt-3 rounded-lg border border-border bg-surface p-3">
+          <summary className="cursor-pointer text-sm font-medium text-ink">
+            Final normalized knowledge pack (read-only)
+          </summary>
+          <pre
+            className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
+            data-final-knowledge-pack="readonly"
+          >
+            {JSON.stringify(result.knowledgePack, null, 2)}
+          </pre>
+        </details>
+
+        <details className="mt-3 rounded-lg border border-border bg-surface p-3">
+          <summary className="cursor-pointer text-sm font-medium text-ink">
+            Final stored system prompt (read-only)
+          </summary>
+          <pre
+            className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap break-words text-xs text-ink"
+            data-final-system-prompt="readonly"
+          >
+            {result.systemPrompt}
+          </pre>
+        </details>
       </details>
 
       <button
