@@ -23,4 +23,5 @@ export const marketingPaths: readonly string[] = [
   "/privacy/",
   "/cookies/",
   "/terms/",
+  "/accessibility/",
 ];

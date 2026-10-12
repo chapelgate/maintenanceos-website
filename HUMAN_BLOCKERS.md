@@ -2,7 +2,7 @@
 
 Resolved blockers are retained in `MASTER_PROBLEM_LOG.md`. This file lists only current human actions.
 
-2026-10-12 final regression on release `7a6f7f6b58bbbd08b490e6dd551f738700ce418d` added no human blocker. HB-004, HB-005, and HB-006 remain the open items.
+2026-10-12 council: website-only decisions are implemented in this repo. The single owner list is the section "Owner actions after the 12 October 2026 council" at the end of this file. HB-004 remains the scanner deploy. HB-005 and HB-006 stay optional. HB-002 remains the physical Safari and assistive-technology check.
 
 ## HB-002 — Physical Safari/iOS and manual assistive-technology launch QA
 Status: OPEN LAUNCH-ONLY HUMAN GATE
@@ -44,7 +44,7 @@ Do NOT deploy the old `cadce5c` archive.
 
 Exact next action:
 1. Use the existing approved recovery identity for the dedicated Scanner V2 droplet `606110383` only.
-2. Transfer/deploy a fresh payload built from exact verified current source `fe69aa7e25a18fa800e3728dd02046501de1db5f` (or a later main SHA only after equivalent verification).
+2. Transfer/deploy a fresh payload built from verified current `main` after the council website change is merged (not `cadce5c`, and not the older pin `fe69aa7e25a18fa800e3728dd02046501de1db5f`).
 3. Preserve the existing fail-closed/self-rollback deployment method and existing HTTPS route.
 4. Verify health, then live black-box Scanner V2 behavior including the zero-evidence case before freezing.
 5. Do not expose or copy the private recovery key into chat/GitHub and do not create a replacement host.
@@ -124,3 +124,16 @@ voice and run `npm run product-tour:remux`. Until then, leave the committed
 recording in place.
 
 Other work can continue: yes.
+
+## Owner actions after the 12 October 2026 council
+
+These are the only actions this website change does not take. Each one needs Andrew.
+
+1. Scanner droplet. Use the existing approved recovery identity for droplet `606110383` only. Deploy a fresh payload built from verified current `main` (not `cadce5c`, and not the older pin `fe69aa7e25a18fa800e3728dd02046501de1db5f`). Keep the existing fail-closed/self-rollback method and the existing HTTPS route. Check health, then a zero-fetch resume, before treating production scan as repaired. Do not paste the recovery private key into chat or GitHub and do not create a replacement host. Also redeploy the App Platform scan function component if the in-repo per-instance limits should be the live bundle.
+2. Voice, optional. The council kept the browser voice. A website-owned Gacrux preview is not required. If you want one later, provide a URL that already holds the credential server-side, separate from the golden line. Set `NEXT_PUBLIC_VOICE_PREVIEW_ENDPOINT` and rebuild. Do not send the golden line's key. Only then regenerate `desmond.wav` and run `npm run product-tour:remux`.
+3. Lead intake, optional. Mailto `andy@chapelgatehome.uk` stays the public path. To replace it, supply an HTTPS endpoint you control that meets `docs/FORM_ENDPOINT_CONTRACT.md` and set `NEXT_PUBLIC_FORM_ENDPOINT` at build. Also answer: is `andy@chapelgatehome.uk` the controller's mailbox, who else can read it, and how long is mail kept?
+4. Domain. At GoDaddy (`ns19.domaincontrol.com` and `ns20.domaincontrol.com`), add CNAME `maintenanceos` to `seahorse-app-4oasq.ondigitalocean.app` (or the hostname DigitalOcean shows when the domain is added). Do not change the apex A records `172.66.0.96` and `162.159.140.98`, and do not change the `www` CNAME `chapelgate-technologies-website-647rc.ondigitalocean.app`. In the MaintenanceOS DigitalOcean app (not app origin `0f1f70fe-623b-45e8-8013-8527118c2b9b`), add the hostname `maintenanceos.chapelgatetechnologies.com` and complete any verification DigitalOcean asks for. The DigitalOcean API token is currently invalid, so this cannot be done from here. Only after `dig` and HTTPS show that name serving this export, set `NEXT_PUBLIC_SITE_URL=https://maintenanceos.chapelgatetechnologies.com` and rebuild.
+5. www-to-apex redirect for `chapelgatetechnologies.com`. On 12 October 2026 both `https://chapelgatetechnologies.com/` and `https://www.chapelgatetechnologies.com/` returned HTTP 200 from app origin `0f1f70fe-623b-45e8-8013-8527118c2b9b`. A redirect is a setting on that corporate app, Cloudflare, or GoDaddy. It needs a valid DigitalOcean token or the corporate app console. Do not point `www` or the apex at MaintenanceOS.
+6. Counsel and company-record questions, before any draft legal page is treated as final. What is the controller's legal name, registered office, company number, and ICO registration number if any? What is the lawful basis for an enquiry email, for a website URL submitted on `/create`, and for any future measurement store? Does DigitalOcean or another processor handle personal data outside the UK, and what transfer mechanism applies? What is the retention period once a receiver exists? Who handles access and erasure requests, and by what process? What children's clause should the draft use? What governing law, courts, and liability cap should the draft terms use? Is the operator a public sector body? If not, a statement under the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 is not required. Who will complete the assistive-technology review? Does the host set any cookie the inventory should name?
+7. Physical Safari and assistive technology (HB-002). On physical Safari/macOS and iOS Safari, check `/`, `/create/`, `/demo/`, `/features/`, `/pricing/`, and `/security/`. Complete a manual keyboard pass and an assistive-technology pass. Record browser, device, and OS versions. Automated WebKit is not that pass.
+8. MP-07 and MP-08 need no action unless you want a different risk decision. The braces advisory stays accepted. The scan cap stays per function instance. No shared store was added.

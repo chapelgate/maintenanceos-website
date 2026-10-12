@@ -171,14 +171,15 @@ export default function CookiesPage() {
               Analytics cookies
             </h2>
             <p className="mt-2 text-muted">
-              No analytics cookies are configured. First-party operational
-              measurement sends only bounded event type and pathname data to the
-              existing Chapelgate Railway control plane. It uses no cookies,
-              localStorage, sessionStorage, persistent visitor identifier,
-              referrer, query string, or user-agent in the stored event record.
-              There is no third-party analytics SDK or tag. This draft remains
-              pending legal review and is not a Google Analytics, PECR, or GDPR
-              compliance certification.
+              No analytics cookies are configured. First-party cookieless
+              operational measurement is built to record only bounded event
+              type and pathname data. It uses no cookies, localStorage,
+              sessionStorage, persistent visitor identifier, referrer, query
+              string, or user-agent in the stored event record. While no
+              measurement endpoint is configured, the beacon does not post.
+              The previous Railway-hosted control plane returns Application not found, so events are not sent there. There is no third-party
+              analytics SDK or tag. This draft remains pending legal review
+              and is not a Google Analytics, PECR, or GDPR compliance certification.
             </p>
           </section>
 

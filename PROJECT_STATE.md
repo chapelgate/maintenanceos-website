@@ -17,9 +17,12 @@ Rollback point: `e4b4604d861520246ef0999296578fe573523d6b`.
 - The Scanner V2 droplet (`178.128.171.45`) and the golden phone line are
   outside a website merge. Shipping package source does not redeploy the droplet.
 - `npm test` passes (script tests plus the TypeScript package and `src/lib` tests).
-- MP-01 through MP-09, MP-11, and MP-12 are fixed in the website client as
-  recorded in `MASTER_PROBLEMS.md`. MP-10 still waits on a production domain.
-  MP-07 remains partial: the braces advisory has no safe non-major fix.
+- MP-01 through MP-06, MP-09, MP-11, and MP-12 are fixed in the website
+  client as recorded in `MASTER_PROBLEMS.md`. MP-07 is an accepted residual:
+  the braces advisory stays, and `eslint-config-next` is not downgraded.
+  MP-08 is an accepted per-instance scan cap, with no shared store.
+  MP-10 waits on DNS for `maintenanceos.chapelgatetechnologies.com`.
+  The intended host is a constant and is not the live canonical.
 - MP-13, MP-14, and MP-15 record the pricing/`llms.txt` copy, the features
   honesty count, and the remaining public audit slices. Those are on the
   live release above.
@@ -30,14 +33,17 @@ Rollback point: `e4b4604d861520246ef0999296578fe573523d6b`.
 - Online enquiries stay on the mailto fallback to andy@chapelgatehome.uk
   until a working lead endpoint is configured. The lead form is not shown
   while that fallback is active.
-- Canonical, Open Graph, and sitemap URLs use the staging host because no
-  production domain has been chosen.
+- Canonical, Open Graph, and sitemap URLs use the staging host. The
+  intended production origin is `https://maintenanceos.chapelgatetechnologies.com`.
+  It is not published as the canonical until that name resolves.
 - The product-tour soundtrack is committed Higgsfield Seed Audio, voice Desmond.
   It is not the phone voice.
 
 ## Next step
 
-The two remaining autonomous slices and the final regression are done.
+The 12 October 2026 council decisions are in `DECISIONS.md`. Website-only
+items from that council are in this tree. Droplet deploy, DNS, the
+DigitalOcean domain attach, a lead receiver, and physical Safari or
+assistive-technology checks stay on the owner list in `HUMAN_BLOCKERS.md`.
 NVIDIA /oc output on this repo requires Cursor acceptance. UI slices route to
-Cursor after 3 demonstrated /oc failures. HB-004, HB-005, and HB-006 stay open.
-No new human blocker came out of the regression.
+Cursor after 3 demonstrated /oc failures.
