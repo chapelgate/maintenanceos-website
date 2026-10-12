@@ -19,13 +19,13 @@ const designedToInclude = [
   "Multi-tenant ops objects in source: properties, residents, contractors, work orders, jobs",
 ] as const;
 
-const notSoldAsLive = [
-  "No live always-on phone line in a plan",
-  "No self-serve checkout and no invented list prices",
-  "No invented list prices on this marketing site",
-  "Calendar booking and live telephony: coming / early access — not general availability",
-  "No ISO, SOC 2, or bank-grade certification claims",
-] as const;
+  const notSoldAsLive = [
+    "No live always-on phone line in a plan",
+    "No self-serve checkout and no invented list prices",
+    "No list prices invented on this marketing site",
+    "Calendar booking and live telephony: coming / early access — not general availability",
+    "No ISO, SOC 2, or bank-grade certification claims",
+  ] as const;
 
 export default function PricingPage() {
   const pricing = getPricingConfig();
