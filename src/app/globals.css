@@ -669,10 +669,8 @@ summary:focus-visible {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .intake-orb {
-    animation: intake-idle 5.6s ease-in-out infinite;
-  }
-
+  /* The button stays still so its hit target does not move. Only the
+     decorative halo and sheen animate. */
   .intake-orb::before {
     animation: intake-halo 4.4s ease-in-out infinite;
   }
@@ -701,6 +699,8 @@ summary:focus-visible {
 }
 
 .intake-cloud {
+  position: relative;
+  z-index: 3;
   display: grid;
   grid-template-rows: 0fr;
   width: min(100%, 20rem);
@@ -739,6 +739,19 @@ summary:focus-visible {
 
 .intake-orb-stage.is-open .intake-cloud-inner {
   padding-block: 1rem;
+}
+
+.intake-orb-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.intake-orb-links a {
+  display: inline-flex;
+  white-space: nowrap;
 }
 
 .intake-orb-caption {
@@ -811,6 +824,58 @@ summary:focus-visible {
   }
 }
 
+header.site-header {
+  --site-header-height: calc(4rem + 1px);
+  --site-header-bottom: var(--site-header-height);
+}
+
+header .site-header-bar {
+  flex-wrap: nowrap;
+  height: 4rem;
+  min-height: 4rem;
+  max-height: 72px;
+}
+
+header .site-header-desktop {
+  display: none;
+}
+
+header .site-header-compact {
+  display: block;
+}
+
+header .site-header-menu {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: 100%;
+  z-index: 50;
+  width: auto;
+  max-height: calc(100dvh - var(--site-header-bottom) - 0.5rem);
+  margin-top: 0.5rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (min-width: 1101px) {
+  header .site-header-desktop {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  header .site-header-desktop .site-nav-link {
+    padding-inline: 0.45rem;
+  }
+
+  header .site-header-compact {
+    display: none;
+  }
+}
+
 header details {
   overflow: visible;
 }
@@ -836,27 +901,14 @@ header details[open] .site-menu-panel {
 }
 
 @supports selector(::details-content) {
-  /* Do not clip: panels are position:absolute and would vanish at 0-height. */
+  /* Do not set opacity, translate, or a content-visibility transition here.
+     Each one turns this box into the menu's containing block and shrinks the
+     panel to the hamburger. The panel fades on its own. */
   header details::details-content {
     overflow: visible;
-    opacity: 0;
-    translate: 0 -8px;
-    transition:
-      opacity var(--mos-duration-menu) var(--mos-easing),
-      translate var(--mos-duration-menu) var(--mos-easing),
-      content-visibility var(--mos-duration-menu);
-    transition-behavior: allow-discrete;
   }
 
   header details[open]::details-content {
-    opacity: 1;
-    translate: 0 0;
-  }
-
-  @starting-style {
-    header details[open]::details-content {
-      opacity: 0;
-      translate: 0 -8px;
-    }
+    content-visibility: visible;
   }
 }
