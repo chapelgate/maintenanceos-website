@@ -2,6 +2,8 @@
 
 Resolved blockers are retained in `MASTER_PROBLEM_LOG.md`. This file lists only current human actions.
 
+2026-10-12 final regression on release `7a6f7f6b58bbbd08b490e6dd551f738700ce418d` added no human blocker. HB-004, HB-005, and HB-006 remain the open items.
+
 ## HB-002 — Physical Safari/iOS and manual assistive-technology launch QA
 Status: OPEN LAUNCH-ONLY HUMAN GATE
 Date: 2026-09-30

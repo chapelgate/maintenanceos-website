@@ -1,8 +1,12 @@
 # Project state
 
-Verified 2026-10-12 in source. The live static site is
+Verified 2026-10-12 against the live static site
 `https://seahorse-app-4oasq.ondigitalocean.app/`. A merge to `main` rebuilds
 it through the existing App Platform auto-deploy path.
+
+Final release SHA: `7a6f7f6b58bbbd08b490e6dd551f738700ce418d`
+(`/release.json`, built 2026-10-12T03:34:07.332Z).
+Rollback point: `e4b4604d861520246ef0999296578fe573523d6b`.
 
 ## Current verified state
 
@@ -17,8 +21,12 @@ it through the existing App Platform auto-deploy path.
   recorded in `MASTER_PROBLEMS.md`. MP-10 still waits on a production domain.
   MP-07 remains partial: the braces advisory has no safe non-major fix.
 - MP-13, MP-14, and MP-15 record the pricing/`llms.txt` copy, the features
-  honesty count, and the remaining public audit slices. Those are fixed in
-  source. Live HTML follows each merge's static deploy.
+  honesty count, and the remaining public audit slices. Those are on the
+  live release above.
+- MP-16 records the jargon and repetition cut. The full safety model, the
+  public path, and the core-safety sentence each appear once. Home visible
+  copy is 899 words. MP-17 records the six home role cards opening `/create`
+  with that role selected at step 3. Both are on the live release above.
 - Online enquiries stay on the mailto fallback to andy@chapelgatehome.uk
   until a working lead endpoint is configured. The lead form is not shown
   while that fallback is active.
@@ -29,5 +37,7 @@ it through the existing App Platform auto-deploy path.
 
 ## Next step
 
+The two remaining autonomous slices and the final regression are done.
 NVIDIA /oc output on this repo requires Cursor acceptance. UI slices route to
 Cursor after 3 demonstrated /oc failures. HB-004, HB-005, and HB-006 stay open.
+No new human blocker came out of the regression.
