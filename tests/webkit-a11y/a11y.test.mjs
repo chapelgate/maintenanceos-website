@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { axe } from '@axe-core/playwright';
+import AxeBuilder from '@axe-core/playwright';
+
+// Use WebKit for all tests in this file
+test.use({ browserName: 'webkit' });
 
 const pages = ['/', '/create/', '/demo/', '/features/', '/pricing/', '/security/'];
 const viewports = [
@@ -19,12 +22,16 @@ test.describe('WebKit accessibility checks', () => {
         await page.goto(`http://localhost:3000${pagePath}`);
         
         // Check for axe violations
-        const accessibilityScanResults = await axe.run(page, {
-          // We only care about serious and critical violations
-          tags: ['wcag2aa', 'wcag2a'],
-          // We can also disable some rules if needed, but we'll use default
-        });
-        expect(accessibilityScanResults.violations).toEqual([]);
+        const accessibilityScanResults = await new AxeBuilder({ page })
+          .withTags(['wcag2aa', 'wcag2a'])
+          .analyze();
+        
+        // Filter violations to only serious and critical
+        const seriousOrCritical = accessibilityScanResults.violations.filter(
+          v => v.impact === 'serious' || v.impact === 'critical'
+        );
+        
+        expect(seriousOrCritical).toEqual([]);
       });
 
       test(`focus and menu checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
