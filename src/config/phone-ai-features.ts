@@ -117,19 +117,19 @@ export const phoneAiMarketingCards: readonly PhoneAiFeatureCard[] = [
     ],
     sources: ["V-02", "V-03", "V-05"],
   },
-  {
-    id: "M-TEL-02",
-    title: "Human transfer on request",
-    status: "VERIFIED",
-    group: "telephony",
-    ukOpsLine:
-      "Callers can ask for a person; transfer is explicit-request-only in product source.",
-    bullets: [
-      "Shared policy across voice providers.",
-      "Transfer quality on carrier remains under retest — not marketed as proven live.",
-    ],
-    sources: ["V-04"],
-  },
+{
+  id: "M-TEL-02",
+  title: "Human transfer on request",
+  status: "UNDER_TEST",
+  group: "telephony",
+  ukOpsLine:
+    "Callers can ask for a person; transfer is explicit-request-only in product source.",
+  bullets: [
+    "Shared policy across voice providers.",
+    "Transfer quality on carrier remains under retest — not marketed as proven live.",
+  ],
+  sources: ["V-04"],
+},
   {
     id: "M-TEL-03",
     title: "AI voice receptionist",

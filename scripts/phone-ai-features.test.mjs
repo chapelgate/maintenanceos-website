@@ -63,10 +63,10 @@ test("inventory short card set is exactly 7 cards and is not invented", () => {
     assert.match(inventory, new RegExp(`\\| ${id} \\|`));
     assert.doesNotMatch(cards, new RegExp(`id: "${id}"`));
   }
-  assert.match(inventory, /exactly 7/);
-  assert.match(inventory, /5 VERIFIED \+ 2 UNDER TEST/);
-  assert.match(inventory, /NOT_ON_SITE/);
-  assert.match(inventory, /Do not invent rows/);
+    assert.match(inventory, /exactly 7/);
+    assert.match(inventory, /4 VERIFIED \+ 3 UNDER TEST/);
+    assert.match(inventory, /NOT_ON_SITE/);
+    assert.match(inventory, /Do not invent rows/);
   assert.match(config, /MARKETING_CARD_HARD_COUNT/);
 });
 
@@ -79,9 +79,9 @@ test("marketing cards are exactly 5 VERIFIED and 2 UNDER TEST", () => {
   );
   assert.deepEqual(ids, ON_PAGE_IDS);
   assert.equal(ids.length, 7);
-  assert.equal(statuses.filter((s) => s === "VERIFIED").length, 5);
-  assert.equal(statuses.filter((s) => s === "UNDER_TEST").length, 2);
-  assert.equal(statuses.filter((s) => s === "NOT_ON_SITE").length, 0);
+    assert.equal(statuses.filter((s) => s === "VERIFIED").length, 4);
+    assert.equal(statuses.filter((s) => s === "UNDER_TEST").length, 3);
+    assert.equal(statuses.filter((s) => s === "NOT_ON_SITE").length, 0);
 });
 
 test("marketing cards never include NOT_ON_SITE as a present capability", () => {
