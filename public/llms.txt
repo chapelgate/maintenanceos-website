@@ -11,14 +11,14 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - Website mode: pre-launch / early access
 - Product: under testing for release; not commercially live / not general availability
 - AI receptionist: under testing and in development (historical validation calls only — not a public production voice service)
-- Public path: website URL → website learning → review → configure → browser voice preview → optional save
-- Conversion on this site: Create from website (primary), or Join launch list / Request early demo (human early-access briefing — not a live phone)
+- Public path: website URL → website learning → review → configure → browser voice preview
+- Conversion on this site: Request an early demo at /demo/ (human early-access briefing — not a live phone)
 - Public /create website learning reads a small, bounded set of public HTTPS pages to extract reviewable business facts; private/internal targets are blocked, robots.txt is honoured, and missing facts stay missing
 - Do not describe this site as a live customer portal, billing product, or always-on telephony service
 
 ## Key pages
 
-- [Home](https://seahorse-app-4oasq.ondigitalocean.app/): Website URL → website learning → review → configure → browser voice preview → optional save — not a live public phone
+- [Home](https://seahorse-app-4oasq.ondigitalocean.app/): Website URL → website learning → review → configure → browser voice preview — not a live public phone
 - [How it works](https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/): Same path; bounded website learning plus browser voice preview; click-to-play product tour (`#product-tour`) — not a live public phone
 - [Features](https://seahorse-app-4oasq.ondigitalocean.app/features/): VERIFIED / PREVIEW cards from the Phone AI inventory — same path; live public phone not claimed
 - [Property maintenance software](https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/): Core UK property-maintenance software category page; distinct role pages link from here; pre-launch, no autonomous dispatch
@@ -27,8 +27,8 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 - [Cookies](https://seahorse-app-4oasq.ondigitalocean.app/cookies/): DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a Google Analytics / PECR / GDPR compliance certification
 - [Industries](https://seahorse-app-4oasq.ondigitalocean.app/industries/): Role pages for UK property maintenance audiences
 - [Pricing](https://seahorse-app-4oasq.ondigitalocean.app/pricing/): List pricing not published — Create from website, or request pricing. No live phone in a plan; telephony and calendar are coming / early access
-- [Create](https://seahorse-app-4oasq.ondigitalocean.app/create/): Website URL → bounded public website learning → review → configure → browser voice preview → optional save
-- [Demo](https://seahorse-app-4oasq.ondigitalocean.app/demo/): Same path; Create from website, or Join launch list / Request early demo as a human briefing (not a public live phone demo)
+- [Create](https://seahorse-app-4oasq.ondigitalocean.app/create/): Website URL → bounded public website learning → review → configure → browser voice preview
+- [Demo](https://seahorse-app-4oasq.ondigitalocean.app/demo/): Same path; Request an early demo as a human briefing (not a public live phone demo)
 
 ## Do not claim
 
@@ -40,9 +40,9 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 ## Contact
 
 - Create from website: https://seahorse-app-4oasq.ondigitalocean.app/create/
-- Join launch list: https://seahorse-app-4oasq.ondigitalocean.app/demo/#launch
+
 - Request early demo / early access: https://seahorse-app-4oasq.ondigitalocean.app/demo/#demo
-- Human enquiry / early access (not a GA support desk, not live phone provisioning, no invented SLA): https://seahorse-app-4oasq.ondigitalocean.app/contact/
+- Human enquiry / early access (not a GA support desk, not live phone provisioning, no invented SLA): email andy@chapelgatehome.uk
 
 There is no public always-on phone number to call on this site.
 

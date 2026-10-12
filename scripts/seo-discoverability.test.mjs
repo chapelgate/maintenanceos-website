@@ -25,13 +25,12 @@ const keyPaths = [
 
 const requiredPhrases = [
   "pre-launch",
-  "Join launch list",
   "Request early demo",
   "under testing",
   "not commercially",
 ];
 
-const funnelPath = /website URL .* website learning .* review .* configure .* browser voice preview .* optional save/;
+const funnelPath = /website URL .* website learning .* review .* configure .* browser voice preview/;
 
 test("llms.txt exists with claims-safe conversion and key URLs", () => {
   const text = readPublic("llms.txt");
