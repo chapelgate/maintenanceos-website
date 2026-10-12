@@ -8,6 +8,8 @@ export {
   isCreateScanReady,
   isValidEmail,
   normalisePublicUrl,
+  unsafePublicUrlMessage,
+  UNSAFE_WEBSITE_URL_MESSAGE,
   type CreateJourneyStep,
   type CreateJourneyStepStatus,
   type CreateScanProgress,

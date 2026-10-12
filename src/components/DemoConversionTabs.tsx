@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useId, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useId, useSyncExternalStore } from "react";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 
 type TabId = "launch" | "demo";
@@ -29,6 +29,11 @@ export function DemoConversionTabs() {
     () => "launch",
   );
 
+  const launchTabId = `${baseId}-tab-launch`;
+  const demoTabId = `${baseId}-tab-demo`;
+  const launchPanelId = `${baseId}-panel-launch`;
+  const demoPanelId = `${baseId}-panel-demo`;
+
   const select = useCallback((next: TabId) => {
     const hash = next === "demo" ? "#demo" : "#launch";
     if (window.location.hash !== hash) {
@@ -37,33 +42,45 @@ export function DemoConversionTabs() {
     }
   }, []);
 
-  const onTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  useEffect(() => {
+    function placeTabs() {
+      const hash = window.location.hash;
+      if (hash !== "#demo" && hash !== "#launch") return;
+      document
+        .getElementById("demo-conversion-tabs")
+        ?.scrollIntoView({ block: "start" });
+    }
+    placeTabs();
+    window.addEventListener("hashchange", placeTabs);
+    return () => window.removeEventListener("hashchange", placeTabs);
+  }, []);
+
+  const onTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (
-      e.key !== "ArrowLeft" &&
-      e.key !== "ArrowRight" &&
-      e.key !== "Home" &&
-      e.key !== "End"
+      event.key !== "ArrowLeft" &&
+      event.key !== "ArrowRight" &&
+      event.key !== "Home" &&
+      event.key !== "End"
     ) {
       return;
     }
-    e.preventDefault();
-    if (e.key === "Home" || e.key === "ArrowLeft") select("launch");
-    else select("demo");
+    event.preventDefault();
+    const next: TabId =
+      event.key === "End" || event.key === "ArrowRight" ? "demo" : "launch";
+    select(next);
+    const id = next === "demo" ? demoTabId : launchTabId;
+    requestAnimationFrame(() => document.getElementById(id)?.focus());
   };
 
-  const launchTabId = `${baseId}-tab-launch`;
-  const demoTabId = `${baseId}-tab-demo`;
-  const launchPanelId = `${baseId}-panel-launch`;
-  const demoPanelId = `${baseId}-panel-demo`;
-
   return (
-    <div className="mx-auto max-w-xl px-4 py-12">
+    <div
+      id="demo-conversion-tabs"
+      className="demo-conversion-tabs mx-auto max-w-xl px-4 py-12"
+    >
       <div
         role="tablist"
         aria-label="Conversion options"
-        tabIndex={0}
         className="flex gap-1 rounded-lg border border-border bg-surface p-1"
-        onKeyDown={onTabKeyDown}
       >
         <button
           type="button"
@@ -78,6 +95,7 @@ export function DemoConversionTabs() {
               : "flex-1 rounded-md px-4 py-2.5 text-sm font-semibold text-ink hover:bg-paper"
           }
           onClick={() => select("launch")}
+          onKeyDown={onTabKeyDown}
         >
           Join launch list
         </button>
@@ -94,6 +112,7 @@ export function DemoConversionTabs() {
               : "flex-1 rounded-md px-4 py-2.5 text-sm font-semibold text-ink hover:bg-paper"
           }
           onClick={() => select("demo")}
+          onKeyDown={onTabKeyDown}
         >
           Request early access
         </button>

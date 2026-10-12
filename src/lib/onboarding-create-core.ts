@@ -88,16 +88,52 @@ export function createJourneyStepAnnouncement(step: CreateJourneyStep): string {
   return `Step ${step} of ${CREATE_JOURNEY_STEPS.length}: ${item?.label ?? "Website"}`;
 }
 
-export function normalisePublicUrl(raw: string): string | null {
+export const UNSAFE_WEBSITE_URL_MESSAGE =
+  "Enter a public https:// website. http://, localhost, and private network addresses (10.*, 172.16–31.*, 192.168.*, and 127.*) are not accepted.";
+
+function isPrivateOrLoopbackHost(hostname: string): boolean {
+  const host = hostname.replace(/\.$/, "").toLowerCase();
+  if (host === "localhost" || host.endsWith(".localhost")) return true;
+  const match = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host);
+  if (!match) return false;
+  const octets = match.slice(1).map((part) => Number(part));
+  if (octets.some((part) => part > 255)) return false;
+  const [first, second] = octets;
+  if (first === 10 || first === 127) return true;
+  if (first === 192 && second === 168) return true;
+  if (first === 172 && second >= 16 && second <= 31) return true;
+  return false;
+}
+
+/** Specific refusal for http, localhost, and private IPv4. Other junk returns null. */
+export function unsafePublicUrlMessage(raw: string): string | null {
   const trimmed = raw.trim();
   if (!trimmed) return null;
+  try {
+    const withProtocol = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)
+      ? trimmed
+      : `https://${trimmed}`;
+    const url = new URL(withProtocol);
+    if (url.protocol === "http:" || isPrivateOrLoopbackHost(url.hostname)) {
+      return UNSAFE_WEBSITE_URL_MESSAGE;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+export function normalisePublicUrl(raw: string): string | null {
+  const trimmed = raw.trim();
+  if (!trimmed || unsafePublicUrlMessage(trimmed)) return null;
   try {
     const withProtocol = /^https?:\/\//i.test(trimmed)
       ? trimmed
       : `https://${trimmed}`;
     const u = new URL(withProtocol);
-    if (u.protocol !== "http:" && u.protocol !== "https:") return null;
+    if (u.protocol !== "https:") return null;
     if (!u.hostname.includes(".")) return null;
+    if (isPrivateOrLoopbackHost(u.hostname)) return null;
     return u.toString();
   } catch {
     return null;

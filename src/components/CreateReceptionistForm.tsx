@@ -7,6 +7,7 @@ import {
   createJourneyNextAction,
   isValidEmail,
   normalisePublicUrl,
+  unsafePublicUrlMessage,
   type ReceptionistDraft,
 } from "@/lib/onboarding-create-core";
 import type { ReceptionistDraftResult } from "@/lib/receptionist-draft";
@@ -123,7 +124,15 @@ export function CreateReceptionistForm({
       return;
     }
 
-    const nextUrl = normalisePublicUrl(businessUrlRef.current?.value ?? "");
+    const rawUrl = businessUrlRef.current?.value ?? "";
+    const unsafe = unsafePublicUrlMessage(rawUrl);
+    if (unsafe) {
+      setError(unsafe);
+      setErrorField("businessUrl");
+      setStatus("error");
+      return;
+    }
+    const nextUrl = normalisePublicUrl(rawUrl);
     if (!nextUrl) {
       setError(
         "Enter a valid public website URL (for example https://example.com).",
