@@ -670,7 +670,7 @@ summary:focus-visible {
 
 @media (prefers-reduced-motion: no-preference) {
   .intake-orb {
-    animation: intake-idle 5.6s ease-in-out infinite;
+    /* Animation removed from button to prevent transform; only pseudo-elements animate */
   }
 
   .intake-orb::before {
