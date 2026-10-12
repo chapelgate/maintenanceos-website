@@ -31,7 +31,7 @@ test("/create defers later steps without weakening the hydration-safe entry", ()
   assert.match(form, /ssr:\s*false/);
   assert.match(form, /CreateLaterStepsFallback/);
   assert.match(form, /useSyncExternalStore/);
-  assert.match(form, /disabled=\{!hydrated\}/);
+  assert.match(form, /disabled=\{buttonState\.disabled\}/);
   assert.doesNotMatch(form, /<form\b/);
   assert.doesNotMatch(form, /from ["']@\/lib\/onboarding-create["']/);
   assert.doesNotMatch(form, /from ["']@\/lib\/lead-adapter["']/);

@@ -158,8 +158,8 @@ test("/create Step 1 cannot native-submit before hydration", () => {
   assert.match(form, /HYDRATED_SERVER_SNAPSHOT = \(\) => false/);
   assert.match(form, /HYDRATED_CLIENT_SNAPSHOT = \(\) => true/);
   assert.match(form, /type="button"/);
-  assert.match(form, /disabled=\{!hydrated\}/);
-  assert.match(form, /data-create-hydrated=\{hydrated \? "true" : "false"\}/);
+  assert.match(form, /disabled=\{buttonState\.disabled\}/);
+  assert.match(form, /data-create-hydrated=\{buttonState\.hydratedAttr\}/);
   assert.doesNotMatch(form, /<form\b/);
   assert.doesNotMatch(form, /requestSubmit\(/);
   assert.match(form, /onClick=\{onStep1\}/);

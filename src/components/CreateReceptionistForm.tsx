@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { CreateJourneyStepper } from "@/components/CreateJourneyStepper";
 import {
   createJourneyNextAction,
@@ -69,6 +69,13 @@ export function CreateReceptionistForm({
     HYDRATED_CLIENT_SNAPSHOT,
     HYDRATED_SERVER_SNAPSHOT,
   );
+  const buttonState = useMemo(() => {
+    if (hydrated) {
+      return { disabled: false, hydratedAttr: "true" };
+    } else {
+      return { disabled: true, hydratedAttr: "false" };
+    }
+  }, [hydrated]);
   const [pastWebsite, setPastWebsite] = useState(false);
   const [honeypotSuccess, setHoneypotSuccess] = useState(false);
   const [status, setStatus] = useState<"idle" | "error">("idle");
@@ -280,13 +287,13 @@ export function CreateReceptionistForm({
         ) : null}
         <button
           type="button"
-          disabled={!hydrated}
+          disabled={buttonState.disabled}
           data-create-primary-action=""
-          data-create-hydrated={hydrated ? "true" : "false"}
+          data-create-hydrated={buttonState.hydratedAttr}
           onClick={onStep1}
           className="mt-5 inline-flex min-h-6 min-w-6 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:cursor-wait disabled:opacity-60"
         >
-          {hydrated ? "Check this website" : "Loading form..."}
+          {buttonState.disabled ? "Loading form..." : "Check this website"}
         </button>
         <p className="mt-3 text-xs text-muted">
           Website learning reads only a small, bounded set of public pages.
