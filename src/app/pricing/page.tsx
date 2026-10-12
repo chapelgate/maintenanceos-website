@@ -22,7 +22,7 @@ const designedToInclude = [
 const notSoldAsLive = [
   "No live always-on phone line in a plan",
   "No self-serve checkout and no invented list prices",
-  "No invented list prices on this marketing site",
+  "No price list is published on this marketing site",
   "Calendar booking and live telephony: coming / early access — not general availability",
   "No ISO, SOC 2, or bank-grade certification claims",
 ] as const;
