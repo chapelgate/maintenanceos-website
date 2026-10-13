@@ -22,8 +22,8 @@ export function LegalPageChrome({ noticeLabel }: LegalPageChromeProps) {
       </p>
       <p>
         <span className="font-medium text-ink">Contact for this {noticeLabel}:</span>{" "}
-        <a href="mailto:andy@chapelgatehome.uk" className="text-accent underline">
-          andy@chapelgatehome.uk
+        <a href="mailto:info@chapelgatetechnologies.com" className="text-accent underline">
+          info@chapelgatetechnologies.com
         </a>
         . Online enquiries are temporarily unavailable. The{" "}
         <a href="/contact/" className="text-accent underline">

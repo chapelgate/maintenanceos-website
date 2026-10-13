@@ -96,6 +96,7 @@ test("public brand distinguishes product from publisher in source", () => {
   const site = fs.readFileSync(path.join(root, "src", "config", "site.ts"), "utf8");
   const schema = fs.readFileSync(path.join(root, "src", "lib", "json-ld.ts"), "utf8");
   assert.match(site, /publicBrand: "MaintenanceOS"/);
+  assert.match(site, /parentBrand: "WorkSmart OS"/);
   assert.match(site, /publisherName: "Chapelgate"/);
   assert.match(site, /UK maintenance operations software with AI-assisted intake/);
   assert.match(schema, /name: "Chapelgate Technologies"/);

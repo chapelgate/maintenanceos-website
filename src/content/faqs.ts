@@ -41,7 +41,7 @@ export const productFaqItems: FaqItem[] = [
     category: "product",
     question: "How do I contact you?",
     answer:
-      "Please email andy@chapelgatehome.uk for genuine human enquiries and early access. That address is not a GA support desk and not an invented SLA.",
+      "Please email info@chapelgatetechnologies.com for genuine human enquiries and early access. That address is not a GA support desk and not an invented SLA.",
     relatedHref: "/demo/",
     relatedLabel: "Request an early demo",
   },

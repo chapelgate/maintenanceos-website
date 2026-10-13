@@ -12,25 +12,19 @@ function read(rel) {
 
 test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", () => {
   const home = read("src/app/page.tsx");
-  const visual = read("src/components/HomeHeroVisual.tsx");
   const shell = read("src/components/ProductUiShell.tsx");
   const pair = read("src/components/CtaPair.tsx");
-  const orb = read("src/components/SiriOrbCloud.tsx");
 
   assert.match(home, /ProductUiShell/);
   assert.match(home, /mos-hero-atmosphere/);
   assert.match(home, /primaryHref="\/demo\/"/);
   assert.match(home, /Request an early demo/);
   assert.match(home, /no live phone demo/i);
-  assert.match(visual, /SiriOrbCloud/);
-  assert.match(visual, /home-orb-stage/);
-  assert.doesNotMatch(visual, /ProductUiShell/);
-  assert.doesNotMatch(visual, /HOME_MEDIA|HomePhoto|uk-terrace/);
+  assert.doesNotMatch(home, /SiriOrbCloud|IntakeOrbAccent|home-orb-stage/);
   assert.doesNotMatch(home, /mos-hero-dusk/);
   assert.doesNotMatch(home, /tone="on-dusk"/);
   assert.doesNotMatch(home, /Placeholder ops chrome/);
-  assert.doesNotMatch(visual, /CtaPair/);
-  assert.doesNotMatch(visual, /Press the glow to begin/);
+  assert.doesNotMatch(home, /Press the glow to begin/);
 
   assert.match(pair, /primaryHref = "\/demo\/"/);
   assert.match(pair, /secondaryHref = "\/how-we-keep-control\/"/);
@@ -44,18 +38,9 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   assert.doesNotMatch(shell, /\b\d{2,}%/);
   assert.doesNotMatch(shell, /live (phone|DID|call)/i);
   assert.doesNotMatch(shell, /amber-100|bg-amber/);
-
-  assert.match(orb, /["']use client["']/);
-  assert.match(orb, /aria-expanded=\{open\}/);
-  assert.match(orb, /aria-controls=\{panelId\}/);
-  assert.match(orb, /Escape/);
-  assert.match(orb, /\/how-it-works\//);
-  assert.match(orb, /\/demo\//);
-  assert.match(orb, /Intake listening/);
-  assert.doesNotMatch(orb, /CtaPair/);
-  assert.doesNotMatch(orb, /Press the glow to begin/);
-  assert.doesNotMatch(orb, /live (phone|call) demo/i);
-  assert.doesNotMatch(orb, /always-on phone/i);
+  assert.equal(fs.existsSync(path.join(ROOT, "src/components/SiriOrbCloud.tsx")), false);
+  assert.equal(fs.existsSync(path.join(ROOT, "src/components/IntakeOrbAccent.tsx")), false);
+  assert.equal(fs.existsSync(path.join(ROOT, "src/components/HomeHeroVisual.tsx")), false);
 });
 
 test("create page does not sit an orb above the URL field", () => {
@@ -82,7 +67,7 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
 
   assert.match(globals, /prefers-reduced-motion: reduce/);
   assert.match(globals, /\.mos-hero-atmosphere/);
-  assert.match(globals, /\.intake-orb/);
+  assert.doesNotMatch(globals, /\.intake-orb|intake-orb-accent|home-orb-stage/);
   assert.match(globals, /--color-accent:\s*#1d4ed8/i);
   assert.match(globals, /--color-accent-hover:\s*#1e40af/i);
   assert.match(globals, /--color-accent-subtle:\s*#dbeafe/i);
@@ -114,18 +99,16 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
   assert.doesNotMatch(wordmark, /text-accent|bg-accent|text-info/);
 });
 
-test("motion lock: CSS-only idle morph, menu fade, reduced-motion instant", () => {
+test("motion lock: menu fade, reduced-motion instant, no orb keyframes", () => {
   const globals = read("src/app/globals.css");
   const tokens = read("docs/ui-preview/tokens.css");
   const header = read("src/components/SiteHeader.tsx");
-  const orb = read("src/components/SiriOrbCloud.tsx");
   const visual = read("UI_VISUAL_SYSTEM.md");
 
-  assert.match(globals, /@keyframes intake-idle/);
-  assert.match(globals, /border-radius:\s*62% 38% 48% 52%/);
-  assert.match(globals, /translate3d\(5px, -6px, 0\) scale\(1\.035\)/);
-  assert.match(globals, /@keyframes intake-halo/);
-  assert.match(globals, /@keyframes intake-sheen/);
+  assert.doesNotMatch(globals, /@keyframes intake-idle/);
+  assert.doesNotMatch(globals, /@keyframes intake-halo/);
+  assert.doesNotMatch(globals, /@keyframes intake-sheen/);
+  assert.doesNotMatch(globals, /border-radius:\s*62% 38% 48% 52%/);
   assert.match(globals, /prefers-reduced-motion:\s*no-preference/);
   assert.match(globals, /--mos-duration-menu:\s*200ms/);
   assert.match(globals, /--mos-duration-panel:\s*220ms/);
@@ -139,21 +122,10 @@ test("motion lock: CSS-only idle morph, menu fade, reduced-motion instant", () =
   assert.match(visual, /Static orb \(no morph\/pulse\)/);
 
   assert.doesNotMatch(globals, /from ["']gsap["']|gsap\.|@gsap/);
-  assert.doesNotMatch(orb, /from ["']gsap["']|gsap\./);
   assert.doesNotMatch(header, /from ["']gsap["']|gsap\./);
   assert.doesNotMatch(globals, /cubic-bezier\([^)]*[1-9]\.\d+/);
   assert.doesNotMatch(globals, /\b(bounce|spring|elastic)\b/i);
-  assert.doesNotMatch(orb, /Press the glow to begin/);
-  assert.doesNotMatch(orb, /always-on phone/i);
 
-  assert.match(
-    globals,
-    /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.intake-orb-accent[\s\S]*animation: none !important/,
-  );
-  assert.match(
-    globals,
-    /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.intake-orb::after[\s\S]*animation: none !important/,
-  );
   assert.match(
     globals,
     /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.site-menu-panel[\s\S]*transition: none !important/,
@@ -164,7 +136,6 @@ test("motion lock: CSS-only idle morph, menu fade, reduced-motion instant", () =
 
 test("home photographs are licensed stock, not customers or RelicVault assets", () => {
   const media = read("src/content/home-media.ts");
-  const visual = read("src/components/HomeHeroVisual.tsx");
   const strip = read("src/components/HomeLifestyleStrip.tsx");
   const band = read("src/components/HomeLifeBand.tsx");
   const sources = read("public/media/home/SOURCES.md");
@@ -175,8 +146,6 @@ test("home photographs are licensed stock, not customers or RelicVault assets", 
   assert.match(media, /Stock photograph/);
   assert.match(media, /Not a MaintenanceOS customer/);
   assert.doesNotMatch(media, /uk-terrace|5lJAQ8yjzCM|terrace/);
-  assert.match(visual, /home-orb-stage/);
-  assert.doesNotMatch(visual, /HOME_MEDIA|HomePhoto|uk-terrace/);
   assert.match(strip, /HOME_MEDIA/);
   assert.match(strip, /not testimonials/);
   assert.match(band, /HOME_MEDIA/);
@@ -184,31 +153,14 @@ test("home photographs are licensed stock, not customers or RelicVault assets", 
   assert.match(sources, /unsplash\.com\/photos\/_2AlIm-F6pw/);
   assert.doesNotMatch(sources, /5lJAQ8yjzCM/);
   assert.doesNotMatch(media, /relicvault/i);
-  assert.doesNotMatch(visual, /trusted by|testimonial|10,000/i);
   assert.doesNotMatch(strip, /trusted by|our customers/i);
   assert.doesNotMatch(band, /trusted by|testimonial/i);
   assert.doesNotMatch(home, /relicvault/i);
   assert.ok(!fs.existsSync(path.join(ROOT, "public/media/home/uk-terrace.webp")));
 });
 
-test("hero orb fills the old photo footprint on paper with a blue-only wash", () => {
+test("decorative orbs and hero glow blobs are gone", () => {
   const globals = read("src/app/globals.css");
-  const visual = read("src/components/HomeHeroVisual.tsx");
-  assert.match(globals, /\.home-orb-stage[\s\S]*min-height:\s*16\.5rem/);
-  assert.match(globals, /\.home-orb-stage \.intake-orb[\s\S]*min\(72cqi,\s*20rem\)/);
-  assert.match(globals, /\.home-orb-stage[\s\S]*--color-paper/);
-  assert.match(globals, /\.home-orb-stage[\s\S]*--color-accent-subtle|219 234 254/);
-  assert.match(globals, /\.home-orb-stage[\s\S]*59 130 246/);
-  assert.doesNotMatch(globals, /home-photo-frame--lead|home-hero-orb/);
-  assert.doesNotMatch(
-    globals,
-    /\.home-orb-stage[\s\S]{0,400}236 214 184/,
-  );
-  assert.doesNotMatch(visual, /HOME_MEDIA|HomePhoto|uk-terrace/);
-});
-
-test("restrained orb accents sit on key marketing bands, not cards or /create", () => {
-  const accent = read("src/components/IntakeOrbAccent.tsx");
   const pageHero = read("src/components/PageHero.tsx");
   const home = read("src/app/page.tsx");
   const industries = read("src/components/HomeIndustries.tsx");
@@ -220,19 +172,13 @@ test("restrained orb accents sit on key marketing bands, not cards or /create", 
   const pricing = read("src/app/pricing/page.tsx");
   const create = read("src/app/create/page.tsx");
   const demo = read("src/app/demo/page.tsx");
+  const style = read("public/style.css");
 
-  assert.doesNotMatch(accent, /["']use client["']/);
-  assert.match(accent, /aria-hidden="true"/);
-  assert.match(pageHero, /orbAccent = false/);
-  assert.match(home, /IntakeOrbAccent/);
-  assert.match(industries, /IntakeOrbAccent/);
-  assert.match(steps, /IntakeOrbAccent/);
-  assert.match(band, /IntakeOrbAccent/);
-  assert.match(how, /orbAccent/);
-  assert.match(features, /orbAccent/);
-  assert.match(industriesPage, /orbAccent/);
-  assert.match(pricing, /orbAccent/);
-  assert.doesNotMatch(create, /orbAccent|IntakeOrbAccent|SiriOrbCloud/);
-  assert.doesNotMatch(demo, /orbAccent/);
-  assert.doesNotMatch(industries, /industryRoles\.map[\s\S]*IntakeOrbAccent/);
+  assert.doesNotMatch(globals, /home-orb-stage|intake-orb|radial-gradient/);
+  assert.doesNotMatch(globals, /home-photo-frame--lead|home-hero-orb/);
+  assert.doesNotMatch(style, /radial-gradient/);
+  assert.doesNotMatch(pageHero, /orbAccent|IntakeOrbAccent/);
+  for (const src of [home, industries, steps, band, how, features, industriesPage, pricing, create, demo]) {
+    assert.doesNotMatch(src, /orbAccent|IntakeOrbAccent|SiriOrbCloud/);
+  }
 });

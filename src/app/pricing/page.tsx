@@ -32,7 +32,6 @@ export default function PricingPage() {
         eyebrow={pricing.eyebrow || undefined}
         title={pricing.title}
         lede="Early access status: packages are shared on request. No live phone in a plan."
-        orbAccent
       />
       <div className="mx-auto max-w-4xl space-y-8 px-4 py-12">
         <FunnelPathStrip linked />

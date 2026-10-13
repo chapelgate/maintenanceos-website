@@ -38,7 +38,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "how-collected",
     title: "How we collect data",
-    body: "Sources include a public website URL you submit on /create, ordinary hosting/network technical data, and any email you send us directly. Website content is used only to extract reviewable business facts; private/internal targets are blocked and missing facts are not invented. Online enquiry forms and the measurement beacon are temporarily unavailable: the previous Railway-hosted control plane returns Application not found, so this site does not post leads or events there and does not claim a submission was stored. Please email andy@chapelgatehome.uk. No invented business data and no invented third-party lists.",
+    body: "Sources include a public website URL you submit on /create, ordinary hosting/network technical data, and any email you send us directly. Website content is used only to extract reviewable business facts; private/internal targets are blocked and missing facts are not invented. Online enquiry forms and the measurement beacon are temporarily unavailable: the previous Railway-hosted control plane returns Application not found, so this site does not post leads or events there and does not claim a submission was stored. Please email info@chapelgatetechnologies.com. No invented business data and no invented third-party lists.",
   },
   {
     id: CREATE_INGEST_PRIVACY_ANCHOR,
@@ -88,7 +88,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "exercise-rights",
     title: "How to exercise your rights",
-    body: "Email andy@chapelgatehome.uk with your request. We will respond within one month, as UK GDPR requires.",
+    body: "Email info@chapelgatetechnologies.com with your request. We will respond within one month, as UK GDPR requires.",
   },
   {
     id: "children",
@@ -103,7 +103,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "contact",
     title: "Contact us",
-    body: "Privacy contact is andy@chapelgatehome.uk. Online enquiries are temporarily unavailable.",
+    body: "Privacy contact is info@chapelgatetechnologies.com. Online enquiries are temporarily unavailable.",
   },
 ];
 

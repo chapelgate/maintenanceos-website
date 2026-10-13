@@ -1328,7 +1328,7 @@ export function CreateReceptionistLaterSteps({
               ? usesProductionLeadReceiver
                 ? " Saving the setup uses the production lead receiver and requires durable acceptance plus a receipt reference."
                 : " Saving the setup uses the preview receiver and still requires a durable receipt reference."
-              : " Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk."}
+              : " Online enquiries are temporarily unavailable. Please email info@chapelgatetechnologies.com."}
             {" "}No live telephone line is changed here.
           </p>
         </div>

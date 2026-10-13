@@ -27,7 +27,7 @@ function organizationNode(): JsonLdRecord {
     "@id": orgId(),
     name: "Chapelgate Technologies",
     url: absoluteUrl("/about/"),
-    description: `Chapelgate develops ${siteConfig.name}, ${siteConfig.category}.`,
+    description: `Chapelgate develops ${siteConfig.name}, a product of ${siteConfig.parentBrand}. ${siteConfig.category}.`,
     brand: {
       "@type": "Brand",
       name: siteConfig.publicBrand,
@@ -40,8 +40,8 @@ function websiteNode(): JsonLdRecord {
   return {
     "@type": "WebSite",
     "@id": websiteId(),
-    name: siteConfig.publicBrand,
-    alternateName: siteConfig.name,
+    name: siteConfig.parentBrand,
+    alternateName: siteConfig.publicBrand,
     url: absoluteUrl("/"),
     description: siteConfig.description,
     inLanguage: siteConfig.locale,

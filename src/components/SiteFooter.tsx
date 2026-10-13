@@ -45,7 +45,10 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border px-4 py-4 md:px-6">
         <div className="mx-auto flex max-w-[70rem] flex-wrap items-center justify-between gap-3 text-sm text-muted">
-          <p>© {new Date().getFullYear()} MaintenanceOS by Chapelgate</p>
+          <p>
+            MaintenanceOS is part of WorkSmart OS, by Chapelgate Technologies. ©{" "}
+            {new Date().getFullYear()} Chapelgate Limited
+          </p>
           <div className="flex flex-wrap gap-4">
             {footerNav.convert.map((link) => (
               <a

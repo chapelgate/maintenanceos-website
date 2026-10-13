@@ -30,10 +30,10 @@ export default function ContactPage() {
           <div className="rounded-lg border border-border bg-paper/50 p-4">
             <p className="text-xs font-medium text-muted">Direct email</p>
             <a
-              href="mailto:andy@chapelgatehome.uk"
+              href="mailto:info@chapelgatetechnologies.com"
               className="text-sm font-semibold text-accent underline"
             >
-              andy@chapelgatehome.uk
+              info@chapelgatetechnologies.com
             </a>
             <p className="mt-1 text-xs text-muted">
               Expected response turnaround: business hours. No invented response SLA.

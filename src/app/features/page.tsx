@@ -118,7 +118,6 @@ export default function FeaturesPage() {
         eyebrow="Capability map · Pre-launch"
         title="What MaintenanceOS can do — and what is in preview"
         lede="Collect maintenance details, enforce safety boundaries in fixed server rules, and keep human oversight. Pre-launch preview."
-        orbAccent
       />
 
       <SafeAutomationLink />

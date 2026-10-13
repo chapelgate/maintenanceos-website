@@ -20,6 +20,8 @@ export const RETIRED_MEASUREMENT_ENDPOINT =
 export const siteConfig = {
   name: "MaintenanceOS",
   publicBrand: "MaintenanceOS",
+  /** Umbrella brand. MaintenanceOS is one product; sibling products are not live. */
+  parentBrand: "WorkSmart OS",
   publisherName: "Chapelgate",
   shortName: "MOS",
   category: "UK maintenance operations software with AI-assisted intake",
