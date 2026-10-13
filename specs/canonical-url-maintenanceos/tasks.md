@@ -1,0 +1,9 @@
+- [x] Set default/fallback for NEXT_PUBLIC_SITE_URL and FALLBACK_SITE_URL in src/lib/site-url.ts to https://maintenanceos.chapelgatetechnologies.com (no trailing slash)
+- [x] Update .env.example NEXT_PUBLIC_SITE_URL to https://maintenanceos.chapelgatetechnologies.com
+- [x] Update canonical link tags, Open Graph/Twitter URLs, sitemap.xml, robots.txt sitemap line, and JSON-LD URLs to resolve to the new origin
+- [x] Update URLs in public/llms.txt and public/llms-full.txt to https://maintenanceos.chapelgatetechnologies.com
+- [x] Verify DigitalOcean app spec in repository (no .do/app.yaml present)
+- [x] Preserve page copy, layout, and legal pages (landed in #252)
+- [x] Update existing test assertions in scripts/council-decisions.test.mjs and scripts/seo-discoverability.test.mjs
+- [x] Add test in scripts/canonical-url.test.mjs asserting built canonical and sitemap origin is https://maintenanceos.chapelgatetechnologies.com
+- [x] Run npm ci, npm test, and npm run build and verify all pass

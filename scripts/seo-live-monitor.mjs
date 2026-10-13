@@ -1,4 +1,4 @@
-const origin = (process.env.SEO_SITE_URL || "https://seahorse-app-4oasq.ondigitalocean.app").replace(/\/$/, "");
+const origin = (process.env.SEO_SITE_URL || "https://maintenanceos.chapelgatetechnologies.com").replace(/\/$/, "");
 const pages = [
   "/", "/property-maintenance-software/", "/ai-receptionist/", "/features/", "/how-it-works/",
   "/industries/", "/industries/landlords/", "/industries/letting-agents/",

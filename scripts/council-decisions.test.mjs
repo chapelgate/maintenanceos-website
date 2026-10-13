@@ -7,25 +7,22 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
-test("intended production host is named and is not the live canonical", () => {
+test("canonical production host is the live canonical origin", () => {
   const siteUrl = read("src/lib/site-url.ts");
   const env = read(".env.example");
   assert.match(
     siteUrl,
-    /export const INTENDED_PRODUCTION_SITE_URL =\n  "https:\/\/maintenanceos\.chapelgatetechnologies\.com";/,
+    /export const INTENDED_PRODUCTION_SITE_URL =\r?\n\s*"https:\/\/maintenanceos\.chapelgatetechnologies\.com";/,
   );
   assert.match(
     siteUrl,
-    /export const FALLBACK_SITE_URL =\n  "https:\/\/seahorse-app-4oasq\.ondigitalocean\.app";/,
+    /export const FALLBACK_SITE_URL =\r?\n\s*"https:\/\/maintenanceos\.chapelgatetechnologies\.com";/,
   );
-  const canonical = siteUrl.slice(siteUrl.indexOf("export function getCanonicalSiteUrl"));
-  assert.doesNotMatch(canonical, /INTENDED_PRODUCTION_SITE_URL/);
-  assert.match(env, /^NEXT_PUBLIC_SITE_URL=https:\/\/seahorse-app-4oasq\.ondigitalocean\.app$/m);
-  assert.match(env, /maintenanceos\.chapelgatetechnologies\.com/);
-  assert.doesNotMatch(
+  assert.match(
     env,
-    /^NEXT_PUBLIC_SITE_URL=https:\/\/maintenanceos\.chapelgatetechnologies\.com/m,
+    /^NEXT_PUBLIC_SITE_URL=https:\/\/maintenanceos\.chapelgatetechnologies\.com$/m,
   );
+  assert.match(env, /maintenanceos\.chapelgatetechnologies\.com/);
 });
 
 test("create hero is a repair-intake preview, not a general receptionist", () => {
@@ -44,7 +41,7 @@ test("cookies page no longer says measurement is sent to Railway", () => {
   assert.match(page, /persistent visitor identifier/);
   assert.match(page, /the beacon does not post/);
   assert.match(page, /events are not sent there/);
-  assert.match(page, /Application not found/);
+  assert.match(page, /Application not[\s\r\n]+found/);
   assert.doesNotMatch(
     page,
     /sends only bounded event type and pathname data to the[\s\S]{0,80}Railway/,

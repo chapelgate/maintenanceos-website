@@ -2,7 +2,7 @@
 
 > MaintenanceOS is pre-launch UK maintenance operations software with AI-assisted intake. AI receptionist capability under testing. This document distinguishes what is VERIFIED in product source, what is UNDER TEST, and what is NOT CLAIMED. Prefer this over speculation.
 
-Canonical marketing host (staging, until NEXT_PUBLIC_SITE_URL is set to a production origin): https://seahorse-app-4oasq.ondigitalocean.app/
+Canonical marketing host: https://maintenanceos.chapelgatetechnologies.com/
 
 Do not claim that AI will overtake humans. Do not use AGI, superintelligence, or “replace the workforce” marketing. AI here means assisted intake under rules and human clearance.
 
@@ -83,22 +83,22 @@ Funnel pages (`/`, `/create/`, `/demo/`, `/how-it-works/`, `/features/`, `/prope
 
 ## Key URLs
 
-- Home (same path as Create): https://seahorse-app-4oasq.ondigitalocean.app/
-- How it works (includes click-to-play product tour at #product-tour — not a public phone call): https://seahorse-app-4oasq.ondigitalocean.app/how-it-works/
-- Features: https://seahorse-app-4oasq.ondigitalocean.app/features/
-- Property maintenance software (core non-brand category page): https://seahorse-app-4oasq.ondigitalocean.app/property-maintenance-software/
-- AI receptionist: https://seahorse-app-4oasq.ondigitalocean.app/ai-receptionist/
-- Security (designed controls; website learning is bounded and read-only; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://seahorse-app-4oasq.ondigitalocean.app/security/
-- Industries: https://seahorse-app-4oasq.ondigitalocean.app/industries/
-- Pricing: https://seahorse-app-4oasq.ondigitalocean.app/pricing/
-- Create (website URL → website learning → review → configure → browser voice preview → optional save): https://seahorse-app-4oasq.ondigitalocean.app/create/
-- Demo (same path; launch list + early-access briefing, not a live phone): https://seahorse-app-4oasq.ondigitalocean.app/demo/
-- Dashboard (coming / under testing): https://seahorse-app-4oasq.ondigitalocean.app/dashboard/
-- FAQ (same path; no live public phone, bounded website learning extracts reviewable facts, empty hours/services stay empty, UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only): https://seahorse-app-4oasq.ondigitalocean.app/faq/
-- Cookies (DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a GA / PECR / GDPR compliance certification): https://seahorse-app-4oasq.ondigitalocean.app/cookies/
-- Contact (human enquiry / early access — not a support desk, not live phone provisioning, no invented SLA): https://seahorse-app-4oasq.ondigitalocean.app/contact/
-- About: https://seahorse-app-4oasq.ondigitalocean.app/about/
-- Short machine summary: https://seahorse-app-4oasq.ondigitalocean.app/llms.txt
+- Home (same path as Create): https://maintenanceos.chapelgatetechnologies.com/
+- How it works (includes click-to-play product tour at #product-tour — not a public phone call): https://maintenanceos.chapelgatetechnologies.com/how-it-works/
+- Features: https://maintenanceos.chapelgatetechnologies.com/features/
+- Property maintenance software (core non-brand category page): https://maintenanceos.chapelgatetechnologies.com/property-maintenance-software/
+- AI receptionist: https://maintenanceos.chapelgatetechnologies.com/ai-receptionist/
+- Security (designed controls; website learning is bounded and read-only; no ISO/SOC 2 or bank-grade claims; legal pages DRAFT; product interest starts at /create): https://maintenanceos.chapelgatetechnologies.com/security/
+- Industries: https://maintenanceos.chapelgatetechnologies.com/industries/
+- Pricing: https://maintenanceos.chapelgatetechnologies.com/pricing/
+- Create (website URL → website learning → review → configure → browser voice preview → optional save): https://maintenanceos.chapelgatetechnologies.com/create/
+- Demo (same path; launch list + early-access briefing, not a live phone): https://maintenanceos.chapelgatetechnologies.com/demo/
+- Dashboard (coming / under testing): https://maintenanceos.chapelgatetechnologies.com/dashboard/
+- FAQ (same path; no live public phone, bounded website learning extracts reviewable facts, empty hours/services stay empty, UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only): https://maintenanceos.chapelgatetechnologies.com/faq/
+- Cookies (DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a GA / PECR / GDPR compliance certification): https://maintenanceos.chapelgatetechnologies.com/cookies/
+- Contact (human enquiry / early access — not a support desk, not live phone provisioning, no invented SLA): https://maintenanceos.chapelgatetechnologies.com/contact/
+- About: https://maintenanceos.chapelgatetechnologies.com/about/
+- Short machine summary: https://maintenanceos.chapelgatetechnologies.com/llms.txt
 
 ## UK property-maintenance industries (positioning)
 
