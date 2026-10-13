@@ -29,8 +29,8 @@ test("FeatureStatusChip encodes VERIFIED solid blue and PREVIEW outline", () => 
   assert.match(chip, /feature-status-chip--under-test/);
   assert.match(css, /\.feature-status-chip--verified/);
   assert.match(css, /background: var\(--color-accent-subtle\)/);
-  assert.match(css, /\.feature-status-chip--under-test/);
-  assert.match(css, /color: var\(--color-warn\)/);
+    assert.match(css, /\.feature-status-chip--under-test/);
+    assert.match(css, /color: #fcd34d;/);
   assert.match(features, /<FeatureStatusChip status=\{card\.status\}/);
   assert.match(features, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(config, /Preview status/);

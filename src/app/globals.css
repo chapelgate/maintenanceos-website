@@ -411,7 +411,7 @@ summary:focus-visible {
 .feature-status-chip--under-test {
   border: 1px solid color-mix(in srgb, var(--color-warn) 35%, var(--color-border));
   background: var(--color-paper);
-  color: var(--color-warn);
+  color: #fcd34d;
 }
 
 /* Compact home role chips — scan only, no new claims. */
