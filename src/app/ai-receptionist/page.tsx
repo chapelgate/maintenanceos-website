@@ -104,21 +104,10 @@ export default function AiReceptionistPage() {
         </section>
 
         <section className="mos-glass p-5 text-sm text-muted">
-          <h2 className="text-base font-semibold text-ink">Where we are</h2>
+          <h2 className="text-base font-semibold text-ink">Preview status</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5">
-            <li>
-              Prior test and validation calls have occurred historically — not
-              commercial general availability
-            </li>
-            <li>
-              Controlled carrier testing on the current voice candidate remains
-              gated — not available as &ldquo;live now&rdquo;
-            </li>
-            <li>
-              Architecture for concurrent operations is being developed — we
-              never invent concurrent-call capacity figures on this site
-            </li>
-            <li>Further controlled testing is underway</li>
+            <li>Controlled voice preview undergoing testing — not commercial general availability.</li>
+            <li>No invented capacity or concurrent-call claims.</li>
           </ul>
         </section>
 
