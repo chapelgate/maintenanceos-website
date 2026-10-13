@@ -50,11 +50,11 @@ test("public copy drops internal jargon", () => {
 test("repeated blocks stay in full once", () => {
   const pages = files.filter((item) => item.file.includes(`${path.sep}src${path.sep}app${path.sep}`) && item.file.endsWith("page.tsx"));
   const fullSafety = pages.filter((item) => /<SafeAutomationModel\b/.test(item.text));
-  assert.deepEqual(fullSafety.map((item) => path.relative(ROOT, item.file)), [
+  assert.deepEqual(fullSafety.map((item) => path.relative(ROOT, item.file).replaceAll("\\", "/")), [
     "src/app/how-we-keep-control/page.tsx",
   ]);
   const fullStrip = pages.filter((item) => /<FunnelPathStrip\s*\/>/.test(item.text));
-  assert.deepEqual(fullStrip.map((item) => path.relative(ROOT, item.file)), [
+  assert.deepEqual(fullStrip.map((item) => path.relative(ROOT, item.file).replaceAll("\\", "/")), [
     "src/app/how-it-works/page.tsx",
   ]);
   const core = joined.match(/Core safety controls are built/g) ?? [];

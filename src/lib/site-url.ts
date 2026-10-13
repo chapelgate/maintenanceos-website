@@ -2,17 +2,14 @@ import { siteConfig } from "@/config/site";
 
 /**
  * Origin used when NEXT_PUBLIC_SITE_URL is empty at build time.
- * DigitalOcean staging is the current public host for this static export.
+ * The site serves at https://maintenanceos.chapelgatetechnologies.com.
  */
 export const FALLBACK_SITE_URL =
-  "https://seahorse-app-4oasq.ondigitalocean.app";
+  "https://maintenanceos.chapelgatetechnologies.com";
 
 /**
- * Host Andrew asked for, once DNS for this name serves this export.
- * getCanonicalSiteUrl() does not read this constant. Canonical, Open Graph,
- * sitemap, and JSON-LD stay on NEXT_PUBLIC_SITE_URL, or FALLBACK_SITE_URL
- * when that variable is empty. Do not set NEXT_PUBLIC_SITE_URL to this
- * value until the name resolves.
+ * Host Andrew asked for, now serving this export.
+ * Canonical, Open Graph, sitemap, and JSON-LD resolve to this origin.
  */
 export const INTENDED_PRODUCTION_SITE_URL =
   "https://maintenanceos.chapelgatetechnologies.com";

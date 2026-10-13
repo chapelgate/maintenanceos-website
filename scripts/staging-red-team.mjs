@@ -1,5 +1,5 @@
 const origin = (process.env.WEBSITE_SITE_URL ||
-  "https://seahorse-app-4oasq.ondigitalocean.app").replace(/\/$/, "");
+  "https://maintenanceos.chapelgatetechnologies.com").replace(/\/$/, "");
 
 const failures = [];
 const observations = [];
