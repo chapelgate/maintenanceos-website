@@ -106,6 +106,8 @@ test("/create stepper chrome is sticky Website to Review & Try", () => {
   assert.match(stepper, /CREATE_JOURNEY_STEPS/);
   assert.match(css, /\.create-step-chrome/);
   assert.match(css, /position: sticky/);
+  assert.match(css, /\.create-step-chrome-bar[\s\S]*background:\s*rgb\(10 23 40 \/ 95%\)/);
+  assert.doesNotMatch(css, /rgb\(255 255 255 \/ 95%\)/);
 
   assert.match(later, /Reading the public website and extracting reviewable facts/i);
   assert.match(later, /missing website facts were not invented/i);

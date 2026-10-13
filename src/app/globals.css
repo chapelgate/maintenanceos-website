@@ -518,7 +518,8 @@ summary:focus-visible {
 }
 
 .create-step-chrome-bar {
-  background: rgb(255 255 255 / 95%);
+  /* #0A1728 at 95% so #E6EEF6 and #A9B8C9 clear 4.5:1. */
+  background: rgb(10 23 40 / 95%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
