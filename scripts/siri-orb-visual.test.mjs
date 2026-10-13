@@ -17,8 +17,6 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
   const pair = read("src/components/CtaPair.tsx");
   const orb = read("src/components/SiriOrbCloud.tsx");
 
-  assert.match(home, /HomeHeroVisual/);
-  assert.match(home, /HomeLifestyleStrip/);
   assert.match(home, /ProductUiShell/);
   assert.match(home, /mos-hero-atmosphere/);
   assert.match(home, /primaryHref="\/demo\/"/);

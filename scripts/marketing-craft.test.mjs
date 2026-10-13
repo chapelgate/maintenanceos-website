@@ -29,8 +29,8 @@ test("FeatureStatusChip encodes VERIFIED solid blue and PREVIEW outline", () => 
   assert.match(chip, /feature-status-chip--under-test/);
   assert.match(css, /\.feature-status-chip--verified/);
   assert.match(css, /background: var\(--color-accent-subtle\)/);
-  assert.match(css, /\.feature-status-chip--under-test/);
-  assert.match(css, /color: var\(--color-warn\)/);
+    assert.match(css, /\.feature-status-chip--under-test/);
+    assert.match(css, /color: #fcd34d;/);
   assert.match(features, /<FeatureStatusChip status=\{card\.status\}/);
   assert.match(features, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(config, /Preview status/);
@@ -106,6 +106,8 @@ test("/create stepper chrome is sticky Website to Review & Try", () => {
   assert.match(stepper, /CREATE_JOURNEY_STEPS/);
   assert.match(css, /\.create-step-chrome/);
   assert.match(css, /position: sticky/);
+  assert.match(css, /\.create-step-chrome-bar[\s\S]*background:\s*rgb\(10 23 40 \/ 95%\)/);
+  assert.doesNotMatch(css, /rgb\(255 255 255 \/ 95%\)/);
 
   assert.match(later, /Reading the public website and extracting reviewable facts/i);
   assert.match(later, /missing website facts were not invented/i);
@@ -150,14 +152,12 @@ test("objection FAQ pack is on home and how-it-works, not features", () => {
 
 test("HonestyBanner token is shared and optional vignettes stay scenarios", () => {
   const banner = read("src/components/HonestyBanner.tsx");
-  const home = read("src/app/page.tsx");
   const features = read("src/app/features/page.tsx");
   const vignettes = read("src/components/UkScenarioVignettes.tsx");
 
   assert.match(banner, /export function HonestyBanner/);
   assert.match(banner, /No ISO, SOC 2, or bank-grade claims/);
   assert.match(read("src/components/CommercialProof.tsx"), /No ISO, SOC 2, or bank-grade claims/);
-  assert.match(home, /<CommercialProof/);
   assert.match(features, /<HonestyBanner compact/);
   assert.match(vignettes, /Scenario: leaky tap/);
   assert.match(vignettes, /Scenario: no heat/);

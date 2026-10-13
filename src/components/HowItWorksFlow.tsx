@@ -10,39 +10,37 @@ import type { MarketingCardStatus } from "@/config/phone-ai-features";
 const STAGE_COPY = [
   {
     id: "website",
-    short: "Start with a public business URL",
-    body: "Paste a public site URL and email to prepare the receptionist preview. Checking the website does not assign a live phone number.",
-    note: "The public /create funnel exists today and ends in a browser voice receptionist preview.",
+    short: "Public business URL",
+    body: "Enter website URL and email for preview.",
+    note: "Read-only crawl follows robots.txt. No live number.",
     status: "UNDER_TEST",
   },
   {
     id: "check",
-
-    short: "Validate the URL and prepare a reviewable draft",
-    body: "We read a small, bounded set of public HTTPS pages and extract reviewable business facts. Missing hours, services, or FAQs stay empty when they are not found.",
-    note: "Website learning is read-only and bounded, and it follows robots.txt. Extracted facts are reviewable before the receptionist uses them.",
-
+    short: "Validate URL",
+    body: "Read public pages for reviewable facts.",
+    note: "Website learning is read-only and bounded, and it follows robots.txt. Extracted facts are reviewable. Missing hours, services, or FAQs stay empty when not found.",
     status: "UNDER_TEST",
   },
   {
     id: "choose",
-    short: "Choose the job you want the AI to do",
-    body: "Pick one bounded starting role: receptionist, maintenance desk, booking assistant, customer service, sales/enquiry, or custom. The choice creates a draft AgentBlueprint; it does not activate a live agent.",
-    note: "Role selection is configuration only. Provider, phone number, credentials, and live routing stay untouched.",
+    short: "Choose bounded role",
+    body: "Select a role such as maintenance desk.",
+    note: "Creates draft AgentBlueprint; credentials untouched.",
     status: "UNDER_TEST",
   },
   {
     id: "configure",
-    short: "Configure the agent within the selected role",
-    body: "Choose a voice preference, narrow the approved role actions, set human-transfer behaviour where the role permits it, and review the business facts and greeting.",
-    note: "Configuration can only narrow the selected role. It cannot add unsupported permissions or alter live phone routing.",
+    short: "Configure actions",
+    body: "Set voice and human-transfer rules.",
+    note: "Narrow permissions only; cannot alter routing.",
     status: "UNDER_TEST",
   },
   {
     id: "review_pack",
-    short: "Review the final configuration and pack",
-    body: "The reviewed configuration becomes a knowledge pack and protected system prompt. Missing hours or services stay missing, and the reviewed configuration becomes the input to the browser voice preview.",
-    note: "The browser voice receptionist is available after review. Speak through the browser microphone and hear the response aloud when browser voice is supported; it is not a live public telephone call.",
+    short: "Review and test",
+    body: "Confirm facts and test via browser voice.",
+    note: "The browser voice receptionist is available after review. Tests audio locally; not a live public telephone call.",
     status: "UNDER_TEST",
   },
 ] as const satisfies readonly {
@@ -65,7 +63,7 @@ type Stage = (typeof STAGES)[number];
 
 function StageBadge({ index }: { index: number }) {
   return (
-    <span className="hiw-step-number flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent bg-paper text-sm font-semibold text-accent">
+    <span className="hiw-step-number flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent bg-paper text-xs font-semibold text-accent">
       {index + 1}
     </span>
   );
@@ -74,10 +72,10 @@ function StageBadge({ index }: { index: number }) {
 function StageLadderArrow() {
   return (
     <span
-      className="pointer-events-none flex items-center justify-center py-2 text-accent"
+      className="pointer-events-none flex items-center justify-center py-1.5 text-accent"
       aria-hidden="true"
     >
-      <svg width="12" height="20" viewBox="0 0 12 20" fill="none">
+      <svg width="12" height="16" viewBox="0 0 12 20" fill="none">
         <path
           d="M6 1v16M1.5 13 6 18.5 10.5 13"
           stroke="currentColor"
@@ -105,23 +103,25 @@ function StageBody({
         {showBadge ? <StageBadge index={index} /> : null}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-lg font-semibold tracking-tight text-ink">
+            <h3 className="text-base font-semibold tracking-tight text-ink">
               {stage.title}
             </h3>
             <FeatureStatusChip status={stage.status} />
           </div>
-          <p className="mt-1 text-sm font-medium leading-snug text-accent">
-            {stage.short}
-          </p>
         </div>
       </div>
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+      <p className="mt-1 text-sm leading-relaxed text-muted">
         {stage.body}
       </p>
-      <p className="mt-4 border-l-2 border-accent pl-3 text-xs leading-relaxed text-muted">
-        <span className="font-medium text-ink">Status: </span>
-        {stage.note}
-      </p>
+      <details className="mt-2 group rounded-lg border border-border bg-surface p-2 text-xs">
+        <summary className="flex cursor-pointer items-center justify-between font-medium text-ink list-none">
+          <span>Boundary</span>
+          <span className="text-muted group-open:rotate-180 transition-transform">▾</span>
+        </summary>
+        <p className="mt-1 pt-1 border-t border-border text-muted leading-relaxed">
+          {stage.note}
+        </p>
+      </details>
     </>
   );
 }
@@ -130,7 +130,7 @@ export function HowItWorksFlow() {
   return (
     <section
       aria-labelledby="flow-heading"
-      className="mx-auto max-w-3xl px-4 py-12 sm:py-16"
+      className="mx-auto max-w-3xl px-4 py-8 sm:py-12"
     >
       <h2
         id="flow-heading"
@@ -138,28 +138,17 @@ export function HowItWorksFlow() {
       >
         Website → Check → Choose → Configure → Review & Try
       </h2>
-      <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
-        The same steps as{" "}
-        <a
-          href="/create/"
-          className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
-        >
-          the website setup preview
-        </a>
-
-        . Typical shape: website URL → validate → choose role → configure →
-        review → interactive receptionist demo → optional save. We do not invent crawl results or a
-
-        live phone number.
+      <p className="mt-1 text-sm leading-relaxed text-muted">
+        Five steps from public URL to interactive browser preview.
       </p>
 
       <ol
-        className="mt-10"
+        className="mt-6 space-y-2"
         aria-label="How MaintenanceOS onboarding is designed to work"
       >
         {STAGES.map((stage, i) => (
           <li key={stage.id} className="relative">
-            <div className="mos-glass flex flex-col bg-paper p-5 sm:p-6">
+            <div className="mos-glass flex flex-col bg-paper p-4 sm:p-5">
               <StageBody stage={stage} showBadge index={i} />
             </div>
             {i < STAGES.length - 1 ? <StageLadderArrow /> : null}

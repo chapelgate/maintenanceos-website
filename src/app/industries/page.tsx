@@ -10,47 +10,70 @@ export const metadata = contentPageMetadata({
   path: "/industries/",
 });
 
+const SECTOR_SUMMARIES: Record<string, string> = {
+  landlords: "Out-of-hours repair capture with emergency triage.",
+  "letting-agents": "Triages tenant reports before reaching property managers.",
+  "property-managers": "Portfolio repairs structured for contractor handover.",
+  "maintenance-companies": "Captures job details without promising false slots.",
+  "housing-associations": "Latches emergency hazards for compliance and safety.",
+  "facilities-management": "Site maintenance intake with clear human approval.",
+  councils: "Statutory repair records with clear officer clearance.",
+  "holiday-lets": "Guest issue reporting without false arrival promises.",
+};
+
 export default function IndustriesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Pre-launch: MaintenanceOS is still under testing, and we're taking early-access requests."
+        eyebrow="Sectors · Pre-launch"
         title="Repair intake for the people who answer for repairs"
-        lede="Whoever you are, the rules are the same: the AI takes the details, fixed rules decide what happens next, and a person still clears anything flagged as dangerous. What changes is who's calling and what you need to show afterwards."
+        lede="AI assists with intake. Server rules enforce boundaries. Authorised people approve."
         orbAccent
       />
-      <div className="mx-auto max-w-6xl space-y-10 px-4 py-12">
-        <p id="core-safety" className="mos-glass px-4 py-3 text-sm text-muted">
-          Pre-launch · in testing. Core safety controls are built; a public always-on phone is not declared ready.
+      <div className="mx-auto max-w-6xl space-y-8 px-4 py-12">
+        <p id="core-safety" className="text-xs text-muted">
+          Pre-launch: Core safety controls are built; not a live phone.
         </p>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {industryRoles.map((ind) => (
             <li key={ind.slug}>
               <a
                 href={`/industries/${ind.slug}/`}
-                className="mos-glass flex flex-col h-full p-5 transition-shadow hover:shadow-[0_0_0_1px_var(--color-accent)]"
+                className="group flex h-full flex-col justify-between rounded-[var(--mos-radius-lg)] border border-border bg-surface p-5 transition-all hover:border-accent/40"
               >
-                <span className="font-semibold text-ink">{ind.label}</span>
-                <span className="mt-2 block text-sm text-muted flex-grow">{ind.title}</span>
+                <div>
+                  <span className="font-semibold text-ink group-hover:text-accent transition-colors">
+                    {ind.label}
+                  </span>
+                  <p className="mt-2 text-xs leading-relaxed text-muted">
+                    {SECTOR_SUMMARIES[ind.slug] || ind.card}
+                  </p>
+                </div>
+                <span className="mt-4 text-xs font-semibold text-accent flex items-center gap-1">
+                  View sector →
+                </span>
               </a>
             </li>
           ))}
         </ul>
-        <section className="max-w-3xl space-y-6 border-t border-border pt-10">
-          <h2 className="text-xl font-semibold text-ink">
+        <section className="max-w-3xl space-y-4 border-t border-border pt-8">
+          <h2 className="text-lg font-semibold text-ink">
             UK maintenance — not a generic AI receptionist
           </h2>
-          <p className="text-muted">
+          <p className="text-xs text-muted">
             What a public always-on phone is not:
           </p>
-          <ul className="list-disc pl-5 space-y-2 text-muted text-sm">
-            <li><strong>emergency triage vs jobs:</strong> UK/999 guidance is locked in product source.</li>
-            <li><strong>contractor-dispatch language:</strong> rules must not invent a van or slot.</li>
-            <li><strong>out-of-hours honesty:</strong> designed to collect caller details when the desk is closed.</li>
-            <li><strong>no client-money:</strong> no payment, refund, compensation, or fee-waiver authority.</li>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted">
+            <li>• <strong>emergency triage vs jobs</strong></li>
+            <li>• <strong>contractor-dispatch language</strong></li>
+            <li>• <strong>out-of-hours honesty</strong></li>
+            <li>• <strong>no client-money</strong></li>
           </ul>
-          <p className="text-muted">
-            Read the rules every sector shares on <a href="/how-we-keep-control/" className="text-accent underline">How we keep control</a>.
+          <p className="text-xs text-muted">
+            Read the rules every sector shares on{" "}
+            <a href="/how-we-keep-control/" className="text-accent underline">
+              How we keep control
+            </a>.
           </p>
           <CtaPair />
         </section>

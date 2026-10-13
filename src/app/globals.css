@@ -7,36 +7,41 @@
  * Source: BRAND_SYSTEM.md / UI_VISUAL_SYSTEM.md / ui-preview/tokens.css
  */
 :root {
-  /* Core (Brand / UI Visual System) — paper stays #F8FAFC (council lock). */
-  --color-ink: #0f172a;
-  --color-muted: #475569;
-  --color-paper: #f8fafc;
-  --color-surface: #ffffff;
-  --color-border: #e2e8f0;
-  --color-accent: #1d4ed8;
-  /* White labels stay ≥4.5:1 on accent and hover (WCAG AA) */
-  --color-accent-hover: #1e40af;
-  --color-accent-subtle: #dbeafe;
-  --color-on-accent: #ffffff;
+  /* Chapelgate Mandatory Design System matching https://chapelgate-technologies-site-nciy8.ondigitalocean.app */
+  --bg: #0A1728;
+  --card: #112A40;
+  --card2: #0E2236;
+  --cyan: #67E8F9;
+  --text: #E6EEF6;
+  --muted: #A9B8C9;
+  --line: rgba(103, 232, 249, 0.16);
+  --r: 14px;
 
-  /* Blue glow stops only — dark #3B82F6 → sky → white. No teal, violet, or black glyph. */
-  --glow-blue: #3b82f6;
-  --glow-sky: #60a5fa;
-  --glow-white: #eff6ff;
+  /* Theme tokens */
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-paper: var(--bg);
+  --color-surface: var(--card);
+  --color-surface-secondary: var(--card2);
+  --color-border: var(--line);
+  --color-accent: var(--cyan);
+  --color-accent-hover: #A5F3FC;
+  --color-accent-subtle: rgba(103, 232, 249, 0.12);
+  --color-on-accent: #0A1728;
 
-  /* Functional — never colour-only. Warn stays warm; info is distinct from accent. */
+  /* Functional */
   --color-ok: #15803d;
   --color-warn: #92400e;
   --color-critical: #b91c1c;
   --color-info: #0369a1;
-  --color-warning-bg: #fffbeb;
+  --color-warning-bg: #112A40;
   --color-warning-border: #f59e0b;
-  --color-warning-text: #92400e;
+  --color-warning-text: #E6EEF6;
 
-  /* Elevation / radii / motion (UI Visual System) */
-  --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
-  --mos-radius: 8px;
-  --mos-radius-lg: 12px;
+  /* Radii & Elevation */
+  --mos-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --mos-radius: 10px;
+  --mos-radius-lg: 14px;
   --mos-duration: 150ms;
   --mos-duration-slow: 200ms;
   --mos-duration-menu: 200ms;
@@ -53,13 +58,8 @@
   --mos-accent-hover: var(--color-accent-hover);
   --mos-accent-subtle: var(--color-accent-subtle);
   --mos-on-accent: var(--color-on-accent);
-  --mos-ok: var(--color-ok);
-  --mos-warn: var(--color-warn);
-  --mos-critical: var(--color-critical);
-  --mos-info: var(--color-info);
-  --mos-glow-blue: var(--glow-blue);
-  --mos-glow-sky: var(--glow-sky);
-  --mos-glow-white: var(--glow-white);
+
+  /* Legacy references: --color-paper: #f8fafc; --color-accent: #1d4ed8; --color-accent-hover: #1e40af; --color-accent-subtle: #dbeafe; --glow-blue: #3b82f6; --glow-sky: #60a5fa; --glow-white: #eff6ff; */
 }
 
 @theme inline {
@@ -72,6 +72,7 @@
   --color-muted: var(--color-muted);
   --color-border: var(--color-border);
   --color-surface: var(--color-surface);
+  --color-surface-secondary: var(--color-surface-secondary);
   --color-info: var(--color-info);
   --color-warn: var(--color-warn);
   --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system,
@@ -81,6 +82,7 @@
 /* 2.4.11 Focus Not Obscured — sticky SiteHeader (h-16) */
 html {
   scroll-padding-top: 5.5rem;
+  -webkit-text-size-adjust: 100%;
 }
 
 .demo-conversion-tabs {
@@ -92,10 +94,36 @@ html {
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  line-height: 1.6;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5em;
+}
+
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  background: var(--cyan);
+  color: var(--bg);
+  padding: 8px 14px;
+  border-radius: 8px;
+  z-index: 100;
+}
+.skip:focus {
+  left: 8px;
 }
 
 a:focus-visible,
@@ -103,9 +131,167 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
-summary:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+summary:focus-visible,
+:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+/* outline: 2px solid var(--color-accent); */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.btn.sm {
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 15px;
+}
+
+.btn-p {
+  background: var(--cyan);
+  color: var(--bg);
+}
+.btn-p:hover {
+  background: #A5F3FC;
+}
+
+.btn-s {
+  border-color: rgba(230, 238, 246, 0.3);
+  color: var(--text);
+}
+.btn-s:hover {
+  border-color: var(--cyan);
+}
+
+.card {
+  display: flex;
+  gap: 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 28px;
+  text-decoration: none;
+  transition: border-color 0.25s, transform 0.25s;
+}
+a.card:hover {
+  border-color: rgba(103, 232, 249, 0.5);
+  transform: translateY(-2px);
+}
+
+.ic {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(103, 232, 249, 0.1);
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+.badge.dev {
+  color: var(--cyan);
+  border-color: rgba(103, 232, 249, 0.45);
+}
+.badge.con {
+  color: #CBD5E1;
+  border-color: rgba(203, 213, 225, 0.4);
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 48px;
+}
+
+.steps {
+  list-style: none;
+  counter-reset: s;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 0;
+}
+.steps li {
+  counter-increment: s;
+  background: var(--card2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 28px;
+}
+.steps li::before {
+  content: "0" counter(s);
+  color: var(--cyan);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+
+/* Bento card, accordion, pipeline, emergency banner */
+.mos-bento-card {
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 1.5rem;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.mos-bento-card:hover {
+  border-color: rgba(103, 232, 249, 0.4);
+}
+
+.mos-accordion {
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 1rem;
+  transition: all 0.2s;
+}
+.mos-accordion[open] {
+  background: var(--card2);
+}
+
+.mos-pipeline {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mos-emergency-banner {
+  border-radius: var(--r);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+  padding: 1.25rem;
+  color: var(--text);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -225,7 +411,7 @@ summary:focus-visible {
 .feature-status-chip--under-test {
   border: 1px solid color-mix(in srgb, var(--color-warn) 35%, var(--color-border));
   background: var(--color-paper);
-  color: var(--color-warn);
+  color: #fcd34d;
 }
 
 /* Compact home role chips — scan only, no new claims. */
@@ -332,7 +518,8 @@ summary:focus-visible {
 }
 
 .create-step-chrome-bar {
-  background: rgb(255 255 255 / 95%);
+  /* #0A1728 at 95% so #E6EEF6 and #A9B8C9 clear 4.5:1. */
+  background: rgb(10 23 40 / 95%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);

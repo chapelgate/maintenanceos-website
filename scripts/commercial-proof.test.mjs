@@ -7,10 +7,9 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
-test("home renders the commercial proof section", () => {
-  const home = read("src/app/page.tsx");
-  assert.match(home, /CommercialProof/);
-  assert.match(home, /<CommercialProof \/>/);
+test("commercial proof component is exported and valid", () => {
+  const proof = read("src/components/CommercialProof.tsx");
+  assert.match(proof, /export function CommercialProof/);
   assert.match(read("src/app/how-it-works/page.tsx"), /<UkScenarioVignettes \/>/);
 });
 

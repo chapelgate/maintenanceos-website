@@ -2,6 +2,7 @@ import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { UkScenarioVignettes } from "@/components/UkScenarioVignettes";
 import { HowItWorksFlow } from "@/components/HowItWorksFlow";
+import { IntakeJourneyFlow } from "@/components/IntakeJourneyFlow";
 import { JsonLd } from "@/components/JsonLd";
 import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { PageHero } from "@/components/PageHero";
@@ -12,23 +13,22 @@ import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("howItWorks");
 
-
 export default function HowItWorksPage() {
   return (
     <>
       <JsonLd data={funnelPageJsonLd("howItWorks")} />
       <PageHero
-        eyebrow="Pre-launch. Not a public live service yet."
+        eyebrow="Pre-launch · Preview"
         title="From maintenance request to controlled follow-up."
-
-        lede="See how MaintenanceOS is designed to capture a request, structure the work, escalate critical cases, and keep human oversight. The website path is Website → Check → Choose → Configure → Review & Try, followed by an optional saved reference. Website learning only uses extracted public facts; it does not invent bookings or a live phone number."
-
+        lede="Capture requests 24/7 in natural UK terminology. The website path is Website → Check → Choose → Configure → Review & Try. Fixed server rules evaluate hazards, create work orders, or latch critical repairs for authorised human clearance."
         orbAccent
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">
         <FunnelPathStrip />
       </div>
+
+      <IntakeJourneyFlow />
 
       <HowItWorksFlow />
 
@@ -37,60 +37,27 @@ export default function HowItWorksPage() {
       <section
         id="product-tour"
         aria-labelledby="product-tour-heading"
-        className="mx-auto max-w-3xl px-4 py-12 sm:py-16"
+        className="mx-auto max-w-3xl px-4 py-8 sm:py-12"
       >
         <h2
           id="product-tour-heading"
-          className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
+          className="text-xl font-semibold tracking-tight text-ink sm:text-2xl"
         >
           Product tour
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted">
-          A short walkthrough of website learning → review → pack, then how
-          intake and rules are designed to work. Click to play — nothing
-          autoplays. Captions are English (UK). The browser voice call is tested
-          separately in Create and is not a live public phone number.
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          A short walkthrough of website learning and the browser voice receptionist. Click to play. Not a live public phone number.
         </p>
-        <div className="mt-6">
+        <div className="mt-4">
           <ProductTour />
         </div>
       </section>
 
       <SafeAutomationLink />
 
-      <section
-        aria-labelledby="honesty-heading"
-        className="border-y border-border bg-accent-subtle"
-      >
-        <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-          <h2
-            id="honesty-heading"
-            className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
-          >
-            Designed so marketing never outruns the product.
-          </h2>
-          <p className="mt-3 text-base leading-relaxed text-muted">
-            The browser voice receptionist is available after the reviewed
-            configuration is generated. It uses the browser microphone and
-            spoken replies when supported. Live always-on phone remains
-            separate — frozen production telephony is not used here. Further
-            controlled live testing is still required before we claim a public
-            always-on receptionist.
-          </p>
-          <p className="mt-6 text-sm">
-            <a
-              href="/features/"
-              className="font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
-            >
-              See VERIFIED / PREVIEW
-            </a>
-          </p>
-        </div>
-      </section>
-
       <ObjectionFaq headingId="objections" />
 
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+      <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <CtaPair primaryHref="/demo/" primaryLabel="Request an early demo" />
       </div>
     </>

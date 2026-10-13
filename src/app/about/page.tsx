@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata: Metadata = contentPageMetadata({
   title: "About MaintenanceOS",
   description:
-    "Why MaintenanceOS is built the way it is: fixed safety rules, an authorised person on anything flagged as dangerous, and an AI that never has the final say.",
+    "Why MaintenanceOS is built the way it is: fixed safety rules, human clearance, and transparent operations. Pre-launch.",
   path: "/about/",
 });
 
@@ -16,75 +16,37 @@ export default function AboutPage() {
       <PageHero
         eyebrow="Chapelgate · United Kingdom"
         title="Why MaintenanceOS is built the way it is"
-        lede="We are building operations software so UK property maintenance stays clear, accountable, and in control — a maintenance department as a service mindset for landlords, letting agents, and property managers."
+        lede="Chapelgate builds operations software so UK property maintenance stays accountable, auditable, and safe."
       />
-      <div className="mx-auto max-w-3xl space-y-10 px-4 py-12 text-muted">
-        <section aria-labelledby="about-why" className="space-y-4">
-          <h2 id="about-why" className="text-xl font-semibold text-ink">
-            Why we are building it
+      <div className="mx-auto max-w-3xl space-y-8 px-4 py-12 text-sm text-muted">
+        <section aria-labelledby="about-mission" className="space-y-3">
+          <h2 id="about-mission" className="text-lg font-semibold text-ink">
+            Our mission
           </h2>
           <p>
-            Chapelgate is developing MaintenanceOS so intake, triage, and
-            follow-through stay auditable. Fixed safety rules and human
-            clearance for critical decisions sit above AI assistance — the
-            product is designed so AI does not hold final authority on safety
-            or money.
-          </p>
-          <p>
-            The commercial problem is familiar to UK ops teams: missed
-            maintenance calls, invented promises, and safety mixed with routine
-            jobs. The product is designed so a leaky tap stays a structured job
-            and 999 stays emergency services.
+            Chapelgate is building MaintenanceOS so repair intake stays auditable. Fixed safety rules and authorised human clearance sit above AI assistance — ensuring AI never holds final authority over safety or money.
           </p>
         </section>
 
-        <section aria-labelledby="about-uk" className="space-y-4">
-          <h2 id="about-uk" className="text-xl font-semibold text-ink">
-            UK-focused by design
+        <section aria-labelledby="about-uk" className="space-y-3">
+          <h2 id="about-uk" className="text-lg font-semibold text-ink">
+            UK operations focus
           </h2>
           <p>
-            The product is shaped for UK property maintenance operations —
-            including UK emergency guidance terminology in the receptionist
-            design. We describe capabilities carefully while the programme is
-            still pre-launch.
-          </p>
-          <p>
-            MaintenanceOS is pre-launch. LandlordOS, LettingAgentOS,
-            PropertyManagerOS, HousingAssociationOS, FacilitiesOS, CouncilOS
-            and HolidayLetOS are separate planned products. They are not live
-            and not for sale. The{" "}
-            <a
-              href="/industries/"
-              className="font-medium text-accent underline-offset-4 hover:underline"
-            >
-              Industries
-            </a>{" "}
-            pages describe MaintenanceOS audiences, not those products. The
-            wider Chapelgate programme is described at{" "}
-            <a
-              href="https://chapelgatetechnologies.com/"
-              className="font-medium text-accent underline-offset-4 hover:underline"
-            >
-              chapelgatetechnologies.com
-            </a>
-            .
+            Designed specifically for United Kingdom property operations. The industry pages describe MaintenanceOS audiences. Any other sector modules remain separate planned products that are not live.
           </p>
         </section>
 
-        <section aria-labelledby="about-honesty" className="space-y-4">
-          <h2 id="about-honesty" className="text-xl font-semibold text-ink">
-            How we show up publicly
+        <section aria-labelledby="about-honesty" className="space-y-3">
+          <h2 id="about-honesty" className="text-lg font-semibold text-ink">
+            Public honesty
           </h2>
           <p>
-            This marketing site is pre-launch. We do not invent team bios,
-            customer logos, certifications, or fake dashboards. Product evidence
-            lives in the internal pilot programme — not as fabricated social
-            proof.
+            We are pre-launch. We do not invent team bios, fake customer logos, awards, or uptime percentages. Technical controls are proven in source code.
           </p>
         </section>
 
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-ink">Stay close to launch</p>
+        <div className="pt-4 border-t border-border">
           <CtaPair />
         </div>
       </div>

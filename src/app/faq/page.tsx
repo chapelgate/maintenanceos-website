@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Accordion } from "@/components/Accordion";
 import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { faqItems } from "@/content/faqs";
+import { faqItems, productFaqItems, safetyFaqItems } from "@/content/faqs";
 import { faqPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
@@ -20,32 +21,56 @@ export default function FaqPage() {
       <JsonLd data={faqPageJsonLd()} />
       <PageHero
         title="Frequently asked questions"
-        lede="The website setup preview follows: website URL → website learning → review → configure → browser voice preview → optional save. Not a live phone, no invented website facts, and no engineering test-harness wording."
+        lede="The preview follows: website URL → website learning → review → configure → browser voice preview → optional save. Not a live phone, no invented facts, and no cert theatre."
       />
-      <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
+      <div className="mx-auto max-w-3xl space-y-8 px-4 py-12">
         <FunnelPathStrip linked />
-        <div className="space-y-3">
-          {faqItems.map((item) => (
-            <details
-              key={item.question}
-              name="mos-site-faq"
-              className="mos-glass p-4"
-            >
-              <summary className="cursor-pointer font-semibold text-ink">
-                {item.question}
-              </summary>
-              <p className="mt-3 text-muted">{item.answer}</p>
-              {item.relatedHref ? (
-                <p className="mt-2 text-sm">
-                  <a href={item.relatedHref} className="text-accent underline">
-                    {item.relatedLabel}
-                  </a>
-                </p>
-              ) : null}
-            </details>
-          ))}
-        </div>
-        <CtaPair className="pt-4" />
+
+        {/* Category 1: Product & Telephone Status */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-ink">
+            Product & Telephone Status
+          </h2>
+          <div className="space-y-3">
+            {productFaqItems.map((item) => (
+              <Accordion key={item.question} summary={item.question} name="mos-site-faq">
+                <p>{item.answer}</p>
+                {item.relatedHref ? (
+                  <p className="mt-2 text-xs">
+                    <a href={item.relatedHref} className="text-accent underline">
+                      {item.relatedLabel}
+                    </a>
+                  </p>
+                ) : null}
+              </Accordion>
+            ))}
+          </div>
+        </section>
+
+        {/* Category 2: Safety, Security & Privacy */}
+        <section className="space-y-4 border-t border-border pt-8">
+          <h2 className="text-xl font-semibold text-ink">
+            Safety, Security & Privacy
+          </h2>
+          <div className="space-y-3">
+            {safetyFaqItems.map((item) => (
+              <Accordion key={item.question} summary={item.question} name="mos-site-faq">
+                <p>{item.answer}</p>
+                {item.relatedHref ? (
+                  <p className="mt-2 text-xs">
+                    <a href={item.relatedHref} className="text-accent underline">
+                      {item.relatedLabel}
+                    </a>
+                  </p>
+                ) : null}
+              </Accordion>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-t border-border pt-8">
+          <CtaPair />
+        </section>
       </div>
     </>
   );

@@ -45,9 +45,8 @@ export default function PropertyMaintenanceSoftwarePage() {
           <ul className="grid gap-3 sm:grid-cols-2">
             {industryRoles.map((role) => (
               <li key={role.slug}>
-                <a href={`/industries/${role.slug}/`} className="mos-glass block h-full p-4 text-sm text-ink hover:underline">
-                  <strong>{role.label}</strong>
-                  <span className="mt-1 block text-muted">{role.card}</span>
+                <a href={`/industries/${role.slug}/`} className="mos-glass block h-full p-4 text-sm font-semibold text-ink hover:text-accent hover:underline">
+                  {role.label} →
                 </a>
               </li>
             ))}
