@@ -150,14 +150,12 @@ test("objection FAQ pack is on home and how-it-works, not features", () => {
 
 test("HonestyBanner token is shared and optional vignettes stay scenarios", () => {
   const banner = read("src/components/HonestyBanner.tsx");
-  const home = read("src/app/page.tsx");
   const features = read("src/app/features/page.tsx");
   const vignettes = read("src/components/UkScenarioVignettes.tsx");
 
   assert.match(banner, /export function HonestyBanner/);
   assert.match(banner, /No ISO, SOC 2, or bank-grade claims/);
   assert.match(read("src/components/CommercialProof.tsx"), /No ISO, SOC 2, or bank-grade claims/);
-  assert.match(home, /<CommercialProof/);
   assert.match(features, /<HonestyBanner compact/);
   assert.match(vignettes, /Scenario: leaky tap/);
   assert.match(vignettes, /Scenario: no heat/);

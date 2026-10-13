@@ -1,0 +1,17 @@
+- [x] Fetch stylesheet from https://chapelgate-technologies-site-nciy8.ondigitalocean.app and extract design system tokens
+- [x] Integrate Chapelgate design system into src/app/globals.css (#0A1728 bg, #112A40 card, #0E2236 panel, #67E8F9 cyan, 14px radius, 3px focus outline)
+- [x] Implement core UI components: Bento cards, progressive disclosure accordions, visual pipeline indicator, emergency warning banner, authoritative trust strip
+- [x] Redesign Homepage (/) to under 380 words with 4 Benefits Bento cards, 5-step pipeline bar, 8 sector pills, and remove apologetic stock photo bands
+- [x] Redesign How It Works (/how-it-works/) to under 450 words with visual intake journey, 5 compact setup cards with accordions, and 3 objection FAQ drawers
+- [x] Redesign Safety Rules (/how-we-keep-control/) to under 750 words with emergency banner at top, 3 pillars bento, 6 "Never Invent" micro-cards, and 4 deep-detail accordions
+- [x] Redesign Features (/features/) to under 360 words with 2x3 Bento grid and clean preview status summary
+- [x] Redesign Security (/security/) to under 290 words with 4 focused Bento cards
+- [x] Redesign Industries Hub (/industries/) to under 180 words with 8 vertical cards
+- [x] Redesign 8 Industry Sector Pages (/industries/*) to 440–460 words each with unified modular template and eliminate duplicate boilerplate prose
+- [x] Redesign FAQ (/faq/) to under 400 words across 2 categorized accordion sections
+- [x] Redesign Pricing (/pricing/), Demo (/demo/), About (/about/), and Contact (/contact/) to target word count limits
+- [x] Preserve legal pages (/privacy/, /cookies/, /terms/, /accessibility/) content verbatim
+- [x] Preserve all routes, emergency guidance (999, 0800 111 999, 0800 002 001), and safety rule meanings
+- [x] Measure before and after word counts per page
+- [x] Pass npm ci, npm test, and npm run build
+- [x] Create PR with required Estate Gate headers and before/after word count table

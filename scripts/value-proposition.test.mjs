@@ -9,16 +9,16 @@ const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
 test("homepage leads with customer outcome before architecture", () => {
   const page = read("src/app/page.tsx");
-  assert.match(page, /AI for repair reports\. A person still clears anything flagged as dangerous\./);
+  assert.match(page, /AI intake for repair reports\. A person still clears anything dangerous\./);
   assert.match(
     page,
-    /MaintenanceOS is repair intake for landlords, letting agents and housing providers\./,
+    /Capture caller details 24\/7 in natural UK terminology\./,
   );
   assert.match(page, /What your team gets/);
-  assert.match(page, /Capture the request clearly/);
-  assert.match(page, /Surface critical cases/);
-  assert.match(page, /Keep decisions with your team/);
-  assert.match(page, /Keep work traceable/);
+  assert.match(page, /Capture Caller Details/);
+  assert.match(page, /Surface Critical Hazards/);
+  assert.match(page, /Fixed Rule Engine/);
+  assert.match(page, /Immutable Audit Trail/);
   assert.match(page, /<SafeAutomationLink \/>/);
   assert.ok(
     page.indexOf("What your team gets") <

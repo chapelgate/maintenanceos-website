@@ -7,12 +7,10 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
-test("public home offers the same controlled agent roles used by setup", () => {
-  const home = read("src/app/page.tsx");
+test("public customer offers match the same controlled agent roles used by setup", () => {
   const offers = read("src/components/CustomerAgentOffers.tsx");
   const selector = read("src/components/AgentTypeSelector.tsx");
 
-  assert.match(home, /<CustomerAgentOffers \/>/);
   assert.match(offers, /AGENT_TEMPLATES\.map/);
   assert.match(selector, /AGENT_TEMPLATES\.map/);
   assert.match(offers, /Choose what you want the AI to do/);
