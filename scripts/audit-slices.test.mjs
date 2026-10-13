@@ -78,7 +78,7 @@ test("meta descriptions stay within 160 characters and titles end with the brand
     }
     for (const match of text.matchAll(/absoluteTitle:\s*"([^"]+)"/g)) {
       assert.ok(
-        match[1].endsWith("| MaintenanceOS"),
+        match[1].endsWith("| MaintenanceOS | WorkSmart OS"),
         `${rel} absolute title: ${match[1]}`,
       );
     }
@@ -99,7 +99,7 @@ test("meta descriptions stay within 160 characters and titles end with the brand
     const description = `${match[1]} Pre-launch, not always-on.`;
     assert.ok(description.length <= 160, description);
   }
-  assert.match(read("src/lib/page-meta.ts"), /template: `%s \| MaintenanceOS`/);
+  assert.match(read("src/lib/page-meta.ts"), /template: `%s \| MaintenanceOS \| WorkSmart OS`/);
 });
 
 test("static export already emits trailing slashes and cannot add a 301", () => {

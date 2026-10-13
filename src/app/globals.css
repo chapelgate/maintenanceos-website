@@ -304,17 +304,12 @@ a.card:hover {
     scroll-behavior: auto !important;
   }
 
-  .intake-orb,
-  .intake-orb::before,
-  .intake-orb::after,
-  .intake-orb-accent,
   .home-photo-motion {
     animation: none !important;
     transform: none !important;
     filter: none !important;
   }
 
-  .intake-cloud,
   .site-menu-panel,
   header details::details-content {
     transition: none !important;
@@ -543,102 +538,19 @@ summary:focus-visible {
   color: var(--color-muted);
 }
 
-/* Soft blue + cream wash for inner page heroes — gradient only, no extra blur. */
 .mos-page-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
-  background-image:
-    radial-gradient(
-      ellipse 40% 80% at 100% 0%,
-      rgb(219 234 254 / 48%),
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse 50% 60% at 0% 100%,
-      rgb(236 214 184 / 28%),
-      transparent 70%
-    );
 }
 
-/*
- * Home atmosphere — paper #F8FAFC plus soft blue + cream depth.
- * Warmth is photographic. No clinical grid. No dusk / constellation sky.
- */
 .mos-hero-atmosphere {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   background-color: var(--color-paper);
-}
-
-.mos-hero-atmosphere::before {
-  content: "" / "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    radial-gradient(
-      ellipse 60% 50% at 88% 0%,
-      rgb(219 234 254 / 55%),
-      transparent 68%
-    ),
-    radial-gradient(
-      ellipse 55% 45% at 6% 100%,
-      rgb(236 214 184 / 42%),
-      transparent 70%
-    );
-}
-
-/* ——— Home hero orb stage (replaces the dropped terrace still) ——— */
-
-.home-hero-stage {
-  position: relative;
-}
-
-.home-orb-stage {
-  container-type: inline-size;
-  display: grid;
-  place-items: center;
-  min-height: 16.5rem;
-  padding: 2rem 1rem 1.5rem;
-  border-radius: var(--mos-radius-lg);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-paper);
-  /* Soft single-hue blue cloud wash behind the orb only. No cream, no photo. */
-  background-image: radial-gradient(
-    circle at 50% 42%,
-    var(--color-accent-subtle) 0 22%,
-    rgb(59 130 246 / 28%) 48%,
-    rgb(219 234 254 / 0%) 72%
-  );
-}
-
-.home-orb-stage .intake-orb-wrap {
-  width: 100%;
-}
-
-.home-orb-stage .intake-orb-stage {
-  width: min(100%, 24rem);
-}
-
-.home-orb-stage .intake-orb {
-  /* Fill the old photo footprint (lead frame was 16.5rem / 4:3). */
-  width: min(72cqi, 20rem);
-  height: min(72cqi, 20rem);
-}
-
-.home-orb-stage .intake-orb::before {
-  inset: -22%;
-  background: radial-gradient(
-    circle,
-    rgb(219 234 254 / 70%),
-    rgb(59 130 246 / 28%) 42%,
-    rgb(59 130 246 / 0%) 70%
-  );
 }
 
 .home-photo-frame {
@@ -712,73 +624,13 @@ summary:focus-visible {
   }
 }
 
-.home-close-band {
-  background:
-    radial-gradient(
-      ellipse 70% 80% at 100% 50%,
-      rgb(219 234 254 / 36%),
-      transparent 62%
-    ),
-    var(--color-surface);
-}
-
 .section-band-head {
   display: flex;
   align-items: flex-start;
   gap: 0.85rem;
 }
 
-.section-band-head .intake-orb-accent {
-  margin-top: 0.35rem;
-  flex-shrink: 0;
-}
-
-/* Decorative listening-cue glow — not a logo, not a CTA, not on /create. */
-.intake-orb-accent {
-  display: block;
-  pointer-events: none;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 38% 32%,
-    var(--glow-white) 0 16%,
-    #bfdbfe 34%,
-    var(--glow-sky) 58%,
-    var(--glow-blue) 100%
-  );
-  box-shadow:
-    0 0 12px rgb(59 130 246 / 18%),
-    0 0 24px rgb(96 165 250 / 20%);
-}
-
-.intake-orb-accent--band {
-  width: 1.75rem;
-  height: 1.75rem;
-}
-
-.intake-orb-accent--header {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  z-index: 0;
-  width: 3.25rem;
-  height: 3.25rem;
-  opacity: 0.72;
-}
-
-@media (min-width: 640px) {
-  .intake-orb-accent--header {
-    top: 1.75rem;
-    right: 2rem;
-    width: 4rem;
-    height: 4rem;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  .intake-orb-accent {
-    animation: intake-idle 5.6s ease-in-out infinite;
-  }
-
   .home-photo-motion {
     animation: home-photo-drift 28s ease-in-out infinite alternate;
     will-change: transform;
@@ -795,210 +647,6 @@ summary:focus-visible {
   }
 }
 
-
-/* ——— Intake listening orb (secondary affordance) ——— */
-
-.intake-orb-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.intake-orb-stage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: min(100%, 20rem);
-}
-
-.intake-orb {
-  position: relative;
-  z-index: 2;
-  width: 5.5rem;
-  height: 5.5rem;
-  border: 0;
-  padding: 0;
-  border-radius: 50%;
-  cursor: pointer;
-  contain: layout paint;
-  background: radial-gradient(
-    circle at 38% 32%,
-    var(--glow-white) 0 16%,
-    #bfdbfe 34%,
-    var(--glow-sky) 58%,
-    var(--glow-blue) 100%
-  );
-  box-shadow:
-    0 0 18px rgb(59 130 246 / 22%),
-    0 0 36px rgb(96 165 250 / 28%);
-  transition:
-    box-shadow var(--mos-duration) var(--mos-easing),
-    filter var(--mos-duration-panel) var(--mos-easing);
-}
-
-.intake-orb::before {
-  content: "";
-  position: absolute;
-  inset: -28%;
-  border-radius: 58% 42% 50% 50% / 50% 46% 54% 50%;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    circle,
-    rgb(96 165 250 / 38%),
-    rgb(59 130 246 / 0%) 70%
-  );
-}
-
-.intake-orb::after {
-  content: "";
-  position: absolute;
-  inset: 14%;
-  border-radius: 46% 54% 48% 52% / 52% 46% 54% 48%;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at 36% 30%,
-    rgb(239 246 255 / 52%),
-    rgb(96 165 250 / 0%) 68%
-  );
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  /* The button stays still so its hit target does not move. Only the
-     decorative halo and sheen animate. */
-  .intake-orb::before {
-    animation: intake-halo 4.4s ease-in-out infinite;
-  }
-
-  .intake-orb::after {
-    animation: intake-sheen 5s ease-in-out infinite;
-  }
-}
-
-.intake-orb:hover {
-  box-shadow:
-    0 0 22px rgb(59 130 246 / 28%),
-    0 0 42px rgb(96 165 250 / 34%);
-}
-
-.intake-orb-stage.is-open .intake-orb,
-.intake-orb-stage.is-open .intake-orb::before,
-.intake-orb-stage.is-open .intake-orb::after {
-  animation: none;
-}
-
-.intake-orb-stage.is-open .intake-orb {
-  border-radius: 50%;
-  transform: none;
-  filter: brightness(0.96);
-}
-
-.intake-cloud {
-  position: relative;
-  z-index: 3;
-  display: grid;
-  grid-template-rows: 0fr;
-  width: min(100%, 20rem);
-  margin-top: 0.75rem;
-  overflow: hidden;
-  opacity: 0;
-  text-align: left;
-  pointer-events: none;
-  background: transparent;
-  border-color: transparent;
-  box-shadow: none;
-  transform: translate3d(0, -6px, 0);
-  transition:
-    opacity var(--mos-duration-panel) var(--mos-easing),
-    transform var(--mos-duration-panel) var(--mos-easing),
-    grid-template-rows var(--mos-duration-panel) var(--mos-easing),
-    border-color var(--mos-duration-panel) var(--mos-easing),
-    box-shadow var(--mos-duration-panel) var(--mos-easing);
-}
-
-.intake-orb-stage.is-open .intake-cloud {
-  grid-template-rows: 1fr;
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-  background: var(--color-surface);
-  border-color: var(--color-border);
-  box-shadow: var(--mos-shadow);
-}
-
-.intake-cloud-inner {
-  min-height: 0;
-  overflow: hidden;
-  padding-inline: 1.1rem;
-}
-
-.intake-orb-stage.is-open .intake-cloud-inner {
-  padding-block: 1rem;
-}
-
-.intake-orb-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.35rem 0.75rem;
-  margin-top: 0.75rem;
-}
-
-.intake-orb-links a {
-  display: inline-flex;
-  white-space: nowrap;
-}
-
-.intake-orb-caption {
-  margin: 0.65rem 0 0;
-  font-size: 0.75rem;
-  color: var(--color-muted);
-}
-
-@keyframes intake-idle {
-  0%,
-  100% {
-    border-radius: 50%;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  30% {
-    border-radius: 62% 38% 48% 52% / 48% 42% 58% 52%;
-    transform: translate3d(5px, -6px, 0) scale(1.035);
-  }
-  62% {
-    border-radius: 40% 60% 46% 54% / 54% 58% 42% 46%;
-    transform: translate3d(-5px, 4px, 0) scale(1.025);
-  }
-}
-
-@keyframes intake-halo {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(1);
-    filter: blur(0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-    filter: blur(0.6px);
-  }
-}
-
-@keyframes intake-sheen {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: translate3d(0, 0, 0);
-    border-radius: 42% 58% 46% 54% / 54% 44% 56% 46%;
-  }
-  50% {
-    opacity: 0.95;
-    transform: translate3d(4px, -3px, 0);
-    border-radius: 58% 42% 54% 46% / 46% 56% 44% 54%;
-  }
-}
 
 /* ——— Header / menu chrome (server <details>) ——— */
 

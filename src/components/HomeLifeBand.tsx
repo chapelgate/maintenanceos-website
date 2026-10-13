@@ -1,5 +1,4 @@
 import { HomePhoto } from "@/components/HomePhoto";
-import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 import { HOME_MEDIA } from "@/content/home-media";
 
 /**
@@ -23,7 +22,6 @@ export function HomeLifeBand() {
       </div>
       <div className="home-life-band-copy mos-glass">
         <div className="section-band-head">
-          <IntakeOrbAccent />
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-accent">
               Stock photograph · UK street

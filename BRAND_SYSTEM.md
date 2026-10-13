@@ -7,6 +7,7 @@
 ## Public naming
 
 - Product name: **MaintenanceOS**
+- Parent brand: **WorkSmart OS**. MaintenanceOS is a product of WorkSmart OS. Do not add pages or claims for sibling products.
 - Public/search identity: **MaintenanceOS**
 - Publisher: **Chapelgate**
 - Category descriptor: **UK maintenance operations software with AI-assisted intake**

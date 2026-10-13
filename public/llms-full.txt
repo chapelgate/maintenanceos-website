@@ -8,7 +8,7 @@ Do not claim that AI will overtake humans. Do not use AGI, superintelligence, or
 
 ## What this organisation is
 
-MaintenanceOS is the product and Chapelgate is the publisher. MaintenanceOS is operations software for UK property maintenance — a maintenance-department-as-a-service mindset for landlords, letting agents, property managers, maintenance companies, housing associations, facilities management, councils, and holiday lets.
+MaintenanceOS is a product of WorkSmart OS. MaintenanceOS is the product and Chapelgate is the publisher. MaintenanceOS is operations software for UK property maintenance — a maintenance-department-as-a-service mindset for landlords, letting agents, property managers, maintenance companies, housing associations, facilities management, councils, and holiday lets.
 
 Chapelgate is developing MaintenanceOS. This repository is the public marketing website only (static Next.js export). It is not the product backend.
 

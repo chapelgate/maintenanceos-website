@@ -26,7 +26,7 @@ test("retired Railway endpoints are not usable and a real override still is", ()
     usableHttpEndpoint("http://127.0.0.1:8787/leads"),
     "http://127.0.0.1:8787/leads",
   );
-  assert.equal(PUBLIC_ENQUIRY_EMAIL, "andy@chapelgatehome.uk");
+  assert.equal(PUBLIC_ENQUIRY_EMAIL, "info@chapelgatetechnologies.com");
   assert.match(ENQUIRY_UNAVAILABLE_MESSAGE, /temporarily unavailable/);
   assert.match(ENQUIRY_UNAVAILABLE_MESSAGE, new RegExp(PUBLIC_ENQUIRY_EMAIL));
   assert.doesNotMatch(ENQUIRY_UNAVAILABLE_MESSAGE, /thank you|submitted|received/i);

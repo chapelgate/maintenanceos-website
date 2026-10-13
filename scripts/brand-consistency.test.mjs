@@ -23,10 +23,15 @@ test("public source uses locked publisher identity", () => {
   );
   const joined = srcFiles
     .filter((file) => !file.endsWith(`${path.sep}json-ld.ts`))
+    .filter((file) => !file.endsWith(`${path.sep}SiteFooter.tsx`))
     .map((file) => fs.readFileSync(file, "utf8"))
     .join("\n");
   assert.doesNotMatch(joined, /Chapelgate Technologies/);
   assert.match(read("src/lib/json-ld.ts"), /name: "Chapelgate Technologies"/);
+  assert.match(
+    read("src/components/SiteFooter.tsx"),
+    /MaintenanceOS is part of WorkSmart OS, by Chapelgate Technologies/,
+  );
 
   const site = read("src/config/site.ts");
   assert.match(site, /publicBrand: "MaintenanceOS"/);

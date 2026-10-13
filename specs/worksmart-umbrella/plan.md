@@ -1,0 +1,6 @@
+# Plan: WorkSmart OS umbrella, contact address, and orb removal
+
+1. **Orbs.** Delete `IntakeOrbAccent`, `SiriOrbCloud`, and `HomeHeroVisual`. Drop `orbAccent` from `PageHero` and the marketing pages that passed it. Remove orb, halo, sheen, and hero radial-glow CSS and keyframes from `src/app/globals.css` and the unused hero wash in `public/style.css`. Leave section structure, type, and spacing in place.
+2. **Email.** Point `PUBLIC_ENQUIRY_EMAIL` and the unavailable-enquiry message at `info@chapelgatetechnologies.com`. Replace the same address on the contact page, FAQ, legal contact lines, privacy, terms, and the create-flow fallback. Update tests that assert the old address.
+3. **Brand.** Add `parentBrand: "WorkSmart OS"` beside the existing MaintenanceOS product name. Header lockup: MaintenanceOS with a small “by WorkSmart OS”. Footer: “MaintenanceOS is part of WorkSmart OS, by Chapelgate Technologies”. Title template and Open Graph titles end `| MaintenanceOS | WorkSmart OS`. Open Graph `siteName` is WorkSmart OS. About states that MaintenanceOS is a product of WorkSmart OS. Legal organisation names stay Chapelgate Limited / Chapelgate Technologies. Do not add sibling product routes.
+4. **Tests.** Update orb, email, and brand assertions. Run `npm test`, then build the static export and run `npx playwright test tests/webkit-a11y/`.

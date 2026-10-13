@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata: Metadata = contentPageMetadata({
   title: "About MaintenanceOS",
   description:
-    "Why MaintenanceOS is built the way it is: fixed safety rules, human clearance, and transparent operations. Pre-launch.",
+    "MaintenanceOS is a WorkSmart OS product: fixed safety rules, human clearance, and transparent operations. Pre-launch.",
   path: "/about/",
 });
 
@@ -14,9 +14,9 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="Chapelgate · United Kingdom"
+        eyebrow="WorkSmart OS · United Kingdom"
         title="Why MaintenanceOS is built the way it is"
-        lede="Chapelgate builds operations software so UK property maintenance stays accountable, auditable, and safe."
+        lede="MaintenanceOS is a product of WorkSmart OS. Chapelgate builds it so UK property maintenance stays accountable, auditable, and safe."
       />
       <div className="mx-auto max-w-3xl space-y-8 px-4 py-12 text-sm text-muted">
         <section aria-labelledby="about-mission" className="space-y-3">

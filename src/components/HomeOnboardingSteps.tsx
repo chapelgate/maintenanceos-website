@@ -1,5 +1,4 @@
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
-import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 
 /**
@@ -24,7 +23,6 @@ export function HomeOnboardingSteps() {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <IntakeOrbAccent />
             <div>
               <h2
                 id="home-onboarding-heading"

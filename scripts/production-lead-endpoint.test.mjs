@@ -17,10 +17,10 @@ test("production lead endpoint does not fall back to the retired Railway host", 
   );
   assert.match(site, /usableHttpEndpoint\(process\.env\.NEXT_PUBLIC_FORM_ENDPOINT\)/);
   assert.doesNotMatch(site, /NEXT_PUBLIC_FORM_ENDPOINT\?\.trim\(\) \|\|/);
-  assert.match(enquiry, /andy@chapelgatehome\.uk/);
+  assert.match(enquiry, /info@chapelgatetechnologies\.com/);
   assert.match(
     enquiry,
-    /Online enquiries are temporarily unavailable\. Please email andy@chapelgatehome\.uk\./,
+    /Online enquiries are temporarily unavailable\. Please email info@chapelgatetechnologies\.com\./,
   );
   assert.match(form, /EnquiryUnavailable/);
   assert.match(form, /!siteConfig\.formEndpoint\.trim\(\)/);
@@ -41,6 +41,7 @@ test("create enquiry address is not in the server HTML that Cloudflare rewrites"
   assert.match(enquiry, /serverSnapshot = \(\) => false/);
   assert.match(enquiry, /addressReady\s*\?\s*ENQUIRY_UNAVAILABLE_MESSAGE/);
   assert.doesNotMatch(create, /andy@chapelgatehome\.uk/);
+  assert.doesNotMatch(create, /info@chapelgatetechnologies\.com/);
   assert.match(create, /Please use the email link above/);
 });
 
@@ -65,7 +66,7 @@ test("draft privacy notice describes the real lead path without claiming final l
   const privacy = read("src/app/privacy/page.tsx");
   assert.match(privacy, /Railway-hosted control plane returns Application not found/);
   assert.match(privacy, /does not post leads or events there/);
-  assert.match(privacy, /andy@chapelgatehome\.uk/);
+  assert.match(privacy, /info@chapelgatetechnologies\.com/);
   assert.match(privacy, /pending legal review|Pending legal review|DRAFT|Draft/);
 });
 

@@ -1,4 +1,3 @@
-import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 import { industryRoles } from "@/config/industries";
 
 /**
@@ -13,7 +12,6 @@ export function HomeIndustries() {
     >
       <div className="mx-auto max-w-6xl">
         <div className="section-band-head">
-          <IntakeOrbAccent />
           <div>
             <h2
               id="home-industries-heading"

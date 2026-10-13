@@ -4,15 +4,11 @@
  */
 export const RETIRED_LEAD_HOST = "rsfm-control-plane-production.up.railway.app";
 
-/**
- * Primary business mailbox already named as the website lead notification
- * destination in docs/WEBSITE_INTEGRATION_PROBLEM_LOG_2026-09-28.md.
- * Not invented for this fallback.
- */
-export const PUBLIC_ENQUIRY_EMAIL = "andy@chapelgatehome.uk";
+/** Public contact address for human enquiries and early access. */
+export const PUBLIC_ENQUIRY_EMAIL = "info@chapelgatetechnologies.com";
 
 export const ENQUIRY_UNAVAILABLE_MESSAGE =
-  "Online enquiries are temporarily unavailable. Please email andy@chapelgatehome.uk.";
+  "Online enquiries are temporarily unavailable. Please email info@chapelgatetechnologies.com.";
 
 export function usableHttpEndpoint(value: string | undefined): string {
   const trimmed = (value ?? "").trim();

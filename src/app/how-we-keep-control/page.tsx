@@ -7,7 +7,7 @@ import { SafeAutomationModel } from "@/components/SafeAutomationModel";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
-  title: "The safety rules, written down | MaintenanceOS",
+  title: "The safety rules, written down",
   description:
     "AI assists with intake. Fixed server rules control the lifecycle. Authorised people clear dangerous repairs.",
   path: "/how-we-keep-control/",
@@ -29,7 +29,6 @@ export default function HowWeKeepControlPage() {
         eyebrow="Pre-launch · Preview"
         title="The safety rules, written down."
         lede="AI assists with intake. Fixed server rules control the lifecycle. Authorised people clear dangerous repairs."
-        orbAccent
       />
 
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 space-y-12">

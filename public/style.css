@@ -18,7 +18,7 @@ a{color:inherit}h1,h2,h3{line-height:1.15;letter-spacing:-.02em;margin:0 0 .5em}
 .btn.sm{min-height:38px;padding:0 16px;font-size:15px}
 .btn-p{background:var(--cyan);color:var(--bg)}.btn-p:hover{background:#A5F3FC}
 .btn-s{border-color:rgba(230,238,246,.3);color:var(--text)}.btn-s:hover{border-color:var(--cyan)}
-.hero{padding:112px 0 80px;background:radial-gradient(900px 420px at 80% -10%,rgba(103,232,249,.12),transparent 70%)}
+.hero{padding:112px 0 80px}
 .hero h1{font-size:clamp(38px,6vw,68px);max-width:16ch;font-weight:700}
 .lede{font-size:clamp(18px,2vw,21px);color:var(--muted);max-width:60ch;margin:0 0 32px}
 .eyebrow{color:var(--cyan);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:0 0 16px}

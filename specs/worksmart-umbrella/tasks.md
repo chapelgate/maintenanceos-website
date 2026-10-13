@@ -1,0 +1,8 @@
+- [x] Remove decorative orb components, hero glow blobs, orb CSS, and orb keyframes
+- [x] Leave page layout, routes, and the Chapelgate colour and type system in place
+- [x] Replace public contact emails with info@chapelgatetechnologies.com
+- [x] Change only the email address on legal pages
+- [x] Add the WorkSmart OS header lockup, footer line, title suffix, OG site name, and About line
+- [x] Keep MaintenanceOS as the product name and Chapelgate Limited / Chapelgate Technologies in legal text
+- [x] Update tests that asserted the old email, brand suffix, or orb markup
+- [x] Pass npm test and npx playwright test tests/webkit-a11y/

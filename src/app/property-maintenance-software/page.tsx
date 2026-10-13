@@ -16,7 +16,6 @@ export default function PropertyMaintenanceSoftwarePage() {
         eyebrow="United Kingdom · Pre-launch"
         title="Property maintenance software for UK teams."
         lede="MaintenanceOS is pre-launch property maintenance software for UK landlords, agents, housing providers and maintenance firms. The AI takes the details. Fixed rules and authorised people keep control of safety, dispatch, and money."
-        orbAccent
       />
       <SafeAutomationLink />
       <div className="mx-auto max-w-4xl space-y-12 px-4 py-12">

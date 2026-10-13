@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { HomeIndustries } from "@/components/HomeIndustries";
-import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
@@ -174,7 +173,6 @@ export default function HomePage() {
       <section className="border-t border-border bg-surface px-4 py-12 sm:px-6">
         <div className="band mx-auto max-w-6xl flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
           <div className="section-band-head max-w-lg">
-            <IntakeOrbAccent />
             <div>
               <h2 className="text-xl font-bold text-ink sm:text-2xl">
                 See the rules working on a sample repair.
