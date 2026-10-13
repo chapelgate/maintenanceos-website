@@ -3,101 +3,56 @@ import { IntakeOrbAccent } from "@/components/IntakeOrbAccent";
 import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 
 /**
- * Home uses the same five /create steps. UNDER TEST only. Not a live phone.
+ * Onboarding Section: Single clean horizontal pipeline bar
+ * Website → Check → Choose → Configure → Review & Try
  */
-const STEP_COPY = [
-  {
-    body: "A public URL and an email. Checking a site does not assign a live phone number.",
-    href: "/create/",
-    link: "Start from your website",
-  },
-  {
-    body: "Missing details stay blank.",
-    href: "/create/",
-    link: "Check a website",
-  },
-  {
-    body: "One role. No phone number is provisioned.",
-    href: "/create/",
-    link: "Choose a role",
-  },
-  {
-    body: "Empty hours or services stay empty.",
-    href: "/create/",
-    link: "Configure the draft",
-  },
-  {
-    body: "Try the reviewed draft in the browser.",
-    href: "/create/",
-    link: "Review and try",
-  },
+const STEP_HINTS = [
+  "Public URL & email",
+  "Fact extraction",
+  "Select bounded role",
+  "Approved boundaries",
+  "Browser voice preview",
 ] as const;
-
-const STEPS = CREATE_JOURNEY_STEPS.map((step, index) => ({
-  title: step.label,
-  ...STEP_COPY[index],
-}));
 
 export function HomeOnboardingSteps() {
   return (
     <section
       id="path"
       aria-labelledby="home-onboarding-heading"
-      className="border-b border-border bg-surface px-4 py-14 sm:px-6 sm:py-16"
+      className="border-b border-border bg-surface px-4 py-12 sm:px-6"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="section-band-head">
-          <IntakeOrbAccent />
-          <div>
-            <h2
-              id="home-onboarding-heading"
-              className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
-            >
-              How to start — five steps
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-              Same public path as{" "}
-              <a
-                href="/create/"
-                className="font-medium text-accent underline-offset-4 hover:underline"
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <IntakeOrbAccent />
+            <div>
+              <h2
+                id="home-onboarding-heading"
+                className="text-xl font-semibold tracking-tight text-ink sm:text-2xl"
               >
-                the website setup preview
-              </a>
-              : {CREATE_JOURNEY_STEPS.map((step) => step.label).join(" → ")}.
-            </p>
+                How to start — five steps
+              </h2>
+              <p className="text-xs text-muted">
+                {CREATE_JOURNEY_STEPS.map((step) => step.label).join(" → ")}
+              </p>
+            </div>
           </div>
+          <FeatureStatusChip status="UNDER_TEST" />
         </div>
-        <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {STEPS.map((step, i) => (
-            <li key={step.title}>
-              <article className="mos-glass flex h-full flex-col p-5 sm:p-6">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-accent bg-paper text-sm font-semibold text-accent"
-                    aria-hidden="true"
-                  >
-                    {i + 1}
-                  </span>
-                  <h3 className="text-lg font-semibold tracking-tight text-ink">
-                    {step.title}
-                  </h3>
-                  <FeatureStatusChip status="UNDER_TEST" />
-                </div>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-ink">
-                  {step.body}
-                </p>
-                <p className="mt-4 text-sm">
-                  <a
-                    href={step.href}
-                    className="font-semibold text-accent underline-offset-4 hover:underline"
-                  >
-                    {step.link}
-                  </a>
-                </p>
-              </article>
-            </li>
+
+        <div className="mos-pipeline grid gap-3 sm:grid-cols-5">
+          {CREATE_JOURNEY_STEPS.map((step, idx) => (
+            <a
+              key={step.label}
+              href="/create/"
+              className="flex flex-col rounded-lg border border-border bg-paper p-3.5 transition-colors hover:border-accent"
+            >
+              <span className="text-xs font-bold text-accent">STEP {idx + 1}</span>
+              <span className="mt-1 font-semibold text-sm text-ink">{step.label}</span>
+              <span className="mt-1 text-xs text-muted">{STEP_HINTS[idx]}</span>
+            </a>
           ))}
-        </ol>
+        </div>
       </div>
     </section>
   );
