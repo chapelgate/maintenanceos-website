@@ -1,3 +1,5 @@
+import { Accordion } from "@/components/Accordion";
+import { BentoCard } from "@/components/BentoCard";
 import { CtaPair } from "@/components/CtaPair";
 import { GasSafetyBlock } from "@/components/GasSafetyBlock";
 import { JsonLd } from "@/components/JsonLd";
@@ -11,47 +13,6 @@ import { industryPageJsonLd } from "@/lib/json-ld";
 
 type Props = { role: IndustryRole };
 
-function parseBold(text: string) {
-  const parts = text.split(/(\*\*.*?\*\*)/);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i} className="text-ink font-semibold">{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-}
-
-function renderContent(lines: string[]) {
-  const elements = [];
-  let currentList: string[] = [];
-
-  const flushList = () => {
-    if (currentList.length > 0) {
-      elements.push(
-        <ul key={`ul-${elements.length}`} className="list-disc pl-5 space-y-2 text-muted">
-          {currentList.map((li, i) => (
-            <li key={i}>{parseBold(li.replace(/^- /, ''))}</li>
-          ))}
-        </ul>
-      );
-      currentList = [];
-    }
-  };
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (line.startsWith('- ')) {
-      currentList.push(line);
-    } else {
-      flushList();
-      elements.push(<p key={`p-${i}`} className="text-muted">{parseBold(line)}</p>);
-    }
-  }
-  flushList();
-
-  return elements;
-}
-
 const GAS_BLOCK_SLUGS = new Set([
   "landlords",
   "letting-agents",
@@ -61,7 +22,7 @@ const GAS_BLOCK_SLUGS = new Set([
 
 export function IndustryRolePage({ role }: Props) {
   const seo = getIndustrySeoIntent(role.slug);
-  const hasDraftSections = Boolean(role.sections && role.sections.length > 0);
+
   return (
     <>
       <JsonLd data={industryPageJsonLd(role.slug)} />
@@ -70,25 +31,104 @@ export function IndustryRolePage({ role }: Props) {
         title={role.title}
         lede={role.sub}
       />
-      <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
-        <p className="text-sm text-muted">
-          <a href="/industries/#core-safety" className="font-medium text-accent underline-offset-4 hover:underline">
-            Pre-launch status
+      <div className="mx-auto max-w-4xl space-y-10 px-4 py-12">
+        <p className="text-xs text-muted">
+          <a
+            href="/industries/#core-safety"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Pre-launch status: under testing; not a live phone.
           </a>
         </p>
 
         {GAS_BLOCK_SLUGS.has(role.slug) ? <GasSafetyBlock /> : null}
 
-        {!hasDraftSections && (
-        <>
+        {/* 1. Sector Key Benefits (3 Cards) */}
+        {role.benefits && role.benefits.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-ink">Sector key benefits</h2>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {role.benefits.map((b) => (
+                <BentoCard
+                  key={b.title}
+                  title={b.title}
+                  description={b.desc}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
+        {/* 2. The Safety Boundary */}
+        <section className="rounded-[var(--mos-radius-lg)] border border-border bg-surface p-4 sm:p-5 space-y-2">
+          <h2 className="text-base font-semibold text-ink">The safety boundary</h2>
+          <div className="grid gap-3 sm:grid-cols-2 pt-1 text-xs text-muted">
+            <div className="rounded-lg border border-border bg-paper/50 p-3">
+              <span className="font-bold text-accent uppercase tracking-wide">
+                Assistant captures
+              </span>
+              <p className="mt-1">
+                Caller identity, property details, and repair descriptions.
+              </p>
+            </div>
+            <div className="rounded-lg border border-border bg-paper/50 p-3">
+              <span className="font-bold text-ink uppercase tracking-wide">
+                Team clears
+              </span>
+              <p className="mt-1">
+                Critical safety latches, emergency hazards, budgets, and dispatches.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 3. UK Maintenance vs Generic Receptionist */}
+        <section className="space-y-4 border-t border-border pt-8">
+          <h2 className="text-xl font-semibold text-ink">
+            UK maintenance — not a generic AI receptionist
+          </h2>
+          <p className="text-xs text-muted">
+            Generic receptionist tools answer phones. {role.productName} is
+            written for UK property-maintenance operations. Positioning only —
+            voice remains in commissioning preview; not commercial general availability.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {ukMaintenanceVsGeneric.map((item, idx) => (
+              <div
+                key={idx}
+                className="rounded-lg border border-border bg-surface p-3.5 text-xs text-muted"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 4. Common Questions (3 Collapsible Accordions) */}
+        {role.faq && role.faq.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-ink">
+              Frequently asked questions
+            </h2>
+            <div className="space-y-3">
+              {role.faq.slice(0, 3).map((item) => (
+                <Accordion key={item.q} summary={item.q}>
+                  <p>{item.a}</p>
+                </Accordion>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 5. Core Category SEO Intent Link */}
         {seo ? (
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-ink">{seo.title}</h2>
-            <p className="text-muted">{seo.summary}</p>
-            <p className="text-sm text-muted">
+          <section className="text-xs text-muted">
+            <p>
               Core category:{" "}
-              <a href="/property-maintenance-software/" className="text-accent underline">
+              <a
+                href="/property-maintenance-software/"
+                className="text-accent underline"
+              >
                 property maintenance software
               </a>
               .
@@ -96,95 +136,7 @@ export function IndustryRolePage({ role }: Props) {
           </section>
         ) : null}
 
-        <section className="space-y-3">
-          <h2 className="text-xl font-semibold text-ink">
-            UK maintenance — not a generic AI receptionist
-          </h2>
-          <p className="text-muted">
-            Generic receptionist tools answer phones. {role.productName} is
-            written for UK property-maintenance operations. Positioning only —
-            voice remains in commissioning preview; not commercial general availability.
-          </p>
-          <ul className="list-disc space-y-2 pl-5 text-muted">
-            {ukMaintenanceVsGeneric.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-
-        {role.job && role.job.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-ink">The job you are doing</h2>
-            <ul className="list-disc space-y-2 pl-5 text-muted">
-              {role.job.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {role.fits && role.fits.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-ink">
-              How {role.productName} fits
-            </h2>
-            <ul className="list-disc space-y-2 pl-5 text-muted">
-              {role.fits.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {role.safety && (
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-ink">Safety and money boundaries</h2>
-            <p className="text-muted">{role.safety}</p>
-            <p className="text-sm text-muted">
-              Trust and clearance:{" "}
-              <a href="/security/" className="text-accent underline">
-                Security
-              </a>
-              .
-            </p>
-          </section>
-        )}
-
-        {role.willNotClaim && (
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-ink">What we will not claim</h2>
-            <p className="text-muted">{role.willNotClaim}</p>
-          </section>
-        )}
-
-        </>
-        )}
-
-        {role.sections?.map((section) => (
-          <section key={section.title} className="space-y-3">
-            <h2 className="text-xl font-semibold text-ink">{section.title}</h2>
-            <div className="space-y-4">
-              {renderContent(section.content)}
-            </div>
-          </section>
-        ))}
-
-        {role.faq && role.faq.length > 0 && (
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-ink">Frequently asked questions</h2>
-            <div className="space-y-3">
-              {role.faq.map((item) => (
-                <details key={item.q} className="mos-glass p-4" name="industry-faq">
-                  <summary className="cursor-pointer font-semibold text-ink">
-                    {item.q}
-                  </summary>
-                  <p className="mt-3 text-muted">{item.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        )}
-
+        {/* 6. Early Demo CTA */}
         <section className="space-y-4 border-t border-border pt-8">
           <CtaPair
             primaryHref="/demo/"
@@ -192,7 +144,7 @@ export function IndustryRolePage({ role }: Props) {
             secondaryHref="/how-we-keep-control/"
             secondaryLabel="See the safety rules"
           />
-          <p className="text-sm text-muted">
+          <p className="text-xs text-muted">
             <a href="/industries/" className="text-accent underline">
               All sectors
             </a>
