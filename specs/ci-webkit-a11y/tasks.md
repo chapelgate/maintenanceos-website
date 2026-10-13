@@ -1,0 +1,13 @@
+- [x] GitHub Actions job runs on pull requests and main
+- [x] Uses Playwright with WebKit
+- [x] Tests at iPhone 13 and desktop Safari viewport sizes
+- [x] Uses @axe-core/playwright to check for accessibility violations
+- [x] Checks pages: /, /create/, /demo/, /features/, /pricing/, /security/
+- [x] Asserts zero axe violations at serious or critical level
+- [x] Tab navigation: focus is always visible
+- [x] Menu opens and closes with Enter and Escape
+- [x] No horizontal overflow
+- [x] Builds static export and serves it locally
+- [x] Uploads HTML report as an artifact
+- [x] Reuses existing Playwright dependency
+- [x] No new services added
