@@ -6,12 +6,11 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-[70rem] gap-10 px-4 py-12 md:px-6 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <p className="text-lg text-ink">
-            <span className="font-medium">Maintenance</span>
-            <span className="font-semibold">OS</span>
+            <span className="font-semibold">WorkSmartOS</span>
           </p>
           <p className="mt-2 text-sm text-muted">
-            Built for UK maintenance operations. Pre-launch — not commercially
-            generally available.
+            MaintenanceOS is the property-maintenance product. Pre-launch —
+            not commercially generally available.
           </p>
         </div>
         {(
@@ -46,7 +45,7 @@ export function SiteFooter() {
       <div className="border-t border-border px-4 py-4 md:px-6">
         <div className="mx-auto flex max-w-[70rem] flex-wrap items-center justify-between gap-3 text-sm text-muted">
           <p>
-            MaintenanceOS is part of WorkSmart OS, by Chapelgate Technologies. ©{" "}
+            WorkSmartOS by Chapelgate Technologies. ©{" "}
             {new Date().getFullYear()} Chapelgate Limited
           </p>
           <div className="flex flex-wrap gap-4">

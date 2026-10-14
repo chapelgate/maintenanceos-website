@@ -1,0 +1,8 @@
+- [x] Spell the master brand WorkSmartOS in config, header, footer, titles, and Open Graph site name
+- [x] Lead the home hero with WorkSmartOS and name MaintenanceOS as the product
+- [x] Add a Products section for WorkSmartOS MaintenanceOS and ReceptionistOS marked Coming soon
+- [x] State on About that WorkSmartOS is the brand and MaintenanceOS is a product
+- [x] Keep the footer line “WorkSmartOS by Chapelgate Technologies” and Chapelgate Limited as the legal entity
+- [x] Leave routes, colours, type, and legal-page company details unchanged
+- [x] Update tests that locked the old MaintenanceOS wordmark, title suffix, or ReceptionistOS ban
+- [x] Pass npm test and npx playwright test tests/webkit-a11y/

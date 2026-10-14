@@ -16,11 +16,7 @@ function Wordmark() {
       href="/"
       className="inline-flex items-baseline gap-2 text-lg tracking-tight text-ink"
     >
-      <span>
-        <span className="font-medium">Maintenance</span>
-        <span className="font-semibold">OS</span>
-      </span>
-      <span className="text-xs font-medium text-muted">by WorkSmart OS</span>
+      <span className="font-semibold">WorkSmartOS</span>
     </a>
   );
 }

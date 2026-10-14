@@ -48,12 +48,13 @@ test("header and footer wordmark accessible names come from visible text", () =>
   const header = read("src/components/SiteHeader.tsx");
   const footer = read("src/components/SiteFooter.tsx");
   const block = header.match(/function Wordmark\(\)[\s\S]*?\r?\n}\r?\n/)?.[0] ?? "";
-  assert.match(block, /Maintenance/);
-  assert.match(block, />OS</);
+  assert.match(block, /WorkSmartOS/);
+  assert.doesNotMatch(block, /WorkSmart OS/);
   assert.doesNotMatch(block, /by Chapelgate/);
   assert.doesNotMatch(block, /aria-label=/);
-  assert.match(footer, /Maintenance/);
-  assert.match(footer, /font-semibold">OS/);
+  assert.match(footer, /WorkSmartOS/);
+  assert.match(footer, /WorkSmartOS by Chapelgate Technologies/);
+  assert.doesNotMatch(footer, /WorkSmart OS/);
   assert.doesNotMatch(footer, /font-medium text-muted">\s*by Chapelgate/);
   assert.doesNotMatch(footer, /aria-label=\{siteConfig\.publicBrand\}/);
 });

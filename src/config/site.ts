@@ -18,10 +18,12 @@ export const RETIRED_MEASUREMENT_ENDPOINT =
   "https://rsfm-control-plane-production.up.railway.app/v1/public/website-events";
 
 export const siteConfig = {
+  /** Product presented on this site. */
   name: "MaintenanceOS",
-  publicBrand: "MaintenanceOS",
-  /** Umbrella brand. MaintenanceOS is one product; sibling products are not live. */
-  parentBrand: "WorkSmart OS",
+  /** Master brand: wordmark, title suffix, and Open Graph site name. One word. */
+  publicBrand: "WorkSmartOS",
+  /** Same master brand. MaintenanceOS is one product; ReceptionistOS is coming soon and is not live. */
+  parentBrand: "WorkSmartOS",
   publisherName: "Chapelgate",
   shortName: "MOS",
   category: "UK maintenance operations software with AI-assisted intake",

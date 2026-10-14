@@ -49,7 +49,7 @@ test("home product tour link and video focus stay in place", () => {
   assert.match(read("src/app/globals.css"), /\.product-tour-card video:focus-visible/);
 });
 
-test("JSON-LD names Chapelgate Technologies and ReceptionistOS is gone from source", () => {
+test("JSON-LD names Chapelgate Technologies and ReceptionistOS is only coming soon", () => {
   assert.match(read("src/lib/json-ld.ts"), /name: "Chapelgate Technologies"/);
   const roots = ["src", "packages", "public"];
   const hits = [];
@@ -66,7 +66,20 @@ test("JSON-LD names Chapelgate Technologies and ReceptionistOS is gone from sour
     }
   }
   for (const root of roots) walk(root);
-  assert.deepEqual(hits, []);
+  assert.deepEqual(
+    hits.map((file) => file.split(path.sep).join("/")).sort(),
+    [
+      "public/llms-full.txt",
+      "public/llms.txt",
+      "src/components/ProductLine.tsx",
+      "src/config/site.ts",
+    ],
+  );
+  for (const file of hits) {
+    const text = fs.readFileSync(file, "utf8");
+    assert.match(text, /ReceptionistOS is coming soon|Coming soon/i, file);
+    assert.doesNotMatch(text, /ReceptionistOS is live|live ReceptionistOS/i, file);
+  }
 });
 
 test("meta descriptions stay within 160 characters and titles end with the brand", () => {
@@ -78,7 +91,7 @@ test("meta descriptions stay within 160 characters and titles end with the brand
     }
     for (const match of text.matchAll(/absoluteTitle:\s*"([^"]+)"/g)) {
       assert.ok(
-        match[1].endsWith("| MaintenanceOS | WorkSmart OS"),
+        match[1].endsWith("| WorkSmartOS"),
         `${rel} absolute title: ${match[1]}`,
       );
     }
@@ -99,7 +112,7 @@ test("meta descriptions stay within 160 characters and titles end with the brand
     const description = `${match[1]} Pre-launch, not always-on.`;
     assert.ok(description.length <= 160, description);
   }
-  assert.match(read("src/lib/page-meta.ts"), /template: `%s \| MaintenanceOS \| WorkSmart OS`/);
+  assert.match(read("src/lib/page-meta.ts"), /template: `%s \| \$\{siteConfig\.publicBrand\}`/);
 });
 
 test("static export already emits trailing slashes and cannot add a 301", () => {

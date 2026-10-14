@@ -27,7 +27,7 @@ function organizationNode(): JsonLdRecord {
     "@id": orgId(),
     name: "Chapelgate Technologies",
     url: absoluteUrl("/about/"),
-    description: `Chapelgate develops ${siteConfig.name}, a product of ${siteConfig.parentBrand}. ${siteConfig.category}.`,
+    description: `Chapelgate develops ${siteConfig.publicBrand} ${siteConfig.name}, a product of ${siteConfig.publicBrand}. ${siteConfig.category}.`,
     brand: {
       "@type": "Brand",
       name: siteConfig.publicBrand,
@@ -40,8 +40,8 @@ function websiteNode(): JsonLdRecord {
   return {
     "@type": "WebSite",
     "@id": websiteId(),
-    name: siteConfig.parentBrand,
-    alternateName: siteConfig.publicBrand,
+    name: siteConfig.publicBrand,
+    alternateName: siteConfig.name,
     url: absoluteUrl("/"),
     description: siteConfig.description,
     inLanguage: siteConfig.locale,
@@ -61,8 +61,8 @@ function softwareApplicationNode(): JsonLdRecord {
   return {
     "@type": "SoftwareApplication",
     "@id": softwareId(),
-    name: siteConfig.name,
-    alternateName: siteConfig.publicBrand,
+    name: `${siteConfig.publicBrand} ${siteConfig.name}`,
+    alternateName: siteConfig.name,
     applicationCategory: "BusinessApplication",
     applicationSubCategory: "Property maintenance operations software",
     operatingSystem: "Web",

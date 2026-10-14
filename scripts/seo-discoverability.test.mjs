@@ -51,7 +51,11 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
     "must prohibit overtake-humans speculation",
   );
   assert.match(text, funnelPath, "must name the verified public funnel");
-  assert.match(text, /^# MaintenanceOS\b/m);
+  assert.match(text, /^# WorkSmartOS\b/m);
+  assert.match(text, /WorkSmartOS is the brand/);
+  assert.match(text, /MaintenanceOS is a WorkSmartOS product/);
+  assert.match(text, /ReceptionistOS is coming soon and is not live/);
+  assert.doesNotMatch(text, /WorkSmart OS/);
   assert.doesNotMatch(text, /MaintenanceOS by Chapelgate/);
   assert.match(text, /Chapelgate is the publisher/);
   assert.match(text, /Create from website/);
@@ -72,7 +76,11 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
 test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
   const text = readPublic("llms-full.txt");
   assert.match(text, /VERIFIED/);
-  assert.match(text, /^# MaintenanceOS\b/m);
+  assert.match(text, /^# WorkSmartOS\b/m);
+  assert.match(text, /WorkSmartOS is the brand/);
+  assert.match(text, /MaintenanceOS is a WorkSmartOS product/);
+  assert.match(text, /ReceptionistOS is coming soon and is not live/);
+  assert.doesNotMatch(text, /WorkSmart OS/);
   assert.doesNotMatch(text, /MaintenanceOS by Chapelgate/);
   assert.match(text, /Chapelgate is the publisher/);
   assert.match(text, /UNDER TEST/);
@@ -95,11 +103,13 @@ test("llms-full.txt distinguishes VERIFIED / UNDER TEST / NOT CLAIMED", () => {
 test("public brand distinguishes product from publisher in source", () => {
   const site = fs.readFileSync(path.join(root, "src", "config", "site.ts"), "utf8");
   const schema = fs.readFileSync(path.join(root, "src", "lib", "json-ld.ts"), "utf8");
-  assert.match(site, /publicBrand: "MaintenanceOS"/);
-  assert.match(site, /parentBrand: "WorkSmart OS"/);
+  assert.match(site, /publicBrand: "WorkSmartOS"/);
+  assert.match(site, /parentBrand: "WorkSmartOS"/);
+  assert.match(site, /name: "MaintenanceOS"/);
   assert.match(site, /publisherName: "Chapelgate"/);
   assert.match(site, /UK maintenance operations software with AI-assisted intake/);
   assert.match(schema, /name: "Chapelgate Technologies"/);
   assert.match(schema, /name: siteConfig\.publicBrand/);
-  assert.match(schema, /alternateName: siteConfig\.publicBrand/);
+  assert.match(schema, /alternateName: siteConfig\.name/);
+  assert.match(schema, /\$\{siteConfig\.publicBrand\} \$\{siteConfig\.name\}/);
 });
