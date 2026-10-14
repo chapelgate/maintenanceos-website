@@ -6,13 +6,14 @@
 
 ## Public naming
 
-- Product name: **MaintenanceOS**
-- Parent brand: **WorkSmart OS**. MaintenanceOS is a product of WorkSmart OS. Do not add pages or claims for sibling products.
-- Public/search identity: **MaintenanceOS**
+- Master brand: **WorkSmartOS** (one word; never “WorkSmart OS”). Andy Cartwright, 13 Oct 2026: WorkSmartOS is the brand. MaintenanceOS is only a product under it.
+- Product on this site: **MaintenanceOS**, framed as WorkSmartOS MaintenanceOS. ReceptionistOS is coming soon and is not live. Do not add a route for it.
+- Public/search identity: **WorkSmartOS**
 - Publisher: **Chapelgate**
 - Category descriptor: **UK maintenance operations software with AI-assisted intake**
-- Use the bare product name inside product copy where natural; use **MaintenanceOS** in site identity, metadata, titles, structured data and search/AI summaries (Andy Cartwright, 10 Oct 2026: "by Chapelgate" dropped from titles and logo). The registered company name stays in the footer copyright line and legal pages only.
-- Do not drift between `Chapelgate` and `Chapelgate Technologies` on this site unless a separate approved naming decision changes the publisher identity.
+- Site wordmark, title suffix, and `og:site_name` are **WorkSmartOS**. Page titles end `| WorkSmartOS`. The footer line is “WorkSmartOS by Chapelgate Technologies”.
+- Use the product name inside product copy. The registered company name stays Chapelgate Limited in the footer copyright line and legal pages (Andy Cartwright, 10 Oct 2026: “by Chapelgate” stays off the logo and out of titles).
+- Do not drift between `Chapelgate` and `Chapelgate Technologies` on this site unless a separate approved naming decision changes the publisher identity. The footer attribution “WorkSmartOS by Chapelgate Technologies” is the approved exception, next to the Chapelgate Limited copyright.
 
 Discoverability baseline and monitoring queries: [`docs/SEO_BRAND_BASELINE_2026-09-25.md`](docs/SEO_BRAND_BASELINE_2026-09-25.md).
 

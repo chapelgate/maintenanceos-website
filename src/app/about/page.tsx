@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
+import { ProductLine } from "@/components/ProductLine";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
-  title: "About MaintenanceOS",
+  title: "About",
   description:
-    "MaintenanceOS is a WorkSmart OS product: fixed safety rules, human clearance, and transparent operations. Pre-launch.",
+    "WorkSmartOS is the brand. MaintenanceOS is its property-maintenance product, with fixed safety rules and human clearance. Pre-launch.",
   path: "/about/",
 });
 
@@ -14,10 +15,11 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="WorkSmart OS · United Kingdom"
-        title="Why MaintenanceOS is built the way it is"
-        lede="MaintenanceOS is a product of WorkSmart OS. Chapelgate builds it so UK property maintenance stays accountable, auditable, and safe."
+        eyebrow="WorkSmartOS · United Kingdom"
+        title="WorkSmartOS is the brand"
+        lede="MaintenanceOS is a WorkSmartOS product. Chapelgate builds it so UK property maintenance stays accountable, auditable, and safe."
       />
+      <ProductLine />
       <div className="mx-auto max-w-3xl space-y-8 px-4 py-12 text-sm text-muted">
         <section aria-labelledby="about-mission" className="space-y-3">
           <h2 id="about-mission" className="text-lg font-semibold text-ink">

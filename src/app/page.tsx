@@ -4,6 +4,7 @@ import { HomeIndustries } from "@/components/HomeIndustries";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
+import { ProductLine } from "@/components/ProductLine";
 import { ProductUiShell } from "@/components/ProductUiShell";
 import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
@@ -78,9 +79,15 @@ export default function HomePage() {
               id="hero-heading"
               className="text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-[2.75rem] leading-[1.15]"
             >
-              AI intake for repair reports. A person still clears anything dangerous.
+              WorkSmartOS
             </h1>
+            <p className="mt-3 text-lg font-semibold text-ink">
+              WorkSmartOS MaintenanceOS
+            </p>
             <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg max-w-2xl">
+              MaintenanceOS is the property-maintenance product. AI intake for repair reports. A person still clears anything dangerous.
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-muted sm:text-lg max-w-2xl">
               Capture caller details 24/7 in natural UK terminology. Fixed server rules latch critical repairs for authorised human clearance.
             </p>
             <CtaPair
@@ -109,6 +116,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <ProductLine />
 
       {/* Authoritative Governance & Trust Strip */}
       <HomeTrustStrip />

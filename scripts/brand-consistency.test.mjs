@@ -17,6 +17,25 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
+test("public copy spells the master brand as one word", () => {
+  const roots = ["src", "public"];
+  const hits = [];
+  function walk(dir) {
+    for (const entry of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+      const rel = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name === "node_modules") continue;
+        walk(rel);
+      } else if (/\.(ts|tsx|txt|css)$/.test(entry.name)) {
+        const text = fs.readFileSync(path.join(ROOT, rel), "utf8");
+        if (text.includes("WorkSmart OS")) hits.push(rel);
+      }
+    }
+  }
+  for (const root of roots) walk(root);
+  assert.deepEqual(hits, []);
+});
+
 test("public source uses locked publisher identity", () => {
   const srcFiles = walk(path.join(ROOT, "src")).filter((file) =>
     /\.(ts|tsx)$/.test(file),
@@ -30,11 +49,14 @@ test("public source uses locked publisher identity", () => {
   assert.match(read("src/lib/json-ld.ts"), /name: "Chapelgate Technologies"/);
   assert.match(
     read("src/components/SiteFooter.tsx"),
-    /MaintenanceOS is part of WorkSmart OS, by Chapelgate Technologies/,
+    /WorkSmartOS by Chapelgate Technologies/,
   );
+  assert.doesNotMatch(read("src/components/SiteFooter.tsx"), /WorkSmart OS/);
 
   const site = read("src/config/site.ts");
-  assert.match(site, /publicBrand: "MaintenanceOS"/);
+  assert.match(site, /publicBrand: "WorkSmartOS"/);
+  assert.match(site, /parentBrand: "WorkSmartOS"/);
+  assert.match(site, /name: "MaintenanceOS"/);
   assert.match(site, /publisherName: "Chapelgate"/);
 });
 
@@ -55,7 +77,8 @@ test("accent CTAs use the locked on-accent token and minimum target height", () 
 
 test("brand source remains the single public naming authority", () => {
   const brand = read("BRAND_SYSTEM.md");
-  assert.match(brand, /Public\/search identity: \*\*MaintenanceOS\*\*/);
+  assert.match(brand, /Public\/search identity: \*\*WorkSmartOS\*\*/);
+  assert.match(brand, /never “WorkSmart OS”/);
   assert.match(brand, /Publisher: \*\*Chapelgate\*\*/);
   assert.match(brand, /Do not drift between `Chapelgate` and `Chapelgate Technologies`/);
 });

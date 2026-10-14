@@ -11,7 +11,7 @@ const OG_IMAGE_URL = () => `${getCanonicalSiteUrl().replace(/\/$/, "")}/og-image
 export const FUNNEL_PATH_LABEL =
   "Website → Check → Choose → Configure → Review & Try";
 
-const defaultTitle = `MaintenanceOS | WorkSmart OS`;
+const defaultTitle = siteConfig.publicBrand;
 
 function ogLocale(): string {
   return siteConfig.locale.replace("-", "_");
@@ -25,7 +25,7 @@ function ogLocale(): string {
 export const funnelPageCopy = {
   home: {
     title: "Repair Intake With Safety Rules for UK Teams",
-    absoluteTitle: "Repair Intake With Safety Rules for UK Teams | MaintenanceOS | WorkSmart OS",
+    absoluteTitle: "Repair Intake With Safety Rules for UK Teams | WorkSmartOS",
     description: "The AI takes the details; fixed rules and an authorised person decide anything dangerous. For UK property teams. Pre-launch, not a live phone, not always-on.",
     path: "/",
   },
@@ -52,7 +52,7 @@ export const funnelPageCopy = {
   },
   propertyMaintenanceSoftware: {
     title: "Property Maintenance Software for UK Teams",
-    absoluteTitle: "Property Maintenance Software for UK Teams | MaintenanceOS | WorkSmart OS",
+    absoluteTitle: "Property Maintenance Software for UK Teams | WorkSmartOS",
     description: "Pre-launch property maintenance software for UK landlords, agents, housing providers and maintenance firms. AI takes the details; rules and people keep control.",
     path: "/property-maintenance-software/",
   },
@@ -67,7 +67,7 @@ export function buildRootMetadata(): Metadata {
     metadataBase: new URL(origin),
     title: {
       default: defaultTitle,
-      template: `%s | MaintenanceOS | WorkSmart OS`,
+      template: `%s | ${siteConfig.publicBrand}`,
     },
     description: siteConfig.description,
     applicationName: siteConfig.publicBrand,
@@ -78,7 +78,7 @@ export function buildRootMetadata(): Metadata {
       type: "website",
       locale: ogLocale(),
       url: home,
-      siteName: siteConfig.parentBrand,
+      siteName: siteConfig.publicBrand,
       title: defaultTitle,
       description: siteConfig.description,
       images: [OG_IMAGE_URL()],
@@ -97,12 +97,12 @@ export function contentPageMetadata(opts: {
   title: string;
   description: string;
   path: string;
-  /** When set, document/OG/Twitter titles skip the `%s | MaintenanceOS | WorkSmart OS` template. */
+  /** When set, document/OG/Twitter titles skip the `%s | WorkSmartOS` template. */
   absoluteTitle?: string;
 }): Metadata {
   const path = opts.path.endsWith("/") ? opts.path : `${opts.path}/`;
   const canonical = absoluteUrl(path);
-  const ogTitle = opts.absoluteTitle ?? `${opts.title} | MaintenanceOS | WorkSmart OS`;
+  const ogTitle = opts.absoluteTitle ?? `${opts.title} | ${siteConfig.publicBrand}`;
 
   return {
     title: opts.absoluteTitle
@@ -114,7 +114,7 @@ export function contentPageMetadata(opts: {
       title: ogTitle,
       description: opts.description,
       url: canonical,
-      siteName: siteConfig.parentBrand,
+      siteName: siteConfig.publicBrand,
       locale: ogLocale(),
       type: "website",
       images: [OG_IMAGE_URL()],
