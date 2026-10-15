@@ -8,4 +8,4 @@
 | `/create` client | manual reason `blocked_by_site`, host line names `178.128.171.45`, `scan_blocked` stays ready |
 | App spec | no `.do/app.yaml` or equivalent in the repo; snippet is in the pull request |
 
-Browser proof of the blocked panel is recorded after the static export check.
+`npm test` 481 pass. `npx tsc --noEmit` pass. Static export of commit `880f481` then `node scripts/create-partial-scan-browser.mjs` printed `create-partial-scan-browser=ok`: the blocked panel named automated reading, typing or pasting, and `178.128.171.45`, and the services field accepted typed text on the next step.
