@@ -88,6 +88,8 @@ function scanNoteFor(progress: CreateScanProgress): string {
       return "scan_response_mapped";
     case "scanned_empty":
       return "scan_response_empty";
+    case "scan_blocked":
+      return "site_blocked_manual_draft";
     case "scan_failed":
       return "scan_failed_no_invented_content";
     case "queued":
@@ -240,6 +242,7 @@ export function CreateReceptionistLaterSteps({
   const [receiptEmailStatus, setReceiptEmailStatus] = useState<"accepted" | "failed" | null>(null);
   const [progress, setProgress] = useState<CreateScanProgress>("checking");
   const [scanDetail, setScanDetail] = useState<string | null>(null);
+  const [scanHostLine, setScanHostLine] = useState<string | null>(null);
   const [scanSummary, setScanSummary] = useState<ScanRunSummary | null>(null);
   const scanAbortRef = useRef<AbortController | null>(null);
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
@@ -388,6 +391,7 @@ export function CreateReceptionistLaterSteps({
     (async () => {
       setProgress("checking");
       setScanDetail(null);
+      setScanHostLine(null);
       setScanSummary(null);
       setFacts({});
       setFactMeta({});
@@ -438,6 +442,7 @@ export function CreateReceptionistLaterSteps({
           email: outcome.facts.contact?.emails?.[0] ?? "",
         });
         setScanDetail(null);
+        setScanHostLine(null);
         setProgress(filled ? "scanned" : "scanned_empty");
         return;
       }
@@ -464,7 +469,8 @@ export function CreateReceptionistLaterSteps({
       setScanSummary(null);
       setIdentityReview(EMPTY_IDENTITY_REVIEW);
       setScanDetail(outcome.message);
-      setProgress("scan_failed");
+      setScanHostLine(outcome.hostLine ?? null);
+      setProgress(outcome.reason === "blocked_by_site" ? "scan_blocked" : "scan_failed");
     })();
 
     return () => {
@@ -488,6 +494,7 @@ export function CreateReceptionistLaterSteps({
     setScanDetail(
       "Continuing without a website check. Fill in the business details yourself. Nothing was invented.",
     );
+    setScanHostLine(null);
     setProgress("scan_failed");
   }
 
@@ -876,6 +883,15 @@ export function CreateReceptionistLaterSteps({
               </p>
             ) : null}
             <PartialScanNotice summary={scanSummary} draft={draft} />
+            {progress === "scan_blocked" ? (
+              <div data-scan-blocked="">
+                <p>
+                  {scanDetail ??
+                    "This website blocks automated reading. You can carry on by typing the details yourself, or by pasting wording from the site into the draft. Nothing was invented."}
+                </p>
+                {scanHostLine ? <p data-scan-host-allow="">{scanHostLine}</p> : null}
+              </div>
+            ) : null}
             {progress === "scan_failed" ? (
               <p>
                 {scanDetail ??
@@ -1007,9 +1023,20 @@ export function CreateReceptionistLaterSteps({
             </p>
           )}
           <PartialScanNotice summary={scanSummary} draft={draft} />
+          {progress === "scan_blocked" ? (
+            <div className="mt-5 text-sm text-muted" data-scan-blocked="">
+              <p>
+                This website blocks automated reading. Type the details, or paste
+                wording from the site. Nothing was invented.
+              </p>
+              {scanHostLine ? <p data-scan-host-allow="">{scanHostLine}</p> : null}
+            </div>
+          ) : null}
           <p className="mt-5 text-sm text-muted">
             {scanCoverage
               ? "The website check was partial. Edit the copied fields and type the blank ones yourself. Nothing was invented."
+              : progress === "scan_blocked"
+                ? "The blank fields are yours to fill. Nothing was invented."
               : progress === "scanned"
               ? "Edit anything the scan returned. Empty fields were not invented. Where the scan copied a value, a source and confidence hint appears under that field."
               : progress === "queued"

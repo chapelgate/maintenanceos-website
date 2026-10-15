@@ -28,6 +28,7 @@ export type CreateScanProgress =
   | "queued"
   | "scanned"
   | "scanned_empty"
+  | "scan_blocked"
   | "scan_failed";
 
 /** Five-step /create funnel labels. Configuration remains website-only until later commissioning. */
@@ -48,6 +49,7 @@ export function isCreateScanReady(progress: CreateScanProgress): boolean {
     progress === "queued" ||
     progress === "scanned" ||
     progress === "scanned_empty" ||
+    progress === "scan_blocked" ||
     progress === "scan_failed"
   );
 }

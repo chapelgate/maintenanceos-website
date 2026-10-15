@@ -22,7 +22,11 @@ import {
   scanFieldReviewHint,
   describeScanCoverage,
   isZeroFetchPartial,
+  isBlockedBySite,
   requestOnboardingScan,
+  BLOCKED_BY_SITE_HOST_LINE,
+  BLOCKED_BY_SITE_MESSAGE,
+  SCANNER_PUBLIC_ADDRESS,
   SCAN_REJECTED_MESSAGE,
   SCAN_TIMEOUT_MESSAGE,
   SCAN_UNAVAILABLE_MESSAGE,
@@ -229,6 +233,7 @@ test("create journey steps name the next action without a live-phone claim", () 
   assert.equal(createJourneyNextAction(5), "Try your receptionist");
   assert.equal(isCreateScanReady("scanning"), false);
   assert.equal(isCreateScanReady("queued"), true);
+  assert.equal(isCreateScanReady("scan_blocked"), true);
 
   assert.match(createScanProgressTitle("queued"), /review the draft/i);
   assert.match(createScanProgressTitle("scanned"), /review supplied fields/i);
@@ -610,6 +615,61 @@ test("mocked scanner zero-fetch stays a failed read and can be completed manuall
   assert.equal(outcome.message, ZERO_FETCH_PARTIAL_MESSAGE);
   assert.match(outcome.message, /complete the draft yourself/i);
   assert.doesNotMatch(outcome.message, /nothing found/i);
+});
+
+test("a 403 with nothing fetched is blocked_by_site and keeps the manual path", async () => {
+  assert.equal(isBlockedBySite({ outcome: "blocked_by_site", scannerV2: { fetched: 0 } }), true);
+  assert.equal(
+    isBlockedBySite({
+      warnings: ["http_403", "scanner_v2_partial"],
+      scannerV2: { state: "PARTIAL", fetched: 0 },
+    }),
+    true,
+  );
+  assert.equal(
+    isBlockedBySite({
+      warnings: ["http_401"],
+      scannerV2: { fetched: 0 },
+    }),
+    true,
+  );
+  assert.equal(
+    isBlockedBySite({
+      warnings: ["http_403"],
+      scannerV2: { state: "PARTIAL", fetched: 2 },
+    }),
+    false,
+  );
+  assert.equal(
+    isBlockedBySite({
+      warnings: ["scanner_v2_partial"],
+      scannerV2: { fetched: 0 },
+    }),
+    false,
+  );
+  assert.match(BLOCKED_BY_SITE_MESSAGE, /blocks automated reading/i);
+  assert.match(BLOCKED_BY_SITE_MESSAGE, /typing the details/i);
+  assert.match(BLOCKED_BY_SITE_MESSAGE, /pasting wording/i);
+  assert.match(BLOCKED_BY_SITE_HOST_LINE, new RegExp(SCANNER_PUBLIC_ADDRESS));
+  assert.match(BLOCKED_BY_SITE_HOST_LINE, /ask the host/i);
+  assert.doesNotMatch(BLOCKED_BY_SITE_MESSAGE, /proxy|spoof|rotate/i);
+  assert.doesNotMatch(BLOCKED_BY_SITE_MESSAGE, /nothing found/i);
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://alleygates.co.uk/", {
+    fetchImpl: async () =>
+      jsonResponse(200, {
+        ok: true,
+        outcome: "blocked_by_site",
+        draft: {},
+        warnings: ["http_403", "blocked_by_site", "scanner_v2_partial"],
+        scannerV2: { state: "PARTIAL", discovered: 1, fetched: 0, unresolved: 0 },
+      }),
+  });
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.equal(outcome.reason, "blocked_by_site");
+  assert.equal(outcome.message, BLOCKED_BY_SITE_MESSAGE);
+  assert.equal(outcome.hostLine, BLOCKED_BY_SITE_HOST_LINE);
+  assert.match(createScanProgressTitle("scan_blocked"), /blocks automated reading/i);
 });
 
 test("mocked scanner timeout retries once then offers the manual draft", async () => {

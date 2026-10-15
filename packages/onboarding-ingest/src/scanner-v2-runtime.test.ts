@@ -8,6 +8,7 @@ import {
   recoverScannerV2ReaderPage,
   runPersistentScannerV2,
 } from "./scanner-v2-runtime.ts";
+import { siteBlockedScan } from "./site-block.ts";
 import type {
   CrawlManifest,
   CrawlPage,
@@ -376,6 +377,58 @@ test("worker retries a bot-rejected homepage through the browser fetch", async (
     assert.ok((result.scannerV2?.fetched ?? 0) >= 1);
     assert.equal(result.warnings.includes("http_401"), false);
     assert.match(JSON.stringify(result.knowledge ?? []), /alley gates/i);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("site block is a 401 or 403 with nothing fetched", () => {
+  assert.equal(
+    siteBlockedScan({ fetched: 0, warnings: ["http_403", "scanner_v2_partial"] }),
+    true,
+  );
+  assert.equal(siteBlockedScan({ fetched: 0, warnings: ["http_401"] }), true);
+  assert.equal(siteBlockedScan({ fetched: 2, warnings: ["http_403"] }), false);
+  assert.equal(
+    siteBlockedScan({ fetched: 0, warnings: ["scanner_v2_partial"] }),
+    false,
+  );
+  assert.equal(siteBlockedScan({ fetched: 0, warnings: ["fetch_failed"] }), false);
+});
+
+test("an empty 403 from the host is blocked_by_site and still a completed scan", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-site-block-"));
+  try {
+    const result = await runPersistentScannerV2("https://alleygates.example/", {
+      stateRoot: root,
+      releaseSha: "site-block",
+      requestMs: 8_000,
+      batchSize: 4,
+      discoveryOptions: {
+        lookup: async () => ["203.0.113.45"],
+        get: async (url) => ({
+          status: 403,
+          headers: { "content-type": "text/html" },
+          body: "",
+          url,
+        }),
+        browserDocumentFetch: async ({ url }) => ({
+          status: 403,
+          headers: { "content-type": "text/html" },
+          body: "",
+          url: new URL(url),
+        }),
+      },
+    });
+
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    assert.equal(result.outcome, "blocked_by_site");
+    assert.equal(result.scannerV2?.fetched, 0);
+    assert.equal(result.draft.businessName, undefined);
+    assert.ok(result.warnings.includes("http_403"));
+    assert.ok(result.warnings.includes("blocked_by_site"));
+    assert.equal("error" in result, false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

@@ -38,6 +38,7 @@ import {
   type ScannerV2JobStore,
   type ScannerV2ProcessUrl,
 } from "./scanner-v2-worker.ts";
+import { siteBlockedScan, warningsWithSiteBlock } from "./site-block.ts";
 import { allowPublicHttpsUrl } from "./ssrf.ts";
 import {
   isPathAllowed,
@@ -608,12 +609,18 @@ async function runtimeResult(input: {
     ...(job.state === "CRAWLING" ? ["scanner_v2_in_progress"] : []),
     ...(job.state === "PARTIAL" ? ["scanner_v2_partial"] : []),
   ]);
+  const blocked = siteBlockedScan({
+    fetched: manifest.fetched,
+    warnings,
+  });
+  const reportedWarnings = blocked ? warningsWithSiteBlock(warnings) : warnings;
 
   return {
     ok: true,
     untrusted: true,
     draft: draftFromFacts(facts),
-    warnings,
+    warnings: reportedWarnings,
+    ...(blocked ? { outcome: "blocked_by_site" as const } : {}),
     sources: pages.map((page) => ({
       url: page.canonicalUrl,
       status: 200,

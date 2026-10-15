@@ -18,6 +18,7 @@ import {
   isHtmlOrText,
   ssrfMessage,
 } from "./fetch-safe.ts";
+import { siteBlockedScan, warningsWithSiteBlock } from "./site-block.ts";
 import { allowPublicHttpsUrl } from "./ssrf.ts";
 import {
   ScanError,
@@ -433,11 +434,22 @@ export async function runScan(
   }
 
   if (!pages.length) {
+    const warningsOut = warnings.length ? warnings : ["no_pages_fetched"];
+    if (siteBlockedScan({ fetched: 0, warnings: warningsOut })) {
+      return {
+        ok: true,
+        untrusted: true,
+        outcome: "blocked_by_site",
+        draft: {},
+        warnings: warningsWithSiteBlock(warningsOut),
+        sources: [],
+      };
+    }
     return {
       ok: false,
       error: "fetch_failed",
       message: "No public pages could be fetched. No crawl results were invented.",
-      warnings: warnings.length ? warnings : ["no_pages_fetched"],
+      warnings: warningsOut,
     };
   }
 
