@@ -36,8 +36,7 @@ export function createScanProgressTitle(progress: CreateScanProgress): string {
     case "scanning":
       return "Checking website setup…";
     case "queued":
-
-      return "Website check complete ? next: review the draft";
+      return "Website check complete — next: review the draft";
 
     case "scanned":
       return "Draft ready — next: review supplied fields";
@@ -380,8 +379,64 @@ export function isAbsoluteHttpUrl(value: string): boolean {
   }
 }
 
+export type ScanRunSummary = {
+  state: string;
+  discovered: number;
+  fetched: number;
+  unresolved: number;
+  warnings: string[];
+};
+
+export type ScanCoverage = {
+  found: string[];
+  missing: string[];
+  detail: string;
+};
+
+const COVERAGE_LABELS: Record<(typeof DRAFT_KEYS)[number], string> = {
+  businessName: "business name",
+  greeting: "greeting",
+  hours: "opening hours",
+  services: "services",
+  faqs: "questions and answers",
+};
+
+/**
+ * PARTIAL with at least one fetched page: say what was copied and what is
+ * still blank. Zero-fetch stays on ZERO_FETCH_PARTIAL_MESSAGE instead.
+ */
+export function describeScanCoverage(input: {
+  summary: ScanRunSummary | null;
+  draft: Partial<ReceptionistDraft>;
+}): ScanCoverage | null {
+  const summary = input.summary;
+  if (!summary || summary.state !== "PARTIAL" || summary.fetched <= 0) return null;
+  const found: string[] = [];
+  const missing: string[] = [];
+  for (const key of DRAFT_KEYS) {
+    const value = input.draft[key];
+    const label = COVERAGE_LABELS[key];
+    if (typeof value === "string" && value.trim()) found.push(label);
+    else missing.push(label);
+  }
+  const pages =
+    summary.discovered === 1
+      ? "Read 1 discovered public page."
+      : `Read ${summary.fetched} of ${summary.discovered} discovered public pages.`;
+  const unresolved =
+    summary.unresolved > 0
+      ? ` ${summary.unresolved} stayed unresolved.`
+      : "";
+  const refused = (summary.warnings ?? []).some((warning) => warning === "http_401" || warning === "http_403")
+    ? " Some pages were refused and were not read."
+    : "";
+  const detail = `${pages}${unresolved}${refused} Continue and fill the gaps yourself. Nothing was invented.`;
+  return { found, missing, detail };
+}
+
 export type ScanOutcome =
   | { status: "disabled" }
+  | { status: "aborted" }
   | {
       status: "ok";
       draft: Partial<ReceptionistDraft>;
@@ -389,8 +444,36 @@ export type ScanOutcome =
       facts: ScanBusinessFacts;
       factMeta: ScanBusinessFactMeta;
       siteKnowledge: ScanSiteKnowledgeItem[];
+      summary: ScanRunSummary | null;
     }
-  | { status: "error"; message: string };
+  | {
+      status: "manual";
+      reason: "zero_fetch" | "timeout" | "unavailable" | "rejected";
+      message: string;
+    };
+
+export type ScanAttemptPhase = "request" | "retry";
+
+export type ScanAttemptProgress = {
+  attempt: number;
+  maxAttempts: number;
+  phase: ScanAttemptPhase;
+};
+
+/** One attempt stays inside the App Platform function limit (120s). */
+export const SCAN_ATTEMPT_TIMEOUT_MS = 90_000;
+/** A second attempt covers a dropped connection or a 5xx. Not a third full wait. */
+export const SCAN_MAX_ATTEMPTS = 2;
+export const SCAN_RETRY_BACKOFF_MS = 800;
+
+export const SCAN_TIMEOUT_MESSAGE =
+  "The website check took too long, so no business facts were filled in. Continue and complete the draft yourself. Nothing was invented.";
+
+export const SCAN_UNAVAILABLE_MESSAGE =
+  "The website check is unavailable just now, so no business facts were filled in. Continue and complete the draft yourself. Nothing was invented.";
+
+export const SCAN_REJECTED_MESSAGE =
+  "This website could not be checked, so no business facts were filled in. Continue and complete the draft yourself. Nothing was invented.";
 
 /**
  * A durable crawl can return HTTP 200 with a PARTIAL manifest that fetched
@@ -398,6 +481,31 @@ export type ScanOutcome =
  */
 export const ZERO_FETCH_PARTIAL_MESSAGE =
   "The website check could not read any public pages, so no business facts were filled in. You can complete the draft yourself. Nothing was invented.";
+
+export function scanAttemptDetail(event: ScanAttemptProgress): string {
+  if (event.phase === "retry") {
+    const next = Math.min(event.attempt + 1, event.maxAttempts);
+    return `The website check did not finish. Trying again (attempt ${next} of ${event.maxAttempts}). You can continue and fill in the draft yourself.`;
+  }
+  return `Reading the public website (attempt ${event.attempt} of ${event.maxAttempts}). You can continue and fill in the draft yourself. Nothing is invented while this runs.`;
+}
+
+export function mapScanRunSummary(body: unknown): ScanRunSummary | null {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return null;
+  const scanner = (body as { scannerV2?: unknown }).scannerV2;
+  if (!scanner || typeof scanner !== "object" || Array.isArray(scanner)) return null;
+  const record = scanner as Record<string, unknown>;
+  const state = typeof record.state === "string" ? record.state.trim() : "";
+  const counts = ["discovered", "fetched", "unresolved"].map((key) => record[key]);
+  if (!state || counts.some((value) => typeof value !== "number" || !Number.isFinite(value) || value < 0)) {
+    return null;
+  }
+  const [discovered, fetched, unresolved] = counts as number[];
+  const warnings = Array.isArray((body as { warnings?: unknown }).warnings)
+    ? (body as { warnings: unknown[] }).warnings.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+    : [];
+  return { state, discovered, fetched, unresolved, warnings };
+}
 
 export function isZeroFetchPartial(body: unknown): boolean {
   if (!body || typeof body !== "object") return false;
@@ -407,69 +515,123 @@ export function isZeroFetchPartial(body: unknown): boolean {
   return record.state === "PARTIAL" && record.fetched === 0;
 }
 
-const SCAN_TIMEOUT_MS = 120_000;
+const RETRYABLE_SCAN_STATUS = new Set([500, 502, 503, 504]);
 
+export type OnboardingScanOptions = {
+  timeoutMs?: number;
+  maxAttempts?: number;
+  backoffMs?: number;
+  fetchImpl?: typeof fetch;
+  onProgress?: (event: ScanAttemptProgress) => void;
+  signal?: AbortSignal;
+  sleep?: (ms: number) => Promise<void>;
+};
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * POST the same-origin scanner. A 5xx or a timed-out attempt is retried once.
+ * Zero-fetch, timeout, and a failed retry all return `manual` so the visitor
+ * can finish the draft. Nothing is invented.
+ */
 export async function requestOnboardingScan(
   endpoint: string,
   url: string,
+  options: OnboardingScanOptions = {},
 ): Promise<ScanOutcome> {
   const trimmed = endpoint.trim();
   if (!trimmed) return { status: "disabled" };
   const sameOriginPath = trimmed.startsWith("/") && !trimmed.startsWith("//");
   if (!sameOriginPath && !isAbsoluteHttpUrl(trimmed)) {
     return {
-      status: "error",
-      message:
-        "Scan endpoint is not a valid same-origin path or http(s) URL. No crawl results were invented.",
+      status: "manual",
+      reason: "rejected",
+      message: SCAN_REJECTED_MESSAGE,
     };
   }
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), SCAN_TIMEOUT_MS);
-  try {
-    const res = await fetch(trimmed, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ url }),
-      signal: controller.signal,
-    });
-    const text = await res.text();
-    let parsed: unknown = null;
-    if (text) {
-      try {
-        parsed = JSON.parse(text);
-      } catch {
-        parsed = null;
+  const timeoutMs = options.timeoutMs ?? SCAN_ATTEMPT_TIMEOUT_MS;
+  const maxAttempts = Math.max(1, options.maxAttempts ?? SCAN_MAX_ATTEMPTS);
+  const backoffMs = options.backoffMs ?? SCAN_RETRY_BACKOFF_MS;
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const sleep = options.sleep ?? sleepMs;
+  let lastManual: Extract<ScanOutcome, { status: "manual" }> = {
+    status: "manual",
+    reason: "unavailable",
+    message: SCAN_UNAVAILABLE_MESSAGE,
+  };
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    if (options.signal?.aborted) return { status: "aborted" };
+    options.onProgress?.({ attempt, maxAttempts, phase: "request" });
+
+    const controller = new AbortController();
+    const onAbort = () => controller.abort();
+    options.signal?.addEventListener("abort", onAbort);
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let retry = false;
+    try {
+      const res = await fetchImpl(trimmed, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ url }),
+        signal: controller.signal,
+      });
+      const text = await res.text();
+      let parsed: unknown = null;
+      if (text) {
+        try {
+          parsed = JSON.parse(text);
+        } catch {
+          parsed = null;
+        }
       }
-    }
-    if (!res.ok) {
-      return {
-        status: "error",
-        message:
-          "The scan service could not process this URL. No crawl results were invented.",
+      if (res.ok) {
+        if (isZeroFetchPartial(parsed)) {
+          return {
+            status: "manual",
+            reason: "zero_fetch",
+            message: ZERO_FETCH_PARTIAL_MESSAGE,
+          };
+        }
+        const facts = mapScanBusinessFacts(parsed);
+        return {
+          status: "ok",
+          draft: mapScanResponse(parsed),
+          fieldMeta: mapScanFieldMeta(parsed),
+          facts,
+          factMeta: mapScanBusinessFactMeta(parsed, facts),
+          siteKnowledge: mapScanSiteKnowledge(parsed),
+          summary: mapScanRunSummary(parsed),
+        };
+      }
+      const retryable = RETRYABLE_SCAN_STATUS.has(res.status);
+      lastManual = {
+        status: "manual",
+        reason: retryable ? "unavailable" : "rejected",
+        message: retryable ? SCAN_UNAVAILABLE_MESSAGE : SCAN_REJECTED_MESSAGE,
       };
+      retry = retryable && attempt < maxAttempts;
+    } catch {
+      if (options.signal?.aborted) return { status: "aborted" };
+      const timedOut = controller.signal.aborted;
+      lastManual = {
+        status: "manual",
+        reason: timedOut ? "timeout" : "unavailable",
+        message: timedOut ? SCAN_TIMEOUT_MESSAGE : SCAN_UNAVAILABLE_MESSAGE,
+      };
+      retry = attempt < maxAttempts;
+    } finally {
+      clearTimeout(timer);
+      options.signal?.removeEventListener("abort", onAbort);
     }
-    if (isZeroFetchPartial(parsed)) {
-      return { status: "error", message: ZERO_FETCH_PARTIAL_MESSAGE };
-    }
-    const facts = mapScanBusinessFacts(parsed);
-    return {
-      status: "ok",
-      draft: mapScanResponse(parsed),
-      fieldMeta: mapScanFieldMeta(parsed),
-      facts,
-      factMeta: mapScanBusinessFactMeta(parsed, facts),
-      siteKnowledge: mapScanSiteKnowledge(parsed),
-    };
-  } catch {
-    return {
-      status: "error",
-      message:
-        "The scan service is unavailable just now. No crawl results were invented.",
-    };
-  } finally {
-    clearTimeout(timer);
+    if (!retry) return lastManual;
+    options.onProgress?.({ attempt, maxAttempts, phase: "retry" });
+    await sleep(backoffMs);
   }
+  return lastManual;
 }
 
 export function buildCreateLeadMessage(input: {

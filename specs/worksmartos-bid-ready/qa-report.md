@@ -1,0 +1,13 @@
+# QA report
+
+Live crawl of the 26 sitemap routes plus `/status`, desktop 1280 and mobile 390, before these fixes: 54 page loads, 0 console errors, 0 failed requests, 0 broken images, 0 dead hashes, 0 unlabelled controls. `/status` stays noindex and out of the sitemap.
+
+| Defect | Fix |
+| --- | --- |
+| Terms, privacy, and cookies called the site the MaintenanceOS website | Visitor copy now says the WorkSmartOS website. Chapelgate Limited and company number 12340004 stay. |
+| Create scan could sit disabled until a long timeout, and a zero-fetch `PARTIAL` looked like an empty success | One retry for timeout and 5xx, no retry for 4xx, a skip control, and the existing failed-read message when `fetched` is 0. |
+| `https://alleygates.co.uk` returned HTTP 200 with scanner state `PARTIAL`, fetched 0, warnings `http_401` and `scanner_v2_partial`. Curl from the same droplet got nginx 200 | The plain client sent a non-browser user agent. It now sends a Mozilla/Chrome user agent that still names WorkSmartOS and MaintenanceOS, plus Accept and Accept-Language, and no credentials. A 401/403 retries through Chromium's own request after the public-HTTPS and DNS checks. |
+| A partial scan with some pages read did not say what was missing | The check step and the review step list copied fields and blank fields and keep the blanks editable. |
+| The Playwright noble image has no `node` user, while the repo image used `USER node` and did not set `SCANNER_V2_STATE_ROOT` | Image, runbook, and `deploy/maintenanceos-scanner-v2/run.sh` run as `1000:1000` with state at `/data`. |
+
+Browser proof after the static build: mocked `POST /api/website/scan` for a partial Alley Gates result showed “Found: business name, services” and the blank greeting, hours, and questions. Filling Hours on the review step removed opening hours from the blank list. A zero-fetch body showed the failed-read message, no partial panel, and the next step stayed reachable. Command: `node scripts/create-partial-scan-browser.mjs` printed `create-partial-scan-browser=ok`.

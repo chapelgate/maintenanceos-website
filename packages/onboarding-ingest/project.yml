@@ -9,3 +9,11 @@ packages:
           timeout: 120000
           memory: 256
           logs: 64
+      - name: voice
+        runtime: nodejs:22
+        main: main
+        web: true
+        limits:
+          timeout: 30000
+          memory: 128
+          logs: 16

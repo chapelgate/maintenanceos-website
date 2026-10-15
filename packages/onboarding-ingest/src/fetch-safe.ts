@@ -29,6 +29,35 @@ import {
 export const DEFAULT_MAX_REDIRECTS = 4;
 export const DEFAULT_PAGE_TIMEOUT_MS = 4000;
 export const DEFAULT_MAX_BYTES_PER_PAGE = 256 * 1024;
+export const PUBLIC_PAGE_ACCEPT =
+  "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1";
+export const PUBLIC_PAGE_ACCEPT_LANGUAGE = "en-GB,en;q=0.8";
+
+const CREDENTIAL_HEADERS = new Set([
+  "authorization",
+  "cookie",
+  "proxy-authorization",
+  "host",
+  "connection",
+]);
+
+/** Browser-like page headers. Caller values override Accept, never credentials. */
+export function publicPageHeaders(
+  extra?: Record<string, string>,
+): Record<string, string> {
+  const headers: Record<string, string> = {
+    "User-Agent": USER_AGENT,
+    Accept: PUBLIC_PAGE_ACCEPT,
+    "Accept-Language": PUBLIC_PAGE_ACCEPT_LANGUAGE,
+  };
+  if (!extra) return headers;
+  for (const [key, value] of Object.entries(extra)) {
+    if (CREDENTIAL_HEADERS.has(key.toLowerCase())) continue;
+    if (!value) continue;
+    headers[key] = value;
+  }
+  return headers;
+}
 
 export type FetchSafeOptions = {
   lookup?: LookupFn;
@@ -137,11 +166,8 @@ export function httpsGetToIp(
   return new Promise((resolve, reject) => {
     const port = url.port ? Number(url.port) : 443;
     const headers: Record<string, string | number> = {
-      "User-Agent": USER_AGENT,
-      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.1",
-      "Accept-Language": "en-GB,en;q=0.8",
+      ...publicPageHeaders(opts.headers),
       "Accept-Encoding": opts.acceptCompressed ? "gzip, identity" : "identity",
-      ...(opts.headers ?? {}),
       Host: url.host,
       Connection: "close",
     };
@@ -256,12 +282,12 @@ export function httpsGetBytesToIp(
   return new Promise((resolve, reject) => {
     const port = url.port ? Number(url.port) : 443;
     const headers: Record<string, string | number> = {
-      "User-Agent": USER_AGENT,
+      ...publicPageHeaders(opts.headers),
       Accept:
-        "application/pdf,text/plain,text/csv,application/csv;q=0.9,*/*;q=0.1",
-      "Accept-Language": "en-GB,en;q=0.8",
+        opts.headers?.Accept && opts.headers.Accept !== PUBLIC_PAGE_ACCEPT
+          ? opts.headers.Accept
+          : "application/pdf,text/plain,text/csv,application/csv;q=0.9,*/*;q=0.1",
       "Accept-Encoding": "identity",
-      ...(opts.headers ?? {}),
       Host: url.host,
       Connection: "close",
     };
@@ -434,7 +460,7 @@ export async function fetchPublicHttpsBytes(
         const candidate = await get(allow.url, address, {
           timeoutMs: attemptTimeoutMs,
           maxBytes,
-          headers: options.headers,
+          headers: publicPageHeaders(options.headers),
         });
         response = candidate;
         if (candidate.status !== 401 && candidate.status !== 403) break;
@@ -576,7 +602,7 @@ export async function fetchPublicHttps(
         const candidate = await get(allow.url, address, {
           timeoutMs: attemptTimeoutMs,
           maxBytes,
-          headers: options.headers,
+          headers: publicPageHeaders(options.headers),
           acceptCompressed: options.acceptCompressed,
           maxDecompressedBytes: options.maxDecompressedBytes,
         });

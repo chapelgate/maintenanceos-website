@@ -31,7 +31,11 @@ test("onboarding-ingest Dockerfile matches npm run onboarding-scan", () => {
     pkg.scripts["onboarding-scan"],
     "node --use-system-ca --experimental-strip-types packages/onboarding-ingest/src/server.ts",
   );
-  assert.match(docker, /FROM node:22-bookworm-slim/);
+  assert.match(docker, /FROM mcr\.microsoft\.com\/playwright:v1\.63\.0-noble/);
+  assert.match(docker, /USER 1000:1000/);
+  assert.match(docker, /SCANNER_V2_STATE_ROOT=\/data/);
+  assert.doesNotMatch(docker, /^USER node\b/m);
+  assert.doesNotMatch(docker, /^ENV SCANNER_V2_STATE_DIR=/m);
   assert.match(
     docker,
     /CMD \["node", "--use-system-ca", "--experimental-strip-types", "packages\/onboarding-ingest\/src\/server\.ts"\]/,
@@ -59,8 +63,21 @@ test("deploy runbook documents droplet, systemd or docker, health, CORS, and DO 
   assert.match(doc, /SSRF/);
   assert.match(doc, /maintenanceos-redteam/);
   assert.match(doc, /output: 'export'/);
+  assert.match(doc, /mcr\.microsoft\.com\/playwright:v1\.63\.0-noble/);
+  assert.match(doc, /--user 1000:1000/);
+  assert.match(doc, /\/var\/lib\/maintenanceos-scanner-v2/);
+  assert.match(doc, /SCANNER_V2_STATE_ROOT=\/data/);
+  assert.match(doc, /Do not pass `--user node`/);
+  assert.doesNotMatch(doc, /docker run[\s\S]{0,500}--user node/);
+  assert.doesNotMatch(doc, /SCANNER_V2_STATE_DIR=/);
   assert.doesNotMatch(doc, /dashboard\.render\.com/);
   assert.doesNotMatch(doc, /onrender\.com/);
+  const run = read("deploy/maintenanceos-scanner-v2/run.sh");
+  assert.match(run, /--user 1000:1000/);
+  assert.match(run, /\/var\/lib\/maintenanceos-scanner-v2/);
+  assert.match(run, /SCANNER_V2_STATE_ROOT=\/data/);
+  assert.doesNotMatch(run, /--user node/);
+  assert.doesNotMatch(run, /SCANNER_V2_STATE_DIR/);
 });
 
 test("next.config static export is unchanged by the companion deploy path", () => {

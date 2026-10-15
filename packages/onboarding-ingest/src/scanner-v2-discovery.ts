@@ -10,6 +10,10 @@ import {
   stableContentHash,
 } from "./scanner-v2-foundation.ts";
 import {
+  recoverAuthBlockedDocument,
+  type BrowserDocumentFetch,
+} from "./scanner-v2-browser-fetch.ts";
+import {
   decideScannerV2RenderEscalation,
   renderScannerV2Page,
   type ScannerV2BrowserBackend,
@@ -93,6 +97,11 @@ export type ScannerV2DiscoveryOptions = {
   maxCalendarVariantsPerFamily?: number;
   /** Deterministic test seam; production uses the reviewed Playwright backend. */
   renderBackend?: ScannerV2BrowserBackend;
+  /**
+   * Used when the plain fetch is refused with 401/403. Tests inject this.
+   * Production launches Playwright only when `get` is not injected.
+   */
+  browserDocumentFetch?: BrowserDocumentFetch;
   /** Production-default only when direct fetch dependencies are not injected. */
   readerFallback?: boolean;
   readerLookup?: LookupFn;
@@ -843,6 +852,22 @@ export async function discoverScannerV2Frontier(
       }
     }
 
+    let browserRecovered = false;
+    if (response.status === 401 || response.status === 403) {
+      const recovered = await recoverAuthBlockedDocument({
+        pageUrl,
+        response,
+        timeoutMs: htmlTimeoutMs,
+        browserDocumentFetch: options.browserDocumentFetch,
+        allowPlaywrightLaunch: !options.get,
+      });
+      if (recovered.usedBrowser) {
+        response = recovered.response;
+        browserRecovered = true;
+        warnings.push("browser_fetch_fallback_used");
+      }
+    }
+
     if (response.url.origin !== origin.origin) {
       urls.update(pageUrl, {
         status: "policy_skipped",
@@ -879,7 +904,7 @@ export async function discoverScannerV2Frontier(
     let effectiveResponseUrl = response.url;
     let renderedLinks: CrawlUrlDisposition[] = [];
 
-    if (isHtmlType(contentType)) {
+    if (isHtmlType(contentType) && !browserRecovered) {
       const renderDecision = decideScannerV2RenderEscalation({
         rawHtml: response.body,
       });

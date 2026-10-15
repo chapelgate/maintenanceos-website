@@ -1024,3 +1024,119 @@ test("path-depth policy records skipped deep URLs and forces PARTIAL", async () 
   assert.equal(row?.reason, "path_depth_limit");
 });
 
+const HOME_HTML =
+  "<html><body><h1>Alley Gates</h1><p>We design and install alley gates for homes in Liverpool and across the North West.</p></body></html>";
+
+test("plain fetch uses the honest browser user agent when a host rejects a bot user agent", async () => {
+  let browserCalls = 0;
+  const result = await discoverScannerV2Frontier("https://alleygates.example/", {
+    lookup: async () => ["203.0.113.10"],
+    browserDocumentFetch: async () => {
+      browserCalls += 1;
+      throw new Error("browser fallback should not run when the browser user agent is accepted");
+    },
+    get: async (url, _ip, opts) => {
+      if (url.pathname === "/robots.txt") {
+        return response(url.toString(), "User-agent: *\nAllow: /", "text/plain");
+      }
+      if (url.pathname.endsWith(".xml")) {
+        return response(url.toString(), "missing", "text/plain", 404);
+      }
+      const ua = opts.headers?.["User-Agent"] ?? "";
+      const accept = opts.headers?.Accept ?? "";
+      const language = opts.headers?.["Accept-Language"] ?? "";
+      if (opts.headers?.Authorization || opts.headers?.Cookie) {
+        return response(url.toString(), "credentials", "text/plain", 401);
+      }
+      const browser =
+        ua.includes("Mozilla/5.0") &&
+        ua.includes("WorkSmartOS-OnboardingScan") &&
+        accept.includes("text/html") &&
+        language.toLowerCase().includes("en-gb");
+      if (!browser) return response(url.toString(), "bot", "text/html", 401);
+      return html(url.toString(), HOME_HTML);
+    },
+  });
+
+  assert.equal(browserCalls, 0);
+  assert.equal(
+    result.manifest.urls.find((row) => row.url === "https://alleygates.example/")?.status,
+    "fetched",
+  );
+  assert.ok(result.manifest.fetched >= 1);
+  assert.equal(result.warnings.includes("http_401"), false);
+});
+
+test("401 from the plain client falls back to the browser document fetch", async () => {
+  const browserUrls: string[] = [];
+  const result = await discoverScannerV2Frontier("https://alleygates.example/", {
+    maxHtmlPages: 2,
+    lookup: async () => ["203.0.113.10"],
+    get: async (url) => {
+      if (url.pathname === "/robots.txt") {
+        return response(
+          url.toString(),
+          "User-agent: *\nAllow: /\n",
+          "text/plain",
+        );
+      }
+      if (url.pathname.endsWith(".xml")) {
+        return response(url.toString(), "missing", "text/plain", 404);
+      }
+      if (url.pathname === "/missing") {
+        return response(url.toString(), "gone", "text/html", 404);
+      }
+      return response(url.toString(), "denied", "text/html", 401);
+    },
+    browserDocumentFetch: async ({ url }) => {
+      browserUrls.push(url);
+      if (url.endsWith("/missing")) {
+        throw new Error("404 must not use the browser fallback");
+      }
+      return html(
+        url,
+        HOME_HTML.replace("</body>", '<a href="/missing">Missing</a></body>'),
+      );
+    },
+  });
+
+  assert.deepEqual(browserUrls, ["https://alleygates.example/"]);
+  assert.equal(
+    result.manifest.urls.find((row) => row.url === "https://alleygates.example/")?.status,
+    "fetched",
+  );
+  assert.ok(result.warnings.includes("browser_fetch_fallback_used"));
+  assert.equal(result.warnings.includes("http_401"), false);
+});
+
+test("browser fallback that is also refused stays a skipped 401", async () => {
+  let browserCalls = 0;
+  const result = await discoverScannerV2Frontier("https://alleygates.example/", {
+    lookup: async () => ["203.0.113.10"],
+    get: async (url) => {
+      if (url.pathname === "/robots.txt") {
+        return response(url.toString(), "User-agent: *\nAllow: /", "text/plain");
+      }
+      if (url.pathname.endsWith(".xml")) {
+        return response(url.toString(), "missing", "text/plain", 404);
+      }
+      return response(url.toString(), "denied", "text/html", 401);
+    },
+    browserDocumentFetch: async ({ url }) => {
+      browserCalls += 1;
+      return response(url, "still denied", "text/html", 401);
+    },
+  });
+
+  assert.equal(browserCalls, 1);
+  assert.equal(
+    result.manifest.urls.find((row) => row.url === "https://alleygates.example/")?.status,
+    "policy_skipped",
+  );
+  assert.equal(
+    result.manifest.urls.find((row) => row.url === "https://alleygates.example/")?.reason,
+    "http_401",
+  );
+  assert.equal(result.manifest.fetched, 0);
+});
+

@@ -44,7 +44,7 @@ jobs:
           image="mos-scanner-v2-candidate:${HEAD_SHA}"
           docker build -f packages/onboarding-ingest/Dockerfile -t "$image" .
           docker run --rm --workdir /app/packages/onboarding-ingest "$image" \
-            node -e '(async()=>{const {chromium}=await import("playwright");const browser=await chromium.launch({headless:true});await browser.close();await import("pdfjs-dist/legacy/build/pdf.mjs");console.log("scanner-v2-runtime-deps=ok")})().catch((error)=>{console.error(error);process.exit(1)})'
+            node -e '(async()=>{const {chromium}=await import("playwright");const args=process.getuid?.()===0?[]:["--no-sandbox","--disable-dev-shm-usage"];const browser=await chromium.launch({headless:true,args});await browser.close();await import("pdfjs-dist/legacy/build/pdf.mjs");console.log("scanner-v2-runtime-deps=ok")})().catch((error)=>{console.error(error);process.exit(1)})'
           cid="$(docker run -d --rm -p 127.0.0.1:18788:8788 \
             -e PORT=8788 \
             -e ONBOARDING_WEB_INGEST=true \

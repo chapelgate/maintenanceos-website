@@ -9,25 +9,39 @@
 #
 # Build from the website repo root:
 #   docker build -f packages/onboarding-ingest/Dockerfile -t mos-onboarding-scan .
+#
+# Base image has ubuntu uid 1000 and pwuser uid 1001. It has no `node` user.
+# Production runs this container as 1000:1000. Do not pass `--user node`.
 
-FROM node:22-bookworm-slim
+FROM mcr.microsoft.com/playwright:v1.63.0-noble
 
+USER root
 WORKDIR /app
+
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 COPY packages/onboarding-ingest/package.json packages/onboarding-ingest/package-lock.json ./packages/onboarding-ingest/
 RUN npm ci --omit=dev --no-audit --no-fund --prefix packages/onboarding-ingest
-RUN PLAYWRIGHT_BROWSERS_PATH=/ms-playwright ./packages/onboarding-ingest/node_modules/.bin/playwright install --with-deps --only-shell chromium
 
 COPY packages/onboarding-ingest/src ./packages/onboarding-ingest/src
 
 # Public bind inside the container. On the droplet, publish 127.0.0.1:8788
 # and reverse-proxy HTTPS. PORT / ONBOARDING_SCAN_PORT select the listen port.
 # Crawl stays off until ONBOARDING_WEB_INGEST=true.
+# Durable crawl state is SCANNER_V2_STATE_ROOT.
 ENV NODE_ENV=production
 ENV ONBOARDING_SCAN_HOST=0.0.0.0
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+ENV SCANNER_V2_STATE_ROOT=/data
+ENV HOME=/tmp
 
-USER node
+RUN mkdir -p /data \
+  && chown -R 1000:1000 /data /app \
+  && chmod -R a+rX /ms-playwright /app \
+  && chmod 0755 /data
+
+USER 1000:1000
 
 EXPOSE 8788
 

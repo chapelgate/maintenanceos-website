@@ -17,7 +17,7 @@ export default function CookiesPage() {
       <PageHero
         eyebrow="Legal · Draft"
         title="Cookie Policy (Draft)"
-        lede="Draft cookie notice for the MaintenanceOS marketing website. No analytics or marketing cookies are configured; first-party operational measurement is cookieless and uses no persistent visitor identifier. Not a compliance certification."
+        lede="Draft cookie notice for the WorkSmartOS website. No analytics or marketing cookies are configured; first-party operational measurement is cookieless and uses no persistent visitor identifier. Not a compliance certification."
       />
       <div className="mx-auto max-w-3xl px-4 py-12">
         <LegalDraftBanner />
@@ -29,7 +29,7 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               This draft explains cookies and similar technologies on the
-              MaintenanceOS marketing site, operated by Chapelgate Limited
+              WorkSmartOS website, operated by Chapelgate Limited
               (company number 12340004). It is pending legal and Privacy
               sign-off. Website-URL ingest on /create is described in the{" "}
               <a

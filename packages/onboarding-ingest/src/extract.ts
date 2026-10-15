@@ -15,8 +15,15 @@ import type {
 } from "./types.ts";
 
 export const MAX_FIELD_CHARS = 4000;
+/**
+ * Honest browser-like agent for the plain HTTPS fetch.
+ * Leading Mozilla/Chrome tokens match a normal page request. The product
+ * tokens and URL identify the crawl. Robots groups for
+ * MaintenanceOS-OnboardingScan still match because that token is included.
+ * No Authorization or Cookie is attached.
+ */
 export const USER_AGENT =
-  "MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)";
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 WorkSmartOS-OnboardingScan/0.1 (MaintenanceOS-OnboardingScan/0.1; +https://worksmartos.co.uk)";
 
 const DAY_RE =
   /\b(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays?|weekends?)\b/i;

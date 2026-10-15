@@ -3,6 +3,7 @@ import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { publicPageHeaders } from "./fetch-safe.ts";
 import {
   buildScannerV2ConditionalHeaders,
   buildScannerV2RefreshSeed,
@@ -265,10 +266,13 @@ test("304 refresh reuses exact prior chunks and active corpus changes only after
 
   assert.equal(result.state, "COMPLETE");
   assert.equal(bodyBytes, 0);
-  assert.deepEqual(seenHeaders, {
-    "If-None-Match": '"v1"',
-    "If-Modified-Since": "Thu, 01 Oct 2026 12:00:00 GMT",
-  });
+  assert.deepEqual(
+    seenHeaders,
+    publicPageHeaders({
+      "If-None-Match": '"v1"',
+      "If-Modified-Since": "Thu, 01 Oct 2026 12:00:00 GMT",
+    }),
+  );
   assert.deepEqual(await jobs.listChunks("v2"), previousChunks);
   assert.equal((await versions.getActive("https://acme.example"))?.crawlId, "v1");
 

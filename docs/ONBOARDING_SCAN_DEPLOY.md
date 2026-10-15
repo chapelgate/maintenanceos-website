@@ -38,25 +38,40 @@ Open firewall ports **22 / 80 / 443** only. Keep the Node listen port off the pu
 
 The existing companion image is the same process as `npm run onboarding-scan`. Build from the **website repo root**.
 
+The image is `mcr.microsoft.com/playwright:v1.63.0-noble`. That image has `ubuntu` as uid 1000 and `pwuser` as uid 1001. It has no `node` user. Run the container as `--user 1000:1000`. Do not pass `--user node`.
+
+Host directory `/var/lib/maintenanceos-scanner-v2` is mounted at `/data`. The process reads `SCANNER_V2_STATE_ROOT=/data`. `SCANNER_V2_STATE_DIR` is not read; do not set it. The host directory must be owned by uid 1000. A `chown` inside the image does not change this mount.
+
 ```bash
 # on the droplet, as a sudo-capable user
 sudo apt-get update
 sudo apt-get install -y git docker.io
 sudo usermod -aG docker "$USER"   # re-login after this
 
-sudo mkdir -p /opt/mos
+sudo mkdir -p /opt/mos /var/lib/maintenanceos-scanner-v2
 sudo chown "$USER":"$USER" /opt/mos
+sudo chown 1000:1000 /var/lib/maintenanceos-scanner-v2
 cd /opt/mos
 git clone https://github.com/chapelgate/maintenanceos-website.git
 cd maintenanceos-website
 git checkout main
 
 docker build -f packages/onboarding-ingest/Dockerfile -t mos-onboarding-scan .
+ONBOARDING_WEB_INGEST=false sh deploy/maintenanceos-scanner-v2/run.sh
+```
+
+`deploy/maintenanceos-scanner-v2/run.sh` is the same as:
+
+```bash
 docker run -d --name mos-onboarding-scan --restart unless-stopped \
+  --user 1000:1000 \
   -p 127.0.0.1:8788:8788 \
+  -v /var/lib/maintenanceos-scanner-v2:/data \
   -e PORT=8788 \
   -e ONBOARDING_SCAN_HOST=0.0.0.0 \
   -e ONBOARDING_WEB_INGEST=false \
+  -e ONBOARDING_SCANNER_V2=true \
+  -e SCANNER_V2_STATE_ROOT=/data \
   mos-onboarding-scan
 ```
 
@@ -73,13 +88,7 @@ Expect `"service":"maintenanceos-onboarding-scan"` and `"ingestEnabled":false`.
 When crawl should actually run:
 
 ```bash
-docker stop mos-onboarding-scan && docker rm mos-onboarding-scan
-docker run -d --name mos-onboarding-scan --restart unless-stopped \
-  -p 127.0.0.1:8788:8788 \
-  -e PORT=8788 \
-  -e ONBOARDING_SCAN_HOST=0.0.0.0 \
-  -e ONBOARDING_WEB_INGEST=true \
-  mos-onboarding-scan
+ONBOARDING_WEB_INGEST=true sh deploy/maintenanceos-scanner-v2/run.sh
 curl -sS http://127.0.0.1:8788/health   # "ingestEnabled": true
 ```
 
@@ -232,7 +241,11 @@ From the website repo root (Docker required):
 
 ```bash
 docker build -f packages/onboarding-ingest/Dockerfile -t mos-onboarding-scan .
-docker run --rm -p 8788:8788 -e PORT=8788 -e ONBOARDING_WEB_INGEST=true mos-onboarding-scan
+docker run --rm --user 1000:1000 -p 8788:8788 \
+  -e PORT=8788 \
+  -e ONBOARDING_WEB_INGEST=true \
+  -e SCANNER_V2_STATE_ROOT=/data \
+  mos-onboarding-scan
 # other terminal:
 curl -s http://127.0.0.1:8788/health
 ```

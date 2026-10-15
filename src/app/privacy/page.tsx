@@ -10,7 +10,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Privacy Policy (Draft)",
   description:
-    "Draft privacy notice scaffold for the MaintenanceOS marketing website. Pending legal review — not final policy.",
+    "Draft privacy notice scaffold for the WorkSmartOS website. Pending legal review — not final policy.",
   path: "/privacy/",
 });
 
@@ -18,7 +18,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "about",
     title: "About this privacy notice",
-    body: "This draft covers the public MaintenanceOS marketing site and related lead forms; it is not a finished product privacy policy unless counsel extends it.",
+    body: "This draft covers the public WorkSmartOS website and related lead forms. MaintenanceOS is a product described on that site. It is not a finished product privacy policy unless counsel extends it.",
   },
   {
     id: "who-we-are",
@@ -113,7 +113,7 @@ export default function PrivacyPage() {
       <PageHero
         eyebrow="Legal · Draft"
         title="Privacy Policy (Draft)"
-        lede="Scaffold privacy notice for the MaintenanceOS marketing website. Headings and one-line placeholders only — pending legal review."
+        lede="Scaffold privacy notice for the WorkSmartOS website. Headings and one-line placeholders only — pending legal review."
       />
       <div className="mx-auto max-w-3xl px-4 py-12">
         <LegalDraftBanner />
