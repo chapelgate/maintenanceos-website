@@ -6,8 +6,9 @@ import { browserVoiceSupport, speakBrowserText } from "./browser-voice.ts";
  * The website never receives the golden line's credential.
  *
  * The live spoken preview prefers the same-origin voice function, which
- * keeps the provider key and voice ID on the server. This module does not
- * know those values. Browser speech is the fallback.
+ * keeps the Gemini key on the server. This module does not know that key.
+ * Browser speech is the fallback when the function is not configured,
+ * rate limited, timed out, or otherwise unavailable.
  */
 export const GOLDEN_LINE_VOICE_PROVIDER = "gemini";
 export const GOLDEN_LINE_VOICE_NAME = "Gacrux";
@@ -117,7 +118,7 @@ export async function requestServerVoice(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "audio/mpeg, application/json",
+        Accept: "audio/wav, application/json",
       },
       body: JSON.stringify({ text }),
       signal: controller.signal,
@@ -127,7 +128,7 @@ export async function requestServerVoice(
       return {
         ok: true,
         bytes: new Uint8Array(await response.arrayBuffer()),
-        contentType: type.split(";")[0]?.trim() || "audio/mpeg",
+        contentType: type.split(";")[0]?.trim() || "audio/wav",
       };
     }
     const raw = await response.text();
@@ -157,7 +158,7 @@ export async function requestServerVoice(
         contentType:
           typeof parsed.contentType === "string" && parsed.contentType
             ? parsed.contentType
-            : "audio/mpeg",
+            : "audio/wav",
       };
     }
     if (response.status === 404 || parsed?.error === "voice_not_configured") {
