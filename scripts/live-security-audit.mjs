@@ -1,5 +1,5 @@
 const origin = (process.env.WEBSITE_SITE_URL ||
-  "https://maintenanceos.chapelgatetechnologies.com").replace(/\/$/, "");
+  "https://worksmartos.co.uk").replace(/\/$/, "");
 const strict = process.env.REQUIRE_SECURITY_HEADERS === "1";
 
 const desired = [

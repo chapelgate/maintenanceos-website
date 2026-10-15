@@ -36,7 +36,7 @@ export const siteConfig = {
   /**
    * Absolute origin for canonical / OG / JSON-LD / sitemap.
    * Empty at build → fallback in `src/lib/site-url.ts`
-   * (`https://maintenanceos.chapelgatetechnologies.com`).
+   * (`https://worksmartos.co.uk`).
    * DNS now resolves to this export.
    */
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "",

@@ -1,7 +1,7 @@
 import { execFileSync, spawnSync } from "node:child_process";
 
 const origin = (process.env.WEBSITE_SITE_URL ||
-  "https://maintenanceos.chapelgatetechnologies.com").replace(/\/$/, "");
+  "https://worksmartos.co.uk").replace(/\/$/, "");
 const SHA_RE = /^[0-9a-f]{7,40}$/i;
 
 function expectedCommit() {

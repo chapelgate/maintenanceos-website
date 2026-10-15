@@ -2,17 +2,17 @@ import { siteConfig } from "@/config/site";
 
 /**
  * Origin used when NEXT_PUBLIC_SITE_URL is empty at build time.
- * The site serves at https://maintenanceos.chapelgatetechnologies.com.
+ * The site serves at https://worksmartos.co.uk.
  */
 export const FALLBACK_SITE_URL =
-  "https://maintenanceos.chapelgatetechnologies.com";
+  "https://worksmartos.co.uk";
 
 /**
  * Host Andrew asked for, now serving this export.
  * Canonical, Open Graph, sitemap, and JSON-LD resolve to this origin.
  */
 export const INTENDED_PRODUCTION_SITE_URL =
-  "https://maintenanceos.chapelgatetechnologies.com";
+  "https://worksmartos.co.uk";
 
 /** Canonical origin without a trailing slash. */
 export function getCanonicalSiteUrl(): string {
