@@ -12,17 +12,17 @@ test("canonical production host is the live canonical origin", () => {
   const env = read(".env.example");
   assert.match(
     siteUrl,
-    /export const INTENDED_PRODUCTION_SITE_URL =\r?\n\s*"https:\/\/maintenanceos\.chapelgatetechnologies\.com";/,
+    /export const INTENDED_PRODUCTION_SITE_URL =\r?\n\s*"https:\/\/worksmartos\.co\.uk";/,
   );
   assert.match(
     siteUrl,
-    /export const FALLBACK_SITE_URL =\r?\n\s*"https:\/\/maintenanceos\.chapelgatetechnologies\.com";/,
+    /export const FALLBACK_SITE_URL =\r?\n\s*"https:\/\/worksmartos\.co\.uk";/,
   );
   assert.match(
     env,
-    /^NEXT_PUBLIC_SITE_URL=https:\/\/maintenanceos\.chapelgatetechnologies\.com$/m,
+    /^NEXT_PUBLIC_SITE_URL=https:\/\/worksmartos\.co\.uk$/m,
   );
-  assert.match(env, /maintenanceos\.chapelgatetechnologies\.com/);
+  assert.match(env, /worksmartos\.co\.uk/);
 });
 
 test("create hero is a repair-intake preview, not a general receptionist", () => {

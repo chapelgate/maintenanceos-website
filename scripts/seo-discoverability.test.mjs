@@ -68,7 +68,7 @@ test("llms.txt exists with claims-safe conversion and key URLs", () => {
   assert.match(text, /\[FAQ\].*bounded public website learning/i);
   assert.doesNotMatch(text, /always-on phone line is live/i);
   assert.doesNotMatch(text, /#demo/);
-  assert.match(text, /https:\/\/maintenanceos\.chapelgatetechnologies\.com\/demo\//);
+  assert.match(text, /https:\/\/worksmartos\.co\.uk\/demo\//);
   const contact = text.split("## Contact")[1] ?? "";
   assert.doesNotMatch(contact, /\n\n\n/);
 });

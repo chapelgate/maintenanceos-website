@@ -27,7 +27,7 @@ requireMatch(site, /rsfm-control-plane-production\.up\.railway\.app\/v1\/public\
 
 const controlPlane = "https://rsfm-control-plane-production.up.railway.app";
 const websiteOrigin = process.env.WEBSITE_SITE_URL ||
-  "https://maintenanceos.chapelgatetechnologies.com";
+  "https://worksmartos.co.uk";
 
 const ready = await fetch(controlPlane + "/ready", {
   headers: { "user-agent": "MaintenanceOS-Conversion-Acceptance/1.0" },

@@ -1,0 +1,9 @@
+- [x] Set default/fallback for NEXT_PUBLIC_SITE_URL, FALLBACK_SITE_URL, and INTENDED_PRODUCTION_SITE_URL in src/lib/site-url.ts to https://worksmartos.co.uk (no trailing slash)
+- [x] Update .env.example NEXT_PUBLIC_SITE_URL to https://worksmartos.co.uk with alias comments
+- [x] Update canonical link tags, Open Graph/Twitter URLs, sitemap.xml, robots.txt sitemap/host lines, and JSON-LD URLs to resolve to the new origin
+- [x] Update URLs in public/llms.txt and public/llms-full.txt to https://worksmartos.co.uk
+- [x] Update script origin fallbacks in scripts/conversion-acceptance.mjs, scripts/deployment-verifier.mjs, scripts/live-security-audit.mjs, scripts/seo-live-monitor.mjs, scripts/staging-red-team.mjs, and scripts/website-health-monitor.mjs
+- [x] Update existing test assertions in scripts/council-decisions.test.mjs and scripts/seo-discoverability.test.mjs
+- [x] Update and expand tests in scripts/canonical-url.test.mjs asserting built canonical and sitemap origin is https://worksmartos.co.uk and verifying old origin does not appear in built sitemap.xml or robots.txt
+- [x] Run npm ci, npm test, and npm run build and verify all pass
+- [x] Confirm built output in out/ uses https://worksmartos.co.uk

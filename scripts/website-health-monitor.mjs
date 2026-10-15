@@ -1,5 +1,5 @@
 const origin = (process.env.WEBSITE_SITE_URL ||
-  "https://maintenanceos.chapelgatetechnologies.com").replace(/\/$/, "");
+  "https://worksmartos.co.uk").replace(/\/$/, "");
 const controlPlane = (process.env.WEBSITE_CONTROL_PLANE ||
   "https://rsfm-control-plane-production.up.railway.app").replace(/\/$/, "");
 
