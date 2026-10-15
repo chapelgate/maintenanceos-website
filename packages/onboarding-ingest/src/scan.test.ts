@@ -401,14 +401,18 @@ test("runScan rejects a Reader security challenge instead of learning it", async
       ),
   });
 
-  assert.equal(result.ok, false);
-  if (!result.ok) {
-    assert.equal(result.error, "fetch_failed");
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.equal(result.outcome, "blocked_by_site");
+    assert.equal(result.sources.length, 0);
+    assert.equal(result.draft.businessName, undefined);
+    assert.ok(result.warnings.includes("http_401"));
+    assert.ok(result.warnings.includes("blocked_by_site"));
     assert.ok(result.warnings.includes("reader_challenge_rejected"));
   }
 });
 
-test("runScan leaves the direct failure typed when reader fallback cannot help", async () => {
+test("runScan classifies a 403 with no pages as blocked_by_site when reader fallback cannot help", async () => {
   const direct = pages({
     "https://blocked.example/robots.txt": {
       status: 403,
@@ -437,10 +441,12 @@ test("runScan leaves the direct failure typed when reader fallback cannot help",
     }),
   });
 
-  assert.equal(result.ok, false);
-  if (!result.ok) {
-    assert.equal(result.error, "fetch_failed");
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.equal(result.outcome, "blocked_by_site");
+    assert.equal(result.sources.length, 0);
     assert.ok(result.warnings.includes("http_403"));
+    assert.ok(result.warnings.includes("blocked_by_site"));
     assert.ok(result.warnings.includes("reader_http_429"));
   }
 });

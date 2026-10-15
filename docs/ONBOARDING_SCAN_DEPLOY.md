@@ -72,6 +72,7 @@ docker run -d --name mos-onboarding-scan --restart unless-stopped \
   -e ONBOARDING_WEB_INGEST=false \
   -e ONBOARDING_SCANNER_V2=true \
   -e SCANNER_V2_STATE_ROOT=/data \
+  -e SCANNER_V2_RELEASE_SHA="${RELEASE_SHA:-local}" \
   mos-onboarding-scan
 ```
 

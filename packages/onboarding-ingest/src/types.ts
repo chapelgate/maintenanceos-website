@@ -111,6 +111,11 @@ export type ScanSuccess = {
   knowledge?: ScanKnowledgeChunk[];
   /** Additive Scanner V2 runtime status. V1 callers omit it. */
   scannerV2?: ScannerV2ScanSummary;
+  /**
+   * Set when every page fetch was refused with 401/403 and nothing was read.
+   * Absent on a normal or partial crawl.
+   */
+  outcome?: "blocked_by_site";
 };
 
 export type ScanFailure = {

@@ -42,6 +42,8 @@ export function createScanProgressTitle(progress: CreateScanProgress): string {
       return "Draft ready — next: review supplied fields";
     case "scanned_empty":
       return "No draft fields supplied — next: complete the draft";
+    case "scan_blocked":
+      return "This site blocks automated reading — next: add the details yourself";
     case "scan_failed":
       return "Website check unavailable — next: complete the draft";
     case "checking":
@@ -448,8 +450,9 @@ export type ScanOutcome =
     }
   | {
       status: "manual";
-      reason: "zero_fetch" | "timeout" | "unavailable" | "rejected";
+      reason: "zero_fetch" | "blocked_by_site" | "timeout" | "unavailable" | "rejected";
       message: string;
+      hostLine?: string;
     };
 
 export type ScanAttemptPhase = "request" | "retry";
@@ -482,6 +485,15 @@ export const SCAN_REJECTED_MESSAGE =
 export const ZERO_FETCH_PARTIAL_MESSAGE =
   "The website check could not read any public pages, so no business facts were filled in. You can complete the draft yourself. Nothing was invented.";
 
+/** Public address of the website scanner. A host can allow this GET source. */
+export const SCANNER_PUBLIC_ADDRESS = "178.128.171.45";
+
+export const BLOCKED_BY_SITE_MESSAGE =
+  "This website blocks automated reading, so no business facts were filled in. You can carry on by typing the details yourself, or by pasting wording from the site into the draft. Nothing was invented.";
+
+export const BLOCKED_BY_SITE_HOST_LINE =
+  `If you look after this website, ask the host to allow HTTPS GET requests from the WorkSmartOS scanner at ${SCANNER_PUBLIC_ADDRESS}. The scanner identifies itself as WorkSmartOS-OnboardingScan and does not sign in.`;
+
 export function scanAttemptDetail(event: ScanAttemptProgress): string {
   if (event.phase === "retry") {
     const next = Math.min(event.attempt + 1, event.maxAttempts);
@@ -505,6 +517,29 @@ export function mapScanRunSummary(body: unknown): ScanRunSummary | null {
     ? (body as { warnings: unknown[] }).warnings.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
     : [];
   return { state, discovered, fetched, unresolved, warnings };
+}
+
+export function isBlockedBySite(body: unknown): boolean {
+  if (!body || typeof body !== "object") return false;
+  const record = body as {
+    outcome?: unknown;
+    warnings?: unknown;
+    scannerV2?: { fetched?: unknown };
+  };
+  if (record.outcome === "blocked_by_site") return true;
+  const warnings = Array.isArray(record.warnings)
+    ? record.warnings.filter((item): item is string => typeof item === "string")
+    : [];
+  const fetched =
+    record.scannerV2 && typeof record.scannerV2 === "object"
+      ? record.scannerV2.fetched
+      : undefined;
+  if (fetched !== 0) return false;
+  return (
+    warnings.includes("blocked_by_site") ||
+    warnings.includes("http_401") ||
+    warnings.includes("http_403")
+  );
 }
 
 export function isZeroFetchPartial(body: unknown): boolean {
@@ -589,6 +624,14 @@ export async function requestOnboardingScan(
         }
       }
       if (res.ok) {
+        if (isBlockedBySite(parsed)) {
+          return {
+            status: "manual",
+            reason: "blocked_by_site",
+            message: BLOCKED_BY_SITE_MESSAGE,
+            hostLine: BLOCKED_BY_SITE_HOST_LINE,
+          };
+        }
         if (isZeroFetchPartial(parsed)) {
           return {
             status: "manual",

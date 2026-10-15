@@ -207,4 +207,6 @@ test("Scanner V2 operational status is explicit and accessible", () => {
   assert.match(later, /data-scan-partial=/);
   assert.match(later, /Partial website check/);
   assert.match(later, /describeScanCoverage/);
+  assert.match(later, /data-scan-blocked=/);
+  assert.match(later, /data-scan-host-allow=/);
 });

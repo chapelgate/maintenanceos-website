@@ -73,11 +73,18 @@ test("deploy runbook documents droplet, systemd or docker, health, CORS, and DO 
   assert.doesNotMatch(doc, /dashboard\.render\.com/);
   assert.doesNotMatch(doc, /onrender\.com/);
   const run = read("deploy/maintenanceos-scanner-v2/run.sh");
+  assert.equal(run.includes("\r"), false);
   assert.match(run, /--user 1000:1000/);
   assert.match(run, /\/var\/lib\/maintenanceos-scanner-v2/);
   assert.match(run, /SCANNER_V2_STATE_ROOT=\/data/);
+  assert.match(run, /-e SCANNER_V2_RELEASE_SHA="\$\{RELEASE_SHA:-local\}"/);
   assert.doesNotMatch(run, /--user node/);
   assert.doesNotMatch(run, /SCANNER_V2_STATE_DIR/);
+  const attrs = read(".gitattributes");
+  assert.match(attrs, /^\*\.sh text eol=lf$/m);
+  assert.match(attrs, /^Dockerfile text eol=lf$/m);
+  assert.match(attrs, /^deploy\/\*\* text eol=lf$/m);
+  assert.match(doc, /SCANNER_V2_RELEASE_SHA/);
 });
 
 test("next.config static export is unchanged by the companion deploy path", () => {
