@@ -38,9 +38,12 @@ import {
   buildCreateLeadMessage,
   createScanProgressTitle,
   emptyHoursOrServicesNote,
+  describeScanCoverage,
   hostnameBusinessHint,
   requestOnboardingScan,
+  scanAttemptDetail,
   scanFieldReviewHint,
+  type ScanRunSummary,
   type DraftFieldMeta,
   type ScanBusinessFacts,
   type ScanBusinessFactMeta,
@@ -166,6 +169,37 @@ function DraftReviewField({
   );
 }
 
+function PartialScanNotice({
+  summary,
+  draft,
+}: {
+  summary: ScanRunSummary | null;
+  draft: ReceptionistDraft;
+}) {
+  const coverage = describeScanCoverage({ summary, draft });
+  if (!coverage) return null;
+  return (
+    <div
+      data-scan-partial=""
+      className="mt-3 rounded-md border border-border bg-paper p-3 text-sm"
+      role="status"
+    >
+      <p className="font-medium text-ink">Partial website check</p>
+      <p className="mt-1 text-muted">{coverage.detail}</p>
+      {coverage.found.length ? (
+        <p className="mt-2 text-ink">Found: {coverage.found.join(", ")}.</p>
+      ) : (
+        <p className="mt-2 text-ink">No draft fields were copied from the pages that could be read.</p>
+      )}
+      {coverage.missing.length ? (
+        <p className="mt-1 text-ink">
+          Still blank, for you to fill in: {coverage.missing.join(", ")}.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 /**
  * Steps 2–5 of /create. Loaded after the URL/email island so First Load JS
  * does not include scan, pack preview, or lead-submit code.
@@ -206,6 +240,8 @@ export function CreateReceptionistLaterSteps({
   const [receiptEmailStatus, setReceiptEmailStatus] = useState<"accepted" | "failed" | null>(null);
   const [progress, setProgress] = useState<CreateScanProgress>("checking");
   const [scanDetail, setScanDetail] = useState<string | null>(null);
+  const [scanSummary, setScanSummary] = useState<ScanRunSummary | null>(null);
+  const scanAbortRef = useRef<AbortController | null>(null);
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
   const [factMeta, setFactMeta] = useState<ScanBusinessFactMeta>({});
@@ -346,10 +382,13 @@ export function CreateReceptionistLaterSteps({
   useEffect(() => {
     if (step !== 2 || !businessUrl.trim()) return;
     let cancelled = false;
+    const controller = new AbortController();
+    scanAbortRef.current = controller;
 
     (async () => {
       setProgress("checking");
       setScanDetail(null);
+      setScanSummary(null);
       setFacts({});
       setFactMeta({});
       setSiteKnowledge([]);
@@ -360,7 +399,7 @@ export function CreateReceptionistLaterSteps({
       setCustomerConfiguration(null);
       setAgentSelectionError(null);
       await new Promise((resolve) => setTimeout(resolve, 700));
-      if (cancelled) return;
+      if (cancelled || controller.signal.aborted) return;
 
       const endpoint = siteConfig.onboardingScanEndpoint.trim();
       if (!endpoint) {
@@ -378,8 +417,13 @@ export function CreateReceptionistLaterSteps({
       }
 
       setProgress("scanning");
-      const outcome = await requestOnboardingScan(endpoint, businessUrl);
-      if (cancelled) return;
+      const outcome = await requestOnboardingScan(endpoint, businessUrl, {
+        signal: controller.signal,
+        onProgress: (event) => {
+          if (!cancelled) setScanDetail(scanAttemptDetail(event));
+        },
+      });
+      if (cancelled || controller.signal.aborted || outcome.status === "aborted") return;
       if (outcome.status === "ok") {
         const filled = Object.keys(outcome.draft).length > 0;
         setDraft({ ...EMPTY_RECEPTIONIST_DRAFT, ...outcome.draft });
@@ -387,11 +431,13 @@ export function CreateReceptionistLaterSteps({
         setFactMeta(outcome.factMeta);
         setFacts(outcome.facts);
         setSiteKnowledge(outcome.siteKnowledge);
+        setScanSummary(outcome.summary);
         setIdentityReview({
           locations: outcome.facts.locations?.join("\n") ?? "",
           phone: outcome.facts.contact?.phones?.[0] ?? "",
           email: outcome.facts.contact?.emails?.[0] ?? "",
         });
+        setScanDetail(null);
         setProgress(filled ? "scanned" : "scanned_empty");
         return;
       }
@@ -407,11 +453,15 @@ export function CreateReceptionistLaterSteps({
         setProgress("queued");
         return;
       }
-      setDraft(EMPTY_RECEPTIONIST_DRAFT);
+      setDraft({
+        ...EMPTY_RECEPTIONIST_DRAFT,
+        businessName: hostnameBusinessHint(businessUrl),
+      });
       setFieldMeta({});
       setFactMeta({});
       setFacts({});
       setSiteKnowledge([]);
+      setScanSummary(null);
       setIdentityReview(EMPTY_IDENTITY_REVIEW);
       setScanDetail(outcome.message);
       setProgress("scan_failed");
@@ -419,8 +469,27 @@ export function CreateReceptionistLaterSteps({
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [step, businessUrl, initialAgentType]);
+
+  function continueWithoutScan() {
+    scanAbortRef.current?.abort();
+    setDraft({
+      ...EMPTY_RECEPTIONIST_DRAFT,
+      businessName: hostnameBusinessHint(businessUrl),
+    });
+    setFieldMeta({});
+    setFactMeta({});
+    setFacts({});
+    setSiteKnowledge([]);
+    setScanSummary(null);
+    setIdentityReview(EMPTY_IDENTITY_REVIEW);
+    setScanDetail(
+      "Continuing without a website check. Fill in the business details yourself. Nothing was invented.",
+    );
+    setProgress("scan_failed");
+  }
 
   function updateDraft<K extends keyof ReceptionistDraft>(
     key: K,
@@ -741,6 +810,7 @@ export function CreateReceptionistLaterSteps({
     );
   }
 
+  const scanCoverage = describeScanCoverage({ summary: scanSummary, draft });
   const stepReady = isCreateScanReady(progress);
   const nextAction = createJourneyNextAction(step, progress);
   const review = currentReview();
@@ -750,6 +820,7 @@ export function CreateReceptionistLaterSteps({
       className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm"
       data-lead-type="create_receptionist"
       data-create-step={step}
+      data-create-scan-progress={progress}
       data-create-next-action={nextAction}
       data-create-submit-state={status}
     >
@@ -774,8 +845,11 @@ export function CreateReceptionistLaterSteps({
               reads a small, bounded set of public pages and blocks private or
               internal network targets.
             </p>
-            {progress === "scanning" ? (
-              <p>Reading the public website and extracting reviewable facts…</p>
+            {progress === "checking" || progress === "scanning" ? (
+              <p>
+                {scanDetail ??
+                  "Reading the public website and extracting reviewable facts. You can continue and fill in the draft yourself."}
+              </p>
             ) : null}
             {progress === "queued" ? (
               <p>
@@ -783,22 +857,35 @@ export function CreateReceptionistLaterSteps({
                 review the business details manually; missing facts stay blank.
               </p>
             ) : null}
-            {progress === "scanned" ? (
+            {progress === "scanned" && !scanCoverage ? (
               <p>
                 Website learning completed. Only facts found on the public
                 pages are filled; review them before the receptionist uses them.
               </p>
             ) : null}
-            {progress === "scanned_empty" ? (
+            {progress === "scanned" && scanCoverage ? (
+              <p>
+                The website check was partial. Review what was copied and fill
+                the gaps yourself. Nothing was invented.
+              </p>
+            ) : null}
+            {progress === "scanned_empty" && !scanCoverage ? (
               <p>
                 No draft fields were supplied. Nothing was invented. You can
                 complete the draft yourself.
               </p>
             ) : null}
+            <PartialScanNotice summary={scanSummary} draft={draft} />
             {progress === "scan_failed" ? (
               <p>
                 {scanDetail ??
-                  "Website learning could not be reached. No business facts were invented."}
+                  "Website learning could not be reached. Continue and complete the draft yourself. No business facts were invented."}
+              </p>
+            ) : null}
+            {scanSummary ? (
+              <p data-scan-summary="">
+                Scanner result: {scanSummary.state}. Discovered {scanSummary.discovered}, fetched{" "}
+                {scanSummary.fetched}, unresolved {scanSummary.unresolved}.
               </p>
             ) : null}
           </div>
@@ -819,6 +906,16 @@ export function CreateReceptionistLaterSteps({
             >
               Back
             </button>
+            {!stepReady ? (
+              <button
+                type="button"
+                data-create-scan-skip=""
+                onClick={continueWithoutScan}
+                className="inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper"
+              >
+                Continue without the website check
+              </button>
+            ) : null}
             <button
               type="button"
               disabled={!stepReady}
@@ -909,8 +1006,11 @@ export function CreateReceptionistLaterSteps({
               again.
             </p>
           )}
+          <PartialScanNotice summary={scanSummary} draft={draft} />
           <p className="mt-5 text-sm text-muted">
-            {progress === "scanned"
+            {scanCoverage
+              ? "The website check was partial. Edit the copied fields and type the blank ones yourself. Nothing was invented."
+              : progress === "scanned"
               ? "Edit anything the scan returned. Empty fields were not invented. Where the scan copied a value, a source and confidence hint appears under that field."
               : progress === "queued"
                 ? "Website learning was unavailable, so review and complete the business details manually."

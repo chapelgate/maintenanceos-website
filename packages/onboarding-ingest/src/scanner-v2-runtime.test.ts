@@ -321,3 +321,62 @@ test("zero-fetch resume reseeds and surfaces the skip reason", async () => {
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("worker retries a bot-rejected homepage through the browser fetch", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-bot-ua-"));
+  const browserUrls: string[] = [];
+  try {
+    const result = await runPersistentScannerV2("https://alleygates.example/", {
+      stateRoot: root,
+      releaseSha: "bot-ua",
+      requestMs: 8_000,
+      batchSize: 4,
+      discoveryOptions: {
+        lookup: async () => ["203.0.113.10"],
+        get: async (url) => {
+          if (url.pathname === "/robots.txt") {
+            return {
+              status: 200,
+              headers: { "content-type": "text/plain" },
+              body: "User-agent: *\nAllow: /\n",
+              url,
+            };
+          }
+          if (url.pathname.endsWith(".xml")) {
+            return {
+              status: 404,
+              headers: { "content-type": "text/plain" },
+              body: "missing",
+              url,
+            };
+          }
+          return {
+            status: 401,
+            headers: { "content-type": "text/html" },
+            body: "denied",
+            url,
+          };
+        },
+        browserDocumentFetch: async ({ url }) => {
+          browserUrls.push(url);
+          return {
+            status: 200,
+            headers: { "content-type": "text/html; charset=utf-8" },
+            body: "<html><body><h1>Alley Gates</h1><p>We design and install alley gates for homes in Liverpool and across the North West.</p></body></html>",
+            url: new URL(url),
+          };
+        },
+      },
+    });
+
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    assert.ok(browserUrls.includes("https://alleygates.example/"));
+    assert.ok(browserUrls.length >= 2);
+    assert.ok((result.scannerV2?.fetched ?? 0) >= 1);
+    assert.equal(result.warnings.includes("http_401"), false);
+    assert.match(JSON.stringify(result.knowledge ?? []), /alley gates/i);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

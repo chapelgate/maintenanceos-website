@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Terms (Draft)",
   description:
-    "Draft website terms of use scaffold for the MaintenanceOS marketing site. Pending legal review — not binding policy.",
+    "Draft website terms of use scaffold for the WorkSmartOS website. Pending legal review — not binding policy.",
   path: "/terms/",
 });
 
@@ -14,7 +14,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "about",
     title: "About these terms",
-    body: "These draft terms cover access to and use of the public MaintenanceOS website; they are a scaffold for counsel, not a finished agreement.",
+    body: "These draft terms cover access to and use of the public WorkSmartOS website. MaintenanceOS is a product on that site. They are a scaffold for counsel, not a finished agreement.",
   },
   {
     id: "who-we-are",
@@ -99,7 +99,7 @@ export default function TermsPage() {
       <PageHero
         eyebrow="Legal · Draft"
         title="Terms (Draft)"
-        lede="Scaffold website terms of use for the MaintenanceOS marketing site — not a customer SaaS MSA. Pending legal review."
+        lede="Scaffold website terms of use for the WorkSmartOS website — not a customer SaaS MSA. Pending legal review."
       />
       <div className="mx-auto max-w-3xl px-4 py-12">
         <LegalDraftBanner />

@@ -17,6 +17,10 @@ import {
   stableContentHash,
 } from "./scanner-v2-foundation.ts";
 import {
+  recoverAuthBlockedDocument,
+  type BrowserDocumentFetch,
+} from "./scanner-v2-browser-fetch.ts";
+import {
   decideScannerV2RenderEscalation,
   renderScannerV2Page,
 } from "./scanner-v2-renderer.ts";
@@ -301,6 +305,9 @@ async function buildDefaultProcessor(input: {
   store: ScannerV2JobStore;
   crawlId: string;
   origin: URL;
+  lookup?: LookupFn;
+  get?: HttpGetFn;
+  browserDocumentFetch?: BrowserDocumentFetch;
 }): Promise<ScannerV2ProcessUrl> {
   const robots = await fetchRobotsRules(input.origin);
   const trapGuard = new ScannerV2FrontierTrapGuard({
@@ -396,6 +403,8 @@ async function buildDefaultProcessor(input: {
     let readerRecovered = false;
     try {
       response = await fetchPublicHttps(url.url, {
+        lookup: input.lookup,
+        get: input.get,
         timeoutMs: 8_000,
         maxBytes: MAX_SCANNER_V2_HTML_BYTES,
         maxDecompressedBytes: MAX_SCANNER_V2_HTML_BYTES,
@@ -407,6 +416,21 @@ async function buildDefaultProcessor(input: {
       if (!reader) throw directError;
       response = reader;
       readerRecovered = true;
+    }
+
+    let browserRecovered = false;
+    if (!readerRecovered && (response.status === 401 || response.status === 403)) {
+      const recovered = await recoverAuthBlockedDocument({
+        pageUrl: url.url,
+        response,
+        timeoutMs: 8_000,
+        browserDocumentFetch: input.browserDocumentFetch,
+        allowPlaywrightLaunch: !input.get,
+      });
+      if (recovered.usedBrowser) {
+        response = recovered.response;
+        browserRecovered = true;
+      }
     }
 
     if (response.url.origin !== input.origin.origin) {
@@ -435,11 +459,14 @@ async function buildDefaultProcessor(input: {
 
     let body = response.body;
     let finalUrl = response.url.toString();
-    let fetchMode: "http" | "rendered" | "reader" =
-      readerRecovered ? "reader" : "http";
+    let fetchMode: "http" | "rendered" | "reader" = readerRecovered
+      ? "reader"
+      : browserRecovered
+        ? "rendered"
+        : "http";
     let renderedLinks: CrawlUrlDisposition[] = [];
 
-    if (type !== "text/plain" && !readerRecovered) {
+    if (type !== "text/plain" && !readerRecovered && !browserRecovered) {
       const renderDecision = decideScannerV2RenderEscalation({ rawHtml: body });
       if (renderDecision.render) {
         const rendered = await renderScannerV2Page(url.url, { rawHtml: body });
@@ -668,7 +695,14 @@ export async function runPersistentScannerV2(
 
   const processUrl =
     options.processUrl ??
-    (await buildDefaultProcessor({ store, crawlId, origin }));
+    (await buildDefaultProcessor({
+      store,
+      crawlId,
+      origin,
+      lookup: options.discoveryOptions?.lookup,
+      get: options.discoveryOptions?.get,
+      browserDocumentFetch: options.discoveryOptions?.browserDocumentFetch,
+    }));
   const requestMs = boundedInt(
     options.requestMs,
     DEFAULT_SCANNER_V2_REQUEST_MS,

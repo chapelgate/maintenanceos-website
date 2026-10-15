@@ -16,7 +16,7 @@ export function LegalPageChrome({ noticeLabel }: LegalPageChromeProps) {
       </p>
       <p>
         <span className="font-medium text-ink">Who this applies to:</span>{" "}
-        Visitors to the MaintenanceOS marketing website and, where relevant,
+        Visitors to the WorkSmartOS website and, where relevant,
         people who submit launch-list, demo, contact, or /create early-access
         forms.
       </p>

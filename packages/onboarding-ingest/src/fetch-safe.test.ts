@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { gzipSync } from "node:zlib";
-import { decodeResponseBodyForText, fetchPublicHttps } from "./fetch-safe.ts";
+import http from "node:http";
+import { USER_AGENT } from "./extract.ts";
+import {
+  decodeResponseBodyForText,
+  fetchPublicHttps,
+  PUBLIC_PAGE_ACCEPT_LANGUAGE,
+  publicPageHeaders,
+} from "./fetch-safe.ts";
 import { ScanError } from "./types.ts";
 
 test("fetchPublicHttps rejects http and private literals without connecting", async () => {
@@ -165,9 +172,91 @@ test("fetchPublicHttps forwards bounded caller headers without allowing Host ove
   });
   assert.equal(res.status, 200);
   assert.deepEqual(received, {
+    "User-Agent": USER_AGENT,
     Accept: "text/html",
+    "Accept-Language": PUBLIC_PAGE_ACCEPT_LANGUAGE,
     "X-Respond-With": "html",
   });
+  assert.equal(received?.Authorization, undefined);
+  assert.equal(received?.Cookie, undefined);
+});
+
+test("fetchPublicHttps drops credential headers and sends the honest browser agent", async () => {
+  let received: Record<string, string> | undefined;
+  await fetchPublicHttps("https://reader.example/page", {
+    lookup: async () => ["203.0.113.9"],
+    headers: {
+      Authorization: "Bearer secret",
+      Cookie: "session=secret",
+      Host: "evil.example",
+    },
+    get: async (url, _ip, opts) => {
+      received = opts.headers;
+      return {
+        status: 200,
+        headers: { "content-type": "text/html" },
+        body: "<html>ok</html>",
+        url,
+      };
+    },
+  });
+  assert.match(received?.["User-Agent"] ?? "", /Mozilla\/5\.0/);
+  assert.match(received?.["User-Agent"] ?? "", /WorkSmartOS-OnboardingScan/);
+  assert.match(received?.["User-Agent"] ?? "", /MaintenanceOS-OnboardingScan/);
+  assert.match(received?.Accept ?? "", /text\/html/);
+  assert.match(received?.["Accept-Language"] ?? "", /en-GB/);
+  assert.equal(received?.Authorization, undefined);
+  assert.equal(received?.Cookie, undefined);
+  assert.equal(received?.Host, undefined);
+});
+
+test("mocked server returns 401 for a bot user agent and 200 for the honest browser headers", async () => {
+  const server = http.createServer((req, res) => {
+    const ua = String(req.headers["user-agent"] ?? "");
+    const accept = String(req.headers.accept ?? "");
+    const language = String(req.headers["accept-language"] ?? "");
+    if (req.headers.authorization || req.headers.cookie) {
+      res.writeHead(401, { "content-type": "text/plain" });
+      res.end("credentials");
+      return;
+    }
+    const browser =
+      ua.includes("Mozilla/5.0") &&
+      ua.includes("WorkSmartOS-OnboardingScan") &&
+      accept.includes("text/html") &&
+      language.toLowerCase().includes("en-gb");
+    if (!browser) {
+      res.writeHead(401, { "content-type": "text/plain" });
+      res.end("bot");
+      return;
+    }
+    res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+    res.end("<html><title>Alley Gates</title><body><h1>Alley Gates</h1><p>Public page.</p></body></html>");
+  });
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", () => resolve()));
+  const address = server.address();
+  const port = typeof address === "object" && address ? address.port : 0;
+  try {
+    const bot = await fetch(`http://127.0.0.1:${port}/`, {
+      headers: {
+        "User-Agent":
+          "MaintenanceOS-OnboardingScan/0.1 (+https://github.com/chapelgate/maintenanceos-website; untrusted-data)",
+      },
+    });
+    assert.equal(bot.status, 401);
+    assert.equal(await bot.text(), "bot");
+
+    const headers = publicPageHeaders();
+    assert.equal("Authorization" in headers, false);
+    assert.equal("Cookie" in headers, false);
+    const ok = await fetch(`http://127.0.0.1:${port}/`, { headers });
+    assert.equal(ok.status, 200);
+    assert.match(await ok.text(), /Alley Gates/);
+  } finally {
+    await new Promise<void>((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
 });
 
 test("fetchPublicHttps returns the body when DNS and HTTPS stay public", async () => {

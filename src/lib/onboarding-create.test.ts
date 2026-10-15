@@ -20,7 +20,13 @@ import {
   unsafePublicUrlMessage,
   UNSAFE_WEBSITE_URL_MESSAGE,
   scanFieldReviewHint,
+  describeScanCoverage,
   isZeroFetchPartial,
+  requestOnboardingScan,
+  SCAN_REJECTED_MESSAGE,
+  SCAN_TIMEOUT_MESSAGE,
+  SCAN_UNAVAILABLE_MESSAGE,
+  scanAttemptDetail,
   ZERO_FETCH_PARTIAL_MESSAGE,
 } from "./onboarding-create.ts";
 
@@ -467,4 +473,225 @@ test("zero-fetch PARTIAL is a failed read, not an empty draft", () => {
   assert.doesNotMatch(ZERO_FETCH_PARTIAL_MESSAGE, /No draft fields were supplied/);
   assert.match(ZERO_FETCH_PARTIAL_MESSAGE, /could not read any public pages/);
   assert.match(ZERO_FETCH_PARTIAL_MESSAGE, /Nothing was invented/);
+  assert.equal(
+    describeScanCoverage({
+      summary: {
+        state: "PARTIAL",
+        discovered: 1,
+        fetched: 0,
+        unresolved: 0,
+        warnings: ["http_401", "scanner_v2_partial"],
+      },
+      draft: {},
+    }),
+    null,
+  );
+});
+
+test("PARTIAL with evidence names what was found and what is still blank", () => {
+  const coverage = describeScanCoverage({
+    summary: {
+      state: "PARTIAL",
+      discovered: 4,
+      fetched: 2,
+      unresolved: 1,
+      warnings: ["http_401", "scanner_v2_partial"],
+    },
+    draft: {
+      businessName: "Alley Gates",
+      greeting: "",
+      hours: "",
+      services: "Alley gate installation",
+      faqs: "",
+    },
+  });
+  assert.ok(coverage);
+  if (!coverage) return;
+  assert.deepEqual(coverage.found, ["business name", "services"]);
+  assert.deepEqual(coverage.missing, ["greeting", "opening hours", "questions and answers"]);
+  assert.match(coverage.detail, /Read 2 of 4 discovered public pages/);
+  assert.match(coverage.detail, /1 stayed unresolved/);
+  assert.match(coverage.detail, /Some pages were refused/);
+  assert.match(coverage.detail, /fill the gaps yourself/);
+  assert.match(coverage.detail, /Nothing was invented/);
+  assert.doesNotMatch(coverage.detail, /nothing found/i);
+  assert.doesNotMatch(coverage.detail, /No draft fields were supplied/);
+  assert.equal(
+    describeScanCoverage({
+      summary: { state: "COMPLETE", discovered: 1, fetched: 1, unresolved: 0, warnings: [] },
+      draft: { businessName: "Example" },
+    }),
+    null,
+  );
+});
+
+const SUCCESS_SCAN = {
+  ok: true,
+  draft: { businessName: "Example Domain" },
+  facts: {
+    businessName: "Example Domain",
+    website: "https://example.com/",
+  },
+  factMeta: {
+    website: { confidence: "high", source: "fetched_url" },
+  },
+  knowledge: [
+    {
+      url: "https://example.com/",
+      title: "Example Domain",
+      headingPath: [],
+      text: "This domain is for use in documentation examples.",
+      contentHash: "abc123",
+    },
+  ],
+  scannerV2: {
+    state: "COMPLETE",
+    discovered: 1,
+    fetched: 1,
+    unresolved: 0,
+    knowledgeChunks: 1,
+    resumed: false,
+  },
+};
+
+function jsonResponse(status, body) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json" },
+  });
+}
+
+test("scan attempt copy names the try and the manual way forward", () => {
+  assert.match(scanAttemptDetail({ attempt: 1, maxAttempts: 2, phase: "request" }), /attempt 1 of 2/i);
+  assert.match(scanAttemptDetail({ attempt: 1, maxAttempts: 2, phase: "retry" }), /attempt 2 of 2/i);
+  assert.match(scanAttemptDetail({ attempt: 1, maxAttempts: 2, phase: "request" }), /continue/i);
+  assert.match(createScanProgressTitle("queued"), /—/);
+  assert.doesNotMatch(createScanProgressTitle("queued"), /\?/);
+});
+
+test("mocked scanner success maps facts and does not invent empty fields", async () => {
+  const calls = [];
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    fetchImpl: async (input, init) => {
+      calls.push({ input: String(input), body: JSON.parse(String(init?.body)) });
+      return jsonResponse(200, SUCCESS_SCAN);
+    },
+  });
+  assert.equal(outcome.status, "ok");
+  if (outcome.status !== "ok") return;
+  assert.equal(outcome.draft.businessName, "Example Domain");
+  assert.equal(outcome.draft.hours, undefined);
+  assert.equal(outcome.facts.website, "https://example.com/");
+  assert.deepEqual(outcome.summary, {
+    state: "COMPLETE",
+    discovered: 1,
+    fetched: 1,
+    unresolved: 0,
+    warnings: [],
+  });
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0].body, { url: "https://example.com/" });
+  assert.doesNotMatch(JSON.stringify(outcome), /api[_-]?key|secret|token/i);
+});
+
+test("mocked scanner zero-fetch stays a failed read and can be completed manually", async () => {
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    fetchImpl: async () =>
+      jsonResponse(200, {
+        ok: true,
+        draft: {},
+        warnings: ["scanner_v2_partial"],
+        scannerV2: { state: "PARTIAL", discovered: 1, fetched: 0, unresolved: 0 },
+      }),
+  });
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.equal(outcome.reason, "zero_fetch");
+  assert.equal(outcome.message, ZERO_FETCH_PARTIAL_MESSAGE);
+  assert.match(outcome.message, /complete the draft yourself/i);
+  assert.doesNotMatch(outcome.message, /nothing found/i);
+});
+
+test("mocked scanner timeout retries once then offers the manual draft", async () => {
+  let calls = 0;
+  const progress = [];
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    timeoutMs: 15,
+    backoffMs: 0,
+    sleep: async () => {},
+    onProgress: (event) => progress.push(event.phase),
+    fetchImpl: (_input, init) =>
+      new Promise((_resolve, reject) => {
+        calls += 1;
+        const signal = init?.signal;
+        const fail = () => reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+        if (signal?.aborted) fail();
+        else signal?.addEventListener("abort", fail, { once: true });
+      }),
+  });
+  assert.equal(calls, 2);
+  assert.deepEqual(progress, ["request", "retry", "request"]);
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.equal(outcome.reason, "timeout");
+  assert.equal(outcome.message, SCAN_TIMEOUT_MESSAGE);
+});
+
+test("mocked scanner 5xx retries once and keeps a successful second response", async () => {
+  let calls = 0;
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    backoffMs: 0,
+    sleep: async () => {},
+    fetchImpl: async () => {
+      calls += 1;
+      if (calls === 1) return jsonResponse(502, { ok: false, error: "upstream_unavailable" });
+      return jsonResponse(200, SUCCESS_SCAN);
+    },
+  });
+  assert.equal(calls, 2);
+  assert.equal(outcome.status, "ok");
+});
+
+test("mocked scanner 5xx on every attempt ends in a manual draft", async () => {
+  let calls = 0;
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    backoffMs: 0,
+    sleep: async () => {},
+    fetchImpl: async () => {
+      calls += 1;
+      return jsonResponse(500, { ok: false, error: "internal_error" });
+    },
+  });
+  assert.equal(calls, 2);
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.equal(outcome.reason, "unavailable");
+  assert.equal(outcome.message, SCAN_UNAVAILABLE_MESSAGE);
+});
+
+test("mocked scanner 400 is not retried and still lets the visitor continue", async () => {
+  let calls = 0;
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    fetchImpl: async () => {
+      calls += 1;
+      return jsonResponse(400, { ok: false, error: "invalid_url" });
+    },
+  });
+  assert.equal(calls, 1);
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.equal(outcome.reason, "rejected");
+  assert.equal(outcome.message, SCAN_REJECTED_MESSAGE);
+});
+
+test("an aborted scan does not become a failed draft", async () => {
+  const controller = new AbortController();
+  controller.abort();
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    signal: controller.signal,
+    fetchImpl: async () => {
+      throw new Error("should not fetch");
+    },
+  });
+  assert.equal(outcome.status, "aborted");
 });

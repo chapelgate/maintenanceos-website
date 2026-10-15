@@ -177,7 +177,7 @@ test("/create uses the same-origin on-demand scanner without reviving the retire
   const scan = read("packages/onboarding-ingest/packages/website/scan/index.ts");
   assert.match(config, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   assert.doesNotMatch(config, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
-  assert.match(later, /requestOnboardingScan\(endpoint, businessUrl\)/);
+  assert.match(later, /requestOnboardingScan\(endpoint, businessUrl,/);
   assert.match(scan, /proxyPersistentScan\(allowed\.url\.toString\(\)\)/);
   assert.match(scan, /DEFAULT_PERSISTENT_SCANNER_ENDPOINT/);
   assert.doesNotMatch(scan, /runScan\(/);
@@ -204,4 +204,7 @@ test("Scanner V2 operational status is explicit and accessible", () => {
   assert.match(status, /View crawl sources/);
   assert.match(later, /scannerV2Status\?: ScannerV2OperationalStatus \| null/);
   assert.match(later, /<ScannerV2CrawlStatus status=\{scannerV2Status\}/);
+  assert.match(later, /data-scan-partial=/);
+  assert.match(later, /Partial website check/);
+  assert.match(later, /describeScanCoverage/);
 });

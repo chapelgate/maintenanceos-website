@@ -4,9 +4,25 @@ import { browserVoiceSupport, speakBrowserText } from "./browser-voice.ts";
  * Golden-line voice recorded in PRODUCT_CLAIMS_REGISTER.md V-01.
  * Kokoro is a commissioning candidate and is not this name.
  * The website never receives the golden line's credential.
+ *
+ * The live spoken preview prefers the same-origin voice function, which
+ * keeps the provider key and voice ID on the server. This module does not
+ * know those values. Browser speech is the fallback.
  */
 export const GOLDEN_LINE_VOICE_PROVIDER = "gemini";
 export const GOLDEN_LINE_VOICE_NAME = "Gacrux";
+export const SERVER_VOICE_ENDPOINT = "/api/website/voice";
+export const CONFIGURED_VOICE_NAME = "Theatrical";
+
+let serverVoiceAbsent = false;
+
+export function serverVoiceAttemptable(): boolean {
+  return !serverVoiceAbsent;
+}
+
+export function resetServerVoiceStateForTests(): void {
+  serverVoiceAbsent = false;
+}
 
 export type PreviewVoiceMode = "browser" | "preview";
 
@@ -68,6 +84,94 @@ export function stopSpokenPreview(): void {
   }
 }
 
+function decodeBase64(value: string): Uint8Array {
+  const bin = atob(value);
+  const out = new Uint8Array(bin.length);
+  for (let index = 0; index < bin.length; index += 1) out[index] = bin.charCodeAt(index);
+  return out;
+}
+
+export type ServerVoiceResult =
+  | { ok: true; bytes: Uint8Array; contentType: string }
+  | { ok: false; reason: "not_configured" | "unavailable" };
+
+/**
+ * Ask the same-origin voice function for audio. The body is only the text.
+ */
+export async function requestServerVoice(
+  text: string,
+  options: {
+    fetchImpl?: typeof fetch;
+    endpoint?: string;
+    signal?: AbortSignal;
+  } = {},
+): Promise<ServerVoiceResult> {
+  const endpoint = options.endpoint ?? SERVER_VOICE_ENDPOINT;
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20_000);
+  const onAbort = () => controller.abort();
+  options.signal?.addEventListener("abort", onAbort);
+  try {
+    const response = await fetchImpl(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "audio/mpeg, application/json",
+      },
+      body: JSON.stringify({ text }),
+      signal: controller.signal,
+    });
+    const type = response.headers.get("content-type") ?? "";
+    if (response.ok && type.startsWith("audio/")) {
+      return {
+        ok: true,
+        bytes: new Uint8Array(await response.arrayBuffer()),
+        contentType: type.split(";")[0]?.trim() || "audio/mpeg",
+      };
+    }
+    const raw = await response.text();
+    type ServerVoicePayload = {
+      ok?: unknown;
+      error?: unknown;
+      audioBase64?: unknown;
+      contentType?: unknown;
+    };
+    let parsed: ServerVoicePayload | null = null;
+    if (raw) {
+      try {
+        parsed = JSON.parse(raw) as ServerVoicePayload;
+      } catch {
+        parsed = null;
+      }
+    }
+    if (
+      response.ok &&
+      parsed?.ok === true &&
+      typeof parsed.audioBase64 === "string" &&
+      parsed.audioBase64
+    ) {
+      return {
+        ok: true,
+        bytes: decodeBase64(parsed.audioBase64),
+        contentType:
+          typeof parsed.contentType === "string" && parsed.contentType
+            ? parsed.contentType
+            : "audio/mpeg",
+      };
+    }
+    if (response.status === 404 || parsed?.error === "voice_not_configured") {
+      return { ok: false, reason: "not_configured" };
+    }
+    return { ok: false, reason: "unavailable" };
+  } catch {
+    return { ok: false, reason: "unavailable" };
+  } finally {
+    clearTimeout(timer);
+    options.signal?.removeEventListener("abort", onAbort);
+  }
+}
+
 async function playPreviewAudio(blob: Blob): Promise<void> {
   const url = URL.createObjectURL(blob);
   const audio = new Audio(url);
@@ -90,8 +194,40 @@ async function playPreviewAudio(blob: Blob): Promise<void> {
  */
 export async function speakReceptionistText(
   text: string,
-  options: { lang?: string; rate?: number; fetchImpl?: typeof fetch } = {},
+  options: {
+    lang?: string;
+    rate?: number;
+    fetchImpl?: typeof fetch;
+    serverEndpoint?: string;
+    playAudio?: (bytes: Uint8Array, contentType: string) => Promise<void>;
+  } = {},
 ): Promise<"browser" | "preview" | "unavailable"> {
+  const serverEndpoint = options.serverEndpoint ?? SERVER_VOICE_ENDPOINT;
+  if (serverEndpoint && serverVoiceAttemptable()) {
+    const server = await requestServerVoice(text, {
+      fetchImpl: options.fetchImpl,
+      endpoint: serverEndpoint,
+    });
+    if (server.ok) {
+      serverVoiceAbsent = false;
+      try {
+        if (options.playAudio) await options.playAudio(server.bytes, server.contentType);
+        else {
+          const audioBytes = server.bytes.buffer.slice(
+            server.bytes.byteOffset,
+            server.bytes.byteOffset + server.bytes.byteLength,
+          ) as ArrayBuffer;
+          await playPreviewAudio(new Blob([audioBytes], { type: server.contentType }));
+        }
+        return "preview";
+      } catch {
+        // Playback failed. The browser voice is still available.
+      }
+    } else if (server.reason === "not_configured") {
+      serverVoiceAbsent = true;
+    }
+  }
+
   const config = previewVoiceConfig();
   if (config.mode === "preview") {
     try {

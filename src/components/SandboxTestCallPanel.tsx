@@ -9,6 +9,7 @@ import {
 } from "@/lib/browser-voice";
 import {
   previewVoiceConfig,
+  serverVoiceAttemptable,
   speakReceptionistText,
   stopSpokenPreview,
 } from "@/lib/preview-voice";
@@ -106,7 +107,9 @@ export function SandboxTestCallPanel({
 
   async function speakReply(text: string) {
     const canSpeak =
-      browserVoiceSupport().synthesis || previewVoiceConfig().mode === "preview";
+      browserVoiceSupport().synthesis ||
+      previewVoiceConfig().mode === "preview" ||
+      serverVoiceAttemptable();
     if (!canSpeak) return;
     setVoiceState("speaking");
     const mode = await speakReceptionistText(text, { lang: "en-GB" });
@@ -122,7 +125,10 @@ export function SandboxTestCallPanel({
     if (!receptionist) return;
     const opening = openingTurn(receptionist);
     const support = browserVoiceSupport();
-    const canSpeak = support.synthesis || previewVoiceConfig().mode === "preview";
+    const canSpeak =
+      support.synthesis ||
+      previewVoiceConfig().mode === "preview" ||
+      serverVoiceAttemptable();
     setTurns([opening]);
     setCallerText("");
     setVoiceDetail(
@@ -163,7 +169,9 @@ export function SandboxTestCallPanel({
     ]);
     setCallerText("");
     const canSpeak =
-      browserVoiceSupport().synthesis || previewVoiceConfig().mode === "preview";
+      browserVoiceSupport().synthesis ||
+      previewVoiceConfig().mode === "preview" ||
+      serverVoiceAttemptable();
     if (speak && canSpeak) {
       await speakReply(reply.text);
     } else {

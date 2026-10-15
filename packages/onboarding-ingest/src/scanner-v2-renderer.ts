@@ -2,6 +2,7 @@ import {
   DEFAULT_MAX_REDIRECTS,
   fetchPublicHttps,
 } from "./fetch-safe.ts";
+import { scannerBrowserLaunchOptions } from "./scanner-v2-browser-fetch.ts";
 import { extractSameOriginHrefs } from "./extract.ts";
 import { allowPublicHttpsUrl } from "./ssrf.ts";
 import { normalizeScannerV2Url } from "./scanner-v2-url-policy.ts";
@@ -396,9 +397,7 @@ export async function playwrightScannerV2BrowserBackend(
   input: ScannerV2BrowserBackendInput,
 ): Promise<ScannerV2BrowserBackendResult> {
   const { chromium } = await import("playwright");
-  const browser = await chromium.launch({
-    headless: true,
-  });
+  const browser = await chromium.launch(scannerBrowserLaunchOptions());
 
   try {
     const context = await browser.newContext({
