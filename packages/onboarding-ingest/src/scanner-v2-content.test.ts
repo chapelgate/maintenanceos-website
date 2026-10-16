@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import {
   buildScannerV2Corpus,
   DEFAULT_MAX_CHUNK_CHARS,
@@ -293,4 +296,27 @@ test("Stage 4 preserves explicit source URL and discovery provenance", () => {
       (chunk) => chunk.canonicalUrl === "https://acme.example/services",
     ),
   );
+});
+
+test("a trades page stores phone, address, services, and area on the crawl page", () => {
+  const html = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), "fixtures/trades-single-page.html"),
+    "utf8",
+  );
+  const result = extractScannerV2Page({
+    requestedUrl: "https://rob-thompson.example/",
+    html,
+    fetchedAt: "2026-10-16T00:00:00.000Z",
+  });
+  const facts = result.page.structuredFacts;
+  assert.deepEqual(facts.contact, { phones: ["07774179685"] });
+  assert.equal(facts.address, "Bromborough, Wirral");
+  assert.deepEqual(facts.services, [
+    "Plumbing Repairs",
+    "Central Heating Repairs & Maintenance",
+  ]);
+  assert.ok(Array.isArray(facts.locations));
+  assert.equal(facts.hours, undefined);
+  const meta = facts._factMeta as { address?: { sourceUrl?: string } };
+  assert.equal(meta.address?.sourceUrl, "https://rob-thompson.example/");
 });

@@ -21,6 +21,8 @@ import {
   UNSAFE_WEBSITE_URL_MESSAGE,
   scanFieldReviewHint,
   describeScanCoverage,
+  describeSkippedPages,
+  scanProgressAfterResult,
   isZeroFetchPartial,
   isBlockedBySite,
   requestOnboardingScan,
@@ -218,6 +220,58 @@ test("mapScanBusinessFactMeta keeps provenance only for surviving facts", () => 
     businessName: { source: "jsonld", confidence: "high" },
     locations: { source: "microdata", confidence: "medium" },
   });
+});
+
+test("address and an https source URL survive mapping, and skipped pages are not a failure", () => {
+  const body = {
+    facts: { address: " 10 Dock Road, Liverpool ", website: "https://acme.example/" },
+    factMeta: {
+      website: { source: "fetched_url", confidence: "high" },
+      address: {
+        source: "heading",
+        confidence: "low",
+        sourceUrl: "https://acme.example/contact",
+      },
+    },
+  };
+  const facts = mapScanBusinessFacts(body);
+  assert.equal(facts.address, "10 Dock Road, Liverpool");
+  assert.deepEqual(mapScanBusinessFactMeta(body, facts).address, {
+    source: "heading",
+    confidence: "low",
+    sourceUrl: "https://acme.example/contact",
+  });
+  assert.equal(
+    mapScanBusinessFactMeta({
+      facts: { address: "10 Dock Road" },
+      factMeta: { address: { source: "heading", confidence: "low", sourceUrl: "javascript:alert(1)" } },
+    }).address?.sourceUrl,
+    undefined,
+  );
+  assert.equal(
+    describeSkippedPages({
+      state: "COMPLETE",
+      discovered: 8,
+      fetched: 6,
+      unresolved: 0,
+      warnings: ["http_404", "content_type_not_supported"],
+    }),
+    "Some pages were skipped.",
+  );
+  assert.equal(
+    describeSkippedPages({
+      state: "COMPLETE",
+      discovered: 2,
+      fetched: 2,
+      unresolved: 0,
+      warnings: ["http_401"],
+    }),
+    null,
+  );
+  assert.equal(scanProgressAfterResult({ state: "CRAWLING", discovered: 20, fetched: 8, unresolved: 0, warnings: [] }, true), "scan_crawling");
+  assert.equal(isCreateScanReady("scan_crawling"), true);
+  assert.match(createScanProgressTitle("scan_crawling"), /draft so far is usable/i);
+  assert.doesNotMatch(createScanProgressTitle("scan_crawling"), /fail/i);
 });
 
 test("create journey steps name the next action without a live-phone claim", () => {

@@ -557,6 +557,7 @@ test("review fact hint makes low confidence explicit without inventing provenanc
 test("identity draft mirrors only the current blueprint identity", () => {
   assert.deepEqual(identityDraftFromBlueprint(blueprint("receptionist")), {
     locations: "Wirral",
+    address: "",
     phone: "0151 555 0100",
     email: "hello@acme.example",
   });

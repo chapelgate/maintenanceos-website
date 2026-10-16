@@ -30,6 +30,8 @@ export type PartialDraft = Partial<ReceptionistDraft>;
 export type BusinessFacts = {
   website?: string;
   businessName?: string;
+  /** Postal or contact-block address. Area names stay in `locations`. */
+  address?: string;
   locations?: string[];
   contact?: {
     phones?: string[];
@@ -65,6 +67,8 @@ export type FieldConfidence = "high" | "medium" | "low";
 export type FieldMeta = {
   confidence: FieldConfidence;
   source: FieldSource;
+  /** HTTPS page the fact was copied from, when one was fetched. */
+  sourceUrl?: string;
 };
 
 export type DraftFieldMeta = Partial<Record<DraftKey, FieldMeta>>;

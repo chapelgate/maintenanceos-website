@@ -56,6 +56,7 @@ export type AgentBlueprintV1 = {
     businessName: string;
     website: string;
     locations?: string[];
+    address?: string;
     contact?: { phone?: string; email?: string };
   };
   agent: {
@@ -270,7 +271,7 @@ export function validateAgentBlueprintV1(value: unknown): AgentBlueprintValidati
   else {
     exactKeys(
       value.identity,
-      ["businessName", "website", "locations", "contact"],
+      ["businessName", "website", "locations", "address", "contact"],
       ["businessName", "website"],
       "$.identity",
       errors,
@@ -279,6 +280,9 @@ export function validateAgentBlueprintV1(value: unknown): AgentBlueprintValidati
     httpsUrl(value.identity.website, "$.identity.website", errors);
     if (value.identity.locations !== undefined) {
       stringArray(value.identity.locations, "$.identity.locations", errors, 50, 300);
+    }
+    if (value.identity.address !== undefined) {
+      stringField(value.identity.address, "$.identity.address", errors, 1, 500);
     }
     if (value.identity.contact !== undefined) {
       if (!isRecord(value.identity.contact)) errors.push("$.identity.contact: expected object");

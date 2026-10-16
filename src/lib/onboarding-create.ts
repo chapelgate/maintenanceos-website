@@ -42,6 +42,8 @@ export function createScanProgressTitle(progress: CreateScanProgress): string {
       return "Draft ready — next: review supplied fields";
     case "scanned_empty":
       return "No draft fields supplied — next: complete the draft";
+    case "scan_crawling":
+      return "Page budget reached — the draft so far is usable";
     case "scan_blocked":
       return "This site blocks automated reading — next: add the details yourself";
     case "scan_failed":
@@ -120,6 +122,7 @@ const FIELD_META_CONFIDENCE = new Set(["high", "medium", "low"]);
 export type DraftFieldMeta = {
   confidence: "high" | "medium" | "low";
   source: string;
+  sourceUrl?: string;
 };
 
 export type ScanDraftFieldMeta = Partial<Record<keyof ReceptionistDraft, DraftFieldMeta>>;
@@ -127,6 +130,7 @@ export type ScanDraftFieldMeta = Partial<Record<keyof ReceptionistDraft, DraftFi
 export type ScanBusinessFacts = {
   website?: string;
   businessName?: string;
+  address?: string;
   locations?: string[];
   contact?: { phones?: string[]; emails?: string[] };
   services?: string[];
@@ -136,7 +140,10 @@ export type ScanBusinessFacts = {
 
 export type ScanBusinessFactKey = keyof ScanBusinessFacts;
 export type ScanBusinessFactMeta = Partial<
-  Record<ScanBusinessFactKey, { confidence: "high" | "medium" | "low"; source: string }>
+  Record<
+    ScanBusinessFactKey,
+    { confidence: "high" | "medium" | "low"; source: string; sourceUrl?: string }
+  >
 >;
 
 export type ScanSiteKnowledgeItem = {
@@ -265,6 +272,9 @@ export function mapScanBusinessFacts(body: unknown): ScanBusinessFacts {
   const businessName = scanFactString(src.businessName, 200);
   if (businessName) out.businessName = businessName;
 
+  const address = scanFactString(src.address, 500);
+  if (address) out.address = address;
+
   const locations = scanFactStringArray(src.locations, 16, 500);
   if (locations) out.locations = locations;
 
@@ -352,7 +362,7 @@ export function mapScanBusinessFactMeta(
   const src = raw as Record<string, unknown>;
   const out: ScanBusinessFactMeta = {};
   const keys: ScanBusinessFactKey[] = [
-    "website", "businessName", "locations", "contact", "services", "hours", "faqs",
+    "website", "businessName", "address", "locations", "contact", "services", "hours", "faqs",
   ];
   for (const key of keys) {
     if (facts[key] === undefined) continue;
@@ -367,7 +377,10 @@ export function mapScanBusinessFactMeta(
       typeof rec.source === "string" && FACT_META_SOURCES.has(rec.source)
         ? rec.source
         : undefined;
-    if (confidence && source) out[key] = { confidence, source };
+    if (confidence && source) {
+      const sourceUrl = scanFactHttpsUrl(rec.sourceUrl);
+      out[key] = sourceUrl ? { confidence, source, sourceUrl } : { confidence, source };
+    }
   }
   return out;
 }
@@ -434,6 +447,27 @@ export function describeScanCoverage(input: {
     : "";
   const detail = `${pages}${unresolved}${refused} Continue and fill the gaps yourself. Nothing was invented.`;
   return { found, missing, detail };
+}
+
+const SKIPPED_PAGE_WARNINGS = new Set(["http_404", "content_type_not_supported"]);
+
+/**
+ * A finished or in-progress crawl can list pages that were not HTML.
+ * That is a skip, not a failed scan.
+ */
+export function describeSkippedPages(summary: ScanRunSummary | null): string | null {
+  if (!summary || summary.fetched <= 0) return null;
+  const skipped = summary.warnings.some((warning) => SKIPPED_PAGE_WARNINGS.has(warning));
+  return skipped ? "Some pages were skipped." : null;
+}
+
+/** CRAWLING with evidence stays usable. The visitor can continue the same crawl. */
+export function scanProgressAfterResult(
+  summary: ScanRunSummary | null,
+  filled: boolean,
+): "scanned" | "scanned_empty" | "scan_crawling" {
+  if (summary?.state === "CRAWLING" && summary.fetched > 0) return "scan_crawling";
+  return filled ? "scanned" : "scanned_empty";
 }
 
 export type ScanOutcome =

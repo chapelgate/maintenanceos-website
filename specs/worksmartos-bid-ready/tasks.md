@@ -7,4 +7,6 @@
 - [x] Dockerfile, deploy script, and runbook aligned to uid 1000 and `/data`
 - [x] Gemini voice function with a WAV payload, browser fallback, and no client secrets
 - [x] Visitor legal copy uses the WorkSmartOS brand
-- [x] `npm test` 488/488 and `npx tsc --noEmit` pass
+- [x] `npm test` and `npx tsc --noEmit` pass
+- [x] Contact, address, services, and area extraction for a small trades page
+- [x] `/create` address field, skipped-page note, and continue scanning for `CRAWLING`

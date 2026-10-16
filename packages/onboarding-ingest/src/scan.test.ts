@@ -530,10 +530,8 @@ test("runScan returns structured Agent Factory facts alongside the legacy draft"
       phones: ["0151 555 0199"],
       emails: ["hello@structured.example"],
     });
-    assert.deepEqual(result.facts?.locations, [
-      "1 Test Street, Liverpool, L1 1AA",
-      "Wirral",
-    ]);
+    assert.equal(result.facts?.address, "1 Test Street, Liverpool, L1 1AA");
+    assert.deepEqual(result.facts?.locations, ["Wirral"]);
     assert.deepEqual(result.facts?.services, ["Repairs"]);
     assert.equal(result.factMeta?.contact?.source, "jsonld");
     assert.equal(result.factMeta?.locations?.confidence, "high");

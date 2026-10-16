@@ -568,6 +568,9 @@ function extractPageInternal(input: ScannerV2PageInput): ScannerV2PageExtraction
   const structuredFacts = structuredClone(
     extracted.facts as unknown as Record<string, unknown>,
   );
+  if (Object.keys(extracted.factMeta).length) {
+    structuredFacts._factMeta = extracted.factMeta;
+  }
   const contentHash = stableContentHash(
     visibleText + "\n\u0000structured\u0000\n" + stableJson(structuredFacts),
   );

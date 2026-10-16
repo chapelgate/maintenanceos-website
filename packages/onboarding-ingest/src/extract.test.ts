@@ -131,14 +131,14 @@ test("structured facts expose contact and locations without changing legacy draf
     phones: ["+44 151 555 0199"],
     emails: ["hello@northdock.example"],
   });
-  assert.deepEqual(result.facts.locations, [
-    "10 Dock Road, Liverpool, L1 1AA, GB",
-    "Merseyside",
-  ]);
+  assert.equal(result.facts.address, "10 Dock Road, Liverpool, L1 1AA, GB");
+  assert.deepEqual(result.facts.locations, ["Merseyside"]);
   assert.deepEqual(result.facts.services, ["Boiler repair", "Heating maintenance"]);
   assert.equal(result.facts.hours, "Mo-Fr 08:00-17:00");
   assert.equal(result.factMeta.website?.source, "fetched_url");
   assert.equal(result.factMeta.contact?.source, "jsonld");
+  assert.equal(result.factMeta.address?.source, "jsonld");
+  assert.equal(result.factMeta.address?.sourceUrl, "https://northdock.example/");
   assert.equal(result.factMeta.locations?.source, "jsonld");
 
   // Existing /create draft stays backward-compatible: contacts remain only in
@@ -400,11 +400,14 @@ test("visible contact block pre-fills address and phone without schema or tel li
   ]);
 
   assert.deepEqual(result.facts.contact?.phones, ["0151 649 9718"]);
-  assert.deepEqual(result.facts.locations, [
+  assert.equal(
+    result.facts.address,
     "Forum Housing Association, 24-28 Hamilton Street, Birkenhead, Wirral CH41 1AL",
-  ]);
+  );
+  assert.equal(result.facts.locations, undefined);
   assert.equal(result.factMeta.contact?.source, "heading");
-  assert.equal(result.factMeta.locations?.source, "heading");
+  assert.equal(result.factMeta.address?.source, "heading");
+  assert.equal(result.factMeta.address?.confidence, "medium");
   assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
   assert.equal(result.draft.hours?.includes("0151"), false);
   assert.match(result.draft.services ?? "", /Caroline Place/);
@@ -430,4 +433,39 @@ test("candidate ranking removes query duplicates and keeps richer public detail 
   assert.ok(ranked.includes("https://forum.example/living-with-us/"));
   assert.ok(ranked.includes("https://forum.example/residents/"));
   assert.equal(ranked.some((url) => url.includes("?subject=")), false);
+});
+
+test("a small trades page without schema yields services, area, phone, and a blank hours field", () => {
+  const html = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), "fixtures/trades-single-page.html"),
+    "utf8",
+  );
+  const result = extractDraftFromHtml([
+    { url: "https://rob-thompson.example/", html },
+  ]);
+
+  assert.equal(result.facts.businessName, "Rob Thompson Plumbing & Heating Ltd");
+  assert.match(result.draft.services ?? "", /Plumbing Repairs/);
+  assert.match(result.draft.services ?? "", /Central Heating Repairs & Maintenance/);
+  assert.doesNotMatch(result.draft.services ?? "", /burst pipes/);
+  assert.doesNotMatch(result.draft.services ?? "", /Bebington/);
+  assert.deepEqual(result.facts.services, [
+    "Plumbing Repairs",
+    "Central Heating Repairs & Maintenance",
+  ]);
+  assert.deepEqual(result.facts.locations, [
+    "Bebington",
+    "Birkenhead",
+    "Bromborough",
+    "Heswall",
+    "Wallasey",
+  ]);
+  assert.deepEqual(result.facts.contact?.phones, ["07774179685"]);
+  assert.equal(result.facts.contact?.emails, undefined);
+  assert.equal(result.facts.address, "Bromborough, Wirral");
+  assert.equal(result.factMeta.address?.confidence, "low");
+  assert.equal(result.factMeta.address?.sourceUrl, "https://rob-thompson.example/");
+  assert.equal(result.facts.hours, undefined);
+  assert.equal(result.draft.hours, undefined);
+  assert.doesNotMatch(JSON.stringify(result), /rob@example\.test/);
 });
