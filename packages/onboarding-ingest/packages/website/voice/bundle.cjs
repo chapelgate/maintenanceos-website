@@ -138,9 +138,34 @@ function safeName(value, fallback2) {
   return NAME_RE.test(name) ? name : null;
 }
 function safeKey(value) {
-  const key = value?.trim() ?? "";
-  if (!key || /[\r\n\0]/.test(key)) return "";
-  return key;
+  if (typeof value !== "string") return "";
+  return value.replace(/[\r\n\0]/g, "").trim();
+}
+function keyPrefixKind(key) {
+  if (key.startsWith("AIza")) return "AIza";
+  if (key.startsWith("AQ.")) return "AQ.";
+  return "other";
+}
+function stringParam(source, name) {
+  if (!source || typeof source !== "object" || Array.isArray(source)) return void 0;
+  const value = source[name];
+  return typeof value === "string" ? value : void 0;
+}
+function paramValue(event, name) {
+  return stringParam(event.__ow_params, name) ?? stringParam(event.params, name) ?? stringParam(event, name);
+}
+function setting(event, options, name) {
+  if (options.env) return options.env[name];
+  const fromProcess = process.env[name];
+  if (typeof fromProcess === "string" && safeKey(fromProcess)) return fromProcess;
+  return paramValue(event, name) ?? (typeof fromProcess === "string" ? fromProcess : void 0);
+}
+function deployedBuild() {
+  for (const name of ["COMMIT_HASH", "GIT_COMMIT", "SOURCE_COMMIT", "GITHUB_SHA"]) {
+    const value = process.env[name]?.trim() ?? "";
+    if (/^[0-9a-f]{7,64}$/i.test(value)) return value;
+  }
+  return null;
 }
 function bytesToBase64(bytes) {
   return Buffer.from(bytes).toString("base64");
@@ -220,22 +245,27 @@ async function handleVoice(event, options) {
       body: ""
     };
   }
-  const env = options.env ?? process.env;
+  const apiKey = safeKey(setting(event, options, "GEMINI_API_KEY"));
+  const modelSetting = setting(event, options, "GEMINI_TTS_MODEL");
+  const voiceSetting = setting(event, options, "GEMINI_TTS_VOICE");
   if (method === "GET") {
-    const model2 = safeName(env.GEMINI_TTS_MODEL, DEFAULT_MODEL) ?? DEFAULT_MODEL;
-    const voice2 = safeName(env.GEMINI_TTS_VOICE, DEFAULT_VOICE) ?? DEFAULT_VOICE;
+    const model2 = safeName(modelSetting, DEFAULT_MODEL) ?? DEFAULT_MODEL;
+    const voice2 = safeName(voiceSetting, DEFAULT_VOICE) ?? DEFAULT_VOICE;
     return jsonResponse(200, {
       ok: true,
-      configured: Boolean(safeKey(env.GEMINI_API_KEY)),
+      configured: Boolean(apiKey),
+      keyPresent: Boolean(apiKey),
+      keyLength: apiKey.length,
+      keyPrefixKind: keyPrefixKind(apiKey),
       model: model2,
-      voice: voice2
+      voice: voice2,
+      build: deployedBuild()
     }, origin);
   }
   if (method !== "POST") return fallback("method_not_allowed", origin);
-  const apiKey = safeKey(env.GEMINI_API_KEY);
   if (!apiKey) return fallback("voice_not_configured", origin);
-  const model = safeName(env.GEMINI_TTS_MODEL, DEFAULT_MODEL);
-  const voice = safeName(env.GEMINI_TTS_VOICE, DEFAULT_VOICE);
+  const model = safeName(modelSetting, DEFAULT_MODEL);
+  const voice = safeName(voiceSetting, DEFAULT_VOICE);
   if (!model || !voice) return fallback("internal_error", origin);
   const text = readText(event);
   if (!text) return fallback("text_missing", origin);

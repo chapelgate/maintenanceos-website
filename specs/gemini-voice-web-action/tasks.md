@@ -6,4 +6,5 @@
 - [x] Rebuild `bundle.cjs` and test the bundle against those event shapes
 - [x] Return HTTP 200 JSON for every failure, with a non-secret `reason`
 - [x] GET health reports `configured` without the key
+- [x] Accept an `AQ.` key and report key length and prefix kind without the key
 - [x] The page reads `reason` and uses the browser voice on fallback

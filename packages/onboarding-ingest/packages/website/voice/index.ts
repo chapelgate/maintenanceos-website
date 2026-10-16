@@ -21,7 +21,12 @@
  * DigitalOcean replaces every 5xx body with its own HTML 504 page
  * (x-do-orig-status shows the function status). Failures therefore stay
  * HTTP 200: { ok:false, fallback:"browser", reason } with a non-secret code.
- * Only a spoken line returns audio/wav. GET reports whether a key is present.
+ * Only a spoken line returns audio/wav. GET reports whether a key is present
+ * and non-secret diagnostics. It never returns the key.
+ *
+ * The key is any non-empty trimmed string. AIza and AQ. keys both go in
+ * the x-goog-api-key header. Nothing is read into a module-level const:
+ * process.env is read when the request runs, then action parameters.
  */
 
 type HeaderValue = string | string[] | number | boolean | null | undefined;
@@ -36,7 +41,9 @@ type WebEvent = {
   __ow_method?: unknown;
   __ow_headers?: Record<string, HeaderValue>;
   __ow_body?: unknown;
+  __ow_params?: unknown;
   __ow_isBase64Encoded?: boolean;
+  params?: unknown;
   isBase64Encoded?: boolean;
   text?: unknown;
 };
@@ -193,10 +200,41 @@ function safeName(value: string | undefined, fallback: string): string | null {
   return NAME_RE.test(name) ? name : null;
 }
 
-function safeKey(value: string | undefined): string {
-  const key = value?.trim() ?? "";
-  if (!key || /[\r\n\0]/.test(key)) return "";
-  return key;
+/** Any non-empty trimmed string. Line breaks are removed so the header stays one line. */
+function safeKey(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return value.replace(/[\r\n\0]/g, "").trim();
+}
+
+function keyPrefixKind(key: string): "AIza" | "AQ." | "other" {
+  if (key.startsWith("AIza")) return "AIza";
+  if (key.startsWith("AQ.")) return "AQ.";
+  return "other";
+}
+
+function stringParam(source: unknown, name: string): string | undefined {
+  if (!source || typeof source !== "object" || Array.isArray(source)) return undefined;
+  const value = (source as Record<string, unknown>)[name];
+  return typeof value === "string" ? value : undefined;
+}
+
+function paramValue(event: WebEvent, name: string): string | undefined {
+  return stringParam(event.__ow_params, name) ?? stringParam(event.params, name) ?? stringParam(event, name);
+}
+
+function setting(event: WebEvent, options: VoiceFunctionOptions, name: keyof VoiceEnv): string | undefined {
+  if (options.env) return options.env[name];
+  const fromProcess = process.env[name];
+  if (typeof fromProcess === "string" && safeKey(fromProcess)) return fromProcess;
+  return paramValue(event, name) ?? (typeof fromProcess === "string" ? fromProcess : undefined);
+}
+
+function deployedBuild(): string | null {
+  for (const name of ["COMMIT_HASH", "GIT_COMMIT", "SOURCE_COMMIT", "GITHUB_SHA"]) {
+    const value = process.env[name]?.trim() ?? "";
+    if (/^[0-9a-f]{7,64}$/i.test(value)) return value;
+  }
+  return null;
 }
 
 function bytesToBase64(bytes: Uint8Array): string {
@@ -294,24 +332,29 @@ async function handleVoice(event: WebEvent, options: VoiceFunctionOptions): Prom
     };
   }
 
-  const env = options.env ?? process.env;
+  const apiKey = safeKey(setting(event, options, "GEMINI_API_KEY"));
+  const modelSetting = setting(event, options, "GEMINI_TTS_MODEL");
+  const voiceSetting = setting(event, options, "GEMINI_TTS_VOICE");
   if (method === "GET") {
-    const model = safeName(env.GEMINI_TTS_MODEL, DEFAULT_MODEL) ?? DEFAULT_MODEL;
-    const voice = safeName(env.GEMINI_TTS_VOICE, DEFAULT_VOICE) ?? DEFAULT_VOICE;
+    const model = safeName(modelSetting, DEFAULT_MODEL) ?? DEFAULT_MODEL;
+    const voice = safeName(voiceSetting, DEFAULT_VOICE) ?? DEFAULT_VOICE;
     return jsonResponse(200, {
       ok: true,
-      configured: Boolean(safeKey(env.GEMINI_API_KEY)),
+      configured: Boolean(apiKey),
+      keyPresent: Boolean(apiKey),
+      keyLength: apiKey.length,
+      keyPrefixKind: keyPrefixKind(apiKey),
       model,
       voice,
+      build: deployedBuild(),
     }, origin);
   }
   if (method !== "POST") return fallback("method_not_allowed", origin);
 
-  const apiKey = safeKey(env.GEMINI_API_KEY);
   if (!apiKey) return fallback("voice_not_configured", origin);
 
-  const model = safeName(env.GEMINI_TTS_MODEL, DEFAULT_MODEL);
-  const voice = safeName(env.GEMINI_TTS_VOICE, DEFAULT_VOICE);
+  const model = safeName(modelSetting, DEFAULT_MODEL);
+  const voice = safeName(voiceSetting, DEFAULT_VOICE);
   if (!model || !voice) return fallback("internal_error", origin);
 
   const text = readText(event);
