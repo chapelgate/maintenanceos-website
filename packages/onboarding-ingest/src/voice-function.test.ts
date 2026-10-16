@@ -26,6 +26,10 @@ function jsonBody(result: VoiceResult) {
     ok?: boolean;
     error?: string;
     fallback?: string;
+    reason?: string;
+    configured?: boolean;
+    model?: string;
+    voice?: string;
   };
 }
 
@@ -93,11 +97,11 @@ test("voice function stays unconfigured without a Gemini key", async () => {
   resetVoiceRateLimitForTests();
   for (const env of [{}, { GEMINI_API_KEY: "  " }, { GEMINI_API_KEY: "bad\nkey" }]) {
     const result = await main(event("POST", "Hello"), { env });
-    assert.equal(result.statusCode, 503);
+    assert.equal(result.statusCode, 200);
     assert.deepEqual(jsonBody(result), {
       ok: false,
-      error: "voice_not_configured",
       fallback: "browser",
+      reason: "voice_not_configured",
     });
     assert.equal(result.headers["Cache-Control"], "no-store");
     assert.doesNotMatch(JSON.stringify(result), /gemini-test-key/);
@@ -195,11 +199,11 @@ test("Gemini 429 and a timeout fall back without the upstream body", async () =>
     fetchImpl: (async () =>
       new Response(JSON.stringify({ error: { message: SECRET } }), { status: 429 })) as typeof fetch,
   });
-  assert.equal(limited.statusCode, 429);
+  assert.equal(limited.statusCode, 200);
   assert.deepEqual(jsonBody(limited), {
     ok: false,
-    error: "voice_rate_limited",
     fallback: "browser",
+    reason: "upstream_429",
   });
   assert.doesNotMatch(JSON.stringify(limited), new RegExp(SECRET));
 
@@ -211,8 +215,8 @@ test("Gemini 429 and a timeout fall back without the upstream body", async () =>
       throw error;
     }) as typeof fetch,
   });
-  assert.equal(timedOut.statusCode, 504);
-  assert.deepEqual(jsonBody(timedOut), { ok: false, error: "timeout", fallback: "browser" });
+  assert.equal(timedOut.statusCode, 200);
+  assert.deepEqual(jsonBody(timedOut), { ok: false, fallback: "browser", reason: "upstream_timeout" });
 });
 
 test("a model override cannot put the key into the Gemini URL", async () => {
@@ -226,9 +230,28 @@ test("a model override cannot put the key into the Gemini URL", async () => {
     }) as typeof fetch,
   });
   assert.equal(calls, 0);
-  assert.equal(result.statusCode, 502);
+  assert.equal(result.statusCode, 200);
+  assert.equal(jsonBody(result).reason, "internal_error");
   assert.equal(jsonBody(result).fallback, "browser");
   assert.doesNotMatch(JSON.stringify(result), new RegExp(SECRET));
+});
+
+test("voice function reports missing audio without a 5xx", async () => {
+  resetVoiceRateLimitForTests();
+  const result = await main(event("POST", "Hello", "203.0.113.66"), {
+    env: { GEMINI_API_KEY: SECRET },
+    fetchImpl: (async () =>
+      new Response(JSON.stringify({ candidates: [] }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      })) as typeof fetch,
+  });
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(jsonBody(result), {
+    ok: false,
+    fallback: "browser",
+    reason: "upstream_no_audio",
+  });
 });
 
 test("voice function turns an upstream 5xx into a browser fallback", async () => {
@@ -237,11 +260,11 @@ test("voice function turns an upstream 5xx into a browser fallback", async () =>
     env: { GEMINI_API_KEY: SECRET },
     fetchImpl: (async () => new Response("nope", { status: 500 })) as typeof fetch,
   });
-  assert.equal(result.statusCode, 502);
+  assert.equal(result.statusCode, 200);
   assert.deepEqual(jsonBody(result), {
     ok: false,
-    error: "voice_unavailable",
     fallback: "browser",
+    reason: "upstream_500",
   });
   assert.doesNotMatch(JSON.stringify(result), /nope/);
 });
@@ -256,11 +279,11 @@ test("voice function rejects an empty or oversized line before calling Gemini", 
   const env = { GEMINI_API_KEY: SECRET };
   const empty = await main(event("POST", "   ", "203.0.113.52"), { env, fetchImpl: fetcher });
   const long = await main(event("POST", "a".repeat(401), "203.0.113.52"), { env, fetchImpl: fetcher });
-  assert.equal(empty.statusCode, 400);
-  assert.equal(jsonBody(empty).error, "text_required");
+  assert.equal(empty.statusCode, 200);
+  assert.equal(jsonBody(empty).reason, "text_missing");
   assert.equal(jsonBody(empty).fallback, "browser");
-  assert.equal(long.statusCode, 400);
-  assert.equal(jsonBody(long).error, "text_too_long");
+  assert.equal(long.statusCode, 200);
+  assert.equal(jsonBody(long).reason, "text_too_long");
   assert.equal(calls, 0);
 });
 
@@ -272,8 +295,9 @@ test("voice function rate limits one address", async () => {
   for (let i = 0; i < 7; i += 1) {
     const result = await main(event("POST", `Line ${i}`, "203.0.113.70"), { env, fetchImpl: fetcher });
     last = result.statusCode;
+    if (i === 6) assert.equal(jsonBody(result).reason, "rate_limited");
   }
-  assert.equal(last, 429);
+  assert.equal(last, 200);
 });
 
 test("deployed voice artifact is prebuilt and matches the unconfigured fallback", async () => {
@@ -294,9 +318,9 @@ test("deployed voice artifact is prebuilt and matches the unconfigured fallback"
   assert.equal(typeof deployed.main, "function");
   deployed.resetVoiceRateLimitForTests();
   const result = await deployed.main(event("POST", "Hello", "203.0.113.53"), { env: {} });
-  assert.equal(result.statusCode, 503);
+  assert.equal(result.statusCode, 200);
   const body = jsonBody(result);
-  assert.equal(body.error, "voice_not_configured");
+  assert.equal(body.reason, "voice_not_configured");
   assert.equal(body.fallback, "browser");
   assert.doesNotMatch(bundled, /AbortSignal\.timeout/);
   assert.match(project, /name:\s*website/);
@@ -376,9 +400,9 @@ test("a thrown handler error returns a string JSON browser fallback", async () =
     },
     { env },
   );
-  assert.equal(result.statusCode, 502);
+  assert.equal(result.statusCode, 200);
   const body = jsonBody(result);
-  assert.deepEqual(body, { ok: false, error: "voice_handler_error", fallback: "browser" });
+  assert.deepEqual(body, { ok: false, fallback: "browser", reason: "internal_error" });
   assert.doesNotMatch(result.body as string, new RegExp(SECRET));
   assert.doesNotMatch(result.body as string, /boom/);
 
@@ -388,8 +412,8 @@ test("a thrown handler error returns a string JSON browser fallback", async () =
   try {
     resetVoiceRateLimitForTests();
     const missing = await main(event("POST", "Hi", "203.0.113.84"), { env: { GEMINI_API_KEY: SECRET } });
-    assert.equal(missing.statusCode, 502);
-    assert.equal(jsonBody(missing).error, "voice_unavailable");
+    assert.equal(missing.statusCode, 200);
+    assert.equal(jsonBody(missing).reason, "internal_error");
     assert.equal(jsonBody(missing).fallback, "browser");
   } finally {
     globalThis.fetch = saved;
@@ -431,9 +455,33 @@ test("the deployed bundle accepts a DigitalOcean web-action event and a thrown e
     },
   });
   const failed = await deployed.main({ http: { method: "POST", body: { text: "Hi" } } }, { env });
-  assert.equal(failed.statusCode, 502);
+  assert.equal(failed.statusCode, 200);
   const body = jsonBody(failed);
-  assert.equal(body.error, "voice_handler_error");
+  assert.equal(body.reason, "internal_error");
   assert.equal(body.fallback, "browser");
   assert.doesNotMatch(String(failed.body), new RegExp(SECRET));
+});
+
+test("GET reports whether the key is present without returning it", async () => {
+  resetVoiceRateLimitForTests();
+  const present = await main(
+    { http: { method: "GET", headers: { origin: "https://worksmartos.co.uk" } } },
+    { env: { GEMINI_API_KEY: SECRET, GEMINI_TTS_MODEL: "gemini-2.5-flash-preview-tts", GEMINI_TTS_VOICE: "Algenib" } },
+  );
+  assert.equal(present.statusCode, 200);
+  assert.deepEqual(jsonBody(present), {
+    ok: true,
+    configured: true,
+    model: "gemini-2.5-flash-preview-tts",
+    voice: "Algenib",
+  });
+  assert.doesNotMatch(JSON.stringify(present), new RegExp(SECRET));
+
+  const absent = await main({ http: { method: "GET" } }, { env: {} });
+  assert.equal(absent.statusCode, 200);
+  const body = jsonBody(absent);
+  assert.equal(body.ok, true);
+  assert.equal(body.configured, false);
+  assert.equal(body.model, "gemini-2.5-flash-preview-tts");
+  assert.equal(body.voice, "Charon");
 });

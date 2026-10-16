@@ -76,8 +76,8 @@ test("a Gemini rate limit falls back and a later line can try the server again",
   const fetchImpl: typeof fetch = async () => {
     calls += 1;
     return new Response(
-      JSON.stringify({ ok: false, error: "voice_rate_limited", fallback: "browser" }),
-      { status: 429, headers: { "content-type": "application/json" } },
+      JSON.stringify({ ok: false, fallback: "browser", reason: "rate_limited" }),
+      { status: 200, headers: { "content-type": "application/json" } },
     );
   };
   const first = await speakReceptionistText("Hello", { fetchImpl });
@@ -88,14 +88,33 @@ test("a Gemini rate limit falls back and a later line can try the server again",
   resetServerVoiceStateForTests();
 });
 
+test("an HTML gateway page is not parsed and the next line retries", async () => {
+  resetServerVoiceStateForTests();
+  let calls = 0;
+  const fetchImpl: typeof fetch = async () => {
+    calls += 1;
+    return new Response("<html>504 Gateway Timeout</html>", {
+      status: 504,
+      headers: { "content-type": "text/html", "x-do-orig-status": "503" },
+    });
+  };
+  const first = await speakReceptionistText("Hello", { fetchImpl });
+  const second = await speakReceptionistText("Hello again", { fetchImpl });
+  assert.equal(first, "unavailable");
+  assert.equal(second, "unavailable");
+  assert.equal(calls, 2);
+  assert.deepEqual(await requestServerVoice("Hi", { fetchImpl }), { ok: false, reason: "unavailable" });
+  resetServerVoiceStateForTests();
+});
+
 test("a missing server voice falls back without exposing configuration", async () => {
   resetServerVoiceStateForTests();
   let calls = 0;
   const fetchImpl: typeof fetch = async () => {
     calls += 1;
     return new Response(
-      JSON.stringify({ ok: false, error: "voice_not_configured", fallback: "browser" }),
-      { status: 503, headers: { "content-type": "application/json" } },
+      JSON.stringify({ ok: false, fallback: "browser", reason: "voice_not_configured" }),
+      { status: 200, headers: { "content-type": "application/json" } },
     );
   };
   const first = await speakReceptionistText("Hello", { fetchImpl });
