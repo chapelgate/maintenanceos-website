@@ -1,13 +1,16 @@
 import {
   acceptableFaqAnswer,
+  assessOpeningHours,
   chooseOpeningHours,
+  chooseProminentAddress,
   chooseProminentEmail,
   chooseProminentPhones,
-  chooseProminentValue,
   crawlUrlPriority,
   isServicePhrase,
   phoneIdentity,
   sanitizeUntrustedField,
+  serviceAreaNames,
+  townFromAddress,
   type ProminentHit,
 } from "./extract.ts";
 import {
@@ -378,7 +381,6 @@ function aggregateFacts(
     }
   }
 
-  const uniqueLocations = unique(locations);
   const phonePicks = chooseProminentPhones(phoneHits, pageUrls, 2);
   const phonePick = phonePicks[0];
   let emailHost = "";
@@ -388,12 +390,11 @@ function aggregateFacts(
     emailHost = "";
   }
   const emailPick = chooseProminentEmail(emailHits, pageUrls, emailHost);
-  const addressPick = chooseProminentValue(
-    addressHits,
-    (value) => value.toLowerCase().replace(/\s+/g, " "),
-    pageUrls,
-  );
+  const addressPick = chooseProminentAddress(addressHits, pageUrls);
   const hourPick = chooseOpeningHours(hourHits, pageUrls);
+  const hoursAssessment = hourPick
+    ? assessOpeningHours(hourPick.value, hourHits.map((hit) => hit.value).join("\n"))
+    : undefined;
   const uniqueServices = unique(services.map((item) => sanitizeUntrustedField(item, 80))).filter(
     (item) => isServicePhrase(item),
   );
@@ -406,7 +407,6 @@ function aggregateFacts(
     ).values(),
   ];
 
-  if (uniqueLocations.length) facts.locations = uniqueLocations;
   if (phonePick || emailPick) {
     facts.contact = {
       ...(phonePicks.length ? { phones: phonePicks.map((hit) => hit.value) } : {}),
@@ -434,11 +434,26 @@ function aggregateFacts(
       ...(addressPick.url.startsWith("https://") ? { sourceUrl: addressPick.url } : {}),
     };
   }
-  if (hourPick) {
-    facts.hours = hourPick.value;
+  const namedLocations = serviceAreaNames(locations);
+  let locationList = namedLocations;
+  if (!locationList.length && addressPick) {
+    const town = townFromAddress(addressPick.value);
+    if (town) {
+      locationList = [town];
+      factMeta.locations = {
+        source: addressPick.source,
+        confidence: "low",
+        ...(addressPick.url.startsWith("https://") ? { sourceUrl: addressPick.url } : {}),
+      };
+    }
+  }
+  if (locationList.length) facts.locations = locationList;
+  else delete factMeta.locations;
+  if (hourPick && hoursAssessment) {
+    facts.hours = hoursAssessment.value;
     factMeta.hours = {
       source: hourPick.source,
-      confidence: hourPick.confidence,
+      confidence: hoursAssessment.partial ? "low" : hourPick.confidence,
       ...(hourPick.url.startsWith("https://") ? { sourceUrl: hourPick.url } : {}),
     };
   }

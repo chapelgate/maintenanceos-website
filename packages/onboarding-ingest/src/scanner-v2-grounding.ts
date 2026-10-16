@@ -1,3 +1,4 @@
+import { hoursAreSpeakable } from "./extract.ts";
 import type { CorpusIndex, CorpusSearchHit } from "./scanner-v2-retrieval.ts";
 
 export const DEFAULT_GROUNDED_RETRIEVAL_LIMIT = 5;
@@ -345,6 +346,7 @@ export async function answerGroundedReceptionistQuestion(
   const intent = exactIntent(question);
 
   if (intent === "hours" && facts.hours?.value) {
+    if (!hoursAreSpeakable(facts.hours.value)) return notFound();
     return structuredAnswer(
       "structured.hours",
       facts.businessName?.value

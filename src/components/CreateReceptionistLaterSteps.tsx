@@ -890,6 +890,7 @@ export function CreateReceptionistLaterSteps({
             blueprint: identityBlueprint,
             reviewedDraft: draft,
             siteKnowledge,
+            hoursSpeakable: fieldMeta.hours?.confidence !== "low",
           });
           if (editVersion !== configEditVersionRef.current) return;
           setReviewConfirmedIds([]);
@@ -1542,6 +1543,7 @@ export function CreateReceptionistLaterSteps({
                     blueprint: agentBlueprint,
                     reviewedDraft: draft,
                     siteKnowledge,
+                    hoursSpeakable: fieldMeta.hours?.confidence !== "low",
                   });
                   setReviewConfirmedIds([]);
                   setAgentBlueprint(configuration.blueprint);

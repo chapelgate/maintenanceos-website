@@ -341,6 +341,17 @@ test("accepted knowledge-pack edits update data fields but cannot expand control
   );
 });
 
+test("partial scan hours stay out of the spoken knowledge pack", () => {
+  const result = buildAgentConfiguration({
+    blueprint: blueprintFor("maintenance_desk"),
+    reviewedDraft: { ...REVIEWED_DRAFT, hours: "Saturday 09:00-12:00" },
+    hoursSpeakable: false,
+  });
+  assert.equal(result.knowledgePack.hours, undefined);
+  assert.equal(result.blueprint.knowledge.hours, undefined);
+  assert.ok(result.knowledgePack.missing.includes("hours"));
+});
+
 test("unstructured FAQ notes are never converted into an invented blueprint question", () => {
   const result = buildAgentConfiguration({
     blueprint: blueprintFor("custom"),

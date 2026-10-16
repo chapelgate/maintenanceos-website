@@ -451,7 +451,7 @@ function normalizePostalAddress(value: string): string | undefined {
   const stripped = stripAddressCodes(value);
   if (!stripped) return undefined;
   if (!UK_POSTCODE_RE.test(stripped)) return stripped;
-  return addressAroundPostcode(stripped) ?? stripped;
+  return addressAroundPostcode(stripped) ?? withFormattedPostcode(stripped);
 }
 
 function locationText(value: unknown): string | undefined {
@@ -1156,11 +1156,25 @@ function splitStreetBlob(part: string): string[] {
   return lines;
 }
 
+/** Outward code, a space, then the inward code. `M251PZ` becomes `M25 1PZ`. */
+export function formatUkPostcode(raw: string): string {
+  const match = raw.match(UK_POSTCODE_RE);
+  if (!match) return raw.trim();
+  const compact = match[0].replace(/\s+/g, "").toUpperCase();
+  if (compact === "GIR0AA") return "GIR 0AA";
+  if (compact.length < 5) return compact;
+  return `${compact.slice(0, -3)} ${compact.slice(-3)}`;
+}
+
+function withFormattedPostcode(value: string): string {
+  return value.replace(UK_POSTCODE_RE, (code) => formatUkPostcode(code));
+}
+
 /** Take the UK postcode and only the street lines immediately before it. */
 export function addressAroundPostcode(text: string): string | undefined {
   const match = UK_POSTCODE_RE.exec(text);
   if (!match || match.index === undefined) return undefined;
-  const postcode = match[0].replace(/\s+/g, " ").toUpperCase();
+  const postcode = formatUkPostcode(match[0]);
   const segments = text
     .slice(0, match.index)
     .split(/[\n,]+/)
@@ -1471,31 +1485,27 @@ export function chooseProminentPhones(
   return chosen.map((hit) => (discardedOutside ? { ...hit, confidence: "low" } : hit));
 }
 
-function chooseProminentAddress(
+const addressIdentity = (value: string) => value.toLowerCase().replace(/\s+/g, " ");
+
+/** A structured postal address with a UK postcode wins over a footer or heading. */
+export function chooseProminentAddress(
   hits: ProminentHit[],
   pageUrls: string[],
 ): ProminentHit | undefined {
-  const adjusted = hits.map((hit) => {
-    const code = postcodeKey(hit.value);
-    if (!code) return hit;
-    const schemaAgrees = hits.some(
-      (other) =>
-        (other.source === "jsonld" || other.source === "microdata") &&
-        postcodeKey(other.value) === code,
-    );
-    if (
-      schemaAgrees &&
-      (hit.source === "footer" || hit.source === "heading" || hit.source === "pattern")
-    ) {
-      return { ...hit, rank: Math.max(hit.rank, 8) };
-    }
-    return hit;
-  });
-  return chooseProminentValue(
-    adjusted,
-    (value) => value.toLowerCase().replace(/\s+/g, " "),
-    pageUrls,
+  const structured = distinctHits(
+    hits.filter(
+      (hit) =>
+        (hit.source === "jsonld" || hit.source === "microdata") &&
+        Boolean(postcodeKey(hit.value)),
+    ),
+    addressIdentity,
   );
+  const picked = structured[0]
+    ? structured.length > 1
+      ? { ...structured[0], confidence: "low" as const }
+      : structured[0]
+    : chooseProminentValue(hits, addressIdentity, pageUrls);
+  return picked ? { ...picked, value: withFormattedPostcode(picked.value) } : undefined;
 }
 
 export function chooseProminentValue(
@@ -1547,6 +1557,104 @@ export function chooseOpeningHours(
     return { ...visiblePick, confidence: "medium" };
   }
   return chooseProminentValue(office.length ? office : hits, hoursIdentity, pageUrls);
+}
+
+const ALWAYS_OPEN_RE = /\b(?:24\s*\/\s*7|24\s*hours|open\s*24)\b/i;
+const PLACEHOLDER_HOURS_RE = /\b00:00\s*(?:-|–|—|to)\s*(?:23:59|00:00)\b/i;
+const WEEKDAY_TOKEN =
+  "monday|tuesday|wednesday|thursday|friday|saturday|sunday|tues|thurs|thur|mon|tue|wed|thu|fri|sat|sun|mo|tu|we|th|fr|sa|su";
+const WEEKDAY_INDEX: Record<string, number> = {
+  monday: 0, mon: 0, mo: 0,
+  tuesday: 1, tue: 1, tues: 1, tu: 1,
+  wednesday: 2, wed: 2, we: 2,
+  thursday: 3, thu: 3, thur: 3, thurs: 3, th: 3,
+  friday: 4, fri: 4, fr: 4,
+  saturday: 5, sat: 5, sa: 5,
+  sunday: 6, sun: 6, su: 6,
+};
+
+function weekdayIndex(token: string): number | undefined {
+  return WEEKDAY_INDEX[token.toLowerCase()];
+}
+
+function addWeekdaySpan(days: Set<number>, start: number, end: number): void {
+  if (start <= end) {
+    for (let day = start; day <= end; day += 1) days.add(day);
+    return;
+  }
+  for (let day = start; day <= 6; day += 1) days.add(day);
+  for (let day = 0; day <= end; day += 1) days.add(day);
+}
+
+/** Weekdays named by a hours string. Two-letter schema tokens count only inside a range or list. */
+export function parsedWeekdayCount(value: string): number {
+  const days = new Set<number>();
+  const text = value.toLowerCase().replace(/[–—]/g, "-");
+  if (/\bweekdays?\b/.test(text)) addWeekdaySpan(days, 0, 4);
+  if (/\bweekends?\b/.test(text)) addWeekdaySpan(days, 5, 6);
+  const rangeRe = new RegExp(`\\b(${WEEKDAY_TOKEN})\\s*(?:to|-)\\s*(${WEEKDAY_TOKEN})\\b`, "gi");
+  for (const match of text.matchAll(rangeRe)) {
+    const start = weekdayIndex(match[1] ?? "");
+    const end = weekdayIndex(match[2] ?? "");
+    if (start === undefined || end === undefined) continue;
+    addWeekdaySpan(days, start, end);
+  }
+  const listRe = new RegExp(`\\b(?:${WEEKDAY_TOKEN})(?:\\s*,\\s*(?:${WEEKDAY_TOKEN}))+\\b`, "gi");
+  for (const match of text.matchAll(listRe)) {
+    for (const part of match[0].split(",")) {
+      const index = weekdayIndex(part.trim());
+      if (index !== undefined) days.add(index);
+    }
+  }
+  const namedRe =
+    /\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tues|thurs|thur|mon|tue|wed|thu|fri|sat|sun)\b/gi;
+  for (const match of text.matchAll(namedRe)) {
+    const index = weekdayIndex(match[1] ?? "");
+    if (index !== undefined) days.add(index);
+  }
+  return days.size;
+}
+
+function lineWithoutPlaceholder(line: string, alwaysOpen: boolean): string | undefined {
+  const trimmed = line.trim();
+  if (!trimmed) return undefined;
+  if (alwaysOpen || !PLACEHOLDER_HOURS_RE.test(trimmed)) return trimmed;
+  const stripped = trimmed
+    .replace(/\b00:00\s*(?:-|–|—|to)\s*(?:23:59|00:00)\b/gi, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\s+,/g, ",")
+    .replace(/,\s*,/g, ",")
+    .replace(/^[\s,]+|[\s,]+$/g, "")
+    .trim();
+  if (!stripped || (!/\d/.test(stripped) && !/\b(?:closed|24)\b/i.test(stripped))) return undefined;
+  return stripped;
+}
+
+export type OpeningHoursAssessment = {
+  value: string;
+  partial: boolean;
+  speakable: boolean;
+};
+
+/** Drop 00:00-23:59 and 00:00-00:00 unless the text says the business is open 24 hours. */
+export function assessOpeningHours(
+  value: string,
+  context = "",
+): OpeningHoursAssessment | undefined {
+  const alwaysOpen = ALWAYS_OPEN_RE.test(value) || ALWAYS_OPEN_RE.test(context);
+  const kept = value
+    .split(/\n+/)
+    .map((line) => lineWithoutPlaceholder(line, alwaysOpen))
+    .filter((line): line is string => Boolean(line));
+  if (!kept.length) return undefined;
+  const next = kept.join("\n");
+  const partial = !alwaysOpen && parsedWeekdayCount(next) < 5;
+  return { value: next, partial, speakable: !partial };
+}
+
+export function hoursAreSpeakable(value: string | undefined): boolean {
+  if (!value?.trim()) return false;
+  return assessOpeningHours(value)?.speakable === true;
 }
 
 const PRESS_MAILBOX_RE = /^(?:press|media|pr|newsdesk|communications|news)@/i;
@@ -1622,9 +1730,11 @@ const KNOWN_UK_PLACES = new Set(
     "reading", "southampton", "portsmouth", "plymouth", "norwich", "exeter",
     "chester", "crewe", "ellesmere port", "hoylake", "west kirby", "moreton",
     "new ferry", "port sunlight", "higher bebingon", "oxton", "tranmere",
-    "england", "scotland", "wales", "northern ireland", "uk", "united kingdom",
   ].map((place) => place.toLowerCase()),
 );
+
+const AREA_REJECT_EXACT_RE =
+  /^(?:home|about(?:\s+us)?|services|our services|menu|faqs?|contact(?:\s+us)?|england|scotland|wales|northern ireland|united kingdom|uk)$/i;
 
 const AREA_NAV_LABEL_RE =
   /\b(?:plumb(?:er|ers|ing)|electric(?:ian|ians)|heat(?:ing|er)s?|boiler|roof(?:er|ing)|locksmiths?|solicitors?|lawyers?|estate agents?|joiners?|builders?|painters?|cleaners?|gardeners?|valuations?)\b/i;
@@ -1639,6 +1749,7 @@ const PLACE_SUFFIX_RE =
 export function isUkPlaceName(value: string): boolean {
   const text = value.trim();
   if (!text || text.length < 2 || text.length > 40) return false;
+  if (AREA_REJECT_EXACT_RE.test(text)) return false;
   if (PLACE_DENY_RE.test(text) || /[0-9@]/.test(text) && !/^[A-Z]{1,2}\d[A-Z\d]?$/i.test(text.replace(/\s+/g, ""))) {
     return false;
   }
@@ -1651,6 +1762,29 @@ export function isUkPlaceName(value: string): boolean {
   if (words.length > 3) return false;
   if (!words.every((word) => /^[A-Za-z][A-Za-z'.]{1,}$/.test(word))) return false;
   return words.some((word) => PLACE_SUFFIX_RE.test(word) || KNOWN_UK_PLACES.has(word.toLowerCase()));
+}
+
+/** Place names only. Country names, navigation labels, and blank lines are omitted. */
+export function serviceAreaNames(values: readonly string[]): string[] {
+  return [...new Set(
+    values
+      .flatMap((item) => item.split(/\n+/))
+      .map((item) => item.trim())
+      .filter((item) => item && isUkPlaceName(item)),
+  )].slice(0, 16);
+}
+
+/** Last non-street place before the postcode. */
+export function townFromAddress(address: string): string | undefined {
+  const match = UK_POSTCODE_RE.exec(address);
+  const before = match ? address.slice(0, match.index) : address;
+  const parts = before.split(/[\n,]+/).map((part) => part.trim()).filter(Boolean);
+  for (let index = parts.length - 1; index >= 0; index -= 1) {
+    const part = parts[index] ?? "";
+    if (!part || /\d/.test(part)) continue;
+    if (isUkPlaceName(part)) return part;
+  }
+  return undefined;
 }
 
 function extractCoveredAreas(html: string): string[] {
@@ -2356,8 +2490,11 @@ export function extractDraftFromHtml(
     const parted = partitionLocations(values);
     if (parted.addresses.length) {
       for (const address of parted.addresses) {
-        const text = stripAddressCodes(address);
-        if (!text || !isAcceptableAddress(text)) continue;
+        const cleaned = stripAddressCodes(address);
+        if (!cleaned || !isAcceptableAddress(cleaned)) continue;
+        const anchored = UK_POSTCODE_RE.test(cleaned) ? addressAroundPostcode(cleaned) : undefined;
+        const text = anchored ?? withFormattedPostcode(cleaned);
+        if (!isAcceptableAddress(text)) continue;
         addressHits.push({
           value: text,
           url: pageUrl,
@@ -2488,9 +2625,17 @@ export function extractDraftFromHtml(
   }
   const pageUrls = pages.map((page) => page.url);
   const hourPick = chooseOpeningHours(hourHits, pageUrls);
-  if (hourPick) {
-    draft.hours = hourPick.value;
-    fieldMeta.hours = factMetaFor(hourPick.source, hourPick.confidence, hourPick.url);
+  const hoursAssessment = hourPick
+    ? assessOpeningHours(hourPick.value, hourHits.map((hit) => hit.value).join("\n"))
+    : undefined;
+  if (hourPick && hoursAssessment) {
+    draft.hours = hoursAssessment.value;
+    fieldMeta.hours = factMetaFor(
+      hourPick.source,
+      hoursAssessment.partial ? "low" : hourPick.confidence,
+      hourPick.url,
+    );
+    if (hoursAssessment.partial) warnings.push("hours_partial");
   }
 
   setField(
@@ -2607,7 +2752,7 @@ export function extractDraftFromHtml(
   warnings.push("untrusted_crawl_text");
 
   const cleanDraft = omitEmpty(draft);
-  const uniqueLocations = [...new Set(locations.map((item) => asUntrustedText(item, 500)).filter((item) => item && isUkPlaceName(item)))].slice(0, 16);
+  const uniqueLocations = serviceAreaNames(locations.map((item) => asUntrustedText(item, 500)));
   const uniqueBranches = distinctBranches(branches);
   const uniquePricing = [...new Set(pricing)].slice(0, 12);
   const uniquePhones = publicPhones;
@@ -2644,9 +2789,18 @@ export function extractDraftFromHtml(
     facts.address = addressPick.value;
     factMeta.address = factMetaFor(addressPick.source, addressPick.confidence, addressPick.url);
   }
-  if (uniqueLocations.length) {
-    facts.locations = uniqueLocations;
-    if (locationMeta) factMeta.locations = locationMeta;
+  let locationList = uniqueLocations;
+  let resolvedLocationMeta = locationMeta;
+  if (!locationList.length && addressPick) {
+    const town = townFromAddress(addressPick.value);
+    if (town) {
+      locationList = [town];
+      resolvedLocationMeta = factMetaFor(addressPick.source, "low", addressPick.url);
+    }
+  }
+  if (locationList.length) {
+    facts.locations = locationList;
+    if (resolvedLocationMeta) factMeta.locations = resolvedLocationMeta;
   }
   if (uniqueBranches.length >= 2) facts.branches = uniqueBranches;
   if (uniquePricing.length) facts.pricing = uniquePricing;
