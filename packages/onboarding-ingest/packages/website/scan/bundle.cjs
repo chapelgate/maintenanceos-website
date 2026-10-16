@@ -152,11 +152,15 @@ var RATE_MAX = 8;
 var HOST_RATE_MAX = 6;
 var UPSTREAM_TIMEOUT_MS = 25e3;
 var DEFAULT_PERSISTENT_SCANNER_ENDPOINT = "https://178-128-171-45.sslip.io/v1/onboarding/scan";
+var SCAN_PATH = "/v1/onboarding/scan";
 function scannerRuntimeUrl() {
   const configured = process.env.SCANNER_V2_RUNTIME_URL?.trim() ?? "";
   try {
     const url = new URL(configured);
-    if (url.protocol === "https:" || url.protocol === "http:") return url.toString();
+    if (url.protocol === "https:" || url.protocol === "http:") {
+      if (url.pathname === "" || url.pathname === "/") url.pathname = SCAN_PATH;
+      return url.toString();
+    }
   } catch {
   }
   return DEFAULT_PERSISTENT_SCANNER_ENDPOINT;
@@ -213,6 +217,12 @@ async function proxyPersistentScan(url, fetcher = fetch, endpoint = scannerRunti
       }),
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
     });
+    if (upstream.status === 404) {
+      return {
+        statusCode: 404,
+        body: { ok: false, error: "upstream_not_found" }
+      };
+    }
     const text = await upstream.text();
     let body;
     try {

@@ -224,7 +224,7 @@ test("deployed scan bundle upgrades http and forwards the crawl id", async () =>
 
 const DROPLET_SCAN_URL = "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 
-test("an empty or unsubstituted scanner URL keeps the droplet address", async () => {
+test("scanner URL accepts an origin and keeps a full path", async () => {
   const saved = process.env.SCANNER_V2_RUNTIME_URL;
   const calls: string[] = [];
   const fetcher = (async (input: string | URL | Request) => {
@@ -237,26 +237,81 @@ test("an empty or unsubstituted scanner URL keeps the droplet address", async ()
   const deployed = require(path.join(functionDir, "bundle.cjs")) as {
     proxyPersistentScan: typeof proxyPersistentScan;
   };
+  const cases: Array<[string | undefined, string]> = [
+    [undefined, DROPLET_SCAN_URL],
+    ["", DROPLET_SCAN_URL],
+    ["${SCANNER_V2_RUNTIME_URL}", DROPLET_SCAN_URL],
+    ["not a url", DROPLET_SCAN_URL],
+    ["https://178-128-171-45.sslip.io", DROPLET_SCAN_URL],
+    ["https://178-128-171-45.sslip.io/", DROPLET_SCAN_URL],
+    ["https://scanner.example", "https://scanner.example/v1/onboarding/scan"],
+    ["https://scanner.example/", "https://scanner.example/v1/onboarding/scan"],
+    ["https://scanner.example/v1/onboarding/scan", "https://scanner.example/v1/onboarding/scan"],
+  ];
   try {
-    for (const value of [undefined, "", "${SCANNER_V2_RUNTIME_URL}", "not a url"]) {
+    for (const [value, expected] of cases) {
       if (value === undefined) delete process.env.SCANNER_V2_RUNTIME_URL;
       else process.env.SCANNER_V2_RUNTIME_URL = value;
       calls.length = 0;
       await proxyPersistentScan("https://example.com/", fetcher);
-      assert.equal(calls[0], DROPLET_SCAN_URL, String(value));
+      assert.equal(calls[0], expected, String(value));
       calls.length = 0;
       await deployed.proxyPersistentScan("https://example.com/", fetcher);
-      assert.equal(calls[0], DROPLET_SCAN_URL, `bundle ${String(value)}`);
+      assert.equal(calls[0], expected, `bundle ${String(value)}`);
     }
-
-    process.env.SCANNER_V2_RUNTIME_URL = "https://scanner.example/v1/onboarding/scan";
-    calls.length = 0;
-    await proxyPersistentScan("https://example.com/", fetcher);
-    assert.equal(calls[0], "https://scanner.example/v1/onboarding/scan");
-    calls.length = 0;
-    await deployed.proxyPersistentScan("https://example.com/", fetcher);
-    assert.equal(calls[0], "https://scanner.example/v1/onboarding/scan");
   } finally {
+    if (saved === undefined) delete process.env.SCANNER_V2_RUNTIME_URL;
+    else process.env.SCANNER_V2_RUNTIME_URL = saved;
+  }
+});
+
+test("upstream 404 is JSON upstream_not_found", async () => {
+  const fetcher = (async () =>
+    new Response("Not found.", {
+      status: 404,
+      headers: { "content-type": "text/plain" },
+    })) as typeof fetch;
+  const result = await proxyPersistentScan(
+    "https://example.com/",
+    fetcher,
+    "https://scanner.example/v1/onboarding/scan",
+  );
+  assert.equal(result.statusCode, 404);
+  assert.deepEqual(result.body, { ok: false, error: "upstream_not_found" });
+
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    proxyPersistentScan: typeof proxyPersistentScan;
+    main: typeof main;
+  };
+  const bundled = await deployed.proxyPersistentScan(
+    "https://example.com/",
+    fetcher,
+    "https://scanner.example/v1/onboarding/scan",
+  );
+  assert.equal(bundled.statusCode, 404);
+  assert.deepEqual(bundled.body, { ok: false, error: "upstream_not_found" });
+
+  const saved = process.env.SCANNER_V2_RUNTIME_URL;
+  process.env.SCANNER_V2_RUNTIME_URL = "https://178-128-171-45.sslip.io";
+  const calls: string[] = [];
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: string | URL | Request) => {
+    calls.push(String(input));
+    return new Response("Not found.", { status: 404 });
+  }) as typeof fetch;
+  try {
+    const live = await deployed.main({
+      http: {
+        method: "POST",
+        headers: { "x-forwarded-for": "203.0.113.41" },
+      },
+      url: "https://example.com/",
+    });
+    assert.equal(calls[0], DROPLET_SCAN_URL);
+    assert.equal(live.statusCode, 404);
+    assert.deepEqual(live.body, { ok: false, error: "upstream_not_found" });
+  } finally {
+    globalThis.fetch = original;
     if (saved === undefined) delete process.env.SCANNER_V2_RUNTIME_URL;
     else process.env.SCANNER_V2_RUNTIME_URL = saved;
   }

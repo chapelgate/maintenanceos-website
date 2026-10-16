@@ -18,12 +18,17 @@ const UPSTREAM_TIMEOUT_MS = 25_000;
 const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
   "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 
-/** Use a real http(s) override. An empty or unsubstituted value keeps the droplet address. */
+const SCAN_PATH = "/v1/onboarding/scan";
+
+/** Use a real http(s) override. An empty or unsubstituted value keeps the droplet address. An origin-only URL gets the scan path. */
 function scannerRuntimeUrl(): string {
   const configured = process.env.SCANNER_V2_RUNTIME_URL?.trim() ?? "";
   try {
     const url = new URL(configured);
-    if (url.protocol === "https:" || url.protocol === "http:") return url.toString();
+    if (url.protocol === "https:" || url.protocol === "http:") {
+      if (url.pathname === "" || url.pathname === "/") url.pathname = SCAN_PATH;
+      return url.toString();
+    }
   } catch {
     // unset, or the project.yml placeholder was not substituted
   }
@@ -95,6 +100,13 @@ export async function proxyPersistentScan(
       }),
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
+
+    if (upstream.status === 404) {
+      return {
+        statusCode: 404,
+        body: { ok: false, error: "upstream_not_found" },
+      };
+    }
 
     const text = await upstream.text();
     let body: unknown;

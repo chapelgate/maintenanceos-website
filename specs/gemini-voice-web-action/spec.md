@@ -11,7 +11,7 @@ The handler returned 503/502/504 with a JSON body. The DigitalOcean edge discard
 ## Acceptance
 
 - Package `website` function `voice` stays `runtime: nodejs:22`, `main: main`, `web: true`, and the deployed file is `bundle.cjs`.
-- Package `website` declares `environment` with quoted `${GEMINI_API_KEY}`, `${GEMINI_TTS_MODEL}`, `${GEMINI_TTS_VOICE}`, and `${SCANNER_V2_RUNTIME_URL}`. DigitalOcean substitutes those from the build environment into both functions. An empty or unsubstituted scanner URL keeps `https://178-128-171-45.sslip.io/v1/onboarding/scan`. Droplet-only variables stay off this file.
+- Package `website` declares `environment` with quoted `${GEMINI_API_KEY}`, `${GEMINI_TTS_MODEL}`, `${GEMINI_TTS_VOICE}`, and `${SCANNER_V2_RUNTIME_URL}`. DigitalOcean substitutes those from the build environment into both functions. An empty or unsubstituted scanner URL keeps `https://178-128-171-45.sslip.io/v1/onboarding/scan`. An origin-only value, with or without a trailing slash, gets `/v1/onboarding/scan` appended. A configured path is used as given. An upstream HTTP 404 returns `{ ok: false, error: "upstream_not_found" }`. Droplet-only variables stay off this file.
 - The handler accepts `http.method` / `__ow_method`, lowercased headers that may be arrays, and a body that is a JSON string, a parsed object, or base64 when `isBase64Encoded` / `__ow_isBase64Encoded` is set.
 - Header reads never call string methods on an array.
 - Upstream timeout uses `AbortController`. A missing `fetch` returns HTTP 200 `{ reason: "internal_error" }` without throwing.
