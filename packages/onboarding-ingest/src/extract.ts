@@ -1923,19 +1923,32 @@ function isSentenceName(value: string): boolean {
   return false;
 }
 
-/** Drop "Welcome to" and names that are only a generic title, a hostname, or a sentence. */
-export function publicBusinessName(value: string | undefined): string | undefined {
-  if (!value) return undefined;
-  const stripped = sanitizeUntrustedField(value, 200)
+function strippedName(value: string): string {
+  return sanitizeUntrustedField(value, 200)
     .replace(/^welcome to\s+/i, "")
     .replace(/^about\s+/i, "")
     .replace(/\s+all rights reserved\.?$/i, "")
     .trim();
+}
+
+/** Drop "Welcome to" and names that are only a generic title, a hostname, or a sentence. */
+export function publicBusinessName(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const stripped = strippedName(value);
   if (!stripped || isGenericName(stripped) || HOSTLIKE_NAME_RE.test(stripped)) return undefined;
   if (ERROR_PAGE_TITLE_RE.test(stripped)) return undefined;
   if (isSentenceName(stripped)) return undefined;
   if (/\.(?:jpe?g|png|gif|webp|svg|ico|pdf|docx?|html?)$/i.test(stripped)) return undefined;
   return stripped;
+}
+
+/** True when the text was dropped because it is a sentence or a place list, not a filename or a nav label. */
+function nameRejectedAsSentence(value: string): boolean {
+  const stripped = strippedName(value);
+  if (!stripped || isGenericName(stripped) || HOSTLIKE_NAME_RE.test(stripped)) return false;
+  if (ERROR_PAGE_TITLE_RE.test(stripped)) return false;
+  if (/\.(?:jpe?g|png|gif|webp|svg|ico|pdf|docx?|html?)$/i.test(stripped)) return false;
+  return isSentenceName(stripped);
 }
 
 const DOMAIN_BRAND_WORDS = [
@@ -2096,20 +2109,67 @@ function isTradeLabel(name: string): boolean {
   return trade.length + place.length + company.length === words.length && place.length + trade.length >= 2;
 }
 
+const TAGLINE_NAME_RE = /^(?:professional|quality|your local|leading|welcome to)\b/i;
+
+/** A slogan that opens with a generic descriptor rather than the business brand. */
+function isTaglineName(name: string): boolean {
+  return TAGLINE_NAME_RE.test(name.trim());
+}
+
 /** A trade word plus a town, such as "Electricians Liverpool" or "Wirral Estate Agents". */
 function isServiceTown(name: string): boolean {
   if (isTradeLabel(name)) return true;
   const words = name
     .split(/[^A-Za-z0-9]+/)
     .filter((word) => word && !/^(?:and|the|of|in|for|a|our|your|co|ltd|limited|group)$/i.test(word));
-  return words.some((word) => TRADE_NAME_RE.test(word)) && words.some((word) => TRADE_PLACE_RE.test(word));
+  const trade = words.some((word) => TRADE_NAME_RE.test(word));
+  if (trade && /\bin\s+[A-Z][a-z]+/.test(name)) return true;
+  return trade && words.some((word) => TRADE_PLACE_RE.test(word));
+}
+
+/**
+ * The shortest in-order span of the original words that covers the domain brand,
+ * such as "Gregorys Heating and Plumbing" inside a longer title.
+ */
+function domainBrandPhrase(value: string, siteHost: string): string | undefined {
+  const tokens = domainBrandTokens(siteHost);
+  if (tokens.length < 2) return undefined;
+  const words = [...value.matchAll(/[A-Za-z0-9]+/g)];
+  if (!words.length) return undefined;
+  const norms = words.map((word) => word[0].toLowerCase());
+  let start = -1;
+  let end = -1;
+  let from = 0;
+  for (const token of tokens) {
+    const index = norms.indexOf(token, from);
+    if (index < 0) return undefined;
+    if (start < 0) start = index;
+    end = index;
+    from = index + 1;
+  }
+  const phrase = words.slice(start, end + 1).map((word) => word[0]).join(" ");
+  if (!phrase || isSentenceName(phrase)) return undefined;
+  return publicBusinessName(phrase);
 }
 
 function acceptableName(text: string, siteHost: string): string | undefined {
   const value = publicBusinessName(text);
   if (!value || isDomainSlug(value, siteHost)) return undefined;
-  if (isServiceTown(value) && !nameMatchesDomain(value, siteHost)) return undefined;
+  const matchesDomain = nameMatchesDomain(value, siteHost);
+  if (!matchesDomain && (isTaglineName(value) || isServiceTown(value))) return undefined;
   return value;
+}
+
+function candidateName(text: string, siteHost: string): string | undefined {
+  const direct = acceptableName(text, siteHost);
+  if (direct) return direct;
+  if (!nameRejectedAsSentence(text)) return undefined;
+  const phrase = domainBrandPhrase(text, siteHost);
+  if (!phrase || isDomainSlug(phrase, siteHost)) return undefined;
+  if ((isTaglineName(phrase) || isServiceTown(phrase)) && !nameMatchesDomain(phrase, siteHost)) {
+    return undefined;
+  }
+  return phrase;
 }
 
 function leadName(value: string): string | undefined {
@@ -2130,7 +2190,7 @@ function chooseBusinessName(hits: NameHit[], siteHost: string): NameHit | undefi
   const prepared: NameHit[] = [];
   for (const hit of hits) {
     for (const piece of namePieces(hit.value)) {
-      const value = acceptableName(piece.text, siteHost);
+      const value = candidateName(piece.text, siteHost);
       if (!value) continue;
       if (piece.order > 0 && !nameMatchesDomain(value, siteHost)) continue;
       prepared.push({ ...hit, value });

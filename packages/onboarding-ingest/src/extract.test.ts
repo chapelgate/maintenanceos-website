@@ -705,6 +705,46 @@ test("sentences and trade titles lose to the domain brand", () => {
   assert.equal(karl.fieldMeta.businessName?.source, "jsonld");
   assert.equal(karl.fieldMeta.businessName?.confidence, "medium");
 
+  const gregorys = extractDraftFromHtml([
+    {
+      url: "https://www.gregorysheatingandplumbing.co.uk/",
+      html: fixture("gregorysheatingandplumbing-home.html"),
+    },
+  ]);
+  assert.equal(gregorys.draft.businessName, "Gregorys Heating and Plumbing");
+  assert.equal(gregorys.fieldMeta.businessName?.source, "jsonld");
+  assert.notEqual(gregorys.draft.businessName, "Professional heating and plumbing in Prenton");
+
+  const taglineJsonLd = extractDraftFromHtml([
+    {
+      url: "https://www.gregorysheatingandplumbing.co.uk/",
+      html: `<!doctype html><html><head>
+        <title>Gregorys Heating and Plumbing Ltd, Prenton, Birkenhead &amp; Liverpool</title>
+        <meta property="og:site_name" content="Gregorys Heating and Plumbing" />
+        <script type="application/ld+json">{"@type":"Organization","name":"Professional heating and plumbing in Prenton"}</script>
+      </head><body><h1>Quality heating in Prenton</h1></body></html>`,
+    },
+  ]);
+  assert.equal(taglineJsonLd.draft.businessName, "Gregorys Heating and Plumbing");
+  assert.notEqual(taglineJsonLd.fieldMeta.businessName?.source, "jsonld");
+
+  const qualityBrand = extractDraftFromHtml([
+    {
+      url: "https://qualityplumbing.co.uk/",
+      html: "<html><head><title>Quality Plumbing</title></head><body><h1>Quality Plumbing</h1></body></html>",
+    },
+  ]);
+  assert.equal(qualityBrand.draft.businessName, "Quality Plumbing");
+
+  const leading = extractDraftFromHtml([
+    {
+      url: "https://example-heating.co.uk/",
+      html: "<html><head><title>Leading boiler repairs in Chester</title></head><body><h1>Your local heating engineer</h1></body></html>",
+    },
+  ]);
+  assert.notEqual(leading.draft.businessName, "Leading boiler repairs in Chester");
+  assert.notEqual(leading.draft.businessName, "Your local heating engineer");
+
   assert.equal(
     publicBusinessName("Black and Pink Modern Initials Logo Design_edited.jpg"),
     undefined,
