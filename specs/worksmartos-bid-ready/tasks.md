@@ -9,4 +9,8 @@
 - [x] Visitor legal copy uses the WorkSmartOS brand
 - [x] `npm test` and `npx tsc --noEmit` pass
 - [x] Contact, address, services, and area extraction for a small trades page
+- [x] Obfuscated contact emails, locality addresses, service lists, and FAQ byline rejection
+- [x] Entity and tag sanitisation on draft fields
+- [x] Priority crawl, about a 45 second budget, and one prominent contact on a large site
+- [x] `/create` progress text while the website check is still running
 - [x] `/create` address field, skipped-page note, and continue scanning for `CRAWLING`

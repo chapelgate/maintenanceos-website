@@ -1,4 +1,13 @@
 import {
+  acceptableFaqAnswer,
+  chooseProminentValue,
+  crawlUrlPriority,
+  isServicePhrase,
+  phoneIdentity,
+  sanitizeUntrustedField,
+  type ProminentHit,
+} from "./extract.ts";
+import {
   DEFAULT_MAX_REDIRECTS,
   fetchPublicHttps,
 } from "./fetch-safe.ts";
@@ -63,7 +72,7 @@ import type {
 } from "./types.ts";
 
 export const DEFAULT_SCANNER_V2_STATE_ROOT = ".data/scanner-v2";
-export const DEFAULT_SCANNER_V2_REQUEST_MS = 110_000;
+export const DEFAULT_SCANNER_V2_REQUEST_MS = 45_000;
 export const MAX_SCANNER_V2_REQUEST_MS = 115_000;
 export const DEFAULT_SCANNER_V2_BATCH_SIZE = 8;
 export const MAX_SCANNER_V2_URLS = 10_000;
@@ -136,6 +145,31 @@ function unique(values: readonly string[]): string[] {
   return [...new Set(values.map((value) => value.trim()).filter(Boolean))];
 }
 
+function asFieldSource(source: string | undefined): ProminentHit["source"] {
+  switch (source) {
+    case "jsonld":
+    case "microdata":
+    case "meta":
+    case "title":
+    case "heading":
+    case "nav":
+    case "pattern":
+    case "contact_link":
+    case "details":
+      return source;
+    default:
+      return "heading";
+  }
+}
+
+function sourceRank(source: string | undefined): number {
+  if (source === "jsonld" || source === "microdata") return 5;
+  if (source === "contact_link") return 4;
+  if (source === "heading") return 3;
+  if (source === "pattern") return 1;
+  return 2;
+}
+
 function aggregateFacts(
   origin: string,
   pages: readonly CrawlPage[],
@@ -145,10 +179,13 @@ function aggregateFacts(
     website: { confidence: "high", source: "fetched_url" },
   };
   const locations: string[] = [];
-  const phones: string[] = [];
-  const emails: string[] = [];
   const services: string[] = [];
   const faqs: Array<{ question: string; answer: string }> = [];
+  const phoneHits: ProminentHit[] = [];
+  const emailHits: ProminentHit[] = [];
+  const addressHits: ProminentHit[] = [];
+  const hourHits: ProminentHit[] = [];
+  const pageUrls = pages.map((page) => page.canonicalUrl);
 
   for (const page of pages) {
     const source = page.structuredFacts as Partial<BusinessFacts> & {
@@ -156,51 +193,101 @@ function aggregateFacts(
     };
     const pageMeta = source._factMeta;
     if (!facts.businessName && typeof source.businessName === "string") {
-      facts.businessName = source.businessName;
+      facts.businessName = sanitizeUntrustedField(source.businessName, 200);
       if (pageMeta?.businessName) factMeta.businessName = pageMeta.businessName;
     }
-    if (!facts.address && typeof source.address === "string" && source.address.trim()) {
-      facts.address = source.address.trim();
-      if (pageMeta?.address) factMeta.address = pageMeta.address;
+    if (typeof source.address === "string" && source.address.trim()) {
+      const meta = pageMeta?.address;
+      addressHits.push({
+        value: source.address,
+        url: page.canonicalUrl,
+        rank: meta && "source" in meta ? sourceRank(meta.source) : 2,
+        source: asFieldSource(meta && "source" in meta ? meta.source : undefined),
+        confidence: meta && "confidence" in meta ? meta.confidence : "medium",
+      });
     }
-    if (!facts.hours && typeof source.hours === "string") {
-      facts.hours = source.hours;
-      if (pageMeta?.hours) factMeta.hours = pageMeta.hours;
+    if (typeof source.hours === "string" && source.hours.trim()) {
+      const meta = pageMeta?.hours;
+      hourHits.push({
+        value: source.hours,
+        url: page.canonicalUrl,
+        rank: meta && "source" in meta ? sourceRank(meta.source) : 2,
+        source: asFieldSource(meta && "source" in meta ? meta.source : undefined),
+        confidence: meta && "confidence" in meta ? meta.confidence : "medium",
+      });
     }
     if (Array.isArray(source.locations)) {
-      locations.push(...source.locations);
+      locations.push(...source.locations.map((item) => sanitizeUntrustedField(item, 80)));
       if (!factMeta.locations && pageMeta?.locations) factMeta.locations = pageMeta.locations;
     }
     if (Array.isArray(source.services)) {
       services.push(...source.services);
       if (!factMeta.services && pageMeta?.services) factMeta.services = pageMeta.services;
     }
-    if (Array.isArray(source.contact?.phones)) phones.push(...source.contact.phones);
-    if (Array.isArray(source.contact?.emails)) emails.push(...source.contact.emails);
-    if (
-      (source.contact?.phones?.length || source.contact?.emails?.length) &&
-      !factMeta.contact &&
-      pageMeta?.contact
-    ) {
-      factMeta.contact = pageMeta.contact;
+    const contactMeta = pageMeta?.contact;
+    const contactRank = contactMeta && "source" in contactMeta ? sourceRank(contactMeta.source) : 2;
+    const contactSource = asFieldSource(contactMeta && "source" in contactMeta ? contactMeta.source : undefined);
+    const contactConfidence =
+      contactMeta && "confidence" in contactMeta ? contactMeta.confidence : "medium";
+    if (Array.isArray(source.contact?.phones)) {
+      for (const phone of source.contact.phones) {
+        phoneHits.push({
+          value: phone,
+          url: page.canonicalUrl,
+          rank: contactRank,
+          source: contactSource,
+          confidence: contactConfidence,
+        });
+      }
+    }
+    if (Array.isArray(source.contact?.emails)) {
+      for (const email of source.contact.emails) {
+        emailHits.push({
+          value: email,
+          url: page.canonicalUrl,
+          rank: contactRank,
+          source: contactSource,
+          confidence: contactConfidence,
+        });
+      }
     }
     if (Array.isArray(source.faqs)) {
       for (const faq of source.faqs) {
         if (
           faq &&
           typeof faq.question === "string" &&
-          typeof faq.answer === "string"
+          typeof faq.answer === "string" &&
+          acceptableFaqAnswer(faq.answer)
         ) {
-          faqs.push({ question: faq.question, answer: faq.answer });
+          faqs.push({
+            question: sanitizeUntrustedField(faq.question, 200),
+            answer: sanitizeUntrustedField(faq.answer, 2000),
+          });
         }
       }
     }
   }
 
   const uniqueLocations = unique(locations);
-  const uniquePhones = unique(phones);
-  const uniqueEmails = unique(emails);
-  const uniqueServices = unique(services);
+  const phonePick = chooseProminentValue(phoneHits, phoneIdentity, pageUrls);
+  const emailPick = chooseProminentValue(
+    emailHits,
+    (value) => value.trim().toLowerCase(),
+    pageUrls,
+  );
+  const addressPick = chooseProminentValue(
+    addressHits,
+    (value) => value.toLowerCase().replace(/\s+/g, " "),
+    pageUrls,
+  );
+  const hourPick = chooseProminentValue(
+    hourHits,
+    (value) => value.toLowerCase().replace(/\s+/g, " "),
+    pageUrls,
+  );
+  const uniqueServices = unique(services.map((item) => sanitizeUntrustedField(item, 80))).filter(
+    (item) => isServicePhrase(item),
+  );
   const uniqueFaqs = [
     ...new Map(
       faqs.map((faq) => [
@@ -211,10 +298,39 @@ function aggregateFacts(
   ];
 
   if (uniqueLocations.length) facts.locations = uniqueLocations;
-  if (uniquePhones.length || uniqueEmails.length) {
+  if (phonePick || emailPick) {
     facts.contact = {
-      ...(uniquePhones.length ? { phones: uniquePhones } : {}),
-      ...(uniqueEmails.length ? { emails: uniqueEmails } : {}),
+      ...(phonePick ? { phones: [phonePick.value] } : {}),
+      ...(emailPick ? { emails: [emailPick.value] } : {}),
+    };
+    const contactHit = [phonePick, emailPick]
+      .filter((hit): hit is ProminentHit => Boolean(hit))
+      .sort((a, b) => b.rank - a.rank)[0];
+    if (contactHit) {
+      factMeta.contact = {
+        source: contactHit.source,
+        confidence:
+          phonePick?.confidence === "low" || emailPick?.confidence === "low"
+            ? "low"
+            : contactHit.confidence,
+        ...(contactHit.url.startsWith("https://") ? { sourceUrl: contactHit.url } : {}),
+      };
+    }
+  }
+  if (addressPick) {
+    facts.address = addressPick.value;
+    factMeta.address = {
+      source: addressPick.source,
+      confidence: addressPick.confidence,
+      ...(addressPick.url.startsWith("https://") ? { sourceUrl: addressPick.url } : {}),
+    };
+  }
+  if (hourPick) {
+    facts.hours = hourPick.value;
+    factMeta.hours = {
+      source: hourPick.source,
+      confidence: hourPick.confidence,
+      ...(hourPick.url.startsWith("https://") ? { sourceUrl: hourPick.url } : {}),
     };
   }
   if (uniqueServices.length) facts.services = uniqueServices;
@@ -751,7 +867,8 @@ export async function runPersistentScannerV2(
     64,
   );
   const now = options.now ?? Date.now;
-  const deadline = now() + requestMs;
+  const started = now();
+  const deadline = started + requestMs;
 
   while (now() < deadline) {
     const batch = await runScannerV2WorkerBatch({
@@ -763,6 +880,16 @@ export async function runPersistentScannerV2(
     });
     if (!batch.hasMoreWork) break;
     if (batch.attempted === 0 && batch.deferred > 0) break;
+    if (!resumed) {
+      const urls = await store.listUrls(crawlId);
+      const pendingPriority = urls.some(
+        (row) => row.status === "queued" && crawlUrlPriority(row.url) >= 50,
+      );
+      const fetched = urls.some(
+        (row) => row.status === "fetched" || row.status === "duplicate",
+      );
+      if (fetched && !pendingPriority) break;
+    }
   }
 
   return runtimeResult({

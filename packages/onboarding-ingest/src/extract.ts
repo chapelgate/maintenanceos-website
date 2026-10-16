@@ -72,22 +72,44 @@ export function asUntrustedText(value: string, max = MAX_FIELD_CHARS): string {
     .slice(0, max);
 }
 
+const NAMED_ENTITIES: Record<string, string> = {
+  nbsp: " ",
+  amp: "&",
+  quot: '"',
+  apos: "'",
+  lt: "<",
+  gt: ">",
+  ndash: "–",
+  mdash: "—",
+  hellip: "…",
+  rsquo: "'",
+  lsquo: "'",
+  rdquo: '"',
+  ldquo: '"',
+  middot: "·",
+  bull: "•",
+  pound: "£",
+};
+
 export function decodeEntities(raw: string): string {
-  return raw
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
+  const decoded = raw
     .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) => {
       const code = Number.parseInt(hex, 16);
-      return Number.isFinite(code) ? String.fromCodePoint(code) : "";
+      return Number.isFinite(code) && code <= 0x10ffff ? String.fromCodePoint(code) : "";
     })
     .replace(/&#(\d+);/g, (_, dec: string) => {
       const code = Number.parseInt(dec, 10);
-      return Number.isFinite(code) ? String.fromCodePoint(code) : "";
-    });
+      return Number.isFinite(code) && code <= 0x10ffff ? String.fromCodePoint(code) : "";
+    })
+    .replace(/&([a-z]+);/gi, (entity, name: string) => NAMED_ENTITIES[name.toLowerCase()] ?? entity);
+  return decoded.includes("&") && decoded !== raw ? decodeEntities(decoded) : decoded;
+}
+
+/** Decode entities, drop tags, and collapse whitespace. Used on every draft field. */
+export function sanitizeUntrustedField(value: string, max = MAX_FIELD_CHARS): string {
+  const decoded = decodeEntities(value);
+  const stripped = decoded.replace(/<[^>]*>/g, " ");
+  return asUntrustedText(decodeEntities(stripped), max);
 }
 
 export function stripHtmlToText(html: string): string {
@@ -294,7 +316,7 @@ function collectFaqs(rec: Record<string, unknown>, into: string[]): void {
     const answer =
       (answerRec && (stringField(answerRec.text) || stringField(answerRec.name))) ||
       stringField(q.acceptedAnswer);
-    if (question && answer) {
+    if (question && answer && acceptableFaqAnswer(answer)) {
       into.push(`Q: ${question}\nA: ${answer}`);
     }
   }
@@ -339,27 +361,28 @@ function collectContact(
 }
 
 
-function countryText(value: unknown): string | undefined {
-  const direct = stringField(value);
-  if (direct) return direct;
-  const rec = asRecord(value);
-  if (!rec) return undefined;
-  return stringField(rec.name);
-}
+const REGION_OR_COUNTRY_CODE = /^(?:eng|gb|gbr|uk|usa|us|eu)$/i;
 
-function formatPostalAddress(value: unknown): string | undefined {
+/** Street, locality, and postcode only. Region and country codes such as ENG and GB are omitted. */
+export function formatPostalAddress(value: unknown): string | undefined {
   const direct = stringField(value);
-  if (direct) return direct;
+  if (direct) return stripAddressCodes(direct);
   const rec = asRecord(value);
   if (!rec) return undefined;
   const parts = [
     stringField(rec.streetAddress),
     stringField(rec.addressLocality),
-    stringField(rec.addressRegion),
     stringField(rec.postalCode),
-    countryText(rec.addressCountry),
   ].filter((item): item is string => Boolean(item));
-  return parts.length ? asUntrustedText(parts.join(", "), 500) : undefined;
+  return parts.length ? stripAddressCodes(parts.join(", ")) : undefined;
+}
+
+function stripAddressCodes(value: string): string | undefined {
+  const parts = sanitizeUntrustedField(value, 500)
+    .split(",")
+    .map((part) => part.trim())
+    .filter((part) => part && !REGION_OR_COUNTRY_CODE.test(part));
+  return parts.length ? parts.join(", ") : undefined;
 }
 
 function locationText(value: unknown): string | undefined {
@@ -507,9 +530,7 @@ export function extractMicrodata(html: string): MicrodataExtract {
   const addressParts = [
     itempropValues(hoursSrc, "streetAddress")[0],
     itempropValues(hoursSrc, "addressLocality")[0],
-    itempropValues(hoursSrc, "addressRegion")[0],
     itempropValues(hoursSrc, "postalCode")[0],
-    itempropValues(hoursSrc, "addressCountry")[0],
   ].filter((item): item is string => Boolean(item));
   const locations = [
     ...(addressParts.length ? [asUntrustedText(addressParts.join(", "), 500)] : []),
@@ -672,12 +693,27 @@ function extractServiceSubheadings(html: string): string | undefined {
     .map((item) => innerText(item[2]))
     .filter(
       (item) =>
-        item.length >= 2 &&
-        item.length <= 80 &&
+        isServicePhrase(item) &&
         !GENERIC_NAV_RE.test(item),
     );
   const unique = [...new Set(labels)].slice(0, 24);
   return unique.length >= 2 ? unique.join("\n") : undefined;
+}
+
+function serviceItemsUnderHeading(html: string): string | undefined {
+  const heading =
+    /<h([1-3])\b[^>]*>\s*((?:our\s+)?(?:services?|what we (?:do|offer|provide)|services we offer))\s*<\/h\1>/i;
+  const match = heading.exec(html);
+  if (!match || match.index === undefined) return undefined;
+  const level = Number(match[1]);
+  const after = html.slice(match.index + match[0].length, match.index + match[0].length + 16_000);
+  const next = after.search(new RegExp(`<h[1-${level}]\\b`, "i"));
+  const section = after.slice(0, next === -1 ? after.length : next);
+  const items = [...section.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)]
+    .map((item) => innerText(item[1] ?? ""))
+    .filter((item) => isServicePhrase(item));
+  const unique = [...new Set(items)].slice(0, 12);
+  return unique.length ? unique.join("\n") : undefined;
 }
 
 function looksLikeQuestion(text: string): boolean {
@@ -689,6 +725,16 @@ function looksLikeQuestion(text: string): boolean {
   );
 }
 
+const FAQ_BYLINE_RE =
+  /\b(?:19|20)\d{2}\b[\s\S]{0,48}\bby\b|\bby\b[\s\S]{0,48}\b(?:19|20)\d{2}\b|^(?:january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\.?\s+\d{1,2},?\s+\d{4}\b/i;
+
+export function acceptableFaqAnswer(answer: string): boolean {
+  const text = sanitizeUntrustedField(answer, 2000);
+  if (text.length < 8) return false;
+  if (FAQ_BYLINE_RE.test(text)) return false;
+  return true;
+}
+
 function extractDetailsFaqs(html: string): string | undefined {
   const pairs = [
     ...html.matchAll(
@@ -698,7 +744,7 @@ function extractDetailsFaqs(html: string): string | undefined {
     .map((m) => {
       const q = innerText(m[1]);
       const a = innerText(m[2]);
-      return q && a ? `Q: ${q}\nA: ${a}` : "";
+      return q && acceptableFaqAnswer(a) ? `Q: ${q}\nA: ${a}` : "";
     })
     .filter(Boolean)
     .slice(0, 12);
@@ -714,7 +760,7 @@ function extractDtDdFaqs(html: string): string | undefined {
     .map((m) => {
       const q = innerText(m[1]);
       const a = innerText(m[2]);
-      if (!looksLikeQuestion(q) || !a || a.length < 8) return "";
+      if (!looksLikeQuestion(q) || !acceptableFaqAnswer(a)) return "";
       return `Q: ${q}\nA: ${a}`;
     })
     .filter(Boolean)
@@ -731,7 +777,7 @@ function extractQuestionHeadingFaqs(html: string): string | undefined {
     .map((m) => {
       const q = innerText(m[2]);
       const a = innerText(m[4]);
-      if (!looksLikeQuestion(q) || !a || a.length < 8) return "";
+      if (!looksLikeQuestion(q) || !acceptableFaqAnswer(a)) return "";
       return `Q: ${q}\nA: ${a}`;
     })
     .filter(Boolean)
@@ -748,7 +794,7 @@ function extractAriaFaqs(html: string): string | undefined {
     .map((m) => {
       const q = innerText(m[1]);
       const a = innerText(m[3]);
-      if (!looksLikeQuestion(q) || !a || a.length < 8) return "";
+      if (!looksLikeQuestion(q) || !acceptableFaqAnswer(a)) return "";
       return `Q: ${q}\nA: ${a}`;
     })
     .filter(Boolean)
@@ -777,7 +823,7 @@ function isPlausiblePhone(value: string): boolean {
   return digits.length >= 8 && digits.length <= 15;
 }
 
-function phoneIdentity(value: string): string {
+export function phoneIdentity(value: string): string {
   const digits = value.replace(/\D/g, "");
   if (digits.startsWith("0044") && digits.length >= 12) return "0" + digits.slice(4);
   if (digits.startsWith("44") && digits.length >= 11) return "0" + digits.slice(2);
@@ -975,7 +1021,12 @@ function partitionLocations(values: string[]): { addresses: string[]; areas: str
   return { addresses, areas };
 }
 
-function isPublicContactEmail(email: string, siteHost: string, pageUrl: string): boolean {
+function isPublicContactEmail(
+  email: string,
+  siteHost: string,
+  pageUrl: string,
+  fromContactSurface = false,
+): boolean {
   if (!isPlausibleEmail(email) || /["'+\s]/.test(email)) return false;
   const at = email.lastIndexOf("@");
   const local = email.slice(0, at);
@@ -994,7 +1045,119 @@ function isPublicContactEmail(email: string, siteHost: string, pageUrl: string):
   }
   if (personalPage) return false;
   const host = siteHost.replace(/^www\./i, "").toLowerCase();
-  return Boolean(host) && (domain === host || domain.endsWith("." + host) || host.endsWith("." + domain));
+  if (host && (domain === host || domain.endsWith("." + host) || host.endsWith("." + domain))) return true;
+  return fromContactSurface && isSiteContactUrl(pageUrl);
+}
+
+/** Higher scores are fetched first. Shallow site pages outrank posts and department URLs. */
+export function crawlUrlPriority(raw: string): number {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return 0;
+  }
+  const segments = url.pathname.split("/").filter(Boolean);
+  const last = segments[segments.length - 1] ?? "";
+  if (segments.length === 0) return 100;
+  if (segments.length !== 1) return 10;
+  if (/^(contact|contact-us|get-in-touch|find-us)$/i.test(last)) return 90;
+  if (/^(about|about-us|our-story)$/i.test(last)) return 80;
+  if (/^(services|our-services|what-we-do|what-we-offer)$/i.test(last)) return 70;
+  if (/^(faq|faqs|frequently-asked-questions)$/i.test(last)) return 60;
+  if (/^(hours|opening-hours|openinghours|times)$/i.test(last)) return 50;
+  return 10;
+}
+
+export function isSiteContactUrl(raw: string): boolean {
+  const priority = crawlUrlPriority(raw);
+  return priority === 100 || priority === 90 || priority === 50;
+}
+
+function factPageUrl(url: string, fallback: string): string {
+  try {
+    if (/\.(?:js|mjs|css|map)$/i.test(new URL(url).pathname)) return fallback;
+  } catch {
+    return fallback;
+  }
+  return url;
+}
+
+const SERVICE_SLOGAN_RE =
+  /\b(?:efficient and friendly|get in touch|contact us|call us|book now|why choose|we pride|years of experience|friendly service|welcome to|our promise|satisfaction guaranteed|free quote)\b/i;
+
+export function isServicePhrase(text: string): boolean {
+  const value = sanitizeUntrustedField(text, 80);
+  if (!value || /<[^>]+>/.test(value)) return false;
+  const words = value.split(/\s+/);
+  if (value.length < 3 || value.length > 60 || words.length > 8) return false;
+  if (/[.!?]/.test(value)) return false;
+  if (GENERIC_NAV_RE.test(value) || SERVICE_SLOGAN_RE.test(value)) return false;
+  if (/^(?:efficient|friendly|professional|reliable|trusted|quality|welcome|get|contact|call|book|click)\b/i.test(value)) {
+    return false;
+  }
+  return true;
+}
+
+export type ProminentHit = {
+  value: string;
+  url: string;
+  rank: number;
+  source: FieldSource;
+  confidence: FieldConfidence;
+};
+
+function distinctHits(hits: ProminentHit[], identity: (value: string) => string): ProminentHit[] {
+  const groups = new Map<string, ProminentHit>();
+  for (const hit of hits) {
+    const value = sanitizeUntrustedField(hit.value, 500);
+    if (!value) continue;
+    const key = identity(value) || value.toLowerCase();
+    const next = { ...hit, value };
+    const prev = groups.get(key);
+    if (!prev || next.rank > prev.rank) groups.set(key, next);
+  }
+  return [...groups.values()].sort(
+    (a, b) => b.rank - a.rank || crawlUrlPriority(b.url) - crawlUrlPriority(a.url),
+  );
+}
+
+export function chooseProminentValue(
+  hits: ProminentHit[],
+  identity: (value: string) => string = (value) => value.trim().toLowerCase(),
+  pageUrls: string[] = [],
+): ProminentHit | undefined {
+  const knownUrls = new Set(pageUrls.length ? pageUrls : hits.map((hit) => hit.url));
+  const siteScoped = [...knownUrls].some((url) => isSiteContactUrl(url));
+  const everything = distinctHits(hits, identity);
+  if (!everything.length) return undefined;
+  const broad =
+    siteScoped && (everything.length > 1 || knownUrls.size > 8);
+  const chosen = broad
+    ? distinctHits(hits.filter((hit) => isSiteContactUrl(hit.url)), identity)
+    : everything;
+  const best = chosen[0];
+  if (!best) return undefined;
+  return everything.length > 1 ? { ...best, confidence: "low" } : best;
+}
+
+/** Cloudflare email protection: first byte is the XOR key. The attribute is not executed. */
+export function decodeCloudflareEmail(hex: string): string | undefined {
+  const clean = hex.trim().toLowerCase();
+  if (!/^[0-9a-f]+$/.test(clean) || clean.length < 4 || clean.length % 2 !== 0) return undefined;
+  const key = Number.parseInt(clean.slice(0, 2), 16);
+  let out = "";
+  for (let i = 2; i < clean.length; i += 2) {
+    out += String.fromCharCode(Number.parseInt(clean.slice(i, i + 2), 16) ^ key);
+  }
+  const email = out.trim().toLowerCase();
+  return isPlausibleEmail(email) ? email : undefined;
+}
+
+function deobfuscateEmailText(text: string): string {
+  return decodeEntities(text)
+    .replace(/\s*[\[(]\s*at\s*[\])]\s*/gi, "@")
+    .replace(/\s*[\[(]\s*dot\s*[\])]\s*/gi, ".");
 }
 
 const TRADE_HEADING_RE =
@@ -1004,7 +1167,7 @@ function extractTradeServiceHeadings(html: string): string | undefined {
   const found: string[] = [];
   for (const match of html.matchAll(/<h([2-4])\b[^>]*>([\s\S]*?)<\/h\1>/gi)) {
     const text = innerText(match[2]);
-    if (!text || text.length > 80 || text.split(/\s+/).length > 8) continue;
+    if (!text || !isServicePhrase(text)) continue;
     if (/\b(?:locations?|areas?|we cover|available at)\b/i.test(text)) continue;
     if (GENERIC_NAV_RE.test(text) || !TRADE_HEADING_RE.test(text)) continue;
     found.push(text);
@@ -1035,6 +1198,56 @@ function extractCoveredAreas(html: string): string[] {
     }
   }
   return [...new Set(areas)].slice(0, 16);
+}
+
+function rememberSurfaceEmail(
+  into: ProminentHit[],
+  email: string,
+  pageUrl: string,
+  siteHost: string,
+  rank: number,
+  source: FieldSource,
+  confidence: FieldConfidence,
+): void {
+  const value = sanitizeUntrustedField(email, 120).toLowerCase();
+  if (!value || !isPublicContactEmail(value, siteHost, pageUrl, true)) return;
+  into.push({ value, url: pageUrl, rank, source, confidence });
+}
+
+function extractSurfaceEmails(html: string, pageUrl: string, siteHost: string): ProminentHit[] {
+  const hits: ProminentHit[] = [];
+  for (const match of html.matchAll(/href=["']mailto:([^"'?\s]+)["']/gi)) {
+    rememberSurfaceEmail(
+      hits,
+      decodeEntities(safeDecode(match[1] ?? "")),
+      pageUrl,
+      siteHost,
+      4,
+      "contact_link",
+      "medium",
+    );
+  }
+  for (const match of html.matchAll(/\bdata-cfemail=["']([0-9a-f]+)["']/gi)) {
+    const email = decodeCloudflareEmail(match[1] ?? "");
+    if (!email) continue;
+    rememberSurfaceEmail(hits, email, pageUrl, siteHost, 4, "contact_link", "medium");
+  }
+  const surfaces: string[] = [];
+  for (const tag of ["header", "footer"]) {
+    const re = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, "gi");
+    for (const match of html.matchAll(re)) surfaces.push(match[1] ?? "");
+  }
+  const contact = headingSectionHtml(
+    html,
+    /contact(?:\s+us|\s+details)?(?:\s+\w+)?|get in touch|find us/,
+  );
+  if (contact) surfaces.push(contact);
+  if (isSiteContactUrl(pageUrl)) surfaces.push(html);
+  const text = deobfuscateEmailText(surfaces.map((surface) => stripHtmlToText(surface)).join("\n"));
+  for (const email of visibleEmailCandidates(text)) {
+    rememberSurfaceEmail(hits, email, pageUrl, siteHost, 3, "heading", "medium");
+  }
+  return hits;
 }
 
 function extractChromePhones(html: string): string[] {
@@ -1251,7 +1464,7 @@ const USEFUL_PATH = [
   },
   { re: /\/(faq|faqs|frequently-asked-questions)\/?$/i, weight: 10 },
   { re: /\/(hours|opening-hours|openinghours|times)\/?$/i, weight: 9 },
-  { re: /\/(contact|contact-us)\/?$/i, weight: 8 },
+  { re: /\/(contact|contact-us|get-in-touch)\/?$/i, weight: 12 },
   { re: /\/(residents|rough-sleeping|report-rough-sleeping)\/?$/i, weight: 5 },
 ];
 
@@ -1302,8 +1515,10 @@ function parseFaqFacts(value: string | undefined): Array<{ question: string; ans
   let match: RegExpExecArray | null;
   while ((match = re.exec(value)) && pairs.length < 100) {
     const question = asUntrustedText(match[1], 500);
-    const answer = asUntrustedText(match[2], 2000);
-    if (question && answer) pairs.push({ question, answer });
+    const answer = sanitizeUntrustedField(match[2] ?? "", 2000);
+    if (question && looksLikeQuestion(question) && acceptableFaqAnswer(answer)) {
+      pairs.push({ question, answer });
+    }
   }
   return pairs.length ? pairs : undefined;
 }
@@ -1330,19 +1545,47 @@ export function extractDraftFromHtml(
   const draft: PartialDraft = {};
   const warnings: string[] = [];
   const fieldMeta: DraftFieldMeta = {};
-  const jsonLdHours: string[] = [];
   const jsonLdServices: string[] = [];
   const jsonLdFaqs: string[] = [];
-  const microHours: string[] = [];
   const microServices: string[] = [];
   const locations: string[] = [];
-  const addresses: string[] = [];
-  const phones: string[] = [];
-  const emailSources: { email: string; url: string }[] = [];
+  const addressHits: ProminentHit[] = [];
+  const phoneHits: ProminentHit[] = [];
+  const emailHits: ProminentHit[] = [];
+  const hourHits: ProminentHit[] = [];
   let locationMeta: BusinessFactMeta["locations"];
-  let addressMeta: BusinessFactMeta["address"];
-  let contactMeta: BusinessFactMeta["contact"];
   let placeFallback: { text: string; url: string } | undefined;
+  let siteHost = "";
+  try {
+    siteHost = new URL(pages[0]?.url ?? "").hostname;
+  } catch {
+    siteHost = "";
+  }
+
+  const pushPhones = (
+    values: string[],
+    pageUrl: string,
+    rank: number,
+    source: FieldSource,
+    confidence: FieldConfidence,
+  ) => {
+    for (const value of values) {
+      const text = sanitizeUntrustedField(value, 80);
+      if (!text || !isPlausiblePhone(text)) continue;
+      phoneHits.push({ value: text, url: pageUrl, rank, source, confidence });
+    }
+  };
+  const pushHours = (
+    value: string | undefined,
+    pageUrl: string,
+    rank: number,
+    source: FieldSource,
+    confidence: FieldConfidence,
+  ) => {
+    const text = value ? sanitizeUntrustedField(value, 500) : "";
+    if (!text) return;
+    hourHits.push({ value: text, url: pageUrl, rank, source, confidence });
+  };
 
   const rememberLocations = (
     values: string[],
@@ -1352,8 +1595,17 @@ export function extractDraftFromHtml(
   ) => {
     const parted = partitionLocations(values);
     if (parted.addresses.length) {
-      addresses.push(...parted.addresses);
-      addressMeta ||= factMetaFor(source, confidence, pageUrl);
+      for (const address of parted.addresses) {
+        const text = stripAddressCodes(address);
+        if (!text) continue;
+        addressHits.push({
+          value: text,
+          url: pageUrl,
+          rank: source === "heading" ? 6 : 5,
+          source,
+          confidence,
+        });
+      }
     }
     if (parted.areas.length) {
       locations.push(...parted.areas);
@@ -1362,21 +1614,21 @@ export function extractDraftFromHtml(
   };
 
   for (const page of pages) {
+    const factUrl = factPageUrl(page.url, pages[0]?.url ?? page.url);
     const visibleHtml = withoutCodeScripts(page.html);
     const jsonLd = extractJsonLd(page.html);
     setField(draft, fieldMeta, "businessName", jsonLd.businessName, "jsonld", "high");
     setField(draft, fieldMeta, "greeting", jsonLd.greeting, "jsonld", "high");
-    if (jsonLd.hours) jsonLdHours.push(jsonLd.hours);
+    pushHours(jsonLd.hours, factUrl, 5, "jsonld", "high");
     if (jsonLd.services) jsonLdServices.push(jsonLd.services);
     if (jsonLd.faqs) jsonLdFaqs.push(jsonLd.faqs);
     if (jsonLd.locations.length) {
-      rememberLocations(jsonLd.locations, "jsonld", "high", page.url);
+      rememberLocations(jsonLd.locations, "jsonld", "high", factUrl);
     }
-    if (jsonLd.phones.length || jsonLd.emails.length) {
-      contactMeta ||= factMetaFor("jsonld", "high", page.url);
+    pushPhones(jsonLd.phones, factUrl, 5, "jsonld", "high");
+    for (const email of jsonLd.emails) {
+      rememberSurfaceEmail(emailHits, email, factUrl, siteHost, 5, "jsonld", "high");
     }
-    phones.push(...jsonLd.phones);
-    for (const email of jsonLd.emails) emailSources.push({ email, url: page.url });
 
     const micro = extractMicrodata(page.html);
     if (!draft.businessName) {
@@ -1385,41 +1637,29 @@ export function extractDraftFromHtml(
     if (!draft.greeting) {
       setField(draft, fieldMeta, "greeting", micro.greeting, "microdata", "high");
     }
-    if (micro.hours) microHours.push(micro.hours);
+    pushHours(micro.hours, factUrl, 5, "microdata", "high");
     if (micro.services) microServices.push(micro.services);
     if (micro.locations.length) {
-      rememberLocations(micro.locations, "microdata", "high", page.url);
+      rememberLocations(micro.locations, "microdata", "high", factUrl);
     }
-    if (micro.phones.length || micro.emails.length) {
-      contactMeta ||= factMetaFor("microdata", "high", page.url);
+    pushPhones(micro.phones, factUrl, 5, "microdata", "high");
+    for (const email of micro.emails) {
+      rememberSurfaceEmail(emailHits, email, factUrl, siteHost, 5, "microdata", "high");
     }
-    phones.push(...micro.phones);
-    for (const email of micro.emails) emailSources.push({ email, url: page.url });
 
     const links = extractTelMailto(visibleHtml);
-    if ((links.phones.length || links.emails.length) && !contactMeta) {
-      contactMeta = factMetaFor("contact_link", "medium", page.url);
-    }
-    phones.push(...links.phones);
-    for (const email of links.emails) emailSources.push({ email, url: page.url });
+    pushPhones(links.phones, factUrl, 4, "contact_link", "medium");
+    emailHits.push(...extractSurfaceEmails(visibleHtml, factUrl, siteHost));
 
     const visibleContact = extractVisibleContactSection(visibleHtml);
-    rememberLocations(visibleContact.locations, "heading", "medium", page.url);
-    if (
-      (visibleContact.phones.length || visibleContact.emails.length) &&
-      !contactMeta
-    ) {
-      contactMeta = factMetaFor("heading", "medium", page.url);
+    rememberLocations(visibleContact.locations, "heading", "medium", factUrl);
+    pushPhones(visibleContact.phones, factUrl, 3, "heading", "medium");
+    for (const email of visibleContact.emails) {
+      rememberSurfaceEmail(emailHits, email, factUrl, siteHost, 3, "heading", "medium");
     }
-    phones.push(...visibleContact.phones);
-    for (const email of visibleContact.emails) emailSources.push({ email, url: page.url });
-    const chromePhones = extractChromePhones(visibleHtml);
-    if (chromePhones.length && !contactMeta) {
-      contactMeta = factMetaFor("pattern", "medium", page.url);
-    }
-    phones.push(...chromePhones);
+    pushPhones(extractChromePhones(visibleHtml), factUrl, 3, "pattern", "medium");
     if (visibleContact.place && !placeFallback) {
-      placeFallback = { text: visibleContact.place, url: page.url };
+      placeFallback = { text: visibleContact.place, url: factUrl };
     }
     const covered = extractCoveredAreas(visibleHtml);
     if (covered.length) {
@@ -1477,42 +1717,30 @@ export function extractDraftFromHtml(
     }
   }
 
-  setField(
-    draft,
-    fieldMeta,
-    "hours",
-    uniqueJoin(jsonLdHours),
-    "jsonld",
-    "high",
-  );
-  setField(
-    draft,
-    fieldMeta,
-    "hours",
-    uniqueJoin(microHours),
-    "microdata",
-    "high",
-  );
-  if (!draft.hours) {
-    for (const page of pages) {
-      const section = headingSection(
-        withoutCodeScripts(page.html),
-        /opening hours|business hours|our hours|office hours/,
-      );
-      if (section && looksLikeHours(section)) {
-        setField(draft, fieldMeta, "hours", section, "heading", "medium");
-        break;
-      }
+  for (const page of pages) {
+    if (hourHits.some((hit) => hit.url === page.url && hit.rank >= 5)) continue;
+    const section = headingSection(
+      withoutCodeScripts(page.html),
+      /opening hours|business hours|our hours|office hours/,
+    );
+    if (section && looksLikeHours(section)) {
+      pushHours(section, page.url, 3, "heading", "medium");
     }
   }
-  if (!draft.hours) {
-    for (const page of pages) {
-      const patterned = extractHoursFromVisibleText(withoutCodeScripts(page.html));
-      if (patterned) {
-        setField(draft, fieldMeta, "hours", patterned, "pattern", "low");
-        break;
-      }
-    }
+  for (const page of pages) {
+    if (hourHits.some((hit) => hit.url === page.url)) continue;
+    const patterned = extractHoursFromVisibleText(withoutCodeScripts(page.html));
+    if (patterned) pushHours(patterned, page.url, 1, "pattern", "low");
+  }
+  const pageUrls = pages.map((page) => page.url);
+  const hourPick = chooseProminentValue(
+    hourHits,
+    (value) => value.toLowerCase().replace(/\s+/g, " "),
+    pageUrls,
+  );
+  if (hourPick) {
+    draft.hours = hourPick.value;
+    fieldMeta.hours = factMetaFor(hourPick.source, hourPick.confidence, hourPick.url);
   }
 
   setField(
@@ -1533,12 +1761,25 @@ export function extractDraftFromHtml(
   );
   if (!draft.services) {
     for (const page of pages) {
+      const listed = serviceItemsUnderHeading(withoutCodeScripts(page.html));
+      if (listed) {
+        setField(draft, fieldMeta, "services", listed, "heading", "medium");
+        break;
+      }
+    }
+  }
+  if (!draft.services) {
+    for (const page of pages) {
       const section = headingSection(
         withoutCodeScripts(page.html),
         /our services|services we offer|what we do|what we offer|what we provide|our work|housing options|support services|services/,
       );
-      if (section && (section.split("\n").length >= 2 || section.length >= 24)) {
-        setField(draft, fieldMeta, "services", section, "heading", "medium");
+      const lines = (section ?? "")
+        .split(/\n+/)
+        .map((item) => sanitizeUntrustedField(item, 80))
+        .filter((item) => isServicePhrase(item));
+      if (lines.length >= 2) {
+        setField(draft, fieldMeta, "services", [...new Set(lines)].join("\n"), "heading", "medium");
         break;
       }
     }
@@ -1612,21 +1853,11 @@ export function extractDraftFromHtml(
     }
   }
 
-  let siteHost = "";
-  try {
-    siteHost = new URL(pages[0]?.url ?? "").hostname;
-  } catch {
-    siteHost = "";
-  }
-  const publicEmails = [
-    ...new Set(
-      emailSources
-        .map((item) => ({ email: asUntrustedText(item.email, 120), url: item.url }))
-        .filter((item) => item.email && isPublicContactEmail(item.email, siteHost, item.url))
-        .map((item) => item.email),
-    ),
-  ].slice(0, 8);
-  const contact = formatContactHints(phones, publicEmails);
+  const phonePick = chooseProminentValue(phoneHits, phoneIdentity, pageUrls);
+  const emailPick = chooseProminentValue(emailHits, (value) => value.trim().toLowerCase(), pageUrls);
+  const publicEmails = emailPick ? [emailPick.value] : [];
+  const publicPhones = phonePick ? [phonePick.value] : [];
+  const contact = formatContactHints(publicPhones, publicEmails);
   if (contact) {
     if (draft.faqs) {
       const already = contact
@@ -1647,6 +1878,17 @@ export function extractDraftFromHtml(
   }
   if (!draft.businessName) warnings.push("business_name_not_found");
   if (!draft.hours) warnings.push("hours_not_found");
+  if (draft.services) {
+    const kept = draft.services
+      .split(/\n+/)
+      .map((item) => sanitizeUntrustedField(item, 80))
+      .filter((item) => isServicePhrase(item));
+    const uniqueServices = [...new Set(kept)].slice(0, 12);
+    if (uniqueServices.length) draft.services = uniqueServices.join("\n");
+    else delete draft.services;
+  }
+  if (draft.hours) draft.hours = sanitizeUntrustedField(draft.hours, 500);
+  if (draft.faqs) draft.faqs = sanitizeUntrustedField(draft.faqs, MAX_FIELD_CHARS);
   if (!draft.services) warnings.push("services_not_found");
   if (!draft.faqs) warnings.push("faqs_not_found");
   for (const key of Object.keys(fieldMeta) as (keyof DraftFieldMeta)[]) {
@@ -1658,7 +1900,7 @@ export function extractDraftFromHtml(
 
   const cleanDraft = omitEmpty(draft);
   const uniqueLocations = [...new Set(locations.map((item) => asUntrustedText(item, 500)).filter(Boolean))].slice(0, 16);
-  const uniquePhones = dedupePhones(phones, 8);
+  const uniquePhones = publicPhones;
   const uniqueEmails = publicEmails;
   const facts: BusinessFacts = {};
   const factMeta: BusinessFactMeta = {};
@@ -1678,13 +1920,23 @@ export function extractDraftFromHtml(
     facts.businessName = cleanDraft.businessName;
     if (fieldMeta.businessName) factMeta.businessName = fieldMeta.businessName;
   }
-  const postalAddress = [...new Set(addresses.map((item) => asUntrustedText(item, 500)).filter(Boolean))][0];
-  if (postalAddress) {
-    facts.address = postalAddress;
-    if (addressMeta) factMeta.address = addressMeta;
-  } else if (placeFallback) {
-    facts.address = placeFallback.text;
-    factMeta.address = factMetaFor("heading", "low", placeFallback.url);
+  if (placeFallback) {
+    addressHits.push({
+      value: placeFallback.text,
+      url: placeFallback.url,
+      rank: 1,
+      source: "heading",
+      confidence: "low",
+    });
+  }
+  const addressPick = chooseProminentValue(
+    addressHits,
+    (value) => value.toLowerCase().replace(/\s+/g, " "),
+    pageUrls,
+  );
+  if (addressPick) {
+    facts.address = addressPick.value;
+    factMeta.address = factMetaFor(addressPick.source, addressPick.confidence, addressPick.url);
   }
   if (uniqueLocations.length) {
     facts.locations = uniqueLocations;
@@ -1695,7 +1947,17 @@ export function extractDraftFromHtml(
       ...(uniquePhones.length ? { phones: uniquePhones } : {}),
       ...(uniqueEmails.length ? { emails: uniqueEmails } : {}),
     };
-    if (contactMeta) factMeta.contact = contactMeta;
+    const contactHit = [phonePick, emailPick]
+      .filter((hit): hit is ProminentHit => Boolean(hit))
+      .sort((a, b) => b.rank - a.rank)[0];
+    if (contactHit) {
+      const lowered = phonePick?.confidence === "low" || emailPick?.confidence === "low";
+      factMeta.contact = factMetaFor(
+        contactHit.source,
+        lowered ? "low" : contactHit.confidence,
+        contactHit.url,
+      );
+    }
   }
   const services = splitFactLines(cleanDraft.services);
   if (services) {

@@ -5,6 +5,8 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import {
   asUntrustedText,
+  crawlUrlPriority,
+  decodeCloudflareEmail,
   extractDraftFromHtml,
   extractJsonLd,
   extractMicrodata,
@@ -131,7 +133,8 @@ test("structured facts expose contact and locations without changing legacy draf
     phones: ["+44 151 555 0199"],
     emails: ["hello@northdock.example"],
   });
-  assert.equal(result.facts.address, "10 Dock Road, Liverpool, L1 1AA, GB");
+  assert.equal(result.facts.address, "10 Dock Road, Liverpool, L1 1AA");
+  assert.doesNotMatch(result.facts.address ?? "", /\b(?:ENG|GB|GBR|UK)\b/);
   assert.deepEqual(result.facts.locations, ["Merseyside"]);
   assert.deepEqual(result.facts.services, ["Boiler repair", "Heating maintenance"]);
   assert.equal(result.facts.hours, "Mo-Fr 08:00-17:00");
@@ -468,4 +471,117 @@ test("a small trades page without schema yields services, area, phone, and a bla
   assert.equal(result.facts.hours, undefined);
   assert.equal(result.draft.hours, undefined);
   assert.doesNotMatch(JSON.stringify(result), /rob@example\.test/);
+});
+
+test("fixture contact pages keep a public gmail, an obfuscated email, and a short address", () => {
+  const gregorys = extractDraftFromHtml([
+    { url: "https://gregorys.example/", html: fixture("gregorys-contact.html") },
+  ]);
+  assert.deepEqual(gregorys.facts.contact?.emails, ["gregorysheating@gmail.com"]);
+  assert.equal(gregorys.facts.address, "4 Hampton Chase, CH43 9HE");
+  assert.deepEqual(gregorys.facts.services, [
+    "Boiler installations",
+    "Boiler repairs",
+    "Gas safety certificates",
+    "Power flushing",
+    "Landlord certificates",
+    "Bathroom plumbing",
+  ]);
+  assert.doesNotMatch(gregorys.draft.services ?? "", /Efficient and friendly|Get in touch/i);
+
+  const plumbers = extractDraftFromHtml([
+    { url: "https://wirralplumbers.com/contact", html: fixture("wirral-plumbers-contact.html") },
+  ]);
+  assert.deepEqual(plumbers.facts.contact?.emails, ["mike@wirralplumbers.com"]);
+  assert.deepEqual(plumbers.facts.contact?.phones, ["0758 0395493"]);
+});
+
+test("fixture postal address keeps the locality and drops region and country codes", () => {
+  const result = extractDraftFromHtml([
+    { url: "https://springfield.example/", html: fixture("springfield-address.html") },
+  ]);
+  assert.equal(result.facts.address, "175 Frankby Road, West Kirby, CH48 9UU");
+  assert.doesNotMatch(result.facts.address ?? "", /\b(?:ENG|GB|Birkenhead)\b/);
+  assert.deepEqual(result.facts.contact?.emails, ["office@springfieldheating.example"]);
+});
+
+test("fixture blog bylines are not FAQs and a real question pair is kept", () => {
+  const result = extractDraftFromHtml([
+    { url: "https://wirralheating.example/faq", html: fixture("wirral-heating-faq.html") },
+  ]);
+  const blob = JSON.stringify(result.facts.faqs ?? []);
+  assert.doesNotMatch(blob, /September 9, 2026/);
+  assert.doesNotMatch(blob, /rich General/);
+  assert.match(blob, /emergency callouts/i);
+  assert.match(blob, /landlord gas certificate/i);
+});
+
+test("fixture draft fields decode entities and strip tags", () => {
+  const result = extractDraftFromHtml([
+    { url: "https://bromborough.example/", html: fixture("bromborough-wordpress.html") },
+  ]);
+  assert.match(result.facts.hours ?? "", /8\.30am – 5\.30 pm/);
+  assert.doesNotMatch(result.facts.hours ?? "", /&ndash;|</);
+  assert.deepEqual(result.facts.services, ["Boiler servicing", "Radiator replacement"]);
+  assert.doesNotMatch(JSON.stringify(result.facts.services), /<img|alt=/i);
+  assert.deepEqual(result.facts.contact?.emails, ["enquiries@bromborough.example"]);
+});
+
+test("fixture Cloudflare data-cfemail decodes without executing a script", () => {
+  assert.equal(
+    decodeCloudflareEmail("422d30212a233026022d30212a233026322e372f202b2c256c273a232f322e27"),
+    "orchard@orchardplumbing.example",
+  );
+  const result = extractDraftFromHtml([
+    { url: "https://orchardplumbing.example/contact-us", html: fixture("orchard-cfemail.html") },
+  ]);
+  assert.deepEqual(result.facts.contact?.emails, ["orchard@orchardplumbing.example"]);
+  assert.doesNotMatch(JSON.stringify(result.facts), /data-cfemail/);
+});
+
+test("a large site keeps one home or contact detail and drops department contacts", () => {
+  const home = `<html><head><script type="application/ld+json">
+    {"@type":"LocalBusiness","name":"Public Service","email":"contact@service.example","telephone":"0151 000 0000"}
+  </script></head><body><h1>Public Service</h1></body></html>`;
+  const tribunal = `<html><body><h1>Tribunal</h1><h2>Contact</h2>
+    <p>tribunal@service.example</p><p>0800 111 2222</p>
+    <h2>Opening hours</h2><p>Monday 9am - 4pm</p></body></html>`;
+  const pages = [
+    { url: "https://service.example/", html: home },
+    { url: "https://service.example/tribunals/contact", html: tribunal },
+  ];
+  for (let i = 0; i < 8; i += 1) {
+    pages.push({
+      url: `https://service.example/departments/team-${i}`,
+      html: `<html><body><p>desk${i}@service.example</p><p>0161 496 0${i}00</p></body></html>`,
+    });
+  }
+  const result = extractDraftFromHtml(pages);
+  assert.deepEqual(result.facts.contact?.emails, ["contact@service.example"]);
+  assert.deepEqual(result.facts.contact?.phones, ["0151 000 0000"]);
+  assert.equal(result.factMeta.contact?.confidence, "low");
+  assert.equal(result.facts.hours, undefined);
+  assert.doesNotMatch(JSON.stringify(result.facts), /tribunal@|0800 111 2222|desk0@/);
+});
+
+test("crawl priority fetches home and contact before posts", () => {
+  assert.equal(crawlUrlPriority("https://trade.example/"), 100);
+  assert.equal(crawlUrlPriority("https://trade.example/contact"), 90);
+  assert.equal(crawlUrlPriority("https://trade.example/contact-us"), 90);
+  assert.equal(crawlUrlPriority("https://trade.example/about"), 80);
+  assert.equal(crawlUrlPriority("https://trade.example/services"), 70);
+  assert.equal(crawlUrlPriority("https://trade.example/faq"), 60);
+  assert.equal(crawlUrlPriority("https://trade.example/opening-hours"), 50);
+  assert.ok(crawlUrlPriority("https://trade.example/2024/boiler-tips") < 50);
+  assert.ok(crawlUrlPriority("https://service.example/departments/contact") < 50);
+  const ranked = [
+    "https://trade.example/2024/boiler-tips",
+    "https://trade.example/contact",
+    "https://trade.example/",
+  ].sort((a, b) => crawlUrlPriority(b) - crawlUrlPriority(a));
+  assert.deepEqual(ranked, [
+    "https://trade.example/",
+    "https://trade.example/contact",
+    "https://trade.example/2024/boiler-tips",
+  ]);
 });

@@ -62,6 +62,76 @@ function seedManifest(origin: string): CrawlManifest {
   };
 }
 
+test("priority pages are read before posts and the draft returns early", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-priority-"));
+  const seen: string[] = [];
+  try {
+    const discover = async (rawUrl: string) => {
+      const origin = new URL(rawUrl).origin;
+      const urls: CrawlUrlDisposition[] = ["/", "/2024/boiler-tips", "/contact"].map((path) => ({
+        url: origin + path,
+        status: "queued",
+        discoveryReason: "sitemap",
+      }));
+      return {
+        manifest: {
+          crawlId: "seed",
+          origin,
+          state: "PARTIAL" as const,
+          discovered: urls.length,
+          queued: urls.length,
+          fetched: 0,
+          duplicate: 0,
+          policySkipped: 0,
+          robotsSkipped: 0,
+          unresolved: 0,
+          urls,
+        },
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: [],
+        limitReached: false,
+        incomplete: true,
+      };
+    };
+    let clock = 0;
+    const result = await runPersistentScannerV2("https://trade.example/", {
+      stateRoot: root,
+      releaseSha: "priority",
+      requestMs: 40_000,
+      batchSize: 1,
+      now: () => (clock += 5),
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => {
+        seen.push(url.url);
+        const fetched = page(url.url, `Trade page ${url.url}`);
+        return {
+          disposition: "fetched" as const,
+          canonicalUrl: url.url,
+          page: fetched,
+          chunks: [],
+        };
+      }) as never,
+    });
+    assert.deepEqual(seen, [
+      "https://trade.example/",
+      "https://trade.example/contact",
+    ]);
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    assert.equal(result.scannerV2?.state, "CRAWLING");
+    assert.equal(result.scannerV2?.fetched, 2);
+    assert.equal(result.scannerV2?.discovered, 3);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("reader recovery keeps the original public target as provenance", async () => {
   let calls = 0;
   const target = "https://forum.example/about";
