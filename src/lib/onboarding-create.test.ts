@@ -25,6 +25,7 @@ import {
   scanProgressAfterResult,
   isZeroFetchPartial,
   isBlockedBySite,
+  gatewayScanCrawlId,
   requestOnboardingScan,
   BLOCKED_BY_SITE_HOST_LINE,
   BLOCKED_BY_SITE_MESSAGE,
@@ -755,7 +756,8 @@ test("mocked scanner success maps facts and does not invent empty fields", async
     warnings: [],
   });
   assert.equal(calls.length, 1);
-  assert.deepEqual(calls[0].body, { url: "https://example.com/" });
+  assert.equal(calls[0].body.url, "https://example.com/");
+  assert.equal(calls[0].body.crawlId, await gatewayScanCrawlId("https://example.com/contact"));
   assert.doesNotMatch(JSON.stringify(outcome), /api[_-]?key|secret|token/i);
 });
 
@@ -834,8 +836,9 @@ test("a 403 with nothing fetched is blocked_by_site and keeps the manual path", 
 
 test("mocked scanner timeout retries once then offers the manual draft", async () => {
   let calls = 0;
+  const bodies: Array<{ url?: string; crawlId?: string }> = [];
   const progress = [];
-  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/pricing", {
     timeoutMs: 15,
     backoffMs: 0,
     sleep: async () => {},
@@ -843,6 +846,7 @@ test("mocked scanner timeout retries once then offers the manual draft", async (
     fetchImpl: (_input, init) =>
       new Promise((_resolve, reject) => {
         calls += 1;
+        bodies.push(JSON.parse(String(init?.body)));
         const signal = init?.signal;
         const fail = () => reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
         if (signal?.aborted) fail();
@@ -851,10 +855,35 @@ test("mocked scanner timeout retries once then offers the manual draft", async (
   });
   assert.equal(calls, 2);
   assert.deepEqual(progress, ["request", "retry", "request"]);
+  const expectedId = await gatewayScanCrawlId("https://example.com/pricing");
+  assert.equal(bodies[0]?.crawlId, expectedId);
+  assert.equal(bodies[1]?.crawlId, expectedId);
   assert.equal(outcome.status, "manual");
   if (outcome.status !== "manual") return;
   assert.equal(outcome.reason, "timeout");
   assert.equal(outcome.message, SCAN_TIMEOUT_MESSAGE);
+});
+
+test("a supplied crawl id is reused when a call does not respond", async () => {
+  const bodies: Array<{ crawlId?: string }> = [];
+  await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    crawlId: "scanner-v2:kept",
+    timeoutMs: 15,
+    backoffMs: 0,
+    sleep: async () => {},
+    fetchImpl: (_input, init) =>
+      new Promise((_resolve, reject) => {
+        bodies.push(JSON.parse(String(init?.body)));
+        const signal = init?.signal;
+        const fail = () => reject(Object.assign(new Error("aborted"), { name: "AbortError" }));
+        if (signal?.aborted) fail();
+        else signal?.addEventListener("abort", fail, { once: true });
+      }),
+  });
+  assert.deepEqual(
+    bodies.map((body) => body.crawlId),
+    ["scanner-v2:kept", "scanner-v2:kept"],
+  );
 });
 
 test("mocked scanner 5xx retries once and keeps a successful second response", async () => {

@@ -530,8 +530,8 @@ export type ScanAttemptProgress = {
   phase: ScanAttemptPhase;
 };
 
-/** One attempt stays inside the App Platform function limit (120s). */
-export const SCAN_ATTEMPT_TIMEOUT_MS = 28_000;
+/** A silent call is aborted at 30 seconds and retried once with the same crawl id. */
+export const SCAN_ATTEMPT_TIMEOUT_MS = 30_000;
 /** A second attempt covers a dropped connection or a 5xx. Not a third full wait. */
 export const SCAN_MAX_ATTEMPTS = 2;
 export const SCAN_RETRY_BACKOFF_MS = 800;
@@ -742,6 +742,25 @@ function sleepMs(ms: number): Promise<void> {
 }
 
 /**
+ * Same id the scan function uses when the client has not learned a crawl id yet.
+ * A no-response retry sends this id again so the durable crawl is resumed.
+ */
+export async function gatewayScanCrawlId(pageUrl: string): Promise<string> {
+  let origin = pageUrl;
+  try {
+    origin = new URL(pageUrl).origin;
+  } catch {
+    origin = pageUrl;
+  }
+  const bytes = new TextEncoder().encode(`${origin.replace(/\r\n?/g, "\n")}\0`);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const hex = [...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+  return `scanner-v2:gateway:${hex}`;
+}
+
+/**
  * POST the same-origin scanner. A 5xx or a timed-out attempt is retried once.
  * Zero-fetch, timeout, and a failed retry all return `manual` so the visitor
  * can finish the draft. Nothing is invented.
@@ -767,6 +786,7 @@ export async function requestOnboardingScan(
   const backoffMs = options.backoffMs ?? SCAN_RETRY_BACKOFF_MS;
   const fetchImpl = options.fetchImpl ?? fetch;
   const sleep = options.sleep ?? sleepMs;
+  const crawlId = options.crawlId?.trim() || (await gatewayScanCrawlId(url));
   let lastManual: Extract<ScanOutcome, { status: "manual" }> = {
     status: "manual",
     reason: "unavailable",
@@ -788,7 +808,7 @@ export async function requestOnboardingScan(
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           url,
-          ...(options.crawlId ? { crawlId: options.crawlId } : {}),
+          crawlId,
         }),
         signal: controller.signal,
       });
@@ -818,7 +838,7 @@ export async function requestOnboardingScan(
             fetched: 0,
             unresolved: 0,
             warnings: ["scan_gateway_retry"],
-            ...(options.crawlId ? { crawlId: options.crawlId } : {}),
+            crawlId,
           },
         };
       }
