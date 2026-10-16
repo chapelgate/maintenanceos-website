@@ -35,6 +35,9 @@ import {
   largeSiteScanMessage,
   reviewPhoneField,
   scanAttemptDetail,
+  chooseRicherScanOutcome,
+  filledScanDraftCount,
+  SCAN_PARTIAL_NOTICE,
   scanContinueDetail,
   scanWaitProgressText,
   shouldAutoContinueScan,
@@ -639,12 +642,88 @@ test("scan wait copy changes while the website check is still running", () => {
   assert.equal(shouldAutoContinueScan({ state: "CRAWLING", discovered: 12, fetched: 0, unresolved: 0, warnings: ["time_budget"] }, 7), true);
   assert.equal(shouldAutoContinueScan({ state: "CRAWLING", discovered: 12, fetched: 2, unresolved: 0, warnings: [] }, SCAN_AUTO_CONTINUE_LIMIT), false);
   assert.equal(shouldAutoContinueScan({ state: "COMPLETE", discovered: 2, fetched: 2, unresolved: 0, warnings: [] }, 0), false);
-  assert.equal(scanContinueDetail(3), "Reading more pages (3 pages so far)");
+  assert.equal(scanContinueDetail(3), "Still reading your site (3 pages)");
+  assert.match(SCAN_PARTIAL_NOTICE, /partial/i);
+  assert.match(SCAN_PARTIAL_NOTICE, /usable/i);
   assert.match(largeSiteScanMessage({ state: "CRAWLING", discovered: 80, fetched: 4, unresolved: 0, warnings: [] }) ?? "", /large site/i);
   assert.match(largeSiteScanMessage({ state: "CRAWLING", discovered: 80, fetched: 4, unresolved: 0, warnings: [] }) ?? "", /contact page or the services page/i);
   assert.equal(largeSiteScanMessage({ state: "COMPLETE", discovered: 80, fetched: 80, unresolved: 0, warnings: [] }), null);
   assert.match(thinHomePageMessage({ state: "PARTIAL", discovered: 1, fetched: 1, unresolved: 0, warnings: ["thin_home_page"] }) ?? "", /home page did not include contact/i);
   assert.equal(reviewPhoneField(["0151 488 1234", "01516 532 896", "07000 000000"]), "0151 488 1234 / 01516 532 896");
+});
+
+test("an empty gateway retry does not replace a filled draft", () => {
+  const current = {
+    status: "ok" as const,
+    draft: {
+      businessName: "PHR Solicitors Wirral",
+      hours: "Friday 09:00–17:00",
+    },
+    fieldMeta: {},
+    facts: {
+      businessName: "PHR Solicitors Wirral",
+      address: "19 Hamilton Square, Birkenhead CH41 6AY",
+    },
+    factMeta: {},
+    siteKnowledge: [],
+    summary: {
+      state: "CRAWLING",
+      discovered: 126,
+      fetched: 11,
+      unresolved: 0,
+      warnings: ["time_budget"],
+      crawlId: "scanner-v2:5afd538:53912a2920abcdef",
+    },
+  };
+  const gateway = {
+    status: "ok" as const,
+    draft: {},
+    fieldMeta: {},
+    facts: {},
+    factMeta: {},
+    siteKnowledge: [],
+    summary: {
+      state: "CRAWLING",
+      discovered: 0,
+      fetched: 0,
+      unresolved: 0,
+      warnings: ["scan_gateway_retry"],
+      crawlId: "scanner-v2:5afd538:53912a2920abcdef",
+    },
+  };
+  const kept = chooseRicherScanOutcome(current, gateway);
+  assert.equal(kept.draft.businessName, "PHR Solicitors Wirral");
+  assert.equal(kept.draft.hours, "Friday 09:00–17:00");
+  assert.equal(kept.facts.address, "19 Hamilton Square, Birkenhead CH41 6AY");
+  assert.equal(kept.summary?.fetched, 11);
+  assert.equal(kept.summary?.crawlId, "scanner-v2:5afd538:53912a2920abcdef");
+  assert.equal(filledScanDraftCount(kept.draft), 2);
+  assert.ok(kept.summary?.warnings.includes("scan_gateway_retry"));
+
+  const richer = chooseRicherScanOutcome(kept, {
+    ...gateway,
+    draft: {
+      businessName: "PHR Solicitors Wirral",
+      hours: "Monday to Friday 09:00–17:00",
+      services: "Conveyancing",
+    },
+    facts: {
+      businessName: "PHR Solicitors Wirral",
+      address: "19 Hamilton Square, Birkenhead CH41 6AY",
+      services: ["Conveyancing"],
+    },
+    summary: {
+      state: "CRAWLING",
+      discovered: 126,
+      fetched: 24,
+      unresolved: 1,
+      warnings: ["time_budget"],
+      crawlId: "scanner-v2:5afd538:53912a2920abcdef",
+    },
+  });
+  assert.equal(richer.draft.services, "Conveyancing");
+  assert.equal(richer.summary?.fetched, 24);
+  assert.equal(filledScanDraftCount(richer.draft), 3);
 });
 
 test("scan attempt copy names the try and the manual way forward", () => {

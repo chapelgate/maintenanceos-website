@@ -578,7 +578,57 @@ export function shouldAutoContinueScan(
 
 export function scanContinueDetail(fetched: number): string {
   const pages = Number.isFinite(fetched) ? Math.max(0, Math.trunc(fetched)) : 0;
-  return `Reading more pages (${pages} pages so far)`;
+  return `Still reading your site (${pages} pages)`;
+}
+
+/** Shown when auto-continue stops before the crawl is finished. The draft already read stays on screen. */
+export const SCAN_PARTIAL_NOTICE =
+  "This check is partial. The draft from the pages already read is usable. You can continue and fill any gaps yourself.";
+
+export type SuccessfulScanOutcome = Extract<ScanOutcome, { status: "ok" }>;
+
+/** Count filled draft strings. The richest snapshot is the one with the most of these. */
+export function filledScanDraftCount(draft: Partial<ReceptionistDraft>): number {
+  let count = 0;
+  for (const value of Object.values(draft)) {
+    if (typeof value === "string" && value.trim()) count += 1;
+  }
+  return count;
+}
+
+function mergeScanSummary(
+  current: ScanRunSummary | null,
+  incoming: ScanRunSummary | null,
+): ScanRunSummary | null {
+  if (!current) return incoming;
+  if (!incoming) return current;
+  const gatewayEmpty =
+    incoming.fetched === 0 && incoming.warnings.includes("scan_gateway_retry");
+  if (gatewayEmpty && current.fetched > 0) {
+    return {
+      ...current,
+      ...(incoming.crawlId ? { crawlId: incoming.crawlId } : {}),
+      warnings: [...new Set([...current.warnings, "scan_gateway_retry"])],
+    };
+  }
+  if (incoming.fetched >= current.fetched) return incoming;
+  return {
+    ...current,
+    ...(incoming.crawlId ? { crawlId: incoming.crawlId } : {}),
+  };
+}
+
+/**
+ * Keep the draft with the most filled fields. An empty gateway retry must not wipe it.
+ * Progress counts stay on the richer read, and a returned crawl id is kept for the next POST.
+ */
+export function chooseRicherScanOutcome(
+  current: SuccessfulScanOutcome,
+  incoming: SuccessfulScanOutcome,
+): SuccessfulScanOutcome {
+  const keepDraft = filledScanDraftCount(current.draft) > filledScanDraftCount(incoming.draft);
+  const summary = mergeScanSummary(current.summary, incoming.summary);
+  return { ...(keepDraft ? current : incoming), summary };
 }
 
 /** A large in-progress crawl should ask for a contact or services URL. */

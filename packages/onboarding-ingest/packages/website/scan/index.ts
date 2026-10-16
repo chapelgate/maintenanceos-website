@@ -95,15 +95,19 @@ function gatewayCrawlId(pageUrl: string): string {
   return `scanner-v2:gateway:${hash.digest("hex")}`;
 }
 
-/** Lost or failed upstream calls stay HTTP 200 so DigitalOcean does not replace the body with an HTML 504. */
-function crawlingGateway(pageUrl: string): { statusCode: number; body: unknown } {
+/**
+ * Lost or failed upstream calls stay HTTP 200 so DigitalOcean does not replace the body with an HTML 504.
+ * A crawl id the client already holds is echoed. A synthetic gateway id is only used when the client sent none.
+ */
+function crawlingGateway(pageUrl: string, supplied = ""): { statusCode: number; body: unknown } {
+  const crawlId = supplied.trim() || gatewayCrawlId(pageUrl);
   return {
     statusCode: 200,
     body: {
       ok: true,
       scannerV2: {
         state: "CRAWLING",
-        crawlId: gatewayCrawlId(pageUrl),
+        crawlId,
         discovered: 0,
         fetched: 0,
         unresolved: 0,
@@ -145,7 +149,7 @@ export async function proxyPersistentScan(
     try {
       body = JSON.parse(text);
     } catch {
-      return crawlingGateway(url);
+      return crawlingGateway(url, crawlId);
     }
 
     if (upstream.status >= 500) {
@@ -153,12 +157,12 @@ export async function proxyPersistentScan(
       if (record?.scannerV2 && typeof record.scannerV2 === "object") {
         return { statusCode: 200, body };
       }
-      return crawlingGateway(url);
+      return crawlingGateway(url, crawlId);
     }
 
     return { statusCode: upstream.status, body };
   } catch {
-    return crawlingGateway(url);
+    return crawlingGateway(url, crawlId);
   }
 }
 
