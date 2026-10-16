@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://worksmartos.co.uk/schemas/scan-golden-expected.json",
+  "title": "Scanner golden expected values",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "sites"],
+  "properties": {
+    "version": { "const": 1 },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minCorrectRate": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.47 },
+        "maxWrongRate": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.03 },
+        "maxOkResponseMs": { "type": "integer", "minimum": 1, "default": 25000 }
+      }
+    },
+    "sites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "url", "fields"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "url": { "type": "string", "pattern": "^https://" },
+          "fields": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": { "$ref": "#/$defs/field" },
+              "phone": { "$ref": "#/$defs/field" },
+              "email": { "$ref": "#/$defs/field" },
+              "address": { "$ref": "#/$defs/field" },
+              "hours": { "$ref": "#/$defs/field" },
+              "services": { "$ref": "#/$defs/field" },
+              "area": { "$ref": "#/$defs/field" },
+              "faqs": { "$ref": "#/$defs/faqField" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
+        "accept": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "faqField": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["question", "answer"],
+            "properties": {
+              "question": { "type": "string" },
+              "answer": { "type": "string" }
+            }
+          }
+        },
+        "accept": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
