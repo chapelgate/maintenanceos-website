@@ -1,5 +1,7 @@
 import {
   acceptableFaqAnswer,
+  chooseOpeningHours,
+  chooseProminentEmail,
   chooseProminentPhones,
   chooseProminentValue,
   isServicePhrase,
@@ -47,8 +49,8 @@ import {
   type ScannerV2JobStore,
   type ScannerV2ProcessUrl,
 } from "./scanner-v2-worker.ts";
+import { allowPublicHttpsUrl, sameRegistrableSite } from "./ssrf.ts";
 import { siteBlockedScan, warningsWithSiteBlock } from "./site-block.ts";
-import { allowPublicHttpsUrl } from "./ssrf.ts";
 import {
   isPathAllowed,
   isReaderChallengePage,
@@ -72,7 +74,7 @@ import type {
 } from "./types.ts";
 
 export const DEFAULT_SCANNER_V2_STATE_ROOT = ".data/scanner-v2";
-export const DEFAULT_SCANNER_V2_REQUEST_MS = 45_000;
+export const DEFAULT_SCANNER_V2_REQUEST_MS = 20_000;
 export const MAX_SCANNER_V2_REQUEST_MS = 115_000;
 export const DEFAULT_SCANNER_V2_BATCH_SIZE = 8;
 export const MAX_SCANNER_V2_URLS = 10_000;
@@ -190,6 +192,9 @@ const THIN_HOME_PROBE_PATHS = [
   "/our-services",
   "/faq",
   "/opening-hours",
+  "/times",
+  "/prices",
+  "/price-list",
 ];
 
 function pathnameKey(raw: string): string {
@@ -343,21 +348,19 @@ function aggregateFacts(
   const uniqueLocations = unique(locations);
   const phonePicks = chooseProminentPhones(phoneHits, pageUrls, 2);
   const phonePick = phonePicks[0];
-  const emailPick = chooseProminentValue(
-    emailHits,
-    (value) => value.trim().toLowerCase(),
-    pageUrls,
-  );
+  let emailHost = "";
+  try {
+    emailHost = new URL(origin).hostname;
+  } catch {
+    emailHost = "";
+  }
+  const emailPick = chooseProminentEmail(emailHits, pageUrls, emailHost);
   const addressPick = chooseProminentValue(
     addressHits,
     (value) => value.toLowerCase().replace(/\s+/g, " "),
     pageUrls,
   );
-  const hourPick = chooseProminentValue(
-    hourHits,
-    (value) => value.toLowerCase().replace(/\s+/g, " "),
-    pageUrls,
-  );
+  const hourPick = chooseOpeningHours(hourHits, pageUrls);
   const uniqueServices = unique(services.map((item) => sanitizeUntrustedField(item, 80))).filter(
     (item) => isServicePhrase(item),
   );
@@ -652,7 +655,7 @@ async function buildDefaultProcessor(input: {
       }
     }
 
-    if (response.url.origin !== input.origin.origin) {
+    if (!sameRegistrableSite(response.url, input.origin)) {
       return { disposition: "policy_skipped", reason: "cross_origin_redirect" };
     }
     if (response.status === 404 || response.status === 410) {
@@ -753,6 +756,10 @@ async function seedJob(input: {
   const discovered = await input.discover(input.submittedUrl, {
     ...input.discoveryOptions,
     maxHtmlPages: 1,
+    maxSitemapDocuments: input.discoveryOptions?.maxSitemapDocuments ?? 3,
+    maxSitemapDepth: input.discoveryOptions?.maxSitemapDepth ?? 1,
+    sitemapTimeoutMs: input.discoveryOptions?.sitemapTimeoutMs ?? 2_500,
+    maxDiscoveredUrls: input.discoveryOptions?.maxDiscoveredUrls ?? 40,
   });
 
   const rows = discovered.manifest.urls.map((row) => {
@@ -829,9 +836,12 @@ async function runtimeResult(input: {
     ...(state === "CRAWLING" ? ["scanner_v2_in_progress"] : []),
     ...(state === "PARTIAL" ? ["scanner_v2_partial"] : []),
   ]);
-  if (!factsAreUseful(facts) && manifest.fetched > 0 && state === "COMPLETE") {
+  const emptyPages =
+    pages.length > 0 && pages.every((page) => page.visibleText.trim().length < 40);
+  if (manifest.fetched > 0 && state === "COMPLETE" && !factsAreUseful(facts)) {
     state = "PARTIAL";
     warnings.push("thin_home_page");
+    if (emptyPages) warnings.push("empty_page");
     if (!warnings.includes("scanner_v2_partial")) warnings.push("scanner_v2_partial");
     await input.store.putJob({
       ...job,
@@ -843,7 +853,12 @@ async function runtimeResult(input: {
     fetched: manifest.fetched,
     warnings,
   });
-  const reportedWarnings = blocked ? warningsWithSiteBlock(warnings) : warnings;
+  if (blocked) state = "BLOCKED";
+  const reportedWarnings = blocked
+    ? warningsWithSiteBlock(
+        warnings.filter((warning) => warning !== "scanner_v2_partial" && warning !== "thin_home_page"),
+      )
+    : warnings;
 
   return {
     ok: true,

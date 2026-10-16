@@ -89,6 +89,8 @@ const EMPTY_IDENTITY_REVIEW: ReviewedIdentityDraft = {
   address: "",
   phone: "",
   email: "",
+  branches: "",
+  pricing: "",
 };
 
 function scanNoteFor(progress: CreateScanProgress): string {
@@ -135,13 +137,30 @@ function DraftReviewField({
   const hint = emptyNote || explicitHint || scanFieldReviewHint(meta, value);
   const describedBy = hint ? hintId : undefined;
   const empty = !value.trim() && Boolean(emptyNote);
-  const fieldClass = empty ? `${FIELD_CLASS} border-dashed` : FIELD_CLASS;
+  const lowConfidence = meta?.confidence === "low" && Boolean(value.trim());
+  const fieldClass = empty
+    ? `${FIELD_CLASS} border-dashed`
+    : lowConfidence
+      ? `${FIELD_CLASS} border-amber-600 bg-amber-50`
+      : FIELD_CLASS;
   return (
     <label className="block text-sm">
       <span className="font-medium text-ink">
         {label}
         {empty ? (
           <span className="ml-2 font-normal text-muted">Empty — not on file</span>
+        ) : null}
+        {meta?.confidence === "high" || meta?.confidence === "medium" || meta?.confidence === "low" ? (
+          <span
+            data-confidence={meta.confidence}
+            className={
+              meta.confidence === "low"
+                ? "ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-950"
+                : "ml-2 rounded bg-paper px-1.5 py-0.5 text-xs font-medium text-muted"
+            }
+          >
+            {meta.confidence} confidence
+          </span>
         ) : null}
       </span>
       {rows ? (
@@ -167,11 +186,17 @@ function DraftReviewField({
           className={fieldClass}
         />
       )}
+      {meta?.sourceUrl ? (
+        <p className="mt-1 text-xs text-muted" data-source-url="">
+          Source: {meta.sourceUrl}
+        </p>
+      ) : null}
       {hint ? (
         <p
           id={hintId}
-          className="mt-1 text-xs text-muted"
+          className={lowConfidence ? "mt-1 text-xs font-medium text-amber-900" : "mt-1 text-xs text-muted"}
           data-empty-field={empty || undefined}
+          data-low-confidence={lowConfidence || undefined}
         >
           {hint}
         </p>
@@ -463,6 +488,7 @@ export function CreateReceptionistLaterSteps({
         setScanDetail(scanContinueDetail(outcome.summary?.fetched ?? 0));
         const next = await requestOnboardingScan(endpoint, businessUrl, {
           signal: controller.signal,
+          ...(outcome.summary?.crawlId ? { crawlId: outcome.summary.crawlId } : {}),
         });
         if (cancelled || controller.signal.aborted || next.status === "aborted") return;
         outcome = next;
@@ -482,6 +508,13 @@ export function CreateReceptionistLaterSteps({
           address: outcome.facts.address ?? "",
           phone: reviewPhoneField(outcome.facts.contact?.phones),
           email: outcome.facts.contact?.emails?.[0] ?? "",
+          branches:
+            outcome.facts.branches
+              ?.map((branch) =>
+                [branch.name, branch.phone, branch.address, branch.hours].filter(Boolean).join(" — "),
+              )
+              .join("\n") ?? "",
+          pricing: outcome.facts.pricing?.join("\n") ?? "",
         });
         setScanDetail(null);
         setScanHostLine(null);
@@ -527,7 +560,9 @@ export function CreateReceptionistLaterSteps({
     setScanContinuing(true);
     setScanDetail("Continuing the website check from the pages already read.");
     try {
-      const outcome = await requestOnboardingScan(endpoint, businessUrl);
+      const outcome = await requestOnboardingScan(endpoint, businessUrl, {
+        ...(scanSummary?.crawlId ? { crawlId: scanSummary.crawlId } : {}),
+      });
       if (outcome.status !== "ok") {
         setScanDetail(
           outcome.status === "manual"
@@ -1005,6 +1040,7 @@ export function CreateReceptionistLaterSteps({
             ) : null}
             {progress === "scan_blocked" ? (
               <div data-scan-blocked="">
+                <p className="font-semibold text-ink">This website blocked the scan</p>
                 <p>
                   {scanDetail ??
                     "This website blocks automated reading. You can carry on by typing the details yourself, or by pasting wording from the site into the draft. Nothing was invented."}
@@ -1145,6 +1181,7 @@ export function CreateReceptionistLaterSteps({
           <PartialScanNotice summary={scanSummary} draft={draft} />
           {progress === "scan_blocked" ? (
             <div className="mt-5 text-sm text-muted" data-scan-blocked="">
+              <p className="font-semibold text-ink">This website blocked the scan</p>
               <p>
                 This website blocks automated reading. Type the details, or paste
                 wording from the site. Nothing was invented.
@@ -1210,7 +1247,7 @@ export function CreateReceptionistLaterSteps({
               placeholder="How should the AI agent introduce the business? (draft only)"
             />
             <DraftReviewField
-              label="Locations"
+              label="Service area"
               value={identityReview.locations}
               onChange={(value) => updateIdentityReview("locations", value)}
               hintId={locationsHintId}
@@ -1241,6 +1278,18 @@ export function CreateReceptionistLaterSteps({
               }
             />
             <DraftReviewField
+              label="Branches"
+              value={identityReview.branches ?? ""}
+              onChange={(value) => updateIdentityReview("branches", value)}
+              hintId={`${addressHintId}-branches`}
+              rows={3}
+              emptyNote={
+                identityReview.branches?.trim()
+                  ? null
+                  : "Empty — not on file. Branches were not invented."
+              }
+            />
+            <DraftReviewField
               label="Phone"
               value={identityReview.phone}
               onChange={(value) => updateIdentityReview("phone", value)}
@@ -1259,6 +1308,18 @@ export function CreateReceptionistLaterSteps({
                 factMeta.contact,
                 Boolean(identityReview.email.trim()),
               )}
+            />
+            <DraftReviewField
+              label="Pricing"
+              value={identityReview.pricing ?? ""}
+              onChange={(value) => updateIdentityReview("pricing", value)}
+              hintId={`${hoursHintId}-pricing`}
+              rows={3}
+              emptyNote={
+                identityReview.pricing?.trim()
+                  ? null
+                  : "Empty — not on file. Prices were not invented."
+              }
             />
             <DraftReviewField
               label="Hours"

@@ -309,7 +309,7 @@ test("a trades page stores phone, address, services, and area on the crawl page"
     fetchedAt: "2026-10-16T00:00:00.000Z",
   });
   const facts = result.page.structuredFacts;
-  assert.deepEqual(facts.contact, { phones: ["07774179685"] });
+  assert.deepEqual(facts.contact, { phones: ["+447774179685"] });
   assert.equal(facts.address, undefined);
   assert.deepEqual(facts.services, [
     "Plumbing Repairs",

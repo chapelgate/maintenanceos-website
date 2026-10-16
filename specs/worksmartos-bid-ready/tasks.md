@@ -17,3 +17,8 @@
 - [x] Thin home page stays partial and still queues contact, about, and services
 - [x] Footer postcode addresses, two phones, parsed hours, and navigation filters
 - [x] `/create` auto-continues a crawling scan and warns on a large site
+- [x] 20 second best-effort crawl, resume by crawl id, and `BLOCKED` for a site refusal
+- [x] Same-registrable redirects and http upgraded to https
+- [x] Postcode-anchored addresses, E.164 phones, same-domain email, visible hours
+- [x] Strict services, service area, and FAQ gates, plus brand names and branches
+- [x] `/create` reviews every field with a source URL and a confidence badge

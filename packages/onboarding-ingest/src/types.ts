@@ -27,18 +27,29 @@ export type ReceptionistDraft = {
 export type PartialDraft = Partial<ReceptionistDraft>;
 
 /** Structured facts for Agent Factory intake. Values remain untrusted until reviewed. */
+export type BusinessBranch = {
+  name?: string;
+  phone?: string;
+  address?: string;
+  hours?: string;
+};
+
 export type BusinessFacts = {
   website?: string;
   businessName?: string;
   /** Postal or contact-block address. Area names stay in `locations`. */
   address?: string;
   locations?: string[];
+  /** One entry per branch when the site publishes more than one location. */
+  branches?: BusinessBranch[];
   contact?: {
     phones?: string[];
     emails?: string[];
   };
   services?: string[];
   hours?: string;
+  /** Visible price lines copied from a Prices or Treatments heading. */
+  pricing?: string[];
   faqs?: Array<{ question: string; answer: string }>;
 };
 
@@ -203,7 +214,8 @@ export type CrawlState =
   | "INDEXING"
   | "COMPLETE"
   | "PARTIAL"
-  | "FAILED";
+  | "FAILED"
+  | "BLOCKED";
 
 export type CrawlUrlStatus =
   | "queued"

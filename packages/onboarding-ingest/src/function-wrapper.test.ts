@@ -103,11 +103,11 @@ test("scan proxy rejects an oversized URL before upstream and rate-limits repeat
     url: "https://127.0.0.1/private",
   };
   const codes: number[] = [];
-  for (let i = 0; i < 4; i += 1) {
+  for (let i = 0; i < 7; i += 1) {
     const result = await main(event);
     codes.push(result.statusCode);
   }
-  assert.deepEqual(codes, [400, 400, 400, 429]);
+  assert.deepEqual(codes, [400, 400, 400, 400, 400, 400, 429]);
 
   const otherClient = await main({
     http: {

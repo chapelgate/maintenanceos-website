@@ -4,7 +4,7 @@ import {
   fetchPublicHttps,
 } from "./fetch-safe.ts";
 import { extractSameOriginHrefs } from "./extract.ts";
-import { allowPublicHttpsUrl } from "./ssrf.ts";
+import { allowPublicHttpsUrl, sameRegistrableSite } from "./ssrf.ts";
 import {
   buildCrawlManifest,
   stableContentHash,
@@ -191,7 +191,7 @@ export function parseRobotsSitemaps(
       continue;
     }
     url.hash = "";
-    if (url.protocol !== "https:" || url.origin !== baseOrigin.origin) continue;
+    if (url.protocol !== "https:" || !sameRegistrableSite(url, baseOrigin)) continue;
     const allow = allowPublicHttpsUrl(url.toString());
     if (!allow.ok) continue;
     const canonical = allow.url.toString();
@@ -233,7 +233,7 @@ export function discoverHtmlLinks(input: {
   } catch {
     return [];
   }
-  if (page.origin !== origin.origin || origin.protocol !== "https:") return [];
+  if (!sameRegistrableSite(page, origin) || origin.protocol !== "https:") return [];
 
   const out: CrawlUrlDisposition[] = [];
   const seen = new Set<string>();
@@ -868,7 +868,7 @@ export async function discoverScannerV2Frontier(
       }
     }
 
-    if (response.url.origin !== origin.origin) {
+    if (!sameRegistrableSite(response.url, origin)) {
       urls.update(pageUrl, {
         status: "policy_skipped",
         reason: "cross_origin_redirect",

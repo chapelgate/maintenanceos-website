@@ -104,6 +104,8 @@ function labelFor(
       return "Website knowledge partial";
     case "FAILED":
       return "Website knowledge failed";
+    case "BLOCKED":
+      return "Website blocked the scan";
   }
 }
 
@@ -111,6 +113,7 @@ function completenessFor(state: CrawlState): ScannerV2Completeness {
   if (state === "COMPLETE") return "complete";
   if (state === "PARTIAL") return "partial";
   if (state === "FAILED") return "failed";
+  if (state === "BLOCKED") return "failed";
   return "in_progress";
 }
 

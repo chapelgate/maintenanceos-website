@@ -201,6 +201,7 @@ try {
     const blocked = page.locator("[data-scan-blocked]");
     await blocked.waitFor({ timeout: 15_000 });
     const blockedText = await blocked.innerText();
+    assert.match(blockedText, /This website blocked the scan/);
     assert.match(blockedText, /blocks automated reading/i);
     assert.match(blockedText, /typing the details/i);
     assert.match(blockedText, /pasting wording/i);
@@ -258,6 +259,12 @@ try {
     const address = page.getByLabel("Address", { exact: false });
     await address.waitFor();
     assert.equal(await address.inputValue(), "Bromborough, Wirral");
+    const addressLabel = page.locator("label", { hasText: "Address" }).first();
+    const addressCopy = await addressLabel.innerText();
+    assert.match(addressCopy, /low confidence/);
+    assert.match(addressCopy, /https:\/\/trades\.example\//);
+    assert.equal(await page.getByLabel("Service area", { exact: false }).count(), 1);
+    assert.equal(await page.getByLabel("Branches", { exact: false }).count(), 1);
     assert.equal(
       await page.getByLabel("Phone", { exact: false }).inputValue(),
       "07774179685 / 01516 532 896",
