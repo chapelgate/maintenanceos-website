@@ -680,7 +680,28 @@ test("sentences and trade titles lose to the domain brand", () => {
     { url: "https://wirralheating.com/", html: fixture("wirralheating-home.html") },
   ]);
   assert.equal(wirral.draft.businessName, "Wirral Heating");
+  assert.equal(wirral.fieldMeta.businessName?.source, "jsonld");
+  assert.equal(wirral.fieldMeta.businessName?.confidence, "medium");
   assert.notEqual(wirral.draft.businessName, "Wirral Plumber");
+
+  const james = extractDraftFromHtml([
+    { url: "https://www.jamesfoyelectrics.co.uk/", html: fixture("jamesfoyelectrics-home.html") },
+  ]);
+  assert.equal(james.draft.businessName, "James Foy Electrics");
+  assert.equal(james.fieldMeta.businessName?.source, "jsonld");
+  assert.equal(james.fieldMeta.businessName?.confidence, "medium");
+
+  const karl = extractDraftFromHtml([
+    { url: "https://www.karltatler.com/", html: fixture("karltatler-home.html") },
+  ]);
+  assert.equal(karl.draft.businessName, "Karl Tatler");
+  assert.equal(karl.fieldMeta.businessName?.source, "jsonld");
+  assert.equal(karl.fieldMeta.businessName?.confidence, "medium");
+
+  assert.equal(
+    publicBusinessName("Black and Pink Modern Initials Logo Design_edited.jpg"),
+    undefined,
+  );
 });
 
 test("a missing name falls back to the domain at low confidence", () => {
