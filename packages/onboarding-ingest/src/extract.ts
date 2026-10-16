@@ -1927,7 +1927,13 @@ function strippedName(value: string): string {
   return sanitizeUntrustedField(value, 200)
     .replace(/^welcome to\s+/i, "")
     .replace(/^about\s+/i, "")
+    .replace(/^(?:by|copyright)\s+/i, "")
+    .replace(/(?:[.\s]|©|\(c\))*proudly created with(?:\s+wix(?:\.com)?)?\.?$/i, "")
     .replace(/\s+all rights reserved\.?$/i, "")
+    .replace(/^(?:all rights reserved|proudly created with(?:\s+wix(?:\.com)?)?)\.?$/i, "")
+    .replace(/\s*(?:©|\(c\))\s*/g, " ")
+    .replace(/\s+\b(?:19|20)\d{2}\b\s*$/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -2035,7 +2041,10 @@ function isDomainSlug(name: string, siteHost: string): boolean {
   if (/\s/.test(name)) return false;
   const slug = siteHost.replace(/^www\./i, "").split(".")[0]?.replace(/[^a-z0-9]/gi, "").toLowerCase() ?? "";
   const compact = name.replace(/[^a-z0-9]/gi, "").toLowerCase();
-  return Boolean(slug) && compact === slug;
+  if (!slug || compact !== slug) return false;
+  // "Lounge83" is the domain label written as a brand. "lounge83" is the raw slug.
+  if (/[A-Z]/.test(name) && /[a-z]/.test(name)) return false;
+  return true;
 }
 
 function isShortNameFragment(name: string): boolean {
@@ -2086,7 +2095,10 @@ function nameMatchesDomain(name: string, siteHost: string): boolean {
     .toLowerCase()
     .split(/[^a-z0-9]+/)
     .filter((word) => word.length >= 2 && !/^(?:ltd|limited|llp|plc|group|company|co|uk)$/.test(word));
-  if (words.join("") === slug) return true;
+  const compact = words.join("");
+  if (compact === slug) return true;
+  const trimmed = slug.replace(/(?:group|ltd|limited|company|co)$/i, "");
+  if (trimmed.length >= 4 && trimmed !== slug && compact === trimmed) return true;
   return coversDomainTokens(name, domainBrandTokens(siteHost));
 }
 
@@ -2114,6 +2126,24 @@ const TAGLINE_NAME_RE = /^(?:professional|quality|your local|leading|welcome to)
 /** A slogan that opens with a generic descriptor rather than the business brand. */
 function isTaglineName(name: string): boolean {
   return TAGLINE_NAME_RE.test(name.trim());
+}
+
+/** "10 Heating Habits for 2026" is a list article, not a business. */
+function isListicleName(name: string): boolean {
+  return /^\d{1,3}\s+[A-Za-z]/.test(name.trim());
+}
+
+function isBoilerplateName(name: string): boolean {
+  return /all rights reserved|proudly created with(?:\s+wix(?:\.com)?)?/i.test(name.trim());
+}
+
+function isArticlePage(url: string): boolean {
+  try {
+    const path = new URL(url).pathname.replace(/\/+$/, "") || "/";
+    return /\/(?:blog|news|articles?|posts?|insights|20\d{2})(?:\/|$)/i.test(path);
+  } catch {
+    return false;
+  }
 }
 
 /** A trade word plus a town, such as "Electricians Liverpool" or "Wirral Estate Agents". */
@@ -2156,7 +2186,13 @@ function acceptableName(text: string, siteHost: string): string | undefined {
   const value = publicBusinessName(text);
   if (!value || isDomainSlug(value, siteHost)) return undefined;
   const matchesDomain = nameMatchesDomain(value, siteHost);
-  if (!matchesDomain && (isTaglineName(value) || isServiceTown(value))) return undefined;
+  if (
+    !matchesDomain &&
+    (isTaglineName(value) || isServiceTown(value) || isListicleName(value) || isBoilerplateName(value))
+  ) {
+    return undefined;
+  }
+  if (isBoilerplateName(value)) return undefined;
   return value;
 }
 
@@ -2234,16 +2270,59 @@ function logoAlt(html: string): string | undefined {
   return undefined;
 }
 
-function copyrightName(html: string): string | undefined {
-  const text = htmlToPlainText(html);
-  const match = /©\s*(?:copyright\s+)?(?:(?:19|20)\d{2}\s+)?([A-Za-z][^|\n]{2,80})/i.exec(text);
-  if (!match?.[1]) return undefined;
-  const name = match[1]
-    .replace(/^copyright\s+/i, "")
-    .replace(/\s+(?:all rights reserved\.?|(?:19|20)\d{2}\b.*)$/i, "")
-    .replace(/[.\s]+$/g, "")
+const COPYRIGHT_NOISE_WORD =
+  /^(?:find|us|our|the|home|menu|terms|privacy|policy|designed|by|copyright|all|rights|reserved|welcome|to)$/i;
+
+function tidyCopyrightFragment(value: string): string | undefined {
+  const cleaned = value
+    .replace(/©|\(c\)|copyright/gi, " ")
+    .replace(/\b(?:19|20)\d{2}\b/g, " ")
+    .replace(/\bby\b/gi, " ")
+    .replace(/[^A-Za-z0-9&'’. -]+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
-  return name || undefined;
+  const words = cleaned.split(/\s+/).filter((word) => word && !COPYRIGHT_NOISE_WORD.test(word));
+  const kept = words.slice(-6);
+  for (let size = Math.floor(kept.length / 2); size >= 1; size -= 1) {
+    const tail = kept.slice(-size).join(" ").toLowerCase();
+    const prev = kept.slice(-size * 2, -size).join(" ").toLowerCase();
+    if (prev && prev === tail) {
+      kept.splice(-size, size);
+      break;
+    }
+  }
+  const name = kept.join(" ").trim();
+  if (!name || isBoilerplateName(name)) return undefined;
+  return name;
+}
+
+function copyrightFromText(text: string): string | undefined {
+  const flat = text.replace(/\s+/g, " ");
+  const wix = /(?:^|[\s©])by\s+([A-Z][^.]{1,80}?)\.?\s*proudly created with(?:\s+wix(?:\.com)?)?/i.exec(flat);
+  if (wix?.[1]) {
+    const name = tidyCopyrightFragment(wix[1]);
+    if (name) return name;
+  }
+  let rightsAt = -1;
+  for (const match of flat.matchAll(/all rights reserved/gi)) {
+    if (match.index !== undefined) rightsAt = match.index;
+  }
+  if (rightsAt >= 0) {
+    const name = tidyCopyrightFragment(flat.slice(Math.max(0, rightsAt - 80), rightsAt));
+    if (name) return name;
+  }
+  const after = /(?:©|\(c\))\s*(?:copyright\s+)?(?:(?:19|20)\d{2}\s+)?(?:by\s+)?([A-Za-z][^|.\n]{1,80})/i.exec(flat);
+  if (after?.[1]) return tidyCopyrightFragment(after[1]);
+  return undefined;
+}
+
+function copyrightName(html: string): string | undefined {
+  const footers = [...html.matchAll(/<footer\b[^>]*>([\s\S]*?)<\/footer>/gi)].map((match) => match[1] ?? "");
+  for (const footer of footers) {
+    const name = copyrightFromText(htmlToPlainText(footer));
+    if (name) return name;
+  }
+  return copyrightFromText(htmlToPlainText(html));
 }
 
 export function extractSameOriginScriptSrcs(
@@ -2677,11 +2756,19 @@ export function extractDraftFromHtml(
     const siteName = metaContent(page.html, "og:site_name");
     if (siteName) nameHits.push({ value: siteName, source: "meta", confidence: "high", rank: 60 });
     const title = extractTitle(page.html);
-    if (title) nameHits.push({ value: title, source: "title", confidence: "medium", rank: 55 });
+    if (title) {
+      const branded = !isArticlePage(page.url) || namePieces(title).some((piece) => {
+        const value = candidateName(piece.text, siteHost);
+        return Boolean(value && nameMatchesDomain(value, siteHost));
+      });
+      if (branded) nameHits.push({ value: title, source: "title", confidence: "medium", rank: 55 });
+    }
     const logo = logoAlt(page.html);
     if (logo) nameHits.push({ value: logo, source: "meta", confidence: "medium", rank: 20 });
     const h1 = extractH1(page.html);
-    if (h1) nameHits.push({ value: h1, source: "heading", confidence: "low", rank: 15 });
+    if (h1 && !isArticlePage(page.url)) {
+      nameHits.push({ value: h1, source: "heading", confidence: "low", rank: 15 });
+    }
     const copyright = copyrightName(page.html);
     if (copyright) nameHits.push({ value: copyright, source: "footer", confidence: "low", rank: 10 });
   }

@@ -749,6 +749,53 @@ test("sentences and trade titles lose to the domain brand", () => {
     publicBusinessName("Black and Pink Modern Initials Logo Design_edited.jpg"),
     undefined,
   );
+  assert.equal(publicBusinessName("All rights reserved"), undefined);
+  assert.equal(
+    publicBusinessName("by KB Joinery Services. Proudly created with Wix.com"),
+    "KB Joinery Services",
+  );
+});
+
+test("blog headings, copyright boilerplate, and wix footers lose to the brand", () => {
+  const wirralGas = extractDraftFromHtml([
+    { url: "https://wirralgasgroup.com/", html: fixture("wirralgasgroup-home.html") },
+    {
+      url: "https://wirralgasgroup.com/blog/10-heating-habits-for-2026",
+      html: fixture("wirralgasgroup-blog.html"),
+    },
+  ]);
+  assert.equal(wirralGas.draft.businessName, "Wirral Gas");
+  assert.equal(wirralGas.fieldMeta.businessName?.source, "jsonld");
+  assert.notEqual(wirralGas.draft.businessName, "10 Heating Habits for 2026");
+
+  const acs = extractDraftFromHtml([
+    { url: "https://acssolicitors.co.uk/", html: fixture("acssolicitors-home.html") },
+  ]);
+  assert.equal(acs.draft.businessName, "ACS Solicitors");
+  assert.equal(acs.fieldMeta.businessName?.source, "footer");
+  assert.notEqual(acs.draft.businessName, "All rights reserved");
+
+  const kb = extractDraftFromHtml([
+    { url: "https://kbjoineryservices.wixsite.com/kbjoinery", html: fixture("kbjoinery-wix.html") },
+  ]);
+  assert.equal(kb.draft.businessName, "KB Joinery Services");
+  assert.equal(kb.fieldMeta.businessName?.source, "footer");
+
+  const lounge = extractDraftFromHtml([
+    { url: "https://lounge83.wixsite.com/lounge83", html: fixture("lounge83-wix.html") },
+  ]);
+  assert.equal(lounge.draft.businessName, "Lounge83");
+  assert.equal(lounge.fieldMeta.businessName?.confidence, "low");
+  assert.notEqual(lounge.draft.businessName, "Proudly created with Wix.com");
+
+  const loungeTitle = extractDraftFromHtml([
+    {
+      url: "https://lounge83.wixsite.com/lounge83",
+      html: "<html><head><title>Lounge83</title></head><body></body></html>",
+    },
+  ]);
+  assert.equal(loungeTitle.draft.businessName, "Lounge83");
+  assert.equal(loungeTitle.fieldMeta.businessName?.source, "title");
 });
 
 test("a missing name falls back to the domain at low confidence", () => {
@@ -807,7 +854,27 @@ test("hours drop a 24-hour placeholder and keep a short week editable", () => {
   assert.equal(assessOpeningHours("Friday 09:00-17:00")?.partial, true);
   assert.equal(assessOpeningHours("Monday 08:00-17:00")?.partial, true);
   assert.equal(hoursAreSpeakable("Saturday 09:00-12:00"), false);
+  assert.equal(hoursAreSpeakable("Saturday 8.30 - 5.30"), false);
+  assert.equal(hoursAreSpeakable("Fri 9:00-17:15"), false);
+  assert.equal(assessOpeningHours("Saturday 8.30 - 5.30")?.partial, true);
+  assert.equal(assessOpeningHours("Fri 9:00-17:15")?.partial, true);
   assert.equal(hoursAreSpeakable("Mo-Fr 08:00-17:00"), true);
+
+  for (const [host, hours] of [
+    ["https://liverpool-saturday.example/", "Saturday 8.30 - 5.30"],
+    ["https://liverpool-friday.example/", "Fri 9:00-17:15"],
+  ] as const) {
+    const singleDay = extractDraftFromHtml([
+      {
+        url: host,
+        html: `<script type="application/ld+json">{"@type":"LocalBusiness","name":"Liverpool Shop","openingHours":${JSON.stringify(hours)}}</script>`,
+      },
+    ]);
+    assert.equal(singleDay.draft.hours, hours);
+    assert.equal(singleDay.fieldMeta.hours?.confidence, "low");
+    assert.equal(hoursAreSpeakable(singleDay.draft.hours), false);
+    assert.ok(singleDay.warnings.includes("hours_partial"));
+  }
 
   const placeholder = extractDraftFromHtml([
     {
