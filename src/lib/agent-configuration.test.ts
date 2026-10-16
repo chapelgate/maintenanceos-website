@@ -352,6 +352,19 @@ test("partial scan hours stay out of the spoken knowledge pack", () => {
   assert.ok(result.knowledgePack.missing.includes("hours"));
 });
 
+test("single-day hours stay out of the spoken knowledge pack", () => {
+  for (const hours of ["Saturday 8.30 - 5.30", "Fri 9:00-17:15"]) {
+    const result = buildAgentConfiguration({
+      blueprint: blueprintFor("maintenance_desk"),
+      reviewedDraft: { ...REVIEWED_DRAFT, hours },
+      hoursSpeakable: false,
+    });
+    assert.equal(result.knowledgePack.hours, undefined);
+    assert.equal(result.blueprint.knowledge.hours, undefined);
+    assert.ok(!result.systemPrompt.includes(hours));
+  }
+});
+
 test("unstructured FAQ notes are never converted into an invented blueprint question", () => {
   const result = buildAgentConfiguration({
     blueprint: blueprintFor("custom"),

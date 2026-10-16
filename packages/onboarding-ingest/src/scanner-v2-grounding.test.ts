@@ -418,6 +418,23 @@ test("partial opening hours are not spoken from structured facts", async () => {
   assert.doesNotMatch(answer.text, /Saturday/);
 });
 
+test("single-day Liverpool hours are not spoken", async () => {
+  const { index, facts } = await fixture();
+  for (const hours of ["Saturday 8.30 - 5.30", "Fri 9:00-17:15"]) {
+    const answer = await answerGroundedReceptionistQuestion("What are your opening hours?", {
+      crawlId: "crawl-stage6",
+      index,
+      facts: {
+        ...facts,
+        hours: { value: hours, sourceUrls: ["https://liverpool.example/contact"] },
+      },
+    });
+    assert.equal(answer.supportStatus, "not_found");
+    assert.equal(answer.source, "missing");
+    assert.doesNotMatch(answer.text, /8\.30|17:15/);
+  }
+});
+
 test("grounded synthesis verifier rejects new numbers and unsupported claim words", () => {
   const evidence: GroundedEvidence[] = [
     {
