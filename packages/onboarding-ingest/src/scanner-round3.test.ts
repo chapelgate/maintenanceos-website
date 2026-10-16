@@ -100,9 +100,8 @@ test("services, places, and FAQs stay inside real sections", () => {
   assert.equal(noisy.facts.services, undefined);
   assert.deepEqual(noisy.facts.locations, ["Birkenhead"]);
   const faqBlob = JSON.stringify(noisy.facts.faqs ?? []);
-  assert.doesNotMatch(faqBlob, /Suggested text|privacy policy|What time do you open/i);
-  assert.match(faqBlob, /Do you take cards/);
-  assert.match(faqBlob, /Where do you work/);
+  assert.equal(noisy.draft.faqs, undefined);
+  assert.doesNotMatch(faqBlob, /Suggested text|privacy policy|What time do you open|Do you take cards/i);
   assert.equal(isUkPlaceName("Privacy Statement"), false);
   assert.equal(isUkPlaceName("Sep 2024"), false);
   assert.equal(isUkPlaceName("Birkenhead"), true);

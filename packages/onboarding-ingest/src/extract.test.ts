@@ -9,6 +9,8 @@ import {
   decodeCloudflareEmail,
   extractDraftFromHtml,
   isAcceptableAddress,
+  isServicePhrase,
+  isUkPlaceName,
   publicBusinessName,
   extractJsonLd,
   extractMicrodata,
@@ -89,7 +91,7 @@ test("extractDraftFromHtml happy-path shape matches /create draft keys", () => {
   assert.equal(draft.hours, "Mo-Fr 08:00-17:00");
   assert.equal(draft.services, "Boiler repair\nEmergency leak stop");
   assert.equal(draft.faqs, "Q: Do you cover London?\nA: Yes, within the M25.");
-  assert.equal(fieldMeta.businessName?.source, "meta");
+  assert.equal(fieldMeta.businessName?.source, "jsonld");
   assert.equal(fieldMeta.hours?.confidence, "high");
   assert.ok(warnings.includes("untrusted_crawl_text"));
   assert.ok(!warnings.includes("greeting_not_found"));
@@ -125,7 +127,6 @@ test("structured facts expose contact and locations without changing legacy draf
 
   assert.deepEqual(Object.keys(result.draft).sort(), [
     "businessName",
-    "faqs",
     "hours",
     "services",
   ]);
@@ -145,11 +146,7 @@ test("structured facts expose contact and locations without changing legacy draf
   assert.equal(result.factMeta.address?.source, "jsonld");
   assert.equal(result.factMeta.address?.sourceUrl, "https://northdock.example/");
   assert.equal(result.factMeta.locations?.source, "jsonld");
-
-  // Existing /create draft stays backward-compatible: contacts remain only in
-  // its legacy FAQ-hint channel until a later UI step consumes structured facts.
-  assert.match(result.draft.faqs ?? "", /\+441515550199/);
-  assert.match(result.draft.faqs ?? "", /hello@northdock\.example/);
+  assert.equal(result.draft.faqs, undefined);
 });
 
 
@@ -182,11 +179,12 @@ test("structured facts reject invalid contact values instead of promoting them",
 
 test("extractDraftFromHtml never invents missing fields", () => {
   const html = `<html><head><title></title></head><body><p>Hello</p></body></html>`;
-  const { draft, warnings } = extractDraftFromHtml([
+  const { draft, warnings, fieldMeta } = extractDraftFromHtml([
     { url: "https://thin.example/", html },
   ]);
-  assert.deepEqual(draft, {});
-  assert.ok(warnings.includes("business_name_not_found"));
+  assert.deepEqual(draft, { businessName: "Thin" });
+  assert.equal(fieldMeta.businessName?.confidence, "low");
+  assert.equal(warnings.includes("business_name_not_found"), false);
   assert.ok(warnings.includes("hours_not_found"));
   assert.ok(warnings.includes("services_not_found"));
   assert.ok(warnings.includes("faqs_not_found"));
@@ -260,7 +258,7 @@ test("same-origin useful paths are ranked; off-origin ignored", () => {
 
 test("fixture trades-no-jsonld: name, hours, nav services, details FAQ, tel/mailto", () => {
   const html = fixture("trades-no-jsonld.html");
-  const { draft, warnings, fieldMeta } = extractDraftFromHtml([
+  const { draft, warnings, fieldMeta, facts } = extractDraftFromHtml([
     { url: "https://riverside-heating.example/", html },
   ]);
   assert.equal(draft.businessName, "Riverside Heating");
@@ -271,16 +269,15 @@ test("fixture trades-no-jsonld: name, hours, nav services, details FAQ, tel/mail
   assert.match(draft.services ?? "", /Bathrooms/);
   assert.match(draft.services ?? "", /Emergency leaks/);
   assert.equal(/Home|About|Contact/.test(draft.services ?? ""), false);
-  assert.match(draft.faqs ?? "", /Do you cover Leeds\?/);
-  assert.match(draft.faqs ?? "", /Gas Safe/);
-  assert.match(draft.faqs ?? "", /\+441132001111/);
-  assert.match(draft.faqs ?? "", /hello@riverside-heating\.example/);
+  assert.equal(draft.faqs, undefined);
+  assert.deepEqual(facts.contact?.phones, ["+441132001111"]);
+  assert.deepEqual(facts.contact?.emails, ["hello@riverside-heating.example"]);
   assert.equal(fieldMeta.businessName?.source, "meta");
   assert.equal(fieldMeta.services?.source, "heading");
   assert.equal(fieldMeta.services?.confidence, "medium");
-  assert.equal(fieldMeta.faqs?.source, "details");
   assert.equal(warnings.includes("services_low_confidence"), false);
-  assert.ok(warnings.includes("contact_hints_from_page"));
+  assert.equal(warnings.includes("contact_hints_from_page"), false);
+  assert.ok(warnings.includes("faqs_not_found"));
   assert.ok(warnings.includes("greeting_not_found"));
   assert.ok(!warnings.includes("hours_not_found"));
 });
@@ -291,9 +288,8 @@ test("fixture accordion + heading questions copy Q/A without inventing extras", 
     { url: "https://oak-street.example/", html },
   ]);
   assert.equal(draft.businessName, "Oak Street Electrical");
-  assert.match(draft.faqs ?? "", /EV charger/);
-  assert.match(draft.faqs ?? "", /next working day/);
-  assert.equal(fieldMeta.faqs?.confidence, "medium");
+  assert.equal(draft.faqs, undefined);
+  assert.equal(fieldMeta.faqs, undefined);
   assert.equal(draft.hours, undefined);
   assert.equal(draft.services, undefined);
 });
@@ -305,14 +301,15 @@ test("fixture microdata LocalBusiness maps name, slogan, hours, services, contac
   assert.equal(micro.greeting, "Keys cut while you wait");
   assert.match(micro.hours ?? "", /Mo-Sa 09:00-18:00/);
   assert.match(micro.services ?? "", /Lock changes/);
-  const { draft, fieldMeta } = extractDraftFromHtml([
+  const { draft, fieldMeta, facts } = extractDraftFromHtml([
     { url: "https://hilltop-locks.example/", html },
   ]);
   assert.equal(draft.businessName, "Hilltop Locksmiths");
   assert.equal(draft.greeting, "Keys cut while you wait");
   assert.equal(draft.hours, "Mo-Sa 09:00-18:00");
   assert.match(draft.services ?? "", /UPVC door repair/);
-  assert.match(draft.faqs ?? "", /\+441615550101/);
+  assert.equal(draft.faqs, undefined);
+  assert.deepEqual(facts.contact?.phones, ["+441615550101"]);
   assert.equal(fieldMeta.businessName?.source, "microdata");
   assert.equal(fieldMeta.hours?.confidence, "high");
 });
@@ -325,11 +322,12 @@ test("fixture JSON-LD Plumber subtype + hours spec days array; no invented call-
   assert.match(extracted.hours ?? "", /08:00–17:30/);
   assert.match(extracted.services ?? "", /Burst pipe isolation/);
   assert.ok(extracted.phones.some((value) => value.includes("161")));
-  const { draft } = extractDraftFromHtml([
+  const { draft, facts } = extractDraftFromHtml([
     { url: "https://leak-stop.example/", html },
   ]);
   assert.equal(draft.hours?.includes("3pm"), false);
-  assert.match(draft.faqs ?? "", /jobs@leak-stop\.example/);
+  assert.equal(draft.faqs, undefined);
+  assert.equal(facts.businessName, "Leak Stop Ltd");
 });
 
 test("fixture hours table under labelled heading; noise page invents nothing", () => {
@@ -509,15 +507,15 @@ test("fixture postal address keeps the locality and drops region and country cod
   assert.deepEqual(result.facts.contact?.emails, ["office@springfieldheating.example"]);
 });
 
-test("fixture blog bylines are not FAQs and a real question pair is kept", () => {
+test("fixture blog bylines and a short heading list are not FAQs", () => {
   const result = extractDraftFromHtml([
     { url: "https://wirralheating.example/faq", html: fixture("wirral-heating-faq.html") },
   ]);
   const blob = JSON.stringify(result.facts.faqs ?? []);
+  assert.equal(result.draft.faqs, undefined);
   assert.doesNotMatch(blob, /September 9, 2026/);
   assert.doesNotMatch(blob, /rich General/);
-  assert.match(blob, /emergency callouts/i);
-  assert.match(blob, /landlord gas certificate/i);
+  assert.doesNotMatch(blob, /emergency callouts/i);
 });
 
 test("fixture draft fields decode entities and strip tags", () => {
@@ -628,4 +626,63 @@ test("crawl priority fetches home and contact before posts", () => {
     "https://trade.example/contact",
     "https://trade.example/2024/boiler-tips",
   ]);
+});
+
+test("title and site name beat a different trade label", () => {
+  const html = `<!doctype html>
+    <html><head>
+      <title>Wirral Heating | Boiler repairs</title>
+      <meta property="og:site_name" content="Wirral Heating" />
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Plumber","name":"Wirral Plumber"}</script>
+    </head><body><h1>Wirral Plumber</h1></body></html>`;
+  const result = extractDraftFromHtml([{ url: "https://wirralheating.example/", html }]);
+  assert.equal(result.draft.businessName, "Wirral Heating");
+  assert.equal(result.fieldMeta.businessName?.source, "meta");
+  assert.equal(publicBusinessName("File not found (404 error)"), undefined);
+  assert.equal(publicBusinessName("About"), undefined);
+  const slug = extractDraftFromHtml([
+    {
+      url: "https://kbjoineryservices.co.uk/",
+      html: "<html><head><title>kbjoineryservices</title></head><body></body></html>",
+    },
+  ]);
+  assert.equal(slug.draft.businessName, "Kbjoineryservices");
+  assert.equal(slug.fieldMeta.businessName?.confidence, "low");
+});
+
+test("a missing name falls back to the domain at low confidence", () => {
+  const result = extractDraftFromHtml([
+    { url: "https://www.alleygates.example/", html: "<html><head><title>Home</title></head><body></body></html>" },
+  ]);
+  assert.equal(result.draft.businessName, "Alleygates");
+  assert.equal(result.fieldMeta.businessName?.confidence, "low");
+});
+
+test("services and areas drop contact text and navigation labels", () => {
+  assert.equal(isServicePhrase("Request a valuation"), false);
+  assert.equal(isServicePhrase("Our history"), false);
+  assert.equal(isServicePhrase("law@phrsols.co.uk"), false);
+  assert.equal(isServicePhrase("https://example.com/book"), false);
+  assert.equal(isServicePhrase("Call 0151 666 9090"), false);
+  assert.equal(isServicePhrase("Boiler repair"), true);
+  assert.equal(isUkPlaceName("Plumbers Liverpool"), false);
+  assert.equal(isUkPlaceName("Liverpool"), true);
+});
+
+test("faqs need a FAQPage or at least three real questions", () => {
+  const two = `<html><body>
+    <details><summary>Do you cover Leeds?</summary><p>Yes, within fifteen miles of the centre.</p></details>
+    <details><summary>Are you registered?</summary><p>Yes. Ask for the engineer ID.</p></details>
+  </body></html>`;
+  const twoResult = extractDraftFromHtml([{ url: "https://trades.example/", html: two }]);
+  assert.equal(twoResult.draft.faqs, undefined);
+  const three = `<html><body>
+    <details><summary>Do you cover Leeds?</summary><p>Yes, within fifteen miles of the centre.</p></details>
+    <details><summary>Are you registered?</summary><p>Yes. Ask for the engineer ID.</p></details>
+    <details><summary>Do you charge a call-out?</summary><p>The first visit is quoted before work starts.</p></details>
+  </body></html>`;
+  const threeResult = extractDraftFromHtml([{ url: "https://trades.example/", html: three }]);
+  assert.match(threeResult.draft.faqs ?? "", /Do you cover Leeds\?/);
+  assert.match(threeResult.draft.faqs ?? "", /call-out\?/);
+  assert.equal(threeResult.fieldMeta.faqs?.source, "details");
 });

@@ -36,7 +36,7 @@ const TIME_RANGE_RE =
 const ALL_HOURS_RE =
   /\b(open(?:ing)?(?:\s+hours)?|hours).{0,24}(24\s*\/\s*7|24\s*hours)\b|\b(24\s*\/\s*7|24\s*hours).{0,24}(open(?:ing)?|hours)\b/i;
 
-const GENERIC_NAME_RE = /^(home|welcome|untitled|index|website)$/i;
+const GENERIC_NAME_RE = /^(home|about|welcome|untitled|index|website|error)$/i;
 const GENERIC_NAV_RE =
   /^(home|homepage|about(?: us)?|our story|contact(?: us)?|get in touch|stay in touch|support us|connect|links|residents?|blog|news|privacy(?: policy)?|terms(?: of (?:service|use)?)?|login|log in|sign in|sign up|register|cart|basket|checkout|faqs?|gallery|testimonials?|reviews?|careers?|jobs?|book now|get a quote|request a quote|menu|search|skip to (?:content|main)|back(?:\s+to\b.*)?|cookies?|(?:our )?services)$/i;
 const CTA_QUESTION_RE = /^(ready to|get started|cookie|subscribe|sign up)/i;
@@ -526,7 +526,7 @@ export function extractJsonLd(html: string): JsonLdExtract {
     if (types.includes("contactpoint")) {
       collectContact(rec, phones, emails);
     }
-    if (types.includes("faqpage") || rec.mainEntity) {
+    if (types.includes("faqpage")) {
       collectFaqs(rec, faqs);
     }
   }
@@ -939,88 +939,30 @@ export function acceptableFaqAnswer(answer: string): boolean {
   return true;
 }
 
+function faqPair(question: string, answer: string): string {
+  const q = question.trim();
+  const a = answer.trim();
+  if (!q.endsWith("?") || !acceptableFaqAnswer(a)) return "";
+  return `Q: ${q}\nA: ${a}`;
+}
+
+/** Details and accordion controls only. Fewer than three real questions is not an FAQ. */
 function extractDetailsFaqs(html: string): string | undefined {
-  if (!/<h[1-4]\b[^>]*>\s*(?:faqs?|frequently asked questions|common questions)\s*<\/h/i.test(html)) {
-    return undefined;
+  const pairs: string[] = [];
+  for (const match of html.matchAll(
+    /<details\b[^>]*>\s*<summary\b[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi,
+  )) {
+    const pair = faqPair(innerText(match[1]), innerText(match[2]));
+    if (pair) pairs.push(pair);
   }
-  const pairs = [
-    ...html.matchAll(
-      /<details\b[^>]*>\s*<summary\b[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi,
-    ),
-  ]
-    .map((m) => {
-      const q = innerText(m[1]);
-      const a = innerText(m[2]);
-      return q && acceptableFaqAnswer(a) ? `Q: ${q}\nA: ${a}` : "";
-    })
-    .filter(Boolean)
-    .slice(0, 12);
-  return pairs.length ? pairs.join("\n\n") : undefined;
-}
-
-function extractDtDdFaqs(html: string): string | undefined {
-  const pairs = [
-    ...html.matchAll(
-      /<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi,
-    ),
-  ]
-    .map((m) => {
-      const q = innerText(m[1]);
-      const a = innerText(m[2]);
-      if (!looksLikeQuestion(q) || !acceptableFaqAnswer(a)) return "";
-      return `Q: ${q}\nA: ${a}`;
-    })
-    .filter(Boolean)
-    .slice(0, 12);
-  return pairs.length >= 2 ? pairs.join("\n\n") : undefined;
-}
-
-function extractQuestionHeadingFaqs(html: string): string | undefined {
-  const pairs = [
-    ...html.matchAll(
-      /<h([2-4])\b[^>]*>([\s\S]*?)<\/h\1>\s*<(p|div)\b[^>]*>([\s\S]*?)<\/\3>/gi,
-    ),
-  ]
-    .map((m) => {
-      const q = innerText(m[2]);
-      const a = innerText(m[4]);
-      if (!looksLikeQuestion(q) || !acceptableFaqAnswer(a)) return "";
-      return `Q: ${q}\nA: ${a}`;
-    })
-    .filter(Boolean)
-    .slice(0, 12);
-  return pairs.length >= 2 ? pairs.join("\n\n") : undefined;
-}
-
-function extractAriaFaqs(html: string): string | undefined {
-  const pairs = [
-    ...html.matchAll(
-      /<button\b[^>]*aria-expanded=["'][^"']+["'][^>]*>([\s\S]*?)<\/button>\s*<([a-z0-9]+)\b[^>]*>([\s\S]*?)<\/\2>/gi,
-    ),
-  ]
-    .map((m) => {
-      const q = innerText(m[1]);
-      const a = innerText(m[3]);
-      if (!looksLikeQuestion(q) || !acceptableFaqAnswer(a)) return "";
-      return `Q: ${q}\nA: ${a}`;
-    })
-    .filter(Boolean)
-    .slice(0, 12);
-  return pairs.length >= 2 ? pairs.join("\n\n") : undefined;
-}
-
-function extractHeuristicFaqs(
-  html: string,
-): { text: string; source: FieldSource } | undefined {
-  const details = extractDetailsFaqs(html);
-  if (details) return { text: details, source: "details" };
-  const aria = extractAriaFaqs(html);
-  if (aria) return { text: aria, source: "details" };
-  const dtdd = extractDtDdFaqs(html);
-  if (dtdd) return { text: dtdd, source: "heading" };
-  const headings = extractQuestionHeadingFaqs(html);
-  if (headings) return { text: headings, source: "heading" };
-  return undefined;
+  for (const match of html.matchAll(
+    /<button\b[^>]*\baria-expanded=["'](?:true|false)["'][^>]*>([\s\S]*?)<\/button>\s*<div\b[^>]*>([\s\S]*?)<\/div>/gi,
+  )) {
+    const pair = faqPair(innerText(match[1]), innerText(match[2]));
+    if (pair) pairs.push(pair);
+  }
+  const unique = [...new Set(pairs)].slice(0, 12);
+  return unique.length >= 3 ? unique.join("\n\n") : undefined;
 }
 
 /**
@@ -1390,6 +1332,11 @@ export function isServicePhrase(text: string): boolean {
   if (/^(?:efficient|friendly|professional|reliable|trusted|quality|welcome|get|contact|call|book|click)\b/i.test(value)) {
     return false;
   }
+  if (/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(value)) return false;
+  if (/https?:\/\/|www\./i.test(value)) return false;
+  if (UK_POSTCODE_RE.test(value) || isPlausiblePhone(value)) return false;
+  if ((value.match(/\d/g) ?? []).length >= 10) return false;
+  if (/\b(?:contact|request a valuation|our history|about(?: us)?)\b/i.test(value)) return false;
   return true;
 }
 
@@ -1595,6 +1542,9 @@ const KNOWN_UK_PLACES = new Set(
   ].map((place) => place.toLowerCase()),
 );
 
+const AREA_NAV_LABEL_RE =
+  /\b(?:plumb(?:er|ers|ing)|electric(?:ian|ians)|heat(?:ing|er)s?|boiler|roof(?:er|ing)|locksmiths?|solicitors?|lawyers?|estate agents?|joiners?|builders?|painters?|cleaners?|gardeners?|valuations?)\b/i;
+
 const PLACE_DENY_RE =
   /\b(?:privacy|policy|statement|copyright|complaint|terms|cookie|facebook|google|instagram|twitter|linkedin|youtube|tiktok|suggested|voucher|prices?|homepage|contact|search|login|january|february|march|april|may|june|july|august|september|october|november|december|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b|\b(?:19|20)\d{2}\b|\b(?:jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\b/i;
 
@@ -1610,6 +1560,7 @@ export function isUkPlaceName(value: string): boolean {
   }
   const compact = text.replace(/\s+/g, "");
   if (/^[A-Z]{1,2}\d[A-Z\d]?$/i.test(compact)) return true;
+  if (AREA_NAV_LABEL_RE.test(text)) return false;
   const key = text.toLowerCase();
   if (KNOWN_UK_PLACES.has(key)) return true;
   const words = text.split(/[\s-]+/);
@@ -1703,17 +1654,6 @@ function extractChromePhones(html: string): string[] {
   return dedupePhones(chunks.flatMap((chunk) => visiblePhoneCandidates(chunk)), 4);
 }
 
-function formatContactHints(phones: string[], emails: string[]): string | undefined {
-  const lines: string[] = [];
-  for (const phone of [...new Set(phones)].slice(0, 4)) {
-    if (isPlausiblePhone(phone)) lines.push(`Phone: ${phone}`);
-  }
-  for (const email of [...new Set(emails)].slice(0, 4)) {
-    if (isPlausibleEmail(email)) lines.push(`Email: ${email}`);
-  }
-  return lines.length ? lines.join("\n") : undefined;
-}
-
 function cleanedTitleName(html: string): string | undefined {
   const title = extractTitle(html);
   if (!title) return undefined;
@@ -1728,13 +1668,14 @@ function isGenericName(name: string): boolean {
 
 const HOSTLIKE_NAME_RE = /^(?:[\w-]+\.)+(?:uk|com|org|net|gov\.uk)$/i;
 const ERROR_PAGE_TITLE_RE =
-  /^(?:file not found|page not found|not found|404|403|401|forbidden|error|untitled document)$/i;
+  /404|\bnot found\b|\berror\b|^untitled(?:\s+document)?$/i;
 
 /** Drop "Welcome to" and names that are only a generic title or a hostname. */
 export function publicBusinessName(value: string | undefined): string | undefined {
   if (!value) return undefined;
   const stripped = sanitizeUntrustedField(value, 200)
     .replace(/^welcome to\s+/i, "")
+    .replace(/^about\s+/i, "")
     .replace(/\s+all rights reserved\.?$/i, "")
     .trim();
   if (!stripped || isGenericName(stripped) || HOSTLIKE_NAME_RE.test(stripped)) return undefined;
@@ -1750,6 +1691,13 @@ function stripTagline(value: string): string {
     return dashed[0]?.trim() || first;
   }
   return first;
+}
+
+function domainBusinessName(siteHost: string): string | undefined {
+  const slug = siteHost.replace(/^www\./i, "").split(".")[0]?.replace(/[^a-z0-9]+/gi, " ").trim() ?? "";
+  if (slug.length < 4) return undefined;
+  const titled = slug.replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+  return publicBusinessName(titled);
 }
 
 function isDomainSlug(name: string, siteHost: string): boolean {
@@ -1791,7 +1739,22 @@ function chooseBusinessName(hits: NameHit[], siteHost: string): NameHit | undefi
   const ranked = (usable.length ? usable : pool).sort(
     (a, b) => b.rank - a.rank || b.value.length - a.value.length,
   );
-  return ranked[0];
+  const top = ranked[0];
+  if (!top) return undefined;
+  const sameBrand = ranked.filter(
+    (hit) => hit.value.toLowerCase() === top.value.toLowerCase(),
+  );
+  const structured = sameBrand.find(
+    (hit) => hit.source === "jsonld" || hit.source === "microdata",
+  );
+  if (
+    structured &&
+    (top.source === "title" || top.source === "meta") &&
+    structured.value.toLowerCase() === top.value.toLowerCase()
+  ) {
+    return structured;
+  }
+  return top;
 }
 
 function logoAlt(html: string): string | undefined {
@@ -2224,9 +2187,9 @@ export function extractDraftFromHtml(
 
   for (const page of pages) {
     const siteName = metaContent(page.html, "og:site_name");
-    if (siteName) nameHits.push({ value: siteName, source: "meta", confidence: "high", rank: 50 });
+    if (siteName) nameHits.push({ value: siteName, source: "meta", confidence: "high", rank: 60 });
     const title = extractTitle(page.html);
-    if (title) nameHits.push({ value: title, source: "title", confidence: "medium", rank: 30 });
+    if (title) nameHits.push({ value: title, source: "title", confidence: "medium", rank: 55 });
     const logo = logoAlt(page.html);
     if (logo) nameHits.push({ value: logo, source: "meta", confidence: "medium", rank: 20 });
     const h1 = extractH1(page.html);
@@ -2244,6 +2207,11 @@ export function extractDraftFromHtml(
       chosenName.source,
       chosenName.confidence,
     );
+  } else {
+    const fromDomain = domainBusinessName(siteHost);
+    if (fromDomain) {
+      setField(draft, fieldMeta, "businessName", fromDomain, "pattern", "low");
+    }
   }
 
   for (const page of pages) {
@@ -2348,44 +2316,11 @@ export function extractDraftFromHtml(
       }
     }
   }
-  if (!draft.faqs) {
-    for (const page of pages) {
-      const heuristic = extractHeuristicFaqs(page.html);
-      if (heuristic) {
-        setField(
-          draft,
-          fieldMeta,
-          "faqs",
-          heuristic.text,
-          heuristic.source,
-          "medium",
-        );
-        break;
-      }
-    }
-  }
-
   const phonePicks = chooseProminentPhones(phoneHits, pageUrls, 2);
   const phonePick = phonePicks[0];
   const emailPick = chooseProminentEmail(emailHits, pageUrls, siteHost);
   const publicEmails = emailPick ? [emailPick.value] : [];
   const publicPhones = phonePicks.map((hit) => hit.value);
-  const contact = formatContactHints(publicPhones, publicEmails);
-  if (contact) {
-    if (draft.faqs) {
-      const already = contact
-        .split("\n")
-        .every((line) => (draft.faqs ?? "").includes(line.replace(/^(Phone|Email): /, "")));
-      if (!already) {
-        draft.faqs = `${draft.faqs}\n\n${contact}`.slice(0, MAX_FIELD_CHARS);
-        warnings.push("contact_hints_from_page");
-      }
-    } else {
-      setField(draft, fieldMeta, "faqs", contact, "contact_link", "medium");
-      warnings.push("contact_hints_from_page");
-    }
-  }
-
   if (!draft.greeting) {
     warnings.push("greeting_not_found");
   }

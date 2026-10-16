@@ -354,7 +354,8 @@ test("runScan recovers a direct TLS/fetch failure with a bounded same-origin rea
     assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
     assert.match(result.draft.services ?? "", /Caroline Place/);
     assert.match(result.draft.services ?? "", /Supported Lodgings/);
-    assert.match(result.draft.faqs ?? "", /\+441516499718/);
+    assert.deepEqual(result.facts?.contact?.phones, ["+441516499718"]);
+    assert.equal(result.draft.faqs, undefined);
     assert.ok(result.warnings.includes("fetch_failed"));
     assert.ok(result.warnings.includes("reader_fallback_used"));
     assert.ok(result.warnings.includes("reader_challenge_retry"));
