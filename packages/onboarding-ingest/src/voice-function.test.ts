@@ -13,6 +13,30 @@ const functionDir = path.resolve(here, "../packages/website/voice");
 const SECRET = "gemini-test-key-should-not-leak";
 const PCM = Buffer.from([0x00, 0x10, 0xff, 0x7f, 0x00, 0x80]);
 
+type VoiceResult = {
+  statusCode: number;
+  headers: Record<string, string>;
+  body: unknown;
+};
+
+function jsonBody(result: VoiceResult) {
+  assert.equal(typeof result.body, "string");
+  assert.match(result.headers["Content-Type"] ?? "", /^application\/json/);
+  return JSON.parse(result.body as string) as {
+    ok?: boolean;
+    error?: string;
+    fallback?: string;
+  };
+}
+
+function wavBytes(result: VoiceResult) {
+  assert.equal(result.statusCode, 200);
+  assert.equal(result.headers["Content-Type"], "audio/wav");
+  assert.equal(typeof result.body, "string");
+  assert.equal("isBase64Encoded" in result, false);
+  return Buffer.from(result.body as string, "base64");
+}
+
 function event(method: string, text?: string, ip = "203.0.113.50") {
   return {
     http: {
@@ -70,7 +94,7 @@ test("voice function stays unconfigured without a Gemini key", async () => {
   for (const env of [{}, { GEMINI_API_KEY: "  " }, { GEMINI_API_KEY: "bad\nkey" }]) {
     const result = await main(event("POST", "Hello"), { env });
     assert.equal(result.statusCode, 503);
-    assert.deepEqual(result.body, {
+    assert.deepEqual(jsonBody(result), {
       ok: false,
       error: "voice_not_configured",
       fallback: "browser",
@@ -95,10 +119,7 @@ test("voice function calls Gemini TTS and returns a WAV", async () => {
 
   assert.equal(result.statusCode, 200);
   assert.equal(result.headers["Cache-Control"], "private, max-age=300");
-  const body = result.body as { ok: boolean; contentType: string; audioBase64: string };
-  assert.equal(body.ok, true);
-  assert.equal(body.contentType, "audio/wav");
-  const wav = Buffer.from(body.audioBase64, "base64");
+  const wav = wavBytes(result);
   const header = wavHeader(wav);
   assert.equal(header.sampleRate, 24000);
   assert.deepEqual(header.pcm, PCM);
@@ -122,7 +143,7 @@ test("voice function calls Gemini TTS and returns a WAV", async () => {
       },
     },
   });
-  assert.doesNotMatch(JSON.stringify(result.body), new RegExp(SECRET));
+  assert.doesNotMatch(String(result.body), new RegExp(SECRET));
   assert.doesNotMatch(JSON.stringify(result), /ELEVENLABS|xi-api-key|elevenlabs/i);
 });
 
@@ -146,7 +167,7 @@ test("GEMINI_TTS_MODEL and GEMINI_TTS_VOICE override the request", async () => {
   assert.equal(result.statusCode, 200);
   assert.match(url, /models\/gemini-2\.5-flash-preview-tts:generateContent$/);
   assert.equal(voice, "Algenib");
-  const wav = Buffer.from((result.body as { audioBase64: string }).audioBase64, "base64");
+  const wav = wavBytes(result);
   assert.equal(wavHeader(wav).sampleRate, 16000);
 });
 
@@ -163,10 +184,8 @@ test("an identical line is served from memory without a second Gemini call", asy
   assert.equal(first.statusCode, 200);
   assert.equal(second.statusCode, 200);
   assert.equal(calls, 1);
-  assert.equal(
-    (first.body as { audioBase64: string }).audioBase64,
-    (second.body as { audioBase64: string }).audioBase64,
-  );
+  assert.equal(first.body, second.body);
+  assert.equal(typeof first.body, "string");
 });
 
 test("Gemini 429 and a timeout fall back without the upstream body", async () => {
@@ -177,7 +196,7 @@ test("Gemini 429 and a timeout fall back without the upstream body", async () =>
       new Response(JSON.stringify({ error: { message: SECRET } }), { status: 429 })) as typeof fetch,
   });
   assert.equal(limited.statusCode, 429);
-  assert.deepEqual(limited.body, {
+  assert.deepEqual(jsonBody(limited), {
     ok: false,
     error: "voice_rate_limited",
     fallback: "browser",
@@ -193,7 +212,7 @@ test("Gemini 429 and a timeout fall back without the upstream body", async () =>
     }) as typeof fetch,
   });
   assert.equal(timedOut.statusCode, 504);
-  assert.deepEqual(timedOut.body, { ok: false, error: "timeout", fallback: "browser" });
+  assert.deepEqual(jsonBody(timedOut), { ok: false, error: "timeout", fallback: "browser" });
 });
 
 test("a model override cannot put the key into the Gemini URL", async () => {
@@ -208,7 +227,7 @@ test("a model override cannot put the key into the Gemini URL", async () => {
   });
   assert.equal(calls, 0);
   assert.equal(result.statusCode, 502);
-  assert.equal((result.body as { fallback: string }).fallback, "browser");
+  assert.equal(jsonBody(result).fallback, "browser");
   assert.doesNotMatch(JSON.stringify(result), new RegExp(SECRET));
 });
 
@@ -219,7 +238,7 @@ test("voice function turns an upstream 5xx into a browser fallback", async () =>
     fetchImpl: (async () => new Response("nope", { status: 500 })) as typeof fetch,
   });
   assert.equal(result.statusCode, 502);
-  assert.deepEqual(result.body, {
+  assert.deepEqual(jsonBody(result), {
     ok: false,
     error: "voice_unavailable",
     fallback: "browser",
@@ -238,10 +257,10 @@ test("voice function rejects an empty or oversized line before calling Gemini", 
   const empty = await main(event("POST", "   ", "203.0.113.52"), { env, fetchImpl: fetcher });
   const long = await main(event("POST", "a".repeat(401), "203.0.113.52"), { env, fetchImpl: fetcher });
   assert.equal(empty.statusCode, 400);
-  assert.equal((empty.body as { error: string }).error, "text_required");
-  assert.equal((empty.body as { fallback: string }).fallback, "browser");
+  assert.equal(jsonBody(empty).error, "text_required");
+  assert.equal(jsonBody(empty).fallback, "browser");
   assert.equal(long.statusCode, 400);
-  assert.equal((long.body as { error: string }).error, "text_too_long");
+  assert.equal(jsonBody(long).error, "text_too_long");
   assert.equal(calls, 0);
 });
 
@@ -276,6 +295,145 @@ test("deployed voice artifact is prebuilt and matches the unconfigured fallback"
   deployed.resetVoiceRateLimitForTests();
   const result = await deployed.main(event("POST", "Hello", "203.0.113.53"), { env: {} });
   assert.equal(result.statusCode, 503);
-  assert.equal((result.body as { error?: string }).error, "voice_not_configured");
-  assert.equal((result.body as { fallback?: string }).fallback, "browser");
+  const body = jsonBody(result);
+  assert.equal(body.error, "voice_not_configured");
+  assert.equal(body.fallback, "browser");
+  assert.doesNotMatch(bundled, /AbortSignal\.timeout/);
+  assert.match(project, /name:\s*website/);
+  assert.match(project, /runtime:\s*nodejs:22/);
+});
+
+function geminiFetcher(calls: Array<{ url: string; init?: RequestInit }>) {
+  return (async (input: string | URL | Request, init?: RequestInit) => {
+    calls.push({ url: String(input), init });
+    return geminiAudio();
+  }) as typeof fetch;
+}
+
+test("web-action events with array headers and parsed or base64 bodies return audio/wav", async () => {
+  resetVoiceRateLimitForTests();
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const env = { GEMINI_API_KEY: SECRET };
+  const shapes = [
+    {
+      http: {
+        method: "post",
+        headers: {
+          origin: "https://worksmartos.co.uk",
+          "x-forwarded-for": ["203.0.113.80", "10.0.0.1"],
+        },
+        body: { text: "Hi" },
+      },
+    },
+    {
+      __ow_method: "post",
+      __ow_headers: { "x-forwarded-for": "203.0.113.81" },
+      __ow_isBase64Encoded: true,
+      __ow_body: Buffer.from(JSON.stringify({ text: "Hi" }), "utf8").toString("base64"),
+    },
+    {
+      http: {
+        method: "POST",
+        headers: { "x-forwarded-for": "203.0.113.82" },
+        isBase64Encoded: true,
+        body: Buffer.from(JSON.stringify({ text: "Hi" }), "utf8").toString("base64"),
+      },
+    },
+  ];
+
+  for (const shape of shapes) {
+    calls.length = 0;
+    const result = await main(shape, { env, fetchImpl: geminiFetcher(calls) });
+    const wav = wavBytes(result);
+    const header = wavHeader(wav);
+    assert.equal(header.sampleRate, 24000);
+    assert.deepEqual(header.pcm, PCM);
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0]?.url.includes("?"), false);
+    assert.equal(calls[0]?.url.includes(SECRET), false);
+    const headers = calls[0]?.init?.headers as Record<string, string>;
+    assert.equal(headers["x-goog-api-key"], SECRET);
+    assert.equal(JSON.parse(String(calls[0]?.init?.body)).contents[0].parts[0].text, "Hi");
+    resetVoiceRateLimitForTests();
+  }
+});
+
+test("a thrown handler error returns a string JSON browser fallback", async () => {
+  resetVoiceRateLimitForTests();
+  const env = {};
+  Object.defineProperty(env, "GEMINI_API_KEY", {
+    get() {
+      throw new Error(`boom ${SECRET}`);
+    },
+  });
+  const result = await main(
+    {
+      http: {
+        method: "POST",
+        headers: { "x-forwarded-for": ["203.0.113.83"] },
+        body: { text: "Hi" },
+      },
+    },
+    { env },
+  );
+  assert.equal(result.statusCode, 502);
+  const body = jsonBody(result);
+  assert.deepEqual(body, { ok: false, error: "voice_handler_error", fallback: "browser" });
+  assert.doesNotMatch(result.body as string, new RegExp(SECRET));
+  assert.doesNotMatch(result.body as string, /boom/);
+
+  const saved = globalThis.fetch;
+  // @ts-expect-error exercise a runtime without global fetch
+  globalThis.fetch = undefined;
+  try {
+    resetVoiceRateLimitForTests();
+    const missing = await main(event("POST", "Hi", "203.0.113.84"), { env: { GEMINI_API_KEY: SECRET } });
+    assert.equal(missing.statusCode, 502);
+    assert.equal(jsonBody(missing).error, "voice_unavailable");
+    assert.equal(jsonBody(missing).fallback, "browser");
+  } finally {
+    globalThis.fetch = saved;
+  }
+});
+
+test("the deployed bundle accepts a DigitalOcean web-action event and a thrown error", async () => {
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    main: typeof main;
+    resetVoiceRateLimitForTests: typeof resetVoiceRateLimitForTests;
+  };
+  deployed.resetVoiceRateLimitForTests();
+  const calls: Array<{ url: string }> = [];
+  const result = await deployed.main(
+    {
+      http: {
+        method: "POST",
+        headers: { "x-forwarded-for": ["203.0.113.85"] },
+        body: { text: "Hi" },
+      },
+    },
+    {
+      env: { GEMINI_API_KEY: SECRET },
+      fetchImpl: (async (input: string | URL | Request) => {
+        calls.push({ url: String(input) });
+        return geminiAudio();
+      }) as typeof fetch,
+    },
+  );
+  assert.equal(wavHeader(wavBytes(result)).sampleRate, 24000);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0]?.url.includes(SECRET), false);
+
+  deployed.resetVoiceRateLimitForTests();
+  const env = {};
+  Object.defineProperty(env, "GEMINI_API_KEY", {
+    get() {
+      throw new Error(SECRET);
+    },
+  });
+  const failed = await deployed.main({ http: { method: "POST", body: { text: "Hi" } } }, { env });
+  assert.equal(failed.statusCode, 502);
+  const body = jsonBody(failed);
+  assert.equal(body.error, "voice_handler_error");
+  assert.equal(body.fallback, "browser");
+  assert.doesNotMatch(String(failed.body), new RegExp(SECRET));
 });

@@ -1,6 +1,6 @@
 /**
  * Same-origin receptionist preview voice.
- * DigitalOcean Functions entry: POST /api/website/voice
+ * DigitalOcean Functions entry: POST /api/website/voice → /website/voice
  *
  * Speech comes from the Gemini generateContent TTS endpoint.
  * GEMINI_API_KEY is read here only, sent in the x-goog-api-key header,
@@ -13,17 +13,29 @@
  * calls the voice Theatrical. The browser never receives the key.
  *
  * Gemini 2.5 Flash TTS returns base64 16-bit PCM, mono, 24 kHz. This
- * function wraps that PCM in a WAV header and returns audio/wav.
- * A missing key, an upstream error, HTTP 429, or a timeout returns a
- * non-secret status with fallback "browser".
+ * function wraps that PCM in a WAV and returns it as a web-action binary
+ * body: Content-Type audio/wav and a base64 string. DigitalOcean decodes
+ * that string because audio/wav is a binary media type. isBase64Encoded is
+ * a request flag (raw HTTP), not a response field.
+ * JSON fallbacks use a string body so the gateway does not have to guess.
+ * A missing key, an upstream error, HTTP 429, a timeout, or any throw
+ * returns a non-secret status with fallback "browser".
  */
+
+type HeaderValue = string | string[] | number | boolean | null | undefined;
 
 type WebEvent = {
   http?: {
-    headers?: Record<string, string>;
+    headers?: Record<string, HeaderValue>;
     method?: string;
     body?: unknown;
+    isBase64Encoded?: boolean;
   };
+  __ow_method?: unknown;
+  __ow_headers?: Record<string, HeaderValue>;
+  __ow_body?: unknown;
+  __ow_isBase64Encoded?: boolean;
+  isBase64Encoded?: boolean;
   text?: unknown;
 };
 
@@ -37,6 +49,12 @@ export type VoiceFunctionOptions = {
   fetchImpl?: typeof fetch;
   env?: VoiceEnv;
   now?: number;
+};
+
+type WebActionResponse = {
+  statusCode: number;
+  headers: Record<string, string>;
+  body: string;
 };
 
 const MAX_TEXT = 400;
@@ -54,21 +72,96 @@ const GEMINI_HOST = "https://generativelanguage.googleapis.com";
 const rateBuckets = new Map<string, number[]>();
 const audioCache = new Map<string, { audioBase64: string; at: number }>();
 
-function response(
-  statusCode: number,
-  body: unknown,
-  origin = "",
-  cacheControl = "no-store",
-): { statusCode: number; headers: Record<string, string>; body: unknown } {
+function responseHeaders(origin: string, contentType: string, cacheControl: string): Record<string, string> {
   const headers: Record<string, string> = {
-    "Content-Type": "application/json; charset=utf-8",
+    "Content-Type": contentType,
     "Cache-Control": cacheControl,
     Vary: "Origin",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Accept",
   };
   if (origin) headers["Access-Control-Allow-Origin"] = origin;
-  return { statusCode, headers, body };
+  return headers;
+}
+
+function jsonResponse(
+  statusCode: number,
+  payload: Record<string, unknown>,
+  origin = "",
+  cacheControl = "no-store",
+): WebActionResponse {
+  return {
+    statusCode,
+    headers: responseHeaders(origin, "application/json", cacheControl),
+    body: JSON.stringify(payload),
+  };
+}
+
+function audioResponse(audioBase64: string, origin: string): WebActionResponse {
+  return {
+    statusCode: 200,
+    headers: responseHeaders(origin, "audio/wav", "private, max-age=300"),
+    body: audioBase64,
+  };
+}
+
+function fallback(statusCode: number, error: string, origin: string): WebActionResponse {
+  return jsonResponse(statusCode, { ok: false, error, fallback: "browser" }, origin);
+}
+
+function headerString(value: HeaderValue): string {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map((item) => headerString(item)).filter(Boolean).join(",");
+  return "";
+}
+
+function headersOf(event: WebEvent): Record<string, HeaderValue> {
+  const headers = event.http?.headers ?? event.__ow_headers;
+  if (!headers || typeof headers !== "object" || Array.isArray(headers)) return {};
+  return headers;
+}
+
+function firstHeader(headers: Record<string, HeaderValue>, name: string): string {
+  const value = headers[name] ?? headers[name.toLowerCase()];
+  const picked = Array.isArray(value) ? value[0] : value;
+  return headerString(picked).replace(/[\r\n]/g, "");
+}
+
+function clientIp(headers: Record<string, HeaderValue>): string {
+  const forwarded = headerString(headers["x-forwarded-for"] ?? headers["X-Forwarded-For"]);
+  return forwarded.split(",")[0]?.trim() || "unknown";
+}
+
+function methodOf(event: WebEvent): string {
+  const raw = event.http?.method ?? event.__ow_method;
+  return typeof raw === "string" && raw.trim() ? raw.trim().toUpperCase() : "GET";
+}
+
+function textFromValue(value: unknown, encoded: boolean): string {
+  if (typeof value === "string") {
+    const source = encoded ? Buffer.from(value, "base64").toString("utf8") : value;
+    if (!source.trim()) return "";
+    try {
+      const parsed = JSON.parse(source) as { text?: unknown };
+      return typeof parsed?.text === "string" ? parsed.text.trim() : "";
+    } catch {
+      return "";
+    }
+  }
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    const text = (value as { text?: unknown }).text;
+    return typeof text === "string" ? text.trim() : "";
+  }
+  return "";
+}
+
+function readText(event: WebEvent): string {
+  if (typeof event.text === "string" && event.text.trim()) return event.text.trim();
+  const httpEncoded = Boolean(event.http?.isBase64Encoded || event.isBase64Encoded);
+  const fromHttp = textFromValue(event.http?.body, httpEncoded);
+  if (fromHttp) return fromHttp;
+  return textFromValue(event.__ow_body, Boolean(event.__ow_isBase64Encoded || event.isBase64Encoded));
 }
 
 function allowRate(key: string, now: number): boolean {
@@ -86,20 +179,6 @@ function allowRate(key: string, now: number): boolean {
 export function resetVoiceRateLimitForTests(): void {
   rateBuckets.clear();
   audioCache.clear();
-}
-
-function readText(event: WebEvent): string {
-  if (typeof event.text === "string") return event.text.trim();
-  const raw = event.http?.body;
-  if (typeof raw === "string" && raw.trim()) {
-    try {
-      const parsed = JSON.parse(raw) as { text?: unknown };
-      if (typeof parsed.text === "string") return parsed.text.trim();
-    } catch {
-      return "";
-    }
-  }
-  return "";
 }
 
 function safeName(value: string | undefined, fallback: string): string | null {
@@ -158,19 +237,6 @@ function cachedAudio(key: string, now: number): string | null {
   return hit.audioBase64;
 }
 
-function audioResponse(audioBase64: string, origin: string) {
-  return response(
-    200,
-    { ok: true, contentType: "audio/wav", audioBase64 },
-    origin,
-    "private, max-age=300",
-  );
-}
-
-function fallback(statusCode: number, error: string, origin: string) {
-  return response(statusCode, { ok: false, error, fallback: "browser" }, origin);
-}
-
 type GeminiPart = {
   inlineData?: { data?: unknown; mimeType?: unknown };
   inline_data?: { data?: unknown; mime_type?: unknown };
@@ -207,16 +273,19 @@ function wavFromPcm(pcm: Buffer, mime: string): Uint8Array | null {
   return pcm16ToWav(pcm, sampleRate);
 }
 
-export async function main(event: WebEvent = {}, options: VoiceFunctionOptions = {}) {
-  const method = event.http?.method?.toUpperCase() ?? "GET";
-  const headers = event.http?.headers ?? {};
-  const origin = headers.origin ?? headers.Origin ?? "";
-  const clientIp =
-    (headers["x-forwarded-for"] ?? headers["X-Forwarded-For"] ?? "unknown")
-      .split(",")[0]
-      ?.trim() || "unknown";
+async function handleVoice(event: WebEvent, options: VoiceFunctionOptions): Promise<WebActionResponse> {
+  const method = methodOf(event);
+  const headers = headersOf(event);
+  const origin = firstHeader(headers, "origin");
+  const ip = clientIp(headers);
 
-  if (method === "OPTIONS") return response(204, "", origin);
+  if (method === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: responseHeaders(origin, "text/plain", "no-store"),
+      body: "",
+    };
+  }
   if (method !== "POST") return fallback(405, "method_not_allowed", origin);
 
   const env = options.env ?? process.env;
@@ -232,15 +301,18 @@ export async function main(event: WebEvent = {}, options: VoiceFunctionOptions =
   if (text.length > MAX_TEXT) return fallback(400, "text_too_long", origin);
 
   const now = options.now ?? Date.now();
-  if (!allowRate(`ip:${clientIp}`, now)) return fallback(429, "rate_limited", origin);
+  if (!allowRate(`ip:${ip}`, now)) return fallback(429, "rate_limited", origin);
 
   const cacheKey = `${model}\n${voice}\n${text}`;
   const hit = cachedAudio(cacheKey, now);
   if (hit) return audioResponse(hit, origin);
 
   const endpoint = `${GEMINI_HOST}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  const fetchImpl = options.fetchImpl ?? globalThis.fetch;
+  if (typeof fetchImpl !== "function") return fallback(502, "voice_unavailable", origin);
 
-  const fetchImpl = options.fetchImpl ?? fetch;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
   try {
     const upstream = await fetchImpl(endpoint, {
       method: "POST",
@@ -260,7 +332,7 @@ export async function main(event: WebEvent = {}, options: VoiceFunctionOptions =
           },
         },
       }),
-      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+      signal: controller.signal,
     });
     if (upstream.status === 429) return fallback(429, "voice_rate_limited", origin);
     if (!upstream.ok) return fallback(502, "voice_unavailable", origin);
@@ -281,5 +353,15 @@ export async function main(event: WebEvent = {}, options: VoiceFunctionOptions =
       error instanceof Error &&
       (error.name === "TimeoutError" || error.name === "AbortError" || /timeout/i.test(error.message));
     return fallback(timedOut ? 504 : 502, timedOut ? "timeout" : "voice_unavailable", origin);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export async function main(event: WebEvent = {}, options: VoiceFunctionOptions = {}): Promise<WebActionResponse> {
+  try {
+    return await handleVoice(event, options);
+  } catch {
+    return jsonResponse(502, { ok: false, error: "voice_handler_error", fallback: "browser" });
   }
 }
