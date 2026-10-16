@@ -167,6 +167,12 @@ function deployedBuild() {
   }
   return null;
 }
+var ENV_NAME_PREFIXES = ["GEMINI_", "ONBOARDING_", "SCAN_", "COMMIT", "GIT", "SOURCE", "__OW", "DO_"];
+function envDiagnostics() {
+  const names = Object.keys(process.env);
+  const envNames = names.filter((name) => ENV_NAME_PREFIXES.some((prefix) => name.startsWith(prefix))).sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
+  return { envNames, envCount: names.length };
+}
 function bytesToBase64(bytes) {
   return Buffer.from(bytes).toString("base64");
 }
@@ -259,7 +265,8 @@ async function handleVoice(event, options) {
       keyPrefixKind: keyPrefixKind(apiKey),
       model: model2,
       voice: voice2,
-      build: deployedBuild()
+      build: deployedBuild(),
+      ...envDiagnostics()
     }, origin);
   }
   if (method !== "POST") return fallback("method_not_allowed", origin);

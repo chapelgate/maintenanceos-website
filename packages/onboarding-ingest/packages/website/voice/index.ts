@@ -237,6 +237,17 @@ function deployedBuild(): string | null {
   return null;
 }
 
+const ENV_NAME_PREFIXES = ["GEMINI_", "ONBOARDING_", "SCAN_", "COMMIT", "GIT", "SOURCE", "__OW", "DO_"];
+
+/** Key names only. Values never leave the function. */
+function envDiagnostics(): { envNames: string[]; envCount: number } {
+  const names = Object.keys(process.env);
+  const envNames = names
+    .filter((name) => ENV_NAME_PREFIXES.some((prefix) => name.startsWith(prefix)))
+    .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  return { envNames, envCount: names.length };
+}
+
 function bytesToBase64(bytes: Uint8Array): string {
   return Buffer.from(bytes).toString("base64");
 }
@@ -347,6 +358,7 @@ async function handleVoice(event: WebEvent, options: VoiceFunctionOptions): Prom
       model,
       voice,
       build: deployedBuild(),
+      ...envDiagnostics(),
     }, origin);
   }
   if (method !== "POST") return fallback("method_not_allowed", origin);

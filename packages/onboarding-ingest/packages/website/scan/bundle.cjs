@@ -152,6 +152,15 @@ var RATE_MAX = 8;
 var HOST_RATE_MAX = 6;
 var UPSTREAM_TIMEOUT_MS = 25e3;
 var DEFAULT_PERSISTENT_SCANNER_ENDPOINT = "https://178-128-171-45.sslip.io/v1/onboarding/scan";
+function scannerRuntimeUrl() {
+  const configured = process.env.SCANNER_V2_RUNTIME_URL?.trim() ?? "";
+  try {
+    const url = new URL(configured);
+    if (url.protocol === "https:" || url.protocol === "http:") return url.toString();
+  } catch {
+  }
+  return DEFAULT_PERSISTENT_SCANNER_ENDPOINT;
+}
 var rateBuckets = /* @__PURE__ */ new Map();
 function pruneRateBuckets(now) {
   const cutoff = now - RATE_WINDOW_MS;
@@ -190,7 +199,7 @@ function response(statusCode, body, origin = "") {
   if (origin) headers["Access-Control-Allow-Origin"] = origin;
   return { statusCode, headers, body };
 }
-async function proxyPersistentScan(url, fetcher = fetch, endpoint = process.env.SCANNER_V2_RUNTIME_URL?.trim() || DEFAULT_PERSISTENT_SCANNER_ENDPOINT, crawlId = "") {
+async function proxyPersistentScan(url, fetcher = fetch, endpoint = scannerRuntimeUrl(), crawlId = "") {
   try {
     const upstream = await fetcher(endpoint, {
       method: "POST",
