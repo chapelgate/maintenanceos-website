@@ -8,6 +8,8 @@ import {
   crawlUrlPriority,
   decodeCloudflareEmail,
   extractDraftFromHtml,
+  isAcceptableAddress,
+  publicBusinessName,
   extractJsonLd,
   extractMicrodata,
   extractSameOriginHrefs,
@@ -465,9 +467,8 @@ test("a small trades page without schema yields services, area, phone, and a bla
   ]);
   assert.deepEqual(result.facts.contact?.phones, ["07774179685"]);
   assert.equal(result.facts.contact?.emails, undefined);
-  assert.equal(result.facts.address, "Bromborough, Wirral");
-  assert.equal(result.factMeta.address?.confidence, "low");
-  assert.equal(result.factMeta.address?.sourceUrl, "https://rob-thompson.example/");
+  assert.equal(result.facts.address, undefined);
+  assert.equal(result.factMeta.address, undefined);
   assert.equal(result.facts.hours, undefined);
   assert.equal(result.draft.hours, undefined);
   assert.doesNotMatch(JSON.stringify(result), /rob@example\.test/);
@@ -478,7 +479,9 @@ test("fixture contact pages keep a public gmail, an obfuscated email, and a shor
     { url: "https://gregorys.example/", html: fixture("gregorys-contact.html") },
   ]);
   assert.deepEqual(gregorys.facts.contact?.emails, ["gregorysheating@gmail.com"]);
-  assert.equal(gregorys.facts.address, "4 Hampton Chase, CH43 9HE");
+  assert.equal(gregorys.facts.address, "4 Hampton Chase, Prenton, CH43 9HE");
+  assert.equal(gregorys.factMeta.address?.source, "footer");
+  assert.deepEqual(gregorys.facts.contact?.phones, ["0151 488 1234", "01516 532 896"]);
   assert.deepEqual(gregorys.facts.services, [
     "Boiler installations",
     "Boiler repairs",
@@ -501,6 +504,7 @@ test("fixture postal address keeps the locality and drops region and country cod
     { url: "https://springfield.example/", html: fixture("springfield-address.html") },
   ]);
   assert.equal(result.facts.address, "175 Frankby Road, West Kirby, CH48 9UU");
+  assert.equal(result.factMeta.address?.source, "footer");
   assert.doesNotMatch(result.facts.address ?? "", /\b(?:ENG|GB|Birkenhead)\b/);
   assert.deepEqual(result.facts.contact?.emails, ["office@springfieldheating.example"]);
 });
@@ -521,10 +525,50 @@ test("fixture draft fields decode entities and strip tags", () => {
     { url: "https://bromborough.example/", html: fixture("bromborough-wordpress.html") },
   ]);
   assert.match(result.facts.hours ?? "", /8\.30am – 5\.30 pm/);
-  assert.doesNotMatch(result.facts.hours ?? "", /&ndash;|</);
+  assert.match(result.facts.hours ?? "", /Sunday: Closed/);
+  assert.doesNotMatch(result.facts.hours ?? "", /Make an appointment|elementor|&ndash;|</);
+  assert.equal(result.facts.address, undefined);
   assert.deepEqual(result.facts.services, ["Boiler servicing", "Radiator replacement"]);
   assert.doesNotMatch(JSON.stringify(result.facts.services), /<img|alt=/i);
   assert.deepEqual(result.facts.contact?.emails, ["enquiries@bromborough.example"]);
+});
+
+test("navigation text is not an address and a house number plus street word is", () => {
+  assert.equal(isAcceptableAddress("← Back"), false);
+  assert.equal(isAcceptableAddress("Home"), false);
+  assert.equal(isAcceptableAddress("Menu"), false);
+  assert.equal(isAcceptableAddress("Contact"), false);
+  assert.equal(isAcceptableAddress("Bromborough, Wirral"), false);
+  assert.equal(isAcceptableAddress("78 St Andrews Road, Bebington"), true);
+  assert.equal(isAcceptableAddress("4 Hampton Chase, Prenton, CH43 9HE"), true);
+});
+
+test("generic welcome titles and menu labels are not a business or a service", () => {
+  assert.equal(publicBusinessName("Welcome to GOV.UK"), undefined);
+  assert.equal(publicBusinessName("nhs.uk"), undefined);
+  assert.equal(publicBusinessName("Welcome to Gregorys Heating"), "Gregorys Heating");
+  const gov = extractDraftFromHtml([
+    { url: "https://www.gov.uk/", html: fixture("govuk-welcome.html") },
+  ]);
+  assert.equal(gov.facts.businessName, undefined);
+  assert.equal(gov.facts.services, undefined);
+  assert.equal(gov.facts.contact, undefined);
+  const nhs = extractDraftFromHtml([
+    { url: "https://www.nhs.uk/", html: fixture("nhs-home.html") },
+  ]);
+  assert.equal(nhs.facts.businessName, undefined);
+  assert.equal(nhs.facts.services, undefined);
+  assert.doesNotMatch(nhs.draft.services ?? "", /Back|Menu|Search|Skip to content/i);
+});
+
+test("a challenge home page has no contact draft", () => {
+  const result = extractDraftFromHtml([
+    { url: "https://wirralplumbers.com/", html: fixture("siteground-challenge.html") },
+  ]);
+  assert.equal(result.facts.address, undefined);
+  assert.equal(result.facts.contact, undefined);
+  assert.equal(result.facts.hours, undefined);
+  assert.equal(result.facts.services, undefined);
 });
 
 test("fixture Cloudflare data-cfemail decodes without executing a script", () => {

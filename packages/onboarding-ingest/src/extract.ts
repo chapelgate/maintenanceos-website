@@ -5,6 +5,7 @@
  * All returned strings are untrusted page data.
  */
 
+import { parseFragment, type DefaultTreeAdapterMap } from "parse5";
 import type {
   BusinessFactMeta,
   BusinessFacts,
@@ -36,7 +37,7 @@ const ALL_HOURS_RE =
 
 const GENERIC_NAME_RE = /^(home|welcome|untitled|index|website)$/i;
 const GENERIC_NAV_RE =
-  /^(home|homepage|about(?: us)?|our story|contact(?: us)?|get in touch|stay in touch|support us|connect|links|residents?|blog|news|privacy(?: policy)?|terms(?: of (?:service|use)?)?|login|log in|sign in|sign up|register|cart|basket|checkout|faqs?|gallery|testimonials?|reviews?|careers?|jobs?|book now|get a quote|request a quote|menu|skip to (?:content|main)|cookies?|(?:our )?services)$/i;
+  /^(home|homepage|about(?: us)?|our story|contact(?: us)?|get in touch|stay in touch|support us|connect|links|residents?|blog|news|privacy(?: policy)?|terms(?: of (?:service|use)?)?|login|log in|sign in|sign up|register|cart|basket|checkout|faqs?|gallery|testimonials?|reviews?|careers?|jobs?|book now|get a quote|request a quote|menu|search|skip to (?:content|main)|back(?:\s+to\b.*)?|cookies?|(?:our )?services)$/i;
 const CTA_QUESTION_RE = /^(ready to|get started|cookie|subscribe|sign up)/i;
 
 const BUSINESS_ITEMTYPE_RE =
@@ -121,6 +122,66 @@ export function stripHtmlToText(html: string): string {
   return asUntrustedText(
     decodeEntities(withoutNoise.replace(/<[^>]+>/g, " ")),
   );
+}
+
+type HtmlNode = DefaultTreeAdapterMap["node"];
+type HtmlElement = DefaultTreeAdapterMap["element"];
+type HtmlText = DefaultTreeAdapterMap["textNode"];
+
+const SKIP_HTML_TAGS = new Set(["script", "style", "noscript", "template"]);
+const BLOCK_HTML_TAGS = new Set([
+  "address",
+  "article",
+  "blockquote",
+  "br",
+  "dd",
+  "div",
+  "dl",
+  "dt",
+  "figcaption",
+  "footer",
+  "form",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "header",
+  "hr",
+  "li",
+  "main",
+  "ol",
+  "p",
+  "pre",
+  "section",
+  "table",
+  "td",
+  "th",
+  "tr",
+  "ul",
+]);
+
+/** Visible text from a real HTML parse. Script, style, and noscript are omitted. */
+export function htmlToPlainText(html: string): string {
+  const fragment = parseFragment(html);
+  let out = "";
+  const walk = (node: HtmlNode) => {
+    if (node.nodeName === "#text") {
+      out += (node as HtmlText).value;
+      return;
+    }
+    if (node.nodeName === "#comment" || node.nodeName === "#documentType") return;
+    const element = node as HtmlElement;
+    const name = element.nodeName.toLowerCase();
+    if (SKIP_HTML_TAGS.has(name)) return;
+    const block = BLOCK_HTML_TAGS.has(name);
+    if (block) out += "\n";
+    for (const child of element.childNodes ?? []) walk(child);
+    if (block) out += "\n";
+  };
+  for (const child of fragment.childNodes) walk(child);
+  return asUntrustedText(decodeEntities(out));
 }
 
 function innerText(fragment: string): string {
@@ -581,13 +642,76 @@ function headingSection(
   return undefined;
 }
 
-function looksLikeHours(text: string): boolean {
-  return DAY_RE.test(text) && TIME_RE.test(text);
+function trimHoursLine(line: string): string | undefined {
+  const text = line.replace(/\s+/g, " ").trim();
+  if (!text || text.length > 240 || /<[a-z!/]/i.test(text)) return undefined;
+  if (ALL_HOURS_RE.test(text)) {
+    const all = text.match(ALL_HOURS_RE);
+    return all?.[0] ? asUntrustedText(all[0], 140) : undefined;
+  }
+  if (/\bclosed\b/i.test(text) && DAY_RE.test(text) && !TIME_RANGE_RE.test(text)) {
+    const closed =
+      /((?:mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays?|weekends?)\b.{0,24}\bclosed\b)/i.exec(
+        text,
+      );
+    return closed?.[1] ? asUntrustedText(closed[1], 140) : undefined;
+  }
+  const day = new RegExp(DAY_RE.source, "i").exec(text);
+  const range = TIME_RANGE_RE.exec(text);
+  if (!day || !range || day.index === undefined || range.index === undefined) return undefined;
+  if (range.index < day.index) return undefined;
+  const snippet = text
+    .slice(day.index, range.index + range[0].length)
+    .replace(/^[^A-Za-z0-9]+/, "")
+    .trim();
+  if (!snippet || snippet.length > 140) return undefined;
+  const prose = snippet.replace(/\d{1,2}[.:]\d{2}/g, "").replace(/\b[ap]\.m\./gi, "");
+  if (/[.!?]/.test(prose)) return undefined;
+  return snippet;
+}
+
+/** Keep opening-hours lines and stop at the first line that is not hours. */
+export function clipHoursText(text: string): string | undefined {
+  const kept: string[] = [];
+  let started = false;
+  for (const raw of text.split(/\n+/)) {
+    const line = raw.replace(/\s+/g, " ").trim();
+    if (!line) continue;
+    const hours = trimHoursLine(line);
+    if (hours) {
+      kept.push(hours);
+      started = true;
+      continue;
+    }
+    if (started) break;
+  }
+  const unique = [...new Set(kept)];
+  return unique.length ? unique.join("\n") : undefined;
+}
+
+function plainHours(value: string): string {
+  const plain = /<[a-z!/]/i.test(value) ? htmlToPlainText(value) : value;
+  const clipped = clipHoursText(plain);
+  if (clipped) return sanitizeUntrustedField(clipped, 500);
+  const text = sanitizeUntrustedField(
+    plain
+      .split(/\n+/)
+      .map((line) => line.trim())
+      .filter((line) => line && !/<[a-z!/]/i.test(line))
+      .join("\n"),
+    500,
+  );
+  if (!text || /<[a-z!/]/i.test(text)) return "";
+  if (looksLikeHoursPattern(text) || /\b\d{1,2}:\d{2}\b/.test(text) || ALL_HOURS_RE.test(text)) {
+    return text;
+  }
+  return "";
 }
 
 function looksLikeHoursPattern(text: string): boolean {
   if (text.length < 8 || text.length > 140) return false;
   if (ALL_HOURS_RE.test(text)) return true;
+  if (DAY_RE.test(text) && /\bclosed\b/i.test(text)) return true;
   if (!DAY_RE.test(text) || !TIME_RE.test(text)) return false;
   if (TIME_RANGE_RE.test(text)) return true;
   return /\b(open(?:ing)?|hours|closed)\b/i.test(text);
@@ -608,6 +732,8 @@ function extractTableHours(html: string): string[] {
 
 function extractHoursFromVisibleText(html: string): string | undefined {
   const fromTable = extractTableHours(html);
+  const parsed = clipHoursText(htmlToPlainText(html));
+  if (parsed) return parsed;
   const text = stripHtmlToText(html);
   const hits: string[] = [...fromTable];
   const day = new RegExp(DAY_RE.source, "gi");
@@ -889,6 +1015,55 @@ function safeDecode(raw: string): string {
 const UK_POSTCODE_RE =
   /\b(?:GIR\s?0AA|[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/i;
 
+const STREET_WORD_RE =
+  /\b(?:road|street|lane|avenue|ave|close|drive|way|court|place|crescent|terrace|gardens|grove|hill|park|square|chase|mews|row|walk|rise|view|gate|yard|quay|wharf|parade|boulevard|rd|st)\b/i;
+
+const NAV_ADDRESS_RE =
+  /^(?:back(?:\s+to\b.*)?|home|homepage|menu|contact(?:\s+us)?|search|skip to (?:content|main))$/i;
+
+/** A postal address needs a UK postcode, or a house number plus a street word. Navigation labels are rejected. */
+export function isAcceptableAddress(value: string): boolean {
+  const text = sanitizeUntrustedField(value, 500);
+  if (!text || text.length < 8 || text.length > 240) return false;
+  const parts = text.split(/[\n,]+/).map((part) => part.trim()).filter(Boolean);
+  if (
+    parts.some((part) => NAV_ADDRESS_RE.test(part.replace(/^[←‹›→\s]+/u, "")))
+  ) {
+    return false;
+  }
+  if (UK_POSTCODE_RE.test(text)) return true;
+  return /\b\d+[a-z]?\b/i.test(text) && STREET_WORD_RE.test(text);
+}
+
+/** Take the UK postcode and the comma or line-separated address lines that precede it. */
+export function addressAroundPostcode(text: string): string | undefined {
+  const match = UK_POSTCODE_RE.exec(text);
+  if (!match || match.index === undefined) return undefined;
+  const postcode = match[0].replace(/\s+/g, " ").toUpperCase();
+  const segments = text
+    .slice(0, match.index)
+    .split(/[\n,]+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const kept: string[] = [];
+  for (let index = segments.length - 1; index >= 0 && kept.length < 4; index -= 1) {
+    const part = segments[index] ?? "";
+    if (!part || part.length > 80) break;
+    if (NAV_ADDRESS_RE.test(part.replace(/^[←‹›→\s]+/u, ""))) break;
+    if (isPlausiblePhone(part) || isPlausibleEmail(part) || /[\[(]\s*at\s*[\])]/i.test(part)) break;
+    if (/^(?:phone|tel|email|e-mail|call)\b/i.test(part)) break;
+    kept.unshift(part);
+  }
+  if (!kept.length) return undefined;
+  const address = sanitizeUntrustedField(`${kept.join(", ")}, ${postcode}`, 500);
+  return address && isAcceptableAddress(address) ? address : undefined;
+}
+
+function postcodeKey(value: string): string | undefined {
+  const match = value.match(UK_POSTCODE_RE);
+  return match?.[0]?.replace(/\s+/g, "").toUpperCase();
+}
+
 function headingSectionHtml(
   html: string,
   headingRe: RegExp,
@@ -1105,6 +1280,7 @@ export type ProminentHit = {
   rank: number;
   source: FieldSource;
   confidence: FieldConfidence;
+  order?: number;
 };
 
 function distinctHits(hits: ProminentHit[], identity: (value: string) => string): ProminentHit[] {
@@ -1118,7 +1294,57 @@ function distinctHits(hits: ProminentHit[], identity: (value: string) => string)
     if (!prev || next.rank > prev.rank) groups.set(key, next);
   }
   return [...groups.values()].sort(
-    (a, b) => b.rank - a.rank || crawlUrlPriority(b.url) - crawlUrlPriority(a.url),
+    (a, b) =>
+      b.rank - a.rank ||
+      crawlUrlPriority(b.url) - crawlUrlPriority(a.url) ||
+      (a.order ?? 0) - (b.order ?? 0),
+  );
+}
+
+/** Up to two phones. The first is the most prominent. Low confidence only when other pages were discarded. */
+export function chooseProminentPhones(
+  hits: ProminentHit[],
+  pageUrls: string[] = [],
+  limit = 2,
+): ProminentHit[] {
+  const knownUrls = new Set(pageUrls.length ? pageUrls : hits.map((hit) => hit.url));
+  const siteScoped = [...knownUrls].some((url) => isSiteContactUrl(url));
+  const everything = distinctHits(hits, phoneIdentity);
+  if (!everything.length) return [];
+  const broad = siteScoped && (everything.length > 1 || knownUrls.size > 8);
+  const siteHits = distinctHits(
+    hits.filter((hit) => isSiteContactUrl(hit.url)),
+    phoneIdentity,
+  );
+  const chosen = (broad ? siteHits : everything).slice(0, Math.max(1, limit));
+  const discardedOutside = broad && everything.some((hit) => !isSiteContactUrl(hit.url));
+  return chosen.map((hit) => (discardedOutside ? { ...hit, confidence: "low" } : hit));
+}
+
+function chooseProminentAddress(
+  hits: ProminentHit[],
+  pageUrls: string[],
+): ProminentHit | undefined {
+  const adjusted = hits.map((hit) => {
+    const code = postcodeKey(hit.value);
+    if (!code) return hit;
+    const schemaAgrees = hits.some(
+      (other) =>
+        (other.source === "jsonld" || other.source === "microdata") &&
+        postcodeKey(other.value) === code,
+    );
+    if (
+      schemaAgrees &&
+      (hit.source === "footer" || hit.source === "heading" || hit.source === "pattern")
+    ) {
+      return { ...hit, rank: Math.max(hit.rank, 8) };
+    }
+    return hit;
+  });
+  return chooseProminentValue(
+    adjusted,
+    (value) => value.toLowerCase().replace(/\s+/g, " "),
+    pageUrls,
   );
 }
 
@@ -1276,11 +1502,21 @@ function cleanedTitleName(html: string): string | undefined {
   if (!title) return undefined;
   const first = title.split(/\s*[|–—]\s*/)[0]?.trim();
   const candidate = first && first.length >= 2 && first.length <= 80 ? first : title;
-  return candidate && !isGenericName(candidate) ? candidate : undefined;
+  return publicBusinessName(candidate);
 }
 
 function isGenericName(name: string): boolean {
   return GENERIC_NAME_RE.test(name.trim());
+}
+
+const HOSTLIKE_NAME_RE = /^(?:[\w-]+\.)+(?:uk|com|org|net|gov\.uk)$/i;
+
+/** Drop "Welcome to" and names that are only a generic title or a hostname. */
+export function publicBusinessName(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const stripped = sanitizeUntrustedField(value, 200).replace(/^welcome to\s+/i, "").trim();
+  if (!stripped || isGenericName(stripped) || HOSTLIKE_NAME_RE.test(stripped)) return undefined;
+  return stripped;
 }
 
 export function extractSameOriginScriptSrcs(
@@ -1572,7 +1808,14 @@ export function extractDraftFromHtml(
     for (const value of values) {
       const text = sanitizeUntrustedField(value, 80);
       if (!text || !isPlausiblePhone(text)) continue;
-      phoneHits.push({ value: text, url: pageUrl, rank, source, confidence });
+      phoneHits.push({
+        value: text,
+        url: pageUrl,
+        rank,
+        source,
+        confidence,
+        order: phoneHits.length,
+      });
     }
   };
   const pushHours = (
@@ -1582,7 +1825,7 @@ export function extractDraftFromHtml(
     source: FieldSource,
     confidence: FieldConfidence,
   ) => {
-    const text = value ? sanitizeUntrustedField(value, 500) : "";
+    const text = value ? plainHours(value) : "";
     if (!text) return;
     hourHits.push({ value: text, url: pageUrl, rank, source, confidence });
   };
@@ -1597,7 +1840,7 @@ export function extractDraftFromHtml(
     if (parted.addresses.length) {
       for (const address of parted.addresses) {
         const text = stripAddressCodes(address);
-        if (!text) continue;
+        if (!text || !isAcceptableAddress(text)) continue;
         addressHits.push({
           value: text,
           url: pageUrl,
@@ -1617,7 +1860,14 @@ export function extractDraftFromHtml(
     const factUrl = factPageUrl(page.url, pages[0]?.url ?? page.url);
     const visibleHtml = withoutCodeScripts(page.html);
     const jsonLd = extractJsonLd(page.html);
-    setField(draft, fieldMeta, "businessName", jsonLd.businessName, "jsonld", "high");
+    setField(
+      draft,
+      fieldMeta,
+      "businessName",
+      publicBusinessName(jsonLd.businessName),
+      "jsonld",
+      "high",
+    );
     setField(draft, fieldMeta, "greeting", jsonLd.greeting, "jsonld", "high");
     pushHours(jsonLd.hours, factUrl, 5, "jsonld", "high");
     if (jsonLd.services) jsonLdServices.push(jsonLd.services);
@@ -1632,7 +1882,14 @@ export function extractDraftFromHtml(
 
     const micro = extractMicrodata(page.html);
     if (!draft.businessName) {
-      setField(draft, fieldMeta, "businessName", micro.businessName, "microdata", "high");
+      setField(
+        draft,
+        fieldMeta,
+        "businessName",
+        publicBusinessName(micro.businessName),
+        "microdata",
+        "high",
+      );
     }
     if (!draft.greeting) {
       setField(draft, fieldMeta, "greeting", micro.greeting, "microdata", "high");
@@ -1658,7 +1915,19 @@ export function extractDraftFromHtml(
       rememberSurfaceEmail(emailHits, email, factUrl, siteHost, 3, "heading", "medium");
     }
     pushPhones(extractChromePhones(visibleHtml), factUrl, 3, "pattern", "medium");
-    if (visibleContact.place && !placeFallback) {
+    for (const footer of visibleHtml.matchAll(/<footer\b[^>]*>([\s\S]*?)<\/footer>/gi)) {
+      const address = addressAroundPostcode(htmlToPlainText(footer[1] ?? ""));
+      if (!address) continue;
+      addressHits.push({
+        value: address,
+        url: factUrl,
+        rank: 7,
+        source: "footer",
+        confidence: "medium",
+        order: addressHits.length,
+      });
+    }
+    if (visibleContact.place && !placeFallback && isAcceptableAddress(visibleContact.place)) {
       placeFallback = { text: visibleContact.place, url: factUrl };
     }
     const covered = extractCoveredAreas(visibleHtml);
@@ -1670,8 +1939,8 @@ export function extractDraftFromHtml(
 
   if (!draft.businessName) {
     for (const page of pages) {
-      const siteName = metaContent(page.html, "og:site_name");
-      if (siteName && !isGenericName(siteName)) {
+      const siteName = publicBusinessName(metaContent(page.html, "og:site_name"));
+      if (siteName) {
         setField(draft, fieldMeta, "businessName", siteName, "meta", "medium");
         break;
       }
@@ -1688,8 +1957,8 @@ export function extractDraftFromHtml(
   }
   if (!draft.businessName) {
     for (const page of pages) {
-      const h1 = extractH1(page.html);
-      if (h1 && !isGenericName(h1)) {
+      const h1 = publicBusinessName(extractH1(page.html));
+      if (h1) {
         setField(draft, fieldMeta, "businessName", h1, "heading", "medium");
         break;
       }
@@ -1700,7 +1969,7 @@ export function extractDraftFromHtml(
       const ogTitle = metaContent(page.html, "og:title") ||
         metaContent(page.html, "twitter:title");
       if (ogTitle && !isGenericName(ogTitle)) {
-        const first = ogTitle.split(/\s*[|–—]\s*/)[0]?.trim() || ogTitle;
+        const first = publicBusinessName(ogTitle.split(/\s*[|–—]\s*/)[0]?.trim() || ogTitle);
         setField(draft, fieldMeta, "businessName", first, "meta", "low");
         break;
       }
@@ -1710,7 +1979,8 @@ export function extractDraftFromHtml(
   if (draft.businessName && /[|]/.test(draft.businessName)) {
     const siteName = pages
       .map((page) => metaContent(page.html, "og:site_name"))
-      .find((value) => value && !isGenericName(value));
+      .map((value) => publicBusinessName(value))
+      .find((value) => Boolean(value));
     if (siteName) {
       draft.businessName = siteName;
       fieldMeta.businessName = { source: "meta", confidence: "medium" };
@@ -1719,13 +1989,11 @@ export function extractDraftFromHtml(
 
   for (const page of pages) {
     if (hourHits.some((hit) => hit.url === page.url && hit.rank >= 5)) continue;
-    const section = headingSection(
+    const section = headingSectionHtml(
       withoutCodeScripts(page.html),
       /opening hours|business hours|our hours|office hours/,
     );
-    if (section && looksLikeHours(section)) {
-      pushHours(section, page.url, 3, "heading", "medium");
-    }
+    if (section) pushHours(section, page.url, 3, "heading", "medium");
   }
   for (const page of pages) {
     if (hourHits.some((hit) => hit.url === page.url)) continue;
@@ -1853,10 +2121,11 @@ export function extractDraftFromHtml(
     }
   }
 
-  const phonePick = chooseProminentValue(phoneHits, phoneIdentity, pageUrls);
+  const phonePicks = chooseProminentPhones(phoneHits, pageUrls, 2);
+  const phonePick = phonePicks[0];
   const emailPick = chooseProminentValue(emailHits, (value) => value.trim().toLowerCase(), pageUrls);
   const publicEmails = emailPick ? [emailPick.value] : [];
-  const publicPhones = phonePick ? [phonePick.value] : [];
+  const publicPhones = phonePicks.map((hit) => hit.value);
   const contact = formatContactHints(publicPhones, publicEmails);
   if (contact) {
     if (draft.faqs) {
@@ -1920,7 +2189,7 @@ export function extractDraftFromHtml(
     facts.businessName = cleanDraft.businessName;
     if (fieldMeta.businessName) factMeta.businessName = fieldMeta.businessName;
   }
-  if (placeFallback) {
+  if (placeFallback && isAcceptableAddress(placeFallback.text)) {
     addressHits.push({
       value: placeFallback.text,
       url: placeFallback.url,
@@ -1929,11 +2198,7 @@ export function extractDraftFromHtml(
       confidence: "low",
     });
   }
-  const addressPick = chooseProminentValue(
-    addressHits,
-    (value) => value.toLowerCase().replace(/\s+/g, " "),
-    pageUrls,
-  );
+  const addressPick = chooseProminentAddress(addressHits, pageUrls);
   if (addressPick) {
     facts.address = addressPick.value;
     factMeta.address = factMetaFor(addressPick.source, addressPick.confidence, addressPick.url);

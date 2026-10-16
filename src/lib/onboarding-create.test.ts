@@ -32,8 +32,14 @@ import {
   SCAN_REJECTED_MESSAGE,
   SCAN_TIMEOUT_MESSAGE,
   SCAN_UNAVAILABLE_MESSAGE,
+  largeSiteScanMessage,
+  reviewPhoneField,
   scanAttemptDetail,
+  scanContinueDetail,
   scanWaitProgressText,
+  shouldAutoContinueScan,
+  thinHomePageMessage,
+  SCAN_AUTO_CONTINUE_LIMIT,
   ZERO_FETCH_PARTIAL_MESSAGE,
 } from "./onboarding-create.ts";
 
@@ -627,6 +633,15 @@ test("scan wait copy changes while the website check is still running", () => {
   assert.match(scanWaitProgressText(20_000) ?? "", /opening hours/i);
   assert.match(scanWaitProgressText(35_000) ?? "", /usable draft/i);
   assert.match(scanWaitProgressText(40_000) ?? "", /fill any gaps/i);
+  assert.equal(shouldAutoContinueScan({ state: "CRAWLING", discovered: 12, fetched: 2, unresolved: 0, warnings: [] }, 0), true);
+  assert.equal(shouldAutoContinueScan({ state: "CRAWLING", discovered: 12, fetched: 2, unresolved: 0, warnings: [] }, SCAN_AUTO_CONTINUE_LIMIT), false);
+  assert.equal(shouldAutoContinueScan({ state: "COMPLETE", discovered: 2, fetched: 2, unresolved: 0, warnings: [] }, 0), false);
+  assert.equal(scanContinueDetail(3), "Reading more pages (3 pages so far)");
+  assert.match(largeSiteScanMessage({ state: "CRAWLING", discovered: 80, fetched: 4, unresolved: 0, warnings: [] }) ?? "", /large site/i);
+  assert.match(largeSiteScanMessage({ state: "CRAWLING", discovered: 80, fetched: 4, unresolved: 0, warnings: [] }) ?? "", /contact page or the services page/i);
+  assert.equal(largeSiteScanMessage({ state: "COMPLETE", discovered: 80, fetched: 80, unresolved: 0, warnings: [] }), null);
+  assert.match(thinHomePageMessage({ state: "PARTIAL", discovered: 1, fetched: 1, unresolved: 0, warnings: ["thin_home_page"] }) ?? "", /home page did not include contact/i);
+  assert.equal(reviewPhoneField(["0151 488 1234", "01516 532 896", "07000 000000"]), "0151 488 1234 / 01516 532 896");
 });
 
 test("scan attempt copy names the try and the manual way forward", () => {

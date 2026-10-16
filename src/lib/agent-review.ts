@@ -212,13 +212,21 @@ export function applyReviewedIdentityToAgentBlueprint(
   const address = draft.address?.trim() ?? "";
   const phone = draft.phone.trim();
   const email = draft.email.trim();
+  const phoneParts = phone
+    .split(/\s*(?:\n|\/)\s*/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const storedPhone = phoneParts.join(" / ");
 
-  if (phone.length > 50) {
+  if (phone.length > 50 || storedPhone.length > 50) {
     throw new Error("Reviewed phone number must be 50 characters or fewer.");
   }
-  if (phone) {
-    const digits = phone.replace(/\D/g, "");
-    if (!/^\+?[\d\s().-]+$/.test(phone) || digits.length < 8 || digits.length > 15) {
+  if (phoneParts.length > 2) {
+    throw new Error("Reviewed phone number is invalid.");
+  }
+  for (const part of phoneParts) {
+    const digits = part.replace(/\D/g, "");
+    if (!/^\+?[\d\s().-]+$/.test(part) || digits.length < 8 || digits.length > 15) {
       throw new Error("Reviewed phone number is invalid.");
     }
   }
@@ -236,10 +244,10 @@ export function applyReviewedIdentityToAgentBlueprint(
       website: trusted.identity.website,
       ...(locations ? { locations } : {}),
       ...(address ? { address } : {}),
-      ...(phone || email
+      ...(storedPhone || email
         ? {
             contact: {
-              ...(phone ? { phone } : {}),
+              ...(storedPhone ? { phone: storedPhone } : {}),
               ...(email ? { email } : {}),
             },
           }

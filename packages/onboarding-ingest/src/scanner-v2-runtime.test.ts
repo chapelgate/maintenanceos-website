@@ -62,7 +62,7 @@ function seedManifest(origin: string): CrawlManifest {
   };
 }
 
-test("priority pages are read before posts and the draft returns early", async () => {
+test("priority pages are read before posts and the crawl uses the request budget", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-priority-"));
   const seen: string[] = [];
   try {
@@ -121,12 +121,174 @@ test("priority pages are read before posts and the draft returns early", async (
     assert.deepEqual(seen, [
       "https://trade.example/",
       "https://trade.example/contact",
+      "https://trade.example/2024/boiler-tips",
     ]);
     assert.equal(result.ok, true);
     if (!result.ok) return;
-    assert.equal(result.scannerV2?.state, "CRAWLING");
-    assert.equal(result.scannerV2?.fetched, 2);
+    assert.equal(result.scannerV2?.state, "COMPLETE");
+    assert.equal(result.scannerV2?.fetched, 3);
     assert.equal(result.scannerV2?.discovered, 3);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+function thinPage(url: string): CrawlPage {
+  return {
+    requestedUrl: url,
+    canonicalUrl: url,
+    title: "Challenge",
+    headings: [],
+    visibleText: "Challenge",
+    structuredFacts: {},
+    contentType: "text/html",
+    fetchMode: "http",
+    contentHash: stableContentHash(`thin:${url}`),
+    fetchedAt: "2026-10-16T12:00:00.000Z",
+  };
+}
+
+test("a thin home page queues contact, about, and services instead of finishing empty", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-thin-home-"));
+  const seen: string[] = [];
+  try {
+    const discover = async (rawUrl: string) => {
+      const origin = new URL(rawUrl).origin;
+      const urls: CrawlUrlDisposition[] = [
+        {
+          url: `${origin}/`,
+          status: "queued",
+          discoveryReason: "submitted",
+        },
+      ];
+      return {
+        manifest: {
+          crawlId: "seed",
+          origin,
+          state: "PARTIAL" as const,
+          discovered: 1,
+          queued: 1,
+          fetched: 0,
+          duplicate: 0,
+          policySkipped: 0,
+          robotsSkipped: 0,
+          unresolved: 0,
+          urls,
+        },
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: [],
+        limitReached: false,
+        incomplete: true,
+      };
+    };
+    let clock = 0;
+    const result = await runPersistentScannerV2("https://wirralplumbers.example/", {
+      stateRoot: root,
+      releaseSha: "thin-home",
+      requestMs: 40_000,
+      batchSize: 4,
+      now: () => (clock += 5),
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => {
+        seen.push(url.url);
+        const fetched = url.url.endsWith("/contact")
+          ? {
+              ...thinPage(url.url),
+              structuredFacts: {
+                contact: { phones: ["0758 0395493"], emails: ["mike@wirralplumbers.com"] },
+                address: "78 St Andrews Road, Bebington",
+              },
+            }
+          : thinPage(url.url);
+        return {
+          disposition: "fetched" as const,
+          canonicalUrl: url.url,
+          page: fetched,
+          chunks: [],
+        };
+      }) as never,
+    });
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    assert.ok(seen.includes("https://wirralplumbers.example/contact"));
+    assert.ok(seen.includes("https://wirralplumbers.example/about"));
+    assert.ok(seen.includes("https://wirralplumbers.example/services"));
+    assert.equal(result.scannerV2?.state, "COMPLETE");
+    assert.ok((result.scannerV2?.fetched ?? 0) > 1);
+    assert.deepEqual(result.facts?.contact?.phones, ["0758 0395493"]);
+    assert.equal(result.facts?.address, "78 St Andrews Road, Bebington");
+    assert.equal(result.warnings.includes("thin_home_page"), false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("one fetched page with no contact facts is partial, not complete", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-empty-home-"));
+  try {
+    const discover = async (rawUrl: string) => {
+      const origin = new URL(rawUrl).origin;
+      return {
+        manifest: {
+          crawlId: "seed",
+          origin,
+          state: "PARTIAL" as const,
+          discovered: 1,
+          queued: 1,
+          fetched: 0,
+          duplicate: 0,
+          policySkipped: 0,
+          robotsSkipped: 0,
+          unresolved: 0,
+          urls: [
+            {
+              url: `${origin}/`,
+              status: "queued" as const,
+              discoveryReason: "submitted" as const,
+            },
+          ],
+        },
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: [],
+        limitReached: false,
+        incomplete: true,
+      };
+    };
+    let clock = 0;
+    const result = await runPersistentScannerV2("https://wirralplumbers.example/", {
+      stateRoot: root,
+      releaseSha: "empty-home",
+      requestMs: 40_000,
+      batchSize: 4,
+      now: () => (clock += 5),
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => ({
+        disposition: "fetched" as const,
+        canonicalUrl: url.url,
+        page: thinPage(url.url),
+        chunks: [],
+      })) as never,
+    });
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    assert.notEqual(result.scannerV2?.state, "COMPLETE");
+    assert.equal(result.scannerV2?.state, "PARTIAL");
+    assert.ok((result.scannerV2?.fetched ?? 0) > 1);
+    assert.ok(result.warnings.includes("thin_home_page"));
+    assert.equal(result.facts?.contact, undefined);
+    assert.equal(result.draft.businessName, undefined);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

@@ -501,6 +501,15 @@ test("identity review can deliberately remove discovered optional identity facts
   assert.equal(next.identity.businessName, original.identity.businessName);
 });
 
+test("a reviewed phone field can keep a primary and a secondary number", () => {
+  const next = applyReviewedIdentityToAgentBlueprint(blueprint("receptionist"), {
+    locations: "Wirral",
+    phone: "0151 488 1234\n01516 532 896",
+    email: "",
+  });
+  assert.equal(next.identity.contact?.phone, "0151 488 1234 / 01516 532 896");
+});
+
 test("invalid reviewed phone is rejected before configuration generation", () => {
   assert.throws(
     () =>

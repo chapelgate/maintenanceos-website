@@ -40,7 +40,12 @@ import {
   emptyHoursOrServicesNote,
   describeScanCoverage,
   describeSkippedPages,
+  largeSiteScanMessage,
+  reviewPhoneField,
+  scanContinueDetail,
   scanProgressAfterResult,
+  shouldAutoContinueScan,
+  thinHomePageMessage,
   hostnameBusinessHint,
   requestOnboardingScan,
   scanAttemptDetail,
@@ -250,6 +255,7 @@ export function CreateReceptionistLaterSteps({
   const [scanSummary, setScanSummary] = useState<ScanRunSummary | null>(null);
   const [scanContinuing, setScanContinuing] = useState(false);
   const scanAbortRef = useRef<AbortController | null>(null);
+  const scanPhaseRef = useRef<"wait" | "continue">("wait");
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
   const [factMeta, setFactMeta] = useState<ScanBusinessFactMeta>({});
@@ -392,6 +398,7 @@ export function CreateReceptionistLaterSteps({
     if (progress !== "scanning") return;
     const started = Date.now();
     const timer = window.setInterval(() => {
+      if (scanPhaseRef.current === "continue") return;
       const text = scanWaitProgressText(Date.now() - started);
       if (text) setScanDetail(text);
     }, 1000);
@@ -437,12 +444,30 @@ export function CreateReceptionistLaterSteps({
       }
 
       setProgress("scanning");
-      const outcome = await requestOnboardingScan(endpoint, businessUrl, {
+      scanPhaseRef.current = "wait";
+      let outcome = await requestOnboardingScan(endpoint, businessUrl, {
         signal: controller.signal,
         onProgress: (event) => {
           if (!cancelled) setScanDetail(scanAttemptDetail(event));
         },
       });
+      let continues = 0;
+      while (
+        !cancelled &&
+        !controller.signal.aborted &&
+        outcome.status === "ok" &&
+        shouldAutoContinueScan(outcome.summary, continues)
+      ) {
+        continues += 1;
+        scanPhaseRef.current = "continue";
+        setScanDetail(scanContinueDetail(outcome.summary?.fetched ?? 0));
+        const next = await requestOnboardingScan(endpoint, businessUrl, {
+          signal: controller.signal,
+        });
+        if (cancelled || controller.signal.aborted || next.status === "aborted") return;
+        outcome = next;
+      }
+      scanPhaseRef.current = "wait";
       if (cancelled || controller.signal.aborted || outcome.status === "aborted") return;
       if (outcome.status === "ok") {
         const filled = Object.keys(outcome.draft).length > 0;
@@ -455,7 +480,7 @@ export function CreateReceptionistLaterSteps({
         setIdentityReview({
           locations: outcome.facts.locations?.join("\n") ?? "",
           address: outcome.facts.address ?? "",
-          phone: outcome.facts.contact?.phones?.[0] ?? "",
+          phone: reviewPhoneField(outcome.facts.contact?.phones),
           email: outcome.facts.contact?.emails?.[0] ?? "",
         });
         setScanDetail(null);
@@ -528,7 +553,7 @@ export function CreateReceptionistLaterSteps({
       setIdentityReview((current) => ({
         locations: outcome.facts.locations?.join("\n") || current.locations,
         address: outcome.facts.address || current.address,
-        phone: outcome.facts.contact?.phones?.[0] || current.phone,
+        phone: reviewPhoneField(outcome.facts.contact?.phones) || current.phone,
         email: outcome.facts.contact?.emails?.[0] || current.email,
       }));
       const filled =
@@ -882,6 +907,8 @@ export function CreateReceptionistLaterSteps({
 
   const scanCoverage = describeScanCoverage({ summary: scanSummary, draft });
   const skippedPages = describeSkippedPages(scanSummary);
+  const largeSiteMessage = largeSiteScanMessage(scanSummary);
+  const thinHomeMessage = thinHomePageMessage(scanSummary);
   const stepReady = isCreateScanReady(progress);
   const nextAction = createJourneyNextAction(step, progress);
   const review = currentReview();
@@ -964,6 +991,12 @@ export function CreateReceptionistLaterSteps({
                   {scanContinuing ? "Continuing the website check…" : "Continue scanning"}
                 </button>
               </div>
+            ) : null}
+            {largeSiteMessage ? (
+              <p data-scan-large-site="">{largeSiteMessage}</p>
+            ) : null}
+            {thinHomeMessage ? (
+              <p data-scan-thin-home="">{thinHomeMessage}</p>
             ) : null}
             {skippedPages ? (
               <p data-scan-skipped="" className="text-muted">
