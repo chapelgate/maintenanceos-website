@@ -90,7 +90,7 @@ test("runScan refuses to crawl when the ingest flag is off", async () => {
   }
 });
 
-test("runScan denies localhost and http before any fetch", async () => {
+test("runScan denies localhost before any fetch", async () => {
   const lookup: LookupFn = async () => {
     throw new Error("lookup should not run");
   };
@@ -115,9 +115,6 @@ test("runScan denies localhost and http before any fetch", async () => {
   });
   assert.equal(metadata.ok, false);
 
-  const http = await runScan("http://example.com/", { enabled: true, lookup, get });
-  assert.equal(http.ok, false);
-  if (!http.ok) assert.equal(http.error, "http_not_allowed");
 });
 
 test("runScan denies private DNS answers and private redirects", async () => {
@@ -357,7 +354,7 @@ test("runScan recovers a direct TLS/fetch failure with a bounded same-origin rea
     assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
     assert.match(result.draft.services ?? "", /Caroline Place/);
     assert.match(result.draft.services ?? "", /Supported Lodgings/);
-    assert.match(result.draft.faqs ?? "", /0151 649 9718/);
+    assert.match(result.draft.faqs ?? "", /\+441516499718/);
     assert.ok(result.warnings.includes("fetch_failed"));
     assert.ok(result.warnings.includes("reader_fallback_used"));
     assert.ok(result.warnings.includes("reader_challenge_retry"));
@@ -527,7 +524,7 @@ test("runScan returns structured Agent Factory facts alongside the legacy draft"
     assert.equal(result.draft.businessName, "Structured Test Ltd");
     assert.equal(result.facts?.website, "https://structured.example/");
     assert.deepEqual(result.facts?.contact, {
-      phones: ["0151 555 0199"],
+      phones: ["+441515550199"],
       emails: ["hello@structured.example"],
     });
     assert.equal(result.facts?.address, "1 Test Street, Liverpool, L1 1AA");

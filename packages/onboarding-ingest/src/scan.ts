@@ -19,7 +19,7 @@ import {
   ssrfMessage,
 } from "./fetch-safe.ts";
 import { siteBlockedScan, warningsWithSiteBlock } from "./site-block.ts";
-import { allowPublicHttpsUrl } from "./ssrf.ts";
+import { allowPublicHttpsUrl, sameRegistrableSite } from "./ssrf.ts";
 import {
   ScanError,
   type HttpGetFn,
@@ -341,7 +341,7 @@ export async function runScan(
       }
       if (
         targetUrl.protocol !== "https:" ||
-        targetUrl.origin !== allow.url.origin
+        !sameRegistrableSite(targetUrl, allow.url)
       ) {
         continue;
       }

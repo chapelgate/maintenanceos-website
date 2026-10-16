@@ -7,13 +7,14 @@ type WebEvent = {
     path?: string;
   };
   url?: unknown;
+  crawlId?: unknown;
 };
 
 const MAX_SCAN_URL_LENGTH = 2048;
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 8;
-const HOST_RATE_MAX = 3;
-const UPSTREAM_TIMEOUT_MS = 115_000;
+const HOST_RATE_MAX = 6;
+const UPSTREAM_TIMEOUT_MS = 25_000;
 const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
   "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 const rateBuckets = new Map<string, number[]>();
@@ -69,6 +70,7 @@ export async function proxyPersistentScan(
   endpoint =
     process.env.SCANNER_V2_RUNTIME_URL?.trim() ||
     DEFAULT_PERSISTENT_SCANNER_ENDPOINT,
+  crawlId = "",
 ): Promise<{ statusCode: number; body: unknown }> {
   try {
     const upstream = await fetcher(endpoint, {
@@ -77,7 +79,10 @@ export async function proxyPersistentScan(
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({
+        url,
+        ...(crawlId ? { crawlId } : {}),
+      }),
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
 
@@ -192,6 +197,7 @@ export async function main(event: WebEvent = {}) {
     );
   }
 
-  const result = await proxyPersistentScan(allowed.url.toString());
+  const crawlId = typeof event.crawlId === "string" ? event.crawlId.trim() : "";
+  const result = await proxyPersistentScan(allowed.url.toString(), fetch, undefined, crawlId);
   return response(result.statusCode, result.body, origin);
 }

@@ -136,9 +136,43 @@ export function isProbablyPublicHostname(hostname: string): boolean {
   return h.includes(".");
 }
 
+const MULTI_LABEL_SUFFIXES = [
+  "co.uk",
+  "org.uk",
+  "ac.uk",
+  "gov.uk",
+  "ltd.uk",
+  "me.uk",
+  "net.uk",
+  "plc.uk",
+  "sch.uk",
+  "nhs.uk",
+  "com.au",
+  "co.nz",
+];
+
+/** eTLD+1, so apex and www (and other subdomains) of one site compare equal. */
+export function registrableDomain(hostname: string): string {
+  const host = hostname.toLowerCase().replace(/\.$/, "");
+  const parts = host.split(".").filter(Boolean);
+  const joined = parts.join(".");
+  for (const suffix of MULTI_LABEL_SUFFIXES) {
+    if (joined === suffix || joined.endsWith(`.${suffix}`)) {
+      const keep = suffix.split(".").length + 1;
+      return parts.slice(-keep).join(".");
+    }
+  }
+  if (parts.length >= 2) return parts.slice(-2).join(".");
+  return joined;
+}
+
+export function sameRegistrableSite(left: URL, right: URL): boolean {
+  return registrableDomain(left.hostname) === registrableDomain(right.hostname);
+}
+
 /**
- * Allow only public http(s) URLs — https required.
- * Does not resolve DNS; use `assertResolvedAddressesPublic` after lookup.
+ * Allow only public websites. An http URL is upgraded to https before any
+ * connection; cleartext is never fetched. Does not resolve DNS.
  */
 export function allowPublicHttpsUrl(raw: string): FetchAllowDecision {
   let url: URL;
@@ -147,11 +181,11 @@ export function allowPublicHttpsUrl(raw: string): FetchAllowDecision {
   } catch {
     return { ok: false, reason: "invalid_url" };
   }
+  if (url.protocol === "http:") {
+    url = new URL(`https://${url.host}${url.pathname}${url.search}${url.hash}`);
+  }
   if (url.protocol !== "https:") {
-    return {
-      ok: false,
-      reason: url.protocol === "http:" ? "http_not_allowed" : "unsupported_scheme",
-    };
+    return { ok: false, reason: "unsupported_scheme" };
   }
   if (url.username || url.password) {
     return { ok: false, reason: "userinfo_not_allowed" };

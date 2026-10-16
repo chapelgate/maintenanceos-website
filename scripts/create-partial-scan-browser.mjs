@@ -156,6 +156,18 @@ try {
 
     await page.goto(`${origin}/create/`);
     await page.locator("[data-create-hydrated='true']").waitFor();
+    await page.locator("input[name='businessUrl']").fill("http://127.0.0.1/");
+    await page.locator("input[name='email']").fill("owner@example.com");
+    await page.locator("[data-create-primary-action]").click();
+    await page.getByText(/private network addresses/i).waitFor();
+    assert.equal(await page.locator("[data-scan-partial]").count(), 0);
+
+    await page.locator("input[name='businessUrl']").fill("http://www.dualds.co.uk/");
+    await page.locator("[data-create-primary-action]").click();
+    await page.locator("[data-scan-partial]").waitFor({ timeout: 15_000 });
+
+    await page.goto(`${origin}/create/`);
+    await page.locator("[data-create-hydrated='true']").waitFor();
     await page.locator("input[name='businessUrl']").fill("https://alleygates.co.uk");
     await page.locator("input[name='email']").fill("owner@example.com");
     await page.locator("[data-create-primary-action]").click();
@@ -201,6 +213,7 @@ try {
     const blocked = page.locator("[data-scan-blocked]");
     await blocked.waitFor({ timeout: 15_000 });
     const blockedText = await blocked.innerText();
+    assert.match(blockedText, /This website blocked the scan/);
     assert.match(blockedText, /blocks automated reading/i);
     assert.match(blockedText, /typing the details/i);
     assert.match(blockedText, /pasting wording/i);
@@ -258,6 +271,12 @@ try {
     const address = page.getByLabel("Address", { exact: false });
     await address.waitFor();
     assert.equal(await address.inputValue(), "Bromborough, Wirral");
+    const addressLabel = page.locator("label", { hasText: "Address" }).first();
+    const addressCopy = await addressLabel.innerText();
+    assert.match(addressCopy, /low confidence/);
+    assert.match(addressCopy, /https:\/\/trades\.example\//);
+    assert.equal(await page.getByLabel("Service area", { exact: false }).count(), 1);
+    assert.equal(await page.getByLabel("Branches", { exact: false }).count(), 1);
     assert.equal(
       await page.getByLabel("Phone", { exact: false }).inputValue(),
       "07774179685 / 01516 532 896",

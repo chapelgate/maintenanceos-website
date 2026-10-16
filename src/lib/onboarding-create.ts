@@ -136,6 +136,8 @@ export type ScanBusinessFacts = {
   contact?: { phones?: string[]; emails?: string[] };
   services?: string[];
   hours?: string;
+  pricing?: string[];
+  branches?: Array<{ name?: string; phone?: string; address?: string; hours?: string }>;
   faqs?: Array<{ question: string; answer: string }>;
 };
 
@@ -204,7 +206,10 @@ export function mapScanFieldMeta(body: unknown): ScanDraftFieldMeta {
       typeof rec.source === "string" && FIELD_META_SOURCES.has(rec.source)
         ? rec.source
         : undefined;
-    if (confidence && source) out[key] = { confidence, source };
+    if (confidence && source) {
+      const sourceUrl = scanFactHttpsUrl(rec.sourceUrl);
+      out[key] = sourceUrl ? { confidence, source, sourceUrl } : { confidence, source };
+    }
   }
   return out;
 }
@@ -279,6 +284,31 @@ export function mapScanBusinessFacts(body: unknown): ScanBusinessFacts {
 
   const locations = scanFactStringArray(src.locations, 16, 500);
   if (locations) out.locations = locations;
+
+  const pricing = scanFactStringArray(src.pricing, 12, 80);
+  if (pricing) out.pricing = pricing;
+
+  if (Array.isArray(src.branches)) {
+    const branches = src.branches
+      .map((item) => {
+        if (!item || typeof item !== "object" || Array.isArray(item)) return undefined;
+        const rec = item as Record<string, unknown>;
+        const name = scanFactString(rec.name, 120);
+        const phone = scanFactString(rec.phone, 20);
+        const address = scanFactString(rec.address, 240);
+        const hours = scanFactString(rec.hours, 200);
+        if (!name && !phone && !address && !hours) return undefined;
+        return {
+          ...(name ? { name } : {}),
+          ...(phone ? { phone } : {}),
+          ...(address ? { address } : {}),
+          ...(hours ? { hours } : {}),
+        };
+      })
+      .filter((item): item is NonNullable<typeof item> => Boolean(item))
+      .slice(0, 12);
+    if (branches.length) out.branches = branches;
+  }
 
   const services = scanFactStringArray(src.services, 100, 300);
   if (services) out.services = services;
@@ -364,7 +394,7 @@ export function mapScanBusinessFactMeta(
   const src = raw as Record<string, unknown>;
   const out: ScanBusinessFactMeta = {};
   const keys: ScanBusinessFactKey[] = [
-    "website", "businessName", "address", "locations", "contact", "services", "hours", "faqs",
+    "website", "businessName", "address", "locations", "contact", "services", "hours", "pricing", "branches", "faqs",
   ];
   for (const key of keys) {
     if (facts[key] === undefined) continue;
@@ -402,6 +432,7 @@ export type ScanRunSummary = {
   fetched: number;
   unresolved: number;
   warnings: string[];
+  crawlId?: string;
 };
 
 export type ScanCoverage = {
@@ -500,7 +531,7 @@ export type ScanAttemptProgress = {
 };
 
 /** One attempt stays inside the App Platform function limit (120s). */
-export const SCAN_ATTEMPT_TIMEOUT_MS = 90_000;
+export const SCAN_ATTEMPT_TIMEOUT_MS = 28_000;
 /** A second attempt covers a dropped connection or a 5xx. Not a third full wait. */
 export const SCAN_MAX_ATTEMPTS = 2;
 export const SCAN_RETRY_BACKOFF_MS = 800;
@@ -541,6 +572,7 @@ export function shouldAutoContinueScan(
   continues: number,
 ): boolean {
   if (!summary || continues >= SCAN_AUTO_CONTINUE_LIMIT) return false;
+  if (summary.warnings.includes("scan_gateway_retry")) return true;
   return summary.state === "CRAWLING" && summary.fetched > 0;
 }
 
@@ -601,7 +633,10 @@ export function mapScanRunSummary(body: unknown): ScanRunSummary | null {
   const warnings = Array.isArray((body as { warnings?: unknown }).warnings)
     ? (body as { warnings: unknown[] }).warnings.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
     : [];
-  return { state, discovered, fetched, unresolved, warnings };
+  const crawlId = typeof record.crawlId === "string" && record.crawlId.trim() ? record.crawlId.trim() : undefined;
+  return crawlId
+    ? { state, discovered, fetched, unresolved, warnings, crawlId }
+    : { state, discovered, fetched, unresolved, warnings };
 }
 
 export function isBlockedBySite(body: unknown): boolean {
@@ -609,9 +644,12 @@ export function isBlockedBySite(body: unknown): boolean {
   const record = body as {
     outcome?: unknown;
     warnings?: unknown;
-    scannerV2?: { fetched?: unknown };
+    scannerV2?: { fetched?: unknown; state?: unknown };
   };
   if (record.outcome === "blocked_by_site") return true;
+  if (record.scannerV2 && typeof record.scannerV2 === "object" && record.scannerV2.state === "BLOCKED") {
+    return true;
+  }
   const warnings = Array.isArray(record.warnings)
     ? record.warnings.filter((item): item is string => typeof item === "string")
     : [];
@@ -645,6 +683,8 @@ export type OnboardingScanOptions = {
   onProgress?: (event: ScanAttemptProgress) => void;
   signal?: AbortSignal;
   sleep?: (ms: number) => Promise<void>;
+  /** Resume the same durable crawl. The server still keys the job by the website URL. */
+  crawlId?: string;
 };
 
 function sleepMs(ms: number): Promise<void> {
@@ -696,7 +736,10 @@ export async function requestOnboardingScan(
       const res = await fetchImpl(trimmed, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({
+          url,
+          ...(options.crawlId ? { crawlId: options.crawlId } : {}),
+        }),
         signal: controller.signal,
       });
       const text = await res.text();
@@ -707,6 +750,27 @@ export async function requestOnboardingScan(
         } catch {
           parsed = null;
         }
+      }
+      if (
+        res.status === 202 ||
+        (parsed === null && /not yet ready/i.test(text))
+      ) {
+        return {
+          status: "ok",
+          draft: {},
+          fieldMeta: {},
+          facts: {},
+          factMeta: {},
+          siteKnowledge: [],
+          summary: {
+            state: "CRAWLING",
+            discovered: 0,
+            fetched: 0,
+            unresolved: 0,
+            warnings: ["scan_gateway_retry"],
+            ...(options.crawlId ? { crawlId: options.crawlId } : {}),
+          },
+        };
       }
       if (res.ok) {
         if (isBlockedBySite(parsed)) {

@@ -72,7 +72,7 @@ test("retired paid scan service stays retired while bounded website learning ret
   assert.match(inventory, /M-KNO-01/);
   assert.match(site, /onboardingScanEndpoint:\s*"\/api\/website\/scan"/);
   assert.doesNotMatch(site, /process\.env\.NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT/);
-  assert.match(scan, /proxyPersistentScan\(allowed\.url\.toString\(\)\)/);
+  assert.match(scan, /proxyPersistentScan\(allowed\.url\.toString\(\)/);
   assert.match(scan, /DEFAULT_PERSISTENT_SCANNER_ENDPOINT/);
   assert.doesNotMatch(scan, /runScan\(/);
   assert.match(project, /runtime:\s*nodejs:22/);

@@ -529,10 +529,11 @@ test("zero-fetch resume reseeds and surfaces the skip reason", async () => {
     assert.equal(first.ok, true);
     if (!first.ok) return;
     assert.equal(first.scannerV2?.fetched, 0);
-    assert.equal(first.scannerV2?.state, "PARTIAL");
+    assert.equal(first.scannerV2?.state, "BLOCKED");
+    assert.equal(first.outcome, "blocked_by_site");
     assert.equal(first.scannerV2?.resumed, false);
     assert.ok(first.warnings.includes("http_403"));
-    assert.ok(first.warnings.includes("scanner_v2_partial"));
+    assert.equal(first.warnings.includes("scanner_v2_partial"), false);
     assert.equal(discoveryCalls, 1);
 
     const second = await runPersistentScannerV2("https://alleygates.example/", {
@@ -656,6 +657,8 @@ test("an empty 403 from the host is blocked_by_site and still a completed scan",
     assert.equal(result.ok, true);
     if (!result.ok) return;
     assert.equal(result.outcome, "blocked_by_site");
+    assert.equal(result.scannerV2?.state, "BLOCKED");
+    assert.equal(result.warnings.includes("scanner_v2_partial"), false);
     assert.equal(result.scannerV2?.fetched, 0);
     assert.equal(result.draft.businessName, undefined);
     assert.ok(result.warnings.includes("http_403"));

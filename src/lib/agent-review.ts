@@ -39,6 +39,8 @@ export type ReviewedIdentityDraft = {
   address?: string;
   phone: string;
   email: string;
+  branches?: string;
+  pricing?: string;
 };
 
 export type AgentReviewSubject = {
@@ -104,11 +106,13 @@ const CONSEQUENTIAL_CAPABILITIES = new Set<AgentCapability>([
 const FACT_LABELS: Record<ScanBusinessFactKey, string> = {
   website: "website",
   businessName: "business name",
-  locations: "locations",
+  locations: "service area",
   address: "postal address",
   contact: "contact details",
   services: "services",
   hours: "opening hours",
+  pricing: "pricing",
+  branches: "branches",
   faqs: "FAQs",
 };
 
@@ -208,7 +212,9 @@ export function applyReviewedIdentityToAgentBlueprint(
   if (trusted.lifecycle.stage !== "draft") {
     throw new Error("Customer review edits require a draft AgentBlueprint.");
   }
-  const locations = normaliseLocations(draft.locations);
+  const locations = normaliseLocations(
+    [draft.locations, draft.branches ?? "", draft.pricing ?? ""].filter((item) => item.trim()).join("\n"),
+  );
   const address = draft.address?.trim() ?? "";
   const phone = draft.phone.trim();
   const email = draft.email.trim();

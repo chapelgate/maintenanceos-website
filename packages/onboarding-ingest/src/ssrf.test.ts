@@ -69,7 +69,9 @@ test("blocks cloud metadata hosts", () => {
 test("blocks .local / .internal and http or non-https schemes", () => {
   assert.equal(isProbablyPublicHostname("printer.local"), false);
   assert.equal(isProbablyPublicHostname("vault.internal"), false);
-  assert.equal(allowPublicHttpsUrl("http://example.com/").ok, false);
+  const upgraded = allowPublicHttpsUrl("http://example.com/path");
+  assert.equal(upgraded.ok, true);
+  if (upgraded.ok) assert.equal(upgraded.url.toString(), "https://example.com/path");
   assert.equal(allowPublicHttpsUrl("ftp://example.com/").ok, false);
   assert.equal(allowPublicHttpsUrl("file:///etc/passwd").ok, false);
 });

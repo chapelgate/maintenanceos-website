@@ -11,14 +11,17 @@ import {
 } from "./fetch-safe.ts";
 import { ScanError } from "./types.ts";
 
-test("fetchPublicHttps rejects http and private literals without connecting", async () => {
-  const get = async () => {
+test("fetchPublicHttps upgrades http to https and rejects private literals without connecting", async () => {
+  let fetched = "";
+  const get = async (url: URL) => {
+    fetched = url.toString();
     throw new Error("connect");
   };
   await assert.rejects(
-    () => fetchPublicHttps("http://example.com/", { get, lookup: async () => ["203.0.113.1"] }),
-    (err: unknown) => err instanceof ScanError && err.code === "http_not_allowed",
+    () => fetchPublicHttps("http://example.com/contact", { get, lookup: async () => ["203.0.113.1"] }),
+    (err: unknown) => err instanceof ScanError && err.code === "fetch_failed",
   );
+  assert.equal(fetched, "https://example.com/contact");
   await assert.rejects(
     () =>
       fetchPublicHttps("https://127.0.0.1/", {

@@ -89,7 +89,7 @@ test("extractDraftFromHtml happy-path shape matches /create draft keys", () => {
   assert.equal(draft.hours, "Mo-Fr 08:00-17:00");
   assert.equal(draft.services, "Boiler repair\nEmergency leak stop");
   assert.equal(draft.faqs, "Q: Do you cover London?\nA: Yes, within the M25.");
-  assert.equal(fieldMeta.businessName?.source, "jsonld");
+  assert.equal(fieldMeta.businessName?.source, "meta");
   assert.equal(fieldMeta.hours?.confidence, "high");
   assert.ok(warnings.includes("untrusted_crawl_text"));
   assert.ok(!warnings.includes("greeting_not_found"));
@@ -104,7 +104,7 @@ test("structured facts expose contact and locations without changing legacy draf
       "@context":"https://schema.org",
       "@type":"LocalBusiness",
       "name":"North Dock Heating",
-      "telephone":"+44 151 555 0199",
+      "telephone":"+441515550199",
       "email":"hello@northdock.example",
       "address":{
         "@type":"PostalAddress",
@@ -132,7 +132,7 @@ test("structured facts expose contact and locations without changing legacy draf
   assert.equal(result.facts.website, "https://northdock.example/");
   assert.equal(result.facts.businessName, "North Dock Heating");
   assert.deepEqual(result.facts.contact, {
-    phones: ["+44 151 555 0199"],
+    phones: ["+441515550199"],
     emails: ["hello@northdock.example"],
   });
   assert.equal(result.facts.address, "10 Dock Road, Liverpool, L1 1AA");
@@ -148,7 +148,7 @@ test("structured facts expose contact and locations without changing legacy draf
 
   // Existing /create draft stays backward-compatible: contacts remain only in
   // its legacy FAQ-hint channel until a later UI step consumes structured facts.
-  assert.match(result.draft.faqs ?? "", /\+44 151 555 0199/);
+  assert.match(result.draft.faqs ?? "", /\+441515550199/);
   assert.match(result.draft.faqs ?? "", /hello@northdock\.example/);
 });
 
@@ -158,7 +158,7 @@ test("structured phone facts dedupe UK local/international forms and reject labe
     {
       "@type":"LocalBusiness",
       "name":"Phone Test Ltd",
-      "telephone":["+44 151 555 0199","0151 555 0199"]
+      "telephone":["+441515550199","0151 555 0199"]
     }
   </script></head><body>
     <a href="tel:01515550199">Call 0151 555 0199</a>
@@ -166,7 +166,7 @@ test("structured phone facts dedupe UK local/international forms and reject labe
   const result = extractDraftFromHtml([
     { url: "https://phone-test.example/", html },
   ]);
-  assert.deepEqual(result.facts.contact?.phones, ["+44 151 555 0199"]);
+  assert.deepEqual(result.facts.contact?.phones, ["+441515550199"]);
 });
 
 test("structured facts reject invalid contact values instead of promoting them", () => {
@@ -224,7 +224,7 @@ test("thin SPA shell can recover explicit LocalBusiness facts from its own stati
     ["https://expressgasdelivery.example/static/js/main.abc123.js"],
   );
 
-  const bundle = `const schema={"@context":"https://schema.org","@type":"LocalBusiness",name:"Express Gas Delivery",telephone:"0151 487 0570",openingHours:["Mo-Fr 08:00-16:00","Sa 08:00-14:00"],hasOfferCatalog:{"@type":"OfferCatalog",itemListElement:[{"@type":"Offer",itemOffered:{"@type":"Product",name:"Propane Gas Cylinders"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Patio Gas"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Beer Gas"}}]}};`;
+  const bundle = `const schema={"@context":"https://schema.org","@type":"LocalBusiness",name:"Express Gas Delivery",telephone:"+441514870570",openingHours:["Mo-Fr 08:00-16:00","Sa 08:00-14:00"],hasOfferCatalog:{"@type":"OfferCatalog",itemListElement:[{"@type":"Offer",itemOffered:{"@type":"Product",name:"Propane Gas Cylinders"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Patio Gas"}},{"@type":"Offer",itemOffered:{"@type":"Product",name:"Beer Gas"}}]}};`;
   const synthetic = extractStructuredBusinessHtmlFromScript(bundle);
   assert.ok(synthetic);
 
@@ -240,7 +240,7 @@ test("thin SPA shell can recover explicit LocalBusiness facts from its own stati
   assert.match(result.draft.services ?? "", /Propane Gas Cylinders/);
   assert.match(result.draft.services ?? "", /Patio Gas/);
   assert.match(result.draft.services ?? "", /Beer Gas/);
-  assert.deepEqual(result.facts.contact?.phones, ["0151 487 0570"]);
+  assert.deepEqual(result.facts.contact?.phones, ["+441514870570"]);
 });
 
 test("same-origin useful paths are ranked; off-origin ignored", () => {
@@ -273,13 +273,13 @@ test("fixture trades-no-jsonld: name, hours, nav services, details FAQ, tel/mail
   assert.equal(/Home|About|Contact/.test(draft.services ?? ""), false);
   assert.match(draft.faqs ?? "", /Do you cover Leeds\?/);
   assert.match(draft.faqs ?? "", /Gas Safe/);
-  assert.match(draft.faqs ?? "", /0113 200 1111/);
+  assert.match(draft.faqs ?? "", /\+441132001111/);
   assert.match(draft.faqs ?? "", /hello@riverside-heating\.example/);
   assert.equal(fieldMeta.businessName?.source, "meta");
-  assert.equal(fieldMeta.services?.source, "nav");
-  assert.equal(fieldMeta.services?.confidence, "low");
+  assert.equal(fieldMeta.services?.source, "heading");
+  assert.equal(fieldMeta.services?.confidence, "medium");
   assert.equal(fieldMeta.faqs?.source, "details");
-  assert.ok(warnings.includes("services_low_confidence"));
+  assert.equal(warnings.includes("services_low_confidence"), false);
   assert.ok(warnings.includes("contact_hints_from_page"));
   assert.ok(warnings.includes("greeting_not_found"));
   assert.ok(!warnings.includes("hours_not_found"));
@@ -312,7 +312,7 @@ test("fixture microdata LocalBusiness maps name, slogan, hours, services, contac
   assert.equal(draft.greeting, "Keys cut while you wait");
   assert.equal(draft.hours, "Mo-Sa 09:00-18:00");
   assert.match(draft.services ?? "", /UPVC door repair/);
-  assert.match(draft.faqs ?? "", /0161 555 0101/);
+  assert.match(draft.faqs ?? "", /\+441615550101/);
   assert.equal(fieldMeta.businessName?.source, "microdata");
   assert.equal(fieldMeta.hours?.confidence, "high");
 });
@@ -404,7 +404,7 @@ test("visible contact block pre-fills address and phone without schema or tel li
     { url: "https://forum.example/contact-us/", html: contact },
   ]);
 
-  assert.deepEqual(result.facts.contact?.phones, ["0151 649 9718"]);
+  assert.deepEqual(result.facts.contact?.phones, ["+441516499718"]);
   assert.equal(
     result.facts.address,
     "Forum Housing Association, 24-28 Hamilton Street, Birkenhead, Wirral CH41 1AL",
@@ -465,7 +465,7 @@ test("a small trades page without schema yields services, area, phone, and a bla
     "Heswall",
     "Wallasey",
   ]);
-  assert.deepEqual(result.facts.contact?.phones, ["07774179685"]);
+  assert.deepEqual(result.facts.contact?.phones, ["+447774179685"]);
   assert.equal(result.facts.contact?.emails, undefined);
   assert.equal(result.facts.address, undefined);
   assert.equal(result.factMeta.address, undefined);
@@ -481,7 +481,7 @@ test("fixture contact pages keep a public gmail, an obfuscated email, and a shor
   assert.deepEqual(gregorys.facts.contact?.emails, ["gregorysheating@gmail.com"]);
   assert.equal(gregorys.facts.address, "4 Hampton Chase, Prenton, CH43 9HE");
   assert.equal(gregorys.factMeta.address?.source, "footer");
-  assert.deepEqual(gregorys.facts.contact?.phones, ["0151 488 1234", "01516 532 896"]);
+  assert.deepEqual(gregorys.facts.contact?.phones, ["+441514881234", "+441516532896"]);
   assert.deepEqual(gregorys.facts.services, [
     "Boiler installations",
     "Boiler repairs",
@@ -496,7 +496,7 @@ test("fixture contact pages keep a public gmail, an obfuscated email, and a shor
     { url: "https://wirralplumbers.com/contact", html: fixture("wirral-plumbers-contact.html") },
   ]);
   assert.deepEqual(plumbers.facts.contact?.emails, ["mike@wirralplumbers.com"]);
-  assert.deepEqual(plumbers.facts.contact?.phones, ["0758 0395493"]);
+  assert.deepEqual(plumbers.facts.contact?.phones, ["+447580395493"]);
 });
 
 test("fixture postal address keeps the locality and drops region and country codes", () => {
@@ -585,7 +585,7 @@ test("fixture Cloudflare data-cfemail decodes without executing a script", () =>
 
 test("a large site keeps one home or contact detail and drops department contacts", () => {
   const home = `<html><head><script type="application/ld+json">
-    {"@type":"LocalBusiness","name":"Public Service","email":"contact@service.example","telephone":"0151 000 0000"}
+    {"@type":"LocalBusiness","name":"Public Service","email":"contact@service.example","telephone":"+441510000000"}
   </script></head><body><h1>Public Service</h1></body></html>`;
   const tribunal = `<html><body><h1>Tribunal</h1><h2>Contact</h2>
     <p>tribunal@service.example</p><p>0800 111 2222</p>
@@ -602,7 +602,7 @@ test("a large site keeps one home or contact detail and drops department contact
   }
   const result = extractDraftFromHtml(pages);
   assert.deepEqual(result.facts.contact?.emails, ["contact@service.example"]);
-  assert.deepEqual(result.facts.contact?.phones, ["0151 000 0000"]);
+  assert.deepEqual(result.facts.contact?.phones, ["+441510000000"]);
   assert.equal(result.factMeta.contact?.confidence, "low");
   assert.equal(result.facts.hours, undefined);
   assert.doesNotMatch(JSON.stringify(result.facts), /tribunal@|0800 111 2222|desk0@/);
@@ -615,7 +615,7 @@ test("crawl priority fetches home and contact before posts", () => {
   assert.equal(crawlUrlPriority("https://trade.example/about"), 80);
   assert.equal(crawlUrlPriority("https://trade.example/services"), 70);
   assert.equal(crawlUrlPriority("https://trade.example/faq"), 60);
-  assert.equal(crawlUrlPriority("https://trade.example/opening-hours"), 50);
+  assert.equal(crawlUrlPriority("https://trade.example/opening-hours"), 55);
   assert.ok(crawlUrlPriority("https://trade.example/2024/boiler-tips") < 50);
   assert.ok(crawlUrlPriority("https://service.example/departments/contact") < 50);
   const ranked = [

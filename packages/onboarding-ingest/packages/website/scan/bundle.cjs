@@ -130,11 +130,11 @@ function allowPublicHttpsUrl(raw) {
   } catch {
     return { ok: false, reason: "invalid_url" };
   }
+  if (url.protocol === "http:") {
+    url = new URL(`https://${url.host}${url.pathname}${url.search}${url.hash}`);
+  }
   if (url.protocol !== "https:") {
-    return {
-      ok: false,
-      reason: url.protocol === "http:" ? "http_not_allowed" : "unsupported_scheme"
-    };
+    return { ok: false, reason: "unsupported_scheme" };
   }
   if (url.username || url.password) {
     return { ok: false, reason: "userinfo_not_allowed" };
@@ -149,8 +149,8 @@ function allowPublicHttpsUrl(raw) {
 var MAX_SCAN_URL_LENGTH = 2048;
 var RATE_WINDOW_MS = 6e4;
 var RATE_MAX = 8;
-var HOST_RATE_MAX = 3;
-var UPSTREAM_TIMEOUT_MS = 115e3;
+var HOST_RATE_MAX = 6;
+var UPSTREAM_TIMEOUT_MS = 25e3;
 var DEFAULT_PERSISTENT_SCANNER_ENDPOINT = "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 var rateBuckets = /* @__PURE__ */ new Map();
 function pruneRateBuckets(now) {
@@ -190,7 +190,7 @@ function response(statusCode, body, origin = "") {
   if (origin) headers["Access-Control-Allow-Origin"] = origin;
   return { statusCode, headers, body };
 }
-async function proxyPersistentScan(url, fetcher = fetch, endpoint = process.env.SCANNER_V2_RUNTIME_URL?.trim() || DEFAULT_PERSISTENT_SCANNER_ENDPOINT) {
+async function proxyPersistentScan(url, fetcher = fetch, endpoint = process.env.SCANNER_V2_RUNTIME_URL?.trim() || DEFAULT_PERSISTENT_SCANNER_ENDPOINT, crawlId = "") {
   try {
     const upstream = await fetcher(endpoint, {
       method: "POST",
@@ -198,7 +198,10 @@ async function proxyPersistentScan(url, fetcher = fetch, endpoint = process.env.
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({
+        url,
+        ...crawlId ? { crawlId } : {}
+      }),
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
     });
     const text = await upstream.text();
@@ -300,7 +303,8 @@ async function main(event = {}) {
       origin
     );
   }
-  const result = await proxyPersistentScan(allowed.url.toString());
+  const crawlId = typeof event.crawlId === "string" ? event.crawlId.trim() : "";
+  const result = await proxyPersistentScan(allowed.url.toString(), fetch, void 0, crawlId);
   return response(result.statusCode, result.body, origin);
 }
 // Annotate the CommonJS export names for ESM import in node:

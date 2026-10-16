@@ -15,6 +15,7 @@ import {
   allowPublicHttpsUrl,
   assertResolvedAddressesPublic,
   parseIPv4Literal,
+  sameRegistrableSite,
 } from "./ssrf.ts";
 import { USER_AGENT } from "./extract.ts";
 import {
@@ -508,7 +509,7 @@ export async function fetchPublicHttpsBytes(
           400,
         );
       }
-      if (options.allowedOrigin && next.origin !== options.allowedOrigin) {
+      if (options.allowedOrigin && !redirectStaysOnSite(next, options.allowedOrigin)) {
         throw new ScanError(
           "cross_origin_redirect",
           "The document redirected outside the submitted website.",
@@ -648,7 +649,7 @@ export async function fetchPublicHttps(
       } catch {
         throw new ScanError("invalid_url", "Redirect Location was not a valid URL.", 400);
       }
-      if (options.allowedOrigin && next.origin !== options.allowedOrigin) {
+      if (options.allowedOrigin && !redirectStaysOnSite(next, options.allowedOrigin)) {
         throw new ScanError(
           "cross_origin_redirect",
           "The page redirected outside the submitted website.",
@@ -663,6 +664,14 @@ export async function fetchPublicHttps(
   }
 
   throw new ScanError("too_many_redirects", "The site redirected too many times.", 422);
+}
+
+function redirectStaysOnSite(next: URL, allowedOrigin: string): boolean {
+  try {
+    return sameRegistrableSite(next, new URL(allowedOrigin));
+  } catch {
+    return false;
+  }
 }
 
 export function ssrfMessage(reason: string): string {

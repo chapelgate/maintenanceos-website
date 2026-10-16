@@ -1,4 +1,4 @@
-import { allowPublicHttpsUrl } from "./ssrf.ts";
+import { allowPublicHttpsUrl, sameRegistrableSite } from "./ssrf.ts";
 
 export const DEFAULT_MAX_PATH_DEPTH = 16;
 export const DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE = 64;
@@ -151,7 +151,7 @@ export function normalizeScannerV2Url(
       incomplete: false,
     };
   }
-  if (parsed.origin !== origin.origin) {
+  if (!sameRegistrableSite(parsed, origin)) {
     return {
       ok: false,
       displayUrl: parsed.toString(),
