@@ -142,6 +142,15 @@ test("deployed Functions artifact is prebuilt-only and loadable", async () => {
   );
   assert.match(project, /main:\s*main/);
   assert.match(project, /name:\s*website[\s\S]*environment:[\s\S]*SCANNER_V2_RUNTIME_URL:\s*"\$\{SCANNER_V2_RUNTIME_URL\}"/);
+  const allowedEnv = new Set([
+    "GEMINI_API_KEY",
+    "GEMINI_TTS_MODEL",
+    "GEMINI_TTS_VOICE",
+    "SCANNER_V2_RUNTIME_URL",
+  ]);
+  const declaredEnv = [...project.matchAll(/\$\{([^}]+)\}/g)].map((match) => match[1]);
+  assert.deepEqual([...new Set(declaredEnv)].sort(), [...allowedEnv].sort());
+  for (const name of declaredEnv) assert.ok(allowedEnv.has(name), name);
 
   const deployed = require(path.join(functionDir, "bundle.cjs")) as {
     main: typeof main;
