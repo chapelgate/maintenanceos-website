@@ -28,6 +28,7 @@ export type CreateScanProgress =
   | "queued"
   | "scanned"
   | "scanned_empty"
+  | "scan_crawling"
   | "scan_blocked"
   | "scan_failed";
 
@@ -49,6 +50,7 @@ export function isCreateScanReady(progress: CreateScanProgress): boolean {
     progress === "queued" ||
     progress === "scanned" ||
     progress === "scanned_empty" ||
+    progress === "scan_crawling" ||
     progress === "scan_blocked" ||
     progress === "scan_failed"
   );

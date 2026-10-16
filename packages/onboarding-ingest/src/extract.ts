@@ -10,6 +10,7 @@ import type {
   BusinessFacts,
   DraftFieldMeta,
   FieldConfidence,
+  FieldMeta,
   FieldSource,
   PartialDraft,
 } from "./types.ts";
@@ -625,6 +626,7 @@ function extractNavBlocks(html: string): string[] {
     /<([a-z0-9]+)\b[^>]*role=["']navigation["'][^>]*>([\s\S]*?)<\/\1>/gi,
     /<header\b[^>]*>([\s\S]*?)<\/header>/gi,
     /<ul\b[^>]*class=["'][^"']*\b(?:nav|menu|navbar)[^"']*["'][^>]*>([\s\S]*?)<\/ul>/gi,
+    /<(?:div|nav)\b[^>]*class=["'][^"']*\b(?:w3-bar|menu-bar|navbar|nav-bar)[^"']*["'][^>]*>([\s\S]*?)<\/(?:div|nav)>/gi,
   ]) {
     let m: RegExpExecArray | null;
     while ((m = re.exec(html))) {
@@ -899,10 +901,11 @@ export function extractVisibleContactSection(html: string): {
   phones: string[];
   emails: string[];
   locations: string[];
+  place?: string;
 } {
   const fragment = headingSectionHtml(
     html,
-    /contact us|contact details|get in touch|find us/,
+    /contact(?:\s+us|\s+details)?(?:\s+\w+)?|get in touch|find us/,
   );
   if (!fragment) return { phones: [], emails: [], locations: [] };
 
@@ -922,8 +925,126 @@ export function extractVisibleContactSection(html: string): {
         .filter((block) => block.length >= 8 && block.length <= 500),
     ),
   ].slice(0, 16);
+  const place = blocks.find((block) => {
+    if (UK_POSTCODE_RE.test(block) || isPlausiblePhone(block) || isPlausibleEmail(block)) {
+      return false;
+    }
+    const words = block.split(/\s+/);
+    return block.length >= 4 && block.length <= 80 && words.length <= 6 && !/[.?!]/.test(block);
+  });
 
-  return { phones, emails, locations };
+  return { phones, emails, locations, ...(place ? { place } : {}) };
+}
+
+function httpsPageUrl(url: string): string | undefined {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" ? parsed.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function factMetaFor(
+  source: FieldSource,
+  confidence: "high" | "medium" | "low",
+  pageUrl: string,
+): FieldMeta {
+  const sourceUrl = httpsPageUrl(pageUrl);
+  return sourceUrl ? { source, confidence, sourceUrl } : { source, confidence };
+}
+
+function withoutCodeScripts(html: string): string {
+  return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, (block) =>
+    /type=["']application\/ld\+json["']/i.test(block) ? block : " ",
+  );
+}
+
+function partitionLocations(values: string[]): { addresses: string[]; areas: string[] } {
+  const addresses: string[] = [];
+  const areas: string[] = [];
+  for (const value of values) {
+    const text = asUntrustedText(value, 500);
+    if (!text) continue;
+    if (UK_POSTCODE_RE.test(text) || (/\d/.test(text) && text.includes(",") && text.length <= 200)) {
+      addresses.push(text);
+    } else {
+      areas.push(text);
+    }
+  }
+  return { addresses, areas };
+}
+
+function isPublicContactEmail(email: string, siteHost: string, pageUrl: string): boolean {
+  if (!isPlausibleEmail(email) || /["'+\s]/.test(email)) return false;
+  const at = email.lastIndexOf("@");
+  const local = email.slice(0, at);
+  const domain = email.slice(at + 1).replace(/^www\./i, "").toLowerCase();
+  if (/^(noreply|no-reply|donotreply|privacy|webmaster)$/i.test(local)) return false;
+  const role =
+    /^(info|hello|enquiries|enquiry|contact|office|admin|sales|bookings|reception|support|service|accounts|mail)$/i.test(
+      local,
+    );
+  if (role) return true;
+  let personalPage = false;
+  try {
+    personalPage = /\/(blog|news|jobs|careers|team|staff|people)(\/|$)/i.test(new URL(pageUrl).pathname);
+  } catch {
+    personalPage = false;
+  }
+  if (personalPage) return false;
+  const host = siteHost.replace(/^www\./i, "").toLowerCase();
+  return Boolean(host) && (domain === host || domain.endsWith("." + host) || host.endsWith("." + domain));
+}
+
+const TRADE_HEADING_RE =
+  /\b(?:plumb|heat|boiler|gas|repair|install|servic|maint|drain|bathrooms?|electr|roof|locksmith|hvac|radiator)/i;
+
+function extractTradeServiceHeadings(html: string): string | undefined {
+  const found: string[] = [];
+  for (const match of html.matchAll(/<h([2-4])\b[^>]*>([\s\S]*?)<\/h\1>/gi)) {
+    const text = innerText(match[2]);
+    if (!text || text.length > 80 || text.split(/\s+/).length > 8) continue;
+    if (/\b(?:locations?|areas?|we cover|available at)\b/i.test(text)) continue;
+    if (GENERIC_NAV_RE.test(text) || !TRADE_HEADING_RE.test(text)) continue;
+    found.push(text);
+  }
+  const unique = [...new Set(found)].slice(0, 12);
+  return unique.length >= 2 ? unique.join("\n") : undefined;
+}
+
+function extractCoveredAreas(html: string): string[] {
+  const areas: string[] = [];
+  const heading = /<h([1-4])\b[^>]*>([\s\S]*?)<\/h\1>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = heading.exec(html))) {
+    const title = innerText(match[2]);
+    if (!/\b(?:we cover|areas?\b|available at these locations|where we work|service areas?)\b/i.test(title)) {
+      continue;
+    }
+    const level = Number(match[1]);
+    const after = html.slice(match.index + match[0].length, match.index + match[0].length + 8000);
+    const next = after.search(new RegExp(`<h[1-${level}]\\b`, "i"));
+    const section = after.slice(0, next === -1 ? after.length : next);
+    for (const item of visibleBlocks(section)) {
+      const words = item.split(/\s+/);
+      if (item.length < 2 || item.length > 40 || words.length > 4) continue;
+      if (/[.?!]/.test(item) || isPlausiblePhone(item) || isPlausibleEmail(item)) continue;
+      if (UK_POSTCODE_RE.test(item)) continue;
+      areas.push(item);
+    }
+  }
+  return [...new Set(areas)].slice(0, 16);
+}
+
+function extractChromePhones(html: string): string[] {
+  const chunks: string[] = [];
+  for (const tag of ["header", "footer"]) {
+    const re = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, "gi");
+    let match: RegExpExecArray | null;
+    while ((match = re.exec(html))) chunks.push(stripHtmlToText(match[1] ?? ""));
+  }
+  return dedupePhones(chunks.flatMap((chunk) => visiblePhoneCandidates(chunk)), 4);
 }
 
 function formatContactHints(phones: string[], emails: string[]): string | undefined {
@@ -1215,12 +1336,33 @@ export function extractDraftFromHtml(
   const microHours: string[] = [];
   const microServices: string[] = [];
   const locations: string[] = [];
+  const addresses: string[] = [];
   const phones: string[] = [];
-  const emails: string[] = [];
+  const emailSources: { email: string; url: string }[] = [];
   let locationMeta: BusinessFactMeta["locations"];
+  let addressMeta: BusinessFactMeta["address"];
   let contactMeta: BusinessFactMeta["contact"];
+  let placeFallback: { text: string; url: string } | undefined;
+
+  const rememberLocations = (
+    values: string[],
+    source: FieldSource,
+    confidence: "high" | "medium" | "low",
+    pageUrl: string,
+  ) => {
+    const parted = partitionLocations(values);
+    if (parted.addresses.length) {
+      addresses.push(...parted.addresses);
+      addressMeta ||= factMetaFor(source, confidence, pageUrl);
+    }
+    if (parted.areas.length) {
+      locations.push(...parted.areas);
+      locationMeta ||= factMetaFor(source, confidence, pageUrl);
+    }
+  };
 
   for (const page of pages) {
+    const visibleHtml = withoutCodeScripts(page.html);
     const jsonLd = extractJsonLd(page.html);
     setField(draft, fieldMeta, "businessName", jsonLd.businessName, "jsonld", "high");
     setField(draft, fieldMeta, "greeting", jsonLd.greeting, "jsonld", "high");
@@ -1228,14 +1370,13 @@ export function extractDraftFromHtml(
     if (jsonLd.services) jsonLdServices.push(jsonLd.services);
     if (jsonLd.faqs) jsonLdFaqs.push(jsonLd.faqs);
     if (jsonLd.locations.length) {
-      locations.push(...jsonLd.locations);
-      locationMeta ||= { source: "jsonld", confidence: "high" };
+      rememberLocations(jsonLd.locations, "jsonld", "high", page.url);
     }
     if (jsonLd.phones.length || jsonLd.emails.length) {
-      contactMeta ||= { source: "jsonld", confidence: "high" };
+      contactMeta ||= factMetaFor("jsonld", "high", page.url);
     }
     phones.push(...jsonLd.phones);
-    emails.push(...jsonLd.emails);
+    for (const email of jsonLd.emails) emailSources.push({ email, url: page.url });
 
     const micro = extractMicrodata(page.html);
     if (!draft.businessName) {
@@ -1247,35 +1388,44 @@ export function extractDraftFromHtml(
     if (micro.hours) microHours.push(micro.hours);
     if (micro.services) microServices.push(micro.services);
     if (micro.locations.length) {
-      locations.push(...micro.locations);
-      locationMeta ||= { source: "microdata", confidence: "high" };
+      rememberLocations(micro.locations, "microdata", "high", page.url);
     }
     if (micro.phones.length || micro.emails.length) {
-      contactMeta ||= { source: "microdata", confidence: "high" };
+      contactMeta ||= factMetaFor("microdata", "high", page.url);
     }
     phones.push(...micro.phones);
-    emails.push(...micro.emails);
+    for (const email of micro.emails) emailSources.push({ email, url: page.url });
 
-    const links = extractTelMailto(page.html);
+    const links = extractTelMailto(visibleHtml);
     if ((links.phones.length || links.emails.length) && !contactMeta) {
-      contactMeta = { source: "contact_link", confidence: "medium" };
+      contactMeta = factMetaFor("contact_link", "medium", page.url);
     }
     phones.push(...links.phones);
-    emails.push(...links.emails);
+    for (const email of links.emails) emailSources.push({ email, url: page.url });
 
-    const visibleContact = extractVisibleContactSection(page.html);
-    if (visibleContact.locations.length && !locationMeta) {
-      locationMeta = { source: "heading", confidence: "medium" };
-    }
+    const visibleContact = extractVisibleContactSection(visibleHtml);
+    rememberLocations(visibleContact.locations, "heading", "medium", page.url);
     if (
       (visibleContact.phones.length || visibleContact.emails.length) &&
       !contactMeta
     ) {
-      contactMeta = { source: "heading", confidence: "medium" };
+      contactMeta = factMetaFor("heading", "medium", page.url);
     }
-    locations.push(...visibleContact.locations);
     phones.push(...visibleContact.phones);
-    emails.push(...visibleContact.emails);
+    for (const email of visibleContact.emails) emailSources.push({ email, url: page.url });
+    const chromePhones = extractChromePhones(visibleHtml);
+    if (chromePhones.length && !contactMeta) {
+      contactMeta = factMetaFor("pattern", "medium", page.url);
+    }
+    phones.push(...chromePhones);
+    if (visibleContact.place && !placeFallback) {
+      placeFallback = { text: visibleContact.place, url: page.url };
+    }
+    const covered = extractCoveredAreas(visibleHtml);
+    if (covered.length) {
+      locations.push(...covered);
+      locationMeta ||= factMetaFor("heading", "medium", page.url);
+    }
   }
 
   if (!draft.businessName) {
@@ -1346,7 +1496,7 @@ export function extractDraftFromHtml(
   if (!draft.hours) {
     for (const page of pages) {
       const section = headingSection(
-        page.html,
+        withoutCodeScripts(page.html),
         /opening hours|business hours|our hours|office hours/,
       );
       if (section && looksLikeHours(section)) {
@@ -1357,7 +1507,7 @@ export function extractDraftFromHtml(
   }
   if (!draft.hours) {
     for (const page of pages) {
-      const patterned = extractHoursFromVisibleText(page.html);
+      const patterned = extractHoursFromVisibleText(withoutCodeScripts(page.html));
       if (patterned) {
         setField(draft, fieldMeta, "hours", patterned, "pattern", "low");
         break;
@@ -1384,7 +1534,7 @@ export function extractDraftFromHtml(
   if (!draft.services) {
     for (const page of pages) {
       const section = headingSection(
-        page.html,
+        withoutCodeScripts(page.html),
         /our services|services we offer|what we do|what we offer|what we provide|our work|housing options|support services|services/,
       );
       if (section && (section.split("\n").length >= 2 || section.length >= 24)) {
@@ -1395,7 +1545,7 @@ export function extractDraftFromHtml(
   }
   if (!draft.services) {
     for (const page of pages) {
-      const fromHeadings = extractServiceSubheadings(page.html);
+      const fromHeadings = extractServiceSubheadings(withoutCodeScripts(page.html));
       if (fromHeadings) {
         setField(
           draft,
@@ -1411,7 +1561,16 @@ export function extractDraftFromHtml(
   }
   if (!draft.services) {
     for (const page of pages) {
-      const fromNav = extractServicesFromNav(page.html);
+      const fromTrades = extractTradeServiceHeadings(withoutCodeScripts(page.html));
+      if (fromTrades) {
+        setField(draft, fieldMeta, "services", fromTrades, "heading", "medium");
+        break;
+      }
+    }
+  }
+  if (!draft.services) {
+    for (const page of pages) {
+      const fromNav = extractServicesFromNav(withoutCodeScripts(page.html));
       if (fromNav) {
         setField(draft, fieldMeta, "services", fromNav, "nav", "low");
         break;
@@ -1453,7 +1612,21 @@ export function extractDraftFromHtml(
     }
   }
 
-  const contact = formatContactHints(phones, emails);
+  let siteHost = "";
+  try {
+    siteHost = new URL(pages[0]?.url ?? "").hostname;
+  } catch {
+    siteHost = "";
+  }
+  const publicEmails = [
+    ...new Set(
+      emailSources
+        .map((item) => ({ email: asUntrustedText(item.email, 120), url: item.url }))
+        .filter((item) => item.email && isPublicContactEmail(item.email, siteHost, item.url))
+        .map((item) => item.email),
+    ),
+  ].slice(0, 8);
+  const contact = formatContactHints(phones, publicEmails);
   if (contact) {
     if (draft.faqs) {
       const already = contact
@@ -1486,7 +1659,7 @@ export function extractDraftFromHtml(
   const cleanDraft = omitEmpty(draft);
   const uniqueLocations = [...new Set(locations.map((item) => asUntrustedText(item, 500)).filter(Boolean))].slice(0, 16);
   const uniquePhones = dedupePhones(phones, 8);
-  const uniqueEmails = [...new Set(emails.map((item) => asUntrustedText(item, 120)).filter(isPlausibleEmail))].slice(0, 8);
+  const uniqueEmails = publicEmails;
   const facts: BusinessFacts = {};
   const factMeta: BusinessFactMeta = {};
   const website = pages[0]?.url;
@@ -1504,6 +1677,14 @@ export function extractDraftFromHtml(
   if (cleanDraft.businessName) {
     facts.businessName = cleanDraft.businessName;
     if (fieldMeta.businessName) factMeta.businessName = fieldMeta.businessName;
+  }
+  const postalAddress = [...new Set(addresses.map((item) => asUntrustedText(item, 500)).filter(Boolean))][0];
+  if (postalAddress) {
+    facts.address = postalAddress;
+    if (addressMeta) factMeta.address = addressMeta;
+  } else if (placeFallback) {
+    facts.address = placeFallback.text;
+    factMeta.address = factMetaFor("heading", "low", placeFallback.url);
   }
   if (uniqueLocations.length) {
     facts.locations = uniqueLocations;

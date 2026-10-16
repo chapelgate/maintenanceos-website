@@ -176,6 +176,7 @@ export function buildAgentBlueprintDraft(input: {
       businessName: name,
       website,
       ...(facts.locations?.length ? { locations: facts.locations.slice(0, 50) } : {}),
+      ...(facts.address?.trim() ? { address: facts.address.trim().slice(0, 500) } : {}),
       ...(contact ? { contact } : {}),
     },
     agent: {

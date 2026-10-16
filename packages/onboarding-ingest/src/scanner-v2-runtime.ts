@@ -49,6 +49,7 @@ import {
   READER_FALLBACK_TIMEOUT_MS,
 } from "./scan.ts";
 import type {
+  BusinessFactMeta,
   BusinessFacts,
   CorpusChunk,
   CrawlManifest,
@@ -135,8 +136,14 @@ function unique(values: readonly string[]): string[] {
   return [...new Set(values.map((value) => value.trim()).filter(Boolean))];
 }
 
-function aggregateFacts(origin: string, pages: readonly CrawlPage[]): BusinessFacts {
+function aggregateFacts(
+  origin: string,
+  pages: readonly CrawlPage[],
+): { facts: BusinessFacts; factMeta: BusinessFactMeta } {
   const facts: BusinessFacts = { website: origin };
+  const factMeta: BusinessFactMeta = {
+    website: { confidence: "high", source: "fetched_url" },
+  };
   const locations: string[] = [];
   const phones: string[] = [];
   const emails: string[] = [];
@@ -144,17 +151,39 @@ function aggregateFacts(origin: string, pages: readonly CrawlPage[]): BusinessFa
   const faqs: Array<{ question: string; answer: string }> = [];
 
   for (const page of pages) {
-    const source = page.structuredFacts as Partial<BusinessFacts>;
+    const source = page.structuredFacts as Partial<BusinessFacts> & {
+      _factMeta?: BusinessFactMeta;
+    };
+    const pageMeta = source._factMeta;
     if (!facts.businessName && typeof source.businessName === "string") {
       facts.businessName = source.businessName;
+      if (pageMeta?.businessName) factMeta.businessName = pageMeta.businessName;
+    }
+    if (!facts.address && typeof source.address === "string" && source.address.trim()) {
+      facts.address = source.address.trim();
+      if (pageMeta?.address) factMeta.address = pageMeta.address;
     }
     if (!facts.hours && typeof source.hours === "string") {
       facts.hours = source.hours;
+      if (pageMeta?.hours) factMeta.hours = pageMeta.hours;
     }
-    if (Array.isArray(source.locations)) locations.push(...source.locations);
-    if (Array.isArray(source.services)) services.push(...source.services);
+    if (Array.isArray(source.locations)) {
+      locations.push(...source.locations);
+      if (!factMeta.locations && pageMeta?.locations) factMeta.locations = pageMeta.locations;
+    }
+    if (Array.isArray(source.services)) {
+      services.push(...source.services);
+      if (!factMeta.services && pageMeta?.services) factMeta.services = pageMeta.services;
+    }
     if (Array.isArray(source.contact?.phones)) phones.push(...source.contact.phones);
     if (Array.isArray(source.contact?.emails)) emails.push(...source.contact.emails);
+    if (
+      (source.contact?.phones?.length || source.contact?.emails?.length) &&
+      !factMeta.contact &&
+      pageMeta?.contact
+    ) {
+      factMeta.contact = pageMeta.contact;
+    }
     if (Array.isArray(source.faqs)) {
       for (const faq of source.faqs) {
         if (
@@ -190,7 +219,7 @@ function aggregateFacts(origin: string, pages: readonly CrawlPage[]): BusinessFa
   }
   if (uniqueServices.length) facts.services = uniqueServices;
   if (uniqueFaqs.length) facts.faqs = uniqueFaqs;
-  return facts;
+  return { facts, factMeta };
 }
 
 function draftFromFacts(facts: BusinessFacts) {
@@ -591,7 +620,8 @@ async function runtimeResult(input: {
     unresolved: urls.filter((row) => row.status === "unresolved").length,
     urls,
   };
-  const facts = aggregateFacts(input.origin, pages);
+  const aggregated = aggregateFacts(input.origin, pages);
+  const facts = aggregated.facts;
   const knowledge = knowledgeFromChunks(chunks);
   const warnings = unique([
     ...urls
@@ -627,9 +657,7 @@ async function runtimeResult(input: {
       bytes: Buffer.byteLength(page.visibleText, "utf8"),
     })),
     facts,
-    factMeta: {
-      website: { confidence: "high", source: "fetched_url" },
-    },
+    factMeta: aggregated.factMeta,
     ...(knowledge.length ? { knowledge } : {}),
     scannerV2: {
       crawlId: input.crawlId,

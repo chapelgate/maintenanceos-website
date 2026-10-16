@@ -36,6 +36,7 @@ export type AgentReviewRecord = {
 
 export type ReviewedIdentityDraft = {
   locations: string;
+  address?: string;
   phone: string;
   email: string;
 };
@@ -104,6 +105,7 @@ const FACT_LABELS: Record<ScanBusinessFactKey, string> = {
   website: "website",
   businessName: "business name",
   locations: "locations",
+  address: "postal address",
   contact: "contact details",
   services: "services",
   hours: "opening hours",
@@ -159,10 +161,16 @@ export function reviewFactHint(
 ): string | null {
   if (!meta || !hasValue) return null;
   const label = reviewSourceLabel(meta.source);
+  const sourceUrl =
+    "sourceUrl" in meta &&
+    typeof meta.sourceUrl === "string" &&
+    meta.sourceUrl.startsWith("https://")
+      ? " " + meta.sourceUrl
+      : "";
   if (meta.confidence === "low") {
-    return `Source: ${label} — low confidence; explicit confirmation is required.`;
+    return `Source: ${label} — low confidence; explicit confirmation is required.${sourceUrl}`;
   }
-  return `Source: ${label} — ${meta.confidence} confidence.`;
+  return `Source: ${label} — ${meta.confidence} confidence.${sourceUrl}`;
 }
 
 export function identityDraftFromBlueprint(
@@ -171,6 +179,7 @@ export function identityDraftFromBlueprint(
   const trusted = validateBlueprint(blueprint);
   return {
     locations: trusted.identity.locations?.join("\n") ?? "",
+    address: trusted.identity.address ?? "",
     phone: trusted.identity.contact?.phone ?? "",
     email: trusted.identity.contact?.email ?? "",
   };
@@ -200,6 +209,7 @@ export function applyReviewedIdentityToAgentBlueprint(
     throw new Error("Customer review edits require a draft AgentBlueprint.");
   }
   const locations = normaliseLocations(draft.locations);
+  const address = draft.address?.trim() ?? "";
   const phone = draft.phone.trim();
   const email = draft.email.trim();
 
@@ -215,6 +225,9 @@ export function applyReviewedIdentityToAgentBlueprint(
   if (email.length > 254 || (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
     throw new Error("Reviewed email address is invalid.");
   }
+  if (address.length > 500) {
+    throw new Error("Reviewed postal address must be 500 characters or fewer.");
+  }
 
   const next: AgentBlueprintV1 = {
     ...trusted,
@@ -222,6 +235,7 @@ export function applyReviewedIdentityToAgentBlueprint(
       businessName: trusted.identity.businessName,
       website: trusted.identity.website,
       ...(locations ? { locations } : {}),
+      ...(address ? { address } : {}),
       ...(phone || email
         ? {
             contact: {
@@ -297,7 +311,7 @@ export function buildAgentReviewRequirements(input: {
     },
   ];
 
-  for (const key of ["locations", "contact"] as const) {
+  for (const key of ["locations", "address", "contact"] as const) {
     const meta = input.factMeta?.[key];
     if (!meta || meta.confidence !== "low") continue;
     requirements.push({

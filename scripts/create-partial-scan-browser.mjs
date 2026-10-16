@@ -38,6 +38,51 @@ const zeroFetchBody = {
   },
 };
 
+const crawlingBody = {
+  ok: true,
+  draft: {
+    businessName: "Town Heating",
+    services: "Boiler repair",
+  },
+  facts: {
+    website: "https://trades.example/",
+    businessName: "Town Heating",
+    address: "Bromborough, Wirral",
+    contact: { phones: ["07774179685"] },
+    services: ["Boiler repair"],
+  },
+  factMeta: {
+    address: {
+      source: "heading",
+      confidence: "low",
+      sourceUrl: "https://trades.example/",
+    },
+    contact: { source: "contact_link", confidence: "medium" },
+  },
+  warnings: ["http_404", "content_type_not_supported", "scanner_v2_in_progress"],
+  scannerV2: {
+    state: "CRAWLING",
+    discovered: 40,
+    fetched: 8,
+    unresolved: 0,
+  },
+};
+
+const crawlingDoneBody = {
+  ...crawlingBody,
+  draft: {
+    businessName: "Town Heating",
+    services: "Boiler repair\nCentral heating",
+  },
+  warnings: ["http_404"],
+  scannerV2: {
+    state: "COMPLETE",
+    discovered: 40,
+    fetched: 12,
+    unresolved: 0,
+  },
+};
+
 const blockedBody = {
   ok: true,
   outcome: "blocked_by_site",
@@ -52,6 +97,7 @@ const blockedBody = {
 };
 
 let mode = "partial";
+let crawlCalls = 0;
 const server = spawn("npx", ["serve", "out", "-l", String(port)], {
   stdio: "ignore",
   detached: false,
@@ -81,7 +127,15 @@ try {
     const page = await browser.newPage();
     await page.route("**/api/website/scan", async (route) => {
       const body =
-        mode === "partial" ? partialBody : mode === "blocked" ? blockedBody : zeroFetchBody;
+        mode === "partial"
+          ? partialBody
+          : mode === "blocked"
+            ? blockedBody
+            : mode === "crawling"
+              ? (crawlCalls += 1) === 1
+                ? crawlingBody
+                : crawlingDoneBody
+              : zeroFetchBody;
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -151,6 +205,35 @@ try {
     await services.fill("Alley gate installation, typed in by hand");
     assert.match(await services.inputValue(), /typed in by hand/);
     assert.match(await page.locator("[data-scan-host-allow]").innerText(), /178\.128\.171\.45/);
+
+    mode = "crawling";
+    await page.goto(`${origin}/create/`);
+    await page.locator("[data-create-hydrated='true']").waitFor();
+    await page.locator("input[name='businessUrl']").fill("https://trades.example");
+    await page.locator("input[name='email']").fill("owner@example.com");
+    await page.locator("[data-create-primary-action]").click();
+    const crawling = page.locator("[data-scan-crawling]");
+    await crawling.waitFor({ timeout: 15_000 });
+    const crawlingText = await crawling.innerText();
+    assert.match(crawlingText, /page budget/i);
+    assert.match(crawlingText, /usable/i);
+    assert.match(await page.locator("[data-scan-skipped]").innerText(), /Some pages were skipped/);
+    assert.doesNotMatch(crawlingText, /failed/i);
+    const continueScan = page.locator("[data-scan-continue]");
+    assert.equal(await continueScan.isEnabled(), true);
+    assert.equal(await page.locator("[data-create-primary-action]").isEnabled(), true);
+    await continueScan.click();
+    await page.getByText(/Scanner result: COMPLETE/).waitFor({ timeout: 15_000 });
+    assert.equal(await page.locator("[data-scan-crawling]").count(), 0);
+    await page.locator("[data-create-primary-action]").click();
+    await page.locator("input[name='agent-type'][value='receptionist']").check();
+    await page.locator("[data-create-primary-action]").click();
+    const address = page.getByLabel("Address", { exact: false });
+    await address.waitFor();
+    assert.equal(await address.inputValue(), "Bromborough, Wirral");
+    assert.match(await page.getByLabel("Phone", { exact: false }).inputValue(), /07774179685/);
+    await address.fill("1 Dock Road, Liverpool");
+    assert.equal(await address.inputValue(), "1 Dock Road, Liverpool");
     console.log("create-partial-scan-browser=ok");
   } finally {
     await browser.close();

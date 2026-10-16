@@ -39,6 +39,8 @@ import {
   createScanProgressTitle,
   emptyHoursOrServicesNote,
   describeScanCoverage,
+  describeSkippedPages,
+  scanProgressAfterResult,
   hostnameBusinessHint,
   requestOnboardingScan,
   scanAttemptDetail,
@@ -78,6 +80,7 @@ type Status = "idle" | "submitting" | "success" | "error";
 
 const EMPTY_IDENTITY_REVIEW: ReviewedIdentityDraft = {
   locations: "",
+  address: "",
   phone: "",
   email: "",
 };
@@ -244,6 +247,7 @@ export function CreateReceptionistLaterSteps({
   const [scanDetail, setScanDetail] = useState<string | null>(null);
   const [scanHostLine, setScanHostLine] = useState<string | null>(null);
   const [scanSummary, setScanSummary] = useState<ScanRunSummary | null>(null);
+  const [scanContinuing, setScanContinuing] = useState(false);
   const scanAbortRef = useRef<AbortController | null>(null);
   const [draft, setDraft] = useState<ReceptionistDraft>(EMPTY_RECEPTIONIST_DRAFT);
   const [fieldMeta, setFieldMeta] = useState<ScanDraftFieldMeta>({});
@@ -281,6 +285,7 @@ export function CreateReceptionistLaterSteps({
   const faqsHintId = useId();
   const websiteHintId = useId();
   const locationsHintId = useId();
+  const addressHintId = useId();
   const phoneHintId = useId();
   const emailHintId = useId();
   const reviewStatusId = useId();
@@ -438,12 +443,13 @@ export function CreateReceptionistLaterSteps({
         setScanSummary(outcome.summary);
         setIdentityReview({
           locations: outcome.facts.locations?.join("\n") ?? "",
+          address: outcome.facts.address ?? "",
           phone: outcome.facts.contact?.phones?.[0] ?? "",
           email: outcome.facts.contact?.emails?.[0] ?? "",
         });
         setScanDetail(null);
         setScanHostLine(null);
-        setProgress(filled ? "scanned" : "scanned_empty");
+        setProgress(scanProgressAfterResult(outcome.summary, filled));
         return;
       }
       if (outcome.status === "disabled") {
@@ -478,6 +484,51 @@ export function CreateReceptionistLaterSteps({
       controller.abort();
     };
   }, [step, businessUrl, initialAgentType]);
+
+  async function continueScanning() {
+    const endpoint = siteConfig.onboardingScanEndpoint.trim();
+    if (!endpoint || scanContinuing) return;
+    setScanContinuing(true);
+    setScanDetail("Continuing the website check from the pages already read.");
+    try {
+      const outcome = await requestOnboardingScan(endpoint, businessUrl);
+      if (outcome.status !== "ok") {
+        setScanDetail(
+          outcome.status === "manual"
+            ? outcome.message
+            : "The website check could not continue. The draft so far is still usable.",
+        );
+        setProgress("scan_crawling");
+        return;
+      }
+      setDraft((current) => {
+        const next = { ...current };
+        for (const key of ["businessName", "greeting", "hours", "services", "faqs"] as const) {
+          const value = outcome.draft[key];
+          if (typeof value === "string" && value.trim()) next[key] = value;
+        }
+        return next;
+      });
+      setFieldMeta(outcome.fieldMeta);
+      setFactMeta(outcome.factMeta);
+      setFacts(outcome.facts);
+      setSiteKnowledge(outcome.siteKnowledge);
+      setScanSummary(outcome.summary);
+      setIdentityReview((current) => ({
+        locations: outcome.facts.locations?.join("\n") || current.locations,
+        address: outcome.facts.address || current.address,
+        phone: outcome.facts.contact?.phones?.[0] || current.phone,
+        email: outcome.facts.contact?.emails?.[0] || current.email,
+      }));
+      const filled =
+        Object.values(outcome.draft).some((value) => typeof value === "string" && value.trim()) ||
+        Boolean(outcome.facts.businessName || outcome.facts.address || outcome.facts.contact);
+      setScanDetail(null);
+      setProgress(scanProgressAfterResult(outcome.summary, filled));
+    } finally {
+      setScanContinuing(false);
+    }
+  }
 
   function continueWithoutScan() {
     scanAbortRef.current?.abort();
@@ -531,6 +582,7 @@ export function CreateReceptionistLaterSteps({
     setFactMeta((current) => {
       const next = { ...current };
       if (key === "locations") delete next.locations;
+      if (key === "address") delete next.address;
       if (key === "phone" || key === "email") delete next.contact;
       return next;
     });
@@ -818,6 +870,7 @@ export function CreateReceptionistLaterSteps({
   }
 
   const scanCoverage = describeScanCoverage({ summary: scanSummary, draft });
+  const skippedPages = describeSkippedPages(scanSummary);
   const stepReady = isCreateScanReady(progress);
   const nextAction = createJourneyNextAction(step, progress);
   const review = currentReview();
@@ -883,6 +936,29 @@ export function CreateReceptionistLaterSteps({
               </p>
             ) : null}
             <PartialScanNotice summary={scanSummary} draft={draft} />
+            {progress === "scan_crawling" ? (
+              <div data-scan-crawling="">
+                <p>
+                  The page budget was reached before every discovered page was read.
+                  The draft so far is usable. Continue scanning reads more of the same
+                  site, or choose an agent and fill any gaps yourself. Nothing was invented.
+                </p>
+                <button
+                  type="button"
+                  data-scan-continue=""
+                  disabled={scanContinuing}
+                  onClick={() => void continueScanning()}
+                  className="mt-3 inline-flex min-h-6 items-center justify-center rounded-md border border-border px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
+                >
+                  {scanContinuing ? "Continuing the website check…" : "Continue scanning"}
+                </button>
+              </div>
+            ) : null}
+            {skippedPages ? (
+              <p data-scan-skipped="" className="text-muted">
+                {skippedPages}
+              </p>
+            ) : null}
             {progress === "scan_blocked" ? (
               <div data-scan-blocked="">
                 <p>
@@ -1103,6 +1179,21 @@ export function CreateReceptionistLaterSteps({
                 identityReview.locations.trim()
                   ? null
                   : "Empty — not on file. Locations were not invented."
+              }
+            />
+            <DraftReviewField
+              label="Address"
+              value={identityReview.address ?? ""}
+              onChange={(value) => updateIdentityReview("address", value)}
+              hintId={addressHintId}
+              hint={reviewFactHint(
+                factMeta.address,
+                Boolean(identityReview.address?.trim()),
+              )}
+              emptyNote={
+                identityReview.address?.trim()
+                  ? null
+                  : "Empty — not on file. The postal address was not invented."
               }
             />
             <DraftReviewField
