@@ -28,8 +28,12 @@ function jsonBody(result: VoiceResult) {
     fallback?: string;
     reason?: string;
     configured?: boolean;
+    keyPresent?: boolean;
+    keyLength?: number;
+    keyPrefixKind?: string;
     model?: string;
     voice?: string;
+    build?: string | null;
   };
 }
 
@@ -95,7 +99,7 @@ test("pcm16ToWav writes a mono 16-bit header", () => {
 
 test("voice function stays unconfigured without a Gemini key", async () => {
   resetVoiceRateLimitForTests();
-  for (const env of [{}, { GEMINI_API_KEY: "  " }, { GEMINI_API_KEY: "bad\nkey" }]) {
+  for (const env of [{}, { GEMINI_API_KEY: "  " }, { GEMINI_API_KEY: "\n\0" }]) {
     const result = await main(event("POST", "Hello"), { env });
     assert.equal(result.statusCode, 200);
     assert.deepEqual(jsonBody(result), {
@@ -469,12 +473,15 @@ test("GET reports whether the key is present without returning it", async () => 
     { env: { GEMINI_API_KEY: SECRET, GEMINI_TTS_MODEL: "gemini-2.5-flash-preview-tts", GEMINI_TTS_VOICE: "Algenib" } },
   );
   assert.equal(present.statusCode, 200);
-  assert.deepEqual(jsonBody(present), {
-    ok: true,
-    configured: true,
-    model: "gemini-2.5-flash-preview-tts",
-    voice: "Algenib",
-  });
+  const presentBody = jsonBody(present);
+  assert.equal(presentBody.ok, true);
+  assert.equal(presentBody.configured, true);
+  assert.equal(presentBody.keyPresent, true);
+  assert.equal(presentBody.keyLength, SECRET.length);
+  assert.equal(presentBody.keyPrefixKind, "other");
+  assert.equal(presentBody.model, "gemini-2.5-flash-preview-tts");
+  assert.equal(presentBody.voice, "Algenib");
+  assert.ok(presentBody.build === null || /^[0-9a-f]{7,64}$/i.test(presentBody.build));
   assert.doesNotMatch(JSON.stringify(present), new RegExp(SECRET));
 
   const absent = await main({ http: { method: "GET" } }, { env: {} });
@@ -482,6 +489,116 @@ test("GET reports whether the key is present without returning it", async () => 
   const body = jsonBody(absent);
   assert.equal(body.ok, true);
   assert.equal(body.configured, false);
+  assert.equal(body.keyPresent, false);
+  assert.equal(body.keyLength, 0);
+  assert.equal(body.keyPrefixKind, "other");
   assert.equal(body.model, "gemini-2.5-flash-preview-tts");
   assert.equal(body.voice, "Charon");
+});
+
+const AQ_KEY = `AQ.${"x".repeat(50)}`;
+
+function withEnvKey(value: string | undefined, run: () => Promise<void>): Promise<void> {
+  const saved = process.env.GEMINI_API_KEY;
+  if (value === undefined) delete process.env.GEMINI_API_KEY;
+  else process.env.GEMINI_API_KEY = value;
+  return run().finally(() => {
+    if (saved === undefined) delete process.env.GEMINI_API_KEY;
+    else process.env.GEMINI_API_KEY = saved;
+  });
+}
+
+test("an AQ. key is configured and sent in x-goog-api-key", async () => {
+  resetVoiceRateLimitForTests();
+  assert.equal(AQ_KEY.length, 53);
+  const health = await main(
+    { http: { method: "GET", headers: { origin: "https://worksmartos.co.uk" } } },
+    { env: { GEMINI_API_KEY: `  ${AQ_KEY}\n` } },
+  );
+  const healthBody = jsonBody(health);
+  assert.equal(healthBody.configured, true);
+  assert.equal(healthBody.keyPresent, true);
+  assert.equal(healthBody.keyLength, 53);
+  assert.equal(healthBody.keyPrefixKind, "AQ.");
+  assert.doesNotMatch(JSON.stringify(health), new RegExp(AQ_KEY));
+
+  const stripped = await main(
+    { http: { method: "GET" } },
+    { env: { GEMINI_API_KEY: "bad\nkey" } },
+  );
+  assert.equal(jsonBody(stripped).configured, true);
+  assert.equal(jsonBody(stripped).keyLength, "badkey".length);
+  assert.doesNotMatch(JSON.stringify(stripped), /\n/);
+
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const spoken = await main(event("POST", "Hello", "203.0.113.90"), {
+    env: { GEMINI_API_KEY: AQ_KEY },
+    fetchImpl: geminiFetcher(calls),
+  });
+  assert.equal(spoken.statusCode, 200);
+  assert.equal(wavHeader(wavBytes(spoken)).sampleRate, 24000);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0]?.url.includes("?"), false);
+  assert.equal(calls[0]?.url.includes(AQ_KEY), false);
+  const headers = calls[0]?.init?.headers as Record<string, string>;
+  assert.equal(headers["x-goog-api-key"], AQ_KEY);
+  assert.equal(headers.Authorization, undefined);
+});
+
+test("GEMINI_API_KEY is read at call time and from action parameters", async () => {
+  resetVoiceRateLimitForTests();
+  await withEnvKey(AQ_KEY, async () => {
+    const fromProcess = await main({ http: { method: "GET" } });
+    const body = jsonBody(fromProcess);
+    assert.equal(body.configured, true);
+    assert.equal(body.keyPrefixKind, "AQ.");
+    assert.equal(body.keyLength, 53);
+    assert.doesNotMatch(JSON.stringify(fromProcess), new RegExp(AQ_KEY));
+  });
+
+  await withEnvKey(undefined, async () => {
+    const fromParam = await main({
+      __ow_method: "get",
+      __ow_params: { GEMINI_API_KEY: AQ_KEY, GEMINI_TTS_VOICE: "Algenib" },
+    });
+    const body = jsonBody(fromParam);
+    assert.equal(body.configured, true);
+    assert.equal(body.keyPresent, true);
+    assert.equal(body.keyLength, 53);
+    assert.equal(body.keyPrefixKind, "AQ.");
+    assert.equal(body.voice, "Algenib");
+    assert.doesNotMatch(JSON.stringify(fromParam), new RegExp(AQ_KEY));
+
+    const calls: Array<{ url: string; init?: RequestInit }> = [];
+    const spoken = await main(
+      {
+        __ow_method: "post",
+        __ow_headers: { "x-forwarded-for": "203.0.113.91" },
+        params: { GEMINI_API_KEY: AQ_KEY },
+        text: "Hello from params",
+      },
+      { fetchImpl: geminiFetcher(calls) },
+    );
+    assert.equal(wavHeader(wavBytes(spoken)).sampleRate, 24000);
+    const headers = calls[0]?.init?.headers as Record<string, string>;
+    assert.equal(headers["x-goog-api-key"], AQ_KEY);
+    assert.equal(calls[0]?.url.includes(AQ_KEY), false);
+  });
+
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    main: typeof main;
+    resetVoiceRateLimitForTests: typeof resetVoiceRateLimitForTests;
+  };
+  deployed.resetVoiceRateLimitForTests();
+  await withEnvKey(undefined, async () => {
+    const bundled = await deployed.main({
+      __ow_method: "get",
+      __ow_params: { GEMINI_API_KEY: AQ_KEY },
+    });
+    const body = jsonBody(bundled);
+    assert.equal(body.configured, true);
+    assert.equal(body.keyPrefixKind, "AQ.");
+    assert.equal(body.keyLength, 53);
+    assert.doesNotMatch(JSON.stringify(bundled), new RegExp(AQ_KEY));
+  });
 });
