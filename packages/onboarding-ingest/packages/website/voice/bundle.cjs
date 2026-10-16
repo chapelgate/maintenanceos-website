@@ -38,16 +38,81 @@ var NAME_RE = /^[A-Za-z0-9][A-Za-z0-9._-]{0,80}$/;
 var GEMINI_HOST = "https://generativelanguage.googleapis.com";
 var rateBuckets = /* @__PURE__ */ new Map();
 var audioCache = /* @__PURE__ */ new Map();
-function response(statusCode, body, origin = "", cacheControl = "no-store") {
+function responseHeaders(origin, contentType, cacheControl) {
   const headers = {
-    "Content-Type": "application/json; charset=utf-8",
+    "Content-Type": contentType,
     "Cache-Control": cacheControl,
     Vary: "Origin",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Accept"
   };
   if (origin) headers["Access-Control-Allow-Origin"] = origin;
-  return { statusCode, headers, body };
+  return headers;
+}
+function jsonResponse(statusCode, payload, origin = "", cacheControl = "no-store") {
+  return {
+    statusCode,
+    headers: responseHeaders(origin, "application/json", cacheControl),
+    body: JSON.stringify(payload)
+  };
+}
+function audioResponse(audioBase64, origin) {
+  return {
+    statusCode: 200,
+    headers: responseHeaders(origin, "audio/wav", "private, max-age=300"),
+    body: audioBase64
+  };
+}
+function fallback(statusCode, error, origin) {
+  return jsonResponse(statusCode, { ok: false, error, fallback: "browser" }, origin);
+}
+function headerString(value) {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map((item) => headerString(item)).filter(Boolean).join(",");
+  return "";
+}
+function headersOf(event) {
+  const headers = event.http?.headers ?? event.__ow_headers;
+  if (!headers || typeof headers !== "object" || Array.isArray(headers)) return {};
+  return headers;
+}
+function firstHeader(headers, name) {
+  const value = headers[name] ?? headers[name.toLowerCase()];
+  const picked = Array.isArray(value) ? value[0] : value;
+  return headerString(picked).replace(/[\r\n]/g, "");
+}
+function clientIp(headers) {
+  const forwarded = headerString(headers["x-forwarded-for"] ?? headers["X-Forwarded-For"]);
+  return forwarded.split(",")[0]?.trim() || "unknown";
+}
+function methodOf(event) {
+  const raw = event.http?.method ?? event.__ow_method;
+  return typeof raw === "string" && raw.trim() ? raw.trim().toUpperCase() : "GET";
+}
+function textFromValue(value, encoded) {
+  if (typeof value === "string") {
+    const source = encoded ? Buffer.from(value, "base64").toString("utf8") : value;
+    if (!source.trim()) return "";
+    try {
+      const parsed = JSON.parse(source);
+      return typeof parsed?.text === "string" ? parsed.text.trim() : "";
+    } catch {
+      return "";
+    }
+  }
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    const text = value.text;
+    return typeof text === "string" ? text.trim() : "";
+  }
+  return "";
+}
+function readText(event) {
+  if (typeof event.text === "string" && event.text.trim()) return event.text.trim();
+  const httpEncoded = Boolean(event.http?.isBase64Encoded || event.isBase64Encoded);
+  const fromHttp = textFromValue(event.http?.body, httpEncoded);
+  if (fromHttp) return fromHttp;
+  return textFromValue(event.__ow_body, Boolean(event.__ow_isBase64Encoded || event.isBase64Encoded));
 }
 function allowRate(key, now) {
   const cutoff = now - RATE_WINDOW_MS;
@@ -63,19 +128,6 @@ function allowRate(key, now) {
 function resetVoiceRateLimitForTests() {
   rateBuckets.clear();
   audioCache.clear();
-}
-function readText(event) {
-  if (typeof event.text === "string") return event.text.trim();
-  const raw = event.http?.body;
-  if (typeof raw === "string" && raw.trim()) {
-    try {
-      const parsed = JSON.parse(raw);
-      if (typeof parsed.text === "string") return parsed.text.trim();
-    } catch {
-      return "";
-    }
-  }
-  return "";
 }
 function safeName(value, fallback2) {
   const name = value?.trim() || fallback2;
@@ -126,17 +178,6 @@ function cachedAudio(key, now) {
   }
   return hit.audioBase64;
 }
-function audioResponse(audioBase64, origin) {
-  return response(
-    200,
-    { ok: true, contentType: "audio/wav", audioBase64 },
-    origin,
-    "private, max-age=300"
-  );
-}
-function fallback(statusCode, error, origin) {
-  return response(statusCode, { ok: false, error, fallback: "browser" }, origin);
-}
 function pcmFromGemini(payload) {
   if (!payload || typeof payload !== "object") return null;
   const candidates = payload.candidates;
@@ -163,12 +204,18 @@ function wavFromPcm(pcm, mime) {
   const sampleRate = Number.isInteger(rate) && rate >= 8e3 && rate <= 48e3 ? rate : PCM_RATE;
   return pcm16ToWav(pcm, sampleRate);
 }
-async function main(event = {}, options = {}) {
-  const method = event.http?.method?.toUpperCase() ?? "GET";
-  const headers = event.http?.headers ?? {};
-  const origin = headers.origin ?? headers.Origin ?? "";
-  const clientIp = (headers["x-forwarded-for"] ?? headers["X-Forwarded-For"] ?? "unknown").split(",")[0]?.trim() || "unknown";
-  if (method === "OPTIONS") return response(204, "", origin);
+async function handleVoice(event, options) {
+  const method = methodOf(event);
+  const headers = headersOf(event);
+  const origin = firstHeader(headers, "origin");
+  const ip = clientIp(headers);
+  if (method === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: responseHeaders(origin, "text/plain", "no-store"),
+      body: ""
+    };
+  }
   if (method !== "POST") return fallback(405, "method_not_allowed", origin);
   const env = options.env ?? process.env;
   const apiKey = safeKey(env.GEMINI_API_KEY);
@@ -180,14 +227,17 @@ async function main(event = {}, options = {}) {
   if (!text) return fallback(400, "text_required", origin);
   if (text.length > MAX_TEXT) return fallback(400, "text_too_long", origin);
   const now = options.now ?? Date.now();
-  if (!allowRate(`ip:${clientIp}`, now)) return fallback(429, "rate_limited", origin);
+  if (!allowRate(`ip:${ip}`, now)) return fallback(429, "rate_limited", origin);
   const cacheKey = `${model}
 ${voice}
 ${text}`;
   const hit = cachedAudio(cacheKey, now);
   if (hit) return audioResponse(hit, origin);
   const endpoint = `${GEMINI_HOST}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
-  const fetchImpl = options.fetchImpl ?? fetch;
+  const fetchImpl = options.fetchImpl ?? globalThis.fetch;
+  if (typeof fetchImpl !== "function") return fallback(502, "voice_unavailable", origin);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
   try {
     const upstream = await fetchImpl(endpoint, {
       method: "POST",
@@ -207,7 +257,7 @@ ${text}`;
           }
         }
       }),
-      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
+      signal: controller.signal
     });
     if (upstream.status === 429) return fallback(429, "voice_rate_limited", origin);
     if (!upstream.ok) return fallback(502, "voice_unavailable", origin);
@@ -226,6 +276,15 @@ ${text}`;
   } catch (error) {
     const timedOut = error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError" || /timeout/i.test(error.message));
     return fallback(timedOut ? 504 : 502, timedOut ? "timeout" : "voice_unavailable", origin);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+async function main(event = {}, options = {}) {
+  try {
+    return await handleVoice(event, options);
+  } catch {
+    return jsonResponse(502, { ok: false, error: "voice_handler_error", fallback: "browser" });
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
