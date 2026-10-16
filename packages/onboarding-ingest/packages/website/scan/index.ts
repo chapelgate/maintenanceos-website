@@ -18,7 +18,7 @@ const UPSTREAM_TIMEOUT_MS = 25_000;
 const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
   "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 
-/** Use a real http(s) override. An empty or unsubstituted ${VAR} keeps the droplet address. */
+/** Use a real http(s) override. An empty or unsubstituted value keeps the droplet address. */
 function scannerRuntimeUrl(): string {
   const configured = process.env.SCANNER_V2_RUNTIME_URL?.trim() ?? "";
   try {
