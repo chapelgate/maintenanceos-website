@@ -364,7 +364,7 @@ test("persistent runtime resumes the same crawl identity from disk", async () =>
       };
     };
 
-    const firstTimes = [0, 500, 2_000];
+    const firstTimes = [0, 500, 500, 2_000];
     const first = await runPersistentScannerV2("https://acme.example/", {
       stateRoot: root,
       releaseSha: "release-a",
@@ -664,6 +664,100 @@ test("an empty 403 from the host is blocked_by_site and still a completed scan",
     assert.ok(result.warnings.includes("http_403"));
     assert.ok(result.warnings.includes("blocked_by_site"));
     assert.equal("error" in result, false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("an 18s budget persists a partial crawl instead of running on", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-budget-"));
+  const seen: string[] = [];
+  try {
+    let clock = 1_000;
+    const discover = async (rawUrl: string) => {
+      const origin = new URL(rawUrl).origin;
+      const urls: CrawlUrlDisposition[] = ["/", "/contact", "/services", "/about", "/team"].map((path) => ({
+        url: origin + path,
+        status: "queued" as const,
+        discoveryReason: "sitemap" as const,
+      }));
+      return {
+        manifest: {
+          crawlId: "seed",
+          origin,
+          state: "PARTIAL" as const,
+          discovered: urls.length,
+          queued: urls.length,
+          fetched: 0,
+          duplicate: 0,
+          policySkipped: 0,
+          robotsSkipped: 0,
+          unresolved: 0,
+          urls,
+        },
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: [],
+        limitReached: false,
+        incomplete: true,
+      };
+    };
+    const first = await runPersistentScannerV2("https://croft.example/", {
+      stateRoot: root,
+      releaseSha: "budget",
+      requestMs: 18_000,
+      batchSize: 8,
+      now: () => clock,
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => {
+        seen.push(url.url);
+        clock += 20_000;
+        return {
+          disposition: "fetched" as const,
+          canonicalUrl: url.url,
+          page: page(url.url, `Page ${url.url} with a phone 0151 496 0000`),
+          chunks: [],
+        };
+      }) as never,
+    });
+    assert.equal(first.ok, true);
+    if (!first.ok) return;
+    assert.equal(seen.length, 1);
+    assert.equal(first.scannerV2?.state, "CRAWLING");
+    assert.equal(first.scannerV2?.fetched, 1);
+    assert.ok(first.warnings.includes("time_budget"));
+    assert.equal(first.draft.businessName, "Acme Gates");
+    const crawlId = first.scannerV2?.crawlId;
+    assert.equal(typeof crawlId, "string");
+
+    clock = 1_000;
+    const second = await runPersistentScannerV2("https://croft.example/contact", {
+      stateRoot: root,
+      releaseSha: "budget",
+      requestMs: 18_000,
+      batchSize: 8,
+      now: () => clock,
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => {
+        seen.push(url.url);
+        return {
+          disposition: "fetched" as const,
+          canonicalUrl: url.url,
+          page: page(url.url, `Resumed ${url.url}`),
+          chunks: [],
+        };
+      }) as never,
+    });
+    assert.equal(second.ok, true);
+    if (!second.ok) return;
+    assert.equal(second.scannerV2?.crawlId, crawlId);
+    assert.equal(second.scannerV2?.resumed, true);
+    assert.ok((second.scannerV2?.fetched ?? 0) > 1);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

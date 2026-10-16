@@ -316,3 +316,50 @@ test("upstream 404 is JSON upstream_not_found", async () => {
     else process.env.SCANNER_V2_RUNTIME_URL = saved;
   }
 });
+
+test("a lost upstream scan is HTTP 200 CRAWLING and never 5xx", async () => {
+  const fetcher = (async () => {
+    const error = new Error("The operation was aborted due to timeout");
+    error.name = "TimeoutError";
+    throw error;
+  }) as typeof fetch;
+  const first = await proxyPersistentScan("https://croftautomotive.co.uk/contact", fetcher);
+  const second = await proxyPersistentScan("https://croftautomotive.co.uk/", fetcher);
+  assert.equal(first.statusCode, 200);
+  assert.ok(first.statusCode < 500);
+  const body = first.body as {
+    ok?: boolean;
+    warnings?: string[];
+    scannerV2?: { state?: string; crawlId?: string; fetched?: number };
+  };
+  assert.equal(body.ok, true);
+  assert.equal(body.scannerV2?.state, "CRAWLING");
+  assert.equal(body.scannerV2?.fetched, 0);
+  assert.deepEqual(body.warnings, ["scan_gateway_retry"]);
+  assert.equal(body.scannerV2?.crawlId, (second.body as { scannerV2?: { crawlId?: string } }).scannerV2?.crawlId);
+  assert.match(body.scannerV2?.crawlId ?? "", /^scanner-v2:gateway:[0-9a-f]{64}$/);
+
+  const unavailable = await proxyPersistentScan(
+    "https://phrsolicitors.co.uk/",
+    (async () => {
+      throw new Error("connect ECONNREFUSED");
+    }) as typeof fetch,
+  );
+  assert.equal(unavailable.statusCode, 200);
+  const upstreamError = await proxyPersistentScan(
+    "https://phrsolicitors.co.uk/",
+    (async () => new Response("bad gateway", { status: 502 })) as typeof fetch,
+  );
+  assert.equal(upstreamError.statusCode, 200);
+  assert.equal((upstreamError.body as { scannerV2?: { state?: string } }).scannerV2?.state, "CRAWLING");
+
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    proxyPersistentScan: typeof proxyPersistentScan;
+  };
+  const bundled = await deployed.proxyPersistentScan("https://croftautomotive.co.uk/", fetcher);
+  assert.equal(bundled.statusCode, 200);
+  assert.equal(
+    (bundled.body as { scannerV2?: { crawlId?: string } }).scannerV2?.crawlId,
+    body.scannerV2?.crawlId,
+  );
+});

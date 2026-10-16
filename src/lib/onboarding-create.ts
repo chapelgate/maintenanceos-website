@@ -562,7 +562,7 @@ export const BLOCKED_BY_SITE_HOST_LINE =
   `If you look after this website, ask the host to allow HTTPS GET requests from the WorkSmartOS scanner at ${SCANNER_PUBLIC_ADDRESS}. The scanner identifies itself as WorkSmartOS-OnboardingScan and does not sign in.`;
 
 /** Extra POSTs after the first response, while the crawl is still in progress. */
-export const SCAN_AUTO_CONTINUE_LIMIT = 4;
+export const SCAN_AUTO_CONTINUE_LIMIT = 8;
 
 export const LARGE_SITE_DISCOVERED_MIN = 40;
 
@@ -572,7 +572,7 @@ export function shouldAutoContinueScan(
   continues: number,
 ): boolean {
   if (!summary || continues >= SCAN_AUTO_CONTINUE_LIMIT) return false;
-  if (summary.warnings.includes("scan_gateway_retry")) return true;
+  if (summary.warnings.includes("scan_gateway_retry") || summary.warnings.includes("time_budget")) return true;
   return summary.state === "CRAWLING" && summary.fetched > 0;
 }
 
