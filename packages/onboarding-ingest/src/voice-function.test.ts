@@ -34,6 +34,8 @@ function jsonBody(result: VoiceResult) {
     model?: string;
     voice?: string;
     build?: string | null;
+    envNames?: string[];
+    envCount?: number;
   };
 }
 
@@ -329,6 +331,12 @@ test("deployed voice artifact is prebuilt and matches the unconfigured fallback"
   assert.doesNotMatch(bundled, /AbortSignal\.timeout/);
   assert.match(project, /name:\s*website/);
   assert.match(project, /runtime:\s*nodejs:22/);
+  assert.match(project, /name:\s*website[\s\S]*environment:[\s\S]*GEMINI_API_KEY:\s*"\$\{GEMINI_API_KEY\}"/);
+  assert.match(project, /GEMINI_TTS_MODEL:\s*"\$\{GEMINI_TTS_MODEL\}"/);
+  assert.match(project, /GEMINI_TTS_VOICE:\s*"\$\{GEMINI_TTS_VOICE\}"/);
+  assert.match(project, /SCANNER_V2_RUNTIME_URL:\s*"\$\{SCANNER_V2_RUNTIME_URL\}"/);
+  assert.match(bundled, /envNames/);
+  assert.match(bundled, /envCount/);
 });
 
 function geminiFetcher(calls: Array<{ url: string; init?: RequestInit }>) {
@@ -601,4 +609,48 @@ test("GEMINI_API_KEY is read at call time and from action parameters", async () 
     assert.equal(body.keyLength, 53);
     assert.doesNotMatch(JSON.stringify(bundled), new RegExp(AQ_KEY));
   });
+});
+
+test("GET lists matching env names and never their values", async () => {
+  const secret = `AQ.${"z".repeat(50)}`;
+  const visible = [
+    "GEMINI_DIAGNOSTIC_MARKER",
+    "ONBOARDING_DIAGNOSTIC_MARKER",
+    "SCAN_DIAGNOSTIC_MARKER",
+    "COMMIT_DIAGNOSTIC_MARKER",
+    "GIT_DIAGNOSTIC_MARKER",
+    "SOURCE_DIAGNOSTIC_MARKER",
+    "__OW_DIAGNOSTIC_MARKER",
+    "DO_DIAGNOSTIC_MARKER",
+  ];
+  const hidden = "SCANNER_DIAGNOSTIC_MARKER";
+  const saved = new Map<string, string | undefined>();
+  for (const name of [...visible, hidden]) {
+    saved.set(name, process.env[name]);
+    process.env[name] = secret;
+  }
+  try {
+    const result = await main({ http: { method: "GET" } }, { env: {} });
+    const body = jsonBody(result);
+    assert.ok(Array.isArray(body.envNames));
+    const names = body.envNames ?? [];
+    for (const name of visible) assert.ok(names.includes(name), name);
+    assert.equal(names.includes(hidden), false);
+    assert.equal(names.includes("PATH"), false);
+    assert.deepEqual(names, [...names].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)));
+    assert.equal(body.envCount, Object.keys(process.env).length);
+    assert.doesNotMatch(JSON.stringify(result), new RegExp(secret));
+
+    const deployed = require(path.join(functionDir, "bundle.cjs")) as { main: typeof main };
+    const bundled = await deployed.main({ http: { method: "GET" } }, { env: {} });
+    const bundledBody = jsonBody(bundled);
+    assert.deepEqual(bundledBody.envNames, names);
+    assert.equal(bundledBody.envCount, body.envCount);
+    assert.doesNotMatch(JSON.stringify(bundled), new RegExp(secret));
+  } finally {
+    for (const [name, value] of saved) {
+      if (value === undefined) delete process.env[name];
+      else process.env[name] = value;
+    }
+  }
 });

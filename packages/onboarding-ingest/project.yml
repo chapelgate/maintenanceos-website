@@ -1,5 +1,15 @@
 packages:
   - name: website
+    # DigitalOcean Functions only pass variables this file declares.
+    # "${VAR}" is substituted at build from the component env, so the
+    # values must be RUN_AND_BUILD_TIME. Quotes are required.
+    # Droplet-only vars (ONBOARDING_WEB_INGEST, PORT, SCANNER_V2_STATE_ROOT)
+    # stay on the droplet process and are not declared here.
+    environment:
+      GEMINI_API_KEY: "${GEMINI_API_KEY}"
+      GEMINI_TTS_MODEL: "${GEMINI_TTS_MODEL}"
+      GEMINI_TTS_VOICE: "${GEMINI_TTS_VOICE}"
+      SCANNER_V2_RUNTIME_URL: "${SCANNER_V2_RUNTIME_URL}"
     functions:
       - name: scan
         runtime: nodejs:22

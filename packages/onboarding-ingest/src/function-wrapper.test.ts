@@ -141,6 +141,7 @@ test("deployed Functions artifact is prebuilt-only and loadable", async () => {
     "utf8",
   );
   assert.match(project, /main:\s*main/);
+  assert.match(project, /name:\s*website[\s\S]*environment:[\s\S]*SCANNER_V2_RUNTIME_URL:\s*"\$\{SCANNER_V2_RUNTIME_URL\}"/);
 
   const deployed = require(path.join(functionDir, "bundle.cjs")) as {
     main: typeof main;
@@ -209,5 +210,45 @@ test("deployed scan bundle upgrades http and forwards the crawl id", async () =>
     });
   } finally {
     globalThis.fetch = original;
+  }
+});
+
+const DROPLET_SCAN_URL = "https://178-128-171-45.sslip.io/v1/onboarding/scan";
+
+test("an empty or unsubstituted scanner URL keeps the droplet address", async () => {
+  const saved = process.env.SCANNER_V2_RUNTIME_URL;
+  const calls: string[] = [];
+  const fetcher = (async (input: string | URL | Request) => {
+    calls.push(String(input));
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  }) as typeof fetch;
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    proxyPersistentScan: typeof proxyPersistentScan;
+  };
+  try {
+    for (const value of [undefined, "", "${SCANNER_V2_RUNTIME_URL}", "not a url"]) {
+      if (value === undefined) delete process.env.SCANNER_V2_RUNTIME_URL;
+      else process.env.SCANNER_V2_RUNTIME_URL = value;
+      calls.length = 0;
+      await proxyPersistentScan("https://example.com/", fetcher);
+      assert.equal(calls[0], DROPLET_SCAN_URL, String(value));
+      calls.length = 0;
+      await deployed.proxyPersistentScan("https://example.com/", fetcher);
+      assert.equal(calls[0], DROPLET_SCAN_URL, `bundle ${String(value)}`);
+    }
+
+    process.env.SCANNER_V2_RUNTIME_URL = "https://scanner.example/v1/onboarding/scan";
+    calls.length = 0;
+    await proxyPersistentScan("https://example.com/", fetcher);
+    assert.equal(calls[0], "https://scanner.example/v1/onboarding/scan");
+    calls.length = 0;
+    await deployed.proxyPersistentScan("https://example.com/", fetcher);
+    assert.equal(calls[0], "https://scanner.example/v1/onboarding/scan");
+  } finally {
+    if (saved === undefined) delete process.env.SCANNER_V2_RUNTIME_URL;
+    else process.env.SCANNER_V2_RUNTIME_URL = saved;
   }
 });

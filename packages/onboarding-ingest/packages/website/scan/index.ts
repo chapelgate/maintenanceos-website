@@ -17,6 +17,18 @@ const HOST_RATE_MAX = 6;
 const UPSTREAM_TIMEOUT_MS = 25_000;
 const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
   "https://178-128-171-45.sslip.io/v1/onboarding/scan";
+
+/** Use a real http(s) override. An empty or unsubstituted ${VAR} keeps the droplet address. */
+function scannerRuntimeUrl(): string {
+  const configured = process.env.SCANNER_V2_RUNTIME_URL?.trim() ?? "";
+  try {
+    const url = new URL(configured);
+    if (url.protocol === "https:" || url.protocol === "http:") return url.toString();
+  } catch {
+    // unset, or the project.yml placeholder was not substituted
+  }
+  return DEFAULT_PERSISTENT_SCANNER_ENDPOINT;
+}
 const rateBuckets = new Map<string, number[]>();
 
 function pruneRateBuckets(now: number): void {
@@ -67,9 +79,7 @@ function response(
 export async function proxyPersistentScan(
   url: string,
   fetcher: typeof fetch = fetch,
-  endpoint =
-    process.env.SCANNER_V2_RUNTIME_URL?.trim() ||
-    DEFAULT_PERSISTENT_SCANNER_ENDPOINT,
+  endpoint = scannerRuntimeUrl(),
   crawlId = "",
 ): Promise<{ statusCode: number; body: unknown }> {
   try {
