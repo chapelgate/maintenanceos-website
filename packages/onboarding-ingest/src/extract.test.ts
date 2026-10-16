@@ -615,7 +615,9 @@ test("crawl priority fetches home and contact before posts", () => {
   assert.equal(crawlUrlPriority("https://trade.example/faq"), 60);
   assert.equal(crawlUrlPriority("https://trade.example/opening-hours"), 55);
   assert.ok(crawlUrlPriority("https://trade.example/2024/boiler-tips") < 50);
-  assert.ok(crawlUrlPriority("https://service.example/departments/contact") < 50);
+  assert.equal(crawlUrlPriority("https://service.example/departments/contact"), 90);
+  assert.equal(crawlUrlPriority("https://trade.example/services/boiler-repair"), 70);
+  assert.equal(crawlUrlPriority("https://trade.example/faq/call-out"), 60);
   const ranked = [
     "https://trade.example/2024/boiler-tips",
     "https://trade.example/contact",

@@ -6,7 +6,7 @@ import {
   parseRobotsSitemaps,
   parseSitemapXml,
 } from "./scanner-v2-discovery.ts";
-import type { HttpGetFn, LookupFn, SafeHttpResponse } from "./types.ts";
+import { ScanError, type HttpGetFn, type LookupFn, type SafeHttpResponse } from "./types.ts";
 
 function response(
   url: string,
@@ -625,6 +625,75 @@ test("URL safety ceiling is explicit and reports dropped frontier candidates", a
   assert.equal(result.manifest.discovered, 5);
   assert.ok(result.urlsDroppedByLimit > 0);
   assert.ok(result.warnings.includes("discovered_url_limit"));
+});
+
+test("a key page replaces a low-priority URL once the discovery cap is full", async () => {
+  const pages = Array.from(
+    { length: 20 },
+    (_, index) => "https://acme.example/service-" + (index + 1),
+  );
+  pages.push("https://acme.example/contact");
+  const map: Record<string, SafeHttpResponse> = {
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "Sitemap: https://acme.example/sitemap.xml",
+      "text/plain",
+    ),
+    "https://acme.example/sitemap.xml": response(
+      "https://acme.example/sitemap.xml",
+      urlset(pages),
+    ),
+    "https://acme.example/": html("https://acme.example/"),
+  };
+  for (const url of pages) map[url] = html(url);
+
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxDiscoveredUrls: 5,
+    maxHtmlPages: 1,
+    ...fixtures(map),
+  });
+
+  assert.equal(result.manifest.discovered, 5);
+  assert.ok(result.manifest.urls.some((row) => row.url === "https://acme.example/contact"));
+});
+
+test("an oversized page is skipped without failing the rest of discovery", async () => {
+  const map: Record<string, SafeHttpResponse> = {
+    "https://acme.example/robots.txt": response(
+      "https://acme.example/robots.txt",
+      "Sitemap: https://acme.example/sitemap.xml",
+      "text/plain",
+    ),
+    "https://acme.example/sitemap.xml": response(
+      "https://acme.example/sitemap.xml",
+      urlset(["https://acme.example/contact"]),
+    ),
+    "https://acme.example/contact": html("https://acme.example/contact"),
+  };
+  const base = fixtures(map);
+  const result = await discoverScannerV2Frontier("https://acme.example/", {
+    maxHtmlPages: 1,
+    lookup: base.lookup,
+    get: async (url, ip, opts) => {
+      if (url.toString() === "https://acme.example/") {
+        throw new ScanError(
+          "response_too_large",
+          "The decompressed response exceeded the allowed size.",
+          422,
+        );
+      }
+      return base.get(url, ip, opts);
+    },
+  });
+
+  const home = result.manifest.urls.find((row) => row.url === "https://acme.example/");
+  assert.equal(home?.status, "policy_skipped");
+  assert.equal(home?.reason, "response_too_large");
+  assert.equal(
+    result.manifest.urls.find((row) => row.url === "https://acme.example/contact")?.status,
+    "queued",
+  );
+  assert.equal(result.warnings.includes("response_too_large"), false);
 });
 
 test("HTML-page safety ceiling leaves queued evidence and returns PARTIAL", async () => {

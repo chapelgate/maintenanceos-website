@@ -3,7 +3,7 @@ import {
   DEFAULT_PAGE_TIMEOUT_MS,
   fetchPublicHttps,
 } from "./fetch-safe.ts";
-import { extractSameOriginHrefs } from "./extract.ts";
+import { crawlUrlPriority, extractSameOriginHrefs } from "./extract.ts";
 import { allowPublicHttpsUrl, sameRegistrableSite } from "./ssrf.ts";
 import {
   buildCrawlManifest,
@@ -106,6 +106,8 @@ export type ScannerV2DiscoveryOptions = {
   readerFallback?: boolean;
   readerLookup?: LookupFn;
   readerGet?: HttpGetFn;
+  /** Aborts sockets that are still receiving bytes after the request deadline. */
+  signal?: AbortSignal;
   /** Wall-clock stop. New fetches are not started once this epoch ms is reached. */
   deadlineAt?: number;
 };
@@ -269,9 +271,15 @@ class UrlAccumulator {
   add(row: CrawlUrlDisposition): boolean {
     if (this.rows.has(row.url)) return false;
     if (this.rows.size >= this.maxUrls) {
+      const incoming = crawlUrlPriority(row.url);
+      const victim = [...this.rows.values()]
+        .filter((existing) => existing.status === "queued")
+        .sort((a, b) => crawlUrlPriority(a.url) - crawlUrlPriority(b.url) || a.url.localeCompare(b.url))
+        .find((existing) => incoming >= 50 && incoming > crawlUrlPriority(existing.url));
       this.limitReached = true;
       this.droppedByLimit += 1;
-      return false;
+      if (!victim) return false;
+      this.rows.delete(victim.url);
     }
     this.rows.set(row.url, structuredClone(row));
     return true;
@@ -313,6 +321,7 @@ async function fetchRobotsForDiscovery(
     const response = await fetchPublicHttps(url.toString(), {
       lookup: options.lookup,
       get: options.get,
+      signal: options.signal,
       timeoutMs: Math.min(
         options.sitemapTimeoutMs ?? DEFAULT_SITEMAP_TIMEOUT_MS,
         DEFAULT_PAGE_TIMEOUT_MS,
@@ -647,6 +656,7 @@ export async function discoverScannerV2Frontier(
       response = await fetchPublicHttps(normalizedSitemap, {
         lookup: options.lookup,
         get: options.get,
+        signal: options.signal,
         timeoutMs: budgetTimeout(sitemapTimeoutMs),
         maxBytes: maxSitemapBytes,
         maxDecompressedBytes: maxSitemapBytes,
@@ -807,19 +817,26 @@ export async function discoverScannerV2Frontier(
       response = await fetchPublicHttps(pageUrl, {
         lookup: options.lookup,
         get: options.get,
+        signal: options.signal,
         timeoutMs: budgetTimeout(htmlTimeoutMs),
         maxBytes: maxHtmlBytes,
         maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
     } catch (error) {
       let recovered = false;
-      if (readerFallbackEnabled && readerPagesUsed < MAX_READER_PAGES) {
+      const directReason = error instanceof ScanError ? error.code : "fetch_failed";
+      if (
+        directReason !== "response_too_large" &&
+        readerFallbackEnabled &&
+        readerPagesUsed < MAX_READER_PAGES
+      ) {
         const readerUrl = `${READER_FALLBACK_ORIGIN}/${pageUrl}`;
         try {
           for (let attempt = 0; attempt < 2; attempt += 1) {
             const reader = await fetchPublicHttps(readerUrl, {
               lookup: options.readerLookup,
               get: options.readerGet,
+              signal: options.signal,
               timeoutMs: budgetTimeout(READER_FALLBACK_TIMEOUT_MS),
               maxBytes: Math.min(
                 READER_FALLBACK_MAX_BYTES,
@@ -858,14 +875,13 @@ export async function discoverScannerV2Frontier(
       }
 
       if (!recovered || !response) {
+        const reason = error instanceof ScanError ? error.code : "fetch_failed";
+        const oversized = reason === "response_too_large";
         urls.update(pageUrl, {
-          status: "unresolved",
-          reason:
-            error instanceof ScanError
-              ? error.code
-              : "fetch_failed",
+          status: oversized ? "policy_skipped" : "unresolved",
+          reason,
         });
-        discoveryIncomplete = true;
+        if (!oversized) discoveryIncomplete = true;
         continue;
       }
     }

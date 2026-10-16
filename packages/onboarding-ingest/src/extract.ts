@@ -1354,7 +1354,7 @@ function isPublicContactEmail(
   return fromContactSurface && isSiteContactUrl(pageUrl);
 }
 
-/** Higher scores are fetched first. Shallow site pages outrank posts and department URLs. */
+/** Higher scores are fetched first. Home, contact, about, services, FAQ, and hours outrank posts. */
 export function crawlUrlPriority(raw: string): number {
   let url: URL;
   try {
@@ -1363,20 +1363,28 @@ export function crawlUrlPriority(raw: string): number {
     return 0;
   }
   const segments = url.pathname.split("/").filter(Boolean);
-  const last = segments[segments.length - 1] ?? "";
   if (segments.length === 0) return 100;
-  if (segments.length !== 1) return 10;
-  if (/^(contact|contact-us|get-in-touch|find-us)$/i.test(last)) return 90;
-  if (/^(about|about-us|our-story)$/i.test(last)) return 80;
-  if (/^(services|our-services|what-we-do|what-we-offer|treatments|prices|price-list|pricelist)$/i.test(last)) return 70;
-  if (/^(faq|faqs|frequently-asked-questions)$/i.test(last)) return 60;
-  if (/^(hours|opening-hours|openinghours|times|opening-times)$/i.test(last)) return 55;
+  const joined = segments.join("/");
+  if (/(?:^|\/)(?:contact|contact-us|get-in-touch|find-us)(?:\/|$)/i.test(joined)) return 90;
+  if (/(?:^|\/)(?:about|about-us|our-story)(?:\/|$)/i.test(joined)) return 80;
+  if (/(?:^|\/)(?:services|our-services|what-we-do|what-we-offer|treatments|prices|price-list|pricelist)(?:\/|$)/i.test(joined)) return 70;
+  if (/(?:^|\/)(?:faq|faqs|frequently-asked-questions)(?:\/|$)/i.test(joined)) return 60;
+  if (/(?:^|\/)(?:hours|opening-hours|openinghours|times|opening-times)(?:\/|$)/i.test(joined)) return 55;
+  if (segments.length === 1) return 20;
   return 10;
 }
 
 export function isSiteContactUrl(raw: string): boolean {
-  const priority = crawlUrlPriority(raw);
-  return priority === 100 || priority === 90 || priority === 50;
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return false;
+  }
+  const segments = url.pathname.split("/").filter(Boolean);
+  if (segments.length === 0) return true;
+  if (segments.length !== 1) return false;
+  return /^(?:contact|contact-us|get-in-touch|find-us)$/i.test(segments[0] ?? "");
 }
 
 function factPageUrl(url: string, fallback: string): string {

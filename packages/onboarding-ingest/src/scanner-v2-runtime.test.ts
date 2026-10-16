@@ -841,6 +841,10 @@ test("document parse failures are skipped instead of retried", () => {
     documentCrawlDisposition({ ok: false, incomplete: false, reason: "cross_origin_redirect" }).disposition,
     "policy_skipped",
   );
+  assert.equal(
+    documentCrawlDisposition({ ok: false, incomplete: true, reason: "response_too_large" }).disposition,
+    "policy_skipped",
+  );
 });
 
 test("a hung page returns the persisted partial within the request budget", async () => {

@@ -180,6 +180,8 @@ export type HttpGetFn = (
     acceptCompressed?: boolean;
     /** Hard ceiling after decompression when acceptCompressed is true. */
     maxDecompressedBytes?: number;
+    /** Aborts the socket even when bytes are still arriving. */
+    signal?: AbortSignal;
   },
 ) => Promise<SafeHttpResponse>;
 
