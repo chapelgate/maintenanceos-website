@@ -1,6 +1,7 @@
 import {
   acceptableFaqAnswer,
   chooseOpeningHours,
+  cleanFaqAnswer,
   chooseProminentEmail,
   chooseProminentPhones,
   chooseProminentValue,
@@ -367,11 +368,12 @@ function aggregateFacts(
           faq &&
           typeof faq.question === "string" &&
           typeof faq.answer === "string" &&
+          faq.question.includes("?") &&
           acceptableFaqAnswer(faq.answer)
         ) {
           faqs.push({
             question: sanitizeUntrustedField(faq.question, 200),
-            answer: sanitizeUntrustedField(faq.answer, 2000),
+            answer: cleanFaqAnswer(faq.answer),
           });
         }
       }
@@ -394,9 +396,9 @@ function aggregateFacts(
     pageUrls,
   );
   const hourPick = chooseOpeningHours(hourHits, pageUrls);
-  const uniqueServices = unique(services.map((item) => sanitizeUntrustedField(item, 80))).filter(
-    (item) => isServicePhrase(item),
-  );
+  const uniqueServices = unique(services.map((item) => sanitizeUntrustedField(item, 80)))
+    .filter((item) => isServicePhrase(item))
+    .slice(0, 12);
   const uniqueFaqs = [
     ...new Map(
       faqs.map((faq) => [
