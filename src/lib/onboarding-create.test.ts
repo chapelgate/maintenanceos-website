@@ -51,6 +51,8 @@ test("normalisePublicUrl accepts public https and rejects junk", () => {
   );
   assert.equal(normalisePublicUrl("https://172.15.0.1/"), "https://172.15.0.1/");
   assert.equal(normalisePublicUrl("https://172.32.0.1/"), "https://172.32.0.1/");
+  assert.equal(normalisePublicUrl("http://www.dualds.co.uk/"), "https://www.dualds.co.uk/");
+  assert.equal(normalisePublicUrl("http://example.com/contact"), "https://example.com/contact");
   assert.equal(normalisePublicUrl("localhost"), null);
   assert.equal(normalisePublicUrl("not a url"), null);
   assert.equal(normalisePublicUrl(""), null);
@@ -58,8 +60,6 @@ test("normalisePublicUrl accepts public https and rejects junk", () => {
 
 test("unsafe website URLs are refused before a public https URL is accepted", () => {
   const refused = [
-    "http://example.com",
-    "http://example.com/contact",
     "https://10.1.2.3/",
     "http://10.0.0.1",
     "https://192.168.1.20/admin",
@@ -76,6 +76,7 @@ test("unsafe website URLs are refused before a public https URL is accepted", ()
     assert.equal(unsafePublicUrlMessage(value), UNSAFE_WEBSITE_URL_MESSAGE, value);
   }
   assert.equal(unsafePublicUrlMessage("https://example.com"), null);
+  assert.equal(unsafePublicUrlMessage("http://www.dualds.co.uk/"), null);
   assert.equal(unsafePublicUrlMessage("not a url"), null);
   assert.match(UNSAFE_WEBSITE_URL_MESSAGE, /https:\/\//);
   assert.match(UNSAFE_WEBSITE_URL_MESSAGE, /localhost/);

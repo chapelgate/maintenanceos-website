@@ -93,7 +93,7 @@ export function createJourneyStepAnnouncement(step: CreateJourneyStep): string {
 }
 
 export const UNSAFE_WEBSITE_URL_MESSAGE =
-  "Enter a public https:// website. http://, localhost, and private network addresses (10.*, 172.16–31.*, 192.168.*, and 127.*) are not accepted.";
+  "Enter a public website. An http:// address is scanned as https://. localhost and private network addresses (10.*, 172.16–31.*, 192.168.*, and 127.*) are not accepted.";
 
 function isPrivateOrLoopbackHost(hostname: string): boolean {
   const host = hostname.replace(/\.$/, "").toLowerCase();
@@ -109,7 +109,21 @@ function isPrivateOrLoopbackHost(hostname: string): boolean {
   return false;
 }
 
-/** Specific refusal for http, localhost, and private IPv4. Other junk returns null. */
+function asPublicHttpsUrl(raw: string): URL | null {
+  const withProtocol = /^[a-z][a-z0-9+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`;
+  const parsed = new URL(withProtocol);
+  const url =
+    parsed.protocol === "http:"
+      ? new URL(`https://${parsed.host}${parsed.pathname}${parsed.search}${parsed.hash}`)
+      : parsed;
+  if (url.protocol !== "https:") return null;
+  if (url.username || url.password) return null;
+  if (!url.hostname.includes(".")) return null;
+  if (isPrivateOrLoopbackHost(url.hostname)) return null;
+  return url;
+}
+
+/** Specific refusal for localhost and private IPv4. Public http:// is upgraded, not refused. */
 export function unsafePublicUrlMessage(raw: string): string | null {
   const trimmed = raw.trim();
   if (!trimmed) return null;
@@ -117,10 +131,13 @@ export function unsafePublicUrlMessage(raw: string): string | null {
     const withProtocol = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)
       ? trimmed
       : `https://${trimmed}`;
-    const url = new URL(withProtocol);
-    if (url.protocol === "http:" || isPrivateOrLoopbackHost(url.hostname)) {
-      return UNSAFE_WEBSITE_URL_MESSAGE;
-    }
+    const parsed = new URL(withProtocol);
+    const host =
+      parsed.protocol === "http:"
+        ? new URL(`https://${parsed.host}${parsed.pathname}${parsed.search}${parsed.hash}`).hostname
+        : parsed.hostname;
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
+    if (isPrivateOrLoopbackHost(host)) return UNSAFE_WEBSITE_URL_MESSAGE;
   } catch {
     return null;
   }
@@ -131,14 +148,7 @@ export function normalisePublicUrl(raw: string): string | null {
   const trimmed = raw.trim();
   if (!trimmed || unsafePublicUrlMessage(trimmed)) return null;
   try {
-    const withProtocol = /^https?:\/\//i.test(trimmed)
-      ? trimmed
-      : `https://${trimmed}`;
-    const u = new URL(withProtocol);
-    if (u.protocol !== "https:") return null;
-    if (!u.hostname.includes(".")) return null;
-    if (isPrivateOrLoopbackHost(u.hostname)) return null;
-    return u.toString();
+    return asPublicHttpsUrl(trimmed)?.toString() ?? null;
   } catch {
     return null;
   }

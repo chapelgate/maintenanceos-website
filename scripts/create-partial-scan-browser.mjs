@@ -156,6 +156,18 @@ try {
 
     await page.goto(`${origin}/create/`);
     await page.locator("[data-create-hydrated='true']").waitFor();
+    await page.locator("input[name='businessUrl']").fill("http://127.0.0.1/");
+    await page.locator("input[name='email']").fill("owner@example.com");
+    await page.locator("[data-create-primary-action]").click();
+    await page.getByText(/private network addresses/i).waitFor();
+    assert.equal(await page.locator("[data-scan-partial]").count(), 0);
+
+    await page.locator("input[name='businessUrl']").fill("http://www.dualds.co.uk/");
+    await page.locator("[data-create-primary-action]").click();
+    await page.locator("[data-scan-partial]").waitFor({ timeout: 15_000 });
+
+    await page.goto(`${origin}/create/`);
+    await page.locator("[data-create-hydrated='true']").waitFor();
     await page.locator("input[name='businessUrl']").fill("https://alleygates.co.uk");
     await page.locator("input[name='email']").fill("owner@example.com");
     await page.locator("[data-create-primary-action]").click();

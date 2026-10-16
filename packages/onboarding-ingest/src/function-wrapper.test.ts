@@ -172,9 +172,42 @@ test("deployed Functions artifact is prebuilt-only and loadable", async () => {
     url: "https://127.0.0.1/private",
   };
   const codes: number[] = [];
-  for (let i = 0; i < 4; i += 1) {
+  for (let i = 0; i < 7; i += 1) {
     const result = await deployed.main(limited);
     codes.push(result.statusCode);
   }
-  assert.deepEqual(codes, [400, 400, 400, 429]);
+  assert.deepEqual(codes, [400, 400, 400, 400, 400, 400, 429]);
+});
+
+test("deployed scan bundle upgrades http and forwards the crawl id", async () => {
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    main: typeof main;
+  };
+  const calls: Array<{ input: string; body?: string }> = [];
+  const original = globalThis.fetch;
+  globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
+    calls.push({ input: String(input), body: typeof init?.body === "string" ? init.body : undefined });
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  }) as typeof fetch;
+  try {
+    const result = await deployed.main({
+      http: {
+        method: "POST",
+        headers: { "x-forwarded-for": "203.0.113.40" },
+      },
+      url: "http://www.dualds.co.uk/contact",
+      crawlId: " scanner-v2:abc ",
+    });
+    assert.equal(result.statusCode, 200);
+    assert.equal(calls.length, 1);
+    assert.deepEqual(JSON.parse(calls[0]?.body ?? "{}"), {
+      url: "https://www.dualds.co.uk/contact",
+      crawlId: "scanner-v2:abc",
+    });
+  } finally {
+    globalThis.fetch = original;
+  }
 });
