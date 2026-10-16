@@ -44,6 +44,7 @@ import {
   hostnameBusinessHint,
   requestOnboardingScan,
   scanAttemptDetail,
+  scanWaitProgressText,
   scanFieldReviewHint,
   type ScanRunSummary,
   type DraftFieldMeta,
@@ -386,6 +387,16 @@ export function CreateReceptionistLaterSteps({
     void loadReceptionistDraft();
     void loadAgentConfiguration();
   }, [step]);
+
+  useEffect(() => {
+    if (progress !== "scanning") return;
+    const started = Date.now();
+    const timer = window.setInterval(() => {
+      const text = scanWaitProgressText(Date.now() - started);
+      if (text) setScanDetail(text);
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [progress]);
 
   useEffect(() => {
     if (step !== 2 || !businessUrl.trim()) return;

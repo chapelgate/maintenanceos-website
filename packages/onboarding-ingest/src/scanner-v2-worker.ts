@@ -7,6 +7,7 @@ import {
   rm,
 } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
+import { crawlUrlPriority } from "./extract.ts";
 import {
   buildCrawlManifest,
   stableContentHash,
@@ -419,10 +420,18 @@ export async function runScannerV2WorkerBatch(input: {
 
   const queued = (await input.store.listUrls(job.crawlId))
     .filter((row) => row.status === "queued")
+    .sort(
+      (a, b) =>
+        crawlUrlPriority(b.url) - crawlUrlPriority(a.url) ||
+        a.url.localeCompare(b.url),
+    )
     .slice(0, batchSize * 4);
 
+  let fetchedPriority = false;
   for (const candidate of queued) {
     if (attempted >= batchSize) break;
+    const priority = crawlUrlPriority(candidate.url);
+    if (fetchedPriority && priority < 50) break;
 
     const current = await input.store.getUrl(job.crawlId, candidate.url);
     if (!current || current.status !== "queued") continue;
@@ -441,6 +450,7 @@ export async function runScannerV2WorkerBatch(input: {
     }
 
     attempted += 1;
+    if (priority >= 50) fetchedPriority = true;
     try {
       const outcome = await input.processUrl({
         crawlId: job.crawlId,

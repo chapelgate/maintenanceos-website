@@ -67,7 +67,8 @@ Example:
   "facts": {
     "website": "https://acme.example/",
     "businessName": "Acme Plumbing",
-    "locations": ["10 High Street, Liverpool, L1 1AA, GB", "Merseyside"],
+    "address": "10 High Street, Liverpool, L1 1AA",
+    "locations": ["Merseyside"],
     "contact": {
       "phones": ["+44 151 555 0100"],
       "emails": ["hello@acme.example"]

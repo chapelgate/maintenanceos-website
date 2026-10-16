@@ -33,6 +33,7 @@ import {
   SCAN_TIMEOUT_MESSAGE,
   SCAN_UNAVAILABLE_MESSAGE,
   scanAttemptDetail,
+  scanWaitProgressText,
   ZERO_FETCH_PARTIAL_MESSAGE,
 } from "./onboarding-create.ts";
 
@@ -619,6 +620,14 @@ function jsonResponse(status, body) {
     headers: { "content-type": "application/json" },
   });
 }
+
+test("scan wait copy changes while the website check is still running", () => {
+  assert.equal(scanWaitProgressText(1_000), null);
+  assert.match(scanWaitProgressText(8_000) ?? "", /home page and the contact page/i);
+  assert.match(scanWaitProgressText(20_000) ?? "", /opening hours/i);
+  assert.match(scanWaitProgressText(35_000) ?? "", /usable draft/i);
+  assert.match(scanWaitProgressText(40_000) ?? "", /fill any gaps/i);
+});
 
 test("scan attempt copy names the try and the manual way forward", () => {
   assert.match(scanAttemptDetail({ attempt: 1, maxAttempts: 2, phase: "request" }), /attempt 1 of 2/i);

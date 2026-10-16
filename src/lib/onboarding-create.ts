@@ -528,6 +528,18 @@ export const BLOCKED_BY_SITE_MESSAGE =
 export const BLOCKED_BY_SITE_HOST_LINE =
   `If you look after this website, ask the host to allow HTTPS GET requests from the WorkSmartOS scanner at ${SCANNER_PUBLIC_ADDRESS}. The scanner identifies itself as WorkSmartOS-OnboardingScan and does not sign in.`;
 
+/** Copy shown while /create is still waiting for the scanner. */
+export function scanWaitProgressText(elapsedMs: number): string | null {
+  if (elapsedMs < 8_000) return null;
+  if (elapsedMs < 20_000) {
+    return "Still reading the home page and the contact page. You can continue and fill in the draft yourself.";
+  }
+  if (elapsedMs < 35_000) {
+    return "Still checking services, opening hours, and common questions. You can continue and fill in the draft yourself.";
+  }
+  return "Finishing a usable draft from the pages read so far. You can continue and fill any gaps yourself.";
+}
+
 export function scanAttemptDetail(event: ScanAttemptProgress): string {
   if (event.phase === "retry") {
     const next = Math.min(event.attempt + 1, event.maxAttempts);
