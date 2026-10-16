@@ -726,6 +726,12 @@ test("services and areas drop contact text and navigation labels", () => {
   assert.equal(isServicePhrase("https://example.com/book"), false);
   assert.equal(isServicePhrase("Call 0151 666 9090"), false);
   assert.equal(isServicePhrase("Boiler repair"), true);
+  assert.equal(isServicePhrase("[email protected]"), false);
+  assert.equal(isServicePhrase("Cookies Policy"), false);
+  assert.equal(isServicePhrase("Complaints Procedure"), false);
+  assert.equal(isServicePhrase("Boiler repair guide"), false);
+  assert.equal(isServicePhrase("How to fix a leaking tap"), false);
+  assert.equal(isServicePhrase("Central heating and"), false);
   assert.equal(isUkPlaceName("Plumbers Liverpool"), false);
   assert.equal(isUkPlaceName("Liverpool"), true);
   assert.equal(isUkPlaceName("United Kingdom"), false);
@@ -811,6 +817,22 @@ test("hours drop a 24-hour placeholder and keep a short week editable", () => {
   ]);
   assert.deepEqual(covered.facts.locations, ["Liverpool"]);
   assert.equal(covered.factMeta.locations?.confidence, "high");
+
+  const blog = extractDraftFromHtml([
+    {
+      url: "https://trades.example/blog/boiler-tips",
+      html: "<h2>Plumbing Repairs</h2><h2>Central Heating Repairs</h2><h2>Boiler Installation</h2>",
+    },
+  ]);
+  assert.equal(blog.draft.services, undefined);
+  const many = Array.from({ length: 20 }, (_, index) => `<li>Service item ${index + 1}</li>`).join("");
+  const listed = extractDraftFromHtml([
+    {
+      url: "https://trades.example/services",
+      html: `<h2>Our services</h2><ul>${many}</ul>`,
+    },
+  ]);
+  assert.equal(listed.draft.services?.split("\n").length, 12);
 });
 
 test("faqs need a FAQPage or at least three real questions", () => {
@@ -829,4 +851,19 @@ test("faqs need a FAQPage or at least three real questions", () => {
   assert.match(threeResult.draft.faqs ?? "", /Do you cover Leeds\?/);
   assert.match(threeResult.draft.faqs ?? "", /call-out\?/);
   assert.equal(threeResult.fieldMeta.faqs?.source, "details");
+
+  const glued = extractDraftFromHtml([
+    {
+      url: "https://faq.example/",
+      html: `<script type="application/ld+json">{"@type":"FAQPage","mainEntity":[
+        {"@type":"Question","name":"Do you cover Leeds?","acceptedAnswer":{"@type":"Answer","text":"Yes, within fifteen miles.\\nQ: Are you insured?\\nA: Yes. The policy covers domestic repairs."}},
+        {"@type":"Question","name":"Do you charge a call-out?","acceptedAnswer":{"@type":"Answer","text":"${"The first visit is quoted before any work starts. ".repeat(40)}"}}
+      ]}</script>`,
+    },
+  ]);
+  assert.match(glued.draft.faqs ?? "", /Q: Are you insured\?/);
+  assert.doesNotMatch(glued.facts.faqs?.find((item) => item.question.startsWith("Do you cover"))?.answer ?? "", /\nQ:/);
+  const long = glued.facts.faqs?.find((item) => item.question.startsWith("Do you charge"));
+  assert.ok((long?.answer.length ?? 0) > 80);
+  assert.ok((long?.answer.length ?? 0) <= 500);
 });

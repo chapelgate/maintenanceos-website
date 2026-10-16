@@ -378,8 +378,8 @@ function collectFaqs(rec: Record<string, unknown>, into: string[]): void {
     const answer =
       (answerRec && (stringField(answerRec.text) || stringField(answerRec.name))) ||
       stringField(q.acceptedAnswer);
-    if (question && answer && acceptableFaqAnswer(answer)) {
-      into.push(`Q: ${question}\nA: ${answer}`);
+    if (question?.includes("?") && answer && acceptableFaqAnswer(answer)) {
+      into.push(`Q: ${question.trim()}\nA: ${sanitizeUntrustedField(answer, 2000)}`);
     }
   }
 }
@@ -907,7 +907,7 @@ function extractServiceSubheadings(html: string): string | undefined {
         isServicePhrase(item) &&
         !GENERIC_NAV_RE.test(item),
     );
-  const unique = [...new Set(labels)].slice(0, 24);
+  const unique = [...new Set(labels)].slice(0, 12);
   return unique.length >= 2 ? unique.join("\n") : undefined;
 }
 
@@ -942,9 +942,21 @@ const FAQ_BYLINE_RE =
 const FAQ_BOILERPLATE_RE =
   /suggested text:|privacy policy|complaints procedure|cookie policy|all rights reserved/i;
 
+const FAQ_ANSWER_CAP = 500;
+
+/** Shorten a long answer. A following `Q:` stays in the text so the pair splitter can separate it. */
+export function cleanFaqAnswer(answer: string): string {
+  const text = sanitizeUntrustedField(answer, 2000).trim();
+  if (text.length <= FAQ_ANSWER_CAP) return text;
+  const slice = text.slice(0, FAQ_ANSWER_CAP);
+  const sentence = Math.max(slice.lastIndexOf(". "), slice.lastIndexOf("! "));
+  if (sentence >= 80) return slice.slice(0, sentence + 1).trim();
+  return slice.trim();
+}
+
 export function acceptableFaqAnswer(answer: string): boolean {
-  const text = sanitizeUntrustedField(answer, 2000);
-  if (text.length < 8 || text.length > 700) return false;
+  const text = cleanFaqAnswer(answer).replace(/\n+Q:[\s\S]*$/i, "").trim();
+  if (text.length < 8) return false;
   if (FAQ_BYLINE_RE.test(text) || FAQ_BOILERPLATE_RE.test(text)) return false;
   if (/\?\s*$/.test(text) && looksLikeQuestion(text)) return false;
   return true;
@@ -952,8 +964,8 @@ export function acceptableFaqAnswer(answer: string): boolean {
 
 function faqPair(question: string, answer: string): string {
   const q = question.trim();
-  const a = answer.trim();
-  if (!q.endsWith("?") || !acceptableFaqAnswer(a)) return "";
+  const a = cleanFaqAnswer(answer).replace(/\n+Q:[\s\S]*$/i, "").trim();
+  if (!q.includes("?") || !acceptableFaqAnswer(a)) return "";
   return `Q: ${q}\nA: ${a}`;
 }
 
@@ -1431,10 +1443,17 @@ export function isServicePhrase(text: string): boolean {
     return false;
   }
   if (/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(value)) return false;
+  if (/\[email\s+protected\]|\[at\]|\(at\)|\bemail\s+protected\b/i.test(value)) return false;
+  if (/\bat\b/i.test(value) && /\bdot\b/i.test(value)) return false;
   if (/https?:\/\/|www\./i.test(value)) return false;
   if (UK_POSTCODE_RE.test(value) || isPlausiblePhone(value)) return false;
   if ((value.match(/\d/g) ?? []).length >= 10) return false;
-  if (/\b(?:contact|request a valuation|our history|about(?: us)?)\b/i.test(value)) return false;
+  if (/\b(?:contact|request a valuation|our history|about(?: us)?|cookies?\s+policy|complaints?\s+procedure|privacy|polic(?:y|ies)|procedures?|guides?|how to)\b/i.test(value)) {
+    return false;
+  }
+  if (/\b(?:19|20)\d{2}\b/.test(value)) return false;
+  if (/(?:-|–|—)$/.test(value) || /\b(?:and|or|the|of|for|to|with)$/i.test(value)) return false;
+  if (words.length >= 6 && /\b(?:we|our|you|your|is|are|will|can)\b/i.test(value)) return false;
   return true;
 }
 
@@ -2394,17 +2413,29 @@ function setField(
 
 function parseFaqFacts(value: string | undefined): Array<{ question: string; answer: string }> | undefined {
   if (!value) return undefined;
+  const normalized = value.replace(/([^\n])\n(?=Q:)/g, "$1\n\n");
   const pairs: Array<{ question: string; answer: string }> = [];
   const re = /Q:\s*([^\n]+)\nA:\s*([\s\S]*?)(?=\n\n(?:Q:|Phone:|Email:)|$)/g;
   let match: RegExpExecArray | null;
-  while ((match = re.exec(value)) && pairs.length < 100) {
-    const question = asUntrustedText(match[1], 500);
-    const answer = sanitizeUntrustedField(match[2] ?? "", 2000);
-    if (question && looksLikeQuestion(question) && acceptableFaqAnswer(answer)) {
+  while ((match = re.exec(normalized)) && pairs.length < 12) {
+    const question = asUntrustedText(match[1], 200).trim();
+    const answer = cleanFaqAnswer(match[2] ?? "").replace(/\n+Q:[\s\S]*$/i, "").trim();
+    if (question.includes("?") && acceptableFaqAnswer(answer)) {
       pairs.push({ question, answer });
     }
   }
   return pairs.length ? pairs : undefined;
+}
+
+function isServiceSourceUrl(url: string): boolean {
+  try {
+    const path = new URL(url).pathname.replace(/\/+$/, "") || "/";
+    if (/\/(?:blog|news|articles?|posts?|insights|20\d{2})(?:\/|$)/i.test(path)) return false;
+    if (path === "/") return true;
+    return /\/(?:services?|our-services|what-we-do|what-we-offer|treatments|prices|repairs|support)(?:\/|$)/i.test(path);
+  } catch {
+    return false;
+  }
 }
 
 function splitFactLines(value: string | undefined, maxItems = 100): string[] | undefined {
@@ -2674,7 +2705,14 @@ export function extractDraftFromHtml(
         .map((item) => sanitizeUntrustedField(item, 80))
         .filter((item) => isServicePhrase(item));
       if (lines.length >= 2) {
-        setField(draft, fieldMeta, "services", [...new Set(lines)].join("\n"), "heading", "medium");
+        setField(
+          draft,
+          fieldMeta,
+          "services",
+          [...new Set(lines)].slice(0, 12).join("\n"),
+          "heading",
+          "medium",
+        );
         break;
       }
     }
@@ -2697,6 +2735,7 @@ export function extractDraftFromHtml(
   }
   if (!draft.services) {
     for (const page of pages) {
+      if (!isServiceSourceUrl(page.url)) continue;
       const fromTrades = extractTradeServiceHeadings(withoutCodeScripts(page.html));
       if (fromTrades) {
         setField(draft, fieldMeta, "services", fromTrades, "heading", "medium");
@@ -2741,7 +2780,14 @@ export function extractDraftFromHtml(
     else delete draft.services;
   }
   if (draft.hours) draft.hours = sanitizeUntrustedField(draft.hours, 500);
-  if (draft.faqs) draft.faqs = sanitizeUntrustedField(draft.faqs, MAX_FIELD_CHARS);
+  if (draft.faqs) {
+    const pairs = parseFaqFacts(draft.faqs);
+    if (pairs?.length) {
+      draft.faqs = pairs.map((item) => `Q: ${item.question}\nA: ${item.answer}`).join("\n\n");
+    } else {
+      delete draft.faqs;
+    }
+  }
   if (!draft.services) warnings.push("services_not_found");
   if (!draft.faqs) warnings.push("faqs_not_found");
   for (const key of Object.keys(fieldMeta) as (keyof DraftFieldMeta)[]) {
