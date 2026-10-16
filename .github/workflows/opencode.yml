@@ -45,15 +45,15 @@ jobs:
         run: npm ci
 
       # Estate Nvidia gate (Andy standing order 11 Oct 2026 09:07): no fixed model.
-      # Same ladder as the box router's gate.json. Every run probes from the top rung down with
-      # one 1-token request and uses the first model that answers 200, so a blocked model is
-      # stepped past and a recovered one is picked up again on the next run.
+      # Same ladder as the box router's gate.json, without openai/gpt-oss-20b (it cannot use tools).
+      # Every run probes from the top rung down with one 1-token request and uses the first model
+      # that answers 200, so a blocked model is stepped past and a recovered one is picked up again.
       - name: Pick model from estate Nvidia ladder
         id: pick
         env:
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
         run: |
-          for m in nvidia/nemotron-3-super-120b-a12b z-ai/glm-5.3-flash nvidia/nemotron-3.5-lightning-30b-a3b nvidia/nemotron-nano-3-30b-a3b openai/gpt-oss-20b; do
+          for m in nvidia/nemotron-3-super-120b-a12b z-ai/glm-5.3-flash nvidia/nemotron-3.5-lightning-30b-a3b nvidia/nemotron-nano-3-30b-a3b; do
             code=$(curl -s -o /dev/null -w '%{http_code}' -m 30 https://integrate.api.nvidia.com/v1/chat/completions \
               -H "Authorization: Bearer $NVIDIA_API_KEY" -H 'Content-Type: application/json' \
               -d "{\"model\":\"$m\",\"messages\":[{\"role\":\"user\",\"content\":\"ok\"}],\"max_tokens\":1}")
