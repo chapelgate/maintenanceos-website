@@ -1,7 +1,7 @@
 import {
   acceptableFaqAnswer,
+  chooseProminentPhones,
   chooseProminentValue,
-  crawlUrlPriority,
   isServicePhrase,
   phoneIdentity,
   sanitizeUntrustedField,
@@ -152,6 +152,7 @@ function asFieldSource(source: string | undefined): ProminentHit["source"] {
     case "meta":
     case "title":
     case "heading":
+    case "footer":
     case "nav":
     case "pattern":
     case "contact_link":
@@ -163,11 +164,82 @@ function asFieldSource(source: string | undefined): ProminentHit["source"] {
 }
 
 function sourceRank(source: string | undefined): number {
+  if (source === "footer") return 7;
   if (source === "jsonld" || source === "microdata") return 5;
   if (source === "contact_link") return 4;
   if (source === "heading") return 3;
   if (source === "pattern") return 1;
   return 2;
+}
+
+function factsAreUseful(facts: BusinessFacts): boolean {
+  if (facts.address?.trim()) return true;
+  if (facts.hours?.trim()) return true;
+  if (facts.services?.length) return true;
+  if (facts.contact?.phones?.some((phone) => phone.trim())) return true;
+  if (facts.contact?.emails?.some((email) => email.trim())) return true;
+  return false;
+}
+
+const THIN_HOME_PROBE_PATHS = [
+  "/contact",
+  "/contact-us",
+  "/about",
+  "/about-us",
+  "/services",
+  "/our-services",
+  "/faq",
+  "/opening-hours",
+];
+
+function pathnameKey(raw: string): string {
+  try {
+    const path = new URL(raw).pathname.replace(/\/+$/, "");
+    return path || "/";
+  } catch {
+    return "";
+  }
+}
+
+function pageHasUsefulFacts(page: CrawlPage): boolean {
+  const facts = page.structuredFacts as Partial<BusinessFacts>;
+  const phones = Array.isArray(facts.contact?.phones)
+    ? facts.contact.phones.filter((item): item is string => typeof item === "string")
+    : [];
+  const emails = Array.isArray(facts.contact?.emails)
+    ? facts.contact.emails.filter((item): item is string => typeof item === "string")
+    : [];
+  return factsAreUseful({
+    ...(typeof facts.address === "string" ? { address: facts.address } : {}),
+    ...(typeof facts.hours === "string" ? { hours: facts.hours } : {}),
+    ...(Array.isArray(facts.services)
+      ? { services: facts.services.filter((item): item is string => typeof item === "string") }
+      : {}),
+    contact: { phones, emails },
+  });
+}
+
+async function enqueueThinHomeProbes(
+  store: ScannerV2JobStore,
+  crawlId: string,
+  origin: string,
+): Promise<number> {
+  const existing = await store.listUrls(crawlId);
+  const known = new Set(existing.map((row) => pathnameKey(row.url)));
+  const base = origin.endsWith("/") ? origin : `${origin}/`;
+  let added = 0;
+  for (const probe of THIN_HOME_PROBE_PATHS) {
+    if (known.has(probe)) continue;
+    await store.upsertUrl(crawlId, {
+      url: new URL(probe, base).toString(),
+      status: "queued",
+      discoveryReason: "html_link",
+      discoveredFrom: new URL("/", base).toString(),
+      retryCount: 0,
+    });
+    added += 1;
+  }
+  return added;
 }
 
 function aggregateFacts(
@@ -269,7 +341,8 @@ function aggregateFacts(
   }
 
   const uniqueLocations = unique(locations);
-  const phonePick = chooseProminentValue(phoneHits, phoneIdentity, pageUrls);
+  const phonePicks = chooseProminentPhones(phoneHits, pageUrls, 2);
+  const phonePick = phonePicks[0];
   const emailPick = chooseProminentValue(
     emailHits,
     (value) => value.trim().toLowerCase(),
@@ -300,7 +373,7 @@ function aggregateFacts(
   if (uniqueLocations.length) facts.locations = uniqueLocations;
   if (phonePick || emailPick) {
     facts.contact = {
-      ...(phonePick ? { phones: [phonePick.value] } : {}),
+      ...(phonePicks.length ? { phones: phonePicks.map((hit) => hit.value) } : {}),
       ...(emailPick ? { emails: [emailPick.value] } : {}),
     };
     const contactHit = [phonePick, emailPick]
@@ -739,6 +812,7 @@ async function runtimeResult(input: {
   const aggregated = aggregateFacts(input.origin, pages);
   const facts = aggregated.facts;
   const knowledge = knowledgeFromChunks(chunks);
+  let state: CrawlState = manifest.state;
   const warnings = unique([
     ...urls
       .filter(
@@ -752,9 +826,19 @@ async function runtimeResult(input: {
     ...(pages.some((page) => page.fetchMode === "reader")
       ? ["reader_fallback_used"]
       : []),
-    ...(job.state === "CRAWLING" ? ["scanner_v2_in_progress"] : []),
-    ...(job.state === "PARTIAL" ? ["scanner_v2_partial"] : []),
+    ...(state === "CRAWLING" ? ["scanner_v2_in_progress"] : []),
+    ...(state === "PARTIAL" ? ["scanner_v2_partial"] : []),
   ]);
+  if (!factsAreUseful(facts) && manifest.fetched > 0 && state === "COMPLETE") {
+    state = "PARTIAL";
+    warnings.push("thin_home_page");
+    if (!warnings.includes("scanner_v2_partial")) warnings.push("scanner_v2_partial");
+    await input.store.putJob({
+      ...job,
+      state: "PARTIAL",
+      updatedAt: new Date().toISOString(),
+    });
+  }
   const blocked = siteBlockedScan({
     fetched: manifest.fetched,
     warnings,
@@ -777,7 +861,7 @@ async function runtimeResult(input: {
     ...(knowledge.length ? { knowledge } : {}),
     scannerV2: {
       crawlId: input.crawlId,
-      state: manifest.state,
+      state,
       discovered: manifest.discovered,
       fetched: manifest.fetched,
       unresolved: manifest.unresolved,
@@ -869,6 +953,7 @@ export async function runPersistentScannerV2(
   const now = options.now ?? Date.now;
   const started = now();
   const deadline = started + requestMs;
+  let probesConsidered = false;
 
   while (now() < deadline) {
     const batch = await runScannerV2WorkerBatch({
@@ -878,18 +963,19 @@ export async function runPersistentScannerV2(
       processUrl,
       batchSize,
     });
+    if (!probesConsidered) {
+      const pages = await store.listPages(crawlId);
+      if (pages.length > 0) {
+        probesConsidered = true;
+        const useful = pages.some((page) => pageHasUsefulFacts(page));
+        if (!useful) {
+          const added = await enqueueThinHomeProbes(store, crawlId, origin.origin);
+          if (added > 0) continue;
+        }
+      }
+    }
     if (!batch.hasMoreWork) break;
     if (batch.attempted === 0 && batch.deferred > 0) break;
-    if (!resumed) {
-      const urls = await store.listUrls(crawlId);
-      const pendingPriority = urls.some(
-        (row) => row.status === "queued" && crawlUrlPriority(row.url) >= 50,
-      );
-      const fetched = urls.some(
-        (row) => row.status === "fetched" || row.status === "duplicate",
-      );
-      if (fetched && !pendingPriority) break;
-    }
   }
 
   return runtimeResult({

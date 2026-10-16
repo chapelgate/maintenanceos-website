@@ -54,6 +54,7 @@ export const FIELD_SOURCES = [
   "meta",
   "title",
   "heading",
+  "footer",
   "nav",
   "pattern",
   "contact_link",

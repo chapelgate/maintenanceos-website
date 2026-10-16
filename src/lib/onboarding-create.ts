@@ -112,6 +112,7 @@ const FIELD_META_SOURCES = new Set([
   "meta",
   "title",
   "heading",
+  "footer",
   "nav",
   "pattern",
   "contact_link",
@@ -161,6 +162,7 @@ export const FIELD_META_SOURCE_LABELS: Record<string, string> = {
   meta: "page metadata",
   title: "page title",
   heading: "labelled heading",
+  footer: "page footer",
   nav: "navigation links",
   pattern: "visible text pattern",
   contact_link: "phone/email links",
@@ -527,6 +529,43 @@ export const BLOCKED_BY_SITE_MESSAGE =
 
 export const BLOCKED_BY_SITE_HOST_LINE =
   `If you look after this website, ask the host to allow HTTPS GET requests from the WorkSmartOS scanner at ${SCANNER_PUBLIC_ADDRESS}. The scanner identifies itself as WorkSmartOS-OnboardingScan and does not sign in.`;
+
+/** Extra POSTs after the first response, while the crawl is still in progress. */
+export const SCAN_AUTO_CONTINUE_LIMIT = 4;
+
+export const LARGE_SITE_DISCOVERED_MIN = 40;
+
+/** Keep reading while the scanner still has pages queued, up to a small limit. */
+export function shouldAutoContinueScan(
+  summary: ScanRunSummary | null,
+  continues: number,
+): boolean {
+  if (!summary || continues >= SCAN_AUTO_CONTINUE_LIMIT) return false;
+  return summary.state === "CRAWLING" && summary.fetched > 0;
+}
+
+export function scanContinueDetail(fetched: number): string {
+  const pages = Number.isFinite(fetched) ? Math.max(0, Math.trunc(fetched)) : 0;
+  return `Reading more pages (${pages} pages so far)`;
+}
+
+/** A large in-progress crawl should ask for a contact or services URL. */
+export function largeSiteScanMessage(summary: ScanRunSummary | null): string | null {
+  if (!summary || summary.state !== "CRAWLING" || summary.discovered < LARGE_SITE_DISCOVERED_MIN) {
+    return null;
+  }
+  return "This is a large site. Paste the contact page or the services page URL so the check reads those pages instead of the site menu.";
+}
+
+export function thinHomePageMessage(summary: ScanRunSummary | null): string | null {
+  if (!summary?.warnings.includes("thin_home_page")) return null;
+  return "The home page did not include contact details. This check is partial. Paste the contact page URL, or fill the draft yourself.";
+}
+
+/** The review field shows the primary phone and one secondary number. */
+export function reviewPhoneField(phones: readonly string[] | undefined): string {
+  return (phones ?? []).map((phone) => phone.trim()).filter(Boolean).slice(0, 2).join(" / ");
+}
 
 /** Copy shown while /create is still waiting for the scanner. */
 export function scanWaitProgressText(elapsedMs: number): string | null {

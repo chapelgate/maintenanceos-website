@@ -48,7 +48,7 @@ const crawlingBody = {
     website: "https://trades.example/",
     businessName: "Town Heating",
     address: "Bromborough, Wirral",
-    contact: { phones: ["07774179685"] },
+    contact: { phones: ["07774179685", "01516 532 896"] },
     services: ["Boiler repair"],
   },
   factMeta: {
@@ -132,10 +132,21 @@ try {
           : mode === "blocked"
             ? blockedBody
             : mode === "crawling"
-              ? (crawlCalls += 1) === 1
-                ? crawlingBody
+              ? (crawlCalls += 1) < 3
+                ? {
+                    ...crawlingBody,
+                    scannerV2: {
+                      ...crawlingBody.scannerV2,
+                      fetched: crawlCalls === 1 ? 2 : 4,
+                    },
+                  }
                 : crawlingDoneBody
+              : mode === "crawling-stuck"
+                ? (crawlCalls += 1, crawlingBody)
               : zeroFetchBody;
+      if (mode === "crawling" || mode === "crawling-stuck") {
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
       await route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -207,31 +218,50 @@ try {
     assert.match(await page.locator("[data-scan-host-allow]").innerText(), /178\.128\.171\.45/);
 
     mode = "crawling";
+    crawlCalls = 0;
+    await page.goto(`${origin}/create/`);
+    await page.locator("[data-create-hydrated='true']").waitFor();
+    await page.locator("input[name='businessUrl']").fill("https://trades.example");
+    await page.locator("input[name='email']").fill("owner@example.com");
+    await page.locator("[data-create-primary-action]").click();
+    await page.getByText(/Reading more pages \(\d+ pages so far\)/).waitFor({ timeout: 15_000 });
+    await page.getByText(/Scanner result: COMPLETE/).waitFor({ timeout: 15_000 });
+    assert.equal(crawlCalls, 3);
+    assert.equal(await page.locator("[data-scan-crawling]").count(), 0);
+    assert.equal(await page.locator("[data-scan-large-site]").count(), 0);
+
+    mode = "crawling-stuck";
+    crawlCalls = 0;
     await page.goto(`${origin}/create/`);
     await page.locator("[data-create-hydrated='true']").waitFor();
     await page.locator("input[name='businessUrl']").fill("https://trades.example");
     await page.locator("input[name='email']").fill("owner@example.com");
     await page.locator("[data-create-primary-action]").click();
     const crawling = page.locator("[data-scan-crawling]");
-    await crawling.waitFor({ timeout: 15_000 });
+    await crawling.waitFor({ timeout: 20_000 });
+    assert.equal(crawlCalls, 5);
     const crawlingText = await crawling.innerText();
     assert.match(crawlingText, /page budget/i);
     assert.match(crawlingText, /usable/i);
+    assert.match(await page.locator("[data-scan-large-site]").innerText(), /contact page or the services page/i);
     assert.match(await page.locator("[data-scan-skipped]").innerText(), /Some pages were skipped/);
     assert.doesNotMatch(crawlingText, /failed/i);
     const continueScan = page.locator("[data-scan-continue]");
     assert.equal(await continueScan.isEnabled(), true);
     assert.equal(await page.locator("[data-create-primary-action]").isEnabled(), true);
     await continueScan.click();
-    await page.getByText(/Scanner result: COMPLETE/).waitFor({ timeout: 15_000 });
-    assert.equal(await page.locator("[data-scan-crawling]").count(), 0);
+    await page.getByText(/Scanner result: CRAWLING/).waitFor({ timeout: 15_000 });
+    assert.equal(await page.locator("[data-scan-crawling]").count(), 1);
     await page.locator("[data-create-primary-action]").click();
     await page.locator("input[name='agent-type'][value='receptionist']").check();
     await page.locator("[data-create-primary-action]").click();
     const address = page.getByLabel("Address", { exact: false });
     await address.waitFor();
     assert.equal(await address.inputValue(), "Bromborough, Wirral");
-    assert.match(await page.getByLabel("Phone", { exact: false }).inputValue(), /07774179685/);
+    assert.equal(
+      await page.getByLabel("Phone", { exact: false }).inputValue(),
+      "07774179685 / 01516 532 896",
+    );
     await address.fill("1 Dock Road, Liverpool");
     assert.equal(await address.inputValue(), "1 Dock Road, Liverpool");
     console.log("create-partial-scan-browser=ok");

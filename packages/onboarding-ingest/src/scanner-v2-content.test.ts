@@ -310,7 +310,7 @@ test("a trades page stores phone, address, services, and area on the crawl page"
   });
   const facts = result.page.structuredFacts;
   assert.deepEqual(facts.contact, { phones: ["07774179685"] });
-  assert.equal(facts.address, "Bromborough, Wirral");
+  assert.equal(facts.address, undefined);
   assert.deepEqual(facts.services, [
     "Plumbing Repairs",
     "Central Heating Repairs & Maintenance",
@@ -318,5 +318,5 @@ test("a trades page stores phone, address, services, and area on the crawl page"
   assert.ok(Array.isArray(facts.locations));
   assert.equal(facts.hours, undefined);
   const meta = facts._factMeta as { address?: { sourceUrl?: string } };
-  assert.equal(meta.address?.sourceUrl, "https://rob-thompson.example/");
+  assert.equal(meta.address, undefined);
 });

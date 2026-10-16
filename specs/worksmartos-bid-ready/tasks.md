@@ -14,3 +14,6 @@
 - [x] Priority crawl, about a 45 second budget, and one prominent contact on a large site
 - [x] `/create` progress text while the website check is still running
 - [x] `/create` address field, skipped-page note, and continue scanning for `CRAWLING`
+- [x] Thin home page stays partial and still queues contact, about, and services
+- [x] Footer postcode addresses, two phones, parsed hours, and navigation filters
+- [x] `/create` auto-continues a crawling scan and warns on a large site
