@@ -89,6 +89,7 @@ function validateBlueprint(value: unknown): AgentBlueprintV1 {
 function reviewedKnowledgePack(
   blueprint: AgentBlueprintV1,
   draft: ReceptionistDraft,
+  hoursSpeakable = true,
 ): KnowledgePack {
   const businessName =
     draft.businessName.trim() || blueprint.identity.businessName;
@@ -98,7 +99,7 @@ function reviewedKnowledgePack(
   const pack = normalizeKnowledgePack({
     businessName,
     greeting: draft.greeting.trim() || defaultGreeting,
-    hours: draft.hours,
+    ...(hoursSpeakable ? { hours: draft.hours } : {}),
     services: draft.services,
     faqs: draft.faqs,
   });
@@ -244,9 +245,15 @@ export function buildAgentConfiguration(input: {
   blueprint: AgentBlueprintV1;
   reviewedDraft: ReceptionistDraft;
   siteKnowledge?: readonly SiteKnowledgeItem[];
+  /** False when the scan marked hours partial. Omitted or true keeps the reviewed text. */
+  hoursSpeakable?: boolean;
 }): AgentConfigurationResult {
   const original = validateBlueprint(input.blueprint);
-  const pack = reviewedKnowledgePack(original, input.reviewedDraft);
+  const pack = reviewedKnowledgePack(
+    original,
+    input.reviewedDraft,
+    input.hoursSpeakable !== false,
+  );
   const blueprint = reviewedBlueprint(original, pack);
   const systemPrompt = buildAgentSystemPrompt(blueprint, pack);
   const limitations = agentLimitationsFor(pack);

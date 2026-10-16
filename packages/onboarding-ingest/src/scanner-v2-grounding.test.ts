@@ -403,6 +403,21 @@ test("unsupported synthesizer additions are rejected and safely fall back to ext
   assert.doesNotMatch(answer.text, /free annual service/i);
 });
 
+test("partial opening hours are not spoken from structured facts", async () => {
+  const { index, facts } = await fixture();
+  const answer = await answerGroundedReceptionistQuestion("What are your opening hours?", {
+    crawlId: "crawl-stage6",
+    index,
+    facts: {
+      ...facts,
+      hours: { value: "Saturday 09:00-12:00", sourceUrls: ["https://acme.example/contact"] },
+    },
+  });
+  assert.equal(answer.supportStatus, "not_found");
+  assert.equal(answer.source, "missing");
+  assert.doesNotMatch(answer.text, /Saturday/);
+});
+
 test("grounded synthesis verifier rejects new numbers and unsupported claim words", () => {
   const evidence: GroundedEvidence[] = [
     {

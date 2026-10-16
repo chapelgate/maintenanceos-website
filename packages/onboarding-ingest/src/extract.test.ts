@@ -4,10 +4,14 @@ import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import {
+  addressAroundPostcode,
   asUntrustedText,
+  assessOpeningHours,
   crawlUrlPriority,
   decodeCloudflareEmail,
   extractDraftFromHtml,
+  formatUkPostcode,
+  hoursAreSpeakable,
   isAcceptableAddress,
   isServicePhrase,
   isUkPlaceName,
@@ -405,9 +409,10 @@ test("visible contact block pre-fills address and phone without schema or tel li
   assert.deepEqual(result.facts.contact?.phones, ["+441516499718"]);
   assert.equal(
     result.facts.address,
-    "Forum Housing Association, 24-28 Hamilton Street, Birkenhead, Wirral CH41 1AL",
+    "24-28 Hamilton Street, Birkenhead, Wirral, CH41 1AL",
   );
-  assert.equal(result.facts.locations, undefined);
+  assert.deepEqual(result.facts.locations, ["Wirral"]);
+  assert.equal(result.factMeta.locations?.confidence, "low");
   assert.equal(result.factMeta.contact?.source, "heading");
   assert.equal(result.factMeta.address?.source, "heading");
   assert.equal(result.factMeta.address?.confidence, "medium");
@@ -501,9 +506,9 @@ test("fixture postal address keeps the locality and drops region and country cod
   const result = extractDraftFromHtml([
     { url: "https://springfield.example/", html: fixture("springfield-address.html") },
   ]);
-  assert.equal(result.facts.address, "175 Frankby Road, West Kirby, CH48 9UU");
-  assert.equal(result.factMeta.address?.source, "footer");
-  assert.doesNotMatch(result.facts.address ?? "", /\b(?:ENG|GB|Birkenhead)\b/);
+  assert.equal(result.facts.address, "175 Frankby Road, Birkenhead, CH48 9UU");
+  assert.equal(result.factMeta.address?.source, "jsonld");
+  assert.doesNotMatch(result.facts.address ?? "", /\b(?:ENG|GB)\b/);
   assert.deepEqual(result.facts.contact?.emails, ["office@springfieldheating.example"]);
 });
 
@@ -723,6 +728,89 @@ test("services and areas drop contact text and navigation labels", () => {
   assert.equal(isServicePhrase("Boiler repair"), true);
   assert.equal(isUkPlaceName("Plumbers Liverpool"), false);
   assert.equal(isUkPlaceName("Liverpool"), true);
+  assert.equal(isUkPlaceName("United Kingdom"), false);
+  assert.equal(isUkPlaceName("England"), false);
+  assert.equal(isUkPlaceName("Home"), false);
+  assert.equal(isUkPlaceName("About"), false);
+  assert.equal(isUkPlaceName("Services"), false);
+  assert.equal(isUkPlaceName("Menu"), false);
+  assert.equal(isUkPlaceName("FAQ"), false);
+});
+
+test("hours drop a 24-hour placeholder and keep a short week editable", () => {
+  assert.equal(formatUkPostcode("M251PZ"), "M25 1PZ");
+  assert.equal(formatUkPostcode("CH62 3QZ"), "CH62 3QZ");
+  assert.equal(
+    addressAroundPostcode("Acme Plumbing, 12 Oak Street, Manchester, M251PZ"),
+    "12 Oak Street, Manchester, M25 1PZ",
+  );
+  assert.equal(
+    addressAroundPostcode("Acme Plumbing 12 Oak Street, Manchester, M251PZ"),
+    "12 Oak Street, Manchester, M25 1PZ",
+  );
+  assert.equal(assessOpeningHours("Mo-Su 00:00-23:59"), undefined);
+  assert.equal(assessOpeningHours("Sunday 00:00-00:00"), undefined);
+  assert.equal(assessOpeningHours("Mo-Su 00:00-23:59", "We are open 24 hours")?.speakable, true);
+  assert.equal(assessOpeningHours("Mo-Fr 08:00-17:00")?.partial, false);
+  assert.equal(assessOpeningHours("Mo-Sa 09:00-18:00")?.partial, false);
+  assert.equal(
+    assessOpeningHours("Monday to Friday 9am-5pm\nSunday: Closed")?.partial,
+    false,
+  );
+  assert.equal(assessOpeningHours("Saturday 09:00-12:00")?.partial, true);
+  assert.equal(assessOpeningHours("Friday 09:00-17:00")?.partial, true);
+  assert.equal(assessOpeningHours("Monday 08:00-17:00")?.partial, true);
+  assert.equal(hoursAreSpeakable("Saturday 09:00-12:00"), false);
+  assert.equal(hoursAreSpeakable("Mo-Fr 08:00-17:00"), true);
+
+  const placeholder = extractDraftFromHtml([
+    {
+      url: "https://allday.example/",
+      html: `<script type="application/ld+json">{"@type":"LocalBusiness","name":"All Day Ltd","openingHours":"Mo-Su 00:00-23:59"}</script>`,
+    },
+  ]);
+  assert.equal(placeholder.draft.hours, undefined);
+  assert.ok(placeholder.warnings.includes("hours_not_found"));
+
+  const saturday = extractDraftFromHtml([
+    {
+      url: "https://saturday.example/",
+      html: `<script type="application/ld+json">{"@type":"LocalBusiness","name":"Saturday Shop","openingHours":"Saturday 09:00-12:00"}</script>`,
+    },
+  ]);
+  assert.equal(saturday.draft.hours, "Saturday 09:00-12:00");
+  assert.equal(saturday.fieldMeta.hours?.confidence, "low");
+  assert.ok(saturday.warnings.includes("hours_partial"));
+
+  const week = extractDraftFromHtml([
+    {
+      url: "https://week.example/",
+      html: `<script type="application/ld+json">{"@type":"LocalBusiness","name":"Week Ltd","openingHours":["Mo-Fr 09:00-17:00","Su 00:00-00:00"]}</script>`,
+    },
+  ]);
+  assert.match(week.draft.hours ?? "", /Mo-Fr 09:00-17:00/);
+  assert.doesNotMatch(week.draft.hours ?? "", /00:00/);
+  assert.equal(week.fieldMeta.hours?.confidence, "high");
+
+  const preferred = extractDraftFromHtml([
+    {
+      url: "https://pref.example/",
+      html: `<script type="application/ld+json">{"@type":"LocalBusiness","name":"Pref Ltd","address":{"@type":"PostalAddress","streetAddress":"12 Oak Street","addressLocality":"Manchester","postalCode":"M251PZ"}}</script><footer>Talk to us, 99 Other Road, York, YO1 7HH</footer>`,
+    },
+  ]);
+  assert.equal(preferred.facts.address, "12 Oak Street, Manchester, M25 1PZ");
+  assert.equal(preferred.factMeta.address?.source, "jsonld");
+  assert.deepEqual(preferred.facts.locations, ["Manchester"]);
+  assert.equal(preferred.factMeta.locations?.confidence, "low");
+
+  const covered = extractDraftFromHtml([
+    {
+      url: "https://covered.example/",
+      html: `<script type="application/ld+json">{"@type":"LocalBusiness","name":"Covered Ltd","address":{"streetAddress":"12 Oak Street","addressLocality":"Manchester","postalCode":"M25 1PZ"},"areaServed":["United Kingdom","Home","Liverpool"]}</script>`,
+    },
+  ]);
+  assert.deepEqual(covered.facts.locations, ["Liverpool"]);
+  assert.equal(covered.factMeta.locations?.confidence, "high");
 });
 
 test("faqs need a FAQPage or at least three real questions", () => {
