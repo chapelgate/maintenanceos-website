@@ -646,8 +646,41 @@ test("title and site name beat a different trade label", () => {
       html: "<html><head><title>kbjoineryservices</title></head><body></body></html>",
     },
   ]);
-  assert.equal(slug.draft.businessName, "Kbjoineryservices");
+  assert.equal(slug.draft.businessName, "Kb Joinery Services");
   assert.equal(slug.fieldMeta.businessName?.confidence, "low");
+});
+
+test("sentences and trade titles lose to the domain brand", () => {
+  assert.equal(
+    publicBusinessName(
+      "Percy Hughes & Roberts Solicitors are a specialist law firm in Birkenhead, Wirral.",
+    ),
+    undefined,
+  );
+  const phr = extractDraftFromHtml([
+    { url: "https://www.phrsolicitors.co.uk/", html: fixture("phrsolicitors-home.html") },
+  ]);
+  assert.match(
+    phr.draft.businessName ?? "",
+    /^(?:PHR Solicitors(?: Wirral)?|Percy Hughes & Roberts Solicitors)$/,
+  );
+  assert.doesNotMatch(phr.draft.businessName ?? "", / are |specialist law firm/i);
+
+  const croft = extractDraftFromHtml([
+    { url: "https://croftautomotive.co.uk/", html: fixture("croftautomotive-home.html") },
+  ]);
+  assert.equal(croft.draft.businessName, "Croft Automotive Group Ltd");
+  assert.doesNotMatch(croft.draft.businessName ?? "", /Car Servicing/i);
+  assert.equal(
+    croft.facts.address,
+    "1 Mosedale Road, Croft Business Park, Bromborough, CH62 3QZ",
+  );
+
+  const wirral = extractDraftFromHtml([
+    { url: "https://wirralheating.com/", html: fixture("wirralheating-home.html") },
+  ]);
+  assert.equal(wirral.draft.businessName, "Wirral Heating");
+  assert.notEqual(wirral.draft.businessName, "Wirral Plumber");
 });
 
 test("a missing name falls back to the domain at low confidence", () => {
