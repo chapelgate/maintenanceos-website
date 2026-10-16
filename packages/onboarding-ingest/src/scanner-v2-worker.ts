@@ -25,6 +25,33 @@ import type {
 export const DEFAULT_WORKER_BATCH_SIZE = 8;
 export const DEFAULT_WORKER_LEASE_MS = 60_000;
 export const DEFAULT_WORKER_RETRY_LIMIT = 3;
+/** After the key pages are fetched, keep only a short tail of other pages. */
+export const NON_KEY_PAGE_LIMIT = 4;
+
+/**
+ * URLs to mark policy_skipped so a large discovered set can finish.
+ * Key pages (home, contact, about, services, FAQ, hours) stay queued.
+ * Nothing is closed until at least one page has been fetched.
+ */
+export function frontierUrlsToSkip(urls: readonly CrawlUrlDisposition[]): string[] {
+  const queued = urls.filter((row) => row.status === "queued");
+  if (queued.some((row) => crawlUrlPriority(row.url) >= 50)) return [];
+  const fetched = urls.filter((row) => row.status === "fetched" || row.status === "duplicate");
+  if (fetched.length === 0) return [];
+  const nonKeyFetched = fetched.filter((row) => crawlUrlPriority(row.url) < 50).length;
+  const room = Math.max(0, NON_KEY_PAGE_LIMIT - nonKeyFetched);
+  const keep = new Set(
+    queued
+      .slice()
+      .sort(
+        (a, b) =>
+          crawlUrlPriority(b.url) - crawlUrlPriority(a.url) || a.url.localeCompare(b.url),
+      )
+      .slice(0, room)
+      .map((row) => row.url),
+  );
+  return queued.filter((row) => !keep.has(row.url)).map((row) => row.url);
+}
 
 export type ScannerV2ProcessResult = {
   disposition:
@@ -421,6 +448,17 @@ export async function runScannerV2WorkerBatch(input: {
   let completed = 0;
   let failed = 0;
   let deferred = 0;
+
+  const known = await input.store.listUrls(job.crawlId);
+  for (const url of frontierUrlsToSkip(known)) {
+    const row = known.find((item) => item.url === url);
+    if (!row || row.status !== "queued") continue;
+    await input.store.upsertUrl(job.crawlId, {
+      ...row,
+      status: "policy_skipped",
+      reason: "frontier_capped",
+    });
+  }
 
   const queued = (await input.store.listUrls(job.crawlId))
     .filter((row) => row.status === "queued")

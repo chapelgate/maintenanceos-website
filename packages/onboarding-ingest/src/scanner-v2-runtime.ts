@@ -4,6 +4,7 @@ import {
   chooseProminentEmail,
   chooseProminentPhones,
   chooseProminentValue,
+  crawlUrlPriority,
   isServicePhrase,
   phoneIdentity,
   sanitizeUntrustedField,
@@ -59,18 +60,19 @@ import {
   READER_FALLBACK_ORIGIN,
   READER_FALLBACK_TIMEOUT_MS,
 } from "./scan.ts";
-import type {
-  BusinessFactMeta,
-  BusinessFacts,
-  CorpusChunk,
-  CrawlManifest,
-  CrawlPage,
-  CrawlState,
-  CrawlUrlDisposition,
-  HttpGetFn,
-  LookupFn,
-  ScanResult,
-  SafeHttpResponse,
+import {
+  ScanError,
+  type BusinessFactMeta,
+  type BusinessFacts,
+  type CorpusChunk,
+  type CrawlManifest,
+  type CrawlPage,
+  type CrawlState,
+  type CrawlUrlDisposition,
+  type HttpGetFn,
+  type LookupFn,
+  type ScanResult,
+  type SafeHttpResponse,
 } from "./types.ts";
 
 export const DEFAULT_SCANNER_V2_STATE_ROOT = ".data/scanner-v2";
@@ -82,11 +84,18 @@ export const SCANNER_V2_ROBOTS_BUDGET_MS = 2_000;
 export const SCANNER_V2_DOCUMENT_PARSE_SLICE_MS = 3_000;
 /** Leave time to read the persisted crawl and build the partial before the budget ends. */
 export const SCANNER_V2_RESULT_RESERVE_MS = 2_000;
+/** In-flight sockets are destroyed at this age so a slow drip cannot outlive the response. */
+export const SCANNER_V2_FETCH_ABORT_MS = 17_000;
+/** A discovered frontier above this is not stored. Key pages can replace a low-priority URL. */
+export const MAX_ADMITTED_CRAWL_URLS = 60;
+const MAX_NON_KEY_ADMISSIONS = 12;
 
 const QUIET_CRAWL_REASONS = new Set([
   "document_parse_timeout",
   "document_parse_failed",
   "unsupported_document",
+  "response_too_large",
+  "frontier_capped",
 ]);
 
 /** Parse failures and finished policy skips are terminal. Other fetch errors stay retryable. */
@@ -564,6 +573,7 @@ async function buildDefaultProcessor(input: {
   get?: HttpGetFn;
   browserDocumentFetch?: BrowserDocumentFetch;
   pageBudgetMs?: () => number;
+  signal?: AbortSignal;
 }): Promise<ScannerV2ProcessUrl> {
   const pageBudgetMs = () => Math.max(250, Math.min(8_000, input.pageBudgetMs?.() ?? 8_000));
   const robots = await fetchRobotsRules(input.origin, pageBudgetMs());
@@ -585,8 +595,13 @@ async function buildDefaultProcessor(input: {
   ): Promise<void> => {
     let count = (await input.store.listUrls(input.crawlId)).length;
     for (const row of links) {
-      if (count >= MAX_SCANNER_V2_URLS) break;
+      if (count >= MAX_ADMITTED_CRAWL_URLS) break;
       if (await input.store.getUrl(input.crawlId, row.url)) continue;
+      if (crawlUrlPriority(row.url) < 50) {
+        const stored = await input.store.listUrls(input.crawlId);
+        const nonKey = stored.filter((item) => crawlUrlPriority(item.url) < 50).length;
+        if (nonKey >= MAX_NON_KEY_ADMISSIONS) continue;
+      }
 
       let parsed: URL;
       try {
@@ -670,11 +685,15 @@ async function buildDefaultProcessor(input: {
         maxDecompressedBytes: MAX_SCANNER_V2_HTML_BYTES,
         acceptCompressed: true,
         maxRedirects: DEFAULT_MAX_REDIRECTS,
+        signal: input.signal,
       });
     } catch (directError) {
+      if (directError instanceof ScanError && directError.code === "response_too_large") {
+        return { disposition: "policy_skipped", reason: "response_too_large" };
+      }
       const readerBudget = pageBudgetMs();
       const reader =
-        readerBudget >= 250
+        !input.signal?.aborted && readerBudget >= 250
           ? await recoverScannerV2ReaderPage(url.url, { timeoutMs: readerBudget })
           : null;
       if (!reader) throw directError;
@@ -683,7 +702,11 @@ async function buildDefaultProcessor(input: {
     }
 
     let browserRecovered = false;
-    if (!readerRecovered && (response.status === 401 || response.status === 403)) {
+    if (
+      !readerRecovered &&
+      !input.signal?.aborted &&
+      (response.status === 401 || response.status === 403)
+    ) {
       const recovered = await recoverAuthBlockedDocument({
         pageUrl: url.url,
         response,
@@ -730,7 +753,7 @@ async function buildDefaultProcessor(input: {
         : "http";
     let renderedLinks: CrawlUrlDisposition[] = [];
 
-    if (type !== "text/plain" && !readerRecovered && !browserRecovered) {
+    if (type !== "text/plain" && !readerRecovered && !browserRecovered && !input.signal?.aborted) {
       const renderDecision = decideScannerV2RenderEscalation({ rawHtml: body });
       const renderBudget = pageBudgetMs();
       if (renderDecision.render && renderBudget >= 500) {
@@ -805,7 +828,7 @@ async function seedJob(input: {
     maxSitemapDocuments: input.discoveryOptions?.maxSitemapDocuments ?? 3,
     maxSitemapDepth: input.discoveryOptions?.maxSitemapDepth ?? 1,
     sitemapTimeoutMs: input.discoveryOptions?.sitemapTimeoutMs ?? 2_500,
-    maxDiscoveredUrls: input.discoveryOptions?.maxDiscoveredUrls ?? 40,
+    maxDiscoveredUrls: input.discoveryOptions?.maxDiscoveredUrls ?? MAX_ADMITTED_CRAWL_URLS,
   });
 
   const rows = discovered.manifest.urls.map((row) => {
@@ -1064,6 +1087,12 @@ export async function runPersistentScannerV2(
   };
 
   let timer: ReturnType<typeof setTimeout> | undefined;
+  const fetchAbort = new AbortController();
+  const fetchAbortMs = Math.min(
+    SCANNER_V2_FETCH_ABORT_MS,
+    Math.max(250, requestMs - 1_000),
+  );
+  const fetchAbortTimer = setTimeout(() => fetchAbort.abort(), fetchAbortMs);
   const limited = new Promise<ScanResult>((resolve) => {
     timer = setTimeout(() => {
       timerWon = true;
@@ -1081,10 +1110,13 @@ export async function runPersistentScannerV2(
       const hasFetchedEvidence = priorUrls.some(
         (row) => row.status === "fetched" || row.status === "duplicate",
       );
+      const oversizedPageSkipped = priorUrls.some(
+        (row) => row.status === "policy_skipped" && row.reason === "response_too_large",
+      );
       const reset = (
         store as { resetZeroEvidenceRecords?: (id: string) => Promise<void> }
       ).resetZeroEvidenceRecords;
-      if (!hasFetchedEvidence && typeof reset === "function") {
+      if (!hasFetchedEvidence && !oversizedPageSkipped && typeof reset === "function") {
         await reset.call(store, crawlId);
         needsSeed = true;
       }
@@ -1110,6 +1142,7 @@ export async function runPersistentScannerV2(
             options.discoveryOptions?.htmlTimeoutMs ?? requestMs,
             requestMs,
           ),
+          signal: fetchAbort.signal,
         },
       });
     }
@@ -1124,6 +1157,7 @@ export async function runPersistentScannerV2(
         get: options.discoveryOptions?.get,
         browserDocumentFetch: options.discoveryOptions?.browserDocumentFetch,
         pageBudgetMs: remainingMs,
+        signal: fetchAbort.signal,
       }));
     const batchSize = boundedInt(
       options.batchSize,
@@ -1182,6 +1216,7 @@ export async function runPersistentScannerV2(
   try {
     return await Promise.race([body, limited]);
   } finally {
+    clearTimeout(fetchAbortTimer);
     if (timer) clearTimeout(timer);
   }
 }

@@ -72,6 +72,8 @@ export type FetchSafeOptions = {
   acceptCompressed?: boolean;
   /** Hard ceiling after decompression when acceptCompressed is true. */
   maxDecompressedBytes?: number;
+  /** Aborts an in-flight fetch even when the socket is still receiving bytes. */
+  signal?: AbortSignal;
 };
 
 function header(headers: Record<string, string>, name: string): string {
@@ -153,6 +155,31 @@ export async function defaultLookup(hostname: string): Promise<string[]> {
   return [...new Set(records.map((row) => row.address))];
 }
 
+function armFetchDeadline(
+  req: { destroy: () => void },
+  timeoutMs: number,
+  signal: AbortSignal | undefined,
+  fail: (error: ScanError) => void,
+): { disarm: () => void; deadlineHit: () => boolean; abortNow: () => void } {
+  let hit = false;
+  const fire = () => {
+    if (hit) return;
+    hit = true;
+    req.destroy();
+    fail(new ScanError("timeout", "The page fetch timed out.", 504));
+  };
+  const timer = setTimeout(fire, timeoutMs);
+  signal?.addEventListener("abort", fire, { once: true });
+  return {
+    deadlineHit: () => hit,
+    abortNow: () => fire(),
+    disarm: () => {
+      clearTimeout(timer);
+      signal?.removeEventListener("abort", fire);
+    },
+  };
+}
+
 export function httpsGetToIp(
   url: URL,
   ip: string,
@@ -162,6 +189,7 @@ export function httpsGetToIp(
     headers?: Record<string, string>;
     acceptCompressed?: boolean;
     maxDecompressedBytes?: number;
+    signal?: AbortSignal;
   },
 ): Promise<SafeHttpResponse> {
   return new Promise((resolve, reject) => {
@@ -179,6 +207,16 @@ export function httpsGetToIp(
       reject(new ScanError("fetch_failed", "Resolved target was not an IP address.", 422));
       return;
     }
+
+    let settled = false;
+    let deadline: ReturnType<typeof armFetchDeadline> | undefined;
+    const finish = (error?: ScanError, response?: SafeHttpResponse) => {
+      if (settled) return;
+      settled = true;
+      deadline?.disarm();
+      if (error) reject(error);
+      else if (response) resolve(response);
+    };
 
     const req = https.request(
       {
@@ -210,7 +248,7 @@ export function httpsGetToIp(
           size += chunk.length;
           if (size > opts.maxBytes) {
             req.destroy();
-            reject(
+            finish(
               new ScanError(
                 "response_too_large",
                 "The page exceeded the fetch size cap.",
@@ -238,11 +276,15 @@ export function httpsGetToIp(
                 opts.maxDecompressedBytes ?? opts.maxBytes,
             });
           } catch (error) {
-            reject(error);
+            finish(
+              error instanceof ScanError
+                ? error
+                : new ScanError("content_decode_failed", "The response could not be decoded.", 422),
+            );
             return;
           }
 
-          resolve({
+          finish(undefined, {
             status: res.statusCode ?? 0,
             headers: rawHeaders,
             body: payload.toString("utf8"),
@@ -252,14 +294,18 @@ export function httpsGetToIp(
       },
     );
 
+    deadline = armFetchDeadline(req, opts.timeoutMs, opts.signal, (error) => finish(error));
+    if (opts.signal?.aborted) deadline.abortNow();
     req.on("timeout", () => {
       req.destroy();
-      reject(
-        new ScanError("timeout", "The page fetch timed out.", 504),
-      );
+      finish(new ScanError("timeout", "The page fetch timed out.", 504));
     });
     req.on("error", (err) => {
-      reject(
+      if (deadline?.deadlineHit()) {
+        finish(new ScanError("timeout", "The page fetch timed out.", 504));
+        return;
+      }
+      finish(
         new ScanError(
           "fetch_failed",
           err instanceof Error ? err.message : "Fetch failed.",
@@ -545,6 +591,9 @@ export async function fetchPublicHttps(
 
   let current = raw;
   for (let hop = 0; hop <= maxRedirects; hop += 1) {
+    if (options.signal?.aborted) {
+      throw new ScanError("timeout", "The page fetch timed out.", 504);
+    }
     const allow = allowPublicHttpsUrl(current);
     if (!allow.ok) {
       throw new ScanError(allow.reason, ssrfMessage(allow.reason), 400);
@@ -554,6 +603,9 @@ export async function fetchPublicHttps(
     try {
       addresses = await lookup(allow.url.hostname);
     } catch (err) {
+      if (options.signal?.aborted) {
+        throw new ScanError("timeout", "The page fetch timed out.", 504);
+      }
       if (err instanceof ScanError) throw err;
       throw new ScanError(
         "dns_failed",
@@ -606,6 +658,7 @@ export async function fetchPublicHttps(
           headers: publicPageHeaders(options.headers),
           acceptCompressed: options.acceptCompressed,
           maxDecompressedBytes: options.maxDecompressedBytes,
+          signal: options.signal,
         });
         response = candidate;
         if (candidate.status !== 401 && candidate.status !== 403) break;

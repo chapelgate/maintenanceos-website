@@ -6,6 +6,7 @@ import test from "node:test";
 import {
   createScannerV2Job,
   FileScannerV2JobStore,
+  frontierUrlsToSkip,
   runScannerV2WorkerBatch,
 } from "./scanner-v2-worker.ts";
 import {
@@ -150,6 +151,47 @@ test("terminal frontier with no fetched evidence stays PARTIAL", async () => {
   assert.equal(result.manifest.state, "PARTIAL");
   assert.equal(result.manifest.fetched, 0);
   assert.equal(result.hasMoreWork, false);
+});
+
+test("a large non-key frontier is capped once the home page is fetched", async () => {
+  const { store } = await tempStore();
+  const blogs = Array.from({ length: 20 }, (_, index) =>
+    queued(`https://acme.example/blog/post-${index}`),
+  );
+  await createScannerV2Job({
+    store,
+    crawlId: "cap",
+    origin: "https://acme.example",
+    releaseSha: "sha-frontier",
+    urls: [
+      {
+        url: "https://acme.example/",
+        status: "fetched",
+        discoveryReason: "submitted",
+      },
+      ...blogs,
+    ],
+  });
+
+  const before = await store.listUrls("cap");
+  assert.equal(frontierUrlsToSkip(before).length, 16);
+
+  const result = await runScannerV2WorkerBatch({
+    store,
+    crawlId: "cap",
+    workerId: "worker-a",
+    batchSize: 1,
+    processUrl: async ({ url }) => ({
+      disposition: "fetched" as const,
+      ...pageFor(url.url, "body"),
+    }),
+  });
+
+  const rows = await store.listUrls("cap");
+  assert.equal(rows.filter((row) => row.reason === "frontier_capped").length, 16);
+  assert.equal(result.attempted, 1);
+  assert.equal(result.hasMoreWork, true);
+  assert.equal(rows.filter((row) => row.status === "queued").length, 3);
 });
 
 test("duplicate worker execution is idempotent by terminal URL state and stable chunk id", async () => {
