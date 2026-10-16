@@ -42,6 +42,24 @@ test("addresses anchor on the postcode and drop phone, email, and label prefixes
     addressAroundPostcode("Available 24/7, kitchen is open, 1 High Street, York, YO1 7HH"),
     "1 High Street, York, YO1 7HH",
   );
+  assert.equal(
+    addressAroundPostcode(
+      "Dunlop Tyres, Michelin Tyres, Talk to us, 1 Mosedale Road Croft Business Park Bromborough Wirral, CH62 3QZ",
+    ),
+    "1 Mosedale Road, Croft Business Park, Bromborough, CH62 3QZ",
+  );
+  assert.equal(
+    addressAroundPostcode("FIND US, 5 Sir Thomas St, Liverpool, L1 6BW"),
+    "5 Sir Thomas St, Liverpool, L1 6BW",
+  );
+  assert.equal(
+    addressAroundPostcode("Address: 19 Hamilton Square, Birkenhead, CH41 6AY"),
+    "19 Hamilton Square, Birkenhead, CH41 6AY",
+  );
+  assert.equal(
+    addressAroundPostcode("Cancellation Policy, 10 King Street, Manchester, M2 4WU"),
+    "10 King Street, Manchester, M2 4WU",
+  );
 });
 
 test("UK phones are E.164 and glued or +0 forms are rejected", () => {

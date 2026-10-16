@@ -646,8 +646,62 @@ test("title and site name beat a different trade label", () => {
       html: "<html><head><title>kbjoineryservices</title></head><body></body></html>",
     },
   ]);
-  assert.equal(slug.draft.businessName, "Kbjoineryservices");
+  assert.equal(slug.draft.businessName, "Kb Joinery Services");
   assert.equal(slug.fieldMeta.businessName?.confidence, "low");
+});
+
+test("sentences and trade titles lose to the domain brand", () => {
+  assert.equal(
+    publicBusinessName(
+      "Percy Hughes & Roberts Solicitors are a specialist law firm in Birkenhead, Wirral.",
+    ),
+    undefined,
+  );
+  const phr = extractDraftFromHtml([
+    { url: "https://www.phrsolicitors.co.uk/", html: fixture("phrsolicitors-home.html") },
+  ]);
+  assert.match(
+    phr.draft.businessName ?? "",
+    /^(?:PHR Solicitors(?: Wirral)?|Percy Hughes & Roberts Solicitors)$/,
+  );
+  assert.doesNotMatch(phr.draft.businessName ?? "", / are |specialist law firm/i);
+
+  const croft = extractDraftFromHtml([
+    { url: "https://croftautomotive.co.uk/", html: fixture("croftautomotive-home.html") },
+  ]);
+  assert.equal(croft.draft.businessName, "Croft Automotive Group Ltd");
+  assert.doesNotMatch(croft.draft.businessName ?? "", /Car Servicing/i);
+  assert.equal(
+    croft.facts.address,
+    "1 Mosedale Road, Croft Business Park, Bromborough, CH62 3QZ",
+  );
+
+  const wirral = extractDraftFromHtml([
+    { url: "https://wirralheating.com/", html: fixture("wirralheating-home.html") },
+  ]);
+  assert.equal(wirral.draft.businessName, "Wirral Heating");
+  assert.equal(wirral.fieldMeta.businessName?.source, "jsonld");
+  assert.equal(wirral.fieldMeta.businessName?.confidence, "medium");
+  assert.notEqual(wirral.draft.businessName, "Wirral Plumber");
+
+  const james = extractDraftFromHtml([
+    { url: "https://www.jamesfoyelectrics.co.uk/", html: fixture("jamesfoyelectrics-home.html") },
+  ]);
+  assert.equal(james.draft.businessName, "James Foy Electrics");
+  assert.equal(james.fieldMeta.businessName?.source, "jsonld");
+  assert.equal(james.fieldMeta.businessName?.confidence, "medium");
+
+  const karl = extractDraftFromHtml([
+    { url: "https://www.karltatler.com/", html: fixture("karltatler-home.html") },
+  ]);
+  assert.equal(karl.draft.businessName, "Karl Tatler");
+  assert.equal(karl.fieldMeta.businessName?.source, "jsonld");
+  assert.equal(karl.fieldMeta.businessName?.confidence, "medium");
+
+  assert.equal(
+    publicBusinessName("Black and Pink Modern Initials Logo Design_edited.jpg"),
+    undefined,
+  );
 });
 
 test("a missing name falls back to the domain at low confidence", () => {

@@ -502,19 +502,27 @@ export async function recoverScannerV2ReaderPage(
   options: {
     lookup?: LookupFn;
     get?: HttpGetFn;
+    timeoutMs?: number;
   } = {},
 ): Promise<SafeHttpResponse | null> {
   const allowed = allowPublicHttpsUrl(targetUrl);
   if (!allowed.ok) return null;
 
+  const budget = Math.min(
+    READER_FALLBACK_TIMEOUT_MS,
+    Math.max(250, options.timeoutMs ?? READER_FALLBACK_TIMEOUT_MS),
+  );
+  const readerDeadline = Date.now() + budget;
   const readerUrl = `${READER_FALLBACK_ORIGIN}/${allowed.url.toString()}`;
   for (let attempt = 0; attempt < 2; attempt += 1) {
+    const left = readerDeadline - Date.now();
+    if (left < 250) return null;
     let reader: SafeHttpResponse;
     try {
       reader = await fetchPublicHttps(readerUrl, {
         lookup: options.lookup,
         get: options.get,
-        timeoutMs: READER_FALLBACK_TIMEOUT_MS,
+        timeoutMs: left,
         maxBytes: READER_FALLBACK_MAX_BYTES,
         maxRedirects: 2,
         headers: {
@@ -664,7 +672,11 @@ async function buildDefaultProcessor(input: {
         maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
     } catch (directError) {
-      const reader = await recoverScannerV2ReaderPage(url.url);
+      const readerBudget = pageBudgetMs();
+      const reader =
+        readerBudget >= 250
+          ? await recoverScannerV2ReaderPage(url.url, { timeoutMs: readerBudget })
+          : null;
       if (!reader) throw directError;
       response = reader;
       readerRecovered = true;
@@ -720,10 +732,11 @@ async function buildDefaultProcessor(input: {
 
     if (type !== "text/plain" && !readerRecovered && !browserRecovered) {
       const renderDecision = decideScannerV2RenderEscalation({ rawHtml: body });
-      if (renderDecision.render) {
+      const renderBudget = pageBudgetMs();
+      if (renderDecision.render && renderBudget >= 500) {
         const rendered = await renderScannerV2Page(url.url, {
           rawHtml: body,
-          timeoutMs: pageBudgetMs(),
+          timeoutMs: renderBudget,
         });
         if (!rendered.ok) {
           throw new Error(rendered.reason);
@@ -956,7 +969,11 @@ export async function runPersistentScannerV2(
   const deadline = started + requestMs;
   const resultReserveMs = Math.min(SCANNER_V2_RESULT_RESERVE_MS, Math.floor(requestMs / 2));
   const workMs = Math.max(250, requestMs - resultReserveMs);
-  const remainingMs = () => Math.max(0, deadline - now());
+  const wallStarted = Date.now();
+  const wallWorkDeadline = wallStarted + workMs;
+  const wallResponseDeadline = wallStarted + requestMs;
+  const remainingMs = () =>
+    Math.min(Math.max(0, deadline - now()), Math.max(0, wallWorkDeadline - Date.now()));
   let resumed = false;
   let timerWon = false;
 
@@ -994,11 +1011,63 @@ export async function runPersistentScannerV2(
     }
   };
 
+  const budgetSnapshot = async (): Promise<ScanResult> => {
+    let discovered = 0;
+    let fetched = 0;
+    let unresolved = 0;
+    try {
+      const urls = await store.listUrls(crawlId);
+      discovered = urls.length;
+      fetched = urls.filter((row) => row.status === "fetched").length;
+      unresolved = urls.filter((row) => row.status === "unresolved").length;
+    } catch {
+      // The job may not exist yet. Counts stay at zero.
+    }
+    return {
+      ok: true,
+      untrusted: true,
+      draft: {},
+      warnings: ["time_budget"],
+      sources: [],
+      facts: {},
+      factMeta: {},
+      scannerV2: {
+        crawlId,
+        state: "CRAWLING",
+        discovered,
+        fetched,
+        unresolved,
+        knowledgeChunks: 0,
+        resumed,
+      },
+    };
+  };
+
+  const finishWithin = (work: Promise<ScanResult>): Promise<ScanResult> => {
+    const left = Math.max(0, wallResponseDeadline - Date.now());
+    if (left <= 25) return budgetSnapshot();
+    return new Promise((resolve) => {
+      const backup = setTimeout(() => {
+        void budgetSnapshot().then(resolve);
+      }, left);
+      work.then(
+        (result) => {
+          clearTimeout(backup);
+          resolve(result);
+        },
+        () => {
+          clearTimeout(backup);
+          void budgetSnapshot().then(resolve);
+        },
+      );
+    });
+  };
+
   let timer: ReturnType<typeof setTimeout> | undefined;
   const limited = new Promise<ScanResult>((resolve) => {
     timer = setTimeout(() => {
       timerWon = true;
-      void persistedPartial().then(resolve);
+      void finishWithin(persistedPartial()).then(resolve);
     }, workMs);
   });
 
@@ -1064,14 +1133,14 @@ export async function runPersistentScannerV2(
     );
     let probesConsidered = false;
 
-    while (now() < deadline && !timerWon) {
+    while (now() < deadline && Date.now() < wallWorkDeadline && !timerWon) {
       const batch = await runScannerV2WorkerBatch({
         store,
         crawlId,
         workerId: `runtime-${process.pid}`,
         processUrl,
         batchSize,
-        deadlineAt: deadline,
+        deadlineAt: Math.min(deadline, wallWorkDeadline),
         nowMs: now,
         leaseMs: requestMs,
       });
@@ -1090,16 +1159,19 @@ export async function runPersistentScannerV2(
       if (batch.attempted === 0 && batch.deferred > 0) break;
     }
 
-    const result = await runtimeResult({
-      store,
-      crawlId,
-      origin: origin.origin,
-      resumed,
-    });
-    if (result.scannerV2?.state === "CRAWLING" && (timerWon || now() >= deadline)) {
-      result.warnings = unique([...result.warnings, "time_budget"]);
-    }
-    return result;
+    return finishWithin(
+      runtimeResult({
+        store,
+        crawlId,
+        origin: origin.origin,
+        resumed,
+      }).then((result) => {
+        if (result.scannerV2?.state === "CRAWLING" && (timerWon || now() >= deadline)) {
+          result.warnings = unique([...result.warnings, "time_budget"]);
+        }
+        return result;
+      }),
+    );
   };
 
   const body = execute().catch((error: unknown) => {

@@ -428,7 +428,7 @@ const REGION_OR_COUNTRY_CODE = /^(?:eng|gb|gbr|uk|usa|us|eu)$/i;
 /** Street, locality, and postcode only. Region and country codes such as ENG and GB are omitted. */
 export function formatPostalAddress(value: unknown): string | undefined {
   const direct = stringField(value);
-  if (direct) return stripAddressCodes(direct);
+  if (direct) return normalizePostalAddress(direct);
   const rec = asRecord(value);
   if (!rec) return undefined;
   const parts = [
@@ -436,7 +436,7 @@ export function formatPostalAddress(value: unknown): string | undefined {
     stringField(rec.addressLocality),
     stringField(rec.postalCode),
   ].filter((item): item is string => Boolean(item));
-  return parts.length ? stripAddressCodes(parts.join(", ")) : undefined;
+  return parts.length ? normalizePostalAddress(parts.join(", ")) : undefined;
 }
 
 function stripAddressCodes(value: string): string | undefined {
@@ -445,6 +445,13 @@ function stripAddressCodes(value: string): string | undefined {
     .map((part) => part.trim())
     .filter((part) => part && !REGION_OR_COUNTRY_CODE.test(part));
   return parts.length ? parts.join(", ") : undefined;
+}
+
+function normalizePostalAddress(value: string): string | undefined {
+  const stripped = stripAddressCodes(value);
+  if (!stripped) return undefined;
+  if (!UK_POSTCODE_RE.test(stripped)) return stripped;
+  return addressAroundPostcode(stripped) ?? stripped;
 }
 
 function locationText(value: unknown): string | undefined {
@@ -501,7 +508,8 @@ export function extractJsonLd(html: string): JsonLdExtract {
   const nodes: Record<string, unknown>[] = [];
   for (const block of parseJsonLdBlocks(html)) flattenJsonLd(block, nodes);
 
-  let businessName: string | undefined;
+  let typedName: string | undefined;
+  let looseName: string | undefined;
   let greeting: string | undefined;
   const hours: string[] = [];
   const services: string[] = [];
@@ -514,7 +522,10 @@ export function extractJsonLd(html: string): JsonLdExtract {
   for (const rec of nodes) {
     const types = typesOf(rec);
     if (isBusinessNode(rec)) {
-      businessName ||= stringField(rec.name);
+      const name = stringField(rec.name);
+      const typed = types.some((t) => BUSINESS_TYPES.has(t) || t.includes("business"));
+      if (typed) typedName ||= name;
+      else looseName ||= name;
       greeting ||= stringField(rec.slogan);
       collectHours(rec, hours);
       collectServices(rec, services);
@@ -534,7 +545,7 @@ export function extractJsonLd(html: string): JsonLdExtract {
   const unique = (items: string[]) => [...new Set(items)].slice(0, 16);
 
   return {
-    businessName,
+    businessName: typedName || looseName,
     greeting,
     hours: unique(hours).join("\n") || undefined,
     services: unique(services).join("\n") || undefined,
@@ -1079,13 +1090,70 @@ export function isAcceptableAddress(value: string): boolean {
 }
 
 const ADDRESS_LABEL_RE =
-  /^(?:find us|contact(?:\s+info|\s+details|\s+us)?|opening hours|address|available|get in touch|location|our location|visit us|where to find us|phone|tel|email|e-mail|call)\b/i;
+  /^(?:find us|contact(?:\s+info|\s+details|\s+us)?|opening hours|address|available|get in touch|location|our location|visit us|where to find us|phone|tel|email|e-mail|call|talk to us|cancellation policy)\b/i;
+
+const REGION_TAIL_RE =
+  /^(?:wirral|merseyside|cheshire|lancashire|yorkshire|staffordshire|shropshire|derbyshire|midlands)$/i;
+
+const STREET_LINE_RE =
+  /^(.*?\b(?:road|street|lane|avenue|ave|close|drive|way|court|place|crescent|terrace|gardens|grove|hill|square|chase|mews|row|walk|rise|view|gate|yard|quay|wharf|parade|boulevard|rd|st)\b)/i;
+
+const ESTATE_LINE_RE =
+  /^(.*?\b(?:business park|industrial estate|trading estate|retail park)\b)/i;
 
 function segmentHasContactToken(part: string): boolean {
   if (/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(part)) return true;
   if (/\bat\b/i.test(part) && /\bdot\b/i.test(part)) return true;
   const digits = part.replace(/\D/g, "");
   return digits.length >= 10 && /(?:\+|0)\d/.test(part);
+}
+
+function stripAddressLabel(part: string): string {
+  return part
+    .replace(
+      /^(?:find us|contact info|opening hours|address|talk to us|cancellation policy)\s*[:\-]?\s*/i,
+      "",
+    )
+    .trim();
+}
+
+function startsWithHouseNumber(part: string): boolean {
+  return /^(?:flat|unit|suite|apartment|apt\.?\s*)?\d+[a-z]?\b/i.test(part);
+}
+
+/** Drop brand and heading text that sits in front of the house number. */
+function cutToHouseNumber(part: string): string {
+  const match =
+    /(?:^|\s)((?:flat|unit|suite|apartment|apt\.?\s*)?\d+[a-z]?\s+\S.*)$/i.exec(
+      part,
+    );
+  return match?.[1]?.trim() || part.trim();
+}
+
+/**
+ * Turn "1 Mosedale Road Croft Business Park Bromborough Wirral" into
+ * street, estate, and town lines. A trailing county glued onto that blob is
+ * omitted. Comma-separated lines are left as the page wrote them.
+ */
+function splitStreetBlob(part: string): string[] {
+  const text = part.replace(/\s+/g, " ").trim();
+  const street = STREET_LINE_RE.exec(text);
+  if (!street?.[1]) return text ? [text] : [];
+  const lines = [street[1].trim()];
+  let rest = text.slice(street[1].length).trim();
+  const estate = ESTATE_LINE_RE.exec(rest);
+  if (estate?.[1]) {
+    lines.push(estate[1].trim());
+    rest = rest.slice(estate[1].length).trim();
+  }
+  if (!rest) return lines;
+  const words = rest.split(/\s+/);
+  while (words.length > 1 && REGION_TAIL_RE.test(words[words.length - 1] ?? "")) {
+    words.pop();
+  }
+  const locality = words.join(" ").trim();
+  if (locality && !REGION_TAIL_RE.test(locality)) lines.push(locality);
+  return lines;
 }
 
 /** Take the UK postcode and only the street lines immediately before it. */
@@ -1096,7 +1164,7 @@ export function addressAroundPostcode(text: string): string | undefined {
   const segments = text
     .slice(0, match.index)
     .split(/[\n,]+/)
-    .map((part) => part.trim())
+    .map((part) => stripAddressLabel(part.trim()))
     .filter(Boolean);
   const kept: string[] = [];
   for (let index = segments.length - 1; index >= 0 && kept.length < 4; index -= 1) {
@@ -1109,7 +1177,15 @@ export function addressAroundPostcode(text: string): string | undefined {
     kept.unshift(part);
   }
   if (!kept.length) return undefined;
-  const address = sanitizeUntrustedField(`${kept.join(", ")}, ${postcode}`, 500);
+  const houseAt = kept.findIndex((part) => startsWithHouseNumber(cutToHouseNumber(part)));
+  const fromHouse = (houseAt >= 0 ? kept.slice(houseAt) : kept).map((part, index) =>
+    index === 0 ? cutToHouseNumber(part) : part,
+  );
+  const lines = fromHouse.flatMap((part, index) =>
+    index === 0 ? splitStreetBlob(part) : [part],
+  );
+  if (!lines.length) return undefined;
+  const address = sanitizeUntrustedField(`${lines.join(", ")}, ${postcode}`, 500);
   return address && isAcceptableAddress(address) ? address : undefined;
 }
 
@@ -1670,7 +1746,23 @@ const HOSTLIKE_NAME_RE = /^(?:[\w-]+\.)+(?:uk|com|org|net|gov\.uk)$/i;
 const ERROR_PAGE_TITLE_RE =
   /404|\bnot found\b|\berror\b|^untitled(?:\s+document)?$/i;
 
-/** Drop "Welcome to" and names that are only a generic title or a hostname. */
+const SENTENCE_VERB_RE = /\s(?:are|is|we|provide)\s/i;
+
+/** A name that is really a sentence, a tagline, or a place tacked on with a comma. */
+function isSentenceName(value: string): boolean {
+  if (value.length > 60) return true;
+  if (/[.]$/.test(value)) return true;
+  if (SENTENCE_VERB_RE.test(` ${value} `) || SENTENCE_VERB_RE.test(value)) return true;
+  if (
+    /,\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}\.?$/.test(value) &&
+    (value.length > 40 || /,\s*[A-Z][a-z]+,\s*[A-Z][a-z]+/.test(value))
+  ) {
+    return true;
+  }
+  return false;
+}
+
+/** Drop "Welcome to" and names that are only a generic title, a hostname, or a sentence. */
 export function publicBusinessName(value: string | undefined): string | undefined {
   if (!value) return undefined;
   const stripped = sanitizeUntrustedField(value, 200)
@@ -1680,23 +1772,88 @@ export function publicBusinessName(value: string | undefined): string | undefine
     .trim();
   if (!stripped || isGenericName(stripped) || HOSTLIKE_NAME_RE.test(stripped)) return undefined;
   if (ERROR_PAGE_TITLE_RE.test(stripped)) return undefined;
+  if (isSentenceName(stripped)) return undefined;
+  if (/\.(?:jpe?g|png|gif|webp|svg|ico|pdf|docx?|html?)$/i.test(stripped)) return undefined;
   return stripped;
 }
 
-function stripTagline(value: string): string {
-  const barred = value.split(/\s*[|–—]\s*/);
-  const first = barred[0]?.trim() || value.trim();
-  const dashed = first.split(/\s+-\s+/);
-  if (dashed.length === 2 && (dashed[1]?.length ?? 0) > (dashed[0]?.length ?? 0)) {
-    return dashed[0]?.trim() || first;
+const DOMAIN_BRAND_WORDS = [
+  "accountants",
+  "accounting",
+  "automotive",
+  "barbers",
+  "bathrooms",
+  "builders",
+  "cleaning",
+  "construction",
+  "consulting",
+  "croft",
+  "dental",
+  "electricians",
+  "electrical",
+  "garage",
+  "gardens",
+  "heating",
+  "joinery",
+  "lettings",
+  "locksmiths",
+  "motors",
+  "plumbing",
+  "properties",
+  "roofing",
+  "services",
+  "service",
+  "solicitors",
+  "solicitor",
+  "wirral",
+  "liverpool",
+  "manchester",
+  "birkenhead",
+  "chester",
+  "london",
+];
+
+function segmentDomainSlug(slug: string): string[] | undefined {
+  const compact = slug.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (compact.length < 4) return undefined;
+  const words = DOMAIN_BRAND_WORDS.slice().sort((a, b) => b.length - a.length);
+  const out: string[] = [];
+  let index = 0;
+  while (index < compact.length) {
+    const match = words.find((word) => compact.startsWith(word, index));
+    if (match) {
+      out.push(match);
+      index += match.length;
+      continue;
+    }
+    let end = index + 1;
+    while (end < compact.length && !words.some((word) => compact.startsWith(word, end))) {
+      end += 1;
+    }
+    const leftover = compact.slice(index, end);
+    if (leftover.length < 2) return undefined;
+    out.push(leftover);
+    index = end;
   }
-  return first;
+  return out.length >= 2 ? out : undefined;
+}
+
+function domainBrandTokens(siteHost: string): string[] {
+  const slug = siteHost.replace(/^www\./i, "").split(".")[0] ?? "";
+  return segmentDomainSlug(slug) ?? [];
+}
+
+function titledToken(word: string): string {
+  return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
 function domainBusinessName(siteHost: string): string | undefined {
   const slug = siteHost.replace(/^www\./i, "").split(".")[0]?.replace(/[^a-z0-9]+/gi, " ").trim() ?? "";
-  if (slug.length < 4) return undefined;
-  const titled = slug.replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+  if (slug.replace(/\s+/g, "").length < 4) return undefined;
+  const tokens = domainBrandTokens(siteHost);
+  const titled = tokens.length >= 2
+    ? tokens.map(titledToken).join(" ")
+    : slug.replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
   return publicBusinessName(titled);
 }
 
@@ -1717,42 +1874,131 @@ function isShortNameFragment(name: string): boolean {
 
 type NameHit = { value: string; source: FieldSource; confidence: FieldConfidence; rank: number };
 
-function chooseBusinessName(hits: NameHit[], siteHost: string): NameHit | undefined {
-  const prepared = hits
-    .map((hit) => ({
-      ...hit,
-      value: publicBusinessName(stripTagline(hit.value)) ?? "",
-    }))
-    .filter((hit) => hit.value && !isDomainSlug(hit.value, siteHost));
-  const longer = prepared.filter((hit) => hit.value.trim().split(/\s+/).length >= 2);
-  const pool = (longer.length ? prepared : prepared.filter((hit) => !isShortNameFragment(hit.value))).filter(
-    (hit) => {
-      if (!longer.length || hit.value.trim().split(/\s+/).length >= 2) return true;
-      const token = hit.value.toLowerCase().replace(/'s$/, "");
-      return !longer.some(
-        (item) =>
-          item.value.toLowerCase().startsWith(token) && item.value.length > hit.value.length + 1,
-      );
-    },
-  );
-  const usable = pool.filter((hit) => !isShortNameFragment(hit.value));
-  const ranked = (usable.length ? usable : pool).sort(
-    (a, b) => b.rank - a.rank || b.value.length - a.value.length,
-  );
-  const top = ranked[0];
-  if (!top) return undefined;
-  const sameBrand = ranked.filter(
-    (hit) => hit.value.toLowerCase() === top.value.toLowerCase(),
-  );
-  const structured = sameBrand.find(
-    (hit) => hit.source === "jsonld" || hit.source === "microdata",
-  );
+const TRADE_NAME_RE =
+  /^(?:car|cars|servicing|service|services|plumber|plumbers|plumbing|electrician|electricians|electrical|electrics|heating|boiler|boilers|roofer|roofers|roofing|builder|builders|solicitor|solicitors|lawyer|lawyers|locksmith|locksmiths|joiner|joiners|painter|painters|cleaner|cleaners|gardener|gardeners|emergency|repairs|repair|gas|auto|garage|estate|agent|agents)$/i;
+
+const TRADE_PLACE_RE =
+  /^(?:wirral|liverpool|birkenhead|chester|manchester|london|leeds|york|birmingham|bromborough|eastham|merseyside|cheshire|wallasey|hoylake|bootle|southport|preston|warrington)$/i;
+
+function clipVerbPhrase(value: string): string {
+  const cut = value.split(SENTENCE_VERB_RE)[0]?.trim() || value.trim();
+  return cut.replace(/[.\s]+$/g, "");
+}
+
+function namePieces(value: string): Array<{ text: string; order: number }> {
+  const clipped = clipVerbPhrase(value);
+  const parts = clipped
+    .split(/\s*(?:\||–|—)\s*|\s+-\s+/)
+    .map((part) => clipVerbPhrase(part))
+    .filter(Boolean);
+  const list = parts.length ? parts : [clipped];
+  return list.map((text, order) => ({ text, order }));
+}
+
+function domainSlug(siteHost: string): string {
+  return siteHost.replace(/^www\./i, "").split(".")[0]?.replace(/[^a-z0-9]/gi, "").toLowerCase() ?? "";
+}
+
+function coversDomainTokens(value: string, tokens: string[]): boolean {
+  if (tokens.length < 2) return false;
+  const words = value.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  return tokens.every((token) => words.includes(token));
+}
+
+function nameMatchesDomain(name: string, siteHost: string): boolean {
+  const slug = domainSlug(siteHost);
+  if (slug.length < 4) return false;
+  const words = name
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((word) => word.length >= 2 && !/^(?:ltd|limited|llp|plc|group|company|co|uk)$/.test(word));
+  if (words.join("") === slug) return true;
+  return coversDomainTokens(name, domainBrandTokens(siteHost));
+}
+
+function isTradeLabel(name: string): boolean {
   if (
-    structured &&
-    (top.source === "title" || top.source === "meta") &&
-    structured.value.toLowerCase() === top.value.toLowerCase()
+    /^(?:plumbers|electricians|builders|solicitors|roofers|locksmiths|painters|cleaners|gardeners|heating|plumber)\s+in\s+\S+/i.test(
+      name,
+    )
   ) {
+    return true;
+  }
+  const words = name
+    .split(/[^A-Za-z0-9]+/)
+    .filter((word) => word && !/^(?:and|the|of|in|for|a|our|your|co)$/i.test(word));
+  if (words.length < 2 || words.length > 6) return false;
+  const trade = words.filter((word) => TRADE_NAME_RE.test(word));
+  if (!trade.length) return false;
+  const place = words.filter((word) => TRADE_PLACE_RE.test(word));
+  const company = words.filter((word) => /^(?:ltd|limited|llp|plc|group|company)$/i.test(word));
+  return trade.length + place.length + company.length === words.length && place.length + trade.length >= 2;
+}
+
+/** A trade word plus a town, such as "Electricians Liverpool" or "Wirral Estate Agents". */
+function isServiceTown(name: string): boolean {
+  if (isTradeLabel(name)) return true;
+  const words = name
+    .split(/[^A-Za-z0-9]+/)
+    .filter((word) => word && !/^(?:and|the|of|in|for|a|our|your|co|ltd|limited|group)$/i.test(word));
+  return words.some((word) => TRADE_NAME_RE.test(word)) && words.some((word) => TRADE_PLACE_RE.test(word));
+}
+
+function acceptableName(text: string, siteHost: string): string | undefined {
+  const value = publicBusinessName(text);
+  if (!value || isDomainSlug(value, siteHost)) return undefined;
+  if (isServiceTown(value) && !nameMatchesDomain(value, siteHost)) return undefined;
+  return value;
+}
+
+function leadName(value: string): string | undefined {
+  const piece = namePieces(value)[0];
+  return piece ? publicBusinessName(piece.text) : undefined;
+}
+
+function structuredNameConflicts(hits: NameHit[], chosen: string): boolean {
+  const wanted = chosen.toLowerCase();
+  return hits.some((hit) => {
+    if ((hit.source !== "meta" && hit.source !== "title") || hit.rank < 55) return false;
+    const lead = leadName(hit.value);
+    return Boolean(lead) && lead!.toLowerCase() !== wanted;
+  });
+}
+
+function chooseBusinessName(hits: NameHit[], siteHost: string): NameHit | undefined {
+  const prepared: NameHit[] = [];
+  for (const hit of hits) {
+    for (const piece of namePieces(hit.value)) {
+      const value = acceptableName(piece.text, siteHost);
+      if (!value) continue;
+      if (piece.order > 0 && !nameMatchesDomain(value, siteHost)) continue;
+      prepared.push({ ...hit, value });
+    }
+  }
+  const structured = prepared.find((hit) => hit.source === "jsonld" || hit.source === "microdata");
+  if (structured) {
+    if (structured.confidence === "high" && structuredNameConflicts(hits, structured.value)) {
+      return { ...structured, confidence: "medium" };
+    }
     return structured;
+  }
+  const copyright = prepared.find((hit) => hit.source === "footer");
+  if (copyright) {
+    return nameMatchesDomain(copyright.value, siteHost)
+      ? { ...copyright, confidence: "medium" }
+      : copyright;
+  }
+  const visible = prepared.filter(
+    (hit) => hit.source === "meta" || hit.source === "title" || hit.source === "heading",
+  );
+  const matched = visible.filter((hit) => nameMatchesDomain(hit.value, siteHost));
+  const pool = matched.length ? matched : visible;
+  pool.sort((a, b) => b.rank - a.rank);
+  const top = pool[0];
+  if (!top) return undefined;
+  const longer = pool.filter((hit) => hit.value.trim().split(/\s+/).length >= 2);
+  if (longer.length && isShortNameFragment(top.value)) {
+    return longer.sort((a, b) => b.rank - a.rank)[0];
   }
   return top;
 }
@@ -1769,8 +2015,14 @@ function logoAlt(html: string): string | undefined {
 
 function copyrightName(html: string): string | undefined {
   const text = htmlToPlainText(html);
-  const match = /©\s*(?:(?:19|20)\d{2}\s+)?([A-Z][^|\n.]{2,60})/.exec(text);
-  return match?.[1]?.trim();
+  const match = /©\s*(?:copyright\s+)?(?:(?:19|20)\d{2}\s+)?([A-Za-z][^|\n]{2,80})/i.exec(text);
+  if (!match?.[1]) return undefined;
+  const name = match[1]
+    .replace(/^copyright\s+/i, "")
+    .replace(/\s+(?:all rights reserved\.?|(?:19|20)\d{2}\b.*)$/i, "")
+    .replace(/[.\s]+$/g, "")
+    .trim();
+  return name || undefined;
 }
 
 export function extractSameOriginScriptSrcs(

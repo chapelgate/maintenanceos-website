@@ -926,13 +926,15 @@ export async function discoverScannerV2Frontier(
       const renderDecision = decideScannerV2RenderEscalation({
         rawHtml: response.body,
       });
-      if (renderDecision.render) {
+      const renderBudget = budgetTimeout(8_000);
+      if (renderDecision.render && !budgetSpent() && renderBudget >= 500) {
         const rendered = await renderScannerV2Page(pageUrl, {
           rawHtml: response.body,
           lookup: options.lookup,
           get: options.get,
           ...(options.renderBackend ? { backend: options.renderBackend } : {}),
           maxPathDepth,
+          timeoutMs: renderBudget,
         });
         if (!rendered.ok) {
           urls.update(pageUrl, {

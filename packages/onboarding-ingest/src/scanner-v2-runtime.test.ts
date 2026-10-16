@@ -10,6 +10,7 @@ import {
   runPersistentScannerV2,
 } from "./scanner-v2-runtime.ts";
 import { siteBlockedScan } from "./site-block.ts";
+import { FileScannerV2JobStore } from "./scanner-v2-worker.ts";
 import type {
   CrawlManifest,
   CrawlPage,
@@ -759,6 +760,65 @@ test("an 18s budget persists a partial crawl instead of running on", async () =>
     assert.equal(second.scannerV2?.crawlId, crawlId);
     assert.equal(second.scannerV2?.resumed, true);
     assert.ok((second.scannerV2?.fetched ?? 0) > 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("a slow final draft build still returns inside the request budget", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-draft-budget-"));
+  class SlowPages extends FileScannerV2JobStore {
+    async listPages(crawlId: string): Promise<CrawlPage[]> {
+      await new Promise<void>((resolve) => {
+        const timer = setTimeout(resolve, 5_000);
+        timer.unref();
+      });
+      return super.listPages(crawlId);
+    }
+  }
+  try {
+    const discover = async (rawUrl: string) => {
+      const origin = new URL(rawUrl).origin;
+      return {
+        manifest: seedManifest(origin),
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: [],
+        limitReached: false,
+        incomplete: true,
+      };
+    };
+    const started = Date.now();
+    const result = await runPersistentScannerV2("https://wirralheating.com/", {
+      stateRoot: root,
+      store: new SlowPages(root),
+      releaseSha: "draft-budget",
+      requestMs: 1_000,
+      batchSize: 4,
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => {
+        const fetched = page(url.url, `Wirral Heating ${url.url} 0151 496 0100`);
+        return {
+          disposition: "fetched" as const,
+          canonicalUrl: fetched.canonicalUrl,
+          page: fetched,
+          chunks: [],
+        };
+      }) as never,
+    });
+    const elapsed = Date.now() - started;
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    assert.ok(elapsed < 1_800, `elapsed ${elapsed}`);
+    assert.ok(elapsed >= 700, `elapsed ${elapsed}`);
+    assert.equal(result.scannerV2?.state, "CRAWLING");
+    assert.ok(result.warnings.includes("time_budget"));
+    assert.equal(typeof result.scannerV2?.fetched, "number");
   } finally {
     await rm(root, { recursive: true, force: true });
   }
