@@ -135,11 +135,13 @@ export async function requestServerVoice(
     type ServerVoicePayload = {
       ok?: unknown;
       error?: unknown;
+      reason?: unknown;
+      fallback?: unknown;
       audioBase64?: unknown;
       contentType?: unknown;
     };
     let parsed: ServerVoicePayload | null = null;
-    if (raw) {
+    if (raw && !type.includes("text/html")) {
       try {
         parsed = JSON.parse(raw) as ServerVoicePayload;
       } catch {
@@ -161,7 +163,8 @@ export async function requestServerVoice(
             : "audio/wav",
       };
     }
-    if (response.status === 404 || parsed?.error === "voice_not_configured") {
+    const reason = typeof parsed?.reason === "string" ? parsed.reason : parsed?.error;
+    if (response.status === 404 || reason === "voice_not_configured") {
       return { ok: false, reason: "not_configured" };
     }
     return { ok: false, reason: "unavailable" };

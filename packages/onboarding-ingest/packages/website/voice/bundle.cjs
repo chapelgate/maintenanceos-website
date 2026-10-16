@@ -43,7 +43,7 @@ function responseHeaders(origin, contentType, cacheControl) {
     "Content-Type": contentType,
     "Cache-Control": cacheControl,
     Vary: "Origin",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Accept"
   };
   if (origin) headers["Access-Control-Allow-Origin"] = origin;
@@ -63,8 +63,12 @@ function audioResponse(audioBase64, origin) {
     body: audioBase64
   };
 }
-function fallback(statusCode, error, origin) {
-  return jsonResponse(statusCode, { ok: false, error, fallback: "browser" }, origin);
+function fallback(reason, origin) {
+  return jsonResponse(200, { ok: false, fallback: "browser", reason }, origin);
+}
+function upstreamReason(status) {
+  const code = Number.isInteger(status) && status >= 100 && status <= 599 ? String(status) : "error";
+  return `upstream_${code}`;
 }
 function headerString(value) {
   if (typeof value === "string") return value;
@@ -216,18 +220,28 @@ async function handleVoice(event, options) {
       body: ""
     };
   }
-  if (method !== "POST") return fallback(405, "method_not_allowed", origin);
   const env = options.env ?? process.env;
+  if (method === "GET") {
+    const model2 = safeName(env.GEMINI_TTS_MODEL, DEFAULT_MODEL) ?? DEFAULT_MODEL;
+    const voice2 = safeName(env.GEMINI_TTS_VOICE, DEFAULT_VOICE) ?? DEFAULT_VOICE;
+    return jsonResponse(200, {
+      ok: true,
+      configured: Boolean(safeKey(env.GEMINI_API_KEY)),
+      model: model2,
+      voice: voice2
+    }, origin);
+  }
+  if (method !== "POST") return fallback("method_not_allowed", origin);
   const apiKey = safeKey(env.GEMINI_API_KEY);
-  if (!apiKey) return fallback(503, "voice_not_configured", origin);
+  if (!apiKey) return fallback("voice_not_configured", origin);
   const model = safeName(env.GEMINI_TTS_MODEL, DEFAULT_MODEL);
   const voice = safeName(env.GEMINI_TTS_VOICE, DEFAULT_VOICE);
-  if (!model || !voice) return fallback(502, "voice_unavailable", origin);
+  if (!model || !voice) return fallback("internal_error", origin);
   const text = readText(event);
-  if (!text) return fallback(400, "text_required", origin);
-  if (text.length > MAX_TEXT) return fallback(400, "text_too_long", origin);
+  if (!text) return fallback("text_missing", origin);
+  if (text.length > MAX_TEXT) return fallback("text_too_long", origin);
   const now = options.now ?? Date.now();
-  if (!allowRate(`ip:${ip}`, now)) return fallback(429, "rate_limited", origin);
+  if (!allowRate(`ip:${ip}`, now)) return fallback("rate_limited", origin);
   const cacheKey = `${model}
 ${voice}
 ${text}`;
@@ -235,7 +249,7 @@ ${text}`;
   if (hit) return audioResponse(hit, origin);
   const endpoint = `${GEMINI_HOST}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
   const fetchImpl = options.fetchImpl ?? globalThis.fetch;
-  if (typeof fetchImpl !== "function") return fallback(502, "voice_unavailable", origin);
+  if (typeof fetchImpl !== "function") return fallback("internal_error", origin);
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
   try {
@@ -259,23 +273,22 @@ ${text}`;
       }),
       signal: controller.signal
     });
-    if (upstream.status === 429) return fallback(429, "voice_rate_limited", origin);
-    if (!upstream.ok) return fallback(502, "voice_unavailable", origin);
+    if (!upstream.ok) return fallback(upstreamReason(upstream.status), origin);
     let payload;
     try {
       payload = await upstream.json();
     } catch {
-      return fallback(502, "voice_unavailable", origin);
+      return fallback("upstream_no_audio", origin);
     }
     const decoded = pcmFromGemini(payload);
     const wav = decoded ? wavFromPcm(decoded.pcm, decoded.mime) : null;
-    if (!wav) return fallback(502, "voice_unavailable", origin);
+    if (!wav) return fallback("upstream_no_audio", origin);
     const audioBase64 = bytesToBase64(wav);
     remember(cacheKey, audioBase64, now);
     return audioResponse(audioBase64, origin);
   } catch (error) {
     const timedOut = error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError" || /timeout/i.test(error.message));
-    return fallback(timedOut ? 504 : 502, timedOut ? "timeout" : "voice_unavailable", origin);
+    return fallback(timedOut ? "upstream_timeout" : "internal_error", origin);
   } finally {
     clearTimeout(timer);
   }
@@ -284,7 +297,7 @@ async function main(event = {}, options = {}) {
   try {
     return await handleVoice(event, options);
   } catch {
-    return jsonResponse(502, { ok: false, error: "voice_handler_error", fallback: "browser" });
+    return jsonResponse(200, { ok: false, fallback: "browser", reason: "internal_error" });
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
