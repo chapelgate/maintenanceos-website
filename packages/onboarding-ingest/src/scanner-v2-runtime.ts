@@ -74,7 +74,7 @@ import type {
 } from "./types.ts";
 
 export const DEFAULT_SCANNER_V2_STATE_ROOT = ".data/scanner-v2";
-export const DEFAULT_SCANNER_V2_REQUEST_MS = 20_000;
+export const DEFAULT_SCANNER_V2_REQUEST_MS = 18_000;
 export const MAX_SCANNER_V2_REQUEST_MS = 115_000;
 export const DEFAULT_SCANNER_V2_BATCH_SIZE = 8;
 export const MAX_SCANNER_V2_URLS = 10_000;
@@ -530,7 +530,9 @@ async function buildDefaultProcessor(input: {
   lookup?: LookupFn;
   get?: HttpGetFn;
   browserDocumentFetch?: BrowserDocumentFetch;
+  pageBudgetMs?: () => number;
 }): Promise<ScannerV2ProcessUrl> {
+  const pageBudgetMs = () => Math.max(250, Math.min(8_000, input.pageBudgetMs?.() ?? 8_000));
   const robots = await fetchRobotsRules(input.origin);
   const trapGuard = new ScannerV2FrontierTrapGuard({
     maxQueryVariantsPerSignature: DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
@@ -604,6 +606,7 @@ async function buildDefaultProcessor(input: {
     if (isScannerV2SupportedDocumentUrl(url.url)) {
       const document = await ingestScannerV2Document(url.url, {
         origin: input.origin.origin,
+        fetchTimeoutMs: pageBudgetMs(),
         ...(url.discoveredFrom ? { discoveredFrom: url.discoveredFrom } : {}),
       });
       if (!document.ok) {
@@ -627,7 +630,7 @@ async function buildDefaultProcessor(input: {
       response = await fetchPublicHttps(url.url, {
         lookup: input.lookup,
         get: input.get,
-        timeoutMs: 8_000,
+        timeoutMs: pageBudgetMs(),
         maxBytes: MAX_SCANNER_V2_HTML_BYTES,
         maxDecompressedBytes: MAX_SCANNER_V2_HTML_BYTES,
         acceptCompressed: true,
@@ -645,7 +648,7 @@ async function buildDefaultProcessor(input: {
       const recovered = await recoverAuthBlockedDocument({
         pageUrl: url.url,
         response,
-        timeoutMs: 8_000,
+        timeoutMs: pageBudgetMs(),
         browserDocumentFetch: input.browserDocumentFetch,
         allowPlaywrightLaunch: !input.get,
       });
@@ -691,7 +694,10 @@ async function buildDefaultProcessor(input: {
     if (type !== "text/plain" && !readerRecovered && !browserRecovered) {
       const renderDecision = decideScannerV2RenderEscalation({ rawHtml: body });
       if (renderDecision.render) {
-        const rendered = await renderScannerV2Page(url.url, { rawHtml: body });
+        const rendered = await renderScannerV2Page(url.url, {
+          rawHtml: body,
+          timeoutMs: pageBudgetMs(),
+        });
         if (!rendered.ok) {
           throw new Error(rendered.reason);
         }
@@ -911,6 +917,16 @@ export async function runPersistentScannerV2(
     DEFAULT_SCANNER_V2_STATE_ROOT;
   const crawlId = crawlIdFor(origin.origin, releaseSha);
   const store = options.store ?? new FileScannerV2JobStore(stateRoot);
+  const now = options.now ?? Date.now;
+  const requestMs = boundedInt(
+    options.requestMs,
+    DEFAULT_SCANNER_V2_REQUEST_MS,
+    1_000,
+    MAX_SCANNER_V2_REQUEST_MS,
+  );
+  const started = now();
+  const deadline = started + requestMs;
+  const remainingMs = () => Math.max(0, deadline - now());
   const existing = await store.getJob(crawlId);
   const resumed = Boolean(existing);
   let needsSeed = !existing;
@@ -930,6 +946,7 @@ export async function runPersistentScannerV2(
   }
 
   if (needsSeed) {
+    const discoverBudget = Math.max(250, Math.min(2_500, requestMs));
     await seedJob({
       store,
       crawlId,
@@ -937,9 +954,18 @@ export async function runPersistentScannerV2(
       submittedUrl: allowed.url.toString(),
       releaseSha,
       discover: options.discover ?? discoverScannerV2Frontier,
-      ...(options.discoveryOptions
-        ? { discoveryOptions: options.discoveryOptions }
-        : {}),
+      discoveryOptions: {
+        ...options.discoveryOptions,
+        deadlineAt: deadline,
+        sitemapTimeoutMs: Math.min(
+          options.discoveryOptions?.sitemapTimeoutMs ?? discoverBudget,
+          discoverBudget,
+        ),
+        htmlTimeoutMs: Math.min(
+          options.discoveryOptions?.htmlTimeoutMs ?? requestMs,
+          requestMs,
+        ),
+      },
     });
   }
 
@@ -952,22 +978,14 @@ export async function runPersistentScannerV2(
       lookup: options.discoveryOptions?.lookup,
       get: options.discoveryOptions?.get,
       browserDocumentFetch: options.discoveryOptions?.browserDocumentFetch,
+      pageBudgetMs: remainingMs,
     }));
-  const requestMs = boundedInt(
-    options.requestMs,
-    DEFAULT_SCANNER_V2_REQUEST_MS,
-    1_000,
-    MAX_SCANNER_V2_REQUEST_MS,
-  );
   const batchSize = boundedInt(
     options.batchSize,
     DEFAULT_SCANNER_V2_BATCH_SIZE,
     1,
     64,
   );
-  const now = options.now ?? Date.now;
-  const started = now();
-  const deadline = started + requestMs;
   let probesConsidered = false;
 
   while (now() < deadline) {
@@ -977,6 +995,8 @@ export async function runPersistentScannerV2(
       workerId: `runtime-${process.pid}`,
       processUrl,
       batchSize,
+      deadlineAt: deadline,
+      nowMs: now,
     });
     if (!probesConsidered) {
       const pages = await store.listPages(crawlId);
@@ -993,10 +1013,14 @@ export async function runPersistentScannerV2(
     if (batch.attempted === 0 && batch.deferred > 0) break;
   }
 
-  return runtimeResult({
+  const result = await runtimeResult({
     store,
     crawlId,
     origin: origin.origin,
     resumed,
   });
+  if (result.scannerV2?.state === "CRAWLING" && now() >= deadline) {
+    result.warnings = unique([...result.warnings, "time_budget"]);
+  }
+  return result;
 }

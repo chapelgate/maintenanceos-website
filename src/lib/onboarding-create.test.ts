@@ -635,6 +635,8 @@ test("scan wait copy changes while the website check is still running", () => {
   assert.match(scanWaitProgressText(35_000) ?? "", /usable draft/i);
   assert.match(scanWaitProgressText(40_000) ?? "", /fill any gaps/i);
   assert.equal(shouldAutoContinueScan({ state: "CRAWLING", discovered: 12, fetched: 2, unresolved: 0, warnings: [] }, 0), true);
+  assert.equal(SCAN_AUTO_CONTINUE_LIMIT, 8);
+  assert.equal(shouldAutoContinueScan({ state: "CRAWLING", discovered: 12, fetched: 0, unresolved: 0, warnings: ["time_budget"] }, 7), true);
   assert.equal(shouldAutoContinueScan({ state: "CRAWLING", discovered: 12, fetched: 2, unresolved: 0, warnings: [] }, SCAN_AUTO_CONTINUE_LIMIT), false);
   assert.equal(shouldAutoContinueScan({ state: "COMPLETE", discovered: 2, fetched: 2, unresolved: 0, warnings: [] }, 0), false);
   assert.equal(scanContinueDetail(3), "Reading more pages (3 pages so far)");

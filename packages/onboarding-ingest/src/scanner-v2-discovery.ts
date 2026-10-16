@@ -106,6 +106,8 @@ export type ScannerV2DiscoveryOptions = {
   readerFallback?: boolean;
   readerLookup?: LookupFn;
   readerGet?: HttpGetFn;
+  /** Wall-clock stop. New fetches are not started once this epoch ms is reached. */
+  deadlineAt?: number;
 };
 
 function boundedInt(
@@ -474,6 +476,12 @@ export async function discoverScannerV2Frontier(
     options.readerFallback ?? (!options.lookup && !options.get);
   let readerPagesUsed = 0;
   let discoveryIncomplete = false;
+  const budgetSpent = () =>
+    typeof options.deadlineAt === "number" && Date.now() >= options.deadlineAt;
+  const budgetTimeout = (cap: number) => {
+    if (typeof options.deadlineAt !== "number") return cap;
+    return Math.max(250, Math.min(cap, options.deadlineAt - Date.now()));
+  };
 
   const root = normalizeScannerV2Url(initial.url.toString(), origin, {
     maxPathDepth,
@@ -602,6 +610,11 @@ export async function discoverScannerV2Frontier(
   let sitemapUrlsDiscovered = 0;
 
   while (sitemapQueue.length > 0) {
+    if (budgetSpent()) {
+      warnings.push("time_budget");
+      discoveryIncomplete = true;
+      break;
+    }
     const next = sitemapQueue.shift();
     if (!next) continue;
 
@@ -634,7 +647,7 @@ export async function discoverScannerV2Frontier(
       response = await fetchPublicHttps(normalizedSitemap, {
         lookup: options.lookup,
         get: options.get,
-        timeoutMs: sitemapTimeoutMs,
+        timeoutMs: budgetTimeout(sitemapTimeoutMs),
         maxBytes: maxSitemapBytes,
         maxDecompressedBytes: maxSitemapBytes,
         acceptCompressed: true,
@@ -750,6 +763,11 @@ export async function discoverScannerV2Frontier(
   let htmlLinksDiscovered = 0;
 
   while (pageQueue.length > 0) {
+    if (budgetSpent()) {
+      warnings.push("time_budget");
+      discoveryIncomplete = true;
+      break;
+    }
     const pageUrl = pageQueue.shift();
     if (!pageUrl || pageAttempted.has(pageUrl)) continue;
     pageAttempted.add(pageUrl);
@@ -789,7 +807,7 @@ export async function discoverScannerV2Frontier(
       response = await fetchPublicHttps(pageUrl, {
         lookup: options.lookup,
         get: options.get,
-        timeoutMs: htmlTimeoutMs,
+        timeoutMs: budgetTimeout(htmlTimeoutMs),
         maxBytes: maxHtmlBytes,
         maxRedirects: DEFAULT_MAX_REDIRECTS,
       });
@@ -802,7 +820,7 @@ export async function discoverScannerV2Frontier(
             const reader = await fetchPublicHttps(readerUrl, {
               lookup: options.readerLookup,
               get: options.readerGet,
-              timeoutMs: READER_FALLBACK_TIMEOUT_MS,
+              timeoutMs: budgetTimeout(READER_FALLBACK_TIMEOUT_MS),
               maxBytes: Math.min(
                 READER_FALLBACK_MAX_BYTES,
                 maxHtmlBytes,

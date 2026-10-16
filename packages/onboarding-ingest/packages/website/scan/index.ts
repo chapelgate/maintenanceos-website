@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { allowPublicHttpsUrl } from "../../../src/ssrf.ts";
 
 type WebEvent = {
@@ -14,16 +15,21 @@ const MAX_SCAN_URL_LENGTH = 2048;
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 8;
 const HOST_RATE_MAX = 6;
-const UPSTREAM_TIMEOUT_MS = 25_000;
+const UPSTREAM_TIMEOUT_MS = 20_000;
 const DEFAULT_PERSISTENT_SCANNER_ENDPOINT =
   "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 
-/** Use a real http(s) override. An empty or unsubstituted value keeps the droplet address. */
+const SCAN_PATH = "/v1/onboarding/scan";
+
+/** Use a real http(s) override. An empty or unsubstituted value keeps the droplet address. An origin-only URL gets the scan path. */
 function scannerRuntimeUrl(): string {
   const configured = process.env.SCANNER_V2_RUNTIME_URL?.trim() ?? "";
   try {
     const url = new URL(configured);
-    if (url.protocol === "https:" || url.protocol === "http:") return url.toString();
+    if (url.protocol === "https:" || url.protocol === "http:") {
+      if (url.pathname === "" || url.pathname === "/") url.pathname = SCAN_PATH;
+      return url.toString();
+    }
   } catch {
     // unset, or the project.yml placeholder was not substituted
   }
@@ -76,6 +82,37 @@ function response(
   return { statusCode, headers, body };
 }
 
+function gatewayCrawlId(pageUrl: string): string {
+  let origin = pageUrl;
+  try {
+    origin = new URL(pageUrl).origin;
+  } catch {
+    origin = pageUrl;
+  }
+  const hash = createHash("sha256");
+  hash.update(origin.replace(/\r\n?/g, "\n"), "utf8");
+  hash.update("\0", "utf8");
+  return `scanner-v2:gateway:${hash.digest("hex")}`;
+}
+
+/** Lost or failed upstream calls stay HTTP 200 so DigitalOcean does not replace the body with an HTML 504. */
+function crawlingGateway(pageUrl: string): { statusCode: number; body: unknown } {
+  return {
+    statusCode: 200,
+    body: {
+      ok: true,
+      scannerV2: {
+        state: "CRAWLING",
+        crawlId: gatewayCrawlId(pageUrl),
+        discovered: 0,
+        fetched: 0,
+        unresolved: 0,
+      },
+      warnings: ["scan_gateway_retry"],
+    },
+  };
+}
+
 export async function proxyPersistentScan(
   url: string,
   fetcher: typeof fetch = fetch,
@@ -96,38 +133,32 @@ export async function proxyPersistentScan(
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     });
 
+    if (upstream.status === 404) {
+      return {
+        statusCode: 404,
+        body: { ok: false, error: "upstream_not_found" },
+      };
+    }
+
     const text = await upstream.text();
     let body: unknown;
     try {
       body = JSON.parse(text);
     } catch {
-      return {
-        statusCode: 502,
-        body: {
-          ok: false,
-          error: "upstream_invalid_response",
-          message: "The persistent scan runtime returned an invalid response.",
-          warnings: ["upstream_invalid_response"],
-        },
-      };
+      return crawlingGateway(url);
+    }
+
+    if (upstream.status >= 500) {
+      const record = body && typeof body === "object" ? body as { scannerV2?: unknown } : null;
+      if (record?.scannerV2 && typeof record.scannerV2 === "object") {
+        return { statusCode: 200, body };
+      }
+      return crawlingGateway(url);
     }
 
     return { statusCode: upstream.status, body };
-  } catch (error) {
-    const timedOut =
-      error instanceof Error &&
-      (error.name === "TimeoutError" || /timeout/i.test(error.message));
-    return {
-      statusCode: timedOut ? 504 : 502,
-      body: {
-        ok: false,
-        error: timedOut ? "timeout" : "upstream_unavailable",
-        message: timedOut
-          ? "The persistent scan runtime exceeded the bounded request time."
-          : "The persistent scan runtime is unavailable.",
-        warnings: [timedOut ? "timeout" : "upstream_unavailable"],
-      },
-    };
+  } catch {
+    return crawlingGateway(url);
   }
 }
 

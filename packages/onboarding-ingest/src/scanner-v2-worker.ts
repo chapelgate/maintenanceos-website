@@ -399,6 +399,9 @@ export async function runScannerV2WorkerBatch(input: {
   batchSize?: number;
   leaseMs?: number;
   now?: () => Date;
+  /** Epoch ms on the same clock as nowMs. No further URL is started after this. */
+  deadlineAt?: number;
+  nowMs?: () => number;
 }): Promise<ScannerV2WorkerBatchResult> {
   const job = await input.store.getJob(input.crawlId);
   if (!job) throw new Error("scanner_v2_job_not_found");
@@ -412,6 +415,7 @@ export async function runScannerV2WorkerBatch(input: {
     ? Math.max(1_000, Math.min(15 * 60_000, Math.trunc(requestedLeaseMs as number)))
     : DEFAULT_WORKER_LEASE_MS;
   const now = input.now ?? (() => new Date());
+  const nowMs = input.nowMs ?? Date.now;
 
   let attempted = 0;
   let completed = 0;
@@ -429,6 +433,7 @@ export async function runScannerV2WorkerBatch(input: {
 
   let fetchedPriority = false;
   for (const candidate of queued) {
+    if (typeof input.deadlineAt === "number" && nowMs() >= input.deadlineAt) break;
     if (attempted >= batchSize) break;
     const priority = crawlUrlPriority(candidate.url);
     if (fetchedPriority && priority < 50) break;
