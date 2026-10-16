@@ -237,7 +237,7 @@ try {
     await page.locator("input[name='businessUrl']").fill("https://trades.example");
     await page.locator("input[name='email']").fill("owner@example.com");
     await page.locator("[data-create-primary-action]").click();
-    await page.getByText(/Reading more pages \(\d+ pages so far\)/).waitFor({ timeout: 15_000 });
+    await page.getByText(/Still reading your site \(\d+ pages\)/).waitFor({ timeout: 15_000 });
     await page.getByText(/Scanner result: COMPLETE/).waitFor({ timeout: 15_000 });
     assert.equal(crawlCalls, 3);
     assert.equal(await page.locator("[data-scan-crawling]").count(), 0);
@@ -252,7 +252,7 @@ try {
     await page.locator("[data-create-primary-action]").click();
     const crawling = page.locator("[data-scan-crawling]");
     await crawling.waitFor({ timeout: 20_000 });
-    assert.equal(crawlCalls, 5);
+    assert.equal(crawlCalls, 9);
     const crawlingText = await crawling.innerText();
     assert.match(crawlingText, /page budget/i);
     assert.match(crawlingText, /usable/i);

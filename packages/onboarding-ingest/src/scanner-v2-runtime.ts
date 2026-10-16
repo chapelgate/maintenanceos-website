@@ -76,6 +76,30 @@ import type {
 export const DEFAULT_SCANNER_V2_STATE_ROOT = ".data/scanner-v2";
 export const DEFAULT_SCANNER_V2_REQUEST_MS = 18_000;
 export const MAX_SCANNER_V2_REQUEST_MS = 115_000;
+/** Robots.txt is part of the request budget, not a fixed 5s wait before it. */
+export const SCANNER_V2_ROBOTS_BUDGET_MS = 2_000;
+/** PDF and office-text parsing gets a short slice, then the crawl moves on. */
+export const SCANNER_V2_DOCUMENT_PARSE_SLICE_MS = 3_000;
+/** Leave time to read the persisted crawl and build the partial before the budget ends. */
+export const SCANNER_V2_RESULT_RESERVE_MS = 2_000;
+
+const QUIET_CRAWL_REASONS = new Set([
+  "document_parse_timeout",
+  "document_parse_failed",
+  "unsupported_document",
+]);
+
+/** Parse failures and finished policy skips are terminal. Other fetch errors stay retryable. */
+export function documentCrawlDisposition(document: {
+  ok: false;
+  incomplete?: boolean;
+  reason: string;
+}): { disposition: "policy_skipped" | "unresolved"; reason: string } {
+  if (QUIET_CRAWL_REASONS.has(document.reason) || document.incomplete === false) {
+    return { disposition: "policy_skipped", reason: document.reason };
+  }
+  return { disposition: "unresolved", reason: document.reason };
+}
 export const DEFAULT_SCANNER_V2_BATCH_SIZE = 8;
 export const MAX_SCANNER_V2_URLS = 10_000;
 export const MAX_SCANNER_V2_HTML_BYTES = 2 * 1024 * 1024;
@@ -458,10 +482,11 @@ function crawlIdFor(origin: string, releaseSha: string): string {
   return `scanner-v2:${releaseSha}:${stableContentHash(origin)}`;
 }
 
-async function fetchRobotsRules(origin: URL) {
+async function fetchRobotsRules(origin: URL, timeoutMs = SCANNER_V2_ROBOTS_BUDGET_MS) {
+  const budget = Math.max(250, Math.min(SCANNER_V2_ROBOTS_BUDGET_MS, timeoutMs));
   try {
     const response = await fetchPublicHttps(new URL("/robots.txt", origin).toString(), {
-      timeoutMs: 5_000,
+      timeoutMs: budget,
       maxBytes: 64 * 1024,
       maxRedirects: 2,
     });
@@ -533,7 +558,7 @@ async function buildDefaultProcessor(input: {
   pageBudgetMs?: () => number;
 }): Promise<ScannerV2ProcessUrl> {
   const pageBudgetMs = () => Math.max(250, Math.min(8_000, input.pageBudgetMs?.() ?? 8_000));
-  const robots = await fetchRobotsRules(input.origin);
+  const robots = await fetchRobotsRules(input.origin, pageBudgetMs());
   const trapGuard = new ScannerV2FrontierTrapGuard({
     maxQueryVariantsPerSignature: DEFAULT_MAX_QUERY_VARIANTS_PER_SIGNATURE,
     maxCalendarVariantsPerFamily: DEFAULT_MAX_CALENDAR_VARIANTS_PER_FAMILY,
@@ -600,20 +625,22 @@ async function buildDefaultProcessor(input: {
     }
 
     if (isScannerV2UnsupportedTextDocumentUrl(url.url)) {
-      return { disposition: "unresolved", reason: "unsupported_document" };
+      return { disposition: "policy_skipped", reason: "unsupported_document" };
     }
 
     if (isScannerV2SupportedDocumentUrl(url.url)) {
+      const parseBudget = Math.max(
+        250,
+        Math.min(SCANNER_V2_DOCUMENT_PARSE_SLICE_MS, pageBudgetMs()),
+      );
       const document = await ingestScannerV2Document(url.url, {
         origin: input.origin.origin,
         fetchTimeoutMs: pageBudgetMs(),
+        parseTimeoutMs: parseBudget,
         ...(url.discoveredFrom ? { discoveredFrom: url.discoveredFrom } : {}),
       });
       if (!document.ok) {
-        return {
-          disposition: document.incomplete ? "unresolved" : "policy_skipped",
-          reason: document.reason,
-        };
+        return documentCrawlDisposition(document);
       }
       return {
         disposition: document.complete ? "fetched" : "unresolved",
@@ -833,7 +860,8 @@ async function runtimeResult(input: {
           (row.status === "unresolved" ||
             row.status === "policy_skipped" ||
             row.status === "robots_skipped") &&
-          row.reason,
+          row.reason &&
+          !QUIET_CRAWL_REASONS.has(row.reason),
       )
       .map((row) => row.reason as string),
     ...(pages.some((page) => page.fetchMode === "reader")
@@ -926,101 +954,162 @@ export async function runPersistentScannerV2(
   );
   const started = now();
   const deadline = started + requestMs;
+  const resultReserveMs = Math.min(SCANNER_V2_RESULT_RESERVE_MS, Math.floor(requestMs / 2));
+  const workMs = Math.max(250, requestMs - resultReserveMs);
   const remainingMs = () => Math.max(0, deadline - now());
-  const existing = await store.getJob(crawlId);
-  const resumed = Boolean(existing);
-  let needsSeed = !existing;
+  let resumed = false;
+  let timerWon = false;
 
-  if (existing) {
-    const priorUrls = await store.listUrls(crawlId);
-    const hasFetchedEvidence = priorUrls.some(
-      (row) => row.status === "fetched" || row.status === "duplicate",
-    );
-    const reset = (
-      store as { resetZeroEvidenceRecords?: (id: string) => Promise<void> }
-    ).resetZeroEvidenceRecords;
-    if (!hasFetchedEvidence && typeof reset === "function") {
-      await reset.call(store, crawlId);
-      needsSeed = true;
+  const persistedPartial = async (): Promise<ScanResult> => {
+    try {
+      const result = await runtimeResult({
+        store,
+        crawlId,
+        origin: origin.origin,
+        resumed,
+      });
+      if (result.scannerV2?.state === "CRAWLING") {
+        result.warnings = unique([...result.warnings, "time_budget"]);
+      }
+      return result;
+    } catch {
+      return {
+        ok: true,
+        untrusted: true,
+        draft: {},
+        warnings: ["time_budget"],
+        sources: [],
+        facts: {},
+        factMeta: {},
+        scannerV2: {
+          crawlId,
+          state: "CRAWLING",
+          discovered: 0,
+          fetched: 0,
+          unresolved: 0,
+          knowledgeChunks: 0,
+          resumed,
+        },
+      };
     }
-  }
+  };
 
-  if (needsSeed) {
-    const discoverBudget = Math.max(250, Math.min(2_500, requestMs));
-    await seedJob({
-      store,
-      crawlId,
-      origin,
-      submittedUrl: allowed.url.toString(),
-      releaseSha,
-      discover: options.discover ?? discoverScannerV2Frontier,
-      discoveryOptions: {
-        ...options.discoveryOptions,
-        deadlineAt: deadline,
-        sitemapTimeoutMs: Math.min(
-          options.discoveryOptions?.sitemapTimeoutMs ?? discoverBudget,
-          discoverBudget,
-        ),
-        htmlTimeoutMs: Math.min(
-          options.discoveryOptions?.htmlTimeoutMs ?? requestMs,
-          requestMs,
-        ),
-      },
-    });
-  }
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const limited = new Promise<ScanResult>((resolve) => {
+    timer = setTimeout(() => {
+      timerWon = true;
+      void persistedPartial().then(resolve);
+    }, workMs);
+  });
 
-  const processUrl =
-    options.processUrl ??
-    (await buildDefaultProcessor({
-      store,
-      crawlId,
-      origin,
-      lookup: options.discoveryOptions?.lookup,
-      get: options.discoveryOptions?.get,
-      browserDocumentFetch: options.discoveryOptions?.browserDocumentFetch,
-      pageBudgetMs: remainingMs,
-    }));
-  const batchSize = boundedInt(
-    options.batchSize,
-    DEFAULT_SCANNER_V2_BATCH_SIZE,
-    1,
-    64,
-  );
-  let probesConsidered = false;
+  const execute = async (): Promise<ScanResult> => {
+    const existing = await store.getJob(crawlId);
+    resumed = Boolean(existing);
+    let needsSeed = !existing;
 
-  while (now() < deadline) {
-    const batch = await runScannerV2WorkerBatch({
-      store,
-      crawlId,
-      workerId: `runtime-${process.pid}`,
-      processUrl,
-      batchSize,
-      deadlineAt: deadline,
-      nowMs: now,
-    });
-    if (!probesConsidered) {
-      const pages = await store.listPages(crawlId);
-      if (pages.length > 0) {
-        probesConsidered = true;
-        const useful = pages.some((page) => pageHasUsefulFacts(page));
-        if (!useful) {
-          const added = await enqueueThinHomeProbes(store, crawlId, origin.origin);
-          if (added > 0) continue;
-        }
+    if (existing) {
+      const priorUrls = await store.listUrls(crawlId);
+      const hasFetchedEvidence = priorUrls.some(
+        (row) => row.status === "fetched" || row.status === "duplicate",
+      );
+      const reset = (
+        store as { resetZeroEvidenceRecords?: (id: string) => Promise<void> }
+      ).resetZeroEvidenceRecords;
+      if (!hasFetchedEvidence && typeof reset === "function") {
+        await reset.call(store, crawlId);
+        needsSeed = true;
       }
     }
-    if (!batch.hasMoreWork) break;
-    if (batch.attempted === 0 && batch.deferred > 0) break;
-  }
 
-  const result = await runtimeResult({
-    store,
-    crawlId,
-    origin: origin.origin,
-    resumed,
+    if (needsSeed) {
+      const discoverBudget = Math.max(250, Math.min(2_500, requestMs));
+      await seedJob({
+        store,
+        crawlId,
+        origin,
+        submittedUrl: allowed.url.toString(),
+        releaseSha,
+        discover: options.discover ?? discoverScannerV2Frontier,
+        discoveryOptions: {
+          ...options.discoveryOptions,
+          deadlineAt: deadline,
+          sitemapTimeoutMs: Math.min(
+            options.discoveryOptions?.sitemapTimeoutMs ?? discoverBudget,
+            discoverBudget,
+          ),
+          htmlTimeoutMs: Math.min(
+            options.discoveryOptions?.htmlTimeoutMs ?? requestMs,
+            requestMs,
+          ),
+        },
+      });
+    }
+
+    const processUrl =
+      options.processUrl ??
+      (await buildDefaultProcessor({
+        store,
+        crawlId,
+        origin,
+        lookup: options.discoveryOptions?.lookup,
+        get: options.discoveryOptions?.get,
+        browserDocumentFetch: options.discoveryOptions?.browserDocumentFetch,
+        pageBudgetMs: remainingMs,
+      }));
+    const batchSize = boundedInt(
+      options.batchSize,
+      DEFAULT_SCANNER_V2_BATCH_SIZE,
+      1,
+      64,
+    );
+    let probesConsidered = false;
+
+    while (now() < deadline && !timerWon) {
+      const batch = await runScannerV2WorkerBatch({
+        store,
+        crawlId,
+        workerId: `runtime-${process.pid}`,
+        processUrl,
+        batchSize,
+        deadlineAt: deadline,
+        nowMs: now,
+        leaseMs: requestMs,
+      });
+      if (!probesConsidered) {
+        const pages = await store.listPages(crawlId);
+        if (pages.length > 0) {
+          probesConsidered = true;
+          const useful = pages.some((page) => pageHasUsefulFacts(page));
+          if (!useful) {
+            const added = await enqueueThinHomeProbes(store, crawlId, origin.origin);
+            if (added > 0) continue;
+          }
+        }
+      }
+      if (!batch.hasMoreWork) break;
+      if (batch.attempted === 0 && batch.deferred > 0) break;
+    }
+
+    const result = await runtimeResult({
+      store,
+      crawlId,
+      origin: origin.origin,
+      resumed,
+    });
+    if (result.scannerV2?.state === "CRAWLING" && (timerWon || now() >= deadline)) {
+      result.warnings = unique([...result.warnings, "time_budget"]);
+    }
+    return result;
+  };
+
+  const body = execute().catch((error: unknown) => {
+    if (timerWon) return persistedPartial();
+    throw error;
   });
-  if (result.scannerV2?.state === "CRAWLING" && now() >= deadline) {
-    result.warnings = unique([...result.warnings, "time_budget"]);
+
+  try {
+    return await Promise.race([body, limited]);
+  } finally {
+    if (timer) clearTimeout(timer);
   }
-  return result;
 }

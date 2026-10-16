@@ -362,4 +362,36 @@ test("a lost upstream scan is HTTP 200 CRAWLING and never 5xx", async () => {
     (bundled.body as { scannerV2?: { crawlId?: string } }).scannerV2?.crawlId,
     body.scannerV2?.crawlId,
   );
+
+  const supplied = "scanner-v2:5afd538:53912a2920abcdef";
+  const echoed = await proxyPersistentScan(
+    "https://www.phrsolicitors.co.uk/",
+    fetcher,
+    "https://scanner.example/v1/onboarding/scan",
+    supplied,
+  );
+  assert.equal(
+    (echoed.body as { scannerV2?: { crawlId?: string } }).scannerV2?.crawlId,
+    supplied,
+  );
+  const echoedBundle = await deployed.proxyPersistentScan(
+    "https://www.phrsolicitors.co.uk/",
+    fetcher,
+    "https://scanner.example/v1/onboarding/scan",
+    supplied,
+  );
+  assert.equal(
+    (echoedBundle.body as { scannerV2?: { crawlId?: string } }).scannerV2?.crawlId,
+    supplied,
+  );
+  const echoedError = await proxyPersistentScan(
+    "https://www.phrsolicitors.co.uk/",
+    (async () => new Response("bad gateway", { status: 502 })) as typeof fetch,
+    "https://scanner.example/v1/onboarding/scan",
+    supplied,
+  );
+  assert.equal(
+    (echoedError.body as { scannerV2?: { crawlId?: string } }).scannerV2?.crawlId,
+    supplied,
+  );
 });

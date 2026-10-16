@@ -42,6 +42,9 @@ import {
   describeSkippedPages,
   largeSiteScanMessage,
   reviewPhoneField,
+  chooseRicherScanOutcome,
+  filledScanDraftCount,
+  SCAN_PARTIAL_NOTICE,
   scanContinueDetail,
   scanProgressAfterResult,
   shouldAutoContinueScan,
@@ -491,7 +494,8 @@ export function CreateReceptionistLaterSteps({
           ...(outcome.summary?.crawlId ? { crawlId: outcome.summary.crawlId } : {}),
         });
         if (cancelled || controller.signal.aborted || next.status === "aborted") return;
-        outcome = next;
+        if (next.status !== "ok") break;
+        outcome = chooseRicherScanOutcome(outcome, next);
       }
       scanPhaseRef.current = "wait";
       if (cancelled || controller.signal.aborted || outcome.status === "aborted") return;
@@ -516,7 +520,8 @@ export function CreateReceptionistLaterSteps({
               .join("\n") ?? "",
           pricing: outcome.facts.pricing?.join("\n") ?? "",
         });
-        setScanDetail(null);
+        const unfinished = outcome.summary?.state === "CRAWLING";
+        setScanDetail(unfinished ? SCAN_PARTIAL_NOTICE : null);
         setScanHostLine(null);
         setProgress(scanProgressAfterResult(outcome.summary, filled));
         return;
@@ -569,6 +574,20 @@ export function CreateReceptionistLaterSteps({
             ? outcome.message
             : "The website check could not continue. The draft so far is still usable.",
         );
+        setProgress("scan_crawling");
+        return;
+      }
+      if (filledScanDraftCount(outcome.draft) === 0) {
+        setScanSummary((current) => {
+          if (!current || !outcome.summary) return outcome.summary ?? current;
+          if (outcome.summary.fetched > 0) return outcome.summary;
+          return {
+            ...current,
+            ...(outcome.summary.crawlId ? { crawlId: outcome.summary.crawlId } : {}),
+            warnings: [...new Set([...current.warnings, ...outcome.summary.warnings])],
+          };
+        });
+        setScanDetail(SCAN_PARTIAL_NOTICE);
         setProgress("scan_crawling");
         return;
       }
@@ -1013,8 +1032,10 @@ export function CreateReceptionistLaterSteps({
               <div data-scan-crawling="">
                 <p>
                   The page budget was reached before every discovered page was read.
-                  The draft so far is usable. Continue scanning reads more of the same
-                  site, or choose an agent and fill any gaps yourself. Nothing was invented.
+                  {" "}
+                  {SCAN_PARTIAL_NOTICE}
+                  {" "}
+                  Continue scanning reads more of the same site. Nothing was invented.
                 </p>
                 <button
                   type="button"

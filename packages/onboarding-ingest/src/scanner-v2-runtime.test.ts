@@ -5,6 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { stableContentHash } from "./scanner-v2-foundation.ts";
 import {
+  documentCrawlDisposition,
   recoverScannerV2ReaderPage,
   runPersistentScannerV2,
 } from "./scanner-v2-runtime.ts";
@@ -759,6 +760,110 @@ test("an 18s budget persists a partial crawl instead of running on", async () =>
     assert.equal(second.scannerV2?.resumed, true);
     assert.ok((second.scannerV2?.fetched ?? 0) > 1);
   } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("document parse failures are skipped instead of retried", () => {
+  assert.equal(
+    documentCrawlDisposition({ ok: false, incomplete: true, reason: "document_parse_failed" }).disposition,
+    "policy_skipped",
+  );
+  assert.equal(
+    documentCrawlDisposition({ ok: false, incomplete: true, reason: "document_parse_timeout" }).disposition,
+    "policy_skipped",
+  );
+  assert.equal(
+    documentCrawlDisposition({ ok: false, incomplete: true, reason: "document_http_503" }).disposition,
+    "unresolved",
+  );
+  assert.equal(
+    documentCrawlDisposition({ ok: false, incomplete: false, reason: "cross_origin_redirect" }).disposition,
+    "policy_skipped",
+  );
+});
+
+test("a hung page returns the persisted partial within the request budget", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-hard-budget-"));
+  let release = () => {};
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let calls = 0;
+  try {
+    const discover = async (rawUrl: string) => {
+      const origin = new URL(rawUrl).origin;
+      return {
+        manifest: seedManifest(origin),
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: [],
+        limitReached: false,
+        incomplete: true,
+      };
+    };
+    const started = Date.now();
+    const first = await runPersistentScannerV2("https://phr.example/", {
+      stateRoot: root,
+      releaseSha: "hard-budget",
+      batchSize: 1,
+      requestMs: 1_000,
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => {
+        calls += 1;
+        if (calls > 1) await gate;
+        const p = page(url.url, `PHR Solicitors Wirral ${url.url}`);
+        return {
+          disposition: "fetched" as const,
+          canonicalUrl: p.canonicalUrl,
+          page: p,
+          chunks: [],
+        };
+      }) as never,
+    });
+    const elapsed = Date.now() - started;
+    assert.equal(first.ok, true);
+    if (!first.ok) return;
+    assert.ok(elapsed < 1_800, `elapsed ${elapsed}`);
+    assert.ok(elapsed >= 400, `elapsed ${elapsed}`);
+    assert.ok(calls >= 2);
+    assert.equal(first.scannerV2?.state, "CRAWLING");
+    assert.equal(first.scannerV2?.fetched, 1);
+    assert.ok(first.warnings.includes("time_budget"));
+    assert.equal(first.draft.businessName, "Acme Gates");
+    const crawlId = first.scannerV2?.crawlId;
+
+    release();
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    const second = await runPersistentScannerV2("https://phr.example/contact", {
+      stateRoot: root,
+      releaseSha: "hard-budget",
+      batchSize: 8,
+      requestMs: 1_000,
+      discover: discover as never,
+      processUrl: (async ({ url }: { url: CrawlUrlDisposition }) => {
+        const p = page(url.url, "Resumed page");
+        return {
+          disposition: "fetched" as const,
+          canonicalUrl: p.canonicalUrl,
+          page: p,
+          chunks: [],
+        };
+      }) as never,
+    });
+    assert.equal(second.ok, true);
+    if (!second.ok) return;
+    assert.equal(second.scannerV2?.resumed, true);
+    assert.equal(second.scannerV2?.crawlId, crawlId);
+    assert.ok((second.scannerV2?.fetched ?? 0) > 1);
+  } finally {
+    release();
     await rm(root, { recursive: true, force: true });
   }
 });

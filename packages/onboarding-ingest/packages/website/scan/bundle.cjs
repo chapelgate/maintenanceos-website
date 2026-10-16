@@ -216,14 +216,15 @@ function gatewayCrawlId(pageUrl) {
   hash.update("\0", "utf8");
   return `scanner-v2:gateway:${hash.digest("hex")}`;
 }
-function crawlingGateway(pageUrl) {
+function crawlingGateway(pageUrl, supplied = "") {
+  const crawlId = supplied.trim() || gatewayCrawlId(pageUrl);
   return {
     statusCode: 200,
     body: {
       ok: true,
       scannerV2: {
         state: "CRAWLING",
-        crawlId: gatewayCrawlId(pageUrl),
+        crawlId,
         discovered: 0,
         fetched: 0,
         unresolved: 0
@@ -257,18 +258,18 @@ async function proxyPersistentScan(url, fetcher = fetch, endpoint = scannerRunti
     try {
       body = JSON.parse(text);
     } catch {
-      return crawlingGateway(url);
+      return crawlingGateway(url, crawlId);
     }
     if (upstream.status >= 500) {
       const record = body && typeof body === "object" ? body : null;
       if (record?.scannerV2 && typeof record.scannerV2 === "object") {
         return { statusCode: 200, body };
       }
-      return crawlingGateway(url);
+      return crawlingGateway(url, crawlId);
     }
     return { statusCode: upstream.status, body };
   } catch {
-    return crawlingGateway(url);
+    return crawlingGateway(url, crawlId);
   }
 }
 async function main(event = {}) {
