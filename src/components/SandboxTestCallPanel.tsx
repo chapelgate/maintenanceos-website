@@ -12,6 +12,7 @@ import {
   serverVoiceAttemptable,
   speakReceptionistText,
   stopSpokenPreview,
+  unlockSpokenAudio,
 } from "@/lib/preview-voice";
 import {
   requestSandboxScriptedDemo,
@@ -95,6 +96,7 @@ export function SandboxTestCallPanel({
     "idle" | "listening" | "speaking" | "error"
   >("idle");
   const [voiceDetail, setVoiceDetail] = useState<string | null>(null);
+  const [voiceEngine, setVoiceEngine] = useState<"preview" | "browser" | null>(null);
   const recognitionRef = useRef<BrowserRecognitionSession | null>(null);
   const inputId = useId();
 
@@ -112,17 +114,33 @@ export function SandboxTestCallPanel({
       serverVoiceAttemptable();
     if (!canSpeak) return;
     setVoiceState("speaking");
-    const mode = await speakReceptionistText(text, { lang: "en-GB" });
+    const mode = await speakReceptionistText(text, {
+      lang: "en-GB",
+      onEngine: (engine) => {
+        setVoiceEngine(engine);
+        setVoiceDetail(engine === "preview" ? "Gemini voice" : "browser voice");
+      },
+    });
     setVoiceState("idle");
-    if (mode === "unavailable") {
-      setVoiceDetail(
-        "Spoken replies are unavailable in this browser, so answers will appear in the transcript.",
-      );
+    if (mode === "preview") {
+      setVoiceEngine("preview");
+      setVoiceDetail("Gemini voice");
+      return;
     }
+    if (mode === "browser") {
+      setVoiceEngine("browser");
+      setVoiceDetail("browser voice");
+      return;
+    }
+    setVoiceEngine(null);
+    setVoiceDetail(
+      "Spoken replies are unavailable in this browser, so answers will appear in the transcript.",
+    );
   }
 
   function startDemo() {
     if (!receptionist) return;
+    unlockSpokenAudio();
     const opening = openingTurn(receptionist);
     const support = browserVoiceSupport();
     const canSpeak =
@@ -185,6 +203,7 @@ export function SandboxTestCallPanel({
   }
 
   async function startListening() {
+    unlockSpokenAudio();
     if (!receptionist || voiceState === "listening") return;
     const support = browserVoiceSupport();
     setVoiceDetail(null);
@@ -340,8 +359,8 @@ export function SandboxTestCallPanel({
               Talk to your receptionist
             </p>
             <p className="mt-1 text-xs text-muted">
-              Tap the microphone, speak after the prompt, and the receptionist
-              will answer aloud when browser voice is available.
+              Tap the microphone and speak after the prompt. The label under
+              this button says Gemini voice or browser voice.
             </p>
             <button
               type="button"
@@ -358,7 +377,12 @@ export function SandboxTestCallPanel({
                   ? "Receptionist speaking…"
                   : "Tap to speak"}
             </button>
-            {voiceDetail ? (
+            {voiceEngine ? (
+              <p className="mt-2 text-xs font-medium text-ink" data-voice-label="">
+                {voiceEngine === "preview" ? "Gemini voice" : "browser voice"}
+              </p>
+            ) : null}
+            {voiceDetail && voiceDetail !== "Gemini voice" && voiceDetail !== "browser voice" ? (
               <p
                 className={
                   voiceState === "error"
@@ -379,7 +403,10 @@ export function SandboxTestCallPanel({
               <button
                 key={prompt}
                 type="button"
-                onClick={() => void sendCallerTurn(prompt)}
+                onClick={() => {
+                  unlockSpokenAudio();
+                  void sendCallerTurn(prompt);
+                }}
                 className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-ink hover:bg-paper"
               >
                 {prompt}
@@ -398,6 +425,7 @@ export function SandboxTestCallPanel({
               onKeyDown={(event) => {
                 if (event.key !== "Enter") return;
                 event.preventDefault();
+                unlockSpokenAudio();
                 void sendCallerTurn();
               }}
               placeholder="e.g. What time are you open?"
@@ -406,7 +434,10 @@ export function SandboxTestCallPanel({
             <button
               type="button"
               disabled={!callerText.trim()}
-              onClick={() => void sendCallerTurn()}
+              onClick={() => {
+                unlockSpokenAudio();
+                void sendCallerTurn();
+              }}
               className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-50"
             >
               Send

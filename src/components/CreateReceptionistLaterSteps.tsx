@@ -37,6 +37,7 @@ import {
 import {
   buildCreateLeadMessage,
   createScanProgressTitle,
+  emptyDraftExplanation,
   emptyHoursOrServicesNote,
   describeScanCoverage,
   describeSkippedPages,
@@ -1023,9 +1024,8 @@ export function CreateReceptionistLaterSteps({
               </p>
             ) : null}
             {progress === "scanned_empty" && !scanCoverage ? (
-              <p>
-                No draft fields were supplied. Nothing was invented. You can
-                complete the draft yourself.
+              <p data-scan-empty="">
+                {emptyDraftExplanation(scanSummary)}
               </p>
             ) : null}
             <PartialScanNotice summary={scanSummary} draft={draft} />
