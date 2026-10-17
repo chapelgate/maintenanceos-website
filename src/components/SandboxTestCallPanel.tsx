@@ -13,6 +13,7 @@ import {
   speakReceptionistText,
   stopSpokenPreview,
   unlockSpokenAudio,
+  VOICE_RATE_LIMIT_NOTICE,
   voiceEngineLabel,
   type SpokenEngine,
 } from "@/lib/preview-voice";
@@ -99,6 +100,7 @@ export function SandboxTestCallPanel({
   >("idle");
   const [voiceDetail, setVoiceDetail] = useState<string | null>(null);
   const [voiceEngine, setVoiceEngine] = useState<SpokenEngine | null>(null);
+  const [voiceNotice, setVoiceNotice] = useState<string | null>(null);
   const recognitionRef = useRef<BrowserRecognitionSession | null>(null);
   const inputId = useId();
 
@@ -116,12 +118,14 @@ export function SandboxTestCallPanel({
       serverVoiceAttemptable();
     if (!canSpeak) return;
     setVoiceState("speaking");
+    setVoiceNotice(null);
     const mode = await speakReceptionistText(text, {
       lang: "en-GB",
       onEngine: (engine) => {
         setVoiceEngine(engine);
         setVoiceDetail(voiceEngineLabel(engine));
       },
+      onNotice: (notice) => setVoiceNotice(notice),
     });
     setVoiceState("idle");
     if (mode === "preview" || mode === "browser") return;
@@ -159,6 +163,7 @@ export function SandboxTestCallPanel({
     stopSpokenPreview();
     setVoiceState("idle");
     setVoiceDetail(null);
+    setVoiceNotice(null);
     setStarted(false);
     setCallerText("");
     setTurns([]);
@@ -373,6 +378,11 @@ export function SandboxTestCallPanel({
             {voiceEngine ? (
               <p className="mt-2 text-xs font-medium text-ink" data-voice-label="">
                 {voiceEngineLabel(voiceEngine)}
+              </p>
+            ) : null}
+            {voiceNotice === VOICE_RATE_LIMIT_NOTICE ? (
+              <p className="mt-2 text-xs text-muted" data-voice-status="rate_limited">
+                {voiceNotice}
               </p>
             ) : null}
             {voiceDetail &&

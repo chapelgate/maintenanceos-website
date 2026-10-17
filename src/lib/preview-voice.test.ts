@@ -11,6 +11,7 @@ import {
   resetServerVoiceStateForTests,
   speakReceptionistText,
   unlockSpokenAudioOn,
+  VOICE_RATE_LIMIT_NOTICE,
   voiceEngineLabel,
 } from "./preview-voice.ts";
 
@@ -70,6 +71,35 @@ test("server voice plays returned audio and sends text only", async () => {
   assert.equal(calls[0]?.url, "/api/website/voice");
   assert.deepEqual(JSON.parse(calls[0]?.body ?? "{}"), { text: "Hello from the desk" });
   assert.doesNotMatch(calls[0]?.body ?? "", /ELEVENLABS|GEMINI_API_KEY|xi-api-key|x-goog-api-key|voiceId/i);
+});
+
+test("a rate limit explains the browser voice and a later line can try again", async () => {
+  resetServerVoiceStateForTests();
+  const warnings: string[] = [];
+  const notices: string[] = [];
+  const original = console.warn;
+  console.warn = (...args: unknown[]) => {
+    warnings.push(args.map(String).join(" "));
+  };
+  const fetchImpl: typeof fetch = async () =>
+    new Response(
+      JSON.stringify({ ok: false, fallback: "browser", engine: "browser", reason: "rate_limited" }),
+      { status: 200, headers: { "content-type": "application/json" } },
+    );
+  try {
+    const mode = await speakReceptionistText("Hello", {
+      fetchImpl,
+      onNotice: (notice) => notices.push(notice),
+    });
+    assert.equal(mode, "unavailable");
+    assert.deepEqual(notices, [VOICE_RATE_LIMIT_NOTICE]);
+    assert.match(warnings.join("\n"), /Gemini voice unavailable: rate_limited/);
+    const again = await requestServerVoice("Hello again", { fetchImpl });
+    assert.deepEqual(again, { ok: false, reason: "rate_limited" });
+  } finally {
+    console.warn = original;
+    resetServerVoiceStateForTests();
+  }
 });
 
 test("a Gemini rate limit falls back and a later line can try the server again", async () => {

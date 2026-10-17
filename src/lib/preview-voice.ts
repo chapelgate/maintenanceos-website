@@ -14,6 +14,8 @@ export const GOLDEN_LINE_VOICE_PROVIDER = "gemini";
 export const GOLDEN_LINE_VOICE_NAME = "Gacrux";
 export const SERVER_VOICE_ENDPOINT = "/api/website/voice";
 export const CONFIGURED_VOICE_NAME = "Theatrical";
+export const VOICE_RATE_LIMIT_NOTICE =
+  "Too many voice previews in a minute. This reply uses the browser voice. Try the neural voice again in a moment.";
 
 let serverVoiceAbsent = false;
 
@@ -184,7 +186,7 @@ export function voiceEngineLabel(engine: SpokenEngine): string {
 
 export type ServerVoiceResult =
   | { ok: true; bytes: Uint8Array; contentType: string; engine: "gemini" | "piper" }
-  | { ok: false; reason: "not_configured" | "unavailable" | "timeout" };
+  | { ok: false; reason: "not_configured" | "unavailable" | "timeout" | "rate_limited" };
 
 /**
  * Ask the same-origin voice function for audio. The body is only the text.
@@ -262,6 +264,7 @@ export async function requestServerVoice(
     if (response.status === 404 || reason === "voice_not_configured") {
       return { ok: false, reason: "not_configured" };
     }
+    if (reason === "rate_limited") return { ok: false, reason: "rate_limited" };
     return { ok: false, reason: "unavailable" };
   } catch {
     const timedOut = controller.signal.aborted && !options.signal?.aborted;
@@ -408,6 +411,7 @@ export async function speakReceptionistText(
     serverEndpoint?: string;
     playAudio?: (bytes: Uint8Array, contentType: string) => Promise<void>;
     onEngine?: (engine: SpokenEngine) => void;
+    onNotice?: (notice: string) => void;
   } = {},
 ): Promise<"browser" | "preview" | "unavailable"> {
   serverVoiceAbsent = false;
@@ -439,6 +443,9 @@ export async function speakReceptionistText(
     } else if (server.reason === "not_configured") {
       serverVoiceAbsent = true;
       warnVoice("not_configured");
+    } else if (server.reason === "rate_limited") {
+      warnVoice("rate_limited");
+      options.onNotice?.(VOICE_RATE_LIMIT_NOTICE);
     } else {
       warnVoice(server.reason);
     }

@@ -3,3 +3,4 @@
 - [x] Piper HTTP server checks the shared secret, health, and a file cache
 - [x] Container, checksums, Caddy route, and rollback runbook
 - [x] Page label names Gemini, Jenny (Dioco), or the browser voice
+- [x] A rate limit tells the visitor this reply uses the browser voice
