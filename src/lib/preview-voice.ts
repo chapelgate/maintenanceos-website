@@ -230,7 +230,7 @@ export async function requestServerVoice(
 
 async function playPreviewAudio(blob: Blob): Promise<void> {
   const url = URL.createObjectURL(blob);
-  const audio = primedAudio ?? new Audio();
+  const audio = primedAudio ?? (new Audio() as unknown as UnlockableAudio);
   primedAudio = audio;
   currentAudio = audio as HTMLAudioElement;
   audio.src = url;
