@@ -99,6 +99,7 @@ const QUIET_CRAWL_REASONS = new Set([
   "document_parse_failed",
   "unsupported_document",
   "response_too_large",
+  "search_endpoint",
   "frontier_capped",
 ]);
 
@@ -917,6 +918,9 @@ async function runtimeResult(input: {
           !QUIET_CRAWL_REASONS.has(row.reason),
       )
       .map((row) => row.reason as string),
+    ...(manifest.fetched === 0 && urls.some((row) => row.reason === "response_too_large")
+      ? ["response_too_large"]
+      : []),
     ...(pages.some((page) => page.fetchMode === "reader")
       ? ["reader_fallback_used"]
       : []),

@@ -736,6 +736,70 @@ test("scan attempt copy names the try and the manual way forward", () => {
   assert.doesNotMatch(createScanProgressTitle("queued"), /\?/);
 });
 
+test("a 429 waits for Retry-After and then keeps the scan", async () => {
+  let calls = 0;
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    backoffMs: 0,
+    sleep: async () => {},
+    fetchImpl: async () => {
+      calls += 1;
+      if (calls === 1) {
+        return new Response(
+          JSON.stringify({
+            ok: false,
+            error: "rate_limited",
+            message: "Too many scan requests. Try again shortly.",
+          }),
+          {
+            status: 429,
+            headers: { "content-type": "application/json", "retry-after": "1" },
+          },
+        );
+      }
+      return jsonResponse(200, SUCCESS_SCAN);
+    },
+  });
+  assert.equal(calls, 2);
+  assert.equal(outcome.status, "ok");
+});
+
+test("a repeated 429 tells the visitor the check is busy", async () => {
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {
+    maxAttempts: 2,
+    sleep: async () => {},
+    fetchImpl: async () =>
+      new Response(
+        JSON.stringify({ ok: false, error: "rate_limited" }),
+        {
+          status: 429,
+          headers: { "content-type": "application/json", "retry-after": "1" },
+        },
+      ),
+  });
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.match(outcome.message, /busy/i);
+  assert.match(outcome.message, /Nothing was invented/);
+  assert.doesNotMatch(outcome.message, /could not be checked/i);
+});
+
+test("a page that is too large to read says so", async () => {
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://lounge.example/lounge83", {
+    fetchImpl: async () =>
+      jsonResponse(200, {
+        ok: true,
+        draft: {},
+        warnings: ["response_too_large", "scanner_v2_partial"],
+        scannerV2: { state: "PARTIAL", discovered: 1, fetched: 0, unresolved: 0 },
+      }),
+  });
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.match(outcome.message, /too large/i);
+  assert.match(outcome.message, /type the details yourself/i);
+  assert.doesNotMatch(outcome.message, /could not read any public pages/i);
+});
+
 test("mocked scanner success maps facts and does not invent empty fields", async () => {
   const calls = [];
   const outcome = await requestOnboardingScan("/api/website/scan", "https://example.com/", {

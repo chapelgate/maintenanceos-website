@@ -481,6 +481,7 @@ export function CreateReceptionistLaterSteps({
         },
       });
       let continues = 0;
+      let continueMessage: string | null = null;
       while (
         !cancelled &&
         !controller.signal.aborted &&
@@ -495,7 +496,10 @@ export function CreateReceptionistLaterSteps({
           ...(outcome.summary?.crawlId ? { crawlId: outcome.summary.crawlId } : {}),
         });
         if (cancelled || controller.signal.aborted || next.status === "aborted") return;
-        if (next.status !== "ok") break;
+        if (next.status !== "ok") {
+          if (next.status === "manual") continueMessage = next.message;
+          break;
+        }
         outcome = chooseRicherScanOutcome(outcome, next);
       }
       scanPhaseRef.current = "wait";
@@ -522,7 +526,7 @@ export function CreateReceptionistLaterSteps({
           pricing: outcome.facts.pricing?.join("\n") ?? "",
         });
         const unfinished = outcome.summary?.state === "CRAWLING";
-        setScanDetail(unfinished ? SCAN_PARTIAL_NOTICE : null);
+        setScanDetail(continueMessage ?? (unfinished ? SCAN_PARTIAL_NOTICE : null));
         setScanHostLine(null);
         setProgress(scanProgressAfterResult(outcome.summary, filled));
         return;
@@ -1023,9 +1027,14 @@ export function CreateReceptionistLaterSteps({
                 the gaps yourself. Nothing was invented.
               </p>
             ) : null}
+            {progress === "scanned" && scanDetail && scanDetail !== SCAN_PARTIAL_NOTICE ? (
+              <p data-scan-retry="">{scanDetail}</p>
+            ) : null}
             {progress === "scanned_empty" && !scanCoverage ? (
               <p data-scan-empty="">
-                {emptyDraftExplanation(scanSummary)}
+                {scanDetail && scanDetail !== SCAN_PARTIAL_NOTICE
+                  ? scanDetail
+                  : emptyDraftExplanation(scanSummary)}
               </p>
             ) : null}
             <PartialScanNotice summary={scanSummary} draft={draft} />
@@ -1038,6 +1047,9 @@ export function CreateReceptionistLaterSteps({
                   {" "}
                   Continue scanning reads more of the same site. Nothing was invented.
                 </p>
+                {scanDetail && scanDetail !== SCAN_PARTIAL_NOTICE ? (
+                  <p data-scan-retry="">{scanDetail}</p>
+                ) : null}
                 <button
                   type="button"
                   data-scan-continue=""

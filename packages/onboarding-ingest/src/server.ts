@@ -25,6 +25,8 @@ export const SCAN_PATHS = new Set([
 
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 20;
+const RESUME_RATE_MAX = 24;
+const RESUME_GLOBAL_MAX = 120;
 
 export type ScanHandler = (url: string) => Promise<ScanResult>;
 
@@ -95,9 +97,19 @@ function send(
   origin: string,
   payload: unknown,
   configured?: string,
+  extra?: Record<string, string>,
 ): void {
-  res.writeHead(status, jsonHeaders(origin, configured));
+  res.writeHead(status, { ...jsonHeaders(origin, configured), ...extra });
   res.end(JSON.stringify(payload));
+}
+
+function isResumeCrawlId(crawlId: string): boolean {
+  return crawlId.startsWith("scanner-v2:") && !crawlId.startsWith("scanner-v2:gateway:");
+}
+
+function retryAfterSeconds(key: string, now = Date.now()): number {
+  const oldest = rateBuckets.get(key)?.[0] ?? now;
+  return Math.max(1, Math.ceil((oldest + RATE_WINDOW_MS - now) / 1000));
 }
 
 function clientIp(req: http.IncomingMessage): string {
@@ -105,10 +117,10 @@ function clientIp(req: http.IncomingMessage): string {
   return raw.startsWith("::ffff:") ? raw.slice(7) : raw;
 }
 
-export function allowRate(ip: string, now = Date.now()): boolean {
+export function allowRate(ip: string, now = Date.now(), max = RATE_MAX): boolean {
   const cutoff = now - RATE_WINDOW_MS;
   const prev = (rateBuckets.get(ip) ?? []).filter((ts) => ts > cutoff);
-  if (prev.length >= RATE_MAX) {
+  if (prev.length >= max) {
     rateBuckets.set(ip, prev);
     return false;
   }
@@ -215,17 +227,6 @@ export async function handleScanRequest(
     return;
   }
 
-  if (!allowRate(clientIp(req))) {
-    send(
-      res,
-      429,
-      origin,
-      { ok: false, error: "rate_limited", message: "Too many scan requests. Try again shortly." },
-      configured,
-    );
-    return;
-  }
-
   let raw: Buffer;
   try {
     raw = await readBody(req, MAX_BODY_BYTES);
@@ -251,9 +252,26 @@ export async function handleScanRequest(
     return;
   }
 
-  const url = typeof (parsed as { url?: unknown }).url === "string"
-    ? (parsed as { url: string }).url.trim()
-    : "";
+  const bodyRecord = parsed as { url?: unknown; crawlId?: unknown };
+  const crawlId = typeof bodyRecord.crawlId === "string" ? bodyRecord.crawlId.trim() : "";
+  const resume = isResumeCrawlId(crawlId);
+  const now = Date.now();
+  const rateKey = resume ? `resume:${crawlId}` : clientIp(req);
+  const globalDenied = resume && !allowRate("resume-global", now, RESUME_GLOBAL_MAX);
+  if (globalDenied || !allowRate(rateKey, now, resume ? RESUME_RATE_MAX : RATE_MAX)) {
+    const deniedKey = globalDenied ? "resume-global" : rateKey;
+    send(
+      res,
+      429,
+      origin,
+      { ok: false, error: "rate_limited", message: "Too many scan requests. Try again shortly." },
+      configured,
+      { "Retry-After": String(retryAfterSeconds(deniedKey, now)) },
+    );
+    return;
+  }
+
+  const url = typeof bodyRecord.url === "string" ? bodyRecord.url.trim() : "";
   if (!url) {
     send(
       res,

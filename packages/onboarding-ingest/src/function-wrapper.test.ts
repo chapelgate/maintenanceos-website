@@ -84,6 +84,42 @@ test("persistent scan proxy forwards only the validated public URL", async () =>
   assert.ok(calls[0]?.init?.signal);
 });
 
+test("a stored crawl resume does not spend the new-scan host budget", async () => {
+  const event = {
+    http: {
+      method: "POST",
+      headers: { "x-forwarded-for": "203.0.113.77" },
+    },
+    url: "https://127.0.0.1/private",
+    crawlId: "scanner-v2:c3337a39:lounge83",
+  };
+  const codes: number[] = [];
+  let retryAfter = "";
+  for (let i = 0; i < 8; i += 1) {
+    const result = await main(event);
+    codes.push(result.statusCode);
+    retryAfter = result.headers["Retry-After"] ?? retryAfter;
+  }
+  assert.deepEqual(codes, [400, 400, 400, 400, 400, 400, 400, 400]);
+  assert.equal(retryAfter, "");
+
+  const deployed = require(path.join(functionDir, "bundle.cjs")) as {
+    main: typeof main;
+  };
+  const bundled: number[] = [];
+  for (let i = 0; i < 8; i += 1) {
+    const result = await deployed.main({
+      ...event,
+      http: {
+        method: "POST",
+        headers: { "x-forwarded-for": "203.0.113.78" },
+      },
+    });
+    bundled.push(result.statusCode);
+  }
+  assert.deepEqual(bundled, [400, 400, 400, 400, 400, 400, 400, 400]);
+});
+
 test("scan proxy rejects an oversized URL before upstream and rate-limits repeats", async () => {
   const oversized = await main({
     http: {
