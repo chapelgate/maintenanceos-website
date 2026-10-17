@@ -62,6 +62,7 @@ const BUSINESS_TYPES = new Set([
   "physician",
   "autorepair",
   "foodestablishment",
+  "restaurant",
 ]);
 
 export function asUntrustedText(value: string, max = MAX_FIELD_CHARS): string {
@@ -2182,10 +2183,59 @@ function domainBrandPhrase(value: string, siteHost: string): string | undefined 
   return publicBusinessName(phrase);
 }
 
+const HOURS_BLEED_RE =
+  /\b(?:closed\s+for\s+lunch|opening\s+hours|\d{1,2}(?::\d{2})?\s*(?:am|pm)(?:\s*(?:[-–—]+|to)\s*\d{1,2}(?::\d{2})?\s*(?:am|pm))?)\b/i;
+const EMAIL_BLEED_RE = /\b[\w.+-]+@[\w.-]+\b/i;
+const HOST_BLEED_RE =
+  /\b(?:https?:\/\/\S+|www\.\S+|[\w-]+(?:\.[\w-]+)*\.(?:co\.uk|org\.uk|gov\.uk|com|org|net|uk))\b/i;
+const PHONE_BLEED_RE = /\b0\d(?:[\s()-]*\d){8,}\b/;
+const NAV_LEGAL_WORD_RE =
+  /^(?:terms|conditions|complaints|procedure|contact|privacy|policy|cookies|cookie)$/i;
+
+function hasContactBleed(value: string): boolean {
+  return (
+    HOURS_BLEED_RE.test(value) ||
+    EMAIL_BLEED_RE.test(value) ||
+    HOST_BLEED_RE.test(value) ||
+    PHONE_BLEED_RE.test(value)
+  );
+}
+
+function stripContactBleed(value: string): string {
+  let next = value.replace(/\b[\w.+-]+@[\w.-]+\b/gi, " ");
+  if (HOURS_BLEED_RE.test(value)) {
+    next = next
+      .replace(/\bclosed\s+for\s+lunch\b/gi, " ")
+      .replace(/\bopening\s+hours\b/gi, " ")
+      .replace(
+        /\b\d{1,2}(?::\d{2})?\s*(?:am|pm)(?:\s*(?:[-–—]+|to)\s*\d{1,2}(?::\d{2})?\s*(?:am|pm))?\b/gi,
+        " ",
+      )
+      .replace(/\b(?:closed|lunch)\b/gi, " ");
+  }
+  next = next
+    .replace(/\b(?:https?:\/\/\S+|www\.\S+)\b/gi, " ")
+    .replace(/\b[\w-]+(?:\.[\w-]+)*\.(?:co\.uk|org\.uk|gov\.uk|com|org|net|uk)\b/gi, " ")
+    .replace(/\b0\d(?:[\s()-]*\d){8,}\b/g, " ");
+  return next.replace(/\s+/g, " ").trim();
+}
+
+function isNavLegalName(name: string): boolean {
+  const words = name.split(/[^A-Za-z0-9]+/).filter(Boolean);
+  if (!words.length) return false;
+  const legal = words.filter((word) => NAV_LEGAL_WORD_RE.test(word)).length;
+  return legal >= 2 || (legal >= 1 && legal * 2 >= words.length);
+}
+
 function acceptableName(text: string, siteHost: string): string | undefined {
-  const value = publicBusinessName(text);
+  const bled = hasContactBleed(text);
+  const source = bled ? stripContactBleed(text) : text;
+  if (bled && (!source || !nameMatchesDomain(source, siteHost))) return undefined;
+  const value = publicBusinessName(source);
   if (!value || isDomainSlug(value, siteHost)) return undefined;
+  if (/^[^A-Za-z0-9]/.test(value) || /(?:\.\.\.|…)\s*$/.test(value)) return undefined;
   const matchesDomain = nameMatchesDomain(value, siteHost);
+  if (!matchesDomain && isNavLegalName(value)) return undefined;
   if (
     !matchesDomain &&
     (isTaglineName(value) || isServiceTown(value) || isListicleName(value) || isBoilerplateName(value))
@@ -2222,13 +2272,48 @@ function structuredNameConflicts(hits: NameHit[], chosen: string): boolean {
   });
 }
 
-function chooseBusinessName(hits: NameHit[], siteHost: string): NameHit | undefined {
+function platformPathSlug(pageUrl: string): string {
+  try {
+    const url = new URL(pageUrl);
+    if (!/(?:^|\.)wixsite\.com$/i.test(url.hostname.replace(/^www\./i, ""))) return "";
+    const segment = url.pathname.split("/").filter(Boolean)[0] ?? "";
+    const slug = segment.replace(/[^a-z0-9]/gi, "").toLowerCase();
+    if (slug.length < 4 || /^(?:site|website|home|index)$/.test(slug)) return "";
+    return slug;
+  } catch {
+    return "";
+  }
+}
+
+function matchesLaterPiece(value: string, siteHost: string, pathSlug: string): boolean {
+  if (nameMatchesDomain(value, siteHost)) return true;
+  if (!pathSlug) return false;
+  return value.replace(/[^a-z0-9]/gi, "").toLowerCase() === pathSlug;
+}
+
+function fallbackBusinessName(siteHost: string, pathSlug: string): string | undefined {
+  const fromHost = domainBusinessName(siteHost);
+  if (!pathSlug) return fromHost;
+  const fromPath = publicBusinessName(pathSlug.replace(/[a-z]/, (letter) => letter.toUpperCase()));
+  if (
+    fromPath &&
+    fromHost &&
+    !fromHost.includes(" ") &&
+    fromHost.toLowerCase().startsWith(fromPath.toLowerCase()) &&
+    fromHost.length > fromPath.length
+  ) {
+    return fromPath;
+  }
+  return fromHost ?? fromPath;
+}
+
+function chooseBusinessName(hits: NameHit[], siteHost: string, pathSlug = ""): NameHit | undefined {
   const prepared: NameHit[] = [];
   for (const hit of hits) {
     for (const piece of namePieces(hit.value)) {
       const value = candidateName(piece.text, siteHost);
       if (!value) continue;
-      if (piece.order > 0 && !nameMatchesDomain(value, siteHost)) continue;
+      if (piece.order > 0 && !matchesLaterPiece(value, siteHost, pathSlug)) continue;
       prepared.push({ ...hit, value });
     }
   }
@@ -2772,7 +2857,8 @@ export function extractDraftFromHtml(
     const copyright = copyrightName(page.html);
     if (copyright) nameHits.push({ value: copyright, source: "footer", confidence: "low", rank: 10 });
   }
-  const chosenName = chooseBusinessName(nameHits, siteHost);
+  const pathSlug = platformPathSlug(pages[0]?.url ?? "");
+  const chosenName = chooseBusinessName(nameHits, siteHost, pathSlug);
   if (chosenName) {
     setField(
       draft,
@@ -2783,7 +2869,7 @@ export function extractDraftFromHtml(
       chosenName.confidence,
     );
   } else {
-    const fromDomain = domainBusinessName(siteHost);
+    const fromDomain = fallbackBusinessName(siteHost, pathSlug);
     if (fromDomain) {
       setField(draft, fieldMeta, "businessName", fromDomain, "pattern", "low");
     }
