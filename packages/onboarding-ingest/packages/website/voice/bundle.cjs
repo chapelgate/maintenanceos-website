@@ -25,10 +25,12 @@ __export(index_exports, {
   resetVoiceRateLimitForTests: () => resetVoiceRateLimitForTests
 });
 module.exports = __toCommonJS(index_exports);
+var import_node_crypto = require("node:crypto");
 var MAX_TEXT = 400;
 var RATE_WINDOW_MS = 6e4;
 var RATE_MAX = 6;
 var UPSTREAM_TIMEOUT_MS = 2e4;
+var PIPER_TIMEOUT_MS = 8e3;
 var CACHE_TTL_MS = 10 * 6e4;
 var CACHE_MAX = 32;
 var PCM_RATE = 24e3;
@@ -56,15 +58,18 @@ function jsonResponse(statusCode, payload, origin = "", cacheControl = "no-store
     body: JSON.stringify(payload)
   };
 }
-function audioResponse(audioBase64, origin) {
+function audioResponse(audioBase64, origin, engine) {
   return {
     statusCode: 200,
-    headers: responseHeaders(origin, "audio/wav", "private, max-age=300"),
+    headers: {
+      ...responseHeaders(origin, "audio/wav", "private, max-age=300"),
+      "X-Voice-Engine": engine
+    },
     body: audioBase64
   };
 }
 function fallback(reason, origin) {
-  return jsonResponse(200, { ok: false, fallback: "browser", reason }, origin);
+  return jsonResponse(200, { ok: false, fallback: "browser", engine: "browser", reason }, origin);
 }
 function upstreamReason(status) {
   const code = Number.isInteger(status) && status >= 100 && status <= 599 ? String(status) : "error";
@@ -167,7 +172,7 @@ function deployedBuild() {
   }
   return null;
 }
-var ENV_NAME_PREFIXES = ["GEMINI_", "ONBOARDING_", "SCAN_", "COMMIT", "GIT", "SOURCE", "__OW", "DO_"];
+var ENV_NAME_PREFIXES = ["GEMINI_", "PIPER_", "ONBOARDING_", "SCAN_", "COMMIT", "GIT", "SOURCE", "__OW", "DO_"];
 function envDiagnostics() {
   const names = Object.keys(process.env);
   const envNames = names.filter((name) => ENV_NAME_PREFIXES.some((prefix) => name.startsWith(prefix))).sort((a, b) => a < b ? -1 : a > b ? 1 : 0);
@@ -196,8 +201,11 @@ function pcm16ToWav(pcm, sampleRate = PCM_RATE) {
   Buffer.from(samples).copy(buffer, 44);
   return buffer;
 }
-function remember(key, audioBase64, now) {
-  audioCache.set(key, { audioBase64, at: now });
+function textCacheKey(text) {
+  return (0, import_node_crypto.createHash)("sha256").update(text, "utf8").digest("hex");
+}
+function remember(key, audioBase64, engine, now) {
+  audioCache.set(key, { audioBase64, engine, at: now });
   while (audioCache.size > CACHE_MAX) {
     const oldest = audioCache.keys().next().value;
     if (oldest === void 0) break;
@@ -211,7 +219,21 @@ function cachedAudio(key, now) {
     audioCache.delete(key);
     return null;
   }
-  return hit.audioBase64;
+  return { audioBase64: hit.audioBase64, engine: hit.engine };
+}
+function piperTarget(event, options) {
+  const raw = setting(event, options, "PIPER_TTS_URL")?.trim() ?? "";
+  const secret = safeKey(setting(event, options, "PIPER_TTS_SECRET"));
+  if (!raw || !secret) return null;
+  let url;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+  if (url.username || url.password) return null;
+  return { url: url.toString(), secret };
 }
 function pcmFromGemini(payload) {
   if (!payload || typeof payload !== "object") return null;
@@ -270,25 +292,53 @@ async function handleVoice(event, options) {
     }, origin);
   }
   if (method !== "POST") return fallback("method_not_allowed", origin);
-  if (!apiKey) return fallback("voice_not_configured", origin);
+  const piper = piperTarget(event, options);
+  if (!apiKey && !piper) return fallback("voice_not_configured", origin);
   const model = safeName(modelSetting, DEFAULT_MODEL);
   const voice = safeName(voiceSetting, DEFAULT_VOICE);
-  if (!model || !voice) return fallback("internal_error", origin);
+  if (apiKey && (!model || !voice)) return fallback("internal_error", origin);
   const text = readText(event);
   if (!text) return fallback("text_missing", origin);
   if (text.length > MAX_TEXT) return fallback("text_too_long", origin);
   const now = options.now ?? Date.now();
   if (!allowRate(`ip:${ip}`, now)) return fallback("rate_limited", origin);
-  const cacheKey = `${model}
-${voice}
-${text}`;
+  const cacheKey = textCacheKey(text);
   const hit = cachedAudio(cacheKey, now);
-  if (hit) return audioResponse(hit, origin);
-  const endpoint = `${GEMINI_HOST}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  if (hit) return audioResponse(hit.audioBase64, origin, hit.engine);
   const fetchImpl = options.fetchImpl ?? globalThis.fetch;
   if (typeof fetchImpl !== "function") return fallback("internal_error", origin);
+  let geminiReason = "voice_not_configured";
+  if (apiKey && model && voice) {
+    const spoken = await geminiWav(
+      text,
+      model,
+      voice,
+      apiKey,
+      fetchImpl,
+      piper ? 12e3 : UPSTREAM_TIMEOUT_MS
+    );
+    if ("wav" in spoken) {
+      const audioBase64 = bytesToBase64(spoken.wav);
+      remember(cacheKey, audioBase64, "gemini", now);
+      return audioResponse(audioBase64, origin, "gemini");
+    }
+    geminiReason = spoken.reason;
+  }
+  if (piper) {
+    const wav = await piperWav(text, piper, fetchImpl);
+    if (wav) {
+      const audioBase64 = bytesToBase64(wav);
+      remember(cacheKey, audioBase64, "piper", now);
+      return audioResponse(audioBase64, origin, "piper");
+    }
+    return fallback("piper_unavailable", origin);
+  }
+  return fallback(geminiReason, origin);
+}
+async function geminiWav(text, model, voice, apiKey, fetchImpl, timeoutMs) {
+  const endpoint = `${GEMINI_HOST}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const upstream = await fetchImpl(endpoint, {
       method: "POST",
@@ -310,22 +360,46 @@ ${text}`;
       }),
       signal: controller.signal
     });
-    if (!upstream.ok) return fallback(upstreamReason(upstream.status), origin);
+    if (!upstream.ok) return { reason: upstreamReason(upstream.status) };
     let payload;
     try {
       payload = await upstream.json();
     } catch {
-      return fallback("upstream_no_audio", origin);
+      return { reason: "upstream_no_audio" };
     }
     const decoded = pcmFromGemini(payload);
     const wav = decoded ? wavFromPcm(decoded.pcm, decoded.mime) : null;
-    if (!wav) return fallback("upstream_no_audio", origin);
-    const audioBase64 = bytesToBase64(wav);
-    remember(cacheKey, audioBase64, now);
-    return audioResponse(audioBase64, origin);
+    if (!wav) return { reason: "upstream_no_audio" };
+    return { wav };
   } catch (error) {
     const timedOut = error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError" || /timeout/i.test(error.message));
-    return fallback(timedOut ? "upstream_timeout" : "internal_error", origin);
+    return { reason: timedOut ? "upstream_timeout" : "internal_error" };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+async function piperWav(text, piper, fetchImpl) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), PIPER_TIMEOUT_MS);
+  try {
+    const upstream = await fetchImpl(piper.url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${piper.secret}`,
+        "Content-Type": "application/json",
+        Accept: "audio/wav"
+      },
+      body: JSON.stringify({ text }),
+      signal: controller.signal
+    });
+    if (!upstream.ok) return null;
+    const type = upstream.headers.get("content-type") ?? "";
+    if (!type.startsWith("audio/")) return null;
+    const bytes = new Uint8Array(await upstream.arrayBuffer());
+    if (Buffer.from(bytes.subarray(0, 4)).toString("ascii") !== "RIFF") return null;
+    return bytes;
+  } catch {
+    return null;
   } finally {
     clearTimeout(timer);
   }
@@ -334,7 +408,7 @@ async function main(event = {}, options = {}) {
   try {
     return await handleVoice(event, options);
   } catch {
-    return jsonResponse(200, { ok: false, fallback: "browser", reason: "internal_error" });
+    return jsonResponse(200, { ok: false, fallback: "browser", engine: "browser", reason: "internal_error" });
   }
 }
 // Annotate the CommonJS export names for ESM import in node:

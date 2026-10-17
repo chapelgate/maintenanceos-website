@@ -182,6 +182,8 @@ test("deployed Functions artifact is prebuilt-only and loadable", async () => {
     "GEMINI_API_KEY",
     "GEMINI_TTS_MODEL",
     "GEMINI_TTS_VOICE",
+    "PIPER_TTS_SECRET",
+    "PIPER_TTS_URL",
     "SCANNER_V2_RUNTIME_URL",
   ]);
   const declaredEnv = [...project.matchAll(/\$\{([^}]+)\}/g)].map((match) => match[1]);

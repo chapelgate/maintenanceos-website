@@ -11,6 +11,7 @@ import {
   resetServerVoiceStateForTests,
   speakReceptionistText,
   unlockSpokenAudioOn,
+  voiceEngineLabel,
 } from "./preview-voice.ts";
 
 test("spoken preview uses the browser until a website-owned endpoint exists", () => {
@@ -223,6 +224,48 @@ test("a blocked play warns and does not pretend the Gemini voice played", async 
     console.warn = original;
     URL.createObjectURL = createObjectURL;
     URL.revokeObjectURL = revokeObjectURL;
+    resetServerVoiceStateForTests();
+  }
+});
+
+test("a Piper wav names Jenny Dioco and a failed server voice stays a browser warning", async () => {
+  resetServerVoiceStateForTests();
+  const engines: string[] = [];
+  const warnings: string[] = [];
+  const original = console.warn;
+  console.warn = (...args: unknown[]) => {
+    warnings.push(args.map(String).join(" "));
+  };
+  try {
+    const played = await speakReceptionistText("Good morning", {
+      fetchImpl: async () =>
+        new Response(Uint8Array.from([82, 73, 70, 70]), {
+          status: 200,
+          headers: { "content-type": "audio/wav", "x-voice-engine": "piper" },
+        }),
+      playAudio: async () => {},
+      onEngine: (engine) => engines.push(engine),
+    });
+    assert.equal(played, "preview");
+    assert.deepEqual(engines, ["piper"]);
+    assert.equal(voiceEngineLabel("piper"), "Neural voice (Jenny Dioco)");
+    assert.equal(voiceEngineLabel("gemini"), "Gemini voice");
+    assert.equal(voiceEngineLabel("browser"), "Browser voice");
+
+    engines.length = 0;
+    const browser = await speakReceptionistText("Good morning", {
+      fetchImpl: async () =>
+        new Response(
+          JSON.stringify({ ok: false, fallback: "browser", engine: "browser", reason: "piper_unavailable" }),
+          { status: 200, headers: { "content-type": "application/json" } },
+        ),
+      onEngine: (engine) => engines.push(engine),
+    });
+    assert.equal(browser, "unavailable");
+    assert.deepEqual(engines, []);
+    assert.match(warnings.join("\n"), /Gemini voice unavailable: unavailable/);
+  } finally {
+    console.warn = original;
     resetServerVoiceStateForTests();
   }
 });

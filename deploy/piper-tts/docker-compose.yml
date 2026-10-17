@@ -1,0 +1,12 @@
+services:
+  piper:
+    build: .
+    image: mos-piper-tts
+    container_name: mos-piper-tts
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8790:8790"
+    env_file:
+      - /etc/mos/piper.env
+    mem_limit: 512m
+    cpus: 1.0

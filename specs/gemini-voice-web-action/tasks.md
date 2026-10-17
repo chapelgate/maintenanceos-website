@@ -10,3 +10,4 @@
 - [x] Declare package `environment` so build-time Gemini and scanner URL values reach the functions
 - [x] GET lists matching env names and a total key count, never values
 - [x] The page reads `reason` and uses the browser voice on fallback
+- [x] A Gemini failure speaks through Piper before the browser voice

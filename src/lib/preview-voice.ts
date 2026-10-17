@@ -163,6 +163,10 @@ export function stopSpokenPreview(): void {
   }
 }
 
+function spokenEngine(value: string | null | undefined): "gemini" | "piper" {
+  return value?.trim().toLowerCase() === "piper" ? "piper" : "gemini";
+}
+
 function decodeBase64(value: string): Uint8Array {
   const bin = atob(value);
   const out = new Uint8Array(bin.length);
@@ -170,8 +174,16 @@ function decodeBase64(value: string): Uint8Array {
   return out;
 }
 
+export type SpokenEngine = "gemini" | "piper" | "browser";
+
+export function voiceEngineLabel(engine: SpokenEngine): string {
+  if (engine === "piper") return "Neural voice (Jenny Dioco)";
+  if (engine === "browser") return "Browser voice";
+  return "Gemini voice";
+}
+
 export type ServerVoiceResult =
-  | { ok: true; bytes: Uint8Array; contentType: string }
+  | { ok: true; bytes: Uint8Array; contentType: string; engine: "gemini" | "piper" }
   | { ok: false; reason: "not_configured" | "unavailable" | "timeout" };
 
 /**
@@ -207,6 +219,7 @@ export async function requestServerVoice(
         ok: true,
         bytes: new Uint8Array(await response.arrayBuffer()),
         contentType: type.split(";")[0]?.trim() || "audio/wav",
+        engine: spokenEngine(response.headers.get("x-voice-engine")),
       };
     }
     const raw = await response.text();
@@ -217,6 +230,7 @@ export async function requestServerVoice(
       fallback?: unknown;
       audioBase64?: unknown;
       contentType?: unknown;
+      engine?: unknown;
     };
     let parsed: ServerVoicePayload | null = null;
     if (raw && !type.includes("text/html")) {
@@ -239,6 +253,9 @@ export async function requestServerVoice(
           typeof parsed.contentType === "string" && parsed.contentType
             ? parsed.contentType
             : "audio/wav",
+        engine: spokenEngine(
+          typeof parsed.engine === "string" ? parsed.engine : response.headers.get("x-voice-engine"),
+        ),
       };
     }
     const reason = typeof parsed?.reason === "string" ? parsed.reason : parsed?.error;
@@ -390,7 +407,7 @@ export async function speakReceptionistText(
     fetchImpl?: typeof fetch;
     serverEndpoint?: string;
     playAudio?: (bytes: Uint8Array, contentType: string) => Promise<void>;
-    onEngine?: (engine: "preview" | "browser") => void;
+    onEngine?: (engine: SpokenEngine) => void;
   } = {},
 ): Promise<"browser" | "preview" | "unavailable"> {
   serverVoiceAbsent = false;
@@ -404,7 +421,7 @@ export async function speakReceptionistText(
       serverVoiceAbsent = false;
       try {
         if (options.playAudio) {
-          options.onEngine?.("preview");
+          options.onEngine?.(server.engine);
           await options.playAudio(server.bytes, server.contentType);
         } else {
           const audioBytes = server.bytes.buffer.slice(
@@ -412,7 +429,7 @@ export async function speakReceptionistText(
             server.bytes.byteOffset + server.bytes.byteLength,
           ) as ArrayBuffer;
           await playPreviewAudio(new Blob([audioBytes], { type: server.contentType }), () =>
-            options.onEngine?.("preview"),
+            options.onEngine?.(server.engine),
           );
         }
         return "preview";
@@ -443,7 +460,7 @@ export async function speakReceptionistText(
       if (!response.ok || !type.startsWith("audio/")) {
         throw new Error("preview_unavailable");
       }
-      await playPreviewAudio(await response.blob(), () => options.onEngine?.("preview"));
+      await playPreviewAudio(await response.blob(), () => options.onEngine?.("gemini"));
       return "preview";
     } catch (error) {
       warnVoice(error instanceof Error ? error.message : "playback_failed");
