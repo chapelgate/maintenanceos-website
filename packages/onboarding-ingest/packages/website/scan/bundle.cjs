@@ -151,6 +151,8 @@ var MAX_SCAN_URL_LENGTH = 2048;
 var RATE_WINDOW_MS = 6e4;
 var RATE_MAX = 8;
 var HOST_RATE_MAX = 6;
+var RESUME_RATE_MAX = 12;
+var RESUME_IP_RATE_MAX = 48;
 var UPSTREAM_TIMEOUT_MS = 2e4;
 var DEFAULT_PERSISTENT_SCANNER_ENDPOINT = "https://178-128-171-45.sslip.io/v1/onboarding/scan";
 var SCAN_PATH = "/v1/onboarding/scan";
@@ -193,16 +195,24 @@ function hostnameOf(url) {
     return "";
   }
 }
-function response(statusCode, body, origin = "") {
+function response(statusCode, body, origin = "", extra = {}) {
   const headers = {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
     Vary: "Origin",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Accept"
+    "Access-Control-Allow-Headers": "Content-Type, Accept",
+    ...extra
   };
   if (origin) headers["Access-Control-Allow-Origin"] = origin;
   return { statusCode, headers, body };
+}
+function isResumeCrawlId(crawlId) {
+  return crawlId.startsWith("scanner-v2:") && !crawlId.startsWith("scanner-v2:gateway:");
+}
+function retryAfterSeconds(key, now) {
+  const oldest = rateBuckets.get(key)?.[0] ?? now;
+  return Math.max(1, Math.ceil((oldest + RATE_WINDOW_MS - now) / 1e3));
 }
 function gatewayCrawlId(pageUrl) {
   let origin = pageUrl;
@@ -307,28 +317,50 @@ async function main(event = {}) {
   const allowed = allowPublicHttpsUrl(url);
   const now = Date.now();
   pruneRateBuckets(now);
-  if (!allowRate(`ip:${clientIp}`, RATE_MAX, now)) {
-    return response(
-      429,
-      {
-        ok: false,
-        error: "rate_limited",
-        message: "Too many scan requests. Try again shortly."
-      },
-      origin
-    );
-  }
-  const host = hostnameOf(url);
-  if (host && !allowRate(`host:${clientIp}|${host}`, HOST_RATE_MAX, now)) {
-    return response(
-      429,
-      {
-        ok: false,
-        error: "rate_limited",
-        message: "Too many scan requests for this website. Try again shortly."
-      },
-      origin
-    );
+  const crawlId = typeof event.crawlId === "string" ? event.crawlId.trim() : "";
+  if (isResumeCrawlId(crawlId)) {
+    const crawlKey = `resume:${crawlId}`;
+    const ipKey = `resume-ip:${clientIp}`;
+    const denied = !allowRate(crawlKey, RESUME_RATE_MAX, now) ? crawlKey : !allowRate(ipKey, RESUME_IP_RATE_MAX, now) ? ipKey : "";
+    if (denied) {
+      return response(
+        429,
+        {
+          ok: false,
+          error: "rate_limited",
+          message: "Too many scan requests. Try again shortly."
+        },
+        origin,
+        { "Retry-After": String(retryAfterSeconds(denied, now)) }
+      );
+    }
+  } else {
+    if (!allowRate(`ip:${clientIp}`, RATE_MAX, now)) {
+      return response(
+        429,
+        {
+          ok: false,
+          error: "rate_limited",
+          message: "Too many scan requests. Try again shortly."
+        },
+        origin,
+        { "Retry-After": String(retryAfterSeconds(`ip:${clientIp}`, now)) }
+      );
+    }
+    const host = hostnameOf(url);
+    const hostKey = `host:${clientIp}|${host}`;
+    if (host && !allowRate(hostKey, HOST_RATE_MAX, now)) {
+      return response(
+        429,
+        {
+          ok: false,
+          error: "rate_limited",
+          message: "Too many scan requests for this website. Try again shortly."
+        },
+        origin,
+        { "Retry-After": String(retryAfterSeconds(hostKey, now)) }
+      );
+    }
   }
   if (!allowed.ok) {
     return response(
@@ -342,7 +374,6 @@ async function main(event = {}) {
       origin
     );
   }
-  const crawlId = typeof event.crawlId === "string" ? event.crawlId.trim() : "";
   const result = await proxyPersistentScan(allowed.url.toString(), fetch, void 0, crawlId);
   return response(result.statusCode, result.body, origin);
 }

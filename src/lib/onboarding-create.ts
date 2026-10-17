@@ -545,6 +545,12 @@ export const SCAN_UNAVAILABLE_MESSAGE =
 export const SCAN_REJECTED_MESSAGE =
   "This website could not be checked, so no business facts were filled in. Continue and complete the draft yourself. Nothing was invented.";
 
+export const SCAN_BUSY_MESSAGE =
+  "The website check is busy right now. Wait a moment and try again, or type the details yourself. Nothing was invented.";
+
+export const SCAN_PAGE_TOO_LARGE_MESSAGE =
+  "This page is too large for the website check to read, so no business facts were filled in. You can type the details yourself. Nothing was invented.";
+
 /**
  * A durable crawl can return HTTP 200 with a PARTIAL manifest that fetched
  * nothing. That is a failed read, not an empty-but-successful draft.
@@ -766,6 +772,9 @@ export function emptyDraftExplanation(summary: ScanRunSummary | null): string {
   if (warnings.some((warning) => /could not resolve this hostname|dns_failed/i.test(warning))) {
     return "We could not find that website address. Check the spelling, or try it with or without www. Nothing was invented.";
   }
+  if (warnings.some((warning) => warning === "response_too_large")) {
+    return SCAN_PAGE_TOO_LARGE_MESSAGE;
+  }
   if (warnings.some((warning) => /cross_origin_redirect/i.test(warning))) {
     return "This website sent the check to a different address. You can paste that address, or complete the draft yourself. Nothing was invented.";
   }
@@ -859,6 +868,7 @@ export async function requestOnboardingScan(
   const fetchImpl = options.fetchImpl ?? fetch;
   const sleep = options.sleep ?? sleepMs;
   const crawlId = options.crawlId?.trim() || (await gatewayScanCrawlId(url));
+  let waitMs = backoffMs;
   let lastManual: Extract<ScanOutcome, { status: "manual" }> = {
     status: "manual",
     reason: "unavailable",
@@ -937,7 +947,9 @@ export async function requestOnboardingScan(
           const summary = mapScanRunSummary(parsed);
           const explained = emptyDraftExplanation(summary);
           const hostnameOrRedirect = (summary?.warnings ?? []).some((warning) =>
-            /could not resolve this hostname|dns_failed|cross_origin_redirect/i.test(warning),
+            /could not resolve this hostname|dns_failed|cross_origin_redirect|response_too_large/i.test(
+              warning,
+            ),
           );
           return {
             status: "manual",
@@ -956,13 +968,26 @@ export async function requestOnboardingScan(
           summary: mapScanRunSummary(parsed),
         };
       }
-      const retryable = RETRYABLE_SCAN_STATUS.has(res.status);
-      lastManual = {
-        status: "manual",
-        reason: retryable ? "unavailable" : "rejected",
-        message: retryable ? SCAN_UNAVAILABLE_MESSAGE : SCAN_REJECTED_MESSAGE,
-      };
-      retry = retryable && attempt < maxAttempts;
+      if (res.status === 429) {
+        const header = Number(res.headers.get("retry-after"));
+        waitMs =
+          Number.isFinite(header) && header > 0 ? Math.min(header * 1000, 15_000) : backoffMs;
+        lastManual = {
+          status: "manual",
+          reason: "unavailable",
+          message: SCAN_BUSY_MESSAGE,
+        };
+        retry = attempt < maxAttempts;
+      } else {
+        const retryable = RETRYABLE_SCAN_STATUS.has(res.status);
+        waitMs = backoffMs;
+        lastManual = {
+          status: "manual",
+          reason: retryable ? "unavailable" : "rejected",
+          message: retryable ? SCAN_UNAVAILABLE_MESSAGE : SCAN_REJECTED_MESSAGE,
+        };
+        retry = retryable && attempt < maxAttempts;
+      }
     } catch {
       if (options.signal?.aborted) return { status: "aborted" };
       const timedOut = controller.signal.aborted;
@@ -978,7 +1003,7 @@ export async function requestOnboardingScan(
     }
     if (!retry) return lastManual;
     options.onProgress?.({ attempt, maxAttempts, phase: "retry" });
-    await sleep(backoffMs);
+    await sleep(waitMs);
   }
   return lastManual;
 }

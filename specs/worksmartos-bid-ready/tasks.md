@@ -22,3 +22,4 @@
 - [x] Postcode-anchored addresses, E.164 phones, same-domain email, visible hours
 - [x] Strict services, service area, and FAQ gates, plus brand names and branches
 - [x] `/create` reviews every field with a source URL and a confidence badge
+- [x] A page up to 2MB is read, a resume does not spend the new-scan limit, and a search URL stays internal
