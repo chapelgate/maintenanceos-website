@@ -114,7 +114,13 @@ export function SandboxTestCallPanel({
       serverVoiceAttemptable();
     if (!canSpeak) return;
     setVoiceState("speaking");
-    const mode = await speakReceptionistText(text, { lang: "en-GB" });
+    const mode = await speakReceptionistText(text, {
+      lang: "en-GB",
+      onEngine: (engine) => {
+        setVoiceEngine(engine);
+        setVoiceDetail(engine === "preview" ? "Gemini voice" : "browser voice");
+      },
+    });
     setVoiceState("idle");
     if (mode === "preview") {
       setVoiceEngine("preview");

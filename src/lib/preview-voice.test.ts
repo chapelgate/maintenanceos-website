@@ -178,8 +178,7 @@ test("the tap unlocks one audio element and the fetched wav plays through it", a
     });
     assert.equal(mode, "preview");
     assert.equal(resumes, 1);
-    assert.equal(plays[0]?.startsWith("data:audio/wav"), true);
-    assert.equal(plays.at(-1), "blob:gemini-wav");
+    assert.deepEqual(plays, ["blob:gemini-wav"]);
     assert.equal(unlocked.src, "blob:gemini-wav");
   } finally {
     URL.createObjectURL = createObjectURL;
@@ -224,6 +223,84 @@ test("a blocked play warns and does not pretend the Gemini voice played", async 
     console.warn = original;
     URL.createObjectURL = createObjectURL;
     URL.revokeObjectURL = revokeObjectURL;
+    resetServerVoiceStateForTests();
+  }
+});
+
+test("the fetched wav plays through the audio context resumed on the tap", async () => {
+  resetServerVoiceStateForTests();
+  const elementPlays: string[] = [];
+  const started: unknown[] = [];
+  let decoded: Uint8Array | null = null;
+  let resumes = 0;
+  class FakeAudio {
+    src = "";
+    onended: (() => void) | null = null;
+    onerror: (() => void) | null = null;
+    pause(): void {}
+    play(): Promise<void> {
+      elementPlays.push(this.src);
+      return Promise.resolve();
+    }
+  }
+  const destination = { kind: "speakers" };
+  class FakeContext {
+    destination = destination;
+    resume(): Promise<void> {
+      resumes += 1;
+      return Promise.resolve();
+    }
+    decodeAudioData(bytes: ArrayBuffer): Promise<{ mark: string }> {
+      decoded = new Uint8Array(bytes);
+      return Promise.resolve({ mark: "decoded" });
+    }
+    createBufferSource() {
+      const source = {
+        buffer: null as { mark: string } | null,
+        onended: null as (() => void) | null,
+        connect(target: unknown) {
+          assert.equal(target, destination);
+        },
+        start() {
+          started.push(source.buffer);
+          queueMicrotask(() => source.onended?.());
+        },
+      };
+      return source;
+    }
+  }
+  const context = new FakeContext();
+  unlockSpokenAudioOn({
+    Audio: FakeAudio,
+    AudioContext: class {
+      constructor() {
+        return context;
+      }
+    } as unknown as new () => FakeContext,
+  });
+  const createObjectURL = URL.createObjectURL;
+  let objectUrls = 0;
+  URL.createObjectURL = () => {
+    objectUrls += 1;
+    return "blob:should-not-play";
+  };
+  try {
+    const mode = await speakReceptionistText("Hello", {
+      fetchImpl: async () =>
+        new Response(Uint8Array.from([82, 73, 70, 70, 1, 2, 3, 4]), {
+          status: 200,
+          headers: { "content-type": "audio/wav" },
+        }),
+    });
+    assert.equal(mode, "preview");
+    assert.equal(resumes, 1);
+    assert.equal(objectUrls, 0);
+    assert.deepEqual(Array.from(decoded ?? []), [82, 73, 70, 70, 1, 2, 3, 4]);
+    assert.equal(started.length, 1);
+    assert.deepEqual(started[0], { mark: "decoded" });
+    assert.deepEqual(elementPlays, []);
+  } finally {
+    URL.createObjectURL = createObjectURL;
     resetServerVoiceStateForTests();
   }
 });
