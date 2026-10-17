@@ -798,6 +798,46 @@ test("blog headings, copyright boilerplate, and wix footers lose to the brand", 
   assert.equal(loungeTitle.fieldMeta.businessName?.source, "title");
 });
 
+test("hours, legal links, contact lines, and wix handles keep the brand", () => {
+  const acs = extractDraftFromHtml([
+    { url: "https://acssolicitors.co.uk/", html: fixture("acssolicitors-lunch.html") },
+  ]);
+  assert.equal(acs.draft.businessName, "ACS Solicitors");
+  assert.doesNotMatch(acs.draft.businessName ?? "", /lunch|closed|pm/i);
+
+  const propeller = extractDraftFromHtml([
+    { url: "https://www.propeller-properties.co.uk/", html: fixture("propeller-properties-home.html") },
+  ]);
+  assert.equal(propeller.draft.businessName, "Propeller Properties");
+  assert.doesNotMatch(propeller.draft.businessName ?? "", /conditions|complaints|procedure/i);
+
+  const noya = extractDraftFromHtml([
+    { url: "https://noyarestaurant.co.uk/", html: fixture("noyarestaurant-home.html") },
+  ]);
+  assert.equal(noya.draft.businessName, "NOYA Mediterranean Restaurant");
+  assert.doesNotMatch(noya.draft.businessName ?? "", /noyarestaurant\.co\.uk|0151|3453340/);
+
+  const noyaFooter = extractDraftFromHtml([
+    {
+      url: "https://noyarestaurant.co.uk/",
+      html: "<html><head><title>Home</title></head><body><footer>info@noyarestaurant.co.uk 0151 3453340 Noya Restaurant © 2025. All rights reserved.</footer></body></html>",
+    },
+  ]);
+  assert.equal(noyaFooter.draft.businessName, "Noya Restaurant");
+
+  const lounge = extractDraftFromHtml([
+    { url: "https://lounge83clare.wixsite.com/lounge83", html: fixture("lounge83clare-wix.html") },
+  ]);
+  assert.equal(lounge.draft.businessName, "Lounge83");
+  assert.equal(lounge.fieldMeta.businessName?.source, "title");
+
+  const loungeShell = extractDraftFromHtml([
+    { url: "https://lounge83clare.wixsite.com/lounge83", html: fixture("lounge83clare-shell.html") },
+  ]);
+  assert.equal(loungeShell.draft.businessName, "Lounge83");
+  assert.notEqual(loungeShell.draft.businessName, "Lounge83clare");
+});
+
 test("a missing name falls back to the domain at low confidence", () => {
   const result = extractDraftFromHtml([
     { url: "https://www.alleygates.example/", html: "<html><head><title>Home</title></head><body></body></html>" },
