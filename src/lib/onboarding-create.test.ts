@@ -26,6 +26,7 @@ import {
   isZeroFetchPartial,
   isBlockedBySite,
   gatewayScanCrawlId,
+  emptyDraftExplanation,
   requestOnboardingScan,
   BLOCKED_BY_SITE_HOST_LINE,
   BLOCKED_BY_SITE_MESSAGE,
@@ -943,4 +944,89 @@ test("an aborted scan does not become a failed draft", async () => {
     },
   });
   assert.equal(outcome.status, "aborted");
+});
+
+test("a cross-origin redirect is followed once onto the other host", async () => {
+  const urls: string[] = [];
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://harrisheating.co.uk/", {
+    sleep: async () => {},
+    fetchImpl: async (_input, init) => {
+      const body = JSON.parse(String(init?.body)) as { url: string };
+      urls.push(body.url);
+      if (urls.length === 1) {
+        return jsonResponse(200, {
+          ok: true,
+          draft: {},
+          warnings: ["cross_origin_redirect"],
+          sources: [{ url: "https://www.harrisheating.co.uk/", status: 200, bytes: 10 }],
+          scannerV2: { state: "PARTIAL", discovered: 1, fetched: 0, unresolved: 1 },
+        });
+      }
+      return jsonResponse(200, {
+        ok: true,
+        draft: { businessName: "Harris Heating" },
+        warnings: [],
+        scannerV2: { state: "COMPLETE", discovered: 1, fetched: 1, unresolved: 0 },
+      });
+    },
+  });
+  assert.deepEqual(urls, ["https://harrisheating.co.uk/", "https://www.harrisheating.co.uk/"]);
+  assert.equal(outcome.status, "ok");
+  if (outcome.status !== "ok") return;
+  assert.equal(outcome.draft.businessName, "Harris Heating");
+});
+
+test("an unresolved hostname is explained instead of an empty draft", async () => {
+  const urls: string[] = [];
+  const outcome = await requestOnboardingScan("/api/website/scan", "https://missing.example/", {
+    sleep: async () => {},
+    fetchImpl: async (_input, init) => {
+      const body = JSON.parse(String(init?.body)) as { url: string };
+      urls.push(body.url);
+      return jsonResponse(200, {
+        ok: true,
+        draft: {},
+        warnings: ["Could not resolve this hostname."],
+        scannerV2: { state: "PARTIAL", discovered: 0, fetched: 0, unresolved: 1 },
+      });
+    },
+  });
+  assert.deepEqual(urls, ["https://missing.example/", "https://www.missing.example/"]);
+  assert.equal(outcome.status, "manual");
+  if (outcome.status !== "manual") return;
+  assert.match(outcome.message, /could not find that website/i);
+  assert.doesNotMatch(outcome.message, /No draft fields were supplied/);
+});
+
+test("partial and blocked scans explain an empty draft in plain language", () => {
+  assert.match(
+    emptyDraftExplanation({
+      state: "PARTIAL",
+      discovered: 1,
+      fetched: 1,
+      unresolved: 0,
+      warnings: ["scanner_v2_partial"],
+    }) ?? "",
+    /part of the site/i,
+  );
+  assert.match(
+    emptyDraftExplanation({
+      state: "BLOCKED",
+      discovered: 1,
+      fetched: 0,
+      unresolved: 0,
+      warnings: ["blocked_by_site"],
+    }) ?? "",
+    /blocks automated reading/i,
+  );
+  assert.doesNotMatch(
+    emptyDraftExplanation({
+      state: "PARTIAL",
+      discovered: 0,
+      fetched: 0,
+      unresolved: 1,
+      warnings: ["Could not resolve this hostname."],
+    }) ?? "",
+    /No draft fields were supplied/,
+  );
 });

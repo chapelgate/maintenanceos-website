@@ -10,6 +10,7 @@ import {
   requestServerVoice,
   resetServerVoiceStateForTests,
   speakReceptionistText,
+  unlockSpokenAudioOn,
 } from "./preview-voice.ts";
 
 test("spoken preview uses the browser until a website-owned endpoint exists", () => {
@@ -107,8 +108,13 @@ test("an HTML gateway page is not parsed and the next line retries", async () =>
   resetServerVoiceStateForTests();
 });
 
-test("a missing server voice falls back without exposing configuration", async () => {
+test("a missing server voice is tried again on the next line and the reason is warned", async () => {
   resetServerVoiceStateForTests();
+  const warnings: string[] = [];
+  const original = console.warn;
+  console.warn = (...args: unknown[]) => {
+    warnings.push(args.map(String).join(" "));
+  };
   let calls = 0;
   const fetchImpl: typeof fetch = async () => {
     calls += 1;
@@ -117,11 +123,16 @@ test("a missing server voice falls back without exposing configuration", async (
       { status: 200, headers: { "content-type": "application/json" } },
     );
   };
-  const first = await speakReceptionistText("Hello", { fetchImpl });
-  const second = await speakReceptionistText("Hello again", { fetchImpl });
-  assert.equal(first, "unavailable");
-  assert.equal(second, "unavailable");
-  assert.equal(calls, 1);
+  try {
+    const first = await speakReceptionistText("Hello", { fetchImpl });
+    const second = await speakReceptionistText("Hello again", { fetchImpl });
+    assert.equal(first, "unavailable");
+    assert.equal(second, "unavailable");
+    assert.equal(calls, 2);
+    assert.match(warnings.join("\n"), /not_configured/);
+  } finally {
+    console.warn = original;
+  }
   const direct = await requestServerVoice("Hello", {
     endpoint: "/api/website/voice",
     fetchImpl: async () =>
@@ -129,4 +140,90 @@ test("a missing server voice falls back without exposing configuration", async (
   });
   assert.deepEqual(direct, { ok: false, reason: "not_configured" });
   resetServerVoiceStateForTests();
+});
+
+test("the tap unlocks one audio element and the fetched wav plays through it", async () => {
+  resetServerVoiceStateForTests();
+  const plays: string[] = [];
+  let resumes = 0;
+  class FakeAudio {
+    src = "";
+    onended: (() => void) | null = null;
+    onerror: (() => void) | null = null;
+    pause(): void {}
+    play(): Promise<void> {
+      plays.push(this.src);
+      queueMicrotask(() => this.onended?.());
+      return Promise.resolve();
+    }
+  }
+  class FakeContext {
+    resume(): Promise<void> {
+      resumes += 1;
+      return Promise.resolve();
+    }
+  }
+  const unlocked = unlockSpokenAudioOn({ Audio: FakeAudio, AudioContext: FakeContext });
+  const createObjectURL = URL.createObjectURL;
+  const revokeObjectURL = URL.revokeObjectURL;
+  URL.createObjectURL = () => "blob:gemini-wav";
+  URL.revokeObjectURL = () => {};
+  try {
+    const mode = await speakReceptionistText("Hello", {
+      fetchImpl: async () =>
+        new Response(Uint8Array.from([82, 73, 70, 70]), {
+          status: 200,
+          headers: { "content-type": "audio/wav" },
+        }),
+    });
+    assert.equal(mode, "preview");
+    assert.equal(resumes, 1);
+    assert.equal(plays[0]?.startsWith("data:audio/wav"), true);
+    assert.equal(plays.at(-1), "blob:gemini-wav");
+    assert.equal(unlocked.src, "blob:gemini-wav");
+  } finally {
+    URL.createObjectURL = createObjectURL;
+    URL.revokeObjectURL = revokeObjectURL;
+    resetServerVoiceStateForTests();
+  }
+});
+
+test("a blocked play warns and does not pretend the Gemini voice played", async () => {
+  resetServerVoiceStateForTests();
+  const warnings: string[] = [];
+  const original = console.warn;
+  console.warn = (...args: unknown[]) => {
+    warnings.push(args.map(String).join(" "));
+  };
+  class FakeAudio {
+    src = "";
+    onended: (() => void) | null = null;
+    onerror: (() => void) | null = null;
+    pause(): void {}
+    play(): Promise<void> {
+      if (this.src.startsWith("blob:")) return Promise.reject(new Error("NotAllowedError"));
+      return Promise.resolve();
+    }
+  }
+  unlockSpokenAudioOn({ Audio: FakeAudio });
+  const createObjectURL = URL.createObjectURL;
+  const revokeObjectURL = URL.revokeObjectURL;
+  URL.createObjectURL = () => "blob:gemini-wav";
+  URL.revokeObjectURL = () => {};
+  try {
+    const mode = await speakReceptionistText("Hello", {
+      fetchImpl: async () =>
+        new Response(Uint8Array.from([82, 73, 70, 70]), {
+          status: 200,
+          headers: { "content-type": "audio/wav" },
+        }),
+    });
+    assert.notEqual(mode, "preview");
+    assert.match(warnings.join("\n"), /NotAllowedError/);
+  } finally {
+    console.warn = original;
+    URL.createObjectURL = createObjectURL;
+    URL.revokeObjectURL = revokeObjectURL;
+    resetServerVoiceStateForTests();
+  }
 });
