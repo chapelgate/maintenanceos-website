@@ -21,8 +21,59 @@ export function serverVoiceAttemptable(): boolean {
   return !serverVoiceAbsent;
 }
 
+type UnlockableAudio = {
+  src: string;
+  pause(): void;
+  play(): Promise<void>;
+  onended: ((event?: unknown) => void) | null;
+  onerror: ((event?: unknown) => void) | null;
+};
+
+type UnlockableContext = {
+  resume(): Promise<void>;
+};
+
+export type SpokenAudioHost = {
+  Audio: new () => UnlockableAudio;
+  AudioContext?: new () => UnlockableContext;
+  webkitAudioContext?: new () => UnlockableContext;
+};
+
+const SILENT_WAV =
+  "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+
+let primedAudio: UnlockableAudio | null = null;
+let primedContext: UnlockableContext | null = null;
+
 export function resetServerVoiceStateForTests(): void {
   serverVoiceAbsent = false;
+  primedAudio = null;
+  primedContext = null;
+}
+
+function warnVoice(reason: string): void {
+  console.warn(`Gemini voice unavailable: ${reason}`);
+}
+
+export function unlockSpokenAudioOn(host: SpokenAudioHost): UnlockableAudio {
+  serverVoiceAbsent = false;
+  const audio = primedAudio ?? new host.Audio();
+  primedAudio = audio;
+  audio.src = SILENT_WAV;
+  void audio.play().then(() => audio.pause()).catch(() => undefined);
+  const Context = host.AudioContext ?? host.webkitAudioContext;
+  if (Context) {
+    primedContext = primedContext ?? new Context();
+    void primedContext.resume().catch(() => undefined);
+  }
+  return audio;
+}
+
+export function unlockSpokenAudio(): void {
+  if (typeof window === "undefined") return;
+  const host = window as unknown as SpokenAudioHost;
+  if (typeof host.Audio !== "function") return;
+  unlockSpokenAudioOn(host);
 }
 
 export type PreviewVoiceMode = "browser" | "preview";
@@ -94,7 +145,7 @@ function decodeBase64(value: string): Uint8Array {
 
 export type ServerVoiceResult =
   | { ok: true; bytes: Uint8Array; contentType: string }
-  | { ok: false; reason: "not_configured" | "unavailable" };
+  | { ok: false; reason: "not_configured" | "unavailable" | "timeout" };
 
 /**
  * Ask the same-origin voice function for audio. The body is only the text.
@@ -169,7 +220,8 @@ export async function requestServerVoice(
     }
     return { ok: false, reason: "unavailable" };
   } catch {
-    return { ok: false, reason: "unavailable" };
+    const timedOut = controller.signal.aborted && !options.signal?.aborted;
+    return { ok: false, reason: timedOut ? "timeout" : "unavailable" };
   } finally {
     clearTimeout(timer);
     options.signal?.removeEventListener("abort", onAbort);
@@ -178,8 +230,10 @@ export async function requestServerVoice(
 
 async function playPreviewAudio(blob: Blob): Promise<void> {
   const url = URL.createObjectURL(blob);
-  const audio = new Audio(url);
-  currentAudio = audio;
+  const audio = primedAudio ?? new Audio();
+  primedAudio = audio;
+  currentAudio = audio as HTMLAudioElement;
+  audio.src = url;
   try {
     await new Promise<void>((resolve, reject) => {
       audio.onended = () => resolve();
@@ -206,6 +260,7 @@ export async function speakReceptionistText(
     playAudio?: (bytes: Uint8Array, contentType: string) => Promise<void>;
   } = {},
 ): Promise<"browser" | "preview" | "unavailable"> {
+  serverVoiceAbsent = false;
   const serverEndpoint = options.serverEndpoint ?? SERVER_VOICE_ENDPOINT;
   if (serverEndpoint && serverVoiceAttemptable()) {
     const server = await requestServerVoice(text, {
@@ -224,11 +279,14 @@ export async function speakReceptionistText(
           await playPreviewAudio(new Blob([audioBytes], { type: server.contentType }));
         }
         return "preview";
-      } catch {
-        // Playback failed. The browser voice is still available.
+      } catch (error) {
+        warnVoice(error instanceof Error ? error.message : "playback_failed");
       }
     } else if (server.reason === "not_configured") {
       serverVoiceAbsent = true;
+      warnVoice("not_configured");
+    } else {
+      warnVoice(server.reason);
     }
   }
 
@@ -250,8 +308,8 @@ export async function speakReceptionistText(
       }
       await playPreviewAudio(await response.blob());
       return "preview";
-    } catch {
-      // Browser voice remains the fail-safe. Do not surface provider errors.
+    } catch (error) {
+      warnVoice(error instanceof Error ? error.message : "playback_failed");
     }
   }
 

@@ -735,7 +735,79 @@ export type OnboardingScanOptions = {
   sleep?: (ms: number) => Promise<void>;
   /** Resume the same durable crawl. The server still keys the job by the website URL. */
   crawlId?: string;
+  followed?: boolean;
 };
+
+export function alternatePublicUrl(raw: string): string | null {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+  const host = url.hostname.replace(/\.$/, "");
+  const nextHost = /^www\./i.test(host) ? host.replace(/^www\./i, "") : `www.${host}`;
+  if (!nextHost || nextHost.toLowerCase() === host.toLowerCase()) return null;
+  url.hostname = nextHost;
+  return url.toString();
+}
+
+function hostOf(raw: string): string {
+  try {
+    return new URL(raw).hostname.replace(/^www\./i, "").toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
+export function emptyDraftExplanation(summary: ScanRunSummary | null): string {
+  const warnings = summary?.warnings ?? [];
+  if (warnings.some((warning) => /could not resolve this hostname|dns_failed/i.test(warning))) {
+    return "We could not find that website address. Check the spelling, or try it with or without www. Nothing was invented.";
+  }
+  if (warnings.some((warning) => /cross_origin_redirect/i.test(warning))) {
+    return "This website sent the check to a different address. You can paste that address, or complete the draft yourself. Nothing was invented.";
+  }
+  if (summary?.state === "BLOCKED" || warnings.includes("blocked_by_site")) {
+    return BLOCKED_BY_SITE_MESSAGE;
+  }
+  if (summary?.state === "PARTIAL") {
+    return "The website check only read part of the site, so no business facts were filled in. You can complete the draft yourself. Nothing was invented.";
+  }
+  if (warnings.length > 0) {
+    return "The website check finished with a warning, so no business facts were filled in. You can complete the draft yourself. Nothing was invented.";
+  }
+  return "No draft fields were supplied. Nothing was invented. You can complete the draft yourself.";
+}
+
+function publicFollowUrl(submitted: string, parsed: unknown): string | null {
+  if (!parsed || typeof parsed !== "object") return null;
+  if (filledScanDraftCount(mapScanResponse(parsed)) > 0) return null;
+  const record = parsed as { warnings?: unknown; sources?: unknown };
+  const warnings = Array.isArray(record.warnings)
+    ? record.warnings.filter((item): item is string => typeof item === "string")
+    : [];
+  const sources = Array.isArray(record.sources) ? record.sources : [];
+  for (const source of sources) {
+    const raw = source && typeof source === "object" ? (source as { url?: unknown }).url : undefined;
+    if (typeof raw !== "string" || !isAbsoluteHttpUrl(raw)) continue;
+    if (hostOf(raw) && hostOf(raw) !== hostOf(submitted)) {
+      try {
+        return new URL(raw).toString();
+      } catch {
+        continue;
+      }
+    }
+  }
+  const interesting = warnings.some((warning) =>
+    /cross_origin_redirect|could not resolve this hostname|dns_failed/i.test(warning),
+  );
+  if (!interesting) return null;
+  const alternate = alternatePublicUrl(submitted);
+  if (!alternate || hostOf(alternate) === hostOf(submitted) && alternate === submitted) return null;
+  return alternate;
+}
 
 function sleepMs(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -843,6 +915,16 @@ export async function requestOnboardingScan(
         };
       }
       if (res.ok) {
+        if (!options.followed) {
+          const nextUrl = publicFollowUrl(url, parsed);
+          if (nextUrl) {
+            return requestOnboardingScan(endpoint, nextUrl, {
+              ...options,
+              crawlId: undefined,
+              followed: true,
+            });
+          }
+        }
         if (isBlockedBySite(parsed)) {
           return {
             status: "manual",
@@ -852,10 +934,15 @@ export async function requestOnboardingScan(
           };
         }
         if (isZeroFetchPartial(parsed)) {
+          const summary = mapScanRunSummary(parsed);
+          const explained = emptyDraftExplanation(summary);
+          const hostnameOrRedirect = (summary?.warnings ?? []).some((warning) =>
+            /could not resolve this hostname|dns_failed|cross_origin_redirect/i.test(warning),
+          );
           return {
             status: "manual",
             reason: "zero_fetch",
-            message: ZERO_FETCH_PARTIAL_MESSAGE,
+            message: hostnameOrRedirect ? explained : ZERO_FETCH_PARTIAL_MESSAGE,
           };
         }
         const facts = mapScanBusinessFacts(parsed);
