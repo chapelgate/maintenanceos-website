@@ -9,6 +9,8 @@ packages:
       GEMINI_API_KEY: "${GEMINI_API_KEY}"
       GEMINI_TTS_MODEL: "${GEMINI_TTS_MODEL}"
       GEMINI_TTS_VOICE: "${GEMINI_TTS_VOICE}"
+      PIPER_TTS_URL: "${PIPER_TTS_URL}"
+      PIPER_TTS_SECRET: "${PIPER_TTS_SECRET}"
       SCANNER_V2_RUNTIME_URL: "${SCANNER_V2_RUNTIME_URL}"
     functions:
       - name: scan

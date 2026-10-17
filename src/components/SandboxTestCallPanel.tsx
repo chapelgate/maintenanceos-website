@@ -13,6 +13,8 @@ import {
   speakReceptionistText,
   stopSpokenPreview,
   unlockSpokenAudio,
+  voiceEngineLabel,
+  type SpokenEngine,
 } from "@/lib/preview-voice";
 import {
   requestSandboxScriptedDemo,
@@ -96,7 +98,7 @@ export function SandboxTestCallPanel({
     "idle" | "listening" | "speaking" | "error"
   >("idle");
   const [voiceDetail, setVoiceDetail] = useState<string | null>(null);
-  const [voiceEngine, setVoiceEngine] = useState<"preview" | "browser" | null>(null);
+  const [voiceEngine, setVoiceEngine] = useState<SpokenEngine | null>(null);
   const recognitionRef = useRef<BrowserRecognitionSession | null>(null);
   const inputId = useId();
 
@@ -118,20 +120,11 @@ export function SandboxTestCallPanel({
       lang: "en-GB",
       onEngine: (engine) => {
         setVoiceEngine(engine);
-        setVoiceDetail(engine === "preview" ? "Gemini voice" : "browser voice");
+        setVoiceDetail(voiceEngineLabel(engine));
       },
     });
     setVoiceState("idle");
-    if (mode === "preview") {
-      setVoiceEngine("preview");
-      setVoiceDetail("Gemini voice");
-      return;
-    }
-    if (mode === "browser") {
-      setVoiceEngine("browser");
-      setVoiceDetail("browser voice");
-      return;
-    }
+    if (mode === "preview" || mode === "browser") return;
     setVoiceEngine(null);
     setVoiceDetail(
       "Spoken replies are unavailable in this browser, so answers will appear in the transcript.",
@@ -360,7 +353,7 @@ export function SandboxTestCallPanel({
             </p>
             <p className="mt-1 text-xs text-muted">
               Tap the microphone and speak after the prompt. The label under
-              this button says Gemini voice or browser voice.
+              this button says Gemini voice, Neural voice (Jenny Dioco), or Browser voice.
             </p>
             <button
               type="button"
@@ -379,10 +372,13 @@ export function SandboxTestCallPanel({
             </button>
             {voiceEngine ? (
               <p className="mt-2 text-xs font-medium text-ink" data-voice-label="">
-                {voiceEngine === "preview" ? "Gemini voice" : "browser voice"}
+                {voiceEngineLabel(voiceEngine)}
               </p>
             ) : null}
-            {voiceDetail && voiceDetail !== "Gemini voice" && voiceDetail !== "browser voice" ? (
+            {voiceDetail &&
+            voiceDetail !== "Gemini voice" &&
+            voiceDetail !== "Neural voice (Jenny Dioco)" &&
+            voiceDetail !== "Browser voice" ? (
               <p
                 className={
                   voiceState === "error"

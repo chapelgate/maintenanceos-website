@@ -26,6 +26,7 @@ function jsonBody(result: VoiceResult) {
     ok?: boolean;
     error?: string;
     fallback?: string;
+    engine?: string;
     reason?: string;
     configured?: boolean;
     keyPresent?: boolean;
@@ -107,6 +108,7 @@ test("voice function stays unconfigured without a Gemini key", async () => {
     assert.deepEqual(jsonBody(result), {
       ok: false,
       fallback: "browser",
+      engine: "browser",
       reason: "voice_not_configured",
     });
     assert.equal(result.headers["Cache-Control"], "no-store");
@@ -198,6 +200,66 @@ test("an identical line is served from memory without a second Gemini call", asy
   assert.equal(typeof first.body, "string");
 });
 
+test("Gemini 429 synthesises through Piper and a second line hits the cache", async () => {
+  resetVoiceRateLimitForTests();
+  const piperWav = Buffer.from(pcm16ToWav(Buffer.from([2, 0, 4, 0]), 22050));
+  const calls: string[] = [];
+  const fetcher = (async (input: string | URL | Request, init?: RequestInit) => {
+    const url = String(input);
+    calls.push(url);
+    if (url.includes("generativelanguage.googleapis.com")) {
+      return new Response("{}", { status: 429, headers: { "content-type": "application/json" } });
+    }
+    const headers = init?.headers as Record<string, string>;
+    assert.equal(headers.Authorization, "Bearer piper-test-secret");
+    assert.equal(JSON.parse(String(init?.body)).text, "Hello from the desk");
+    return new Response(piperWav, { status: 200, headers: { "content-type": "audio/wav" } });
+  }) as typeof fetch;
+  const env = {
+    GEMINI_API_KEY: SECRET,
+    PIPER_TTS_URL: "https://voice.internal/v1/voice/piper",
+    PIPER_TTS_SECRET: "piper-test-secret",
+  };
+  const first = await main(event("POST", "Hello from the desk", "203.0.113.90"), { env, fetchImpl: fetcher });
+  const second = await main(event("POST", "Hello from the desk", "203.0.113.90"), { env, fetchImpl: fetcher });
+  assert.equal(first.statusCode, 200);
+  assert.equal(first.headers["X-Voice-Engine"], "piper");
+  assert.equal(wavBytes(first).toString("base64"), piperWav.toString("base64"));
+  assert.equal(second.headers["X-Voice-Engine"], "piper");
+  assert.equal(second.body, first.body);
+  assert.deepEqual(calls, [
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent",
+    "https://voice.internal/v1/voice/piper",
+  ]);
+  assert.doesNotMatch(JSON.stringify(first), /piper-test-secret/);
+});
+
+test("a down Piper engine stays HTTP 200 and tells the browser to speak", async () => {
+  resetVoiceRateLimitForTests();
+  const result = await main(event("POST", "Hello", "203.0.113.91"), {
+    env: {
+      GEMINI_API_KEY: SECRET,
+      PIPER_TTS_URL: "https://voice.internal/v1/voice/piper",
+      PIPER_TTS_SECRET: "piper-test-secret",
+    },
+    fetchImpl: (async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url.includes("generativelanguage.googleapis.com")) {
+        return new Response("{}", { status: 429 });
+      }
+      return new Response("down", { status: 503 });
+    }) as typeof fetch,
+  });
+  assert.equal(result.statusCode, 200);
+  assert.equal(result.statusCode < 500, true);
+  const body = jsonBody(result);
+  assert.equal(body.ok, false);
+  assert.equal(body.fallback, "browser");
+  assert.equal(body.engine, "browser");
+  assert.equal(body.reason, "piper_unavailable");
+  assert.doesNotMatch(JSON.stringify(result), /piper-test-secret/);
+});
+
 test("Gemini 429 and a timeout fall back without the upstream body", async () => {
   resetVoiceRateLimitForTests();
   const limited = await main(event("POST", "Hello", "203.0.113.63"), {
@@ -209,6 +271,7 @@ test("Gemini 429 and a timeout fall back without the upstream body", async () =>
   assert.deepEqual(jsonBody(limited), {
     ok: false,
     fallback: "browser",
+    engine: "browser",
     reason: "upstream_429",
   });
   assert.doesNotMatch(JSON.stringify(limited), new RegExp(SECRET));
@@ -222,7 +285,12 @@ test("Gemini 429 and a timeout fall back without the upstream body", async () =>
     }) as typeof fetch,
   });
   assert.equal(timedOut.statusCode, 200);
-  assert.deepEqual(jsonBody(timedOut), { ok: false, fallback: "browser", reason: "upstream_timeout" });
+  assert.deepEqual(jsonBody(timedOut), {
+    ok: false,
+    fallback: "browser",
+    engine: "browser",
+    reason: "upstream_timeout",
+  });
 });
 
 test("a model override cannot put the key into the Gemini URL", async () => {
@@ -256,6 +324,7 @@ test("voice function reports missing audio without a 5xx", async () => {
   assert.deepEqual(jsonBody(result), {
     ok: false,
     fallback: "browser",
+    engine: "browser",
     reason: "upstream_no_audio",
   });
 });
@@ -270,6 +339,7 @@ test("voice function turns an upstream 5xx into a browser fallback", async () =>
   assert.deepEqual(jsonBody(result), {
     ok: false,
     fallback: "browser",
+    engine: "browser",
     reason: "upstream_500",
   });
   assert.doesNotMatch(JSON.stringify(result), /nope/);
@@ -414,7 +484,7 @@ test("a thrown handler error returns a string JSON browser fallback", async () =
   );
   assert.equal(result.statusCode, 200);
   const body = jsonBody(result);
-  assert.deepEqual(body, { ok: false, fallback: "browser", reason: "internal_error" });
+  assert.deepEqual(body, { ok: false, fallback: "browser", engine: "browser", reason: "internal_error" });
   assert.doesNotMatch(result.body as string, new RegExp(SECRET));
   assert.doesNotMatch(result.body as string, /boom/);
 

@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 /**
  * Same-origin receptionist preview voice.
  * DigitalOcean Functions entry: POST /api/website/voice → /website/voice
@@ -52,6 +54,8 @@ type VoiceEnv = {
   GEMINI_API_KEY?: string;
   GEMINI_TTS_MODEL?: string;
   GEMINI_TTS_VOICE?: string;
+  PIPER_TTS_URL?: string;
+  PIPER_TTS_SECRET?: string;
 };
 
 export type VoiceFunctionOptions = {
@@ -70,6 +74,7 @@ const MAX_TEXT = 400;
 const RATE_WINDOW_MS = 60_000;
 const RATE_MAX = 6;
 const UPSTREAM_TIMEOUT_MS = 20_000;
+const PIPER_TIMEOUT_MS = 8_000;
 const CACHE_TTL_MS = 10 * 60_000;
 const CACHE_MAX = 32;
 const PCM_RATE = 24_000;
@@ -78,8 +83,10 @@ const DEFAULT_VOICE = "Charon";
 const NAME_RE = /^[A-Za-z0-9][A-Za-z0-9._-]{0,80}$/;
 const GEMINI_HOST = "https://generativelanguage.googleapis.com";
 
+type SpokenEngine = "gemini" | "piper";
+
 const rateBuckets = new Map<string, number[]>();
-const audioCache = new Map<string, { audioBase64: string; at: number }>();
+const audioCache = new Map<string, { audioBase64: string; engine: SpokenEngine; at: number }>();
 
 function responseHeaders(origin: string, contentType: string, cacheControl: string): Record<string, string> {
   const headers: Record<string, string> = {
@@ -106,16 +113,19 @@ function jsonResponse(
   };
 }
 
-function audioResponse(audioBase64: string, origin: string): WebActionResponse {
+function audioResponse(audioBase64: string, origin: string, engine: SpokenEngine): WebActionResponse {
   return {
     statusCode: 200,
-    headers: responseHeaders(origin, "audio/wav", "private, max-age=300"),
+    headers: {
+      ...responseHeaders(origin, "audio/wav", "private, max-age=300"),
+      "X-Voice-Engine": engine,
+    },
     body: audioBase64,
   };
 }
 
 function fallback(reason: string, origin: string): WebActionResponse {
-  return jsonResponse(200, { ok: false, fallback: "browser", reason }, origin);
+  return jsonResponse(200, { ok: false, fallback: "browser", engine: "browser", reason }, origin);
 }
 
 function upstreamReason(status: number): string {
@@ -237,7 +247,7 @@ function deployedBuild(): string | null {
   return null;
 }
 
-const ENV_NAME_PREFIXES = ["GEMINI_", "ONBOARDING_", "SCAN_", "COMMIT", "GIT", "SOURCE", "__OW", "DO_"];
+const ENV_NAME_PREFIXES = ["GEMINI_", "PIPER_", "ONBOARDING_", "SCAN_", "COMMIT", "GIT", "SOURCE", "__OW", "DO_"];
 
 /** Key names only. Values never leave the function. */
 function envDiagnostics(): { envNames: string[]; envCount: number } {
@@ -274,8 +284,12 @@ export function pcm16ToWav(pcm: Uint8Array, sampleRate = PCM_RATE): Uint8Array {
   return buffer;
 }
 
-function remember(key: string, audioBase64: string, now: number): void {
-  audioCache.set(key, { audioBase64, at: now });
+function textCacheKey(text: string): string {
+  return createHash("sha256").update(text, "utf8").digest("hex");
+}
+
+function remember(key: string, audioBase64: string, engine: SpokenEngine, now: number): void {
+  audioCache.set(key, { audioBase64, engine, at: now });
   while (audioCache.size > CACHE_MAX) {
     const oldest = audioCache.keys().next().value;
     if (oldest === undefined) break;
@@ -283,14 +297,32 @@ function remember(key: string, audioBase64: string, now: number): void {
   }
 }
 
-function cachedAudio(key: string, now: number): string | null {
+function cachedAudio(key: string, now: number): { audioBase64: string; engine: SpokenEngine } | null {
   const hit = audioCache.get(key);
   if (!hit) return null;
   if (now - hit.at > CACHE_TTL_MS) {
     audioCache.delete(key);
     return null;
   }
-  return hit.audioBase64;
+  return { audioBase64: hit.audioBase64, engine: hit.engine };
+}
+
+function piperTarget(
+  event: WebEvent,
+  options: VoiceFunctionOptions,
+): { url: string; secret: string } | null {
+  const raw = setting(event, options, "PIPER_TTS_URL")?.trim() ?? "";
+  const secret = safeKey(setting(event, options, "PIPER_TTS_SECRET"));
+  if (!raw || !secret) return null;
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+  if (url.username || url.password) return null;
+  return { url: url.toString(), secret };
 }
 
 type GeminiPart = {
@@ -363,11 +395,12 @@ async function handleVoice(event: WebEvent, options: VoiceFunctionOptions): Prom
   }
   if (method !== "POST") return fallback("method_not_allowed", origin);
 
-  if (!apiKey) return fallback("voice_not_configured", origin);
+  const piper = piperTarget(event, options);
+  if (!apiKey && !piper) return fallback("voice_not_configured", origin);
 
   const model = safeName(modelSetting, DEFAULT_MODEL);
   const voice = safeName(voiceSetting, DEFAULT_VOICE);
-  if (!model || !voice) return fallback("internal_error", origin);
+  if (apiKey && (!model || !voice)) return fallback("internal_error", origin);
 
   const text = readText(event);
   if (!text) return fallback("text_missing", origin);
@@ -376,16 +409,54 @@ async function handleVoice(event: WebEvent, options: VoiceFunctionOptions): Prom
   const now = options.now ?? Date.now();
   if (!allowRate(`ip:${ip}`, now)) return fallback("rate_limited", origin);
 
-  const cacheKey = `${model}\n${voice}\n${text}`;
+  const cacheKey = textCacheKey(text);
   const hit = cachedAudio(cacheKey, now);
-  if (hit) return audioResponse(hit, origin);
+  if (hit) return audioResponse(hit.audioBase64, origin, hit.engine);
 
-  const endpoint = `${GEMINI_HOST}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
   const fetchImpl = options.fetchImpl ?? globalThis.fetch;
   if (typeof fetchImpl !== "function") return fallback("internal_error", origin);
 
+  let geminiReason = "voice_not_configured";
+  if (apiKey && model && voice) {
+    const spoken = await geminiWav(
+      text,
+      model,
+      voice,
+      apiKey,
+      fetchImpl,
+      piper ? 12_000 : UPSTREAM_TIMEOUT_MS,
+    );
+    if ("wav" in spoken) {
+      const audioBase64 = bytesToBase64(spoken.wav);
+      remember(cacheKey, audioBase64, "gemini", now);
+      return audioResponse(audioBase64, origin, "gemini");
+    }
+    geminiReason = spoken.reason;
+  }
+
+  if (piper) {
+    const wav = await piperWav(text, piper, fetchImpl);
+    if (wav) {
+      const audioBase64 = bytesToBase64(wav);
+      remember(cacheKey, audioBase64, "piper", now);
+      return audioResponse(audioBase64, origin, "piper");
+    }
+    return fallback("piper_unavailable", origin);
+  }
+  return fallback(geminiReason, origin);
+}
+
+async function geminiWav(
+  text: string,
+  model: string,
+  voice: string,
+  apiKey: string,
+  fetchImpl: typeof fetch,
+  timeoutMs: number,
+): Promise<{ wav: Uint8Array } | { reason: string }> {
+  const endpoint = `${GEMINI_HOST}/v1beta/models/${encodeURIComponent(model)}:generateContent`;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const upstream = await fetchImpl(endpoint, {
       method: "POST",
@@ -407,24 +478,53 @@ async function handleVoice(event: WebEvent, options: VoiceFunctionOptions): Prom
       }),
       signal: controller.signal,
     });
-    if (!upstream.ok) return fallback(upstreamReason(upstream.status), origin);
+    if (!upstream.ok) return { reason: upstreamReason(upstream.status) };
     let payload: unknown;
     try {
       payload = await upstream.json();
     } catch {
-      return fallback("upstream_no_audio", origin);
+      return { reason: "upstream_no_audio" };
     }
     const decoded = pcmFromGemini(payload);
     const wav = decoded ? wavFromPcm(decoded.pcm, decoded.mime) : null;
-    if (!wav) return fallback("upstream_no_audio", origin);
-    const audioBase64 = bytesToBase64(wav);
-    remember(cacheKey, audioBase64, now);
-    return audioResponse(audioBase64, origin);
+    if (!wav) return { reason: "upstream_no_audio" };
+    return { wav };
   } catch (error) {
     const timedOut =
       error instanceof Error &&
       (error.name === "TimeoutError" || error.name === "AbortError" || /timeout/i.test(error.message));
-    return fallback(timedOut ? "upstream_timeout" : "internal_error", origin);
+    return { reason: timedOut ? "upstream_timeout" : "internal_error" };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function piperWav(
+  text: string,
+  piper: { url: string; secret: string },
+  fetchImpl: typeof fetch,
+): Promise<Uint8Array | null> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), PIPER_TIMEOUT_MS);
+  try {
+    const upstream = await fetchImpl(piper.url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${piper.secret}`,
+        "Content-Type": "application/json",
+        Accept: "audio/wav",
+      },
+      body: JSON.stringify({ text }),
+      signal: controller.signal,
+    });
+    if (!upstream.ok) return null;
+    const type = upstream.headers.get("content-type") ?? "";
+    if (!type.startsWith("audio/")) return null;
+    const bytes = new Uint8Array(await upstream.arrayBuffer());
+    if (Buffer.from(bytes.subarray(0, 4)).toString("ascii") !== "RIFF") return null;
+    return bytes;
+  } catch {
+    return null;
   } finally {
     clearTimeout(timer);
   }
@@ -434,6 +534,6 @@ export async function main(event: WebEvent = {}, options: VoiceFunctionOptions =
   try {
     return await handleVoice(event, options);
   } catch {
-    return jsonResponse(200, { ok: false, fallback: "browser", reason: "internal_error" });
+    return jsonResponse(200, { ok: false, fallback: "browser", engine: "browser", reason: "internal_error" });
   }
 }
