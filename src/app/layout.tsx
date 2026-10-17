@@ -16,7 +16,7 @@ const inter = Inter({
   weight: ["400", "600"],
   variable: "--font-inter",
   display: "swap",
-  preload: true,
+  preload: false,
 });
 
 export const metadata: Metadata = buildRootMetadata();

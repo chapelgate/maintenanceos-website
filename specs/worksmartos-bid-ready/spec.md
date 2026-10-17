@@ -4,7 +4,7 @@
 Make the public WorkSmartOS site usable in a contract bid: the create-flow website check must finish or fail in a way the visitor can continue, a partial scan must say what was found and what was not, and the scanner image must match the droplet that is already live.
 
 ## Brand
-WorkSmartOS is the brand. MaintenanceOS and ReceptionistOS are products under it. Visitor-facing legal pages say WorkSmartOS website. The company remains Chapelgate Limited (12340004). Colours stay navy `#0A1728`, cyan `#67E8F9`, type Inter.
+WorkSmartOS is the brand. MaintenanceOS and ReceptionistOS are products under it. Visitor-facing legal pages say WorkSmartOS website. The company remains Chapelgate Limited (12340004). Colours stay navy `#0A1728`, cyan `#67E8F9`, type Inter. Inter is applied from the stylesheet and is not preloaded, so WebKit does not download the same woff2 twice.
 
 ## Acceptance criteria
 - `/create` calls `POST /api/website/scan`. A successful scan fills only returned fields. A zero-fetch `PARTIAL` (`fetched: 0`) tells the visitor the pages could not be read and lets them continue. A call with no response for 30 seconds, and a 5xx, retry once with the same crawl id. A golden check fails when a kept name is a filename or a sentence, when hours are a 24-hour placeholder or a single day at high confidence, when a service line contains contact data, when the correct rate is below 47%, when the wrong rate is above 3%, or when a live HTTP 200 takes more than 25 seconds. The 38-site values belong in `test/golden/expected.json` using `test/golden/expected.schema.json`. A 4xx is not retried. The visitor can skip the check while it is running.
