@@ -210,6 +210,76 @@ test("POST scan happy path returns draft shape /create already maps", async () =
   );
 });
 
+test("resume posts do not spend the shared new-scan limit", async () => {
+  let calls = 0;
+  await withServer(
+    {
+      ingestEnabled: true,
+      scan: async () => {
+        calls += 1;
+        return {
+          ok: true,
+          untrusted: true,
+          draft: {},
+          warnings: [],
+          sources: [],
+          facts: {},
+          factMeta: {},
+        };
+      },
+    },
+    async (base) => {
+      for (let i = 0; i < 20; i += 1) {
+        const res = await fetch(`${base}/v1/onboarding/scan`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: "https://acme.example/",
+            crawlId: "scanner-v2:c3337a39:job",
+          }),
+        });
+        assert.equal(res.status, 200);
+      }
+      const fresh = await fetch(`${base}/v1/onboarding/scan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: "https://acme.example/" }),
+      });
+      assert.equal(fresh.status, 200);
+      assert.equal(calls, 21);
+    },
+  );
+});
+
+test("a full new-scan budget answers 429 with Retry-After", async () => {
+  await withServer(
+    {
+      ingestEnabled: true,
+      scan: async () => ({
+        ok: true,
+        untrusted: true,
+        draft: {},
+        warnings: [],
+        sources: [],
+        facts: {},
+        factMeta: {},
+      }),
+    },
+    async (base) => {
+      let limited: Response | null = null;
+      for (let i = 0; i < 21; i += 1) {
+        limited = await fetch(`${base}/v1/onboarding/scan`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: "https://acme.example/" }),
+        });
+      }
+      assert.equal(limited?.status, 429);
+      assert.ok(Number(limited?.headers.get("retry-after")) >= 1);
+    },
+  );
+});
+
 test("OPTIONS preflight is empty 204", async () => {
   await withServer({ ingestEnabled: true }, async (base) => {
     const res = await fetch(`${base}/v1/onboarding/scan`, {

@@ -461,6 +461,77 @@ test("release SHA creates a fresh durable crawl identity", async () => {
   }
 });
 
+test("a skipped search URL is not a visitor warning", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-search-"));
+  try {
+    const discover = async (rawUrl: string) => {
+      const origin = new URL(rawUrl).origin;
+      return {
+        manifest: {
+          crawlId: "seed",
+          origin,
+          state: "PARTIAL" as const,
+          discovered: 2,
+          queued: 1,
+          fetched: 0,
+          duplicate: 0,
+          policySkipped: 1,
+          robotsSkipped: 0,
+          unresolved: 0,
+          urls: [
+            {
+              url: `${origin}/`,
+              status: "queued" as const,
+              discoveryReason: "submitted" as const,
+              retryCount: 0,
+            },
+            {
+              url: `${origin}/search`,
+              status: "policy_skipped" as const,
+              reason: "search_endpoint",
+              discoveryReason: "html_link" as const,
+              retryCount: 0,
+            },
+          ],
+        },
+        sitemapSources: [],
+        pageSources: [],
+        sitemapDocuments: 0,
+        sitemapUrlsDiscovered: 0,
+        htmlPagesFetched: 0,
+        htmlLinksDiscovered: 0,
+        urlsDroppedByLimit: 0,
+        warnings: ["search_endpoint"],
+        limitReached: false,
+        incomplete: false,
+      };
+    };
+    const processUrl = async ({ url }: { url: CrawlUrlDisposition }) => {
+      const p = page(url.url, "Propeller Properties");
+      return {
+        disposition: "fetched" as const,
+        canonicalUrl: p.canonicalUrl,
+        page: p,
+        chunks: [],
+      };
+    };
+    const result = await runPersistentScannerV2("https://propeller.example/", {
+      stateRoot: root,
+      releaseSha: "release-a",
+      requestMs: 2_000,
+      now: () => 0,
+      discover: discover as never,
+      processUrl: processUrl as never,
+    });
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    assert.equal(result.warnings.includes("search_endpoint"), false);
+    assert.equal(result.scannerV2?.fetched, 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("zero-fetch resume reseeds and surfaces the skip reason", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "scanner-v2-zero-fetch-"));
   let discoveryCalls = 0;

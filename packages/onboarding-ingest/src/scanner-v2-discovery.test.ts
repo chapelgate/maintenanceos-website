@@ -657,6 +657,33 @@ test("a key page replaces a low-priority URL once the discovery cap is full", as
   assert.ok(result.manifest.urls.some((row) => row.url === "https://acme.example/contact"));
 });
 
+test("a page larger than 512KB and smaller than 2MB is still read", async () => {
+  const body =
+    "<html><head><title>Lounge83</title></head><body>" +
+    "Lounge83 ".repeat(90_000) +
+    "</body></html>";
+  const bytes = Buffer.byteLength(body);
+  assert.ok(bytes > 512 * 1024);
+  assert.ok(bytes < 2 * 1024 * 1024);
+  const result = await discoverScannerV2Frontier("https://lounge.example/lounge83", {
+    maxHtmlPages: 1,
+    maxSitemapDocuments: 0,
+    lookup: async () => ["203.0.113.10"],
+    get: async (url, _ip, opts) => {
+      if (url.pathname === "/robots.txt") {
+        return response(url.toString(), "User-agent: *\nAllow: /\n", "text/plain");
+      }
+      if (opts.maxBytes < bytes) {
+        throw new ScanError("response_too_large", "The page exceeded the fetch size cap.", 422);
+      }
+      return html(url.toString(), body);
+    },
+  });
+  const home = result.manifest.urls.find((row) => row.url === "https://lounge.example/lounge83");
+  assert.notEqual(home?.status, "policy_skipped");
+  assert.notEqual(home?.reason, "response_too_large");
+});
+
 test("an oversized page is skipped without failing the rest of discovery", async () => {
   const map: Record<string, SafeHttpResponse> = {
     "https://acme.example/robots.txt": response(
