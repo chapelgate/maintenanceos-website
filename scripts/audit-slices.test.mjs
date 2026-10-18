@@ -124,11 +124,17 @@ test("static export already emits trailing slashes and cannot add a 301", () => 
 
 test("lead form keeps the enquiry fallback and adds field focus plus a silent honeypot", () => {
   const form = read("src/components/LeadCaptureForm.tsx");
-  assert.match(form, /EnquiryUnavailable/);
+  assert.match(form, /buildEnquiryMailto/);
+  assert.doesNotMatch(form, /<EnquiryUnavailable/);
   assert.match(form, /!siteConfig\.formEndpoint\.trim\(\)/);
   assert.match(form, /Enter an email address/);
   assert.match(form, /Enter a valid email address/);
+  assert.match(form, /Enter a valid phone number/);
   assert.match(form, /emailRef\.current\?\.focus\(\)/);
+  assert.match(form, /phoneRef\.current\?\.focus\(\)/);
+  assert.match(form, /aria-live=/);
+  assert.match(form, /min-h-12/);
+  assert.match(form, /Copy details/);
   assert.match(form, /if \(website\.trim\(\)\)/);
   assert.doesNotMatch(form, /honeypot/i);
 });
