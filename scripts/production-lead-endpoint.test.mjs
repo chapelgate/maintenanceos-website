@@ -22,8 +22,11 @@ test("production lead endpoint does not fall back to the retired Railway host", 
     enquiry,
     /Online enquiries are temporarily unavailable\. Please email info@chapelgatetechnologies\.com\./,
   );
-  assert.match(form, /EnquiryUnavailable/);
+  assert.match(form, /buildEnquiryMailto/);
+  assert.doesNotMatch(form, /<EnquiryUnavailable/);
   assert.match(form, /!siteConfig\.formEndpoint\.trim\(\)/);
+  assert.match(form, /Copy details/);
+  assert.match(form, /nothing is sent until you press send/i);
   assert.match(
     read("src/components/EnquiryUnavailable.tsx"),
     /mailto:\$\{PUBLIC_ENQUIRY_EMAIL\}/,
