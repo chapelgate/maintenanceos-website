@@ -82,6 +82,9 @@ test("root layout does not mark chrome as a client island", () => {
   const layout = read("src/app/layout.tsx");
   assert.doesNotMatch(layout, /^["']use client["']/);
   assert.match(layout, /SiteHeader/);
-  assert.match(layout, /weight:\s*\[["']400["'],\s*["']600["']\]/);
+  assert.match(layout, /localFont/);
+  assert.match(layout, /Inter-Regular\.woff2/);
+  assert.match(layout, /Inter-Medium\.woff2/);
   assert.match(layout, /display:\s*["']swap["']/);
+  assert.doesNotMatch(layout, /fonts\.googleapis\.com/);
 });
