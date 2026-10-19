@@ -1,11 +1,21 @@
 import { execSync } from "node:child_process";
-import { statSync } from "node:fs";
+import { statSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getAllComparisonSlugs } from "../src/lib/compare.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "..");
+
+function getAllBlogSlugs(): string[] {
+  const blogDir = join(REPO_ROOT, "src/content/blog");
+  if (!existsSync(blogDir)) {
+    return [];
+  }
+  return readdirSync(blogDir)
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => file.replace(".mdx", ""));
+}
 
 interface SitemapEntry {
   url: string;
@@ -47,9 +57,14 @@ function getLastModForPath(path: string): string {
     "/how-it-works/": "src/app/how-it-works/page.tsx",
     "/features/": "src/app/features/page.tsx",
     "/compare/": "src/app/compare/page.tsx",
+    "/blog/": "src/app/blog/page.tsx",
     ...Object.fromEntries(getAllComparisonSlugs().map((slug) => [
       `/compare/${slug}/`,
       `src/content/compare/${slug.replace(/^worksmartos-vs-/, "")}.mdx`,
+    ])),
+    ...Object.fromEntries(getAllBlogSlugs().map((slug) => [
+      `/blog/${slug}/`,
+      `src/content/blog/${slug}.mdx`,
     ])),
     "/property-maintenance-software/": "src/app/property-maintenance-software/page.tsx",
     "/ai-receptionist/": "src/app/ai-receptionist/page.tsx",
@@ -95,7 +110,9 @@ function getMarketingPaths(): string[] {
     "/how-it-works/",
     "/features/",
     "/compare/",
+    "/blog/",
     ...getAllComparisonSlugs().map((slug) => `/compare/${slug}/`),
+    ...getAllBlogSlugs().map((slug) => `/blog/${slug}/`),
     "/property-maintenance-software/",
     "/ai-receptionist/",
     "/create/",
