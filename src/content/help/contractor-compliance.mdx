@@ -1,0 +1,92 @@
+---
+slug: contractor-compliance
+title: "Managing Contractor Compliance"
+description: "Track contractor certifications, insurance, and qualifications. Automated expiry warnings and renewal workflows."
+date: "2025-01-22"
+author: "WorkSmartOS Team"
+category: "Compliance"
+tags: ["compliance", "certifications", "insurance", "gas-safe", "niceic", "renewals"]
+---
+
+# Managing Contractor Compliance
+
+MaintenanceOS tracks contractor certifications, insurance, and qualifications to ensure only qualified contractors work on your properties.
+
+## Tracked Certifications
+
+| Certification | Trade | Expiry Check | Verification |
+|---------------|-------|--------------|--------------|
+| **Gas Safe Register** | Gas Engineering | Annual | Online API check |
+| **NICEIC / ELECSA** | Electrical | Annual | Certificate upload |
+| **OFTEC** | Oil Heating | Annual | Certificate upload |
+| **F-Gas** | Air Conditioning | 3–5 years | Certificate upload |
+| **Asbestos Licence** | Asbestos Removal | 1–3 years | HSE register check |
+| **PAS 2030/2035** | Retrofit/Insulation | Annual | TrustMark register |
+| **IPAF / PASMA** | Access Equipment | 5 years | Card upload |
+| **First Aid at Work** | All (recommended) | 3 years | Certificate upload |
+
+## Insurance Tracking
+
+Required insurances (configurable minimums):
+- **Public Liability** — Minimum £2M (default £5M)
+- **Employers' Liability** — Minimum £5M (legal requirement)
+- **Professional Indemnity** — If providing design/specification
+- **Contract Works** — For major projects
+
+## Automated Monitoring
+
+**30 days before expiry:** Email to contractor + Manager
+**7 days before expiry:** SMS to contractor + Manager + Admin
+**On expiry date:** Contractor **suspended** from new assignments
+**7 days after expiry:** Contractor **archived** (hidden from assignment)
+
+Suspended contractors:
+- Cannot be assigned new repairs
+- Can complete currently assigned repairs
+- Show as "Compliance Expired" in directory
+
+## Renewal Workflow
+
+1. Contractor uploads new certificate in portal
+2. Manager/Admin reviews (auto-verified for Gas Safe via API)
+3. Approve → Expiry date updated → Contractor reactivated
+4. Reject → Contractor notified with reason → Re-upload
+
+## Bulk Compliance Import
+
+For onboarding large networks:
+- CSV template with: contractor_id, cert_type, cert_number, expiry_date, document_url
+- System validates format and creates renewal reminders
+
+## Compliance Reports
+
+**Dashboard:** Settings → Contractors → Compliance Overview
+- Green: All current
+- Amber: Expiring within 30 days
+- Red: Expired or suspended
+
+**Export:** Reports → Contractor Compliance
+- Full list with expiry dates
+- Filter by trade, status, property portfolio
+- Regulator-ready format
+
+## Property-Specific Requirements
+
+Some properties need additional compliance:
+- **High-rise (18m+):** Contractor must have Building Safety Act competence
+- **HMO:** Enhanced fire safety awareness training
+- **Schools/Healthcare:** DBS checks for contractors
+- **Heritage:** Conservation-accredited trades
+
+Configure at Property → Compliance Requirements.
+
+## Next Steps
+
+- [Gas Safe API Integration](./gas-safe-api)
+- [Setting Insurance Minimums](./insurance-minimums)
+- [Compliance Audit Reports](./compliance-audit)
+- [Subcontractor Compliance Flow](./subcontractor-compliance)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

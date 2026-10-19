@@ -1,0 +1,102 @@
+---
+slug: configuring-contractors
+title: "Configuring Contractors"
+description: "Add and manage your contractor network, set trade specialisms, and configure SLA expectations."
+date: "2025-01-16"
+author: "WorkSmartOS Team"
+category: "Getting Started"
+tags: ["contractors", "trades", "sla", "network"]
+---
+
+# Configuring Contractors
+
+Your contractor network is the backbone of maintenance delivery. MaintenanceOS lets you manage contractors, their specialisms, and performance in one place.
+
+## Adding a Contractor
+
+Go to **Settings → Contractors → Add Contractor**.
+
+**Required fields:**
+- Company name
+- Primary contact (name, phone, email)
+- Trade specialisms (select all that apply)
+- Coverage area (postcode districts or radius from base)
+
+**Optional fields:**
+- Insurance expiry date (MaintenanceOS will warn 30 days before expiry)
+- Gas Safe registration number
+- NICEIC / ELECSA registration number
+- Preferred payment terms
+- Notes (internal only)
+
+## Trade Specialisms
+
+Select from the standard list or add custom trades:
+
+- Plumbing & Heating
+- Electrical
+- Gas Engineering
+- Roofing
+- Damp Proofing
+- General Building
+- Carpentry & Joinery
+- Plastering & Rendering
+- Groundworks & Drainage
+- Pest Control
+- Fire Safety
+- Asbestos Management
+- Lift Maintenance
+- Cleaning & Clearance
+
+Contractors can have multiple specialisms. When a repair is created, MaintenanceOS suggests contractors matching the repair category and coverage area.
+
+## SLA Configuration
+
+Set default SLA targets per trade:
+
+| Trade | Emergency | Urgent | Standard |
+|-------|-----------|--------|----------|
+| Gas Engineering | 2 hours | 4 hours | 24 hours |
+| Electrical | 2 hours | 4 hours | 24 hours |
+| Plumbing | 4 hours | 8 hours | 48 hours |
+| Roofing | 4 hours | 24 hours | 72 hours |
+| General Building | 8 hours | 24 hours | 5 days |
+
+These are workspace defaults. You can override per contractor or per property.
+
+## Contractor Portal Access
+
+Contractors receive a secure portal link where they can:
+- View assigned repairs
+- Update status (En Route / On Site / Completed / Needs Parts)
+- Upload photos and notes
+- Submit quotes for approval
+- See their performance dashboard
+
+Access is granted automatically when you assign their first repair.
+
+## Performance Tracking
+
+MaintenanceOS tracks:
+- **First-time fix rate** (completed on first visit)
+- **Average response time** (acknowledgement to on-site)
+- **Quote accuracy** (quoted vs final cost)
+- **Tenant satisfaction** (post-repair survey)
+- **Compliance** (certificates up to date)
+
+View reports at **Reports → Contractor Performance**.
+
+## Bulk Import
+
+For large networks, use the CSV import template (download from the Contractors page). Required columns:
+- company_name, contact_name, email, phone, trades, postcode_districts
+
+## Next Steps
+
+- [Assigning Repairs to Contractors](./assigning-repairs)
+- [Contractor Quotes & Approvals](./contractor-quotes)
+- [Managing Contractor Compliance](./contractor-compliance)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

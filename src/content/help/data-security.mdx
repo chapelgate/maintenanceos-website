@@ -1,0 +1,119 @@
+---
+slug: data-security
+title: "Data Security & Privacy"
+description: "How MaintenanceOS protects your data: encryption, access controls, retention, and your rights under UK GDPR."
+date: "2025-02-03"
+author: "WorkSmartOS Team"
+category: "Security & Privacy"
+tags: ["security", "privacy", "gdpr", "encryption", "data-protection"]
+---
+
+# Data Security & Privacy
+
+MaintenanceOS is built with security and privacy by design. This document explains how we protect your data and your rights.
+
+## Data Controller & Processor
+
+- **Data Controller:** You (the workspace owner)
+- **Data Processor:** Chapelgate Technologies Ltd (MaintenanceOS)
+- **DPA:** Standard Data Processing Addendum included in Terms
+- **Sub-processors:** Listed at `/subprocessors/` (DigitalOcean, Cloudflare, Twilio, SendGrid, Google)
+
+## Encryption
+
+| State | Method | Details |
+|-------|--------|---------|
+| **In transit** | TLS 1.3 | All API, web, email, webhook traffic |
+| **At rest** | AES-256 | Database, file storage, backups |
+| **Application-level** | Field-level | PII (names, emails, phones, addresses) encrypted before storage |
+| **Backups** | AES-256 | Encrypted with separate key, stored in different region |
+
+**Key management:** AWS KMS (UK region) — keys never leave HSM.
+
+## Access Controls
+
+- **Principle of least privilege** — Role-based access (see User Management)
+- **Multi-factor authentication** — Optional for all users, mandatory for Admins (Enterprise)
+- **IP allowlisting** — Enterprise only
+- **Session management** — Configurable timeouts, concurrent limits
+- **Audit logging** — All data access logged (7-year retention)
+
+## Data Residency
+
+**Standard:** UK (London) — DigitalOcean LON1, Cloudflare LHR
+**Enterprise:** UK-only hosting guaranteed via contractual commitment
+
+No data leaves UK without explicit consent.
+
+## Retention & Deletion
+
+| Data Type | Retention | Deletion Trigger |
+|-----------|-----------|------------------|
+| Repair records | 7 years | Legal requirement (Limitation Act) |
+| Compliance certificates | 7 years | Regulatory requirement |
+| Contractor records | 7 years | Contract duration + 6 years |
+| Tenant data | 7 years | Tenancy end + 6 years |
+| Audit logs | 7 years | Security/compliance |
+| Invoices/billing | 7 years | HMRC requirement |
+| API logs | 90 days | Operational |
+| Deleted workspace | 30 days read-only | Then permanent deletion |
+
+**Right to erasure (GDPR Article 17):** Applies to personal data not subject to legal retention. Request via Settings → Privacy → Data Request.
+
+## Your Rights (UK GDPR)
+
+| Right | How to Exercise |
+|-------|-----------------|
+| **Access** | Settings → Privacy → Download My Data |
+| **Rectification** | Edit in dashboard or contact support |
+| **Erasure** | Settings → Privacy → Request Deletion (where legally permissible) |
+| **Restriction** | Contact support |
+| **Portability** | Settings → Privacy → Export (JSON/CSV) |
+| **Object** | Contact support (direct marketing) |
+| **Automated decisions** | Not used for significant decisions |
+
+**DPO:** Chapelgate Technologies Ltd — dpo@chapelgatetechnologies.com
+
+## Security Certifications & Testing
+
+| Certification | Status |
+|---------------|--------|
+| **Cyber Essentials** | Planned (target Q2 2027) |
+| **ISO 27001** | Not currently certified |
+| **SOC 2** | Not currently certified |
+| **Penetration testing** | Annual (external), quarterly (internal) |
+| **Vulnerability scanning** | Continuous (automated) |
+| **Bug bounty** | Private program (HackerOne) |
+
+## Incident Response
+
+- **Detection:** 24/7 monitoring (Cloudflare, DigitalOcean, internal)
+- **Response:** < 1 hour (business hours), < 4 hours (out of hours)
+- **Notification:** Within 72 hours if personal data breach (ICO)
+- **Communication:** Status page, email to admins, in-app banner
+
+## Secure Development
+
+- **SDLC:** Security reviews at design, code review, pre-deploy
+- **Dependencies:** Automated scanning (GitHub Dependabot, npm audit)
+- **Secrets:** Never in code — injected at runtime via DO Functions secrets
+- **SAST/DAST:** GitHub Actions on every PR
+
+## Tenant Data Protections
+
+- Tenant portal: Separate subdomain, isolated session
+- Tenant data: Never visible to other tenants
+- Contractor portal: Only sees assigned repairs
+- No cross-workspace data leakage
+
+## Next Steps
+
+- [Subprocessor List](./subprocessors)
+- [Data Processing Addendum](./dpa)
+- [Security Questionnaire (CAIQ)](./security-questionnaire)
+- [Incident Response Plan](./incident-response)
+- [Vulnerability Disclosure](./vulnerability-disclosure)
+
+---
+
+*Pre-launch documentation. Security posture evolves; check `/security/` for current status.*

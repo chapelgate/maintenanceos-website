@@ -1,0 +1,148 @@
+---
+slug: reports-analytics
+title: "Reports & Analytics"
+description: "Use built-in reports to track repair performance, contractor KPIs, compliance status, and portfolio health."
+date: "2025-01-28"
+author: "WorkSmartOS Team"
+category: "Reports"
+tags: ["reports", "analytics", "kpi", "dashboards", "export"]
+---
+
+# Reports & Analytics
+
+MaintenanceOS provides a comprehensive reporting suite to help you monitor performance, prove compliance, and make data-driven decisions.
+
+## Dashboard Overview
+
+**Home → Dashboard** shows real-time KPIs:
+- Open repairs by status
+- SLA compliance (response / resolution)
+- Safety latches triggered (24h / 7d / 30d)
+- Contractor utilisation
+- Compliance alerts (gas, EPC, fire, HMO)
+- Tenant satisfaction trend
+
+Customise: Drag to reorder, hide/show widgets, set date range.
+
+## Core Reports
+
+### 1. Repair Performance
+**Reports → Repair Performance**
+
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **First Response Time** | Triaged → Acknowledged | < 4 hours (standard) |
+| **Resolution Time** | Triaged → Completed | < 3 days (standard) |
+| **First-Time Fix Rate** | Completed on first visit | > 80% |
+| **SLA Compliance** | % within target | > 95% |
+| **Re-open Rate** | Closed → Reopened within 7d | < 5% |
+| **Tenant Satisfaction** | Post-repair survey (1–5) | > 4.2 |
+
+**Filters:** Date range, property, category, contractor, priority, safety latch.
+
+### 2. Contractor Performance
+**Reports → Contractor Performance**
+
+Per contractor:
+- Jobs completed (period)
+- First-time fix rate
+- Average response / resolution time
+- Quote accuracy (quoted vs actual)
+- Tenant satisfaction score
+- Compliance status (certs, insurance)
+- Revenue (if billing integrated)
+
+**Benchmark:** Compare against portfolio average.
+
+### 3. Compliance Dashboard
+**Reports → Compliance**
+
+| Area | Status | Count | Action |
+|------|--------|-------|--------|
+| Gas Safety | Current / Expiring / Overdue | 45 / 3 / 2 | Schedule |
+| EPC / MEES | Compliant / Exempt / Non-compliant | 48 / 2 / 0 | Plan |
+| Fire Risk Assessment | Current / Due / Overdue | 40 / 5 / 5 | Assess |
+| HMO Licences | Current / Expiring / Overdue | 8 / 1 / 0 | Renew |
+| Contractor Certs | Current / Expiring / Expired | 120 / 5 / 2 | Chase |
+
+One-click: Schedule, Create Task, Email Contractor.
+
+### 4. Financial Reports
+**Reports → Financial**
+
+- **Spend by category** (plumbing, electrical, etc.)
+- **Spend by property / portfolio**
+- **Spend by contractor**
+- **Quote vs actual variance**
+- **Emergency vs planned spend ratio**
+- **Budget vs actual** (if budgets set per property)
+
+Export to CSV for accounting integration.
+
+### 5. Portfolio Health
+**Reports → Portfolio Health**
+
+Composite score per property:
+- Compliance % (gas, EPC, fire, HMO)
+- Repair backlog (open > SLA)
+- Tenant satisfaction
+- Contractor coverage (trades available locally)
+- Capital expenditure forecast (EPC improvements, major works)
+
+## Custom Reports
+
+**Reports → Custom → New Report**
+1. Select data source (Repairs, Contractors, Properties, Compliance, Tenants)
+2. Choose columns
+3. Add filters, grouping, sorting
+4. Save as template
+5. Schedule email delivery (daily/weekly/monthly)
+
+## Scheduled Reports
+
+Pre-built scheduled reports:
+- **Daily:** Open repairs, safety latches, overdue compliance
+- **Weekly:** Contractor performance, SLA compliance, tenant satisfaction
+- **Monthly:** Financial summary, portfolio health, compliance forecast
+- **Quarterly:** Board pack (PDF with commentary)
+
+Configure recipients per report.
+
+## API Access
+
+For BI tools (Power BI, Tableau, Looker):
+- REST API at `/api/v1/reports`
+- Authentication: API key (Settings → Integrations)
+- Rate limit: 100 requests/minute
+- Data freshness: Near real-time (5-min cache)
+
+## Data Export
+
+All reports exportable:
+- **CSV** — Raw data for Excel/BI
+- **PDF** — Formatted for board packs
+- **XLSX** — With charts/formatting
+- **JSON** — For API consumers
+
+## Audit-Ready Exports
+
+**Reports → Audit Exports:**
+- Gas safety certificate register
+- Fire risk assessment register
+- HMO licence register
+- Contractor compliance register
+- Repair audit trail (full history)
+- Safety latch register
+
+Formatted for regulator / insurer / auditor requests.
+
+## Next Steps
+
+- [Setting Up Custom Dashboards](./custom-dashboards)
+- [API Integration Guide](./reports-api)
+- [Board Pack Templates](./board-packs)
+- [Benchmarking Against Industry](./benchmarking)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

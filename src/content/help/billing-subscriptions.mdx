@@ -1,0 +1,105 @@
+---
+slug: billing-subscriptions
+title: "Billing & Subscriptions"
+description: "Understand MaintenanceOS pricing, manage your subscription, update payment methods, and access invoices."
+date: "2025-02-01"
+author: "WorkSmartOS Team"
+category: "Account & Billing"
+tags: ["billing", "subscription", "pricing", "invoices", "payment"]
+---
+
+# Billing & Subscriptions
+
+MaintenanceOS uses transparent, per-workspace pricing. This guide covers plans, billing cycles, and account management.
+
+## Pricing Plans (Pre-Launch)
+
+| Plan | Monthly | Annual (20% off) | Includes |
+|------|---------|------------------|----------|
+| **Starter** | £49 | £470 | Up to 50 properties, 5 team members, core repairs, basic compliance, email support |
+| **Professional** | £149 | £1,430 | Up to 500 properties, 25 team members, all compliance, contractor portal, API access, Slack/Teams, priority support |
+| **Enterprise** | Custom | Custom | Unlimited properties, SSO, dedicated SLAs, custom integrations, on-premise option, account manager |
+
+**Pre-launch early access:** 50% off first 12 months for design partners.
+
+## What Counts as a Property
+
+- Each unique address (building or unit)
+- HMOs: Each licensed HMO = 1 property (flats within not counted separately)
+- Blocks: Each block = 1 property (flats within not counted separately)
+- Commercial units: Each unit = 1 property
+
+## Billing Cycle
+
+- **Monthly:** Charged 1st of each month, in advance
+- **Annual:** Charged on anniversary, in advance
+- **Proration:** Upgrades immediate, downgrades at cycle end
+- **Currency:** GBP only (UK entities)
+
+## Payment Methods
+
+- **Card** (Visa, Mastercard, Amex) — Stripe processed
+- **Direct Debit** (Bacs) — GoCardless, UK bank accounts only
+- **Invoice** (Enterprise only) — Net 30 terms, PO required
+
+**Failed payments:** 3 retry attempts over 7 days → Workspace suspended → Data retained 90 days → Then deleted.
+
+## Managing Your Subscription
+
+**Settings → Billing → Subscription:**
+
+- View current plan, next billing date, usage vs limits
+- **Upgrade:** Immediate, prorated charge
+- **Downgrade:** Takes effect next cycle, confirm data fits new limits
+- **Cancel:** Access continues until period end, then workspace read-only 30 days, then deleted
+
+## Invoices
+
+**Settings → Billing → Invoices:**
+- All historical invoices (PDF download)
+- VAT breakdown (UK VAT 20%)
+- Invoice number format: `MOS-{YYYY}-{NNNNN}`
+- Auto-emailed to billing contact
+
+**VAT:** MaintenanceOS is UK VAT registered. Invoices include VAT number.
+
+## Team Members & Seats
+
+- Each plan includes seat allowance
+- Additional seats: £8/month (Starter), £5/month (Professional)
+- Remove member → Seat frees immediately
+- Invite pending → Counts toward limit
+
+## Usage Alerts
+
+- **80% of property limit:** Email to admins
+- **95% of property limit:** Email + in-app banner
+- **100%:** New properties blocked until upgrade or removal
+
+## Data Portability
+
+**Export anytime:** Settings → Billing → Export Data
+- Properties, repairs, contractors, compliance (CSV + JSON)
+- API bulk export for Enterprise
+
+**On cancellation:** 30-day read-only access + full export available.
+
+## Enterprise Features
+
+- **SSO/SAML** (Okta, Azure AD, Google Workspace)
+- **Custom contracts** (MSA, DPA, Security Questionnaire)
+- **Dedicated infrastructure** (optional)
+- **SLA** (99.9% uptime, 1-hour support response)
+- **Data residency** (UK-only hosting available)
+- **Penetration test reports** (annual)
+
+## Next Steps
+
+- [Updating Payment Method](./update-payment)
+- [Invoice History & VAT](./invoice-history)
+- [Cancellation & Data Export](./cancellation)
+- [Enterprise Sales Contact](./enterprise-contact)
+
+---
+
+*Pre-launch documentation. Pricing and features may change before general availability.*

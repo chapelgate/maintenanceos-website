@@ -1,0 +1,140 @@
+---
+slug: integration-overview
+title: "Integration Overview"
+description: "Connect MaintenanceOS to your existing tools: property management software, accounting, CRM, and custom systems via API."
+date: "2025-01-29"
+author: "WorkSmartOS Team"
+category: "Integrations"
+tags: ["api", "integrations", "webhooks", "property-management", "accounting"]
+---
+
+# Integration Overview
+
+MaintenanceOS connects to your existing stack via REST API, webhooks, and pre-built integrations. All integrations are read/write where appropriate — you stay in control of your data.
+
+## Authentication
+
+**API Keys** (Settings → Integrations → API Keys):
+- Scoped permissions (read-only, read-write, admin)
+- Rotatable, revocable
+- Audit log of all API activity
+- Rate limits: 100 req/min (standard), 1,000 req/min (Enterprise)
+
+**OAuth 2.0** (for user-facing integrations):
+- Authorization Code flow with PKCE
+- Scopes: `repairs:read`, `repairs:write`, `properties:read`, `compliance:read`
+- Refresh tokens (90-day expiry)
+
+## Pre-Built Integrations
+
+### Property Management Software
+| Platform | Sync Direction | Data Synced |
+|----------|----------------|-------------|
+| **Reapit** | Bi-directional | Properties, tenancies, contacts, repairs |
+| **AgentOS** | Bi-directional | Properties, tenancies, repairs, compliance |
+| **Qube** | Bi-directional | Properties, repairs, contractors |
+| **MRI** | Bi-directional | Properties, tenancies, repairs, financials |
+| **Yardi** | Bi-directional | Properties, work orders, vendors |
+
+**Setup:** Settings → Integrations → [Platform] → Connect → Authorise → Map fields → Test → Enable.
+
+### Accounting
+| Platform | Sync | Details |
+|----------|------|---------|
+| **Xero** | Push (invoices, bills, payments) | Purchase orders → Bills, Invoices → Invoices |
+| **QuickBooks** | Push | Same as Xero |
+| **Sage** | Push | Purchase orders, invoices |
+| **FreeAgent** | Push | Bills, invoices |
+
+### CRM
+| Platform | Sync | Details |
+|----------|------|---------|
+| **HubSpot** | Bi-directional | Contacts, companies, deals ↔ Tenants, properties, repairs |
+| **Salesforce** | Bi-directional | Custom object mapping |
+| **Pipedrive** | Push (repairs → activities) | Repair updates as activities |
+
+### Communication
+| Platform | Use Case |
+|----------|----------|
+| **Slack** | Repair notifications, daily digests, @mentions |
+| **Microsoft Teams** | Same as Slack |
+| **Twilio** | SMS notifications, inbound repair reports via phone |
+| **SendGrid / Mailgun** | Transactional email delivery |
+
+## Webhooks
+
+**Real-time event notifications** for custom integrations.
+
+**Events available:**
+- `repair.created`, `repair.updated`, `repair.completed`
+- `property.created`, `property.updated`
+- `contractor.assigned`, `contractor.compliance_changed`
+- `safety_latch.triggered`, `safety_latch.cleared`
+- `quote.submitted`, `quote.approved`, `quote.rejected`
+- `compliance.expiring`, `compliance.expired`
+- `tenant.portal_message`
+
+**Configuration:** Settings → Integrations → Webhooks
+- Target URL (HTTPS only)
+- Events to receive
+- Secret for signature verification
+- Retry policy: 3 attempts with exponential backoff
+
+**Payload example:**
+```json
+{
+  "event": "repair.completed",
+  "timestamp": "2025-01-15T14:32:00Z",
+  "workspace_id": "wks_abc123",
+  "data": { "repair_id": "rep_xyz789", ... }
+}
+```
+
+**Verification:** `X-MaintenanceOS-Signature` = HMAC-SHA256(payload, secret)
+
+## API Reference
+
+Base URL: `https://api.maintenanceos.co.uk/v1`
+
+**Key endpoints:**
+| Resource | Endpoints |
+|----------|-----------|
+| Repairs | `GET/POST /repairs`, `GET/PATCH /repairs/{id}`, `POST /repairs/{id}/assign`, `POST /repairs/{id}/quotes` |
+| Properties | `GET/POST /properties`, `GET/PATCH /properties/{id}` |
+| Contractors | `GET/POST /contractors`, `GET/PATCH /contractors/{id}` |
+| Compliance | `GET /compliance/gas`, `GET /compliance/epc`, `GET /compliance/fire`, `GET /compliance/hmo` |
+| Tenants | `GET/POST /tenants`, `GET/PATCH /tenants/{id}` |
+| Reports | `GET /reports/performance`, `GET /reports/contractors`, `GET /reports/compliance` |
+
+**Pagination:** Cursor-based (`?cursor=...&limit=100`)
+
+**Errors:** Standard HTTP codes + RFC 7807 problem details.
+
+## Sandbox Environment
+
+**Sandbox workspace** (Settings → Integrations → Sandbox):
+- Isolated test data
+- No real notifications sent
+- Mock contractor/tenant responses
+- API key separate from production
+- Reset anytime
+
+## Rate Limits & Best Practices
+
+- Cache reference data (properties, contractors) — refresh hourly
+- Use webhooks for real-time updates, not polling
+- Batch writes where possible
+- Handle 429 (rate limited) with exponential backoff
+- Monitor API usage at Settings → Integrations → API Usage
+
+## Next Steps
+
+- [API Quickstart Guide](./api-quickstart)
+- [Webhook Implementation Guide](./webhook-guide)
+- [Reapit Integration Deep Dive](./reapit-integration)
+- [Xero Integration Deep Dive](./xero-integration)
+- [Custom Integration Patterns](./custom-integrations)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

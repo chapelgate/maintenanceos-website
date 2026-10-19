@@ -37,6 +37,7 @@ function getFileLastMod(filePath: string): string {
 
 import { getAllComparisonSlugs } from "@/lib/compare";
 import { getBlogPostSlugs } from "@/lib/blog";
+import { getHelpArticleSlugs } from "@/lib/help";
 
 function getLastModForPath(path: string): string {
   const comparisonPaths = Object.fromEntries(getAllComparisonSlugs().map((slug) => [
@@ -47,6 +48,10 @@ function getLastModForPath(path: string): string {
     `/blog/${slug}/`,
     `src/content/blog/${slug}.mdx`,
   ]));
+  const helpPaths = Object.fromEntries(getHelpArticleSlugs().map((slug) => [
+    `/help/${slug}/`,
+    `src/content/help/${slug}.mdx`,
+  ]));
 
   const pathToFile: Record<string, string> = {
     "/": "src/app/page.tsx",
@@ -54,8 +59,10 @@ function getLastModForPath(path: string): string {
     "/features/": "src/app/features/page.tsx",
     "/compare/": "src/app/compare/page.tsx",
     "/blog/": "src/app/blog/page.tsx",
+    "/help/": "src/app/help/page.tsx",
     ...comparisonPaths,
     ...blogPaths,
+    ...helpPaths,
     "/property-maintenance-software/": "src/app/property-maintenance-software/page.tsx",
     "/ai-receptionist/": "src/app/ai-receptionist/page.tsx",
     "/create/": "src/app/create/page.tsx",
