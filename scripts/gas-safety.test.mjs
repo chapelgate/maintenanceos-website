@@ -52,5 +52,5 @@ test("gas copy makes no product or always-on claim", () => {
 test("og:image points at the static file without a trailing slash", () => {
   const meta = read("src/lib/page-meta.ts");
   assert.doesNotMatch(meta, /absoluteUrl\("\/og-image\.png"\)/);
-  assert.match(meta, /\/og-image\.png`/);
+  assert.match(meta, /\/og-image\.webp`/);
 });
