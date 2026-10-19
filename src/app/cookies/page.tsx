@@ -2,6 +2,8 @@ import { CookieSettingsStub } from "@/components/CookieSettingsStub";
 import { LegalDraftBanner } from "@/components/LegalDraftBanner";
 import { LegalPageChrome } from "@/components/LegalPageChrome";
 import { PageHero } from "@/components/PageHero";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -14,6 +16,11 @@ export const metadata = contentPageMetadata({
 export default function CookiesPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/cookies/", "Cookie Policy (Draft)", "Draft cookie notice. No analytics or marketing cookies, and no site-wide consent banner. Pending legal review.", [
+          { name: "Cookies", path: "/cookies/" },
+        ])}
+      />
       <PageHero
         eyebrow="Legal · Draft"
         title="Cookie Policy (Draft)"
@@ -164,8 +171,8 @@ export default function CookiesPage() {
               Preferences cookies
             </h2>
             <p className="mt-2 text-muted">
-              Remember UI or locale choices if introduced — non-essential;
-              default off until consent — [ANDY: list or "none currently"].
+              Remember UI or locale choices if introduced &mdash; non-essential;
+              default off until consent &mdash; [ANDY: list or &ldquo;none currently&rdquo;].
               None currently.
             </p>
           </section>

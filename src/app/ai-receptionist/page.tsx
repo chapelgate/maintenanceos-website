@@ -1,6 +1,8 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -38,6 +40,11 @@ const mustNotInvent = [
 export default function AiReceptionistPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/ai-receptionist/", "AI receptionist for UK maintenance intake", "An AI receptionist preview for UK maintenance intake. Rules keep control of safety and money. Not a live voice service.", [
+          { name: "AI Receptionist", path: "/ai-receptionist/" },
+        ])}
+      />
       <PageHero
         eyebrow="AI receptionist · Voice preview"
         title="Capture maintenance calls without handing control to the AI"

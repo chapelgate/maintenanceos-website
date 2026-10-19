@@ -1,6 +1,8 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { industryRoles } from "@/config/industries";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -24,6 +26,11 @@ const SECTOR_SUMMARIES: Record<string, string> = {
 export default function IndustriesPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/industries/", "Repair Intake Software by Sector (UK)", "Repair intake for UK landlords, letting agents, property managers, maintenance firms, housing associations, councils, FM teams and holiday lets.", [
+          { name: "Industries", path: "/industries/" },
+        ])}
+      />
       <PageHero
         eyebrow="Sectors · Pre-launch"
         title="Repair intake for the people who answer for repairs"

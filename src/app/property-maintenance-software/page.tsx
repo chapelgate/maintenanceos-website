@@ -3,7 +3,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { industryRoles } from "@/config/industries";
-import { funnelPageJsonLd } from "@/lib/json-ld";
+import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("propertyMaintenanceSoftware");
@@ -11,7 +11,7 @@ export const metadata = funnelPageMetadata("propertyMaintenanceSoftware");
 export default function PropertyMaintenanceSoftwarePage() {
   return (
     <>
-      <JsonLd data={funnelPageJsonLd("propertyMaintenanceSoftware")} />
+      <JsonLd data={fullFunnelPageJsonLd("propertyMaintenanceSoftware")} />
       <PageHero
         eyebrow="United Kingdom · Pre-launch"
         title="Property maintenance software for UK teams."

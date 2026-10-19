@@ -10,7 +10,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { ProductTourWatchLink } from "@/components/ProductTour";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
-import { funnelPageJsonLd } from "@/lib/json-ld";
+import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = funnelPageMetadata("home");
@@ -64,7 +64,7 @@ const benefits = [
 export default function HomePage() {
   return (
     <>
-      <JsonLd data={funnelPageJsonLd("home")} />
+      <JsonLd data={fullFunnelPageJsonLd("home")} />
       {/* 1. Hero */}
       <section
         className="mos-hero-atmosphere border-b border-border px-4 py-12 sm:px-6 sm:py-16 lg:py-20"

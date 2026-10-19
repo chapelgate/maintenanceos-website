@@ -33,12 +33,16 @@ test("shared JSON-LD helper stays claims-safe and uses funnel copy", () => {
   const src = read("src/lib/json-ld.ts");
   assert.match(src, /export function marketingJsonLd/);
   assert.match(src, /export function funnelPageJsonLd/);
+  assert.match(src, /export function fullFunnelPageJsonLd/);
+  assert.match(src, /export function fullFaqPageJsonLd/);
   assert.match(src, /from ["']@\/lib\/page-meta["']/);
   assert.match(src, /funnelPageCopy/);
   assert.match(src, /"@type": "Organization"/);
   assert.match(src, /"@type": "WebSite"/);
   assert.match(src, /"@type": "WebPage"/);
   assert.match(src, /"@type": "SoftwareApplication"/);
+  assert.match(src, /"@type": "FAQPage"/);
+  assert.match(src, /"@type": "BreadcrumbList"/);
   assert.match(src, /name: "Chapelgate Technologies"/);
   assert.match(src, /siteConfig\.publicBrand/);
   assert.match(src, /alternateName/);
@@ -55,32 +59,34 @@ test("shared JSON-LD helper stays claims-safe and uses funnel copy", () => {
   assert.doesNotMatch(src, /24\/7/);
 });
 
-test("layout keeps site-wide Organization + WebSite only", () => {
+test("layout does not include JSON-LD (deduplicated to per-page)", () => {
   const layout = read("src/app/layout.tsx");
-  assert.match(layout, /marketingJsonLd\(\)/);
-  assert.match(layout, /contentSecurityPolicy/);
+  assert.doesNotMatch(layout, /marketingJsonLd\(\)/);
   assert.doesNotMatch(layout, /funnelPageJsonLd/);
+  assert.doesNotMatch(layout, /JsonLd/);
+  assert.match(layout, /contentSecurityPolicy/);
 });
 
-test("home and key funnel pages emit funnelPageJsonLd", () => {
+test("home and key funnel pages emit fullFunnelPageJsonLd with BreadcrumbList", () => {
   for (const [file, key] of Object.entries(FUNNEL_PAGES)) {
     const src = read(file);
     assert.match(
       src,
-      new RegExp(`funnelPageJsonLd\\("${key}"\\)`),
-      `${file} should render funnelPageJsonLd("${key}")`,
+      new RegExp(`fullFunnelPageJsonLd\\("${key}"\\)`),
+      `${file} should render fullFunnelPageJsonLd("${key}")`,
     );
     assert.match(src, /from ["']@\/components\/JsonLd["']/);
   }
 });
 
-test("FAQ JSON-LD stays on /faq/ and uses the shared funnel answers", () => {
+test("FAQ JSON-LD uses fullFaqPageJsonLd with BreadcrumbList", () => {
   const faqPage = read("src/app/faq/page.tsx");
   const helper = read("src/lib/json-ld.ts");
   const faqs = read("src/content/faqs.ts");
-  assert.match(faqPage, /faqPageJsonLd\(\)/);
-  assert.match(helper, /export function faqPageJsonLd/);
+  assert.match(faqPage, /fullFaqPageJsonLd\(\)/);
+  assert.match(helper, /export function fullFaqPageJsonLd/);
   assert.match(helper, /"@type": "FAQPage"/);
+  assert.match(helper, /"@type": "BreadcrumbList"/);
   assert.match(helper, /from ["']@\/content\/faqs["']/);
   assert.match(helper, /faqItems\.map/);
   assert.doesNotMatch(helper, /aggregateRating/);
@@ -118,7 +124,7 @@ function parseJsonLdBlocks(html) {
   return blocks;
 }
 
-test("exported funnel HTML has claims-safe JSON-LD when out/ exists", () => {
+test("exported funnel HTML has single claims-safe JSON-LD with BreadcrumbList when out/ exists", () => {
   const files = {
     "out/index.html": "home",
     "out/create/index.html": "create",
@@ -138,7 +144,7 @@ test("exported funnel HTML has claims-safe JSON-LD when out/ exists", () => {
     const html = read(rel);
     assert.match(html, /http-equiv="Content-Security-Policy"/);
     const blocks = parseJsonLdBlocks(html);
-    assert.ok(blocks.length >= 2, `${rel} should have layout + page JSON-LD`);
+    assert.equal(blocks.length, 1, `${rel} should have exactly ONE JSON-LD block`);
 
     const types = new Set();
     const keys = new Set();
@@ -157,6 +163,7 @@ test("exported funnel HTML has claims-safe JSON-LD when out/ exists", () => {
       types.has("SoftwareApplication"),
       `${rel} missing SoftwareApplication`,
     );
+    assert.ok(types.has("BreadcrumbList"), `${rel} missing BreadcrumbList`);
     assert.equal(types.has("Offer"), false, `${rel} must not emit Offer`);
 
     for (const forbidden of FORBIDDEN_SCHEMA_KEYS) {
@@ -175,7 +182,7 @@ test("exported funnel HTML has claims-safe JSON-LD when out/ exists", () => {
   }
 });
 
-test("exported /faq/ HTML has claims-safe FAQPage JSON-LD when out/ exists", () => {
+test("exported /faq/ HTML has single claims-safe FAQPage JSON-LD with BreadcrumbList when out/ exists", () => {
   const rel = "out/faq/index.html";
   if (!fs.existsSync(path.join(ROOT, rel))) {
     return;
@@ -183,7 +190,7 @@ test("exported /faq/ HTML has claims-safe FAQPage JSON-LD when out/ exists", () 
 
   const html = read(rel);
   const blocks = parseJsonLdBlocks(html);
-  assert.ok(blocks.length >= 2, `${rel} should have layout + FAQ JSON-LD`);
+  assert.equal(blocks.length, 1, `${rel} should have exactly ONE JSON-LD block`);
 
   const types = new Set();
   const keys = new Set();
@@ -198,6 +205,7 @@ test("exported /faq/ HTML has claims-safe FAQPage JSON-LD when out/ exists", () 
   assert.ok(types.has("FAQPage"), `${rel} missing FAQPage`);
   assert.ok(types.has("Organization"), `${rel} missing Organization`);
   assert.ok(types.has("WebSite"), `${rel} missing WebSite`);
+  assert.ok(types.has("BreadcrumbList"), `${rel} missing BreadcrumbList`);
   assert.equal(types.has("Offer"), false, `${rel} must not emit Offer`);
 
   for (const forbidden of FORBIDDEN_SCHEMA_KEYS) {

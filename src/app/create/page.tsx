@@ -7,7 +7,7 @@ import { CreateIngestPrivacyNote } from "@/components/CreateIngestPrivacyNote";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { funnelPageJsonLd } from "@/lib/json-ld";
+import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("create");
@@ -44,7 +44,7 @@ const steps = [
 export default function CreateReceptionistPage() {
   return (
     <>
-      <JsonLd data={funnelPageJsonLd("create")} />
+      <JsonLd data={fullFunnelPageJsonLd("create")} />
       <PageHero
 
         eyebrow="Repair intake · Preview"

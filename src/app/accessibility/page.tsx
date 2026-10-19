@@ -1,4 +1,6 @@
 import { PageHero } from "@/components/PageHero";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -11,6 +13,11 @@ export const metadata = contentPageMetadata({
 export default function AccessibilityPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/accessibility/", "Accessibility", "Voluntary note of an automated accessibility check on this pre-launch site. Not a public-sector accessibility statement and not a certification.", [
+          { name: "Accessibility", path: "/accessibility/" },
+        ])}
+      />
       <PageHero
         eyebrow="Voluntary note"
         title="Accessibility checks we have actually run"

@@ -4,6 +4,7 @@ import { CtaPair } from "@/components/CtaPair";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { SafeAutomationModel } from "@/components/SafeAutomationModel";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
@@ -14,17 +15,13 @@ export const metadata: Metadata = contentPageMetadata({
 });
 
 export default function HowWeKeepControlPage() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "The safety rules, written down",
-    description:
-      "AI assists with intake. Fixed server rules control the lifecycle. Authorised people clear dangerous repairs.",
-  };
-
   return (
     <>
-      <JsonLd data={jsonLd} />
+      <JsonLd
+        data={contentPageJsonLd("/how-we-keep-control/", "The safety rules, written down", "AI assists with intake. Fixed server rules control the lifecycle. Authorised people clear dangerous repairs.", [
+          { name: "How We Keep Control", path: "/how-we-keep-control/" },
+        ])}
+      />
       <PageHero
         eyebrow="Pre-launch · Preview"
         title="The safety rules, written down."

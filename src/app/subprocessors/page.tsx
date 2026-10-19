@@ -1,4 +1,6 @@
 import { PageHero } from "@/components/PageHero";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -11,6 +13,11 @@ export const metadata = contentPageMetadata({
 export default function SubprocessorsPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/subprocessors/", "Subprocessors", "List of third-party subprocessors who process data on behalf of MaintenanceOS. Transparent list with locations and transfer mechanisms.", [
+          { name: "Subprocessors", path: "/subprocessors/" },
+        ])}
+      />
       <PageHero
         eyebrow="Transparency · Pre-launch"
         title="Subprocessors"
