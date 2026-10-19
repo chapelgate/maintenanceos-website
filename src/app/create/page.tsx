@@ -1,4 +1,4 @@
-import { EnquiryUnavailable } from "@/components/EnquiryUnavailable";
+import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import {
   CalendarConnectSection,
   CreateJourneySection,
@@ -21,9 +21,7 @@ const steps = [
   },
   {
     title: "Check the URL",
-
     body: "We read a small, bounded set of public pages and extract business facts for you to review. Missing details stay empty rather than being invented.",
-
   },
   {
     title: "Review the draft",
@@ -39,7 +37,7 @@ const steps = [
   },
   {
     title: "Save your setup (optional)",
-    body: "Online enquiries are temporarily unavailable. Please use the email link above. The browser preview does not store the setup.",
+    body: "Submit your details to receive a copy of the reviewed configuration. The browser preview does not store the setup.",
   },
 ] as const;
 
@@ -48,11 +46,9 @@ export default function CreateReceptionistPage() {
     <>
       <JsonLd data={fullFunnelPageJsonLd("create")} />
       <PageHero
-
         eyebrow="Repair intake · Preview"
         title="Turn your business website into a repair-intake preview"
-        lede="Paste your site URL so MaintenanceOS can read public facts for a repair-intake preview, review them, then try a browser voice call. Online enquiries are temporarily unavailable, so the preview is not stored. It does not change your live telephone service, book viewings, or write into a CRM."
-
+        lede="Paste your site URL so MaintenanceOS can read public facts for a repair-intake preview, review them, then try a browser voice call. Submit your details to receive a copy of the reviewed configuration. It does not change your live telephone service, book viewings, or write into a CRM."
       />
       {siteConfig.demoPhoneNumber && (
         <div className="mx-auto max-w-3xl px-4 pb-6">
@@ -87,7 +83,14 @@ export default function CreateReceptionistPage() {
             in this browser.
           </p>
           <div className="mt-6">
-            <EnquiryUnavailable />
+            <LeadCaptureForm
+              leadType="create_receptionist"
+              title="Get your reviewed configuration"
+              helper="We will email you a copy of the reviewed facts and configuration. Only email is required."
+              submitLabel="Send configuration"
+              showMessage={false}
+              showOrganisation={true}
+            />
           </div>
           <div className="mt-6">
             <CreateJourneySection />

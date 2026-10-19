@@ -1,6 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
+import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { PageHero } from "@/components/PageHero";
 import { getPricingConfig } from "@/config/pricing";
 import { contentPageMetadata } from "@/lib/page-meta";
@@ -161,6 +162,25 @@ export default function PricingPage() {
                 <li key={item}>• {item}</li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        <section
+          aria-labelledby="pricing-form-heading"
+          className="mx-auto max-w-xl"
+        >
+          <h2 id="pricing-form-heading" className="text-xl font-semibold text-ink text-center">
+            Join the launch list
+          </h2>
+          <p className="mt-2 text-sm text-muted text-center">
+            We will email you when pricing is published and early access opens.
+          </p>
+          <div className="mt-4">
+            <LeadCaptureForm
+              leadType="launch_list"
+              showMessage={false}
+              showOrganisation={true}
+            />
           </div>
         </section>
       </div>

@@ -4,6 +4,7 @@ import { DemoProof } from "@/components/DemoProof";
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
+import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { PageHero } from "@/components/PageHero";
 import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
@@ -63,6 +64,25 @@ export default function DemoPage() {
       </section>
 
       <DemoProof />
+
+      <section
+        aria-labelledby="demo-form-heading"
+        className="mx-auto max-w-4xl px-4 py-6"
+      >
+        <h2 id="demo-form-heading" className="text-xl font-semibold text-ink">
+          Request early access
+        </h2>
+        <p className="mt-2 text-sm text-muted">
+          Share your details and we will be in touch about early access.
+        </p>
+        <div className="mt-4">
+          <LeadCaptureForm
+            leadType="early_demo"
+            showMessage={true}
+            showOrganisation={true}
+          />
+        </div>
+      </section>
 
       {false && <CtaPair />}
 

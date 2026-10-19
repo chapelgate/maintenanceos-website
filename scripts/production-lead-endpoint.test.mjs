@@ -45,7 +45,8 @@ test("create enquiry address is not in the server HTML that Cloudflare rewrites"
   assert.match(enquiry, /addressReady\s*\?\s*ENQUIRY_UNAVAILABLE_MESSAGE/);
   assert.doesNotMatch(create, /andy@chapelgatehome\.uk/);
   assert.doesNotMatch(create, /info@chapelgatetechnologies\.com/);
-  assert.match(create, /Please use the email link above/);
+  assert.match(create, /LeadCaptureForm/);
+  assert.match(create, /leadType="create_receptionist"/);
 });
 
 test("lead adapter sends the current page URL and preserves accepted semantics", () => {
