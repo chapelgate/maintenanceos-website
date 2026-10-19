@@ -2,6 +2,7 @@ import { execSync } from "node:child_process";
 import { statSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { getAllComparisonSlugs } from "../src/lib/compare.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "..");
@@ -45,6 +46,11 @@ function getLastModForPath(path: string): string {
     "/": "src/app/page.tsx",
     "/how-it-works/": "src/app/how-it-works/page.tsx",
     "/features/": "src/app/features/page.tsx",
+    "/compare/": "src/app/compare/page.tsx",
+    ...Object.fromEntries(getAllComparisonSlugs().map((slug) => [
+      `/compare/${slug}/`,
+      `src/content/compare/${slug.replace(/^worksmartos-vs-/, "")}.mdx`,
+    ])),
     "/property-maintenance-software/": "src/app/property-maintenance-software/page.tsx",
     "/ai-receptionist/": "src/app/ai-receptionist/page.tsx",
     "/create/": "src/app/create/page.tsx",
@@ -88,6 +94,8 @@ function getMarketingPaths(): string[] {
     "/",
     "/how-it-works/",
     "/features/",
+    "/compare/",
+    ...getAllComparisonSlugs().map((slug) => `/compare/${slug}/`),
     "/property-maintenance-software/",
     "/ai-receptionist/",
     "/create/",

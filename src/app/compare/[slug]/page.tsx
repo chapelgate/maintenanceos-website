@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getComparisonBySlug, getAllComparisonSlugs, generateComparisonMetadata } from "@/lib/compare";
+import { getComparisonBySlug, getAllComparisonSlugs, getLegacyComparisonSlugs, generateComparisonMetadata } from "@/lib/compare";
 import { contentPageMetadata } from "@/lib/page-meta";
 import { contentPageJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/JsonLd";
@@ -10,8 +10,9 @@ interface ComparePageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getAllComparisonSlugs();
-  return slugs.map((slug) => ({ slug }));
+  const newSlugs = getAllComparisonSlugs();
+  const legacySlugs = getLegacyComparisonSlugs();
+  return [...newSlugs, ...legacySlugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: ComparePageProps) {
@@ -36,7 +37,32 @@ export async function generateMetadata({ params }: ComparePageProps) {
 
 export default async function ComparePage({ params }: ComparePageProps) {
   const resolvedParams = await params;
-  const data = getComparisonBySlug(resolvedParams.slug);
+  const slug = resolvedParams.slug;
+  const data = getComparisonBySlug(slug);
+
+  const isLegacySlug = !slug.startsWith("worksmartos-vs-");
+
+  if (isLegacySlug) {
+    const correctUrl = `/compare/worksmartos-vs-${slug}/`;
+
+    return (
+      <>
+        <title>Redirecting...</title>
+        <meta name="robots" content="noindex" />
+        <link rel="canonical" href={`https://worksmartos.co.uk${correctUrl}`} />
+        <meta httpEquiv="refresh" content={`0;url=${correctUrl}`} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.location.href = "${correctUrl}";`,
+          }}
+        />
+        <noscript>
+          <meta httpEquiv="refresh" content={`0;url=${correctUrl}`} />
+          <p>Redirecting to <a href={correctUrl}>{correctUrl}</a>...</p>
+        </noscript>
+      </>
+    );
+  }
 
   if (!data) {
     notFound();
@@ -64,7 +90,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
       if (cells[0].includes("---")) return "";
       return `<div class="overflow-x-auto my-6"><table class="min-w-full divide-y divide-border"><tbody><tr class="bg-surface">${cells
         .map((c) => `<td class="px-4 py-3 text-sm text-ink">${c}</td>`)
-        .join("")}</tr></tbody></table></div>`;
+        .join("")}</tr></tbody></div>`;
     })
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")

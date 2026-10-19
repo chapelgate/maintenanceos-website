@@ -1,4 +1,5 @@
 import { industries } from "@/config/site";
+import { getAllComparisonSlugs } from "../lib/compare.ts";
 
 /**
  * Public marketing routes for the static export sitemap.
@@ -8,6 +9,8 @@ export const marketingPaths: readonly string[] = [
   "/",
   "/how-it-works/",
   "/features/",
+  "/compare/",
+  ...getAllComparisonSlugs().map((slug) => `/compare/${slug}/`),
   "/property-maintenance-software/",
   "/ai-receptionist/",
   "/create/",

@@ -39,6 +39,7 @@ export interface ComparisonData {
 
 /** Load and parse a comparison MDX file by slug. */
 export function getComparisonBySlug(slug: string): ComparisonData | null {
+  slug = slug.replace(/^worksmartos-vs-/, "");
   if (!COMPARISON_SLUGS.includes(slug as ComparisonSlug)) {
     return null;
   }
@@ -58,8 +59,13 @@ export function getComparisonBySlug(slug: string): ComparisonData | null {
   };
 }
 
-/** Get all comparison slugs for static generation. */
-export function getAllComparisonSlugs(): ComparisonSlug[] {
+/** Get all comparison slugs for static generation (new format with prefix). */
+export function getAllComparisonSlugs(): string[] {
+  return COMPARISON_SLUGS.map((slug) => `worksmartos-vs-${slug}`);
+}
+
+/** Get legacy comparison slugs (without prefix) for redirect generation. */
+export function getLegacyComparisonSlugs(): string[] {
   return [...COMPARISON_SLUGS];
 }
 
