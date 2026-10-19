@@ -152,7 +152,7 @@ export default function CookiesPage() {
               Reserved for required site operation if and when named. Inventory
               is empty — do not invent cookie names. Consent-preference storage
               is not implemented. Do not put analytics or marketing here.
-              [OWNER: list when known].
+              [ANDY: list when known].
             </p>
           </section>
 
@@ -165,7 +165,7 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               Remember UI or locale choices if introduced — non-essential;
-              default off until consent — [OWNER: list or “none currently”].
+              default off until consent — [ANDY: list or "none currently"].
               None currently.
             </p>
           </section>
@@ -302,7 +302,7 @@ export default function CookiesPage() {
               Changes to this notice
             </h2>
             <p className="mt-2 text-muted">
-              [COUNSEL] — version and date practice for material updates.
+              [ANDY: version and date practice for material updates.]
             </p>
           </section>
 

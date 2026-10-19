@@ -69,7 +69,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "indemnity",
     title: "Indemnity (if used)",
-    body: "[COUNSEL: include or omit] — optional placeholder only.",
+    body: "[ANDY: include or omit indemnity clause] — optional placeholder only.",
   },
   {
     id: "privacy",

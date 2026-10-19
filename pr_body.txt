@@ -1,0 +1,8 @@
+Estate-Preflight: yes
+Estate-Route: FEATURE
+Estate-Artifact: specs/s12-trust-page
+Estate-Converged: yes
+
+Skills used: pstack poteto-mode, no-comments, principle-prove-it-works
+
+Add Cyber Essentials PLANNED status to security page. Build passes, typecheck passes, lint passes. Acceptance test: curl -s https://worksmartos.co.uk/security/ | grep -q "PLANNED"
