@@ -9,7 +9,7 @@
 - [x] Create specs/S20-pricing-ssr-fix/{spec.md,plan.md,tasks.md}
 - [x] Commit and push branch
 - [x] Open PR with Estate-Preflight headers
-- [ ] Wait for CI (estate-gate, webkit-a11y)
-- [ ] Merge when all checks pass
-- [ ] Verify live acceptance: `curl https://worksmartos.co.uk/pricing/ | grep -c '<h1'`
-- [ ] Update IMPL_STATE.md
+- [x] Wait for CI (estate-gate, webkit-a11y)
+- [x] Merge when all checks pass
+- [x] Verify live acceptance: `curl https://worksmartos.co.uk/pricing/ | grep -c '<h1'`
+- [x] Update IMPL_STATE.md
