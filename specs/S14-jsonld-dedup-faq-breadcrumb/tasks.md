@@ -33,6 +33,6 @@
 - [x] Create specs folder with spec.md, plan.md, tasks.md
 - [x] Commit and push
 - [x] Open PR #302
-- [ ] Wait for estate-gate, validate, webkit-a11y to pass
-- [ ] Merge with `gh pr merge --squash`
-- [ ] Verify live site after deploy: `curl -s https://worksmartos.co.uk/faq/ | grep -c 'application/ld+json'` = 1
+- [x] Wait for estate-gate, validate, webkit-a11y to pass
+- [x] Merge with `gh pr merge --squash`
+- [x] Verify live site after deploy: `curl -s https://worksmartos.co.uk/faq/ | grep -c 'application/ld+json'` = 1
