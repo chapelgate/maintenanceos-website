@@ -1,6 +1,7 @@
 import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { PageHero } from "@/components/PageHero";
+import { JsonLd } from "@/components/JsonLd";
 import { getPricingConfig } from "@/config/pricing";
 import { contentPageMetadata } from "@/lib/page-meta";
 
@@ -10,6 +11,24 @@ export const metadata = contentPageMetadata({
     "List prices are not published yet. Request an early demo to talk through pricing. Pre-launch, not a live phone.",
   path: "/pricing/",
 });
+
+const pricingProductLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "WorkSmartOS",
+  description:
+    "MaintenanceOS AI receptionist — pre-launch, not a live public phone. Early access by request only.",
+  url: "/pricing/",
+  inLanguage: "en-GB",
+  aggregateRating: null,
+  review: null,
+  offers: {
+    "@type": "PriceSpecification",
+    price: null,
+    priceSpecification: null,
+    availability: "https://schema.org/PreOrder",
+  },
+} as const;
 
 const designedToInclude = [
   "Website Intake: Captures repair facts in natural UK terminology.",
@@ -28,6 +47,7 @@ export default function PricingPage() {
 
   return (
     <>
+      <JsonLd data={pricingProductLd} />
       <PageHero
         eyebrow={pricing.eyebrow || undefined}
         title={pricing.title}
