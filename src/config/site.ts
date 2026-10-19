@@ -104,6 +104,12 @@ export const siteConfig = {
   customerDashboardEndpoint:
     process.env.NEXT_PUBLIC_CUSTOMER_DASHBOARD_ENDPOINT ?? "",
   locale: "en-GB",
+  /**
+   * Live demo phone number (E.164 format, e.g. +447700900123).
+   * Provided by Andy via NEXT_PUBLIC_DEMO_PHONE_NUMBER.
+   * Empty means the live demo number is not yet configured.
+   */
+  demoPhoneNumber: process.env.NEXT_PUBLIC_DEMO_PHONE_NUMBER ?? "",
 } as const;
 
 /** Conversion forms — always render via LeadCaptureForm. See docs/FORM_ENDPOINT_CONTRACT.md. */

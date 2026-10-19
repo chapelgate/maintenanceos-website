@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
+import { siteConfig } from "@/config/site";
 
 export const metadata = funnelPageMetadata("create");
 
@@ -52,6 +53,24 @@ export default function CreateReceptionistPage() {
         lede="Paste your site URL so MaintenanceOS can read public facts for a repair-intake preview, review them, then try a browser voice call. Online enquiries are temporarily unavailable, so the preview is not stored. It does not change your live telephone service, book viewings, or write into a CRM."
 
       />
+      {siteConfig.demoPhoneNumber && (
+        <div className="mx-auto max-w-3xl px-4 pb-6">
+          <div className="bg-accent/5 border border-accent/20 rounded-lg p-4 text-sm">
+            <p className="font-medium text-ink">
+              Live demo number available:
+            </p>
+            <p className="mt-1">
+              <a
+                href={`tel:${siteConfig.demoPhoneNumber}`}
+                className="text-accent underline-offset-2 hover:no-underline font-medium"
+              >
+                {siteConfig.demoPhoneNumber}
+              </a>
+              {" — call 24/7 for AI greeting and basic intake. Not a production answering service."}
+            </p>
+          </div>
+        </div>
+      )}
       <div className="mx-auto max-w-3xl space-y-10 px-4 py-12">
         <FunnelPathStrip linked />
         <section aria-labelledby="create-form-heading">
