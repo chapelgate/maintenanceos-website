@@ -13,3 +13,8 @@ test("rendered pricing copy says invented list prices at most once", () => {
   assert.match(page, /^const notSoldAsLive = \[/m);
   assert.doesNotMatch(page, /\n {2}const notSoldAsLive/);
 });
+
+test("pricing page static output contains h1 heading", () => {
+  const html = fs.readFileSync("out/pricing/index.html", "utf8");
+  assert.match(html, /<h1[^>]*>Pricing<\/h1>/);
+});
