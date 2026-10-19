@@ -12,6 +12,7 @@ import { ProductTourWatchLink } from "@/components/ProductTour";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = funnelPageMetadata("home");
 
@@ -186,9 +187,22 @@ export default function HomePage() {
               <h2 className="text-xl font-bold text-ink sm:text-2xl">
                 See the rules working on a sample repair.
               </h2>
-              <p className="mt-2 text-sm text-muted">
-                No live phone demo from this site.
-              </p>
+              {siteConfig.demoPhoneNumber ? (
+                <p className="mt-2 text-sm text-muted">
+                  Live demo number:{" "}
+                  <a
+                    href={`tel:${siteConfig.demoPhoneNumber}`}
+                    className="font-medium text-accent underline-offset-2 hover:underline"
+                  >
+                    {siteConfig.demoPhoneNumber}
+                  </a>
+                  {" — answers 24/7 with AI greeting. Not a production service."}
+                </p>
+              ) : (
+                <p className="mt-2 text-sm text-muted">
+                  No live phone demo from this site.
+                </p>
+              )}
             </div>
           </div>
           <CtaPair
