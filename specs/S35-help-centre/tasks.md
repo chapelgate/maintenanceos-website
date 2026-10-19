@@ -28,5 +28,5 @@
 - [x] Push to origin
 - [x] Create PR with estate-gate preflight
 - [x] Wait for CI (estate-gate, validate, webkit-a11y)
-- [ ] Merge when all checks green
-- [ ] Verify live deployment
+- [x] Merge when all checks green
+- [x] Verify live deployment
