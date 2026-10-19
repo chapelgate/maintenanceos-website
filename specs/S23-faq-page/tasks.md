@@ -11,9 +11,9 @@
 - [x] Run `npm run lint` — passes
 - [x] Run `npx tsc --noEmit` — passes
 - [x] Create specs/S23-faq-page/{spec.md,plan.md,tasks.md}
-- [ ] Commit and push branch
-- [ ] Open PR with Estate-Preflight headers
-- [ ] Wait for CI (estate-gate, webkit-a11y)
-- [ ] Merge when all checks pass
-- [ ] Verify live acceptance: Rich Results Test on /faq/, page searchable, keyboard accessible
-- [ ] Update IMPL_STATE.md
+- [x] Commit and push branch
+- [x] Open PR with Estate-Preflight headers
+- [x] Wait for CI (estate-gate, webkit-a11y)
+- [x] Merge when all checks pass
+- [x] Verify live acceptance: Rich Results Test on /faq/, page searchable, keyboard accessible
+- [x] Update IMPL_STATE.md
