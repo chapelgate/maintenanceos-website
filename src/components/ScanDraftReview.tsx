@@ -23,7 +23,7 @@ export function ScanDraftReview({
 
   return (
     <div className="space-y-4" data-scan-draft="review">
-      {facts.businessName !== "Unknown — not found" && (
+      {((facts.businessName ?? "").toString()) !== "Unknown — not found" && (
         <div key="businessName" className="space-y-2">
           <label className={LABEL_CLASS} htmlFor={`businessName-${id}`}>
             Business Name
@@ -33,7 +33,7 @@ export function ScanDraftReview({
           </p>
         </div>
       )}
-      {facts.address !== "Unknown — not found" && (
+      {((facts.address ?? "").toString()) !== "Unknown — not found" && (
         <div key="address" className="space-y-2">
           <label className={LABEL_CLASS} htmlFor={`address-${id}`}>
             Address
@@ -43,7 +43,7 @@ export function ScanDraftReview({
           </p>
         </div>
       )}
-      {facts.hours !== "Unknown — not found" && (
+      {((facts.hours ?? "").toString()) !== "Unknown — not found" && (
         <div key="hours" className="space-y-2">
           <label className={LABEL_CLASS} htmlFor={`hours-${id}`}>
             Hours
@@ -53,7 +53,7 @@ export function ScanDraftReview({
           </p>
         </div>
       )}
-      {facts.services !== "Unknown — not found" && (
+      {((facts.services ?? []).toString()) !== "Unknown — not found" && (
         <div key="services" className="space-y-2">
           <label className={LABEL_CLASS} htmlFor={`services-${id}`}>
             Services
@@ -63,37 +63,37 @@ export function ScanDraftReview({
           </p>
         </div>
       )}
-      {facts.faqs !== "Unknown — not found" && facts.faqs.length > 0 && (
+      {((facts.faqs ?? []).length > 0 && ((facts.faqs ?? []).map((f) => f.question).join("\n\n")) !== "Unknown — not found") && (
         <div key="faqs" className="space-y-2">
           <label className={LABEL_CLASS} htmlFor={`faqs-${id}`}>
             FAQs
           </label>
           <pre className={VALUE_CLASS} id={`faqs-${id}`}>
-            {facts.faqs.join("\n\n")}
+            {(facts.faqs ?? []).join("\n\n")}
           </pre>
         </div>
       )}
-      {facts.businessName === "Unknown — not found" && (
+      {((facts.businessName ?? "").toString()) === "Unknown — not found" && (
         <div key="businessNameUnknown" className="text-sm text-muted">
           Business Name: Unknown — not found
         </div>
       )}
-      {facts.address === "Unknown — not found" && (
+      {((facts.address ?? "").toString()) === "Unknown — not found" && (
         <div key="addressUnknown" className="text-sm text-muted">
           Address: Unknown — not found
         </div>
       )}
-      {facts.hours === "Unknown — not found" && (
+      {((facts.hours ?? "").toString()) === "Unknown — not found" && (
         <div key="hoursUnknown" className="text-sm text-muted">
           Hours: Unknown — not found
         </div>
       )}
-      {facts.services === "Unknown — not found" && (
+      {((facts.services ?? []).toString()) === "Unknown — not found" && (
         <div key="servicesUnknown" className="text-sm text-muted">
           Services: Unknown — not found
         </div>
       )}
-      {facts.faqs === "Unknown — not found" && (
+      {((facts.faqs ?? []).length > 0 && ((facts.faqs ?? []).map((f) => f.question).join("\n\n")) === "Unknown — not found") && (
         <div key="faqsUnknown" className="text-sm text-muted">
           FAQs: Unknown — not found
         </div>
