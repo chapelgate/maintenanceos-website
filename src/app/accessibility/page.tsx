@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Accessibility",
   description:
-    "Voluntary note of an automated accessibility check on this pre-launch site. Not a public-sector accessibility statement and not a certification.",
+    "Accessibility target, audit scope, known issues, remediation plan, feedback contact. Not a public-sector statement or certification.",
   path: "/accessibility/",
 });
 
@@ -14,14 +14,14 @@ export default function AccessibilityPage() {
   return (
     <>
       <JsonLd
-        data={contentPageJsonLd("/accessibility/", "Accessibility", "Voluntary note of an automated accessibility check on this pre-launch site. Not a public-sector accessibility statement and not a certification.", [
+        data={contentPageJsonLd("/accessibility/", "Accessibility", "Accessibility target, audit scope, known issues, remediation plan, feedback contact. Not a public-sector statement or certification.", [
           { name: "Accessibility", path: "/accessibility/" },
         ])}
       />
       <PageHero
         eyebrow="Voluntary note"
-        title="Accessibility checks we have actually run"
-        lede="This page records an automated check of this pre-launch website. It is not a public-sector accessibility statement, not a certification, and not a sign-off by a person using assistive technology."
+        title="Accessibility target and audit summary"
+        lede="This page records the accessibility target for this site, the scope and results of automated checks, known issues, the remediation plan, and how to report barriers. It is not a public-sector accessibility statement, not a certification, and not a sign-off by a person using assistive technology."
       />
       <div className="mx-auto max-w-3xl space-y-8 px-4 py-12 text-muted">
         <section aria-labelledby="a11y-scope">
@@ -37,23 +37,137 @@ export default function AccessibilityPage() {
             Equality Act 2010.
           </p>
         </section>
+
+        <section aria-labelledby="a11y-target">
+          <h2 id="a11y-target" className="text-xl font-semibold text-ink">
+            Conformance target
+          </h2>
+          <p className="mt-2">
+            Target: WCAG 2.2 Level AA.
+          </p>
+          <p className="mt-2">
+            Status: Conformance is <strong>not verified</strong>. This page
+            describes the automated checks that have run, the gaps in testing,
+            and the work remaining. We do not claim full WCAG 2.2 AA
+            conformance, a Lighthouse accessibility score, a WAVE result, or an
+            assistive-technology sign-off.
+          </p>
+        </section>
+
         <section aria-labelledby="a11y-run">
           <h2 id="a11y-run" className="text-xl font-semibold text-ink">
-            Automated check on 12 October 2026
+            Automated check — 19 October 2026 (CI run 39312522438)
           </h2>
           <p className="mt-2">
             axe-core 4.10.3 ran in Playwright WebKit 26.6 against a local
-            static export of this site, at a 1440 by 900 viewport. The routes
-            were the home page, create, demo, features, pricing, security, and
-            this page. That is not a physical iPhone or Mac Safari check, and
-            not a pass by a person using a screen reader or other assistive
-            technology.
+            static export of this site, at two viewports (iPhone 13: 390×844;
+            Desktop Safari: 1280×800). The routes tested were:
           </p>
-          <p className="mt-2" id="a11y-result">
-            axe-core 4.10.3 reported no violations on those seven routes in
-            that run. Each route returned HTTP 200, had one heading at level
-            1, and did not overflow horizontally. WebKit recorded no uncaught
-            page error.
+          <ul className="mt-2 list-disc list-inside space-y-1">
+            <li>Home (/) — 2 viewports</li>
+            <li>Create (/create/) — 2 viewports</li>
+            <li>Demo (/demo/) — 2 viewports</li>
+            <li>Features (/features/) — 2 viewports</li>
+            <li>Pricing (/pricing/) — 2 viewports</li>
+            <li>Security (/security/) — 2 viewports</li>
+          </ul>
+          <p className="mt-2">
+            <strong>Result:</strong> axe-core 4.10.3 reported no violations on those seven routes in that run. Each route returned HTTP 200, had one heading at level 1, and did not overflow horizontally. WebKit recorded no uncaught page error.
+          </p>
+          <p className="mt-2">
+            <strong>Scope limitations:</strong> This is an automated subset
+            check. It does not cover the full site (e.g., /faq/, /blog/,
+            /trust/, /compare/, /subprocessors/, /vulnerability-disclosure/,
+            /accessibility/, /cookies/, /terms/, /privacy/). It does not test
+            physical iPhone or Mac Safari, nor any screen reader or assistive
+            technology. It tests only WCAG 2.0 A/AA tags in axe-core, not the
+            full WCAG 2.2 AA criterion set.
+          </p>
+        </section>
+
+        <section aria-labelledby="a11y-known">
+          <h2 id="a11y-known" className="text-xl font-semibold text-ink">
+            Known issues and testing gaps
+          </h2>
+          <ul className="mt-2 list-disc list-inside space-y-2">
+            <li>
+              <strong>Incomplete route coverage:</strong> The automated suite
+              does not run against /faq/, /blog/, /trust/, /compare/,
+              /subprocessors/, /vulnerability-disclosure/, /accessibility/,
+              /cookies/, /terms/, /privacy/.
+            </li>
+            <li>
+              <strong>WCAG 2.2 criteria not covered:</strong> axe-core tags
+              used were <code>wcag2aa</code> and <code>wcag2a</code> (WCAG 2.0).
+              WCAG 2.2 adds new success criteria (e.g., 2.4.11 Focus Not
+              Obscured, 2.5.7 Dragging Movements, 3.2.6 Consistent Help,
+              3.3.7 Redundant Entry) that are not validated here.
+            </li>
+            <li>
+              <strong>No assistive-technology testing:</strong> No manual
+              screen-reader (NVDA, VoiceOver, JAWS), voice-control, or
+              switch-access testing has been performed.
+            </li>
+            <li>
+              <strong>S26 remediation pending deployment:</strong> The
+              following fixes are merged in PR #315 but not yet deployed to
+              production because the <code>validate</code> CI job fails for a
+              pre-existing reason unrelated to S26 (static pricing page test
+              failure): skip link (already present), brand warning color
+              <code>#92400E</code> verified at 4.5:1 on light paper
+              <code>#F8FAFC</code>, <code>aria-live=&apos;polite&apos;</code> on voice
+              transcript, form label audit on Create and Demo flows.
+            </li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="a11y-plan">
+          <h2 id="a11y-plan" className="text-xl font-semibold text-ink">
+            Remediation plan
+          </h2>
+          <ol className="mt-2 list-decimal list-inside space-y-3">
+            <li>
+              <strong>Deploy S26 fixes:</strong> Resolve the pre-existing
+              <code>validate</code> CI failure (static pricing page output) so
+              PR #315 can merge and the contrast, <code>aria-live</code>, and
+              form-label fixes go live.
+            </li>
+            <li>
+              <strong>Expand automated route coverage:</strong> Add the
+              remaining public routes to the WebKit accessibility test matrix
+              (tests/webkit-a11y/a11y.test.mjs).
+            </li>
+            <li>
+              <strong>Upgrade axe-core tags:</strong> Add WCAG 2.2 specific
+              tags (<code>wcag21aa</code>, <code>wcag22aa</code>) once
+              axe-core supports them, or supplement with manual checks for
+              the new criteria.
+            </li>
+            <li>
+              <strong>Manual assistive-technology audit:</strong> Conduct
+              screen-reader testing (VoiceOver on iOS/macOS, NVDA on Windows)
+              on core user flows: home → create → demo, and the enquiry form.
+            </li>
+            <li>
+              <strong>Publish updated statement:</strong> After each
+              milestone above, update this page with the new scope, results,
+              and any remaining gaps.
+            </li>
+          </ol>
+        </section>
+
+        <section aria-labelledby="a11y-contact">
+          <h2 id="a11y-contact" className="text-xl font-semibold text-ink">
+            Feedback and barrier reports
+          </h2>
+          <p className="mt-2">
+            If you encounter an accessibility barrier on this site, please
+            contact us at
+            <a href="mailto:info@chapelgatetechnologies.com" className="underline hover:no-underline">
+              info@chapelgatetechnologies.com
+            </a>
+            . We aim to acknowledge within 2 business days and provide a
+            remediation timeline.
           </p>
         </section>
       </div>
