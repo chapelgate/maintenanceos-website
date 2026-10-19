@@ -3,9 +3,9 @@ import { Accordion } from "@/components/Accordion";
 import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
+import { absoluteUrl } from "@/lib/site-url";
 import { PageHero } from "@/components/PageHero";
 import { faqItems, productFaqItems, safetyFaqItems } from "@/content/faqs";
-import { faqPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
@@ -14,6 +14,34 @@ export const metadata: Metadata = contentPageMetadata({
     "What the AI will and won't do, what counts as safety-critical, how data is kept apart, cookies, pricing and launch status.",
   path: "/faq/",
 });
+
+function faqPageJsonLd(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${absoluteUrl("/faq/")}#faq`,
+    url: absoluteUrl("/faq/"),
+    name: "MaintenanceOS frequently asked questions",
+    isPartOf: {
+      "@id": absoluteUrl("/#organization"),
+    },
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "FAQ", item: absoluteUrl("/faq/") },
+      ],
+    },
+  };
+}
 
 export default function FaqPage() {
   return (
