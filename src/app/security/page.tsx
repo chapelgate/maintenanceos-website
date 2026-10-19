@@ -75,6 +75,20 @@ export default function SecurityPage() {
 
       <section className="mx-auto max-w-3xl space-y-6 px-4 py-12 border-t border-border">
         <h2 className="text-xl font-semibold text-ink">
+          Core architectural controls
+        </h2>
+        <p className="text-sm text-muted">
+          Controls implemented directly in product source code.
+        </p>
+        <div className="mt-4 flex gap-2">
+          <span className="px-3 py-1 text-xs font-medium bg-primary/10 border border-primary rounded">
+            Cyber Essentials: PLANNED (target Q2 2027)
+          </span>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl space-y-6 px-4 py-12 border-t border-border">
+        <h2 className="text-xl font-semibold text-ink">
           Operational verification
         </h2>
         <p className="text-sm text-muted">
@@ -96,8 +110,15 @@ export default function SecurityPage() {
           className="mt-6"
           primaryHref="/demo/"
           primaryLabel="Request an early demo"
-          secondaryHref="/how-we-keep-control/"
-          secondaryLabel="See the safety rules"
+          secondaryHref="/vulnerability-disclosure/"
+          secondaryLabel="Vulnerability disclosure"
+        />
+        <CtaPair
+          className="mt-6"
+          primaryHref="/subprocessors/"
+          primaryLabel="Subprocessor page"
+          secondaryHref="/vulnerability-disclosure/"
+          secondaryLabel="Vulnerability disclosure"
         />
 
         <p className="mt-4 text-sm text-muted">
