@@ -17,8 +17,8 @@
 - [x] Verify sitemap.xml includes 6 blog URLs
 - [x] Verify RSS feed at `/blog/rss.xml` with 5 items
 - [x] Verify blog pages render with JSON-LD BreadcrumbList
-- [ ] Create PR with Estate-Preflight header
-- [ ] Wait for CI (estate-gate, validate, webkit-a11y)
-- [ ] Merge PR after green checks
-- [ ] Update IMPL_STATE.md with PR number and SHA
-- [ ] Run live acceptance check against https://worksmartos.co.uk
+- [x] Create PR with Estate-Preflight header
+- [x] Wait for CI (estate-gate, validate, webkit-a11y)
+- [x] Merge PR after green checks
+- [x] Update IMPL_STATE.md with PR number and SHA
+- [x] Run live acceptance check against https://worksmartos.co.uk
