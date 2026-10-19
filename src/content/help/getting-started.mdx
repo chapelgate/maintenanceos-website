@@ -1,0 +1,105 @@
+---
+slug: getting-started
+title: "Getting Started with MaintenanceOS"
+description: "Learn how to set up your MaintenanceOS workspace, invite team members, and configure your first properties."
+date: "2025-01-15"
+author: "WorkSmartOS Team"
+category: "Getting Started"
+tags: ["onboarding", "setup", "workspace"]
+---
+
+# Getting Started with MaintenanceOS
+
+Welcome to MaintenanceOS. This guide walks you through the initial setup so your team can start managing maintenance operations safely and efficiently.
+
+## 1. Create Your Workspace
+
+After accepting your invitation, you'll be prompted to create a workspace. A workspace is your organisation's home in MaintenanceOS — it holds your properties, team members, and maintenance history.
+
+- Choose a workspace name (usually your company or portfolio name).
+- Select your primary currency (GBP for UK teams).
+- Confirm your time zone (defaults to Europe/London).
+
+## 2. Add Properties
+
+Properties are the buildings or units you maintain. You can add them individually or import a CSV.
+
+**Required fields per property:**
+- Address (UK postcode preferred for auto-complete)
+- Property type (residential, commercial, mixed-use)
+- Number of units
+- Primary contact (name, phone, email)
+
+**Optional but recommended:**
+- Gas safety certificate expiry
+- EPC rating
+- HMO licence number (if applicable)
+- Access instructions for contractors
+
+## 3. Invite Your Team
+
+MaintenanceOS supports role-based access:
+
+| Role | Permissions |
+|------|-------------|
+| **Admin** | Full access: properties, team, billing, integrations |
+| **Manager** | Properties, repairs, contractors, reports |
+| **Contractor** | Assigned repairs only, update status, upload photos |
+| **Viewer** | Read-only access to repairs and reports |
+
+Invite team members by email. They'll receive a secure link to join.
+
+## 4. Configure Repair Categories
+
+Customise repair categories to match your workflow. Default categories include:
+- Plumbing
+- Electrical
+- Heating & Hot Water
+- Structural
+- Damp & Mould
+- Gas Safety
+- Common Areas
+- External & Grounds
+
+You can add, rename, or archive categories at any time.
+
+## 5. Set Up Safety Rules
+
+MaintenanceOS uses **fixed safety rules** to flag high-risk repairs. Review the default rules and adjust thresholds if needed:
+
+- **Gas smell / carbon monoxide** → Immediate escalation, 24/7
+- **No heating in winter (Oct–Mar)** → 4-hour SLA
+- **Water leak affecting electrics** → 2-hour SLA
+- **Structural instability** → Immediate escalation
+- **Fire safety equipment fault** → 24-hour SLA
+
+These rules cannot be disabled — they ensure compliance with UK regulations.
+
+## 6. Connect Your Channels (Optional)
+
+MaintenanceOS can receive repair reports from:
+- **Website widget** (embed on your tenant portal)
+- **Email forwarding** (dedicated address per workspace)
+- **Phone** (via Twilio — requires admin setup)
+- **API** (for custom integrations)
+
+You can enable channels one at a time. Start with the website widget for the fastest setup.
+
+## 7. Run a Test Repair
+
+Before going live, submit a test repair through your chosen channel. Verify:
+- The repair appears in the dashboard
+- Correct category and priority are assigned
+- Safety rules trigger as expected
+- Notifications reach the right people
+
+## Next Steps
+
+- [Configure Contractors](./configuring-contractors)
+- [Set Up Notifications](./notification-settings)
+- [Understand the Repair Lifecycle](./repair-lifecycle)
+- [Safety Latches Explained](./safety-latches)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

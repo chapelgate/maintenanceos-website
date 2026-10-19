@@ -1,0 +1,95 @@
+---
+slug: gas-safety-compliance
+title: "Gas Safety Compliance"
+description: "Manage gas safety certificates, annual checks, and engineer assignments to stay compliant with UK regulations."
+date: "2025-01-23"
+author: "WorkSmartOS Team"
+category: "Compliance"
+tags: ["gas-safety", "cp12", "annual-check", "gas-safe", "landlord-duties"]
+---
+
+# Gas Safety Compliance
+
+UK landlords must ensure gas appliances, flues, and pipework are checked annually by a Gas Safe registered engineer. MaintenanceOS automates tracking, scheduling, and certification.
+
+## Legal Requirements
+
+**Gas Safety (Installation and Use) Regulations 1998:**
+- Annual gas safety check by Gas Safe engineer
+- Certificate (CP12) issued within 28 days
+- Copy to tenant within 28 days (new tenants before move-in)
+- Records kept for minimum 2 years
+- Appliances: boilers, cookers, fires, water heaters, pipework, flues
+
+**Penalties:** Unlimited fines, imprisonment, invalid insurance.
+
+## How MaintenanceOS Helps
+
+### Certificate Tracking
+- Each property → Gas Safety tab
+- Current certificate: expiry date, engineer, certificate number
+- **Auto-warning:** 60/30/7 days before expiry
+- **Overdue alert:** Red banner on property + daily notifications
+
+### Scheduling
+1. Go to Property → Gas Safety → **Schedule Check**
+2. Select Gas Safe engineer from your network
+3. Choose date → Tenant notified automatically
+4. Engineer receives job in portal with property access details
+
+### Engineer Requirements
+- Must be on Gas Safe Register for **domestic** work
+- Correct categories: CKR1 (boilers), CKR2 (cookers), HTR1 (fires), etc.
+- MaintenanceOS verifies via Gas Safe API at assignment
+
+### Certificate Upload
+After check, engineer uploads:
+- CP12 certificate (PDF)
+- Appliance list with results
+- Any defects / remedial actions
+- Next check due date
+
+System validates:
+- Engineer matches assigned engineer
+- Date within scheduled window
+- All required appliances listed
+- Certificate number format valid
+
+### Tenant Delivery
+- Automatic email to tenant with certificate attachment
+- Portal access for tenant to download anytime
+- **Audit log:** Delivery timestamp, method, recipient
+
+### Remedial Actions
+If defects found:
+1. Engineer marks on certificate → Creates **Remedial Repair** auto-linked
+2. Safety latch triggers if "Immediately Dangerous" (ID) or "At Risk" (AR)
+3. ID repairs: Emergency priority, gas supply isolated
+4. AR repairs: Urgent priority, 24-hour target
+5. Not to Current Standards (NCS): Advisory, tracked for next check
+
+## Portfolio View
+
+**Reports → Gas Safety Portfolio:**
+- All properties with expiry status
+- Filter: Current / Expiring Soon / Overdue / No Certificate
+- Bulk schedule for properties due same month
+- Export for regulator / insurance
+
+## Multi-Unit Properties
+
+For blocks / HMOs:
+- **Common areas:** Separate certificate (communal boilers, pipework)
+- **Individual flats:** Separate certificates per tenancy
+- MaintenanceOS links them: Block → Flat certificates
+
+## Next Steps
+
+- [Scheduling Annual Checks](./gas-safety-scheduling)
+- [Remedial Repair Workflow](./gas-remedial-repairs)
+- [Gas Safe Engineer Network](./gas-safe-engineers)
+- [Tenant Communication Templates](./gas-tenant-comms)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

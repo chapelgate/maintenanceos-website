@@ -1,0 +1,144 @@
+---
+slug: emergency-procedures
+title: "Emergency Procedures"
+description: "What to do in critical situations: gas leaks, floods, fires, structural failures, and out-of-hours emergencies."
+date: "2025-02-05"
+author: "WorkSmartOS Team"
+category: "Safety & Compliance"
+tags: ["emergency", "gas-leak", "flood", "fire", "structural", "out-of-hours"]
+---
+
+# Emergency Procedures
+
+MaintenanceOS is designed to handle emergencies safely and compliantly. This guide covers the critical procedures every team member should know.
+
+## Emergency Contact Numbers
+
+**Always call 999 first for immediate danger to life.**
+
+| Emergency | Number | When to Call |
+|-----------|--------|--------------|
+| **Gas leak / carbon monoxide** | 0800 111 999 (National Gas Emergency) | Smell gas, CO alarm sounding |
+| **Fire** | 999 | Any fire, smoke, burning smell |
+| **Electrical emergency** | 105 (Power Cut) / 999 if danger | Exposed wires, sparking, shock risk |
+| **Water main burst** | Local water company emergency | Uncontrolled flooding |
+| **Structural collapse risk** | 999 | Building movement, major cracks |
+| **Asbestos disturbance** | 999 + HSE 0300 003 1647 | Suspected asbestos release |
+
+## MaintenanceOS Emergency Flow
+
+### 1. Emergency Repair Reported
+- Tenant/contractor reports via portal, phone, or email
+- **Safety keywords** (gas, fire, flood, collapse, electrical) → **Auto-triggers Safety Latch**
+- Repair status: **Safety Hold** (cannot be assigned)
+- **Immediate notifications:** All Admins + Safety Officer (email + SMS + Slack/Teams)
+
+### 2. Safety Officer Review (Target: < 30 minutes)
+1. Open repair → **Safety Hold** banner → "Review"
+2. Assess: Is 999 already called? Is property evacuated?
+3. If not already done → **Call appropriate emergency service**
+4. Select qualified emergency contractor (Gas Safe, NICEIC, etc.)
+5. Add mandatory clearance note
+6. **Clear Hold** → Repair becomes **Emergency** priority
+
+### 3. Emergency Assignment
+- Only contractors with **emergency availability** and **correct certifications** shown
+- Contractor must **acknowledge within 30 minutes**
+- SLA: **On site within 2–4 hours** (gas: 1 hour)
+- Contractor receives: Property access, tenant contact, safety notes
+
+### 4. On Site & Resolution
+- Contractor updates: En Route → On Site → Completed
+- **Photos mandatory** for emergency repairs
+- If further danger found → New Safety Latch triggered
+- Completion notes must include: Cause, fix, certification references
+
+### 5. Post-Emergency
+- Safety Officer reviews within 24 hours
+- Tenant welfare check (automated prompt)
+- Compliance certificates updated (Gas Safe, EICR, etc.)
+- Incident logged in **Reports → Safety Incidents**
+
+## Specific Emergency Protocols
+
+### Gas Leak / Carbon Monoxide
+1. **Tenant instruction (auto-sent):** "Open windows, don't use switches, evacuate, call 0800 111 999"
+2. Safety Latch: **Gas Emergency** (highest priority)
+3. Contractor: **Gas Safe registered** (CKR1 for boilers)
+4. Post-fix: Gas Safe certificate uploaded, CO alarm tested
+5. **Never** clear hold without Gas Safe engineer
+
+### Major Water Leak / Flood
+1. Safety Latch: **Water + Electrics** if near electrical
+2. Contractor: **Plumbing + Electrical** (or two contractors)
+3. Priority: Stop water → Make safe → Dry → Repair
+4. Document: Photos of damage, moisture readings
+5. Insurance: Auto-creates claim reference if enabled
+
+### Fire Damage
+1. **999 first** — MaintenanceOS never delays fire response
+2. Safety Latch: **Fire Safety** (structural, electrical, smoke)
+3. Contractor: **Fire restoration specialist** + **Structural engineer** if needed
+4. Post-fix: Fire risk assessment review, EICR, building control notification
+
+### Structural Instability
+1. Safety Latch: **Structural**
+2. **Evacuate if imminent risk** — 999
+3. Contractor: **Structural engineer** + **Groundworks**
+4. Building Control notification required
+5. No re-entry until engineer certifies safe
+
+### No Heating in Winter (Oct–Mar)
+1. Safety Latch: **Winter Heating** (if tenant vulnerable)
+2. Contractor: **Gas Safe / OFTEC** (heating engineer)
+3. SLA: **4 hours** (vulnerable), **24 hours** (standard)
+4. Temporary heaters provided if >24 hours (policy dependent)
+
+## Out-of-Hours Coverage
+
+**Standard plans:** Emergency contractor network with 24/7 availability
+- Contractors opt-in to emergency rota
+- Rota managed in Settings → Contractors → Emergency Rota
+- Escalation: Primary → Secondary → On-call Manager
+
+**Professional/Enterprise:** Dedicated 24/7 support desk option
+
+## Emergency Spend Authority
+
+| Role | Limit (per repair) | Approval |
+|------|-------------------|----------|
+| Safety Officer | £2,000 | Self-authorised (note required) |
+| Admin | £5,000 | Self-authorised |
+| Manager | £500 | Requires Admin approval |
+| Auto-approve (config) | £250 | None |
+
+**Above limits:** Emergency authorisation via Slack/Teams/email to Admin — reply "APPROVE [amount]" within 15 minutes.
+
+## Communication Templates
+
+**Tenant notification (auto):**
+> "EMERGENCY REPAIR: We've received a report of [issue] at your property. Emergency services [have been/are being] contacted. A qualified contractor will attend within [timeframe]. Your safety is our priority. Reply HELP for assistance."
+
+**Contractor brief (auto):**
+> "EMERGENCY JOB: [Property address] — [Issue description]. Safety Latch: [type]. Tenant: [name, phone, vulnerability flags]. Access: [instructions]. Required cert: [Gas Safe/NICEIC/etc.]. Target on-site: [time]. Reply ACK to accept."
+
+## After-Action Review
+
+Every emergency repair triggers a review (within 7 days):
+1. Timeline reconstruction
+2. Communication effectiveness
+3. Contractor performance
+4. Tenant outcome
+5. Process improvements
+6. Record in **Reports → Safety Incidents → After-Action**
+
+## Next Steps
+
+- [Setting Up Emergency Rota](./emergency-rota)
+- [Emergency Spend Configuration](./emergency-spend)
+- [Tenant Emergency Communication](./tenant-emergency-comms)
+- [Insurance Claims from Emergencies](./emergency-insurance)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

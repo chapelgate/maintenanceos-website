@@ -1,0 +1,132 @@
+---
+slug: hmocompliance
+title: "HMO Licensing & Compliance"
+description: "Manage Houses in Multiple Occupation licences, mandatory conditions, and council inspections."
+date: "2025-01-25"
+author: "WorkSmartOS Team"
+category: "Compliance"
+tags: ["hmo", "licensing", "mandatory-conditions", "council-inspection", "fire-safety"]
+---
+
+# HMO Licensing & Compliance
+
+Houses in Multiple Occupation (HMOs) require mandatory licensing and compliance with enhanced standards. MaintenanceOS tracks licences, conditions, and inspection readiness.
+
+## What Counts as an HMO
+
+**Mandatory licensing (England & Wales):**
+- 5+ occupants forming 2+ households
+- 3+ storeys (pre-2018 definition — some councils still apply)
+
+**Additional licensing (council-specific):**
+- Some councils license all HMOs regardless of size
+- Check local scheme — MaintenanceOS flags by postcode
+
+**Selective licensing (area-based):**
+- All rental properties in designated areas
+- Not HMO-specific but same tracking
+
+## Licence Tracking
+
+Each HMO property → HMO tab:
+- Licence number + issuing council
+- Issue date + expiry date (typically 5 years)
+- Licence holder (must be "fit and proper person")
+- Maximum permitted occupants
+- **Auto-warning:** 6 months before expiry
+
+## Mandatory Licence Conditions
+
+Every HMO licence includes these conditions (Housing Act 2004):
+
+### 1. Gas Safety
+- Annual gas safety check (CP12)
+- Copy to council on request
+
+### 2. Electrical Safety
+- 5-yearly EICR (Electrical Installation Condition Report)
+- Portable appliance testing (PAT) recommended annually
+
+### 3. Fire Safety
+- Working smoke alarms (Grade D, LD2 coverage)
+- Heat detector in kitchen
+- Fire doors (FD30s) on risk rooms
+- Fire blanket in kitchen
+- Emergency lighting (if 3+ storeys)
+- Fire risk assessment (annual review)
+
+### 4. Amenities Standards
+- Sufficient bathrooms/WCs for occupants
+- Sufficient kitchen facilities
+- Adequate heating, ventilation, lighting
+
+### 5. Management Standards
+- Manager contact details displayed
+- Repair reporting system
+- Refuse storage / collection
+- Anti-social behaviour procedure
+
+### 6. Room Sizes (England)
+- Single room: ≥6.51m² (1 person), ≥10.22m² (2 persons)
+- Double room: ≥10.22m²
+- Under-10 rooms: ≥4.64m² (not counted for max occupancy)
+
+## Condition Monitoring
+
+MaintenanceOS creates **compliance tasks** for each condition:
+- Gas safety → Annual task
+- EICR → 5-yearly task
+- Fire risk assessment → Annual task
+- Smoke alarm test → Monthly task (contractor/tenant)
+- Fire door inspection → Quarterly task
+
+**Dashboard:** Compliance → HMO Conditions
+- Green: Current
+- Amber: Due within 30 days
+- Red: Overdue
+
+## Council Inspections
+
+**Pre-inspection checklist** (auto-generated 2 weeks before):
+- All certificates current
+- Fire risk assessment reviewed
+- Room sizes verified
+- Amenities adequate
+- Management records up to date
+- Tenant feedback log available
+
+**During inspection:**
+- Council officer may request MaintenanceOS access (read-only)
+- Use **Inspection Mode** → Generates compliance pack (PDF)
+
+**Post-inspection:**
+- Upload inspection report
+- Track required actions with deadlines
+- Evidence completion → Council sign-off
+
+## Licence Renewal
+
+Start 6 months before expiry:
+1. Council application (MaintenanceOS provides data export)
+2. Fit and proper person declaration
+3. Updated fire risk assessment
+4. Current gas/EICR certificates
+5. Fee payment (varies by council, typically £500–£2,000)
+
+## Penalties for Non-Compliance
+
+- **Civil penalty:** Up to £30,000 per offence
+- **Rent repayment order:** Up to 12 months' rent
+- **Banning order:** Prevents letting
+- **Criminal prosecution:** Unlimited fine
+
+## Next Steps
+
+- [Fire Risk Assessments for HMOs](./hmo-fire-risk)
+- [Room Size Calculator](./hmo-room-sizes)
+- [Council-Specific Requirements](./hmo-council-schemes)
+- [Tenant Management in HMOs](./hmo-tenant-management)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*
