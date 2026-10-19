@@ -101,6 +101,9 @@ export default function SecurityPage() {
         />
 
         <p className="mt-4 text-sm text-muted">
+          <strong>Cyber Essentials: PLANNED (target Q2 2027)</strong> — certification has not been achieved
+        </p>
+        <p className="mt-4 text-sm text-muted">
           <a href="/vulnerability-disclosure/" className="underline hover:text-accent">
             Vulnerability disclosure page
           </a>
