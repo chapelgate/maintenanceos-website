@@ -11,10 +11,10 @@
 - [x] Run `npm run lint` — lint passes (only pre-existing warnings)
 - [x] Run `npm run build` — build passes
 - [x] Run `npm test` — tests pass (except pre-existing failures)
-- [ ] Create specs folder with spec.md, plan.md, tasks.md
-- [ ] Commit changes
-- [ ] Push branch and create PR
-- [ ] Wait for CI checks (estate-gate, validate, webkit-a11y)
-- [ ] Merge PR when all checks pass
-- [ ] Verify live acceptance on https://worksmartos.co.uk/trust/
-- [ ] Update IMPL_STATE.md with PR number and merge SHA
+- [x] Create specs folder with spec.md, plan.md, tasks.md
+- [x] Commit changes
+- [x] Push branch and create PR
+- [x] Wait for CI checks (estate-gate, validate, webkit-a11y)
+- [x] Merge PR when all checks pass
+- [x] Verify live acceptance on https://worksmartos.co.uk/trust/
+- [x] Update IMPL_STATE.md with PR number and merge SHA
