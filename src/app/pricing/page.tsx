@@ -1,8 +1,10 @@
 import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
+import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { getPricingConfig } from "@/config/pricing";
 import { contentPageMetadata } from "@/lib/page-meta";
+import { pricingPageProductJsonLd } from "@/lib/json-ld";
 
 export const metadata = contentPageMetadata({
   title: "Pricing",
@@ -28,6 +30,7 @@ export default function PricingPage() {
 
   return (
     <>
+      <JsonLd data={pricingPageProductJsonLd()} />
       <PageHero
         eyebrow={pricing.eyebrow || undefined}
         title={pricing.title}

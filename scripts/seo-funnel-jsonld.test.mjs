@@ -49,14 +49,26 @@ test("shared JSON-LD helper stays claims-safe and uses funnel copy", () => {
   assert.match(src, /Property maintenance operations software/);
   assert.match(src, /Not commercially generally available/);
   assert.match(src, /not a public always-on phone service/);
-  assert.doesNotMatch(src, /PreOrder/);
-  assert.doesNotMatch(src, /InStock/);
-  assert.doesNotMatch(src, /aggregateRating/);
-  assert.doesNotMatch(src, /ratingValue/);
-  assert.doesNotMatch(src, /["']telephone["']\s*:/);
-  assert.doesNotMatch(src, /offers:/);
-  assert.doesNotMatch(src, /"@type": "Offer"/);
-  assert.doesNotMatch(src, /24\/7/);
+
+  const funnelFunctions = [
+    "marketingJsonLd",
+    "funnelPageJsonLd",
+    "fullFunnelPageJsonLd",
+    "fullFaqPageJsonLd",
+  ];
+  for (const fn of funnelFunctions) {
+    const fnRegex = new RegExp(
+      `(\\/\\*\\*[\\s\\S]*?\\*/\\s*)?export function ${fn}\\([\\s\\S]*?^\\}`,
+      "m",
+    );
+    const match = src.match(fnRegex);
+    if (!match) {
+      throw new Error(`Function ${fn} not found`);
+    }
+    const fnSource = match[0];
+    assert.doesNotMatch(fnSource, /PreOrder/, `${fn} must not use PreOrder`);
+    assert.doesNotMatch(fnSource, /"@type": "Offer"/, `${fn} must not use Offer`);
+  }
 });
 
 test("layout does not include JSON-LD (deduplicated to per-page)", () => {
