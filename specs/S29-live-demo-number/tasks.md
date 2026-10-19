@@ -11,8 +11,8 @@
 - [x] Run `npm run lint` — lint passes (only pre-existing warnings)
 - [x] Run `npm run build` — build passes
 - [x] Run `npm test` — tests pass (except pre-existing failures)
-- [ ] Commit changes
-- [ ] Push branch and create PR
+- [x] Commit changes
+- [x] Push branch and create PR
 - [ ] Wait for CI checks (estate-gate, validate, webkit-a11y)
 - [ ] Merge PR when all checks pass
 - [ ] Verify live acceptance on https://worksmartos.co.uk/ and https://worksmartos.co.uk/create/
