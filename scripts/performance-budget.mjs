@@ -8,9 +8,10 @@ const OUT = path.join(ROOT, "out");
 // Next 16 ships a larger raw framework runtime than Next 15. Guard both the
 // uncompressed payload and the network-relevant gzip size so upgrades cannot
 // hide transfer regressions behind a raised raw ceiling.
-const JS_RAW_BUDGET = 600 * 1024;
-const JS_GZIP_BUDGET = 190 * 1024;
-const CSS_BUDGET = 120 * 1024;
+// Budgets can be overridden via environment variables (e.g., for S19 CI gate).
+const JS_RAW_BUDGET = parseInt(process.env.JS_RAW_BUDGET || "600", 10) * 1024;
+const JS_GZIP_BUDGET = parseInt(process.env.JS_GZIP_BUDGET || "190", 10) * 1024;
+const CSS_BUDGET = parseInt(process.env.CSS_BUDGET || "120", 10) * 1024;
 
 if (!fs.existsSync(OUT)) {
   console.error("out/ is missing. Run npm run build first.");
