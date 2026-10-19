@@ -7,10 +7,10 @@
 - [x] Run `npm run build` - PASS
 - [x] Run link/sitemap checks
 - [x] Create spec artifact files (spec.md, plan.md, tasks.md)
-- [ ] Commit and push changes
-- [ ] Open PR with Estate headers
-- [ ] Wait for CI checks (estate-gate, validate, webkit-a11y) to pass
-- [ ] Merge PR when all checks green
-- [ ] Verify live acceptance test against https://worksmartos.co.uk
+- [x] Commit and push changes
+- [x] Open PR with Estate headers
+- [x] Wait for CI checks (estate-gate, validate, webkit-a11y) to pass
+- [x] Merge PR when all checks green
+- [x] Verify live acceptance test against https://worksmartos.co.uk
 
 (End of file - total 14 lines)
