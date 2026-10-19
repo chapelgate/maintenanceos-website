@@ -120,7 +120,7 @@ test("contact, about, and faq stay professional and claims-safe", () => {
   assert.doesNotMatch(about, /our team of \d+/i);
   assert.doesNotMatch(about, /trusted by/i);
 
-  assert.match(faq, /name="mos-site-faq"/);
+  assert.match(faq, /FaqAccordion/);
   assert.match(faq, /Not a live (public )?phone/);
 });
 
