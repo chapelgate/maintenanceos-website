@@ -14,6 +14,26 @@ test("rendered pricing copy says invented list prices at most once", () => {
   assert.doesNotMatch(page, /\n {2}const notSoldAsLive/);
 });
 
+test("pricing config has 3 tiers defined for published mode", () => {
+  // Check that published.tiers array has 3 entries
+  const tiersMatch = config.match(/tiers:\s*\[([\s\S]*?)\]\s+as\s+PricingTier\[\]/);
+  assert.ok(tiersMatch, "published.tiers array not found");
+  const tiersContent = tiersMatch[1];
+  // Count tier objects (each has an 'id' property)
+  const tierIds = tiersContent.match(/id:\s*["']([^"']+)["']/g) ?? [];
+  assert.equal(tierIds.length, 3, `expected 3 tiers, found ${tierIds.length}`);
+  const expectedIds = ["starter", "professional", "enterprise"];
+  for (const id of expectedIds) {
+    assert.ok(tiersContent.includes(`id: "${id}"`), `tier ${id} not found`);
+  }
+});
+
+test("pricing page has TierCard component for rendering tiers", () => {
+  assert.match(page, /function TierCard/);
+  assert.match(page, /pricing\.tiers\.map/);
+  assert.match(page, /showTiers/);
+});
+
 test("pricing page static output contains h1 heading", () => {
   const html = fs.readFileSync("out/pricing/index.html", "utf8");
   assert.match(html, /<h1[^>]*>Pricing<\/h1>/);
