@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { JsonLd } from "@/components/JsonLd";
 import { PreLaunchBanner } from "@/components/PreLaunchBanner";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -11,9 +11,11 @@ import { buildRootMetadata } from "@/lib/page-meta";
 import { contentSecurityPolicy } from "@/lib/static-security-headers";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "600"],
+const inter = localFont({
+  src: [
+    { path: "../../public/fonts/Inter-Regular.woff2", weight: "400" },
+    { path: "../../public/fonts/Inter-Medium.woff2", weight: "600" },
+  ],
   variable: "--font-inter",
   display: "swap",
   preload: false,
