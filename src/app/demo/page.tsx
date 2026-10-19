@@ -5,7 +5,7 @@ import { FeatureStatusChip } from "@/components/FeatureStatusChip";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { funnelPageJsonLd } from "@/lib/json-ld";
+import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 
@@ -14,7 +14,7 @@ export const metadata = funnelPageMetadata("demo");
 export default function DemoPage() {
   return (
     <>
-      <JsonLd data={funnelPageJsonLd("demo")} />
+      <JsonLd data={fullFunnelPageJsonLd("demo")} />
       <PageHero
         eyebrow="Preview"
         title="Start from your website URL."

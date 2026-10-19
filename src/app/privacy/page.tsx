@@ -5,6 +5,8 @@ import {
   CREATE_INGEST_PRIVACY_ANCHOR,
   CREATE_INGEST_PRIVACY_NOTE,
 } from "@/lib/create-ingest-privacy";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -110,6 +112,11 @@ const sections: { id: string; title: string; body: string }[] = [
 export default function PrivacyPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/privacy/", "Privacy Policy (Draft)", "Draft privacy notice scaffold for the WorkSmartOS website. Pending legal review — not final policy.", [
+          { name: "Privacy", path: "/privacy/" },
+        ])}
+      />
       <PageHero
         eyebrow="Legal · Draft"
         title="Privacy Policy (Draft)"

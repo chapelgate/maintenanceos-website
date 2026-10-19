@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { PageHero } from "@/components/PageHero";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
@@ -14,6 +16,11 @@ export const metadata: Metadata = contentPageMetadata({
 export default function ContactPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/contact/", "Contact", "Direct enquiries about MaintenanceOS. A person will reply. Pre-launch.", [
+          { name: "Contact", path: "/contact/" },
+        ])}
+      />
       <PageHero
         eyebrow="Pre-launch"
         title="Talk to a person"

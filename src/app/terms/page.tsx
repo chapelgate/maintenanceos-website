@@ -1,6 +1,8 @@
 import { LegalDraftBanner } from "@/components/LegalDraftBanner";
 import { LegalPageChrome } from "@/components/LegalPageChrome";
 import { PageHero } from "@/components/PageHero";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -96,6 +98,11 @@ const sections: { id: string; title: string; body: string }[] = [
 export default function TermsPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/terms/", "Terms (Draft)", "Draft website terms of use scaffold for the WorkSmartOS website. Pending legal review — not binding policy.", [
+          { name: "Terms", path: "/terms/" },
+        ])}
+      />
       <PageHero
         eyebrow="Legal · Draft"
         title="Terms (Draft)"

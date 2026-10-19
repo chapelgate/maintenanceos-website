@@ -181,3 +181,146 @@ export function faqPageJsonLd(): JsonLdRecord {
     })),
   };
 }
+
+/**
+ * Build a complete single JSON-LD graph for a funnel page including
+ * Organization, WebSite, WebPage, SoftwareApplication, and BreadcrumbList.
+ * This replaces the dual-block pattern (layout marketingJsonLd + page funnelPageJsonLd).
+ */
+export function fullFunnelPageJsonLd(page: FunnelJsonLdPage): JsonLdRecord {
+  const copy = funnelPageCopy[page];
+  const url = absoluteUrl(copy.path);
+  const name =
+    "absoluteTitle" in copy && copy.absoluteTitle
+      ? copy.absoluteTitle
+      : copy.title;
+
+  const breadcrumbItems = [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+  ];
+
+  if (page !== "home") {
+    const labelMap: Record<FunnelJsonLdPage, string> = {
+      home: "Home",
+      create: "Try Website Set-up",
+      demo: "Request an Early Demo",
+      howItWorks: "How It Works",
+      features: "Features",
+      propertyMaintenanceSoftware: "Property Maintenance Software",
+    };
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: 2,
+      name: labelMap[page],
+      item: url,
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationNode(),
+      websiteNode(),
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name,
+        description: copy.description,
+        inLanguage: siteConfig.locale,
+        isPartOf: { "@id": websiteId() },
+        about: { "@id": softwareId() },
+        publisher: { "@id": orgId() },
+      },
+      softwareApplicationNode(),
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbItems,
+      },
+    ],
+  };
+}
+
+/**
+ * Build a complete single JSON-LD graph for a content page including
+ * Organization, WebSite, WebPage, and BreadcrumbList.
+ */
+export function contentPageJsonLd(
+  path: string,
+  title: string,
+  description: string,
+  breadcrumbLabels: Array<{ name: string; path: string }>
+): JsonLdRecord {
+  const url = absoluteUrl(path);
+  const breadcrumbItems = [
+    { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+  ];
+
+  breadcrumbLabels.forEach((item, index) => {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: index + 2,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    });
+  });
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationNode(),
+      websiteNode(),
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: title,
+        description,
+        inLanguage: siteConfig.locale,
+        isPartOf: { "@id": websiteId() },
+        publisher: { "@id": orgId() },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbItems,
+      },
+    ],
+  };
+}
+
+/**
+ * Build a complete single JSON-LD graph for the FAQ page including
+ * Organization, WebSite, FAQPage, and BreadcrumbList.
+ */
+export function fullFaqPageJsonLd(): JsonLdRecord {
+  const url = absoluteUrl("/faq/");
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationNode(),
+      websiteNode(),
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        url,
+        name: "MaintenanceOS frequently asked questions",
+        isPartOf: { "@id": websiteId() },
+        mainEntity: faqItems.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+          { "@type": "ListItem", position: 2, name: "FAQ", item: url },
+        ],
+      },
+    ],
+  };
+}

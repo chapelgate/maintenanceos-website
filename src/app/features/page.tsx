@@ -13,7 +13,7 @@ import {
   UNDER_TEST_GROUP_HONESTY,
   type MarketingCardStatus,
 } from "@/config/phone-ai-features";
-import { funnelPageJsonLd } from "@/lib/json-ld";
+import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("features");
@@ -113,7 +113,7 @@ export default function FeaturesPage() {
 
   return (
     <>
-      <JsonLd data={funnelPageJsonLd("features")} />
+      <JsonLd data={fullFunnelPageJsonLd("features")} />
       <PageHero
         eyebrow="Capability map · Pre-launch"
         title="What MaintenanceOS can do — and what is in preview"

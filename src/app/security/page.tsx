@@ -2,6 +2,8 @@ import { BentoCard } from "@/components/BentoCard";
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -14,6 +16,11 @@ export const metadata = contentPageMetadata({
 export default function SecurityPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/security/", "Security and Data Separation", "How MaintenanceOS keeps organisation records separate, enforces boundaries, and records actions. No certifications claimed. Pre-launch.", [
+          { name: "Security", path: "/security/" },
+        ])}
+      />
       <PageHero
         eyebrow="Trust · Pre-launch"
         title="How we keep your data separate and your actions on record"

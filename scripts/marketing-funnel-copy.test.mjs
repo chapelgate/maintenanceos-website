@@ -316,8 +316,9 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
   assert.doesNotMatch(faqs, /your number is ready/i);
   assert.doesNotMatch(faqs, /commercially generally available now/i);
 
-  assert.match(page, /faqItems/);
-  assert.match(page, /faqPageJsonLd\(\)/);
+  assert.match(page, /productFaqItems/);
+  assert.match(page, /safetyFaqItems/);
+  assert.match(page, /fullFaqPageJsonLd\(\)/);
   assert.match(
     page,
     /website URL .* website learning .* review .* configure .* browser voice preview .* optional save/,

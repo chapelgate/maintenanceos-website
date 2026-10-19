@@ -4,8 +4,8 @@ import { CtaPair } from "@/components/CtaPair";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { faqItems, productFaqItems, safetyFaqItems } from "@/content/faqs";
-import { faqPageJsonLd } from "@/lib/json-ld";
+import { productFaqItems, safetyFaqItems } from "@/content/faqs";
+import { fullFaqPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
@@ -18,7 +18,7 @@ export const metadata: Metadata = contentPageMetadata({
 export default function FaqPage() {
   return (
     <>
-      <JsonLd data={faqPageJsonLd()} />
+      <JsonLd data={fullFaqPageJsonLd()} />
       <PageHero
         title="Frequently asked questions"
         lede="The preview follows: website URL → website learning → review → configure → browser voice preview → optional save. Not a live phone, no invented facts, and no cert theatre."
