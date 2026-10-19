@@ -30,15 +30,9 @@ export default function SubprocessorsPage() {
           <table className="w-full rounded border-border border caption-bottom">
             <thead>
               <tr>
-                <th className="text-left text-sm font-semibold text-muted pb-2">
-                  Subprocessor
-                </th>
-                <th className="text-left text-sm font-semibold text-muted pb-2">
-                  Location
-                </th>
-                <th className="text-left text-sm font-semibold text-muted pb-2">
-                  Transfer Mechanism
-                </th>
+<th className="text-left text-sm font-semibold text-muted pb-2">Subprocessor</th>
+                <th className="text-left text-sm font-semibold text-muted pb-2">Location</th>
+                <th className="text-left text-sm font-semibold text-muted pb-2">Transfer Mechanism</th>
               </tr>
             </thead>
             <tbody>
