@@ -24,9 +24,9 @@
 - Build output shows 27 help routes (1 index + 26 articles)
 
 ## Next Steps
-- [ ] Commit changes
-- [ ] Push to origin
-- [ ] Create PR with estate-gate preflight
-- [ ] Wait for CI (estate-gate, validate, webkit-a11y)
+- [x] Commit changes
+- [x] Push to origin
+- [x] Create PR with estate-gate preflight
+- [x] Wait for CI (estate-gate, validate, webkit-a11y)
 - [ ] Merge when all checks green
 - [ ] Verify live deployment
