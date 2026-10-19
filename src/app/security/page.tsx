@@ -105,6 +105,11 @@ export default function SecurityPage() {
             Vulnerability disclosure page
           </a>
         </p>
+        <p className="mt-4 text-sm text-muted">
+          <a href="/subprocessors/" className="underline hover:text-accent">
+            Subprocessor page
+          </a>
+        </p>
       </section>
     </>
   );
