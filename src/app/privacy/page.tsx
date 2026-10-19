@@ -63,7 +63,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "The website is hosted and processed by DigitalOcean. Transfers of personal data outside the UK/EEA are covered by the UK IDTA / UK Addendum. No third-party analytics vendor is used.",
+    body: "The website is hosted and processed by DigitalOcean. Transfers of personal data outside the UK/EEA are covered by the UK IDTA / UK Addendum. No third-party analytics vendor is used. For a full list of subprocessors, see the <a href=\"/subprocessors/\" className=\"text-accent underline\">Subprocessor page</a>.",
   },
   {
     id: "transfers",
