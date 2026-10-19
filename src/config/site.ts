@@ -153,6 +153,7 @@ export const footerNav = {
     { href: "/faq/", label: "FAQ" },
     { href: "/status/", label: "Status" },
     { href: "/accessibility/", label: "Accessibility" },
+    { href: "/trust/", label: "Trust & verification" },
   ],
   legal: [
     { href: "/privacy/", label: "Privacy" },

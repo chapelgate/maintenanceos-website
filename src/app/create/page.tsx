@@ -131,6 +131,18 @@ export default function CreateReceptionistPage() {
             </a>
             .
           </p>
+          <p className="mt-3">
+            See our{" "}
+            <a
+              href="/trust/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Trust & verification
+            </a>
+            {" "}
+            page for legal entity, DPIA status, recording disclosure, and
+            certification facts.
+          </p>
         </section>
       </div>
     </>
