@@ -146,6 +146,7 @@ export const footerNav = {
     { href: "/security/", label: "Security" },
     { href: "/industries/", label: "All sectors" },
     { href: "/pricing/", label: "Pricing" },
+    { href: "/compare/", label: "Compare alternatives" },
   ],
   company: [
     { href: "/about/", label: "About" },
