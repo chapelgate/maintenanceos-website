@@ -69,6 +69,7 @@ test("JSON-LD names Chapelgate Technologies and ReceptionistOS is only coming so
   assert.deepEqual(
     hits.map((file) => file.split(path.sep).join("/")).sort(),
     [
+      "public/.well-known/ai.txt",
       "public/llms-full.txt",
       "public/llms.txt",
       "src/components/ProductLine.tsx",
