@@ -13,10 +13,10 @@
 - [x] Run `npm test` — tests pass (except pre-existing failures)
 - [x] Commit changes
 - [x] Push branch and create PR
-- [ ] Wait for CI checks (estate-gate, validate, webkit-a11y)
-- [ ] Merge PR when all checks pass
-- [ ] Verify live acceptance on https://worksmartos.co.uk/ and https://worksmartos.co.uk/create/
-- [ ] Update IMPL_STATE.md with PR number and merge SHA
+- [x] Wait for CI checks (estate-gate, validate, webkit-a11y)
+- [x] Merge PR when all checks pass
+- [x] Verify live acceptance on https://worksmartos.co.uk/ and https://worksmartos.co.uk/create/
+- [x] Update IMPL_STATE.md with PR number and merge SHA
 
 ## Notes
 - PR body must begin with Estate-Preflight, Estate-Route, Estate-Artifact, Estate-Converged headers
