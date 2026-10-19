@@ -99,6 +99,12 @@ export default function SecurityPage() {
           secondaryHref="/how-we-keep-control/"
           secondaryLabel="See the safety rules"
         />
+
+        <p className="mt-4 text-sm text-muted">
+          <a href="/vulnerability-disclosure/" className="underline hover:text-accent">
+            Vulnerability disclosure page
+          </a>
+        </p>
       </section>
     </>
   );
