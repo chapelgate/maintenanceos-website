@@ -1,0 +1,8 @@
+- [ ] Create `public/.well-known/` directory
+- [ ] Create `public/.well-known/security.txt` with Contact field
+- [ ] Run `npm run build` - verify no regressions
+- [ ] Commit and push
+- [ ] Create PR with required Estate headers
+- [ ] Wait for CI (estate-gate, validate, webkit-a11y)
+- [ ] Merge PR
+- [ ] Run acceptance test: `curl -f https://worksmartos.co.uk/.well-known/security.txt | grep -q "Contact:"`
