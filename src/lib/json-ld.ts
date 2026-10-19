@@ -324,3 +324,50 @@ export function fullFaqPageJsonLd(): JsonLdRecord {
     ],
   };
 }
+
+/**
+ * Product JSON-LD for /pricing/ — pre-launch, honest signal only.
+ * priceSpecification is null (no list price published).
+ * availability is PreOrder (not generally available).
+ */
+export function pricingPageProductJsonLd(): JsonLdRecord {
+  const url = absoluteUrl("/pricing/");
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationNode(),
+      websiteNode(),
+      {
+        "@type": "Product",
+        "@id": `${url}#product`,
+        url,
+        name: "WorkSmartOS MaintenanceOS",
+        alternateName: "MaintenanceOS",
+        description:
+          "Pre-launch UK maintenance operations software with AI-assisted intake. The AI receptionist capability is under testing. Fixed rules and authorised human clearance keep control of safety and money. Not commercially generally available; not a public always-on phone service.",
+        brand: {
+          "@type": "Brand",
+          name: "WorkSmartOS",
+        },
+        category: "BusinessApplication",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        offers: {
+          "@type": "Offer",
+          url,
+          availability: "https://schema.org/PreOrder",
+          priceSpecification: null,
+          seller: { "@id": orgId() },
+        },
+        publisher: { "@id": orgId() },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+          { "@type": "ListItem", position: 2, name: "Pricing", item: url },
+        ],
+      },
+    ],
+  };
+}
