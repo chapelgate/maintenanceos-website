@@ -76,9 +76,8 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
   assert.match(globals, /--glow-white:\s*#eff6ff/i);
   assert.match(globals, /--color-info:\s*#0369a1/i);
   assert.match(globals, /--color-warn:\s*#92400e/i);
-  assert.match(globals, /--color-warning-border:\s*#f59e0b/i);
   assert.match(globals, /--color-paper:\s*#f8fafc/i);
-  assert.match(globals, /outline: 2px solid var\(--color-accent\)/);
+  assert.match(globals, /outline: var\(--mos-focus-ring\)/);
   assert.doesNotMatch(globals, /--glow-amber|--glow-peach|--color-accent:\s*#b45309/i);
   assert.doesNotMatch(globals, /#5eead4|#c4b5fd|#7dd3fc|#0b1224|#14b8a6|#8b5cf6|#07090f/i);
   assert.doesNotMatch(globals, /conic-gradient/);

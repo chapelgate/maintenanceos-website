@@ -101,7 +101,7 @@ test("product-tour player is click-to-play and static-export safe", () => {
 
   assert.match(css, /\.product-tour-card/);
   assert.match(css, /\.product-tour-card video:focus-visible/);
-  assert.match(css, /outline:\s*3px solid var\(--color-accent\)/);
+  assert.match(css, /outline: var\(--mos-focus-ring\)/);
   assert.match(css, /border-radius: 12px/);
   assert.match(css, /accent-color: var\(--color-accent\)/);
 

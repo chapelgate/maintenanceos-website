@@ -99,7 +99,7 @@ test("/create primary next actions stay in DOM order and are marked", () => {
   const globals = read("src/app/globals.css");
   assert.equal((form.match(/data-create-primary-action=""/g) || []).length, 5);
   assert.match(globals, /button:focus-visible/);
-  assert.match(globals, /outline: 2px solid var\(--color-accent\)/);
+  assert.match(globals, /outline: var\(--mos-focus-ring\)/);
 });
 
 test("empty hours and services stay textual for AT", () => {

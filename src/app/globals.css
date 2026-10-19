@@ -8,45 +8,26 @@
  */
 :root {
   /* Chapelgate Mandatory Design System matching https://chapelgate-technologies-site-nciy8.ondigitalocean.app */
-  --bg: #0A1728;
-  --card: #112A40;
-  --card2: #0E2236;
-  --cyan: #67E8F9;
-  --text: #E6EEF6;
-  --muted: #A9B8C9;
-  --line: rgba(103, 232, 249, 0.16);
-  --r: 14px;
+  --color-ink: #0F172A;
+  --color-muted: #475569;
+  --color-paper: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-accent: #1D4ED8;
+  --color-accent-hover: #1E40AF;
+  --color-accent-subtle: #DBEAFE;
+  --color-on-accent: #FFFFFF;
 
-  /* Theme tokens */
-  --color-ink: var(--text);
-  --color-muted: var(--muted);
-  --color-paper: var(--bg);
-  --color-surface: var(--card);
-  --color-surface-secondary: var(--card2);
-  --color-border: var(--line);
-  --color-accent: var(--cyan);
-  --color-accent-hover: #A5F3FC;
-  --color-accent-subtle: rgba(103, 232, 249, 0.12);
-  --color-on-accent: #0A1728;
+  /* Blue glow only — dark #3B82F6 → sky → white */
+  --glow-blue: #3B82F6;
+  --glow-sky: #60A5FA;
+  --glow-white: #EFF6FF;
 
-  /* Functional */
-  --color-ok: #15803d;
-  --color-warn: #92400e;
-  --color-critical: #b91c1c;
-  --color-info: #0369a1;
-  --color-warning-bg: #112A40;
-  --color-warning-border: #f59e0b;
-  --color-warning-text: #E6EEF6;
-
-  /* Radii & Elevation */
-  --mos-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
-  --mos-radius: 10px;
-  --mos-radius-lg: 14px;
-  --mos-duration: 150ms;
-  --mos-duration-slow: 200ms;
-  --mos-duration-menu: 200ms;
-  --mos-duration-panel: 220ms;
-  --mos-easing: ease;
+  /* Functional — never colour-only. Warn stays warm; info ≠ accent. */
+  --color-ok: #15803D;
+  --color-warn: #92400E;
+  --color-critical: #B91C1C;
+  --color-info: #0369A1;
 
   /* Aliases matching UI_VISUAL_SYSTEM --mos-* names */
   --mos-ink: var(--color-ink);
@@ -58,8 +39,27 @@
   --mos-accent-hover: var(--color-accent-hover);
   --mos-accent-subtle: var(--color-accent-subtle);
   --mos-on-accent: var(--color-on-accent);
+  --mos-glow-blue: var(--glow-blue);
+  --mos-glow-sky: var(--glow-sky);
+  --mos-glow-white: var(--glow-white);
+  --mos-ok: var(--color-ok);
+  --mos-warn: var(--color-warn);
+  --mos-critical: var(--color-critical);
+  --mos-info: var(--color-info);
 
-  /* Legacy references: --color-paper: #f8fafc; --color-accent: #1d4ed8; --color-accent-hover: #1e40af; --color-accent-subtle: #dbeafe; --glow-blue: #3b82f6; --glow-sky: #60a5fa; --glow-white: #eff6ff; */
+  /* Radii & Elevation */
+  --mos-shadow: 0 1px 2px rgb(15 23 42 / 6%), 0 8px 24px rgb(15 23 42 / 6%);
+  --mos-radius: 8px;
+  --mos-radius-lg: 12px;
+  --mos-duration: 150ms;
+  --mos-duration-slow: 200ms;
+  --mos-duration-menu: 200ms;
+  --mos-duration-panel: 220ms;
+  --mos-easing: ease;
+
+  /* Focus */
+  --mos-focus-ring: 2px solid var(--mos-accent);
+  --mos-focus-offset: 2px;
 }
 
 @theme inline {
@@ -72,9 +72,10 @@
   --color-muted: var(--color-muted);
   --color-border: var(--color-border);
   --color-surface: var(--color-surface);
-  --color-surface-secondary: var(--color-surface-secondary);
-  --color-info: var(--color-info);
+  --color-ok: var(--color-ok);
   --color-warn: var(--color-warn);
+  --color-critical: var(--color-critical);
+  --color-info: var(--color-info);
   --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -95,9 +96,9 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font: 17px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: 17px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 h1, h2, h3 {
@@ -116,8 +117,8 @@ h1, h2, h3 {
   position: absolute;
   left: -999px;
   top: 8px;
-  background: var(--cyan);
-  color: var(--bg);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
   padding: 8px 14px;
   border-radius: 8px;
   z-index: 100;
@@ -133,11 +134,10 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 :focus-visible {
-  outline: 3px solid var(--cyan);
-  outline-offset: 3px;
+  outline: var(--mos-focus-ring);
+  outline-offset: var(--mos-focus-offset);
   border-radius: 6px;
 }
-/* outline: 2px solid var(--color-accent); */
 
 .btn {
   display: inline-flex;
@@ -162,33 +162,34 @@ summary:focus-visible,
 }
 
 .btn-p {
-  background: var(--cyan);
-  color: var(--bg);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
 }
 .btn-p:hover {
-  background: #A5F3FC;
+  background: var(--color-accent-hover);
 }
 
 .btn-s {
-  border-color: rgba(230, 238, 246, 0.3);
-  color: var(--text);
+  border-color: var(--color-border);
+  color: var(--color-ink);
 }
 .btn-s:hover {
-  border-color: var(--cyan);
+  border-color: var(--color-accent);
+  background: var(--color-accent-subtle);
 }
 
 .card {
   display: flex;
   gap: 18px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--mos-radius);
   padding: 28px;
   text-decoration: none;
   transition: border-color 0.25s, transform 0.25s;
 }
 a.card:hover {
-  border-color: rgba(103, 232, 249, 0.5);
+  border-color: var(--color-accent);
   transform: translateY(-2px);
 }
 
@@ -198,9 +199,9 @@ a.card:hover {
   height: 44px;
   padding: 10px;
   border-radius: 10px;
-  background: rgba(103, 232, 249, 0.1);
+  background: var(--color-accent-subtle);
   fill: none;
-  stroke: var(--cyan);
+  stroke: var(--color-accent);
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -215,12 +216,12 @@ a.card:hover {
   border: 1px solid;
 }
 .badge.dev {
-  color: var(--cyan);
-  border-color: rgba(103, 232, 249, 0.45);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 .badge.con {
-  color: #CBD5E1;
-  border-color: rgba(203, 213, 225, 0.4);
+  color: var(--color-muted);
+  border-color: var(--color-border);
 }
 
 .band {
@@ -228,8 +229,8 @@ a.card:hover {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 20px;
   padding: 48px;
 }
@@ -245,14 +246,14 @@ a.card:hover {
 }
 .steps li {
   counter-increment: s;
-  background: var(--card2);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--mos-radius);
   padding: 28px;
 }
 .steps li::before {
   content: "0" counter(s);
-  color: var(--cyan);
+  color: var(--color-accent);
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.1em;
@@ -260,25 +261,25 @@ a.card:hover {
 
 /* Bento card, accordion, pipeline, emergency banner */
 .mos-bento-card {
-  border-radius: var(--r);
-  border: 1px solid var(--line);
-  background: var(--card);
+  border-radius: var(--mos-radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   padding: 1.5rem;
   transition: border-color 0.25s, transform 0.25s;
 }
 .mos-bento-card:hover {
-  border-color: rgba(103, 232, 249, 0.4);
+  border-color: var(--color-accent);
 }
 
 .mos-accordion {
-  border-radius: var(--r);
-  border: 1px solid var(--line);
-  background: var(--card);
+  border-radius: var(--mos-radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   padding: 1rem;
   transition: all 0.2s;
 }
 .mos-accordion[open] {
-  background: var(--card2);
+  background: var(--color-paper);
 }
 
 .mos-pipeline {
@@ -287,11 +288,11 @@ a.card:hover {
 }
 
 .mos-emergency-banner {
-  border-radius: var(--r);
-  border: 2px solid rgba(239, 68, 68, 0.3);
-  background: rgba(239, 68, 68, 0.05);
+  border-radius: var(--mos-radius);
+  border: 2px solid var(--color-critical);
+  background: rgb(185 28 28 / 0.05);
   padding: 1.25rem;
-  color: var(--text);
+  color: var(--color-ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -319,8 +320,8 @@ a.card:hover {
 
 /* Native disclosure controls used by SiteHeader */
 summary:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: var(--mos-focus-ring);
+  outline-offset: var(--mos-focus-offset);
 }
 
 /* Screen-reader-only utility */
@@ -371,7 +372,7 @@ summary:focus-visible {
 }
 
 .product-tour-card video:focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: var(--mos-focus-ring);
   outline-offset: -6px;
 }
 
@@ -404,9 +405,9 @@ summary:focus-visible {
 }
 
 .feature-status-chip--under-test {
-  border: 1px solid color-mix(in srgb, var(--color-warn) 35%, var(--color-border));
+  border: 1px solid var(--color-warn);
   background: var(--color-paper);
-  color: #fcd34d;
+  color: var(--color-warn);
 }
 
 /* Compact home role chips — scan only, no new claims. */
@@ -416,7 +417,7 @@ summary:focus-visible {
   align-items: center;
   border: 1px solid var(--color-border);
   border-radius: 999px;
-  background: var(--color-paper);
+  background: var(--color-surface);
   padding: 0.2rem 0.7rem;
   font-size: 0.75rem;
   font-weight: 600;
@@ -425,7 +426,6 @@ summary:focus-visible {
   white-space: nowrap;
   text-wrap: nowrap;
 }
-
 .home-role-chip:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
@@ -433,6 +433,7 @@ summary:focus-visible {
 
 .home-role-chip--all {
   color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .home-trust-chip {
@@ -513,8 +514,7 @@ summary:focus-visible {
 }
 
 .create-step-chrome-bar {
-  /* #0A1728 at 95% so #E6EEF6 and #A9B8C9 clear 4.5:1. */
-  background: rgb(10 23 40 / 95%);
+  background: rgb(248 250 252 / 95%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
@@ -641,7 +641,6 @@ summary:focus-visible {
   from {
     transform: scale(1.04) translate3d(0, 0, 0);
   }
-
   to {
     transform: scale(1.1) translate3d(-1.6%, 1.2%, 0);
   }
@@ -652,7 +651,7 @@ summary:focus-visible {
 
 .site-nav-link,
 .site-cta-outline {
-  /* Wrap-safe desktop labels: “How it works”, “Dashboard (soon)” stay one line. */
+  /* Wrap-safe desktop labels: "How it works", "Dashboard (soon)" stay one line. */
   white-space: nowrap;
   text-wrap: nowrap;
   transition:
