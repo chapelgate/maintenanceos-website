@@ -1,0 +1,7 @@
+- [x] Replace [COUNSEL]/[OWNER] with [ANDY: ...] in privacy page
+- [x] Replace [COUNSEL]/[OWNER] with [ANDY: ...] in cookies page
+- [x] Replace [COUNSEL]/[OWNER] with [ANDY: ...] in terms page
+- [x] Replace [OWNER] with [ANDY: ...] in LegalPageChrome component
+- [x] Update launch-gates test assertions for [ANDY:] placeholders
+- [x] Run npm test and confirm no regressions
+- [x] Verify build passes
