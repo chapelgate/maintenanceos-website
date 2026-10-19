@@ -35,11 +35,27 @@ function getFileLastMod(filePath: string): string {
   }
 }
 
+import { getAllComparisonSlugs } from "@/lib/compare";
+import { getBlogPostSlugs } from "@/lib/blog";
+
 function getLastModForPath(path: string): string {
+  const comparisonPaths = Object.fromEntries(getAllComparisonSlugs().map((slug) => [
+    `/compare/${slug}/`,
+    `src/content/compare/${slug.replace(/^worksmartos-vs-/, "")}.mdx`,
+  ]));
+  const blogPaths = Object.fromEntries(getBlogPostSlugs().map((slug) => [
+    `/blog/${slug}/`,
+    `src/content/blog/${slug}.mdx`,
+  ]));
+
   const pathToFile: Record<string, string> = {
     "/": "src/app/page.tsx",
     "/how-it-works/": "src/app/how-it-works/page.tsx",
     "/features/": "src/app/features/page.tsx",
+    "/compare/": "src/app/compare/page.tsx",
+    "/blog/": "src/app/blog/page.tsx",
+    ...comparisonPaths,
+    ...blogPaths,
     "/property-maintenance-software/": "src/app/property-maintenance-software/page.tsx",
     "/ai-receptionist/": "src/app/ai-receptionist/page.tsx",
     "/create/": "src/app/create/page.tsx",

@@ -1,8 +1,16 @@
 Estate-Preflight: yes
 Estate-Route: FEATURE
-Estate-Artifact: specs/s12-trust-page
+Estate-Artifact: specs/S24-blog
 Estate-Converged: yes
 
-Skills used: pstack poteto-mode, no-comments, principle-prove-it-works
+Skills used: vercel-react-best-practices, web-quality-audit, api-design-principles, observability-and-instrumentation
 
-Add Cyber Essentials PLANNED status to security page. Build passes, typecheck passes, lint passes. Acceptance test: curl -s https://worksmartos.co.uk/security/ | grep -q "PLANNED"
+Slice: S24 — Add blog at `/blog/` with MDX in `/content/blog`, RSS, auto-sitemap
+
+Acceptance test: 5 posts render; RSS valid; sitemap includes blog URLs
+Result: PASS — Build passes, TypeScript clean, lint clean, tests pass (pre-existing failures only). 
+- out/sitemap.xml contains 6 blog URLs (index + 5 posts) with lastmod
+- out/blog/rss.xml valid RSS 2.0 with 5 items, atom:link self-reference
+- out/blog/ page renders 5 post cards with links
+- out/blog/<slug>/ pages render with JSON-LD (WebPage + BreadcrumbList)
+- All content claims-safe, sourced, pre-launch honest
