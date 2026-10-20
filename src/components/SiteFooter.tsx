@@ -1,6 +1,16 @@
 import { footerNav } from "@/config/site";
+import { prependLocaleToPath, type Locale } from "@/i18n/config";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  locale: Locale;
+}
+
+function localizeHref(href: string, locale: Locale): string {
+  if (href.startsWith("http") || href.startsWith("#")) return href;
+  return prependLocaleToPath(href, locale);
+}
+
+export function SiteFooter({ locale }: SiteFooterProps) {
   return (
     <footer className="mt-auto border-t border-border bg-surface text-ink">
       <div className="mx-auto grid max-w-[70rem] gap-10 px-4 py-12 md:px-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -28,7 +38,7 @@ export function SiteFooter() {
               {links.map((link) => (
                 <li key={link.href}>
                   <a
-                    href={link.href}
+                    href={localizeHref(link.href, locale)}
                     className="text-sm text-ink transition-colors hover:text-accent"
                   >
                     {link.label}
@@ -52,7 +62,7 @@ export function SiteFooter() {
             {footerNav.convert.map((link) => (
               <a
                 key={link.href}
-                href={link.href}
+                href={localizeHref(link.href, locale)}
                 className="font-semibold text-ink transition-colors hover:text-accent"
               >
                 {link.label}

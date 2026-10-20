@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { PreLaunchBanner } from "@/components/PreLaunchBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { prependLocaleToPath } from "@/i18n/config";
 import { WebsiteMeasurement } from "@/components/WebsiteMeasurement";
 import { SkipLink } from "@/components/SkipLink";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
@@ -64,11 +65,11 @@ export default async function RootLayout({ children, params }: LayoutProps) {
           <WebsiteMeasurement />
           <SkipLink />
           <PreLaunchBanner />
-          <SiteHeader />
+          <SiteHeader locale={validLocale} />
           <main id="main" tabIndex={-1} className="flex-1 outline-none">
             {children}
           </main>
-          <SiteFooter />
+          <SiteFooter locale={validLocale} />
         </LocaleProvider>
       </body>
     </html>

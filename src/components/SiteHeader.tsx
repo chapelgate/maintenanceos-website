@@ -1,5 +1,6 @@
 import { industries, primaryNav } from "@/config/site";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { prependLocaleToPath, type Locale } from "@/i18n/config";
 
 /**
  * Shell chrome stays a server component. Compact widths (through 1100px) use
@@ -54,7 +55,16 @@ function MenuIcon() {
   );
 }
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  locale: Locale;
+}
+
+function localizeHref(href: string, locale: Locale): string {
+  if (href.startsWith("http") || href.startsWith("#")) return href;
+  return prependLocaleToPath(href, locale);
+}
+
+export function SiteHeader({ locale }: SiteHeaderProps) {
   return (
     <header className="site-header sticky top-0 z-50 border-b border-border bg-paper/90 backdrop-blur-md supports-[backdrop-filter]:bg-paper/78">
       <div className="site-header-bar mx-auto flex min-h-16 w-full flex-wrap items-center justify-between px-4 md:px-6">
@@ -89,7 +99,7 @@ export function SiteHeader() {
                 <ul className="site-menu-panel absolute left-0 top-full z-50 mt-2 min-w-[15rem] rounded-xl border border-border bg-surface py-2 shadow-[var(--mos-shadow)]">
                   <li>
                     <a
-                      href={item.href}
+                      href={localizeHref(item.href, locale)}
                       className="block px-4 py-2 text-sm font-medium text-ink hover:bg-paper"
                     >
                       All industries
@@ -98,7 +108,7 @@ export function SiteHeader() {
                   {industries.map((ind) => (
                     <li key={ind.slug}>
                       <a
-                        href={`/industries/${ind.slug}/`}
+                        href={localizeHref(`/industries/${ind.slug}/`, locale)}
                         className="block px-4 py-2 text-sm text-muted hover:bg-paper hover:text-ink"
                       >
                         {ind.label}
@@ -110,7 +120,7 @@ export function SiteHeader() {
             ) : (
               <a
                 key={item.href}
-                href={item.href}
+                href={localizeHref(item.href, locale)}
                 className="site-nav-link inline-flex h-9 min-h-6 items-center rounded-md px-2.5 text-sm font-medium text-ink hover:text-accent"
               >
                 {item.label}
@@ -119,7 +129,7 @@ export function SiteHeader() {
           )}
 
           <a
-            href="/demo/"
+            href={localizeHref("/demo/", locale)}
             className="ml-2 inline-flex h-9 min-h-6 min-w-6 items-center whitespace-nowrap rounded-md bg-accent px-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover"
           >
             Request an early demo
@@ -142,7 +152,7 @@ export function SiteHeader() {
             <ul className="flex flex-col flex-wrap gap-1">
               <li>
                 <a
-                  href="/demo/"
+                  href={localizeHref("/demo/", locale)}
                   className="inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md bg-accent px-3 text-sm font-semibold text-on-accent"
                 >
                   Request an early demo
@@ -151,7 +161,7 @@ export function SiteHeader() {
               {primaryNav.map((item) => (
                 <li key={item.href}>
                   <a
-                    href={item.href}
+                    href={localizeHref(item.href, locale)}
                     className="block rounded-md px-2 py-2.5 text-base font-medium text-ink"
                   >
                     {item.label}
@@ -161,7 +171,7 @@ export function SiteHeader() {
                       {industries.map((ind) => (
                         <li key={ind.slug}>
                           <a
-                            href={`/industries/${ind.slug}/`}
+                            href={localizeHref(`/industries/${ind.slug}/`, locale)}
                             className="block rounded-md px-2 py-1.5 text-sm text-muted"
                           >
                             {ind.label}
@@ -174,7 +184,7 @@ export function SiteHeader() {
               ))}
               <li>
                 <a
-                  href="/about/"
+                  href={localizeHref("/about/", locale)}
                   className="block rounded-md px-2 py-2 text-base text-muted"
                 >
                   About
@@ -182,7 +192,7 @@ export function SiteHeader() {
               </li>
               <li>
                 <a
-                  href="/faq/"
+                  href={localizeHref("/faq/", locale)}
                   className="block rounded-md px-2 py-2 text-base text-muted"
                 >
                   FAQ
@@ -190,7 +200,7 @@ export function SiteHeader() {
               </li>
               <li>
                 <a
-                  href="/contact/"
+                  href={localizeHref("/contact/", locale)}
                   className="block rounded-md px-2 py-2 text-base text-muted"
                 >
                   Contact
@@ -198,7 +208,7 @@ export function SiteHeader() {
               </li>
               <li className="pt-2">
                 <a
-                  href="/how-we-keep-control/"
+                  href={localizeHref("/how-we-keep-control/", locale)}
                   className="site-cta-outline inline-flex h-10 min-h-6 w-full items-center justify-center rounded-md border border-border px-3 text-sm font-semibold text-ink"
                 >
                   See the safety rules

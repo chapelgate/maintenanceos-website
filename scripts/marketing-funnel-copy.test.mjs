@@ -12,7 +12,7 @@ function read(rel) {
 
 test("how-it-works matches the /demo/ stepper labels", () => {
   const flow = read("src/components/HowItWorksFlow.tsx");
-  const page = read("src/app/how-it-works/page.tsx");
+  const page = read("src/app/[locale]/how-it-works/page.tsx");
   const create = [
     read("src/lib/onboarding-create.ts"),
     read("src/lib/onboarding-create-core.ts"),
@@ -44,7 +44,7 @@ test("how-it-works matches the /demo/ stepper labels", () => {
 });
 
 test("features page renders inventory-driven VERIFIED / PREVIEW cards", () => {
-  const page = read("src/app/features/page.tsx");
+  const page = read("src/app/[locale]/features/page.tsx");
   const config = read("src/config/phone-ai-features.ts");
   const copy = [page, config].join("\n");
   assert.doesNotMatch(page, /phoneAiNotClaimed/);
@@ -75,7 +75,7 @@ test("static export setting is unchanged", () => {
 });
 
 test("home CTA strip names the website-to-pack path", () => {
-  const page = read("src/app/page.tsx");
+  const page = read("src/app/[locale]/page.tsx");
   assert.match(page, /<CtaPair/);
   assert.match(page, /no live phone demo/i);
   assert.match(page, /funnelPageMetadata\("home"\)/);
@@ -106,11 +106,11 @@ test("Fonio matrix records the current interactive funnel", () => {
 });
 
 test("cookies stay DRAFT-honest with cookieless first-party measurement only", () => {
-  const page = read("src/app/cookies/page.tsx");
+  const page = read("src/app/[locale]/cookies/page.tsx");
   const stub = read("src/components/CookieSettingsStub.tsx");
-  const privacy = read("src/app/privacy/page.tsx");
+  const privacy = read("src/app/[locale]/privacy/page.tsx");
   const faqs = read("src/content/faqs.ts");
-  const faqPage = read("src/app/faq/page.tsx");
+  const faqPage = read("src/app/[locale]/faq/page.tsx");
   const llms = read("public/llms.txt");
   const llmsFull = read("public/llms-full.txt");
   const measurement = read("src/lib/measurement.ts");
@@ -165,14 +165,14 @@ test("cookies stay DRAFT-honest with cookieless first-party measurement only", (
 });
 
 test("security stays claims-safe with bounded website learning and no cert theatre", () => {
-  const page = read("src/app/security/page.tsx");
+  const page = read("src/app/[locale]/security/page.tsx");
   const faqs = read("src/content/faqs.ts");
   const features = [
-    read("src/app/features/page.tsx"),
+    read("src/app/[locale]/features/page.tsx"),
     read("src/config/phone-ai-features.ts"),
   ].join("\n");
   const home = [
-    read("src/app/page.tsx"),
+    read("src/app/[locale]/page.tsx"),
     read("src/components/HonestyBanner.tsx"),
   ].join("\n");
   const flow = read("src/components/HowItWorksFlow.tsx");
@@ -221,7 +221,7 @@ test("security stays claims-safe with bounded website learning and no cert theat
 });
 
 test("contact stays claims-safe as human enquiry, not a support desk", () => {
-  const page = read("src/app/contact/page.tsx");
+  const page = read("src/app/[locale]/contact/page.tsx");
   const faqs = read("src/content/faqs.ts");
   const llms = read("public/llms.txt");
   const llmsFull = read("public/llms-full.txt");
@@ -253,7 +253,7 @@ test("contact stays claims-safe as human enquiry, not a support desk", () => {
 
 test("pricing stays claims-safe with early demo CTA and coming telephony/calendar", () => {
   const config = read("src/config/pricing.ts");
-  const page = read("src/app/pricing/page.tsx");
+  const page = read("src/app/[locale]/pricing/page.tsx");
   const faqs = read("src/content/faqs.ts");
   const llms = read("public/llms.txt");
   const llmsFull = read("public/llms-full.txt");
@@ -291,7 +291,7 @@ test("pricing stays claims-safe with early demo CTA and coming telephony/calenda
 
 test("FAQ copy names the verified funnel and stays claims-safe", () => {
   const faqs = read("src/content/faqs.ts");
-  const page = read("src/app/faq/page.tsx");
+  const page = read("src/app/[locale]/faq/page.tsx");
 
   assert.match(
     faqs,
@@ -328,7 +328,7 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
 });
 
 test("demo page names the website-to-pack path and does not book a live phone", () => {
-  const page = read("src/app/demo/page.tsx");
+  const page = read("src/app/[locale]/demo/page.tsx");
   const tabs = read("src/components/DemoConversionTabs.tsx");
   const create = [
     read("src/lib/onboarding-create.ts"),
@@ -355,7 +355,7 @@ test("demo page names the website-to-pack path and does not book a live phone", 
 });
 
 test("create page metadata comes from the shared funnel helper", () => {
-  const page = read("src/app/create/page.tsx");
+  const page = read("src/app/[locale]/create/page.tsx");
   assert.match(page, /funnelPageMetadata\("create"\)/);
   assert.doesNotMatch(page, /Create your AI receptionist/);
 });
@@ -363,10 +363,10 @@ test("create page metadata comes from the shared funnel helper", () => {
 test("create and legal scaffolds share the website-URL setup privacy note", () => {
   const copy = read("src/lib/create-ingest-privacy.ts");
   const note = read("src/components/CreateIngestPrivacyNote.tsx");
-  const page = read("src/app/create/page.tsx");
-  const privacy = read("src/app/privacy/page.tsx");
-  const cookies = read("src/app/cookies/page.tsx");
-  const terms = read("src/app/terms/page.tsx");
+  const page = read("src/app/[locale]/create/page.tsx");
+  const privacy = read("src/app/[locale]/privacy/page.tsx");
+  const cookies = read("src/app/[locale]/cookies/page.tsx");
+  const terms = read("src/app/[locale]/terms/page.tsx");
   const chrome = read("src/components/LegalPageChrome.tsx");
   const config = read("next.config.ts");
 
@@ -429,12 +429,12 @@ test("create and legal scaffolds share the website-URL setup privacy note", () =
 test("primary conversion CTAs point at /demo/, not a live phone demo", () => {
   const pair = read("src/components/CtaPair.tsx");
   const header = read("src/components/SiteHeader.tsx");
-  const home = read("src/app/page.tsx");
+  const home = read("src/app/[locale]/page.tsx");
   const industries = read("src/components/IndustryRolePage.tsx");
 
   assert.match(pair, /primaryHref = "\/demo\/"/);
   assert.match(pair, /secondaryHref = "\/how-we-keep-control\/"/);
-  assert.match(header, /href="\/demo\/"/);
+  assert.match(header, /localizeHref\("\/demo\/", locale\)/);
   assert.match(header, /Request an early demo/);
   assert.doesNotMatch(header, /See it live/i);
   assert.match(home, /primaryHref="\/demo\/"/);

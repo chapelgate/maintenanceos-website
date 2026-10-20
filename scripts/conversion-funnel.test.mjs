@@ -13,7 +13,7 @@ test("Request an early demo remains the canonical primary conversion", () => {
   const doc = read("docs/STEP6_CONVERSION_FUNNEL.md");
   assert.match(cta, /primaryHref = "\/demo\//);
   assert.match(cta, /primaryLabel = "Request an early demo"/);
-  assert.match(header, /href="\/demo\/"/);
+  assert.match(header, /localizeHref\("\/demo\/", locale\)/);
   assert.match(doc, /primary website conversion is \*\*Create from website\*\*/);
 });
 
@@ -41,8 +41,8 @@ test("commercial enquiry form stays short", () => {
 
 test("all commercial enquiry intents still share one form and adapter", () => {
   const demo = read("src/components/DemoConversionTabs.tsx");
-  const contact = read("src/app/contact/page.tsx");
-  const home = read("src/app/page.tsx");
+  const contact = read("src/app/[locale]/contact/page.tsx");
+  const home = read("src/app/[locale]/page.tsx");
   assert.match(demo, /<LeadCaptureForm/);
   assert.match(demo, /leadType="launch_list"/);
   assert.match(demo, /leadType="early_demo"/);
