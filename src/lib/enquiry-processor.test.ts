@@ -34,8 +34,7 @@ test("processEnquiry returns 201 for valid submission", async () => {
   });
   assert.equal(status, 201);
   assert.equal(body.ok, true);
-  assert.ok(body.reference);
-  assert.equal(body.mode, "accepted");
+  assert.equal(body.mode, "queued_stub");
 });
 
 test("processEnquiry returns 201 for minimal valid submission", async () => {
@@ -45,7 +44,7 @@ test("processEnquiry returns 201 for minimal valid submission", async () => {
   });
   assert.equal(status, 201);
   assert.equal(body.ok, true);
-  assert.ok(body.reference);
+  assert.equal(body.mode, "queued_stub");
 });
 
 test("processEnquiry rejects honeypot field", async () => {

@@ -46,8 +46,7 @@ export function corsHeaders(origin) {
 export function successBody() {
   return {
     ok: true,
-    mode: "accepted",
-    reference: `stub-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    mode: "queued_stub",
     sends_email: false,
   };
 }
@@ -223,7 +222,7 @@ export async function handleFormStubRequest(req, res, options) {
       return;
     }
     console.log(
-      `[form-stub] accepted lead_type=${result.record.lead_type} email=${result.record.email} sends_email=false`,
+      `[form-stub] queued_stub lead_type=${result.record.lead_type} email=${result.record.email} sends_email=false`,
     );
   } else {
     console.log("[form-stub] honeypot discarded; no email sent");
