@@ -1909,7 +1909,7 @@ const ERROR_PAGE_TITLE_RE =
   /404|\bnot found\b|\berror\b|^untitled(?:\s+document)?$/i;
 
 const SENTENCE_VERB_RE = /\s(?:are|is|we|provide)\s/i;
-const SENTENCE_STARTER_RE = /^(?:welcome to|we are|our|quality|best|professional|expert|reliable|trusted|experienced|affordable|local|family|established|since)\s+/i;
+const SENTENCE_STARTER_RE = /^(?:welcome to|we are|our|established|since)\s+/i;
 
 /** A name that is really a sentence, a tagline, or a place tacked on with a comma. */
 function isSentenceName(value: string): boolean {
