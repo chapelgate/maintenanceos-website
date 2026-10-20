@@ -6,6 +6,11 @@
  */
 
 import { parseFragment, type DefaultTreeAdapterMap } from "parse5";
+import { createGunzip, gunzipSync } from "node:zlib";
+import { createReadStream, readFileSync } from "node:fs";
+import { pipeline } from "node:stream/promises";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import type {
   BusinessBranch,
   BusinessFactMeta,
@@ -18,6 +23,50 @@ import type {
 } from "./types.ts";
 
 export const MAX_FIELD_CHARS = 4000;
+
+interface GazetteerData {
+  version: number;
+  generated: string;
+  postcodeDistricts: string[];
+  towns: string[];
+  counties: string[];
+}
+
+let gazetteerCache: GazetteerData | null = null;
+
+async function loadGazetteer(): Promise<GazetteerData> {
+  if (gazetteerCache) return gazetteerCache;
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const gazetteerPath = join(__dirname, "..", "..", "public", "gazetteer.json.gz");
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    pipeline(
+      createReadStream(gazetteerPath),
+      createGunzip(),
+      async function* () {
+        for await (const chunk of this) chunks.push(chunk);
+      }()
+    ).then(() => {
+      try {
+        const json = Buffer.concat(chunks).toString("utf8");
+        gazetteerCache = JSON.parse(json) as GazetteerData;
+        resolve(gazetteerCache);
+      } catch (err) {
+        reject(err);
+      }
+    }).catch(reject);
+  });
+}
+
+function getGazetteerSync(): GazetteerData {
+  if (gazetteerCache) return gazetteerCache;
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const gazetteerPath = join(__dirname, "..", "..", "..", "public", "gazetteer.json.gz");
+  const compressed = readFileSync(gazetteerPath);
+  const json = gunzipSync(compressed).toString("utf8");
+  gazetteerCache = JSON.parse(json) as GazetteerData;
+  return gazetteerCache;
+}
 /**
  * Honest browser-like agent for the plain HTTPS fetch.
  * Leading Mozilla/Chrome tokens match a normal page request. The product
@@ -1751,19 +1800,6 @@ function extractTradeServiceHeadings(html: string): string | undefined {
   return unique.length >= 2 ? unique.join("\n") : undefined;
 }
 
-const KNOWN_UK_PLACES = new Set(
-  [
-    "bebington", "birkenhead", "bromborough", "heswall", "wallasey", "wirral",
-    "merseyside", "leeds", "london", "liverpool", "prenton", "warrington",
-    "cheshire", "manchester", "birmingham", "bristol", "cardiff", "edinburgh",
-    "glasgow", "belfast", "newcastle", "sheffield", "nottingham", "leicester",
-    "coventry", "bradford", "hull", "york", "oxford", "cambridge", "brighton",
-    "reading", "southampton", "portsmouth", "plymouth", "norwich", "exeter",
-    "chester", "crewe", "ellesmere port", "hoylake", "west kirby", "moreton",
-    "new ferry", "port sunlight", "higher bebingon", "oxton", "tranmere",
-  ].map((place) => place.toLowerCase()),
-);
-
 const AREA_REJECT_EXACT_RE =
   /^(?:home|about(?:\s+us)?|services|our services|menu|faqs?|contact(?:\s+us)?|england|scotland|wales|northern ireland|united kingdom|uk)$/i;
 
@@ -1776,8 +1812,21 @@ const PLACE_DENY_RE =
 const PLACE_SUFFIX_RE =
   /(?:ton|ham|ley|pool|ford|mouth|bridge|borough|wich|wick|field|hill|wood|well|worth|chester|kirk|shaw|side|heath|moor|port|haven|ness|ington|bourne|caster|minster|wall)$/i;
 
+let gazetteerTowns: Set<string> | null = null;
+let gazetteerPostcodeDistricts: Set<string> | null = null;
+let gazetteerCounties: Set<string> | null = null;
+
+function initGazetteerSets(): void {
+  if (gazetteerTowns) return;
+  const g = getGazetteerSync();
+  gazetteerTowns = new Set(g.towns.map((t) => t.toLowerCase()));
+  gazetteerPostcodeDistricts = new Set(g.postcodeDistricts.map((d) => d.toUpperCase()));
+  gazetteerCounties = new Set(g.counties.map((c) => c.toLowerCase()));
+}
+
 /** A service-area token must be a postcode district or a UK place, not a legal link or a date. */
 export function isUkPlaceName(value: string): boolean {
+  initGazetteerSets();
   const text = value.trim();
   if (!text || text.length < 2 || text.length > 40) return false;
   if (AREA_REJECT_EXACT_RE.test(text)) return false;
@@ -1785,14 +1834,17 @@ export function isUkPlaceName(value: string): boolean {
     return false;
   }
   const compact = text.replace(/\s+/g, "");
-  if (/^[A-Z]{1,2}\d[A-Z\d]?$/i.test(compact)) return true;
+  if (/^[A-Z]{1,2}\d[A-Z\d]?$/i.test(compact)) {
+    return gazetteerPostcodeDistricts!.has(compact.toUpperCase());
+  }
   if (AREA_NAV_LABEL_RE.test(text)) return false;
   const key = text.toLowerCase();
-  if (KNOWN_UK_PLACES.has(key)) return true;
+  if (gazetteerTowns!.has(key)) return true;
+  if (gazetteerCounties!.has(key)) return true;
   const words = text.split(/[\s-]+/);
   if (words.length > 3) return false;
   if (!words.every((word) => /^[A-Za-z][A-Za-z'.]{1,}$/.test(word))) return false;
-  return words.some((word) => PLACE_SUFFIX_RE.test(word) || KNOWN_UK_PLACES.has(word.toLowerCase()));
+  return words.some((word) => PLACE_SUFFIX_RE.test(word) || gazetteerTowns!.has(word.toLowerCase()));
 }
 
 /** Place names only. Country names, navigation labels, and blank lines are omitted. */
