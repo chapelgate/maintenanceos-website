@@ -5,6 +5,8 @@ import {
   CREATE_INGEST_PRIVACY_ANCHOR,
   CREATE_INGEST_PRIVACY_NOTE,
 } from "@/lib/create-ingest-privacy";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -23,7 +25,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "who-we-are",
     title: "Who we are (data controller)",
-    body: "Chapelgate Limited (company number 12340004), registered office C/O Wainwrights Accountants, Faversham House, Wirral International Business Park, Old Hall Road, Bromborough, Wirral, CH62 3NX. Director: Andrew John Cartwright. ICO registration: [ICO REG NO].",
+    body: "Chapelgate Limited (company number 12340004), registered office C/O Wainwrights Accountants, Faversham House, Wirral International Business Park, Old Hall Road, Bromborough, Wirral, CH62 3NX. Director: Andrew John Cartwright. ICO registration: [ANDY: ICO registration number].",
   },
   {
     id: "scope",
@@ -63,12 +65,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "The website is hosted and processed by DigitalOcean. Transfers of personal data outside the UK/EEA are covered by the UK IDTA / UK Addendum. No third-party analytics vendor is used.",
+    body: "The website is hosted and processed by DigitalOcean. Transfers of personal data outside the UK/EEA are covered by the UK IDTA / UK Addendum. No third-party analytics vendor is used. For a full list of subprocessors, see the <a href=\"/subprocessors/\" className=\"text-accent underline\">Subprocessor page</a>.",
   },
   {
     id: "transfers",
     title: "International transfers",
-    body: "[COUNSEL] — placeholder for transfer mechanisms if any processor is outside the UK/EEA.",
+    body: "[ANDY: transfer mechanisms if any processor is outside the UK/EEA.]",
   },
   {
     id: "retention",
@@ -93,12 +95,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "children",
     title: "Children",
-    body: "[COUNSEL: age threshold] — this site is aimed at businesses and property professionals, not children.",
+    body: "[ANDY: age threshold for children] — this site is aimed at businesses and property professionals, not children.",
   },
   {
     id: "changes",
     title: "Changes to this notice",
-    body: "[COUNSEL] — how updates will be shown (date and material-change practice).",
+    body: "[ANDY: how updates will be shown (date and material-change practice).]",
   },
   {
     id: "contact",
@@ -110,6 +112,11 @@ const sections: { id: string; title: string; body: string }[] = [
 export default function PrivacyPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/privacy/", "Privacy Policy (Draft)", "Draft privacy notice scaffold for the WorkSmartOS website. Pending legal review — not final policy.", [
+          { name: "Privacy", path: "/privacy/" },
+        ])}
+      />
       <PageHero
         eyebrow="Legal · Draft"
         title="Privacy Policy (Draft)"

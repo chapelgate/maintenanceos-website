@@ -1,0 +1,122 @@
+---
+slug: contractor-quotes
+title: "Contractor Quotes & Approvals"
+description: "Manage the quote process: request, review, approve, or reject contractor quotes for repairs."
+date: "2025-01-21"
+author: "WorkSmartOS Team"
+category: "Daily Operations"
+tags: ["quotes", "approvals", "budget", "contractors", "spend-control"]
+---
+
+# Contractor Quotes & Approvals
+
+When a repair needs parts or specialist work beyond the initial scope, contractors submit quotes through MaintenanceOS. This guide covers the end-to-end quote workflow.
+
+## When Quotes Are Needed
+
+- **Parts required** not in contractor's standard kit
+- **Specialist sub-trade** needed (e.g., roofer for a plumbing job)
+- **Scope change** discovered on site
+- **Tenant upgrade request** (e.g., premium fixture replacement)
+- **Insurance claim** requiring detailed breakdown
+
+## Quote Workflow
+
+```
+Contractor Identifies Need
+         ↓
+Submits Quote in Portal
+         ↓
+Manager Notified (email + in-app)
+         ↓
+Manager Reviews → Approve / Reject / Request Revision
+         ↓
+If Approved → Contractor Notified → Work Continues
+If Rejected → Contractor Notified → Alternative Plan
+If Revision → Contractor Updates → Back to Review
+```
+
+## Quote Details
+
+Each quote includes:
+- **Line items** (labour, materials, plant, disposal, subcontractor)
+- **Quantity, unit, unit price, total** per line
+- **VAT breakdown** (standard 20%, reduced 5% for energy efficiency)
+- **Estimated duration** additional days
+- **Photos** of issue requiring quote
+- **Contractor notes** explaining necessity
+
+## Approval Rules
+
+**Auto-approve thresholds** (configurable per workspace):
+- Under £250 → Auto-approve (notify only)
+- £250–£1,000 → Manager approval
+- £1,000–£5,000 → Senior Manager approval
+- Over £5,000 → Admin approval + Safety Officer if safety-related
+
+**Emergency spend limit:** Safety Officer can authorise up to £2,000 without standard approval for Safety Hold repairs.
+
+## Reviewing a Quote
+
+1. Notification → **Review Quote**
+2. Compare against:
+   - Previous similar repairs (MaintenanceOS shows benchmarks)
+   - Contractor's historical pricing for same trade
+   - Market rates (optional integration)
+3. Check:
+   - Materials itemised (not "materials — £500")
+   - Labour hours reasonable
+   - No duplicate charges
+   - VAT correctly calculated
+4. **Approve** / **Request Revision** / **Reject**
+
+## Revision Requests
+
+- Add comment specifying what needs changing
+- Contractor receives notification with your comments
+- Contractor updates quote → status returns to "Under Review"
+- Maximum 2 revision cycles before escalation
+
+## Rejection
+
+- Must provide reason (budget, scope, duplication, alternative)
+- Contractor sees reason
+- Repair stays in "Needs Parts/Quote" status
+- Manager must assign alternative or close repair
+
+## Post-Approval
+
+Once approved:
+- Quote becomes **Purchase Order** (PO number auto-generated)
+- Contractor can order materials
+- Additional SLA days added to resolution target
+- Final invoice matched against PO (three-way match)
+
+## Invoice Matching
+
+When contractor submits invoice:
+1. System matches to PO
+2. Flags discrepancies (>5% variance or new line items)
+3. Manager reviews exceptions
+4. Approve for payment → sent to accounting integration
+
+## Audit Trail
+
+Full history stored:
+- All quote versions
+- Approver, timestamp, decision
+- Comments at each stage
+- Linked to repair, property, contractor
+
+Export at **Reports → Quote Audit**.
+
+## Next Steps
+
+- [Setting Approval Thresholds](./approval-thresholds)
+- [Invoice Matching & Accounting](./invoice-matching)
+- [Emergency Spend Limits](./emergency-spend)
+- [Budget Tracking by Property](./budget-tracking)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

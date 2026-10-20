@@ -1,0 +1,5 @@
+- [x] Add "Cyber Essentials: PLANNED (target Q2 2027)" text to /security/ page
+- [x] Add link to /vulnerability-disclosure/ from /security/ CtaPair
+- [x] Add link to /subprocessors/ from /security/ CtaPair
+- [x] Verify acceptance test: `curl -s https://worksmartos.co.uk/security/ | grep -q "PLANNED"`
+- [x] Run npm test and npm run build to confirm no regressions

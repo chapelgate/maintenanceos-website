@@ -12,7 +12,7 @@ export function LegalPageChrome({ noticeLabel }: LegalPageChromeProps) {
     <div className="mb-10 space-y-4 border-b border-border pb-8 text-sm text-muted">
       <p>
         <span className="font-medium text-ink">Last updated:</span>{" "}
-        [OWNER: effective / last-updated date]
+        [ANDY: effective / last-updated date]
       </p>
       <p>
         <span className="font-medium text-ink">Who this applies to:</span>{" "}

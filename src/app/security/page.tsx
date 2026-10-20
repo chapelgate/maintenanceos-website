@@ -2,6 +2,8 @@ import { BentoCard } from "@/components/BentoCard";
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata = contentPageMetadata({
@@ -14,6 +16,11 @@ export const metadata = contentPageMetadata({
 export default function SecurityPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/security/", "Security and Data Separation", "How MaintenanceOS keeps organisation records separate, enforces boundaries, and records actions. No certifications claimed. Pre-launch.", [
+          { name: "Security", path: "/security/" },
+        ])}
+      />
       <PageHero
         eyebrow="Trust · Pre-launch"
         title="How we keep your data separate and your actions on record"
@@ -75,6 +82,20 @@ export default function SecurityPage() {
 
       <section className="mx-auto max-w-3xl space-y-6 px-4 py-12 border-t border-border">
         <h2 className="text-xl font-semibold text-ink">
+          Core architectural controls
+        </h2>
+        <p className="text-sm text-muted">
+          Controls implemented directly in product source code.
+        </p>
+        <div className="mt-4 flex gap-2">
+          <span className="px-3 py-1 text-xs font-medium bg-primary/10 border border-primary rounded">
+            Cyber Essentials: PLANNED (target Q2 2027)
+          </span>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl space-y-6 px-4 py-12 border-t border-border">
+        <h2 className="text-xl font-semibold text-ink">
           Operational verification
         </h2>
         <p className="text-sm text-muted">
@@ -96,9 +117,27 @@ export default function SecurityPage() {
           className="mt-6"
           primaryHref="/demo/"
           primaryLabel="Request an early demo"
-          secondaryHref="/how-we-keep-control/"
-          secondaryLabel="See the safety rules"
+          secondaryHref="/vulnerability-disclosure/"
+          secondaryLabel="Vulnerability disclosure"
         />
+        <CtaPair
+          className="mt-6"
+          primaryHref="/subprocessors/"
+          primaryLabel="Subprocessor page"
+          secondaryHref="/vulnerability-disclosure/"
+          secondaryLabel="Vulnerability disclosure"
+        />
+
+        <p className="mt-4 text-sm text-muted">
+          <a href="/vulnerability-disclosure/" className="underline hover:text-accent">
+            Vulnerability disclosure page
+          </a>
+        </p>
+        <p className="mt-4 text-sm text-muted">
+          <a href="/subprocessors/" className="underline hover:text-accent">
+            Subprocessor page
+          </a>
+        </p>
       </section>
     </>
   );

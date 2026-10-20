@@ -1,0 +1,147 @@
+---
+slug: troubleshooting-common-issues
+title: "Troubleshooting Common Issues"
+description: "Quick fixes for common problems: login issues, missing notifications, sync errors, and portal problems."
+date: "2025-02-04"
+author: "WorkSmartOS Team"
+category: "Troubleshooting"
+tags: ["troubleshooting", "login", "notifications", "sync", "portal"]
+---
+
+# Troubleshooting Common Issues
+
+Quick solutions for the most frequent support requests.
+
+## Login & Access Issues
+
+### "I didn't receive the magic link email"
+1. Check spam/junk folder
+2. Verify email address is correct in invite
+3. Request new link (expires in 15 minutes)
+4. Contact admin to resend invite
+5. **Still failing?** Try incognito/private browser window
+
+### "Magic link says 'expired' or 'invalid'"
+- Links expire after 15 minutes or single use
+- Request a new link
+- Clear browser cookies for maintenanceos.co.uk
+- Try different browser/device
+
+### "I'm logged in but see 'Access Denied'"
+- Your role may not have permission for that page
+- Contact your Admin to check your role and property assignments
+- Contractors: Use the contractor portal, not the main dashboard
+
+### SSO login fails
+- Ensure you're using correct identity provider URL
+- Check with IT: SSO session may have expired
+- Try IDP-initiated login (from Okta/Azure portal)
+- Contact admin to verify SCIM sync status
+
+## Notification Problems
+
+### "I'm not receiving email notifications"
+1. Check Settings → Notifications → your preferences
+2. Check spam/junk folder
+3. Verify email address in Settings → Profile
+4. Ask admin: Workspace may have quiet hours enabled
+5. **Critical:** Safety alerts cannot be disabled — if missing, contact support immediately
+
+### "SMS notifications not arriving"
+- SMS only for safety latches (emergency)
+- Verify mobile number in Settings → Profile
+- UK numbers only (+44 format)
+- Check with mobile provider: shortcode blocking?
+
+### "Slack/Teams notifications not posting"
+1. Check integration status: Settings → Integrations → Slack/Teams
+2. Re-authorise if "Disconnected" shown
+3. Verify bot has permission in target channel
+4. Check channel is not archived/private
+
+## Repair & Portal Issues
+
+### "Tenant can't see their repair in portal"
+- Repair must be assigned to a property with that tenant linked
+- Check Property → Tenants → tenant is listed
+- Tenant must have accepted portal invite
+- Repair status "Cancelled" hides from tenant view
+
+### "Contractor portal shows no repairs"
+- Contractor must be assigned to repair
+- Check Repair → Contractor assigned
+- Contractor must have accepted portal invite
+- Filter may be set to "My Active" — check "All"
+
+### "Photos not uploading"
+- Max file size: 25MB per photo
+- Supported: JPG, PNG, HEIC, WebP
+- Max 20 photos per repair
+- Check network connection
+- Try compressed photos
+
+## Sync & Integration Issues
+
+### "Property management software sync failed"
+1. Check Settings → Integrations → [Platform] → Sync Status
+2. Common errors:
+   - **Auth expired:** Reconnect integration
+   - **Field mapping:** Required field missing in source
+   - **Rate limited:** Wait, auto-retries
+3. View sync log for details
+4. Manual sync button available
+
+### "Webhook not receiving events"
+1. Verify webhook URL is HTTPS and accessible
+2. Check Settings → Integrations → Webhooks → Delivery History
+3. Verify secret matches your verification code
+4. Ensure endpoint responds 2xx within 10 seconds
+5. Test with "Send Test Event" button
+
+### "API returns 401 Unauthorized"
+- API key may be revoked or rotated
+- Check Settings → Integrations → API Keys
+- Ensure key has required scopes
+- Verify `Authorization: Bearer <key>` header format
+
+## Performance Issues
+
+### "Dashboard loads slowly"
+- Clear browser cache
+- Try different browser
+- Check internet connection
+- Large portfolios: Use filters to reduce data load
+
+### "Export times out"
+- Large exports: Use API with pagination
+- Apply date filters to reduce dataset
+- Contact support for custom large exports
+
+## When to Contact Support
+
+**Email:** support@maintenanceos.co.uk
+**In-app:** Help → Contact Support
+
+**Include:**
+- Workspace name
+- User email
+- Steps to reproduce
+- Screenshots/error messages
+- Browser/device
+- Time of issue (with timezone)
+
+**Response targets:**
+- Critical (safety, data loss): < 1 hour business hours
+- Standard: < 4 hours business hours
+- Low: < 24 hours business hours
+
+## Next Steps
+
+- [Contact Support](./contact-support)
+- [System Status Page](./system-status)
+- [Known Issues & Workarounds](./known-issues)
+- [Feature Requests](./feature-requests)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

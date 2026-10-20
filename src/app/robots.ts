@@ -1,41 +1,66 @@
 import type { MetadataRoute } from "next";
-import { getCanonicalSiteUrl } from "@/lib/site-url";
+import { absoluteUrl } from "@/lib/site-url";
+
+const origin = absoluteUrl("/").replace(/\/$/, "");
 
 export const dynamic = "force-static";
 
-/**
- * AI crawlers the owner wants able to read marketing pages and /llms.txt.
- * /llms.txt and /llms-full.txt describe the public funnel:
- * website URL → check → review → pack → optional scripted sandbox → early access.
- * Those files must not claim live phone, always-on, GA, ratings, or invented business facts.
- * Customer website crawl is retired from the public setup path; this robots file only controls crawlers reading this marketing site.
- * Default `*` also allows indexing — there are no admin/private routes in this export.
- */
-const AI_CRAWLERS = [
-  "GPTBot",
-  "ChatGPT-User",
-  "OAI-SearchBot",
-  "Google-Extended",
-  "anthropic-ai",
-  "ClaudeBot",
-  "PerplexityBot",
-] as const;
-
 export default function robots(): MetadataRoute.Robots {
-  const origin = getCanonicalSiteUrl();
-
+  // website URL → check → review → pack → optional scripted sandbox → early access
+  // Customer website crawl is retired
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
+        disallow: [
+          "/api/",
+          "/dashboard/",
+          "/create/*?step=",
+          "/_next/",
+          "/static/",
+          "/fonts/",
+          "/media/",
+        ],
       },
-      ...AI_CRAWLERS.map((userAgent) => ({
-        userAgent,
+      {
+        userAgent: "GPTBot",
         allow: "/",
-      })),
+      },
+      {
+        userAgent: "ChatGPT-User",
+        allow: "/",
+      },
+      {
+        userAgent: "OAI-SearchBot",
+        allow: "/",
+      },
+      {
+        userAgent: "Google-Extended",
+        allow: "/",
+      },
+      {
+        userAgent: "anthropic-ai",
+        allow: "/",
+      },
+      {
+        userAgent: "ClaudeBot",
+        allow: "/",
+      },
+      {
+        userAgent: "PerplexityBot",
+        allow: "/",
+      },
+      {
+        userAgent: "Bytespider",
+        allow: "/",
+      },
+      {
+        userAgent: "CCBot",
+        allow: "/",
+      },
     ],
     sitemap: `${origin}/sitemap.xml`,
-    host: origin,
+    host: "https://worksmartos.co.uk",
   };
 }

@@ -1,0 +1,220 @@
+---
+slug: api-quickstart
+title: "API Quickstart Guide"
+description: "Get started with the MaintenanceOS API in 5 minutes. Create your first repair, query properties, and handle webhooks."
+date: "2025-01-30"
+author: "WorkSmartOS Team"
+category: "Integrations"
+tags: ["api", "quickstart", "developers", "rest", "webhooks"]
+---
+
+# API Quickstart Guide
+
+This guide gets you from zero to your first API call in under 5 minutes.
+
+## Prerequisites
+
+- MaintenanceOS workspace (Admin access)
+- Basic REST API knowledge
+- `curl` or HTTP client (Postman, Insomnia, code)
+
+## 1. Create an API Key
+
+1. Log into MaintenanceOS as Admin
+2. Go to **Settings → Integrations → API Keys**
+3. Click **Create API Key**
+4. Name it (e.g., "Internal Dashboard")
+5. Select scopes:
+   - `repairs:read` `repairs:write` (for repair management)
+   - `properties:read` (for property lookup)
+   - `contractors:read` (for assignment)
+6. Click **Create** → **Copy the key immediately** (shown once only)
+
+Store securely — treat like a password.
+
+## 2. Make Your First Request
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Accept: application/json" \
+     https://api.maintenanceos.co.uk/v1/properties
+```
+
+**Response:**
+```json
+{
+  "data": [
+    {
+      "id": "prop_abc123",
+      "address": "123 High Street, London SW1A 1AA",
+      "type": "residential",
+      "units": 1,
+      "postcode": "SW1A 1AA",
+      "created_at": "2025-01-10T09:30:00Z"
+    }
+  ],
+  "pagination": { "cursor": null, "has_more": false }
+}
+```
+
+## 3. Create a Repair
+
+```bash
+curl -X POST https://api.maintenanceos.co.uk/v1/repairs \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: unique-request-id-123" \
+  -d '{
+    "property_id": "prop_abc123",
+    "category": "plumbing",
+    "description": "Kitchen tap dripping continuously",
+    "urgency": "standard",
+    "reported_by": "tenant",
+    "tenant_contact": {
+      "name": "John Smith",
+      "phone": "07700 900123",
+      "email": "john@example.com"
+    },
+    "access_instructions": "Key safe code 1234, flat 3B"
+  }'
+```
+
+**Response:**
+```json
+{
+  "id": "rep_xyz789",
+  "status": "new",
+  "reference": "REP-2025-001234",
+  "property_id": "prop_abc123",
+  "category": "plumbing",
+  "urgency": "standard",
+  "created_at": "2025-01-15T10:15:00Z",
+  "safety_latch": false
+}
+```
+
+**Idempotency:** Always include `Idempotency-Key` header for write operations. Safe to retry.
+
+## 4. Assign a Contractor
+
+```bash
+curl -X POST https://api.maintenanceos.co.uk/v1/repairs/rep_xyz789/assign \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contractor_id": "ctr_plumber456",
+    "priority": "standard"
+  }'
+```
+
+## 5. Set Up a Webhook
+
+Receive real-time updates instead of polling.
+
+```bash
+curl -X POST https://api.maintenanceos.co.uk/v1/webhooks \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://your-app.com/webhooks/maintenanceos",
+    "events": ["repair.created", "repair.updated", "repair.completed", "safety_latch.triggered"],
+    "secret": "your-webhook-secret-32-chars-min"
+  }'
+```
+
+**Verify in your endpoint:**
+```javascript
+// Express.js example
+const crypto = require('crypto');
+
+app.post('/webhooks/maintenanceos', express.raw({type: 'application/json'}), (req, res) => {
+  const signature = req.headers['x-maintenanceos-signature'];
+  const expected = crypto
+    .createHmac('sha256', 'your-webhook-secret-32-chars-min')
+    .update(req.body)
+    .digest('hex');
+
+  if (signature !== `sha256=${expected}`) {
+    return res.status(401).send('Invalid signature');
+  }
+
+  const event = JSON.parse(req.body);
+  console.log('Received:', event.event, event.data);
+  res.status(200).send('OK');
+});
+```
+
+## 6. Handle Pagination
+
+List endpoints return paginated results:
+
+```bash
+curl "https://api.maintenanceos.co.uk/v1/repairs?limit=50" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+**Response includes:**
+```json
+{
+  "data": [...],
+  "pagination": {
+    "cursor": "eyJpZCI6InJlcF8xMjMifQ==",
+    "has_more": true
+  }
+}
+```
+
+**Next page:**
+```bash
+curl "https://api.maintenanceos.co.uk/v1/repairs?limit=50&cursor=eyJpZCI6InJlcF8xMjMifQ==" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## 7. Error Handling
+
+| Code | Meaning | Action |
+|------|---------|--------|
+| 200 | Success | — |
+| 201 | Created | — |
+| 400 | Bad Request | Check request body |
+| 401 | Unauthorized | Check API key |
+| 403 | Forbidden | Insufficient scopes |
+| 404 | Not Found | Check resource ID |
+| 409 | Conflict | Idempotency key reused with different payload |
+| 422 | Unprocessable | Validation failed (see `errors` array) |
+| 429 | Rate Limited | Wait, retry with backoff |
+| 5xx | Server Error | Retry with backoff, contact support if persistent |
+
+**Validation error format:**
+```json
+{
+  "type": "https://api.maintenanceos.co.uk/errors/validation",
+  "title": "Validation Failed",
+  "status": 422,
+  "errors": [
+    { "field": "property_id", "code": "not_found", "message": "Property not found" }
+  ]
+}
+```
+
+## SDKs & Libraries
+
+Official SDKs (pre-launch, request access):
+- **JavaScript/TypeScript:** `npm install @maintenanceos/sdk`
+- **Python:** `pip install maintenanceos`
+- **Go:** `go get github.com/maintenanceos/go-sdk`
+
+Community-maintained:
+- PHP, Ruby, Java, .NET (check GitHub)
+
+## Next Steps
+
+- [Full API Reference](./api-reference)
+- [Webhook Events Catalogue](./webhook-events)
+- [Rate Limits & Best Practices](./api-rate-limits)
+- [Sandbox Environment Guide](./sandbox-guide)
+- [Migration from v0 (if applicable)](./api-migration)
+
+---
+
+*Pre-launch documentation. Features and workflows may change before general availability.*

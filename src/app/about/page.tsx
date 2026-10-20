@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
 import { ProductLine } from "@/components/ProductLine";
+import { JsonLd } from "@/components/JsonLd";
+import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
 export const metadata: Metadata = contentPageMetadata({
@@ -14,6 +16,11 @@ export const metadata: Metadata = contentPageMetadata({
 export default function AboutPage() {
   return (
     <>
+      <JsonLd
+        data={contentPageJsonLd("/about/", "About", "WorkSmartOS is the brand. MaintenanceOS is its property-maintenance product, with fixed safety rules and human clearance. Pre-launch.", [
+          { name: "About", path: "/about/" },
+        ])}
+      />
       <PageHero
         eyebrow="WorkSmartOS · United Kingdom"
         title="WorkSmartOS is the brand"

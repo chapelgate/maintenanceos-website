@@ -43,7 +43,7 @@ test("core property maintenance page is unique, indexable source and internally 
   assert.match(page, /Property maintenance software for UK teams/);
   assert.match(page, /not marketed as a full property-accounting suite/);
   assert.match(page, /funnelPageMetadata\("propertyMaintenanceSoftware"\)/);
-  assert.match(page, /funnelPageJsonLd\("propertyMaintenanceSoftware"\)/);
+  assert.match(page, /fullFunnelPageJsonLd\("propertyMaintenanceSoftware"\)/);
   assert.match(routes, /\/property-maintenance-software\//);
   assert.match(footer, /Property maintenance software/);
 });

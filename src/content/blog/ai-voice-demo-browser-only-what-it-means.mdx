@@ -1,0 +1,72 @@
+---
+slug: "ai-voice-demo-browser-only-what-it-means"
+title: "AI Voice Demo: Browser-Only — What It Means"
+description: "Understanding the WorkSmartOS voice demo: browser-based, no phone number required, pre-launch preview of the AI receptionist capability."
+date: "2026-09-20"
+author: "WorkSmartOS Team"
+tags: ["AI Voice", "Demo", "Pre-Launch"]
+category: "Product"
+---
+
+# AI Voice Demo: Browser-Only — What It Means
+
+The WorkSmartOS voice demo runs in your browser. No phone number. No app install. No signup. This is intentional — it's a functional preview of the AI receptionist capability under testing, not a live phone service.
+
+## How the Browser Demo Works
+
+1. **Click "Try Voice Demo"** on /create/ or /demo/
+2. **Grant microphone permission** (browser prompt)
+3. **Speak naturally** — describe a maintenance issue
+4. **AI extracts structured facts** in real time
+5. **Review the draft** — see what the AI heard and structured
+6. **Safety latches apply** — gas, electrical, safeguarding, high-value flags appear
+
+The demo uses Google Gemini for language understanding and Piper for text-to-speech, running client-side where possible and via our API for the voice components.
+
+## What It Is Not
+
+- ❌ Not a live phone number you can call
+- ❌ Not an always-on receptionist service
+- ❌ Not general availability
+- ❌ Not a substitute for emergency services (999/111)
+- ❌ Not a contracted service — no SLA, no support
+
+## What It Is
+
+- ✅ Functional preview of structured fact extraction from speech
+- ✅ Safety latch demonstration (gas/electrical/safeguarding/high-value)
+- ✅ Browser-based — works on desktop and mobile
+- ✅ No data retained after session ends
+- ✅ Honest about pre-launch status
+
+## Live Demo Number (Under Testing)
+
+We are testing a Twilio-powered demo number that routes to the same voice pipeline. When enabled, it will appear on /create/ and /demo/ pages. This is separate from the browser demo and also pre-launch.
+
+- **Availability**: 24/7 when enabled
+- **Scope**: Greeting + structured intake only
+- **Safety**: Same safety latches apply
+- **Data**: Call audio processed per our subprocessors list (/subprocessors/)
+- **Cost**: Free during pre-launch testing
+
+The live number is gated behind the same voice gate enforcement (S7 in our master plan) — low-confidence fields reported as "Unknown — not found", not guessed.
+
+## Why Browser-First?
+
+1. **Accessibility**: No phone required; works for deaf/hard-of-hearing users with text fallback
+2. **Privacy**: No phone number shared; microphone permission is explicit and revocable
+3. **Testing**: Faster iteration on the AI pipeline without telephony infrastructure
+4. **Transparency**: You see exactly what the AI extracts in real time
+
+## Pre-Launch Status
+
+WorkSmartOS MaintenanceOS is pre-launch. The AI receptionist capability is under testing. Fixed rules and authorised human clearance keep control of safety and money. Not commercially generally available; not a public always-on phone service.
+
+Early access packages shared on request via /demo/.
+
+## Further Reading
+
+- [Try Website Set-up (Preview)](/create/) — browser demo entry point
+- [Request an Early Demo](/demo/) — early access request
+- [Why Safety Latches Matter in AI Receptionists](/blog/why-safety-latches-matter-in-ai-receptionists/)
+- [FAQ: Safety, Data, Pricing and Status](/faq/)

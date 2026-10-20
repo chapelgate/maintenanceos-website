@@ -5,7 +5,7 @@ import { REFERRER_POLICY } from "@/lib/static-security-headers";
 import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/site-url";
 
 /** Static file URL: no trailing slash (absoluteUrl adds one for routes). */
-const OG_IMAGE_URL = () => `${getCanonicalSiteUrl().replace(/\/$/, "")}/og-image.png`;
+const OG_IMAGE_URL = () => `${getCanonicalSiteUrl().replace(/\/$/, "")}/og-image.webp`;
 
 /** Canonical public path named in funnel-page titles, descriptions, and OG. */
 export const FUNNEL_PATH_LABEL =
@@ -81,7 +81,14 @@ export function buildRootMetadata(): Metadata {
       siteName: siteConfig.publicBrand,
       title: defaultTitle,
       description: siteConfig.description,
-      images: [OG_IMAGE_URL()],
+      images: [
+        {
+          url: OG_IMAGE_URL(),
+          width: 1200,
+          height: 630,
+          alt: siteConfig.publicBrand,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -117,7 +124,14 @@ export function contentPageMetadata(opts: {
       siteName: siteConfig.publicBrand,
       locale: ogLocale(),
       type: "website",
-      images: [OG_IMAGE_URL()],
+      images: [
+        {
+          url: OG_IMAGE_URL(),
+          width: 1200,
+          height: 630,
+          alt: siteConfig.publicBrand,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

@@ -47,15 +47,68 @@ const prelaunch = {
 } as const;
 
 /**
- * Published-mode copy. Keep `tiers` empty until real packages are approved.
- * Empty tiers fall back to the request-pricing card (no fake prices).
+ * Published-mode copy. Tiers are populated with Andy-approved prices only.
+ * Empty or placeholder prices fall back to the request-pricing card (no fake prices).
+ * Andy must confirm: tier names, prices, unit/period, and feature lists.
  */
 const published = {
   eyebrow: "",
   title: "Pricing",
   lede:
     "Packages for UK landlords, letting agents, and property managers. No self-serve checkout on this site — request a quote if you need a tailored plan. No live phone is included in a plan.",
-  tiers: [] as PricingTier[],
+  tiers: [
+    {
+      id: "starter",
+      name: "Starter",
+      priceLabel: "[ANDY: Starter tier price — e.g. XX/month per property]",
+      blurb: "For small portfolios getting started with structured intake.",
+      features: [
+        "Website intake for repair reports",
+        "Safety latches on critical hazards",
+        "Audit logs (read-only)",
+        "Email support",
+      ],
+      cta: {
+        href: "/demo/",
+        label: "Request Starter demo",
+      },
+    },
+    {
+      id: "professional",
+      name: "Professional",
+      priceLabel: "[ANDY: Professional tier price — e.g. XX/month per property]",
+      blurb: "For growing letting agents and property managers.",
+      features: [
+        "Everything in Starter",
+        "Multi-property dashboard",
+        "Team member access",
+        "Priority email support",
+        "API access (read)",
+      ],
+      cta: {
+        href: "/demo/",
+        label: "Request Professional demo",
+      },
+    },
+    {
+      id: "enterprise",
+      name: "Enterprise",
+      priceLabel: "[ANDY: Enterprise tier price — e.g. XX/month per property]",
+      blurb: "For large portfolios and housing associations.",
+      features: [
+        "Everything in Professional",
+        "Unlimited properties",
+        "SSO / SAML",
+        "Dedicated support channel",
+        "API access (read/write)",
+        "Custom safety rules",
+      ],
+      cta: {
+        href: "/demo/",
+        label: "Request Enterprise demo",
+      },
+    },
+  ] as PricingTier[],
   fallbackCardTitle: "Request a quote",
   fallbackCardBody:
     "List packages are not on this page yet. Request pricing and we will share what fits your portfolio. No price list is published, and no live phone is included in a plan.",

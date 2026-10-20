@@ -8,7 +8,7 @@ import { ObjectionFaq } from "@/components/ObjectionFaq";
 import { PageHero } from "@/components/PageHero";
 import { ProductTour } from "@/components/ProductTour";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
-import { funnelPageJsonLd } from "@/lib/json-ld";
+import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 
 export const metadata = funnelPageMetadata("howItWorks");
@@ -16,7 +16,7 @@ export const metadata = funnelPageMetadata("howItWorks");
 export default function HowItWorksPage() {
   return (
     <>
-      <JsonLd data={funnelPageJsonLd("howItWorks")} />
+      <JsonLd data={fullFunnelPageJsonLd("howItWorks")} />
       <PageHero
         eyebrow="Pre-launch · Preview"
         title="From maintenance request to controlled follow-up."

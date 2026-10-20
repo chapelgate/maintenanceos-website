@@ -5,7 +5,7 @@ import { FeatureStatusChip } from "@/components/FeatureStatusChip";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { funnelPageJsonLd } from "@/lib/json-ld";
+import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 import { CREATE_JOURNEY_STEPS } from "@/lib/onboarding-create";
 
@@ -14,7 +14,7 @@ export const metadata = funnelPageMetadata("demo");
 export default function DemoPage() {
   return (
     <>
-      <JsonLd data={funnelPageJsonLd("demo")} />
+      <JsonLd data={fullFunnelPageJsonLd("demo")} />
       <PageHero
         eyebrow="Preview"
         title="Start from your website URL."
@@ -67,6 +67,21 @@ export default function DemoPage() {
       {false && <CtaPair />}
 
       <DemoConversionTabs />
+
+      <section className="mx-auto max-w-4xl px-4 py-12" aria-labelledby="demo-trust-link">
+        <p className="text-sm text-muted text-center">
+          See our{" "}
+          <a
+            href="/trust/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Trust & verification
+          </a>
+          {" "}
+          page for legal entity, DPIA status, recording disclosure, and
+          certification facts.
+        </p>
+      </section>
     </>
   );
 }

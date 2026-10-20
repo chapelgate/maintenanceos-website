@@ -1,0 +1,24 @@
+# S24 Implementation Tasks
+
+- [x] Create `src/content/blog/` directory
+- [x] Create 5 blog MDX files with frontmatter
+- [x] Create `src/lib/blog.ts` with blog post loading functions
+- [x] Create `src/app/blog/page.tsx` (blog index)
+- [x] Create `src/app/blog/[slug]/page.tsx` (individual post)
+- [x] Create `src/app/blog/rss.xml/route.ts` (RSS feed)
+- [x] Update `scripts/generate-sitemap.ts` for blog paths
+- [x] Update `src/app/sitemap.ts` for blog paths
+- [x] Update `src/config/routes.ts` for blog paths
+- [x] Run `npm ci` — PASS
+- [x] Run `npx tsc --noEmit` — PASS
+- [x] Run `npm run lint` — PASS (pre-existing warnings only)
+- [x] Run `npm test` — PASS (pre-existing failures only)
+- [x] Run `npm run build` — PASS
+- [x] Verify sitemap.xml includes 6 blog URLs
+- [x] Verify RSS feed at `/blog/rss.xml` with 5 items
+- [x] Verify blog pages render with JSON-LD BreadcrumbList
+- [x] Create PR with Estate-Preflight header
+- [x] Wait for CI (estate-gate, validate, webkit-a11y)
+- [x] Merge PR after green checks
+- [x] Update IMPL_STATE.md with PR number and SHA
+- [x] Run live acceptance check against https://worksmartos.co.uk

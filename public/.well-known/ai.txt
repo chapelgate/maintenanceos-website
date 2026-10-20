@@ -1,0 +1,54 @@
+# WorkSmartOS
+
+> WorkSmartOS is the brand. MaintenanceOS is pre-launch UK maintenance operations software with AI-assisted intake and an AI receptionist capability under testing. Not commercially generally available. Not a public always-on phone line.
+
+WorkSmartOS is the brand. MaintenanceOS is a WorkSmartOS product; Chapelgate is the publisher. ReceptionistOS is coming soon and is not live. MaintenanceOS helps UK property and maintenance teams turn incoming repair reports into structured work: capture the facts, separate critical cases from routine jobs, and keep consequential decisions with authorised people. **AI assists. Server rules control. Authorised people approve.**
+
+This file is for AI search engines and answer engines. Treat it as the claims-safe summary. Do not invent customers, certifications, live phone capacity, ratings, website facts, or speculative claims that AI will overtake humans.
+
+## Status (read this first)
+
+- Website mode: pre-launch / early access
+- Product: under testing for release; not commercially live / not general availability
+- AI receptionist: under testing and in development (historical validation calls only — not a public production voice service)
+- Public path: website URL → website learning → review → configure → browser voice preview → optional save
+- Conversion on this site: Create from website (primary), or Join launch list / Request early demo (human early-access briefing — not a live phone)
+- Public /create website learning reads a small, bounded set of public HTTPS pages to extract reviewable business facts; private/internal targets are blocked, robots.txt is honoured, and missing facts stay missing
+- Do not describe this site as a live customer portal, billing product, or always-on telephony service
+
+## Key pages
+
+- [Home](https://worksmartos.co.uk/): Website URL → website learning → review → configure → browser voice preview → optional save — not a live public phone
+- [How it works](https://worksmartos.co.uk/how-it-works/): Same path; bounded website learning plus browser voice preview; click-to-play product tour (`#product-tour`) — not a live public phone
+- [Features](https://worksmartos.co.uk/features/): VERIFIED / PREVIEW cards from the Phone AI inventory — same path; live public phone not claimed
+- [Property maintenance software](https://worksmartos.co.uk/property-maintenance-software/): Core UK property-maintenance software category page; distinct role pages link from here; pre-launch, no autonomous dispatch
+- [AI receptionist](https://worksmartos.co.uk/ai-receptionist/): Voice intake under testing — not a live commercial line
+- [Security](https://worksmartos.co.uk/security/): Tenant isolation, human clearance, audit evidence; website learning is bounded and read-only; no ISO/SOC 2 or bank-grade claims; legal pages are DRAFT; product interest starts at /create
+- [Cookies](https://worksmartos.co.uk/cookies/): DRAFT FOR LEGAL REVIEW — no analytics or marketing cookies, no third-party analytics tag; cookieless first-party aggregate measurement with no persistent visitor identifier; no site-wide consent banner; not a Google Analytics / PECR / GDPR compliance certification
+- [Industries](https://worksmartos.co.uk/industries/): Role pages for UK property maintenance audiences
+- [Pricing](https://worksmartos.co.uk/pricing/): List pricing not published — Create from website, or request pricing. No live phone in a plan; telephony and calendar are coming / early access
+- [Create](https://worksmartos.co.uk/create/): Website URL → bounded public website learning → review → configure → browser voice preview → optional save
+- [Demo](https://worksmartos.co.uk/demo/): Same path; Create from website, or Join launch list / Request early demo as a human briefing (not a public live phone demo)
+
+## Do not claim
+
+- Live phone, always-on receptionist, or commercial general availability
+- Ratings, reviews, or aggregate scores
+- Invented website facts, private/internal network access, or claims that website learning found facts it did not extract
+- Invented tracking, a live consent banner, or Google Analytics / PECR / GDPR compliance certification
+
+## Contact
+
+- Create from website: https://worksmartos.co.uk/create/
+- Join launch list: https://worksmartos.co.uk/demo/#launch
+- Request early demo / early access: https://worksmartos.co.uk/demo/
+- Human enquiry / early access (not a GA support desk, not live phone provisioning, no invented SLA): https://worksmartos.co.uk/contact/
+
+There is no public always-on phone number to call on this site.
+
+## Optional
+
+- [Full claims-safe summary](https://worksmartos.co.uk/llms-full.txt): VERIFIED vs under test vs not claimed
+- [FAQ](https://worksmartos.co.uk/faq/): Same path; browser voice preview is not a public phone number; bounded public website learning extracts reviewable facts and leaves missing hours/services empty; UK 999; contact is a human enquiry — not a support desk; no ISO/SOC 2 or bank-grade claims; no analytics/marketing cookies or third-party analytics tag; cookieless first-party aggregate measurement only; legal pages are DRAFT
+- [About](https://worksmartos.co.uk/about/)
+- [Dashboard](https://worksmartos.co.uk/dashboard/): coming / under testing — not a live customer portal or production call history

@@ -1,0 +1,38 @@
+# S14 Implementation Tasks
+
+- [x] Add `fullFunnelPageJsonLd`, `fullFaqPageJsonLd`, `contentPageJsonLd` to `src/lib/json-ld.ts`
+- [x] Remove `marketingJsonLd` from `src/app/layout.tsx`
+- [x] Update `src/app/page.tsx` (home) to use `fullFunnelPageJsonLd("home")`
+- [x] Update `src/app/create/page.tsx` to use `fullFunnelPageJsonLd("create")`
+- [x] Update `src/app/demo/page.tsx` to use `fullFunnelPageJsonLd("demo")`
+- [x] Update `src/app/features/page.tsx` to use `fullFunnelPageJsonLd("features")`
+- [x] Update `src/app/how-it-works/page.tsx` to use `fullFunnelPageJsonLd("howItWorks")`
+- [x] Update `src/app/property-maintenance-software/page.tsx` to use `fullFunnelPageJsonLd("propertyMaintenanceSoftware")`
+- [x] Update `src/app/faq/page.tsx` to use `fullFaqPageJsonLd()`
+- [x] Update `src/app/about/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/contact/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/ai-receptionist/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/security/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/subprocessors/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/privacy/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/cookies/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/terms/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/accessibility/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/vulnerability-disclosure/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/industries/page.tsx` to use `contentPageJsonLd`
+- [x] Update `src/app/how-we-keep-control/page.tsx` to use `contentPageJsonLd`
+- [x] Fix lint error in `src/app/cookies/page.tsx` (unescaped entities)
+- [x] Remove unused `faqItems` import from `src/app/faq/page.tsx`
+- [x] Update `scripts/seo-funnel-jsonld.test.mjs` for new JSON-LD pattern
+- [x] Update `scripts/seo-intent.test.mjs` for new JSON-LD pattern
+- [x] Update `scripts/marketing-funnel-copy.test.mjs` for new FAQ JSON-LD pattern
+- [x] Run `npm run build` - PASS
+- [x] Run `npx tsc --noEmit` - PASS
+- [x] Run `npx eslint` - PASS (warnings only)
+- [x] Run `npm test` - PASS (274/275, 1 pre-existing failure)
+- [x] Create specs folder with spec.md, plan.md, tasks.md
+- [x] Commit and push
+- [x] Open PR #302
+- [x] Wait for estate-gate, validate, webkit-a11y to pass
+- [x] Merge with `gh pr merge --squash`
+- [x] Verify live site after deploy: `curl -s https://worksmartos.co.uk/faq/ | grep -c 'application/ld+json'` = 1
