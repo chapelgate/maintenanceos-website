@@ -80,8 +80,8 @@ jobs:
             npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts
             npx tsc --noEmit
             # Next 16 emits both out/404/index.html and out/_not-found/index.html.
-            # /accessibility/ is included. 30 is the current static page count.
-            test "$(find out -name index.html -type f | wc -l)" -eq 30
+            # Current static page count (including dynamic routes via generateStaticParams).
+            test "$(find out -name index.html -type f | wc -l)" -eq 91
             test -f out/robots.txt
             test -f out/sitemap.xml
             BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
