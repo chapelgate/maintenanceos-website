@@ -5,13 +5,17 @@ import path from "node:path";
 import test from "node:test";
 import { stableContentHash } from "./scanner-v2-foundation.ts";
 import {
+  aggregateFacts,
   documentCrawlDisposition,
+  draftFromFacts,
   recoverScannerV2ReaderPage,
   runPersistentScannerV2,
 } from "./scanner-v2-runtime.ts";
 import { siteBlockedScan } from "./site-block.ts";
 import { FileScannerV2JobStore } from "./scanner-v2-worker.ts";
 import type {
+  BusinessFactMeta,
+  BusinessFacts,
   CrawlManifest,
   CrawlPage,
   CrawlUrlDisposition,
@@ -1001,4 +1005,147 @@ test("a hung page returns the persisted partial within the request budget", asyn
     release();
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test("aggregateFacts omits low-confidence businessName", () => {
+  const facts: BusinessFacts = {
+    businessName: "Acme Corp",
+    address: "123 Main St",
+    hours: "Mo-Fr 09:00-17:00",
+    services: ["Service A", "Service B"],
+    faqs: [{ question: "Q1?", answer: "A1" }],
+  };
+  const factMeta: BusinessFactMeta = {
+    businessName: { confidence: "low", source: "test" },
+    address: { confidence: "high", source: "test" },
+    hours: { confidence: "high", source: "test" },
+    services: [{ confidence: "high", source: "test" }, { confidence: "high", source: "test" }],
+    faqs: [{ confidence: "high", source: "test" }],
+  };
+  const { facts: outFacts, factMeta: outMeta } = aggregateFacts(facts, factMeta);
+  assert.equal(outFacts.businessName, undefined);
+  assert.equal(outMeta.businessName, undefined);
+  assert.equal(outFacts.address, "123 Main St");
+  assert.equal(outFacts.hours, "Mo-Fr 09:00-17:00");
+  assert.deepEqual(outFacts.services, ["Service A", "Service B"]);
+});
+
+test("aggregateFacts omits low-confidence address", () => {
+  const facts: BusinessFacts = {
+    businessName: "Acme Corp",
+    address: "123 Main St",
+    hours: "Mo-Fr 09:00-17:00",
+  };
+  const factMeta: BusinessFactMeta = {
+    businessName: { confidence: "high", source: "test" },
+    address: { confidence: "low", source: "test" },
+    hours: { confidence: "high", source: "test" },
+  };
+  const { facts: outFacts, factMeta: outMeta } = aggregateFacts(facts, factMeta);
+  assert.equal(outFacts.businessName, "Acme Corp");
+  assert.equal(outFacts.address, undefined);
+  assert.equal(outMeta.address, undefined);
+  assert.equal(outFacts.hours, "Mo-Fr 09:00-17:00");
+});
+
+test("aggregateFacts omits low-confidence hours", () => {
+  const facts: BusinessFacts = {
+    businessName: "Acme Corp",
+    address: "123 Main St",
+    hours: "Mo-Fr 09:00-17:00",
+  };
+  const factMeta: BusinessFactMeta = {
+    businessName: { confidence: "high", source: "test" },
+    address: { confidence: "high", source: "test" },
+    hours: { confidence: "low", source: "test" },
+  };
+  const { facts: outFacts, factMeta: outMeta } = aggregateFacts(facts, factMeta);
+  assert.equal(outFacts.businessName, "Acme Corp");
+  assert.equal(outFacts.address, "123 Main St");
+  assert.equal(outFacts.hours, undefined);
+  assert.equal(outMeta.hours, undefined);
+});
+
+test("aggregateFacts filters low-confidence services", () => {
+  const facts: BusinessFacts = {
+    businessName: "Acme Corp",
+    services: ["Good Service", "Bad Service", "Another Good"],
+  };
+  const factMeta: BusinessFactMeta = {
+    businessName: { confidence: "high", source: "test" },
+    services: [
+      { confidence: "high", source: "test" },
+      { confidence: "low", source: "test" },
+      { confidence: "high", source: "test" },
+    ],
+  };
+  const { facts: outFacts, factMeta: outMeta } = aggregateFacts(facts, factMeta);
+  assert.deepEqual(outFacts.services, ["Good Service", "Another Good"]);
+  assert.deepEqual(outMeta.services, [
+    { confidence: "high", source: "test" },
+    { confidence: "high", source: "test" },
+  ]);
+});
+
+test("aggregateFacts filters low-confidence faqs", () => {
+  const facts: BusinessFacts = {
+    businessName: "Acme Corp",
+    faqs: [
+      { question: "Good Q?", answer: "Good A" },
+      { question: "Bad Q?", answer: "Bad A" },
+    ],
+  };
+  const factMeta: BusinessFactMeta = {
+    businessName: { confidence: "high", source: "test" },
+    faqs: [
+      { confidence: "high", source: "test", question: "Good Q?", sourceUrl: "https://example.com" },
+      { confidence: "low", source: "test", question: "Bad Q?", sourceUrl: "https://example.com" },
+    ],
+  };
+  const { facts: outFacts, factMeta: outMeta } = aggregateFacts(facts, factMeta);
+  assert.equal(outFacts.faqs?.length, 1);
+  assert.equal(outFacts.faqs?.[0].question, "Good Q?");
+  assert.equal(outMeta.faqs?.length, 1);
+  assert.equal(outMeta.faqs?.[0].confidence, "high");
+});
+
+test("draftFromFacts shows Unknown for missing businessName", () => {
+  const facts: BusinessFacts = {
+    address: "123 Main St",
+    hours: "Mo-Fr 09:00-17:00",
+    services: ["Service A"],
+    faqs: [{ question: "Q?", answer: "A" }],
+  };
+  const draft = draftFromFacts(facts);
+  assert.equal(draft.businessName, "Unknown — not found");
+  assert.equal(draft.address, "123 Main St");
+  assert.equal(draft.hours, "Mo-Fr 09:00-17:00");
+  assert.equal(draft.services, "Service A");
+  assert.equal(draft.faqs, "Q: Q?\nA: A");
+});
+
+test("draftFromFacts shows Unknown for all missing fields", () => {
+  const facts: BusinessFacts = {};
+  const draft = draftFromFacts(facts);
+  assert.equal(draft.businessName, "Unknown — not found");
+  assert.equal(draft.address, "Unknown — not found");
+  assert.equal(draft.hours, "Unknown — not found");
+  assert.equal(draft.services, "Unknown — not found");
+  assert.equal(draft.faqs, "Unknown — not found");
+});
+
+test("draftFromFacts handles empty services array", () => {
+  const facts: BusinessFacts = {
+    services: [],
+  };
+  const draft = draftFromFacts(facts);
+  assert.equal(draft.services, "Unknown — not found");
+});
+
+test("draftFromFacts handles empty faqs array", () => {
+  const facts: BusinessFacts = {
+    faqs: [],
+  };
+  const draft = draftFromFacts(facts);
+  assert.equal(draft.faqs, "Unknown — not found");
 });
