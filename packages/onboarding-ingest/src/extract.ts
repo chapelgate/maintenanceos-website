@@ -1958,7 +1958,7 @@ export function validateBusinessName(value: string | undefined): boolean {
   const trimmed = value.trim();
   if (/^about\s+/i.test(trimmed)) return false;
   if (/^our\s+story$/i.test(trimmed)) return false;
-  
+
   const stripped = strippedName(value);
   if (!stripped) return false;
   if (isGenericName(stripped)) return false;
