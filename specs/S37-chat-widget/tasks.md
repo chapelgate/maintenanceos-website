@@ -8,8 +8,6 @@
 - [x] Integrate ChatWidget on industry pages (`src/components/IndustryRolePage.tsx`)
 - [x] Run lint, TypeScript, tests, build - all pass
 - [x] Verify ChatWidget renders in static HTML output for `/create` and industry pages
-
-## Pending Tasks
 - [ ] Commit changes to git
 - [ ] Push branch `feat/S37-chat-widget`
 - [ ] Create PR with Estate-Preflight header
@@ -17,6 +15,9 @@
 - [ ] Merge PR when all checks green
 - [ ] Update IMPL_STATE.md with PR number and merge SHA
 - [ ] Run acceptance check against https://worksmartos.co.uk after deploy
+
+## Pending Tasks
+- None (all implementation tasks complete)
 
 ## Blockers
 - None identified. DO Function webhook (`CHAT_WEBHOOK_URL`) is configured separately by dr eggbot (deploy note D2).
