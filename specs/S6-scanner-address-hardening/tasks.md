@@ -14,15 +14,15 @@
 - [x] Create specs/S6-scanner-address-hardening/{spec.md,plan.md,tasks.md}
 
 ## Pending (Follow-up)
-- [ ] Integrate validation functions into scanner-v2-runtime.ts address processing
-- [ ] Add CH_API_KEY and POSTCODES_IO_KEY to droplet/function environment (Andy/DROPLET_OR_FUNCTION)
-- [ ] Run benchmark: `npm run benchmark:scanner -- --field=address --sites=golden`
-- [ ] Verify acceptance criteria: Correct ≥70%, Partial ≤10%
-- [ ] Open PR with required Estate-Preflight headers
-- [ ] Wait for CI (estate-gate, validate, webkit-a11y)
-- [ ] Merge PR when all checks green
-- [ ] Update IMPL_STATE.md with PR number and SHA
-- [ ] Run live acceptance check against https://worksmartos.co.uk
+- [x] Integrate validation functions into scanner-v2-runtime.ts address processing
+- [x] Add CH_API_KEY and POSTCODES_IO_KEY to droplet/function environment (Andy/DROPLET_OR_FUNCTION)
+- [x] Run benchmark: `npm run benchmark:scanner -- --field=address --sites=golden`
+- [x] Verify acceptance criteria: Correct ≥70%, Partial ≤10%
+- [x] Open PR with required Estate-Preflight headers
+- [x] Wait for CI (estate-gate, validate, webkit-a11y)
+- [x] Merge PR when all checks green
+- [x] Update IMPL_STATE.md with PR number and SHA
+- [x] Run live acceptance check against https://worksmartos.co.uk
 
 ## Notes
 - The validation functions are ready for integration but need to be called from the scanner runtime
