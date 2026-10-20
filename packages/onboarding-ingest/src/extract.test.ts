@@ -1358,3 +1358,15 @@ test("accordion with question-marked buttons and sibling divs extracts as FAQs",
   assert.match(result.draft.faqs ?? "", /call-out\?/);
   assert.equal(result.fieldMeta.faqs?.source, "details");
 });
+
+test("visible hours beat JSON-LD placeholder hours", () => {
+  const visibleWins = extractDraftFromHtml([
+    {
+      url: "https://visiblewins.example/",
+      html: `<script type="application/ld+json">{"@type":"LocalBusiness","name":"Visible Wins","openingHours":"Mo-Su 00:00-23:59"}</script><body><p>Monday - Friday 9am-5pm</p></body>`,
+    },
+  ]);
+  assert.match(visibleWins.draft.hours ?? "", /Monday - Friday 9am-5pm/);
+  assert.doesNotMatch(visibleWins.draft.hours ?? "", /00:00/);
+  assert.equal(visibleWins.fieldMeta.hours?.source, "pattern");
+});
