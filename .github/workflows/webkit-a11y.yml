@@ -23,11 +23,11 @@ jobs:
       - name: Build static export
         run: npm run build
       - name: Start local server
-        run: npx serve out -l 3000 &
+        run: npx http-server out -p 3000 -c-1 &
       - name: Wait for server
         run: |
           for i in {1..30}; do
-            if curl -s http://localhost:3000/ > /dev/null; then
+            if curl -s http://localhost:3000/en-GB/ > /dev/null; then
               echo "Server is ready"
               break
             fi
