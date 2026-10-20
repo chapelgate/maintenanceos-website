@@ -51,7 +51,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "ip",
     title: "Intellectual property",
-    body: "[COUNSEL] — ownership of site content, marks, and branding; limited licence to view only as counsel directs.",
+    body: "[ANDY: IP ownership, marks, branding, and limited licence terms per counsel review.]",
   },
   {
     id: "third-party",
@@ -81,7 +81,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "changes",
     title: "Changes to these terms",
-    body: "[COUNSEL] — how updates take effect once a final version exists.",
+    body: "[ANDY: how updates take effect and are communicated once a final version exists, per counsel review.]",
   },
   {
     id: "governing-law",

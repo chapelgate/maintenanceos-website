@@ -1,0 +1,5 @@
+- [x] Replace [COUNSEL] in terms page Intellectual property section
+- [x] Replace [COUNSEL] in terms page Changes to these terms section
+- [x] Run npm run build - passes (96 pages)
+- [x] Run npm test - all relevant tests pass
+- [x] Verify no [COUNSEL] or [OWNER] in out/ build output
