@@ -22,8 +22,14 @@ jobs:
         run: npx playwright install --with-deps webkit
       - name: Build static export
         run: npm run build
+      - name: Verify static export structure
+        run: |
+          echo "Checking out/en-GB/ directory:"
+          ls -la out/en-GB/
+          echo "Checking out/en-GB/create/ directory:"
+          ls -la out/en-GB/create/
       - name: Start local server
-        run: npx http-server out -p 3000 -c-1 &
+        run: python3 -m http.server 3000 --directory out &
       - name: Wait for server
         run: |
           for i in {1..30}; do
