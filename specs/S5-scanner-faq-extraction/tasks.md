@@ -8,6 +8,6 @@
 - [x] Run typecheck: `npx tsc --noEmit` passes
 - [x] Run lint: `npm run lint` passes (0 errors, 5 pre-existing warnings)
 - [x] Create PR with Estate headers
-- [ ] Wait for CI: estate-gate, validate, webkit-a11y all green
-- [ ] Merge PR with `gh pr merge --squash`
-- [ ] Verify live acceptance after deploy
+- [x] Wait for CI: estate-gate, validate, webkit-a11y all green
+- [x] Merge PR with `gh pr merge --squash`
+- [x] Verify live acceptance after deploy
