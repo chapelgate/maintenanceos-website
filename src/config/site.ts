@@ -3,7 +3,7 @@
  * Flip PUBLIC_LAUNCH only after WEBSITE_LAUNCH_CHECKLIST.md is complete.
  */
 
-import { usableHttpEndpoint } from "@/lib/public-enquiry";
+import { usableHttpEndpoint } from "../lib/public-enquiry.ts";
 
 function envFlag(value: string | undefined, fallback = false): boolean {
   if (value === undefined || value === "") return fallback;
