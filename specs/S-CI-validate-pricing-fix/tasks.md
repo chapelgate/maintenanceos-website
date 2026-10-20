@@ -5,4 +5,4 @@
 - [x] Create specs/S-CI-validate-pricing-fix/plan.md
 - [x] Create specs/S-CI-validate-pricing-fix/tasks.md
 - [x] Push changes and verify CI passes
-- [ ] Merge PR when all checks green
+- [x] Merge PR when all checks green
