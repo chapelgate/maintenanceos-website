@@ -1909,12 +1909,14 @@ const ERROR_PAGE_TITLE_RE =
   /404|\bnot found\b|\berror\b|^untitled(?:\s+document)?$/i;
 
 const SENTENCE_VERB_RE = /\s(?:are|is|we|provide)\s/i;
+const SENTENCE_STARTER_RE = /^(?:welcome to|we are|our|established|since)\s+/i;
 
 /** A name that is really a sentence, a tagline, or a place tacked on with a comma. */
 function isSentenceName(value: string): boolean {
   if (value.length > 60) return true;
   if (/[.]$/.test(value)) return true;
   if (SENTENCE_VERB_RE.test(` ${value} `) || SENTENCE_VERB_RE.test(value)) return true;
+  if (SENTENCE_STARTER_RE.test(value)) return true;
   if (
     /,\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}\.?$/.test(value) &&
     (value.length > 40 || /,\s*[A-Z][a-z]+,\s*[A-Z][a-z]+/.test(value))
@@ -1947,6 +1949,31 @@ export function publicBusinessName(value: string | undefined): string | undefine
   if (isSentenceName(stripped)) return undefined;
   if (/\.(?:jpe?g|png|gif|webp|svg|ico|pdf|docx?|html?)$/i.test(stripped)) return undefined;
   return stripped;
+}
+
+/** Stricter validation for business names: rejects 404/error pages, about pages, slugs, and other junk. */
+export function validateBusinessName(value: string | undefined): boolean {
+  if (!value) return false;
+  // Check for "About X" patterns BEFORE stripping (strippedName removes "^about\s+")
+  const trimmed = value.trim();
+  if (/^about\s+/i.test(trimmed)) return false;
+  if (/^our\s+story$/i.test(trimmed)) return false;
+
+  const stripped = strippedName(value);
+  if (!stripped) return false;
+  if (isGenericName(stripped)) return false;
+  if (HOSTLIKE_NAME_RE.test(stripped)) return false;
+  if (ERROR_PAGE_TITLE_RE.test(stripped)) return false;
+  if (isSentenceName(stripped)) return false;
+  if (/\.(?:jpe?g|png|gif|webp|svg|ico|pdf|docx?|html?)$/i.test(stripped)) return false;
+  // Reject obvious slug-like names: all lowercase, hyphens/underscores, no brand indicators
+  // e.g., "plumbing-services", "about-us", "contact-us" but NOT "Lounge83", "Alleygates", "Thin"
+  if (!/\s/.test(stripped) && stripped.length <= 30) {
+    const lower = stripped.toLowerCase();
+    if (/^[a-z0-9]+(-[a-z0-9]+)+$/.test(lower)) return false; // kebab-case slug
+    if (/^(?:about|home|index|welcome|main|default|contact|services|blog|news|shop|store|admin|login|register|cart|checkout|faq|help|support|privacy|terms|legal|policy|cookie|cookies|us|me)$/i.test(stripped)) return false;
+  }
+  return true;
 }
 
 /** True when the text was dropped because it is a sentence or a place list, not a filename or a nav label. */
@@ -2233,6 +2260,7 @@ function acceptableName(text: string, siteHost: string): string | undefined {
   if (bled && (!source || !nameMatchesDomain(source, siteHost))) return undefined;
   const value = publicBusinessName(source);
   if (!value || isDomainSlug(value, siteHost)) return undefined;
+  if (!validateBusinessName(value)) return undefined;
   if (/^[^A-Za-z0-9]/.test(value) || /(?:\.\.\.|…)\s*$/.test(value)) return undefined;
   const matchesDomain = nameMatchesDomain(value, siteHost);
   if (!matchesDomain && isNavLegalName(value)) return undefined;
@@ -2293,7 +2321,7 @@ function matchesLaterPiece(value: string, siteHost: string, pathSlug: string): b
 
 function fallbackBusinessName(siteHost: string, pathSlug: string): string | undefined {
   const fromHost = domainBusinessName(siteHost);
-  if (!pathSlug) return fromHost;
+  if (!pathSlug) return fromHost && validateBusinessName(fromHost) ? fromHost : undefined;
   const fromPath = publicBusinessName(pathSlug.replace(/[a-z]/, (letter) => letter.toUpperCase()));
   if (
     fromPath &&
@@ -2302,9 +2330,10 @@ function fallbackBusinessName(siteHost: string, pathSlug: string): string | unde
     fromHost.toLowerCase().startsWith(fromPath.toLowerCase()) &&
     fromHost.length > fromPath.length
   ) {
-    return fromPath;
+    return validateBusinessName(fromPath) ? fromPath : undefined;
   }
-  return fromHost ?? fromPath;
+  const chosen = fromHost ?? fromPath;
+  return chosen && validateBusinessName(chosen) ? chosen : undefined;
 }
 
 function chooseBusinessName(hits: NameHit[], siteHost: string, pathSlug = ""): NameHit | undefined {
@@ -2342,7 +2371,7 @@ function chooseBusinessName(hits: NameHit[], siteHost: string, pathSlug = ""): N
   if (longer.length && isShortNameFragment(top.value)) {
     return longer.sort((a, b) => b.rank - a.rank)[0];
   }
-  return top;
+  return validateBusinessName(top.value) ? top : undefined;
 }
 
 function logoAlt(html: string): string | undefined {
@@ -2842,7 +2871,17 @@ export function extractDraftFromHtml(
     if (siteName) nameHits.push({ value: siteName, source: "meta", confidence: "high", rank: 60 });
     const title = extractTitle(page.html);
     if (title) {
-      const branded = !isArticlePage(page.url) || namePieces(title).some((piece) => {
+      const pieces = namePieces(title);
+      let pushedAny = false;
+      for (const piece of pieces) {
+        const value = candidateName(piece.text, siteHost);
+        if (value && validateBusinessName(value)) {
+          const pieceRank = 55 - piece.order * 5;
+          nameHits.push({ value, source: "title", confidence: "medium", rank: pieceRank });
+          pushedAny = true;
+        }
+      }
+      const branded = !isArticlePage(page.url) || pieces.some((piece) => {
         const value = candidateName(piece.text, siteHost);
         return Boolean(value && nameMatchesDomain(value, siteHost));
       });
@@ -2869,9 +2908,16 @@ export function extractDraftFromHtml(
       chosenName.confidence,
     );
   } else {
-    const fromDomain = fallbackBusinessName(siteHost, pathSlug);
-    if (fromDomain) {
-      setField(draft, fieldMeta, "businessName", fromDomain, "pattern", "low");
+    // Skip domain fallback for error pages (404, etc.)
+    const mainPage = pages[0];
+    const mainTitle = mainPage ? extractTitle(mainPage.html) : "";
+    const mainUrl = mainPage?.url ?? "";
+    const isErrorPage = ERROR_PAGE_TITLE_RE.test(mainTitle ?? "") || /\/404|\/error|\/not-found/i.test(mainUrl);
+    if (!isErrorPage) {
+      const fromDomain = fallbackBusinessName(siteHost, pathSlug);
+      if (fromDomain) {
+        setField(draft, fieldMeta, "businessName", fromDomain, "pattern", "low");
+      }
     }
   }
 
