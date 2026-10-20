@@ -26,7 +26,9 @@ import {
   extractServicesFromNav,
   extractTelMailto,
   rankCandidateUrls,
+  serviceAreaNames,
   stripHtmlToText,
+  townFromAddress,
 } from "./extract.ts";
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
@@ -1137,4 +1139,172 @@ test("validateBusinessName integrates with publicBusinessName to filter extracti
   // Slug-like title is rejected; domain fallback may apply but not the slug itself
   assert.notEqual(resultSlug.draft.businessName, "plumbing-services");
   assert.notEqual(resultSlug.draft.businessName, "Plumbing Services");
+});
+
+test("gazetteer: isUkPlaceName recognises major UK towns and postcode districts", () => {
+  assert.equal(isUkPlaceName("London"), true);
+  assert.equal(isUkPlaceName("Birmingham"), true);
+  assert.equal(isUkPlaceName("Manchester"), true);
+  assert.equal(isUkPlaceName("Glasgow"), true);
+  assert.equal(isUkPlaceName("Liverpool"), true);
+  assert.equal(isUkPlaceName("Leeds"), true);
+  assert.equal(isUkPlaceName("Sheffield"), true);
+  assert.equal(isUkPlaceName("Edinburgh"), true);
+  assert.equal(isUkPlaceName("Bristol"), true);
+  assert.equal(isUkPlaceName("Cardiff"), true);
+  assert.equal(isUkPlaceName("Newcastle upon Tyne"), true);
+  assert.equal(isUkPlaceName("Nottingham"), true);
+  assert.equal(isUkPlaceName("Leicester"), true);
+  assert.equal(isUkPlaceName("Coventry"), true);
+  assert.equal(isUkPlaceName("Bradford"), true);
+  assert.equal(isUkPlaceName("Belfast"), true);
+  assert.equal(isUkPlaceName("Kingston upon Hull"), true);
+  assert.equal(isUkPlaceName("Stoke-on-Trent"), true);
+  assert.equal(isUkPlaceName("Plymouth"), true);
+  assert.equal(isUkPlaceName("Wolverhampton"), true);
+  assert.equal(isUkPlaceName("Derby"), true);
+  assert.equal(isUkPlaceName("Swansea"), true);
+  assert.equal(isUkPlaceName("Southampton"), true);
+  assert.equal(isUkPlaceName("Aberdeen"), true);
+  assert.equal(isUkPlaceName("Portsmouth"), true);
+  assert.equal(isUkPlaceName("Peterborough"), true);
+  assert.equal(isUkPlaceName("York"), true);
+  assert.equal(isUkPlaceName("Northampton"), true);
+  assert.equal(isUkPlaceName("Norwich"), true);
+  assert.equal(isUkPlaceName("Luton"), true);
+  assert.equal(isUkPlaceName("Exeter"), true);
+  assert.equal(isUkPlaceName("Preston"), true);
+  assert.equal(isUkPlaceName("Chelmsford"), true);
+  assert.equal(isUkPlaceName("Gloucester"), true);
+  assert.equal(isUkPlaceName("Oxford"), true);
+  assert.equal(isUkPlaceName("Cambridge"), true);
+  assert.equal(isUkPlaceName("St Albans"), true);
+});
+
+test("gazetteer: isUkPlaceName recognises postcode districts", () => {
+  assert.equal(isUkPlaceName("SW1"), true);
+  assert.equal(isUkPlaceName("EC1"), true);
+  assert.equal(isUkPlaceName("M1"), true);
+  assert.equal(isUkPlaceName("B1"), true);
+  assert.equal(isUkPlaceName("L1"), true);
+  assert.equal(isUkPlaceName("LS1"), true);
+  assert.equal(isUkPlaceName("BS1"), true);
+  assert.equal(isUkPlaceName("NE1"), true);
+  assert.equal(isUkPlaceName("S1"), true);
+  assert.equal(isUkPlaceName("NG1"), true);
+  assert.equal(isUkPlaceName("G1"), true);
+  assert.equal(isUkPlaceName("EH1"), true);
+  assert.equal(isUkPlaceName("CF1"), true);
+  assert.equal(isUkPlaceName("BT1"), true);
+  assert.equal(isUkPlaceName("M25"), true);
+  assert.equal(isUkPlaceName("CH62"), true);
+  assert.equal(isUkPlaceName("AB10"), true);
+});
+
+test("gazetteer: isUkPlaceName recognises UK counties", () => {
+  assert.equal(isUkPlaceName("Greater London"), true);
+  assert.equal(isUkPlaceName("Greater Manchester"), true);
+  assert.equal(isUkPlaceName("Merseyside"), true);
+  assert.equal(isUkPlaceName("West Midlands"), true);
+  assert.equal(isUkPlaceName("West Yorkshire"), true);
+  assert.equal(isUkPlaceName("Hampshire"), true);
+  assert.equal(isUkPlaceName("Kent"), true);
+  assert.equal(isUkPlaceName("Lancashire"), true);
+  assert.equal(isUkPlaceName("Essex"), true);
+  assert.equal(isUkPlaceName("Surrey"), true);
+  assert.equal(isUkPlaceName("Hertfordshire"), true);
+  assert.equal(isUkPlaceName("Devon"), true);
+  assert.equal(isUkPlaceName("Cornwall"), true);
+  assert.equal(isUkPlaceName("Cumbria"), true);
+  assert.equal(isUkPlaceName("Gwynedd"), true);
+  assert.equal(isUkPlaceName("Highland"), true);
+});
+
+test("gazetteer: isUkPlaceName rejects non-places and navigation labels", () => {
+  assert.equal(isUkPlaceName("Home"), false);
+  assert.equal(isUkPlaceName("About"), false);
+  assert.equal(isUkPlaceName("Services"), false);
+  assert.equal(isUkPlaceName("Contact"), false);
+  assert.equal(isUkPlaceName("Privacy"), false);
+  assert.equal(isUkPlaceName("Terms"), false);
+  assert.equal(isUkPlaceName("England"), false);
+  assert.equal(isUkPlaceName("Scotland"), false);
+  assert.equal(isUkPlaceName("Wales"), false);
+  assert.equal(isUkPlaceName("United Kingdom"), false);
+  assert.equal(isUkPlaceName("UK"), false);
+  assert.equal(isUkPlaceName("Plumber"), false);
+  assert.equal(isUkPlaceName("Electrician"), false);
+  assert.equal(isUkPlaceName("Builder"), false);
+  assert.equal(isUkPlaceName("Solicitor"), false);
+  assert.equal(isUkPlaceName("2024"), false);
+  assert.equal(isUkPlaceName("January"), false);
+  assert.equal(isUkPlaceName("Monday"), false);
+});
+
+test("gazetteer: serviceAreaNames extracts valid places from mixed input", () => {
+  const input = [
+    "London",
+    "Birmingham",
+    "Manchester",
+    "Leeds",
+    "Glasgow",
+    "Liverpool",
+    "Newcastle upon Tyne",
+    "Bristol",
+    "SW1",
+    "M1",
+    "B1",
+    "Kent",
+    "Essex",
+    "Surrey",
+    "Home",
+    "About",
+    "Contact",
+  ];
+  const result = serviceAreaNames(input);
+  assert.ok(result.includes("London"));
+  assert.ok(result.includes("Birmingham"));
+  assert.ok(result.includes("Manchester"));
+  assert.ok(result.includes("Leeds"));
+  assert.ok(result.includes("Glasgow"));
+  assert.ok(result.includes("Liverpool"));
+  assert.ok(result.includes("Newcastle upon Tyne"));
+  assert.ok(result.includes("Bristol"));
+  assert.ok(result.includes("SW1"));
+  assert.ok(result.includes("M1"));
+  assert.ok(result.includes("B1"));
+  assert.ok(result.includes("Kent"));
+  assert.ok(result.includes("Essex"));
+  assert.ok(result.includes("Surrey"));
+  assert.equal(result.includes("Home"), false);
+  assert.equal(result.includes("About"), false);
+  assert.equal(result.includes("Contact"), false);
+});
+
+test("gazetteer: serviceAreaNames limits results to 16", () => {
+  const manyPlaces = [
+    "London", "Birmingham", "Manchester", "Leeds", "Glasgow",
+    "Liverpool", "Newcastle upon Tyne", "Bristol", "Sheffield", "Edinburgh",
+    "Cardiff", "Belfast", "Nottingham", "Leicester", "Coventry", "Bradford",
+    "Kingston upon Hull", "Stoke-on-Trent", "Plymouth", "Wolverhampton",
+  ];
+  const result = serviceAreaNames(manyPlaces);
+  assert.equal(result.length, 16);
+});
+
+test("gazetteer: townFromAddress extracts town from UK address", () => {
+  const addr1 = "10 Dock Road, Liverpool, L1 1AA";
+  assert.equal(townFromAddress(addr1), "Liverpool");
+
+  const addr2 = "4 Hampton Chase, Prenton, CH43 9HE";
+  assert.equal(townFromAddress(addr2), "Prenton");
+
+  const addr3 = "1 Mosedale Road, Croft Business Park, Bromborough, CH62 3QZ";
+  assert.equal(townFromAddress(addr3), "Bromborough");
+
+  const addr4 = "12 Oak Street, Manchester, M25 1PZ";
+  assert.equal(townFromAddress(addr4), "Manchester");
+
+  const addr5 = "175 Frankby Road, Birkenhead, CH48 9UU";
+  assert.equal(townFromAddress(addr5), "Birkenhead");
 });
