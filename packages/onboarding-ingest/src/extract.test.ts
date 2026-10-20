@@ -29,11 +29,8 @@ import {
   rankCandidateUrls,
   serviceAreaNames,
   stripHtmlToText,
-<<<<<<< HEAD
   townFromAddress,
-=======
   validatePostcodeWithPostcodesIo,
->>>>>>> 1008904 (S6: Add postcodes.io validation and Companies House check for address hardening)
 } from "./extract.ts";
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
@@ -1387,7 +1384,8 @@ test("validatePostcodeWithPostcodesIo validates correct UK postcodes and rejects
   assert.equal(invalid, undefined);
 
   const noApiKey = await validatePostcodeWithPostcodesIo("CH62 3QZ", "");
-  assert.equal(noApiKey, undefined);
+  assert.ok(noApiKey);
+  assert.equal(noApiKey.postcode, "CH62 3QZ");
 });
 
 test("checkCompaniesHouse returns company match when address matches registered address", async () => {
