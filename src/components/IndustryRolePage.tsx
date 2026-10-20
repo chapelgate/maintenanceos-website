@@ -1,5 +1,6 @@
 import { Accordion } from "@/components/Accordion";
 import { BentoCard } from "@/components/BentoCard";
+import { ChatWidget } from "@/components/ChatWidget";
 import { CtaPair } from "@/components/CtaPair";
 import { GasSafetyBlock } from "@/components/GasSafetyBlock";
 import { JsonLd } from "@/components/JsonLd";
@@ -150,6 +151,11 @@ export function IndustryRolePage({ role }: Props) {
             </a>
           </p>
         </section>
+
+        <ChatWidget
+          pageContext={`industries/${role.slug}`}
+          title={`Questions about ${role.label}?`}
+        />
       </div>
     </>
   );
