@@ -10,6 +10,7 @@ import {
   crawlUrlPriority,
   decodeCloudflareEmail,
   extractDraftFromHtml,
+  extractGroundedServices,
   formatUkPostcode,
   hoursAreSpeakable,
   isAcceptableAddress,
@@ -366,6 +367,52 @@ test("nav extraction excludes phone and email labels from services", () => {
   assert.equal(extractServicesFromNav(html), "Alley Gate Installation\nCCTV");
 });
 
+test("extractGroundedServices uses JSON-LD and /services page only, rejects nav and subheadings", () => {
+  const htmlWithJsonLd = `<!doctype html>
+    <html><head>
+      <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"LocalBusiness","name":"Test Business",
+       "makesOffer":[{"itemOffered":{"name":"Boiler repair"}},{"itemOffered":{"name":"Emergency leaks"}}]}
+      </script>
+    </head><body>
+      <nav><a href="/about">About</a><a href="/services">Services</a></nav>
+      <h2>Our services</h2>
+      <ul><li>Boiler repair</li><li>Emergency leaks</li><li>Contact us</li></ul>
+    </body></html>`;
+  const jsonLdServices = extractGroundedServices(htmlWithJsonLd, "https://test.example/");
+  assert.ok(jsonLdServices);
+  assert.match(jsonLdServices, /Boiler repair/);
+  assert.match(jsonLdServices, /Emergency leaks/);
+  assert.equal(jsonLdServices.includes("Contact us"), false);
+
+  const htmlServicesPage = `<!doctype html>
+    <html><head><title>Test Business</title></head><body>
+      <h2>Our services</h2>
+      <ul><li>Plumbing</li><li>Heating</li><li>Contact us</li></ul>
+    </body></html>`;
+  const servicesPageServices = extractGroundedServices(htmlServicesPage, "https://test.example/services");
+  assert.ok(servicesPageServices);
+  assert.match(servicesPageServices, /Plumbing/);
+  assert.match(servicesPageServices, /Heating/);
+  assert.equal(servicesPageServices.includes("Contact us"), false);
+
+  const htmlNavOnly = `<!doctype html>
+    <html><body>
+      <nav><a href="/plumbing">Plumbing</a><a href="/heating">Heating</a></nav>
+    </body></html>`;
+  const navServices = extractGroundedServices(htmlNavOnly, "https://test.example/");
+  assert.equal(navServices, undefined);
+
+  const htmlSubheadingsOnly = `<!doctype html>
+    <html><body>
+      <h2>Our services</h2>
+      <h3>Plumbing</h3>
+      <h3>Heating</h3>
+    </body></html>`;
+  const subheadingServices = extractGroundedServices(htmlSubheadingsOnly, "https://test.example/");
+  assert.equal(subheadingServices, undefined);
+});
+
 test("visible hours pattern stops at the time range and drops trailing page copy", () => {
   const html = `<p>Monday - Friday 9am-5pm) 0151 649 9718 Safeguarding Forum is committed to safeguarding our Service</p>`;
   const { draft } = extractDraftFromHtml([{ url: "https://hours.example/", html }]);
@@ -419,9 +466,10 @@ test("visible contact block pre-fills address and phone without schema or tel li
   assert.equal(result.factMeta.address?.confidence, "medium");
   assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
   assert.equal(result.draft.hours?.includes("0151"), false);
-  assert.match(result.draft.services ?? "", /Caroline Place/);
-  assert.match(result.draft.services ?? "", /Supported Lodgings/);
-  assert.equal(result.fieldMeta.services?.source, "heading");
+  // S3: services extraction now only from JSON-LD and service pages with list items under service headings
+  // h4 subheadings under "Our Accomodation" are no longer extracted as services
+  assert.equal(result.draft.services, undefined);
+  assert.equal(result.fieldMeta.services, undefined);
 });
 
 test("candidate ranking removes query duplicates and keeps richer public detail pages", () => {

@@ -887,31 +887,6 @@ export function extractServicesFromNav(html: string): string | undefined {
   return unique.join("\n");
 }
 
-function extractServiceSubheadings(html: string): string | undefined {
-  const heading =
-    /<h([1-3])\b[^>]*>\s*(?:our\s+)?(?:services?|accomm?odation|housing options?|support services?|what we (?:do|offer|provide))\s*<\/h\1>/i;
-  const m = heading.exec(html);
-  if (!m || m.index === undefined) return undefined;
-  const level = Number(m[1]);
-  const after = html.slice(
-    m.index + m[0].length,
-    m.index + m[0].length + 16_000,
-  );
-  const next = after.search(new RegExp(`<h[1-${level}]\\b`, "i"));
-  const section = after.slice(0, next === -1 ? after.length : next);
-  const labels = [
-    ...section.matchAll(/<h([2-4])\b[^>]*>([\s\S]*?)<\/h\1>/gi),
-  ]
-    .map((item) => innerText(item[2]))
-    .filter(
-      (item) =>
-        isServicePhrase(item) &&
-        !GENERIC_NAV_RE.test(item),
-    );
-  const unique = [...new Set(labels)].slice(0, 12);
-  return unique.length >= 2 ? unique.join("\n") : undefined;
-}
-
 function serviceItemsUnderHeading(html: string): string | undefined {
   const heading =
     /<h([1-3])\b[^>]*>\s*((?:our\s+)?(?:services?|what we (?:do|offer|provide)|services we offer|treatments?|menu(?:\s+categories)?))\s*<\/h\1>/i;
@@ -926,6 +901,42 @@ function serviceItemsUnderHeading(html: string): string | undefined {
     .filter((item) => isServicePhrase(item));
   const unique = [...new Set(items)].slice(0, 12);
   return unique.length ? unique.join("\n") : undefined;
+}
+
+/**
+ * Grounded services extraction: only JSON-LD (makesOffer, hasOfferCatalog, serviceType)
+ * and service pages identified by isServiceSourceUrl (via headingSection with service-related headings).
+ * Explicitly rejects nav-based and generic subheading-based extraction.
+ */
+export function extractGroundedServices(html: string, pageUrl: string): string | undefined {
+  const services: string[] = [];
+
+  // 1. Extract from JSON-LD
+  const jsonLd = extractJsonLd(html);
+  if (jsonLd.services) {
+    for (const line of jsonLd.services.split(/\n+/)) {
+      const cleaned = sanitizeUntrustedField(line, 80);
+      if (cleaned && isServicePhrase(cleaned)) services.push(cleaned);
+    }
+  }
+
+  // 2. Extract from service pages via serviceItemsUnderHeading (stops at same/higher level headings)
+  try {
+    if (isServiceSourceUrl(pageUrl)) {
+      const listed = serviceItemsUnderHeading(withoutCodeScripts(html));
+      if (listed) {
+        for (const line of listed.split(/\n+/)) {
+          const cleaned = sanitizeUntrustedField(line, 80);
+          if (cleaned && isServicePhrase(cleaned)) services.push(cleaned);
+        }
+      }
+    }
+  } catch {
+    // Invalid URL, skip services page extraction
+  }
+
+  const uniqueServices = [...new Set(services)].slice(0, 12);
+  return uniqueServices.length ? uniqueServices.join("\n") : undefined;
 }
 
 function looksLikeQuestion(text: string): boolean {
@@ -2966,48 +2977,9 @@ export function extractDraftFromHtml(
   );
   if (!draft.services) {
     for (const page of pages) {
-      const listed = serviceItemsUnderHeading(withoutCodeScripts(page.html));
-      if (listed) {
-        setField(draft, fieldMeta, "services", listed, "heading", "medium");
-        break;
-      }
-    }
-  }
-  if (!draft.services) {
-    for (const page of pages) {
-      const section = headingSection(
-        withoutCodeScripts(page.html),
-        /our services|services we offer|what we do|what we offer|what we provide|our work|housing options|support services|services/,
-      );
-      const lines = (section ?? "")
-        .split(/\n+/)
-        .map((item) => sanitizeUntrustedField(item, 80))
-        .filter((item) => isServicePhrase(item));
-      if (lines.length >= 2) {
-        setField(
-          draft,
-          fieldMeta,
-          "services",
-          [...new Set(lines)].slice(0, 12).join("\n"),
-          "heading",
-          "medium",
-        );
-        break;
-      }
-    }
-  }
-  if (!draft.services) {
-    for (const page of pages) {
-      const fromHeadings = extractServiceSubheadings(withoutCodeScripts(page.html));
-      if (fromHeadings) {
-        setField(
-          draft,
-          fieldMeta,
-          "services",
-          fromHeadings,
-          "heading",
-          "medium",
-        );
+      const grounded = extractGroundedServices(withoutCodeScripts(page.html), page.url);
+      if (grounded) {
+        setField(draft, fieldMeta, "services", grounded, "heading", "medium");
         break;
       }
     }
