@@ -16,6 +16,7 @@ import {
   isServicePhrase,
   isUkPlaceName,
   publicBusinessName,
+  validateBusinessName,
   extractJsonLd,
   extractMicrodata,
   extractSameOriginHrefs,
@@ -1013,4 +1014,79 @@ test("faqs need a FAQPage or at least three real questions", () => {
   const long = glued.facts.faqs?.find((item) => item.question.startsWith("Do you charge"));
   assert.ok((long?.answer.length ?? 0) > 80);
   assert.ok((long?.answer.length ?? 0) <= 500);
+});
+
+test("validateBusinessName rejects 404, error, about, and slug-like names", () => {
+  // 404 / error page titles
+  assert.equal(validateBusinessName("404 Not Found"), false);
+  assert.equal(validateBusinessName("Page Not Found"), false);
+  assert.equal(validateBusinessName("404 Error"), false);
+  assert.equal(validateBusinessName("Error 404"), false);
+  assert.equal(validateBusinessName("Not Found"), false);
+  assert.equal(validateBusinessName("Error"), false);
+
+  // About pages
+  assert.equal(validateBusinessName("About"), false);
+  assert.equal(validateBusinessName("About Us"), false);
+  assert.equal(validateBusinessName("About Me"), false);
+  assert.equal(validateBusinessName("Our Story"), false);
+  assert.equal(validateBusinessName("About Our Company"), false);
+
+  // Generic/slug-like names
+  assert.equal(validateBusinessName("Home"), false);
+  assert.equal(validateBusinessName("Welcome"), false);
+  assert.equal(validateBusinessName("Untitled"), false);
+  assert.equal(validateBusinessName("Index"), false);
+  assert.equal(validateBusinessName("Website"), false);
+  assert.equal(validateBusinessName("Main"), false);
+  assert.equal(validateBusinessName("Default"), false);
+  assert.equal(validateBusinessName("Contact"), false);
+  assert.equal(validateBusinessName("Services"), false);
+  assert.equal(validateBusinessName("Blog"), false);
+  assert.equal(validateBusinessName("FAQ"), false);
+  assert.equal(validateBusinessName("plumbing-services"), false);
+  assert.equal(validateBusinessName("about-us"), false);
+  assert.equal(validateBusinessName("contact-us"), false);
+
+  // Valid business names should pass
+  assert.equal(validateBusinessName("Acme Plumbing"), true);
+  assert.equal(validateBusinessName("Acme Plumbing Ltd"), true);
+  assert.equal(validateBusinessName("Smith & Sons Heating"), true);
+  assert.equal(validateBusinessName("Wirral Heating Services"), true);
+  assert.equal(validateBusinessName("Gregorys Heating and Plumbing"), true);
+  assert.equal(validateBusinessName("J&K Electrical"), true);
+  assert.equal(validateBusinessName("24/7 Emergency Plumbers"), true);
+  assert.equal(validateBusinessName("Lounge83"), true);
+  assert.equal(validateBusinessName("Alleygates"), true);
+  assert.equal(validateBusinessName("Thin"), true);
+
+  // Names with file extensions should fail
+  assert.equal(validateBusinessName("logo.jpg"), false);
+  assert.equal(validateBusinessName("image.png"), false);
+  assert.equal(validateBusinessName("document.pdf"), false);
+
+  // Sentence-like names should fail
+  assert.equal(validateBusinessName("We are the best plumbers in town."), false);
+  assert.equal(validateBusinessName("Welcome to our website"), false);
+  assert.equal(validateBusinessName("Quality service since 1990."), false);
+
+  // Host-like names should fail
+  assert.equal(validateBusinessName("example.com"), false);
+  assert.equal(validateBusinessName("www.example.co.uk"), false);
+});
+
+test("validateBusinessName integrates with publicBusinessName to filter extraction", () => {
+  const html404 = `<html><head><title>404 Not Found</title></head><body><h1>Page Not Found</h1></body></html>`;
+  const result404 = extractDraftFromHtml([{ url: "https://example.com/404", html: html404 }]);
+  assert.equal(result404.draft.businessName, undefined);
+
+  const htmlAbout = `<html><head><title>About Us | Acme Plumbing</title></head><body><h1>About Us</h1></body></html>`;
+  const resultAbout = extractDraftFromHtml([{ url: "https://acme.example/about", html: htmlAbout }]);
+  assert.equal(resultAbout.draft.businessName, "Acme Plumbing");
+
+  const htmlSlug = `<html><head><title>plumbing-services</title></head><body><h1>plumbing-services</h1></body></html>`;
+  const resultSlug = extractDraftFromHtml([{ url: "https://example.com/plumbing-services", html: htmlSlug }]);
+  // Slug-like title is rejected; domain fallback may apply but not the slug itself
+  assert.notEqual(resultSlug.draft.businessName, "plumbing-services");
+  assert.notEqual(resultSlug.draft.businessName, "Plumbing Services");
 });
