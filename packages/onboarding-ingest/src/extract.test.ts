@@ -7,6 +7,7 @@ import {
   addressAroundPostcode,
   asUntrustedText,
   assessOpeningHours,
+  checkCompaniesHouse,
   crawlUrlPriority,
   decodeCloudflareEmail,
   extractDraftFromHtml,
@@ -28,7 +29,11 @@ import {
   rankCandidateUrls,
   serviceAreaNames,
   stripHtmlToText,
+<<<<<<< HEAD
   townFromAddress,
+=======
+  validatePostcodeWithPostcodesIo,
+>>>>>>> 1008904 (S6: Add postcodes.io validation and Companies House check for address hardening)
 } from "./extract.ts";
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
@@ -1369,4 +1374,35 @@ test("visible hours beat JSON-LD placeholder hours", () => {
   assert.match(visibleWins.draft.hours ?? "", /Monday - Friday 9am-5pm/);
   assert.doesNotMatch(visibleWins.draft.hours ?? "", /00:00/);
   assert.equal(visibleWins.fieldMeta.hours?.source, "pattern");
+});
+
+test("validatePostcodeWithPostcodesIo validates correct UK postcodes and rejects invalid ones", async () => {
+  const valid = await validatePostcodeWithPostcodesIo("CH62 3QZ");
+  assert.ok(valid);
+  assert.equal(valid.postcode, "CH62 3QZ");
+  assert.ok(valid.quality >= 1);
+  assert.ok(["England", "Scotland", "Wales", "Northern Ireland"].includes(valid.country));
+
+  const invalid = await validatePostcodeWithPostcodesIo("INVALID");
+  assert.equal(invalid, undefined);
+
+  const noApiKey = await validatePostcodeWithPostcodesIo("CH62 3QZ", "");
+  assert.equal(noApiKey, undefined);
+});
+
+test("checkCompaniesHouse returns company match when address matches registered address", async () => {
+  const result = await checkCompaniesHouse("Acme Plumbing Ltd", "12 Oak Street, Manchester, M25 1PZ", "");
+  assert.equal(result, undefined);
+
+  const noApiKey = await checkCompaniesHouse("Acme Plumbing Ltd", "12 Oak Street, Manchester, M25 1PZ", "");
+  assert.equal(noApiKey, undefined);
+});
+
+test("addressAroundPostcode validates postcode format", () => {
+  const address = "Acme Plumbing, 12 Oak Street, Manchester, M251PZ";
+  const result = addressAroundPostcode(address);
+  assert.ok(result);
+  assert.match(result, /12 Oak Street/);
+  assert.match(result, /Manchester/);
+  assert.match(result, /M25 1PZ/);
 });

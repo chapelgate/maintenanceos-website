@@ -1282,6 +1282,97 @@ export function addressAroundPostcode(text: string): string | undefined {
   return address && isAcceptableAddress(address) ? address : undefined;
 }
 
+export interface PostcodeValidationResult {
+  postcode: string;
+  quality: number;
+  country: string;
+  region?: string;
+  adminDistrict?: string;
+  adminCounty?: string;
+}
+
+/**
+ * Validate a UK postcode using the postcodes.io API.
+ * Returns validation result with quality score and geographic data, or undefined if invalid or API unavailable.
+ */
+export async function validatePostcodeWithPostcodesIo(
+  postcode: string,
+  apiKey?: string,
+): Promise<PostcodeValidationResult | undefined> {
+  const compact = postcode.replace(/\s+/g, "").toUpperCase();
+  if (!UK_POSTCODE_RE.test(compact)) return undefined;
+
+  const url = `https://api.postcodes.io/postcodes/${encodeURIComponent(compact)}`;
+  const headers: Record<string, string> = {
+    "User-Agent": "WorkSmartOS-OnboardingScan/0.1 (+https://worksmartos.co.uk)",
+  };
+  if (apiKey) {
+    headers["Authorization"] = `Bearer ${apiKey}`;
+  }
+
+  try {
+    const response = await fetch(url, { headers });
+    if (!response.ok) return undefined;
+    const data = await response.json();
+    if (data.status !== 200 || !data.result) return undefined;
+
+    const result = data.result;
+    return {
+      postcode: formatUkPostcode(result.postcode),
+      quality: result.quality ?? 0,
+      country: result.country ?? "",
+      region: result.region,
+      adminDistrict: result.admin_district,
+      adminCounty: result.admin_county,
+    };
+  } catch {
+    return undefined;
+  }
+}
+
+export interface CompaniesHouseCheckResult {
+  match: boolean;
+  companyNumber?: string;
+  companyName?: string;
+  registeredAddress?: string;
+}
+
+/**
+ * Check Companies House for a company matching the given name and address.
+ * Returns match result, or undefined if API unavailable or no match.
+ */
+export async function checkCompaniesHouse(
+  businessName: string,
+  address: string,
+  apiKey?: string,
+): Promise<CompaniesHouseCheckResult | undefined> {
+  if (!apiKey) return undefined;
+
+  const query = encodeURIComponent(`${businessName} ${address}`);
+  const url = `https://api.company-information.service.gov.uk/search/companies?q=${query}`;
+  const headers: Record<string, string> = {
+    "User-Agent": "WorkSmartOS-OnboardingScan/0.1 (+https://worksmartos.co.uk)",
+    "Authorization": `Bearer ${apiKey}`,
+  };
+
+  try {
+    const response = await fetch(url, { headers });
+    if (!response.ok) return undefined;
+    const data = await response.json();
+    if (!data.items || data.items.length === 0) return undefined;
+
+    const first = data.items[0];
+    return {
+      match: true,
+      companyNumber: first.company_number,
+      companyName: first.title,
+      registeredAddress: first.address_snippet,
+    };
+  } catch {
+    return undefined;
+  }
+}
+
 function postcodeKey(value: string): string | undefined {
   const match = value.match(UK_POSTCODE_RE);
   return match?.[0]?.replace(/\s+/g, "").toUpperCase();
