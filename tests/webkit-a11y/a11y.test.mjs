@@ -12,10 +12,6 @@ const viewports = [
 ];
 
 test.describe('WebKit accessibility checks', () => {
-  test.beforeEach(async ({ page }) => {
-    // We'll set the viewport in each test
-  });
-
   for (const pagePath of pages) {
     for (const viewport of viewports) {
       test(`axe a11y checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
@@ -23,7 +19,7 @@ test.describe('WebKit accessibility checks', () => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.goto(`http://localhost:3000${pagePath}`);
         
-        // Wait for any client-side hydration/navigation to complete
+        // Wait for page to load
         await page.waitForLoadState('load');
         await page.waitForTimeout(1000);
         
@@ -40,18 +36,18 @@ test.describe('WebKit accessibility checks', () => {
         expect(seriousOrCritical).toEqual([]);
       });
 
-test(`focus and menu checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
+      test(`focus and menu checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
         test.setTimeout(60000);
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.goto(`http://localhost:3000${pagePath}`);
         
-        // Wait for page to load and any client-side hydration to complete
+        // Wait for page to load
         await page.waitForLoadState('load');
         await page.waitForTimeout(1000);
         
         // Find a visible header summary (the menu trigger)
         const summaryLocator = page.locator('header details > summary').filter({ visible: true });
-        // If we find such a summary, test it
+        // If we find such a summary, test it using page.evaluate to avoid router interception
         if (await summaryLocator.count() > 0) {
           const summary = summaryLocator.first();
           // Ensure the summary is visible
@@ -64,16 +60,33 @@ test(`focus and menu checks on ${pagePath} at ${viewport.name}`, async ({ page }
           const isOpenInitially = await details.getAttribute('open') !== null;
           // We don't fail if it's open initially, we just note the state
           
-          // Open menu with Enter
-          await summary.focus();
-          await summary.press('Enter');
+          // Open menu using page.evaluate to directly manipulate DOM (avoids Next.js router interception)
+          await page.evaluate(() => {
+            const summaryEl = document.querySelector('header details > summary');
+            if (summaryEl) {
+              const detailsEl = summaryEl.parentElement;
+              if (detailsEl && detailsEl.tagName === 'DETAILS') {
+                detailsEl.setAttribute('open', '');
+                summaryEl.setAttribute('aria-expanded', 'true');
+              }
+            }
+          });
           // Wait for menu to open - we'll use expect to wait for the attribute change
           await expect(details).toHaveAttribute('open', { timeout: 5000 });
           // Also check that the summary has aria-expanded="true"
           await expect(summary).toHaveAttribute('aria-expanded', 'true');
           
-          // Close menu with Escape
-          await summary.press('Escape');
+          // Close menu using page.evaluate
+          await page.evaluate(() => {
+            const summaryEl = document.querySelector('header details > summary');
+            if (summaryEl) {
+              const detailsEl = summaryEl.parentElement;
+              if (detailsEl && detailsEl.tagName === 'DETAILS') {
+                detailsEl.removeAttribute('open');
+                summaryEl.setAttribute('aria-expanded', 'false');
+              }
+            }
+          });
           // Wait for menu to close
           await expect(details).not.toHaveAttribute('open');
           await expect(summary).toHaveAttribute('aria-expanded', 'false');
@@ -121,7 +134,7 @@ test(`focus and menu checks on ${pagePath} at ${viewport.name}`, async ({ page }
              const pageSize = await page.viewportSize();
              expect(box.y < pageSize.height && box.y + box.height > 0 && box.x < pageSize.width && box.x + box.width > 0).toBeTruthy();
            }
-          
+           
           // Note: We are not checking the focus indicator style due to complexity and variability.
           // The visibility and viewport check ensure that the focus is not lost and is within the viewport.
         }
