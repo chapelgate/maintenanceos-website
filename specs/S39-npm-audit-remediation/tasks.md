@@ -7,8 +7,8 @@
 - [x] Add audit:ci script to package.json
 - [x] Run verification steps (TypeScript, lint, tests, build, audit:ci)
 - [x] Create spec.md, plan.md, tasks.md in specs/S39-npm-audit-remediation/
-- [ ] Commit and push to feat/S39-npm-audit-remediation
-- [ ] Open PR to main with required PR body format
-- [ ] Wait for CI checks (estate-gate, validate, webkit-a11y)
-- [ ] Merge PR when all checks pass
-- [ ] Update IMPL_STATE.md with PR number and SHA
+- [x] Commit and push to feat/S39-npm-audit-remediation
+- [x] Open PR to main with required PR body format
+- [x] Wait for CI checks (estate-gate, validate, webkit-a11y)
+- [x] Merge PR when all checks pass
+- [x] Update IMPL_STATE.md with PR number and SHA
