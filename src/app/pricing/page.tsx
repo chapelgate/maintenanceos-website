@@ -13,6 +13,8 @@ export const metadata = contentPageMetadata({
   path: "/pricing/",
 });
 
+export const dynamic = "force-static";
+
 const designedToInclude = [
   "Website Intake: Captures repair facts in natural UK terminology.",
   "Fixed Safety Latches: Rules hold critical hazards for human clearance.",
