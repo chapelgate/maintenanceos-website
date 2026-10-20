@@ -1,6 +1,6 @@
-import type { LeadType } from "@/config/site";
-import { siteConfig } from "@/config/site";
-import { ENQUIRY_UNAVAILABLE_MESSAGE } from "@/lib/public-enquiry";
+import type { LeadType } from "../config/site.ts";
+import { siteConfig } from "../config/site.ts";
+import { ENQUIRY_UNAVAILABLE_MESSAGE } from "./public-enquiry.ts";
 
 export type LeadPayload = {
   leadType: LeadType;
