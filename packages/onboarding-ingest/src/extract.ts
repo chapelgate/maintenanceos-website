@@ -1040,9 +1040,9 @@ function extractDetailsFaqs(html: string): string | undefined {
     if (pair) pairs.push(pair);
   }
   for (const match of html.matchAll(
-    /<button\b[^>]*\baria-expanded=["'](?:true|false)["'][^>]*>([\s\S]*?)<\/button>\s*<div\b[^>]*>([\s\S]*?)<\/div>/gi,
+    /<button\b[^>]*\baria-expanded=["'](?:true|false)["'][^>]*\baria-controls=["']([^"']+)["'][^>]*>([\s\S]*?)<\/button>\s*<div\b[^>]*\bid=["']\1["'][^>]*>([\s\S]*?)<\/div>/gi,
   )) {
-    const pair = faqPair(innerText(match[1]), innerText(match[2]));
+    const pair = faqPair(innerText(match[2]), innerText(match[3]));
     if (pair) pairs.push(pair);
   }
   const unique = [...new Set(pairs)].slice(0, 12);

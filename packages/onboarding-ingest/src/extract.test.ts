@@ -1308,3 +1308,53 @@ test("gazetteer: townFromAddress extracts town from UK address", () => {
   const addr5 = "175 Frankby Road, Birkenhead, CH48 9UU";
   assert.equal(townFromAddress(addr5), "Birkenhead");
 });
+
+test("mobile menu with button[aria-expanded] + div is not extracted as FAQs", () => {
+  const mobileMenu = `<html><body>
+    <header>
+      <button aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      <nav id="nav-menu">
+        <div>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+        </div>
+      </nav>
+    </header>
+    <button aria-expanded="false" aria-controls="submenu-1">Services</button>
+    <div id="submenu-1">
+      <a href="/plumbing">Plumbing</a>
+      <a href="/heating">Heating</a>
+    </div>
+    <button aria-expanded="false" aria-controls="submenu-2">Locations</button>
+    <div id="submenu-2">
+      <a href="/liverpool">Liverpool</a>
+      <a href="/wirral">Wirral</a>
+    </div>
+    <button aria-expanded="false" aria-controls="submenu-3">Contact Us</button>
+    <div id="submenu-3">
+      <a href="/contact">Contact Form</a>
+      <a href="/phone">Call Us</a>
+    </div>
+  </body></html>`;
+  const result = extractDraftFromHtml([{ url: "https://trades.example/", html: mobileMenu }]);
+  assert.equal(result.draft.faqs, undefined);
+  assert.equal(result.fieldMeta.faqs, undefined);
+});
+
+test("accordion with question-marked buttons and sibling divs extracts as FAQs", () => {
+  const properFaq = `<html><body>
+    <section class="faq">
+      <button aria-expanded="false" aria-controls="faq-1">Do you cover Leeds?</button>
+      <div id="faq-1" role="region">Yes, within fifteen miles of the centre.</div>
+      <button aria-expanded="false" aria-controls="faq-2">Are you registered?</button>
+      <div id="faq-2" role="region">Yes. Ask for the engineer ID.</div>
+      <button aria-expanded="false" aria-controls="faq-3">Do you charge a call-out?</button>
+      <div id="faq-3" role="region">The first visit is quoted before work starts.</div>
+    </section>
+  </body></html>`;
+  const result = extractDraftFromHtml([{ url: "https://trades.example/", html: properFaq }]);
+  assert.match(result.draft.faqs ?? "", /Do you cover Leeds\?/);
+  assert.match(result.draft.faqs ?? "", /call-out\?/);
+  assert.equal(result.fieldMeta.faqs?.source, "details");
+});
