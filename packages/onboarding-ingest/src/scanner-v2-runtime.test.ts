@@ -294,7 +294,7 @@ test("one fetched page with no contact facts is partial, not complete", async ()
     assert.ok((result.scannerV2?.fetched ?? 0) > 1);
     assert.ok(result.warnings.includes("thin_home_page"));
     assert.equal(result.facts?.contact, undefined);
-    assert.equal(result.draft.businessName, undefined);
+    assert.equal(result.draft.businessName, "Unknown — not found");
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -737,7 +737,7 @@ test("an empty 403 from the host is blocked_by_site and still a completed scan",
     assert.equal(result.scannerV2?.state, "BLOCKED");
     assert.equal(result.warnings.includes("scanner_v2_partial"), false);
     assert.equal(result.scannerV2?.fetched, 0);
-    assert.equal(result.draft.businessName, undefined);
+    assert.equal(result.draft.businessName, "Unknown — not found");
     assert.ok(result.warnings.includes("http_403"));
     assert.ok(result.warnings.includes("blocked_by_site"));
     assert.equal("error" in result, false);
