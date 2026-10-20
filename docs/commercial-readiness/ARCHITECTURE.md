@@ -62,7 +62,7 @@ passed all gates: validate, deliver, check, browser-check (receipts kept locally
 - Edges: 15 correct / 0 wrong / 0 unverified.
 
 Corrections vs the first draft candidate (failed `validate`, previous session): the invented
-"WebsiteOS site → Provisioning gateway (authenticated)" edge was removed — `rg` finds no
+"WebsiteOS site → Provisioning gateway (authenticated)" edge was removed: `rg` finds no
 provisioning call in `src/`, and the gateway rejects any browser `Origin` (server.ts:267-274);
 the Chat API's "serverless" sublabel was dropped as unverified; the two DigitalOcean Functions,
 the droplet scanner, Gemini TTS and the Agent Factory caller were added as evidenced nodes;
