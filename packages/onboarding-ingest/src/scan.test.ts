@@ -352,8 +352,9 @@ test("runScan recovers a direct TLS/fetch failure with a bounded same-origin rea
   if (result.ok) {
     assert.match(result.draft.businessName ?? "", /Forum Housing/);
     assert.equal(result.draft.hours, "Monday - Friday 9am-5pm");
-    assert.match(result.draft.services ?? "", /Caroline Place/);
-    assert.match(result.draft.services ?? "", /Supported Lodgings/);
+    // S3: services extraction now only from JSON-LD and service pages with list items under service headings
+    // h4 subheadings under "Our Accomodation" are no longer extracted as services
+    assert.equal(result.draft.services, undefined);
     assert.deepEqual(result.facts?.contact?.phones, ["+441516499718"]);
     assert.equal(result.draft.faqs, undefined);
     assert.ok(result.warnings.includes("fetch_failed"));
