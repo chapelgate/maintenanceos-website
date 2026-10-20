@@ -11,7 +11,7 @@ function read(rel) {
 }
 
 test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", () => {
-  const home = read("src/app/page.tsx");
+  const home = read("src/app/[locale]/page.tsx");
   const shell = read("src/components/ProductUiShell.tsx");
   const pair = read("src/components/CtaPair.tsx");
 
@@ -44,7 +44,7 @@ test("home hero keeps locked CTAs primary; proof is labelled UNDER TEST shell", 
 });
 
 test("create page does not sit an orb above the URL field", () => {
-  const page = read("src/app/create/page.tsx");
+  const page = read("src/app/[locale]/create/page.tsx");
   const form = read("src/components/CreateReceptionistForm.tsx");
 
   assert.doesNotMatch(page, /SiriOrbCloud/);
@@ -57,7 +57,7 @@ test("create page does not sit an orb above the URL field", () => {
 });
 
 test("visual lock: light paper, blue-only glow, reduced-motion, static export", () => {
-  const globals = read("src/app/globals.css");
+  const globals = read("src/app/[locale]/globals.css");
   const brand = read("BRAND_SYSTEM.md");
   const visual = read("UI_VISUAL_SYSTEM.md");
   const tokens = read("docs/ui-preview/tokens.css");
@@ -100,7 +100,7 @@ test("visual lock: light paper, blue-only glow, reduced-motion, static export", 
 });
 
 test("motion lock: menu fade, reduced-motion instant, no orb keyframes", () => {
-  const globals = read("src/app/globals.css");
+  const globals = read("src/app/[locale]/globals.css");
   const tokens = read("docs/ui-preview/tokens.css");
   const header = read("src/components/SiteHeader.tsx");
   const visual = read("UI_VISUAL_SYSTEM.md");
@@ -139,7 +139,7 @@ test("home photographs are licensed stock, not customers or RelicVault assets", 
   const strip = read("src/components/HomeLifestyleStrip.tsx");
   const band = read("src/components/HomeLifeBand.tsx");
   const sources = read("public/media/home/SOURCES.md");
-  const home = read("src/app/page.tsx");
+  const home = read("src/app/[locale]/page.tsx");
 
   assert.match(media, /Unsplash License/);
   assert.match(media, /Pexels License/);
@@ -160,18 +160,18 @@ test("home photographs are licensed stock, not customers or RelicVault assets", 
 });
 
 test("decorative orbs and hero glow blobs are gone", () => {
-  const globals = read("src/app/globals.css");
+  const globals = read("src/app/[locale]/globals.css");
   const pageHero = read("src/components/PageHero.tsx");
-  const home = read("src/app/page.tsx");
+  const home = read("src/app/[locale]/page.tsx");
   const industries = read("src/components/HomeIndustries.tsx");
   const steps = read("src/components/HomeOnboardingSteps.tsx");
   const band = read("src/components/HomeLifeBand.tsx");
-  const how = read("src/app/how-it-works/page.tsx");
-  const features = read("src/app/features/page.tsx");
-  const industriesPage = read("src/app/industries/page.tsx");
-  const pricing = read("src/app/pricing/page.tsx");
-  const create = read("src/app/create/page.tsx");
-  const demo = read("src/app/demo/page.tsx");
+  const how = read("src/app/[locale]/how-it-works/page.tsx");
+  const features = read("src/app/[locale]/features/page.tsx");
+  const industriesPage = read("src/app/[locale]/industries/page.tsx");
+  const pricing = read("src/app/[locale]/pricing/page.tsx");
+  const create = read("src/app/[locale]/create/page.tsx");
+  const demo = read("src/app/[locale]/demo/page.tsx");
   const style = read("public/style.css");
 
   assert.doesNotMatch(globals, /home-orb-stage|intake-orb|radial-gradient/);

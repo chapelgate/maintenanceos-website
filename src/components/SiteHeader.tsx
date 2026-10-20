@@ -1,4 +1,5 @@
 import { industries, primaryNav } from "@/config/site";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 /**
  * Shell chrome stays a server component. Compact widths (through 1100px) use
@@ -123,6 +124,7 @@ export function SiteHeader() {
           >
             Request an early demo
           </a>
+        <LanguageSwitcher />
         </nav>
 
         <details className="site-header-compact">

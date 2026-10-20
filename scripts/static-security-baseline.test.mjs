@@ -24,7 +24,7 @@ test("deploy path stays App Platform static export — no invented header hosts"
 });
 
 test("exported HTML carries CSP http-equiv and referrer when out/ exists", () => {
-  const pages = ["out/index.html", "out/create/index.html", "out/dashboard/index.html"];
+  const pages = ["out/en-GB/index.html", "out/en-GB/create/index.html", "out/en-GB/dashboard/index.html"];
   const present = pages.filter((rel) => fs.existsSync(path.join(ROOT, rel)));
   if (present.length === 0) {
     return;
@@ -40,7 +40,7 @@ test("exported HTML carries CSP http-equiv and referrer when out/ exists", () =>
 });
 
 test("root layout and metadata apply the HTML-honored baseline", () => {
-  const layout = read("src/app/layout.tsx");
+  const layout = read("src/app/[locale]/layout.tsx");
   const meta = read("src/lib/page-meta.ts");
   assert.match(layout, /contentSecurityPolicy/);
   assert.match(layout, /httpEquiv=["']Content-Security-Policy["']/);

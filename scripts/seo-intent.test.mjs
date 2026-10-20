@@ -25,7 +25,8 @@ test("all eight industry pages have distinct buyer-intent positioning", () => {
   const src = read("src/config/seo-intents.ts");
   const queries = [
     "property maintenance software for UK landlords",
-    "property maintenance software for UK letting agents",    "property maintenance software for UK property managers",
+    "property maintenance software for UK letting agents",
+    "property maintenance software for UK property managers",
     "maintenance management software for UK maintenance companies",
     "housing maintenance software UK",
     "facilities maintenance software UK",
@@ -37,7 +38,7 @@ test("all eight industry pages have distinct buyer-intent positioning", () => {
 });
 
 test("core property maintenance page is unique, indexable source and internally linked", () => {
-  const page = read("src/app/property-maintenance-software/page.tsx");
+  const page = read("src/app/[locale]/property-maintenance-software/page.tsx");
   const routes = read("src/config/routes.ts");
   const footer = read("src/config/site.ts");
   assert.match(page, /Property maintenance software for UK teams/);
@@ -54,7 +55,8 @@ test("industry pages reuse one component but emit unique metadata and structured
   const schema = read("src/lib/json-ld.ts");
   assert.match(component, /getIndustrySeoIntent/);
   assert.match(component, /industryPageJsonLd/);
-  assert.match(component, /\/property-maintenance-software\//);  assert.match(meta, /getIndustrySeoIntent/);
+  assert.match(component, /\/property-maintenance-software\//);
+  assert.match(meta, /getIndustrySeoIntent/);
   assert.match(schema, /export function industryPageJsonLd/);
   assert.match(schema, /"@type": "BreadcrumbList"/);
   assert.match(schema, /softwareApplicationNode\(\)/);
@@ -79,7 +81,7 @@ test("exported industry pages contain page schema when out exists", () => {
     "housing-associations", "facilities-management", "councils", "holiday-lets",
   ];
   for (const slug of slugs) {
-    const rel = `out/industries/${slug}/index.html`;
+    const rel = `out/en-GB/industries/${slug}/index.html`;
     if (!fs.existsSync(path.join(ROOT, rel))) continue;
     const html = read(rel);
     assert.match(html, /BreadcrumbList/);

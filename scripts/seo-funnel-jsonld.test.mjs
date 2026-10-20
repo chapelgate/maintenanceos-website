@@ -11,12 +11,12 @@ function read(rel) {
 }
 
 const FUNNEL_PAGES = {
-  "src/app/page.tsx": "home",
-  "src/app/create/page.tsx": "create",
-  "src/app/demo/page.tsx": "demo",
-  "src/app/how-it-works/page.tsx": "howItWorks",
-  "src/app/features/page.tsx": "features",
-  "src/app/property-maintenance-software/page.tsx": "propertyMaintenanceSoftware",
+  "src/app/[locale]/page.tsx": "home",
+  "src/app/[locale]/create/page.tsx": "create",
+  "src/app/[locale]/demo/page.tsx": "demo",
+  "src/app/[locale]/how-it-works/page.tsx": "howItWorks",
+  "src/app/[locale]/features/page.tsx": "features",
+  "src/app/[locale]/property-maintenance-software/page.tsx": "propertyMaintenanceSoftware",
 };
 
 const FORBIDDEN_SCHEMA_KEYS = [
@@ -72,7 +72,7 @@ test("shared JSON-LD helper stays claims-safe and uses funnel copy", () => {
 });
 
 test("layout does not include JSON-LD (deduplicated to per-page)", () => {
-  const layout = read("src/app/layout.tsx");
+  const layout = read("src/app/[locale]/layout.tsx");
   assert.doesNotMatch(layout, /marketingJsonLd\(\)/);
   assert.doesNotMatch(layout, /funnelPageJsonLd/);
   assert.doesNotMatch(layout, /JsonLd/);
@@ -92,7 +92,7 @@ test("home and key funnel pages emit fullFunnelPageJsonLd with BreadcrumbList", 
 });
 
 test("FAQ JSON-LD uses fullFaqPageJsonLd with BreadcrumbList", () => {
-  const faqPage = read("src/app/faq/page.tsx");
+  const faqPage = read("src/app/[locale]/faq/page.tsx");
   const helper = read("src/lib/json-ld.ts");
   const faqs = read("src/content/faqs.ts");
   assert.match(faqPage, /fullFaqPageJsonLd\(\)/);
@@ -138,12 +138,12 @@ function parseJsonLdBlocks(html) {
 
 test("exported funnel HTML has single claims-safe JSON-LD with BreadcrumbList when out/ exists", () => {
   const files = {
-    "out/index.html": "home",
-    "out/create/index.html": "create",
-    "out/demo/index.html": "demo",
-    "out/how-it-works/index.html": "howItWorks",
-    "out/features/index.html": "features",
-    "out/property-maintenance-software/index.html": "propertyMaintenanceSoftware",
+    "out/en-GB/index.html": "home",
+    "out/en-GB/create/index.html": "create",
+    "out/en-GB/demo/index.html": "demo",
+    "out/en-GB/how-it-works/index.html": "howItWorks",
+    "out/en-GB/features/index.html": "features",
+    "out/en-GB/property-maintenance-software/index.html": "propertyMaintenanceSoftware",
   };
   const present = Object.keys(files).filter((rel) =>
     fs.existsSync(path.join(ROOT, rel)),
@@ -195,7 +195,7 @@ test("exported funnel HTML has single claims-safe JSON-LD with BreadcrumbList wh
 });
 
 test("exported /faq/ HTML has single claims-safe FAQPage JSON-LD with BreadcrumbList when out/ exists", () => {
-  const rel = "out/faq/index.html";
+  const rel = "out/en-GB/faq/index.html";
   if (!fs.existsSync(path.join(ROOT, rel))) {
     return;
   }

@@ -8,7 +8,7 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
 test("homepage leads with customer outcome before architecture", () => {
-  const page = read("src/app/page.tsx");
+  const page = read("src/app/[locale]/page.tsx");
   assert.match(page, /AI intake for repair reports\. A person still clears anything dangerous\./);
   assert.match(
     page,
@@ -41,14 +41,14 @@ test("canonical value proposition is claims-linked and status-honest", () => {
 
 test("major buyer pages state a plain outcome in the first-screen source", () => {
   const cases = {
-    "src/app/ai-receptionist/page.tsx": /Capture maintenance calls without handing control to the AI/,
-    "src/app/how-it-works/page.tsx": /From maintenance request to controlled follow-up/,
-    "src/app/features/page.tsx": /What MaintenanceOS can do.*what is in preview/,
-    "src/app/industries/page.tsx": /Repair intake for the people who answer for repairs/,
-    "src/app/pricing/page.tsx": /title=\{pricing\.title\}/,
-    "src/app/demo/page.tsx": /Start from your website URL/,
-    "src/app/security/page.tsx": /How we keep your data separate and your actions on record/,
-    "src/app/contact/page.tsx": /Talk to a person/,
+    "src/app/[locale]/ai-receptionist/page.tsx": /Capture maintenance calls without handing control to the AI/,
+    "src/app/[locale]/how-it-works/page.tsx": /From maintenance request to controlled follow-up/,
+    "src/app/[locale]/features/page.tsx": /What MaintenanceOS can do.*what is in preview/,
+    "src/app/[locale]/industries/page.tsx": /Repair intake for the people who answer for repairs/,
+    "src/app/[locale]/pricing/page.tsx": /title=\{pricing\.title\}/,
+    "src/app/[locale]/demo/page.tsx": /Start from your website URL/,
+    "src/app/[locale]/security/page.tsx": /How we keep your data separate and your actions on record/,
+    "src/app/[locale]/contact/page.tsx": /Talk to a person/,
   };
   for (const [file, pattern] of Object.entries(cases)) {
     assert.match(read(file), pattern, file + " must have a plain first-screen proposition");
@@ -57,15 +57,15 @@ test("major buyer pages state a plain outcome in the first-screen source", () =>
 
 test("major-page first screens retain honesty and no invented live service", () => {
   const files = [
-    "src/app/page.tsx",
-    "src/app/ai-receptionist/page.tsx",
-    "src/app/how-it-works/page.tsx",
-    "src/app/features/page.tsx",
-    "src/app/industries/page.tsx",
-    "src/app/pricing/page.tsx",
-    "src/app/demo/page.tsx",
-    "src/app/security/page.tsx",
-    "src/app/contact/page.tsx",
+    "src/app/[locale]/page.tsx",
+    "src/app/[locale]/ai-receptionist/page.tsx",
+    "src/app/[locale]/how-it-works/page.tsx",
+    "src/app/[locale]/features/page.tsx",
+    "src/app/[locale]/industries/page.tsx",
+    "src/app/[locale]/pricing/page.tsx",
+    "src/app/[locale]/demo/page.tsx",
+    "src/app/[locale]/security/page.tsx",
+    "src/app/[locale]/contact/page.tsx",
   ];
   const joined = files.map(read).join("\n");
   assert.match(joined, /pre-launch/i);

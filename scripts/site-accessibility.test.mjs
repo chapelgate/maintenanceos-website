@@ -8,11 +8,11 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
 
 test("document shell exposes language, skip target and non-obscured main focus", () => {
-  const layout = read("src/app/layout.tsx");
+  const layout = read("src/app/[locale]/layout.tsx");
   const skip = read("src/components/SkipLink.tsx");
-  const css = read("src/app/globals.css");
+  const css = read("src/app/[locale]/globals.css");
 
-  assert.match(layout, /<html lang="en-GB">/);
+  assert.match(layout, /<html lang=\{validLocale\}>/);
   assert.match(layout, /<SkipLink \/>/);
   assert.match(layout, /<main id="main" tabIndex=\{-1\}/);
   assert.ok(
@@ -26,7 +26,7 @@ test("document shell exposes language, skip target and non-obscured main focus",
 });
 
 test("focus and reduced-motion safeguards remain global", () => {
-  const css = read("src/app/globals.css");
+  const css = read("src/app/[locale]/globals.css");
   assert.match(css, /a:focus-visible,[\s\S]*summary:focus-visible/);
   assert.match(css, /outline:\s*2px solid var\(--color-accent\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);

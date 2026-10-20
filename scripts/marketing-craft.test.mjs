@@ -20,8 +20,8 @@ const OBJECTION_QUESTIONS = [
 
 test("FeatureStatusChip encodes VERIFIED solid blue and PREVIEW outline", () => {
   const chip = read("src/components/FeatureStatusChip.tsx");
-  const css = read("src/app/globals.css");
-  const features = read("src/app/features/page.tsx");
+  const css = read("src/app/[locale]/globals.css");
+  const features = read("src/app/[locale]/features/page.tsx");
   const config = read("src/config/phone-ai-features.ts");
 
   assert.match(chip, /export function FeatureStatusChip/);
@@ -29,8 +29,8 @@ test("FeatureStatusChip encodes VERIFIED solid blue and PREVIEW outline", () => 
   assert.match(chip, /feature-status-chip--under-test/);
   assert.match(css, /\.feature-status-chip--verified/);
   assert.match(css, /background: var\(--color-accent-subtle\)/);
-    assert.match(css, /\.feature-status-chip--under-test/);
-    assert.match(css, /color: #fcd34d;/);
+  assert.match(css, /\.feature-status-chip--under-test/);
+  assert.match(css, /color: #fcd34d;/);
   assert.match(features, /<FeatureStatusChip status=\{card\.status\}/);
   assert.match(features, /UNDER_TEST_GROUP_HONESTY/);
   assert.match(config, /Preview status/);
@@ -42,7 +42,7 @@ test("FeatureStatusChip encodes VERIFIED solid blue and PREVIEW outline", () => 
 test("nav desktop labels stay wrap-safe single-line units", () => {
   const header = read("src/components/SiteHeader.tsx");
   const site = read("src/config/site.ts");
-  const css = read("src/app/globals.css");
+  const css = read("src/app/[locale]/globals.css");
 
   assert.match(site, /label: "How it works"/);
   assert.match(site, /Safety rules/);
@@ -54,7 +54,7 @@ test("nav desktop labels stay wrap-safe single-line units", () => {
 });
 
 test("home trust strip, tour caption, and role chips stay claims-safe", () => {
-  const home = read("src/app/page.tsx");
+  const home = read("src/app/[locale]/page.tsx");
   const strip = read("src/components/HomeTrustStrip.tsx");
   const chips = read("src/components/HomeRoleChips.tsx");
   const tour = read("src/lib/product-tour.ts");
@@ -98,7 +98,7 @@ test("HIW step cards are a mos-glass number→title→status ladder", () => {
 
 test("/create stepper chrome is sticky Website to Review & Try", () => {
   const stepper = read("src/components/CreateJourneyStepper.tsx");
-  const css = read("src/app/globals.css");
+  const css = read("src/app/[locale]/globals.css");
   const later = read("src/components/CreateReceptionistLaterSteps.tsx");
   const preview = read("src/components/ReceptionistDraftPreview.tsx");
 
@@ -119,9 +119,9 @@ test("/create stepper chrome is sticky Website to Review & Try", () => {
 
 test("objection FAQ pack is on home and how-it-works, not features", () => {
   const faqs = read("src/content/objection-faqs.ts");
-  const home = read("src/app/page.tsx");
-  const hiw = read("src/app/how-it-works/page.tsx");
-  const features = read("src/app/features/page.tsx");
+  const home = read("src/app/[locale]/page.tsx");
+  const hiw = read("src/app/[locale]/how-it-works/page.tsx");
+  const features = read("src/app/[locale]/features/page.tsx");
   const accordion = read("src/components/ObjectionFaq.tsx");
 
   assert.equal(OBJECTION_QUESTIONS.length, 5);
@@ -152,7 +152,7 @@ test("objection FAQ pack is on home and how-it-works, not features", () => {
 
 test("HonestyBanner token is shared and optional vignettes stay scenarios", () => {
   const banner = read("src/components/HonestyBanner.tsx");
-  const features = read("src/app/features/page.tsx");
+  const features = read("src/app/[locale]/features/page.tsx");
   const vignettes = read("src/components/UkScenarioVignettes.tsx");
 
   assert.match(banner, /export function HonestyBanner/);
