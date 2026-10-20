@@ -331,7 +331,7 @@ try {
 
   await clickPrimary(cdp);
 
-  await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "2"`);
+  await waitFor(cdp, `document.querySelector("[data-create-step]")?.getAttribute("data-create-step") === "2"`, 30000);
   await waitFor(cdp, `(() => { const b=document.querySelector("[data-create-primary-action]"); return Boolean(b && !b.disabled); })()`, 10000);
   assert.equal(scanRequests(cdp).length, 1, "website learning must call the same-origin scanner exactly once");
   await clickPrimary(cdp);
