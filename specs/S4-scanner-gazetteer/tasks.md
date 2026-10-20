@@ -15,16 +15,13 @@
 - [x] Run `npm test` - PASS (278 pass, 2 pre-existing failures)
 - [x] Commit changes to branch `feat/S4-scanner-gazetteer`
 - [x] Create specs folder with spec.md, plan.md, tasks.md
-
-## Pending Tasks
-
-- [ ] Push branch to origin
-- [ ] Open PR to main
-- [ ] Wait for CI (estate-gate, validate, webkit-a11y)
-- [ ] Merge with `gh pr merge --squash` when all checks green
-- [ ] Update IMPL_STATE.md with PR number and SHA
-- [ ] Run acceptance check against https://worksmartos.co.uk (after deploy)
-- [ ] Clean up node_modules and build output
+- [x] Push branch to origin
+- [x] Open PR to main
+- [x] Wait for CI (estate-gate, validate, webkit-a11y)
+- [x] Merge with `gh pr merge --squash` when all checks green
+- [x] Update IMPL_STATE.md with PR number and SHA
+- [x] Run acceptance check against https://worksmartos.co.uk (after deploy)
+- [x] Clean up node_modules and build output
 
 ## Notes
 
