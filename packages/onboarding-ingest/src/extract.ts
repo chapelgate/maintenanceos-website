@@ -78,12 +78,14 @@ export const USER_AGENT =
   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 WorkSmartOS-OnboardingScan/0.1 (MaintenanceOS-OnboardingScan/0.1; +https://worksmartos.co.uk)";
 
 const DAY_RE =
-  /\b(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays?|weekends?)\b/i;
+  /\b(mon|tue|wed|thu|fri|sat|sun|mo|tu|we|th|fr|sa|su|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays?|weekends?)\b/i;
 const TIME_RE = /\b(\d{1,2}[:.]\d{2}|\d{1,2}\s?(am|pm))\b/i;
 const TIME_RANGE_RE =
   /\d{1,2}(?:[:.]\d{2})?\s?(?:a\.?m\.?|p\.?m\.?)?\s*(?:-|–|—|to)\s*\d{1,2}(?:[:.]\d{2})?\s?(?:a\.?m\.?|p\.?m\.?)?/i;
 const ALL_HOURS_RE =
   /\b(open(?:ing)?(?:\s+hours)?|hours).{0,24}(24\s*\/\s*7|24\s*hours)\b|\b(24\s*\/\s*7|24\s*hours).{0,24}(open(?:ing)?|hours)\b/i;
+
+const PLACEHOLDER_HOURS_RE = /\b00:00\s*(?:-|–|—|to)\s*(?:23:59|00:00)\b/i;
 
 const GENERIC_NAME_RE = /^(home|about|welcome|untitled|index|website|error)$/i;
 const GENERIC_NAV_RE =
@@ -777,6 +779,9 @@ function trimHoursLine(line: string): string | undefined {
     const all = text.match(ALL_HOURS_RE);
     return all?.[0] ? asUntrustedText(all[0], 140) : undefined;
   }
+  if (PLACEHOLDER_HOURS_RE.test(text)) {
+    return undefined;
+  }
   if (/\bclosed\b/i.test(text) && DAY_RE.test(text) && !TIME_RANGE_RE.test(text)) {
     const closed =
       /((?:mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays?|weekends?)\b.{0,24}\bclosed\b)/i.exec(
@@ -830,6 +835,7 @@ function plainHours(value: string): string {
     500,
   );
   if (!text || /<[a-z!/]/i.test(text)) return "";
+  if (PLACEHOLDER_HOURS_RE.test(text) && !ALL_HOURS_RE.test(text)) return "";
   if (looksLikeHoursPattern(text) || /\b\d{1,2}:\d{2}\b/.test(text) || ALL_HOURS_RE.test(text)) {
     return text;
   }
@@ -1640,7 +1646,6 @@ export function chooseOpeningHours(
 }
 
 const ALWAYS_OPEN_RE = /\b(?:24\s*\/\s*7|24\s*hours|open\s*24)\b/i;
-const PLACEHOLDER_HOURS_RE = /\b00:00\s*(?:-|–|—|to)\s*(?:23:59|00:00)\b/i;
 const WEEKDAY_TOKEN =
   "monday|tuesday|wednesday|thursday|friday|saturday|sunday|tues|thurs|thur|mon|tue|wed|thu|fri|sat|sun|mo|tu|we|th|fr|sa|su";
 const WEEKDAY_INDEX: Record<string, number> = {
