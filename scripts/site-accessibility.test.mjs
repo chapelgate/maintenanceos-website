@@ -28,7 +28,7 @@ test("document shell exposes language, skip target and non-obscured main focus",
 test("focus and reduced-motion safeguards remain global", () => {
   const css = read("src/app/globals.css");
   assert.match(css, /a:focus-visible,[\s\S]*summary:focus-visible/);
-  assert.match(css, /outline:\s*2px solid var\(--color-accent\)/);
+  assert.match(css, /outline: var\(--mos-focus-ring\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(css, /animation-duration:\s*0\.01ms !important/);
   assert.match(css, /transition-duration:\s*0\.01ms !important/);
