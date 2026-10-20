@@ -73,11 +73,12 @@ jobs:
             apt-get update -qq
             DEBIAN_FRONTEND=noninteractive apt-get install -y -qq chromium >/dev/null
             npm ci
+            # Build first so tests that read static output (e.g. out/pricing/index.html) can pass
+            NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan npm run build
             npm test
             npm run accessibility:check
             npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts
             npx tsc --noEmit
-            NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT=http://127.0.0.1:8788/scan npm run build
             # Next 16 emits both out/404/index.html and out/_not-found/index.html.
             # /accessibility/ is included. 30 is the current static page count.
             test "$(find out -name index.html -type f | wc -l)" -eq 30
