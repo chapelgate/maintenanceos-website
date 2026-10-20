@@ -4,5 +4,5 @@
 - [x] Create specs/S-CI-ci-baseline-repair/spec.md
 - [x] Create specs/S-CI-ci-baseline-repair/plan.md
 - [x] Create specs/S-CI-ci-baseline-repair/tasks.md
-- [ ] Push changes and verify CI passes
-- [ ] Merge PR when all checks green
+- [x] Push changes and verify CI passes
+- [x] Merge PR when all checks green
