@@ -1909,12 +1909,14 @@ const ERROR_PAGE_TITLE_RE =
   /404|\bnot found\b|\berror\b|^untitled(?:\s+document)?$/i;
 
 const SENTENCE_VERB_RE = /\s(?:are|is|we|provide)\s/i;
+const SENTENCE_STARTER_RE = /^(?:welcome to|we are|our|quality|best|professional|expert|reliable|trusted|experienced|affordable|local|family|established|since)\s+/i;
 
 /** A name that is really a sentence, a tagline, or a place tacked on with a comma. */
 function isSentenceName(value: string): boolean {
   if (value.length > 60) return true;
   if (/[.]$/.test(value)) return true;
   if (SENTENCE_VERB_RE.test(` ${value} `) || SENTENCE_VERB_RE.test(value)) return true;
+  if (SENTENCE_STARTER_RE.test(value)) return true;
   if (
     /,\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}\.?$/.test(value) &&
     (value.length > 40 || /,\s*[A-Z][a-z]+,\s*[A-Z][a-z]+/.test(value))
@@ -2869,7 +2871,17 @@ export function extractDraftFromHtml(
     if (siteName) nameHits.push({ value: siteName, source: "meta", confidence: "high", rank: 60 });
     const title = extractTitle(page.html);
     if (title) {
-      const branded = !isArticlePage(page.url) || namePieces(title).some((piece) => {
+      const pieces = namePieces(title);
+      let pushedAny = false;
+      for (const piece of pieces) {
+        const value = candidateName(piece.text, siteHost);
+        if (value && validateBusinessName(value)) {
+          const pieceRank = 55 - piece.order * 5;
+          nameHits.push({ value, source: "title", confidence: "medium", rank: pieceRank });
+          pushedAny = true;
+        }
+      }
+      const branded = !isArticlePage(page.url) || pieces.some((piece) => {
         const value = candidateName(piece.text, siteHost);
         return Boolean(value && nameMatchesDomain(value, siteHost));
       });
