@@ -20,7 +20,11 @@ test.describe('WebKit accessibility checks', () => {
     for (const viewport of viewports) {
       test(`axe a11y checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
-        await page.goto(`http://localhost:3000${pagePath}`);
+        await page.goto(`http://localhost:3000${pagePath}`, { waitUntil: 'networkidle' });
+        
+        // Wait for any client-side hydration/navigation to complete
+        await page.waitForLoadState('load');
+        await page.waitForTimeout(500);
         
         // Check for axe violations
         const accessibilityScanResults = await new AxeBuilder({ page })
@@ -35,12 +39,13 @@ test.describe('WebKit accessibility checks', () => {
         expect(seriousOrCritical).toEqual([]);
       });
 
-      test(`focus and menu checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
+test(`focus and menu checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
-        await page.goto(`http://localhost:3000${pagePath}`);
+        await page.goto(`http://localhost:3000${pagePath}`, { waitUntil: 'networkidle' });
         
-        // Wait for page to load
+        // Wait for page to load and any client-side hydration to complete
         await page.waitForLoadState('load');
+        await page.waitForTimeout(500);
         
         // Find a visible header summary (the menu trigger)
         const summaryLocator = page.locator('header details > summary').filter({ visible: true });
@@ -61,7 +66,7 @@ test.describe('WebKit accessibility checks', () => {
           await summary.focus();
           await summary.press('Enter');
           // Wait for menu to open - we'll use expect to wait for the attribute change
-          await expect(details).toHaveAttribute('open');
+          await expect(details).toHaveAttribute('open', { timeout: 5000 });
           // Also check that the summary has aria-expanded="true"
           await expect(summary).toHaveAttribute('aria-expanded', 'true');
           
@@ -72,9 +77,10 @@ test.describe('WebKit accessibility checks', () => {
           await expect(summary).toHaveAttribute('aria-expanded', 'false');
          }
          
-         // Reload the page to start tab navigation from the top of a fresh page
-         await page.goto(`http://localhost:3000${pagePath}`);
-         await page.waitForLoadState('load');
+          // Reload the page to start tab navigation from the top of a fresh page
+          await page.goto(`http://localhost:3000${pagePath}`, { waitUntil: 'networkidle' });
+          await page.waitForLoadState('load');
+          await page.waitForTimeout(500);
          
          // Tab through the page and check focus visibility
         // We'll tab 50 times or until we have no more focusable elements
