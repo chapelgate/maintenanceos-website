@@ -153,6 +153,7 @@ export const footerNav = {
     { href: "/industries/", label: "All sectors" },
     { href: "/pricing/", label: "Pricing" },
     { href: "/compare/", label: "Compare alternatives" },
+    { href: "/integrations/", label: "Integrations" },
   ],
   company: [
     { href: "/about/", label: "About" },

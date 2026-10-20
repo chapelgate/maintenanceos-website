@@ -38,6 +38,7 @@ function getFileLastMod(filePath: string): string {
 import { getAllComparisonSlugs } from "@/lib/compare";
 import { getBlogPostSlugs } from "@/lib/blog";
 import { getHelpArticleSlugs } from "@/lib/help";
+import { getAllProviders } from "@/lib/integrations";
 
 function getLastModForPath(path: string): string {
   const comparisonPaths = Object.fromEntries(getAllComparisonSlugs().map((slug) => [
@@ -68,6 +69,11 @@ function getLastModForPath(path: string): string {
     "/create/": "src/app/create/page.tsx",
     "/how-we-keep-control/": "src/app/how-we-keep-control/page.tsx",
     "/security/": "src/app/security/page.tsx",
+    "/integrations/": "src/app/integrations/page.tsx",
+    ...Object.fromEntries(getAllProviders().map((p) => [
+      `/integrations/${p.id}/`,
+      `src/app/integrations/[provider]/page.tsx`,
+    ])),
     "/industries/": "src/app/industries/page.tsx",
     "/industries/landlords/": "src/app/industries/landlords/page.tsx",
     "/industries/letting-agents/": "src/app/industries/letting-agents/page.tsx",
