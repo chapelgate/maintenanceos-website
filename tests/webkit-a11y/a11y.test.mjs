@@ -4,7 +4,8 @@ import AxeBuilder from '@axe-core/playwright';
 // Use WebKit for all tests in this file
 test.use({ browserName: 'webkit' });
 
-const pages = ['/', '/create/', '/demo/', '/features/', '/pricing/', '/security/'];
+const locale = 'en-GB';
+const pages = [`/${locale}/`, `/${locale}/create/`, `/${locale}/demo/`, `/${locale}/features/`, `/${locale}/pricing/`, `/${locale}/security/`];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
   { name: 'Desktop Safari', width: 1280, height: 800 }
