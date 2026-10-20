@@ -76,7 +76,12 @@ jobs:
             # Build first so tests that read static output (e.g. out/pricing/index.html) can pass
             # Do not set NEXT_PUBLIC_ONBOARDING_SCAN_ENDPOINT; default /api/website/scan is mocked by browser test
             NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run build
-            npm test
+            # Start form stub server for enquiry processor tests AND browser test (form endpoint inlined at build)
+            NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run form-stub &
+            FORM_STUB_PID=$!
+            sleep 3
+            NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm test
+            kill $FORM_STUB_PID 2>/dev/null || true
             npm run accessibility:check
             npx eslint src/components/CreateReceptionistForm.tsx src/components/CreateReceptionistLaterSteps.tsx src/lib/lead-adapter.ts
             npx tsc --noEmit
@@ -87,6 +92,7 @@ jobs:
             test -f out/sitemap.xml
             BROWSER_PATH=/usr/bin/chromium npm run browser:smoke
             BROWSER_PATH=/usr/bin/chromium NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads node scripts/create-mobile-stability-browser.mjs
+            kill $FORM_STUB_PID 2>/dev/null || true
           '
       - name: Patch integrity
         run: |
