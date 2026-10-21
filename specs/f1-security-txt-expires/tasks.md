@@ -1,0 +1,8 @@
+- [ ] Add Expires, Preferred-Languages, Canonical to public/.well-known/security.txt
+- [ ] Add RFC 9116 test to scripts/audit-slices.test.mjs
+- [ ] Run npm ci, npx tsc --noEmit, npm run lint, node --test scripts/audit-slices.test.mjs, npm run build
+- [ ] Commit and push branch feat/f1-security-txt-expires
+- [ ] Open PR with Estate headers and Skills used line
+- [ ] Wait for estate-gate, validate, webkit-a11y green
+- [ ] Merge with gh pr merge --squash
+- [ ] Run live acceptance test after redeploy
