@@ -123,6 +123,14 @@ test("static export already emits trailing slashes and cannot add a 301", () => 
   assert.doesNotMatch(config, /redirects\s*[:(]/);
 });
 
+test("security.txt meets RFC 9116 with Contact and Expires lines", () => {
+  const security = read("public/.well-known/security.txt");
+  assert.match(security, /Contact:\s*mailto:/i);
+  assert.match(security, /Expires:\s*\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/i);
+  assert.match(security, /Preferred-Languages:\s*en/i);
+  assert.match(security, /Canonical:\s*https:\/\/worksmartos\.co\.uk\/\.well-known\/security\.txt/i);
+});
+
 test("lead form keeps the enquiry fallback and adds field focus plus a silent honeypot", () => {
   const form = read("src/components/LeadCaptureForm.tsx");
   assert.match(form, /buildEnquiryMailto/);
