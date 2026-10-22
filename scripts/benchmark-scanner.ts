@@ -68,18 +68,20 @@ function runBenchmark(sites: Array<{ name: string; url: string; expected: Record
 }
 
 async function main(): Promise<void> {
-  const args = parseArgs({
-    options: {
-      ci: { type: "boolean" },
-      field: { type: "string" },
-      sites: { type: "string" },
-      gate: { type: "string" },
-    },
-  });
+const parsed = parseArgs({
+  options: {
+    ci: { type: "boolean" },
+    field: { type: "string" },
+    sites: { type: "string" },
+    gate: { type: "string" },
+  },
+});
 
-  const isCI = args?.ci ?? false;
-  const field = args?.field ?? "all";
-  const gate = args?.gate ?? "medium";
+const args = parsed.values;
+
+const isCI = args?.ci ?? false;
+const field = args?.field ?? "all";
+const gate = args?.gate ?? "medium";
 
   const sites = loadKnownSites();
   const fields = field === "all" ? FIELDS : [field];
