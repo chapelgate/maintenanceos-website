@@ -1471,6 +1471,58 @@ export function extractVisibleContactSection(html: string): {
   return { phones, emails, locations, ...(place ? { place } : {}) };
 }
 
+export function extractVisiblePhones(html: string): string[] {
+  const phones: string[] = [];
+
+  const telAnchors = html.matchAll(
+    /<a\b[^>]*href=["']tel:([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi,
+  );
+  for (const m of telAnchors) {
+    const href = decodeEntities(decodeURIComponent(safeDecode(m[1])));
+    const label = innerText(m[2]);
+    const candidate = isPlausiblePhone(label) ? label : asUntrustedText(href);
+    const canonical = candidate ? normalizeUkPhone(candidate) : undefined;
+    if (canonical) phones.push(canonical);
+  }
+
+  const visibleText = stripHtmlToText(html);
+  const textPhones = visiblePhoneCandidates(visibleText);
+  for (const p of textPhones) {
+    const canonical = normalizeUkPhone(p);
+    if (canonical) phones.push(canonical);
+  }
+
+  return [...new Set(phones)].slice(0, 8);
+}
+
+export function extractVisibleEmails(html: string): string[] {
+  const emails: string[] = [];
+
+  const mailto = html.matchAll(/href=["']mailto:([^"'?]+)["']/gi);
+  for (const m of mailto) {
+    const email = asUntrustedText(decodeEntities(safeDecode(m[1])));
+    if (email && isPlausibleEmail(email) && !isRejectedEmail(email)) {
+      emails.push(email.toLowerCase());
+    }
+  }
+
+  const visibleText = stripHtmlToText(html);
+  const textEmails = visibleEmailCandidates(visibleText);
+  for (const e of textEmails) {
+    if (!isRejectedEmail(e)) {
+      emails.push(e.toLowerCase());
+    }
+  }
+
+  return [...new Set(emails)].slice(0, 8);
+}
+
+function isRejectedEmail(email: string): boolean {
+  const local = email.split("@")[0] ?? "";
+  return /^(noreply|no-reply|donotreply|privacy|webmaster)$/i.test(local)
+    || /(?:tracking|pixel|marketing|newsletter|campaign|analytics)/i.test(local);
+}
+
 function httpsPageUrl(url: string): string | undefined {
   try {
     const parsed = new URL(url);
@@ -2996,6 +3048,11 @@ export function extractDraftFromHtml(
     pushPhones(links.phones, factUrl, 4, "contact_link", "medium");
     emailHits.push(...extractSurfaceEmails(visibleHtml, factUrl, siteHost));
 
+    pushPhones(extractVisiblePhones(visibleHtml), factUrl, 2, "pattern", "medium");
+    for (const email of extractVisibleEmails(visibleHtml)) {
+      rememberSurfaceEmail(emailHits, email, factUrl, siteHost, 2, "pattern", "medium");
+    }
+
     const visibleContact = extractVisibleContactSection(visibleHtml);
     rememberLocations(visibleContact.locations, "heading", "medium", factUrl);
     pushPhones(visibleContact.phones, factUrl, 3, "heading", "medium");
@@ -3132,7 +3189,7 @@ export function extractDraftFromHtml(
       }
     }
   }
-  if (!draft.services) {
+if (!draft.services) {
     for (const page of pages) {
       if (!isServiceSourceUrl(page.url)) continue;
       const fromTrades = extractTradeServiceHeadings(withoutCodeScripts(page.html));
@@ -3142,6 +3199,16 @@ export function extractDraftFromHtml(
       }
     }
   }
+  if (!draft.services) {
+    for (const page of pages) {
+      const visible = extractServicesFromNav(withoutCodeScripts(page.html));
+      if (visible) {
+        setField(draft, fieldMeta, "services", visible, "heading", "low");
+        break;
+      }
+    }
+  }
+
   setField(
     draft,
     fieldMeta,
