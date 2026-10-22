@@ -8,7 +8,7 @@
 import { parseFragment, type DefaultTreeAdapterMap } from "parse5";
 import { createGunzip, gunzipSync } from "node:zlib";
 import { createReadStream, readFileSync } from "node:fs";
-import { pipeline } from "node:stream/promises";
+
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import type {
@@ -38,24 +38,10 @@ async function loadGazetteer(): Promise<GazetteerData> {
   if (gazetteerCache) return gazetteerCache;
   const __dirname = dirname(fileURLToPath(import.meta.url));
   const gazetteerPath = join(__dirname, "..", "..", "public", "gazetteer.json.gz");
-  return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
-    pipeline(
-      createReadStream(gazetteerPath),
-      createGunzip(),
-      async function* () {
-        for await (const chunk of this) chunks.push(chunk);
-      }()
-    ).then(() => {
-      try {
-        const json = Buffer.concat(chunks).toString("utf8");
-        gazetteerCache = JSON.parse(json) as GazetteerData;
-        resolve(gazetteerCache);
-      } catch (err) {
-        reject(err);
-      }
-    }).catch(reject);
-  });
+  const compressed = readFileSync(gazetteerPath);
+  const json = gunzipSync(compressed).toString("utf8");
+  gazetteerCache = JSON.parse(json) as GazetteerData;
+  return gazetteerCache;
 }
 
 function getGazetteerSync(): GazetteerData {
