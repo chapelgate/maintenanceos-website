@@ -5,7 +5,7 @@ Scanner field extraction behind POST /api/website/scan now falls back to visible
 
 ## Acceptance Criteria
 - Phone extraction: on sites visibly showing a phone number, at least 80% extracted correctly
-- Email extraction: on sites visibly showing an email, at least 80% extracted correctly  
+- Email extraction: on sites visibly showing an email, at least 80% extracted correctly
 - No regressions on name/address fields
 - Unit tests with fixture HTML for each extractor
 - Local `npm ci && npx tsc --noEmit && npm run lint && npm test && npm run build` pass
