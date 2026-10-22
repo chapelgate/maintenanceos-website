@@ -1,0 +1,394 @@
+{
+  "sites": [
+    {
+      "name": "moneypenny.com",
+      "url": "https://www.moneypenny.com",
+      "fixture": "fixture-moneypenny.com.html",
+      "expected": {
+        "businessName": "Moneypenny",
+        "phone": "+443332021005",
+        "email": "hello@moneypenny.co.uk",
+        "address": "Moneypenny, Western Gateway, Wrexham, LL13 7ZB",
+        "hours": null,
+        "services": ["Moneypenny", "Telephone Answering Service People-first answering solution", "AI Receptionist Fully automated answering", "Outsourced Switchboard 24/7 scalable call handling"]
+      }
+    },
+    {
+      "name": "britishgas.co.uk",
+      "url": "https://www.britishgas.co.uk",
+      "fixture": "fixture-britishgas.co.uk.html",
+      "expected": {
+        "businessName": "British Gas",
+        "phone": null,
+        "email": null,
+        "address": "Maidenhead Road, Windsor, SL4 5GD",
+        "hours": null,
+        "services": ["Heat pumps", "Smart heating"]
+      }
+    },
+    {
+      "name": "octopus.energy",
+      "url": "https://octopus.energy",
+      "fixture": "fixture-octopus.energy.html",
+      "expected": {
+        "businessName": "Octopus Energy",
+        "phone": null,
+        "email": null,
+        "address": "164-182 Oxford Street, London, W1D 1NN",
+        "hours": null,
+        "services": ["Heat pumps", "Electric vehicles & chargers", "Heat your home for less", "The smartest way to get an electric car", "Charger installation (from £949)"]
+      }
+    },
+    {
+      "name": "utilita.co.uk",
+      "url": "https://www.utilita.co.uk",
+      "fixture": "fixture-utilita.co.uk.html",
+      "expected": {
+        "businessName": "Utilita Energy",
+        "phone": "+443452072000",
+        "email": "customerservices@utilita.co.uk",
+        "address": "Hutwood Court, Bournemouth Road, Chandler's Ford, Eastleigh, SO53 3QB",
+        "hours": null,
+        "services": ["Energy", "Solar", "Business", "Smart Pay As You Go", "My Utilita App"]
+      }
+    },
+    {
+      "name": "barclays.co.uk",
+      "url": "https://www.barclays.co.uk",
+      "fixture": "fixture-barclays.co.uk.html",
+      "expected": {
+        "businessName": "Barclays Bank UK PLC",
+        "phone": "+443457345345",
+        "email": null,
+        "address": "1 Churchill Place, London, E14 5HP",
+        "hours": null,
+        "services": ["Tools and services", "Tools and Services", "Independent service quality survey results"]
+      }
+    },
+    {
+      "name": "lloydsbank.com",
+      "url": "https://www.lloydsbank.com",
+      "fixture": "fixture-lloydsbank.com.html",
+      "expected": {
+        "businessName": "Lloyds",
+        "phone": null,
+        "email": null,
+        "address": "The Mound, The Mound, EH1 1YZ",
+        "hours": null,
+        "services": ["Independent service quality survey results", "Overall service quality", "Products and services"]
+      }
+    },
+    {
+      "name": "halifax.co.uk",
+      "url": "https://www.halifax.co.uk",
+      "fixture": "fixture-halifax.co.uk.html",
+      "expected": {
+        "businessName": "Halifax",
+        "phone": null,
+        "email": null,
+        "address": "The Mound, The Mound, EH1 1YZ",
+        "hours": null,
+        "services": ["Travel services", "Independent service quality survey results", "Overall service quality", "Products & services"]
+      }
+    },
+    {
+      "name": "niceic.co.uk",
+      "url": "https://www.niceic.co.uk",
+      "fixture": "fixture-niceic.co.uk.html",
+      "expected": {
+        "businessName": "UK Electrical Certification and Training",
+        "phone": null,
+        "email": null,
+        "address": "Houghton Hall Park, Porz Ave, Houghton Regis, Dunstable, LU5 5ZX",
+        "hours": null,
+        "services": ["NICEIC Insurance Services", "Find an electrician near you"]
+      }
+    },
+    {
+      "name": "propertymanager.co.uk",
+      "url": "https://www.propertymanager.co.uk",
+      "fixture": "fixture-propertymanager.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "plumbfix.co.uk",
+      "url": "https://www.plumbfix.co.uk",
+      "fixture": "fixture-plumbfix.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "housing.org.uk",
+      "url": "https://www.housing.org.uk",
+      "fixture": "fixture-housing.org.uk.html",
+      "expected": {
+        "businessName": "National Housing Federation",
+        "phone": "+442070671010",
+        "email": "info@housing.org.uk",
+        "address": null,
+        "hours": null,
+        "services": ["Our Work", "Affordable home ownership", "Building new homes", "Building safety", "Climate and sustainability"]
+      }
+    },
+    {
+      "name": "facilities.com",
+      "url": "https://www.facilities.com",
+      "fixture": "fixture-facilities.com.html",
+      "expected": {
+        "businessName": "Facilities",
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "lb.gov.uk",
+      "url": "https://www.lb.gov.uk",
+      "fixture": "fixture-lb.gov.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "holidaycottages.co.uk",
+      "url": "https://www.holidaycottages.co.uk",
+      "fixture": "fixture-holidaycottages.co.uk.html",
+      "expected": {
+        "businessName": "Holidaycottages",
+        "phone": "+441237459888",
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "e-on.co.uk",
+      "url": "https://www.e-on.co.uk",
+      "fixture": "fixture-e-on.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "rightmove.co.uk",
+      "url": "https://www.rightmove.co.uk",
+      "fixture": "fixture-rightmove.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": ["Buy", "Property for sale", "New homes for sale", "Property valuation", "Agent valuation"]
+      }
+    },
+    {
+      "name": "zoopla.co.uk",
+      "url": "https://www.zoopla.co.uk",
+      "fixture": "fixture-zoopla.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "sutton.co.uk",
+      "url": "https://www.sutton.co.uk",
+      "fixture": "fixture-sutton.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "folio.co.uk",
+      "url": "https://www.folio.co.uk",
+      "fixture": "fixture-folio.co.uk.html",
+      "expected": {
+        "businessName": "Web Design Smart Domain Group Ltd",
+        "phone": "+441865820322",
+        "email": null,
+        "address": "6 and 7, Kingston Business Park, Kingston Bagpuize, Oxford, OX13 5AS",
+        "hours": null,
+        "services": ["Our Guarantee", "Our Products", "Computer Desks", "Sixpence Desks", "Custom Build Options"]
+      }
+    },
+    {
+      "name": "yell.com",
+      "url": "https://www.yell.com",
+      "fixture": "fixture-yell.com.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "checkatrade.com",
+      "url": "https://www.checkatrade.com",
+      "fixture": "fixture-checkatrade.com.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": null
+      }
+    },
+    {
+      "name": "trustatrader.com",
+      "url": "https://www.trustatrader.com",
+      "fixture": "fixture-trustatrader.com.html",
+      "expected": {
+        "businessName": "TrustATrader",
+        "phone": "+441438870097",
+        "email": "sales@trustatrader.com",
+        "address": "Unit 5, Meadway Court, Rutherford Close, Stevenage, SG1 2EF",
+        "hours": null,
+        "services": ["Trade Window Services Limited, Leigh on Sea", "Howman & Nicholls Roofing, Sandy", "Other services"]
+      }
+    },
+    {
+      "name": "cityplumbing.co.uk",
+      "url": "https://www.cityplumbing.co.uk",
+      "fixture": "fixture-cityplumbing.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": "1 Eldon Way, Crick, Northampton, NN6 7SL",
+        "hours": null,
+        "services": ["Boilers", "Heating", "Radiators", "Spares", "Plumbing"]
+      }
+    },
+    {
+      "name": "wolseley.co.uk",
+      "url": "https://www.wolseley.co.uk",
+      "fixture": "fixture-wolseley.co.uk.html",
+      "expected": {
+        "businessName": "Wolseley",
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": ["Boiler Packs", "Domestic Boiler Parts", "Central Heating Controls", "Bathrooms and Kitchens", "Explore the latest deals on heating"]
+      }
+    },
+    {
+      "name": "plumbase.co.uk",
+      "url": "https://www.plumbase.co.uk",
+      "fixture": "fixture-plumbase.co.uk.html",
+      "expected": {
+        "businessName": "Plumbase",
+        "phone": null,
+        "email": null,
+        "address": "Greenalls Avenue, Stockton Heath, Cheshire, United Kingdom, WA4 6HL",
+        "hours": null,
+        "services": ["Showrooms", "Esteem Bathrooms", "Apply for an Account", "Location"]
+      }
+    },
+    {
+      "name": "bes.co.uk",
+      "url": "https://www.bes.co.uk",
+      "fixture": "fixture-bes.co.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": "+44800801090",
+        "email": null,
+        "address": "6 Industrial Park, Electric Avenue, Birmingham, B6 7JJ",
+        "hours": null,
+        "services": ["Natural Gas & LPG", "All", "Natural Gas", "Thermocouple", "Label"]
+      }
+    },
+    {
+      "name": "fixflo.com",
+      "url": "https://www.fixflo.com",
+      "fixture": "fixture-fixflo.com.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": "2 Dominion Centre, Elliott Road, Bournemouth, BH11 8JR",
+        "hours": null,
+        "services": ["Lettings", "Block management", "Commercial (CAFM)", "Build to rent", "Social housing"]
+      }
+    },
+    {
+      "name": "gov.uk",
+      "url": "https://www.gov.uk",
+      "fixture": "fixture-gov.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": ["Services and information", "Housing and local services"]
+      }
+    },
+    {
+      "name": "nhs.uk",
+      "url": "https://www.nhs.uk",
+      "fixture": "fixture-nhs.uk.html",
+      "expected": {
+        "businessName": null,
+        "phone": null,
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": ["Health A to Z", "NHS services", "Healthy living", "Mental health", "Care and support"]
+      }
+    },
+    {
+      "name": "lettingsupermarket.co.uk",
+      "url": "https://www.lettingsupermarket.co.uk",
+      "fixture": "fixture-lettingsupermarket.co.uk.html",
+      "expected": {
+        "businessName": "Letting Supermarket",
+        "phone": "+448000988844",
+        "email": null,
+        "address": null,
+        "hours": null,
+        "services": ["LANDLORD SERVICES", "INSTANT VALUATION", "MAIN MENU"]
+      }
+    }
+  ]
+}
