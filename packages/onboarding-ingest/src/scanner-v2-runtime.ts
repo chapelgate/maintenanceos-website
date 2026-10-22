@@ -285,7 +285,7 @@ async function enqueueThinHomeProbes(
   return added;
 }
 
-function aggregateFacts(
+export function aggregateFacts(
   origin: string,
   pages: readonly CrawlPage[],
 ): { facts: BusinessFacts; factMeta: BusinessFactMeta } {
@@ -462,22 +462,46 @@ function aggregateFacts(
   }
   if (uniqueServices.length) facts.services = uniqueServices;
   if (uniqueFaqs.length) facts.faqs = uniqueFaqs;
+
+  if (factMeta.businessName?.confidence === "low") {
+    delete facts.businessName;
+    delete factMeta.businessName;
+  }
+  if (factMeta.address?.confidence === "low") {
+    delete facts.address;
+    delete factMeta.address;
+  }
+  if (factMeta.hours?.confidence === "low") {
+    delete facts.hours;
+    delete factMeta.hours;
+  }
+  if (Array.isArray(factMeta.services) && factMeta.services.some((m) => m.confidence === "low")) {
+    const lowServiceIndices = new Set<number>();
+    factMeta.services.forEach((m, i) => { if (m.confidence === "low") lowServiceIndices.add(i); });
+    facts.services = facts.services?.filter((_, i) => !lowServiceIndices.has(i));
+    factMeta.services = factMeta.services?.filter((_, i) => !lowServiceIndices.has(i));
+  }
+  if (factMeta.faqs?.length) {
+    const goodFaqs = factMeta.faqs.filter((m) => m.confidence !== "low");
+    if (goodFaqs.length < factMeta.faqs.length) {
+      facts.faqs = goodFaqs.map((m) => ({ question: m.question, answer: m.sourceUrl ? `From: ${m.sourceUrl}` : m.question }));
+    }
+  }
+
   return { facts, factMeta };
 }
 
-function draftFromFacts(facts: BusinessFacts) {
-  return {
-    ...(facts.businessName ? { businessName: facts.businessName } : {}),
-    ...(facts.hours ? { hours: facts.hours } : {}),
-    ...(facts.services?.length ? { services: facts.services.join("\n") } : {}),
-    ...(facts.faqs?.length
-      ? {
-          faqs: facts.faqs
-            .map((faq) => `Q: ${faq.question}\nA: ${faq.answer}`)
-            .join("\n\n"),
-        }
-      : {}),
-  };
+export function draftFromFacts(facts: BusinessFacts) {
+  const result: Partial<BusinessFacts> = {};
+  result.businessName = facts.businessName ?? "Unknown — not found";
+  result.hours = facts.hours ?? "Unknown — not found";
+  result.services = facts.services?.length ? facts.services.join("\n") : "Unknown — not found";
+  result.faqs = facts.faqs?.length
+    ? facts.faqs
+        .map((faq) => `Q: ${faq.question}\nA: ${faq.answer}`)
+        .join("\n\n")
+    : "Unknown — not found";
+  return result;
 }
 
 function knowledgeFromChunks(chunks: readonly CorpusChunk[]): RuntimeKnowledgeItem[] {
