@@ -1,0 +1,78 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build static export
+        run: npm run build
+      - name: Start local server
+        run: npx serve out -l 3000 &
+      - name: Wait for server
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:3000/ > /dev/null; then
+              echo "Server is ready"
+              break
+            fi
+            sleep 1
+          done
+      - name: Install Lighthouse
+        run: npm install -g lighthouse@latest
+      - name: Run Lighthouse on key pages (mobile)
+        run: |
+          set -euo pipefail
+          PAGES=("/" "/pricing/" "/create/" "/contact/")
+          FAILED=0
+          for page in "${PAGES[@]}"; do
+            echo "=== Testing $page ==="
+            lighthouse "http://localhost:3000$page" \
+              --preset=mobile \
+              --output=json \
+              --output-path=/tmp/lighthouse-$(echo "$page" | tr '/' '_').json \
+              --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+              >/dev/null 2>&1 || true
+            
+            node -e '
+              const fs = require("fs");
+              const page = process.argv[1];
+              try {
+                const data = JSON.parse(fs.readFileSync("/tmp/lighthouse-" + page.replace(/\//g, "_") + ".json", "utf8"));
+                const cats = { performance: data.categories.performance?.score, accessibility: data.categories.accessibility?.score, "best-practices": data.categories["best-practices"]?.score, seo: data.categories.seo?.score };
+                let fail = false;
+                for (const [cat, score] of Object.entries(cats)) {
+                  const pct = score ? Math.round(score * 100) : 0;
+                  console.log(page, cat + ": " + pct);
+                  if (pct < 90) { fail = true; console.error("FAIL: " + page + " " + cat + " score " + pct + " < 90"); }
+                }
+                process.exit(fail ? 1 : 0);
+              } catch (e) {
+                console.error("FAIL: " + page + " cannot read Lighthouse output: " + e.message);
+                process.exit(1);
+              }
+            ' "$page" || FAILED=1
+          done
+          
+          if [ $FAILED -eq 1 ]; then
+            echo "Lighthouse CI FAILED: One or more pages have category scores below 90"
+            exit 1
+          else
+            echo "All pages passed Lighthouse CI (all categories >= 90)"
+          fi
