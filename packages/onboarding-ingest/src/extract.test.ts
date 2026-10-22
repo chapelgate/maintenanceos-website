@@ -26,6 +26,8 @@ import {
   extractStructuredBusinessHtmlFromScript,
   extractServicesFromNav,
   extractTelMailto,
+  extractVisiblePhones,
+  extractVisibleEmails,
   rankCandidateUrls,
   serviceAreaNames,
   stripHtmlToText,
@@ -1403,4 +1405,141 @@ test("addressAroundPostcode validates postcode format", () => {
   assert.match(result, /12 Oak Street/);
   assert.match(result, /Manchester/);
   assert.match(result, /M25 1PZ/);
+});
+
+test("extractVisiblePhones extracts tel: links and inline UK phone numbers", () => {
+  const html = `<html><body>
+    <a href="tel:+441515550199">0151 555 0199</a>
+    <a href="tel:0151 555 0222">Call us</a>
+    <p>Reach us on 020 7946 0000</p>
+    <a href="tel:invalid">Not a phone</a>
+  </body></html>`;
+  const phones = extractVisiblePhones(html);
+  assert.match(phones.join(","), /\+441515550199/);
+  assert.match(phones.join(","), /\+441515550222/);
+  assert.match(phones.join(","), /\+442079460000/);
+  assert.equal(phones.length, 3);
+});
+
+test("extractVisibleEmails extracts mailto: links and inline emails", () => {
+  const html = `<html><body>
+    <a href="mailto:hello@testplumbing.example">hello@testplumbing.example</a>
+    <p>Email us at enquiries@testplumbing.example</p>
+    <a href="mailto:noreply@example.com">No-reply</a>
+    <a href="mailto:webmaster@example.com">Webmaster</a>
+  </body></html>`;
+  const emails = extractVisibleEmails(html);
+  assert.match(emails.join(","), /hello@testplumbing.example/);
+  assert.match(emails.join(","), /enquiries@testplumbing.example/);
+  assert.ok(!emails.includes("noreply@example.com"));
+  assert.ok(!emails.includes("webmaster@example.com"));
+});
+
+test("extractVisibleEmails rejects noreply, webmaster, tracking addresses, and image filenames", () => {
+  const html = `<html><body>
+    <img src="email@domain.com" />
+    <a href="mailto:tracking+pixel@example.com">Track</a>
+    <p>Real address: real@example.com</p>
+    <a href="mailto:noreply@example.com">No-reply</a>
+    <a href="mailto:webmaster@example.com">Webmaster</a>
+  </body></html>`;
+  const emails = extractVisibleEmails(html);
+  assert.match(emails.join(","), /real@example\.com/);
+  assert.ok(!emails.includes("noreply@example.com"));
+  assert.ok(!emails.includes("webmaster@example.com"));
+  assert.ok(!emails.includes("tracking+pixel@example.com"));
+  assert.ok(!emails.includes("email@domain.com"));
+});
+
+test("extractServicesFromNav pulls service labels from nav blocks", () => {
+  const html = `<html><body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/boilers">Boiler repair</a>
+      <a href="/bathrooms">Bathroom installation</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </body></html>`;
+  const services = extractServicesFromNav(html);
+  assert.ok(services);
+  assert.match(services!, /Boiler repair/);
+  assert.match(services!, /Bathroom installation/);
+  assert.ok(!services!.includes("Home"));
+  assert.ok(!services!.includes("Contact"));
+});
+
+test("extractDraftFromHtml extracts phone and email from visible HTML when no JSON-LD present", () => {
+  const html = `<html><body>
+    <header>
+      <a href="tel:+441515550199">0151 555 0199</a>
+      <a href="mailto:hello@testplumbing.example">hello@testplumbing.example</a>
+    </header>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/boilers">Boiler repair</a>
+      <a href="/bathrooms">Bathrooms</a>
+    </nav>
+    <h1>Test Plumbing</h1>
+    <footer>
+      <p>Monday to Friday 8:00am – 6:00pm</p>
+    </footer>
+  </body></html>`;
+  const result = extractDraftFromHtml([
+    { url: "https://testplumbing.example/", html },
+  ]);
+  assert.equal(result.draft.businessName, "Test Plumbing");
+  assert.match(result.facts.contact?.phones.join(",") ?? "", /\+441515550199/);
+  assert.match(result.facts.contact?.emails.join(",") ?? "", /hello@testplumbing.example/);
+  assert.match(result.draft.services ?? "", /Boiler repair/);
+});
+
+test("extractDraftFromHtml extracts visible opening hours without JSON-LD", () => {
+  const html = `<html><body>
+    <h1>Test Plumbing</h1>
+    <p>Opening hours Monday to Friday 8:00am – 6:00pm</p>
+    <p>Saturday 9:00am – 1:00pm</p>
+  </body></html>`;
+  const result = extractDraftFromHtml([
+    { url: "https://testplumbing.example/", html },
+  ]);
+  assert.match(result.draft.hours ?? "", /Monday to Friday/);
+  assert.match(result.draft.hours ?? "", /8:00am/);
+});
+
+test("extractDraftFromHtml prefers JSON-LD over visible HTML for phone and email", () => {
+  const html = `<html><body>
+    <script type="application/ld+json">
+    {"@type":"LocalBusiness","name":"Schema Co","telephone":"+441515550100","email":"schema@schemaco.example"}
+    </script>
+    <header>
+      <a href="tel:+441515550200">0151 555 0200</a>
+      <a href="mailto:visible@schemaco.example">visible@schemaco.example</a>
+    </header>
+    <h1>Schema Co</h1>
+  </body></html>`;
+  const result = extractDraftFromHtml([
+    { url: "https://schemaco.example/", html },
+  ]);
+  assert.match(result.facts.contact?.phones.join(",") ?? "", /\+441515550100/);
+  assert.match(result.facts.contact?.emails.join(",") ?? "", /schema@schemaco.example/);
+});
+
+test("extractDraftFromHtml handles multiple nav service links correctly", () => {
+  const html = `<html><body>
+    <nav>
+      <a href="/services">Services</a>
+      <a href="/boilers">Boiler repair</a>
+      <a href="/bathrooms">Bathrooms</a>
+      <a href="/contact">Contact</a>
+      <a href="/privacy">Privacy</a>
+    </nav>
+    <h1>Test Plumbing</h1>
+  </body></html>`;
+  const result = extractDraftFromHtml([
+    { url: "https://testplumbing.example/", html },
+  ]);
+  assert.match(result.draft.services ?? "", /Boiler repair/);
+  assert.match(result.draft.services ?? "", /Bathrooms/);
+  assert.ok(!result.draft.services?.includes("Services"));
 });

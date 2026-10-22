@@ -9,6 +9,8 @@ import {
   extractSameOriginScriptSrcs,
   extractStructuredBusinessHtmlFromScript,
   rankCandidateUrls,
+  extractVisiblePhones,
+  extractVisibleEmails,
 } from "./extract.ts";
 import {
   DEFAULT_MAX_BYTES_PER_PAGE,
@@ -177,6 +179,40 @@ export function isReaderChallengePage(html: string): boolean {
   ];
   const markerCount = challengeMarkers.filter((marker) => text.includes(marker)).length;
   return markerCount >= 2;
+}
+
+const CONTACT_PAGE_PATH_RE = /^\/(contact|contact-us|get-in-touch|find-us|about|about-us)\/?$/i;
+
+async function fetchContactPage(
+  baseUrl: URL,
+  deps: RunScanOptions,
+  remainingMs: () => number,
+): Promise<string | undefined> {
+  const contactPaths = ["/contact", "/contact-us", "/get-in-touch", "/find-us", "/about", "/about-us"];
+  for (const path of contactPaths) {
+    if (remainingMs() < 1000) break;
+    const targetUrl = new URL(path, baseUrl);
+    if (targetUrl.hostname !== baseUrl.hostname) continue;
+    if (!isPathAllowed({ allow: [], disallow: [], unavailable: false }, targetUrl.pathname)) continue;
+    try {
+      const res = await fetchPublicHttps(targetUrl.toString(), {
+        lookup: deps.lookup,
+        get: deps.get,
+        remainingMs: remainingMs(),
+        timeoutMs: 5000,
+        maxBytes: 128 * 1024,
+        maxRedirects: 2,
+      });
+      if (res.status === 200 && isHtmlOrText(
+        Object.entries(res.headers).find(([key]) => key.toLowerCase() === "content-type")?.[1] ?? ""
+      )) {
+        return res.body;
+      }
+    } catch {
+      continue;
+    }
+  }
+  return undefined;
 }
 
 export async function runScan(
@@ -431,6 +467,32 @@ export async function runScan(
     }
 
     if (pages.length) warnings.push("reader_fallback_used");
+  }
+
+  // One same-origin contact/about page fetch inside existing SSRF guards and
+  // timeouts, so sites without JSON-LD can still yield phone/email/hours from
+  // visible HTML. Only fetched when the crawl has pages and budget remains.
+  if (pages.length > 0 && remaining() >= 1_500 && totalBytes < MAX_TOTAL_BYTES) {
+    const firstPage = pages[0];
+    let firstUrl: URL | null = null;
+    try {
+      firstUrl = new URL(firstPage.url);
+    } catch {
+      firstUrl = null;
+    }
+    if (firstUrl) {
+      const contactHtml = await fetchContactPage(
+        firstUrl,
+        options,
+        remaining,
+      );
+      if (contactHtml) {
+        const bytes = Buffer.byteLength(contactHtml, "utf8");
+        totalBytes += bytes;
+        pages.push({ url: firstUrl.origin + "/contact", html: contactHtml });
+        warnings.push("contact_page_fetched");
+      }
+    }
   }
 
   if (!pages.length) {

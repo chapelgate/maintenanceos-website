@@ -1,0 +1,22 @@
+# Tasks: F5 Visible-HTML Extraction Fix
+
+- [x] Find scanner extraction code (extract.ts, scan.ts)
+- [x] Add extractVisiblePhones function
+- [x] Add extractVisibleEmails function with rejection logic
+- [x] Add fetchContactPage function in scan.ts
+- [x] Integrate visible HTML extraction in extractDraftFromHtml
+- [x] Prefer schema over visible HTML (jsonld > microdata > visible)
+- [x] Add services fallback from nav when no JSON-LD
+- [x] Create test fixture visible-html-extraction.html
+- [x] Add unit tests for extractVisiblePhones
+- [x] Add unit tests for extractVisibleEmails
+- [x] Add unit tests for visible HTML phone/email extraction
+- [x] Add unit tests for visible opening hours extraction
+- [x] Add unit tests for JSON-LD preference over visible HTML
+- [x] Add unit tests for nav services extraction
+- [x] Run npm ci && npx tsc --noEmit && npm run lint && npm test && npm run build
+- [ ] Create branch fix/f5-visible-html-extraction
+- [ ] Push branch and open PR
+- [ ] Verify CI passes on PR
+- [ ] Update FIX_STATE_F5.md with final status
+- [ ] Write PASS to out/MISSION_COMPLETE
