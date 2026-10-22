@@ -44,7 +44,7 @@ jobs:
           for page in "${PAGES[@]}"; do
             echo "=== Testing $page ==="
             lighthouse "http://localhost:3000$page" \
-              --preset=mobile \
+              --form-factor=mobile \
               --output=json \
               --output-path=/tmp/lighthouse-${page//\//-}.json \
               --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage"
