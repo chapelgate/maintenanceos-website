@@ -48,18 +48,18 @@ jobs:
               --output=json \
               --output-path=/tmp/lighthouse-${page//\//-}.json \
               --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage"
-            
+
             # Extract scores
             PERF=$(cat /tmp/lighthouse-${page//\//-}.json | jq '.categories.performance.score * 100')
             A11Y=$(cat /tmp/lighthouse-${page//\//-}.json | jq '.categories.accessibility.score * 100')
             BEST=$(cat /tmp/lighthouse-${page//\//-}.json | jq '.categories["best-practices"].score * 100')
             SEO=$(cat /tmp/lighthouse-${page//\//-}.json | jq '.categories.seo.score * 100')
-            
+
             echo "Performance: $PERF"
             echo "Accessibility: $A11Y"
             echo "Best Practices: $BEST"
             echo "SEO: $SEO"
-            
+
             # Check if any category < 90
             for score in $PERF $A11Y $BEST $SEO; do
               if (( $(echo "$score < 90" | bc -l) )); then
@@ -68,7 +68,7 @@ jobs:
               fi
             done
           done
-          
+
           if [ $FAILED -eq 1 ]; then
             echo "Lighthouse CI FAILED: One or more pages have category scores below 90"
             exit 1
