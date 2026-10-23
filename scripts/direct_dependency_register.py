@@ -27,10 +27,19 @@ def distribution_name(requirement: str) -> str:
     return requirement.split("[", 1)[0].strip()
 
 
-def licence_classifiers(dist) -> str:
-    classifiers = dist.metadata.get_all("Classifier") or []
+def licence_from_metadata(dist) -> str:
+    md = dist.metadata
+    expr = md.get("License-Expression")
+    if expr:
+        return expr.strip()
+    licence = md.get("License")
+    if licence:
+        return licence.strip()
+    classifiers = md.get_all("Classifier") or []
     found = [item.strip() for item in classifiers if item.startswith("License ::") and item.strip()]
-    return "; ".join(found)
+    if found:
+        return "; ".join(found)
+    return ""
 
 
 def register_row(requirement: str) -> dict[str, str]:
@@ -43,7 +52,7 @@ def register_row(requirement: str) -> dict[str, str]:
             "status": "UNKNOWN",
             "licence_expression": "",
         }
-    licence = licence_classifiers(dist)
+    licence = licence_from_metadata(dist)
     if not licence:
         return {
             "requirement": requirement,
