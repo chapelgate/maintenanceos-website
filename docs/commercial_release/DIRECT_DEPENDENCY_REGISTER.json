@@ -1,0 +1,98 @@
+[
+  {
+    "requirement": "cryptography",
+    "version": "50.0.2",
+    "status": "METADATA",
+    "licence_expression": "Apache-2.0 OR BSD-3-Clause"
+  },
+  {
+    "requirement": "fastapi",
+    "version": "0.156.8",
+    "status": "METADATA",
+    "licence_expression": "MIT"
+  },
+  {
+    "requirement": "uvicorn[standard]",
+    "version": "0.54.0",
+    "status": "METADATA",
+    "licence_expression": "BSD-3-Clause"
+  },
+  {
+    "requirement": "streamlit",
+    "version": "1.66.1",
+    "status": "METADATA",
+    "licence_expression": "Apache-2.0"
+  },
+  {
+    "requirement": "sqlalchemy",
+    "version": "2.1.5",
+    "status": "METADATA",
+    "licence_expression": "MIT"
+  },
+  {
+    "requirement": "psycopg[binary]",
+    "version": "3.3.6",
+    "status": "METADATA",
+    "licence_expression": "LGPL-3.0-only"
+  },
+  {
+    "requirement": "python-dotenv",
+    "version": "1.2.4",
+    "status": "METADATA",
+    "licence_expression": "BSD-3-Clause"
+  },
+  {
+    "requirement": "openai",
+    "version": "2.54.0",
+    "status": "METADATA",
+    "licence_expression": "Apache-2.0"
+  },
+  {
+    "requirement": "google-genai",
+    "version": "1.75.0",
+    "status": "METADATA",
+    "licence_expression": "Apache-2.0"
+  },
+  {
+    "requirement": "websockets",
+    "version": "15.0.1",
+    "status": "METADATA",
+    "licence_expression": "BSD-3-Clause"
+  },
+  {
+    "requirement": "httpx",
+    "version": "0.28.1",
+    "status": "METADATA",
+    "licence_expression": "BSD-3-Clause"
+  },
+  {
+    "requirement": "twilio",
+    "version": "9.12.0",
+    "status": "METADATA",
+    "licence_expression": "MIT"
+  },
+  {
+    "requirement": "python-multipart",
+    "version": "0.0.32",
+    "status": "METADATA",
+    "licence_expression": "Apache-2.0"
+  },
+  {
+    "requirement": "pillow",
+    "version": "12.3.0",
+    "status": "METADATA",
+    "licence_expression": "MIT-CMU"
+  },
+  {
+    "requirement": "apscheduler",
+    "version": "3.11.3",
+    "status": "METADATA",
+    "licence_expression": "MIT"
+  },
+  {
+    "requirement": "pytest",
+    "version": "9.1.1",
+    "status": "METADATA",
+    "licence_expression": "MIT"
+  }
+]
