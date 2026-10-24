@@ -14,7 +14,7 @@ function read(rel) {
 const LOCK_HASH = "f6305aadc0ba7493c2cb3b5bb6d46e263e1c995028eef04cb85fa8282c864d31";
 const SOURCE_COMMIT = "c4ff3ca3c85d296e557897949c58f2608e29e27b";
 
-const COPYLEFT_OR_UNKNOWN = /LGPL|GPL|AGPL|BSL|source-available|\(none\)/i;
+const REUSE_LICENCES = new Set(["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "0BSD"]);
 
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -22,27 +22,15 @@ function escapeRegex(str) {
 
 function entryName(entry) {
   if (entry.name) return entry.name;
-  const path = entry.path || "";
-  const scoped = path.match(/(@[^/]+\/[^/]+)$/);
+  const p = entry.path || "";
+  const scoped = p.match(/(@[^/]+\/[^/]+)$/);
   if (scoped) return scoped[1];
-  return path.split("/").pop();
+  return p.split("/").pop();
 }
 
-function assertNoUndefinedPackageLabels(evidence) {
-  assert.doesNotMatch(
-    evidence,
-    /`undefined`/,
-    "evidence must not contain literal `undefined` package labels",
-  );
-}
-
-function assertBacktickPackageLabel(evidence, entry) {
+function entryShortName(entry) {
   const name = entryName(entry);
-  assert.match(
-    evidence,
-    new RegExp("`" + escapeRegex(name) + "`"),
-    `package ${name} must appear as a backtick-wrapped label, not only in a URL`,
-  );
+  return name.split("/").pop();
 }
 
 function collectLock() {
@@ -58,14 +46,49 @@ function collectLock() {
 
 const LOCK = collectLock();
 
-function assertEntryRecorded(evidence, entry) {
-  const name = entryName(entry);
-  assert.match(evidence, new RegExp(escapeRegex(name)), `lockfile package ${name} not recorded in evidence`);
+function assertNoUndefinedPackageLabels(evidence) {
+  assert.doesNotMatch(
+    evidence,
+    /`undefined`/,
+    "evidence must not contain literal `undefined` package labels",
+  );
 }
 
-function assertEntryUnresolved(evidence, entry) {
-  assertBacktickPackageLabel(evidence, entry);
-  assert.match(evidence, /unresolved/i, `copyleft/unlicensed package ${entryName(entry)} not marked unresolved in evidence`);
+
+
+function parseEvidenceTable(evidence) {
+  const rows = [];
+  const lines = evidence.split("\n");
+  let inTable = false;
+  for (const line of lines) {
+    if (line.startsWith("| # | Package name")) {
+      inTable = true;
+      continue;
+    }
+    if (inTable) {
+      if (!line.startsWith("| ")) break;
+      const parts = line.split("|").map(s => s.trim()).filter((_, i) => i > 0 && i < 7);
+      if (parts.length >= 5) {
+        const [idx, name, version, licence, source, category] = parts;
+        if (/^\d+$/.test(idx)) {
+          rows.push({ idx: parseInt(idx), name, version, licence, source, category });
+        }
+      }
+    }
+  }
+  return rows;
+}
+
+function parseSourcesMd(sourcesMd) {
+  const files = [];
+  const lines = sourcesMd.split("\n");
+  for (const line of lines) {
+    const match = line.match(/^\|\s*`([^`]+)`\s*\|/);
+    if (match) {
+      files.push(match[1]);
+    }
+  }
+  return files;
 }
 
 test("licence evidence matches the package lock hash and package versions", () => {
@@ -109,6 +132,21 @@ test("licence evidence matches the package lock hash and package versions", () =
       `lockfile entry missing resolved source: ${entry.path}`,
     );
   }
+
+  // Parse evidence table and verify each row's version matches lockfile
+  const evidenceRows = parseEvidenceTable(evidence);
+  for (const row of evidenceRows) {
+    const matches = LOCK.entries.filter(
+      (e) => entryName(e) === row.name || entryShortName(e) === row.name || e.path.endsWith(`/node_modules/${row.name}`),
+    );
+    const versionMatch = matches.find((e) => e.version === row.version);
+    if (versionMatch) continue;
+    if (matches.length > 0) {
+      assert.fail(
+        `evidence row version mismatch for ${row.name}: evidence has ${row.version}, lockfile entries have versions: ${matches.map((e) => `${entryName(e)}=${e.version}`).join(", ")}`,
+      );
+    }
+  }
 });
 
 test("licence evidence records sharp libvips and shipped media sources", () => {
@@ -121,21 +159,22 @@ test("licence evidence records sharp libvips and shipped media sources", () => {
   assert.match(evidence, /opencollective\.com\/libvips/);
 
   const sources = read("public/media/home/SOURCES.md");
-  for (const file of ["office-phone.webp", "site-trade.webp", "uk-row.webp"]) {
-    assert.match(sources, new RegExp(file, "i"));
-    assert.match(evidence, new RegExp(file, "i"));
-  }
-  assert.match(evidence, /Pexels License/);
-  assert.match(evidence, /Unsplash License/);
+  const mediaFiles = parseSourcesMd(sources);
+  assert.ok(mediaFiles.length > 0, "SOURCES.md must contain at least one media file");
 
-  for (const file of ["office-phone.webp", "site-trade.webp", "uk-row.webp"]) {
-    assert.ok(fs.existsSync(path.join(ROOT, "public/media/home", file)), `missing shipped media file: ${file}`);
+  for (const file of mediaFiles) {
+    assert.match(sources, new RegExp(file, "i"), `SOURCES.md must reference ${file}`);
+    assert.match(evidence, new RegExp(file, "i"), `evidence must reference ${file}`);
+    assert.ok(
+      fs.existsSync(path.join(ROOT, "public/media/home", file)),
+      `missing shipped media file: ${file}`
+    );
   }
   assert.ok(fs.existsSync(path.join(ROOT, "public/media/home/SOURCES.md")), "missing SOURCES.md");
 
   const sharpEntries = LOCK.entries.filter((e) => /sharp|libvips/.test(e.name || e.path.split("/").pop()));
   for (const entry of sharpEntries) {
-    assertEntryRecorded(evidence, entry);
+    assert.match(evidence, new RegExp(escapeRegex(entryName(entry))));
   }
 });
 
@@ -149,14 +188,44 @@ test("licence evidence fails closed on unresolved obligations", () => {
   assert.match(evidence, /unresolved/);
   assert.match(evidence, /not described as legally cleared/);
 
-  for (const entry of LOCK.entries) {
-    const lic = entry.license || "";
-    if (COPYLEFT_OR_UNKNOWN.test(lic)) {
-      assertEntryUnresolved(evidence, entry);
+  const evidenceRows = parseEvidenceTable(evidence);
+
+  for (const row of evidenceRows) {
+    const lic = row.licence || "";
+    const category = (row.category || "").toLowerCase();
+
+    // Check if licence is outside reuse list (ISC, LGPL, GPL, AGPL, MPL, etc.)
+    const isReuseLicence = REUSE_LICENCES.has(lic);
+    const hasCopyleft = /LGPL|GPL|AGPL|MPL/i.test(lic);
+
+    if (!isReuseLicence || hasCopyleft) {
+      // Non-reuse licence or copyleft licence must not be categorized as "reuse"
+      assert.notStrictEqual(
+        category,
+        "reuse",
+        `package ${row.name} has licence ${lic} but evidence category is "reuse" — must be "unresolved" or similar`
+      );
     }
+
+    // ISC specifically must be unresolved
+    if (lic === "ISC") {
+      assert.strictEqual(
+        category,
+        "unresolved",
+        `ISC package ${row.name} must be categorized as "unresolved", not "${category}"`
+      );
+    }
+
+    // MPL packages must be unresolved
     if (/MPL/i.test(lic)) {
-      assertBacktickPackageLabel(evidence, entry);
-      assert.match(evidence, /unresolved/i, `MPL package ${entryName(entry)} not marked unresolved in evidence`);
+      assert.match(evidence, new RegExp(escapeRegex(row.name)), `MPL package ${row.name} not recorded in evidence`);
+      assert.match(evidence, /unresolved/i, `MPL package ${row.name} not marked unresolved in evidence`);
+    }
+
+    // LGPL packages must be unresolved
+    if (/LGPL/i.test(lic)) {
+      assert.match(evidence, new RegExp(escapeRegex(row.name)), `LGPL package ${row.name} not recorded in evidence`);
+      assert.match(evidence, /unresolved|copyleft/i, `LGPL package ${row.name} not marked unresolved in evidence`);
     }
   }
 

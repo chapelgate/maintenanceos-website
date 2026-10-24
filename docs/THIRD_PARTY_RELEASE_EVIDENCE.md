@@ -23,7 +23,7 @@ Declared licences observed:
 | --- | --- | --- |
 | MIT | 372 | reuse |
 | Apache-2.0 | 38 | reuse |
-| ISC | 18 | reuse |
+| ISC | 18 | unresolved |
 | MPL-2.0 | 14 | unresolved |
 | LGPL-3.0-or-later | 10 | copyleft/unlicensed |
 | BSD-2-Clause | 9 | reuse |
@@ -47,10 +47,10 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 3 | code-frame | 7.29.7 | MIT | https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.29.7.tgz | reuse |
 | 4 | compat-data | 7.29.7 | MIT | https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.29.7.tgz | reuse |
 | 5 | core | 7.29.7 | MIT | https://registry.npmjs.org/@babel/core/-/core-7.29.7.tgz | reuse |
-| 6 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | reuse |
+| 6 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | unresolved |
 | 7 | generator | 7.29.8 | MIT | https://registry.npmjs.org/@babel/generator/-/generator-7.29.8.tgz | reuse |
 | 8 | helper-compilation-targets | 7.29.7 | MIT | https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-7.29.7.tgz | reuse |
-| 9 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | reuse |
+| 9 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | unresolved |
 | 10 | helper-globals | 7.29.7 | MIT | https://registry.npmjs.org/@babel/helper-globals/-/helper-globals-7.29.7.tgz | reuse |
 | 11 | helper-module-imports | 7.29.7 | MIT | https://registry.npmjs.org/@babel/helper-module-imports/-/helper-module-imports-7.29.7.tgz | reuse |
 | 12 | helper-module-transforms | 7.29.7 | MIT | https://registry.npmjs.org/@babel/helper-module-transforms/-/helper-module-transforms-7.29.7.tgz | reuse |
@@ -258,7 +258,7 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 214 | detect-libc | 2.1.2 | Apache-2.0 | https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz | reuse |
 | 215 | doctrine | 2.1.0 | Apache-2.0 | https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz | reuse |
 | 216 | dunder-proto | 1.0.1 | MIT | https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz | reuse |
-| 217 | electron-to-chromium | 1.5.439 | ISC | https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.439.tgz | reuse |
+| 217 | electron-to-chromium | 1.5.439 | ISC | https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.439.tgz | unresolved |
 | 218 | emoji-regex | 9.2.2 | MIT | https://registry.npmjs.org/emoji-regex/-/emoji-regex-9.2.2.tgz | reuse |
 | 219 | enhanced-resolve | 5.25.1 | MIT | https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.25.1.tgz | reuse |
 | 220 | entities | 6.0.1 | BSD-2-Clause | https://registry.npmjs.org/entities/-/entities-6.0.1.tgz | reuse |
@@ -275,13 +275,13 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 231 | escape-string-regexp | 4.0.0 | MIT | https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz | reuse |
 | 232 | eslint | 9.39.5 | MIT | https://registry.npmjs.org/eslint/-/eslint-9.39.5.tgz | reuse |
 | 233 | eslint-config-next | 16.4.2 | MIT | https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-16.4.2.tgz | reuse |
-| 234 | eslint-import-resolver-typescript | 3.10.1 | ISC | https://registry.npmjs.org/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.10.1.tgz | reuse |
+| 234 | eslint-import-resolver-typescript | 3.10.1 | ISC | https://registry.npmjs.org/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.10.1.tgz | unresolved |
 | 235 | eslint-plugin-import | 2.32.0 | MIT | https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.32.0.tgz | reuse |
 | 236 | debug | 3.2.7 | MIT | https://registry.npmjs.org/debug/-/debug-3.2.7.tgz | reuse |
 | 237 | eslint-plugin-jsx-a11y | 6.10.2 | MIT | https://registry.npmjs.org/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.10.2.tgz | reuse |
 | 238 | eslint-plugin-react | 7.37.5 | MIT | https://registry.npmjs.org/eslint-plugin-react/-/eslint-plugin-react-7.37.5.tgz | reuse |
 | 239 | globals | 16.4.0 | MIT | https://registry.npmjs.org/globals/-/globals-16.4.0.tgz | reuse |
-| 240 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | reuse |
+| 240 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | unresolved |
 | 241 | eslint-import-resolver-node | 0.3.10 | MIT | https://registry.npmjs.org/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.10.tgz | reuse |
 | 242 | debug | 3.2.7 | MIT | https://registry.npmjs.org/debug/-/debug-3.2.7.tgz | reuse |
 | 243 | eslint-module-utils | 2.14.0 | MIT | https://registry.npmjs.org/eslint-module-utils/-/eslint-module-utils-2.14.0.tgz | reuse |
@@ -298,15 +298,15 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 254 | extend-shallow | 2.0.1 | MIT | https://registry.npmjs.org/extend-shallow/-/extend-shallow-2.0.1.tgz | reuse |
 | 255 | fast-deep-equal | 3.1.3 | MIT | https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz | reuse |
 | 256 | fast-glob | 3.3.1 | MIT | https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.1.tgz | reuse |
-| 257 | glob-parent | 5.1.2 | ISC | https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz | reuse |
+| 257 | glob-parent | 5.1.2 | ISC | https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz | unresolved |
 | 258 | fast-json-stable-stringify | 2.1.0 | MIT | https://registry.npmjs.org/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz | reuse |
 | 259 | fast-levenshtein | 2.0.6 | MIT | https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz | reuse |
-| 260 | fastq | 1.20.3 | ISC | https://registry.npmjs.org/fastq/-/fastq-1.20.3.tgz | reuse |
+| 260 | fastq | 1.20.3 | ISC | https://registry.npmjs.org/fastq/-/fastq-1.20.3.tgz | unresolved |
 | 261 | file-entry-cache | 8.0.0 | MIT | https://registry.npmjs.org/file-entry-cache/-/file-entry-cache-8.0.0.tgz | reuse |
 | 262 | fill-range | 7.1.1 | MIT | https://registry.npmjs.org/fill-range/-/fill-range-7.1.1.tgz | reuse |
 | 263 | find-up | 5.0.0 | MIT | https://registry.npmjs.org/find-up/-/find-up-5.0.0.tgz | reuse |
 | 264 | flat-cache | 4.0.1 | MIT | https://registry.npmjs.org/flat-cache/-/flat-cache-4.0.1.tgz | reuse |
-| 265 | flatted | 3.4.4 | ISC | https://registry.npmjs.org/flatted/-/flatted-3.4.4.tgz | reuse |
+| 265 | flatted | 3.4.4 | ISC | https://registry.npmjs.org/flatted/-/flatted-3.4.4.tgz | unresolved |
 | 266 | for-each | 0.3.5 | MIT | https://registry.npmjs.org/for-each/-/for-each-0.3.5.tgz | reuse |
 | 267 | function-bind | 1.1.2 | MIT | https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz | reuse |
 | 268 | function.prototype.name | 1.2.0 | MIT | https://registry.npmjs.org/function.prototype.name/-/function.prototype.name-1.2.0.tgz | reuse |
@@ -317,11 +317,11 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 273 | get-proto | 1.0.1 | MIT | https://registry.npmjs.org/get-proto/-/get-proto-1.0.1.tgz | reuse |
 | 274 | get-symbol-description | 1.1.0 | MIT | https://registry.npmjs.org/get-symbol-description/-/get-symbol-description-1.1.0.tgz | reuse |
 | 275 | get-tsconfig | 4.14.3 | MIT | https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.14.3.tgz | reuse |
-| 276 | glob-parent | 6.0.2 | ISC | https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz | reuse |
+| 276 | glob-parent | 6.0.2 | ISC | https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz | unresolved |
 | 277 | globals | 14.0.0 | MIT | https://registry.npmjs.org/globals/-/globals-14.0.0.tgz | reuse |
 | 278 | globalthis | 1.0.4 | MIT | https://registry.npmjs.org/globalthis/-/globalthis-1.0.4.tgz | reuse |
 | 279 | gopd | 1.2.0 | MIT | https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz | reuse |
-| 280 | graceful-fs | 4.2.11 | ISC | https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz | reuse |
+| 280 | graceful-fs | 4.2.11 | ISC | https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz | unresolved |
 | 281 | gray-matter | 4.0.3 | MIT | https://registry.npmjs.org/gray-matter/-/gray-matter-4.0.3.tgz | reuse |
 | 282 | argparse | 1.0.10 | MIT | https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz | reuse |
 | 283 | js-yaml | 3.15.2 | MIT | https://registry.npmjs.org/js-yaml/-/js-yaml-3.15.2.tgz | reuse |
@@ -367,7 +367,7 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 323 | is-weakref | 1.1.1 | MIT | https://registry.npmjs.org/is-weakref/-/is-weakref-1.1.1.tgz | reuse |
 | 324 | is-weakset | 2.0.4 | MIT | https://registry.npmjs.org/is-weakset/-/is-weakset-2.0.4.tgz | reuse |
 | 325 | isarray | 2.0.5 | MIT | https://registry.npmjs.org/isarray/-/isarray-2.0.5.tgz | reuse |
-| 326 | isexe | 2.0.0 | ISC | https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz | reuse |
+| 326 | isexe | 2.0.0 | ISC | https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz | unresolved |
 | 327 | iterator.prototype | 1.1.5 | MIT | https://registry.npmjs.org/iterator.prototype/-/iterator.prototype-1.1.5.tgz | reuse |
 | 328 | jiti | 2.7.0 | MIT | https://registry.npmjs.org/jiti/-/jiti-2.7.0.tgz | reuse |
 | 329 | js-tokens | 4.0.0 | MIT | https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz | reuse |
@@ -398,12 +398,12 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 354 | locate-path | 6.0.0 | MIT | https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz | reuse |
 | 355 | lodash.merge | 4.6.2 | MIT | https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz | reuse |
 | 356 | loose-envify | 1.4.0 | MIT | https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz | reuse |
-| 357 | lru-cache | 5.1.1 | ISC | https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz | reuse |
+| 357 | lru-cache | 5.1.1 | ISC | https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz | unresolved |
 | 358 | magic-string | 0.30.21 | MIT | https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz | reuse |
 | 359 | math-intrinsics | 1.1.0 | MIT | https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz | reuse |
 | 360 | merge2 | 1.4.1 | MIT | https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz | reuse |
 | 361 | micromatch | 4.0.8 | MIT | https://registry.npmjs.org/micromatch/-/micromatch-4.0.8.tgz | reuse |
-| 362 | minimatch | 3.1.5 | ISC | https://registry.npmjs.org/minimatch/-/minimatch-3.1.5.tgz | reuse |
+| 362 | minimatch | 3.1.5 | ISC | https://registry.npmjs.org/minimatch/-/minimatch-3.1.5.tgz | unresolved |
 | 363 | minimist | 1.2.8 | MIT | https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz | reuse |
 | 364 | ms | 2.1.3 | MIT | https://registry.npmjs.org/ms/-/ms-2.1.3.tgz | reuse |
 | 365 | nanoid | 3.3.19 | MIT | https://registry.npmjs.org/nanoid/-/nanoid-3.3.19.tgz | reuse |
@@ -412,7 +412,7 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 368 | next | 16.3.8 | MIT | https://registry.npmjs.org/next/-/next-16.3.8.tgz | reuse |
 | 369 | postcss | 8.5.23 | MIT | https://registry.npmjs.org/postcss/-/postcss-8.5.23.tgz | reuse |
 | 370 | node-exports-info | 1.6.2 | MIT | https://registry.npmjs.org/node-exports-info/-/node-exports-info-1.6.2.tgz | reuse |
-| 371 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | reuse |
+| 371 | semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | unresolved |
 | 372 | node-releases | 2.0.57 | MIT | https://registry.npmjs.org/node-releases/-/node-releases-2.0.57.tgz | reuse |
 | 373 | object-assign | 4.1.1 | MIT | https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz | reuse |
 | 374 | object-inspect | 1.13.4 | MIT | https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz | reuse |
@@ -432,7 +432,7 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 388 | path-key | 3.1.1 | MIT | https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz | reuse |
 | 389 | path-parse | 1.0.7 | MIT | https://registry.npmjs.org/path-parse/-/path-parse-1.0.7.tgz | reuse |
 | 390 | pdfjs-dist | 6.3.289 | Apache-2.0 | https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-6.3.289.tgz | reuse |
-| 391 | picocolors | 1.1.1 | ISC | https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz | reuse |
+| 391 | picocolors | 1.1.1 | ISC | https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz | unresolved |
 | 392 | picomatch | 2.3.2 | MIT | https://registry.npmjs.org/picomatch/-/picomatch-2.3.2.tgz | reuse |
 | 393 | playwright | 1.63.0 | Apache-2.0 | https://registry.npmjs.org/playwright/-/playwright-1.63.0.tgz | reuse |
 | 394 | playwright-core | 1.63.0 | Apache-2.0 | https://registry.npmjs.org/playwright-core/-/playwright-core-1.63.0.tgz | reuse |
@@ -457,7 +457,7 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 413 | safe-regex-test | 1.1.0 | MIT | https://registry.npmjs.org/safe-regex-test/-/safe-regex-test-1.1.0.tgz | reuse |
 | 414 | scheduler | 0.28.0 | MIT | https://registry.npmjs.org/scheduler/-/scheduler-0.28.0.tgz | reuse |
 | 415 | section-matter | 1.0.0 | MIT | https://registry.npmjs.org/section-matter/-/section-matter-1.0.0.tgz | reuse |
-| 416 | semver | 7.8.5 | ISC | https://registry.npmjs.org/semver/-/semver-7.8.5.tgz | reuse |
+| 416 | semver | 7.8.5 | ISC | https://registry.npmjs.org/semver/-/semver-7.8.5.tgz | unresolved |
 | 417 | set-function-length | 1.2.2 | MIT | https://registry.npmjs.org/set-function-length/-/set-function-length-1.2.2.tgz | reuse |
 | 418 | set-function-name | 2.0.2 | MIT | https://registry.npmjs.org/set-function-name/-/set-function-name-2.0.2.tgz | reuse |
 | 419 | set-proto | 1.0.0 | MIT | https://registry.npmjs.org/set-proto/-/set-proto-1.0.0.tgz | reuse |
@@ -506,13 +506,13 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 462 | unrs-resolver | 1.12.2 | MIT | https://registry.npmjs.org/unrs-resolver/-/unrs-resolver-1.12.2.tgz | reuse |
 | 463 | update-browserslist-db | 1.3.3 | MIT | https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.3.3.tgz | reuse |
 | 464 | uri-js | 4.4.1 | BSD-2-Clause | https://registry.npmjs.org/uri-js/-/uri-js-4.4.1.tgz | reuse |
-| 465 | which | 2.0.2 | ISC | https://registry.npmjs.org/which/-/which-2.0.2.tgz | reuse |
+| 465 | which | 2.0.2 | ISC | https://registry.npmjs.org/which/-/which-2.0.2.tgz | unresolved |
 | 466 | which-boxed-primitive | 1.1.1 | MIT | https://registry.npmjs.org/which-boxed-primitive/-/which-boxed-primitive-1.1.1.tgz | reuse |
 | 467 | which-builtin-type | 1.2.1 | MIT | https://registry.npmjs.org/which-builtin-type/-/which-builtin-type-1.2.1.tgz | reuse |
 | 468 | which-collection | 1.0.2 | MIT | https://registry.npmjs.org/which-collection/-/which-collection-1.0.2.tgz | reuse |
 | 469 | which-typed-array | 1.1.23 | MIT | https://registry.npmjs.org/which-typed-array/-/which-typed-array-1.1.23.tgz | reuse |
 | 470 | word-wrap | 1.2.5 | MIT | https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz | reuse |
-| 471 | yallist | 3.1.1 | ISC | https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz | reuse |
+| 471 | yallist | 3.1.1 | ISC | https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz | unresolved |
 | 472 | yocto-queue | 0.1.0 | MIT | https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz | reuse |
 | 473 | zod | 4.6.5 | MIT | https://registry.npmjs.org/zod/-/zod-4.6.5.tgz | reuse |
 | 474 | zod-validation-error | 4.0.2 | MIT | https://registry.npmjs.org/zod-validation-error/-/zod-validation-error-4.0.2.tgz | reuse |
@@ -531,7 +531,7 @@ Dev dependencies: `@axe-core/playwright`, `@playwright/test`, `@tailwindcss/post
 
 `sharp` 0.35.5 — declared licence Apache-2.0, optional dependency of `next`. Source: https://registry.npmjs.org/sharp/-/sharp-0.35.5.tgz. Funds libvips via opencollective.com/libvips.
 
-Sharp's optional platform bindings (`@img/sharp-*`) declare Apache-2.0, but their `sharp-libvips-*` optionalDependencies declare **LGPL-3.0-or-later** (libvips). Four conjunctive Sharp Windows/wasm bindings declare **Apache-2.0 AND LGPL-3.0-or-later** (`@img/sharp-win32-arm64`, `@img/sharp-win32-ia32`, `@img/sharp-win32-x64`) or **Apache-2.0 AND LGPL-3.0-or-later AND MIT** (`@img/sharp-wasm32`). SPDX AND means every conjunct applies, so these carry LGPL obligations too.
+Sharp's optional platform bindings (`@img/sharp-*`) carry declared licences per package — see rows 40-65 below. Their `sharp-libvips-*` optionalDependencies declare **LGPL-3.0-or-later** (libvips). Four conjunctive Sharp Windows/wasm bindings declare **Apache-2.0 AND LGPL-3.0-or-later** (`@img/sharp-win32-arm64`, `@img/sharp-win32-ia32`, `@img/sharp-win32-x64`) or **Apache-2.0 AND LGPL-3.0-or-later AND MIT** (`@img/sharp-wasm32`). SPDX AND means every conjunct applies, so these carry LGPL obligations too.
 
 These copyleft components are present in the lockfile. Whether they are redistributed by this site's build output is **unresolved** and is recorded here for Andy or the solicitor, **not described as legally cleared**.
 
@@ -590,6 +590,7 @@ All referenced shipped files exist on disk; all three source entries resolve.
 
 ## Unresolved obligations
 
+- ISC packages (18, including `semver`, `electron-to-chromium`, `eslint-import-resolver-typescript`, `glob-parent`, `fastq`, `flatted`, `graceful-fs`, `isexe`, `lru-cache`, `minimatch`, `picocolors`, `which`, `yallist`): reuse interpretation unresolved per estate licence route (MIT/Apache/BSD only).
 - Sharp/libvips LGPL-3.0-or-later redistribution interpretation: not established. Recorded as unresolved; not described as legally cleared.
 - `@img/sharp-wasm32`, `@img/sharp-win32-arm64`, `@img/sharp-win32-ia32`, `@img/sharp-win32-x64` declare conjunctive licences containing LGPL-3.0-or-later; redistribution interpretation unresolved.
 - MPL-2.0 packages (14, including `lightningcss` platform packages and `@axe-core/playwright`): reuse interpretation unresolved.
