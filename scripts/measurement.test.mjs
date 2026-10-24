@@ -96,9 +96,31 @@ test("health monitor checks a control plane only when WEBSITE_CONTROL_PLANE is s
   const monitor = read("scripts/website-health-monitor.mjs");
   const guardStart = monitor.indexOf("if (controlPlane) {");
   assert.ok(guardStart !== -1, "control plane guard missing");
-  const guarded = monitor.slice(guardStart);
+
+  // Find the matching closing brace of the if (controlPlane) { block so the
+  // assertions are bounded by the block's true closing boundary, not EOF.
+  let depth = 0;
+  let closeEnd = -1;
+  for (let i = guardStart; i < monitor.length; i++) {
+    const ch = monitor[i];
+    if (ch === "{") depth += 1;
+    else if (ch === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        closeEnd = i + 1;
+        break;
+      }
+    }
+  }
+  assert.ok(closeEnd !== -1, "control plane guard closing brace missing");
+
+  const guarded = monitor.slice(guardStart, closeEnd);
+  const tail = monitor.slice(closeEnd);
+
   assert.match(guarded, /control plane backend is not ready on durable Postgres/);
   assert.match(guarded, /v1\/public\/website-events/);
+  assert.doesNotMatch(tail, /control plane backend is not ready on durable Postgres/);
+  assert.doesNotMatch(tail, /v1\/public\/website-events/);
 });
 
 test("KPI document forbids unique-user tracking and describes event-triggered weekly report", () => {

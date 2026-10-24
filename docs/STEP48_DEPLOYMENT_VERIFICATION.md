@@ -5,7 +5,7 @@ Owner: MOS Website Manager
 
 ## Reuse decision
 
-Step 9 already created `scripts/website-health-monitor.mjs`. It checks the live sitemap, pages, internal links, static assets, third-party script absence, and the public-event CORS preflight. The control-plane Postgres readiness check runs only when `WEBSITE_CONTROL_PLANE` is set. Step 48 reuses that as the uptime/health check instead of creating a second crawler or monitoring service.
+Step 9 already created `scripts/website-health-monitor.mjs`. It always runs the sitemap, page, internal link, and static asset checks. The control-plane checks—the Postgres readiness check and the public-event CORS preflight—run only when `WEBSITE_CONTROL_PLANE` is set. Step 48 reuses that as the uptime/health check instead of creating a second crawler or monitoring service.
 
 The missing control was deployment identity: a healthy site could still be an old build.
 
