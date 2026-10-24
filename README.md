@@ -11,7 +11,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 - Never claim commercially live / GA / certified / production call-ready.
 - No fake social proof, dashboards-as-live-product, customers, or certifications.
 - Copy gated by `PRODUCT_CLAIMS_REGISTER.md`.
-- `NEXT_PUBLIC_SITE_URL` — absolute origin for canonical URLs, Open Graph, JSON-LD, sitemap, and robots (see `.env.example`). If unset at build, `src/lib/site-url.ts` falls back to the DigitalOcean staging host.
+- `NEXT_PUBLIC_SITE_URL` — absolute origin for canonical URLs, Open Graph, JSON-LD, sitemap, and robots (see `.env.example`). If unset at build, `src/lib/site-url.ts` falls back to `FALLBACK_SITE_URL` (`https://worksmartos.co.uk`).
 
 ## Source of truth
 
