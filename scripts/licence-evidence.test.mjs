@@ -21,7 +21,28 @@ function escapeRegex(str) {
 }
 
 function entryName(entry) {
-  return entry.name || entry.path.split("/").pop();
+  if (entry.name) return entry.name;
+  const path = entry.path || "";
+  const scoped = path.match(/(@[^/]+\/[^/]+)$/);
+  if (scoped) return scoped[1];
+  return path.split("/").pop();
+}
+
+function assertNoUndefinedPackageLabels(evidence) {
+  assert.doesNotMatch(
+    evidence,
+    /`undefined`/,
+    "evidence must not contain literal `undefined` package labels",
+  );
+}
+
+function assertBacktickPackageLabel(evidence, entry) {
+  const name = entryName(entry);
+  assert.match(
+    evidence,
+    new RegExp("`" + escapeRegex(name) + "`"),
+    `package ${name} must appear as a backtick-wrapped label, not only in a URL`,
+  );
 }
 
 function collectLock() {
@@ -43,9 +64,8 @@ function assertEntryRecorded(evidence, entry) {
 }
 
 function assertEntryUnresolved(evidence, entry) {
-  const name = entryName(entry);
-  assert.match(evidence, new RegExp(escapeRegex(name)), `copyleft/unlicensed package ${name} not recorded in evidence`);
-  assert.match(evidence, /unresolved/i, `copyleft/unlicensed package ${name} not marked unresolved in evidence`);
+  assertBacktickPackageLabel(evidence, entry);
+  assert.match(evidence, /unresolved/i, `copyleft/unlicensed package ${entryName(entry)} not marked unresolved in evidence`);
 }
 
 test("licence evidence matches the package lock hash and package versions", () => {
@@ -122,6 +142,8 @@ test("licence evidence records sharp libvips and shipped media sources", () => {
 test("licence evidence fails closed on unresolved obligations", () => {
   const evidence = read("docs/THIRD_PARTY_RELEASE_EVIDENCE.md");
 
+  assertNoUndefinedPackageLabels(evidence);
+
   assert.doesNotMatch(evidence, /LGPL[^.]*\b(?:is|are|being|has been|was)\s+cleared\b/i);
   assert.doesNotMatch(evidence, /sharp[^.]*\b(?:is|are|being|has been|was)\s+cleared\b/i);
   assert.match(evidence, /unresolved/);
@@ -131,6 +153,10 @@ test("licence evidence fails closed on unresolved obligations", () => {
     const lic = entry.license || "";
     if (COPYLEFT_OR_UNKNOWN.test(lic)) {
       assertEntryUnresolved(evidence, entry);
+    }
+    if (/MPL/i.test(lic)) {
+      assertBacktickPackageLabel(evidence, entry);
+      assert.match(evidence, /unresolved/i, `MPL package ${entryName(entry)} not marked unresolved in evidence`);
     }
   }
 

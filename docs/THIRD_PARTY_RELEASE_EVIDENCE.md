@@ -536,22 +536,22 @@ Sharp's optional platform bindings (`@img/sharp-*`) declare Apache-2.0, but thei
 These copyleft components are present in the lockfile. Whether they are redistributed by this site's build output is **unresolved** and is recorded here for Andy or the solicitor, **not described as legally cleared**.
 
 Sharp libvips platform packages (version 1.3.4, all optional, declared licence LGPL-3.0-or-later):
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-arm/-/sharp-libvips-linux-arm-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-arm64/-/sharp-libvips-linux-arm64-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-ppc64/-/sharp-libvips-linux-ppc64-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-riscv64/-/sharp-libvips-linux-riscv64-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-s390x/-/sharp-libvips-linux-s390x-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-arm64/-/sharp-libvips-linuxmusl-arm64-1.3.4.tgz
-- `undefined` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.3.4.tgz
+- `@img/sharp-libvips-darwin-arm64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.3.4.tgz
+- `@img/sharp-libvips-darwin-x64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.3.4.tgz
+- `@img/sharp-libvips-linux-arm` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-arm/-/sharp-libvips-linux-arm-1.3.4.tgz
+- `@img/sharp-libvips-linux-arm64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-arm64/-/sharp-libvips-linux-arm64-1.3.4.tgz
+- `@img/sharp-libvips-linux-ppc64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-ppc64/-/sharp-libvips-linux-ppc64-1.3.4.tgz
+- `@img/sharp-libvips-linux-riscv64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-riscv64/-/sharp-libvips-linux-riscv64-1.3.4.tgz
+- `@img/sharp-libvips-linux-s390x` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-s390x/-/sharp-libvips-linux-s390x-1.3.4.tgz
+- `@img/sharp-libvips-linux-x64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.3.4.tgz
+- `@img/sharp-libvips-linuxmusl-arm64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-arm64/-/sharp-libvips-linuxmusl-arm64-1.3.4.tgz
+- `@img/sharp-libvips-linuxmusl-x64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.3.4.tgz
 
 Other Sharp packages carrying LGPL conjuncts:
-- `undefined` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later AND MIT — https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.35.5.tgz
-- `undefined` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-win32-arm64/-/sharp-win32-arm64-0.35.5.tgz
-- `undefined` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-win32-ia32/-/sharp-win32-ia32-0.35.5.tgz
-- `undefined` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-win32-x64/-/sharp-win32-x64-0.35.5.tgz
+- `@img/sharp-wasm32` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later AND MIT — https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.35.5.tgz
+- `@img/sharp-win32-arm64` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-win32-arm64/-/sharp-win32-arm64-0.35.5.tgz
+- `@img/sharp-win32-ia32` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-win32-ia32/-/sharp-win32-ia32-0.35.5.tgz
+- `@img/sharp-win32-x64` 0.35.5 — Apache-2.0 AND LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-win32-x64/-/sharp-win32-x64-0.35.5.tgz
 
 libvips source: https://opencollective.com/libvips (funding page; not a licence grant).
 
@@ -559,20 +559,20 @@ libvips source: https://opencollective.com/libvips (funding page; not a licence 
 
 14 packages declare MPL-2.0, including `lightningcss` and its platform packages plus `@axe-core/playwright` and `axe-core`. MPL-2.0 is not on the MIT/Apache/BSD reuse list and not on the GPL/AGPL/LGPL forbidden list. The interpretation is recorded as **unresolved** for Andy or the solicitor, not described as cleared.
 
-- `undefined` 4.13.0 — MPL-2.0 — https://registry.npmjs.org/@axe-core/playwright/-/playwright-4.13.0.tgz
-- `undefined` 4.13.0 — MPL-2.0 — https://registry.npmjs.org/axe-core/-/axe-core-4.13.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss/-/lightningcss-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-android-arm64/-/lightningcss-android-arm64-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-darwin-arm64/-/lightningcss-darwin-arm64-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-darwin-x64/-/lightningcss-darwin-x64-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-freebsd-x64/-/lightningcss-freebsd-x64-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/-/lightningcss-linux-arm-gnueabihf-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-arm64-gnu/-/lightningcss-linux-arm64-gnu-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-arm64-musl/-/lightningcss-linux-arm64-musl-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-win32-arm64-msvc/-/lightningcss-win32-arm64-msvc-1.32.0.tgz
-- `undefined` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.32.0.tgz
+- `@axe-core/playwright` 4.13.0 — MPL-2.0 — https://registry.npmjs.org/@axe-core/playwright/-/playwright-4.13.0.tgz
+- `axe-core` 4.13.0 — MPL-2.0 — https://registry.npmjs.org/axe-core/-/axe-core-4.13.0.tgz
+- `lightningcss` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss/-/lightningcss-1.32.0.tgz
+- `lightningcss-android-arm64` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-android-arm64/-/lightningcss-android-arm64-1.32.0.tgz
+- `lightningcss-darwin-arm64` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-darwin-arm64/-/lightningcss-darwin-arm64-1.32.0.tgz
+- `lightningcss-darwin-x64` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-darwin-x64/-/lightningcss-darwin-x64-1.32.0.tgz
+- `lightningcss-freebsd-x64` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-freebsd-x64/-/lightningcss-freebsd-x64-1.32.0.tgz
+- `lightningcss-linux-arm-gnueabihf` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/-/lightningcss-linux-arm-gnueabihf-1.32.0.tgz
+- `lightningcss-linux-arm64-gnu` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-arm64-gnu/-/lightningcss-linux-arm64-gnu-1.32.0.tgz
+- `lightningcss-linux-arm64-musl` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-arm64-musl/-/lightningcss-linux-arm64-musl-1.32.0.tgz
+- `lightningcss-linux-x64-gnu` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.32.0.tgz
+- `lightningcss-linux-x64-musl` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.32.0.tgz
+- `lightningcss-win32-arm64-msvc` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-win32-arm64-msvc/-/lightningcss-win32-arm64-msvc-1.32.0.tgz
+- `lightningcss-win32-x64-msvc` 1.32.0 — MPL-2.0 — https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.32.0.tgz
 
 ## Shipped media evidence (public/media/home/SOURCES.md)
 
