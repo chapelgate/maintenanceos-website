@@ -5,56 +5,47 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const HELP = path.join(ROOT, "src/content/help");
 
 function walk(dir, acc = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(full, acc);
-    else if (/\.(tsx?|mdx?|txt)$/.test(entry.name) && !entry.name.endsWith(".test.ts")) {
-      acc.push(full);
-    }
+    else if (/\.mdx?$/.test(entry.name)) acc.push(full);
   }
   return acc;
 }
 
-function visible(source) {
-  return source
-    .replace(/\/\*[\s\S]*?\*\//g, " ")
-    .replace(/(^|[^:])\/\/.*$/gm, "$1");
-}
-
-const files = [
-  ...walk(path.join(ROOT, "src")),
-  ...walk(path.join(ROOT, "public")),
-].map((file) => ({
+const files = walk(HELP).map((file) => ({
   file,
-  text: visible(fs.readFileSync(file, "utf8")),
+  text: fs.readFileSync(file, "utf8"),
 }));
 
-test("help content does not claim price plans are verified or published", () => {
-  for (const item of files) {
-    assert.doesNotMatch(
-      item.text,
-      /£49\/month|£149\/month|£1,430/,
-      `${item.file} has unverified price claim`,
-    );
-    assert.doesNotMatch(
-      item.text,
-      /\*\*.*£.*per month\*\*.*/i,
-      `${item.file} has price-plan style £ claim`,
-    );
+const faq = fs.readFileSync(path.join(HELP, "faq.mdx"), "utf8");
+const billing = fs.readFileSync(path.join(HELP, "billing-subscriptions.mdx"), "utf8");
+
+test("help FAQ and billing do not publish product prices", () => {
+  for (const source of [faq, billing]) {
+    assert.doesNotMatch(source, /£\d/);
+    assert.doesNotMatch(source, /50%\s*off/i);
+    assert.doesNotMatch(source, /buy now/i);
   }
 });
 
-test("help content keeps honest pre-launch price framing", () => {
+test("help product pricing pages keep request-on-request framing", () => {
+  assert.match(faq, /no published price list/i);
+  assert.match(faq, /request/i);
+  assert.match(billing, /no published price list/i);
+  assert.match(billing, /request/i);
+});
+
+test("help corpus refuses Starter\/Professional pound monthly list prices", () => {
   for (const item of files) {
-    const hasPriceClaim = /£[0-9]/.test(item.text);
-    if (!hasPriceClaim) continue;
-    // Must keep ANDY or pre-launch or request-on-request framing
-    assert.match(
-      item.text,
-      /ANDY|pre-launch|request pricing|quote-led|no price list|not published/i,
-      `${item.file} has price mention without honesty qualifier`,
-    );
+    assert.doesNotMatch(item.text, /£49/);
+    assert.doesNotMatch(item.text, /£149/);
+    assert.doesNotMatch(item.text, /£470/);
+    assert.doesNotMatch(item.text, /£1,?430/);
+    assert.doesNotMatch(item.text, /£8\/month/);
+    assert.doesNotMatch(item.text, /£5\/month/);
   }
 });

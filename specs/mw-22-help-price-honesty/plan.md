@@ -1,5 +1,6 @@
 # Plan
 
-1. Replace specific £ prices in help copy with `[ANDY:]` placeholders.
-2. Add the help-price-honesty lock test over `src` and `public`.
-3. Add FEATURE Spec Kit artifacts and Estate-* headers on the draft PR.
+1. Remove published help product prices and discount claims.
+2. Add a help-scoped price honesty lock test.
+3. Keep `scripts/wcag-claim-lock.test.mjs` intact.
+4. Open a draft PR with Estate-* headers.

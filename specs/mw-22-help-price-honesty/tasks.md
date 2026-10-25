@@ -1,8 +1,7 @@
 # Tasks
 
-- [x] Replace £ price claims in billing-subscriptions.mdx with [ANDY:] placeholders
-- [x] Replace £ price claims in faq.mdx with [ANDY:] placeholders
+- [x] Rewrite FAQ and billing help pricing sections
 - [x] Add scripts/help-price-honesty.test.mjs
-- [x] Create specs/mw-22-help-price-honesty Spec Kit artifacts
-- [x] Prepend Estate-* headers to the draft PR body
-- [x] Keep the PR draft; do not push main
+- [x] Restore scripts/wcag-claim-lock.test.mjs if renamed
+- [x] Create specs/mw-22-help-price-honesty
+- [x] Keep the PR draft

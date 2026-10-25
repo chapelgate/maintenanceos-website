@@ -2,15 +2,15 @@
 
 ## Problem
 
-Help centre articles listed specific price tiers (£49/month, £149/month, etc.) as if they were current, but the live site is pre-launch with no published price list.
+Help FAQ and billing articles published Starter/Professional pound prices and a 50% early-access discount while the marketing site correctly keeps packages quote-led with no published list.
 
 ## Cause
 
-Pricing copy was written with published-mode values, not pre-launch framing.
+Help MDX was written as if self-serve billing were live.
 
 ## Acceptance
 
-- `scripts/help-price-honesty.test.mjs` fails the build on £ price-plan claims without `[ANDY:]` or honest pre-launch framing (`quote-led`, `no price list`, `request pricing`).
-- Billing copy uses `[ANDY:]` placeholders; FAQ copy uses `[ANDY: monthly per property]` and references `request pricing`.
-- `node --test scripts/help-price-honesty.test.mjs` exits 0.
-- `node --test scripts/public-copy.test.mjs` exits 0.
+- FAQ and billing help pages publish no `£` product prices and no `50% off` offer.
+- `scripts/help-price-honesty.test.mjs` locks that.
+- `scripts/wcag-claim-lock.test.mjs` remains on the branch (must not be renamed away).
+- `node --test scripts/help-price-honesty.test.mjs scripts/wcag-claim-lock.test.mjs` exits 0.
