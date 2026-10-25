@@ -34,7 +34,7 @@ export default function DemoPage() {
             id="demo-timeline-heading"
             className="text-base font-semibold text-ink"
           >
-            What happens on the call
+            What the scripted preview does
           </h2>
           <FeatureStatusChip status="UNDER_TEST" />
         </div>
@@ -42,7 +42,7 @@ export default function DemoPage() {
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <div className="rounded-lg border border-border bg-surface p-3">
             <span className="text-xs font-bold text-accent">STEP 1</span>
-            <p className="mt-1 text-xs text-muted">Caller explains repair issue.</p>
+            <p className="mt-1 text-xs text-muted">A person describes a repair in the browser preview.</p>
           </div>
           <div className="rounded-lg border border-border bg-surface p-3">
             <span className="text-xs font-bold text-accent">STEP 2</span>
