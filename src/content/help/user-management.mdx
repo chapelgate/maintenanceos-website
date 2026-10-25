@@ -1,113 +1,32 @@
 ---
 slug: user-management
 title: "User Management & Roles"
-description: "Invite, manage, and remove team members. Understand role permissions and set up single sign-on."
+description: "User invites, roles, and single sign-on are not published on this site. Not a live account control."
 date: "2025-02-02"
 author: "WorkSmartOS Team"
 category: "Account & Billing"
-tags: ["users", "roles", "permissions", "sso", "team-management"]
+tags: ["users", "roles", "permissions", "sso", "team-management", "pre-launch"]
 ---
 
 # User Management & Roles
 
-Control who has access to your MaintenanceOS workspace and what they can do.
+User invites, roles, and single sign-on are not published on this site. Not a live account control.
 
-## Roles & Permissions
+## Roles
 
-| Permission | Admin | Manager | Contractor | Viewer |
-|------------|-------|---------|------------|--------|
-| **Properties** | ✅ CRUD | ✅ Read/Update | ✅ Assigned only | ✅ Read |
-| **Repairs** | ✅ All | ✅ Create/Manage | ✅ Assigned only | ✅ Read |
-| **Safety Latches** | ✅ Clear/Escalate | ❌ View only | ❌ | ❌ |
-| **Contractors** | ✅ CRUD | ✅ View/Assign | ❌ | ❌ |
-| **Compliance** | ✅ All | ✅ View/Schedule | ❌ | ✅ Read |
-| **Reports** | ✅ All | ✅ View | ❌ | ✅ View |
-| **Settings** | ✅ All | ❌ | ❌ | ❌ |
-| **Billing** | ✅ All | ❌ | ❌ | ❌ |
-| **Users** | ✅ Invite/Remove | ❌ | ❌ | ❌ |
-| **API Keys** | ✅ Manage | ❌ | ❌ | ❌ |
-| **Integrations** | ✅ Manage | ❌ | ❌ | ❌ |
+No role matrix is published on this site. Not a live permission model.
 
-**Safety Officer** — Additional permission for any Admin/Manager:
-- Clear safety latches
-- Authorise emergency spend
-- Receive safety alert SMS
+## Invites
 
-## Inviting Team Members
+No invite flow is published on this site. Not a live setup.
 
-1. **Settings → Users → Invite User**
-2. Enter email, select role
-3. Optional: Assign to specific properties/portfolios (Manager only)
-4. Send invite → User receives magic link email
+## Single sign-on
 
-**Bulk invite:** CSV upload (email, role, property_ids)
+No single sign-on provider is published on this site. Not a live configuration.
 
-## Managing Existing Users
+## Sessions and audit
 
-**Settings → Users:**
-- Search/filter by name, email, role, status
-- **Edit:** Change role, property assignments
-- **Deactivate:** Immediate access revocation, data retained
-- **Reactivate:** Within 30 days, full restoration
-- **Remove:** Permanent (30 days after deactivation)
-
-**Audit log:** All user changes logged (who, what, when).
-
-## Property-Level Access (Managers)
-
-Managers can be restricted to specific properties:
-1. Edit user → **Property Access**
-2. Select "Specific properties"
-3. Choose from list or upload CSV
-4. User only sees repairs/properties in their scope
-
-**Admins** always have full access.
-
-## Contractor Portal Access
-
-Contractors **do not** count as workspace users:
-- Added via Settings → Contractors
-- Access via separate contractor portal
-- No access to workspace dashboard, reports, settings
-- Only see assigned repairs
-
-## Single Sign-On (Enterprise)
-
-**Supported providers:** Okta, Azure AD (Entra ID), Google Workspace, OneLogin, Ping Identity
-
-**Setup:**
-1. Settings → Security → SSO → Configure
-2. Enter provider metadata / upload XML
-3. Map attributes: email, first_name, last_name, role
-4. Test with test user
-5. Enforce SSO (optional — disables magic link)
-
-**SCIM provisioning** (Okta, Azure AD):
-- Auto-create/update/deactivate users
-- Sync groups → roles
-- Real-time deprovisioning
-
-## Session Management
-
-- **Session timeout:** 8 hours (configurable 1–24h)
-- **Concurrent sessions:** 5 per user (configurable)
-- **Force logout:** Admin can revoke all sessions for a user
-- **Device trust:** Remember device 30 days (optional)
-
-## Audit Trail
-
-**Settings → Security → Audit Log:**
-- All user actions (login, repair changes, settings changes, exports)
-- Filter by user, date, action type, resource
-- Export for compliance (CSV, JSON)
-- Retention: 7 years (configurable 1–10)
-
-## Next Steps
-
-- [Setting Up SSO with Azure AD](./sso-azure-ad)
-- [Setting Up SSO with Okta](./sso-okta)
-- [SCIM Provisioning Guide](./scim-provisioning)
-- [Audit Log Export for Compliance](./audit-log-export)
+No session timeout, device trust, or audit export is published on this site. Not applicable.
 
 ---
 
