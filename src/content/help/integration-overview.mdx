@@ -22,69 +22,19 @@ Named connectors are not published as available. Not a live integration catalogu
 
 ## Webhooks
 
-**Real-time event notifications** for custom integrations.
-
-**Events available:**
-- `repair.created`, `repair.updated`, `repair.completed`
-- `property.created`, `property.updated`
-- `contractor.assigned`, `contractor.compliance_changed`
-- `safety_latch.triggered`, `safety_latch.cleared`
-- `quote.submitted`, `quote.approved`, `quote.rejected`
-- `compliance.expiring`, `compliance.expired`
-- `tenant.portal_message`
-
-**Configuration:** Settings → Integrations → Webhooks
-- Target URL (HTTPS only)
-- Events to receive
-- Secret for signature verification
-- Retry policy: 3 attempts with exponential backoff
-
-**Payload example:**
-```json
-{
-  "event": "repair.completed",
-  "timestamp": "2025-01-15T14:32:00Z",
-  "workspace_id": "wks_abc123",
-  "data": { "repair_id": "rep_xyz789", ... }
-}
-```
-
-**Verification:** `X-MaintenanceOS-Signature` = HMAC-SHA256(payload, secret)
+Webhook delivery is not published on this site. Not a live webhook.
 
 ## API Reference
 
-No public base URL is published on this site.
-
-**Key endpoints:**
-| Resource | Endpoints |
-|----------|-----------|
-| Repairs | `GET/POST /repairs`, `GET/PATCH /repairs/{id}`, `POST /repairs/{id}/assign`, `POST /repairs/{id}/quotes` |
-| Properties | `GET/POST /properties`, `GET/PATCH /properties/{id}` |
-| Contractors | `GET/POST /contractors`, `GET/PATCH /contractors/{id}` |
-| Compliance | `GET /compliance/gas`, `GET /compliance/epc`, `GET /compliance/fire`, `GET /compliance/hmo` |
-| Tenants | `GET/POST /tenants`, `GET/PATCH /tenants/{id}` |
-| Reports | `GET /reports/performance`, `GET /reports/contractors`, `GET /reports/compliance` |
-
-**Pagination:** Cursor-based (`?cursor=...&limit=100`)
-
-**Errors:** Standard HTTP codes + RFC 7807 problem details.
+No public base URL is published on this site. Endpoint lists are not a live API.
 
 ## Sandbox Environment
 
-**Sandbox workspace** (Settings → Integrations → Sandbox):
-- Isolated test data
-- No real notifications sent
-- Mock contractor/tenant responses
-- API key separate from production
-- Reset anytime
+No sandbox workspace is published on this site. Not a live sandbox.
 
 ## Rate Limits & Best Practices
 
-- Cache reference data (properties, contractors) — refresh hourly
-- Use webhooks for real-time updates, not polling
-- Batch writes where possible
-- Handle 429 (rate limited) with exponential backoff
-- Monitor API usage at Settings → Integrations → API Usage
+No rate limit is published on this site. Not a live API.
 
 ## Next Steps
 
