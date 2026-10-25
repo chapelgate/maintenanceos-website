@@ -1,131 +1,36 @@
 ---
 slug: safety-latches
 title: "Safety Latches Explained"
-description: "How MaintenanceOS safety latches work, which repairs they catch, and what happens when one triggers."
+description: "Safety holds, officer review, and statutory repair rules are not published on this site. Not a live safety latch."
 date: "2025-01-19"
 author: "WorkSmartOS Team"
 category: "Safety & Compliance"
-tags: ["safety", "latches", "compliance", "gas", "electrical", "structural"]
+tags: ["safety", "latches", "compliance", "pre-launch"]
 ---
 
 # Safety Latches Explained
 
-Safety latches are MaintenanceOS's core safety mechanism. They automatically detect high-risk repairs and prevent them from being assigned to contractors until a designated safety officer reviews them.
+Safety holds, officer review, and statutory repair rules are not published on this site. Not a live safety latch.
 
-## What Is a Safety Latch?
+## What a safety latch is
 
-A safety latch is an **automatic hold** placed on a repair when specific danger conditions are detected. It cannot be bypassed by managers or contractors — only a Safety Officer or Admin can clear it.
+No automatic hold, bypass rule, or officer role is published on this site. Not a live hold.
 
-## Default Safety Rules
+## Default rules
 
-MaintenanceOS ships with these non-configurable safety rules:
+No keyword rule, season rule, or statutory repair target is published on this site. Not a live rule set.
 
-### 1. Gas & Carbon Monoxide
-**Triggers on:** Keywords "gas smell", "carbon monoxide", "CO alarm", "boiler leaking gas", "gas leak"
-**Action:** Immediate Safety Hold + SMS to all Admins + Safety Officer
-**Regulation:** Gas Safety (Installation and Use) Regulations 1998
+## Clearance
 
-### 2. No Heating in Winter
-**Triggers on:** Category "Heating & Hot Water" + date between 1 Oct – 31 Mar + tenant vulnerability flag
-**Action:** Safety Hold (Urgent priority) + notification to Manager + Safety Officer
-**Target:** On site within 4 hours
-**Regulation:** Homes (Fitness for Human Habitation) Act 2018
+No review banner, clearance note, or assignment step is published on this site. Not a live workflow.
 
-### 3. Water Near Electrics
-**Triggers on:** Category "Plumbing" + keywords "electrical", "socket", "light fitting", "consumer unit", "fuse board"
-**Action:** Safety Hold + immediate escalation
-**Regulation:** Electricity at Work Regulations 1989
+## Escalation and custom rules
 
-### 4. Structural Instability
-**Triggers on:** Category "Structural" + keywords "crack", "bulge", "leaning", "subsidence", "collapse"
-**Action:** Safety Hold + immediate escalation
-**Regulation:** Building Regulations 2010, Part A
+No escalation clock, custom rule, or audit export is published on this site. Not applicable.
 
-### 5. Fire Safety Equipment
-**Triggers on:** Category "Fire Safety" + keywords "fire alarm", "extinguisher", "fire door", "emergency lighting", "smoke detector"
-**Action:** Safety Hold (24-hour SLA)
-**Regulation:** Regulatory Reform (Fire Safety) Order 2005
+## Next steps
 
-### 6. Asbestos Disturbance
-**Triggers on:** Keywords "asbestos", "artex", "pipe lagging", "ceiling tiles" + category "Structural" or "Plumbing"
-**Action:** Safety Hold + specialist contractor required
-**Regulation:** Control of Asbestos Regulations 2012
-
-### 7. Legionella Risk
-**Triggers on:** Category "Plumbing" + keywords "stagnant", "dead leg", "cold water tank", "shower not used"
-**Action:** Safety Hold + risk assessment required
-**Regulation:** ACOP L8, HSG274
-
-## How the Safety Latch Flow Works
-
-```
-1. Repair Reported
-       ↓
-2. Auto-Triage (keywords + category + property flags)
-       ↓
-3. Safety Rule Match? → YES → SAFETY HOLD
-       ↓                                    ↓
-   NO                                     Safety Officer Notified
-       ↓                                    ↓
-4. Normal Priority                    Safety Officer Reviews
-       ↓                                    ↓
-5. Assign Contractor              Clear Hold OR Escalate
-       ↓                                    ↓
-6. Continue Normal Flow           If Escalated → Specialist Required
-```
-
-## Safety Officer Role
-
-**Who can be a Safety Officer:** Any Admin or Manager with the "Safety Officer" permission enabled.
-
-**Responsibilities:**
-- Review Safety Hold repairs within 30 minutes (emergency) or 2 hours (urgent)
-- Verify contractor has correct certifications (Gas Safe, NICEIC, etc.)
-- Authorise emergency spend limits
-- Document decision rationale (audit requirement)
-
-**Clearing a hold:**
-1. Open repair → Safety Hold banner → "Review"
-2. Confirm contractor certifications match risk
-3. Add mandatory note: "Cleared: [reason], contractor [name] certified for [trade]"
-4. Click "Clear Hold" → Repair moves to Assigned
-
-## What Happens If No Safety Officer Is Available?
-
-- After 30 minutes (emergency) or 2 hours (urgent), escalates to all Admins
-- After 1 hour (emergency) or 4 hours (urgent), sends SMS to all Admins
-- Repair remains in Safety Hold until cleared — **never auto-clears**
-
-## Custom Safety Rules (Admin Only)
-
-Admins can add **additional** rules (cannot remove defaults):
-- Property-specific risks (e.g., known RAAC concrete)
-- Tenant-specific vulnerabilities
-- Seasonal risks (e.g., frozen pipes alert)
-
-Custom rules follow the same clearance process.
-
-## Audit & Compliance
-
-Every Safety Hold creates an immutable record:
-- Triggered rule
-- Timestamp
-- Safety Officer who cleared
-- Clearance note
-- Contractor assigned post-clearance
-
-Export at **Reports → Safety Latch Audit** for regulator requests.
-
-## Testing Safety Latches
-
-Use the "Test Safety Latch" tool at Settings → Safety → Test Rules. Enter a test description and see which rules would trigger.
-
-## Next Steps
-
-- [Configuring Safety Officers](./safety-officers)
-- [Emergency Spend Limits](./emergency-spend)
-- [Regulatory Compliance Reports](./compliance-reports)
-- [Contractor Certification Tracking](./contractor-compliance)
+No next-step help links are published on this site. Not applicable.
 
 ---
 
