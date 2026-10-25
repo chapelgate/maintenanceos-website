@@ -46,28 +46,9 @@ export function ChatWidget({
 
     setStatus("submitting");
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: trimmedMessage,
-          pageContext,
-          pageUrl: typeof window !== "undefined" ? window.location.href : "",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to send message");
-      }
-
-      setStatus("success");
-      setMessage("");
-      formRef.current?.reset();
-    } catch {
-      setError("Could not send message. Please try again or email us directly.");
-      setStatus("error");
-    }
+    setStatus("success");
+    setMessage("");
+    formRef.current?.reset();
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -129,10 +110,7 @@ export function ChatWidget({
             </button>
           </div>
           <p className="mt-3 text-sm text-ink">
-            Thanks for your message. We will reply to your email shortly.
-          </p>
-          <p className="mt-2 text-xs text-muted">
-            Pre-launch: chat messages are forwarded to our team email.
+            Online chat is not connected on this static site.
           </p>
         </div>
       </div>
@@ -205,61 +183,15 @@ export function ChatWidget({
             </button>
           </div>
           <p className="mt-2 text-sm text-muted">
-            Messages reach our team directly. No mouse required — use Tab and
-            Enter.
-          </p>
-          <form
-            ref={formRef}
-            onSubmit={onSubmit}
-            className="mt-4 space-y-3"
-            noValidate
-          >
-            <label className="block text-sm">
-              <span className="font-medium text-ink">Message</span>
-              <textarea
-                ref={messageRef}
-                name="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={placeholder}
-                rows={3}
-                required
-                aria-label="Message"
-                aria-required="true"
-                aria-invalid={error ? true : undefined}
-                aria-describedby={error ? errorId : undefined}
-                className="mt-1 w-full rounded-md border border-border bg-paper px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-                disabled={status === "submitting"}
-              />
-              {error ? (
-                <span
-                  id={errorId}
-                  className="mt-1 block text-sm text-red-700"
-                  role="alert"
-                  aria-live="polite"
-                >
-                  {error}
-                </span>
-              ) : null}
-            </label>
-            <button
-              type="submit"
-              disabled={status === "submitting" || !message.trim()}
-              className="w-full inline-flex min-h-12 items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            Online chat is not connected on this static site.{" "}
+            <a
+              href={`mailto:info@chapelgatetechnologies.com`}
+              className="font-medium text-accent underline"
             >
-              {status === "submitting" ? "Sending…" : "Send message"}
-            </button>
-            <p className="text-xs text-muted text-center">
-              Pre-launch: messages are forwarded to{" "}
-              <a
-                href={`mailto:info@chapelgatetechnologies.com`}
-                className="font-medium text-accent underline"
-              >
-                info@chapelgatetechnologies.com
-              </a>
-            </p>
-          </form>
+              Email us directly
+            </a>
+            instead.
+          </p>
         </div>
       )}
     </div>
