@@ -15,10 +15,7 @@ MaintenanceOS does not publish a public API host. Not a live API. Connectors lis
 ## Authentication
 
 **API Keys** (Settings → Integrations → API Keys):
-- Scoped permissions (read-only, read-write, admin)
-- Rotatable, revocable
-- Audit log of all API activity
-- Rate limits: 100 req/min (standard), 1,000 req/min (Enterprise)
+- No API key screen is published on this site. Not a live API key.
 
 **OAuth 2.0** (for user-facing integrations):
 - Authorization Code flow with PKCE
@@ -27,39 +24,7 @@ MaintenanceOS does not publish a public API host. Not a live API. Connectors lis
 
 ## Pre-Built Integrations
 
-### Property Management Software
-| Platform | Sync Direction | Data Synced |
-|----------|----------------|-------------|
-| **Reapit** | Bi-directional | Properties, tenancies, contacts, repairs |
-| **AgentOS** | Bi-directional | Properties, tenancies, repairs, compliance |
-| **Qube** | Bi-directional | Properties, repairs, contractors |
-| **MRI** | Bi-directional | Properties, tenancies, repairs, financials |
-| **Yardi** | Bi-directional | Properties, work orders, vendors |
-
-**Setup:** Settings → Integrations → [Platform] → Connect → Authorise → Map fields → Test → Enable.
-
-### Accounting
-| Platform | Sync | Details |
-|----------|------|---------|
-| **Xero** | Push (invoices, bills, payments) | Purchase orders → Bills, Invoices → Invoices |
-| **QuickBooks** | Push | Same as Xero |
-| **Sage** | Push | Purchase orders, invoices |
-| **FreeAgent** | Push | Bills, invoices |
-
-### CRM
-| Platform | Sync | Details |
-|----------|------|---------|
-| **HubSpot** | Bi-directional | Contacts, companies, deals ↔ Tenants, properties, repairs |
-| **Salesforce** | Bi-directional | Custom object mapping |
-| **Pipedrive** | Push (repairs → activities) | Repair updates as activities |
-
-### Communication
-| Platform | Use Case |
-|----------|----------|
-| **Slack** | Repair notifications, daily digests, @mentions |
-| **Microsoft Teams** | Same as Slack |
-| **Twilio** | SMS notifications, inbound repair reports via phone |
-| **SendGrid / Mailgun** | Transactional email delivery |
+Named connectors are not published as available. Not a live integration catalogue.
 
 ## Webhooks
 
@@ -131,9 +96,6 @@ No public base URL is published on this site.
 
 - [API Quickstart Guide](./api-quickstart)
 - [Webhook Implementation Guide](./webhook-guide)
-- [Reapit Integration Deep Dive](./reapit-integration)
-- [Xero Integration Deep Dive](./xero-integration)
-- [Custom Integration Patterns](./custom-integrations)
 
 ---
 
