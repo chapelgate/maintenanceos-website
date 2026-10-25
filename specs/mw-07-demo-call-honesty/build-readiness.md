@@ -31,3 +31,5 @@ Reason: The timeline no longer describes a telephone call.
 ## 8. Operations and Rollback
 Status: ALREADY_COVERED
 Reason: Revert the commit to restore the previous sentences. No deploy change.
+
+Artifact directory: specs/mw-07-demo-call-honesty
