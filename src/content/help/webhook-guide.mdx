@@ -1,7 +1,7 @@
 ---
 slug: webhook-guide
 title: "Webhook Implementation Guide"
-description: "Build reliable webhook consumers for MaintenanceOS events. Handle retries, verify signatures, and process events idempotently."
+description: "Pre-launch note. No public webhook host is published on this site. Not a live webhook."
 date: "2025-01-31"
 author: "WorkSmartOS Team"
 category: "Integrations"
@@ -10,202 +10,39 @@ tags: ["webhooks", "implementation", "reliability", "signatures", "idempotency"]
 
 # Webhook Implementation Guide
 
-Webhooks deliver real-time events from MaintenanceOS to your systems. This guide covers building a robust consumer.
-
-## Event Delivery Guarantees
-
-- **At-least-once delivery** — Events may be duplicated; handle idempotently
-- **Ordering** — Events per resource delivered in order; cross-resource ordering not guaranteed
-- **Retries** — 3 attempts with exponential backoff (1m, 5m, 15m)
-- **Timeout** — 10 seconds per attempt
-- **Dead letter** — After 3 failures, event logged in MaintenanceOS (Settings → Webhooks → Failed Deliveries)
+Webhook delivery is not published on this site. Not a live webhook.
 
 ## Signature Verification
 
-**Always verify signatures** to prevent spoofing.
-
-**Header:** `X-MaintenanceOS-Signature: sha256=<hex>`
-
-**Algorithm:** HMAC-SHA256(payload, webhook_secret)
-
-**Example (Node.js):**
-```javascript
-const crypto = require('crypto');
-
-function verifySignature(payload, signatureHeader, secret) {
-  const expected = 'sha256=' + crypto
-    .createHmac('sha256', secret)
-    .update(payload, 'utf8')
-    .digest('hex');
-  
-  // Timing-safe comparison
-  return crypto.timingSafeEqual(
-    Buffer.from(signatureHeader),
-    Buffer.from(expected)
-  );
-}
-
-app.post('/webhooks/maintenanceos', express.raw({type: 'application/json'}), (req, res) => {
-  const signature = req.headers['x-maintenanceos-signature'];
-  if (!verifySignature(req.body, signature, process.env.MOS_WEBHOOK_SECRET)) {
-    return res.status(401).send('Invalid signature');
-  }
-  
-  // Process event...
-  res.status(200).send('OK');
-});
-```
-
-**Example (Python):**
-```python
-import hmac
-import hashlib
-from fastapi import Request, HTTPException
-
-async def verify_webhook(request: Request, secret: str):
-    body = await request.body()
-    signature = request.headers.get('X-MaintenanceOS-Signature')
-    expected = 'sha256=' + hmac.new(
-        secret.encode(), body, hashlib.sha256
-    ).hexdigest()
-    
-    if not hmac.compare_digest(signature, expected):
-        raise HTTPException(status_code=401, detail='Invalid signature')
-```
+No signature header is published on this site. Not a live verification method.
 
 ## Idempotent Event Processing
 
-Events may be delivered multiple times. Design your consumer to be idempotent.
-
-**Strategy 1: Event ID deduplication**
-```javascript
-const processedEvents = new Set(); // Use Redis in production
-
-app.post('/webhooks/maintenanceos', async (req, res) => {
-  const event = req.body;
-  
-  if (processedEvents.has(event.id)) {
-    return res.status(200).send('Already processed');
-  }
-  
-  await processEvent(event);
-  processedEvents.add(event.id);
-  
-  // TTL cleanup for memory
-  setTimeout(() => processedEvents.delete(event.id), 24 * 60 * 60 * 1000);
-  
-  res.status(200).send('OK');
-});
-```
-
-**Strategy 2: Database unique constraint**
-```sql
-CREATE TABLE webhook_events (
-  event_id VARCHAR(64) PRIMARY KEY,
-  event_type VARCHAR(64),
-  payload JSONB,
-  processed_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- In consumer:
-INSERT INTO webhook_events (event_id, event_type, payload)
-VALUES ($1, $2, $3)
-ON CONFLICT (event_id) DO NOTHING;
--- Only process if row inserted
-```
+No event processing guidance is published on this site. Not a live consumer pattern.
 
 ## Event Structure
 
-All events follow this envelope:
-
-```json
-{
-  "id": "evt_abc123def456",
-  "event": "repair.completed",
-  "timestamp": "2025-01-15T14:32:00Z",
-  "workspace_id": "wks_xyz789",
-  "data": { ... },
-  "previous_data": { ... }  // For .updated events
-}
-```
-
-## Key Event Types
-
-### Repair Events
-| Event | When | Data Includes |
-|-------|------|---------------|
-| `repair.created` | New repair submitted | Full repair object |
-| `repair.updated` | Any field changed | Full repair + `previous_data` |
-| `repair.assigned` | Contractor assigned | Repair + contractor_id |
-| `repair.completed` | Contractor marks complete | Repair + completion photos |
-| `repair.verified` | Manager verifies | Repair + verifier_id |
-| `repair.closed` | Auto-closed after 7 days | Repair |
-
-### Safety Events
-| Event | When | Data Includes |
-|-------|------|---------------|
-| `safety_latch.triggered` | Safety rule matched | Repair + rule_id + matched_keywords |
-| `safety_latch.cleared` | Safety Officer cleared | Repair + officer_id + clearance_note |
-| `safety_latch.escalated` | No response in time | Repair + escalation_level |
-
-### Compliance Events
-| Event | When | Data Includes |
-|-------|------|---------------|
-| `compliance.expiring` | 30/7/1 days before expiry | Property + compliance_type + expiry_date |
-| `compliance.expired` | On expiry date | Property + compliance_type |
-| `contractor.compliance_changed` | Cert added/removed/expired | Contractor + cert_type + status |
+No event envelope is published on this site. Not a live API.
 
 ## Handling High Volume
 
-For high-volume workspaces:
-
-1. **Queue events** — Push to message queue (RabbitMQ, SQS, Kafka) immediately, respond 200
-2. **Process asynchronously** — Workers consume from queue
-3. **Batch API calls** — If calling MaintenanceOS API in response, batch where possible
-4. **Monitor queue depth** — Alert if processing lags > 5 minutes
+No rate-limit or volume guidance is published on this site. Not a live configuration.
 
 ## Testing Webhooks
 
-**Local development:**
-1. Use ngrok/cloudflared: `ngrok http 3000`
-2. Register webhook with ngrok HTTPS URL
-3. Use MaintenanceOS "Send Test Event" button
-
-**Sandbox workspace:**
-- Separate webhook configuration
-- Mock events for all types
-- No real notifications sent
+No testing instructions are published on this site. Not a live setup.
 
 ## Monitoring & Debugging
 
-**MaintenanceOS side:**
-- Settings → Integrations → Webhooks → Delivery History
-- Shows: timestamp, event, response code, latency, retries
-- Failed deliveries: payload, error, retry schedule
-
-**Your side:**
-- Log all received events (event_id, type, timestamp)
-- Track processing latency (received → acknowledged)
-- Alert on: signature failures, processing errors, queue depth
-- Correlate with MaintenanceOS delivery history
+No delivery history is published on this site. Not a live dashboard.
 
 ## Common Pitfalls
 
-| Pitfall | Solution |
-|---------|----------|
-| Not verifying signatures | Always verify — reject invalid |
-| Processing synchronously | Queue immediately, respond 200 |
-| No idempotency | Use event_id deduplication |
-| Ignoring `previous_data` | Use for audit / change detection |
-| Hardcoding event types | Handle unknown types gracefully |
-| No dead letter handling | Monitor MaintenanceOS failed deliveries |
+No pitfalls are documented on this site. Not applicable.
 
 ## Next Steps
 
-- [Webhook Events Catalogue](./webhook-events)
-- [API Rate Limits](./api-rate-limits)
-- [Sandbox Testing Guide](./sandbox-guide)
-- [Troubleshooting Webhook Failures](./webhook-troubleshooting)
+No next steps are published on this site. Not applicable.
 
 ---
 
