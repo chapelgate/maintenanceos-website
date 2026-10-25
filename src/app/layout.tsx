@@ -16,7 +16,7 @@ const inter = localFont({
   ],
   variable: "--font-inter",
   display: "swap",
-  preload: true,
+  preload: false,
 });
 
 export const metadata: Metadata = buildRootMetadata();
