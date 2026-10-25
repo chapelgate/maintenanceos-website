@@ -31,29 +31,30 @@ const files = [
   text: visible(fs.readFileSync(file, "utf8")),
 }));
 
-const forbidden = [
-  /meets WCAG 2\.2 AA/i,
-  /WCAG 2\.2 AA compliant/i,
-  /verified WCAG 2\.2 AA/i,
-];
-
-const honesty = /do not claim|not a claim|not verified|not claiming|independent audit planned|working toward WCAG/i;
-
-test("no public source claims WCAG 2.2 AA is met or verified", () => {
-  for (const pattern of forbidden) {
-    for (const item of files) {
-      assert.doesNotMatch(item.text, pattern, `${item.file} matches ${pattern}`);
-    }
+test("help content does not claim price plans are verified or published", () => {
+  for (const item of files) {
+    assert.doesNotMatch(
+      item.text,
+      /£49\/month|£149\/month|£1,430/,
+      `${item.file} has unverified price claim`,
+    );
+    assert.doesNotMatch(
+      item.text,
+      /\*\*.*£.*per month\*\*.*/i,
+      `${item.file} has price-plan style £ claim`,
+    );
   }
 });
 
-test("any WCAG 2.2 AA mention keeps an honesty qualifier", () => {
+test("help content keeps honest pre-launch price framing", () => {
   for (const item of files) {
-    if (!/WCAG 2\.2 AA/i.test(item.text)) continue;
+    const hasPriceClaim = /£[0-9]/.test(item.text);
+    if (!hasPriceClaim) continue;
+    // Must keep ANDY or pre-launch or request-on-request framing
     assert.match(
       item.text,
-      honesty,
-      `${item.file} mentions WCAG 2.2 AA without an honesty qualifier`,
+      /ANDY|pre-launch|request pricing|quote-led|no price list|not published/i,
+      `${item.file} has price mention without honesty qualifier`,
     );
   }
 });
