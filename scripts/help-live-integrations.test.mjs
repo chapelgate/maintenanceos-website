@@ -30,6 +30,7 @@ test("integration overview does not publish a rate limit or named connectors", (
   assert.doesNotMatch(overview, /100 req\/min/);
   assert.doesNotMatch(overview, /Reapit/);
   assert.doesNotMatch(overview, /Authorise/);
+  assert.doesNotMatch(overview, /OAuth 2\.0/);
   assert.match(overview, /no API key screen/i);
   assert.match(overview, /not a live API key/i);
   assert.match(overview, /not a live integration catalogue/i);
