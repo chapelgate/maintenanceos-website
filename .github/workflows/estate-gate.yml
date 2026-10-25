@@ -8,4 +8,4 @@ permissions:
 
 jobs:
   estate-gate:
-    uses: chapelgate/agent-skills/.github/workflows/estate-gate.yml@bbd641b1473496e9812c592a9fed13f5fab665e5
+    uses: chapelgate/agent-skills/.github/workflows/estate-gate.yml@f75cc1e1f81da8aafd6229bf8528cd7172f11e1d
