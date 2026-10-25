@@ -5,6 +5,8 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+// Directories skipped because they contain dependencies, build output, or
+// generated artefacts rather than reviewed project source.
 const SKIP_DIRS = new Set([
   ".git",
   ".next",
@@ -21,10 +23,16 @@ const PATTERNS = [
     "-----BEGIN " + "(?:RSA |OPENSSH |EC |DSA )?" + "PRIVATE KEY-----",
   ),
   new RegExp("sk_live_" + "[0-9A-Za-z]{16,}"),
+  new RegExp("sk_test_" + "[0-9A-Za-z]{16,}"),
+  new RegExp("pk_live_" + "[0-9A-Za-z]{16,}"),
+  new RegExp("pk_test_" + "[0-9A-Za-z]{16,}"),
   new RegExp("ghp_" + "[A-Za-z0-9]{20,}"),
   new RegExp("github_pat_" + "[A-Za-z0-9_]{20,}"),
   new RegExp("xox[baprs]-" + "[A-Za-z0-9-]{10,}"),
   new RegExp("AIza" + "[0-9A-Za-z\\-_]{35}"),
+  new RegExp("vercel_" + "[0-9A-Za-z]{20,}"),
+  new RegExp("DATABASE_URL" + ".*" + "postgres://[^ ]*:[^ ]*@"),
+  new RegExp("mongodb" + "+srv?://[^ ]*:[^ ]*@"),
 ];
 
 function walk(dir, acc = []) {
