@@ -4,6 +4,7 @@
  * explicitly filled below AND PUBLIC_LAUNCH is true.
  */
 import { siteConfig } from "@/config/site";
+import { isPublishablePriceLabel } from "@/lib/publishable-price";
 
 export type PricingCta = {
   href: string;
@@ -134,11 +135,11 @@ export function getPricingMode(): PricingMode {
 export function getPricingConfig() {
   const mode = getPricingMode();
   if (mode === "published") {
-    const hasTiers = published.tiers.some((t) => t.priceLabel.trim().length > 0);
+    const allLabelsPublishable = published.tiers.every((t) => isPublishablePriceLabel(t.priceLabel));
     return {
       mode,
       ...published,
-      showTiers: hasTiers,
+      showTiers: allLabelsPublishable,
     };
   }
   return {
