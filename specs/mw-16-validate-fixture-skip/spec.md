@@ -6,11 +6,13 @@ Editing only a captured HTML fixture under `packages/onboarding-ingest/src/fixtu
 
 ## Cause
 
-The workflow path filter matched every file under `packages/onboarding-ingest/**`, including fixtures that do not change the scanner runtime image.
+The workflow path filter matched every file under `packages/onboarding-ingest/**`, including fixtures, and the job only ran on hosted runners.
 
 ## Acceptance
 
+- The job runs on `[self-hosted, estate]`.
 - The pull_request path filter excludes `packages/onboarding-ingest/src/fixtures/**`.
 - The scanner image smoke step also skips when the only onboarding-ingest paths in the diff are under `src/fixtures/`.
+- Docker image steps run only when `docker info` works for the runner user.
 - `node --test scripts/validate-fixture-skip.test.mjs` exits 0.
 - No Docker group change. No hosted spend.
