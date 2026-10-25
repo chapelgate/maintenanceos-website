@@ -4,7 +4,34 @@ import AxeBuilder from '@axe-core/playwright';
 // Use WebKit for all tests in this file
 test.use({ browserName: 'webkit' });
 
-const pages = ['/', '/create/', '/demo/', '/features/', '/pricing/', '/security/'];
+const pages = [
+  '/',
+  '/about/',
+  '/accessibility/',
+  '/ai-receptionist/',
+  '/blog/',
+  '/buyers/',
+  '/compare/',
+  '/contact/',
+  '/cookies/',
+  '/create/',
+  '/demo/',
+  '/faq/',
+  '/features/',
+  '/how-it-works/',
+  '/how-we-keep-control/',
+  '/industries/',
+  '/integrations/',
+  '/pricing/',
+  '/privacy/',
+  '/property-maintenance-software/',
+  '/security/',
+  '/status/',
+  '/subprocessors/',
+  '/terms/',
+  '/trust/',
+  '/vulnerability-disclosure/',
+];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
   { name: 'Desktop Safari', width: 1280, height: 800 }
