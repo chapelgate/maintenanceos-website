@@ -1,7 +1,7 @@
 ---
 slug: api-quickstart
 title: "API Quickstart Guide"
-description: "Get started with the MaintenanceOS API in 5 minutes. Create your first repair, query properties, and handle webhooks."
+description: "Pre-launch note. No public API host is published on this site. Not a live API."
 date: "2025-01-30"
 author: "WorkSmartOS Team"
 category: "Integrations"
@@ -10,7 +10,7 @@ tags: ["api", "quickstart", "developers", "rest", "webhooks"]
 
 # API Quickstart Guide
 
-This guide gets you from zero to your first API call in under 5 minutes.
+MaintenanceOS does not publish a public API host. Not a live API. Samples on this page are not connected to a MaintenanceOS service.
 
 ## Prerequisites
 
@@ -37,7 +37,7 @@ Store securely — treat like a password.
 ```bash
 curl -H "Authorization: Bearer YOUR_API_KEY" \
      -H "Accept: application/json" \
-     https://api.maintenanceos.co.uk/v1/properties
+     https://api.example.invalid/v1/properties
 ```
 
 **Response:**
@@ -60,7 +60,7 @@ curl -H "Authorization: Bearer YOUR_API_KEY" \
 ## 3. Create a Repair
 
 ```bash
-curl -X POST https://api.maintenanceos.co.uk/v1/repairs \
+curl -X POST https://api.example.invalid/v1/repairs \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: unique-request-id-123" \
@@ -98,7 +98,7 @@ curl -X POST https://api.maintenanceos.co.uk/v1/repairs \
 ## 4. Assign a Contractor
 
 ```bash
-curl -X POST https://api.maintenanceos.co.uk/v1/repairs/rep_xyz789/assign \
+curl -X POST https://api.example.invalid/v1/repairs/rep_xyz789/assign \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -112,7 +112,7 @@ curl -X POST https://api.maintenanceos.co.uk/v1/repairs/rep_xyz789/assign \
 Receive real-time updates instead of polling.
 
 ```bash
-curl -X POST https://api.maintenanceos.co.uk/v1/webhooks \
+curl -X POST https://api.example.invalid/v1/webhooks \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -149,7 +149,7 @@ app.post('/webhooks/maintenanceos', express.raw({type: 'application/json'}), (re
 List endpoints return paginated results:
 
 ```bash
-curl "https://api.maintenanceos.co.uk/v1/repairs?limit=50" \
+curl "https://api.example.invalid/v1/repairs?limit=50" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -166,7 +166,7 @@ curl "https://api.maintenanceos.co.uk/v1/repairs?limit=50" \
 
 **Next page:**
 ```bash
-curl "https://api.maintenanceos.co.uk/v1/repairs?limit=50&cursor=eyJpZCI6InJlcF8xMjMifQ==" \
+curl "https://api.example.invalid/v1/repairs?limit=50&cursor=eyJpZCI6InJlcF8xMjMifQ==" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -188,7 +188,7 @@ curl "https://api.maintenanceos.co.uk/v1/repairs?limit=50&cursor=eyJpZCI6InJlcF8
 **Validation error format:**
 ```json
 {
-  "type": "https://api.maintenanceos.co.uk/errors/validation",
+  "type": "https://api.example.invalid/errors/validation",
   "title": "Validation Failed",
   "status": 422,
   "errors": [
