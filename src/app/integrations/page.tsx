@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export const metadata = contentPageMetadata({
   title: "Integrations",
-  description: "Connect MaintenanceOS with your existing tools. Google Calendar, Outlook, Cal.com, Calendly, Zapier, and HubSpot integrations for seamless workflow automation.",
+  description: "Coming soon: Calendar, scheduling, automation, and CRM integrations for MaintenanceOS.",
   path: "/integrations/",
 });
 
@@ -100,7 +100,7 @@ export default function IntegrationsPage() {
   const jsonLdData = contentPageJsonLd(
     "/integrations/",
     "Integrations",
-    "Connect MaintenanceOS with your existing tools. Google Calendar, Outlook, Cal.com, Calendly, Zapier, and HubSpot integrations for seamless workflow automation.",
+    "Coming soon: Calendar, scheduling, automation, and CRM integrations for MaintenanceOS.",
     [
       { name: "Integrations", path: "/integrations/" },
     ],
@@ -112,7 +112,7 @@ export default function IntegrationsPage() {
       <PageHero
         eyebrow="Product"
         title="Integrations"
-        lede="Connect MaintenanceOS with the tools you already use. Sync calendars, automate workflows, and keep your CRM up to date — all without leaving your maintenance workflow."
+        lede="Coming soon: Calendar, scheduling, automation, and CRM integrations for MaintenanceOS."
       />
       <div className="mx-auto max-w-4xl space-y-12 px-4 py-12">
         <FunnelPathStrip linked />
@@ -138,7 +138,7 @@ export default function IntegrationsPage() {
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
               </div>
               <h3 className="text-lg font-semibold text-ink">Connect securely</h3>
-              <p className="text-sm text-muted">OAuth 2.0 flow with encrypted token storage. Your credentials never touch the browser.</p>
+              <p className="text-sm text-muted">OAuth 2.0 flow with encrypted token storage.</p>
             </div>
             <div className="rounded-[var(--mos-radius-lg)] border border-border bg-surface p-5 space-y-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent" aria-hidden="true">
@@ -166,7 +166,6 @@ export default function IntegrationsPage() {
             <li>Short-lived access tokens; automatic refresh via stored refresh tokens</li>
             <li>Minimal scopes requested — only what&apos;s needed for each integration</li>
             <li>Revoke access anytime from this page or the provider&apos;s dashboard</li>
-            <li>No credential storage in browser — all OAuth handled server-side</li>
           </ul>
         </section>
 
@@ -175,7 +174,7 @@ export default function IntegrationsPage() {
             Coming soon
           </h2>
           <p className="text-sm text-muted">
-            We&apos;re actively working on Cal.com, Calendly, Zapier, and HubSpot integrations.
+            We&apos;re actively working on Google Calendar, Outlook, Cal.com, Calendly, Zapier, and HubSpot integrations.
             <Link href="/contact/" className="text-accent underline underline-offset-2 hover:text-accent/80">
               Contact us
             </Link>

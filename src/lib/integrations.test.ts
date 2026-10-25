@@ -14,13 +14,13 @@ test("integrations library - should have correct config for each provider", () =
   const google = getProviderConfig("google");
   assert.equal(google.id, "google");
   assert.equal(google.name, "Google Calendar");
-  assert.equal(google.status, "available");
+  assert.equal(google.status, "coming-soon");
   assert.ok(google.scopes.includes("https://www.googleapis.com/auth/calendar"));
 
   const outlook = getProviderConfig("outlook");
   assert.equal(outlook.id, "outlook");
   assert.equal(outlook.name, "Outlook Calendar");
-  assert.equal(outlook.status, "available");
+  assert.equal(outlook.status, "coming-soon");
 
   const calcom = getProviderConfig("calcom");
   assert.equal(calcom.id, "calcom");
