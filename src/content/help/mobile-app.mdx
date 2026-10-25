@@ -1,25 +1,20 @@
 ---
 slug: mobile-app
 title: "Mobile App & PWA"
-description: "Pre-launch note. No app host is published on this site. Not a live app."
-date: "2025-02-07"
+description: "No app host is published on this site. Not a live app. MaintenanceOS does not publish an app host."
+date: "2025-02-01"
 author: "WorkSmartOS Team"
 category: "Features"
-tags: ["mobile", "pwa", "offline", "push-notifications", "app"]
+tags: ["notifications", "webhooks", "api", "integrations", "pre-launch"]
 ---
 
 # Mobile App & PWA
 
-MaintenanceOS does not publish an app host on this site. Not a live app.
+No app host is published on this site. Not a live app.
 
 ## What Is a PWA?
 
-A Progressive Web App combines the best of web and native apps:
-- **Installable** — Add to home screen (no App Store)
-- **Offline-capable** — Works without connection
-- **Push notifications** — Real-time alerts
-- **Auto-updates** — Always latest version
-- **Secure** — HTTPS only, service worker controlled
+No PWA capability is published on this site. Not a live app.
 
 ## Installing the PWA
 
@@ -27,107 +22,39 @@ No app host is published, so there is nothing to install from this site. Not a l
 
 ## Offline Support
 
-### What Works Offline
-- **View** assigned repairs (cached at login)
-- **Update status** (En Route, On Site, Completed) — queued
-- **Take photos** — stored locally, uploaded when online
-- **View property details** (cached)
-- **Read compliance certificates** (cached)
-
-### What Requires Connection
-- **New repairs** (create, assign)
-- **Search** properties/contractors
-- **Reports** (analytics, exports)
-- **Settings** changes
-- **Real-time chat** with tenant/manager
-
-### Conflict Resolution
-- Last-write-wins for status updates
-- Photos always upload (append-only)
-- Manager notified of offline edits on sync
+No offline behaviour is published on this site. Not a live app.
 
 ## Push Notifications
 
-### Enable Notifications
-1. Login → **Settings → Notifications → Push**
-2. Allow permission prompt
-3. Select event types:
-   - Repair assigned to me
-   - Status changes on my repairs
-   - Safety latches (emergency)
-   - Compliance deadlines
-   - Messages from tenant/manager
-
-### Notification Payload
-- Title, body, action buttons
-- Deep link to repair in app
-- Works when app closed (service worker)
-
-### Platform Notes
-- **iOS:** Requires iOS 16.4+, added to Home Screen
-- **Android:** Full support Chrome 70+
-- **Desktop:** Chrome/Edge/Safari (with PWA installed)
+No push notification setup is published on this site. Not a live setup.
 
 ## Camera & Media
 
-- **Photo capture:** Direct camera access (`<input capture="environment">`)
-- **Compression:** Auto-resize to 2MB max before upload
-- **EXIF stripping:** GPS/location data removed for privacy
-- **Multi-photo:** Select multiple, upload in background
+No camera behaviour is published on this site. Not applicable.
 
 ## Biometric Authentication
 
-**Optional** (Settings → Security → Biometric):
-- Face ID / Touch ID (iOS)
-- Fingerprint / Face Unlock (Android)
-- Windows Hello (Desktop)
-- Replaces magic link for 30 days
-- Falls back to email if failed
+No biometric behaviour is published on this site. Not applicable.
 
 ## Background Sync
 
-- **Periodic sync:** Every 15 minutes when online
-- **On connectivity change:** Immediate sync
-- **Battery aware:** Defers if low power mode
-- **Data usage:** ~50KB/sync (text only), photos separate
+No sync behaviour is published on this site. Not applicable.
 
 ## Storage Management
 
-- **Cache limit:** 50MB (configurable)
-- **Auto-evict:** Oldest unused data first
-- **Manual clear:** Settings → App → Clear Cache
-- **Photos:** Never auto-deleted (user controls)
+No storage behaviour is published on this site. Not applicable.
 
 ## Updates
 
-- **Silent update:** Service worker fetches new version in background
-- **Prompt:** "New version available — Refresh" banner
-- **Force update:** Critical security patches auto-refresh
-- **Version check:** On app focus + periodic
+No update behaviour is published on this site. Not applicable.
 
 ## Troubleshooting
 
-| Issue | Fix |
-|-------|-----|
-| "App won't install" | Use HTTPS, clear browser data, try different browser |
-| "Notifications not working" | Check OS permissions, re-enable in app settings |
-| "Offline changes lost" | Don't clear browser data; contact support for recovery |
-| "White screen on launch" | Hard refresh (Ctrl+Shift+R), check internet, reinstall |
-| "Camera not working" | Check browser permissions, try native camera app first |
+No troubleshooting is published on this site. Not applicable.
 
 ## Native App (Future)
 
-- **iOS App Store / Google Play** planned post-launch
-- **Feature parity** with PWA
-- **Additional:** Widgets, Siri Shortcuts, Android Intents
-- **Migration:** Seamless from PWA (same account)
-
-## Next Steps
-
-- [Push Notification Setup](./push-notifications)
-- [Offline Workflow Guide](./offline-workflow)
-- [PWA vs Native Comparison](./pwa-vs-native)
-- [Mobile Testing Checklist](./mobile-testing)
+No native app is published on this site. Not applicable.
 
 ---
 

@@ -1,105 +1,32 @@
 ---
 slug: notification-settings
 title: "Notification Settings"
-description: "Configure who gets notified, when, and through which channels for repairs, safety alerts, and system events."
-date: "2025-01-17"
+description: "Notification delivery is not published on this site. Not a live notification service."
+date: "2025-02-01"
 author: "WorkSmartOS Team"
-category: "Configuration"
-tags: ["notifications", "email", "sms", "slack", "alerts"]
+category: "Features"
+tags: ["notifications", "webhooks", "api", "integrations", "pre-launch"]
 ---
 
 # Notification Settings
 
-MaintenanceOS sends notifications for repair updates, safety alerts, compliance deadlines, and system events. Configure them to match your team's workflow.
+Notification delivery is not published on this site. Not a live notification service.
 
 ## Notification Channels
 
-| Channel | Use Case | Setup Required |
-|---------|----------|----------------|
-| **Email** | All notifications | None (uses workspace email) |
-| **SMS** | Emergency safety alerts only | Twilio account (admin) |
-| **Slack** | Team channel updates | Slack app install (admin) |
-| **In-app** | Real-time dashboard | Automatic |
-| **Webhook** | Custom integrations | Developer setup |
+No notification channels are published on this site. Not a live configuration.
 
 ## Notification Types
 
-### Repair Lifecycle
-- **New repair created** → Assigned manager + contractor
-- **Contractor assigned** → Manager + tenant (if portal enabled)
-- **Contractor en route** → Manager + tenant
-- **On site / work started** → Manager
-- **Repair completed** → Manager + tenant + admin (audit)
-- **Repair needs parts / follow-up** → Manager + contractor
-- **Quote submitted** → Manager (for approval)
-
-### Safety & Compliance
-- **Safety latch triggered** → All admins + designated safety officer (immediate, all channels)
-- **Gas safety certificate expiring (30/7/1 days)** → Admin + property manager
-- **EPC expiring** → Admin + property manager
-- **HMO licence expiring** → Admin
-- **Fire risk assessment due** → Admin + safety officer
-
-### System
-- **New team member joined** → Admins
-- **Contractor certificate expiring** → Admin
-- **Payment failed / subscription issue** → Billing contact
-- **API rate limit warning** → Technical contact
+No notification types are published on this site. Not applicable.
 
 ## Configuring Recipients
 
-Go to **Settings → Notifications**.
+No recipient configuration is published on this site. Not a live setup.
 
-**Per notification type, you can:**
-- Enable/disable
-- Choose channels (email, SMS, Slack, in-app)
-- Set recipients by role (Admin, Manager, Safety Officer, All)
-- Add custom email addresses
-- Set quiet hours (e.g., 22:00–07:00 for non-emergency)
+## Emergency safety alerts
 
-**Emergency safety alerts** (gas, fire, structural) **cannot be silenced** and always use all channels.
-
-## Slack Integration
-
-1. Go to Settings → Notifications → Slack
-2. Click "Add to Slack"
-3. Authorise the MaintenanceOS app
-4. Select default channel for repair updates
-5. Map notification types to channels (optional)
-
-MaintenanceOS posts rich messages with repair details, photos, and action buttons.
-
-## Webhook Events
-
-For custom integrations, configure webhooks at Settings → Integrations → Webhooks.
-
-**Event payload example:**
-```json
-{
-  "event": "repair.completed",
-  "timestamp": "2025-01-15T14:32:00Z",
-  "workspace": "wks_abc123",
-  "data": {
-    "repairId": "rep_xyz789",
-    "propertyId": "prop_456",
-    "category": "plumbing",
-    "contractorId": "ctr_111",
-    "cost": 245.00
-  }
-}
-```
-
-**Headers:** `X-MaintenanceOS-Signature` (HMAC-SHA256 for verification)
-
-## Testing Notifications
-
-Use the "Send Test Notification" button on each notification type to verify delivery.
-
-## Next Steps
-
-- [Slack Integration Guide](./slack-integration)
-- [Webhook Developer Guide](./webhooks)
-- [Safety Alert Escalation](./safety-alerts)
+No emergency alert behaviour is published on this site. Not applicable.
 
 ---
 
