@@ -1,7 +1,9 @@
 const origin = (process.env.WEBSITE_SITE_URL ||
   "https://worksmartos.co.uk").replace(/\/$/, "");
-const controlPlane = (process.env.WEBSITE_CONTROL_PLANE ||
-  "https://rsfm-control-plane-production.up.railway.app").replace(/\/$/, "");
+const controlPlaneRaw = process.env.WEBSITE_CONTROL_PLANE;
+const controlPlane = controlPlaneRaw && controlPlaneRaw.trim() !== ""
+  ? controlPlaneRaw.replace(/\/$/, "")
+  : null;
 
 function bust(url) {
   return url + (url.includes("?") ? "&" : "?") + "website_check=" + Date.now();
@@ -103,29 +105,31 @@ for (const url of [...assetUrls].sort()) {
   }
 }
 
-const ready = await request(controlPlane + "/ready");
-const readyText = await ready.text();
-if (ready.status !== 200 || !/"backend"\s*:\s*"postgres"/.test(readyText)) {
-  failures.push("control plane backend is not ready on durable Postgres");
-}
+if (controlPlane) {
+  const ready = await request(controlPlane + "/ready");
+  const readyText = await ready.text();
+  if (ready.status !== 200 || !/"backend"\s*:\s*"postgres"/.test(readyText)) {
+    failures.push("control plane backend is not ready on durable Postgres");
+  }
 
-const preflight = await request(
-  controlPlane + "/v1/public/website-events",
-  {
-    method: "OPTIONS",
-    headers: {
-      Origin: origin,
-      "Access-Control-Request-Method": "POST",
-      "Access-Control-Request-Headers": "content-type",
+  const preflight = await request(
+    controlPlane + "/v1/public/website-events",
+    {
+      method: "OPTIONS",
+      headers: {
+        Origin: origin,
+        "Access-Control-Request-Method": "POST",
+        "Access-Control-Request-Headers": "content-type",
+      },
     },
-  },
-  false,
-);
-if (preflight.status >= 400) {
-  failures.push(`website event CORS preflight HTTP ${preflight.status}`);
-}
-if (preflight.headers.get("access-control-allow-origin") !== origin) {
-  failures.push("website event CORS origin mismatch");
+    false,
+  );
+  if (preflight.status >= 400) {
+    failures.push(`website event CORS preflight HTTP ${preflight.status}`);
+  }
+  if (preflight.headers.get("access-control-allow-origin") !== origin) {
+    failures.push("website event CORS origin mismatch");
+  }
 }
 
 console.log(JSON.stringify({

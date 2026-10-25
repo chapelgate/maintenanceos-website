@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getProviderConfig, getAllProviders, generateAuthUrl, type IntegrationProviderId } from "@/lib/integrations";
+import { getProviderConfig, getAllProviders, generateAuthUrl, isProviderAvailable, type IntegrationProviderId } from "@/lib/integrations";
 import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 import { JsonLd } from "@/components/JsonLd";
@@ -56,7 +56,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
     breadcrumbLabels,
   );
 
-  const isAvailable = config.status === "available";
+  const isAvailable = isProviderAvailable(config.id);
   const authUrl = isAvailable ? await generateAuthUrl(config.id, "integrations-page") : null;
 
   return (

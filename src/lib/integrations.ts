@@ -37,7 +37,7 @@ const PROVIDER_CONFIGS: Record<IntegrationProviderId, ProviderConfig> = {
     logo: "/logos/google.svg",
     description: "Sync MaintenanceOS repair schedules with Google Calendar. Two-way sync for appointments and availability.",
     category: "calendar",
-    status: "available",
+    status: "coming-soon",
     authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
     tokenUrl: "https://oauth2.googleapis.com/token",
     scopes: [
@@ -60,7 +60,7 @@ const PROVIDER_CONFIGS: Record<IntegrationProviderId, ProviderConfig> = {
     logo: "/logos/outlook.svg",
     description: "Connect Microsoft 365 / Outlook Calendar to sync repair appointments and team availability.",
     category: "calendar",
-    status: "available",
+    status: "coming-soon",
     authUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
     tokenUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
     scopes: ["https://graph.microsoft.com/Calendars.ReadWrite", "offline_access"],
