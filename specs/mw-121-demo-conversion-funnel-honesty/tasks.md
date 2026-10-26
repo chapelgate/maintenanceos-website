@@ -1,2 +1,2 @@
-- [x] Update DemoConversionTabs helper text
+- [x] Update DemoConversionTabs helpers
 - [x] Add lock test

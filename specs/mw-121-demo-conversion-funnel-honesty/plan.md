@@ -1,1 +1,1 @@
-Add and lock helper text on DemoConversionTabs (launch + early-demo) denoting live chat denial, no-GA, no live phone provisioning, and no fake instant-live-receptionist.
+Strengthen DemoConversionTabs launch-list and early-demo helpers; lock with demo-conversion-funnel-honesty.test.mjs.
