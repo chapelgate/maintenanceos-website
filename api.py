@@ -523,6 +523,7 @@ async def pilot_synthetic_email_proof(request: Request):
     marker = _bounded_text(body.get("marker") or f"P0-PROOF-{os.urandom(4).hex()}", "marker", required=True, maximum=64)
     # Build a minimal synthetic call session for chapelgate tenant and dispatch.
     from call_notifications import dispatch_internal_call_email
+    from landlord_pilot_guards import can_create_landlord_property
     from models import Client, Property, TenantBoundary, SessionLocal
     from voice_bridge import create_call_session, close_call_session
 
@@ -532,7 +533,10 @@ async def pilot_synthetic_email_proof(request: Request):
             client = Client(name="Chapelgate synthetic proof")
             session.add(client)
             session.flush()
-        if session.query(Property).filter_by(client_id=client.id).first() is None:
+        property_exists = session.query(Property).filter_by(client_id=client.id).first() is not None
+        if not property_exists:
+            if not can_create_landlord_property(client.id):
+                raise HTTPException(403, "Landlord pilot guard rejected: market scope or property cap blocks create.")
             session.add(Property(client_id=client.id, address="Synthetic proof", postcode="CH1 1AA"))
         if session.query(TenantBoundary).filter_by(client_id=client.id).first() is None:
             session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="P0"))

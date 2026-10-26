@@ -63,6 +63,7 @@ def run_email_selftest_if_configured(*, force: bool = False) -> dict[str, Any] |
 
         try:
             from call_notifications import dispatch_internal_call_email
+            from landlord_pilot_guards import can_create_landlord_property
             from models import Client, Property, SessionLocal, TenantBoundary, CommunicationDelivery
             from voice_bridge import close_call_session, create_call_session
 
@@ -72,7 +73,10 @@ def run_email_selftest_if_configured(*, force: bool = False) -> dict[str, Any] |
                     client = Client(name="Chapelgate synthetic proof")
                     session.add(client)
                     session.flush()
-                if session.query(Property).filter_by(client_id=client.id).first() is None:
+                property_exists = session.query(Property).filter_by(client_id=client.id).first() is not None
+                if not property_exists:
+                    if not can_create_landlord_property(client.id):
+                        raise RuntimeError("Landlord pilot guard rejected: market scope or property cap blocks create.")
                     session.add(Property(client_id=client.id, address="Synthetic proof", postcode="CH1 1AA"))
                 if session.query(TenantBoundary).filter_by(client_id=client.id).first() is None:
                     session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="P0"))

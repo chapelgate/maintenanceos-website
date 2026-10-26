@@ -19,6 +19,7 @@ from commercial_release_controls import (
 )
 from idempotency import ai_side_effects_enabled
 from ingress_security import rate_setting_valid
+from landlord_pilot_guards import is_landlord_pilot_ready
 from models import RuntimeControl,SessionLocal
 from operational_logging import structured_logging_enabled
 from provider_runtime import provider_ready, voice_provider
@@ -204,6 +205,7 @@ def report():
         try:results[key]=bool(check())
         except Exception:results[key]=False
     results["voice_ready"]=provider_ready()
+    results["landlord_pilot_ready"]=is_landlord_pilot_ready()
     results["local_pre_live_ready"]=all(results[key] for key in LOCAL_CLOSED_KEYS)
     results["public_test_config_ready"]=all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and not results["realtime_voice_enabled"]
     results["controlled_call_config_ready"]=all(results[key] for key in CONTROLLED_CALL_CONFIG_KEYS) and results["voice_ready"]

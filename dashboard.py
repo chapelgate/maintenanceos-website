@@ -60,6 +60,11 @@ if page=="Command Centre":
 elif page=="New Work Order":
     st.title("New Work Order")
     with SessionLocal() as s:
+        from landlord_pilot_guards import landlord_list_refusal_reason
+        refusal=landlord_list_refusal_reason(CLIENT)
+        if refusal:
+            st.error(refusal)
+            st.stop()
         props=s.query(Property).filter_by(client_id=CLIENT).all()
         pmap={f"{x.address} ({x.postcode})":x for x in props}
         if not pmap:
