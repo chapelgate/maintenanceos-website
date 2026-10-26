@@ -26,8 +26,8 @@ export function CommercialProof() {
           {"What's live today"}
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-          Pre-launch. No invented uptime, testimonials, customer logos, awards, or certification badges. No ISO, SOC 2, or bank-grade claims
-          we have not earned.
+          Pre-launch preview — not commercial general availability. No invented uptime, testimonials, customer logos, awards, or certification badges. No ISO, SOC 2, or bank-grade claims
+          we have not earned. Not a public always-on phone service.
         </p>
         <ul className="mt-6 space-y-3">
           {verifiedCapabilities.map((card) => (
