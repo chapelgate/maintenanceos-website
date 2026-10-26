@@ -24,4 +24,7 @@
 
 - axe Playwright CI on `/` + form routes once staging exists  
 - Full keyboard QA on staging; banner vs sticky focus order  
-- Multi-field error summary  
+
+## Closed this cut
+
+- Multi-field error summary — `LeadCaptureForm` form-level summary (`data-lead-error-summary`), locked by `scripts/lead-form-error-summary.test.mjs` (mw-98 / PR #443).
