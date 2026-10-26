@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound escalation resolution reason at 1000 characters
+- [x] Run the named tests

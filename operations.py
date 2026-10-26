@@ -512,9 +512,13 @@ def close_work_order(work_order_id,actor_user_id):
         s.commit();return True
 
 
+ESCALATION_RESOLUTION_MAX = 1000
+
+
 def resolve_escalation(escalation_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason)>ESCALATION_RESOLUTION_MAX:return False
     with SessionLocal() as s:
         escalation=s.get(Escalation,escalation_id)
         work_order=s.get(WorkOrder,escalation.work_order_id) if escalation and escalation.work_order_id else None
