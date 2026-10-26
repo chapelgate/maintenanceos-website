@@ -27,9 +27,13 @@ export async function generateMetadata({ params }: ProviderPageProps) {
     });
   }
 
+  const statusNote =
+    config.status === "available"
+      ? `Connect ${config.name} with MaintenanceOS.`
+      : `${config.name} integration is coming soon — not a live connector.`;
   return contentPageMetadata({
     title: `${config.name} Integration`,
-    description: `Connect ${config.name} with MaintenanceOS. ${config.description}`,
+    description: `${statusNote} ${config.description}`,
     path: `/integrations/${config.id}/`,
   });
 }
@@ -49,21 +53,26 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
     { name: config.name, path: pagePath },
   ];
 
+  const statusBlurb =
+    config.status === "available"
+      ? `Connect ${config.name} with MaintenanceOS.`
+      : `${config.name} integration is coming soon — not a live connector.`;
   const jsonLdData = contentPageJsonLd(
     pagePath,
     `${config.name} Integration`,
-    `Connect ${config.name} with MaintenanceOS. ${config.description}`,
+    `${statusBlurb} ${config.description}`,
     breadcrumbLabels,
   );
 
   const isAvailable = isProviderAvailable(config.id);
   const authUrl = isAvailable ? await generateAuthUrl(config.id, "integrations-page") : null;
+  const isComingSoon = config.status === "coming-soon";
 
   return (
     <>
       <JsonLd data={jsonLdData} />
       <PageHero
-        eyebrow="Integration"
+        eyebrow={isComingSoon ? "Integration (planned)" : "Integration"}
         title={`${config.name} Integration`}
         lede={config.description}
       />
@@ -114,21 +123,20 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
             </div>
           )}
 
-          {!isAvailable && (
-            <div className="pt-4 border-t border-border">
-              <form action="/contact/" method="GET" className="space-y-4">
-                <input type="hidden" name="subject" value={`Integration request: ${config.name}`} />
-                <input type="hidden" name="message" value={`I&apos;m interested in the ${config.name} integration for MaintenanceOS. Please notify me when it&apos;s available.`} />
-                <button
-                  type="submit"
-                  className="inline-flex min-h-11 items-center justify-center rounded-md border border-border bg-surface px-6 py-2.5 text-sm font-semibold text-ink hover:border-accent"
-                >
-                  Notify me when available
-                </button>
-                <p className="text-sm text-muted">
-                  We&apos;ll email you when this integration is ready.
-                </p>
-              </form>
+          {!isAvailable && isComingSoon && (
+            <div className="pt-4 border-t border-border space-y-3">
+              <p className="text-sm text-muted">
+                This integration is coming soon — not a live connector on this site.
+              </p>
+              <Link
+                href={`/contact/?subject=${encodeURIComponent(`Integration enquiry: ${config.name}`)}`}
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-border bg-surface px-6 py-2.5 text-sm font-semibold text-ink hover:border-accent"
+              >
+                Ask about this integration
+              </Link>
+              <p className="text-sm text-muted">
+                Contact is a human enquiry path. This site does not send automated availability emails.
+              </p>
             </div>
           )}
         </div>
@@ -136,8 +144,13 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
         {config.setupSteps && config.setupSteps.length > 0 && (
           <section aria-labelledby="setup-heading" className="space-y-6">
             <h2 id="setup-heading" className="text-xl font-semibold text-ink">
-              Setup steps
+              {isAvailable ? "Setup steps" : "Planned setup steps"}
             </h2>
+            {!isAvailable && (
+              <p className="text-sm text-muted">
+                These steps describe the intended flow when the connector ships. They are not live instructions on this site.
+              </p>
+            )}
             <ol className="space-y-4">
               {config.setupSteps.map((step, i) => (
                 <li key={i} className="relative flex gap-4 rounded-[var(--mos-radius-lg)] border border-border bg-surface p-4">
@@ -158,7 +171,9 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
             Requested permissions
           </h2>
           <p className="text-sm text-muted">
-            We only request the minimum scopes needed for the integration to function.
+            {isAvailable
+              ? "We only request the minimum scopes needed for the integration to function."
+              : "Planned scopes for when the connector ships — not an active OAuth grant from this page."}
           </p>
           <ul className="space-y-2" role="list">
             {config.scopes.map((scope, i) => (
@@ -174,11 +189,10 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
             Security & privacy
           </h2>
           <ul className="space-y-3 text-sm text-muted list-disc list-inside">
-            <li>Tokens encrypted at rest using AES-256-GCM</li>
-            <li>Short-lived access tokens; automatic refresh via stored refresh tokens</li>
-            <li>Minimal scopes requested — only what&apos;s needed for each integration</li>
-            <li>Revoke access anytime from this page or the provider&apos;s dashboard</li>
-            <li>No credential storage in browser — all OAuth handled server-side</li>
+            <li>Planned design: short-lived tokens held server-side when a connector ships</li>
+            <li>Planned design: minimal scopes only</li>
+            <li>No revoke control on this page today — connector is coming soon</li>
+            <li>No AES-256-GCM or live OAuth claim is proved by this marketing page</li>
           </ul>
         </section>
 

@@ -79,15 +79,14 @@ function ProviderCard({
 
       <div className="pt-2">
         <Link
-          href={isAvailable ? `/integrations/${provider.id}/` : "#"}
+          href={isAvailable ? `/integrations/${provider.id}/` : `/contact/?subject=${encodeURIComponent(`Integration enquiry: ${provider.name}`)}`}
           className={`inline-flex w-full min-h-11 items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
             isAvailable
               ? "bg-accent text-on-accent hover:bg-accent-hover"
-              : "border border-border bg-surface text-ink cursor-not-allowed"
+              : "border border-border bg-surface text-ink hover:border-accent"
           }`}
-          aria-disabled={!isAvailable}
         >
-          {isAvailable ? "Connect" : "Notify me when available"}
+          {isAvailable ? "Connect" : "Ask about this integration"}
         </Link>
       </div>
     </article>
@@ -119,7 +118,7 @@ export default function IntegrationsPage() {
 
         <section aria-labelledby="providers-heading" className="space-y-6">
           <h2 id="providers-heading" className="sr-only">
-            Available integrations
+            Planned integrations
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {providers.map((provider) => (
@@ -137,22 +136,22 @@ export default function IntegrationsPage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent" aria-hidden="true">
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
               </div>
-              <h3 className="text-lg font-semibold text-ink">Connect securely</h3>
-              <p className="text-sm text-muted">OAuth 2.0 flow with encrypted token storage.</p>
+              <h3 className="text-lg font-semibold text-ink">Connect securely (planned)</h3>
+              <p className="text-sm text-muted">Design intent: OAuth 2.0 with server-held tokens. Not a live connector on this site.</p>
             </div>
             <div className="rounded-[var(--mos-radius-lg)] border border-border bg-surface p-5 space-y-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent" aria-hidden="true">
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>
               </div>
-              <h3 className="text-lg font-semibold text-ink">Configure once</h3>
-              <p className="text-sm text-muted">Map fields, set sync rules, and choose which events trigger actions in each direction.</p>
+              <h3 className="text-lg font-semibold text-ink">Configure once (planned)</h3>
+              <p className="text-sm text-muted">Field mapping and sync rules are planned for when a connector ships. Nothing syncs from this marketing page.</p>
             </div>
             <div className="rounded-[var(--mos-radius-lg)] border border-border bg-surface p-5 space-y-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent" aria-hidden="true">
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
               </div>
-              <h3 className="text-lg font-semibold text-ink">Automate with confidence</h3>
-              <p className="text-sm text-muted">Full audit log of every sync. Human clearance required for safety-critical actions.</p>
+              <h3 className="text-lg font-semibold text-ink">Human clearance first</h3>
+              <p className="text-sm text-muted">Safety-critical actions stay with authorised people. No live sync audit log is published here.</p>
             </div>
           </div>
         </section>
@@ -162,10 +161,10 @@ export default function IntegrationsPage() {
             Security & privacy
           </h2>
           <ul className="space-y-3 text-sm text-muted list-disc list-inside">
-            <li>Tokens encrypted at rest using AES-256-GCM</li>
-            <li>Short-lived access tokens; automatic refresh via stored refresh tokens</li>
-            <li>Minimal scopes requested — only what&apos;s needed for each integration</li>
-            <li>Revoke access anytime from this page or the provider&apos;s dashboard</li>
+            <li>Planned design: short-lived tokens held server-side when a connector ships — not live on this static site</li>
+            <li>Planned design: minimal scopes only for each integration</li>
+            <li>No revoke control on this page today — connectors are coming soon</li>
+            <li>No AES-256-GCM or other crypto claim is proved by this marketing page</li>
           </ul>
         </section>
 
@@ -174,11 +173,12 @@ export default function IntegrationsPage() {
             Coming soon
           </h2>
           <p className="text-sm text-muted">
-            We&apos;re actively working on Google Calendar, Outlook, Cal.com, Calendly, Zapier, and HubSpot integrations.
+            Google Calendar, Outlook, Cal.com, Calendly, Zapier, and HubSpot are listed as coming soon — not live connectors.
+            {" "}
             <Link href="/contact/" className="text-accent underline underline-offset-2 hover:text-accent/80">
               Contact us
             </Link>
-            {" to be notified when they&apos;re available or to request a specific integration."}
+            {" to ask about a specific integration. No automated availability email is sent from this site."}
           </p>
         </section>
       </div>
