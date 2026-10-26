@@ -1,0 +1,4 @@
+- [x] Create consolidated-verification.mjs gate runner
+- [x] Add consolidated-verification.test.mjs acceptance lock
+- [x] Verify exits 0 on clean main
+- [x] Commit and open draft PR
