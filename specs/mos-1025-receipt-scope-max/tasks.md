@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound ActionReceipt scope at 80 characters
+- [x] Run the named tests
