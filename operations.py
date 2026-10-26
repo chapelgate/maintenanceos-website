@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from models import *
 from decision_engine import contractor_rank,transition_allowed,work_order_allows_dispatch
 from lifecycle import transition_work_order
-from security import app_secret_ready,sign_link
+from security import app_secret_ready,contractor_link_expires_at,sign_link
 from idempotency import claim_action
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
@@ -141,11 +141,12 @@ def contractor_portal_links(work_order_id):
         approved=s.query(Approval).filter_by(work_order_id=wo.id,approval_type="DISPATCH",status="APPROVED").first()
         if not approved:return {}
     base=os.getenv("PUBLIC_BASE_URL","http://127.0.0.1:8000").rstrip("/")
+    expires_at=contractor_link_expires_at()
     return {
-      "accept":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=accept&token={sign_link('accept',work_order_id,cid)}",
-      "decline":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=decline&token={sign_link('decline',work_order_id,cid)}",
-      "availability":f"{base}/contractor/availability?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('availability',work_order_id,cid)}",
-      "complete":f"{base}/contractor/complete?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('complete',work_order_id,cid)}"
+      "accept":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=accept&token={sign_link('accept',work_order_id,cid,expires_at)}",
+      "decline":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=decline&token={sign_link('decline',work_order_id,cid,expires_at)}",
+      "availability":f"{base}/contractor/availability?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('availability',work_order_id,cid,expires_at)}",
+      "complete":f"{base}/contractor/complete?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('complete',work_order_id,cid,expires_at)}"
     }
 
 def book_slot(work_order_id,availability_id):

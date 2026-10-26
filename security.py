@@ -25,11 +25,30 @@ def verify_password(password:str,stored:str)->bool:
     except Exception:
         return False
 
-SIGNED_LINK_KINDS=frozenset({"accept","decline","availability","complete","voice_stream"})
+CONTRACTOR_LINK_TTL_DEFAULT = 86400
+CONTRACTOR_LINK_TTL_MIN = 300
+CONTRACTOR_LINK_TTL_MAX = 604800
+
+
+def contractor_link_ttl_seconds() -> int:
+    raw = os.getenv("CONTRACTOR_LINK_TTL_SECONDS", "")
+    if not raw:
+        return CONTRACTOR_LINK_TTL_DEFAULT
+    try:
+        ttl = int(raw)
+    except ValueError:
+        return CONTRACTOR_LINK_TTL_DEFAULT
+    if ttl < CONTRACTOR_LINK_TTL_MIN or ttl > CONTRACTOR_LINK_TTL_MAX:
+        return CONTRACTOR_LINK_TTL_DEFAULT
+    return ttl
+
+
+def contractor_link_expires_at(now=None) -> int:
+    base = int(time.time() if now is None else now)
+    return base + contractor_link_ttl_seconds()
+
 
 def sign_link(kind:str,work_order_id:int,subject_id:int,expires_at:int|None=None):
-    if kind not in SIGNED_LINK_KINDS:
-        raise ValueError("unsupported link kind")
     if not app_secret_ready():
         raise RuntimeError("APP_SECRET is not configured securely")
     if expires_at is None:

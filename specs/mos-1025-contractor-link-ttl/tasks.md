@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Clamp contractor portal link TTL without editing voice
+- [x] Run the named tests
