@@ -1,0 +1,4 @@
+- [x] Write spec/plan
+- [x] Bound resident comment at 4000 characters
+- [x] Run the named tests
+- [x] Run full pytest suite

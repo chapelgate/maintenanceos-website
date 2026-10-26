@@ -83,7 +83,7 @@ def _positive_amount(value) -> float:
     return result
 
 
-QUOTE_DESCRIPTION_MAX = 4000
+RESIDENT_COMMENT_MAX = 4000
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -277,7 +277,7 @@ async def quotes(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
-    description=_bounded_text(d.get("description",""),"description",maximum=QUOTE_DESCRIPTION_MAX)
+    description=_bounded_text(d.get("description",""),"description")
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -293,7 +293,7 @@ async def invoices(request:Request,client_id=Depends(require_internal_api)):
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
     invoice_number=_bounded_text(d.get("invoice_number"),"invoice_number",required=True,maximum=128)
-    description=_bounded_text(d.get("description",""),"description",maximum=QUOTE_DESCRIPTION_MAX)
+    description=_bounded_text(d.get("description",""),"description")
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -308,7 +308,7 @@ async def confirm(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resolved=d.get("resolved")
     if not isinstance(resolved,bool):raise HTTPException(400,"resolved must be a boolean")
-    comment=_bounded_text(d.get("comment",""),"comment")
+    comment=_bounded_text(d.get("comment",""),"comment",maximum=RESIDENT_COMMENT_MAX)
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
