@@ -58,7 +58,8 @@ export default function DemoPage() {
           Stages: {CREATE_JOURNEY_STEPS.map((s) => s.label).join(" → ")}.
         </p>
         <p className="mt-1 text-xs text-muted">
-          What this is not: Not a live telephone call; does not assign a live number.
+          What this is not: Not a live telephone call; does not assign a live
+          number; not an offer for sale; not a booking. Pre-launch synthetic demo.
         </p>
       </section>
 

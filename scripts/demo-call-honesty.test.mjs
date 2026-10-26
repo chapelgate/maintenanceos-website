@@ -11,7 +11,7 @@ test("demo timeline describes a scripted browser preview", () => {
   assert.match(demo, /What the scripted preview does/);
   assert.match(demo, /A person describes a repair in the browser preview/);
   assert.match(demo, /Not a live telephone call/);
-  assert.match(demo, /does not assign a live number/);
+  assert.match(demo, /does not assign a live\s+number/);
 });
 
 test("demo timeline does not describe a telephone call", () => {
