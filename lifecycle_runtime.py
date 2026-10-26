@@ -43,6 +43,24 @@ SUPPORTED_RUNTIME_CLASSES = frozenset(
 )
 
 
+
+VALID_LIFECYCLE_AUDIT_EVENTS = frozenset(
+    {
+        "DATA_LIFECYCLE_HOLD_CREATED",
+        "DATA_LIFECYCLE_HOLD_RELEASED",
+        "DATA_LIFECYCLE_SWEEP_QUEUED",
+        "DATA_LIFECYCLE_ACTION_APPLIED",
+        "DATA_LIFECYCLE_SWEEP_COMPLETED",
+    }
+)
+
+
+def _lifecycle_audit(session, work_order_id, actor, event: str, detail: str) -> None:
+    if event not in VALID_LIFECYCLE_AUDIT_EVENTS:
+        raise LifecycleRuntimeError("invalid_lifecycle_audit_event")
+    audit(session, work_order_id, actor, event, detail)
+
+
 def _require_client(session, client_id: int) -> None:
     if not isinstance(client_id, int) or client_id <= 0 or session.get(Client, client_id) is None:
         raise LifecycleRuntimeError("valid_tenant_required")
@@ -76,7 +94,7 @@ def create_hold(
     )
     session.add(hold)
     session.flush()
-    audit(
+    _lifecycle_audit(
         session,
         None,
         actor,
@@ -94,7 +112,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     if hold.active:
         hold.active = False
         hold.released_at = utcnow()
-        audit(
+        _lifecycle_audit(
             session,
             None,
             (actor or "").strip() or "Lifecycle Controller",
@@ -140,7 +158,7 @@ def queue_retention_sweep(
     )
     session.add(job)
     session.flush()
-    audit(
+    _lifecycle_audit(
         session,
         None,
         actor,
@@ -383,7 +401,7 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
     else:
         raise LifecycleRuntimeError(f"runtime_class_not_supported:{decision.data_class}")
 
-    audit(
+    _lifecycle_audit(
         session,
         work_order_id,
         "Lifecycle Controller",
@@ -424,7 +442,7 @@ def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
 
     request.status = "COMPLETED"
     request.completed_at = now
-    audit(
+    _lifecycle_audit(
         session,
         None,
         "Lifecycle Controller",
