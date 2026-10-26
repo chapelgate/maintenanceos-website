@@ -111,6 +111,11 @@ def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
         raise HTTPException(400, f"{name} is too long")
     return result
 
+COMPLETION_NOTE_MAX = 4000
+
+def normalize_completion_note(value) -> str:
+    return _bounded_text(value, "note", required=True, maximum=COMPLETION_NOTE_MAX)
+
 def require_internal_api(request:Request):
     expected=os.getenv("INTERNAL_API_TOKEN","")
     if len(expected)<32:
@@ -295,6 +300,7 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
     require_contractor_portal()
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    note=normalize_completion_note(note)
     try:evidence_id=submit_completion(work_order_id,contractor_id,note,evidence_url,token)
     except (TenantAccessError,SafetyStateError):evidence_id=None
     if not evidence_id:raise HTTPException(409,"Job is not available for this action")

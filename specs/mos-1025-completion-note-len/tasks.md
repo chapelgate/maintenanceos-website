@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound completion notes on contractor complete
+- [x] Run the named tests
