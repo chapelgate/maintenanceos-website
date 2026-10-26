@@ -1,108 +1,44 @@
 ---
 slug: accessibility-features
 title: "Accessibility Features"
-description: "How MaintenanceOS supports users with disabilities: screen readers, keyboard navigation, high contrast, and Welsh language."
+description: "Accessibility features of unpublished product portals are not published on this site. Not a verified WCAG claim."
 date: "2025-02-06"
 author: "WorkSmartOS Team"
 category: "Features"
-tags: ["accessibility", "screen-reader", "keyboard", "wcag", "welsh", "inclusive-design"]
+tags: ["accessibility", "pre-launch"]
 ---
 
 # Accessibility Features
 
-MaintenanceOS is designed to be accessible to everyone. We are working toward WCAG 2.2 Level AA; an independent audit is planned before public launch.
+MaintenanceOS is pre-launch. Accessibility features of unpublished product portals are not published on this site. Not a verified WCAG claim. We are working toward WCAG 2.2 AA; an independent audit is planned before public launch.
 
-## Current Accessibility Status
+## Current status
 
-**Target:** WCAG 2.2 AA — independent audit planned pre-launch
-**Audit:** Independent audit planned pre-launch
-**Known gaps:** Documented at `/accessibility/`
+No conformance score or verified audit result is published on this site. Known website notes stay at `/accessibility/`. Not verified.
 
-## Dashboard & Manager Portal
+## Manager, tenant, and contractor portals
 
-### Keyboard Navigation
-- **Tab order:** Logical, follows visual layout
-- **Focus indicators:** Visible 3px accent ring on all interactive elements
-- **Skip links:** "Skip to main content" on every page
-- **Landmarks:** `<main>`, `<nav>`, `<aside>`, `<header>`, `<footer>` properly marked
-- **Shortcuts:** `Alt+1` Dashboard, `Alt+2` Repairs, `Alt+3` Properties, `Alt+4` Compliance, `Alt+5` Reports
+No keyboard shortcut map, portal landmark list, speech-input feature, or offline portal behaviour is published on this site. Not a live portal.
 
-### Screen Reader Support
-- **ARIA labels** on all icon-only buttons
-- **Live regions** for status updates (repair count, notifications)
-- **Table headers** scoped correctly (`<th scope="col">`)
-- **Form labels** explicitly associated (`<label for>`)
-- **Error announcements** via `aria-live="assertive"`
-- **Modal dialogs** trap focus, announce title
+## API and developer tools
 
-### Visual Design
-- **Colour contrast:** 4.5:1 minimum (text), 3:1 (UI components)
-- **No colour-only information** — Icons + text, patterns + colour
-- **Text scaling:** Supports 200% zoom without horizontal scroll
-- **Reduced motion:** Respects `prefers-reduced-motion`
-- **High contrast mode:** Windows High Contrast / forced colours supported
+No accessibility guarantee for API docs or webhook payloads is published on this site. Not a live API.
 
-## Tenant Portal
+## Testing claims
 
-### Additional Features
-- **Simple language** — Plain English, no jargon
-- **Step-by-step repair form** — One question per screen option
-- **Voice input** — HTML5 speech recognition for description field
-- **Large touch targets** — 48×48px minimum
-- **Welsh language** — Full Cymraeg translation (toggle in header)
+No claim that every PR meets an axe or Lighthouse accessibility threshold is published on this site. Not verified.
 
-### Welsh Language Support
-- All user-facing text translated
-- Date formats: DD/MM/YYYY (Welsh), DD MMM YYYY (English)
-- Currency: £ (both)
-- Right-to-left: Not required for Welsh
+## Reporting issues
 
-## Contractor Portal
+This site does not publish an accessibility inbox. Not a live accessibility desk.
 
-- Simplified interface — fewer navigation items
-- Large buttons for status updates
-- Photo upload with camera access
-- Offline-capable (PWA) — queue updates when reconnected
+## Accessibility statement
 
-## API & Developer Tools
+The public statement lives at `/accessibility/`. No unpublished help links are listed here. Not applicable.
 
-- **API docs:** Keyboard navigable, screen reader compatible
-- **Webhook payloads:** Structured, predictable, documented
-- **Error messages:** Clear, actionable, no jargon
+## Next steps
 
-## Testing & Validation
-
-### Automated (CI)
-- **axe-core** on every PR (0 critical, 0 serious)
-- **Lighthouse CI** accessibility score ≥ 95
-- **TypeScript** strict mode catches missing ARIA
-
-### Manual (Pre-release)
-- **Screen readers:** NVDA (Windows), VoiceOver (Mac/iOS), TalkBack (Android)
-- **Keyboard only:** Full workflow testing
-- **Zoom:** 200%, 400% testing
-- **Colour blindness:** Simulators (Protanopia, Deuteranopia, Tritanopia)
-- **Voice control:** macOS Voice Control, Windows Speech Recognition
-
-## Reporting Issues
-
-Found an accessibility barrier? This site does not publish an accessibility inbox. Not a live accessibility desk.
-
-## Accessibility Statement
-
-Full statement at `/accessibility/` including:
-- Conformance level & scope
-- Known limitations
-- Testing methodology
-- Contact for feedback
-- Remediation roadmap
-
-## Next Steps
-
-- [Keyboard Shortcuts Reference](./keyboard-shortcuts)
-- [Screen Reader Testing Guide](./screen-reader-testing)
-- [Welsh Language Guide](./welsh-language)
-- [Accessibility Conformance Report](./accessibility-conformance)
+No next-step help links are published on this site. Not applicable.
 
 ---
 
