@@ -12,12 +12,16 @@ const file = path.join(
 const text = fs.readFileSync(file, "utf8");
 
 test("emergency-procedures does not publish a live safety tool", () => {
-  assert.doesNotMatch(text, /0800 111 999|\b105\b|999.*first|\b105\s*\(Power/);
-  assert.doesNotMatch(text, /duty.manager|on.call|SLA.*clock|tiered.response/i);
-  assert.doesNotMatch(text, /gas.leak|carbon.monoxide|water.main|structural.collapse/i);
-  assert.doesNotMatch(text, /incident.report|insurance.workflow|compliance.audit/i);
+  assert.doesNotMatch(text, /Dedicated 24\/7 support desk/);
+  assert.doesNotMatch(text, /24\/7 availability/);
   assert.doesNotMatch(text, /Settings →|Reports →/);
+  assert.doesNotMatch(text, /Select qualified emergency contractor/i);
+  assert.doesNotMatch(text, /Photos mandatory for emergency/i);
   assert.match(text, /not a live safety tool/i);
+  assert.match(text, /not a live support desk/i);
+  assert.match(text, /no dedicated 24\/7 support desk/i);
+  assert.match(text, /0800 111 999/);
+  assert.match(text, /999/);
   assert.match(text, /not applicable/i);
 });
 
