@@ -94,17 +94,17 @@ export default function HowWeKeepControlPage() {
               Deep details &amp; technical boundaries
             </h2>
             <p className="mt-2 text-sm text-muted">
-              Operational rules, statutory records, and continuous verification.
+              Operational rules, statutory records, and product design intent for verification.
             </p>
           </div>
 
           <div className="space-y-3">
             <Accordion summary="How the critical safety latch works">
               <p>
-                When an intake report indicates hazards to life or property—such as gas, electrical sparking, or severe leaks—the server applies an immutable latch.
+                Product design intent: when an intake report indicates hazards to life or property—such as gas, electrical sparking, or severe leaks—the product path applies a safety latch that holds the ticket.
               </p>
               <p>
-                This latch halts automated transitions and requires an authorised human supervisor to review and explicitly clear the ticket before contractor dispatch.
+                That latch is designed to halt automated transitions and require an authorised human supervisor to review and explicitly clear the ticket before contractor dispatch. Not a live latch runtime on this marketing site.
               </p>
             </Accordion>
 
