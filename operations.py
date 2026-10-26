@@ -411,12 +411,16 @@ def approve_operational_action(approval_id,actor_user_id,reason=""):
         s.commit();return True
 
 
-TRIAGE_REASON_MAX = 1000
+TRIAGE_CATEGORIES = frozenset({
+    "Plumbing","Heating","Electrical","Drainage","Roofing",
+    "Locks / access","Doors","Windows","Appliances","Damp / mould",
+    "Pests","Structural","Fire safety","General maintenance"
+})
 
 
 def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
     reason=(reason or "").strip();category=(category or "").strip();trade=(trade or "").strip()
-    if len(reason)<5 or len(reason)>TRIAGE_REASON_MAX or not category or category=="Unknown" or not trade or urgency not in {"P2","P3"}:return False
+    if len(reason)<5 or not category or category not in TRIAGE_CATEGORIES or not trade or urgency not in {"P2","P3"}:return False
     with SessionLocal() as s:
         approval=s.get(Approval,approval_id)
         if not approval or approval.status!="PENDING" or approval.approval_type!="TRIAGE":return False
