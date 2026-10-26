@@ -159,7 +159,7 @@ export default function CookiesPage() {
               Reserved for required site operation if and when named. Inventory
               is empty — do not invent cookie names. Consent-preference storage
               is not implemented. Do not put analytics or marketing here.
-              [ANDY: list when known].
+              None currently — pending counsel confirmation if any are named.
             </p>
           </section>
 
@@ -172,8 +172,7 @@ export default function CookiesPage() {
             </h2>
             <p className="mt-2 text-muted">
               Remember UI or locale choices if introduced &mdash; non-essential;
-              default off until consent &mdash; [ANDY: list or &ldquo;none currently&rdquo;].
-              None currently.
+              default off until consent &mdash; none currently.
             </p>
           </section>
 
@@ -309,7 +308,7 @@ export default function CookiesPage() {
               Changes to this notice
             </h2>
             <p className="mt-2 text-muted">
-              [ANDY: version and date practice for material updates.]
+              Pending counsel confirmation — version and date practice for material updates not yet set.
             </p>
           </section>
 

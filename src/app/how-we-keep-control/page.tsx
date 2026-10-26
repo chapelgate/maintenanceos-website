@@ -94,41 +94,41 @@ export default function HowWeKeepControlPage() {
               Deep details &amp; technical boundaries
             </h2>
             <p className="mt-2 text-sm text-muted">
-              Operational rules, statutory records, and continuous verification.
+              Operational rules, statutory records, and product design intent for verification.
             </p>
           </div>
 
           <div className="space-y-3">
             <Accordion summary="How the critical safety latch works">
               <p>
-                When an intake report indicates hazards to life or property—such as gas, electrical sparking, or severe leaks—the server applies an immutable latch.
+                Product design intent: when an intake report indicates hazards to life or property—such as gas, electrical sparking, or severe leaks—the product path applies a safety latch that holds the ticket.
               </p>
               <p>
-                This latch halts automated transitions and requires an authorised human supervisor to review and explicitly clear the ticket before contractor dispatch.
+                That latch is designed to halt automated transitions and require an authorised human supervisor to review and explicitly clear the ticket before contractor dispatch. Not a live latch runtime on this marketing site.
               </p>
             </Accordion>
 
             <Accordion summary="Auditable evidence and job records">
               <p>
-                Every caller interaction, transcription extract, hazard detection score, and staff clearance decision is permanently logged with timestamps.
+                Product design intent: caller interaction, transcription extract, hazard detection score, and staff clearance decision are logged with timestamps in the MaintenanceOS product path.
               </p>
               <p>
-                Records provide complete traceability for statutory compliance and Housing Ombudsman evidence without tampering.
+                That design aims for auditable evidence for statutory and Housing Ombudsman review. This marketing site does not itself operate live call logging or claim a live production evidence store.
               </p>
             </Accordion>
 
             <Accordion summary="Tenant isolation and multi-organisation data controls">
               <p>
-                Data is strictly partitioned by organisation ID at the database layer. No cross-organisation data sharing or cross-tenant leakage is permitted.
+                Product design intent: organisation data is partitioned by organisation ID at the database layer so cross-organisation leakage is not permitted in the product path.
               </p>
               <p>
-                Automated continuous integration regressions enforce database partitioning across all release builds.
+                Targeted product regressions are intended to enforce that partitioning on product release builds. This marketing site does not host multi-tenant customer data.
               </p>
             </Accordion>
 
-            <Accordion summary="Checkpoint test verification (196 automated test suite)">
+            <Accordion summary="Checkpoint test verification (pinned product evidence)">
               <p>
-                Every deployment must pass 196 automated safety and claims verification tests before shipping.
+                Safety claims and test counts are pinned to the audited product checkpoint.
               </p>
               <p>
                 Tests verify that safety latches fail closed, payment operations remain prohibited, and emergency routing cannot be bypassed.

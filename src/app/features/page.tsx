@@ -54,7 +54,7 @@ const BENTO_FEATURES: BentoFeatureCard[] = [
     id: "human-transfer",
     title: "Explicit Human Transfer",
     status: "UNDER_TEST",
-    desc: "Transfers to your team on request; fails safe if unreachable.",
+    desc: "UNDER_TEST preview: explicit-request person transfer in product source; transfer quality remains under retest — not a live always-on transfer desk on this site.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -68,7 +68,7 @@ const BENTO_FEATURES: BentoFeatureCard[] = [
     id: "evidence-audit-trails",
     title: "Evidence Audit Trails",
     status: "VERIFIED",
-    desc: "Timestamped logs of every intake event and clearance decision for compliance.",
+    desc: "Designed-for timestamped logs of intake events and clearance decisions for compliance (product source).",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -95,7 +95,7 @@ const BENTO_FEATURES: BentoFeatureCard[] = [
     id: "tenant-isolation",
     title: "Multi-Tenant Data Isolation",
     status: "VERIFIED",
-    desc: "Strict database partitioning ensures zero cross-organisation data exposure.",
+    desc: "Designed strict database partitioning for tenant isolation (product source).",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <ellipse cx="12" cy="5" rx="9" ry="3"/>
@@ -127,10 +127,10 @@ export default function FeaturesPage() {
 
         <section id="whats-live-today" aria-labelledby="whats-live-today-heading">
           <h2 id="whats-live-today-heading" className="text-xl font-semibold text-ink mb-3">
-            {"What's live today"}
+            {"Preview capability inventory"}
           </h2>
           <p className="mb-3 text-sm text-muted">
-            Preview capability inventory for the pre-launch demo — not commercial
+            Capability cards for the pre-launch demo — not commercial
             general availability and not a public always-on phone service.
           </p>
           <HonestyBanner compact>

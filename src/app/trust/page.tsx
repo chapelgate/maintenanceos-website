@@ -141,7 +141,7 @@ export default function TrustPage() {
           <ul className="mt-4 space-y-2 text-sm text-muted list-disc list-inside">
             <li>ISO 27001 (Information Security Management)</li>
             <li>SOC 2 Type I or Type II</li>
-            <li>Cyber Essentials (PLANNED — target Q2 2027)</li>
+            <li>Cyber Essentials (PLANNED — not held)</li>
             <li>ISO 9001 (Quality Management)</li>
             <li>PCI DSS</li>
             <li>HIPAA</li>

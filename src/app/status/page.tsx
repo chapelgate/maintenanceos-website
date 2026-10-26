@@ -18,13 +18,14 @@ export default function StatusPage() {
       <PageHero
         eyebrow="Placeholder"
         title="Service status"
-        lede="This page describes how a future public status surface would work. It does not show live uptime metrics."
+        lede="This page is a placeholder. It is not a live status page and does not publish an uptime figure."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12 text-muted">
         <p>
           When MaintenanceOS publishes a real status page, it will report
           verified component health from monitored systems — not invented
-          percentages.
+          percentages. This page describes how a future public status surface
+          would work; it does not show live uptime metrics.
         </p>
         <section aria-labelledby="status-components">
           <h2

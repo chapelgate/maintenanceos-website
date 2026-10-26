@@ -25,7 +25,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "who-we-are",
     title: "Who we are (data controller)",
-    body: "Chapelgate Limited (company number 12340004), registered office C/O Wainwrights Accountants, Faversham House, Wirral International Business Park, Old Hall Road, Bromborough, Wirral, CH62 3NX. Director: Andrew John Cartwright. ICO registration: [ANDY: ICO registration number].",
+    body: "Chapelgate Limited (company number 12340004), registered office C/O Wainwrights Accountants, Faversham House, Wirral International Business Park, Old Hall Road, Bromborough, Wirral, CH62 3NX. Director: Andrew John Cartwright. ICO registration: pending counsel confirmation — number not published on this draft notice.",
   },
   {
     id: "scope",
@@ -65,12 +65,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "sharing",
     title: "Who we share data with",
-    body: "The website is hosted and processed by DigitalOcean. Transfers of personal data outside the UK/EEA are covered by the UK IDTA / UK Addendum. No third-party analytics vendor is used. For a full list of subprocessors, see the <a href=\"/subprocessors/\" className=\"text-accent underline\">Subprocessor page</a>.",
+    body: "The website is hosted and processed by DigitalOcean. Transfers of personal data outside the UK/EEA are covered by the UK IDTA / UK Addendum. No third-party analytics vendor is used. For the draft planned subprocessor register (pending legal review — not a live Twilio/SendGrid/Google processing claim on this static pre-launch site), see the <a href=\"/subprocessors/\" className=\"text-accent underline\">Subprocessor page</a>.",
   },
   {
     id: "transfers",
     title: "International transfers",
-    body: "[ANDY: transfer mechanisms if any processor is outside the UK/EEA.]",
+    body: "Pending counsel review: transfer mechanisms if any processor is outside the UK/EEA are not yet final on this draft notice.",
   },
   {
     id: "retention",
@@ -95,12 +95,12 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "children",
     title: "Children",
-    body: "[ANDY: age threshold for children] — this site is aimed at businesses and property professionals, not children.",
+    body: "Pending counsel review: age threshold for children not yet final — this site is aimed at businesses and property professionals, not children.",
   },
   {
     id: "changes",
     title: "Changes to this notice",
-    body: "[ANDY: how updates will be shown (date and material-change practice).]",
+    body: "Pending counsel review: how updates will be shown (date and material-change practice) is not yet final on this draft notice.",
   },
   {
     id: "contact",

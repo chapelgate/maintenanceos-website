@@ -21,7 +21,7 @@ The WorkSmartOS voice demo runs in your browser. No phone number. No app install
 5. **Review the draft** — see what the AI heard and structured
 6. **Safety latches apply** — gas, electrical, safeguarding, high-value flags appear
 
-The demo uses Google Gemini for language understanding and Piper for text-to-speech, running client-side where possible and via our API for the voice components.
+The demo uses Google Gemini for language understanding and Piper for text-to-speech, running client-side where possible and via authorised preview endpoints when those endpoints are configured. Not a published public API.
 
 ## What It Is Not
 
@@ -35,8 +35,8 @@ The demo uses Google Gemini for language understanding and Piper for text-to-spe
 
 - ✅ Functional preview of structured fact extraction from speech
 - ✅ Safety latch demonstration (gas/electrical/safeguarding/high-value)
-- ✅ Browser-based — works on desktop and mobile
-- ✅ No data retained after session ends
+- ✅ Browser-based preview path (desktop and mobile browser support varies; not a verified WCAG claim)
+- ✅ Session retention is not published as a guarantee on this site. Not a verified retention claim.
 - ✅ Honest about pre-launch status
 
 ## Preview Demo Number (Under Testing)
@@ -46,8 +46,8 @@ We are testing a Twilio-powered preview demo number that routes to the same voic
 - **Availability**: only when the preview gate is enabled — not a public 24/7 answering service
 - **Scope**: Greeting + structured intake only
 - **Safety**: Same safety latches apply
-- **Data**: Call audio processed per our subprocessors list (/subprocessors/)
-- **Cost**: Free during pre-launch testing
+- **Data**: When enabled, call audio is processed under the draft subprocessors register (/subprocessors/). Not a live processing claim for every vendor listed.
+- **Cost**: No published price or free-trial promise on this site. Not a commercial offer.
 
 The preview number is gated behind the same voice gate enforcement (S7 in our master plan) — low-confidence fields reported as "Unknown — not found", not guessed.
 

@@ -61,12 +61,19 @@ test("repeated blocks stay in full once", () => {
   assert.equal(core.length, 1);
 });
 
-test("what's live today appears at most once in each page file", () => {
+test("preview-inventory heading replaces What's live today", () => {
   const pages = files.filter((item) => item.file.endsWith("page.tsx"));
+  let oldCount = 0;
   for (const item of pages) {
-    const count = item.text.match(/What's live today/g)?.length ?? 0;
-    assert.ok(count <= 1, item.file);
+    oldCount += (item.text.match(/What's live today/g) ?? []).length;
   }
+  assert.equal(oldCount, 0);
+  const features = pages.find((item) => item.file.endsWith("features/page.tsx"));
+  assert.ok(features, "features page missing");
+  assert.equal((features.text.match(/Preview capability inventory/g) ?? []).length, 1);
+  const proof = fs.readFileSync(path.join(ROOT, "src/components/CommercialProof.tsx"), "utf8");
+  assert.equal((proof.match(/Preview capability inventory/g) ?? []).length, 1);
+  assert.doesNotMatch(proof, /What's live today/);
 });
 
 test("company number appears on legal pages", () => {

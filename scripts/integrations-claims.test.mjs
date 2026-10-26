@@ -34,30 +34,33 @@ test("integrations-claims - integrations page does not say credentials never tou
 
   assert.ok(
     !content.toLowerCase().includes("credentials never touch the browser"),
-    "Page must not contain 'credentials never touch the browser'"
+    "Page must not contain 'credentials never touch the browser'",
   );
 
   assert.ok(
     content.includes('provider.status === "available"'),
-    "Listing page must gate Connect on provider.status === \"available\""
+    "Listing page must gate Connect on provider.status === \"available\"",
   );
   assert.ok(
-    content.includes('{isAvailable ? "Connect" : "Notify me when available"}'),
-    "Connect label must be gated on isAvailable"
+    content.includes('{isAvailable ? "Connect" : "Ask about this integration"}'),
+    "Coming-soon label must be Ask about this integration",
   );
 });
 
 test("integrations-claims - Connect button is gated on isProviderAvailable", () => {
-  const providerPagePath = resolve(rootDir, "src/app/integrations/[provider]/page.tsx");
+  const providerPagePath = resolve(
+    rootDir,
+    "src/app/integrations/[provider]/page.tsx",
+  );
   const content = readFileSync(providerPagePath, "utf-8");
 
   assert.ok(content.includes("isProviderAvailable"), "Must import isProviderAvailable");
   assert.ok(
     content.includes("isProviderAvailable(config.id)"),
-    "Must use isProviderAvailable to determine availability"
+    "Must use isProviderAvailable to determine availability",
   );
   assert.ok(
     content.includes("{isAvailable && authUrl && ("),
-    "Connect button must be gated on isAvailable && authUrl"
+    "Connect button must be gated on isAvailable && authUrl",
   );
 });
