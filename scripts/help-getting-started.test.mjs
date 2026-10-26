@@ -41,7 +41,9 @@ test("getting-started does not publish workspaces, properties, invites, rules, c
   assert.doesNotMatch(text, /Phone.*Twilio/);
   assert.doesNotMatch(text, /API.*custom integrations/);
   assert.doesNotMatch(text, /Run a Test Repair/);
-  assert.doesNotMatch(text, /test repair/);
+  assert.doesNotMatch(text, /submit a test repair/i);
+  assert.match(text, /test repairs are not published/i);
+  assert.match(text, /No test repair submission/);
   assert.doesNotMatch(text, /Configure Contractors/);
   assert.doesNotMatch(text, /Set Up Notifications/);
   assert.doesNotMatch(text, /Repair Lifecycle/);
