@@ -38,6 +38,21 @@ export default function GlobalError({
               Try again
             </button>
           </p>
+          <p>
+            <a
+              href="/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Back to the homepage
+            </a>
+            {" · "}
+            <a
+              href="/contact/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Contact
+            </a>
+          </p>
         </main>
       </body>
     </html>
