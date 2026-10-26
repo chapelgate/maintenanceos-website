@@ -24,7 +24,7 @@ export default function SecurityPage() {
       <PageHero
         eyebrow="Trust · Pre-launch"
         title="How we keep your data separate and your actions on record"
-        lede="Tenant isolation, zero client-money execution, and an immutable audit trail. Controls sit in source code, not marketing claims."
+        lede="Tenant isolation, zero client-money execution, and an audit trail designed into the product. Controls sit in source code, not marketing claims. Not a live production guarantee on this site."
       />
 
       <section className="mx-auto max-w-6xl px-4 py-12">
@@ -43,7 +43,7 @@ export default function SecurityPage() {
               </svg>
             }
             title="Tenant Isolation"
-            description="Strict separation of organisation records. Data stays inside your workspace, verified by automated test suites."
+            description="Strict separation of organisation records inside your workspace. Enforcement paths are tested in source code."
           />
 
           <BentoCard
@@ -63,7 +63,7 @@ export default function SecurityPage() {
               </svg>
             }
             title="Audit Trails"
-            description="Every intake event and supervisor decision is permanently recorded with user attribution and timestamps."
+            description="Intake events and supervisor decisions are recorded with timestamps and attribution. Persistence is scoped to this pre-launch demo data, not a live customer record."
           />
 
           <BentoCard
@@ -99,7 +99,7 @@ export default function SecurityPage() {
           Operational verification
         </h2>
         <p className="text-sm text-muted">
-          Local acceptance on 10 September 2026 included a full automated test pass, a closed local run, and a backup and restore check. Recorded build checks and security checks passed on the canonical application code. That is not an uptime percentage, latency guarantee, or SLA.
+          Local acceptance on 10 September 2026 included a full automated test pass, a closed local run, and a backup and restore check. Recorded build checks and security checks passed on the canonical application code. That is not an uptime percentage, latency guarantee, production SLA, or live-release guarantee.
         </p>
         <p className="text-sm text-muted">
           Website learning reads only a small, bounded set of public HTTPS pages. Here, private/internal addresses are blocked, and robots.txt is honoured.
