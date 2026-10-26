@@ -48,9 +48,6 @@ def _require_client(session, client_id: int) -> None:
         raise LifecycleRuntimeError("valid_tenant_required")
 
 
-SCOPE_ID_MAX = 200
-
-
 def create_hold(
     session,
     *,
@@ -63,8 +60,6 @@ def create_hold(
     _require_client(session, client_id)
     scope = (scope or "").strip()
     scope_id = (scope_id or "").strip()
-    if len(scope_id) > SCOPE_ID_MAX:
-        raise LifecycleRuntimeError("hold_scope_id_too_long")
     reason = (reason or "").strip()
     actor = (actor or "").strip()
     if scope not in {"tenant", "record", "subject", "data_class"}:
@@ -109,7 +104,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     return hold
 
 
-SUBJECT_ID_MAX = 200
+SWEEP_REASON_MAX = 1000
 
 
 def queue_retention_sweep(
@@ -119,22 +114,21 @@ def queue_retention_sweep(
     run_at: datetime,
     actor: str,
     reason: str = "Scheduled retention sweep",
-    subject_id: str = "",
 ) -> tuple[DataLifecycleRequest, AutomationJob]:
     _require_client(session, client_id)
     actor = (actor or "").strip()
-    subject_id = (subject_id or "").strip()
+    reason = (reason or "").strip()
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
-    if len(subject_id) > SUBJECT_ID_MAX:
-        raise LifecycleRuntimeError("subject_id_too_long")
+    if len(reason) > SWEEP_REASON_MAX:
+        raise LifecycleRuntimeError("sweep_reason_too_long")
     request = DataLifecycleRequest(
         client_id=client_id,
         request_type="RETENTION_SWEEP",
-        subject_id=subject_id,
+        subject_id="",
         status="PENDING",
         requested_by=actor,
-        reason=(reason or "").strip(),
+        reason=reason,
     )
     session.add(request)
     session.flush()
