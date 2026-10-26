@@ -43,7 +43,13 @@ def ai_side_effects_enabled(session) -> bool:
         return False
 
 
+AI_SIDE_EFFECT_REASON_MAX = 500
+
+
 def set_ai_side_effects(session, enabled: bool, *, actor: str, reason: str) -> None:
+    reason = (reason or "").strip()
+    if len(reason) > AI_SIDE_EFFECT_REASON_MAX:
+        raise ValueError("AI side-effect reason too long")
     control = session.get(RuntimeControl, "AI_SIDE_EFFECTS")
     if control is None:
         control = RuntimeControl(key="AI_SIDE_EFFECTS")
@@ -51,4 +57,4 @@ def set_ai_side_effects(session, enabled: bool, *, actor: str, reason: str) -> N
     control.enabled = enabled
     control.updated_at = utcnow()
     control.updated_by = actor
-    control.reason = (reason or "").strip()
+    control.reason = reason
