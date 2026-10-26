@@ -16,6 +16,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/api/",
           "/dashboard/",
+          "/status/",
+          "/buyers/",
           "/create/*?step=",
           "/_next/",
           "/static/",
