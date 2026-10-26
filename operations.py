@@ -351,8 +351,12 @@ def confirm_appointment(work_order_id,resident_id,event_key):
         s.commit();return True
 
 
+APPROVAL_REASON_MAX = 1000
+
+
 def approve_operational_action(approval_id,actor_user_id,reason=""):
     reason=(reason or "").strip()
+    if len(reason)>APPROVAL_REASON_MAX:return False
     with SessionLocal() as s:
         approval=s.get(Approval,approval_id)
         if not approval or approval.status!="PENDING" or approval.approval_type not in APPROVAL_ROLES:return False
