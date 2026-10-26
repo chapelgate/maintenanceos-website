@@ -125,16 +125,16 @@ export function DemoConversionTabs() {
         hidden={tab !== "launch"}
         className="mt-6"
       >
-        {tab === "launch" ? (
-          <div id="launch">
-            <LeadCaptureForm
-              leadType="launch_list"
-              title="Join the launch list"
-              helper="Updates only. No instant live receptionist and no live number."
-              submitLabel="Join launch list"
-            />
-          </div>
-        ) : null}
+{tab === "launch" ? (
+            <div id="launch">
+              <LeadCaptureForm
+                leadType="launch_list"
+                title="Join the launch list"
+                helper="Updates only — not a live support desk, not a GA support desk, no live chat, no live phone provisioning, and no response-time SLA."
+                submitLabel="Join launch list"
+              />
+            </div>
+          ) : null}
       </div>
 
       <div
@@ -149,7 +149,7 @@ export function DemoConversionTabs() {
             <LeadCaptureForm
               leadType="early_demo"
               title="Request an early access briefing"
-              helper="A human briefing about fit and what is verified today — not live number provisioning. No spam, no fake “instant live receptionist” claims."
+              helper="A human briefing about fit and what is verified today — not live number provisioning, not a GA support desk, no live chat, and no response-time SLA. No spam, no fake “instant live receptionist” claims."
               submitLabel="Request early access"
               showMessage
             />
