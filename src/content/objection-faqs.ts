@@ -37,7 +37,7 @@ export const objectionFaqItems: readonly ObjectionFaqItem[] = [
   {
     question: "What if the caller asks for a person?",
     answer:
-      "The assistant immediately transfers to your team or latches the request for human callback.",
+      "In product source, transfer is explicit-request-only and still under retest. This site does not claim a live always-on transfer desk; unknown or critical cases stay latched for human review.",
   },
   {
     question: "Can the AI dispatch a contractor?",
