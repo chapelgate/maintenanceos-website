@@ -468,9 +468,13 @@ def reject_operational_action(approval_id,actor_user_id,reason):
         s.commit();return True
 
 
+CANCEL_REASON_MAX = 1000
+
+
 def cancel_work_order(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason)>CANCEL_REASON_MAX:return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"Cancellation")
         except SafetyStateError:return False
