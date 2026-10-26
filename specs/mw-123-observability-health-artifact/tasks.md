@@ -1,0 +1,3 @@
+- [x] Implement slice behaviour
+- [x] Add lock test
+- [x] Verify node --test

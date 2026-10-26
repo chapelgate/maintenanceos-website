@@ -40,7 +40,8 @@
     "provisioning-gateway": "node --experimental-strip-types packages/provisioning-gateway/src/server.ts",
     "browser:cross": "node scripts/browser-cross-engine-smoke.mjs",
     "browser:install": "playwright install firefox webkit",
-    "candidate:evidence": "node scripts/write-candidate-evidence.mjs"
+    "candidate:evidence": "node scripts/write-candidate-evidence.mjs",
+    "health:artifact": "node scripts/write-health-artifact.mjs"
   },
   "dependencies": {
     "next": "16.3.8",
