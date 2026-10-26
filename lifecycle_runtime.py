@@ -48,9 +48,6 @@ def _require_client(session, client_id: int) -> None:
         raise LifecycleRuntimeError("valid_tenant_required")
 
 
-VALID_HOLD_SCOPES = frozenset({"tenant", "record", "subject", "data_class"})
-
-
 def create_hold(
     session,
     *,
@@ -65,7 +62,7 @@ def create_hold(
     scope_id = (scope_id or "").strip()
     reason = (reason or "").strip()
     actor = (actor or "").strip()
-    if scope not in VALID_HOLD_SCOPES:
+    if scope not in {"tenant", "record", "subject", "data_class"}:
         raise LifecycleRuntimeError("invalid_hold_scope")
     if not scope_id or not reason or not actor:
         raise LifecycleRuntimeError("hold_scope_reason_actor_required")
@@ -91,27 +88,23 @@ def create_hold(
 
 def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLifecycleHold:
     _require_client(session, client_id)
-    actor = (actor or "").strip()
-    if not actor:
-        raise LifecycleRuntimeError("release_hold_actor_required")
     hold = session.get(DataLifecycleHold, hold_id)
     if not hold or hold.client_id != client_id:
         raise LifecycleRuntimeError("hold_not_found_for_tenant")
-    if not hold.active:
-        raise LifecycleRuntimeError("hold_already_released")
-    hold.active = False
-    hold.released_at = utcnow()
-    audit(
-        session,
-        None,
-        actor,
-        "DATA_LIFECYCLE_HOLD_RELEASED",
-        json.dumps({"hold_id": hold.id, "client_id": client_id}, sort_keys=True),
-    )
+    if hold.active:
+        hold.active = False
+        hold.released_at = utcnow()
+        audit(
+            session,
+            None,
+            (actor or "").strip() or "Lifecycle Controller",
+            "DATA_LIFECYCLE_HOLD_RELEASED",
+            json.dumps({"hold_id": hold.id, "client_id": client_id}, sort_keys=True),
+        )
     return hold
 
 
-LIFECYCLE_JOB_PAYLOAD_MAX = 2000
+VALID_LIFECYCLE_JOB_STATUSES = frozenset({"PENDING", "RUNNING", "COMPLETED", "FAILED"})
 
 
 def queue_retention_sweep(
@@ -124,29 +117,27 @@ def queue_retention_sweep(
 ) -> tuple[DataLifecycleRequest, AutomationJob]:
     _require_client(session, client_id)
     actor = (actor or "").strip()
-    reason = (reason or "").strip()
+    job_status = "PENDING"
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
-    if not reason:
-        raise LifecycleRuntimeError("sweep_reason_required")
+    if job_status not in VALID_LIFECYCLE_JOB_STATUSES:
+        raise LifecycleRuntimeError("invalid_lifecycle_job_status")
     request = DataLifecycleRequest(
         client_id=client_id,
         request_type="RETENTION_SWEEP",
         subject_id="",
         status="PENDING",
         requested_by=actor,
-        reason=reason,
+        reason=(reason or "").strip(),
     )
     session.add(request)
     session.flush()
-    payload = json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True)
-    if len(payload) > LIFECYCLE_JOB_PAYLOAD_MAX:
-        raise LifecycleRuntimeError("lifecycle_job_payload_too_long")
     job = AutomationJob(
         work_order_id=None,
         job_type="DATA_LIFECYCLE_SWEEP",
         run_at=run_at,
-        payload=payload,
+        payload=json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True),
+        status=job_status,
     )
     session.add(job)
     session.flush()
@@ -335,27 +326,9 @@ def _parse_record_id(record_id: str, expected: str) -> int:
     return value
 
 
-_APPLY_ACTIONS = frozenset({"erase", "preserve_minimal"})
-
-
 def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
     if decision.action == "retain":
         return False
-    action = (decision.action or "").strip()
-    if not action:
-        raise LifecycleRuntimeError("lifecycle_decision_action_required")
-    if action not in _APPLY_ACTIONS:
-        raise LifecycleRuntimeError(f"lifecycle_action_invalid:{action}")
-    reason = (decision.reason or "").strip()
-    if not reason:
-        raise LifecycleRuntimeError("lifecycle_decision_reason_required")
-    record_id = (decision.record_id or "").strip()
-    if not record_id:
-        raise LifecycleRuntimeError("lifecycle_decision_record_id_required")
-    if decision.client_id != client_id:
-        raise LifecycleRuntimeError("lifecycle_decision_tenant_mismatch")
-    if decision.data_class not in SUPPORTED_RUNTIME_CLASSES:
-        raise LifecycleRuntimeError(f"runtime_class_not_supported:{decision.data_class}")
     key = f"{job_id}:{decision.data_class}:{decision.record_id}:{decision.action}"
     _receipt, fresh = claim_action(
         session,
@@ -432,26 +405,18 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
 
 
 def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
-    if job.status != "RUNNING":
-        raise LifecycleRuntimeError("lifecycle_job_not_running")
     try:
         payload = json.loads(job.payload or "{}")
     except json.JSONDecodeError as exc:
         raise LifecycleRuntimeError("invalid_lifecycle_job_payload") from exc
-    if not isinstance(payload, dict):
-        raise LifecycleRuntimeError("invalid_lifecycle_job_payload")
     client_id = payload.get("client_id")
     request_id = payload.get("request_id")
     if type(client_id) is not int or client_id <= 0 or type(request_id) is not int or request_id <= 0:
         raise LifecycleRuntimeError("lifecycle_job_tenant_request_required")
     _require_client(session, client_id)
     request = session.get(DataLifecycleRequest, request_id)
-    if not request or request.client_id != client_id:
+    if not request or request.client_id != client_id or request.request_type != "RETENTION_SWEEP":
         raise LifecycleRuntimeError("lifecycle_request_not_found_for_tenant")
-    if request.request_type != "RETENTION_SWEEP":
-        raise LifecycleRuntimeError("lifecycle_request_wrong_type")
-    if request.status != "PENDING":
-        raise LifecycleRuntimeError("lifecycle_request_not_pending")
 
     applied = 0
     for decision in plan_client_retention(session, client_id=client_id, now=now):
