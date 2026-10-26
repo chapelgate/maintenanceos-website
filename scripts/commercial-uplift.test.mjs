@@ -105,8 +105,8 @@ test("contact, about, and faq stay professional and claims-safe", () => {
 
   assert.match(contact, /Talk to a person/);
   assert.match(contact, /Choose the right path/);
-  assert.match(contact, /not a GA support desk/);
-  assert.match(contact, /no invented response SLA/);
+  assert.match(contact, /not a live support desk/i);
+  assert.match(contact, /no invented response SLA/i);
   assert.doesNotMatch(contact, /we reply within/i);
   assert.doesNotMatch(contact, /call us on/i);
 
