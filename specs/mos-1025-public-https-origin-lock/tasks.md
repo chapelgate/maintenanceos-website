@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Add tests/test_public_https_origin_lock.py
+- [x] Run the three named tests
