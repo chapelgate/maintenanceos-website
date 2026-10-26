@@ -83,7 +83,7 @@ def _positive_amount(value) -> float:
     return result
 
 
-WORK_ORDER_SOURCE_MAX = 30
+UNMATCHED_INBOUND_MEDIA_URL_MAX = 2000
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -175,7 +175,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
     try:
-        wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=WORK_ORDER_SOURCE_MAX),description,
+        wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=32),description,
                                 identity_verified=identity_verified,
                                 incident_key=d.get("incident_key"),event_key=request.headers.get("Idempotency-Key"))
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -364,7 +364,7 @@ async def messaging_inbound(request:Request):
                     channel=channel,
                     participant_hash=hashlib.sha256(phone.encode()).hexdigest(),
                     body=body,
-                    media_url=media,
+                    media_url=_bounded_text(media,"MediaUrl0",maximum=UNMATCHED_INBOUND_MEDIA_URL_MAX),
                 ))
                 s.commit()
         return Response('<?xml version="1.0" encoding="UTF-8"?><Response><Message>Thanks. Your report has been received for review.</Message></Response>',media_type="application/xml")
