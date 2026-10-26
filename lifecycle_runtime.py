@@ -407,6 +407,8 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
 
 
 def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
+    if job.status != "RUNNING":
+        raise LifecycleRuntimeError("lifecycle_job_not_running")
     try:
         payload = json.loads(job.payload or "{}")
     except json.JSONDecodeError as exc:
