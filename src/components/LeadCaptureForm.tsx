@@ -9,7 +9,7 @@ import { trackWebsiteEvent } from "@/lib/measurement";
 import {
   buildEnquiryMailto,
   PUBLIC_ENQUIRY_EMAIL,
-  validateEnquiryFields,
+  isValidEnquiryPhone,
   type EnquiryMailtoDraft,
 } from "@/lib/public-enquiry";
 
@@ -108,6 +108,7 @@ function LeadCaptureFormFields({
   const [error, setError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [receiptReference, setReceiptReference] = useState<string | null>(null);
   const [mailtoDraft, setMailtoDraft] = useState<EnquiryMailtoDraft | null>(null);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
@@ -116,9 +117,14 @@ function LeadCaptureFormFields({
   const emailRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
   const mailtoStatusRef = useRef<HTMLDivElement>(null);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
   const errorId = useId();
   const emailErrorId = useId();
   const phoneErrorId = useId();
+  const errorSummaryId = useId();
+  const errorSummaryHeadingId = useId();
+  const emailFieldId = useId();
+  const phoneFieldId = useId();
 
   async function onCopyDetails() {
     const draft =
@@ -143,6 +149,7 @@ function LeadCaptureFormFields({
     setError(null);
     setEmailError(null);
     setPhoneError(null);
+    setFieldErrors({});
     setCopyFeedback(null);
     const form = e.currentTarget;
     const fd = new FormData(form);
@@ -155,29 +162,23 @@ function LeadCaptureFormFields({
     }
     const email = String(fd.get("email") ?? "").trim();
     const phone = String(fd.get("phone") ?? "").trim();
-    const validation = validateEnquiryFields({
-      name: String(fd.get("name") ?? ""),
-      email,
-      phone,
-      businessType: String(fd.get("role") ?? ""),
-      organisation: String(fd.get("organisation") ?? ""),
-      message: String(fd.get("message") ?? ""),
-      leadType,
-    });
-    if (!email || !isValidEmail(email) || (!validation.ok && validation.field === "email")) {
-      setEmailError(
-        email
-          ? "Enter a valid email address."
-          : "Enter an email address.",
-      );
-      setStatus("error");
-      emailRef.current?.focus();
-      return;
+    const emailInvalid = !email || !isValidEmail(email);
+    const phoneInvalid = Boolean(phone) && !isValidEnquiryPhone(phone);
+    const errors: Record<string, string> = {};
+    if (emailInvalid) {
+      const msg = email ? "Enter a valid email address." : "Enter an email address.";
+      setEmailError(msg);
+      errors.email = msg;
     }
-    if (!validation.ok && validation.field === "phone") {
-      setPhoneError("Enter a valid phone number.");
+    if (phoneInvalid) {
+      const msg = "Enter a valid phone number.";
+      setPhoneError(msg);
+      errors.phone = msg;
+    }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       setStatus("error");
-      phoneRef.current?.focus();
+      requestAnimationFrame(() => errorSummaryRef.current?.focus());
       return;
     }
 
@@ -288,6 +289,47 @@ function LeadCaptureFormFields({
       <p className="mt-2 text-xs text-muted">
         Only email is required. Everything else is optional. Submitting opens your email app with a prefilled WorkSmartOS draft — nothing is sent until you press send.
       </p>
+      {Object.keys(fieldErrors).length > 0 ? (
+        <div
+          ref={errorSummaryRef}
+          id={errorSummaryId}
+          tabIndex={-1}
+          data-lead-error-summary="true"
+          className="mt-4 rounded-md border border-red-700 bg-red-50 p-4"
+          role="alert"
+          aria-live="assertive"
+          aria-labelledby={errorSummaryHeadingId}
+        >
+          <h3
+            id={errorSummaryHeadingId}
+            className="font-semibold text-red-700"
+          >
+            Please fix the following:
+          </h3>
+          <ul className="mt-2 space-y-1 text-sm text-red-700" role="list">
+            {fieldErrors.email ? (
+              <li>
+                <a
+                  href={`#${emailFieldId}`}
+                  className="underline hover:no-underline"
+                >
+                  Email: {fieldErrors.email}
+                </a>
+              </li>
+            ) : null}
+            {fieldErrors.phone ? (
+              <li>
+                <a
+                  href={`#${phoneFieldId}`}
+                  className="underline hover:no-underline"
+                >
+                  Phone: {fieldErrors.phone}
+                </a>
+              </li>
+            ) : null}
+          </ul>
+        </div>
+      ) : null}
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <label className="block text-sm">
           <span className="font-medium text-ink">Name (optional)</span>
@@ -302,12 +344,20 @@ function LeadCaptureFormFields({
           <span className="font-medium text-ink">Email (required)</span>
           <input
             ref={emailRef}
+            id={emailFieldId}
             name="email"
             type="email"
             required
             autoComplete="email"
             aria-invalid={emailError ? true : undefined}
-            aria-describedby={emailError ? emailErrorId : undefined}
+            aria-describedby={
+              [
+                emailError ? emailErrorId : undefined,
+                fieldErrors.email ? errorSummaryId : undefined,
+              ]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
             className="mt-1 w-full rounded-md border border-border px-3 py-2"
           />
           {emailError ? (
@@ -325,11 +375,19 @@ function LeadCaptureFormFields({
           <span className="font-medium text-ink">Phone (optional)</span>
           <input
             ref={phoneRef}
+            id={phoneFieldId}
             name="phone"
             type="tel"
             autoComplete="tel"
             aria-invalid={phoneError ? true : undefined}
-            aria-describedby={phoneError ? phoneErrorId : undefined}
+            aria-describedby={
+              [
+                phoneError ? phoneErrorId : undefined,
+                fieldErrors.phone ? errorSummaryId : undefined,
+              ]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
             className="mt-1 w-full rounded-md border border-border px-3 py-2"
           />
           {phoneError ? (
