@@ -51,7 +51,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "ip",
     title: "Intellectual property",
-    body: "[ANDY: IP ownership, marks, branding, and limited licence terms per counsel review.]",
+    body: "Pending counsel review: IP ownership, marks, branding, and limited licence terms not yet final.",
   },
   {
     id: "third-party",
@@ -71,7 +71,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "indemnity",
     title: "Indemnity (if used)",
-    body: "[ANDY: include or omit indemnity clause] — optional placeholder only.",
+    body: "Pending counsel review: indemnity clause decision pending.",
   },
   {
     id: "privacy",
@@ -81,7 +81,7 @@ const sections: { id: string; title: string; body: string }[] = [
   {
     id: "changes",
     title: "Changes to these terms",
-    body: "[ANDY: how updates take effect and are communicated once a final version exists, per counsel review.]",
+    body: "Pending counsel review: how updates take effect will be set once a final version exists.",
   },
   {
     id: "governing-law",
