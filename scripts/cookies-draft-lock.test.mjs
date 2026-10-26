@@ -14,9 +14,10 @@ test("cookies page keeps draft wording and cookieless-first-party-only claims", 
   assert.match(page, /cookieless operational measurement/);
   assert.match(page, /no site-wide consent banner/);
   assert.match(page, /uses no cookies/);
+  assert.match(page, /Not a compliance certification/);
   assert.doesNotMatch(page, /Google Analytics certified/);
   assert.doesNotMatch(page, /PECR certified/);
-  assert.doesNotMatch(page, /GDPR compliance certification/);
+  assert.doesNotMatch(page, /we are GDPR certified/i);
 });
 
 test("cookie settings stub stays draft expectations only", () => {
