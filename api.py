@@ -6,7 +6,6 @@ import os
 import threading
 from contextlib import suppress
 from datetime import datetime
-from urllib.parse import urlsplit
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
 from fastapi.responses import HTMLResponse,Response
 from sqlalchemy.exc import SQLAlchemyError
@@ -84,7 +83,8 @@ def _positive_amount(value) -> float:
     return result
 
 
-IDEMPOTENCY_KEY_MAX = 200
+AI_SIDE_EFFECT_REASON_MAX = 500
+
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
     if not isinstance(value, str):
@@ -94,35 +94,6 @@ def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
         raise HTTPException(400, f"{name} is required")
     if len(result) > maximum:
         raise HTTPException(400, f"{name} is too long")
-    return result
-
-
-EVIDENCE_URL_MAX = 2000
-
-
-def normalize_evidence_url(value) -> str:
-    if value is None:
-        return ""
-    if not isinstance(value, str):
-        raise HTTPException(400, "evidence_url must be text")
-    result = value.strip()
-    if not result:
-        return ""
-    if len(result) > EVIDENCE_URL_MAX:
-        raise HTTPException(400, "evidence_url is too long")
-    try:
-        parsed = urlsplit(result)
-    except ValueError as exc:
-        raise HTTPException(400, "evidence_url must be an https URL") from exc
-    host = (parsed.hostname or "").casefold()
-    if (
-        parsed.scheme != "https"
-        or not host
-        or parsed.username
-        or parsed.password
-        or parsed.fragment
-    ):
-        raise HTTPException(400, "evidence_url must be an https URL")
     return result
 
 def require_internal_api(request:Request):
@@ -206,7 +177,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     try:
         wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=32),description,
                                 identity_verified=identity_verified,
-                                incident_key=d.get("incident_key"),event_key=_bounded_text(request.headers.get("Idempotency-Key") or "","Idempotency-Key",maximum=IDEMPOTENCY_KEY_MAX) or None)
+                                incident_key=d.get("incident_key"),event_key=request.headers.get("Idempotency-Key"))
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
     with SessionLocal() as s:
         wo=s.get(WorkOrder,wid);cid=wo.assigned_contractor_id if wo else None
@@ -295,7 +266,6 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
     require_contractor_portal()
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
-    evidence_url=normalize_evidence_url(evidence_url)
     try:evidence_id=submit_completion(work_order_id,contractor_id,note,evidence_url,token)
     except (TenantAccessError,SafetyStateError):evidence_id=None
     if not evidence_id:raise HTTPException(409,"Job is not available for this action")
@@ -354,7 +324,7 @@ async def appointment_confirm(request:Request,client_id=Depends(require_internal
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resident_id=_positive_int(d.get("resident_id"),"resident_id")
     event_key=_bounded_text(
-        request.headers.get("Idempotency-Key", ""),"Idempotency-Key",required=True,maximum=IDEMPOTENCY_KEY_MAX
+        request.headers.get("Idempotency-Key", ""),"Idempotency-Key",required=True,maximum=200
     )
     with SessionLocal() as s:
         try:require_client_resource(
@@ -514,7 +484,7 @@ async def identity_postcode(request:Request,client_id=Depends(require_internal_a
 
 @app.post("/controls/ai-side-effects")
 async def control_ai_side_effects(request:Request,client_id=Depends(require_internal_api)):
-    d=await _json_object(request);enabled=d.get("enabled");reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=500)
+    d=await _json_object(request);enabled=d.get("enabled");reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=AI_SIDE_EFFECT_REASON_MAX)
     if not isinstance(enabled,bool):raise HTTPException(400,"enabled must be a boolean")
     if not reason:raise HTTPException(400,"A reason is required")
     if enabled and os.getenv("ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE", "false").lower() != "true":

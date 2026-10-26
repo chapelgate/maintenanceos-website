@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound AI side-effect control reason at 500 characters
+- [x] Run the named tests
