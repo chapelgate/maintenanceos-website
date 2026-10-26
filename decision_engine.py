@@ -87,6 +87,7 @@ TRADE={
  "Appliances":"Appliance Engineer","Damp / mould":"Damp Specialist","Pests":"Pest Control",
  "Structural":"Builder","Fire safety":"Fire Safety","General maintenance":"Handyperson","Unknown":"General"
 }
+URGENCIES=frozenset({"P1","P2","P3"})
 
 def safety_flags(text):
     t=text.lower() if isinstance(text,str) else ""
@@ -116,6 +117,8 @@ def classify(text):
     if flags: urgency="P1"
     elif any(x in t for x in ["no heating","no hot water","cannot lock","can't lock","water through ceiling","leaking through ceiling"]): urgency="P2"
     else: urgency="P3"
+    if urgency not in URGENCIES:
+        raise ValueError("urgency is not allowed")
     return {"category":category,"trade":TRADE.get(category,"General"),"urgency":urgency,
             "confidence":round(confidence,2),"safety_flags":flags,
             "human_escalation_flags":human_flags,
