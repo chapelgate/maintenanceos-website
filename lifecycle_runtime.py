@@ -104,7 +104,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     return hold
 
 
-VALID_LIFECYCLE_JOB_PAYLOAD_KEYS = frozenset({"client_id", "request_id"})
+LIFECYCLE_JOB_WORK_ORDER_ID = None
 
 
 def queue_retention_sweep(
@@ -129,14 +129,14 @@ def queue_retention_sweep(
     )
     session.add(request)
     session.flush()
-    payload_obj = {"client_id": client_id, "request_id": request.id}
-    if set(payload_obj) != VALID_LIFECYCLE_JOB_PAYLOAD_KEYS:
-        raise LifecycleRuntimeError("invalid_lifecycle_job_payload_keys")
+    work_order_id = LIFECYCLE_JOB_WORK_ORDER_ID
+    if work_order_id is not None:
+        raise LifecycleRuntimeError("lifecycle_job_work_order_must_be_none")
     job = AutomationJob(
-        work_order_id=None,
+        work_order_id=work_order_id,
         job_type="DATA_LIFECYCLE_SWEEP",
         run_at=run_at,
-        payload=json.dumps(payload_obj, sort_keys=True),
+        payload=json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True),
     )
     session.add(job)
     session.flush()
@@ -404,12 +404,12 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
 
 
 def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
+    if job.work_order_id is not None:
+        raise LifecycleRuntimeError("lifecycle_job_work_order_must_be_none")
     try:
         payload = json.loads(job.payload or "{}")
     except json.JSONDecodeError as exc:
         raise LifecycleRuntimeError("invalid_lifecycle_job_payload") from exc
-    if not isinstance(payload, dict) or set(payload) != VALID_LIFECYCLE_JOB_PAYLOAD_KEYS:
-        raise LifecycleRuntimeError("invalid_lifecycle_job_payload_keys")
     client_id = payload.get("client_id")
     request_id = payload.get("request_id")
     if type(client_id) is not int or client_id <= 0 or type(request_id) is not int or request_id <= 0:
