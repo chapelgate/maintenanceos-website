@@ -43,24 +43,6 @@ SUPPORTED_RUNTIME_CLASSES = frozenset(
 )
 
 
-
-VALID_LIFECYCLE_AUDIT_EVENTS = frozenset(
-    {
-        "DATA_LIFECYCLE_HOLD_CREATED",
-        "DATA_LIFECYCLE_HOLD_RELEASED",
-        "DATA_LIFECYCLE_SWEEP_QUEUED",
-        "DATA_LIFECYCLE_ACTION_APPLIED",
-        "DATA_LIFECYCLE_SWEEP_COMPLETED",
-    }
-)
-
-
-def _lifecycle_audit(session, work_order_id, actor, event: str, detail: str) -> None:
-    if event not in VALID_LIFECYCLE_AUDIT_EVENTS:
-        raise LifecycleRuntimeError("invalid_lifecycle_audit_event")
-    audit(session, work_order_id, actor, event, detail)
-
-
 def _require_client(session, client_id: int) -> None:
     if not isinstance(client_id, int) or client_id <= 0 or session.get(Client, client_id) is None:
         raise LifecycleRuntimeError("valid_tenant_required")
@@ -94,7 +76,7 @@ def create_hold(
     )
     session.add(hold)
     session.flush()
-    _lifecycle_audit(
+    audit(
         session,
         None,
         actor,
@@ -104,31 +86,25 @@ def create_hold(
     return hold
 
 
-RELEASE_HOLD_ACTOR_MAX = 100
-
-
 def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLifecycleHold:
     _require_client(session, client_id)
-    actor = (actor or "").strip() or "Lifecycle Controller"
-    if len(actor) > RELEASE_HOLD_ACTOR_MAX:
-        raise LifecycleRuntimeError("release_hold_actor_too_long")
     hold = session.get(DataLifecycleHold, hold_id)
     if not hold or hold.client_id != client_id:
         raise LifecycleRuntimeError("hold_not_found_for_tenant")
     if hold.active:
         hold.active = False
         hold.released_at = utcnow()
-        _lifecycle_audit(
+        audit(
             session,
             None,
-            actor,
+            (actor or "").strip() or "Lifecycle Controller",
             "DATA_LIFECYCLE_HOLD_RELEASED",
             json.dumps({"hold_id": hold.id, "client_id": client_id}, sort_keys=True),
         )
     return hold
 
 
-SWEEP_REASON_MAX = 1000
+VALID_LIFECYCLE_JOB_PAYLOAD_KEYS = frozenset({"client_id", "request_id"})
 
 
 def queue_retention_sweep(
@@ -141,30 +117,30 @@ def queue_retention_sweep(
 ) -> tuple[DataLifecycleRequest, AutomationJob]:
     _require_client(session, client_id)
     actor = (actor or "").strip()
-    reason = (reason or "").strip()
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
-    if len(reason) > SWEEP_REASON_MAX:
-        raise LifecycleRuntimeError("sweep_reason_too_long")
     request = DataLifecycleRequest(
         client_id=client_id,
         request_type="RETENTION_SWEEP",
         subject_id="",
         status="PENDING",
         requested_by=actor,
-        reason=reason,
+        reason=(reason or "").strip(),
     )
     session.add(request)
     session.flush()
+    payload_obj = {"client_id": client_id, "request_id": request.id}
+    if set(payload_obj) != VALID_LIFECYCLE_JOB_PAYLOAD_KEYS:
+        raise LifecycleRuntimeError("invalid_lifecycle_job_payload_keys")
     job = AutomationJob(
         work_order_id=None,
         job_type="DATA_LIFECYCLE_SWEEP",
         run_at=run_at,
-        payload=json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True),
+        payload=json.dumps(payload_obj, sort_keys=True),
     )
     session.add(job)
     session.flush()
-    _lifecycle_audit(
+    audit(
         session,
         None,
         actor,
@@ -407,7 +383,7 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
     else:
         raise LifecycleRuntimeError(f"runtime_class_not_supported:{decision.data_class}")
 
-    _lifecycle_audit(
+    audit(
         session,
         work_order_id,
         "Lifecycle Controller",
@@ -432,6 +408,8 @@ def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
         payload = json.loads(job.payload or "{}")
     except json.JSONDecodeError as exc:
         raise LifecycleRuntimeError("invalid_lifecycle_job_payload") from exc
+    if not isinstance(payload, dict) or set(payload) != VALID_LIFECYCLE_JOB_PAYLOAD_KEYS:
+        raise LifecycleRuntimeError("invalid_lifecycle_job_payload_keys")
     client_id = payload.get("client_id")
     request_id = payload.get("request_id")
     if type(client_id) is not int or client_id <= 0 or type(request_id) is not int or request_id <= 0:
@@ -448,7 +426,7 @@ def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
 
     request.status = "COMPLETED"
     request.completed_at = now
-    _lifecycle_audit(
+    audit(
         session,
         None,
         "Lifecycle Controller",
