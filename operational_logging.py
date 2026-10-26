@@ -20,6 +20,7 @@ SAFE_EVENT_FIELDS = {
     "request_id",
     "status",
     "transport",
+    "client_id",
 }
 SENSITIVE_KEY = re.compile(
     r"(?:authorization|body|caller|cookie|credential|detail|email|key|number|"
@@ -64,6 +65,7 @@ class RedactedJsonFormatter(logging.Formatter):
                 key: _redact(value, key)
                 for key, value in fields.items()
                 if key in SAFE_EVENT_FIELDS
+                and not (key == "client_id" and not (isinstance(value, int) and not isinstance(value, bool)))
             })
         return json.dumps(payload, sort_keys=True, separators=(",", ":"))
 

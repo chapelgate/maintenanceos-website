@@ -99,3 +99,31 @@ def test_operational_event_normalises_event_name_and_passes_only_to_formatter(mo
     )
     assert "secret body" not in rendered
     assert "abc123" not in rendered
+
+
+def test_client_id_integer_is_emitted():
+    payload = json.loads(
+        ol.RedactedJsonFormatter().format(
+            _record(
+                fields={
+                    "status": "failed",
+                    "client_id": 42,
+                }
+            )
+        )
+    )
+    assert payload["client_id"] == 42
+
+
+def test_client_id_string_is_dropped():
+    payload = json.loads(
+        ol.RedactedJsonFormatter().format(
+            _record(
+                fields={
+                    "status": "failed",
+                    "client_id": "tenant-42",
+                }
+            )
+        )
+    )
+    assert "client_id" not in payload
