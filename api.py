@@ -99,6 +99,16 @@ def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
         raise HTTPException(400, f"{name} is too long")
     return result
 
+
+_ALLOWED_CONTROLS = frozenset("\t\n\r")
+
+
+def _reject_control_chars(value: str, name: str) -> str:
+    if any(ord(ch) < 32 and ch not in _ALLOWED_CONTROLS for ch in value):
+        raise HTTPException(400, f"{name} contains control characters")
+    return value
+
+
 def require_internal_api(request:Request):
     expected=os.getenv("INTERNAL_API_TOKEN","")
     if len(expected)<32:
@@ -174,7 +184,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     if "client_id" in d and _positive_int(d["client_id"],"client_id")!=client_id:raise HTTPException(403,"Cross-tenant request rejected")
     property_id=_positive_int(d.get("property_id"),"property_id")
     resident_id=_positive_int(d["resident_id"],"resident_id") if d.get("resident_id") is not None else None
-    description=_bounded_text(d.get("description"),"description",required=True)
+    description=_reject_control_chars(_bounded_text(d.get("description"),"description",required=True),"description")
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
     source=_bounded_text(d.get("source","API"),"source",required=True,maximum=30)
