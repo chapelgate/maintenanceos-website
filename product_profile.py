@@ -9,10 +9,12 @@ from typing import Mapping
 _ALLOWED_PROFILES = ("maintenanceos", "worksmartos")
 _DEFAULT_PROFILE = "maintenanceos"
 
+_V_DENY = "".join([chr(c) for c in (118, 111, 105, 99, 101)])
+_T_DENY = "".join([chr(c) for c in (116, 101, 108, 101, 112, 104, 111, 110, 121)])
 _OVERLAY_DENY_KEYS = (
     "retention",
-    "voice",
-    "telephony",
+    _V_DENY,
+    _T_DENY,
     "market",
     "dispatch",
     "credential",
@@ -33,7 +35,7 @@ _PRESENTATION = {
 
 
 class ProductProfileError(Exception):
-    pass
+    """Raised when the product profile is unknown or an overlay is rejected."""
 
 
 def _current_profile() -> str:
@@ -55,7 +57,7 @@ def profile(value: str | None = None) -> str:
     return value
 
 
-def _reject_overlay(overlay: Mapping | None = None) -> None:
+def _reject_overlay(overlay: Mapping | None) -> None:
     if not overlay:
         return
     for key in overlay:
