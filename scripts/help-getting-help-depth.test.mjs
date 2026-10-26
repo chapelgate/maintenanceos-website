@@ -18,7 +18,7 @@ test("getting-help does not publish in-product support surfaces", () => {
   assert.doesNotMatch(text, /Help → Tours/);
   assert.doesNotMatch(text, /Settings →|Reports →/);
   assert.doesNotMatch(text, /contact-support|community-forum|feature-requests|training-resources/);
-  assert.match(text, /early-access@maintenanceos\.co\.uk/);
+  assert.match(text, /info@chapelgatetechnologies\.com/);
   assert.match(text, /no public support phone/i);
   assert.match(text, /not a live support desk/i);
   assert.match(text, /not a live SLA/i);

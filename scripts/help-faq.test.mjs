@@ -23,7 +23,7 @@ test("faq does not publish unproved hosts, inboxes, or live product claims", () 
   assert.match(text, /not a live app/i);
   assert.match(text, /Not a public always-on phone/);
   assert.match(text, /not a live SLA/i);
-  assert.match(text, /early-access@maintenanceos\.co\.uk/);
+  assert.match(text, /info@chapelgatetechnologies\.com/);
 });
 
 test("faq description stays within the meta limit", () => {

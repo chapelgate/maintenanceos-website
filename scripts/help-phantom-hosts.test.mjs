@@ -30,7 +30,7 @@ test("Getting Help says those destinations are not live", () => {
   assert.match(getting, /not a live community/i);
   assert.match(getting, /not a live status page/i);
   assert.match(getting, /not a live training programme/i);
-  assert.match(getting, /early-access@maintenanceos\.co\.uk/);
+  assert.match(getting, /info@chapelgatetechnologies\.com/);
   assert.match(getting, /0800 111 999/);
   assert.doesNotMatch(getting, /Public Roadmap/);
 });

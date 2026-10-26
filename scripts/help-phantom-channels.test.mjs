@@ -42,6 +42,6 @@ test("Getting Help does not publish a feedback desk or onboarding call", () => {
   assert.doesNotMatch(getting, /Admin onboarding call/);
   assert.match(getting, /not a live feedback channel/i);
   assert.match(getting, /not a live onboarding call/i);
-  assert.match(getting, /early-access@maintenanceos\.co\.uk/);
+  assert.match(getting, /info@chapelgatetechnologies\.com/);
   assert.match(getting, /0800 111 999/);
 });
