@@ -124,7 +124,7 @@ def create_dispatch_approval(work_order_id):
         s.add(a);s.flush();receipt.result_ref=str(a.id);s.commit();return a.id
 
 def contractor_portal_links(work_order_id):
-    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").lower() != "true":
+    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").strip().lower() != "true":
         return {}
     with SessionLocal() as s:
         wo=s.query(WorkOrder).filter_by(id=work_order_id).first()

@@ -149,7 +149,7 @@ CONTRACTOR_FORM_METHOD = "post"
 
 
 def require_contractor_portal():
-    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").lower() != "true":
+    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").strip().lower() != "true":
         raise HTTPException(503, "Contractor portal is disabled")
 
 
