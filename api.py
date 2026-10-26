@@ -84,6 +84,8 @@ def _positive_amount(value) -> float:
     return result
 
 
+IDEMPOTENCY_KEY_MAX = 200
+
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
     if not isinstance(value, str):
         raise HTTPException(400, f"{name} must be text")
@@ -204,7 +206,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     try:
         wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=32),description,
                                 identity_verified=identity_verified,
-                                incident_key=d.get("incident_key"),event_key=request.headers.get("Idempotency-Key"))
+                                incident_key=d.get("incident_key"),event_key=_bounded_text(request.headers.get("Idempotency-Key") or "","Idempotency-Key",maximum=IDEMPOTENCY_KEY_MAX) or None)
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
     with SessionLocal() as s:
         wo=s.get(WorkOrder,wid);cid=wo.assigned_contractor_id if wo else None
@@ -352,7 +354,7 @@ async def appointment_confirm(request:Request,client_id=Depends(require_internal
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resident_id=_positive_int(d.get("resident_id"),"resident_id")
     event_key=_bounded_text(
-        request.headers.get("Idempotency-Key", ""),"Idempotency-Key",required=True,maximum=200
+        request.headers.get("Idempotency-Key", ""),"Idempotency-Key",required=True,maximum=IDEMPOTENCY_KEY_MAX
     )
     with SessionLocal() as s:
         try:require_client_resource(

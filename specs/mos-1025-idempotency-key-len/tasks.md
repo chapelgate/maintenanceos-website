@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound Idempotency-Key on work-order create and appointment confirm
+- [x] Run the named tests
