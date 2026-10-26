@@ -104,7 +104,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     return hold
 
 
-LIFECYCLE_JOB_WORK_ORDER_ID = None
+RETENTION_SWEEP_SUBJECT_ID = ""
 
 
 def queue_retention_sweep(
@@ -119,21 +119,21 @@ def queue_retention_sweep(
     actor = (actor or "").strip()
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
+    subject_id = RETENTION_SWEEP_SUBJECT_ID
+    if subject_id != "":
+        raise LifecycleRuntimeError("retention_sweep_subject_id_must_be_empty")
     request = DataLifecycleRequest(
         client_id=client_id,
         request_type="RETENTION_SWEEP",
-        subject_id="",
+        subject_id=subject_id,
         status="PENDING",
         requested_by=actor,
         reason=(reason or "").strip(),
     )
     session.add(request)
     session.flush()
-    work_order_id = LIFECYCLE_JOB_WORK_ORDER_ID
-    if work_order_id is not None:
-        raise LifecycleRuntimeError("lifecycle_job_work_order_must_be_none")
     job = AutomationJob(
-        work_order_id=work_order_id,
+        work_order_id=None,
         job_type="DATA_LIFECYCLE_SWEEP",
         run_at=run_at,
         payload=json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True),
@@ -404,8 +404,6 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
 
 
 def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
-    if job.work_order_id is not None:
-        raise LifecycleRuntimeError("lifecycle_job_work_order_must_be_none")
     try:
         payload = json.loads(job.payload or "{}")
     except json.JSONDecodeError as exc:
@@ -418,6 +416,8 @@ def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
     request = session.get(DataLifecycleRequest, request_id)
     if not request or request.client_id != client_id or request.request_type != "RETENTION_SWEEP":
         raise LifecycleRuntimeError("lifecycle_request_not_found_for_tenant")
+    if (request.subject_id or "").strip() != RETENTION_SWEEP_SUBJECT_ID:
+        raise LifecycleRuntimeError("retention_sweep_subject_id_must_be_empty")
 
     applied = 0
     for decision in plan_client_retention(session, client_id=client_id, now=now):
