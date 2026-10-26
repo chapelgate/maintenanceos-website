@@ -83,7 +83,7 @@ def _positive_amount(value) -> float:
     return result
 
 
-UNMATCHED_INBOUND_BODY_MAX = 4000
+WORK_ORDER_DESCRIPTION_MAX = 8000
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -171,7 +171,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     if "client_id" in d and _positive_int(d["client_id"],"client_id")!=client_id:raise HTTPException(403,"Cross-tenant request rejected")
     property_id=_positive_int(d.get("property_id"),"property_id")
     resident_id=_positive_int(d["resident_id"],"resident_id") if d.get("resident_id") is not None else None
-    description=_bounded_text(d.get("description"),"description",required=True)
+    description=_bounded_text(d.get("description"),"description",required=True,maximum=WORK_ORDER_DESCRIPTION_MAX)
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
     try:
@@ -363,7 +363,7 @@ async def messaging_inbound(request:Request):
                     client_id=client_id,
                     channel=channel,
                     participant_hash=hashlib.sha256(phone.encode()).hexdigest(),
-                    body=_bounded_text(body,"Body",maximum=UNMATCHED_INBOUND_BODY_MAX),
+                    body=body,
                     media_url=media,
                 ))
                 s.commit()

@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound work-order description at 8000 characters
+- [x] Run the named tests
