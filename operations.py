@@ -483,9 +483,13 @@ def reopen_work_order(work_order_id,actor_user_id,reason):
         s.commit();return True
 
 
+NO_SHOW_REASON_MAX = 1000
+
+
 def record_no_show(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason)>NO_SHOW_REASON_MAX:return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"No-show recording")
         except SafetyStateError:return False
