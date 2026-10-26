@@ -89,7 +89,7 @@ export default function HomePage() {
               MaintenanceOS is the property-maintenance product. AI intake for repair reports. A person still clears anything dangerous.
             </p>
             <p className="mt-3 text-base leading-relaxed text-muted sm:text-lg max-w-2xl">
-              Capture caller details 24/7 in natural UK terminology. Fixed server rules latch critical repairs for authorised human clearance.
+              Designed to capture caller details in natural UK terminology when voice intake is enabled — not a live always-on phone. Fixed server rules latch critical repairs for authorised human clearance.
             </p>
             <CtaPair
               className="mt-8"
@@ -192,14 +192,14 @@ export default function HomePage() {
               </h2>
               {siteConfig.demoPhoneNumber ? (
                 <p className="mt-2 text-sm text-muted">
-                  Live demo number:{" "}
+                  Preview demo number (not production):{" "}
                   <a
                     href={`tel:${siteConfig.demoPhoneNumber}`}
                     className="font-medium text-accent underline-offset-2 hover:underline"
                   >
                     {siteConfig.demoPhoneNumber}
                   </a>
-                  {" — answers 24/7 with AI greeting. Not a production service."}
+                  {" — when enabled, AI greeting and basic intake preview. Not a production service and not a live always-on phone."}
                 </p>
               ) : (
                 <p className="mt-2 text-sm text-muted">
