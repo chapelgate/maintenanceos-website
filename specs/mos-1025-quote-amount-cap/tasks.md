@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Cap positive amounts at 1_000_000
+- [x] Run the named tests

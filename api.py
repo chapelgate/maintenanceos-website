@@ -72,6 +72,8 @@ def _positive_int(value, name: str) -> int:
     return result
 
 
+AMOUNT_MAX = 1_000_000
+
 def _positive_amount(value) -> float:
     if isinstance(value, bool):
         raise HTTPException(400, "amount must be a positive number")
@@ -81,6 +83,8 @@ def _positive_amount(value) -> float:
         raise HTTPException(400, "amount must be a positive number") from exc
     if not math.isfinite(result) or result <= 0:
         raise HTTPException(400, "amount must be a positive number")
+    if result > AMOUNT_MAX:
+        raise HTTPException(400, "amount is too large")
     return result
 
 
