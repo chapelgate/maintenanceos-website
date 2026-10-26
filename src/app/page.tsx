@@ -98,6 +98,9 @@ export default function HomePage() {
               secondaryHref="/how-we-keep-control/"
               secondaryLabel="See safety rules →"
             />
+            <p className="mt-3 text-sm text-muted">
+              Early demo request is an interest note — not a booking, checkout, or sale.
+            </p>
             <p className="mt-4 text-xs text-muted">
               <a href="/how-we-keep-control/#gas" className="text-accent underline underline-offset-2">
                 Smell gas? What to do right now →
