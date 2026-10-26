@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound delivery provider_reference at 200 characters
+- [x] Run the named tests

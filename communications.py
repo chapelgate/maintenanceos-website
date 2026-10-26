@@ -17,7 +17,7 @@ DELIVERY_TRANSITIONS = {
     "FAILED": set(),
 }
 CHANNELS = {"EMAIL", "SMS", "WHATSAPP", "VOICE"}
-FAILURE_CODE_MAX = 100
+PROVIDER_REFERENCE_MAX = 200
 
 
 def _hash_recipient(value: str) -> str:
@@ -84,7 +84,7 @@ def record_delivery_status(
     if status==delivery.status:return True
     if status not in DELIVERY_TRANSITIONS.get(delivery.status,set()):return False
     provider_reference=(provider_reference or "").strip();failure_code=(failure_code or "").strip()
-    if len(failure_code)>FAILURE_CODE_MAX:return False
+    if len(provider_reference)>PROVIDER_REFERENCE_MAX:return False
     if status in {"SENT","DELIVERED"} and not provider_reference:return False
     if status=="FAILED" and not failure_code:return False
     delivery.status=status;delivery.updated_at=utcnow()
