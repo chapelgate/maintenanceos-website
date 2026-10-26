@@ -42,15 +42,13 @@ SUPPORTED_RUNTIME_CLASSES = frozenset(
     }
 )
 
-HOLD_REASON_MAX = 1000
-
 
 def _require_client(session, client_id: int) -> None:
     if not isinstance(client_id, int) or client_id <= 0 or session.get(Client, client_id) is None:
         raise LifecycleRuntimeError("valid_tenant_required")
 
 
-HOLD_REASON_MAX = 1000
+SCOPE_ID_MAX = 200
 
 
 def create_hold(
@@ -65,14 +63,14 @@ def create_hold(
     _require_client(session, client_id)
     scope = (scope or "").strip()
     scope_id = (scope_id or "").strip()
+    if len(scope_id) > SCOPE_ID_MAX:
+        raise LifecycleRuntimeError("hold_scope_id_too_long")
     reason = (reason or "").strip()
     actor = (actor or "").strip()
     if scope not in {"tenant", "record", "subject", "data_class"}:
         raise LifecycleRuntimeError("invalid_hold_scope")
     if not scope_id or not reason or not actor:
         raise LifecycleRuntimeError("hold_scope_reason_actor_required")
-    if len(reason) > HOLD_REASON_MAX:
-        raise LifecycleRuntimeError("hold_reason_too_long")
     hold = DataLifecycleHold(
         client_id=client_id,
         scope=scope,
