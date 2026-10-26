@@ -83,7 +83,7 @@ def _positive_amount(value) -> float:
     return result
 
 
-RESIDENT_COMMENT_MAX = 4000
+INVOICE_NUMBER_MAX = 100
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -292,7 +292,7 @@ async def invoices(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
-    invoice_number=_bounded_text(d.get("invoice_number"),"invoice_number",required=True,maximum=128)
+    invoice_number=_bounded_text(d.get("invoice_number"),"invoice_number",required=True,maximum=INVOICE_NUMBER_MAX)
     description=_bounded_text(d.get("description",""),"description")
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)
@@ -308,7 +308,7 @@ async def confirm(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resolved=d.get("resolved")
     if not isinstance(resolved,bool):raise HTTPException(400,"resolved must be a boolean")
-    comment=_bounded_text(d.get("comment",""),"comment",maximum=RESIDENT_COMMENT_MAX)
+    comment=_bounded_text(d.get("comment",""),"comment")
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))

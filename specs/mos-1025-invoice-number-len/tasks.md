@@ -1,0 +1,4 @@
+- [x] Write spec/plan
+- [x] Bound invoice number at 100 characters
+- [x] Run the named tests
+- [x] Run full pytest suite
