@@ -5,6 +5,15 @@ from sqlalchemy.exc import IntegrityError
 
 from models import ActionReceipt, RuntimeControl
 
+RESULT_REF_MAX = 200
+
+
+def set_result_ref(receipt, value) -> None:
+    text = "" if value is None else str(value)
+    if len(text) > RESULT_REF_MAX:
+        raise ValueError("Invalid action receipt result_ref")
+    receipt.result_ref = text
+
 
 def claim_action(session, scope: str, action_key: str, *, client_id=None, work_order_id=None):
     query = session.query(ActionReceipt).filter_by(scope=scope, action_key=action_key, client_id=client_id)

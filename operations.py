@@ -10,7 +10,7 @@ from models import *
 from decision_engine import contractor_rank,transition_allowed,work_order_allows_dispatch
 from lifecycle import transition_work_order
 from security import app_secret_ready,sign_link
-from idempotency import claim_action
+from idempotency import claim_action, set_result_ref
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
 
@@ -127,7 +127,7 @@ def create_dispatch_approval(work_order_id):
             return int(receipt.result_ref) if receipt.result_ref else None
         a=Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="DISPATCH",
                    proposed_action=f"Dispatch job to {c.name}",reason=f"Best ranked approved {wo.trade}")
-        s.add(a);s.flush();receipt.result_ref=str(a.id);s.commit();return a.id
+        s.add(a);s.flush();set_result_ref(receipt, str(a.id));s.commit();return a.id
 
 def contractor_portal_links(work_order_id):
     if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").lower() != "true":
@@ -166,7 +166,7 @@ def book_slot(work_order_id,availability_id):
         receipt,fresh=claim_action(s,"BOOK_AVAILABILITY",str(availability_id),client_id=wo.client_id,work_order_id=wo.id)
         if not fresh:return int(receipt.result_ref) if receipt.result_ref else None
         ap=Appointment(work_order_id=wo.id,contractor_id=av.contractor_id,start_at=av.slot_start,end_at=av.slot_end,status="BOOKED")
-        s.add(ap);s.flush();receipt.result_ref=str(ap.id)
+        s.add(ap);s.flush();set_result_ref(receipt, str(ap.id))
         transition_work_order(s,wo,"APPOINTMENT_BOOKED",actor="Scheduler",reason="Resident/contractor slot selected")
         s.add(AutomationJob(work_order_id=wo.id,job_type="APPOINTMENT_REMINDER",
                             run_at=max(utcnow(),av.slot_start-timedelta(hours=1)),payload=json.dumps({"appointment":"reminder"})))
@@ -309,7 +309,7 @@ def submit_availability(work_order_id,contractor_id,start,end,action_key):
         receipt,fresh=claim_action(s,"CONTRACTOR_AVAILABILITY",action_key,client_id=wo.client_id,work_order_id=wo.id)
         if not fresh:return int(receipt.result_ref) if receipt.result_ref else None
         av=ContractorAvailability(work_order_id=work_order_id,contractor_id=contractor_id,slot_start=start,slot_end=end)
-        s.add(av);s.flush();receipt.result_ref=str(av.id)
+        s.add(av);s.flush();set_result_ref(receipt, str(av.id))
         transition_work_order(s,wo,"AWAITING_AVAILABILITY",actor="Contractor",reason="Availability submitted")
         audit(s,wo.id,"Contractor","AVAILABILITY_SUBMITTED",f"{start.isoformat()} - {end.isoformat()}")
         s.commit();return av.id
@@ -326,7 +326,7 @@ def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
         fingerprint=hashlib.sha256((evidence_url.strip() or note.strip()).encode()).hexdigest()
         reused=s.get(EvidenceIdentity,fingerprint)
         evidence=CompletionEvidence(work_order_id=work_order_id,contractor_id=contractor_id,completion_note=note,evidence_url=evidence_url)
-        s.add(evidence);s.flush();receipt.result_ref=str(evidence.id)
+        s.add(evidence);s.flush();set_result_ref(receipt, str(evidence.id))
         if wo.status=="APPOINTMENT_BOOKED":
             transition_work_order(s,wo,"IN_PROGRESS",actor="Contractor",reason="Contractor reports work started",flush=True)
         if wo.status=="IN_PROGRESS":
@@ -358,7 +358,7 @@ def confirm_appointment(work_order_id,resident_id,event_key):
             client_id=wo.client_id,work_order_id=wo.id,
         )
         if not fresh:return appointment.resident_confirmed
-        appointment.resident_confirmed=True;receipt.result_ref=str(appointment.id)
+        appointment.resident_confirmed=True;set_result_ref(receipt, str(appointment.id))
         audit(s,wo.id,"Resident Confirmation","APPOINTMENT_CONFIRMED",str(appointment.id))
         s.commit();return True
 
@@ -392,7 +392,7 @@ def approve_operational_action(approval_id,actor_user_id,reason=""):
             receipt,fresh=claim_action(s,"CONTRACTOR_RESPONSE_TIMER",str(work_order.id),client_id=work_order.client_id,work_order_id=work_order.id)
             if fresh:
                 job=AutomationJob(work_order_id=work_order.id,job_type="CONTRACTOR_RESPONSE_CHECK",run_at=utcnow(),payload="{}")
-                s.add(job);s.flush();receipt.result_ref=str(job.id)
+                s.add(job);s.flush();set_result_ref(receipt, str(job.id))
         elif approval.approval_type=="QUOTE":
             quote=s.query(Quote).filter_by(work_order_id=work_order.id,amount=approval.amount).order_by(Quote.id.desc()).first()
             if not quote or work_order.status!="HUMAN_REVIEW":return False
