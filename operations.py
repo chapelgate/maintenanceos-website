@@ -488,9 +488,13 @@ def cancel_work_order(work_order_id,actor_user_id,reason):
         s.commit();return True
 
 
+REOPEN_REASON_MAX = 1000
+
+
 def reopen_work_order(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason)>REOPEN_REASON_MAX:return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"Reopening")
         except SafetyStateError:return False
