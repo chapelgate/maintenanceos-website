@@ -83,7 +83,7 @@ def _positive_amount(value) -> float:
     return result
 
 
-AI_SIDE_EFFECT_REASON_MAX = 500
+WORK_ORDER_SOURCE_MAX = 30
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -175,7 +175,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
     try:
-        wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=32),description,
+        wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=WORK_ORDER_SOURCE_MAX),description,
                                 identity_verified=identity_verified,
                                 incident_key=d.get("incident_key"),event_key=request.headers.get("Idempotency-Key"))
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -484,7 +484,7 @@ async def identity_postcode(request:Request,client_id=Depends(require_internal_a
 
 @app.post("/controls/ai-side-effects")
 async def control_ai_side_effects(request:Request,client_id=Depends(require_internal_api)):
-    d=await _json_object(request);enabled=d.get("enabled");reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=AI_SIDE_EFFECT_REASON_MAX)
+    d=await _json_object(request);enabled=d.get("enabled");reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=500)
     if not isinstance(enabled,bool):raise HTTPException(400,"enabled must be a boolean")
     if not reason:raise HTTPException(400,"A reason is required")
     if enabled and os.getenv("ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE", "false").lower() != "true":
