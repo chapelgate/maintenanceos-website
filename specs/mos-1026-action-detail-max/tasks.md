@@ -1,0 +1,2 @@
+- [x] Bound ActionExecution.detail at 4000
+- [x] Tests for constant, accept, reject

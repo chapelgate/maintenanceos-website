@@ -16,6 +16,7 @@ from models import (
 
 
 ACTION_STATES = {"REQUESTED", "PENDING", "ATTEMPTED", "FAILED", "SUCCEEDED", "CANCELLED", "UNKNOWN"}
+DETAIL_MAX = 4000
 CONFIRMABLE_ACTIONS = {
     "contractor_contacted",
     "contractor_dispatched",
@@ -46,12 +47,15 @@ def record_action_result(
     action_type = (action_type or "").strip().lower()
     action_key = (action_key or "").strip()
     status = (status or "").strip().upper()
+    detail = (detail or "").strip()
     if action_type not in CONFIRMABLE_ACTIONS:
         raise ValueError("Unknown confirmable action")
     if status not in ACTION_STATES:
         raise ValueError("Unknown action state")
     if not action_key:
         raise ValueError("Action result requires an idempotency key")
+    if len(detail) > DETAIL_MAX:
+        raise ValueError("Action detail exceeds maximum length")
     if work_order_id:
         work_order = session.get(WorkOrder, work_order_id)
         if not work_order or work_order.client_id != client_id:
@@ -78,7 +82,7 @@ def record_action_result(
         action_key=action_key,
         status=status,
         provider_reference=(provider_reference or "").strip(),
-        detail=(detail or "").strip(),
+        detail=detail,
     )
     try:
         with session.begin_nested():
