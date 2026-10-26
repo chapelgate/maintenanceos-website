@@ -48,6 +48,9 @@ def _require_client(session, client_id: int) -> None:
         raise LifecycleRuntimeError("valid_tenant_required")
 
 
+VALID_HOLD_SCOPES = frozenset({"tenant", "record", "subject", "data_class"})
+
+
 def create_hold(
     session,
     *,
@@ -62,7 +65,7 @@ def create_hold(
     scope_id = (scope_id or "").strip()
     reason = (reason or "").strip()
     actor = (actor or "").strip()
-    if scope not in {"tenant", "record", "subject", "data_class"}:
+    if scope not in VALID_HOLD_SCOPES:
         raise LifecycleRuntimeError("invalid_hold_scope")
     if not scope_id or not reason or not actor:
         raise LifecycleRuntimeError("hold_scope_reason_actor_required")
