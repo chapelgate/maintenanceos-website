@@ -204,18 +204,18 @@ def apply_deploy(client: RenderClient, report: dict[str, Any], *, branch: str, r
     target = report["target"]
     _assert_mos_only(target)
     service_id = str(target["id"])
-    rollback = write_rollback(report, branch)
 
     # Opening public ingress runs render_prepare Twilio mutation at boot.
     # Missing TWILIO_AUTH_TOKEN → ProviderWebhookError → non-zero exit → update_failed.
-    # Check this before any extra Render API reads so the fail-closed contract remains
-    # deterministic and testable even with a minimal client.
+    # Check before write_rollback so a refusal cannot dirty tracked evidence.
     env_creds = ((report.get("env") or {}).get("credentials_present") or {})
     if not env_creds.get("TWILIO_AUTH_TOKEN"):
         raise RenderInventoryError(
             "TWILIO_AUTH_TOKEN absent on target service — refuse opening call window "
             "(open ingress would fail closed at boot). Restore token via estate/USH, not chat."
         )
+
+    rollback = write_rollback(report, branch)
 
     protected_before = _env_presence(client, service_id)
 
