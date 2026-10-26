@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound and normalize evidence_url on contractor complete
+- [x] Run the named tests

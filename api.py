@@ -6,6 +6,7 @@ import os
 import threading
 from contextlib import suppress
 from datetime import datetime
+from urllib.parse import urlsplit
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
 from fastapi.responses import HTMLResponse,Response
 from sqlalchemy.exc import SQLAlchemyError
@@ -41,24 +42,6 @@ from voice_bridge import (
 from provider_runtime import handle_provider_media_stream, provider_ready
 load_dotenv()
 app=FastAPI(title="MaintenanceOS V1 Pilot",docs_url=None,redoc_url=None,openapi_url=None)
-HEALTH_TOP_LEVEL_KEYS = frozenset({
-    "ok",
-    "version",
-    "realtime_voice",
-    "active_calls",
-    "call_capacity",
-    "pilot",
-})
-HEALTH_CALL_CAPACITY_KEYS = frozenset({
-    "active",
-    "global_limit",
-    "per_client_limit",
-    "backend",
-    "draining",
-    "ai_session_utilisation",
-    "estimated_hourly_burn_usd",
-    "by_client",
-})
 init_db()
 # Optional one-shot completion-email proof on boot (no Twilio / no pilot ceiling).
 with suppress(Exception):
@@ -111,10 +94,34 @@ def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
         raise HTTPException(400, f"{name} is too long")
     return result
 
-COMPLETION_NOTE_MAX = 4000
 
-def normalize_completion_note(value) -> str:
-    return _bounded_text(value, "note", required=True, maximum=COMPLETION_NOTE_MAX)
+EVIDENCE_URL_MAX = 2000
+
+
+def normalize_evidence_url(value) -> str:
+    if value is None:
+        return ""
+    if not isinstance(value, str):
+        raise HTTPException(400, "evidence_url must be text")
+    result = value.strip()
+    if not result:
+        return ""
+    if len(result) > EVIDENCE_URL_MAX:
+        raise HTTPException(400, "evidence_url is too long")
+    try:
+        parsed = urlsplit(result)
+    except ValueError as exc:
+        raise HTTPException(400, "evidence_url must be an https URL") from exc
+    host = (parsed.hostname or "").casefold()
+    if (
+        parsed.scheme != "https"
+        or not host
+        or parsed.username
+        or parsed.password
+        or parsed.fragment
+    ):
+        raise HTTPException(400, "evidence_url must be an https URL")
+    return result
 
 def require_internal_api(request:Request):
     expected=os.getenv("INTERNAL_API_TOKEN","")
@@ -157,14 +164,6 @@ def require_public_provider_ingress():
     if not public_provider_ingress_ready():
         raise HTTPException(503, "Public provider ingress is disabled")
 
-
-def _portal_page(title: str, body: str) -> str:
-    return (
-        "<!DOCTYPE html><html lang=\"en-GB\"><head>"
-        f"<meta charset=\"utf-8\"><title>{title}</title></head>"
-        f"<body><main>{body}</main></body></html>"
-    )
-
 @app.get("/health")
 def health():
     snap = capacity_snapshot()
@@ -175,25 +174,23 @@ def health():
         pilot = pilot_status()
     except Exception:
         pilot = {"armed": False, "error": "pilot_status_unavailable"}
-    capacity = {
-        "active": snap.active_calls,
-        "global_limit": snap.global_limit,
-        "per_client_limit": snap.per_client_limit,
-        "backend": snap.backend,
-        "draining": snap.draining,
-        "ai_session_utilisation": snap.ai_session_utilisation,
-        "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
-        "by_client": {str(k): v for k, v in snap.by_client.items()},
-    }
-    body = {
+    return {
         "ok": True,
         "version": "v1-pilot",
         "realtime_voice": os.getenv("ENABLE_REALTIME_VOICE", "false").lower() == "true",
         "active_calls": snap.active_calls,
-        "call_capacity": {key: capacity[key] for key in HEALTH_CALL_CAPACITY_KEYS},
-        "pilot": pilot if isinstance(pilot, dict) else {"armed": False, "error": "pilot_status_unavailable"},
+        "call_capacity": {
+            "active": snap.active_calls,
+            "global_limit": snap.global_limit,
+            "per_client_limit": snap.per_client_limit,
+            "backend": snap.backend,
+            "draining": snap.draining,
+            "ai_session_utilisation": snap.ai_session_utilisation,  # lease util, not mock AI contexts
+            "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
+            "by_client": {str(k): v for k, v in snap.by_client.items()},
+        },
+        "pilot": pilot,
     }
-    return {key: body[key] for key in HEALTH_TOP_LEVEL_KEYS}
 
 @app.post("/work-orders")
 async def create_work_order(request:Request,client_id=Depends(require_internal_api)):
@@ -223,14 +220,13 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
         approval=s.query(Approval).filter_by(work_order_id=work_order_id,approval_type="DISPATCH",status="APPROVED").first()
         if not wo or not approval:raise HTTPException(409,"Job is not available for this action")
     label="Accept job" if decision=="accept" else "Decline job"
-    body = f"""<h1 id="confirm-heading">Confirm action for job #{work_order_id}</h1>
-<form method="post" action="/contractor/decision" aria-labelledby="confirm-heading">
+    return f"""<h2>Confirm action for job #{work_order_id}</h2>
+<form method="post" action="/contractor/decision">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="decision" value="{decision}">
 <input type="hidden" name="token" value="{token}">
 <button type="submit">{label}</button></form>"""
-    return _portal_page("Confirm contractor action", body)
 
 
 @app.post("/contractor/decision",response_class=HTMLResponse)
@@ -248,7 +244,7 @@ def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=For
         except (TenantAccessError,SafetyStateError):accepted=False
         if not accepted:raise HTTPException(409,"Job is not available for this action")
         msg="Job accepted. Please now submit your availability."
-    return _portal_page("Contractor decision recorded", f"<h1>{msg}</h1><p>Job #{work_order_id}</p>")
+    return f"<h2>{msg}</h2><p>Job #{work_order_id}</p>"
 
 @app.get("/contractor/availability",response_class=HTMLResponse)
 def availability_form(work_order_id:int,contractor_id:int,token:str):
@@ -257,15 +253,14 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"CONTRACTOR_ACCEPTED","AWAITING_AVAILABILITY"}):
             raise HTTPException(409,"Job is not available for this action")
-    body = f"""<h1 id="availability-heading">Submit availability for job #{work_order_id}</h1>
-<form method="post" aria-labelledby="availability-heading">
+    return f"""<h2>Submit availability for job #{work_order_id}</h2>
+<form method="post">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
-<label for="start">Start (YYYY-MM-DD HH:MM)</label><input id="start" name="start"><br>
-<label for="end">End (YYYY-MM-DD HH:MM)</label><input id="end" name="end"><br>
+<label>Start (YYYY-MM-DD HH:MM)</label><input name="start"><br>
+<label>End (YYYY-MM-DD HH:MM)</label><input name="end"><br>
 <button type="submit">Submit</button></form>"""
-    return _portal_page("Submit availability", body)
 
 @app.post("/contractor/availability",response_class=HTMLResponse)
 def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),start:str=Form(...),end:str=Form(...)):
@@ -277,7 +272,7 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
     try:availability_id=submit_availability(work_order_id,contractor_id,st,en,token)
     except (TenantAccessError,SafetyStateError):availability_id=None
     if not availability_id:raise HTTPException(409,"Job is not available for this action")
-    return _portal_page("Availability received", "<h1>Availability received.</h1>")
+    return "<h2>Availability received.</h2>"
 
 @app.get("/contractor/complete",response_class=HTMLResponse)
 def complete_form(work_order_id:int,contractor_id:int,token:str):
@@ -286,25 +281,23 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}):
             raise HTTPException(409,"Job is not available for this action")
-    body = f"""<h1 id="complete-heading">Complete job #{work_order_id}</h1>
-<form method="post" aria-labelledby="complete-heading">
+    return f"""<h2>Complete job #{work_order_id}</h2><form method="post">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
-<label for="note">Completion note</label><textarea id="note" name="note"></textarea><br>
-<label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url"><br>
+<label>Completion note</label><textarea name="note"></textarea><br>
+<label>Evidence URL (optional)</label><input name="evidence_url"><br>
 <button type="submit">Submit completion</button></form>"""
-    return _portal_page("Complete job", body)
 
 @app.post("/contractor/complete",response_class=HTMLResponse)
 def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
     require_contractor_portal()
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
-    note=normalize_completion_note(note)
+    evidence_url=normalize_evidence_url(evidence_url)
     try:evidence_id=submit_completion(work_order_id,contractor_id,note,evidence_url,token)
     except (TenantAccessError,SafetyStateError):evidence_id=None
     if not evidence_id:raise HTTPException(409,"Job is not available for this action")
-    return _portal_page("Completion recorded", "<h1>Completion recorded.</h1>")
+    return "<h2>Completion recorded.</h2>"
 
 @app.post("/quotes")
 async def quotes(request:Request,client_id=Depends(require_internal_api)):
