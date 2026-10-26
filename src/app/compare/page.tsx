@@ -89,7 +89,7 @@ export default function CompareIndexPage() {
             Disclaimer
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Comparisons are based on publicly available information as of the access dates shown on each page. Competitor products and pricing may change. We do not guarantee the accuracy of third-party information. WorkSmartOS and MaintenanceOS are products of Chapelgate Limited (company number 12340004). This comparison is for informational purposes only and does not constitute legal or financial advice.
+            Pre-launch. Informational purposes only — not an offer to sell, book, or buy WorkSmartOS or MaintenanceOS. Comparisons are based on publicly available information as of the access dates shown on each page. Competitor products and pricing may change. We do not guarantee the accuracy of third-party information. WorkSmartOS and MaintenanceOS are products of Chapelgate Limited (company number 12340004). This comparison does not constitute legal or financial advice.
           </p>
         </section>
       </section>
