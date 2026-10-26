@@ -56,14 +56,15 @@ def canonical_incident_key(client_id,property_id,resident_id,description):
     return f"daily:{utcnow().date().isoformat()}:{client_id}:{property_id}:{resident_id or 0}:{digest}"
 
 
-EVENT_KEY_MAX = 200
+MEDIA_URL_MAX = 2000
 
 
 def create_from_channel(client_id,property_id,resident_id,source,description,participant="",media_url="",identity_verified=True,incident_key=None,event_key=None):
+    media_url = "" if media_url is None else str(media_url).strip()
+    if len(media_url) > MEDIA_URL_MAX:
+        raise ValueError("media_url is too long")
     incident_key=(incident_key or canonical_incident_key(client_id,property_id,resident_id,description)).strip()
     event_key=(event_key or "").strip()
-    if len(event_key) > EVENT_KEY_MAX:
-        raise ValueError("event_key is too long")
     with SessionLocal() as s:
         require_client_resource(s,client_id,property_id=property_id,resident_id=resident_id)
         if event_key:
