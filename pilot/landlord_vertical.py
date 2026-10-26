@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -22,9 +22,22 @@ SYNTHETIC_POSTCODE = "ZZ1 1ZZ"
 _SHA: str | None = None
 
 
+class VerticalErrorCode:
+    INACTIVE = "vertical_inactive"
+    PROPERTY_CAP = "property_cap_exceeded"
+    COMPLIANCE_FAILED = "compliance_failed"
+    NO_PROPERTIES = "no_properties"
+    HANDOFF_DESCRIPTION = "handoff_description_not_synthetic"
+    HANDOFF_MISSING_REFS = "handoff_missing_property_or_resident"
+    DB_ERROR = "db_error"
+    SNAPSHOT_RESTORE_FAILED = "snapshot_restore_failed"
+    INVALID_ARGUMENT = "invalid_argument"
+
+
 class VerticalInactive(RuntimeError):
     def __init__(self, vertical: str) -> None:
         self.vertical = vertical
+        self.error_code = VerticalErrorCode.INACTIVE
         super().__init__(f"vertical_inactive:{vertical}")
 
 
@@ -32,12 +45,14 @@ class VerticalPropertyCap(ValueError):
     def __init__(self, requested: int, limit: int = MAX_SYNTHETIC_PROPERTIES) -> None:
         self.requested = requested
         self.limit = limit
+        self.error_code = VerticalErrorCode.PROPERTY_CAP
         super().__init__(f"property_cap_exceeded:{requested}>{limit}")
 
 
 class VerticalComplianceError(RuntimeError):
     def __init__(self, findings: list[str]) -> None:
         self.findings = list(findings)
+        self.error_code = VerticalErrorCode.COMPLIANCE_FAILED
         super().__init__("compliance_failed")
 
 
@@ -50,9 +65,25 @@ class _Session:
     client_id: int | None = None
     handoff_ref: str | None = None
     compliance_passed: bool | None = None
+    metrics: dict[str, int] = field(default_factory=lambda: {
+        "activations": 0,
+        "deactivations": 0,
+        "portfolio_opens": 0,
+        "compliance_checks": 0,
+        "handoffs_recorded": 0,
+        "errors": 0,
+    })
 
 
 _SESSION = _Session()
+
+
+def _record_metric(key: str, increment: int = 1) -> None:
+    _SESSION.metrics[key] = _SESSION.metrics.get(key, 0) + increment
+
+
+def get_vertical_metrics() -> dict[str, int]:
+    return dict(_SESSION.metrics)
 
 
 def _normalise(raw: str | None) -> str:
@@ -120,23 +151,51 @@ def vertical_view() -> dict[str, Any]:
         "mos_sha": mos_sha(),
         "handoff_ref": _SESSION.handoff_ref,
         "compliance_passed": _SESSION.compliance_passed,
+        "metrics": get_vertical_metrics(),
+    }
+
+
+def get_vertical_diagnostics() -> dict[str, Any]:
+    name = read_worksmart_vertical()
+    return {
+        "vertical": name,
+        "active": bool(_SESSION.active and name == LANDLORD_VERTICAL),
+        "session": {
+            "client_id": _SESSION.client_id,
+            "handoff_ref": _SESSION.handoff_ref,
+            "compliance_passed": _SESSION.compliance_passed,
+        },
+        "metrics": get_vertical_metrics(),
+        "env": {
+            VERTICAL_ENV: name,
+        },
     }
 
 
 def activate_landlord_vertical() -> dict[str, Any]:
     name = _normalise(os.getenv(VERTICAL_ENV))
     if name != LANDLORD_VERTICAL:
+        _record_metric("errors")
         raise VerticalInactive(name)
     if _SESSION.baseline_encoded is None:
-        _SESSION.baseline_encoded = export_pilot_runtime_snapshot()
-        _SESSION.armed_env = os.environ.get("PILOT_MODE_ARMED")
-        _SESSION.armed_captured = True
+        try:
+            _SESSION.baseline_encoded = export_pilot_runtime_snapshot()
+            _SESSION.armed_env = os.environ.get("PILOT_MODE_ARMED")
+            _SESSION.armed_captured = True
+        except Exception:
+            _record_metric("errors")
+            _SESSION.baseline_encoded = None
+            _SESSION.armed_env = None
+            _SESSION.armed_captured = False
+            raise
     _SESSION.active = True
+    _record_metric("activations")
     return vertical_view()
 
 
 def deactivate_landlord_vertical() -> dict[str, Any]:
     os.environ[VERTICAL_ENV] = VERTICAL_OFF
+    _record_metric("deactivations")
     return vertical_view()
 
 
@@ -148,6 +207,14 @@ def reset_landlord_vertical_for_tests() -> None:
     _SESSION.client_id = None
     _SESSION.handoff_ref = None
     _SESSION.compliance_passed = None
+    _SESSION.metrics = {
+        "activations": 0,
+        "deactivations": 0,
+        "portfolio_opens": 0,
+        "compliance_checks": 0,
+        "handoffs_recorded": 0,
+        "errors": 0,
+    }
 
 
 def _require_active() -> None:
@@ -158,6 +225,7 @@ def _require_active() -> None:
 
 def open_synthetic_portfolio(*, units: int) -> dict[str, Any]:
     _require_active()
+    _record_metric("portfolio_opens")
     import models
     from models import Client, Contractor, Property, Resident, TenantBoundary
     from tenant_security import SYNTHETIC_MODE
@@ -177,6 +245,7 @@ def open_synthetic_portfolio(*, units: int) -> dict[str, Any]:
         projected = existing + int(units)
         if units < 1 or projected > MAX_SYNTHETIC_PROPERTIES:
             session.rollback()
+            _record_metric("errors")
             raise VerticalPropertyCap(projected, MAX_SYNTHETIC_PROPERTIES)
         if _SESSION.client_id is None:
             session.add(
@@ -232,6 +301,7 @@ def open_synthetic_portfolio(*, units: int) -> dict[str, Any]:
 
 def evaluate_landlord_compliance(client_id: int) -> dict[str, Any]:
     _require_active()
+    _record_metric("compliance_checks")
     import models
     from models import Contractor, Property, Resident, TenantBoundary
     from tenant_security import SYNTHETIC_MODE
@@ -273,6 +343,8 @@ def evaluate_landlord_compliance(client_id: int) -> dict[str, Any]:
         stored = len(props)
     passed = not findings
     _SESSION.compliance_passed = passed
+    if not passed:
+        _record_metric("errors")
     return {
         "passed": passed,
         "findings": findings,
@@ -283,10 +355,13 @@ def evaluate_landlord_compliance(client_id: int) -> dict[str, Any]:
 
 def record_maintenance_handoff(client_id: int, *, description: str) -> dict[str, Any]:
     _require_active()
+    _record_metric("handoffs_recorded")
     if "SYNTHETIC" not in description:
+        _record_metric("errors")
         raise VerticalComplianceError(["handoff_description_not_synthetic"])
     report = evaluate_landlord_compliance(client_id)
     if not report["passed"]:
+        _record_metric("errors")
         raise VerticalComplianceError(list(report["findings"]))
     import models
     from models import AuditEvent, Property, Resident, WorkOrder
