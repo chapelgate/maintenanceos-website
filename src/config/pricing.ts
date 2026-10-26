@@ -61,7 +61,7 @@ const published = {
     {
       id: "starter",
       name: "Starter",
-      priceLabel: "[ANDY: Starter tier price — e.g. XX/month per property]",
+      priceLabel: "",
       blurb: "For small portfolios getting started with structured intake.",
       features: [
         "Website intake for repair reports",
@@ -77,7 +77,7 @@ const published = {
     {
       id: "professional",
       name: "Professional",
-      priceLabel: "[ANDY: Professional tier price — e.g. XX/month per property]",
+      priceLabel: "",
       blurb: "For growing letting agents and property managers.",
       features: [
         "Everything in Starter",
@@ -94,7 +94,7 @@ const published = {
     {
       id: "enterprise",
       name: "Enterprise",
-      priceLabel: "[ANDY: Enterprise tier price — e.g. XX/month per property]",
+      priceLabel: "",
       blurb: "For large portfolios and housing associations.",
       features: [
         "Everything in Professional",
