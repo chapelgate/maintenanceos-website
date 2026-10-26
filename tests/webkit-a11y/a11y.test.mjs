@@ -18,6 +18,7 @@ const pages = [
   '/demo/',
   '/faq/',
   '/features/',
+  '/help/',
   '/how-it-works/',
   '/how-we-keep-control/',
   '/industries/',
