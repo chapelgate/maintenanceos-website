@@ -17,7 +17,7 @@ DELIVERY_TRANSITIONS = {
     "FAILED": set(),
 }
 CHANNELS = {"EMAIL", "SMS", "WHATSAPP", "VOICE"}
-PROVIDER_REFERENCE_MAX = 200
+ACTION_KEY_MAX = 200
 
 
 def _hash_recipient(value: str) -> str:
@@ -36,7 +36,7 @@ def queue_outbound(
 ) -> CommunicationDelivery:
     channel=(channel or "").strip().upper();body=body if isinstance(body,str) else ""
     action_key=(action_key or "").strip();recipient=(recipient or "").strip()
-    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>10000:
+    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>10000 or len(action_key)>ACTION_KEY_MAX:
         raise ValueError("Invalid outbound communication")
     work_order=session.get(WorkOrder,work_order_id)
     if not work_order or work_order.client_id!=client_id:
@@ -84,7 +84,6 @@ def record_delivery_status(
     if status==delivery.status:return True
     if status not in DELIVERY_TRANSITIONS.get(delivery.status,set()):return False
     provider_reference=(provider_reference or "").strip();failure_code=(failure_code or "").strip()
-    if len(provider_reference)>PROVIDER_REFERENCE_MAX:return False
     if status in {"SENT","DELIVERED"} and not provider_reference:return False
     if status=="FAILED" and not failure_code:return False
     delivery.status=status;delivery.updated_at=utcnow()

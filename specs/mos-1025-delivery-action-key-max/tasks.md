@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound delivery action_key at 200 characters
+- [x] Run the named tests
