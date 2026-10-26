@@ -83,7 +83,7 @@ def _positive_amount(value) -> float:
     return result
 
 
-MESSAGING_BODY_MAX = 4000
+UNMATCHED_INBOUND_BODY_MAX = 4000
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -350,7 +350,7 @@ async def messaging_inbound(request:Request):
     if not targets_dedicated_test_number(params):
         raise HTTPException(403,"Request is not for the dedicated test number")
     sender=str(form.get("From",""))
-    body=_bounded_text(str(form.get("Body","")),"Body",maximum=MESSAGING_BODY_MAX)
+    body=str(form.get("Body",""))
     media=str(form.get("MediaUrl0",""))
     channel="WHATSAPP" if sender.startswith("whatsapp:") else "SMS"
     phone=sender.replace("whatsapp:","")
@@ -363,7 +363,7 @@ async def messaging_inbound(request:Request):
                     client_id=client_id,
                     channel=channel,
                     participant_hash=hashlib.sha256(phone.encode()).hexdigest(),
-                    body=body,
+                    body=_bounded_text(body,"Body",maximum=UNMATCHED_INBOUND_BODY_MAX),
                     media_url=media,
                 ))
                 s.commit()
