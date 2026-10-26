@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Wire CONTRACTOR_FORM_METHOD into contractor forms
+- [x] Run the named tests

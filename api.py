@@ -145,6 +145,9 @@ def _contractor_work_order(s,work_order_id,contractor_id,allowed_statuses):
     return wo
 
 
+CONTRACTOR_FORM_METHOD = "post"
+
+
 def require_contractor_portal():
     if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").lower() != "true":
         raise HTTPException(503, "Contractor portal is disabled")
@@ -213,7 +216,7 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
         if not wo or not approval:raise HTTPException(409,"Job is not available for this action")
     label="Accept job" if decision=="accept" else "Decline job"
     return f"""<h2>Confirm action for job #{work_order_id}</h2>
-<form method="post" action="/contractor/decision">
+<form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/decision">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="decision" value="{decision}">
@@ -246,7 +249,7 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
         if not _contractor_work_order(s,work_order_id,contractor_id,{"CONTRACTOR_ACCEPTED","AWAITING_AVAILABILITY"}):
             raise HTTPException(409,"Job is not available for this action")
     return f"""<h2>Submit availability for job #{work_order_id}</h2>
-<form method="post">
+<form method="{CONTRACTOR_FORM_METHOD}">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
@@ -280,7 +283,7 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}):
             raise HTTPException(409,"Job is not available for this action")
-    return f"""<h2>Complete job #{work_order_id}</h2><form method="post">
+    return f"""<h2>Complete job #{work_order_id}</h2><form method="{CONTRACTOR_FORM_METHOD}">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
