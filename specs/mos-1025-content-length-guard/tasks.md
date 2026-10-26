@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Add tests/test_content_length_guard.py
+- [x] Run the three named tests
