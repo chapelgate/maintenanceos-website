@@ -10,10 +10,12 @@ const page = fs.readFileSync(path.join(ROOT, "src/app/page.tsx"), "utf8");
 test("home launch list denies GA desk and live phone provisioning", () => {
   assert.match(page, /leadType="launch_list"/);
   assert.match(page, /not a GA support desk/i);
-  assert.match(page, /not live phone provisioning/i);
+  assert.match(page, /no live phone provisioning/i);
+  assert.match(page, /no live chat/i);
+  assert.match(page, /no response-time SLA/i);
   assert.match(
     page,
-    /Updates only — not a live support desk, not a GA support desk, not live phone provisioning/,
+    /Updates only — not a live support desk, not a GA support desk, no live chat, no live phone provisioning/,
   );
   assert.doesNotMatch(page, /buy now/i);
   assert.doesNotMatch(page, /£/);

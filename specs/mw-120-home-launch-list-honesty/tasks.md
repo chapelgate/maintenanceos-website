@@ -1,0 +1,2 @@
+- [x] Update homepage launch-list honesty copy
+- [x] Add lock test
