@@ -94,16 +94,17 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     hold = session.get(DataLifecycleHold, hold_id)
     if not hold or hold.client_id != client_id:
         raise LifecycleRuntimeError("hold_not_found_for_tenant")
-    if hold.active:
-        hold.active = False
-        hold.released_at = utcnow()
-        audit(
-            session,
-            None,
-            actor,
-            "DATA_LIFECYCLE_HOLD_RELEASED",
-            json.dumps({"hold_id": hold.id, "client_id": client_id}, sort_keys=True),
-        )
+    if not hold.active:
+        raise LifecycleRuntimeError("hold_already_released")
+    hold.active = False
+    hold.released_at = utcnow()
+    audit(
+        session,
+        None,
+        actor,
+        "DATA_LIFECYCLE_HOLD_RELEASED",
+        json.dumps({"hold_id": hold.id, "client_id": client_id}, sort_keys=True),
+    )
     return hold
 
 
