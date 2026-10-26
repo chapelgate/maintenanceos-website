@@ -205,7 +205,13 @@ elif page=="Audit":
 
 elif page=="System Health":
     st.title("System Health")
+    from readiness import release_status_banner
     checks=readiness_report()
+    banner=release_status_banner(checks)
+    if banner["level"]=="warning":
+        st.warning(f"{banner['title']} — {banner['body']}")
+    else:
+        st.info(f"{banner['title']} — {banner['body']}")
     st.dataframe([{"check":key,"ready":value} for key,value in checks.items()],hide_index=True,use_container_width=True)
     from call_capacity import capacity_snapshot
     snap=capacity_snapshot()
