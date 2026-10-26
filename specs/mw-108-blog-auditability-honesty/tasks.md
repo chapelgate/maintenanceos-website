@@ -1,0 +1,4 @@
+- [x] Soften Every step is auditable
+- [x] Soften regulations audit trail bullet
+- [x] Soften landscape subprocessor/auditable claims
+- [x] Add lock test
