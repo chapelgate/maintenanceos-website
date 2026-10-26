@@ -104,8 +104,14 @@ def create_hold(
     return hold
 
 
+RELEASE_HOLD_ACTOR_MAX = 100
+
+
 def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLifecycleHold:
     _require_client(session, client_id)
+    actor = (actor or "").strip() or "Lifecycle Controller"
+    if len(actor) > RELEASE_HOLD_ACTOR_MAX:
+        raise LifecycleRuntimeError("release_hold_actor_too_long")
     hold = session.get(DataLifecycleHold, hold_id)
     if not hold or hold.client_id != client_id:
         raise LifecycleRuntimeError("hold_not_found_for_tenant")
@@ -115,7 +121,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
         _lifecycle_audit(
             session,
             None,
-            (actor or "").strip() or "Lifecycle Controller",
+            actor,
             "DATA_LIFECYCLE_HOLD_RELEASED",
             json.dumps({"hold_id": hold.id, "client_id": client_id}, sort_keys=True),
         )
