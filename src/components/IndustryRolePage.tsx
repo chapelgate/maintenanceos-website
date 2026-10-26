@@ -154,7 +154,7 @@ export function IndustryRolePage({ role }: Props) {
 
         <ChatWidget
           pageContext={`industries/${role.slug}`}
-          title={`Questions about ${role.label}?`}
+          title={`Questions about ${role.label}? Chat is not connected.`}
         />
       </div>
     </>

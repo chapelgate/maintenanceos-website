@@ -11,31 +11,18 @@ test("ChatWidget renders with default props", () => {
   const html = render();
 
   assert.ok(html.includes("mos-chat-widget"));
-  assert.ok(html.includes("Chat with us"));
+  assert.ok(html.includes("Chat is not connected"));
   assert.ok(html.includes('type="button"'));
-  assert.ok(html.includes('aria-label="Open chat"'));
+  assert.ok(html.includes('aria-label="Open chat availability"'));
 });
 
 test("ChatWidget renders with custom title", () => {
-  const html = render({ title: "Talk to our team" });
+  const html = render({ title: "Questions about the preview?" });
 
-  assert.ok(html.includes("Talk to our team"));
+  assert.ok(html.includes("Questions about the preview?"));
 });
 
-test("ChatWidget renders with custom placeholder", () => {
-  const html = render({ placeholder: "Type your message..." });
-
-  assert.ok(html.includes('placeholder="Type your message..."'));
-});
-
-test("ChatWidget input has required accessibility attributes", () => {
-  const html = render();
-
-  assert.ok(html.includes('aria-label="Message"'));
-  assert.ok(html.includes('aria-required="true"'));
-});
-
-test("ChatWidget send button has focus-visible styles", () => {
+test("ChatWidget trigger has focus-visible styles", () => {
   const html = render();
 
   assert.ok(html.includes("focus-visible:ring-2"));
@@ -55,9 +42,10 @@ test("ChatWidget renders in closed state by default", () => {
   assert.ok(html.includes('aria-expanded="false"'));
 });
 
-test("ChatWidget has proper form structure", () => {
+test("ChatWidget has no fake submit form", () => {
   const html = render();
 
-  assert.ok(html.includes("<form"));
-  assert.ok(html.includes('type="submit"'));
+  assert.ok(!html.includes("<form"));
+  assert.ok(!html.includes('type="submit"'));
+  assert.ok(!html.includes("placeholder="));
 });
