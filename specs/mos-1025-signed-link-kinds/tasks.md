@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Allow only the existing signed-link kinds
+- [x] Run the named tests and the security stdlib regression
