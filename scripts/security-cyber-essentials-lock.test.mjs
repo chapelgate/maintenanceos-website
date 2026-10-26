@@ -13,8 +13,8 @@ const page = fs.readFileSync(
 test("security page keeps Cyber Essentials PLANNED only", () => {
   assert.match(page, /Cyber Essentials: PLANNED \(target Q2 2027\)/);
   assert.match(page, /Honest Certification Status/);
-  assert.match(page, /No ISO 27001, SOC 2/);
-  assert.match(page, /bank-grade/i);
+  assert.match(page, /No ISO 27001, SOC 2, or bank-grade claims/);
+  assert.doesNotMatch(page, /or No bank-grade/);
   assert.doesNotMatch(page, /Cyber Essentials certified/i);
   assert.doesNotMatch(page, /we hold Cyber Essentials/i);
   assert.doesNotMatch(page, /ISO 27001 certified/i);
@@ -27,4 +27,12 @@ test("security page keeps draft legal and no launch-flag sales copy", () => {
   assert.doesNotMatch(page, /buy now/i);
   assert.doesNotMatch(page, /99\.9%/);
   assert.doesNotMatch(page, /uptime guarantee/i);
+});
+
+test("security page does not claim static-host clickjacking headers are resolved", () => {
+  assert.match(page, /not claimed as resolved on the current static host/);
+  assert.match(page, /frame-ancestors/);
+  assert.match(page, /does not change deploy or\s+nginx configuration/);
+  assert.doesNotMatch(page, /clickjacking (is |risk is )?resolved/i);
+  assert.doesNotMatch(page, /X-Frame-Options: DENY/);
 });

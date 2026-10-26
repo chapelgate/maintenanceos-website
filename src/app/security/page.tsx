@@ -73,7 +73,7 @@ export default function SecurityPage() {
               </svg>
             }
             title="Honest Certification Status"
-            description="No ISO 27001, SOC 2, or No bank-grade claims. Security controls exist in product code rather than certificate theatre."
+            description="No ISO 27001, SOC 2, or bank-grade claims. Security controls exist in product code rather than certificate theatre."
           />
         </div>
       </section>
@@ -103,6 +103,14 @@ export default function SecurityPage() {
         </p>
         <p className="text-sm text-muted">
           Website learning reads only a small, bounded set of public HTTPS pages. Here, private/internal addresses are blocked, and robots.txt is honoured.
+        </p>
+        <p className="text-sm text-muted">
+          Static-host HTTP response headers for clickjacking defence
+          (<code>X-Frame-Options</code> / CSP <code>frame-ancestors</code>) are
+          not claimed as resolved on the current static host. That residual risk
+          stays open until an authorised host-header change or explicit owner
+          acceptance before public launch. This page does not change deploy or
+          nginx configuration.
         </p>
       </section>
 
