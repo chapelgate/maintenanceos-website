@@ -45,7 +45,7 @@ export const industryRoles: IndustryRole[] = [
     label: "Landlords",
     card: "Landlords — UK emergency triage vs jobs; no invented vans or client-money.",
     title: "Repair reporting for landlords who can't be on the phone all night",
-    sub: "Capture tenant repair calls 24/7. Fixed rules decide urgency; hazardous reports latch for an authorised person.",
+    sub: "Designed to capture tenant repair reports when the desk is closed. Fixed rules decide urgency; hazardous reports latch for an authorised person.",
     metaDescription: "Take tenant repair reports properly, keep anything dangerous in front of a person, and keep a record of what happened. Repair intake for UK landlords.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
