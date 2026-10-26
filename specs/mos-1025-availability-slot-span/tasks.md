@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound availability slot span on contractor submit
+- [x] Run the named tests

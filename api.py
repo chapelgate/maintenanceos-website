@@ -5,7 +5,7 @@ import math
 import os
 import threading
 from contextlib import suppress
-from datetime import datetime
+from datetime import datetime,timedelta
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
 from fastapi.responses import HTMLResponse,Response
 from sqlalchemy.exc import SQLAlchemyError
@@ -254,13 +254,20 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <label>End (YYYY-MM-DD HH:MM)</label><input name="end"><br>
 <button type="submit">Submit</button></form>"""
 
+AVAILABILITY_SLOT_MAX_DAYS=14
+
+def validate_availability_slot(start:datetime,end:datetime)->None:
+    if end<=start:raise HTTPException(400,"End must be after start")
+    if end-start>timedelta(days=AVAILABILITY_SLOT_MAX_DAYS):
+        raise HTTPException(400,"Availability slot is too long")
+
 @app.post("/contractor/availability",response_class=HTMLResponse)
 def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),start:str=Form(...),end:str=Form(...)):
     require_contractor_portal()
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     try:st=datetime.strptime(start,"%Y-%m-%d %H:%M");en=datetime.strptime(end,"%Y-%m-%d %H:%M")
     except ValueError as exc:raise HTTPException(400,"Invalid availability date/time") from exc
-    if en<=st:raise HTTPException(400,"End must be after start")
+    validate_availability_slot(st,en)
     try:availability_id=submit_availability(work_order_id,contractor_id,st,en,token)
     except (TenantAccessError,SafetyStateError):availability_id=None
     if not availability_id:raise HTTPException(409,"Job is not available for this action")
