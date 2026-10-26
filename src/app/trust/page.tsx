@@ -185,11 +185,12 @@ export default function TrustPage() {
               The scanner reads public websites only; private/internal targets
               are blocked.
             </li>
-            <li>
-              Voice demo runs in the browser via WebRTC (no app install) or
-              via a live demo phone number (when available) — it is not an
-              always-on production service.
-            </li>
+                <li>
+                  Voice demo runs in the browser via WebRTC (no app install) or
+                  via a preview demo phone number (when the preview gate is
+                  enabled) — it is not a live always-on phone or production
+                  service.
+                </li>
           </ul>
           <p className="mt-2 text-sm text-muted">
             General availability will be announced publicly. Interested parties
@@ -203,7 +204,7 @@ export default function TrustPage() {
 
         <section aria-labelledby="voice-demo" className="border-t border-border pt-8">
           <h2 id="voice-demo" className="text-xl font-semibold text-ink">
-            Voice Demo — Browser-Only & Live Number
+            Voice Demo — Browser Sandbox & Preview Number
           </h2>
           <p className="mt-2 text-sm text-muted">
             The voice AI receptionist can be tried in two ways:
@@ -212,19 +213,20 @@ export default function TrustPage() {
             <li>
               <strong>Browser sandbox (/create):</strong> WebRTC-based test call
               runs entirely in the browser. No phone number required. Audio is
-              processed by the same AI pipeline as the live demo.
+              processed by the same AI pipeline as the preview number.
             </li>
             <li>
-              <strong>Live demo number (when enabled):</strong> A UK geographic
-              number routed via Twilio to the same voice function. Available
-              24/7 for greeting and basic intake. Not a production answering
+              <strong>Preview demo number (when enabled):</strong> A UK geographic
+              number routed via Twilio to the same voice function. Only available
+              when the preview gate is enabled — not a public 24/7 answering
+              service. Not a live always-on phone. Not a production answering
               service.
             </li>
           </ul>
           <p className="mt-2 text-sm text-muted">
             Both paths use the same backend: Twilio → `/api/website/voice` →
             Gemini (LLM) → Piper (TTS). No client data leaves the call session.
-            The sandbox does not persist audio. The live number does not store
+            The sandbox does not persist audio. The preview number does not store
             recordings beyond the session.
           </p>
           <p className="mt-2 text-sm text-muted">
