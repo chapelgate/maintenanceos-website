@@ -16,7 +16,7 @@ from models import (
 
 
 ACTION_STATES = {"REQUESTED", "PENDING", "ATTEMPTED", "FAILED", "SUCCEEDED", "CANCELLED", "UNKNOWN"}
-ACTION_KEY_MAX = 200
+PROVIDER_REFERENCE_MAX = 200
 CONFIRMABLE_ACTIONS = {
     "contractor_contacted",
     "contractor_dispatched",
@@ -47,14 +47,15 @@ def record_action_result(
     action_type = (action_type or "").strip().lower()
     action_key = (action_key or "").strip()
     status = (status or "").strip().upper()
+    provider_reference = (provider_reference or "").strip()
     if action_type not in CONFIRMABLE_ACTIONS:
         raise ValueError("Unknown confirmable action")
     if status not in ACTION_STATES:
         raise ValueError("Unknown action state")
     if not action_key:
         raise ValueError("Action result requires an idempotency key")
-    if len(action_key) > ACTION_KEY_MAX:
-        raise ValueError("Action key exceeds maximum length")
+    if len(provider_reference) > PROVIDER_REFERENCE_MAX:
+        raise ValueError("Provider reference exceeds maximum length")
     if work_order_id:
         work_order = session.get(WorkOrder, work_order_id)
         if not work_order or work_order.client_id != client_id:
@@ -80,7 +81,7 @@ def record_action_result(
         action_type=action_type,
         action_key=action_key,
         status=status,
-        provider_reference=(provider_reference or "").strip(),
+        provider_reference=provider_reference,
         detail=(detail or "").strip(),
     )
     try:
@@ -100,7 +101,7 @@ def record_action_result(
         "action_type": action_type,
         "status": status,
         "action_key": action_key,
-        "provider_reference": (provider_reference or "").strip(),
+        "provider_reference": provider_reference,
     }, sort_keys=True)
     if work_order_id:
         session.add(AuditEvent(
