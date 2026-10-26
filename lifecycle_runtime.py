@@ -323,9 +323,14 @@ def _parse_record_id(record_id: str, expected: str) -> int:
     return value
 
 
+_APPLY_ACTIONS = frozenset({"erase", "preserve_minimal"})
+
+
 def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
     if decision.action == "retain":
         return False
+    if decision.action not in _APPLY_ACTIONS:
+        raise LifecycleRuntimeError(f"lifecycle_action_invalid:{decision.action}")
     key = f"{job_id}:{decision.data_class}:{decision.record_id}:{decision.action}"
     _receipt, fresh = claim_action(
         session,
