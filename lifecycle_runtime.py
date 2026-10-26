@@ -42,13 +42,15 @@ SUPPORTED_RUNTIME_CLASSES = frozenset(
     }
 )
 
+HOLD_REASON_MAX = 1000
+
 
 def _require_client(session, client_id: int) -> None:
     if not isinstance(client_id, int) or client_id <= 0 or session.get(Client, client_id) is None:
         raise LifecycleRuntimeError("valid_tenant_required")
 
 
-HOLD_ACTOR_MAX = 100
+HOLD_REASON_MAX = 1000
 
 
 def create_hold(
@@ -69,8 +71,8 @@ def create_hold(
         raise LifecycleRuntimeError("invalid_hold_scope")
     if not scope_id or not reason or not actor:
         raise LifecycleRuntimeError("hold_scope_reason_actor_required")
-    if len(actor) > HOLD_ACTOR_MAX:
-        raise LifecycleRuntimeError("hold_actor_too_long")
+    if len(reason) > HOLD_REASON_MAX:
+        raise LifecycleRuntimeError("hold_reason_too_long")
     hold = DataLifecycleHold(
         client_id=client_id,
         scope=scope,
@@ -109,9 +111,6 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     return hold
 
 
-REQUESTED_BY_MAX = 100
-
-
 def queue_retention_sweep(
     session,
     *,
@@ -124,8 +123,6 @@ def queue_retention_sweep(
     actor = (actor or "").strip()
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
-    if len(actor) > REQUESTED_BY_MAX:
-        raise LifecycleRuntimeError("requested_by_too_long")
     request = DataLifecycleRequest(
         client_id=client_id,
         request_type="RETENTION_SWEEP",
