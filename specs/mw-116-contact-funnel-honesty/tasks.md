@@ -1,0 +1,3 @@
+- [x] Update contact page honesty copy
+- [x] Align business-hours lock with no invented response SLA wording
+- [x] Add contact-funnel-honesty lock test
