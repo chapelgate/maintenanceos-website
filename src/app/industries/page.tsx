@@ -13,7 +13,7 @@ export const metadata = contentPageMetadata({
 });
 
 const SECTOR_SUMMARIES: Record<string, string> = {
-  landlords: "Out-of-hours repair capture with emergency triage.",
+  landlords: "Designed for out-of-hours repair capture with emergency triage — pre-launch preview, not a live phone.",
   "letting-agents": "Triages tenant reports before reaching property managers.",
   "property-managers": "Portfolio repairs structured for contractor handover.",
   "maintenance-companies": "Captures job details without promising false slots.",
