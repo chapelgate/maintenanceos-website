@@ -33,7 +33,7 @@ export const productFaqItems: FaqItem[] = [
     category: "product",
     question: "When will pricing be published?",
     answer:
-      "No public price list is published on this site. MaintenanceOS is pre-launch and not for self-serve purchase. Packages suited to UK landlords, letting agents, and property managers are shared on request — request an early demo to talk pricing. This is not a booking, checkout, or sale, and no live phone included in a plan. Live telephony and calendar booking are coming / early access.",
+      "No public price list is published on this site. MaintenanceOS is pre-launch and not for self-serve purchase. Packages suited to UK landlords, letting agents, and property managers are shared on request — request an early demo to talk pricing. This is not a booking, checkout, or sale, and no live phone is included in any published plan.",
     relatedHref: "/demo/",
     relatedLabel: "Request an early demo",
   },

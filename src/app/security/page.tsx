@@ -73,7 +73,7 @@ export default function SecurityPage() {
               </svg>
             }
             title="Honest Certification Status"
-            description="No ISO 27001, SOC 2. No bank-grade claims. Security controls exist in product code rather than certificate theatre."
+            description="No ISO 27001, SOC 2, or bank-grade claims. No bank-grade certifications. Security controls exist in product code rather than certificate theatre."
           />
         </div>
       </section>

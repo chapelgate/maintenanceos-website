@@ -47,7 +47,7 @@ export default function ContactPage() {
               info@chapelgatetechnologies.com
             </a>
             <p className="mt-1 text-xs text-muted">
-              No published response-time turnaround on this draft site — no invented response SLA.
+              No published response-time turnaround on this draft site. Not a support SLA. Also no invented response SLA.
             </p>
           </div>
         </div>
