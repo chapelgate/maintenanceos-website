@@ -287,7 +287,7 @@ function LeadCaptureFormFields({
       ) : null}
       {helper ? <p className="mt-2 text-sm text-muted">{helper}</p> : null}
       <p className="mt-2 text-xs text-muted">
-        Only email is required. Everything else is optional. Submitting opens your email app with a prefilled WorkSmartOS draft — nothing is sent until you press send.
+        Only email is required. Everything else is optional. When no form endpoint is configured, submitting opens your email app with a prefilled WorkSmartOS draft — nothing is sent until you press send.
       </p>
       {Object.keys(fieldErrors).length > 0 ? (
         <div
