@@ -48,6 +48,9 @@ def _require_client(session, client_id: int) -> None:
         raise LifecycleRuntimeError("valid_tenant_required")
 
 
+HOLD_ACTOR_MAX = 100
+
+
 def create_hold(
     session,
     *,
@@ -66,6 +69,8 @@ def create_hold(
         raise LifecycleRuntimeError("invalid_hold_scope")
     if not scope_id or not reason or not actor:
         raise LifecycleRuntimeError("hold_scope_reason_actor_required")
+    if len(actor) > HOLD_ACTOR_MAX:
+        raise LifecycleRuntimeError("hold_actor_too_long")
     hold = DataLifecycleHold(
         client_id=client_id,
         scope=scope,
