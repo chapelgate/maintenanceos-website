@@ -7,7 +7,7 @@ import threading
 from contextlib import suppress
 from datetime import datetime,timedelta
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
-from fastapi.responses import HTMLResponse,Response
+from fastapi.responses import HTMLResponse,JSONResponse,Response
 from sqlalchemy.exc import SQLAlchemyError
 from models import *
 from decision_engine import apply_intake_rules
@@ -19,6 +19,7 @@ from tenant_security import TenantAccessError,configured_voice_client_id,interna
 from dotenv import load_dotenv
 from webhook_security import public_provider_ingress_ready,targets_dedicated_test_number,validate_twilio
 from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
+from http_error_text import sanitize_http_detail
 from channels import resident_by_phone,create_from_channel
 from identity import postcode_matches
 from readiness import report as readiness_report
@@ -48,6 +49,13 @@ with suppress(Exception):
     from pilot.email_selftest import run_email_selftest_if_configured
     run_email_selftest_if_configured()
 app.add_middleware(HttpSecurityBoundary,maximum_body_bytes=MAX_REQUEST_BYTES)
+
+
+@app.exception_handler(HTTPException)
+async def sanitized_http_exception(request: Request, exc: HTTPException):
+    detail = sanitize_http_detail(exc.detail)
+    headers = getattr(exc, "headers", None)
+    return JSONResponse(status_code=exc.status_code, content={"detail": detail}, headers=headers)
 
 
 async def _json_object(request: Request) -> dict:
