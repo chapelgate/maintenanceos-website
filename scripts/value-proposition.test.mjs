@@ -12,13 +12,15 @@ test("homepage leads with customer outcome before architecture", () => {
   assert.match(page, /AI intake for repair reports\. A person still clears anything dangerous\./);
   assert.match(
     page,
-    /Capture caller details 24\/7 in natural UK terminology\./,
+    /Designed to capture caller details in natural UK terminology when voice intake is enabled/,
   );
+  assert.doesNotMatch(page, /Capture caller details 24\/7/);
   assert.match(page, /What your team gets/);
   assert.match(page, /Capture Caller Details/);
   assert.match(page, /Surface Critical Hazards/);
   assert.match(page, /Fixed Rule Engine/);
-  assert.match(page, /Immutable Audit Trail/);
+  assert.match(page, /Audit Trail Design/);
+  assert.doesNotMatch(page, /Immutable Audit Trail/);
   assert.match(page, /<SafeAutomationLink \/>/);
   assert.ok(
     page.indexOf("What your team gets") <
