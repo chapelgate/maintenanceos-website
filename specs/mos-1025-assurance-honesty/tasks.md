@@ -1,0 +1,4 @@
+- [x] Write spec/plan
+- [x] Add honesty doc
+- [x] Add tests/test_assurance_claims_honesty.py
+- [x] Run the three named tests
