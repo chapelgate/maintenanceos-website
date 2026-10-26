@@ -7,6 +7,7 @@ from clock import utcnow
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from communications import queue_outbound
+from product_profile import worker_banner
 from idempotency import claim_action
 from lifecycle import transition_work_order
 from models import ActionReceipt, Approval, AutomationJob, ContractorAttempt, Escalation, SessionLocal, WorkOrder
@@ -242,6 +243,6 @@ if __name__ == "__main__":
     init_db()
     scheduler = BlockingScheduler()
     scheduler.add_job(cycle, "interval", seconds=30, max_instances=1, coalesce=True)
-    print("MaintenanceOS V1 worker running")
+    print(worker_banner())
     cycle()
     scheduler.start()

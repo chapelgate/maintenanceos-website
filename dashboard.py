@@ -8,14 +8,15 @@ from security import verify_password
 from idempotency import ai_side_effects_enabled,set_ai_side_effects
 from readiness import report as readiness_report
 from reporting import operational_metrics
+from product_profile import page_title
 from safety_controls import SafetyStateError,clear_critical_safety,critical_safety_active
 
 init_db()
-st.set_page_config(page_title="MaintenanceOS V1",layout="wide")
+st.set_page_config(page_title=page_title(),layout="wide")
 
 def auth():
     if "uid" in st.session_state:return True
-    st.title("MaintenanceOS V1 Pilot")
+    st.title(page_title())
     e=st.text_input("Email");p=st.text_input("Password",type="password")
     if st.button("Sign in",type="primary"):
         with SessionLocal() as s:

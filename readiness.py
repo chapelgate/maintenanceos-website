@@ -19,15 +19,16 @@ from commercial_release_controls import (
 )
 from idempotency import ai_side_effects_enabled
 from ingress_security import rate_setting_valid
-from models import RuntimeControl,SessionLocal
+from models import RuntimeControl, SessionLocal
 from operational_logging import structured_logging_enabled
 from provider_runtime import provider_ready, voice_provider
 from gemini_voice import gemini_ready
 from security import app_secret_ready
 from schema_health import schema_report
-from tenant_security import internal_api_tenant_ready,isolated_voice_tenant_ready
-from voice_bridge import realtime_model_supported,realtime_voice_supported,transcription_model_supported
-from webhook_security import dedicated_test_number_ready,public_https_origin_ready,public_provider_ingress_ready
+from tenant_security import internal_api_tenant_ready, isolated_voice_tenant_ready
+from voice_bridge import realtime_model_supported, realtime_voice_supported, transcription_model_supported
+from webhook_security import dedicated_test_number_ready, public_https_origin_ready, public_provider_ingress_ready
+from product_profile import profile_ready
 
 load_dotenv()
 
@@ -119,7 +120,7 @@ def _staged_database_configured() -> bool:
     return bool(url.startswith(("postgresql://", "postgresql+psycopg://")) and os.getenv("DATABASE_DEPLOYMENT_MODE", "").strip().lower() == "managed_test" and _enabled("DATABASE_TLS_REQUIRED"))
 
 
-CHECKS={
+CHECKS = {
     "database": lambda: schema_report()["database_reachable"],
     "schema_compatible": lambda: schema_report()["schema_compatible"],
     "app_secret_changed": app_secret_ready,
@@ -164,25 +165,27 @@ CHECKS={
     "commercial_external_identity_config": external_identity_configured,
     "commercial_external_identity_runtime": external_identity_runtime_ready,
     "commercial_social_housing_runtime": social_housing_runtime_ready,
+    "product_profile_ready": profile_ready,
 }
 
 LOCAL_CLOSED_KEYS = (
-    "database","schema_compatible","app_secret_changed","internal_api_secured",
-    "internal_api_tenant","isolated_voice_tenant","ai_provider_selected","ai_provider_credential",
-    "ai_provider_runtime","provider_credential_formats","dedicated_test_number",
-    "public_provider_ingress_disabled","contractor_portal_disabled","live_email_disabled",
-    "live_messaging_disabled","automatic_dispatch_disabled","remote_ai_enable_disabled",
-    "ai_side_effects_disabled","ai_kill_switch_recorded","structured_logging",
-    "http_rate_limit_configured","websocket_rate_limit_configured","voice_timing_configured",
+    "database", "schema_compatible", "app_secret_changed", "internal_api_secured",
+    "internal_api_tenant", "isolated_voice_tenant", "ai_provider_selected", "ai_provider_credential",
+    "ai_provider_runtime", "provider_credential_formats", "dedicated_test_number",
+    "public_provider_ingress_disabled", "contractor_portal_disabled", "live_email_disabled",
+    "live_messaging_disabled", "automatic_dispatch_disabled", "remote_ai_enable_disabled",
+    "ai_side_effects_disabled", "ai_kill_switch_recorded", "structured_logging",
+    "http_rate_limit_configured", "websocket_rate_limit_configured", "voice_timing_configured",
+    "product_profile_ready",
 )
 PUBLIC_TEST_CONFIG_KEYS = (
-    "database","schema_compatible","app_secret_changed",
-    "internal_api_secured","internal_api_tenant","isolated_voice_tenant","ai_provider_selected",
-    "ai_provider_credential","ai_provider_runtime","provider_credential_formats","dedicated_test_number",
-    "public_https_url","twilio_signatures","public_provider_ingress_disabled","contractor_portal_disabled",
-    "live_email_disabled","live_messaging_disabled","automatic_dispatch_disabled",
-    "remote_ai_enable_disabled","ai_side_effects_disabled","ai_kill_switch_recorded",
-    "structured_logging","http_rate_limit_configured","websocket_rate_limit_configured",
+    "database", "schema_compatible", "app_secret_changed",
+    "internal_api_secured", "internal_api_tenant", "isolated_voice_tenant", "ai_provider_selected",
+    "ai_provider_credential", "ai_provider_runtime", "provider_credential_formats", "dedicated_test_number",
+    "public_https_url", "twilio_signatures", "public_provider_ingress_disabled", "contractor_portal_disabled",
+    "live_email_disabled", "live_messaging_disabled", "automatic_dispatch_disabled",
+    "remote_ai_enable_disabled", "ai_side_effects_disabled", "ai_kill_switch_recorded",
+    "structured_logging", "http_rate_limit_configured", "websocket_rate_limit_configured",
     "voice_timing_configured",
 )
 CONTROLLED_CALL_CONFIG_KEYS = tuple(
@@ -199,20 +202,23 @@ COMMERCIAL_RELEASE_KEYS = (
 
 
 def report():
-    results={}
-    for key,check in CHECKS.items():
-        try:results[key]=bool(check())
-        except Exception:results[key]=False
-    results["voice_ready"]=provider_ready()
-    results["local_pre_live_ready"]=all(results[key] for key in LOCAL_CLOSED_KEYS)
-    results["public_test_config_ready"]=all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and not results["realtime_voice_enabled"]
-    results["controlled_call_config_ready"]=all(results[key] for key in CONTROLLED_CALL_CONFIG_KEYS) and results["voice_ready"]
-    results["commercial_release_ready"]=(
+    results = {}
+    for key, check in CHECKS.items():
+        try:
+            results[key] = bool(check())
+        except Exception:
+            results[key] = False
+    results["voice_ready"] = provider_ready()
+    results["local_pre_live_ready"] = all(results[key] for key in LOCAL_CLOSED_KEYS)
+    results["public_test_config_ready"] = all(results[key] for key in PUBLIC_TEST_CONFIG_KEYS) and not results["realtime_voice_enabled"]
+    results["controlled_call_config_ready"] = all(results[key] for key in CONTROLLED_CALL_CONFIG_KEYS) and results["voice_ready"]
+    results["commercial_release_ready"] = (
         results["controlled_call_config_ready"]
         and all(results[key] for key in COMMERCIAL_RELEASE_KEYS)
     )
-    results["live_ready"]=results["controlled_call_config_ready"]
+    results["live_ready"] = results["controlled_call_config_ready"]
     return results
+
 
 PROFILE_KEYS = {
     "local-closed": "local_pre_live_ready",
@@ -221,14 +227,14 @@ PROFILE_KEYS = {
     "commercial-release": "commercial_release_ready",
 }
 
-if __name__=="__main__":
-    parser=argparse.ArgumentParser(description="Emit boolean-only MaintenanceOS readiness")
-    parser.add_argument("--profile",choices=PROFILE_KEYS)
-    args=parser.parse_args()
-    result=report()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Emit boolean-only MaintenanceOS readiness")
+    parser.add_argument("--profile", choices=PROFILE_KEYS)
+    args = parser.parse_args()
+    result = report()
     if args.profile:
-        ready_key=PROFILE_KEYS[args.profile]
-        payload={"profile":args.profile,"ready":result[ready_key],"checks":result}
-        print(json.dumps(payload,indent=2,sort_keys=True))
+        ready_key = PROFILE_KEYS[args.profile]
+        payload = {"profile": args.profile, "ready": result[ready_key], "checks": result}
+        print(json.dumps(payload, indent=2, sort_keys=True))
         sys.exit(0 if result[ready_key] else 1)
-    print(json.dumps(result,indent=2,sort_keys=True))
+    print(json.dumps(result, indent=2, sort_keys=True))

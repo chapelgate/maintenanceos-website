@@ -40,7 +40,8 @@ from voice_bridge import (
 )
 from provider_runtime import handle_provider_media_stream, provider_ready
 load_dotenv()
-app=FastAPI(title="MaintenanceOS V1 Pilot",docs_url=None,redoc_url=None,openapi_url=None)
+from product_profile import api_title
+app=FastAPI(title=api_title(),docs_url=None,redoc_url=None,openapi_url=None)
 init_db()
 # Optional one-shot completion-email proof on boot (no Twilio / no pilot ceiling).
 with suppress(Exception):
