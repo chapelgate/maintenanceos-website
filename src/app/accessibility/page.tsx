@@ -67,6 +67,7 @@ export default function AccessibilityPage() {
           <ul className="mt-2 list-disc list-inside space-y-1">
             <li>Baseline CI run 39312522438 (19 October 2026): Home, Create, Demo, Features, Pricing, Security</li>
             <li>Later gate additions: Help (/help/), Subprocessors (/subprocessors/), Vulnerability disclosure (/vulnerability-disclosure/)</li>
+            <li>Current WebKit matrix also gates: About, Accessibility, AI receptionist, Blog index, Buyers, Compare index, Contact, Cookies, FAQ, How it works, How we keep control, Industries index, Integrations index, Privacy, Property maintenance software, Status, Terms, Trust</li>
           </ul>
           <p className="mt-2">
             <strong>Result:</strong> Those gated routes reported no axe
@@ -76,12 +77,14 @@ export default function AccessibilityPage() {
           </p>
           <p className="mt-2">
             <strong>Scope limitations:</strong> This is an automated subset
-            check. It does not cover the full site (e.g., /faq/, /blog/,
-            /trust/, /compare/, /accessibility/, /cookies/, /terms/,
-            /privacy/). It does not test physical iPhone or Mac Safari, nor
-            any screen reader or assistive technology — those remain
-            owner-only checks. It tests only WCAG 2.0 A/AA tags in axe-core,
-            not the full WCAG 2.2 AA criterion set.
+            check on the routes listed in
+            <code>tests/webkit-a11y/a11y.test.mjs</code>. Nested or dynamic
+            routes (individual blog posts, compare vendor pages, industry
+            role pages, integration provider pages, dashboard preview) are
+            not claimed as covered here. It does not test physical iPhone or
+            Mac Safari, nor any screen reader or assistive technology — those
+            remain owner-only checks. It tests only WCAG 2.0 A/AA tags in
+            axe-core, not the full WCAG 2.2 AA criterion set.
           </p>
         </section>
 
@@ -91,11 +94,13 @@ export default function AccessibilityPage() {
           </h2>
           <ul className="mt-2 list-disc list-inside space-y-2">
             <li>
-              <strong>Incomplete route coverage:</strong> The automated suite
-              still does not run against /faq/, /blog/, /trust/, /compare/,
-              /accessibility/, /cookies/, /terms/, /privacy/. Help,
-              subprocessors, and vulnerability disclosure are gated; they are
-              not listed as uncovered.
+              <strong>Nested and dynamic routes:</strong> The WebKit axe
+              gate covers the static routes listed in
+              <code>tests/webkit-a11y/a11y.test.mjs</code>. Nested or
+              dynamic routes (individual blog posts, compare vendor pages,
+              industry role pages, integration provider pages, dashboard
+              preview) are not claimed as covered here. Help, subprocessors,
+              and vulnerability disclosure are gated.
             </li>
             <li>
               <strong>Owner-only device and AT checks:</strong> Physical
@@ -139,9 +144,10 @@ export default function AccessibilityPage() {
               form-label fixes go live.
             </li>
             <li>
-              <strong>Expand automated route coverage:</strong> Add the
-              remaining public routes to the WebKit accessibility test matrix
-              (tests/webkit-a11y/a11y.test.mjs).
+              <strong>Review nested route coverage:</strong> Decide whether
+              individual blog, compare, industry, and integration pages need
+              their own WebKit axe entries beyond the current index matrix in
+              <code>tests/webkit-a11y/a11y.test.mjs</code>.
             </li>
             <li>
               <strong>Upgrade axe-core tags:</strong> Add WCAG 2.2 specific

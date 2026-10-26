@@ -1,9 +1,9 @@
 # mw-119-a11y-coverage-honesty
 
 ## Goal
-Align accessibility coverage copy with gated WebKit axe routes (/help/, /subprocessors/, /vulnerability-disclosure/) and keep Safari/AT as owner-only (REVIEW item 6).
+Align accessibility coverage copy with the current WebKit axe matrix so gated index routes are not listed as uncovered (REVIEW item 6).
 
 ## Acceptance
-- Behaviour or honesty copy changed as described.
-- Lock test green via node --test.
-- No PUBLIC_LAUNCH, deploy, or nginx changes.
+- Page lists current WebKit-gated index routes.
+- Nested/dynamic routes called out as not covered.
+- node --test scripts/a11y-coverage-honesty.test.mjs passes.
