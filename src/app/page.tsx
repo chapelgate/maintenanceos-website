@@ -224,11 +224,15 @@ export default function HomePage() {
           <p className="mt-2 text-xs text-muted">
             We will email when early access opens. Pre-launch.
           </p>
+          <p className="mt-2 text-xs text-muted">
+            Launch list is updates only — not a live support desk, not a GA support desk, not live phone provisioning.
+          </p>
           <div className="mt-5">
             <LeadCaptureForm
               leadType="launch_list"
               submitLabel="Join launch list"
               showOrganisation={false}
+              helper="Updates only — not a live support desk, not a GA support desk, not live phone provisioning."
             />
           </div>
         </div>
