@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Name and enforce COMMUNICATION_BODY_MAX
+- [x] Run the named tests

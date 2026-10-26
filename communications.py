@@ -17,7 +17,7 @@ DELIVERY_TRANSITIONS = {
     "FAILED": set(),
 }
 CHANNELS = {"EMAIL", "SMS", "WHATSAPP", "VOICE"}
-ACTION_KEY_MAX = 200
+COMMUNICATION_BODY_MAX = 10000
 
 
 def _hash_recipient(value: str) -> str:
@@ -36,7 +36,7 @@ def queue_outbound(
 ) -> CommunicationDelivery:
     channel=(channel or "").strip().upper();body=body if isinstance(body,str) else ""
     action_key=(action_key or "").strip();recipient=(recipient or "").strip()
-    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>10000 or len(action_key)>ACTION_KEY_MAX:
+    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>COMMUNICATION_BODY_MAX:
         raise ValueError("Invalid outbound communication")
     work_order=session.get(WorkOrder,work_order_id)
     if not work_order or work_order.client_id!=client_id:
