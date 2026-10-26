@@ -14,7 +14,13 @@ from idempotency import claim_action
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
 
+AUDIT_EVENT_MAX = 100
+
+
 def audit(s,woid,actor,event,detail=""):
+    event=(event or "").strip()
+    if not event or len(event)>AUDIT_EVENT_MAX:
+        raise ValueError("audit event invalid")
     s.add(AuditEvent(work_order_id=woid,actor=actor,event=event,detail=detail))
 
 
