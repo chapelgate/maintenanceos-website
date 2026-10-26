@@ -1,0 +1,3 @@
+- [x] Soften UK-specific table row
+- [x] Soften audit trail and UK feature detail bullets
+- [x] Add lock test
