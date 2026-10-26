@@ -329,8 +329,21 @@ _APPLY_ACTIONS = frozenset({"erase", "preserve_minimal"})
 def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
     if decision.action == "retain":
         return False
-    if decision.action not in _APPLY_ACTIONS:
-        raise LifecycleRuntimeError(f"lifecycle_action_invalid:{decision.action}")
+    action = (decision.action or "").strip()
+    if not action:
+        raise LifecycleRuntimeError("lifecycle_decision_action_required")
+    if action not in _APPLY_ACTIONS:
+        raise LifecycleRuntimeError(f"lifecycle_action_invalid:{action}")
+    reason = (decision.reason or "").strip()
+    if not reason:
+        raise LifecycleRuntimeError("lifecycle_decision_reason_required")
+    record_id = (decision.record_id or "").strip()
+    if not record_id:
+        raise LifecycleRuntimeError("lifecycle_decision_record_id_required")
+    if decision.client_id != client_id:
+        raise LifecycleRuntimeError("lifecycle_decision_tenant_mismatch")
+    if decision.data_class not in SUPPORTED_RUNTIME_CLASSES:
+        raise LifecycleRuntimeError(f"runtime_class_not_supported:{decision.data_class}")
     key = f"{job_id}:{decision.data_class}:{decision.record_id}:{decision.action}"
     _receipt, fresh = claim_action(
         session,
