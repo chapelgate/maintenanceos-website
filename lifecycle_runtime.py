@@ -104,7 +104,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     return hold
 
 
-VALID_LIFECYCLE_JOB_STATUSES = frozenset({"PENDING", "RUNNING", "COMPLETED", "FAILED"})
+VALID_LIFECYCLE_JOB_TYPES = frozenset({"DATA_LIFECYCLE_SWEEP"})
 
 
 def queue_retention_sweep(
@@ -117,11 +117,11 @@ def queue_retention_sweep(
 ) -> tuple[DataLifecycleRequest, AutomationJob]:
     _require_client(session, client_id)
     actor = (actor or "").strip()
-    job_status = "PENDING"
+    job_type = "DATA_LIFECYCLE_SWEEP"
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
-    if job_status not in VALID_LIFECYCLE_JOB_STATUSES:
-        raise LifecycleRuntimeError("invalid_lifecycle_job_status")
+    if job_type not in VALID_LIFECYCLE_JOB_TYPES:
+        raise LifecycleRuntimeError("invalid_lifecycle_job_type")
     request = DataLifecycleRequest(
         client_id=client_id,
         request_type="RETENTION_SWEEP",
@@ -134,10 +134,9 @@ def queue_retention_sweep(
     session.flush()
     job = AutomationJob(
         work_order_id=None,
-        job_type="DATA_LIFECYCLE_SWEEP",
+        job_type=job_type,
         run_at=run_at,
         payload=json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True),
-        status=job_status,
     )
     session.add(job)
     session.flush()
