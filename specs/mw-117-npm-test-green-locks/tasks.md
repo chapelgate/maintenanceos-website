@@ -1,0 +1,3 @@
+- [x] Restore single-field lead focus
+- [x] Align commercial-proof and launch-gates locks
+- [x] Verify previously red lock tests

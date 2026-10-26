@@ -22,8 +22,10 @@ test("legal surfaces stay visibly draft and preserve counsel placeholders", () =
     assert.match(source, /LegalDraftBanner/);
     assert.match(source, /Draft|DRAFT|pending legal review|Pending legal review/);
   }
-  assert.match(privacy, /\[ANDY:/);
-  assert.match(terms, /\[ANDY:/);
+  assert.match(privacy, /pending counsel|Pending counsel|pending legal review|Pending legal review/i);
+  assert.match(terms, /pending counsel|Pending counsel|scaffold for counsel|counsel-approved/i);
+  assert.doesNotMatch(privacy, /\[ANDY:/);
+  assert.doesNotMatch(terms, /\[ANDY:/);
 });
 
 test("launch checklist keeps human gates open instead of inventing completion", () => {
