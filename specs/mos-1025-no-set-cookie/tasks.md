@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Strip Set-Cookie in the HTTP security boundary
+- [x] Run the named tests
