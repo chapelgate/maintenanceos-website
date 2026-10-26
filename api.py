@@ -84,6 +84,11 @@ def _positive_amount(value) -> float:
     return result
 
 
+WORK_ORDER_SOURCES = frozenset({
+    "API","MANUAL","VOICE","SMS","EMAIL","WHATSAPP","TEST","HARNESS","LOCAL_ACCEPTANCE",
+})
+
+
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
     if not isinstance(value, str):
         raise HTTPException(400, f"{name} must be text")
@@ -172,8 +177,10 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     description=_bounded_text(d.get("description"),"description",required=True)
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
+    source=_bounded_text(d.get("source","API"),"source",required=True,maximum=30)
+    if source not in WORK_ORDER_SOURCES:raise HTTPException(400,"source is not allowed")
     try:
-        wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=32),description,
+        wid=create_from_channel(client_id,property_id,resident_id,source,description,
                                 identity_verified=identity_verified,
                                 incident_key=d.get("incident_key"),event_key=request.headers.get("Idempotency-Key"))
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
