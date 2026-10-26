@@ -111,6 +111,9 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     return hold
 
 
+LIFECYCLE_JOB_PAYLOAD_MAX = 2000
+
+
 def queue_retention_sweep(
     session,
     *,
@@ -136,11 +139,14 @@ def queue_retention_sweep(
     )
     session.add(request)
     session.flush()
+    payload = json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True)
+    if len(payload) > LIFECYCLE_JOB_PAYLOAD_MAX:
+        raise LifecycleRuntimeError("lifecycle_job_payload_too_long")
     job = AutomationJob(
         work_order_id=None,
         job_type="DATA_LIFECYCLE_SWEEP",
         run_at=run_at,
-        payload=json.dumps({"client_id": client_id, "request_id": request.id}, sort_keys=True),
+        payload=payload,
     )
     session.add(job)
     session.flush()
