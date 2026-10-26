@@ -1,0 +1,2 @@
+- [x] Bound IncidentIdentity.incident_key at 200
+- [x] Tests for constant, accept, reject
