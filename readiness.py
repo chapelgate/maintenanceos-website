@@ -23,7 +23,7 @@ from models import RuntimeControl, SessionLocal
 from operational_logging import structured_logging_enabled
 from provider_runtime import provider_ready, voice_provider
 from gemini_voice import gemini_ready
-from security import app_secret_ready
+from security import app_secret_ready, internal_api_token_ready
 from schema_health import schema_report
 from tenant_security import internal_api_tenant_ready, isolated_voice_tenant_ready
 from voice_bridge import realtime_model_supported, realtime_voice_supported, transcription_model_supported
@@ -124,7 +124,7 @@ CHECKS = {
     "database": lambda: schema_report()["database_reachable"],
     "schema_compatible": lambda: schema_report()["schema_compatible"],
     "app_secret_changed": app_secret_ready,
-    "internal_api_secured": lambda: len(os.getenv("INTERNAL_API_TOKEN", "")) >= 32,
+    "internal_api_secured": internal_api_token_ready,
     "internal_api_tenant": internal_api_tenant_ready,
     "ai_provider_selected": _provider_selected,
     "ai_provider_credential": _provider_credential_ready,

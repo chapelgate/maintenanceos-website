@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Share the token helper between the API and readiness
+- [x] Run the named tests

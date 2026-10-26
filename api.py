@@ -12,7 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from models import *
 from decision_engine import apply_intake_rules
 from operations import *
-from security import verify_link
+from security import configured_internal_api_token, verify_link
 from idempotency import claim_action,set_ai_side_effects
 from safety_controls import SafetyStateError,SAFETY_CLEARANCE_REASON_MAX,clear_critical_safety,critical_safety_active
 from tenant_security import TenantAccessError,configured_voice_client_id,internal_api_tenant_ready,require_client_resource
@@ -114,8 +114,8 @@ def _reject_control_chars(value: str, name: str) -> str:
 
 
 def require_internal_api(request:Request):
-    expected=os.getenv("INTERNAL_API_TOKEN","")
-    if len(expected)<32:
+    expected=configured_internal_api_token()
+    if not expected:
         raise HTTPException(503,"Internal API is not configured")
     authorization=request.headers.get("Authorization","")
     supplied=authorization[7:] if authorization.startswith("Bearer ") else ""

@@ -8,6 +8,17 @@ def app_secret_ready()->bool:
     secret=os.getenv('APP_SECRET','')
     return len(secret)>=32 and secret not in INSECURE_APP_SECRETS
 
+def configured_internal_api_token()->str|None:
+    token=os.getenv("INTERNAL_API_TOKEN","").strip()
+    if not token or len(token)<32:
+        return None
+    if token in INSECURE_APP_SECRETS:
+        return None
+    return token
+
+def internal_api_token_ready()->bool:
+    return configured_internal_api_token() is not None
+
 def hash_password(password:str)->str:
     salt=secrets.token_bytes(16)
     iterations=260000
