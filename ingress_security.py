@@ -33,6 +33,8 @@ SECURITY_HEADERS = (
     (b"x-frame-options", b"DENY"),
     (b"referrer-policy", b"no-referrer"),
     (b"cache-control", b"no-store"),
+    (b"permissions-policy", b"camera=(), microphone=(), geolocation=()"),
+    (b"cross-origin-opener-policy", b"same-origin"),
 )
 REQUEST_ID = re.compile(r"^[A-Za-z0-9._-]{1,64}$")
 
