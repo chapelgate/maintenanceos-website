@@ -14,7 +14,7 @@ export function HomeTrustStrip() {
         <div className="flex flex-wrap items-center gap-3 font-medium">
           <span className="home-trust-chip">Pre-launch</span>
           <span className="home-trust-chip">UK maintenance ops</span>
-          <span className="home-trust-chip">196 automated claims tests passed</span>
+          <span className="home-trust-chip">Claims evidence pinned to audited checkpoint</span>
           <span className="home-trust-chip">No client-money execution</span>
           <span className="home-trust-chip">Authorised human clearance</span>
           <span className="home-trust-chip">No live phone on this site</span>

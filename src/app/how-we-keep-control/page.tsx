@@ -126,9 +126,9 @@ export default function HowWeKeepControlPage() {
               </p>
             </Accordion>
 
-            <Accordion summary="Checkpoint test verification (196 automated test suite)">
+            <Accordion summary="Checkpoint test verification (pinned product evidence)">
               <p>
-                Every deployment must pass 196 automated safety and claims verification tests before shipping.
+                Safety claims and test counts are pinned to the audited product checkpoint.
               </p>
               <p>
                 Tests verify that safety latches fail closed, payment operations remain prohibited, and emergency routing cannot be bypassed.
