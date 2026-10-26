@@ -40,3 +40,18 @@ test("provider pages do not invent notify email or live crypto claims", () => {
   assert.doesNotMatch(providerPage, /Revoke access anytime from this page/);
   assert.doesNotMatch(providerPage, /No credential storage in browser/);
 });
+
+test("coming-soon provider descriptions stay planned and drop scale theatre", () => {
+  const lib = fs.readFileSync(path.join(ROOT, "src/lib/integrations.ts"), "utf8");
+  assert.match(lib, /Planned: sync MaintenanceOS repair schedules with Google Calendar/);
+  assert.match(lib, /Planned: Microsoft 365 \/ Outlook Calendar sync/);
+  assert.match(lib, /Planned: Cal\.com scheduling links/);
+  assert.match(lib, /Planned: Calendly scheduling/);
+  assert.match(lib, /Planned: Zapier workflows for repair-report triggers/);
+  assert.match(lib, /Planned: HubSpot CRM sync/);
+  assert.match(lib, /Not a live connector/);
+  assert.doesNotMatch(lib, /5000\+/);
+  assert.doesNotMatch(lib, /Two-way sync for appointments and availability/);
+  assert.doesNotMatch(lib, /Trigger actions on new repair reports/);
+  assert.doesNotMatch(lib, /Track maintenance pipeline/);
+});
