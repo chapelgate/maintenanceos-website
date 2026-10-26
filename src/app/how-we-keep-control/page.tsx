@@ -110,19 +110,19 @@ export default function HowWeKeepControlPage() {
 
             <Accordion summary="Auditable evidence and job records">
               <p>
-                Every caller interaction, transcription extract, hazard detection score, and staff clearance decision is permanently logged with timestamps.
+                Product design intent: caller interaction, transcription extract, hazard detection score, and staff clearance decision are logged with timestamps in the MaintenanceOS product path.
               </p>
               <p>
-                Records provide complete traceability for statutory compliance and Housing Ombudsman evidence without tampering.
+                That design aims for auditable evidence for statutory and Housing Ombudsman review. This marketing site does not itself operate live call logging or claim a live production evidence store.
               </p>
             </Accordion>
 
             <Accordion summary="Tenant isolation and multi-organisation data controls">
               <p>
-                Data is strictly partitioned by organisation ID at the database layer. No cross-organisation data sharing or cross-tenant leakage is permitted.
+                Product design intent: organisation data is partitioned by organisation ID at the database layer so cross-organisation leakage is not permitted in the product path.
               </p>
               <p>
-                Automated continuous integration regressions enforce database partitioning across all release builds.
+                Targeted product regressions are intended to enforce that partitioning on product release builds. This marketing site does not host multi-tenant customer data.
               </p>
             </Accordion>
 
