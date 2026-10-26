@@ -413,6 +413,8 @@ def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
     request = session.get(DataLifecycleRequest, request_id)
     if not request or request.client_id != client_id or request.request_type != "RETENTION_SWEEP":
         raise LifecycleRuntimeError("lifecycle_request_not_found_for_tenant")
+    if request.status != "PENDING":
+        raise LifecycleRuntimeError("lifecycle_request_not_pending")
 
     applied = 0
     for decision in plan_client_retention(session, client_id=client_id, now=now):
