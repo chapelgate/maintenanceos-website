@@ -178,7 +178,19 @@ function LeadCaptureFormFields({
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       setStatus("error");
-      requestAnimationFrame(() => errorSummaryRef.current?.focus());
+      requestAnimationFrame(() => {
+        if (Object.keys(errors).length > 1) {
+          errorSummaryRef.current?.focus();
+          return;
+        }
+        if (errors.email) {
+          emailRef.current?.focus();
+          return;
+        }
+        if (errors.phone) {
+          phoneRef.current?.focus();
+        }
+      });
       return;
     }
 
