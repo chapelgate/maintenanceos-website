@@ -127,10 +127,10 @@ export default function FeaturesPage() {
 
         <section id="whats-live-today" aria-labelledby="whats-live-today-heading">
           <h2 id="whats-live-today-heading" className="text-xl font-semibold text-ink mb-3">
-            {"What's live today"}
+            {"Preview capability inventory"}
           </h2>
           <p className="mb-3 text-sm text-muted">
-            Preview capability inventory for the pre-launch demo — not commercial
+            Capability cards for the pre-launch demo — not commercial
             general availability and not a public always-on phone service.
           </p>
           <HonestyBanner compact>
