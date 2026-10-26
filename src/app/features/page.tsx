@@ -54,7 +54,7 @@ const BENTO_FEATURES: BentoFeatureCard[] = [
     id: "human-transfer",
     title: "Explicit Human Transfer",
     status: "UNDER_TEST",
-    desc: "Transfers to your team on request; fails safe if unreachable.",
+    desc: "UNDER_TEST preview: explicit-request person transfer in product source; transfer quality remains under retest — not a live always-on transfer desk on this site.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
