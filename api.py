@@ -41,6 +41,26 @@ from voice_bridge import (
 from provider_runtime import handle_provider_media_stream, provider_ready
 load_dotenv()
 app=FastAPI(title="MaintenanceOS V1 Pilot",docs_url=None,redoc_url=None,openapi_url=None)
+HEALTH_TOP_LEVEL_KEYS = frozenset({
+    "ok",
+    "version",
+    "realtime_voice",
+    "active_calls",
+    "call_capacity",
+    "pilot",
+    "incident_link",
+})
+HEALTH_CALL_CAPACITY_KEYS = frozenset({
+    "active",
+    "global_limit",
+    "per_client_limit",
+    "backend",
+    "draining",
+    "ai_session_utilisation",
+    "estimated_hourly_burn_usd",
+    "by_client",
+})
+
 init_db()
 # Optional one-shot completion-email proof on boot (no Twilio / no pilot ceiling).
 with suppress(Exception):
@@ -84,6 +104,7 @@ def _positive_amount(value) -> float:
 
 
 INVOICE_NUMBER_MAX = 100
+INCIDENT_LINK_KEY_MAX = 200
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -147,23 +168,30 @@ def health():
         pilot = pilot_status()
     except Exception:
         pilot = {"armed": False, "error": "pilot_status_unavailable"}
-    return {
+    capacity = {
+        "active": snap.active_calls,
+        "global_limit": snap.global_limit,
+        "per_client_limit": snap.per_client_limit,
+        "backend": snap.backend,
+        "draining": snap.draining,
+        "ai_session_utilisation": getattr(snap, "ai_session_utilisation", 0),
+        "estimated_hourly_burn_usd": getattr(snap, "estimated_hourly_burn_usd", 0),
+        "by_client": getattr(snap, "by_client", {}),
+    }
+    body = {
         "ok": True,
         "version": "v1-pilot",
         "realtime_voice": os.getenv("ENABLE_REALTIME_VOICE", "false").lower() == "true",
         "active_calls": snap.active_calls,
-        "call_capacity": {
-            "active": snap.active_calls,
-            "global_limit": snap.global_limit,
-            "per_client_limit": snap.per_client_limit,
-            "backend": snap.backend,
-            "draining": snap.draining,
-            "ai_session_utilisation": snap.ai_session_utilisation,  # lease util, not mock AI contexts
-            "estimated_hourly_burn_usd": snap.estimated_hourly_burn_usd,
-            "by_client": {str(k): v for k, v in snap.by_client.items()},
+        "call_capacity": {key: capacity[key] for key in HEALTH_CALL_CAPACITY_KEYS},
+        "pilot": pilot if isinstance(pilot, dict) else {"armed": False, "error": "pilot_status_unavailable"},
+        "incident_link": {
+            "key_max": INCIDENT_LINK_KEY_MAX,
+            "ready": True,
         },
-        "pilot": pilot,
     }
+    return {key: body[key] for key in HEALTH_TOP_LEVEL_KEYS}
+
 
 @app.post("/work-orders")
 async def create_work_order(request:Request,client_id=Depends(require_internal_api)):

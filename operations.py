@@ -46,6 +46,21 @@ REVIEW_TARGETS={
     "CONTRACTOR_TIMEOUT":"READY_FOR_DISPATCH",
 }
 
+INCIDENT_LINK_KEY_MAX = 200
+
+def incident_link(kind: str, work_order_id: int | None = None, subject_id: int = 0, expires_at: int | None = None) -> str | None:
+    """Create an incident link token for observability."""
+    try:
+        from security import SIGNED_LINK_KINDS, sign_link
+        if kind not in SIGNED_LINK_KINDS:
+            return None
+        if work_order_id is None:
+            return None
+        return sign_link(kind, work_order_id, subject_id, expires_at)
+    except (ImportError, ValueError):
+        # security module not fully initialized; degrade gracefully
+        return None
+
 
 def _valid_expiry(value,on_date=None):
     try:return date.fromisoformat((value or "").strip()) >= (on_date or date.today())
