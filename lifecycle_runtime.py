@@ -42,6 +42,8 @@ SUPPORTED_RUNTIME_CLASSES = frozenset(
     }
 )
 
+VALID_REQUEST_TYPES = frozenset({"RETENTION_SWEEP", "CLIENT_EXPORT", "CLIENT_IMPORT"})
+
 
 def _require_client(session, client_id: int) -> None:
     if not isinstance(client_id, int) or client_id <= 0 or session.get(Client, client_id) is None:
@@ -104,7 +106,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     return hold
 
 
-VALID_LIFECYCLE_JOB_TYPES = frozenset({"DATA_LIFECYCLE_SWEEP"})
+VALID_REQUEST_TYPES = frozenset({"RETENTION_SWEEP"})
 
 
 def queue_retention_sweep(
@@ -117,11 +119,14 @@ def queue_retention_sweep(
 ) -> tuple[DataLifecycleRequest, AutomationJob]:
     _require_client(session, client_id)
     actor = (actor or "").strip()
+    request_type = "RETENTION_SWEEP"
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
+    if request_type not in VALID_REQUEST_TYPES:
+        raise LifecycleRuntimeError("invalid_request_type")
     request = DataLifecycleRequest(
         client_id=client_id,
-        request_type="RETENTION_SWEEP",
+        request_type=request_type,
         subject_id="",
         status="PENDING",
         requested_by=actor,
@@ -401,8 +406,6 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
 
 
 def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
-    if job.job_type not in VALID_LIFECYCLE_JOB_TYPES:
-        raise LifecycleRuntimeError("invalid_lifecycle_job_type")
     try:
         payload = json.loads(job.payload or "{}")
     except json.JSONDecodeError as exc:
@@ -413,7 +416,7 @@ def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
         raise LifecycleRuntimeError("lifecycle_job_tenant_request_required")
     _require_client(session, client_id)
     request = session.get(DataLifecycleRequest, request_id)
-    if not request or request.client_id != client_id or request.request_type != "RETENTION_SWEEP":
+    if not request or request.client_id != client_id or request.request_type not in VALID_REQUEST_TYPES:
         raise LifecycleRuntimeError("lifecycle_request_not_found_for_tenant")
 
     applied = 0
