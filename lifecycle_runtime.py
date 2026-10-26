@@ -118,15 +118,18 @@ def queue_retention_sweep(
 ) -> tuple[DataLifecycleRequest, AutomationJob]:
     _require_client(session, client_id)
     actor = (actor or "").strip()
+    reason = (reason or "").strip()
     if not actor or not isinstance(run_at, datetime):
         raise LifecycleRuntimeError("actor_and_run_at_required")
+    if not reason:
+        raise LifecycleRuntimeError("sweep_reason_required")
     request = DataLifecycleRequest(
         client_id=client_id,
         request_type="RETENTION_SWEEP",
         subject_id="",
         status="PENDING",
         requested_by=actor,
-        reason=(reason or "").strip(),
+        reason=reason,
     )
     session.add(request)
     session.flush()
