@@ -19,7 +19,7 @@ export const metadata: Metadata = funnelPageMetadata("home");
 const benefits = [
   {
     title: "Capture Caller Details",
-    body: "Structured work orders from messy telephone calls.",
+    body: "Product design intent: structured work orders from messy calls when voice intake is enabled — not a live always-on phone on this site.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -28,7 +28,7 @@ const benefits = [
   },
   {
     title: "Surface Critical Hazards",
-    body: "Automatic detection of gas, electrical danger, and leaks.",
+    body: "Product design intent: hazard cues for gas, electrical danger, and leaks latch for authorised human review — not a live detection service on this site.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -48,8 +48,8 @@ const benefits = [
     ),
   },
   {
-    title: "Immutable Audit Trail",
-    body: "Complete evidence log for compliance and the Housing Ombudsman.",
+    title: "Audit Trail Design",
+    body: "Product design intent: evidence logging for compliance review paths. Not an immutable live production guarantee on this site.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
