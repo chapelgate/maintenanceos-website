@@ -68,7 +68,7 @@ const BENTO_FEATURES: BentoFeatureCard[] = [
     id: "evidence-audit-trails",
     title: "Evidence Audit Trails",
     status: "VERIFIED",
-    desc: "Timestamped logs of every intake event and clearance decision for compliance.",
+    desc: "Designed-for timestamped logs of intake events and clearance decisions for compliance (product source).",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -95,7 +95,7 @@ const BENTO_FEATURES: BentoFeatureCard[] = [
     id: "tenant-isolation",
     title: "Multi-Tenant Data Isolation",
     status: "VERIFIED",
-    desc: "Strict database partitioning ensures zero cross-organisation data exposure.",
+    desc: "Designed strict database partitioning for tenant isolation (product source).",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <ellipse cx="12" cy="5" rx="9" ry="3"/>
