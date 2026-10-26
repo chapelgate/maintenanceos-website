@@ -14,7 +14,7 @@ from decision_engine import apply_intake_rules
 from operations import *
 from security import verify_link
 from idempotency import claim_action,set_ai_side_effects
-from safety_controls import SafetyStateError,clear_critical_safety,critical_safety_active
+from safety_controls import SafetyStateError,SAFETY_CLEARANCE_REASON_MAX,clear_critical_safety,critical_safety_active
 from tenant_security import TenantAccessError,configured_voice_client_id,internal_api_tenant_ready,require_client_resource
 from dotenv import load_dotenv
 from webhook_security import public_provider_ingress_ready,targets_dedicated_test_number,validate_twilio
@@ -513,7 +513,7 @@ async def safety_clearance(request:Request,client_id=Depends(require_internal_ap
     d=await _json_object(request)
     try:
         with SessionLocal() as s:
-            clear_critical_safety(s,_positive_int(d.get("work_order_id"),"work_order_id"),actor_user_id=_positive_int(d.get("actor_user_id"),"actor_user_id"),reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=1000),client_id=client_id)
+            clear_critical_safety(s,_positive_int(d.get("work_order_id"),"work_order_id"),actor_user_id=_positive_int(d.get("actor_user_id"),"actor_user_id"),reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=SAFETY_CLEARANCE_REASON_MAX),client_id=client_id)
             s.commit()
     except SafetyStateError as exc:raise HTTPException(409,str(exc))
     return {"cleared":True,"status":"HUMAN_REVIEW"}

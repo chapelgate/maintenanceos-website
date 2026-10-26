@@ -1,5 +1,7 @@
 import json
 from datetime import datetime
+SAFETY_CLEARANCE_REASON_MIN = 10
+SAFETY_CLEARANCE_REASON_MAX = 1000
 from clock import utcnow
 
 from models import Approval, AuditEvent, CriticalSafetyState, User, WorkOrder
@@ -95,8 +97,10 @@ def clear_critical_safety(
     client_id: int,
 ) -> None:
     reason = (reason or "").strip()
-    if len(reason) < 10:
+    if len(reason) < SAFETY_CLEARANCE_REASON_MIN:
         raise SafetyStateError("A substantive safety-clearance reason is required")
+    if len(reason) > SAFETY_CLEARANCE_REASON_MAX:
+        raise SafetyStateError("Safety-clearance reason is too long")
     user = session.get(User, actor_user_id)
     work_order = session.get(WorkOrder, work_order_id)
     state = session.get(CriticalSafetyState, work_order_id)
