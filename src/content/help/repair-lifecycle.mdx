@@ -1,112 +1,32 @@
 ---
 slug: repair-lifecycle
 title: "Understanding the Repair Lifecycle"
-description: "Follow a repair from initial report through to completion, audit, and tenant feedback."
+description: "Repair statuses, clocks, and tenant feedback are not published on this site. Not a live repair workflow."
 date: "2025-01-18"
 author: "WorkSmartOS Team"
 category: "Core Concepts"
-tags: ["repairs", "workflow", "status", "lifecycle"]
+tags: ["repairs", "workflow", "status", "pre-launch"]
 ---
 
 # Understanding the Repair Lifecycle
 
-Every repair in MaintenanceOS follows a defined lifecycle. Understanding each stage helps your team manage work efficiently and maintain compliance.
+Repair statuses, clocks, and tenant feedback are not published on this site. Not a live repair workflow.
 
-## Repair Statuses
+## Repair statuses
 
-| Status | Description | Who Can Set | Typical Duration |
-|--------|-------------|-------------|------------------|
-| **New** | Report received, not yet triaged | System (auto) | Minutes |
-| **Triaged** | Categorised, priority set, safety checked | Manager | < 1 hour |
-| **Assigned** | Contractor allocated, notified | Manager | < 4 hours |
-| **Acknowledged** | Contractor accepted the job | Contractor | < 2 hours |
-| **En Route** | Contractor travelling to property | Contractor | Variable |
-| **On Site** | Contractor at property, work started | Contractor | Variable |
-| **Needs Parts** | Work paused awaiting materials | Contractor | Days |
-| **Completed** | Work finished, photos uploaded | Contractor | — |
-| **Verified** | Manager reviewed, signed off | Manager | < 24 hours |
-| **Closed** | Tenant satisfied, audit complete | System (auto after 7 days) | — |
-| **Cancelled** | Duplicate, not needed, or tenant withdrew | Manager | — |
+No status table, duration target, or role assignment is published on this site. Not a live status model.
 
-## Safety Latch Integration
+## Transitions
 
-At **Triaged** stage, MaintenanceOS runs safety rules:
+No triage, assign, acknowledge, or verify step is published on this site. Not a live workflow.
 
-1. **Keyword scan** — Checks description for danger terms
-2. **Category rules** — Gas, electrical, structural categories auto-escalate
-3. **Property flags** — HMO, high-rise, known issues increase priority
-4. **Tenant vulnerability** — Elderly, disabled, families with young children
+## Audit and feedback
 
-If a safety latch triggers:
-- Status becomes **Safety Hold** (sub-status of Triaged)
-- Immediate notification to Safety Officer + all Admins
-- Cannot be assigned to contractor until Safety Officer clears
-- Full audit trail recorded
+No audit log, photo requirement, or tenant satisfaction step is published on this site. Not applicable.
 
-## The Happy Path (Standard Repair)
+## Next steps
 
-```
-New → Triaged → Assigned → Acknowledged → En Route → On Site → Completed → Verified → Closed
-```
-
-**Typical timeline:** 1–3 days for standard repairs.
-
-## Common Variations
-
-### Emergency Repair (Safety Latch)
-```
-New → Triaged (Safety Hold) → Safety Officer Review → Assigned (Emergency) → On Site → Completed → Verified → Closed
-```
-**Target:** On site within 2–4 hours.
-
-### Quote Required
-```
-... → On Site → Needs Parts/Quote → Quote Submitted → Manager Approves → On Site → Completed → Verified → Closed
-```
-
-### Tenant Not Home / Access Issue
-```
-... → En Route → On Site (Access Failed) → Rescheduled → En Route → On Site → ...
-```
-Up to 3 access attempts before escalation.
-
-### Multi-Visit Repair
-```
-... → On Site → Needs Parts → (wait) → On Site → Completed → Verified → Closed
-```
-Each visit creates a visit record with photos and notes.
-
-## Audit Trail
-
-Every status change records:
-- Who changed it
-- When (timestamp)
-- Previous → new status
-- Optional note (required for Cancellations)
-
-View at **Repair → Activity** tab.
-
-## SLA Tracking
-
-SLA clock starts at **Triaged** (or **Safety Hold cleared** for emergencies).
-- **Response SLA:** Triaged → Acknowledged
-- **Resolution SLA:** Triaged → Completed
-
-Breaches trigger automatic escalation to next management level.
-
-## Tenant Communication
-
-If tenant portal is enabled:
-- Automatic updates at each status change
-- Tenant can add notes/photos
-- Post-repair survey sent at **Verified**
-
-## Next Steps
-
-- [Safety Latches Explained](./safety-latches)
-- [Managing Quotes](./contractor-quotes)
-- [Access Issues & Rescheduling](./access-issues)
-- [Repair Reports & Analytics](./repair-reports)
+No next-step help links are published on this site. Not applicable.
 
 ---
 
