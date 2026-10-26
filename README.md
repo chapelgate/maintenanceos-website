@@ -17,7 +17,7 @@ Truthful **pre-launch** marketing site for MaintenanceOS (not the product backen
 
 - Canonical marketing repository: `chapelgate/maintenanceos-website`
 - Authoritative release branch: `main`
-- DigitalOcean App Platform static staging: `https://seahorse-app-4oasq.ondigitalocean.app`
+- Recorded DigitalOcean App Platform staging host (historical evidence only; not a release claim): `https://seahorse-app-4oasq.ondigitalocean.app` — canonical public origin falls back to `https://worksmartos.co.uk` via `FALLBACK_SITE_URL`
 - Build: `npm run build` → `out/`
 - Canonical product/backend repository: `chapelgate/maintenanceos-v1-pilot` — not the marketing-site source
 - Full evidence, duplicate check and rollback pin: [`WEBSITE_SOURCE_OF_TRUTH.md`](WEBSITE_SOURCE_OF_TRUTH.md)
