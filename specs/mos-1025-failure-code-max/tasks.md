@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound delivery failure_code at 100 characters
+- [x] Run the named tests
