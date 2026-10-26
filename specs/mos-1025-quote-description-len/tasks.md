@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Bound quote/invoice descriptions at 4000 characters
+- [x] Run the named tests

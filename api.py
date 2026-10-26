@@ -83,7 +83,7 @@ def _positive_amount(value) -> float:
     return result
 
 
-WORK_ORDER_DESCRIPTION_MAX = 8000
+QUOTE_DESCRIPTION_MAX = 4000
 
 
 def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
@@ -171,7 +171,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     if "client_id" in d and _positive_int(d["client_id"],"client_id")!=client_id:raise HTTPException(403,"Cross-tenant request rejected")
     property_id=_positive_int(d.get("property_id"),"property_id")
     resident_id=_positive_int(d["resident_id"],"resident_id") if d.get("resident_id") is not None else None
-    description=_bounded_text(d.get("description"),"description",required=True,maximum=WORK_ORDER_DESCRIPTION_MAX)
+    description=_bounded_text(d.get("description"),"description",required=True)
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
     try:
@@ -277,7 +277,7 @@ async def quotes(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
-    description=_bounded_text(d.get("description",""),"description")
+    description=_bounded_text(d.get("description",""),"description",maximum=QUOTE_DESCRIPTION_MAX)
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -293,7 +293,7 @@ async def invoices(request:Request,client_id=Depends(require_internal_api)):
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
     invoice_number=_bounded_text(d.get("invoice_number"),"invoice_number",required=True,maximum=128)
-    description=_bounded_text(d.get("description",""),"description")
+    description=_bounded_text(d.get("description",""),"description",maximum=QUOTE_DESCRIPTION_MAX)
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
