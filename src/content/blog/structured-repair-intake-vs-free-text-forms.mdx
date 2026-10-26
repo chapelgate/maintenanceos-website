@@ -38,26 +38,28 @@ MaintenanceOS uses AI to extract structured facts from natural language — whet
 
 The output is a structured repair draft — not a classification label, but a complete fact set ready for human review.
 
-## Safety Latches Apply Automatically
+## Safety Latches Hold for Human Clearance
 
-The structured data triggers safety latches without coordinator judgement:
+The structured data is designed to trigger safety latches that hold the draft for authorised human clearance. Coordinator judgement is still required to clear a latch — this is not unsupervised automation:
 
 - Gas appliance mentioned → holds for Gas Safe engineer clearance
 - Electrical hazard keywords → holds for NICEIC clearance
 - Vulnerable tenant flagged → escalates to safeguarding lead
 - Value threshold exceeded → requires authorised sign-off
 
-Every latch decision is recorded: who cleared, when, what evidence.
+Product design intent: latch trigger and clearance events are recorded (who cleared, when, what evidence). Not a live latch runtime on this marketing site.
 
-## Audit Evidence by Default
+## Audit Evidence by Design
 
-Free-text forms create no evidence. Structured intake creates:
+Free-text forms create little usable evidence. Structured intake is designed to create:
 
 - Timestamped fact extraction log
 - Safety latch trigger and clearance records
 - Contractor brief with complete structured data
 - Tenant communication trail
 - Compliance export for regulators
+
+These are product design capabilities under testing. Not a live audit suite on this marketing site.
 
 ## Not a Live Service
 

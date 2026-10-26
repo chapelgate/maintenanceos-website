@@ -17,3 +17,15 @@ test("structured-repair blog does not imply published response SLAs", () => {
   assert.doesNotMatch(post, /24\/7 always/i);
   assert.doesNotMatch(post, /commercially generally available/i);
 });
+
+test("structured-repair blog keeps latch clearance as human judgement", () => {
+  assert.match(post, /Safety Latches Hold for Human Clearance/);
+  assert.match(post, /Coordinator judgement is still required to clear a latch/);
+  assert.match(post, /Not a live latch runtime on this marketing site/);
+  assert.match(post, /Audit Evidence by Design/);
+  assert.match(post, /Not a live audit suite on this marketing site/);
+  assert.doesNotMatch(post, /Safety Latches Apply Automatically/);
+  assert.doesNotMatch(post, /without coordinator judgement/);
+  assert.doesNotMatch(post, /Audit Evidence by Default/);
+  assert.doesNotMatch(post, /NEXT_PUBLIC_PUBLIC_LAUNCH/);
+});
