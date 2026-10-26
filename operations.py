@@ -437,9 +437,12 @@ def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
         s.commit();return True
 
 
+REJECT_REASON_MAX = 1000
+
+
 def reject_operational_action(approval_id,actor_user_id,reason):
     reason=(reason or "").strip()
-    if len(reason)<5:return False
+    if len(reason)<5 or len(reason)>REJECT_REASON_MAX:return False
     with SessionLocal() as s:
         approval=s.get(Approval,approval_id)
         roles=APPROVAL_ROLES.get(approval.approval_type,set()) if approval else set()
