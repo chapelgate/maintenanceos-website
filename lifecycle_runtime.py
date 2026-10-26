@@ -413,6 +413,8 @@ def execute_lifecycle_sweep(session, job: AutomationJob, now: datetime) -> int:
         payload = json.loads(job.payload or "{}")
     except json.JSONDecodeError as exc:
         raise LifecycleRuntimeError("invalid_lifecycle_job_payload") from exc
+    if not isinstance(payload, dict):
+        raise LifecycleRuntimeError("invalid_lifecycle_job_payload")
     client_id = payload.get("client_id")
     request_id = payload.get("request_id")
     if type(client_id) is not int or client_id <= 0 or type(request_id) is not int or request_id <= 0:
