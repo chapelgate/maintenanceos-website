@@ -9,6 +9,8 @@ import os
 import re
 from typing import Any
 
+from request_context import request_id as current_request_id
+
 
 SAFE_EVENT_FIELDS = {
     "duration_ms",
@@ -86,6 +88,9 @@ def structured_logging_enabled() -> bool:
 def operational_event(event: str, **fields: Any) -> None:
     if not structured_logging_enabled():
         return
+    rid = current_request_id()
+    if rid and "request_id" not in fields:
+        fields = {**fields, "request_id": rid}
     LOGGER.info(
         "operational_event",
         extra={

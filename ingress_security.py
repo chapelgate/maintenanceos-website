@@ -15,6 +15,7 @@ import uuid
 from starlette.responses import PlainTextResponse
 
 from operational_logging import operational_event
+from request_context import clear_request_id, set_request_id
 
 
 MAX_REQUEST_BYTES = 64 * 1024
@@ -140,6 +141,7 @@ class HttpSecurityBoundary:
         supplied_request_id = headers.get(b"x-request-id", b"").decode("ascii", errors="ignore")
         request_id = supplied_request_id if REQUEST_ID.fullmatch(supplied_request_id) else uuid.uuid4().hex
         scope.setdefault("state", {})["request_id"] = request_id
+        set_request_id(request_id)
         path = str(scope.get("path") or "/")[:200]
         method = str(scope.get("method") or "UNKNOWN")[:16]
 
@@ -229,3 +231,4 @@ class HttpSecurityBoundary:
                 status=status,
                 duration_ms=round((time.monotonic() - started) * 1000, 2),
             )
+            clear_request_id()

@@ -15,8 +15,18 @@ from safety_controls import SafetyStateError,critical_safety_active,require_nonc
 from tenant_security import TenantAccessError,require_client_resource
 
 from audit_text import redact_detail
+from request_context import audit_detail, request_id
 
 def audit(s,woid,actor,event,detail=""):
+    detail = detail or ""
+    rid = request_id()
+    if rid and isinstance(detail, str) and detail.startswith("{"):
+        try:
+            obj = json.loads(detail)
+        except json.JSONDecodeError:
+            obj = None
+        if isinstance(obj, dict):
+            detail = json.dumps(audit_detail(obj), sort_keys=True)
     s.add(AuditEvent(work_order_id=woid,actor=actor,event=event,detail=redact_detail(detail)))
 
 
