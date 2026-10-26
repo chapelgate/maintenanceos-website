@@ -7,20 +7,14 @@ from datetime import date,datetime,timedelta
 from clock import utcnow
 from sqlalchemy.exc import IntegrityError
 from models import *
-from decision_engine import CATEGORIES,TRADE,contractor_rank,transition_allowed,work_order_allows_dispatch
+from decision_engine import contractor_rank,transition_allowed,work_order_allows_dispatch
 from lifecycle import transition_work_order
 from security import app_secret_ready,sign_link
 from idempotency import claim_action
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
 
-AUDIT_ACTOR_MAX = 100
-
-
 def audit(s,woid,actor,event,detail=""):
-    actor=(actor or "").strip()
-    if not actor or len(actor)>AUDIT_ACTOR_MAX:
-        raise ValueError("audit actor invalid")
     s.add(AuditEvent(work_order_id=woid,actor=actor,event=event,detail=detail))
 
 
@@ -417,9 +411,12 @@ def approve_operational_action(approval_id,actor_user_id,reason=""):
         s.commit();return True
 
 
+TRIAGE_URGENCIES=frozenset({"P2","P3"})
+
+
 def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
     reason=(reason or "").strip();category=(category or "").strip();trade=(trade or "").strip()
-    if len(reason)<5 or not category or category=="Unknown" or trade!=TRADE.get(category) or urgency not in {"P2","P3"}:return False
+    if len(reason)<5 or not category or category=="Unknown" or not trade or urgency not in TRIAGE_URGENCIES:return False
     with SessionLocal() as s:
         approval=s.get(Approval,approval_id)
         if not approval or approval.status!="PENDING" or approval.approval_type!="TRIAGE":return False
