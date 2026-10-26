@@ -252,6 +252,36 @@ def reset_pilot_runtime_for_tests() -> None:
                 path.unlink()
 
 
+def export_pilot_runtime_snapshot() -> str:
+    with _LOCK:
+        with SessionLocal() as session:
+            state, _control = _load_state(session, for_update=False)
+            session.commit()
+            return _encode_state(state)
+
+
+def restore_pilot_runtime_snapshot(encoded: str) -> None:
+    incoming = _decode_state(encoded)
+    floor = _bootstrap_count()
+    if incoming.calls_completed < floor:
+        incoming.calls_completed = floor
+    if incoming.calls_admitted < incoming.calls_completed:
+        incoming.calls_admitted = incoming.calls_completed
+    with _LOCK:
+        with SessionLocal() as session:
+            state, control = _load_state(session, for_update=True)
+            state.calls_completed = max(floor, incoming.calls_completed)
+            state.calls_admitted = max(state.calls_completed, incoming.calls_admitted)
+            state.aborted = incoming.aborted
+            state.abort_reason = incoming.abort_reason
+            state.scorecard = incoming.scorecard
+            state.last_event_at = incoming.last_event_at
+            # File mirror is written first so a higher in-session mirror cannot raise the restored snapshot.
+            _write_file_state(state)
+            _save_state(session, control, state)
+            session.commit()
+
+
 class suppress_os_error:
     def __enter__(self):
         return self
@@ -377,6 +407,7 @@ def record_pilot_scorecard_event(kind: str, **values: Any) -> dict[str, Any]:
 
 
 def pilot_status() -> dict[str, Any]:
+    worksmart_vertical = _worksmart_vertical_view()
     cfg = chapelgate_pilot_mode_config()
     with _LOCK:
         with SessionLocal() as session:
@@ -427,4 +458,11 @@ def pilot_status() -> dict[str, Any]:
         },
         "email_gate": email_gate,
         "email_selftest": email_selftest,
+        "worksmart_vertical": worksmart_vertical,
     }
+
+
+def _worksmart_vertical_view() -> dict[str, Any]:
+    from pilot.landlord_vertical import vertical_view
+
+    return vertical_view()
