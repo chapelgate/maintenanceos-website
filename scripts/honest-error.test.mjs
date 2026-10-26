@@ -39,3 +39,13 @@ test("route error links home and contact", () => {
   assert.match(page, /href="\/"/);
   assert.match(page, /href="\/contact\/"/);
 });
+
+test("global error links home and contact", () => {
+  const page = read("src/app/global-error.tsx");
+  assert.match(page, /href="\/"/);
+  assert.match(page, /href="\/contact\/"/);
+  assert.match(page, /Back to the homepage/);
+  assert.match(page, /Contact/);
+  assert.doesNotMatch(page, /buy now/i);
+  assert.doesNotMatch(page, /£/);
+});
