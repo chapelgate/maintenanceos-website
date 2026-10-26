@@ -58,7 +58,7 @@ export default function CreateReceptionistPage() {
         <div className="mx-auto max-w-3xl px-4 pb-6">
           <div className="bg-accent/5 border border-accent/20 rounded-lg p-4 text-sm">
             <p className="font-medium text-ink">
-              Live demo number available:
+              Preview demo number (not production):
             </p>
             <p className="mt-1">
               <a
@@ -67,7 +67,7 @@ export default function CreateReceptionistPage() {
               >
                 {siteConfig.demoPhoneNumber}
               </a>
-              {" — call 24/7 for AI greeting and basic intake. Not a production answering service."}
+              {" — when enabled, call for an AI greeting and basic intake preview. Not a production answering service and not a live always-on phone."}
             </p>
           </div>
         </div>
@@ -102,7 +102,7 @@ export default function CreateReceptionistPage() {
             id="create-steps-heading"
             className="text-xl font-semibold text-ink"
           >
-            How onboarding is designed to work
+            How the preview funnel is designed to work
           </h2>
           <ol className="mt-4 list-decimal space-y-4 pl-5 text-muted">
             {steps.map((step) => (
