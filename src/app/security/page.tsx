@@ -89,7 +89,7 @@ export default function SecurityPage() {
         </p>
         <div className="mt-4 flex gap-2">
           <span className="px-3 py-1 text-xs font-medium bg-primary/10 border border-primary rounded">
-            Cyber Essentials: PLANNED (target Q2 2027)
+            Cyber Essentials: PLANNED (not held)
           </span>
         </div>
       </section>

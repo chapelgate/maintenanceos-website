@@ -9,9 +9,13 @@ const page = fs.readFileSync(
   path.join(ROOT, "src/app/security/page.tsx"),
   "utf8",
 );
+const trust = fs.readFileSync(
+  path.join(ROOT, "src/app/trust/page.tsx"),
+  "utf8",
+);
 
-test("security page keeps Cyber Essentials PLANNED only", () => {
-  assert.match(page, /Cyber Essentials: PLANNED \(target Q2 2027\)/);
+test("security page keeps Cyber Essentials PLANNED only without invented target quarter", () => {
+  assert.match(page, /Cyber Essentials: PLANNED \(not held\)/);
   assert.match(page, /Honest Certification Status/);
   assert.match(page, /No ISO 27001, SOC 2, or bank-grade claims/);
   assert.doesNotMatch(page, /or No bank-grade/);
@@ -19,6 +23,15 @@ test("security page keeps Cyber Essentials PLANNED only", () => {
   assert.doesNotMatch(page, /we hold Cyber Essentials/i);
   assert.doesNotMatch(page, /ISO 27001 certified/i);
   assert.doesNotMatch(page, /SOC 2 (Type (I|II) )?certified/i);
+  assert.doesNotMatch(page, /target Q2 2027/i);
+  assert.doesNotMatch(page, /Q2 2027/);
+});
+
+test("trust page keeps Cyber Essentials PLANNED only without invented target quarter", () => {
+  assert.match(trust, /Cyber Essentials \(PLANNED — not held\)/);
+  assert.doesNotMatch(trust, /Q2 2027/);
+  assert.doesNotMatch(trust, /target Q\d/i);
+  assert.doesNotMatch(trust, /Cyber Essentials certified/i);
 });
 
 test("security page keeps draft legal and no launch-flag sales copy", () => {

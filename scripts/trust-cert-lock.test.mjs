@@ -11,7 +11,9 @@ test("trust page denies holding listed certifications", () => {
   assert.match(page, /We do not hold and do not claim any of the following certifications/i);
   assert.match(page, /ISO 27001/);
   assert.match(page, /SOC 2 Type I or Type II/);
-  assert.match(page, /Cyber Essentials \(PLANNED/);
+  assert.match(page, /Cyber Essentials \(PLANNED — not held\)/);
+  assert.doesNotMatch(page, /Q2 2027/);
+  assert.doesNotMatch(page, /target Q\d/i);
   assert.match(page, /ISO 9001/);
   assert.match(page, /PCI DSS/);
   assert.match(page, /HIPAA/);
