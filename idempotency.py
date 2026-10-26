@@ -5,12 +5,12 @@ from sqlalchemy.exc import IntegrityError
 
 from models import ActionReceipt, RuntimeControl
 
-SCOPE_MAX = 80
+ACTION_KEY_MAX = 200
 
 
 def claim_action(session, scope: str, action_key: str, *, client_id=None, work_order_id=None):
-    if len(scope or "") > SCOPE_MAX:
-        raise ValueError("Invalid action receipt scope")
+    if len(action_key or "") > ACTION_KEY_MAX:
+        raise ValueError("Invalid action receipt key")
     query = session.query(ActionReceipt).filter_by(scope=scope, action_key=action_key, client_id=client_id)
     existing = query.first()
     if existing:
