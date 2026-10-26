@@ -20,7 +20,7 @@ export default function HowItWorksPage() {
       <PageHero
         eyebrow="Pre-launch · Preview"
         title="From maintenance request to controlled follow-up."
-        lede="Capture requests 24/7 in natural UK terminology. The website path is Website → Check → Choose → Configure → Review & Try. Fixed server rules evaluate hazards, create work orders, or latch critical repairs for authorised human clearance."
+        lede="Designed to capture maintenance requests in natural UK terminology when voice intake is enabled — not a live always-on phone. The website path is Website → Check → Choose → Configure → Review & Try. Fixed server rules evaluate hazards, create work orders, or latch critical repairs for authorised human clearance."
       />
 
       <div className="mx-auto max-w-3xl px-4 pt-8">
