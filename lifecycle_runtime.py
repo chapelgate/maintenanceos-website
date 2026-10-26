@@ -88,6 +88,9 @@ def create_hold(
 
 def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLifecycleHold:
     _require_client(session, client_id)
+    actor = (actor or "").strip()
+    if not actor:
+        raise LifecycleRuntimeError("release_hold_actor_required")
     hold = session.get(DataLifecycleHold, hold_id)
     if not hold or hold.client_id != client_id:
         raise LifecycleRuntimeError("hold_not_found_for_tenant")
@@ -97,7 +100,7 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
         audit(
             session,
             None,
-            (actor or "").strip() or "Lifecycle Controller",
+            actor,
             "DATA_LIFECYCLE_HOLD_RELEASED",
             json.dumps({"hold_id": hold.id, "client_id": client_id}, sort_keys=True),
         )
