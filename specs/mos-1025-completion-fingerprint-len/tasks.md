@@ -1,0 +1,3 @@
+- [x] Write spec/plan
+- [x] Lock completion fingerprint length and alphabet
+- [x] Run the named tests

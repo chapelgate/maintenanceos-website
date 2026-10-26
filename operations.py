@@ -302,6 +302,15 @@ def submit_availability(work_order_id,contractor_id,start,end,action_key):
         audit(s,wo.id,"Contractor","AVAILABILITY_SUBMITTED",f"{start.isoformat()} - {end.isoformat()}")
         s.commit();return av.id
 
+COMPLETION_FINGERPRINT_LEN = 64
+
+def completion_evidence_fingerprint(note, evidence_url) -> str:
+    material = (evidence_url or "").strip() or (note or "").strip()
+    fingerprint = hashlib.sha256(material.encode()).hexdigest()
+    if len(fingerprint) != COMPLETION_FINGERPRINT_LEN or any(c not in "0123456789abcdef" for c in fingerprint):
+        raise ValueError("completion fingerprint must be 64 lowercase hex characters")
+    return fingerprint
+
 def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
     with SessionLocal() as s:
         if not (note or "").strip():return None
@@ -311,7 +320,7 @@ def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
         if wo.status not in {"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}:return None
         receipt,fresh=claim_action(s,"CONTRACTOR_COMPLETION",action_key,client_id=wo.client_id,work_order_id=wo.id)
         if not fresh:return int(receipt.result_ref) if receipt.result_ref else None
-        fingerprint=hashlib.sha256((evidence_url.strip() or note.strip()).encode()).hexdigest()
+        fingerprint=completion_evidence_fingerprint(note,evidence_url)
         reused=s.get(EvidenceIdentity,fingerprint)
         evidence=CompletionEvidence(work_order_id=work_order_id,contractor_id=contractor_id,completion_note=note,evidence_url=evidence_url)
         s.add(evidence);s.flush();receipt.result_ref=str(evidence.id)
