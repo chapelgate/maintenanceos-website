@@ -24,7 +24,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Pre-launch"
         title="Talk to a person"
-        lede="Direct enquiries about MaintenanceOS. Not live phone provisioning, not a GA support desk, and no invented response SLA."
+        lede="Direct enquiries about MaintenanceOS. Not a live support desk: no monitored support phone, no live chat, and no response-time SLA."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
         <FunnelPathStrip linked />
@@ -33,6 +33,10 @@ export default function ContactPage() {
           <h2 className="text-lg font-semibold text-ink">Choose the right path</h2>
           <p className="text-xs text-muted">
             For early access, visit <a href="/demo/" className="text-accent underline">Request an early demo</a>. For direct general questions, email our founder.
+          </p>
+          <p className="text-xs text-muted">
+            This page is not a live support desk. There is no monitored support
+            phone, no live chat, and no response-time SLA.
           </p>
           <div className="rounded-lg border border-border bg-paper/50 p-4">
             <p className="text-xs font-medium text-muted">Direct email</p>
@@ -51,7 +55,7 @@ export default function ContactPage() {
         <LeadCaptureForm
           leadType="contact"
           title="Send a message"
-          helper="Human enquiry only — not live phone provisioning, not a GA support desk, and no invented response SLA."
+          helper="Human enquiry only — not a live support desk, no monitored support phone, no live chat, and no response-time SLA."
           submitLabel="Send enquiry"
         />
       </div>
