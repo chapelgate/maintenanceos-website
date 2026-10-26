@@ -23,7 +23,7 @@ export function CommercialProof() {
           id="whats-live-today-heading"
           className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
         >
-          {"What's live today"}
+          {"Preview capability inventory"}
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
           Pre-launch preview — not commercial general availability. No invented uptime, testimonials, customer logos, awards, or certification badges. No ISO, SOC 2, or bank-grade claims
