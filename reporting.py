@@ -3,7 +3,55 @@ from models import *
 from sla import sla_status
 
 
+PORTFOLIO_KPI_FIELDS = (
+    "total_jobs",
+    "open_jobs",
+    "closed_jobs",
+    "p1_jobs",
+    "repeat_repairs",
+    "open_sla_breaches",
+    "avg_close_hours",
+)
+
+OPERATIONAL_METRICS_FIELDS = (
+    "requests",
+    "urgency_distribution",
+    "avg_minutes_to_triage",
+    "avg_minutes_to_contractor_acceptance",
+    "avg_minutes_to_appointment",
+    "avg_minutes_to_completion_submission",
+    "overdue_open_jobs",
+    "repeat_repairs",
+    "human_intervention_rate",
+    "human_minutes_per_work_order",
+    "human_minutes_measurement_available",
+    "automation_completed",
+    "automation_failed",
+    "safety_escalations",
+    "open_escalations",
+    "avg_approval_turnaround_minutes",
+    "unresolved_exceptions",
+    "data_scope",
+)
+
+FORBIDDEN_REPORT_FIELDS = frozenset(
+    {
+        "email",
+        "phone",
+        "password",
+        "password_hash",
+        "token",
+        "api_key",
+        "secret",
+        "authorization",
+        "resident_name",
+        "access_notes",
+    }
+)
+
+
 def _average(values):
+
     return round(sum(values)/len(values),2) if values else None
 
 def portfolio_kpis(client_id:int):
@@ -16,7 +64,7 @@ def portfolio_kpis(client_id:int):
         repeats=[x for x in jobs if x.repeat_repair]
         breached=sum(1 for x in open_jobs if sla_status(x.urgency,x.created_at)[0]=="BREACHED")
         durations=[(x.closed_at-x.created_at).total_seconds()/3600 for x in closed if x.closed_at]
-        return {
+        body = {
           "total_jobs":total,
           "open_jobs":len(open_jobs),
           "closed_jobs":len(closed),
@@ -25,6 +73,10 @@ def portfolio_kpis(client_id:int):
           "open_sla_breaches":breached,
           "avg_close_hours":round(sum(durations)/len(durations),2) if durations else None
         }
+        overlap = FORBIDDEN_REPORT_FIELDS.intersection(body)
+        if overlap:
+            raise RuntimeError(f"KPI fields include forbidden keys: {sorted(overlap)}")
+        return {key: body[key] for key in PORTFOLIO_KPI_FIELDS}
 
 def contractor_scorecard(client_id:int,contractor_id:int):
     with SessionLocal() as s:
@@ -85,7 +137,7 @@ def operational_metrics(client_id:int):
         automation=(s.query(AutomationJob).join(WorkOrder,AutomationJob.work_order_id==WorkOrder.id)
                     .filter(WorkOrder.client_id==client_id).all())
         urgency_distribution={level:sum(1 for job in jobs if job.urgency==level) for level in ("P1","P2","P3")}
-        return {
+        body = {
             "requests":len(jobs),"urgency_distribution":urgency_distribution,
             "avg_minutes_to_triage":_average(triage_minutes),
             "avg_minutes_to_contractor_acceptance":_average(acceptance_minutes),
@@ -104,3 +156,7 @@ def operational_metrics(client_id:int):
             "unresolved_exceptions":sum(1 for job in jobs if job.status in {"HUMAN_REVIEW","NO_SHOW","FAILED_CONTRACTOR"}),
             "data_scope":"tenant_recorded_data",
         }
+        overlap = FORBIDDEN_REPORT_FIELDS.intersection(body)
+        if overlap:
+            raise RuntimeError(f"Operational metrics include forbidden keys: {sorted(overlap)}")
+        return {key: body[key] for key in OPERATIONAL_METRICS_FIELDS}
