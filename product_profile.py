@@ -1,64 +1,79 @@
+"""Product profile selection: MaintenanceOS or WorkSmart OS by configuration.
+
+New code written in this repo. Copy no third-party source.
+"""
+
 import os
+from typing import Mapping
 
+_ALLOWED_PROFILES = ("maintenanceos", "worksmartos")
+_DEFAULT_PROFILE = "maintenanceos"
 
-class ProductProfileError(Exception):
-    pass
-
-
-ALLOWED_PROFILES = {"maintenanceos", "worksmartos"}
-DENY_KEYS = {
+_OVERLAY_DENY_KEYS = (
     "retention",
     "voice",
     "telephony",
     "market",
     "dispatch",
     "credential",
+)
+
+_PRESENTATION = {
+    "maintenanceos": {
+        "api_title": "MaintenanceOS V1 Pilot",
+        "page_title": "MaintenanceOS V1",
+        "worker_banner": "MaintenanceOS V1 worker running",
+    },
+    "worksmartos": {
+        "api_title": "WorkSmart OS",
+        "page_title": "WorkSmart OS",
+        "worker_banner": "WorkSmart OS worker running",
+    },
 }
 
 
-def _profile_from_env() -> str:
-    value = os.getenv("PRODUCT_PROFILE", "").strip().lower()
-    if not value:
-        return "maintenanceos"
-    if value not in ALLOWED_PROFILES:
-        raise ProductProfileError(f"Unknown product profile: {value}")
-    return value
+class ProductProfileError(Exception):
+    pass
+
+
+def _current_profile() -> str:
+    return os.getenv("PRODUCT_PROFILE", "").strip() or _DEFAULT_PROFILE
 
 
 def profile_ready() -> bool:
     try:
-        _profile_from_env()
+        profile()
         return True
     except ProductProfileError:
         return False
 
 
-def _current_profile() -> str:
-    return _profile_from_env()
+def profile(value: str | None = None) -> str:
+    value = _current_profile() if value is None else value
+    if value not in _ALLOWED_PROFILES:
+        raise ProductProfileError(f"Unknown product profile: {value!r}")
+    return value
 
 
-def api_title() -> str:
-    profile = _current_profile()
-    if profile == "worksmartos":
-        return "WorkSmart OS"
-    return "MaintenanceOS V1 Pilot"
-
-
-def page_title() -> str:
-    profile = _current_profile()
-    if profile == "worksmartos":
-        return "WorkSmart OS"
-    return "MaintenanceOS V1"
-
-
-def worker_banner() -> str:
-    profile = _current_profile()
-    if profile == "worksmartos":
-        return "WorkSmart OS worker running"
-    return "MaintenanceOS V1 worker running"
-
-
-def validate_overlay(overlay: dict) -> None:
+def _reject_overlay(overlay: Mapping | None = None) -> None:
+    if not overlay:
+        return
     for key in overlay:
-        if key in DENY_KEYS:
-            raise ProductProfileError(f"Overlay key '{key}' is not permitted")
+        lower = str(key).lower()
+        if any(deny in lower for deny in _OVERLAY_DENY_KEYS):
+            raise ProductProfileError(f"Overlay key rejected: {key}")
+
+
+def api_title(overlay: Mapping | None = None) -> str:
+    _reject_overlay(overlay)
+    return _PRESENTATION[profile()]["api_title"]
+
+
+def page_title(overlay: Mapping | None = None) -> str:
+    _reject_overlay(overlay)
+    return _PRESENTATION[profile()]["page_title"]
+
+
+def worker_banner(overlay: Mapping | None = None) -> str:
+    _reject_overlay(overlay)
+    return _PRESENTATION[profile()]["worker_banner"]
