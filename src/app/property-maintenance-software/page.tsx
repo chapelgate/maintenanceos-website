@@ -33,7 +33,7 @@ export default function PropertyMaintenanceSoftwarePage() {
           <h2 className="text-2xl font-semibold text-ink">Maintenance management without invented commitments</h2>
           <p className="text-muted">
             The product model includes properties, residents, contractors, work orders, jobs, and
-            communications. AI-assisted intake is available as a product preview. Fixed server rules own
+            communications. AI-assisted intake exists only as a product preview — not a generally available live service. Fixed server rules own
             lifecycle, safety boundaries, and prohibited money actions. The system must not invent
             a booking, engineer visit, refund, safety assurance, or “someone is on the way”.
           </p>
