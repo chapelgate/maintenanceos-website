@@ -95,12 +95,12 @@ try {
   }
 
   const checks = [
-    ["/", /Turn maintenance requests into clear, controlled work\./],
-    ["/create/", /Website[\s\S]*Check[\s\S]*Review[\s\S]*Pack/],
-    ["/demo/", /fictional SAMPLE data|SAMPLE call/i],
-    ["/contact/", /Send a message/],
-    ["/features/", /VERIFIED[\s\S]*UNDER TEST/],
-    ["/security/", /Security and accountability by design/],
+    ["/", /WorkSmartOS/],
+    ["/create/", /repair-intake preview/],
+    ["/demo/", /SAMPLE/i],
+    ["/contact/", /Talk to a person/],
+    ["/features/", /Preview capability inventory/],
+    ["/security/", /How we keep your data separate/],
   ];
   for (const [route, pattern] of checks) {
     const text = await (await fetch(origin + route)).text();

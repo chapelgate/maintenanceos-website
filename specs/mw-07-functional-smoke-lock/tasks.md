@@ -1,0 +1,4 @@
+- [x] Read current src/app/page.tsx hero and page copy
+- [x] Update scripts/functional-smoke.mjs test assertions to match current copy
+- [x] Verify `node --test scripts/functional-smoke.mjs` passes
+- [x] Commit and open draft PR
