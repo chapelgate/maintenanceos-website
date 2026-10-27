@@ -9,5 +9,7 @@
   "sla_claim": false,
   "uptime_percent": null,
   "incident_feed": false,
-  "note": "Pre-launch synthetic demo. No live status, uptime figure, or SLA is published."
+  "note": "Pre-launch synthetic demo. No live status, uptime figure, SLA, commercial general availability, or live phone is published.",
+  "commercial_ga": false,
+  "live_phone": false
 }
