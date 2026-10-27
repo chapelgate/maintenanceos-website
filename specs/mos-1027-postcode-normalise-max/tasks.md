@@ -1,5 +1,5 @@
 - [x] Add postcode_normalise.POSTCODE_MAX=20
 - [x] Fail closed on overlong raw/normalised postcodes
-- [x] Wire api.identity_postcode; max=20
+- [x] Wire api.py to postcode_normalise
 - [x] Contract tests green
-- [x] identity.py untouched
+- [x] identity.py and voice_bridge.py untouched

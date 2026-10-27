@@ -2,18 +2,16 @@ POSTCODE_MAX = 20
 
 
 def normalise_postcode(value: str) -> str:
-    raw = (value or "").strip().upper()
+    raw = value or ""
     if len(raw) > POSTCODE_MAX:
         return ""
-    s = "".join(ch for ch in raw if ch.isalnum())
-    if len(s) > POSTCODE_MAX:
+    normalised = "".join(raw.upper().split())
+    if len(normalised) > POSTCODE_MAX:
         return ""
-    if len(s) > 3:
-        s = s[:-3] + " " + s[-3:]
-    return s
+    return normalised
 
 
-def postcode_matches(stored: str, supplied: str) -> bool:
-    a = normalise_postcode(stored)
+def postcode_matches(expected: str, supplied: str) -> bool:
+    a = normalise_postcode(expected)
     b = normalise_postcode(supplied)
-    return a == b
+    return bool(a and b and a == b)

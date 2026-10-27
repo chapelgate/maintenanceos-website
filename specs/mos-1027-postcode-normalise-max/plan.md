@@ -1,5 +1,5 @@
 # Plan
-1. Add postcode_normalise.py with POSTCODE_MAX=20 and bounded normalise_postcode/postcode_matches
-2. Update api.identity_postcode to import from postcode_normalise; max=20
+1. Add postcode_normalise.py with POSTCODE_MAX and bounded helpers
+2. Point api.py postcode_matches import at postcode_normalise
 3. Contract tests in tests/test_postcode_normalise_max.py
-4. Leave identity.py unchanged (free route after #338 close)
+4. Leave identity.py and voice_bridge.py unchanged
