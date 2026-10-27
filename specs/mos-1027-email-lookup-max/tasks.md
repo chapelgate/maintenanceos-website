@@ -1,0 +1,5 @@
+- [x] Add EMAIL_LOOKUP_MAX
+- [x] Fail closed on blank/overlong email
+- [x] Add contract tests
+- [x] Local pytest green
+- [x] PR ready for council merge

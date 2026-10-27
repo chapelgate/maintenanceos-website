@@ -17,7 +17,12 @@ MEDIA_URL_MAX = 2000
 MEDIA_URL_MAX = 2000
 
 
+EMAIL_LOOKUP_MAX = 320
+
+
 def resident_by_email(client_id,email):
+    email=(email or "").strip()
+    if not email or len(email) > EMAIL_LOOKUP_MAX:return None
     with SessionLocal() as s:
         r=s.query(Resident).filter_by(client_id=client_id,email=email,active=True).first()
         return r.id if r else None
