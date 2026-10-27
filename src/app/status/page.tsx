@@ -27,6 +27,17 @@ export default function StatusPage() {
           percentages. This page describes how a future public status surface
           would work; it does not show live uptime metrics.
         </p>
+        <p>
+          Machine-readable status:{" "}
+          <a
+            href="/status.json"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            /status.json
+          </a>{" "}
+          sets live false, sla_claim false, and uptime_percent null. It does
+          not publish an SLA or an uptime figure.
+        </p>
         <section aria-labelledby="status-components">
           <h2
             id="status-components"
