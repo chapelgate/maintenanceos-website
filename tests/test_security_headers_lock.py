@@ -18,6 +18,7 @@ EXPECTED = (
     (b"x-permitted-cross-domain-policies", b"none"),
     (b"x-dns-prefetch-control", b"off"),
     (b"origin-agent-cluster", b"?1"),
+    (b"x-download-options", b"noopen"),
 )
 
 
