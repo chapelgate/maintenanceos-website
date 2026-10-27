@@ -1,0 +1,4 @@
+- [x] Add escalation_text helper
+- [x] Wrap decision_engine and worker Escalation creates
+- [x] Contract tests green
+- [x] Spec Kit complete

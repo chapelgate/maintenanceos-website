@@ -12,6 +12,7 @@ from idempotency import claim_action
 from lifecycle import transition_work_order
 from models import ActionReceipt, Approval, AutomationJob, ContractorAttempt, Escalation, SessionLocal, WorkOrder
 from approval_text import bounded_proposed_action
+from escalation_text import bounded_escalation_reason
 from operations import audit
 from safety_controls import critical_safety_active
 from sla import sla_status
@@ -149,7 +150,9 @@ def _record_job_failure(job_id, error):
                 session.add(Escalation(
                     work_order_id=job.work_order_id,
                     level="SYSTEM",
-                    reason=f"Automation job {job.id} exhausted {_max_attempts()} attempts",
+                    reason=bounded_escalation_reason(
+                        f"Automation job {job.id} exhausted {_max_attempts()} attempts"
+                    ),
                 ))
         session.commit()
 
@@ -225,7 +228,9 @@ def check_sla():
                     session.add(Escalation(
                         work_order_id=work_order.id,
                         level="SLA",
-                        reason=f"{work_order.urgency} SLA breached: {age} min / {target} target",
+                        reason=bounded_escalation_reason(
+                            f"{work_order.urgency} SLA breached: {age} min / {target} target"
+                        ),
                     ))
         session.commit()
 
