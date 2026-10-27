@@ -19,6 +19,12 @@ GITHUB_USER_TOKEN = re.compile(r"\bghu_[A-Za-z0-9]{20,}\b")
 GITHUB_SESSION_TOKEN = re.compile(r"\bghs_[A-Za-z0-9]{20,}\b")
 NPM_TOKEN = re.compile(r"\bnpm_[A-Za-z0-9]{20,}\b")
 XOXE_TOKEN = re.compile(r"\bxoxe-[A-Za-z0-9-]{10,}\b")
+SENDGRID_KEY = re.compile(r"\bSG\.[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}\b")
+GITLAB_PERSONAL_ACCESS_TOKEN = re.compile(r"\bglpat-[A-Za-z0-9_-]{20,}\b")
+HUGGINGFACE_TOKEN = re.compile(r"\bhf_[A-Za-z0-9_-]{16,}\b")
+MAILGUN_KEY = re.compile(r"\bkey-[A-Za-z0-9]{16,}\b")
+DIGITALOCEAN_TOKEN = re.compile(r"\bdop_v1_[A-Za-z0-9]{16,}\b")
+
 SLACK_TOKEN = re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")
 PEM_PRIVATE_KEY = re.compile(
     r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----.*?-----END [A-Z0-9 ]*PRIVATE KEY-----",
@@ -45,6 +51,11 @@ def redact_detail(detail: str) -> str:
     value = GITHUB_SESSION_TOKEN.sub("[REDACTED]", value)
     value = NPM_TOKEN.sub("[REDACTED]", value)
     value = XOXE_TOKEN.sub("[REDACTED]", value)
+    value = SENDGRID_KEY.sub("[REDACTED]", value)
+    value = GITLAB_PERSONAL_ACCESS_TOKEN.sub("[REDACTED]", value)
+    value = HUGGINGFACE_TOKEN.sub("[REDACTED]", value)
+    value = MAILGUN_KEY.sub("[REDACTED]", value)
+    value = DIGITALOCEAN_TOKEN.sub("[REDACTED]", value)
     value = SLACK_TOKEN.sub("[REDACTED]", value)
     value = PEM_PRIVATE_KEY.sub("[REDACTED]", value)
     return value
