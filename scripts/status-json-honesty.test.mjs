@@ -9,10 +9,6 @@ const status = JSON.parse(
   fs.readFileSync(path.join(ROOT, "public/status.json"), "utf8"),
 );
 const page = fs.readFileSync(path.join(ROOT, "src/app/status/page.tsx"), "utf8");
-const uptimeLock = fs.readFileSync(
-  path.join(ROOT, "scripts/status-uptime-lock.test.mjs"),
-  "utf8",
-);
 
 test("status.json denies live status, uptime, and SLA", () => {
   assert.equal(status.schema, 1);
@@ -33,11 +29,12 @@ test("status.json names Chapelgate Limited with company number", () => {
   assert.equal(status.company_number, "12340004");
 });
 
-test("status page links status.json", () => {
+test("status page links status.json and denies SLA claims", () => {
   assert.match(page, /href="\/status\.json"/);
+  assert.match(page, /sla_claim false/);
+  assert.match(page, /uptime_percent null/);
+  assert.match(page, /does not publish an SLA/);
   assert.match(page, /index: false/);
-});
-
-test("status page keeps uptime lock phrases", () => {
-  assert.match(uptimeLock, /does not publish an uptime figure/i);
+  assert.doesNotMatch(page, /99\.\d%/);
+  assert.doesNotMatch(page, /uptime guarantee/i);
 });
