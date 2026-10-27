@@ -1,0 +1,2 @@
+- [x] Rewrite industry metaDescription with phone + SLA denials ≤160
+- [x] Add honesty lock test and verify

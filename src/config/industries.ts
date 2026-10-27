@@ -46,7 +46,7 @@ export const industryRoles: IndustryRole[] = [
     card: "Landlords — UK emergency triage vs jobs; no invented vans or client-money.",
     title: "Repair reporting for landlords who can't be on the phone all night",
     sub: "Designed to capture tenant repair reports when the desk is closed. Fixed rules decide urgency; hazardous reports latch for an authorised person.",
-    metaDescription: "Take tenant repair reports properly, keep anything dangerous in front of a person, and keep a record of what happened. Repair intake for UK landlords.",
+    metaDescription: "UK landlord repair intake: dangerous cases stay with a person. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
     benefits: [
@@ -85,7 +85,7 @@ export const industryRoles: IndustryRole[] = [
     card: "Letting agents — portfolio intake with 999-vs-jobs triage; rules stay in charge.",
     title: "Repair intake for letting agents who carry the blame for both sides",
     sub: "Triage tenant repair calls across your portfolio. Fixed server rules prevent false promises to tenants or landlords.",
-    metaDescription: "Repair intake for UK letting agents: take tenant reports consistently, hold safety-critical calls for a person, and keep a record.",
+    metaDescription: "UK letting-agent repair intake; safety-critical calls stay with a person. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or fee waivers. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
     benefits: [
@@ -124,7 +124,7 @@ export const industryRoles: IndustryRole[] = [
     card: "Property managers — multi-tenant ops with 999-vs-jobs triage; no autonomous dispatch.",
     title: "One way of taking repair reports, across every building you manage",
     sub: "One consistent front door for building maintenance. Fixed rules decide next steps; dangerous issues stay with a person.",
-    metaDescription: "Repair reports across many buildings, captured the same way, with dangerous ones kept with a person and a record of what happened. For UK property managers.",
+    metaDescription: "Multi-building repair capture for UK property managers. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
     benefits: [
@@ -163,7 +163,7 @@ export const industryRoles: IndustryRole[] = [
     card: "MaintenanceOS — UK emergency triage vs jobs; contractor-dispatch language, no invented vans.",
     title: "Job intake for maintenance firms that won't promise an engineer you haven't sent",
     sub: "Job intake built for trade operations. Captures trade-specific facts without false arrival times or invented dispatches.",
-    metaDescription: "For maintenance firms taking repair calls from landlords, agents and residents: structured job intake, dangerous reports kept with a person, no invented dispatch.",
+    metaDescription: "Structured job intake for UK maintenance firms. Dangerous reports stay with a person. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No contractor marketplace pitch. No “we dispatch your team automatically.” No always-on phone claim. Pre-launch status only.",
     benefits: [
@@ -202,7 +202,7 @@ export const industryRoles: IndustryRole[] = [
     card: "Housing associations — 999-vs-jobs latch and escalation; no client-money or invented dispatch.",
     title: "Repairs reporting that keeps dangerous cases in front of a person",
     sub: "Structured repair intake for social housing. Fixed server rules latch emergency hazards and significant damp.",
-    metaDescription: "Repair intake for UK housing associations: reports captured consistently, safety-critical cases held for an authorised person, and an audit trail on the case.",
+    metaDescription: "Housing-association repair intake with authorised-person holds. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
     benefits: [
@@ -241,7 +241,7 @@ export const industryRoles: IndustryRole[] = [
     card: "Facilities management — 999-vs-jobs site triage; no autonomous dispatch or client-money.",
     title: "Facilities management — site maintenance triage with clearance and audit in the loop.",
     sub: "Site maintenance intake for UK facilities teams. AI assists with capture; server rules control consequential steps.",
-    metaDescription: "Facilities management — 999-vs-jobs site triage with human clearance. No client-money. Pre-launch.",
+    metaDescription: "Facilities management — 999-vs-jobs site triage with human clearance. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
     benefits: [
@@ -280,7 +280,7 @@ export const industryRoles: IndustryRole[] = [
     card: "Councils — controlled 999-vs-jobs intake; no invented dispatch or client-money.",
     title: "Repairs reporting for councils that need to show their working",
     sub: "Repair intake for council housing teams. Fixed rules manage statutory repair clocks; safety hazards held for officers.",
-    metaDescription: "Repair intake for council housing and public-sector maintenance teams: consistent capture, safety-critical cases held for an authorised officer, and an audit trail.",
+    metaDescription: "Council repair intake; safety-critical cases held for an authorised officer. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
     benefits: [
@@ -319,7 +319,7 @@ export const industryRoles: IndustryRole[] = [
     card: "Holiday lets — out-of-hours guest reports structured; 999 vs jobs, no invented engineer.",
     title: "Holiday lets — guest maintenance calls, structured — without autonomous dispatch.",
     sub: "Capture out-of-hours guest issues clearly. Fixed rules triage emergencies without false promises or invented visits.",
-    metaDescription: "Holiday lets — out-of-hours guest maintenance structured; 999 vs jobs, no invented dispatch.",
+    metaDescription: "Holiday-let out-of-hours guest maintenance; 999 vs jobs. Pre-launch; not a live phone; no SLA claim.",
     safety: "No client-money authority — no payment, refund, or compensation. 999 guidance locked for life danger. Not a live always-on phone; under testing.",
     willNotClaim: "No “we dispatch your team automatically.” Pre-launch status only.",
     benefits: [
