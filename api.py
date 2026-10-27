@@ -20,7 +20,7 @@ from tenant_security import TenantAccessError,configured_voice_client_id,interna
 from dotenv import load_dotenv
 from webhook_security import public_provider_ingress_ready,targets_dedicated_test_number,validate_twilio
 from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
-from channels import EVENT_KEY_MAX,MEDIA_URL_MAX,resident_by_phone,create_from_channel
+from channels import EVENT_KEY_MAX,MEDIA_URL_MAX,PARTICIPANT_MAX,resident_by_phone,create_from_channel
 from postcode_normalise import postcode_matches
 from readiness import report as readiness_report
 from call_capacity import (
@@ -86,6 +86,7 @@ TENANT_HEALTH_KEYS = frozenset({
 MESSAGING_BODY_MAX = 4000
 MESSAGING_EVENT_KEY_MAX = EVENT_KEY_MAX
 MESSAGING_MEDIA_URL_MAX = MEDIA_URL_MAX
+MESSAGING_FROM_MAX = PARTICIPANT_MAX
 
 
 def messaging_event_key(message_sid, channel, phone, body) -> str:
@@ -502,11 +503,13 @@ async def messaging_inbound(request:Request):
         raise HTTPException(403,"Invalid Twilio signature")
     if not targets_dedicated_test_number(params):
         raise HTTPException(403,"Request is not for the dedicated test number")
-    sender=str(form.get("From",""))
+    sender=_bounded_text(str(form.get("From","") or ""),"From",required=True,maximum=MESSAGING_FROM_MAX)
     body=_bounded_text(form.get("Body",""),"Body",maximum=MESSAGING_BODY_MAX)
     media=_bounded_text(str(form.get("MediaUrl0","") or ""),"MediaUrl0",maximum=MESSAGING_MEDIA_URL_MAX)
     channel="WHATSAPP" if sender.startswith("whatsapp:") else "SMS"
     phone=sender.replace("whatsapp:","")
+    if len(phone) > MESSAGING_FROM_MAX:
+        raise HTTPException(400, "From is too long")
     client_id=configured_voice_client_id()
     rid=resident_by_phone(phone,client_id) if client_id else None
     if not rid:
