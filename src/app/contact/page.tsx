@@ -24,7 +24,7 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Pre-launch"
         title="Talk to a person"
-        lede="Direct enquiries about MaintenanceOS. Not a live support desk: no monitored support phone, no live chat, and no response-time SLA."
+        lede="Direct enquiries about MaintenanceOS. Not a live support desk and not a GA support desk: no monitored support phone, no live chat, not live phone provisioning, and no response-time SLA."
       />
       <div className="mx-auto max-w-3xl space-y-6 px-4 py-12">
         <FunnelPathStrip linked />
@@ -35,8 +35,8 @@ export default function ContactPage() {
             For early access, visit <a href="/demo/" className="text-accent underline">Request an early demo</a>. For direct general questions, email our founder.
           </p>
           <p className="text-xs text-muted">
-            This page is not a live support desk. There is no monitored support
-            phone, no live chat, and no response-time SLA.
+            This page is not a live support desk and not a GA support desk. There is no monitored support
+            phone, no live chat, not live phone provisioning, and no response-time SLA.
           </p>
           <div className="rounded-lg border border-border bg-paper/50 p-4">
             <p className="text-xs font-medium text-muted">Direct email</p>
@@ -47,7 +47,7 @@ export default function ContactPage() {
               info@chapelgatetechnologies.com
             </a>
             <p className="mt-1 text-xs text-muted">
-              No published response-time turnaround on this draft site. Not a support SLA.
+              No published response-time turnaround on this draft site. Not a support SLA. Also no invented response SLA.
             </p>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function ContactPage() {
         <LeadCaptureForm
           leadType="contact"
           title="Send a message"
-          helper="Human enquiry only — not a live support desk, no monitored support phone, no live chat, and no response-time SLA."
+          helper="Human enquiry only — not a live support desk, not a GA support desk, not live phone provisioning, no monitored support phone, no live chat, and no response-time SLA."
           submitLabel="Send enquiry"
         />
       </div>

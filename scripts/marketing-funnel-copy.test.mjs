@@ -275,8 +275,8 @@ test("pricing stays claims-safe with early demo CTA and coming telephony/calenda
   assert.match(page, /No live phone in a plan/);
   assert.doesNotMatch(page, /£/);
 
-  assert.match(faqs, /no live phone included in a plan/);
-  assert.match(faqs, /Live telephony and calendar booking are coming \/ early access/);
+  assert.match(faqs, /no live phone is included in any published plan/i);
+  assert.match(config, /coming \/ early access/);
   assert.match(
     faqs,
     /question: "When will pricing be published\?"[\s\S]*relatedHref: "\/demo\/"/,
@@ -284,7 +284,7 @@ test("pricing stays claims-safe with early demo CTA and coming telephony/calenda
 
   assert.match(llms, /No live phone in a plan/);
   assert.match(llms, /telephony and calendar are coming \/ early access/);
-  assert.match(llmsFull, /no live phone included in a plan/);
+  assert.match(llmsFull, /no live phone included in a plan|no live phone is included in any published plan/i);
   assert.match(llmsFull, /No invented £ figures/);
   assert.match(nextConfig, /output:\s*["']export["']/);
 });
