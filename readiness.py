@@ -159,6 +159,7 @@ CHECKS={
     "ai_kill_switch_recorded": _kill_switch_recorded_disabled,
     "structured_logging": structured_logging_enabled,
     "http_rate_limit_configured": lambda: rate_setting_valid("PUBLIC_HTTP_RATE_LIMIT_PER_MINUTE"),
+    "product_profile_ready": profile_ready,
     "websocket_rate_limit_configured": lambda: rate_setting_valid("PUBLIC_WS_RATE_LIMIT_PER_MINUTE"),
     "voice_timing_configured": _voice_timing_valid,
     "staged_database_configured": _staged_database_configured,
@@ -167,6 +168,7 @@ CHECKS={
     "commercial_external_identity_config": external_identity_configured,
     "commercial_external_identity_runtime": external_identity_runtime_ready,
     "commercial_social_housing_runtime": social_housing_runtime_ready,
+    "product_profile_ready": profile_ready,
 }
 
 LOCAL_CLOSED_KEYS = (
@@ -177,6 +179,7 @@ LOCAL_CLOSED_KEYS = (
     "live_messaging_disabled","automatic_dispatch_disabled","remote_ai_enable_disabled",
     "ai_side_effects_disabled","ai_kill_switch_recorded","structured_logging",
     "http_rate_limit_configured","websocket_rate_limit_configured","voice_timing_configured",
+    "product_profile_ready",
 )
 PUBLIC_TEST_CONFIG_KEYS = (
     "database","schema_compatible","app_secret_changed",
@@ -186,7 +189,7 @@ PUBLIC_TEST_CONFIG_KEYS = (
     "live_email_disabled","live_messaging_disabled","automatic_dispatch_disabled",
     "remote_ai_enable_disabled","ai_side_effects_disabled","ai_kill_switch_recorded",
     "structured_logging","http_rate_limit_configured","websocket_rate_limit_configured",
-    "voice_timing_configured",
+    "voice_timing_configured","product_profile_ready",
 )
 CONTROLLED_CALL_CONFIG_KEYS = tuple(
     "public_provider_ingress" if key == "public_provider_ingress_disabled" else key
@@ -227,11 +230,14 @@ def release_status_banner(checks=None):
             "title": "Commercial release flag is true",
             "body": "Still requires owner last gates before any sale or live personal data.",
         }
-    _profile_ok = profile_ready()
+    profile_ok = bool(data.get("product_profile_ready", profile_ready()))
+    body = "commercial_release_ready is false. SYNTHETIC ONLY. No sale. No live personal data."
+    if not profile_ok:
+        body = "product_profile_ready is false. " + body
     return {
         "level": "warning",
         "title": "NOT COMMERCIALLY RELEASED",
-        "body": "commercial_release_ready is false. SYNTHETIC ONLY. No sale. No live personal data.",
+        "body": body,
     }
 
 
