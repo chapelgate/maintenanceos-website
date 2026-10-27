@@ -107,8 +107,10 @@ elif page=="Work Orders":
                 create_dispatch_approval(w.id);st.rerun()
             lifecycle_reason=st.text_input("Lifecycle action reason",key=f"lifecycle-{w.id}")
             if w.status=="READY_TO_CLOSE" and st.button("Close work order"):
-                if close_work_order(w.id,user.id):st.rerun()
-                else:st.error("Closure is blocked")
+                try:
+                    if close_work_order(w.id,user.id):st.rerun()
+                    else:st.error("Closure is blocked")
+                except SafetyStateError as exc:st.error(str(exc))
             if w.status in {"CLOSED","CANCELLED"} and st.button("Reopen work order"):
                 if reopen_work_order(w.id,user.id,lifecycle_reason):st.rerun()
                 else:st.error("Reopening requires authority and a reason")

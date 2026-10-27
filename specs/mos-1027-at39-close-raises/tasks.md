@@ -1,0 +1,5 @@
+- [x] Spec
+- [x] Edit operations.close_work_order
+- [x] Edit dashboard Close handler
+- [x] Add tests/test_at39_close_raises.py
+- [x] Verify pytest (AT39 + close_lifecycle_roles + new)
