@@ -54,6 +54,26 @@ export default function AccessibilityPage() {
           </p>
         </section>
 
+        <section aria-labelledby="a11y-perf">
+          <h2 id="a11y-perf" className="text-xl font-semibold text-ink">
+            Performance budgets are lab evidence, not field Core Web Vitals
+          </h2>
+          <p className="mt-2">
+            The performance budget (<code>npm run performance:budget</code>) measures
+            lab-only initial JS/CSS payload sizes against fixed ceilings (raw JS ≤ 600 KB,
+            gzip JS ≤ 190 KB, CSS ≤ 120 KB). These are static-build lab numbers from the
+            exported <code>out/</code> tree. They are not a CrUX or field Core Web Vitals
+            claim and must not be marketed as one without real field data.
+            <a
+              href="/accessibility/#a11y-run"
+              className="font-medium text-accent underline"
+            >
+              Automated accessibility checks (WebKit axe)
+            </a>
+            are recorded separately below.
+          </p>
+        </section>
+
         <section aria-labelledby="a11y-run">
           <h2 id="a11y-run" className="text-xl font-semibold text-ink">
             Automated checks (WebKit axe)
