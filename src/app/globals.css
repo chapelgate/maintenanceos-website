@@ -755,3 +755,31 @@ header details[open] .site-menu-panel {
     content-visibility: visible;
   }
 }
+
+@media print {
+  .site-header,
+  .mos-chat-widget,
+  a[href="#main"],
+  .prelaunch-banner {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  a[href]::after {
+    content: none !important;
+  }
+
+  main {
+    outline: none !important;
+  }
+
+  .mos-glass {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
