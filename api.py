@@ -350,6 +350,8 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
 
 def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:str):
     require_contractor_portal()
+    work_order_id=_positive_int(work_order_id,"work_order_id")
+    contractor_id=_positive_int(contractor_id,"contractor_id")
     decision=_require_contractor_decision(decision)
     token=_require_contractor_token(token)
 
@@ -395,6 +397,8 @@ def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=For
 @app.get("/contractor/availability",response_class=HTMLResponse)
 def availability_form(work_order_id:int,contractor_id:int,token:str):
     require_contractor_portal()
+    work_order_id=_positive_int(work_order_id,"work_order_id")
+    contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     with SessionLocal() as s:
@@ -434,6 +438,8 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
 @app.get("/contractor/complete",response_class=HTMLResponse)
 def complete_form(work_order_id:int,contractor_id:int,token:str):
     require_contractor_portal()
+    work_order_id=_positive_int(work_order_id,"work_order_id")
+    contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     with SessionLocal() as s:
