@@ -9,7 +9,7 @@ EXPECTED = (
     (b"x-frame-options", b"DENY"),
     (b"referrer-policy", b"no-referrer"),
     (b"cache-control", b"no-store"),
-    (b"permissions-policy", b"camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), clipboard-read=(), clipboard-write=(), serial=(), hid=(), xr-spatial-tracking=(), screen-wake-lock=(), fullscreen=()"),
+    (b"permissions-policy", b"camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), clipboard-read=(), clipboard-write=(), serial=(), hid=(), xr-spatial-tracking=(), screen-wake-lock=(), fullscreen=(), autoplay=(), encrypted-media=(), picture-in-picture=(), interest-cohort=(), idle-detection=(), window-management=(), document-domain=(), web-share=(), otp-credentials=()"),
     (b"cross-origin-opener-policy", b"same-origin"),
     (b"content-security-policy", b"default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"),
     (b"cross-origin-resource-policy", b"same-origin"),
@@ -31,7 +31,7 @@ def test_health_response_carries_locked_headers():
     assert response.headers["x-frame-options"] == "DENY"
     assert response.headers["referrer-policy"] == "no-referrer"
     assert response.headers["cache-control"] == "no-store"
-    assert response.headers["permissions-policy"] == "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), clipboard-read=(), clipboard-write=(), serial=(), hid=(), xr-spatial-tracking=(), screen-wake-lock=(), fullscreen=()"
+    assert response.headers["permissions-policy"] == "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), clipboard-read=(), clipboard-write=(), serial=(), hid=(), xr-spatial-tracking=(), screen-wake-lock=(), fullscreen=(), autoplay=(), encrypted-media=(), picture-in-picture=(), interest-cohort=(), idle-detection=(), window-management=(), document-domain=(), web-share=(), otp-credentials=()"
     assert response.headers["cross-origin-opener-policy"] == "same-origin"
     assert response.headers["content-security-policy"] == "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
     assert response.headers["cross-origin-resource-policy"] == "same-origin"
