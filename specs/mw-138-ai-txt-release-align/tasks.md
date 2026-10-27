@@ -1,0 +1,3 @@
+- [x] Update ai.txt markers
+- [x] Add lock test
+- [x] Verify with node --test
