@@ -435,6 +435,8 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
         raise HTTPException(400,"start is too long")
     if not isinstance(end,str) or len(end) > AVAILABILITY_DATETIME_TEXT_MAX:
         raise HTTPException(400,"end is too long")
+    start=_reject_control_chars(start,"start")
+    end=_reject_control_chars(end,"end")
     try:st=datetime.strptime(start,"%Y-%m-%dT%H:%M");en=datetime.strptime(end,"%Y-%m-%dT%H:%M")
     except ValueError as exc:raise HTTPException(400,"Invalid availability date/time") from exc
     validate_availability_slot(st,en)
