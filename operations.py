@@ -315,6 +315,8 @@ def accept_contractor(work_order_id,contractor_id,action_key):
 
 
 def decline_contractor(work_order_id,contractor_id,action_key):
+    action_key=(action_key or "").strip()
+    if not action_key or len(action_key) > ACTION_KEY_MAX:return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"Contractor decline")
         except SafetyStateError:return False
