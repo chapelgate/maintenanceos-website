@@ -17,6 +17,7 @@ EXPECTED = (
     (b"strict-transport-security", b"max-age=31536000; includeSubDomains"),
     (b"x-permitted-cross-domain-policies", b"none"),
     (b"x-dns-prefetch-control", b"off"),
+    (b"origin-agent-cluster", b"?1"),
 )
 
 
@@ -39,6 +40,7 @@ def test_health_response_carries_locked_headers():
     assert response.headers["strict-transport-security"] == "max-age=31536000; includeSubDomains"
     assert response.headers["x-permitted-cross-domain-policies"] == "none"
     assert response.headers["x-dns-prefetch-control"] == "off"
+    assert response.headers["origin-agent-cluster"] == "?1"
     assert "x-request-id" in response.headers
 
 
