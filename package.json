@@ -7,6 +7,7 @@
     "build": "node scripts/write-release-marker.mjs && next build",
     "start": "npx serve out",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "seo:monitor": "node scripts/seo-live-monitor.mjs",
     "website:monitor": "node scripts/website-health-monitor.mjs",
     "functional:smoke": "node scripts/functional-smoke.mjs",
@@ -44,7 +45,8 @@
     "candidate:evidence": "node scripts/write-candidate-evidence.mjs",
     "health:artifact": "node scripts/write-health-artifact.mjs",
     "secret-scan:evidence": "node scripts/write-secret-scan-evidence.mjs",
-    "consolidated:evidence": "node scripts/write-consolidated-evidence.mjs"
+    "consolidated:evidence": "node scripts/write-consolidated-evidence.mjs",
+    "toolchain:evidence": "node scripts/write-toolchain-evidence.mjs"
   },
   "dependencies": {
     "next": "16.3.8",
