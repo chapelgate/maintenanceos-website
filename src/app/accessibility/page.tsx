@@ -59,7 +59,7 @@ export default function AccessibilityPage() {
             Automated checks (WebKit axe)
           </h2>
           <p className="mt-2">
-            axe-core 4.10.3 ran in Playwright WebKit 26.6 against a local static
+            axe-core 4.13.0 ran in Playwright WebKit 26.6 against a local static
             export, at two viewports (iPhone 13: 390×844; Desktop Safari:
             1280×800). Coverage is the estate WebKit axe gate, not a full-site
             audit.
@@ -83,8 +83,9 @@ export default function AccessibilityPage() {
             role pages, integration provider pages, dashboard preview) are
             not claimed as covered here. It does not test physical iPhone or Mac Safari,
             nor any screen reader or assistive technology — those
-            remain owner-only checks. It tests only WCAG 2.0 A/AA tags in
-            axe-core, not the full WCAG 2.2 AA criterion set.
+            remain owner-only checks. It tests axe-core tags <code>wcag2a</code>, <code>wcag2aa</code>,
+            <code>wcag21aa</code>, and <code>wcag22aa</code>. That is still an
+            automated subset, not a full WCAG 2.2 AA conformance claim.
           </p>
         </section>
 
@@ -108,11 +109,12 @@ export default function AccessibilityPage() {
               this page. They remain Andy-only launch checks.
             </li>
             <li>
-              <strong>WCAG 2.2 criteria not covered:</strong> axe-core tags
-              used were <code>wcag2aa</code> and <code>wcag2a</code> (WCAG 2.0).
-              WCAG 2.2 adds new success criteria (e.g., 2.4.11 Focus Not
-              Obscured, 2.5.7 Dragging Movements, 3.2.6 Consistent Help,
-              3.3.7 Redundant Entry) that are not validated here.
+              <strong>WCAG 2.2 still not fully covered:</strong> The gate
+              now includes axe tags <code>wcag21aa</code> and <code>wcag22aa</code>
+              alongside <code>wcag2a</code>/<code>wcag2aa</code>. axe-core still
+              cannot prove full WCAG 2.2 AA (for example criteria without automated
+              rules, and any AT/device checks). Do not read a green gate as
+              certification.
             </li>
             <li>
               <strong>No assistive-technology testing:</strong> No manual
@@ -150,10 +152,10 @@ export default function AccessibilityPage() {
               <code>tests/webkit-a11y/a11y.test.mjs</code>.
             </li>
             <li>
-              <strong>Upgrade axe-core tags:</strong> Add WCAG 2.2 specific
-              tags (<code>wcag21aa</code>, <code>wcag22aa</code>) once
-              axe-core supports them, or supplement with manual checks for
-              the new criteria.
+              <strong>Automated WCAG 2.2 tags enabled:</strong> The WebKit
+              axe gate now requests <code>wcag21aa</code> and <code>wcag22aa</code>
+              as well as <code>wcag2a</code>/<code>wcag2aa</code>. Manual AT and
+              device checks remain required before any conformance claim.
             </li>
             <li>
               <strong>Manual assistive-technology audit:</strong> Conduct

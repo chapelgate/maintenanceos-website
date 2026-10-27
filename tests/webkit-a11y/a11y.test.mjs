@@ -51,7 +51,7 @@ test.describe('WebKit accessibility checks', () => {
         
         // Check for axe violations
         const accessibilityScanResults = await new AxeBuilder({ page })
-          .withTags(['wcag2aa', 'wcag2a'])
+          .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
           .analyze();
         
         // Filter violations to only serious and critical
