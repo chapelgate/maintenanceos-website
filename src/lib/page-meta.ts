@@ -26,34 +26,35 @@ export const funnelPageCopy = {
   home: {
     title: "Repair Intake With Safety Rules for UK Teams",
     absoluteTitle: "Repair Intake With Safety Rules for UK Teams | WorkSmartOS",
-    description: "The AI takes the details; fixed rules and an authorised person decide anything dangerous. For UK property teams. Pre-launch, not a live phone, not always-on.",
+    description:
+      "The AI takes the details; fixed rules and an authorised person decide anything dangerous. UK property teams. Pre-launch; not a live phone; no SLA claim.",
     path: "/",
   },
   create: {
     title: "Try Website Set-up (Preview)",
     description:
-      "Preview a repair-intake draft from your business details. It does not create a phone number. Pre-launch, not always-on, not general availability.",
+      "Preview a repair-intake draft from your business details. No phone number created. Pre-launch; not always-on; not general availability; no SLA claim.",
     path: "/create/",
   },
   demo: {
     title: "Request an Early Demo",
-    description: "See a sample repair report go from first contact to safety latch to clearance, using sample data. Request an early demo of MaintenanceOS.",
+    description: "Sample repair report from first contact to safety latch to clearance. Request an early demo. Pre-launch; not a live phone; no SLA claim.",
     path: "/demo/",
   },
   howItWorks: {
     title: "How MaintenanceOS Works: From Repair Report to Decision",
-    description: "How a repair report becomes a structured request, how safety-critical reports are held for an authorised person, and what's recorded along the way.",
+    description: "How a repair report becomes a structured request and safety-critical items stay with an authorised person. Pre-launch; not a live phone; no SLA claim.",
     path: "/how-it-works/",
   },
   features: {
     title: "MaintenanceOS Features: What's Built and What's in Preview",
-    description: "What MaintenanceOS does today, from structured repair intake to safety latches and audit evidence, and what's still under testing. Plainly labelled.",
+    description: "What MaintenanceOS does today — structured repair intake, safety latches, audit evidence — and what's under testing. Pre-launch; not a live phone; no SLA claim.",
     path: "/features/",
   },
   propertyMaintenanceSoftware: {
     title: "Property Maintenance Software for UK Teams",
     absoluteTitle: "Property Maintenance Software for UK Teams | WorkSmartOS",
-    description: "Pre-launch property maintenance software for UK landlords, agents, housing providers and maintenance firms. AI takes the details; rules and people keep control.",
+    description: "Pre-launch property maintenance software for UK landlords, agents, housing providers and maintenance firms. Not a live phone; no SLA claim.",
     path: "/property-maintenance-software/",
   },
 } as const;
@@ -162,7 +163,7 @@ export function industryRoleMetadata(
     return contentPageMetadata({
       title: "Industries",
       description:
-        "Industry OS lines for UK landlords, agents, managers, housing, FM, councils, and holiday lets. Pre-launch.",
+        "Industry OS lines for UK landlords, agents, managers, housing, FM, councils, and holiday lets. Pre-launch; not a live phone; no SLA claim.",
       path: "/industries/",
     });
   }
