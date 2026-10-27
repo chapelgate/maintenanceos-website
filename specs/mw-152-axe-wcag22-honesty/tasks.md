@@ -1,0 +1,3 @@
+- [x] Cite axe-core 4.13.0 on accessibility page
+- [x] Enable wcag21aa + wcag22aa in WebKit axe gate
+- [x] Update honesty locks and Spec Kit

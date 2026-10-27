@@ -58,7 +58,9 @@ test("accessibility note stays voluntary and is on the sitemap", () => {
   assert.match(page, /not a certification/);
   assert.match(page, /assistive technology/);
   assert.match(page, /physical iPhone or Mac Safari/);
-  assert.match(page, /axe-core 4\.10\.3/);
+  assert.match(page, /axe-core 4\.13\.0/);
+  assert.match(page, /wcag22aa/);
+  assert.match(page, /wcag21aa/);
   assert.match(page, /Playwright WebKit 26\.6/);
   assert.match(page, /reported no violations on those seven routes/);
   assert.doesNotMatch(page, /AXE_RESULT_PLACEHOLDER/);
