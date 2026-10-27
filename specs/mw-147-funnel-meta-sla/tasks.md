@@ -1,0 +1,3 @@
+- [x] Update funnelPageCopy descriptions with phone + SLA denials
+- [x] Update industries fallback description
+- [x] Add honesty lock test and verify
