@@ -15,6 +15,7 @@ CHANNEL_SOURCE_MAX = 30
 INCIDENT_KEY_MAX = 200
 MEDIA_URL_MAX = 2000
 MEDIA_URL_MAX = 2000
+CHANNEL_DESCRIPTION_MAX = 8000
 
 
 def resident_by_email(client_id,email):
@@ -79,6 +80,8 @@ def create_from_channel(client_id,property_id,resident_id,source,description,par
         raise ValueError("incident_key is too long")
     if media_url and len(media_url) > MEDIA_URL_MAX:
         raise ValueError("media_url is too long")
+    if not description or not description.strip() or len(description) > CHANNEL_DESCRIPTION_MAX:
+        raise ValueError("description is invalid")
     with SessionLocal() as s:
         require_client_resource(s,client_id,property_id=property_id,resident_id=resident_id)
         if event_key:
