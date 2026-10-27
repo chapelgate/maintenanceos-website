@@ -27,3 +27,13 @@ test("Andy demo script does not instruct a sale or a public launch", () => {
   assert.doesNotMatch(doc, /set NEXT_PUBLIC_PUBLIC_LAUNCH=true/);
   assert.doesNotMatch(doc, /merge/i);
 });
+
+test("Andy demo script covers accessibility, security.txt, disclosure, and buyers pack", () => {
+  assert.match(doc, /\/accessibility\//);
+  assert.match(doc, /not field Core Web Vitals/);
+  assert.match(doc, /\/\.well-known\/security\.txt/);
+  assert.match(doc, /\/vulnerability-disclosure\//);
+  assert.match(doc, /\/buyers\//);
+  assert.match(doc, /not an offer for sale/);
+  assert.match(doc, /not a WCAG 2\.2 AA verification claim/);
+});
