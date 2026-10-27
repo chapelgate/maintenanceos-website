@@ -43,7 +43,8 @@
     "browser:install": "playwright install firefox webkit",
     "candidate:evidence": "node scripts/write-candidate-evidence.mjs",
     "health:artifact": "node scripts/write-health-artifact.mjs",
-    "secret-scan:evidence": "node scripts/write-secret-scan-evidence.mjs"
+    "secret-scan:evidence": "node scripts/write-secret-scan-evidence.mjs",
+    "consolidated:evidence": "node scripts/write-consolidated-evidence.mjs"
   },
   "dependencies": {
     "next": "16.3.8",
