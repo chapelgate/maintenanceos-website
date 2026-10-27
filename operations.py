@@ -555,6 +555,9 @@ def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
 def reject_operational_action(approval_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if reason_has_control_chars(reason):
+        return False
+
     if len(reason) > REJECT_REASON_MAX:
         return False
     with SessionLocal() as s:
@@ -570,6 +573,8 @@ def reject_operational_action(approval_id,actor_user_id,reason):
 def cancel_work_order(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if reason_has_control_chars(reason):
+        return False
     if len(reason) > CANCEL_REASON_MAX:
         return False
     with SessionLocal() as s:
@@ -588,6 +593,8 @@ def cancel_work_order(work_order_id,actor_user_id,reason):
 def reopen_work_order(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if reason_has_control_chars(reason):
+        return False
     if len(reason) > REOPEN_REASON_MAX:
         return False
     with SessionLocal() as s:
@@ -604,6 +611,8 @@ def reopen_work_order(work_order_id,actor_user_id,reason):
 def record_no_show(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if reason_has_control_chars(reason):
+        return False
     if len(reason) > NO_SHOW_REASON_MAX:
         return False
     with SessionLocal() as s:
