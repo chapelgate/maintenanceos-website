@@ -7,7 +7,7 @@ import api
 
 
 def test_messaging_body_rejects_control_chars():
-    source = inspect.getsource(api.messaging_webhook)
+    source = inspect.getsource(api.messaging_inbound)
     assert "_reject_control_chars" in source
     assert "MESSAGING_BODY_MAX" in source
 
