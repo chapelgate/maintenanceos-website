@@ -227,7 +227,7 @@ def _contractor_work_order(s,work_order_id,contractor_id,allowed_statuses):
 def _portal_page(title: str, body: str) -> str:
     return (
         "<!DOCTYPE html><html lang=\"en-GB\"><head>"
-        f"<meta charset=\"utf-8\"><title>{title}</title></head>"
+        f"<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>{title}</title></head>"
         f"<body><main>{body}</main></body></html>"
     )
 
