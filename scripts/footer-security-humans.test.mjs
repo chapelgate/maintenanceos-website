@@ -18,6 +18,7 @@ const security = fs.readFileSync(
 
 test("footer company nav exposes security.txt, humans.txt, and vulnerability disclosure", () => {
   assert.match(site, /href: ["']\/\.well-known\/security\.txt["']/);
+  assert.match(site, /label: ["']Security policy["']/);
   assert.match(site, /href: ["']\/humans\.txt["']/);
   assert.match(site, /href: ["']\/vulnerability-disclosure\/["']/);
   assert.match(footer, /footerNav\.company/);
@@ -27,7 +28,7 @@ test("footer company nav exposes security.txt, humans.txt, and vulnerability dis
 test("linked security.txt and humans.txt stay pre-launch honest", () => {
   assert.match(security, /Policy: https:\/\/worksmartos\.co\.uk\/vulnerability-disclosure\//);
   assert.match(security, /Contact: mailto:info@chapelgatetechnologies\.com/);
-  assert.doesNotMatch(security, /bug bounty/i);
+  assert.match(security, /No bug bounty/);
   assert.match(humans, /Not commercially generally available/i);
   assert.match(humans, /No SLA claim/i);
   assert.doesNotMatch(humans, /£/);
