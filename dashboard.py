@@ -5,6 +5,7 @@ from decision_engine import CATEGORIES,TRADE,apply_intake_rules
 from operations import *
 from sla import sla_status
 from security import verify_password
+from approval_text import APPROVAL_REASON_MAX
 from idempotency import AI_SIDE_EFFECT_REASON_MAX,ai_side_effects_enabled,set_ai_side_effects
 from readiness import report as readiness_report
 from reporting import operational_metrics
@@ -118,13 +119,16 @@ elif page=="Work Orders":
                     else:st.error("Closure is blocked")
                 except SafetyStateError as exc:st.error(str(exc))
             if w.status in {"CLOSED","CANCELLED"} and st.button("Reopen work order"):
-                if reopen_work_order(w.id,user.id,lifecycle_reason):st.rerun()
+                if len(lifecycle_reason.strip())>REOPEN_REASON_MAX:st.error("Lifecycle action reason is too long")
+                elif reopen_work_order(w.id,user.id,lifecycle_reason):st.rerun()
                 else:st.error("Reopening requires authority and a reason")
             if w.status=="APPOINTMENT_BOOKED" and st.button("Record no-show"):
-                if record_no_show(w.id,user.id,lifecycle_reason):st.rerun()
+                if len(lifecycle_reason.strip())>NO_SHOW_REASON_MAX:st.error("Lifecycle action reason is too long")
+                elif record_no_show(w.id,user.id,lifecycle_reason):st.rerun()
                 else:st.error("No-show recording is blocked")
             if w.status not in {"CLOSED","CANCELLED"} and st.button("Cancel work order"):
-                if cancel_work_order(w.id,user.id,lifecycle_reason):st.rerun()
+                if len(lifecycle_reason.strip())>CANCEL_REASON_MAX:st.error("Lifecycle action reason is too long")
+                elif cancel_work_order(w.id,user.id,lifecycle_reason):st.rerun()
                 else:st.error("Cancellation requires authority and a reason")
 
 elif page=="Approvals":
@@ -141,16 +145,19 @@ elif page=="Approvals":
                     if c1.button("Approve",key=f"a{a.id}"):
                         if a.approval_type=="TRIAGE":
                             st.error("Use the triage controls below to classify this request")
+                        elif len(decision_reason.strip())>APPROVAL_REASON_MAX:st.error("Decision reason is too long")
                         elif approve_operational_action(a.id,user.id,decision_reason):st.rerun()
                         else:st.error("Approval blocked by tenant or safety policy")
                     if c2.button("Reject",key=f"r{a.id}"):
-                        if reject_operational_action(a.id,user.id,decision_reason):st.rerun()
+                        if len(decision_reason.strip())>REJECT_REASON_MAX:st.error("Decision reason is too long")
+                        elif reject_operational_action(a.id,user.id,decision_reason):st.rerun()
                         else:st.error("Rejection blocked by tenant or authority policy")
                     if a.approval_type=="TRIAGE":
                         category=st.selectbox("Category",list(CATEGORIES),key=f"category-{a.id}")
                         urgency=st.selectbox("Urgency",["P2","P3"],key=f"urgency-{a.id}")
                         if st.button("Resolve triage",key=f"triage-{a.id}"):
-                            if resolve_triage(a.id,user.id,category,TRADE[category],urgency,decision_reason):st.rerun()
+                            if len(decision_reason.strip())>TRIAGE_REASON_MAX:st.error("Decision reason is too long")
+                            elif resolve_triage(a.id,user.id,category,TRADE[category],urgency,decision_reason):st.rerun()
                             else:st.error("Triage resolution requires authority, a reason, and a non-critical classification")
 
 elif page=="Scheduling":
