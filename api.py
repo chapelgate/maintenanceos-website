@@ -376,7 +376,7 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="decision" value="{decision}" maxlength="{CONTRACTOR_DECISION_MAX}">
-<input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
+<input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
 <button type="submit">{label}</button></form>""",
     )
 
@@ -418,7 +418,7 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/availability" aria-labelledby="availability-heading">
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
-<input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
+<input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
 <label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <button type="submit">Submit</button></form>""",
@@ -458,7 +458,7 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
         f"""<h1 id="complete-heading">Complete job #{work_order_id}</h1><form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/complete" aria-labelledby="complete-heading">
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
-<input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
+<input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
 <label for="note">Completion note</label><textarea id="note" name="note" required maxlength="{COMPLETION_NOTE_MAX}"></textarea><br>
 <label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url" type="url" maxlength="{EVIDENCE_URL_MAX}"><br>
 <button type="submit">Submit completion</button></form>""",
