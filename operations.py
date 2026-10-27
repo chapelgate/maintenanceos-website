@@ -361,6 +361,8 @@ def completion_evidence_fingerprint(note: str, evidence_url: str = "") -> str:
     return digest
 
 def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
+    action_key=(action_key or "").strip()
+    if not action_key or len(action_key) > ACTION_KEY_MAX:return None
     with SessionLocal() as s:
         if not (note or "").strip():return None
         wo=require_noncritical(s,work_order_id,"Completion submission")
