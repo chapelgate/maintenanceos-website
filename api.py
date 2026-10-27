@@ -499,7 +499,7 @@ async def invoices(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
-    invoice_number=_bounded_text(d.get("invoice_number"),"invoice_number",required=True,maximum=INVOICE_NUMBER_MAX)
+    invoice_number=_reject_control_chars(_bounded_text(d.get("invoice_number"),"invoice_number",required=True,maximum=INVOICE_NUMBER_MAX),"invoice_number")
     description=_reject_control_chars(_bounded_text(d.get("description",""),"description",maximum=QUOTE_DESCRIPTION_MAX),"description")
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)

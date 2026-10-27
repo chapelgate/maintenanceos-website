@@ -1,5 +1,5 @@
 # Tasks
 - [x] Spec
-- [x] Wire control-char reject
-- [x] Add tests
-- [x] Verify
+- [x] Implement
+- [x] Test
+- [x] Converge
