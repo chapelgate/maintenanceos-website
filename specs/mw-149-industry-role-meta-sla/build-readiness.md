@@ -4,13 +4,16 @@ Status: APPLIES
 Reason: Bounded change for mw-149-industry-role-meta-sla only.
 ## 2. Data and Storage
 Status: NOT_APPLICABLE
+Reason: No new data store or persistence path.
 ## 3. Security and Privacy
 Status: NOT_APPLICABLE
+Reason: Public industry meta description strings only.
 ## 4. Reliability and Fallbacks
 Status: APPLIES
-Reason: Static SEO fallback strings.
+Reason: Static SEO fallback strings; no live backend.
 ## 5. Accessibility and UX
 Status: NOT_APPLICABLE
+Reason: Meta description strings only, not UI chrome.
 ## 6. Testing and Verification
 Status: APPLIES
 Reason: node --test lock accompanies this change.
@@ -19,4 +22,4 @@ Status: APPLIES
 Reason: Pre-launch / no live phone / no SLA in industry fallbacks.
 ## 8. Operations and Rollback
 Status: ALREADY_COVERED
-Reason: Revert this commit. No deploy/launch-flag change.
+Reason: Revert this commit. No deploy, nginx, or launch-flag change.
