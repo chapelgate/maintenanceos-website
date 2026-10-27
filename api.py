@@ -419,8 +419,8 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
-<label for="start">Start (YYYY-MM-DD HH:MM)</label><input id="start" name="start" required maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
-<label for="end">End (YYYY-MM-DD HH:MM)</label><input id="end" name="end" required maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <button type="submit">Submit</button></form>""",
     )
 
@@ -435,7 +435,7 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
         raise HTTPException(400,"start is too long")
     if not isinstance(end,str) or len(end) > AVAILABILITY_DATETIME_TEXT_MAX:
         raise HTTPException(400,"end is too long")
-    try:st=datetime.strptime(start,"%Y-%m-%d %H:%M");en=datetime.strptime(end,"%Y-%m-%d %H:%M")
+    try:st=datetime.strptime(start,"%Y-%m-%dT%H:%M");en=datetime.strptime(end,"%Y-%m-%dT%H:%M")
     except ValueError as exc:raise HTTPException(400,"Invalid availability date/time") from exc
     validate_availability_slot(st,en)
     try:availability_id=submit_availability(work_order_id,contractor_id,st,en,token)
