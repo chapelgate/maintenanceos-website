@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from models import ActionReceipt, RuntimeControl
 
 ACTION_KEY_MAX = 200
+AI_SIDE_EFFECT_ACTOR_MAX = 100
 
 
 def claim_action(session, scope: str, action_key: str, *, client_id=None, work_order_id=None):
@@ -53,6 +54,9 @@ AI_SIDE_EFFECT_REASON_MAX = 500
 
 
 def set_ai_side_effects(session, enabled: bool, *, actor: str, reason: str) -> None:
+    actor = (actor or "").strip()
+    if not actor or len(actor) > AI_SIDE_EFFECT_ACTOR_MAX:
+        raise ValueError("AI side-effect actor invalid")
     reason = (reason or "").strip()
     if len(reason) > AI_SIDE_EFFECT_REASON_MAX:
         raise ValueError("AI side-effect reason too long")
