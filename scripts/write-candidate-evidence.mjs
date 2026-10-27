@@ -31,15 +31,29 @@ const secretScan = read("scripts/secret-pattern-scan.test.mjs");
 const rollback = read("scripts/rollback-plan.mjs");
 const monitor = read("scripts/website-health-monitor.mjs");
 const site = read("src/config/site.ts");
+const releaseWriter = exists("scripts/write-release-marker.mjs")
+  ? read("scripts/write-release-marker.mjs")
+  : "";
 
 const checks = {
   secretScanInNpmTest: /secret-pattern-scan\.test\.mjs/.test(pkg.scripts.test) || /scripts\/\*\.test\.mjs/.test(pkg.scripts.test),
   secretScanScriptPresent: exists("scripts/secret-pattern-scan.test.mjs"),
   secretScanSkipsBuildDirs: /SKIP_DIRS/.test(secretScan) && /node_modules/.test(secretScan),
+  secretScanEvidenceScript:
+    pkg.scripts["secret-scan:evidence"] === "node scripts/write-secret-scan-evidence.mjs",
   rollbackRevertOnly: /git revert --no-edit/.test(rollback) && !/execFileSync\("git", \["reset", "--hard"/.test(rollback),
+  rollbackEvidenceScript:
+    pkg.scripts["rollback:evidence"] === "node scripts/write-rollback-evidence.mjs",
+  healthArtifactScript:
+    pkg.scripts["health:artifact"] === "node scripts/write-health-artifact.mjs",
   healthMonitorOptInControlPlane: /WEBSITE_CONTROL_PLANE/.test(monitor),
   healthMonitorNoRailwayDefault: !/railway\.app/.test(monitor),
   publicLaunchFailClosed: /publicLaunch[\s\S]*false/.test(site) || /PUBLIC_LAUNCH[\s\S]*!==\s*["']true["']/.test(site),
+  releaseMarkerDeniesLaunch:
+    /public_launch:\s*false/.test(releaseWriter) &&
+    /commercial_ga:\s*false/.test(releaseWriter) &&
+    /live_phone:\s*false/.test(releaseWriter),
+  lintScriptPresent: typeof pkg.scripts.lint === "string" && pkg.scripts.lint.length > 0,
 };
 
 const failures = Object.entries(checks)

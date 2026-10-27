@@ -32,6 +32,11 @@ test("local candidate evidence records HEAD and required policy checks", () => {
   assert.equal(evidence.checks.healthMonitorOptInControlPlane, true);
   assert.equal(evidence.checks.healthMonitorNoRailwayDefault, true);
   assert.equal(evidence.checks.publicLaunchFailClosed, true);
+  assert.equal(evidence.checks.secretScanEvidenceScript, true);
+  assert.equal(evidence.checks.rollbackEvidenceScript, true);
+  assert.equal(evidence.checks.healthArtifactScript, true);
+  assert.equal(evidence.checks.releaseMarkerDeniesLaunch, true);
+  assert.equal(evidence.checks.lintScriptPresent, true);
   assert.ok(evidence.bans.some((b) => /Does not deploy/.test(b)));
   assert.ok(evidence.bans.some((b) => /PUBLIC_LAUNCH/.test(b)));
   assert.doesNotMatch(JSON.stringify(evidence), /0151\s*321\s*1920/);
