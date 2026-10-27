@@ -24,7 +24,8 @@ test("commercial proof reuses the signed VERIFIED inventory", () => {
 test("reliability wording is evidence-bounded", () => {
   const proof = read("src/components/CommercialProof.tsx");
   const security = read("src/app/security/page.tsx");
-  assert.match(proof, /What.s live today/);
+  assert.match(proof, /Preview capability inventory/);
+  assert.match(proof, /id="whats-live-today"/);
   assert.match(security, /10 September 2026/);
   assert.match(security, /full automated test pass/);
   assert.match(security, /backup and restore check/);
