@@ -296,10 +296,15 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
     source=_bounded_text(d.get("source","API"),"source",required=True,maximum=WORK_ORDER_SOURCE_MAX)
     if source not in WORK_ORDER_SOURCES:raise HTTPException(400,"source is not allowed")
+    raw_incident=d.get("incident_key")
+    if raw_incident is None:
+        incident_key=None
+    else:
+        incident_key=_bounded_text(raw_incident,"incident_key",maximum=INCIDENT_LINK_KEY_MAX) or None
     try:
         wid=create_from_channel(client_id,property_id,resident_id,source,description,
                                 identity_verified=identity_verified,
-                                incident_key=d.get("incident_key"),event_key=_bounded_text(request.headers.get("Idempotency-Key") or "","Idempotency-Key",maximum=IDEMPOTENCY_KEY_MAX) or None)
+                                incident_key=incident_key,event_key=_bounded_text(request.headers.get("Idempotency-Key") or "","Idempotency-Key",maximum=IDEMPOTENCY_KEY_MAX) or None)
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
     with SessionLocal() as s:
         wo=s.get(WorkOrder,wid);cid=wo.assigned_contractor_id if wo else None
