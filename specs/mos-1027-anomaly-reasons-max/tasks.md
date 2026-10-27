@@ -1,0 +1,4 @@
+- [x] Spec
+- [x] Edit operations.invoice_qa
+- [x] Add tests
+- [x] Verify
