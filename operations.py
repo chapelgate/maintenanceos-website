@@ -506,6 +506,7 @@ def approve_operational_action(approval_id,actor_user_id,reason=""):
 
 TRIAGE_URGENCIES = frozenset({"P2", "P3"})
 TRIAGE_REASON_MAX = 1000
+TRIAGE_CATEGORY_MAX = 64
 TRIAGE_CATEGORIES = frozenset({
     "Plumbing","Heating","Electrical","Drainage","Roofing",
     "Locks / access","Doors","Windows","Appliances","Damp / mould",
@@ -515,6 +516,8 @@ TRIAGE_CATEGORIES = frozenset({
 
 def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
     reason=(reason or "").strip();category=(category or "").strip();trade=(trade or "").strip()
+    if len(category) > TRIAGE_CATEGORY_MAX:
+        return False
     if len(reason)<5 or not category or category not in TRIAGE_CATEGORIES or not trade or urgency not in TRIAGE_URGENCIES:return False
     if DECISION_TRADE.get(category) != trade:return False
     if len(reason) > TRIAGE_REASON_MAX:return False
