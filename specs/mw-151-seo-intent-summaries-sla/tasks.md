@@ -1,0 +1,3 @@
+- [x] Put phone + SLA denials into industry SEO intent summaries
+- [x] Use seo.summary directly in page-meta and JSON-LD
+- [x] Update honesty locks and verify

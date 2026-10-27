@@ -170,7 +170,7 @@ export function industryRoleMetadata(
   const seo = getIndustrySeoIntent(role.slug);
   return contentPageMetadata({
     title: seo?.title ?? role.productName ?? role.label,
-    description: seo ? `${seo.summary} Pre-launch; not a live phone; no SLA claim.` : role.metaDescription,
+    description: seo ? seo.summary : role.metaDescription,
     path: `/industries/${role.slug}/`,
   });
 }

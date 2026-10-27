@@ -19,42 +19,42 @@ const industrySeoIntents: Record<string, IndustrySeoIntent> = {
   landlords: {
     title: "Repair Reporting Software for UK Landlords",
     primaryQuery: "property maintenance software for UK landlords",
-    summary: "Tenant repair reports for UK landlords, with dangerous cases kept in front of a person.",
+    summary: "Tenant repair reports for UK landlords; dangerous cases stay with a person. Pre-launch; not a live phone; no SLA claim.",
   },
   "letting-agents": {
     title: "Repair Reporting for UK Letting Agents",
     primaryQuery: "property maintenance software for UK letting agents",
-    summary: "Letting-agent repair intake. Dangerous reports stay with a person. No invented promises.",
+    summary: "Letting-agent repair intake; dangerous reports stay with a person. Pre-launch; not a live phone; no SLA claim.",
   },
   "property-managers": {
     title: "Repair Intake for UK Property Managers",
     primaryQuery: "property maintenance software for UK property managers",
-    summary: "Repair reports across many buildings, with dangerous cases kept with a person.",
+    summary: "Repair reports across many buildings; dangerous cases stay with a person. Pre-launch; not a live phone; no SLA claim.",
   },
   "maintenance-companies": {
     title: "Call & Job Intake for UK Maintenance Companies",
     primaryQuery: "maintenance management software for UK maintenance companies",
-    summary: "Structured job intake for UK maintenance firms. Dangerous reports stay with a person.",
+    summary: "Structured job intake for UK maintenance firms; dangerous reports stay with a person. Pre-launch; not a live phone; no SLA claim.",
   },
   "housing-associations": {
     title: "Repairs Reporting for Housing Associations",
     primaryQuery: "housing maintenance software UK",
-    summary: "Housing-association repair intake. Safety-critical cases stay with an authorised person.",
+    summary: "Housing-association repair intake; safety-critical cases stay with an authorised person. Pre-launch; not a live phone; no SLA claim.",
   },
   "facilities-management": {
     title: "Facilities maintenance software for UK FM teams",
     primaryQuery: "facilities maintenance software UK",
-    summary: "Facilities teams capture urgent reports. Consequential decisions stay with people.",
+    summary: "Facilities teams capture urgent reports; consequential decisions stay with people. Pre-launch; not a live phone; no SLA claim.",
   },
   councils: {
     title: "Repairs Reporting Software for UK Councils",
     primaryQuery: "council maintenance software UK",
-    summary: "Council repair intake. Safety-critical cases stay with an authorised officer.",
+    summary: "Council repair intake; safety-critical cases stay with an authorised officer. Pre-launch; not a live phone; no SLA claim.",
   },
   "holiday-lets": {
     title: "Holiday let maintenance software for UK operators",
     primaryQuery: "holiday let maintenance software UK",
-    summary: "Out-of-hours guest reports for holiday lets, without invented visits or refunds.",
+    summary: "Out-of-hours guest reports for holiday lets, without invented visits or refunds. Pre-launch; not a live phone; no SLA claim.",
   },
 };
 
