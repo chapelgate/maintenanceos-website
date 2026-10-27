@@ -72,6 +72,7 @@ export default function AccessibilityPage() {
             <li>Dashboard preview (mw-158): /dashboard/ — SAMPLE / DEMO only; robots noindex; not a live customer portal</li>
             <li>Not-found export (mw-159): /404/ — pre-launch recovery page; robots noindex; no price or live phone</li>
             <li>Nested sample (mw-160): /industries/councils/, /industries/property-managers/, /blog/structured-repair-intake-vs-free-text-forms/, /compare/worksmartos-vs-answerconnect/, /integrations/calcom/, /help/data-security/ — all carry robots noindex; none claim checkout, live phone, published price, live SLA, or WCAG 2.2 AA certification.</li>
+            <li>Help billing gate (mw-162): /help/billing-subscriptions/, /help/getting-help/, /help/faq/ — pre-launch honesty; no published price, live phone, or live SLA</li>
           </ul>
           <p className="mt-2">
             <strong>Result:</strong> Those gated routes reported no axe
@@ -116,7 +117,8 @@ export default function AccessibilityPage() {
               /compare/worksmartos-vs-answerconnect/,
               /integrations/google/, /integrations/outlook/,
               /integrations/calcom/, /help/getting-started/,
-              /help/data-security/,
+              /help/data-security/, /help/billing-subscriptions/,
+              /help/getting-help/, /help/faq/,
               /dashboard/ (SAMPLE / DEMO preview; noindex), and
               /404/ (exported not-found recovery page; noindex).
               Other nested blog, compare, industry, and integration pages,

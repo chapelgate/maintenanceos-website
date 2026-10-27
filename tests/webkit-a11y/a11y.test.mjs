@@ -49,6 +49,9 @@ const pages = [
   '/compare/worksmartos-vs-answerconnect/',
   '/integrations/calcom/',
   '/help/data-security/',
+  '/help/billing-subscriptions/',
+  '/help/getting-help/',
+  '/help/faq/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
