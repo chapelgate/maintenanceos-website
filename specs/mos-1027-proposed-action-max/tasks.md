@@ -1,0 +1,3 @@
+- [x] Add PROPOSED_ACTION_MAX and helper
+- [x] Wire operations Approval creates
+- [x] Contract tests green
