@@ -229,7 +229,7 @@ def _portal_page(title: str, body: str) -> str:
     )
 
 def normalize_completion_note(value) -> str:
-    return _bounded_text(value, "note", required=True, maximum=COMPLETION_NOTE_MAX)
+    return _reject_control_chars(_bounded_text(value, "note", required=True, maximum=COMPLETION_NOTE_MAX), "note")
 
 
 def normalize_evidence_url(value) -> str:
