@@ -1,0 +1,3 @@
+- [x] Add RESIDENT_COMMENT_MAX and early validation in resident_confirmation.
+- [x] Add tests.
+- [x] Run acceptance.
