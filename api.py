@@ -410,7 +410,7 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
     return _portal_page(
         f"Availability for job #{work_order_id}",
         f"""<h1 id="availability-heading">Submit availability for job #{work_order_id}</h1>
-<form method="{CONTRACTOR_FORM_METHOD}" aria-labelledby="availability-heading">
+<form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/availability" aria-labelledby="availability-heading">
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
@@ -450,7 +450,7 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
             raise HTTPException(409,"Job is not available for this action")
     return _portal_page(
         f"Complete job #{work_order_id}",
-        f"""<h1 id="complete-heading">Complete job #{work_order_id}</h1><form method="{CONTRACTOR_FORM_METHOD}" aria-labelledby="complete-heading">
+        f"""<h1 id="complete-heading">Complete job #{work_order_id}</h1><form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/complete" aria-labelledby="complete-heading">
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
