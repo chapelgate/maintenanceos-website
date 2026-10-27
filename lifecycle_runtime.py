@@ -175,6 +175,8 @@ def queue_retention_sweep(
         raise LifecycleRuntimeError("sweep_reason_too_long")
     if not reason:
         raise LifecycleRuntimeError("sweep_reason_required")
+    if reason_has_control_chars(reason) or reason_has_control_chars(actor) or reason_has_control_chars(subject_id):
+        raise LifecycleRuntimeError("sweep_control_chars")
     if request_type not in VALID_REQUEST_TYPES:
         raise LifecycleRuntimeError("invalid_request_type")
     if status not in VALID_REQUEST_STATUSES:
