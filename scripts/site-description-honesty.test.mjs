@@ -11,7 +11,7 @@ test("siteConfig.description denies GA, live phone, and SLA", () => {
   assert.match(site, /description:\s*"[^"]*Pre-launch/);
   assert.match(site, /Not commercially available/);
   assert.match(site, /not a public always-on phone/);
-  assert.match(site, /or SLA/);
+  assert.match(site, /no SLA claim/);
   const description = site.match(/description:\s*"([^"]+)"/)?.[1] ?? "";
   assert.ok(description.length <= 160, `description is ${description.length}`);
   assert.doesNotMatch(site, /description:\s*"[^"]*£/);
