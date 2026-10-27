@@ -33,6 +33,7 @@ export default function RootLayout({
           httpEquiv="Content-Security-Policy"
           content={contentSecurityPolicy()}
         />
+        <link rel="author" type="text/plain" href="/humans.txt" />
       </head>
       <body
         className={`${inter.variable} flex min-h-screen flex-col font-sans antialiased`}

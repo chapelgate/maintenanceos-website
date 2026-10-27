@@ -1,0 +1,3 @@
+- [x] Update src/app/layout.tsx
+- [x] Add lock test
+- [x] Verify with node --test
