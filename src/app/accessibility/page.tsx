@@ -122,14 +122,12 @@ export default function AccessibilityPage() {
               switch-access testing has been performed.
             </li>
             <li>
-              <strong>S26 remediation pending deployment:</strong> The
-              following fixes are merged in PR #315 but not yet deployed to
-              production because the <code>validate</code> CI job fails for a
-              pre-existing reason unrelated to S26 (static pricing page test
-              failure): skip link (already present), brand warning color
-              <code>#92400E</code> verified at 4.5:1 on light paper
-              <code>#F8FAFC</code>, <code>aria-live=&apos;polite&apos;</code> on voice
-              transcript, form label audit on Create and Demo flows.
+              <strong>S26 source merge is not a production deploy claim:</strong>{" "}
+              Accessibility remediation from PR #315 (skip link, brand warning
+              contrast, <code>aria-live=&apos;polite&apos;</code> on voice
+              transcript, Create/Demo form labels) is merged in source. This
+              page does not claim a production redeploy, a live host SHA, or
+              that those fixes are verified on a public production URL.
             </li>
           </ul>
         </section>
@@ -140,10 +138,10 @@ export default function AccessibilityPage() {
           </h2>
           <ol className="mt-2 list-decimal list-inside space-y-3">
             <li>
-              <strong>Deploy S26 fixes:</strong> Resolve the pre-existing
-              <code>validate</code> CI failure (static pricing page output) so
-              PR #315 can merge and the contrast, <code>aria-live</code>, and
-              form-label fixes go live.
+              <strong>Keep source honesty separate from deploy:</strong> S26
+              (PR #315) is already merged in source. Any production redeploy,
+              DNS, or live host verification stays outside this page and is not
+              claimed here.
             </li>
             <li>
               <strong>Review nested route coverage:</strong> Decide whether
@@ -180,8 +178,8 @@ export default function AccessibilityPage() {
             <a href="mailto:info@chapelgatetechnologies.com" className="underline hover:no-underline">
               info@chapelgatetechnologies.com
             </a>
-            . We aim to acknowledge within 2 business days and provide a
-            remediation timeline.
+            . Barrier reports are reviewed by a person. This site does not
+            publish a response-time SLA or remediation deadline.
           </p>
         </section>
       </div>

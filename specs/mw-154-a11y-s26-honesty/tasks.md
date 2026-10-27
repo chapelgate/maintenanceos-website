@@ -1,0 +1,4 @@
+- [x] Rewrite S26 known-issue bullet (merged in source, no deploy claim)
+- [x] Rewrite remediation bullet (no validate-CI / merge theatre)
+- [x] Drop 2-business-day barrier-report SLA
+- [x] Add honesty lock test
