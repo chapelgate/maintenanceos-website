@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 INSECURE_APP_SECRETS={"","change-me","CHANGE_THIS_TO_A_LONG_RANDOM_SECRET"}
+LOGIN_PASSWORD_MAX = 200
 
 def app_secret_ready()->bool:
     secret=os.getenv('APP_SECRET','')
@@ -20,12 +21,16 @@ def internal_api_token_ready()->bool:
     return configured_internal_api_token() is not None
 
 def hash_password(password:str)->str:
+    if password is None or len(password) > LOGIN_PASSWORD_MAX:
+        raise ValueError("Password is too long")
     salt=secrets.token_bytes(16)
     iterations=260000
     dk=hashlib.pbkdf2_hmac('sha256',password.encode(),salt,iterations)
     return f'pbkdf2_sha256${iterations}${base64.urlsafe_b64encode(salt).decode()}${base64.urlsafe_b64encode(dk).decode()}'
 
 def verify_password(password:str,stored:str)->bool:
+    if password is None or len(password) > LOGIN_PASSWORD_MAX:
+        return False
     try:
         scheme,iters,salt_b64,hash_b64=stored.split('$',3)
         if scheme!='pbkdf2_sha256':return False

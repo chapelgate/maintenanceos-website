@@ -4,7 +4,8 @@ from models import *
 from decision_engine import CATEGORIES,TRADE,apply_intake_rules
 from operations import *
 from sla import sla_status
-from security import verify_password
+from security import LOGIN_PASSWORD_MAX,verify_password
+from channels import EMAIL_LOOKUP_MAX
 from approval_text import APPROVAL_REASON_MAX
 from idempotency import AI_SIDE_EFFECT_REASON_MAX,ai_side_effects_enabled,set_ai_side_effects
 from operations import ESCALATION_RESOLUTION_MAX
@@ -22,11 +23,14 @@ def auth():
     st.title(page_title())
     e=st.text_input("Email");p=st.text_input("Password",type="password")
     if st.button("Sign in",type="primary"):
-        with SessionLocal() as s:
-            u=s.query(User).filter_by(email=e,active=True).first()
-            if u and verify_password(p,u.password_hash):
-                st.session_state.uid=u.id;st.rerun()
-        st.error("Invalid login")
+        if len(e or "")>EMAIL_LOOKUP_MAX:st.error("Email is too long")
+        elif len(p or "")>LOGIN_PASSWORD_MAX:st.error("Password is too long")
+        else:
+            with SessionLocal() as s:
+                u=s.query(User).filter_by(email=e,active=True).first()
+                if u and verify_password(p,u.password_hash):
+                    st.session_state.uid=u.id;st.rerun()
+            st.error("Invalid login")
     return False
 if not auth():st.stop()
 
