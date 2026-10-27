@@ -11,6 +11,10 @@ const webkit = fs.readFileSync(
   "utf8",
 );
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 test("accessibility page does not claim WCAG verification", () => {
   assert.match(page, /not verified/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
@@ -63,8 +67,8 @@ test("mw-156/157 nested sample is gated and disclosed", () => {
     "/integrations/outlook/",
     "/help/getting-started/",
   ]) {
-    assert.match(webkit, new RegExp("'" + route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "'"));
-    assert.match(page, new RegExp(route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample gated/);
   assert.match(page, /help article/i);
@@ -96,8 +100,8 @@ test("mw-160 nested sample wave 3 is gated and disclosed", () => {
     "/integrations/calcom/",
     "/help/data-security/",
   ]) {
-    assert.match(webkit, new RegExp("'" + route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "'"));
-    assert.match(page, new RegExp(route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-160\)/);
   assert.match(page, /across three waves/i);
@@ -105,5 +109,19 @@ test("mw-160 nested sample wave 3 is gated and disclosed", () => {
   assert.match(page, /three blogs/i);
   assert.match(page, /robots noindex/);
   assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});
+
+test("mw-162 help billing/getting-help/faq are gated and disclosed", () => {
+  for (const route of [
+    "/help/billing-subscriptions/",
+    "/help/getting-help/",
+    "/help/faq/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
+  }
+  assert.match(page, /Help billing gate \(mw-162\)/);
+  assert.match(page, /no published price/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });
