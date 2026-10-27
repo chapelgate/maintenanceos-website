@@ -7,6 +7,7 @@ from sla import sla_status
 from security import verify_password
 from approval_text import APPROVAL_REASON_MAX
 from idempotency import AI_SIDE_EFFECT_REASON_MAX,ai_side_effects_enabled,set_ai_side_effects
+from operations import ESCALATION_RESOLUTION_MAX
 from readiness import report as readiness_report
 from reporting import operational_metrics
 from product_profile import page_title
@@ -207,7 +208,9 @@ elif page=="Escalations":
             escalation_id=st.selectbox("Open escalation",[x.id for x in open_rows])
             resolution=st.text_input("Resolution reason")
             if st.button("Resolve escalation"):
-                if resolve_escalation(escalation_id,user.id,resolution):st.rerun()
+                if len(resolution.strip())>ESCALATION_RESOLUTION_MAX:
+                    st.error("Resolution reason is too long")
+                elif resolve_escalation(escalation_id,user.id,resolution):st.rerun()
                 else:st.error("Resolution is blocked while critical safety remains active or authority is insufficient")
 
 elif page=="Unmatched Reports":
