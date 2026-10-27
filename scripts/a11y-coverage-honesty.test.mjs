@@ -80,3 +80,10 @@ test("mw-158 dashboard preview is gated and disclosed as SAMPLE", () => {
   assert.match(page, /dashboard preview route is also axe-gated/i);
   assert.doesNotMatch(page, /dashboard preview are not claimed as covered/i);
 });
+
+test("mw-159 exported not-found page is gated and disclosed", () => {
+  assert.match(webkit, /'\/404\/'/);
+  assert.match(page, /\/404\//);
+  assert.match(page, /Not-found export \(mw-159\)/);
+  assert.match(page, /exported \/404\/ not-found page/i);
+});

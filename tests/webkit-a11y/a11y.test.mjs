@@ -42,6 +42,7 @@ const pages = [
   '/integrations/outlook/',
   '/help/getting-started/',
   '/dashboard/',
+  '/404/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
