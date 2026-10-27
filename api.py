@@ -713,7 +713,7 @@ async def pilot_synthetic_email_proof(request: Request):
     body = {}
     with suppress(Exception):
         body = await _json_object(request)
-    marker = _bounded_text(body.get("marker") or f"P0-PROOF-{os.urandom(4).hex()}", "marker", required=True, maximum=64)
+    marker = _bounded_text(body.get("marker") or f"P0-PROOF-{os.urandom(4).hex()}", "marker", required=True, maximum=PILOT_MARKER_MAX)
     # Build a minimal synthetic call session for chapelgate tenant and dispatch.
     from call_notifications import dispatch_internal_call_email
     from landlord_pilot_guards import can_create_landlord_property
@@ -787,6 +787,7 @@ AUDIT_EVENT_MAX = 100
 AVAILABILITY_SLOT_MAX_DAYS = 14
 
 AVAILABILITY_DATETIME_TEXT_MAX = 32
+PILOT_MARKER_MAX = 64
 
 def validate_availability_slot(start:datetime,end:datetime)->None:
     if end<=start:raise HTTPException(400,"End must be after start")
