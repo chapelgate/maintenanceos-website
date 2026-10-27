@@ -1,0 +1,4 @@
+- [x] Spec
+- [x] Add landlord_rent_bridge.py
+- [x] Add tests
+- [x] Verify
