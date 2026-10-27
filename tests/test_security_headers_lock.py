@@ -33,7 +33,7 @@ def test_health_response_carries_locked_headers():
     assert response.headers["x-frame-options"] == "DENY"
     assert response.headers["referrer-policy"] == "no-referrer"
     assert response.headers["cache-control"] == "no-store"
-    assert response.headers["permissions-policy"] == "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), clipboard-read=(), clipboard-write=(), serial=(), hid=(), xr-spatial-tracking=(), screen-wake-lock=(), fullscreen=(), autoplay=(), encrypted-media=(), picture-in-picture=(), interest-cohort=(), idle-detection=(), window-management=(), document-domain=(), web-share=(), otp-credentials=()"
+    assert response.headers["permissions-policy"] == "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), clipboard-read=(), clipboard-write=(), serial=(), hid=(), xr-spatial-tracking=(), screen-wake-lock=(), fullscreen=(), autoplay=(), encrypted-media=(), picture-in-picture=(), interest-cohort=(), idle-detection=(), window-management=(), document-domain=(), web-share=(), otp-credentials=(), unload=()"
     assert response.headers["cross-origin-opener-policy"] == "same-origin"
     assert response.headers["content-security-policy"] == "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
     assert response.headers["cross-origin-resource-policy"] == "same-origin"
