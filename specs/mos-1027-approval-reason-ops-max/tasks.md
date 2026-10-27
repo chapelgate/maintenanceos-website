@@ -1,0 +1,3 @@
+- [x] Re-export APPROVAL_REASON_MAX; wrap ops/channels/worker create reasons
+- [x] Contract tests green
+- [x] Spec Kit complete

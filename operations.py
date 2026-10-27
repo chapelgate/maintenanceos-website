@@ -1,3 +1,4 @@
+from approval_text import bounded_approval_reason
 import hashlib
 import json
 import math
@@ -14,9 +15,8 @@ from idempotency import ACTION_KEY_MAX, claim_action, set_result_ref
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
 from audit_text import redact_detail
-from approval_text import PROPOSED_ACTION_MAX, bounded_proposed_action
+from approval_text import APPROVAL_REASON_MAX, PROPOSED_ACTION_MAX, bounded_approval_reason, bounded_proposed_action
 from request_context import request_id as current_request_id
-APPROVAL_REASON_MAX = 1000
 CANCEL_REASON_MAX = 1000
 ESCALATION_RESOLUTION_MAX = 1000
 NO_SHOW_REASON_MAX = 1000
@@ -167,7 +167,7 @@ def create_dispatch_approval(work_order_id):
         if not fresh:
             return int(receipt.result_ref) if receipt.result_ref else None
         a=Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="DISPATCH",
-                   proposed_action=bounded_proposed_action(f"Dispatch job to {c.name}"),reason=f"Best ranked approved {wo.trade}")
+                   proposed_action=bounded_proposed_action(f"Dispatch job to {c.name}"),reason=bounded_approval_reason(f"Best ranked approved {wo.trade}"))
         s.add(a);s.flush();receipt.result_ref=str(a.id);s.commit();return a.id
 
 def contractor_portal_links(work_order_id):
@@ -229,7 +229,7 @@ def submit_quote(work_order_id,contractor_id,amount,description):
         s.add(q);s.flush()
         if amount>client.quote_approval_limit:
             s.add(Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="QUOTE",
-                           proposed_action=bounded_proposed_action(f"Approve quote £{amount:.2f}"),reason=description,amount=amount))
+                           proposed_action=bounded_proposed_action(f"Approve quote £{amount:.2f}"),reason=bounded_approval_reason(description),amount=amount))
             transition_work_order(s,wo,"HUMAN_REVIEW",actor="Quote Engine",reason="Quote exceeds client authority")
         else:
             q.status="AUTO_WITHIN_LIMIT"
@@ -279,7 +279,7 @@ def invoice_qa(work_order_id,contractor_id,invoice_number,amount,description):
         if identity.first_invoice_id is None:identity.first_invoice_id=inv.id
         if score>=.25:
             s.add(Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="INVOICE",
-                           proposed_action=bounded_proposed_action(f"Review invoice {invoice_number} £{amount:.2f}"),reason=json.dumps(reasons),amount=amount))
+                           proposed_action=bounded_proposed_action(f"Review invoice {invoice_number} £{amount:.2f}"),reason=bounded_approval_reason(json.dumps(reasons)),amount=amount))
             transition_work_order(s,wo,"HUMAN_REVIEW",actor="Invoice QA",reason="Invoice anomaly requires review")
         else:
             transition_work_order(s,wo,"READY_TO_CLOSE",actor="Invoice QA",reason="Invoice checks passed")
@@ -297,7 +297,7 @@ def resident_confirmation(work_order_id,resolved,comment=""):
         else:
             transition_work_order(s,wo,"REOPENED",actor="Resident Confirmation",reason="Resident reported repair unresolved",flush=True);wo.repeat_repair=True
             s.add(Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="REPEAT_REPAIR",
-                           proposed_action=bounded_proposed_action("Review failed/repeat repair"),reason=comment or "Resident says unresolved"))
+                           proposed_action=bounded_proposed_action("Review failed/repeat repair"),reason=bounded_approval_reason(comment or "Resident says unresolved")))
             transition_work_order(s,wo,"HUMAN_REVIEW",actor="Resident Confirmation",reason="Repeat repair requires human review")
         audit(s,wo.id,"Resident Confirmation","RESOLUTION_RECORDED",str(resolved))
         s.commit();return True
@@ -403,7 +403,7 @@ def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
         if reused and reused.first_work_order_id!=work_order_id:
             transition_work_order(s,wo,"HUMAN_REVIEW",actor="Evidence Gate",reason="Completion evidence was reused")
             s.add(Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="EVIDENCE_REUSE",
-                           proposed_action=bounded_proposed_action("Review reused completion evidence"),reason=f"Previously used for work order {reused.first_work_order_id}"))
+                           proposed_action=bounded_proposed_action("Review reused completion evidence"),reason=bounded_approval_reason(f"Previously used for work order {reused.first_work_order_id}")))
         else:
             if not reused:s.add(EvidenceIdentity(fingerprint=fingerprint,first_work_order_id=work_order_id,first_contractor_id=contractor_id))
             transition_work_order(s,wo,"AWAITING_RESIDENT_CONFIRMATION",actor="Evidence Gate",reason="Completion evidence recorded")
