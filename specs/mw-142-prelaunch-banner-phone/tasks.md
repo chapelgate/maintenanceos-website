@@ -1,0 +1,3 @@
+- [x] Update src/components/PreLaunchBanner.tsx
+- [x] Add lock test
+- [x] Verify with node --test
