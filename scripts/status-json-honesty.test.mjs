@@ -17,8 +17,12 @@ test("status.json denies live status, uptime, and SLA", () => {
   assert.equal(status.sla_claim, false);
   assert.equal(status.uptime_percent, null);
   assert.equal(status.incident_feed, false);
+  assert.equal(status.commercial_ga, false);
+  assert.equal(status.live_phone, false);
   assert.match(status.note, /No live status/);
   assert.match(status.note, /SLA/);
+  assert.match(status.note, /commercial general availability/);
+  assert.match(status.note, /live phone/);
   assert.doesNotMatch(JSON.stringify(status), /99\.\d%/);
 });
 
