@@ -9,7 +9,7 @@ const site = fs.readFileSync(path.join(ROOT, "src/config/site.ts"), "utf8");
 
 test("siteConfig.description denies GA, live phone, and SLA", () => {
   assert.match(site, /description:\s*"[^"]*Pre-launch/);
-  assert.match(site, /Not commercially available/);
+  assert.match(site, /not commercially available/);
   assert.match(site, /not a public always-on phone/);
   assert.match(site, /no SLA claim/);
   const description = site.match(/description:\s*"([^"]+)"/)?.[1] ?? "";
