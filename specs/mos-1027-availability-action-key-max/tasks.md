@@ -1,0 +1,3 @@
+- [x] Add action_key max validation in submit_availability.
+- [x] Add tests.
+- [x] Run acceptance.

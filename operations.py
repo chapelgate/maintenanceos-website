@@ -335,6 +335,8 @@ def decline_contractor(work_order_id,contractor_id,action_key):
         s.commit();return True
 
 def submit_availability(work_order_id,contractor_id,start,end,action_key):
+    action_key=(action_key or "").strip()
+    if not action_key or len(action_key) > ACTION_KEY_MAX:return None
     with SessionLocal() as s:
         wo=require_noncritical(s,work_order_id,"Availability submission")
         require_client_resource(s,wo.client_id,work_order_id=wo.id,contractor_id=contractor_id)
