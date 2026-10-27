@@ -1,0 +1,3 @@
+- [x] Update src/app/blog/rss.xml/route.ts channel description
+- [x] Add lock test
+- [x] Verify with node --test
