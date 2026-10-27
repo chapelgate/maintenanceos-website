@@ -147,7 +147,7 @@ elif page=="Approvals":
                 st.write(f"**WO #{a.work_order_id} • {a.approval_type} • {a.status}**")
                 st.write(a.proposed_action);st.write(a.reason)
                 if a.status=="PENDING":
-                    decision_reason=st.text_input("Decision reason",key=f"reason-{a.id}")
+                    decision_reason=st.text_input("Decision reason",key=f"reason-{a.id}",max_chars=APPROVAL_REASON_MAX)
                     c1,c2=st.columns(2)
                     if c1.button("Approve",key=f"a{a.id}"):
                         if a.approval_type=="TRIAGE":
