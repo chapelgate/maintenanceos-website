@@ -38,6 +38,7 @@ SECURITY_HEADERS = (
     (b"content-security-policy", b"default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"),
     (b"cross-origin-resource-policy", b"same-origin"),
     (b"cross-origin-embedder-policy", b"require-corp"),
+    (b"strict-transport-security", b"max-age=31536000; includeSubDomains"),
 )
 REQUEST_ID = re.compile(r"^[A-Za-z0-9._-]{1,64}$")
 
