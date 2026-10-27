@@ -181,6 +181,7 @@ _ZW_FORMAT = frozenset("\u200b\u200c\u200d\u200e\u200f\ufeff\u2060")
 _SOFT_HYPHEN = "\u00ad"
 _LINE_PARA_SEP = frozenset("\u2028\u2029")
 _C1_CONTROLS = frozenset(chr(i) for i in range(0x80, 0xA0))
+_INVISIBLE_FORMAT = frozenset("\u180e\u061c\ufff9\ufffc\ufffd\u2061\u2062\u2063\u2064")
 
 
 def _reject_control_chars(value: str, name: str) -> str:
@@ -192,6 +193,7 @@ def _reject_control_chars(value: str, name: str) -> str:
         or ch == _SOFT_HYPHEN
         or ch in _LINE_PARA_SEP
         or ch in _C1_CONTROLS
+        or ch in _INVISIBLE_FORMAT
         for ch in value
     ):
         raise HTTPException(400, f"{name} contains control characters")
