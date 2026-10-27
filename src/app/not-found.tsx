@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  description:
+    "WorkSmartOS is a pre-launch synthetic demo. This address is not a published page.",
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (
