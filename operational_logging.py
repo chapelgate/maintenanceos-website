@@ -50,6 +50,7 @@ SENDGRID_API_KEY = re.compile(r"\bSG\.[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}\b")
 DIGITALOCEAN_PAT = re.compile(r"\bdop_v1_[A-Za-z0-9]{20,}\b")
 GITLAB_PAT = re.compile(r"\bglpat-[A-Za-z0-9_-]{16,}\b")
 HUGGINGFACE_TOKEN = re.compile(r"\bhf_[A-Za-z0-9]{20,}\b")
+MAILGUN_API_KEY = re.compile(r"\bkey-[A-Za-z0-9]{20,}\b")
 SLACK_TOKEN = re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")
 PEM_PRIVATE_KEY = re.compile(r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----.*?-----END [A-Z0-9 ]*PRIVATE KEY-----", re.DOTALL)
 
@@ -83,6 +84,7 @@ def _redact(value: Any, key: str = "") -> Any:
         value = DIGITALOCEAN_PAT.sub("[REDACTED]", value)
         value = GITLAB_PAT.sub("[REDACTED]", value)
         value = HUGGINGFACE_TOKEN.sub("[REDACTED]", value)
+        value = MAILGUN_API_KEY.sub("[REDACTED]", value)
         value = SLACK_TOKEN.sub("[REDACTED]", value)
         return PEM_PRIVATE_KEY.sub("[REDACTED]", value)
     if value is None or isinstance(value, (bool, int, float)):
