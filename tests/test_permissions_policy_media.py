@@ -16,7 +16,7 @@ def test_permissions_policy_denies_media_and_window_features():
         "window-management=()",
         "document-domain=()",
         "web-share=()",
-        "otp-credentials=()",
+        "otp-credentials=(), unload=()",
     ):
         assert feature in policy
     # no duplicate feature tokens
@@ -37,4 +37,4 @@ def test_health_response_carries_media_denies():
     policy = response.headers["permissions-policy"]
     assert "autoplay=()" in policy
     assert "web-share=()" in policy
-    assert "otp-credentials=()" in policy
+    assert "otp-credentials=(), unload=()" in policy
