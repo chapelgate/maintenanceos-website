@@ -398,6 +398,10 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
     require_contractor_portal()
     token=_require_contractor_token(token)
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    if not isinstance(start,str) or len(start) > AVAILABILITY_DATETIME_TEXT_MAX:
+        raise HTTPException(400,"start is too long")
+    if not isinstance(end,str) or len(end) > AVAILABILITY_DATETIME_TEXT_MAX:
+        raise HTTPException(400,"end is too long")
     try:st=datetime.strptime(start,"%Y-%m-%d %H:%M");en=datetime.strptime(end,"%Y-%m-%d %H:%M")
     except ValueError as exc:raise HTTPException(400,"Invalid availability date/time") from exc
     validate_availability_slot(st,en)
@@ -768,6 +772,8 @@ AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 
 AVAILABILITY_SLOT_MAX_DAYS = 14
+
+AVAILABILITY_DATETIME_TEXT_MAX = 32
 
 def validate_availability_slot(start:datetime,end:datetime)->None:
     if end<=start:raise HTTPException(400,"End must be after start")
