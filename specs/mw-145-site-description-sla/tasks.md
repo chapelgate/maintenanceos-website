@@ -1,0 +1,3 @@
+- [x] Update src/config/site.ts description
+- [x] Add lock test
+- [x] Verify with node --test
