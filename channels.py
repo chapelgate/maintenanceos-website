@@ -8,7 +8,7 @@ from models import *
 from phone_normalise import normalise_phone
 from decision_engine import apply_intake_rules
 from lifecycle import transition_work_order
-from approval_text import bounded_proposed_action
+from approval_text import bounded_approval_reason, bounded_proposed_action
 from operations import select_contractor,create_dispatch_approval
 from tenant_security import require_client_resource,resident_by_phone_for_client
 EVENT_KEY_MAX = 200
@@ -48,7 +48,7 @@ def _enforce_identity_review(work_order_id,identity_verified):
         if not existing:
             s.add(Approval(client_id=wo.client_id,work_order_id=work_order_id,approval_type="IDENTITY",
                            proposed_action=bounded_proposed_action("Verify caller identity before property-specific action"),
-                           reason="Inbound caller has not completed second-factor verification"))
+                           reason=bounded_approval_reason("Inbound caller has not completed second-factor verification")))
         s.add(AuditEvent(work_order_id=work_order_id,actor="Identity Gate",event="IDENTITY_REVIEW_REQUIRED",
                          detail="No property-specific information or dispatch permitted"))
         s.commit()
