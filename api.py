@@ -338,7 +338,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     description=_reject_control_chars(_bounded_text(d.get("description"),"description",required=True,maximum=WORK_ORDER_DESCRIPTION_MAX),"description")
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
-    source=_bounded_text(d.get("source","API"),"source",required=True,maximum=WORK_ORDER_SOURCE_MAX)
+    source=_reject_control_chars(_bounded_text(d.get("source","API"),"source",required=True,maximum=WORK_ORDER_SOURCE_MAX),"source")
     if source not in WORK_ORDER_SOURCES:raise HTTPException(400,"source is not allowed")
     raw_incident=d.get("incident_key")
     if raw_incident is None:
