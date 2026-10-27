@@ -348,7 +348,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     try:
         wid=create_from_channel(client_id,property_id,resident_id,source,description,
                                 identity_verified=identity_verified,
-                                incident_key=incident_key,event_key=_bounded_text(request.headers.get("Idempotency-Key") or "","Idempotency-Key",maximum=IDEMPOTENCY_KEY_MAX) or None)
+                                incident_key=incident_key,event_key=_reject_control_chars(_bounded_text(request.headers.get("Idempotency-Key") or "","Idempotency-Key",maximum=IDEMPOTENCY_KEY_MAX),"Idempotency-Key") or None)
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
     with SessionLocal() as s:
         wo=s.get(WorkOrder,wid);cid=wo.assigned_contractor_id if wo else None
