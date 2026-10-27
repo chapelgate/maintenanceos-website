@@ -94,7 +94,7 @@ def messaging_event_key(message_sid, channel, phone, body) -> str:
     if len(sid) > MESSAGING_EVENT_KEY_MAX:
         raise HTTPException(400, "MessageSid is too long")
     if sid:
-        return sid
+        return _reject_control_chars(sid, "MessageSid")
     digest = hashlib.sha256(f"{channel}:{phone}:{body}".encode()).hexdigest()[:40]
     return f"msg:{digest}"
 
@@ -602,7 +602,7 @@ async def messaging_inbound(request:Request):
                 ))
                 s.commit()
         return Response('<?xml version="1.0" encoding="UTF-8"?><Response><Message>Thanks. Your report has been received for review.</Message></Response>',media_type="application/xml")
-    event_key=messaging_event_key(form.get("MessageSid",""),channel,phone,body)
+    event_key=messaging_event_key(_reject_control_chars(str(form.get("MessageSid","") or ""),"MessageSid"),channel,phone,body)
     with SessionLocal() as s:
         r=s.query(Resident).filter_by(id=rid).first()
         try:
