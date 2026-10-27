@@ -87,6 +87,7 @@ MESSAGING_BODY_MAX = 4000
 MESSAGING_EVENT_KEY_MAX = EVENT_KEY_MAX
 MESSAGING_MEDIA_URL_MAX = MEDIA_URL_MAX
 MESSAGING_FROM_MAX = PARTICIPANT_MAX
+MESSAGING_TO_MAX = PARTICIPANT_MAX
 
 
 def messaging_event_key(message_sid, channel, phone, body) -> str:
@@ -575,6 +576,8 @@ async def messaging_inbound(request:Request):
     sig=_require_twilio_signature(request.headers.get("X-Twilio-Signature",""))
     if not validate_twilio(str(request.url),params,sig):
         raise HTTPException(403,"Invalid Twilio signature")
+    to=_reject_control_chars(_bounded_text(str(form.get("To") or form.get("Called") or ""),"To",required=True,maximum=MESSAGING_TO_MAX),"To")
+    params["To"]=to
     if not targets_dedicated_test_number(params):
         raise HTTPException(403,"Request is not for the dedicated test number")
     sender=_reject_control_chars(_bounded_text(str(form.get("From","") or ""),"From",required=True,maximum=MESSAGING_FROM_MAX),"From")
