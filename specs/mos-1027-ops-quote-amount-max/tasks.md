@@ -1,0 +1,3 @@
+- [x] Add amount/description max validation in submit_quote.
+- [x] Add tests.
+- [x] Run acceptance.
