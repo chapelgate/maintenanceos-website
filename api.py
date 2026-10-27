@@ -13,7 +13,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from models import *
 from decision_engine import apply_intake_rules
 from operations import *
-from security import verify_link
+from security import CONTRACTOR_LINK_TOKEN_MAX,verify_link
 from idempotency import claim_action,set_ai_side_effects
 from safety_controls import SafetyStateError,clear_critical_safety,critical_safety_active
 from tenant_security import TenantAccessError,configured_voice_client_id,internal_api_tenant_ready,require_client_resource
@@ -250,6 +250,12 @@ def require_contractor_portal():
         raise HTTPException(503, "Contractor portal is disabled")
 
 
+def _require_contractor_token(token):
+    if not isinstance(token,str) or len(token) > CONTRACTOR_LINK_TOKEN_MAX:
+        raise HTTPException(400,"token is too long")
+    return token
+
+
 def require_public_provider_ingress():
     if not public_provider_ingress_ready():
         raise HTTPException(503, "Public provider ingress is disabled")
@@ -330,6 +336,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
 def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:str):
     require_contractor_portal()
     if decision not in ("accept","decline"):raise HTTPException(400,"Invalid decision")
+    token=_require_contractor_token(token)
     if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     with SessionLocal() as s:
         wo=_contractor_work_order(s,work_order_id,contractor_id,{"AWAITING_CONTRACTOR"})
@@ -352,6 +359,7 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
 def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),decision:str=Form(...),token:str=Form(...)):
     require_contractor_portal()
     if decision not in ("accept","decline"):raise HTTPException(400,"Invalid decision")
+    token=_require_contractor_token(token)
     if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     if decision=="decline":
         try:declined=decline_contractor(work_order_id,contractor_id,token)
@@ -368,6 +376,7 @@ def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=For
 @app.get("/contractor/availability",response_class=HTMLResponse)
 def availability_form(work_order_id:int,contractor_id:int,token:str):
     require_contractor_portal()
+    token=_require_contractor_token(token)
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"CONTRACTOR_ACCEPTED","AWAITING_AVAILABILITY"}):
@@ -387,6 +396,7 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 @app.post("/contractor/availability",response_class=HTMLResponse)
 def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),start:str=Form(...),end:str=Form(...)):
     require_contractor_portal()
+    token=_require_contractor_token(token)
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     try:st=datetime.strptime(start,"%Y-%m-%d %H:%M");en=datetime.strptime(end,"%Y-%m-%d %H:%M")
     except ValueError as exc:raise HTTPException(400,"Invalid availability date/time") from exc
@@ -399,6 +409,7 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
 @app.get("/contractor/complete",response_class=HTMLResponse)
 def complete_form(work_order_id:int,contractor_id:int,token:str):
     require_contractor_portal()
+    token=_require_contractor_token(token)
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}):
@@ -417,6 +428,7 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 @app.post("/contractor/complete",response_class=HTMLResponse)
 def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
     require_contractor_portal()
+    token=_require_contractor_token(token)
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     note=normalize_completion_note(note)
     evidence_url=normalize_evidence_url(evidence_url)
