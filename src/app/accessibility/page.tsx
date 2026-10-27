@@ -79,6 +79,7 @@ export default function AccessibilityPage() {
             <li>Nested sample (mw-166): /compare/worksmartos-vs-fasthosts/, /compare/worksmartos-vs-goodcall/, /compare/worksmartos-vs-rosie/, /integrations/hubspot/, /help/emergency-procedures/, /help/hmocompliance/ — all carry robots noindex; none claim checkout, live phone, published price, live SLA, or WCAG 2.2 AA certification.</li>
             <li>Help compliance gate (mw-167): /help/epc-compliance/, /help/fire-risk-assessment/, /help/contractor-compliance/, /help/assigning-repairs/, /help/tenant-portal/, /help/user-management/ — pre-launch honesty; no published price, live phone, live SLA, or WCAG 2.2 AA certification.</li>
             <li>Help tail gate (mw-168): /help/api-quickstart/, /help/configuring-contractors/, /help/contractor-quotes/, /help/integration-overview/, /help/mobile-app/, /help/notification-settings/, /help/release-notes/, /help/reports-analytics/, /help/webhook-guide/ — pre-launch honesty; no published price, live phone, live SLA, or WCAG 2.2 AA certification.</li>
+            <li>Compare short-page gate (mw-169): /compare/answerconnect/, /compare/dialzara/, /compare/fasthosts/, /compare/fixflo/, /compare/goodcall/, /compare/moneypenny/, /compare/phena/, /compare/rosie/ — pre-launch honesty; no published price, live phone, live SLA, or WCAG 2.2 AA certification.</li>
           </ul>
           <p className="mt-2">
             <strong>Result:</strong> Those gated routes reported no axe
@@ -144,6 +145,7 @@ export default function AccessibilityPage() {
               /help/contractor-compliance/, /help/assigning-repairs/,
               /help/tenant-portal/, /help/user-management/,
               /help/api-quickstart/, /help/configuring-contractors/, /help/contractor-quotes/, /help/integration-overview/, /help/mobile-app/, /help/notification-settings/, /help/release-notes/, /help/reports-analytics/, /help/webhook-guide/,
+              /compare/answerconnect/, /compare/dialzara/, /compare/fasthosts/, /compare/fixflo/, /compare/goodcall/, /compare/moneypenny/, /compare/phena/, /compare/rosie/,
               /dashboard/ (SAMPLE / DEMO preview; noindex), and
               /404/ (exported not-found recovery page; noindex).
               Other nested blog, compare, industry, and integration pages,
