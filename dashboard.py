@@ -119,7 +119,7 @@ elif page=="Work Orders":
                 select_contractor(w.id);st.rerun()
             if st.button("Create dispatch approval"):
                 create_dispatch_approval(w.id);st.rerun()
-            lifecycle_reason=st.text_input("Lifecycle action reason",key=f"lifecycle-{w.id}")
+            lifecycle_reason=st.text_input("Lifecycle action reason",key=f"lifecycle-{w.id}",max_chars=REOPEN_REASON_MAX)
             if w.status=="READY_TO_CLOSE" and st.button("Close work order"):
                 try:
                     if close_work_order(w.id,user.id):st.rerun()
