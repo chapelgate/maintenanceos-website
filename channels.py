@@ -5,7 +5,7 @@ from datetime import datetime
 from clock import utcnow
 from sqlalchemy.exc import IntegrityError
 from models import *
-from identity import normalise_phone
+from phone_normalise import normalise_phone
 from decision_engine import apply_intake_rules
 from lifecycle import transition_work_order
 from operations import select_contractor,create_dispatch_approval
@@ -32,6 +32,7 @@ def resident_by_phone(phone,client_id=None):
     if client_id is None:
         return None
     target=normalise_phone(phone)
+    if not target:return None
     with SessionLocal() as s:
         resident=resident_by_phone_for_client(s,client_id,target)
         return resident.id if resident else None

@@ -1,0 +1,5 @@
+- [x] Add phone_normalise.PHONE_MAX=50
+- [x] Fail closed on overlong raw/normalised phones
+- [x] Wire channels.resident_by_phone; skip session on empty
+- [x] Contract tests green
+- [x] identity.py untouched
