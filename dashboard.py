@@ -212,7 +212,7 @@ elif page=="Escalations":
         open_rows=[x for x in rows if x.status=="OPEN"]
         if open_rows:
             escalation_id=st.selectbox("Open escalation",[x.id for x in open_rows])
-            resolution=st.text_input("Resolution reason")
+            resolution=st.text_input("Resolution reason",max_chars=ESCALATION_RESOLUTION_MAX)
             if st.button("Resolve escalation"):
                 if len(resolution.strip())>ESCALATION_RESOLUTION_MAX:
                     st.error("Resolution reason is too long")
