@@ -30,7 +30,7 @@ export const siteConfig = {
   tagline:
     "UK maintenance operations software with AI-assisted intake — rules keep control.",
   description:
-    "Pre-launch MaintenanceOS structures repair reports. People control dangerous cases. Not commercially available; not a public always-on phone; no SLA claim.",
+    "MaintenanceOS turns incoming repair reports into structured work. Pre-launch; not commercially available; not a public always-on phone; no SLA claim.",
   /** PRE-LAUNCH gate. Default false. */
   publicLaunch: envFlag(process.env.NEXT_PUBLIC_PUBLIC_LAUNCH, false),
   /**
