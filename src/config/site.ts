@@ -162,6 +162,9 @@ export const footerNav = {
     { href: "/status/", label: "Status" },
     { href: "/accessibility/", label: "Accessibility" },
     { href: "/trust/", label: "Trust & verification" },
+    { href: "/.well-known/security.txt", label: "Security policy" },
+    { href: "/humans.txt", label: "Humans.txt" },
+    { href: "/vulnerability-disclosure/", label: "Vulnerability disclosure" },
   ],
   legal: [
     { href: "/privacy/", label: "Privacy" },
