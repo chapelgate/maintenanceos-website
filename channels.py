@@ -10,6 +10,12 @@ from decision_engine import apply_intake_rules
 from lifecycle import transition_work_order
 from operations import select_contractor,create_dispatch_approval
 from tenant_security import require_client_resource,resident_by_phone_for_client
+EVENT_KEY_MAX = 200
+CHANNEL_SOURCE_MAX = 30
+INCIDENT_KEY_MAX = 200
+MEDIA_URL_MAX = 2000
+MEDIA_URL_MAX = 2000
+
 
 def resident_by_email(client_id,email):
     with SessionLocal() as s:
@@ -65,6 +71,14 @@ def create_from_channel(client_id,property_id,resident_id,source,description,par
         raise ValueError("participant is too long")
     incident_key=(incident_key or canonical_incident_key(client_id,property_id,resident_id,description)).strip()
     event_key=(event_key or "").strip()
+    if len(event_key) > EVENT_KEY_MAX:
+        raise ValueError("event_key is too long")
+    if len(source) > CHANNEL_SOURCE_MAX:
+        raise ValueError("source is too long")
+    if incident_key and len(incident_key) > INCIDENT_KEY_MAX:
+        raise ValueError("incident_key is too long")
+    if media_url and len(media_url) > MEDIA_URL_MAX:
+        raise ValueError("media_url is too long")
     with SessionLocal() as s:
         require_client_resource(s,client_id,property_id=property_id,resident_id=resident_id)
         if event_key:

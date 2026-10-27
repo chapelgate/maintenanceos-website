@@ -5,7 +5,8 @@ import math
 import os
 import threading
 from contextlib import suppress
-from datetime import datetime
+from datetime import datetime,timedelta
+from urllib.parse import urlsplit
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
 from fastapi.responses import HTMLResponse,Response
 from sqlalchemy.exc import SQLAlchemyError
@@ -39,8 +40,16 @@ from voice_bridge import (
     is_active_call_session,
 )
 from provider_runtime import handle_provider_media_stream, provider_ready
+from product_profile import api_title
+from http_error_text import sanitize_http_detail
 load_dotenv()
-app=FastAPI(title="MaintenanceOS V1 Pilot",docs_url=None,redoc_url=None,openapi_url=None)
+app=FastAPI(title=api_title(),docs_url=None,redoc_url=None,openapi_url=None)
+
+@app.exception_handler(HTTPException)
+async def _sanitize_http_exception(request: Request, exc: HTTPException):
+    from fastapi.responses import JSONResponse
+    return JSONResponse(status_code=exc.status_code, content={"detail": sanitize_http_detail(exc.detail)})
+
 HEALTH_TOP_LEVEL_KEYS = frozenset({
     "ok",
     "version",
@@ -60,6 +69,16 @@ HEALTH_CALL_CAPACITY_KEYS = frozenset({
     "estimated_hourly_burn_usd",
     "by_client",
 })
+
+MESSAGING_BODY_MAX = 4000
+AMOUNT_MAX = 1_000_000
+QUOTE_DESCRIPTION_MAX = 4000
+RESIDENT_COMMENT_MAX = 4000
+WORK_ORDER_SOURCES = frozenset({"API", "MANUAL", "VOICE", "SMS", "EMAIL", "WHATSAPP", "TEST", "HARNESS", "LOCAL_ACCEPTANCE"})
+WORK_ORDER_SOURCE_MAX = 30
+CONTRACTOR_FORM_METHOD = "post"
+SAFETY_CLEARANCE_REASON_MAX = 1000
+AI_SIDE_EFFECT_REASON_MAX = 500
 
 init_db()
 # Optional one-shot completion-email proof on boot (no Twilio / no pilot ceiling).
@@ -100,6 +119,8 @@ def _positive_amount(value) -> float:
         raise HTTPException(400, "amount must be a positive number") from exc
     if not math.isfinite(result) or result <= 0:
         raise HTTPException(400, "amount must be a positive number")
+    if result > AMOUNT_MAX:
+        raise HTTPException(400, "amount is too large")
     return result
 
 
@@ -117,9 +138,19 @@ def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
         raise HTTPException(400, f"{name} is too long")
     return result
 
+
+_ALLOWED_CONTROLS = frozenset("\t\n\r")
+
+
+def _reject_control_chars(value: str, name: str) -> str:
+    if any(ord(ch) < 32 and ch not in _ALLOWED_CONTROLS for ch in value):
+        raise HTTPException(400, f"{name} contains control characters")
+    return value
+
 def require_internal_api(request:Request):
-    expected=os.getenv("INTERNAL_API_TOKEN","")
-    if len(expected)<32:
+    from security import configured_internal_api_token
+    expected=configured_internal_api_token()
+    if not expected:
         raise HTTPException(503,"Internal API is not configured")
     authorization=request.headers.get("Authorization","")
     supplied=authorization[7:] if authorization.startswith("Bearer ") else ""
@@ -149,8 +180,45 @@ def _contractor_work_order(s,work_order_id,contractor_id,allowed_statuses):
     return wo
 
 
+
+def _portal_page(title: str, body: str) -> str:
+    return (
+        "<!DOCTYPE html><html lang=\"en-GB\"><head>"
+        f"<meta charset=\"utf-8\"><title>{title}</title></head>"
+        f"<body><main>{body}</main></body></html>"
+    )
+
+def normalize_completion_note(value) -> str:
+    return _bounded_text(value, "note", required=True, maximum=COMPLETION_NOTE_MAX)
+
+
+def normalize_evidence_url(value) -> str:
+    if value is None:
+        return ""
+    if not isinstance(value, str):
+        raise HTTPException(400, "evidence_url must be text")
+    result = value.strip()
+    if not result:
+        return ""
+    if len(result) > EVIDENCE_URL_MAX:
+        raise HTTPException(400, "evidence_url is too long")
+    try:
+        parsed = urlsplit(result)
+    except ValueError as exc:
+        raise HTTPException(400, "evidence_url must be an https URL") from exc
+    host = (parsed.hostname or "").casefold()
+    if (
+        parsed.scheme != "https"
+        or not host
+        or parsed.username
+        or parsed.password
+        or parsed.fragment
+    ):
+        raise HTTPException(400, "evidence_url must be an https URL")
+    return result
+
 def require_contractor_portal():
-    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").lower() != "true":
+    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").strip().lower() != "true":
         raise HTTPException(503, "Contractor portal is disabled")
 
 
@@ -199,19 +267,22 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     if "client_id" in d and _positive_int(d["client_id"],"client_id")!=client_id:raise HTTPException(403,"Cross-tenant request rejected")
     property_id=_positive_int(d.get("property_id"),"property_id")
     resident_id=_positive_int(d["resident_id"],"resident_id") if d.get("resident_id") is not None else None
-    description=_bounded_text(d.get("description"),"description",required=True)
+    description=_reject_control_chars(_bounded_text(d.get("description"),"description",required=True,maximum=WORK_ORDER_DESCRIPTION_MAX),"description")
     identity_verified=d.get("identity_verified",False)
     if not isinstance(identity_verified,bool):raise HTTPException(400,"identity_verified must be a boolean")
+    source=_bounded_text(d.get("source","API"),"source",required=True,maximum=WORK_ORDER_SOURCE_MAX)
+    if source not in WORK_ORDER_SOURCES:raise HTTPException(400,"source is not allowed")
     try:
-        wid=create_from_channel(client_id,property_id,resident_id,_bounded_text(d.get("source","API"),"source",required=True,maximum=32),description,
+        wid=create_from_channel(client_id,property_id,resident_id,source,description,
                                 identity_verified=identity_verified,
-                                incident_key=d.get("incident_key"),event_key=request.headers.get("Idempotency-Key"))
+                                incident_key=d.get("incident_key"),event_key=_bounded_text(request.headers.get("Idempotency-Key") or "","Idempotency-Key",maximum=IDEMPOTENCY_KEY_MAX) or None)
     except TenantAccessError as exc:raise HTTPException(403,str(exc))
     with SessionLocal() as s:
         wo=s.get(WorkOrder,wid);cid=wo.assigned_contractor_id if wo else None
     return {"work_order_id":wid,"recommended_contractor_id":cid}
 
 @app.get("/contractor/decision",response_class=HTMLResponse)
+
 def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:str):
     require_contractor_portal()
     if decision not in ("accept","decline"):raise HTTPException(400,"Invalid decision")
@@ -221,13 +292,16 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
         approval=s.query(Approval).filter_by(work_order_id=work_order_id,approval_type="DISPATCH",status="APPROVED").first()
         if not wo or not approval:raise HTTPException(409,"Job is not available for this action")
     label="Accept job" if decision=="accept" else "Decline job"
-    return f"""<h2>Confirm action for job #{work_order_id}</h2>
-<form method="post" action="/contractor/decision">
+    return _portal_page(
+        f"Confirm {label}",
+        f"""<h1 id=\"confirm-heading\">Confirm action for job #{work_order_id}</h1>
+<form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/decision" aria-labelledby="confirm-heading">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="decision" value="{decision}">
 <input type="hidden" name="token" value="{token}">
-<button type="submit">{label}</button></form>"""
+<button type="submit">{label}</button></form>""",
+    )
 
 
 @app.post("/contractor/decision",response_class=HTMLResponse)
@@ -254,14 +328,17 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"CONTRACTOR_ACCEPTED","AWAITING_AVAILABILITY"}):
             raise HTTPException(409,"Job is not available for this action")
-    return f"""<h2>Submit availability for job #{work_order_id}</h2>
-<form method="post">
+    return _portal_page(
+        f"Availability for job #{work_order_id}",
+        f"""<h1>Submit availability for job #{work_order_id}</h1>
+<form method="{CONTRACTOR_FORM_METHOD}">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
-<label>Start (YYYY-MM-DD HH:MM)</label><input name="start"><br>
-<label>End (YYYY-MM-DD HH:MM)</label><input name="end"><br>
-<button type="submit">Submit</button></form>"""
+<label for="start">Start (YYYY-MM-DD HH:MM)</label><input id="start" name="start"><br>
+<label for="end">End (YYYY-MM-DD HH:MM)</label><input id="end" name="end"><br>
+<button type="submit">Submit</button></form>""",
+    )
 
 @app.post("/contractor/availability",response_class=HTMLResponse)
 def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),start:str=Form(...),end:str=Form(...)):
@@ -269,7 +346,7 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     try:st=datetime.strptime(start,"%Y-%m-%d %H:%M");en=datetime.strptime(end,"%Y-%m-%d %H:%M")
     except ValueError as exc:raise HTTPException(400,"Invalid availability date/time") from exc
-    if en<=st:raise HTTPException(400,"End must be after start")
+    validate_availability_slot(st,en)
     try:availability_id=submit_availability(work_order_id,contractor_id,st,en,token)
     except (TenantAccessError,SafetyStateError):availability_id=None
     if not availability_id:raise HTTPException(409,"Job is not available for this action")
@@ -282,18 +359,23 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}):
             raise HTTPException(409,"Job is not available for this action")
-    return f"""<h2>Complete job #{work_order_id}</h2><form method="post">
+    return _portal_page(
+        f"Complete job #{work_order_id}",
+        f"""<h1>Complete job #{work_order_id}</h1><form method="{CONTRACTOR_FORM_METHOD}">
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
-<label>Completion note</label><textarea name="note"></textarea><br>
-<label>Evidence URL (optional)</label><input name="evidence_url"><br>
-<button type="submit">Submit completion</button></form>"""
+<label for="note">Completion note</label><textarea id="note" name="note"></textarea><br>
+<label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url"><br>
+<button type="submit">Submit completion</button></form>""",
+    )
 
 @app.post("/contractor/complete",response_class=HTMLResponse)
 def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
     require_contractor_portal()
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    note=normalize_completion_note(note)
+    evidence_url=normalize_evidence_url(evidence_url)
     try:evidence_id=submit_completion(work_order_id,contractor_id,note,evidence_url,token)
     except (TenantAccessError,SafetyStateError):evidence_id=None
     if not evidence_id:raise HTTPException(409,"Job is not available for this action")
@@ -305,7 +387,7 @@ async def quotes(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
-    description=_bounded_text(d.get("description",""),"description")
+    description=_bounded_text(d.get("description",""),"description",maximum=QUOTE_DESCRIPTION_MAX)
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -321,7 +403,7 @@ async def invoices(request:Request,client_id=Depends(require_internal_api)):
     contractor_id=_positive_int(d.get("contractor_id"),"contractor_id")
     amount=_positive_amount(d.get("amount"))
     invoice_number=_bounded_text(d.get("invoice_number"),"invoice_number",required=True,maximum=INVOICE_NUMBER_MAX)
-    description=_bounded_text(d.get("description",""),"description")
+    description=_bounded_text(d.get("description",""),"description",maximum=QUOTE_DESCRIPTION_MAX)
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id,contractor_id=contractor_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -336,7 +418,7 @@ async def confirm(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resolved=d.get("resolved")
     if not isinstance(resolved,bool):raise HTTPException(400,"resolved must be a boolean")
-    comment=_bounded_text(d.get("comment",""),"comment")
+    comment=_bounded_text(d.get("comment",""),"comment",maximum=RESIDENT_COMMENT_MAX)
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
@@ -352,7 +434,7 @@ async def appointment_confirm(request:Request,client_id=Depends(require_internal
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resident_id=_positive_int(d.get("resident_id"),"resident_id")
     event_key=_bounded_text(
-        request.headers.get("Idempotency-Key", ""),"Idempotency-Key",required=True,maximum=200
+        request.headers.get("Idempotency-Key", ""),"Idempotency-Key",required=True,maximum=IDEMPOTENCY_KEY_MAX
     )
     with SessionLocal() as s:
         try:require_client_resource(
@@ -378,13 +460,17 @@ async def messaging_inbound(request:Request):
     if not targets_dedicated_test_number(params):
         raise HTTPException(403,"Request is not for the dedicated test number")
     sender=str(form.get("From",""))
-    body=str(form.get("Body",""))
+    body=_bounded_text(form.get("Body",""),"Body",maximum=MESSAGING_BODY_MAX)
     media=str(form.get("MediaUrl0",""))
     channel="WHATSAPP" if sender.startswith("whatsapp:") else "SMS"
     phone=sender.replace("whatsapp:","")
     client_id=configured_voice_client_id()
     rid=resident_by_phone(phone,client_id) if client_id else None
     if not rid:
+        if len(body) > api.UNMATCHED_INBOUND_BODY_MAX:
+            raise HTTPException(400, "Body exceeds maximum length")
+        if len(media) > api.UNMATCHED_INBOUND_MEDIA_URL_MAX:
+            raise HTTPException(400, "Media URL exceeds maximum length")
         if client_id:
             with SessionLocal() as s:
                 s.add(UnmatchedInbound(
@@ -512,7 +598,7 @@ async def identity_postcode(request:Request,client_id=Depends(require_internal_a
 
 @app.post("/controls/ai-side-effects")
 async def control_ai_side_effects(request:Request,client_id=Depends(require_internal_api)):
-    d=await _json_object(request);enabled=d.get("enabled");reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=500)
+    d=await _json_object(request);enabled=d.get("enabled");reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=AI_SIDE_EFFECT_REASON_MAX)
     if not isinstance(enabled,bool):raise HTTPException(400,"enabled must be a boolean")
     if not reason:raise HTTPException(400,"A reason is required")
     if enabled and os.getenv("ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE", "false").lower() != "true":
@@ -526,7 +612,7 @@ async def safety_clearance(request:Request,client_id=Depends(require_internal_ap
     d=await _json_object(request)
     try:
         with SessionLocal() as s:
-            clear_critical_safety(s,_positive_int(d.get("work_order_id"),"work_order_id"),actor_user_id=_positive_int(d.get("actor_user_id"),"actor_user_id"),reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=1000),client_id=client_id)
+            clear_critical_safety(s,_positive_int(d.get("work_order_id"),"work_order_id"),actor_user_id=_positive_int(d.get("actor_user_id"),"actor_user_id"),reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=SAFETY_CLEARANCE_REASON_MAX),client_id=client_id)
             s.commit()
     except SafetyStateError as exc:raise HTTPException(409,str(exc))
     return {"cleared":True,"status":"HUMAN_REVIEW"}
@@ -612,3 +698,30 @@ async def pilot_synthetic_email_proof(request: Request):
 @app.get("/readiness")
 def readiness_endpoint(_=Depends(require_internal_api)):
     return readiness_report()
+
+ACTION_KEY_MAX = 200
+
+AUDIT_ACTOR_MAX = 100
+
+AUDIT_EVENT_MAX = 100
+
+AVAILABILITY_SLOT_MAX_DAYS = 14
+
+def validate_availability_slot(start:datetime,end:datetime)->None:
+    if end<=start:raise HTTPException(400,"End must be after start")
+    if end-start>timedelta(days=AVAILABILITY_SLOT_MAX_DAYS):
+        raise HTTPException(400,"Availability slot is too long")
+
+COMPLETION_NOTE_MAX = 4000
+
+EVIDENCE_URL_MAX = 2000
+
+UNMATCHED_INBOUND_BODY_MAX = 4000
+
+UNMATCHED_INBOUND_MEDIA_URL_MAX = 2000
+
+WORK_ORDER_DESCRIPTION_MAX = 8000
+
+IDEMPOTENCY_KEY_MAX = 200
+
+RESULT_REF_MAX = 200

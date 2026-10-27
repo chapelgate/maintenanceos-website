@@ -2,6 +2,9 @@ import hashlib
 import json
 from datetime import datetime
 from clock import utcnow
+FAILURE_CODE_MAX = 100
+PROVIDER_REFERENCE_MAX = 200
+
 
 from sqlalchemy.exc import IntegrityError
 
@@ -18,6 +21,9 @@ DELIVERY_TRANSITIONS = {
 }
 CHANNELS = {"EMAIL", "SMS", "WHATSAPP", "VOICE"}
 COMMUNICATION_BODY_MAX = 10000
+ACTION_KEY_MAX = 200
+FAILURE_CODE_MAX = 100
+PROVIDER_REFERENCE_MAX = 200
 
 
 def _hash_recipient(value: str) -> str:
@@ -36,7 +42,7 @@ def queue_outbound(
 ) -> CommunicationDelivery:
     channel=(channel or "").strip().upper();body=body if isinstance(body,str) else ""
     action_key=(action_key or "").strip();recipient=(recipient or "").strip()
-    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>COMMUNICATION_BODY_MAX:
+    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>COMMUNICATION_BODY_MAX or len(action_key)>ACTION_KEY_MAX:
         raise ValueError("Invalid outbound communication")
     work_order=session.get(WorkOrder,work_order_id)
     if not work_order or work_order.client_id!=client_id:
@@ -84,6 +90,8 @@ def record_delivery_status(
     if status==delivery.status:return True
     if status not in DELIVERY_TRANSITIONS.get(delivery.status,set()):return False
     provider_reference=(provider_reference or "").strip();failure_code=(failure_code or "").strip()
+    if len(provider_reference) > PROVIDER_REFERENCE_MAX:return False
+    if len(failure_code) > FAILURE_CODE_MAX:return False
     if status in {"SENT","DELIVERED"} and not provider_reference:return False
     if status=="FAILED" and not failure_code:return False
     delivery.status=status;delivery.updated_at=utcnow()

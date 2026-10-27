@@ -1,5 +1,9 @@
 from datetime import datetime
 from clock import utcnow
+SCOPE_MAX = 80
+
+RESULT_REF_MAX = 200
+
 
 from sqlalchemy.exc import IntegrityError
 
@@ -11,6 +15,8 @@ ACTION_KEY_MAX = 200
 def claim_action(session, scope: str, action_key: str, *, client_id=None, work_order_id=None):
     if len(action_key or "") > ACTION_KEY_MAX:
         raise ValueError("Invalid action receipt key")
+    if len(scope or "") > SCOPE_MAX:
+        raise ValueError("Invalid action receipt scope")
     query = session.query(ActionReceipt).filter_by(scope=scope, action_key=action_key, client_id=client_id)
     existing = query.first()
     if existing:
@@ -58,3 +64,10 @@ def set_ai_side_effects(session, enabled: bool, *, actor: str, reason: str) -> N
     control.updated_at = utcnow()
     control.updated_by = actor
     control.reason = reason
+
+
+def set_result_ref(receipt, value) -> None:
+    result_ref = str(value)
+    if len(result_ref) > RESULT_REF_MAX:
+        raise ValueError("Invalid action receipt result_ref")
+    receipt.result_ref = result_ref

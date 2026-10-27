@@ -1,5 +1,8 @@
 import json
 import hashlib
+ACTION_KEY_MAX = 200
+DETAIL_MAX = 4000
+
 
 from sqlalchemy.exc import IntegrityError
 
@@ -54,6 +57,10 @@ def record_action_result(
         raise ValueError("Unknown action state")
     if not action_key:
         raise ValueError("Action result requires an idempotency key")
+    if len(action_key) > ACTION_KEY_MAX:
+        raise ValueError("Action key exceeds maximum length")
+    if len(detail) > DETAIL_MAX:
+        raise ValueError("Action detail exceeds maximum length")
     if len(provider_reference) > PROVIDER_REFERENCE_MAX:
         raise ValueError("Provider reference exceeds maximum length")
     if work_order_id:

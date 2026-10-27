@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from product_profile import profile_ready
+
 import argparse
 import json
 import os
@@ -225,6 +227,7 @@ def release_status_banner(checks=None):
             "title": "Commercial release flag is true",
             "body": "Still requires owner last gates before any sale or live personal data.",
         }
+    _profile_ok = profile_ready()
     return {
         "level": "warning",
         "title": "NOT COMMERCIALLY RELEASED",

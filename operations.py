@@ -9,13 +9,41 @@ from sqlalchemy.exc import IntegrityError
 from models import *
 from decision_engine import contractor_rank,transition_allowed,work_order_allows_dispatch
 from lifecycle import transition_work_order
-from security import app_secret_ready,sign_link
-from idempotency import claim_action
+from security import app_secret_ready,contractor_link_expires_at,sign_link
+from idempotency import claim_action, set_result_ref
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
+from audit_text import redact_detail
+from request_context import request_id as current_request_id
+APPROVAL_REASON_MAX = 1000
+CANCEL_REASON_MAX = 1000
+ESCALATION_RESOLUTION_MAX = 1000
+NO_SHOW_REASON_MAX = 1000
+REJECT_REASON_MAX = 1000
+REOPEN_REASON_MAX = 1000
+AUDIT_ACTOR_MAX = 100
+AUDIT_EVENT_MAX = 100
+COMPLETION_FINGERPRINT_LEN = 64
 
-def audit(s,woid,actor,event,detail=""):
-    s.add(AuditEvent(work_order_id=woid,actor=actor,event=event,detail=detail))
+
+def audit(s, woid, actor, event, detail=""):
+    actor = (actor or "").strip()
+    event = (event or "").strip()
+    if not actor or len(actor) > AUDIT_ACTOR_MAX:
+        raise ValueError("audit actor invalid")
+    if not event or len(event) > AUDIT_EVENT_MAX:
+        raise ValueError("audit event invalid")
+    detail = redact_detail(detail or "")
+    rid = current_request_id()
+    if rid:
+        try:
+            payload = json.loads(detail) if detail else {}
+            if isinstance(payload, dict):
+                payload.setdefault("request_id", rid)
+                detail = json.dumps(payload, sort_keys=True)
+        except (json.JSONDecodeError, TypeError):
+            pass
+    s.add(AuditEvent(work_order_id=woid, actor=actor, event=event, detail=detail))
 
 
 BLOCKING_REVIEW_TYPES={
@@ -133,7 +161,7 @@ def create_dispatch_approval(work_order_id):
         s.add(a);s.flush();receipt.result_ref=str(a.id);s.commit();return a.id
 
 def contractor_portal_links(work_order_id):
-    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").lower() != "true":
+    if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").strip().lower() != "true":
         return {}
     with SessionLocal() as s:
         wo=s.query(WorkOrder).filter_by(id=work_order_id).first()
@@ -150,11 +178,12 @@ def contractor_portal_links(work_order_id):
         approved=s.query(Approval).filter_by(work_order_id=wo.id,approval_type="DISPATCH",status="APPROVED").first()
         if not approved:return {}
     base=os.getenv("PUBLIC_BASE_URL","http://127.0.0.1:8000").rstrip("/")
+    expires_at=contractor_link_expires_at()
     return {
-      "accept":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=accept&token={sign_link('accept',work_order_id,cid)}",
-      "decline":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=decline&token={sign_link('decline',work_order_id,cid)}",
-      "availability":f"{base}/contractor/availability?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('availability',work_order_id,cid)}",
-      "complete":f"{base}/contractor/complete?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('complete',work_order_id,cid)}"
+      "accept":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=accept&token={sign_link('accept',work_order_id,cid,expires_at)}",
+      "decline":f"{base}/contractor/decision?work_order_id={work_order_id}&contractor_id={cid}&decision=decline&token={sign_link('decline',work_order_id,cid,expires_at)}",
+      "availability":f"{base}/contractor/availability?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('availability',work_order_id,cid,expires_at)}",
+      "complete":f"{base}/contractor/complete?work_order_id={work_order_id}&contractor_id={cid}&token={sign_link('complete',work_order_id,cid,expires_at)}"
     }
 
 def book_slot(work_order_id,availability_id):
@@ -317,6 +346,14 @@ def submit_availability(work_order_id,contractor_id,start,end,action_key):
         audit(s,wo.id,"Contractor","AVAILABILITY_SUBMITTED",f"{start.isoformat()} - {end.isoformat()}")
         s.commit();return av.id
 
+
+def completion_evidence_fingerprint(note: str, evidence_url: str = "") -> str:
+    material = (evidence_url or note or "").encode()
+    digest = hashlib.sha256(material).hexdigest()
+    if len(digest) != COMPLETION_FINGERPRINT_LEN:
+        raise ValueError("completion fingerprint length invalid")
+    return digest
+
 def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
     with SessionLocal() as s:
         if not (note or "").strip():return None
@@ -326,10 +363,10 @@ def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
         if wo.status not in {"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}:return None
         receipt,fresh=claim_action(s,"CONTRACTOR_COMPLETION",action_key,client_id=wo.client_id,work_order_id=wo.id)
         if not fresh:return int(receipt.result_ref) if receipt.result_ref else None
-        fingerprint=hashlib.sha256((evidence_url.strip() or note.strip()).encode()).hexdigest()
+        fingerprint=completion_evidence_fingerprint(note, evidence_url)
         reused=s.get(EvidenceIdentity,fingerprint)
         evidence=CompletionEvidence(work_order_id=work_order_id,contractor_id=contractor_id,completion_note=note,evidence_url=evidence_url)
-        s.add(evidence);s.flush();receipt.result_ref=str(evidence.id)
+        s.add(evidence);s.flush();set_result_ref(receipt, evidence.id)
         if wo.status=="APPOINTMENT_BOOKED":
             transition_work_order(s,wo,"IN_PROGRESS",actor="Contractor",reason="Contractor reports work started",flush=True)
         if wo.status=="IN_PROGRESS":
@@ -368,6 +405,8 @@ def confirm_appointment(work_order_id,resident_id,event_key):
 
 def approve_operational_action(approval_id,actor_user_id,reason=""):
     reason=(reason or "").strip()
+    if len(reason) > APPROVAL_REASON_MAX:
+        return False
     with SessionLocal() as s:
         approval=s.get(Approval,approval_id)
         if not approval or approval.status!="PENDING" or approval.approval_type not in APPROVAL_ROLES:return False
@@ -426,6 +465,8 @@ def approve_operational_action(approval_id,actor_user_id,reason=""):
         s.commit();return True
 
 
+TRIAGE_URGENCIES = frozenset({"P2", "P3"})
+TRIAGE_REASON_MAX = 1000
 TRIAGE_CATEGORIES = frozenset({
     "Plumbing","Heating","Electrical","Drainage","Roofing",
     "Locks / access","Doors","Windows","Appliances","Damp / mould",
@@ -435,7 +476,9 @@ TRIAGE_CATEGORIES = frozenset({
 
 def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
     reason=(reason or "").strip();category=(category or "").strip();trade=(trade or "").strip()
-    if len(reason)<5 or not category or category not in TRIAGE_CATEGORIES or not trade or urgency not in {"P2","P3"}:return False
+    if len(reason)<5 or not category or category not in TRIAGE_CATEGORIES or not trade or urgency not in TRIAGE_URGENCIES:return False
+    if DECISION_TRADE.get(category) != trade:return False
+    if len(reason) > TRIAGE_REASON_MAX:return False
     with SessionLocal() as s:
         approval=s.get(Approval,approval_id)
         if not approval or approval.status!="PENDING" or approval.approval_type!="TRIAGE":return False
@@ -455,6 +498,8 @@ def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
 def reject_operational_action(approval_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason) > REJECT_REASON_MAX:
+        return False
     with SessionLocal() as s:
         approval=s.get(Approval,approval_id)
         roles=APPROVAL_ROLES.get(approval.approval_type,set()) if approval else set()
@@ -468,6 +513,8 @@ def reject_operational_action(approval_id,actor_user_id,reason):
 def cancel_work_order(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason) > CANCEL_REASON_MAX:
+        return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"Cancellation")
         except SafetyStateError:return False
@@ -484,6 +531,8 @@ def cancel_work_order(work_order_id,actor_user_id,reason):
 def reopen_work_order(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason) > REOPEN_REASON_MAX:
+        return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"Reopening")
         except SafetyStateError:return False
@@ -498,6 +547,8 @@ def reopen_work_order(work_order_id,actor_user_id,reason):
 def record_no_show(work_order_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason) > NO_SHOW_REASON_MAX:
+        return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"No-show recording")
         except SafetyStateError:return False
@@ -523,6 +574,8 @@ def close_work_order(work_order_id,actor_user_id):
 def resolve_escalation(escalation_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if len(reason) > ESCALATION_RESOLUTION_MAX:
+        return False
     with SessionLocal() as s:
         escalation=s.get(Escalation,escalation_id)
         work_order=s.get(WorkOrder,escalation.work_order_id) if escalation and escalation.work_order_id else None
@@ -533,3 +586,6 @@ def resolve_escalation(escalation_id,actor_user_id,reason):
         escalation.status="RESOLVED"
         audit(s,work_order.id,f"User:{user.id}","ESCALATION_RESOLVED",json.dumps({"escalation_id":escalation.id,"reason":reason}))
         s.commit();return True
+
+from decision_engine import TRADE as DECISION_TRADE
+TRADE = DECISION_TRADE
