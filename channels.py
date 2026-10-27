@@ -98,7 +98,11 @@ def create_from_channel(client_id,property_id,resident_id,source,description,par
             wo=s.get(WorkOrder,existing.work_order_id)
             if event_key:s.add(ChannelEventIdentity(client_id=client_id,source=source,event_key=event_key,work_order_id=wo.id))
             s.add(Communication(work_order_id=wo.id,channel=source,direction="INBOUND",participant=participant,body=description,media_url=media_url))
-            if description and description not in wo.description:wo.description=(wo.description+"\n"+description).strip()
+            if description and description not in wo.description:
+                combined=(wo.description+"\n"+description).strip()
+                if len(combined) > CHANNEL_DESCRIPTION_MAX:
+                    raise ValueError("description is invalid")
+                wo.description=combined
             try:s.commit();wid=wo.id
             except IntegrityError:
                 s.rollback()

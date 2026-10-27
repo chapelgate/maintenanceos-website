@@ -1,0 +1,3 @@
+- [x] Bound description accumulate in create_from_channel
+- [x] Contract tests green
+- [x] Spec Kit complete
