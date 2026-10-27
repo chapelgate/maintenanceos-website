@@ -1,18 +1,15 @@
-import inspect
-
 import pytest
 from fastapi import HTTPException
 
 import api
 
 
-def test_messaging_body_rejects_control_chars():
-    source = inspect.getsource(api.messaging_inbound)
-    assert "_reject_control_chars" in source
-    assert "MESSAGING_BODY_MAX" in source
+def test_api_wires_reject_on_messaging_body():
+    text = open("api.py").read()
+    assert '_reject_control_chars(_bounded_text(form.get("Body",""),"Body",maximum=MESSAGING_BODY_MAX),"Body")' in text
 
 
 def test_reject_control_chars_on_body():
     with pytest.raises(HTTPException) as exc:
-        api._reject_control_chars("ok\x00bad", "body")
+        api._reject_control_chars("hello\x00", "Body")
     assert exc.value.status_code == 400
