@@ -530,9 +530,9 @@ async def appointment_confirm(request:Request,client_id=Depends(require_internal
     d=await _json_object(request)
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resident_id=_positive_int(d.get("resident_id"),"resident_id")
-    event_key=_bounded_text(
+    event_key=_reject_control_chars(_bounded_text(
         request.headers.get("Idempotency-Key", ""),"Idempotency-Key",required=True,maximum=IDEMPOTENCY_KEY_MAX
-    )
+    ),"Idempotency-Key")
     with SessionLocal() as s:
         try:require_client_resource(
             s,client_id,work_order_id=work_order_id,resident_id=resident_id
