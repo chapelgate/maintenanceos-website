@@ -12,6 +12,7 @@ JWT_VALUE = re.compile(r"\beyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\
 GOOGLE_API_KEY = re.compile(r"\bAIza[0-9A-Za-z_-]{10,}\b")
 GITHUB_PAT = re.compile(r"\bghp_[A-Za-z0-9]{20,}\b")
 SLACK_TOKEN = re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")
+PEM_PRIVATE_KEY = re.compile(r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----.*?-----END [A-Z0-9 ]*PRIVATE KEY-----", re.DOTALL)
 
 
 HTTP_ERROR_DETAIL_MAX = 2000
@@ -31,6 +32,7 @@ def sanitize_http_detail(detail: object) -> object:
     value = GOOGLE_API_KEY.sub("[REDACTED]", value)
     value = GITHUB_PAT.sub("[REDACTED]", value)
     value = SLACK_TOKEN.sub("[REDACTED]", value)
+    value = PEM_PRIVATE_KEY.sub("[REDACTED]", value)
     if len(value) > HTTP_ERROR_DETAIL_MAX:
         return value[:HTTP_ERROR_DETAIL_MAX]
     return value
