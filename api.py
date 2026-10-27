@@ -182,12 +182,17 @@ def _reject_control_chars(value: str, name: str) -> str:
         raise HTTPException(400, f"{name} contains control characters")
     return value
 
+AUTHORIZATION_HEADER_MAX = 512
+
+
 def require_internal_api(request:Request):
     from security import configured_internal_api_token
     expected=configured_internal_api_token()
     if not expected:
         raise HTTPException(503,"Internal API is not configured")
     authorization=request.headers.get("Authorization","")
+    if not isinstance(authorization,str) or len(authorization) > AUTHORIZATION_HEADER_MAX:
+        raise HTTPException(401,"Invalid internal API credentials")
     supplied=authorization[7:] if authorization.startswith("Bearer ") else ""
     if not supplied or not hmac.compare_digest(supplied,expected):
         raise HTTPException(401,"Invalid internal API credentials")
