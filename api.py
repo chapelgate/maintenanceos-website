@@ -176,10 +176,16 @@ def _bounded_text(value, name: str, *, required=False, maximum=BOUNDED_TEXT_DEFA
 
 
 _ALLOWED_CONTROLS = frozenset("\t\n\r")
+_BIDI_CONTROLS = frozenset("\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069")
 
 
 def _reject_control_chars(value: str, name: str) -> str:
-    if any(ord(ch) < 32 and ch not in _ALLOWED_CONTROLS for ch in value):
+    if any(
+        (ord(ch) < 32 and ch not in _ALLOWED_CONTROLS)
+        or ord(ch) == 127
+        or ch in _BIDI_CONTROLS
+        for ch in value
+    ):
         raise HTTPException(400, f"{name} contains control characters")
     return value
 
