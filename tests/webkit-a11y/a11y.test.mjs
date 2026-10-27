@@ -41,6 +41,7 @@ const pages = [
   '/compare/worksmartos-vs-phena/',
   '/integrations/outlook/',
   '/help/getting-started/',
+  '/dashboard/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },

@@ -72,3 +72,11 @@ test("mw-156/157 nested sample is gated and disclosed", () => {
   assert.match(page, /representative nested sample/i);
   assert.doesNotMatch(page, /Review nested route coverage/);
 });
+
+test("mw-158 dashboard preview is gated and disclosed as SAMPLE", () => {
+  assert.match(webkit, /'\/dashboard\/'/);
+  assert.match(page, /\/dashboard\//);
+  assert.match(page, /SAMPLE \/ DEMO/);
+  assert.match(page, /dashboard preview route is also axe-gated/i);
+  assert.doesNotMatch(page, /dashboard preview are not claimed as covered/i);
+});
