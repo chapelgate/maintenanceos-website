@@ -4,6 +4,7 @@ from datetime import datetime
 from clock import utcnow
 FAILURE_CODE_MAX = 100
 PROVIDER_REFERENCE_MAX = 200
+RECIPIENT_MAX = 100
 
 
 from sqlalchemy.exc import IntegrityError
@@ -22,6 +23,7 @@ DELIVERY_TRANSITIONS = {
 CHANNELS = {"EMAIL", "SMS", "WHATSAPP", "VOICE"}
 COMMUNICATION_BODY_MAX = 10000
 ACTION_KEY_MAX = 200
+RECIPIENT_MAX = 320
 FAILURE_CODE_MAX = 100
 PROVIDER_REFERENCE_MAX = 200
 
@@ -42,7 +44,7 @@ def queue_outbound(
 ) -> CommunicationDelivery:
     channel=(channel or "").strip().upper();body=body if isinstance(body,str) else ""
     action_key=(action_key or "").strip();recipient=(recipient or "").strip()
-    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>COMMUNICATION_BODY_MAX or len(action_key)>ACTION_KEY_MAX:
+    if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>COMMUNICATION_BODY_MAX or len(action_key)>ACTION_KEY_MAX or len(recipient)>RECIPIENT_MAX:
         raise ValueError("Invalid outbound communication")
     work_order=session.get(WorkOrder,work_order_id)
     if not work_order or work_order.client_id!=client_id:
