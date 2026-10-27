@@ -1,0 +1,4 @@
+- [x] Add AUDIT_DETAIL_MAX=8000
+- [x] Fail closed on overlong audit detail after redaction
+- [x] Contract tests green
+- [x] Spec Kit artifacts complete

@@ -29,6 +29,7 @@ COMPLETION_NOTE_MAX = 4000
 EVIDENCE_URL_MAX = 2000
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
+AUDIT_DETAIL_MAX = 8000
 COMPLETION_FINGERPRINT_LEN = 64
 
 
@@ -40,6 +41,8 @@ def audit(s, woid, actor, event, detail=""):
     if not event or len(event) > AUDIT_EVENT_MAX:
         raise ValueError("audit event invalid")
     detail = redact_detail(detail or "")
+    if len(detail) > AUDIT_DETAIL_MAX:
+        raise ValueError("audit detail invalid")
     rid = current_request_id()
     if rid:
         try:
