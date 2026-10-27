@@ -65,6 +65,7 @@ def contractor_link_expires_at(now=None) -> int:
 
 
 SIGNED_LINK_KINDS=frozenset({"accept","decline","availability","complete","voice_stream"})
+CONTRACTOR_LINK_TOKEN_MAX = 200
 
 def sign_link(kind:str,work_order_id:int,subject_id:int,expires_at:int|None=None):
     if kind not in SIGNED_LINK_KINDS:
@@ -79,6 +80,8 @@ def sign_link(kind:str,work_order_id:int,subject_id:int,expires_at:int|None=None
     return f"{expires_at}.{signature}"
 
 def verify_link(kind,work_order_id,subject_id,token,now=None):
+    if not isinstance(token,str) or len(token) > CONTRACTOR_LINK_TOKEN_MAX:
+        return False
     try:
         expiry_text,signature=token.split(".",1)
         expires_at=int(expiry_text)
