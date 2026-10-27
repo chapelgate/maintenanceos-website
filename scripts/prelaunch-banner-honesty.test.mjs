@@ -11,9 +11,10 @@ const banner = fs.readFileSync(
 );
 
 test("PreLaunchBanner denies live phone and SLA, not only commercial GA", () => {
-  assert.match(banner, /not commercially generally available/i);
-  assert.match(banner, /not a public always-on phone line/i);
-  assert.match(banner, /no SLA claim/i);
-  assert.doesNotMatch(banner, /commercially generally available\. yet\./i);
+  assert.match(banner, /not commercially\s+generally available/i);
+  assert.match(banner, /Not a public always-on phone line/);
+  assert.match(banner, /No SLA claim/);
+  assert.match(banner, /siteConfig\.publicLaunch/);
   assert.doesNotMatch(banner, /generally available yet\./);
+  assert.doesNotMatch(banner, /£/);
 });
