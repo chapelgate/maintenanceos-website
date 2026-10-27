@@ -8,7 +8,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Repair Intake Software by Sector (UK)",
   description:
-    "Repair intake for UK landlords, letting agents, property managers, maintenance firms, housing associations, councils, FM teams and holiday lets.",
+    "Repair intake for UK landlords, agents, managers, housing, FM, councils and holiday lets. Pre-launch; not a live phone; no SLA claim.",
   path: "/industries/",
 });
 
@@ -27,7 +27,7 @@ export default function IndustriesPage() {
   return (
     <>
       <JsonLd
-        data={contentPageJsonLd("/industries/", "Repair Intake Software by Sector (UK)", "Repair intake for UK landlords, letting agents, property managers, maintenance firms, housing associations, councils, FM teams and holiday lets.", [
+        data={contentPageJsonLd("/industries/", "Repair Intake Software by Sector (UK)", "Repair intake for UK landlords, agents, managers, housing, FM, councils and holiday lets. Pre-launch; not a live phone; no SLA claim.", [
           { name: "Industries", path: "/industries/" },
         ])}
       />

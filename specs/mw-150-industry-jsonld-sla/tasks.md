@@ -1,0 +1,3 @@
+- [x] Align industry JSON-LD description with phone + SLA denials
+- [x] Align /industries/ index meta description
+- [x] Add honesty lock test and verify
