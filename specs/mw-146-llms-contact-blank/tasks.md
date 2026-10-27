@@ -1,0 +1,3 @@
+- [x] Fix public/llms.txt Contact blank lines
+- [x] Add lock test
+- [x] Verify seo-discoverability + focused lock
