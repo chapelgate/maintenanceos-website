@@ -22,6 +22,8 @@ NO_SHOW_REASON_MAX = 1000
 REJECT_REASON_MAX = 1000
 REOPEN_REASON_MAX = 1000
 RESIDENT_COMMENT_MAX = 4000
+AMOUNT_MAX = 1_000_000
+QUOTE_DESCRIPTION_MAX = 4000
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 COMPLETION_FINGERPRINT_LEN = 64
@@ -207,8 +209,10 @@ def book_slot(work_order_id,availability_id):
         s.commit();return ap.id
 
 def submit_quote(work_order_id,contractor_id,amount,description):
+    description=(description or "")
+    if len(description) > QUOTE_DESCRIPTION_MAX:return None
+    if not math.isfinite(amount) or amount<=0 or amount>AMOUNT_MAX:return None
     with SessionLocal() as s:
-        if not math.isfinite(amount) or amount<=0:return None
         wo=require_noncritical(s,work_order_id,"Quote submission")
         require_client_resource(s,wo.client_id,work_order_id=wo.id,contractor_id=contractor_id)
         if wo.assigned_contractor_id != contractor_id:return None
