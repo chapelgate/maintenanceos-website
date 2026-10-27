@@ -21,6 +21,7 @@ ESCALATION_RESOLUTION_MAX = 1000
 NO_SHOW_REASON_MAX = 1000
 REJECT_REASON_MAX = 1000
 REOPEN_REASON_MAX = 1000
+RESIDENT_COMMENT_MAX = 4000
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 COMPLETION_FINGERPRINT_LEN = 64
@@ -271,6 +272,8 @@ def invoice_qa(work_order_id,contractor_id,invoice_number,amount,description):
         s.commit();return inv.id
 
 def resident_confirmation(work_order_id,resolved,comment=""):
+    comment=(comment or "")
+    if len(comment) > RESIDENT_COMMENT_MAX:return False
     with SessionLocal() as s:
         wo=require_noncritical(s,work_order_id,"Resident confirmation")
         if wo.status!="AWAITING_RESIDENT_CONFIRMATION":return False
