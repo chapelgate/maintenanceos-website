@@ -715,7 +715,7 @@ async def safety_clearance(request:Request,client_id=Depends(require_internal_ap
     d=await _json_object(request)
     try:
         with SessionLocal() as s:
-            clear_critical_safety(s,_positive_int(d.get("work_order_id"),"work_order_id"),actor_user_id=_positive_int(d.get("actor_user_id"),"actor_user_id"),reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=SAFETY_CLEARANCE_REASON_MAX),client_id=client_id)
+            clear_critical_safety(s,_positive_int(d.get("work_order_id"),"work_order_id"),actor_user_id=_positive_int(d.get("actor_user_id"),"actor_user_id"),reason=_reject_control_chars(_bounded_text(d.get("reason",""),"reason",required=True,maximum=SAFETY_CLEARANCE_REASON_MAX),"reason"),client_id=client_id)
             s.commit()
     except SafetyStateError as exc:raise HTTPException(409,str(exc))
     return {"cleared":True,"status":"HUMAN_REVIEW"}
