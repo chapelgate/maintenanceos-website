@@ -71,6 +71,7 @@ export default function AccessibilityPage() {
             <li>Nested sample (mw-156 + mw-157): /industries/landlords/, /industries/housing-associations/, /blog/ai-voice-demo-browser-only-what-it-means/, /blog/why-safety-latches-matter-in-ai-receptionists/, /compare/worksmartos-vs-moneypenny/, /compare/worksmartos-vs-phena/, /integrations/google/, /integrations/outlook/, /help/getting-started/</li>
             <li>Dashboard preview (mw-158): /dashboard/ — SAMPLE / DEMO only; robots noindex; not a live customer portal</li>
             <li>Not-found export (mw-159): /404/ — pre-launch recovery page; robots noindex; no price or live phone</li>
+            <li>Nested sample (mw-160): /industries/councils/, /industries/property-managers/, /blog/structured-repair-intake-vs-free-text-forms/, /compare/worksmartos-vs-answerconnect/, /integrations/calcom/, /help/data-security/ — all carry robots noindex; none claim checkout, live phone, published price, live SLA, or WCAG 2.2 AA certification.</li>
           </ul>
           <p className="mt-2">
             <strong>Result:</strong> Those gated routes reported no axe
@@ -82,9 +83,9 @@ export default function AccessibilityPage() {
             <strong>Scope limitations:</strong> This is an automated subset
             check on the routes listed in
             <code>tests/webkit-a11y/a11y.test.mjs</code>. A representative
-            nested sample is gated (two industry roles, two blog posts, two
-            compare vendor pages, two integration providers, and one help
-            article). The dashboard preview route is also axe-gated as a
+            nested sample is gated across three waves (industry roles, blog
+            posts, compare vendor pages, integration providers, and help
+            articles). The dashboard preview route is also axe-gated as a
             SAMPLE / DEMO page, and the exported /404/ not-found page is
             axe-gated. Other nested or dynamic routes are not claimed as
             covered. It does not test physical iPhone or Mac Safari,
@@ -105,16 +106,21 @@ export default function AccessibilityPage() {
               gate covers the static routes listed in
               <code>tests/webkit-a11y/a11y.test.mjs</code>, plus a
               representative nested sample: /industries/landlords/,
-              /industries/housing-associations/,
+              /industries/housing-associations/, /industries/councils/,
+              /industries/property-managers/,
               /blog/ai-voice-demo-browser-only-what-it-means/,
               /blog/why-safety-latches-matter-in-ai-receptionists/,
+              /blog/structured-repair-intake-vs-free-text-forms/,
               /compare/worksmartos-vs-moneypenny/,
-              /compare/worksmartos-vs-phena/, /integrations/google/,
-              /integrations/outlook/, /help/getting-started/,
+              /compare/worksmartos-vs-phena/,
+              /compare/worksmartos-vs-answerconnect/,
+              /integrations/google/, /integrations/outlook/,
+              /integrations/calcom/, /help/getting-started/,
+              /help/data-security/,
               /dashboard/ (SAMPLE / DEMO preview; noindex), and
               /404/ (exported not-found recovery page; noindex).
               Other nested blog, compare, industry, and integration pages,
-              and remaining help articles beyond getting-started, are not
+              and remaining help articles beyond the gated sample, are not
               claimed as covered. Help index, subprocessors, and
               vulnerability disclosure remain gated.
             </li>
@@ -160,11 +166,11 @@ export default function AccessibilityPage() {
             </li>
             <li>
               <strong>Nested sample gated:</strong> A representative nested
-              sample (two industries, two blogs, two compares, two
-              integrations, one help article) plus the dashboard SAMPLE
-              preview and the exported /404/ not-found page are now in
-              the WebKit axe matrix. Expanding to every nested page remains
-              optional and is not claimed here.
+              sample across three waves (four industries, three blogs, three
+              compares, three integrations, two help articles) plus the
+              dashboard SAMPLE preview and the exported /404/ not-found page
+              are now in the WebKit axe matrix. Expanding to every nested
+              page remains optional and is not claimed here.
             </li>
             <li>
               <strong>Automated WCAG 2.2 tags enabled:</strong> The WebKit

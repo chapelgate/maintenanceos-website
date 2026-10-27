@@ -67,7 +67,6 @@ test("mw-156/157 nested sample is gated and disclosed", () => {
     assert.match(page, new RegExp(route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   assert.match(page, /Nested sample gated/);
-  assert.match(page, /two industr/i);
   assert.match(page, /help article/i);
   assert.match(page, /representative nested sample/i);
   assert.doesNotMatch(page, /Review nested route coverage/);
@@ -86,4 +85,25 @@ test("mw-159 exported not-found page is gated and disclosed", () => {
   assert.match(page, /\/404\//);
   assert.match(page, /Not-found export \(mw-159\)/);
   assert.match(page, /exported \/404\/ not-found page/i);
+});
+
+test("mw-160 nested sample wave 3 is gated and disclosed", () => {
+  for (const route of [
+    "/industries/councils/",
+    "/industries/property-managers/",
+    "/blog/structured-repair-intake-vs-free-text-forms/",
+    "/compare/worksmartos-vs-answerconnect/",
+    "/integrations/calcom/",
+    "/help/data-security/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "'"));
+    assert.match(page, new RegExp(route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+  assert.match(page, /Nested sample \(mw-160\)/);
+  assert.match(page, /across three waves/i);
+  assert.match(page, /four industr/i);
+  assert.match(page, /three blogs/i);
+  assert.match(page, /robots noindex/);
+  assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });
