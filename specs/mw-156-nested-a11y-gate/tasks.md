@@ -1,0 +1,3 @@
+- [x] Gate nested sample routes in WebKit axe matrix
+- [x] Update accessibility honesty copy
+- [x] Update a11y-coverage-honesty lock
