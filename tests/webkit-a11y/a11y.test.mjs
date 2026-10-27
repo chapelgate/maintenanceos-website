@@ -67,6 +67,12 @@ const pages = [
   '/compare/worksmartos-vs-dialzara/',
   '/integrations/zapier/',
   '/help/repair-lifecycle/',
+  '/compare/worksmartos-vs-fasthosts/',
+  '/compare/worksmartos-vs-goodcall/',
+  '/compare/worksmartos-vs-rosie/',
+  '/integrations/hubspot/',
+  '/help/emergency-procedures/',
+  '/help/hmocompliance/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
