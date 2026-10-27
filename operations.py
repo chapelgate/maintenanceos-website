@@ -10,7 +10,7 @@ from models import *
 from decision_engine import contractor_rank,transition_allowed,work_order_allows_dispatch
 from lifecycle import transition_work_order
 from security import app_secret_ready,contractor_link_expires_at,sign_link
-from idempotency import claim_action, set_result_ref
+from idempotency import ACTION_KEY_MAX, claim_action, set_result_ref
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
 from audit_text import redact_detail
@@ -384,7 +384,7 @@ def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
 
 def confirm_appointment(work_order_id,resident_id,event_key):
     event_key=(event_key or "").strip()
-    if not event_key:return False
+    if not event_key or len(event_key) > ACTION_KEY_MAX:return False
     with SessionLocal() as s:
         wo=require_noncritical(s,work_order_id,"Appointment confirmation")
         require_client_resource(s,wo.client_id,work_order_id=wo.id,resident_id=resident_id)
