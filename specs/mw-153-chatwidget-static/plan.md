@@ -1,0 +1,4 @@
+- Simplify ChatWidget to trigger + panel (no form, no submit, no success state)
+- Update call sites (create page, IndustryRolePage) to drop unused props
+- Update component tests to match simplified behaviour
+- Add honesty lock test if missing

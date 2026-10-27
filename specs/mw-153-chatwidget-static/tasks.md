@@ -1,0 +1,5 @@
+- [x] Remove form refs, message state, status state, error state, onSubmit, handleKeyDown from ChatWidget.tsx
+- [x] Drop placeholder/pageContext props from ChatWidgetProps
+- [x] Update src/app/create/page.tsx call
+- [x] Update src/components/IndustryRolePage.tsx call
+- [x] Rewrite ChatWidget.test.tsx to test disclosure-only behaviour
