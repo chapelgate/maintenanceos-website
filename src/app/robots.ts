@@ -14,6 +14,8 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
+          "/status.json",
+          "/release.json",
           "/api/",
           "/dashboard/",
           "/status/",
