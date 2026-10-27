@@ -53,6 +53,8 @@ def audit(s, woid, actor, event, detail=""):
         raise ValueError("audit actor invalid")
     if not event or len(event) > AUDIT_EVENT_MAX:
         raise ValueError("audit event invalid")
+    if reason_has_control_chars(actor) or reason_has_control_chars(event):
+        raise ValueError("audit control characters")
     detail = redact_detail(detail or "")
     if len(detail) > AUDIT_DETAIL_MAX:
         raise ValueError("audit detail invalid")
