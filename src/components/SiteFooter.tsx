@@ -10,7 +10,8 @@ export function SiteFooter() {
           </p>
           <p className="mt-2 text-sm text-muted">
             MaintenanceOS is the property-maintenance product. Pre-launch —
-            not commercially generally available.
+            not commercially generally available. Not a public always-on phone
+            line. No SLA claim.
           </p>
         </div>
         {(

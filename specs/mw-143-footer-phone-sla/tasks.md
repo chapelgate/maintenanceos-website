@@ -1,0 +1,3 @@
+- [x] Update SiteFooter.tsx
+- [x] Add lock test
+- [x] Verify with node --test
