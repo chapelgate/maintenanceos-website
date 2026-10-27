@@ -202,3 +202,20 @@ test("mw-166 nested sample wave 6 is gated and disclosed", () => {
   assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });
+
+test("mw-167 help compliance routes are gated and disclosed", () => {
+  for (const route of [
+    "/help/epc-compliance/",
+    "/help/fire-risk-assessment/",
+    "/help/contractor-compliance/",
+    "/help/assigning-repairs/",
+    "/help/tenant-portal/",
+    "/help/user-management/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
+  }
+  assert.match(page, /Help compliance gate \(mw-167\)/);
+  assert.match(page, /no published price/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});
