@@ -26,6 +26,15 @@ for (const rel of ["src/app/error.tsx", "src/app/global-error.tsx"]) {
     assert.doesNotMatch(page, /£/);
     assert.doesNotMatch(page, /buy now/i);
   });
+
+  test(`${rel} announces the failure and focuses the heading`, () => {
+    const page = read(rel);
+    assert.match(page, /role="alert"/);
+    assert.match(page, /tabIndex=\{-1\}/);
+    assert.match(page, /useEffect/);
+    assert.match(page, /headingRef\.current\?\.focus\(\)/);
+    assert.match(page, /useRef/);
+  });
 }
 
 test("global error keeps the site language and a full document", () => {

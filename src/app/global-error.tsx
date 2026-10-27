@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import "./globals.css";
 
 export default function GlobalError({
@@ -10,15 +11,27 @@ export default function GlobalError({
   reset: () => void;
 }) {
   void error;
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   return (
     <html lang="en-GB">
       <body>
-        <main className="mx-auto max-w-3xl space-y-4 px-4 py-16 text-muted">
+        <main
+          role="alert"
+          className="mx-auto max-w-3xl space-y-4 px-4 py-16 text-muted"
+        >
           <p className="text-sm font-medium uppercase tracking-wide text-accent">
             Pre-launch
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight text-ink">
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="text-3xl font-semibold tracking-tight text-ink outline-none"
+          >
             This page did not finish
           </h1>
           <p>
