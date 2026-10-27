@@ -256,6 +256,17 @@ def _require_contractor_token(token):
     return token
 
 
+CONTRACTOR_DECISION_MAX = 16
+
+
+def _require_contractor_decision(decision):
+    if not isinstance(decision,str) or len(decision) > CONTRACTOR_DECISION_MAX:
+        raise HTTPException(400,"decision is too long")
+    if decision not in ("accept","decline"):
+        raise HTTPException(400,"Invalid decision")
+    return decision
+
+
 def require_public_provider_ingress():
     if not public_provider_ingress_ready():
         raise HTTPException(503, "Public provider ingress is disabled")
@@ -335,8 +346,9 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
 
 def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:str):
     require_contractor_portal()
-    if decision not in ("accept","decline"):raise HTTPException(400,"Invalid decision")
+    decision=_require_contractor_decision(decision)
     token=_require_contractor_token(token)
+
     if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     with SessionLocal() as s:
         wo=_contractor_work_order(s,work_order_id,contractor_id,{"AWAITING_CONTRACTOR"})
@@ -358,8 +370,9 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
 @app.post("/contractor/decision",response_class=HTMLResponse)
 def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),decision:str=Form(...),token:str=Form(...)):
     require_contractor_portal()
-    if decision not in ("accept","decline"):raise HTTPException(400,"Invalid decision")
+    decision=_require_contractor_decision(decision)
     token=_require_contractor_token(token)
+
     if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     if decision=="decline":
         try:declined=decline_contractor(work_order_id,contractor_id,token)
