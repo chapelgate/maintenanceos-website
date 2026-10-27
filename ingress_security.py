@@ -39,6 +39,7 @@ SECURITY_HEADERS = (
     (b"cross-origin-resource-policy", b"same-origin"),
     (b"cross-origin-embedder-policy", b"require-corp"),
     (b"strict-transport-security", b"max-age=31536000; includeSubDomains"),
+    (b"expect-ct", b"enforce, max-age=31536000, report-uri=/ct-err"),
     (b"x-permitted-cross-domain-policies", b"none"),
     (b"x-dns-prefetch-control", b"off"),
     (b"origin-agent-cluster", b"?1"),
