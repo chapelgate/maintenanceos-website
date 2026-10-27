@@ -13,7 +13,7 @@ from readiness import report as readiness_report
 from reporting import operational_metrics
 from product_profile import page_title
 from safety_controls import SAFETY_CLEARANCE_REASON_MAX,SafetyStateError,clear_critical_safety,critical_safety_active
-from work_order_text import problem_description_error
+from work_order_text import WORK_ORDER_DESCRIPTION_MAX,problem_description_error
 
 init_db()
 st.set_page_config(page_title=page_title(),layout="wide")
@@ -81,7 +81,7 @@ elif page=="New Work Order":
         residents=s.query(Resident).filter_by(client_id=CLIENT,property_id=pmap[ps].id).all()
         rmap={f"{x.name} — {x.email}":x for x in residents}
         rs=st.selectbox("Resident",list(rmap)) if rmap else None
-        desc=st.text_area("Problem",height=150)
+        desc=st.text_area("Problem",height=150,max_chars=WORK_ORDER_DESCRIPTION_MAX)
         if st.button("Create + triage",type="primary") and desc.strip():
             problem_error=problem_description_error(desc)
             if problem_error:
