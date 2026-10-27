@@ -68,7 +68,7 @@ export default function AccessibilityPage() {
             <li>Baseline CI run 39312522438 (19 October 2026): Home, Create, Demo, Features, Pricing, Security, Accessibility — reported no violations on those seven routes</li>
             <li>Later gate additions: Help (/help/), Subprocessors (/subprocessors/), Vulnerability disclosure (/vulnerability-disclosure/)</li>
             <li>Current WebKit matrix also gates: About, Accessibility, AI receptionist, Blog index, Buyers, Compare index, Contact, Cookies, FAQ, How it works, How we keep control, Industries index, Integrations index, Privacy, Property maintenance software, Status, Terms, Trust</li>
-            <li>Nested sample (mw-156): /industries/landlords/, /blog/ai-voice-demo-browser-only-what-it-means/, /compare/worksmartos-vs-moneypenny/, /integrations/google/</li>
+            <li>Nested sample (mw-156 + mw-157): /industries/landlords/, /industries/housing-associations/, /blog/ai-voice-demo-browser-only-what-it-means/, /blog/why-safety-latches-matter-in-ai-receptionists/, /compare/worksmartos-vs-moneypenny/, /compare/worksmartos-vs-phena/, /integrations/google/, /integrations/outlook/, /help/getting-started/</li>
           </ul>
           <p className="mt-2">
             <strong>Result:</strong> Those gated routes reported no axe
@@ -80,10 +80,10 @@ export default function AccessibilityPage() {
             <strong>Scope limitations:</strong> This is an automated subset
             check on the routes listed in
             <code>tests/webkit-a11y/a11y.test.mjs</code>. A representative
-            nested sample is gated (one industry role, one blog post, one
-            compare vendor page, one integration provider). Other nested or
-            dynamic routes and the dashboard preview are not claimed as
-            covered. It does not test physical iPhone or Mac Safari,
+            nested sample is gated (two industry roles, two blog posts, two
+            compare vendor pages, two integration providers, and one help
+            article). Other nested or dynamic routes and the dashboard
+            preview are not claimed as covered. It does not test physical iPhone or Mac Safari,
             nor any screen reader or assistive technology — those
             remain owner-only checks. It tests axe-core tags <code>wcag2a</code>, <code>wcag2aa</code>,
             <code>wcag21aa</code>, and <code>wcag22aa</code>. That is still an
@@ -101,10 +101,15 @@ export default function AccessibilityPage() {
               gate covers the static routes listed in
               <code>tests/webkit-a11y/a11y.test.mjs</code>, plus a
               representative nested sample: /industries/landlords/,
+              /industries/housing-associations/,
               /blog/ai-voice-demo-browser-only-what-it-means/,
-              /compare/worksmartos-vs-moneypenny/, and /integrations/google/.
+              /blog/why-safety-latches-matter-in-ai-receptionists/,
+              /compare/worksmartos-vs-moneypenny/,
+              /compare/worksmartos-vs-phena/, /integrations/google/,
+              /integrations/outlook/, and /help/getting-started/.
               Other nested blog, compare, industry, and integration pages,
-              and the dashboard preview, are not claimed as covered. Help,
+              remaining help articles beyond getting-started, and the
+              dashboard preview, are not claimed as covered. Help index,
               subprocessors, and vulnerability disclosure remain gated.
             </li>
             <li>
@@ -149,9 +154,10 @@ export default function AccessibilityPage() {
             </li>
             <li>
               <strong>Nested sample gated:</strong> A representative nested
-              sample (one industry, one blog, one compare, one integration)
-              is now in the WebKit axe matrix. Expanding to every nested
-              page remains optional and is not claimed here.
+              sample (two industries, two blogs, two compares, two
+              integrations, one help article) is now in the WebKit axe
+              matrix. Expanding to every nested page remains optional and
+              is not claimed here.
             </li>
             <li>
               <strong>Automated WCAG 2.2 tags enabled:</strong> The WebKit

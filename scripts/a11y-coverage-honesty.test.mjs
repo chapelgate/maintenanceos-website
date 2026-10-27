@@ -22,11 +22,14 @@ test("gated help subprocessors and vuln routes are not listed as uncovered", () 
   assert.match(page, /Later gate additions: Help \(\/help\/\)/);
   assert.match(page, /Subprocessors \(\/subprocessors\/\)/);
   assert.match(page, /Vulnerability disclosure \(\/vulnerability-disclosure\/\)/);
+  assert.match(page, /\/help\/getting-started\//);
   const known = page.slice(page.indexOf("Nested and dynamic routes"));
   const uncoveredList = known.slice(0, known.indexOf("</li>"));
-  assert.doesNotMatch(uncoveredList, /\/help\//);
+  // Sample help article is gated; do not list help index as uncovered.
+  assert.doesNotMatch(uncoveredList, /Help index is not covered/i);
   assert.doesNotMatch(uncoveredList, /\/subprocessors\//);
   assert.doesNotMatch(uncoveredList, /\/vulnerability-disclosure\//);
+  assert.match(webkit, /'\/help\/getting-started\/'/);
 });
 
 test("page does not list WebKit-gated index routes as uncovered", () => {
@@ -48,17 +51,24 @@ test("page stays a voluntary note not a public-sector statement", () => {
   assert.doesNotMatch(page, /NEXT_PUBLIC_PUBLIC_LAUNCH/);
 });
 
-test("mw-156 nested sample is gated and disclosed", () => {
+test("mw-156/157 nested sample is gated and disclosed", () => {
   for (const route of [
     "/industries/landlords/",
+    "/industries/housing-associations/",
     "/blog/ai-voice-demo-browser-only-what-it-means/",
+    "/blog/why-safety-latches-matter-in-ai-receptionists/",
     "/compare/worksmartos-vs-moneypenny/",
+    "/compare/worksmartos-vs-phena/",
     "/integrations/google/",
+    "/integrations/outlook/",
+    "/help/getting-started/",
   ]) {
     assert.match(webkit, new RegExp("'" + route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "'"));
     assert.match(page, new RegExp(route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   assert.match(page, /Nested sample gated/);
+  assert.match(page, /two industr/i);
+  assert.match(page, /help article/i);
   assert.match(page, /representative nested sample/i);
   assert.doesNotMatch(page, /Review nested route coverage/);
 });
