@@ -79,6 +79,15 @@ const pages = [
   '/help/assigning-repairs/',
   '/help/tenant-portal/',
   '/help/user-management/',
+  '/help/api-quickstart/',
+  '/help/configuring-contractors/',
+  '/help/contractor-quotes/',
+  '/help/integration-overview/',
+  '/help/mobile-app/',
+  '/help/notification-settings/',
+  '/help/release-notes/',
+  '/help/reports-analytics/',
+  '/help/webhook-guide/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },

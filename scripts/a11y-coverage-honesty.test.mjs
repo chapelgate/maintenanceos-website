@@ -219,3 +219,23 @@ test("mw-167 help compliance routes are gated and disclosed", () => {
   assert.match(page, /no published price/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });
+
+test("mw-168 help tail routes are gated and disclosed", () => {
+  for (const route of [
+    "/help/api-quickstart/",
+    "/help/configuring-contractors/",
+    "/help/contractor-quotes/",
+    "/help/integration-overview/",
+    "/help/mobile-app/",
+    "/help/notification-settings/",
+    "/help/release-notes/",
+    "/help/reports-analytics/",
+    "/help/webhook-guide/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
+  }
+  assert.match(page, /Help tail gate \(mw-168\)/);
+  assert.match(page, /no published price/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});
