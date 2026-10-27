@@ -640,6 +640,8 @@ def close_work_order(work_order_id,actor_user_id):
 def resolve_escalation(escalation_id,actor_user_id,reason):
     reason=(reason or "").strip()
     if len(reason)<5:return False
+    if reason_has_control_chars(reason):
+        return False
     if len(reason) > ESCALATION_RESOLUTION_MAX:
         return False
     with SessionLocal() as s:
