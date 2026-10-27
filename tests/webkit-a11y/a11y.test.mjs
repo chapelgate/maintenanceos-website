@@ -61,6 +61,12 @@ const pages = [
   '/help/accessibility-features/',
   '/help/troubleshooting-common-issues/',
   '/help/gas-safety-compliance/',
+  '/industries/facilities-management/',
+  '/industries/maintenance-companies/',
+  '/blog/uk-maintenance-regulations-what-property-teams-need-to-know/',
+  '/compare/worksmartos-vs-dialzara/',
+  '/integrations/zapier/',
+  '/help/repair-lifecycle/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },

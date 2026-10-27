@@ -104,9 +104,9 @@ test("mw-160 nested sample wave 3 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-160\)/);
-  assert.match(page, /across (three|four) waves/i);
-  assert.match(page, /(four|six) industr/i);
-  assert.match(page, /(three|four) blogs/i);
+  assert.match(page, /across (three|four|five) waves/i);
+  assert.match(page, /(four|six|all eight) industr/i);
+  assert.match(page, /(three|four|five) blogs/i);
   assert.match(page, /robots noindex/);
   assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
@@ -139,9 +139,9 @@ test("mw-163 nested sample wave 4 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-163\)/);
-  assert.match(page, /across four waves/i);
-  assert.match(page, /six industr/i);
-  assert.match(page, /four blogs/i);
+  assert.match(page, /across (four|five) waves/i);
+  assert.match(page, /(six|all eight) industr/i);
+  assert.match(page, /(four|five) blogs/i);
   assert.match(page, /robots noindex/);
   assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
@@ -158,5 +158,26 @@ test("mw-164 help ops routes are gated and disclosed", () => {
   }
   assert.match(page, /Help ops gate \(mw-164\)/);
   assert.match(page, /no published price/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});
+
+test("mw-165 nested sample wave 5 is gated and disclosed", () => {
+  for (const route of [
+    "/industries/facilities-management/",
+    "/industries/maintenance-companies/",
+    "/blog/uk-maintenance-regulations-what-property-teams-need-to-know/",
+    "/compare/worksmartos-vs-dialzara/",
+    "/integrations/zapier/",
+    "/help/repair-lifecycle/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
+  }
+  assert.match(page, /Nested sample \(mw-165\)/);
+  assert.match(page, /across five waves/i);
+  assert.match(page, /all eight industr/i);
+  assert.match(page, /five blogs/i);
+  assert.match(page, /robots noindex/);
+  assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });
