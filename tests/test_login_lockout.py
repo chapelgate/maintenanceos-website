@@ -1,4 +1,4 @@
-import inspect
+from pathlib import Path
 
 import security
 
@@ -41,8 +41,7 @@ def test_window_expiry_clears_lock():
 
 
 def test_dashboard_auth_uses_lockout():
-    source = Path(__file__).resolve().parents[1] / "dashboard.py"
-    text = source.read_text()
+    text = (Path(__file__).resolve().parents[1] / "dashboard.py").read_text()
     assert "login_is_locked" in text
     assert "record_login_failure" in text
     assert "clear_login_failures" in text
