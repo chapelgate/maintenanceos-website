@@ -43,7 +43,7 @@ from models import (
     UnmatchedInbound,
     WorkOrder,
 )
-from operations import audit
+from operations import audit, reason_has_control_chars
 
 
 class LifecycleRuntimeError(ValueError):
@@ -90,6 +90,8 @@ def create_hold(
         raise LifecycleRuntimeError("invalid_hold_scope")
     if not scope_id or not reason or not actor:
         raise LifecycleRuntimeError("hold_scope_reason_actor_required")
+    if reason_has_control_chars(reason) or reason_has_control_chars(actor) or reason_has_control_chars(scope_id):
+        raise LifecycleRuntimeError("hold_control_chars")
     if len(actor) > HOLD_ACTOR_MAX:
         raise LifecycleRuntimeError("hold_actor_too_long")
     if len(reason) > HOLD_REASON_MAX:
@@ -121,6 +123,8 @@ def release_hold(session, hold_id: int, *, client_id: int, actor: str) -> DataLi
     actor = (actor or "").strip()
     if not actor:
         raise LifecycleRuntimeError("release_hold_actor_required")
+    if reason_has_control_chars(actor):
+        raise LifecycleRuntimeError("hold_control_chars")
     if len(actor) > RELEASE_HOLD_ACTOR_MAX:
         raise LifecycleRuntimeError("release_hold_actor_too_long")
     hold = session.get(DataLifecycleHold, hold_id)
