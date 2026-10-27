@@ -73,6 +73,12 @@ const pages = [
   '/integrations/hubspot/',
   '/help/emergency-procedures/',
   '/help/hmocompliance/',
+  '/help/epc-compliance/',
+  '/help/fire-risk-assessment/',
+  '/help/contractor-compliance/',
+  '/help/assigning-repairs/',
+  '/help/tenant-portal/',
+  '/help/user-management/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
