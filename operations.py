@@ -591,8 +591,7 @@ def record_no_show(work_order_id,actor_user_id,reason):
 
 def close_work_order(work_order_id,actor_user_id):
     with SessionLocal() as s:
-        try:wo=require_noncritical(s,work_order_id,"Work-order closure")
-        except SafetyStateError:return False
+        wo=require_noncritical(s,work_order_id,"Work-order closure")
         user=_authorised_user(s,actor_user_id,wo.client_id,LIFECYCLE_ROLES)
         if not user:return False
         if wo.status!="READY_TO_CLOSE":return False
