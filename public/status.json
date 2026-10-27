@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "product": "MaintenanceOS",
+  "brand": "WorkSmartOS",
+  "publisher": "Chapelgate Limited",
+  "company_number": "12340004",
+  "live": false,
+  "public_launch": false,
+  "sla_claim": false,
+  "uptime_percent": null,
+  "incident_feed": false,
+  "note": "Pre-launch synthetic demo. No live status, uptime figure, or SLA is published."
+}
