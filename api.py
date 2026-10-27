@@ -126,6 +126,9 @@ async def _json_object(request: Request) -> dict:
     return value
 
 
+POSITIVE_INT_MAX = 2_147_483_647
+
+
 def _positive_int(value, name: str) -> int:
     if isinstance(value, bool):
         raise HTTPException(400, f"{name} must be a positive integer")
@@ -133,7 +136,7 @@ def _positive_int(value, name: str) -> int:
         result = int(value)
     except (TypeError, ValueError) as exc:
         raise HTTPException(400, f"{name} must be a positive integer") from exc
-    if result <= 0:
+    if result <= 0 or result > POSITIVE_INT_MAX:
         raise HTTPException(400, f"{name} must be a positive integer")
     return result
 
@@ -370,6 +373,8 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
 @app.post("/contractor/decision",response_class=HTMLResponse)
 def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),decision:str=Form(...),token:str=Form(...)):
     require_contractor_portal()
+    work_order_id=_positive_int(work_order_id,"work_order_id")
+    contractor_id=_positive_int(contractor_id,"contractor_id")
     decision=_require_contractor_decision(decision)
     token=_require_contractor_token(token)
 
@@ -409,6 +414,8 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 @app.post("/contractor/availability",response_class=HTMLResponse)
 def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),start:str=Form(...),end:str=Form(...)):
     require_contractor_portal()
+    work_order_id=_positive_int(work_order_id,"work_order_id")
+    contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     if not isinstance(start,str) or len(start) > AVAILABILITY_DATETIME_TEXT_MAX:
@@ -445,6 +452,8 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 @app.post("/contractor/complete",response_class=HTMLResponse)
 def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
     require_contractor_portal()
+    work_order_id=_positive_int(work_order_id,"work_order_id")
+    contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     note=normalize_completion_note(note)
