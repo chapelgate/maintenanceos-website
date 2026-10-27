@@ -419,8 +419,8 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
-<label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" type="datetime-local" required maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
-<label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" type="datetime-local" required maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <button type="submit">Submit</button></form>""",
     )
 
