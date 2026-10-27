@@ -56,32 +56,35 @@ export default function AccessibilityPage() {
 
         <section aria-labelledby="a11y-run">
           <h2 id="a11y-run" className="text-xl font-semibold text-ink">
-            Automated check — 19 October 2026 (CI run 39312522438)
+            Automated checks (WebKit axe)
           </h2>
           <p className="mt-2">
-            axe-core 4.10.3 ran in Playwright WebKit 26.6 against a local
-            static export of this site, at two viewports (iPhone 13: 390×844;
-            Desktop Safari: 1280×800). The routes tested were:
+            axe-core 4.10.3 ran in Playwright WebKit against a local static
+            export, at two viewports (iPhone 13: 390×844; Desktop Safari:
+            1280×800). Coverage is the estate WebKit axe gate, not a full-site
+            audit.
           </p>
           <ul className="mt-2 list-disc list-inside space-y-1">
-            <li>Home (/) — 2 viewports</li>
-            <li>Create (/create/) — 2 viewports</li>
-            <li>Demo (/demo/) — 2 viewports</li>
-            <li>Features (/features/) — 2 viewports</li>
-            <li>Pricing (/pricing/) — 2 viewports</li>
-            <li>Security (/security/) — 2 viewports</li>
+            <li>Baseline CI run 39312522438 (19 October 2026): Home, Create, Demo, Features, Pricing, Security</li>
+            <li>Later gate additions: Help (/help/), Subprocessors (/subprocessors/), Vulnerability disclosure (/vulnerability-disclosure/)</li>
+            <li>Current WebKit matrix also gates: About, Accessibility, AI receptionist, Blog index, Buyers, Compare index, Contact, Cookies, FAQ, How it works, How we keep control, Industries index, Integrations index, Privacy, Property maintenance software, Status, Terms, Trust</li>
           </ul>
           <p className="mt-2">
-            <strong>Result:</strong> axe-core 4.10.3 reported no violations on those seven routes in that run. Each route returned HTTP 200, had one heading at level 1, and did not overflow horizontally. WebKit recorded no uncaught page error.
+            <strong>Result:</strong> Those gated routes reported no axe
+            violations in their respective runs. Each checked route returned
+            HTTP 200, had one heading at level 1, and did not overflow
+            horizontally. WebKit recorded no uncaught page error.
           </p>
           <p className="mt-2">
             <strong>Scope limitations:</strong> This is an automated subset
-            check. It does not cover the full site (e.g., /faq/, /blog/,
-            /trust/, /compare/, /subprocessors/, /vulnerability-disclosure/,
-            /accessibility/, /cookies/, /terms/, /privacy/). It does not test
-            physical iPhone or Mac Safari, nor any screen reader or assistive
-            technology. It tests only WCAG 2.0 A/AA tags in axe-core, not the
-            full WCAG 2.2 AA criterion set.
+            check on the routes listed in
+            <code>tests/webkit-a11y/a11y.test.mjs</code>. Nested or dynamic
+            routes (individual blog posts, compare vendor pages, industry
+            role pages, integration provider pages, dashboard preview) are
+            not claimed as covered here. It does not test physical iPhone or
+            Mac Safari, nor any screen reader or assistive technology — those
+            remain owner-only checks. It tests only WCAG 2.0 A/AA tags in
+            axe-core, not the full WCAG 2.2 AA criterion set.
           </p>
         </section>
 
@@ -91,10 +94,18 @@ export default function AccessibilityPage() {
           </h2>
           <ul className="mt-2 list-disc list-inside space-y-2">
             <li>
-              <strong>Incomplete route coverage:</strong> The automated suite
-              does not run against /faq/, /blog/, /trust/, /compare/,
-              /subprocessors/, /vulnerability-disclosure/, /accessibility/,
-              /cookies/, /terms/, /privacy/.
+              <strong>Nested and dynamic routes:</strong> The WebKit axe
+              gate covers the static routes listed in
+              <code>tests/webkit-a11y/a11y.test.mjs</code>. Nested or
+              dynamic routes (individual blog posts, compare vendor pages,
+              industry role pages, integration provider pages, dashboard
+              preview) are not claimed as covered here. Help, subprocessors,
+              and vulnerability disclosure are gated.
+            </li>
+            <li>
+              <strong>Owner-only device and AT checks:</strong> Physical
+              Safari/iOS and assistive-technology passes are not claimed from
+              this page. They remain Andy-only launch checks.
             </li>
             <li>
               <strong>WCAG 2.2 criteria not covered:</strong> axe-core tags
@@ -133,9 +144,10 @@ export default function AccessibilityPage() {
               form-label fixes go live.
             </li>
             <li>
-              <strong>Expand automated route coverage:</strong> Add the
-              remaining public routes to the WebKit accessibility test matrix
-              (tests/webkit-a11y/a11y.test.mjs).
+              <strong>Review nested route coverage:</strong> Decide whether
+              individual blog, compare, industry, and integration pages need
+              their own WebKit axe entries beyond the current index matrix in
+              <code>tests/webkit-a11y/a11y.test.mjs</code>.
             </li>
             <li>
               <strong>Upgrade axe-core tags:</strong> Add WCAG 2.2 specific
