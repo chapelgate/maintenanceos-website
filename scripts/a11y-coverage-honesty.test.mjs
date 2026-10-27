@@ -104,7 +104,7 @@ test("mw-160 nested sample wave 3 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-160\)/);
-  assert.match(page, /across (three|four|five|six) waves/i);
+  assert.match(page, /across (three|four|five|six|historical) waves/i);
   assert.match(page, /(four|six|all eight) industr/i);
   assert.match(page, /(three|four|five) blogs/i);
   assert.match(page, /robots noindex/);
@@ -139,7 +139,7 @@ test("mw-163 nested sample wave 4 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-163\)/);
-  assert.match(page, /across (four|five|six) waves/i);
+  assert.match(page, /across (four|five|six|historical) waves/i);
   assert.match(page, /(six|all eight) industr/i);
   assert.match(page, /(four|five) blogs/i);
   assert.match(page, /robots noindex/);
@@ -174,7 +174,7 @@ test("mw-165 nested sample wave 5 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-165\)/);
-  assert.match(page, /across (five|six) waves/i);
+  assert.match(page, /across (five|six|historical) waves/i);
   assert.match(page, /all eight industr/i);
   assert.match(page, /five blogs/i);
   assert.match(page, /robots noindex/);
@@ -195,8 +195,8 @@ test("mw-166 nested sample wave 6 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-166\)/);
-  assert.match(page, /across six waves/i);
-  assert.match(page, /seven\s+compares/i);
+  assert.match(page, /all twenty-seven help articles/i);
+  assert.match(page, /(seven|sixteen)\s+compares/i);
   assert.match(page, /six\s+integrations/i);
   assert.match(page, /robots noindex/);
   assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
@@ -256,5 +256,18 @@ test("mw-169 compare short routes are gated and disclosed", () => {
   }
   assert.match(page, /Compare short-page gate \(mw-169\)/);
   assert.match(page, /no published price/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});
+
+test("mw-170 nested coverage catch-up is disclosed honestly", () => {
+  assert.match(page, /Nested sample gated/);
+  assert.match(page, /Coverage catch-up \(mw-170\)/);
+  assert.match(page, /all twenty-seven help articles/i);
+  assert.match(page, /sixteen\s+compares/i);
+  assert.match(page, /six\s+integrations/i);
+  assert.match(page, /all eight industr/i);
+  assert.match(page, /five blogs/i);
+  assert.match(page, /dashboard preview route is also axe-gated/i);
+  assert.doesNotMatch(page, /remaining help articles beyond the gated sample/i);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });

@@ -90,15 +90,14 @@ export default function AccessibilityPage() {
           <p className="mt-2">
             <strong>Scope limitations:</strong> This is an automated subset
             check on the routes listed in
-            <code>tests/webkit-a11y/a11y.test.mjs</code>. A representative
-            nested sample is gated across six waves (industry roles, blog
-            posts, compare vendor pages, integration providers, and help
-            articles). The dashboard preview route is also axe-gated as a
-            SAMPLE / DEMO page, and the exported /404/ not-found page is
-            axe-gated. Other nested or dynamic routes are not claimed as
-            covered. It does not test physical iPhone or Mac Safari,
-            nor any screen reader or assistive technology — those
-            remain owner-only checks. It tests axe-core tags <code>wcag2a</code>, <code>wcag2aa</code>,
+            <code>tests/webkit-a11y/a11y.test.mjs</code>. Nested sample gated
+            coverage is now complete across the historical waves: all eight
+            industries, five blogs, sixteen compares, six integrations, and
+            all twenty-seven help articles are axe-gated. The dashboard preview route is also axe-gated as a SAMPLE / DEMO page, and the
+            exported /404/ not-found page is axe-gated. Other nested or
+            dynamic routes are not claimed as covered. It does not test
+            physical iPhone or Mac Safari, nor any screen reader or
+            assistive technology — those remain owner-only checks. It tests axe-core tags <code>wcag2a</code>, <code>wcag2aa</code>,
             <code>wcag21aa</code>, and <code>wcag22aa</code>. That is still an
             automated subset, not a full WCAG 2.2 AA conformance claim.
           </p>
@@ -148,10 +147,7 @@ export default function AccessibilityPage() {
               /compare/answerconnect/, /compare/dialzara/, /compare/fasthosts/, /compare/fixflo/, /compare/goodcall/, /compare/moneypenny/, /compare/phena/, /compare/rosie/,
               /dashboard/ (SAMPLE / DEMO preview; noindex), and
               /404/ (exported not-found recovery page; noindex).
-              Other nested blog, compare, industry, and integration pages,
-              and remaining help articles beyond the gated sample, are not
-              claimed as covered. Help index, subprocessors, and
-              vulnerability disclosure remain gated.
+              Help index, subprocessors, and vulnerability disclosure remain gated.
             </li>
             <li>
               <strong>Owner-only device and AT checks:</strong> Physical
@@ -194,12 +190,12 @@ export default function AccessibilityPage() {
               claimed here.
             </li>
             <li>
-              <strong>Nested sample gated:</strong> A representative nested
-              sample across six waves (all eight industries, five blogs, seven
-              compares, six integrations, and help article samples) plus the
+              <strong>Nested sample gated:</strong> Coverage catch-up (mw-170)
+              confirms the representative nested sample across historical waves
+              is complete — all eight industries, five blogs, sixteen compares,
+              six integrations, and all twenty-seven help articles — plus the
               dashboard SAMPLE preview and the exported /404/ not-found page
-              are now in the WebKit axe matrix. Expanding to every nested
-              page remains optional and is not claimed here.
+              are in the WebKit axe matrix. No WCAG 2.2 AA claim.
             </li>
             <li>
               <strong>Automated WCAG 2.2 tags enabled:</strong> The WebKit
