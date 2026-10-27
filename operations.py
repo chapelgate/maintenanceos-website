@@ -505,6 +505,7 @@ def approve_operational_action(approval_id,actor_user_id,reason=""):
 
 
 TRIAGE_URGENCIES = frozenset({"P2", "P3"})
+TRIAGE_URGENCY_MAX = 2
 TRIAGE_REASON_MAX = 1000
 TRIAGE_CATEGORY_MAX = 64
 TRIAGE_TRADE_MAX = 64
@@ -520,6 +521,9 @@ def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
     if len(category) > TRIAGE_CATEGORY_MAX:
         return False
     if len(trade) > TRIAGE_TRADE_MAX:
+        return False
+    urgency = (urgency or "").strip()
+    if len(urgency) > TRIAGE_URGENCY_MAX:
         return False
     if len(reason)<5 or not category or category not in TRIAGE_CATEGORIES or not trade or urgency not in TRIAGE_URGENCIES:return False
     if DECISION_TRADE.get(category) != trade:return False
