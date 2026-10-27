@@ -1,5 +1,5 @@
 - [x] Add CHANNEL_DESCRIPTION_MAX
 - [x] Fail closed on blank/overlong description
 - [x] Add contract tests
-- [ ] Local pytest green
-- [ ] PR ready for council merge
+- [x] Local pytest green
+- [x] PR ready for council merge
