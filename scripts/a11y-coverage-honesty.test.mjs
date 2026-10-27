@@ -239,3 +239,22 @@ test("mw-168 help tail routes are gated and disclosed", () => {
   assert.match(page, /no published price/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });
+
+test("mw-169 compare short routes are gated and disclosed", () => {
+  for (const route of [
+    "/compare/answerconnect/",
+    "/compare/dialzara/",
+    "/compare/fasthosts/",
+    "/compare/fixflo/",
+    "/compare/goodcall/",
+    "/compare/moneypenny/",
+    "/compare/phena/",
+    "/compare/rosie/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
+  }
+  assert.match(page, /Compare short-page gate \(mw-169\)/);
+  assert.match(page, /no published price/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});

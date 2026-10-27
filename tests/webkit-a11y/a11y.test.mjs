@@ -88,6 +88,14 @@ const pages = [
   '/help/release-notes/',
   '/help/reports-analytics/',
   '/help/webhook-guide/',
+  '/compare/answerconnect/',
+  '/compare/dialzara/',
+  '/compare/fasthosts/',
+  '/compare/fixflo/',
+  '/compare/goodcall/',
+  '/compare/moneypenny/',
+  '/compare/phena/',
+  '/compare/rosie/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
