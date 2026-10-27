@@ -32,6 +32,10 @@ EVIDENCE_URL_MAX = 2000
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 AUDIT_DETAIL_MAX = 8000
+ALLOWED_REASON_CONTROLS = {"\t", "\n", "\r"}
+
+def reason_has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 and ch not in ALLOWED_REASON_CONTROLS for ch in value)
 
 def encode_anomaly_reasons(reasons) -> str:
     payload = json.dumps(reasons)
@@ -444,6 +448,8 @@ def confirm_appointment(work_order_id,resident_id,event_key):
 
 def approve_operational_action(approval_id,actor_user_id,reason=""):
     reason=(reason or "").strip()
+    if reason_has_control_chars(reason):
+        return False
     if len(reason) > APPROVAL_REASON_MAX:
         return False
     with SessionLocal() as s:
@@ -518,6 +524,8 @@ TRIAGE_CATEGORIES = frozenset({
 
 def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
     reason=(reason or "").strip();category=(category or "").strip();trade=(trade or "").strip()
+    if reason_has_control_chars(reason):
+        return False
     if len(category) > TRIAGE_CATEGORY_MAX:
         return False
     if len(trade) > TRIAGE_TRADE_MAX:
