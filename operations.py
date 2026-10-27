@@ -25,6 +25,8 @@ RESIDENT_COMMENT_MAX = 4000
 AMOUNT_MAX = 1_000_000
 QUOTE_DESCRIPTION_MAX = 4000
 INVOICE_NUMBER_MAX = 100
+COMPLETION_NOTE_MAX = 4000
+EVIDENCE_URL_MAX = 2000
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 COMPLETION_FINGERPRINT_LEN = 64
@@ -374,9 +376,12 @@ def completion_evidence_fingerprint(note: str, evidence_url: str = "") -> str:
 
 def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
     action_key=(action_key or "").strip()
+    note=(note or "").strip()
+    evidence_url=(evidence_url or "").strip()
     if not action_key or len(action_key) > ACTION_KEY_MAX:return None
+    if not note or len(note) > COMPLETION_NOTE_MAX:return None
+    if len(evidence_url) > EVIDENCE_URL_MAX:return None
     with SessionLocal() as s:
-        if not (note or "").strip():return None
         wo=require_noncritical(s,work_order_id,"Completion submission")
         require_client_resource(s,wo.client_id,work_order_id=wo.id,contractor_id=contractor_id)
         if wo.assigned_contractor_id != contractor_id:return None
