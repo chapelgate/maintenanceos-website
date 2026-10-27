@@ -46,7 +46,6 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 
 There is no public always-on phone number to call on this site.
 
-
 ## Honesty markers (aligned with /release.json and /status.json)
 
 - public_launch: false
