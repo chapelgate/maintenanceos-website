@@ -1,0 +1,2 @@
+- [x] Point security.txt Policy at vulnerability-disclosure
+- [x] Update scripts/security-txt-lock.test.mjs

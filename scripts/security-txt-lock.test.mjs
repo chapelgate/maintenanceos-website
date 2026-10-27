@@ -26,5 +26,5 @@ test("security.txt states pre-launch honesty denials", () => {
   assert.match(txt, /Not a public always-on phone line/i);
   assert.match(txt, /No bug bounty/i);
   assert.match(txt, /No response-time SLA/i);
-  assert.match(txt, /^Policy:\s*https:\/\/worksmartos\.co\.uk\/security\/$/m);
+  assert.match(txt, /^Policy:\s*https:\/\/worksmartos\.co\.uk\/vulnerability-disclosure\/$/m);
 });
