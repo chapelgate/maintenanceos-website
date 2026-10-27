@@ -16,6 +16,8 @@ AI_SIDE_EFFECT_ACTOR_MAX = 100
 def claim_action(session, scope: str, action_key: str, *, client_id=None, work_order_id=None):
     if len(action_key or "") > ACTION_KEY_MAX:
         raise ValueError("Invalid action receipt key")
+    if _has_control_chars(action_key):
+        raise ValueError("action_key_control_chars")
     if len(scope or "") > SCOPE_MAX:
         raise ValueError("Invalid action receipt scope")
     query = session.query(ActionReceipt).filter_by(scope=scope, action_key=action_key, client_id=client_id)
@@ -75,3 +77,7 @@ def set_result_ref(receipt, value) -> None:
     if len(result_ref) > RESULT_REF_MAX:
         raise ValueError("Invalid action receipt result_ref")
     receipt.result_ref = result_ref
+
+
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in value)
