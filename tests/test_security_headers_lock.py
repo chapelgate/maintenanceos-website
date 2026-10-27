@@ -15,6 +15,7 @@ EXPECTED = (
     (b"cross-origin-resource-policy", b"same-origin"),
     (b"cross-origin-embedder-policy", b"require-corp"),
     (b"strict-transport-security", b"max-age=31536000; includeSubDomains"),
+    (b"expect-ct", b"enforce, max-age=31536000, report-uri=/ct-err"),
     (b"x-permitted-cross-domain-policies", b"none"),
     (b"x-dns-prefetch-control", b"off"),
     (b"origin-agent-cluster", b"?1"),
@@ -39,6 +40,7 @@ def test_health_response_carries_locked_headers():
     assert response.headers["cross-origin-resource-policy"] == "same-origin"
     assert response.headers["cross-origin-embedder-policy"] == "require-corp"
     assert response.headers["strict-transport-security"] == "max-age=31536000; includeSubDomains"
+    assert response.headers["expect-ct"] == "enforce, max-age=31536000, report-uri=/ct-err"
     assert response.headers["x-permitted-cross-domain-policies"] == "none"
     assert response.headers["x-dns-prefetch-control"] == "off"
     assert response.headers["origin-agent-cluster"] == "?1"
