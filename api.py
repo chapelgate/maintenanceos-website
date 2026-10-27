@@ -510,7 +510,7 @@ async def confirm(request:Request,client_id=Depends(require_internal_api)):
     work_order_id=_positive_int(d.get("work_order_id"),"work_order_id")
     resolved=d.get("resolved")
     if not isinstance(resolved,bool):raise HTTPException(400,"resolved must be a boolean")
-    comment=_bounded_text(d.get("comment",""),"comment",maximum=RESIDENT_COMMENT_MAX)
+    comment=_reject_control_chars(_bounded_text(d.get("comment",""),"comment",maximum=RESIDENT_COMMENT_MAX),"comment")
     with SessionLocal() as s:
         try:require_client_resource(s,client_id,work_order_id=work_order_id)
         except TenantAccessError as exc:raise HTTPException(403,str(exc))
