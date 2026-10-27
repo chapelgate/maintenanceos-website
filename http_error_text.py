@@ -17,7 +17,7 @@ GITHUB_OAUTH_TOKEN = re.compile(r"\bgho_[A-Za-z0-9]{20,}\b")
 GITHUB_USER_TOKEN = re.compile(r"\bghu_[A-Za-z0-9]{20,}\b")
 GITHUB_SESSION_TOKEN = re.compile(r"\bghs_[A-Za-z0-9]{20,}\b")
 NPM_TOKEN = re.compile(r"\bnpm_[A-Za-z0-9]{20,}\b")
-XOXE_TOKEN = re.compile(r"\bxoxe-[A-Za-z0-9]{10,}\b")
+XOXE_TOKEN = re.compile(r"\bxoxe-[A-Za-z0-9-]{10,}\b")
 SLACK_TOKEN = re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")
 PEM_PRIVATE_KEY = re.compile(r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----.*?-----END [A-Z0-9 ]*PRIVATE KEY-----", re.DOTALL)
 
