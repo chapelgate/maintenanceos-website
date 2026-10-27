@@ -70,6 +70,7 @@ export default function AccessibilityPage() {
             <li>Current WebKit matrix also gates: About, Accessibility, AI receptionist, Blog index, Buyers, Compare index, Contact, Cookies, FAQ, How it works, How we keep control, Industries index, Integrations index, Privacy, Property maintenance software, Status, Terms, Trust</li>
             <li>Nested sample (mw-156 + mw-157): /industries/landlords/, /industries/housing-associations/, /blog/ai-voice-demo-browser-only-what-it-means/, /blog/why-safety-latches-matter-in-ai-receptionists/, /compare/worksmartos-vs-moneypenny/, /compare/worksmartos-vs-phena/, /integrations/google/, /integrations/outlook/, /help/getting-started/</li>
             <li>Dashboard preview (mw-158): /dashboard/ — SAMPLE / DEMO only; robots noindex; not a live customer portal</li>
+            <li>Not-found export (mw-159): /404/ — pre-launch recovery page; robots noindex; no price or live phone</li>
           </ul>
           <p className="mt-2">
             <strong>Result:</strong> Those gated routes reported no axe
@@ -84,8 +85,9 @@ export default function AccessibilityPage() {
             nested sample is gated (two industry roles, two blog posts, two
             compare vendor pages, two integration providers, and one help
             article). The dashboard preview route is also axe-gated as a
-            SAMPLE / DEMO page. Other nested or dynamic routes are not
-            claimed as covered. It does not test physical iPhone or Mac Safari,
+            SAMPLE / DEMO page, and the exported /404/ not-found page is
+            axe-gated. Other nested or dynamic routes are not claimed as
+            covered. It does not test physical iPhone or Mac Safari,
             nor any screen reader or assistive technology — those
             remain owner-only checks. It tests axe-core tags <code>wcag2a</code>, <code>wcag2aa</code>,
             <code>wcag21aa</code>, and <code>wcag22aa</code>. That is still an
@@ -108,8 +110,9 @@ export default function AccessibilityPage() {
               /blog/why-safety-latches-matter-in-ai-receptionists/,
               /compare/worksmartos-vs-moneypenny/,
               /compare/worksmartos-vs-phena/, /integrations/google/,
-              /integrations/outlook/, /help/getting-started/, and
-              /dashboard/ (SAMPLE / DEMO preview; noindex).
+              /integrations/outlook/, /help/getting-started/,
+              /dashboard/ (SAMPLE / DEMO preview; noindex), and
+              /404/ (exported not-found recovery page; noindex).
               Other nested blog, compare, industry, and integration pages,
               and remaining help articles beyond getting-started, are not
               claimed as covered. Help index, subprocessors, and
@@ -159,8 +162,9 @@ export default function AccessibilityPage() {
               <strong>Nested sample gated:</strong> A representative nested
               sample (two industries, two blogs, two compares, two
               integrations, one help article) plus the dashboard SAMPLE
-              preview are now in the WebKit axe matrix. Expanding to every
-              nested page remains optional and is not claimed here.
+              preview and the exported /404/ not-found page are now in
+              the WebKit axe matrix. Expanding to every nested page remains
+              optional and is not claimed here.
             </li>
             <li>
               <strong>Automated WCAG 2.2 tags enabled:</strong> The WebKit
