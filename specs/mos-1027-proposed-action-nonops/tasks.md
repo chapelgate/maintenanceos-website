@@ -1,0 +1,4 @@
+- [x] Add approval_text with PROPOSED_ACTION_MAX helper
+- [x] Re-export from operations; wire non-ops create sites
+- [x] Contract tests green
+- [x] Spec Kit complete
