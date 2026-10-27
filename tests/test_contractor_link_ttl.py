@@ -11,7 +11,8 @@ def test_contractor_link_ttl_bounds():
     source = inspect.getsource(operations.contractor_portal_links)
     assert "contractor_link_expires_at" in source
     sign_source = inspect.getsource(security.sign_link)
-    assert 'os.getenv("CONTRACTOR_LINK_TTL_SECONDS","86400")' in sign_source
+    assert "contractor_link_ttl_seconds()" in sign_source
+    assert 'os.getenv("CONTRACTOR_LINK_TTL_SECONDS"' not in sign_source
 
 
 def test_contractor_link_ttl_accepts_inclusive_range(monkeypatch):

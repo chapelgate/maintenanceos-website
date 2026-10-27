@@ -73,7 +73,7 @@ def sign_link(kind:str,work_order_id:int,subject_id:int,expires_at:int|None=None
     if not app_secret_ready():
         raise RuntimeError("APP_SECRET is not configured securely")
     if expires_at is None:
-        expires_at=int(time.time())+int(os.getenv("CONTRACTOR_LINK_TTL_SECONDS","86400"))
+        expires_at=int(time.time())+contractor_link_ttl_seconds()
     secret=os.getenv('APP_SECRET','').encode()
     msg=f'{kind}:{work_order_id}:{subject_id}:{expires_at}'.encode()
     signature=base64.urlsafe_b64encode(hmac.new(secret,msg,hashlib.sha256).digest()).decode().rstrip('=')
