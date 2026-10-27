@@ -11,7 +11,7 @@ from operations import ESCALATION_RESOLUTION_MAX
 from readiness import report as readiness_report
 from reporting import operational_metrics
 from product_profile import page_title
-from safety_controls import SafetyStateError,clear_critical_safety,critical_safety_active
+from safety_controls import SAFETY_CLEARANCE_REASON_MAX,SafetyStateError,clear_critical_safety,critical_safety_active
 from work_order_text import problem_description_error
 
 init_db()
@@ -103,10 +103,12 @@ elif page=="Work Orders":
                 st.error("Active critical-safety latch. Operational progression and closure are blocked.")
                 clearance_reason=st.text_area("Safety clearance evidence",key=f"safety-clear-{w.id}")
                 if st.button("Record authorised safety clearance",key=f"clear-{w.id}"):
-                    try:
-                        clear_critical_safety(s,w.id,actor_user_id=user.id,reason=clearance_reason,client_id=CLIENT)
-                        s.commit();st.rerun()
-                    except SafetyStateError as exc:st.error(str(exc))
+                    if len(clearance_reason.strip())>SAFETY_CLEARANCE_REASON_MAX:st.error("Safety clearance evidence is too long")
+                    else:
+                        try:
+                            clear_critical_safety(s,w.id,actor_user_id=user.id,reason=clearance_reason,client_id=CLIENT)
+                            s.commit();st.rerun()
+                        except SafetyStateError as exc:st.error(str(exc))
             if w.assigned_contractor_id:
                 st.json(contractor_portal_links(w.id))
             if st.button("Recommend contractor"):
