@@ -38,6 +38,14 @@ const marker = {
   schema: 1,
   commit: sourceCommit(),
   builtAt: new Date().toISOString(),
+  product: "MaintenanceOS",
+  brand: "WorkSmartOS",
+  publisher: "Chapelgate Limited",
+  company_number: "12340004",
+  public_launch: false,
+  commercial_ga: false,
+  live_phone: false,
+  note: "Pre-launch synthetic demo release marker. Not commercially generally available. Not a public always-on phone line.",
 };
 
 fs.writeFileSync(
