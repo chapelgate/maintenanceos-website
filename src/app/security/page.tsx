@@ -128,23 +128,13 @@ export default function SecurityPage() {
           secondaryHref="/vulnerability-disclosure/"
           secondaryLabel="Vulnerability disclosure"
         />
-        <CtaPair
-          className="mt-6"
-          primaryHref="/subprocessors/"
-          primaryLabel="Subprocessor page"
-          secondaryHref="/vulnerability-disclosure/"
-          secondaryLabel="Vulnerability disclosure"
-        />
-
         <p className="mt-4 text-sm text-muted">
-          <a href="/vulnerability-disclosure/" className="underline hover:text-accent">
-            Vulnerability disclosure page
-          </a>
-        </p>
-        <p className="mt-4 text-sm text-muted">
+          Subprocessors for this pre-launch marketing site are listed on the{" "}
           <a href="/subprocessors/" className="underline hover:text-accent">
-            Subprocessor page
+            subprocessor page
           </a>
+          . That page is not a live operations console and does not claim Cyber
+          Essentials certification.
         </p>
       </section>
     </>
