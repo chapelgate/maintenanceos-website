@@ -36,6 +36,11 @@ const pages = [
   '/blog/ai-voice-demo-browser-only-what-it-means/',
   '/compare/worksmartos-vs-moneypenny/',
   '/integrations/google/',
+  '/industries/housing-associations/',
+  '/blog/why-safety-latches-matter-in-ai-receptionists/',
+  '/compare/worksmartos-vs-phena/',
+  '/integrations/outlook/',
+  '/help/getting-started/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
