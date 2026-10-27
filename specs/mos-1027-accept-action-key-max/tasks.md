@@ -1,0 +1,3 @@
+- [x] Add action_key max validation in accept_contractor.
+- [x] Add tests.
+- [x] Run acceptance.
