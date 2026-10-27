@@ -408,6 +408,8 @@ def _apply_decision(session, *, client_id: int, job_id: int, decision) -> bool:
     reason = (decision.reason or "").strip()
     if not reason:
         raise LifecycleRuntimeError("lifecycle_decision_reason_required")
+    if reason_has_control_chars(reason):
+        raise LifecycleRuntimeError("lifecycle_decision_control_chars")
     record_id = (decision.record_id or "").strip()
     if not record_id:
         raise LifecycleRuntimeError("lifecycle_decision_record_id_required")
