@@ -6,7 +6,9 @@ from models import SessionLocal, WorkOrder, Approval, Escalation, AuditEvent, Co
 from lifecycle import transition_work_order
 from lifecycle_rules import transition_allowed
 from safety_controls import enforce_latched_state, latch_critical_safety
+from escalation_text import bounded_escalation_reason
 from approval_text import bounded_proposed_action
+from escalation_text import bounded_escalation_reason
 
 RED_RULES=[
  ("GAS_SMELL",["smell gas","smell of gas","gas smell","gas leak","smells of gas","gas fumes"],"Suspected gas escape"),
@@ -155,7 +157,7 @@ def apply_intake_rules(work_order_id):
         if result["safety_flags"] or prior_safety_flags:
             latch_critical_safety(s,wo,prior_safety_flags+result["safety_flags"],"Decision Engine")
             if not s.query(Escalation).filter_by(work_order_id=wo.id,level="RED",status="OPEN").first():
-                s.add(Escalation(work_order_id=wo.id,level="RED",reason=json.dumps(result["safety_flags"])))
+                s.add(Escalation(work_order_id=wo.id,level="RED",reason=bounded_escalation_reason(json.dumps(result["safety_flags"]))))
             if not s.query(Approval).filter_by(work_order_id=wo.id,approval_type="SAFETY",status="PENDING").first():
                 s.add(Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="SAFETY",
                                proposed_action=bounded_proposed_action("Human safety review"),reason=json.dumps(result["safety_flags"])))
@@ -169,7 +171,7 @@ def apply_intake_rules(work_order_id):
                 wo.safety_flags="[]";wo.urgency=result["urgency"]
                 transition_work_order(s,wo,"HUMAN_REVIEW",actor="Decision Engine",reason="Deterministic human escalation")
             if not s.query(Escalation).filter_by(work_order_id=wo.id,level=level,status="OPEN").first():
-                s.add(Escalation(work_order_id=wo.id,level=level,reason=json.dumps(result["human_escalation_flags"])))
+                s.add(Escalation(work_order_id=wo.id,level=level,reason=bounded_escalation_reason(json.dumps(result["human_escalation_flags"]))))
             if not s.query(Approval).filter_by(work_order_id=wo.id,approval_type="HUMAN_ESCALATION",status="PENDING").first():
                 s.add(Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="HUMAN_ESCALATION",
                                proposed_action=bounded_proposed_action("Human review required"),reason=json.dumps(result["human_escalation_flags"])))
