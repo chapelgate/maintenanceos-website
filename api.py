@@ -127,6 +127,7 @@ async def _json_object(request: Request) -> dict:
 
 
 POSITIVE_INT_MAX = 2_147_483_647
+POSITIVE_INT_DIGITS = len(str(POSITIVE_INT_MAX))
 
 
 def _positive_int(value, name: str) -> int:
@@ -362,8 +363,8 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
         f"Confirm {label}",
         f"""<h1 id=\"confirm-heading\">Confirm action for job #{work_order_id}</h1>
 <form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/decision" aria-labelledby="confirm-heading">
-<input type="hidden" name="work_order_id" value="{work_order_id}">
-<input type="hidden" name="contractor_id" value="{contractor_id}">
+<input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
+<input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="decision" value="{decision}" maxlength="{CONTRACTOR_DECISION_MAX}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
 <button type="submit">{label}</button></form>""",
@@ -403,8 +404,8 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
         f"Availability for job #{work_order_id}",
         f"""<h1>Submit availability for job #{work_order_id}</h1>
 <form method="{CONTRACTOR_FORM_METHOD}">
-<input type="hidden" name="work_order_id" value="{work_order_id}">
-<input type="hidden" name="contractor_id" value="{contractor_id}">
+<input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
+<input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
 <label for="start">Start (YYYY-MM-DD HH:MM)</label><input id="start" name="start" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <label for="end">End (YYYY-MM-DD HH:MM)</label><input id="end" name="end" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
@@ -441,8 +442,8 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
     return _portal_page(
         f"Complete job #{work_order_id}",
         f"""<h1>Complete job #{work_order_id}</h1><form method="{CONTRACTOR_FORM_METHOD}">
-<input type="hidden" name="work_order_id" value="{work_order_id}">
-<input type="hidden" name="contractor_id" value="{contractor_id}">
+<input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
+<input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}">
 <label for="note">Completion note</label><textarea id="note" name="note" maxlength="{COMPLETION_NOTE_MAX}"></textarea><br>
 <label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url" maxlength="{EVIDENCE_URL_MAX}"><br>
