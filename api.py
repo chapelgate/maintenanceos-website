@@ -179,6 +179,7 @@ _ALLOWED_CONTROLS = frozenset("\t\n\r")
 _BIDI_CONTROLS = frozenset("\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069")
 _ZW_FORMAT = frozenset("\u200b\u200c\u200d\u200e\u200f\ufeff\u2060")
 _SOFT_HYPHEN = "\u00ad"
+_LINE_PARA_SEP = frozenset("\u2028\u2029")
 
 
 def _reject_control_chars(value: str, name: str) -> str:
@@ -188,6 +189,7 @@ def _reject_control_chars(value: str, name: str) -> str:
         or ch in _BIDI_CONTROLS
         or ch in _ZW_FORMAT
         or ch == _SOFT_HYPHEN
+        or ch in _LINE_PARA_SEP
         for ch in value
     ):
         raise HTTPException(400, f"{name} contains control characters")
