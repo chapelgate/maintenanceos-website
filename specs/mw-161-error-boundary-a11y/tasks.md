@@ -1,5 +1,5 @@
 # Tasks
-- [ ] error.tsx a11y behaviour
-- [ ] global-error.tsx a11y behaviour
-- [ ] Honesty lock test
-- [ ] Local npm test
+- [x] error.tsx a11y behaviour
+- [x] global-error.tsx a11y behaviour
+- [x] Honesty lock test
+- [x] Local npm test
