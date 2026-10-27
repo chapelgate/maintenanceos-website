@@ -1,0 +1,3 @@
+- [x] Reproduce full-suite 629/630 failure on bot-rejected browser fallback
+- [x] Raise test requestMs to 20_000 (above production default 18_000)
+- [x] Verify npm test 630/630 and lint 0 errors

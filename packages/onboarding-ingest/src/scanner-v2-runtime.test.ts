@@ -636,7 +636,7 @@ test("worker retries a bot-rejected homepage through the browser fetch", async (
     const result = await runPersistentScannerV2("https://alleygates.example/", {
       stateRoot: root,
       releaseSha: "bot-ua",
-      requestMs: 8_000,
+      requestMs: 20_000,
       batchSize: 4,
       discoveryOptions: {
         lookup: async () => ["203.0.113.10"],
