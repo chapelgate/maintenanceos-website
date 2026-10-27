@@ -4,6 +4,7 @@ ACTION_KEY_MAX = 200
 DETAIL_MAX = 4000
 ACTION_ACTOR_MAX = 100
 ACTION_TYPE_MAX = 64
+ACTION_STATUS_MAX = 16
 
 
 from sqlalchemy.exc import IntegrityError
@@ -59,6 +60,8 @@ def record_action_result(
         raise ValueError("Action type exceeds maximum length")
     if action_type not in CONFIRMABLE_ACTIONS:
         raise ValueError("Unknown confirmable action")
+    if len(status) > ACTION_STATUS_MAX:
+        raise ValueError("Action status exceeds maximum length")
     if status not in ACTION_STATES:
         raise ValueError("Unknown action state")
     if not action_key:
