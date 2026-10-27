@@ -737,7 +737,7 @@ async def pilot_synthetic_email_proof(request: Request):
     body = {}
     with suppress(Exception):
         body = await _json_object(request)
-    marker = _bounded_text(body.get("marker") or f"P0-PROOF-{os.urandom(4).hex()}", "marker", required=True, maximum=PILOT_MARKER_MAX)
+    marker = _reject_control_chars(_bounded_text(body.get("marker") or f"P0-PROOF-{os.urandom(4).hex()}", "marker", required=True, maximum=PILOT_MARKER_MAX), "marker")
     # Build a minimal synthetic call session for chapelgate tenant and dispatch.
     from call_notifications import dispatch_internal_call_email
     from landlord_pilot_guards import can_create_landlord_property
