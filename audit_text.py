@@ -72,6 +72,8 @@ def redact_detail(detail: str) -> str:
     value = MAILGUN_KEY.sub("[REDACTED]", value)
     value = DIGITALOCEAN_TOKEN.sub("[REDACTED]", value)
     value = SLACK_TOKEN.sub("[REDACTED]", value)
+    value = AUTH0_TOKEN.sub("[REDACTED]", value)
+    value = OKTA_TOKEN.sub("[REDACTED]", value)
     value = SHOPIFY_TOKEN.sub("[REDACTED]", value)
     value = PYPI_TOKEN.sub("[REDACTED]", value)
     value = PEM_PRIVATE_KEY.sub("[REDACTED]", value)
