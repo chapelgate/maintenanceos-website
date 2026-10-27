@@ -183,6 +183,7 @@ def _reject_control_chars(value: str, name: str) -> str:
     return value
 
 AUTHORIZATION_HEADER_MAX = 512
+PILOT_PROOF_TOKEN_MAX = 512
 TWILIO_SIGNATURE_MAX = 512
 
 
@@ -262,6 +263,14 @@ def normalize_evidence_url(value) -> str:
 def require_contractor_portal():
     if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").strip().lower() != "true":
         raise HTTPException(503, "Contractor portal is disabled")
+
+
+def _require_pilot_proof_token(token):
+    if not isinstance(token, str):
+        raise HTTPException(400, "X-Pilot-Proof-Token must be text")
+    if len(token) > PILOT_PROOF_TOKEN_MAX:
+        raise HTTPException(400, "X-Pilot-Proof-Token is too long")
+    return _reject_control_chars(token, "X-Pilot-Proof-Token")
 
 
 def _require_twilio_signature(signature):
@@ -740,7 +749,7 @@ async def pilot_synthetic_email_proof(request: Request):
     and does not consume the 10-call pilot ceiling. Token-gated only.
     """
     expected = (os.getenv("PILOT_SYNTHETIC_PROOF_TOKEN") or "").strip()
-    provided = (request.headers.get("X-Pilot-Proof-Token") or "").strip()
+    provided = _require_pilot_proof_token((request.headers.get("X-Pilot-Proof-Token") or "").strip())
     if not expected or not provided or not hmac.compare_digest(provided, expected):
         raise HTTPException(404, "Not found")
     from pilot.runtime_guard import is_pilot_mode_armed
