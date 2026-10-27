@@ -7,8 +7,8 @@ from lifecycle import transition_work_order
 from lifecycle_rules import transition_allowed
 from safety_controls import enforce_latched_state, latch_critical_safety
 from escalation_text import bounded_escalation_reason
+from approval_text import bounded_approval_reason
 from approval_text import bounded_proposed_action
-from escalation_text import bounded_escalation_reason
 
 RED_RULES=[
  ("GAS_SMELL",["smell gas","smell of gas","gas smell","gas leak","smells of gas","gas fumes"],"Suspected gas escape"),
@@ -160,7 +160,7 @@ def apply_intake_rules(work_order_id):
                 s.add(Escalation(work_order_id=wo.id,level="RED",reason=bounded_escalation_reason(json.dumps(result["safety_flags"]))))
             if not s.query(Approval).filter_by(work_order_id=wo.id,approval_type="SAFETY",status="PENDING").first():
                 s.add(Approval(client_id=wo.client_id,work_order_id=wo.id,approval_type="SAFETY",
-                               proposed_action=bounded_proposed_action("Human safety review"),reason=json.dumps(result["safety_flags"])))
+                               proposed_action=bounded_proposed_action("Human safety review"),reason=bounded_approval_reason(json.dumps(result["safety_flags"]))))
         elif enforce_latched_state(s,wo):
             pass
         elif result["human_escalation_flags"]:
