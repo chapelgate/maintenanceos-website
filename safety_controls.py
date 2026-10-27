@@ -31,6 +31,8 @@ def latch_critical_safety(session, work_order: WorkOrder, new_flags: list, actor
     actor = (actor or "").strip()
     if not actor or len(actor) > SAFETY_LATCH_ACTOR_MAX:
         raise SafetyStateError("Safety latch actor invalid")
+    if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in actor):
+        raise SafetyStateError("Safety latch actor contains control characters")
     with session.no_autoflush:
         state = session.get(CriticalSafetyState, work_order.id)
     if not new_flags and not (state and state.active):
