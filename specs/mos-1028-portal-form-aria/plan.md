@@ -1,4 +1,4 @@
 # Plan
-1. Add aria-labelledby on availability/complete forms.
+1. Add heading ids and aria-labelledby on availability/complete forms.
 2. Add tests.
-3. Verify regression with portal a11y suite.
+3. Verify with contractor portal a11y regression.
