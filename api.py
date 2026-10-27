@@ -557,7 +557,7 @@ async def messaging_inbound(request:Request):
     if not targets_dedicated_test_number(params):
         raise HTTPException(403,"Request is not for the dedicated test number")
     sender=_bounded_text(str(form.get("From","") or ""),"From",required=True,maximum=MESSAGING_FROM_MAX)
-    body=_bounded_text(form.get("Body",""),"Body",maximum=MESSAGING_BODY_MAX)
+    body=_reject_control_chars(_bounded_text(form.get("Body",""),"Body",maximum=MESSAGING_BODY_MAX),"body")
     media=_bounded_text(str(form.get("MediaUrl0","") or ""),"MediaUrl0",maximum=MESSAGING_MEDIA_URL_MAX)
     channel="WHATSAPP" if sender.startswith("whatsapp:") else "SMS"
     phone=sender.replace("whatsapp:","")
