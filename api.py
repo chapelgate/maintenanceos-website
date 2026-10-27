@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 from webhook_security import public_provider_ingress_ready,targets_dedicated_test_number,validate_twilio
 from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
 from channels import resident_by_phone,create_from_channel
-from identity import postcode_matches
+from postcode_normalise import postcode_matches, normalise_postcode
 from readiness import report as readiness_report
 from call_capacity import (
     CapacityRejected,
@@ -614,7 +614,7 @@ async def voice_media_stream(websocket:WebSocket):
 async def identity_postcode(request:Request,client_id=Depends(require_internal_api)):
     d=await _json_object(request)
     rid=_positive_int(d.get("resident_id"),"resident_id")
-    supplied=_bounded_text(d.get("postcode"),"postcode",required=True,maximum=16)
+    supplied=_bounded_text(d.get("postcode"),"postcode",required=True,maximum=20)
     with SessionLocal() as s:
         r=s.query(Resident).filter_by(id=rid,client_id=client_id).first()
         if not r:raise HTTPException(404,"Resident not found")
