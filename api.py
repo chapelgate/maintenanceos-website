@@ -193,6 +193,7 @@ def require_internal_api(request:Request):
     authorization=request.headers.get("Authorization","")
     if not isinstance(authorization,str) or len(authorization) > AUTHORIZATION_HEADER_MAX:
         raise HTTPException(401,"Invalid internal API credentials")
+    authorization=_reject_control_chars(authorization,"Authorization")
     supplied=authorization[7:] if authorization.startswith("Bearer ") else ""
     if not supplied or not hmac.compare_digest(supplied,expected):
         raise HTTPException(401,"Invalid internal API credentials")
