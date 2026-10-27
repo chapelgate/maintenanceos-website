@@ -31,3 +31,11 @@ def test_contractor_link_ttl_out_of_range_uses_one_day(monkeypatch):
         assert security.contractor_link_ttl_seconds() == security.CONTRACTOR_LINK_TTL_DEFAULT
     monkeypatch.delenv("CONTRACTOR_LINK_TTL_SECONDS", raising=False)
     assert security.contractor_link_ttl_seconds() == security.CONTRACTOR_LINK_TTL_DEFAULT
+
+def test_sign_link_default_ttl_uses_clamped_helper(monkeypatch):
+    monkeypatch.setenv("APP_SECRET", "s" * 32)
+    monkeypatch.setenv("CONTRACTOR_LINK_TTL_SECONDS", "999999999")
+    token = security.sign_link("accept", 1, 2, expires_at=None)
+    expiry = int(token.split(".", 1)[0])
+    now = int(__import__("time").time())
+    assert abs(expiry - (now + security.CONTRACTOR_LINK_TTL_DEFAULT)) < 3

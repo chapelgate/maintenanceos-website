@@ -1,5 +1,5 @@
 # Tasks
 - [x] Spec
-- [x] Edit sign_link to use ttl func
-- [x] Add tests
+- [x] Wire clamped TTL into sign_link
+- [x] Update tests
 - [x] Verify
