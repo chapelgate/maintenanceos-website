@@ -1,0 +1,3 @@
+- [x] Update public/.well-known/security.txt
+- [x] Extend lock test
+- [x] Verify with node --test
