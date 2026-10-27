@@ -43,6 +43,12 @@ const pages = [
   '/help/getting-started/',
   '/dashboard/',
   '/404/',
+  '/industries/councils/',
+  '/industries/property-managers/',
+  '/blog/structured-repair-intake-vs-free-text-forms/',
+  '/compare/worksmartos-vs-answerconnect/',
+  '/integrations/calcom/',
+  '/help/data-security/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
@@ -94,6 +100,7 @@ test.describe('WebKit accessibility checks', () => {
           // Check initial state: menu closed (details does not have open attribute)
           const isOpenInitially = await details.getAttribute('open') !== null;
           // We don't fail if it's open initially, we just note the state
+          void isOpenInitially;
           
           // Open menu with Enter
           await summary.focus();
