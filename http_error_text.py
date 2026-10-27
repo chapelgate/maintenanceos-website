@@ -9,6 +9,9 @@ PHONE_VALUE = re.compile(r"(?<!\w)\+[1-9][0-9]{7,14}(?!\w)")
 PROVIDER_ID = re.compile(r"\b(?:AC|CA|MZ|SM)[0-9a-fA-F]{16,}\b")
 
 
+HTTP_ERROR_DETAIL_MAX = 2000
+
+
 def sanitize_http_detail(detail: object) -> object:
     if not isinstance(detail, str):
         return detail
@@ -17,4 +20,7 @@ def sanitize_http_detail(detail: object) -> object:
     value = OPENAI_KEY.sub("[REDACTED]", value)
     value = EMAIL_VALUE.sub("[REDACTED]", value)
     value = PHONE_VALUE.sub("[REDACTED]", value)
-    return PROVIDER_ID.sub("[REDACTED]", value)
+    value = PROVIDER_ID.sub("[REDACTED]", value)
+    if len(value) > HTTP_ERROR_DETAIL_MAX:
+        return value[:HTTP_ERROR_DETAIL_MAX]
+    return value

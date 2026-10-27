@@ -1,0 +1,3 @@
+- [x] Add HTTP_ERROR_DETAIL_MAX and clip after redact
+- [x] Contract tests green
+- [x] Spec Kit complete
