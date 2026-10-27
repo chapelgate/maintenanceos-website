@@ -2,6 +2,7 @@ import json
 import hashlib
 ACTION_KEY_MAX = 200
 DETAIL_MAX = 4000
+ACTION_ACTOR_MAX = 100
 
 
 from sqlalchemy.exc import IntegrityError
@@ -20,6 +21,7 @@ from models import (
 
 ACTION_STATES = {"REQUESTED", "PENDING", "ATTEMPTED", "FAILED", "SUCCEEDED", "CANCELLED", "UNKNOWN"}
 PROVIDER_REFERENCE_MAX = 200
+ACTION_ACTOR_MAX = 100
 CONFIRMABLE_ACTIONS = {
     "contractor_contacted",
     "contractor_dispatched",
@@ -51,6 +53,7 @@ def record_action_result(
     action_key = (action_key or "").strip()
     status = (status or "").strip().upper()
     provider_reference = (provider_reference or "").strip()
+    actor = (actor or "").strip()
     if action_type not in CONFIRMABLE_ACTIONS:
         raise ValueError("Unknown confirmable action")
     if status not in ACTION_STATES:
@@ -59,6 +62,8 @@ def record_action_result(
         raise ValueError("Action result requires an idempotency key")
     if len(action_key) > ACTION_KEY_MAX:
         raise ValueError("Action key exceeds maximum length")
+    if not actor or len(actor) > ACTION_ACTOR_MAX:
+        raise ValueError("Action actor invalid")
     if len(detail) > DETAIL_MAX:
         raise ValueError("Action detail exceeds maximum length")
     if len(provider_reference) > PROVIDER_REFERENCE_MAX:
