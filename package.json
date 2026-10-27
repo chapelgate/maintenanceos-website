@@ -32,6 +32,7 @@
     "release:preflight": "node scripts/release-preflight.mjs",
     "release:verify": "node scripts/deployment-verifier.mjs",
     "rollback:plan": "node scripts/rollback-plan.mjs",
+    "rollback:evidence": "node scripts/write-rollback-evidence.mjs",
     "audit:ci": "node scripts/audit-ci.mjs",
     "manager:monitor": "node scripts/website-manager-loop.mjs monitor",
     "manager:preflight": "node scripts/website-manager-loop.mjs preflight",
