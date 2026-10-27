@@ -41,6 +41,37 @@ def verify_password(password:str,stored:str)->bool:
     except Exception:
         return False
 
+
+LOGIN_LOCKOUT_MAX_ATTEMPTS = 5
+LOGIN_LOCKOUT_WINDOW_SECONDS = 900
+_login_failures: dict[str, list[float]] = {}
+
+
+def _login_key(email: str) -> str:
+    return hashlib.sha256((email or "").strip().lower().encode()).hexdigest()
+
+
+def login_is_locked(email: str, *, now: float | None = None) -> bool:
+    key = _login_key(email)
+    stamp = time.time() if now is None else now
+    window_start = stamp - LOGIN_LOCKOUT_WINDOW_SECONDS
+    attempts = [t for t in _login_failures.get(key, []) if t >= window_start]
+    _login_failures[key] = attempts
+    return len(attempts) >= LOGIN_LOCKOUT_MAX_ATTEMPTS
+
+
+def record_login_failure(email: str, *, now: float | None = None) -> None:
+    key = _login_key(email)
+    stamp = time.time() if now is None else now
+    window_start = stamp - LOGIN_LOCKOUT_WINDOW_SECONDS
+    attempts = [t for t in _login_failures.get(key, []) if t >= window_start]
+    attempts.append(stamp)
+    _login_failures[key] = attempts
+
+
+def clear_login_failures(email: str) -> None:
+    _login_failures.pop(_login_key(email), None)
+
 CONTRACTOR_LINK_TTL_DEFAULT = 86400
 CONTRACTOR_LINK_TTL_MIN = 300
 CONTRACTOR_LINK_TTL_MAX = 604800
