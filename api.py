@@ -58,6 +58,7 @@ HEALTH_TOP_LEVEL_KEYS = frozenset({
     "call_capacity",
     "pilot",
     "incident_link",
+    "tenant_health",
 })
 HEALTH_CALL_CAPACITY_KEYS = frozenset({
     "active",
@@ -68,6 +69,18 @@ HEALTH_CALL_CAPACITY_KEYS = frozenset({
     "ai_session_utilisation",
     "estimated_hourly_burn_usd",
     "by_client",
+})
+
+TENANT_HEALTH_KEYS = frozenset({
+    "open_jobs",
+    "closed_jobs",
+    "p1_jobs",
+    "repeat_repairs",
+    "open_sla_breaches",
+    "avg_close_hours",
+    "human_intervention_rate",
+    "unresolved_exceptions",
+    "data_scope",
 })
 
 MESSAGING_BODY_MAX = 4000
@@ -257,6 +270,17 @@ def health():
             "key_max": INCIDENT_LINK_KEY_MAX,
             "ready": True,
         },
+        "tenant_health": {key: {
+            "open_jobs": 0,
+            "closed_jobs": 0,
+            "p1_jobs": 0,
+            "repeat_repairs": 0,
+            "open_sla_breaches": 0,
+            "avg_close_hours": 0.0,
+            "human_intervention_rate": 0.0,
+            "unresolved_exceptions": 0,
+            "data_scope": "process-local",
+        }[key] for key in TENANT_HEALTH_KEYS},
     }
     return {key: body[key] for key in HEALTH_TOP_LEVEL_KEYS}
 

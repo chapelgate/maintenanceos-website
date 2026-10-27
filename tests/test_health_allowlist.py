@@ -24,6 +24,7 @@ def test_health_top_level_and_capacity_keys_are_allowlisted():
     body = TestClient(api.app).get("/health").json()
     assert set(body) == set(api.HEALTH_TOP_LEVEL_KEYS)
     assert set(body["call_capacity"]) == set(api.HEALTH_CALL_CAPACITY_KEYS)
+    assert set(body["tenant_health"]) == set(api.TENANT_HEALTH_KEYS)
 
 
 def test_health_body_has_no_secret_like_keys():
@@ -42,3 +43,15 @@ def test_health_ok_and_version_types():
     assert isinstance(body["active_calls"], int)
     assert isinstance(body["call_capacity"], dict)
     assert isinstance(body["pilot"], dict)
+    tenant_health = body["tenant_health"]
+    assert tenant_health["data_scope"] == "process-local"
+    assert all(isinstance(tenant_health[key], int) for key in (
+        "open_jobs",
+        "closed_jobs",
+        "p1_jobs",
+        "repeat_repairs",
+        "open_sla_breaches",
+        "unresolved_exceptions",
+    ))
+    assert isinstance(tenant_health["avg_close_hours"], float)
+    assert isinstance(tenant_health["human_intervention_rate"], float)
