@@ -1,70 +1,26 @@
 "use client";
 
-import { FormEvent, useId, useRef, useState, useSyncExternalStore } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 
 type ChatWidgetProps = {
   title?: string;
-  placeholder?: string;
-  pageContext?: string;
 };
 
 const subscribeHydration = () => () => {};
 const clientHydratedSnapshot = () => true;
 const serverHydratedSnapshot = () => false;
 
-export function ChatWidget({
-  title = "Chat with us",
-  placeholder = "Describe your issue…",
-  pageContext,
-}: ChatWidgetProps) {
+export function ChatWidget({ title = "Chat with us" }: ChatWidgetProps) {
   useSyncExternalStore(
     subscribeHydration,
     clientHydratedSnapshot,
     serverHydratedSnapshot,
   );
   const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState("");
-  const formRef = useRef<HTMLFormElement>(null);
-  const messageRef = useRef<HTMLTextAreaElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const errorId = useId();
-
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-
-    const trimmedMessage = message.trim();
-    if (!trimmedMessage) {
-      setError("Enter a message.");
-      messageRef.current?.focus();
-      return;
-    }
-
-    setStatus("submitting");
-
-    setStatus("success");
-    setMessage("");
-    formRef.current?.reset();
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      if (formRef.current) {
-        formRef.current.requestSubmit();
-      }
-    }
-  }
 
   function handleTriggerClick() {
     setIsOpen((prev) => !prev);
-    if (!isOpen) {
-      setTimeout(() => messageRef.current?.focus(), 0);
-    }
   }
 
   function handleTriggerKeyDown(e: React.KeyboardEvent<HTMLButtonElement>) {
@@ -72,49 +28,6 @@ export function ChatWidget({
       e.preventDefault();
       handleTriggerClick();
     }
-  }
-
-  if (status === "success") {
-    return (
-      <div
-        className="mos-chat-widget fixed bottom-4 right-4 z-50"
-        role="region"
-        aria-label="Chat widget"
-      >
-        <div className="mos-glass rounded-[var(--mos-radius-lg)] border border-border p-5 min-w-[320px] max-w-[400px] shadow-lg">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-semibold text-ink">{title}</h3>
-            <button
-              type="button"
-              onClick={() => {
-                setStatus("idle");
-                setIsOpen(false);
-              }}
-              className="text-muted hover:text-ink transition-colors"
-              aria-label="Close chat"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <p className="mt-3 text-sm text-ink">
-            Online chat is not connected on this static site.
-          </p>
-        </div>
-      </div>
-    );
   }
 
   return (

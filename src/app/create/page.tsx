@@ -165,7 +165,7 @@ export default function CreateReceptionistPage() {
           </p>
         </section>
       </div>
-      <ChatWidget pageContext="create" title="Questions about the preview?" />
+      <ChatWidget title="Questions about the preview?" />
     </>
   );
 }
