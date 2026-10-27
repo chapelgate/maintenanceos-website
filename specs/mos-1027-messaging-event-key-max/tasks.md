@@ -1,0 +1,4 @@
+- [x] Spec
+- [x] Edit api.messaging_event_key and messaging_inbound
+- [x] Add tests
+- [x] Verify

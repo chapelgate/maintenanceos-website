@@ -20,7 +20,7 @@ from tenant_security import TenantAccessError,configured_voice_client_id,interna
 from dotenv import load_dotenv
 from webhook_security import public_provider_ingress_ready,targets_dedicated_test_number,validate_twilio
 from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
-from channels import resident_by_phone,create_from_channel
+from channels import EVENT_KEY_MAX,resident_by_phone,create_from_channel
 from postcode_normalise import postcode_matches
 from readiness import report as readiness_report
 from call_capacity import (
@@ -84,6 +84,19 @@ TENANT_HEALTH_KEYS = frozenset({
 })
 
 MESSAGING_BODY_MAX = 4000
+MESSAGING_EVENT_KEY_MAX = EVENT_KEY_MAX
+
+
+def messaging_event_key(message_sid, channel, phone, body) -> str:
+    sid = str(message_sid or "").strip()
+    if len(sid) > MESSAGING_EVENT_KEY_MAX:
+        raise HTTPException(400, "MessageSid is too long")
+    if sid:
+        return sid
+    digest = hashlib.sha256(f"{channel}:{phone}:{body}".encode()).hexdigest()[:40]
+    return f"msg:{digest}"
+
+
 AMOUNT_MAX = 1_000_000
 QUOTE_DESCRIPTION_MAX = 4000
 RESIDENT_COMMENT_MAX = 4000
@@ -511,10 +524,14 @@ async def messaging_inbound(request:Request):
                 ))
                 s.commit()
         return Response('<?xml version="1.0" encoding="UTF-8"?><Response><Message>Thanks. Your report has been received for review.</Message></Response>',media_type="application/xml")
+    event_key=messaging_event_key(form.get("MessageSid",""),channel,phone,body)
     with SessionLocal() as s:
         r=s.query(Resident).filter_by(id=rid).first()
-        create_from_channel(r.client_id,r.property_id,r.id,channel,body,participant=phone,media_url=media,identity_verified=False,
-                            event_key=str(form.get("MessageSid","") or f"message:{channel}:{phone}:{body}"))
+        try:
+            create_from_channel(r.client_id,r.property_id,r.id,channel,body,participant=phone,media_url=media,identity_verified=False,
+                                event_key=event_key)
+        except ValueError as exc:
+            raise HTTPException(400,str(exc)) from exc
     return Response('<?xml version="1.0" encoding="UTF-8"?><Response><Message>Thanks. Your report has been received for review.</Message></Response>',media_type="application/xml")
 
 def _schedule_pending_voice_lease_cleanup(call_sid: str, call_session_id: int) -> None:
