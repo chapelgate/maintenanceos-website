@@ -35,7 +35,7 @@ export default function StatusPage() {
           >
             /status.json
           </a>{" "}
-          sets live false, sla_claim false, and uptime_percent null. It does
+          sets live false, sla_claim false, commercial_ga false, live_phone false, and uptime_percent null. It does
           not publish an SLA or an uptime figure.
         </p>
         <section aria-labelledby="status-components">
