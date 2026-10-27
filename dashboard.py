@@ -5,7 +5,7 @@ from decision_engine import CATEGORIES,TRADE,apply_intake_rules
 from operations import *
 from sla import sla_status
 from security import verify_password
-from idempotency import ai_side_effects_enabled,set_ai_side_effects
+from idempotency import AI_SIDE_EFFECT_REASON_MAX,ai_side_effects_enabled,set_ai_side_effects
 from readiness import report as readiness_report
 from reporting import operational_metrics
 from product_profile import page_title
@@ -242,6 +242,8 @@ elif page=="System Health":
         control_reason=st.text_input("Control change reason")
         desired=not enabled
         if st.button("Enable AI side effects" if desired else "Disable AI side effects"):
-            if len(control_reason.strip())<5:st.error("A substantive reason is required")
+            reason=control_reason.strip()
+            if len(reason)<5:st.error("A substantive reason is required")
+            elif len(reason)>AI_SIDE_EFFECT_REASON_MAX:st.error("Control change reason is too long")
             else:
-                set_ai_side_effects(s,desired,actor=f"User:{user.id}",reason=control_reason);s.commit();st.rerun()
+                set_ai_side_effects(s,desired,actor=f"User:{user.id}",reason=reason);s.commit();st.rerun()
