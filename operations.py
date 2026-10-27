@@ -24,6 +24,7 @@ REOPEN_REASON_MAX = 1000
 RESIDENT_COMMENT_MAX = 4000
 AMOUNT_MAX = 1_000_000
 QUOTE_DESCRIPTION_MAX = 4000
+INVOICE_NUMBER_MAX = 100
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 COMPLETION_FINGERPRINT_LEN = 64
@@ -230,8 +231,12 @@ def submit_quote(work_order_id,contractor_id,amount,description):
         s.commit();return q.id
 
 def invoice_qa(work_order_id,contractor_id,invoice_number,amount,description):
+    invoice_number=(invoice_number or "").strip()
+    description=description or ""
+    if not invoice_number or len(invoice_number) > INVOICE_NUMBER_MAX:return None
+    if len(description) > QUOTE_DESCRIPTION_MAX:return None
+    if not math.isfinite(amount) or amount<=0 or amount>AMOUNT_MAX:return None
     with SessionLocal() as s:
-        if not (invoice_number or "").strip() or not math.isfinite(amount):return None
         wo=require_noncritical(s,work_order_id,"Invoice processing")
         require_client_resource(s,wo.client_id,work_order_id=wo.id,contractor_id=contractor_id)
         if wo.assigned_contractor_id != contractor_id:return None
