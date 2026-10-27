@@ -40,6 +40,7 @@ SECURITY_HEADERS = (
     (b"cross-origin-embedder-policy", b"require-corp"),
     (b"strict-transport-security", b"max-age=31536000; includeSubDomains"),
     (b"x-permitted-cross-domain-policies", b"none"),
+    (b"x-dns-prefetch-control", b"off"),
 )
 REQUEST_ID = re.compile(r"^[A-Za-z0-9._-]{1,64}$")
 
