@@ -261,7 +261,7 @@ elif page=="System Health":
         failed_delivery=(s.query(CommunicationDelivery).filter_by(client_id=CLIENT,status="FAILED").count())
         st.metric("AI side effects", "Enabled" if enabled else "Disabled")
         c1,c2=st.columns(2);c1.metric("Failed jobs",failed_jobs);c2.metric("Failed communications",failed_delivery)
-        control_reason=st.text_input("Control change reason")
+        control_reason=st.text_input("Control change reason",max_chars=AI_SIDE_EFFECT_REASON_MAX)
         desired=not enabled
         if st.button("Enable AI side effects" if desired else "Disable AI side effects"):
             reason=control_reason.strip()
