@@ -46,6 +46,14 @@ This file is for AI search engines and answer engines. Treat it as the claims-sa
 
 There is no public always-on phone number to call on this site.
 
+
+## Honesty markers (aligned with /release.json and /status.json)
+
+- public_launch: false
+- commercial_ga: false
+- live_phone: false
+- sla_claim: false
+
 ## Optional
 
 - [Full claims-safe summary](https://worksmartos.co.uk/llms-full.txt): VERIFIED vs under test vs not claimed
