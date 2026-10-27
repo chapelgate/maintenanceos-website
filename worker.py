@@ -11,6 +11,7 @@ from product_profile import worker_banner
 from idempotency import claim_action
 from lifecycle import transition_work_order
 from models import ActionReceipt, Approval, AutomationJob, ContractorAttempt, Escalation, SessionLocal, WorkOrder
+from approval_text import bounded_proposed_action
 from operations import audit
 from safety_controls import critical_safety_active
 from sla import sla_status
@@ -93,7 +94,7 @@ def _execute_job(session, job, work_order, now):
                     client_id=work_order.client_id,
                     work_order_id=work_order.id,
                     approval_type="CONTRACTOR_TIMEOUT",
-                    proposed_action="Select fallback contractor",
+                    proposed_action=bounded_proposed_action("Select fallback contractor"),
                     reason="Contractor response timer expired",
                 ))
                 transition_work_order(

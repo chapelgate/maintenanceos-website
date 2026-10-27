@@ -14,6 +14,7 @@ from idempotency import ACTION_KEY_MAX, claim_action, set_result_ref
 from safety_controls import SafetyStateError,critical_safety_active,require_noncritical
 from tenant_security import TenantAccessError,require_client_resource
 from audit_text import redact_detail
+from approval_text import PROPOSED_ACTION_MAX, bounded_proposed_action
 from request_context import request_id as current_request_id
 APPROVAL_REASON_MAX = 1000
 CANCEL_REASON_MAX = 1000
@@ -30,15 +31,7 @@ EVIDENCE_URL_MAX = 2000
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 AUDIT_DETAIL_MAX = 8000
-PROPOSED_ACTION_MAX = 1000
 COMPLETION_FINGERPRINT_LEN = 64
-
-
-def bounded_proposed_action(value: str) -> str:
-    text = (value or "").strip()
-    if not text or len(text) > PROPOSED_ACTION_MAX:
-        raise ValueError("proposed_action invalid")
-    return text
 
 
 def audit(s, woid, actor, event, detail=""):
