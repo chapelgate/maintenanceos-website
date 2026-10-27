@@ -104,9 +104,9 @@ test("mw-160 nested sample wave 3 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-160\)/);
-  assert.match(page, /across three waves/i);
-  assert.match(page, /four industr/i);
-  assert.match(page, /three blogs/i);
+  assert.match(page, /across (three|four) waves/i);
+  assert.match(page, /(four|six) industr/i);
+  assert.match(page, /(three|four) blogs/i);
   assert.match(page, /robots noindex/);
   assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
@@ -123,5 +123,26 @@ test("mw-162 help billing/getting-help/faq are gated and disclosed", () => {
   }
   assert.match(page, /Help billing gate \(mw-162\)/);
   assert.match(page, /no published price/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});
+
+test("mw-163 nested sample wave 4 is gated and disclosed", () => {
+  for (const route of [
+    "/industries/holiday-lets/",
+    "/industries/letting-agents/",
+    "/blog/uk-property-maintenance-software-landscape-2026/",
+    "/compare/worksmartos-vs-fixflo/",
+    "/integrations/calendly/",
+    "/help/safety-latches/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
+  }
+  assert.match(page, /Nested sample \(mw-163\)/);
+  assert.match(page, /across four waves/i);
+  assert.match(page, /six industr/i);
+  assert.match(page, /four blogs/i);
+  assert.match(page, /robots noindex/);
+  assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });

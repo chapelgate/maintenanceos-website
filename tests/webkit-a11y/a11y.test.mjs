@@ -52,6 +52,12 @@ const pages = [
   '/help/billing-subscriptions/',
   '/help/getting-help/',
   '/help/faq/',
+  '/industries/holiday-lets/',
+  '/industries/letting-agents/',
+  '/blog/uk-property-maintenance-software-landscape-2026/',
+  '/compare/worksmartos-vs-fixflo/',
+  '/integrations/calendly/',
+  '/help/safety-latches/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
