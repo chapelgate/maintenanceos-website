@@ -1,0 +1,25 @@
+# WorkSmartOS / MaintenanceOS — humans.txt
+# Pre-launch synthetic demo. Not commercially generally available.
+# Not a public always-on phone line. No SLA claim.
+# See /release.json and /status.json.
+
+/* TEAM */
+Publisher: Chapelgate Technologies (Chapelgate Limited)
+Brand: WorkSmartOS
+Product: MaintenanceOS (pre-launch)
+Contact: info@chapelgatetechnologies.com
+
+/* SITE */
+Standards: HTML5, CSS, TypeScript, Next.js static export
+Location: United Kingdom
+
+/* CONTACT */
+General human enquiries: info@chapelgatetechnologies.com
+Not a GA support desk. Not a monitored support phone. No response-time SLA.
+Create from website: /create/
+Early demo request: /demo/
+Vulnerability disclosure: /vulnerability-disclosure/
+Security policy: /.well-known/security.txt
+
+/* THANKS */
+Built for UK property maintenance teams. Pre-launch only.
