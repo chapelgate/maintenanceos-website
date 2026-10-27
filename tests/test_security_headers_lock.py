@@ -11,6 +11,7 @@ EXPECTED = (
     (b"cache-control", b"no-store"),
     (b"permissions-policy", b"camera=(), microphone=(), geolocation=()"),
     (b"cross-origin-opener-policy", b"same-origin"),
+    (b"content-security-policy", b"default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"),
 )
 
 
@@ -27,6 +28,7 @@ def test_health_response_carries_locked_headers():
     assert response.headers["cache-control"] == "no-store"
     assert response.headers["permissions-policy"] == "camera=(), microphone=(), geolocation=()"
     assert response.headers["cross-origin-opener-policy"] == "same-origin"
+    assert response.headers["content-security-policy"] == "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
     assert "x-request-id" in response.headers
 
 
