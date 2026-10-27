@@ -21,7 +21,7 @@ st.set_page_config(page_title=page_title(),layout="wide")
 def auth():
     if "uid" in st.session_state:return True
     st.title(page_title())
-    e=st.text_input("Email");p=st.text_input("Password",type="password")
+    e=st.text_input("Email",max_chars=EMAIL_LOOKUP_MAX);p=st.text_input("Password",type="password",max_chars=LOGIN_PASSWORD_MAX)
     if st.button("Sign in",type="primary"):
         if len(e or "")>EMAIL_LOOKUP_MAX:st.error("Email is too long")
         elif len(p or "")>LOGIN_PASSWORD_MAX:st.error("Password is too long")
