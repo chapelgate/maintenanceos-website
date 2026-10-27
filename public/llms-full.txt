@@ -121,3 +121,10 @@ Tenant isolation, human clearance, and audit evidence exist in product source as
 ## Pricing
 
 Public list pricing is not published. Create from website, or request pricing. No invented £ figures, no live phone included in a plan, not general availability. Live telephony and calendar booking are coming / early access. No self-serve checkout on this marketing site.
+
+## Honesty markers (aligned with /release.json and /status.json)
+
+- public_launch: false
+- commercial_ga: false
+- live_phone: false
+- sla_claim: false

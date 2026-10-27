@@ -29,3 +29,20 @@ test("robots keeps dashboard out of the crawl map", () => {
   assert.match(robots, /"\/api\/"/);
   assert.doesNotMatch(robots, /allow:\s*"\/dashboard/);
 });
+
+test("llms.txt honesty markers align with release/status denials", () => {
+  assert.match(llms, /public_launch:\s*false/);
+  assert.match(llms, /commercial_ga:\s*false/);
+  assert.match(llms, /live_phone:\s*false/);
+  assert.match(llms, /sla_claim:\s*false/);
+  assert.match(llms, /\/release\.json/);
+  assert.match(llms, /\/status\.json/);
+});
+
+test("llms-full.txt honesty markers align with release/status denials", () => {
+  const full = fs.readFileSync(path.join(ROOT, "public/llms-full.txt"), "utf8");
+  assert.match(full, /public_launch:\s*false/);
+  assert.match(full, /commercial_ga:\s*false/);
+  assert.match(full, /live_phone:\s*false/);
+  assert.match(full, /sla_claim:\s*false/);
+});
