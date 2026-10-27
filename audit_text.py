@@ -31,6 +31,8 @@ HUGGINGFACE_TOKEN = re.compile(r"\bhf_[A-Za-z0-9_-]{16,}\b")
 MAILGUN_KEY = re.compile(r"\bkey-[A-Za-z0-9]{16,}\b")
 DIGITALOCEAN_TOKEN = re.compile(r"\bdop_v1_[A-Za-z0-9]{16,}\b")
 
+AUTH0_TOKEN = re.compile(r"\bauth0_[A-Za-z0-9]{20,}\b")
+OKTA_TOKEN = re.compile(r"\bokta_[A-Za-z0-9]{20,}\b")
 PYPI_TOKEN = re.compile(r"\bpypi-[A-Za-z0-9_-]{20,}\b")
 SHOPIFY_TOKEN = re.compile(r"\b(?:shpat|shpss|shpca|shppa)_[A-Za-z0-9]{20,}\b")
 SLACK_TOKEN = re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")
