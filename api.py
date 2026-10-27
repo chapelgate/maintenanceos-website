@@ -693,7 +693,7 @@ async def voice_media_stream(websocket:WebSocket):
 async def identity_postcode(request:Request,client_id=Depends(require_internal_api)):
     d=await _json_object(request)
     rid=_positive_int(d.get("resident_id"),"resident_id")
-    supplied=_bounded_text(d.get("postcode"),"postcode",required=True,maximum=POSTCODE_MAX)
+    supplied=_reject_control_chars(_bounded_text(d.get("postcode"),"postcode",required=True,maximum=POSTCODE_MAX),"postcode")
     with SessionLocal() as s:
         r=s.query(Resident).filter_by(id=rid,client_id=client_id).first()
         if not r:raise HTTPException(404,"Resident not found")
