@@ -344,7 +344,7 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     if raw_incident is None:
         incident_key=None
     else:
-        incident_key=_bounded_text(raw_incident,"incident_key",maximum=INCIDENT_LINK_KEY_MAX) or None
+        incident_key=_reject_control_chars(_bounded_text(raw_incident,"incident_key",maximum=INCIDENT_LINK_KEY_MAX),"incident_key") or None
     try:
         wid=create_from_channel(client_id,property_id,resident_id,source,description,
                                 identity_verified=identity_verified,
