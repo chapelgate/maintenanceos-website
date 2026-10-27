@@ -1,0 +1,34 @@
+# WORKSMARTOS MAINTENANCEOS — HUMANS.TXT
+# Pre-launch build — not commercially generally available
+# Not a public always-on phone line
+# No SLA claim
+
+# TEAM
+Lead: Andrew Cartwright (WorkSmartOS / Chapelgate)
+Security: security@worksmartos.co.uk
+Product: product@worksmartos.co.uk
+
+# SITE
+Standards: HTML5, CSS3, ES2024, Next.js 15
+Components: React 19, Tailwind CSS 4
+AI: On-device classification + server rules; no autonomous dispatch
+Robots: /robots.txt allows major AI crawlers; disallows /dashboard and /api
+Security: /security.txt and /.well-known/ai.txt with release/status links
+Status: /status.json · Release: /release.json
+
+# CONTACT
+General: contact@worksmartos.co.uk
+Launch list: /create/
+Early demo: /demo/
+Vulnerability disclosure: /vulnerability-disclosure/
+
+# LEGAL
+Publisher: Chapelgate Technologies (Chapelgate Limited)
+Brand: WorkSmartOS
+Product: MaintenanceOS (pre-launch)
+Terms: /terms/ (draft)
+Privacy: /privacy/ (draft)
+Cookies: /cookies/ (draft)
+
+# THANK YOU
+Built in the open. See https://github.com/chapelgate/maintenanceos-website
