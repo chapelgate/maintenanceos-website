@@ -10,6 +10,7 @@ PROVIDER_ID = re.compile(r"\b(?:AC|CA|MZ|SM)[0-9a-fA-F]{16,}\b")
 AWS_ACCESS_KEY = re.compile(r"\b(?:AKIA|ASIA)[0-9A-Z]{16}\b")
 JWT_VALUE = re.compile(r"\beyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b")
 GOOGLE_API_KEY = re.compile(r"\bAIza[0-9A-Za-z_-]{10,}\b")
+GITHUB_PAT = re.compile(r"\bghp_[A-Za-z0-9]{20,}\b")
 
 
 def redact_detail(detail: str) -> str:
@@ -22,4 +23,5 @@ def redact_detail(detail: str) -> str:
     value = AWS_ACCESS_KEY.sub("[REDACTED]", value)
     value = JWT_VALUE.sub("[REDACTED]", value)
     value = GOOGLE_API_KEY.sub("[REDACTED]", value)
+    value = GITHUB_PAT.sub("[REDACTED]", value)
     return value
