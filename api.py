@@ -160,7 +160,10 @@ INVOICE_NUMBER_MAX = 100
 INCIDENT_LINK_KEY_MAX = 200
 
 
-def _bounded_text(value, name: str, *, required=False, maximum=10000) -> str:
+BOUNDED_TEXT_DEFAULT_MAX = 10000
+
+
+def _bounded_text(value, name: str, *, required=False, maximum=BOUNDED_TEXT_DEFAULT_MAX) -> str:
     if not isinstance(value, str):
         raise HTTPException(400, f"{name} must be text")
     result = value.strip()
