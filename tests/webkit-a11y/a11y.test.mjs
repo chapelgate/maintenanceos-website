@@ -58,6 +58,9 @@ const pages = [
   '/compare/worksmartos-vs-fixflo/',
   '/integrations/calendly/',
   '/help/safety-latches/',
+  '/help/accessibility-features/',
+  '/help/troubleshooting-common-issues/',
+  '/help/gas-safety-compliance/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },
