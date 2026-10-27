@@ -27,6 +27,8 @@ def transition_work_order(
         raise ValueError("transition actor invalid")
     if len(reason) > TRANSITION_REASON_MAX:
         raise ValueError("transition reason invalid")
+    if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in actor + reason):
+        raise ValueError("transition control characters")
 
     old_status = work_order.status
     if old_status == new_status:
