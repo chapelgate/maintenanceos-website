@@ -26,11 +26,19 @@ RESIDENT_COMMENT_MAX = 4000
 AMOUNT_MAX = 1_000_000
 QUOTE_DESCRIPTION_MAX = 4000
 INVOICE_NUMBER_MAX = 100
+ANOMALY_REASONS_MAX = 2000
 COMPLETION_NOTE_MAX = 4000
 EVIDENCE_URL_MAX = 2000
 AUDIT_ACTOR_MAX = 100
 AUDIT_EVENT_MAX = 100
 AUDIT_DETAIL_MAX = 8000
+
+def encode_anomaly_reasons(reasons) -> str:
+    payload = json.dumps(reasons)
+    if len(payload) > ANOMALY_REASONS_MAX:
+        raise ValueError("anomaly_reasons invalid")
+    return payload
+
 COMPLETION_FINGERPRINT_LEN = 64
 
 
@@ -272,8 +280,10 @@ def invoice_qa(work_order_id,contractor_id,invoice_number,amount,description):
         if amount<=0:
             reasons.append("invalid_amount");score=1
         score=min(score,1)
+        try:reasons_payload=encode_anomaly_reasons(reasons)
+        except ValueError:return None
         inv=Invoice(work_order_id=work_order_id,contractor_id=contractor_id,invoice_number=invoice_number,
-                    amount=amount,description=description,anomaly_score=score,anomaly_reasons=json.dumps(reasons),
+                    amount=amount,description=description,anomaly_score=score,anomaly_reasons=reasons_payload,
                     status="HUMAN_REVIEW" if score>=.25 else "READY_FOR_CLIENT")
         s.add(inv);s.flush()
         if identity.first_invoice_id is None:identity.first_invoice_id=inv.id
