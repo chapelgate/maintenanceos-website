@@ -1,0 +1,5 @@
+- [x] Require LIFECYCLE_ROLES on close_work_order
+- [x] Handle SafetyStateError fail-closed
+- [x] Add contract tests
+- [x] Local pytest green
+- [x] PR ready for council merge
