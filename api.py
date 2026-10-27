@@ -183,6 +183,7 @@ def _reject_control_chars(value: str, name: str) -> str:
     return value
 
 AUTHORIZATION_HEADER_MAX = 512
+TWILIO_SIGNATURE_MAX = 512
 
 
 def require_internal_api(request:Request):
@@ -261,6 +262,14 @@ def normalize_evidence_url(value) -> str:
 def require_contractor_portal():
     if os.getenv("ENABLE_CONTRACTOR_PORTAL", "false").strip().lower() != "true":
         raise HTTPException(503, "Contractor portal is disabled")
+
+
+def _require_twilio_signature(signature):
+    if not isinstance(signature, str):
+        raise HTTPException(400, "X-Twilio-Signature must be text")
+    if len(signature) > TWILIO_SIGNATURE_MAX:
+        raise HTTPException(400, "X-Twilio-Signature is too long")
+    return _reject_control_chars(signature, "X-Twilio-Signature")
 
 
 def _require_contractor_token(token):
@@ -554,7 +563,7 @@ async def messaging_inbound(request:Request):
     require_public_provider_ingress()
     form=await request.form()
     params=dict(form)
-    sig=request.headers.get("X-Twilio-Signature","")
+    sig=_require_twilio_signature(request.headers.get("X-Twilio-Signature",""))
     if not validate_twilio(str(request.url),params,sig):
         raise HTTPException(403,"Invalid Twilio signature")
     if not targets_dedicated_test_number(params):
@@ -633,7 +642,7 @@ async def voice_inbound(request:Request):
     require_public_provider_ingress()
     form=await request.form()
     params=dict(form)
-    sig=request.headers.get("X-Twilio-Signature","")
+    sig=_require_twilio_signature(request.headers.get("X-Twilio-Signature",""))
     if not validate_twilio(str(request.url),params,sig):
         raise HTTPException(403,"Invalid Twilio signature")
     if not targets_dedicated_test_number(params):
@@ -677,7 +686,7 @@ async def voice_stream_status(request:Request):
     require_public_provider_ingress()
     form=await request.form()
     params=dict(form)
-    sig=request.headers.get("X-Twilio-Signature","")
+    sig=_require_twilio_signature(request.headers.get("X-Twilio-Signature",""))
     if not validate_twilio(str(request.url),params,sig):
         raise HTTPException(403,"Invalid Twilio signature")
     record_stream_status(
