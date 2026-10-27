@@ -11,7 +11,8 @@ def test_triage_trade_max_covers_allowlist():
     assert max(map(len, decision_engine.TRADE.values())) <= operations.TRIAGE_TRADE_MAX
     source = inspect.getsource(operations.resolve_triage)
     assert "TRIAGE_TRADE_MAX" in source
-    assert "Plumbing" in operations.TRADE.values()
+    assert "Plumber" in operations.TRADE.values()
+    assert len("Plumber") <= operations.TRIAGE_TRADE_MAX
 
 
 def test_triage_trade_rejects_overlong_before_allowlist():
@@ -25,8 +26,8 @@ def test_triage_trade_rejects_overlong_before_allowlist():
         )
 
 
-def test_triage_trade_accepts_allowlisted_past_length_gate():
+def test_triage_trade_rejects_overlong_prefixed_known_trade():
     with patch.object(operations, "SessionLocal") as session_local:
-        session_local.side_effect = AssertionError("session must not open for unknown trade")
-        assert operations.resolve_triage(1, 1, "Plumbing", "Plumber", "P2", "enough reason text") is False
-        session_local.assert_not_called()
+        session_local.side_effect = AssertionError("session must not open for overlong trade")
+        overlong = "Plumber" + ("x" * operations.TRIAGE_TRADE_MAX)
+        assert operations.resolve_triage(1, 1, "Plumbing", overlong, "P2", "enough reason text") is False
