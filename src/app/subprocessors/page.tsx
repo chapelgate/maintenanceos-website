@@ -6,7 +6,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Subprocessors",
   description:
-    "Draft planned subprocessor register for the WorkSmartOS website and MaintenanceOS product. Pending legal review — not a live processing claim for Twilio, SendGrid, or Google on this static pre-launch site.",
+    "Draft planned subprocessor register. Pending legal review — not a live Twilio, SendGrid, or Google processing claim on this pre-launch site.",
   path: "/subprocessors/",
 });
 
@@ -17,7 +17,7 @@ export default function SubprocessorsPage() {
         data={contentPageJsonLd(
           "/subprocessors/",
           "Subprocessors (Draft)",
-          "Draft planned subprocessor register for the WorkSmartOS website and MaintenanceOS product. Pending legal review — not a live processing claim for Twilio, SendGrid, or Google on this static pre-launch site.",
+          "Draft planned subprocessor register. Pending legal review — not a live Twilio, SendGrid, or Google processing claim on this pre-launch site.",
           [{ name: "Subprocessors", path: "/subprocessors/" }],
         )}
       />

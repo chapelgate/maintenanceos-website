@@ -1,0 +1,3 @@
+- [x] Shorten metadata description ≤160
+- [x] Add lock test
+- [x] Verify audit-slices meta subtest
