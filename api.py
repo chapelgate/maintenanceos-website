@@ -237,7 +237,7 @@ def normalize_evidence_url(value) -> str:
         return ""
     if not isinstance(value, str):
         raise HTTPException(400, "evidence_url must be text")
-    result = value.strip()
+    result = _reject_control_chars(value.strip(), "evidence_url")
     if not result:
         return ""
     if len(result) > EVIDENCE_URL_MAX:
