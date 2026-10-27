@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 from webhook_security import public_provider_ingress_ready,targets_dedicated_test_number,validate_twilio
 from ingress_security import HttpSecurityBoundary,MAX_REQUEST_BYTES
 from channels import resident_by_phone,create_from_channel
-from postcode_normalise import postcode_matches, normalise_postcode
+from postcode_normalise import postcode_matches
 from readiness import report as readiness_report
 from call_capacity import (
     CapacityRejected,
