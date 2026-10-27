@@ -701,7 +701,7 @@ async def identity_postcode(request:Request,client_id=Depends(require_internal_a
 
 @app.post("/controls/ai-side-effects")
 async def control_ai_side_effects(request:Request,client_id=Depends(require_internal_api)):
-    d=await _json_object(request);enabled=d.get("enabled");reason=_bounded_text(d.get("reason",""),"reason",required=True,maximum=AI_SIDE_EFFECT_REASON_MAX)
+    d=await _json_object(request);enabled=d.get("enabled");reason=_reject_control_chars(_bounded_text(d.get("reason",""),"reason",required=True,maximum=AI_SIDE_EFFECT_REASON_MAX),"reason")
     if not isinstance(enabled,bool):raise HTTPException(400,"enabled must be a boolean")
     if not reason:raise HTTPException(400,"A reason is required")
     if enabled and os.getenv("ALLOW_REMOTE_AI_SIDE_EFFECT_ENABLE", "false").lower() != "true":
