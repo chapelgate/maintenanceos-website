@@ -321,6 +321,7 @@ def resident_confirmation(work_order_id,resolved,comment=""):
 def accept_contractor(work_order_id,contractor_id,action_key):
     action_key=(action_key or "").strip()
     if not action_key or len(action_key) > ACTION_KEY_MAX:return False
+    if reason_has_control_chars(action_key):return False
     with SessionLocal() as s:
         try: wo=require_noncritical(s,work_order_id,"Contractor acceptance")
         except SafetyStateError:return False
@@ -351,6 +352,7 @@ def accept_contractor(work_order_id,contractor_id,action_key):
 def decline_contractor(work_order_id,contractor_id,action_key):
     action_key=(action_key or "").strip()
     if not action_key or len(action_key) > ACTION_KEY_MAX:return False
+    if reason_has_control_chars(action_key):return False
     with SessionLocal() as s:
         try:wo=require_noncritical(s,work_order_id,"Contractor decline")
         except SafetyStateError:return False
@@ -371,6 +373,7 @@ def decline_contractor(work_order_id,contractor_id,action_key):
 def submit_availability(work_order_id,contractor_id,start,end,action_key):
     action_key=(action_key or "").strip()
     if not action_key or len(action_key) > ACTION_KEY_MAX:return None
+    if reason_has_control_chars(action_key):return None
     with SessionLocal() as s:
         wo=require_noncritical(s,work_order_id,"Availability submission")
         require_client_resource(s,wo.client_id,work_order_id=wo.id,contractor_id=contractor_id)
@@ -399,6 +402,7 @@ def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
     note=(note or "").strip()
     evidence_url=(evidence_url or "").strip()
     if not action_key or len(action_key) > ACTION_KEY_MAX:return None
+    if reason_has_control_chars(action_key):return None
     if not note or len(note) > COMPLETION_NOTE_MAX:return None
     if len(evidence_url) > EVIDENCE_URL_MAX:return None
     with SessionLocal() as s:
@@ -430,6 +434,7 @@ def submit_completion(work_order_id,contractor_id,note,evidence_url,action_key):
 def confirm_appointment(work_order_id,resident_id,event_key):
     event_key=(event_key or "").strip()
     if not event_key or len(event_key) > ACTION_KEY_MAX:return False
+    if reason_has_control_chars(event_key):return False
     with SessionLocal() as s:
         wo=require_noncritical(s,work_order_id,"Appointment confirmation")
         require_client_resource(s,wo.client_id,work_order_id=wo.id,resident_id=resident_id)
