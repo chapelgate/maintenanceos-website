@@ -32,6 +32,10 @@ const pages = [
   '/terms/',
   '/trust/',
   '/vulnerability-disclosure/',
+  '/industries/landlords/',
+  '/blog/ai-voice-demo-browser-only-what-it-means/',
+  '/compare/worksmartos-vs-moneypenny/',
+  '/integrations/google/',
 ];
 const viewports = [
   { name: 'iPhone 13', width: 390, height: 844 },

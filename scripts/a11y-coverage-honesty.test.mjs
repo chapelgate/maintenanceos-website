@@ -47,3 +47,18 @@ test("page stays a voluntary note not a public-sector statement", () => {
   assert.match(page, /not a public-sector accessibility statement/i);
   assert.doesNotMatch(page, /NEXT_PUBLIC_PUBLIC_LAUNCH/);
 });
+
+test("mw-156 nested sample is gated and disclosed", () => {
+  for (const route of [
+    "/industries/landlords/",
+    "/blog/ai-voice-demo-browser-only-what-it-means/",
+    "/compare/worksmartos-vs-moneypenny/",
+    "/integrations/google/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "'"));
+    assert.match(page, new RegExp(route.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+  assert.match(page, /Nested sample gated/);
+  assert.match(page, /representative nested sample/i);
+  assert.doesNotMatch(page, /Review nested route coverage/);
+});
