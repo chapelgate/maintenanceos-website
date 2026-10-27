@@ -265,7 +265,7 @@ def require_contractor_portal():
 def _require_contractor_token(token):
     if not isinstance(token,str) or len(token) > CONTRACTOR_LINK_TOKEN_MAX:
         raise HTTPException(400,"token is too long")
-    return token
+    return _reject_control_chars(token, "token")
 
 
 CONTRACTOR_DECISION_MAX = 16
