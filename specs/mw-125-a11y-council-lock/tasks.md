@@ -1,0 +1,3 @@
+- [x] Restore council-decisions locked phrases on accessibility page
+- [x] Verify council-decisions + a11y-coverage-honesty locks
+- [x] Verify full npm test green

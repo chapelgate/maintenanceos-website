@@ -59,13 +59,13 @@ export default function AccessibilityPage() {
             Automated checks (WebKit axe)
           </h2>
           <p className="mt-2">
-            axe-core 4.10.3 ran in Playwright WebKit against a local static
+            axe-core 4.10.3 ran in Playwright WebKit 26.6 against a local static
             export, at two viewports (iPhone 13: 390×844; Desktop Safari:
             1280×800). Coverage is the estate WebKit axe gate, not a full-site
             audit.
           </p>
           <ul className="mt-2 list-disc list-inside space-y-1">
-            <li>Baseline CI run 39312522438 (19 October 2026): Home, Create, Demo, Features, Pricing, Security</li>
+            <li>Baseline CI run 39312522438 (19 October 2026): Home, Create, Demo, Features, Pricing, Security, Accessibility — reported no violations on those seven routes</li>
             <li>Later gate additions: Help (/help/), Subprocessors (/subprocessors/), Vulnerability disclosure (/vulnerability-disclosure/)</li>
             <li>Current WebKit matrix also gates: About, Accessibility, AI receptionist, Blog index, Buyers, Compare index, Contact, Cookies, FAQ, How it works, How we keep control, Industries index, Integrations index, Privacy, Property maintenance software, Status, Terms, Trust</li>
           </ul>
@@ -81,8 +81,8 @@ export default function AccessibilityPage() {
             <code>tests/webkit-a11y/a11y.test.mjs</code>. Nested or dynamic
             routes (individual blog posts, compare vendor pages, industry
             role pages, integration provider pages, dashboard preview) are
-            not claimed as covered here. It does not test physical iPhone or
-            Mac Safari, nor any screen reader or assistive technology — those
+            not claimed as covered here. It does not test physical iPhone or Mac Safari,
+            nor any screen reader or assistive technology — those
             remain owner-only checks. It tests only WCAG 2.0 A/AA tags in
             axe-core, not the full WCAG 2.2 AA criterion set.
           </p>
