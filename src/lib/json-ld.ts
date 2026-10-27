@@ -144,7 +144,7 @@ export function industryPageJsonLd(slug: string): JsonLdRecord {
         "@id": `${url}#webpage`,
         url,
         name: seo.title,
-        description: `${seo.summary} Pre-launch.`,
+        description: `${seo.summary} Pre-launch; not a live phone; no SLA claim.`,
         inLanguage: siteConfig.locale,
         isPartOf: { "@id": websiteId() },
         about: { "@id": softwareId() },
