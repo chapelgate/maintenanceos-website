@@ -5,7 +5,8 @@ import ingress_security as sec
 
 EXPANDED = (
     "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), "
-    "accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=()"
+    "accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), "
+    "clipboard-read=(), clipboard-write=()"
 )
 
 

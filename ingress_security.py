@@ -33,7 +33,7 @@ SECURITY_HEADERS = (
     (b"x-frame-options", b"DENY"),
     (b"referrer-policy", b"no-referrer"),
     (b"cache-control", b"no-store"),
-    (b"permissions-policy", b"camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=()"),
+    (b"permissions-policy", b"camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), display-capture=(), browsing-topics=(), clipboard-read=(), clipboard-write=()"),
     (b"cross-origin-opener-policy", b"same-origin"),
     (b"content-security-policy", b"default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"),
     (b"cross-origin-resource-policy", b"same-origin"),
