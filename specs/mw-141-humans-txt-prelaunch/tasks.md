@@ -1,0 +1,3 @@
+- [x] Add public/humans.txt
+- [x] Add lock test (no invented @worksmartos inboxes)
+- [x] Verify with node --test
