@@ -9,6 +9,15 @@ from safety_controls import enforce_latched_state, latch_critical_safety
 from escalation_text import bounded_escalation_reason
 from approval_text import bounded_approval_reason
 from approval_text import bounded_proposed_action
+from audit_text import redact_detail
+
+INTAKE_AUDIT_DETAIL_MAX = 8000
+INTAKE_AUDIT_ACTOR_MAX = 100
+def bound_intake_audit_detail(result) -> str:
+    detail = redact_detail(json.dumps(result, sort_keys=True))
+    if len(detail) > INTAKE_AUDIT_DETAIL_MAX:
+        raise ValueError("intake audit detail invalid")
+    return detail
 
 RED_RULES=[
  ("GAS_SMELL",["smell gas","smell of gas","gas smell","gas leak","smells of gas","gas fumes"],"Suspected gas escape"),
@@ -192,5 +201,8 @@ def apply_intake_rules(work_order_id):
                 s,wo,"HUMAN_REVIEW" if blocking else "READY_FOR_DISPATCH",
                 actor="Decision Engine",reason="Blocking human hold" if blocking else "Routine intake complete",
             )
-        s.add(AuditEvent(work_order_id=wo.id,actor="Decision Engine",event="INTAKE_CLASSIFIED",detail=json.dumps(result)))
+        actor = "Decision Engine"
+        if not actor or len(actor) > INTAKE_AUDIT_ACTOR_MAX:
+            raise ValueError("intake audit actor invalid")
+        s.add(AuditEvent(work_order_id=wo.id,actor=actor,event="INTAKE_CLASSIFIED",detail=bound_intake_audit_detail(result)))
         s.commit()
