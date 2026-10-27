@@ -388,8 +388,8 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
-<label for="start">Start (YYYY-MM-DD HH:MM)</label><input id="start" name="start"><br>
-<label for="end">End (YYYY-MM-DD HH:MM)</label><input id="end" name="end"><br>
+<label for="start">Start (YYYY-MM-DD HH:MM)</label><input id="start" name="start" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="end">End (YYYY-MM-DD HH:MM)</label><input id="end" name="end" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <button type="submit">Submit</button></form>""",
     )
 
@@ -424,8 +424,8 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="work_order_id" value="{work_order_id}">
 <input type="hidden" name="contractor_id" value="{contractor_id}">
 <input type="hidden" name="token" value="{token}">
-<label for="note">Completion note</label><textarea id="note" name="note"></textarea><br>
-<label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url"><br>
+<label for="note">Completion note</label><textarea id="note" name="note" maxlength="{COMPLETION_NOTE_MAX}"></textarea><br>
+<label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url" maxlength="{EVIDENCE_URL_MAX}"><br>
 <button type="submit">Submit completion</button></form>""",
     )
 
