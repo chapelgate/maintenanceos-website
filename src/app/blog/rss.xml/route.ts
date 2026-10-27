@@ -37,7 +37,7 @@ export async function GET(): Promise<Response> {
   <channel>
     <title>WorkSmartOS Blog</title>
     <link>${blogUrl}</link>
-    <description>Pre-launch insights on UK property maintenance operations, AI safety architecture, regulatory compliance, and product updates. Verifiable claims only.</description>
+    <description>Pre-launch insights on UK property maintenance operations, AI safety architecture, regulatory compliance, and product updates. Verifiable claims only. Not commercially generally available. Not a public always-on phone line. No SLA claim. See /release.json and /status.json.</description>
     <language>en-GB</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${absoluteUrl("/blog/rss.xml")}" rel="self" type="application/rss+xml" />
