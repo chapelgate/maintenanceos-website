@@ -105,7 +105,7 @@ elif page=="Work Orders":
             st.write(w.description)
             if critical_safety_active(s,w.id):
                 st.error("Active critical-safety latch. Operational progression and closure are blocked.")
-                clearance_reason=st.text_area("Safety clearance evidence",key=f"safety-clear-{w.id}")
+                clearance_reason=st.text_area("Safety clearance evidence",key=f"safety-clear-{w.id}",max_chars=SAFETY_CLEARANCE_REASON_MAX)
                 if st.button("Record authorised safety clearance",key=f"clear-{w.id}"):
                     if len(clearance_reason.strip())>SAFETY_CLEARANCE_REASON_MAX:st.error("Safety clearance evidence is too long")
                     else:
