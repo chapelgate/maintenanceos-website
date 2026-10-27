@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 SAFETY_CLEARANCE_REASON_MIN = 10
 SAFETY_CLEARANCE_REASON_MAX = 1000
+SAFETY_LATCH_ACTOR_MAX = 100
 from clock import utcnow
 
 from models import Approval, AuditEvent, CriticalSafetyState, User, WorkOrder
@@ -27,6 +28,9 @@ def critical_safety_active(session, work_order_id: int) -> bool:
 
 
 def latch_critical_safety(session, work_order: WorkOrder, new_flags: list, actor: str) -> CriticalSafetyState | None:
+    actor = (actor or "").strip()
+    if not actor or len(actor) > SAFETY_LATCH_ACTOR_MAX:
+        raise SafetyStateError("Safety latch actor invalid")
     with session.no_autoflush:
         state = session.get(CriticalSafetyState, work_order.id)
     if not new_flags and not (state and state.active):
