@@ -105,6 +105,8 @@ def clear_critical_safety(
         raise SafetyStateError("A substantive safety-clearance reason is required")
     if len(reason) > SAFETY_CLEARANCE_REASON_MAX:
         raise SafetyStateError("Safety-clearance reason is too long")
+    if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in reason):
+        raise SafetyStateError("Safety-clearance reason contains control characters")
     user = session.get(User, actor_user_id)
     work_order = session.get(WorkOrder, work_order_id)
     state = session.get(CriticalSafetyState, work_order_id)
