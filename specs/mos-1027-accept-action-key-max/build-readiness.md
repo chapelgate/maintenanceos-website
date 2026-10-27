@@ -20,7 +20,7 @@ Reason: reuses existing ActionReceipt path without new topics or workers.
 
 ## 5. Security
 Status: APPLIES
-Reason: overlong action_key rejected before session/DB write.
+Reason: blank or overlong action_key rejected before session/DB write.
 
 ## 6. Delivery
 Status: APPLIES
@@ -28,8 +28,8 @@ Reason: FEATURE Spec Kit under specs/mos-1027-accept-action-key-max/; ready PR; 
 
 ## 7. Operations
 Status: APPLIES
-Reason: typed ValueError on invalid action_key keeps acceptance fail-closed.
+Reason: False return on invalid action_key keeps acceptance fail-closed.
 
 ## 8. Runtime hygiene
 Status: APPLIES
-Reason: invalid action_key raises before acceptance proceeds.
+Reason: invalid action_key returns False before acceptance proceeds.
