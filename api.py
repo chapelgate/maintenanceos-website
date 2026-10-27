@@ -392,7 +392,7 @@ def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=For
         except (TenantAccessError,SafetyStateError):accepted=False
         if not accepted:raise HTTPException(409,"Job is not available for this action")
         msg="Job accepted. Please now submit your availability."
-    return f"<h2>{msg}</h2><p>Job #{work_order_id}</p>"
+    return _portal_page(f"Decision for job #{work_order_id}", f"<h1>Decision for job #{work_order_id}</h1><p>{msg}</p>")
 
 @app.get("/contractor/availability",response_class=HTMLResponse)
 def availability_form(work_order_id:int,contractor_id:int,token:str):
@@ -433,7 +433,7 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
     try:availability_id=submit_availability(work_order_id,contractor_id,st,en,token)
     except (TenantAccessError,SafetyStateError):availability_id=None
     if not availability_id:raise HTTPException(409,"Job is not available for this action")
-    return "<h2>Availability received.</h2>"
+    return _portal_page("Availability received", "<h1>Availability received.</h1>")
 
 @app.get("/contractor/complete",response_class=HTMLResponse)
 def complete_form(work_order_id:int,contractor_id:int,token:str):
@@ -468,7 +468,7 @@ def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),toke
     try:evidence_id=submit_completion(work_order_id,contractor_id,note,evidence_url,token)
     except (TenantAccessError,SafetyStateError):evidence_id=None
     if not evidence_id:raise HTTPException(409,"Job is not available for this action")
-    return "<h2>Completion recorded.</h2>"
+    return _portal_page("Completion recorded", "<h1>Completion recorded.</h1>")
 
 @app.post("/quotes")
 async def quotes(request:Request,client_id=Depends(require_internal_api)):
