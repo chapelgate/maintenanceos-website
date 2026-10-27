@@ -10,6 +10,7 @@ from readiness import report as readiness_report
 from reporting import operational_metrics
 from product_profile import page_title
 from safety_controls import SafetyStateError,clear_critical_safety,critical_safety_active
+from work_order_text import problem_description_error
 
 init_db()
 st.set_page_config(page_title=page_title(),layout="wide")
@@ -76,11 +77,16 @@ elif page=="New Work Order":
         rs=st.selectbox("Resident",list(rmap)) if rmap else None
         desc=st.text_area("Problem",height=150)
         if st.button("Create + triage",type="primary") and desc.strip():
-            wo=WorkOrder(client_id=CLIENT,property_id=pmap[ps].id,resident_id=rmap[rs].id if rs else None,source="MANUAL",description=desc)
-            s.add(wo);s.commit();wid=wo.id
-            apply_intake_rules(wid);cid=select_contractor(wid)
-            if cid:create_dispatch_approval(wid)
-            st.success(f"Work order #{wid} created");st.rerun()
+            problem_error=problem_description_error(desc)
+            if problem_error:
+                st.error(problem_error)
+            else:
+                clean_desc=desc.strip()
+                wo=WorkOrder(client_id=CLIENT,property_id=pmap[ps].id,resident_id=rmap[rs].id if rs else None,source="MANUAL",description=clean_desc)
+                s.add(wo);s.commit();wid=wo.id
+                apply_intake_rules(wid);cid=select_contractor(wid)
+                if cid:create_dispatch_approval(wid)
+                st.success(f"Work order #{wid} created");st.rerun()
 
 elif page=="Work Orders":
     st.title("Work Orders")
