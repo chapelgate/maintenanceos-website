@@ -73,6 +73,7 @@ export default function AccessibilityPage() {
             <li>Not-found export (mw-159): /404/ — pre-launch recovery page; robots noindex; no price or live phone</li>
             <li>Nested sample (mw-160): /industries/councils/, /industries/property-managers/, /blog/structured-repair-intake-vs-free-text-forms/, /compare/worksmartos-vs-answerconnect/, /integrations/calcom/, /help/data-security/ — all carry robots noindex; none claim checkout, live phone, published price, live SLA, or WCAG 2.2 AA certification.</li>
             <li>Help billing gate (mw-162): /help/billing-subscriptions/, /help/getting-help/, /help/faq/ — pre-launch honesty; no published price, live phone, or live SLA</li>
+            <li>Nested sample (mw-163): /industries/holiday-lets/, /industries/letting-agents/, /blog/uk-property-maintenance-software-landscape-2026/, /compare/worksmartos-vs-fixflo/, /integrations/calendly/, /help/safety-latches/ — all carry robots noindex; none claim checkout, live phone, published price, live SLA, or WCAG 2.2 AA certification.</li>
           </ul>
           <p className="mt-2">
             <strong>Result:</strong> Those gated routes reported no axe
@@ -84,7 +85,7 @@ export default function AccessibilityPage() {
             <strong>Scope limitations:</strong> This is an automated subset
             check on the routes listed in
             <code>tests/webkit-a11y/a11y.test.mjs</code>. A representative
-            nested sample is gated across three waves (industry roles, blog
+            nested sample is gated across four waves (industry roles, blog
             posts, compare vendor pages, integration providers, and help
             articles). The dashboard preview route is also axe-gated as a
             SAMPLE / DEMO page, and the exported /404/ not-found page is
@@ -108,17 +109,21 @@ export default function AccessibilityPage() {
               <code>tests/webkit-a11y/a11y.test.mjs</code>, plus a
               representative nested sample: /industries/landlords/,
               /industries/housing-associations/, /industries/councils/,
-              /industries/property-managers/,
+              /industries/property-managers/, /industries/holiday-lets/,
+              /industries/letting-agents/,
               /blog/ai-voice-demo-browser-only-what-it-means/,
               /blog/why-safety-latches-matter-in-ai-receptionists/,
               /blog/structured-repair-intake-vs-free-text-forms/,
+              /blog/uk-property-maintenance-software-landscape-2026/,
               /compare/worksmartos-vs-moneypenny/,
               /compare/worksmartos-vs-phena/,
               /compare/worksmartos-vs-answerconnect/,
+              /compare/worksmartos-vs-fixflo/,
               /integrations/google/, /integrations/outlook/,
-              /integrations/calcom/, /help/getting-started/,
-              /help/data-security/, /help/billing-subscriptions/,
-              /help/getting-help/, /help/faq/,
+              /integrations/calcom/, /integrations/calendly/,
+              /help/getting-started/, /help/data-security/,
+              /help/billing-subscriptions/, /help/getting-help/,
+              /help/faq/, /help/safety-latches/,
               /dashboard/ (SAMPLE / DEMO preview; noindex), and
               /404/ (exported not-found recovery page; noindex).
               Other nested blog, compare, industry, and integration pages,
@@ -168,8 +173,8 @@ export default function AccessibilityPage() {
             </li>
             <li>
               <strong>Nested sample gated:</strong> A representative nested
-              sample across three waves (four industries, three blogs, three
-              compares, three integrations, two help articles) plus the
+              sample across four waves (six industries, four blogs, four
+              compares, four integrations, and help article samples) plus the
               dashboard SAMPLE preview and the exported /404/ not-found page
               are now in the WebKit axe matrix. Expanding to every nested
               page remains optional and is not claimed here.
