@@ -1,0 +1,4 @@
+- [x] Spec
+- [x] Edit lifecycle.py
+- [x] Add tests
+- [x] Verify
