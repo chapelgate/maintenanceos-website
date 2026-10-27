@@ -104,7 +104,7 @@ test("mw-160 nested sample wave 3 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-160\)/);
-  assert.match(page, /across (three|four|five) waves/i);
+  assert.match(page, /across (three|four|five|six) waves/i);
   assert.match(page, /(four|six|all eight) industr/i);
   assert.match(page, /(three|four|five) blogs/i);
   assert.match(page, /robots noindex/);
@@ -139,7 +139,7 @@ test("mw-163 nested sample wave 4 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-163\)/);
-  assert.match(page, /across (four|five) waves/i);
+  assert.match(page, /across (four|five|six) waves/i);
   assert.match(page, /(six|all eight) industr/i);
   assert.match(page, /(four|five) blogs/i);
   assert.match(page, /robots noindex/);
@@ -174,9 +174,30 @@ test("mw-165 nested sample wave 5 is gated and disclosed", () => {
     assert.match(page, new RegExp(escapeRegExp(route)));
   }
   assert.match(page, /Nested sample \(mw-165\)/);
-  assert.match(page, /across five waves/i);
+  assert.match(page, /across (five|six) waves/i);
   assert.match(page, /all eight industr/i);
   assert.match(page, /five blogs/i);
+  assert.match(page, /robots noindex/);
+  assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
+});
+
+test("mw-166 nested sample wave 6 is gated and disclosed", () => {
+  for (const route of [
+    "/compare/worksmartos-vs-fasthosts/",
+    "/compare/worksmartos-vs-goodcall/",
+    "/compare/worksmartos-vs-rosie/",
+    "/integrations/hubspot/",
+    "/help/emergency-procedures/",
+    "/help/hmocompliance/",
+  ]) {
+    assert.match(webkit, new RegExp("'" + escapeRegExp(route) + "'"));
+    assert.match(page, new RegExp(escapeRegExp(route)));
+  }
+  assert.match(page, /Nested sample \(mw-166\)/);
+  assert.match(page, /across six waves/i);
+  assert.match(page, /seven\s+compares/i);
+  assert.match(page, /six\s+integrations/i);
   assert.match(page, /robots noindex/);
   assert.match(page, /none claim[\s\S]*WCAG 2\.2 AA certification/);
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
