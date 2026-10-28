@@ -50,3 +50,26 @@ test("consolidated evidence aggregates SHA-bound local artifacts", () => {
     try { fs.unlinkSync(out); } catch {}
   }
 });
+
+test("consolidated evidence all parts SHA-bound to same HEAD", () => {
+  const out = path.join(os.tmpdir(), `mw-consol-sha-${process.pid}.json`);
+  try {
+    const stdout = execFileSync(
+      process.execPath,
+      ["scripts/write-consolidated-evidence.mjs"],
+      {
+        cwd: ROOT,
+        encoding: "utf8",
+        env: { ...process.env, CONSOLIDATED_EVIDENCE_PATH: out },
+      },
+    );
+    const evidence = JSON.parse(stdout);
+    assert.equal(evidence.parts.candidate.head, evidence.head);
+    assert.equal(evidence.parts.secretScan.head, evidence.head);
+    assert.equal(evidence.parts.rollback.head, evidence.head);
+    assert.equal(evidence.parts.health.head, evidence.head);
+    assert.deepEqual(evidence.failures, []);
+  } finally {
+    try { fs.unlinkSync(out); } catch {}
+  }
+});
