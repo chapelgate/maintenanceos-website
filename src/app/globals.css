@@ -755,7 +755,6 @@ header details[open] .site-menu-panel {
     content-visibility: visible;
   }
 }
-
 @media print {
   .site-header,
   .mos-chat-widget,
@@ -782,4 +781,3 @@ header details[open] .site-menu-panel {
     backdrop-filter: none !important;
   }
 }
-
