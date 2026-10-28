@@ -5,6 +5,8 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
+
 // Directories skipped because they contain dependencies, build output, or
 // generated artefacts rather than reviewed project source.
 const SKIP_DIRS = new Set([
@@ -68,4 +70,33 @@ test("the captured homepage fixture no longer stores a Google client key", () =>
   );
   assert.match(fixture, /REDACTED_FIXTURE_GOOGLE_API/);
   assert.doesNotMatch(fixture, /AIza[0-9A-Za-z\-_]{35}/);
+});
+
+test("static security baseline CSP and referrer hardening", () => {
+  const config = read("next.config.ts");
+  assert.match(config, /output:\s*["']export["']/);
+  assert.doesNotMatch(config, /^\s*(async\s+)?headers\s*[:(]/m);
+  assert.match(config, /static-security-headers/);
+
+  assert.equal(fs.existsSync(path.join(ROOT, "app.yaml")), false);
+  assert.equal(fs.existsSync(path.join(ROOT, ".do")), false);
+  assert.equal(fs.existsSync(path.join(ROOT, "public/_headers")), false);
+  assert.equal(fs.existsSync(path.join(ROOT, "vercel.json")), false);
+  assert.equal(fs.existsSync(path.join(ROOT, "netlify.toml")), false);
+});
+
+test("exported HTML carries CSP http-equiv and referrer when out/ exists", () => {
+  const pages = ["out/index.html", "out/create/index.html", "out/dashboard/index.html"];
+  const present = pages.filter((rel) => fs.existsSync(path.join(ROOT, rel)));
+  if (present.length === 0) {
+    return;
+  }
+  for (const rel of present) {
+    const html = read(rel);
+    assert.match(html, /http-equiv="Content-Security-Policy"/);
+    assert.match(html, /script-src/);
+    assert.match(html, /unsafe-inline/);
+    assert.doesNotMatch(html, /unsafe-eval/);
+    assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/);
+  }
 });
