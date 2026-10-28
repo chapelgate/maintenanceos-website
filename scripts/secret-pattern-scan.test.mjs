@@ -69,3 +69,20 @@ test("the captured homepage fixture no longer stores a Google client key", () =>
   assert.match(fixture, /REDACTED_FIXTURE_GOOGLE_API/);
   assert.doesNotMatch(fixture, /AIza[0-9A-Za-z\-_]{35}/);
 });
+
+test("no NEXT_PUBLIC_ secrets in src/", () => {
+  const srcRoot = path.join(ROOT, "src");
+  const files = fs.readdirSync(srcRoot, { recursive: true });
+  const tsFiles = files.filter(
+    (f) => f.endsWith(".ts") || f.endsWith(".tsx") || f.endsWith(".js") || f.endsWith(".mjs"),
+  );
+  const patternHits = [];
+  for (const f of tsFiles) {
+    const text = fs.readFileSync(path.join(srcRoot, f), "utf8");
+    // Only flag actual secret assignments like NEXT_PUBLIC_SECRET=actualvalue or NEXT_PUBLIC_KEY=actualvalue
+    if (/NEXT_PUBLIC_SECRET\s*=\s*[^"'\\\n\s]+/.test(text) || /NEXT_PUBLIC_KEY\s*=\s*[^"'\\\n\s]+/.test(text)) {
+      patternHits.push(path.relative(ROOT, f));
+    }
+  }
+  assert.deepEqual(patternHits, []);
+});

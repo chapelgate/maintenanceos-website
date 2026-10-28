@@ -67,3 +67,19 @@ test("operator note is honest about DO static header limits", () => {
   assert.match(doc, /NEXT_PUBLIC_FORM_ENDPOINT/);
   assert.match(readme, /docs\/security\/static-security-baseline\.md/);
 });
+
+test("out/ HTML carries referrer-policy meta when export exists", () => {
+  const pages = ["out/index.html", "out/create/index.html", "out/dashboard/index.html"];
+  const present = pages.filter((rel) => fs.existsSync(path.join(ROOT, rel)));
+  if (present.length === 0) {
+    return;
+  }
+  for (const rel of present) {
+    const html = read(rel);
+    assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/);
+    assert.match(html, /http-equiv="Content-Security-Policy"/);
+    assert.match(html, /script-src/);
+    assert.match(html, /unsafe-inline/);
+    assert.doesNotMatch(html, /unsafe-eval/);
+  }
+});
