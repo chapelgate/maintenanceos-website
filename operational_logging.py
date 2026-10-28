@@ -91,6 +91,7 @@ def _redact(value: Any, key: str = "") -> Any:
         value = HUGGINGFACE_TOKEN.sub("[REDACTED]", value)
         value = MAILGUN_API_KEY.sub("[REDACTED]", value)
         value = SLACK_TOKEN.sub("[REDACTED]", value)
+        value = TWILIO_TOKEN.sub("[REDACTED]", value)
         value = SHOPIFY_TOKEN.sub("[REDACTED]", value)
         value = AUTH0_TOKEN.sub("[REDACTED]", value)
         value = OKTA_TOKEN.sub("[REDACTED]", value)
