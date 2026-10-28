@@ -1,4 +1,5 @@
 import { browserVoiceSupport, speakBrowserText } from "./browser-voice.ts";
+import { logger } from "./logger.ts";
 
 /**
  * Golden-line voice recorded in PRODUCT_CLAIMS_REGISTER.md V-01.
@@ -73,7 +74,7 @@ export function resetServerVoiceStateForTests(): void {
 }
 
 function warnVoice(reason: string): void {
-  console.warn(`Gemini voice unavailable: ${reason}`);
+  logger.warn(`Gemini voice unavailable: ${reason}`);
 }
 
 export function unlockSpokenAudioOn(host: SpokenAudioHost): UnlockableAudio {

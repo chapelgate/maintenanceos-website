@@ -131,6 +131,8 @@ export interface TokenData {
  * Token storage interface.
  * Implementation depends on deployment target (DO Functions KV, database, etc.)
  */
+import { logger } from "./logger.ts";
+
 export interface TokenStore {
   /** Save encrypted tokens for a user/provider combination */
   save(userId: string, providerId: string, encryptedTokens: string): Promise<void>;
@@ -192,7 +194,7 @@ export function getTokenStore(): TokenStore {
 
   // Production: would connect to DO Functions KV or database
   // For now, return memory store with a warning
-  console.warn("Using MemoryTokenStore in non-test environment. Implement persistent store for production.");
+  logger.warn("Using MemoryTokenStore in non-test environment. Implement persistent store for production.");
   return new MemoryTokenStore();
 }
 
