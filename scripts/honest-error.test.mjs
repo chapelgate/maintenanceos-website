@@ -58,3 +58,38 @@ test("global error links home and contact", () => {
   assert.doesNotMatch(page, /buy now/i);
   assert.doesNotMatch(page, /£/);
 });
+
+test("error pages never leak stack, PII or vendor internals", () => {
+  const pageErr = read("src/app/error.tsx");
+  const pageGlobal = read("src/app/global-error.tsx");
+  const sources = [`src/app/error.tsx`, `src/app/global-error.tsx`];
+  const pages = [pageErr, pageGlobal];
+  const violations = [];
+  for (let i = 0; i < sources.length; i++) {
+    const src = pages[i];
+    if (/stack|\.stack|at /i.test(src)) violations.push(`stack exposure in ${sources[i]}`);
+    if (/process\.env/i.test(src)) violations.push(`env exposure in ${sources[i]}`);
+    if (/<pre>/i.test(src)) violations.push(`pre block in ${sources[i]}`);
+    if (/console\.(log|error|warn)/i.test(src)) violations.push(`console logging in ${sources[i]}`);
+  }
+  assert.deepEqual(violations, []);
+});
+
+test("reset button returns user to site root path without advertising recovery", () => {
+  const page = read("src/app/error.tsx");
+  assert.match(page, /onClick/);
+  assert.match(page, /reset/);
+  assert.doesNotMatch(page, /restore/i);
+  assert.doesNotMatch(page, /recover/i);
+});
+
+test("lead form on submit announces errors and focuses error summary or first error field", () => {
+  const page = read("src/components/LeadCaptureForm.tsx");
+  assert.match(page, /aria-live="polite"/);
+  assert.match(page, /role="alert"/);
+  assert.match(page, /errorSummaryHeadingId/);
+  assert.match(page, /emailRef\.current\?\.focus\(\)/);
+  assert.match(page, /phoneRef\.current\?\.focus\(\)/);
+  assert.match(page, /data-lead-error-summary="true"/);
+  assert.match(page, /tabIndex={-1}/);
+});
