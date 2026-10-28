@@ -19,3 +19,8 @@ test("logger exports warn, info, debug, error methods", () => {
   assert.match(logger, /debug:/);
   assert.match(logger, /error:/);
 });
+
+test("logger trace context is available in format string", () => {
+  assert.match(logger, /traceId=/);
+  assert.match(logger, /requestId=/);
+});
