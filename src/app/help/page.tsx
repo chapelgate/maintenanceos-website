@@ -29,8 +29,9 @@ export default async function HelpIndexPage() {
     <>
       <JsonLd data={jsonLdData} />
       <PageHero
+        eyebrow="Pre-launch synthetic demo"
         title="Help Centre"
-        lede="Searchable documentation for MaintenanceOS: getting started, repairs, compliance, integrations, and more. 26 articles, versioned in git."
+        lede="Searchable documentation for MaintenanceOS: getting started, repairs, compliance, integrations, and more. 26 articles, versioned in git. This site is pre-launch and synthetic; nothing here is a live customer portal."
       />
       <div className="mx-auto max-w-4xl space-y-12 px-4 py-12">
         <FunnelPathStrip linked />
