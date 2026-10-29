@@ -19,8 +19,6 @@ export function ChatWidget({ title = "Chat with us" }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  const openRef = useRef(isOpen);
-  openRef.current = isOpen;
 
   function handleTriggerClick() {
     setIsOpen((prev) => !prev);
@@ -42,8 +40,7 @@ export function ChatWidget({ title = "Chat with us" }: ChatWidgetProps) {
     if (!isOpen) return;
     closeRef.current?.focus();
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key !== "Escape") return;
-      if (!openRef.current) return;
+      if (event.key !== "Escape" || !isOpen) return;
       event.preventDefault();
       setIsOpen(false);
       queueMicrotask(() => triggerRef.current?.focus());
