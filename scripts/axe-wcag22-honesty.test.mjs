@@ -13,11 +13,14 @@ const axeVersion = pkg.packages?.["node_modules/axe-core"]?.version
 
 test("accessibility page cites installed axe-core and WCAG 2.2 axe tags", () => {
   assert.equal(axeVersion, "4.13.0");
-  assert.match(page, /axe-core 4\.13\.0/);
+  assert.match(page, /axe-core 4\.13.0/);
   assert.doesNotMatch(page, /axe-core 4\.10\.3/);
   assert.match(page, /wcag21aa/);
   assert.match(page, /wcag22aa/);
-  assert.match(page, /not a full WCAG 2\.2 AA conformance claim|Do not read a green gate as\s+certification/i);
+  assert.match(
+    page,
+    /not a full WCAG 2\.2 AA conformance claim|Do not read a green gate as\s+certification/i,
+  );
   assert.match(
     a11y,
     /\.withTags\(\['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'\]\)/,
