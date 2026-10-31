@@ -15,6 +15,7 @@ def test_contractor_forms_include_hidden_token():
     for fn in (api.contractor_decision, api.availability_form, api.complete_form):
         source = inspect.getsource(fn)
         assert 'name="token"' in source
+        assert 'name="csrf_token"' in source
         assert "type=\"hidden\"" in source or "type='hidden'" in source
 
 
@@ -26,4 +27,6 @@ def test_contractor_post_handlers_require_token_form():
     ):
         source = inspect.getsource(fn)
         assert "token:str=Form(...)" in source or "token: str = Form(...)" in source
+        assert "csrf_token:str=Form(...)" in source or "csrf_token: str = Form(...)" in source
         assert "verify_link" in source
+        assert "verify_form_csrf" in source
