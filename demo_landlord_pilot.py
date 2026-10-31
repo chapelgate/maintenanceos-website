@@ -29,6 +29,7 @@ from pilot.landlord_vertical import (
     VerticalInactive,
     VerticalPropertyCap,
 )
+from synthetic_buyer_onboarding_kit import populate_demo_buyer_pack
 
 
 def main():
@@ -87,8 +88,23 @@ def main():
     except Exception as e:
         print(f"   FAILED: {type(e).__name__}: {e}")
 
-    # Step 5: Deactivate the vertical
-    print("\n5. Deactivate landlord vertical...")
+    # Step 5: Populate synthetic buyer-pack demo data
+    print("\n5. Populate synthetic buyer pack...")
+    try:
+        pack = populate_demo_buyer_pack()
+        tenant = pack["tenant"]
+        print(f"   Client: {tenant['client_name']}")
+        print(f"   Synthetic only: {tenant['synthetic_only']}")
+        print(f"   Sale ready: {tenant['sale_ready']}")
+        print(f"   Kit present: {pack['kit_present']}")
+        print(f"   commercial_release_ready: {pack['commercial_release_ready']}")
+    except Exception as e:
+        print(f"   FAILED: {type(e).__name__}: {e}")
+        deactivate_landlord_vertical()
+        return 1
+
+    # Step 6: Deactivate the vertical
+    print("\n6. Deactivate landlord vertical...")
     try:
         view = deactivate_landlord_vertical()
         print(f"   Vertical restored: {not view['active']}")
