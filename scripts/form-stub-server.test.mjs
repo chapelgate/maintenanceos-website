@@ -4,8 +4,10 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import {
+  ALLOWED_ORIGINS,
   LEAD_TYPES,
   createFormStubServer,
+  corsHeaders,
   successBody,
   validateLead,
 } from "./form-stub-server.mjs";
@@ -95,7 +97,7 @@ test("POST /leads stores jsonl and returns queued_stub", async () => {
     assert.equal(lines.length, 1);
     const stored = JSON.parse(lines[0]);
     assert.equal(stored.lead_type, "early_demo");
-    assert.equal(stored.email, "alex@example.com");
+    assert.equal(stored.email, "[REDACTED]");
     assert.equal(stored.sends_email, false);
   });
 });
@@ -172,4 +174,45 @@ test("invalid JSON and unknown path fail closed", async () => {
     });
     assert.equal(missing.status, 404);
   });
+});
+
+test("corsHeaders rejects unlisted origins", () => {
+  const h = corsHeaders("https://evil.example.com");
+  assert.equal(h["Access-Control-Allow-Origin"], "");
+  assert.equal(h.Vary, "Origin");
+});
+
+test("corsHeaders accepts configured allow-list origin", () => {
+  const h = corsHeaders("https://worksmartos.co.uk");
+  assert.equal(h["Access-Control-Allow-Origin"], "https://worksmartos.co.uk");
+});
+
+test("corsHeaders accepts localhost dev origins", () => {
+  const h = corsHeaders("http://localhost:3000");
+  assert.equal(h["Access-Control-Allow-Origin"], "http://localhost:3000");
+});
+
+test("appendJsonl persists redacted email (masked by handler)", async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "form-stub-"));
+  const dataFile = path.join(dir, "leads.jsonl");
+  const { server } = createFormStubServer({ dataFile });
+  const port = await new Promise((resolve) => {
+    server.listen(0, "127.0.0.1", () => resolve(server.address().port));
+  });
+  const base = `http://127.0.0.1:${port}`;
+  try {
+    const res = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: "http://localhost:3000" },
+      body: JSON.stringify({ ...validLead, lead_type: "contact", email: "real@example.com" }),
+    });
+    assert.equal(res.status, 200);
+    const lines = fs.readFileSync(dataFile, "utf8").trim().split("\n");
+    assert.equal(lines.length, 1);
+    const stored = JSON.parse(lines[0]);
+    assert.equal(stored.email, "[REDACTED]");
+    assert.equal(stored.sends_email, false);
+  } finally {
+    server.close(() => fs.rmSync(dir, { recursive: true, force: true }));
+  }
 });

@@ -31,11 +31,18 @@ export function jsonHeaders(origin) {
   };
 }
 
+export const ALLOWED_ORIGINS = new Set([
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://worksmartos.co.uk",
+]);
+
 export function corsHeaders(origin) {
-  const allow =
-    process.env.FORM_STUB_CORS_ORIGIN || origin || "*";
+  const allowed =
+    process.env.FORM_STUB_CORS_ORIGIN ||
+    (origin && ALLOWED_ORIGINS.has(origin) ? origin : "");
   return {
-    "Access-Control-Allow-Origin": allow,
+    "Access-Control-Allow-Origin": allowed,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Accept",
     "Access-Control-Max-Age": "86400",
@@ -210,11 +217,12 @@ export async function handleFormStubRequest(req, res, options) {
   }
 
   if (!result.discarded) {
+    const masked = { ...result.record, email: "[REDACTED]" };
     try {
       if (options.appendLead) {
         await options.appendLead(result.record);
       } else {
-        await appendJsonl(options.dataFile, result.record);
+        await appendJsonl(options.dataFile, masked);
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "write failed";
@@ -222,7 +230,7 @@ export async function handleFormStubRequest(req, res, options) {
       return;
     }
     console.log(
-      `[form-stub] queued_stub lead_type=${result.record.lead_type} email=${result.record.email} sends_email=false`,
+      `[form-stub] queued_stub lead_type=${result.record.lead_type} email=[REDACTED] sends_email=false`,
     );
   } else {
     console.log("[form-stub] honeypot discarded; no email sent");
