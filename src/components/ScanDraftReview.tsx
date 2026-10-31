@@ -1,10 +1,6 @@
-"use client";
-
 import { useId } from "react";
 import type { BusinessFacts, BusinessFactMeta } from "@/lib/types";
-import type { PartialDraft } from "@/lib/types";
 
-const FIELD_CLASS = "mt-1 w-full rounded-md border border-border bg-paper px-3 py-2";
 const LABEL_CLASS = "block text-sm font-medium text-ink mb-1";
 const VALUE_CLASS = "font-inherit rounded-md border border-border bg-paper px-3 py-2";
 
@@ -14,7 +10,6 @@ const VALUE_CLASS = "font-inherit rounded-md border border-border bg-paper px-3 
  */
 export function ScanDraftReview({
   facts,
-  factMeta,
 }: {
   facts: BusinessFacts;
   factMeta: BusinessFactMeta;

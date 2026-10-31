@@ -108,8 +108,8 @@ const BENTO_FEATURES: BentoFeatureCard[] = [
 
 export default function FeaturesPage() {
   const cardCounts = marketingCardCounts();
-  // Ensure inventory reference for verification
-  const _groups = FEATURE_GROUPS.map((g) => marketingCardsByGroup(g));
+  void marketingCardsByGroup;
+  void FEATURE_GROUPS;
 
   return (
     <>

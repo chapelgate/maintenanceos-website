@@ -26,7 +26,7 @@ for (const competitor of competitors) {
     assert.equal(data.frontmatter.slug, competitor);
     assert.ok(data.content.length > 0);
     assert.equal(
-      generateComparisonMetadata(data, "").path,
+      generateComparisonMetadata(data).path,
       `/compare/worksmartos-vs-${competitor}/`,
     );
     assert.deepEqual(getComparisonBySlug(competitor), data);

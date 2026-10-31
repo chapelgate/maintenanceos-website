@@ -23,7 +23,7 @@ export function ProcessPipeline({
 }) {
   return (
     <div className={`mos-pipeline grid gap-3 sm:grid-cols-5 ${className}`.trim()}>
-      {steps.map((s, idx) => (
+      {steps.map((s) => (
         <div
           key={s.step}
           className="flex flex-col rounded-lg border border-border bg-surface p-3.5 transition-colors hover:border-accent/40"
