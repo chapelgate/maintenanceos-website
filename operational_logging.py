@@ -146,3 +146,27 @@ def operational_event(event: str, **fields: Any) -> None:
             "event_fields": fields,
         },
     )
+
+def log_event_valid_fields(fields: dict[str, Any]) -> dict[str, Any]:
+    """Return only SAFE_EVENT_FIELDS; drop secret-shaped keys."""
+    if not isinstance(fields, dict):
+        return {}
+    out: dict[str, Any] = {}
+    for key, value in fields.items():
+        name = str(key)
+        if name not in SAFE_EVENT_FIELDS:
+            continue
+        if SENSITIVE_KEY.search(name):
+            continue
+        out[name] = value
+    return out
+
+
+def error_event(exc: BaseException, event: str = "error", **fields: Any) -> None:
+    """Emit a redacted operational error with exception_type only from the type name."""
+    safe = log_event_valid_fields(fields)
+    safe["exception_type"] = type(exc).__name__[:100]
+    if "outcome" not in safe:
+        safe["outcome"] = "error"
+    operational_event(event, **safe)
+
