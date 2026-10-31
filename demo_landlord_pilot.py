@@ -18,6 +18,7 @@ import sys
 # Ensure we're using the pilot's landlord vertical
 sys.path.insert(0, os.path.dirname(__file__))
 
+from models import init_db
 from pilot.landlord_vertical import (
     activate_landlord_vertical,
     deactivate_landlord_vertical,
@@ -33,6 +34,9 @@ from pilot.landlord_vertical import (
 def main():
     """Run a complete synthetic pilot demo cycle."""
     print("=== LandlordOS Synthetic Pilot Demo ===\n")
+
+    # Bootstrap test database for the demo
+    init_db()
 
     # Reset session
     reset_landlord_vertical_for_tests()
