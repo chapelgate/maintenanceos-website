@@ -9,6 +9,7 @@ from contextlib import suppress
 from datetime import datetime,timedelta
 from urllib.parse import urlsplit
 from fastapi import Depends,FastAPI,Request,HTTPException,Form,WebSocket
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import HTMLResponse,Response
 from sqlalchemy.exc import SQLAlchemyError
 from models import *
@@ -47,9 +48,9 @@ from reporting import process_local_tenant_health
 load_dotenv()
 app=FastAPI(title=api_title(),docs_url=None,redoc_url=None,openapi_url=None)
 
-@app.exception_handler(HTTPException)
 async def _sanitize_http_exception(request: Request, exc: HTTPException):
     from fastapi.responses import JSONResponse
+    from request_context import request_id
     detail = sanitize_http_detail(exc.detail)
     path = request.url.path or ""
     if path.startswith("/contractor/"):
@@ -68,7 +69,15 @@ async def _sanitize_http_exception(request: Request, exc: HTTPException):
             status_code=exc.status_code,
             content=_portal_page("Error", body),
         )
-    return JSONResponse(status_code=exc.status_code, content={"detail": detail})
+    payload = {"detail": detail}
+    rid = request_id()
+    if rid:
+        payload["correlation_id"] = rid
+    return JSONResponse(status_code=exc.status_code, content=payload)
+
+
+app.add_exception_handler(HTTPException, _sanitize_http_exception)
+app.add_exception_handler(StarletteHTTPException, _sanitize_http_exception)
 
 HEALTH_TOP_LEVEL_KEYS = frozenset({
     "ok",
@@ -491,8 +500,8 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
 <input type="hidden" name="csrf_token" value="{form_csrf}" maxlength="{CSRF_TOKEN_MAX}" autocomplete="off">
-<label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required aria-required="true" type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
-<label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required aria-required="true" type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required aria-required="true" type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}" autocomplete="off"><br>
+<label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required aria-required="true" type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}" autocomplete="off"><br>
 <button type="submit">Submit</button></form>""",
     )
 
@@ -538,8 +547,8 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
 <input type="hidden" name="csrf_token" value="{form_csrf}" maxlength="{CSRF_TOKEN_MAX}" autocomplete="off">
-<label for="note">Completion note</label><textarea id="note" name="note" required aria-required="true" maxlength="{COMPLETION_NOTE_MAX}"></textarea><br>
-<label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url" type="url" maxlength="{EVIDENCE_URL_MAX}"><br>
+<label for="note">Completion note</label><textarea id="note" name="note" required aria-required="true" maxlength="{COMPLETION_NOTE_MAX}" autocomplete="off"></textarea><br>
+<label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url" type="url" maxlength="{EVIDENCE_URL_MAX}" autocomplete="url"><br>
 <button type="submit">Submit completion</button></form>""",
     )
 
