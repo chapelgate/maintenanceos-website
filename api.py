@@ -491,8 +491,8 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
 <input type="hidden" name="csrf_token" value="{form_csrf}" maxlength="{CSRF_TOKEN_MAX}" autocomplete="off">
-<label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
-<label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required aria-required="true" type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
+<label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required aria-required="true" type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <button type="submit">Submit</button></form>""",
     )
 
@@ -538,7 +538,7 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
 <input type="hidden" name="csrf_token" value="{form_csrf}" maxlength="{CSRF_TOKEN_MAX}" autocomplete="off">
-<label for="note">Completion note</label><textarea id="note" name="note" required maxlength="{COMPLETION_NOTE_MAX}"></textarea><br>
+<label for="note">Completion note</label><textarea id="note" name="note" required aria-required="true" maxlength="{COMPLETION_NOTE_MAX}"></textarea><br>
 <label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url" type="url" maxlength="{EVIDENCE_URL_MAX}"><br>
 <button type="submit">Submit completion</button></form>""",
     )
