@@ -72,7 +72,6 @@ export function getLegacyComparisonSlugs(): string[] {
 /** Generate SEO metadata for a comparison page. */
 export function generateComparisonMetadata(
   data: ComparisonData,
-  _siteUrl: string,
 ): {
   title: string;
   description: string;

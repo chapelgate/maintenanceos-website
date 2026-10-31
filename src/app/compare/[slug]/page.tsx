@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: ComparePageProps) {
     });
   }
 
-  const meta = generateComparisonMetadata(data, "");
+  const meta = generateComparisonMetadata(data);
   return contentPageMetadata({
     title: meta.title,
     description: meta.description,

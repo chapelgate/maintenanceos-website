@@ -3,8 +3,6 @@ type LogLevel = { DEBUG: number; INFO: number; WARN: number; ERROR: number };
 
 const LogLevel: LogLevel = { DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3 };
 
-type LevelName = "DEBUG" | "INFO" | "WARN" | "ERROR";
-
 const levelFromEnv = (): keyof typeof LogLevel => {
   const v = process.env.LOG_LEVEL?.toLowerCase();
   if (v === "debug") return "DEBUG";

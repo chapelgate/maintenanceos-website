@@ -103,7 +103,7 @@ const viewports = [
 ];
 
 test.describe('WebKit accessibility checks', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async () => {
     // We'll set the viewport in each test
   });
 
