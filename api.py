@@ -61,6 +61,7 @@ HEALTH_TOP_LEVEL_KEYS = frozenset({
     "pilot",
     "incident_link",
     "tenant_health",
+    "correlation_id",
 })
 HEALTH_CALL_CAPACITY_KEYS = frozenset({
     "active",
@@ -323,6 +324,7 @@ def require_public_provider_ingress():
 
 @app.get("/health")
 def health(response: Response):
+    from request_context import set_request_id, request_id
     snap = capacity_snapshot()
     pilot = {}
     try:
@@ -360,6 +362,11 @@ def health(response: Response):
         },
         "tenant_health": {key: tenant_health_snapshot[key] for key in TENANT_HEALTH_KEYS},
     }
+    rid = request_id()
+    body["correlation_id"] = rid or None
+    if rid:
+        response.headers["x-correlation-id"] = rid
+        set_request_id(rid)
     response.headers["x-csrf-token"] = issue_health_csrf()
     return {key: body[key] for key in HEALTH_TOP_LEVEL_KEYS}
 

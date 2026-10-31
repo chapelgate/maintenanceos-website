@@ -14,6 +14,7 @@ from secret_patterns import SENSITIVE_KEY, redact_secrets
 
 
 SAFE_EVENT_FIELDS = {
+    "correlation_id",
     "duration_ms",
     "exception_type",
     "method",
@@ -74,8 +75,11 @@ def operational_event(event: str, **fields: Any) -> None:
     if not structured_logging_enabled():
         return
     rid = current_request_id()
-    if rid and "request_id" not in fields:
-        fields = {**fields, "request_id": rid}
+    if rid:
+        if "request_id" not in fields:
+            fields = {**fields, "request_id": rid}
+        if "correlation_id" not in fields:
+            fields = {**fields, "correlation_id": rid}
     LOGGER.info(
         "operational_event",
         extra={
