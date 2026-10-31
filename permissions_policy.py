@@ -5,19 +5,21 @@ on the running MaintenanceOS application.
 """
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 
 def permissions_configured() -> bool:
-    """Test whether Permissions-Policy is configured.
+    from ingress_security import SECURITY_HEADERS
 
-    Returns True when the application has been configured with
-    proper Permissions-Policy header settings. Currently returns
-    True as the header configuration is in place via ingress_security.
-    """
-    return True
+    values = {name.decode().casefold(): value.decode() for name, value in SECURITY_HEADERS}
+    policy = values.get("permissions-policy", "")
+    if not policy:
+        return False
+    required = ("camera=()", "microphone=()", "geolocation=()")
+    return all(item in policy for item in required)
 
 
 def no_nvidia_references() -> bool:
-    """Test no NVIDIA API references in permissions policy code."""
-    return True
+    text = Path(__file__).read_text(encoding="utf-8")
+    needle = "integrate.api" + ".nvidia.com"
+    return needle not in text

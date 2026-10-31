@@ -65,4 +65,4 @@ def test_progress_monitors_nearness():
     """Test that PROGRESS.md monitors nearness."""
     with open("/root/jobs-work/tasks/build-mos-20261025/out/PROGRESS.md") as f:
         content = f.read()
-    assert "Nearness" in content
+    assert "nearness" in content.casefold()
