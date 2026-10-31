@@ -842,6 +842,13 @@ async def pilot_synthetic_email_proof(request: Request):
 def readiness_endpoint(_=Depends(require_internal_api)):
     return readiness_report()
 
+@app.get("/metrics", dependencies=[Depends(require_internal_api)])
+def metrics_endpoint(request: Request):
+    """Internal metrics endpoint — local data scope only."""
+    from reporting import operational_metrics
+    client_id = request.state.client_id
+    return operational_metrics(client_id)
+
 ACTION_KEY_MAX = 200
 
 AUDIT_ACTOR_MAX = 100
