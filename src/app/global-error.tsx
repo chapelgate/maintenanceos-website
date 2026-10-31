@@ -1,5 +1,9 @@
 "use client";
 
+// NOTE: Server-error pages MUST NOT expose diagnostics to users
+// to end users. Diagnostic logging is suppressed.
+// suppressed. See release-preflight for the gate.
+
 import { useEffect, useRef } from "react";
 import "./globals.css";
 

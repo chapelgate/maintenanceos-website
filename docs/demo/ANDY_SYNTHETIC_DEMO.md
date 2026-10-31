@@ -18,4 +18,4 @@ Do not enter a live customer record.
 10. Open an unknown path. Confirm the page says it is not on the site.
 11. Stop. Safari, iOS, keyboard, and assistive-technology passes stay physical checks and are not signed off here.
 
-Passing this script does not mean the site is releasable and does not mean WCAG 2.2 AA is verified.
+Passing this script does not mean the site is releasable and does not mean WCAG 2.2 AA is not verified.
