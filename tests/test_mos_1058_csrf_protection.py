@@ -217,3 +217,78 @@ def test_health_csrf_rejects_tamper(monkeypatch):
     assert verify_health_csrf(token) is True
     assert verify_health_csrf(token + "z") is False
     assert verify_health_csrf("") is False
+
+
+def _set_work_order_status(session_factory, work_order_id, status):
+    with session_factory() as session:
+        session.query(WorkOrder).filter_by(id=work_order_id).update(
+            {"status": status}, synchronize_session=False
+        )
+        session.commit()
+
+
+def test_availability_submit_rejects_missing_csrf(test_database):
+    work_order_id, contractor_id = seed_dispatch(test_database)
+    _set_work_order_status(test_database, work_order_id, "CONTRACTOR_ACCEPTED")
+    link = sign_link("availability", work_order_id, contractor_id)
+    client = TestClient(api.app)
+    response = client.post(
+        "/contractor/availability",
+        data={
+            "work_order_id": str(work_order_id),
+            "contractor_id": str(contractor_id),
+            "token": link,
+            "start": "2099-01-02T15:30",
+            "end": "2099-01-02T16:30",
+        },
+    )
+    assert response.status_code == 422
+
+
+def test_availability_submit_rejects_invalid_csrf(test_database):
+    work_order_id, contractor_id = seed_dispatch(test_database)
+    _set_work_order_status(test_database, work_order_id, "CONTRACTOR_ACCEPTED")
+    link = sign_link("availability", work_order_id, contractor_id)
+    client = TestClient(api.app)
+    response = client.post(
+        "/contractor/availability",
+        data={
+            "work_order_id": str(work_order_id),
+            "contractor_id": str(contractor_id),
+            "token": link,
+            "csrf_token": "not-a-real-csrf-token",
+            "start": "2099-01-02T15:30",
+            "end": "2099-01-02T16:30",
+        },
+    )
+    assert response.status_code == 403
+    assert "CSRF" in response.text
+
+
+def test_complete_submit_rejects_missing_and_invalid_csrf(test_database):
+    work_order_id, contractor_id = seed_dispatch(test_database)
+    _set_work_order_status(test_database, work_order_id, "APPOINTMENT_BOOKED")
+    link = sign_link("complete", work_order_id, contractor_id)
+    client = TestClient(api.app)
+    missing = client.post(
+        "/contractor/complete",
+        data={
+            "work_order_id": str(work_order_id),
+            "contractor_id": str(contractor_id),
+            "token": link,
+            "note": "Done",
+        },
+    )
+    assert missing.status_code == 422
+    invalid = client.post(
+        "/contractor/complete",
+        data={
+            "work_order_id": str(work_order_id),
+            "contractor_id": str(contractor_id),
+            "token": link,
+            "csrf_token": "not-a-real-csrf-token",
+            "note": "Done",
+        },
+    )
+    assert invalid.status_code == 403
+    assert "CSRF" in invalid.text
