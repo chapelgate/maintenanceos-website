@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 import pytest
 from sqlalchemy import create_engine
@@ -181,7 +181,7 @@ def test_committed_contractor_acceptance_allows_matching_confirmation(action_ses
 
 def test_committed_booked_appointment_allows_matching_confirmation(action_session):
     session, work_order, contractor = action_session
-    start = datetime.utcnow() + timedelta(days=1)
+    start = datetime.now(timezone.utc) + timedelta(days=1)
     session.add(Appointment(
         work_order_id=work_order.id,
         contractor_id=contractor.id,

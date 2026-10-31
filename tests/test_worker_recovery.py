@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 import pytest
 from sqlalchemy import create_engine
@@ -47,7 +47,7 @@ def add_job(factory, work_order_id, job_type, *, status="PENDING", attempts=0, r
     with factory() as session:
         job = AutomationJob(
             work_order_id=work_order_id, job_type=job_type,
-            run_at=run_at or datetime.utcnow() - timedelta(seconds=1),
+            run_at=run_at or datetime.now(timezone.utc) - timedelta(seconds=1),
             payload="{}", status=status, attempts=attempts,
         )
         session.add(job); session.commit()
@@ -57,7 +57,7 @@ def add_job(factory, work_order_id, job_type, *, status="PENDING", attempts=0, r
 def make_due(factory, job_id):
     with factory() as session:
         job = session.get(AutomationJob, job_id)
-        job.run_at = datetime.utcnow() - timedelta(seconds=1)
+        job.run_at = datetime.now(timezone.utc) - timedelta(seconds=1)
         session.commit()
 
 
@@ -94,7 +94,7 @@ def test_stale_running_job_is_recovered_deterministically(worker_db, monkeypatch
     monkeypatch.setenv("AUTOMATION_MAX_ATTEMPTS", "3")
     job_id = add_job(
         factory, ids["work_order"], "SYNTHETIC_STALE",
-        status="RUNNING", attempts=attempts, run_at=datetime.utcnow() - timedelta(minutes=5),
+        status="RUNNING", attempts=attempts, run_at=datetime.now(timezone.utc) - timedelta(minutes=5),
     )
     assert worker.recover_stale_jobs() == 1
     with factory() as session:

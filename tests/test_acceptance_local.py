@@ -2,7 +2,7 @@ import asyncio
 import base64
 import json
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from threading import Barrier
 
 import pytest
@@ -463,7 +463,7 @@ def test_at38_timer_recovery_is_idempotent(local_db):
     with local_db() as session:
         wo=WorkOrder(client_id=client_id,property_id=property_id,resident_id=resident_id,description="tap",status="AWAITING_CONTRACTOR",category="Plumbing",trade="Plumber",ai_confidence=.9,assigned_contractor_id=contractor_id)
         session.add(wo);session.flush()
-        job=AutomationJob(work_order_id=wo.id,job_type="CONTRACTOR_RESPONSE_CHECK",run_at=datetime.utcnow()-timedelta(hours=1),payload="{}")
+        job=AutomationJob(work_order_id=wo.id,job_type="CONTRACTOR_RESPONSE_CHECK",run_at=datetime.now(timezone.utc)-timedelta(hours=1),payload="{}")
         session.add(job);session.commit();wid=wo.id;jid=job.id
     worker.run_due_jobs();worker.run_due_jobs()
     with local_db() as session:

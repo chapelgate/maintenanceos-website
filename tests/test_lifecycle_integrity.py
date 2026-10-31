@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 from sqlalchemy import create_engine
@@ -94,7 +94,7 @@ def test_active_critical_latch_rejects_direct_orm_bypass(lifecycle_db, mutation)
         work_order = session.get(WorkOrder, work_order_id)
         state = session.get(CriticalSafetyState, work_order_id)
         if mutation == "status":
-            work_order.status = "CLOSED"; work_order.closed_at = datetime.utcnow()
+            work_order.status = "CLOSED"; work_order.closed_at = datetime.now(timezone.utc)
         elif mutation == "urgency":
             work_order.urgency = "P3"
         elif mutation == "flags":
@@ -154,7 +154,7 @@ def test_illegal_noncritical_transition_fails_at_commit(lifecycle_db):
     work_order_id = create_work_order(factory, ids)
     with factory() as session:
         work_order = session.get(WorkOrder, work_order_id)
-        work_order.status = "CLOSED"; work_order.closed_at = datetime.utcnow()
+        work_order.status = "CLOSED"; work_order.closed_at = datetime.now(timezone.utc)
         with pytest.raises(WorkOrderStateError, match="Illegal work-order transition"):
             session.commit()
 

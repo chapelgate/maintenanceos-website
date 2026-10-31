@@ -1,4 +1,4 @@
-from datetime import datetime,timedelta
+from datetime import datetime, timezone,timedelta
 
 import pytest
 from sqlalchemy import create_engine
@@ -81,7 +81,7 @@ def test_timed_out_contractor_requires_human_release_and_is_not_reselected(contr
     with factory() as session:
         job=AutomationJob(
             work_order_id=work_order_id,job_type="CONTRACTOR_RESPONSE_CHECK",
-            run_at=datetime.utcnow()-timedelta(minutes=1),payload="{}",
+            run_at=datetime.now(timezone.utc)-timedelta(minutes=1),payload="{}",
         );session.add(job);session.commit()
     worker.run_due_jobs()
     with factory() as session:
@@ -104,7 +104,7 @@ def test_resident_appointment_confirmation_is_scoped_and_idempotent(contractor_d
     with factory() as session:
         appointment=Appointment(
             work_order_id=work_order_id,contractor_id=ids["first"],
-            start_at=datetime.utcnow()+timedelta(days=1),status="BOOKED",
+            start_at=datetime.now(timezone.utc)+timedelta(days=1),status="BOOKED",
         );session.add(appointment);session.commit();appointment_id=appointment.id
     with pytest.raises(TenantAccessError):
         operations.confirm_appointment(work_order_id,999,"bad-resident")

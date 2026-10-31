@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 import pytest
 from sqlalchemy import create_engine
@@ -179,8 +179,8 @@ def test_unassigned_same_tenant_contractor_cannot_submit_consequential_records(m
         operations.submit_availability(
             work_order_id,
             other_id,
-            datetime.utcnow() + timedelta(hours=1),
-            datetime.utcnow() + timedelta(hours=2),
+            datetime.now(timezone.utc) + timedelta(hours=1),
+            datetime.now(timezone.utc) + timedelta(hours=2),
             "unassigned-availability",
         )
     with pytest.raises(TenantAccessError):
