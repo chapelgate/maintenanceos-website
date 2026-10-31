@@ -1,6 +1,6 @@
 # MaintenanceOS website security review
 
-**Updated:** 2026-09-27
+**Updated:** 2026-10-31
 **Scope:** public/pre-launch marketing website and its website-only companion contracts
 **Status:** engineering review complete; one known hosting-header gap remains open for launch review
 
@@ -14,8 +14,12 @@
   before notification, and an origin allowlist on the existing control plane.
 - Optional website companions default off and must not claim live telephony.
 - `NEXT_PUBLIC_*` values are treated as public build-time configuration, not secrets.
-- Repository dependency audit on 2026-09-26: **0 known vulnerabilities** at
-  `--audit-level=moderate`.
+- Repository dependency audit on 2026-10-31 after mw-298: Next.js patched to
+  **16.4.3** and zod overridden to **4.6.7**. Native `npm audit` reports
+  **critical/high cleared** (0 critical, 0 high). Residual **16 moderate**
+  findings remain in the eslint/minimatch **dev** toolchain; npm's suggested
+  "fix" downgrades eslint to 4.x and is rejected. Residual moderates are
+  tracked for a later toolchain bump, not claimed cleared.
 - Common committed-secret pattern scan on 2026-09-26 found no API-key/private-key
   patterns in tracked source.
 
