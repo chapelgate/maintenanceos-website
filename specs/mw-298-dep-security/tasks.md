@@ -8,3 +8,5 @@
 - [x] Accept residual eslint/minimatch moderates in scripts/audit-ci.mjs
 - [x] Add scripts/dep-security-patch.test.mjs and update backlog-reconciliation.test.mjs
 - [x] Verify npm test, tsc --noEmit, npm run audit:ci
+- [x] Wire audit:ci into scripts/release-preflight.mjs before lint
+- [x] Lock release-preflight audit:ci call in release-control.test.mjs
