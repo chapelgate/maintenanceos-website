@@ -13,10 +13,34 @@ const IGNORED_GHSA_IDS = new Set([
   'GHSA-HP3W-G68C-FV3C', // sprintf-js unbounded precision DoS - no patch available
 ]);
 
-// Root cause package names that have the unpatchable vulnerabilities
+// Root cause packages that carry unpatchable vulnerabilities
 const ROOT_CAUSE_PACKAGES = new Set([
   'braces',
   'sprintf-js',
+]);
+
+// Accepted moderate dev-toolchain findings (tracked, not cleared).
+// All resolve to minimatch/eslint transitive toolchain deps, are dev-only,
+// are not reachable in the static export, and have no safe in-range fix
+// (minimatch 11 drops CommonJS; eslint downgrade regresses the lint config).
+// Next.js/zod critical/high are cleared by mw-298.
+const ACCEPTED_DEV_MODERATE = new Set([
+  '@eslint-community/eslint-utils',
+  '@eslint/config-array',
+  '@eslint/eslintrc',
+  '@next/eslint-plugin-next',
+  '@typescript-eslint/eslint-plugin',
+  '@typescript-eslint/parser',
+  '@typescript-eslint/type-utils',
+  '@typescript-eslint/typescript-estree',
+  '@typescript-eslint/utils',
+  'eslint',
+  'eslint-config-next',
+  'eslint-plugin-import',
+  'eslint-plugin-jsx-a11y',
+  'eslint-plugin-react',
+  'minimatch',
+  'typescript-eslint',
 ]);
 
 function findNpm() {
@@ -115,8 +139,12 @@ function main() {
       continue;
     }
 
-    // Check severity
     const severity = vuln.severity;
+    if (severity === 'moderate' && ACCEPTED_DEV_MODERATE.has(name)) {
+      console.log(`Accepted moderate (dev toolchain, tracked): ${name}`);
+      continue;
+    }
+
     if (severity && ['moderate', 'high', 'critical'].includes(severity)) {
       console.error(`Actionable vulnerability found: ${name} (${severity})`);
       hasActionableVulns = true;

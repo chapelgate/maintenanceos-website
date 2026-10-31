@@ -34,3 +34,11 @@ test("security review records the 2026-10-31 dependency patch", () => {
   assert.match(review, /critical\/high cleared/i);
   assert.doesNotMatch(review, /0 known vulnerabilities at\s+2026-09-27/);
 });
+
+test("audit-ci accepts residual eslint/minimatch moderates only", () => {
+  const src = fs.readFileSync(path.join(ROOT, "scripts/audit-ci.mjs"), "utf8");
+  assert.match(src, /ACCEPTED_DEV_MODERATE/);
+  assert.match(src, /minimatch/);
+  assert.match(src, /eslint-config-next/);
+  assert.doesNotMatch(src, /ACCEPTED_DEV_MODERATE\.has\(['"]next['"]\)/);
+});
