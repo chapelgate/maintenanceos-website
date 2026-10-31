@@ -17,6 +17,19 @@ This kit is for Chapelgate internal demos and tender evidence. It uses synthetic
 - Not a controlled call on the golden phone line.
 - Not central monitoring, managed PostgreSQL restore, or a release GO.
 
+
+## Required step fields (machine-checked)
+
+required_fields: checkout_sha, readiness_false, local_pytest, synthetic_sqlite_only, no_pstn_call, no_live_pii
+
+Each local demo step must keep these fields covered:
+- checkout_sha: disposable worktree at a candidate SHA
+- readiness_false: commercial_release_ready prints False
+- local_pytest: pytest suite runs on the candidate tree
+- synthetic_sqlite_only: dashboard/API against synthetic SQLite only
+- no_pstn_call: do not place a PSTN or golden-line call
+- no_live_pii: do not load resident or live customer PII
+
 ## Local synthetic demo steps
 
 1. Check out the candidate SHA on a disposable worktree.
