@@ -89,6 +89,7 @@ def test_operational_metrics_returns_dict(monkeypatch, test_database):
                 "automation_failed", "safety_escalations",
                 "open_escalations", "avg_approval_turnaround_minutes",
                 "unresolved_exceptions", "data_scope",
+                "correlation_id",
             }
             assert set(data.keys()) == expected_keys
 

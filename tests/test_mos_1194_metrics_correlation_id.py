@@ -1,0 +1,50 @@
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+
+import api
+import reporting
+from models import Base, Client, TenantBoundary
+
+
+def _configure(monkeypatch):
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    testing_session = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(engine)
+    for module in (api, reporting):
+        monkeypatch.setattr(module, "SessionLocal", testing_session)
+    token = "i" * 32
+    with testing_session() as session:
+        client = Client(name="Synthetic metrics corr tenant")
+        session.add(client)
+        session.flush()
+        session.add(TenantBoundary(client_id=client.id, mode="SYNTHETIC_TEST", label="HTTP"))
+        session.commit()
+        client_id = client.id
+    monkeypatch.setenv("INTERNAL_API_TOKEN", token)
+    monkeypatch.setenv("INTERNAL_API_CLIENT_ID", str(client_id))
+    monkeypatch.setenv("VOICE_TENANT_MODE", "isolated_test")
+    monkeypatch.setenv("VOICE_TEST_CLIENT_ID", str(client_id))
+    return {"Authorization": f"Bearer {token}"}
+
+
+def test_metrics_body_includes_correlation_id(monkeypatch):
+    headers = _configure(monkeypatch)
+    with TestClient(api.app) as client:
+        resp = client.get("/metrics", headers=headers)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "correlation_id" in data
+        rid = resp.headers.get("x-request-id") or resp.headers.get("x-correlation-id")
+        assert rid
+        assert data["correlation_id"] == rid
+        assert data["data_scope"] == "tenant_recorded_data"
+
+
+def test_reporting_allowlist_unchanged_without_correlation():
+    assert "correlation_id" not in reporting.OPERATIONAL_METRICS_FIELDS

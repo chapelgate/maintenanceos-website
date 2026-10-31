@@ -890,8 +890,11 @@ def readiness_endpoint(_=Depends(require_internal_api)):
 def metrics_endpoint(request: Request):
     """Internal metrics endpoint — local data scope only."""
     from reporting import operational_metrics
+    from request_context import request_id
     client_id = request.state.client_id
-    return operational_metrics(client_id)
+    body = dict(operational_metrics(client_id))
+    body["correlation_id"] = request_id() or None
+    return body
 
 ACTION_KEY_MAX = 200
 
