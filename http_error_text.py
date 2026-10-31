@@ -3,19 +3,41 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from secret_patterns import redact_secrets
+from secret_patterns import SENSITIVE_KEY, redact_secrets
 
 HTTP_ERROR_DETAIL_MAX = 2000
 HTTP_ERROR_JSON_MAX = 4000
 
 
+def _sanitize_structure(value: Any, key: str = "") -> Any:
+    if key and SENSITIVE_KEY.search(key):
+        return "[REDACTED]"
+    if isinstance(value, str):
+        redacted = redact_secrets(value)
+        if len(redacted) > HTTP_ERROR_DETAIL_MAX:
+            return redacted[:HTTP_ERROR_DETAIL_MAX]
+        return redacted
+    if isinstance(value, dict):
+        return {
+            str(item_key): _sanitize_structure(item_value, str(item_key))
+            for item_key, item_value in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [_sanitize_structure(item) for item in value]
+    if value is None or isinstance(value, (bool, int, float)):
+        return value
+    return type(value).__name__
+
+
 def sanitize_http_detail(detail: object) -> object:
-    if not isinstance(detail, str):
-        return detail
-    value = redact_secrets(detail)
-    if len(value) > HTTP_ERROR_DETAIL_MAX:
-        return value[:HTTP_ERROR_DETAIL_MAX]
-    return value
+    if isinstance(detail, str):
+        value = redact_secrets(detail)
+        if len(value) > HTTP_ERROR_DETAIL_MAX:
+            return value[:HTTP_ERROR_DETAIL_MAX]
+        return value
+    if isinstance(detail, (dict, list, tuple)):
+        return _sanitize_structure(detail)
+    return detail
 
 
 def sanitize_json_payload(payload: Any) -> str:
