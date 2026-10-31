@@ -13,7 +13,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from models import *
 from decision_engine import apply_intake_rules
 from operations import *
-from security import CONTRACTOR_LINK_TOKEN_MAX,verify_link
+from security import CONTRACTOR_LINK_TOKEN_MAX,CSRF_TOKEN_MAX,verify_link,issue_form_csrf,verify_form_csrf,issue_health_csrf
 from idempotency import claim_action,set_ai_side_effects
 from safety_controls import SafetyStateError,clear_critical_safety,critical_safety_active
 from tenant_security import TenantAccessError,configured_voice_client_id,internal_api_tenant_ready,require_client_resource
@@ -320,7 +320,7 @@ def require_public_provider_ingress():
         raise HTTPException(503, "Public provider ingress is disabled")
 
 @app.get("/health")
-def health():
+def health(response: Response):
     snap = capacity_snapshot()
     pilot = {}
     try:
@@ -362,6 +362,7 @@ def health():
             "data_scope": "process-local",
         }[key] for key in TENANT_HEALTH_KEYS},
     }
+    response.headers["x-csrf-token"] = issue_health_csrf()
     return {key: body[key] for key in HEALTH_TOP_LEVEL_KEYS}
 
 
@@ -391,7 +392,6 @@ async def create_work_order(request:Request,client_id=Depends(require_internal_a
     return {"work_order_id":wid,"recommended_contractor_id":cid}
 
 @app.get("/contractor/decision",response_class=HTMLResponse)
-
 def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:str):
     require_contractor_portal()
     work_order_id=_positive_int(work_order_id,"work_order_id")
@@ -405,6 +405,7 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
         approval=s.query(Approval).filter_by(work_order_id=work_order_id,approval_type="DISPATCH",status="APPROVED").first()
         if not wo or not approval:raise HTTPException(409,"Job is not available for this action")
     label="Accept job" if decision=="accept" else "Decline job"
+    form_csrf=issue_form_csrf(work_order_id,contractor_id,"decision")
     return _portal_page(
         f"Confirm {label}",
         f"""<h1 id=\"confirm-heading\">Confirm action for job #{work_order_id}</h1>
@@ -413,17 +414,19 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="decision" value="{decision}" maxlength="{CONTRACTOR_DECISION_MAX}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
+<input type="hidden" name="csrf_token" value="{form_csrf}" maxlength="{CSRF_TOKEN_MAX}" autocomplete="off">
 <button type="submit">{label}</button></form>""",
     )
 
 
 @app.post("/contractor/decision",response_class=HTMLResponse)
-def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),decision:str=Form(...),token:str=Form(...)):
+def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),decision:str=Form(...),token:str=Form(...),csrf_token:str=Form(...)):
     require_contractor_portal()
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     decision=_require_contractor_decision(decision)
     token=_require_contractor_token(token)
+    if not verify_form_csrf(work_order_id,contractor_id,"decision",csrf_token):raise HTTPException(403,"Invalid CSRF token")
 
     if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     if decision=="decline":
@@ -438,6 +441,7 @@ def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=For
         msg="Job accepted. Please now submit your availability."
     return _portal_page(f"Decision for job #{work_order_id}", f"<h1>Decision for job #{work_order_id}</h1><p>{msg}</p>")
 
+
 @app.get("/contractor/availability",response_class=HTMLResponse)
 def availability_form(work_order_id:int,contractor_id:int,token:str):
     require_contractor_portal()
@@ -448,6 +452,7 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"CONTRACTOR_ACCEPTED","AWAITING_AVAILABILITY"}):
             raise HTTPException(409,"Job is not available for this action")
+    form_csrf=issue_form_csrf(work_order_id,contractor_id,"availability")
     return _portal_page(
         f"Availability for job #{work_order_id}",
         f"""<h1 id="availability-heading">Submit availability for job #{work_order_id}</h1>
@@ -455,17 +460,20 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
+<input type="hidden" name="csrf_token" value="{form_csrf}" maxlength="{CSRF_TOKEN_MAX}" autocomplete="off">
 <label for="start">Start (YYYY-MM-DDTHH:MM)</label><input id="start" name="start" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <label for="end">End (YYYY-MM-DDTHH:MM)</label><input id="end" name="end" required type="datetime-local" maxlength="{AVAILABILITY_DATETIME_TEXT_MAX}"><br>
 <button type="submit">Submit</button></form>""",
     )
 
+
 @app.post("/contractor/availability",response_class=HTMLResponse)
-def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),start:str=Form(...),end:str=Form(...)):
+def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),csrf_token:str=Form(...),start:str=Form(...),end:str=Form(...)):
     require_contractor_portal()
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
+    if not verify_form_csrf(work_order_id,contractor_id,"availability",csrf_token):raise HTTPException(403,"Invalid CSRF token")
     if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     if not isinstance(start,str) or len(start) > AVAILABILITY_DATETIME_TEXT_MAX:
         raise HTTPException(400,"start is too long")
@@ -481,6 +489,7 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
     if not availability_id:raise HTTPException(409,"Job is not available for this action")
     return _portal_page("Availability received", "<h1>Availability received.</h1>")
 
+
 @app.get("/contractor/complete",response_class=HTMLResponse)
 def complete_form(work_order_id:int,contractor_id:int,token:str):
     require_contractor_portal()
@@ -491,23 +500,27 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}):
             raise HTTPException(409,"Job is not available for this action")
+    form_csrf=issue_form_csrf(work_order_id,contractor_id,"complete")
     return _portal_page(
         f"Complete job #{work_order_id}",
         f"""<h1 id="complete-heading">Complete job #{work_order_id}</h1><form method="{CONTRACTOR_FORM_METHOD}" action="/contractor/complete" aria-labelledby="complete-heading">
 <input type="hidden" name="work_order_id" value="{work_order_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="contractor_id" value="{contractor_id}" maxlength="{POSITIVE_INT_DIGITS}">
 <input type="hidden" name="token" value="{token}" maxlength="{CONTRACTOR_LINK_TOKEN_MAX}" autocomplete="one-time-code">
+<input type="hidden" name="csrf_token" value="{form_csrf}" maxlength="{CSRF_TOKEN_MAX}" autocomplete="off">
 <label for="note">Completion note</label><textarea id="note" name="note" required maxlength="{COMPLETION_NOTE_MAX}"></textarea><br>
 <label for="evidence_url">Evidence URL (optional)</label><input id="evidence_url" name="evidence_url" type="url" maxlength="{EVIDENCE_URL_MAX}"><br>
 <button type="submit">Submit completion</button></form>""",
     )
 
+
 @app.post("/contractor/complete",response_class=HTMLResponse)
-def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
+def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),csrf_token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
     require_contractor_portal()
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
+    if not verify_form_csrf(work_order_id,contractor_id,"complete",csrf_token):raise HTTPException(403,"Invalid CSRF token")
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     note=normalize_completion_note(note)
     evidence_url=normalize_evidence_url(evidence_url)
@@ -515,6 +528,7 @@ def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),toke
     except (TenantAccessError,SafetyStateError):evidence_id=None
     if not evidence_id:raise HTTPException(409,"Job is not available for this action")
     return _portal_page("Completion recorded", "<h1>Completion recorded.</h1>")
+
 
 @app.post("/quotes")
 async def quotes(request:Request,client_id=Depends(require_internal_api)):

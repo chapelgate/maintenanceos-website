@@ -121,3 +121,56 @@ def verify_link(kind,work_order_id,subject_id,token,now=None):
         return hmac.compare_digest(expected,token)
     except (RuntimeError,TypeError,ValueError,AttributeError):
         return False
+
+CSRF_TOKEN_MAX = 160
+
+
+def issue_form_csrf(work_order_id: int, contractor_id: int, kind: str) -> str:
+    if not app_secret_ready():
+        raise RuntimeError("APP_SECRET is not configured securely")
+    if kind not in {"decision", "availability", "complete"}:
+        raise ValueError("unsupported csrf kind")
+    secret = os.getenv("APP_SECRET", "").encode()
+    msg = f"csrf:{kind}:{int(work_order_id)}:{int(contractor_id)}".encode()
+    return base64.urlsafe_b64encode(hmac.new(secret, msg, hashlib.sha256).digest()).decode().rstrip("=")
+
+
+def verify_form_csrf(work_order_id: int, contractor_id: int, kind: str, token: object) -> bool:
+    if not isinstance(token, str) or not token or len(token) > CSRF_TOKEN_MAX:
+        return False
+    try:
+        expected = issue_form_csrf(work_order_id, contractor_id, kind)
+    except (RuntimeError, TypeError, ValueError):
+        return False
+    return hmac.compare_digest(expected, token)
+
+
+def issue_health_csrf() -> str:
+    if not app_secret_ready():
+        secret = b"local-csrf-dev-secret-not-for-production!!"
+    else:
+        secret = os.getenv("APP_SECRET", "").encode()
+    nonce = secrets.token_urlsafe(12)
+    expires = int(time.time()) + 3600
+    msg = f"csrf:health:{expires}:{nonce}".encode()
+    sig = base64.urlsafe_b64encode(hmac.new(secret, msg, hashlib.sha256).digest()).decode().rstrip("=")
+    return f"{expires}.{nonce}.{sig}"
+
+
+def verify_health_csrf(token: object) -> bool:
+    if not isinstance(token, str) or not token or len(token) > CSRF_TOKEN_MAX:
+        return False
+    try:
+        expires_s, nonce, sig = token.split(".", 2)
+        expires = int(expires_s)
+        if expires < int(time.time()):
+            return False
+        if not app_secret_ready():
+            secret = b"local-csrf-dev-secret-not-for-production!!"
+        else:
+            secret = os.getenv("APP_SECRET", "").encode()
+        msg = f"csrf:health:{expires}:{nonce}".encode()
+        expected = base64.urlsafe_b64encode(hmac.new(secret, msg, hashlib.sha256).digest()).decode().rstrip("=")
+        return hmac.compare_digest(expected, sig)
+    except (TypeError, ValueError):
+        return False
