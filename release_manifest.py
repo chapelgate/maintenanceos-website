@@ -9,8 +9,25 @@ from commercial_release_controls import (
     retention_policy_configured,
     social_housing_runtime_ready,
 )
+from synthetic_buyer_onboarding_kit import (
+    kit_doc_path,
+    populate_demo_buyer_pack,
+    required_step_fields,
+)
 
 _SHA = re.compile(r"[0-9a-fA-F]{40}")
+
+
+def synthetic_buyer_pack_fields() -> dict:
+    pack = populate_demo_buyer_pack()
+    return {
+        "buyer_pack_synthetic_only": True,
+        "buyer_pack_sale_ready": False,
+        "buyer_pack_live_pii": False,
+        "buyer_pack_kit_present": bool(pack["kit_present"] and kit_doc_path().is_file()),
+        "buyer_pack_required_step_fields": list(required_step_fields()),
+        "buyer_pack_commercial_release_ready": False,
+    }
 
 
 def manifest(sha: str) -> dict:
