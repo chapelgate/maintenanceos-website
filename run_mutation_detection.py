@@ -3,7 +3,7 @@ import json
 import shutil
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -115,7 +115,7 @@ def run(output_dir: Path, python: str) -> dict:
             }
         )
     summary = {
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "mutations": results,
         "passed": all(item["detected"] for item in results),
         "disposable_copies_only": True,

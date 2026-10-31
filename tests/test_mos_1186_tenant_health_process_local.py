@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 
 from fastapi.testclient import TestClient
 
@@ -19,7 +19,7 @@ def _seed():
         prop = Property(client_id=client.id, address="1 Test Street", postcode="CH45 1AA")
         s.add(prop)
         s.flush()
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         open_job = WorkOrder(
             client_id=client.id,
             property_id=prop.id,

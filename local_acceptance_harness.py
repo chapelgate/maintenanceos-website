@@ -2,7 +2,7 @@ import argparse
 import hashlib
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from sqlalchemy import create_engine
@@ -290,7 +290,7 @@ def independent_controls() -> dict:
         ("contractor_links", lambda: operations.contractor_portal_links(work_order_id) == {}),
         ("appointment_booking", lambda: operations.book_slot(work_order_id, 999) is None),
         ("contractor_acceptance", lambda: operations.accept_contractor(work_order_id, contractor_id, "critical-accept") is False),
-        ("availability_submission", lambda: _raises_safety(lambda: operations.submit_availability(work_order_id, contractor_id, datetime.utcnow(), datetime.utcnow(), "critical-av"))),
+        ("availability_submission", lambda: _raises_safety(lambda: operations.submit_availability(work_order_id, contractor_id, datetime.now(timezone.utc), datetime.now(timezone.utc), "critical-av"))),
         ("quote_submission", lambda: _raises_safety(lambda: operations.submit_quote(work_order_id, contractor_id, 100, "routine"))),
         ("invoice_processing", lambda: _raises_safety(lambda: operations.invoice_qa(work_order_id, contractor_id, "INV-1", 100, "routine"))),
         ("resident_confirmation", lambda: _raises_safety(lambda: operations.resident_confirmation(work_order_id, True, "resolved"))),
@@ -330,7 +330,7 @@ def independent_controls() -> dict:
         checks.append(_control("tenant_scoped_idempotency", "same key accepted independently for two tenants", allowed_a and allowed_b and not duplicate_a and duplicate_reason == "duplicate_model_action"))
         record_action_result(session, client_id=first[0], work_order_id=wo_a.id, action_type="contractor_dispatched", action_key="verified-dispatch", status="SUCCEEDED", actor="Synthetic callback")
         session.add(ContractorAcceptance(work_order_id=wo_a.id, contractor_id=first[3], action_key="accepted"))
-        start = datetime.utcnow()
+        start = datetime.now(timezone.utc)
         session.add(Appointment(work_order_id=wo_a.id, contractor_id=first[3], start_at=start, status="BOOKED"))
         session.add(AuditEvent(work_order_id=wo_a.id, actor="Synthetic scheduler", event="APPOINTMENT_BOOKED", detail="synthetic slot"))
         session.add(ResidentConfirmation(work_order_id=wo_a.id, resolved=True, comment="Synthetic confirmation"))
@@ -410,7 +410,7 @@ def run(input_path: Path, output_path: Path | None, stop_on_hard_failure: bool =
     }
     evidence = {
         "schema_version": 3,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "scope": "MaintenanceOS local acceptance scenarios 1-90",
         "source_tree_sha256": source_hash,
         "active_file_count": file_count,

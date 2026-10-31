@@ -1,7 +1,7 @@
 import argparse
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from sqlalchemy import create_engine
@@ -66,7 +66,7 @@ def build_database(path: Path):
         session.add(CriticalSafetyState(work_order_id=critical.id, client_id=client.id, active=True, flags=critical.safety_flags, established_by="synthetic dashboard verifier"))
         session.add(Approval(client_id=client.id, work_order_id=routine.id, approval_type="DISPATCH", proposed_action="Dispatch", reason="Synthetic"))
         session.add(Escalation(work_order_id=critical.id, level="RED", reason=critical.safety_flags, status="OPEN"))
-        session.add(AutomationJob(work_order_id=routine.id, job_type="SYNTHETIC_FAILED_JOB", run_at=datetime.utcnow(), status="FAILED", attempts=3))
+        session.add(AutomationJob(work_order_id=routine.id, job_type="SYNTHETIC_FAILED_JOB", run_at=datetime.now(timezone.utc), status="FAILED", attempts=3))
         session.add(CommunicationDelivery(client_id=client.id, work_order_id=routine.id, communication_id=1, channel="EMAIL", action_key="synthetic-failed", status="FAILED"))
         set_ai_side_effects(session, False, actor="synthetic verifier", reason="local closed dashboard verification")
         session.commit()
@@ -106,7 +106,7 @@ def verify(path: Path) -> dict:
         "external_calls_permitted": False,
         "realtime_voice_enabled": False,
     }
-    return {"generated_at": datetime.utcnow().isoformat() + "Z", "database": str(path), "checks": checks, "passed": all(checks.values())}
+    return {"generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"), "database": str(path), "checks": checks, "passed": all(checks.values())}
 
 
 def main() -> int:
