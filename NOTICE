@@ -1,0 +1,6 @@
+CLEAN-ROOM NOTICE
+
+MaintenanceOS / WorkSmartOS landlord vertical integration is Chapelgate original work.
+Ideas-only reference: MicroRealEstate SUL v2.0 concepts may inform product thinking.
+No MicroRealEstate source code, assets, or NVIDIA model weights are vendored in this repository.
+landlordos packaging lives in chapelgate/landlord-os (lo-ws-01 merged); this tree consumes it optionally behind WORKSMART_VERTICAL.
