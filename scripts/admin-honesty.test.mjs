@@ -18,6 +18,7 @@ test("admin page declares pre-launch internal state honestly", () => {
   assert.match(page, /630.*630 pass/);
   assert.match(page, /mw-1023-01-licences/);
   assert.match(page, /mw-1024-01-estate-meta/);
+  assert.match(page, /index: false/);
 });
 
 test("admin page has no live customer data claims", () => {
@@ -27,7 +28,7 @@ test("admin page has no live customer data claims", () => {
   assert.doesNotMatch(page, /real.*data/);
 });
 
-test("admin page is in sitemap routes", () => {
+test("admin page is excluded from sitemap routes", () => {
   const routes = fs.readFileSync(path.join(ROOT, "src/config/routes.ts"), "utf8");
-  assert.match(routes, /"\/admin\/"/);
+  assert.doesNotMatch(routes, /"\/admin\/"/);
 });

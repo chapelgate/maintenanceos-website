@@ -4,12 +4,15 @@ import { JsonLd } from "@/components/JsonLd";
 import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 
-export const metadata: Metadata = contentPageMetadata({
-  title: "Admin",
-  description:
-    "Internal admin overview — pre-launch site status, build evidence, and honesty gates. Not a public page.",
-  path: "/admin/",
-});
+export const metadata: Metadata = {
+  ...contentPageMetadata({
+    title: "Admin",
+    description:
+      "Internal admin overview — pre-launch site status, build evidence, and honesty gates. Not a public page.",
+    path: "/admin/",
+  }),
+  robots: { index: false, follow: false },
+};
 
 export default function AdminPage() {
   return (
