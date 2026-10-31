@@ -884,7 +884,10 @@ async def pilot_synthetic_email_proof(request: Request):
 
 @app.get("/readiness")
 def readiness_endpoint(_=Depends(require_internal_api)):
-    return readiness_report()
+    from request_context import request_id
+    body = dict(readiness_report())
+    body["correlation_id"] = request_id() or None
+    return body
 
 @app.get("/metrics", dependencies=[Depends(require_internal_api)])
 def metrics_endpoint(request: Request):
