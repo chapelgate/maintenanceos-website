@@ -62,7 +62,7 @@ open engineering work remains in `WEBSITE_BACKLOG.md`.
 
 - [x] `WEBSITE_SECURITY_REVIEW.md` filled.
 - [x] HTML CSP / referrer policy and form-abuse controls reviewed.
-- [x] Dependency audit: 0 known vulnerabilities at 2026-09-27 final engineering RC.
+- [x] Dependency audit (2026-10-31): Next 16.4.3 + zod 4.6.7 — critical/high cleared; 16 residual moderate eslint/minimatch dev-toolchain findings tracked, not claimed zero.
 - [x] Common committed-secret pattern scan clean at 2026-09-27 final engineering RC.
 - [ ] Resolve or explicitly accept the documented HTTP response-header /
   clickjacking gap on the current static host before public launch.
