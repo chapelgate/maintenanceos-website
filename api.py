@@ -2,6 +2,7 @@ import hmac
 import hashlib
 import json
 import math
+import html
 import os
 import threading
 from contextlib import suppress
@@ -49,7 +50,25 @@ app=FastAPI(title=api_title(),docs_url=None,redoc_url=None,openapi_url=None)
 @app.exception_handler(HTTPException)
 async def _sanitize_http_exception(request: Request, exc: HTTPException):
     from fastapi.responses import JSONResponse
-    return JSONResponse(status_code=exc.status_code, content={"detail": sanitize_http_detail(exc.detail)})
+    detail = sanitize_http_detail(exc.detail)
+    path = request.url.path or ""
+    if path.startswith("/contractor/"):
+        if isinstance(detail, str):
+            message = detail
+        elif detail is None:
+            message = "Request failed"
+        else:
+            message = "Request failed"
+        safe = html.escape(message, quote=True)
+        body = (
+            "<h1>Unable to complete request</h1>"
+            f'<p role="alert" aria-live="assertive">{safe}</p>'
+        )
+        return HTMLResponse(
+            status_code=exc.status_code,
+            content=_portal_page("Error", body),
+        )
+    return JSONResponse(status_code=exc.status_code, content={"detail": detail})
 
 HEALTH_TOP_LEVEL_KEYS = frozenset({
     "ok",
