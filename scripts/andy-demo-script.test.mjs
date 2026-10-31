@@ -18,7 +18,7 @@ test("Andy demo script stays a pre-launch synthetic walkthrough", () => {
   assert.match(doc, /not a live telephone call/);
   assert.match(doc, /no list price is published/);
   assert.match(doc, /no uptime percentage/);
-  assert.match(doc, /WCAG 2\.2 AA is verified/);
+  assert.match(doc, /WCAG 2\.2 AA is not verified/);
 });
 
 test("Andy demo script does not instruct a sale or a public launch", () => {

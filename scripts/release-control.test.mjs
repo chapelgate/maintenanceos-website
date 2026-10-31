@@ -18,6 +18,7 @@ test("release preflight requires clean source and runs all local quality gates",
   assert.match(src, /functional:smoke/);
   assert.match(src, /performance:budget/);
   assert.match(src, /accessibility:check/);
+  assert.match(src, /typecheck/);
   assert.match(src, /release\.json/);
   assert.match(src, /does not match HEAD/);
 });
