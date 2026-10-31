@@ -54,6 +54,60 @@ def _average(values):
 
     return round(sum(values)/len(values),2) if values else None
 
+
+def process_local_tenant_health():
+    empty = {
+        "open_jobs": 0,
+        "closed_jobs": 0,
+        "p1_jobs": 0,
+        "repeat_repairs": 0,
+        "open_sla_breaches": 0,
+        "avg_close_hours": 0.0,
+        "human_intervention_rate": 0.0,
+        "unresolved_exceptions": 0,
+        "data_scope": "process-local",
+    }
+    try:
+        with SessionLocal() as s:
+            jobs = s.query(WorkOrder).all()
+            closed = [job for job in jobs if job.status == "CLOSED"]
+            open_jobs = [job for job in jobs if job.status not in {"CLOSED", "CANCELLED"}]
+            durations = [
+                (job.closed_at - job.created_at).total_seconds() / 3600
+                for job in closed
+                if job.closed_at and job.created_at and job.closed_at >= job.created_at
+            ]
+            approvals = s.query(Approval).all()
+            audits = s.query(AuditEvent).all()
+            human_jobs = {item.work_order_id for item in approvals if item.work_order_id}
+            human_jobs.update(
+                event.work_order_id
+                for event in audits
+                if event.work_order_id and str(getattr(event, "actor", "") or "").startswith("User:")
+            )
+            body = {
+                "open_jobs": len(open_jobs),
+                "closed_jobs": len(closed),
+                "p1_jobs": sum(1 for job in jobs if job.urgency == "P1"),
+                "repeat_repairs": sum(1 for job in jobs if job.repeat_repair),
+                "open_sla_breaches": sum(
+                    1 for job in open_jobs if sla_status(job.urgency, job.created_at)[0] == "BREACHED"
+                ),
+                "avg_close_hours": round(sum(durations) / len(durations), 2) if durations else 0.0,
+                "human_intervention_rate": round(len(human_jobs) / len(jobs), 4) if jobs else 0.0,
+                "unresolved_exceptions": sum(
+                    1 for job in jobs if job.status in {"HUMAN_REVIEW", "NO_SHOW", "FAILED_CONTRACTOR"}
+                ),
+                "data_scope": "process-local",
+            }
+            overlap = FORBIDDEN_REPORT_FIELDS.intersection(body)
+            if overlap:
+                raise RuntimeError(f"tenant health fields include forbidden keys: {sorted(overlap)}")
+            return body
+    except Exception:
+        return empty
+
+
 def portfolio_kpis(client_id:int):
     with SessionLocal() as s:
         jobs=s.query(WorkOrder).filter_by(client_id=client_id).all()

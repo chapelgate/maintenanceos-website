@@ -42,6 +42,7 @@ from voice_bridge import (
 from provider_runtime import handle_provider_media_stream, provider_ready
 from product_profile import ProductProfileError,api_title
 from http_error_text import sanitize_http_detail
+from reporting import process_local_tenant_health
 load_dotenv()
 app=FastAPI(title=api_title(),docs_url=None,redoc_url=None,openapi_url=None)
 
@@ -344,6 +345,7 @@ def health(response: Response):
         product_title = api_title()
     except ProductProfileError:
         product_title = "MaintenanceOS V1 Pilot"
+    tenant_health_snapshot = process_local_tenant_health()
     body = {
         "ok": True,
         "version": "v1-pilot",
@@ -356,17 +358,7 @@ def health(response: Response):
             "key_max": INCIDENT_LINK_KEY_MAX,
             "ready": True,
         },
-        "tenant_health": {key: {
-            "open_jobs": 0,
-            "closed_jobs": 0,
-            "p1_jobs": 0,
-            "repeat_repairs": 0,
-            "open_sla_breaches": 0,
-            "avg_close_hours": 0.0,
-            "human_intervention_rate": 0.0,
-            "unresolved_exceptions": 0,
-            "data_scope": "process-local",
-        }[key] for key in TENANT_HEALTH_KEYS},
+        "tenant_health": {key: tenant_health_snapshot[key] for key in TENANT_HEALTH_KEYS},
     }
     response.headers["x-csrf-token"] = issue_health_csrf()
     return {key: body[key] for key in HEALTH_TOP_LEVEL_KEYS}
