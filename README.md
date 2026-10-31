@@ -34,3 +34,4 @@ A fresh controlled Gemini test-number call is still required before production d
 The historical `chapelgate/cloud-workers/jobs/maintenanceos` directory is a legacy cloud-validation copy. Product development belongs in this repository. Shared cloud infrastructure may remain in `cloud-workers`, but agents must not develop competing MaintenanceOS product copies there.
 
 See [CURRENT_STATUS.md](CURRENT_STATUS.md) first for the live checkpoint, then [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY_DEPLOYMENT.md](SECURITY_DEPLOYMENT.md), [DATA_GOVERNANCE.md](DATA_GOVERNANCE.md), [STAGED_VOICE_INTEGRATION.md](STAGED_VOICE_INTEGRATION.md), and [TEST_CALL_RUNBOOK.md](TEST_CALL_RUNBOOK.md).
+
