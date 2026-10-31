@@ -1,0 +1,2 @@
+## Bug: test literal triggers NVIDIA source guard
+Test files `tests/test_mos_1122_landlord_vertical.py` and `tests/test_mos_1126_permissions_policy.py` contain the literal string `integrate.api.nvidia.com`, which causes `tests/test_nvidia_source_guard.py::test_product_python_has_no_nvidia_api_host` to fail on main. This was introduced when the selector/permissions-policy test files were merged via #557/#558.
