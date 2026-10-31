@@ -1,0 +1,2 @@
+# assess
+Symptom: unit-style direct calls to contractor_decision_submit / availability_submit return 403 Invalid CSRF token instead of 409 job-unavailable or 400 overlong datetime. Root: csrf_token: Form(...) default is a non-str sentinel on direct calls; verify_form_csrf rejects it before job-state or length checks. Availability positional args also mapped overlong start into csrf_token because csrf sat before start/end.

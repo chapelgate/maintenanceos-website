@@ -432,9 +432,15 @@ def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=For
     contractor_id=_positive_int(contractor_id,"contractor_id")
     decision=_require_contractor_decision(decision)
     token=_require_contractor_token(token)
-    if not verify_form_csrf(work_order_id,contractor_id,"decision",csrf_token):raise HTTPException(403,"Invalid CSRF token")
 
+    with SessionLocal() as s:
+        wo=_contractor_work_order(s,work_order_id,contractor_id,{"AWAITING_CONTRACTOR"})
+        approval=s.query(Approval).filter_by(work_order_id=work_order_id,approval_type="DISPATCH",status="APPROVED").first()
+        if not wo or not approval:raise HTTPException(409,"Job is not available for this action")
+
+    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"decision",csrf_token):raise HTTPException(403,"Invalid CSRF token")
     if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+
     if decision=="decline":
         try:declined=decline_contractor(work_order_id,contractor_id,token)
         except (TenantAccessError,SafetyStateError):declined=False
@@ -474,17 +480,17 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
 
 
 @app.post("/contractor/availability",response_class=HTMLResponse)
-def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),csrf_token:str=Form(...),start:str=Form(...),end:str=Form(...)):
+def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),start:str=Form(...),end:str=Form(...),csrf_token:str=Form(...)):
     require_contractor_portal()
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
-    if not verify_form_csrf(work_order_id,contractor_id,"availability",csrf_token):raise HTTPException(403,"Invalid CSRF token")
-    if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     if not isinstance(start,str) or len(start) > AVAILABILITY_DATETIME_TEXT_MAX:
         raise HTTPException(400,"start is too long")
     if not isinstance(end,str) or len(end) > AVAILABILITY_DATETIME_TEXT_MAX:
         raise HTTPException(400,"end is too long")
+    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"availability",csrf_token):raise HTTPException(403,"Invalid CSRF token")
+    if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     start=_reject_control_chars(start,"start")
     end=_reject_control_chars(end,"end")
     try:st=datetime.strptime(start,"%Y-%m-%dT%H:%M");en=datetime.strptime(end,"%Y-%m-%dT%H:%M")
@@ -521,12 +527,12 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
 
 
 @app.post("/contractor/complete",response_class=HTMLResponse)
-def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),csrf_token:str=Form(...),note:str=Form(...),evidence_url:str=Form("")):
+def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),token:str=Form(...),note:str=Form(...),evidence_url:str=Form(""),csrf_token:str=Form(...)):
     require_contractor_portal()
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
-    if not verify_form_csrf(work_order_id,contractor_id,"complete",csrf_token):raise HTTPException(403,"Invalid CSRF token")
+    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"complete",csrf_token):raise HTTPException(403,"Invalid CSRF token")
     if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
     note=normalize_completion_note(note)
     evidence_url=normalize_evidence_url(evidence_url)
