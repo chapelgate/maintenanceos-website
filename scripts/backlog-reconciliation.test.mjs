@@ -30,7 +30,8 @@ test("launch checklist separates completed engineering from human launch gates",
 
 test("security review records the real static-host gap without theatre", () => {
   const review = read("WEBSITE_SECURITY_REVIEW.md");
-  assert.match(review, /0 known vulnerabilities/);
+  assert.match(review, /critical\/high cleared/);
+  assert.match(review, /16 moderate/);
   assert.match(review, /clickjacking/);
   assert.match(review, /X-Frame-Options/);
   assert.match(review, /do not add fake meta tags/i);
