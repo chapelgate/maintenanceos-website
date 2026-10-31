@@ -1,2 +1,2 @@
 # Plan
-Add Spec Kit + run existing acceptance tests directly by name.
+Add Spec Kit + named wrappers that reassert existing acceptance names.
