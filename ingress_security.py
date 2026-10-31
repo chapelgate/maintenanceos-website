@@ -160,14 +160,20 @@ class HttpSecurityBoundary:
             nonlocal status
             if message.get("type") == "http.response.start":
                 status = int(message.get("status", 500))
-                blocked = {item[0] for item in SECURITY_HEADERS} | {b"x-request-id", b"set-cookie"}
+                blocked = {item[0] for item in SECURITY_HEADERS} | {
+                    b"x-request-id",
+                    b"x-correlation-id",
+                    b"set-cookie",
+                }
                 response_headers = [
                     (key, value)
                     for key, value in message.get("headers", [])
                     if key.lower() not in blocked
                 ]
                 response_headers.extend(SECURITY_HEADERS)
-                response_headers.append((b"x-request-id", request_id.encode("ascii")))
+                rid_bytes = request_id.encode("ascii")
+                response_headers.append((b"x-request-id", rid_bytes))
+                response_headers.append((b"x-correlation-id", rid_bytes))
                 message = {**message, "headers": response_headers}
             await send(message)
 
