@@ -8,14 +8,14 @@ Licence route: REUSE-WITH-ATTRIBUTION. MIT/Apache/BSD packages are recorded with
 
 ## Candidate identity
 
-- Source commit: `c4ff3ca3c85d296e557897949c58f2608e29e27b` (2026-10-22)
-- `package-lock.json` SHA-256: `f6305aadc0ba7493c2cb3b5bb6d46e263e1c995028eef04cb85fa8282c864d31`
+- Source commit: `ff0140cc8ef7ac48e7fdab2c17d2f8ee4cbd4cbe` (2026-10-31)
+- `package-lock.json` SHA-256: `b6b40384eb0034ae70ae32d6df5ab824d34a43641611e272e5f207b4af906d37`
 - lockfileVersion: 3
 - Root package: `maintenanceos-website` 0.1.0 (private)
 
 ## Package evidence (from package-lock.json, lockfileVersion 3)
 
-474 package entries. Every entry carries a declared `license` field and a `resolved` source reference except six nested packages under `@tailwindcss/oxide-wasm32-wasi` (no `resolved` field); those six are recorded with name, version and licence only.
+474 package entries. Every entry carries a declared `license` field and a `resolved` source reference except nested packages under `@tailwindcss/oxide-wasm32-wasi` (no `resolved` field); those are recorded with name, version and licence only.
 
 Declared licences observed:
 
@@ -125,18 +125,18 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 81 | node_modules/@napi-rs/canvas-win32-arm64-msvc | 1.0.10 | MIT | https://registry.npmjs.org/@napi-rs/canvas-win32-arm64-msvc/-/canvas-win32-arm64-msvc-1.0.10.tgz | reuse |
 | 82 | node_modules/@napi-rs/canvas-win32-x64-msvc | 1.0.10 | MIT | https://registry.npmjs.org/@napi-rs/canvas-win32-x64-msvc/-/canvas-win32-x64-msvc-1.0.10.tgz | reuse |
 | 83 | node_modules/@napi-rs/wasm-runtime | 1.2.4 | MIT | https://registry.npmjs.org/@napi-rs/wasm-runtime/-/wasm-runtime-1.2.4.tgz | reuse |
-| 84 | node_modules/@next/env | 16.3.8 | MIT | https://registry.npmjs.org/@next/env/-/env-16.3.8.tgz | reuse |
-| 85 | node_modules/@next/eslint-plugin-next | 16.4.2 | MIT | https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-16.4.2.tgz | reuse |
+| 84 | node_modules/@next/env | 16.4.3 | MIT | https://registry.npmjs.org/@next/env/-/env-16.4.3.tgz | reuse |
+| 85 | node_modules/@next/eslint-plugin-next | 16.4.3 | MIT | https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-16.4.3.tgz | reuse |
 | 86 | node_modules/@next/eslint-plugin-next/node_modules/@eslint-community/eslint-utils | 4.9.1 | MIT | https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.9.1.tgz | reuse |
 | 87 | node_modules/@next/eslint-plugin-next/node_modules/eslint-visitor-keys | 3.4.3 | Apache-2.0 | https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz | reuse |
-| 88 | node_modules/@next/swc-darwin-arm64 | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-16.3.8.tgz | reuse |
-| 89 | node_modules/@next/swc-darwin-x64 | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-16.3.8.tgz | reuse |
-| 90 | node_modules/@next/swc-linux-arm64-gnu | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-16.3.8.tgz | reuse |
-| 91 | node_modules/@next/swc-linux-arm64-musl | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-16.3.8.tgz | reuse |
-| 92 | node_modules/@next/swc-linux-x64-gnu | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-16.3.8.tgz | reuse |
-| 93 | node_modules/@next/swc-linux-x64-musl | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-16.3.8.tgz | reuse |
-| 94 | node_modules/@next/swc-win32-arm64-msvc | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-16.3.8.tgz | reuse |
-| 95 | node_modules/@next/swc-win32-x64-msvc | 16.3.8 | MIT | https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-16.3.8.tgz | reuse |
+| 88 | node_modules/@next/swc-darwin-arm64 | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-16.4.3.tgz | reuse |
+| 89 | node_modules/@next/swc-darwin-x64 | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-16.4.3.tgz | reuse |
+| 90 | node_modules/@next/swc-linux-arm64-gnu | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-16.4.3.tgz | reuse |
+| 91 | node_modules/@next/swc-linux-arm64-musl | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-16.4.3.tgz | reuse |
+| 92 | node_modules/@next/swc-linux-x64-gnu | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-16.4.3.tgz | reuse |
+| 93 | node_modules/@next/swc-linux-x64-musl | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-16.4.3.tgz | reuse |
+| 94 | node_modules/@next/swc-win32-arm64-msvc | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-16.4.3.tgz | reuse |
+| 95 | node_modules/@next/swc-win32-x64-msvc | 16.4.3 | MIT | https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-16.4.3.tgz | reuse |
 | 96 | node_modules/@nodelib/fs.scandir | 2.1.5 | MIT | https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz | reuse |
 | 97 | node_modules/@nodelib/fs.stat | 2.0.5 | MIT | https://registry.npmjs.org/@nodelib/fs.stat/-/fs.stat-2.0.5.tgz | reuse |
 | 98 | node_modules/@nodelib/fs.walk | 1.2.8 | MIT | https://registry.npmjs.org/@nodelib/fs.walk/-/fs.walk-1.2.8.tgz | reuse |
@@ -156,12 +156,12 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 112 | node_modules/@tailwindcss/oxide-linux-x64-gnu | 4.3.3 | MIT | https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-gnu/-/oxide-linux-x64-gnu-4.3.3.tgz | reuse |
 | 113 | node_modules/@tailwindcss/oxide-linux-x64-musl | 4.3.3 | MIT | https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-musl/-/oxide-linux-x64-musl-4.3.3.tgz | reuse |
 | 114 | node_modules/@tailwindcss/oxide-wasm32-wasi | 4.3.3 | MIT | https://registry.npmjs.org/@tailwindcss/oxide-wasm32-wasi/-/oxide-wasm32-wasi-4.3.3.tgz | reuse |
-| 115 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@emnapi/core | 1.11.1 | MIT | (no resolved URL — nested dependency) | reuse |
-| 116 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@emnapi/runtime | 1.11.1 | MIT | (no resolved URL — nested dependency) | reuse |
-| 117 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@emnapi/wasi-threads | 1.2.2 | MIT | (no resolved URL — nested dependency) | reuse |
-| 118 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@napi-rs/wasm-runtime | 1.1.4 | MIT | (no resolved URL — nested dependency) | reuse |
-| 119 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@tybys/wasm-util | 0.10.2 | MIT | (no resolved URL — nested dependency) | reuse |
-| 120 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/tslib | 2.8.1 | 0BSD | (no resolved URL — nested dependency) | reuse |
+| 115 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@emnapi/core | 1.11.1 | MIT | (nested; no resolved field) | reuse |
+| 116 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@emnapi/runtime | 1.11.1 | MIT | (nested; no resolved field) | reuse |
+| 117 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@emnapi/wasi-threads | 1.2.2 | MIT | (nested; no resolved field) | reuse |
+| 118 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@napi-rs/wasm-runtime | 1.1.4 | MIT | (nested; no resolved field) | reuse |
+| 119 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@tybys/wasm-util | 0.10.2 | MIT | (nested; no resolved field) | reuse |
+| 120 | node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/tslib | 2.8.1 | 0BSD | (nested; no resolved field) | reuse |
 | 121 | node_modules/@tailwindcss/oxide-win32-arm64-msvc | 4.3.3 | MIT | https://registry.npmjs.org/@tailwindcss/oxide-win32-arm64-msvc/-/oxide-win32-arm64-msvc-4.3.3.tgz | reuse |
 | 122 | node_modules/@tailwindcss/oxide-win32-x64-msvc | 4.3.3 | MIT | https://registry.npmjs.org/@tailwindcss/oxide-win32-x64-msvc/-/oxide-win32-x64-msvc-4.3.3.tgz | reuse |
 | 123 | node_modules/@tailwindcss/postcss | 4.3.3 | MIT | https://registry.npmjs.org/@tailwindcss/postcss/-/postcss-4.3.3.tgz | reuse |
@@ -274,7 +274,7 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 230 | node_modules/escalade | 3.2.0 | MIT | https://registry.npmjs.org/escalade/-/escalade-3.2.0.tgz | reuse |
 | 231 | node_modules/escape-string-regexp | 4.0.0 | MIT | https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz | reuse |
 | 232 | node_modules/eslint | 9.39.5 | MIT | https://registry.npmjs.org/eslint/-/eslint-9.39.5.tgz | reuse |
-| 233 | node_modules/eslint-config-next | 16.4.2 | MIT | https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-16.4.2.tgz | reuse |
+| 233 | node_modules/eslint-config-next | 16.4.3 | MIT | https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-16.4.3.tgz | reuse |
 | 234 | node_modules/eslint-config-next/node_modules/eslint-import-resolver-typescript | 3.10.1 | ISC | https://registry.npmjs.org/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.10.1.tgz | unresolved |
 | 235 | node_modules/eslint-config-next/node_modules/eslint-plugin-import | 2.32.0 | MIT | https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.32.0.tgz | reuse |
 | 236 | node_modules/eslint-config-next/node_modules/eslint-plugin-import/node_modules/debug | 3.2.7 | MIT | https://registry.npmjs.org/debug/-/debug-3.2.7.tgz | reuse |
@@ -409,7 +409,7 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 365 | node_modules/nanoid | 3.3.19 | MIT | https://registry.npmjs.org/nanoid/-/nanoid-3.3.19.tgz | reuse |
 | 366 | node_modules/napi-postinstall | 0.3.4 | MIT | https://registry.npmjs.org/napi-postinstall/-/napi-postinstall-0.3.4.tgz | reuse |
 | 367 | node_modules/natural-compare | 1.4.0 | MIT | https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz | reuse |
-| 368 | node_modules/next | 16.3.8 | MIT | https://registry.npmjs.org/next/-/next-16.3.8.tgz | reuse |
+| 368 | node_modules/next | 16.4.3 | MIT | https://registry.npmjs.org/next/-/next-16.4.3.tgz | reuse |
 | 369 | node_modules/next/node_modules/postcss | 8.5.23 | MIT | https://registry.npmjs.org/postcss/-/postcss-8.5.23.tgz | reuse |
 | 370 | node_modules/node-exports-info | 1.6.2 | MIT | https://registry.npmjs.org/node-exports-info/-/node-exports-info-1.6.2.tgz | reuse |
 | 371 | node_modules/node-exports-info/node_modules/semver | 6.3.1 | ISC | https://registry.npmjs.org/semver/-/semver-6.3.1.tgz | unresolved |
@@ -514,13 +514,13 @@ Every package entry carries a `license` field; no entry is unlicensed/unknown by
 | 470 | node_modules/word-wrap | 1.2.5 | MIT | https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.5.tgz | reuse |
 | 471 | node_modules/yallist | 3.1.1 | ISC | https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz | unresolved |
 | 472 | node_modules/yocto-queue | 0.1.0 | MIT | https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz | reuse |
-| 473 | node_modules/zod | 4.6.5 | MIT | https://registry.npmjs.org/zod/-/zod-4.6.5.tgz | reuse |
+| 473 | node_modules/zod | 4.6.7 | MIT | https://registry.npmjs.org/zod/-/zod-4.6.7.tgz | reuse |
 | 474 | node_modules/zod-validation-error | 4.0.2 | MIT | https://registry.npmjs.org/zod-validation-error/-/zod-validation-error-4.0.2.tgz | reuse |
 
 
 ## Direct dependencies (root `package.json`)
 
-- `next` 16.3.8 — dependency `sharp` ^0.35.4 (resolved 0.35.5)
+- `next` 16.4.3 — dependency `sharp` (resolved 0.35.5)
 - `parse5` 7.3.0
 - `pdfjs-dist` 6.3.289
 - `react` 19.3.0
@@ -532,11 +532,11 @@ Dev dependencies: `@axe-core/playwright`, `@playwright/test`, `@tailwindcss/post
 
 `sharp` 0.35.5 — declared licence Apache-2.0, optional dependency of `next`. Source: https://registry.npmjs.org/sharp/-/sharp-0.35.5.tgz. Funds libvips via opencollective.com/libvips.
 
-Sharp's optional platform bindings (`@img/sharp-*`) carry declared licences per package — see rows 40-65 below. Their `sharp-libvips-*` optionalDependencies declare **LGPL-3.0-or-later** (libvips). Four conjunctive Sharp Windows/wasm bindings declare **Apache-2.0 AND LGPL-3.0-or-later** (`@img/sharp-win32-arm64`, `@img/sharp-win32-ia32`, `@img/sharp-win32-x64`) or **Apache-2.0 AND LGPL-3.0-or-later AND MIT** (`@img/sharp-wasm32`). SPDX AND means every conjunct applies, so these carry LGPL obligations too.
+Sharp's optional platform bindings (`@img/sharp-*`) carry declared licences per package. Their `sharp-libvips-*` optionalDependencies declare **LGPL-3.0-or-later** (libvips). Four conjunctive Sharp Windows/wasm bindings declare **Apache-2.0 AND LGPL-3.0-or-later** or **Apache-2.0 AND LGPL-3.0-or-later AND MIT**. SPDX AND means every conjunct applies, so these carry LGPL obligations too.
 
 These copyleft components are present in the lockfile. Whether they are redistributed by this site's build output is **unresolved** and is recorded here for Andy or the solicitor, **not described as legally cleared**.
 
-Sharp libvips platform packages (version 1.3.4, all optional, declared licence LGPL-3.0-or-later):
+Sharp libvips platform packages (all optional, declared licence LGPL-3.0-or-later):
 - `@img/sharp-libvips-darwin-arm64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.3.4.tgz
 - `@img/sharp-libvips-darwin-x64` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.3.4.tgz
 - `@img/sharp-libvips-linux-arm` 1.3.4 — LGPL-3.0-or-later — https://registry.npmjs.org/@img/sharp-libvips-linux-arm/-/sharp-libvips-linux-arm-1.3.4.tgz
@@ -588,19 +588,18 @@ Source file preserved unchanged. Self-hosted under `public/media/home/`; static 
 Encoded with ffmpeg/libwebp (local crops, no Unsplash/Pexels hotlink).
 
 All referenced shipped files exist on disk; all three source entries resolve.
-
 ## Unresolved obligations
 
-- ISC packages (18, including `semver`, `electron-to-chromium`, `eslint-import-resolver-typescript`, `glob-parent`, `fastq`, `flatted`, `graceful-fs`, `isexe`, `lru-cache`, `minimatch`, `picocolors`, `which`, `yallist`): reuse interpretation unresolved per estate licence route (MIT/Apache/BSD only).
+- ISC and other non-reuse packages: reuse interpretation unresolved per estate licence route (MIT/Apache/BSD only).
 - Sharp/libvips LGPL-3.0-or-later redistribution interpretation: not established. Recorded as unresolved; not described as legally cleared.
-- `@img/sharp-wasm32`, `@img/sharp-win32-arm64`, `@img/sharp-win32-ia32`, `@img/sharp-win32-x64` declare conjunctive licences containing LGPL-3.0-or-later; redistribution interpretation unresolved.
-- MPL-2.0 packages (14, including `lightningcss` platform packages and `@axe-core/playwright`): reuse interpretation unresolved.
+- Conjunctive Sharp packages containing LGPL-3.0-or-later; redistribution interpretation unresolved.
+- MPL-2.0 packages: reuse interpretation unresolved.
 - No copyleft/source-available/unlicensed obligation is presented as cleared in this record.
 
 ## What this record does not do
 
 - Does not add a root licence (LICENSE / LICENSE.md / COPYING unchanged).
-- Does not change dependencies, package.json, or package-lock.json.
+- Does not change dependencies, package.json, or package-lock.json beyond the security patch that produced this candidate.
 - Does not download licence data or contact any service.
 - Does not resolve legal ambiguity in code.
-- Does not touch `src/**`, public media files, deploy/, .do/, .github/, Dockerfile, docker-compose*, .env*, nginx, startup, voice/telephony/product backend/production data.
+- Does not touch deploy/, .do/, .github/, Dockerfile, docker-compose*, .env*, nginx, startup, voice/telephony/product backend/production data.
