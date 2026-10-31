@@ -40,7 +40,7 @@ from voice_bridge import (
     is_active_call_session,
 )
 from provider_runtime import handle_provider_media_stream, provider_ready
-from product_profile import api_title
+from product_profile import ProductProfileError,api_title
 from http_error_text import sanitize_http_detail
 load_dotenv()
 app=FastAPI(title=api_title(),docs_url=None,redoc_url=None,openapi_url=None)
@@ -53,6 +53,7 @@ async def _sanitize_http_exception(request: Request, exc: HTTPException):
 HEALTH_TOP_LEVEL_KEYS = frozenset({
     "ok",
     "version",
+    "product_title",
     "realtime_voice",
     "active_calls",
     "call_capacity",
@@ -339,9 +340,14 @@ def health(response: Response):
         "estimated_hourly_burn_usd": getattr(snap, "estimated_hourly_burn_usd", 0),
         "by_client": getattr(snap, "by_client", {}),
     }
+    try:
+        product_title = api_title()
+    except ProductProfileError:
+        product_title = "MaintenanceOS V1 Pilot"
     body = {
         "ok": True,
         "version": "v1-pilot",
+        "product_title": product_title,
         "realtime_voice": os.getenv("ENABLE_REALTIME_VOICE", "false").lower() == "true",
         "active_calls": snap.active_calls,
         "call_capacity": {key: capacity[key] for key in HEALTH_CALL_CAPACITY_KEYS},
