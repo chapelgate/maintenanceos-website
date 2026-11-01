@@ -1,6 +1,6 @@
 import { CtaPair } from "@/components/CtaPair";
-import { DemoConversionTabs } from "@/components/DemoConversionTabs";
 import { DemoProof } from "@/components/DemoProof";
+import { DeferredDemoConversionTabs } from "@/components/DeferredDemoConversionTabs";
 import { FeatureStatusChip } from "@/components/FeatureStatusChip";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
@@ -66,7 +66,7 @@ export default function DemoPage() {
 
       {false && <CtaPair />}
 
-      <DemoConversionTabs />
+      <DeferredDemoConversionTabs />
 
       <section className="mx-auto max-w-4xl px-4 py-12" aria-labelledby="demo-trust-link">
         <p className="text-sm text-muted text-center">
