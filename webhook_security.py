@@ -8,6 +8,10 @@ from twilio.request_validator import RequestValidator
 E164 = re.compile(r"^\+[1-9][0-9]{7,14}$")
 
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 def public_https_origin_ready() -> bool:
     value = os.getenv("PUBLIC_BASE_URL", "").strip()
     try:
@@ -65,6 +69,8 @@ def _public_http_candidate(url:str)->str:
     return base+suffix
 
 def validate_twilio(url:str,params:dict,signature:str)->bool:
+    if _has_control_chars(url) or _has_control_chars(signature or ""):
+        return False
     if os.getenv("VERIFY_TWILIO_SIGNATURES","false").lower()!="true":
         return False
     token=os.getenv("TWILIO_AUTH_TOKEN","")
@@ -74,6 +80,8 @@ def validate_twilio(url:str,params:dict,signature:str)->bool:
     return any(validator.validate(candidate,params,signature or "") for candidate in candidates if candidate)
 
 def validate_twilio_websocket(url:str,signature:str)->bool:
+    if _has_control_chars(url) or _has_control_chars(signature):
+        return False
     if os.getenv("VERIFY_TWILIO_SIGNATURES","false").lower()!="true":
         return False
     token=os.getenv("TWILIO_AUTH_TOKEN","")
