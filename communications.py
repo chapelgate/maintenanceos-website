@@ -85,6 +85,11 @@ def queue_outbound(
     return delivery
 
 
+def _has_control_chars(value: str, *, allow_whitespace_controls: bool = False) -> bool:
+    allowed = {"\t", "\n", "\r"} if allow_whitespace_controls else set()
+    return any(ord(ch) < 32 and ch not in allowed for ch in value)
+
+
 def record_delivery_status(
     session,
     delivery_id: int,
@@ -101,6 +106,8 @@ def record_delivery_status(
     provider_reference=(provider_reference or "").strip();failure_code=(failure_code or "").strip()
     if len(provider_reference) > PROVIDER_REFERENCE_MAX:return False
     if len(failure_code) > FAILURE_CODE_MAX:return False
+    if _has_control_chars(provider_reference) or _has_control_chars(failure_code):
+        return False
     if status in {"SENT","DELIVERED"} and not provider_reference:return False
     if status=="FAILED" and not failure_code:return False
     delivery.status=status;delivery.updated_at=utcnow()
