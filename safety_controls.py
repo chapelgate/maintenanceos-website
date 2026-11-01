@@ -171,5 +171,7 @@ def clear_critical_safety(
 
 
 def assert_status_change_allowed(session, work_order: WorkOrder, new_status: str) -> None:
+    if not new_status or any(ord(ch) < 32 and ch not in "\t\n\r" for ch in new_status):
+        raise SafetyStateError("Safety status contains control characters")
     if critical_safety_active(session, work_order.id) and new_status != "HUMAN_REVIEW":
         raise SafetyStateError("Critical safety state cannot be downgraded or closed")
