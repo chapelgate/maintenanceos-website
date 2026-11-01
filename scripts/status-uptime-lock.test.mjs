@@ -25,3 +25,14 @@ test("status page stays a pre-launch placeholder", () => {
   assert.doesNotMatch(page, /NEXT_PUBLIC_PUBLIC_LAUNCH/);
   assert.doesNotMatch(page, /£/);
 });
+
+test("status page links trust, security, help and contact without ops-desk claims", () => {
+  assert.match(page, /href="\/trust\/"/);
+  assert.match(page, /href="\/security\/"/);
+  assert.match(page, /href="\/help\/"/);
+  assert.match(page, /href="\/contact\/"/);
+  assert.match(page, /scanner remains frozen/);
+  assert.match(page, /not a live ops desk/);
+  assert.doesNotMatch(page, /buy now/i);
+  assert.doesNotMatch(page, /99\.\d%/);
+});

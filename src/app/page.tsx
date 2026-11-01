@@ -6,7 +6,7 @@ import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
 import { ProductLine } from "@/components/ProductLine";
-import { ProductUiShell } from "@/components/ProductUiShell";
+import { DeferredProductUiShell } from "@/components/DeferredProductUiShell";
 import { JsonLd } from "@/components/JsonLd";
 import { ProductTourWatchLink } from "@/components/ProductTour";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
@@ -112,7 +112,7 @@ export default function HomePage() {
             <h2 id="hero-shell-heading" className="sr-only">
               Supervisor shell preview
             </h2>
-            <ProductUiShell />
+            <DeferredProductUiShell />
             <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
               <ProductTourWatchLink />
               <HomeRoleChips />
