@@ -43,6 +43,11 @@ def test_product_profile_deny_keys_comprehensive():
         "market",
         "dispatch",
         "credential",
+        "deploy",
+        "nginx",
+        "golden_line",
+        "secret",
+        "production",
     }
 
 

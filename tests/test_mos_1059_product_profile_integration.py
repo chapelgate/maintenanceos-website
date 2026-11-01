@@ -82,7 +82,7 @@ def test_product_profile_module_imports_clean():
 
 
 def test_deny_keys_set_has_exactly_six_keys():
-    assert len(product_profile.DENY_KEYS) == 6
+    assert len(product_profile.DENY_KEYS) == 11
     assert product_profile.DENY_KEYS == {
         "retention",
         "voice",
@@ -90,6 +90,11 @@ def test_deny_keys_set_has_exactly_six_keys():
         "market",
         "dispatch",
         "credential",
+        "deploy",
+        "nginx",
+        "golden_line",
+        "secret",
+        "production",
     }
 
 
