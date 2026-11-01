@@ -4,6 +4,7 @@ SAFETY_CLEARANCE_REASON_MIN = 10
 SAFETY_CLEARANCE_REASON_MAX = 1000
 SAFETY_LATCH_ACTOR_MAX = 100
 from clock import utcnow
+from operational_logging import operational_event
 
 from models import Approval, AuditEvent, CriticalSafetyState, User, WorkOrder
 
@@ -71,6 +72,12 @@ def latch_critical_safety(session, work_order: WorkOrder, new_flags: list, actor
         event="CRITICAL_SAFETY_LATCHED",
         detail=json.dumps({"flags": merged}, sort_keys=True),
     ))
+    operational_event(
+        "critical_safety_latched",
+        client_id=work_order.client_id,
+        outcome="latched",
+        reason_code="critical_safety",
+    )
     return state
 
 
@@ -155,6 +162,12 @@ def clear_critical_safety(
         proposed_action="Human review before any operational action",
         reason=reason,
     ))
+    operational_event(
+        "critical_safety_cleared",
+        client_id=client_id,
+        outcome="cleared",
+        reason_code="critical_safety",
+    )
 
 
 def assert_status_change_allowed(session, work_order: WorkOrder, new_status: str) -> None:
