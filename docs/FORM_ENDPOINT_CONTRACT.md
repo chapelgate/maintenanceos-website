@@ -116,7 +116,8 @@ Suggested status codes:
 | 404 | Unknown path |
 | 405 | Method not allowed |
 | 413 | Body larger than 32 KiB |
-| 429 | Rate limited (recommended for production) |
+| 415 | Content-Type is not application/json |
+| 429 | Rate limited (global per-origin bucket on the local stub; recommended for production) |
 | 500 | Unexpected failure |
 
 ## Email and claims
@@ -151,6 +152,7 @@ NEXT_PUBLIC_FORM_ENDPOINT=http://127.0.0.1:8787/leads npm run dev
 | `FORM_STUB_PORT` | `8787` | Listen port |
 | `FORM_STUB_CORS_ORIGIN` | echo request `Origin`, else `*` | CORS allow origin |
 | `FORM_STUB_DATA_FILE` | `.data/form-stub-leads.jsonl` | Append-only JSONL log (gitignored) |
+| (built-in) | 10 POSTs / 60s per Origin+path | Local stub rate limit; returns 429 + Retry-After |
 
 `GET /health` returns `{ "ok": true, "sends_email": false }`.
 

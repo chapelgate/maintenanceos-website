@@ -2,13 +2,16 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
+import test, { beforeEach } from "node:test";
 import {
   LEAD_TYPES,
   createFormStubServer,
   corsHeaders,
   successBody,
   validateLead,
+  rateLimit,
+  rateLimitMap,
+  RATE_LIMIT_MAX_PER_WINDOW,
 } from "./form-stub-server.mjs";
 
 const validLead = {
@@ -18,6 +21,10 @@ const validLead = {
   source: "maintenanceos-website",
   public_launch: false,
 };
+
+beforeEach(() => {
+  rateLimitMap.clear();
+});
 
 function listen(server) {
   return new Promise((resolve) => {
@@ -191,6 +198,69 @@ test("corsHeaders accepts localhost dev origins", () => {
   assert.equal(h["Access-Control-Allow-Origin"], "http://localhost:3000");
 });
 
+test("rateLimit allows up to max per window then rejects", () => {
+  const id = `unit-${Date.now()}`;
+  for (let i = 0; i < RATE_LIMIT_MAX_PER_WINDOW; i += 1) {
+    assert.equal(rateLimit(id).ok, true);
+  }
+  const limited = rateLimit(id);
+  assert.equal(limited.ok, false);
+  assert.equal(typeof limited.retryAfter, "number");
+});
+
+test("rateLimit resets after map clear", () => {
+  const id = `unit-reset-${Date.now()}`;
+  assert.equal(rateLimit(id).ok, true);
+  rateLimitMap.delete(id);
+  assert.equal(rateLimit(id).ok, true);
+});
+
+test("POST /leads rejects non-json content type", async () => {
+  await withServer(async ({ base }) => {
+    const res = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        Origin: "http://localhost:3000",
+      },
+      body: "not json",
+    });
+    assert.equal(res.status, 415);
+    const json = await res.json();
+    assert.equal(json.ok, false);
+    assert.match(json.error, /application\/json/i);
+  });
+});
+
+test("POST /leads rate limits repeated requests", async () => {
+  await withServer(async ({ base }) => {
+    for (let i = 0; i < RATE_LIMIT_MAX_PER_WINDOW; i += 1) {
+      const res = await fetch(`${base}/leads`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: JSON.stringify(validLead),
+      });
+      assert.equal(res.status, 200);
+    }
+    const limited = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      body: JSON.stringify(validLead),
+    });
+    assert.equal(limited.status, 429);
+    assert.ok(limited.headers.get("retry-after"));
+    const json = await limited.json();
+    assert.equal(json.ok, false);
+    assert.equal(json.error, "Rate limited.");
+  });
+});
+
 test("appendJsonl persists redacted email (masked by handler)", async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "form-stub-"));
   const dataFile = path.join(dir, "leads.jsonl");
@@ -212,6 +282,7 @@ test("appendJsonl persists redacted email (masked by handler)", async () => {
     assert.equal(stored.email, "[REDACTED]");
     assert.equal(stored.sends_email, false);
   } finally {
-    server.close(() => fs.rmSync(dir, { recursive: true, force: true }));
+    await new Promise((resolve) => server.close(resolve));
+    fs.rmSync(dir, { recursive: true, force: true });
   }
 });

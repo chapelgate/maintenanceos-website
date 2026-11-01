@@ -20,6 +20,8 @@ export const LEAD_TYPES = new Set([
 export const MAX_BODY_BYTES = 32 * 1024;
 export const DEFAULT_HOST = "127.0.0.1";
 export const DEFAULT_PORT = 8787;
+export const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+export const RATE_LIMIT_MAX_PER_WINDOW = 10;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -48,6 +50,24 @@ export function corsHeaders(origin) {
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
+}
+
+const rateLimitMap = new Map();
+
+export { rateLimitMap };
+
+export function rateLimit(identifier) {
+  const now = Date.now();
+  let bucket = rateLimitMap.get(identifier);
+  if (!bucket || now - bucket.windowStart >= RATE_LIMIT_WINDOW_MS) {
+    bucket = { count: 0, windowStart: now };
+    rateLimitMap.set(identifier, bucket);
+  }
+  bucket.count += 1;
+  if (bucket.count > RATE_LIMIT_MAX_PER_WINDOW) {
+    return { ok: false, retryAfter: RATE_LIMIT_WINDOW_MS - (now - bucket.windowStart) };
+  }
+  return { ok: true };
 }
 
 export function successBody() {
@@ -190,8 +210,23 @@ export async function handleFormStubRequest(req, res, options) {
     return;
   }
 
+  const rate = rateLimit(`${origin}:${pathname}`);
+  if (!rate.ok) {
+    res.writeHead(429, {
+      ...jsonHeaders(origin),
+      "Retry-After": Math.ceil(rate.retryAfter / 1000),
+    });
+    res.end(JSON.stringify({ ok: false, error: "Rate limited." }));
+    return;
+  }
+
   let raw;
   try {
+    const ct = req.headers["content-type"];
+    if (!ct?.includes("application/json")) {
+      send(res, 415, origin, { ok: false, error: "Unsupported media type. application/json required." });
+      return;
+    }
     raw = await readBody(req, MAX_BODY_BYTES);
   } catch (err) {
     if (err && err.code === "PAYLOAD_TOO_LARGE") {
