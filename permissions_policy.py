@@ -15,7 +15,7 @@ def permissions_configured() -> bool:
     policy = values.get("permissions-policy", "")
     if not policy:
         return False
-    required = ("camera=()", "microphone=()", "geolocation=()")
+    required = ("camera=()", "microphone=()", "geolocation=()", "clipboard-read=()", "clipboard-write=()", "unload=()")
     return all(item in policy for item in required)
 
 
