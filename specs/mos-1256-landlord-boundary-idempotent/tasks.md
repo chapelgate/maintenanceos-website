@@ -1,0 +1,2 @@
+- [x] Patch open_synthetic_portfolio boundary handling
+- [x] Add reuse acceptance test

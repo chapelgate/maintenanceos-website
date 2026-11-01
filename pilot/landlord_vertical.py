@@ -248,24 +248,31 @@ def open_synthetic_portfolio(*, units: int) -> dict[str, Any]:
             _record_metric("errors")
             raise VerticalPropertyCap(projected, MAX_SYNTHETIC_PROPERTIES)
         if _SESSION.client_id is None:
-            session.add(
-                TenantBoundary(
-                    client_id=client_id,
-                    mode=SYNTHETIC_MODE,
-                    label="SYNTHETIC England landlord vertical",
+            boundary = session.get(TenantBoundary, client_id)
+            if boundary is None:
+                session.add(
+                    TenantBoundary(
+                        client_id=client_id,
+                        mode=SYNTHETIC_MODE,
+                        label="SYNTHETIC England landlord vertical",
+                    )
                 )
-            )
-            session.add(
-                Contractor(
-                    client_id=client_id,
-                    name="SYNTHETIC TEST CONTRACTOR",
-                    trade="Plumber",
-                    postcode_coverage="ZZ1",
-                    email=f"synthetic-contractor{SYNTHETIC_EMAIL_DOMAIN}",
-                    qualification_summary="TEST DATA ONLY",
-                    active=False,
+            elif boundary.mode != SYNTHETIC_MODE:
+                session.rollback()
+                _record_metric("errors")
+                raise VerticalComplianceError(["boundary_not_synthetic"])
+            if session.query(Contractor).filter_by(client_id=client_id).count() == 0:
+                session.add(
+                    Contractor(
+                        client_id=client_id,
+                        name="SYNTHETIC TEST CONTRACTOR",
+                        trade="Plumber",
+                        postcode_coverage="ZZ1",
+                        email=f"synthetic-contractor{SYNTHETIC_EMAIL_DOMAIN}",
+                        qualification_summary="TEST DATA ONLY",
+                        active=False,
+                    )
                 )
-            )
             _SESSION.client_id = client_id
         for offset in range(int(units)):
             number = existing + offset + 1
