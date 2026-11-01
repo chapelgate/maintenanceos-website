@@ -531,7 +531,7 @@ TRIAGE_CATEGORIES = frozenset({
 
 def resolve_triage(approval_id,actor_user_id,category,trade,urgency,reason):
     reason=(reason or "").strip();category=(category or "").strip();trade=(trade or "").strip()
-    if reason_has_control_chars(reason):
+    if reason_has_control_chars(reason) or reason_has_control_chars(category) or reason_has_control_chars(trade) or reason_has_control_chars(urgency):
         return False
     if len(category) > TRIAGE_CATEGORY_MAX:
         return False
