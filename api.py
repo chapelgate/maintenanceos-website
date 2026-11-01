@@ -347,6 +347,32 @@ def _require_contractor_decision(decision):
     return decision
 
 
+
+def _reject_invalid_csrf(action: str):
+    from request_context import request_id as current_request_id
+    operational_event(
+        "csrf_rejected",
+        request_id=current_request_id() or None,
+        method="POST",
+        path=f"/contractor/{action}",
+        status=403,
+        action=action,
+    )
+    raise HTTPException(403, "Invalid CSRF token")
+
+
+def _reject_invalid_link(action: str, method: str, path: str):
+    from request_context import request_id as current_request_id
+    operational_event(
+        "invalid_link",
+        request_id=current_request_id() or None,
+        method=method,
+        path=path,
+        status=403,
+        action=action,
+    )
+    raise HTTPException(403, "Invalid link")
+
 def require_public_provider_ingress():
     if not public_provider_ingress_ready():
         raise HTTPException(503, "Public provider ingress is disabled")
@@ -452,7 +478,7 @@ def contractor_decision(work_order_id:int,contractor_id:int,decision:str,token:s
     decision=_require_contractor_decision(decision)
     token=_require_contractor_token(token)
 
-    if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    if not verify_link(decision,work_order_id,contractor_id,token):_reject_invalid_link("decision","GET","/contractor/decision")
     with SessionLocal() as s:
         wo=_contractor_work_order(s,work_order_id,contractor_id,{"AWAITING_CONTRACTOR"})
         approval=s.query(Approval).filter_by(work_order_id=work_order_id,approval_type="DISPATCH",status="APPROVED").first()
@@ -485,8 +511,8 @@ def contractor_decision_submit(work_order_id:int=Form(...),contractor_id:int=For
         approval=s.query(Approval).filter_by(work_order_id=work_order_id,approval_type="DISPATCH",status="APPROVED").first()
         if not wo or not approval:raise HTTPException(409,"Job is not available for this action")
 
-    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"decision",csrf_token):raise HTTPException(403,"Invalid CSRF token")
-    if not verify_link(decision,work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"decision",csrf_token):_reject_invalid_csrf("decision")
+    if not verify_link(decision,work_order_id,contractor_id,token):_reject_invalid_link("decision","POST","/contractor/decision")
 
     if decision=="decline":
         try:declined=decline_contractor(work_order_id,contractor_id,token)
@@ -507,7 +533,7 @@ def availability_form(work_order_id:int,contractor_id:int,token:str):
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
-    if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    if not verify_link("availability",work_order_id,contractor_id,token):_reject_invalid_link("availability","GET","/contractor/availability")
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"CONTRACTOR_ACCEPTED","AWAITING_AVAILABILITY"}):
             raise HTTPException(409,"Job is not available for this action")
@@ -536,8 +562,8 @@ def availability_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),
         raise HTTPException(400,"start is too long")
     if not isinstance(end,str) or len(end) > AVAILABILITY_DATETIME_TEXT_MAX:
         raise HTTPException(400,"end is too long")
-    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"availability",csrf_token):raise HTTPException(403,"Invalid CSRF token")
-    if not verify_link("availability",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"availability",csrf_token):_reject_invalid_csrf("availability")
+    if not verify_link("availability",work_order_id,contractor_id,token):_reject_invalid_link("availability","POST","/contractor/availability")
     start=_reject_control_chars(start,"start")
     end=_reject_control_chars(end,"end")
     try:st=datetime.strptime(start,"%Y-%m-%dT%H:%M");en=datetime.strptime(end,"%Y-%m-%dT%H:%M")
@@ -555,7 +581,7 @@ def complete_form(work_order_id:int,contractor_id:int,token:str):
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
-    if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    if not verify_link("complete",work_order_id,contractor_id,token):_reject_invalid_link("complete","GET","/contractor/complete")
     with SessionLocal() as s:
         if not _contractor_work_order(s,work_order_id,contractor_id,{"APPOINTMENT_BOOKED","IN_PROGRESS","AWAITING_COMPLETION_EVIDENCE"}):
             raise HTTPException(409,"Job is not available for this action")
@@ -579,8 +605,8 @@ def complete_submit(work_order_id:int=Form(...),contractor_id:int=Form(...),toke
     work_order_id=_positive_int(work_order_id,"work_order_id")
     contractor_id=_positive_int(contractor_id,"contractor_id")
     token=_require_contractor_token(token)
-    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"complete",csrf_token):raise HTTPException(403,"Invalid CSRF token")
-    if not verify_link("complete",work_order_id,contractor_id,token):raise HTTPException(403,"Invalid link")
+    if isinstance(csrf_token,str) and not verify_form_csrf(work_order_id,contractor_id,"complete",csrf_token):_reject_invalid_csrf("complete")
+    if not verify_link("complete",work_order_id,contractor_id,token):_reject_invalid_link("complete","POST","/contractor/complete")
     note=normalize_completion_note(note)
     evidence_url=normalize_evidence_url(evidence_url)
     try:evidence_id=submit_completion(work_order_id,contractor_id,note,evidence_url,token)
