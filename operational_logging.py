@@ -14,6 +14,7 @@ from secret_patterns import SENSITIVE_KEY, redact_secrets
 
 
 SAFE_EVENT_FIELDS = {
+    "action",
     "correlation_id",
     "duration_ms",
     "exception_type",
