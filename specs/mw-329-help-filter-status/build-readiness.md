@@ -9,4 +9,4 @@
 | 5 Tests | PASS — scripts/help-filter-status.test.mjs |
 | 6 Frozen | PASS — no scanner/deploy/golden/IR |
 | 7 Estate headers | PASS — FEATURE / Preflight / Converged |
-| 8 Verification | PENDING local npm test + lint + tsc |
+| 8 Verification | PASS — npm test 674+630 fail 0; lint 0; tsc clean |

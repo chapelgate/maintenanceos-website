@@ -9,4 +9,4 @@
 | 5 Tests | PASS — scripts/onboarding-recovery-nav.test.mjs |
 | 6 Frozen | PASS — scanner note already present; untouched |
 | 7 Estate headers | PASS |
-| 8 Verification | PENDING |
+| 8 Verification | PASS — npm test 674+630 fail 0; lint 0; tsc clean |
