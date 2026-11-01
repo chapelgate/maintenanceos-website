@@ -86,6 +86,8 @@ def set_result_ref(receipt, value) -> None:
     result_ref = str(value)
     if len(result_ref) > RESULT_REF_MAX:
         raise ValueError("Invalid action receipt result_ref")
+    if any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in result_ref):
+        raise ValueError("result_ref control characters")
     receipt.result_ref = result_ref
 
 
