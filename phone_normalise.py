@@ -6,6 +6,8 @@ def normalise_phone(value: str) -> str:
     raw = value or ""
     if len(raw) > PHONE_MAX:
         return ""
+    if any(ord(ch) < 32 for ch in raw):
+        return ""
     s = "".join(ch for ch in raw if ch.isdigit() or ch == "+")
     if s.startswith("0044"):
         s = "+44" + s[4:]
