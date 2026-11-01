@@ -1,5 +1,6 @@
 import os,hmac,hashlib,base64,secrets,time
 from dotenv import load_dotenv
+from operational_logging import operational_event
 load_dotenv()
 
 INSECURE_APP_SECRETS={"","change-me","CHANGE_THIS_TO_A_LONG_RANDOM_SECRET"}
@@ -67,6 +68,12 @@ def record_login_failure(email: str, *, now: float | None = None) -> None:
     attempts = [t for t in _login_failures.get(key, []) if t >= window_start]
     attempts.append(stamp)
     _login_failures[key] = attempts
+    if len(attempts) == LOGIN_LOCKOUT_MAX_ATTEMPTS:
+        operational_event(
+            "login_lockout",
+            outcome="locked",
+            reason_code="login_lockout",
+        )
 
 
 def clear_login_failures(email: str) -> None:
