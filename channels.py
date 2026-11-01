@@ -65,7 +65,13 @@ def _finish_intake(work_order_id,identity_verified):
     cid=select_contractor(work_order_id)
     if cid:create_dispatch_approval(work_order_id)
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 def canonical_incident_key(client_id,property_id,resident_id,description):
+    if _has_control_chars(description or ""):
+        raise ValueError("control characters not allowed")
     caller_lines=[]
     for line in (description or "").splitlines():
         if line.lower().startswith("caller") and ":" in line:
@@ -80,6 +86,9 @@ PARTICIPANT_MAX = 320
 
 
 def create_from_channel(client_id,property_id,resident_id,source,description,participant="",media_url="",identity_verified=True,incident_key=None,event_key=None):
+    for val in (description, participant, media_url or "", event_key or "", incident_key or ""):
+        if _has_control_chars(val):
+            raise ValueError("control characters not allowed")
     participant = "" if participant is None else str(participant)
     if len(participant) > PARTICIPANT_MAX:
         raise ValueError("participant is too long")
