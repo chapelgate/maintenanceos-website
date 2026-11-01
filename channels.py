@@ -20,11 +20,17 @@ CHANNEL_DESCRIPTION_MAX = 8000
 
 
 EMAIL_LOOKUP_MAX = 320
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 def resident_by_email(client_id,email):
     email=(email or "").strip()
-    if not email or len(email) > EMAIL_LOOKUP_MAX:return None
+    if not email or len(email) > EMAIL_LOOKUP_MAX:
+        return None
+    if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in email):
+        return None
+    if not EMAIL_RE.match(email):
+        return None
     with SessionLocal() as s:
         r=s.query(Resident).filter_by(client_id=client_id,email=email,active=True).first()
         return r.id if r else None
