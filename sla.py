@@ -11,3 +11,7 @@ def sla_status(urgency,created_at,now=None):
     if ratio>=1:return "BREACHED",round(age,1),target
     if ratio>=.75:return "AT_RISK",round(age,1),target
     return "OK",round(age,1),target
+
+
+def known_urgency(urgency) -> bool:
+    return urgency in TARGETS
