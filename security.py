@@ -106,6 +106,8 @@ SIGNED_LINK_KINDS=frozenset({"accept","decline","availability","complete","voice
 CONTRACTOR_LINK_TOKEN_MAX = 200
 
 def sign_link(kind:str,work_order_id:int,subject_id:int,expires_at:int|None=None):
+    if not kind or any(ord(ch) < 32 for ch in kind):
+        raise ValueError("unsupported link kind")
     if kind not in SIGNED_LINK_KINDS:
         raise ValueError("unsupported link kind")
     if not app_secret_ready():
@@ -118,6 +120,8 @@ def sign_link(kind:str,work_order_id:int,subject_id:int,expires_at:int|None=None
     return f"{expires_at}.{signature}"
 
 def verify_link(kind,work_order_id,subject_id,token,now=None):
+    if not isinstance(kind, str) or not kind or any(ord(ch) < 32 for ch in kind):
+        return False
     if not isinstance(token,str) or len(token) > CONTRACTOR_LINK_TOKEN_MAX:
         return False
     try:
