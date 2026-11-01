@@ -23,6 +23,8 @@ def transition_work_order(
     """Apply one validated, audited work-order state transition."""
     actor = (actor or "").strip()
     reason = (reason or "").strip()
+    if not new_status or any(ord(ch) < 32 and ch not in "\t\n\r" for ch in new_status):
+        raise ValueError("transition control characters")
     if not actor or len(actor) > TRANSITION_ACTOR_MAX:
         raise ValueError("transition actor invalid")
     if len(reason) > TRANSITION_REASON_MAX:
