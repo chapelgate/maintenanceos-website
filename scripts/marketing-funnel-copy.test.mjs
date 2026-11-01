@@ -227,7 +227,7 @@ test("contact stays claims-safe as human enquiry, not a support desk", () => {
   const llmsFull = read("public/llms-full.txt");
   const nextConfig = read("next.config.ts");
 
-  assert.match(page, /<LeadCaptureForm/);
+  assert.match(page, /<DeferredLeadCaptureForm/);
   assert.match(page, /not live phone provisioning/);
   assert.match(page, /not a GA support desk/);
   assert.match(page, /no invented (response )?SLA/);

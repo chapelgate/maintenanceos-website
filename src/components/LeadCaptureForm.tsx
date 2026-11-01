@@ -17,7 +17,7 @@ const subscribeHydration = () => () => {};
 const clientHydratedSnapshot = () => true;
 const serverHydratedSnapshot = () => false;
 
-type LeadCaptureFormProps = {
+export type LeadCaptureFormProps = {
   leadType: LeadType;
   title?: string;
   helper?: string;
