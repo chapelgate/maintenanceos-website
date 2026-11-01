@@ -56,7 +56,39 @@ export default function StatusPage() {
         </section>
         <p className="mos-glass border-dashed p-4 text-sm">
           No fake uptime charts, incident timelines, or SLA badges are shown
-          here. Metrics appear only when wired to real monitors.
+          here. Metrics appear only when wired to real monitors. The website
+          scanner remains frozen (t835u) and is not a monitored component here.
+        </p>
+        <p className="text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a
+            href="/trust/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Trust
+          </a>
+          {" · "}
+          <a
+            href="/security/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Security
+          </a>
+          {" · "}
+          <a
+            href="/help/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Help
+          </a>
+          {" · "}
+          <a
+            href="/contact/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Contact
+          </a>
+          . These are documentation surfaces — not a live ops desk.
         </p>
       </div>
     </>

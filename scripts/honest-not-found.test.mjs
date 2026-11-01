@@ -14,7 +14,9 @@ test("unknown addresses use an honest pre-launch not-found page", () => {
   assert.match(page, /assign a live phone number/);
   assert.match(page, /href="\/"/);
   assert.match(page, /href="\/demo\/"/);
+  assert.match(page, /href="\/help\/"/);
   assert.match(page, /href="\/contact\/"/);
+  assert.match(page, /Help/);
 });
 
 test("not-found page does not claim a sale or a live service", () => {
