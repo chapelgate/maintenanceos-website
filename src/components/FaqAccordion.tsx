@@ -87,11 +87,22 @@ function FaqAccordionComponent({ items }: FaqAccordionProps) {
         </p>
       </div>
 
+      <p
+        id="faq-result-count"
+        className="mb-3 text-xs text-muted"
+        role="status"
+        aria-live="polite"
+      >
+        {searchQuery.trim()
+          ? `${filteredItems.length} matching question${filteredItems.length === 1 ? "" : "s"}`
+          : `${items.length} question${items.length === 1 ? "" : "s"}`}
+      </p>
+
       <div
         id="faq-list"
         role="list"
         className="space-y-2"
-        aria-live="polite"
+        aria-describedby="faq-result-count"
       >
         {filteredItems.length > 0 ? (
           filteredItems.map((item) => {
@@ -160,7 +171,14 @@ function FaqAccordionComponent({ items }: FaqAccordionProps) {
             aria-live="polite"
           >
             <p className="text-base font-medium">No matching questions found.</p>
-            <p className="mt-1 text-sm">Try a different search term or browse all questions below.</p>
+            <p className="mt-1 text-sm">Try a different search term, or clear the filter to show every question again.</p>
+            <button
+              type="button"
+              className="mt-4 inline-flex min-h-11 items-center justify-center rounded-md border border-border bg-surface px-4 text-sm font-semibold text-ink hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              onClick={() => setSearchQuery("")}
+            >
+              Clear FAQ filter
+            </button>
           </div>
         )}
       </div>

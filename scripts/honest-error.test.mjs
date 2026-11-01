@@ -43,17 +43,25 @@ test("global error keeps the site language and a full document", () => {
   assert.match(page, /<body>/);
 });
 
-test("route error links home and contact", () => {
+test("route error links home, demo, help and contact", () => {
   const page = read("src/app/error.tsx");
   assert.match(page, /href="\/"/);
+  assert.match(page, /href="\/demo\/"/);
+  assert.match(page, /href="\/help\/"/);
   assert.match(page, /href="\/contact\/"/);
+  assert.match(page, /Scripted preview/);
+  assert.match(page, /Help/);
 });
 
-test("global error links home and contact", () => {
+test("global error links home, demo, help and contact", () => {
   const page = read("src/app/global-error.tsx");
   assert.match(page, /href="\/"/);
+  assert.match(page, /href="\/demo\/"/);
+  assert.match(page, /href="\/help\/"/);
   assert.match(page, /href="\/contact\/"/);
   assert.match(page, /Back to the homepage/);
+  assert.match(page, /Scripted preview/);
+  assert.match(page, /Help/);
   assert.match(page, /Contact/);
   assert.doesNotMatch(page, /buy now/i);
   assert.doesNotMatch(page, /£/);
