@@ -7,8 +7,16 @@ import contextvars
 _request_id: contextvars.ContextVar[str] = contextvars.ContextVar("mos_request_id", default="")
 
 
+REQUEST_ID_MAX = 128
+
+
 def set_request_id(request_id: str | None) -> None:
-    _request_id.set(request_id or "")
+    value = request_id or ""
+    if len(value) > REQUEST_ID_MAX:
+        value = ""
+    elif any(ord(ch) < 32 for ch in value):
+        value = ""
+    _request_id.set(value)
 
 
 def clear_request_id() -> None:
