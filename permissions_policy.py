@@ -8,6 +8,47 @@ from __future__ import annotations
 from pathlib import Path
 
 
+REQUIRED_PERMISSIONS_FEATURES = (
+    "camera=()",
+    "microphone=()",
+    "geolocation=()",
+    "payment=()",
+    "usb=()",
+    "bluetooth=()",
+    "accelerometer=()",
+    "gyroscope=()",
+    "magnetometer=()",
+    "midi=()",
+    "display-capture=()",
+    "browsing-topics=()",
+    "clipboard-read=()",
+    "clipboard-write=()",
+    "serial=()",
+    "hid=()",
+    "xr-spatial-tracking=()",
+    "screen-wake-lock=()",
+    "fullscreen=()",
+    "autoplay=()",
+    "encrypted-media=()",
+    "picture-in-picture=()",
+    "interest-cohort=()",
+    "idle-detection=()",
+    "window-management=()",
+    "document-domain=()",
+    "web-share=()",
+    "otp-credentials=()",
+    "unload=()",
+)
+
+
+def validate_permissions_policy(policy: str) -> bool:
+    if not isinstance(policy, str):
+        return False
+    if not policy or any(ord(ch) < 32 for ch in policy):
+        return False
+    return all(feature in policy for feature in REQUIRED_PERMISSIONS_FEATURES)
+
+
 def permissions_configured() -> bool:
     from ingress_security import SECURITY_HEADERS
 
