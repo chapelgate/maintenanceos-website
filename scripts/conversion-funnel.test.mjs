@@ -48,6 +48,6 @@ test("all commercial enquiry intents still share one form and adapter", () => {
   assert.match(demo, /leadType="early_demo"/);
   assert.match(contact, /<LeadCaptureForm/);
   assert.match(contact, /leadType="contact"/);
-  assert.match(home, /<LeadCaptureForm/);
+  assert.match(home, /<HomeLeadCaptureForm/);
   assert.match(home, /leadType="launch_list"/);
 });

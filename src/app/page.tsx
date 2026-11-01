@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { CtaPair } from "@/components/CtaPair";
 import { HomeIndustries } from "@/components/HomeIndustries";
+import { HomeLeadCaptureForm } from "@/components/HomeLeadCaptureForm";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
 import { ProductLine } from "@/components/ProductLine";
 import { ProductUiShell } from "@/components/ProductUiShell";
 import { JsonLd } from "@/components/JsonLd";
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { ProductTourWatchLink } from "@/components/ProductTour";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { fullFunnelPageJsonLd } from "@/lib/json-ld";
@@ -225,7 +225,7 @@ export default function HomePage() {
             We will email when early access opens. Pre-launch.
           </p>
           <div className="mt-5">
-            <LeadCaptureForm
+            <HomeLeadCaptureForm
               leadType="launch_list"
               submitLabel="Join launch list"
               showOrganisation={false}
