@@ -60,9 +60,13 @@ def set_ai_side_effects(session, enabled: bool, *, actor: str, reason: str) -> N
     actor = (actor or "").strip()
     if not actor or len(actor) > AI_SIDE_EFFECT_ACTOR_MAX:
         raise ValueError("AI side-effect actor invalid")
+    if any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in actor):
+        raise ValueError("AI side-effect actor control characters")
     reason = (reason or "").strip()
     if len(reason) > AI_SIDE_EFFECT_REASON_MAX:
         raise ValueError("AI side-effect reason too long")
+    if any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in reason):
+        raise ValueError("AI side-effect reason control characters")
     control = session.get(RuntimeControl, "AI_SIDE_EFFECTS")
     if control is None:
         control = RuntimeControl(key="AI_SIDE_EFFECTS")
