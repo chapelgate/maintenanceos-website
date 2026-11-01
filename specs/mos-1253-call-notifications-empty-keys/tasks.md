@@ -1,0 +1,2 @@
+- [x] Patch early-return keys
+- [x] Run mos-1246 tests
