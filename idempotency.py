@@ -8,6 +8,7 @@ RESULT_REF_MAX = 200
 from sqlalchemy.exc import IntegrityError
 
 from models import ActionReceipt, RuntimeControl
+from operational_logging import operational_event
 
 ACTION_KEY_MAX = 200
 AI_SIDE_EFFECT_ACTOR_MAX = 100
@@ -70,6 +71,11 @@ def set_ai_side_effects(session, enabled: bool, *, actor: str, reason: str) -> N
     control.updated_at = utcnow()
     control.updated_by = actor
     control.reason = reason
+    operational_event(
+        "ai_side_effects_changed",
+        outcome="enabled" if enabled else "disabled",
+        reason_code="ai_side_effects",
+    )
 
 
 def set_result_ref(receipt, value) -> None:
