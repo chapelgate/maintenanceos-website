@@ -1,3 +1,4 @@
+import re
 PHONE_MAX = 50
 
 
@@ -13,3 +14,11 @@ def normalise_phone(value: str) -> str:
     if len(s) > PHONE_MAX:
         return ""
     return s
+
+
+E164 = re.compile(r"^\+[1-9][0-9]{7,14}$")
+
+
+def is_e164_phone(value: str) -> bool:
+    normalised = normalise_phone(value)
+    return bool(normalised) and bool(E164.fullmatch(normalised))
