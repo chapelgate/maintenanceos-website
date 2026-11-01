@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { CtaPair } from "@/components/CtaPair";
 import { HomeIndustries } from "@/components/HomeIndustries";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
@@ -7,12 +8,26 @@ import { HomeTrustStrip } from "@/components/HomeTrustStrip";
 import { ProductLine } from "@/components/ProductLine";
 import { ProductUiShell } from "@/components/ProductUiShell";
 import { JsonLd } from "@/components/JsonLd";
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { ProductTourWatchLink } from "@/components/ProductTour";
 import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 import { siteConfig } from "@/config/site";
+
+const LeadCaptureForm = dynamic(
+  () =>
+    import("@/components/LeadCaptureForm").then(
+      (module) => module.LeadCaptureForm,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <p className="text-sm text-muted" aria-busy="true">
+        Loading launch list form…
+      </p>
+    ),
+  },
+);
 
 export const metadata: Metadata = funnelPageMetadata("home");
 
