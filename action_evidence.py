@@ -38,6 +38,11 @@ CONFIRMABLE_ACTIONS = {
 }
 
 
+def _has_control_chars(value: str, *, allow_whitespace_controls: bool = False) -> bool:
+    allowed = {"\t", "\n", "\r"} if allow_whitespace_controls else set()
+    return any(ord(ch) < 32 and ch not in allowed for ch in value)
+
+
 def record_action_result(
     session,
     *,
@@ -58,6 +63,8 @@ def record_action_result(
     actor = (actor or "").strip()
     if len(action_type) > ACTION_TYPE_MAX:
         raise ValueError("Action type exceeds maximum length")
+    if _has_control_chars(action_key) or _has_control_chars(actor) or _has_control_chars(provider_reference) or _has_control_chars(detail, allow_whitespace_controls=True):
+        raise ValueError("Action result control characters")
     if action_type not in CONFIRMABLE_ACTIONS:
         raise ValueError("Unknown confirmable action")
     if len(status) > ACTION_STATUS_MAX:
