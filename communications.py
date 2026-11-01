@@ -32,6 +32,11 @@ def _hash_recipient(value: str) -> str:
     return "sha256:" + hashlib.sha256((value or "").strip().casefold().encode()).hexdigest()
 
 
+def _has_control_chars(value: str, *, allow_whitespace_controls: bool = False) -> bool:
+    allowed = {"\t", "\n", "\r"} if allow_whitespace_controls else set()
+    return any(ord(ch) < 32 and ch not in allowed for ch in value)
+
+
 def queue_outbound(
     session,
     *,
@@ -46,6 +51,8 @@ def queue_outbound(
     action_key=(action_key or "").strip();recipient=(recipient or "").strip()
     if channel not in CHANNELS or not action_key or not recipient or not body.strip() or len(body)>COMMUNICATION_BODY_MAX or len(action_key)>ACTION_KEY_MAX or len(recipient)>RECIPIENT_MAX:
         raise ValueError("Invalid outbound communication")
+    if _has_control_chars(recipient) or _has_control_chars(action_key) or _has_control_chars(body, allow_whitespace_controls=True):
+        raise ValueError("Outbound communication control characters")
     work_order=session.get(WorkOrder,work_order_id)
     if not work_order or work_order.client_id!=client_id:
         raise ValueError("Outbound communication is outside the authorised tenant")
