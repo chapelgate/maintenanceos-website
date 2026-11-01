@@ -20,7 +20,7 @@ This kit is for Chapelgate internal demos and tender evidence. It uses synthetic
 
 ## Required step fields (machine-checked)
 
-required_fields: checkout_sha, readiness_false, local_pytest, synthetic_sqlite_only, no_pstn_call, no_live_pii
+required_fields: checkout_sha, readiness_false, local_pytest, synthetic_sqlite_only, no_pstn_call, no_golden_line, no_live_pii
 
 Each local demo step must keep these fields covered:
 - checkout_sha: disposable worktree at a candidate SHA
@@ -28,6 +28,7 @@ Each local demo step must keep these fields covered:
 - local_pytest: pytest suite runs on the candidate tree
 - synthetic_sqlite_only: dashboard/API against synthetic SQLite only
 - no_pstn_call: do not place a PSTN or golden-line call
+- no_golden_line: do not touch the frozen golden phone line or voice box
 - no_live_pii: do not load resident or live customer PII
 
 ## Local synthetic demo steps

@@ -13,6 +13,7 @@ REQUIRED_STEP_FIELDS = (
     "local_pytest",
     "synthetic_sqlite_only",
     "no_pstn_call",
+    "no_golden_line",
     "no_live_pii",
 )
 
