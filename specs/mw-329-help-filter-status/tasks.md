@@ -1,0 +1,3 @@
+- [x] Result count + clear filter on help index
+- [x] Test lock
+- [x] Build readiness groups 1-8
