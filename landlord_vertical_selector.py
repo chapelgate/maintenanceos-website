@@ -37,14 +37,30 @@ def vertical_selector() -> str:
     return vertical
 
 
+def market_scope_ok() -> bool:
+    scope = _get_env("COMMERCIAL_MARKET_SCOPE").lower()
+    if scope == "england-social-housing":
+        return False
+    return scope == "uk-non-social-housing"
+
+
+def synthetic_data_ok() -> bool:
+    return _get_env("LANDLORD_PILOT_DATA_MODE").lower() == "synthetic"
+
+
 def e2e_scorecard() -> dict:
     """Return a synthetic landlord e2e scorecard.
 
     All values are synthetic; no live PII or real tenant data is used.
     """
+    vertical = vertical_selector()
+    market_ok = market_scope_ok()
+    data_ok = synthetic_data_ok()
     return {
-        "vertical": vertical_selector(),
+        "vertical": vertical,
         "synthetic": True,
         "no_live_pii": True,
-        "landlord_guard_active": False,
+        "market_scope_ok": market_ok,
+        "synthetic_data_ok": data_ok,
+        "landlord_guard_active": vertical == "landlord" and market_ok and data_ok,
     }
