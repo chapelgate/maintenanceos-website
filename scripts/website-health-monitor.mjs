@@ -159,7 +159,7 @@ for (const path of [...internalPaths].sort()) {
   const headings = [...html.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi)];
   let previous = 0;
   let headingOrderOk = true;
-  for (const [, level, text] of headings) {
+  for (const [, level] of headings) {
     const current = Number(level);
     if (previous > 0 && current > previous + 1) headingOrderOk = false;
     previous = current;
