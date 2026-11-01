@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import { PreLaunchBanner } from "@/components/PreLaunchBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { WebsiteMeasurement } from "@/components/WebsiteMeasurement";
+import { DeferredWebsiteMeasurement } from "@/components/DeferredWebsiteMeasurement";
 import { SkipLink } from "@/components/SkipLink";
 import { buildRootMetadata } from "@/lib/page-meta";
 import { contentSecurityPolicy } from "@/lib/static-security-headers";
@@ -38,7 +38,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} flex min-h-screen flex-col font-sans antialiased`}
       >
-        <WebsiteMeasurement />
+        <DeferredWebsiteMeasurement />
         <SkipLink />
         <PreLaunchBanner />
         <SiteHeader />

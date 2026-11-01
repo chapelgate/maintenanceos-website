@@ -45,9 +45,9 @@ test("client event contract is bounded and excludes persistent visitor identity"
 test("root measurement tracks page views conversions and only generic client errors", () => {
   const component = read("src/components/WebsiteMeasurement.tsx");
   const layout = read("src/app/layout.tsx");
-  assert.match(layout, /<WebsiteMeasurement \/>/);
+  assert.match(layout, /<DeferredWebsiteMeasurement \/>/);
   assert.equal(
-    (layout.match(/import \{ WebsiteMeasurement \}/g) || []).length,
+    (layout.match(/import \{ DeferredWebsiteMeasurement \}/g) || []).length,
     1,
   );
   assert.match(component, /CONVERSION_PATHS/);
