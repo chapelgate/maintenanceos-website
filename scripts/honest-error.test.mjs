@@ -93,3 +93,18 @@ test("lead form on submit announces errors and focuses error summary or first er
   assert.match(page, /data-lead-error-summary="true"/);
   assert.match(page, /tabIndex={-1}/);
 });
+
+test("global-error announces skip link and id=main landmark", () => {
+  const page = read("src/app/global-error.tsx");
+  assert.match(page, /href="#main"/);
+  assert.match(page, /Skip to main content/);
+  assert.match(page, /id="main"/);
+});
+
+test("global error has skip link and main landmark id", () => {
+  const page = read("src/app/global-error.tsx");
+  assert.match(page, /Skip to main content/);
+  assert.match(page, /href="#main"/);
+  assert.match(page, /id="main"/);
+  assert.match(page, /<html lang="en-GB">/);
+});

@@ -37,3 +37,37 @@ test("admin page is excluded from public sitemap routes", () => {
   assert.doesNotMatch(routes, /"\/admin\/"/);
   assert.match(routes, /No admin/);
 });
+
+test("admin page includes internal review navigation", () => {
+  assert.match(page, /admin-internal-nav/);
+  assert.match(page, /Internal review pages/);
+  assert.match(page, /href="\/buyers\//);
+  assert.match(page, /href="\/onboarding\//);
+  assert.match(page, /href="\/accessibility\//);
+  assert.match(page, /href="\/status\//);
+  assert.match(page, /href="\/create\//);
+  assert.match(page, /href="\/compare\//);
+  assert.match(page, /t835u/);
+  assert.match(page, /scanner frozen/);
+});
+
+test("admin page navigates to related review surfaces", () => {
+  assert.match(page, /href="\/buyers\//);
+  assert.match(page, /href="\/onboarding\//);
+  assert.match(page, /href="\/accessibility\//);
+  assert.match(page, /href="\/status\//);
+  assert.match(page, /href="\/create\//);
+  assert.match(page, /href="\/compare\//);
+  assert.match(page, /scanner frozen/);
+  assert.match(page, /t835u/);
+});
+
+test("admin page links internal review surfaces and notes frozen scanner", () => {
+  assert.match(page, /admin-internal-nav/);
+  assert.match(page, /href="\/buyers\/"/);
+  assert.match(page, /href="\/onboarding\/"/);
+  assert.match(page, /href="\/accessibility\/"/);
+  assert.match(page, /href="\/status\/"/);
+  assert.match(page, /scanner is frozen \(t835u\)|scanner: frozen \(t835u\)/i);
+  assert.doesNotMatch(page, /WCAG 2\.2 AA verified/);
+});
