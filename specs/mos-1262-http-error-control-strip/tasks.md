@@ -1,0 +1,3 @@
+- [x] Patch http_error_text.py
+- [x] Add tests
+- [x] pytest

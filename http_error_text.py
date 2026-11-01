@@ -7,13 +7,18 @@ from secret_patterns import SENSITIVE_KEY, redact_secrets
 
 HTTP_ERROR_DETAIL_MAX = 2000
 HTTP_ERROR_JSON_MAX = 4000
+_ALLOWED_CONTROLS = frozenset({"\t", "\n", "\r"})
+
+
+def _strip_controls(value: str) -> str:
+    return "".join(ch for ch in value if ord(ch) >= 32 or ch in _ALLOWED_CONTROLS)
 
 
 def _sanitize_structure(value: Any, key: str = "") -> Any:
     if key and SENSITIVE_KEY.search(key):
         return "[REDACTED]"
     if isinstance(value, str):
-        redacted = redact_secrets(value)
+        redacted = _strip_controls(redact_secrets(value))
         if len(redacted) > HTTP_ERROR_DETAIL_MAX:
             return redacted[:HTTP_ERROR_DETAIL_MAX]
         return redacted
@@ -31,7 +36,7 @@ def _sanitize_structure(value: Any, key: str = "") -> Any:
 
 def sanitize_http_detail(detail: object) -> object:
     if isinstance(detail, str):
-        value = redact_secrets(detail)
+        value = _strip_controls(redact_secrets(detail))
         if len(value) > HTTP_ERROR_DETAIL_MAX:
             return value[:HTTP_ERROR_DETAIL_MAX]
         return value
@@ -55,7 +60,7 @@ def sanitize_json_payload(payload: Any) -> str:
             text = json.dumps(payload, default=str, separators=(",", ":"), sort_keys=True)
         except (TypeError, ValueError):
             text = str(payload)
-    value = redact_secrets(text)
+    value = _strip_controls(redact_secrets(text))
     if len(value) > HTTP_ERROR_JSON_MAX:
         return value[:HTTP_ERROR_JSON_MAX]
     return value
