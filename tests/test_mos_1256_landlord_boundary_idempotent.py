@@ -25,13 +25,18 @@ def test_open_portfolio_reuses_existing_synthetic_boundary():
             session.add(client)
             session.flush()
             cid = int(client.id)
-            session.add(
-                TenantBoundary(
-                    client_id=cid,
-                    mode=SYNTHETIC_MODE,
-                    label="preexisting synthetic",
+            boundary = session.get(TenantBoundary, cid)
+            if boundary is None:
+                session.add(
+                    TenantBoundary(
+                        client_id=cid,
+                        mode=SYNTHETIC_MODE,
+                        label="preexisting synthetic",
+                    )
                 )
-            )
+            elif boundary.mode != SYNTHETIC_MODE:
+                boundary.mode = SYNTHETIC_MODE
+                boundary.label = "preexisting synthetic"
             session.commit()
         result = open_synthetic_portfolio(units=1)
         assert result["property_count"] >= 1

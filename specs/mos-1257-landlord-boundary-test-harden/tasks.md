@@ -1,0 +1,2 @@
+- [x] Harden reuse test setup
+- [x] Verify pytest green
