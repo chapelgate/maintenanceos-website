@@ -58,8 +58,22 @@ class LifecycleDecision:
     reason: str
 
 
-_ALLOWED_HOLD_SCOPES = {"tenant", "record", "subject", "data_class"}
-_ALLOWED_ACTIONS = {"export", "erasure"}
+_ALLOWED_HOLD_SCOPES = frozenset({"tenant", "record", "subject", "data_class"})
+_ALLOWED_ACTIONS = frozenset({"export", "erasure"})
+
+
+def hold_scope_known(scope: str) -> bool:
+    value = (scope or "").strip()
+    if not value or any(ord(ch) < 32 for ch in value):
+        return False
+    return value in _ALLOWED_HOLD_SCOPES
+
+
+def action_known(action: str) -> bool:
+    value = (action or "").strip()
+    if not value or any(ord(ch) < 32 for ch in value):
+        return False
+    return value in _ALLOWED_ACTIONS
 
 
 def _validate_record(record: LifecycleRecord, client_id: int) -> None:
