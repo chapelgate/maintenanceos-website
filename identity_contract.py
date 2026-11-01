@@ -10,6 +10,10 @@ from datetime import datetime
 from typing import FrozenSet
 
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 @dataclass(frozen=True)
 class ExternalPrincipal:
     issuer: str
@@ -61,12 +65,20 @@ def authorize_identity(
         return _deny("principal_required")
     if not principal.issuer.strip() or not principal.subject.strip():
         return _deny("principal_identity_invalid")
+    if _has_control_chars(principal.issuer) or _has_control_chars(principal.subject):
+        return _deny("principal_identity_control_chars")
+    if any(_has_control_chars(role) for role in principal.roles):
+        return _deny("principal_role_control_chars")
+    if any(_has_control_chars(item) for item in principal.assurance):
+        return _deny("principal_assurance_control_chars")
     if principal.revoked:
         return _deny("account_revoked")
     if not principal.active:
         return _deny("account_inactive")
     if session is None or not session.session_id.strip():
         return _deny("session_required")
+    if _has_control_chars(session.session_id):
+        return _deny("session_control_chars")
     if session.revoked:
         return _deny("session_revoked")
     if not session.active:
@@ -77,6 +89,10 @@ def authorize_identity(
         return _deny("tenant_membership_required")
     if not requirement.allowed_roles:
         return _deny("role_policy_required")
+    if any(_has_control_chars(role) for role in requirement.allowed_roles):
+        return _deny("role_policy_control_chars")
+    if any(_has_control_chars(item) for item in requirement.required_assurance):
+        return _deny("assurance_policy_control_chars")
     effective_roles = principal.roles.intersection(requirement.allowed_roles)
     if not effective_roles:
         return _deny("role_not_authorized")
