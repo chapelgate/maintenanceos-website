@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { DeferredLeadCaptureForm } from "@/components/DeferredLeadCaptureForm";
 import { PageHero } from "@/components/PageHero";
 import { JsonLd } from "@/components/JsonLd";
 import { contentPageJsonLd } from "@/lib/json-ld";
@@ -52,7 +52,7 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <LeadCaptureForm
+        <DeferredLeadCaptureForm
           leadType="contact"
           title="Send a message"
           helper="Human enquiry only — not a live support desk, not a GA support desk, not live phone provisioning, no monitored support phone, no live chat, and no response-time SLA."
