@@ -1,3 +1,8 @@
+import fs from "node:fs";
+import path from "node:path";
+
+const OUT = path.resolve("out");
+
 const origin = (process.env.WEBSITE_SITE_URL ||
   "https://worksmartos.co.uk").replace(/\/$/, "");
 const controlPlaneRaw = process.env.WEBSITE_CONTROL_PLANE;
@@ -130,6 +135,62 @@ if (controlPlane) {
   if (preflight.headers.get("access-control-allow-origin") !== origin) {
     failures.push("website event CORS origin mismatch");
   }
+}
+
+for (const path of [...internalPaths].sort()) {
+  if (!isContentHtmlPage(path)) continue;
+  const htmlPath = exportedHtmlFile(path);
+  if (!htmlPath) continue;
+  const html = fs.readFileSync(htmlPath, "utf8");
+  if (!/<html lang="en-GB">/.test(html)) {
+    failures.push(`${path}: missing lang="en-GB"`);
+  }
+  if (!/<main id="main"/.test(html)) {
+    failures.push(`${path}: missing main landmark #main`);
+  }
+  if (!/Skip to main content/.test(html)) {
+    failures.push(`${path}: missing skip-to-main link`);
+  }
+  for (const img of html.matchAll(/<img\b[^>]*>/gi)) {
+    if (!/\balt=/.test(img[0])) {
+      failures.push(`${path}: image without alt text`);
+    }
+  }
+  const headings = [...html.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi)];
+  let previous = 0;
+  let headingOrderOk = true;
+  for (const [, level, text] of headings) {
+    const current = Number(level);
+    if (previous > 0 && current > previous + 1) headingOrderOk = false;
+    previous = current;
+  }
+  if (!headingOrderOk) {
+    failures.push(`${path}: heading levels skip`);
+  }
+}
+
+function isContentHtmlPage(urlPath) {
+  const clean = decodeURIComponent(urlPath.split("?")[0]).replace(/^\/+/, "");
+  if (!clean) return true;
+  if (clean.startsWith("_next/")) return false;
+  if (clean.startsWith(".well-known/")) return false;
+  if (clean === "humans.txt") return false;
+  if (clean === "icon.png") return false;
+  if (clean === "robots.txt") return false;
+  if (clean === "sitemap.xml") return false;
+  if (clean.startsWith("cdn-cgi/")) return false;
+  if (/\.(?:css|js|png|jpg|jpeg|webp|svg|ico|woff2?|txt|xml|json)$/i.test(clean)) return false;
+  return true;
+}
+
+function exportedHtmlFile(urlPath) {
+  const clean = decodeURIComponent(urlPath.split("?")[0]).replace(/^\/+/, "");
+  if (!clean) return path.join(OUT, "index.html");
+  const direct = path.join(OUT, clean);
+  if (fs.existsSync(direct) && fs.statSync(direct).isFile()) return direct;
+  const index = path.join(OUT, clean, "index.html");
+  if (fs.existsSync(index)) return index;
+  return null;
 }
 
 console.log(JSON.stringify({
