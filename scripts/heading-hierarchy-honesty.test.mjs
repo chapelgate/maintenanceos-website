@@ -21,26 +21,6 @@ function extractHeadings(source) {
   return headings;
 }
 
-function verifyHeadingHierarchy(headings) {
-  const errors = [];
-  for (let i = 0; i < headings.length; i++) {
-    if (i === 0) {
-      if (headings[i].level !== 1) {
-        // h1 comes from PageHero component rendered in the page, not from raw JSX here
-      }
-    } else {
-      const prev = headings[i - 1];
-      const curr = headings[i];
-      if (curr.level > prev.level + 1) {
-        errors.push(
-          `Heading level jumps from h${prev.level} to h${curr.level} (${curr.id})`
-        );
-      }
-    }
-  }
-  return errors;
-}
-
 test("accessibility page sections use sequential h2 without jumps", () => {
   const headings = extractHeadings(a11y);
   // All sections should be h2 (h1 comes from PageHero component)
