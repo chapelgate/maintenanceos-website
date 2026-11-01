@@ -14,6 +14,13 @@ SENSITIVE_KEY = re.compile(
     r"password|phone|secret|signature|token|transcript)",
     re.IGNORECASE,
 )
+
+def secret_key_known(key: str) -> bool:
+    value = (key or "").strip()
+    if not value or any(ord(ch) < 32 for ch in value):
+        return False
+    return bool(SENSITIVE_KEY.search(value))
+
 BEARER_VALUE = re.compile(r"\bBearer\s+[^\s,;]+", re.IGNORECASE)
 OPENAI_KEY = re.compile(r"\bsk-[A-Za-z0-9_.-]{8,}")
 EMAIL_VALUE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
