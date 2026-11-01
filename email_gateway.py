@@ -5,30 +5,51 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def live_email_enabled():
+    email_mode = os.getenv("EMAIL_MODE", "mock")
+    enable_live = os.getenv("ENABLE_LIVE_EMAIL", "false")
+    if any(map(_has_control_chars, (email_mode, enable_live))):
+        return False
     return (
-        os.getenv("EMAIL_MODE", "mock") == "imap_smtp"
-        and os.getenv("ENABLE_LIVE_EMAIL", "false").lower() == "true"
+        email_mode == "imap_smtp"
+        and enable_live.strip().lower() == "true"
     )
 
 def _truthy(name: str) -> bool:
     return os.getenv(name, "").strip().lower() in {"1", "true", "yes", "on"}
 
 def smtp_configured():
-    host=os.getenv("SMTP_HOST");user=os.getenv("SMTP_USERNAME");pw=os.getenv("SMTP_PASSWORD")
-    sender=os.getenv("SMTP_FROM") or user
+    host = os.getenv("SMTP_HOST")
+    user = os.getenv("SMTP_USERNAME")
+    pw = os.getenv("SMTP_PASSWORD")
+    sender = os.getenv("SMTP_FROM") or user
+    if any(map(_has_control_chars, (host, user, pw, sender))):
+        return False
     return bool(host and user and pw and sender)
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 def _sender_address() -> str:
-    user=os.getenv("SMTP_USERNAME","").strip()
-    return (os.getenv("SMTP_FROM") or user).strip()
+    user = os.getenv("SMTP_USERNAME", "").strip()
+    if _has_control_chars(user):
+        return ""
+    sender = (os.getenv("SMTP_FROM") or user).strip()
+    if _has_control_chars(sender):
+        return ""
+    return sender
 
 def _resend_api_key():
-    explicit=(os.getenv("RESEND_API_KEY") or "").strip()
+    explicit = (os.getenv("RESEND_API_KEY") or "").strip()
+    if _has_control_chars(explicit):
+        return ""
     if explicit:
         return explicit
-    user=os.getenv("SMTP_USERNAME","").strip()
-    pw=os.getenv("SMTP_PASSWORD","").strip()
-    if user.casefold()=="resend" or pw.startswith("re_"):
+    user = os.getenv("SMTP_USERNAME", "").strip()
+    pw = os.getenv("SMTP_PASSWORD", "").strip()
+    if _has_control_chars(user) or _has_control_chars(pw):
+        return ""
+    if user.casefold() == "resend" or pw.startswith("re_"):
         return pw
     return ""
 
