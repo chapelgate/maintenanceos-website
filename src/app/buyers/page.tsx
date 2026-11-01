@@ -32,6 +32,31 @@ export default function BuyerNotePage() {
           <li>The scripted browser preview on the demo page.</li>
           <li>The pricing page, which does not publish a list price.</li>
           <li>The status page, which does not show an uptime figure.</li>
+          <li>
+            The{" "}
+            <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">
+              trust page
+            </a>
+            , which records legal-entity and DPIA honesty without certifying release.
+          </li>
+          <li>
+            The{" "}
+            <a href="/onboarding/" className="font-medium text-accent underline-offset-4 hover:underline">
+              onboarding walkthrough
+            </a>
+            , which is a read-only demo path (scanner remains frozen).
+          </li>
+          <li>
+            The{" "}
+            <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">
+              help centre
+            </a>
+            {" "}and{" "}
+            <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">
+              security page
+            </a>
+            , which stay pre-launch documentation — not a live support desk.
+          </li>
         </ul>
       </section>
       <section aria-labelledby="buyer-andy">
@@ -89,6 +114,27 @@ export default function BuyerNotePage() {
             className="font-medium text-accent underline-offset-4 hover:underline"
           >
             Contact
+          </a>
+          {" · "}
+          <a
+            href="/trust/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Trust
+          </a>
+          {" · "}
+          <a
+            href="/onboarding/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Onboarding
+          </a>
+          {" · "}
+          <a
+            href="/help/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Help
           </a>
         </p>
       </div>

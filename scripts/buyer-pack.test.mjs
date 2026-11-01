@@ -20,6 +20,17 @@ test("buyer note stays a noindex pre-launch pack", () => {
   assert.doesNotMatch(routes, /\/buyers\//);
 });
 
+test("buyer note inspect pack links trust, onboarding, help and security", () => {
+  assert.match(page, /href="\/trust\/"/);
+  assert.match(page, /href="\/onboarding\/"/);
+  assert.match(page, /href="\/help\/"/);
+  assert.match(page, /href="\/security\/"/);
+  assert.match(page, /scanner remains frozen/);
+  assert.match(page, /not a live support desk/);
+  assert.doesNotMatch(page, /£/);
+  assert.doesNotMatch(page, /buy now/i);
+});
+
 test("buyer note does not sell or certify", () => {
   assert.doesNotMatch(page, /£/);
   assert.doesNotMatch(page, /buy now/i);

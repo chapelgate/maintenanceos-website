@@ -68,6 +68,20 @@ export default function GlobalError({
             </a>
             {" · "}
             <a
+              href="/demo/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Scripted preview
+            </a>
+            {" · "}
+            <a
+              href="/help/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Help
+            </a>
+            {" · "}
+            <a
               href="/contact/"
               className="font-medium text-accent underline-offset-4 hover:underline"
             >
