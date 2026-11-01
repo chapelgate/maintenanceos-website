@@ -11,11 +11,23 @@ OVERLAY_KEYS = frozenset([
     "WORKSMART_MARKET",
     "WORKSMART_DISPATCH",
     "WORKSMART_CREDENTIALS",
+    "WORKSMART_DEPLOY",
+    "WORKSMART_NGINX",
+    "WORKSMART_GOLDEN_LINE",
+    "WORKSMART_SECRET",
+    "WORKSMART_PRODUCTION",
 ])
 
 
 def _get_env(key: str, default: str = "") -> str:
-    return os.getenv(key, default).strip()
+    try:
+        raw = os.getenv(key, default)
+    except ValueError:
+        return ""
+    value = raw.strip()
+    if any(ord(ch) < 32 for ch in value):
+        return ""
+    return value
 
 
 def _check_overlay_keys() -> None:
