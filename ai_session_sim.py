@@ -24,7 +24,13 @@ _LOCK = threading.Lock()
 _SESSIONS: dict[int, MockAISession] = {}  # call_session_id -> session
 
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 def open_mock_ai_session(*, call_sid: str, call_session_id: int, client_id: int) -> MockAISession:
+    if _has_control_chars(call_sid):
+        raise ValueError("control characters not allowed")
     session = MockAISession(
         context_id=f"ai-{uuid.uuid4().hex}",
         call_sid=call_sid,
