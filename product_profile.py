@@ -13,6 +13,11 @@ DENY_KEYS = {
     "market",
     "dispatch",
     "credential",
+    "deploy",
+    "nginx",
+    "golden_line",
+    "secret",
+    "production",
 }
 
 
