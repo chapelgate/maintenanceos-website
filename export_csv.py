@@ -33,6 +33,7 @@ FORBIDDEN_EXPORT_FIELDS = frozenset(
         "secret",
         "authorization",
         "access_notes",
+        "resident_name",
         "emergency_notes",
         "session",
         "session_id",
