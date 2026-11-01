@@ -60,6 +60,13 @@ PEM_PRIVATE_KEY = re.compile(
 )
 
 
+_ALLOWED_CONTROLS = frozenset({"\t", "\n", "\r"})
+
+
+def _strip_controls(value: str) -> str:
+    return "".join(ch for ch in value if ord(ch) >= 32 or ch in _ALLOWED_CONTROLS)
+
+
 def redact_secrets(value: str) -> str:
     value = BEARER_VALUE.sub("Bearer [REDACTED]", value)
     value = OPENAI_KEY.sub("[REDACTED]", value)
@@ -95,7 +102,7 @@ def redact_secrets(value: str) -> str:
     value = SHOPIFY_TOKEN.sub("[REDACTED]", value)
     value = PYPI_TOKEN.sub("[REDACTED]", value)
     value = PEM_PRIVATE_KEY.sub("[REDACTED]", value)
-    return value
+    return _strip_controls(value)
 
 
 def redact_value(value: str) -> str:
