@@ -5,6 +5,8 @@ def age_minutes(created_at,now=None):
     now=now or utcnow()
     return max(0,(now-created_at).total_seconds()/60)
 def sla_status(urgency,created_at,now=None):
+    if isinstance(urgency, str) and any(ord(ch) < 32 for ch in urgency):
+        raise ValueError("urgency control characters")
     target=TARGETS.get(urgency,1440)
     age=age_minutes(created_at,now)
     ratio=age/target if target else 0
