@@ -15,3 +15,8 @@ def postcode_matches(expected: str, supplied: str) -> bool:
     a = normalise_postcode(expected)
     b = normalise_postcode(supplied)
     return bool(a and b and a == b)
+
+
+def is_synthetic_test_postcode(value: str) -> bool:
+    normalised = normalise_postcode(value)
+    return bool(normalised) and normalised.startswith("ZZ")
