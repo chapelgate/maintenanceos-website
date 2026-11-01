@@ -46,6 +46,32 @@ export default function OnboardingPage() {
             <li>Not a claim that WCAG 2.2 AA has been verified.</li>
           </ul>
         </section>
+        <section aria-labelledby="onboarding-walkthrough" className="space-y-3">
+          <h2 id="onboarding-walkthrough" className="text-lg font-semibold text-ink">
+            Synthetic demo walkthrough (ordered)
+          </h2>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-xs">
+            <li>
+              <a href="/" className="font-medium text-accent underline-offset-4 hover:underline">Homepage</a>
+              {" — "}pre-launch preview, no live claims.
+            </li>
+            <li>
+              <a href="/demo/" className="font-medium text-accent underline-offset-4 hover:underline">Demo</a>
+              {" — "}scripted browser preview; no live phone.
+            </li>
+            <li>
+              <a href="/pricing/" className="font-medium text-accent underline-offset-4 hover:underline">Pricing</a>
+              {" — "}[ANDY:] placeholders only; no checkout.
+            </li>
+            <li>
+              <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+              {" — "}mailto fallback; no live chat/support desk.
+            </li>
+          </ol>
+          <p className="text-xs text-muted">
+            The onboarding scanner is frozen (t835u) and is not operated from this page.
+          </p>
+        </section>
         <p>
           Publisher: Chapelgate Limited, company number 12340004. Passing this
           note does not make the site releasable.
