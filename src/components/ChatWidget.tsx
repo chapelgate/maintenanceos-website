@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
-type ChatWidgetProps = {
+export type ChatWidgetProps = {
   title?: string;
 };
 

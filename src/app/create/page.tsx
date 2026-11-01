@@ -3,7 +3,7 @@ import {
   CalendarConnectSection,
   CreateJourneySection,
 } from "@/components/create-funnel-islands";
-import { ChatWidget } from "@/components/ChatWidget";
+import { DeferredChatWidget } from "@/components/DeferredChatWidget";
 import { CreateIngestPrivacyNote } from "@/components/CreateIngestPrivacyNote";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { JsonLd } from "@/components/JsonLd";
@@ -165,7 +165,7 @@ export default function CreateReceptionistPage() {
           </p>
         </section>
       </div>
-      <ChatWidget title="Questions about the preview?" />
+      <DeferredChatWidget title="Questions about the preview?" />
     </>
   );
 }
