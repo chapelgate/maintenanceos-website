@@ -36,7 +36,14 @@ def sanitize_http_detail(detail: object) -> object:
             return value[:HTTP_ERROR_DETAIL_MAX]
         return value
     if isinstance(detail, (dict, list, tuple)):
-        return _sanitize_structure(detail)
+        sanitized = _sanitize_structure(detail)
+        try:
+            encoded = json.dumps(sanitized, default=str, separators=(",", ":"), sort_keys=True)
+            if len(encoded) > HTTP_ERROR_JSON_MAX:
+                return {"_truncated": True, "size_limit": HTTP_ERROR_JSON_MAX}
+        except (TypeError, ValueError):
+            return "Request failed"
+        return sanitized
     return detail
 
 
