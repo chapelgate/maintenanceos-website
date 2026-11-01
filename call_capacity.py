@@ -25,6 +25,10 @@ class CapacityRejected(RuntimeError):
         self.reason = reason
 
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 def _positive_int(name: str, default: int, *, minimum: int = 1, maximum: int = 100_000) -> int:
     try:
         value = int(os.getenv(name, str(default)))
@@ -117,6 +121,12 @@ class ProcessLocalCapacityBackend:
             self.draining = bool(enabled)
 
     def try_acquire(self, lease: CallLease, *, global_limit: int, per_client_limit: int) -> tuple[bool, str]:
+        if _has_control_chars(lease.call_sid):
+            self.rejected_total += 1
+            return False, "control_char_rejected"
+        if _has_control_chars(lease.worker_id):
+            self.rejected_total += 1
+            return False, "control_char_rejected"
         with self._lock:
             existing = self._by_call_sid.get(lease.call_sid) or self._by_session.get(lease.call_session_id)
             if existing:
