@@ -1,0 +1,3 @@
+- [x] Expand denylist
+- [x] Add tests
+- [x] pytest

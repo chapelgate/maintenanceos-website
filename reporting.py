@@ -46,11 +46,16 @@ FORBIDDEN_REPORT_FIELDS = frozenset(
         "authorization",
         "resident_name",
         "access_notes",
+        "emergency_notes",
+        "csrf",
         "csrf_token",
         "cookie",
+        "cookies",
         "session",
         "session_id",
         "bearer",
+        "access_token",
+        "refresh_token",
     }
 )
 
