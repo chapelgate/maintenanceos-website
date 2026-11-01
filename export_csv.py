@@ -34,6 +34,15 @@ FORBIDDEN_EXPORT_FIELDS = frozenset(
         "authorization",
         "access_notes",
         "emergency_notes",
+        "session",
+        "session_id",
+        "csrf",
+        "csrf_token",
+        "cookie",
+        "cookies",
+        "bearer",
+        "access_token",
+        "refresh_token",
     }
 )
 
