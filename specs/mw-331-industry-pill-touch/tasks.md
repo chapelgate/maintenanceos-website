@@ -1,0 +1,3 @@
+- [x] Touch target classes
+- [x] Test lock
+- [x] Build readiness

@@ -1,0 +1,3 @@
+- [x] Recovery links
+- [x] Test lock
+- [x] Build readiness

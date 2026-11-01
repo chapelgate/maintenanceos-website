@@ -76,7 +76,29 @@ export default function OnboardingPage() {
           Publisher: Chapelgate Limited, company number 12340004. Passing this
           note does not make the site releasable.
         </p>
-        <p>
+        <p className="text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a
+            href="/trust/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Trust
+          </a>
+          {" · "}
+          <a
+            href="/help/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Help
+          </a>
+          {" · "}
+          <a
+            href="/security/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Security
+          </a>
+          {" · "}
           <a
             href="/"
             className="font-medium text-accent underline-offset-4 hover:underline"
@@ -104,6 +126,7 @@ export default function OnboardingPage() {
           >
             Contact
           </a>
+          . These are documentation surfaces — not a live onboarding desk.
         </p>
       </div>
     </>

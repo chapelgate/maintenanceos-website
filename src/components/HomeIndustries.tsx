@@ -27,7 +27,7 @@ export function HomeIndustries() {
             <a
               key={ind.slug}
               href={`/industries/${ind.slug}/`}
-              className="inline-flex items-center rounded-full border border-border bg-surface px-4 py-2 text-xs font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-border bg-surface px-4 py-2.5 text-xs font-semibold text-ink transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               {ind.label}
             </a>

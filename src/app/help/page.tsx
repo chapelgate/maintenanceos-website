@@ -36,7 +36,7 @@ export default async function HelpIndexPage() {
         <FunnelPathStrip linked />
         
         {/* Search */}
-        <section aria-labelledby="search-heading" className="mb-8">
+        <section aria-labelledby="search-heading" className="mb-8" role="search">
           <h2 id="search-heading" className="sr-only">Search Help Articles</h2>
           <div className="relative">
             <label htmlFor="help-search" className="sr-only">Search help articles</label>
@@ -46,6 +46,7 @@ export default async function HelpIndexPage() {
               placeholder="Search help articles…"
               className="w-full px-4 py-3 text-base border border-border rounded-[var(--mos-radius-lg)] bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent pl-10"
               aria-controls="help-articles"
+              aria-describedby="help-result-count"
               autoComplete="off"
             />
             <svg
@@ -60,10 +61,18 @@ export default async function HelpIndexPage() {
               <path d="M15 15l-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </div>
+          <p
+            id="help-result-count"
+            className="mt-3 text-xs text-muted"
+            role="status"
+            aria-live="polite"
+          >
+            {articles.length} article{articles.length === 1 ? "" : "s"}
+          </p>
         </section>
 
         {/* Categories with Articles */}
-        <div id="help-articles" role="list" aria-live="polite" className="space-y-12">
+        <div id="help-articles" role="list" aria-describedby="help-result-count" className="space-y-12">
           {categories.map((category) => {
             const categoryArticles = articles.filter((a) => a.frontmatter.category === category);
             return (
@@ -137,11 +146,19 @@ export default async function HelpIndexPage() {
         <div
           id="help-no-results"
           className="hidden text-center py-12 text-muted"
+          data-no-results
           role="status"
           aria-live="polite"
         >
           <p className="text-base font-medium">No matching articles found.</p>
-          <p className="mt-1 text-sm">Try a different search term or browse all articles above.</p>
+          <p className="mt-1 text-sm">Clear the filter to show every article again.</p>
+          <button
+            id="help-clear-filter"
+            type="button"
+            className="mt-4 text-sm font-medium text-accent underline underline-offset-4 hover:no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            Clear help filter
+          </button>
         </div>
 
         <section className="border-t border-border pt-8">
@@ -157,22 +174,21 @@ export default async function HelpIndexPage() {
               const searchInput = document.getElementById('help-search');
               const articlesContainer = document.getElementById('help-articles');
               const noResults = document.getElementById('help-no-results');
+              const resultCount = document.getElementById('help-result-count');
+              const clearBtn = document.getElementById('help-clear-filter');
               const articles = articlesContainer ? articlesContainer.querySelectorAll('[data-search-text]') : [];
-              
+              const total = articles.length;
+
               if (!searchInput || !articlesContainer) return;
-              
-              searchInput.addEventListener('input', function() {
-                const query = this.value.toLowerCase().trim();
+
+              function applyFilter(query) {
                 let visibleCount = 0;
-                
                 articles.forEach(function(article) {
                   const searchText = article.getAttribute('data-search-text') || '';
                   const matches = !query || searchText.includes(query);
                   article.style.display = matches ? '' : 'none';
                   if (matches) visibleCount++;
                 });
-                
-                // Show/hide category headers based on visible articles
                 const categories = articlesContainer.querySelectorAll('section[aria-labelledby^="cat-"]');
                 categories.forEach(function(cat) {
                   const catArticles = cat.querySelectorAll('[data-search-text]');
@@ -182,11 +198,27 @@ export default async function HelpIndexPage() {
                   });
                   cat.style.display = catVisible > 0 ? '' : 'none';
                 });
-                
+                if (resultCount) {
+                  resultCount.textContent = query
+                    ? (visibleCount + ' matching article' + (visibleCount === 1 ? '' : 's'))
+                    : (total + ' article' + (total === 1 ? '' : 's'));
+                }
                 if (noResults) {
                   noResults.style.display = visibleCount === 0 && query ? 'block' : 'none';
+                  noResults.classList.toggle('hidden', !(visibleCount === 0 && query));
                 }
+              }
+
+              searchInput.addEventListener('input', function() {
+                applyFilter(this.value.toLowerCase().trim());
               });
+              if (clearBtn) {
+                clearBtn.addEventListener('click', function() {
+                  searchInput.value = '';
+                  applyFilter('');
+                  searchInput.focus();
+                });
+              }
             })();
           `,
         }}
