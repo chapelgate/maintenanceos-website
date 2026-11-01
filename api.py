@@ -44,6 +44,7 @@ from voice_bridge import (
 from provider_runtime import handle_provider_media_stream, provider_ready
 from product_profile import ProductProfileError,api_title
 from http_error_text import sanitize_http_detail
+from operational_logging import operational_event
 from reporting import process_local_tenant_health
 load_dotenv()
 app=FastAPI(title=api_title(),docs_url=None,redoc_url=None,openapi_url=None)
@@ -349,6 +350,25 @@ def _require_contractor_decision(decision):
 def require_public_provider_ingress():
     if not public_provider_ingress_ready():
         raise HTTPException(503, "Public provider ingress is disabled")
+
+@app.post("/ct-err")
+async def expect_ct_report(request: Request):
+    from request_context import request_id as current_request_id
+    if request.headers.get("content-type", "").startswith("application/json"):
+        try:
+            payload = await request.json()
+        except Exception:
+            raise HTTPException(400, "Malformed JSON request")
+        if payload is not None and not isinstance(payload, dict):
+            raise HTTPException(400, "JSON object required")
+    operational_event(
+        "expect_ct_report",
+        request_id=current_request_id() or None,
+        method=request.method,
+        path=request.url.path,
+        status=204,
+    )
+    return Response(status_code=204)
 
 @app.get("/health")
 def health(response: Response):
