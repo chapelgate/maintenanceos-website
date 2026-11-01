@@ -128,9 +128,15 @@ def require_client_resource(
         raise TenantAccessError("Unknown work order")
 
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 def resident_by_phone_for_client(session, client_id: int, normalised_phone: str):
     from identity import normalise_phone
 
+    if _has_control_chars(normalised_phone):
+        return None
     for resident in session.query(Resident).filter_by(client_id=client_id, active=True).all():
         if normalise_phone(resident.phone) == normalised_phone:
             return resident
