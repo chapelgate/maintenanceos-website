@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { CtaPair } from "@/components/CtaPair";
 import { HomeIndustries } from "@/components/HomeIndustries";
+import { HomeLeadCaptureForm } from "@/components/HomeLeadCaptureForm";
 import { HomeOnboardingSteps } from "@/components/HomeOnboardingSteps";
 import { HomeRoleChips } from "@/components/HomeRoleChips";
 import { HomeTrustStrip } from "@/components/HomeTrustStrip";
@@ -13,21 +13,6 @@ import { SafeAutomationLink } from "@/components/SafeAutomationLink";
 import { fullFunnelPageJsonLd } from "@/lib/json-ld";
 import { funnelPageMetadata } from "@/lib/page-meta";
 import { siteConfig } from "@/config/site";
-
-const LeadCaptureForm = dynamic(
-  () =>
-    import("@/components/LeadCaptureForm").then(
-      (module) => module.LeadCaptureForm,
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <p className="text-sm text-muted" aria-busy="true">
-        Loading launch list form…
-      </p>
-    ),
-  },
-);
 
 export const metadata: Metadata = funnelPageMetadata("home");
 
@@ -240,7 +225,7 @@ export default function HomePage() {
             We will email when early access opens. Pre-launch.
           </p>
           <div className="mt-5">
-            <LeadCaptureForm
+            <HomeLeadCaptureForm
               leadType="launch_list"
               submitLabel="Join launch list"
               showOrganisation={false}
