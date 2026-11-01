@@ -11,10 +11,14 @@ def test_email_lookup_max_matches_resident_model():
 
 
 def test_email_lookup_accepts_bounded_email():
+    local = "a" * (channels.EMAIL_LOOKUP_MAX - len("@example.invalid"))
+    email = local + "@example.invalid"
+    assert len(email) == channels.EMAIL_LOOKUP_MAX
+    assert channels.EMAIL_RE.match(email)
     with patch.object(channels, "SessionLocal") as session_local:
         session_local.side_effect = AssertionError("bounded email must open session")
         try:
-            channels.resident_by_email(1, "a" * channels.EMAIL_LOOKUP_MAX)
+            channels.resident_by_email(1, email)
         except AssertionError as raised:
             assert "bounded email" in str(raised)
         else:

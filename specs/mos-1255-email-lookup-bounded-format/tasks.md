@@ -1,0 +1,2 @@
+- [x] Fix bounded email fixture format
+- [x] Run test_email_lookup_max
