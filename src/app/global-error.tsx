@@ -60,6 +60,7 @@ export default function GlobalError({
             </button>
           </p>
           <p>
+            Related pre-launch pages:{" "}
             <a
               href="/"
               className="font-medium text-accent underline-offset-4 hover:underline"
@@ -82,11 +83,26 @@ export default function GlobalError({
             </a>
             {" · "}
             <a
+              href="/trust/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Trust
+            </a>
+            {" · "}
+            <a
+              href="/security/"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Security
+            </a>
+            {" · "}
+            <a
               href="/contact/"
               className="font-medium text-accent underline-offset-4 hover:underline"
             >
               Contact
             </a>
+            . Failure screen only — not a live support desk.
           </p>
         </main>
       </body>
