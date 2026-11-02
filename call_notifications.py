@@ -267,7 +267,12 @@ def _structured_readback_unchallenged(transcript: str, readback_line: str) -> bo
 
 
 def _has_control_chars(value: str) -> bool:
-    return any(ord(ch) < 32 for ch in value)
+    return any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
 
 
 def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, Any]:
