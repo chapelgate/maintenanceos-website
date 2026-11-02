@@ -1,0 +1,3 @@
+- [x] patch audit_text._has_control_chars
+- [x] tests/test_mos_1278_audit_text_del_c1.py
+- [x] regression mos-1218 suite still green
