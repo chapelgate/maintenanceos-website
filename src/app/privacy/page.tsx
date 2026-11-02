@@ -181,6 +181,18 @@ export default function PrivacyPage() {
         <p className="mt-12 text-sm text-muted" aria-hidden="false">
           To be completed by legal review.
         </p>
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Draft legal scaffold only — not a live counsel desk, and not final privacy policy.
+        </p>
       </div>
     </>
   );
