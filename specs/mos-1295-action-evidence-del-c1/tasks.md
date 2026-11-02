@@ -1,0 +1,3 @@
+- [x] patch _has_control_chars
+- [x] tests/test_mos_1295_action_evidence_del_c1.py
+- [x] regression existing action_evidence control suites still green

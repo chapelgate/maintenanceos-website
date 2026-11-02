@@ -40,7 +40,12 @@ CONFIRMABLE_ACTIONS = {
 
 def _has_control_chars(value: str, *, allow_whitespace_controls: bool = False) -> bool:
     allowed = {"\t", "\n", "\r"} if allow_whitespace_controls else set()
-    return any(ord(ch) < 32 and ch not in allowed for ch in value)
+    return any(
+        (ord(ch) < 32 and ch not in allowed)
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
 
 
 def record_action_result(
