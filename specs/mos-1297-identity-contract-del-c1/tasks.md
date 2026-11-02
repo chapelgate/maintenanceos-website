@@ -1,0 +1,3 @@
+- [x] patch _has_control_chars
+- [x] tests/test_mos_1297_identity_contract_del_c1.py
+- [x] regression mos-1265 suite still green
