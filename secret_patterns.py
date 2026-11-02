@@ -17,7 +17,12 @@ SENSITIVE_KEY = re.compile(
 
 def secret_key_known(key: str) -> bool:
     value = (key or "").strip()
-    if not value or any(ord(ch) < 32 for ch in value):
+    if not value or any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    ):
         return False
     return bool(SENSITIVE_KEY.search(value))
 

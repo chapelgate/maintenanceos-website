@@ -1,0 +1,3 @@
+- [x] patch secret_key_known
+- [x] tests/test_mos_1302_secret_patterns_del_c1.py
+- [x] regression existing secret_patterns control suite still green
