@@ -1,0 +1,3 @@
+- [x] patch _has_control_chars
+- [x] tests/test_mos_1294_webhook_security_del_c1.py
+- [x] regression mos-1244 suite still green

@@ -9,7 +9,12 @@ E164 = re.compile(r"^\+[1-9][0-9]{7,14}$")
 
 
 def _has_control_chars(value: str) -> bool:
-    return any(ord(ch) < 32 for ch in value)
+    return any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
 
 
 def public_https_origin_ready() -> bool:
