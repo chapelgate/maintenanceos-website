@@ -23,6 +23,7 @@ REQUIRED_UNIQUES = {
     "invoice_identities": {("client_id","contractor_id","normalised_invoice_number")},
     "communication_deliveries": {("client_id","channel","action_key")},
     "call_events": {("call_session_id","event_key")},
+    "call_sessions": {("call_sid",)},
     "contractor_attempts": {("work_order_id","contractor_id")},
 }
 
