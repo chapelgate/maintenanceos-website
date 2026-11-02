@@ -15,6 +15,8 @@ test("unknown addresses use an honest pre-launch not-found page", () => {
   assert.match(page, /href="\/"/);
   assert.match(page, /href="\/demo\/"/);
   assert.match(page, /href="\/help\/"/);
+  assert.match(page, /href="\/trust\/"/);
+  assert.match(page, /href="\/security\/"/);
   assert.match(page, /href="\/contact\/"/);
   assert.match(page, /Help/);
 });
@@ -24,4 +26,10 @@ test("not-found page does not claim a sale or a live service", () => {
   assert.doesNotMatch(page, /£/);
   assert.doesNotMatch(page, /NEXT_PUBLIC_PUBLIC_LAUNCH/);
   assert.doesNotMatch(page, /available now/i);
+});
+
+test("not-found includes Trust and Security recovery links", () => {
+  assert.match(page, /href="\/trust\/"/);
+  assert.match(page, /href="\/security\/"/);
+  assert.match(page, /not a live support desk/);
 });
