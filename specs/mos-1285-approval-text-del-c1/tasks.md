@@ -1,0 +1,3 @@
+- [x] patch approval_text._has_control_chars
+- [x] tests/test_mos_1285_approval_text_del_c1.py
+- [x] regression mos-1216 suite still green
