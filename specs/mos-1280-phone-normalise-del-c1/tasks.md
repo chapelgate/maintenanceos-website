@@ -1,0 +1,3 @@
+- [x] patch phone_normalise.normalise_phone control check
+- [x] tests/test_mos_1280_phone_normalise_del_c1.py
+- [x] regression mos-1258 suite still green
