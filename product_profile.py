@@ -18,6 +18,16 @@ DENY_KEYS = {
     "golden_line",
     "secret",
     "production",
+    "disclosure",
+    "redaction",
+    "pii",
+    "customer_pii",
+    "live_customer",
+    "approved_release",
+    "ir_deadline",
+    "voice_line",
+    "production_db",
+    "nginx_config",
 }
 
 
