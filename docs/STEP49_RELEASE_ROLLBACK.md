@@ -85,3 +85,7 @@ No new deployment service, rollback product, Actions workflow, paid runner, data
 ## Status
 
 Implementation and live verification complete. PR #100 merged as `e113eb7d08c99910bb83b0eb3f5a96cbfa745c2a`. The live `/release.json` reported that exact SHA, `release:verify` returned `failures: []`, `ok: true`, and the reused health monitor checked 29 internal paths / 47 pages-assets with `failures: []`, `ok: true`.
+
+Current HEAD (post #645 nested recovery nav) is `87350b4e75a56653d2c820ba0ea70688c8c72b1e`. The live deployment follows the merge through DigitalOcean App Platform.
+
+Honesty note: the original Step 49 merge SHA `e113eb7d08c99910bb83b0eb3f5a96cbfa745c2a` was part of an earlier repository state and is no longer in the current git history after the nested recovery nav merge. This document records the historical fact honestly.
