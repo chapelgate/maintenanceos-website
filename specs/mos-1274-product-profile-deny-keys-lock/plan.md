@@ -1,0 +1,1 @@
+1. Update lock assertions to current DENY_KEYS.\n2. Re-run named product_profile suites.\n

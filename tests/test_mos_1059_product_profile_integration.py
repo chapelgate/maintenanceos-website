@@ -81,8 +81,8 @@ def test_product_profile_module_imports_clean():
         assert forbidden not in source
 
 
-def test_deny_keys_set_has_exactly_six_keys():
-    assert len(product_profile.DENY_KEYS) == 11
+def test_deny_keys_set_matches_frozen_overlay_lock():
+    assert len(product_profile.DENY_KEYS) == 21
     assert product_profile.DENY_KEYS == {
         "retention",
         "voice",
@@ -95,6 +95,16 @@ def test_deny_keys_set_has_exactly_six_keys():
         "golden_line",
         "secret",
         "production",
+        "disclosure",
+        "redaction",
+        "pii",
+        "customer_pii",
+        "live_customer",
+        "approved_release",
+        "ir_deadline",
+        "voice_line",
+        "production_db",
+        "nginx_config",
     }
 
 
