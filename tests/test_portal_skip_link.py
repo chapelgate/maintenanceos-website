@@ -12,7 +12,7 @@ import operations
 from models import Approval, Base, Client, Contractor, Property, WorkOrder
 from security import sign_link
 
-SKIP = 'href="#main-content">Skip to content'
+SKIP = 'href="#main-content" aria-label="Skip to main content">Skip to content'
 MAIN_ID = 'id="main-content"'
 
 
