@@ -25,7 +25,12 @@ _SESSIONS: dict[int, MockAISession] = {}  # call_session_id -> session
 
 
 def _has_control_chars(value: str) -> bool:
-    return any(ord(ch) < 32 for ch in value)
+    return any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
 
 
 def open_mock_ai_session(*, call_sid: str, call_session_id: int, client_id: int) -> MockAISession:

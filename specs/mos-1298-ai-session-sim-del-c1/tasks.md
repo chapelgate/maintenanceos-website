@@ -1,0 +1,3 @@
+- [x] patch _has_control_chars
+- [x] tests/test_mos_1298_ai_session_sim_del_c1.py
+- [x] regression mos-1248 suite still green
