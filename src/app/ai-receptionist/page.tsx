@@ -143,6 +143,18 @@ export default function AiReceptionistPage() {
         </p>
 
         <CtaPair />
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/how-it-works/" className="font-medium text-accent underline-offset-4 hover:underline">How it works</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/demo/" className="font-medium text-accent underline-offset-4 hover:underline">Early demo</a>
+          . Documentation surfaces only — not a live phone, and not a live receptionist support desk.
+        </p>
       </div>
     </>
   );
