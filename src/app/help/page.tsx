@@ -164,6 +164,18 @@ export default async function HelpIndexPage() {
         <section className="border-t border-border pt-8">
           <CtaPair />
         </section>
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/faq/" className="font-medium text-accent underline-offset-4 hover:underline">FAQ</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Documentation surfaces only — not a live help desk, and not a response-time SLA.
+        </p>
       </div>
 
       {/* Client-side search script */}

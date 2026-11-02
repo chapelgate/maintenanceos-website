@@ -165,6 +165,18 @@ export default function CreateReceptionistPage() {
           </p>
         </section>
       </div>
+
+      <p className="mx-auto mt-8 max-w-3xl px-4 text-sm text-muted">
+        Related pre-launch pages:{" "}
+        <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+        {" · "}
+        <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+        {" · "}
+        <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+        {" · "}
+        <a href="/demo/" className="font-medium text-accent underline-offset-4 hover:underline">Early demo</a>
+        . Preview funnel only — not a live phone, and not a live create support desk.
+      </p>
       <DeferredChatWidget title="Questions about the preview?" />
     </>
   );
