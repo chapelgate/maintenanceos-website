@@ -332,6 +332,18 @@ export default function CookiesPage() {
         <p className="mt-12 text-sm text-muted">
           To be completed by legal review.
         </p>
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/privacy/" className="font-medium text-accent underline-offset-4 hover:underline">Privacy</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Draft legal scaffold only — not a live counsel desk, and not final cookie policy.
+        </p>
       </div>
     </>
   );

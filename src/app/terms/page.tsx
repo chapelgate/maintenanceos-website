@@ -149,6 +149,18 @@ export default function TermsPage() {
           To be completed by legal review. No binding terms until counsel
           completes this scaffold.
         </p>
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/privacy/" className="font-medium text-accent underline-offset-4 hover:underline">Privacy</a>
+          {" · "}
+          <a href="/cookies/" className="font-medium text-accent underline-offset-4 hover:underline">Cookies</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Draft legal scaffold only — not a live counsel desk, and not binding terms.
+        </p>
       </div>
     </>
   );
