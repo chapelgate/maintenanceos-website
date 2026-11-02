@@ -1,0 +1,3 @@
+- [x] patch security.py with DEL/C1 reject
+- [x] tests/test_mos_1305_security_del_c1.py
+- [x] regression existing security suite still green
