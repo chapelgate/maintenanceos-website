@@ -1,5 +1,6 @@
 import { CtaPair } from "@/components/CtaPair";
 import { PageHero } from "@/components/PageHero";
+import { PreLaunchRecoveryNav } from "@/components/PreLaunchRecoveryNav";
 
 type IndustryStubPageProps = {
   title: string;
@@ -42,6 +43,15 @@ export function IndustryStubPage({
           primaryLabel="Request an early demo"
           secondaryHref="/how-we-keep-control/"
           secondaryLabel="See the safety rules"
+        />
+        <PreLaunchRecoveryNav
+          links={[
+            { href: "/industries/", label: "All sectors" },
+            { href: "/help/", label: "Help" },
+            { href: "/security/", label: "Security" },
+            { href: "/contact/", label: "Contact" },
+          ]}
+          note="Sector page only — not a live industry support desk, and not a live phone."
         />
       </div>
     </>

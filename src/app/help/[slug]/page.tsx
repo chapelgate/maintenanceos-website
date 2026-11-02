@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { CtaPair } from "@/components/CtaPair";
+import { PreLaunchRecoveryNav } from "@/components/PreLaunchRecoveryNav";
 
 interface HelpArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -116,6 +117,16 @@ export default async function HelpArticlePage({ params }: HelpArticlePageProps) 
         <section className="border-t border-border pt-8">
           <CtaPair />
         </section>
+
+        <PreLaunchRecoveryNav
+          links={[
+            { href: "/help/", label: "Help centre" },
+            { href: "/faq/", label: "FAQ" },
+            { href: "/trust/", label: "Trust" },
+            { href: "/contact/", label: "Contact" },
+          ]}
+          note="Help article only — not a live support desk, and not a live phone."
+        />
       </article>
     </>
   );

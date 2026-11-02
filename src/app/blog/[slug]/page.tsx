@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { CtaPair } from "@/components/CtaPair";
+import { PreLaunchRecoveryNav } from "@/components/PreLaunchRecoveryNav";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -118,6 +119,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <section className="border-t border-border pt-8">
           <CtaPair />
         </section>
+
+        <PreLaunchRecoveryNav
+          links={[
+            { href: "/blog/", label: "Blog" },
+            { href: "/help/", label: "Help" },
+            { href: "/trust/", label: "Trust" },
+            { href: "/contact/", label: "Contact" },
+          ]}
+          note="Editorial article only — not a live support desk, and not a live phone."
+        />
       </article>
     </>
   );
