@@ -1,0 +1,3 @@
+- [x] patch actor/reason/new_status control checks
+- [x] tests/test_mos_1291_safety_controls_del_c1.py
+- [x] regression mos-1237 + latch/clearance suites still green
