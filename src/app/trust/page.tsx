@@ -284,6 +284,18 @@ export default function TrustPage() {
           </ul>
         </section>
       </section>
+
+      <p className="mx-auto max-w-3xl px-4 py-12 text-sm text-muted">
+        Related pre-launch pages:{" "}
+        <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+        {" · "}
+        <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+        {" · "}
+        <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+        {" · "}
+        <a href="/demo/" className="font-medium text-accent underline-offset-4 hover:underline">Early demo</a>
+        . Documentation surfaces only — not a live trust support desk.
+      </p>
     </>
   );
 }

@@ -58,6 +58,18 @@ export default function ContactPage() {
           helper="Human enquiry only — not a live support desk, not a GA support desk, not live phone provisioning, no monitored support phone, no live chat, and no response-time SLA."
           submitLabel="Send enquiry"
         />
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/demo/" className="font-medium text-accent underline-offset-4 hover:underline">Early demo</a>
+          . Documentation surfaces only — not a live support desk.
+        </p>
       </div>
     </>
   );
