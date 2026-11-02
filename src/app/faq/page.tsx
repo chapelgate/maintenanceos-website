@@ -29,6 +29,19 @@ export default function FaqPage() {
         <section className="border-t border-border pt-8">
           <CtaPair />
         </section>
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/pricing/" className="font-medium text-accent underline-offset-4 hover:underline">Pricing</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Documentation surfaces only — not a live FAQ support desk.
+        </p>
       </div>
     </>
   );
