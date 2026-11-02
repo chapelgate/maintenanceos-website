@@ -14,7 +14,12 @@ def set_request_id(request_id: str | None) -> None:
     value = request_id or ""
     if len(value) > REQUEST_ID_MAX:
         value = ""
-    elif any(ord(ch) < 32 for ch in value):
+    elif any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    ):
         value = ""
     _request_id.set(value)
 
