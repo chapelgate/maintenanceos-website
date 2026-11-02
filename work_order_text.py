@@ -7,7 +7,12 @@ def problem_description_error(text: str) -> str | None:
     stripped = value.strip()
     if not stripped:
         return "Problem description is required"
-    if any(ord(ch) < 32 and ch not in _ALLOWED_CONTROLS for ch in value):
+    if any(
+        (ord(ch) < 32 and ch not in _ALLOWED_CONTROLS)
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    ):
         return "Problem description contains control characters"
     if len(stripped) > WORK_ORDER_DESCRIPTION_MAX:
         return "Problem description is too long"

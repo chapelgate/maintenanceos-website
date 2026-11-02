@@ -1,0 +1,3 @@
+- [x] patch work_order_text.problem_description_error
+- [x] tests/test_mos_1286_work_order_text_del_c1.py
+- [x] regression description control suites still green
