@@ -1,0 +1,4 @@
+- [x] patch idempotency._has_control_chars
+- [x] route inline control checks through helper
+- [x] tests/test_mos_1279_idempotency_del_c1.py
+- [x] regression mos-1276/1222/1223 suites still green

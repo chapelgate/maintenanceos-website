@@ -62,12 +62,12 @@ def set_ai_side_effects(session, enabled: bool, *, actor: str, reason: str) -> N
     actor = (actor or "").strip()
     if not actor or len(actor) > AI_SIDE_EFFECT_ACTOR_MAX:
         raise ValueError("AI side-effect actor invalid")
-    if any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in actor):
+    if _has_control_chars(actor):
         raise ValueError("AI side-effect actor control characters")
     reason = (reason or "").strip()
     if len(reason) > AI_SIDE_EFFECT_REASON_MAX:
         raise ValueError("AI side-effect reason too long")
-    if any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in reason):
+    if _has_control_chars(reason):
         raise ValueError("AI side-effect reason control characters")
     control = session.get(RuntimeControl, "AI_SIDE_EFFECTS")
     if control is None:
@@ -88,10 +88,15 @@ def set_result_ref(receipt, value) -> None:
     result_ref = str(value)
     if len(result_ref) > RESULT_REF_MAX:
         raise ValueError("Invalid action receipt result_ref")
-    if any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in result_ref):
+    if _has_control_chars(result_ref):
         raise ValueError("result_ref control characters")
     receipt.result_ref = result_ref
 
 
 def _has_control_chars(value: str) -> bool:
-    return any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in value)
+    return any(
+        (ord(ch) < 32 and ch not in {"\t", "\n", "\r"})
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
