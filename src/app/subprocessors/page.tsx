@@ -92,6 +92,17 @@ export default function SubprocessorsPage() {
         <p className="mt-6 text-sm text-muted">
           This page is a draft for counsel. It is not a live Twilio telephony claim, not a live SendGrid mail claim, and not a public-launch processor schedule.
         </p>
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/privacy/" className="font-medium text-accent underline-offset-4 hover:underline">Privacy</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Draft processor list only — not a live counsel desk, and not a live processor schedule.
+        </p>
       </section>
     </>
   );
