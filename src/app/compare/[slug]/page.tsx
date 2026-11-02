@@ -4,6 +4,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 import { contentPageJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { PreLaunchRecoveryNav } from "@/components/PreLaunchRecoveryNav";
 
 interface ComparePageProps {
   params: Promise<{ slug: string }>;
@@ -148,6 +149,16 @@ export default async function ComparePage({ params }: ComparePageProps) {
             ))}
           </ol>
         </section>
+        <PreLaunchRecoveryNav
+          links={[
+            { href: "/compare/", label: "Compare" },
+            { href: "/help/", label: "Help" },
+            { href: "/trust/", label: "Trust" },
+            { href: "/contact/", label: "Contact" },
+          ]}
+          note="Comparison page only — not a live sales desk, and not a live phone."
+        />
+
       </section>
     </>
   );

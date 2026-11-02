@@ -4,6 +4,7 @@ import { contentPageJsonLd } from "@/lib/json-ld";
 import { contentPageMetadata } from "@/lib/page-meta";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
+import { PreLaunchRecoveryNav } from "@/components/PreLaunchRecoveryNav";
 import Link from "next/link";
 
 interface ProviderPageProps {
@@ -209,6 +210,16 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
             </li>
           </ol>
         </nav>
+
+        <PreLaunchRecoveryNav
+          links={[
+            { href: "/integrations/", label: "Integrations" },
+            { href: "/help/", label: "Help" },
+            { href: "/security/", label: "Security" },
+            { href: "/contact/", label: "Contact" },
+          ]}
+          note="Integration preview only — not a live connector desk, and not a live phone."
+        />
       </section>
     </>
   );
