@@ -1,0 +1,3 @@
+- [x] patch postcode_normalise._has_control_chars
+- [x] tests/test_mos_1282_postcode_normalise_del_c1.py
+- [x] regression mos-1231/postcode_control suites still green
