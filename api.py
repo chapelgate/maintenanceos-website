@@ -276,10 +276,10 @@ def _contractor_work_order(s,work_order_id,contractor_id,allowed_statuses):
 def _portal_page(title: str, body: str) -> str:
     return (
         "<!DOCTYPE html><html lang=\"en-GB\"><head>"
-        f"<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>{title}</title></head>"
+        f"<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>{title}</title>"
+        "<style>.skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}.skip-link:focus{position:static;left:auto;width:auto;height:auto;overflow:visible}</style></head>"
         f"<body><a class=\"skip-link\" href=\"#main-content\">Skip to content</a><main id=\"main-content\" tabindex=\"-1\">{body}</main></body></html>"
     )
-
 def normalize_completion_note(value) -> str:
     return _reject_control_chars(_bounded_text(value, "note", required=True, maximum=COMPLETION_NOTE_MAX), "note")
 
