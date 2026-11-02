@@ -129,7 +129,12 @@ def require_client_resource(
 
 
 def _has_control_chars(value: str) -> bool:
-    return any(ord(ch) < 32 for ch in value)
+    return any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
 
 
 def resident_by_phone_for_client(session, client_id: int, normalised_phone: str):

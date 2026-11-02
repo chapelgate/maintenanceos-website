@@ -1,0 +1,3 @@
+- [x] patch _has_control_chars
+- [x] tests/test_mos_1292_tenant_security_del_c1.py
+- [x] regression mos-1245 suite still green
