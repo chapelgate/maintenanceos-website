@@ -1,0 +1,3 @@
+- [x] patch both _has_control_chars helpers
+- [x] tests/test_mos_1289_communications_del_c1.py
+- [x] regression mos-1225/mos-1227 suites still green
