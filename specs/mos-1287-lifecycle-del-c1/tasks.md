@@ -1,0 +1,3 @@
+- [x] patch lifecycle.transition_work_order control checks
+- [x] tests/test_mos_1287_lifecycle_del_c1.py
+- [x] regression mos-1241 suite still green
