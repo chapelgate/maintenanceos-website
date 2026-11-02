@@ -21,6 +21,8 @@ def claim_action(session, scope: str, action_key: str, *, client_id=None, work_o
         raise ValueError("action_key_control_chars")
     if len(scope or "") > SCOPE_MAX:
         raise ValueError("Invalid action receipt scope")
+    if _has_control_chars(scope or ""):
+        raise ValueError("scope_control_chars")
     query = session.query(ActionReceipt).filter_by(scope=scope, action_key=action_key, client_id=client_id)
     existing = query.first()
     if existing:

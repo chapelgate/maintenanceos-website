@@ -1,0 +1,1 @@
+1. Guard scope with _has_control_chars.\n2. Named tests.\n
