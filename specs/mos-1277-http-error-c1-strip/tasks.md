@@ -1,0 +1,4 @@
+- [x] patch http_error_text._strip_controls
+- [x] patch secret_patterns._strip_controls
+- [x] tests/test_mos_1277_http_error_c1_strip.py
+- [x] regression C0 suites still green

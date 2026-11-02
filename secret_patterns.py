@@ -64,7 +64,13 @@ _ALLOWED_CONTROLS = frozenset({"\t", "\n", "\r"})
 
 
 def _strip_controls(value: str) -> str:
-    return "".join(ch for ch in value if ord(ch) >= 32 or ch in _ALLOWED_CONTROLS)
+    return "".join(
+        ch
+        for ch in value
+        if (ord(ch) >= 32 or ch in _ALLOWED_CONTROLS)
+        and ord(ch) != 127
+        and not (0x80 <= ord(ch) <= 0x9F)
+    )
 
 
 def redact_secrets(value: str) -> str:
