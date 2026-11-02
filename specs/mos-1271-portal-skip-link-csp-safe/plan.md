@@ -1,0 +1,1 @@
+1. Drop style tag from _portal_page.\n2. Adjust named tests.\n
