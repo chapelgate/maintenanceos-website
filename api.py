@@ -277,7 +277,7 @@ def _portal_page(title: str, body: str) -> str:
     return (
         "<!DOCTYPE html><html lang=\"en-GB\"><head>"
         f"<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>{title}</title></head>"
-        f"<body><a href=\"#main-content\">Skip to content</a><main id=\"main-content\">{body}</main></body></html>"
+        f"<body><a class=\"skip-link\" href=\"#main-content\">Skip to content</a><main id=\"main-content\" tabindex=\"-1\">{body}</main></body></html>"
     )
 
 def normalize_completion_note(value) -> str:
