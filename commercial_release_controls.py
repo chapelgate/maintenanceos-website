@@ -29,7 +29,12 @@ _REQUIRED_RETENTION_CLASS_SET = frozenset(REQUIRED_RETENTION_CLASSES)
 
 def retention_class_known(data_class: str) -> bool:
     value = (data_class or "").strip()
-    if not value or any(ord(ch) < 32 for ch in value):
+    if not value or any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    ):
         return False
     return value in _REQUIRED_RETENTION_CLASS_SET
 

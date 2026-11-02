@@ -1,0 +1,3 @@
+- [x] patch retention_class_known
+- [x] tests/test_mos_1290_commercial_release_del_c1.py
+- [x] regression commercial_release_controls suite still green
