@@ -137,6 +137,18 @@ export default function BuyerNotePage() {
             Help
           </a>
         </p>
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Documentation surfaces only — not a live buyers support desk, and not a published price list.
+        </p>
       </div>
     </>
   );

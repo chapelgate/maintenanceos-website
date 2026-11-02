@@ -58,6 +58,18 @@ export default function HowItWorksPage() {
 
       <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <CtaPair primaryHref="/demo/" primaryLabel="Request an early demo" />
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Documentation surfaces only — not a live product-tour support desk.
+        </p>
       </div>
     </>
   );
