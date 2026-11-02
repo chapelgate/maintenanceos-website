@@ -1,0 +1,3 @@
+- [x] patch _has_control_chars
+- [x] tests/test_mos_1293_email_gateway_del_c1.py
+- [x] regression mos-1242 suite still green
