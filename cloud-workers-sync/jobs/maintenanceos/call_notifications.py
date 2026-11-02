@@ -266,7 +266,13 @@ def _structured_readback_unchallenged(transcript: str, readback_line: str) -> bo
     return False
 
 
+def _has_control_chars(value: str) -> bool:
+    return any(ord(ch) < 32 for ch in value)
+
+
 def extract_call_details(transcript: str, *, job_reference: str) -> dict[str, Any]:
+    if not isinstance(transcript, str) or _has_control_chars(transcript):
+        return {"gate_number": "", "area": "", "name": "", "callback": "", "address": "", "postcode": "", "fault_or_request": "", "sent": False}
     caller_lines = _caller_lines(transcript)
     assistant_lines = _assistant_lines(transcript)
     caller_text = "\n".join(caller_lines)

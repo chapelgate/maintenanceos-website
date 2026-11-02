@@ -1,0 +1,1 @@
+1. Copy drifted canonical files into cloud-workers-sync mirror.\n2. Re-run sync suite.\n
