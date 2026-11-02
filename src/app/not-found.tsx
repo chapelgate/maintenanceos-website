@@ -23,6 +23,7 @@ export default function NotFound() {
           calendar, or deliver chat.
         </p>
         <p>
+          Related pre-launch pages:{" "}
           <a
             href="/"
             className="font-medium text-accent underline-offset-4 hover:underline"
@@ -45,11 +46,26 @@ export default function NotFound() {
           </a>
           {" · "}
           <a
+            href="/trust/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Trust
+          </a>
+          {" · "}
+          <a
+            href="/security/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Security
+          </a>
+          {" · "}
+          <a
             href="/contact/"
             className="font-medium text-accent underline-offset-4 hover:underline"
           >
             Contact
           </a>
+          . Missing-page screen only — not a live support desk.
         </p>
       </div>
     </>
