@@ -65,6 +65,28 @@ export default function DemoPage() {
       <DemoProof />
 
       {false && <CtaPair />}
+      <section className="mx-auto max-w-4xl px-4 py-12" aria-labelledby="demo-trust-link">
+        <h2 id="demo-trust-link" className="sr-only">Related pre-launch pages</h2>
+        <p className="text-sm text-muted text-center">
+          See our{" "}
+          <a
+            href="/trust/"
+            className="font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Trust & verification
+          </a>
+          {" "}
+          page for legal entity, DPIA status, recording disclosure, and
+          certification facts.
+          {" "}Also:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          . Scripted preview only — not a live support desk.
+        </p>
+      </section>
 
       <DeferredDemoConversionTabs />
 

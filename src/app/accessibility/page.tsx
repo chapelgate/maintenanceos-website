@@ -86,6 +86,7 @@ export default function AccessibilityPage() {
           </p>
           <ul className="mt-2 list-disc list-inside space-y-1">
             <li>Baseline CI run 39312522438 (19 October 2026): Home, Create, Demo, Features, Pricing, Security, Accessibility — reported no violations on those seven routes</li>
+          <li>Recovery additions: Help (/help/), Subprocessors (/subprocessors/), Vulnerability disclosure (/vulnerability-disclosure/) — gated pre-launch honesty (mw-162/164/167)</li>
             <li>Later gate additions: Help (/help/), Subprocessors (/subprocessors/), Vulnerability disclosure (/vulnerability-disclosure/)</li>
             <li>Current WebKit matrix also gates: About, Accessibility, AI receptionist, Blog index, Buyers, Compare index, Contact, Cookies, FAQ, How it works, How we keep control, Industries index, Integrations index, Privacy, Property maintenance software, Status, Terms, Trust</li>
             <li>Nested sample (mw-156 + mw-157): /industries/landlords/, /industries/housing-associations/, /blog/ai-voice-demo-browser-only-what-it-means/, /blog/why-safety-latches-matter-in-ai-receptionists/, /compare/worksmartos-vs-moneypenny/, /compare/worksmartos-vs-phena/, /integrations/google/, /integrations/outlook/, /help/getting-started/</li>
@@ -250,6 +251,18 @@ export default function AccessibilityPage() {
             publish a response-time SLA or remediation deadline.
           </p>
         </section>
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Documentation surfaces only — not a live accessibility support desk, and not a WCAG 2.2 AA certification claim.
+        </p>
       </div>
     </>
   );
