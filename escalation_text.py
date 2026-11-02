@@ -2,7 +2,12 @@ ESCALATION_REASON_MAX = 2000
 
 
 def _has_control_chars(value: str) -> bool:
-    return any(ord(ch) < 32 and ch not in {"\t", "\n", "\r"} for ch in value)
+    return any(
+        (ord(ch) < 32 and ch not in {"\t", "\n", "\r"})
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
 
 
 def bounded_escalation_reason(value: str) -> str:

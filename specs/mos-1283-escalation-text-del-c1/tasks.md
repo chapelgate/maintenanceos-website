@@ -1,0 +1,3 @@
+- [x] patch escalation_text._has_control_chars
+- [x] tests/test_mos_1283_escalation_text_del_c1.py
+- [x] regression mos-1217 suite still green
