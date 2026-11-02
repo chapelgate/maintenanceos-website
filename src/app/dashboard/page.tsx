@@ -72,6 +72,20 @@ export default function CustomerDashboardPage() {
             />
           </div>
         </section>
+
+        <p className="text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/demo/" className="font-medium text-accent underline-offset-4 hover:underline">Demo</a>
+          {" · "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . SAMPLE / DEMO preview only — not a live customer portal, and not an operational help desk.
+        </p>
       </div>
     </>
   );

@@ -130,27 +130,18 @@ export default function AdminPage() {
           </ul>
         </section>
 
-        <p>
-          <a
-            href="/"
-            className="font-medium text-accent underline-offset-4 hover:underline"
-          >
-            Homepage
-          </a>
+        <p className="text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
           {" · "}
-          <a
-            href="/status/"
-            className="font-medium text-accent underline-offset-4 hover:underline"
-          >
-            Status
-          </a>
+          <a href="/trust/" className="font-medium text-accent underline-offset-4 hover:underline">Trust</a>
           {" · "}
-          <a
-            href="/contact/"
-            className="font-medium text-accent underline-offset-4 hover:underline"
-          >
-            Contact
-          </a>
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/status/" className="font-medium text-accent underline-offset-4 hover:underline">Status</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Internal review surface only — not a live ops console, and not a customer admin portal.
         </p>
       </div>
     </>
