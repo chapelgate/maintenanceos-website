@@ -27,7 +27,12 @@ def resident_by_email(client_id,email):
     email=(email or "").strip()
     if not email or len(email) > EMAIL_LOOKUP_MAX:
         return None
-    if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in email):
+    if any(
+        (ord(ch) < 32 and ch not in "\t\n\r")
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in email
+    ):
         return None
     if not EMAIL_RE.match(email):
         return None
@@ -66,7 +71,12 @@ def _finish_intake(work_order_id,identity_verified):
     if cid:create_dispatch_approval(work_order_id)
 
 def _has_control_chars(value: str) -> bool:
-    return any(ord(ch) < 32 for ch in value)
+    return any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in value
+    )
 
 
 def canonical_incident_key(client_id,property_id,resident_id,description):

@@ -1,0 +1,3 @@
+- [x] patch channels._has_control_chars and resident_by_email
+- [x] tests/test_mos_1288_channels_del_c1.py
+- [x] regression mos-1247 suite still green
