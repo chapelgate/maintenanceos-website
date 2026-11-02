@@ -83,6 +83,18 @@ export default function IndustriesPage() {
           </p>
           <CtaPair />
         </section>
+
+        <p className="mt-8 text-sm text-muted">
+          Related pre-launch pages:{" "}
+          <a href="/help/" className="font-medium text-accent underline-offset-4 hover:underline">Help</a>
+          {" · "}
+          <a href="/features/" className="font-medium text-accent underline-offset-4 hover:underline">Features</a>
+          {" · "}
+          <a href="/security/" className="font-medium text-accent underline-offset-4 hover:underline">Security</a>
+          {" · "}
+          <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
+          . Documentation surfaces only — not a live industries support desk, and not a live phone service.
+        </p>
       </div>
     </>
   );
