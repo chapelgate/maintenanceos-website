@@ -6,7 +6,12 @@ def normalise_phone(value: str) -> str:
     raw = value or ""
     if len(raw) > PHONE_MAX:
         return ""
-    if any(ord(ch) < 32 for ch in raw):
+    if any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in raw
+    ):
         return ""
     s = "".join(ch for ch in raw if ch.isdigit() or ch == "+")
     if s.startswith("0044"):
@@ -20,7 +25,12 @@ def normalise_phone(value: str) -> str:
 
 def normalise_postcode(value: str) -> str:
     raw = value or ""
-    if any(ord(ch) < 32 for ch in raw):
+    if any(
+        ord(ch) < 32
+        or ord(ch) == 127
+        or 0x80 <= ord(ch) <= 0x9F
+        for ch in raw
+    ):
         return ""
     if len(raw) > POSTCODE_MAX:
         return ""

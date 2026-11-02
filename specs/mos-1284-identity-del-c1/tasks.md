@@ -1,0 +1,3 @@
+- [x] patch identity.normalise_phone and normalise_postcode
+- [x] tests/test_mos_1284_identity_del_c1.py
+- [x] regression mos-1231 identity suite still green
