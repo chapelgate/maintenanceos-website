@@ -1,0 +1,3 @@
+- [x] patch sla.sla_status control check
+- [x] tests/test_mos_1281_sla_urgency_del_c1.py
+- [x] regression mos-1260 suite still green
