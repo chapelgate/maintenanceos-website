@@ -1,0 +1,1 @@
+1. Stub query().filter_by().first() to None in mos-1226 tests.\n
