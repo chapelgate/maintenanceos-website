@@ -16,13 +16,13 @@ export default function NotFound() {
         title="This page is not on the site"
         lede="WorkSmartOS is a pre-launch synthetic demo. This address is not a published page."
       />
-      <div className="mx-auto max-w-3xl space-y-4 px-4 pb-16 text-muted">
+      <div className="mx-auto max-w-3xl space-y-4 px-4 pb-16 text-muted" aria-labelledby="demo-trust-link">
         <p>
           Nothing was sold, booked, or connected from this address. This page
           does not publish a price, assign a live phone number, connect a
           calendar, or deliver chat.
         </p>
-        <p>
+        <p id="demo-trust-link">
           Related pre-launch pages:{" "}
           <a
             href="/"
