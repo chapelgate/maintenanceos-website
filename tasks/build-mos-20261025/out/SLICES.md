@@ -123,3 +123,6 @@ mos-1031-01: Enforce deny-keys set exactly six keys and allow exactly two profil
 
 ## mos-1311 (PR #753 OPEN) — Competitor and market benchmark
 MOS-S011: compare Moneypenny, BT Digital Voice for Business, Hey Jodie, Dialzara and relevant UK alternatives on verified current primary-source features, call accuracy, interruptions, escalation, reporting, integrations, privacy, trial/onboarding and price; identify realistic differentiated positioning. Sourced dated matrix, no fabricated scores. Independent of S004/S006/S007; documentation/analysis only, no carrier call. Artifact: docs/commercial_release/COMPETITOR_BENCHMARK.md.
+
+## mos-1031-02-runtime-hardening (PR #755 OPEN) — Commercial runtime fail-closed guards enrichment
+mos-1031-02: Add social_housing_runtime_fail_closed guard and reinforce lifecycle/identity runtime false-closed. Acceptance: test_lifecycle_runtime_fail_closed, test_identity_runtime_fail_closed, test_social_housing_runtime_fail_closed, test_retention_policy_configured — all pass. PR: https://github.com/chapelgate/maintenanceos-v1-pilot/pull/755

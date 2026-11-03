@@ -1,0 +1,1 @@
+MaintenanceOS (WorkSmartOS) — builds in chapelgate/maintenanceos-v1-pilot; name from README.md line 3-5 and api.py:43 (title "MaintenanceOS API")
