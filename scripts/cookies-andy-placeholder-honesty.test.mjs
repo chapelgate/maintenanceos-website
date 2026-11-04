@@ -8,7 +8,7 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const page = fs.readFileSync(path.join(ROOT, "src/app/cookies/page.tsx"), "utf8");
 
 test("cookies page replaces [ANDY:] placeholders with pending-counsel wording", () => {
-  assert.match(page, /None currently — pending counsel confirmation if any are named/);
+  assert.match(page, /No cookies are currently named — pending counsel\s+confirmation if any are introduced/);
   assert.match(page, /default off until consent &mdash; none currently/);
   assert.match(
     page,

@@ -118,7 +118,7 @@ test("cookies stay DRAFT-honest with cookieless first-party measurement only", (
 
   assert.match(page, /DRAFT FOR LEGAL REVIEW|LegalDraftBanner/);
   assert.match(page, /Cookie Policy \(Draft\)/);
-  assert.match(page, /no site-wide consent banner/i);
+  assert.match(page, /site-wide preference notice/i);
   assert.match(page, /No analytics cookie or third-party analytics tag/);
   assert.match(page, /cookieless operational measurement/);
   assert.match(page, /no browser storage|uses no cookies/);
@@ -129,9 +129,9 @@ test("cookies stay DRAFT-honest with cookieless first-party measurement only", (
   assert.doesNotMatch(page, /prepared but inactive/i);
   assert.doesNotMatch(page, /Google Analytics certified|PECR compliant|GDPR compliant/i);
 
-  assert.match(stub, /No site-wide banner/);
+  assert.match(stub, /Current choice/);
   assert.match(stub, /Cookieless first-party operational measurement/);
-  assert.match(stub, /does not set\s+a visitor identifier/);
+  assert.match(stub, /stores no persistent visitor identifier/);
   assert.doesNotMatch(stub, /gtag|googletagmanager/i);
 
   assert.match(privacy, /No analytics or marketing cookies/);
@@ -140,7 +140,7 @@ test("cookies stay DRAFT-honest with cookieless first-party measurement only", (
   assert.match(privacy, /Cookie Policy \(Draft\)/);
 
   assert.match(faqs, /question: "Do you use cookies or a consent banner\?"/);
-  assert.match(faqs, /no site-wide cookie or consent banner/i);
+  assert.match(faqs, /site-wide preference notice/i);
   assert.match(faqs, /cookieless first-party operational measurement/);
   assert.match(faqs, /no persistent visitor identifier/);
   assert.match(faqs, /not a Google Analytics, PECR, or GDPR compliance certification/);
@@ -311,7 +311,7 @@ test("FAQ copy names the verified funnel and stays claims-safe", () => {
   assert.match(faqs, /How do I contact you\?/);
   assert.match(faqs, /not a GA support desk/);
   assert.match(faqs, /Do you use cookies or a consent banner\?/);
-  assert.match(faqs, /no site-wide cookie or consent banner/);
+  assert.match(faqs, /site-wide preference notice/);
   assert.doesNotMatch(faqs, /always-on phone line is live/i);
   assert.doesNotMatch(faqs, /your number is ready/i);
   assert.doesNotMatch(faqs, /commercially generally available now/i);

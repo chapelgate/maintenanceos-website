@@ -21,6 +21,8 @@ const inter = localFont({
 
 export const metadata: Metadata = buildRootMetadata();
 
+import { CookieConsentBanner } from "@/components/CookieConsentBanner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -40,6 +42,7 @@ export default function RootLayout({
       >
         <DeferredWebsiteMeasurement />
         <SkipLink />
+        <CookieConsentBanner />
         <PreLaunchBanner />
         <SiteHeader />
         <main id="main" tabIndex={-1} className="flex-1 outline-none">
