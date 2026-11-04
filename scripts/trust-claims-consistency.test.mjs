@@ -69,6 +69,6 @@ test("/trust/ does not claim commercially live voice or production GA", () => {
 
 test("/trust/ voice demo framing is browser-only / pre-launch", () => {
   assert.match(page, /runs entirely in the browser/);
-  assert.match(page, /browser's Web Speech API/);
+  assert.match(page, /browser&apos;s Web Speech API/);
   assert.match(page, /Not a live always-on phone/);
 });
