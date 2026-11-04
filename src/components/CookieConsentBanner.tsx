@@ -66,9 +66,7 @@ function storeChoice(choice: ConsentChoice): void {
  * State machine for cookie consent.
  * Tracks the current choice and whether non-essential scripts are blocked.
  */
-function useCookieConsent(
-  initialChoice: ConsentChoice,
-): [
+function useCookieConsent(): [
   ConsentChoice,
   {
     accept: () => void;
@@ -78,15 +76,9 @@ function useCookieConsent(
     isBlocked: boolean;
   }
 ] {
-  const [choice, setChoice] = useState<ConsentChoice>(initialChoice);
-  const [isBlocked, setIsBlocked] = useState(true);
-
-  // Initially load from storage
-  useEffect(() => {
-    const stored = getStoredChoice();
-    setChoice(stored);
-    setIsBlocked(!stored.essential);
-  }, []);
+  const stored = getStoredChoice();
+  const [choice, setChoice] = useState<ConsentChoice>(stored);
+  const [isBlocked] = useState(!stored.essential);
 
   // Persist to storage on change
   useEffect(() => {
@@ -144,8 +136,8 @@ function useCookieConsent(
 }
 
 export function CookieConsentBanner() {
-  const [choice, { accept, reject, preferences, toggleCategory, isBlocked }] =
-    useCookieConsent(DEFAULT_CHOICE);
+  const [choice, { accept, reject, toggleCategory, isBlocked }] =
+    useCookieConsent();
 
   const announce = useRef<((message: string) => void) | undefined>(undefined);
 
