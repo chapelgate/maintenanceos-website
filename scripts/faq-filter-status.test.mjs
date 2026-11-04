@@ -27,3 +27,11 @@ test("FAQ empty filter offers a clear-action recovery path", () => {
   assert.doesNotMatch(src, /£/);
   assert.doesNotMatch(src, /buy now/i);
 });
+
+test("clearing the FAQ filter restores focus to the search input", () => {
+  assert.match(src, /const searchInputRef = useRef<HTMLInputElement>\(null\)/);
+  assert.match(src, /ref=\{searchInputRef\}/);
+  assert.match(src, /const handleClearFilter = \(\) =>/);
+  assert.match(src, /searchInputRef\.current\?\.focus\(\)/);
+  assert.match(src, /onClick=\{handleClearFilter\}/);
+});
