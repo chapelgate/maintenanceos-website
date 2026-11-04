@@ -103,9 +103,11 @@ export default function TrustPage() {
               demo call or sandbox test call.
             </li>
             <li>
-              <strong>How it is processed:</strong> Audio is transcribed and
-              analysed by AI (Gemini / Piper TTS) to generate a response. No
-              human listens to demo recordings unless explicitly escalated.
+              <strong>How it is processed:</strong> In the browser demo, audio is
+              processed by the browser's Web Speech API (no server voice
+              pipeline). The preview demo number (when enabled) would route
+              via Twilio to a server voice function. No human listens to demo
+              recordings unless explicitly escalated.
             </li>
             <li>
               <strong>Retention:</strong> Demo recordings are not stored
@@ -213,18 +215,19 @@ export default function TrustPage() {
             <li>
               <strong>Browser sandbox (/create):</strong> WebRTC-based test call
               runs entirely in the browser. No phone number required. Audio is
-              processed by the same AI pipeline as the preview number.
+              processed by the browser's Web Speech API.
             </li>
             <li>
               <strong>Preview demo number (when enabled):</strong> A UK geographic
-              number routed via Twilio to the same voice function. Only available
+              number routed via Twilio to a server voice function. Only available
               when the preview gate is enabled — not a public 24/7 answering
               service. Not a live always-on phone. Not a production answering
               service.
             </li>
           </ul>
           <p className="mt-2 text-sm text-muted">
-            Both paths use the same backend: Twilio → `/api/website/voice` →
+            The browser demo uses the browser's Web Speech API. The preview
+            number (when enabled) would use: Twilio → server voice function →
             Gemini (LLM) → Piper (TTS). No client data leaves the call session.
             The sandbox does not persist audio. The preview number does not store
             recordings beyond the session.
