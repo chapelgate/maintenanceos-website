@@ -9,15 +9,6 @@ const STORAGE_KEY = "cookieConsentChoice";
 const ACCEPTED_CHOICE: ConsentChoice = { essential: true, preferences: true, analytics: true, marketing: true };
 const REJECTED_CHOICE: ConsentChoice = { essential: true, preferences: false, analytics: false, marketing: false };
 
-function hasStoredChoice(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    return localStorage.getItem(STORAGE_KEY) !== null;
-  } catch {
-    return false;
-  }
-}
-
 function storeChoice(choice: ConsentChoice): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(choice));
@@ -25,7 +16,14 @@ function storeChoice(choice: ConsentChoice): void {
 }
 
 export function CookieConsentBanner() {
-  const [isVisible, setIsVisible] = useState(() => !hasStoredChoice());
+  const [isVisible, setIsVisible] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === null;
+    } catch {
+      return true;
+    }
+  });
+
   const choose = useCallback((choice: ConsentChoice) => {
     storeChoice(choice);
     setIsVisible(false);
