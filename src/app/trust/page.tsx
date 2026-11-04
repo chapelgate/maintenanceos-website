@@ -104,7 +104,7 @@ export default function TrustPage() {
             </li>
             <li>
               <strong>How it is processed:</strong> In the browser demo, audio is
-              processed by the browser's Web Speech API (no server voice
+              processed by the browser&apos;s Web Speech API (no server voice
               pipeline). The preview demo number (when enabled) would route
               via Twilio to a server voice function. No human listens to demo
               recordings unless explicitly escalated.
@@ -215,7 +215,7 @@ export default function TrustPage() {
             <li>
               <strong>Browser sandbox (/create):</strong> WebRTC-based test call
               runs entirely in the browser. No phone number required. Audio is
-              processed by the browser's Web Speech API.
+              processed by the browser&apos;s Web Speech API.
             </li>
             <li>
               <strong>Preview demo number (when enabled):</strong> A UK geographic
@@ -226,7 +226,7 @@ export default function TrustPage() {
             </li>
           </ul>
           <p className="mt-2 text-sm text-muted">
-            The browser demo uses the browser's Web Speech API. The preview
+            The browser demo uses the browser&apos;s Web Speech API. The preview
             number (when enabled) would use: Twilio → server voice function →
             Gemini (LLM) → Piper (TTS). No client data leaves the call session.
             The sandbox does not persist audio. The preview number does not store
