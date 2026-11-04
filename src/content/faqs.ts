@@ -68,7 +68,7 @@ export const safetyFaqItems: FaqItem[] = [
     category: "safety",
     question: "Do you use cookies or a consent banner?",
     answer:
-      "No, there is no site-wide cookie or consent banner. The site uses cookieless first-party operational measurement with no persistent visitor identifier; Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW — not a Google Analytics, PECR, or GDPR compliance certification.",
+      "The site-wide preference notice stores only whether optional categories were accepted or rejected in browser local storage. No analytics or marketing cookies or tags are currently loaded. The site uses cookieless first-party operational measurement with no persistent visitor identifier; Privacy, cookies, and terms remain DRAFT FOR LEGAL REVIEW — not a Google Analytics, PECR, or GDPR compliance certification.",
     relatedHref: "/cookies/",
     relatedLabel: "Cookie Policy (Draft)",
   },
