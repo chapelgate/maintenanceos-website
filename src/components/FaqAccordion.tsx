@@ -18,6 +18,14 @@ function FaqAccordionComponent({ items }: FaqAccordionProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const summaryRefs = useRef<(HTMLElement | null)[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClearFilter = () => {
+    setSearchQuery("");
+    requestAnimationFrame(() => {
+      searchInputRef.current?.focus();
+    });
+  };
 
   const filteredItems = useMemo(() => {
     if (!searchQuery.trim()) return items;
@@ -74,6 +82,7 @@ function FaqAccordionComponent({ items }: FaqAccordionProps) {
         </label>
         <input
           id="faq-search"
+          ref={searchInputRef}
           type="search"
           placeholder="Search FAQs…"
           value={searchQuery}
@@ -175,7 +184,7 @@ function FaqAccordionComponent({ items }: FaqAccordionProps) {
             <button
               type="button"
               className="mt-4 inline-flex min-h-11 items-center justify-center rounded-md border border-border bg-surface px-4 text-sm font-semibold text-ink hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              onClick={() => setSearchQuery("")}
+              onClick={handleClearFilter}
             >
               Clear FAQ filter
             </button>
