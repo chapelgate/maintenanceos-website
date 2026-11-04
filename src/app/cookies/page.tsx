@@ -9,7 +9,7 @@ import { contentPageMetadata } from "@/lib/page-meta";
 export const metadata = contentPageMetadata({
   title: "Cookie Policy (Draft)",
   description:
-    "Draft cookie notice. No analytics or marketing cookies, and no site-wide consent banner. Pending legal review.",
+    "Draft cookie notice. No analytics or marketing cookies; the site stores only your consent choice in local storage. Pending legal review.",
   path: "/cookies/",
 });
 
@@ -17,7 +17,7 @@ export default function CookiesPage() {
   return (
     <>
       <JsonLd
-        data={contentPageJsonLd("/cookies/", "Cookie Policy (Draft)", "Draft cookie notice. No analytics or marketing cookies, and no site-wide consent banner. Pending legal review.", [
+        data={contentPageJsonLd("/cookies/", "Cookie Policy (Draft)", "Draft cookie notice. No analytics or marketing cookies; the site stores only your consent choice in local storage. Pending legal review.", [
           { name: "Cookies", path: "/cookies/" },
         ])}
       />
@@ -114,8 +114,8 @@ export default function CookiesPage() {
                     </th>
                     <td className="py-2 pr-3">Yes</td>
                     <td className="py-2">
-                      None named in inventory yet. Hosting may set operational
-                      cookies; consent-preference storage is not built.
+                      No cookies named in inventory. The consent banner stores
+                      the visitor choice in browser local storage, not a cookie.
                     </td>
                   </tr>
                   <tr className="border-b border-border">
@@ -158,8 +158,9 @@ export default function CookiesPage() {
             <p className="mt-2 text-muted">
               Reserved for required site operation if and when named. Inventory
               is empty — do not invent cookie names. Consent-preference storage
-              is not implemented. Do not put analytics or marketing here.
-              None currently — pending counsel confirmation if any are named.
+              is implemented in browser local storage. Do not put analytics or
+              marketing here. No cookies are currently named — pending counsel
+              confirmation if any are introduced.
             </p>
           </section>
 
@@ -282,13 +283,13 @@ export default function CookiesPage() {
               Managing your preferences
             </h2>
             <p className="mt-2 text-muted">
-              There is no site-wide consent banner today because no
-              non-essential cookies, browser-storage analytics, or marketing
-              tags are loaded. The first-party operational measurement described
-              above is cookieless and stores no persistent visitor identifier. A
-              preference centre would be wired only if optional storage or tags
-              are introduced; this page is still a draft, not a live consent
-              manager.
+              The site-wide preference notice records only whether optional
+              categories were accepted or rejected in browser local storage.
+              No non-essential cookies, browser-storage analytics, or marketing
+              tags are currently loaded. First-party operational measurement is
+              cookieless and stores no persistent visitor identifier. You can
+              change the stored choice below. This policy remains a draft pending
+              legal review.
             </p>
             <CookieSettingsStub />
           </section>
