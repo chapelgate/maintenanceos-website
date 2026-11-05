@@ -71,6 +71,7 @@ for (const path of [...internalPaths]) {
       continue;
     }
     if (url.origin !== new URL(origin).origin) continue;
+    if (url.pathname.startsWith("/cdn-cgi/")) continue;
     internalPaths.add(url.pathname);
   }
 
