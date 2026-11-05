@@ -1,12 +1,4 @@
 #!/usr/bin/env node
-/**
- * scripts/sri-verifier.mjs
- * Verifies Subresource Integrity (SRI) hashes on all <script src> and
- * <link rel="stylesheet"> tags in exported static HTML pages.
- *
- * Does not mutate HTML. Reports which resources are covered by SRI and
- * which are not, so the operator can make an honest coverage claim.
- */
 
 import fs from "node:fs";
 import path from "node:path";

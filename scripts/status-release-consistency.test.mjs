@@ -74,7 +74,6 @@ test("both status.json and release.json deny 99.x% claims", () => {
 test("status page links status.json and release marker references match", () => {
   const page = read("src/app/status/page.tsx");
   const compact = page.replace(/\s+/g, " ");
-  const marker = readJson("public/release.json");
 
   assert.match(compact, /href="\/status\.json"/);
   assert.match(compact, /sla_claim false/);
