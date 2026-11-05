@@ -11,4 +11,4 @@
 - [x] Create specs/mw-a11y-coverage-alignment/spec.md
 - [x] Create specs/mw-a11y-coverage-alignment/plan.md
 - [x] Create specs/mw-a11y-coverage-alignment/tasks.md
-- [ ] Create specs/mw-a11y-coverage-alignment/build-readiness.md
+- [x] Create specs/mw-a11y-coverage-alignment/build-readiness.md
