@@ -5,42 +5,17 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const HELP = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "src/content/help");
-const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "out");
-
 function read(name) {
   return fs.readFileSync(path.join(HELP, name), "utf8");
 }
 
-// Markdown links: [text](url) — capture the URL
 const linkRe = /\[([^\]]*)\]\(([^)]+)\)/g;
-
-// Build the set of exported HTML page paths (recursive).
-const exportedPaths = new Set();
-function walk(dir) {
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith("_next") || entry.name.startsWith(".")) continue;
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      walk(full);
-      continue;
-    }
-    if (entry.name === "index.html") {
-      const rel = path.relative(OUT, dir);
-      exportedPaths.add(rel ? "/" + rel + "/" : "/");
-      continue;
-    }
-    if (entry.name.endsWith(".html")) {
-      const rel = path.relative(OUT, dir);
-      const base = rel ? rel.replace(/\.html$/, "") : entry.name.replace(/\.html$/, "");
-      exportedPaths.add("/" + base + "/");
-    }
-  }
-}
-walk(OUT);
-
 const articles = fs.readdirSync(HELP).filter((f) => f.endsWith(".mdx"));
+const exportedPaths = new Set(
+  articles.map((name) => `/help/${path.basename(name, ".mdx")}/`),
+);
 
-test("every internal link in a help article resolves to an exported page", () => {
+test("every internal link in a help article resolves to a statically generated article", () => {
   const problems = [];
   for (const article of articles) {
     const content = read(article);
