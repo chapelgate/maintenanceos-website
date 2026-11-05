@@ -149,6 +149,17 @@ export default function BuyerNotePage() {
           <a href="/contact/" className="font-medium text-accent underline-offset-4 hover:underline">Contact</a>
           . Documentation surfaces only — not a live buyers support desk, and not a published price list.
         </p>
+        <section aria-labelledby="buyer-demo-data">
+          <h2 id="buyer-demo-data" className="text-lg font-semibold text-ink">
+            Demo data is synthetic
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            All names, addresses, phone numbers, case details, and invoice
+            figures shown in this synthetic demo are synthetic (generated for
+            the buyer walkthrough). No live customer record appears anywhere
+            on this site. Data shown is not production evidence.
+          </p>
+        </section>
       </div>
     </>
   );
