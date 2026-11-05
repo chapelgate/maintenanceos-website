@@ -5,7 +5,6 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = path.join(ROOT, "out");
 
 function readJson(rel) {
   return JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8"));
@@ -26,7 +25,6 @@ test("release.json in out/ matches source commit at build time", () => {
 });
 
 test("health artifact timestamp matches release marker commitment", () => {
-  const releaseMarker = readJson("out/release.json");
   const healthArtifact = read("scripts/write-health-artifact.mjs");
   assert.match(healthArtifact, /recordedAt: new Date\(\)\.toISOString\(\)/);
   assert.match(healthArtifact, /head: head\(\)/);
