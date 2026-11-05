@@ -259,6 +259,38 @@ test("mw-169 compare short routes are gated and disclosed", () => {
   assert.doesNotMatch(page, /WCAG 2\.2 AA (certified|verified|compliant)/i);
 });
 
+test("accessibility page has WCAG 2.2 AA success criteria coverage table", () => {
+  const page = fs.readFileSync(path.join(ROOT, "src/app/accessibility/page.tsx"), "utf8");
+  assert.match(page, /WCAG 2\.2 AA success criteria/);
+  assert.match(page, /Principle/);
+  assert.match(page, /Perceivable/);
+  assert.match(page, /Operable/);
+  assert.match(page, /Understandable/);
+  assert.match(page, /Robust/);
+  assert.match(page, /1\.1\.1/);
+  assert.match(page, /1\.3\.1/);
+  assert.match(page, /1\.3\.5/);
+  assert.match(page, /1\.4\.1/);
+  assert.match(page, /1\.4\.3/);
+  assert.match(page, /1\.4\.5/);
+  assert.match(page, /1\.4\.11/);
+  assert.match(page, /2\.1\.1/);
+  assert.match(page, /2\.1\.2/);
+  assert.match(page, /2\.4\.1/);
+  assert.match(page, /2\.4\.2/);
+  assert.match(page, /2\.4\.3/);
+  assert.match(page, /2\.4\.4/);
+  assert.match(page, /2\.4\.6/);
+  assert.match(page, /2\.4\.7/);
+  assert.match(page, /3\.1\.1/);
+  assert.match(page, /3\.2\.1/);
+  assert.match(page, /3\.2\.2/);
+  assert.match(page, /3\.3\.1/);
+  assert.match(page, /3\.3\.2/);
+  assert.match(page, /4\.1\.1/);
+  assert.match(page, /4\.1\.2/);
+});
+
 test("mw-170 nested coverage catch-up is disclosed honestly", () => {
   assert.match(page, /Nested sample gated/);
   assert.match(page, /Coverage catch-up \(mw-170\)/);
