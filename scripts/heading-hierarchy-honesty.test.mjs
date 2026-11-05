@@ -25,11 +25,12 @@ test("accessibility page sections use sequential h2 without jumps", () => {
   const headings = extractHeadings(a11y);
   // All sections should be h2 (h1 comes from PageHero component)
   const sectionHeadings = headings.filter(h => h.level === 2);
-  assert.equal(sectionHeadings.length, 7, "Expected 7 h2 sections");
+  assert.equal(sectionHeadings.length, 8, "Expected 8 h2 sections");
   const ids = sectionHeadings.map(h => h.id);
   assert.deepEqual(ids, [
     "a11y-scope",
     "a11y-target",
+    "a11y-criteria",
     "a11y-perf",
     "a11y-run",
     "a11y-known",

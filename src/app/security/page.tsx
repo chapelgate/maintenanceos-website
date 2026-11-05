@@ -112,6 +112,14 @@ export default function SecurityPage() {
           acceptance before public launch. This page does not change deploy or
           nginx configuration.
         </p>
+        <p className="text-sm text-muted">
+          Subresource Integrity (SRI) verification covers exported scripts and
+          stylesheets via <code>sha384-</code> hashes. The SRI script in
+          <code>scripts/sri-verifier.mjs</code> validates hash coverage on the
+          static export. HTML meta CSP provides enforcing client-side protection;
+          arbitrary HTTP response headers (X-Frame-Options, X-Content-Type-Options,
+          Permissions-Policy) require a hosting change beyond App Platform static.
+        </p>
       </section>
 
       <section className="mx-auto max-w-3xl space-y-4 px-4 pb-12 border-t border-border pt-8">
