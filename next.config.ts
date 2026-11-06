@@ -9,15 +9,24 @@ const createCompanionsEnabled =
   publicFlag(process.env.NEXT_PUBLIC_SANDBOX_TEST_CALL_ENABLED) ||
   publicFlag(process.env.NEXT_PUBLIC_CALENDAR_ADAPTERS_ENABLED);
 
+const githubPages = publicFlag(process.env.GITHUB_PAGES);
+const pagesBase = githubPages ? "/maintenanceos-website" : "";
+
 const nextConfig: NextConfig = {
-  // Static export for DigitalOcean App Platform. Do not add `headers()` —
-  // Next ignores it with `output: "export"`. Browser-honored baseline:
-  // src/lib/static-security-headers.ts and docs/security/static-security-baseline.md
+  // Static export for DigitalOcean App Platform / GitHub Pages.
+  // Do not add `headers()` — Next ignores it with `output: "export"`.
+  // Browser-honored baseline: src/lib/static-security-headers.ts
   output: "export",
   trailingSlash: true,
   images: {
     unoptimized: true,
   },
+  ...(pagesBase
+    ? {
+        basePath: pagesBase,
+        assetPrefix: pagesBase,
+      }
+    : {}),
   ...(createCompanionsEnabled
     ? {
         turbopack: {
