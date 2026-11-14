@@ -195,22 +195,21 @@ function LeadCaptureFormFields({
     }
 
     if (!siteConfig.formEndpoint.trim()) {
-      const draft = buildEnquiryMailto({
-        leadType,
-        name: String(fd.get("name") ?? ""),
-        email,
-        phone,
-        organisation: String(fd.get("organisation") ?? ""),
-        businessType: String(fd.get("role") ?? ""),
-        role: String(fd.get("role") ?? ""),
-        message: String(fd.get("message") ?? ""),
-      });
-      setMailtoDraft(draft);
       setStatus("mailto_ready");
-      if (typeof window !== "undefined") {
-        window.location.href = draft.mailtoHref;
-      }
-      requestAnimationFrame(() => mailtoStatusRef.current?.focus());
+      Promise.resolve().then(() => {
+        const draft = buildEnquiryMailto({
+          leadType,
+          name: String(fd.get("name") ?? ""),
+          email,
+          phone,
+          organisation: String(fd.get("organisation") ?? ""),
+          businessType: String(fd.get("role") ?? ""),
+          role: String(fd.get("role") ?? ""),
+          message: String(fd.get("message") ?? ""),
+        });
+        setMailtoDraft(draft);
+        requestAnimationFrame(() => mailtoStatusRef.current?.focus());
+      });
       return;
     }
 
@@ -223,7 +222,7 @@ function LeadCaptureFormFields({
         globalThis.crypto?.randomUUID?.() ??
         `web-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
     }
-    const result = await submitLead({
+    const promise = submitLead({
       leadType,
       email: String(fd.get("email") ?? ""),
       name: String(fd.get("name") ?? ""),
@@ -233,36 +232,49 @@ function LeadCaptureFormFields({
       website,
       submissionId: submissionIdRef.current ?? undefined,
     });
-    if (!result.ok) {
-      if (!website) {
-        trackWebsiteEvent({ event: "form_submit_error", leadType });
-      }
-      setError(
-        result.error ||
+    promise.then(
+      (result) => {
+        if (!result.ok) {
+          if (!website) {
+            trackWebsiteEvent({ event: "form_submit_error", leadType });
+          }
+          setError(
+            result.error ||
+              "We could not submit just now. Please try again shortly.",
+          );
+          setStatus("error");
+          return;
+        }
+        if (
+          !website &&
+          result.mode === "accepted" &&
+          (!result.reference || result.confirmationEmail !== "accepted")
+        ) {
+          trackWebsiteEvent({ event: "form_submit_error", leadType });
+          setError(
+            "Your request reached the server, but a complete receipt and confirmation-email acknowledgement were not returned. Please retry.",
+          );
+          setStatus("error");
+          return;
+        }
+        if (!website) {
+          trackWebsiteEvent({ event: "form_submit_success", leadType });
+        }
+        setReceiptReference(result.reference ?? null);
+        setSuccessMode(result.mode);
+        setStatus("success");
+        form.reset();
+      },
+      (_) => {
+        if (!website) {
+          trackWebsiteEvent({ event: "form_submit_error", leadType });
+        }
+        setError(
           "We could not submit just now. Please try again shortly.",
-      );
-      setStatus("error");
-      return;
-    }
-    if (
-      !website &&
-      result.mode === "accepted" &&
-      (!result.reference || result.confirmationEmail !== "accepted")
-    ) {
-      trackWebsiteEvent({ event: "form_submit_error", leadType });
-      setError(
-        "Your request reached the server, but a complete receipt and confirmation-email acknowledgement were not returned. Please retry.",
-      );
-      setStatus("error");
-      return;
-    }
-    if (!website) {
-      trackWebsiteEvent({ event: "form_submit_success", leadType });
-    }
-    setReceiptReference(result.reference ?? null);
-    setSuccessMode(result.mode);
-    setStatus("success");
-    form.reset();
+        );
+        setStatus("error");
+      },
+    );
   }
 
   if (status === "success") {
