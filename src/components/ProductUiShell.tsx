@@ -82,7 +82,7 @@ export function ProductUiShell() {
               Mock labels only — no live counts. No invented throughput, SLA, or revenue figures.
             </p>
           </div>
-          <div className="overflow-x-auto rounded-lg border border-border">
+          <div className="overflow-x-auto rounded-lg border border-border" tabIndex={0}>
             <table className="min-w-full text-left text-xs sm:text-sm">
               <thead className="bg-paper text-muted">
                 <tr>

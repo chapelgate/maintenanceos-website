@@ -37,7 +37,7 @@ export default function SubprocessorsPage() {
           website currently processes personal data through those vendors.
         </p>
 
-        <div className="mt-8 overflow-x-auto">
+        <div className="mt-8 overflow-x-auto" tabIndex={0}>
           <table className="w-full rounded border-border border caption-bottom">
             <thead>
               <tr>

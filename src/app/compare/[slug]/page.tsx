@@ -89,7 +89,7 @@ export default async function ComparePage({ params }: ComparePageProps) {
     .replace(/^\|(.+)\|$/gm, (match) => {
       const cells = match.split("|").slice(1, -1).map((c) => c.trim());
       if (cells[0].includes("---")) return "";
-      return `<div class="overflow-x-auto my-6"><table class="min-w-full divide-y divide-border"><tbody><tr class="bg-surface">${cells
+      return `<div class="overflow-x-auto my-6" tabIndex={0}><table class="min-w-full divide-y divide-border"><tbody><tr class="bg-surface/300">${cells
         .map((c) => `<td class="px-4 py-3 text-sm text-ink">${c}</td>`)
         .join("")}</tr></tbody></div>`;
     })

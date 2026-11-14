@@ -83,7 +83,7 @@ export default function CookiesPage() {
               non-essential off until affirmative consent. Lead-form submit is
               operational, not an analytics cookie category.
             </p>
-            <div className="mt-4 overflow-x-auto">
+            <div className="mt-4 overflow-x-auto" tabIndex={0}>
               <table className="w-full min-w-[36rem] border-collapse text-left text-sm">
                 <caption className="sr-only">
                   Cookie categories, whether required, and current status
@@ -222,7 +222,7 @@ export default function CookiesPage() {
               Fill only when a real tag exists; otherwise none configured. Never
               invent cookie names, vendors, or durations.
             </p>
-            <div className="mt-4 overflow-x-auto">
+            <div className="mt-4 overflow-x-auto" tabIndex={0}>
               <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
                 <caption className="sr-only">
                   Cookie inventory: name, provider, purpose, category, duration

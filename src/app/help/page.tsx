@@ -76,7 +76,7 @@ export default async function HelpIndexPage() {
           {categories.map((category) => {
             const categoryArticles = articles.filter((a) => a.frontmatter.category === category);
             return (
-              <section key={category} aria-labelledby={`cat-${category.toLowerCase().replace(/\s+/g, "-")}`} className="space-y-6">
+              <section key={category} role="listitem" aria-labelledby={`cat-${category.toLowerCase().replace(/\s+/g, "-")}`} className="space-y-6">
                 <h2 id={`cat-${category.toLowerCase().replace(/\s+/g, "-")}`} className="text-xl font-semibold text-ink flex items-center gap-2">
                   <span className="text-accent">{category}</span>
                   <span className="text-sm text-muted font-normal">({categoryArticles.length})</span>
