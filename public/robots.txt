@@ -1,0 +1,43 @@
+User-Agent: *
+Allow: /
+Disallow: /status.json
+Disallow: /release.json
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /status/
+Disallow: /buyers/
+Disallow: /create/*?step=
+Disallow: /_next/
+Disallow: /static/
+Disallow: /fonts/
+Disallow: /media/
+
+User-Agent: GPTBot
+Allow: /
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: OAI-SearchBot
+Allow: /
+
+User-Agent: Google-Extended
+Allow: /
+
+User-Agent: anthropic-ai
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: Bytespider
+Allow: /
+
+User-Agent: CCBot
+Allow: /
+
+Host: https://worksmartos.co.uk
+Sitemap: https://worksmartos.co.uk/sitemap.xml
