@@ -91,6 +91,7 @@ jobs:
             set -euo pipefail
             cp -a /src /work
             cd /work
+            git config --global --add safe.directory /work
             apt-get update -qq
             DEBIAN_FRONTEND=noninteractive apt-get install -y -qq chromium >/dev/null
             npm ci
