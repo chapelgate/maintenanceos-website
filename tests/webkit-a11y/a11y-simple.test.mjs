@@ -44,15 +44,15 @@ test.describe('WebKit accessibility checks', () => {
       test(`axe a11y checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.goto(`http://localhost:3000${pagePath}`);
-        
+
         const accessibilityScanResults = await new AxeBuilder({ page })
           .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
           .analyze();
-        
+
         const seriousOrCritical = accessibilityScanResults.violations.filter(
           v => v.impact === 'serious' || v.impact === 'critical'
         );
-        
+
         expect(seriousOrCritical).toEqual([]);
       });
     }
