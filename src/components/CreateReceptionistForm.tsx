@@ -86,7 +86,7 @@ export function CreateReceptionistForm({
   const [pastWebsite, setPastWebsite] = useState(false);
   const [presetDismissed, setPresetDismissed] = useState(false);
   const [honeypotSuccess, setHoneypotSuccess] = useState(false);
-  const [status, setStatus] = useState<"idle" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
   const [errorField, setErrorField] = useState<"businessUrl" | "email" | null>(
     null,
@@ -143,6 +143,8 @@ export function CreateReceptionistForm({
       return;
     }
 
+    setStatus("submitting");
+
     const rawUrl = businessUrlRef.current?.value ?? "";
     const unsafe = unsafePublicUrlMessage(rawUrl);
     if (unsafe) {
@@ -196,6 +198,24 @@ export function CreateReceptionistForm({
   const presetRole = hydrated ? presetRoleFromLocation() : null;
   const showPreset = Boolean(presetRole) && !presetDismissed && !pastWebsite;
 
+  // Show loading spinner while validating URL and loading next step
+  if (status === "submitting") {
+    return (
+      <div className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm">
+        <CreateJourneyStepper step={2} headingRef={null} />
+        <p className="mt-4 text-sm text-muted">Checking website…</p>
+        <div className="mt-2 flex items-center gap-2">
+          <span className="relative flex h-4 w-4">
+            <span className="animate-spin absolute h-full w-full rounded-full border-2 border-accent border-t-transparent" />
+            <span className="relative flex h-full w-full rounded-full border-2 border-t-accent border-transparent" />
+          </span>
+          <span className="text-sm text-ink">Validating URL and loading next step</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show the next steps (deferred component) after successful validation
   if (pastWebsite || showPreset) {
     return (
       <CreateReceptionistLaterSteps
@@ -222,6 +242,7 @@ export function CreateReceptionistForm({
     );
   }
 
+  // Show step 1 form (enter URL)
   return (
     <div
       className="create-journey-card rounded-md border border-border bg-surface p-6 shadow-sm"
