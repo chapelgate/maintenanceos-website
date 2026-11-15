@@ -24,7 +24,11 @@ alert() {
     local full_name="$2"
     local what="$3"
     local action="$4"
-    printf '%s | %s | %s | %s | %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$severity" "$full_name" "$what" "$action" >> "$ALERTS_FILE"
+    local lockfile="$LOG_FILE.lock"
+    (
+        flock -n 9 || exit 1
+        printf '%s | %s | %s | %s | %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$severity" "$full_name" "$what" "$action" >> "$ALERTS_FILE"
+    ) 9>"$lockfile" || printf '%s | %s | %s | %s | %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$severity" "$full_name" "$what" "$action" >> "$ALERTS_FILE"
 }
 
 IDLE_THRESHOLD=30

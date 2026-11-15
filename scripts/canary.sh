@@ -23,10 +23,28 @@ alert() {
     local full_name="$2"
     local what="$3"
     local action="$4"
-    printf '%s | %s | %s | %s | %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$severity" "$full_name" "$what" "$action" >> "$ALERTS_FILE"
+    local lockfile="$CANARY_DIR/out/canary.alerts.lock"
+    (
+        flock -n 9 || exit 1
+        printf '%s | %s | %s | %s | %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$severity" "$full_name" "$what" "$action" >> "$ALERTS_FILE"
+    ) 9>"$lockfile" || printf '%s | %s | %s | %s | %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$severity" "$full_name" "$what" "$action" >> "$ALERTS_FILE"
 }
 
 fail_count=0
+PROVIDER_STATE_FILE="$CANARY_DIR/out/canary.provider_state"
+if [[ -z "${OMNIROUTE_API_KEY:-}" ]]; then
+    alert "FAIL" "canary.sh" "OMNIROUTE_API_KEY not set in environment" "Logged alert"
+    echo "canary complete: 1 checks failed this run (consecutive: 1)"
+    echo "1" > "$CANARY_DIR/out/canary.fail_count"
+    exit 1
+fi
+declare -A prev_provider_state
+if [[ -f "$PROVIDER_STATE_FILE" ]]; then
+    while IFS='|' read -r pname pstate; do
+        prev_provider_state["$pname"]="$pstate"
+    done < "$PROVIDER_STATE_FILE"
+fi
+declare -A new_provider_state
 
 # --- 1. Dell disk/load ---
 disk_pct=$(df -P / 2>/dev/null | awk 'NR==2{print $5}' | tr -d '%' || echo "unknown")
@@ -71,16 +89,27 @@ for p in "${providers[@]}"; do
     presp=$(curl -s --max-time 60 -H "Authorization: Bearer $OMNIROUTE_API_KEY" -H "Content-Type: application/json" -d "{\"model\":\"$p\",\"messages\":[{\"role\":\"user\",\"content\":\"ping\"}],\"max_tokens\":5}" http://127.0.0.1:20128/v1/chat/completions 2>/dev/null || echo "")
     if echo "$presp" | grep -q '"choices"'; then
         provider_json+="{\"name\":\"$p\",\"status\":\"ok\",\"detail\":\"responded with choices\"},"
+        new_provider_state["$p"]="ok"
     else
         provider_json+="{\"name\":\"$p\",\"status\":\"fail\",\"detail\":\"no choices\"},"
-        alert "WARN" "canary.sh" "Provider $p unreachable" "Logged alert"
-        # Only required lanes increment fail_count; optional/free providers are WARN-only.
+        new_provider_state["$p"]="fail"
+        prev_state="${prev_provider_state[$p]:-}"
+        if [[ "$prev_state" != "fail" ]]; then
+            alert "WARN" "canary.sh" "Provider $p unreachable" "Logged alert"
+        fi
+        # Optional/free providers never increment fail_count; required lanes (e.g. mistral/codestral-latest) do.
         if ! echo " $optional_providers " | grep -q " $p "; then
             fail_count=$((fail_count+1))
         fi
     fi
 done
 provider_json=${provider_json%,}
+
+# Persist provider state for state-change WARN logic
+> "$PROVIDER_STATE_FILE"
+for p in "${!new_provider_state[@]}"; do
+    printf '%s|%s\n' "$p" "${new_provider_state[$p]}" >> "$PROVIDER_STATE_FILE"
+done
 
 # --- 5. Mac LM Studio via bridge ---
 mac_lm_ok="ok"
