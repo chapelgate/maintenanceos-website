@@ -66,10 +66,10 @@ export default function AccessibilityPage() {
             verification required). This is not a conformance claim — manual AT and
             device checks remain required before any claim.
           </p>
-          <div className="mt-4 overflow-x-auto">
+          <div className="mt-4 overflow-x-auto" tabIndex={0}>
             <table className="min-w-full text-sm text-left border-collapse">
               <thead>
-                <tr className="border-b border-border bg-muted/50">
+                <tr className="border-b border-border bg-muted/300">
                   <th className="px-3 py-2 font-medium">Principle</th>
                   <th className="px-3 py-2 font-medium">Criterion</th>
                   <th className="px-3 py-2 font-medium">Description</th>

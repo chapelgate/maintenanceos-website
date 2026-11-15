@@ -109,7 +109,6 @@ function FaqAccordionComponent({ items }: FaqAccordionProps) {
 
       <div
         id="faq-list"
-        role="list"
         className="space-y-2"
         aria-describedby="faq-result-count"
       >
