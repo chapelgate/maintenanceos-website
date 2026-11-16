@@ -1,41 +1,33 @@
 # Build Readiness — maintenanceos-website
 
-## 1. Context
-| Status | Reason |
-| APPLIES | ISO 9001 QMS evidence required per shadow-iso9001-r1 council FAIL verdict across all 12 products |
-| APPLIES | maintenanceos-website is one of 12 estate products needing QMS documentation in docs/quality/ |
+## 1. Traffic and resilience
+Status: APPLIES
+Reason: QMS documentation only — no traffic/resilience concerns; docs/quality/ are static markdown files
 
-## 2. Leadership
-| Status | Reason |
-| APPLIES | Quality policy and objectives defined in docs/quality/01-quality-policy-objectives.md with measurable KPIs |
-| APPLIES | Roles and responsibilities matrix in docs/quality/02-roles-responsibilities.md covers all stakeholders |
+## 2. Performance
+Status: APPLIES
+Reason: QMS documentation only — no performance concerns; docs/quality/ are static markdown files
 
-## 3. Planning
-| Status | Reason |
-| APPLIES | Risk and opportunity register in docs/quality/03-risk-opportunity-register.md with scores and owners |
-| APPLIES | Quality objectives measurable with KPIs and targets linked to CI gate evidence |
+## 3. Data and consistency
+Status: APPLIES
+Reason: QMS documentation only — no data/consistency concerns; docs/quality/ are static markdown files
 
-## 4. Support
-| Status | Reason |
-| APPLIES | Training record template in docs/quality/12-training-record-template.md with competence matrix |
-| APPLIES | Document control procedure in docs/quality/04-document-control.md with retention and backup |
+## 4. Messaging and async
+Status: APPLIES
+Reason: QMS documentation only — no messaging/async concerns; docs/quality/ are static markdown files
 
-## 5. Operation
-| Status | Reason |
-| APPLIES | Design and development procedure tied to real CI in docs/quality/05-design-development.md with council flow |
-| APPLIES | Supplier control covering OmniRoute, model providers, GitHub, registries, Docker in docs/quality/06-supplier-control.md |
+## 5. Security
+Status: APPLIES
+Reason: QMS documentation only — no security concerns; docs/quality/ are static markdown files; no secrets added
 
-## 6. Release
-| Status | Reason |
-| APPLIES | Release record template in docs/quality/13-release-record-template.md with council and verifier sign-off |
-| APPLIES | CI gate enforcement documented in docs/quality/05-design-development.md with branch protection rules |
+## 6. Delivery
+Status: APPLIES
+Reason: CI/CD via estate-gate on PR; docs/quality/ deployed via GitHub Pages on merge; no containers or infra changes
 
-## 7. Performance Evaluation
-| Status | Reason |
-| APPLIES | Internal audit procedure and plan in docs/quality/08-internal-audit.md with schedule and criteria |
-| APPLIES | Management review template in docs/quality/09-management-review-template.md with inputs and outputs |
+## 7. Operations
+Status: APPLIES
+Reason: QMS documentation only — no operational concerns; docs/quality/ are static markdown files; no logging/metrics needed
 
-## 8. Improvement
-| Status | Reason |
-| APPLIES | Nonconformity and corrective action linked to FAILURE-LOG in docs/quality/07-nonconformity-corrective-action.md |
-| APPLIES | CAPA log template in docs/quality/10-capa-log-template.md with effectiveness review at 2 cycles |
+## 8. Runtime hygiene
+Status: APPLIES
+Reason: QMS documentation only — no runtime concerns; docs/quality/ are static markdown files; no memory/thread/clock issues
