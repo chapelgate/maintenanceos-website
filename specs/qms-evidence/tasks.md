@@ -13,6 +13,6 @@
 - [x] Create docs/quality/13-release-record-template.md (8.5.1, 8.6)
 - [x] Commit on feat/iso9001-qms-evidence-20261116 branch
 - [x] Open PR on GitHub
-- [ ] Council A review (GO/FAIL)
-- [ ] Council B review (GO/FAIL)
-- [ ] Council merge on GO
+- [x] Council A review (GO/FAIL)
+- [x] Council B review (GO/FAIL)
+- [x] Council merge on GO
