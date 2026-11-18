@@ -1,20 +1,33 @@
-# Reel DfzvuBcORuK - Outcome First Prompting - RESULT
+# ADOPT RESULT: reel Dfr7HAkHxPK (Shadow AI usage, 64% on personal accounts)
 
-## Summary
-Implemented the council-approved ADOPT for reel DfzvuBcORuK (Outcome first prompting) by reinforcing "describe end result not steps" in chapelgate-skill-first.
+## Implementation Summary
 
-## Changes Made
-**File:** `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`
+**Objective**: Implement reel Dfr7HAkHxPK for Estate AI policy awareness — reinforce "OmniRoute/local models only" policy with the 64% shadow AI statistic.
 
-**Change:** Added "Outcome-First Prompting" subsection under Section 1 (Goal Lock) with the principle:
-> **Describe the end result, not the steps.** When defining objectives, specifying acceptance criteria, or prompting any AI agent (including this skill system), provide a detailed picture of the finished outcome and minimal guidance on process. Every detail you leave out about the result, the system will guess—and every guess costs hours of fixing. Flip the traditional ratio: a page about the result, zero about how.
+**Action Taken**: Added Section 9 "Shadow AI Awareness — Estate AI Policy" to `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`.
 
-**Backup:** `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md.bak-reelimpl-20261117-2200`
+### Changes Made
+
+#### chapelgate-skill-first/SKILL.md
+- Added new Section 9: "Shadow AI Awareness — Estate AI Policy"
+- Codifies the following estate AI policy practices:
+  1. **64% shadow AI statistic**: 64% of workplace AI usage runs on personal accounts (data leakage risk)
+  2. **OmniRoute/local models only**: All AI-assisted work must use OmniRoute or local models only
+  3. **No personal accounts**: Personal AI accounts (ChatGPT, Claude, Grok, etc.) prohibited for estate work
+  4. **Enforcement**: FAILURE-LOG.md compliance, Full Shakedown security checklist, PentAGI red-team checks
+  5. **Data sovereignty**: Log stays on estate systems only, never in vendor training or settings
+  6. **Scope**: All estate AI agent products, builds, and workflows must comply
 
 ## Evidence
-- Modified chapelgate-skill-first SKILL.md (mandatory preflight for every estate task)
-- The principle now applies to all estate products via the skill system
-- IMPLEMENTATION-STATUS.md updated with DONE entry
 
-## Council Verdict
-GO - Smallest real change, own repos only, no PR needed (skill file modification), trial report-only in sandbox with ADOPT result.
+- Modified file: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`
+- Backup created: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md.bak-reelimpl-20261118-*`
+- Implementation status logged: `/home/andy/chapelgate/jobs-work-dell/readiness/reel-review/IMPLEMENTATION-STATUS.md`
+- Review source: `/mnt/d/reel-bulk/reviews/andy-video-instagram-Dfr7HAkHxPK-REVIEW.md`
+
+## Council Compliance
+
+This implementation follows the council decision recorded in REEL-DECISIONS.md line 131:
+> "17 Nov 2026 | bulk:andy-video-instagram-Dfr7HAkHxPK | Shadow AI usage (64% on personal accounts) | ADOPT | Estate AI policy awareness | N/A"
+
+The change is minimal, surgical, and directly addresses the council's ADOPT decision without broadening scope.
