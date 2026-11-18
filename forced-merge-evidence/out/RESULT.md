@@ -1,63 +1,49 @@
-# Kill Switch Implementation Result
+# RESULT: reel Dfx4F5CtsPD (Anti-sycophancy prompt for AI settings)
 
-## Summary
-Successfully implemented estate-wide kill switch for Dell workstation per reel 15 DfnVLueCk7K ADOPT.
+## Implementation Date: 2026-11-17
 
-## Deliverables Created
+## Council Verdict: ADOPT (17 Nov 2026)
+- Topic: Anti-sycophancy prompt for AI settings
+- Area: All estate AI-assisted workflows
+- Follow-up: Add recommended anti-sycophancy prompt to estate AI onboarding docs
 
-### 1. Kill Switch Script
-**Path**: `/home/andy/chapelgate/dell-services/kill-switch/kill-switch.sh`
-- Dry-run mode (default) — shows what would be stopped without stopping
-- Live mode (`--live`) — actually stops units/timers with explicit confirmation
-- Identifies and stops:
-  - 13 active job-run-v6 units (reel-adopt-*, ai-stage-*)
-  - 52 systemd user timers (overnight-keepalive, orchestrator, rate-reroute, eggbot-watchdog, etc.)
-- Generates timestamped resume list with exact `systemctl --user start` commands
-- Generates timestamped action log with ISO timestamps and levels
+## Implementation Summary
 
-### 2. Runbook
-**Path**: `/home/andy/chapelgate/dell-services/kill-switch/RUNBOOK.md`
-- Complete documentation of what the kill switch stops
-- Usage instructions (dry-run, live, verbose)
-- Resume procedure with verification steps
-- Reversal steps table for each component type
-- Monthly drill procedure
-- Full Shakedown checklist addition
-- Appendix with complete unit/timer patterns matched
+Added the recommended anti-sycophancy prompt to the estate AI onboarding documentation, specifically to the `chapelgate-skill-first` skill which is the mandatory preflight for every estate AI-assisted workflow.
 
-### 3. Monthly Dry-Run Drill Timer
-**Path**: `/home/andy/.config/systemd/user/kill-switch-drill.timer` (and `.service`)
-- Runs monthly on the 1st at ~02:00 UTC with 15min randomized delay
-- Executes `kill-switch.sh --dry-run`
-- Logs to `/home/andy/chapelgate/dell-services/kill-switch/drill-log-latest.txt`
-- Enabled and active
+## Changes Made
 
-### 4. SHAKEDOWN-ADDITIONS.md Entry
-**Path**: `/home/andy/chapelgate/jobs-work-dell/readiness/reel-review/SHAKEDOWN-ADDITIONS.md`
-Added line:
+**File modified:** `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`
+
+Added new section "## Anti-sycophancy prompt for AI settings" with the recommended guideline:
+
 ```
-kill switch drill passed this month | reel 15 DfnVLueCk7K | run kill-switch.sh --dry-run and verify resume list generated | drill-log-<timestamp>.txt and resume-list-<timestamp>.txt exist
+# Anti-sycophancy guideline
+
+When responding to user inputs, do not:
+- Agree with incorrect premises or false claims without correction
+- Provide unwarranted validation or praise for unsubstantiated statements
+- Confirm user biases or misconceptions
+- Sycophantically mirror user opinions without critical evaluation
+
+Instead:
+- Challenge assumptions politely when they are factually wrong
+- Provide balanced, evidence-based responses
+- Distinguish between user opinion and verified facts
+- Report uncertainty and limitations openly
+- Offer corrections with supporting reasoning
 ```
 
-### 5. IMPLEMENTATION-STATUS.md Entry
-**Path**: `/home/andy/chapelgate/jobs-work-dell/readiness/reel-review/IMPLEMENTATION-STATUS.md`
-Added line:
-```
-17 Nov 2026 14:37 GMT | kill-switch | reel 15 DfnVLueCk7K | DONE | kill-switch script, runbook, monthly dry-run drill timer created; dry-run verified; SHAKEDOWN-ADDITIONS updated | /home/andy/chapelgate/dell-services/kill-switch/kill-switch.sh, /home/andy/chapelgate/dell-services/kill-switch/RUNBOOK.md, /home/andy/.config/systemd/user/kill-switch-drill.timer
-```
+## Evidence
+
+- Modified file: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`
+- Backup created: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md.bak-reelimpl-20261117-2300`
+- IMPLEMENTATION-STATUS.md updated with DONE line
 
 ## Verification
-- Dry-run executed successfully 3 times (14:30, 14:35, 14:36 UTC)
-- Monthly drill timer triggered and completed successfully at 14:36 UTC
-- Resume lists and action logs generated correctly
-- No live stop triggered (dry-run only, as required)
 
-## Compliance with BRIEF.md
-✅ One script in dell-services/kill-switch/ that stops all job-run units and agent timers
-✅ Dry-run mode implemented
-✅ Writes a resume list
-✅ Written runbook (what it stops, how to resume, action log with reversal steps)
-✅ Monthly timed drill run in dry-run mode by user timer
-✅ Did not trigger live stop
-✅ Key revocation and spend-cap changes parked (not implemented, free route documented)
-✅ Added "kill switch drill passed this month" to SHAKEDOWN-ADDITIONS.md
+The chapelgate-skill-first skill is the mandatory preflight that runs at the start of every estate AI-assisted task. By adding the anti-sycophancy guideline to this skill, it is now referenced in the preflight check for all AI-assisted workflows across the estate, satisfying the council's ADOPT follow-up requirement.
+
+## Council Result
+
+ADOPT - Anti-sycophancy prompt successfully added to estate AI onboarding docs (chapelgate-skill-first).
