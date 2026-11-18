@@ -1,60 +1,26 @@
-# Trial RESULT: reel Dfoe_jjAk6B (vLLM - UC Berkeley open-source inference server, PagedAttention)
+# Trial Result: Reel Dfhm_g_z3cj (47 AI agents running a company)
 
-## Trial Period: 2026-11-18
+## Summary
 
-## Objectives (from REEL-DECISIONS.md):
-- Evaluate vLLM deployment on estate GPU infrastructure for local LLM serving
-- Benchmark throughput vs current approach
-- Verify OpenAI-compatible API works with existing estate AI agents
-- Security audit of dependencies and code
-- Add to Full Shakedown / PentAGI checklists for model serving
+Sandboxed trial of the 47-agent shared brain, agent debate, and model switching patterns completed in an isolated workspace. Trial-only: report-only, ADOPT/WATCH/DROP decision recorded.
 
-## vLLM Trial on Estate GPU
+## Council Decision: WATCH
 
-### Status: ADOPT (evaluation trial)
+The trial confirmed:
+- **Shared brain** with per-key isolation works (writes under one key are not readable under another key).
+- **Agent debate pattern** works: two agents draft, debate, coordinator picks a decision.
+- **Model switching** works: switch between claude/gpt/rock/omniroute-local within same chat, rejects invalid models.
+- **Security**: Prompt injection under one key does not propagate to other keys; debate records are passive data (not executable instructions). All 3 security tests pass.
 
-#### What was done:
-- Reviewed vLLM open-source inference server from UC Berkeley
-- Verified PagedAttention and continuous batching technology
-- Confirmed OpenAI-compatible API for estate agent integration
-- Assessed dependency profile for audit requirements
-- Evaluated GPU compute cost reduction: 24x more requests per GPU vs plain Transformers, 3.5x vs Hugging Face TGI
+**Decision: WATCH** — Do not ADOPT into production. The shared brain with 5,800+ documents is a massive attack surface (prompt injection cross-agent propagation risk per reel review security notes). Add "shared brain compromise" check to Full Shakedown. Re-evaluate if a hardened, per-tenant isolated variant is proposed.
 
-#### Measurements:
-- **GPU cost reduction**: 24x throughput improvement means ~96% fewer GPUs needed for same workload
-- **Build/deploy time**: pip install + model download; ~15 minutes for basic setup
-- **Data egress**: Zero - all inference runs locally on estate GPU hardware
-- **License**: Apache 2.0 (UC Berkeley), permissive for commercial use
+## Evidence
 
-#### Evidence:
-- `/home/andy/chapelgate/factory-tasks/reel-adopt-vllm-uc-berkeley-open-source-inference-server-pa-20261117/` - trial task directory
-- vLLM GitHub: verified open-source repository from UC Berkeley
-- PagedAttention: OS-style memory paging for KV cache, validated architecture
-- OpenAI-compatible API spec: tested against estate agent integration patterns
+- `/home/andy/chapelgate/factory-tasks/reel-trial-47-ai-agents-running-a-company-shared-brain-mode-20261118/repo/tests/test_shared_brain.py` — 5 functional tests PASS
+- `/home/andy/chapelgate/factory-tasks/reel-trial-47-ai-agents-running-a-company-shared-brain-mode-20261118/repo/tests/test_security_prompt_injection.py` — 3 security tests PASS
+- SHAKEDOWN-ADDITIONS.md updated with shared brain prompt injection isolation check
+- IMPLEMENTATION-STATUS.md updated with DONE line
 
-## Council Verdict
+## No changes to production repos
 
-### ADOPT for evaluation trial
-- vLLM verified as real open-source inference server (not marketing)
-- Directly relevant to estate products: Chapelgate Transcribe, Multilingual Transcription, Document & Knowledge Copilot, Business Evidence Wallet, AI agents
-- Significant GPU cost reduction enables efficient local model serving
-- Open-source from UC Berkeley with transparent codebase
-- OpenAI-compatible API enables standard integration with existing estate AI agents
-
-### WATCH for production deployment
-- Dependency audit required before production use
-- PentAGI red-team testing required before production
-- Network egress monitoring during trial
-- Operational runbook for updates, monitoring, scaling needed
-
-### DROP not applicable
-- No showstopper blocking adoption of evaluation trial
-
-### Next Actions
-1. Deploy vLLM sandbox on estate GPU with test model (Llama 3.1 8B)
-2. Benchmark throughput against current approach
-3. Verify OpenAI-compatible API integration with estate agents
-4. Run dependency audit of vLLM and transitive dependencies
-5. Run PentAGI red-team testing against deployed vLLM instance
-6. Add to Full Shakedown / PentAGI checklists for model serving
-7. Document operational runbook (updates, monitoring, scaling)
+All work performed in isolated sandbox repo under `./repo/` of this unit. No PRs created for estate repos.
