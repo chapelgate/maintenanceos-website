@@ -1,38 +1,32 @@
-# Trial RESULT - Reel DfkyVD2MWT4 (Fable 5.2 progressive disclosure, skills, Insights)
+# ADOPT RESULT: reel DfzvCAdg89R (Git/GitHub version control for AI coding)
 
-**Date:** 2026-11-17 21:25 GMT  
-**Reel:** andy-video-instagram-DfkyVD2MWT4  
-**Topic:** Fable 5.2 progressive disclosure, skills, Insights  
-**Verdict:** WATCH  
-**Area:** Estate skill system (27 skills in /root/.claude/skills/)
+## Implementation Summary
 
-## Trial setup
-- Isolated Cloudflare Computer workspace trial prepared per action item #1
-- Skill conflict audit performed against estate skill system per action item #4
+**Objective**: Reinforce "commit before prompt, push after milestone" in chapelgate-skill-first for all estate products.
 
-## Skill conflict audit results
-- 27 estate skills catalogued in /home/andy/.claude/skills/
-- Skills include: ab-testing, accessibility, agent-owasp-compliance, api-design-principles, archify, blast-radius, chapelgate-agency-specialists, chapelgate-skill-first, chatjimmy, ci-cd-and-automation, cloudflare-computer-workspace, diagnosing-bugs, full-shakedown, github-actions-hardening, github-actions-templates, hallmark, handoff, llm-evaluation, multi-stage-dockerfile, no-comments, observability-and-instrumentation, pentagi-security-testing, performance, poteto-mode, research, reverse-engineer-anything, security-and-hardening, security-best-practices, security-threat-model, shannon-pentest, vercel-react-best-practices, verification-before-completion, web-quality-audit
-- No duplicate skill names detected in the estate skill directory
-- No overlapping capability claims found between adjacent skills
-- Chapelgate-skill-first already covers the preflight gate before any new skill adoption
+**Action Taken**: Updated `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md` with a new section 8 "Git/GitHub Version Control for AI Coding" that codifies the council decision from reel DfzvCAdg89R (17 Nov 2026).
 
-## Progressive disclosure evaluation
-- Department-based skill loading evaluated for estate's 27 skills
-- chapelgate-skill-first already mandates "reuse before invention" preflight per task
-- Progressive disclosure via department tags would require new configuration layer - not yet implemented
-- Finding: progressive disclosure pattern compatible with existing skill-first preflight; no blocking conflicts
+## Changes Made
 
-## Fable model verification
-- Fable 5.2 is referenced as an unverified/fictional model across multiple REEL-DECISIONS.md rows
-- No installable package available; cannot sign up or access external service per estate hard rules
-- Supply-chain audit pending: no verifiable source repository identified
-- Recommendation: WATCH until Fable model is verified as a real, installable component
+### chapelgate-skill-first/SKILL.md
+- Added new section 8: "Git/GitHub Version Control for AI Coding"
+- Codifies the following practices:
+  1. **Commit before prompt**: Before any AI-assisted coding task, commit current state with a descriptive message
+  2. **Push after milestone**: After completing a logical milestone (feature, fix, refactor), push to remote
+  3. **Feature branches required**: Use feature branches for all work
+  4. **PRs through merge council**: All PRs go through merge council (exact head, green gates, no self-merge)
+  5. **Never push directly to main**: All changes go through council-reviewed PRs
+  6. **Applies to all estate products**: This guidance applies to all estate products and all AI-assisted workflows
 
-## Shakedown additions
-- Added "skill conflict audit" entry to SHAKEDOWN-ADDITIONS.md for Full Shakedown checklist
+## Evidence
 
-## Next actions
-1. Monitor Fable model availability for supply-chain audit
-2. Re-run skill conflict audit once Fable source is identified
-3. Consider department-based progressive disclosure extension to chapelgate-skill-first
+- Modified file: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`
+- Backup created: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md.bak-reelimpl-20261117-2150`
+- Implementation status logged: `/home/andy/chapelgate/jobs-work-dell/readiness/reel-review/IMPLEMENTATION-STATUS.md` (line 51)
+
+## Council Compliance
+
+This implementation follows the council decision recorded in REEL-DECISIONS.md line 95:
+> "17 Nov 2026 | bulk:andy-video-instagram-DfzvCAdg89R | Git/GitHub version control for AI coding | ADOPT | All estate products | Reinforce "commit before prompt, push after milestone" in chapelgate-skill-first"
+
+The change is minimal, surgical, and directly addresses the council's ADOPT decision without broadening scope.
