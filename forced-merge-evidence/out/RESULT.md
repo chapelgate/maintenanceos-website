@@ -1,25 +1,26 @@
-# Result: Reel DZAw8CcRXM6 - 13 layers of production stack
+# FAILURE-LOG Compliance Audit Result
 
-## Council Verdict: ADOPT
+## Task
+Reel 19 (andy-video-instagram-DfIUvtMm_IS) ADOPT: Check estate compliance with FAILURE-LOG rule
 
-### Summary
-The 13-layer production stack framework has been successfully adopted across the estate. This framework provides a comprehensive checklist of production infrastructure layers that every estate product must address for production readiness.
+## Verdict
+**PARTIAL COMPLIANCE** - 2 of 4 criteria met
 
-### Changes Made
-1. **Full Shakedown CHECKLIST.md** (`/home/andy/chapelgate/factory-tasks/release-readiness-20261112/10-business-evidence-wallet/work/shakedown/CHECKLIST.md`): Added layer 13 ("13 layers of production stack verified (reel DZAw8CcRXM6)") to the Discover section, with all 13 layers documented: frontend, APIs/back-end logic, database/storage, auth/permissions, hosting/deployment, cloud/compute, CI/CD/version control, security/RLS, rate limiting, caching/CDN, load balancing/scaling, error tracking/logs, availability/recovery.
+## Summary
+The estate FAILURE-LOG.md file exists and is actively maintained (496 lines, entries through today). However, the weekly rule review process is NOT operating - multiple repeat failure patterns (hung cycles, false MISSION_COMPLETE claims, OmniRoute production outages) have occurred 10-50+ times each with NO council-reviewed rule PRs or regression tests created. Approximately 50+ active factory tasks have no FAILURE-LOG entries in the last 7 days. Vendor opt-outs are partially addressed (all AI traffic routes through self-hosted OmniRoute, no direct vendor APIs found).
 
-2. **chapelgate-skill-first SKILL.md** (`/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`): Added 13-layer verification gate to the Implementation permit section - all 13 layers must be addressed before implementation begins.
+## Evidence
+- FAILURE-LOG-COMPLIANCE.md: Full audit with 7 repeat patterns documented
+- FAILURE-LOG.md: Source log (496 lines)
+- BOT-SUPERVISOR-REGISTER.md: Active bot inventory
+- Git history search: No rule PRs for operational repeat failures
 
-3. **blast-radius SKILL.md** (`/home/andy/.claude/skills/blast-radius/SKILL.md`): Added 13-layer production stack reference framework as the blast-radius reference model for change impact assessment across estate products.
+## Required Actions (Council-Reviewed PRs)
+1. Rule PR: Hung cycle prevention (background servers + timeouts in job-run-v6)
+2. Rule PR: False MISSION_COMPLETE gate (verify council verdict + RESULT.md)
+3. Rule PR: OmniRoute production protection (prohibit docker stop on port 20128)
 
-4. **SHAKEDOWN-ADDITIONS.md** (`/home/andy/chapelgate/jobs-work-dell/readiness/reel-review/SHAKEDOWN-ADDITIONS.md`): Appended "13-layer production stack | DZAw8CcRXM6 | Full Shakedown checklist inclusion | CHECKLIST.md inclusion evidence".
-
-### Acceptance Criteria
-All 13 layers of the production stack must be verified as part of the Full Shakedown pre-implementation gate. Each layer maps to existing estate skills and gates, providing a concrete checklist for production readiness that complements the Full Shakedown.
-
-### Evidence
-- Full Shakedown CHECKLIST.md updated with 13-layer checklist item
-- chapelgate-skill-first SKILL.md updated with 13-layer verification gate
-- blast-radius SKILL.md updated with 13-layer reference framework
-- SHAKEDOWN-ADDITIONS.md appended with 13-layer production stack item
-- IMPLEMENTATION-STATUS.md updated with DONE line for reel DZAw8CcRXM6
+## Compliance Checklist Items for Full Shakedown
+- "FAILURE-LOG.md compliance: all bots logging, repeat failures → rules + tests, vendor opt-outs confirmed"
+- Automated weekly compliance checker script
+- OmniRoute training-data config verification
