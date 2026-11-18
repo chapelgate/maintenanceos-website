@@ -1,26 +1,23 @@
-# Trial Result: Reel Dfhm_g_z3cj (47 AI agents running a company)
+# Trial Result: Reel DfpU_1Pi8Fd - AI Invoice Clerk Copilot Studio
 
 ## Summary
+Sandboxed trial completed. The AI Invoice Clerk workflow pattern from Copilot Studio (bank-change fraud detection, document classification, human-in-the-loop routing) is directly applicable to Legal Case Management, Business Evidence Wallet, and Document Knowledge Copilot. The Copilot Studio implementation itself cannot run on estate compute (proprietary Microsoft product), but the security patterns and workflow architecture are transferable.
 
-Sandboxed trial of the 47-agent shared brain, agent debate, and model switching patterns completed in an isolated workspace. Trial-only: report-only, ADOPT/WATCH/DROP decision recorded.
+## Trial Result: **WATCH**
 
-## Council Decision: WATCH
+## Key Findings
+1. Copilot Studio workflow: Outlook trigger → SharePoint storage → Extract → Classify → Agent rules → Decision routing → Teams adaptive card → SharePoint log
+2. Bank-change fraud detection: flag bank detail changes as possible fraud attempts, never auto-approve, human must confirm via existing contact details
+3. Approved vendors list, PO verification for amounts over $2,500
+4. Every decision logged with reason (audit trail)
+5. Test results: 5 invoices processed - 2 auto-approved, 1 quote rejected, 1 big one via Teams card, 1 fake bank change rejected
 
-The trial confirmed:
-- **Shared brain** with per-key isolation works (writes under one key are not readable under another key).
-- **Agent debate pattern** works: two agents draft, debate, coordinator picks a decision.
-- **Model switching** works: switch between claude/gpt/rock/omniroute-local within same chat, rejects invalid models.
-- **Security**: Prompt injection under one key does not propagate to other keys; debate records are passive data (not executable instructions). All 3 security tests pass.
+## Recommended Actions
+1. Implement bank-change fraud detection logic in estate invoice/document processing
+2. Replicate trigger→extract→classify→route→review→log pattern using estate automation tools
+3. Add bank-change confirmation protocol, approved vendor list, PO verification to Full Shakedown checklist
 
-**Decision: WATCH** — Do not ADOPT into production. The shared brain with 5,800+ documents is a massive attack surface (prompt injection cross-agent propagation risk per reel review security notes). Add "shared brain compromise" check to Full Shakedown. Re-evaluate if a hardened, per-tenant isolated variant is proposed.
-
-## Evidence
-
-- `/home/andy/chapelgate/factory-tasks/reel-trial-47-ai-agents-running-a-company-shared-brain-mode-20261118/repo/tests/test_shared_brain.py` — 5 functional tests PASS
-- `/home/andy/chapelgate/factory-tasks/reel-trial-47-ai-agents-running-a-company-shared-brain-mode-20261118/repo/tests/test_security_prompt_injection.py` — 3 security tests PASS
-- SHAKEDOWN-ADDITIONS.md updated with shared brain prompt injection isolation check
-- IMPLEMENTATION-STATUS.md updated with DONE line
-
-## No changes to production repos
-
-All work performed in isolated sandbox repo under `./repo/` of this unit. No PRs created for estate repos.
+## Evidence Paths
+- EVIDENCE.md: /home/andy/chapelgate/factory-tasks/reel-trial-ai-invoice-clerk-copilot-studio-bank-change-frau-20261118/out/EVIDENCE.md
+- Reel Review: /mnt/d/reel-bulk/reviews/andy-video-instagram-DfpU_1Pi8Fd-REVIEW.md
+- Council Decision: /home/andy/chapelgate/jobs-work-dell/readiness/reel-review/REEL-DECISIONS.md
