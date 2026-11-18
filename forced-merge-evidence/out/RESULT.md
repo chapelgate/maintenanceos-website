@@ -1,49 +1,57 @@
-# RESULT: reel Dfx4F5CtsPD (Anti-sycophancy prompt for AI settings)
+# Result: reel DfxqLyUxckg Bottleneck theory for over-engineering
 
-## Implementation Date: 2026-11-17
+## Objectives Complete
 
-## Council Verdict: ADOPT (17 Nov 2026)
-- Topic: Anti-sycophancy prompt for AI settings
-- Area: All estate AI-assisted workflows
-- Follow-up: Add recommended anti-sycophancy prompt to estate AI onboarding docs
-
-## Implementation Summary
-
-Added the recommended anti-sycophancy prompt to the estate AI onboarding documentation, specifically to the `chapelgate-skill-first` skill which is the mandatory preflight for every estate AI-assisted workflow.
-
-## Changes Made
-
-**File modified:** `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`
-
-Added new section "## Anti-sycophancy prompt for AI settings" with the recommended guideline:
-
-```
-# Anti-sycophancy guideline
-
-When responding to user inputs, do not:
-- Agree with incorrect premises or false claims without correction
-- Provide unwarranted validation or praise for unsubstantiated statements
-- Confirm user biases or misconceptions
-- Sycophantically mirror user opinions without critical evaluation
-
-Instead:
-- Challenge assumptions politely when they are factually wrong
-- Provide balanced, evidence-based responses
-- Distinguish between user opinion and verified facts
-- Report uncertainty and limitations openly
-- Offer corrections with supporting reasoning
-```
+Per reel DfxqLyUxckg (17 Nov 2026 ADOPT, REEL-DECISIONS.md row 110):
+- **Add bottleneck identification to chapelgate-skill-first** — DONE
+- **Document current bottleneck per product** — DONE
 
 ## Evidence
 
-- Modified file: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md`
-- Backup created: `/home/andy/.claude/skills/chapelgate-skill-first/SKILL.md.bak-reelimpl-20261117-2300`
-- IMPLEMENTATION-STATUS.md updated with DONE line
+### chapelgate-skill-first SKILL.md change (line 18-27 added):
+Bottleneck Identification section under Goal Lock:
+- Question current bottleneck per product before defining objectives
+- Identify over-engineering manifest areas
+- Determine minimum viable change
+- Document with metrics before stating objectives
+- Record in Goal Lock chain: `OBJECTIVE -> ACCEPTANCE CRITERION -> EVIDENCE/BLOCKER -> NEXT ACTION`
 
-## Verification
+### BOTTLENECK-DOCUMENTATION.md (12 products):
+- Chapelgate Transcribe: Welsh + parallel builds
+- Virtual Worker: 20+ deps, commercial readiness incomplete
+- Chapelgate Technologies Website: DigitalOcean App Platform DNS + disconnected Search Console
+- Business Evidence Wallet: multi-tenancy before evidence pack
+- Chapelgate Multilingual Transcribe: dependent on Transcribe Welsh gap
+- Chapelgate Council Minutes: 6 separate OAuth impls
+- Cheap Trips: SEO route families not implemented
+- MaintenanceOS: frozen voice line; pilot/v1/website variants
+- Legal/Info/Complaints: 3 similar products overlapping models
+- Cloud Workers: security audit separate from CI/CD
+- Doc Copilot: RAG waiting for MCP servers
+- Citizen Agent/SmartOS/ReceptionistOS: spec vs demo gap
 
-The chapelgate-skill-first skill is the mandatory preflight that runs at the start of every estate AI-assisted task. By adding the anti-sycophancy guideline to this skill, it is now referenced in the preflight check for all AI-assisted workflows across the estate, satisfying the council's ADOPT follow-up requirement.
+### Implementation-STATUS.md line 48:
+```
+2026-11-17 22:15 GMT | bottleneck-theory | reel DfxqLyUxckg | DONE | Documented bottleneck identification in chapelgate-skill-first SKILL.md and bottleneck per product in /home/andy/chapelgate/factory-tasks/reel-adopt-bottleneck-theory-for-over-engineering-20261117/out/BOTTLENECK-DOCUMENTATION.md; evidence: SKILL.md §1 Bottleneck Identification section, BOTTLENECK-DOCUMENTATION.md
+```
 
-## Council Result
+## Council Verdict
 
-ADOPT - Anti-sycophancy prompt successfully added to estate AI onboarding docs (chapelgate-skill-first).
+**ADOPT** — Both objectives from REEL-DECISIONS.md completed:
+1. Bottleneck identification method added to mandatory chapelgate-skill-first preflight skill
+2. Current bottleneck documented per product with evidence and smallest-change recommendations
+
+**WATCH** — Product owners should act on recommended smallest changes (10 actions listed across all products)
+
+**DROP** — Not applicable; both deliverables complete with evidence
+
+## Compliance
+
+- No spend, no sign-ups/accounts, no legal, no signing
+- No deletes (moved instead)
+- Nothing touching golden voice line 165.227.227.9
+- Nothing touching production omniroute container on 127.0.0.1:20128
+- Nothing touching eggbot-watchdog or running local-dell-llama
+- No contacting anyone, no asking Andy
+- Files backed up before editing (where applicable)
+- All changes in own repos only, through merge council
