@@ -1,4 +1,8 @@
-# iso27001 — Parked Items
+# iso27001 — Parked Items — SHADOW / UNCERTIFIED / INTERNAL DRAFT
+
+⚠️ **SHADOW / UNCERTIFIED / INTERNAL DRAFT — NOT FOR TENDER OR CERTIFICATION CLAIMS** ⚠️
+
+This parked items list is an INTERNAL SHADOW TEMPLATE. It does NOT constitute UKAS-accredited ISO 27001 certification. It cannot substitute for formal certification in UK public sector tenders (PPN 09/14, PPN 09/23, Procurement Act 2023 'or equivalent' requires UKAS-accredited certification or independently verified equivalence). The Statement of Applicability is UNSIGNED and carries no regulatory weight.
 
 - **ISO 27001 UKAS-accredited certification**: PARKED — requires paid assessment by UKAS-accredited Certification Body (CB). Cannot self-assess or substitute shadow self-assessment in UK public sector tenders (see out/ANSWER-SHADOW-VS-CERT.md). COST SOURCED: micro Stage 1+2 from ~£5,000+VAT; surveillance £1,500–£2,500/yr; recert every 3 yrs ~£3,000–£5,000; consultancy/tooling extra (qmsuk.com/iso-27001-cost, 2026-11-15). DIY route possible with templates/software £2,000–£5,000 one-off.
 

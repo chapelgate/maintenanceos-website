@@ -1,4 +1,8 @@
-# iso27001 — Shadow ISO/IEC 27001:2022 (Clauses 4-10 + 93 Annex A Controls)
+# iso27001 — SHADOW ISO/IEC 27001:2022 — INTERNAL DRAFT / NOT UKAS CERTIFIED
+
+⚠️ **SHADOW / UNCERTIFIED / INTERNAL DRAFT — NOT FOR TENDER OR CERTIFICATION CLAIMS** ⚠️
+
+This is an INTERNAL SHADOW TEMPLATE for gap analysis only. It does NOT constitute UKAS-accredited ISO 27001 certification. It cannot substitute for formal certification in UK public sector tenders (PPN 09/14, PPN 09/23, Procurement Act 2023 'or equivalent' requires UKAS-accredited certification or independently verified equivalence). The Statement of Applicability is UNSIGNED and carries no regulatory weight.
 
 ## Overview
 Standard: ISO/IEC 27001:2022 — clauses 4-10 (ISMS) AND all 93 Annex A controls (5 organisational 37, 6 people 8, 7 physical 14, 8 technological 34). Slug iso27001. Also produce a Statement of Applicability draft (unsigned). Shadow template pattern: every control/criterion of the standard listed from the official public source, with requirement in plain words, how Chapelgate meets it in practice, EVIDENCE = real repo path/commit, Dell service, script, test or doc on disk, status MET / PARTIAL / GAP / N-A with reason.

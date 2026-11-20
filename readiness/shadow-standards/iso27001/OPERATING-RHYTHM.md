@@ -1,4 +1,8 @@
-# iso27001 — Operating Rhythm
+# iso27001 — Operating Rhythm — SHADOW / UNCERTIFIED / INTERNAL DRAFT
+
+⚠️ **SHADOW / UNCERTIFIED / INTERNAL DRAFT — NOT FOR TENDER OR CERTIFICATION CLAIMS** ⚠️
+
+This operating rhythm is an INTERNAL SHADOW TEMPLATE. It does NOT constitute UKAS-accredited ISO 27001 certification. It cannot substitute for formal certification in UK public sector tenders (PPN 09/14, PPN 09/23, Procurement Act 2023 'or equivalent' requires UKAS-accredited certification or independently verified equivalence). The Statement of Applicability is UNSIGNED and carries no regulatory weight.
 
 Recurring checks that keep this standard true day to day, wired to existing Dell timers/jobs where possible:
 
