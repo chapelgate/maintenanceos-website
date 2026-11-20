@@ -1,0 +1,61 @@
+**ROUND 1 — OPENING POSITIONS**  
+*(Max 200 words each)*
+
+**Maya Chen — Senior Security Engineer**  
+The shadow QMS deliverables treat application security as optional rather than a clause 6.1 risk and a clause 8.1 operational control. Across Chapelgate’s 12 estate products, I see no documented CSP policy, no HSTS enforcement, no upload sandboxing, and no auth requirements in the QMS scope. Defense-in-depth is absent from the documented information required by clause 7.5. Without security objectives integrated into planning and operation, the deliverables cannot align with ISO 9001:2015 clauses 4–10. **Position: FAIL.**
+
+**Rafael Torres — Backend/API Platform Lead**  
+API contracts are missing or incomplete for most estate products. Route semantics, versioning, and backward-compatibility criteria are undocumented, violating clause 8.5.1’s requirement for controlled production and service provision. ORM usage is inconsistent, and backend correctness cannot be verified from the artifacts provided. The QMS lacks defined criteria for API changes, making clause 6.1 planning and clause 8 operation unverifiable. **Position: FAIL.**
+
+**Priya Natarajan — DevOps & Release Engineer**  
+CI gates are not evidenced; there are no staging verification results, signed release artifacts, or HSTS reach confirmations. Flaky tests are acknowledged but unmitigated. Clause 7.1.3 infrastructure and clause 8.5.1 demand evidence that processes are operated as planned; these deliverables provide none. Release traceability is broken. **Position: FAIL.**
+
+**David Okonkwo — QA Automation Architect**  
+The regression suite is incomplete, pre-existing failures are untriaged, and E2E coverage gaps span multiple estate products. No coverage metrics appear in the deliverables. Clause 9.1.1 requires monitoring and measurement of product conformity; without regression evidence, performance evaluation is impossible. **Position: FAIL.**
+
+**Aisha Hassan — Frontend & Compliance UI Lead**  
+CSP impact on the dashboard is undocumented. Inline styles are used without nonces, CDN dependencies are unpinned, and the frontend compliance posture is unaddressed. Clause 7.5 documented information fails to capture UI security and compliance controls. **Position: FAIL.**
+
+**Dr. Lars Eriksson — Database & ORM Specialist**  
+The kysely upgrade is mentioned, but migration safety is unproven. Schema changes lack rollback plans, and query plans are not reviewed. Clause 8.5.1 requires controlled changes; database migrations are high-risk operational activities with no documented safeguards. **Position: FAIL.**
+
+**Sandra Morales — Product & Compliance Owner**  
+Regulatory gates G33–G37 are not mapped to ISO clauses, audit criteria are undefined, and release deadlines are jeopardized by incomplete deliverables. Clauses 5 (leadership) and 6 (planning) show no evidence of compliance governance. **Position: FAIL.**
+
+---
+
+**ROUND 2 — REBUTTALS**  
+*(Max 150 words each; each responds to at least two personas)*
+
+**Maya Chen**  
+Rafael, API semantics are irrelevant if the transport layer is unsecured; CSP and HSTS are clause 8.1 operational controls, not afterthoughts. Aisha, inline styles without nonces are a direct CSP violation under clause 6.2 security objectives. You cannot discuss route contracts when the dashboard executes untrusted inline code. Security requirements must precede API design in the QMS.
+
+**Rafael Torres**  
+Maya, security headers do not compensate for undefined route semantics; clause 8.5.1 demands operational criteria, not just CSP. Lars, your kysely migration is a backend change—without API versioning, schema modifications break clients. You cannot migrate the ORM in isolation from the API contract layer.
+
+**Priya Natarajan**  
+David, flaky tests are a release-blocker, not a QA footnote; CI gates must fail fast on instability. Sandra, regulatory gates G33–G37 cannot be satisfied if release artifacts lack traceability and signing. Deadlines do not excuse missing clause 7.5 documented information.
+
+**David Okonkwo**  
+Priya, CI gates are useless without a regression suite that actually executes; you are optimizing a broken pipeline. Maya, XSS and CSP matter, but they do not substitute for clause 9.1.1 performance evidence across all 12 estate products.
+
+**Aisha Hassan**  
+Maya, HSTS reach is network-layer; the dashboard CSP fails because of inline styles and unpinned CDNs—a clause 7.5 documentation gap. Rafael, API contracts will not render if the frontend is blocked by CSP violations. Fix the nonce policy before debating route semantics.
+
+**Dr. Lars Eriksson**  
+Rafael, stable API routes depend on versioned schema views; my migration plan includes backward-compatible database layers. Priya, release artifacts include migration checksums in the database appendix you overlooked. Migration safety is documented; your CI gate concern is separate.
+
+**Sandra Morales**  
+Priya, release deadlines are fixed; G33–G37 are regulatory gates, not suggestions. David, coverage gaps mean we cannot evidence clause 9.1 conformity. I cannot vote PASS until audit criteria are defined and regulatory gates are mapped to QMS clauses.
+
+---
+
+**ROUND 3 — VOTES**
+
+**Maya Chen:** FAIL — Security controls are absent from clauses 6–8, violating defense-in-depth requirements for Chapelgate’s estate products.  
+**Rafael Torres:** FAIL — Undocumented API contracts and route semantics make clause 8.5.1 operational control unverifiable.  
+**Priya Natarajan:** FAIL — Missing CI gates, staging verification, and artifact traceability fail clauses 7 and 8 support/operation requirements.  
+**David Okonkwo:** FAIL — Incomplete regression coverage and E2E gaps leave clause 9.1 performance evaluation unsubstantiated.  
+**Aisha Hassan:** FAIL — CSP violations and missing nonces undermine clause 7.5 documented information and frontend compliance.  
+**Dr. Lars Eriksson:** FAIL — Untested kysely migrations without rollback plans endanger clause 8.5.1 change control.  
+**Sandra Morales:** FAIL — Unmapped regulatory gates G33–G37 and undefined audit criteria fail clauses 4–6 leadership and planning obligations.
