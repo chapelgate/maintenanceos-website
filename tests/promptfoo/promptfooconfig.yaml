@@ -1,0 +1,22 @@
+description: maintenanceos-website — promptfoo AI eval regression suite on synthetic data
+# Local synthetic provider only. No network calls, no model secrets, no real customer data.
+prompts:
+  - "{input}"
+
+providers:
+  - id: file://./synthetic-provider.mjs
+    label: maintenanceos-website-synthetic
+
+tests:
+  - description: PII-free synthetic training data
+    vars:
+      input: "Check this synthetic script for real PII: {train_sample}"
+    assert:
+      - type: not-contains
+        value: "REAL"
+  - description: labelled intent present
+    vars:
+      input: "Intent: {intent}"
+    assert:
+      - type: contains
+        value: "{intent}"
