@@ -4,6 +4,7 @@ import { getHelpArticleBySlug, getHelpArticleSlugs, generateHelpMetadata } from 
 import { contentPageMetadata } from "@/lib/page-meta";
 import { contentPageJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/JsonLd";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { PageHero } from "@/components/PageHero";
 import { FunnelPathStrip } from "@/components/FunnelPathStrip";
 import { CtaPair } from "@/components/CtaPair";
@@ -57,7 +58,7 @@ export default async function HelpArticlePage({ params }: HelpArticlePageProps) 
   );
 
   // Simple markdown-to-HTML conversion (matching blog pattern)
-  const htmlContent = content
+  const htmlContent = sanitizeHtml(content
     .replace(/^# (.+)$/gm, '<h2 class="text-2xl font-semibold text-ink mt-10 mb-4">$1</h2>')
     .replace(/^## (.+)$/gm, '<h3 class="text-xl font-semibold text-ink mt-8 mb-3">$1</h3>')
     .replace(/^### (.+)$/gm, '<h4 class="text-lg font-semibold text-ink mt-6 mb-2">$1</h4>')
@@ -75,7 +76,7 @@ export default async function HelpArticlePage({ params }: HelpArticlePageProps) 
     .replace(/^- (.+)$/gm, '<li class="ml-4 mb-1">• $1</li>')
     .replace(/(<li class="ml-4 mb-1">• .+<\/li>\n)+/g, (match) => `<ul class="list-disc list-inside space-y-1 text-sm text-muted my-4">${match}</ul>`)
     .replace(/\n\n/g, "</p><p class=\"mt-4 text-sm text-muted\">")
-    .replace(/^(.+)$/gm, "<p class=\"mt-4 text-sm text-muted\">$1</p>");
+    .replace(/^(.+)$/gm, "<p class=\"mt-4 text-sm text-muted\">$1</p>"));
 
   const date = new Date(frontmatter.date).toLocaleDateString("en-GB", {
     day: "numeric",

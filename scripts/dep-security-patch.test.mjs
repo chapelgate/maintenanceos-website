@@ -13,8 +13,8 @@ function readJson(rel) {
 test("next is patched past the 16.3.x advisory window", () => {
   const pkg = readJson("package.json");
   const lock = readJson("package-lock.json");
-  assert.strictEqual(pkg.dependencies.next, "16.4.3");
-  assert.strictEqual(lock.packages["node_modules/next"].version, "16.4.3");
+  assert.strictEqual(pkg.dependencies.next, "16.4.5");
+  assert.strictEqual(lock.packages["node_modules/next"].version, "16.4.5");
 });
 
 test("zod override pins a patched 4.6.7 release", () => {

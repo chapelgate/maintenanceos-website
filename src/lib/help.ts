@@ -57,7 +57,13 @@ function categoryOrder(category: string): number {
   return order[category] ?? 99;
 }
 
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export function getHelpArticleBySlug(slug: string): HelpArticle | null {
+  if (!SLUG_PATTERN.test(slug)) {
+    return null;
+  }
+
   const filePath = path.join(process.cwd(), "src/content/help", `${slug}.mdx`);
 
   if (!fs.existsSync(filePath)) {
