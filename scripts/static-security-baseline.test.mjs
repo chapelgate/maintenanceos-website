@@ -42,7 +42,7 @@ test("exported HTML carries CSP http-equiv and referrer when out/ exists", () =>
 test("root layout and metadata apply the HTML-honored baseline", () => {
   const layout = read("src/app/layout.tsx");
   const meta = read("src/lib/page-meta.ts");
-  assert.match(layout, /contentSecurityPolicy/);
+  assert.match(layout, /generateCspWithNonce/);
   assert.match(layout, /httpEquiv=["']Content-Security-Policy["']/);
   assert.doesNotMatch(layout, /^["']use client["']/);
   assert.match(meta, /referrer:\s*REFERRER_POLICY/);

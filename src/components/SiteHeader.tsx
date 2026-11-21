@@ -53,7 +53,7 @@ function MenuIcon() {
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ cspNonce }: { cspNonce?: string }) {
   return (
     <header className="site-header sticky top-0 z-50 border-b border-border bg-paper/90 backdrop-blur-md supports-[backdrop-filter]:bg-paper/78">
       <div className="site-header-bar mx-auto flex min-h-16 w-full flex-wrap items-center justify-between px-4 md:px-6">
@@ -206,7 +206,7 @@ export function SiteHeader() {
           </nav>
         </details>
       </div>
-      <script dangerouslySetInnerHTML={{ __html: HEADER_DETAILS_SCRIPT }} />
+      <script nonce={cspNonce} dangerouslySetInnerHTML={{ __html: HEADER_DETAILS_SCRIPT }} />
     </header>
   );
 }

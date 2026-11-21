@@ -76,7 +76,7 @@ test("layout does not include JSON-LD (deduplicated to per-page)", () => {
   assert.doesNotMatch(layout, /marketingJsonLd\(\)/);
   assert.doesNotMatch(layout, /funnelPageJsonLd/);
   assert.doesNotMatch(layout, /JsonLd/);
-  assert.match(layout, /contentSecurityPolicy/);
+  assert.match(layout, /generateCspWithNonce/);
 });
 
 test("home and key funnel pages emit fullFunnelPageJsonLd with BreadcrumbList", () => {

@@ -8,12 +8,15 @@ import {
   contentSecurityPolicy,
 } from "./static-security-headers.ts";
 
+function stripNonces(csp: string): string {
+  return csp.replace(/'nonce-[0-9a-f]+'/g, "'NONCE'");
+}
+
 test("production CSP allows the static funnel without unsafe-eval or third-party fonts", () => {
   const csp = contentSecurityPolicy("production");
-  assert.equal(csp, CONTENT_SECURITY_POLICY);
   assert.match(csp, /default-src 'self'/);
-  assert.match(csp, /script-src 'self' 'unsafe-inline'/);
-  assert.match(csp, /style-src 'self' 'unsafe-inline'/);
+  assert.match(csp, /script-src 'self' 'nonce-[0-9a-f]+'/);
+  assert.match(csp, /style-src 'self' 'nonce-[0-9a-f]+'/);
   assert.match(csp, /font-src 'self'/);
   assert.match(csp, /img-src 'self' data:/);
   assert.match(csp, /media-src 'self'/);
@@ -23,17 +26,25 @@ test("production CSP allows the static funnel without unsafe-eval or third-party
   assert.match(csp, /object-src 'none'/);
   assert.match(csp, /base-uri 'self'/);
   assert.doesNotMatch(csp, /unsafe-eval/);
+  assert.doesNotMatch(csp, /unsafe-inline/);
   assert.doesNotMatch(csp, /fonts\.googleapis|fonts\.gstatic|cdn\.jsdelivr|unpkg/);
   assert.doesNotMatch(csp, /upgrade-insecure-requests/);
   assert.doesNotMatch(csp, /frame-ancestors/);
   assert.doesNotMatch(csp, /Report-Only|report-uri|report-to/);
 });
 
-test("development CSP only adds eval and websockets for next dev", () => {
+test("production CSP generates a unique nonce per call", () => {
+  const csp1 = contentSecurityPolicy("production");
+  const csp2 = contentSecurityPolicy("production");
+  assert.notEqual(csp1, csp2, "nonce must differ between calls");
+});
+
+test("development CSP uses nonce instead of unsafe-inline", () => {
   const csp = contentSecurityPolicy("development");
-  assert.match(csp, /script-src 'self' 'unsafe-inline' 'unsafe-eval'/);
+  assert.match(csp, /script-src 'self' 'nonce-[0-9a-f]+' 'unsafe-eval'/);
+  assert.match(csp, /style-src 'self' 'nonce-[0-9a-f]+'/);
   assert.match(csp, /connect-src[^;]+ws: wss:/);
-  assert.notEqual(csp, CONTENT_SECURITY_POLICY);
+  assert.doesNotMatch(csp, /unsafe-inline/);
 });
 
 test("HTTP-only complement documents nosniff, DENY, and frame-ancestors", () => {
@@ -42,6 +53,8 @@ test("HTTP-only complement documents nosniff, DENY, and frame-ancestors", () => 
   assert.equal(DESIRED_HTTP_HEADERS["X-Frame-Options"], "DENY");
   assert.equal(DESIRED_HTTP_HEADERS["Referrer-Policy"], REFERRER_POLICY);
   assert.match(DESIRED_HTTP_HEADERS["Permissions-Policy"], /camera=\(\)/);
-  assert.match(CONTENT_SECURITY_POLICY_HTTP, /frame-ancestors 'none'/);
-  assert.ok(CONTENT_SECURITY_POLICY_HTTP.startsWith(CONTENT_SECURITY_POLICY));
+  const httpCsp = stripNonces(CONTENT_SECURITY_POLICY_HTTP);
+  assert.match(httpCsp, /frame-ancestors 'none'/);
+  const bareCsp = stripNonces(CONTENT_SECURITY_POLICY);
+  assert.ok(httpCsp.startsWith(bareCsp));
 });

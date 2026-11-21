@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { DeferredWebsiteMeasurement } from "@/components/DeferredWebsiteMeasurement";
 import { SkipLink } from "@/components/SkipLink";
 import { buildRootMetadata } from "@/lib/page-meta";
-import { contentSecurityPolicy } from "@/lib/static-security-headers";
+import { generateCspWithNonce } from "@/lib/static-security-headers";
 import "./globals.css";
 
 const inter = localFont({
@@ -28,12 +28,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { nonce, csp } = generateCspWithNonce();
   return (
     <html lang="en-GB">
       <head>
         <meta
           httpEquiv="Content-Security-Policy"
-          content={contentSecurityPolicy()}
+          content={csp}
         />
         <link rel="author" type="text/plain" href="/humans.txt" />
       </head>
@@ -44,7 +45,7 @@ export default function RootLayout({
         <SkipLink />
         <DeferredCookieConsentBannerWrapper />
         <PreLaunchBanner />
-        <SiteHeader />
+        <SiteHeader cspNonce={nonce} />
         <main id="main" tabIndex={-1} className="flex-1 outline-none">
           {children}
         </main>

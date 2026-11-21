@@ -30,26 +30,40 @@ function isDevelopment(nodeEnv: CspEnv): boolean {
   return nodeEnv === "development";
 }
 
+function generateCspNonce(): string {
+  const bytes = new Uint8Array(16);
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+    crypto.getRandomValues(bytes);
+  } else {
+    // Fallback for non-browser environments (tests, build-time)
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = Math.floor(Math.random() * 256);
+    }
+  }
+  return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
 /**
- * Enforcing CSP for the static funnel.
- * `'unsafe-inline'` is required for next/font style tags, JSON-LD, and the
- * header Escape script. Production omits `'unsafe-eval'`. `https:` connect/form
- * covers hosted companions and NEXT_PUBLIC_FORM_ENDPOINT without pinning hosts.
+ * Enforcing CSP for the static funnel using nonce-based approach.
+ * Production and development both use nonces to avoid 'unsafe-inline'.
+ * `https:` connect/form covers hosted companions and NEXT_PUBLIC_FORM_ENDPOINT.
  * Loopback is for local e2e only. `frame-ancestors` is omitted here — it is
  * ignored in meta CSP and belongs on DESIRED_HTTP_HEADERS / HTTP_CSP.
  */
 export function contentSecurityPolicy(nodeEnv: CspEnv = process.env.NODE_ENV): string {
-  const scriptSrc = isDevelopment(nodeEnv)
-    ? "'self' 'unsafe-inline' 'unsafe-eval'"
-    : "'self' 'unsafe-inline'";
-  const connectSrc = isDevelopment(nodeEnv)
+  const nonce = generateCspNonce();
+  const isDev = isDevelopment(nodeEnv);
+  const scriptSrc = isDev
+    ? `'self' 'nonce-${nonce}' 'unsafe-eval'`
+    : `'self' 'nonce-${nonce}'`;
+  const connectSrc = isDev
     ? "'self' https: http://127.0.0.1:* http://localhost:* ws: wss:"
     : "'self' https: http://127.0.0.1:* http://localhost:*";
 
   return [
     "default-src 'self'",
     `script-src ${scriptSrc}`,
-    "style-src 'self' 'unsafe-inline'",
+    `style-src 'self' 'nonce-${nonce}'`,
     "img-src 'self' data:",
     "media-src 'self'",
     "font-src 'self'",
@@ -59,6 +73,40 @@ export function contentSecurityPolicy(nodeEnv: CspEnv = process.env.NODE_ENV): s
     "frame-src 'none'",
     "object-src 'none'",
   ].join("; ");
+}
+
+/**
+ * Generate nonce and CSP together for server-side rendering.
+ * Returns both the nonce and the CSP string so they can be injected into HTML.
+ */
+export function generateCspWithNonce(nodeEnv: CspEnv = process.env.NODE_ENV): {
+  nonce: string;
+  csp: string;
+} {
+  const nonce = generateCspNonce();
+  const isDev = isDevelopment(nodeEnv);
+  const scriptSrc = isDev
+    ? `'self' 'nonce-${nonce}' 'unsafe-eval'`
+    : `'self' 'nonce-${nonce}'`;
+  const connectSrc = isDev
+    ? "'self' https: http://127.0.0.1:* http://localhost:* ws: wss:"
+    : "'self' https: http://127.0.0.1:* http://localhost:*";
+
+  const csp = [
+    "default-src 'self'",
+    `script-src ${scriptSrc}`,
+    `style-src 'self' 'nonce-${nonce}'`,
+    "img-src 'self' data:",
+    "media-src 'self'",
+    "font-src 'self'",
+    `connect-src ${connectSrc}`,
+    "form-action 'self' https:",
+    "base-uri 'self'",
+    "frame-src 'none'",
+    "object-src 'none'",
+  ].join("; ");
+
+  return { nonce, csp };
 }
 
 /** Production policy used in the static export and operator docs. */
