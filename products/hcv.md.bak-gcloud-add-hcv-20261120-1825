@@ -1,0 +1,67 @@
+# Service Definition — hcv (Housing Compliance Vault)
+
+## Product
+
+Housing Compliance Vault (HCV) — supplier qualification evidence management for UK housing compliance, built on the chapelgate/business-evidence-wallet repository (Housing Compliance Vault per README.md). Multi-tenant evidence vault that lets organisations upload evidence documents (PDF, DOCX, XLSX, TXT), extract candidate facts, have humans approve them with provenance, and generate compliance/evidence packs. Used by suppliers and buyers who need to evidence qualifications, insurance, certificates, contracts, housing compliance and construction certifications (CSCS, CPCS, SMAS).
+
+## Lot
+
+Cloud Software (SaaS)
+
+## Description
+
+Multi-tenant evidence wallet that lets organisations upload evidence documents (PDF, DOCX, XLSX, TXT), extract candidate facts, have humans approve them with provenance, and generate compliance/evidence packs. Organisations can prove what they claim. Used by suppliers and buyers who need to evidence qualifications, insurance, certificates, contracts and housing compliance certifications.
+
+## Key features
+
+- Organisations, roles, invitations (capability codes, not email-identity join)
+- Evidence upload (PDF, DOCX, XLSX, TXT) with safe text extraction; file validation accepts text files and rejects empty, oversize, executable files, double-extension executables and PDF magic with non-PDF extension
+- Candidate fact extraction (heuristic always; optional AI) — extracts PL limit and expiry from labelled certificates, EL at £5m, employees, turnover, ISO; caps questionnaire questions so a huge file cannot amplify inserts
+- Human review with provenance and fact versions
+- Candidate correction before approval (original extraction kept; OCC on concurrent edits); normalises public liability limit from typed correction; rejects empty, injection and non-money limit edits
+- Expiry, conflicts, dependency reevaluation; conflict engine flags disagreeing live values (PL £5m vs £10m) without picking a winner; ignores archived facts
+- Questionnaire ingest and evidence-backed response packs; parses PAS 91, SSIP, CHAS, Constructionline templates without fabricating questions; includes all UK construction templates
+- GREEN/AMBER/RED/EXPIRED/CONFLICT status (never silently upgraded); fail-closed wording — RED/EXPIRED/CONFLICT wording never confirms the requirement is met
+- JSON/XLSX/DOCX export, reopened and verified; export integrity round-trips JSON and rejects GREEN without facts; strips XML 1.0 forbidden control characters before escaping; rejects oversized export fields before OOXML generation; spreadsheet formula neutralization prefixes formula-like cells so they stay literal text
+- Audit trail; invalidation marks dependent answers when a fact is superseded
+
+## Intended users
+
+Public sector buyers and suppliers who need to evidence qualifications, insurance, certificates, case facts and housing compliance certifications.
+
+## Data handled
+
+Untrusted document text sliced to 12,000 chars and wrapped via wrapUntrusted before optional AI model call. No PII intentionally added; input may contain user document content. Output claims validated against ClaimListSchema (max 40 claims, bounded fields). Personal data may be present in uploaded documents.
+
+## AI/ML use
+
+Optional AI grok-4.5 for candidate fact extraction. Output is candidate-only; human must approve. Fail-closed: if model unavailable or output fails schema validation, no claims persisted. Deterministic threshold engine gates evidence status; no model may override. Prompt safety corpus lock: wraps untrusted text and detects injection corpus.
+
+## Security & compliance
+
+- 312 domain tests (311 pass; 1 pre-existing extraction PL/EL failure on master unrelated to service behaviour), Typecheck EXIT:0, Lint 0 errors (4 pre-existing warnings), Build EXIT:0
+- Server-enforced org isolation, RLS fail-closed
+- Prompt safety: untrusted text wrapping and injection corpus detection
+- SBOM: TBC — source: jobs-work-dell/readiness/sbom/business-evidence-wallet/ (not yet generated for HCV)
+- Model card: TBC — source: jobs-work-dell/readiness/compliance/model-cards/ (not yet generated for HCV)
+- DPIA: TBC — source: jobs-work-dell/readiness/compliance/dpia/ (not yet generated for HCV)
+- Cyber Essentials: TBC — certification not yet obtained (fee parked)
+- PentAGI: no scan run — no eligible local or staging HCV runtime exists; no critical/high-finding clearance claimed (see out/PENTAGI-REPORT.md)
+
+## Evidence paths
+
+- Source repo: chapelgate/business-evidence-wallet (Housing Compliance Vault per README.md)
+- Tests: src/domain/*.test.ts src/domain/v2/*.test.ts src/domain/v2/agent-loop/*.test.ts
+- Readiness evidence: /home/andy/chapelgate/hcv-source-readonly/out/ (MASTER_GATES.txt, MERGE_LOG.md, PROGRESS.md, PENTAGI-REPORT.md, SKILLS-USED.md)
+
+## Known gaps
+
+- Cyber Essentials certification not yet obtained (fee parked — Andy-only)
+- DPIA draft not signed off (Andy-only)
+- SBOM not yet generated for HCV
+- Model card not yet generated for HCV
+- No live production deployment (controlled private pilot candidate)
+
+## Version
+
+master head TBC — source: /home/andy/chapelgate/hcv-source-readonly/ (read-only clone). Exact SHA to be read from repo HEAD when a writable clone is available.
