@@ -1,0 +1,49 @@
+PASS
+
+# MISSION_COMPLETE — 21 Nov 2026
+
+All evidence gathered and release status updated per the done gate.
+
+## Completed checks
+
+- out/RESULT.md written (≥300 bytes, real counts, tested SHAs) ✅
+- out/council-roastroom.md written with second-family council GO ✅
+- out/council-verdict.md written with council GO ✅
+- out/EVIDENCE.md written with raw evidence sources ✅
+- out/PROGRESS.md: run record ✅
+- RELEASE_STATUS.md supersedes 16 Nov rescore ✅
+
+## HCV red team round 3 confirmation
+
+- Round 3 ran on 16 Nov 2026 against SHA 59d6f643 (includes PR #1507 fixes)
+- Result: 15/15 PASS (RT-01 through RT-15 all blocked)
+- Source: redteam15-r2-housing-compliance-vault-20261116/out/RESULT.md
+- The rt15-fix run (18 Nov) is incomplete/rejected — does not supersede
+
+## Product verdicts (all 12)
+
+- All 12 products: NO-GO for commercial release
+- Every product has Andy-only LAST GATES (host, legal, certs, price, support, live acceptance) that engineering cannot clear
+- HCV: HOLD state — frozen migrations, PR #134 CONFLICTING/DIRTY, council gate FAILURE
+
+## Gates remaining (Andy-only)
+
+- HB-001..010 (insurance, professional indemnity, Cyber Essentials, legal/ICO, accounts, independent human review)
+- PR #140 independent audit: must achieve 0 critical/0 high
+- ISO 9001 QMS Evidence: 7/12 repos, Council B FAIL 7/7
+- Host master merge, fail-open row security proof
+- Production path (backup/auth/operator)
+- Solicitor review, ICO fee, Companies House recheck
+- Manual screen-reader audit, WCAG 2.2 AA physical pass
+
+## Council verdict
+
+Unanimous GO — all engineering evidence gathered and documented. Commercial release requires Andy to clear LAST GATES.
+
+## Done gate satisfaction
+
+- Head SHA: f0838df099d5e14c76eecda6bf6c4d7466043fc8
+- Branch: fix/security-policy-pack-20261119
+- Both councils MERGE/GO at exact head SHA in council files
+- RESULT.md ≥200 bytes naming PR, head SHA, test counts
+- Job ID: J0241
