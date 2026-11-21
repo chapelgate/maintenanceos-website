@@ -9,6 +9,9 @@ const STORAGE_KEY = "cookieConsentChoice";
 const ACCEPTED_CHOICE: ConsentChoice = { essential: true, preferences: true, analytics: true, marketing: true };
 const REJECTED_CHOICE: ConsentChoice = { essential: true, preferences: false, analytics: false, marketing: false };
 
+// ALLOW-LIST: Cookie consent preference (UI-only, non-sensitive) — stored in localStorage per PECR/GDPR.
+// This is benign UI state: cookie category toggles (essential/preferences/analytics/marketing).
+// No PII, tokens, or credentials. Release gate Q1 allow-list entry.
 function hasStoredChoice(): boolean {
   if (typeof window === "undefined") return false;
   try {
@@ -18,6 +21,9 @@ function hasStoredChoice(): boolean {
   }
 }
 
+// ALLOW-LIST: Cookie consent preference (UI-only, non-sensitive) — stored in localStorage per PECR/GDPR.
+// This is benign UI state: cookie category toggles (essential/preferences/analytics/marketing).
+// No PII, tokens, or credentials. Release gate Q1 allow-list entry.
 function storeChoice(choice: ConsentChoice): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(choice));
