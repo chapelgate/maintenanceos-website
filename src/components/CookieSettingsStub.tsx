@@ -5,6 +5,9 @@ import { useState } from "react";
 type ConsentChoice = "accept" | "reject";
 const STORAGE_KEY = "cookieConsentChoice";
 
+// ALLOW-LIST: Cookie consent preference (UI-only, non-sensitive) — stored in localStorage per PECR/GDPR.
+// This is benign UI state: cookie category toggles (essential/preferences/analytics/marketing).
+// No PII, tokens, or credentials. Release gate Q1 allow-list entry.
 function readChoice(): ConsentChoice | null {
   try {
     const value = window.localStorage.getItem(STORAGE_KEY);
@@ -16,6 +19,9 @@ function readChoice(): ConsentChoice | null {
   }
 }
 
+// ALLOW-LIST: Cookie consent preference (UI-only, non-sensitive) — stored in localStorage per PECR/GDPR.
+// This is benign UI state: cookie category toggles (essential/preferences/analytics/marketing).
+// No PII, tokens, or credentials. Release gate Q1 allow-list entry.
 function saveChoice(choice: ConsentChoice): void {
   const optional = choice === "accept";
   try {

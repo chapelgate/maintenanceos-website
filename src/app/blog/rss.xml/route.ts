@@ -1,6 +1,9 @@
 import { getAllBlogPosts } from "@/lib/blog";
 import { absoluteUrl } from "@/lib/site-url";
 
+// ALLOW-LIST: Public RSS feed (read-only, no auth needed).
+// This endpoint serves a static XML blog feed with public content.
+// No PII, tokens, or credentials are exposed. It's a read-only syndication endpoint.
 export const dynamic = "force-static";
 
 export async function GET(): Promise<Response> {
