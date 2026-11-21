@@ -1,0 +1,43 @@
+**ROUND 1 — OPENING POSITIONS**
+
+---
+
+### 1. Maya Chen — Senior Security Engineer
+
+Shadow QMS deliverables for Chapelgate’s 12 estate products cannot be treated as documentation theater. Under ISO 9001:2015 Clause 8 (Operation), security is an operational control, not an afterthought. I require evidence that authentication boundaries, XSS mitigations, CSP headers, HSTS enforcement, and upload sandboxing are specified per product and verified before release. Shadow artifacts that omit defense-in-depth create systemic risk across the entire estate. Without traceable security requirements mapped into clauses 4–10 context and planning, we are certifying paperwork, not a functioning QMS. My position: **FAIL** unless security controls are explicitly mapped to each estate product’s operational procedures and release criteria.
+
+---
+
+### 2. Rafael Torres — Backend/API Platform Lead
+
+ISO 9001:2015 Clause 8 demands controlled product realization. For the 12 estate products, I need defined API contracts, deterministic route semantics, and documented ORM usage inside the shadow deliverables. Backend correctness is not optional; it is part of clause 8.1 operational planning and control. If the QMS artifacts lack interface specifications, versioning policies, or backend correctness evidence, they are incomplete. Shadow status does not excuse missing contracts. My opening position: **FAIL** unless each product’s backend boundary is specified, versioned, and traceable to documented quality objectives.
+
+---
+
+### 3. Priya Natarajan — DevOps & Release Engineer
+
+From a release-engineering view, Clauses 8 and 9 require evidence that products are released through verified gates. Shadow deliverables must show CI gates, staging verification, artifact immutability, and flaky-test quarantine for all 12 products. HSTS reach and transport security belong in operational release criteria, not just engineering backlogs. If the QMS artifacts do not include release-gate records or staging sign-off evidence, they fail Clause 8.1 and Clause 9.1 monitoring requirements. My opening vote: **FAIL** unless release evidence accompanies each product deliverable.
+
+---
+
+### 4. David Okonkwo — QA Automation Architect
+
+QA is the backbone of Clause 9 (Performance Evaluation) and Clause 8. I need regression suites, coverage reports, and E2E test evidence for the 12 estate products. Shadow deliverables that hide pre-existing failures or omit test-coverage gaps are not quality records—they are liabilities. ISO 9001:2015 demands evidence of conformity, not assertions. If the QMS does not capture test execution results, defect trends, and E2E gaps per product, it cannot support Clause 10 improvement. Position: **FAIL** without per-product test evidence and regression baselines.
+
+---
+
+### 5. Aisha Hassan — Frontend & Compliance UI Lead
+
+Clause 7 (Support) and Clause 8 (Operation) extend to the compliance UI and dashboard surfaces. Shadow deliverables must address CSP impact, inline-style elimination, nonce usage, and CDN dependency governance for the estate product dashboards. If the QMS interface itself violates the security policy it is meant to enforce, the system lacks integrity. I need documented frontend compliance checks and CDN allow-lists in the artifacts. Without this, the QMS is operationally unsound. Opening position: **FAIL** unless frontend compliance is evidenced per product.
+
+---
+
+### 6. Dr. Lars Eriksson — Database & ORM Specialist
+
+Database integrity is core to Clause 8 operational control and Clause 7 infrastructure. Shadow deliverables must show schema versioning, migration safety, query-plan stability, and ORM (Kysely) alignment across the 12 estate products. Uncontrolled schema drift undermines product conformity and traceability. I require migration rollback plans and query-performance evidence as part of the QMS records. If database changes are untracked or untested, Clause 8.1 and 8.5 are violated. Position: **FAIL** unless schema and migration controls are documented per product.
+
+---
+
+### 7. Sandra Morales — Product & Compliance Owner
+
+As Product & Compliance Owner, I evaluate against ISO 9001:2015 clauses 4–10 and regulatory gates G33–G37. Shadow deliverables are acceptable only if they demonstrate context, leadership commitment, planning, support, operation, performance evaluation, and improvement for all 12 products. They need audit criteria, evidence of internal audit, and management-review records. Release deadlines cannot compromise clause compliance. Because these are shadow (non-certification) artifacts, the bar is completeness and alignment, not certification. My preliminary position: **GO/PASS** only if every clause 4–10 is evidenced and gates G33–G37 are cleared; otherwise **FAIL**.
