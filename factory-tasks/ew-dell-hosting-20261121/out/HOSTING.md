@@ -4,7 +4,7 @@
 https://dell-t5820.taild4745e.ts.net/
 
 ## SHA
-12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+0aa1d93b1525353ec26f39491c4e8f20fd4d8a75 (PR #1523)
 
 ## How to start
 1. PostgreSQL must be running: `systemctl --user status postgresql.service` or `pg:start`
