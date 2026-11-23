@@ -1,5 +1,6 @@
 import DOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
+import { serializeForInlineScript } from "./inline-script.ts";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
@@ -57,5 +58,5 @@ export function sanitizeHtml(html: string): string {
  * Sanitize JSON-LD data - escape < characters for safe embedding in script tags.
  */
 export function sanitizeJsonLd(jsonLd: Record<string, unknown>): string {
-  return JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+  return serializeForInlineScript(jsonLd);
 }

@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { PageHero } from "@/components/PageHero";
 import { PreLaunchRecoveryNav } from "@/components/PreLaunchRecoveryNav";
+import { redirectScript } from "@/lib/inline-script";
 
 interface ComparePageProps {
   params: Promise<{ slug: string }>;
@@ -55,13 +56,8 @@ export default async function ComparePage({ params }: ComparePageProps) {
         <meta httpEquiv="refresh" content={`0;url=${correctUrl}`} />
         <script
           dangerouslySetInnerHTML={{
-            // Escape for a JS string literal AND neutralise any "</script>"
-            // breakout (JSON.stringify leaves "<" intact). correctUrl derives
-            // from the route slug, so never interpolate it raw.
-            __html: `window.location.href = ${JSON.stringify(correctUrl)
-              .replace(/</g, "\\u003c")
-              .replace(/\u2028/g, "\\u2028")
-              .replace(/\u2029/g, "\\u2029")};`,
+            // correctUrl derives from the route slug: never interpolate raw.
+            __html: redirectScript(correctUrl),
           }}
         />
         <noscript>
