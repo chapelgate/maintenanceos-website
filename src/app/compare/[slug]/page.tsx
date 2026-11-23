@@ -55,7 +55,13 @@ export default async function ComparePage({ params }: ComparePageProps) {
         <meta httpEquiv="refresh" content={`0;url=${correctUrl}`} />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.location.href = "${correctUrl}";`,
+            // Escape for a JS string literal AND neutralise any "</script>"
+            // breakout (JSON.stringify leaves "<" intact). correctUrl derives
+            // from the route slug, so never interpolate it raw.
+            __html: `window.location.href = ${JSON.stringify(correctUrl)
+              .replace(/</g, "\\u003c")
+              .replace(/\u2028/g, "\\u2028")
+              .replace(/\u2029/g, "\\u2029")};`,
           }}
         />
         <noscript>
