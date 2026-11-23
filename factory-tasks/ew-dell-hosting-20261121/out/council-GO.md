@@ -1,8 +1,8 @@
 # Council GO - EW Dell Hosting
 
-**Date:** 2026-11-21 20:48 UTC
-**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
-**PR/Branch:** ew-dell-hosting-20261121 (factory task)
+**Date:** 2026-11-23 08:45 UTC
+**SHA:** 0aa1d93b1525353ec26f39491c4e8f20fd4d8a75 (PR #1523)
+**PR/Branch:** rc/ew-20261121 (PR #1523)
 
 ## Decision: GO
 

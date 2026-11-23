@@ -1,7 +1,7 @@
 # EW Dell Hosting - Task Result
 
 **Date:** 2026-11-22
-**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd (from RC ew-rc2-20261121)
+**SHA:** 0aa1d93b1525353ec26f39491c4e8f20fd4d8a75 (PR #1523)
 
 ## Summary
 Successfully deployed Business Evidence Wallet on Dell for CSO hosted checks (EW step 1 of 16). Tests: 2168 pass, 10 fail.
