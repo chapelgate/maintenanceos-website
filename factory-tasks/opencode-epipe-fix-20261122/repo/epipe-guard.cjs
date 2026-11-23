@@ -1,18 +1,15 @@
-function swallowEPIPE(err) {
+function isEPIPE(err) {
   return !!(err && (err.code === "EPIPE" || err.code === "ERR_STREAM_DESTROYED"))
 }
-function guard(stream) {
-  if (!stream || typeof stream.on !== "function") return
-  stream.on("error", function (err) {
-    if (swallowEPIPE(err)) return
-    throw err
-  })
+function fatal(err) {
+  if (isEPIPE(err)) return
+  try { process.stderr.write(String((err && err.stack) || err) + "\n") } catch (_) {}
+  process.exit(1)
 }
-guard(process.stdout)
-guard(process.stderr)
-const EventEmitter = require("events").EventEmitter
-const originalEmit = EventEmitter.prototype.emit
-EventEmitter.prototype.emit = function (type) {
-  if (type === "error" && arguments.length > 1 && swallowEPIPE(arguments[1])) return true
-  return originalEmit.apply(this, arguments)
+process.on("uncaughtException", fatal)
+process.on("unhandledRejection", fatal)
+for (const stream of [process.stdout, process.stderr]) {
+  if (stream && typeof stream.on === "function") {
+    stream.on("error", fatal)
+  }
 }

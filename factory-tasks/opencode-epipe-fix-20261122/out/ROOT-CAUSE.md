@@ -59,9 +59,12 @@ the whole cycle aborts.
 
 ## Fix (smallest, reversible, does not touch running jobs)
 `repo/epipe-guard.cjs` — Node preload that attaches an `error` listener to stdout/stderr and
-swallows only `EPIPE`/`ERR_STREAM_DESTROYED`, rethrowing everything else; plus a narrow
-`EventEmitter.emit` shim for the same two codes so child-process stream pipes are covered.
-Loaded via `NODE_OPTIONS=--require ...` from the runner using `out/RUNNER-PATCH.diff`
-(eggbot applies). It changes no global config, no opencode binary, no running job, no
-secrets, no frozen area. Rollback = revert the runner line / unset NODE_OPTIONS.
+installs an `uncaughtException`/`unhandledRejection` handler; both swallow only
+`EPIPE`/`ERR_STREAM_DESTROYED`. Any other error is printed and exits 1 (verified: a real
+`Error("REAL-BUG")` still fails), so real faults are not masked. No global
+`EventEmitter.emit` monkey-patch. Loaded via `NODE_OPTIONS=--require ...` set inline on the
+two opencode runner invocation lines in `out/RUNNER-PATCH.diff` (eggbot applies), so only
+the opencode process inherits it — not all runner Node processes. It changes no global
+config, no opencode binary, no running job, no secrets, no frozen area. Rollback = revert
+the runner line / unset NODE_OPTIONS.
 `repo/opencode-safe.sh` is the equivalent wrapper for ad-hoc nested runs.
