@@ -1,0 +1,129 @@
+[0m
+> build · estate-coding
+[0m
+[0m✱ [0mGlob "**/*"[90m in . · 100 matches[0m
+[0m✗ [0mRead out/SHA failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/SHA
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/council-GO.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/HOSTING.md
+[0m→ [0mRead out/PROGRESS.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE* 2>/dev/null
+-rw-rw-r-- 1 andy andy    5 Nov 21 20:49 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy   48 Nov 21 21:02 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy    8 Nov 21 21:52 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy  621 Nov 21 22:22 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy  621 Nov 21 23:09 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2314
+-rw-rw-r-- 1 andy andy  621 Nov 22 00:30 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0034
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:05 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0109
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:28 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0134
+-rw-rw-r-- 1 andy andy 1245 Nov 22 04:32 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0434
+-rw-rw-r-- 1 andy andy 1245 Nov 22 05:51 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0614
+-rw-rw-r-- 1 andy andy 1245 Nov 22 07:56 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0759
+-rw-rw-r-- 1 andy andy   11 Nov 22 09:50 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1039
+-rw-rw-r-- 1 andy andy   10 Nov 22 13:16 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1326
+-rw-rw-r-- 1 andy andy   10 Nov 22 13:54 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1414
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/SHA 2>/dev/null
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-035621-output.log 2>/dev/null | tail -30
+duration_ms: 2.826151
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.438688
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.239823
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 7.19583
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2058
+# fail 120
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 127913.161593
+[0m
+Let me check the current state of the repo and understand what's needed.
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo 2>/dev/null | head -20
+total 2364
+drwxrwxr-x  23 andy andy    4096 Nov 22 12:08 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 11:44 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 00:15 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 00:15 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 00:15 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 00:15 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 00:15 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 00:15 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 00:15 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .cursor
+drwxrwxr-x   6 andy andy    4096 Nov 22 10:29 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 00:15 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 deploy
+drwxrwxr-x   9 andy andy    4096 Nov 21 00:15 docs
+-rw-rw-r--   1 andy andy    1093 Nov 21 00:15 .env.example
+-rw-rw-r--   1 andy andy    1451 Nov 22 12:03 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 00:15 evidence-wallet-independent-review.zip
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/SHA
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+[0m
+[0m$ [0mwhich rt 2>/dev/null; type rt 2>/dev/null; echo "---"; ls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/
+/home/andy/bin/rt
+rt is /home/andy/bin/rt
+---
+build-20261122-035223-exit-code.txt
+build-20261122-035223-output.log
+build-final-20261122-040032-exit-code.txt
+build-final-20261122-040032-output.log
+final-verification-20261121-2154-output.log
+INDEX.tsv
+lint-20261122-035206-exit-code.txt
+lint-20261122-035206-output.log
+lint-final-20261122-040100-exit-code.txt
+lint-final-20261122-040100-output.log
+SHA
+test-20261122-035333-exit-code.txt
+test-20261122-035333-output.log
+test-final-20261122-035621-exit-code.txt
+test-final-20261122-035621-output.log
+typecheck-20261122-035109-exit-code.txt
+typecheck-20261122-035109-output.log
+typecheck-final-20261122-035958-exit-code.txt
+typecheck-final-20261122-035958-output.log
+[0m
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mRead /home/andy/bin/rt failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/typecheck-final-20261122-035958-exit-code.txt
+0
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/build-final-20261122-040032-exit-code.txt
+0
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/lint-final-20261122-040100-exit-code.txt
+2
+[0m

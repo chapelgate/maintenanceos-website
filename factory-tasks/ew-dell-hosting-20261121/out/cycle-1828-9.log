@@ -1,0 +1,1007 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 88
+drwxrwxr-x   4 andy andy  4096 Nov 21 16:59 .
+drwxrwxr-x 598 andy andy 57344 Nov 21 18:17 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 21 18:28 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  1554 Nov 21 18:28 history.log
+drwxrwxr-x   2 andy andy  4096 Nov 21 18:28 out
+drwxrwxr-x  22 andy andy  4096 Nov 21 17:13 repo
+-rw-rw-r--   1 andy andy    81 Nov 21 18:28 status.json
+-rw-rw-r--   1 andy andy    75 Nov 21 00:15 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo 2>/dev/null || echo "repo directory does not exist"
+total 2368
+drwxrwxr-x  22 andy andy    4096 Nov 21 17:13 .
+drwxrwxr-x   4 andy andy    4096 Nov 21 16:59 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 00:15 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 00:15 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 00:15 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 00:15 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 00:15 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 00:15 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 00:15 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 21 17:23 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 00:15 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 deploy
+drwxrwxr-x   9 andy andy    4096 Nov 21 00:15 docs
+-rw-rw-r--   1 andy andy    1093 Nov 21 00:15 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 00:15 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 00:15 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 00:15 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-6.md
+drwxrwxr-x   8 andy andy    4096 Nov 21 17:10 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 00:15 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 21 00:15 .gitleaksignore
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 00:15 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 00:15 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 21 17:24 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 00:15 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 00:15 opencode.json
+-rw-rw-r--   1 andy andy    5410 Nov 21 00:15 package.json
+-rw-rw-r--   1 andy andy  274699 Nov 21 17:12 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 00:15 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 00:15 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 00:15 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 00:15 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 00:15 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 21 17:10 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 21 00:15 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 00:15 specs
+drwxrwxr-x   7 andy andy    4096 Nov 21 17:10 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 00:15 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 00:15 startup.sh
+-rw-rw-r--   1 andy andy   74946 Nov 21 00:15 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 00:15 tsconfig.json
+-rw-rw-r--   1 andy andy   10137 Nov 21 17:50 vite.config.ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out 2>/dev/null || echo "out directory does not exist"
+total 636
+drwxrwxr-x 2 andy andy   4096 Nov 21 18:28 .
+drwxrwxr-x 4 andy andy   4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy     35 Nov 21 18:28 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy      6 Nov 21 16:59 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 21 16:59 .preflight-ok
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+total 640
+drwxrwxr-x 2 andy andy   4096 Nov 21 18:28 .
+drwxrwxr-x 4 andy andy   4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy   5007 Nov 21 18:29 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy      6 Nov 21 16:59 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 21 16:59 .preflight-ok
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git log --oneline -5
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead status.json
+[0m→ [0mRead out/cycle-1828-9.log
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/ew/RC.md 2>/dev/null || echo "RC.md not found"
+# Business Evidence Wallet Release Candidate
+
+**Date:** 2026-11-21
+**Tag:** ew-rc2-20261121
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+**Branch:** rc/ew-20261121 (pushed to origin)
+**Source:** master branch at SHA 3fc3bf95f7055be4eb4a4357b62109e8addb2030
+
+This release candidate is based on the same SHA as the Dell hosted build (job-ew-dell-hosting).
+Coordinated through readiness files.
+
+## PR 175-183 Decisions (Second-Family Council)
+
+| PR | Decision | Reason | Resulting SHA |
+|----|----------|--------|---------------|
+| 175 | MERGED (already) | Release docs point at master 41aa829, migrations through 0027, refuse GO | 3fc3bf95 (in master) |
+| 176 | MERGED (already) | /app banner check waits for Organisations heading | 3fc3bf95 (in master) |
+| 177 | MERGED (already) | Rehearse pre-0011 backup restore after migration 0027 | 3fc3bf95 (in master) |
+| 178 | CLOSED (already) | Draft PR, diff empty, false green gate withdrawn | N/A (closed) |
+| 179 | MERGED (already) | Wait for Evidence heading instead of networkidle | 3fc3bf95 (in master) |
+| 180 | MERGED (already) | Fail tests if product source calls NVIDIA API | 3fc3bf95 (in master) |
+| 181 | MERGED (already) | Lock questionnaire template ids to existing seven | 3fc3bf95 (in master) |
+| 182 | MERGED (already) | Test tenant setting written only after membership succeeds | 3fc3bf95 (in master) |
+| 183 | MERGED (already) | Remove unused deny import from gateway HTTP adapter | 3fc3bf95 (in master) |
+
+All 9 PRs (175-183) are already merged or closed as of master SHA 3fc3bf95.
+No further council action needed - all decisions already reflected in RC branch.
+
+## RC2 - CSO Findings Fixed
+
+| Finding | Fix | Files Changed |
+|---------|-----|---------------|
+| F1: BEW preview secret not migrated to env var | Migrated to GROK_PREVIEW_CLIENT_SECRET env var | src/lib/auth/preview.ts |
+| F2: CSP unsafe-inline in script-src | Nonce-based CSP implementation | src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx |
+| F5: Login token in sessionStorage | Moved to in-memory only | src/lib/auth/client.ts |
+| Test: No token in browser storage | Added verification test | scripts/no-token-in-browser-storage.test.mjs |
+
+All fixes committed to rc/ew-20261121 at SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd.
+Tag ew-rc2-20261121 pushed to origin.
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-status-rc-20261121/out/RELEASE-CANDIDATE.md 2>/dev/null || echo "RELEASE-CANDIDATE.md not found"
+# Release Candidate
+
+**Branch:** rc/ew-20261121
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+**Tag:** ew-rc2-20261121
+**Date:** 2026-11-21
+
+Pushed to origin. CSO review requested via INBOX-FROM-EGGBOT.md.
+CSO findings F1, F2, F5 addressed and committed.
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/PROGRESS.md 2>/dev/null || echo "PROGRESS.md not found"
+PROGRESS.md not found
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m← [0mWrite out/PROGRESS.md
+Wrote file successfully.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git rev-parse HEAD
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+[0m
+[0m→ [0mRead repo/package.json
+[0m
+[0m# [0mTodos
+[ ] Set up systemd --user service + Postgres (user-level, no sudo/root)
+[ ] Configure tailscale serve on free port
+[ ] Create seed credentials file at out/seed-credentials.env
+[ ] Add EW /health check to existing 5-min uptime timer (create EW-UPTIME.md)
+[ ] Set up job-supervisor to restart EW service if down
+[ ] Create all required output files and verify completion
+[0m
+[0m# [0mTodos
+[•] Build the application (npm run build)
+[ ] Set up systemd --user service + Postgres (user-level, no sudo/root)
+[ ] Configure tailscale serve on free port
+[ ] Create seed credentials file at out/seed-credentials.env
+[ ] Add EW /health check to existing 5-min uptime timer (create EW-UPTIME.md)
+[ ] Set up job-supervisor to restart EW service if down
+[ ] Create all required output files and verify completion
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm run build 2>&1
+...output truncated...
+
+Full output saved to: /home/andy/.local/share/opencode/tool-output/tool_1ff626780001iR8Iw6RfLcSJ0x
+
+✓ 2118 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/public/assets/initdb-BnC8r6Zv.wasm                   300.10 kB │ gzip:   132.94 kB
+.output/public/assets/pglite-BgbVgg6N.data                 6,248.50 kB
+.output/public/assets/pglite-Busfj2jm.wasm                 9,087.74 kB │ gzip: 3,315.39 kB
+.output/public/assets/styles-CPlQdRco.css                     34.31 kB │ gzip:     7.16 kB
+.output/public/assets/evidence-CGzKJBXD.js                     0.07 kB │ gzip:     0.08 kB
+.output/public/assets/packs-CGzKJBXD.js                        0.07 kB │ gzip:     0.08 kB
+.output/public/assets/questionnaires-CGzKJBXD.js               0.07 kB │ gzip:     0.08 kB
+.output/public/assets/__vite-browser-external-NkSIBfMg.js      0.09 kB │ gzip:     0.10 kB
+.output/public/assets/format-wallet-timestamp-BQ4vb0Ca.js      0.12 kB │ gzip:     0.12 kB
+.output/public/assets/use-current-user-DYEngeje.js             0.29 kB │ gzip:     0.22 kB
+.output/public/assets/useNavigate-Bm-Ly08z.js                  0.42 kB │ gzip:     0.29 kB
+.output/public/assets/jsx-runtime-lTuChwRC.js                  0.43 kB │ gzip:     0.30 kB
+.output/public/assets/app-DrGC59qn.js                          0.47 kB │ gzip:     0.34 kB
+.output/public/assets/use-signup-open-_EpaUNQx.js              0.48 kB │ gzip:     0.32 kB
+.output/public/assets/nodefs-3snSVVA9.js                       0.55 kB │ gzip:     0.38 kB
+.output/public/assets/file-to-base64-kKBIQhK9.js               0.64 kB │ gzip:     0.38 kB
+.output/public/assets/roles-DziZDHK1.js                        0.73 kB │ gzip:     0.33 kB
+.output/public/assets/useParams-BAGGLvED.js                    0.78 kB │ gzip:     0.44 kB
+.output/public/assets/rolldown-runtime-BWaJ3C7D.js             0.91 kB │ gzip:     0.51 kB
+.output/public/assets/button-BU_d9krf.js                       1.32 kB │ gzip:     0.71 kB
+.output/public/assets/packs.index-sdYfcH_s.js                  1.33 kB │ gzip:     0.68 kB
+.output/public/assets/status-badge-Cb0aTQXc.js                 1.42 kB │ gzip:     0.49 kB
+.output/public/assets/preload-helper-BLdHbfdN.js               1.51 kB │ gzip:     0.79 kB
+.output/public/assets/gates-C5vtSSfr.js                        1.56 kB │ gzip:     0.83 kB
+.output/public/assets/questionnaires._qid-Bz8BFKmJ.js          1.71 kB │ gzip:     0.75 kB
+.output/public/assets/useSelector-iTHbqsqc.js                  1.92 kB │ gzip:     0.85 kB
+.output/public/assets/exports-DmdxYndS.js                      2.18 kB │ gzip:     1.01 kB
+.output/public/assets/useMutation-J-KGSK8S.js                  2.40 kB │ gzip:     1.01 kB
+.output/public/assets/signup-CYf4z694.js                       3.12 kB │ gzip:     1.23 kB
+.output/public/assets/lazyRouteComponent-ByXReo0m.js           3.50 kB │ gzip:     1.29 kB
+.output/public/assets/admin--Vp_RpyB.js                        3.62 kB │ gzip:     1.17 kB
+.output/public/assets/login-idpbZ6pB.js                        3.76 kB │ gzip:     1.52 kB
+.output/public/assets/ids-O9aAO_f4.js                          3.91 kB │ gzip:     1.64 kB
+.output/public/assets/evidence.index-D-qNb8zN.js               4.16 kB │ gzip:     1.72 kB
+.output/public/assets/routes-ekHPxj8u.js                       4.20 kB │ gzip:     1.82 kB
+.output/public/assets/link-BjCcQlo2.js                         4.20 kB │ gzip:     2.17 kB
+.output/public/assets/_orgId-B4n5lj94.js                       4.55 kB │ gzip:     1.75 kB
+.output/public/assets/control-mcp-CjPPLVy9.js                  4.58 kB │ gzip:     1.49 kB
+.output/public/assets/app-C9dii8PV.js                          4.60 kB │ gzip:     1.54 kB
+.output/public/assets/audit-DnpbPKZ8.js                        7.60 kB │ gzip:     2.25 kB
+.output/public/assets/react-CaKr0epQ.js                        7.87 kB │ gzip:     3.01 kB
+.output/public/assets/useQuery-BxOVNUku.js                     8.02 kB │ gzip:     2.96 kB
+.output/public/assets/memfs2opfs-BR1Qst18.js                   8.05 kB │ gzip:     3.24 kB
+.output/public/assets/opfs-ahp-Cx4gD7sv.js                     9.93 kB │ gzip:     3.02 kB
+.output/public/assets/v2-fns-26Bt01dN.js                      10.13 kB │ gzip:     3.77 kB
+.output/public/assets/evidence._docId-DDEagRR8.js             10.45 kB │ gzip:     2.97 kB
+.output/public/assets/decisions-CXTOSK3K.js                   11.89 kB │ gzip:     3.77 kB
+.output/public/assets/_orgId-dAy_IZl6.js                      12.37 kB │ gzip:     3.53 kB
+.output/public/assets/opportunities-BGIHhkPF.js               12.40 kB │ gzip:     3.01 kB
+.output/public/assets/questionnaires.index-B4NnbDOG.js        13.25 kB │ gzip:     3.21 kB
+.output/public/assets/packs._packId-g7hh8AF6.js               14.68 kB │ gzip:     4.28 kB
+.output/public/assets/compliance-ClLFpZEo.js                  14.97 kB │ gzip:     3.53 kB
+.output/public/assets/facts-VtzUr8VT.js                       18.41 kB │ gzip:     4.57 kB
+.output/public/assets/team-XqJCPv9U.js                        24.70 kB │ gzip:     5.89 kB
+.output/public/assets/utils-D0T3A-kS.js                       27.56 kB │ gzip:     8.73 kB
+.output/public/assets/entities-BLxhEljg.js                    32.26 kB │ gzip:     6.47 kB
+.output/public/assets/client-kblaaXSr.js                      33.81 kB │ gzip:    12.70 kB
+.output/public/assets/middleware-BjWqOUN1.js                  52.14 kB │ gzip:    17.70 kB
+.output/public/assets/matchContext-BGDdtVEG.js                59.50 kB │ gzip:    21.09 kB
+.output/public/assets/esm-7cVBgBVN.js                         87.27 kB │ gzip:    26.54 kB
+.output/public/assets/chunk-CE4NCHVO-DEEQTeoD.js             102.35 kB │ gzip:    33.80 kB
+.output/public/assets/dist-DR4ilMft.js                       363.17 kB │ gzip:    96.98 kB
+.output/public/assets/index-DWTjUP9l.js                      404.82 kB │ gzip:   120.06 kB
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-CE4NCHVO.js at 23110..23114
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-CE4NCHVO.js at 23601..23605
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-66APQTYC.js at 84997..85001
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-66APQTYC.js at 85488..85492
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+✓ built in 4.59s
+vite v8.3.5 building ssr environment for production...
+transforming...
+✓ 487 modules transformed.
+rendering chunks...
+computing gzip size...
+node_modules/.nitro/vite/services/ssr/assets/styles-CPlQdRco.css                      34.31 kB │ gzip:  7.16 kB
+node_modules/.nitro/vite/services/ssr/assets/kysely-adapter-Cj_QZw5p.js                0.05 kB │ gzip:  0.07 kB
+node_modules/.nitro/vite/services/ssr/assets/inbox-U38y0xK2.js                         0.06 kB │ gzip:  0.08 kB
+node_modules/.nitro/vite/services/ssr/assets/answer-bank-CMj_LSUe.js                   0.06 kB │ gzip:  0.08 kB
+node_modules/.nitro/vite/services/ssr/assets/compliance-alerts-Oa6Q3h3D.js             0.07 kB │ gzip:  0.09 kB
+node_modules/.nitro/vite/services/ssr/assets/start-COmmreO7.js                         0.12 kB │ gzip:  0.12 kB
+node_modules/.nitro/vite/services/ssr/assets/utils-DWGjSd5x.js                         0.16 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/packs-DVfXADM1.js                         0.17 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/evidence-CdiPQseC.js                      0.17 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaires-BY4j7U1N.js                0.18 kB │ gzip:  0.15 kB
+node_modules/.nitro/vite/services/ssr/assets/empty-plugin-adapters-CeyhLWeJ.js         0.20 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/rolldown-runtime-D8jQpDG7.js              0.34 kB │ gzip:  0.24 kB
+node_modules/.nitro/vite/services/ssr/assets/format-wallet-timestamp-FnsnHHz9.js       0.41 kB │ gzip:  0.26 kB
+node_modules/.nitro/vite/services/ssr/assets/mcp-setup-ui-DKckmhmf.js                  0.46 kB │ gzip:  0.30 kB
+node_modules/.nitro/vite/services/ssr/assets/env.server-DVpsvLgU.js                    0.47 kB │ gzip:  0.33 kB
+node_modules/.nitro/vite/services/ssr/assets/createSsrRpc-DBvzW8Uy.js                  0.50 kB │ gzip:  0.31 kB
+node_modules/.nitro/vite/services/ssr/assets/app-DOnVQlBc.js                           0.72 kB │ gzip:  0.43 kB
+node_modules/.nitro/vite/services/ssr/assets/button-DRVnKhKe.js                        0.93 kB │ gzip:  0.51 kB
+node_modules/.nitro/vite/services/ssr/assets/use-signup-open-DfkiU9g2.js               1.01 kB │ gzip:  0.54 kB
+node_modules/.nitro/vite/services/ssr/assets/file-to-base64-DfzJPoLC.js                1.12 kB │ gzip:  0.54 kB
+node_modules/.nitro/vite/services/ssr/assets/answers-BGITrsXI.js                       1.47 kB │ gzip:  0.64 kB
+node_modules/.nitro/vite/services/ssr/assets/status-badge-C-dzRlo7.js                  1.63 kB │ gzip:  0.57 kB
+node_modules/.nitro/vite/services/ssr/assets/entities-sLmFTBCj.js                      1.63 kB │ gzip:  0.73 kB
+node_modules/.nitro/vite/services/ssr/assets/use-current-user-DKIpqZuy.js              1.89 kB │ gzip:  0.89 kB
+node_modules/.nitro/vite/services/ssr/assets/packs.index-DP7kBeMT.js                   1.92 kB │ gzip:  0.82 kB
+node_modules/.nitro/vite/services/ssr/assets/isolation.server-z4c_3uw8.js              1.99 kB │ gzip:  1.04 kB
+node_modules/.nitro/vite/services/ssr/assets/obligations-CwAl2yVd.js                   2.04 kB │ gzip:  0.90 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaires._qid-rJsvPjGH.js           2.42 kB │ gzip:  0.91 kB
+node_modules/.nitro/vite/services/ssr/assets/opportunities-BZuzvFtH.js                 3.15 kB │ gzip:  1.31 kB
+node_modules/.nitro/vite/services/ssr/assets/exports-3ZztrAcq.js                       3.40 kB │ gzip:  1.26 kB
+node_modules/.nitro/vite/services/ssr/assets/admin-jxZXQG8k.js                         3.63 kB │ gzip:  0.85 kB
+node_modules/.nitro/vite/services/ssr/assets/gates-BwSeBmDP.js                         3.78 kB │ gzip:  1.69 kB
+node_modules/.nitro/vite/services/ssr/assets/answer-bank-DF-sqCNN.js                   4.36 kB │ gzip:  1.58 kB
+node_modules/.nitro/vite/services/ssr/assets/signup-D9W0J3pf.js                        4.56 kB │ gzip:  1.42 kB
+node_modules/.nitro/vite/services/ssr/assets/mcp-setup-CpplYUOO.js                     4.64 kB │ gzip:  1.68 kB
+node_modules/.nitro/vite/services/ssr/assets/routes-5Ny05abb.js                        5.12 kB │ gzip:  1.77 kB
+node_modules/.nitro/vite/services/ssr/assets/login-Hx2W-myA.js                         5.67 kB │ gzip:  1.82 kB
+node_modules/.nitro/vite/services/ssr/assets/evidence.index-CaWQQ7fT.js                5.97 kB │ gzip:  1.99 kB
+node_modules/.nitro/vite/services/ssr/assets/_orgId-BdtV1_Vb.js                        6.48 kB │ gzip:  2.20 kB
+node_modules/.nitro/vite/services/ssr/assets/app-naQRPvUu.js                           6.56 kB │ gzip:  1.78 kB
+node_modules/.nitro/vite/services/ssr/assets/control-mcp-CBTrcnwc.js                   6.67 kB │ gzip:  1.76 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaires.index-DIl69vAd.js          6.84 kB │ gzip:  1.84 kB
+node_modules/.nitro/vite/services/ssr/assets/decision-inbox-BVY4I5xj.js                7.61 kB │ gzip:  2.65 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaire-templates-CV9KIVrb.js       9.56 kB │ gzip:  2.05 kB
+node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-LWlviQ88.js    9.83 kB │ gzip:  1.57 kB
+node_modules/.nitro/vite/services/ssr/assets/ooxml-BDSzzh80.js                        10.92 kB │ gzip:  2.67 kB
+node_modules/.nitro/vite/services/ssr/assets/decisions-dsiWl2KE.js                    11.51 kB │ gzip:  2.75 kB
+node_modules/.nitro/vite/services/ssr/assets/audit-CLZF5GAV.js                        12.18 kB │ gzip:  2.93 kB
+node_modules/.nitro/vite/services/ssr/assets/url-Dzr7y_FO.js                          14.82 kB │ gzip:  4.56 kB
+node_modules/.nitro/vite/services/ssr/assets/evidence._docId-B0RZH9p0.js              15.78 kB │ gzip:  3.57 kB
+node_modules/.nitro/vite/services/ssr/assets/_orgId-5C7i8Pf9.js                       18.77 kB │ gzip:  4.40 kB
+node_modules/.nitro/vite/services/ssr/assets/opportunities-DtpSQaAh.js                19.66 kB │ gzip:  3.75 kB
+node_modules/.nitro/vite/services/ssr/assets/packs._packId-CwEcuLDX.js                21.38 kB │ gzip:  4.54 kB
+node_modules/.nitro/vite/services/ssr/assets/compliance-D433XcBm.js                   23.92 kB │ gzip:  4.51 kB
+node_modules/.nitro/vite/services/ssr/assets/decisions-D9_SiBrf.js                    24.44 kB │ gzip:  5.65 kB
+node_modules/.nitro/vite/services/ssr/assets/v2-fns-BwI8WI1o.js                       30.41 kB │ gzip:  6.47 kB
+node_modules/.nitro/vite/services/ssr/assets/facts-DQ17uEc7.js                        31.50 kB │ gzip:  5.80 kB
+node_modules/.nitro/vite/services/ssr/assets/agents-fuWsD12P.js                       32.12 kB │ gzip:  8.69 kB
+node_modules/.nitro/vite/services/ssr/assets/client-BwnV-pPP.js                       37.48 kB │ gzip: 11.48 kB
+node_modules/.nitro/vite/services/ssr/assets/team-Bxqf3HFO.js                         38.70 kB │ gzip:  7.26 kB
+node_modules/.nitro/vite/services/ssr/assets/fns-B4rwnt-i.js                          39.58 kB │ gzip:  8.04 kB
+node_modules/.nitro/vite/services/ssr/assets/entities-DH0fjR85.js                     53.90 kB │ gzip:  8.36 kB
+node_modules/.nitro/vite/services/ssr/assets/router-BDSCwnSw.js                       60.82 kB │ gzip: 16.15 kB
+node_modules/.nitro/vite/services/ssr/assets/tenant-BwiZ2Ilh.js                      112.06 kB │ gzip: 29.20 kB
+node_modules/.nitro/vite/services/ssr/index.js                                       124.54 kB │ gzip: 33.10 kB
+node_modules/.nitro/vite/services/ssr/assets/wallet-B8CLxrMr.js                      174.97 kB │ gzip: 41.59 kB
+node_modules/.nitro/vite/services/ssr/assets/v2-fns-CWQEDXIf.js                      226.91 kB │ gzip: 47.36 kB
+node_modules/.nitro/vite/services/ssr/assets/verify.server-CODEidZY.js               390.77 kB │ gzip: 94.98 kB
+
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0msrc/server/v2/compliance-alerts.ts is dynamically imported by src/server/v2-fns.ts?tss-serverfn-split but also statically imported by src/server/v2/agent-loop.ts, src/server/v2/scheduler.ts, dynamic import will not move module into another chunk.
+
+✓ built in 2.91s
+
+[nitro] ◐ Building [Nitro] (preset: node-server, compatibility: 2026-11-21)
+[nitro] ✔ Generated public .output/public
+vite v8.3.5 building nitro environment for production...
+`output.codeSplitting.groups[0].name` is a function. Set `output.codeSplitting.groups[0].debugName` so the bundler timing report can identify this group.
+transforming...
+✓ 2610 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/server/_ssr/inbox-U38y0xK2.mjs                        0.06 kB │ gzip:   0.08 kB
+.output/server/_ssr/answer-bank-CMj_LSUe.mjs                  0.06 kB │ gzip:   0.08 kB
+.output/server/_ssr/compliance-alerts-Oa6Q3h3D.mjs            0.07 kB │ gzip:   0.09 kB
+.output/server/_ssr/kysely-adapter-Cj_QZw5p.mjs               0.11 kB │ gzip:   0.11 kB
+.output/server/_ssr/start-COmmreO7.mjs                        0.12 kB │ gzip:   0.11 kB
+.output/server/_ssr/packs-DVfXADM1.mjs                        0.20 kB │ gzip:   0.17 kB
+.output/server/_ssr/empty-plugin-adapters-CeyhLWeJ.mjs        0.21 kB │ gzip:   0.15 kB
+.output/server/_ssr/evidence-CdiPQseC.mjs                     0.21 kB │ gzip:   0.17 kB
+.output/server/_ssr/questionnaires-BY4j7U1N.mjs               0.21 kB │ gzip:   0.18 kB
+.output/server/_chunks/core.mjs                               0.23 kB │ gzip:   0.17 kB
+.output/server/_ssr/utils-DWGjSd5x.mjs                        0.27 kB │ gzip:   0.21 kB
+.output/server/_libs/isarray.mjs                              0.33 kB │ gzip:   0.24 kB
+.output/server/_ssr/rolldown-runtime-D8jQpDG7.mjs             0.39 kB │ gzip:   0.27 kB
+.output/server/_ssr/format-wallet-timestamp-FnsnHHz9.mjs      0.45 kB │ gzip:   0.30 kB
+.output/server/_ssr/mcp-setup-ui-DKckmhmf.mjs                 0.50 kB │ gzip:   0.34 kB
+.output/server/_ssr/env.server-DVpsvLgU.mjs                   0.51 kB │ gzip:   0.36 kB
+.output/server/_chunks/ssr-renderer.mjs                       0.90 kB │ gzip:   0.48 kB
+.output/server/_ssr/app-DOnVQlBc.mjs                          0.94 kB │ gzip:   0.51 kB
+.output/server/_ssr/button-DRVnKhKe.mjs                       1.11 kB │ gzip:   0.59 kB
+.output/server/_ssr/file-to-base64-DfzJPoLC.mjs               1.17 kB │ gzip:   0.57 kB
+.output/server/_libs/inherits.mjs                             1.18 kB │ gzip:   0.46 kB
+.output/server/_ssr/use-signup-open-DfkiU9g2.mjs              1.23 kB │ gzip:   0.66 kB
+.output/server/_libs/defu.mjs                                 1.39 kB │ gzip:   0.57 kB
+.output/server/_ssr/answers-BGITrsXI.mjs                      1.52 kB │ gzip:   0.68 kB
+.output/server/_ssr/entities-sLmFTBCj.mjs                     1.67 kB │ gzip:   0.75 kB
+.output/server/_libs/immediate.mjs                            1.78 kB │ gzip:   0.73 kB
+.output/server/_ssr/status-badge-C-dzRlo7.mjs                 1.80 kB │ gzip:   0.64 kB
+.output/server/_runtime.mjs                                   1.92 kB │ gzip:   0.86 kB
+.output/server/_libs/core-util-is.mjs                         1.92 kB │ gzip:   0.60 kB
+.output/server/_ssr/use-current-user-DKIpqZuy.mjs             1.96 kB │ gzip:   0.94 kB
+.output/server/_ssr/isolation.server-z4c_3uw8.mjs             2.03 kB │ gzip:   1.07 kB
+.output/server/_ssr/obligations-CwAl2yVd.mjs                  2.08 kB │ gzip:   0.94 kB
+.output/server/_libs/ufo.mjs                                  2.20 kB │ gzip:   0.71 kB
+.output/server/_ssr/packs.index-DP7kBeMT.mjs                  2.25 kB │ gzip:   0.90 kB
+.output/server/_libs/better-auth__utils.mjs                   2.76 kB │ gzip:   1.04 kB
+.output/server/_ssr/questionnaires._qid-rJsvPjGH.mjs          2.79 kB │ gzip:   0.98 kB
+.output/server/_libs/class-variance-authority+clsx.mjs        3.13 kB │ gzip:   1.23 kB
+.output/server/_ssr/exports-3ZztrAcq.mjs                      3.84 kB │ gzip:   1.32 kB
+.output/server/_ssr/gates-BwSeBmDP.mjs                        4.27 kB │ gzip:   1.81 kB
+.output/server/_ssr/answer-bank-DF-sqCNN.mjs                  4.36 kB │ gzip:   1.59 kB
+.output/server/_ssr/admin-jxZXQG8k.mjs                        4.50 kB │ gzip:   0.94 kB
+.output/server/_ssr/mcp-setup-CpplYUOO.mjs                    4.68 kB │ gzip:   1.71 kB
+.output/server/_ssr/signup-D9W0J3pf.mjs                       5.32 kB │ gzip:   1.54 kB
+.output/server/_libs/nanostores.mjs                           6.03 kB │ gzip:   1.97 kB
+.output/server/_ssr/routes-5Ny05abb.mjs                       6.08 kB │ gzip:   1.85 kB
+.output/server/_ssr/login-Hx2W-myA.mjs                        6.55 kB │ gzip:   1.94 kB
+.output/server/_ssr/evidence.index-CaWQQ7fT.mjs               6.84 kB │ gzip:   2.11 kB
+.output/server/_orgId-BdtV1_Vb.mjs                            7.24 kB │ gzip:   2.29 kB
+.output/server/_ssr/app-naQRPvUu.mjs                          7.54 kB │ gzip:   1.90 kB
+.output/server/_ssr/decision-inbox-BVY4I5xj.mjs               7.65 kB │ gzip:   2.69 kB
+.output/server/_libs/lucide-react.mjs                         7.71 kB │ gzip:   2.16 kB
+.output/server/_ssr/questionnaires.index-DIl69vAd.mjs         7.75 kB │ gzip:   1.94 kB
+.output/server/_ssr/control-mcp-CBTrcnwc.mjs                  7.82 kB │ gzip:   1.86 kB
+.output/server/_ssr/questionnaire-templates-CV9KIVrb.mjs      9.60 kB │ gzip:   2.08 kB
+.output/server/_tanstack-start-manifest_v-LWlviQ88.mjs        9.89 kB │ gzip:   1.60 kB
+.output/server/_ssr/ooxml-BDSzzh80.mjs                       11.20 kB │ gzip:   2.80 kB
+.output/server/_libs/tanstack__history.mjs                   12.31 kB │ gzip:   3.65 kB
+.output/server/_ssr/decisions-dsiWl2KE.mjs                   13.05 kB │ gzip:   2.87 kB
+.output/server/_ssr/audit-CLZF5GAV.mjs                       13.39 kB │ gzip:   2.97 kB
+.output/server/_ssr/url-Dzr7y_FO.mjs                         14.77 kB │ gzip:   4.58 kB
+.output/server/_libs/better-auth__memory-adapter.mjs         14.93 kB │ gzip:   4.11 kB
+.output/server/_libs/noble__hashes.mjs                       15.70 kB │ gzip:   5.69 kB
+.output/server/_libs/@better-auth/telemetry+[...].mjs        17.15 kB │ gzip:   4.81 kB
+.output/server/_ssr/evidence._docId-B0RZH9p0.mjs             17.88 kB │ gzip:   3.72 kB
+.output/server/_orgId-5C7i8Pf9.mjs                           20.87 kB │ gzip:   4.50 kB
+.output/server/_ssr/opportunities-DtpSQaAh.mjs               21.59 kB │ gzip:   3.82 kB
+.output/server/_libs/h3+rou3+srvx.mjs                        22.60 kB │ gzip:   6.12 kB
+.output/server/_ssr/packs._packId-CwEcuLDX.mjs               23.68 kB │ gzip:   4.69 kB
+.output/server/_ssr/compliance-D433XcBm.mjs                  27.09 kB │ gzip:   4.65 kB
+.output/server/_ssr/v2-fns-BwI8WI1o.mjs                      30.45 kB │ gzip:   6.50 kB
+.output/server/_libs/srvx.mjs                                31.87 kB │ gzip:   8.68 kB
+.output/server/_ssr/agents-fuWsD12P.mjs                      32.00 kB │ gzip:   8.67 kB
+.output/server/_ssr/facts-DQ17uEc7.mjs                       34.90 kB │ gzip:   5.94 kB
+.output/server/_libs/react+tanstack__react-query.mjs         35.48 kB │ gzip:   9.36 kB
+.output/server/_libs/@tanstack/router-core+[...].mjs         36.49 kB │ gzip:   9.90 kB
+.output/server/_ssr/client-BwnV-pPP.mjs                      36.91 kB │ gzip:  11.46 kB
+.output/server/_libs/jose.mjs                                39.04 kB │ gzip:   8.76 kB
+.output/server/_ssr/fns-B4rwnt-i.mjs                         39.62 kB │ gzip:   8.09 kB
+.output/server/_ssr/team-Bxqf3HFO.mjs                        43.00 kB │ gzip:   7.43 kB
+.output/server/_libs/noble__ciphers.mjs                      47.32 kB │ gzip:  14.65 kB
+.output/server/index.mjs                                     52.76 kB │ gzip:  15.34 kB
+.output/server/_ssr/entities-DH0fjR85.mjs                    60.27 kB │ gzip:   8.54 kB
+.output/server/_ssr/router-BDSCwnSw.mjs                      60.38 kB │ gzip:  16.14 kB
+.output/server/_libs/tailwind-merge.mjs                      88.90 kB │ gzip:  15.69 kB
+.output/server/_ssr/tenant-BwiZ2Ilh.mjs                     110.74 kB │ gzip:  29.05 kB
+.output/server/_ssr/ssr.mjs                                 123.63 kB │ gzip:  33.04 kB
+.output/server/_libs/tanstack__query-core.mjs               143.06 kB │ gzip:  34.01 kB
+.output/server/_libs/pg.mjs                                 149.28 kB │ gzip:  34.80 kB
+.output/server/_ssr/wallet-B8CLxrMr.mjs                     174.51 kB │ gzip:  41.42 kB
+.output/server/_libs/xmldom__xmldom.mjs                     237.98 kB │ gzip:  61.69 kB
+.output/server/_ssr/v2-fns-CWQEDXIf.mjs                     260.90 kB │ gzip:  54.05 kB
+.output/server/_libs/jszip+[...].mjs                        272.24 kB │ gzip:  60.94 kB
+.output/server/_ssr/verify.server-CODEidZY.mjs              386.17 kB │ gzip:  94.43 kB
+.output/server/_libs/@better-auth/kysely-adapter+[...].mjs  480.57 kB │ gzip:  81.92 kB
+.output/server/_libs/@better-auth/core+[...].mjs            565.06 kB │ gzip: 128.59 kB
+.output/server/_libs/electric-sql__pglite.mjs               601.27 kB │ gzip: 148.47 kB
+.output/server/_libs/@tanstack/react-router+[...].mjs       804.75 kB │ gzip: 171.55 kB
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/index.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/index.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/utils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/utils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/ClientOnly.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/ClientOnly.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useRouter.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useRouter.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useNavigate.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useNavigate.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useBlocker.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useBlocker.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useRouterState.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useRouterState.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Asset.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Asset.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/RouterProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/RouterProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useMatch.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useMatch.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Match.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Match.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/link.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/link.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Matches.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Matches.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useLocation.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useLocation.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/HeadContent.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/HeadContent.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/nonRouteComponentContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/nonRouteComponentContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Transitioner.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Transitioner.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/matchContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/matchContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/routerContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/routerContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+✓ built in 2.04s
+ℹ Generated .output/nitro.json
+
+[nitro] ✔ You can preview this build using npx vite preview
+
+> app-builder-workspace@0.0.0-private db:migrate
+> node scripts/migrate.mjs
+
+[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).
+[pglite-assets] no Vercel server output — skip
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m# [0mTodos
+[✓] Build the application (npm run build)
+[•] Set up systemd --user service + Postgres (user-level, no sudo/root)
+[ ] Configure tailscale serve on free port
+[ ] Create seed credentials file at out/seed-credentials.env
+[ ] Add EW /health check to existing 5-min uptime timer (create EW-UPTIME.md)
+[ ] Set up job-supervisor to restart EW service if down
+[ ] Create all required output files and verify completion
+[0m
+Build succeeded. Now let me set up the required services.
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mwhich podman docker 2>/dev/null; podman --version 2>/dev/null || docker --version 2>/dev/null
+/usr/bin/docker
+Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2
+[0m
+[0m→ [0mRead repo/scripts/pg-local.mjs
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/startup.sh
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node scripts/pg-local.mjs start 2>&1
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+{"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/pg-password","initialized":false,"started":false,"staleLock":{"cleared":false,"reason":"tcp-ready"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node scripts/pg-local.mjs wait 2>&1
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+{"ok":true,"port":55432}
+[0m
+PostgreSQL is running on port 55432. Now let me set up the systemd --user service.
+[91m[1mError: [0mFailed to execute statement

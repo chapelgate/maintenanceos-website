@@ -1,0 +1,169 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mSkill "chapelgate-skill-first"
+[0m
+[0m$ [0mls -F /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/ && ls -F /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+BRIEF.md
+history.log
+out/
+repo/
+status.json
+STEER.md
+council-GO.md
+cycle-1659-1.log
+cycle-1717-2.log
+cycle-1823-3.log
+cycle-1824-4.log
+cycle-1825-5.log
+cycle-1825-6.log
+cycle-1826-7.log
+cycle-1827-8.log
+cycle-1828-9.log
+cycle-1837-10.log
+cycle-1839-11.log
+cycle-1839-12.log
+cycle-1840-13.log
+cycle-1841-14.log
+cycle-1842-15.log
+cycle-1843-16.log
+cycle-1858-17.log
+cycle-1950-18.log
+cycle-2059-1.log
+cycle-2124-1.log
+cycle-2145-2.log
+EVIDENCE.md
+HOSTING.md
+JOB-ID
+MISSION_COMPLETE.rejected-20261121-2059
+MISSION_COMPLETE.rejected-20261121-2104
+PROGRESS.md
+RESULT.md
+roastroom-raw.json
+ROASTROOM-VERDICT.md
+seed-credentials.env
+SKILLS-USED.md
+VERIFIER-FEEDBACK.md
+[0m
+[0m✗ [0mRead PROGRESS.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/PROGRESS.md
+[0m✗ [0mRead VERIFIER-FEEDBACK.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/VERIFIER-FEEDBACK.md
+[0m✗ [0mRead HOSTING.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/HOSTING.md
+[0m✗ [0mRead RESULT.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/RESULT.md
+[0m✗ [0mRead EVIDENCE.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/EVIDENCE.md
+[0m
+[0m$ [0mls -F /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/
+ACCEPTANCE.md
+AGENTS.md
+AGENTS.project.md
+artifacts/
+AUTONOMOUS_WORK_SLICES.md
+COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+COMMERCIAL-READINESS.md
+COMMERCIAL_RELEASE_STATUS.md
+control-mcp/
+data/
+DECISIONS.md
+deploy/
+docs/
+eslint.config.mjs
+evidence-wallet-independent-review.zip
+FINAL_REPORT_t810u.md
+FIX-LIST-2.md
+FIX-LIST-3.md
+FIX-LIST-4.md
+FIX-LIST-6.md
+HUMAN_BLOCKERS.md
+MASTER_PROBLEM_REGISTER.md
+migrations/
+node_modules/
+opencode.json
+package.json
+package-lock.json
+PLAN.md
+policy/
+public/
+README.md
+RISKS.md
+RUNBOOK.md
+screenshots/
+scripts/
+SECURITY.md
+server/
+specs/
+src/
+startup-production.sh*
+startup.sh*
+TASKS.md
+tests/
+tsconfig.json
+vite.config.ts
+[0m
+[0m→ [0mRead status.json
+[0m→ [0mRead repo/README.md
+[0m→ [0mRead repo/package.json
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261121-2059
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261121-2104
+[0m✗ [0mRead council-GO.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/council-GO.md
+[0m→ [0mRead out/SKILLS-USED.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+total 1456
+drwxrwxr-x 2 andy andy   4096 Nov 21 21:45 .
+drwxrwxr-x 4 andy andy   4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy   1310 Nov 21 20:48 council-GO.md
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy  68232 Nov 21 18:37 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy    650 Nov 21 18:38 cycle-1837-10.log
+-rw-rw-r-- 1 andy andy    166 Nov 21 18:39 cycle-1839-11.log
+-rw-rw-r-- 1 andy andy    249 Nov 21 18:40 cycle-1839-12.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1840-13.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1841-14.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:42 cycle-1842-15.log
+-rw-rw-r-- 1 andy andy 118662 Nov 21 18:58 cycle-1843-16.log
+-rw-rw-r-- 1 andy andy 245255 Nov 21 19:49 cycle-1858-17.log
+-rw-rw-r-- 1 andy andy 221273 Nov 21 20:55 cycle-1950-18.log
+-rw-rw-r-- 1 andy andy   9509 Nov 21 21:03 cycle-2059-1.log
+-rw-rw-r-- 1 andy andy  67272 Nov 21 21:45 cycle-2124-1.log
+-rw-rw-r-- 1 andy andy   2787 Nov 21 21:49 cycle-2145-2.log
+-rw-rw-r-- 1 andy andy   2147 Nov 21 20:49 EVIDENCE.md
+-rw-rw-r-- 1 andy andy    890 Nov 21 20:41 HOSTING.md
+-rw-rw-r-- 1 andy andy      6 Nov 21 21:24 JOB-ID
+-rw-rw-r-- 1 andy andy      5 Nov 21 20:49 MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy     48 Nov 21 21:02 MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:24 .preflight-ok
+-rw-rw-r-- 1 andy andy    955 Nov 21 20:49 PROGRESS.md
+-rw-rw-r-- 1 andy andy   4102 Nov 21 20:48 RESULT.md
+-rw-rw-r-- 1 andy andy   2391 Nov 21 20:46 roastroom-raw.json
+-rw-rw-r-- 1 andy andy   2587 Nov 21 20:48 ROASTROOM-VERDICT.md
+-rw------- 1 andy andy    513 Nov 21 20:42 seed-credentials.env
+-rw-rw-r-- 1 andy andy    225 Nov 21 19:16 SKILLS-USED.md
+-rw-rw-r-- 1 andy andy    359 Nov 21 21:04 VERIFIER-FEEDBACK.md
+[0m
+[0m→ [0mRead out/council-GO.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/ 2>/dev/null || echo "No raw directory"
+No raw directory
+[0m
+[0m$ [0mwhich rt || find /home/andy -name "rt" -type f 2>/dev/null | head -20
+/home/andy/bin/rt
+[0m
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mRead /home/andy/bin/rt failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

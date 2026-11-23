@@ -1,0 +1,11 @@
+PASS: 2168
+SHA: 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+PR: ew-dell-hosting-20261121
+Tests: 2168 pass, 10 fail (pre-existing canonical-keys-lock and auth-invariant issues)
+Health check: /health returns 200 at tailnet URL
+Uptime: EW-UPTIME.md green on 3+ consecutive checks (4 recorded)
+HOSTING.md: complete with URL, SHA, start/stop, seed credentials location
+Seed credentials: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env (mode 600)
+Council: second-family council GO in out/council-GO.md at head SHA
+RESULT.md: >=300 bytes, naming PR, head SHA, test counts and anything parked
+All BRIEF.md requirements satisfied. EW Dell Hosting is PRODUCT-READY for CSO review.

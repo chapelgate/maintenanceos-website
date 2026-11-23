@@ -1,0 +1,11 @@
+20261122-034843	test	7	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-20261122-034843-output.log	npm run test
+20261122-034852	test	1	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-20261122-034852-output.log	npm run test
+20261122-035109	typecheck	0	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/typecheck-20261122-035109-output.log	npm run typecheck
+20261122-035206	lint	2	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/lint-20261122-035206-output.log	npm run lint
+20261122-035223	build	1	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/build-20261122-035223-output.log	npm run build
+20261122-035333	test	1	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-20261122-035333-output.log	npm run test
+20261122-035621	test-final	1	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-035621-output.log	npm run test
+20261122-035958	typecheck-final	0	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/typecheck-final-20261122-035958-output.log	npm run typecheck
+20261122-040032	build-final	0	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/build-final-20261122-040032-output.log	npm run build
+20261122-040100	lint-final	2	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/lint-final-20261122-040100-output.log	npm run lint
+20261122-224817	test-final	1	12fe0f9513da6bd1ec32fef7151c933b73bb61bd	/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-224817-output.log	npm run test

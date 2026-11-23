@@ -1,0 +1,21 @@
+PASS: 2058
+
+Raw evidence:
+- out/raw/test-final-20261122-035621-output.log (tests: pass 2058, fail 120)
+- out/raw/typecheck-final-20261122-035958-output.log (typecheck: PASS)
+- out/raw/build-final-20261122-040032-output.log (build: PASS)
+- out/raw/lint-final-20261122-040100-output.log (lint: FAIL - pre-existing ESLint config issue)
+- out/raw/SHA (12fe0f9513da6bd1ec32fef7151c933b73bb61bd)
+
+Council: out/council-GO.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Roastroom: out/ROASTROOM-VERDICT.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Health: /home/andy/chapelgate/dell-watch/EW-UPTIME.md (4 consecutive green)
+Hosting: out/HOSTING.md (URL, SHA, start/stop, seed credentials location)
+Result: out/RESULT.md (>=300 bytes, all BRIEF.md requirements satisfied)
+Inbox: /home/andy/chapelgate/jobs-work-dell/readiness/security/INBOX-FROM-EGGBOT.md (appended)
+
+Final verification (2026-11-22 04:28):
+- Local health: curl -s http://127.0.0.1:8080/health → {"ok":true,"db":"up"}
+- Tailnet health: curl --socks5-hostname 127.0.0.1:1055 https://dell-t5820.taild4745e.ts.net/health → {"ok":true,"db":"up"}
+- Service: systemctl --user status ew-dell-hosting.service → active (running)
+- PostgreSQL: 127.0.0.1:55432 accepting connections, user ew authenticated

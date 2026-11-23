@@ -1,0 +1,482 @@
+[0m
+> build · estate-coding
+[0m
+Let me start by exploring the current state of the repository and understanding what's already been done.
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 120
+drwxrwxr-x   4 andy andy  4096 Nov 23 01:18 .
+drwxrwxr-x 811 andy andy 69632 Nov 23 06:37 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy  3502 Nov 23 01:18 BRIEF.md.bak-rootcause
+-rw-rw-r--   1 andy andy     0 Nov 23 06:35 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  9650 Nov 23 06:35 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 06:35 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 23 06:35 out
+drwxrwxr-x  23 andy andy  4096 Nov 22 12:08 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 06:35 status.json
+-rw-rw-r--   1 andy andy  4157 Nov 23 06:25 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/out/ 2>/dev/null || echo "no out dir at chapelgate root"
+total 300
+drwxrwxr-x 19 andy andy  4096 Nov 23 02:04 .
+drwxrwxr-x 60 andy andy 12288 Nov 23 03:53 ..
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-business-evidence-wallet
+-rw-rw-r--  1 andy andy  1322 Nov 17 23:09 AUDIT-business-evidence-wallet.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-complaints
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-chapelgate-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-multilingual-transcribe
+-rw-rw-r--  1 andy andy  1392 Nov 19 16:32 AUDIT-chapelgate-multilingual-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-transcribe
+-rw-rw-r--  1 andy andy  1301 Nov 19 16:32 AUDIT-chapelgate-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cheap-trips
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-cheap-trips.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cloud-workers
+-rw-rw-r--  1 andy andy  1245 Nov 17 23:09 AUDIT-cloud-workers.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-holiday-let-operator
+-rw-rw-r--  1 andy andy  1294 Nov 19 16:33 AUDIT-holiday-let-operator.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-housing-compliance-vault
+-rw-rw-r--  1 andy andy  1322 Nov 19 16:32 AUDIT-housing-compliance-vault.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-information-rights-complaints
+-rw-rw-r--  1 andy andy  1357 Nov 19 16:33 AUDIT-information-rights-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-landlord-os
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-landlord-os.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-legal-case-management
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-legal-case-management.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-maintenanceos
+-rw-rw-r--  1 andy andy  1245 Nov 19 16:34 AUDIT-maintenanceos.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-citizen-agent
+-rw-rw-r--  1 andy andy  1343 Nov 19 16:34 AUDIT-public-sector-citizen-agent.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-document-copilot
+-rw-rw-r--  1 andy andy  1364 Nov 19 16:36 AUDIT-public-sector-document-copilot.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-virtual-worker
+-rw-rw-r--  1 andy andy  1252 Nov 17 23:09 AUDIT-virtual-worker.md
+-rw-rw-r--  1 andy andy  8099 Nov 21 23:51 COMPETITOR-INDEX-TABLE.md
+-rw-rw-r--  1 andy andy   660 Nov 23 01:38 COUNCIL.md
+-rw-rw-r--  1 andy andy  1006 Nov 20 16:27 council-verdict.md
+-rw-rw-r--  1 andy andy   157 Nov 21 17:08 DONE
+-rw-rw-r--  1 andy andy  2760 Nov 22 08:27 EVIDENCE.md
+-rw-rw-r--  1 andy andy  9174 Nov 18 00:51 gitleaks-business-evidence-wallet.json
+-rw-rw-r--  1 andy andy  1533 Nov 18 00:51 gitleaks-chapelgate-complaints.json
+-rw-rw-r--  1 andy andy 27341 Nov 18 00:51 gitleaks-chapelgate-multilingual-transcribe.json
+-rw-rw-r--  1 andy andy  6679 Nov 18 00:51 gitleaks-cheap-trips.json
+-rw-rw-r--  1 andy andy 10702 Nov 18 00:51 gitleaks-holiday-let-operator.json
+-rw-rw-r--  1 andy andy  1417 Nov 18 00:51 gitleaks-public-sector-document-copilot.json
+-rw-rw-r--  1 andy andy 15363 Nov 18 00:51 gitleaks-virtual-worker.json
+-rw-rw-r--  1 andy andy  2587 Nov 22 07:56 METRICS-BASIS.md
+-rw-rw-r--  1 andy andy   927 Nov 23 06:09 MISSION_COMPLETE
+-rw-rw-r--  1 andy andy  1835 Nov 15 13:49 PRODUCT-READINESS-STATUS.md
+-rw-rw-r--  1 andy andy   562 Nov 22 08:21 PROGRESS.md
+-rw-rw-r--  1 andy andy 12878 Nov 23 01:40 PROMISE-TRIAGE.md
+drwxrwxr-x  2 andy andy  4096 Nov 23 06:36 raw
+-rw-rw-r--  1 andy andy  2099 Nov 23 06:05 RESULT.md
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:32 runs
+-rw-rw-r--  1 andy andy    32 Nov 21 01:12 test-stalled-raw.out
+-rw-rw-r--  1 andy andy  2362 Nov 23 02:04 TRIAGE-SUMMARY.md
+-rw-rw-r--  1 andy andy  3461 Nov 22 07:56 WEDGE.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/jobs-work-dell/readiness/ew/ 2>/dev/null || echo "no ew dir"
+total 672
+drwxr-xr-x  4 andy andy  4096 Nov 21 21:21 .
+drwxr-xr-x 84 andy andy 36864 Nov 23 06:35 ..
+-rw-r--r--  1 andy andy  2204 Oct 23 15:01 ANDY_DECISIONS.md
+-rw-r--r--  1 andy andy  1377 Oct 23 10:49 BUILD_SLICES.md
+-rw-r--r--  1 andy andy  6531 Oct 23 17:28 DECISIONS.md
+-rw-r--r--  1 andy andy   391 Oct 23 19:19 EXISTING_WORK.md
+drwxrwxr-x  2 andy andy  4096 Nov 21 20:40 legal
+-rw-rw-r--  1 andy andy  2392 Nov 21 21:21 RC.md
+-rw-rw-r--  1 andy andy  2356 Nov 21 16:58 RC.md.bak-eggbot-20261121-2121
+-rw-r--r--  1 andy andy  6080 Oct 23 10:49 READINESS.md
+-rw-r--r--  1 andy andy  6677 Oct 23 19:26 RELEASE_PLAN-20261023.md
+-rw-r--r--  1 andy andy  8788 Oct 24 09:57 RELEASE_PLAN-20261024-andy-rerequest.md
+-rw-r--r--  1 andy andy  9685 Oct 25 01:03 RELEASE_PLAN-20261024.md
+-rw-r--r--  1 andy andy 24078 Oct 26 05:51 RELEASE_PLAN-20261025.md
+-rw-r--r--  1 andy andy  7815 Oct 26 07:16 RELEASE_PLAN-20261026.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261027.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261028.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261029.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261030.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261031.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261101.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261102.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261103.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261104.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261105.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261106.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261107.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261108.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261109.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN.md
+-rw-r--r--  1 andy andy 11200 Oct 23 18:35 REVIEW-rd2-20261023.md
+-rw-r--r--  1 andy andy  9629 Oct 24 09:46 REVIEW-rd2-20261024-andy-rerequest.md
+-rw-r--r--  1 andy andy  7407 Oct 24 16:14 REVIEW-rd2-20261024.md
+-rw-r--r--  1 andy andy 11200 Oct 24 09:46 REVIEW-rd2-20261024-pre.md
+-rw-r--r--  1 andy andy  9107 Oct 25 06:34 REVIEW-rd2-20261025.md
+-rw-r--r--  1 andy andy  8584 Oct 26 06:49 REVIEW-rd2-20261026.md
+-rw-r--r--  1 andy andy  8661 Oct 27 06:47 REVIEW-rd2-20261027.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261028.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261029.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261030.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261031.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261101.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261102.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261103.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261104.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261105.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261106.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261107.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261108.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261109.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2.md
+drwxr-xr-x  2 andy andy  4096 Oct 27 07:22 slices
+-rw-r--r--  1 andy andy  6996 Oct 27 07:25 slices.json
+-rw-r--r--  1 andy andy  2278 Oct 23 10:49 slices.json.bak-20261023
+-rw-r--r--  1 andy andy  3693 Oct 24 09:57 slices.json.bak-20261024
+-rw-r--r--  1 andy andy  4132 Oct 25 06:39 slices.json.bak-20261025
+-rw-r--r--  1 andy andy  4132 Oct 26 07:15 slices.json.bak-20261026
+-rw-r--r--  1 andy andy  4132 Oct 27 07:13 slices.json.bak-20261027
+-rw-r--r--  1 andy andy  3802 Oct 25 12:42 UNBLOCK-ew-1023-02-localgate-A.md
+-rw-r--r--  1 andy andy  3991 Oct 25 17:14 UNBLOCK-ew-1023-02-localgate-B.md
+-rw-r--r--  1 andy andy  4700 Oct 25 17:31 UNBLOCK-ew-1023-02-localgate.md
+-rw-r--r--  1 andy andy  3380 Oct 25 13:09 UNBLOCK-ew-1023-03-rollback-A.md
+-rw-r--r--  1 andy andy  6587 Oct 25 17:15 UNBLOCK-ew-1023-03-rollback-B.md
+-rw-r--r--  1 andy andy  6973 Oct 25 17:25 UNBLOCK-ew-1023-03-rollback.md
+-rw-r--r--  1 andy andy  2287 Oct 27 07:41 UNBLOCK-ew-1027-03-rel-truth-vfy-A.md
+-rw-r--r--  1 andy andy  2816 Oct 27 07:43 UNBLOCK-ew-1027-03-rel-truth-vfy-B.md
+-rw-r--r--  1 andy andy  2920 Oct 27 08:26 UNBLOCK-ew-1027-03-rel-truth-vfy.md
+-rw-r--r--  1 andy andy  3628 Oct 27 07:41 UNBLOCK-ew-1027-04-post-slcs-vfy-A.md
+-rw-r--r--  1 andy andy  3532 Oct 27 08:36 UNBLOCK-ew-1027-04-post-slcs-vfy-B.md
+-rw-r--r--  1 andy andy  3545 Oct 27 09:16 UNBLOCK-ew-1027-04-post-slcs-vfy.md
+-rw-r--r--  1 andy andy  3165 Oct 27 10:05 UNBLOCK-ew-1027-05-evd-a11y-vfy-A.md
+-rw-r--r--  1 andy andy  3872 Oct 27 10:23 UNBLOCK-ew-1027-05-evd-a11y-vfy-B.md
+-rw-r--r--  1 andy andy  3953 Oct 27 10:30 UNBLOCK-ew-1027-05-evd-a11y-vfy.md
+-rw-r--r--  1 andy andy  3964 Oct 27 09:30 UNBLOCK-ew-1027-06-mon-vfy-A.md
+-rw-r--r--  1 andy andy  3655 Oct 27 09:38 UNBLOCK-ew-1027-06-mon-vfy-B.md
+-rw-r--r--  1 andy andy  3708 Oct 27 09:45 UNBLOCK-ew-1027-06-mon-vfy.md
+-rw-r--r--  1 andy andy  6903 Oct 25 12:07 UNBLOCK-ew-local-gate-A.md
+-rw-r--r--  1 andy andy  5279 Oct 25 16:31 UNBLOCK-ew-local-gate-B.md
+-rw-r--r--  1 andy andy  6309 Oct 25 16:40 UNBLOCK-ew-local-gate.md
+[0m
+Let me read the key status files to understand the current state.
+[0m✗ [0mRead out/MISSION_COMPLETE failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+
+Did you mean one of these?
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0135
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0625
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1834
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261123-0625
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/
+total 1216
+drwxrwxr-x 2 andy andy   4096 Nov 22 22:50 .
+drwxrwxr-x 4 andy andy   4096 Nov 23 06:35 ..
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:52 build-20261122-035223-exit-code.txt
+-rw-rw-r-- 1 andy andy  15022 Nov 22 03:52 build-20261122-035223-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:00 build-final-20261122-040032-exit-code.txt
+-rw-rw-r-- 1 andy andy  61087 Nov 22 04:00 build-final-20261122-040032-output.log
+-rw-rw-r-- 1 andy andy   9572 Nov 21 21:56 final-verification-20261121-2154-output.log
+-rw-rw-r-- 1 andy andy   2054 Nov 22 22:50 INDEX.tsv
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:52 lint-20261122-035206-exit-code.txt
+-rw-rw-r-- 1 andy andy   1937 Nov 22 03:52 lint-20261122-035206-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:01 lint-final-20261122-040100-exit-code.txt
+-rw-rw-r-- 1 andy andy   1943 Nov 22 04:01 lint-final-20261122-040100-output.log
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:52 .lock-build
+-rw-rw-r-- 1 andy andy      0 Nov 22 04:00 .lock-build-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:52 .lock-lint
+-rw-rw-r-- 1 andy andy      0 Nov 22 04:01 .lock-lint-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:53 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 22 22:48 .lock-test-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:51 .lock-typecheck
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:59 .lock-typecheck-final
+-rw-rw-r-- 1 andy andy    107 Nov 22 22:48 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:56 test-20261122-035333-exit-code.txt
+-rw-rw-r-- 1 andy andy 611076 Nov 22 03:56 test-20261122-035333-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 22:50 test-final-20261122-224817-exit-code.txt
+-rw-rw-r-- 1 andy andy 470738 Nov 22 22:50 test-final-20261122-224817-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:51 typecheck-20261122-035109-exit-code.txt
+-rw-rw-r-- 1 andy andy    242 Nov 22 03:51 typecheck-20261122-035109-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:00 typecheck-final-20261122-035958-exit-code.txt
+-rw-rw-r-- 1 andy andy    248 Nov 22 03:59 typecheck-final-20261122-035958-output.log
+[0m
+Let me look at the current git state and council files more carefully.
+[0m✗ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/COUNCIL.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/jobs-work-dell/readiness/COUNCIL.md
+
+Did you mean one of these?
+/home/andy/chapelgate/jobs-work-dell/readiness/MERGE_COUNCIL.md
+/home/andy/chapelgate/jobs-work-dell/readiness/TENDER_COUNCIL.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/*.md /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/council-* 2>/dev/null
+-rw-rw-r-- 1 andy andy 1310 Nov 21 20:48 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/council-GO.md
+-rw-rw-r-- 1 andy andy 1310 Nov 21 20:48 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/council-GO.md
+-rw-rw-r-- 1 andy andy 2882 Nov 23 06:20 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/EVIDENCE.md
+-rw-rw-r-- 1 andy andy  890 Nov 21 20:41 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/HOSTING.md
+-rw-rw-r-- 1 andy andy 1403 Nov 23 04:03 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/PROGRESS.md
+-rw-rw-r-- 1 andy andy 4129 Nov 22 23:03 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/RESULT.md
+-rw-rw-r-- 1 andy andy 2587 Nov 21 20:48 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/ROASTROOM-VERDICT.md
+-rw-rw-r-- 1 andy andy 1224 Nov 23 01:30 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/ROOT-CAUSE.md
+-rw-rw-r-- 1 andy andy  225 Nov 21 19:16 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/SKILLS-USED.md
+-rw-rw-r-- 1 andy andy  359 Nov 23 06:25 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/VERIFIER-FEEDBACK.md
+[0m
+[0m→ [0mRead status.json
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/MERGE_COUNCIL.md
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/TENDER_COUNCIL.md
+[0m→ [0mRead out/council-GO.md
+[0m→ [0mRead out/EVIDENCE.md
+Let me check the current state of the mission complete file and understand what needs fixing.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE* 2>/dev/null
+-rw-rw-r-- 1 andy andy    5 Nov 21 20:49 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy   48 Nov 21 21:02 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy    8 Nov 21 21:52 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy  621 Nov 21 22:22 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy  621 Nov 21 23:09 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2314
+-rw-rw-r-- 1 andy andy  621 Nov 22 00:30 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0034
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:05 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0109
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:28 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0134
+-rw-rw-r-- 1 andy andy 1245 Nov 22 04:32 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0434
+-rw-rw-r-- 1 andy andy 1245 Nov 22 05:51 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0614
+-rw-rw-r-- 1 andy andy 1245 Nov 22 07:56 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0759
+-rw-rw-r-- 1 andy andy   11 Nov 22 09:50 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1039
+-rw-rw-r-- 1 andy andy   10 Nov 22 13:16 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1326
+-rw-rw-r-- 1 andy andy   10 Nov 22 13:54 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1414
+-rw-rw-r-- 1 andy andy   10 Nov 22 16:15 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1634
+-rw-rw-r-- 1 andy andy   10 Nov 22 18:20 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1834
+-rw-rw-r-- 1 andy andy   10 Nov 22 20:36 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-2045
+-rw-rw-r-- 1 andy andy   11 Nov 22 23:01 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-2315
+-rw-rw-r-- 1 andy andy   10 Nov 23 01:16 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0120
+-rw-rw-r-- 1 andy andy   10 Nov 23 01:22 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0125
+-rw-rw-r-- 1 andy andy   10 Nov 23 01:31 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0135
+-rw-rw-r-- 1 andy andy   10 Nov 23 01:37 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0140
+-rw-rw-r-- 1 andy andy   10 Nov 23 01:40 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0145
+-rw-rw-r-- 1 andy andy   10 Nov 23 03:10 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0330
+-rw-rw-r-- 1 andy andy  705 Nov 23 03:58 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0420
+-rw-rw-r-- 1 andy andy   10 Nov 23 06:03 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0625
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/jobs-work-dell/readiness/ew/ 2>/dev/null
+total 672
+drwxr-xr-x  4 andy andy  4096 Nov 21 21:21 .
+drwxr-xr-x 84 andy andy 36864 Nov 23 06:35 ..
+-rw-r--r--  1 andy andy  2204 Oct 23 15:01 ANDY_DECISIONS.md
+-rw-r--r--  1 andy andy  1377 Oct 23 10:49 BUILD_SLICES.md
+-rw-r--r--  1 andy andy  6531 Oct 23 17:28 DECISIONS.md
+-rw-r--r--  1 andy andy   391 Oct 23 19:19 EXISTING_WORK.md
+drwxrwxr-x  2 andy andy  4096 Nov 21 20:40 legal
+-rw-rw-r--  1 andy andy  2392 Nov 21 21:21 RC.md
+-rw-rw-r--  1 andy andy  2356 Nov 21 16:58 RC.md.bak-eggbot-20261121-2121
+-rw-r--r--  1 andy andy  6080 Oct 23 10:49 READINESS.md
+-rw-r--r--  1 andy andy  6677 Oct 23 19:26 RELEASE_PLAN-20261023.md
+-rw-r--r--  1 andy andy  8788 Oct 24 09:57 RELEASE_PLAN-20261024-andy-rerequest.md
+-rw-r--r--  1 andy andy  9685 Oct 25 01:03 RELEASE_PLAN-20261024.md
+-rw-r--r--  1 andy andy 24078 Oct 26 05:51 RELEASE_PLAN-20261025.md
+-rw-r--r--  1 andy andy  7815 Oct 26 07:16 RELEASE_PLAN-20261026.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261027.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261028.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261029.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261030.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261031.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261101.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261102.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261103.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261104.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261105.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261106.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261107.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261108.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261109.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN.md
+-rw-r--r--  1 andy andy 11200 Oct 23 18:35 REVIEW-rd2-20261023.md
+-rw-r--r--  1 andy andy  9629 Oct 24 09:46 REVIEW-rd2-20261024-andy-rerequest.md
+-rw-r--r--  1 andy andy  7407 Oct 24 16:14 REVIEW-rd2-20261024.md
+-rw-r--r--  1 andy andy 11200 Oct 24 09:46 REVIEW-rd2-20261024-pre.md
+-rw-r--r--  1 andy andy  9107 Oct 25 06:34 REVIEW-rd2-20261025.md
+-rw-r--r--  1 andy andy  8584 Oct 26 06:49 REVIEW-rd2-20261026.md
+-rw-r--r--  1 andy andy  8661 Oct 27 06:47 REVIEW-rd2-20261027.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261028.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261029.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261030.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261031.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261101.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261102.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261103.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261104.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261105.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261106.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261107.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261108.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261109.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2.md
+drwxr-xr-x  2 andy andy  4096 Oct 27 07:22 slices
+-rw-r--r--  1 andy andy  6996 Oct 27 07:25 slices.json
+-rw-r--r--  1 andy andy  2278 Oct 23 10:49 slices.json.bak-20261023
+-rw-r--r--  1 andy andy  3693 Oct 24 09:57 slices.json.bak-20261024
+-rw-r--r--  1 andy andy  4132 Oct 25 06:39 slices.json.bak-20261025
+-rw-r--r--  1 andy andy  4132 Oct 26 07:15 slices.json.bak-20261026
+-rw-r--r--  1 andy andy  4132 Oct 27 07:13 slices.json.bak-20261027
+-rw-r--r--  1 andy andy  3802 Oct 25 12:42 UNBLOCK-ew-1023-02-localgate-A.md
+-rw-r--r--  1 andy andy  3991 Oct 25 17:14 UNBLOCK-ew-1023-02-localgate-B.md
+-rw-r--r--  1 andy andy  4700 Oct 25 17:31 UNBLOCK-ew-1023-02-localgate.md
+-rw-r--r--  1 andy andy  3380 Oct 25 13:09 UNBLOCK-ew-1023-03-rollback-A.md
+-rw-r--r--  1 andy andy  6587 Oct 25 17:15 UNBLOCK-ew-1023-03-rollback-B.md
+-rw-r--r--  1 andy andy  6973 Oct 25 17:25 UNBLOCK-ew-1023-03-rollback.md
+-rw-r--r--  1 andy andy  2287 Oct 27 07:41 UNBLOCK-ew-1027-03-rel-truth-vfy-A.md
+-rw-r--r--  1 andy andy  2816 Oct 27 07:43 UNBLOCK-ew-1027-03-rel-truth-vfy-B.md
+-rw-r--r--  1 andy andy  2920 Oct 27 08:26 UNBLOCK-ew-1027-03-rel-truth-vfy.md
+-rw-r--r--  1 andy andy  3628 Oct 27 07:41 UNBLOCK-ew-1027-04-post-slcs-vfy-A.md
+-rw-r--r--  1 andy andy  3532 Oct 27 08:36 UNBLOCK-ew-1027-04-post-slcs-vfy-B.md
+-rw-r--r--  1 andy andy  3545 Oct 27 09:16 UNBLOCK-ew-1027-04-post-slcs-vfy.md
+-rw-r--r--  1 andy andy  3165 Oct 27 10:05 UNBLOCK-ew-1027-05-evd-a11y-vfy-A.md
+-rw-r--r--  1 andy andy  3872 Oct 27 10:23 UNBLOCK-ew-1027-05-evd-a11y-vfy-B.md
+-rw-r--r--  1 andy andy  3953 Oct 27 10:30 UNBLOCK-ew-1027-05-evd-a11y-vfy.md
+-rw-r--r--  1 andy andy  3964 Oct 27 09:30 UNBLOCK-ew-1027-06-mon-vfy-A.md
+-rw-r--r--  1 andy andy  3655 Oct 27 09:38 UNBLOCK-ew-1027-06-mon-vfy-B.md
+-rw-r--r--  1 andy andy  3708 Oct 27 09:45 UNBLOCK-ew-1027-06-mon-vfy.md
+-rw-r--r--  1 andy andy  6903 Oct 25 12:07 UNBLOCK-ew-local-gate-A.md
+-rw-r--r--  1 andy andy  5279 Oct 25 16:31 UNBLOCK-ew-local-gate-B.md
+-rw-r--r--  1 andy andy  6309 Oct 25 16:40 UNBLOCK-ew-local-gate.md
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/SHA
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+[0m
+[0m$ [0msystemctl --user status ew-dell-hosting.service 2>/dev/null | head -20
+● ew-dell-hosting.service - Business Evidence Wallet - EW Dell Hosting
+     Loaded: loaded (/home/andy/.config/systemd/user/ew-dell-hosting.service; enabled; preset: enabled)
+    Drop-In: /run/user/1000/systemd/user.control/ew-dell-hosting.service.d
+             └─50-CPUWeight.conf
+     Active: active (running) since Sun 2026-11-22 23:07:57 GMT; 7h ago
+   Main PID: 3551758 (node)
+      Tasks: 11 (limit: 70708)
+     Memory: 31.6M (high: 384.0M max: 512.0M available: 352.3M peak: 78.7M swap: 28.5M swap peak: 33.8M)
+        CPU: 3.023s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/ew-dell-hosting.service
+             └─3551758 /usr/bin/node .output/server/index.mjs
+
+Nov 22 23:07:57 andy-Precision-5820-Tower systemd[1511]: Started ew-dell-hosting.service - Business Evidence Wallet - EW Dell Hosting.
+Nov 22 23:07:57 andy-Precision-5820-Tower node[3551758]: ➜ Listening on: http://localhost:8080/ (all interfaces)
+Nov 22 23:10:00 andy-Precision-5820-Tower node[3551758]: 2026-11-22T23:10:00.751Z ERROR [Better Auth]: Could not validate the database schema. Check your database connection.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/
+total 2364
+drwxrwxr-x  23 andy andy    4096 Nov 22 12:08 .
+drwxrwxr-x   4 andy andy    4096 Nov 23 01:18 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 00:15 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 00:15 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 00:15 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 00:15 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 00:15 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 00:15 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 00:15 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .cursor
+drwxrwxr-x   6 andy andy    4096 Nov 22 10:29 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 00:15 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 deploy
+drwxrwxr-x   9 andy andy    4096 Nov 21 00:15 docs
+-rw-rw-r--   1 andy andy    1093 Nov 21 00:15 .env.example
+-rw-rw-r--   1 andy andy    1451 Nov 22 12:03 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 00:15 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 00:15 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 23 03:07 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 00:15 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 21 00:15 .gitleaksignore
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 00:15 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 00:15 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 migrations
+drwxrwxr-x 282 andy andy   12288 Nov 22 12:07 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 00:15 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 00:15 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:08 .output
+-rw-rw-r--   1 andy andy    5411 Nov 22 12:07 package.json
+-rw-rw-r--   1 andy andy  270136 Nov 22 12:07 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 00:15 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 00:15 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 00:15 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 00:15 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 00:15 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 21 21:31 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 21 00:15 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 00:15 specs
+drwxrwxr-x   7 andy andy    4096 Nov 21 17:10 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 00:15 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 00:15 startup.sh
+-rw-rw-r--   1 andy andy   74946 Nov 21 00:15 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 00:15 tsconfig.json
+-rw-rw-r--   1 andy andy   10137 Nov 21 17:50 vite.config.ts
+[0m
+[0m$ [0mcurl -s http://127.0.0.1:8080/health
+{"ok":false,"db":"down","uptimeSeconds":28472,"heapUsedBytes":25233592,"heapTotalBytes":29724672}
+[0m
+The DB is now down. Let me investigate and understand the full state.
+[0m$ [0mwhich rt 2>/dev/null || type rt 2>/dev/null || echo "rt not found in PATH"; ls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/rt 2>/dev/null || echo "no rt in task dir"; ls /usr/local/bin/rt /usr/bin/rt /home/andy/bin/rt 2>/dev/null || echo "no rt in common paths"
+/home/andy/bin/rt
+no rt in task dir
+/home/andy/bin/rt
+no rt in common paths
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.env 2>/dev/null | head -30; echo "---"; ls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.env 2>/dev/null || echo "no .env"
+---
+no .env
+[0m
+[0m$ [0mpg_lsclusters 2>/dev/null; ls /home/andy/postgres* 2>/dev/null; ps aux | grep -i postgres | grep -v grep | head -5
+70          9807  0.0  0.0 174036  1092 ?        Ss   Nov20   0:18 postgres
+70         10556  0.0  0.0 174196  2076 ?        Ss   Nov20   0:01 postgres: checkpointer 
+70         10557  0.0  0.0 174140   980 ?        Ss   Nov20   0:40 postgres: background writer 
+70         10599  0.0  0.0 174108   672 ?        Ss   Nov20   0:34 postgres: walwriter 
+70         10600  0.0  0.0 175716  1412 ?        Ss   Nov20   0:42 postgres: autovacuum launcher
+[0m
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mcat /home/andy/bin/rt failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[0m
+[0m$ [0mps aux | grep -i "postgres\|pg_" | grep -v grep | head -20
+70          9807  0.0  0.0 174036  1092 ?        Ss   Nov20   0:18 postgres
+70         10556  0.0  0.0 174196  2076 ?        Ss   Nov20   0:01 postgres: checkpointer 
+70         10557  0.0  0.0 174140   980 ?        Ss   Nov20   0:40 postgres: background writer 
+70         10599  0.0  0.0 174108   672 ?        Ss   Nov20   0:34 postgres: walwriter 
+70         10600  0.0  0.0 175716  1412 ?        Ss   Nov20   0:42 postgres: autovacuum launcher 
+70         10601  0.0  0.0 175644  1412 ?        Ss   Nov20   0:10 postgres: logical replication launcher 
+andy       75966  0.0  0.0 222344  3824 ?        Ss   01:36   0:00 /home/andy/chapelgate/factory-tasks/cso-fix-housing-compliance-vault-open-findings-20261121/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /tmp/ew-rollback-qfLiKU/postgres -p 55437 -k /tmp/ew-rollback-qfLiKU/run -h 127.0.0.1
+andy       75967  0.0  0.0 222480   780 ?        Ss   01:36   0:00 postgres: io worker 0
+andy       75968  0.0  0.0 222344   704 ?        Ss   01:36   0:00 postgres: io worker 1
+andy       75969  0.0  0.0 222344   704 ?        Ss   01:36   0:00 postgres: io worker 2
+andy       75970  0.0  0.0 222480  1728 ?        Ss   01:36   0:00 postgres: checkpointer 
+andy       75971  0.0  0.0 222480  1004 ?        Ss   01:36   0:00 postgres: background writer 
+andy       76000  0.0  0.0 222480   868 ?        Ss   01:36   0:00 postgres: walwriter 
+andy       76001  0.0  0.0 223936  2272 ?        Ss   01:36   0:00 postgres: autovacuum launcher 
+andy       76002  0.0  0.0 223936  2072 ?        Ss   01:36   0:00 postgres: logical replication launcher 
+andy       88601  0.0  0.0 222344  5696 ?        Ss   01:37   0:00 /home/andy/chapelgate/factory-tasks/cso-fix-housing-compliance-vault-open-findings-20261121/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /tmp/ew-rollback-THQY4a/postgres -p 55438 -k /tmp/ew-rollback-THQY4a/run -h 127.0.0.1
+andy       88620  0.0  0.0 222480  1228 ?        Ss   01:37   0:00 postgres: io worker 0
+andy       88621  0.0  0.0 222344   884 ?        Ss   01:37   0:00 postgres: io worker 2
+andy       88622  0.0  0.0 222480  1172 ?        Ss   01:37   0:00 postgres: io worker 1
+andy       88623  0.0  0.0 222776  2572 ?        Ss   01:37   0:00 postgres: checkpointer
+[0m
+[0m$ [0mpg_lsclusters 2>/dev/null; echo "---"; pgrep -a postgres | head -10
+---
+9807 postgres
+10556 postgres: checkpointer 
+10557 postgres: background writer 
+10599 postgres: walwriter 
+10600 postgres: autovacuum launcher 
+10601 postgres: logical replication launcher 
+75966 /home/andy/chapelgate/factory-tasks/cso-fix-housing-compliance-vault-open-findings-20261121/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /tmp/ew-rollback-qfLiKU/postgres -p 55437 -k /tmp/ew-rollback-qfLiKU/run -h 127.0.0.1
+75967 postgres: io worker 0
+75968 postgres: io worker 1
+75969 postgres: io worker 2
+[0m

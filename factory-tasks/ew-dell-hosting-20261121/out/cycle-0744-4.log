@@ -1,0 +1,37 @@
+[0m
+> build · estate-coding
+[0m
+[0m✱ [0mGlob "**/*"[90m in . · 100 matches[0m
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 120
+drwxrwxr-x   4 andy andy  4096 Nov 23 01:18 .
+drwxrwxr-x 817 andy andy 69632 Nov 23 07:37 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy  3502 Nov 23 01:18 BRIEF.md.bak-rootcause
+-rw-rw-r--   1 andy andy     0 Nov 23 07:44 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy 10593 Nov 23 07:44 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 07:44 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 23 07:44 out
+drwxrwxr-x  23 andy andy  4096 Nov 22 12:08 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 07:44 status.json
+-rw-rw-r--   1 andy andy  4157 Nov 23 06:25 STEER.md
+[0m
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/PROGRESS.md
+[0m✗ [0mRead out/MISSION_COMPLETE failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+
+Did you mean one of these?
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0135
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0625
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1834
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/council-GO.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261123-0135
+[93m[1m! [0mpermission requested: read (factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env); auto-rejecting
+[0m✗ [0mRead out/seed-credentials.env failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[0m→ [0mRead out/HOSTING.md
+[0m→ [0mRead /home/andy/chapelgate/dell-watch/EW-UPTIME.md

@@ -1,0 +1,4 @@
+[91m[1mError: [0mUnexpected error
+
+Failed query: insert into "project" ("id", "worktree", "vcs", "name", "icon_url", "icon_url_override", "icon_color", "time_created", "time_updated", "time_initialized", "sandboxes", "commands") values (?, ?, ?, null, null, null, null, ?, ?, null, ?, null) on conflict ("project"."id") do update set "worktree" = ?, "vcs" = ?, "time_updated" = ?, "sandboxes" = ?
+params: 9ba32d7235ae7540986202353753dc72fb69cefc,/home/andy/chapelgate,git,1795219370882,1795286455972,[],/home/andy/chapelgate,git,1795286455972,[]

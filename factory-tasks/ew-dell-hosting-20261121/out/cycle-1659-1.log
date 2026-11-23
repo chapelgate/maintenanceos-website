@@ -1,0 +1,877 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 88
+drwxrwxr-x   4 andy andy  4096 Nov 21 16:59 .
+drwxrwxr-x 592 andy andy 57344 Nov 21 16:35 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 21 16:59 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy    77 Nov 21 16:59 history.log
+drwxrwxr-x   2 andy andy  4096 Nov 21 16:59 out
+drwxrwxr-x  20 andy andy  4096 Nov 21 00:15 repo
+-rw-rw-r--   1 andy andy    81 Nov 21 16:59 status.json
+-rw-rw-r--   1 andy andy    75 Nov 21 00:15 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+total 16
+drwxrwxr-x 2 andy andy 4096 Nov 21 16:59 .
+drwxrwxr-x 4 andy andy 4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy  602 Nov 21 16:59 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy    6 Nov 21 16:59 JOB-ID
+-rw-rw-r-- 1 andy andy    0 Nov 21 16:59 .preflight-ok
+[0m
+[0m→ [0mRead out/cycle-1659-1.log
+[0m✗ [0mRead out/status.json failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/status.json
+[0m→ [0mRead status.json
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/
+total 2340
+drwxrwxr-x  20 andy andy    4096 Nov 21 00:15 .
+drwxrwxr-x   4 andy andy    4096 Nov 21 16:59 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 00:15 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 00:15 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 00:15 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 00:15 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 00:15 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 00:15 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 00:15 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .cursor
+-rw-rw-r--   1 andy andy   12209 Nov 21 00:15 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 deploy
+drwxrwxr-x   9 andy andy    4096 Nov 21 00:15 docs
+-rw-rw-r--   1 andy andy    1093 Nov 21 00:15 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 00:15 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 00:15 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 00:15 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-6.md
+drwxrwxr-x   8 andy andy    4096 Nov 21 00:15 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 00:15 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 21 00:15 .gitleaksignore
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 00:15 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 00:15 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 migrations
+-rw-rw-r--   1 andy andy       0 Nov 21 00:15 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 00:15 opencode.json
+-rw-rw-r--   1 andy andy    5410 Nov 21 00:15 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 21 00:15 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 00:15 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 00:15 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 00:15 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 00:15 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 00:15 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 21 00:15 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 21 00:15 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 00:15 specs
+drwxrwxr-x   7 andy andy    4096 Nov 21 00:15 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 00:15 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 00:15 startup.sh
+-rw-rw-r--   1 andy andy   74946 Nov 21 00:15 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 00:15 tsconfig.json
+-rw-rw-r--   1 andy andy    9848 Nov 21 00:15 vite.config.ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/deploy/
+total 12
+drwxrwxr-x  3 andy andy 4096 Nov 21 00:15 .
+drwxrwxr-x 20 andy andy 4096 Nov 21 00:15 ..
+drwxrwxr-x  2 andy andy 4096 Nov 21 00:15 digitalocean
+[0m
+[0m→ [0mRead history.log
+Let me explore the repo to understand the current state and what needs to be done.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git log --oneline -5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+[0m
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/ew/RC.md 2>/dev/null || echo "File not found"
+# Business Evidence Wallet Release Candidate
+
+**Date:** 2026-11-21
+**Tag:** ew-rc2-20261121
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+**Branch:** rc/ew-20261121 (pushed to origin)
+**Source:** master branch at SHA 3fc3bf95f7055be4eb4a4357b62109e8addb2030
+
+This release candidate is based on the same SHA as the Dell hosted build (job-ew-dell-hosting).
+Coordinated through readiness files.
+
+## PR 175-183 Decisions (Second-Family Council)
+
+| PR | Decision | Reason | Resulting SHA |
+|----|----------|--------|---------------|
+| 175 | MERGED (already) | Release docs point at master 41aa829, migrations through 0027, refuse GO | 3fc3bf95 (in master) |
+| 176 | MERGED (already) | /app banner check waits for Organisations heading | 3fc3bf95 (in master) |
+| 177 | MERGED (already) | Rehearse pre-0011 backup restore after migration 0027 | 3fc3bf95 (in master) |
+| 178 | CLOSED (already) | Draft PR, diff empty, false green gate withdrawn | N/A (closed) |
+| 179 | MERGED (already) | Wait for Evidence heading instead of networkidle | 3fc3bf95 (in master) |
+| 180 | MERGED (already) | Fail tests if product source calls NVIDIA API | 3fc3bf95 (in master) |
+| 181 | MERGED (already) | Lock questionnaire template ids to existing seven | 3fc3bf95 (in master) |
+| 182 | MERGED (already) | Test tenant setting written only after membership succeeds | 3fc3bf95 (in master) |
+| 183 | MERGED (already) | Remove unused deny import from gateway HTTP adapter | 3fc3bf95 (in master) |
+
+All 9 PRs (175-183) are already merged or closed as of master SHA 3fc3bf95.
+No further council action needed - all decisions already reflected in RC branch.
+
+## RC2 - CSO Findings Fixed
+
+| Finding | Fix | Files Changed |
+|---------|-----|---------------|
+| F1: BEW preview secret not migrated to env var | Migrated to GROK_PREVIEW_CLIENT_SECRET env var | src/lib/auth/preview.ts |
+| F2: CSP unsafe-inline in script-src | Nonce-based CSP implementation | src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx |
+| F5: Login token in sessionStorage | Moved to in-memory only | src/lib/auth/client.ts |
+| Test: No token in browser storage | Added verification test | scripts/no-token-in-browser-storage.test.mjs |
+
+All fixes committed to rc/ew-20261121 at SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd.
+Tag ew-rc2-20261121 pushed to origin.
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git rev-parse HEAD
+3fc3bf95f7055be4eb4a4357b62109e8addb2030
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat package.json | grep -A 5 '"scripts"'
+"scripts": {
+    "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port ${EW_HTTP_PORT:-8080}",
+    "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs",
+    "db:migrate": "node scripts/migrate.mjs",
+    "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
+    "preview": "node scripts/with-app-env.mjs vite preview",
+[0m
+[0m→ [0mRead repo/startup.sh
+[0m
+[0m$ [0msystemctl --user list-units | head -30
+UNIT                                                                                                            LOAD   ACTIVE     SUB          JOB   DESCRIPTION
+  sys-bus-pci-drivers-nvidia.device                                                                               loaded active     plugged            /sys/bus/pci/drivers/nvidia
+  sys-devices-pci0000:00-0000:00:14.0-usb2-2\x2d9-2\x2d9:1.0-host8-target8:0:0-8:0:0:0-block-sdb.device           loaded active     plugged            SD_MMC_CRW
+  sys-devices-pci0000:00-0000:00:16.3-0000:00:16.3:0-0000:00:16.3:0.0-tty-ttyS4.device                            loaded active     plugged            /sys/devices/pci0000:00/0000:00:16.3/0000:00:16.3:0/0000:00:16.3:0.0/tty/ttyS4
+  sys-devices-pci0000:00-0000:00:17.0-ata1-host0-target0:0:0-0:0:0:0-block-sda-sda1.device                        loaded active     plugged            TOSHIBA_DT01ACA200 DATADRIVE_1
+  sys-devices-pci0000:00-0000:00:17.0-ata1-host0-target0:0:0-0:0:0:0-block-sda.device                             loaded active     plugged            TOSHIBA_DT01ACA200
+  sys-devices-pci0000:00-0000:00:17.0-ata7-host6-target6:0:0-6:0:0:0-block-sr0.device                             loaded active     plugged            PLDS_DVD+_-RW_DU-8A5LH
+  sys-devices-pci0000:00-0000:00:1f.3-sound-card0-controlC0.device                                                loaded active     plugged            /sys/devices/pci0000:00/0000:00:1f.3/sound/card0/controlC0
+  sys-devices-pci0000:00-0000:00:1f.6-net-eno1.device                                                             loaded active     plugged            Ethernet Connection (5) I219-LM
+  sys-devices-pci0000:00-0000:00:1f.6-ptp-ptp0.device                                                             loaded active     plugged            /sys/devices/pci0000:00/0000:00:1f.6/ptp/ptp0
+  sys-devices-pci0000:64-0000:64:00.0-0000:65:00.1-sound-card1-controlC1.device                                   loaded active     plugged            /sys/devices/pci0000:64/0000:64:00.0/0000:65:00.1/sound/card1/controlC1
+  sys-devices-pci0000:b2-0000:b2:05.5-pci10000:00-10000:00:02.0-10000:01:00.0-nvme-nvme0-nvme0n1-nvme0n1p1.device loaded active     plugged            PC711 NVMe SK hynix 1TB Basic\x20data\x20partition
+  sys-devices-pci0000:b2-0000:b2:05.5-pci10000:00-10000:00:02.0-10000:01:00.0-nvme-nvme0-nvme0n1-nvme0n1p5.device loaded active     plugged            PC711 NVMe SK hynix 1TB 5
+  sys-devices-pci0000:b2-0000:b2:05.5-pci10000:00-10000:00:02.0-10000:01:00.0-nvme-nvme0-nvme0n1.device           loaded active     plugged            PC711 NVMe SK hynix 1TB
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.1-tty-ttyS1.device                                    loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.1/tty/ttyS1
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.10-tty-ttyS10.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.10/tty/ttyS10
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.11-tty-ttyS11.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.11/tty/ttyS11
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.12-tty-ttyS12.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.12/tty/ttyS12
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.13-tty-ttyS13.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.13/tty/ttyS13
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.14-tty-ttyS14.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.14/tty/ttyS14
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.15-tty-ttyS15.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.15/tty/ttyS15
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.16-tty-ttyS16.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.16/tty/ttyS16
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.17-tty-ttyS17.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.17/tty/ttyS17
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.18-tty-ttyS18.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.18/tty/ttyS18
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.19-tty-ttyS19.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.19/tty/ttyS19
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.2-tty-ttyS2.device                                    loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.2/tty/ttyS2
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.20-tty-ttyS20.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.20/tty/ttyS20
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.21-tty-ttyS21.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.21/tty/ttyS21
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.22-tty-ttyS22.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.22/tty/ttyS22
+  sys-devices-platform-serial8250-serial8250:0-serial8250:0.23-tty-ttyS23.device                                  loaded active     plugged            /sys/devices/platform/serial8250/serial8250:0/serial8250:0.23/tty/ttyS23
+[0m
+[0m$ [0msystemctl --user list-units --type=service | grep -E '(omniroute|eggbot|dell|tail|ew|business)'
+actions-runner-business-evidence-wallet.service                           loaded active     running            GitHub Actions Runner - business-evidence-wallet (Dell staged copy, not activated)
+  actions-runner-pool-cloud.service                                         loaded active     running            GitHub Actions Runner - dell-pool-cloud (cloud-workers), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-ee-critical.service                                   loaded active     running            GitHub Actions Runner - dell-pool-ee-critical (evolution-engine), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-ee.service                                            loaded active     running            GitHub Actions Runner - dell-pool-ee (evolution-engine), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-rtb.service                                           loaded active     running            GitHub Actions Runner - dell-pool-rtb (red-team-board), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-saw.service                                           loaded active     running            GitHub Actions Runner - dell-pool-saw (standalone-autonomous-worker), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-ush.service                                           loaded active     running            GitHub Actions Runner - dell-pool-ush (chapelgate-universal-secrets-handler.), added 15 Nov 2026 beside OmniRoute droplet pool runner
+● ai-stage1-orr-business-evidence-wallet.service                            loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-business-evidence-wallet-20261115 40
+● ai-stage1-orr-business-os.service                                         loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-business-os-20261115 40
+● ai-stage1-orr-chapelgate-information-rights.service                       loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-chapelgate-information-rights-20261115 40
+● ai-stage1-orr-chapelgate-multilingual-transcribe.service                  loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-chapelgate-multilingual-transcribe-20261115 40
+● ai-stage1-orr-council-minutes.service                                     loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-council-minutes-20261115 40
+● ai-stage1-orr-holiday-let-operator.service                                loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-holiday-let-operator-20261115 40
+● ai-stage1-orr-housing-compliance-vault.service                            loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-housing-compliance-vault-20261115 40
+● ai-stage1-orr-information-rights-complaints.service                       loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-information-rights-complaints-20261115 40
+● ai-stage1-orr-legal-case-management.service                               loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage1-orr-legal-case-management-20261115 40
+● ai-stage3-council-minutes.service                                         loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage3-council-minutes-20261115 40
+  ai-stage3-holiday-let-operator.service                                    loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage3-holiday-let-operator-20261115 40
+● ai-stage5-legal-case-management.service                                   loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ai-stage5-legal-case-management-20261115 40
+● b18-dell-staging-shakedown-r1.service                                     loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh.sh /home/andy/chapelgate/factory-tasks/b18-dell-staging-shakedown-20261117 80
+  chapelgate-business-evidence-wallet.service                               loaded activating auto-restart       Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080)
+● council-omniroute-review-r1.service                                       loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh.sh /home/andy/chapelgate/factory-tasks/council-omniroute-review-20261117 50
+● cso-cyber-essentials-self-assessment-readiness-20261120.service           loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cyber-essentials-self-assessment-readiness-20261120 40
+● cso-device-health-malware-audit-review-20261119.service                   loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/device-health-malware-audit-review-20261119 80
+● cso-estate-content-security-policy-inline-script-sweep-20261119.service   loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/estate-content-security-policy-inline-script-sweep-20261119 80
+  cso-estate-test-environment-repair-20261119.service                       loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/estate-test-environment-repair-20261119 80
+● cso-housing-compliance-vault-asvs-l2-wcag-attack-test-20261120-r3.service loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/housing-compliance-vault-asvs-l2-wcag-attack-test-20261120 120
+● cso-information-rights-complaints-tesseract-tests-20261119.service        loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/information-rights-complaints-tesseract-tests-20261119 80
+● cso-maintenanceos-website-security-fixes-20261120.service                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/maintenanceos-website-security-fixes-20261120 60
+● dell-hardware-council-r1.service                                          loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/dell-hardware-council-20261113 20
+  dell-watch-http.service                                                   loaded active     running            Dell watch status HTTP server
+● ef-bew-test-fixes.service                                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ef-bew-test-fixes-20261119 80
+● eggbot-watchdog.service                                                   loaded failed     failed             dr eggbot watchdog: oversight only, reports misses (Andy order 15 Nov 2026; dr eggbot may not stop or mute it)
+● estate-backup.service                                                     loaded failed     failed             Nightly estate backup: tars dell-services, jobs-work-dell (excl repos/node_modules), user systemd units, redacted opencode config
+● fix-b18-dell-staging-shakedown-r1.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-b18-dell-staging-shakedown-r1-20261121 40
+● fix-council-omniroute-review-r1.service                                   loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-council-omniroute-review-r1-20261121 40
+● fix-safety-screen-r1.service                                              loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-safety-screen-r1-20261115 60
+● foreman-improvements-cr005-014-r2.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/foreman-improvements-cr005-014 30
+  h25-08-holiday-let-operator.service                                       loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hard25-20261113/08-holiday-let-operator 40
+  h25-09-housing-compliance-vault.service                                   loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hard25-20261113/09-housing-compliance-vault 40
+  hcv-tutorial-verify.service                                               loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-tutorial-verify-20261120 120
+  job-competitor-gap.service                                                loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/competitor-gap-20261120 100
+  job-ew-dell-hosting.service                                               loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121 120
+  job-ew-signoff-features.service                                           loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ew-signoff-features-20261121 150
+  job-ew-status-rc.service                                                  loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ew-status-rc-20261121 150
+  job-hcv-council-sso.service                                               loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-council-sso-20261121 120
+  job-hcv-demo-sandbox.service                                              loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-demo-sandbox-20261121 100
+  job-hcv-maintenance-tier.service                                          loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-maintenance-tier-20261121 40
+● job-hcv-retention-deletion-r2.service                                     loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-retention-deletion-20261121 60
+● job-hcv-retention-deletion.service                                        loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-retention-deletion-20261121 120
+  job-hcv-wcag-audit-r2.service                                             loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-wcag-audit-20261121 60
+  job-hcv-wcag-audit.service                                                loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/hcv-wcag-audit-20261121 100
+● job-improve-four.service                                                  loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/improve-four-20261120 240
+● job-jobdb-council-build.service                                           loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/jobdb-council-build-20261120 60
+● job-podcast-ai-morning-read-scrape.service                                loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/podcast-ai-morning-read-20261120 80
+  job-video-status.service                                                  loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/video-status-20261120 30
+  job-website-council-rebuild.service                                       loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/website-council-rebuild-20261120 150
+  local-dell-llama.service                                                  loaded active     running            Local Dell llama.cpp server (Qwen2.5-Coder-7B Q4_K_M, CPU)
+  local-dell-qwen-trial-r1.service                                          loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/local-dell-qwen-trial-20261115 40
+  mac-lmstudio-forward.service                                              loaded active     running            Mac Trainer: forward 127.0.0.1:11234 to Mac Studio LM Studio over tailnet
+  mac-lmstudio-relay.service                                                loaded active     running            Relay docker bridge 11234 to Mac LM Studio over tailnet SOCKS
+● mlt-offline-speech-weights-r1.service                                     loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/mlt-offline-speech-weights-20261116 60
+  narrow-pilot-pack-r1.service                                              loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/narrow-pilot-pack-20261116 50
+  omniroute-db-integrity.service                                            loaded activating start        start OmniRoute Database Integrity Check Service
+  omniroute-fallback.service                                                loaded active     running            OmniRoute local-first fallback proxy
+  omniroute-front-proxy.service                                             loaded active     running            OmniRoute front proxy 127.0.0.1:20140 (failover 20128 -> 20131 -> 11234), dr eggbot 16 Nov 2026
+● omniroute-health.service                                                  loaded failed     failed             Check OmniRoute endpoints
+  openclaw-gateway.service                                                  loaded active     running            OpenClaw gateway for Mac Trainer (loopback only)
+  org-adopt-orphan-repos-r1.service                                         loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/org-adopt-orphan-repos-20261116 60
+  pipewire-pulse.service                                                    loaded active     running            PipeWire PulseAudio
+  pipewire.service                                                          loaded active     running            PipeWire Multimedia Service
+● reel-adopt-20-attack-vectors-rapid-reset-okta-gitlab-spotif.service       loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-20-attack-vectors-rapid-reset-okta-gitlab-spotif-20261121 120
+● reel-adopt-anthropic-playbook-pattern-one-agent-playbooks-v.service       loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-anthropic-playbook-pattern-one-agent-playbooks-v-20261121 120
+● reel-adopt-cybersecurity-investigation-osint.service                      loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-cybersecurity-investigation-osint-20261121 120
+● reel-adopt-five-sign-up-tests-before-launch-localhost-googl.service       loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-five-sign-up-tests-before-launch-localhost-googl-20261119 120
+● reel-adopt-full-attack-chain-facial-rec-breach-db-password.service        loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-full-attack-chain-facial-rec-breach-db-password-20261121 120
+  reel-review-council-20261117-0916.service                                 loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261117-0916 30
+● reel-review-council-20261120-0946.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261120-0946 30
+● reel-review-council-20261121-0107.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0107 30
+● reel-review-council-20261121-0307.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0307 30
+● reel-review-council-20261121-0322.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0322 30
+● reel-review-council-20261121-0337.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0337 30
+● reel-review-council-20261121-0352.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0352 30
+● reel-review-council-20261121-0407.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0407 30
+● reel-review-council-20261121-0422.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0422 30
+● reel-review-council-20261121-0437.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0437 30
+● reel-review-council-20261121-0452.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0452 30
+● reel-review-council-20261121-0507.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0507 30
+● reel-review-council-20261121-0522.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0522 30
+● reel-review-council-20261121-0537.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0537 30
+● reel-review-council-20261121-0552.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0552 30
+● reel-review-council-20261121-0607.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0607 30
+● reel-review-council-20261121-0622.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0622 30
+● reel-review-council-20261121-0637.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0637 30
+● reel-review-council-20261121-0652.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0652 30
+● reel-review-council-20261121-0707.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0707 30
+● reel-review-council-20261121-0722.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0722 30
+● reel-review-council-20261121-0737.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0737 30
+● reel-review-council-20261121-0752.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0752 30
+● reel-review-council-20261121-0807.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0807 30
+● reel-review-council-20261121-0822.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0822 30
+● reel-review-council-20261121-0837.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0837 30
+● reel-review-council-20261121-0852.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0852 30
+● reel-review-council-20261121-0907.service                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-0907 30
+  reel-review-council-20261121-1122.service                                 loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261121-1122 30
+● reel-trial-ux-principles-checklist.service                                loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-trial-ux-principles-checklist-20261121 120
+● rescore-12-products-r1.service                                            loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rescore-12-products-20261116 30
+● router-outage-fixes-r1.service                                            loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/router-outage-fixes-20261115 40
+  shadow-wcag22aa-r1.service                                                loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/shadow-wcag22aa-20261116 90
+● slice7-endtest-r1.service                                                 loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/slice7-endtest 30
+  tailscaled-user.service                                                   loaded active     running            Tailscale userspace daemon
+● trading-bot-ai-agent-r1.service                                           loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/trading-bot-ai-agent-20261116 120
+  tutorial-benchmark-rework.service                                         loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/tutorial-benchmark-rework-20261118 120
+● video-skill-install-r1.service                                            loaded failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/video-skill-install-20261116 60
+  welsh-pilot-pitch-r1.service                                              loaded active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/welsh-pilot-pitch-20261117 60
+[0m
+[0m$ [0mcurl -sf http://127.0.0.1:8080/health 2>/dev/null && echo "OK" || echo "FAIL"
+FAIL
+[0m
+[0m$ [0msystemctl --user status chapelgate-business-evidence-wallet.service
+● chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080)
+     Loaded: loaded (/home/andy/.config/systemd/user/chapelgate-business-evidence-wallet.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Sat 2026-11-21 17:06:36 GMT; 5s ago
+    Process: 2001803 ExecStart=/usr/bin/bash /home/andy/chapelgate/dell-services/business-evidence-wallet-run.sh (code=exited, status=1/FAILURE)
+   Main PID: 2001803 (code=exited, status=1/FAILURE)
+        CPU: 110ms
+[0m
+[0m→ [0mRead /home/andy/chapelgate/dell-services/business-evidence-wallet-run.sh
+[0m
+[0m$ [0mls -ld /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo
+drwxrwxr-x 24 andy andy 4096 Nov 11 17:23 /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo
+[0m
+[0m$ [0mnetstat -tlnp 2>/dev/null | grep -E '(8080|55432|20128|20140)' || ss -tlnp 2>/dev/null | grep -E '(8080|55432|20128|20140)'
+LISTEN 0      200        127.0.0.1:55432      0.0.0.0:*    users:(("postgres",pid=1740611,fd=8))     
+LISTEN 0      4096       127.0.0.1:20128      0.0.0.0:*                                              
+LISTEN 0      5            0.0.0.0:20140      0.0.0.0:*    users:(("python3",pid=1805330,fd=3))
+[0m
+[0m$ [0mtailscale ip -4 2>/dev/null || echo "tailscale not available"
+tailscale not available
+[0m
+[0m$ [0mwhich tailscale
+(no output)
+[0m
+[0m$ [0msystemctl --user status tailscaled-user.service
+● tailscaled-user.service - Tailscale userspace daemon
+     Loaded: loaded (/home/andy/.config/systemd/user/tailscaled-user.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-11-20 23:58:00 GMT; 17h ago
+   Main PID: 2982800 (tailscaled)
+      Tasks: 25 (limit: 70708)
+     Memory: 406.5M (peak: 26.1G swap: 4.1M swap peak: 23.4M)
+        CPU: 26min 15.007s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/tailscaled-user.service
+             ├─2982800 /home/andy/tailscale/tailscaled --tun=userspace-networking --statedir=/home/andy/tailscale/state --socket=/home/andy/tailscale/tailscaled.sock --socks5-server=localhost:1055
+             ├─3142053 bash -c "for d in /mnt/d/*/; do timeout 240 du -sh \"\$d\" 2>/dev/null; done | sort -rh > /tmp/du-d-top.txt; for d in /mnt/d/archives/*; do timeout 240 du -sh \"\$d\" 2>/dev/null; done | sort -rh > /tmp/du-d-arch.txt; find / /mnt/d -xdev -type f -size +10G -printf \"%s %p\\n\" 2>/dev/null | sort -rn > /tmp/big10g.txt"
+             ├─3580620 find / /mnt/d -xdev -type f -size +10 "" -printf "%s %p\nn"
+             └─3580621 sort -rn
+
+Nov 20 23:58:00 andy-Precision-5820-Tower systemd[1511]: tailscaled-user.service: Scheduled restart job, restart counter is at 1.
+Nov 20 23:58:00 andy-Precision-5820-Tower systemd[1511]: Started tailscaled-user.service - Tailscale userspace daemon.
+Nov 21 09:21:15 andy-Precision-5820-Tower sudo[3116637]:     andy : a password is required ; PWD=/home/andy ; USER=root ; COMMAND=/usr/bin/true
+Nov 21 09:27:24 andy-Precision-5820-Tower crontab[3160306]: (andy) LIST (andy)
+[0m
+[0m$ [0m/home/andy/tailscale/tailscale ip -4 2>/dev/null || echo "tailscale CLI not in path or no output"
+tailscale CLI not in path or no output
+[0m
+[0m$ [0mls -la /home/andy/tailscale/
+total 133080
+drwxrwxr-x  4 andy andy     4096 Nov 20 23:58 .
+drwxr-x--- 60 andy andy    20480 Nov 21 13:27 ..
+drwxrwxr-x  7 andy andy     4096 Nov 14 16:12 state
+drwxr-xr-x  2 andy andy     4096 Nov 10 23:24 systemd
+-rwxr-xr-x  1 andy andy 34346837 Nov 10 23:24 tailscale
+-rwxr-xr-x  1 andy andy 43936416 Nov 10 23:24 tailscaled
+-rw-rw-r--  1 andy andy 13712217 Nov 21 17:08 tailscaled.log
+srw-rw-rw-  1 andy andy        0 Nov 20 23:58 tailscaled.sock
+-rw-rw-r--  1 andy andy 41392900 Nov 11 09:01 ts.tgz
+-rw-rw-r--  1 andy andy      177 Nov 11 09:01 up.log
+-rw-rw-r--  1 andy andy  2822291 Nov 21 17:05 watch-http.log
+[0m
+[0m$ [0m/home/andy/tailscale/tailscale status 2>/dev/null || echo "tailscale not connected"
+tailscale not connected
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git fetch origin rc/ew-20261121 2>&1 | head -20
+From https://github.com/chapelgate/business-evidence-wallet
+ * branch              rc/ew-20261121 -> FETCH_HEAD
+ * [new branch]        rc/ew-20261121 -> origin/rc/ew-20261121
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git checkout rc/ew-20261121
+Switched to a new branch 'rc/ew-20261121'
+branch 'rc/ew-20261121' set up to track 'origin/rc/ew-20261121'.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git rev-parse HEAD
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm ci --no-audit --no-fund 2>&1 | tail -20
+npm error Missing: brace-expansion@2.1.8 from lock file
+npm error
+npm error Clean install a project
+npm error
+npm error Usage:
+npm error npm ci
+npm error
+npm error Options:
+npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+npm error [--no-bin-links] [--no-fund] [--dry-run]
+npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+npm error
+npm error aliases: clean-install, ic, install-clean, isntall-clean
+npm error
+npm error Run "npm help ci" for more info
+npm error A complete log of this run can be found in: /mnt/d/caches/npm/_logs/2026-11-21T17_11_09_897Z-debug-0.log
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm install --no-audit --no-fund 2>&1 | tail -30
+npm warn deprecated recharts@2.15.4: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
+npm warn deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+
+added 458 packages in 1m
+[0m
+[0m→ [0mRead repo/scripts/pg-local.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node scripts/pg-local.mjs status
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+{"running":false,"engine":"postgresql","pgVersion":null,"version":null,"port":55432,"dataDir":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/postgres","dbName":"evidence_wallet","passwordFile":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/pg-password"}
+[0m
+[0m$ [0mps aux | grep postgres
+70          9807  0.0  0.0 174036  2100 ?        Ss   Nov20   0:17 postgres
+70         10556  0.0  0.0 174196  2952 ?        Ss   Nov20   0:01 postgres: checkpointer 
+70         10557  0.0  0.0 174140  1504 ?        Ss   Nov20   0:40 postgres: background writer 
+70         10599  0.0  0.0 174108  1004 ?        Ss   Nov20   0:33 postgres: walwriter 
+70         10600  0.0  0.0 175716  2316 ?        Ss   Nov20   0:41 postgres: autovacuum launcher 
+70         10601  0.0  0.0 175644  2524 ?        Ss   Nov20   0:10 postgres: logical replication launcher 
+dnsmasq   886560  0.0  0.0 220068  1180 ?        Ss   Nov20   0:22 postgres
+dnsmasq   886833  0.0  0.0 220488  1996 ?        Ss   Nov20   0:00 postgres: checkpointer 
+dnsmasq   886834  0.0  0.0 220220   952 ?        Ss   Nov20   0:04 postgres: background writer 
+dnsmasq   886836  0.0  0.0 220068   872 ?        Ss   Nov20   0:04 postgres: walwriter 
+dnsmasq   886837  0.0  0.0 221660  1524 ?        Ss   Nov20   0:06 postgres: autovacuum launcher 
+dnsmasq   886838  0.0  0.0 221648  1252 ?        Ss   Nov20   0:00 postgres: logical replication launcher 
+dnsmasq  1043926  0.0  0.0 219772  6284 ?        Ss   03:35   0:01 postgres
+dnsmasq  1044170  0.0  0.0 220048  6308 ?        Ss   03:35   0:00 postgres: checkpointer 
+dnsmasq  1044171  0.0  0.0 219908  2740 ?        Ss   03:35   0:00 postgres: background writer 
+dnsmasq  1044173  0.0  0.0 219772  2132 ?        Ss   03:35   0:00 postgres: walwriter 
+dnsmasq  1044174  0.0  0.0 221352  3800 ?        Ss   03:35   0:00 postgres: autovacuum launcher 
+dnsmasq  1044175  0.0  0.0 221340  3100 ?        Ss   03:35   0:00 postgres: logical replication launcher 
+andy     1740611  0.1  0.0 222340  4540 ?        Ss   16:47   0:01 /home/andy/chapelgate/factory-tasks/hard25-20261113/09-housing-compliance-vault/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /tmp/hcv-pg/data -p 55432 -k /tmp/hcv-pg/run -h 127.0.0.1
+andy     1740612  0.0  0.0 222472   716 ?        Ss   16:47   0:00 postgres: io worker 0
+andy     1740613  0.0  0.0 222472   716 ?        Ss   16:47   0:00 postgres: io worker 1
+andy     1740614  0.0  0.0 222472   716 ?        Ss   16:47   0:00 postgres: io worker 2
+andy     1740615  0.0  0.0 222732  1400 ?        Ss   16:47   0:00 postgres: checkpointer 
+andy     1740616  0.0  0.0 222472   956 ?        Ss   16:47   0:01 postgres: background writer 
+andy     1740618  0.0  0.0 222472   760 ?        Ss   16:47   0:01 postgres: walwriter 
+andy     1740619  0.1  0.0 223928  1896 ?        Ss   16:47   0:02 postgres: autovacuum launcher 
+andy     1740620  0.0  0.0 223928  1280 ?        Ss   16:47   0:00 postgres: logical replication launcher 
+andy     1872202  0.0  0.0 222340  8420 ?        Ss   16:58   0:00 /home/andy/chapelgate/factory-tasks/hcv-demo-sandbox-20261121/repo/node_modules/embedded-postgres/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /home/andy/chapelgate/factory-tasks/hcv-demo-sandbox-20261121/repo/data/postgres-demo -p 55446 -k /home/andy/chapelgate/factory-tasks/hcv-demo-sandbox-20261121/repo/data/postgres-demo-run -h 127.0.0.1
+andy     1872204  0.0  0.0 222472  1848 ?        Ss   16:58   0:00 postgres: io worker 0
+andy     1872205  0.0  0.0 222472  1452 ?        Ss   16:58   0:00 postgres: io worker 1
+andy     1872206  0.0  0.0 222340  1092 ?        Ss   16:58   0:00 postgres: io worker 2
+andy     1872207  0.0  0.0 222472  3008 ?        Ss   16:58   0:00 postgres: checkpointer 
+andy     1872208  0.0  0.0 222472  2124 ?        Ds   16:58   0:00 postgres: background writer 
+andy     1872210  0.0  0.0 222472  3276 ?        Ss   16:58   0:00 postgres: walwriter 
+andy     1872211  0.0  0.0 223936  2140 ?        Ss   16:58   0:00 postgres: autovacuum launcher 
+andy     1872212  0.0  0.0 223800  1676 ?        Ss   16:58   0:00 postgres: logical replication launcher 
+andy     1905837  0.0  0.0 222344  4540 ?        Ss   17:00   0:00 /home/andy/chapelgate/factory-tasks/ew-status-rc-20261121/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /tmp/ew-rollback-MLddH0/postgres -p 55435 -k /tmp/ew-rollback-MLddH0/run -h 127.0.0.1
+andy     1905907  0.0  0.0 222480   720 ?        Ss   17:00   0:00 postgres: io worker 0
+andy     1905908  0.0  0.0 222480   720 ?        Ss   17:00   0:00 postgres: io worker 1
+andy     1905909  0.0  0.0 222480   720 ?        Ss   17:00   0:00 postgres: io worker 2
+andy     1905910  0.0  0.0 222776  1500 ?        Ss   17:00   0:00 postgres: checkpointer 
+andy     1905911  0.1  0.0 222480  1336 ?        Ss   17:00   0:00 postgres: background writer 
+andy     1905934  0.1  0.0 222480  1128 ?        Ss   17:00   0:00 postgres: walwriter 
+andy     1905935  0.1  0.0 223936  3872 ?        Ss   17:00   0:01 postgres: autovacuum launcher 
+andy     1905936  0.0  0.0 223936  3496 ?        Ss   17:00   0:00 postgres: logical replication launcher 
+andy     1936469  0.0  0.0 222344  4516 ?        Ss   17:02   0:00 /home/andy/chapelgate/factory-tasks/ew-status-rc-20261121/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /tmp/ew-rollback-wsdo2O/postgres -p 55436 -k /tmp/ew-rollback-wsdo2O/run -h 127.0.0.1
+andy     1936470  0.0  0.0 222480   720 ?        Ss   17:02   0:00 postgres: io worker 0
+andy     1936471  0.0  0.0 222480   720 ?        Ss   17:02   0:00 postgres: io worker 1
+andy     1936472  0.0  0.0 222480   720 ?        Ss   17:02   0:00 postgres: io worker 2
+andy     1936473  1.0  0.0 222776  2240 ?        Ss   17:02   0:06 postgres: checkpointer 
+andy     1936474  0.1  0.0 222480  1416 ?        Ss   17:02   0:00 postgres: background writer 
+andy     1936476  0.2  0.0 222480  1132 ?        Ss   17:02   0:01 postgres: walwriter 
+andy     1936477  0.2  0.0 223936  3864 ?        Ss   17:02   0:01 postgres: autovacuum launcher 
+andy     1936478  0.0  0.0 223936  3520 ?        Ss   17:02   0:00 postgres: logical replication launcher 
+andy     1992571  0.0  0.0 222344  4508 ?        Ss   17:06   0:00 /home/andy/chapelgate/factory-tasks/ew-status-rc-20261121/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /tmp/ew-rollback-61xxul/postgres -p 55437 -k /tmp/ew-rollback-61xxul/run -h 127.0.0.1
+andy     1992606  0.0  0.0 222480   788 ?        Ss   17:06   0:00 postgres: io worker 0
+andy     1992607  0.0  0.0 222480   832 ?        Ss   17:06   0:00 postgres: io worker 1
+andy     1992608  0.0  0.0 222480   752 ?        Ss   17:06   0:00 postgres: io worker 2
+andy     1992609  0.0  0.0 222776  6100 ?        Ss   17:06   0:00 postgres: checkpointer 
+andy     1992610  0.0  0.0 222480  2120 ?        Ss   17:06   0:00 postgres: background writer 
+andy     1992627  0.0  0.0 222480  1576 ?        Ss   17:06   0:00 postgres: walwriter 
+andy     1992628  0.0  0.0 223936  3884 ?        Ss   17:06   0:00 postgres: autovacuum launcher 
+andy     1992630  0.0  0.0 223936  3600 ?        Ss   17:06   0:00 postgres: logical replication launcher 
+dnsmasq  2079055  0.0  0.0 223160 14668 ?        Ss   17:11   0:00 postgres: postgres pentagidb 172.20.0.4(36608) idle
+70       2094485  0.0  0.0 176440 10524 ?        Ss   17:12   0:00 postgres: langfuse langfuse 172.22.0.4(60242) idle
+andy     2097807  0.0  0.0 222340 25680 ?        SNs  17:13   0:00 /home/andy/chapelgate/dell-services/src/housing-compliance-vault/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /home/andy/chapelgate/dell-services/data/hcv-postgres -p 55433 -k /tmp/hcv-pg-run -h 127.0.0.1
+andy     2097810  0.0  0.0 222472  6868 ?        SNs  17:13   0:00 postgres: io worker 0
+andy     2097811  0.0  0.0 222472  5724 ?        SNs  17:13   0:00 postgres: io worker 1
+andy     2097812  0.0  0.0 222340  5128 ?        SNs  17:13   0:00 postgres: io worker 2
+andy     2097813  0.0  0.0 222472  5312 ?        SNs  17:13   0:00 postgres: checkpointer 
+andy     2097814  0.0  0.0 222472  5272 ?        SNs  17:13   0:00 postgres: background writer 
+andy     2097820  0.0  0.0 223496  5428 ?        SNs  17:13   0:00 postgres: walwriter 
+andy     2097821  0.0  0.0 223928  8284 ?        SNs  17:13   0:00 postgres: autovacuum launcher 
+andy     2097822  0.0  0.0 223928  7576 ?        SNs  17:13   0:00 postgres: logical replication launcher 
+andy     2098137  4.1  0.0 222500  1524 ?        Ds   17:13   0:00 postgres: autovacuum worker 
+andy     2098562  0.0  0.0   2760  1812 ?        S    17:13   0:00 /home/andy/chapelgate/factory-tasks/estate-test-environment-repair-20261119/repo/bew-test/node_modules/@embedded-postgres/linux-x64/native/bin/pg_ctl -D /home/andy/chapelgate/factory-tasks/estate-test-environment-repair-20261119/repo/bew-test/data/postgres -l /home/andy/chapelgate/factory-tasks/estate-test-environment-repair-20261119/repo/bew-test/data/postgres.log -w -t 20 -o -p 55432 -k /home/andy/chapelgate/factory-tasks/estate-test-environment-repair-20261119/repo/bew-test/data/postgres-run -h 127.0.0.1 start
+andy     2098570  0.0  0.0   2812  1960 ?        S    17:13   0:00 sh -c -- "/home/andy/chapelgate/repos/business-evidence-wallet/node_modules/@embedded-postgres/linux-x64/native/bin/postgres" -V
+andy     2098576  1.2  0.0   9228   264 ?        D    17:13   0:00 /home/andy/chapelgate/repos/business-evidence-wallet/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -V
+andy     2098845  0.0  0.0   9952  3612 ?        Ss   17:13   0:00 /bin/bash -c ps aux | grep postgres
+andy     2098848  0.0  0.0   9156  2368 ?        S    17:13   0:00 grep postgres
+[0m
+[0m$ [0mnetstat -tln 2>/dev/null | grep -E ':554[0-9][0-9]' | sort || ss -tln 2>/dev/null | grep -E ':554[0-9][0-9]' | sort
+(no output)
+[0m
+[0m$ [0mss -tln 2>/dev/null | grep postgres || netstat -tln 2>/dev/null | grep postgres || ss -tln 2>/dev/null | grep -E ':5[0-9]{4}' | head -20
+LISTEN 0      200        127.0.0.1:55446      0.0.0.0:*          
+LISTEN 0      200        127.0.0.1:55436      0.0.0.0:*          
+LISTEN 0      200        127.0.0.1:55437      0.0.0.0:*          
+LISTEN 0      200        127.0.0.1:55432      0.0.0.0:*          
+LISTEN 0      200        127.0.0.1:55433      0.0.0.0:*          
+LISTEN 0      200        127.0.0.1:55435      0.0.0.0:*
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mfor port in {55438..55450}; do ss -tln | grep -q ":$port " || { echo "Free port: $port"; break; }; done
+Free port: 55438
+[0m
+[0m$ [0mfor port in {8080..8100}; do ss -tln | grep -q ":$port " || { echo "Free port: $port"; break; }; done
+Free port: 8080
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && EW_PG_PORT=55438 node scripts/pg-local.mjs start
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+{"ok":true,"engine":"postgresql","versionFile":"18","port":55438,"dataDir":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/pg-password","initialized":true,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":true,"urlHost":"127.0.0.1"}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && export DATABASE_URL="$(node scripts/pg-local.mjs url)" && export BETTER_AUTH_SECRET="$(node scripts/pg-local.mjs auth-secret)" && node scripts/migrate.mjs
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+[migrate] failed: password authentication failed for user "ew"
+[migrate]   code: 28P01
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/pg-password
+ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && export PGPASSWORD=ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O && psql -h 127.0.0.1 -p 55438 -U ew -d evidence_wallet -c "SELECT 1"
+/bin/bash: line 1: psql: command not found
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@embedded-postgres/linux-x64/native/bin/
+initdb
+pg_ctl
+postgres
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node -e "
+const pg = require('pg');
+const pool = new pg.Pool({ connectionString: 'postgres://ew:ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O@127.0.0.1:55438/evidence_wallet', max: 1 });
+pool.query('SELECT 1').then(r => console.log('OK:', r.rows)).catch(e => console.error('FAIL:', e.message)).finally(() => pool.end());
+"
+OK: [ { '?column?': 1 } ]
+[0m
+[0m→ [0mRead repo/scripts/migrate.mjs
+[0m→ [0mRead repo/scripts/pg-ssl.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node scripts/pg-local.mjs url
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+postgres://ew:ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O@127.0.0.1:55432/evidence_wallet
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && EW_PG_PORT=55438 node -e "
+const { clusterConfig, connectionUrl } = await import('./scripts/pg-local.mjs');
+const cfg = clusterConfig();
+console.log('Port from config:', cfg.port);
+console.log('URL:', connectionUrl(cfg));
+"
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+Port from config: 55438
+URL: postgres://ew:ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O@127.0.0.1:55438/evidence_wallet
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && export EW_PG_PORT=55438 && export DATABASE_URL="$(node scripts/pg-local.mjs url)" && export BETTER_AUTH_SECRET="$(node scripts/pg-local.mjs auth-secret)" && node scripts/migrate.mjs
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_evidence_wallet.sql
+[migrate] applied 0003_answer_notes.sql
+[migrate] applied 0004_claim_human_edits.sql
+[migrate] applied 0005_integrity_guards.sql
+[migrate] applied 0006_rate_quotas_invites.sql
+[migrate] applied 0007_org_lifecycle.sql
+[migrate] applied 0008_demo_filename_unique.sql
+[migrate] applied 0009_orphan_source_facts.sql
+[migrate] applied 0010_orphan_source_org_scope.sql
+[migrate] applied 0011_v2_foundations.sql
+[migrate] applied 0012_v2_decision_inbox.sql
+[migrate] applied 0013_v2_council_hardening.sql
+[migrate] applied 0014_v2_agent_loop.sql
+[migrate] applied 0015_v2_workflows.sql
+[migrate] applied 0016_v2_quotes_comms.sql
+[migrate] applied 0017_v2_answer_bank_inbox.sql
+[migrate] applied 0018_v2_rls_tenant.sql
+[migrate] applied 0019_v2_deletion_orders_assertions.sql
+[migrate] applied 0020_v2_perf_indexes.sql
+[migrate] applied 0021_v2_preference_hints.sql
+[migrate] applied 0022_v2_preference_scopes.sql
+[migrate] applied 0023_v2_agent_credential_rotation.sql
+[migrate] applied 0024_v2_entity_type_defs.sql
+[migrate] applied 0025_v2_relation_type_defs.sql
+[migrate] applied 0026_v2_gateway_audit_rls.sql
+[migrate] applied 0027_v2_gateway_phase_o.sql
+[migrate] done — 27 migration(s) applied.
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/ | grep -i seed
+hcv-entities-seed-answer-busy.test.mjs
+hcv-entities-seed-inbound-busy.test.mjs
+hcv-entities-seed-preference-busy.test.mjs
+hcv-entity-seed-alert.test.mjs
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mgrep -r "seed" /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/*.mjs | head -20
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-create-busy.test.mjs:test("entity seed errors stay alerts", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-answer-busy.test.mjs:test("seed answer draft is announced and marked busy", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-answer-busy.test.mjs:  const button = source.indexOf("aria-busy={seedAnswer.isPending}");
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-answer-busy.test.mjs:  assert.match(slice, /aria-busy=\{seedAnswer\.isPending\}/);
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-answer-busy.test.mjs:test("seed answer errors stay alerts", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-inbound-busy.test.mjs:test("seed inbound is announced and marked busy", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-inbound-busy.test.mjs:  const button = source.indexOf("aria-busy={seedInbound.isPending}");
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-inbound-busy.test.mjs:test("seed inbound errors stay alerts", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-preference-busy.test.mjs:test("seed preference is announced and marked busy", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-preference-busy.test.mjs:  const button = source.indexOf("aria-busy={seedPreference.isPending}");
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entities-seed-preference-busy.test.mjs:test("seed preference errors stay alerts", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entity-seed-alert.test.mjs:test("entity seed, inbound staging, and type archive failures are alerts", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entity-seed-alert.test.mjs:  for (const name of ["createOrgEntity", "seedAnswer", "seedInbound", "archiveTypeDef"]) {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-entity-seed-alert.test.mjs:  const at = source.indexOf("seedPreference.error");
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/http-restart-persistence.mjs:async function seed(page) {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/http-restart-persistence.mjs:    await page.screenshot({ path: "/workspace/screenshots/persist-seed-failed.png", fullPage: true }).catch(() => {});
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/http-restart-persistence.mjs:    console.error("seed url", page.url());
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/http-restart-persistence.mjs:  const seeded = await seed(page);
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/http-restart-persistence.mjs:  await verify(after, seeded.packUrl, seeded.originalSha);
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/http-restart-persistence.mjs:      packUrl: seeded.packUrl,
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/*.mjs | xargs -I{} basename {} | head -40
+accelerometer-permissions-deny-lock.test.mjs
+admin-error-copy-lock.test.mjs
+agent-display-name-max-lock.test.mjs
+agent-display-name-max-wire-lock.test.mjs
+agent-loop-events-list-max-lock.test.mjs
+agent-loop-runs-list-max-lock.test.mjs
+agent-purpose-max-lock.test.mjs
+ai-grounding-lock.test.mjs
+ai-response-caps-lock.test.mjs
+ai-timeout-lock.test.mjs
+all-screens-capture-permissions-deny-lock.test.mjs
+ambient-light-sensor-permissions-deny-lock.test.mjs
+amounts-equal-lock.test.mjs
+answer-bank-lock.test.mjs
+answer-fail-closed-lock.test.mjs
+answers-lock.test.mjs
+answer-status-lock.test.mjs
+app-env-plugin.mjs
+assertion-kind-max-lock.test.mjs
+attribution-reporting-permissions-deny-lock.test.mjs
+authority-demote-lock.test.mjs
+authority-lock.test.mjs
+battery-permissions-deny-lock.test.mjs
+bluetooth-permissions-deny-lock.test.mjs
+brand-check.mjs
+brand-check.test.mjs
+browser-guard.mjs
+browser-install-permissions-deny-lock.test.mjs
+browser-sandbox-lock.test.mjs
+browser-smoke.mjs
+browser-smoke-verdict.mjs
+browser-smoke-verdict.test.mjs
+browsing-topics-permissions-deny-lock.test.mjs
+build-decision-worker-view-lock.test.mjs
+calendar-date-lock.test.mjs
+canonical-key-max-lock.test.mjs
+canonical-keys-lock.test.mjs
+capability-max-lock.test.mjs
+captured-surface-control-permissions-deny-lock.test.mjs
+capture-permissions-deny-lock.test.mjs
+xargs: basename: terminated by signal 13
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/ | grep -E '(seed|tenant|demo|synth)' | head -20
+authority-demote-lock.test.mjs
+demo-pack-synthetic-lock.test.mjs
+e2e-demo.mjs
+gateway-tenant-org-id-max-lock.test.mjs
+hcv-entities-seed-answer-busy.test.mjs
+hcv-entities-seed-inbound-busy.test.mjs
+hcv-entities-seed-preference-busy.test.mjs
+hcv-entity-seed-alert.test.mjs
+hcv-index-demo-loading-status.test.mjs
+hcv-nodemon-cut.test.mjs
+hcv-overview-demo-busy.test.mjs
+hcv-synthetic-demo.test.mjs
+hcv-tenant-guc-fail-closed.test.mjs
+hcv-tenant-membership.test.mjs
+[0m
+[0m→ [0mRead repo/scripts/e2e-demo.mjs
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/public/
+favicon.svg
+__grok
+og.jpg
+[0m
+[0m$ [0mgrep -r "synthetic" /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/*.mjs | head -20
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/demo-pack-synthetic-lock.test.mjs:describe("demo pack synthetic lock", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/demo-pack-synthetic-lock.test.mjs:  it("demoFiles returns seven synthetic files with -demo filenames", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-clock-fail-closed.test.mjs:  displayValue: "synthetic",
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-expiry-budget.test.mjs:    displayValue: "synthetic",
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-expiry-budget.test.mjs:test("five thousand synthetic certificate expiries stay under one second", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-first-release-cuts.test.mjs:test("first-release cuts name the synthetic boundary and the cut list", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-first-release-cuts.test.mjs:  assert.match(body, /private synthetic demonstration/);
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-ico-boundary.test.mjs:test("ico boundary names launch gate and synthetic scope", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-ico-boundary.test.mjs:  assert.match(body, /synthetic only/);
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-kiosk-cut.test.mjs:  assert.match(body, /private synthetic demonstration/);
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-synthetic-demo.test.mjs:test("synthetic demo names Northbridge host demo and absent housing tree", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-synthetic-demo.test.mjs:  assert.match(body, /private synthetic demonstration/);
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hcv-synthetic-demo.test.mjs:test("synthetic demo forbids a live customer housing claim", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hosted-acceptance.mjs: * Optional operator session (synthetic data only):
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/hosted-acceptance.mjs:      next: "Set HOSTED_OPERATOR_EMAIL and HOSTED_OPERATOR_PASSWORD for the synthetic journey.",
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/live-adapters-lock.test.mjs:  it("stays live:false even when a synthetic credential is present", () => {
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/live-adapters-lock.test.mjs:      BEW_SMTP_URL: "synthetic-smtp",
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/live-adapters-lock.test.mjs:      BEW_EMAIL_API_KEY: "synthetic-email",
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/live-adapters-lock.test.mjs:      BEW_MAILBOX_IMAP_URL: "synthetic-imap",
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/live-adapters-lock.test.mjs:      BEW_MAILBOX_API_KEY: "synthetic-mailbox",
+[0m
+[0m→ [0mRead repo/scripts/hosted-acceptance.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && export EW_PG_PORT=55438 && export DATABASE_URL="$(node scripts/pg-local.mjs url)" && export BETTER_AUTH_SECRET="$(node scripts/pg-local.mjs auth-secret)" && timeout 30 npm run dev 2>&1 | head -50
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+
+> app-builder-workspace@0.0.0-private dev
+> node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port ${EW_HTTP_PORT:-8080}
+
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/grok-pwa-shared.mjs'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/grok-pwa-plugin.mjs'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/app-env-plugin.mjs'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/migration-plan.mjs'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/vite.config.ts'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.env.example'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.gitignore'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.gitleaksignore'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.node_modules.lock'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.prettierrc'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/ACCEPTANCE.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/AGENTS.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/AGENTS.project.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/AUTONOMOUS_WORK_SLICES.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/COMMERCIAL-READINESS.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/COMMERCIAL_ACCEPTANCE_EVIDENCE.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/COMMERCIAL_RELEASE_STATUS.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/DECISIONS.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/FINAL_REPORT_t810u.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/FIX-LIST-2.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/FIX-LIST-3.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/FIX-LIST-4.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/FIX-LIST-6.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/HUMAN_BLOCKERS.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/MASTER_PROBLEM_REGISTER.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/PLAN.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/README.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/RISKS.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/RUNBOOK.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/SECURITY.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/TASKS.md'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/evidence-wallet-independent-review.zip'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/opencode.json'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/package-lock.json'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/package.json'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/startup-production.sh'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/startup.sh'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/tsconfig.json'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/public'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/public/favicon.svg'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/public/og.jpg'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo'
+file watcher error: ENOSPC: System limit for number of file watchers reached, watch '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo'
+[0m
+[93m[1m! [0mpermission requested: external_directory (/proc/sys/fs/inotify/*); auto-rejecting
+[0m✗ [0mcat /proc/sys/fs/inotify/max_user_watches failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

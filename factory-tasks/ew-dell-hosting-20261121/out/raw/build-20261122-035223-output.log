@@ -1,0 +1,102 @@
+# rt build | 20261122-035223 | sha 12fe0f9513da6bd1ec32fef7151c933b73bb61bd | cwd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+# cmd: npm run build
+
+> app-builder-workspace@0.0.0-private build
+> node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs
+
+vite v8.3.5 building client environment for production...
+transforming...
+[plugin rolldown:vite-resolve] Module "node:fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/lib/db.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "net" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg-pool/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util/types" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "net" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/stream.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "tls" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/stream.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "path" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "crypto" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/crypto/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "node:module" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@electric-sql/pglite/dist/chunk-CE4NCHVO.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "dns" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection-parameters.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "path" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "stream" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg-connection-string/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "stream" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/split2/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "buffer" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/safe-buffer/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "node:module" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@electric-sql/pglite/dist/chunk-66APQTYC.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+✓ 2118 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/public/assets/initdb-BnC8r6Zv.wasm                   300.10 kB │ gzip:   132.94 kB
+.output/public/assets/pglite-BgbVgg6N.data                 6,248.50 kB
+.output/public/assets/pglite-Busfj2jm.wasm                 9,087.74 kB │ gzip: 3,315.39 kB
+.output/public/assets/styles-CPlQdRco.css                     34.31 kB │ gzip:     7.16 kB
+.output/public/assets/evidence-CGzKJBXD.js                     0.07 kB │ gzip:     0.08 kB
+.output/public/assets/packs-CGzKJBXD.js                        0.07 kB │ gzip:     0.08 kB
+.output/public/assets/questionnaires-CGzKJBXD.js               0.07 kB │ gzip:     0.08 kB
+.output/public/assets/__vite-browser-external-NkSIBfMg.js      0.09 kB │ gzip:     0.10 kB
+.output/public/assets/format-wallet-timestamp-BQ4vb0Ca.js      0.12 kB │ gzip:     0.12 kB
+.output/public/assets/use-current-user-DYEngeje.js             0.29 kB │ gzip:     0.22 kB
+.output/public/assets/useNavigate-Bm-Ly08z.js                  0.42 kB │ gzip:     0.29 kB
+.output/public/assets/jsx-runtime-lTuChwRC.js                  0.43 kB │ gzip:     0.30 kB
+.output/public/assets/app-DrGC59qn.js                          0.47 kB │ gzip:     0.34 kB
+.output/public/assets/use-signup-open-_EpaUNQx.js              0.48 kB │ gzip:     0.32 kB
+.output/public/assets/nodefs-3snSVVA9.js                       0.55 kB │ gzip:     0.38 kB
+.output/public/assets/file-to-base64-kKBIQhK9.js               0.64 kB │ gzip:     0.38 kB
+.output/public/assets/roles-DziZDHK1.js                        0.73 kB │ gzip:     0.33 kB
+.output/public/assets/useParams-BAGGLvED.js                    0.78 kB │ gzip:     0.44 kB
+.output/public/assets/rolldown-runtime-BWaJ3C7D.js             0.91 kB │ gzip:     0.51 kB
+.output/public/assets/button-BU_d9krf.js                       1.32 kB │ gzip:     0.71 kB
+.output/public/assets/packs.index-sdYfcH_s.js                  1.33 kB │ gzip:     0.68 kB
+.output/public/assets/status-badge-Cb0aTQXc.js                 1.42 kB │ gzip:     0.49 kB
+.output/public/assets/preload-helper-BLdHbfdN.js               1.51 kB │ gzip:     0.79 kB
+.output/public/assets/gates-C5vtSSfr.js                        1.56 kB │ gzip:     0.83 kB
+.output/public/assets/questionnaires._qid-Bz8BFKmJ.js          1.71 kB │ gzip:     0.75 kB
+.output/public/assets/useSelector-iTHbqsqc.js                  1.92 kB │ gzip:     0.85 kB
+.output/public/assets/exports-DmdxYndS.js                      2.18 kB │ gzip:     1.01 kB
+.output/public/assets/useMutation-J-KGSK8S.js                  2.40 kB │ gzip:     1.01 kB
+.output/public/assets/signup-CYf4z694.js                       3.12 kB │ gzip:     1.23 kB
+.output/public/assets/lazyRouteComponent-ByXReo0m.js           3.50 kB │ gzip:     1.29 kB
+.output/public/assets/admin--Vp_RpyB.js                        3.62 kB │ gzip:     1.17 kB
+.output/public/assets/login-idpbZ6pB.js                        3.76 kB │ gzip:     1.52 kB
+.output/public/assets/ids-O9aAO_f4.js                          3.91 kB │ gzip:     1.64 kB
+.output/public/assets/evidence.index-D-qNb8zN.js               4.16 kB │ gzip:     1.72 kB
+.output/public/assets/routes-ekHPxj8u.js                       4.20 kB │ gzip:     1.82 kB
+.output/public/assets/link-BjCcQlo2.js                         4.20 kB │ gzip:     2.17 kB
+.output/public/assets/_orgId-B4n5lj94.js                       4.55 kB │ gzip:     1.75 kB
+.output/public/assets/control-mcp-CjPPLVy9.js                  4.58 kB │ gzip:     1.49 kB
+.output/public/assets/app-C9dii8PV.js                          4.60 kB │ gzip:     1.54 kB
+.output/public/assets/audit-DnpbPKZ8.js                        7.60 kB │ gzip:     2.25 kB
+.output/public/assets/react-CaKr0epQ.js                        7.87 kB │ gzip:     3.01 kB
+.output/public/assets/useQuery-BxOVNUku.js                     8.02 kB │ gzip:     2.96 kB
+.output/public/assets/memfs2opfs-BR1Qst18.js                   8.05 kB │ gzip:     3.24 kB
+.output/public/assets/opfs-ahp-Cx4gD7sv.js                     9.93 kB │ gzip:     3.02 kB
+.output/public/assets/v2-fns-26Bt01dN.js                      10.13 kB │ gzip:     3.77 kB
+.output/public/assets/evidence._docId-DDEagRR8.js             10.45 kB │ gzip:     2.97 kB
+.output/public/assets/decisions-CXTOSK3K.js                   11.89 kB │ gzip:     3.77 kB
+.output/public/assets/_orgId-dAy_IZl6.js                      12.37 kB │ gzip:     3.53 kB
+.output/public/assets/opportunities-BGIHhkPF.js               12.40 kB │ gzip:     3.01 kB
+.output/public/assets/questionnaires.index-B4NnbDOG.js        13.25 kB │ gzip:     3.21 kB
+.output/public/assets/packs._packId-g7hh8AF6.js               14.68 kB │ gzip:     4.28 kB
+.output/public/assets/compliance-ClLFpZEo.js                  14.97 kB │ gzip:     3.53 kB
+.output/public/assets/facts-VtzUr8VT.js                       18.41 kB │ gzip:     4.57 kB
+.output/public/assets/team-XqJCPv9U.js                        24.70 kB │ gzip:     5.89 kB
+.output/public/assets/utils-D0T3A-kS.js                       27.56 kB │ gzip:     8.73 kB
+.output/public/assets/entities-BLxhEljg.js                    32.26 kB │ gzip:     6.47 kB
+.output/public/assets/client-kblaaXSr.js                      33.81 kB │ gzip:    12.70 kB
+.output/public/assets/middleware-BjWqOUN1.js                  52.14 kB │ gzip:    17.70 kB
+.output/public/assets/matchContext-BGDdtVEG.js                59.50 kB │ gzip:    21.09 kB
+.output/public/assets/esm-7cVBgBVN.js                         87.27 kB │ gzip:    26.54 kB
+.output/public/assets/chunk-CE4NCHVO-DEEQTeoD.js             102.35 kB │ gzip:    33.80 kB
+.output/public/assets/dist-DR4ilMft.js                       363.17 kB │ gzip:    96.98 kB
+.output/public/assets/index-DWTjUP9l.js                      404.82 kB │ gzip:   120.06 kB
+

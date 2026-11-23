@@ -1,0 +1,304 @@
+[0m
+> build · estate-coding
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 100
+drwxrwxr-x   4 andy andy  4096 Nov 21 16:59 .
+drwxrwxr-x 698 andy andy 65536 Nov 22 07:35 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 07:39 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  5925 Nov 22 07:39 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 07:39 out
+drwxrwxr-x  23 andy andy  4096 Nov 22 04:00 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 07:39 status.json
+-rw-rw-r--   1 andy andy  1645 Nov 22 06:14 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/ 2>/dev/null || echo "out directory doesn't exist"
+total 1936
+drwxrwxr-x 4 andy andy   4096 Nov 22 07:39 .
+drwxrwxr-x 4 andy andy   4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy   1310 Nov 21 20:48 council-GO.md
+-rw-rw-r-- 1 andy andy   3890 Nov 22 00:33 cycle-0029-1.log
+-rw-rw-r-- 1 andy andy  12140 Nov 22 01:05 cycle-0054-1.log
+-rw-rw-r-- 1 andy andy  14743 Nov 22 01:30 cycle-0119-1.log
+-rw-rw-r-- 1 andy andy 175093 Nov 22 04:34 cycle-0339-1.log
+-rw-rw-r-- 1 andy andy    608 Nov 22 05:40 cycle-0539-1.log
+-rw-rw-r-- 1 andy andy    801 Nov 22 05:41 cycle-0540-2.log
+-rw-rw-r-- 1 andy andy 116902 Nov 22 06:13 cycle-0542-3.log
+-rw-rw-r-- 1 andy andy     35 Nov 22 07:39 cycle-0739-1.log
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy  68232 Nov 21 18:37 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy    650 Nov 21 18:38 cycle-1837-10.log
+-rw-rw-r-- 1 andy andy    166 Nov 21 18:39 cycle-1839-11.log
+-rw-rw-r-- 1 andy andy    249 Nov 21 18:40 cycle-1839-12.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1840-13.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1841-14.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:42 cycle-1842-15.log
+-rw-rw-r-- 1 andy andy 118662 Nov 21 18:58 cycle-1843-16.log
+-rw-rw-r-- 1 andy andy 245255 Nov 21 19:49 cycle-1858-17.log
+-rw-rw-r-- 1 andy andy 221273 Nov 21 20:55 cycle-1950-18.log
+-rw-rw-r-- 1 andy andy   9509 Nov 21 21:03 cycle-2059-1.log
+-rw-rw-r-- 1 andy andy  67272 Nov 21 21:45 cycle-2124-1.log
+-rw-rw-r-- 1 andy andy   5754 Nov 21 21:50 cycle-2145-2.log
+-rw-rw-r-- 1 andy andy  14861 Nov 21 22:00 cycle-2151-3.log
+-rw-rw-r-- 1 andy andy  31453 Nov 21 22:23 cycle-2219-1.log
+-rw-rw-r-- 1 andy andy  31730 Nov 21 23:03 cycle-2249-1.log
+-rw-rw-r-- 1 andy andy  15974 Nov 21 23:11 cycle-2304-2.log
+-rw-rw-r-- 1 andy andy   2147 Nov 21 20:49 EVIDENCE.md
+-rw-rw-r-- 1 andy andy    890 Nov 21 20:41 HOSTING.md
+-rw-rw-r-- 1 andy andy      6 Nov 22 07:39 JOB-ID
+-rw-rw-r-- 1 andy andy      5 Nov 21 20:49 MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy     48 Nov 21 21:02 MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy      8 Nov 21 21:52 MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy    621 Nov 21 22:22 MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy    621 Nov 21 23:09 MISSION_COMPLETE.rejected-20261121-2314
+-rw-rw-r-- 1 andy andy    621 Nov 22 00:30 MISSION_COMPLETE.rejected-20261122-0034
+-rw-rw-r-- 1 andy andy    621 Nov 22 01:05 MISSION_COMPLETE.rejected-20261122-0109
+-rw-rw-r-- 1 andy andy    621 Nov 22 01:28 MISSION_COMPLETE.rejected-20261122-0134
+-rw-rw-r-- 1 andy andy   1245 Nov 22 04:32 MISSION_COMPLETE.rejected-20261122-0434
+-rw-rw-r-- 1 andy andy   1245 Nov 22 05:51 MISSION_COMPLETE.rejected-20261122-0614
+-rw-rw-r-- 1 andy andy      0 Nov 22 07:39 .preflight-ok
+-rw-rw-r-- 1 andy andy   1294 Nov 22 05:53 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 04:01 raw
+-rw-rw-r-- 1 andy andy   4102 Nov 21 20:48 RESULT.md
+-rw-rw-r-- 1 andy andy   2391 Nov 21 20:46 roastroom-raw.json
+-rw-rw-r-- 1 andy andy   2587 Nov 21 20:48 ROASTROOM-VERDICT.md
+drwxrwxr-x 3 andy andy   4096 Nov 22 03:48 runs
+-rw------- 1 andy andy    513 Nov 21 20:42 seed-credentials.env
+-rw-rw-r-- 1 andy andy    225 Nov 21 19:16 SKILLS-USED.md
+-rw-rw-r-- 1 andy andy    359 Nov 22 06:14 VERIFIER-FEEDBACK.md
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261122-0614
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/council-GO.md
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/
+total 1356
+drwxrwxr-x 2 andy andy   4096 Nov 22 04:01 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 07:39 ..
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:52 build-20261122-035223-exit-code.txt
+-rw-rw-r-- 1 andy andy  15022 Nov 22 03:52 build-20261122-035223-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:00 build-final-20261122-040032-exit-code.txt
+-rw-rw-r-- 1 andy andy  61087 Nov 22 04:00 build-final-20261122-040032-output.log
+-rw-rw-r-- 1 andy andy   9572 Nov 21 21:56 final-verification-20261121-2154-output.log
+-rw-rw-r-- 1 andy andy   1864 Nov 22 04:01 INDEX.tsv
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:52 lint-20261122-035206-exit-code.txt
+-rw-rw-r-- 1 andy andy   1937 Nov 22 03:52 lint-20261122-035206-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:01 lint-final-20261122-040100-exit-code.txt
+-rw-rw-r-- 1 andy andy   1943 Nov 22 04:01 lint-final-20261122-040100-output.log
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:52 .lock-build
+-rw-rw-r-- 1 andy andy      0 Nov 22 04:00 .lock-build-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:52 .lock-lint
+-rw-rw-r-- 1 andy andy      0 Nov 22 04:01 .lock-lint-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:53 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:56 .lock-test-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:51 .lock-typecheck
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:59 .lock-typecheck-final
+-rw-rw-r-- 1 andy andy    107 Nov 22 04:01 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:56 test-20261122-035333-exit-code.txt
+-rw-rw-r-- 1 andy andy 611076 Nov 22 03:56 test-20261122-035333-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:58 test-final-20261122-035621-exit-code.txt
+-rw-rw-r-- 1 andy andy 610787 Nov 22 03:58 test-final-20261122-035621-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:51 typecheck-20261122-035109-exit-code.txt
+-rw-rw-r-- 1 andy andy    242 Nov 22 03:51 typecheck-20261122-035109-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:00 typecheck-final-20261122-035958-exit-code.txt
+-rw-rw-r-- 1 andy andy    248 Nov 22 03:59 typecheck-final-20261122-035958-output.log
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/SHA
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE* 2>/dev/null
+-rw-rw-r-- 1 andy andy    5 Nov 21 20:49 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy   48 Nov 21 21:02 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy    8 Nov 21 21:52 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy  621 Nov 21 22:22 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy  621 Nov 21 23:09 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2314
+-rw-rw-r-- 1 andy andy  621 Nov 22 00:30 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0034
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:05 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0109
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:28 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0134
+-rw-rw-r-- 1 andy andy 1245 Nov 22 04:32 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0434
+-rw-rw-r-- 1 andy andy 1245 Nov 22 05:51 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0614
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/ROASTROOM-VERDICT.md
+[0m→ [0mRead out/council-GO.md
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git status && git log --oneline -5 && git branch -a
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   src/lib/auth/preview.ts
+	modified:   vite.config.ts
+
+no changes added to commit (use "git add" and/or "git commit -a")
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+  hosting
+  master
+* rc/ew-20261121
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/feat/iso9001-qms-evidence-20261116
+  remotes/origin/feat/uk-gdpr-data-broker-opt-out-docs
+  remotes/origin/fix/bearer-token-in-memory-not-sessionstorage
+  remotes/origin/fix/csp-no-unsafe-inline-scripts
+  remotes/origin/fix/preview-login-secret-to-env
+  remotes/origin/fix/security-headers-single-source
+  remotes/origin/fix/test-env-hooks
+  remotes/origin/forced-merge/out-1794998819
+  remotes/origin/forced-merge/out-1794998859
+  remotes/origin/forced-merge/reel-adopt-six-essential-documents-before-vibe-coding-20261117-1795005015
+  remotes/origin/forced-merge/reel-trial-claude-security-anti-patterns-api-key-front-end-20261118-1795005066
+  remotes/origin/master
+  remotes/origin/rc/ew-20261121
+  remotes/origin/six-docs-adopt
+  remotes/origin/synthetic-data-r1
+[0m
+[0m→ [0mRead out/EVIDENCE.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE 2>/dev/null || echo "No MISSION_COMPLETE file exists"
+No MISSION_COMPLETE file exists
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[91m[1mError: [0m{
+  "name": "UnknownError",
+  "data": {
+    "message": "Unexpected server error. Check server logs for details.",
+    "ref": "err_a3c9023b"
+  }
+}
+[91m[1mError: [0mFailed to execute statement

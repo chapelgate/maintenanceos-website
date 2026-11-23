@@ -1,0 +1,116 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 120
+drwxrwxr-x   4 andy andy  4096 Nov 23 01:18 .
+drwxrwxr-x 813 andy andy 69632 Nov 23 07:07 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy  3502 Nov 23 01:18 BRIEF.md.bak-rootcause
+-rw-rw-r--   1 andy andy     0 Nov 23 07:07 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  9872 Nov 23 07:07 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 07:07 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 23 07:07 out
+drwxrwxr-x  23 andy andy  4096 Nov 22 12:08 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 07:07 status.json
+-rw-rw-r--   1 andy andy  4157 Nov 23 06:25 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+total 3128
+drwxrwxr-x 4 andy andy   4096 Nov 23 07:07 .
+drwxrwxr-x 4 andy andy   4096 Nov 23 01:18 ..
+-rw-rw-r-- 1 andy andy   1310 Nov 21 20:48 council-GO.md
+-rw-rw-r-- 1 andy andy   3890 Nov 22 00:33 cycle-0029-1.log
+-rw-rw-r-- 1 andy andy  12140 Nov 22 01:05 cycle-0054-1.log
+-rw-rw-r-- 1 andy andy  14743 Nov 22 01:30 cycle-0119-1.log
+-rw-rw-r-- 1 andy andy   9716 Nov 23 03:00 cycle-0255-1.log
+-rw-rw-r-- 1 andy andy  63056 Nov 23 03:26 cycle-0300-2.log
+-rw-rw-r-- 1 andy andy 175093 Nov 22 04:34 cycle-0339-1.log
+-rw-rw-r-- 1 andy andy   9548 Nov 23 04:15 cycle-0351-1.log
+-rw-rw-r-- 1 andy andy  43636 Nov 23 04:43 cycle-0425-1.log
+-rw-rw-r-- 1 andy andy    608 Nov 22 05:40 cycle-0539-1.log
+-rw-rw-r-- 1 andy andy  91008 Nov 23 06:21 cycle-0540-1.log
+-rw-rw-r-- 1 andy andy    801 Nov 22 05:41 cycle-0540-2.log
+-rw-rw-r-- 1 andy andy 116902 Nov 22 06:13 cycle-0542-3.log
+-rw-rw-r-- 1 andy andy  34134 Nov 23 07:06 cycle-0635-1.log
+-rw-rw-r-- 1 andy andy    733 Nov 23 07:10 cycle-0707-2.log
+-rw-rw-r-- 1 andy andy  14726 Nov 22 07:47 cycle-0739-1.log
+-rw-rw-r-- 1 andy andy  10689 Nov 22 07:57 cycle-0748-2.log
+-rw-rw-r-- 1 andy andy 292938 Nov 22 10:37 cycle-0944-1.log
+-rw-rw-r-- 1 andy andy 120124 Nov 22 13:14 cycle-1144-1.log
+-rw-rw-r-- 1 andy andy   5705 Nov 22 13:20 cycle-1315-2.log
+-rw-rw-r-- 1 andy andy  22590 Nov 22 13:51 cycle-1344-1.log
+-rw-rw-r-- 1 andy andy 110035 Nov 22 14:13 cycle-1352-2.log
+-rw-rw-r-- 1 andy andy   6599 Nov 22 15:59 cycle-1550-1.log
+-rw-rw-r-- 1 andy andy 121288 Nov 22 16:31 cycle-1600-2.log
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy   3580 Nov 22 17:59 cycle-1750-1.log
+-rw-rw-r-- 1 andy andy  36420 Nov 22 18:30 cycle-1804-1.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy  68232 Nov 21 18:37 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy    650 Nov 21 18:38 cycle-1837-10.log
+-rw-rw-r-- 1 andy andy    166 Nov 21 18:39 cycle-1839-11.log
+-rw-rw-r-- 1 andy andy    249 Nov 21 18:40 cycle-1839-12.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1840-13.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1841-14.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:42 cycle-1842-15.log
+-rw-rw-r-- 1 andy andy 118662 Nov 21 18:58 cycle-1843-16.log
+-rw-rw-r-- 1 andy andy 245255 Nov 21 19:49 cycle-1858-17.log
+-rw-rw-r-- 1 andy andy 221273 Nov 21 20:55 cycle-1950-18.log
+-rw-rw-r-- 1 andy andy  59565 Nov 22 20:43 cycle-1955-1.log
+-rw-rw-r-- 1 andy andy   9509 Nov 21 21:03 cycle-2059-1.log
+-rw-rw-r-- 1 andy andy  67272 Nov 21 21:45 cycle-2124-1.log
+-rw-rw-r-- 1 andy andy   5754 Nov 21 21:50 cycle-2145-2.log
+-rw-rw-r-- 1 andy andy  14861 Nov 21 22:00 cycle-2151-3.log
+-rw-rw-r-- 1 andy andy  31453 Nov 21 22:23 cycle-2219-1.log
+-rw-rw-r-- 1 andy andy  20813 Nov 22 23:12 cycle-2230-1.log
+-rw-rw-r-- 1 andy andy  31730 Nov 21 23:03 cycle-2249-1.log
+-rw-rw-r-- 1 andy andy  15974 Nov 21 23:11 cycle-2304-2.log
+-rw-rw-r-- 1 andy andy   2882 Nov 23 06:20 EVIDENCE.md
+-rw-rw-r-- 1 andy andy    890 Nov 21 20:41 HOSTING.md
+-rw-rw-r-- 1 andy andy      6 Nov 23 06:35 JOB-ID
+-rw-rw-r-- 1 andy andy      5 Nov 21 20:49 MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy     48 Nov 21 21:02 MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy      8 Nov 21 21:52 MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy    621 Nov 21 22:22 MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy    621 Nov 21 23:09 MISSION_COMPLETE.rejected-20261121-2314
+-rw-rw-r-- 1 andy andy    621 Nov 22 00:30 MISSION_COMPLETE.rejected-20261122-0034
+-rw-rw-r-- 1 andy andy    621 Nov 22 01:05 MISSION_COMPLETE.rejected-20261122-0109
+-rw-rw-r-- 1 andy andy    621 Nov 22 01:28 MISSION_COMPLETE.rejected-20261122-0134
+-rw-rw-r-- 1 andy andy   1245 Nov 22 04:32 MISSION_COMPLETE.rejected-20261122-0434
+-rw-rw-r-- 1 andy andy   1245 Nov 22 05:51 MISSION_COMPLETE.rejected-20261122-0614
+-rw-rw-r-- 1 andy andy   1245 Nov 22 07:56 MISSION_COMPLETE.rejected-20261122-0759
+-rw-rw-r-- 1 andy andy     11 Nov 22 09:50 MISSION_COMPLETE.rejected-20261122-1039
+-rw-rw-r-- 1 andy andy     10 Nov 22 13:16 MISSION_COMPLETE.rejected-20261122-1326
+-rw-rw-r-- 1 andy andy     10 Nov 22 13:54 MISSION_COMPLETE.rejected-20261122-1414
+-rw-rw-r-- 1 andy andy     10 Nov 22 16:15 MISSION_COMPLETE.rejected-20261122-1634
+-rw-rw-r-- 1 andy andy     10 Nov 22 18:20 MISSION_COMPLETE.rejected-20261122-1834
+-rw-rw-r-- 1 andy andy     10 Nov 22 20:36 MISSION_COMPLETE.rejected-20261122-2045
+-rw-rw-r-- 1 andy andy     11 Nov 22 23:01 MISSION_COMPLETE.rejected-20261122-2315
+-rw-rw-r-- 1 andy andy     10 Nov 23 01:16 MISSION_COMPLETE.rejected-20261123-0120
+-rw-rw-r-- 1 andy andy     10 Nov 23 01:22 MISSION_COMPLETE.rejected-20261123-0125
+-rw-rw-r-- 1 andy andy     10 Nov 23 01:31 MISSION_COMPLETE.rejected-20261123-0135
+-rw-rw-r-- 1 andy andy     10 Nov 23 01:37 MISSION_COMPLETE.rejected-20261123-0140
+-rw-rw-r-- 1 andy andy     10 Nov 23 01:40 MISSION_COMPLETE.rejected-20261123-0145
+-rw-rw-r-- 1 andy andy     10 Nov 23 03:10 MISSION_COMPLETE.rejected-20261123-0330
+-rw-rw-r-- 1 andy andy    705 Nov 23 03:58 MISSION_COMPLETE.rejected-20261123-0420
+-rw-rw-r-- 1 andy andy     10 Nov 23 06:03 MISSION_COMPLETE.rejected-20261123-0625
+-rw-rw-r-- 1 andy andy      0 Nov 23 06:35 .preflight-ok
+-rw-rw-r-- 1 andy andy   1403 Nov 23 04:03 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 22:50 raw
+-rw-rw-r-- 1 andy andy   4129 Nov 22 23:03 RESULT.md
+-rw-rw-r-- 1 andy andy   2391 Nov 21 20:46 roastroom-raw.json
+-rw-rw-r-- 1 andy andy   2587 Nov 21 20:48 ROASTROOM-VERDICT.md
+-rw-rw-r-- 1 andy andy   1224 Nov 23 01:30 ROOT-CAUSE.md
+drwxrwxr-x 3 andy andy   4096 Nov 22 03:48 runs
+-rw------- 1 andy andy    513 Nov 21 20:42 seed-credentials.env
+-rw-rw-r-- 1 andy andy    225 Nov 21 19:16 SKILLS-USED.md
+-rw-rw-r-- 1 andy andy    359 Nov 23 06:25 VERIFIER-FEEDBACK.md
+[0m
+[91m[1mError: [0m{"message":"nvidia/nvidia/nemotron-3-ultra-550b-a55b: rate limit — All credentials for model nvidia/nemotron-3-ultra-550b-a55b are cooling down (HTTP 429) (reset after 1m 36s)"}

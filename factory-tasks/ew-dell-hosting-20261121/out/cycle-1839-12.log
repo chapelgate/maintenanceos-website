@@ -1,0 +1,11 @@
+[0m
+> build · estate-coding
+[0m
+[91m[1mError: [0m{
+  "name": "UnknownError",
+  "data": {
+    "message": "Unexpected server error. Check server logs for details.",
+    "ref": "err_5d64d1a9"
+  }
+}
+[91m[1mError: [0mFailed to execute statement

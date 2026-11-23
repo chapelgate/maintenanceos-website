@@ -1,0 +1,2531 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 92
+drwxrwxr-x   4 andy andy  4096 Nov 21 16:59 .
+drwxrwxr-x 599 andy andy 61440 Nov 21 18:35 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 21 18:42 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  2695 Nov 21 18:42 history.log
+drwxrwxr-x   2 andy andy  4096 Nov 21 18:43 out
+drwxrwxr-x  23 andy andy  4096 Nov 21 18:33 repo
+-rw-rw-r--   1 andy andy    82 Nov 21 18:43 status.json
+-rw-rw-r--   1 andy andy    75 Nov 21 00:15 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/ 2>/dev/null; echo "---RC---"; cat /home/andy/chapelgate/jobs-work-dell/readiness/ew/RC.md 2>/dev/null; echo "---RC-FACTORY---"; cat /home/andy/chapelgate/factory-tasks/ew-status-rc-20261121/out/RELEASE-CANDIDATE.md 2>/dev/null
+total 736
+drwxrwxr-x 2 andy andy   4096 Nov 21 18:43 .
+drwxrwxr-x 4 andy andy   4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy  68232 Nov 21 18:37 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy    650 Nov 21 18:38 cycle-1837-10.log
+-rw-rw-r-- 1 andy andy    166 Nov 21 18:39 cycle-1839-11.log
+-rw-rw-r-- 1 andy andy    249 Nov 21 18:40 cycle-1839-12.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1840-13.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1841-14.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:42 cycle-1842-15.log
+-rw-rw-r-- 1 andy andy     35 Nov 21 18:43 cycle-1843-16.log
+-rw-rw-r-- 1 andy andy      6 Nov 21 16:59 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 21 16:59 .preflight-ok
+-rw-rw-r-- 1 andy andy    541 Nov 21 18:30 PROGRESS.md
+---RC---
+# Business Evidence Wallet Release Candidate
+
+**Date:** 2026-11-21
+**Tag:** ew-rc2-20261121
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+**Branch:** rc/ew-20261121 (pushed to origin)
+**Source:** master branch at SHA 3fc3bf95f7055be4eb4a4357b62109e8addb2030
+
+This release candidate is based on the same SHA as the Dell hosted build (job-ew-dell-hosting).
+Coordinated through readiness files.
+
+## PR 175-183 Decisions (Second-Family Council)
+
+| PR | Decision | Reason | Resulting SHA |
+|----|----------|--------|---------------|
+| 175 | MERGED (already) | Release docs point at master 41aa829, migrations through 0027, refuse GO | 3fc3bf95 (in master) |
+| 176 | MERGED (already) | /app banner check waits for Organisations heading | 3fc3bf95 (in master) |
+| 177 | MERGED (already) | Rehearse pre-0011 backup restore after migration 0027 | 3fc3bf95 (in master) |
+| 178 | CLOSED (already) | Draft PR, diff empty, false green gate withdrawn | N/A (closed) |
+| 179 | MERGED (already) | Wait for Evidence heading instead of networkidle | 3fc3bf95 (in master) |
+| 180 | MERGED (already) | Fail tests if product source calls NVIDIA API | 3fc3bf95 (in master) |
+| 181 | MERGED (already) | Lock questionnaire template ids to existing seven | 3fc3bf95 (in master) |
+| 182 | MERGED (already) | Test tenant setting written only after membership succeeds | 3fc3bf95 (in master) |
+| 183 | MERGED (already) | Remove unused deny import from gateway HTTP adapter | 3fc3bf95 (in master) |
+
+All 9 PRs (175-183) are already merged or closed as of master SHA 3fc3bf95.
+No further council action needed - all decisions already reflected in RC branch.
+
+## RC2 - CSO Findings Fixed
+
+| Finding | Fix | Files Changed |
+|---------|-----|---------------|
+| F1: BEW preview secret not migrated to env var | Migrated to GROK_PREVIEW_CLIENT_SECRET env var | src/lib/auth/preview.ts |
+| F2: CSP unsafe-inline in script-src | Nonce-based CSP implementation | src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx |
+| F5: Login token in sessionStorage | Moved to in-memory only | src/lib/auth/client.ts |
+| Test: No token in browser storage | Added verification test | scripts/no-token-in-browser-storage.test.mjs |
+
+All fixes committed to rc/ew-20261121 at SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd.
+Tag ew-rc2-20261121 pushed to origin.---RC-FACTORY---
+# Release Candidate
+
+**Branch:** rc/ew-20261121
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+**Tag:** ew-rc2-20261121
+**Date:** 2026-11-21
+
+Pushed to origin. CSO review requested via INBOX-FROM-EGGBOT.md.
+CSO findings F1, F2, F5 addressed and committed.
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/PROGRESS.md 2>/dev/null; echo "---VERIFIER---"; cat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/VERIFIER-FEEDBACK.md 2>/dev/null
+# Progress Log - EW Dell Hosting
+
+**Date:** 2026-11-21
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd (from RC)
+
+## Steps Completed:
+- [x] Read BRIEF.md and STEER.md
+- [x] Verified SHA matches release candidate (12fe0f9513da6bd1ec32fef7151c933b73bb61bd)
+
+## Next Steps:
+1. Check current repo SHA and ensure it matches RC
+2. Build the application
+3. Set up Postgres (user-level container)
+4. Create systemd --user service
+5. Configure tailscale serve
+6. Seed synthetic data
+7. Set up health check monitoring
+8. Create required output files---VERIFIER---
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git log --oneline -5 && echo "---" && git rev-parse HEAD
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+---
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/jobs-work-dell/readiness/ew/ 2>/dev/null; echo "---"; ls /home/andy/chapelgate/jobs-work-dell/readiness/ 2>/dev/null
+total 660
+drwxr-xr-x  3 andy andy  4096 Nov 21 15:05 .
+drwxr-xr-x 80 andy andy 32768 Nov 21 18:44 ..
+-rw-r--r--  1 andy andy  2204 Oct 23 15:01 ANDY_DECISIONS.md
+-rw-r--r--  1 andy andy  1377 Oct 23 10:49 BUILD_SLICES.md
+-rw-r--r--  1 andy andy  6531 Oct 23 17:28 DECISIONS.md
+-rw-r--r--  1 andy andy   391 Oct 23 19:19 EXISTING_WORK.md
+-rw-rw-r--  1 andy andy  2356 Nov 21 16:58 RC.md
+-rw-r--r--  1 andy andy  6080 Oct 23 10:49 READINESS.md
+-rw-r--r--  1 andy andy  6677 Oct 23 19:26 RELEASE_PLAN-20261023.md
+-rw-r--r--  1 andy andy  8788 Oct 24 09:57 RELEASE_PLAN-20261024-andy-rerequest.md
+-rw-r--r--  1 andy andy  9685 Oct 25 01:03 RELEASE_PLAN-20261024.md
+-rw-r--r--  1 andy andy 24078 Oct 26 05:51 RELEASE_PLAN-20261025.md
+-rw-r--r--  1 andy andy  7815 Oct 26 07:16 RELEASE_PLAN-20261026.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261027.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261028.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261029.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261030.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261031.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261101.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261102.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261103.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261104.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261105.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261106.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261107.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261108.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN-20261109.md
+-rw-r--r--  1 andy andy 10575 Oct 27 07:13 RELEASE_PLAN.md
+-rw-r--r--  1 andy andy 11200 Oct 23 18:35 REVIEW-rd2-20261023.md
+-rw-r--r--  1 andy andy  9629 Oct 24 09:46 REVIEW-rd2-20261024-andy-rerequest.md
+-rw-r--r--  1 andy andy  7407 Oct 24 16:14 REVIEW-rd2-20261024.md
+-rw-r--r--  1 andy andy 11200 Oct 24 09:46 REVIEW-rd2-20261024-pre.md
+-rw-r--r--  1 andy andy  9107 Oct 25 06:34 REVIEW-rd2-20261025.md
+-rw-r--r--  1 andy andy  8584 Oct 26 06:49 REVIEW-rd2-20261026.md
+-rw-r--r--  1 andy andy  8661 Oct 27 06:47 REVIEW-rd2-20261027.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261028.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261029.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261030.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261031.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261101.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261102.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261103.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261104.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261105.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261106.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261107.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261108.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2-20261109.md
+-rw-r--r--  1 andy andy  7555 Oct 28 17:51 REVIEW-rd2.md
+drwxr-xr-x  2 andy andy  4096 Oct 27 07:22 slices
+-rw-r--r--  1 andy andy  6996 Oct 27 07:25 slices.json
+-rw-r--r--  1 andy andy  2278 Oct 23 10:49 slices.json.bak-20261023
+-rw-r--r--  1 andy andy  3693 Oct 24 09:57 slices.json.bak-20261024
+-rw-r--r--  1 andy andy  4132 Oct 25 06:39 slices.json.bak-20261025
+-rw-r--r--  1 andy andy  4132 Oct 26 07:15 slices.json.bak-20261026
+-rw-r--r--  1 andy andy  4132 Oct 27 07:13 slices.json.bak-20261027
+-rw-r--r--  1 andy andy  3802 Oct 25 12:42 UNBLOCK-ew-1023-02-localgate-A.md
+-rw-r--r--  1 andy andy  3991 Oct 25 17:14 UNBLOCK-ew-1023-02-localgate-B.md
+-rw-r--r--  1 andy andy  4700 Oct 25 17:31 UNBLOCK-ew-1023-02-localgate.md
+-rw-r--r--  1 andy andy  3380 Oct 25 13:09 UNBLOCK-ew-1023-03-rollback-A.md
+-rw-r--r--  1 andy andy  6587 Oct 25 17:15 UNBLOCK-ew-1023-03-rollback-B.md
+-rw-r--r--  1 andy andy  6973 Oct 25 17:25 UNBLOCK-ew-1023-03-rollback.md
+-rw-r--r--  1 andy andy  2287 Oct 27 07:41 UNBLOCK-ew-1027-03-rel-truth-vfy-A.md
+-rw-r--r--  1 andy andy  2816 Oct 27 07:43 UNBLOCK-ew-1027-03-rel-truth-vfy-B.md
+-rw-r--r--  1 andy andy  2920 Oct 27 08:26 UNBLOCK-ew-1027-03-rel-truth-vfy.md
+-rw-r--r--  1 andy andy  3628 Oct 27 07:41 UNBLOCK-ew-1027-04-post-slcs-vfy-A.md
+-rw-r--r--  1 andy andy  3532 Oct 27 08:36 UNBLOCK-ew-1027-04-post-slcs-vfy-B.md
+-rw-r--r--  1 andy andy  3545 Oct 27 09:16 UNBLOCK-ew-1027-04-post-slcs-vfy.md
+-rw-r--r--  1 andy andy  3165 Oct 27 10:05 UNBLOCK-ew-1027-05-evd-a11y-vfy-A.md
+-rw-r--r--  1 andy andy  3872 Oct 27 10:23 UNBLOCK-ew-1027-05-evd-a11y-vfy-B.md
+-rw-r--r--  1 andy andy  3953 Oct 27 10:30 UNBLOCK-ew-1027-05-evd-a11y-vfy.md
+-rw-r--r--  1 andy andy  3964 Oct 27 09:30 UNBLOCK-ew-1027-06-mon-vfy-A.md
+-rw-r--r--  1 andy andy  3655 Oct 27 09:38 UNBLOCK-ew-1027-06-mon-vfy-B.md
+-rw-r--r--  1 andy andy  3708 Oct 27 09:45 UNBLOCK-ew-1027-06-mon-vfy.md
+-rw-r--r--  1 andy andy  6903 Oct 25 12:07 UNBLOCK-ew-local-gate-A.md
+-rw-r--r--  1 andy andy  5279 Oct 25 16:31 UNBLOCK-ew-local-gate-B.md
+-rw-r--r--  1 andy andy  6309 Oct 25 16:40 UNBLOCK-ew-local-gate.md
+---
+ACCESS_LOG.md
+AI-OBSERVABILITY.md
+ai-stack
+ALERTS.md
+ANDY-ACTION-REGISTER-DELL-MIGRATION-2026-11-12.md
+ANDY_ANSWERS-20261023.md
+ANDY_BLOCKERS.md
+ANDY-BRIEFING.md
+ANDY-BRIEFING.md.bak-20261117-1535
+ANDY-BRIEFING.md.bak-eggbot-20261116-2315
+ANDY-BRIEFING.md.bak-eggbot-20261116-2319
+ANDY-BRIEFING.md.bak-eggbot-20261116-2328
+ANDY_DECISIONS_ALL.md
+ANDY-EXTERNAL-REGISTER.md
+ANDY_PRE_RELEASE_TODO.md
+ANDY-REGISTER.md
+ANDY-REGISTER.md.bak-eggbot-20261120-1327
+ANDY-REGISTER.md.bak-eggbot-20261120-1328
+ANDY-REGISTER.md.bak-eggbot-20261120-1331
+ANDY-REGISTER.md.bak-eggbot-20261120-1334
+ANDY-REGISTER.md.bak-eggbot-20261120-1335
+ANDY-REGISTER.md.bak-eggbot-20261120-1412
+ANDY-REGISTER.md.bak-eggbot-20261120-1415
+ANDY-REGISTER.md.bak-eggbot-20261120-1751
+ANDY-REGISTER.md.bak-eggbot-20261120-1818
+ANDY-REGISTER.md.bak-eggbot-20261120-2116
+ANDY-REGISTER.md.bak-eggbot-20261120-2222
+ANDY-REGISTER.md.bak-eggbot-20261121-0001
+ANDY-REGISTER.md.bak-eggbot-20261121-0001-50
+ANDY-REGISTER.md.bak-eggbot-20261121-0008-17
+ANDY-REGISTER.md.bak-eggbot-20261121-0014-52
+ANDY-REGISTER.md.bak-eggbot-20261121-0909
+ANDY-REGISTER.md.bak-eggbot-20261121-0945-16
+ANDY-REGISTER.md.bak-eggbot-20261121-0945-39
+ANDY-REGISTER.md.bak-eggbot-20261121-1013-55
+ANDY-REGISTER.md.bak-eggbot-20261121-1025-24
+ANDY-REGISTER.md.bak-eggbot-20261121-1025-46
+ANDY-REGISTER.md.bak-eggbot-20261121-1027-52
+ANDY-REGISTER-PRINT-20261121.pdf
+ANDY_TEST_CALLS.md
+archive
+AUTO_DECISIONS.md.bak-hvb-20261106T151609Z
+AUTO_DECISIONS.md.bak-ir1108-20261106T003947Z
+b18
+b18-184-assign-owner
+b18-185-vulnerability-flag
+BACKUP-SCHEDULES.md
+BLOCKED.md
+BOT-SUPERVISOR-REGISTER.md
+BOT-SUPERVISOR-REGISTER.md.bak
+BOT-SUPERVISOR-REGISTER.md.bak-1746
+BOT-SUPERVISOR-REGISTER.md.bak-hvb-20261106T125357Z
+BOT-SUPERVISOR-REGISTER.md.bak-ir-20261106T064125Z
+BOT-SUPERVISOR-REGISTER.md.bak-ir-20261106T064136Z
+BOT-SUPERVISOR-REGISTER.md.bak-supervisor-20261105T194708Z
+BOT-SUPERVISOR-REGISTER.md.bak-supervisor-header-20261105T194716Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T014748Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T0445Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T125416Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T145429Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T154623Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T164504Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T174559Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T215139Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T224633Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T234502Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0152Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0253Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0348Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T045505Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T055351Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T065519Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T075610Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0851Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T115618Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1359Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T150008Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1549Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1653Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1754Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T185212Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1952Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T2045Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-2026-11-06T2147Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T225254Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T2351Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T004910Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T015531Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T035241Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T045535Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T055151Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T064825Z
+brief-template.md
+BUILD-HOURLY.md
+BUSINESS-EVIDENCE-WALLET-BACKUP-SCHEDULES.md
+BUSINESS-OS-BACKUP-SCHEDULES.md
+ca
+CALL-20261115-CHECKLIST.md
+capacity-bcfd-tmp-20261105
+case-studies
+cf
+CHAPELGATE-COUNCIL-MINUTES-BACKUP-SCHEDULES.md
+CHAPELGATE-INFORMATION-RIGHTS-BACKUP-SCHEDULES.md
+CHAPELGATE-MULTILINGUAL-TRANSCRIBE-BACKUP-SCHEDULES.md
+chief
+CLEANUP-20261119.md
+cm
+competitor-gap
+COMPETITOR-INDEX.md
+COMPLETED_BUILDS.md
+compliance
+compute-slo.py
+COST_SAVINGS_EVIDENCE.md
+council-doc-review
+council-extbot-20261026
+COUNCIL-EXTBOT-20261026.md
+council-gates
+COUNCIL_GATES_CONSENSUS.md
+COUNCIL-QUEUE-STATUS.md
+ct
+cw
+cyber-essentials
+dc
+DELL-COPY-AI-USAGE-DASHBOARD.md
+DELL-FIX-PLAN-20261118.md
+DELL-FIX-PLAN-20261118.md.bak-eggbot-20261118-1731
+dell-jobs-topup-list2.status
+dell-jobs-topup-list.status
+dell-maintenance-cleanup-20261121.log
+DIGITALOCEAN_AUDIT.md
+DIRECT_BUILDS.md
+DISK-PLAN.md
+document-copilot
+duo
+DUO-GOLIVE.md
+duo-golive.sh
+ESTATE_INVENTORY_t809u_ADDENDUM_t819u.md
+ESTATE_INVENTORY_t809u.md
+ew
+EW-MERGE-FENCE.md
+FAILURE-LOG
+failure-log-compliance
+FAILURE-LOG-COMPLIANCE.md
+FAILURE-LOG.md
+FAILURE-LOG.md.bak-20261109131040
+FAILURE-LOG.md.bak-20261109T2052Z
+FAILURE-LOG.md.bak-20261109T2226Z
+FAILURE-LOG.md.bak-20261109T2236Z
+FAILURE-LOG.md.bak-20261110T212644Z
+FAILURE-LOG.md.bak-20261114-1033
+FAILURE-LOG.md.bak-20261114-2235
+FAILURE-LOG.md.bak-20261115-0040
+FAILURE-LOG.md.bak-20261115-0058
+FAILURE-LOG.md.bak-alley-sheets-2026-11-05T220229Z
+FAILURE-LOG.md.bak-arrivals-20261104T080127Z
+FAILURE-LOG.md.bak-copystatus-20261112T1926Z
+FAILURE-LOG.md.bak-dellslice-20261108T174306Z
+FAILURE-LOG.md.bak-dellstatus-20261113T2052Z
+FAILURE-LOG.md.bak-dellswitch-20261115T1112Z
+FAILURE-LOG.md.bak-depcheck-20261117T2242Z
+FAILURE-LOG.md.bak-diagnostic-cleanup-20261108T233341431822
+FAILURE-LOG.md.bak-dropletaudit-20261115T1107Z
+FAILURE-LOG.md.bak-eggbot-1730
+FAILURE-LOG.md.bak-eggbot-20261114-1638
+FAILURE-LOG.md.bak-eggbot-20261114-1839
+FAILURE-LOG.md.bak-eggbot-20261115-0435
+FAILURE-LOG.md.bak-eggbot-20261115-0635
+FAILURE-LOG.md.bak-eggbot-20261115-0835
+FAILURE-LOG.md.bak-eggbot-20261115-1100
+FAILURE-LOG.md.bak-eggbot-20261115-2038
+FAILURE-LOG.md.bak-eggbot-20261115-2108
+FAILURE-LOG.md.bak-eggbot-20261116-2319
+FAILURE-LOG.md.bak-eggbot-20261118-0815
+FAILURE-LOG.md.bak-eggbot-20261118-0842
+FAILURE-LOG.md.bak-eggbot-20261118-0846
+FAILURE-LOG.md.bak-eggbot-20261118-0848
+FAILURE-LOG.md.bak-eggbot-20261118-0852
+FAILURE-LOG.md.bak-eggbot-20261118-0906
+FAILURE-LOG.md.bak-eggbot-20261118-2341
+FAILURE-LOG.md.bak-eggbot-20261119-1818
+FAILURE-LOG.md.bak-eggbot-20261120-1323
+FAILURE-LOG.md.bak-eggbot-20261120-1341
+FAILURE-LOG.md.bak-eggbot-20261120-1357
+FAILURE-LOG.md.bak-eggbot-20261120-1833
+FAILURE-LOG.md.bak-eggbot-20261120-2116
+FAILURE-LOG.md.bak-eggbot-20261121-0021-53
+FAILURE-LOG.md.bak-eggbot-20261121-1801-28
+FAILURE-LOG.md.bak-ew1446-recover-20261106T124756Z
+FAILURE-LOG.md.bak-ewwatch-t810u-20261106T121644Z
+FAILURE-LOG.md.bak-extbotstop-20261114T1613Z
+FAILURE-LOG.md.bak-gapclose-cont-20261112T1355Z
+FAILURE-LOG.md.bak-gapclose-finish-20261112T1308Z
+FAILURE-LOG.md.bak-ir-20261107T024024Z
+FAILURE-LOG.md.bak-ir-gap02-20261106T223538Z
+FAILURE-LOG.md.bak-ir-plan-council-hold-20261106T064125Z
+FAILURE-LOG.md.bak-ir-results-hold-20261106T183549Z
+FAILURE-LOG.md.bak-jobsgone-20261115T1154Z
+FAILURE-LOG.md.bak-memfdgate-20261108T184618Z
+FAILURE-LOG.md.bak-memfdr2-20261108T204259Z
+FAILURE-LOG.md.bak-memfdr3-20261108T204523Z
+FAILURE-LOG.md.bak-mining-check-20261117T223840Z
+FAILURE-LOG.md.bak-movestop-20261113T2232Z
+FAILURE-LOG.md.bak-omnidb-20261108T223904Z
+FAILURE-LOG.md.bak-omnidbdell-20261108T225325Z
+FAILURE-LOG.md.bak-omnidbdell2-20261108T230932Z
+FAILURE-LOG.md.bak-omnidbdell3-20261108T231350Z
+FAILURE-LOG.md.bak-omnidbfix-20261108T233238Z
+FAILURE-LOG.md.bak-omnimeasure-20261108T182321Z
+FAILURE-LOG.md.bak-omnimg-20261108T234853Z
+FAILURE-LOG.md.bak-omnimg2-20261108T235316Z
+FAILURE-LOG.md.bak-omnimgdell-20261109T001733Z
+FAILURE-LOG.md.bak-omnistop-20261108T182953Z
+FAILURE-LOG.md.bak-omnithaw-20261108T234208Z
+FAILURE-LOG.md.bak-prod-20261115T1205Z
+FAILURE-LOG.md.bak-reelimpl-20261117-1520
+FAILURE-LOG.md.bak-t197u-20261105T213603Z
+FAILURE-LOG.md.bak-t5820-20261105T131259Z
+FAILURE-LOG.md.bak-ush-20261115T1157Z
+FAILURE-LOG.md.bak-wirral-rerun-sim-20261115-232657
+followup
+forced-merge-ledger.tsv
+GATES_ALL.md
+GATES_HUMAN.md
+g-cloud
+gitleaks
+gitleaks2
+gpu-upgrade
+grok-handover-ir
+HANDED_BUILDS.md
+hcv
+HERMES_PLAN_t770u.BRIEF.md
+HERMES_PLAN_t770u.md
+hl
+HOLIDAY-LET-OPERATOR-BACKUP-SCHEDULES.md
+HOUSING-COMPLIANCE-VAULT-BACKUP-SCHEDULES.md
+HUMAN_BLOCKERS.md
+HUMAN_ONLY.md
+INBOX-FOR-PUBLIC-CHIEF.md
+incidents
+INFINITY_EVAL.md
+INFORMATION-RIGHTS-COMPLAINTS-BACKUP-SCHEDULES.md
+inv-t809u
+ir
+job-db
+job-dir-retention
+JOB-DIR-RETENTION.log
+JOB-STATE.md
+LAST_GATES.md
+lcm
+LEGAL-CASE-MANAGEMENT-BACKUP-SCHEDULES.md
+lo
+locks
+LOGGING-STANDARD.md
+lumi
+MAINTENANCEOS-BACKUP-SCHEDULES.md
+MAINTENANCEOS-WEBSITE-BACKUP-SCHEDULES.md
+MASTER_PROBLEMS.md
+MERGE_COUNCIL.md
+MERGE_LOG.md
+mos
+mos-regfix.log
+mos-regfix.merged
+mt
+mw
+nvdl-review-t820u
+nvidia-dev-lane-review-t820u.md
+obscura-snapshots
+OPEN_PRS.md
+ORR-CHECKLIST.md
+out
+pages
+PARKED.md
+PARKED.md.bak-20261114-0910
+PARKED.md.bak-20261114-0930
+PARKED.md.bak-20261114-223759
+PARKED.md.bak-20261115-0057
+PARKED.md.bak-20261115-0110
+PARKED.md.bak-20261115-01132
+PARKED.md.bak-autoheal-20261117-2049
+PARKED.md.bak-autoheal-20261117-2134
+PARKED.md.bak-autoheal-20261118-1334
+PARKED.md.bak-autoheal-20261118-1750
+PARKED.md.bak-autoheal-20261118-2049
+PARKED.md.bak-autoheal-20261118-2148
+PARKED.md.bak-autoheal-20261119-1546
+PARKED.md.bak-autoheal-20261119-2110
+PARKED.md.bak-autoheal-20261120-1354
+PARKED.md.bak-autoheal-20261120-1500
+PARKED.md.bak-autoheal-20261120-2111
+PARKED.md.bak-autoheal-20261121-0050
+PARKED.md.bak-autoheal-20261121-1356
+PARKED.md.bak-autoheal-20261121-1503
+PARKED.md.bak-cso-20261119-1802
+PARKED.md.bak-deviceaudit-20261119-1506
+PARKED.md.bak-eggbot-20261115-1048
+PARKED.md.bak-eggbot-20261115-1552
+PARKED.md.bak-eggbot-20261115-1718
+PARKED.md.bak-eggbot-20261115-1721
+PARKED.md.bak-eggbot-20261115-1724
+PARKED.md.bak-eggbot-20261115-1725
+PARKED.md.bak-eggbot-20261115-1731
+PARKED.md.bak-eggbot-20261115-1801
+PARKED.md.bak-eggbot-20261115-2137
+PARKED.md.bak-eggbot-20261115-2212
+PARKED.md.bak-eggbot-20261115-2214
+PARKED.md.bak-eggbot-20261116-0840
+PARKED.md.bak-eggbot-20261116-0849
+PARKED.md.bak-eggbot-20261116-0851
+PARKED.md.bak-eggbot-20261116-2022
+PARKED.md.bak-eggbot-20261116-2048
+PARKED.md.bak-eggbot-20261116-2335
+PARKED.md.bak-eggbot-20261117-0008
+PARKED.md.bak-eggbot-20261117-0021
+PARKED.md.bak-eggbot-20261117-0033
+PARKED.md.bak-eggbot-20261117-0034
+PARKED.md.bak-eggbot-20261117-1447
+PARKED.md.bak-eggbot-20261117-1502
+PARKED.md.bak-eggbot-20261117-1510
+PARKED.md.bak-eggbot-20261117-1512
+PARKED.md.bak-eggbot-20261117-1522
+PARKED.md.bak-eggbot-20261117-1525
+PARKED.md.bak-eggbot-20261118-0901
+PARKED.md.bak-eggbot-20261118-0917
+PARKED.md.bak-eggbot-20261118-0923
+PARKED.md.bak-eggbot-20261118-1605
+PARKED.md.bak-eggbot-20261118-1745
+PARKED.md.bak-eggbot-20261118-1856
+PARKED.md.bak-eggbot-20261119-1125
+PARKED.md.bak-eggbot-20261120-1327
+PARKED.md.bak-eggbot-20261120-1328
+PARKED.md.bak-eggbot-20261120-1331
+PARKED.md.bak-eggbot-20261120-1334
+PARKED.md.bak-eggbot-20261120-1335
+PARKED.md.bak-eggbot-20261120-1751
+PARKED.md.bak-eggbot-20261120-2116
+PARKED.md.bak-eggbot-20261120-2222
+PARKED.md.bak-eggbot-20261121-0001
+PARKED.md.bak-eggbot-20261121-0909
+PARKED.md.bak-eggbot-20261121-0945-16
+PARKED.md.bak-eggbot-20261121-0945-39
+PARKED.md.bak-eggbot-20261121-1013-55
+PARKED.md.bak-eggbot-20261121-1358-04
+PARKED.md.bak-eggbot-20261121-1801-28
+PARKED.md.bak-eggbot-20261121-1809-03
+PARKED.md.bak-hl-daily-20261106T084815Z
+PARKED.md.bak-reelimpl-20261117-1510
+PARKED.md.bak-reelimpl-20261118-0000
+PARKED.md.bak-reelimpl-20261119-0430
+PARKED.md.bak-reelimpl-20261119-0432
+PARKED.md.bak-reelimpl-20261119-0434
+PARKED.md.bak-reelimpl-20261119-1452
+PARKED.md.bak-reelimpl-20261119-20261119-0034
+PARKED.md.bak-reelimpl-20261120-1357
+PARKED.md.bak-reelimpl-20261120-1515
+PARKED.md.bak-reelimpl-20261120-1645
+PARKED.md.bak-reelreview-20261120-1830
+PARKED.md.bak-reelreview-20261121-0042
+PARKED.md.bak-rr-20261112
+PARKED.md.bak-t1070u-20261106T225254Z
+PARKED.md.bak-welshpilot-20261120-0036
+PARKED.md.lock
+PAUSED_BUILDS.md
+PAUSED_BUILDS.md.backup
+PAUSED_BUILDS.reason
+pilot-pack
+POSITIONING.md
+pre-reboot-t748u-jobs.txt
+prerelease-pack
+PRIORITY_BUILDS.md
+PROTECTED-PATHS.md
+PROTECTED-PATHS.md.bak-eggbot-20261119-1546
+PROTECTED-PATHS.md.bak-eggbot-20261119-1627
+PROTECTED-PATHS.md.bak-eggbot-20261119-1638
+PROTECTED-PATHS.md.bak-eggbot-20261119-1639
+PROTECTED-PATHS.md.bak-eggbot-20261119-1641
+PROTECTED-PATHS.md.bak-eggbot-20261119-1819
+PROTECTED-PATHS.md.bak-eggbot-20261119-1947
+PROTECTED-PATHS.md.bak-eggbot-20261119-1950
+PR_SWEEP_EXCLUDE.md
+psdc-archive-t826u
+PUBLIC-SECTOR-CITIZEN-AGENT-BACKUP-SCHEDULES.md
+QUEUE-WELSH-BUILD-2.md
+READY_PRS.md
+reboot-t748u.done
+reboot-t748u.health-done
+reboot-t748u.log
+reel-review
+release
+RELEASE-HOLDS.md
+RELEASE_STATUS.md
+REMOTE_BUILDS.md
+REMOTE_BUILDS.md.pre-hold-20261031
+remote-notes
+RETENTION-POLICY.md
+RETENTION-POLICY.md.bak-eggbot-20261121-1437
+ROOT-CAUSE-AND-OPEN-ITEMS-EVIDENCE.md
+ROOT-CAUSE-AND-OPEN-ITEMS.md
+RUNBOOK-ESTATE-OPERATOR.md
+sales
+SANDBOX-PROMOTIONS.md
+sbom
+security
+SECURITY-HANDOVER.md
+semgrep
+semgrep2
+shadow-standards
+SIX-DOCS-COVERAGE.md
+SLO.md
+SPEND_REGISTER.md
+STATUS.md
+STORAGE-RULES-20261121.md
+support
+tender
+tender-bot-handover
+TENDER_COUNCIL.md
+TENDER-REGISTER.md
+TENDER-REGISTER.md.bak-20261115-1794775225
+TENDER-REGISTER.md.bak-20261115T210300Z
+TENDER-REGISTER.md.bak-20261116-2353
+TENDER-REGISTER.md.bak-20261120-201337
+TENDER-REGISTER.md.bak-eggbot-20261116-0846
+TENDER-REGISTER.md.bak-eggbot-20261116-0851
+tenders
+TEST-BENCHMARK-AND-SKILLS.md
+tmp-clean-t838u.list
+tools-councils
+TOOLS_INVENTORY_t784u.md
+TOOLS_MAX_PLAN_t785u.md
+tools-review-v2
+tr
+tr-1026-01-api-error-secrets
+tr-1026-01-extend-233
+tr-1026-08-homepage-copy
+tr-1026-09-ready-version
+unit-bak-20261115T004527Z
+VERSIONS.lock.md
+videos
+vw
+welsh
+wsos
+zap
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/status.json
+cat: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/status.json: No such file or directory
+[0m
+Now let me check the repo structure and understand what needs to be done:
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+total 760
+drwxrwxr-x 2 andy andy   4096 Nov 21 18:43 .
+drwxrwxr-x 4 andy andy   4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy  68232 Nov 21 18:37 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy    650 Nov 21 18:38 cycle-1837-10.log
+-rw-rw-r-- 1 andy andy    166 Nov 21 18:39 cycle-1839-11.log
+-rw-rw-r-- 1 andy andy    249 Nov 21 18:40 cycle-1839-12.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1840-13.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1841-14.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:42 cycle-1842-15.log
+-rw-rw-r-- 1 andy andy  25771 Nov 21 18:45 cycle-1843-16.log
+-rw-rw-r-- 1 andy andy      6 Nov 21 16:59 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 21 16:59 .preflight-ok
+-rw-rw-r-- 1 andy andy    541 Nov 21 18:30 PROGRESS.md
+[0m
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/ew/RC.md
+# Business Evidence Wallet Release Candidate
+
+**Date:** 2026-11-21
+**Tag:** ew-rc2-20261121
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+**Branch:** rc/ew-20261121 (pushed to origin)
+**Source:** master branch at SHA 3fc3bf95f7055be4eb4a4357b62109e8addb2030
+
+This release candidate is based on the same SHA as the Dell hosted build (job-ew-dell-hosting).
+Coordinated through readiness files.
+
+## PR 175-183 Decisions (Second-Family Council)
+
+| PR | Decision | Reason | Resulting SHA |
+|----|----------|--------|---------------|
+| 175 | MERGED (already) | Release docs point at master 41aa829, migrations through 0027, refuse GO | 3fc3bf95 (in master) |
+| 176 | MERGED (already) | /app banner check waits for Organisations heading | 3fc3bf95 (in master) |
+| 177 | MERGED (already) | Rehearse pre-0011 backup restore after migration 0027 | 3fc3bf95 (in master) |
+| 178 | CLOSED (already) | Draft PR, diff empty, false green gate withdrawn | N/A (closed) |
+| 179 | MERGED (already) | Wait for Evidence heading instead of networkidle | 3fc3bf95 (in master) |
+| 180 | MERGED (already) | Fail tests if product source calls NVIDIA API | 3fc3bf95 (in master) |
+| 181 | MERGED (already) | Lock questionnaire template ids to existing seven | 3fc3bf95 (in master) |
+| 182 | MERGED (already) | Test tenant setting written only after membership succeeds | 3fc3bf95 (in master) |
+| 183 | MERGED (already) | Remove unused deny import from gateway HTTP adapter | 3fc3bf95 (in master) |
+
+All 9 PRs (175-183) are already merged or closed as of master SHA 3fc3bf95.
+No further council action needed - all decisions already reflected in RC branch.
+
+## RC2 - CSO Findings Fixed
+
+| Finding | Fix | Files Changed |
+|---------|-----|---------------|
+| F1: BEW preview secret not migrated to env var | Migrated to GROK_PREVIEW_CLIENT_SECRET env var | src/lib/auth/preview.ts |
+| F2: CSP unsafe-inline in script-src | Nonce-based CSP implementation | src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx |
+| F5: Login token in sessionStorage | Moved to in-memory only | src/lib/auth/client.ts |
+| Test: No token in browser storage | Added verification test | scripts/no-token-in-browser-storage.test.mjs |
+
+All fixes committed to rc/ew-20261121 at SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd.
+Tag ew-rc2-20261121 pushed to origin.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git status
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   package-lock.json
+	modified:   vite.config.ts
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && ls -la && cat package.json | head -50
+total 2372
+drwxrwxr-x  23 andy andy    4096 Nov 21 18:33 .
+drwxrwxr-x   4 andy andy    4096 Nov 21 16:59 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 00:15 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 00:15 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 00:15 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 00:15 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 00:15 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 00:15 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 00:15 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 21 17:23 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 00:15 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 deploy
+drwxrwxr-x   9 andy andy    4096 Nov 21 00:15 docs
+-rw-rw-r--   1 andy andy    1093 Nov 21 00:15 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 00:15 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 00:15 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 00:15 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 00:15 FIX-LIST-6.md
+drwxrwxr-x   8 andy andy    4096 Nov 21 18:47 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 00:15 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 21 00:15 .gitleaksignore
+drwxrwxr-x   4 andy andy    4096 Nov 21 00:15 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 00:15 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 00:15 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 migrations
+drwxrwxr-x 292 andy andy   12288 Nov 21 18:33 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 00:15 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 00:15 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 21 18:33 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 00:15 package.json
+-rw-rw-r--   1 andy andy  274699 Nov 21 17:12 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 00:15 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 00:15 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 00:15 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 00:15 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 00:15 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 21 17:10 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 21 00:15 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 00:15 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 00:15 specs
+drwxrwxr-x   7 andy andy    4096 Nov 21 17:10 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 00:15 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 00:15 startup.sh
+-rw-rw-r--   1 andy andy   74946 Nov 21 00:15 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 00:15 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 00:15 tsconfig.json
+-rw-rw-r--   1 andy andy   10137 Nov 21 17:50 vite.config.ts
+{
+  "name": "app-builder-workspace",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "overrides": {
+    "nf3": "0.3.17"
+  },
+  "scripts": {
+    "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port ${EW_HTTP_PORT:-8080}",
+    "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs",
+    "db:migrate": "node scripts/migrate.mjs",
+    "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
+    "preview": "node scripts/with-app-env.mjs vite preview",
+    "preview:restart": "node scripts/preview.mjs restart",
+    "preview:stop": "node scripts/preview.mjs stop",
+    "sbom": "npm sbom --sbom-format cyclonedx",
+    "typecheck": "tsc --noEmit",
+    "check:auth": "node scripts/check-auth-invariant.mjs",
+    "test": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts",
+    "test:domain": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test src/domain/*.test.ts src/domain/v2/*.test.ts src/domain/v2/agent-loop/*.test.ts",
+    "test:integration": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/*.test.mjs",
+    "test:control-mcp": "node --test tests/control-mcp.test.mjs",
+    "test:app": "npm run test:domain && npm run test:integration",
+    "test:mutation-isolation": "node scripts/mutation-isolation.mjs",
+    "test:live-idor": "node scripts/live-http-idor.mjs",
+    "test:gateway-cert": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs scripts/gateway-phase-o-cert.mjs",
+    "test:concurrency-pg": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/concurrency-pg.test.mjs",
+    "test:persistence": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs scripts/pg-restart-persistence.mjs",
+    "test:http-persistence": "node scripts/http-restart-persistence.mjs",
+    "test:backup": "node scripts/pg-backup-restore.mjs",
+    "test:hosted-probe": "node scripts/hosted-probe.mjs",
+    "test:hosted-preflight": "node scripts/staging-preflight.mjs",
+    "test:hosted-acceptance": "node scripts/hosted-acceptance.mjs",
+    "test:secret-scan": "node scripts/secret-scan.mjs",
+    "pg:start": "node scripts/pg-local.mjs start",
+    "pg:stop": "node scripts/pg-local.mjs stop",
+    "pg:status": "node scripts/pg-local.mjs status",
+    "test:platform": "npm test",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.14",
+    "@hookform/resolvers": "5.9.2",
+    "@radix-ui/react-accordion": "1.3.1",
+    "@radix-ui/react-alert-dialog": "1.2.1",
+    "@radix-ui/react-avatar": "1.3.1",
+    "@radix-ui/react-checkbox": "1.4.1",
+    "@radix-ui/react-collapsible": "1.2.1",
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat startup.sh && echo "===PRODUCTION===" && cat startup-production.sh
+#!/bin/sh
+set -eu
+# Repo root (this file). Sandbox path is /workspace/startup.sh; a clone can live anywhere.
+cd "$(dirname "$0")"
+node scripts/preview.mjs stop || true
+node scripts/pg-local.mjs start
+DATABASE_URL="$(node scripts/pg-local.mjs url)"
+BETTER_AUTH_SECRET="$(node scripts/pg-local.mjs auth-secret)"
+export DATABASE_URL BETTER_AUTH_SECRET
+# Fail-closed: Gateway HTTP is OFF unless explicitly armed for certification.
+# Do not default to 1 — production/staging must opt in with BEW_GATEWAY_HTTP_ENABLED=1.
+# Example cert: BEW_GATEWAY_HTTP_ENABLED=1 sh /workspace/startup.sh
+if [ "${BEW_GATEWAY_HTTP_ENABLED:-}" = "1" ]; then
+  export BEW_GATEWAY_HTTP_ENABLED=1
+else
+  unset BEW_GATEWAY_HTTP_ENABLED || true
+fi
+node scripts/migrate.mjs
+
+need_start=1
+if curl -sf -o /dev/null --max-time 2 http://127.0.0.1:8080/; then
+  pids_json="$(node scripts/listen-port.mjs pids 8080 || true)"
+  has_pg_url=0
+  gateway_ok=1
+  want_gateway=0
+  if [ "${BEW_GATEWAY_HTTP_ENABLED:-}" = "1" ]; then
+    want_gateway=1
+  fi
+  for pid in $(node -e "const j=JSON.parse(process.argv[1]||'{\"pids\":[]}'); console.log((j.pids||[]).join(' '))" "$pids_json"); do
+    if [ -r "/proc/$pid/environ" ]; then
+      if tr '\0' '\n' < "/proc/$pid/environ" 2>/dev/null | grep -q '^DATABASE_URL=postgres://'; then
+        has_pg_url=1
+      fi
+    fi
+    if [ "$want_gateway" = "1" ]; then
+      if [ -r "/proc/$pid/environ" ] && tr '\0' '\n' < "/proc/$pid/environ" | grep -q '^BEW_GATEWAY_HTTP_ENABLED=1'; then
+        :
+      else
+        gateway_ok=0
+      fi
+    fi
+  done
+  if [ "$has_pg_url" = "1" ] && [ "$gateway_ok" = "1" ]; then
+    need_start=0
+  else
+    node scripts/listen-port.mjs kill 8080 || true
+    sleep 1
+  fi
+fi
+if [ "$need_start" = "1" ]; then
+  npm run dev >>/tmp/app-startup.log 2>&1 &
+fi
+node scripts/control-mcp.mjs start >/tmp/control-mcp-startup.log 2>&1 || true
+===PRODUCTION===
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")"
+node scripts/pg-local.mjs start
+DATABASE_URL="$(node scripts/pg-local.mjs url)"
+BETTER_AUTH_SECRET="$(node scripts/pg-local.mjs auth-secret)"
+export DATABASE_URL BETTER_AUTH_SECRET
+
+# Fail-closed production defaults for the DigitalOcean pilot. Operators may
+# override explicitly in the systemd unit Environment= / EnvironmentFile=.
+# Do not open signup or the MCP credential UI by accident on a public origin.
+if [ -z "${WALLET_SIGNUP_OPEN+x}" ]; then
+  WALLET_SIGNUP_OPEN=false
+fi
+if [ -z "${CHAPELGATE_MCP_SETUP_UI+x}" ]; then
+  CHAPELGATE_MCP_SETUP_UI=false
+fi
+export WALLET_SIGNUP_OPEN CHAPELGATE_MCP_SETUP_UI
+
+if [ -z "${BETTER_AUTH_URL:-}" ]; then
+  echo "startup-production: BETTER_AUTH_URL must be the public https origin" >&2
+  exit 1
+fi
+
+node scripts/migrate.mjs
+export HOST=127.0.0.1
+export PORT="${EW_HTTP_PORT:-8080}"
+exec node .output/server/index.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat .env.example
+# Example only — never commit real values.
+# Local preview does not require this file: startup.sh starts PostgreSQL 18
+# and exports DATABASE_URL from scripts/pg-local.mjs. The local database
+# password is generated into gitignored data/pg-password.
+
+# DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/DB
+# BETTER_AUTH_SECRET=
+# BETTER_AUTH_URL=
+# GROK_AUTH_ISSUER=
+# GROK_AUTH_CLIENT_ID=
+# GROK_AUTH_CLIENT_SECRET=
+# XAI_API_KEY=
+
+# Optional RSFM control/evidence-reference integration. Safe default disabled.
+# Publish only evidence IDs/hashes/status — never document contents.
+RSFM_INTEGRATION_ENABLED=0
+RSFM_CONTROL_PLANE_URL=https://rsfm-control-plane-production.up.railway.app
+RSFM_CONTROL_PLANE_TOKEN=
+RSFM_TENANT_ID=chapelgate
+# CHAPELGATE_MCP_ENABLED=true
+# CHAPELGATE_MCP_BIND=127.0.0.1
+# CHAPELGATE_MCP_PORT=8788
+# CHAPELGATE_MCP_TOKEN=
+# CHAPELGATE_MCP_PUBLIC_HOST=
+# CHAPELGATE_MCP_EXTERNAL_ENABLED=false
+# CHAPELGATE_MCP_SETUP_UI=
+# CONTROL_CENTER_URL=
+# CHAPELGATE_CONTROL_REPO=chapelgate/business-evidence-wallet
+# CHAPELGATE_CONTROL_ISSUE=3
+# CLOUDFLARE_TUNNEL_TOKEN=
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && ls server/ && cat server/*.js 2>/dev/null | head -100
+middleware
+virtual-grok-og-identity.d.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/pg-local.mjs | head -100
+#!/usr/bin/env node
+/**
+ * Local **real PostgreSQL 18** cluster for this workspace.
+ *
+ * Not PGLite. Not a mock. Not Neon. Binaries are the zonkyio/embedded-postgres
+ * PostgreSQL 18.4 linux-x64 build (`postgres`, `initdb`, `pg_ctl`).
+ *
+ * The sandbox is already in a user namespace and `setuid` to a normal user
+ * fails with EINVAL. Official PostgreSQL refuses to run as root, so the
+ * postmaster is started with:
+ *
+ *   unshare --user --map-user=<ewpg> --map-group=<ewpg> -- pg_ctl ...
+ *
+ * Data lives on disk under `data/postgres` (gitignored). The cluster is
+ * daemonized by pg_ctl and survives the Node helper exiting.
+ *
+ * The database password is generated once and stored at `data/pg-password`
+ * (gitignored, mode 0600). It is not hard-coded. Restart reuses the file.
+ *
+ * Commands: start | stop | status | url | auth-secret | wait | reset
+ * Environment (no .env file): EW_PG_DATA, EW_PG_PORT, EW_PG_RUN, EW_PG_LOG,
+ * EW_PG_DATABASE, EW_PG_USER, EW_PG_PASSWORD.
+ */
+import { execFileSync, spawnSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
+import {
+  chmodSync,
+  copyFileSync,
+  cpSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+  renameSync,
+  rmSync,
+  statSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { createConnection } from "node:net";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import pg from "pg";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const nativeRoot = join(root, "node_modules/@embedded-postgres/linux-x64/native");
+const binDir = join(nativeRoot, "bin");
+const libDir = join(nativeRoot, "lib");
+const shareDir = join(nativeRoot, "share");
+const INITDB = join(binDir, "initdb");
+const PG_CTL = join(binDir, "pg_ctl");
+const POSTGRES = join(binDir, "postgres");
+
+const DEFAULT_PORT = 55432;
+const DEFAULT_USER = "ew";
+const DEFAULT_DB = "evidence_wallet";
+
+function defaultPasswordFile(dataDir) {
+  return join(dirname(dataDir), "pg-password");
+}
+
+function persistPassword(file, password) {
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, `${password}\n`, { encoding: "utf8", mode: 0o600 });
+  try {
+    chmodSync(file, 0o600);
+  } catch {
+    // best-effort on filesystems that ignore mode
+  }
+}
+
+export function loadLocalPassword(passwordFile, envPassword) {
+  const fromEnv = typeof envPassword === "string" ? envPassword.trim() : "";
+  if (existsSync(passwordFile)) {
+    const existing = readFileSync(passwordFile, "utf8").trim();
+    if (existing) return existing;
+  }
+  if (fromEnv) {
+    persistPassword(passwordFile, fromEnv);
+    return fromEnv;
+  }
+  const generated = randomBytes(24).toString("base64url");
+  persistPassword(passwordFile, generated);
+  return generated;
+}
+
+export function clusterConfig(overrides = {}) {
+  const port = Number(overrides.port ?? process.env.EW_PG_PORT ?? DEFAULT_PORT);
+  const dataDir = overrides.dataDir ?? process.env.EW_PG_DATA ?? join(root, "data/postgres");
+  const passwordFile =
+    overrides.passwordFile ?? process.env.EW_PG_PASSWORD_FILE ?? defaultPasswordFile(dataDir);
+  const dbPassword =
+    overrides.dbPassword ?? loadLocalPassword(passwordFile, process.env.EW_PG_PASSWORD);
+  return {
+    dataDir,
+    runDir: overrides.runDir ?? process.env.EW_PG_RUN ?? join(root, "data/postgres-run"),
+    logFile: overrides.logFile ?? process.env.EW_PG_LOG ?? join(root, "data/postgres.log"),
+    port: Number.isInteger(port) && port > 0 ? port : DEFAULT_PORT,
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && ls server/middleware/ && cat server/middleware/*.ts
+grok-pwa.ts
+wallet-headers.ts
+/**
+ * Deployed-app (Nitro) half of the platform PWA chrome. Auto-registered as
+ * global h3 middleware because vite.config.ts sets `serverDir: "./server"` —
+ * without that option Nitro v3 never scans this directory.
+ *
+ * - `?install=1&platform=ios` on a document path → the Home Screen tutorial,
+ *   bundled into the server build via `?raw` (the public/ directory is CDN
+ *   static output on Vercel and not readable from the function).
+ * - `/__grok/manifest.webmanifest` → per-app-named manifest (kept out of
+ *   public/ so this dynamic response is the only one).
+ * - Other HTML documents → stream-inject PWA + OG head tags at `</head>`.
+ *   OG identity is baked via `virtual:grok-og-identity` at `vite build`
+ *   (this function cannot read `src/lib/og/site.json` or `public/og.jpg`).
+ *   This must be a middleware transforming `next()`: h3 discards the `response`
+ *   runtime hook's return value, and `render:html` does not exist in Nitro v3.
+ */
+import installPageTemplate from "../../scripts/install-page.html?raw";
+import { grokOgIdentity } from "virtual:grok-og-identity";
+import {
+  acceptsHtml,
+  createHeadInjector,
+  isDocumentPath,
+  isInstallQuery,
+  renderInstallPageHtml,
+  renderWebManifest,
+} from "../../scripts/grok-pwa-shared.mjs";
+
+interface GrokPwaEvent {
+  url: URL;
+  req: { method: string; headers: Headers };
+}
+
+function requestHost(event: GrokPwaEvent): string {
+  return (
+    event.req.headers.get("x-forwarded-host") ?? event.req.headers.get("host") ?? event.url.host
+  );
+}
+
+function injectHeadStreaming(response: Response, host: string): Response {
+  const injector = createHeadInjector({
+    host,
+    site: grokOgIdentity.site,
+  });
+  const transformed = response.body!.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        for (const out of injector.push(chunk)) controller.enqueue(out);
+      },
+      flush(controller) {
+        for (const out of injector.flush()) controller.enqueue(out);
+      },
+    }),
+  );
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+  return new Response(transformed, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+export default async function grokPwaMiddleware(
+  event: GrokPwaEvent,
+  next: () => unknown | Promise<unknown>,
+): Promise<unknown> {
+  const method = (event.req.method ?? "GET").toUpperCase();
+  if (method !== "GET") return next();
+
+  const path = event.url.pathname;
+  const urlWithQuery = path + event.url.search;
+
+  if (path === "/__grok/manifest.webmanifest" || path === "/__grok/manifest.json") {
+    return new Response(renderWebManifest(requestHost(event)), {
+      headers: {
+        "content-type": "application/manifest+json; charset=utf-8",
+        "cache-control": "no-cache",
+      },
+    });
+  }
+
+  if (
+    isInstallQuery(urlWithQuery) &&
+    isDocumentPath(path) &&
+    acceptsHtml(event.req.headers.get("accept"))
+  ) {
+    const html = renderInstallPageHtml(installPageTemplate, {
+      host: requestHost(event),
+      url: urlWithQuery,
+    });
+    return new Response(html, {
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "no-cache",
+      },
+    });
+  }
+
+  if (!isDocumentPath(path)) return next();
+
+  const result = await next();
+  if (
+    result instanceof Response &&
+    result.body &&
+    String(result.headers.get("content-type") ?? "").includes("text/html") &&
+    !result.headers.get("content-encoding")
+  ) {
+    return injectHeadStreaming(result, requestHost(event));
+  }
+  return result;
+}
+/**
+ * Product security headers for Nitro (deployed). Dev uses vite `server.headers`
+ * plus jsonResponse on /health and /ready.
+ *
+ * NOTE: TanStack Start's `Scripts` component injects nonces into inline scripts
+ * when `router.options.ssr.nonce` is set. The nonce is generated per-request
+ * in the SSR handler (see .output/server/_ssr/ssr.mjs).
+ */
+const WALLET_SECURITY_HEADERS = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Content-Security-Policy": "frame-ancestors 'none'",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+interface WalletHeaderEvent {
+  req: { method: string; url?: string };
+}
+
+export default async function walletHeadersMiddleware(
+  _event: WalletHeaderEvent,
+  next: () => unknown | Promise<unknown>,
+): Promise<unknown> {
+  const result = await next();
+  if (!(result instanceof Response)) return result;
+  const headers = new Headers(result.headers);
+  for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+    headers.set(key, value);
+  }
+  // Don't override CSP if it already has a nonce (set by TanStack Start SSR)
+  if (!headers.get("Content-Security-Policy")?.includes("nonce-")) {
+    headers.set("Content-Security-Policy", WALLET_SECURITY_HEADERS["Content-Security-Policy"]);
+  }
+  return new Response(result.body, {
+    status: result.status,
+    statusText: result.statusText,
+    headers,
+  });
+}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/pg-local.mjs | tail -100
+passwordFile: cfg.passwordFile,
+    initialized: init.initialized,
+    started,
+    staleLock,
+    databaseCreated: database.created,
+    urlHost: "127.0.0.1",
+  };
+}
+
+export async function resetCluster(cfg = clusterConfig()) {
+  return startCluster(cfg, { reset: true });
+}
+
+export async function statusCluster(cfg = clusterConfig()) {
+  const running = await isRunning(cfg);
+  const pgVersion = existsSync(join(cfg.dataDir, "PG_VERSION"))
+    ? readFileSync(join(cfg.dataDir, "PG_VERSION"), "utf8").trim()
+    : null;
+  let version = null;
+  if (running) {
+    const pool = new pg.Pool({
+      connectionString: adminUrl(cfg),
+      connectionTimeoutMillis: 3_000,
+      max: 1,
+    });
+    try {
+      const row = await pool.query("select version() as version");
+      version = row.rows[0]?.version ?? null;
+    } catch (err) {
+      version = redactSecret(err instanceof Error ? err.message : String(err), cfg.dbPassword);
+    } finally {
+      await pool.end().catch(() => undefined);
+    }
+  }
+  return {
+    running,
+    engine: "postgresql",
+    pgVersion,
+    version,
+    port: cfg.port,
+    dataDir: cfg.dataDir,
+    dbName: cfg.dbName,
+    passwordFile: cfg.passwordFile,
+  };
+}
+
+export async function waitCluster(cfg = clusterConfig(), timeoutMs = 20_000) {
+  const ok = await waitForTcp(cfg.port, timeoutMs);
+  if (!ok) throw new Error(`timeout waiting for PostgreSQL on 127.0.0.1:${cfg.port}`);
+  return { ok: true, port: cfg.port };
+}
+
+function printJson(value) {
+  console.log(JSON.stringify(value));
+}
+
+async function main() {
+  const action = process.argv[2] || "status";
+  const cfg = clusterConfig();
+  if (action === "start") {
+    printJson(await startCluster(cfg));
+    return;
+  }
+  if (action === "stop") {
+    printJson(await stopCluster(cfg));
+    return;
+  }
+  if (action === "status") {
+    printJson(await statusCluster(cfg));
+    return;
+  }
+  if (action === "url") {
+    process.stdout.write(`${connectionUrl(cfg)}\n`);
+    return;
+  }
+  if (action === "auth-secret") {
+    process.stdout.write(`${authSecret(cfg)}\n`);
+    return;
+  }
+  if (action === "wait") {
+    printJson(await waitCluster(cfg));
+    return;
+  }
+  if (action === "reset") {
+    printJson(await resetCluster(cfg));
+    return;
+  }
+  console.error("usage: node scripts/pg-local.mjs start|stop|status|url|auth-secret|wait|reset");
+  process.exit(2);
+}
+
+const invokedDirectly = process.argv[1]?.endsWith("pg-local.mjs");
+if (invokedDirectly) {
+  main().catch((err) => {
+    const cfg = clusterConfig();
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[pg-local]", redactSecret(message, cfg.dbPassword));
+    process.exit(1);
+  });
+}
+[0m
+[0m$ [0mnetstat -tlnp 2>/dev/null | head -40
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/preview.mjs | head -100
+#!/usr/bin/env node
+/**
+ * Owns :8081, the built-output QA preview.
+ *
+ * `vite preview` is strictPort, so a preview left over from an earlier turn
+ * both fails the next start and keeps serving the previous build's output.
+ * Every restart therefore kills the current port owner first, whoever started
+ * it. Owners come from /proc, so this runs only inside the Linux sandbox.
+ *
+ *   node scripts/preview.mjs stop|restart
+ */
+import { spawn } from "node:child_process";
+import {
+  existsSync,
+  mkdirSync,
+  openSync,
+  readFileSync,
+  readdirSync,
+  readlinkSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const PREVIEW_PORT = 8081;
+const PREVIEW_URL = `http://127.0.0.1:${PREVIEW_PORT}/`;
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const PID_FILE = join(ROOT, ".grok/preview.pid");
+const LOG_FILE = join(ROOT, ".grok/preview.log");
+const READY_TIMEOUT_MS = Number(process.env.PREVIEW_READY_TIMEOUT_MS || 60000);
+const GRACE_MS = 3000;
+const POLL_MS = 100;
+
+export function parsePreviewArgs(argv) {
+  const [action, ...rest] = argv;
+  if (!action) return { error: "usage: node scripts/preview.mjs stop|restart" };
+  if (rest.length > 0) return { error: `unexpected argument: ${rest[0]}` };
+  if (!["stop", "restart"].includes(action)) {
+    return { error: `unknown action: ${action} (expected stop or restart)` };
+  }
+  return { action };
+}
+
+export function parsePid(text) {
+  const pid = Number.parseInt(String(text ?? "").trim(), 10);
+  // pid 1 is the sandbox init — never the preview, and dangerous to signal.
+  return Number.isInteger(pid) && pid > 1 ? pid : null;
+}
+
+/** pgid of a process from its /proc/<pid>/stat line. */
+export function parsePgid(stat) {
+  const line = String(stat ?? "");
+  // The comm field is parenthesised and may itself contain spaces; state, ppid
+  // and pgrp are the three fields after it.
+  const end = line.lastIndexOf(") ");
+  if (end === -1) return null;
+  const pgid = Number.parseInt(line.slice(end + 2).split(/\s+/)[2], 10);
+  return Number.isInteger(pgid) && pgid > 0 ? pgid : null;
+}
+
+const TCP_LISTEN = "0A";
+
+/** Socket inodes of the LISTEN sockets on `port` in a /proc/net/tcp{,6} dump. */
+export function parseListenerInodes(procNetTcp, port) {
+  const wanted = `:${port.toString(16).toUpperCase().padStart(4, "0")}`;
+  const inodes = [];
+  for (const line of String(procNetTcp ?? "").split("\n")) {
+    const cols = line.trim().split(/\s+/);
+    if (cols.length < 10 || cols[3] !== TCP_LISTEN || !cols[1].endsWith(wanted)) continue;
+    if (/^\d+$/.test(cols[9])) inodes.push(cols[9]);
+  }
+  return inodes;
+}
+
+export function looksLikePreviewProcess(cmdline) {
+  // /proc/<pid>/cmdline is NUL-separated.
+  const argv = String(cmdline ?? "")
+    .split("\0")
+    .filter(Boolean)
+    .join(" ");
+  // The sandbox service runs scripts/preview-thumbnail.mjs in this box, and
+  // this script can be running concurrently: neither is ever a target.
+  if (/\bpreview[\w-]*\.mjs\b/.test(argv)) return false;
+  // The `npm run preview` wrapper (`npm-cli.js run preview`) and its vite child.
+  // `preview` must be the whole script name: `run preview:stop`/`preview:restart`
+  // are this tooling's own wrappers, and `vite build --outDir preview-dist` is
+  // not a server.
+  return /\brun\s+preview(?:\s|$)/.test(argv) || /\bvite\b\s+preview\b/.test(argv);
+}
+
+/**
+ * Pids to signal. Port owners are owners by definition; the pidfile pid is only
+ * a claim left by an earlier run — pids are re-used across hibernate/revive, so
+ * signal it only when its command line still looks like the preview.
+ */
+export function previewOwners({ portPids, pidFilePid, cmdlineOf }) {
+  const owners = new Set(portPids);
+  if (
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/preview.mjs | tail -100
+*/
+function portOwners() {
+  const inodes = new Set();
+  for (const file of ["/proc/net/tcp", "/proc/net/tcp6"]) {
+    let dump;
+    try {
+      dump = readFileSync(file, "utf8");
+    } catch {
+      // tcp6 is absent when the box has no IPv6.
+      continue;
+    }
+    for (const inode of parseListenerInodes(dump, PREVIEW_PORT)) inodes.add(inode);
+  }
+  const pids = inodes.size > 0 ? pidsForSocketInodes(inodes) : [];
+  return { pids, unattributed: inodes.size > 0 && pids.length === 0 };
+}
+
+async function stop(announce = true) {
+  const owners = previewOwners({
+    portPids: portOwners().pids,
+    pidFilePid: readPidFile(),
+    cmdlineOf,
+  });
+  const { signalled, stubborn } = await terminatePids(owners, { kill: killPid, isAlive, sleep });
+
+  const outcome = stopOutcome({ signalled, stubborn, after: portOwners() });
+  if (!outcome.ok) {
+    // Keep the pidfile: a survivor the port scan cannot attribute leaves it as
+    // the only record a retry could use.
+    console.error(`[preview] ${outcome.error}`);
+    return false;
+  }
+  rmSync(PID_FILE, { force: true });
+  if (announce) console.log(`[preview] ${outcome.message}`);
+  return true;
+}
+
+async function waitForReady(failure) {
+  const deadline = Date.now() + READY_TIMEOUT_MS;
+  while (Date.now() < deadline && failure() === null) {
+    try {
+      // Any HTTP response means the server is bound; a 404 is still ready.
+      await fetch(PREVIEW_URL, { signal: AbortSignal.timeout(2000) });
+      return true;
+    } catch {
+      await sleep(250);
+    }
+  }
+  return false;
+}
+
+async function restart() {
+  if (!(await stop())) return 1;
+
+  mkdirSync(dirname(LOG_FILE), { recursive: true });
+  const log = openSync(LOG_FILE, "a");
+  const child = spawn("npm", ["run", "preview"], {
+    cwd: ROOT,
+    detached: true,
+    stdio: ["ignore", log, log],
+  });
+  child.unref();
+  writeFileSync(PID_FILE, `${child.pid}\n`);
+
+  let failure = null;
+  child.on("error", (err) => {
+    failure = `npm run preview could not be spawned: ${err.message}`;
+  });
+  child.on("exit", (code, signal) => {
+    failure = `npm run preview exited early (${signal ?? `code ${code}`})`;
+  });
+
+  if (!(await waitForReady(() => failure))) {
+    const secs = Math.round(READY_TIMEOUT_MS / 1000);
+    const why =
+      failure ??
+      `nothing answered on ${PREVIEW_URL} within ${secs}s — check that vite.config.ts ` +
+        `still sets preview.port ${PREVIEW_PORT}`;
+    console.error(`[preview] ${why} — see ${LOG_FILE}`);
+    // A server that binds a few seconds later would serve a build the agent has
+    // already been told to distrust.
+    await stop(false);
+    return 1;
+  }
+  console.log(`[preview] serving ${PREVIEW_URL} (pid ${child.pid}, log ${LOG_FILE})`);
+  return 0;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const args = parsePreviewArgs(process.argv.slice(2));
+  if (args.error) {
+    console.error(`[preview] ${args.error}`);
+    process.exit(1);
+  }
+  if (!existsSync("/proc/self")) {
+    console.error("[preview] no /proc — this script only runs inside the sandbox");
+    process.exit(1);
+  }
+  process.exitCode = args.action === "stop" ? ((await stop()) ? 0 : 1) : await restart();
+}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/migrate.mjs | head -50
+#!/usr/bin/env node
+/**
+ * Deploy-time database migrator (node-postgres, `pg`).
+ *
+ * Runs during `npm run build` — on every Vercel deploy — applying pending files
+ * in ../migrations to DATABASE_URL. Each file is applied in one transaction and
+ * recorded in a `_migrations` table, so it runs once and is safe to re-run.
+ *
+ * The read is non-recursive, so the opt-in auth schema under migrations/auth/
+ * is not applied to an app that never asked for sign-in.
+ *
+ * No DATABASE_URL (local / preview builds) -> skip; the PGLite fallback applies
+ * the same files at startup instead (see src/lib/db.ts).
+ */
+import { readdir, readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+import pg from "pg";
+import { pendingMigrations } from "./migration-plan.mjs";
+import { postgresPoolConfig } from "./pg-ssl.mjs";
+
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+  console.log(
+    "[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).",
+  );
+  process.exit(0);
+}
+
+const migrationsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "migrations");
+
+async function main() {
+  let entries;
+  try {
+    entries = await readdir(migrationsDir);
+  } catch {
+    console.log("[migrate] no migrations/ directory — nothing to do.");
+    return;
+  }
+  // An app with no schema of its own must not pay for a database connection.
+  if (pendingMigrations(entries, []).length === 0) {
+    console.log("[migrate] no migrations — nothing to do.");
+    return;
+  }
+
+  const pool = new pg.Pool(postgresPoolConfig(databaseUrl, { max: 1 }));
+  const client = await pool.connect();
+  try {
+    await client.query(
+      "CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())",
+[0m
+[0m$ [0mss -tlnp 2>/dev/null | head -40
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                    
+LISTEN 0      511          0.0.0.0:4300       0.0.0.0:*    users:(("node",pid=3308534,fd=22))        
+LISTEN 0      511          0.0.0.0:4311       0.0.0.0:*    users:(("node",pid=3283100,fd=22))        
+LISTEN 0      200        127.0.0.1:55446      0.0.0.0:*    users:(("postgres",pid=3283748,fd=8))     
+LISTEN 0      200        127.0.0.1:55432      0.0.0.0:*    users:(("postgres",pid=2392097,fd=8))     
+LISTEN 0      200        127.0.0.1:55434      0.0.0.0:*    users:(("postgres",pid=2726817,fd=8))     
+LISTEN 0      5          127.0.0.1:18091      0.0.0.0:*    users:(("python3",pid=2765,fd=3))         
+LISTEN 0      4096       127.0.0.1:20180      0.0.0.0:*    users:(("caddy",pid=1316004,fd=3))        
+LISTEN 0      4096       127.0.0.1:20182      0.0.0.0:*    users:(("caddy",pid=1316004,fd=6))        
+LISTEN 0      4096       127.0.0.1:20128      0.0.0.0:*                                              
+LISTEN 0      5          127.0.0.1:20130      0.0.0.0:*    users:(("python3",pid=2078963,fd=3))      
+LISTEN 0      4096       127.0.0.1:20131      0.0.0.0:*                                              
+LISTEN 0      511        127.0.0.1:18789      0.0.0.0:*    users:(("openclaw-gatewa",pid=1690,fd=32))
+LISTEN 0      4096       127.0.0.1:18446      0.0.0.0:*                                              
+LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*                                              
+LISTEN 0      4096      0.0.0.0%lo:41198      0.0.0.0:*    users:(("tailscaled",pid=2982800,fd=18))  
+LISTEN 0      4096         0.0.0.0:8443       0.0.0.0:*                                              
+LISTEN 0      64        172.17.0.1:11234      0.0.0.0:*    users:(("python3",pid=3102330,fd=3))      
+LISTEN 0      4096       127.0.0.1:5432       0.0.0.0:*                                              
+LISTEN 0      512        127.0.0.1:4096       0.0.0.0:*    users:(("opencode",pid=2521,fd=11))       
+LISTEN 0      512        127.0.0.1:8081       0.0.0.0:*    users:(("llama-server",pid=3554152,fd=15))
+LISTEN 0      4096       127.0.0.1:39353      0.0.0.0:*                                              
+LISTEN 0      4096       127.0.0.1:1055       0.0.0.0:*    users:(("tailscaled",pid=2982800,fd=11))  
+LISTEN 0      4096         0.0.0.0:18092      0.0.0.0:*                                              
+LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*                                              
+LISTEN 0      2048       127.0.0.1:3300       0.0.0.0:*    users:(("python",pid=1140660,fd=13))      
+LISTEN 0      5            0.0.0.0:20140      0.0.0.0:*    users:(("python3",pid=1805330,fd=3))      
+LISTEN 0      4096       127.0.0.1:3008       0.0.0.0:*                                              
+LISTEN 0      4096       127.0.0.1:9443       0.0.0.0:*                                              
+LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*                                              
+LISTEN 0      511        127.0.0.1:8788       0.0.0.0:*    users:(("node",pid=3018602,fd=21))        
+LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:(("python3",pid=1040547,fd=3))      
+LISTEN 0      4096         0.0.0.0:28006      0.0.0.0:*                                              
+LISTEN 0      4096         0.0.0.0:28007      0.0.0.0:*                                              
+LISTEN 0      4096         0.0.0.0:28002      0.0.0.0:*                                              
+LISTEN 0      4096         0.0.0.0:28003      0.0.0.0:*                                              
+LISTEN 0      32         127.0.0.1:11234      0.0.0.0:*    users:(("python3",pid=3102298,fd=3))      
+LISTEN 0      511            [::1]:18789         [::]:*    users:(("openclaw-gatewa",pid=1690,fd=33))
+LISTEN 0      4096            [::]:8443          [::]:*                                              
+LISTEN 0      4096           [::1]:631           [::]:*
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/migrate.mjs | tail -50
+console.log("[migrate] no migrations — nothing to do.");
+    return;
+  }
+
+  const pool = new pg.Pool(postgresPoolConfig(databaseUrl, { max: 1 }));
+  const client = await pool.connect();
+  try {
+    await client.query(
+      "CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())",
+    );
+    const applied = (await client.query("SELECT name FROM _migrations")).rows.map(
+      (r) => r.name,
+    );
+
+    let count = 0;
+    for (const { name } of pendingMigrations(entries, applied)) {
+      const text = await readFile(join(migrationsDir, name), "utf8");
+      try {
+        await client.query("BEGIN");
+        // pg's simple-query protocol runs a whole multi-statement file at once.
+        await client.query(text);
+        await client.query("INSERT INTO _migrations (name) VALUES ($1)", [name]);
+        await client.query("COMMIT");
+      } catch (err) {
+        console.error(`[migrate] error applying ${name}`);
+        try {
+          await client.query("ROLLBACK");
+        } catch {
+          // ROLLBACK fails when the connection died — keep the original error.
+        }
+        throw err;
+      }
+      console.log(`[migrate] applied ${name}`);
+      count += 1;
+    }
+    console.log(count ? `[migrate] done — ${count} migration(s) applied.` : "[migrate] up to date.");
+  } finally {
+    client.release();
+    await pool.end();
+  }
+}
+
+main().catch((err) => {
+  console.error("[migrate] failed:", err?.message || err);
+  // pg errors carry the context needed to debug a bad SQL file.
+  for (const key of ["code", "detail", "hint", "position", "where"]) {
+    if (err?.[key] != null) console.error(`[migrate]   ${key}: ${err[key]}`);
+  }
+  process.exit(1);
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && ls migrations/
+0001_auth.sql
+0002_evidence_wallet.sql
+0003_answer_notes.sql
+0004_claim_human_edits.sql
+0005_integrity_guards.sql
+0006_rate_quotas_invites.sql
+0007_org_lifecycle.sql
+0008_demo_filename_unique.sql
+0009_orphan_source_facts.sql
+0010_orphan_source_org_scope.sql
+0011_v2_foundations.sql
+0012_v2_decision_inbox.sql
+0013_v2_council_hardening.sql
+0014_v2_agent_loop.sql
+0015_v2_workflows.sql
+0016_v2_quotes_comms.sql
+0017_v2_answer_bank_inbox.sql
+0018_v2_rls_tenant.sql
+0019_v2_deletion_orders_assertions.sql
+0020_v2_perf_indexes.sql
+0021_v2_preference_hints.sql
+0022_v2_preference_scopes.sql
+0023_v2_agent_credential_rotation.sql
+0024_v2_entity_type_defs.sql
+0025_v2_relation_type_defs.sql
+0026_v2_gateway_audit_rls.sql
+0027_v2_gateway_phase_o.sql
+auth
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat vite.config.ts
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
+import { randomBytes } from "node:crypto";
+import type { Plugin } from "vite";
+import { defineConfig } from "vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { nitro } from "nitro/vite";
+// @ts-expect-error JS plugin alongside the TS vite config
+import { grokPwaPlugin } from "./scripts/grok-pwa-plugin.mjs";
+// @ts-expect-error JS plugin alongside the TS vite config
+import { appEnvPlugin } from "./scripts/app-env-plugin.mjs";
+import { isMigrationFile } from "./scripts/migration-plan.mjs";
+
+/** Vite plugin to add security headers to all dev server responses. */
+function securityHeadersPlugin(): Plugin {
+  return {
+    name: "app-builder:security-headers",
+    apply: "serve",
+    configureServer(server) {
+      // Handle large URI requests early (before SPA fallback)
+      server.middlewares.use((req, res, next) => {
+        const url = req.url ?? "";
+        if (url.length > 8000) {
+          res.statusCode = 414;
+          res.setHeader("content-type", "text/plain; charset=utf-8");
+          res.end("Request-URI Too Long");
+          return;
+        }
+        next();
+      });
+
+      server.middlewares.use((_req, res, next) => {
+        // Generate a nonce for this request to use in CSP
+        const nonce = Buffer.from(randomBytes(16)).toString("base64");
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+        res.setHeader("X-Frame-Options", "DENY");
+        res.setHeader("Content-Security-Policy", `default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com; style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';`);
+        res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+        // Pass nonce to Vite for inline scripts
+        res.setHeader("X-CSP-Nonce", nonce);
+        next();
+      });
+    },
+  };
+}
+
+/** The files `src/lib/db.ts` globs — same directory, same non-recursive scope. */
+function hasGlobbedMigrations(root: string): boolean {
+  try {
+    return readdirSync(join(root, "migrations")).some(isMigrationFile);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Finish PGLite bootstrap during dev-server setup (before traffic). Vite awaits
+ * async `configureServer` hooks. Production: `src/lib/db` kicks `ensureDbReady`
+ * on import.
+ *
+ * Vite awaiting the hook puts this on time-to-first-render, so an app with no
+ * migrations — no schema to apply — skips it entirely rather than paying for a
+ * PGLite instance it never queries.
+ */
+function pgliteBootstrapPlugin(): Plugin {
+  return {
+    name: "app-builder:pglite-bootstrap",
+    apply: "serve",
+    async configureServer(server) {
+      if (!hasGlobbedMigrations(server.config.root)) return;
+      try {
+        const mod = (await server.ssrLoadModule("/src/lib/db.ts")) as {
+          ensureDbReady?: () => Promise<void>;
+        };
+        if (typeof mod.ensureDbReady === "function") {
+          await mod.ensureDbReady();
+        }
+      } catch (err) {
+        console.error("[app-builder] DB bootstrap failed:", err);
+        throw err;
+      }
+    },
+  };
+}
+
+/**
+ * Live-preview OAuth popup — handled HERE so the agent never has to create a
+ * `/auth/popup` route (and cannot break it by scaffolding a React page that
+ * paints the full app shell in the popup).
+ *
+ * `signIn` (client.ts) opens `/auth/popup?providerId=…` in a top-level window.
+ * This middleware runs before TanStack Start, calls `handleAuthPopupRequest`,
+ * and returns the 302 / completion HTML. Deployed apps do not use the popup
+ * (full-page OAuth redirect), so `apply: "serve"` is enough.
+ */
+function authPopupPlugin(): Plugin {
+  return {
+    name: "app-builder:auth-popup",
+    apply: "serve",
+    configureServer(server) {
+      // Register immediately (not in a returned post-hook) so we run BEFORE
+      // TanStack Start / the SPA HTML fallback. A model-authored
+      // `src/routes/auth/popup.tsx` React page must never win this path.
+      server.middlewares.use(async (req, res, next) => {
+        try {
+          const rawUrl = req.url ?? "";
+          const pathOnly = rawUrl.split("?", 1)[0] ?? "";
+          if (pathOnly !== "/auth/popup") {
+            next();
+            return;
+          }
+          if ((req.method ?? "GET").toUpperCase() !== "GET") {
+            res.statusCode = 405;
+            res.setHeader("content-type", "text/plain; charset=utf-8");
+            res.end("Method Not Allowed");
+            return;
+          }
+
+          const host = String(
+            req.headers["x-forwarded-host"] ?? req.headers.host ?? "localhost:8080",
+          );
+          const proto = String(
+            req.headers["x-forwarded-proto"] ??
+              ((req.socket as { encrypted?: boolean } | undefined)?.encrypted ? "https" : "http"),
+          );
+          const requestHeaders = new Headers();
+          for (const [key, value] of Object.entries(req.headers)) {
+            if (value === undefined) continue;
+            if (Array.isArray(value)) {
+              for (const v of value) requestHeaders.append(key, v);
+            } else {
+              requestHeaders.set(key, value);
+            }
+          }
+          // Ensure Host is the public preview host so Better Auth's dynamic
+          // baseURL / redirect_uri match the popup origin.
+          if (!requestHeaders.has("host")) requestHeaders.set("host", host);
+
+          const request = new Request(`${proto}://${host}${rawUrl}`, {
+            method: "GET",
+            headers: requestHeaders,
+          });
+
+          const mod = (await server.ssrLoadModule("/src/lib/auth/popup.server.ts")) as {
+            handleAuthPopupRequest: (req: Request) => Promise<Response>;
+          };
+          const response = await mod.handleAuthPopupRequest(request);
+
+          res.statusCode = response.status;
+          // Preserve multiple Set-Cookie headers (OAuth state + session).
+          const setCookies =
+            typeof response.headers.getSetCookie === "function"
+              ? response.headers.getSetCookie()
+              : [];
+          response.headers.forEach((value, key) => {
+            if (key.toLowerCase() === "set-cookie") return;
+            res.setHeader(key, value);
+          });
+          for (const cookie of setCookies) {
+            res.appendHeader("set-cookie", cookie);
+          }
+          const body = Buffer.from(await response.arrayBuffer());
+          res.end(body);
+        } catch (err) {
+          console.error("[app-builder] /auth/popup handler failed:", err);
+          if (!res.headersSent) {
+            res.statusCode = 500;
+            res.setHeader("content-type", "text/plain; charset=utf-8");
+            res.end("auth popup failed");
+          }
+        }
+      });
+    },
+  };
+}
+
+// `0.0.0.0:8080` is the live-preview contract — don't change host/port.
+// The dev server starts once `src/router.tsx` and `src/routes/` exist — see
+// AGENTS.md § "First scaffold".
+export default defineConfig(({ command, isPreview }) => ({
+  server: {
+    host: "0.0.0.0",
+    port: Number.parseInt(process.env.EW_HTTP_PORT || "8080", 10) || 8080,
+    strictPort: true,
+    allowedHosts: ["dell-t5820.taild4745e.ts.net"],
+    maxHeaderSize: 131072,
+    headers: {
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "X-Frame-Options": "DENY",
+      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+      "X-Robots-Tag": "noindex, nofollow",
+      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    },
+  },
+  preview: {
+    host: "127.0.0.1",
+    port: 8081,
+    strictPort: true,
+    headers: {
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "X-Frame-Options": "DENY",
+      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+      "X-Robots-Tag": "noindex, nofollow",
+      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    },
+  },
+  resolve: { tsconfigPaths: true },
+  cacheDir:
+    process.env.EW_HTTP_PORT && process.env.EW_HTTP_PORT !== "8080"
+      ? "node_modules/.vite-isolated"
+      : "node_modules/.vite",
+  plugins: [
+    pgliteBootstrapPlugin(),
+    // Before tanstackStart so /auth/popup never falls through to the SPA.
+    authPopupPlugin(),
+    // Dev-only /__app-env, read by scripts/check-auth-invariant.mjs.
+    appEnvPlugin(),
+    // PWA head + ?install=1 tutorial page; runs before Start/Nitro.
+    grokPwaPlugin(),
+    tailwindcss(),
+    tanstackStart(),
+    securityHeadersPlugin(),
+    ...(command === "build" || isPreview
+      ? [
+          nitro({
+            preset: "node-server",
+            // Auto-registers server/middleware/* (the PWA install page +
+            // manifest + head-tag middleware). Nitro v3 defaults serverDir to
+            // false, so removing this silently unwires /?install=1 on deploys.
+            serverDir: "./server",
+          }),
+        ]
+      : []),
+    viteReact(),
+  ],
+}));
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/PROGRESS.md
+# Progress Log - EW Dell Hosting
+
+**Date:** 2026-11-21
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd (from RC)
+
+## Steps Completed:
+- [x] Read BRIEF.md and STEER.md
+- [x] Verified SHA matches release candidate (12fe0f9513da6bd1ec32fef7151c933b73bb61bd)
+
+## Next Steps:
+1. Check current repo SHA and ensure it matches RC
+2. Build the application
+3. Set up Postgres (user-level container)
+4. Create systemd --user service
+5. Configure tailscale serve
+6. Seed synthetic data
+7. Set up health check monitoring
+8. Create required output files
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/jobs-work-dell/readiness/security/
+total 348
+drwxrwxr-x 16 andy andy  4096 Nov 21 00:29 .
+drwxr-xr-x 80 andy andy 32768 Nov 21 18:49 ..
+-rw-rw-r--  1 andy andy  1347 Nov 19 18:02 ADOPTED-ITEMS-FIX-20261119.md
+-rw-rw-r--  1 andy andy  2626 Nov 21 00:26 APPROVALS-LEDGER.md
+-rwxrwxr-x  1 andy andy  3012 Nov 21 00:49 check-approval.sh
+drwxrwxr-x  2 andy andy  4096 Nov 20 21:31 cyber-essentials
+-rw-rw-r--  1 andy andy  1491 Nov 20 14:12 CYBER-ESSENTIALS-FUNDING-ROUTES-20261120.md
+-rw-rw-r--  1 andy andy  2314 Nov 19 18:01 DATA-SEPARATION-STATUS.md
+-rwxrwxr-x  1 andy andy  2128 Nov 21 00:15 dell-t5820-docker-port-closure.sh
+-rw-rw-r--  1 andy andy 11052 Nov 19 17:51 DELL-T5820-FIREWALL-HARDENING-PLAN-20261119.md
+-rw-rw-r--  1 andy andy  2800 Nov 19 15:06 DEVICE-AUDIT-2026-11-19.md
+-rw-rw-r--  1 andy andy  1956 Nov 19 15:06 DEVICE-IMPROVEMENTS-2026-11-19.md
+drwxrwxr-x  2 andy andy  4096 Nov 20 13:31 drafts-20261120
+drwxrwxr-x  3 andy andy  4096 Nov 20 00:58 estate-security-programme
+drwxrwxr-x  3 andy andy  4096 Nov 19 18:06 evidence-packs
+drwxrwxr-x  2 andy andy  4096 Nov 21 00:15 ew
+-rw-rw-r--  1 andy andy  2382 Nov 19 21:13 FAILURE-LOG-VENDOR-OPTOUTS.md
+-rw-rw-r--  1 andy andy 37483 Nov 20 23:18 FALSE-DONE-CLAIMS.md
+-rw-rw-r--  1 andy andy  1990 Nov 19 19:51 FIFTY-PROBLEMS-20261119.md
+-rw-rw-r--  1 andy andy  1721 Nov 21 01:35 FINDINGS.tsv
+drwxrwxr-x  2 andy andy  4096 Nov 19 18:07 firewall-capture
+-rw-rw-r--  1 andy andy  4163 Nov 19 23:28 GATE-AND-OAUTH-EXTENSIONS-20261119.md
+-rw-rw-r--  1 andy andy  1388 Nov 19 10:01 HANDOVER-chapelgate-multilingual-transcribe-pentagi-20261119.md
+drwxrwxr-x  2 andy andy  4096 Nov 21 00:07 hcv
+-rw-rw-r--  1 andy andy  1730 Nov 19 18:10 HCV-IR-DELETION-INVESTIGATION-20261119.md
+-rw-rw-r--  1 andy andy 20012 Nov 21 18:34 INBOX-FROM-EGGBOT.md
+-rw-rw-r--  1 andy andy  1356 Nov 21 18:04 JOB-CHECKS.md
+drwxrwxr-x 10 andy andy  4096 Nov 20 13:31 knowledge-library
+-rwxr-xr-x  1 andy andy   455 Nov 19 18:07 mac-studio-firewall-on.sh
+drwxrwxr-x  2 andy andy  4096 Nov 19 18:01 oauth
+drwxrwxr-x  2 andy andy  4096 Nov 20 19:10 oauth-dashboard
+drwxrwxr-x  2 andy andy  4096 Nov 19 18:02 password-reset
+-rw-rw-r--  1 andy andy  3250 Nov 19 18:07 PENTAGI-EMERGENCY-STOP-ASSESSMENT-20261119.md
+-rw-rw-r--  1 andy andy  5711 Nov 20 13:46 PITCH-SECURITY-CREDENTIALS-HCV-MAINTENANCEOS-20261120.md
+-rw-rw-r--  1 andy andy  4567 Nov 20 13:46 PITCH-SECURITY-CREDENTIALS-HCV-MAINTENANCEOS-20261120.v1-superseded.md
+-rw-rw-r--  1 andy andy  2874 Nov 19 18:25 PRODUCT-REPAIRS-20261119.md
+drwxrwxr-x  5 andy andy  4096 Nov 20 20:08 products
+-rw-rw-r--  1 andy andy  2995 Nov 19 15:33 reel-security-items.md
+drwxrwxr-x  2 andy andy  4096 Nov 21 14:42 release-gate
+drwxrwxr-x  2 andy andy  4096 Nov 20 19:26 release-plans
+-rw-rw-r--  1 andy andy  1598 Nov 20 19:24 RELEASE-VERIFIED.md
+-rw-rw-r--  1 andy andy  3329 Nov 19 23:22 RUNNER-POOL-HOST-KEY-INVESTIGATION-20261119.md
+-rw-rw-r--  1 andy andy 49945 Nov 21 00:29 SECURITY-DASHBOARD.md
+-rw-rw-r--  1 andy andy   910 Nov 19 15:04 VOICE-CLONE-PRODUCT-PRODUCTION.md
+-rw-rw-r--  1 andy andy  5504 Nov 19 15:35 VOICE-CLONE-PRODUCT-SPEC.md
+-rw-rw-r--  1 andy andy  7239 Nov 19 15:31 VOICE-CLONE-PRODUCT-VERDICT-20261119.md
+[0m
+[0m$ [0mtailscale ip -4 2>/dev/null; echo "---"; ss -tlnp 2>/dev/null | grep -E ":(8080|8081|8082|8083|8084|8085|8086|8087|8088|8089|8090)" | head -20
+---
+LISTEN 0      512        127.0.0.1:8081       0.0.0.0:*    users:(("llama-server",pid=3554152,fd=15))
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm run build 2>&1 | head -100
+> app-builder-workspace@0.0.0-private build
+> node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs
+
+vite v8.3.5 building client environment for production...
+transforming...
+[plugin rolldown:vite-resolve] Module "node:fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/lib/db.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "net" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util/types" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg-pool/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "node:module" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@electric-sql/pglite/dist/chunk-CE4NCHVO.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "tls" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/stream.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "net" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/stream.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "crypto" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/crypto/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "dns" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection-parameters.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "path" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg-connection-string/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "stream" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "path" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "stream" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/split2/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "buffer" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/safe-buffer/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "node:module" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@electric-sql/pglite/dist/chunk-66APQTYC.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+✓ 2118 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/public/assets/initdb-BnC8r6Zv.wasm                   300.10 kB │ gzip:   132.94 kB
+.output/public/assets/pglite-BgbVgg6N.data                 6,248.50 kB
+.output/public/assets/pglite-Busfj2jm.wasm                 9,087.74 kB │ gzip: 3,315.39 kB
+.output/public/assets/styles-CPlQdRco.css                     34.31 kB │ gzip:     7.16 kB
+.output/public/assets/evidence-CGzKJBXD.js                     0.07 kB │ gzip:     0.08 kB
+.output/public/assets/packs-CGzKJBXD.js                        0.07 kB │ gzip:     0.08 kB
+.output/public/assets/questionnaires-CGzKJBXD.js               0.07 kB │ gzip:     0.08 kB
+.output/public/assets/__vite-browser-external-NkSIBfMg.js      0.09 kB │ gzip:     0.10 kB
+.output/public/assets/format-wallet-timestamp-BQ4vb0Ca.js      0.12 kB │ gzip:     0.12 kB
+.output/public/assets/use-current-user-DYEngeje.js             0.29 kB │ gzip:     0.22 kB
+.output/public/assets/useNavigate-Bm-Ly08z.js                  0.42 kB │ gzip:     0.29 kB
+.output/public/assets/jsx-runtime-lTuChwRC.js                  0.43 kB │ gzip:     0.30 kB
+.output/public/assets/app-DrGC59qn.js                          0.47 kB │ gzip:     0.34 kB
+.output/public/assets/use-signup-open-_EpaUNQx.js              0.48 kB │ gzip:     0.32 kB
+.output/public/assets/nodefs-3snSVVA9.js                       0.55 kB │ gzip:     0.38 kB
+.output/public/assets/file-to-base64-kKBIQhK9.js               0.64 kB │ gzip:     0.38 kB
+.output/public/assets/roles-DziZDHK1.js                        0.73 kB │ gzip:     0.33 kB
+.output/public/assets/useParams-BAGGLvED.js                    0.78 kB │ gzip:     0.44 kB
+.output/public/assets/rolldown-runtime-BWaJ3C7D.js             0.91 kB │ gzip:     0.51 kB
+.output/public/assets/button-BU_d9krf.js                       1.32 kB │ gzip:     0.71 kB
+.output/public/assets/packs.index-sdYfcH_s.js                  1.33 kB │ gzip:     0.68 kB
+.output/public/assets/status-badge-Cb0aTQXc.js                 1.42 kB │ gzip:     0.49 kB
+.output/public/assets/preload-helper-BLdHbfdN.js               1.51 kB │ gzip:     0.79 kB
+.output/public/assets/gates-C5vtSSfr.js                        1.56 kB │ gzip:     0.83 kB
+.output/public/assets/questionnaires._qid-Bz8BFKmJ.js          1.71 kB │ gzip:     0.75 kB
+.output/public/assets/useSelector-iTHbqsqc.js                  1.92 kB │ gzip:     0.85 kB
+.output/public/assets/exports-DmdxYndS.js                      2.18 kB │ gzip:     1.01 kB
+.output/public/assets/useMutation-J-KGSK8S.js                  2.40 kB │ gzip:     1.01 kB
+.output/public/assets/signup-CYf4z694.js                       3.12 kB │ gzip:     1.23 kB
+.output/public/assets/lazyRouteComponent-ByXReo0m.js           3.50 kB │ gzip:     1.29 kB
+.output/public/assets/admin--Vp_RpyB.js                        3.62 kB │ gzip:     1.17 kB
+.output/public/assets/login-idpbZ6pB.js                        3.76 kB │ gzip:     1.52 kB
+.output/public/assets/ids-O9aAO_f4.js                          3.91 kB │ gzip:     1.64 kB
+.output/public/assets/evidence.index-D-qNb8zN.js               4.16 kB │ gzip:     1.72 kB
+.output/public/assets/routes-ekHPxj8u.js                       4.20 kB │ gzip:     1.82 kB
+.output/public/assets/link-BjCcQlo2.js                         4.20 kB │ gzip:     2.17 kB
+.output/public/assets/_orgId-B4n5lj94.js                       4.55 kB │ gzip:     1.75 kB
+.output/public/assets/control-mcp-CjPPLVy9.js                  4.58 kB │ gzip:     1.49 kB
+.output/public/assets/app-C9dii8PV.js                          4.60 kB │ gzip:     1.54 kB
+.output/public/assets/audit-DnpbPKZ8.js                        7.60 kB │ gzip:     2.25 kB
+.output/public/assets/react-CaKr0epQ.js                        7.87 kB │ gzip:     3.01 kB
+.output/public/assets/useQuery-BxOVNUku.js                     8.02 kB │ gzip:     2.96 kB
+.output/public/assets/memfs2opfs-BR1Qst18.js                   8.05 kB │ gzip:     3.24 kB
+.output/public/assets/opfs-ahp-Cx4gD7sv.js                     9.93 kB │ gzip:     3.02 kB
+.output/public/assets/v2-fns-26Bt01dN.js                      10.13 kB │ gzip:     3.77 kB
+.output/public/assets/evidence._docId-DDEagRR8.js             10.45 kB │ gzip:     2.97 kB
+.output/public/assets/decisions-CXTOSK3K.js                   11.89 kB │ gzip:     3.77 kB
+.output/public/assets/_orgId-dAy_IZl6.js                      12.37 kB │ gzip:     3.53 kB
+.output/public/assets/opportunities-BGIHhkPF.js               12.40 kB │ gzip:     3.01 kB
+.output/public/assets/questionnaires.index-B4NnbDOG.js        13.25 kB │ gzip:     3.21 kB
+.output/public/assets/packs._packId-g7hh8AF6.js               14.68 kB │ gzip:     4.28 kB
+.output/public/assets/compliance-ClLFpZEo.js                  14.97 kB │ gzip:     3.53 kB
+.output/public/assets/facts-VtzUr8VT.js                       18.41 kB │ gzip:     4.57 kB
+.output/public/assets/team-XqJCPv9U.js                        24.70 kB │ gzip:     5.89 kB
+.output/public/assets/utils-D0T3A-kS.js                       27.56 kB │ gzip:     8.73 kB
+.output/public/assets/entities-BLxhEljg.js                    32.26 kB │ gzip:     6.47 kB
+.output/public/assets/client-kblaaXSr.js                      33.81 kB │ gzip:    12.70 kB
+.output/public/assets/middleware-BjWqOUN1.js                  52.14 kB │ gzip:    17.70 kB
+.output/public/assets/matchContext-BGDdtVEG.js                59.50 kB │ gzip:    21.09 kB
+.output/public/assets/esm-7cVBgBVN.js                         87.27 kB │ gzip:    26.54 kB
+.output/public/assets/chunk-CE4NCHVO-DEEQTeoD.js             102.35 kB │ gzip:    33.80 kB
+.output/public/assets/dist-DR4ilMft.js                       363.17 kB │ gzip:    96.98 kB
+.output/public/assets/index-DWTjUP9l.js                      404.82 kB │ gzip:   120.06 kB
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm run build 2>&1 | tail -50
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+✓ built in 4.42s
+ℹ Generated .output/nitro.json
+
+[nitro] ✔ You can preview this build using npx vite preview
+
+> app-builder-workspace@0.0.0-private db:migrate
+> node scripts/migrate.mjs
+
+[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).
+[pglite-assets] no Vercel server output — skip
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node scripts/pg-local.mjs start
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+{"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/pg-password","initialized":false,"started":false,"staleLock":{"cleared":false,"reason":"tcp-ready"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node scripts/pg-local.mjs wait && node scripts/pg-local.mjs status
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+{"ok":true,"port":55432}
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+{"running":true,"engine":"postgresql","pgVersion":"18","version":"PostgreSQL 18.4 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0, 64-bit","port":55432,"dataDir":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/postgres","dbName":"evidence_wallet","passwordFile":"/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/data/pg-password"}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node scripts/pg-local.mjs url && node scripts/pg-local.mjs auth-secret
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+postgres://ew:ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O@127.0.0.1:55432/evidence_wallet
+id: ‘ewpg’: no such user
+id: ‘ewpg’: no such user
+f19b3f7ba8e75fa87625af263d73b2fccc54622166972265f6c63728f010ac58
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && export DATABASE_URL="postgres://ew:ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O@127.0.0.1:55432/evidence_wallet" && export BETTER_AUTH_SECRET="f19b3f7ba8e75fa87625af263d73b2fccc54622166972265f6c63728f010ac58" && npm run db:migrate
+> app-builder-workspace@0.0.0-private db:migrate
+> node scripts/migrate.mjs
+
+[migrate] up to date.
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcat > ~/.config/systemd/user/ew-dell-hosting.service << 'EOF'
+[Unit]
+Description=Business Evidence Wallet (Dell Hosting)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+Environment=DATABASE_URL=postgres://ew:ms5ZHd1Q6G8kzRVmeQm9W-Mko4JAM02O@127.0.0.1:55432/evidence_wallet
+Environment=BETTER_AUTH_SECRET=f19b3f7ba8e75fa87625af263d73b2fccc54622166972265f6c63728f010ac58
+Environment=HOST=127.0.0.1
+Environment=PORT=8080
+Environment=WALLET_SIGNUP_OPEN=false
+Environment=CHAPELGATE_MCP_SETUP_UI=false
+ExecStart=/usr/bin/node .output/server/index.mjs
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+EOF
+(no output)
+[0m
+[0m$ [0mmkdir -p ~/.config/systemd/user/
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0msystemctl --user daemon-reload && systemctl --user enable ew-dell-hosting.service && systemctl --user start ew-dell-hosting.service
+Created symlink /home/andy/.config/systemd/user/default.target.wants/ew-dell-hosting.service → /home/andy/.config/systemd/user/ew-dell-hosting.service.
+[0m
+[0m$ [0msystemctl --user status ew-dell-hosting.service
+● ew-dell-hosting.service - Business Evidence Wallet (Dell Hosting)
+     Loaded: loaded (/home/andy/.config/systemd/user/ew-dell-hosting.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-11-21 18:56:08 GMT; 3s ago
+   Main PID: 3799001 (node)
+      Tasks: 11 (limit: 70708)
+     Memory: 53.7M (peak: 54.3M)
+        CPU: 341ms
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/ew-dell-hosting.service
+             └─3799001 /usr/bin/node .output/server/index.mjs
+
+Nov 21 18:56:08 andy-Precision-5820-Tower systemd[1511]: Started ew-dell-hosting.service - Business Evidence Wallet (Dell Hosting).
+Nov 21 18:56:10 andy-Precision-5820-Tower node[3799001]: ➜ Listening on: http://127.0.0.1:8080/
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcurl -sf http://127.0.0.1:8080/health && echo "---" && curl -sf http://127.0.0.1:8080/
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcurl -v http://127.0.0.1:8080/health 2>&1 | head -50
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 127.0.0.1:8080...
+* Connected to 127.0.0.1 (127.0.0.1) port 8080
+> GET /health HTTP/1.1
+> Host: 127.0.0.1:8080
+> User-Agent: curl/8.5.0
+> Accept: */*
+> 
+< HTTP/1.1 500 
+< content-security-policy: frame-ancestors 'none'
+< content-type: application/json
+< permissions-policy: camera=(), microphone=(), geolocation=()
+< referrer-policy: strict-origin-when-cross-origin
+< x-content-type-options: nosniff
+< x-frame-options: DENY
+< x-robots-tag: noindex, nofollow
+< Date: Sat, 21 Nov 2026 18:56:22 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+< Transfer-Encoding: chunked
+< 
+{ [69 bytes data]
+100    69    0    69    0     0   3340      0 --:--:-- --:--:-- --:--:--  3450
+* Connection #0 to host 127.0.0.1 left intact
+{"status":500,"statusText":"","unhandled":true,"message":"HTTPError"}
+[0m
+[0m$ [0mjournalctl --user -u ew-dell-hosting.service -n 50 --no-pager
+Nov 21 18:56:08 andy-Precision-5820-Tower systemd[1511]: Started ew-dell-hosting.service - Business Evidence Wallet (Dell Hosting).
+Nov 21 18:56:10 andy-Precision-5820-Tower node[3799001]: ➜ Listening on: http://127.0.0.1:8080/
+Nov 21 18:56:18 andy-Precision-5820-Tower node[3799001]: Error: GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.
+Nov 21 18:56:18 andy-Precision-5820-Tower node[3799001]:     at file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.output/server/_ssr/verify.server-CODEidZY.mjs:9817:8
+Nov 21 18:56:18 andy-Precision-5820-Tower node[3799001]:     at file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.output/server/_ssr/verify.server-CODEidZY.mjs:9818:3
+Nov 21 18:56:18 andy-Precision-5820-Tower node[3799001]:     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+Nov 21 18:56:18 andy-Precision-5820-Tower node[3799001]:     at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)
+Nov 21 18:56:18 andy-Precision-5820-Tower node[3799001]:     at async Promise.all (index 0)
+Nov 21 18:56:18 andy-Precision-5820-Tower node[3799001]:     at async loadEntries (file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.output/server/_ssr/ssr.mjs:2547:52)
+Nov 21 18:56:22 andy-Precision-5820-Tower node[3799001]: Error: GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.
+Nov 21 18:56:22 andy-Precision-5820-Tower node[3799001]:     at file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.output/server/_ssr/verify.server-CODEidZY.mjs:9817:8
+Nov 21 18:56:22 andy-Precision-5820-Tower node[3799001]:     at file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.output/server/_ssr/verify.server-CODEidZY.mjs:9818:3
+Nov 21 18:56:22 andy-Precision-5820-Tower node[3799001]:     at ModuleJob.run (node:internal/modules/esm/module_job:195:25)
+Nov 21 18:56:22 andy-Precision-5820-Tower node[3799001]:     at async ModuleLoader.import (node:internal/modules/esm/loader:336:24)
+Nov 21 18:56:22 andy-Precision-5820-Tower node[3799001]:     at async Promise.all (index 0)
+Nov 21 18:56:22 andy-Precision-5820-Tower node[3799001]:     at async loadEntries (file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/.output/server/_ssr/ssr.mjs:2547:52)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && grep -r "GROK_PREVIEW_CLIENT_SECRET" --include="*.ts" | head -20
+src/lib/auth/preview.ts: * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+src/lib/auth/preview.ts: * SECURITY: PREVIEW_CLIENT_SECRET moved to env var GROK_PREVIEW_CLIENT_SECRET
+src/lib/auth/preview.ts:export const PREVIEW_CLIENT_SECRET = env("GROK_PREVIEW_CLIENT_SECRET") ?? (() => {
+src/lib/auth/preview.ts:  throw new Error("GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.");
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat src/lib/auth/preview.ts
+/**
+ * Shared LIVE-PREVIEW OAuth client (server-only — NEVER import from the client).
+ *
+ * The sandbox serves each live preview on a dynamic `https://*.grok-sandbox.com`
+ * URL, which can't be pre-registered per app. The broker instead exposes ONE
+ * shared "preview" client that accepts any
+ * `https://*.grok-sandbox.com/api/auth/oauth2/callback/*`
+ * (broker: `app-builder-deployer/auth/src/preview-oauth.ts`). Baking it here lets
+ * the live preview do REAL sign-in — no demo/mock users — with no platform
+ * injection. When deployed the deployer injects a per-app
+ * `GROK_AUTH_*` that overrides these (see `server.ts`).
+ *
+ * These MUST equal the broker's `GROK_PREVIEW_CLIENT_ID` /
+ * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+ * only the secret's `base64url(SHA-256)` hash). This is a dedicated, low-privilege
+ * client (preview-only, `*.grok-sandbox.com`) — rotate it by regenerating the
+ * broker env var and this constant together.
+ *
+ * SECURITY: PREVIEW_CLIENT_SECRET moved to env var GROK_PREVIEW_CLIENT_SECRET
+ * (Three-Question Release Gate, 19 Nov 2026). Default fallback removed.
+ */
+export const PREVIEW_CLIENT_ID = "grok_preview";
+
+/** Read an env var, treating empty/whitespace as unset. */
+const env = (key: string): string | undefined => {
+  const value = process.env[key]?.trim();
+  return value ? value : undefined;
+};
+
+export const PREVIEW_CLIENT_SECRET = env("GROK_PREVIEW_CLIENT_SECRET") ?? (() => {
+  throw new Error("GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.");
+})();
+
+/** The shared auth broker issuer (OIDC discovery lives under it). */
+export const GROK_ISSUER_DEFAULT = "https://auth.grok.me";
+
+/**
+ * Host patterns whose callbacks the preview client accepts. Better Auth derives
+ * the live preview's real origin from the request host and validates it against
+ * this list (wildcard-matched), so the OAuth `redirect_uri` becomes the concrete
+ * `https://<preview-host>/api/auth/oauth2/callback/...` the broker allows.
+ */
+export const PREVIEW_ALLOWED_HOSTS = ["*.grok-sandbox.com"] as const;
+[0m
+[91m[1mError: [0mFailed to execute statement

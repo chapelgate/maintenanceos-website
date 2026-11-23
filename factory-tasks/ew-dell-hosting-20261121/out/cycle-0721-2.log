@@ -1,0 +1,939 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+BRIEF.md
+BRIEF.md.bak-rootcause
+history.log
+out
+repo
+status.json
+STEER.md
+[0m
+[0m$ [0mls /home/andy/chapelgate/out/ 2>/dev/null || echo "out dir not found at /home/andy/chapelgate/out/"
+audit-business-evidence-wallet
+AUDIT-business-evidence-wallet.md
+audit-chapelgate-complaints
+AUDIT-chapelgate-complaints.md
+audit-chapelgate-multilingual-transcribe
+AUDIT-chapelgate-multilingual-transcribe.md
+audit-chapelgate-transcribe
+AUDIT-chapelgate-transcribe.md
+audit-cheap-trips
+AUDIT-cheap-trips.md
+audit-cloud-workers
+AUDIT-cloud-workers.md
+audit-holiday-let-operator
+AUDIT-holiday-let-operator.md
+audit-housing-compliance-vault
+AUDIT-housing-compliance-vault.md
+audit-information-rights-complaints
+AUDIT-information-rights-complaints.md
+audit-landlord-os
+AUDIT-landlord-os.md
+audit-legal-case-management
+AUDIT-legal-case-management.md
+audit-maintenanceos
+AUDIT-maintenanceos.md
+audit-public-sector-citizen-agent
+AUDIT-public-sector-citizen-agent.md
+audit-public-sector-document-copilot
+AUDIT-public-sector-document-copilot.md
+audit-virtual-worker
+AUDIT-virtual-worker.md
+COMPETITOR-INDEX-TABLE.md
+COUNCIL.md
+council-verdict.md
+DONE
+EVIDENCE.md
+gitleaks-business-evidence-wallet.json
+gitleaks-chapelgate-complaints.json
+gitleaks-chapelgate-multilingual-transcribe.json
+gitleaks-cheap-trips.json
+gitleaks-holiday-let-operator.json
+gitleaks-public-sector-document-copilot.json
+gitleaks-virtual-worker.json
+METRICS-BASIS.md
+MISSION_COMPLETE
+PRODUCT-READINESS-STATUS.md
+PROGRESS.md
+PROMISE-TRIAGE.md
+raw
+RESULT.md
+ROOT-CAUSE.md
+runs
+test-stalled-raw.out
+TRIAGE-SUMMARY.md
+WEDGE.md
+[0m
+[0m$ [0mls /home/andy/chapelgate/jobs-work-dell/readiness/ 2>/dev/null || echo "jobs-work-dell readiness dir not found"
+ACCESS_LOG.md
+AI-OBSERVABILITY.md
+ai-stack
+ALERTS.md
+ANDY-ACTION-REGISTER-DELL-MIGRATION-2026-11-12.md
+ANDY_ANSWERS-20261023.md
+ANDY_BLOCKERS.md
+ANDY-BRIEFING.md
+ANDY-BRIEFING.md.bak-20261117-1535
+ANDY-BRIEFING.md.bak-eggbot-20261116-2315
+ANDY-BRIEFING.md.bak-eggbot-20261116-2319
+ANDY-BRIEFING.md.bak-eggbot-20261116-2328
+ANDY-BRIEFING.md.bak-eggbot-20261121-2121
+ANDY_DECISIONS_ALL.md
+ANDY-EXTERNAL-REGISTER.md
+ANDY_PRE_RELEASE_TODO.md
+ANDY-REGISTER.md
+ANDY-REGISTER.md.bak-eggbot-20261120-1327
+ANDY-REGISTER.md.bak-eggbot-20261120-1328
+ANDY-REGISTER.md.bak-eggbot-20261120-1331
+ANDY-REGISTER.md.bak-eggbot-20261120-1334
+ANDY-REGISTER.md.bak-eggbot-20261120-1335
+ANDY-REGISTER.md.bak-eggbot-20261120-1412
+ANDY-REGISTER.md.bak-eggbot-20261120-1415
+ANDY-REGISTER.md.bak-eggbot-20261120-1751
+ANDY-REGISTER.md.bak-eggbot-20261120-1818
+ANDY-REGISTER.md.bak-eggbot-20261120-2116
+ANDY-REGISTER.md.bak-eggbot-20261120-2222
+ANDY-REGISTER.md.bak-eggbot-20261121-0001
+ANDY-REGISTER.md.bak-eggbot-20261121-0001-50
+ANDY-REGISTER.md.bak-eggbot-20261121-0008-17
+ANDY-REGISTER.md.bak-eggbot-20261121-0014-52
+ANDY-REGISTER.md.bak-eggbot-20261121-0909
+ANDY-REGISTER.md.bak-eggbot-20261121-0945-16
+ANDY-REGISTER.md.bak-eggbot-20261121-0945-39
+ANDY-REGISTER.md.bak-eggbot-20261121-1013-55
+ANDY-REGISTER.md.bak-eggbot-20261121-1025-24
+ANDY-REGISTER.md.bak-eggbot-20261121-1025-46
+ANDY-REGISTER.md.bak-eggbot-20261121-1027-52
+ANDY-REGISTER.md.bak-eggbot-20261121-2056
+ANDY-REGISTER.md.bak-eggbot-20261121-2121
+ANDY-REGISTER.md.bak-eggbot-20261121-2129
+ANDY-REGISTER.md.bak-eggbot-20261122-0008
+ANDY-REGISTER.md.bak-eggbot-20261122-0011
+ANDY-REGISTER.md.bak-eggbot-20261122-2015
+ANDY-REGISTER.md.bak-eggbot-20261122-2047
+ANDY-REGISTER.md.bak-eggbot-20261122-2049b
+ANDY-REGISTER.md.bak-eggbot-20261122-2211
+ANDY-REGISTER.md.bak-triage-1795396142
+ANDY-REGISTER.md.bak-triage-1795398113
+ANDY-REGISTER.md.bak-triage-1795401175
+ANDY-REGISTER-PRINT-20261121.pdf
+ANDY_TEST_CALLS.md
+archive
+AUTO_DECISIONS.md.bak-hvb-20261106T151609Z
+AUTO_DECISIONS.md.bak-ir1108-20261106T003947Z
+b18
+b18-184-assign-owner
+b18-185-vulnerability-flag
+BACKUP-SCHEDULES.md
+BLOCKED.md
+BOARD.md
+BOT-SUPERVISOR-REGISTER.md
+BOT-SUPERVISOR-REGISTER.md.bak
+BOT-SUPERVISOR-REGISTER.md.bak-1746
+BOT-SUPERVISOR-REGISTER.md.bak-hvb-20261106T125357Z
+BOT-SUPERVISOR-REGISTER.md.bak-ir-20261106T064125Z
+BOT-SUPERVISOR-REGISTER.md.bak-ir-20261106T064136Z
+BOT-SUPERVISOR-REGISTER.md.bak-supervisor-20261105T194708Z
+BOT-SUPERVISOR-REGISTER.md.bak-supervisor-header-20261105T194716Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T014748Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T0445Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T125416Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T145429Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T154623Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T164504Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T174559Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T215139Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T224633Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261105T234502Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0152Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0253Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0348Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T045505Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T055351Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T065519Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T075610Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T0851Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T115618Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1359Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T150008Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1549Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1653Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1754Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T185212Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T1952Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T2045Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-2026-11-06T2147Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T225254Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261106T2351Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T004910Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T015531Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T035241Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T045535Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T055151Z
+BOT-SUPERVISOR-REGISTER.md.bak-t1070u-20261107T064825Z
+brief-template.md
+brief-template.md.bak-eggbot-20261121-2104
+brief-template.md.bak-eggbot-20261121-2109
+brief-template.md.bak-eggbot-20261122-2209
+brief-template.md.bak-job-20261122-0238
+BUILD-HOURLY.md
+BUSINESS-EVIDENCE-WALLET-BACKUP-SCHEDULES.md
+BUSINESS-OS-BACKUP-SCHEDULES.md
+ca
+CALL-20261115-CHECKLIST.md
+capacity-bcfd-tmp-20261105
+case-studies
+CEO-BOARD.md
+CEO-BOARD.md.bak-ceo-20261123-0010
+CEO-CHANGES-20261123.md
+cf
+CHAPELGATE-COUNCIL-MINUTES-BACKUP-SCHEDULES.md
+CHAPELGATE-INFORMATION-RIGHTS-BACKUP-SCHEDULES.md
+CHAPELGATE-MULTILINGUAL-TRANSCRIBE-BACKUP-SCHEDULES.md
+chief
+CLEANUP-20261119.md
+cm
+competitor-gap
+COMPETITOR-INDEX.md
+COMPETITOR-INDEX.md.bak-eggbot-20261121-2121
+COMPETITOR-INDEX.md.bak-eggbot-20261122-2015
+competitors
+COMPLETED_BUILDS.md
+compliance
+compute-slo.py
+COST_SAVINGS_EVIDENCE.md
+council-doc-review
+council-extbot-20261026
+COUNCIL-EXTBOT-20261026.md
+council-gates
+COUNCIL_GATES_CONSENSUS.md
+COUNCIL-QUEUE-STATUS.md
+ct
+cw
+cyber-essentials
+dc
+DELL-COPY-AI-USAGE-DASHBOARD.md
+DELL-FIX-PLAN-20261118.md
+DELL-FIX-PLAN-20261118.md.bak-eggbot-20261118-1731
+dell-jobs-topup-list2.status
+dell-jobs-topup-list.status
+dell-maintenance-cleanup-20261121.log
+DIGITALOCEAN_AUDIT.md
+DIRECT_BUILDS.md
+DISK-PLAN.md
+document-copilot
+duo
+DUO-GOLIVE.md
+duo-golive.sh
+ESTATE_INVENTORY_t809u_ADDENDUM_t819u.md
+ESTATE_INVENTORY_t809u.md
+ew
+EW-MERGE-FENCE.md
+FAILURE-LOG
+failure-log-compliance
+FAILURE-LOG-COMPLIANCE.md
+FAILURE-LOG.md
+FAILURE-LOG.md.bak-20261109131040
+FAILURE-LOG.md.bak-20261109T2052Z
+FAILURE-LOG.md.bak-20261109T2226Z
+FAILURE-LOG.md.bak-20261109T2236Z
+FAILURE-LOG.md.bak-20261110T212644Z
+FAILURE-LOG.md.bak-20261114-1033
+FAILURE-LOG.md.bak-20261114-2235
+FAILURE-LOG.md.bak-20261115-0040
+FAILURE-LOG.md.bak-20261115-0058
+FAILURE-LOG.md.bak-alley-sheets-2026-11-05T220229Z
+FAILURE-LOG.md.bak-arrivals-20261104T080127Z
+FAILURE-LOG.md.bak-copystatus-20261112T1926Z
+FAILURE-LOG.md.bak-dellslice-20261108T174306Z
+FAILURE-LOG.md.bak-dellstatus-20261113T2052Z
+FAILURE-LOG.md.bak-dellswitch-20261115T1112Z
+FAILURE-LOG.md.bak-depcheck-20261117T2242Z
+FAILURE-LOG.md.bak-diagnostic-cleanup-20261108T233341431822
+FAILURE-LOG.md.bak-dropletaudit-20261115T1107Z
+FAILURE-LOG.md.bak-eggbot-1730
+FAILURE-LOG.md.bak-eggbot-20261114-1638
+FAILURE-LOG.md.bak-eggbot-20261114-1839
+FAILURE-LOG.md.bak-eggbot-20261115-0435
+FAILURE-LOG.md.bak-eggbot-20261115-0635
+FAILURE-LOG.md.bak-eggbot-20261115-0835
+FAILURE-LOG.md.bak-eggbot-20261115-1100
+FAILURE-LOG.md.bak-eggbot-20261115-2038
+FAILURE-LOG.md.bak-eggbot-20261115-2108
+FAILURE-LOG.md.bak-eggbot-20261116-2319
+FAILURE-LOG.md.bak-eggbot-20261118-0815
+FAILURE-LOG.md.bak-eggbot-20261118-0842
+FAILURE-LOG.md.bak-eggbot-20261118-0846
+FAILURE-LOG.md.bak-eggbot-20261118-0848
+FAILURE-LOG.md.bak-eggbot-20261118-0852
+FAILURE-LOG.md.bak-eggbot-20261118-0906
+FAILURE-LOG.md.bak-eggbot-20261118-2341
+FAILURE-LOG.md.bak-eggbot-20261119-1818
+FAILURE-LOG.md.bak-eggbot-20261120-1323
+FAILURE-LOG.md.bak-eggbot-20261120-1341
+FAILURE-LOG.md.bak-eggbot-20261120-1357
+FAILURE-LOG.md.bak-eggbot-20261120-1833
+FAILURE-LOG.md.bak-eggbot-20261120-2116
+FAILURE-LOG.md.bak-eggbot-20261121-0021-53
+FAILURE-LOG.md.bak-eggbot-20261121-1801-28
+FAILURE-LOG.md.bak-eggbot-20261121-2121
+FAILURE-LOG.md.bak-eggbot-20261121-2318
+FAILURE-LOG.md.bak-eggbot-20261121-2354
+FAILURE-LOG.md.bak-eggbot-20261122-0004
+FAILURE-LOG.md.bak-eggbot-20261122-0007
+FAILURE-LOG.md.bak-eggbot-20261122-1049
+FAILURE-LOG.md.bak-eggbot-20261122-1057
+FAILURE-LOG.md.bak-eggbot-20261122-1436
+FAILURE-LOG.md.bak-eggbot-20261122-1537
+FAILURE-LOG.md.bak-eggbot-20261122-2015
+FAILURE-LOG.md.bak-eggbot-20261122-2047
+FAILURE-LOG.md.bak-ew1446-recover-20261106T124756Z
+FAILURE-LOG.md.bak-ewwatch-t810u-20261106T121644Z
+FAILURE-LOG.md.bak-extbotstop-20261114T1613Z
+FAILURE-LOG.md.bak-gapclose-cont-20261112T1355Z
+FAILURE-LOG.md.bak-gapclose-finish-20261112T1308Z
+FAILURE-LOG.md.bak-ir-20261107T024024Z
+FAILURE-LOG.md.bak-ir-gap02-20261106T223538Z
+FAILURE-LOG.md.bak-ir-plan-council-hold-20261106T064125Z
+FAILURE-LOG.md.bak-ir-results-hold-20261106T183549Z
+FAILURE-LOG.md.bak-jobsgone-20261115T1154Z
+FAILURE-LOG.md.bak-memfdgate-20261108T184618Z
+FAILURE-LOG.md.bak-memfdr2-20261108T204259Z
+FAILURE-LOG.md.bak-memfdr3-20261108T204523Z
+FAILURE-LOG.md.bak-mining-check-20261117T223840Z
+FAILURE-LOG.md.bak-movestop-20261113T2232Z
+FAILURE-LOG.md.bak-omnidb-20261108T223904Z
+FAILURE-LOG.md.bak-omnidbdell-20261108T225325Z
+FAILURE-LOG.md.bak-omnidbdell2-20261108T230932Z
+FAILURE-LOG.md.bak-omnidbdell3-20261108T231350Z
+FAILURE-LOG.md.bak-omnidbfix-20261108T233238Z
+FAILURE-LOG.md.bak-omnimeasure-20261108T182321Z
+FAILURE-LOG.md.bak-omnimg-20261108T234853Z
+FAILURE-LOG.md.bak-omnimg2-20261108T235316Z
+FAILURE-LOG.md.bak-omnimgdell-20261109T001733Z
+FAILURE-LOG.md.bak-omnistop-20261108T182953Z
+FAILURE-LOG.md.bak-omnithaw-20261108T234208Z
+FAILURE-LOG.md.bak-prod-20261115T1205Z
+FAILURE-LOG.md.bak-reelimpl-20261117-1520
+FAILURE-LOG.md.bak-t197u-20261105T213603Z
+FAILURE-LOG.md.bak-t5820-20261105T131259Z
+FAILURE-LOG.md.bak-ush-20261115T1157Z
+FAILURE-LOG.md.bak-wirral-rerun-sim-20261115-232657
+findings
+followup
+forced-merge-ledger.tsv
+GATES_ALL.md
+GATES_HUMAN.md
+g-cloud
+gitleaks
+gitleaks2
+gpu-upgrade
+grok-handover-ir
+HANDED_BUILDS.md
+hcv
+HERMES_PLAN_t770u.BRIEF.md
+HERMES_PLAN_t770u.md
+hl
+HOLIDAY-LET-OPERATOR-BACKUP-SCHEDULES.md
+HOUSING-COMPLIANCE-VAULT-BACKUP-SCHEDULES.md
+HUMAN_BLOCKERS.md
+HUMAN_ONLY.md
+INBOX-FOR-PUBLIC-CHIEF.md
+incidents
+INFINITY_EVAL.md
+INFORMATION-RIGHTS-COMPLAINTS-BACKUP-SCHEDULES.md
+inv-t809u
+ir
+job-db
+job-dir-retention
+JOB-DIR-RETENTION.log
+JOB-STATE.md
+LAST_GATES.md
+LAUNCH-FREEZE.md
+lcm
+LEGAL-CASE-MANAGEMENT-BACKUP-SCHEDULES.md
+lo
+locks
+LOGGING-STANDARD.md
+lumi
+MAINTENANCEOS-BACKUP-SCHEDULES.md
+MAINTENANCEOS-WEBSITE-BACKUP-SCHEDULES.md
+MASTER_PROBLEMS.md
+MERGE_COUNCIL.md
+MERGE_LOG.md
+MISSION_COMPLETE
+mos
+mos-regfix.log
+mos-regfix.merged
+mt
+mw
+nvdl-review-t820u
+nvidia-dev-lane-review-t820u.md
+obscura-snapshots
+OPEN_PRS.md
+ORR-CHECKLIST.md
+out
+pages
+PARKED.md
+PARKED.md.bak-20261114-0910
+PARKED.md.bak-20261114-0930
+PARKED.md.bak-20261114-223759
+PARKED.md.bak-20261115-0057
+PARKED.md.bak-20261115-0110
+PARKED.md.bak-20261115-01132
+PARKED.md.bak-autoheal-20261117-2049
+PARKED.md.bak-autoheal-20261117-2134
+PARKED.md.bak-autoheal-20261118-1334
+PARKED.md.bak-autoheal-20261118-1750
+PARKED.md.bak-autoheal-20261118-2049
+PARKED.md.bak-autoheal-20261118-2148
+PARKED.md.bak-autoheal-20261119-1546
+PARKED.md.bak-autoheal-20261119-2110
+PARKED.md.bak-autoheal-20261120-1354
+PARKED.md.bak-autoheal-20261120-1500
+PARKED.md.bak-autoheal-20261120-2111
+PARKED.md.bak-autoheal-20261121-0050
+PARKED.md.bak-autoheal-20261121-1356
+PARKED.md.bak-autoheal-20261121-1503
+PARKED.md.bak-autoheal-20261121-2116
+PARKED.md.bak-autoheal-20261122-1519
+PARKED.md.bak-autoheal-20261122-2050
+PARKED.md.bak-autoheal-20261122-2119
+PARKED.md.bak-autoheal-20261123-0004
+PARKED.md.bak-autoheal-20261123-0239
+PARKED.md.bak-cso-20261119-1802
+PARKED.md.bak-deviceaudit-20261119-1506
+PARKED.md.bak-eggbot-20261115-1048
+PARKED.md.bak-eggbot-20261115-1552
+PARKED.md.bak-eggbot-20261115-1718
+PARKED.md.bak-eggbot-20261115-1721
+PARKED.md.bak-eggbot-20261115-1724
+PARKED.md.bak-eggbot-20261115-1725
+PARKED.md.bak-eggbot-20261115-1731
+PARKED.md.bak-eggbot-20261115-1801
+PARKED.md.bak-eggbot-20261115-2137
+PARKED.md.bak-eggbot-20261115-2212
+PARKED.md.bak-eggbot-20261115-2214
+PARKED.md.bak-eggbot-20261116-0840
+PARKED.md.bak-eggbot-20261116-0849
+PARKED.md.bak-eggbot-20261116-0851
+PARKED.md.bak-eggbot-20261116-2022
+PARKED.md.bak-eggbot-20261116-2048
+PARKED.md.bak-eggbot-20261116-2335
+PARKED.md.bak-eggbot-20261117-0008
+PARKED.md.bak-eggbot-20261117-0021
+PARKED.md.bak-eggbot-20261117-0033
+PARKED.md.bak-eggbot-20261117-0034
+PARKED.md.bak-eggbot-20261117-1447
+PARKED.md.bak-eggbot-20261117-1502
+PARKED.md.bak-eggbot-20261117-1510
+PARKED.md.bak-eggbot-20261117-1512
+PARKED.md.bak-eggbot-20261117-1522
+PARKED.md.bak-eggbot-20261117-1525
+PARKED.md.bak-eggbot-20261118-0901
+PARKED.md.bak-eggbot-20261118-0917
+PARKED.md.bak-eggbot-20261118-0923
+PARKED.md.bak-eggbot-20261118-1605
+PARKED.md.bak-eggbot-20261118-1745
+PARKED.md.bak-eggbot-20261118-1856
+PARKED.md.bak-eggbot-20261119-1125
+PARKED.md.bak-eggbot-20261120-1327
+PARKED.md.bak-eggbot-20261120-1328
+PARKED.md.bak-eggbot-20261120-1331
+PARKED.md.bak-eggbot-20261120-1334
+PARKED.md.bak-eggbot-20261120-1335
+PARKED.md.bak-eggbot-20261120-1751
+PARKED.md.bak-eggbot-20261120-2116
+PARKED.md.bak-eggbot-20261120-2222
+PARKED.md.bak-eggbot-20261121-0001
+PARKED.md.bak-eggbot-20261121-0909
+PARKED.md.bak-eggbot-20261121-0945-16
+PARKED.md.bak-eggbot-20261121-0945-39
+PARKED.md.bak-eggbot-20261121-1013-55
+PARKED.md.bak-eggbot-20261121-1358-04
+PARKED.md.bak-eggbot-20261121-1801-28
+PARKED.md.bak-eggbot-20261121-1809-03
+PARKED.md.bak-eggbot-20261121-2056
+PARKED.md.bak-eggbot-20261121-2121
+PARKED.md.bak-eggbot-20261122-0004
+PARKED.md.bak-eggbot-20261122-0007
+PARKED.md.bak-eggbot-20261122-0008
+PARKED.md.bak-eggbot-20261122-2040
+PARKED.md.bak-eggbot-20261122-2047
+PARKED.md.bak-eggbot-20261122-2049
+PARKED.md.bak-eggbot-20261122-2227
+PARKED.md.bak-eggbot-20261122-2334
+PARKED.md.bak-eggbot-20261122-2338
+PARKED.md.bak-hl-daily-20261106T084815Z
+PARKED.md.bak-reelimpl-20261117-1510
+PARKED.md.bak-reelimpl-20261118-0000
+PARKED.md.bak-reelimpl-20261119-0430
+PARKED.md.bak-reelimpl-20261119-0432
+PARKED.md.bak-reelimpl-20261119-0434
+PARKED.md.bak-reelimpl-20261119-1452
+PARKED.md.bak-reelimpl-20261119-20261119-0034
+PARKED.md.bak-reelimpl-20261120-1357
+PARKED.md.bak-reelimpl-20261120-1515
+PARKED.md.bak-reelimpl-20261120-1645
+PARKED.md.bak-reelreview-20261120-1830
+PARKED.md.bak-reelreview-20261121-0042
+PARKED.md.bak-rr-20261112
+PARKED.md.bak-t1070u-20261106T225254Z
+PARKED.md.bak-welshpilot-20261120-0036
+PARKED.md.lock
+PAUSED_BUILDS.md
+PAUSED_BUILDS.md.backup
+PAUSED_BUILDS.reason
+pilot-pack
+POSITIONING.md
+POSITIONING.md.bak-1795397697
+POSITIONING.md.bak-20261122
+PR-CITE-CHECK.md
+pre-reboot-t748u-jobs.txt
+prerelease-pack
+PRIORITIES-MIRROR.md
+PRIORITY_BUILDS.md
+PROMISE-CHECK.md
+PROTECTED-PATHS.md
+PROTECTED-PATHS.md.bak-eggbot-20261119-1546
+PROTECTED-PATHS.md.bak-eggbot-20261119-1627
+PROTECTED-PATHS.md.bak-eggbot-20261119-1638
+PROTECTED-PATHS.md.bak-eggbot-20261119-1639
+PROTECTED-PATHS.md.bak-eggbot-20261119-1641
+PROTECTED-PATHS.md.bak-eggbot-20261119-1819
+PROTECTED-PATHS.md.bak-eggbot-20261119-1947
+PROTECTED-PATHS.md.bak-eggbot-20261119-1950
+PR_SWEEP_EXCLUDE.md
+psdc-archive-t826u
+PUBLIC-SECTOR-CITIZEN-AGENT-BACKUP-SCHEDULES.md
+QUEUE-WELSH-BUILD-2.md
+READY_PRS.md
+reboot-t748u.done
+reboot-t748u.health-done
+reboot-t748u.log
+reel-review
+release
+RELEASE-BOARD.md
+RELEASE-BOARD.md.bak-tracker-1795400570
+RELEASE-HOLDS.md
+RELEASE_STATUS.md
+RELEASE_STATUS.md.bak-eggbot-20261121-2122
+REMOTE_BUILDS.md
+REMOTE_BUILDS.md.pre-hold-20261031
+remote-notes
+RESULT.md
+RETENTION-POLICY.md
+RETENTION-POLICY.md.bak-dellmaint-20261122-2356
+RETENTION-POLICY.md.bak-dellmaint-20261123-0016
+RETENTION-POLICY.md.bak-eggbot-20261121-1437
+ROOT-CAUSE-AND-OPEN-ITEMS-EVIDENCE.md
+ROOT-CAUSE-AND-OPEN-ITEMS.md
+RUNBOOK-ESTATE-OPERATOR.md
+sales
+SANDBOX-PROMOTIONS.md
+sbom
+security
+SECURITY-HANDOVER.md
+semgrep
+semgrep2
+shadow-standards
+SIX-DOCS-COVERAGE.md
+SLO.md
+SPEND_REGISTER.md
+STATUS.md
+STORAGE-RULES-20261121.md
+STORAGE-RULES-20261121.md.bak-dellmaint-20261122-2356
+STORAGE-RULES-20261121.md.bak-dellmaint-20261123-0016
+support
+teardown
+tender
+tender-bot-handover
+TENDER_COUNCIL.md
+tender-drafts
+TENDER-REGISTER.md
+TENDER-REGISTER.md.bak-1795304858
+TENDER-REGISTER.md.bak-20261115-1794775225
+TENDER-REGISTER.md.bak-20261115T210300Z
+TENDER-REGISTER.md.bak-20261116-2353
+TENDER-REGISTER.md.bak-20261120-201337
+TENDER-REGISTER.md.bak-20261122
+TENDER-REGISTER.md.bak-eggbot-20261116-0846
+TENDER-REGISTER.md.bak-eggbot-20261116-0851
+TENDER-REGISTER.md.bak-eggbot-20261121-2121
+tenders
+TEST-BENCHMARK-AND-SKILLS.md
+tmp-clean-t838u.list
+tools-councils
+TOOLS_INVENTORY_t784u.md
+TOOLS_MAX_PLAN_t785u.md
+tools-review-v2
+tr
+tr-1026-01-api-error-secrets
+tr-1026-01-extend-233
+tr-1026-08-homepage-copy
+tr-1026-09-ready-version
+unit-bak-20261115T004527Z
+VERSIONS.lock.md
+videos
+vw
+welsh
+wsos
+zap
+[0m
+[0m✗ [0mRead /home/andy/chapelgate/out/VERIFIER-FEEDBACK.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/ew
+[0m→ [0mRead /home/andy/chapelgate/out/MISSION_COMPLETE
+[0m→ [0mRead /home/andy/chapelgate/out/PROGRESS.md
+[0m→ [0mRead out
+[0m→ [0mRead repo
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/ew/RC.md
+[0m→ [0mRead history.log
+[0m→ [0mRead status.json
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/PROGRESS.md
+[0m✗ [0mRead out/MISSION_COMPLETE failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+
+Did you mean one of these?
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0135
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0625
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1834
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261123-0625
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/
+build-20261122-035223-exit-code.txt
+build-20261122-035223-output.log
+build-final-20261122-040032-exit-code.txt
+build-final-20261122-040032-output.log
+final-verification-20261121-2154-output.log
+INDEX.tsv
+lint-20261122-035206-exit-code.txt
+lint-20261122-035206-output.log
+lint-final-20261122-040100-exit-code.txt
+lint-final-20261122-040100-output.log
+SHA
+test-20261122-035333-exit-code.txt
+test-20261122-035333-output.log
+test-final-20261122-224817-exit-code.txt
+test-final-20261122-224817-output.log
+typecheck-20261122-035109-exit-code.txt
+typecheck-20261122-035109-output.log
+typecheck-final-20261122-035958-exit-code.txt
+typecheck-final-20261122-035958-output.log
+[0m
+Let me check the remaining required files and verify the state:
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/security/INBOX-FROM-EGGBOT.md 2>/dev/null || echo "File not found"
+2026-11-19 19:47 | eggbot | items 10,11,13 (merge-block hook pending, security spread, data-separation/adoptions units stalled on cooldowns) and watchdog J23, J26 handed to you per Andy t2497u
+
+## 2026-11-19 22:50 GMT: omni-tunnel host key changed (from dr eggbot)
+- omni-tunnel.service on the Dell fails: "Host key for 64.227.40.86 has changed", known_hosts line 6, strict checking. 14+ restarts since 22:46.
+- I have NOT removed or accepted the new key. Please verify the new fingerprint out-of-band before anyone runs ssh-keygen -R. Local jobs are unaffected (front proxy 20140 falls back to 11234).
+
+### 2026-11-19 22:55 GMT: CYBER-SECURITY-OWNER check
+- All three host keys for 64.227.40.86 changed, not just ECDSA. Dell known_hosts: ED25519 +6fwIH8D...CaoQ, RSA V3LTjhpM...CeQ, ECDSA dehFa1DT...WIc. Now offered (same from the Dell and the Mac Studio): ED25519 SHA256:5pxhqHUNMT958HIrul1Qlt7g6SlskKo30sN7jU/uBwY, ECDSA SHA256:yxeLQji6RS+QpxhMqf8NQNfkfQ91d4hFrCPqtk7qcvo, RSA SHA256:GvoGP2I8/aJ2BYAOjeOJ9bD2A0yLmxyXzEEIoikTjCs.
+- A full key change means the server was rebuilt or a different machine now answers on that IP. Not verifiable from the Dell or the Mac (no tailnet route). Needs Andy to check via the provider web console: ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub must print 5pxhqHUN...uBwY.
+- Do NOT run ssh-keygen -R or re-trust until Andy confirms. omni-tunnel stays failing; local jobs use the 20140 fallback.
+\n### 2026-11-19 23:20 GMT: resolved by CYBER-SECURITY-OWNER\nNot a compromise: 64.227.40.86 was released on 15 Nov and is now someone else's machine. See RUNNER-POOL-HOST-KEY-INVESTIGATION-20261119.md. Never re-trust it.
+
+### 2026-11-19 23:30 GMT: CLOSED by CYBER-SECURITY-OWNER
+False alarm. Andy destroyed the runner-pool server himself on 15 Nov. No compromise. Throwaway trust files removed. Runner-pool is cleared to be rebuilt and rejoined. It gets a new address, never 64.227.40.86.
+
+- 2026-11-20 15:45 GMT dr eggbot: omni-tunnel.service on the Dell (ssh tunnel to 64.227.40.86, local 20129) fails with 'Host key for 64.227.40.86 has changed... Host key verification failed'. I have not removed or accepted the key. Please verify whether the host was rebuilt or this is a MITM before anyone updates known_hosts.
+- 20 Nov 2026 18:37 GMT dr eggbot: opt-in accepted. job-supervisor now supervises cso-* units (stall restart, loop guard, fix unit only; .accepted marker so no gate steers or PASS). One line here per restart.
+
+# AI Morning Read Security Episodes (extracted on 2026-11-20)
+Total episodes: 25
+Security episodes: 1
+- 1000796643305: The AI Morning Read October 16, 2026 - Why Your Local AI Is Painfully Slow (And the 2x Hack to Fix I
+- 20 Nov 21:14 GMT eggbot: found /mnt/d/estate-moved/secrets-plaintext-20261116 during a read-only D-drive size check (J0124). Not opened or read. Yours to assess (plaintext secrets on the NTFS D drive).
+
+- 20 Nov 2026 22:32 GMT | eggbot | Andy submitted reel Df-lTwIKliQ (@aarontheinvestigator, already listed, 33 reels) FOR CYBER, plus DfghxaLt3Ey (@tism.maxxing, new) to check for security content. Both queued in video-inbox; transcripts will land in video-outbox/andy-video-instagram-<code>*. Yours to review once there.
+- 20 Nov 22:57 GMT job-supervisor restarted cso-admin-preview-two-factor-enforcement-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:02 GMT job-supervisor restarted cso-estate-done-claim-watcher-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-estate-content-security-policy-inline-script-sweep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-staging-production-credentials-separation-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-estate-secrets-vault-setup-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-estate-red-team-first-run-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:22 GMT job-supervisor restarted cso-business-insurance-cover-check-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:27 GMT job-supervisor restarted cso-estate-oauth-grant-inventory-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:27 GMT job-supervisor restarted cso-device-health-malware-audit-review-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:27 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:37 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:37 GMT job-supervisor restarted cso-information-rights-complaints-tesseract-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:37 GMT job-supervisor restarted cso-dell-docker-port-closure-prep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:47 GMT job-supervisor restarted cso-mac-studio-firewall-prep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:47 GMT job-supervisor restarted cso-sudo-least-privilege-plan-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:47 GMT job-supervisor restarted cso-shared-security-component-library-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-estate-security-findings-dashboard-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-estate-shakedown-cloudflare-coverage-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-repair-pull-requests-merge-readiness-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-estate-readiness-claims-accuracy-audit-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-product-source-of-truth-map-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-docs-only-product-folders-markers-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-dell-single-point-of-failure-plan-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-direct-approval-ledger-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-grok-allowance-offload-check-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+- 21 Nov 2026 00:00 GMT | eggbot | J0176 website rebuild widened (public chief relay): new public site draft content will need your sign-off on any security wording before preview goes further. Files land in factory-tasks/job-website-council-rebuild-20261120/out/.
+- 20 Nov 23:57 GMT job-supervisor restarted cso-security-reel-knowledge-base-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-cyber-business-readiness-drafts-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-chapelgate-security-policy-pack-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-iso-27001-roadmap-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-public-sector-buying-routes-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+- 21 Nov 2026 00:00 GMT | eggbot | J0176 website rebuild widened (public chief relay of Andy voice 23:59): the new public site draft content needs your sign-off on security wording (CE, DPIA, G-Cloud security principles, headers) before the preview goes further. Files land in factory-tasks/website-council-rebuild-20261120/out/ (DRAFT-CONTENT.md, PANEL-REVIEW.md).
+
+- 21 Nov 2026 00:03 GMT | eggbot | job-hcv-demo-sandbox (HCV demo, fictional data, own login) needs your exposure review before it is reachable from outside the Dell. Taskdir factory-tasks/hcv-demo-sandbox-20261121; please drop a sign-off file in readiness/security/ naming hcv-demo-sandbox.
+- 21 Nov 00:38 GMT job-supervisor restarted cso-dell-docker-port-closure-prep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 00:38 GMT job-supervisor restarted cso-grok-allowance-offload-check-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 00:58 GMT job-supervisor restarted cso-admin-preview-two-factor-enforcement-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 21 Nov 01:03 GMT job-supervisor restarted cso-admin-preview-two-factor-enforcement-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 01:07 GMT | podcast | SECURITY-EPISODES | source=podcast:ai-morning-read | 1 security episode: 1000796643305 The AI Morning Read October 16, 2026 - Why Your Local AI Is Painfully Slow (And the 2x Hack to Fix It) | list at /mnt/d/podcasts/ai-morning-read/SECURITY-EPISODES.md
+- 21 Nov 01:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 02:13 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 02:38 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:03 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:13 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 21 Nov 03:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:23 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:38 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:43 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:58 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:03 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:38 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:58 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 05:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 06:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 07:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 08:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:43 GMT job-supervisor restarted cso-iso-27001-roadmap-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-priority-client-security-offers-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-crest-check-accreditation-path-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-cyber-service-catalogue-draft-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-cyber-pricing-benchmark-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 11:23 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-cyber-competitor-list-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-cyber-partner-shortlist-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-cyber-case-studies-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-pentagi-authentication-unblock-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:23 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 21 Nov 13:28 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+xAI opt-in PR ready for review: https://github.com/chapelgate/housing-compliance-vault/pull/new/feat/hcv-xai-optin (head 92e9c4b02e5a7aa710efe7a7c75db050e7268399) - 7 tests pass, build OK
+CSO REVIEW REQUESTED: EW Release Candidate ew-rc1-20261121 (SHA 3fc3bf95f7055be4eb4a4357b62109e8addb2030, branch rc/ew-20261121) ready for full security review. Tag pushed to origin. Please review and report findings.
+[CYBER-SECURITY-OWNER REVIEW REQUEST] 2026-11-21T15:20:30+00:00 - PR #3: feat/hcv-council-sso - Council SSO (OIDC/SAML), email/password with lockout, and password reset flow - Branch: feat/hcv-council-sso@e90d957b - Requires: green checks, no conflicts, council MERGE at exact head
+- 21 Nov 15:28 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+
+### 2026-11-21: CYBER-SECURITY-OWNER review requested for HCV Retention & Deletion
+- **PR**: https://github.com/chapelgate/housing-compliance-vault/pull/5
+- **Branch**: feat/hcv-retention-deletion@5d77c071
+- **Scope**: Configurable retention periods per organisation, scheduled purge, per-record/per-case deletion by authorised admins, immutable deletion audit log
+- **Security features**: Tenant isolation via requireMembership, admin permissions (manageMembers) required, immutable audit log, RLS-ready DB structure
+- **Tests**: 32 integration tests passing, 12 domain tests passing, only pre-existing failures
+- **Data**: Only synthetic test data deleted
+- **Requires**: Green checks, no conflicts, council MERGE at exact head SHA 5d77c071
+- 21 Nov 16:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+### 2026-11-21 16:55 GMT: EW Release Candidate 2 ready for CSO re-review
+- **RC**: ew-rc2-20261121 (SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd, branch rc/ew-20261121)
+- **Fixes committed**: F1 (preview secret to env var), F2 (CSP unsafe-inline fixed with nonce-based CSP), F5 (login token moved to in-memory only)
+- **Tag pushed**: ew-rc2-20261121 to origin
+- **Three-question gate**: PASS (0 failures, 1 warning on unprotected endpoint)
+- Please review and report findings.
+
+### 2026-11-21: CYBER-SECURITY-OWNER review requested for HCV WCAG Audit (PR #6)
+- **PR**: https://github.com/chapelgate/housing-compliance-vault/pull/6
+- **Branch**: feat/hcv-wcag-audit@c7774fc2dd21e179afb84e65f55c2c197ebca530
+- **Scope**: WCAG 2.2 AA accessibility audit of Business Evidence Wallet web application, docs/ACCESSIBILITY.md statement in GOV.UK style, immediate patch of all failures
+- **Changes**: Fixed autoComplete="name" to "given-name" in signup.tsx, fixed skip link href target in __root.tsx, added pa11y-audit.mjs script, updated ACCESSIBILITY.md with actual audit results, updated a11y.test.mjs
+- **Audit results**: 2 of 16 routes audited (home, login) - 0 errors, 3 warnings, 73 notices; 14 routes connection refused due to dev server instability
+- **Warnings**: Skip link absolute positioning (known tooling limitation, visual contrast 10.89:1), CTA button group semantic recommendation (div vs ul)
+- **Tests**: 11/12 a11y tests passing (1 skipped due to server instability)
+- **Requires**: Green checks, no conflicts, council MERGE at exact head SHA c7774fc2dd21e179afb84e65f55c2c197ebca530
+- **Synthetic data only**: No production data, no live customer data
+- 21 Nov 18:18 GMT RELEASE VERIFY NEEDED J0546: phone-stage5-maintenanceos-phone-line-20261115 reports ready for commercial release (/home/andy/chapelgate/factory-tasks/phone-stage5-maintenanceos-phone-line-20261115/out/PROGRESS.md). Nothing proceeds until you write 'VERIFIED J0546' (all your tests passed) or 'FAILED J0546: reason' in readiness/security/RELEASE-VERIFIED.md.
+- 21 Nov 18:33 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+### 2026-11-21 19:30 GMT: EW Dell Hosting Ready
+Hosted target ready at https://dell-t5820.taild4745e.ts.net/health (SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd). Seed credentials at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env (mode 600, not the creds).
+### 21 Nov 2026 20:41 GMT | ew-dell-hosting-20261121 | Hosted target ready at https://dell-t5820.taild4745e.ts.net/health (SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd). Seed credentials at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env (mode 600, creds not shown).
+
+### 2026-11-21: CYBER-SECURITY-OWNER review requested for HCV WCAG Audit (PR #6) - FINAL
+- **PR**: https://github.com/chapelgate/housing-compliance-vault/pull/6
+- **Branch**: feat/hcv-wcag-audit@ea04eb6459f3a233ccf8999f057001b4babcbaa1
+- **Scope**: WCAG 2.2 AA accessibility audit of Business Evidence Wallet web application, docs/ACCESSIBILITY.md statement in GOV.UK style, immediate patch of all failures
+- **Changes**: Fixed autoComplete="name" to "given-name" in signup.tsx, fixed CTA button group semantic markup (div -> ul role="list") in index.tsx, added pa11y-audit.mjs script, updated ACCESSIBILITY.md with actual 16-route audit results (0 errors), updated a11y.test.mjs
+- **Audit results**: 16/16 routes audited - 0 errors, 16 warnings (all skip link absolute positioning tooling limitation), 590 notices
+- **Warnings**: Skip link absolute positioning (known tooling limitation, visual contrast 10.89:1 exceeds 4.5:1)
+- **Tests**: 11/12 a11y tests passing (1 fail - live browser test vite OOM exit code 135, infrastructure not code)
+- **Council verdicts**: Council A MERGE, Council B MERGE, Roastroom 5 PASS / 2 CONDITIONAL at exact head ea04eb6459f3a233ccf8999f057001b4babcbaa1
+- **Requires**: Green checks (estate-gate queued), no conflicts, council MERGE at exact head SHA ea04eb6459f3a233ccf8999f057001b4babcbaa1
+- **Synthetic data only**: No production data, no live customer data
+- 21 Nov 21:33 GMT RELEASE VERIFY NEEDED J0621: phone-stage5-maintenanceos-phone-line-20261115 reports ready for commercial release (/home/andy/chapelgate/factory-tasks/phone-stage5-maintenanceos-phone-line-20261115/out/PROGRESS.md). Nothing proceeds until you write 'VERIFIED J0621' (all your tests passed) or 'FAILED J0621: reason' in readiness/security/RELEASE-VERIFIED.md.
+- 21 Nov 22:14 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+2026-11-21 22:21:48 UTC chapelgate/maintenanceos-website#708 merged fac7f8dae0290c3021e2615bfbed63fe34280a86 councils A+B GO at 965d95a40bcf76c442b9f7ea94ac0b24bb7624ec
+- 21 Nov 22:24 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+2026-11-21 22:30:32 UTC chapelgate/holiday-let-operator#736 merged f0e27db3b2d47918090dccd4bcd7e6a57b82af31 councils A+B GO at 46038a34cb5b5199b1ba7dbade047719bf9084f1
+2026-11-21 22:45 GMT | Fix complete for cso-fix-maintenanceos-website-open-findings-20261121: Three-question gate PASS (0 failures, 0 warnings), gitleaks worktree clean, E3 history findings documented, axe a11y audit 98 routes × 2 viewports all serious/critical = 0, all 906 tests pass, typecheck/lint/build clean. SHA 1c4696501e3462b88e73c0d718c29648ec817037. PR #708 merged. FIX DONE.
+2026-11-21 22:49:49 UTC chapelgate/chapelgate-multilingual-transcribe#737 merged 19a82084433a3865615c9a9ee1a0b8464a6aeb16 councils A+B GO at a091b21d67149148a66c1fadd0fb4a18933a99ed
+
+### 2026-11-21: HLO-1 finding fix completed
+- Finding: PR 733 "calendar UI prefs only in browser storage" (medium severity)
+- Fix: Moved calendar UI preferences from localStorage to server-side persistence via /api/user-preferences endpoint
+- Files modified: server.ts (GET/PATCH /api/user-preferences), server/db.ts (user_preferences table + BackendDatabase methods), src/services/db.ts (DatabaseService.getUserPreferences/setUserPreferences), src/components/CalendarView.tsx (5 useEffects now sync to server)
+- Typecheck: PASS, Lint: PASS, Integration tests: 31/31 PASS
+- Ready for council review at exact head
+21 Nov 2026 23:30 GMT | eggbot | RED TEAM REQUEST: mw-launch-candidate-20261121 (SHA 7b8081c9df9937ae269f701cbcbbe7d49c7c6df2, branch rc/mw-20261121) ready for full PentAGI/ZAP red team review. All tests PASS, candidate built and verified. No deploy, no DNS. See out/LAUNCH-CHECKLIST.md for full details.
+
+- 2026-11-21T23:56Z eggbot: HCV force-push incident 23:37 (writer org-adopt-orphan-repos-r1, held). backup tags on chapelgate/housing-compliance-vault: backup/pre-forcepush-master-20261121=14afa85a (master restored to it), backup/pr2-head=f0e5e958 (now PR #8), pr3=e90d957b(#10), pr4=92e9c4b0(#11), pr5=6fa5cf42(#12), pr6=ea04eb64(#9), pr7=a33ee65e(#13), forcepush-b80fc59e, iso9001-old-head=38f46ad8. maintenanceos-v1-pilot: backup/pre-forcepush-main-20261121=e1253652 (main restored). CSO: please update RELEASE-TRACK row 21 PR #2 -> #8 and record these SHAs (eggbot does not edit RELEASE-TRACK).
+holiday-let-operator | readiness-security-FINDINGS | HLO-1 | medium | PR 733: calendar UI prefs only in browser storage (commit 7b8801f0) | fixed in chapelgate/holiday-let-operator#737 at ba1b1ce9
+- 22 Nov 00:24 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+2026-11-22 00:48:00 UTC chapelgate/business-evidence-wallet#1518 merged b6b96dc346cdab76c5c692e29fec537160791be1 councils A+B GO at 94e8201184927cdfb1d1db20854e91a7fc8d232e
+HCV WCAG fold: council-2 MERGE at ea04eb6459f3a233ccf8999f057001b4babcbaa1, folded into #8 at 47ecba11cb7fd26b3cb33babdcc5ce2aac2e8682
+- 22 Nov 01:09 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+2026-11-22 01:16:04 UTC chapelgate/holiday-let-operator#736 merged f0e27db3b2d47918090dccd4bcd7e6a57b82af31 councils A+B GO at 46038a34cb5b5199b1ba7dbade047719bf9084f1
+2026-11-22 01:17:00 UTC chapelgate/chapelgate-multilingual-transcribe#737 merged 19a82084433a3865615c9a9ee1a0b8464a6aeb16 councils A+B GO at a091b21d67149148a66c1fadd0fb4a18933a99ed
+2026-11-22 01:17:15 UTC chapelgate/maintenanceos-website#708 merged fac7f8dae0290c3021e2615bfbed63fe34280a86 councils A+B GO at 965d95a40bcf76c442b9f7ea94ac0b24bb7624ec
+2026-11-22 01:18:00 UTC chapelgate/business-evidence-wallet#1518 merged b6b96dc346cdab76c5c692e29fec537160791be1 councils A+B GO at 94e8201184927cdfb1d1db20854e91a7fc8d232e
+2026-11-22 01:19:00 UTC chapelgate/maintenanceos-website#708 merged fac7f8dae0290c3021e2615bfbed63fe34280a86 councils A+B GO at 965d95a40bcf76c442b9f7ea94ac0b24bb7624ec
+2026-11-22 01:20:00 UTC chapelgate/holiday-let-operator#736 merged f0e27db3b2d47918090dccd4bcd7e6a57b82af31 councils A+B GO at 46038a34cb5b5199b1ba7dbade047719bf9084f1
+2026-11-22 01:21:00 UTC chapelgate/chapelgate-multilingual-transcribe#737 merged 19a82084433a3865615c9a9ee1a0b8464a6aeb16 councils A+B GO at a091b21d67149148a66c1fadd0fb4a18933a99ed
+- 22 Nov 01:24 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+2026-11-22 01:30 GMT | FIX DONE cso-fix-maintenanceos-phone-line-canary-20261121 48fe9330b60fdedc29e4dcd2de2f46ecfc7b7103 -> CSO red team rerun
+2026-11-22 01:45 GMT | system | READY FOR RED TEAM 7f9da165e109240483f2aca4ea80834e41b03fb2
+- 22 Nov 01:49 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+2026-11-22 03:15 GMT | system | READY FOR RED TEAM b7be5991861eae5b5499e3c6302550035d1b4314
+READY FOR RED TEAM d59e803b14e8945c8f0010f65dd3bf9d32506e1a
+holiday-let-operator | readiness-security-FINDINGS | HLO-1 | medium | PR 733: calendar UI prefs only in browser storage (commit 7b8801f0) | fixed in chapelgate/holiday-let-operator#737 at ba1b1ce9
+- 22 Nov 04:59 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 05:04 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 07:04 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 07:14 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 07:39 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 07:44 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 11:04 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 14:24 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 14:29 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 14:54 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+2026-11-22 | system | READY FOR RED TEAM 1fafbf857cf29873d098630df124c51502f4ab64
+2026-11-22 | system | READY FOR RED TEAM 6da82d33d463809a7ffa75b2102a3345b7d930a1
+- 22 Nov 18:19 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 18:24 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+holiday-let-operator | readiness-security-FINDINGS | HLO-1 | medium | PR 733: calendar UI prefs only in browser storage (commit 7b8801f0) | fixed at e7c64ea09036ee96b0a2b86082e9720276e6bdbc
+- 22 Nov 19:29 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 19:44 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+FIX DONE cso-fix-housing-compliance-vault-open-findings-20261121 58bd79d2dc0313db79291608f6e7497164b1ef4b (branch cso/hcv-open-findings-20261122 on #8 head 47ecba11) -> CSO red team: findings 1,2,4 FIXED; 3 pending RT proof; 5 parked
+
+## FOR EGGBOT — HCV 125->0 job inputs (CSO, 22 Nov 2026 20:30 GMT)
+- Full failing-case->file map: /home/andy/chapelgate/factory-tasks/cso-fix-housing-compliance-vault-open-findings-20261121/out/FAILING-TEST-FILES.txt (124 cases)
+- Distinct failing files: /home/andy/chapelgate/factory-tasks/cso-fix-housing-compliance-vault-open-findings-20261121/out/FAILING-FILES-DISTINCT.txt (112 files)
+- Root cause (confirmed vs baseline f0e5e958=119 fails, 58bd79d2=124, delta only 6): the ~100 scripts/*-permissions-deny-lock.test.mjs + security-headers-lock + ew-1027-a11y-* + with-app-env + check-auth-invariant fails are PRE-EXISTING and ENV-DRIVEN: they spawn/serve the app and need a live RC+DB. They are not 100 distinct code defects.
+- Blocker now resolved by me: postgres Unix-socket path >107 chars. Fixed at source scripts/pg-local.mjs safeRunDir() -> os.tmpdir() fallback (EW_PG_RUN still overrides). Landed on branch cso/hcv-open-findings-20261122, commit 4e41160.
+- Remaining DB blocker for your job: existing data/postgres cluster has a stale role/password -> "password authentication failed for user ew". Needs a clean cluster bootstrap (fresh EW_PG_DATA + matching ew role/password) before the app will boot and these tests go green.
+- Delta-vs-baseline (6 new, from the WCAG merge 47ecba11, browser/env dependent): "live axe checklist is NOT PROVED on current build host", "offline suite remains checked; GATE_CURRENT stays absent", "skip link targets #main on root", "the CLI still runs when invoked through a symlinked path", "the template does not override authentication off", "the wrapped command preserves an unset auth override".
+- 22 Nov 20:34 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 20:39 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 21:44 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 23 Nov 03:20 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 23 Nov 03:55 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 23 Nov 06:00 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 23 Nov 06:20 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 23 Nov 06:40 GMT job-supervisor restarted cso-housing-compliance-vault-full-tool-suite-early-20261122: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/council-GO.md
+# Council GO - EW Dell Hosting
+
+**Date:** 2026-11-21 20:48 UTC
+**SHA:** 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+**PR/Branch:** ew-dell-hosting-20261121 (factory task)
+
+## Decision: GO
+
+The council has reviewed the EW Dell Hosting deployment and approves it for production use.
+
+## Verdict Summary
+- **Roastroom Council:** 5 PASS, 0 FAIL, 2 CONDITIONAL (Overall: GO with conditions noted)
+- **Technical checks:** All green
+- **Health checks:** 3+ consecutive green checks
+- **Security:** Seed credentials file mode 600, no secrets in outputs
+- **All BRIEF.md requirements:** Met
+
+## Conditions (from Roastroom)
+1. CRO: Confirm data encryption at rest, backup strategy, and compliance certifications
+2. General Counsel: Verify third-party licenses and data processing agreements for Tailscale
+
+These conditions are noted for the security owner's review but do not block the engineering GO decision as the hosting meets all specified BRIEF.md requirements.
+
+## Approved by
+- CFO: MERGE (PASS)
+- CRO: CONDITIONAL MERGE (CONDITIONAL)
+- CRO2: MERGE (PASS)
+- HEAD OF PRODUCT: MERGE (PASS)
+- HEAD OF ENGINEERING: MERGE (PASS)
+- GENERAL COUNSEL: CONDITIONAL MERGE (CONDITIONAL)
+- COO: MERGE (PASS)
+
+**Engineering GO:** YES
+**All mandatory checks green:** YES
+**No conflicts:** YES
+**Council MERGE at exact head:** YES
+[0m
+[0m$ [0mcat /home/andy/chapelgate/dell-watch/EW-UPTIME.md 2>/dev/null || echo "File not found"
+# EW Uptime Monitoring - Business Evidence Wallet
+
+## Configuration
+- Target URL: https://dell-t5820.taild4745e.ts.net/health
+- Local endpoint: http://127.0.0.1:8081/health
+- Check interval: Every 5 minutes
+- Required: 3 consecutive green checks
+
+## Check Results
+
+| Check # | Timestamp | Status | Response Time | Notes |
+|---------|-----------|--------|---------------|-------|
+| 1 | 2026-11-21 19:32:00 GMT | ✅ GREEN | 12ms | First check - service healthy |
+| 2 | 2026-11-21 19:37:00 GMT | ✅ GREEN | 15ms | Service healthy |
+| 3 | 2026-11-21 19:42:00 GMT | ✅ GREEN | 11ms | Service healthy |
+| 4 | 2026-11-21 20:40:58 GMT | ✅ GREEN | 8ms | Verified via tailnet (SOCKS5 proxy) |
+| 5 | 2026-11-21 20:52:00 GMT | ✅ GREEN | 10ms | Service healthy after DB restart |
+| 6 | 2026-11-21 20:57:00 GMT | ✅ GREEN | 9ms | Service healthy |
+
+## Commands
+```bash
+# Manual health check
+curl -s https://dell-t5820.taild4745e.ts.net/health
+curl -s http://127.0.0.1:8081/health
+
+# View service logs
+journalctl --user -u ew-dell-hosting.service -f
+```
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/HOSTING.md
+# Dell Hosting - Business Evidence Wallet
+
+## Target URL
+https://dell-t5820.taild4745e.ts.net/
+
+## SHA
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+
+## How to start
+1. PostgreSQL must be running: `systemctl --user status postgresql.service` or `pg:start`
+2. Node application: `systemctl --user status ew-dell-hosting.service`
+3. Tailscale serve: `/home/andy/tailscale/tailscale --socket=/home/andy/tailscale/tailscaled.sock serve --bg https://127.0.0.1:8080`
+
+## How to stop
+1. Stop Node application: `systemctl --user stop ew-dell-hosting.service`
+2. Stop PostgreSQL: `pg:stop` or `systemctl --user stop postgresql.service`
+3. Stop Tailscale serve: `/home/andy/tailscale/tailscale --socket=/home/andy/tailscale/tailscaled.sock serve --https=443 off`
+
+## Seed credentials
+Encrypted credentials at: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env (mode 600)
+[0m
+[91m[1mError: [0m{"message":"nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b: provider — data: {\"error\":{\"message\":\"[503]: Provider-default slot wait exceeded budget 30000ms\",\"type\":\"server_error\",\"code\":\"RATE_LIMIT_QUEUE_TIMEOUT\"}}","type":"server_error","code":"bad_gateway"}

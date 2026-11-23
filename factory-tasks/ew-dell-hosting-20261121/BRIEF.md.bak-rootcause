@@ -1,0 +1,17 @@
+# job-ew-dell-hosting: temporary hosted Business Evidence Wallet on the Dell for CSO hosted checks (EW step 1 of 16)
+Requested by public chief 21 Nov 2026 00:15 GMT. Repo https://github.com/chapelgate/business-evidence-wallet.git master.
+- Code version: the SAME SHA as the EW release candidate named by job-ew-status-rc (factory-tasks/ew-status-rc-20261121/out/RELEASE-CANDIDATE.md and /home/andy/chapelgate/jobs-work-dell/readiness/ew/RC.md). If that is not written yet, use current origin master, record it, and coordinate so both use one SHA. Write /home/andy/chapelgate/jobs-work-dell/readiness/ew/HOSTING.md: URL, SHA, how to start/stop, seed account NAMES only.
+- Persistent systemd --user service + Postgres (user-level: container or user-run cluster, no sudo/root). Bind to 127.0.0.1 or the tailscale IP only; expose on the tailnet via tailscale serve on a free port, e.g. https://dell-t5820.taild4745e.ts.net:<port>. NEVER tailscale funnel, never 0.0.0.0 on a public interface, no DNS changes, no public exposure. Check the port is free; do not touch omniroute 20128, the job router 20140, golden line, or any existing service.
+- Seed: synthetic data only, two throwaway tenants. Seed credentials go in a mode-600 local file (e.g. /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env), NEVER in chat, md files or logs.
+- Monitoring: add an EW /health check to the existing 5-min uptime timer (copy, edit, mv; never edit eggbot-watchdog), writing /home/andy/chapelgate/dell-watch/EW-UPTIME.md; and make job-supervisor (or a small user timer of its own) restart the EW service if it is down. Back up every file edited as .bak-eggbot-<ts>.
+- Memory: respect memory-guard; stay lean (one app process, small Postgres shared_buffers).
+- Hard limits: NO restore from the destroyed 17 Nov server's provider backups (parked for Andy). No spend, signing, third-party contact. Patch any hole found straight away.
+## Done
+/health returns 200 at the tailnet URL (raw curl in out/), EW-UPTIME.md green on 3 consecutive checks, HOSTING.md complete, one line appended to /home/andy/chapelgate/jobs-work-dell/readiness/security/INBOX-FROM-EGGBOT.md telling CYBER-SECURITY-OWNER the hosted target is ready (URL, SHA, where the creds file is - not the creds), second-family council GO in out/council-*.md, out/RESULT.md (>=300 bytes) + out/MISSION_COMPLETE.
+## Hard rules (Andy standing rules; requested by public chief, Andy's CEO-level chief of staff, 20 Nov 2026)
+- Dell only via OpenCode/OmniRoute. Never stop/restart/remove the production docker container `omniroute`, the golden line, eggbot-watchdog, local-dell-llama, stt-improve-loop, reel-* units, or any container/process you did not create. Use your OWN repo clone and your OWN port block (write PORTS.env).
+- Councils decide and merge (branch, PR, second-family council MERGE at exact head, green checks). Never ask Andy.
+- No spend, signing, sign-ups, legal, deletes, portal registration or declarations. Park those in /home/andy/chapelgate/jobs-work-dell/readiness/PARKED.md with a free route, AND add a tick-box row to section B of readiness/ANDY-REGISTER.md.
+- Never invent figures. Every count must come from raw command output saved under out/. Synthetic data only. No secrets in outputs.
+- Security results (red team, CF security audit) go to readiness/security/ for CYBER-SECURITY-OWNER; do not edit anything else in readiness/security/.
+- Memory: the Dell is near its limit. Run one heavy suite at a time.

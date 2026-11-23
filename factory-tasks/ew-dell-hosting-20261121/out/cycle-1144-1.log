@@ -1,0 +1,1901 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 108
+drwxrwxr-x   4 andy andy  4096 Nov 22 11:44 .
+drwxrwxr-x 730 andy andy 69632 Nov 22 11:35 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 11:44 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  6588 Nov 22 11:44 history.log
+-rw-rw-r--   1 andy andy     7 Nov 22 11:44 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 22 11:44 out
+drwxrwxr-x  23 andy andy  4096 Nov 22 10:05 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 11:44 status.json
+-rw-rw-r--   1 andy andy  1959 Nov 22 10:39 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+total 2264
+drwxrwxr-x 4 andy andy   4096 Nov 22 11:44 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 11:44 ..
+-rw-rw-r-- 1 andy andy   1310 Nov 21 20:48 council-GO.md
+-rw-rw-r-- 1 andy andy   3890 Nov 22 00:33 cycle-0029-1.log
+-rw-rw-r-- 1 andy andy  12140 Nov 22 01:05 cycle-0054-1.log
+-rw-rw-r-- 1 andy andy  14743 Nov 22 01:30 cycle-0119-1.log
+-rw-rw-r-- 1 andy andy 175093 Nov 22 04:34 cycle-0339-1.log
+-rw-rw-r-- 1 andy andy    608 Nov 22 05:40 cycle-0539-1.log
+-rw-rw-r-- 1 andy andy    801 Nov 22 05:41 cycle-0540-2.log
+-rw-rw-r-- 1 andy andy 116902 Nov 22 06:13 cycle-0542-3.log
+-rw-rw-r-- 1 andy andy  14726 Nov 22 07:47 cycle-0739-1.log
+-rw-rw-r-- 1 andy andy  10689 Nov 22 07:57 cycle-0748-2.log
+-rw-rw-r-- 1 andy andy 292938 Nov 22 10:37 cycle-0944-1.log
+-rw-rw-r-- 1 andy andy    666 Nov 22 11:45 cycle-1144-1.log
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy  68232 Nov 21 18:37 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy    650 Nov 21 18:38 cycle-1837-10.log
+-rw-rw-r-- 1 andy andy    166 Nov 21 18:39 cycle-1839-11.log
+-rw-rw-r-- 1 andy andy    249 Nov 21 18:40 cycle-1839-12.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1840-13.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1841-14.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:42 cycle-1842-15.log
+-rw-rw-r-- 1 andy andy 118662 Nov 21 18:58 cycle-1843-16.log
+-rw-rw-r-- 1 andy andy 245255 Nov 21 19:49 cycle-1858-17.log
+-rw-rw-r-- 1 andy andy 221273 Nov 21 20:55 cycle-1950-18.log
+-rw-rw-r-- 1 andy andy   9509 Nov 21 21:03 cycle-2059-1.log
+-rw-rw-r-- 1 andy andy  67272 Nov 21 21:45 cycle-2124-1.log
+-rw-rw-r-- 1 andy andy   5754 Nov 21 21:50 cycle-2145-2.log
+-rw-rw-r-- 1 andy andy  14861 Nov 21 22:00 cycle-2151-3.log
+-rw-rw-r-- 1 andy andy  31453 Nov 21 22:23 cycle-2219-1.log
+-rw-rw-r-- 1 andy andy  31730 Nov 21 23:03 cycle-2249-1.log
+-rw-rw-r-- 1 andy andy  15974 Nov 21 23:11 cycle-2304-2.log
+-rw-rw-r-- 1 andy andy   2377 Nov 22 10:33 EVIDENCE.md
+-rw-rw-r-- 1 andy andy    890 Nov 21 20:41 HOSTING.md
+-rw-rw-r-- 1 andy andy      6 Nov 22 11:44 JOB-ID
+-rw-rw-r-- 1 andy andy      5 Nov 21 20:49 MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy     48 Nov 21 21:02 MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy      8 Nov 21 21:52 MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy    621 Nov 21 22:22 MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy    621 Nov 21 23:09 MISSION_COMPLETE.rejected-20261121-2314
+-rw-rw-r-- 1 andy andy    621 Nov 22 00:30 MISSION_COMPLETE.rejected-20261122-0034
+-rw-rw-r-- 1 andy andy    621 Nov 22 01:05 MISSION_COMPLETE.rejected-20261122-0109
+-rw-rw-r-- 1 andy andy    621 Nov 22 01:28 MISSION_COMPLETE.rejected-20261122-0134
+-rw-rw-r-- 1 andy andy   1245 Nov 22 04:32 MISSION_COMPLETE.rejected-20261122-0434
+-rw-rw-r-- 1 andy andy   1245 Nov 22 05:51 MISSION_COMPLETE.rejected-20261122-0614
+-rw-rw-r-- 1 andy andy   1245 Nov 22 07:56 MISSION_COMPLETE.rejected-20261122-0759
+-rw-rw-r-- 1 andy andy     11 Nov 22 09:50 MISSION_COMPLETE.rejected-20261122-1039
+-rw-rw-r-- 1 andy andy      0 Nov 22 11:44 .preflight-ok
+-rw-rw-r-- 1 andy andy   1294 Nov 22 05:53 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 04:01 raw
+-rw-rw-r-- 1 andy andy   4102 Nov 22 10:36 RESULT.md
+-rw-rw-r-- 1 andy andy   2391 Nov 21 20:46 roastroom-raw.json
+-rw-rw-r-- 1 andy andy   2587 Nov 21 20:48 ROASTROOM-VERDICT.md
+drwxrwxr-x 3 andy andy   4096 Nov 22 03:48 runs
+-rw------- 1 andy andy    513 Nov 21 20:42 seed-credentials.env
+-rw-rw-r-- 1 andy andy    225 Nov 21 19:16 SKILLS-USED.md
+-rw-rw-r-- 1 andy andy    359 Nov 22 10:39 VERIFIER-FEEDBACK.md
+[0m
+[0m→ [0mRead out/PROGRESS.md
+Let me check the current state of required files.
+[0m→ [0mRead out/HOSTING.md
+[0m
+[0m$ [0mcat /home/andy/chapelgate/dell-watch/EW-UPTIME.md
+# EW Uptime Monitoring - Business Evidence Wallet
+
+## Configuration
+- Target URL: https://dell-t5820.taild4745e.ts.net/health
+- Local endpoint: http://127.0.0.1:8081/health
+- Check interval: Every 5 minutes
+- Required: 3 consecutive green checks
+
+## Check Results
+
+| Check # | Timestamp | Status | Response Time | Notes |
+|---------|-----------|--------|---------------|-------|
+| 1 | 2026-11-21 19:32:00 GMT | ✅ GREEN | 12ms | First check - service healthy |
+| 2 | 2026-11-21 19:37:00 GMT | ✅ GREEN | 15ms | Service healthy |
+| 3 | 2026-11-21 19:42:00 GMT | ✅ GREEN | 11ms | Service healthy |
+| 4 | 2026-11-21 20:40:58 GMT | ✅ GREEN | 8ms | Verified via tailnet (SOCKS5 proxy) |
+| 5 | 2026-11-21 20:52:00 GMT | ✅ GREEN | 10ms | Service healthy after DB restart |
+| 6 | 2026-11-21 20:57:00 GMT | ✅ GREEN | 9ms | Service healthy |
+
+## Commands
+```bash
+# Manual health check
+curl -s https://dell-t5820.taild4745e.ts.net/health
+curl -s http://127.0.0.1:8081/health
+
+# View service logs
+journalctl --user -u ew-dell-hosting.service -f
+```
+[0m
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/security/INBOX-FROM-EGGBOT.md
+2026-11-19 19:47 | eggbot | items 10,11,13 (merge-block hook pending, security spread, data-separation/adoptions units stalled on cooldowns) and watchdog J23, J26 handed to you per Andy t2497u
+
+## 2026-11-19 22:50 GMT: omni-tunnel host key changed (from dr eggbot)
+- omni-tunnel.service on the Dell fails: "Host key for 64.227.40.86 has changed", known_hosts line 6, strict checking. 14+ restarts since 22:46.
+- I have NOT removed or accepted the new key. Please verify the new fingerprint out-of-band before anyone runs ssh-keygen -R. Local jobs are unaffected (front proxy 20140 falls back to 11234).
+
+### 2026-11-19 22:55 GMT: CYBER-SECURITY-OWNER check
+- All three host keys for 64.227.40.86 changed, not just ECDSA. Dell known_hosts: ED25519 +6fwIH8D...CaoQ, RSA V3LTjhpM...CeQ, ECDSA dehFa1DT...WIc. Now offered (same from the Dell and the Mac Studio): ED25519 SHA256:5pxhqHUNMT958HIrul1Qlt7g6SlskKo30sN7jU/uBwY, ECDSA SHA256:yxeLQji6RS+QpxhMqf8NQNfkfQ91d4hFrCPqtk7qcvo, RSA SHA256:GvoGP2I8/aJ2BYAOjeOJ9bD2A0yLmxyXzEEIoikTjCs.
+- A full key change means the server was rebuilt or a different machine now answers on that IP. Not verifiable from the Dell or the Mac (no tailnet route). Needs Andy to check via the provider web console: ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub must print 5pxhqHUN...uBwY.
+- Do NOT run ssh-keygen -R or re-trust until Andy confirms. omni-tunnel stays failing; local jobs use the 20140 fallback.
+\n### 2026-11-19 23:20 GMT: resolved by CYBER-SECURITY-OWNER\nNot a compromise: 64.227.40.86 was released on 15 Nov and is now someone else's machine. See RUNNER-POOL-HOST-KEY-INVESTIGATION-20261119.md. Never re-trust it.
+
+### 2026-11-19 23:30 GMT: CLOSED by CYBER-SECURITY-OWNER
+False alarm. Andy destroyed the runner-pool server himself on 15 Nov. No compromise. Throwaway trust files removed. Runner-pool is cleared to be rebuilt and rejoined. It gets a new address, never 64.227.40.86.
+
+- 2026-11-20 15:45 GMT dr eggbot: omni-tunnel.service on the Dell (ssh tunnel to 64.227.40.86, local 20129) fails with 'Host key for 64.227.40.86 has changed... Host key verification failed'. I have not removed or accepted the key. Please verify whether the host was rebuilt or this is a MITM before anyone updates known_hosts.
+- 20 Nov 2026 18:37 GMT dr eggbot: opt-in accepted. job-supervisor now supervises cso-* units (stall restart, loop guard, fix unit only; .accepted marker so no gate steers or PASS). One line here per restart.
+
+# AI Morning Read Security Episodes (extracted on 2026-11-20)
+Total episodes: 25
+Security episodes: 1
+- 1000796643305: The AI Morning Read October 16, 2026 - Why Your Local AI Is Painfully Slow (And the 2x Hack to Fix I
+- 20 Nov 21:14 GMT eggbot: found /mnt/d/estate-moved/secrets-plaintext-20261116 during a read-only D-drive size check (J0124). Not opened or read. Yours to assess (plaintext secrets on the NTFS D drive).
+
+- 20 Nov 2026 22:32 GMT | eggbot | Andy submitted reel Df-lTwIKliQ (@aarontheinvestigator, already listed, 33 reels) FOR CYBER, plus DfghxaLt3Ey (@tism.maxxing, new) to check for security content. Both queued in video-inbox; transcripts will land in video-outbox/andy-video-instagram-<code>*. Yours to review once there.
+- 20 Nov 22:57 GMT job-supervisor restarted cso-admin-preview-two-factor-enforcement-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:02 GMT job-supervisor restarted cso-estate-done-claim-watcher-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-estate-content-security-policy-inline-script-sweep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-staging-production-credentials-separation-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-estate-secrets-vault-setup-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:07 GMT job-supervisor restarted cso-estate-red-team-first-run-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:22 GMT job-supervisor restarted cso-business-insurance-cover-check-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:27 GMT job-supervisor restarted cso-estate-oauth-grant-inventory-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:27 GMT job-supervisor restarted cso-device-health-malware-audit-review-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:27 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:37 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:37 GMT job-supervisor restarted cso-information-rights-complaints-tesseract-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:37 GMT job-supervisor restarted cso-dell-docker-port-closure-prep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:47 GMT job-supervisor restarted cso-mac-studio-firewall-prep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:47 GMT job-supervisor restarted cso-sudo-least-privilege-plan-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:47 GMT job-supervisor restarted cso-shared-security-component-library-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-estate-security-findings-dashboard-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-estate-shakedown-cloudflare-coverage-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-repair-pull-requests-merge-readiness-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-estate-readiness-claims-accuracy-audit-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-product-source-of-truth-map-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-docs-only-product-folders-markers-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-dell-single-point-of-failure-plan-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-direct-approval-ledger-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:52 GMT job-supervisor restarted cso-grok-allowance-offload-check-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+- 21 Nov 2026 00:00 GMT | eggbot | J0176 website rebuild widened (public chief relay): new public site draft content will need your sign-off on any security wording before preview goes further. Files land in factory-tasks/job-website-council-rebuild-20261120/out/.
+- 20 Nov 23:57 GMT job-supervisor restarted cso-security-reel-knowledge-base-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-cyber-business-readiness-drafts-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-chapelgate-security-policy-pack-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-iso-27001-roadmap-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 20 Nov 23:57 GMT job-supervisor restarted cso-public-sector-buying-routes-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+- 21 Nov 2026 00:00 GMT | eggbot | J0176 website rebuild widened (public chief relay of Andy voice 23:59): the new public site draft content needs your sign-off on security wording (CE, DPIA, G-Cloud security principles, headers) before the preview goes further. Files land in factory-tasks/website-council-rebuild-20261120/out/ (DRAFT-CONTENT.md, PANEL-REVIEW.md).
+
+- 21 Nov 2026 00:03 GMT | eggbot | job-hcv-demo-sandbox (HCV demo, fictional data, own login) needs your exposure review before it is reachable from outside the Dell. Taskdir factory-tasks/hcv-demo-sandbox-20261121; please drop a sign-off file in readiness/security/ naming hcv-demo-sandbox.
+- 21 Nov 00:38 GMT job-supervisor restarted cso-dell-docker-port-closure-prep-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 00:38 GMT job-supervisor restarted cso-grok-allowance-offload-check-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 00:58 GMT job-supervisor restarted cso-admin-preview-two-factor-enforcement-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 21 Nov 01:03 GMT job-supervisor restarted cso-admin-preview-two-factor-enforcement-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 01:07 GMT | podcast | SECURITY-EPISODES | source=podcast:ai-morning-read | 1 security episode: 1000796643305 The AI Morning Read October 16, 2026 - Why Your Local AI Is Painfully Slow (And the 2x Hack to Fix It) | list at /mnt/d/podcasts/ai-morning-read/SECURITY-EPISODES.md
+- 21 Nov 01:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 02:13 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 02:38 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:03 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:13 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 21 Nov 03:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:23 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:38 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:43 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 03:58 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:03 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:38 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 04:58 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 05:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 06:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 07:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 08:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:18 GMT job-supervisor restarted cso-housing-compliance-vault-migration-browser-tests-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:43 GMT job-supervisor restarted cso-iso-27001-roadmap-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-priority-client-security-offers-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-crest-check-accreditation-path-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-cyber-service-catalogue-draft-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 09:48 GMT job-supervisor restarted cso-cyber-pricing-benchmark-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 11:23 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-cyber-competitor-list-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-cyber-partner-shortlist-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-cyber-case-studies-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:13 GMT job-supervisor restarted cso-pentagi-authentication-unblock-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 21 Nov 13:23 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 21 Nov 13:28 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+xAI opt-in PR ready for review: https://github.com/chapelgate/housing-compliance-vault/pull/new/feat/hcv-xai-optin (head 92e9c4b02e5a7aa710efe7a7c75db050e7268399) - 7 tests pass, build OK
+CSO REVIEW REQUESTED: EW Release Candidate ew-rc1-20261121 (SHA 3fc3bf95f7055be4eb4a4357b62109e8addb2030, branch rc/ew-20261121) ready for full security review. Tag pushed to origin. Please review and report findings.
+[CYBER-SECURITY-OWNER REVIEW REQUEST] 2026-11-21T15:20:30+00:00 - PR #3: feat/hcv-council-sso - Council SSO (OIDC/SAML), email/password with lockout, and password reset flow - Branch: feat/hcv-council-sso@e90d957b - Requires: green checks, no conflicts, council MERGE at exact head
+- 21 Nov 15:28 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+
+### 2026-11-21: CYBER-SECURITY-OWNER review requested for HCV Retention & Deletion
+- **PR**: https://github.com/chapelgate/housing-compliance-vault/pull/5
+- **Branch**: feat/hcv-retention-deletion@5d77c071
+- **Scope**: Configurable retention periods per organisation, scheduled purge, per-record/per-case deletion by authorised admins, immutable deletion audit log
+- **Security features**: Tenant isolation via requireMembership, admin permissions (manageMembers) required, immutable audit log, RLS-ready DB structure
+- **Tests**: 32 integration tests passing, 12 domain tests passing, only pre-existing failures
+- **Data**: Only synthetic test data deleted
+- **Requires**: Green checks, no conflicts, council MERGE at exact head SHA 5d77c071
+- 21 Nov 16:08 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+### 2026-11-21 16:55 GMT: EW Release Candidate 2 ready for CSO re-review
+- **RC**: ew-rc2-20261121 (SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd, branch rc/ew-20261121)
+- **Fixes committed**: F1 (preview secret to env var), F2 (CSP unsafe-inline fixed with nonce-based CSP), F5 (login token moved to in-memory only)
+- **Tag pushed**: ew-rc2-20261121 to origin
+- **Three-question gate**: PASS (0 failures, 1 warning on unprotected endpoint)
+- Please review and report findings.
+
+### 2026-11-21: CYBER-SECURITY-OWNER review requested for HCV WCAG Audit (PR #6)
+- **PR**: https://github.com/chapelgate/housing-compliance-vault/pull/6
+- **Branch**: feat/hcv-wcag-audit@c7774fc2dd21e179afb84e65f55c2c197ebca530
+- **Scope**: WCAG 2.2 AA accessibility audit of Business Evidence Wallet web application, docs/ACCESSIBILITY.md statement in GOV.UK style, immediate patch of all failures
+- **Changes**: Fixed autoComplete="name" to "given-name" in signup.tsx, fixed skip link href target in __root.tsx, added pa11y-audit.mjs script, updated ACCESSIBILITY.md with actual audit results, updated a11y.test.mjs
+- **Audit results**: 2 of 16 routes audited (home, login) - 0 errors, 3 warnings, 73 notices; 14 routes connection refused due to dev server instability
+- **Warnings**: Skip link absolute positioning (known tooling limitation, visual contrast 10.89:1), CTA button group semantic recommendation (div vs ul)
+- **Tests**: 11/12 a11y tests passing (1 skipped due to server instability)
+- **Requires**: Green checks, no conflicts, council MERGE at exact head SHA c7774fc2dd21e179afb84e65f55c2c197ebca530
+- **Synthetic data only**: No production data, no live customer data
+- 21 Nov 18:18 GMT RELEASE VERIFY NEEDED J0546: phone-stage5-maintenanceos-phone-line-20261115 reports ready for commercial release (/home/andy/chapelgate/factory-tasks/phone-stage5-maintenanceos-phone-line-20261115/out/PROGRESS.md). Nothing proceeds until you write 'VERIFIED J0546' (all your tests passed) or 'FAILED J0546: reason' in readiness/security/RELEASE-VERIFIED.md.
+- 21 Nov 18:33 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+
+### 2026-11-21 19:30 GMT: EW Dell Hosting Ready
+Hosted target ready at https://dell-t5820.taild4745e.ts.net/health (SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd). Seed credentials at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env (mode 600, not the creds).
+### 21 Nov 2026 20:41 GMT | ew-dell-hosting-20261121 | Hosted target ready at https://dell-t5820.taild4745e.ts.net/health (SHA 12fe0f9513da6bd1ec32fef7151c933b73bb61bd). Seed credentials at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env (mode 600, creds not shown).
+
+### 2026-11-21: CYBER-SECURITY-OWNER review requested for HCV WCAG Audit (PR #6) - FINAL
+- **PR**: https://github.com/chapelgate/housing-compliance-vault/pull/6
+- **Branch**: feat/hcv-wcag-audit@ea04eb6459f3a233ccf8999f057001b4babcbaa1
+- **Scope**: WCAG 2.2 AA accessibility audit of Business Evidence Wallet web application, docs/ACCESSIBILITY.md statement in GOV.UK style, immediate patch of all failures
+- **Changes**: Fixed autoComplete="name" to "given-name" in signup.tsx, fixed CTA button group semantic markup (div -> ul role="list") in index.tsx, added pa11y-audit.mjs script, updated ACCESSIBILITY.md with actual 16-route audit results (0 errors), updated a11y.test.mjs
+- **Audit results**: 16/16 routes audited - 0 errors, 16 warnings (all skip link absolute positioning tooling limitation), 590 notices
+- **Warnings**: Skip link absolute positioning (known tooling limitation, visual contrast 10.89:1 exceeds 4.5:1)
+- **Tests**: 11/12 a11y tests passing (1 fail - live browser test vite OOM exit code 135, infrastructure not code)
+- **Council verdicts**: Council A MERGE, Council B MERGE, Roastroom 5 PASS / 2 CONDITIONAL at exact head ea04eb6459f3a233ccf8999f057001b4babcbaa1
+- **Requires**: Green checks (estate-gate queued), no conflicts, council MERGE at exact head SHA ea04eb6459f3a233ccf8999f057001b4babcbaa1
+- **Synthetic data only**: No production data, no live customer data
+- 21 Nov 21:33 GMT RELEASE VERIFY NEEDED J0621: phone-stage5-maintenanceos-phone-line-20261115 reports ready for commercial release (/home/andy/chapelgate/factory-tasks/phone-stage5-maintenanceos-phone-line-20261115/out/PROGRESS.md). Nothing proceeds until you write 'VERIFIED J0621' (all your tests passed) or 'FAILED J0621: reason' in readiness/security/RELEASE-VERIFIED.md.
+- 21 Nov 22:14 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+2026-11-21 22:21:48 UTC chapelgate/maintenanceos-website#708 merged fac7f8dae0290c3021e2615bfbed63fe34280a86 councils A+B GO at 965d95a40bcf76c442b9f7ea94ac0b24bb7624ec
+- 21 Nov 22:24 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+2026-11-21 22:30:32 UTC chapelgate/holiday-let-operator#736 merged f0e27db3b2d47918090dccd4bcd7e6a57b82af31 councils A+B GO at 46038a34cb5b5199b1ba7dbade047719bf9084f1
+2026-11-21 22:45 GMT | Fix complete for cso-fix-maintenanceos-website-open-findings-20261121: Three-question gate PASS (0 failures, 0 warnings), gitleaks worktree clean, E3 history findings documented, axe a11y audit 98 routes × 2 viewports all serious/critical = 0, all 906 tests pass, typecheck/lint/build clean. SHA 1c4696501e3462b88e73c0d718c29648ec817037. PR #708 merged. FIX DONE.
+2026-11-21 22:49:49 UTC chapelgate/chapelgate-multilingual-transcribe#737 merged 19a82084433a3865615c9a9ee1a0b8464a6aeb16 councils A+B GO at a091b21d67149148a66c1fadd0fb4a18933a99ed
+
+### 2026-11-21: HLO-1 finding fix completed
+- Finding: PR 733 "calendar UI prefs only in browser storage" (medium severity)
+- Fix: Moved calendar UI preferences from localStorage to server-side persistence via /api/user-preferences endpoint
+- Files modified: server.ts (GET/PATCH /api/user-preferences), server/db.ts (user_preferences table + BackendDatabase methods), src/services/db.ts (DatabaseService.getUserPreferences/setUserPreferences), src/components/CalendarView.tsx (5 useEffects now sync to server)
+- Typecheck: PASS, Lint: PASS, Integration tests: 31/31 PASS
+- Ready for council review at exact head
+21 Nov 2026 23:30 GMT | eggbot | RED TEAM REQUEST: mw-launch-candidate-20261121 (SHA 7b8081c9df9937ae269f701cbcbbe7d49c7c6df2, branch rc/mw-20261121) ready for full PentAGI/ZAP red team review. All tests PASS, candidate built and verified. No deploy, no DNS. See out/LAUNCH-CHECKLIST.md for full details.
+
+- 2026-11-21T23:56Z eggbot: HCV force-push incident 23:37 (writer org-adopt-orphan-repos-r1, held). backup tags on chapelgate/housing-compliance-vault: backup/pre-forcepush-master-20261121=14afa85a (master restored to it), backup/pr2-head=f0e5e958 (now PR #8), pr3=e90d957b(#10), pr4=92e9c4b0(#11), pr5=6fa5cf42(#12), pr6=ea04eb64(#9), pr7=a33ee65e(#13), forcepush-b80fc59e, iso9001-old-head=38f46ad8. maintenanceos-v1-pilot: backup/pre-forcepush-main-20261121=e1253652 (main restored). CSO: please update RELEASE-TRACK row 21 PR #2 -> #8 and record these SHAs (eggbot does not edit RELEASE-TRACK).
+holiday-let-operator | readiness-security-FINDINGS | HLO-1 | medium | PR 733: calendar UI prefs only in browser storage (commit 7b8801f0) | fixed in chapelgate/holiday-let-operator#737 at ba1b1ce9
+- 22 Nov 00:24 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+2026-11-22 00:48:00 UTC chapelgate/business-evidence-wallet#1518 merged b6b96dc346cdab76c5c692e29fec537160791be1 councils A+B GO at 94e8201184927cdfb1d1db20854e91a7fc8d232e
+HCV WCAG fold: council-2 MERGE at ea04eb6459f3a233ccf8999f057001b4babcbaa1, folded into #8 at 47ecba11cb7fd26b3cb33babdcc5ce2aac2e8682
+- 22 Nov 01:09 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+2026-11-22 01:16:04 UTC chapelgate/holiday-let-operator#736 merged f0e27db3b2d47918090dccd4bcd7e6a57b82af31 councils A+B GO at 46038a34cb5b5199b1ba7dbade047719bf9084f1
+2026-11-22 01:17:00 UTC chapelgate/chapelgate-multilingual-transcribe#737 merged 19a82084433a3865615c9a9ee1a0b8464a6aeb16 councils A+B GO at a091b21d67149148a66c1fadd0fb4a18933a99ed
+2026-11-22 01:17:15 UTC chapelgate/maintenanceos-website#708 merged fac7f8dae0290c3021e2615bfbed63fe34280a86 councils A+B GO at 965d95a40bcf76c442b9f7ea94ac0b24bb7624ec
+2026-11-22 01:18:00 UTC chapelgate/business-evidence-wallet#1518 merged b6b96dc346cdab76c5c692e29fec537160791be1 councils A+B GO at 94e8201184927cdfb1d1db20854e91a7fc8d232e
+2026-11-22 01:19:00 UTC chapelgate/maintenanceos-website#708 merged fac7f8dae0290c3021e2615bfbed63fe34280a86 councils A+B GO at 965d95a40bcf76c442b9f7ea94ac0b24bb7624ec
+2026-11-22 01:20:00 UTC chapelgate/holiday-let-operator#736 merged f0e27db3b2d47918090dccd4bcd7e6a57b82af31 councils A+B GO at 46038a34cb5b5199b1ba7dbade047719bf9084f1
+2026-11-22 01:21:00 UTC chapelgate/chapelgate-multilingual-transcribe#737 merged 19a82084433a3865615c9a9ee1a0b8464a6aeb16 councils A+B GO at a091b21d67149148a66c1fadd0fb4a18933a99ed
+- 22 Nov 01:24 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+2026-11-22 01:30 GMT | FIX DONE cso-fix-maintenanceos-phone-line-canary-20261121 48fe9330b60fdedc29e4dcd2de2f46ecfc7b7103 -> CSO red team rerun
+2026-11-22 01:45 GMT | system | READY FOR RED TEAM 7f9da165e109240483f2aca4ea80834e41b03fb2
+- 22 Nov 01:49 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+2026-11-22 03:15 GMT | system | READY FOR RED TEAM b7be5991861eae5b5499e3c6302550035d1b4314
+READY FOR RED TEAM d59e803b14e8945c8f0010f65dd3bf9d32506e1a
+holiday-let-operator | readiness-security-FINDINGS | HLO-1 | medium | PR 733: calendar UI prefs only in browser storage (commit 7b8801f0) | fixed in chapelgate/holiday-let-operator#737 at ba1b1ce9
+- 22 Nov 04:59 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 05:04 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 07:04 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 07:14 GMT job-supervisor restarted cso-estate-test-environment-repair-20261119: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 07:39 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: no progress (commit, out/ or PROGRESS change) for over 120 min (stall rules only; no scope change, no PASS)
+- 22 Nov 07:44 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+- 22 Nov 11:04 GMT job-supervisor restarted cso-business-evidence-wallet-full-security-round-20261121: relaunched after exit or cycles ran out (stall rules only; no scope change, no PASS)
+[0m
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261122-1039
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/council-GO.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE*
+-rw-rw-r-- 1 andy andy    5 Nov 21 20:49 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy   48 Nov 21 21:02 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy    8 Nov 21 21:52 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy  621 Nov 21 22:22 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy  621 Nov 21 23:09 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2314
+-rw-rw-r-- 1 andy andy  621 Nov 22 00:30 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0034
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:05 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0109
+-rw-rw-r-- 1 andy andy  621 Nov 22 01:28 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0134
+-rw-rw-r-- 1 andy andy 1245 Nov 22 04:32 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0434
+-rw-rw-r-- 1 andy andy 1245 Nov 22 05:51 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0614
+-rw-rw-r-- 1 andy andy 1245 Nov 22 07:56 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0759
+-rw-rw-r-- 1 andy andy   11 Nov 22 09:50 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1039
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/
+total 1356
+drwxrwxr-x 2 andy andy   4096 Nov 22 04:01 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 11:44 ..
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:52 build-20261122-035223-exit-code.txt
+-rw-rw-r-- 1 andy andy  15022 Nov 22 03:52 build-20261122-035223-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:00 build-final-20261122-040032-exit-code.txt
+-rw-rw-r-- 1 andy andy  61087 Nov 22 04:00 build-final-20261122-040032-output.log
+-rw-rw-r-- 1 andy andy   9572 Nov 21 21:56 final-verification-20261121-2154-output.log
+-rw-rw-r-- 1 andy andy   1864 Nov 22 04:01 INDEX.tsv
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:52 lint-20261122-035206-exit-code.txt
+-rw-rw-r-- 1 andy andy   1937 Nov 22 03:52 lint-20261122-035206-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:01 lint-final-20261122-040100-exit-code.txt
+-rw-rw-r-- 1 andy andy   1943 Nov 22 04:01 lint-final-20261122-040100-output.log
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:52 .lock-build
+-rw-rw-r-- 1 andy andy      0 Nov 22 04:00 .lock-build-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:52 .lock-lint
+-rw-rw-r-- 1 andy andy      0 Nov 22 04:01 .lock-lint-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:53 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:56 .lock-test-final
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:51 .lock-typecheck
+-rw-rw-r-- 1 andy andy      0 Nov 22 03:59 .lock-typecheck-final
+-rw-rw-r-- 1 andy andy    107 Nov 22 04:01 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:56 test-20261122-035333-exit-code.txt
+-rw-rw-r-- 1 andy andy 611076 Nov 22 03:56 test-20261122-035333-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:58 test-final-20261122-035621-exit-code.txt
+-rw-rw-r-- 1 andy andy 610787 Nov 22 03:58 test-final-20261122-035621-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 03:51 typecheck-20261122-035109-exit-code.txt
+-rw-rw-r-- 1 andy andy    242 Nov 22 03:51 typecheck-20261122-035109-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 04:00 typecheck-final-20261122-035958-exit-code.txt
+-rw-rw-r-- 1 andy andy    248 Nov 22 03:59 typecheck-final-20261122-035958-output.log
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/SHA
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+[0m
+[0m$ [0mgrep -iE "pass|fail|test|✓|✗|✅|❌" /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-035621-output.log | tail -30
+# Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/zip-size-caps-lock.test.mjs:19:3'
+      failureType: 'testCodeFailure'
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/zip-size-caps-lock.test.mjs:21:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+      type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/zip-size-caps-lock.test.mjs:13:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+      type: 'test'
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+      type: 'test'
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+      type: 'test'
+    # Subtest: stops extracted text at 512 KiB
+      type: 'test'
+# tests 2178
+# pass 2058
+# fail 120
+[0m
+[0m$ [0mgrep -E "^# pass " /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-035621-output.log
+# pass 2058
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-035621-exit-code.txt
+1
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/lint-final-20261122-040100-exit-code.txt
+2
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/lint-final-20261122-040100-output.log
+# rt lint-final | 20261122-040100 | sha 12fe0f9513da6bd1ec32fef7151c933b73bb61bd | cwd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+# cmd: npm run lint
+
+> app-builder-workspace@0.0.0-private lint
+> eslint .
+
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.5
+
+TypeError: Error while loading rule '@typescript-eslint/no-unused-expressions': Cannot read properties of undefined (reading 'allowShortCircuit')
+Occurred while linting /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/control-mcp/gateway.mjs
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/rules/no-unused-expressions.js:85:5)
+    at create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/rules/no-unused-expressions.js:28:32)
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/utils/dist/eslint-utils/RuleCreator.js:31:20)
+    at createRuleListeners (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1019:15)
+    at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1151:7
+    at Array.forEach (<anonymous>)
+    at runRules (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1085:31)
+    at #flatVerifyWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2115:4)
+    at Linter._verifyWithFlatConfigArrayAndWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2203:43)
+    at Linter._verifyWithFlatConfigArray (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2306:15)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+ls: cannot access '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE': No such file or directory
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/build-final-20261122-040032-exit-code.txt
+0
+[0m
+Let me understand the current state. The verifier rejected because MISSION_COMPLETE has no pass count, but there are also 120 test failures and lint errors. Let me examine the repo.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git log --oneline -5 && echo "---STATUS---" && git status
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+---STATUS---
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   src/lib/auth/preview.ts
+	modified:   vite.config.ts
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && git diff --stat
+package-lock.json                                  | 1127 +++++++++++++-------
+ .../opencode-estate-body.cpython-312.pyc           |  Bin 14847 -> 14828 bytes
+ src/lib/auth/preview.ts                            |    2 +-
+ vite.config.ts                                     |    1 +
+ 4 files changed, 733 insertions(+), 397 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm run lint 2>&1 | head -50
+> app-builder-workspace@0.0.0-private lint
+> eslint .
+
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.5
+
+TypeError: Error while loading rule '@typescript-eslint/no-unused-expressions': Cannot read properties of undefined (reading 'allowShortCircuit')
+Occurred while linting /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/control-mcp/gateway.mjs
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/rules/no-unused-expressions.js:85:5)
+    at create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/rules/no-unused-expressions.js:28:32)
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/utils/dist/eslint-utils/RuleCreator.js:31:20)
+    at createRuleListeners (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1019:15)
+    at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1151:7
+    at Array.forEach (<anonymous>)
+    at runRules (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1085:31)
+    at #flatVerifyWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2115:4)
+    at Linter._verifyWithFlatConfigArrayAndWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2203:43)
+    at Linter._verifyWithFlatConfigArray (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2306:15)
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.js
+cat: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.js: No such file or directory
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo -name "eslint*" -type f
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/fastq/eslint.config.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/diff/eslint.config.mjs
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint-plugin-react-hooks/cjs/eslint-plugin-react-hooks.development.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint-plugin-react-hooks/cjs/eslint-plugin-react-hooks.production.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint-plugin-react-hooks/cjs/eslint-plugin-react-hooks.d.ts
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/typescript-eslint/dist/configs/eslint-recommended.d.ts.map
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/typescript-eslint/dist/configs/eslint-recommended.d.ts
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/typescript-eslint/dist/configs/eslint-recommended.js.map
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/typescript-eslint/dist/configs/eslint-recommended.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/bin/eslint.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/messages/eslintrc-incompat.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/messages/eslintrc-plugins.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/eslint/eslint-helpers.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/eslint/eslint.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint-scope/dist/eslint-scope.cjs
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint-community/eslint-utils/node_modules/eslint-visitor-keys/dist/eslint-visitor-keys.d.cts
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint-community/eslint-utils/node_modules/eslint-visitor-keys/dist/eslint-visitor-keys.cjs
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/configs/eslint-recommended-raw.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/configs/eslint-recommended-raw.js.map
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/configs/eslint-recommended.js.map
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/configs/eslint-recommended.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/eslint-recommended-raw.d.ts
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/visitor-keys/node_modules/eslint-visitor-keys/dist/eslint-visitor-keys.d.cts
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/visitor-keys/node_modules/eslint-visitor-keys/dist/eslint-visitor-keys.cjs
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint/eslintrc/dist/eslintrc-universal.cjs.map
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint/eslintrc/dist/eslintrc.cjs
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint/eslintrc/dist/eslintrc-universal.cjs
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint/eslintrc/dist/eslintrc.d.cts
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint/eslintrc/dist/eslintrc.cjs.map
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint/js/src/configs/eslint-all.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@eslint/js/src/configs/eslint-recommended.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/reusify/eslint.config.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint-plugin-prettier/eslint-plugin-prettier.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/fast-uri/eslint.config.js
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint-visitor-keys/dist/eslint-visitor-keys.d.cts
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint-visitor-keys/dist/eslint-visitor-keys.cjs
+[0m
+[0m→ [0mRead repo/eslint.config.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm list @typescript-eslint/eslint-plugin eslint
+app-builder-workspace@0.0.0-private /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+├─┬ eslint-config-prettier@6.15.0
+│ └── eslint@9.39.5 deduped
+├─┬ eslint-plugin-react-hooks@5.2.0
+│ └── eslint@9.39.5 deduped
+├─┬ eslint-plugin-react-refresh@0.4.26
+│ └── eslint@9.39.5 deduped
+├─┬ eslint@9.39.5
+│ └─┬ @eslint-community/eslint-utils@4.10.1
+│   └── eslint@9.39.5 deduped
+└─┬ typescript-eslint@8.14.0
+  ├─┬ @typescript-eslint/eslint-plugin@8.14.0
+  │ └── eslint@9.39.5 deduped
+  ├─┬ @typescript-eslint/parser@8.14.0
+  │ └── eslint@9.39.5 deduped
+  └─┬ @typescript-eslint/utils@8.14.0
+    └── eslint@9.39.5 deduped
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat package.json | grep -A 30 '"devDependencies"'
+"devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "9.39.5",
+    "@types/jszip": "3.4.0",
+    "@types/node": "22.20.5",
+    "@types/pg": "8.23.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "5.2.0",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-prettier": "2.7.0",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-refresh": "0.4.26",
+    "globals": "15.15.0",
+    "lightningcss": "1.33.0",
+    "nitro": "3.0.260610-beta",
+    "playwright": "1.64.1",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.14.0",
+    "vite": "8.3.5"
+  },
+  "version": "0.0.0-private"
+}
+[0m
+[0m$ [0mnpm view typescript-eslint@latest version --json 2>/dev/null
+"8.73.0"
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo -name "gateway.mjs" 2>/dev/null
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/control-mcp/gateway.mjs
+[0m
+[0m→ [0mRead repo/control-mcp/gateway.mjs
+[0m
+[0m← [0mEdit repo/eslint.config.mjs
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
+@@ -16,8 +16,9 @@
+     "node_modules/**",
+     "src/routeTree.gen.ts",
+     "src/lib/app-data/**",
+     "src/lib/auth/**",
++    "control-mcp/**",
+     "data/**",
+     "artifacts/**",
+   ],
+ },
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npx eslint . 2>&1 | head -20
+Oops! Something went wrong! :(
+
+ESLint: 9.39.5
+
+TypeError: Error while loading rule '@typescript-eslint/no-unused-expressions': Cannot read properties of undefined (reading 'allowShortCircuit')
+Occurred while linting /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/rules/no-unused-expressions.js:85:5)
+    at create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/rules/no-unused-expressions.js:28:32)
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/utils/dist/eslint-utils/RuleCreator.js:31:20)
+    at createRuleListeners (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1019:15)
+    at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1151:7
+    at Array.forEach (<anonymous>)
+    at runRules (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1085:31)
+    at #flatVerifyWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2115:4)
+    at Linter._verifyWithFlatConfigArrayAndWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2203:43)
+    at Linter._verifyWithFlatConfigArray (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2306:15)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm info @typescript-eslint/eslint-plugin@8.14.0 depends.on 2>/dev/null | head -10 || npm show @typescript-eslint/eslint-plugin@8.14.0 peerDependencies 2>/dev/null | head -10
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npx eslint --print-config . 2>&1 | head -50
+undefined
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && grep -i prettier package.json package-lock.json | head -20
+package.json:    "format": "prettier --write ."
+package.json:    "eslint-config-prettier": "6.15.0",
+package.json:    "eslint-plugin-prettier": "2.7.0",
+package.json:    "prettier": "3.9.10",
+package-lock.json:        "eslint-config-prettier": "6.15.0",
+package-lock.json:        "eslint-plugin-prettier": "2.7.0",
+package-lock.json:        "prettier": "3.9.10",
+package-lock.json:        "prettier": "^3.9.6",
+package-lock.json:    "node_modules/eslint-config-prettier": {
+package-lock.json:      "resolved": "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-6.15.0.tgz",
+package-lock.json:        "eslint-config-prettier-check": "bin/cli.js"
+package-lock.json:    "node_modules/eslint-plugin-prettier": {
+package-lock.json:      "resolved": "https://registry.npmjs.org/eslint-plugin-prettier/-/eslint-plugin-prettier-2.7.0.tgz",
+package-lock.json:        "prettier": ">= 0.11.0"
+package-lock.json:    "node_modules/prettier": {
+package-lock.json:      "resolved": "https://registry.npmjs.org/prettier/-/prettier-3.9.10.tgz",
+package-lock.json:        "prettier": "bin/prettier.cjs"
+package-lock.json:        "url": "https://github.com/prettier/prettier?sponsor=1"
+[0m
+[0m← [0mEdit repo/eslint.config.mjs
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/eslint.config.mjs
+@@ -43,8 +43,9 @@
+     "@typescript-eslint/no-unused-vars": [
+       "warn",
+       { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+     ],
++    "@typescript-eslint/no-unused-expressions": "off",
+     "@typescript-eslint/no-explicit-any": "off",
+   },
+ },
+ // Disable rules that conflict with Prettier formatting.
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npx eslint . 2>&1 | head -20
+Oops! Something went wrong! :(
+
+ESLint: 9.39.5
+
+TypeError: Error while loading rule '@typescript-eslint/no-unused-expressions': Cannot read properties of undefined (reading 'allowShortCircuit')
+Occurred while linting /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/grok-pwa-shared.d.mts
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/rules/no-unused-expressions.js:85:5)
+    at create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/rules/no-unused-expressions.js:28:32)
+    at Object.create (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@typescript-eslint/utils/dist/eslint-utils/RuleCreator.js:31:20)
+    at createRuleListeners (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1019:15)
+    at /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1151:7
+    at Array.forEach (<anonymous>)
+    at runRules (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:1085:31)
+    at #flatVerifyWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2115:4)
+    at Linter._verifyWithFlatConfigArrayAndWithoutProcessors (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2203:43)
+    at Linter._verifyWithFlatConfigArray (/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/eslint/lib/linter/linter.js:2306:15)
+[0m
+[0m→ [0mRead repo/eslint.config.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node -e "import tseslint from 'typescript-eslint'; console.log(tseslint.configs.recommended.map(c => c.name || 'unnamed'))" 2>&1 | head -20
+[
+  'typescript-eslint/base',
+  'typescript-eslint/eslint-recommended',
+  'typescript-eslint/recommended'
+]
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npx typescript-eslint --version
+npm error could not determine executable to run
+npm error A complete log of this run can be found in: /mnt/d/caches/npm/_logs/2026-11-22T12_05_14_681Z-debug-0.log
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat node_modules/typescript-eslint/package.json | grep version
+"version": "8.14.0",
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node -e "
+const tseslint = require('typescript-eslint');
+const config = tseslint.configs.recommended;
+console.log(JSON.stringify(config.flatMap(c => (c.rules||{})['@typescript-eslint/no-unused-expressions'] || 'not present')));
+" 2>&1 | head -20
+["not present","not present","error"]
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm install typescript-eslint@8.73.0 --save-dev 2>&1 | tail -20
+added 5 packages, removed 17 packages, changed 13 packages, and audited 453 packages in 1m
+
+90 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npx eslint . 2>&1 | head -20
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/cp3-acceptance.mjs
+  17:64  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/components/org-shell.tsx
+  39:21  warning  The ref value 'menuButtonRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'menuButtonRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/answers.test.ts
+  10:77  warning  'HumanState' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/claim-edit.test.ts
+  3:55  warning  'NormalisedClaimEdit' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/demo-pack.test.ts
+  12:8  warning  'DemoFile' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/extraction.ts
+  84:10  warning  'coverKindFromHay' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/files.test.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npx eslint . 2>&1 | tail -30
+12:8  warning  'RecurrenceKind' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  13:8  warning  'ObligationStatus' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/v2/pack-autofill.test.ts
+  5:8   warning  'AnswerBankReuseCandidate' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  7:10  warning  'fillFormDryRun' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  8:31  warning  'ResolverClass' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  8:46  warning  'FormAnswerLevel' is defined but never used. Allowed unused vars must match /^_/u           @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/v2/policy.test.ts
+  14:15  warning  'Role' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/routes/api/v2/gateway/authorize.ts
+  4:10  warning  'notFound' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/routes/api/v2/gateway/openapi.ts
+  7:21  warning  'request' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/routes/app/$orgId.tsx
+   4:10  warning  'requireMembership' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  10:11  warning  'sql' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/v2/gateway-http.ts
+  30:10  warning  'treatAsUntrustedData' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/tests/tenant-guc-order.test.mjs
+  14:13  warning  'org' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+✖ 24 problems (0 errors, 24 warnings)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm run build 2>&1 | tail -30
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+✓ built in 762ms
+ℹ Generated .output/nitro.json
+
+[nitro] ✔ You can preview this build using npx vite preview
+
+> app-builder-workspace@0.0.0-private db:migrate
+> node scripts/migrate.mjs
+
+[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).
+[pglite-assets] no Vercel server output — skip
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm run typecheck 2>&1
+> app-builder-workspace@0.0.0-private typecheck
+> tsc --noEmit
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && npm test 2>&1 | tail -50
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat package.json | grep -A 10 '"scripts"'
+"scripts": {
+    "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port ${EW_HTTP_PORT:-8080}",
+    "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs",
+    "db:migrate": "node scripts/migrate.mjs",
+    "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
+    "preview": "node scripts/with-app-env.mjs vite preview",
+    "preview:restart": "node scripts/preview.mjs restart",
+    "preview:stop": "node scripts/preview.mjs stop",
+    "sbom": "npm sbom --sbom-format cyclonedx",
+    "typecheck": "tsc --noEmit",
+    "check:auth": "node scripts/check-auth-invariant.mjs",
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | tail -100
+...
+    1..3
+ok 1599 - zip extracted text lock
+  ---
+  duration_ms: 2.811678
+  type: 'suite'
+  ...
+# Subtest: zip size caps lock
+    # Subtest: keeps per-entry and inflate caps at 2 MiB
+    ok 1 - keeps per-entry and inflate caps at 2 MiB
+      ---
+      duration_ms: 0.692052
+      type: 'test'
+      ...
+    # Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+    not ok 2 - keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+      ---
+      duration_ms: 0.738006
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/zip-size-caps-lock.test.mjs:19:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 6291456
+        - 15728640
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 15728640
+      actual: 6291456
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/zip-size-caps-lock.test.mjs:21:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+    ok 3 - keeps ZIP file and PDF stream counts bounded
+      ---
+      duration_ms: 0.20164
+      type: 'test'
+      ...
+    1..3
+not ok 1600 - zip size caps lock
+  ---
+  duration_ms: 2.488655
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/scripts/zip-size-caps-lock.test.mjs:13:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 2.293172
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 1.939706
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.369463
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.196561
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 5.867446
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2059
+# fail 119
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 116134.876353
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -E "^not ok|^# fail" | head -30
+not ok 1 - accelerometer permissions deny lock
+not ok 11 - all-screens-capture permissions deny lock
+not ok 12 - ambient-light-sensor permissions deny lock
+not ok 19 - attribution-reporting permissions deny lock
+not ok 22 - battery permissions deny lock
+not ok 23 - bluetooth permissions deny lock
+not ok 53 - browser-install permissions deny lock
+not ok 95 - browsing-topics permissions deny lock
+not ok 99 - canonical keys lock
+not ok 101 - capture permissions deny lock
+not ok 102 - captured-surface-control permissions deny lock
+not ok 103 - ch-device-memory permissions deny lock
+not ok 104 - ch-downlink permissions deny lock
+not ok 105 - ch-dpr permissions deny lock
+not ok 106 - ch-ect permissions deny lock
+not ok 107 - ch-lang permissions deny lock
+not ok 108 - ch-prefers-color-scheme permissions deny lock
+not ok 109 - ch-prefers-reduced-motion permissions deny lock
+not ok 110 - ch-rtt permissions deny lock
+not ok 111 - ch-save-data permissions deny lock
+not ok 112 - ch-ua-arch permissions deny lock
+not ok 113 - ch-ua-bitness permissions deny lock
+not ok 114 - ch-ua-form-factors permissions deny lock
+not ok 115 - ch-ua-full-version-list permissions deny lock
+not ok 116 - ch-ua-full-version permissions deny lock
+not ok 117 - ch-ua-high-entropy-values permissions deny lock
+not ok 118 - ch-ua-mobile permissions deny lock
+not ok 119 - ch-ua-model permissions deny lock
+not ok 120 - ch-ua permissions deny lock
+not ok 121 - ch-ua-platform permissions deny lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -c "permissions deny lock"
+208
+[0m
+[0m→ [0mRead repo/scripts/zip-size-caps-lock.test.mjs
+[0m→ [0mRead repo/src/server/zip-bounded.ts
+[0m
+[0m← [0mEdit repo/src/server/zip-bounded.ts
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/zip-bounded.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/zip-bounded.ts
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/zip-bounded.ts
+@@ -7,9 +7,9 @@
+ export const MAX_INFLATE_OUTPUT_BYTES = 2 * 1024 * 1024;
+ export const MAX_EXTRACTED_TEXT_CHARS = 512 * 1024;
+ export const MAX_PDF_STREAMS = 80;
+ /** Cumulative decompressed PDF bytes across all streams. Not 80 × 2 MiB. */
+-export const MAX_PDF_DECOMPRESSED_TOTAL_BYTES = 6 * 1024 * 1024;
++export const MAX_PDF_DECOMPRESSED_TOTAL_BYTES = 15 * 1024 * 1024;
+ export const MAX_PARSE_MS = 3_000;
+ /** Cap on XLSX sharedStrings entries before parse aborts. */
+ export const MAX_XLSX_SHARED_STRINGS = 20_000;
+ /** Cap on XLSX worksheet cells visited before parse aborts. */
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | tail -20
+ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.226252
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 14.561099
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2060
+# fail 118
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 130113.978574
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -B 5 "not ok.*permissions deny lock" | head -40
+---
+      duration_ms: 0.426009
+      type: 'test'
+      ...
+    1..2
+not ok 1 - accelerometer permissions deny lock
+--
+      ---
+      duration_ms: 0.452279
+      type: 'test'
+      ...
+    1..2
+not ok 11 - all-screens-capture permissions deny lock
+--
+      ---
+      duration_ms: 0.368126
+      type: 'test'
+      ...
+    1..2
+not ok 12 - ambient-light-sensor permissions deny lock
+--
+      ---
+      duration_ms: 5.781848
+      type: 'test'
+      ...
+    1..2
+not ok 19 - attribution-reporting permissions deny lock
+--
+      ---
+      duration_ms: 0.269946
+      type: 'test'
+      ...
+    1..2
+not ok 22 - battery permissions deny lock
+--
+      ---
+      duration_ms: 1.279753
+      type: 'test'
+      ...
+    1..2
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && find . -name "*.test.mjs" -o -name "*.test.ts" | xargs grep -l "permissions deny lock" | head -5
+./scripts/compute-pressure-permissions-deny-lock.test.mjs
+./scripts/browser-install-permissions-deny-lock.test.mjs
+./scripts/gamepad-permissions-deny-lock.test.mjs
+./scripts/ch-prefers-reduced-motion-permissions-deny-lock.test.mjs
+./scripts/bluetooth-permissions-deny-lock.test.mjs
+xargs: grep: terminated by signal 13
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -E "# fail|# pass" | tail -5
+# pass 2060
+# fail 118
+[0m
+[0m→ [0mRead repo/scripts/accelerometer-permissions-deny-lock.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat src/server/security-headers.ts | grep -A 5 "Permissions-Policy"
+"Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+
+export function buildCsp(nonce?: string): string {
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && find scripts -name "*permissions-deny-lock*" | wc -l
+105
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && head -10 scripts/accelerometer-permissions-deny-lock.test.mjs scripts/bluetooth-permissions-deny-lock.test.mjs scripts/battery-permissions-deny-lock.test.mjs
+==> scripts/accelerometer-permissions-deny-lock.test.mjs <==
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("accelerometer permissions deny lock", () => {
+  it("Permissions-Policy includes accelerometer=() once", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.equal((pp.match(/accelerometer=\(\)/g) || []).length, 1);
+  });
+  it("SECURITY.md documents accelerometer=()", () => {
+
+==> scripts/bluetooth-permissions-deny-lock.test.mjs <==
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+
+describe("bluetooth permissions deny lock", () => {
+  it("Permissions-Policy includes bluetooth=()", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.ok(pp.includes("bluetooth=()"));
+
+==> scripts/battery-permissions-deny-lock.test.mjs <==
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("battery permissions deny lock", () => {
+  it("Permissions-Policy includes battery=() once", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.equal((pp.match(/battery=\(\)/g) || []).length, 1);
+  });
+  it("SECURITY.md documents battery=()", () => {
+[0m
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && for f in scripts/*permissions-deny-lock.test.mjs; do grep -h "Permissions-Policy includes" "$f" | head -1; done | sort -u
+it("Permissions-Policy includes accelerometer=() once", () => {
+  it("Permissions-Policy includes ambient-light-sensor=() once", () => {
+  it("Permissions-Policy includes attribution-reporting=() once", () => {
+  it("Permissions-Policy includes battery=() once", () => {
+  it("Permissions-Policy includes bluetooth=()", () => {
+  it("Permissions-Policy includes browsing-topics=() once", () => {
+  it("Permissions-Policy includes ch-dpr=() once", () => {
+  it("Permissions-Policy includes ch-ua-arch=() once", () => {
+  it("Permissions-Policy includes ch-ua-bitness=() once", () => {
+  it("Permissions-Policy includes ch-ua-full-version=() once", () => {
+  it("Permissions-Policy includes ch-ua-high-entropy-values=() once", () => {
+  it("Permissions-Policy includes ch-ua-mobile=() once", () => {
+  it("Permissions-Policy includes ch-ua-model=() once", () => {
+  it("Permissions-Policy includes ch-ua-platform=() once", () => {
+  it("Permissions-Policy includes ch-ua-wow64=() once", () => {
+  it("Permissions-Policy includes ch-viewport-height=() once", () => {
+  it("Permissions-Policy includes ch-viewport-width=() once", () => {
+  it("Permissions-Policy includes clipboard-read=()", () => {
+  it("Permissions-Policy includes clipboard-write=()", () => {
+  it("Permissions-Policy includes compute-pressure=() once", () => {
+  it("Permissions-Policy includes conversion-measurement=() once", () => {
+  it("Permissions-Policy includes cross-origin-isolated=() once", () => {
+  it("Permissions-Policy includes display-capture=()", () => {
+  it("Permissions-Policy includes document-domain=() once", () => {
+  it("Permissions-Policy includes encrypted-media=() once", () => {
+  it("Permissions-Policy includes execution-while-not-rendered=() once", () => {
+  it("Permissions-Policy includes execution-while-out-of-viewport=() once", () => {
+  it("Permissions-Policy includes fullscreen=() once", () => {
+  it("Permissions-Policy includes gamepad=() once", () => {
+  it("Permissions-Policy includes gyroscope=() once", () => {
+  it("Permissions-Policy includes hid=()", () => {
+  it("Permissions-Policy includes identity-credentials-get=() once", () => {
+  it("Permissions-Policy includes idle-detection=() once", () => {
+  it("Permissions-Policy includes join-ad-interest-group=() once", () => {
+  it("Permissions-Policy includes keyboard-map=() once", () => {
+  it("Permissions-Policy includes local-fonts=() once", () => {
+  it("Permissions-Policy includes magnetometer=() once", () => {
+  it("Permissions-Policy includes midi=()", () => {
+  it("Permissions-Policy includes otp-credentials=() once", () => {
+  it("Permissions-Policy includes payment=()", () => {
+  it("Permissions-Policy includes picture-in-picture=() once", () => {
+  it("Permissions-Policy includes private-aggregation=() once", () => {
+  it("Permissions-Policy includes private-state-token-issuance=() once", () => {
+  it("Permissions-Policy includes private-state-token-redemption=() once", () => {
+  it("Permissions-Policy includes publickey-credentials-create=() once", () => {
+  it("Permissions-Policy includes publickey-credentials-get=() once", () => {
+  it("Permissions-Policy includes run-ad-auction=() once", () => {
+  it("Permissions-Policy includes screen-wake-lock=() once", () => {
+  it("Permissions-Policy includes serial=()", () => {
+  it("Permissions-Policy includes shared-storage=() once", () => {
+  it("Permissions-Policy includes shared-storage-select-url=() once", () => {
+  it("Permissions-Policy includes speaker-selection=() once", () => {
+  it("Permissions-Policy includes sync-script=() once", () => {
+  it("Permissions-Policy includes sync-xhr=() once", () => {
+  it("Permissions-Policy includes top-level-storage-access=() once", () => {
+  it("Permissions-Policy includes trust-token-redemption=() once", () => {
+  it("Permissions-Policy includes unload=() once", () => {
+  it("Permissions-Policy includes usb=()", () => {
+  it("Permissions-Policy includes vertical-scroll=() once", () => {
+  it("Permissions-Policy includes view-transition=() once", () => {
+  it("Permissions-Policy includes web-share=() once", () => {
+  it("Permissions-Policy includes window-management=()", () => {
+  it("Permissions-Policy includes xr-spatial-tracking=()", () => {
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && for f in scripts/*permissions-deny-lock.test.mjs; do grep -oP "includes '\K[^']+" "$f" | head -1; done | sort -u | head -120
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && for f in scripts/*permissions-deny-lock.test.mjs; do grep -o "includes '[^']*" "$f" | head -1 | sed "s/includes '//" | sed "s/)//"; done | sort -u
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && for f in scripts/*permissions-deny-lock.test.mjs; do grep "includes" "$f" | head -1 | grep -oP "includes.*?\('([^']+)'"; done | sed "s/.*('\(.*\)'.*/\1/"
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/accelerometer-permissions-deny-lock.test.mjs
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("accelerometer permissions deny lock", () => {
+  it("Permissions-Policy includes accelerometer=() once", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.equal((pp.match(/accelerometer=\(\)/g) || []).length, 1);
+  });
+  it("SECURITY.md documents accelerometer=()", () => {
+    assert.ok(readFileSync("SECURITY.md", "utf8").includes("accelerometer=()"));
+  });
+});
+[0m
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+@@ -6,9 +6,9 @@
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), camera=(), microphone=(), geolocation=()",
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && for f in scripts/*permissions-deny-lock.test.mjs; do grep -o "includes '[^']*" "$f" | head -1; done | sed "s/includes '//" | sed "s/)//"
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && for f in scripts/*permissions-deny-lock.test.mjs; do grep "includes" "$f" | head -1 | grep -oE "\(\)" | head -1; done
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+()
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && for f in scripts/*permissions-deny-lock.test.mjs; do grep -h "includes" "$f" | head -1 | sed -E "s/.*includes ([^=]+)=\(\).*/\1/" | sed -E "s/.*includes ([^=]+)=\(\).*/\1/"; done | sort -u
+accelerometer
+all-screens-capture
+ambient-light-sensor
+attribution-reporting
+battery
+bluetooth
+browser-install
+browsing-topics
+capture
+captured-surface-control
+ch-device-memory
+ch-downlink
+ch-dpr
+ch-ect
+ch-lang
+ch-prefers-color-scheme
+ch-prefers-reduced-motion
+ch-rtt
+ch-save-data
+ch-ua
+ch-ua-arch
+ch-ua-bitness
+ch-ua-form-factors
+ch-ua-full-version
+ch-ua-full-version-list
+ch-ua-high-entropy-values
+ch-ua-mobile
+ch-ua-model
+ch-ua-platform
+ch-ua-platform-version
+ch-ua-wow64
+ch-viewport-height
+ch-viewport-width
+ch-width
+clipboard-read
+clipboard-write
+compute-pressure
+conversion-measurement
+cross-origin-isolated
+deferred-fetch
+deferred-fetch-minimal
+digital-credentials-get
+display-capture
+document-domain
+document-write
+encrypted-media
+execution-while-not-rendered
+execution-while-out-of-viewport
+focus-without-user-activation
+fullscreen
+gamepad
+gyroscope
+hid
+html-attribute-or-property
+identity-credentials-create
+identity-credentials-get
+idle-detection
+interest-cohort
+join-ad-interest-group
+keyboard-map
+language-detector
+layout-animations
+legacy-image-formats
+local-fonts
+magnetometer
+manual-text
+midi
+navigation-override
+on-device-speech-recognition
+otp-credentials
+oversized-images
+payment
+picture-in-picture
+private-aggregation
+private-state-token-issuance
+private-state-token-redemption
+publickey-credentials-create
+publickey-credentials-get
+rewriter
+run-ad-auction
+screen-wake-lock
+serial
+shared-storage
+shared-storage-select-url
+smart-card
+speaker-selection
+summarizer
+sync-script
+sync-xhr
+top-level-storage-access
+translator
+trust-token-redemption
+unload
+unoptimized-images
+usb
+vertical-scroll
+view-transition
+wake-lock
+web-share
+webxr
+window-management
+writer
+xr
+xr-spatial-tracking
+[0m
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+@@ -6,9 +6,9 @@
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "accelerometer=(), camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), ambient-light-sensor=(), attribution-reporting=(), battery=(), bluetooth=(), browsing-topics=(), camera=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), cross-origin-isolated=(), deferred-fetch=(), deferred-fetch-minimal=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-create=(), identity-credentials-get=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), midi=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), payment=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), wake-lock=(), web-share=(), webxr=(), window-management=(), writer=(), xr=(), xr-spatial-tracking=()",
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+
+[0m
+[0m→ [0mRead repo/SECURITY.md
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -E "# fail|# pass" | tail -5
+# pass 2160
+# fail 18
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep "not ok.*permissions deny lock" -c
+4
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep "not ok.*permissions deny lock"
+not ok 11 - all-screens-capture permissions deny lock
+not ok 53 - browser-install permissions deny lock
+not ok 1447 - payment permissions deny lock
+not ok 1560 - usb permissions deny lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/all-screens-capture-permissions-deny-lock.test.mjs
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("all-screens-capture permissions deny lock", () => {
+  it("includes all-screens-capture=() once", () => {
+    const tokens = WALLET_SECURITY_HEADERS["Permissions-Policy"].split(",").map((p) => p.trim().split("=")[0]);
+    assert.equal(tokens.filter((t) => t === "all-screens-capture").length, 1);
+  });
+  it("SECURITY.md documents all-screens-capture=()", () => {
+    assert.ok(readFileSync("SECURITY.md", "utf8").includes("all-screens-capture=()"));
+  });
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && grep -o "all-screens-capture" src/server/security-headers.ts
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && python3 -c "
+import re
+with open('SECURITY.md') as f:
+    sec = f.read()
+with open('src/server/security-headers.ts') as f:
+    hdr = f.read()
+
+# Extract all directives from SECURITY.md Permissions-Policy
+sec_directives = set(re.findall(r'([a-z-]+)=\(\)', sec))
+hdr_directives = set(re.findall(r'([a-z-]+)=\(\)', hdr))
+
+missing_from_header = sec_directives - hdr_directives
+print('In SECURITY.md but NOT in security-headers.ts:')
+for d in sorted(missing_from_header):
+    print(d)
+
+extra_in_header = hdr_directives - sec_directives
+print('In security-headers.ts but NOT in SECURITY.md:')
+for d in sorted(extra_in_header):
+    print(d)
+"
+
+In SECURITY.md but NOT in security-headers.ts:
+all-screens-capture
+autoplay
+browser-install
+microphone
+storage-access
+In security-headers.ts but NOT in SECURITY.md:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && python3 -c "
+import re
+with open('src/server/security-headers.ts') as f:
+    hdr = f.read()
+
+# Extract all directives from test files
+import glob
+test_directives = set()
+for f in glob.glob('scripts/*permissions-deny-lock.test.mjs'):
+    with open(f) as tf:
+        content = tf.read()
+        for m in re.finditer(r'includes\s+([a-z-]+)=\(\)', content):
+            test_directives.add(m.group(1))
+        for m in re.finditer(r'includes\s+([a-z-]+)=\(\)', content):
+            test_directives.add(m.group(1))
+        for m in re.finditer(r'once.*([a-z-]+)=\(\)', content):
+            test_directives.add(m.group(1))
+
+hdr_directives = set(re.findall(r'([a-z-]+)=\(\)', hdr))
+
+missing = test_directives - hdr_directives
+print('In tests but NOT in header:')
+for d in sorted(missing):
+    print(d)
+
+extra = hdr_directives - test_directives
+print('In header but NOT in tests:')
+for d in sorted(extra):
+    print(d)
+"
+In tests but NOT in header:
+all-screens-capture
+browser-install
+In header but NOT in tests:
+camera
+geolocation
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/browser-install-permissions-deny-lock.test.mjs
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("browser-install permissions deny lock", () => {
+  it("includes browser-install=() once", () => {
+    const tokens = WALLET_SECURITY_HEADERS["Permissions-Policy"].split(",").map((p) => p.trim().split("=")[0]);
+    assert.equal(tokens.filter((t) => t === "browser-install").length, 1);
+  });
+  it("SECURITY.md documents browser-install=()", () => {
+    assert.ok(readFileSync("SECURITY.md", "utf8").includes("browser-install=()"));
+  });
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/payment-permissions-deny-lock.test.mjs
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+
+describe("payment permissions deny lock", () => {
+  it("Permissions-Policy includes payment=()", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.ok(pp.includes("payment=()"));
+    assert.ok(pp.includes("camera=()"));
+    assert.ok(pp.includes("microphone=()"));
+    assert.ok(pp.includes("geolocation=()"));
+  });
+
+  it("SECURITY.md documents payment=()", () => {
+    const sec = readFileSync("SECURITY.md", "utf8");
+    assert.ok(sec.includes("payment=()"));
+  });
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat scripts/usb-permissions-deny-lock.test.mjs
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+
+describe("usb permissions deny lock", () => {
+  it("Permissions-Policy includes usb=()", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.ok(pp.includes("usb=()"));
+    assert.ok(pp.includes("payment=()"));
+    assert.ok(pp.includes("camera=()"));
+    assert.ok(pp.includes("microphone=()"));
+    assert.ok(pp.includes("geolocation=()"));
+  });
+
+  it("SECURITY.md documents usb=()", () => {
+    const sec = readFileSync("SECURITY.md", "utf8");
+    assert.ok(sec.includes("usb=()"));
+  });
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && python3 -c "
+import re
+with open('src/server/security-headers.ts') as f:
+    hdr = f.read()
+
+hdr_directives = set(re.findall(r'([a-z-]+)=\(\)', hdr))
+test_directives = {'payment', 'usb', 'camera', 'microphone', 'geolocation', 'bluetooth', 'midi', 'serial', 'hid', 'display-capture', 'window-management', 'xr-spatial-tracking', 'clipboard-read', 'clipboard-write', 'accelerometer', 'gyroscope', 'magnetometer', 'ambient-light-sensor', 'screen-wake-lock', 'idle-detection', 'picture-in-picture', 'autoplay', 'encrypted-media', 'fullscreen', 'web-share', 'sync-xhr', 'battery', 'gamepad', 'local-fonts', 'speaker-selection', 'storage-access', 'top-level-storage-access', 'otp-credentials', 'cross-origin-isolated', 'document-domain', 'view-transition', 'identity-credentials-get', 'execution-while-out-of-viewport', 'execution-while-not-rendered', 'browsing-topics', 'shared-storage', 'attribution-reporting', 'private-state-token-issuance', 'private-state-token-redemption', 'publickey-credentials-create', 'publickey-credentials-get', 'compute-pressure', 'keyboard-map', 'unload', 'interest-cohort', 'join-ad-interest-group', 'run-ad-auction', 'private-aggregation', 'shared-storage-select-url', 'ch-ua-high-entropy-values', 'trust-token-redemption', 'conversion-measurement', 'vertical-scroll', 'sync-script', 'ch-ua-arch', 'ch-ua-bitness', 'ch-ua-full-version', 'ch-ua-platform', 'ch-ua-mobile', 'ch-ua-model', 'ch-ua-wow64', 'ch-viewport-height', 'ch-viewport-width', 'ch-dpr', 'ch-device-memory', 'ch-prefers-reduced-motion', 'ch-save-data', 'document-write', 'xr', 'focus-without-user-activation', 'navigation-override', 'ch-ua-full-version-list', 'ch-ua-platform-version', 'ch-prefers-color-scheme', 'ch-width', 'ch-rtt', 'ch-downlink', 'ch-ect', 'layout-animations', 'legacy-image-formats', 'all-screens-capture', 'browser-install', 'autoplay', 'storage-access'}
+
+missing = test_directives - hdr_directives
+print('In tests but NOT in header:')
+for d in sorted(missing):
+    print(d)
+
+extra = hdr_directives - test_directives
+print('In header but NOT in tests:')
+for d in sorted(extra):
+    print(d)
+"
+In tests but NOT in header:
+all-screens-capture
+autoplay
+browser-install
+ch-ua-wow64
+microphone
+storage-access
+In header but NOT in tests:
+capture
+captured-surface-control
+ch-lang
+ch-ua
+ch-ua-form-factors
+deferred-fetch
+deferred-fetch-minimal
+digital-credentials-get
+html-attribute-or-property
+identity-credentials-create
+language-detector
+manual-text
+on-device-speech-recognition
+oversized-images
+rewriter
+smart-card
+summarizer
+translator
+unoptimized-images
+wake-lock
+webxr
+writer
+[0m
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+@@ -6,9 +6,9 @@
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "accelerometer=(), ambient-light-sensor=(), attribution-reporting=(), battery=(), bluetooth=(), browsing-topics=(), camera=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), cross-origin-isolated=(), deferred-fetch=(), deferred-fetch-minimal=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-create=(), identity-credentials-get=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), midi=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), payment=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), wake-lock=(), web-share=(), webxr=(), window-management=(), writer=(), xr=(), xr-spatial-tracking=()",
++  "Permissions-Policy": "accelerometer=(), all-screens-capture=(), ambient-light-sensor=(), attribution-reporting=(), autoplay=(), battery=(), bluetooth=(), browser-install=(), browsing-topics=(), camera=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), cross-origin-isolated=(), deferred-fetch=(), deferred-fetch-minimal=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-create=(), identity-credentials-get=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), microphone=(), midi=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), payment=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), storage-access=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), wake-lock=(), web-share=(), webxr=(), window-management=(), writer=(), xr=(), xr-spatial-tracking=()",
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -E "# fail|# pass" | tail -5
+# pass 2165
+# fail 13
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep "not ok"
+not ok 1 - keeps the 26 canonical keys
+not ok 99 - canonical keys lock
+not ok 132 - an unobservable dev server is indeterminate, not agreement
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 975 - active org nav links set aria-current=page
+not ok 982 - load demonstration pack is announced and marked busy
+not ok 1061 - questionnaire detail load exposes busy status
+not ok 1145 - skip link reveals on focus-visible
+    not ok 1 - exports the private-wallet browser headers
+    not ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+not ok 1510 - security headers lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -B 5 "not ok 1 - keeps the 26 canonical keys"
+duration_ms: 4.590947
+  type: 'suite'
+  ...
+# Subtest: canonical keys lock
+    # Subtest: keeps the 26 canonical keys
+    not ok 1 - keeps the 26 canonical keys
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && find . -name "*canonical*" -type f | head -10
+./src/domain/canonical.ts
+./src/domain/canonical.test.ts
+./node_modules/fast-uri/test/ipv6-canonical.test.js
+./scripts/canonical-keys-lock.test.mjs
+./scripts/hcv-canonical-keys-complete.test.mjs
+./scripts/canonical-key-max-lock.test.mjs
+[0m
+[0m→ [0mRead repo/scripts/canonical-keys-lock.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node -e "import { CANONICAL_KEYS } from './src/domain/canonical.ts'; console.log(Object.keys(CANONICAL_KEYS).length); console.log(Object.keys(CANONICAL_KEYS).sort().join('\n'))" 2>&1 | head -40
+26
+BUSINESS_CONTINUITY_PLAN
+COMPANY_NUMBER
+CPCS_EXPIRY
+CPCS_STATUS
+CSCS_EXPIRY
+CSCS_STATUS
+CYBER_ESSENTIALS_EXPIRY
+CYBER_ESSENTIALS_STATUS
+EL_EXPIRY
+EL_LIMIT
+EMPLOYEES
+ISO9001_EXPIRY
+ISO9001_STATUS
+ISO_27001_EXPIRY
+ISO_27001_STATUS
+LEGAL_NAME
+LIVING_WAGE
+MOTOR_INSURANCE_EXPIRY
+MOTOR_INSURANCE_LIMIT
+PL_EXPIRY
+PL_LIMIT
+PROFESSIONAL_INDEMNITY_EXPIRY
+PROFESSIONAL_INDEMNITY_LIMIT
+SMAS_EXPIRY
+SMAS_STATUS
+TURNOVER
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node -e "
+import { CANONICAL_KEYS } from './src/domain/canonical.ts';
+console.log('Count:', Object.keys(CANONICAL_KEYS).length);
+console.log('Keys:', Object.keys(CANONICAL_KEYS).sort().join(','));
+console.log('');
+console.log('PL_LIMIT:', CANONICAL_KEYS.PL_LIMIT);
+console.log('PL_EXPIRY:', CANONICAL_KEYS.PL_EXPIRY);
+console.log('EL_LIMIT:', CANONICAL_KEYS.EL_LIMIT);
+console.log('EL_EXPIRY:', CANONICAL_KEYS.EL_EXPIRY);
+console.log('EMPLOYEES:', CANONICAL_KEYS.EMPLOYEES);
+console.log('TURNOVER:', CANONICAL_KEYS.TURNOVER);
+console.log('LEGAL_NAME:', CANONICAL_KEYS.LEGAL_NAME);
+console.log('ISO9001_STATUS:', CANONICAL_KEYS.ISO9001_STATUS);
+console.log('ISO9001_EXPIRY:', CANONICAL_KEYS.ISO9001_EXPIRY);
+console.log('LIVING_WAGE:', CANONICAL_KEYS.LIVING_WAGE);
+console.log('CSCS_STATUS:', CANONICAL_KEYS.CSCS_STATUS);
+console.log('CSCS_EXPIRY:', CANONICAL_KEYS.CSCS_EXPIRY);
+console.log('CPCS_STATUS:', CANONICAL_KEYS.CPCS_STATUS);
+console.log('CPCS_EXPIRY:', CANONICAL_KEYS.CPCS_EXPIRY);
+console.log('SMAS_STATUS:', CANONICAL_KEYS.SMAS_STATUS);
+console.log('SMAS_EXPIRY:', CANONICAL_KEYS.SMAS_EXPIRY);
+console.log('PROFESSIONAL_INDEMNITY_LIMIT:', CANONICAL_KEYS.PROFESSIONAL_INDEMNITY_LIMIT);
+console.log('PROFESSIONAL_INDEMNITY_EXPIRY:', CANONICAL_KEYS.PROFESSIONAL_INDEMNITY_EXPIRY);
+console.log('MOTOR_INSURANCE_LIMIT:', CANONICAL_KEYS.MOTOR_INSURANCE_LIMIT);
+console.log('MOTOR_INSURANCE_EXPIRY:', CANONICAL_KEYS.MOTOR_INSURANCE_EXPIRY);
+console.log('CYBER_ESSENTIALS_STATUS:', CANONICAL_KEYS.CYBER_ESSENTIALS_STATUS);
+console.log('CYBER_ESSENTIALS_EXPIRY:', CANONICAL_KEYS.CYBER_ESSENTIALS_EXPIRY);
+console.log('ISO_27001_STATUS:', CANONICAL_KEYS.ISO_27001_STATUS);
+console.log('ISO_27001_EXPIRY:', CANONICAL_KEYS.ISO_27001_EXPIRY);
+console.log('COMPANY_NUMBER:', CANONICAL_KEYS.COMPANY_NUMBER);
+console.log('BUSINESS_CONTINUITY_PLAN:', CANONICAL_KEYS.BUSINESS_CONTINUITY_PLAN);
+" 2>&1
+Count: 26
+Keys: BUSINESS_CONTINUITY_PLAN,COMPANY_NUMBER,CPCS_EXPIRY,CPCS_STATUS,CSCS_EXPIRY,CSCS_STATUS,CYBER_ESSENTIALS_EXPIRY,CYBER_ESSENTIALS_STATUS,EL_EXPIRY,EL_LIMIT,EMPLOYEES,ISO9001_EXPIRY,ISO9001_STATUS,ISO_27001_EXPIRY,ISO_27001_STATUS,LEGAL_NAME,LIVING_WAGE,MOTOR_INSURANCE_EXPIRY,MOTOR_INSURANCE_LIMIT,PL_EXPIRY,PL_LIMIT,PROFESSIONAL_INDEMNITY_EXPIRY,PROFESSIONAL_INDEMNITY_LIMIT,SMAS_EXPIRY,SMAS_STATUS,TURNOVER
+
+PL_LIMIT: insurance.public_liability.limit
+PL_EXPIRY: insurance.public_liability.expiry
+EL_LIMIT: insurance.employers_liability.limit
+EL_EXPIRY: insurance.employers_liability.expiry
+EMPLOYEES: company.employee_count
+TURNOVER: company.turnover
+LEGAL_NAME: company.legal_name
+ISO9001_STATUS: certification.iso_9001.status
+ISO9001_EXPIRY: certification.iso_9001.expiry
+LIVING_WAGE: policy.living_wage
+CSCS_STATUS: certification.cscs.status
+CSCS_EXPIRY: certification.cscs.expiry
+CPCS_STATUS: certification.cpcs.status
+CPCS_EXPIRY: certification.cpcs.expiry
+SMAS_STATUS: certification.smas.status
+SMAS_EXPIRY: certification.smas.expiry
+PROFESSIONAL_INDEMNITY_LIMIT: insurance.professional_indemnity.limit
+PROFESSIONAL_INDEMNITY_EXPIRY: insurance.professional_indemnity.expiry
+MOTOR_INSURANCE_LIMIT: insurance.motor.limit
+MOTOR_INSURANCE_EXPIRY: insurance.motor.expiry
+CYBER_ESSENTIALS_STATUS: certification.cyber_essentials.status
+CYBER_ESSENTIALS_EXPIRY: certification.cyber_essentials.expiry
+ISO_27001_STATUS: certification.iso_27001.status
+ISO_27001_EXPIRY: certification.iso_27001.expiry
+COMPANY_NUMBER: company.company_number
+BUSINESS_CONTINUITY_PLAN: policy.business_continuity_plan
+[0m
+[0m→ [0mRead repo/src/domain/canonical.ts
+[0m
+[0m← [0mEdit repo/src/domain/canonical.ts
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/canonical.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/canonical.ts
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/domain/canonical.ts
+@@ -19,10 +19,10 @@
+ SMAS_STATUS: "certification.smas.status",
+ SMAS_EXPIRY: "certification.smas.expiry",
+ PROFESSIONAL_INDEMNITY_LIMIT: "insurance.professional_indemnity.limit",
+ PROFESSIONAL_INDEMNITY_EXPIRY: "insurance.professional_indemnity.expiry",
+-MOTOR_INSURANCE_LIMIT: "insurance.motor.limit",
+-MOTOR_INSURANCE_EXPIRY: "insurance.motor.expiry",
++MOTOR_INSURANCE_LIMIT: "insurance.motor_insurance.limit",
++MOTOR_INSURANCE_EXPIRY: "insurance.motor_insurance.expiry",
+ CYBER_ESSENTIALS_STATUS: "certification.cyber_essentials.status",
+ CYBER_ESSENTIALS_EXPIRY: "certification.cyber_essentials.expiry",
+ ISO_27001_STATUS: "certification.iso_27001.status",
+ ISO_27001_EXPIRY: "certification.iso_27001.expiry",
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -E "# fail|# pass" | tail -5
+# pass 2166
+# fail 12
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep "not ok" | grep -v "not ok [0-9]* - " | head -30
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep "not ok"
+not ok 1 - keeps the 26 canonical keys
+not ok 99 - canonical keys lock
+not ok 132 - an unobservable dev server is indeterminate, not agreement
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 975 - active org nav links set aria-current=page
+not ok 982 - load demonstration pack is announced and marked busy
+not ok 1061 - questionnaire detail load exposes busy status
+not ok 1145 - skip link reveals on focus-visible
+    not ok 1 - exports the private-wallet browser headers
+    not ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+not ok 1510 - security headers lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && node -e "
+import { CANONICAL_KEYS } from './src/domain/canonical.ts';
+console.log('Count:', Object.keys(CANONICAL_KEYS).length);
+console.log('MOTOR_INSURANCE_LIMIT:', CANONICAL_KEYS.MOTOR_INSURANCE_LIMIT);
+console.log('MOTOR_INSURANCE_EXPIRY:', CANONICAL_KEYS.MOTOR_INSURANCE_EXPIRY);
+"
+Count: 26
+MOTOR_INSURANCE_LIMIT: insurance.motor_insurance.limit
+MOTOR_INSURANCE_EXPIRY: insurance.motor_insurance.expiry
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -B 5 "security headers lock"
+ok 1509 - secret scan
+  ---
+  duration_ms: 14.48496
+  type: 'suite'
+  ...
+# Subtest: security headers lock
+--
+      ---
+      duration_ms: 0.26761
+      type: 'test'
+      ...
+    1..4
+not ok 1510 - security headers lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && find . -name "*security*headers*lock*"
+./specs/ew-1027-security-headers-lock-sync
+./specs/ew-1025-14-security-headers-lock
+./scripts/security-headers-lock.test.mjs
+[0m
+[0m→ [0mRead repo/scripts/security-headers-lock.test.mjs
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/server/security-headers.ts
+@@ -1,9 +1,8 @@
+ /** Browser headers for a privately operated wallet. */
+ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+-  "Referrer-Policy": "strict-origin-when-cross-origin",
+-  "X-Frame-Options": "DENY",
++  "Referrer-Policy": "no-referrer",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && timeout 180 npm test 2>&1 | grep -E "# fail|# pass" | tail -5
+# pass 2167
+# fail 11
+[0m

@@ -1,0 +1,211 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead out
+[0m→ [0mRead .
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/HOSTING.md
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/RESULT.md
+[0m✗ [0mRead out/MISSION_COMPLETE failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+
+Did you mean one of these?
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0135
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1834
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0434
+[0m→ [0mRead out/raw
+[0m→ [0mRead repo
+[0m→ [0mRead out/council-GO.md
+Let me understand the current state. The verifier rejected the MISSION_COMPLETE because it has no pass count. Let me check the repo and run the required tests.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121 && git log --oneline -5
+dd2ca3c4 fix(lint): escape quotes on AI receptionist page after rebase
+d566fd75 chore(forms): ignore generated Next lint noise; contain honeypot
+89aec755 feat(forms): contract-compliant stub endpoint without email claims
+5dc7ce96 fix(home): align homepage copy to COPY_PACK v3.3 (#18)
+a9b7c58b perf: budget + Inter 400/600 + server header (Shell CTA chrome) (#7)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121 && git status
+On branch cursor/form-stub-endpoint-0825
+Your branch is up to date with 'origin/cursor/form-stub-endpoint-0825'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   ../../package.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	../../.claude/
+	../../9
+	../../ANDY-ACTION-REGISTER-DELL-MIGRATION-2026-11-12.md
+	../../Backlog temp droplet - Postgres dump - 2026-11-15/
+	../../Cloudflare security-audit-skill - pinned sandbox copy - 2026-11-12 (report-only)/
+	../../Dell - sudo steps for Andy - 2026-11-12.md
+	../../Dell disk - proposed deletion list - 2026-11-12.md
+	../../Dell disk - proposed deletion list - 2026-11-12.md.bak-cont-20261112T1355Z
+	../../Dell disk - proposed deletion list - 2026-11-12.md.bak-disk-survey-20261112T1931Z
+	../../Dell gap-close progress - 2026-11-12.md
+	../../Droplet-only loops and housekeeping - jobs and OmniRoute - copy 2026-11-12 (NOT STARTED)/
+	../../Holiday Let Operator live pilot - OmniRoute droplet - copy 2026-11-12 (NOT STARTED)
+	../../INDEX.md
+	../../INDEX.md.bak-15-start-20261111T173528
+	../../INDEX.md.bak-20261111T0750Z
+	../../INDEX.md.bak-bew-service-20261111T172612
+	../../INDEX.md.bak-finaltopup-20261115T1129Z
+	../../INDEX.md.bak-gap-report-20261111T192101
+	../../INDEX.md.bak-gapclose-1-4-20261112T1124Z
+	../../INDEX.md.bak-gapclose-cont-20261112T1355Z
+	../../INDEX.md.bak-gapclose-finish-20261112T1308Z
+	../../INDEX.md.bak-migration-steps-20261111T2027
+	../../INDEX.md.bak-migration-steps-final-20261111T2050
+	../../INDEX.md.bak-psca-service-20261111T1721Z
+	../../INDEX.md.bak-runnerstage-20261114T161448Z
+	../../INDEX.md.bak-welsh-20261111T1730Z
+	../../Migration gap report - droplets vs Dell - 2026-11-11.md
+	../../OmniRoute - Database backup - 2026-11-11 22-20 GMT - pulled 2026-11-15/
+	../../PentAGI and OpenTerminal - local Dell copy - 2026-11-12
+	../../TEST_COUNTS_REPORT.md
+	../../Welsh Celtic Training - index - 2026-11-11/
+	../../Welsh Celtic Training - welsh-build-2 workdir and evidence - box - 2026-11-11/
+	../../agent-skills/
+	../../backups/
+	../../dell-services/
+	../../dell-watch/
+	../../estate-artifacts/
+	../../estate-scripts/
+	../../estate-shared-utils/
+	../../evidence-packs/
+	../../extbot - Instinct workdir and units - jobs droplet - copy 2026-11-12 (NOT STARTED)
+	../../factory-runs/
+	../../factory-tasks-archive/
+	../
+	../../factory-trial-gal-central-ai-agent-config-manager-17-agents-ya-20261117/
+	../../factory-trial-learn-ai-automation-from-scratch-in-three-months-20261119/
+	../../factory-tuning-r1-20261115/
+	../../gate-worktrees-20261121/
+	../../golden-line-email-cleaner/
+	../../golden-line-en-gb-test-line/
+	../../golden-line-stt-bench/
+	../../hcv-source-readonly/
+	../../heimdall-adapters.mjs.bak-eggbot-20261118-0844
+	../../heimdall/
+	../../jjobs-work-dell/
+	../../jobs-work-dell/
+	../../jobs-work/
+	../../langfuse-3.39.2.tgz
+	../../library-tools/
+	../../library/
+	../../migration-staging/
+	../../omniroute/
+	../../package-lock.json
+	../../public/
+	../../readiness/
+	../../repo/
+	../../repos-github/
+	../../repos/
+	../../research/
+	../../runners/
+	../../scratch/
+	../../skills-roll-20261111.tgz
+	../../skills-roll-20261111/
+	../../stt-improve-loop/
+	../../tailscale-serve.bak-dellomni-20261114T161241Z.json
+	../../test-results/
+	../../video-inbox/
+	../../video-outbox/
+	../../work/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121 && cat out/raw/SHA
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121 && cat out/raw/test-final-20261122-224817-exit-code.txt && echo "---" && cat out/raw/test-final-20261122-224817-output.log | head -50
+1
+---
+# rt test-final | 20261122-224817 | sha 12fe0f9513da6bd1ec32fef7151c933b73bb61bd | cwd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+# cmd: npm run test
+
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 0.8053
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 4.930679
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 6.963002
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 3.851643
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.264623
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.610031
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.334965
+      type: 'test'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121 && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts 2>&1 | tail -30
+TAP version 13
+1..0
+# tests 0
+# suites 0
+# pass 0
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11.427283
+Could not find 'src/lib/app-data/app-data.test.ts, src/lib/app-data/readiness-schedule.test.ts, src/lib/auth/gate-identity.test.ts, src/lib/auth/sign-in-gate.test.ts, src/lib/auth/signup-policy.test.ts, src/lib/format-wallet-timestamp.test.ts'
+[0m
+[0m✱ [0mGlob "scripts/**/*.test.mjs"[90m in repo · 100 matches[0m
+[0m✱ [0mGlob "**/*.test.mjs"[90m in repo · 100 matches[0m
+[0m
+[0m$ [0mwhich rt 2>/dev/null; echo "---"; type rt 2>/dev/null; echo "---"; cd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo && cat package.json | grep -A5 '"test"'
+/home/andy/bin/rt
+---
+rt is /home/andy/bin/rt
+---
+    "test": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts",
+    "test:domain": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test src/domain/*.test.ts src/domain/v2/*.test.ts src/domain/v2/agent-loop/*.test.ts",
+    "test:integration": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/*.test.mjs",
+    "test:control-mcp": "node --test tests/control-mcp.test.mjs",
+    "test:app": "npm run test:domain && npm run test:integration",
+    "test:mutation-isolation": "node scripts/mutation-isolation.mjs",
+[0m
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mRead /home/andy/bin/rt failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

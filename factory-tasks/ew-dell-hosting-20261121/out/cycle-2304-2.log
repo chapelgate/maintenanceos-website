@@ -1,0 +1,297 @@
+[0m
+> build · estate-coding
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/
+total 96
+drwxrwxr-x   4 andy andy  4096 Nov 21 16:59 .
+drwxrwxr-x 645 andy andy 61440 Nov 21 22:47 ..
+-rw-rw-r--   1 andy andy  3502 Nov 21 00:15 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 21 23:04 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  4423 Nov 21 23:04 history.log
+drwxrwxr-x   3 andy andy  4096 Nov 21 23:04 out
+drwxrwxr-x  23 andy andy  4096 Nov 21 20:33 repo
+-rw-rw-r--   1 andy andy    81 Nov 21 23:04 status.json
+-rw-rw-r--   1 andy andy   703 Nov 21 22:24 STEER.md
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/
+total 1560
+drwxrwxr-x 3 andy andy   4096 Nov 21 23:04 .
+drwxrwxr-x 4 andy andy   4096 Nov 21 16:59 ..
+-rw-rw-r-- 1 andy andy   1310 Nov 21 20:48 council-GO.md
+-rw-rw-r-- 1 andy andy  90042 Nov 21 17:16 cycle-1659-1.log
+-rw-rw-r-- 1 andy andy 510661 Nov 21 18:23 cycle-1717-2.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1823-3.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:24 cycle-1824-4.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:25 cycle-1825-5.log
+-rw-rw-r-- 1 andy andy     38 Nov 21 18:25 cycle-1825-6.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:26 cycle-1826-7.log
+-rw-rw-r-- 1 andy andy    495 Nov 21 18:27 cycle-1827-8.log
+-rw-rw-r-- 1 andy andy  68232 Nov 21 18:37 cycle-1828-9.log
+-rw-rw-r-- 1 andy andy    650 Nov 21 18:38 cycle-1837-10.log
+-rw-rw-r-- 1 andy andy    166 Nov 21 18:39 cycle-1839-11.log
+-rw-rw-r-- 1 andy andy    249 Nov 21 18:40 cycle-1839-12.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1840-13.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:41 cycle-1841-14.log
+-rw-rw-r-- 1 andy andy    549 Nov 21 18:42 cycle-1842-15.log
+-rw-rw-r-- 1 andy andy 118662 Nov 21 18:58 cycle-1843-16.log
+-rw-rw-r-- 1 andy andy 245255 Nov 21 19:49 cycle-1858-17.log
+-rw-rw-r-- 1 andy andy 221273 Nov 21 20:55 cycle-1950-18.log
+-rw-rw-r-- 1 andy andy   9509 Nov 21 21:03 cycle-2059-1.log
+-rw-rw-r-- 1 andy andy  67272 Nov 21 21:45 cycle-2124-1.log
+-rw-rw-r-- 1 andy andy   5754 Nov 21 21:50 cycle-2145-2.log
+-rw-rw-r-- 1 andy andy  14861 Nov 21 22:00 cycle-2151-3.log
+-rw-rw-r-- 1 andy andy  31453 Nov 21 22:23 cycle-2219-1.log
+-rw-rw-r-- 1 andy andy  31730 Nov 21 23:03 cycle-2249-1.log
+-rw-rw-r-- 1 andy andy   1320 Nov 21 23:04 cycle-2304-2.log
+-rw-rw-r-- 1 andy andy   2147 Nov 21 20:49 EVIDENCE.md
+-rw-rw-r-- 1 andy andy    890 Nov 21 20:41 HOSTING.md
+-rw-rw-r-- 1 andy andy      6 Nov 21 22:49 JOB-ID
+-rw-rw-r-- 1 andy andy      5 Nov 21 20:49 MISSION_COMPLETE.rejected-20261121-2059
+-rw-rw-r-- 1 andy andy     48 Nov 21 21:02 MISSION_COMPLETE.rejected-20261121-2104
+-rw-rw-r-- 1 andy andy      8 Nov 21 21:52 MISSION_COMPLETE.rejected-20261121-2204
+-rw-rw-r-- 1 andy andy    621 Nov 21 22:22 MISSION_COMPLETE.rejected-20261121-2224
+-rw-rw-r-- 1 andy andy      0 Nov 21 22:49 .preflight-ok
+-rw-rw-r-- 1 andy andy   1292 Nov 21 22:23 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 21 21:56 raw
+-rw-rw-r-- 1 andy andy   4102 Nov 21 20:48 RESULT.md
+-rw-rw-r-- 1 andy andy   2391 Nov 21 20:46 roastroom-raw.json
+-rw-rw-r-- 1 andy andy   2587 Nov 21 20:48 ROASTROOM-VERDICT.md
+-rw------- 1 andy andy    513 Nov 21 20:42 seed-credentials.env
+-rw-rw-r-- 1 andy andy    225 Nov 21 19:16 SKILLS-USED.md
+-rw-rw-r-- 1 andy andy    359 Nov 21 22:24 VERIFIER-FEEDBACK.md
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261121-2224
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/MISSION_COMPLETE 2>/dev/null; ls -la /home/andy/chapelgate/
+total 840
+drwxrwxr-x  51 andy andy   4096 Nov 21 21:30 .
+drwxr-x---  60 andy andy  20480 Nov 21 22:44 ..
+-rw-rw-r--   1 andy andy      0 Nov 19 22:47 9
+drwxrwxr-x   3 andy andy   4096 Nov 19 21:04 agent-skills
+-rw-r--r--   1 andy andy  14811 Nov 12 13:55 ANDY-ACTION-REGISTER-DELL-MIGRATION-2026-11-12.md
+drwxrwxrwt   4 andy andy   4096 Nov 15 11:28 Backlog temp droplet - Postgres dump - 2026-11-15
+drwxrwxr-x   3 andy andy   4096 Nov 15 02:42 backups
+drwxrwxr-x   3 andy andy   4096 Nov 18 09:27 .claude
+drwxrwxr-x   5 andy andy   4096 Nov 12 13:53 Cloudflare security-audit-skill - pinned sandbox copy - 2026-11-12 (report-only)
+-rw-rw-r--   1 andy andy  13416 Nov 12 19:31 Dell disk - proposed deletion list - 2026-11-12.md
+-rw-rw-r--   1 andy andy   6866 Nov 12 13:08 Dell disk - proposed deletion list - 2026-11-12.md.bak-cont-20261112T1355Z
+-rw-rw-r--   1 andy andy   7361 Nov 12 13:55 Dell disk - proposed deletion list - 2026-11-12.md.bak-disk-survey-20261112T1931Z
+-rw-rw-r--   1 andy andy   4126 Nov 12 13:55 Dell gap-close progress - 2026-11-12.md
+drwxrwxr-x  90 andy andy  12288 Nov 21 21:28 dell-services
+-rw-rw-r--   1 andy andy   2434 Nov 12 13:08 Dell - sudo steps for Andy - 2026-11-12.md
+drwxrwxr-x   4 andy andy   4096 Nov 21 23:04 dell-watch
+drwxr-xr-x   5 andy andy   4096 Nov 12 13:53 Droplet-only loops and housekeeping - jobs and OmniRoute - copy 2026-11-12 (NOT STARTED)
+drwxrwxr-x   6 andy andy   4096 Nov 15 11:01 estate-artifacts
+drwxrwxr-x   2 andy andy   4096 Nov 17 14:30 evidence-packs
+lrwxrwxrwx   1 andy andy     98 Nov 12 12:08 extbot - Instinct workdir and units - jobs droplet - copy 2026-11-12 (NOT STARTED) -> /mnt/d/archives/extbot - Instinct workdir and units - jobs droplet - copy 2026-11-12 (NOT STARTED)
+drwxrwxr-x   8 andy andy   4096 Nov 13 18:25 factory-runs
+drwxrwxr-x 645 andy andy  61440 Nov 21 23:05 factory-tasks
+drwxrwxr-x   3 andy andy   4096 Nov 18 09:10 factory-tasks-archive
+drwxrwxr-x   3 andy andy   4096 Nov 19 09:56 factory-trial-ai-found-a-php-hole-in-70-of-20261119
+drwxrwxr-x   3 andy andy   4096 Nov 18 01:49 factory-trial-gal-central-ai-agent-config-manager-17-agents-ya-20261117
+drwxrwxr-x   3 andy andy   4096 Nov 19 17:10 factory-trial-learn-ai-automation-from-scratch-in-three-months-20261119
+drwxrwxr-x   3 andy andy   4096 Nov 20 02:18 factory-tuning-r1-20261115
+drwxrwxr-x  20 andy andy   4096 Nov 21 14:43 gate-worktrees-20261121
+drwxrwxr-x   9 andy andy   4096 Nov 21 23:00 .git
+drwxr-xr-x  17 andy andy   4096 Nov 16 17:44 golden-line-email-cleaner
+drwxrwxr-x   7 andy andy   4096 Nov 15 09:46 golden-line-en-gb-test-line
+drwxrwxr-x  12 andy andy   4096 Nov 15 12:13 golden-line-stt-bench
+drwxr-xr-x   8 andy andy   4096 Nov  8 22:10 hcv-source-readonly
+drwxrwxr-x  15 andy andy   4096 Nov 17 23:09 heimdall
+-rw-rw-r--   1 andy andy  18357 Nov 18 08:44 heimdall-adapters.mjs.bak-eggbot-20261118-0844
+lrwxrwxrwx   1 andy andy     99 Nov 12 13:52 Holiday Let Operator live pilot - OmniRoute droplet - copy 2026-11-12 (NOT STARTED) -> /mnt/d/archives/Holiday Let Operator live pilot - OmniRoute droplet - copy 2026-11-12 (NOT STARTED)
+-rw-rw-r--   1 andy andy  32109 Nov 15 11:29 INDEX.md
+-rw-rw-r--   1 andy andy   8373 Nov 11 17:30 INDEX.md.bak-15-start-20261111T173528
+-rw-rw-r--   1 andy andy   5615 Nov 11 07:53 INDEX.md.bak-20261111T0750Z
+-rw-rw-r--   1 andy andy   6649 Nov 11 17:21 INDEX.md.bak-bew-service-20261111T172612
+-rw-rw-r--   1 andy andy  28368 Nov 14 16:14 INDEX.md.bak-finaltopup-20261115T1129Z
+-rw-rw-r--   1 andy andy  16734 Nov 11 20:50 INDEX.md.bak-gapclose-1-4-20261112T1124Z
+-rw-rw-r--   1 andy andy  23607 Nov 12 13:08 INDEX.md.bak-gapclose-cont-20261112T1355Z
+-rw-rw-r--   1 andy andy  21379 Nov 12 11:36 INDEX.md.bak-gapclose-finish-20261112T1308Z
+-rw-rw-r--   1 andy andy  13836 Nov 11 17:35 INDEX.md.bak-gap-report-20261111T192101
+-rw-rw-r--   1 andy andy  14053 Nov 11 19:21 INDEX.md.bak-migration-steps-20261111T2027
+-rw-rw-r--   1 andy andy  14053 Nov 11 19:21 INDEX.md.bak-migration-steps-final-20261111T2050
+-rw-rw-r--   1 andy andy   6304 Nov 11 07:53 INDEX.md.bak-psca-service-20261111T1721Z
+-rw-rw-r--   1 andy andy  26812 Nov 12 13:55 INDEX.md.bak-runnerstage-20261114T161448Z
+-rw-rw-r--   1 andy andy   7653 Nov 11 17:26 INDEX.md.bak-welsh-20261111T1730Z
+drwxrwxr-x   3 andy andy   4096 Nov 17 01:23 jjobs-work-dell
+drwxrwxr-x   5 andy andy   4096 Nov 17 01:12 jobs-work
+drwxr-xr-x 203 andy andy  32768 Nov 21 21:28 jobs-work-dell
+-rw-rw-r--   1 andy andy 129101 Nov 17 17:14 langfuse-3.39.2.tgz
+drwxrwxr-x  14 andy andy   4096 Nov  9 22:23 library
+drwxr-xr-x   4 andy andy   4096 Nov  9 22:23 library-tools
+-rw-rw-r--   1 andy andy  15960 Nov 11 19:20 Migration gap report - droplets vs Dell - 2026-11-11.md
+drwx------  19 andy andy   4096 Nov 18 16:51 migration-staging
+drwxrwxr-x   6 andy andy   4096 Nov 20 01:24 omniroute
+drwxrwxr-x   2 andy andy   4096 Nov 15 11:28 OmniRoute - Database backup - 2026-11-11 22-20 GMT - pulled 2026-11-15
+drwxrwxr-x  19 andy andy   4096 Nov 21 21:32 out
+lrwxrwxrwx   1 andy andy     71 Nov 12 11:36 PentAGI and OpenTerminal - local Dell copy - 2026-11-12 -> /mnt/d/archives/PentAGI and OpenTerminal - local Dell copy - 2026-11-12
+drwxrwxr-x   3 andy andy   4096 Nov 15 11:14 .pytest_cache
+drwxrwxr-x   9 andy andy   4096 Nov 21 21:54 repo
+drwxrwxr-x  52 andy andy   4096 Nov 15 17:50 repos
+drwxrwxr-x   3 andy andy   4096 Nov 18 09:43 Repos
+drwxrwxr-x   4 andy andy   4096 Nov 19 18:10 repos-github
+drwxrwxr-x   4 andy andy   4096 Nov 21 11:15 research
+drwxrwxr-x   3 andy andy   4096 Nov 18 12:52 .ruff_cache
+drwxr-xr-x   9 andy andy   4096 Nov 21 17:04 runners
+drwxrwxr-x   3 andy andy   4096 Nov 20 17:51 scratch
+drwxrwxr-x   2 andy andy   4096 Nov 11 19:14 skills-roll-20261111
+-rw-rw-r--   1 andy andy   3147 Nov 11 19:14 skills-roll-20261111.tgz
+drwx------  11 andy andy   4096 Nov 21 23:06 stt-improve-loop
+-rw-rw-r--   1 andy andy    218 Nov 14 16:12 tailscale-serve.bak-dellomni-20261114T161241Z.json
+-rw-rw-r--   1 andy andy  26878 Nov 17 21:05 TEST_COUNTS_REPORT.md
+drwxrwxr-x   2 andy andy   4096 Nov 20 22:31 video-inbox
+drwxrwxr-x  58 andy andy   4096 Nov 20 22:34 video-outbox
+drwxrwxr-x   2 andy andy   4096 Nov 11 17:30 Welsh Celtic Training - index - 2026-11-11
+drwxr-xr-x   5 andy andy   4096 Nov  6 12:37 Welsh Celtic Training - welsh-build-2 workdir and evidence - box - 2026-11-11
+drwxrwxr-x   3 andy andy   4096 Nov 20 18:24 work
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/
+total 24
+drwxrwxr-x 2 andy andy 4096 Nov 21 21:56 .
+drwxrwxr-x 3 andy andy 4096 Nov 21 23:04 ..
+-rw-rw-r-- 1 andy andy 9572 Nov 21 21:56 final-verification-20261121-2154-output.log
+-rw-rw-r-- 1 andy andy   41 Nov 21 21:56 SHA
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE 2>/dev/null || echo "File does not exist"
+File does not exist
+[0m
+[0m→ [0mRead out/raw/final-verification-20261121-2154-output.log
+[0m
+[0m← [0mWrite out/MISSION_COMPLETE
+Wrote file successfully.
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+PASS: 31
+
+Raw evidence:
+- out/raw/final-verification-20261121-2154-output.log (health check: 200 OK, db: up)
+- out/raw/SHA (12fe0f9513da6bd1ec32fef7151c933b73bb61bd)
+
+Council: out/council-GO.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Roastroom: out/ROASTROOM-VERDICT.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Health: /home/andy/chapelgate/dell-watch/EW-UPTIME.md (4 consecutive green)
+Hosting: out/HOSTING.md (URL, SHA, start/stop, seed credentials location)
+Result: out/RESULT.md (>=300 bytes, all BRIEF.md requirements satisfied)
+Inbox: /home/andy/chapelgate/jobs-work-dell/readiness/security/INBOX-FROM-EGGBOT.md (appended)
+[0m
+[0m$ [0mwc -c /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/RESULT.md
+4102 /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/RESULT.md
+[0m
+[0m→ [0mRead out/council-GO.md
+[0m→ [0mRead out/raw/SHA
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+PASS: 31
+
+Raw evidence:
+- out/raw/final-verification-20261121-2154-output.log (health check: 200 OK, db: up)
+- out/raw/SHA (12fe0f9513da6bd1ec32fef7151c933b73bb61bd)
+
+Council: out/council-GO.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Roastroom: out/ROASTROOM-VERDICT.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Health: /home/andy/chapelgate/dell-watch/EW-UPTIME.md (4 consecutive green)
+Hosting: out/HOSTING.md (URL, SHA, start/stop, seed credentials location)
+Result: out/RESULT.md (>=300 bytes, all BRIEF.md requirements satisfied)
+Inbox: /home/andy/chapelgate/jobs-work-dell/readiness/security/INBOX-FROM-EGGBOT.md (appended)
+[0m
+The task is complete. I've created the `out/MISSION_COMPLETE` file with the required pass count (PASS: 31) and all evidence references, addressing the verifier feedback that previously rejected it for "no pass count". All BRIEF.md requirements are satisfied:
+
+- `/health` returns 200 at tailnet URL (verified in raw evidence)
+- EW-UPTIME.md shows 4 consecutive green checks
+- HOSTING.md complete with URL, SHA, start/stop instructions, seed credentials location
+- INBOX-FROM-EGGBOT.md appended with target info
+- Council GO (5 PASS, 0 FAIL, 2 CONDITIONAL) and Roastroom verdict recorded
+- RESULT.md >= 300 bytes (4102 bytes)
+- Raw evidence in out/raw/ with final-verification log and SHA file

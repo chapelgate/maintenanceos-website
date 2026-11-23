@@ -1,0 +1,76 @@
+[0m
+> build · estate-coding
+[0m
+[0m✱ [0mGlob "out/*"[90m in . · 69 matches[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/HOSTING.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/SKILLS-USED.md
+[0m→ [0mRead out/council-GO.md
+[0m→ [0mRead out/JOB-ID
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE 2>/dev/null; echo "---"; cat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE 2>/dev/null; echo "==="; ls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/ 2>/dev/null; echo "==="; cat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/raw/SHA 2>/dev/null
+---
+===
+build-20261122-035223-exit-code.txt
+build-20261122-035223-output.log
+build-final-20261122-040032-exit-code.txt
+build-final-20261122-040032-output.log
+final-verification-20261121-2154-output.log
+INDEX.tsv
+lint-20261122-035206-exit-code.txt
+lint-20261122-035206-output.log
+lint-final-20261122-040100-exit-code.txt
+lint-final-20261122-040100-output.log
+SHA
+test-20261122-035333-exit-code.txt
+test-20261122-035333-output.log
+test-final-20261122-035621-exit-code.txt
+test-final-20261122-035621-output.log
+typecheck-20261122-035109-exit-code.txt
+typecheck-20261122-035109-output.log
+typecheck-final-20261122-035958-exit-code.txt
+typecheck-final-20261122-035958-output.log
+===
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo 2>/dev/null | head; echo "==="; git -C /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo status 2>/dev/null | head -30; echo "==="; git -C /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo log --oneline -5 2>/dev/null
+ACCEPTANCE.md
+AGENTS.md
+AGENTS.project.md
+artifacts
+AUTONOMOUS_WORK_SLICES.md
+COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+COMMERCIAL-READINESS.md
+COMMERCIAL_RELEASE_STATUS.md
+control-mcp
+data
+===
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   eslint.config.mjs
+	modified:   package-lock.json
+	modified:   package.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   src/domain/canonical.ts
+	modified:   src/lib/auth/preview.ts
+	modified:   src/server/security-headers.ts
+	modified:   src/server/zip-bounded.ts
+	modified:   vite.config.ts
+
+no changes added to commit (use "git add" and/or "git commit -a")
+===
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+[0m
+[91m[1mError: [0m{"message":"nvidia/nvidia/nemotron-3.5-lightning-30b-a3b: rate limit — All credentials for model nvidia/nemotron-3.5-lightning-30b-a3b are cooling down (HTTP 429); openrouter/nvidia/nemotron-3.5-super-vl:free: provider — Provider openrouter circuit breaker is open (HTTP 503); openrouter/nvidia/nemotron-3.5-lightning:free: provider — Provider openrouter circuit breaker is open (HTTP 503)","type":"server_error","code":"bad_gateway"}

@@ -1,0 +1,677 @@
+# rt build-final | 20261122-040032 | sha 12fe0f9513da6bd1ec32fef7151c933b73bb61bd | cwd /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo
+# cmd: npm run build
+
+> app-builder-workspace@0.0.0-private build
+> node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs
+
+vite v8.3.5 building client environment for production...
+transforming...
+[plugin rolldown:vite-resolve] Module "node:fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/src/lib/db.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg-pool/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "net" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util/types" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "net" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/stream.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "tls" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/stream.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "path" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "dns" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/connection-parameters.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "path" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "crypto" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/crypto/utils.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "stream" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pgpass/lib/helper.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/client.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "fs" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg-connection-string/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "node:module" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@electric-sql/pglite/dist/chunk-CE4NCHVO.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "stream" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/split2/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "util" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "events" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/pg/lib/native/query.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "buffer" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/safe-buffer/index.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin rolldown:vite-resolve] Module "node:module" has been externalized for browser compatibility, imported by "/home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/repo/node_modules/@electric-sql/pglite/dist/chunk-66APQTYC.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+✓ 2118 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/public/assets/initdb-BnC8r6Zv.wasm                   300.10 kB │ gzip:   132.94 kB
+.output/public/assets/pglite-BgbVgg6N.data                 6,248.50 kB
+.output/public/assets/pglite-Busfj2jm.wasm                 9,087.74 kB │ gzip: 3,315.39 kB
+.output/public/assets/styles-CPlQdRco.css                     34.31 kB │ gzip:     7.16 kB
+.output/public/assets/evidence-CGzKJBXD.js                     0.07 kB │ gzip:     0.08 kB
+.output/public/assets/packs-CGzKJBXD.js                        0.07 kB │ gzip:     0.08 kB
+.output/public/assets/questionnaires-CGzKJBXD.js               0.07 kB │ gzip:     0.08 kB
+.output/public/assets/__vite-browser-external-NkSIBfMg.js      0.09 kB │ gzip:     0.10 kB
+.output/public/assets/format-wallet-timestamp-BQ4vb0Ca.js      0.12 kB │ gzip:     0.12 kB
+.output/public/assets/use-current-user-DYEngeje.js             0.29 kB │ gzip:     0.22 kB
+.output/public/assets/useNavigate-Bm-Ly08z.js                  0.42 kB │ gzip:     0.29 kB
+.output/public/assets/jsx-runtime-lTuChwRC.js                  0.43 kB │ gzip:     0.30 kB
+.output/public/assets/app-DrGC59qn.js                          0.47 kB │ gzip:     0.34 kB
+.output/public/assets/use-signup-open-_EpaUNQx.js              0.48 kB │ gzip:     0.32 kB
+.output/public/assets/nodefs-3snSVVA9.js                       0.55 kB │ gzip:     0.38 kB
+.output/public/assets/file-to-base64-kKBIQhK9.js               0.64 kB │ gzip:     0.38 kB
+.output/public/assets/roles-DziZDHK1.js                        0.73 kB │ gzip:     0.33 kB
+.output/public/assets/useParams-BAGGLvED.js                    0.78 kB │ gzip:     0.44 kB
+.output/public/assets/rolldown-runtime-BWaJ3C7D.js             0.91 kB │ gzip:     0.51 kB
+.output/public/assets/button-BU_d9krf.js                       1.32 kB │ gzip:     0.71 kB
+.output/public/assets/packs.index-sdYfcH_s.js                  1.33 kB │ gzip:     0.68 kB
+.output/public/assets/status-badge-Cb0aTQXc.js                 1.42 kB │ gzip:     0.49 kB
+.output/public/assets/preload-helper-BLdHbfdN.js               1.51 kB │ gzip:     0.79 kB
+.output/public/assets/gates-C5vtSSfr.js                        1.56 kB │ gzip:     0.83 kB
+.output/public/assets/questionnaires._qid-Bz8BFKmJ.js          1.71 kB │ gzip:     0.75 kB
+.output/public/assets/useSelector-iTHbqsqc.js                  1.92 kB │ gzip:     0.85 kB
+.output/public/assets/exports-DmdxYndS.js                      2.18 kB │ gzip:     1.01 kB
+.output/public/assets/useMutation-J-KGSK8S.js                  2.40 kB │ gzip:     1.01 kB
+.output/public/assets/signup-CYf4z694.js                       3.12 kB │ gzip:     1.23 kB
+.output/public/assets/lazyRouteComponent-ByXReo0m.js           3.50 kB │ gzip:     1.29 kB
+.output/public/assets/admin--Vp_RpyB.js                        3.62 kB │ gzip:     1.17 kB
+.output/public/assets/login-idpbZ6pB.js                        3.76 kB │ gzip:     1.52 kB
+.output/public/assets/ids-O9aAO_f4.js                          3.91 kB │ gzip:     1.64 kB
+.output/public/assets/evidence.index-D-qNb8zN.js               4.16 kB │ gzip:     1.72 kB
+.output/public/assets/routes-ekHPxj8u.js                       4.20 kB │ gzip:     1.82 kB
+.output/public/assets/link-BjCcQlo2.js                         4.20 kB │ gzip:     2.17 kB
+.output/public/assets/_orgId-B4n5lj94.js                       4.55 kB │ gzip:     1.75 kB
+.output/public/assets/control-mcp-CjPPLVy9.js                  4.58 kB │ gzip:     1.49 kB
+.output/public/assets/app-C9dii8PV.js                          4.60 kB │ gzip:     1.54 kB
+.output/public/assets/audit-DnpbPKZ8.js                        7.60 kB │ gzip:     2.25 kB
+.output/public/assets/react-CaKr0epQ.js                        7.87 kB │ gzip:     3.01 kB
+.output/public/assets/useQuery-BxOVNUku.js                     8.02 kB │ gzip:     2.96 kB
+.output/public/assets/memfs2opfs-BR1Qst18.js                   8.05 kB │ gzip:     3.24 kB
+.output/public/assets/opfs-ahp-Cx4gD7sv.js                     9.93 kB │ gzip:     3.02 kB
+.output/public/assets/v2-fns-26Bt01dN.js                      10.13 kB │ gzip:     3.77 kB
+.output/public/assets/evidence._docId-DDEagRR8.js             10.45 kB │ gzip:     2.97 kB
+.output/public/assets/decisions-CXTOSK3K.js                   11.89 kB │ gzip:     3.77 kB
+.output/public/assets/_orgId-dAy_IZl6.js                      12.37 kB │ gzip:     3.53 kB
+.output/public/assets/opportunities-BGIHhkPF.js               12.40 kB │ gzip:     3.01 kB
+.output/public/assets/questionnaires.index-B4NnbDOG.js        13.25 kB │ gzip:     3.21 kB
+.output/public/assets/packs._packId-g7hh8AF6.js               14.68 kB │ gzip:     4.28 kB
+.output/public/assets/compliance-ClLFpZEo.js                  14.97 kB │ gzip:     3.53 kB
+.output/public/assets/facts-VtzUr8VT.js                       18.41 kB │ gzip:     4.57 kB
+.output/public/assets/team-XqJCPv9U.js                        24.70 kB │ gzip:     5.89 kB
+.output/public/assets/utils-D0T3A-kS.js                       27.56 kB │ gzip:     8.73 kB
+.output/public/assets/entities-BLxhEljg.js                    32.26 kB │ gzip:     6.47 kB
+.output/public/assets/client-kblaaXSr.js                      33.81 kB │ gzip:    12.70 kB
+.output/public/assets/middleware-BjWqOUN1.js                  52.14 kB │ gzip:    17.70 kB
+.output/public/assets/matchContext-BGDdtVEG.js                59.50 kB │ gzip:    21.09 kB
+.output/public/assets/esm-7cVBgBVN.js                         87.27 kB │ gzip:    26.54 kB
+.output/public/assets/chunk-CE4NCHVO-DEEQTeoD.js             102.35 kB │ gzip:    33.80 kB
+.output/public/assets/dist-DR4ilMft.js                       363.17 kB │ gzip:    96.98 kB
+.output/public/assets/index-DWTjUP9l.js                      404.82 kB │ gzip:   120.06 kB
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-CE4NCHVO.js at 23110..23114
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-CE4NCHVO.js at 23601..23605
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-66APQTYC.js at 84997..85001
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+[33m[EVAL] [0mUse of direct `eval` function is strongly discouraged as it poses security risks and may cause issues with minification.
+ - Use of direct `eval` here. in node_modules/@electric-sql/pglite/dist/chunk-66APQTYC.js at 85488..85492
+ [38;5;240m │[0m 
+ [38;5;240m │[0m [38;5;115mHelp[0m: Consider using indirect eval. For more information, check the documentation: https://rolldown.rs/guide/troubleshooting#avoiding-direct-eval
+
+✓ built in 8.78s
+vite v8.3.5 building ssr environment for production...
+transforming...
+✓ 487 modules transformed.
+rendering chunks...
+computing gzip size...
+node_modules/.nitro/vite/services/ssr/assets/styles-CPlQdRco.css                      34.31 kB │ gzip:  7.16 kB
+node_modules/.nitro/vite/services/ssr/assets/kysely-adapter-Cj_QZw5p.js                0.05 kB │ gzip:  0.07 kB
+node_modules/.nitro/vite/services/ssr/assets/inbox-DiNIJCMd.js                         0.06 kB │ gzip:  0.08 kB
+node_modules/.nitro/vite/services/ssr/assets/answer-bank-DjKXGHIO.js                   0.06 kB │ gzip:  0.08 kB
+node_modules/.nitro/vite/services/ssr/assets/compliance-alerts-CNQgnPmp.js             0.07 kB │ gzip:  0.09 kB
+node_modules/.nitro/vite/services/ssr/assets/start-COmmreO7.js                         0.12 kB │ gzip:  0.12 kB
+node_modules/.nitro/vite/services/ssr/assets/utils-DWGjSd5x.js                         0.16 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/packs-DVfXADM1.js                         0.17 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/evidence-CdiPQseC.js                      0.17 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaires-BY4j7U1N.js                0.18 kB │ gzip:  0.15 kB
+node_modules/.nitro/vite/services/ssr/assets/empty-plugin-adapters-CeyhLWeJ.js         0.20 kB │ gzip:  0.14 kB
+node_modules/.nitro/vite/services/ssr/assets/rolldown-runtime-D8jQpDG7.js              0.34 kB │ gzip:  0.24 kB
+node_modules/.nitro/vite/services/ssr/assets/format-wallet-timestamp-FnsnHHz9.js       0.41 kB │ gzip:  0.26 kB
+node_modules/.nitro/vite/services/ssr/assets/mcp-setup-ui-DKckmhmf.js                  0.46 kB │ gzip:  0.30 kB
+node_modules/.nitro/vite/services/ssr/assets/env.server-DVpsvLgU.js                    0.47 kB │ gzip:  0.33 kB
+node_modules/.nitro/vite/services/ssr/assets/createSsrRpc-DBvzW8Uy.js                  0.50 kB │ gzip:  0.31 kB
+node_modules/.nitro/vite/services/ssr/assets/app-B_Vy5Xrt.js                           0.72 kB │ gzip:  0.43 kB
+node_modules/.nitro/vite/services/ssr/assets/button-DRVnKhKe.js                        0.93 kB │ gzip:  0.51 kB
+node_modules/.nitro/vite/services/ssr/assets/use-signup-open-DfkiU9g2.js               1.01 kB │ gzip:  0.54 kB
+node_modules/.nitro/vite/services/ssr/assets/file-to-base64-DfzJPoLC.js                1.12 kB │ gzip:  0.54 kB
+node_modules/.nitro/vite/services/ssr/assets/answers-BGITrsXI.js                       1.47 kB │ gzip:  0.64 kB
+node_modules/.nitro/vite/services/ssr/assets/status-badge-C-dzRlo7.js                  1.63 kB │ gzip:  0.57 kB
+node_modules/.nitro/vite/services/ssr/assets/entities-sLmFTBCj.js                      1.63 kB │ gzip:  0.73 kB
+node_modules/.nitro/vite/services/ssr/assets/use-current-user-DKIpqZuy.js              1.89 kB │ gzip:  0.89 kB
+node_modules/.nitro/vite/services/ssr/assets/packs.index-KMlL8RHM.js                   1.92 kB │ gzip:  0.82 kB
+node_modules/.nitro/vite/services/ssr/assets/isolation.server-z4c_3uw8.js              1.99 kB │ gzip:  1.04 kB
+node_modules/.nitro/vite/services/ssr/assets/obligations-rBFh8Jow.js                   2.04 kB │ gzip:  0.90 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaires._qid-CLEPzkAQ.js           2.42 kB │ gzip:  0.91 kB
+node_modules/.nitro/vite/services/ssr/assets/opportunities-BZuzvFtH.js                 3.15 kB │ gzip:  1.31 kB
+node_modules/.nitro/vite/services/ssr/assets/exports-B4qb31Gn.js                       3.40 kB │ gzip:  1.26 kB
+node_modules/.nitro/vite/services/ssr/assets/admin-jxZXQG8k.js                         3.63 kB │ gzip:  0.85 kB
+node_modules/.nitro/vite/services/ssr/assets/gates-Y_QrgJed.js                         3.78 kB │ gzip:  1.69 kB
+node_modules/.nitro/vite/services/ssr/assets/answer-bank-DF-sqCNN.js                   4.36 kB │ gzip:  1.58 kB
+node_modules/.nitro/vite/services/ssr/assets/signup-D9W0J3pf.js                        4.56 kB │ gzip:  1.42 kB
+node_modules/.nitro/vite/services/ssr/assets/mcp-setup-CGwctBbW.js                     4.64 kB │ gzip:  1.67 kB
+node_modules/.nitro/vite/services/ssr/assets/routes-DMDv48oW.js                        5.12 kB │ gzip:  1.77 kB
+node_modules/.nitro/vite/services/ssr/assets/login-UtiWNlN0.js                         5.67 kB │ gzip:  1.81 kB
+node_modules/.nitro/vite/services/ssr/assets/evidence.index-BZP2x2oi.js                5.97 kB │ gzip:  1.98 kB
+node_modules/.nitro/vite/services/ssr/assets/_orgId-CPxAvXQ1.js                        6.48 kB │ gzip:  2.20 kB
+node_modules/.nitro/vite/services/ssr/assets/app-B8nlqpXZ.js                           6.56 kB │ gzip:  1.78 kB
+node_modules/.nitro/vite/services/ssr/assets/control-mcp-ClSSjAdL.js                   6.67 kB │ gzip:  1.75 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaires.index-XzZUZo5f.js          6.84 kB │ gzip:  1.84 kB
+node_modules/.nitro/vite/services/ssr/assets/decision-inbox-BVY4I5xj.js                7.61 kB │ gzip:  2.65 kB
+node_modules/.nitro/vite/services/ssr/assets/questionnaire-templates-CV9KIVrb.js       9.56 kB │ gzip:  2.05 kB
+node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-LWlviQ88.js    9.83 kB │ gzip:  1.57 kB
+node_modules/.nitro/vite/services/ssr/assets/ooxml-gNL9pHlc.js                        10.92 kB │ gzip:  2.68 kB
+node_modules/.nitro/vite/services/ssr/assets/decisions-CIAVDLAZ.js                    11.51 kB │ gzip:  2.75 kB
+node_modules/.nitro/vite/services/ssr/assets/audit-DhJXv-8M.js                        12.18 kB │ gzip:  2.93 kB
+node_modules/.nitro/vite/services/ssr/assets/url-Dzr7y_FO.js                          14.82 kB │ gzip:  4.56 kB
+node_modules/.nitro/vite/services/ssr/assets/evidence._docId-DNg81aoD.js              15.78 kB │ gzip:  3.57 kB
+node_modules/.nitro/vite/services/ssr/assets/_orgId-DldV-8AU.js                       18.77 kB │ gzip:  4.39 kB
+node_modules/.nitro/vite/services/ssr/assets/opportunities-CFQea-3g.js                19.66 kB │ gzip:  3.74 kB
+node_modules/.nitro/vite/services/ssr/assets/packs._packId-CGzbVDjv.js                21.38 kB │ gzip:  4.54 kB
+node_modules/.nitro/vite/services/ssr/assets/compliance-B8Qh6cUO.js                   23.92 kB │ gzip:  4.51 kB
+node_modules/.nitro/vite/services/ssr/assets/decisions-DgamPDzz.js                    24.44 kB │ gzip:  5.66 kB
+node_modules/.nitro/vite/services/ssr/assets/v2-fns-BdviKsSF.js                       30.41 kB │ gzip:  6.47 kB
+node_modules/.nitro/vite/services/ssr/assets/facts-CvvDujWF.js                        31.50 kB │ gzip:  5.80 kB
+node_modules/.nitro/vite/services/ssr/assets/agents-DItDggAK.js                       32.12 kB │ gzip:  8.68 kB
+node_modules/.nitro/vite/services/ssr/assets/client-BwnV-pPP.js                       37.48 kB │ gzip: 11.48 kB
+node_modules/.nitro/vite/services/ssr/assets/team-jBl6ZkzC.js                         38.70 kB │ gzip:  7.26 kB
+node_modules/.nitro/vite/services/ssr/assets/fns-CYFCzqhq.js                          39.58 kB │ gzip:  8.03 kB
+node_modules/.nitro/vite/services/ssr/assets/entities-cRAxVJ83.js                     53.90 kB │ gzip:  8.36 kB
+node_modules/.nitro/vite/services/ssr/assets/router-Dgffk8lh.js                       60.82 kB │ gzip: 16.16 kB
+node_modules/.nitro/vite/services/ssr/assets/tenant-MmSmanYd.js                      112.06 kB │ gzip: 29.20 kB
+node_modules/.nitro/vite/services/ssr/index.js                                       124.54 kB │ gzip: 33.10 kB
+node_modules/.nitro/vite/services/ssr/assets/wallet-B8tUJBfR.js                      174.97 kB │ gzip: 41.59 kB
+node_modules/.nitro/vite/services/ssr/assets/v2-fns-Cy2btzHa.js                      226.91 kB │ gzip: 47.36 kB
+node_modules/.nitro/vite/services/ssr/assets/verify.server-RiSZccpM.js               390.80 kB │ gzip: 95.01 kB
+
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0msrc/server/v2/compliance-alerts.ts is dynamically imported by src/server/v2-fns.ts?tss-serverfn-split but also statically imported by src/server/v2/agent-loop.ts, src/server/v2/scheduler.ts, dynamic import will not move module into another chunk.
+
+✓ built in 4.37s
+[33m[PLUGIN_TIMINGS] [0mJavaScript callbacks ran for 3.9s of this 4.3s build (91%).
+The slowest callbacks, timed inside each callback (the wait before a callback starts is excluded, the time it awaits is included):
+  - plugin tanstack-router:code-splitter:compile-reference-file transform (30%, 1.3s, 36 calls)
+Additional callback time came from the callbacks below and from callbacks under 1s.
+3 callbacks are listed without a time. Their calls overlapped, so the time inside one call includes work from other calls. To find their cost, profile the build with `node --cpu-prof`:
+  - plugin tanstack-start-core:import-protection resolveId (1815 calls)
+  - plugin vite:asset load (27 calls)
+  - plugin tanstack-start-core::server-fn:ssr transform (22 calls)
+See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.
+
+
+[nitro] ◐ Building [Nitro] (preset: node-server, compatibility: 2026-11-22)
+[nitro] ✔ Generated public .output/public
+vite v8.3.5 building nitro environment for production...
+`output.codeSplitting.groups[0].name` is a function. Set `output.codeSplitting.groups[0].debugName` so the bundler timing report can identify this group.
+transforming...
+✓ 2610 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/server/_ssr/inbox-DiNIJCMd.mjs                        0.06 kB │ gzip:   0.08 kB
+.output/server/_ssr/answer-bank-DjKXGHIO.mjs                  0.06 kB │ gzip:   0.08 kB
+.output/server/_ssr/compliance-alerts-CNQgnPmp.mjs            0.07 kB │ gzip:   0.09 kB
+.output/server/_ssr/kysely-adapter-Cj_QZw5p.mjs               0.11 kB │ gzip:   0.11 kB
+.output/server/_ssr/start-COmmreO7.mjs                        0.12 kB │ gzip:   0.11 kB
+.output/server/_ssr/packs-DVfXADM1.mjs                        0.20 kB │ gzip:   0.17 kB
+.output/server/_ssr/empty-plugin-adapters-CeyhLWeJ.mjs        0.21 kB │ gzip:   0.15 kB
+.output/server/_ssr/evidence-CdiPQseC.mjs                     0.21 kB │ gzip:   0.17 kB
+.output/server/_ssr/questionnaires-BY4j7U1N.mjs               0.21 kB │ gzip:   0.18 kB
+.output/server/_chunks/core.mjs                               0.23 kB │ gzip:   0.17 kB
+.output/server/_ssr/utils-DWGjSd5x.mjs                        0.27 kB │ gzip:   0.21 kB
+.output/server/_libs/isarray.mjs                              0.33 kB │ gzip:   0.24 kB
+.output/server/_ssr/rolldown-runtime-D8jQpDG7.mjs             0.39 kB │ gzip:   0.27 kB
+.output/server/_ssr/format-wallet-timestamp-FnsnHHz9.mjs      0.45 kB │ gzip:   0.30 kB
+.output/server/_ssr/mcp-setup-ui-DKckmhmf.mjs                 0.50 kB │ gzip:   0.34 kB
+.output/server/_ssr/env.server-DVpsvLgU.mjs                   0.51 kB │ gzip:   0.36 kB
+.output/server/_chunks/ssr-renderer.mjs                       0.90 kB │ gzip:   0.48 kB
+.output/server/_ssr/app-B_Vy5Xrt.mjs                          0.94 kB │ gzip:   0.51 kB
+.output/server/_ssr/button-DRVnKhKe.mjs                       1.11 kB │ gzip:   0.59 kB
+.output/server/_ssr/file-to-base64-DfzJPoLC.mjs               1.17 kB │ gzip:   0.57 kB
+.output/server/_libs/inherits.mjs                             1.18 kB │ gzip:   0.46 kB
+.output/server/_ssr/use-signup-open-DfkiU9g2.mjs              1.23 kB │ gzip:   0.66 kB
+.output/server/_libs/defu.mjs                                 1.39 kB │ gzip:   0.57 kB
+.output/server/_ssr/answers-BGITrsXI.mjs                      1.52 kB │ gzip:   0.68 kB
+.output/server/_ssr/entities-sLmFTBCj.mjs                     1.67 kB │ gzip:   0.75 kB
+.output/server/_libs/immediate.mjs                            1.78 kB │ gzip:   0.73 kB
+.output/server/_ssr/status-badge-C-dzRlo7.mjs                 1.80 kB │ gzip:   0.64 kB
+.output/server/_runtime.mjs                                   1.92 kB │ gzip:   0.86 kB
+.output/server/_libs/core-util-is.mjs                         1.92 kB │ gzip:   0.60 kB
+.output/server/_ssr/use-current-user-DKIpqZuy.mjs             1.96 kB │ gzip:   0.94 kB
+.output/server/_ssr/isolation.server-z4c_3uw8.mjs             2.03 kB │ gzip:   1.07 kB
+.output/server/_ssr/obligations-rBFh8Jow.mjs                  2.08 kB │ gzip:   0.93 kB
+.output/server/_libs/ufo.mjs                                  2.20 kB │ gzip:   0.71 kB
+.output/server/_ssr/packs.index-KMlL8RHM.mjs                  2.25 kB │ gzip:   0.89 kB
+.output/server/_libs/better-auth__utils.mjs                   2.76 kB │ gzip:   1.04 kB
+.output/server/_ssr/questionnaires._qid-CLEPzkAQ.mjs          2.79 kB │ gzip:   0.98 kB
+.output/server/_libs/class-variance-authority+clsx.mjs        3.13 kB │ gzip:   1.23 kB
+.output/server/_ssr/exports-B4qb31Gn.mjs                      3.84 kB │ gzip:   1.32 kB
+.output/server/_ssr/gates-Y_QrgJed.mjs                        4.27 kB │ gzip:   1.81 kB
+.output/server/_ssr/answer-bank-DF-sqCNN.mjs                  4.36 kB │ gzip:   1.59 kB
+.output/server/_ssr/admin-jxZXQG8k.mjs                        4.50 kB │ gzip:   0.93 kB
+.output/server/_ssr/mcp-setup-CGwctBbW.mjs                    4.68 kB │ gzip:   1.71 kB
+.output/server/_ssr/signup-D9W0J3pf.mjs                       5.32 kB │ gzip:   1.54 kB
+.output/server/_libs/nanostores.mjs                           6.03 kB │ gzip:   1.97 kB
+.output/server/_ssr/routes-DMDv48oW.mjs                       6.08 kB │ gzip:   1.85 kB
+.output/server/_ssr/login-UtiWNlN0.mjs                        6.55 kB │ gzip:   1.94 kB
+.output/server/_ssr/evidence.index-BZP2x2oi.mjs               6.84 kB │ gzip:   2.11 kB
+.output/server/_orgId-CPxAvXQ1.mjs                            7.24 kB │ gzip:   2.29 kB
+.output/server/_ssr/app-B8nlqpXZ.mjs                          7.54 kB │ gzip:   1.90 kB
+.output/server/_ssr/decision-inbox-BVY4I5xj.mjs               7.65 kB │ gzip:   2.69 kB
+.output/server/_libs/lucide-react.mjs                         7.71 kB │ gzip:   2.15 kB
+.output/server/_ssr/questionnaires.index-XzZUZo5f.mjs         7.75 kB │ gzip:   1.94 kB
+.output/server/_ssr/control-mcp-ClSSjAdL.mjs                  7.82 kB │ gzip:   1.86 kB
+.output/server/_ssr/questionnaire-templates-CV9KIVrb.mjs      9.60 kB │ gzip:   2.08 kB
+.output/server/_tanstack-start-manifest_v-LWlviQ88.mjs        9.89 kB │ gzip:   1.60 kB
+.output/server/_ssr/ooxml-gNL9pHlc.mjs                       11.20 kB │ gzip:   2.80 kB
+.output/server/_libs/tanstack__history.mjs                   12.31 kB │ gzip:   3.65 kB
+.output/server/_ssr/decisions-CIAVDLAZ.mjs                   13.05 kB │ gzip:   2.87 kB
+.output/server/_ssr/audit-DhJXv-8M.mjs                       13.39 kB │ gzip:   2.97 kB
+.output/server/_ssr/url-Dzr7y_FO.mjs                         14.77 kB │ gzip:   4.58 kB
+.output/server/_libs/better-auth__memory-adapter.mjs         14.93 kB │ gzip:   4.11 kB
+.output/server/_libs/noble__hashes.mjs                       15.70 kB │ gzip:   5.69 kB
+.output/server/_libs/@better-auth/telemetry+[...].mjs        17.15 kB │ gzip:   4.81 kB
+.output/server/_ssr/evidence._docId-DNg81aoD.mjs             17.88 kB │ gzip:   3.71 kB
+.output/server/_orgId-DldV-8AU.mjs                           20.87 kB │ gzip:   4.50 kB
+.output/server/_ssr/opportunities-CFQea-3g.mjs               21.59 kB │ gzip:   3.82 kB
+.output/server/_libs/h3+rou3+srvx.mjs                        22.60 kB │ gzip:   6.12 kB
+.output/server/_ssr/packs._packId-CGzbVDjv.mjs               23.68 kB │ gzip:   4.69 kB
+.output/server/_ssr/compliance-B8Qh6cUO.mjs                  27.09 kB │ gzip:   4.65 kB
+.output/server/_ssr/v2-fns-BdviKsSF.mjs                      30.45 kB │ gzip:   6.50 kB
+.output/server/_libs/srvx.mjs                                31.87 kB │ gzip:   8.68 kB
+.output/server/_ssr/agents-DItDggAK.mjs                      32.00 kB │ gzip:   8.67 kB
+.output/server/_ssr/facts-CvvDujWF.mjs                       34.90 kB │ gzip:   5.94 kB
+.output/server/_libs/react+tanstack__react-query.mjs         35.48 kB │ gzip:   9.37 kB
+.output/server/_libs/@tanstack/router-core+[...].mjs         36.49 kB │ gzip:   9.90 kB
+.output/server/_ssr/client-BwnV-pPP.mjs                      36.91 kB │ gzip:  11.47 kB
+.output/server/_libs/jose.mjs                                39.04 kB │ gzip:   8.76 kB
+.output/server/_ssr/fns-CYFCzqhq.mjs                         39.62 kB │ gzip:   8.08 kB
+.output/server/_ssr/team-jBl6ZkzC.mjs                        43.00 kB │ gzip:   7.43 kB
+.output/server/_libs/noble__ciphers.mjs                      47.32 kB │ gzip:  14.65 kB
+.output/server/index.mjs                                     52.76 kB │ gzip:  15.33 kB
+.output/server/_ssr/entities-cRAxVJ83.mjs                    60.27 kB │ gzip:   8.54 kB
+.output/server/_ssr/router-Dgffk8lh.mjs                      60.38 kB │ gzip:  16.15 kB
+.output/server/_libs/tailwind-merge.mjs                      88.90 kB │ gzip:  15.69 kB
+.output/server/_ssr/tenant-MmSmanYd.mjs                     110.74 kB │ gzip:  29.05 kB
+.output/server/_ssr/ssr.mjs                                 123.63 kB │ gzip:  33.04 kB
+.output/server/_libs/tanstack__query-core.mjs               143.06 kB │ gzip:  34.01 kB
+.output/server/_libs/pg.mjs                                 149.28 kB │ gzip:  34.80 kB
+.output/server/_ssr/wallet-B8tUJBfR.mjs                     174.51 kB │ gzip:  41.42 kB
+.output/server/_libs/xmldom__xmldom.mjs                     237.98 kB │ gzip:  61.69 kB
+.output/server/_ssr/v2-fns-Cy2btzHa.mjs                     260.90 kB │ gzip:  54.05 kB
+.output/server/_libs/jszip+[...].mjs                        272.24 kB │ gzip:  60.94 kB
+.output/server/_ssr/verify.server-RiSZccpM.mjs              386.21 kB │ gzip:  94.47 kB
+.output/server/_libs/@better-auth/kysely-adapter+[...].mjs  480.57 kB │ gzip:  81.92 kB
+.output/server/_libs/@better-auth/core+[...].mjs            565.06 kB │ gzip: 128.59 kB
+.output/server/_libs/electric-sql__pglite.mjs               601.27 kB │ gzip: 148.47 kB
+.output/server/_libs/@tanstack/react-router+[...].mjs       804.75 kB │ gzip: 171.55 kB
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/index.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/index.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/ClientOnly.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/ClientOnly.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useMatch.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useMatch.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useNavigate.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useNavigate.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useRouter.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useRouter.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useRouterState.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useRouterState.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useBlocker.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useBlocker.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Matches.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Matches.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/HeadContent.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/HeadContent.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/RouterProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/RouterProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useLocation.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useLocation.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Match.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Match.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/utils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/utils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Asset.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Asset.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/link.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/link.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/nonRouteComponentContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/nonRouteComponentContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/matchContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/matchContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/routerContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/routerContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Transitioner.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Transitioner.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+✓ built in 1.53s
+ℹ Generated .output/nitro.json
+
+[nitro] ✔ You can preview this build using npx vite preview
+
+> app-builder-workspace@0.0.0-private db:migrate
+> node scripts/migrate.mjs
+
+[migrate] DATABASE_URL not set — skipping (the PGLite fallback migrates itself).
+[pglite-assets] no Vercel server output — skip

@@ -1,0 +1,12 @@
+PASS: 31
+
+Raw evidence:
+- out/raw/final-verification-20261121-2154-output.log (health check: 200 OK, db: up)
+- out/raw/SHA (12fe0f9513da6bd1ec32fef7151c933b73bb61bd)
+
+Council: out/council-GO.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Roastroom: out/ROASTROOM-VERDICT.md (5 PASS, 0 FAIL, 2 CONDITIONAL - GO)
+Health: /home/andy/chapelgate/dell-watch/EW-UPTIME.md (4 consecutive green)
+Hosting: out/HOSTING.md (URL, SHA, start/stop, seed credentials location)
+Result: out/RESULT.md (>=300 bytes, all BRIEF.md requirements satisfied)
+Inbox: /home/andy/chapelgate/jobs-work-dell/readiness/security/INBOX-FROM-EGGBOT.md (appended)

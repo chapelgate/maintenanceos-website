@@ -1,0 +1,149 @@
+2026-11-21T16:59:03+00:00 SEMAPHORE: acquired cycle semaphore with 2s jitter
+2026-11-21T17:16:44+00:00 HUNG CYCLE: opencode run elapsed 1059s (exceeded 300s timeout)
+2026-11-21T17:16:45+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-21T17:17:01+00:00 SEMAPHORE: acquired cycle semaphore with 26s jitter
+2026-11-21T18:23:25+00:00 HUNG CYCLE: opencode run elapsed 3958s (exceeded 300s timeout)
+2026-11-21T18:23:31+00:00 cycle=2 exit=1 v6.1 session=
+2026-11-21T18:23:46+00:00 SEMAPHORE: acquired cycle semaphore with 10s jitter
+2026-11-21T18:24:08+00:00 cycle=3 exit=1 v6.1 session=
+2026-11-21T18:24:23+00:00 SEMAPHORE: acquired cycle semaphore with 4s jitter
+2026-11-21T18:24:38+00:00 cycle=4 exit=1 v6.1 session=
+2026-11-21T18:24:38+00:00 FRESH-SESSION: 2 exit=1 in a row on session  - starting fresh session, record in history.log
+2026-11-21T18:24:53+00:00 SEMAPHORE: acquired cycle semaphore with 14s jitter
+2026-11-21T18:25:19+00:00 cycle=5 exit=1 v6.1 session=
+2026-11-21T18:25:34+00:00 SEMAPHORE: acquired cycle semaphore with 7s jitter
+2026-11-21T18:25:54+00:00 cycle=6 exit=1 v6.1 session=
+2026-11-21T18:25:54+00:00 FRESH-SESSION: 2 exit=1 in a row on session  - starting fresh session, record in history.log
+2026-11-21T18:26:09+00:00 SEMAPHORE: acquired cycle semaphore with 22s jitter
+2026-11-21T18:26:42+00:00 cycle=7 exit=1 v6.1 session=
+2026-11-21T18:26:57+00:00 SEMAPHORE: acquired cycle semaphore with 9s jitter
+2026-11-21T18:28:00+00:00 cycle=8 exit=1 v6.1 session=
+2026-11-21T18:28:15+00:00 SEMAPHORE: acquired cycle semaphore with 28s jitter
+2026-11-21T18:37:14+00:00 HUNG CYCLE: opencode run elapsed 511s (exceeded 300s timeout)
+2026-11-21T18:37:16+00:00 cycle=9 exit=1 v6.1 session=
+2026-11-21T18:37:31+00:00 SEMAPHORE: acquired cycle semaphore with 22s jitter
+2026-11-21T18:38:50+00:00 cycle=10 exit=1 v6.1 session=
+2026-11-21T18:39:05+00:00 SEMAPHORE: acquired cycle semaphore with 2s jitter
+2026-11-21T18:39:29+00:00 cycle=11 exit=1 v6.1 session=
+2026-11-21T18:39:44+00:00 SEMAPHORE: acquired cycle semaphore with 0s jitter
+2026-11-21T18:40:39+00:00 cycle=12 exit=1 v6.1 session=
+2026-11-21T18:40:54+00:00 SEMAPHORE: acquired cycle semaphore with 1s jitter
+2026-11-21T18:41:06+00:00 cycle=13 exit=1 v6.1 session=
+2026-11-21T18:41:21+00:00 SEMAPHORE: acquired cycle semaphore with 15s jitter
+2026-11-21T18:41:48+00:00 cycle=14 exit=1 v6.1 session=
+2026-11-21T18:41:48+00:00 FRESH-SESSION: 2 exit=1 in a row on session  - starting fresh session, record in history.log
+2026-11-21T18:42:03+00:00 SEMAPHORE: acquired cycle semaphore with 24s jitter
+2026-11-21T18:42:39+00:00 cycle=15 exit=1 v6.1 session=
+2026-11-21T18:42:54+00:00 SEMAPHORE: acquired cycle semaphore with 27s jitter
+2026-11-21T18:58:14+00:00 HUNG CYCLE: opencode run elapsed 893s (exceeded 300s timeout)
+2026-11-21T18:58:16+00:00 cycle=16 exit=1 v6.1 session=
+2026-11-21T18:58:32+00:00 SEMAPHORE: acquired cycle semaphore with 16s jitter
+2026-11-21T19:49:42+00:00 HUNG CYCLE: opencode run elapsed 3054s (exceeded 300s timeout)
+2026-11-21T19:49:44+00:00 cycle=17 exit=1 v6.1 session=
+2026-11-21T19:49:59+00:00 SEMAPHORE: acquired cycle semaphore with 20s jitter
+2026-11-21T20:55:59+00:00 HUNG CYCLE: opencode run elapsed 3940s (exceeded 300s timeout)
+2026-11-21T20:56:01+00:00 cycle=18 exit=1 v6.1 session=
+2026-11-21T20:59:06+00:00 SEMAPHORE: acquired cycle semaphore with 6s jitter
+2026-11-21T21:04:01+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-21T21:24:23+00:00 SEMAPHORE: acquired cycle semaphore with 21s jitter
+2026-11-21T21:45:10+00:00 HUNG CYCLE: opencode run elapsed 1226s (exceeded 300s timeout)
+2026-11-21T21:45:12+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-21T21:45:27+00:00 SEMAPHORE: acquired cycle semaphore with 22s jitter
+2026-11-21T21:50:43+00:00 cycle=2 exit=0 v6.1 session=
+2026-11-21T21:50:59+00:00 SEMAPHORE: acquired cycle semaphore with 4s jitter
+2026-11-21T22:00:03+00:00 HUNG CYCLE: opencode run elapsed 540s (exceeded 300s timeout)
+2026-11-21T22:00:04+00:00 cycle=3 exit=0 v6.1 session=
+2026-11-21T22:19:20+00:00 SEMAPHORE: acquired cycle semaphore with 12s jitter
+2026-11-21T22:23:41+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-21T22:49:18+00:00 SEMAPHORE: acquired cycle semaphore with 24s jitter
+2026-11-21T23:03:49+00:00 HUNG CYCLE: opencode run elapsed 847s (exceeded 300s timeout)
+2026-11-21T23:03:56+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-21T23:04:11+00:00 SEMAPHORE: acquired cycle semaphore with 2s jitter
+2026-11-21T23:11:32+00:00 HUNG CYCLE: opencode run elapsed 439s (exceeded 300s timeout)
+2026-11-21T23:11:33+00:00 cycle=2 exit=1 v6.1 session=
+2026-11-22T00:29:11+00:00 SEMAPHORE: acquired cycle semaphore with 4s jitter
+2026-11-22T00:33:59+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T00:54:20+00:00 SEMAPHORE: acquired cycle semaphore with 4s jitter
+2026-11-22T01:05:53+00:00 HUNG CYCLE: opencode run elapsed 689s (exceeded 300s timeout)
+2026-11-22T01:05:54+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T01:19:25+00:00 SEMAPHORE: acquired cycle semaphore with 22s jitter
+2026-11-22T01:30:01+00:00 HUNG CYCLE: opencode run elapsed 614s (exceeded 300s timeout)
+2026-11-22T01:30:03+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T03:39:23+00:00 SEMAPHORE: acquired cycle semaphore with 3s jitter
+2026-11-22T04:34:01+00:00 HUNG CYCLE: opencode run elapsed 3275s (exceeded 300s timeout)
+2026-11-22T04:34:03+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T05:39:23+00:00 SEMAPHORE: acquired cycle semaphore with 0s jitter
+2026-11-22T05:40:16+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T05:40:31+00:00 SEMAPHORE: acquired cycle semaphore with 12s jitter
+2026-11-22T05:41:29+00:00 cycle=2 exit=1 v6.1 session=
+2026-11-22T05:41:44+00:00 SEMAPHORE: acquired cycle semaphore with 21s jitter
+2026-11-22T06:13:42+00:00 HUNG CYCLE: opencode run elapsed 1897s (exceeded 300s timeout)
+2026-11-22T06:13:43+00:00 cycle=3 exit=1 v6.1 session=
+2026-11-22T07:39:30+00:00 SEMAPHORE: acquired cycle semaphore with 26s jitter
+2026-11-22T07:47:48+00:00 HUNG CYCLE: opencode run elapsed 472s (exceeded 300s timeout)
+2026-11-22T07:47:51+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T07:48:06+00:00 SEMAPHORE: acquired cycle semaphore with 9s jitter
+2026-11-22T07:57:54+00:00 HUNG CYCLE: opencode run elapsed 579s (exceeded 300s timeout)
+2026-11-22T07:57:56+00:00 cycle=2 exit=1 v6.1 session=
+2026-11-22T09:44:26+00:00 SEMAPHORE: acquired cycle semaphore with 23s jitter
+2026-11-22T10:37:12+00:00 HUNG CYCLE: opencode run elapsed 3143s (exceeded 300s timeout)
+2026-11-22T10:37:13+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T11:44:33+00:00 SEMAPHORE: acquired cycle semaphore with 23s jitter
+2026-11-22T13:14:57+00:00 HUNG CYCLE: opencode run elapsed 5401s (exceeded 300s timeout)
+2026-11-22T13:15:03+00:00 cycle=1 exit=124 v6.1 session=
+2026-11-22T13:15:18+00:00 SEMAPHORE: acquired cycle semaphore with 22s jitter
+2026-11-22T13:20:20+00:00 cycle=2 exit=0 v6.1 session=
+2026-11-22T13:44:43+00:00 SEMAPHORE: acquired cycle semaphore with 2s jitter
+2026-11-22T13:51:46+00:00 HUNG CYCLE: opencode run elapsed 421s (exceeded 300s timeout)
+2026-11-22T13:51:48+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-22T13:52:03+00:00 SEMAPHORE: acquired cycle semaphore with 12s jitter
+2026-11-22T14:13:23+00:00 HUNG CYCLE: opencode run elapsed 1268s (exceeded 300s timeout)
+2026-11-22T14:13:24+00:00 cycle=2 exit=0 v6.1 session=
+2026-11-22T15:49:50+00:00 SEMAPHORE: acquired cycle semaphore with 13s jitter
+2026-11-22T15:59:36+00:00 HUNG CYCLE: opencode run elapsed 573s (exceeded 300s timeout)
+2026-11-22T15:59:36+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-22T15:59:53+00:00 SEMAPHORE: acquired cycle semaphore with 16s jitter
+2026-11-22T16:31:15+00:00 HUNG CYCLE: opencode run elapsed 1866s (exceeded 300s timeout)
+2026-11-22T16:31:16+00:00 cycle=2 exit=0 v6.1 session=
+2026-11-22T17:49:57+00:00 SEMAPHORE: acquired cycle semaphore with 19s jitter
+2026-11-22T17:59:06+00:00 HUNG CYCLE: opencode run elapsed 530s (exceeded 300s timeout)
+2026-11-22T17:59:07+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T17:59:07+00:00 quota-wait 1 (cycle not counted)
+2026-11-22T18:04:07+00:00 SEMAPHORE: acquired cycle semaphore with 18s jitter
+2026-11-22T18:30:39+00:00 HUNG CYCLE: opencode run elapsed 1574s (exceeded 300s timeout)
+2026-11-22T18:30:39+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-22T19:55:02+00:00 SEMAPHORE: acquired cycle semaphore with 19s jitter
+2026-11-22T20:43:59+00:00 HUNG CYCLE: opencode run elapsed 2918s (exceeded 300s timeout)
+2026-11-22T20:44:00+00:00 cycle=1 exit=1 v6.1 session=
+2026-11-22T22:30:20+00:00 SEMAPHORE: acquired cycle semaphore with 22s jitter
+2026-11-22T23:12:01+00:00 HUNG CYCLE: opencode run elapsed 2479s (exceeded 300s timeout)
+2026-11-22T23:12:03+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-23T02:55:16+00:00 SEMAPHORE: acquired cycle semaphore with 26s jitter
+2026-11-23T03:00:22+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-23T03:00:38+00:00 SEMAPHORE: acquired cycle semaphore with 9s jitter
+2026-11-23T03:26:39+00:00 HUNG CYCLE: opencode run elapsed 1552s (exceeded 300s timeout)
+2026-11-23T03:26:40+00:00 cycle=2 exit=0 v6.1 session=
+2026-11-23T03:50:55+00:00 SEMAPHORE: acquired cycle semaphore with 11s jitter
+2026-11-23T04:15:38+00:00 HUNG CYCLE: opencode run elapsed 1471s (exceeded 300s timeout)
+2026-11-23T04:15:39+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-23T04:25:18+00:00 SEMAPHORE: acquired cycle semaphore with 5s jitter
+2026-11-23T05:40:35+00:00 SEMAPHORE: acquired cycle semaphore with 8s jitter
+2026-11-23T06:21:11+00:00 HUNG CYCLE: opencode run elapsed 2428s (exceeded 300s timeout)
+2026-11-23T06:21:12+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-23T06:35:29+00:00 SEMAPHORE: acquired cycle semaphore with 11s jitter
+2026-11-23T07:06:49+00:00 HUNG CYCLE: opencode run elapsed 1869s (exceeded 300s timeout)
+2026-11-23T07:06:50+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-23T07:07:07+00:00 SEMAPHORE: acquired cycle semaphore with 13s jitter
+2026-11-23T07:16:13+00:00 HUNG CYCLE: opencode run elapsed 533s (exceeded 300s timeout)
+2026-11-23T07:16:14+00:00 cycle=2 exit=1 v6.1 session=
+2026-11-23T07:16:14+00:00 quota-wait 1 (cycle not counted)
+2026-11-23T07:21:14+00:00 SEMAPHORE: acquired cycle semaphore with 21s jitter
+2026-11-23T07:37:02+00:00 HUNG CYCLE: opencode run elapsed 927s (exceeded 300s timeout)
+2026-11-23T07:37:03+00:00 cycle=2 exit=1 v6.1 session=
+2026-11-23T07:37:19+00:00 SEMAPHORE: acquired cycle semaphore with 8s jitter
+2026-11-23T07:44:02+00:00 HUNG CYCLE: opencode run elapsed 395s (exceeded 300s timeout)
+2026-11-23T07:44:04+00:00 cycle=3 exit=0 v6.1 session=
+2026-11-23T07:44:21+00:00 SEMAPHORE: acquired cycle semaphore with 22s jitter
+2026-11-23T07:58:57+00:00 HUNG CYCLE: opencode run elapsed 854s (exceeded 300s timeout)
+2026-11-23T07:58:58+00:00 cycle=4 exit=0 v6.1 session=
+2026-11-23T07:59:15+00:00 SEMAPHORE: acquired cycle semaphore with 2s jitter
