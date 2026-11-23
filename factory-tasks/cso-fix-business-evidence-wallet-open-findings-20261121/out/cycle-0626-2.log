@@ -1,0 +1,1006 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/ 2>/dev/null; echo "---OUT---"; ls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out 2>/dev/null; echo "---REPO---"; ls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo 2>/dev/null
+total 120
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:16 .
+drwxrwxr-x 810 andy andy 69632 Nov 23 06:22 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 23 06:26 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  6889 Nov 23 06:26 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 06:26 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 23 06:26 out
+drwxrwxr-x  25 andy andy  4096 Nov 22 21:09 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 06:26 status.json
+-rw-rw-r--   1 andy andy  4566 Nov 23 04:50 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+---OUT---
+total 3396
+drwxrwxr-x 4 andy andy   4096 Nov 23 06:26 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:16 ..
+-rw-rw-r-- 1 andy andy 224234 Nov 22 01:51 cycle-0022-4.log
+-rw-rw-r-- 1 andy andy   5373 Nov 23 00:42 cycle-0035-1.log
+-rw-rw-r-- 1 andy andy   7136 Nov 23 00:52 cycle-0047-1.log
+-rw-rw-r-- 1 andy andy 124063 Nov 23 02:08 cycle-0125-2.log
+-rw-rw-r-- 1 andy andy  75271 Nov 22 02:23 cycle-0152-5.log
+-rw-rw-r-- 1 andy andy  63307 Nov 23 02:16 cycle-0209-3.log
+-rw-rw-r-- 1 andy andy  52998 Nov 23 02:39 cycle-0216-4.log
+-rw-rw-r-- 1 andy andy 231783 Nov 22 03:58 cycle-0229-1.log
+-rw-rw-r-- 1 andy andy   7956 Nov 23 03:32 cycle-0245-1.log
+-rw-rw-r-- 1 andy andy   8882 Nov 23 03:45 cycle-0337-1.log
+-rw-rw-r-- 1 andy andy  45630 Nov 23 04:45 cycle-0346-2.log
+-rw-rw-r-- 1 andy andy  40834 Nov 22 04:34 cycle-0359-2.log
+-rw-rw-r-- 1 andy andy 168692 Nov 22 05:40 cycle-0439-1.log
+-rw-rw-r-- 1 andy andy    772 Nov 23 06:07 cycle-0540-1.log
+-rw-rw-r-- 1 andy andy 138086 Nov 22 07:10 cycle-0541-2.log
+-rw-rw-r-- 1 andy andy  10592 Nov 23 06:21 cycle-0607-2.log
+-rw-rw-r-- 1 andy andy     35 Nov 23 06:26 cycle-0626-2.log
+-rw-rw-r-- 1 andy andy   1101 Nov 22 07:14 cycle-0711-3.log
+-rw-rw-r-- 1 andy andy  79789 Nov 22 08:14 cycle-0714-4.log
+-rw-rw-r-- 1 andy andy  29388 Nov 22 08:48 cycle-0814-5.log
+-rw-rw-r-- 1 andy andy 109013 Nov 22 09:14 cycle-0848-6.log
+-rw-rw-r-- 1 andy andy 137688 Nov 22 10:45 cycle-0915-1.log
+-rw-rw-r-- 1 andy andy 214184 Nov 22 12:15 cycle-1046-2.log
+-rw-rw-r-- 1 andy andy  67956 Nov 22 12:48 cycle-1216-3.log
+-rw-rw-r-- 1 andy andy 165251 Nov 22 14:14 cycle-1251-1.log
+-rw-rw-r-- 1 andy andy 159056 Nov 22 15:47 cycle-1420-1.log
+-rw-rw-r-- 1 andy andy 114378 Nov 22 17:20 cycle-1550-2.log
+-rw-rw-r-- 1 andy andy   7513 Nov 22 17:33 cycle-1721-3.log
+-rw-rw-r-- 1 andy andy 131633 Nov 22 19:33 cycle-1805-4.log
+-rw-rw-r-- 1 andy andy  72392 Nov 22 20:10 cycle-1939-1.log
+-rw-rw-r-- 1 andy andy 122883 Nov 22 21:25 cycle-2011-2.log
+-rw-rw-r-- 1 andy andy 213063 Nov 21 22:46 cycle-2116-1.log
+-rw-rw-r-- 1 andy andy   8971 Nov 22 21:43 cycle-2130-2.log
+-rw-rw-r-- 1 andy andy  81774 Nov 22 23:26 cycle-2230-1.log
+-rw-rw-r-- 1 andy andy  55270 Nov 21 22:51 cycle-2247-2.log
+-rw-rw-r-- 1 andy andy 186568 Nov 22 00:19 cycle-2251-3.log
+-rw-rw-r-- 1 andy andy 119217 Nov 23 00:31 cycle-2326-2.log
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 EVIDENCE.md
+-rw-rw-r-- 1 andy andy      6 Nov 23 05:40 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 23 05:40 .preflight-ok
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 15:47 raw
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 RESULT.md
+drwxrwxr-x 3 andy andy   4096 Nov 21 22:58 runs
+-rw-rw-r-- 1 andy andy     62 Nov 22 10:49 SKILLS-USED.md
+---REPO---
+total 2372
+drwxrwxr-x  25 andy andy    4096 Nov 22 21:09 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 18:42 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 23 06:14 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 18:42 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 18:42 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 21:09 test-results
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 18:42 vite.config.ts
+[0m
+[0m→ [0mRead out/PROGRESS.md
+Let me start by exploring the repository structure and understanding the codebase.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git branch -a
+master
+* rc/ew-20261121
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/agy/construction-templates
+  remotes/origin/agy/task-1
+  remotes/origin/agy/task-14
+  remotes/origin/agy/task-2
+  remotes/origin/audit-freeze/bew-v2-rc3-68eff076
+  remotes/origin/backup/pr157-e3e42eb-20261022
+  remotes/origin/bt-a1-configurable
+  remotes/origin/bt-a2-browseres
+  remotes/origin/bt-a3-externalapi
+  remotes/origin/bt10-rate-limit
+  remotes/origin/bt11-a11ytest
+  remotes/origin/bt12-checkauth
+  remotes/origin/bt13-metrics
+  remotes/origin/bt14-lint-fixes
+  remotes/origin/bt15-longoutput
+  remotes/origin/bt4-expiry-warning
+  remotes/origin/bt5-shortfalls
+  remotes/origin/bt7-ocraccessible
+  remotes/origin/bt8-companieshouse
+  remotes/origin/bt9-duplicates
+  remotes/origin/business-os-migration-2026-09-11
+  remotes/origin/chore/opencode-no-nvidia-pin
+  remotes/origin/claude/charter-v2-agents-md
+  remotes/origin/claude/gate-pin-build-readiness
+  remotes/origin/commercial-readiness/security-reconcile-20260930
+  remotes/origin/copilot/integration
+  remotes/origin/crr/2026-10-21
+  remotes/origin/cursor/a4i-autumn-2026-not-suitable-fa9a
+  remotes/origin/cursor/actions-cost-audit-a48f
+  remotes/origin/cursor/agent-loop-cert2-maintenance-9cce
+  remotes/origin/cursor/agent-loop-supervisor-cert-9cce
+  remotes/origin/cursor/bew-signup-gate-d691
+  remotes/origin/cursor/comp-01-legal-pack-d160
+  remotes/origin/cursor/comp-05-legal-pages-d160
+  remotes/origin/cursor/comp-09-a11y-d160
+  remotes/origin/cursor/comp-10-ops-runbooks-d160
+  remotes/origin/cursor/estate-auth-cutover-3f9d
+  remotes/origin/cursor/estate-auth-service-dfdb
+  remotes/origin/cursor/fix-review-findings-1287
+  remotes/origin/cursor/gha-cost-selfhosted-repair-33fa
+  remotes/origin/cursor/opencode-estate-lines-9d80
+  remotes/origin/cursor/opencode-model-fallback-9d80
+  remotes/origin/cursor/overnight-registers-9d80
+  remotes/origin/cursor/public-ai-compute-audit-dfa4
+  remotes/origin/cursor/rc2-security-onto-master-ef9e
+  remotes/origin/cursor/reconcile-production-master-9d80
+  remotes/origin/cursor/release-readiness-8a5b
+  remotes/origin/cursor/release-rehearsal-9d80
+  remotes/origin/cursor/release-truth-reconcile-d160
+  remotes/origin/cursor/rsfm-membership-acceptance-c580
+  remotes/origin/cursor/sovereign-ai-agent-security-bid-396a
+  remotes/origin/cursor/sovereign-ai-hardware-infra-f155
+  remotes/origin/cursor/v2-commissioning-reconciliation-9cce
+  remotes/origin/cursor/v2-evidence-graph-foundations-4a8f
+  remotes/origin/cursor/v2-evidence-graph-foundations-9cce
+  remotes/origin/cursor/v2-independent-audit-signoff-9cce
+  remotes/origin/cursor/v2-post-audit-conditions-closure-9cce
+  remotes/origin/cursor/v2-rc2-human-audit-remediation-9cce
+  remotes/origin/cursor/v2-rc3-operational-blockers-9cce
+  remotes/origin/cursor/v3-evidence-platform-9cce
+  remotes/origin/data/ds0-separate-owner-pilot-data-20261010
+  remotes/origin/deployment/digitalocean-20260913
+  remotes/origin/deployment/reconciled-pilot-20260914
+  remotes/origin/docs/final-report-t810u
+  remotes/origin/docs/final-report-t810u-r2
+  remotes/origin/estate-gate-caller-20261004
+  remotes/origin/ew-commercial-r8
+  remotes/origin/ew-final-report-t810u
+  remotes/origin/ew-fix-01
+  remotes/origin/ew-fix-02
+  remotes/origin/ew-fix-03
+  remotes/origin/ew-fix-04
+  remotes/origin/ew-fix-05
+  remotes/origin/execution-authority-direct-nvdl-20261003
+  remotes/origin/factory/bew-copilot-onboarding
+  remotes/origin/feat/a11y-wcag22-pass
+  remotes/origin/feat/billing-stripe-test
+  remotes/origin/feat/final-report-t810u
+  remotes/origin/feat/housing-compliance-vault
+  remotes/origin/feat/iso9001-qms-evidence-20261116
+  remotes/origin/feat/p0-2-expiry-automation
+  remotes/origin/feat/p0-3-mobile-responsiveness
+  remotes/origin/feat/p1-5-answer-bank-freshness
+  remotes/origin/feat/s01-rls-core-tables
+  remotes/origin/feat/s03-questionnaire-templates
+  remotes/origin/feat/s06-sbom
+  remotes/origin/feat/s06-sbom-vuln-scan
+  remotes/origin/feat/s15-progressive-forms
+  remotes/origin/feat/s16-role-based-ui
+  remotes/origin/feat/uk-gdpr-data-broker-opt-out-docs
+  remotes/origin/feature/document-knowledge-copilot
+  remotes/origin/feature/public-sector-knowledge-copilot
+  remotes/origin/fix-eslint-peer-deps
+  remotes/origin/fix/bearer-token-in-memory-not-sessionstorage
+  remotes/origin/fix/eb-0028-opencode-nvidia-429
+  remotes/origin/fix/ew-check-auth
+  remotes/origin/fix/ew-check-auth-fresh
+  remotes/origin/fix/ew-cp3-lint
+  remotes/origin/fix/ew-cp3-lint-fresh
+  remotes/origin/fix/ew-doc-drift-master-tip
+  remotes/origin/fix/ew-fix-04-release-truth
+  remotes/origin/fix/ew-fix-05-aria-busy
+  remotes/origin/fix/ew-fixlist-2-r19
+  remotes/origin/fix/ew-fixlist-3-r19
+  remotes/origin/fix/ew-fixlist-4-r19
+  remotes/origin/fix/ew-fixlist-6-r19
+  remotes/origin/fix/ew-master-redness-20261106
+  remotes/origin/fix/ew-master-redness-full
+  remotes/origin/fix/ew-metrics-auth
+  remotes/origin/fix/ew-metrics-auth-fresh
+  remotes/origin/fix/ew-npm-audit
+  remotes/origin/fix/ew-npm-audit-fresh
+  remotes/origin/fix/ew-pdf-lock
+  remotes/origin/fix/ew-rls-quotes-r10
+  remotes/origin/fix/ew-v2-rls-fail-closed
+  remotes/origin/fix/ew-v2-rls-fix-quotes
+  remotes/origin/fix/ew-vuln-forward
+  remotes/origin/fix/fixall-20261113
+  remotes/origin/fix/master-red-fixes
+  remotes/origin/fix/master-sbom-vuln-fix
+  remotes/origin/fix/mcp-lint-20260910
+  remotes/origin/fix/mcp-windows-path-20260910
+  remotes/origin/fix/oc-per-comment-concurrency
+  remotes/origin/fix/oc-probe-tokens
+  remotes/origin/fix/pg-local-portable-render
+  remotes/origin/fix/restore-integration-script-20260910
+  remotes/origin/fix/shakedown-findings-20261113
+  remotes/origin/forced-merge/out-1794998819
+  remotes/origin/forced-merge/out-1794998859
+  remotes/origin/forced-merge/reel-adopt-six-essential-documents-before-vibe-coding-20261117-1795005015
+  remotes/origin/forced-merge/reel-trial-claude-security-anti-patterns-api-key-front-end-20261118-1795005066
+  remotes/origin/governance/s031-release-protection
+  remotes/origin/hcv-a11y-error-boundary-test-20261106
+  remotes/origin/hcv-a11y-wcag22-pass-20261105
+  remotes/origin/hcv-accessibility-improvement-20261106
+  remotes/origin/hcv-admin-error-copy-lock-20261029
+  remotes/origin/hcv-admin-ux-20261105
+  remotes/origin/hcv-admin-ux-error-boundary-20261106
+  remotes/origin/hcv-admin-ux-error-boundary-20261106b
+  remotes/origin/hcv-admin-ux-improvement-20261106
+  remotes/origin/hcv-ai-grounding-lock-20261029
+  remotes/origin/hcv-ai-grounding-test-lock-20261029
+  remotes/origin/hcv-answers-lock-20261029
+  remotes/origin/hcv-api-contract-test-20261106
+  remotes/origin/hcv-audit-trail-spec-20261106
+  remotes/origin/hcv-backup-recovery-20261106
+  remotes/origin/hcv-backup-recovery-test-20261106
+  remotes/origin/hcv-buyer-pack-extension-20261106
+  remotes/origin/hcv-buyer-pack-synthetic-20261106
+  remotes/origin/hcv-buyer-pack-synthetic-extension-20261106
+  remotes/origin/hcv-buyer-pack-validation-20261106
+  remotes/origin/hcv-canonical-lock-20261029
+  remotes/origin/hcv-canonical-lock2-20261029
+  remotes/origin/hcv-claim-edit-lock-20261029
+  remotes/origin/hcv-compliance-reports-20261106
+  remotes/origin/hcv-control-mcp-issue-busy
+  remotes/origin/hcv-csp-policy-20261106
+  remotes/origin/hcv-data-retention-policy-20261106
+  remotes/origin/hcv-db-source-lock-20261029
+  remotes/origin/hcv-demo-data-test-20261106
+  remotes/origin/hcv-demo-data-test2-20261106
+  remotes/origin/hcv-demo-data-validation-20261106
+  remotes/origin/hcv-demo-pack-lock-20261029
+  remotes/origin/hcv-docs-20261105
+  remotes/origin/hcv-docs-api-reference-20261106
+  remotes/origin/hcv-e2e-tenant-isolation-20261106
+  remotes/origin/hcv-edge-case-tests-20261104
+  remotes/origin/hcv-edge-case-tests-20261104-rebased
+  remotes/origin/hcv-env-server-lock-20261029
+  remotes/origin/hcv-error-catalog-20261106
+  remotes/origin/hcv-error-component-alerts-20261029
+  remotes/origin/hcv-error-component-lock2-20261029
+  remotes/origin/hcv-error-handling-20261105
+  remotes/origin/hcv-error-handling-improvement-20261106
+  remotes/origin/hcv-error-handling-test-20261106
+  remotes/origin/hcv-evidence-index-alerts-20261029
+  remotes/origin/hcv-expiry-lock-20261029
+  remotes/origin/hcv-extraction-lock-20261029
+  remotes/origin/hcv-file-to-base64-lock-20261029
+  remotes/origin/hcv-files-lock-20261029
+  remotes/origin/hcv-format-wallet-timestamp-lock-20261029
+  remotes/origin/hcv-health-checks-20261106
+  remotes/origin/hcv-ids-lock-20261029
+  remotes/origin/hcv-incident-response-runbook-20261106
+  remotes/origin/hcv-index-alerts-20261029
+  remotes/origin/hcv-integration-api-20261106
+  remotes/origin/hcv-integration-test-20261106
+  remotes/origin/hcv-invalidation-lock-20261029
+  remotes/origin/hcv-legal-docs-clean-20261106
+  remotes/origin/hcv-limits-lock-20261029
+  remotes/origin/hcv-live-region-announcements-20261029
+  remotes/origin/hcv-logging-improvement-20261106
+  remotes/origin/hcv-logging-standards-20261106
+  remotes/origin/hcv-mcp-owner-status
+  remotes/origin/hcv-mcp-owner-status-2
+  remotes/origin/hcv-mcp-setup-ui-lock-20261029
+  remotes/origin/hcv-money-lock-20261029
+  remotes/origin/hcv-monitoring-alerts-20261106
+  remotes/origin/hcv-monitoring-improvement-20261106
+  remotes/origin/hcv-observability-lock
+  remotes/origin/hcv-observability-metrics-extension-20261106
+  remotes/origin/hcv-observability-test-20261106
+  remotes/origin/hcv-onboarding-accessibility-20261106
+  remotes/origin/hcv-onboarding-docs-20261105
+  remotes/origin/hcv-onboarding-flow-20261106
+  remotes/origin/hcv-onboarding-improvement-20261106
+  remotes/origin/hcv-operator-board-lock-20261029
+  remotes/origin/hcv-pack-export-lock-20261029
+  remotes/origin/hcv-performance-baseline-20261106
+  remotes/origin/hcv-performance-test-20261106
+  remotes/origin/hcv-pr1458-prompt-safety
+  remotes/origin/hcv-pr1459-observability
+  remotes/origin/hcv-pr1460-buyer-pack
+  remotes/origin/hcv-pr1461-error-boundary
+  remotes/origin/hcv-preview-embedder-origin-lock-20261029
+  remotes/origin/hcv-privacy-data-handling-20261106
+  remotes/origin/hcv-prompt-safety-corpus-lock-20261106
+  remotes/origin/hcv-prompt-safety-lock-20261029
+  remotes/origin/hcv-query-client-lock-20261029
+  remotes/origin/hcv-questionnaire-templates-lock-20261029
+  remotes/origin/hcv-questions-lock-20261029
+  remotes/origin/hcv-roles-lock-20261029
+  remotes/origin/hcv-rsfm-control-plane-lock-20261029
+  remotes/origin/hcv-rules-lock-20261029
+  remotes/origin/hcv-security-audit-prep-20261106
+  remotes/origin/hcv-security-hardening-20261106
+  remotes/origin/hcv-security-headers-20261029
+  remotes/origin/hcv-security-headers-20261106
+  remotes/origin/hcv-status-lock-20261029
+  remotes/origin/hcv-status-properties-lock-20261029
+  remotes/origin/hcv-utils-lock-20261029
+  remotes/origin/hcv-utils-lock2-20261029
+  remotes/origin/independent-verification-20260908
+  remotes/origin/legal/uk-launch-docs-20261103
+  remotes/origin/local-chore
+  remotes/origin/master
+  remotes/origin/oc/task-1
+  remotes/origin/oc/task-10
+  remotes/origin/oc/task-19
+  remotes/origin/oc/task-3
+  remotes/origin/oc/task-9
+  remotes/origin/opencode/issue122-20261012000615
+  remotes/origin/opencode/issue55-20261011010153
+  remotes/origin/opencode/issue66-20261011011604
+  remotes/origin/opencode/issue68-20261011024833
+  remotes/origin/opencode/issue69-20261011012246
+  remotes/origin/opencode/issue77-20261011075035
+  remotes/origin/opencode/issue82-20261011003157
+  remotes/origin/opencode/issue83-20261011021115
+  remotes/origin/ops/bew-blocker-prep-20261007
+  remotes/origin/ops/bew-blocker-removal-20261007
+  remotes/origin/ops/bew-commercial-specialists-20261006
+  remotes/origin/ops/bew-legal-acceptance-20261007
+  remotes/origin/ops/bew-legal-identity-20261007
+  remotes/origin/ops/bew-release-verifiers-20261006
+  remotes/origin/ops/bew-remaining-gate-workers-20261007
+  remotes/origin/ops/bew-remaining-slice-workers-20261007
+  remotes/origin/ops/bew-s007-review-pack-output-20261007
+  remotes/origin/ops/bew-s007-review-pack-refresh-20261007
+  remotes/origin/ops/bew-s011-dogfood-20261007
+  remotes/origin/ops/bew-s011-evidence-20261007
+  remotes/origin/ops/bew-s017-verifier-20261006
+  remotes/origin/ops/bew-s022-closure-20261007
+  remotes/origin/ops/bew-s023-closure-20261007
+  remotes/origin/ops/bew-s027-closure-20261007
+  remotes/origin/ops/bew-s028-canonical-integration-20261007
+  remotes/origin/ops/bew-s028-closure-20261007
+  remotes/origin/ops/bew-s028-integrate-20261007
+  remotes/origin/ops/bew-s031-live-protection-probe-20261007
+  remotes/origin/ops/bew-s031-plan-blocker-output-20261007
+  remotes/origin/ops/bew-s031-plan-blocker-refresh-20261007
+  remotes/origin/ops/bew-s032-antigravity-review-20261007
+  remotes/origin/ops/bew-s035-focus-integration-20261007
+  remotes/origin/ops/bew-s035-focus-integration-v2-20261007
+  remotes/origin/ops/bew-s035-reconcile-20261007
+  remotes/origin/ops/bew-unfinished-workers-20261007
+  remotes/origin/ops/runner-pool-burst-20260926
+  remotes/origin/ops/security-audit-gate-repin-20261007
+  remotes/origin/ops/security-audit-recon-20261007
+  remotes/origin/pilot/controlled-2026-09-08
+  remotes/origin/policy/nvidia-factory-owner-rule-20261008
+  remotes/origin/pr-214
+  remotes/origin/prep/bew-s022-privacy-20261007
+  remotes/origin/prep/bew-s027-legal-20261007
+  remotes/origin/rc/ew-20261121
+  remotes/origin/rea/evidence-wallet-compliance
+  remotes/origin/rea16/c-01
+  remotes/origin/rea16/c-02
+  remotes/origin/rea16/c-03
+  remotes/origin/rea16/c-04
+  remotes/origin/rea16/c-04-contradictory-certificates
+  remotes/origin/rea16/c-05
+  remotes/origin/rea16/c-06
+  remotes/origin/rea16/d-housingcase/pango-inspection-comparison
+  remotes/origin/rea16/d-housingcase/pango-per-door-job-management
+  remotes/origin/readiness/ew-1023-02-localgate
+  remotes/origin/readiness/ew-1023-03-rollback
+  remotes/origin/readiness/ew-1025-02-master-sha
+  remotes/origin/readiness/ew-1025-04-pilot-onboard
+  remotes/origin/readiness/ew-1025-05-buyer-honesty
+  remotes/origin/readiness/ew-1025-07-operator-checklist
+  remotes/origin/readiness/ew-1025-08-a11y-statement
+  remotes/origin/readiness/ew-1025-09-rls-honesty
+  remotes/origin/readiness/ew-1025-14-security-headers-lock
+  remotes/origin/readiness/ew-1025-15-rate-limit-scopes-lock
+  remotes/origin/readiness/ew-1025-16-release-sha-be84
+  remotes/origin/readiness/ew-1025-17-session-cookie-lock
+  remotes/origin/readiness/ew-1025-18-zip-slip-lock
+  remotes/origin/readiness/ew-1025-19-embedder-origin-lock
+  remotes/origin/readiness/ew-1025-20-password-bounds
+  remotes/origin/readiness/ew-1025-21-parse-budget-lock
+  remotes/origin/readiness/ew-1025-22-ai-timeout-lock
+  remotes/origin/readiness/ew-1025-23-pdf-inflate-lock
+  remotes/origin/readiness/ew-1025-24-file-bytes-lock
+  remotes/origin/readiness/ew-1025-25-admin-error-copy
+  remotes/origin/readiness/ew-1025-26-incident-drill
+  remotes/origin/readiness/ew-1025-27-paste-text-lock
+  remotes/origin/readiness/ew-1025-28-invite-token-lock
+  remotes/origin/readiness/ew-1025-29-health-ready-lock
+  remotes/origin/readiness/ew-1025-30-job-stale-lock
+  remotes/origin/readiness/ew-1025-31-count-limits-lock
+  remotes/origin/readiness/ew-1025-32-pack-recompute-batch
+  remotes/origin/readiness/ew-1025-33-text-limits-lock
+  remotes/origin/readiness/ew-1025-34-money-parse-lock
+  remotes/origin/readiness/ew-1025-35-demo-pack-synthetic
+  remotes/origin/readiness/ew-1025-36-canonical-keys-lock
+  remotes/origin/readiness/ew-1025-37-prompt-safety-corpus-lock
+  remotes/origin/readiness/ew-1025-38-expiry-bucket-honesty
+  remotes/origin/readiness/ew-1025-39-roles-permissions-lock
+  remotes/origin/readiness/ew-1025-40-conflict-engine-lock
+  remotes/origin/readiness/ew-1025-41-answer-fail-closed-lock
+  remotes/origin/readiness/ew-1025-42-invalidation-lock
+  remotes/origin/readiness/ew-1025-43-claim-edit-honesty
+  remotes/origin/readiness/ew-1025-44-threshold-currency-lock
+  remotes/origin/readiness/ew-1025-45-ai-grounding-lock
+  remotes/origin/readiness/ew-1025-46-pack-export-honesty
+  remotes/origin/readiness/ew-1025-47-operator-board-lock
+  remotes/origin/readiness/ew-1025-48-status-properties-lock
+  remotes/origin/readiness/ew-1025-49-negative-evidence-lock
+  remotes/origin/readiness/ew-1025-50-extraction-limits-lock
+  remotes/origin/readiness/ew-1025-55-parse-numeric-lock
+  remotes/origin/readiness/ew-1025-89-opportunities-lock
+  remotes/origin/readiness/ew-1025-90-opportunity-prep-lock
+  remotes/origin/readiness/ew-1025-94-entity-graph-lock
+  remotes/origin/readiness/ew-1025-96-compliance-alerts-lock
+  remotes/origin/readiness/ew-1026-62-neon-pool-options-lock
+  remotes/origin/readiness/ew-1026-authority-level-max
+  remotes/origin/readiness/ew-1026-permissions-encrypted-media-deny
+  remotes/origin/readiness/ew-1026-permissions-hid-deny
+  remotes/origin/readiness/ew-1026-purpose-max
+  remotes/origin/readiness/ew-1027-04-post-slices-verify
+  remotes/origin/readiness/ew-1027-admin-ux
+  remotes/origin/readiness/ew-1027-audit-aria-busy
+  remotes/origin/readiness/ew-1027-audit-empty-gate
+  remotes/origin/readiness/ew-1027-audit-loop-events-busy
+  remotes/origin/readiness/ew-1027-beyond-health-ready-metrics
+  remotes/origin/readiness/ew-1027-claims-empty-gate
+  remotes/origin/readiness/ew-1027-compliance-empty-gate
+  remotes/origin/readiness/ew-1027-compliance-entities-busy
+  remotes/origin/readiness/ew-1027-compliance-renewals-aria-busy
+  remotes/origin/readiness/ew-1027-coop-corp-headers
+  remotes/origin/readiness/ew-1027-decisions-empty-gate
+  remotes/origin/readiness/ew-1027-domain-lock-honesty
+  remotes/origin/readiness/ew-1027-empty-gate-fix
+  remotes/origin/readiness/ew-1027-entities-aria-busy
+  remotes/origin/readiness/ew-1027-entities-catalog-busy
+  remotes/origin/readiness/ew-1027-entities-load-alerts
+  remotes/origin/readiness/ew-1027-entities-paths-busy
+  remotes/origin/readiness/ew-1027-entity-name-max-wire
+  remotes/origin/readiness/ew-1027-evidence-claims-busy
+  remotes/origin/readiness/ew-1027-evidence-empty-gate
+  remotes/origin/readiness/ew-1027-exports-empty-gate
+  remotes/origin/readiness/ew-1027-facts-empty-gate
+  remotes/origin/readiness/ew-1027-facts-history-aria-busy
+  remotes/origin/readiness/ew-1027-file-to-base64-bytes
+  remotes/origin/readiness/ew-1027-gateway-http-typecheck
+  remotes/origin/readiness/ew-1027-hsts-header-lock
+  remotes/origin/readiness/ew-1027-hsts-lock-test-fix
+  remotes/origin/readiness/ew-1027-incident-drill-fix
+  remotes/origin/readiness/ew-1027-incident-drill-fix-2
+  remotes/origin/readiness/ew-1027-incident-metrics-lock
+  remotes/origin/readiness/ew-1027-index-docs-busy
+  remotes/origin/readiness/ew-1027-lint-nvidia-empty-catch
+  remotes/origin/readiness/ew-1027-lint-unused-vars-cleanup
+  remotes/origin/readiness/ew-1027-metrics-observability-lock
+  remotes/origin/readiness/ew-1027-monitoring-verify
+  remotes/origin/readiness/ew-1027-opportunities-aria-busy
+  remotes/origin/readiness/ew-1027-opportunities-aria-busy-fix
+  remotes/origin/readiness/ew-1027-opportunities-empty-gate
+  remotes/origin/readiness/ew-1027-opportunities-templates-aria
+  remotes/origin/readiness/ew-1027-opportunities-templates-busy
+  remotes/origin/readiness/ew-1027-orgs-aria-busy
+  remotes/origin/readiness/ew-1027-orgs-aria-busy-lock
+  remotes/origin/readiness/ew-1027-overview-stats-busy
+  remotes/origin/readiness/ew-1027-packs-detail-aria-busy
+  remotes/origin/readiness/ew-1027-packs-empty-gate
+  remotes/origin/readiness/ew-1027-packs-prefs-busy
+  remotes/origin/readiness/ew-1027-packs-prefs-lock-fix
+  remotes/origin/readiness/ew-1027-permissions-all-screens-capture-deny
+  remotes/origin/readiness/ew-1027-permissions-browser-install-deny
+  remotes/origin/readiness/ew-1027-permissions-capture-deny
+  remotes/origin/readiness/ew-1027-permissions-capture-deny-fix
+  remotes/origin/readiness/ew-1027-permissions-captured-surface-control-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-device-memory-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-downlink-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-dpr-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ect-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-lang-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-prefers-color-scheme-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-prefers-reduced-motion-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-rtt-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-save-data-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-arch-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-bitness-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-form-factors-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-full-version-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-full-version-list-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-high-entropy-values-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-mobile-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-model-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-platform-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-platform-version-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-wow64-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-viewport-height-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-viewport-width-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-width-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-width-deny-v2
+  remotes/origin/readiness/ew-1027-permissions-compute-pressure-deny
+  remotes/origin/readiness/ew-1027-permissions-conversion-measurement-deny
+  remotes/origin/readiness/ew-1027-permissions-deferred-fetch-deny
+  remotes/origin/readiness/ew-1027-permissions-deferred-fetch-minimal-deny
+  remotes/origin/readiness/ew-1027-permissions-digital-credentials-get-deny
+  remotes/origin/readiness/ew-1027-permissions-document-write-deny
+  remotes/origin/readiness/ew-1027-permissions-focus-without-user-activation-deny
+  remotes/origin/readiness/ew-1027-permissions-html-attribute-or-property-deny
+  remotes/origin/readiness/ew-1027-permissions-identity-credentials-create-deny
+  remotes/origin/readiness/ew-1027-permissions-interest-cohort-deny
+  remotes/origin/readiness/ew-1027-permissions-join-ad-interest-group-deny
+  remotes/origin/readiness/ew-1027-permissions-keyboard-map-deny
+  remotes/origin/readiness/ew-1027-permissions-language-detector-deny
+  remotes/origin/readiness/ew-1027-permissions-layout-animations-deny
+  remotes/origin/readiness/ew-1027-permissions-legacy-image-formats-deny
+  remotes/origin/readiness/ew-1027-permissions-manual-text-deny
+  remotes/origin/readiness/ew-1027-permissions-navigation-override-deny
+  remotes/origin/readiness/ew-1027-permissions-on-device-speech-recognition-deny
+  remotes/origin/readiness/ew-1027-permissions-on-device-speech-recognition-deny-2
+  remotes/origin/readiness/ew-1027-permissions-oversized-images-deny
+  remotes/origin/readiness/ew-1027-permissions-private-aggregation-deny
+  remotes/origin/readiness/ew-1027-permissions-private-state-token-issuance-deny
+  remotes/origin/readiness/ew-1027-permissions-private-state-token-redemption-deny
+  remotes/origin/readiness/ew-1027-permissions-publickey-credentials-create-deny
+  remotes/origin/readiness/ew-1027-permissions-publickey-credentials-get-deny
+  remotes/origin/readiness/ew-1027-permissions-rewriter-deny
+  remotes/origin/readiness/ew-1027-permissions-run-ad-auction-deny
+  remotes/origin/readiness/ew-1027-permissions-shared-storage-select-url-deny
+  remotes/origin/readiness/ew-1027-permissions-smart-card-deny
+  remotes/origin/readiness/ew-1027-permissions-speaker-deny
+  remotes/origin/readiness/ew-1027-permissions-summarizer-deny
+  remotes/origin/readiness/ew-1027-permissions-sync-script-deny
+  remotes/origin/readiness/ew-1027-permissions-translator-deny
+  remotes/origin/readiness/ew-1027-permissions-trust-token-redemption-deny
+  remotes/origin/readiness/ew-1027-permissions-unload-deny
+  remotes/origin/readiness/ew-1027-permissions-unoptimized-images-deny
+  remotes/origin/readiness/ew-1027-permissions-vertical-scroll-deny
+  remotes/origin/readiness/ew-1027-permissions-wake-lock-deny
+  remotes/origin/readiness/ew-1027-permissions-webxr-deny
+  remotes/origin/readiness/ew-1027-permissions-writer-deny
+  remotes/origin/readiness/ew-1027-permissions-xr-deny
+  remotes/origin/readiness/ew-1027-pg-local-stage-bins
+  remotes/origin/readiness/ew-1027-pg-local-stage-once
+  remotes/origin/readiness/ew-1027-pg-local-stage-share
+  remotes/origin/readiness/ew-1027-questionnaires-empty-gate
+  remotes/origin/readiness/ew-1027-release-branching-row-fix
+  remotes/origin/readiness/ew-1027-release-branching-tip-note
+  remotes/origin/readiness/ew-1027-release-truth-tip-9a9b
+  remotes/origin/readiness/ew-1027-release-truth-tip-format
+  remotes/origin/readiness/ew-1027-secret-scan-fixture-dummies
+  remotes/origin/readiness/ew-1027-security-headers-lock-sync
+  remotes/origin/readiness/ew-1027-team-agents-aria-busy
+  remotes/origin/readiness/ew-1027-team-empty-gate
+  remotes/origin/readiness/ew-1027-team-invites-caps-busy
+  remotes/origin/readiness/ew-1027-with-app-env-exec
+  remotes/origin/readiness/ew-commercial-registers
+  remotes/origin/readiness/ew-compliance-request-alert
+  remotes/origin/readiness/ew-fix-bt1
+  remotes/origin/readiness/ew-fix-bt1-bt2
+  remotes/origin/readiness/ew-fix-bt1-pdf-parse
+  remotes/origin/readiness/ew-fix-bt2
+  remotes/origin/readiness/ew-fix-bt3
+  remotes/origin/readiness/ew-fixes-comprehensive
+  remotes/origin/readiness/ew-gateway-unused-deny
+  remotes/origin/readiness/ew-invite-mailer
+  remotes/origin/readiness/ew-local-gate
+  remotes/origin/readiness/ew-nvidia-runtime-guard
+  remotes/origin/readiness/ew-observability
+  remotes/origin/readiness/ew-registers-r5
+  remotes/origin/readiness/ew-registers-r7
+  remotes/origin/readiness/ew-t32-droplet-mcp
+  remotes/origin/readiness/ew-template-id-set
+  remotes/origin/readiness/ew-tenant-guc-order
+  remotes/origin/readiness/fix-incident-drill-lock
+  remotes/origin/readiness/gh-runner-estate-pin-bump
+  remotes/origin/readiness/hcv-a11y-status
+  remotes/origin/readiness/hcv-acceptance-matrix
+  remotes/origin/readiness/hcv-admin-error-bearer-scrub
+  remotes/origin/readiness/hcv-admin-ux
+  remotes/origin/readiness/hcv-agent-limits-lock
+  remotes/origin/readiness/hcv-agent-loop-limits-lock
+  remotes/origin/readiness/hcv-ai-grounding-edges
+  remotes/origin/readiness/hcv-ai-grounding-lock
+  remotes/origin/readiness/hcv-ai-grounding-tokens
+  remotes/origin/readiness/hcv-answer-bank-freshness-lock
+  remotes/origin/readiness/hcv-answers
+  remotes/origin/readiness/hcv-answers-human-decision
+  remotes/origin/readiness/hcv-app-session-busy
+  remotes/origin/readiness/hcv-assertion-limits-lock
+  remotes/origin/readiness/hcv-audit-alerts
+  remotes/origin/readiness/hcv-audit-empty-status
+  remotes/origin/readiness/hcv-audit-error-alerts
+  remotes/origin/readiness/hcv-audit-gateway-auth-busy
+  remotes/origin/readiness/hcv-audit-gateway-loading-status
+  remotes/origin/readiness/hcv-audit-list-aria-label
+  remotes/origin/readiness/hcv-audit-loop-events-busy
+  remotes/origin/readiness/hcv-audit-loop-events-loading-status
+  remotes/origin/readiness/hcv-audit-loop-runs-busy
+  remotes/origin/readiness/hcv-audit-loops-loading-status
+  remotes/origin/readiness/hcv-audit-org-events-busy
+  remotes/origin/readiness/hcv-browser-sandbox-hostile-lock
+  remotes/origin/readiness/hcv-browser-sandbox-policy-lock
+  remotes/origin/readiness/hcv-buyer-pack
+  remotes/origin/readiness/hcv-canonical-keys
+  remotes/origin/readiness/hcv-canonical-keys-complete
+  remotes/origin/readiness/hcv-canonical-keys-lock
+  remotes/origin/readiness/hcv-canonical-null-guard
+  remotes/origin/readiness/hcv-claim-edit-failclosed-lock
+  remotes/origin/readiness/hcv-claim-edit-injection
+  remotes/origin/readiness/hcv-claims-empty
+  remotes/origin/readiness/hcv-clock-fail-closed
+  remotes/origin/readiness/hcv-compliance-alerts
+  remotes/origin/readiness/hcv-compliance-board-busy-lock
+  remotes/origin/readiness/hcv-compliance-board-loading-status
+  remotes/origin/readiness/hcv-compliance-empty-status
+  remotes/origin/readiness/hcv-compliance-entities-loading-status
+  remotes/origin/readiness/hcv-compliance-entities-select-loading-status
+  remotes/origin/readiness/hcv-compliance-list-aria-label
+  remotes/origin/readiness/hcv-compliance-obligation-actions-busy
+  remotes/origin/readiness/hcv-compliance-obligations-busy
+  remotes/origin/readiness/hcv-compliance-refresh-busy
+  remotes/origin/readiness/hcv-compliance-renewals-busy-lock
+  remotes/origin/readiness/hcv-compliance-renewals-loading-status
+  remotes/origin/readiness/hcv-compliance-tables-aria-label
+  remotes/origin/readiness/hcv-conflicts-active-status-lock
+  remotes/origin/readiness/hcv-conflicts-agree
+  remotes/origin/readiness/hcv-control-mcp-alerts
+  remotes/origin/readiness/hcv-control-mcp-aria-label
+  remotes/origin/readiness/hcv-control-mcp-owner-status
+  remotes/origin/readiness/hcv-control-mcp-status-busy-lock
+  remotes/origin/readiness/hcv-control-mcp-status-loading-status
+  remotes/origin/readiness/hcv-currency-conflict
+  remotes/origin/readiness/hcv-decisions-alerts
+  remotes/origin/readiness/hcv-decisions-empty-status
+  remotes/origin/readiness/hcv-decisions-inbox-busy-lock
+  remotes/origin/readiness/hcv-decisions-list-aria-label
+  remotes/origin/readiness/hcv-decisions-nested-list-aria-label
+  remotes/origin/readiness/hcv-decisions-scan-busy
+  remotes/origin/readiness/hcv-decisions-sibling-actions-busy
+  remotes/origin/readiness/hcv-demo-files-shape
+  remotes/origin/readiness/hcv-demo-pack-deterministic-lock
+  remotes/origin/readiness/hcv-demo-pack-lock
+  remotes/origin/readiness/hcv-doc-model-alert
+  remotes/origin/readiness/hcv-entities-alerts
+  remotes/origin/readiness/hcv-entities-answer-bank-busy
+  remotes/origin/readiness/hcv-entities-answers-loading-status
+  remotes/origin/readiness/hcv-entities-catalog-list-aria-label
+  remotes/origin/readiness/hcv-entities-create-busy
+  remotes/origin/readiness/hcv-entities-create-typed-busy
+  remotes/origin/readiness/hcv-entities-empty-status
+  remotes/origin/readiness/hcv-entities-inbound-busy
+  remotes/origin/readiness/hcv-entities-inbound-loading-status
+  remotes/origin/readiness/hcv-entities-list-busy
+  remotes/origin/readiness/hcv-entities-merge-entities-busy
+  remotes/origin/readiness/hcv-entities-neighborhood-busy
+  remotes/origin/readiness/hcv-entities-neighborhood-loading-status
+  remotes/origin/readiness/hcv-entities-paths-busy
+  remotes/origin/readiness/hcv-entities-preferences-busy
+  remotes/origin/readiness/hcv-entities-preferences-empty-status
+  remotes/origin/readiness/hcv-entities-preferences-loading-status
+  remotes/origin/readiness/hcv-entities-register-relation-busy
+  remotes/origin/readiness/hcv-entities-relation-catalog-busy
+  remotes/origin/readiness/hcv-entities-relation-catalog-loading-status
+  remotes/origin/readiness/hcv-entities-relations-aria-label
+  remotes/origin/readiness/hcv-entities-relations-busy
+  remotes/origin/readiness/hcv-entities-relations-loading-status
+  remotes/origin/readiness/hcv-entities-review-inbound-busy
+  remotes/origin/readiness/hcv-entities-stale-keys-status
+  remotes/origin/readiness/hcv-entities-type-catalog-busy
+  remotes/origin/readiness/hcv-entity-graph-cycle-lock
+  remotes/origin/readiness/hcv-entity-limits-lock
+  remotes/origin/readiness/hcv-entity-type-parse-lock
+  remotes/origin/readiness/hcv-error-handling
+  remotes/origin/readiness/hcv-error-main-landmark
+  remotes/origin/readiness/hcv-evidence-claims-busy
+  remotes/origin/readiness/hcv-evidence-claims-loading-status
+  remotes/origin/readiness/hcv-evidence-doc-busy-lock
+  remotes/origin/readiness/hcv-evidence-doc-claims-aria-label
+  remotes/origin/readiness/hcv-evidence-doc-empty-status
+  remotes/origin/readiness/hcv-evidence-doc-loading-status
+  remotes/origin/readiness/hcv-evidence-doc-org-busy
+  remotes/origin/readiness/hcv-evidence-docs-loading-status
+  remotes/origin/readiness/hcv-evidence-document-busy
+  remotes/origin/readiness/hcv-evidence-empty-status
+  remotes/origin/readiness/hcv-evidence-index-busy-lock
+  remotes/origin/readiness/hcv-evidence-list
+  remotes/origin/readiness/hcv-evidence-list-aria-label
+  remotes/origin/readiness/hcv-evidence-request-templates-lock
+  remotes/origin/readiness/hcv-evidence-showmore-aria
+  remotes/origin/readiness/hcv-evidence-text-unsafe-lock
+  remotes/origin/readiness/hcv-evidence-viewer-status
+  remotes/origin/readiness/hcv-expiry-buckets
+  remotes/origin/readiness/hcv-expiry-budget
+  remotes/origin/readiness/hcv-expiry-date-null
+  remotes/origin/readiness/hcv-expiry-extract-null
+  remotes/origin/readiness/hcv-expiry-normalize-null
+  remotes/origin/readiness/hcv-expiry-text-null
+  remotes/origin/readiness/hcv-exports-alerts
+  remotes/origin/readiness/hcv-exports-busy
+  remotes/origin/readiness/hcv-exports-empty-status
+  remotes/origin/readiness/hcv-exports-list-aria-label
+  remotes/origin/readiness/hcv-extract-null
+  remotes/origin/readiness/hcv-extraction-injection
+  remotes/origin/readiness/hcv-extraction-mixed-cover
+  remotes/origin/readiness/hcv-facts-alerts
+  remotes/origin/readiness/hcv-facts-assert-siblings-busy
+  remotes/origin/readiness/hcv-facts-assertions-busy
+  remotes/origin/readiness/hcv-facts-assertions-loading-status
+  remotes/origin/readiness/hcv-facts-authority-busy
+  remotes/origin/readiness/hcv-facts-authority-jsx
+  remotes/origin/readiness/hcv-facts-authority-loading-status
+  remotes/origin/readiness/hcv-facts-claims-loading-busy
+  remotes/origin/readiness/hcv-facts-claims-loading-status
+  remotes/origin/readiness/hcv-facts-empty-status
+  remotes/origin/readiness/hcv-facts-history-busy
+  remotes/origin/readiness/hcv-facts-history-loading-status
+  remotes/origin/readiness/hcv-facts-list-aria-label
+  remotes/origin/readiness/hcv-facts-nested-list-aria-label
+  remotes/origin/readiness/hcv-facts-org-still-loading-busy
+  remotes/origin/readiness/hcv-facts-review-queue-busy
+  remotes/origin/readiness/hcv-facts-showmore-aria
+  remotes/origin/readiness/hcv-facts-wallet-busy
+  remotes/origin/readiness/hcv-facts-wallet-loading-status
+  remotes/origin/readiness/hcv-files-blocked-ext-lock
+  remotes/origin/readiness/hcv-files-null
+  remotes/origin/readiness/hcv-files-validate-upload
+  remotes/origin/readiness/hcv-focus-scroll-margin
+  remotes/origin/readiness/hcv-form-agent-dry-run-lock
+  remotes/origin/readiness/hcv-gateway-purpose-untrusted-lock
+  remotes/origin/readiness/hcv-home-account-status
+  remotes/origin/readiness/hcv-home-session-busy
+  remotes/origin/readiness/hcv-host-busy-lock-repair
+  remotes/origin/readiness/hcv-host-gate-honesty
+  remotes/origin/readiness/hcv-ids-invite
+  remotes/origin/readiness/hcv-ids-invite-lock
+  remotes/origin/readiness/hcv-ids-invite-shape
+  remotes/origin/readiness/hcv-inbox-ingestion-quarantine-lock
+  remotes/origin/readiness/hcv-index-demo-loading-status
+  remotes/origin/readiness/hcv-index-expiry-buckets-loading-status
+  remotes/origin/readiness/hcv-index-expiry-empty-status
+  remotes/origin/readiness/hcv-index-expiry-error-alert
+  remotes/origin/readiness/hcv-invalidation-reeval-lock
+  remotes/origin/readiness/hcv-kill-switches-fail-closed-lock
+  remotes/origin/readiness/hcv-lock-sync-1179
+  remotes/origin/readiness/hcv-login-busy
+  remotes/origin/readiness/hcv-login-busy-status
+  remotes/origin/readiness/hcv-login-closed-status
+  remotes/origin/readiness/hcv-master-honesty
+  remotes/origin/readiness/hcv-money-candidates-lock
+  remotes/origin/readiness/hcv-money-null
+  remotes/origin/readiness/hcv-money-null-guard
+  remotes/origin/readiness/hcv-no-price-honesty
+  remotes/origin/readiness/hcv-obligation-key-limits-lock
+  remotes/origin/readiness/hcv-observability
+  remotes/origin/readiness/hcv-observability-lock
+  remotes/origin/readiness/hcv-onboarding
+  remotes/origin/readiness/hcv-operator-board-empty
+  remotes/origin/readiness/hcv-operator-board-lock
+  remotes/origin/readiness/hcv-opp-drafts-busy
+  remotes/origin/readiness/hcv-opp-quotes-busy
+  remotes/origin/readiness/hcv-opp-ranked-busy
+  remotes/origin/readiness/hcv-opp-requests-busy
+  remotes/origin/readiness/hcv-opp-templates-busy
+  remotes/origin/readiness/hcv-opportunities-alerts
+  remotes/origin/readiness/hcv-opportunities-empty-status
+  remotes/origin/readiness/hcv-opportunities-ingest-busy
+  remotes/origin/readiness/hcv-opportunities-list-aria-label
+  remotes/origin/readiness/hcv-opportunities-quotes-drafts-aria-label
+  remotes/origin/readiness/hcv-opportunities-score-lock
+  remotes/origin/readiness/hcv-opportunities-scoring-lock
+  remotes/origin/readiness/hcv-opportunities-templates-loading-status
+  remotes/origin/readiness/hcv-org-list-status
+  remotes/origin/readiness/hcv-org-nav-aria-current
+  remotes/origin/readiness/hcv-org-nav-aria-current-r2
+  remotes/origin/readiness/hcv-org-overview-list-aria-label
+  remotes/origin/readiness/hcv-org-shell-busy
+  remotes/origin/readiness/hcv-orgs-create-join-busy
+  remotes/origin/readiness/hcv-orgs-empty
+  remotes/origin/readiness/hcv-orgs-list-aria-label
+  remotes/origin/readiness/hcv-orgs-list-busy-lock
+  remotes/origin/readiness/hcv-orgshell-menu-focus-return
+  remotes/origin/readiness/hcv-overview-alerts
+  remotes/origin/readiness/hcv-overview-checklist-aria-label
+  remotes/origin/readiness/hcv-overview-demo-busy-lock
+  remotes/origin/readiness/hcv-overview-expiry-board-busy
+  remotes/origin/readiness/hcv-overview-expiry-buckets-busy
+  remotes/origin/readiness/hcv-overview-stats-busy-lock
+  remotes/origin/readiness/hcv-overview-stats-loading-status
+  remotes/origin/readiness/hcv-pack-autofill-grounded-lock
+  remotes/origin/readiness/hcv-pack-detail-alerts
+  remotes/origin/readiness/hcv-pack-export-green
+  remotes/origin/readiness/hcv-pack-export-integrity-lock
+  remotes/origin/readiness/hcv-packs-alerts
+  remotes/origin/readiness/hcv-packs-detail-busy-lock
+  remotes/origin/readiness/hcv-packs-detail-list-aria-label
+  remotes/origin/readiness/hcv-packs-detail-loading-status
+  remotes/origin/readiness/hcv-packs-detail-secondary-loading-status
+  remotes/origin/readiness/hcv-packs-details-busy
+  remotes/origin/readiness/hcv-packs-empty-status
+  remotes/origin/readiness/hcv-packs-index-busy-lock
+  remotes/origin/readiness/hcv-packs-list-aria-label
+  remotes/origin/readiness/hcv-packs-note-assign-busy
+  remotes/origin/readiness/hcv-packs-showmore-aria
+  remotes/origin/readiness/hcv-parseflexdate-null-guard
+  remotes/origin/readiness/hcv-policy-human-only-lock
+  remotes/origin/readiness/hcv-prompt-injection-punctuation
+  remotes/origin/readiness/hcv-prompt-safety-lock
+  remotes/origin/readiness/hcv-prompt-strip-markers
+  remotes/origin/readiness/hcv-prompt-wrap
+  remotes/origin/readiness/hcv-qn-detail-busy-lock
+  remotes/origin/readiness/hcv-qn-detail-list-aria-label
+  remotes/origin/readiness/hcv-qn-index-busy-lock
+  remotes/origin/readiness/hcv-qn-list-aria-label
+  remotes/origin/readiness/hcv-qn-templates-list-aria-label
+  remotes/origin/readiness/hcv-questionnaire-detail-busy
+  remotes/origin/readiness/hcv-questionnaire-detail-loading-status
+  remotes/origin/readiness/hcv-questionnaire-missing
+  remotes/origin/readiness/hcv-questionnaire-templates-lock
+  remotes/origin/readiness/hcv-questionnaires-add-loading-status
+  remotes/origin/readiness/hcv-questionnaires-alerts
+  remotes/origin/readiness/hcv-questionnaires-empty-status
+  remotes/origin/readiness/hcv-questionnaires-list-loading-status
+  remotes/origin/readiness/hcv-questions-max
+  remotes/origin/readiness/hcv-questions-null
+  remotes/origin/readiness/hcv-questions-parse-lock
+  remotes/origin/readiness/hcv-release-truth-tip
+  remotes/origin/readiness/hcv-renewals-stage-plan-lock
+  remotes/origin/readiness/hcv-requirements-trace
+  remotes/origin/readiness/hcv-rls-failopen-honesty
+  remotes/origin/readiness/hcv-roles-assign
+  remotes/origin/readiness/hcv-roles-parse-null
+  remotes/origin/readiness/hcv-roles-permissions-lock
+  remotes/origin/readiness/hcv-route-error-alert
+  remotes/origin/readiness/hcv-rules-parse-numeric-lock
+  remotes/origin/readiness/hcv-rules-threshold
+  remotes/origin/readiness/hcv-security-residuals
+  remotes/origin/readiness/hcv-shell-org-alert
+  remotes/origin/readiness/hcv-signin-pending-status
+  remotes/origin/readiness/hcv-signup-busy
+  remotes/origin/readiness/hcv-signup-busy-status
+  remotes/origin/readiness/hcv-skip-focus-visible
+  remotes/origin/readiness/hcv-skip-focus-visible-r2
+  remotes/origin/readiness/hcv-skip-link-focus-visible
+  remotes/origin/readiness/hcv-skip-target-main
+  remotes/origin/readiness/hcv-skip-target-main-final
+  remotes/origin/readiness/hcv-status-badge-name
+  remotes/origin/readiness/hcv-status-failclosed-lock
+  remotes/origin/readiness/hcv-team-agent-caps-loading-status
+  remotes/origin/readiness/hcv-team-agents-loading-status
+  remotes/origin/readiness/hcv-team-alerts
+  remotes/origin/readiness/hcv-team-capability-grants-busy
+  remotes/origin/readiness/hcv-team-deletion-orders-busy
+  remotes/origin/readiness/hcv-team-deletion-orders-loading-status
+  remotes/origin/readiness/hcv-team-empty-status
+  remotes/origin/readiness/hcv-team-execute-deletion-busy
+  remotes/origin/readiness/hcv-team-identities-status
+  remotes/origin/readiness/hcv-team-invite-status
+  remotes/origin/readiness/hcv-team-invites-busy
+  remotes/origin/readiness/hcv-team-invites-loading-status
+  remotes/origin/readiness/hcv-team-kill-switches-busy
+  remotes/origin/readiness/hcv-team-kill-switches-loading-status
+  remotes/origin/readiness/hcv-team-list-aria-label
+  remotes/origin/readiness/hcv-team-members-busy
+  remotes/origin/readiness/hcv-team-monitor-agents-busy
+  remotes/origin/readiness/hcv-team-ops-list-aria-label
+  remotes/origin/readiness/hcv-team-remove-armed-busy
+  remotes/origin/readiness/hcv-team-request-deletion-busy
+  remotes/origin/readiness/hcv-team-revoke-agent-busy
+  remotes/origin/readiness/hcv-team-rotate-cred-busy
+  remotes/origin/readiness/hcv-team-wipe-busy
+  remotes/origin/readiness/hcv-template-limits-lock
+  remotes/origin/readiness/hcv-tenant-guc-fail-closed
+  remotes/origin/readiness/hcv-text-limits-lock
+  remotes/origin/reconcile/step14-security-port-20260925
+  remotes/origin/release/candidate-2026-09-08
+  remotes/origin/release/fix-platform-regressions-20260913
+  remotes/origin/release/reconciled-pilot-20260914
+  remotes/origin/repair/bew-s035-focus-20261007
+  remotes/origin/research/nvidia-evidence-wallet-p0
+  remotes/origin/review/slice-vocabulary-20261003
+  remotes/origin/rsfm-estate-adapter-20260911
+  remotes/origin/sec/redteam-pentest-report
+  remotes/origin/security/automated-redteam-2026-09-08
+  remotes/origin/security/release-gate-fix-20261121
+  remotes/origin/six-docs-adopt
+  remotes/origin/synthetic-data-r1
+  remotes/origin/task-6-verification-final
+  remotes/origin/task-6/register-fix-ew-fix-04-05
+  remotes/origin/task/cp-11-expiry-tracking
+  remotes/origin/test/hard25-20261113
+  remotes/origin/test/redteam15-rerun-20261116
+  remotes/origin/validation/cloud-ci-2026-09-13
+  remotes/origin/verification/cloud-release-gate-20260910
+  remotes/origin/verification/current-release-20260912
+  remotes/origin/verification/deployment-reconciled-2-20260914
+  remotes/origin/verification/deployment-reconciled-20260914
+  remotes/origin/verification/deployment-reconciled-3-20260914
+  remotes/origin/verification/master-af79ed2-20260913
+  remotes/origin/verification/platform-fix-20260913
+  remotes/origin/verification/reconciled-base-20260914
+  remotes/origin/verification/reconciled-pilot-20260914
+  remotes/origin/verify/document-knowledge-html-gate-20261007
+  remotes/origin/verify/step16-integration-20260925
+  remotes/origin/wip/100-rebased
+  remotes/origin/wip/101-on-reconciled
+  remotes/origin/wip/102-on-reconciled
+  remotes/origin/wip/103-on-reconciled
+  remotes/origin/wip/104-on-reconciled
+  remotes/origin/wip/84-rebased
+  remotes/origin/wip/85-rebased
+  remotes/origin/wip/86-on-reconciled
+  remotes/origin/wip/89-rebased
+  remotes/origin/wip/92-on-reconciled
+  remotes/origin/wip/94-on-reconciled
+  remotes/origin/wip/95-on-reconciled
+  remotes/origin/wip/97-rebased
+  remotes/origin/wip/d35-base-line
+  remotes/origin/worker-goal-slicing-20261003
+  remotes/origin/worker-goal-slicing-v2-20261003
+  remotes/origin/worker/bew-capacity-wave-20261006
+  remotes/origin/worker/bew-iam-recovery-20261006
+  remotes/origin/worker/bew-release-docs-20261006
+  remotes/origin/wt-parseflexdate-null-guard
+[0m
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -20 --all -- rc/ew-20261121 2>/dev/null | head -30
+(no output)
+[0m
+[0m• [0mExplore repo structure[90m Explore Agent[0m
+Now let me explore the codebase to understand the findings:

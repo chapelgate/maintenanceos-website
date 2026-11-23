@@ -1,0 +1,180 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead .
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo 2>/dev/null || echo "No repo at chapelgate/repo"
+total 44
+drwxrwxr-x  9 andy andy  4096 Nov 21 21:54 .
+drwxrwxr-x 60 andy andy 12288 Nov 23 03:53 ..
+drwxrwxr-x 23 andy andy  4096 Nov 23 01:28 business-evidence-wallet
+drwxrwxr-x 21 andy andy  4096 Nov 21 22:32 business-os
+drwxrwxr-x 14 andy andy  4096 Nov 21 22:44 chapelgate-multilingual-transcribe
+drwxrwxr-x 19 andy andy  4096 Nov 21 22:54 cheap-trips
+drwxrwxr-x 23 andy andy  4096 Nov 22 03:53 holiday-let-operator
+drwxrwxr-x 21 andy andy  4096 Nov 22 00:49 housing-compliance-vault
+drwxrwxr-x 26 andy andy  4096 Nov 21 22:13 maintenanceos-website
+[0m
+[0m→ [0mRead out
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+total 2372
+drwxrwxr-x  25 andy andy    4096 Nov 22 21:09 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 18:42 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 23 03:59 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 18:42 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 18:42 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 21:09 test-results
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 18:42 vite.config.ts
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead FINDINGS.tsv
+[0m→ [0mRead out/raw
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/SKILLS-USED.md
+[0m→ [0mRead repo/package.json
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5 && echo "---STATUS---" && git status && echo "---SHA---" && git rev-parse HEAD
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+---STATUS---
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/secret-scan.mjs
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/routes/app/$orgId/index.tsx
+	modified:   src/server/security-headers.ts
+	modified:   src/server/zip-bounded.ts
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+	test-results/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+---SHA---
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+Now let me examine the raw test outputs and understand the current state of the codebase:
+[0m✗ [0mRead out/raw/test_security-headers-20261121-231512-output.log failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_security-headers-20261121-231512-output.log
+[0m✗ [0mRead out/raw/test_security-headers-20261121-231512-exit-code.txt failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_security-headers-20261121-231512-exit-code.txt
+[0m→ [0mRead out/raw/test_platform-74dbd3-20261122-154400-exit-code.txt
+[0m→ [0mRead out/raw/test_secret-scan-895b8f-20261122-151615-output.log
+[0m→ [0mRead out/raw/test_platform-74dbd3-20261122-154400-output.log[90m [limit=100][0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD && echo "---" && git log --oneline --all | head -20
+a61f1a8be38615bf994143d074da05b9535fdfbb
+---
+cddaaf20 WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+dcb3aad1 index on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+94e82011 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+257d74c0 Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+a80f89e7 hard25: fix home navigation tests, decisions nav wait
+cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+a39fc0b7 test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+9889beac tool-synthetic-data-r1: add synthetic data test register + promptfoo eval
+6930398c feat: add ISO 9001 QMS evidence docs (clauses 4-10)
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+f3aa6b5a fix(auth): hold preview bearer token in memory, never sessionStorage
+729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+73e7de4b Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && wc -l out/raw/test_platform-74dbd3-20261122-154400-output.log 2>/dev/null; echo "---"; ls -la out/raw/ | grep security-headers
+---
+ls: cannot access 'out/raw/': No such file or directory
+[0m
+[0m$ [0mls -la "/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/" | grep -i security
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+[0m
+[0m✱ [0mGrep "not ok|fail|# fail|# Subtest.*(fail|error)"[90m in out/raw/test_platform-74dbd3-20261122-154400-output.log · 100 matches[0m
+[91m[1mError: [0m{"message":"nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b: rate limit — All credentials for model nvidia/nemotron-3.5-super-vl-120b-a12b are cooling down (HTTP 429) (reset after 1m 36s)"}

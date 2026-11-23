@@ -1,0 +1,42 @@
+# rt test | 20261121-233408 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/release-truth.test.mjs
+TAP version 13
+# Subtest: docs share one Current master tip and refuse Release GO
+ok 1 - docs share one Current master tip and refuse Release GO
+  ---
+  duration_ms: 1.842036
+  type: 'test'
+  ...
+# Subtest: README and OPERATIONS name 0027_v2_gateway_phase_o.sql
+ok 2 - README and OPERATIONS name 0027_v2_gateway_phase_o.sql
+  ---
+  duration_ms: 1.621659
+  type: 'test'
+  ...
+# Subtest: OPERATIONS.md does not claim migrations 0001–0010 only
+ok 3 - OPERATIONS.md does not claim migrations 0001–0010 only
+  ---
+  duration_ms: 0.219702
+  type: 'test'
+  ...
+# Subtest: none of the four files contains security review passed
+ok 4 - none of the four files contains security review passed
+  ---
+  duration_ms: 0.34054
+  type: 'test'
+  ...
+# Subtest: RELEASE.md does not claim fea7ff2 is the default branch tip
+ok 5 - RELEASE.md does not claim fea7ff2 is the default branch tip
+  ---
+  duration_ms: 0.254954
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 171.218175

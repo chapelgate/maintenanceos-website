@@ -1,0 +1,3220 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 112
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:16 .
+drwxrwxr-x 738 andy andy 69632 Nov 22 12:47 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 12:51 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  2881 Nov 22 12:51 history.log
+-rw-rw-r--   1 andy andy     7 Nov 22 12:51 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:51 out
+drwxrwxr-x  24 andy andy  4096 Nov 22 10:37 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 12:51 status.json
+-rw-rw-r--   1 andy andy  2408 Nov 22 12:49 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo 2>/dev/null || echo "repo not found"
+total 2368
+drwxrwxr-x  24 andy andy    4096 Nov 22 10:37 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 10:37 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 10:37 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 11:36 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 10:37 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 10:37 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 10:37 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 11:02 vite.config.ts
+[0m
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git status
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/secret-scan.mjs
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/routes/app/$orgId/index.tsx
+	modified:   src/routes/app/$orgId/questionnaires.$qid.tsx
+	modified:   src/server/security-headers.ts
+	modified:   src/server/zip-bounded.ts
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/
+total 2044
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:51 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:16 ..
+-rw-rw-r-- 1 andy andy 224234 Nov 22 01:51 cycle-0022-4.log
+-rw-rw-r-- 1 andy andy  75271 Nov 22 02:23 cycle-0152-5.log
+-rw-rw-r-- 1 andy andy 231783 Nov 22 03:58 cycle-0229-1.log
+-rw-rw-r-- 1 andy andy  40834 Nov 22 04:34 cycle-0359-2.log
+-rw-rw-r-- 1 andy andy 168692 Nov 22 05:40 cycle-0439-1.log
+-rw-rw-r-- 1 andy andy 138086 Nov 22 07:10 cycle-0541-2.log
+-rw-rw-r-- 1 andy andy   1101 Nov 22 07:14 cycle-0711-3.log
+-rw-rw-r-- 1 andy andy  79789 Nov 22 08:14 cycle-0714-4.log
+-rw-rw-r-- 1 andy andy  29388 Nov 22 08:48 cycle-0814-5.log
+-rw-rw-r-- 1 andy andy 109013 Nov 22 09:14 cycle-0848-6.log
+-rw-rw-r-- 1 andy andy 137688 Nov 22 10:45 cycle-0915-1.log
+-rw-rw-r-- 1 andy andy 214184 Nov 22 12:15 cycle-1046-2.log
+-rw-rw-r-- 1 andy andy  67956 Nov 22 12:48 cycle-1216-3.log
+-rw-rw-r-- 1 andy andy   6003 Nov 22 12:53 cycle-1251-1.log
+-rw-rw-r-- 1 andy andy 213063 Nov 21 22:46 cycle-2116-1.log
+-rw-rw-r-- 1 andy andy  55270 Nov 21 22:51 cycle-2247-2.log
+-rw-rw-r-- 1 andy andy 186568 Nov 22 00:19 cycle-2251-3.log
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 EVIDENCE.md
+-rw-rw-r-- 1 andy andy      6 Nov 22 12:51 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 22 12:51 .preflight-ok
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 07:08 raw
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 RESULT.md
+drwxrwxr-x 3 andy andy   4096 Nov 21 22:58 runs
+-rw-rw-r-- 1 andy andy     62 Nov 22 10:49 SKILLS-USED.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+total 920
+drwxrwxr-x 2 andy andy   4096 Nov 22 07:08 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:51 ..
+-rw-rw-r-- 1 andy andy  11751 Nov 22 00:23 INDEX.tsv
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 21 22:59 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:42 .lock-typecheck
+-rw-rw-r-- 1 andy andy     41 Nov 22 07:08 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy 436030 Nov 21 22:59 test-platform-20261121-225910-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:43 typecheck-20261121-234252-exit-code.txt
+-rw-rw-r-- 1 andy andy   9509 Nov 21 23:43 typecheck-20261121-234252-output.log
+[0m
+[0m→ [0mRead out/SKILLS-USED.md
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/SHA
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff --stat
+control-mcp/gateway.mjs                             |   2 +-
+ .../housing-compliance-vault/RETENTION_HOLD.md      |   2 +-
+ .../opencode-estate-body.cpython-312.pyc            | Bin 14847 -> 14859 bytes
+ scripts/check-auth-invariant.mjs                    |   4 ++--
+ scripts/hcv-retention-hold.test.mjs                 |   4 ++--
+ scripts/secret-scan.mjs                             |   2 +-
+ src/components/org-shell.tsx                        |   4 ++--
+ src/domain/canonical.ts                             |   6 +++---
+ src/routes/__root.tsx                               |   2 +-
+ src/routes/app/$orgId/index.tsx                     |   2 +-
+ src/routes/app/$orgId/questionnaires.$qid.tsx       |   2 +-
+ src/server/security-headers.ts                      |  17 ++++++-----------
+ src/server/zip-bounded.ts                           |   2 +-
+ tests/signup-policy.test.mjs                        |   4 ++--
+ vite.config.ts                                      |   6 +++---
+ 15 files changed, 27 insertions(+), 32 deletions(-)
+[0m
+[0m→ [0mRead repo/package.json
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -r "unsafe-inline" --include="*.ts" --include="*.tsx" --include="*.mjs"
+control-mcp/gateway.mjs:        "content-security-policy": "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -r "preview" --include="*.ts" --include="*.tsx" --include="*.mjs" | grep -i secret
+.output/server/_ssr/verify.server-BHe3UbgU.mjs:	throw new Error("GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.");
+.output/server/_ssr/verify.server-BHe3UbgU.mjs:* NEVER import this from client code — it pulls in `pg` + the preview secret +
+.output/server/_ssr/verify.server-BHe3UbgU.mjs:* new signing secret. Local PostgreSQL preview writes a durable secret to
+.output/server/_ssr/verify.server-BHe3UbgU.mjs:function previewAuthSecret() {
+.output/server/_ssr/verify.server-BHe3UbgU.mjs:	secret: env$1("BETTER_AUTH_SECRET") ?? previewAuthSecret(),
+src/lib/auth/server.ts: * NEVER import this from client code — it pulls in `pg` + the preview secret +
+src/lib/auth/server.ts: * new signing secret. Local PostgreSQL preview writes a durable secret to
+src/lib/auth/server.ts:function previewAuthSecret(): string {
+src/lib/auth/server.ts:  secret: env("BETTER_AUTH_SECRET") ?? previewAuthSecret(),
+src/lib/auth/preview.ts:  throw new Error("GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.");
+[0m
+[0m→ [0mRead repo/control-mcp/gateway.mjs
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m→ [0mRead out/raw/test-platform-20261121-225910-output.log[90m [limit=100][0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -n "not ok" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log | head -50
+1141:    not ok 1 - keeps the 26 canonical keys
+1215:not ok 99 - canonical keys lock
+1768:not ok 132 - an unobservable dev server is indeterminate, not agreement
+1820:not ok 137 - the CLI reports rather than silently passing when run via a symlink
+3243:not ok 205 - docs/RELEASE.md names tip and refuses GO
+3413:not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+3679:not ok 207 - docs/OPERATOR.md names tip and refuses GO
+9159:not ok 975 - active org nav links set aria-current=page
+9499:not ok 982 - load demonstration pack is announced and marked busy
+10010:not ok 1061 - questionnaire detail load exposes busy status
+10340:not ok 1098 - retention hold names absent purge paths
+10640:not ok 1145 - skip link reveals on focus-visible
+13121:not ok 1395 - the auth schema copy ships in the globbed migration directory
+13214:not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+14389:    not ok 1 - keeps PDF stream and decompress caps at the documented values
+14438:not ok 1448 - pdf inflate lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '1130,1220p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+duration_ms: 0.671553
+      type: 'test'
+      ...
+    1..2
+ok 98 - canonical key max lock
+  ---
+  duration_ms: 2.817344
+  type: 'suite'
+  ...
+# Subtest: canonical keys lock
+    # Subtest: keeps the 26 canonical keys
+    not ok 1 - keeps the 26 canonical keys
+      ---
+      duration_ms: 2.987793
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:16:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'insurance.motor.limit'
+        - 'insurance.motor_insurance.limit'
+                          ^
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'insurance.motor_insurance.limit'
+      actual: 'insurance.motor.limit'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:36:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:466:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:435:3)
+        node:internal/per_context/primordials:466:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: NUMERIC_STAT_KEYS only contains employee_count and turnover
+    ok 2 - NUMERIC_STAT_KEYS only contains employee_count and turnover
+      ---
+      duration_ms: 0.259516
+      type: 'test'
+      ...
+    # Subtest: categoryForKey extracts head component
+    ok 3 - categoryForKey extracts head component
+      ---
+      duration_ms: 0.232761
+      type: 'test'
+      ...
+    # Subtest: relatedExpiryKey pairs limit with expiry and returns null for expiry
+    ok 4 - relatedExpiryKey pairs limit with expiry and returns null for expiry
+      ---
+      duration_ms: 0.342435
+      type: 'test'
+      ...
+    # Subtest: isExpiryKey true for .expiry suffix only
+    ok 5 - isExpiryKey true for .expiry suffix only
+      ---
+      duration_ms: 0.209997
+      type: 'test'
+      ...
+    # Subtest: employee question detection covers headcount variants
+    ok 6 - employee question detection covers headcount variants
+      ---
+      duration_ms: 0.332911
+      type: 'test'
+      ...
+    # Subtest: keysForQuestionText maps keywords to correct canonical keys
+    ok 7 - keysForQuestionText maps keywords to correct canonical keys
+      ---
+      duration_ms: 0.635023
+      type: 'test'
+      ...
+    # Subtest: otherKey produces stable slug under other.* namespace
+    ok 8 - otherKey produces stable slug under other.* namespace
+      ---
+      duration_ms: 0.726318
+      type: 'test'
+      ...
+    1..8
+not ok 99 - canonical keys lock
+  ---
+  duration_ms: 7.600787
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+[0m
+[0m→ [0mRead repo/scripts/canonical-keys-lock.test.mjs
+[0m→ [0mRead repo/src/domain/canonical.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '1760,1830p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+...
+# Subtest: divergence fails in either direction
+ok 131 - divergence fails in either direction
+  ---
+  duration_ms: 0.35545
+  type: 'test'
+  ...
+# Subtest: an unobservable dev server is indeterminate, not agreement
+not ok 132 - an unobservable dev server is indeterminate, not agreement
+  ---
+  duration_ms: 1.221926
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:63:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'ok'
+    - 'indeterminate'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'indeterminate'
+  actual: 'ok'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:64:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a dev server that cannot be reached probes as null
+ok 133 - a dev server that cannot be reached probes as null
+  ---
+  duration_ms: 0.451926
+  type: 'test'
+  ...
+# Subtest: a server without the endpoint probes as null, not as agreement
+ok 134 - a server without the endpoint probes as null, not as agreement
+  ---
+  duration_ms: 0.314968
+  type: 'test'
+  ...
+# Subtest: only a divergence warns the smoke verdict
+ok 135 - only a divergence warns the smoke verdict
+  ---
+  duration_ms: 1.115858
+  type: 'test'
+  ...
+# Subtest: the build side resolves the template's shipped app-env
+ok 136 - the build side resolves the template's shipped app-env
+  ---
+  duration_ms: 16.442911
+  type: 'test'
+  ...
+# Subtest: the CLI reports rather than silently passing when run via a symlink
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 300.841637
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    undefined !== 2
+[0m
+[0m→ [0mRead repo/scripts/check-auth-invariant.test.mjs
+[0m→ [0mRead repo/scripts/check-auth-invariant.mjs
+[0m→ [0mRead repo/scripts/with-app-env.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '3230,3450p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+# Subtest: multi-child busy ternaries use fragments
+ok 203 - multi-child busy ternaries use fragments
+  ---
+  duration_ms: 1.669494
+  type: 'test'
+  ...
+# Subtest: touched routes still expose aria-busy + sr-only status
+ok 204 - touched routes still expose aria-busy + sr-only status
+  ---
+  duration_ms: 5.400367
+  type: 'test'
+  ...
+# Subtest: docs/RELEASE.md names tip and refuses GO
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+  ---
+  duration_ms: 8.08718
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: a61f1a8be38615bf994143d074da05b9535fdfbb$/m. Input:
+    
+    '# Release and rollback\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      'Note: Static tip is last docs sync, not a live GO marker.\n' +
+      '\n' +
+      '## Branching\n' +
+      '\n' +
+      '| Ref | Meaning |\n' +
+      '|---|---|\n' +
+      '| `master` tip | Default branch (Current master above). Historical `fea7ff2` (2026-09-13) is a freeze marker only. Do not merge RC without Andrew. |\n' +
+      '| `security/automated-redteam-2026-09-08` `9d7afe3` | Reviewed security freeze. Do not force-push. |\n' +
+      '| `pilot/controlled-2026-09-08` | T24 local pilot. Do not force-push. |\n' +
+      '| `deployment/reconciled-pilot-20260914` `6f8cf3d` | Hosted DigitalOcean pilot base. |\n' +
+      '| `verification/deployment-reconciled-3-20260914` `cf67428` | Cloud Release Gate SUCCESS (typecheck/lint/domain/integration/concurrency/persistence/build/audit). |\n' +
+      '| `cursor/release-readiness-8a5b` | Release-readiness fixes atop reconciled pilot (PR #14). |\n' +
+      '| `release/candidate-*` | Commercially usable candidate. Push only; do not merge to master without Andrew. GitHub Actions `verify.yml` is a **subset** of the local gate. |\n' +
+      '\n' +
+      'Never force-push freeze SHAs. Never mark the independent audit closed from this agent.\n' +
+      '\n' +
+      '## Release checklist\n' +
+      '\n' +
+      '1. `npm run check:auth`\n' +
+      '2. `npm run typecheck` and `npm run lint`\n' +
+      '3. `npm test` (platform/tooling)\n' +
+      '4. `npm run test:app` (domain + integration, skipped = 0)\n' +
+      '5. `npm run test:concurrency-pg`\n' +
+      '6. `npm run test:persistence` and `npm run test:http-persistence`\n' +
+      '7. `npm run test:backup`\n' +
+      '8. `npm run test:live-idor` (app on 8080)\n' +
+      '9. `node scripts/mutation-isolation.mjs`\n' +
+      '10. `node scripts/e2e-demo.mjs`\n' +
+      '11. `DATABASE_URL=$(node scripts/pg-local.mjs url) npm run build`\n' +
+      '12. `npm audit`\n' +
+      '13. Secret scan of the commit (`npm run test:secret-scan`; never prints secret text)\n' +
+      '14. `HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe`\n' +
+      '15. Push the private release-candidate branch\n' +
+      '16. Hand the SHA to the Evidence Wallet Reviewer. Do not claim they reviewed it unless they did.\n' +
+      '\n' +
+      'Exact operator runbooks (DEPLOY / VERIFY / ROLL BACK / BACKUP / RESTORE / FAILED MIGRATION / AUTH FAILURE / DATABASE OUTAGE / COMPROMISED SECRET / TENANT-ISOLATION): [OPERATIONS.md](./OPERATIONS.md).\n' +
+      '\n' +
+      '## Hosted gate (2026-09-15)\n' +
+      '\n' +
+      'DigitalOcean pilot origin is live: `https://46-101-16-174.sslip.io`\n' +
+      '(`hostedReady: true`, `signupOpen: false`). See [HOSTED.md](./HOSTED.md).\n' +
+      '\n' +
+      'Redeploy of a new candidate SHA still needs droplet SSH (human). Hosted\n' +
+      'operator acceptance (`hosted-acceptance.mjs` with credentials) still needs a\n' +
+      'named throwaway operator account Andrew authorises.\n' +
+      '\n' +
+      '```text\n' +
+      'HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe\n' +
+      'HOSTED_ORIGIN=https://… HOSTED_OPERATOR_EMAIL=… HOSTED_OPERATOR_PASSWORD=… npm run test:hosted-acceptance\n' +
+      '```\n' +
+      '\n' +
+      'Do not disable signup closure, TLS, or auth to make those pass.\n' +
+      '\n' +
+      '## Rollback (local)\n' +
+      '\n' +
+      '1. Stop the app (`node scripts/preview.mjs stop` or kill 8080).\n' +
+      '2. Restore the last known-good physical backup (`node scripts/pg-backup.mjs restore <tar> --replace-live-data`).\n' +
+      '3. Check out the previous git SHA. Do not mix a new schema with an old backup unless migrations are forward-compatible.\n' +
+      '4. Start Postgres + migrate + app. Confirm `/health` and a sign-in.\n' +
+      '\n' +
+      '## Rollback (hosted, when authorised)\n' +
+      '\n' +
+      'Redeploy the previous candidate SHA. Neon PITR if data must move back. Do not “fix” a bad deploy by disabling TLS, auth, or tenant checks.\n' +
+      '\n' +
+      '## Support\n' +
+      '\n' +
+      'Operator questions: [OPERATOR.md](./OPERATOR.md). Incidents: [INCIDENT.md](./INCIDENT.md). Known limitations: [RISKS.md](../RISKS.md).\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    # Release and rollback
+    
+    ## Current truth
+    
+    Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
+    Release GO: no
+    Note: Static tip is last docs sync, not a live GO marker.
+    
+    ## Branching
+    
+    | Ref | Meaning |
+    |---|---|
+    | `master` tip | Default branch (Current master above). Historical `fea7ff2` (2026-09-13) is a freeze marker only. Do not merge RC without Andrew. |
+    | `security/automated-redteam-2026-09-08` `9d7afe3` | Reviewed security freeze. Do not force-push. |
+    | `pilot/controlled-2026-09-08` | T24 local pilot. Do not force-push. |
+    | `deployment/reconciled-pilot-20260914` `6f8cf3d` | Hosted DigitalOcean pilot base. |
+    | `verification/deployment-reconciled-3-20260914` `cf67428` | Cloud Release Gate SUCCESS (typecheck/lint/domain/integration/concurrency/persistence/build/audit). |
+    | `cursor/release-readiness-8a5b` | Release-readiness fixes atop reconciled pilot (PR #14). |
+    | `release/candidate-*` | Commercially usable candidate. Push only; do not merge to master without Andrew. GitHub Actions `verify.yml` is a **subset** of the local gate. |
+    
+    Never force-push freeze SHAs. Never mark the independent audit closed from this agent.
+    
+    ## Release checklist
+    
+    1. `npm run check:auth`
+    2. `npm run typecheck` and `npm run lint`
+    3. `npm test` (platform/tooling)
+    4. `npm run test:app` (domain + integration, skipped = 0)
+    5. `npm run test:concurrency-pg`
+    6. `npm run test:persistence` and `npm run test:http-persistence`
+    7. `npm run test:backup`
+    8. `npm run test:live-idor` (app on 8080)
+    9. `node scripts/mutation-isolation.mjs`
+    10. `node scripts/e2e-demo.mjs`
+    11. `DATABASE_URL=$(node scripts/pg-local.mjs url) npm run build`
+    12. `npm audit`
+    13. Secret scan of the commit (`npm run test:secret-scan`; never prints secret text)
+    14. `HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe`
+    15. Push the private release-candidate branch
+    16. Hand the SHA to the Evidence Wallet Reviewer. Do not claim they reviewed it unless they did.
+    
+    Exact operator runbooks (DEPLOY / VERIFY / ROLL BACK / BACKUP / RESTORE / FAILED MIGRATION / AUTH FAILURE / DATABASE OUTAGE / COMPROMISED SECRET / TENANT-ISOLATION): [OPERATIONS.md](./OPERATIONS.md).
+    
+    ## Hosted gate (2026-09-15)
+    
+    DigitalOcean pilot origin is live: `https://46-101-16-174.sslip.io`
+    (`hostedReady: true`, `signupOpen: false`). See [HOSTED.md](./HOSTED.md).
+    
+    Redeploy of a new candidate SHA still needs droplet SSH (human). Hosted
+    operator acceptance (`hosted-acceptance.mjs` with credentials) still needs a
+    named throwaway operator account Andrew authorises.
+    
+    ```text
+    HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe
+    HOSTED_ORIGIN=https://… HOSTED_OPERATOR_EMAIL=… HOSTED_OPERATOR_PASSWORD=… npm run test:hosted-acceptance
+    ```
+    
+    Do not disable signup closure, TLS, or auth to make those pass.
+    
+    ## Rollback (local)
+    
+    1. Stop the app (`node scripts/preview.mjs stop` or kill 8080).
+    2. Restore the last known-good physical backup (`node scripts/pg-backup.mjs restore <tar> --replace-live-data`).
+    3. Check out the previous git SHA. Do not mix a new schema with an old backup unless migrations are forward-compatible.
+    4. Start Postgres + migrate + app. Confirm `/health` and a sign-in.
+    
+    ## Rollback (hosted, when authorised)
+    
+    Redeploy the previous candidate SHA. Neon PITR if data must move back. Do not “fix” a bad deploy by disabling TLS, auth, or tenant checks.
+    
+    ## Support
+    
+    Operator questions: [OPERATOR.md](./OPERATOR.md). Incidents: [INCIDENT.md](./INCIDENT.md). Known limitations: [RISKS.md](../RISKS.md).
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:9:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: docs/OPERATIONS.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+  ---
+  duration_ms: 1.729605
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: a61f1a8be38615bf994143d074da05b9535fdfbb$/m. Input:
+    
+    '# Operations runbook — Business Evidence Wallet\n' +
+      '\n' +
+      'Technically competent operator guide. No guessing. Do **not** paste secrets,\n' +
+      'invite codes, or customer evidence into chat.\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      '\n' +
+      'Local PostgreSQL 18 is the fully gated clean-room path. A DigitalOcean pilot\n' +
+      'origin is live (see [HOSTED.md](./HOSTED.md)). Neon/Vercel remains separately\n' +
+      'blocked until Andrew injects those credentials.\n' +
+      '\n' +
+      '## DEPLOY (DigitalOcean pilot, when SSH authorised)\n' +
+      '\n' +
+      '1. Confirm the release-candidate SHA (PR #14 / `cursor/release-readiness-8a5b`\n' +
+      '   atop `deployment/reconciled-pilot-20260914`). Do not deploy `master` without\n' +
+      "   Andrew — `master` diverged and lacks this pilot's deploy/ops surface.\n" +
+      '2. On the droplet (`/opt/business-evidence-wallet`): fetch, checkout the SHA,\n' +
+      '   `npm ci`, `npm run build`, restart `evidence-wallet.service` (unit in\n' +
+      '   `deploy/digitalocean/`). Nginx TLS config is in\n' +
+      '   `deploy/digitalocean/evidence-wallet.nginx`.\n' +
+      '3. Confirm host env includes `BETTER_AUTH_URL=https://46-101-16-174.sslip.io`\n' +
+      '   (required by `startup-production.sh`). The script defaults\n' +
+      '   `WALLET_SIGNUP_OPEN=false` and `CHAPELGATE_MCP_SETUP_UI=false` when unset —\n' +
+      '   required production control for the DO pilot (MCP credential mint stays\n' +
+      '   closed; MCP Bearer remains host-level privilege — see CONTROL_MCP.md).\n' +
+      '   Optional overrides: `/etc/evidence-wallet.env` via systemd EnvironmentFile —\n' +
+[0m
+[0m→ [0mRead repo/scripts/ew-1027-release-truth-tip.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '9140,9520p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+# Subtest: loading organisations and an empty list are announced
+ok 972 - loading organisations and an empty list are announced
+  ---
+  duration_ms: 1.188912
+  type: 'test'
+  ...
+# Subtest: creating an organisation is announced
+ok 973 - creating an organisation is announced
+  ---
+  duration_ms: 0.357238
+  type: 'test'
+  ...
+# Subtest: organisation list exposes pending state and fail-closed empty
+ok 974 - organisation list exposes pending state and fail-closed empty
+  ---
+  duration_ms: 1.366766
+  type: 'test'
+  ...
+# Subtest: active org nav links set aria-current=page
+not ok 975 - active org nav links set aria-current=page
+  ---
+  duration_ms: 2.844232
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-org-nav-aria-current.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /activeProps=\{\{[^}]*"aria-current": "page"/. Input:
+    
+    'import { Link, Outlet, useParams } from "@tanstack/react-router";\n' +
+      'import { useQuery } from "@tanstack/react-query";\n' +
+      'import { Menu } from "lucide-react";\n' +
+      'import { useEffect, useRef, useState } from "react";\n' +
+      'import { UserButton } from "@/lib/auth/gates";\n' +
+      'import { useMcpSetupUi } from "@/lib/mcp-setup-ui-client";\n' +
+      'import { cn } from "@/lib/utils";\n' +
+      'import { can, type Role, type Permission } from "@/domain/roles";\n' +
+      'import { getOrgFn } from "@/server/fns";\n' +
+      '\n' +
+      'const LINKS = [\n' +
+      '  { to: "/app/$orgId", label: "Overview", permission: "read" as Permission },\n' +
+      '  { to: "/app/$orgId/evidence", label: "Evidence", permission: "viewEvidence" as Permission },\n' +
+      '  { to: "/app/$orgId/facts", label: "Facts", permission: "viewFacts" as Permission },\n' +
+      '  { to: "/app/$orgId/compliance", label: "Compliance", permission: "viewCompliance" as Permission },\n' +
+      '  { to: "/app/$orgId/decisions", label: "Decisions", permission: "viewDecisions" as Permission },\n' +
+      '  { to: "/app/$orgId/opportunities", label: "Opportunities", permission: "viewOpportunities" as Permission },\n' +
+      '  { to: "/app/$orgId/entities", label: "Entities", permission: "viewEntities" as Permission },\n' +
+      '  { to: "/app/$orgId/questionnaires", label: "Questionnaires", permission: "uploadQuestionnaires" as Permission },\n' +
+      '  { to: "/app/$orgId/packs", label: "Packs", permission: "viewPacks" as Permission },\n' +
+      '  { to: "/app/$orgId/exports", label: "Exports", permission: "viewExports" as Permission },\n' +
+      '  { to: "/app/$orgId/team", label: "Team", permission: "viewTeam" as Permission },\n' +
+      '  { to: "/app/$orgId/audit", label: "Audit", permission: "viewAudit" as Permission },\n' +
+      '] as const;\n' +
+      '\n' +
+      'export function OrgShell() {\n' +
+      '  const { orgId } = useParams({ from: "/app/$orgId" });\n' +
+      '  const org = useQuery({ queryKey: ["org", orgId], queryFn: () => getOrgFn({ data: { orgId } }) });\n' +
+      '  const mcpSetupUi = useMcpSetupUi();\n' +
+      '  const [open, setOpen] = useState(false);\n' +
+      '  const navDialogRef = useRef<HTMLDivElement | null>(null);\n' +
+      '  const menuButtonRef = useRef<HTMLButtonElement | null>(null);\n' +
+      '  useEffect(() => {\n' +
+      '    if (!open) return;\n' +
+      '    const root = navDialogRef.current;\n' +
+      "    const focusable = root?.querySelector<HTMLElement>('a[href], button:not([disabled])');\n" +
+      '    focusable?.focus();\n' +
+      '    return () => {\n' +
+      '      menuButtonRef.current?.focus();\n' +
+      '    };\n' +
+      '  }, [open]);\n' +
+      '  const renderNav = (role: string) => (\n' +
+      '    <nav className="flex flex-col gap-1" aria-label="Organisation">\n' +
+      '      {LINKS.filter((l) => can(role as Role, l.permission)).map((l) => (\n' +
+      '        <Link\n' +
+      '          key={l.label}\n' +
+      '          to={l.to}\n' +
+      '          params={{ orgId }}\n' +
+      '          className="rounded-[10px] px-3 py-2 text-sm text-ink-soft hover:bg-paper-2"\n' +
+      '          activeProps={{ className: "bg-paper-2 text-ink font-medium" }}\n' +
+      '          onClick={() => setOpen(false)}\n' +
+      '        >\n' +
+      '          {l.label}\n' +
+      '        </Link>\n' +
+      '      ))}\n' +
+      '      {role === "owner" && mcpSetupUi === "on" ? (\n' +
+      '        <Link\n' +
+      '          to="/app/$orgId/control-mcp"\n' +
+      '          params={{ orgId }}\n' +
+      '          className="rounded-[10px] px-3 py-2 text-sm text-ink-soft hover:bg-paper-2"\n' +
+      '          activeProps={{ className: "bg-paper-2 text-ink font-medium" }}\n' +
+      '          onClick={() => setOpen(false)}\n' +
+      '        >\n' +
+      '          MCP\n' +
+      '        </Link>\n' +
+      '      ) : null}\n' +
+      '      <Link to="/app" className="mt-4 px-3 text-xs uppercase tracking-wider text-muted">\n' +
+      '        All organisations\n' +
+      '      </Link>\n' +
+      '    </nav>\n' +
+      '  );\n' +
+      '\n' +
+      '  const role = org.data?.role;\n' +
+      '  return (\n' +
+      '    <div className="min-h-screen bg-paper lg:grid lg:grid-cols-[240px_1fr]">\n' +
+      '      <aside className="hidden border-r border-line p-5 lg:block" aria-label="Organisation sidebar">\n' +
+      '        <p className="font-display text-lg leading-tight">\n' +
+      '          {org.data?.name ?? (org.isPending ? "…" : "Organisation")}\n' +
+      '        </p>\n' +
+      '        {org.data?.role ? (\n' +
+      '          <p className="mb-6 text-xs uppercase tracking-wider text-muted">{org.data.role}</p>\n' +
+      '        ) : null}\n' +
+      '        {role ? renderNav(role) : null}\n' +
+      '      </aside>\n' +
+      '      <div>\n' +
+      '        <header className="flex items-center justify-between border-b border-line px-4 py-3 lg:px-8">\n' +
+      '          <button\n' +
+      '            type="button"\n' +
+      '            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] lg:hidden"\n' +
+      '            onClick={() => setOpen((v) => !v)}\n' +
+      '            ref={menuButtonRef}\n' +
+      '            aria-label="Toggle navigation"\n' +
+      '            aria-expanded={open}\n' +
+      '            aria-controls="org-mobile-nav"\n' +
+      '          >\n' +
+      '            <Menu className="size-5" aria-hidden="true" />\n' +
+      '          </button>\n' +
+      '          <span className={cn("font-display text-base lg:hidden")}>{org.data?.name}</span>\n' +
+      '          <div className="ml-auto">\n' +
+      '            <UserButton />\n' +
+      '          </div>\n' +
+      '        </header>\n' +
+      '        {org.isPending ? (\n' +
+      '          <p role="status" className="px-4 pt-4 text-sm text-muted lg:px-8">\n' +
+      '            Loading organisation…\n' +
+      '          </p>\n' +
+      '        ) : null}\n' +
+      '        {org.error ? (\n' +
+      '          <p role="alert" className="px-4 pt-4 text-sm text-red-ink lg:px-8">\n' +
+      '            Organisation: {org.error.message}\n' +
+      '          </p>\n' +
+      '        ) : null}\n' +
+      '        {open ? (\n' +
+      '          <div\n' +
+      '            id="org-mobile-nav"\n' +
+      '            ref={navDialogRef}\n' +
+      '            role="dialog"\n' +
+      '            aria-modal="true"\n' +
+      '            aria-label="Navigation"\n' +
+      '            onKeyDown={(e) => {\n' +
+      '              if (e.key === "Escape") setOpen(false);\n' +
+      '            }}\n' +
+      '            className="border-b border-line p-4 lg:hidden"\n' +
+      '          >\n' +
+      '            {role ? (\n' +
+      '              renderNav(role)\n' +
+      '            ) : (\n' +
+      '              <p role="status" className="text-sm text-muted">\n' +
+      '                Navigation waits until the organisation loads.\n' +
+      '              </p>\n' +
+      '            )}\n' +
+      '          </div>\n' +
+      '        ) : null}\n' +
+      '        <main id="main" className="px-4 py-6 lg:px-8" tabIndex={-1}>\n' +
+      '          <Outlet />\n' +
+      '        </main>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { Link, Outlet, useParams } from "@tanstack/react-router";
+    import { useQuery } from "@tanstack/react-query";
+    import { Menu } from "lucide-react";
+    import { useEffect, useRef, useState } from "react";
+    import { UserButton } from "@/lib/auth/gates";
+    import { useMcpSetupUi } from "@/lib/mcp-setup-ui-client";
+    import { cn } from "@/lib/utils";
+    import { can, type Role, type Permission } from "@/domain/roles";
+    import { getOrgFn } from "@/server/fns";
+    
+    const LINKS = [
+      { to: "/app/$orgId", label: "Overview", permission: "read" as Permission },
+      { to: "/app/$orgId/evidence", label: "Evidence", permission: "viewEvidence" as Permission },
+      { to: "/app/$orgId/facts", label: "Facts", permission: "viewFacts" as Permission },
+      { to: "/app/$orgId/compliance", label: "Compliance", permission: "viewCompliance" as Permission },
+      { to: "/app/$orgId/decisions", label: "Decisions", permission: "viewDecisions" as Permission },
+      { to: "/app/$orgId/opportunities", label: "Opportunities", permission: "viewOpportunities" as Permission },
+      { to: "/app/$orgId/entities", label: "Entities", permission: "viewEntities" as Permission },
+      { to: "/app/$orgId/questionnaires", label: "Questionnaires", permission: "uploadQuestionnaires" as Permission },
+      { to: "/app/$orgId/packs", label: "Packs", permission: "viewPacks" as Permission },
+      { to: "/app/$orgId/exports", label: "Exports", permission: "viewExports" as Permission },
+      { to: "/app/$orgId/team", label: "Team", permission: "viewTeam" as Permission },
+      { to: "/app/$orgId/audit", label: "Audit", permission: "viewAudit" as Permission },
+    ] as const;
+    
+    export function OrgShell() {
+      const { orgId } = useParams({ from: "/app/$orgId" });
+      const org = useQuery({ queryKey: ["org", orgId], queryFn: () => getOrgFn({ data: { orgId } }) });
+      const mcpSetupUi = useMcpSetupUi();
+      const [open, setOpen] = useState(false);
+      const navDialogRef = useRef<HTMLDivElement | null>(null);
+      const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+      useEffect(() => {
+        if (!open) return;
+        const root = navDialogRef.current;
+        const focusable = root?.querySelector<HTMLElement>('a[href], button:not([disabled])');
+        focusable?.focus();
+        return () => {
+          menuButtonRef.current?.focus();
+        };
+      }, [open]);
+      const renderNav = (role: string) => (
+        <nav className="flex flex-col gap-1" aria-label="Organisation">
+          {LINKS.filter((l) => can(role as Role, l.permission)).map((l) => (
+            <Link
+              key={l.label}
+              to={l.to}
+              params={{ orgId }}
+              className="rounded-[10px] px-3 py-2 text-sm text-ink-soft hover:bg-paper-2"
+              activeProps={{ className: "bg-paper-2 text-ink font-medium" }}
+              onClick={() => setOpen(false)}
+            >
+              {l.label}
+            </Link>
+          ))}
+          {role === "owner" && mcpSetupUi === "on" ? (
+            <Link
+              to="/app/$orgId/control-mcp"
+              params={{ orgId }}
+              className="rounded-[10px] px-3 py-2 text-sm text-ink-soft hover:bg-paper-2"
+              activeProps={{ className: "bg-paper-2 text-ink font-medium" }}
+              onClick={() => setOpen(false)}
+            >
+              MCP
+            </Link>
+          ) : null}
+          <Link to="/app" className="mt-4 px-3 text-xs uppercase tracking-wider text-muted">
+            All organisations
+          </Link>
+        </nav>
+      );
+    
+      const role = org.data?.role;
+      return (
+        <div className="min-h-screen bg-paper lg:grid lg:grid-cols-[240px_1fr]">
+          <aside className="hidden border-r border-line p-5 lg:block" aria-label="Organisation sidebar">
+            <p className="font-display text-lg leading-tight">
+              {org.data?.name ?? (org.isPending ? "…" : "Organisation")}
+            </p>
+            {org.data?.role ? (
+              <p className="mb-6 text-xs uppercase tracking-wider text-muted">{org.data.role}</p>
+            ) : null}
+            {role ? renderNav(role) : null}
+          </aside>
+          <div>
+            <header className="flex items-center justify-between border-b border-line px-4 py-3 lg:px-8">
+              <button
+                type="button"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[10px] lg:hidden"
+                onClick={() => setOpen((v) => !v)}
+                ref={menuButtonRef}
+                aria-label="Toggle navigation"
+                aria-expanded={open}
+                aria-controls="org-mobile-nav"
+              >
+                <Menu className="size-5" aria-hidden="true" />
+              </button>
+              <span className={cn("font-display text-base lg:hidden")}>{org.data?.name}</span>
+              <div className="ml-auto">
+                <UserButton />
+              </div>
+            </header>
+            {org.isPending ? (
+              <p role="status" className="px-4 pt-4 text-sm text-muted lg:px-8">
+                Loading organisation…
+              </p>
+            ) : null}
+            {org.error ? (
+              <p role="alert" className="px-4 pt-4 text-sm text-red-ink lg:px-8">
+                Organisation: {org.error.message}
+              </p>
+            ) : null}
+            {open ? (
+              <div
+                id="org-mobile-nav"
+                ref={navDialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Navigation"
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setOpen(false);
+                }}
+                className="border-b border-line p-4 lg:hidden"
+              >
+                {role ? (
+                  renderNav(role)
+                ) : (
+                  <p role="status" className="text-sm text-muted">
+                    Navigation waits until the organisation loads.
+                  </p>
+                )}
+              </div>
+            ) : null}
+            <main id="main" className="px-4 py-6 lg:px-8" tabIndex={-1}>
+              <Outlet />
+            </main>
+          </div>
+        </div>
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-org-nav-aria-current.test.mjs:6:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: mobile nav dialog focuses first control on open
+ok 976 - mobile nav dialog focuses first control on open
+  ---
+  duration_ms: 1.331963
+  type: 'test'
+  ...
+# Subtest: escape still closes nav dialog
+ok 977 - escape still closes nav dialog
+  ---
+  duration_ms: 0.191916
+  type: 'test'
+  ...
+# Subtest: overview announces load failures
+ok 978 - overview announces load failures
+  ---
+  duration_ms: 1.54823
+  type: 'test'
+  ...
+# Subtest: an empty expiry board is claimed only after facts have loaded
+ok 979 - an empty expiry board is claimed only after facts have loaded
+  ---
+  duration_ms: 0.223168
+  type: 'test'
+  ...
+# Subtest: a failed count does not complete the first-hour checklist
+ok 980 - a failed count does not complete the first-hour checklist
+  ---
+  duration_ms: 0.185236
+  type: 'test'
+  ...
+# Subtest: overview stats grid exposes pending state for document-backed counts
+ok 981 - overview stats grid exposes pending state for document-backed counts
+  ---
+  duration_ms: 0.109805
+  type: 'test'
+  ...
+# Subtest: load demonstration pack is announced and marked busy
+not ok 982 - load demonstration pack is announced and marked busy
+  ---
+  duration_ms: 10.389749
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-overview-demo-busy.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Loading…/. Input:
+    
+    'aria-busy={demo.isPending}\n' +
+      '          >\n' +
+      '            {demo.isPending ? "Loading demonstration pack…" : "Load demonstration pack"}\n' +
+      '          </Button>\n' +
+      '          {demo.isPending ? (\n' +
+      '            <p role="status" className="sr-only">\n' +
+      '              Loading demonstration pack.\n' +
+      '            </p>\n' +
+      '          ) : null}\n' +
+      '          {'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff src/server/security-headers.ts control-mcp/gateway.mjs src/lib/auth/preview.ts src/domain/canonical.ts
+diff --git a/control-mcp/gateway.mjs b/control-mcp/gateway.mjs
+index c15b05c3..96cf3463 100644
+--- a/control-mcp/gateway.mjs
++++ b/control-mcp/gateway.mjs
+@@ -890,7 +890,7 @@ export function createGateway(options = {}) {
+         "cache-control": "no-store",
+         "x-content-type-options": "nosniff",
+         "x-frame-options": "DENY",
+-        "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
++        "content-security-policy": "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+         ...extraHeaders,
+       },
+       body,
+diff --git a/src/domain/canonical.ts b/src/domain/canonical.ts
+index 1ca218fa..8468d508 100644
+--- a/src/domain/canonical.ts
++++ b/src/domain/canonical.ts
+@@ -20,13 +20,13 @@ export const CANONICAL_KEYS = {
+   SMAS_EXPIRY: "certification.smas.expiry",
+   PROFESSIONAL_INDEMNITY_LIMIT: "insurance.professional_indemnity.limit",
+   PROFESSIONAL_INDEMNITY_EXPIRY: "insurance.professional_indemnity.expiry",
+-  MOTOR_INSURANCE_LIMIT: "insurance.motor.limit",
+-  MOTOR_INSURANCE_EXPIRY: "insurance.motor.expiry",
++  MOTOR_INSURANCE_LIMIT: "insurance.motor_insurance.limit",
++  MOTOR_INSURANCE_EXPIRY: "insurance.motor_insurance.expiry",
+   CYBER_ESSENTIALS_STATUS: "certification.cyber_essentials.status",
+   CYBER_ESSENTIALS_EXPIRY: "certification.cyber_essentials.expiry",
+   ISO_27001_STATUS: "certification.iso_27001.status",
+   ISO_27001_EXPIRY: "certification.iso_27001.expiry",
+-  COMPANY_NUMBER: "company.company_number",
++  COMPANY_NUMBER: "company.number",
+   BUSINESS_CONTINUITY_PLAN: "policy.business_continuity_plan",
+ } as const;
+ 
+diff --git a/src/server/security-headers.ts b/src/server/security-headers.ts
+index 594feb25..cc566e76 100644
+--- a/src/server/security-headers.ts
++++ b/src/server/security-headers.ts
+@@ -1,30 +1,25 @@
+ /** Browser headers for a privately operated wallet. */
+ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+-  "Referrer-Policy": "strict-origin-when-cross-origin",
+-  "X-Frame-Options": "DENY",
++  "Referrer-Policy": "no-referrer",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), all-screens-capture=(), ambient-light-sensor=(), autoplay=(), battery=(), bluetooth=(), browser-install=(), browsing-topics=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), camera=(), microphone=(), geolocation=(), payment=(), attribution-reporting=(), wake-lock=(), writer=(), cross-origin-isolated=(), deferred-fetch-minimal=(), deferred-fetch=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-get=(), identity-credentials-create=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), midi=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), storage-access=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), web-share=(), webxr=(), window-management=(), xr=(), xr-spatial-tracking=()",
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+-export function buildCsp(nonce?: string): string {
+-  const scriptSrc = nonce
+-    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+-    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+-  const styleSrc = nonce
+-    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+-    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
++export function buildCsp(nonce: string): string {
++  const scriptSrc = `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`;
++  const styleSrc = `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`;
+   return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+ }
+ 
+ export function mergeWalletSecurityHeaders(
+   headers: HeadersInit | undefined = undefined,
+-  nonce?: string,
++  nonce: string,
+ ): Headers {
+   const next = new Headers(headers);
+   for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+[0m
+Let me understand the full scope of failures. Let me count failing tests and check the secret-scan situation.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -c "^not ok" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+14
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep "^not ok" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log | wc -l
+14
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-security-headers-20261121-231512-output.log
+# rt test-security-headers | 20261121-231512 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/security-headers-lock.test.mjs
+TAP version 13
+# Subtest: security headers lock
+    # Subtest: exports the private-wallet browser headers
+    ok 1 - exports the private-wallet browser headers
+      ---
+      duration_ms: 0.743987
+      type: 'test'
+      ...
+    # Subtest: mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+    ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+      ---
+      duration_ms: 21.26047
+      type: 'test'
+      ...
+    # Subtest: health.ts applies mergeWalletSecurityHeaders in jsonResponse
+    ok 3 - health.ts applies mergeWalletSecurityHeaders in jsonResponse
+      ---
+      duration_ms: 0.216216
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents the header set including Permissions-Policy
+    ok 4 - SECURITY.md documents the header set including Permissions-Policy
+      ---
+      duration_ms: 0.279888
+      type: 'test'
+      ...
+    1..4
+ok 1 - security headers lock
+  ---
+  duration_ms: 23.480719
+  type: 'suite'
+  ...
+1..1
+# tests 4
+# suites 1
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 127.470337
+[0m
+Let me understand the full scope. Let me check the `rt` wrapper and run typecheck/lint.
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck-20261121-234252-output.log | head -80
+# rt typecheck | 20261121-234252 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: npm run typecheck
+
+> app-builder-workspace@0.0.0-private typecheck
+> tsc --noEmit
+
+src/routes/app/$orgId/admin/deletion-audit.tsx(6,38): error TS2345: Argument of type '"/app/$orgId/admin/deletion-audit"' is not assignable to parameter of type 'keyof FileRoutesByPath | undefined'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(32,47): error TS2322: Type '"/app/$orgId/admin/deletion-audit"' is not assignable to type 'ConstrainLiteral<"/app/$orgId/admin/deletion-audit", "/" | "__root__" | "/login" | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/" | "/app/$orgId" | "/robots/txt" | ... 23 more ... | "/app/$orgId/questionnaires/$qid", "/" | ... 34 more ... | "/app/$orgId/questionnaires/$qid">'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(34,20): error TS2339: Property 'action' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(35,24): error TS2339: Property 'entityType' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(36,22): error TS2339: Property 'fromDate' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(37,20): error TS2339: Property 'toDate' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(39,52): error TS2339: Property 'offset' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(129,16): error TS2339: Property 'length' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(145,24): error TS2339: Property 'map' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(179,54): error TS2339: Property 'length' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(191,31): error TS2339: Property 'length' does not exist on type 'never'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 16 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 16 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(8,38): error TS2345: Argument of type '"/app/$orgId/admin/retention"' is not assignable to parameter of type 'keyof FileRoutesByPath | undefined'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, RootRoute<Register, ... 10 more ..., undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/app/$orgId/admin/retention.tsx(26,38): error TS2820: Type '"/app/$orgId/admin/retention"' is not assignable to type 'ConstrainLiteral<"/app/$orgId/admin/retention", "/" | "__root__" | "/login" | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/" | "/app/$orgId" | "/robots/txt" | ... 23 more ... | "/app/$orgId/questionnaires/$qid", "/" | ... 34 more ... | "/app/$orgId/questionnaires/$qid">'. Did you mean '"/app/$orgId/admin/"'?
+src/routes/app/$orgId/admin/retention.tsx(30,35): error TS2339: Property 'documentRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(31,31): error TS2339: Property 'factRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(32,40): error TS2339: Property 'questionnaireRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(33,31): error TS2339: Property 'packRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(34,33): error TS2339: Property 'exportRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(35,32): error TS2339: Property 'auditRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(36,40): error TS2339: Property 'deletionAuditRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(37,26): error TS2339: Property 'purgeEnabled' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(38,27): error TS2339: Property 'purgeSchedule' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(89,39): error TS2339: Property 'purgeEnabled' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(226,45): error TS2339: Property 'purgeEnabled' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(228,45): error TS2339: Property 'purgeSchedule' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(230,23): error TS2339: Property 'documentRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(232,23): error TS2339: Property 'factRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(234,23): error TS2339: Property 'questionnaireRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(236,23): error TS2339: Property 'packRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(238,23): error TS2339: Property 'exportRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(240,23): error TS2339: Property 'auditRetentionDays' does not exist on type 'never'.
+src/routes/app/$orgId/admin/retention.tsx(242,23): error TS2339: Property 'deletionAuditRetentionDays' does not exist on type 'never'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+[0m
+[0m$ [0mwhich rt 2>/dev/null; ls ~/.local/bin/rt 2>/dev/null; ls /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/ 2>/dev/null | head -30
+/home/andy/bin/rt
+raw
+TOOL-COVERAGE-TEMPLATE.md
+TOOLS-INVENTORY.md
+verify-tools.sh
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -rn "password\|secret\|API_KEY\|token" --include="*.ts" --include="*.tsx" --include="*.mjs" src/ | grep -v "test\|\.test\|\.spec" | head -20
+src/lib/rsfm-control-plane.ts:14:function config(): { baseUrl: string; token: string; tenantId: string } | null {
+src/lib/rsfm-control-plane.ts:17:  const token = (process.env.RSFM_CONTROL_PLANE_TOKEN || "").trim();
+src/lib/rsfm-control-plane.ts:20:  if (!baseUrl || !token || !tenantId) return null;
+src/lib/rsfm-control-plane.ts:21:  return { baseUrl, token, tenantId };
+src/lib/rsfm-control-plane.ts:39:        'x-rsfm-token': cfg.token,
+src/lib/db-source.ts:159:    .replace(/"password"\s*:\s*"[^"]*"/gi, '"password":"***"')
+src/lib/db-source.ts:160:    .replace(/password["'\s:=]+[^\s"'`,}]+/gi, "password=***")
+src/lib/admin-error-copy.ts:8:  /node:internal|^\s*at\s+|\/(?:src|scripts|node_modules)\/|\.tsx?:\d+|STACK|ECONNREFUSED|password=/i;
+src/lib/app-data/client.server.ts:28:  token: string | null;
+src/lib/app-data/client.server.ts:70:    token: headerToken ?? envToken,
+src/lib/app-data/client.server.ts:81:  return inboundContext().token;
+src/lib/app-data/client.server.ts:86:// Digest of the last preview token the gate answered 401 for. The readiness
+src/lib/app-data/client.server.ts:87:// probe reports "not ready" while that exact token is still the one on the
+src/lib/app-data/client.server.ts:88:// request, so the client waits for the preview panel to push a fresh token
+src/lib/app-data/client.server.ts:89:// instead of re-calling the gate with a token already known to be rejected.
+src/lib/app-data/client.server.ts:92:function tokenDigest(token: string): string {
+src/lib/app-data/client.server.ts:93:  return createHash("sha256").update(token).digest("base64url");
+src/lib/app-data/client.server.ts:96:function noteTokenRejected(token: string): void {
+src/lib/app-data/client.server.ts:97:  rejectedTokenDigest = tokenDigest(token);
+src/lib/app-data/client.server.ts:100:function noteTokenAccepted(token: string): void {
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -rn "sk-" --include="*.ts" --include="*.tsx" --include="*.mjs" | grep -v node_modules | grep -v ".git" | head -20
+.output/server/_ssr/verify.server-BHe3UbgU.mjs:5633:          mask-image: radial-gradient(ellipse at center, transparent 20%, black);
+.output/server/_ssr/verify.server-BHe3UbgU.mjs:5634:          -webkit-mask-image: radial-gradient(ellipse at center, transparent 20%, black);
+.output/server/_libs/tailwind-merge.mjs:2329:			* @see https://tailwindcss.com/docs/mask-clip
+.output/server/_libs/tailwind-merge.mjs:2331:			"mask-clip": [{ "mask-clip": [
+.output/server/_libs/tailwind-merge.mjs:2338:			] }, "mask-no-clip"],
+.output/server/_libs/tailwind-merge.mjs:2341:			* @see https://tailwindcss.com/docs/mask-composite
+.output/server/_libs/tailwind-merge.mjs:2343:			"mask-composite": [{ mask: [
+.output/server/_libs/tailwind-merge.mjs:2351:			* @see https://tailwindcss.com/docs/mask-image
+.output/server/_libs/tailwind-merge.mjs:2353:			"mask-image-linear-pos": [{ "mask-linear": [isNumber] }],
+.output/server/_libs/tailwind-merge.mjs:2354:			"mask-image-linear-from-pos": [{ "mask-linear-from": scaleMaskImagePosition() }],
+.output/server/_libs/tailwind-merge.mjs:2355:			"mask-image-linear-to-pos": [{ "mask-linear-to": scaleMaskImagePosition() }],
+.output/server/_libs/tailwind-merge.mjs:2356:			"mask-image-linear-from-color": [{ "mask-linear-from": scaleColor() }],
+.output/server/_libs/tailwind-merge.mjs:2357:			"mask-image-linear-to-color": [{ "mask-linear-to": scaleColor() }],
+.output/server/_libs/tailwind-merge.mjs:2358:			"mask-image-t-from-pos": [{ "mask-t-from": scaleMaskImagePosition() }],
+.output/server/_libs/tailwind-merge.mjs:2359:			"mask-image-t-to-pos": [{ "mask-t-to": scaleMaskImagePosition() }],
+.output/server/_libs/tailwind-merge.mjs:2360:			"mask-image-t-from-color": [{ "mask-t-from": scaleColor() }],
+.output/server/_libs/tailwind-merge.mjs:2361:			"mask-image-t-to-color": [{ "mask-t-to": scaleColor() }],
+.output/server/_libs/tailwind-merge.mjs:2362:			"mask-image-r-from-pos": [{ "mask-r-from": scaleMaskImagePosition() }],
+.output/server/_libs/tailwind-merge.mjs:2363:			"mask-image-r-to-pos": [{ "mask-r-to": scaleMaskImagePosition() }],
+.output/server/_libs/tailwind-merge.mjs:2364:			"mask-image-r-from-color": [{ "mask-r-from": scaleColor() }],
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff src/domain/canonical.ts
+diff --git a/src/domain/canonical.ts b/src/domain/canonical.ts
+index 1ca218fa..8468d508 100644
+--- a/src/domain/canonical.ts
++++ b/src/domain/canonical.ts
+@@ -20,13 +20,13 @@ export const CANONICAL_KEYS = {
+   SMAS_EXPIRY: "certification.smas.expiry",
+   PROFESSIONAL_INDEMNITY_LIMIT: "insurance.professional_indemnity.limit",
+   PROFESSIONAL_INDEMNITY_EXPIRY: "insurance.professional_indemnity.expiry",
+-  MOTOR_INSURANCE_LIMIT: "insurance.motor.limit",
+-  MOTOR_INSURANCE_EXPIRY: "insurance.motor.expiry",
++  MOTOR_INSURANCE_LIMIT: "insurance.motor_insurance.limit",
++  MOTOR_INSURANCE_EXPIRY: "insurance.motor_insurance.expiry",
+   CYBER_ESSENTIALS_STATUS: "certification.cyber_essentials.status",
+   CYBER_ESSENTIALS_EXPIRY: "certification.cyber_essentials.expiry",
+   ISO_27001_STATUS: "certification.iso_27001.status",
+   ISO_27001_EXPIRY: "certification.iso_27001.expiry",
+-  COMPANY_NUMBER: "company.company_number",
++  COMPANY_NUMBER: "company.number",
+   BUSINESS_CONTINUITY_PLAN: "policy.business_continuity_plan",
+ } as const;
+[0m
+Let me revert the changes to canonical.ts that are breaking the test:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git checkout src/domain/canonical.ts
+Updated 1 path from the index
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- npm run test:platform 2>&1 | tail -50
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 60 npm run test 2>&1 | tail -80
+ok 1497 - resolver types lock
+  ---
+  duration_ms: 3.843701
+  type: 'suite'
+  ...
+# Subtest: rewriter permissions deny lock
+    # Subtest: includes rewriter=() once
+    ok 1 - includes rewriter=() once
+      ---
+      duration_ms: 1.019848
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents rewriter=()
+    ok 2 - SECURITY.md documents rewriter=()
+      ---
+      duration_ms: 0.372171
+      type: 'test'
+      ...
+    1..2
+ok 1498 - rewriter permissions deny lock
+  ---
+  duration_ms: 2.585544
+  type: 'suite'
+  ...
+# Subtest: role at least lock
+    # Subtest: owner outranks every role including itself
+    ok 1 - owner outranks every role including itself
+      ---
+      duration_ms: 0.840526
+      type: 'test'
+      ...
+    # Subtest: viewer only satisfies viewer
+    ok 2 - viewer only satisfies viewer
+      ---
+      duration_ms: 0.227446
+      type: 'test'
+      ...
+    # Subtest: mid ranks are ordered contributor < reviewer < admin
+    ok 3 - mid ranks are ordered contributor < reviewer < admin
+      ---
+      duration_ms: 0.199612
+      type: 'test'
+      ...
+    1..3
+ok 1499 - role at least lock
+  ---
+  duration_ms: 3.215285
+  type: 'suite'
+  ...
+# Subtest: roles permissions lock
+    # Subtest: locks the permission to minimum-role matrix
+    ok 1 - locks the permission to minimum-role matrix
+      ---
+      duration_ms: 1.579037
+      type: 'test'
+      ...
+    # Subtest: ranks roles and evaluates can() against the matrix
+    ok 2 - ranks roles and evaluates can() against the matrix
+      ---
+      duration_ms: 0.346682
+      type: 'test'
+      ...
+    # Subtest: parses only the five known roles
+    ok 3 - parses only the five known roles
+      ---
+      duration_ms: 0.199882
+      type: 'test'
+      ...
+    # Subtest: restricts owner grants and owner-target changes to owners
+    ok 4 - restricts owner grants and owner-target changes to owners
+      ---
+      duration_ms: 0.20511
+      type: 'test'
+      ...
+    1..4
+ok 1500 - roles permissions lock
+  ---
+  duration_ms: 3.74891
+  type: 'suite'
+  ...
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | tail -100
+---
+      duration_ms: 0.292061
+      type: 'test'
+      ...
+    1..2
+ok 1598 - xr-spatial-tracking permissions deny lock
+  ---
+  duration_ms: 2.705161
+  type: 'suite'
+  ...
+# Subtest: zip extracted text lock
+    # Subtest: utf8FromBytes decodes valid UTF-8 bytes
+    ok 1 - utf8FromBytes decodes valid UTF-8 bytes
+      ---
+      duration_ms: 0.987675
+      type: 'test'
+      ...
+    # Subtest: clipExtractedText returns input under cap
+    ok 2 - clipExtractedText returns input under cap
+      ---
+      duration_ms: 1.802943
+      type: 'test'
+      ...
+    # Subtest: throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+    ok 3 - throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+      ---
+      duration_ms: 0.603662
+      type: 'test'
+      ...
+    1..3
+ok 1599 - zip extracted text lock
+  ---
+  duration_ms: 4.590786
+  type: 'suite'
+  ...
+# Subtest: zip size caps lock
+    # Subtest: keeps per-entry and inflate caps at 2 MiB
+    ok 1 - keeps per-entry and inflate caps at 2 MiB
+      ---
+      duration_ms: 0.824664
+      type: 'test'
+      ...
+    # Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+    ok 2 - keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+      ---
+      duration_ms: 0.167337
+      type: 'test'
+      ...
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+    ok 3 - keeps ZIP file and PDF stream counts bounded
+      ---
+      duration_ms: 0.153757
+      type: 'test'
+      ...
+    1..3
+ok 1600 - zip size caps lock
+  ---
+  duration_ms: 2.339043
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.748312
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 2.957625
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.408637
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.232771
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 6.713381
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2169
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 122751.085631
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep "not ok"
+not ok 1 - keeps the 26 canonical keys
+not ok 99 - canonical keys lock
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 1063 - questionnaire detail announces specific loading
+not ok 1395 - the auth schema copy ships in the globbed migration directory
+not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat docs/RELEASE.md | head -20
+# Release and rollback
+
+## Current truth
+
+Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
+Release GO: no
+Note: Static tip is last docs sync, not a live GO marker.
+
+## Branching
+
+| Ref | Meaning |
+|---|---|
+| `master` tip | Default branch (Current master above). Historical `fea7ff2` (2026-09-13) is a freeze marker only. Do not merge RC without Andrew. |
+| `security/automated-redteam-2026-09-08` `9d7afe3` | Reviewed security freeze. Do not force-push. |
+| `pilot/controlled-2026-09-08` | T24 local pilot. Do not force-push. |
+| `deployment/reconciled-pilot-20260914` `6f8cf3d` | Hosted DigitalOcean pilot base. |
+| `verification/deployment-reconciled-3-20260914` `cf67428` | Cloud Release Gate SUCCESS (typecheck/lint/domain/integration/concurrency/persistence/build/audit). |
+| `cursor/release-readiness-8a5b` | Release-readiness fixes atop reconciled pilot (PR #14). |
+| `release/candidate-*` | Commercially usable candidate. Push only; do not merge to master without Andrew. GitHub Actions `verify.yml` is a **subset** of the local gate. |
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+Let me look at all the failing tests in detail:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 99"
+not ok 99 - canonical keys lock
+  ---
+  duration_ms: 5.357514
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: capability max lock
+    # Subtest: exports CAPABILITY_MAX at 64
+    ok 1 - exports CAPABILITY_MAX at 64
+      ---
+      duration_ms: 0.811454
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds capability with CAPABILITY_MAX
+    ok 2 - v2-fns.ts bounds capability with CAPABILITY_MAX
+      ---
+      duration_ms: 2.141078
+      type: 'test'
+      ...
+    1..2
+ok 100 - capability max lock
+  ---
+  duration_ms: 4.121052
+  type: 'suite'
+  ...
+# Subtest: capture permissions deny lock
+    # Subtest: includes capture=() once
+    ok 1 - includes capture=() once
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 137"
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 208.932997
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /could not read the dev server's resolved VITE_AUTH_ENABLED/. Input:
+    
+    '[auth-invariant] dev server not observable; build value used as reference\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    [auth-invariant] dev server not observable; build value used as reference
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:110:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: claim edit honesty lock
+    # Subtest: rejects empty, oversized, and injection edits
+    ok 1 - rejects empty, oversized, and injection edits
+      ---
+      duration_ms: 1.034967
+      type: 'test'
+      ...
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 1063"
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 300000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 1395"
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 300000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 1501"
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 300000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+Let me look at the failure details from the previous log instead of re-running:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '10330,10450p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+sed: can't read /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log: No such file or directory
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '13110,13220p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+sed: can't read /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log: No such file or directory
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '14370,14460p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+sed: can't read /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log: No such file or directory
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '14880,14970p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+sed: can't read /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log: No such file or directory
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+total 896
+drwxrwxr-x 2 andy andy   4096 Nov 22 13:22 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:51 ..
+-rw-rw-r-- 1 andy andy  12983 Nov 22 13:22 INDEX.tsv
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 22 13:18 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:42 .lock-typecheck
+-rw-rw-r-- 1 andy andy    138 Nov 22 13:22 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy 410442 Nov 22 13:22 test-platform-20261122-132213-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:43 typecheck-20261121-234252-exit-code.txt
+-rw-rw-r-- 1 andy andy   9509 Nov 21 23:43 typecheck-20261121-234252-output.log
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -n "not ok" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log
+1141:    not ok 1 - keeps the 26 canonical keys
+1215:not ok 99 - canonical keys lock
+1798:not ok 137 - the CLI reports rather than silently passing when run via a symlink
+3224:not ok 205 - docs/RELEASE.md names tip and refuses GO
+3394:not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+3660:not ok 207 - docs/OPERATOR.md names tip and refuses GO
+9668:not ok 1063 - questionnaire detail announces specific loading
+12593:not ok 1395 - the auth schema copy ships in the globbed migration directory
+12686:not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '1135,1220p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log
+---
+  duration_ms: 8.356078
+  type: 'suite'
+  ...
+# Subtest: canonical keys lock
+    # Subtest: keeps the 26 canonical keys
+    not ok 1 - keeps the 26 canonical keys
+      ---
+      duration_ms: 2.03748
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:16:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'insurance.motor.limit'
+        - 'insurance.motor_insurance.limit'
+                          ^
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'insurance.motor_insurance.limit'
+      actual: 'insurance.motor.limit'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:36:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:466:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:435:3)
+        node:internal/per_context/primordials:466:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: NUMERIC_STAT_KEYS only contains employee_count and turnover
+    ok 2 - NUMERIC_STAT_KEYS only contains employee_count and turnover
+      ---
+      duration_ms: 0.18358
+      type: 'test'
+      ...
+    # Subtest: categoryForKey extracts head component
+    ok 3 - categoryForKey extracts head component
+      ---
+      duration_ms: 0.168863
+      type: 'test'
+      ...
+    # Subtest: relatedExpiryKey pairs limit with expiry and returns null for expiry
+    ok 4 - relatedExpiryKey pairs limit with expiry and returns null for expiry
+      ---
+      duration_ms: 0.165433
+      type: 'test'
+      ...
+    # Subtest: isExpiryKey true for .expiry suffix only
+    ok 5 - isExpiryKey true for .expiry suffix only
+      ---
+      duration_ms: 0.127498
+      type: 'test'
+      ...
+    # Subtest: employee question detection covers headcount variants
+    ok 6 - employee question detection covers headcount variants
+      ---
+      duration_ms: 0.248922
+      type: 'test'
+      ...
+    # Subtest: keysForQuestionText maps keywords to correct canonical keys
+    ok 7 - keysForQuestionText maps keywords to correct canonical keys
+      ---
+      duration_ms: 0.373293
+      type: 'test'
+      ...
+    # Subtest: otherKey produces stable slug under other.* namespace
+    ok 8 - otherKey produces stable slug under other.* namespace
+      ---
+      duration_ms: 0.440043
+      type: 'test'
+      ...
+    1..8
+not ok 99 - canonical keys lock
+  ---
+  duration_ms: 5.40331
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat scripts/canonical-keys-lock.test.mjs | head -45
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+
+const {
+  CANONICAL_KEYS,
+  NUMERIC_STAT_KEYS,
+  categoryForKey,
+  relatedExpiryKey,
+  isExpiryKey,
+  isEmployeeCountQuestion,
+  keysForQuestionText,
+  otherKey,
+} = await import("../src/domain/canonical.ts");
+
+describe("canonical keys lock", () => {
+  it("keeps the 26 canonical keys", () => {
+    assert.equal(Object.keys(CANONICAL_KEYS).length, 26);
+    assert.equal(CANONICAL_KEYS.PL_LIMIT, "insurance.public_liability.limit");
+    assert.equal(CANONICAL_KEYS.PL_EXPIRY, "insurance.public_liability.expiry");
+    assert.equal(CANONICAL_KEYS.EL_LIMIT, "insurance.employers_liability.limit");
+    assert.equal(CANONICAL_KEYS.EL_EXPIRY, "insurance.employers_liability.expiry");
+    assert.equal(CANONICAL_KEYS.EMPLOYEES, "company.employee_count");
+    assert.equal(CANONICAL_KEYS.TURNOVER, "company.turnover");
+    assert.equal(CANONICAL_KEYS.LEGAL_NAME, "company.legal_name");
+    assert.equal(CANONICAL_KEYS.ISO9001_STATUS, "certification.iso_9001.status");
+    assert.equal(CANONICAL_KEYS.ISO9001_EXPIRY, "certification.iso_9001.expiry");
+    assert.equal(CANONICAL_KEYS.LIVING_WAGE, "policy.living_wage");
+    assert.equal(CANONICAL_KEYS.CSCS_STATUS, "certification.cscs.status");
+    assert.equal(CANONICAL_KEYS.CSCS_EXPIRY, "certification.cscs.expiry");
+    assert.equal(CANONICAL_KEYS.CPCS_STATUS, "certification.cpcs.status");
+    assert.equal(CANONICAL_KEYS.CPCS_EXPIRY, "certification.cpcs.expiry");
+    assert.ok(CANONICAL_KEYS.SMAS_STATUS);
+    assert.ok(CANONICAL_KEYS.SMAS_EXPIRY);
+    assert.equal(CANONICAL_KEYS.PROFESSIONAL_INDEMNITY_LIMIT, "insurance.professional_indemnity.limit");
+    assert.equal(CANONICAL_KEYS.PROFESSIONAL_INDEMNITY_EXPIRY, "insurance.professional_indemnity.expiry");
+    assert.equal(CANONICAL_KEYS.MOTOR_INSURANCE_LIMIT, "insurance.motor_insurance.limit");
+    assert.equal(CANONICAL_KEYS.MOTOR_INSURANCE_EXPIRY, "insurance.motor_insurance.expiry");
+    assert.equal(CANONICAL_KEYS.CYBER_ESSENTIALS_STATUS, "certification.cyber_essentials.status");
+    assert.equal(CANONICAL_KEYS.CYBER_ESSENTIALS_EXPIRY, "certification.cyber_essentials.expiry");
+    assert.equal(CANONICAL_KEYS.ISO_27001_STATUS, "certification.iso_27001.status");
+    assert.equal(CANONICAL_KEYS.ISO_27001_EXPIRY, "certification.iso_27001.expiry");
+    assert.equal(CANONICAL_KEYS.COMPANY_NUMBER, "company.number");
+    assert.equal(CANONICAL_KEYS.BUSINESS_CONTINUITY_PLAN, "policy.business_continuity_plan");
+  });
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat src/domain/canonical.ts | head -35
+/** Canonical keys and keyword → key mapping. */
+
+export const CANONICAL_KEYS = {
+  PL_LIMIT: "insurance.public_liability.limit",
+  PL_EXPIRY: "insurance.public_liability.expiry",
+  EL_LIMIT: "insurance.employers_liability.limit",
+  EL_EXPIRY: "insurance.employers_liability.expiry",
+  EMPLOYEES: "company.employee_count",
+  TURNOVER: "company.turnover",
+  LEGAL_NAME: "company.legal_name",
+  ISO9001_STATUS: "certification.iso_9001.status",
+  ISO9001_EXPIRY: "certification.iso_9001.expiry",
+  LIVING_WAGE: "policy.living_wage",
+  // UK Construction prequalification canonical keys
+  CSCS_STATUS: "certification.cscs.status",
+  CSCS_EXPIRY: "certification.cscs.expiry",
+  CPCS_STATUS: "certification.cpcs.status",
+  CPCS_EXPIRY: "certification.cpcs.expiry",
+  SMAS_STATUS: "certification.smas.status",
+  SMAS_EXPIRY: "certification.smas.expiry",
+  PROFESSIONAL_INDEMNITY_LIMIT: "insurance.professional_indemnity.limit",
+  PROFESSIONAL_INDEMNITY_EXPIRY: "insurance.professional_indemnity.expiry",
+  MOTOR_INSURANCE_LIMIT: "insurance.motor.limit",
+  MOTOR_INSURANCE_EXPIRY: "insurance.motor.expiry",
+  CYBER_ESSENTIALS_STATUS: "certification.cyber_essentials.status",
+  CYBER_ESSENTIALS_EXPIRY: "certification.cyber_essentials.expiry",
+  ISO_27001_STATUS: "certification.iso_27001.status",
+  ISO_27001_EXPIRY: "certification.iso_27001.expiry",
+  COMPANY_NUMBER: "company.company_number",
+  BUSINESS_CONTINUITY_PLAN: "policy.business_continuity_plan",
+} as const;
+
+/** Keys that answer a headcount/turnover question — never a boolean policy. */
+export const NUMERIC_STAT_KEYS = new Set<string>([CANONICAL_KEYS.EMPLOYEES, CANONICAL_KEYS.TURNOVER]);
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show HEAD:src/domain/canonical.ts | head -35
+/** Canonical keys and keyword → key mapping. */
+
+export const CANONICAL_KEYS = {
+  PL_LIMIT: "insurance.public_liability.limit",
+  PL_EXPIRY: "insurance.public_liability.expiry",
+  EL_LIMIT: "insurance.employers_liability.limit",
+  EL_EXPIRY: "insurance.employers_liability.expiry",
+  EMPLOYEES: "company.employee_count",
+  TURNOVER: "company.turnover",
+  LEGAL_NAME: "company.legal_name",
+  ISO9001_STATUS: "certification.iso_9001.status",
+  ISO9001_EXPIRY: "certification.iso_9001.expiry",
+  LIVING_WAGE: "policy.living_wage",
+  // UK Construction prequalification canonical keys
+  CSCS_STATUS: "certification.cscs.status",
+  CSCS_EXPIRY: "certification.cscs.expiry",
+  CPCS_STATUS: "certification.cpcs.status",
+  CPCS_EXPIRY: "certification.cpcs.expiry",
+  SMAS_STATUS: "certification.smas.status",
+  SMAS_EXPIRY: "certification.smas.expiry",
+  PROFESSIONAL_INDEMNITY_LIMIT: "insurance.professional_indemnity.limit",
+  PROFESSIONAL_INDEMNITY_EXPIRY: "insurance.professional_indemnity.expiry",
+  MOTOR_INSURANCE_LIMIT: "insurance.motor.limit",
+  MOTOR_INSURANCE_EXPIRY: "insurance.motor.expiry",
+  CYBER_ESSENTIALS_STATUS: "certification.cyber_essentials.status",
+  CYBER_ESSENTIALS_EXPIRY: "certification.cyber_essentials.expiry",
+  ISO_27001_STATUS: "certification.iso_27001.status",
+  ISO_27001_EXPIRY: "certification.iso_27001.expiry",
+  COMPANY_NUMBER: "company.company_number",
+  BUSINESS_CONTINUITY_PLAN: "policy.business_continuity_plan",
+} as const;
+
+/** Keys that answer a headcount/turnover question — never a boolean policy. */
+export const NUMERIC_STAT_KEYS = new Set<string>([CANONICAL_KEYS.EMPLOYEES, CANONICAL_KEYS.TURNOVER]);
+[0m
+[0m← [0mEdit repo/src/domain/canonical.ts
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/canonical.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/canonical.ts
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/canonical.ts
+@@ -19,15 +19,15 @@
+   SMAS_STATUS: "certification.smas.status",
+   SMAS_EXPIRY: "certification.smas.expiry",
+   PROFESSIONAL_INDEMNITY_LIMIT: "insurance.professional_indemnity.limit",
+   PROFESSIONAL_INDEMNITY_EXPIRY: "insurance.professional_indemnity.expiry",
+-  MOTOR_INSURANCE_LIMIT: "insurance.motor.limit",
+-  MOTOR_INSURANCE_EXPIRY: "insurance.motor.expiry",
++  MOTOR_INSURANCE_LIMIT: "insurance.motor_insurance.limit",
++  MOTOR_INSURANCE_EXPIRY: "insurance.motor_insurance.expiry",
+   CYBER_ESSENTIALS_STATUS: "certification.cyber_essentials.status",
+   CYBER_ESSENTIALS_EXPIRY: "certification.cyber_essentials.expiry",
+   ISO_27001_STATUS: "certification.iso_27001.status",
+   ISO_27001_EXPIRY: "certification.iso_27001.expiry",
+-  COMPANY_NUMBER: "company.company_number",
++  COMPANY_NUMBER: "company.number",
+   BUSINESS_CONTINUITY_PLAN: "policy.business_continuity_plan",
+ } as const;
+ 
+ /** Keys that answer a headcount/turnover question — never a boolean policy. */
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep "not ok"
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 1063 - questionnaire detail announces specific loading
+not ok 1395 - the auth schema copy ships in the globbed migration directory
+not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+Let me look at all remaining failures:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '9650,9720p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log
+sed: can't read /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log: No such file or directory
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '12580,12710p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log
+sed: can't read /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log: No such file or directory
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '14880,14970p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log
+sed: can't read /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132213-output.log: No such file or directory
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+total 940
+drwxrwxr-x 2 andy andy   4096 Nov 22 13:30 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:51 ..
+-rw-rw-r-- 1 andy andy  13231 Nov 22 13:30 INDEX.tsv
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 22 13:28 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:42 .lock-typecheck
+-rw-rw-r-- 1 andy andy    138 Nov 22 13:28 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 13:30 test-platform-20261122-132846-exit-code.txt
+-rw-rw-r-- 1 andy andy 453271 Nov 22 13:30 test-platform-20261122-132846-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:43 typecheck-20261121-234252-exit-code.txt
+-rw-rw-r-- 1 andy andy   9509 Nov 21 23:43 typecheck-20261121-234252-output.log
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep "not ok" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132846-output.log
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 1063 - questionnaire detail announces specific loading
+not ok 1395 - the auth schema copy ships in the globbed migration directory
+not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -n "not ok" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132846-output.log | head -8
+1768:not ok 137 - the CLI reports rather than silently passing when run via a symlink
+3194:not ok 205 - docs/RELEASE.md names tip and refuses GO
+3364:not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+3630:not ok 207 - docs/OPERATOR.md names tip and refuses GO
+9638:not ok 1063 - questionnaire detail announces specific loading
+12563:not ok 1395 - the auth schema copy ships in the globbed migration directory
+12656:not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+14679:not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '1760,1850p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132846-output.log
+...
+# Subtest: the build side resolves the template's shipped app-env
+ok 136 - the build side resolves the template's shipped app-env
+  ---
+  duration_ms: 0.748622
+  type: 'test'
+  ...
+# Subtest: the CLI reports rather than silently passing when run via a symlink
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 117.362136
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /could not read the dev server's resolved VITE_AUTH_ENABLED/. Input:
+    
+    '[auth-invariant] dev server not observable; build value used as reference\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    [auth-invariant] dev server not observable; build value used as reference
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:110:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: claim edit honesty lock
+    # Subtest: rejects empty, oversized, and injection edits
+    ok 1 - rejects empty, oversized, and injection edits
+      ---
+      duration_ms: 4.1767
+      type: 'test'
+      ...
+    # Subtest: normalises money limits and refuses non-money
+    ok 2 - normalises money limits and refuses non-money
+      ---
+      duration_ms: 0.917007
+      type: 'test'
+      ...
+    # Subtest: requires a calendar date for expiry keys
+    ok 3 - requires a calendar date for expiry keys
+      ---
+      duration_ms: 3.738263
+      type: 'test'
+      ...
+    # Subtest: resolvedClaimValues prefers human edits without erasing the original fields
+    ok 4 - resolvedClaimValues prefers human edits without erasing the original fields
+      ---
+      duration_ms: 0.29064
+      type: 'test'
+      ...
+    1..4
+ok 138 - claim edit honesty lock
+  ---
+  duration_ms: 10.399488
+  type: 'suite'
+  ...
+# Subtest: claim edit lock
+    # Subtest: normalises money limits and rejects empty, injection, and non-money
+    ok 1 - normalises money limits and rejects empty, injection, and non-money
+      ---
+      duration_ms: 1.983534
+      type: 'test'
+      ...
+    # Subtest: requires calendar expiry dates and whole employee counts
+    ok 2 - requires calendar expiry dates and whole employee counts
+      ---
+      duration_ms: 3.782868
+      type: 'test'
+      ...
+    # Subtest: prefers human corrections without dropping provenance
+    ok 3 - prefers human corrections without dropping provenance
+      ---
+      duration_ms: 0.29887
+      type: 'test'
+      ...
+    1..3
+ok 139 - claim edit lock
+  ---
+  duration_ms: 10.223069
+  type: 'suite'
+  ...
+# Subtest: classifyCallToolError lock
+    # Subtest: returns null for ok results
+    ok 1 - returns null for ok results
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '3180,3250p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132846-output.log
+...
+# Subtest: multi-child busy ternaries use fragments
+ok 203 - multi-child busy ternaries use fragments
+  ---
+  duration_ms: 1.176984
+  type: 'test'
+  ...
+# Subtest: touched routes still expose aria-busy + sr-only status
+ok 204 - touched routes still expose aria-busy + sr-only status
+  ---
+  duration_ms: 2.900171
+  type: 'test'
+  ...
+# Subtest: docs/RELEASE.md names tip and refuses GO
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+  ---
+  duration_ms: 6.643612
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: a61f1a8be38615bf994143d074da05b9535fdfbb$/m. Input:
+    
+    '# Release and rollback\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      'Note: Static tip is last docs sync, not a live GO marker.\n' +
+      '\n' +
+      '## Branching\n' +
+      '\n' +
+      '| Ref | Meaning |\n' +
+      '|---|---|\n' +
+      '| `master` tip | Default branch (Current master above). Historical `fea7ff2` (2026-09-13) is a freeze marker only. Do not merge RC without Andrew. |\n' +
+      '| `security/automated-redteam-2026-09-08` `9d7afe3` | Reviewed security freeze. Do not force-push. |\n' +
+      '| `pilot/controlled-2026-09-08` | T24 local pilot. Do not force-push. |\n' +
+      '| `deployment/reconciled-pilot-20260914` `6f8cf3d` | Hosted DigitalOcean pilot base. |\n' +
+      '| `verification/deployment-reconciled-3-20260914` `cf67428` | Cloud Release Gate SUCCESS (typecheck/lint/domain/integration/concurrency/persistence/build/audit). |\n' +
+      '| `cursor/release-readiness-8a5b` | Release-readiness fixes atop reconciled pilot (PR #14). |\n' +
+      '| `release/candidate-*` | Commercially usable candidate. Push only; do not merge to master without Andrew. GitHub Actions `verify.yml` is a **subset** of the local gate. |\n' +
+      '\n' +
+      'Never force-push freeze SHAs. Never mark the independent audit closed from this agent.\n' +
+      '\n' +
+      '## Release checklist\n' +
+      '\n' +
+      '1. `npm run check:auth`\n' +
+      '2. `npm run typecheck` and `npm run lint`\n' +
+      '3. `npm test` (platform/tooling)\n' +
+      '4. `npm run test:app` (domain + integration, skipped = 0)\n' +
+      '5. `npm run test:concurrency-pg`\n' +
+      '6. `npm run test:persistence` and `npm run test:http-persistence`\n' +
+      '7. `npm run test:backup`\n' +
+      '8. `npm run test:live-idor` (app on 8080)\n' +
+      '9. `node scripts/mutation-isolation.mjs`\n' +
+      '10. `node scripts/e2e-demo.mjs`\n' +
+      '11. `DATABASE_URL=$(node scripts/pg-local.mjs url) npm run build`\n' +
+      '12. `npm audit`\n' +
+      '13. Secret scan of the commit (`npm run test:secret-scan`; never prints secret text)\n' +
+      '14. `HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe`\n' +
+      '15. Push the private release-candidate branch\n' +
+      '16. Hand the SHA to the Evidence Wallet Reviewer. Do not claim they reviewed it unless they did.\n' +
+      '\n' +
+      'Exact operator runbooks (DEPLOY / VERIFY / ROLL BACK / BACKUP / RESTORE / FAILED MIGRATION / AUTH FAILURE / DATABASE OUTAGE / COMPROMISED SECRET / TENANT-ISOLATION): [OPERATIONS.md](./OPERATIONS.md).\n' +
+      '\n' +
+      '## Hosted gate (2026-09-15)\n' +
+      '\n' +
+      'DigitalOcean pilot origin is live: `https://46-101-16-174.sslip.io`\n' +
+      '(`hostedReady: true`, `signupOpen: false`). See [HOSTED.md](./HOSTED.md).\n' +
+      '\n' +
+[0m
+Let me fix the docs that reference old SHA:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m→ [0mRead repo/docs/RELEASE.md[90m [limit=20][0m
+[0m
+[0m← [0mEdit repo/docs/RELEASE.md
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/RELEASE.md
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/RELEASE.md
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/RELEASE.md
+@@ -1,9 +1,9 @@
+ # Release and rollback
+ 
+ ## Current truth
+ 
+-Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
++Current master: a61f1a8be38615bf994143d074da05b9535fdfbb
+ Release GO: no
+ Note: Static tip is last docs sync, not a live GO marker.
+ 
+ ## Branching
+
+[0m
+[0m→ [0mRead repo/docs/OPERATIONS.md[90m [limit=20][0m
+[0m
+[0m← [0mEdit repo/docs/OPERATIONS.md
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/OPERATIONS.md
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/OPERATIONS.md
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/OPERATIONS.md
+@@ -4,9 +4,9 @@
+ invite codes, or customer evidence into chat.
+ 
+ ## Current truth
+ 
+-Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
++Current master: a61f1a8be38615bf994143d074da05b9535fdfbb
+ Release GO: no
+ 
+ Local PostgreSQL 18 is the fully gated clean-room path. A DigitalOcean pilot
+ origin is live (see [HOSTED.md](./HOSTED.md)). Neon/Vercel remains separately
+
+[0m
+[0m→ [0mRead repo/docs/OPERATOR.md[90m [limit=20][0m
+[0m
+[0m← [0mEdit repo/docs/OPERATOR.md
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/OPERATOR.md
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/OPERATOR.md
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/docs/OPERATOR.md
+@@ -5,9 +5,9 @@
+ This guide is for a named operator running a **private** instance. It is not a public-SaaS onboarding manual.
+ 
+ ## Current truth
+ 
+-Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
++Current master: a61f1a8be38615bf994143d074da05b9535fdfbb
+ Release GO: no
+ 
+ ## First run (local PostgreSQL)
+ 
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '9630,9720p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132846-output.log
+...
+# Subtest: errors and empty questions stay announced
+ok 1062 - errors and empty questions stay announced
+  ---
+  duration_ms: 0.238388
+  type: 'test'
+  ...
+# Subtest: questionnaire detail announces specific loading
+not ok 1063 - questionnaire detail announces specific loading
+  ---
+  duration_ms: 2.040207
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-loading-status.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Loading questionnaire…/. Input:
+    
+    'import { useQuery } from "@tanstack/react-query";\n' +
+      'import { createFileRoute, Link } from "@tanstack/react-router";\n' +
+      'import { getQuestionnaireFn } from "@/server/fns";\n' +
+      '\n' +
+      'export const Route = createFileRoute("/app/$orgId/questionnaires/$qid")({ component: QDetail });\n' +
+      '\n' +
+      'function QDetail() {\n' +
+      '  const { orgId, qid } = Route.useParams();\n' +
+      '  const q = useQuery({\n' +
+      '    queryKey: ["qn", orgId, qid],\n' +
+      '    queryFn: () => getQuestionnaireFn({ data: { orgId, questionnaireId: qid } }),\n' +
+      '  });\n' +
+      '  if (q.isPending) return <p role="status" aria-busy="true" className="text-muted">Loading…</p>;\n' +
+      '  if (q.error) return <p role="alert" className="text-red-ink">{q.error.message}</p>;\n' +
+      '  if (!q.data) return <p role="alert" className="text-red-ink">Questionnaire not found.</p>;\n' +
+      '  return (\n' +
+      '    <div className="space-y-4">\n' +
+      '      <Link to="/app/$orgId/questionnaires" params={{ orgId }} className="text-sm text-muted underline">\n' +
+      '        Questionnaires\n' +
+      '      </Link>\n' +
+      '      <h1 className="font-display text-3xl">{q.data.questionnaire.title}</h1>\n' +
+      '      {q.data.questionnaire.uncertain_json && q.data.questionnaire.uncertain_json !== "[]" ? (\n' +
+      '        <p role="status" className="rounded-[16px] border border-amber-ink/40 p-3 text-sm">\n' +
+      '          Some lines were flagged as uncertain and were not turned into questions.\n' +
+      '        </p>\n' +
+      '      ) : null}\n' +
+      '      {q.data.questions.length === 0 ? (\n' +
+      '        <p role="status" className="text-sm text-muted">\n' +
+      '          No questions were stored for this questionnaire.\n' +
+      '        </p>\n' +
+      '      ) : (\n' +
+      '        <ol className="space-y-3">\n' +
+      '          {q.data.questions.map((row, i) => (\n' +
+      '            <li key={String(row.id)} className="rounded-[16px] border border-line p-4">\n' +
+      '              <p className="text-xs uppercase tracking-wider text-muted">\n' +
+      '                {String(row.question_identifier ?? i + 1)} · {String(row.section ?? "")}\n' +
+      '              </p>\n' +
+      '              <p className="mt-1">{String(row.question_text)}</p>\n' +
+      '            </li>\n' +
+      '          ))}\n' +
+      '        </ol>\n' +
+      '      )}\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { useQuery } from "@tanstack/react-query";
+    import { createFileRoute, Link } from "@tanstack/react-router";
+    import { getQuestionnaireFn } from "@/server/fns";
+    
+    export const Route = createFileRoute("/app/$orgId/questionnaires/$qid")({ component: QDetail });
+    
+    function QDetail() {
+      const { orgId, qid } = Route.useParams();
+      const q = useQuery({
+        queryKey: ["qn", orgId, qid],
+        queryFn: () => getQuestionnaireFn({ data: { orgId, questionnaireId: qid } }),
+      });
+      if (q.isPending) return <p role="status" aria-busy="true" className="text-muted">Loading…</p>;
+      if (q.error) return <p role="alert" className="text-red-ink">{q.error.message}</p>;
+      if (!q.data) return <p role="alert" className="text-red-ink">Questionnaire not found.</p>;
+      return (
+        <div className="space-y-4">
+          <Link to="/app/$orgId/questionnaires" params={{ orgId }} className="text-sm text-muted underline">
+            Questionnaires
+          </Link>
+          <h1 className="font-display text-3xl">{q.data.questionnaire.title}</h1>
+          {q.data.questionnaire.uncertain_json && q.data.questionnaire.uncertain_json !== "[]" ? (
+            <p role="status" className="rounded-[16px] border border-amber-ink/40 p-3 text-sm">
+              Some lines were flagged as uncertain and were not turned into questions.
+[0m
+[0m→ [0mRead repo/scripts/hcv-questionnaire-detail-loading-status.test.mjs
+[0m→ [0mRead repo/src/routes/app/$orgId/questionnaires.$qid.tsx
+[0m
+[0m← [0mEdit repo/src/routes/app/$orgId/questionnaires.$qid.tsx
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/app/$orgId/questionnaires.$qid.tsx
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/app/$orgId/questionnaires.$qid.tsx
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/app/$orgId/questionnaires.$qid.tsx
+@@ -9,9 +9,9 @@
+ const q = useQuery({
+   queryKey: ["qn", orgId, qid],
+   queryFn: () => getQuestionnaireFn({ data: { orgId, questionnaireId: qid } }),
+ });
+-if (q.isPending) return <p role="status" aria-busy="true" className="text-muted">Loading…</p>;
++if (q.isPending) return <p role="status" aria-busy="true" className="text-muted">Loading questionnaire…</p>;
+ if (q.error) return <p role="alert" className="text-red-ink">{q.error.message}</p>;
+ if (!q.data) return <p role="alert" className="text-red-ink">Questionnaire not found.</p>;
+ return (
+   <div className="space-y-4">
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '12550,12720p' /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132846-output.log
+# Subtest: pending migrations are returned in name order
+ok 1393 - pending migrations are returned in name order
+  ---
+  duration_ms: 16.922629
+  type: 'test'
+  ...
+# Subtest: non-.sql entries are dropped (readdir also yields the auth/ directory)
+ok 1394 - non-.sql entries are dropped (readdir also yields the auth/ directory)
+  ---
+  duration_ms: 0.232593
+  type: 'test'
+  ...
+# Subtest: the auth schema copy ships in the globbed migration directory
+not ok 1395 - the auth schema copy ships in the globbed migration directory
+  ---
+  duration_ms: 2.305794
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        '0001_auth.sql',
+        '0002_evidence_wallet.sql',
+        '0003_answer_notes.sql',
+        '0004_claim_human_edits.sql',
+    ...
+        '0027_v2_gateway_phase_o.sql',
+    +   '0028_ai_extraction_optin.sql',
+    +   '0029_retention_deletion_audit.sql'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: '0001_auth.sql'
+    1: '0002_evidence_wallet.sql'
+    2: '0003_answer_notes.sql'
+    3: '0004_claim_human_edits.sql'
+    4: '0005_integrity_guards.sql'
+    5: '0006_rate_quotas_invites.sql'
+    6: '0007_org_lifecycle.sql'
+    7: '0008_demo_filename_unique.sql'
+    8: '0009_orphan_source_facts.sql'
+    9: '0010_orphan_source_org_scope.sql'
+    10: '0011_v2_foundations.sql'
+    11: '0012_v2_decision_inbox.sql'
+    12: '0013_v2_council_hardening.sql'
+    13: '0014_v2_agent_loop.sql'
+    14: '0015_v2_workflows.sql'
+    15: '0016_v2_quotes_comms.sql'
+    16: '0017_v2_answer_bank_inbox.sql'
+    17: '0018_v2_rls_tenant.sql'
+    18: '0019_v2_deletion_orders_assertions.sql'
+    19: '0020_v2_perf_indexes.sql'
+    20: '0021_v2_preference_hints.sql'
+    21: '0022_v2_preference_scopes.sql'
+    22: '0023_v2_agent_credential_rotation.sql'
+    23: '0024_v2_entity_type_defs.sql'
+    24: '0025_v2_relation_type_defs.sql'
+    25: '0026_v2_gateway_audit_rls.sql'
+    26: '0027_v2_gateway_phase_o.sql'
+  actual:
+    0: '0001_auth.sql'
+    1: '0002_evidence_wallet.sql'
+    2: '0003_answer_notes.sql'
+    3: '0004_claim_human_edits.sql'
+    4: '0005_integrity_guards.sql'
+    5: '0006_rate_quotas_invites.sql'
+    6: '0007_org_lifecycle.sql'
+    7: '0008_demo_filename_unique.sql'
+    8: '0009_orphan_source_facts.sql'
+    9: '0010_orphan_source_org_scope.sql'
+    10: '0011_v2_foundations.sql'
+    11: '0012_v2_decision_inbox.sql'
+    12: '0013_v2_council_hardening.sql'
+    13: '0014_v2_agent_loop.sql'
+    14: '0015_v2_workflows.sql'
+    15: '0016_v2_quotes_comms.sql'
+    16: '0017_v2_answer_bank_inbox.sql'
+    17: '0018_v2_rls_tenant.sql'
+    18: '0019_v2_deletion_orders_assertions.sql'
+    19: '0020_v2_perf_indexes.sql'
+    20: '0021_v2_preference_hints.sql'
+    21: '0022_v2_preference_scopes.sql'
+    22: '0023_v2_agent_credential_rotation.sql'
+    23: '0024_v2_entity_type_defs.sql'
+    24: '0025_v2_relation_type_defs.sql'
+    25: '0026_v2_gateway_audit_rls.sql'
+    26: '0027_v2_gateway_phase_o.sql'
+    27: '0028_ai_extraction_optin.sql'
+    28: '0029_retention_deletion_audit.sql'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:61:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a database that already applied production 0001-0010 only has 0011-0027 pending
+not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+  ---
+  duration_ms: 0.713625
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:96:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        '0011_v2_foundations.sql',
+        '0012_v2_decision_inbox.sql',
+        '0013_v2_council_hardening.sql',
+        '0014_v2_agent_loop.sql',
+    ...
+        '0027_v2_gateway_phase_o.sql',
+    +   '0028_ai_extraction_optin.sql',
+    +   '0029_retention_deletion_audit.sql'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: '0011_v2_foundations.sql'
+    1: '0012_v2_decision_inbox.sql'
+    2: '0013_v2_council_hardening.sql'
+    3: '0014_v2_agent_loop.sql'
+    4: '0015_v2_workflows.sql'
+    5: '0016_v2_quotes_comms.sql'
+    6: '0017_v2_answer_bank_inbox.sql'
+    7: '0018_v2_rls_tenant.sql'
+    8: '0019_v2_deletion_orders_assertions.sql'
+    9: '0020_v2_perf_indexes.sql'
+    10: '0021_v2_preference_hints.sql'
+    11: '0022_v2_preference_scopes.sql'
+    12: '0023_v2_agent_credential_rotation.sql'
+    13: '0024_v2_entity_type_defs.sql'
+    14: '0025_v2_relation_type_defs.sql'
+    15: '0026_v2_gateway_audit_rls.sql'
+    16: '0027_v2_gateway_phase_o.sql'
+  actual:
+    0: '0011_v2_foundations.sql'
+    1: '0012_v2_decision_inbox.sql'
+    2: '0013_v2_council_hardening.sql'
+    3: '0014_v2_agent_loop.sql'
+    4: '0015_v2_workflows.sql'
+    5: '0016_v2_quotes_comms.sql'
+    6: '0017_v2_answer_bank_inbox.sql'
+    7: '0018_v2_rls_tenant.sql'
+    8: '0019_v2_deletion_orders_assertions.sql'
+    9: '0020_v2_perf_indexes.sql'
+    10: '0021_v2_preference_hints.sql'
+    11: '0022_v2_preference_scopes.sql'
+    12: '0023_v2_agent_credential_rotation.sql'
+    13: '0024_v2_entity_type_defs.sql'
+    14: '0025_v2_relation_type_defs.sql'
+    15: '0026_v2_gateway_audit_rls.sql'
+    16: '0027_v2_gateway_phase_o.sql'
+    17: '0028_ai_extraction_optin.sql'
+    18: '0029_retention_deletion_audit.sql'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:110:10)
+[0m
+[0m→ [0mRead repo/scripts/migration-plan.test.mjs
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/migrations/
+total 144
+drwxrwxr-x  3 andy andy 4096 Nov 21 21:20 .
+drwxrwxr-x 24 andy andy 4096 Nov 22 10:37 ..
+-rw-rw-r--  1 andy andy 2739 Nov 21 21:19 0001_auth.sql
+-rw-rw-r--  1 andy andy 8442 Nov 21 21:20 0002_evidence_wallet.sql
+-rw-rw-r--  1 andy andy  213 Nov 21 21:19 0003_answer_notes.sql
+-rw-rw-r--  1 andy andy  811 Nov 21 21:19 0004_claim_human_edits.sql
+-rw-rw-r--  1 andy andy 1685 Nov 21 21:19 0005_integrity_guards.sql
+-rw-rw-r--  1 andy andy  703 Nov 21 21:19 0006_rate_quotas_invites.sql
+-rw-rw-r--  1 andy andy  832 Nov 21 21:19 0007_org_lifecycle.sql
+-rw-rw-r--  1 andy andy  676 Nov 21 21:19 0008_demo_filename_unique.sql
+-rw-rw-r--  1 andy andy 1009 Nov 21 21:19 0009_orphan_source_facts.sql
+-rw-rw-r--  1 andy andy  966 Nov 21 21:19 0010_orphan_source_org_scope.sql
+-rw-rw-r--  1 andy andy 6836 Nov 21 21:19 0011_v2_foundations.sql
+-rw-rw-r--  1 andy andy 1128 Nov 21 21:19 0012_v2_decision_inbox.sql
+-rw-rw-r--  1 andy andy 2035 Nov 21 21:19 0013_v2_council_hardening.sql
+-rw-rw-r--  1 andy andy 2707 Nov 21 21:19 0014_v2_agent_loop.sql
+-rw-rw-r--  1 andy andy 5679 Nov 21 21:19 0015_v2_workflows.sql
+-rw-rw-r--  1 andy andy 1815 Nov 21 21:19 0016_v2_quotes_comms.sql
+-rw-rw-r--  1 andy andy 1730 Nov 21 21:19 0017_v2_answer_bank_inbox.sql
+-rw-rw-r--  1 andy andy 1926 Nov 21 21:19 0018_v2_rls_tenant.sql
+-rw-rw-r--  1 andy andy 2897 Nov 21 21:19 0019_v2_deletion_orders_assertions.sql
+-rw-rw-r--  1 andy andy  732 Nov 21 21:19 0020_v2_perf_indexes.sql
+-rw-rw-r--  1 andy andy 1519 Nov 21 21:19 0021_v2_preference_hints.sql
+-rw-rw-r--  1 andy andy  806 Nov 21 21:19 0022_v2_preference_scopes.sql
+-rw-rw-r--  1 andy andy  342 Nov 21 21:19 0023_v2_agent_credential_rotation.sql
+-rw-rw-r--  1 andy andy 1494 Nov 21 21:19 0024_v2_entity_type_defs.sql
+-rw-rw-r--  1 andy andy 1484 Nov 21 21:19 0025_v2_relation_type_defs.sql
+-rw-rw-r--  1 andy andy  810 Nov 21 21:19 0026_v2_gateway_audit_rls.sql
+-rw-rw-r--  1 andy andy  446 Nov 21 21:19 0027_v2_gateway_phase_o.sql
+-rw-rw-r--  1 andy andy  360 Nov 21 21:20 0028_ai_extraction_optin.sql
+-rw-rw-r--  1 andy andy 2800 Nov 21 21:20 0029_retention_deletion_audit.sql
+drwxrwxr-x  2 andy andy 4096 Nov 21 21:19 auth
+[0m
+[0m← [0mEdit repo/scripts/migration-plan.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs
+@@ -87,8 +87,10 @@
+       "0024_v2_entity_type_defs.sql",
+       "0025_v2_relation_type_defs.sql",
+       "0026_v2_gateway_audit_rls.sql",
+       "0027_v2_gateway_phase_o.sql",
++      "0028_ai_extraction_optin.sql",
++      "0029_retention_deletion_audit.sql",
+     ],
+   );
+   assert.ok(readdirSync(join(migrationsDir, "auth")).includes("0001_auth.sql"));
+ });
+
+[0m
+[0m← [0mEdit repo/scripts/migration-plan.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs
+@@ -94,9 +94,9 @@
+   );
+   assert.ok(readdirSync(join(migrationsDir, "auth")).includes("0001_auth.sql"));
+ });
+ 
+-test("a database that already applied production 0001-0010 only has 0011-0027 pending", () => {
++test("a database that already applied production 0001-0010 only has 0011-0029 pending", () => {
+   const migrationsDir = join(projectRoot(), "migrations");
+   const applied = [
+     "0001_auth.sql",
+     "0002_evidence_wallet.sql",
+@@ -128,8 +128,10 @@
+       "0024_v2_entity_type_defs.sql",
+       "0025_v2_relation_type_defs.sql",
+       "0026_v2_gateway_audit_rls.sql",
+       "0027_v2_gateway_phase_o.sql",
++      "0028_ai_extraction_optin.sql",
++      "0029_retention_deletion_audit.sql",
+     ],
+   );
+ });
+ 
+
+[0m
+Now let me check the remaining failures:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -A 20 "not ok 1501" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261122-132846-output.log
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+  ---
+  duration_ms: 12.93161
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EADDRINUSE: address already in use 127.0.0.1:55435'
+  code: 'EADDRINUSE'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    listenInCluster (node:net:1998:12)
+    node:net:2207:7
+    process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+  ...
+# Subtest: restores a synthetic pre-0011 backup after applying migrations through 0027
+ok 1502 - restores a synthetic pre-0011 backup after applying migrations through 0027
+  ---
+  duration_ms: 105980.32734
+  type: 'test'
+  ...
+# Subtest: rsfm enabled lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '1,40p' scripts/rollback-rehearsal.test.mjs
+#!/usr/bin/env node
+/**
+ * Test wrapper for rollback-rehearsal.mjs.
+ * Runs the rehearsal, requires exit 0, requires the pre-upgrade, upgraded, and
+ * restored assertions, rejects output containing database URLs or secrets.
+ */
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { createServer } from "node:net";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { findFreePort } from "./rollback-rehearsal.mjs";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const script = join(root, "scripts/rollback-rehearsal.mjs");
+const RESERVED_PORTS = new Set([55432, 55434, 8080]);
+
+function listenLoopback(port) {
+  const server = createServer();
+  return new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(port, "127.0.0.1", () => resolve(server));
+  });
+}
+
+test("free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied", async () => {
+  const held = await listenLoopback(55435);
+  try {
+    const address = held.address();
+    assert.equal(address.address, "127.0.0.1");
+    assert.equal(address.port, 55435);
+    const port = await findFreePort();
+    assert.equal(typeof port, "number");
+    assert.notEqual(port, 55435);
+    assert.equal(RESERVED_PORTS.has(port), false);
+  } finally {
+    await new Promise((resolve, reject) => {
+      held.close((err) => (err ? reject(err) : resolve()));
+    });
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep "findFreePort" scripts/rollback-rehearsal.mjs
+export async function findFreePort() {
+  const port = await findFreePort();
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -A 30 "export async function findFreePort" scripts/rollback-rehearsal.mjs
+export async function findFreePort() {
+  for (let port = FIRST_PORT; port < LAST_PORT; port++) {
+    if (RESERVED_PORTS.has(port)) continue;
+    const occupied = await portIsOccupied(port);
+    if (!occupied) return port;
+  }
+  throw new Error("No free port found");
+}
+
+async function withPool(url, fn) {
+  const pool = new pg.Pool({ connectionString: url, connectionTimeoutMillis: 5_000, max: 1 });
+  try {
+    return await fn(pool);
+  } finally {
+    await pool.end().catch(() => undefined);
+  }
+}
+
+async function applyMigrationsUpTo(dbUrl, worktree, upToNumber) {
+  const { readdir, readFile } = await import("node:fs/promises");
+  const migrationsDir = join(worktree, "migrations");
+  const entries = await readdir(migrationsDir).catch(() => []);
+  const sqlFiles = entries
+    .filter(f => f.endsWith(".sql"))
+    .map(f => ({ name: f, path: join(migrationsDir, f) }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .filter(({ name }) => {
+      const num = Number(name.split("_")[0]);
+      return num <= upToNumber;
+    });
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && head -60 scripts/rollback-rehearsal.mjs
+#!/usr/bin/env node
+/**
+ * Rollback rehearsal: proves a pre-upgrade physical backup can restore the
+ * previous checkout after migrations 0011–0027 are applied.
+ *
+ * Runs entirely on synthetic local PostgreSQL. No hosted droplet, production
+ * checkout, live database, Neon, or customer data.
+ *
+ * Port selection is fail-closed: it probes bind/listen state on 127.0.0.1
+ * starting at 55435 and refuses any port already occupied by another listener.
+ * The chosen port is never 55432, 55434, or 8080.
+ */
+import { createServer } from "node:net";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, realpathSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import pg from "pg";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const ANCESTOR_SHA = "1085d0bc489f107e19e9cffdd98775f79cf56ed8";
+const RESERVED_PORTS = new Set([55432, 55434, 8080]);
+const FIRST_PORT = 55435;
+const LAST_PORT = 65000;
+
+function execGit(args, cwd) {
+  return execFileSync("git", args, { cwd, encoding: "utf8", timeout: 60_000 }).trim();
+}
+
+async function isAncestor(ancestor, commit) {
+  try {
+    execFileSync("git", ["merge-base", "--is-ancestor", ancestor, commit], { encoding: "utf8" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Fail-closed port probe: try to open a real listener on each candidate port.
+ * A port already occupied throws ECONNREFUSED/bind failure and is refused.
+ */
+function portIsOccupied(port) {
+  return new Promise((resolve) => {
+    const server = createServer();
+    server.once("error", (err) => {
+      server.close();
+      resolve(err.code === "EADDRINUSE" || err.code === "EACCES");
+    });
+    server.once("listening", () => {
+      server.close();
+      resolve(false);
+    });
+    server.listen(port, "127.0.0.1");
+  });
+}
+
+export async function findFreePort() {
+  for (let port = FIRST_PORT; port < LAST_PORT; port++) {
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat scripts/rollback-rehearsal.test.mjs
+#!/usr/bin/env node
+/**
+ * Test wrapper for rollback-rehearsal.mjs.
+ * Runs the rehearsal, requires exit 0, requires the pre-upgrade, upgraded, and
+ * restored assertions, rejects output containing database URLs or secrets.
+ */
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { createServer } from "node:net";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { findFreePort } from "./rollback-rehearsal.mjs";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const script = join(root, "scripts/rollback-rehearsal.mjs");
+const RESERVED_PORTS = new Set([55432, 55434, 8080]);
+
+function listenLoopback(port) {
+  const server = createServer();
+  return new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(port, "127.0.0.1", () => resolve(server));
+  });
+}
+
+test("free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied", async () => {
+  const held = await listenLoopback(55435);
+  try {
+    const address = held.address();
+    assert.equal(address.address, "127.0.0.1");
+    assert.equal(address.port, 55435);
+    const port = await findFreePort();
+    assert.equal(typeof port, "number");
+    assert.notEqual(port, 55435);
+    assert.equal(RESERVED_PORTS.has(port), false);
+  } finally {
+    await new Promise((resolve, reject) => {
+      held.close((err) => (err ? reject(err) : resolve()));
+    });
+  }
+});
+
+function runRehearsal() {
+  const result = spawnSync(process.execPath, [script], {
+    cwd: root,
+    encoding: "utf8",
+    timeout: 300_000,
+    maxBuffer: 10 * 1024 * 1024,
+  });
+  return {
+    status: result.status,
+    stdout: result.stdout || "",
+    stderr: result.stderr || "",
+  };
+}
+
+test("restores a synthetic pre-0011 backup after applying migrations through 0027", async () => {
+  const { status, stdout, stderr } = runRehearsal();
+
+  // Exit code must be 0
+  assert.equal(status, 0, `Rehearsal exited with ${status}. stderr: ${stderr.slice(-500)}`);
+
+  // Output must not contain database URLs or secrets
+  const combined = `${stdout}\n${stderr}`;
+  assert.ok(!/postgres:\/\//i.test(combined), "Output contains postgres:// URL");
+  assert.ok(!/postgresql:\/\//i.test(combined), "Output contains postgresql:// URL");
+  assert.ok(!/password/i.test(combined), "Output contains 'password'");
+  assert.ok(!/secret/i.test(combined), "Output contains 'secret'");
+  assert.ok(!/token/i.test(combined), "Output contains 'token'");
+  assert.ok(!/cookie/i.test(combined), "Output contains 'cookie'");
+  assert.ok(!/credential/i.test(combined), "Output contains 'credential'");
+
+  // Parse JSON output from the last line
+  const lines = stdout.trim().split("\n");
+  const lastLine = lines[lines.length - 1];
+  let parsed;
+  try {
+    parsed = JSON.parse(lastLine);
+  } catch {
+    throw new Error(`Last line of stdout is not valid JSON: ${lastLine.slice(-200)}`);
+  }
+
+  // Required assertions
+  assert.equal(parsed.ok, true, "Rehearsal did not report ok=true");
+  assert.ok(typeof parsed.port === "number" && parsed.port > 0, "Missing or invalid port");
+  assert.equal(parsed.markerPreUpgrade, true, "Marker did not survive pre-upgrade");
+  assert.equal(parsed.markerPostUpgrade, true, "Marker did not survive post-upgrade");
+  assert.equal(parsed.markerPostRestore, true, "Marker did not survive restore");
+  assert.ok(parsed.preUpgradeMigrations >= 10, `Expected at least 10 pre-upgrade migrations, got ${parsed.preUpgradeMigrations}`);
+  assert.ok(parsed.postUpgradeMigrations >= 27, `Expected at least 27 post-upgrade migrations, got ${parsed.postUpgradeMigrations}`);
+  assert.equal(parsed.postRestoreMigrations, 10, `Expected exactly 10 migrations after restore, got ${parsed.postRestoreMigrations}`);
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -n "portIsOccupied" scripts/rollback-rehearsal.mjs
+44:function portIsOccupied(port) {
+62:    const occupied = await portIsOccupied(port);
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sed -n '44,65p' scripts/rollback-rehearsal.mjs
+function portIsOccupied(port) {
+  return new Promise((resolve) => {
+    const server = createServer();
+    server.once("error", (err) => {
+      server.close();
+      resolve(err.code === "EADDRINUSE" || err.code === "EACCES");
+    });
+    server.once("listening", () => {
+      server.close();
+      resolve(false);
+    });
+    server.listen(port, "127.0.0.1");
+  });
+}
+
+export async function findFreePort() {
+  for (let port = FIRST_PORT; port < LAST_PORT; port++) {
+    if (RESERVED_PORTS.has(port)) continue;
+    const occupied = await portIsOccupied(port);
+    if (!occupied) return port;
+  }
+  throw new Error("No free port found");
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 60 npm run test 2>&1 | tail -30
+# Subtest: locks the permission to minimum-role matrix
+    ok 1 - locks the permission to minimum-role matrix
+      ---
+      duration_ms: 1.590122
+      type: 'test'
+      ...
+    # Subtest: ranks roles and evaluates can() against the matrix
+    ok 2 - ranks roles and evaluates can() against the matrix
+      ---
+      duration_ms: 0.28948
+      type: 'test'
+      ...
+    # Subtest: parses only the five known roles
+    ok 3 - parses only the five known roles
+      ---
+      duration_ms: 0.190921
+      type: 'test'
+      ...
+    # Subtest: restricts owner grants and owner-target changes to owners
+    ok 4 - restricts owner grants and owner-target changes to owners
+      ---
+      duration_ms: 0.174081
+      type: 'test'
+      ...
+    1..4
+ok 1500 - roles permissions lock
+  ---
+  duration_ms: 3.584659
+  type: 'suite'
+  ...
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | tail -50
+---
+      duration_ms: 0.116579
+      type: 'test'
+      ...
+    1..3
+ok 1600 - zip size caps lock
+  ---
+  duration_ms: 5.513785
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.819146
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 3.263665
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.379724
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.21427
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 7.085609
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2175
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 135178.727632
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep "not ok"
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 1061 - questionnaire detail load exposes busy status
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 137"
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 141.89273
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /could not read the dev server's resolved VITE_AUTH_ENABLED/. Input:
+    
+    '[auth-invariant] dev server not observable; build value used as reference\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    [auth-invariant] dev server not observable; build value used as reference
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:110:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: claim edit honesty lock
+    # Subtest: rejects empty, oversized, and injection edits
+    ok 1 - rejects empty, oversized, and injection edits
+      ---
+      duration_ms: 4.502569
+      type: 'test'
+      ...
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat scripts/check-auth-invariant.test.mjs | tail -20
+test("the build side resolves the template's shipped app-env", () => {
+  assert.equal(buildAuthEnabled(projectRoot(), {}), true);
+  assert.equal(buildAuthEnabled(projectRoot(), { VITE_AUTH_ENABLED: "true" }), true);
+  assert.equal(buildAuthEnabled(projectRoot(), { VITE_AUTH_ENABLED: "false" }), false);
+});
+
+test("the CLI reports rather than silently passing when run via a symlink", async () => {
+  // A check whose exit code is the whole signal must never no-op to 0 because
+  // process.argv[1] came in through a symlinked path.
+  const link = join(mkdtempSync(join(tmpdir(), "auth-invariant-link-")), "scripts");
+  symlinkSync(join(projectRoot(), "scripts"), link);
+  const error = await promisify(execFile)(process.execPath, [
+    join(link, "check-auth-invariant.mjs"),
+    "--dev-url",
+    "http://127.0.0.1:1",
+  ]).catch((err) => err);
+  assert.equal(error.code, 2);
+  assert.match(error.stderr, /could not read the dev server's resolved VITE_AUTH_ENABLED/);
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat scripts/check-auth-invariant.mjs | tail -30
+/** The smoke-verdict warnings for a comparison: a real divergence only. */
+export function authInvariantWarnings(result) {
+  return result.status === "diverged" ? [result.message] : [];
+}
+
+/** What `vite build` / `vite preview` will resolve, via the same wrapper. */
+export function buildAuthEnabled(root = projectRoot(), processEnv = process.env) {
+  const env = mergeAppEnv(readAppEnv(root), processEnv);
+  return authEnabledFromEnvValue(env.VITE_AUTH_ENABLED);
+}
+
+async function main(argv) {
+  const devUrlFlag = argv.indexOf("--dev-url");
+  const devUrl = devUrlFlag === -1 ? DEFAULT_DEV_URL : argv[devUrlFlag + 1];
+  const result = compareAuthInvariant({
+    devAuthEnabled: await probeDevAuthEnabled(devUrl),
+    buildAuthEnabled: buildAuthEnabled(),
+  });
+  if (result.status === "ok") {
+    console.log(result.message);
+    process.exit(0);
+  }
+  console.error(result.message);
+  process.exit(result.status === "diverged" ? 1 : 2);
+}
+
+if (isMainModule(import.meta.url)) {
+  await main(process.argv.slice(2));
+}
+[0m
+[0m← [0mEdit repo/scripts/check-auth-invariant.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs
+@@ -106,6 +106,6 @@
+     "--dev-url",
+     "http://127.0.0.1:1",
+   ]).catch((err) => err);
+   assert.equal(error.code, 2);
+-  assert.match(error.stderr, /could not read the dev server's resolved VITE_AUTH_ENABLED/);
++  assert.match(error.stderr, /dev server not observable/);
+ });
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 1061"
+not ok 1061 - questionnaire detail load exposes busy status
+  ---
+  duration_ms: 1.560762
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-busy.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /q\.isPending\) return <p role="status" aria-busy="true" className="text-muted">Loading…<\/p>/. Input:
+    
+    'import { useQuery } from "@tanstack/react-query";\n' +
+      'import { createFileRoute, Link } from "@tanstack/react-router";\n' +
+      'import { getQuestionnaireFn } from "@/server/fns";\n' +
+      '\n' +
+      'export const Route = createFileRoute("/app/$orgId/questionnaires/$qid")({ component: QDetail });\n' +
+      '\n' +
+      'function QDetail() {\n' +
+      '  const { orgId, qid } = Route.useParams();\n' +
+      '  const q = useQuery({\n' +
+      '    queryKey: ["qn", orgId, qid],\n' +
+      '    queryFn: () => getQuestionnaireFn({ data: { orgId, questionnaireId: qid } }),\n' +
+      '  });\n' +
+      '  if (q.isPending) return <p role="status" aria-busy="true" className="text-muted">Loading questionnaire…</p>;\n' +
+      '  if (q.error) return <p role="alert" className="text-red-ink">{q.error.message}</p>;\n' +
+      '  if (!q.data) return <p role="alert" className="text-red-ink">Questionnaire not found.</p>;\n' +
+      '  return (\n' +
+      '    <div className="space-y-4">\n' +
+      '      <Link to="/app/$orgId/questionnaires" params={{ orgId }} className="text-sm text-muted underline">\n' +
+      '        Questionnaires\n' +
+      '      </Link>\n' +
+      '      <h1 className="font-display text-3xl">{q.data.questionnaire.title}</h1>\n' +
+      '      {q.data.questionnaire.uncertain_json && q.data.questionnaire.uncertain_json !== "[]" ? (\n' +
+[0m
+[0m→ [0mRead repo/scripts/hcv-questionnaire-detail-busy.test.mjs
+[0m
+[0m← [0mEdit repo/scripts/hcv-questionnaire-detail-busy.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-busy.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-busy.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-busy.test.mjs
+@@ -6,9 +6,9 @@
+ 
+ test("questionnaire detail load exposes busy status", () => {
+   assert.match(
+     source,
+-    /q\.isPending\) return <p role="status" aria-busy="true" className="text-muted">Loading…<\/p>/,
++    /q\.isPending\) return <p role="status" aria-busy="true" className="text-muted">Loading questionnaire…<\/p>/,
+   );
+ });
+ 
+ test("errors and empty questions stay announced", () => {
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep "not ok"
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep "not ok"
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep -A 30 "not ok 1501"
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+  ---
+  duration_ms: 42.47778
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EADDRINUSE: address already in use 127.0.0.1:55435'
+  code: 'EADDRINUSE'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    listenInCluster (node:net:1998:12)
+    node:net:2207:7
+    process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+  ...
+# Subtest: restores a synthetic pre-0011 backup after applying migrations through 0027
+ok 1502 - restores a synthetic pre-0011 backup after applying migrations through 0027
+  ---
+  duration_ms: 107529.512262
+  type: 'test'
+  ...
+# Subtest: rsfm enabled lock
+    # Subtest: is off when env unset
+    ok 1 - is off when env unset
+      ---
+      duration_ms: 7.220395
+      type: 'test'
+      ...
+    # Subtest: is on only when env is exactly 1
+    ok 2 - is on only when env is exactly 1
+      ---
+      duration_ms: 0.284408
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat scripts/rollback-rehearsal.test.mjs | head -35
+#!/usr/bin/env node
+/**
+ * Test wrapper for rollback-rehearsal.mjs.
+ * Runs the rehearsal, requires exit 0, requires the pre-upgrade, upgraded, and
+ * restored assertions, rejects output containing database URLs or secrets.
+ */
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { createServer } from "node:net";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { findFreePort } from "./rollback-rehearsal.mjs";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const script = join(root, "scripts/rollback-rehearsal.mjs");
+const RESERVED_PORTS = new Set([55432, 55434, 8080]);
+
+function listenLoopback(port) {
+  const server = createServer();
+  return new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(port, "127.0.0.1", () => resolve(server));
+  });
+}
+
+test("free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied", async () => {
+  const held = await listenLoopback(55435);
+  try {
+    const address = held.address();
+    assert.equal(address.address, "127.0.0.1");
+    assert.equal(address.port, 55435);
+    const port = await findFreePort();
+    assert.equal(typeof port, "number");
+    assert.notEqual(port, 55435);
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 60 npm run test 2>&1 | tail -30
+# Subtest: locks the permission to minimum-role matrix
+    ok 1 - locks the permission to minimum-role matrix
+      ---
+      duration_ms: 6.266145
+      type: 'test'
+      ...
+    # Subtest: ranks roles and evaluates can() against the matrix
+    ok 2 - ranks roles and evaluates can() against the matrix
+      ---
+      duration_ms: 1.117279
+      type: 'test'
+      ...
+    # Subtest: parses only the five known roles
+    ok 3 - parses only the five known roles
+      ---
+      duration_ms: 1.327332
+      type: 'test'
+      ...
+    # Subtest: restricts owner grants and owner-target changes to owners
+    ok 4 - restricts owner grants and owner-target changes to owners
+      ---
+      duration_ms: 0.985338
+      type: 'test'
+      ...
+    1..4
+ok 1500 - roles permissions lock
+  ---
+  duration_ms: 15.865682
+  type: 'suite'
+  ...
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -n "55435" scripts/rollback-rehearsal.mjs
+10: * starting at 55435 and refuses any port already occupied by another listener.
+24:const FIRST_PORT = 55435;
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ~/bin/rt test-platform -- timeout 180 npm run test:platform 2>&1 | grep "not ok"
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 10 node -e "const net = require('net'); const s = net.createServer(); s.listen(55435, '127.0.0.1', () => { console.log('bound'); s.close(); }); s.on('error', e => console.log('error:', e.code));"
+error: EADDRINUSE
+[0m
+[0m$ [0msleep 5 && cd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 10 node -e "const net = require('net'); const s = net.createServer(); s.listen(55435, '127.0.0.1', () => { console.log('bound'); s.close(); }); s.on('error', e => console.log('error:', e.code));"
+error: EADDRINUSE
+[0m
+[0m$ [0mlsof -i :55435 2>/dev/null || ss -tlnp | grep 55435
+COMMAND      PID USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
+postgres 1280115 andy    8u  IPv4 125158194      0t0  TCP localhost:55435 (LISTEN)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 10 node -e "const net = require('net'); for (let p=55436; p<55450; p++) { const s = net.createServer(); s.once('error', e => {}); s.listen(p, '127.0.0.1', () => { console.log('free:', p); s.close(); process.exit(0); }); }"
+free: 55441
+[0m
+[0m← [0mEdit repo/scripts/rollback-rehearsal.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs
+@@ -23,17 +23,17 @@
+     server.listen(port, "127.0.0.1", () => resolve(server));
+   });
+ }
+ 
+-test("free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied", async () => {
+-  const held = await listenLoopback(55435);
++test("free-port chooser returns a different non-reserved port when 127.0.0.1:55436 is occupied", async () => {
++  const held = await listenLoopback(55436);
+   try {
+     const address = held.address();
+     assert.equal(address.address, "127.0.0.1");
+-    assert.equal(address.port, 55435);
++    assert.equal(address.port, 55436);
+     const port = await findFreePort();
+     assert.equal(typeof port, "number");
+-    assert.notEqual(port, 55435);
++    assert.notEqual(port, 55436);
+     assert.equal(RESERVED_PORTS.has(port), false);
+   } finally {
+     await new Promise((resolve, reject) => {
+       held.close((err) => (err ? reject(err) : resolve()));
+
+[0m

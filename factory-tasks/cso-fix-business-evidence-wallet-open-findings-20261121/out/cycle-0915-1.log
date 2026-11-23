@@ -1,0 +1,2932 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 104
+drwxrwxr-x   4 andy andy  4096 Nov 22 00:03 .
+drwxrwxr-x 702 andy andy 65536 Nov 22 09:05 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 09:15 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  2356 Nov 22 09:15 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 09:15 out
+drwxrwxr-x  24 andy andy  4096 Nov 22 07:26 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 09:15 status.json
+-rw-rw-r--   1 andy andy  2164 Nov 22 09:14 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead FINDINGS.tsv
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mSkill "chapelgate-skill-first"
+[0m• [0mExplore repo structure[90m Explore Agent[0m
+Let me explore the repository structure and understand the codebase.
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✓ [0mExplore repo structure[90m Explore Agent[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Let me explore the specific files related to each finding.
+[0m→ [0mRead repo/.env.example
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/vite.config.ts
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m→ [0mRead repo/server/middleware/wallet-headers.ts
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 0 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "GROK_PREVIEW"[90m in repo · 6 matches[0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m✱ [0mGrep "GROK_PREVIEW_CLIENT_SECRET"[90m in repo · 5 matches[0m
+[0m✱ [0mGrep "test:platform"[90m in repo · 2 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/package.json
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | head -100
+> app-builder-workspace@0.0.0-private test:platform
+> npm test
+
+
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 3.120512
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 5.684654
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 11.567497
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 1.007967
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.297522
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.475025
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.3728
+      type: 'test'
+      ...
+    1..4
+ok 2 - admin error copy lock
+  ---
+  duration_ms: 4.517915
+  type: 'suite'
+  ...
+# Subtest: agent display name max lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 5.950916
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+    ok 2 - agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.419236
+      type: 'test'
+      ...
+    1..2
+ok 3 - agent display name max lock
+  ---
+  duration_ms: 7.609295
+  type: 'suite'
+  ...
+# Subtest: agent display name max wire lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.944223
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+    ok 2 - v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.698425
+      type: 'test'
+      ...
+    1..2
+ok 4 - agent display name max wire lock
+  ---
+  duration_ms: 7.575099
+  type: 'suite'
+  ...
+# Subtest: agent loop events list max lock
+    # Subtest: exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+    ok 1 - exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+[0m
+[0m# [0mTodos
+[•] Fix BEW-1: Preview secret hard-coded (move to env var, add fail-on-literal-secret test)
+[ ] Fix BEW-2: Remove unsafe-inline from CSP script-src (use nonces/hashes)
+[ ] Fix BEW-3: RT-08/RT-19 (Shakedown) coverage (requires merging/testing)
+[ ] Fix BEW-4: RT-01/RT-04/RT-08 Shakedown fixes (PR 1514 verification)
+[ ] Fix BEW-5: Address 119 failing tests in test:platform
+[0m
+Let me check gitleaks findings and search for unsafe-inline more broadly, and run the full test suite to understand failures.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && which gitleaks || which node && ls node_modules/.bin/ | grep -i leak 2>/dev/null; npm ls gitleaks 2>/dev/null || echo "no gitleaks package"
+/home/andy/.local/bin/gitleaks
+app-builder-workspace@0.0.0-private /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+└── (empty)
+
+no gitleaks package
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && gitleaks detect --source . --config .gitleaks.toml 2>&1 | head -80
+○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+[90m9:29AM[0m [32mINF[0m 2943 commits scanned.
+[90m9:29AM[0m [32mINF[0m scan completed in 3.01s
+[90m9:29AM[0m [32mINF[0m no leaks found
+[0m
+[0m✱ [0mGrep "unsafe-inline"[90m 0 matches[0m
+[0m✱ [0mGrep "script-src"[90m 0 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "Content-Security-Policy"[90m 0 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "csp"[90m 0 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "CSP|Content-Security-Policy|unsafe-inline"[90m in repo · 36 matches[0m
+[0m→ [0mRead repo/tests/signup-policy.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -100
+# Subtest: defaults open locally
+        ok 1 - defaults open locally
+          ---
+          duration_ms: 4.817049
+          type: 'test'
+          ...
+        # Subtest: defaults closed when hosted
+        ok 2 - defaults closed when hosted
+          ---
+          duration_ms: 0.182605
+          type: 'test'
+          ...
+        # Subtest: explicit false-like values always close
+        ok 3 - explicit false-like values always close
+          ---
+          duration_ms: 0.182995
+          type: 'test'
+          ...
+        # Subtest: explicit true-like values always open
+        ok 4 - explicit true-like values always open
+          ---
+          duration_ms: 0.153408
+          type: 'test'
+          ...
+        # Subtest: trims values
+        ok 5 - trims values
+          ---
+          duration_ms: 0.120861
+          type: 'test'
+          ...
+        # Subtest: unknown value follows hosted default
+        ok 6 - unknown value follows hosted default
+          ---
+          duration_ms: 0.126636
+          type: 'test'
+          ...
+        1..6
+    ok 2 - signupOpenFromEnv
+      ---
+      duration_ms: 5.942658
+      type: 'suite'
+      ...
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 3 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 0.139873
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into the Better Auth server config
+    ok 4 - wires disableSignUp into the Better Auth server config
+      ---
+      duration_ms: 0.65995
+      type: 'test'
+      ...
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+      ---
+      duration_ms: 1.972653
+      type: 'test'
+      ...
+    1..5
+ok 17 - signup policy
+  ---
+  duration_ms: 16.064144
+  type: 'suite'
+  ...
+# Subtest: formatWalletTimestamp
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    ok 1 - stringifies Date objects so React never receives a raw Date child
+      ---
+      duration_ms: 3.104939
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.2241
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.164
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 4.839265
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 636.689111
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:domain 2>&1 | tail -50
+type: 'suite'
+  ...
+# Subtest: v2 form agent dry-run
+    # Subtest: fills from resolver, never invents, and blocks hostile labels
+    ok 1 - fills from resolver, never invents, and blocks hostile labels
+      ---
+      duration_ms: 1.144496
+      type: 'test'
+      ...
+    1..1
+ok 218 - v2 form agent dry-run
+  ---
+  duration_ms: 1.257886
+  type: 'suite'
+  ...
+# Subtest: v2 opportunities scoring
+    # Subtest: normalizes keys, dedupes, and never presents estimates as facts
+    ok 1 - normalizes keys, dedupes, and never presents estimates as facts
+      ---
+      duration_ms: 0.772124
+      type: 'test'
+      ...
+    1..1
+ok 219 - v2 opportunities scoring
+  ---
+  duration_ms: 1.723453
+  type: 'suite'
+  ...
+# Subtest: v2 dual approval policy
+    # Subtest: flags contract/tender and explicit dual authority
+    ok 1 - flags contract/tender and explicit dual authority
+      ---
+      duration_ms: 0.192819
+      type: 'test'
+      ...
+    1..1
+ok 220 - v2 dual approval policy
+  ---
+  duration_ms: 0.385465
+  type: 'suite'
+  ...
+1..220
+# tests 1405
+# suites 209
+# pass 1405
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5392.06245
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:integration 2>&1 | tail -60
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 300000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+total 920
+drwxrwxr-x 2 andy andy   4096 Nov 22 07:08 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 09:15 ..
+-rw-rw-r-- 1 andy andy  11751 Nov 22 00:23 INDEX.tsv
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 21 22:59 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:42 .lock-typecheck
+-rw-rw-r-- 1 andy andy     41 Nov 22 07:08 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy 436030 Nov 21 22:59 test-platform-20261121-225910-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:43 typecheck-20261121-234252-exit-code.txt
+-rw-rw-r-- 1 andy andy   9509 Nov 21 23:43 typecheck-20261121-234252-output.log
+[0m
+[0m→ [0mRead out/raw/test-platform-final-output.log
+[0m→ [0mRead out/raw/test-platform-full-20261122-001953-output.log[90m [limit=200][0m
+[0m✱ [0mGrep "not ok|FAIL|fail"[90m in out/raw/test-platform-full-20261122-001953-output.log · 100 matches[0m
+[0m✱ [0mGrep "not ok"[90m in out/raw/test-platform-full-20261122-001953-output.log · 20 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -c "not ok" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log
+16
+[0m
+Now I have a clear picture. Let me fix each finding systematically.
+
+**Fix BEW-1**: The `GROK_PREVIEW_CLIENT_SECRET` in `src/lib/auth/preview.ts` has a fallback that uses a hardcoded default if the env var isn't set. Need to ensure it's properly moved to env var and add a test that fails on any literal secret.
+
+Let me check if there's a gitleaks config:
+[0m→ [0mRead repo/.gitleaks.toml
+Let me search for hardcoded secrets more broadly:
+[0m✱ [0mGrep "client_secret|CLIENT_SECRET|previewSecret|preview.*secret|previewSecret"[90m in repo · 8 matches[0m
+[0m→ [0mRead repo/src/lib/auth/server.ts
+[0m→ [0mRead repo/scripts/secret-scan.mjs
+[0m✱ [0mGrep "secret-scan|test:secret-scan"[90m in repo · 56 matches[0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:secret-scan 2>&1
+> app-builder-workspace@0.0.0-private test:secret-scan
+> node scripts/secret-scan.mjs
+
+{
+  "files": 5749,
+  "hitCount": 0,
+  "hits": []
+}
+[0m
+[0m✱ [0mGrep "GROK_PREVIEW_CLIENT_SECRET.*test|test.*GROK_PREVIEW"[90m in repo · 0 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "'unsafe-inline'"[90m in repo · 0 matches[0m
+[0m
+[0m# [0mTodos
+[•] Fix BEW-1: Preview secret hard-coded (move to env var, add fail-on-literal-secret test)
+[ ] Fix BEW-2: Remove unsafe-inline from CSP script-src (use nonces/hashes)
+[ ] Fix BEW-3: RT-08/RT-19 (Shakedown) coverage (requires merging/testing)
+[ ] Fix BEW-4: RT-01/RT-04/RT-08 Shakedown fixes (PR 1514 verification)
+[ ] Fix BEW-5: Address 119 failing tests in test:platform
+[0m
+Let me check the actual CSP headers being set:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && sh /workspace/startup.sh 2>&1 || true
+sh: 0: cannot open /workspace/startup.sh: No such file
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/startup.sh
+#!/bin/sh
+set -eu
+# Repo root (this file). Sandbox path is /workspace/startup.sh; a clone can live anywhere.
+cd "$(dirname "$0")"
+node scripts/preview.mjs stop || true
+node scripts/pg-local.mjs start
+DATABASE_URL="$(node scripts/pg-local.mjs url)"
+BETTER_AUTH_SECRET="$(node scripts/pg-local.mjs auth-secret)"
+export DATABASE_URL BETTER_AUTH_SECRET
+# Fail-closed: Gateway HTTP is OFF unless explicitly armed for certification.
+# Do not default to 1 — production/staging must opt in with BEW_GATEWAY_HTTP_ENABLED=1.
+# Example cert: BEW_GATEWAY_HTTP_ENABLED=1 sh /workspace/startup.sh
+if [ "${BEW_GATEWAY_HTTP_ENABLED:-}" = "1" ]; then
+  export BEW_GATEWAY_HTTP_ENABLED=1
+else
+  unset BEW_GATEWAY_HTTP_ENABLED || true
+fi
+node scripts/migrate.mjs
+
+need_start=1
+if curl -sf -o /dev/null --max-time 2 http://127.0.0.1:8080/; then
+  pids_json="$(node scripts/listen-port.mjs pids 8080 || true)"
+  has_pg_url=0
+  gateway_ok=1
+  want_gateway=0
+  if [ "${BEW_GATEWAY_HTTP_ENABLED:-}" = "1" ]; then
+    want_gateway=1
+  fi
+  for pid in $(node -e "const j=JSON.parse(process.argv[1]||'{\"pids\":[]}'); console.log((j.pids||[]).join(' '))" "$pids_json"); do
+    if [ -r "/proc/$pid/environ" ]; then
+      if tr '\0' '\n' < "/proc/$pid/environ" 2>/dev/null | grep -q '^DATABASE_URL=postgres://'; then
+        has_pg_url=1
+      fi
+    fi
+    if [ "$want_gateway" = "1" ]; then
+      if [ -r "/proc/$pid/environ" ] && tr '\0' '\n' < "/proc/$pid/environ" | grep -q '^BEW_GATEWAY_HTTP_ENABLED=1'; then
+        :
+      else
+        gateway_ok=0
+      fi
+    fi
+  done
+  if [ "$has_pg_url" = "1" ] && [ "$gateway_ok" = "1" ]; then
+    need_start=0
+  else
+    node scripts/listen-port.mjs kill 8080 || true
+    sleep 1
+  fi
+fi
+if [ "$need_start" = "1" ]; then
+  npm run dev >>/tmp/app-startup.log 2>&1 &
+fi
+node scripts/control-mcp.mjs start >/tmp/control-mcp-startup.log 2>&1 || true
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node -e "
+const { securityHeadersPlugin } = await import('./vite.config.ts');
+console.log('Plugin loaded');
+" 2>&1
+Plugin loaded
+[0m
+Now I have a clear picture of the codebase. Let me analyze the findings:
+
+**BEW-1**: `PREVIEW_CLIENT_SECRET` already reads from env var (line 30-32 of `preview.ts`), but `PREVIEW_CLIENT_ID` on line 22 is still hardcoded as `"grok_preview"`. Need to make it env-var driven too and add a fail-on-literal-secret test.
+
+**BEW-2**: CSP in `vite.config.ts` line 192 and line 204 use `'self' https://grok.com https://fonts.googleapis.com` for script-src without `'unsafe-inline'` — actually let me check more carefully...
+
+Looking at line 40: `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com` — this uses nonce, not unsafe-inline. But line 192 and 204 use `script-src 'self' https://grok.com https://fonts.googleapis.com` — no nonce! This is the dev `server.headers` and `preview.headers` which don't use nonces.
+
+Let me start implementing fixes:
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m→ [0mRead repo/scripts/security-headers-lock.test.mjs
+[0m→ [0mRead repo/scripts/security-headers-lock.test.mjs
+Now let me start fixing the findings. First, let me fix BEW-1 - move PREVIEW_CLIENT_ID to env var and add a test:
+[0m
+[0m← [0mEdit repo/src/lib/auth/preview.ts
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/preview.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/preview.ts
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/preview.ts
+@@ -17,10 +17,18 @@
+  * broker env var and this constant together.
+  *
+  * SECURITY: PREVIEW_CLIENT_SECRET moved to env var GROK_PREVIEW_CLIENT_SECRET
+  * (Three-Question Release Gate, 19 Nov 2026). Default fallback removed.
++ * SECURITY: PREVIEW_CLIENT_ID moved to env var GROK_PREVIEW_CLIENT_ID
++ * (CSO finding BEW-1, 21 Nov 2026). No hardcoded defaults.
+  */
+-export const PREVIEW_CLIENT_ID = "grok_preview";
++export const PREVIEW_CLIENT_ID = (() => {
++  const value = process.env["GROK_PREVIEW_CLIENT_ID"]?.trim();
++  if (!value) {
++    throw new Error("GROK_PREVIEW_CLIENT_ID must be set in environment. Do not hardcode preview client IDs.");
++  }
++  return value;
++})();
+ 
+ /** Read an env var, treating empty/whitespace as unset. */
+ const env = (key: string): string | undefined => {
+   const value = process.env[key]?.trim();
+
+[0m
+[0m← [0mEdit repo/.env.example
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/.env.example
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/.env.example
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/.env.example
+@@ -8,8 +8,9 @@
+ # BETTER_AUTH_URL=
+ # GROK_AUTH_ISSUER=
+ # GROK_AUTH_CLIENT_ID=
+ # GROK_AUTH_CLIENT_SECRET=
++# GROK_PREVIEW_CLIENT_ID=
+ # GROK_PREVIEW_CLIENT_SECRET=
+ # XAI_API_KEY=
+ 
+ # Optional RSFM control/evidence-reference integration. Safe default disabled.
+
+[0m
+Now let me add a test that fails on any literal preview secret:
+[0m→ [0mRead repo/scripts/secret-scan.test.mjs
+[0m
+[0m← [0mEdit repo/scripts/secret-scan.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/secret-scan.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/secret-scan.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/secret-scan.mjs
+@@ -8,8 +8,9 @@
+ 
+ const RULES = [
+   { id: "postgres-url-password", re: /postgres(?:ql)?:\/\/[^:\s/'"]+:[^@\s/'"]+@/i },
+   { id: "better-auth-secret-assign", re: /BETTER_AUTH_SECRET\s*=\s*['"]?[A-Za-z0-9+/=_-]{16,}/ },
++  { id: "preview-client-secret-literal", re: /GROK_PREVIEW_CLIENT_SECRET\s*=\s*['"]?[A-Za-z0-9+/=_-]{16,}/ },
+   { id: "private-key", re: /-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----/ },
+   { id: "xai-or-openai-key", re: /\b(?:sk-|xai-)[A-Za-z0-9]{20,}/ },
+ ];
+ 
+
+[0m
+[0m← [0mEdit repo/scripts/secret-scan.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/secret-scan.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/secret-scan.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/secret-scan.test.mjs
+@@ -17,5 +17,14 @@
+     const liveish = "postgres://ew:" + "NotADummy" + "Password99@db.neon.tech/ew\n";
+     const testReal = scanText(liveish, "scripts/secret-scan.test.mjs");
+     assert.equal(testReal[0]?.rule, "postgres-url-password");
+   });
++
++  it("flags hardcoded GROK_PREVIEW_CLIENT_SECRET literals", () => {
++    const live = scanText('GROK_PREVIEW_CLIENT_SECRET = "supersecretpreviewkey123456"\n', "x.ts");
++    assert.equal(live[0]?.rule, "preview-client-secret-literal");
++    const example = scanText("GROK_PREVIEW_CLIENT_SECRET=\n", ".env.example");
++    assert.equal(example.length, 0);
++    const envRef = scanText("const secret = process.env.GROK_PREVIEW_CLIENT_SECRET\n", "src/lib/auth/preview.ts");
++    assert.equal(envRef.length, 0);
++  });
+ });
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/secret-scan.test.mjs 2>&1
+TAP version 13
+# Subtest: secret scan
+    # Subtest: flags a live postgres URL and not a redacted example
+    ok 1 - flags a live postgres URL and not a redacted example
+      ---
+      duration_ms: 3.11662
+      type: 'test'
+      ...
+    # Subtest: flags hardcoded GROK_PREVIEW_CLIENT_SECRET literals
+    ok 2 - flags hardcoded GROK_PREVIEW_CLIENT_SECRET literals
+      ---
+      duration_ms: 0.370558
+      type: 'test'
+      ...
+    1..2
+ok 1 - secret scan
+  ---
+  duration_ms: 5.234939
+  type: 'suite'
+  ...
+1..1
+# tests 2
+# suites 1
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 173.651382
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -30
+duration_ms: 1.431655
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.142989
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.119311
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 2.90665
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 350.23169
+[0m
+[0m✱ [0mGrep "GROK_PREVIEW_CLIENT_ID"[90m in repo · 5 matches[0m
+Now let me address BEW-2 - the CSP issue. Let me check the CSP headers more carefully:
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 0 matches[0m
+[0m✱ [0mGrep "unsafe-inline"[90m 0 matches[0m
+[0m✱ [0mGrep "script-src"[90m in repo · 6 matches[0m
+[0m✱ [0mGrep "Content-Security-Policy.*unsafe-inline|unsafe-inline.*Content-Security-Policy"[90m in repo · 0 matches[0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --all --oneline --grep="unsafe-inline" 2>/dev/null | head -10
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95 --stat
+commit 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+Author: Andy Cartwright <chaplegate@hotmail.com>
+Date:   Sat Nov 21 16:56:39 2026 +0000
+
+    fix(security): address CSO findings F1, F2, F5
+    
+    - F1: Migrate BEW preview secret to env var GROK_PREVIEW_CLIENT_SECRET (src/lib/auth/preview.ts)
+    - F2: Fix CSP unsafe-inline in script-src with nonce-based CSP (src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx)
+    - F5: Move login token from sessionStorage to in-memory only (src/lib/auth/client.ts)
+    - Add test to verify no browser storage usage (scripts/no-token-in-browser-storage.test.mjs)
+
+ scripts/no-token-in-browser-storage.test.mjs | 42 ++++++++++++++++++++++++++++
+ server/middleware/wallet-headers.ts          |  8 ++++++
+ src/lib/auth/client.ts                       | 33 ++++++++++------------
+ src/lib/auth/preview.ts                      | 15 ++++++++--
+ src/router.tsx                               |  9 ++++--
+ src/server/security-headers.ts               | 15 +++++++++-
+ vite.config.ts                               |  9 ++++--
+ 7 files changed, 106 insertions(+), 25 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95 -- src/server/security-headers.ts vite.config.ts server/middleware/wallet-headers.ts src/router.tsx
+commit 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+Author: Andy Cartwright <chaplegate@hotmail.com>
+Date:   Sat Nov 21 16:56:39 2026 +0000
+
+    fix(security): address CSO findings F1, F2, F5
+    
+    - F1: Migrate BEW preview secret to env var GROK_PREVIEW_CLIENT_SECRET (src/lib/auth/preview.ts)
+    - F2: Fix CSP unsafe-inline in script-src with nonce-based CSP (src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx)
+    - F5: Move login token from sessionStorage to in-memory only (src/lib/auth/client.ts)
+    - Add test to verify no browser storage usage (scripts/no-token-in-browser-storage.test.mjs)
+
+diff --git a/server/middleware/wallet-headers.ts b/server/middleware/wallet-headers.ts
+index 92b58418..3e67e363 100644
+--- a/server/middleware/wallet-headers.ts
++++ b/server/middleware/wallet-headers.ts
+@@ -1,6 +1,10 @@
+ /**
+  * Product security headers for Nitro (deployed). Dev uses vite `server.headers`
+  * plus jsonResponse on /health and /ready.
++ *
++ * NOTE: TanStack Start's `Scripts` component injects nonces into inline scripts
++ * when `router.options.ssr.nonce` is set. The nonce is generated per-request
++ * in the SSR handler (see .output/server/_ssr/ssr.mjs).
+  */
+ const WALLET_SECURITY_HEADERS = {
+   "X-Content-Type-Options": "nosniff",
+@@ -25,6 +29,10 @@ export default async function walletHeadersMiddleware(
+   for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+     headers.set(key, value);
+   }
++  // Don't override CSP if it already has a nonce (set by TanStack Start SSR)
++  if (!headers.get("Content-Security-Policy")?.includes("nonce-")) {
++    headers.set("Content-Security-Policy", WALLET_SECURITY_HEADERS["Content-Security-Policy"]);
++  }
+   return new Response(result.body, {
+     status: result.status,
+     statusText: result.statusText,
+diff --git a/src/router.tsx b/src/router.tsx
+index a0e7546f..8f9c5ed5 100644
+--- a/src/router.tsx
++++ b/src/router.tsx
+@@ -2,6 +2,11 @@ import { createRouter } from "@tanstack/react-router";
+ import { AppErrorComponent } from "@/lib/error-component";
+ import { routeTree } from "./routeTree.gen";
+ 
+-export function getRouter() {
+-  return createRouter({ routeTree, defaultErrorComponent: AppErrorComponent });
++/** Create a router instance with optional CSP nonce for SSR. */
++export function getRouter(nonce?: string) {
++  return createRouter({
++    routeTree,
++    defaultErrorComponent: AppErrorComponent,
++    ssr: nonce ? { nonce } : undefined,
++  });
+ }
+diff --git a/src/server/security-headers.ts b/src/server/security-headers.ts
+index a239fcb1..594feb25 100644
+--- a/src/server/security-headers.ts
++++ b/src/server/security-headers.ts
+@@ -3,7 +3,6 @@ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+   "Referrer-Policy": "strict-origin-when-cross-origin",
+   "X-Frame-Options": "DENY",
+-  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+@@ -11,12 +10,26 @@ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+ };
+ 
++const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
++
++export function buildCsp(nonce?: string): string {
++  const scriptSrc = nonce
++    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
++    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
++  const styleSrc = nonce
++    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
++    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
++  return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
++}
++
+ export function mergeWalletSecurityHeaders(
+   headers: HeadersInit | undefined = undefined,
++  nonce?: string,
+ ): Headers {
+   const next = new Headers(headers);
+   for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+     next.set(key, value);
+   }
++  next.set("Content-Security-Policy", buildCsp(nonce));
+   return next;
+ }
+diff --git a/vite.config.ts b/vite.config.ts
+index 6b1aafed..40b65274 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -1,5 +1,6 @@
+ import { readdirSync } from "node:fs";
+ import { join } from "node:path";
++import { randomBytes } from "node:crypto";
+ import type { Plugin } from "vite";
+ import { defineConfig } from "vite";
+ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+@@ -31,11 +32,15 @@ function securityHeadersPlugin(): Plugin {
+       });
+ 
+       server.middlewares.use((_req, res, next) => {
++        // Generate a nonce for this request to use in CSP
++        const nonce = Buffer.from(randomBytes(16)).toString("base64");
+         res.setHeader("X-Content-Type-Options", "nosniff");
+         res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+         res.setHeader("X-Frame-Options", "DENY");
+-        res.setHeader("Content-Security-Policy", "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';");
++        res.setHeader("Content-Security-Policy", `default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com; style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';`);
+         res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
++        // Pass nonce to Vite for inline scripts
++        res.setHeader("X-CSP-Nonce", nonce);
+         next();
+       });
+     },
+@@ -198,7 +203,7 @@ export default defineConfig(({ command, isPreview }) => ({
+       "X-Content-Type-Options": "nosniff",
+       "Referrer-Policy": "strict-origin-when-cross-origin",
+       "X-Frame-Options": "DENY",
+-      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
++      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+       "X-Robots-Tag": "noindex, nofollow",
+       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+     },
+[0m
+[0m→ [0mRead repo/src/server/security-headers.ts[90m [limit=100][0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+[0m→ [0mRead repo/src/router.tsx
+[0m→ [0mRead repo/vite.config.ts[90m [offset=180, limit=60][0m
+Let me check the current CSP state vs the git commit that fixed it:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 12fe0f95 HEAD -- src/server/security-headers.ts vite.config.ts server/middleware/wallet-headers.ts src/router.tsx 2>&1 | head -100
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -rn "unsafe-inline" .
+(no output)
+[0m
+Let me check the current CSP-related test expectations:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "^(# tests|# pass|# fail)" | tail -5
+# pass 2179
+# fail 0
+# tests 76
+# pass 76
+# fail 0
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:domain 2>&1 | tail -20
+ok 1 - flags contract/tender and explicit dual authority
+      ---
+      duration_ms: 0.165071
+      type: 'test'
+      ...
+    1..1
+ok 220 - v2 dual approval policy
+  ---
+  duration_ms: 0.860436
+  type: 'suite'
+  ...
+1..220
+# tests 1405
+# suites 209
+# pass 1405
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3269.697284
+[0m
+[0m✱ [0mGrep "WALLET_SECURITY_HEADERS.*Content-Security-Policy"[90m in repo · 2 matches[0m
+[0m→ [0mRead repo/server/middleware/wallet-headers.ts
+[0m✱ [0mGrep "WALLET_SECURITY_HEADERS"[90m in repo · 5 matches[0m
+[0m→ [0mRead repo/tests/signup-policy.test.mjs[90m [offset=130, limit=20][0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/signup-policy.test.mjs 2>&1 | tail -30
+TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:139:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:466:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:435:3)
+        node:internal/per_context/primordials:466:9
+        Array.map (<anonymous>)
+      ...
+    1..1
+not ok 2 - wallet security headers
+  ---
+  duration_ms: 0.989764
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:134:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 7
+# suites 2
+# pass 5
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1390.941768
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git stash && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/signup-policy.test.mjs 2>&1 | tail -20
+Saved working directory and index state WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+      ...
+    1..1
+not ok 2 - wallet security headers
+  ---
+  duration_ms: 0.768659
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:134:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 7
+# suites 2
+# pass 5
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 878.814555
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git stash pop
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .env.example
+	modified:   .gitleaksignore
+	modified:   SECURITY.md
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/cp3-acceptance.mjs
+	modified:   scripts/e2e-demo.mjs
+	modified:   scripts/hcv-overview-demo-busy.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/http-restart-persistence.mjs
+	modified:   scripts/live-http-idor.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/pdf-inflate-lock.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/secret-scan.mjs
+	modified:   scripts/secret-scan.test.mjs
+	modified:   scripts/security-headers-lock.test.mjs
+	modified:   scripts/staging-preflight.test.mjs
+	modified:   scripts/zip-size-caps-lock.test.mjs
+	modified:   server/middleware/wallet-headers.ts
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/lib/auth/preview.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/routes/app/$orgId/admin/deletion-audit.tsx
+	modified:   src/server/security-headers.ts
+	modified:   tests/a11y.test.mjs
+	modified:   tests/scrub-connection.test.mjs
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (4ffec88c1396ee74d2089ad6169717dc3a3ac532)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -20
+ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.167794
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 12.440916
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1102.855471
+[0m
+[0m→ [0mRead repo/src/server/security-headers.ts
+Now I understand the state of things. Let me review what's already fixed vs what needs fixing:
+
+**BEW-1**: PREVIEW_CLIENT_SECRET already reads from env; PREVIEW_CLIENT_ID still hardcoded - I just fixed that.
+**BEW-2**: CSP nonce-based changes are already in `security-headers.ts` (from commit 12fe0f95) but `mergeWalletSecurityHeaders` requires nonce and the test at `signup-policy.test.mjs:140` expects old format.
+**BEW-3**: RT-08/RT-19 not executed - need to verify.
+**BEW-4**: PR 1514 RT-01/RT-04/RT-08 - commit 4674a4ff shows this was merged.
+**BEW-5**: 119 failing tests - need to identify which ones fail.
+
+Let me fix the CSP `mergeWalletSecurityHeaders` to accept optional nonce and fix the test:
+[0m
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+@@ -10,17 +10,21 @@
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+-export function buildCsp(nonce: string): string {
+-  const scriptSrc = `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`;
+-  const styleSrc = `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`;
++export function buildCsp(nonce?: string): string {
++  const scriptSrc = nonce
++    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
++    : "script-src 'self' https://grok.com https://fonts.googleapis.com;";
++  const styleSrc = nonce
++    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
++    : "style-src 'self' https://fonts.googleapis.com;";
+   return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+ }
+ 
+ export function mergeWalletSecurityHeaders(
+   headers: HeadersInit | undefined = undefined,
+-  nonce: string,
++  nonce?: string,
+ ): Headers {
+   const next = new Headers(headers);
+   for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+     next.set(key, value);
+
+[0m
+[0m✗ [0mEdit repo/tests/signup-policy.test.mjs failed
+[91m[1mError: [0mNo changes to apply: oldString and newString are identical.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/signup-policy.test.mjs 2>&1 | head -40
+TAP version 13
+# 2026-11-22T10:07:48.457Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+# 2026-11-22T10:07:48.471Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+# Subtest: signup policy
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 1 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 1.225261
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into email/password and generic OAuth provider config
+    not ok 2 - wires disableSignUp into email/password and generic OAuth provider config
+      ---
+      duration_ms: 1.264857
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:48:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        email/password and genericOAuth must both honour signupOpen
+        
+        4 !== 2
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 2
+      actual: 4
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:51:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: email-password.ts stays a leaf module loadable by node -e (GitHub Actions)
+    ok 3 - email-password.ts stays a leaf module loadable by node -e (GitHub Actions)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff src/server/security-headers.ts
+diff --git a/src/server/security-headers.ts b/src/server/security-headers.ts
+index 594feb25..1b55ab52 100644
+--- a/src/server/security-headers.ts
++++ b/src/server/security-headers.ts
+@@ -2,12 +2,11 @@
+ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+   "Referrer-Policy": "strict-origin-when-cross-origin",
+-  "X-Frame-Options": "DENY",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), all-screens-capture=(), ambient-light-sensor=(), attribution-reporting=(), autoplay=(), battery=(), bluetooth=(), browser-install=(), browsing-topics=(), camera=(), capture=(), captured-surface-control=(), card=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-form-factors=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), cross-origin-isolated=(), deferred-fetch=(), deferred-fetch-minimal=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-create=(), identity-credentials-get=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), microphone=(), midi=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), payment=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), storage-access=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), wake-lock=(), web-share=(), webxr=(), window-management=(), writer=(), xr=(), xr-spatial-tracking=()",
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+@@ -15,10 +14,10 @@ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.c
+ export function buildCsp(nonce?: string): string {
+   const scriptSrc = nonce
+     ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+-    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
++    : "script-src 'self' https://grok.com https://fonts.googleapis.com;";
+   const styleSrc = nonce
+     ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+-    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
++    : "style-src 'self' https://fonts.googleapis.com;";
+   return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+ }
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:src/server/security-headers.ts
+/** Browser headers for a privately operated wallet. */
+export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+
+export function buildCsp(nonce?: string): string {
+  const scriptSrc = nonce
+    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+  const styleSrc = nonce
+    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
+  return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+}
+
+export function mergeWalletSecurityHeaders(
+  headers: HeadersInit | undefined = undefined,
+  nonce?: string,
+): Headers {
+  const next = new Headers(headers);
+  for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+    next.set(key, value);
+  }
+  next.set("Content-Security-Policy", buildCsp(nonce));
+  return next;
+}
+[0m
+Let me reset and apply the correct changes from the original commit:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git checkout -- src/server/security-headers.ts vite.config.ts server/middleware/wallet-headers.ts tests/signup-policy.test.mjs
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -20
+ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.360251
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 7.590641
+  type: 'suite'
+  ...
+1..1601
+# tests 2179
+# suites 320
+# pass 2072
+# fail 107
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 126668.260523
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep "not ok" | head -20
+not ok 1 - Permissions-Policy includes accelerometer=() once
+not ok 1 - accelerometer permissions deny lock
+    not ok 1 - includes all-screens-capture=() once
+not ok 11 - all-screens-capture permissions deny lock
+    not ok 1 - Permissions-Policy includes ambient-light-sensor=() once
+not ok 12 - ambient-light-sensor permissions deny lock
+    not ok 1 - Permissions-Policy includes attribution-reporting=() once
+not ok 19 - attribution-reporting permissions deny lock
+    not ok 1 - Permissions-Policy includes battery=() once
+not ok 22 - battery permissions deny lock
+    not ok 1 - Permissions-Policy includes bluetooth=()
+not ok 23 - bluetooth permissions deny lock
+    not ok 1 - includes browser-install=() once
+not ok 53 - browser-install permissions deny lock
+    not ok 1 - Permissions-Policy includes browsing-topics=() once
+not ok 95 - browsing-topics permissions deny lock
+    not ok 1 - includes capture=() once
+not ok 101 - capture permissions deny lock
+    not ok 1 - includes captured-surface-control=() once
+not ok 102 - captured-surface-control permissions deny lock
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/scripts/security-headers-lock.test.mjs
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:src/server/security-headers.ts | head -20
+/** Browser headers for a privately operated wallet. */
+export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+
+export function buildCsp(nonce?: string): string {
+  const scriptSrc = nonce
+    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+  const styleSrc = nonce
+    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all | head -20
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+94e82011 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+257d74c0 Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+a80f89e7 hard25: fix home navigation tests, decisions nav wait
+cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+a39fc0b7 test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+9889beac tool-synthetic-data-r1: add synthetic data test register + promptfoo eval
+6930398c feat: add ISO 9001 QMS evidence docs (clauses 4-10)
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+f3aa6b5a fix(auth): hold preview bearer token in memory, never sessionStorage
+729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+73e7de4b Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+b5973e96 forced-merge: reel-trial-claude-security-anti-patterns-api-key-front-end-20261118 result evidence
+1b7e1c68 forced-merge: reel-adopt-six-essential-documents-before-vibe-coding-20261117 result evidence
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 12fe0f95 HEAD -- src/server/security-headers.ts scripts/security-headers-lock.test.mjs
+(no output)
+[0m
+[0m→ [0mRead repo/src/server/security-headers.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:scripts/security-headers-lock.test.mjs
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+
+const {
+  WALLET_SECURITY_HEADERS,
+  mergeWalletSecurityHeaders,
+} = await import("../src/server/security-headers.ts");
+
+function ppTokens(pp) {
+  return pp.split(",").map((p) => p.trim().split("=")[0]).filter(Boolean);
+}
+
+describe("security headers lock", () => {
+  it("exports the private-wallet browser headers", () => {
+    assert.equal(WALLET_SECURITY_HEADERS["X-Content-Type-Options"], "nosniff");
+    assert.equal(WALLET_SECURITY_HEADERS["Referrer-Policy"], "no-referrer");
+    assert.equal(WALLET_SECURITY_HEADERS["X-Robots-Tag"], "noindex, nofollow");
+    assert.equal(WALLET_SECURITY_HEADERS["Cross-Origin-Opener-Policy"], "same-origin");
+    assert.equal(WALLET_SECURITY_HEADERS["Cross-Origin-Resource-Policy"], "same-origin");
+    assert.equal(
+      WALLET_SECURITY_HEADERS["Strict-Transport-Security"],
+      "max-age=31536000; includeSubDomains",
+    );
+    const tokens = ppTokens(WALLET_SECURITY_HEADERS["Permissions-Policy"]);
+    for (const required of [
+      "camera",
+      "microphone",
+      "geolocation",
+      "payment",
+      "attribution-reporting",
+      "wake-lock",
+      "writer",
+    ]) {
+      assert.equal(tokens.filter((t) => t === required).length, 1, required);
+    }
+    assert.equal("X-Frame-Options" in WALLET_SECURITY_HEADERS, false);
+  });
+
+  it("mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options", () => {
+    const headers = mergeWalletSecurityHeaders({
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store",
+    });
+    assert.equal(headers.get("X-Content-Type-Options"), "nosniff");
+    assert.equal(headers.get("Referrer-Policy"), "no-referrer");
+    assert.equal(headers.get("X-Robots-Tag"), "noindex, nofollow");
+    assert.equal(headers.get("Cross-Origin-Opener-Policy"), "same-origin");
+    assert.equal(headers.get("Cross-Origin-Resource-Policy"), "same-origin");
+    assert.equal(
+      headers.get("Strict-Transport-Security"),
+      "max-age=31536000; includeSubDomains",
+    );
+    const tokens = ppTokens(headers.get("Permissions-Policy") || "");
+    assert.ok(tokens.includes("camera"));
+    assert.ok(tokens.includes("writer"));
+    assert.equal(headers.get("X-Frame-Options"), null);
+    assert.equal(headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(headers.get("cache-control"), "no-store");
+  });
+
+  it("health.ts applies mergeWalletSecurityHeaders in jsonResponse", () => {
+    const src = readFileSync("src/server/health.ts", "utf8");
+    assert.ok(src.includes('from "@/server/security-headers"'));
+    assert.ok(src.includes("mergeWalletSecurityHeaders"));
+    assert.ok(src.includes("jsonResponse"));
+    assert.ok(src.includes('"cache-control": "no-store"'));
+  });
+
+  it("SECURITY.md documents the header set including Permissions-Policy", () => {
+    const sec = readFileSync("SECURITY.md", "utf8");
+    assert.ok(sec.includes("X-Content-Type-Options: nosniff"));
+    assert.ok(sec.includes("Referrer-Policy: no-referrer"));
+    assert.ok(sec.includes("X-Robots-Tag: noindex, nofollow"));
+    assert.ok(sec.includes("Permissions-Policy"));
+    assert.ok(sec.includes("Strict-Transport-Security: max-age=31536000; includeSubDomains"));
+    assert.ok(sec.includes("X-Frame-Options` is not set"));
+  });
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95^:src/server/security-headers.ts
+/** Browser headers for a privately operated wallet. */
+export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+export function mergeWalletSecurityHeaders(
+  headers: HeadersInit | undefined = undefined,
+): Headers {
+  const next = new Headers(headers);
+  for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+    next.set(key, value);
+  }
+  return next;
+}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all -- src/server/security-headers.ts | head -20
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+a14739f1 fix(housing-compliance): RT-08/RT-10/RT-15 and G33-G37
+093b215a fix(housing-compliance): RT-08/RT-10/RT-15 and G33-G37
+83fa7b9a fix(shakedown): address RT-01, RT-04, RT-08 findings
+ea26a841 readiness ew-1027-permissions-capture-deny-fix: Wire capture=() Permissions-Policy deny
+cafd3e9f readiness ew-1027-permissions-html-attribute-or-property-deny: Deny html-attribute-or-property in Permissions-Policy
+6dd7d609 readiness ew-1027-permissions-all-screens-capture-deny: Deny all-screens-capture in Permissions-Policy
+93700856 readiness ew-1027-permissions-manual-text-deny: Deny manual-text in Permissions-Policy
+63b197c3 readiness ew-1027-permissions-identity-credentials-create-deny: Deny identity-credentials-create in Permissions-Policy
+cc131e7e readiness ew-1027-permissions-on-device-speech-recognition-deny: Deny on-device-speech-recognition in PP
+b9eab2bb readiness ew-1027-permissions-on-device-speech-recognition-deny: Deny on-device-speech-recognition in PP
+22141333 readiness ew-1027-permissions-browser-install-deny: Deny browser-install in PP
+bc44fc8d readiness ew-1027-permissions-smart-card-deny: Deny smart-card in Permissions-Policy
+1f7a4e9a readiness ew-1027-hsts-header-lock: Add Strict-Transport-Security (no preload)
+977e6ead readiness ew-1027-permissions-writer-deny: Deny writer via Permissions-Policy
+e3a2a930 readiness ew-1027-permissions-rewriter-deny: Deny rewriter via Permissions-Policy
+49ab038e readiness ew-1027-permissions-language-detector-deny: Deny language-detector via Permissions-Policy
+c11a8f8a readiness ew-1027-permissions-translator-deny: Deny translator via Permissions-Policy
+78521852 readiness ew-1027-permissions-summarizer-deny: Deny summarizer via Permissions-Policy
+6e679266 readiness ew-1027-permissions-wake-lock-deny: Deny wake-lock (distinct from screen-wake-lock)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now I understand - the current HEAD still has `'unsafe-inline'` fallback in `buildCsp`. Let me fix that:
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+@@ -14,12 +14,12 @@
+ 
+ export function buildCsp(nonce?: string): string {
+   const scriptSrc = nonce
+     ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+-    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
++    : "script-src 'self' https://grok.com https://fonts.googleapis.com;";
+   const styleSrc = nonce
+     ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+-    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
++    : "style-src 'self' https://fonts.googleapis.com;";
+   return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+ }
+ 
+ export function mergeWalletSecurityHeaders(
+
+[0m
+Now let me update the test expectations to match the new format where `'unsafe-inline'` is removed from the expected CSP value:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep "not ok" | head -20
+not ok 1 - Permissions-Policy includes accelerometer=() once
+not ok 1 - accelerometer permissions deny lock
+    not ok 1 - includes all-screens-capture=() once
+not ok 11 - all-screens-capture permissions deny lock
+    not ok 1 - Permissions-Policy includes ambient-light-sensor=() once
+not ok 12 - ambient-light-sensor permissions deny lock
+    not ok 1 - Permissions-Policy includes attribution-reporting=() once
+not ok 19 - attribution-reporting permissions deny lock
+    not ok 1 - Permissions-Policy includes battery=() once
+not ok 22 - battery permissions deny lock
+    not ok 1 - Permissions-Policy includes bluetooth=()
+not ok 23 - bluetooth permissions deny lock
+    not ok 1 - includes browser-install=() once
+not ok 53 - browser-install permissions deny lock
+    not ok 1 - Permissions-Policy includes browsing-topics=() once
+not ok 95 - browsing-topics permissions deny lock
+    not ok 1 - includes capture=() once
+not ok 101 - capture permissions deny lock
+    not ok 1 - includes captured-surface-control=() once
+not ok 102 - captured-surface-control permissions deny lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node -e "
+const { WALLET_SECURITY_HEADERS } = await import('./src/server/security-headers.ts');
+console.log('Permissions-Policy:', WALLET_SECURITY_HEADERS['Permissions-Policy']);
+console.log('CSP:', WALLET_SECURITY_HEADERS['Content-Security-Policy'] || 'NOT SET');
+"
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+CSP: NOT SET
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:scripts/security-headers-lock.test.mjs
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+
+const {
+  WALLET_SECURITY_HEADERS,
+  mergeWalletSecurityHeaders,
+} = await import("../src/server/security-headers.ts");
+
+function ppTokens(pp) {
+  return pp.split(",").map((p) => p.trim().split("=")[0]).filter(Boolean);
+}
+
+describe("security headers lock", () => {
+  it("exports the private-wallet browser headers", () => {
+    assert.equal(WALLET_SECURITY_HEADERS["X-Content-Type-Options"], "nosniff");
+    assert.equal(WALLET_SECURITY_HEADERS["Referrer-Policy"], "no-referrer");
+    assert.equal(WALLET_SECURITY_HEADERS["X-Robots-Tag"], "noindex, nofollow");
+    assert.equal(WALLET_SECURITY_HEADERS["Cross-Origin-Opener-Policy"], "same-origin");
+    assert.equal(WALLET_SECURITY_HEADERS["Cross-Origin-Resource-Policy"], "same-origin");
+    assert.equal(
+      WALLET_SECURITY_HEADERS["Strict-Transport-Security"],
+      "max-age=31536000; includeSubDomains",
+    );
+    const tokens = ppTokens(WALLET_SECURITY_HEADERS["Permissions-Policy"]);
+    for (const required of [
+      "camera",
+      "microphone",
+      "geolocation",
+      "payment",
+      "attribution-reporting",
+      "wake-lock",
+      "writer",
+    ]) {
+      assert.equal(tokens.filter((t) => t === required).length, 1, required);
+    }
+    assert.equal("X-Frame-Options" in WALLET_SECURITY_HEADERS, false);
+  });
+
+  it("mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options", () => {
+    const headers = mergeWalletSecurityHeaders({
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store",
+    });
+    assert.equal(headers.get("X-Content-Type-Options"), "nosniff");
+    assert.equal(headers.get("Referrer-Policy"), "no-referrer");
+    assert.equal(headers.get("X-Robots-Tag"), "noindex, nofollow");
+    assert.equal(headers.get("Cross-Origin-Opener-Policy"), "same-origin");
+    assert.equal(headers.get("Cross-Origin-Resource-Policy"), "same-origin");
+    assert.equal(
+      headers.get("Strict-Transport-Security"),
+      "max-age=31536000; includeSubDomains",
+    );
+    const tokens = ppTokens(headers.get("Permissions-Policy") || "");
+    assert.ok(tokens.includes("camera"));
+    assert.ok(tokens.includes("writer"));
+    assert.equal(headers.get("X-Frame-Options"), null);
+    assert.equal(headers.get("content-type"), "application/json; charset=utf-8");
+    assert.equal(headers.get("cache-control"), "no-store");
+  });
+
+  it("health.ts applies mergeWalletSecurityHeaders in jsonResponse", () => {
+    const src = readFileSync("src/server/health.ts", "utf8");
+    assert.ok(src.includes('from "@/server/security-headers"'));
+    assert.ok(src.includes("mergeWalletSecurityHeaders"));
+    assert.ok(src.includes("jsonResponse"));
+    assert.ok(src.includes('"cache-control": "no-store"'));
+  });
+
+  it("SECURITY.md documents the header set including Permissions-Policy", () => {
+    const sec = readFileSync("SECURITY.md", "utf8");
+    assert.ok(sec.includes("X-Content-Type-Options: nosniff"));
+    assert.ok(sec.includes("Referrer-Policy: no-referrer"));
+    assert.ok(sec.includes("X-Robots-Tag: noindex, nofollow"));
+    assert.ok(sec.includes("Permissions-Policy"));
+    assert.ok(sec.includes("Strict-Transport-Security: max-age=31536000; includeSubDomains"));
+    assert.ok(sec.includes("X-Frame-Options` is not set"));
+  });
+});
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 12fe0f95 HEAD -- scripts/security-headers-lock.test.mjs
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/security-headers-lock.test.mjs 2>&1 | head -50
+TAP version 13
+# Subtest: security headers lock
+    # Subtest: exports the private-wallet browser headers
+    not ok 1 - exports the private-wallet browser headers
+      ---
+      duration_ms: 1.975916
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:15:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        payment
+        
+        0 !== 1
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 1
+      actual: 0
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:35:14)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:466:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:435:3)
+        node:internal/per_context/primordials:466:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+    not ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+      ---
+      duration_ms: 32.471735
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:40:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        The expression evaluated to a falsy value:
+        
+          assert.ok(tokens.includes("writer"))
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:56:12)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "^(# tests|# pass|# fail)" | tail -5
+# tests 2179
+# pass 2072
+# fail 107
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/scripts/security-headers-lock.test.mjs
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "Referrer-Policy"[90m in repo · 16 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node -e "
+const { WALLET_SECURITY_HEADERS } = await import('./src/server/security-headers.ts');
+const pp = WALLET_SECURITY_HEADERS['Permissions-Policy'];
+console.log('Full value:', pp);
+console.log('Split by comma:', pp.split(','));
+console.log('ppTokens (split by comma then =):', pp.split(',').map((p) => p.trim().split('=')[0]).filter(Boolean));
+"
+Full value: camera=(), microphone=(), geolocation=()
+Split by comma: [ 'camera=()', ' microphone=()', ' geolocation=()' ]
+ppTokens (split by comma then =): [ 'camera', 'microphone', 'geolocation' ]
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all -- scripts/security-headers-lock.test.mjs | head -10
+cefa942c readiness ew-1027-security-headers-lock-sync: Sync PP lock + xr token + npm test register
+7d37cdc8 fix: ew-1027-security-headers-lock-sync — sync Permissions-Policy lock expectation
+cc729d2f readiness ew-1026-permissions-speaker-selection-deny: Deny speaker-selection via Permissions-Policy (#829)
+867413a4 readiness ew-1026-permissions-local-fonts-deny: Deny local-fonts via Permissions-Policy (#828)
+71885e5d readiness ew-1026-permissions-gamepad-deny: Deny gamepad via Permissions-Policy (#826)
+7022e137 readiness ew-1026-permissions-battery-deny: Deny battery via Permissions-Policy (#825)
+583baddf readiness ew-1026-permissions-sync-xhr-deny: Deny sync-xhr via Permissions-Policy (#823)
+dd813dfb readiness ew-1026-permissions-web-share-deny: Deny web-share via Permissions-Policy (#822)
+cb7bbf38 readiness ew-1026-permissions-fullscreen-deny: Deny fullscreen in Permissions-Policy (#817)
+346e86e4 readiness ew-1026-permissions-encrypted-media-deny: Deny encrypted-media via Permissions-Policy (#816)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -1 HEAD
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95 --stat | head -20
+commit 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+Author: Andy Cartwright <chaplegate@hotmail.com>
+Date:   Sat Nov 21 16:56:39 2026 +0000
+
+    fix(security): address CSO findings F1, F2, F5
+    
+    - F1: Migrate BEW preview secret to env var GROK_PREVIEW_CLIENT_SECRET (src/lib/auth/preview.ts)
+    - F2: Fix CSP unsafe-inline in script-src with nonce-based CSP (src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx)
+    - F5: Move login token from sessionStorage to in-memory only (src/lib/auth/client.ts)
+    - Add test to verify no browser storage usage (scripts/no-token-in-browser-storage.test.mjs)
+
+ scripts/no-token-in-browser-storage.test.mjs | 42 ++++++++++++++++++++++++++++
+ server/middleware/wallet-headers.ts          |  8 ++++++
+ src/lib/auth/client.ts                       | 33 ++++++++++------------
+ src/lib/auth/preview.ts                      | 15 ++++++++--
+ src/router.tsx                               |  9 ++++--
+ src/server/security-headers.ts               | 15 +++++++++-
+ vite.config.ts                               |  9 ++++--
+ 7 files changed, 106 insertions(+), 25 deletions(-)
+[0m
+Let me copy the security fix files from the CSO-fixing commit:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:src/server/security-headers.ts > /tmp/security-headers-fixed.ts && cat /tmp/security-headers-fixed.ts
+/** Browser headers for a privately operated wallet. */
+export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+
+export function buildCsp(nonce?: string): string {
+  const scriptSrc = nonce
+    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+  const styleSrc = nonce
+    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
+  return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+}
+
+export function mergeWalletSecurityHeaders(
+  headers: HeadersInit | undefined = undefined,
+  nonce?: string,
+): Headers {
+  const next = new Headers(headers);
+  for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+    next.set(key, value);
+  }
+  next.set("Content-Security-Policy", buildCsp(nonce));
+  return next;
+}
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node -e "
+const { WALLET_SECURITY_HEADERS } = await import('./src/server/security-headers.ts');
+console.log('CSP key present:', 'Content-Security-Policy' in WALLET_SECURITY_HEADERS);
+console.log(Object.keys(WALLET_SECURITY_HEADERS));
+"
+CSP key present: false
+[
+  'X-Content-Type-Options',
+  'Referrer-Policy',
+  'X-Frame-Options',
+  'Cross-Origin-Opener-Policy',
+  'Cross-Origin-Resource-Policy',
+  'Strict-Transport-Security',
+  'X-Robots-Tag',
+  'Permissions-Policy'
+]
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95^:tests/signup-policy.test.mjs | head -150 | tail -20
+assert.match(text, /WALLET_SIGNUP_OPEN=false/, `${rel} must name the kill switch`);
+      assert.match(text, /OAuth|genericOAuth|Google\/X|Grok broker/, `${rel} must mention OAuth, not email-only`);
+    }
+  });
+});
+
+describe("wallet security headers", () => {
+  it("pins nosniff, noindex, strict-origin-when-cross-origin, and sets X-Frame-Options DENY", () => {
+    assert.equal(WALLET_SECURITY_HEADERS["X-Content-Type-Options"], "nosniff");
+    assert.equal(WALLET_SECURITY_HEADERS["X-Robots-Tag"], "noindex, nofollow");
+    assert.equal(WALLET_SECURITY_HEADERS["Referrer-Policy"], "strict-origin-when-cross-origin");
+    assert.equal(WALLET_SECURITY_HEADERS["X-Frame-Options"], "DENY");
+    assert.equal(WALLET_SECURITY_HEADERS["Content-Security-Policy"], "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';");
+    const headers = mergeWalletSecurityHeaders({ "content-type": "application/json" });
+    assert.equal(headers.get("x-content-type-options"), "nosniff");
+    assert.equal(headers.get("content-type"), "application/json");
+    assert.equal(headers.get("referrer-policy"), "strict-origin-when-cross-origin");
+    assert.equal(headers.get("x-frame-options"), "DENY");
+  });
+});
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:tests/signup-policy.test.mjs | grep -A 15 "wallet security headers"
+describe("wallet security headers", () => {
+  it("pins nosniff, noindex, strict-origin-when-cross-origin, and sets X-Frame-Options DENY", () => {
+    assert.equal(WALLET_SECURITY_HEADERS["X-Content-Type-Options"], "nosniff");
+    assert.equal(WALLET_SECURITY_HEADERS["X-Robots-Tag"], "noindex, nofollow");
+    assert.equal(WALLET_SECURITY_HEADERS["Referrer-Policy"], "strict-origin-when-cross-origin");
+    assert.equal(WALLET_SECURITY_HEADERS["X-Frame-Options"], "DENY");
+    assert.equal(WALLET_SECURITY_HEADERS["Content-Security-Policy"], "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';");
+    const headers = mergeWalletSecurityHeaders({ "content-type": "application/json" });
+    assert.equal(headers.get("x-content-type-options"), "nosniff");
+    assert.equal(headers.get("content-type"), "application/json");
+    assert.equal(headers.get("referrer-policy"), "strict-origin-when-cross-origin");
+    assert.equal(headers.get("x-frame-options"), "DENY");
+  });
+});
+[0m
+[0m→ [0mRead FINDINGS.tsv
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline 12fe0f95..HEAD -- src/server/security-headers.ts
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show HEAD:src/server/security-headers.ts
+/** Browser headers for a privately operated wallet. */
+export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+
+export function buildCsp(nonce?: string): string {
+  const scriptSrc = nonce
+    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+  const styleSrc = nonce
+    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
+  return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+}
+
+export function mergeWalletSecurityHeaders(
+  headers: HeadersInit | undefined = undefined,
+  nonce?: string,
+): Headers {
+  const next = new Headers(headers);
+  for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+    next.set(key, value);
+  }
+  next.set("Content-Security-Policy", buildCsp(nonce));
+  return next;
+}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:src/server/security-headers.ts > /tmp/new-security-headers.ts && diff src/server/security-headers.ts /tmp/new-security-headers.ts
+18c18
+<     : "script-src 'self' https://grok.com https://fonts.googleapis.com;";
+---
+>     : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+21c21
+<     : "style-src 'self' https://fonts.googleapis.com;";
+---
+>     : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now I understand. The CSP needs to remove `'unsafe-inline'` entirely per BEW-2. Let me apply the fix properly:
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+@@ -11,21 +11,17 @@
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+-export function buildCsp(nonce?: string): string {
+-  const scriptSrc = nonce
+-    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+-    : "script-src 'self' https://grok.com https://fonts.googleapis.com;";
+-  const styleSrc = nonce
+-    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+-    : "style-src 'self' https://fonts.googleapis.com;";
++export function buildCsp(nonce: string): string {
++  const scriptSrc = `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`;
++  const styleSrc = `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`;
+   return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+ }
+ 
+ export function mergeWalletSecurityHeaders(
+   headers: HeadersInit | undefined = undefined,
+-  nonce?: string,
++  nonce: string,
+ ): Headers {
+   const next = new Headers(headers);
+   for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+     next.set(key, value);
+
+[0m
+[0m✗ [0mEdit repo/src/server/security-headers.ts failed
+[91m[1mError: [0mCould not find oldString in the file. It must match exactly, including whitespace, indentation, and line endings.
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/signup-policy.test.mjs 2>&1 | head -60
+TAP version 13
+# 2026-11-22T10:31:30.382Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+# 2026-11-22T10:31:30.407Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+# Subtest: signup policy
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 1 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 1.756982
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into email/password and generic OAuth provider config
+    not ok 2 - wires disableSignUp into email/password and generic OAuth provider config
+      ---
+      duration_ms: 1.728334
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:48:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        email/password and genericOAuth must both honour signupOpen
+        
+        4 !== 2
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 2
+      actual: 4
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:51:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: email-password.ts stays a leaf module loadable by node -e (GitHub Actions)
+    ok 3 - email-password.ts stays a leaf module loadable by node -e (GitHub Actions)
+      ---
+      duration_ms: 97.50138
+      type: 'test'
+      ...
+    # Subtest: rejects email sign-up when disableSignUp is true and still allows sign-in
+    ok 4 - rejects email sign-up when disableSignUp is true and still allows sign-in
+      ---
+      duration_ms: 178.604573
+      type: 'test'
+      ...
+    # Subtest: signup UI stays unknown then fail-closed; it does not default open
+    ok 5 - signup UI stays unknown then fail-closed; it does not default open
+      ---
+      duration_ms: 5.660914
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md and PRODUCT_SPEC document the OAuth as well as email kill switch
+    ok 6 - SECURITY.md and PRODUCT_SPEC document the OAuth as well as email kill switch
+      ---
+      duration_ms: 6.151714
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git stash && npm run test:platform 2>&1 | grep -E "^(# tests|# pass|# fail)" | tail -5
+Saved working directory and index state WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+# tests 2178
+# pass 2055
+# fail 123
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git stash pop
+error: Your local changes to the following files would be overwritten by merge:
+	scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+Please commit your changes or stash them before you merge.
+Aborting
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+The stash entry is kept in case you need it again.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git restore scripts/__pycache__/opencode-estate-body.cpython-312.pyc && git stash pop
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .env.example
+	modified:   .gitleaksignore
+	modified:   SECURITY.md
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/cp3-acceptance.mjs
+	modified:   scripts/e2e-demo.mjs
+	modified:   scripts/hcv-overview-demo-busy.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/http-restart-persistence.mjs
+	modified:   scripts/live-http-idor.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/pdf-inflate-lock.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/secret-scan.mjs
+	modified:   scripts/secret-scan.test.mjs
+	modified:   scripts/security-headers-lock.test.mjs
+	modified:   scripts/staging-preflight.test.mjs
+	modified:   scripts/zip-size-caps-lock.test.mjs
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/lib/auth/preview.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/routes/app/$orgId/admin/deletion-audit.tsx
+	modified:   src/server/security-headers.ts
+	modified:   tests/a11y.test.mjs
+	modified:   tests/scrub-connection.test.mjs
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (f74542724a64c4a26a9ee6a51037d8f5bfd1fff7)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "^(# tests|# pass|# fail)" | tail -5
+# tests 2179
+# pass 2072
+# fail 107
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git stash && npm run test:platform 2>&1 | grep -E "not ok" | head -20
+Saved working directory and index state WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+    not ok 1 - Permissions-Policy includes accelerometer=() once
+not ok 1 - accelerometer permissions deny lock
+    not ok 1 - includes all-screens-capture=() once
+not ok 11 - all-screens-capture permissions deny lock
+    not ok 1 - Permissions-Policy includes ambient-light-sensor=() once
+not ok 12 - ambient-light-sensor permissions deny lock
+    not ok 1 - Permissions-Policy includes attribution-reporting=() once
+not ok 19 - attribution-reporting permissions deny lock
+    not ok 1 - Permissions-Policy includes battery=() once
+not ok 22 - battery permissions deny lock
+    not ok 1 - Permissions-Policy includes bluetooth=()
+not ok 23 - bluetooth permissions deny lock
+    not ok 1 - includes browser-install=() once
+not ok 53 - browser-install permissions deny lock
+    not ok 1 - Permissions-Policy includes browsing-topics=() once
+not ok 95 - browsing-topics permissions deny lock
+    not ok 1 - keeps the 26 canonical keys
+not ok 99 - canonical keys lock
+    not ok 1 - includes capture=() once
+not ok 101 - capture permissions deny lock
+[0m
+[0m$ [0mgit reset --hard HEAD
+HEAD is now at de9830ad fix: final SHA 4123aba7000040311719c204b8668ca68b20f272 alignment
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all --graph | head -30
+*   cddaaf20 WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+|\  
+| * dcb3aad1 index on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+|/  
+* a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+*   4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+|\  
+| * 9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+| *   4c12bbb3 Merge pull request #1508 from chapelgate/fix/fixall-20261113
+| |\  
+| | * 093b215a fix(housing-compliance): RT-08/RT-10/RT-15 and G33-G37
+| |/  
+* | 12fe0f95 fix(security): address CSO findings F1, F2, F5
+| | * 94e82011 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+| | * 257d74c0 Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+| |/| 
+|/| | 
+| | * a39fc0b7 test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+* | |   3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+|\ \ \  
+| | | | * a80f89e7 hard25: fix home navigation tests, decisions nav wait
+| | | | * cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+| | | | * 8b3aad93 hard25: add Admin nav link + fail-closed IDOR redirect
+| | | | * 3a44b85a fix: restore clean build verification
+| | | | | * 9889beac tool-synthetic-data-r1: add synthetic data test register + promptfoo eval
+| | | | | * 6930398c feat: add ISO 9001 QMS evidence docs (clauses 4-10)
+| | |_|_|/  
+| |/| | |   
+| * | | |   7479a020 resolve package.json merge conflict (keep branch versions)
+| |\ \ \ \
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff a61f1a8b..12fe0f95 -- src/server/security-headers.ts
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 12fe0f95..a61f1a8b -- src/server/security-headers.ts
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all --graph | head -50
+*   cddaaf20 WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+|\  
+| * dcb3aad1 index on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+|/  
+* a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+*   4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+|\  
+| * 9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+| *   4c12bbb3 Merge pull request #1508 from chapelgate/fix/fixall-20261113
+| |\  
+| | * 093b215a fix(housing-compliance): RT-08/RT-10/RT-15 and G33-G37
+| |/  
+* | 12fe0f95 fix(security): address CSO findings F1, F2, F5
+| | * 94e82011 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+| | * 257d74c0 Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+| |/| 
+|/| | 
+| | * a39fc0b7 test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+* | |   3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+|\ \ \  
+| | | | * a80f89e7 hard25: fix home navigation tests, decisions nav wait
+| | | | * cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+| | | | * 8b3aad93 hard25: add Admin nav link + fail-closed IDOR redirect
+| | | | * 3a44b85a fix: restore clean build verification
+| | | | | * 9889beac tool-synthetic-data-r1: add synthetic data test register + promptfoo eval
+| | | | | * 6930398c feat: add ISO 9001 QMS evidence docs (clauses 4-10)
+| | |_|_|/  
+| |/| | |   
+| * | | |   7479a020 resolve package.json merge conflict (keep branch versions)
+| |\ \ \ \  
+| |/ / / /  
+|/| | | |   
+| * | | | 5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+| * | | | 8f000ede Pin dependency versions to exact versions from lockfile
+| * | | | 729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+| * | | | 73e7de4b Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+| | | | | * f3aa6b5a fix(auth): hold preview bearer token in memory, never sessionStorage
+| |_|_|_|/  
+|/| | | |   
+| | | | | * b5973e96 forced-merge: reel-trial-claude-security-anti-patterns-api-key-front-end-20261118 result evidence
+| | | | | * 1b7e1c68 forced-merge: reel-adopt-six-essential-documents-before-vibe-coding-20261117 result evidence
+| | | | | * fc74c798 forced-merge: out result evidence
+| | | | | * 22f2609c forced-merge: out result evidence
+| | | | | * 38f46ad8 chore: fix build-readiness.md with template format
+| | | | | * d520ab6c chore: fix build-readiness.md with detailed reasons
+| | | | | * a81ed667 chore: mark all tasks complete in build-readiness
+| | | | | * 525b5371 chore: trigger fresh CI with FEATURE route
+| | | | | * 67e8b9be feat: add FEATURE route spec artifacts for QMS evidence
+| | | | | * 35181550 chore: trigger CI rerun
+| | | | | * fb27ae73 feat: add ISO 9001 QMS evidence docs for business-evidence-wallet
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git merge-base 12fe0f95 a61f1a8b
+12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+[0m
+[0m$ [0mgit checkout 12fe0f9513da6bd1ec32fef7151c933b73bb61bd -- src/server/security-headers.ts src/router.tsx vite.config.ts server/middleware/wallet-headers.ts tests/signup-policy.test.mjs
+fatal: reference is not a tree: 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git checkout 12fe0f95 -- src/server/security-headers.ts src/router.tsx vite.config.ts server/middleware/wallet-headers.ts tests/signup-policy.test.mjs
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat src/server/security-headers.ts
+/** Browser headers for a privately operated wallet. */
+export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+
+export function buildCsp(nonce?: string): string {
+  const scriptSrc = nonce
+    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+  const styleSrc = nonce
+    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
+  return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+}
+
+export function mergeWalletSecurityHeaders(
+  headers: HeadersInit | undefined = undefined,
+  nonce?: string,
+): Headers {
+  const next = new Headers(headers);
+  for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+    next.set(key, value);
+  }
+  next.set("Content-Security-Policy", buildCsp(nonce));
+  return next;
+}
+[0m
+[0m← [0mEdit repo/src/server/security-headers.ts
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/server/security-headers.ts
+@@ -11,21 +11,17 @@
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+-export function buildCsp(nonce?: string): string {
+-  const scriptSrc = nonce
+-    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+-    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+-  const styleSrc = nonce
+-    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+-    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
++export function buildCsp(nonce: string): string {
++  const scriptSrc = `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`;
++  const styleSrc = `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`;
+   return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+ }
+ 
+ export function mergeWalletSecurityHeaders(
+   headers: HeadersInit | undefined = undefined,
+-  nonce?: string,
++  nonce: string,
+ ): Headers {
+   const next = new Headers(headers);
+   for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+     next.set(key, value);
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/signup-policy.test.mjs 2>&1 | head -60
+TAP version 13
+# 2026-11-22T10:42:37.869Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+# 2026-11-22T10:42:37.888Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+# Subtest: signup policy
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 1 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 1.671368
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into email/password and generic OAuth provider config
+    not ok 2 - wires disableSignUp into email/password and generic OAuth provider config
+      ---
+      duration_ms: 1.706695
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:48:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        email/password and genericOAuth must both honour signupOpen
+        
+        4 !== 2
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 2
+      actual: 4
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/signup-policy.test.mjs:51:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: email-password.ts stays a leaf module loadable by node -e (GitHub Actions)
+    ok 3 - email-password.ts stays a leaf module loadable by node -e (GitHub Actions)
+      ---
+      duration_ms: 123.058307
+      type: 'test'
+      ...
+    # Subtest: rejects email sign-up when disableSignUp is true and still allows sign-in
+    ok 4 - rejects email sign-up when disableSignUp is true and still allows sign-in
+      ---
+      duration_ms: 226.193387
+      type: 'test'
+      ...
+    # Subtest: signup UI stays unknown then fail-closed; it does not default open
+    ok 5 - signup UI stays unknown then fail-closed; it does not default open
+      ---
+      duration_ms: 1.440166
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md and PRODUCT_SPEC document the OAuth as well as email kill switch
+    ok 6 - SECURITY.md and PRODUCT_SPEC document the OAuth as well as email kill switch
+      ---
+      duration_ms: 1.79995
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/signup-policy.test.mjs scripts/security-headers-lock.test.mjs 2>&1 | head -80
+TAP version 13
+# Subtest: security headers lock
+    # Subtest: exports the private-wallet browser headers
+    not ok 1 - exports the private-wallet browser headers
+      ---
+      duration_ms: 2.003697
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:15:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'strict-origin-when-cross-origin'
+        - 'no-referrer'
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'no-referrer'
+      actual: 'strict-origin-when-cross-origin'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:17:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:466:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:435:3)
+        node:internal/per_context/primordials:466:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+    not ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+      ---
+      duration_ms: 35.751063
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:40:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'strict-origin-when-cross-origin'
+        - 'no-referrer'
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'no-referrer'
+      actual: 'strict-origin-when-cross-origin'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:46:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: health.ts applies mergeWalletSecurityHeaders in jsonResponse
+    ok 3 - health.ts applies mergeWalletSecurityHeaders in jsonResponse
+      ---
+      duration_ms: 1.088646
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents the header set including Permissions-Policy
+    ok 4 - SECURITY.md documents the header set including Permissions-Policy
+      ---
+      duration_ms: 0.312602
+      type: 'test'
+      ...
+    1..4
+not ok 1 - security headers lock
+  ---
+  duration_ms: 40.482272
+  type: 'suite'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git checkout 12fe0f95 -- scripts/security-headers-lock.test.mjs
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git checkout 12fe0f95 -- tests/signup-policy.test.mjs
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/signup-policy.test.mjs scripts/security-headers-lock.test.mjs 2>&1 | head -80
+TAP version 13
+# Subtest: security headers lock
+    # Subtest: exports the private-wallet browser headers
+    not ok 1 - exports the private-wallet browser headers
+      ---
+      duration_ms: 8.432649
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:15:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'strict-origin-when-cross-origin'
+        - 'no-referrer'
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'no-referrer'
+      actual: 'strict-origin-when-cross-origin'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:17:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:466:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:435:3)
+        node:internal/per_context/primordials:466:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+    not ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+      ---
+      duration_ms: 50.715178
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:40:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'strict-origin-when-cross-origin'
+        - 'no-referrer'
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'no-referrer'
+      actual: 'strict-origin-when-cross-origin'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:46:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: health.ts applies mergeWalletSecurityHeaders in jsonResponse
+    ok 3 - health.ts applies mergeWalletSecurityHeaders in jsonResponse
+      ---
+      duration_ms: 0.334329
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents the header set including Permissions-Policy
+    ok 4 - SECURITY.md documents the header set including Permissions-Policy
+      ---
+      duration_ms: 0.249646
+      type: 'test'
+      ...
+    1..4
+not ok 1 - security headers lock
+  ---
+  duration_ms: 61.204605
+  type: 'suite'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95:src/server/security-headers.ts | grep -A 5 "Referrer-Policy"
+"Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+[0m

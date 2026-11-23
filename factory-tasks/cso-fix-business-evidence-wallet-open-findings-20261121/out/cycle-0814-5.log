@@ -1,0 +1,756 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m✱ [0mGlob "/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/*"[90m 0 matches[0m
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 104
+drwxrwxr-x   4 andy andy  4096 Nov 22 00:03 .
+drwxrwxr-x 702 andy andy 65536 Nov 22 08:07 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 08:14 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  2056 Nov 22 08:14 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 08:14 out
+drwxrwxr-x  24 andy andy  4096 Nov 22 07:26 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 08:14 status.json
+-rw-rw-r--   1 andy andy  1920 Nov 22 04:34 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2384
+drwxrwxr-x  24 andy andy    4096 Nov 22 07:26 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 00:03 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 05:36 docs
+-rw-rw-r--   1 andy andy    1123 Nov 22 05:36 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 07:56 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     370 Nov 22 06:29 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  274699 Nov 22 05:36 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 05:36 scripts
+-rw-rw-r--   1 andy andy   15457 Nov 22 05:36 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 07:08 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 05:36 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   14297 Nov 22 05:36 vite.config.ts
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/package.json
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git status && git log --oneline -5
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .env.example
+	modified:   .gitleaksignore
+	modified:   SECURITY.md
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/cp3-acceptance.mjs
+	modified:   scripts/e2e-demo.mjs
+	modified:   scripts/hcv-overview-demo-busy.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/http-restart-persistence.mjs
+	modified:   scripts/live-http-idor.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/pdf-inflate-lock.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/security-headers-lock.test.mjs
+	modified:   scripts/staging-preflight.test.mjs
+	modified:   scripts/zip-size-caps-lock.test.mjs
+	modified:   server/middleware/wallet-headers.ts
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/server/security-headers.ts
+	modified:   tests/a11y.test.mjs
+	modified:   tests/scrub-connection.test.mjs
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+Let me explore the codebase to understand the current state and what needs fixing for each finding.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all | head -20
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+94e82011 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+257d74c0 Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+a80f89e7 hard25: fix home navigation tests, decisions nav wait
+cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+a39fc0b7 test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+9889beac tool-synthetic-data-r1: add synthetic data test register + promptfoo eval
+6930398c feat: add ISO 9001 QMS evidence docs (clauses 4-10)
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+f3aa6b5a fix(auth): hold preview bearer token in memory, never sessionStorage
+729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+73e7de4b Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+b5973e96 forced-merge: reel-trial-claude-security-anti-patterns-api-key-front-end-20261118 result evidence
+1b7e1c68 forced-merge: reel-adopt-six-essential-documents-before-vibe-coding-20261117 result evidence
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "preview.*secret|PREVIEW_SECRET"[90m in repo · 7 matches[0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m→ [0mRead repo/.env.example
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "unsafe-inline.*script-src|script-src.*unsafe-inline"[90m in repo · 0 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "Content-Security-Policy|CSP"[90m in repo · 36 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m→ [0mRead repo/vite.config.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/server/middleware/wallet-headers.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | head -200
+> app-builder-workspace@0.0.0-private test:platform
+> npm test
+
+
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 0.799529
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 0.301931
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 2.153987
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 3.704282
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.219174
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 2.991895
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.423143
+      type: 'test'
+      ...
+    1..4
+ok 2 - admin error copy lock
+  ---
+  duration_ms: 11.818406
+  type: 'suite'
+  ...
+# Subtest: agent display name max lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.719915
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+    ok 2 - agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.32041
+      type: 'test'
+      ...
+    1..2
+ok 3 - agent display name max lock
+  ---
+  duration_ms: 1.934808
+  type: 'suite'
+  ...
+# Subtest: agent display name max wire lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.837789
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+    ok 2 - v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 2.116146
+      type: 'test'
+      ...
+    1..2
+ok 4 - agent display name max wire lock
+  ---
+  duration_ms: 5.861112
+  type: 'suite'
+  ...
+# Subtest: agent loop events list max lock
+    # Subtest: exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+    ok 1 - exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+      ---
+      duration_ms: 1.360908
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+      ---
+      duration_ms: 0.469109
+      type: 'test'
+      ...
+    1..2
+ok 5 - agent loop events list max lock
+  ---
+  duration_ms: 3.555005
+  type: 'suite'
+  ...
+# Subtest: agent loop runs list max lock
+    # Subtest: exports AGENT_LOOP_RUNS_LIST_MAX at 100
+    ok 1 - exports AGENT_LOOP_RUNS_LIST_MAX at 100
+      ---
+      duration_ms: 0.723848
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+      ---
+      duration_ms: 0.357474
+      type: 'test'
+      ...
+    1..2
+ok 6 - agent loop runs list max lock
+  ---
+  duration_ms: 2.068156
+  type: 'suite'
+  ...
+# Subtest: agent purpose max lock
+    # Subtest: exports AGENT_PURPOSE_MAX at 500
+    ok 1 - exports AGENT_PURPOSE_MAX at 500
+      ---
+      duration_ms: 0.909651
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares purpose length against AGENT_PURPOSE_MAX
+    ok 2 - agents.ts compares purpose length against AGENT_PURPOSE_MAX
+      ---
+      duration_ms: 0.387157
+      type: 'test'
+      ...
+    1..2
+ok 7 - agent purpose max lock
+  ---
+  duration_ms: 7.659807
+  type: 'suite'
+  ...
+# Subtest: ai grounding lock
+    # Subtest: accepts an exact token-bounded value case-insensitively
+    ok 1 - accepts an exact token-bounded value case-insensitively
+      ---
+      duration_ms: 3.943163
+      type: 'test'
+      ...
+    # Subtest: rejects a smaller amount that is only a prefix of a larger figure
+    ok 2 - rejects a smaller amount that is only a prefix of a larger figure
+      ---
+      duration_ms: 2.031856
+      type: 'test'
+      ...
+    # Subtest: rejects short tokens that collide inside longer words
+    ok 3 - rejects short tokens that collide inside longer words
+      ---
+      duration_ms: 1.895846
+      type: 'test'
+      ...
+    # Subtest: rejects empty extracted text and display values under 3 chars
+    ok 4 - rejects empty extracted text and display values under 3 chars
+      ---
+      duration_ms: 0.257253
+      type: 'test'
+      ...
+    1..4
+ok 8 - ai grounding lock
+  ---
+  duration_ms: 9.483199
+  type: 'suite'
+  ...
+# Subtest: ai response caps lock
+    # Subtest: keeps fetch timeout at 15 seconds
+    ok 1 - keeps fetch timeout at 15 seconds
+      ---
+      duration_ms: 0.945847
+      type: 'test'
+      ...
+    # Subtest: keeps max response chars at 100000
+    ok 2 - keeps max response chars at 100000
+      ---
+      duration_ms: 0.180338
+      type: 'test'
+      ...
+    # Subtest: timeout stays below max response chars numerically as separate unit caps
+    ok 3 - timeout stays below max response chars numerically as separate unit caps
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -100
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | grep -E "(^not ok|^# Subtest.*FAIL|^  \d+\. .*FAIL|FAIL)" | head -50
+# Subtest: KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+    ok 1 - KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | grep -E "^(ok|not ok)" | tail -20
+ok 1600 - zip size caps lock
+ok 1601 - zip slip lock
+ok 1 - callTool failure memo
+ok 2 - callTool in the workspace preview vs deployed
+ok 3 - callTool
+ok 4 - isLoginRequired
+ok 5 - redirectToLoginIfRequired
+ok 6 - GoogleCalendarTools
+ok 7 - classifyCallToolError
+ok 8 - readinessProbeDelayMs
+ok 9 - readinessProbeExhausted
+ok 10 - verifyGateIdentityToken
+ok 11 - gateIdentityFromHeaders
+ok 12 - gateIdentityEnabled
+ok 13 - gateTokenAudience
+ok 14 - gateIdentityUserInfo
+ok 15 - sessionBoundToGateIdentity
+ok 16 - resolveSignInGateState
+ok 17 - signup policy
+ok 18 - formatWalletTimestamp
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | tail -50
+---
+      duration_ms: 0.449832
+      type: 'test'
+      ...
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+      ---
+      duration_ms: 0.285574
+      type: 'test'
+      ...
+    1..5
+ok 17 - signup policy
+  ---
+  duration_ms: 8.854443
+  type: 'suite'
+  ...
+# Subtest: formatWalletTimestamp
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    ok 1 - stringifies Date objects so React never receives a raw Date child
+      ---
+      duration_ms: 1.189834
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.178413
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.16359
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 2.757489
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 374.591317
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:domain 2>&1 | tail -30
+type: 'test'
+      ...
+    1..1
+ok 219 - v2 opportunities scoring
+  ---
+  duration_ms: 5.51341
+  type: 'suite'
+  ...
+# Subtest: v2 dual approval policy
+    # Subtest: flags contract/tender and explicit dual authority
+    ok 1 - flags contract/tender and explicit dual authority
+      ---
+      duration_ms: 0.225275
+      type: 'test'
+      ...
+    1..1
+ok 220 - v2 dual approval policy
+  ---
+  duration_ms: 0.420237
+  type: 'suite'
+  ...
+1..220
+# tests 1405
+# suites 209
+# pass 1405
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6598.783556
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:integration 2>&1 | tail -50
+type: 'test'
+      ...
+    # Subtest: does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+    ok 4 - does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+      ---
+      duration_ms: 2.716502
+      type: 'test'
+      ...
+    # Subtest: uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+    ok 5 - uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+      ---
+      duration_ms: 0.727006
+      type: 'test'
+      ...
+    1..5
+ok 3 - WCAG 2.2 AA route headings, form labels, error associations, and live regions
+  ---
+  duration_ms: 23.251615
+  type: 'suite'
+  ...
+# Subtest: Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+    # Subtest: passes axe-core WCAG 2.2 AA, ARIA landmark/heading/form snapshots, and keyboard focus across public and app routes
+    not ok 1 - passes axe-core WCAG 2.2 AA, ARIA landmark/heading/form snapshots, and keyboard focus across public and app routes
+      ---
+      duration_ms: 93674.672635
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:286:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Timed out waiting for http://127.0.0.1:38297/. Server log:
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        waitHttp (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:275:9)
+        async TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:329:7)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..1
+not ok 4 - Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+  ---
+  duration_ms: 94107.413039
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:282:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:integration 2>&1 | grep -E "^(ok|not ok)" | wc -l
+4
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:integration 2>&1 | grep -E "^(ok|not ok)"
+ok 1 - WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+ok 2 - WCAG 2.2 AA shell, skip link, landmarks, and status badges
+ok 3 - WCAG 2.2 AA route headings, form labels, error associations, and live regions
+not ok 4 - Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mSkill "chapelgate-skill-first"
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/.gitleaks.toml
+[93m[1m! [0mpermission requested: external_directory (/home/andy/.local/bin/*); auto-rejecting
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Let me check the `rt` wrapper and understand the full state.
+[0m✗ [0mwhich rt 2>/dev/null; ls ~/.local/bin/rt 2>/dev/null; cat ~/.local/bin/rt 2>/dev/null | head -50 failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

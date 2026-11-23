@@ -1,0 +1,1435 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 116
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:16 .
+drwxrwxr-x 763 andy andy 69632 Nov 22 22:28 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 22:30 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  4284 Nov 22 22:30 history.log
+-rw-rw-r--   1 andy andy     7 Nov 22 22:30 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 22 22:30 out
+drwxrwxr-x  25 andy andy  4096 Nov 22 21:09 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 22:30 status.json
+-rw-rw-r--   1 andy andy  3365 Nov 22 21:45 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m→ [0mRead out
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead history.log
+[0m→ [0mRead status.json
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2372
+drwxrwxr-x  25 andy andy    4096 Nov 22 21:09 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 18:42 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 20:13 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 18:42 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 18:42 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 21:09 test-results
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 18:42 vite.config.ts
+[0m
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/SKILLS-USED.md
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git branch -a
+master
+* rc/ew-20261121
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/agy/construction-templates
+  remotes/origin/agy/task-1
+  remotes/origin/agy/task-14
+  remotes/origin/agy/task-2
+  remotes/origin/audit-freeze/bew-v2-rc3-68eff076
+  remotes/origin/backup/pr157-e3e42eb-20261022
+  remotes/origin/bt-a1-configurable
+  remotes/origin/bt-a2-browseres
+  remotes/origin/bt-a3-externalapi
+  remotes/origin/bt10-rate-limit
+  remotes/origin/bt11-a11ytest
+  remotes/origin/bt12-checkauth
+  remotes/origin/bt13-metrics
+  remotes/origin/bt14-lint-fixes
+  remotes/origin/bt15-longoutput
+  remotes/origin/bt4-expiry-warning
+  remotes/origin/bt5-shortfalls
+  remotes/origin/bt7-ocraccessible
+  remotes/origin/bt8-companieshouse
+  remotes/origin/bt9-duplicates
+  remotes/origin/business-os-migration-2026-09-11
+  remotes/origin/chore/opencode-no-nvidia-pin
+  remotes/origin/claude/charter-v2-agents-md
+  remotes/origin/claude/gate-pin-build-readiness
+  remotes/origin/commercial-readiness/security-reconcile-20260930
+  remotes/origin/copilot/integration
+  remotes/origin/crr/2026-10-21
+  remotes/origin/cursor/a4i-autumn-2026-not-suitable-fa9a
+  remotes/origin/cursor/actions-cost-audit-a48f
+  remotes/origin/cursor/agent-loop-cert2-maintenance-9cce
+  remotes/origin/cursor/agent-loop-supervisor-cert-9cce
+  remotes/origin/cursor/bew-signup-gate-d691
+  remotes/origin/cursor/comp-01-legal-pack-d160
+  remotes/origin/cursor/comp-05-legal-pages-d160
+  remotes/origin/cursor/comp-09-a11y-d160
+  remotes/origin/cursor/comp-10-ops-runbooks-d160
+  remotes/origin/cursor/estate-auth-cutover-3f9d
+  remotes/origin/cursor/estate-auth-service-dfdb
+  remotes/origin/cursor/fix-review-findings-1287
+  remotes/origin/cursor/gha-cost-selfhosted-repair-33fa
+  remotes/origin/cursor/opencode-estate-lines-9d80
+  remotes/origin/cursor/opencode-model-fallback-9d80
+  remotes/origin/cursor/overnight-registers-9d80
+  remotes/origin/cursor/public-ai-compute-audit-dfa4
+  remotes/origin/cursor/rc2-security-onto-master-ef9e
+  remotes/origin/cursor/reconcile-production-master-9d80
+  remotes/origin/cursor/release-readiness-8a5b
+  remotes/origin/cursor/release-rehearsal-9d80
+  remotes/origin/cursor/release-truth-reconcile-d160
+  remotes/origin/cursor/rsfm-membership-acceptance-c580
+  remotes/origin/cursor/sovereign-ai-agent-security-bid-396a
+  remotes/origin/cursor/sovereign-ai-hardware-infra-f155
+  remotes/origin/cursor/v2-commissioning-reconciliation-9cce
+  remotes/origin/cursor/v2-evidence-graph-foundations-4a8f
+  remotes/origin/cursor/v2-evidence-graph-foundations-9cce
+  remotes/origin/cursor/v2-independent-audit-signoff-9cce
+  remotes/origin/cursor/v2-post-audit-conditions-closure-9cce
+  remotes/origin/cursor/v2-rc2-human-audit-remediation-9cce
+  remotes/origin/cursor/v2-rc3-operational-blockers-9cce
+  remotes/origin/cursor/v3-evidence-platform-9cce
+  remotes/origin/data/ds0-separate-owner-pilot-data-20261010
+  remotes/origin/deployment/digitalocean-20260913
+  remotes/origin/deployment/reconciled-pilot-20260914
+  remotes/origin/docs/final-report-t810u
+  remotes/origin/docs/final-report-t810u-r2
+  remotes/origin/estate-gate-caller-20261004
+  remotes/origin/ew-commercial-r8
+  remotes/origin/ew-final-report-t810u
+  remotes/origin/ew-fix-01
+  remotes/origin/ew-fix-02
+  remotes/origin/ew-fix-03
+  remotes/origin/ew-fix-04
+  remotes/origin/ew-fix-05
+  remotes/origin/execution-authority-direct-nvdl-20261003
+  remotes/origin/factory/bew-copilot-onboarding
+  remotes/origin/feat/a11y-wcag22-pass
+  remotes/origin/feat/billing-stripe-test
+  remotes/origin/feat/final-report-t810u
+  remotes/origin/feat/housing-compliance-vault
+  remotes/origin/feat/iso9001-qms-evidence-20261116
+  remotes/origin/feat/p0-2-expiry-automation
+  remotes/origin/feat/p0-3-mobile-responsiveness
+  remotes/origin/feat/p1-5-answer-bank-freshness
+  remotes/origin/feat/s01-rls-core-tables
+  remotes/origin/feat/s03-questionnaire-templates
+  remotes/origin/feat/s06-sbom
+  remotes/origin/feat/s06-sbom-vuln-scan
+  remotes/origin/feat/s15-progressive-forms
+  remotes/origin/feat/s16-role-based-ui
+  remotes/origin/feat/uk-gdpr-data-broker-opt-out-docs
+  remotes/origin/feature/document-knowledge-copilot
+  remotes/origin/feature/public-sector-knowledge-copilot
+  remotes/origin/fix-eslint-peer-deps
+  remotes/origin/fix/bearer-token-in-memory-not-sessionstorage
+  remotes/origin/fix/eb-0028-opencode-nvidia-429
+  remotes/origin/fix/ew-check-auth
+  remotes/origin/fix/ew-check-auth-fresh
+  remotes/origin/fix/ew-cp3-lint
+  remotes/origin/fix/ew-cp3-lint-fresh
+  remotes/origin/fix/ew-doc-drift-master-tip
+  remotes/origin/fix/ew-fix-04-release-truth
+  remotes/origin/fix/ew-fix-05-aria-busy
+  remotes/origin/fix/ew-fixlist-2-r19
+  remotes/origin/fix/ew-fixlist-3-r19
+  remotes/origin/fix/ew-fixlist-4-r19
+  remotes/origin/fix/ew-fixlist-6-r19
+  remotes/origin/fix/ew-master-redness-20261106
+  remotes/origin/fix/ew-master-redness-full
+  remotes/origin/fix/ew-metrics-auth
+  remotes/origin/fix/ew-metrics-auth-fresh
+  remotes/origin/fix/ew-npm-audit
+  remotes/origin/fix/ew-npm-audit-fresh
+  remotes/origin/fix/ew-pdf-lock
+  remotes/origin/fix/ew-rls-quotes-r10
+  remotes/origin/fix/ew-v2-rls-fail-closed
+  remotes/origin/fix/ew-v2-rls-fix-quotes
+  remotes/origin/fix/ew-vuln-forward
+  remotes/origin/fix/fixall-20261113
+  remotes/origin/fix/master-red-fixes
+  remotes/origin/fix/master-sbom-vuln-fix
+  remotes/origin/fix/mcp-lint-20260910
+  remotes/origin/fix/mcp-windows-path-20260910
+  remotes/origin/fix/oc-per-comment-concurrency
+  remotes/origin/fix/oc-probe-tokens
+  remotes/origin/fix/pg-local-portable-render
+  remotes/origin/fix/restore-integration-script-20260910
+  remotes/origin/fix/shakedown-findings-20261113
+  remotes/origin/forced-merge/out-1794998819
+  remotes/origin/forced-merge/out-1794998859
+  remotes/origin/forced-merge/reel-adopt-six-essential-documents-before-vibe-coding-20261117-1795005015
+  remotes/origin/forced-merge/reel-trial-claude-security-anti-patterns-api-key-front-end-20261118-1795005066
+  remotes/origin/governance/s031-release-protection
+  remotes/origin/hcv-a11y-error-boundary-test-20261106
+  remotes/origin/hcv-a11y-wcag22-pass-20261105
+  remotes/origin/hcv-accessibility-improvement-20261106
+  remotes/origin/hcv-admin-error-copy-lock-20261029
+  remotes/origin/hcv-admin-ux-20261105
+  remotes/origin/hcv-admin-ux-error-boundary-20261106
+  remotes/origin/hcv-admin-ux-error-boundary-20261106b
+  remotes/origin/hcv-admin-ux-improvement-20261106
+  remotes/origin/hcv-ai-grounding-lock-20261029
+  remotes/origin/hcv-ai-grounding-test-lock-20261029
+  remotes/origin/hcv-answers-lock-20261029
+  remotes/origin/hcv-api-contract-test-20261106
+  remotes/origin/hcv-audit-trail-spec-20261106
+  remotes/origin/hcv-backup-recovery-20261106
+  remotes/origin/hcv-backup-recovery-test-20261106
+  remotes/origin/hcv-buyer-pack-extension-20261106
+  remotes/origin/hcv-buyer-pack-synthetic-20261106
+  remotes/origin/hcv-buyer-pack-synthetic-extension-20261106
+  remotes/origin/hcv-buyer-pack-validation-20261106
+  remotes/origin/hcv-canonical-lock-20261029
+  remotes/origin/hcv-canonical-lock2-20261029
+  remotes/origin/hcv-claim-edit-lock-20261029
+  remotes/origin/hcv-compliance-reports-20261106
+  remotes/origin/hcv-control-mcp-issue-busy
+  remotes/origin/hcv-csp-policy-20261106
+  remotes/origin/hcv-data-retention-policy-20261106
+  remotes/origin/hcv-db-source-lock-20261029
+  remotes/origin/hcv-demo-data-test-20261106
+  remotes/origin/hcv-demo-data-test2-20261106
+  remotes/origin/hcv-demo-data-validation-20261106
+  remotes/origin/hcv-demo-pack-lock-20261029
+  remotes/origin/hcv-docs-20261105
+  remotes/origin/hcv-docs-api-reference-20261106
+  remotes/origin/hcv-e2e-tenant-isolation-20261106
+  remotes/origin/hcv-edge-case-tests-20261104
+  remotes/origin/hcv-edge-case-tests-20261104-rebased
+  remotes/origin/hcv-env-server-lock-20261029
+  remotes/origin/hcv-error-catalog-20261106
+  remotes/origin/hcv-error-component-alerts-20261029
+  remotes/origin/hcv-error-component-lock2-20261029
+  remotes/origin/hcv-error-handling-20261105
+  remotes/origin/hcv-error-handling-improvement-20261106
+  remotes/origin/hcv-error-handling-test-20261106
+  remotes/origin/hcv-evidence-index-alerts-20261029
+  remotes/origin/hcv-expiry-lock-20261029
+  remotes/origin/hcv-extraction-lock-20261029
+  remotes/origin/hcv-file-to-base64-lock-20261029
+  remotes/origin/hcv-files-lock-20261029
+  remotes/origin/hcv-format-wallet-timestamp-lock-20261029
+  remotes/origin/hcv-health-checks-20261106
+  remotes/origin/hcv-ids-lock-20261029
+  remotes/origin/hcv-incident-response-runbook-20261106
+  remotes/origin/hcv-index-alerts-20261029
+  remotes/origin/hcv-integration-api-20261106
+  remotes/origin/hcv-integration-test-20261106
+  remotes/origin/hcv-invalidation-lock-20261029
+  remotes/origin/hcv-legal-docs-clean-20261106
+  remotes/origin/hcv-limits-lock-20261029
+  remotes/origin/hcv-live-region-announcements-20261029
+  remotes/origin/hcv-logging-improvement-20261106
+  remotes/origin/hcv-logging-standards-20261106
+  remotes/origin/hcv-mcp-owner-status
+  remotes/origin/hcv-mcp-owner-status-2
+  remotes/origin/hcv-mcp-setup-ui-lock-20261029
+  remotes/origin/hcv-money-lock-20261029
+  remotes/origin/hcv-monitoring-alerts-20261106
+  remotes/origin/hcv-monitoring-improvement-20261106
+  remotes/origin/hcv-observability-lock
+  remotes/origin/hcv-observability-metrics-extension-20261106
+  remotes/origin/hcv-observability-test-20261106
+  remotes/origin/hcv-onboarding-accessibility-20261106
+  remotes/origin/hcv-onboarding-docs-20261105
+  remotes/origin/hcv-onboarding-flow-20261106
+  remotes/origin/hcv-onboarding-improvement-20261106
+  remotes/origin/hcv-operator-board-lock-20261029
+  remotes/origin/hcv-pack-export-lock-20261029
+  remotes/origin/hcv-performance-baseline-20261106
+  remotes/origin/hcv-performance-test-20261106
+  remotes/origin/hcv-pr1458-prompt-safety
+  remotes/origin/hcv-pr1459-observability
+  remotes/origin/hcv-pr1460-buyer-pack
+  remotes/origin/hcv-pr1461-error-boundary
+  remotes/origin/hcv-preview-embedder-origin-lock-20261029
+  remotes/origin/hcv-privacy-data-handling-20261106
+  remotes/origin/hcv-prompt-safety-corpus-lock-20261106
+  remotes/origin/hcv-prompt-safety-lock-20261029
+  remotes/origin/hcv-query-client-lock-20261029
+  remotes/origin/hcv-questionnaire-templates-lock-20261029
+  remotes/origin/hcv-questions-lock-20261029
+  remotes/origin/hcv-roles-lock-20261029
+  remotes/origin/hcv-rsfm-control-plane-lock-20261029
+  remotes/origin/hcv-rules-lock-20261029
+  remotes/origin/hcv-security-audit-prep-20261106
+  remotes/origin/hcv-security-hardening-20261106
+  remotes/origin/hcv-security-headers-20261029
+  remotes/origin/hcv-security-headers-20261106
+  remotes/origin/hcv-status-lock-20261029
+  remotes/origin/hcv-status-properties-lock-20261029
+  remotes/origin/hcv-utils-lock-20261029
+  remotes/origin/hcv-utils-lock2-20261029
+  remotes/origin/independent-verification-20260908
+  remotes/origin/legal/uk-launch-docs-20261103
+  remotes/origin/local-chore
+  remotes/origin/master
+  remotes/origin/oc/task-1
+  remotes/origin/oc/task-10
+  remotes/origin/oc/task-19
+  remotes/origin/oc/task-3
+  remotes/origin/oc/task-9
+  remotes/origin/opencode/issue122-20261012000615
+  remotes/origin/opencode/issue55-20261011010153
+  remotes/origin/opencode/issue66-20261011011604
+  remotes/origin/opencode/issue68-20261011024833
+  remotes/origin/opencode/issue69-20261011012246
+  remotes/origin/opencode/issue77-20261011075035
+  remotes/origin/opencode/issue82-20261011003157
+  remotes/origin/opencode/issue83-20261011021115
+  remotes/origin/ops/bew-blocker-prep-20261007
+  remotes/origin/ops/bew-blocker-removal-20261007
+  remotes/origin/ops/bew-commercial-specialists-20261006
+  remotes/origin/ops/bew-legal-acceptance-20261007
+  remotes/origin/ops/bew-legal-identity-20261007
+  remotes/origin/ops/bew-release-verifiers-20261006
+  remotes/origin/ops/bew-remaining-gate-workers-20261007
+  remotes/origin/ops/bew-remaining-slice-workers-20261007
+  remotes/origin/ops/bew-s007-review-pack-output-20261007
+  remotes/origin/ops/bew-s007-review-pack-refresh-20261007
+  remotes/origin/ops/bew-s011-dogfood-20261007
+  remotes/origin/ops/bew-s011-evidence-20261007
+  remotes/origin/ops/bew-s017-verifier-20261006
+  remotes/origin/ops/bew-s022-closure-20261007
+  remotes/origin/ops/bew-s023-closure-20261007
+  remotes/origin/ops/bew-s027-closure-20261007
+  remotes/origin/ops/bew-s028-canonical-integration-20261007
+  remotes/origin/ops/bew-s028-closure-20261007
+  remotes/origin/ops/bew-s028-integrate-20261007
+  remotes/origin/ops/bew-s031-live-protection-probe-20261007
+  remotes/origin/ops/bew-s031-plan-blocker-output-20261007
+  remotes/origin/ops/bew-s031-plan-blocker-refresh-20261007
+  remotes/origin/ops/bew-s032-antigravity-review-20261007
+  remotes/origin/ops/bew-s035-focus-integration-20261007
+  remotes/origin/ops/bew-s035-focus-integration-v2-20261007
+  remotes/origin/ops/bew-s035-reconcile-20261007
+  remotes/origin/ops/bew-unfinished-workers-20261007
+  remotes/origin/ops/runner-pool-burst-20260926
+  remotes/origin/ops/security-audit-gate-repin-20261007
+  remotes/origin/ops/security-audit-recon-20261007
+  remotes/origin/pilot/controlled-2026-09-08
+  remotes/origin/policy/nvidia-factory-owner-rule-20261008
+  remotes/origin/pr-214
+  remotes/origin/prep/bew-s022-privacy-20261007
+  remotes/origin/prep/bew-s027-legal-20261007
+  remotes/origin/rc/ew-20261121
+  remotes/origin/rea/evidence-wallet-compliance
+  remotes/origin/rea16/c-01
+  remotes/origin/rea16/c-02
+  remotes/origin/rea16/c-03
+  remotes/origin/rea16/c-04
+  remotes/origin/rea16/c-04-contradictory-certificates
+  remotes/origin/rea16/c-05
+  remotes/origin/rea16/c-06
+  remotes/origin/rea16/d-housingcase/pango-inspection-comparison
+  remotes/origin/rea16/d-housingcase/pango-per-door-job-management
+  remotes/origin/readiness/ew-1023-02-localgate
+  remotes/origin/readiness/ew-1023-03-rollback
+  remotes/origin/readiness/ew-1025-02-master-sha
+  remotes/origin/readiness/ew-1025-04-pilot-onboard
+  remotes/origin/readiness/ew-1025-05-buyer-honesty
+  remotes/origin/readiness/ew-1025-07-operator-checklist
+  remotes/origin/readiness/ew-1025-08-a11y-statement
+  remotes/origin/readiness/ew-1025-09-rls-honesty
+  remotes/origin/readiness/ew-1025-14-security-headers-lock
+  remotes/origin/readiness/ew-1025-15-rate-limit-scopes-lock
+  remotes/origin/readiness/ew-1025-16-release-sha-be84
+  remotes/origin/readiness/ew-1025-17-session-cookie-lock
+  remotes/origin/readiness/ew-1025-18-zip-slip-lock
+  remotes/origin/readiness/ew-1025-19-embedder-origin-lock
+  remotes/origin/readiness/ew-1025-20-password-bounds
+  remotes/origin/readiness/ew-1025-21-parse-budget-lock
+  remotes/origin/readiness/ew-1025-22-ai-timeout-lock
+  remotes/origin/readiness/ew-1025-23-pdf-inflate-lock
+  remotes/origin/readiness/ew-1025-24-file-bytes-lock
+  remotes/origin/readiness/ew-1025-25-admin-error-copy
+  remotes/origin/readiness/ew-1025-26-incident-drill
+  remotes/origin/readiness/ew-1025-27-paste-text-lock
+  remotes/origin/readiness/ew-1025-28-invite-token-lock
+  remotes/origin/readiness/ew-1025-29-health-ready-lock
+  remotes/origin/readiness/ew-1025-30-job-stale-lock
+  remotes/origin/readiness/ew-1025-31-count-limits-lock
+  remotes/origin/readiness/ew-1025-32-pack-recompute-batch
+  remotes/origin/readiness/ew-1025-33-text-limits-lock
+  remotes/origin/readiness/ew-1025-34-money-parse-lock
+  remotes/origin/readiness/ew-1025-35-demo-pack-synthetic
+  remotes/origin/readiness/ew-1025-36-canonical-keys-lock
+  remotes/origin/readiness/ew-1025-37-prompt-safety-corpus-lock
+  remotes/origin/readiness/ew-1025-38-expiry-bucket-honesty
+  remotes/origin/readiness/ew-1025-39-roles-permissions-lock
+  remotes/origin/readiness/ew-1025-40-conflict-engine-lock
+  remotes/origin/readiness/ew-1025-41-answer-fail-closed-lock
+  remotes/origin/readiness/ew-1025-42-invalidation-lock
+  remotes/origin/readiness/ew-1025-43-claim-edit-honesty
+  remotes/origin/readiness/ew-1025-44-threshold-currency-lock
+  remotes/origin/readiness/ew-1025-45-ai-grounding-lock
+  remotes/origin/readiness/ew-1025-46-pack-export-honesty
+  remotes/origin/readiness/ew-1025-47-operator-board-lock
+  remotes/origin/readiness/ew-1025-48-status-properties-lock
+  remotes/origin/readiness/ew-1025-49-negative-evidence-lock
+  remotes/origin/readiness/ew-1025-50-extraction-limits-lock
+  remotes/origin/readiness/ew-1025-55-parse-numeric-lock
+  remotes/origin/readiness/ew-1025-89-opportunities-lock
+  remotes/origin/readiness/ew-1025-90-opportunity-prep-lock
+  remotes/origin/readiness/ew-1025-94-entity-graph-lock
+  remotes/origin/readiness/ew-1025-96-compliance-alerts-lock
+  remotes/origin/readiness/ew-1026-62-neon-pool-options-lock
+  remotes/origin/readiness/ew-1026-authority-level-max
+  remotes/origin/readiness/ew-1026-permissions-encrypted-media-deny
+  remotes/origin/readiness/ew-1026-permissions-hid-deny
+  remotes/origin/readiness/ew-1026-purpose-max
+  remotes/origin/readiness/ew-1027-04-post-slices-verify
+  remotes/origin/readiness/ew-1027-admin-ux
+  remotes/origin/readiness/ew-1027-audit-aria-busy
+  remotes/origin/readiness/ew-1027-audit-empty-gate
+  remotes/origin/readiness/ew-1027-audit-loop-events-busy
+  remotes/origin/readiness/ew-1027-beyond-health-ready-metrics
+  remotes/origin/readiness/ew-1027-claims-empty-gate
+  remotes/origin/readiness/ew-1027-compliance-empty-gate
+  remotes/origin/readiness/ew-1027-compliance-entities-busy
+  remotes/origin/readiness/ew-1027-compliance-renewals-aria-busy
+  remotes/origin/readiness/ew-1027-coop-corp-headers
+  remotes/origin/readiness/ew-1027-decisions-empty-gate
+  remotes/origin/readiness/ew-1027-domain-lock-honesty
+  remotes/origin/readiness/ew-1027-empty-gate-fix
+  remotes/origin/readiness/ew-1027-entities-aria-busy
+  remotes/origin/readiness/ew-1027-entities-catalog-busy
+  remotes/origin/readiness/ew-1027-entities-load-alerts
+  remotes/origin/readiness/ew-1027-entities-paths-busy
+  remotes/origin/readiness/ew-1027-entity-name-max-wire
+  remotes/origin/readiness/ew-1027-evidence-claims-busy
+  remotes/origin/readiness/ew-1027-evidence-empty-gate
+  remotes/origin/readiness/ew-1027-exports-empty-gate
+  remotes/origin/readiness/ew-1027-facts-empty-gate
+  remotes/origin/readiness/ew-1027-facts-history-aria-busy
+  remotes/origin/readiness/ew-1027-file-to-base64-bytes
+  remotes/origin/readiness/ew-1027-gateway-http-typecheck
+  remotes/origin/readiness/ew-1027-hsts-header-lock
+  remotes/origin/readiness/ew-1027-hsts-lock-test-fix
+  remotes/origin/readiness/ew-1027-incident-drill-fix
+  remotes/origin/readiness/ew-1027-incident-drill-fix-2
+  remotes/origin/readiness/ew-1027-incident-metrics-lock
+  remotes/origin/readiness/ew-1027-index-docs-busy
+  remotes/origin/readiness/ew-1027-lint-nvidia-empty-catch
+  remotes/origin/readiness/ew-1027-lint-unused-vars-cleanup
+  remotes/origin/readiness/ew-1027-metrics-observability-lock
+  remotes/origin/readiness/ew-1027-monitoring-verify
+  remotes/origin/readiness/ew-1027-opportunities-aria-busy
+  remotes/origin/readiness/ew-1027-opportunities-aria-busy-fix
+  remotes/origin/readiness/ew-1027-opportunities-empty-gate
+  remotes/origin/readiness/ew-1027-opportunities-templates-aria
+  remotes/origin/readiness/ew-1027-opportunities-templates-busy
+  remotes/origin/readiness/ew-1027-orgs-aria-busy
+  remotes/origin/readiness/ew-1027-orgs-aria-busy-lock
+  remotes/origin/readiness/ew-1027-overview-stats-busy
+  remotes/origin/readiness/ew-1027-packs-detail-aria-busy
+  remotes/origin/readiness/ew-1027-packs-empty-gate
+  remotes/origin/readiness/ew-1027-packs-prefs-busy
+  remotes/origin/readiness/ew-1027-packs-prefs-lock-fix
+  remotes/origin/readiness/ew-1027-permissions-all-screens-capture-deny
+  remotes/origin/readiness/ew-1027-permissions-browser-install-deny
+  remotes/origin/readiness/ew-1027-permissions-capture-deny
+  remotes/origin/readiness/ew-1027-permissions-capture-deny-fix
+  remotes/origin/readiness/ew-1027-permissions-captured-surface-control-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-device-memory-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-downlink-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-dpr-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ect-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-lang-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-prefers-color-scheme-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-prefers-reduced-motion-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-rtt-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-save-data-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-arch-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-bitness-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-form-factors-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-full-version-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-full-version-list-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-high-entropy-values-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-mobile-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-model-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-platform-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-platform-version-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-wow64-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-viewport-height-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-viewport-width-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-width-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-width-deny-v2
+  remotes/origin/readiness/ew-1027-permissions-compute-pressure-deny
+  remotes/origin/readiness/ew-1027-permissions-conversion-measurement-deny
+  remotes/origin/readiness/ew-1027-permissions-deferred-fetch-deny
+  remotes/origin/readiness/ew-1027-permissions-deferred-fetch-minimal-deny
+  remotes/origin/readiness/ew-1027-permissions-digital-credentials-get-deny
+  remotes/origin/readiness/ew-1027-permissions-document-write-deny
+  remotes/origin/readiness/ew-1027-permissions-focus-without-user-activation-deny
+  remotes/origin/readiness/ew-1027-permissions-html-attribute-or-property-deny
+  remotes/origin/readiness/ew-1027-permissions-identity-credentials-create-deny
+  remotes/origin/readiness/ew-1027-permissions-interest-cohort-deny
+  remotes/origin/readiness/ew-1027-permissions-join-ad-interest-group-deny
+  remotes/origin/readiness/ew-1027-permissions-keyboard-map-deny
+  remotes/origin/readiness/ew-1027-permissions-language-detector-deny
+  remotes/origin/readiness/ew-1027-permissions-layout-animations-deny
+  remotes/origin/readiness/ew-1027-permissions-legacy-image-formats-deny
+  remotes/origin/readiness/ew-1027-permissions-manual-text-deny
+  remotes/origin/readiness/ew-1027-permissions-navigation-override-deny
+  remotes/origin/readiness/ew-1027-permissions-on-device-speech-recognition-deny
+  remotes/origin/readiness/ew-1027-permissions-on-device-speech-recognition-deny-2
+  remotes/origin/readiness/ew-1027-permissions-oversized-images-deny
+  remotes/origin/readiness/ew-1027-permissions-private-aggregation-deny
+  remotes/origin/readiness/ew-1027-permissions-private-state-token-issuance-deny
+  remotes/origin/readiness/ew-1027-permissions-private-state-token-redemption-deny
+  remotes/origin/readiness/ew-1027-permissions-publickey-credentials-create-deny
+  remotes/origin/readiness/ew-1027-permissions-publickey-credentials-get-deny
+  remotes/origin/readiness/ew-1027-permissions-rewriter-deny
+  remotes/origin/readiness/ew-1027-permissions-run-ad-auction-deny
+  remotes/origin/readiness/ew-1027-permissions-shared-storage-select-url-deny
+  remotes/origin/readiness/ew-1027-permissions-smart-card-deny
+  remotes/origin/readiness/ew-1027-permissions-speaker-deny
+  remotes/origin/readiness/ew-1027-permissions-summarizer-deny
+  remotes/origin/readiness/ew-1027-permissions-sync-script-deny
+  remotes/origin/readiness/ew-1027-permissions-translator-deny
+  remotes/origin/readiness/ew-1027-permissions-trust-token-redemption-deny
+  remotes/origin/readiness/ew-1027-permissions-unload-deny
+  remotes/origin/readiness/ew-1027-permissions-unoptimized-images-deny
+  remotes/origin/readiness/ew-1027-permissions-vertical-scroll-deny
+  remotes/origin/readiness/ew-1027-permissions-wake-lock-deny
+  remotes/origin/readiness/ew-1027-permissions-webxr-deny
+  remotes/origin/readiness/ew-1027-permissions-writer-deny
+  remotes/origin/readiness/ew-1027-permissions-xr-deny
+  remotes/origin/readiness/ew-1027-pg-local-stage-bins
+  remotes/origin/readiness/ew-1027-pg-local-stage-once
+  remotes/origin/readiness/ew-1027-pg-local-stage-share
+  remotes/origin/readiness/ew-1027-questionnaires-empty-gate
+  remotes/origin/readiness/ew-1027-release-branching-row-fix
+  remotes/origin/readiness/ew-1027-release-branching-tip-note
+  remotes/origin/readiness/ew-1027-release-truth-tip-9a9b
+  remotes/origin/readiness/ew-1027-release-truth-tip-format
+  remotes/origin/readiness/ew-1027-secret-scan-fixture-dummies
+  remotes/origin/readiness/ew-1027-security-headers-lock-sync
+  remotes/origin/readiness/ew-1027-team-agents-aria-busy
+  remotes/origin/readiness/ew-1027-team-empty-gate
+  remotes/origin/readiness/ew-1027-team-invites-caps-busy
+  remotes/origin/readiness/ew-1027-with-app-env-exec
+  remotes/origin/readiness/ew-commercial-registers
+  remotes/origin/readiness/ew-compliance-request-alert
+  remotes/origin/readiness/ew-fix-bt1
+  remotes/origin/readiness/ew-fix-bt1-bt2
+  remotes/origin/readiness/ew-fix-bt1-pdf-parse
+  remotes/origin/readiness/ew-fix-bt2
+  remotes/origin/readiness/ew-fix-bt3
+  remotes/origin/readiness/ew-fixes-comprehensive
+  remotes/origin/readiness/ew-gateway-unused-deny
+  remotes/origin/readiness/ew-invite-mailer
+  remotes/origin/readiness/ew-local-gate
+  remotes/origin/readiness/ew-nvidia-runtime-guard
+  remotes/origin/readiness/ew-observability
+  remotes/origin/readiness/ew-registers-r5
+  remotes/origin/readiness/ew-registers-r7
+  remotes/origin/readiness/ew-t32-droplet-mcp
+  remotes/origin/readiness/ew-template-id-set
+  remotes/origin/readiness/ew-tenant-guc-order
+  remotes/origin/readiness/fix-incident-drill-lock
+  remotes/origin/readiness/gh-runner-estate-pin-bump
+  remotes/origin/readiness/hcv-a11y-status
+  remotes/origin/readiness/hcv-acceptance-matrix
+  remotes/origin/readiness/hcv-admin-error-bearer-scrub
+  remotes/origin/readiness/hcv-admin-ux
+  remotes/origin/readiness/hcv-agent-limits-lock
+  remotes/origin/readiness/hcv-agent-loop-limits-lock
+  remotes/origin/readiness/hcv-ai-grounding-edges
+  remotes/origin/readiness/hcv-ai-grounding-lock
+  remotes/origin/readiness/hcv-ai-grounding-tokens
+  remotes/origin/readiness/hcv-answer-bank-freshness-lock
+  remotes/origin/readiness/hcv-answers
+  remotes/origin/readiness/hcv-answers-human-decision
+  remotes/origin/readiness/hcv-app-session-busy
+  remotes/origin/readiness/hcv-assertion-limits-lock
+  remotes/origin/readiness/hcv-audit-alerts
+  remotes/origin/readiness/hcv-audit-empty-status
+  remotes/origin/readiness/hcv-audit-error-alerts
+  remotes/origin/readiness/hcv-audit-gateway-auth-busy
+  remotes/origin/readiness/hcv-audit-gateway-loading-status
+  remotes/origin/readiness/hcv-audit-list-aria-label
+  remotes/origin/readiness/hcv-audit-loop-events-busy
+  remotes/origin/readiness/hcv-audit-loop-events-loading-status
+  remotes/origin/readiness/hcv-audit-loop-runs-busy
+  remotes/origin/readiness/hcv-audit-loops-loading-status
+  remotes/origin/readiness/hcv-audit-org-events-busy
+  remotes/origin/readiness/hcv-browser-sandbox-hostile-lock
+  remotes/origin/readiness/hcv-browser-sandbox-policy-lock
+  remotes/origin/readiness/hcv-buyer-pack
+  remotes/origin/readiness/hcv-canonical-keys
+  remotes/origin/readiness/hcv-canonical-keys-complete
+  remotes/origin/readiness/hcv-canonical-keys-lock
+  remotes/origin/readiness/hcv-canonical-null-guard
+  remotes/origin/readiness/hcv-claim-edit-failclosed-lock
+  remotes/origin/readiness/hcv-claim-edit-injection
+  remotes/origin/readiness/hcv-claims-empty
+  remotes/origin/readiness/hcv-clock-fail-closed
+  remotes/origin/readiness/hcv-compliance-alerts
+  remotes/origin/readiness/hcv-compliance-board-busy-lock
+  remotes/origin/readiness/hcv-compliance-board-loading-status
+  remotes/origin/readiness/hcv-compliance-empty-status
+  remotes/origin/readiness/hcv-compliance-entities-loading-status
+  remotes/origin/readiness/hcv-compliance-entities-select-loading-status
+  remotes/origin/readiness/hcv-compliance-list-aria-label
+  remotes/origin/readiness/hcv-compliance-obligation-actions-busy
+  remotes/origin/readiness/hcv-compliance-obligations-busy
+  remotes/origin/readiness/hcv-compliance-refresh-busy
+  remotes/origin/readiness/hcv-compliance-renewals-busy-lock
+  remotes/origin/readiness/hcv-compliance-renewals-loading-status
+  remotes/origin/readiness/hcv-compliance-tables-aria-label
+  remotes/origin/readiness/hcv-conflicts-active-status-lock
+  remotes/origin/readiness/hcv-conflicts-agree
+  remotes/origin/readiness/hcv-control-mcp-alerts
+  remotes/origin/readiness/hcv-control-mcp-aria-label
+  remotes/origin/readiness/hcv-control-mcp-owner-status
+  remotes/origin/readiness/hcv-control-mcp-status-busy-lock
+  remotes/origin/readiness/hcv-control-mcp-status-loading-status
+  remotes/origin/readiness/hcv-currency-conflict
+  remotes/origin/readiness/hcv-decisions-alerts
+  remotes/origin/readiness/hcv-decisions-empty-status
+  remotes/origin/readiness/hcv-decisions-inbox-busy-lock
+  remotes/origin/readiness/hcv-decisions-list-aria-label
+  remotes/origin/readiness/hcv-decisions-nested-list-aria-label
+  remotes/origin/readiness/hcv-decisions-scan-busy
+  remotes/origin/readiness/hcv-decisions-sibling-actions-busy
+  remotes/origin/readiness/hcv-demo-files-shape
+  remotes/origin/readiness/hcv-demo-pack-deterministic-lock
+  remotes/origin/readiness/hcv-demo-pack-lock
+  remotes/origin/readiness/hcv-doc-model-alert
+  remotes/origin/readiness/hcv-entities-alerts
+  remotes/origin/readiness/hcv-entities-answer-bank-busy
+  remotes/origin/readiness/hcv-entities-answers-loading-status
+  remotes/origin/readiness/hcv-entities-catalog-list-aria-label
+  remotes/origin/readiness/hcv-entities-create-busy
+  remotes/origin/readiness/hcv-entities-create-typed-busy
+  remotes/origin/readiness/hcv-entities-empty-status
+  remotes/origin/readiness/hcv-entities-inbound-busy
+  remotes/origin/readiness/hcv-entities-inbound-loading-status
+  remotes/origin/readiness/hcv-entities-list-busy
+  remotes/origin/readiness/hcv-entities-merge-entities-busy
+  remotes/origin/readiness/hcv-entities-neighborhood-busy
+  remotes/origin/readiness/hcv-entities-neighborhood-loading-status
+  remotes/origin/readiness/hcv-entities-paths-busy
+  remotes/origin/readiness/hcv-entities-preferences-busy
+  remotes/origin/readiness/hcv-entities-preferences-empty-status
+  remotes/origin/readiness/hcv-entities-preferences-loading-status
+  remotes/origin/readiness/hcv-entities-register-relation-busy
+  remotes/origin/readiness/hcv-entities-relation-catalog-busy
+  remotes/origin/readiness/hcv-entities-relation-catalog-loading-status
+  remotes/origin/readiness/hcv-entities-relations-aria-label
+  remotes/origin/readiness/hcv-entities-relations-busy
+  remotes/origin/readiness/hcv-entities-relations-loading-status
+  remotes/origin/readiness/hcv-entities-review-inbound-busy
+  remotes/origin/readiness/hcv-entities-stale-keys-status
+  remotes/origin/readiness/hcv-entities-type-catalog-busy
+  remotes/origin/readiness/hcv-entity-graph-cycle-lock
+  remotes/origin/readiness/hcv-entity-limits-lock
+  remotes/origin/readiness/hcv-entity-type-parse-lock
+  remotes/origin/readiness/hcv-error-handling
+  remotes/origin/readiness/hcv-error-main-landmark
+  remotes/origin/readiness/hcv-evidence-claims-busy
+  remotes/origin/readiness/hcv-evidence-claims-loading-status
+  remotes/origin/readiness/hcv-evidence-doc-busy-lock
+  remotes/origin/readiness/hcv-evidence-doc-claims-aria-label
+  remotes/origin/readiness/hcv-evidence-doc-empty-status
+  remotes/origin/readiness/hcv-evidence-doc-loading-status
+  remotes/origin/readiness/hcv-evidence-doc-org-busy
+  remotes/origin/readiness/hcv-evidence-docs-loading-status
+  remotes/origin/readiness/hcv-evidence-document-busy
+  remotes/origin/readiness/hcv-evidence-empty-status
+  remotes/origin/readiness/hcv-evidence-index-busy-lock
+  remotes/origin/readiness/hcv-evidence-list
+  remotes/origin/readiness/hcv-evidence-list-aria-label
+  remotes/origin/readiness/hcv-evidence-request-templates-lock
+  remotes/origin/readiness/hcv-evidence-showmore-aria
+  remotes/origin/readiness/hcv-evidence-text-unsafe-lock
+  remotes/origin/readiness/hcv-evidence-viewer-status
+  remotes/origin/readiness/hcv-expiry-buckets
+  remotes/origin/readiness/hcv-expiry-budget
+  remotes/origin/readiness/hcv-expiry-date-null
+  remotes/origin/readiness/hcv-expiry-extract-null
+  remotes/origin/readiness/hcv-expiry-normalize-null
+  remotes/origin/readiness/hcv-expiry-text-null
+  remotes/origin/readiness/hcv-exports-alerts
+  remotes/origin/readiness/hcv-exports-busy
+  remotes/origin/readiness/hcv-exports-empty-status
+  remotes/origin/readiness/hcv-exports-list-aria-label
+  remotes/origin/readiness/hcv-extract-null
+  remotes/origin/readiness/hcv-extraction-injection
+  remotes/origin/readiness/hcv-extraction-mixed-cover
+  remotes/origin/readiness/hcv-facts-alerts
+  remotes/origin/readiness/hcv-facts-assert-siblings-busy
+  remotes/origin/readiness/hcv-facts-assertions-busy
+  remotes/origin/readiness/hcv-facts-assertions-loading-status
+  remotes/origin/readiness/hcv-facts-authority-busy
+  remotes/origin/readiness/hcv-facts-authority-jsx
+  remotes/origin/readiness/hcv-facts-authority-loading-status
+  remotes/origin/readiness/hcv-facts-claims-loading-busy
+  remotes/origin/readiness/hcv-facts-claims-loading-status
+  remotes/origin/readiness/hcv-facts-empty-status
+  remotes/origin/readiness/hcv-facts-history-busy
+  remotes/origin/readiness/hcv-facts-history-loading-status
+  remotes/origin/readiness/hcv-facts-list-aria-label
+  remotes/origin/readiness/hcv-facts-nested-list-aria-label
+  remotes/origin/readiness/hcv-facts-org-still-loading-busy
+  remotes/origin/readiness/hcv-facts-review-queue-busy
+  remotes/origin/readiness/hcv-facts-showmore-aria
+  remotes/origin/readiness/hcv-facts-wallet-busy
+  remotes/origin/readiness/hcv-facts-wallet-loading-status
+  remotes/origin/readiness/hcv-files-blocked-ext-lock
+  remotes/origin/readiness/hcv-files-null
+  remotes/origin/readiness/hcv-files-validate-upload
+  remotes/origin/readiness/hcv-focus-scroll-margin
+  remotes/origin/readiness/hcv-form-agent-dry-run-lock
+  remotes/origin/readiness/hcv-gateway-purpose-untrusted-lock
+  remotes/origin/readiness/hcv-home-account-status
+  remotes/origin/readiness/hcv-home-session-busy
+  remotes/origin/readiness/hcv-host-busy-lock-repair
+  remotes/origin/readiness/hcv-host-gate-honesty
+  remotes/origin/readiness/hcv-ids-invite
+  remotes/origin/readiness/hcv-ids-invite-lock
+  remotes/origin/readiness/hcv-ids-invite-shape
+  remotes/origin/readiness/hcv-inbox-ingestion-quarantine-lock
+  remotes/origin/readiness/hcv-index-demo-loading-status
+  remotes/origin/readiness/hcv-index-expiry-buckets-loading-status
+  remotes/origin/readiness/hcv-index-expiry-empty-status
+  remotes/origin/readiness/hcv-index-expiry-error-alert
+  remotes/origin/readiness/hcv-invalidation-reeval-lock
+  remotes/origin/readiness/hcv-kill-switches-fail-closed-lock
+  remotes/origin/readiness/hcv-lock-sync-1179
+  remotes/origin/readiness/hcv-login-busy
+  remotes/origin/readiness/hcv-login-busy-status
+  remotes/origin/readiness/hcv-login-closed-status
+  remotes/origin/readiness/hcv-master-honesty
+  remotes/origin/readiness/hcv-money-candidates-lock
+  remotes/origin/readiness/hcv-money-null
+  remotes/origin/readiness/hcv-money-null-guard
+  remotes/origin/readiness/hcv-no-price-honesty
+  remotes/origin/readiness/hcv-obligation-key-limits-lock
+  remotes/origin/readiness/hcv-observability
+  remotes/origin/readiness/hcv-observability-lock
+  remotes/origin/readiness/hcv-onboarding
+  remotes/origin/readiness/hcv-operator-board-empty
+  remotes/origin/readiness/hcv-operator-board-lock
+  remotes/origin/readiness/hcv-opp-drafts-busy
+  remotes/origin/readiness/hcv-opp-quotes-busy
+  remotes/origin/readiness/hcv-opp-ranked-busy
+  remotes/origin/readiness/hcv-opp-requests-busy
+  remotes/origin/readiness/hcv-opp-templates-busy
+  remotes/origin/readiness/hcv-opportunities-alerts
+  remotes/origin/readiness/hcv-opportunities-empty-status
+  remotes/origin/readiness/hcv-opportunities-ingest-busy
+  remotes/origin/readiness/hcv-opportunities-list-aria-label
+  remotes/origin/readiness/hcv-opportunities-quotes-drafts-aria-label
+  remotes/origin/readiness/hcv-opportunities-score-lock
+  remotes/origin/readiness/hcv-opportunities-scoring-lock
+  remotes/origin/readiness/hcv-opportunities-templates-loading-status
+  remotes/origin/readiness/hcv-org-list-status
+  remotes/origin/readiness/hcv-org-nav-aria-current
+  remotes/origin/readiness/hcv-org-nav-aria-current-r2
+  remotes/origin/readiness/hcv-org-overview-list-aria-label
+  remotes/origin/readiness/hcv-org-shell-busy
+  remotes/origin/readiness/hcv-orgs-create-join-busy
+  remotes/origin/readiness/hcv-orgs-empty
+  remotes/origin/readiness/hcv-orgs-list-aria-label
+  remotes/origin/readiness/hcv-orgs-list-busy-lock
+  remotes/origin/readiness/hcv-orgshell-menu-focus-return
+  remotes/origin/readiness/hcv-overview-alerts
+  remotes/origin/readiness/hcv-overview-checklist-aria-label
+  remotes/origin/readiness/hcv-overview-demo-busy-lock
+  remotes/origin/readiness/hcv-overview-expiry-board-busy
+  remotes/origin/readiness/hcv-overview-expiry-buckets-busy
+  remotes/origin/readiness/hcv-overview-stats-busy-lock
+  remotes/origin/readiness/hcv-overview-stats-loading-status
+  remotes/origin/readiness/hcv-pack-autofill-grounded-lock
+  remotes/origin/readiness/hcv-pack-detail-alerts
+  remotes/origin/readiness/hcv-pack-export-green
+  remotes/origin/readiness/hcv-pack-export-integrity-lock
+  remotes/origin/readiness/hcv-packs-alerts
+  remotes/origin/readiness/hcv-packs-detail-busy-lock
+  remotes/origin/readiness/hcv-packs-detail-list-aria-label
+  remotes/origin/readiness/hcv-packs-detail-loading-status
+  remotes/origin/readiness/hcv-packs-detail-secondary-loading-status
+  remotes/origin/readiness/hcv-packs-details-busy
+  remotes/origin/readiness/hcv-packs-empty-status
+  remotes/origin/readiness/hcv-packs-index-busy-lock
+  remotes/origin/readiness/hcv-packs-list-aria-label
+  remotes/origin/readiness/hcv-packs-note-assign-busy
+  remotes/origin/readiness/hcv-packs-showmore-aria
+  remotes/origin/readiness/hcv-parseflexdate-null-guard
+  remotes/origin/readiness/hcv-policy-human-only-lock
+  remotes/origin/readiness/hcv-prompt-injection-punctuation
+  remotes/origin/readiness/hcv-prompt-safety-lock
+  remotes/origin/readiness/hcv-prompt-strip-markers
+  remotes/origin/readiness/hcv-prompt-wrap
+  remotes/origin/readiness/hcv-qn-detail-busy-lock
+  remotes/origin/readiness/hcv-qn-detail-list-aria-label
+  remotes/origin/readiness/hcv-qn-index-busy-lock
+  remotes/origin/readiness/hcv-qn-list-aria-label
+  remotes/origin/readiness/hcv-qn-templates-list-aria-label
+  remotes/origin/readiness/hcv-questionnaire-detail-busy
+  remotes/origin/readiness/hcv-questionnaire-detail-loading-status
+  remotes/origin/readiness/hcv-questionnaire-missing
+  remotes/origin/readiness/hcv-questionnaire-templates-lock
+  remotes/origin/readiness/hcv-questionnaires-add-loading-status
+  remotes/origin/readiness/hcv-questionnaires-alerts
+  remotes/origin/readiness/hcv-questionnaires-empty-status
+  remotes/origin/readiness/hcv-questionnaires-list-loading-status
+  remotes/origin/readiness/hcv-questions-max
+  remotes/origin/readiness/hcv-questions-null
+  remotes/origin/readiness/hcv-questions-parse-lock
+  remotes/origin/readiness/hcv-release-truth-tip
+  remotes/origin/readiness/hcv-renewals-stage-plan-lock
+  remotes/origin/readiness/hcv-requirements-trace
+  remotes/origin/readiness/hcv-rls-failopen-honesty
+  remotes/origin/readiness/hcv-roles-assign
+  remotes/origin/readiness/hcv-roles-parse-null
+  remotes/origin/readiness/hcv-roles-permissions-lock
+  remotes/origin/readiness/hcv-route-error-alert
+  remotes/origin/readiness/hcv-rules-parse-numeric-lock
+  remotes/origin/readiness/hcv-rules-threshold
+  remotes/origin/readiness/hcv-security-residuals
+  remotes/origin/readiness/hcv-shell-org-alert
+  remotes/origin/readiness/hcv-signin-pending-status
+  remotes/origin/readiness/hcv-signup-busy
+  remotes/origin/readiness/hcv-signup-busy-status
+  remotes/origin/readiness/hcv-skip-focus-visible
+  remotes/origin/readiness/hcv-skip-focus-visible-r2
+  remotes/origin/readiness/hcv-skip-link-focus-visible
+  remotes/origin/readiness/hcv-skip-target-main
+  remotes/origin/readiness/hcv-skip-target-main-final
+  remotes/origin/readiness/hcv-status-badge-name
+  remotes/origin/readiness/hcv-status-failclosed-lock
+  remotes/origin/readiness/hcv-team-agent-caps-loading-status
+  remotes/origin/readiness/hcv-team-agents-loading-status
+  remotes/origin/readiness/hcv-team-alerts
+  remotes/origin/readiness/hcv-team-capability-grants-busy
+  remotes/origin/readiness/hcv-team-deletion-orders-busy
+  remotes/origin/readiness/hcv-team-deletion-orders-loading-status
+  remotes/origin/readiness/hcv-team-empty-status
+  remotes/origin/readiness/hcv-team-execute-deletion-busy
+  remotes/origin/readiness/hcv-team-identities-status
+  remotes/origin/readiness/hcv-team-invite-status
+  remotes/origin/readiness/hcv-team-invites-busy
+  remotes/origin/readiness/hcv-team-invites-loading-status
+  remotes/origin/readiness/hcv-team-kill-switches-busy
+  remotes/origin/readiness/hcv-team-kill-switches-loading-status
+  remotes/origin/readiness/hcv-team-list-aria-label
+  remotes/origin/readiness/hcv-team-members-busy
+  remotes/origin/readiness/hcv-team-monitor-agents-busy
+  remotes/origin/readiness/hcv-team-ops-list-aria-label
+  remotes/origin/readiness/hcv-team-remove-armed-busy
+  remotes/origin/readiness/hcv-team-request-deletion-busy
+  remotes/origin/readiness/hcv-team-revoke-agent-busy
+  remotes/origin/readiness/hcv-team-rotate-cred-busy
+  remotes/origin/readiness/hcv-team-wipe-busy
+  remotes/origin/readiness/hcv-template-limits-lock
+  remotes/origin/readiness/hcv-tenant-guc-fail-closed
+  remotes/origin/readiness/hcv-text-limits-lock
+  remotes/origin/reconcile/step14-security-port-20260925
+  remotes/origin/release/candidate-2026-09-08
+  remotes/origin/release/fix-platform-regressions-20260913
+  remotes/origin/release/reconciled-pilot-20260914
+  remotes/origin/repair/bew-s035-focus-20261007
+  remotes/origin/research/nvidia-evidence-wallet-p0
+  remotes/origin/review/slice-vocabulary-20261003
+  remotes/origin/rsfm-estate-adapter-20260911
+  remotes/origin/sec/redteam-pentest-report
+  remotes/origin/security/automated-redteam-2026-09-08
+  remotes/origin/security/release-gate-fix-20261121
+  remotes/origin/six-docs-adopt
+  remotes/origin/synthetic-data-r1
+  remotes/origin/task-6-verification-final
+  remotes/origin/task-6/register-fix-ew-fix-04-05
+  remotes/origin/task/cp-11-expiry-tracking
+  remotes/origin/test/hard25-20261113
+  remotes/origin/test/redteam15-rerun-20261116
+  remotes/origin/validation/cloud-ci-2026-09-13
+  remotes/origin/verification/cloud-release-gate-20260910
+  remotes/origin/verification/current-release-20260912
+  remotes/origin/verification/deployment-reconciled-2-20260914
+  remotes/origin/verification/deployment-reconciled-20260914
+  remotes/origin/verification/deployment-reconciled-3-20260914
+  remotes/origin/verification/master-af79ed2-20260913
+  remotes/origin/verification/platform-fix-20260913
+  remotes/origin/verification/reconciled-base-20260914
+  remotes/origin/verification/reconciled-pilot-20260914
+  remotes/origin/verify/document-knowledge-html-gate-20261007
+  remotes/origin/verify/step16-integration-20260925
+  remotes/origin/wip/100-rebased
+  remotes/origin/wip/101-on-reconciled
+  remotes/origin/wip/102-on-reconciled
+  remotes/origin/wip/103-on-reconciled
+  remotes/origin/wip/104-on-reconciled
+  remotes/origin/wip/84-rebased
+  remotes/origin/wip/85-rebased
+  remotes/origin/wip/86-on-reconciled
+  remotes/origin/wip/89-rebased
+  remotes/origin/wip/92-on-reconciled
+  remotes/origin/wip/94-on-reconciled
+  remotes/origin/wip/95-on-reconciled
+  remotes/origin/wip/97-rebased
+  remotes/origin/wip/d35-base-line
+  remotes/origin/worker-goal-slicing-20261003
+  remotes/origin/worker-goal-slicing-v2-20261003
+  remotes/origin/worker/bew-capacity-wave-20261006
+  remotes/origin/worker/bew-iam-recovery-20261006
+  remotes/origin/worker/bew-release-docs-20261006
+  remotes/origin/wt-parseflexdate-null-guard
+[0m
+Let me explore the repository structure to understand the code and identify what needs fixing.
+[0m→ [0mRead repo/src
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -1 && git rev-parse HEAD
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat .gitleaks.toml 2>/dev/null || echo "no gitleaks config"
+[allowlist]
+description = "Proven false positives only"
+paths = [
+    "src/server/wallet.ts",
+    "scripts/cp3-acceptance.mjs",
+    "src/domain/extraction.ts",
+    "scripts/staging-preflight.test.mjs",
+    "tests/scrub-connection.test.mjs",
+]
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat package.json | grep -A 20 scripts
+"scripts": {
+    "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port ${EW_HTTP_PORT:-8080}",
+    "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs",
+    "db:migrate": "node scripts/migrate.mjs",
+    "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
+    "preview": "node scripts/with-app-env.mjs vite preview",
+    "preview:restart": "node scripts/preview.mjs restart",
+    "preview:stop": "node scripts/preview.mjs stop",
+    "sbom": "npm sbom --sbom-format cyclonedx",
+    "typecheck": "tsc --noEmit",
+    "check:auth": "node scripts/check-auth-invariant.mjs",
+    "test": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts",
+    "test:domain": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test src/domain/*.test.ts src/domain/v2/*.test.ts src/domain/v2/agent-loop/*.test.ts",
+    "test:integration": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/*.test.mjs",
+    "test:control-mcp": "node --test tests/control-mcp.test.mjs",
+    "test:app": "npm run test:domain && npm run test:integration",
+    "test:mutation-isolation": "node scripts/mutation-isolation.mjs",
+    "test:live-idor": "node scripts/live-http-idor.mjs",
+    "test:gateway-cert": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs scripts/gateway-phase-o-cert.mjs",
+    "test:concurrency-pg": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/concurrency-pg.test.mjs",
+    "test:persistence": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs scripts/pg-restart-persistence.mjs",
+    "test:http-persistence": "node scripts/http-restart-persistence.mjs",
+    "test:backup": "node scripts/pg-backup-restore.mjs",
+    "test:hosted-probe": "node scripts/hosted-probe.mjs",
+    "test:hosted-preflight": "node scripts/staging-preflight.mjs",
+    "test:hosted-acceptance": "node scripts/hosted-acceptance.mjs",
+    "test:secret-scan": "node scripts/secret-scan.mjs",
+    "pg:start": "node scripts/pg-local.mjs start",
+    "pg:stop": "node scripts/pg-local.mjs stop",
+    "pg:status": "node scripts/pg-local.mjs status",
+    "test:platform": "npm test",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.14",
+    "@hookform/resolvers": "5.9.2",
+    "@radix-ui/react-accordion": "1.3.1",
+    "@radix-ui/react-alert-dialog": "1.2.1",
+    "@radix-ui/react-avatar": "1.3.1",
+    "@radix-ui/react-checkbox": "1.4.1",
+    "@radix-ui/react-collapsible": "1.2.1",
+    "@radix-ui/react-dialog": "1.3.1",
+    "@radix-ui/react-dropdown-menu": "2.2.1",
+    "@radix-ui/react-label": "2.1.17",
+    "@radix-ui/react-popover": "1.3.1",
+    "@radix-ui/react-progress": "1.2.1",
+    "@radix-ui/react-radio-group": "1.5.1",
+    "@radix-ui/react-scroll-area": "1.4.0",
+    "@radix-ui/react-select": "2.4.1",
+[0m
+[0m✱ [0mGrep "preview.*secret|secret.*preview"[90m in repo · 8 matches[0m
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 1 match[0m
+[0m→ [0mRead repo/control-mcp/gateway.mjs[90m [offset=880, limit=30][0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+Let me understand the current state of the repo relative to the base SHA.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 4674a4ff..a61f1a8b --stat
+docs/legal/DPA.md                              | 177 ++++++++++++
+ docs/legal/PRIVACY_NOTICE.md                   | 178 ++++++++++++
+ docs/legal/SUB_PROCESSOR_LIST.md               | 139 ++++++++++
+ docs/legal/TERMS_OF_SERVICE.md                 | 195 +++++++++++++
+ migrations/0002_evidence_wallet.sql            |   1 +
+ migrations/0028_ai_extraction_optin.sql        |   7 +
+ migrations/0029_retention_deletion_audit.sql   |  50 ++++
+ src/components/ui/alert.tsx                    |  28 ++
+ src/components/ui/label.tsx                    |  17 ++
+ src/components/ui/switch.tsx                   |  29 ++
+ src/domain/retention.test.ts                   | 136 +++++++++
+ src/domain/retention.ts                        | 135 +++++++++
+ src/lib/auth/client.ts                         |   8 +-
+ src/lib/auth/council-sso.ts                    |  56 ++++
+ src/lib/auth/magic-link.ts                     |  17 ++
+ src/lib/auth/providers.ts                      |   6 +
+ src/lib/auth/server.ts                         |  42 ++-
+ src/routes/api/v2/deletion.ts                  | 130 +++++++++
+ src/routes/api/v2/retention.ts                 |  47 ++++
+ src/routes/app/$orgId/admin/deletion-audit.tsx | 200 ++++++++++++++
+ src/routes/app/$orgId/admin/index.tsx          |  99 ++++++-
+ src/routes/app/$orgId/admin/retention.tsx      | 247 +++++++++++++++++
+ src/routes/login.tsx                           |  72 ++++-
+ src/server/fns.ts                              | 207 ++++++++++++++
+ src/server/v2/deletion.ts                      | 335 ++++++++++++++++++++++
+ src/server/v2/retention.ts                     | 292 ++++++++++++++++++++
+ src/server/wallet.ts                           |  28 +-
+ tests/retention-deletion.test.mjs              | 368 +++++++++++++++++++++++++
+ tests/xai-optin.test.mjs                       |  96 +++++++
+ 29 files changed, 3333 insertions(+), 9 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 4674a4ff --stat | head -30
+commit 4674a4ff2b81b4905c22f34af7a5543e02bbc370
+Merge: 12fe0f95 9eb69cc1
+Author: Andy Cartwright <chaplegate@hotmail.com>
+Date:   Sat Nov 21 20:09:20 2026 +0000
+
+    fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+
+ .specify/bugs/hcv-rt04-security-headers/assessment.md | 12 ++++++++++++
+ .specify/bugs/hcv-rt04-security-headers/fix.md        | 10 ++++++++++
+ .specify/bugs/hcv-rt04-security-headers/test.md       | 17 +++++++++++++++++
+ .specify/bugs/hcv-rt08-large-input/assessment.md      | 11 +++++++++++
+ 4 files changed, 50 insertions(+)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 12fe0f95 --stat | head -30
+commit 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+Author: Andy Cartwright <chaplegate@hotmail.com>
+Date:   Sat Nov 21 16:56:39 2026 +0000
+
+    fix(security): address CSO findings F1, F2, F5
+    
+    - F1: Migrate BEW preview secret to env var GROK_PREVIEW_CLIENT_SECRET (src/lib/auth/preview.ts)
+    - F2: Fix CSP unsafe-inline in script-src with nonce-based CSP (src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx)
+    - F5: Move login token from sessionStorage to in-memory only (src/lib/auth/client.ts)
+    - Add test to verify no browser storage usage (scripts/no-token-in-browser-storage.test.mjs)
+
+ scripts/no-token-in-browser-storage.test.mjs | 42 ++++++++++++++++++++++++++++
+ server/middleware/wallet-headers.ts          |  8 ++++++
+ src/lib/auth/client.ts                       | 33 ++++++++++------------
+ src/lib/auth/preview.ts                      | 15 ++++++++--
+ src/router.tsx                               |  9 ++++--
+ src/server/security-headers.ts               | 15 +++++++++-
+ vite.config.ts                               |  9 ++++--
+ 7 files changed, 106 insertions(+), 25 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -3
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+[0m
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m→ [0mRead repo/server/middleware/wallet-headers.ts
+Now let me look at what still needs to be fixed. Let me check the findings status and the test failures.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -40
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.694207
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 2.100788
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.418861
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.226078
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 5.588326
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2177
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 124627.710867
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -A 5 "not ok"
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -i "fail\|not ok" | head -20
+# Subtest: answer fail-closed lock
+    # Subtest: ships fail-closed text even when a stored answer claims the requirement is met
+    ok 2 - ships fail-closed text even when a stored answer claims the requirement is met
+    # Subtest: treats only RED, EXPIRED, and CONFLICT as fail-closed
+    ok 4 - treats only RED, EXPIRED, and CONFLICT as fail-closed
+ok 15 - answer fail-closed lock
+    # Subtest: isFailClosedStatus true only for RED EXPIRED CONFLICT
+    ok 3 - isFailClosedStatus true only for RED EXPIRED CONFLICT
+    # Subtest: draftAnswerText canned wording for fail-closed statuses
+    ok 4 - draftAnswerText canned wording for fail-closed statuses
+    # Subtest: shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    ok 5 - shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    # Subtest: locks fail-closed wording for RED/EXPIRED/CONFLICT
+    ok 1 - locks fail-closed wording for RED/EXPIRED/CONFLICT
+    # Subtest: never ships confirmatory wording on fail-closed status
+    ok 2 - never ships confirmatory wording on fail-closed status
+# Subtest: cli: a bad argument fails with JSON on stderr
+ok 46 - cli: a bad argument fails with JSON on stderr
+# Subtest: cli: a non-game with no card fails too — the pass exists to produce one
+ok 47 - cli: a non-game with no card fails too — the pass exists to produce one
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -B 5 "not ok"
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -i "^not ok\|not ok " | head -20
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 300 npm run test:platform 2>&1 | grep -iE "not ok|^# fail" | head -20
+# fail 0
+# fail 0
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline 4674a4ff..HEAD
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git status
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/secret-scan.mjs
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/routes/app/$orgId/index.tsx
+	modified:   src/server/security-headers.ts
+	modified:   src/server/zip-bounded.ts
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+	test-results/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m✱ [0mGrep "script-src.*unsafe-inline|unsafe-inline.*script-src"[90m in repo · 1 match[0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff control-mcp/gateway.mjs
+diff --git a/control-mcp/gateway.mjs b/control-mcp/gateway.mjs
+index c15b05c3..96cf3463 100644
+--- a/control-mcp/gateway.mjs
++++ b/control-mcp/gateway.mjs
+@@ -890,7 +890,7 @@ export function createGateway(options = {}) {
+         "cache-control": "no-store",
+         "x-content-type-options": "nosniff",
+         "x-frame-options": "DENY",
+-        "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
++        "content-security-policy": "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+         ...extraHeaders,
+       },
+       body,
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff --stat
+control-mcp/gateway.mjs                            |   2 +-
+ docs/OPERATIONS.md                                 |   2 +-
+ docs/OPERATOR.md                                   |   2 +-
+ docs/RELEASE.md                                    |   2 +-
+ .../housing-compliance-vault/RETENTION_HOLD.md     |   2 +-
+ .../opencode-estate-body.cpython-312.pyc           | Bin 14847 -> 14859 bytes
+ scripts/check-auth-invariant.mjs                   |   4 +-
+ scripts/check-auth-invariant.test.mjs              |   2 +-
+ scripts/hcv-questionnaire-detail-busy.test.mjs     |   2 +-
+ scripts/hcv-retention-hold.test.mjs                |   4 +-
+ scripts/migration-plan.test.mjs                    |   6 ++-
+ scripts/rollback-rehearsal.test.mjs                |   8 ++--
+ scripts/secret-scan.mjs                            |   2 +-
+ src/components/org-shell.tsx                       |   4 +-
+ src/domain/canonical.ts                            |   6 +--
+ src/routeTree.gen.ts                               |  43 +++++++++++++++++++++
+ src/routes/__root.tsx                              |   2 +-
+ src/routes/app/$orgId/index.tsx                    |   2 +-
+ src/server/security-headers.ts                     |  17 +++-----
+ src/server/zip-bounded.ts                          |   2 +-
+ tests/signup-policy.test.mjs                       |   4 +-
+ vite.config.ts                                     |   6 +--
+ 22 files changed, 83 insertions(+), 41 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -B 2 -A 10 "^not ok\|not ok " | head -40
+(no output)
+[0m
+[0m→ [0mRead repo/vite.config.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff vite.config.ts
+diff --git a/vite.config.ts b/vite.config.ts
+index 40b65274..dad573b8 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -190,9 +190,9 @@ export default defineConfig(({ command, isPreview }) => ({
+       "X-Content-Type-Options": "nosniff",
+       "Referrer-Policy": "strict-origin-when-cross-origin",
+       "X-Frame-Options": "DENY",
+-      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
++      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+       "X-Robots-Tag": "noindex, nofollow",
+-      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++      "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), attribution-reporting=(), wake-lock=(), writer=()",
+     },
+   },
+   preview: {
+@@ -205,7 +205,7 @@ export default defineConfig(({ command, isPreview }) => ({
+       "X-Frame-Options": "DENY",
+       "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+       "X-Robots-Tag": "noindex, nofollow",
+-      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++      "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), attribution-reporting=(), wake-lock=(), writer=()",
+     },
+   },
+   resolve: { tsconfigPaths: true },
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 300 npm run test:platform 2>&1 | grep -E "^not ok|FAIL|fail " | head -20
+# Subtest: hcv clock fail closed
+ok 402 - hcv clock fail closed
+    # Subtest: KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+    ok 1 - KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+# fail 0
+# fail 0
+[0m
+Let me check the current state more carefully and understand what's still unfixed.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && which rt 2>/dev/null || echo "rt not in PATH"; ls ~/.local/bin/ 2>/dev/null | head -20
+/home/andy/bin/rt
+age
+age-keygen
+bin
+caddy
+cffi-gen-src
+coverage
+coverage3
+coverage-3.12
+dmypy
+docker-compose
+doesitcache
+dotenv
+env
+env.fish
+f2py
+fastapi
+ffuf
+flask
+gh
+gitleaks
+[0m
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/TOOLS-INVENTORY.md 2>/dev/null || echo "not found"
+# Estate security tools inventory (standing)
+Owner: CYBER-SECURITY-OWNER. Last verified: 22 Nov 2026 00:01 GMT. Verify any time: `/home/andy/chapelgate/jobs-work-dell/readiness/security/tools/verify-tools.sh` (writes raw/<stamp>/SUMMARY.tsv + one version file per tool).
+Rules: target only the Dell-hosted RC (never production, the golden line or third parties); installed binaries or pinned images only, never `npx <scanner>`; raw output per frozen SHA in the job's out/raw/; new packs vetted with skillspector (Mac, ~/ai-setup/skill-vetting/skillspector) before use; paid/declaration items parked.
+Every test run's out/ must contain TOOL-COVERAGE.md (template: /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/TOOL-COVERAGE-TEMPLATE.md) or it is incomplete.
+
+| # | Tool | Kind | Location | Status 22 Nov 00:01 | Version raw |
+|---|---|---|---|---|---|
+| 1 | gitleaks | secrets | ~/.local/bin/gitleaks | WORKING 8.18.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/gitleaks.txt |
+| 2 | trufflehog | secrets (verified) | ~/.local/bin/trufflehog (official release, sha256 checked) | WORKING 3.100.0, installed 21 Nov 23:51 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/trufflehog.txt |
+| 3 | semgrep | SAST | ~/tools/venvs/semgrep (isolated venv) | WORKING 1.186.0, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/semgrep.txt |
+| 4 | osv-scanner | dependencies | ~/.local/bin/osv-scanner | WORKING 1.9.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/osv-scanner.txt |
+| 5 | npm audit | dependencies | npm 10.9.9 | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/npm-audit.txt |
+| 6 | pip-audit | dependencies | ~/tools/venvs/pip-audit | WORKING 2.10.1, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pip-audit.txt |
+| 7 | trivy | deps/container/IaC | ~/.local/bin/trivy (official 0.76.2, sha256 checked) | WORKING, replaced dev build 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/trivy.txt |
+| 8 | syft | SBOM | ~/.local/bin/syft | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/syft.txt |
+| 9 | grype | SBOM vulns | ~/.local/bin/grype | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/grype.txt |
+| 10 | ZAP | DAST | wrappers zap-baseline / zap-full / zap-api (ghcr.io/zaproxy/zaproxy:stable) | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/zap.txt |
+| 11 | nuclei | DAST templates | wrapper -> kali image, templates ~/.local/share/nuclei-templates | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nuclei.txt |
+| 12 | sqlmap | SQL injection | wrapper -> kali image | WORKING 1.10.9 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/sqlmap.txt |
+| 13 | nikto | web server | wrapper -> kali image | WORKING 2.6.1 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nikto.txt |
+| 14 | ffuf | fuzzing | wrapper -> kali image | WORKING 2.1.0-dev | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/ffuf.txt |
+| 15 | gobuster | content discovery | wrapper -> kali image | WORKING 3.8.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/gobuster.txt |
+| 16 | nmap | ports/TLS | wrapper -> kali image (NET_RAW cap) | WORKING 7.99, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nmap.txt |
+| 17 | axe | WCAG | npx --no-install axe (project dep) | WORKING 4.14.0 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/axe.txt |
+| 18 | pa11y | WCAG | npx --no-install pa11y | WORKING 10.0.0 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pa11y.txt |
+| 19 | PentAGI | autonomous pentest | docker pentagi (Up) | IMAGE OK; autonomous scan never completed (readiness/security/HANDOVER-chapelgate-multilingual-transcribe-pentagi-20261119.md); auth unblock in progress | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pentagi.txt |
+| 20 | full-shakedown | skill (red team RT suite) | ~/.claude/skills/full-shakedown | PRESENT, in use | |
+| 21 | pentagi-security-testing | skill | ~/.claude/skills/pentagi-security-testing | PRESENT, blocked with PentAGI | |
+| 22 | shannon-pentest | skill | ~/.claude/skills/shannon-pentest | PRESENT; Shannon engine NOT installed: skill requires KeygraphHQ/shannon pinned to a reviewed SHA + isolated worker | |
+| 23 | security-threat-model | skill | ~/.claude/skills/security-threat-model | PRESENT, to run before each red team | |
+| 24 | chapelgate-security-audit | skill | ~/chapelgate/repos/agent-skills/skills/chapelgate-security-audit | PRESENT | |
+| 25 | web-quality-audit | skill | ~/.claude/skills/web-quality-audit | PRESENT | |
+| 26 | security-best-practices | skill | ~/.claude/skills/security-best-practices | PRESENT | |
+| 27 | security-and-hardening | skill | ~/.claude/skills/security-and-hardening | PRESENT | |
+| 28 | github-actions-hardening | skill | ~/.claude/skills/github-actions-hardening | PRESENT | |
+| 29 | agent-owasp-compliance | skill | ~/.claude/skills/agent-owasp-compliance | PRESENT (AI features only) | |
+| 30 | release-standards | skill | ~/chapelgate/jobs-work-dell/skills/release-standards | PRESENT | |
+| 31 | skillspector | skill vetting | Mac ~/ai-setup/skill-vetting/skillspector/.venv | WORKING (Mac) | |
+| X | cloudflare security-audit pack | downloaded pack | FT/reel-trial-cloudflare-security-audit-skill-for-claude-code-20261119/sandbox/security-audit-skill | REJECTED: skillspector 86/100 CRITICAL, DO NOT INSTALL | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/cloudflare-security-audit-skill.SKILLSPECTOR-20261121.md |
+| X | bettercap | network MITM | not installed | NOT APPLICABLE to web products (LAN attack tool) | |
+Renamed aside (not deleted): ~/.local/bin/.trivy.dev-build-*, .pysemgrep.pre-venv-*, .pip-audit.pre-venv-*.
+
+| 32 | claude-bughunter skill pack (elementalsouls/Claude-BugHunter) | pinned 42bd4625d5cd4d206fbb468f0cd7a2e9cf1ef54f | WORKING (skills only) | Added 22 Nov 2026 10:45 GMT on Andy's tip. skillspector --no-llm: 100/100 CRITICAL "DO NOT INSTALL", reviewed by CSO: criticals are attack payload examples in docs and skill text (php webshell / upload payload strings), install scripts have no pipe-to-shell. Accepted with limits: SKILL.md text only, symlinked into ~/.agents/skills (83 skills; name clashes skipped:). EXCLUDED: install.sh/install-community-skills (pulls an unpinned third-party repo), engine/, cbh CLI, mcp/ (HackerOne MCP), offensive-osint/scripts (calls hackerone.com, spawns subprocesses), Burp MCP (Burp Pro is paid, parked). Use only against the Dell-local RC; its external recon/OSINT/enterprise-attack skills are not applicable to our products. Report: raw/claude-bughunter.SKILLSPECTOR-20261122.md |
+[0m
+[0m$ [0mls /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/ 2>/dev/null || echo "not found"
+raw
+TOOL-COVERAGE-TEMPLATE.md
+TOOLS-INVENTORY.md
+verify-tools.sh
+[0m
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mcat /home/andy/bin/rt 2>/dev/null || echo "rt not found at /home/andy/bin/rt" failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/ 2>/dev/null
+total 1928
+drwxrwxr-x 2 andy andy   4096 Nov 22 15:47 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 22:30 ..
+-rw-rw-r-- 1 andy andy  19031 Nov 22 15:47 INDEX.tsv
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:09 lint-20261122-150950-exit-code.txt
+-rw-rw-r-- 1 andy andy   2272 Nov 22 15:09 lint-20261122-150950-output.log
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:09 .lock-lint
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 22 14:24 .lock-test-domain
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:08 .lock-test_domain-092b48
+-rw-rw-r-- 1 andy andy      0 Nov 22 14:31 .lock-test-integration
+-rw-rw-r-- 1 andy andy      0 Nov 22 14:22 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:44 .lock-test_platform-74dbd3
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:16 .lock-test_secret-scan-895b8f
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:47 .lock-typecheck
+-rw-rw-r-- 1 andy andy     41 Nov 22 17:32 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:08 test_domain-092b48-20261122-150847-exit-code.txt
+-rw-rw-r-- 1 andy andy 286161 Nov 22 15:08 test_domain-092b48-20261122-150847-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 14:25 test-domain-20261122-142458-exit-code.txt
+-rw-rw-r-- 1 andy andy 286338 Nov 22 14:25 test-domain-20261122-142458-output.log
+-rw-rw-r-- 1 andy andy   6666 Nov 22 14:32 test-integration-20261122-143132-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 14:24 test-platform-20261122-142228-exit-code.txt
+-rw-rw-r-- 1 andy andy 423561 Nov 22 14:24 test-platform-20261122-142228-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:46 test_platform-74dbd3-20261122-154400-exit-code.txt
+-rw-rw-r-- 1 andy andy 423555 Nov 22 15:46 test_platform-74dbd3-20261122-154400-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:16 test_secret-scan-895b8f-20261122-151615-exit-code.txt
+-rw-rw-r-- 1 andy andy    368 Nov 22 15:16 test_secret-scan-895b8f-20261122-151615-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:47 typecheck-20261122-154724-exit-code.txt
+-rw-rw-r-- 1 andy andy   6663 Nov 22 15:47 typecheck-20261122-154724-output.log
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "^not ok|# fail|# tests" | head -20
+# tests 2178
+# fail 0
+# tests 76
+# fail 0
+[0m

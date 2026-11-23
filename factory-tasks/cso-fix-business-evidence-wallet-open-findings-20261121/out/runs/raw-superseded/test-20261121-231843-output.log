@@ -1,0 +1,97 @@
+# rt test | 20261121-231843 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/canonical-keys-lock.test.mjs
+TAP version 13
+# Subtest: canonical keys lock
+    # Subtest: keeps the 26 canonical keys
+    not ok 1 - keeps the 26 canonical keys
+      ---
+      duration_ms: 2.648885
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:16:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+        
+        + 'company.company_number'
+        - 'company.number'
+                   ^
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'company.number'
+      actual: 'company.company_number'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:42:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Test.start (node:internal/test_runner/test:944:17)
+        node:internal/test_runner/test:1440:71
+        node:internal/per_context/primordials:466:82
+        new Promise (<anonymous>)
+        new SafePromise (node:internal/per_context/primordials:435:3)
+        node:internal/per_context/primordials:466:9
+        Array.map (<anonymous>)
+      ...
+    # Subtest: NUMERIC_STAT_KEYS only contains employee_count and turnover
+    ok 2 - NUMERIC_STAT_KEYS only contains employee_count and turnover
+      ---
+      duration_ms: 0.258909
+      type: 'test'
+      ...
+    # Subtest: categoryForKey extracts head component
+    ok 3 - categoryForKey extracts head component
+      ---
+      duration_ms: 0.270576
+      type: 'test'
+      ...
+    # Subtest: relatedExpiryKey pairs limit with expiry and returns null for expiry
+    ok 4 - relatedExpiryKey pairs limit with expiry and returns null for expiry
+      ---
+      duration_ms: 0.199503
+      type: 'test'
+      ...
+    # Subtest: isExpiryKey true for .expiry suffix only
+    ok 5 - isExpiryKey true for .expiry suffix only
+      ---
+      duration_ms: 0.162017
+      type: 'test'
+      ...
+    # Subtest: employee question detection covers headcount variants
+    ok 6 - employee question detection covers headcount variants
+      ---
+      duration_ms: 0.311727
+      type: 'test'
+      ...
+    # Subtest: keysForQuestionText maps keywords to correct canonical keys
+    ok 7 - keysForQuestionText maps keywords to correct canonical keys
+      ---
+      duration_ms: 0.353737
+      type: 'test'
+      ...
+    # Subtest: otherKey produces stable slug under other.* namespace
+    ok 8 - otherKey produces stable slug under other.* namespace
+      ---
+      duration_ms: 0.509981
+      type: 'test'
+      ...
+    1..8
+not ok 1 - canonical keys lock
+  ---
+  duration_ms: 6.409324
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 8
+# suites 1
+# pass 7
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 225.406726

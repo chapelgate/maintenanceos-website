@@ -1,0 +1,43 @@
+# rt test-security-headers | 20261121-231512 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/security-headers-lock.test.mjs
+TAP version 13
+# Subtest: security headers lock
+    # Subtest: exports the private-wallet browser headers
+    ok 1 - exports the private-wallet browser headers
+      ---
+      duration_ms: 0.743987
+      type: 'test'
+      ...
+    # Subtest: mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+    ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+      ---
+      duration_ms: 21.26047
+      type: 'test'
+      ...
+    # Subtest: health.ts applies mergeWalletSecurityHeaders in jsonResponse
+    ok 3 - health.ts applies mergeWalletSecurityHeaders in jsonResponse
+      ---
+      duration_ms: 0.216216
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents the header set including Permissions-Policy
+    ok 4 - SECURITY.md documents the header set including Permissions-Policy
+      ---
+      duration_ms: 0.279888
+      type: 'test'
+      ...
+    1..4
+ok 1 - security headers lock
+  ---
+  duration_ms: 23.480719
+  type: 'suite'
+  ...
+1..1
+# tests 4
+# suites 1
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 127.470337

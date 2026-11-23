@@ -1,0 +1,1324 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead .
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo 2>/dev/null || echo "No repo dir"
+total 44
+drwxrwxr-x  9 andy andy  4096 Nov 21 21:54 .
+drwxrwxr-x 75 andy andy 12288 Nov 22 10:37 ..
+drwxrwxr-x 21 andy andy  4096 Nov 21 21:31 business-evidence-wallet
+drwxrwxr-x 21 andy andy  4096 Nov 21 22:32 business-os
+drwxrwxr-x 14 andy andy  4096 Nov 21 22:44 chapelgate-multilingual-transcribe
+drwxrwxr-x 19 andy andy  4096 Nov 21 22:54 cheap-trips
+drwxrwxr-x 23 andy andy  4096 Nov 22 03:53 holiday-let-operator
+drwxrwxr-x 21 andy andy  4096 Nov 22 00:49 housing-compliance-vault
+drwxrwxr-x 26 andy andy  4096 Nov 21 22:13 maintenanceos-website
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/out/ 2>/dev/null || echo "No out dir"
+total 276
+drwxrwxr-x 19 andy andy  4096 Nov 22 07:56 .
+drwxrwxr-x 75 andy andy 12288 Nov 22 10:37 ..
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-business-evidence-wallet
+-rw-rw-r--  1 andy andy  1322 Nov 17 23:09 AUDIT-business-evidence-wallet.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-complaints
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-chapelgate-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-multilingual-transcribe
+-rw-rw-r--  1 andy andy  1392 Nov 19 16:32 AUDIT-chapelgate-multilingual-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-transcribe
+-rw-rw-r--  1 andy andy  1301 Nov 19 16:32 AUDIT-chapelgate-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cheap-trips
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-cheap-trips.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cloud-workers
+-rw-rw-r--  1 andy andy  1245 Nov 17 23:09 AUDIT-cloud-workers.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-holiday-let-operator
+-rw-rw-r--  1 andy andy  1294 Nov 19 16:33 AUDIT-holiday-let-operator.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-housing-compliance-vault
+-rw-rw-r--  1 andy andy  1322 Nov 19 16:32 AUDIT-housing-compliance-vault.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-information-rights-complaints
+-rw-rw-r--  1 andy andy  1357 Nov 19 16:33 AUDIT-information-rights-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-landlord-os
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-landlord-os.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-legal-case-management
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-legal-case-management.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-maintenanceos
+-rw-rw-r--  1 andy andy  1245 Nov 19 16:34 AUDIT-maintenanceos.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-citizen-agent
+-rw-rw-r--  1 andy andy  1343 Nov 19 16:34 AUDIT-public-sector-citizen-agent.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-document-copilot
+-rw-rw-r--  1 andy andy  1364 Nov 19 16:36 AUDIT-public-sector-document-copilot.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-virtual-worker
+-rw-rw-r--  1 andy andy  1252 Nov 17 23:09 AUDIT-virtual-worker.md
+-rw-rw-r--  1 andy andy  8099 Nov 21 23:51 COMPETITOR-INDEX-TABLE.md
+-rw-rw-r--  1 andy andy  1006 Nov 20 16:27 council-verdict.md
+-rw-rw-r--  1 andy andy   157 Nov 21 17:08 DONE
+-rw-rw-r--  1 andy andy  2760 Nov 22 08:27 EVIDENCE.md
+-rw-rw-r--  1 andy andy  9174 Nov 18 00:51 gitleaks-business-evidence-wallet.json
+-rw-rw-r--  1 andy andy  1533 Nov 18 00:51 gitleaks-chapelgate-complaints.json
+-rw-rw-r--  1 andy andy 27341 Nov 18 00:51 gitleaks-chapelgate-multilingual-transcribe.json
+-rw-rw-r--  1 andy andy  6679 Nov 18 00:51 gitleaks-cheap-trips.json
+-rw-rw-r--  1 andy andy 10702 Nov 18 00:51 gitleaks-holiday-let-operator.json
+-rw-rw-r--  1 andy andy  1417 Nov 18 00:51 gitleaks-public-sector-document-copilot.json
+-rw-rw-r--  1 andy andy 15363 Nov 18 00:51 gitleaks-virtual-worker.json
+-rw-rw-r--  1 andy andy  2587 Nov 22 07:56 METRICS-BASIS.md
+-rw-rw-r--  1 andy andy   520 Nov 22 08:21 MISSION_COMPLETE
+-rw-rw-r--  1 andy andy  1835 Nov 15 13:49 PRODUCT-READINESS-STATUS.md
+-rw-rw-r--  1 andy andy   562 Nov 22 08:21 PROGRESS.md
+drwxrwxr-x  2 andy andy  4096 Nov 22 04:35 raw
+-rw-rw-r--  1 andy andy   572 Nov 22 08:14 RESULT.md
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:32 runs
+-rw-rw-r--  1 andy andy    32 Nov 21 01:12 test-stalled-raw.out
+-rw-rw-r--  1 andy andy  3461 Nov 22 07:56 WEDGE.md
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2368
+drwxrwxr-x  24 andy andy    4096 Nov 22 10:37 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 10:37 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 10:37 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 11:36 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 10:37 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 10:37 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 10:37 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 11:02 vite.config.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+total 920
+drwxrwxr-x 2 andy andy   4096 Nov 22 07:08 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:16 ..
+-rw-rw-r-- 1 andy andy  11751 Nov 22 00:23 INDEX.tsv
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 21 22:59 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:42 .lock-typecheck
+-rw-rw-r-- 1 andy andy     41 Nov 22 07:08 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy 436030 Nov 21 22:59 test-platform-20261121-225910-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:43 typecheck-20261121-234252-exit-code.txt
+-rw-rw-r-- 1 andy andy   9509 Nov 21 23:43 typecheck-20261121-234252-output.log
+[0m
+[0m→ [0mRead out/raw/SHA
+[0m→ [0mRead out/raw/test-platform-final-output.log
+[0m→ [0mRead out/raw/test-platform-full-20261122-001953-output.log[90m [limit=100][0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -50
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/**/*.test.mjs 2>&1 | tail -30
+duration_ms: 1.737937
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.241133
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.144275
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 4.568849
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2169
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 117869.837508
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/**/*.test.mjs 2>&1 | grep -A 5 "not ok"
+not ok 132 - an unobservable dev server is indeterminate, not agreement
+  ---
+  duration_ms: 1.105125
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:63:1'
+  failureType: 'testCodeFailure'
+--
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 194.970132
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+--
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+  ---
+  duration_ms: 4.375849
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+--
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+  ---
+  duration_ms: 4.037631
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+--
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+  ---
+  duration_ms: 0.528114
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+--
+not ok 1063 - questionnaire detail announces specific loading
+  ---
+  duration_ms: 1.782844
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-loading-status.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+--
+not ok 1395 - the auth schema copy ships in the globbed migration directory
+  ---
+  duration_ms: 4.024484
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+--
+not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+  ---
+  duration_ms: 1.636631
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:96:1'
+  failureType: 'testCodeFailure'
+--
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+  ---
+  duration_ms: 10.235162
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+[0m
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 1 match[0m
+Now I understand the task. There are 5 findings to fix:
+
+1. **BEW-1**: Move preview secret to env var
+2. **BEW-2**: Remove `unsafe-inline` from CSP script-src
+3. **BEW-3**: Fix 9 failing tests out of 2178 (currently 0 failing in final output, but need to verify)
+4. **BEW-4**: Confirm PR 1514 shakedown fixes merged and tested
+5. **BEW-5**: Same as #3 - OWASP red-team pass
+
+Let me start by fixing the easier issues first - the CSP and secret findings.
+
+Let me check the repo structure and find where the secret is hard-coded:
+[0m✱ [0mGrep "secret|SECRET|SECRET_KEY|API_KEY"[90m in repo/src · 51 matches[0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat .gitleaks.toml
+[allowlist]
+description = "Proven false positives only"
+paths = [
+    "src/server/wallet.ts",
+    "scripts/cp3-acceptance.mjs",
+    "src/domain/extraction.ts",
+    "scripts/staging-preflight.test.mjs",
+    "tests/scrub-connection.test.mjs",
+]
+[0m
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 1 match[0m
+[0m→ [0mRead repo/control-mcp/gateway.mjs[90m [offset=880, limit=50][0m
+Now I'll fix the findings. Let me start with the CSP unsafe-inline removal:
+[0m
+[0m← [0mEdit repo/control-mcp/gateway.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/control-mcp/gateway.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/control-mcp/gateway.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/control-mcp/gateway.mjs
+@@ -889,9 +889,9 @@
+     "content-type": "text/html; charset=utf-8",
+     "cache-control": "no-store",
+     "x-content-type-options": "nosniff",
+     "x-frame-options": "DENY",
+-    "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
++    "content-security-policy": "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+     ...extraHeaders,
+   },
+   body,
+ };
+
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -30
+duration_ms: 1.635212
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.237379
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.142906
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 4.428394
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2169
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 118263.658688
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/security-headers.test.mjs 2>&1
+Could not find 'scripts/security-headers.test.mjs'
+[0m
+[0m✱ [0mGrep "content-security-policy|CSP|csp|unsafe-inline"[90m in repo/scripts · 0 matches[0m
+[0m✱ [0mGrep "security.header|securityHeader"[90m in repo · 100 matches[0m
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/**/*.test.mjs 2>&1 | grep -E "(not ok|# fail|# pass)"
+not ok 132 - an unobservable dev server is indeterminate, not agreement
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 1063 - questionnaire detail announces specific loading
+not ok 1395 - the auth schema copy ships in the globbed migration directory
+not ok 1396 - a database that already applied production 0001-0010 only has 0011-0027 pending
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+# pass 2169
+# fail 9
+[0m
+Now I need to fix the 9 failing tests. Let me examine each one:
+[0m→ [0mRead repo/scripts/check-auth-invariant.test.mjs[90m [offset=55, limit=55][0m
+[0m→ [0mRead repo/scripts/hcv-questionnaire-detail-loading-status.test.mjs
+[0m→ [0mRead repo/scripts/migration-plan.test.mjs[90m [limit=120][0m
+[0m→ [0mRead repo/scripts/ew-1027-release-truth-tip.test.mjs
+[0m→ [0mRead repo/scripts/rollback-rehearsal.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m→ [0mRead repo/docs/RELEASE.md[90m [limit=20][0m
+[0m→ [0mRead repo/docs/OPERATIONS.md[90m [limit=20][0m
+Let me look at the check-auth-invariant source to understand the failing tests:
+[0m→ [0mRead repo/scripts/check-auth-invariant.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/check-auth-invariant.test.mjs 2>&1 | grep -A 20 "not ok"
+not ok 6 - an unobservable dev server is indeterminate, not agreement
+  ---
+  duration_ms: 1.036589
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:63:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'ok'
+    - 'indeterminate'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'indeterminate'
+  actual: 'ok'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:64:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+--
+not ok 11 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 88.736431
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    undefined !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:109:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..11
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/ew-1027-release-truth-tip.test.mjs 2>&1
+TAP version 13
+# Subtest: docs/RELEASE.md names tip and refuses GO
+not ok 1 - docs/RELEASE.md names tip and refuses GO
+  ---
+  duration_ms: 2.479213
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: a61f1a8be38615bf994143d074da05b9535fdfbb$/m. Input:
+    
+    '# Release and rollback\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      'Note: Static tip is last docs sync, not a live GO marker.\n' +
+      '\n' +
+      '## Branching\n' +
+      '\n' +
+      '| Ref | Meaning |\n' +
+      '|---|---|\n' +
+      '| `master` tip | Default branch (Current master above). Historical `fea7ff2` (2026-09-13) is a freeze marker only. Do not merge RC without Andrew. |\n' +
+      '| `security/automated-redteam-2026-09-08` `9d7afe3` | Reviewed security freeze. Do not force-push. |\n' +
+      '| `pilot/controlled-2026-09-08` | T24 local pilot. Do not force-push. |\n' +
+      '| `deployment/reconciled-pilot-20260914` `6f8cf3d` | Hosted DigitalOcean pilot base. |\n' +
+      '| `verification/deployment-reconciled-3-20260914` `cf67428` | Cloud Release Gate SUCCESS (typecheck/lint/domain/integration/concurrency/persistence/build/audit). |\n' +
+      '| `cursor/release-readiness-8a5b` | Release-readiness fixes atop reconciled pilot (PR #14). |\n' +
+      '| `release/candidate-*` | Commercially usable candidate. Push only; do not merge to master without Andrew. GitHub Actions `verify.yml` is a **subset** of the local gate. |\n' +
+      '\n' +
+      'Never force-push freeze SHAs. Never mark the independent audit closed from this agent.\n' +
+      '\n' +
+      '## Release checklist\n' +
+      '\n' +
+      '1. `npm run check:auth`\n' +
+      '2. `npm run typecheck` and `npm run lint`\n' +
+      '3. `npm test` (platform/tooling)\n' +
+      '4. `npm run test:app` (domain + integration, skipped = 0)\n' +
+      '5. `npm run test:concurrency-pg`\n' +
+      '6. `npm run test:persistence` and `npm run test:http-persistence`\n' +
+      '7. `npm run test:backup`\n' +
+      '8. `npm run test:live-idor` (app on 8080)\n' +
+      '9. `node scripts/mutation-isolation.mjs`\n' +
+      '10. `node scripts/e2e-demo.mjs`\n' +
+      '11. `DATABASE_URL=$(node scripts/pg-local.mjs url) npm run build`\n' +
+      '12. `npm audit`\n' +
+      '13. Secret scan of the commit (`npm run test:secret-scan`; never prints secret text)\n' +
+      '14. `HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe`\n' +
+      '15. Push the private release-candidate branch\n' +
+      '16. Hand the SHA to the Evidence Wallet Reviewer. Do not claim they reviewed it unless they did.\n' +
+      '\n' +
+      'Exact operator runbooks (DEPLOY / VERIFY / ROLL BACK / BACKUP / RESTORE / FAILED MIGRATION / AUTH FAILURE / DATABASE OUTAGE / COMPROMISED SECRET / TENANT-ISOLATION): [OPERATIONS.md](./OPERATIONS.md).\n' +
+      '\n' +
+      '## Hosted gate (2026-09-15)\n' +
+      '\n' +
+      'DigitalOcean pilot origin is live: `https://46-101-16-174.sslip.io`\n' +
+      '(`hostedReady: true`, `signupOpen: false`). See [HOSTED.md](./HOSTED.md).\n' +
+      '\n' +
+      'Redeploy of a new candidate SHA still needs droplet SSH (human). Hosted\n' +
+      'operator acceptance (`hosted-acceptance.mjs` with credentials) still needs a\n' +
+      'named throwaway operator account Andrew authorises.\n' +
+      '\n' +
+      '```text\n' +
+      'HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe\n' +
+      'HOSTED_ORIGIN=https://… HOSTED_OPERATOR_EMAIL=… HOSTED_OPERATOR_PASSWORD=… npm run test:hosted-acceptance\n' +
+      '```\n' +
+      '\n' +
+      'Do not disable signup closure, TLS, or auth to make those pass.\n' +
+      '\n' +
+      '## Rollback (local)\n' +
+      '\n' +
+      '1. Stop the app (`node scripts/preview.mjs stop` or kill 8080).\n' +
+      '2. Restore the last known-good physical backup (`node scripts/pg-backup.mjs restore <tar> --replace-live-data`).\n' +
+      '3. Check out the previous git SHA. Do not mix a new schema with an old backup unless migrations are forward-compatible.\n' +
+      '4. Start Postgres + migrate + app. Confirm `/health` and a sign-in.\n' +
+      '\n' +
+      '## Rollback (hosted, when authorised)\n' +
+      '\n' +
+      'Redeploy the previous candidate SHA. Neon PITR if data must move back. Do not “fix” a bad deploy by disabling TLS, auth, or tenant checks.\n' +
+      '\n' +
+      '## Support\n' +
+      '\n' +
+      'Operator questions: [OPERATOR.md](./OPERATOR.md). Incidents: [INCIDENT.md](./INCIDENT.md). Known limitations: [RISKS.md](../RISKS.md).\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    # Release and rollback
+    
+    ## Current truth
+    
+    Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
+    Release GO: no
+    Note: Static tip is last docs sync, not a live GO marker.
+    
+    ## Branching
+    
+    | Ref | Meaning |
+    |---|---|
+    | `master` tip | Default branch (Current master above). Historical `fea7ff2` (2026-09-13) is a freeze marker only. Do not merge RC without Andrew. |
+    | `security/automated-redteam-2026-09-08` `9d7afe3` | Reviewed security freeze. Do not force-push. |
+    | `pilot/controlled-2026-09-08` | T24 local pilot. Do not force-push. |
+    | `deployment/reconciled-pilot-20260914` `6f8cf3d` | Hosted DigitalOcean pilot base. |
+    | `verification/deployment-reconciled-3-20260914` `cf67428` | Cloud Release Gate SUCCESS (typecheck/lint/domain/integration/concurrency/persistence/build/audit). |
+    | `cursor/release-readiness-8a5b` | Release-readiness fixes atop reconciled pilot (PR #14). |
+    | `release/candidate-*` | Commercially usable candidate. Push only; do not merge to master without Andrew. GitHub Actions `verify.yml` is a **subset** of the local gate. |
+    
+    Never force-push freeze SHAs. Never mark the independent audit closed from this agent.
+    
+    ## Release checklist
+    
+    1. `npm run check:auth`
+    2. `npm run typecheck` and `npm run lint`
+    3. `npm test` (platform/tooling)
+    4. `npm run test:app` (domain + integration, skipped = 0)
+    5. `npm run test:concurrency-pg`
+    6. `npm run test:persistence` and `npm run test:http-persistence`
+    7. `npm run test:backup`
+    8. `npm run test:live-idor` (app on 8080)
+    9. `node scripts/mutation-isolation.mjs`
+    10. `node scripts/e2e-demo.mjs`
+    11. `DATABASE_URL=$(node scripts/pg-local.mjs url) npm run build`
+    12. `npm audit`
+    13. Secret scan of the commit (`npm run test:secret-scan`; never prints secret text)
+    14. `HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe`
+    15. Push the private release-candidate branch
+    16. Hand the SHA to the Evidence Wallet Reviewer. Do not claim they reviewed it unless they did.
+    
+    Exact operator runbooks (DEPLOY / VERIFY / ROLL BACK / BACKUP / RESTORE / FAILED MIGRATION / AUTH FAILURE / DATABASE OUTAGE / COMPROMISED SECRET / TENANT-ISOLATION): [OPERATIONS.md](./OPERATIONS.md).
+    
+    ## Hosted gate (2026-09-15)
+    
+    DigitalOcean pilot origin is live: `https://46-101-16-174.sslip.io`
+    (`hostedReady: true`, `signupOpen: false`). See [HOSTED.md](./HOSTED.md).
+    
+    Redeploy of a new candidate SHA still needs droplet SSH (human). Hosted
+    operator acceptance (`hosted-acceptance.mjs` with credentials) still needs a
+    named throwaway operator account Andrew authorises.
+    
+    ```text
+    HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe
+    HOSTED_ORIGIN=https://… HOSTED_OPERATOR_EMAIL=… HOSTED_OPERATOR_PASSWORD=… npm run test:hosted-acceptance
+    ```
+    
+    Do not disable signup closure, TLS, or auth to make those pass.
+    
+    ## Rollback (local)
+    
+    1. Stop the app (`node scripts/preview.mjs stop` or kill 8080).
+    2. Restore the last known-good physical backup (`node scripts/pg-backup.mjs restore <tar> --replace-live-data`).
+    3. Check out the previous git SHA. Do not mix a new schema with an old backup unless migrations are forward-compatible.
+    4. Start Postgres + migrate + app. Confirm `/health` and a sign-in.
+    
+    ## Rollback (hosted, when authorised)
+    
+    Redeploy the previous candidate SHA. Neon PITR if data must move back. Do not “fix” a bad deploy by disabling TLS, auth, or tenant checks.
+    
+    ## Support
+    
+    Operator questions: [OPERATOR.md](./OPERATOR.md). Incidents: [INCIDENT.md](./INCIDENT.md). Known limitations: [RISKS.md](../RISKS.md).
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:9:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: docs/OPERATIONS.md names tip and refuses GO
+not ok 2 - docs/OPERATIONS.md names tip and refuses GO
+  ---
+  duration_ms: 1.155229
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: a61f1a8be38615bf994143d074da05b9535fdfbb$/m. Input:
+    
+    '# Operations runbook — Business Evidence Wallet\n' +
+      '\n' +
+      'Technically competent operator guide. No guessing. Do **not** paste secrets,\n' +
+      'invite codes, or customer evidence into chat.\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      '\n' +
+      'Local PostgreSQL 18 is the fully gated clean-room path. A DigitalOcean pilot\n' +
+      'origin is live (see [HOSTED.md](./HOSTED.md)). Neon/Vercel remains separately\n' +
+      'blocked until Andrew injects those credentials.\n' +
+      '\n' +
+      '## DEPLOY (DigitalOcean pilot, when SSH authorised)\n' +
+      '\n' +
+      '1. Confirm the release-candidate SHA (PR #14 / `cursor/release-readiness-8a5b`\n' +
+      '   atop `deployment/reconciled-pilot-20260914`). Do not deploy `master` without\n' +
+      "   Andrew — `master` diverged and lacks this pilot's deploy/ops surface.\n" +
+      '2. On the droplet (`/opt/business-evidence-wallet`): fetch, checkout the SHA,\n' +
+      '   `npm ci`, `npm run build`, restart `evidence-wallet.service` (unit in\n' +
+      '   `deploy/digitalocean/`). Nginx TLS config is in\n' +
+      '   `deploy/digitalocean/evidence-wallet.nginx`.\n' +
+      '3. Confirm host env includes `BETTER_AUTH_URL=https://46-101-16-174.sslip.io`\n' +
+      '   (required by `startup-production.sh`). The script defaults\n' +
+      '   `WALLET_SIGNUP_OPEN=false` and `CHAPELGATE_MCP_SETUP_UI=false` when unset —\n' +
+      '   required production control for the DO pilot (MCP credential mint stays\n' +
+      '   closed; MCP Bearer remains host-level privilege — see CONTROL_MCP.md).\n' +
+      '   Optional overrides: `/etc/evidence-wallet.env` via systemd EnvironmentFile —\n' +
+      '   do **not** set `CHAPELGATE_MCP_SETUP_UI=true` on the public pilot.\n' +
+      '4. `HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe`\n' +
+      '   Expect `/ready` with `signupOpen: false` and (after this RC) `mcpSetupUi: false`.\n' +
+      '5. Record the deployed SHA. Do not claim the live origin matches a candidate\n' +
+      '   until this step is done.\n' +
+      '\n' +
+      '## DEPLOY (Vercel/Neon, when authorised)\n' +
+      '\n' +
+      '1. Confirm the git SHA of the release-candidate branch. Do not deploy `master`\n' +
+      '   without Andrew.\n' +
+      '2. Confirm Vercel production branch is the RC branch. Deployment Protection **on**.\n' +
+      '3. Inject (never commit): pooled TLS `DATABASE_URL`, `BETTER_AUTH_SECRET` (≥32 random bytes), `BETTER_AUTH_URL` = exact `https://` origin, `WALLET_SIGNUP_OPEN=false`.\n' +
+      '4. Run `node scripts/staging-preflight.mjs --hosted` in an environment that has those vars. Expect `ok: true`. The script never prints secrets.\n' +
+      '5. Deploy the RC SHA. `npm run build` applies every pending file in `migrations/` (including `0027_v2_gateway_phase_o.sql`).\n' +
+      '6. `HOSTED_ORIGIN=https://<origin> node scripts/hosted-probe.mjs`\n' +
+      '7. `HOSTED_ORIGIN=https://<origin> node scripts/hosted-acceptance.mjs`  \n' +
+      '   If the result is `deployment-protection`, leave protection on and supply a signed-in operator session. Do not disable it to make the test pass.\n' +
+      '\n' +
+      '## VERIFY\n' +
+      '\n' +
+      'Local:\n' +
+      '\n' +
+      '```text\n' +
+      'npm run check:auth\n' +
+      'npm run typecheck\n' +
+      'npm run lint\n' +
+      'npm test\n' +
+      'npm run test:app\n' +
+      'npm run test:concurrency-pg\n' +
+      'npm run test:persistence\n' +
+      'npm run test:http-persistence\n' +
+      'npm run test:backup\n' +
+      'npm run test:live-idor\n' +
+      'node scripts/mutation-isolation.mjs\n' +
+      'node scripts/e2e-demo.mjs\n' +
+      'npm run test:secret-scan\n' +
+      'node scripts/staging-preflight.mjs\n' +
+      'DATABASE_URL=$(node scripts/pg-local.mjs url) npm run build\n' +
+      '```\n' +
+      '\n' +
+      'Hosted: `GET /health` → `{"ok":true,"db":"up"}`. `GET /ready` → `authOrigin: true`, `signupOpen: false`. Then the synthetic operator journey on throwaway data only.\n' +
+      '\n' +
+      '## ROLL BACK\n' +
+      '\n' +
+      'Local: stop the app, restore the last physical backup (`pg-backup.mjs restore <tar> --replace-live-data`), check out the previous SHA, start Postgres + migrate + app, confirm `/health` and a sign-in.\n' +
+      '\n' +
+      'Hosted: redeploy the previous candidate SHA. Use Neon PITR if data must move back. Do **not** disable TLS, auth, tenant checks, or signup closure.\n' +
+      '\n' +
+      '## DATABASE BACKUP\n' +
+      '\n' +
+      'Local: `npm run test:backup` proves the isolated path. Operator backup: `node scripts/pg-backup.mjs backup`. Archives are not customer exports.\n' +
+      '\n' +
+      'Hosted: configure Neon PITR / backups on the Neon side. Application tar backup is for the local cluster only.\n' +
+      '\n' +
+      '## DATABASE RESTORE\n' +
+      '\n' +
+      '`node scripts/pg-backup.mjs restore <archive.tar.gz> --replace-live-data`  \n' +
+      'Without the flag the CLI exits 2 (will not overwrite live `data/postgres`). Prove on the isolated port first.\n' +
+      '\n' +
+      '## FAILED MIGRATION\n' +
+      '\n' +
+      '`scripts/migrate.mjs` applies each file in one transaction and records `_migrations`. A failed file rolls back; retry is safe. Do not edit an already-applied file — add a new `00xx_*.sql`. If 0009/0010 archive orphan facts, that is intentional (dangling/cross-org sources cannot stay GREEN). They do not delete fact rows.\n' +
+      '\n' +
+      '## AUTH FAILURE\n' +
+      '\n' +
+      '- LAN IP over HTTP will not keep `__Host-` cookies. Use `localhost` or HTTPS.\n' +
+      '- Hosted sessions bounce: `BETTER_AUTH_URL` does not match the browser origin.\n' +
+      '- `/ready` `"authOrigin": false`: HTTPS origin missing.\n' +
+      '- Rotate `BETTER_AUTH_SECRET` only with a planned sign-out of every session.\n' +
+      '\n' +
+      '## DATABASE OUTAGE\n' +
+      '\n' +
+      'Symptoms: `/health` 503, UI “Database unavailable”, scrubbed `[db] pool error` logs.\n' +
+      '\n' +
+      '1. Local: `node scripts/pg-local.mjs status` then `start` then `npm run db:migrate`.\n' +
+      '2. Hosted: check Neon status. Do not set `sslmode=disable`.\n' +
+      '3. Confirm `/health` 200 before sending operators back.\n' +
+      '\n' +
+      '## COMPROMISED SECRET\n' +
+      '\n' +
+      '1. Rotate the affected secret (`BETTER_AUTH_SECRET`, `DATABASE_URL` password, `XAI_API_KEY`, invite codes).\n' +
+      '2. Do not commit the new value. Do not paste it into chat.\n' +
+      '3. Re-invite members (old invite ids die). Audit for unexpected memberships.\n' +
+      '4. Record the incident; do not claim the leak never happened.\n' +
+      '\n' +
+      '## TENANT-ISOLATION INCIDENT\n' +
+      '\n' +
+      '1. Do not relax tests.\n' +
+      '2. `npm run test:live-idor` against the running app.\n' +
+      '3. `node scripts/mutation-isolation.mjs`\n' +
+      '4. If confirmed: take the origin off the network, preserve logs, notify Andrew.\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    # Operations runbook — Business Evidence Wallet
+    
+    Technically competent operator guide. No guessing. Do **not** paste secrets,
+    invite codes, or customer evidence into chat.
+    
+    ## Current truth
+    
+    Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
+    Release GO: no
+    
+    Local PostgreSQL 18 is the fully gated clean-room path. A DigitalOcean pilot
+    origin is live (see [HOSTED.md](./HOSTED.md)). Neon/Vercel remains separately
+    blocked until Andrew injects those credentials.
+    
+    ## DEPLOY (DigitalOcean pilot, when SSH authorised)
+    
+    1. Confirm the release-candidate SHA (PR #14 / `cursor/release-readiness-8a5b`
+       atop `deployment/reconciled-pilot-20260914`). Do not deploy `master` without
+       Andrew — `master` diverged and lacks this pilot's deploy/ops surface.
+    2. On the droplet (`/opt/business-evidence-wallet`): fetch, checkout the SHA,
+       `npm ci`, `npm run build`, restart `evidence-wallet.service` (unit in
+       `deploy/digitalocean/`). Nginx TLS config is in
+       `deploy/digitalocean/evidence-wallet.nginx`.
+    3. Confirm host env includes `BETTER_AUTH_URL=https://46-101-16-174.sslip.io`
+       (required by `startup-production.sh`). The script defaults
+       `WALLET_SIGNUP_OPEN=false` and `CHAPELGATE_MCP_SETUP_UI=false` when unset —
+       required production control for the DO pilot (MCP credential mint stays
+       closed; MCP Bearer remains host-level privilege — see CONTROL_MCP.md).
+       Optional overrides: `/etc/evidence-wallet.env` via systemd EnvironmentFile —
+       do **not** set `CHAPELGATE_MCP_SETUP_UI=true` on the public pilot.
+    4. `HOSTED_ORIGIN=https://46-101-16-174.sslip.io npm run test:hosted-probe`
+       Expect `/ready` with `signupOpen: false` and (after this RC) `mcpSetupUi: false`.
+    5. Record the deployed SHA. Do not claim the live origin matches a candidate
+       until this step is done.
+    
+    ## DEPLOY (Vercel/Neon, when authorised)
+    
+    1. Confirm the git SHA of the release-candidate branch. Do not deploy `master`
+       without Andrew.
+    2. Confirm Vercel production branch is the RC branch. Deployment Protection **on**.
+    3. Inject (never commit): pooled TLS `DATABASE_URL`, `BETTER_AUTH_SECRET` (≥32 random bytes), `BETTER_AUTH_URL` = exact `https://` origin, `WALLET_SIGNUP_OPEN=false`.
+    4. Run `node scripts/staging-preflight.mjs --hosted` in an environment that has those vars. Expect `ok: true`. The script never prints secrets.
+    5. Deploy the RC SHA. `npm run build` applies every pending file in `migrations/` (including `0027_v2_gateway_phase_o.sql`).
+    6. `HOSTED_ORIGIN=https://<origin> node scripts/hosted-probe.mjs`
+    7. `HOSTED_ORIGIN=https://<origin> node scripts/hosted-acceptance.mjs`  
+       If the result is `deployment-protection`, leave protection on and supply a signed-in operator session. Do not disable it to make the test pass.
+    
+    ## VERIFY
+    
+    Local:
+    
+    ```text
+    npm run check:auth
+    npm run typecheck
+    npm run lint
+    npm test
+    npm run test:app
+    npm run test:concurrency-pg
+    npm run test:persistence
+    npm run test:http-persistence
+    npm run test:backup
+    npm run test:live-idor
+    node scripts/mutation-isolation.mjs
+    node scripts/e2e-demo.mjs
+    npm run test:secret-scan
+    node scripts/staging-preflight.mjs
+    DATABASE_URL=$(node scripts/pg-local.mjs url) npm run build
+    ```
+    
+    Hosted: `GET /health` → `{"ok":true,"db":"up"}`. `GET /ready` → `authOrigin: true`, `signupOpen: false`. Then the synthetic operator journey on throwaway data only.
+    
+    ## ROLL BACK
+    
+    Local: stop the app, restore the last physical backup (`pg-backup.mjs restore <tar> --replace-live-data`), check out the previous SHA, start Postgres + migrate + app, confirm `/health` and a sign-in.
+    
+    Hosted: redeploy the previous candidate SHA. Use Neon PITR if data must move back. Do **not** disable TLS, auth, tenant checks, or signup closure.
+    
+    ## DATABASE BACKUP
+    
+    Local: `npm run test:backup` proves the isolated path. Operator backup: `node scripts/pg-backup.mjs backup`. Archives are not customer exports.
+    
+    Hosted: configure Neon PITR / backups on the Neon side. Application tar backup is for the local cluster only.
+    
+    ## DATABASE RESTORE
+    
+    `node scripts/pg-backup.mjs restore <archive.tar.gz> --replace-live-data`  
+    Without the flag the CLI exits 2 (will not overwrite live `data/postgres`). Prove on the isolated port first.
+    
+    ## FAILED MIGRATION
+    
+    `scripts/migrate.mjs` applies each file in one transaction and records `_migrations`. A failed file rolls back; retry is safe. Do not edit an already-applied file — add a new `00xx_*.sql`. If 0009/0010 archive orphan facts, that is intentional (dangling/cross-org sources cannot stay GREEN). They do not delete fact rows.
+    
+    ## AUTH FAILURE
+    
+    - LAN IP over HTTP will not keep `__Host-` cookies. Use `localhost` or HTTPS.
+    - Hosted sessions bounce: `BETTER_AUTH_URL` does not match the browser origin.
+    - `/ready` `"authOrigin": false`: HTTPS origin missing.
+    - Rotate `BETTER_AUTH_SECRET` only with a planned sign-out of every session.
+    
+    ## DATABASE OUTAGE
+    
+    Symptoms: `/health` 503, UI “Database unavailable”, scrubbed `[db] pool error` logs.
+    
+    1. Local: `node scripts/pg-local.mjs status` then `start` then `npm run db:migrate`.
+    2. Hosted: check Neon status. Do not set `sslmode=disable`.
+    3. Confirm `/health` 200 before sending operators back.
+    
+    ## COMPROMISED SECRET
+    
+    1. Rotate the affected secret (`BETTER_AUTH_SECRET`, `DATABASE_URL` password, `XAI_API_KEY`, invite codes).
+    2. Do not commit the new value. Do not paste it into chat.
+    3. Re-invite members (old invite ids die). Audit for unexpected memberships.
+    4. Record the incident; do not claim the leak never happened.
+    
+    ## TENANT-ISOLATION INCIDENT
+    
+    1. Do not relax tests.
+    2. `npm run test:live-idor` against the running app.
+    3. `node scripts/mutation-isolation.mjs`
+    4. If confirmed: take the origin off the network, preserve logs, notify Andrew.
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:9:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: docs/OPERATOR.md names tip and refuses GO
+not ok 3 - docs/OPERATOR.md names tip and refuses GO
+  ---
+  duration_ms: 0.725649
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: a61f1a8be38615bf994143d074da05b9535fdfbb$/m. Input:
+    
+    '# Operator guide\n' +
+      '\n' +
+      'Business Evidence Wallet stores supplier evidence, human-approved facts, questionnaires, cited response packs, and an audit trail. AI may extract or draft. It does not approve facts and cannot turn RED, EXPIRED, or CONFLICT into GREEN.\n' +
+      '\n' +
+      'This guide is for a named operator running a **private** instance. It is not a public-SaaS onboarding manual.\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      '\n' +
+      '## First run (local PostgreSQL)\n' +
+      '\n' +
+      'See [PILOT.md](./PILOT.md) for install, database ports, cookies, and backup. Summary:\n' +
+      '\n' +
+      '1. Clone the private repository and check out the release-candidate branch.\n' +
+      '2. `npm ci` then `sh startup.sh` (or `npm run pg:start` + `npm run dev`).\n' +
+      '3. Confirm `npm run check:auth` prints sign-in on.\n' +
+      '4. Open the app, create an account, create an organisation.\n' +
+      '\n' +
+      'Do not create a `.env` file. Local secrets live in gitignored `data/pg-password` and `data/auth-secret` (mode 0600).\n' +
+      '\n' +
+      '## First organisation\n' +
+      '\n' +
+      '1. **Create organisation** on the organisations screen.\n' +
+      '2. Optional: **Load demonstration pack** (admin/owner). Sample files are labelled demonstration. Nothing is pre-approved. Loading twice is a no-op. A partial load (for example after a rate-limit stop) resumes missing files instead of bricking the pack. The same demonstration filename cannot be stored twice.\n' +
+      '3. **Team → Invite**: pick a role (never owner via invite). Copy the bearer code. Share it out of band. Email is a note, not a credential. Codes expire in 7 days; re-invite rotates the code.\n' +
+      '4. Joiners sign in separately and paste the code. Matching the invited email is not enough.\n' +
+      '\n' +
+      'Last owner cannot leave — the Leave button says so and the server refuses. Transfer ownership first, or delete the organisation.\n' +
+      '\n' +
+      '## Evidence and facts\n' +
+      '\n' +
+      '- Upload PDF / DOCX / XLSX / TXT (4 MiB). Macros are never executed.\n' +
+      '- Heuristic extraction always runs. Optional **Ask model** needs `XAI_API_KEY` and is rate-limited.\n' +
+      '- If extraction fails or is stuck on **parsing**, Retry parse. A parse that is still running (under five minutes) is refused. Human corrections to candidates survive retry.\n' +
+      '- Reviewers approve or reject candidates. Contributors cannot approve.\n' +
+      '- Disagreeing values become CONFLICT. Keep the true value; do not rubber-stamp GREEN.\n' +
+      '- Invalidate a source when it is withdrawn. Original bytes remain downloadable. Dependents recompute.\n' +
+      '\n' +
+      '## Questionnaires and packs\n' +
+      '\n' +
+      '- Upload a questionnaire from Evidence (check “Treat as questionnaire”) or use the demo PQQ.\n' +
+      '- Create a response pack. Status is computed: GREEN / AMBER / RED / EXPIRED / CONFLICT.\n' +
+      '- Approving wording does not change evidence status. Exports keep that status.\n' +
+      '- Export JSON / XLSX / DOCX. Re-open the file. GREEN rows must cite live facts.\n' +
+      '\n' +
+      '## Export, leave, delete\n' +
+      '\n' +
+      '- Admins can download an **organisation snapshot** (metadata, members, facts, answers). File bytes and live invite codes are omitted.\n' +
+      '- Any member except the last owner can **leave**.\n' +
+      '- Owners can **delete** the organisation by typing its exact name. This wipes memberships, evidence, facts, packs, exports, jobs, and audit.\n' +
+      '\n' +
+      '## Roles\n' +
+      '\n' +
+      '| Role | Can |\n' +
+      '|---|---|\n' +
+      '| viewer | read, download originals |\n' +
+      '| contributor | upload, extract, create packs |\n' +
+      '| reviewer | approve facts/answers, export, invalidate sources |\n' +
+      '| admin | manage members, load demo, snapshot |\n' +
+      '| owner | all of the above, including delete organisation |\n' +
+      '\n' +
+      '## Limits\n' +
+      '\n' +
+      '- 10 organisations created / user / hour\n' +
+      '- 60 uploads / user / hour\n' +
+      '- 60 invites / user / org / hour\n' +
+      '- 30 AI extracts / user / org / hour\n' +
+      '- 25 memberships / user\n' +
+      '- 5,000 documents / org (including archived)\n' +
+      '- 250 live pending invites / org\n' +
+      '- 500 packs / org\n' +
+      '- 2,000 stored exports / org\n' +
+      '\n' +
+      '429 responses say how many seconds to wait.\n' +
+      '\n' +
+      '## What this product does not do\n' +
+      '\n' +
+      'No mailer, SAML, OCR, FX conversion, or background worker. Invitations are capability codes shown in the UI. Set `WALLET_SIGNUP_OPEN=false` to reject new email/password **and** new Grok broker OAuth accounts (existing users still sign in). The landing/login/signup UI stays unknown until `/ready` answers 200 with `signupOpen: true`, and fail-closed on a non-OK or failed fetch. Unverified email/password can occupy a mailbox while signup is open (accepted risk K23). There is no password-reset email.\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    # Operator guide
+    
+    Business Evidence Wallet stores supplier evidence, human-approved facts, questionnaires, cited response packs, and an audit trail. AI may extract or draft. It does not approve facts and cannot turn RED, EXPIRED, or CONFLICT into GREEN.
+    
+    This guide is for a named operator running a **private** instance. It is not a public-SaaS onboarding manual.
+    
+    ## Current truth
+    
+    Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19
+    Release GO: no
+    
+    ## First run (local PostgreSQL)
+    
+    See [PILOT.md](./PILOT.md) for install, database ports, cookies, and backup. Summary:
+    
+    1. Clone the private repository and check out the release-candidate branch.
+    2. `npm ci` then `sh startup.sh` (or `npm run pg:start` + `npm run dev`).
+    3. Confirm `npm run check:auth` prints sign-in on.
+    4. Open the app, create an account, create an organisation.
+    
+    Do not create a `.env` file. Local secrets live in gitignored `data/pg-password` and `data/auth-secret` (mode 0600).
+    
+    ## First organisation
+    
+    1. **Create organisation** on the organisations screen.
+    2. Optional: **Load demonstration pack** (admin/owner). Sample files are labelled demonstration. Nothing is pre-approved. Loading twice is a no-op. A partial load (for example after a rate-limit stop) resumes missing files instead of bricking the pack. The same demonstration filename cannot be stored twice.
+    3. **Team → Invite**: pick a role (never owner via invite). Copy the bearer code. Share it out of band. Email is a note, not a credential. Codes expire in 7 days; re-invite rotates the code.
+    4. Joiners sign in separately and paste the code. Matching the invited email is not enough.
+    
+    Last owner cannot leave — the Leave button says so and the server refuses. Transfer ownership first, or delete the organisation.
+    
+    ## Evidence and facts
+    
+    - Upload PDF / DOCX / XLSX / TXT (4 MiB). Macros are never executed.
+    - Heuristic extraction always runs. Optional **Ask model** needs `XAI_API_KEY` and is rate-limited.
+    - If extraction fails or is stuck on **parsing**, Retry parse. A parse that is still running (under five minutes) is refused. Human corrections to candidates survive retry.
+    - Reviewers approve or reject candidates. Contributors cannot approve.
+    - Disagreeing values become CONFLICT. Keep the true value; do not rubber-stamp GREEN.
+    - Invalidate a source when it is withdrawn. Original bytes remain downloadable. Dependents recompute.
+    
+    ## Questionnaires and packs
+    
+    - Upload a questionnaire from Evidence (check “Treat as questionnaire”) or use the demo PQQ.
+    - Create a response pack. Status is computed: GREEN / AMBER / RED / EXPIRED / CONFLICT.
+    - Approving wording does not change evidence status. Exports keep that status.
+    - Export JSON / XLSX / DOCX. Re-open the file. GREEN rows must cite live facts.
+    
+    ## Export, leave, delete
+    
+    - Admins can download an **organisation snapshot** (metadata, members, facts, answers). File bytes and live invite codes are omitted.
+    - Any member except the last owner can **leave**.
+    - Owners can **delete** the organisation by typing its exact name. This wipes memberships, evidence, facts, packs, exports, jobs, and audit.
+    
+    ## Roles
+    
+    | Role | Can |
+    |---|---|
+    | viewer | read, download originals |
+    | contributor | upload, extract, create packs |
+    | reviewer | approve facts/answers, export, invalidate sources |
+    | admin | manage members, load demo, snapshot |
+    | owner | all of the above, including delete organisation |
+    
+    ## Limits
+    
+    - 10 organisations created / user / hour
+    - 60 uploads / user / hour
+    - 60 invites / user / org / hour
+    - 30 AI extracts / user / org / hour
+    - 25 memberships / user
+    - 5,000 documents / org (including archived)
+    - 250 live pending invites / org
+    - 500 packs / org
+    - 2,000 stored exports / org
+    
+    429 responses say how many seconds to wait.
+    
+    ## What this product does not do
+    
+    No mailer, SAML, OCR, FX conversion, or background worker. Invitations are capability codes shown in the UI. Set `WALLET_SIGNUP_OPEN=false` to reject new email/password **and** new Grok broker OAuth accounts (existing users still sign in). The landing/login/signup UI stays unknown until `/ready` answers 200 with `signupOpen: true`, and fail-closed on a non-OK or failed fetch. Unverified email/password can occupy a mailbox while signup is open (accepted risk K23). There is no password-reset email.
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/ew-1027-release-truth-tip.test.mjs:9:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 0
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 167.218084
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/hcv-questionnaire-detail-loading-status.test.mjs 2>&1
+TAP version 13
+# Subtest: questionnaire detail announces specific loading
+not ok 1 - questionnaire detail announces specific loading
+  ---
+  duration_ms: 1.844419
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-loading-status.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Loading questionnaire…/. Input:
+    
+    'import { useQuery } from "@tanstack/react-query";\n' +
+      'import { createFileRoute, Link } from "@tanstack/react-router";\n' +
+      'import { getQuestionnaireFn } from "@/server/fns";\n' +
+      '\n' +
+      'export const Route = createFileRoute("/app/$orgId/questionnaires/$qid")({ component: QDetail });\n' +
+      '\n' +
+      'function QDetail() {\n' +
+      '  const { orgId, qid } = Route.useParams();\n' +
+      '  const q = useQuery({\n' +
+      '    queryKey: ["qn", orgId, qid],\n' +
+      '    queryFn: () => getQuestionnaireFn({ data: { orgId, questionnaireId: qid } }),\n' +
+      '  });\n' +
+      '  if (q.isPending) return <p role="status" aria-busy="true" className="text-muted">Loading…</p>;\n' +
+      '  if (q.error) return <p role="alert" className="text-red-ink">{q.error.message}</p>;\n' +
+      '  if (!q.data) return <p role="alert" className="text-red-ink">Questionnaire not found.</p>;\n' +
+      '  return (\n' +
+      '    <div className="space-y-4">\n' +
+      '      <Link to="/app/$orgId/questionnaires" params={{ orgId }} className="text-sm text-muted underline">\n' +
+      '        Questionnaires\n' +
+      '      </Link>\n' +
+      '      <h1 className="font-display text-3xl">{q.data.questionnaire.title}</h1>\n' +
+      '      {q.data.questionnaire.uncertain_json && q.data.questionnaire.uncertain_json !== "[]" ? (\n' +
+      '        <p role="status" className="rounded-[16px] border border-amber-ink/40 p-3 text-sm">\n' +
+      '          Some lines were flagged as uncertain and were not turned into questions.\n' +
+      '        </p>\n' +
+      '      ) : null}\n' +
+      '      {q.data.questions.length === 0 ? (\n' +
+      '        <p role="status" className="text-sm text-muted">\n' +
+      '          No questions were stored for this questionnaire.\n' +
+      '        </p>\n' +
+      '      ) : (\n' +
+      '        <ol className="space-y-3">\n' +
+      '          {q.data.questions.map((row, i) => (\n' +
+      '            <li key={String(row.id)} className="rounded-[16px] border border-line p-4">\n' +
+      '              <p className="text-xs uppercase tracking-wider text-muted">\n' +
+      '                {String(row.question_identifier ?? i + 1)} · {String(row.section ?? "")}\n' +
+      '              </p>\n' +
+      '              <p className="mt-1">{String(row.question_text)}</p>\n' +
+      '            </li>\n' +
+      '          ))}\n' +
+      '        </ol>\n' +
+      '      )}\n' +
+      '    </div>\n' +
+      '  );\n' +
+      '}\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    import { useQuery } from "@tanstack/react-query";
+    import { createFileRoute, Link } from "@tanstack/react-router";
+    import { getQuestionnaireFn } from "@/server/fns";
+    
+    export const Route = createFileRoute("/app/$orgId/questionnaires/$qid")({ component: QDetail });
+    
+    function QDetail() {
+      const { orgId, qid } = Route.useParams();
+      const q = useQuery({
+        queryKey: ["qn", orgId, qid],
+        queryFn: () => getQuestionnaireFn({ data: { orgId, questionnaireId: qid } }),
+      });
+      if (q.isPending) return <p role="status" aria-busy="true" className="text-muted">Loading…</p>;
+      if (q.error) return <p role="alert" className="text-red-ink">{q.error.message}</p>;
+      if (!q.data) return <p role="alert" className="text-red-ink">Questionnaire not found.</p>;
+      return (
+        <div className="space-y-4">
+          <Link to="/app/$orgId/questionnaires" params={{ orgId }} className="text-sm text-muted underline">
+            Questionnaires
+          </Link>
+          <h1 className="font-display text-3xl">{q.data.questionnaire.title}</h1>
+          {q.data.questionnaire.uncertain_json && q.data.questionnaire.uncertain_json !== "[]" ? (
+            <p role="status" className="rounded-[16px] border border-amber-ink/40 p-3 text-sm">
+              Some lines were flagged as uncertain and were not turned into questions.
+            </p>
+          ) : null}
+          {q.data.questions.length === 0 ? (
+            <p role="status" className="text-sm text-muted">
+              No questions were stored for this questionnaire.
+            </p>
+          ) : (
+            <ol className="space-y-3">
+              {q.data.questions.map((row, i) => (
+                <li key={String(row.id)} className="rounded-[16px] border border-line p-4">
+                  <p className="text-xs uppercase tracking-wider text-muted">
+                    {String(row.question_identifier ?? i + 1)} · {String(row.section ?? "")}
+                  </p>
+                  <p className="mt-1">{String(row.question_text)}</p>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      );
+    }
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-questionnaire-detail-loading-status.test.mjs:6:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 144.350341
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/migration-plan.test.mjs 2>&1 | grep -A 20 "not ok"
+not ok 5 - the auth schema copy ships in the globbed migration directory
+  ---
+  duration_ms: 1.695905
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        '0001_auth.sql',
+        '0002_evidence_wallet.sql',
+        '0003_answer_notes.sql',
+        '0004_claim_human_edits.sql',
+    ...
+        '0027_v2_gateway_phase_o.sql',
+    +   '0028_ai_extraction_optin.sql',
+    +   '0029_retention_deletion_audit.sql'
+      ]
+--
+not ok 6 - a database that already applied production 0001-0010 only has 0011-0027 pending
+  ---
+  duration_ms: 0.456541
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/migration-plan.test.mjs:96:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        '0011_v2_foundations.sql',
+        '0012_v2_decision_inbox.sql',
+        '0013_v2_council_hardening.sql',
+        '0014_v2_agent_loop.sql',
+    ...
+        '0027_v2_gateway_phase_o.sql',
+    +   '0028_ai_extraction_optin.sql',
+    +   '0029_retention_deletion_audit.sql'
+      ]
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/migrations/
+0001_auth.sql
+0002_evidence_wallet.sql
+0003_answer_notes.sql
+0004_claim_human_edits.sql
+0005_integrity_guards.sql
+0006_rate_quotas_invites.sql
+0007_org_lifecycle.sql
+0008_demo_filename_unique.sql
+0009_orphan_source_facts.sql
+0010_orphan_source_org_scope.sql
+0011_v2_foundations.sql
+0012_v2_decision_inbox.sql
+0013_v2_council_hardening.sql
+0014_v2_agent_loop.sql
+0015_v2_workflows.sql
+0016_v2_quotes_comms.sql
+0017_v2_answer_bank_inbox.sql
+0018_v2_rls_tenant.sql
+0019_v2_deletion_orders_assertions.sql
+0020_v2_perf_indexes.sql
+0021_v2_preference_hints.sql
+0022_v2_preference_scopes.sql
+0023_v2_agent_credential_rotation.sql
+0024_v2_entity_type_defs.sql
+0025_v2_relation_type_defs.sql
+0026_v2_gateway_audit_rls.sql
+0027_v2_gateway_phase_o.sql
+0028_ai_extraction_optin.sql
+0029_retention_deletion_audit.sql
+auth
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/rollback-rehearsal.test.mjs 2>&1 | grep -A 30 "not ok"
+not ok 1 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+  ---
+  duration_ms: 6.256942
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EADDRINUSE: address already in use 127.0.0.1:55435'
+  code: 'EADDRINUSE'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    listenInCluster (node:net:1998:12)
+    node:net:2207:7
+    process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+  ...
+# Subtest: restores a synthetic pre-0011 backup after applying migrations through 0027
+ok 2 - restores a synthetic pre-0011 backup after applying migrations through 0027
+  ---
+  duration_ms: 103807.694621
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 103971.076967
+[0m
+[0m→ [0mRead repo/scripts/check-auth-invariant.mjs[90m [limit=50, offset=35][0m
+[0m
+[0m← [0mEdit repo/scripts/check-auth-invariant.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.mjs
+@@ -39,10 +39,10 @@
+ export function compareAuthInvariant({ devAuthEnabled, buildAuthEnabled }) {
+   const label = (value) => (value ? "on" : "off");
+   if (devAuthEnabled === null || devAuthEnabled === undefined) {
+     return {
+-      status: "ok",
+-      message: "[auth-invariant] dev server not running; build value used as reference",
++      status: "indeterminate",
++      message: "[auth-invariant] dev server not observable; build value used as reference",
+     };
+   }
+   if (devAuthEnabled === buildAuthEnabled) {
+     return {
+
+[0m
+[0m→ [0mRead repo/scripts/check-auth-invariant.mjs[90m [limit=30, offset=90][0m
+[0m→ [0mRead repo/scripts/with-app-env.mjs[90m [limit=50][0m
+[0m✱ [0mGrep "isMainModule"[90m in repo/scripts · 4 matches[0m
+[0m→ [0mRead repo/scripts/with-app-env.mjs[90m [limit=40, offset=90][0m

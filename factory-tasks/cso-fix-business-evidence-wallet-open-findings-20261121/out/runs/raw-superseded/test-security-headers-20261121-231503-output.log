@@ -1,0 +1,67 @@
+# rt test-security-headers | 20261121-231503 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/security-headers-lock.test.mjs
+TAP version 13
+# Subtest: security headers lock
+    # Subtest: exports the private-wallet browser headers
+    ok 1 - exports the private-wallet browser headers
+      ---
+      duration_ms: 0.857846
+      type: 'test'
+      ...
+    # Subtest: mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+    ok 2 - mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+      ---
+      duration_ms: 21.976464
+      type: 'test'
+      ...
+    # Subtest: health.ts applies mergeWalletSecurityHeaders in jsonResponse
+    ok 3 - health.ts applies mergeWalletSecurityHeaders in jsonResponse
+      ---
+      duration_ms: 0.276654
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents the header set including Permissions-Policy
+    not ok 4 - SECURITY.md documents the header set including Permissions-Policy
+      ---
+      duration_ms: 6.259226
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:70:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        The expression evaluated to a falsy value:
+        
+          assert.ok(sec.includes("Referrer-Policy: no-referrer"))
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:73:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+        Test.run (node:internal/test_runner/test:1047:25)
+        Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+        Test.postRun (node:internal/test_runner/test:1173:19)
+        Test.run (node:internal/test_runner/test:1101:12)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..4
+not ok 1 - security headers lock
+  ---
+  duration_ms: 30.659926
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/security-headers-lock.test.mjs:14:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 4
+# suites 1
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 161.815795

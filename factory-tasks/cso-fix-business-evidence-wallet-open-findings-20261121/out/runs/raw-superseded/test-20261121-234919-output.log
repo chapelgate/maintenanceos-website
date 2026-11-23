@@ -1,0 +1,97 @@
+# rt test | 20261121-234919 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/check-auth-invariant.test.mjs
+TAP version 13
+# Subtest: the flag predicate matches src/lib/auth
+ok 1 - the flag predicate matches src/lib/auth
+  ---
+  duration_ms: 1.301155
+  type: 'test'
+  ...
+# Subtest: reads the value a live dev server resolved
+ok 2 - reads the value a live dev server resolved
+  ---
+  duration_ms: 0.465195
+  type: 'test'
+  ...
+# Subtest: a server started without the flag reads as sign-in on
+ok 3 - a server started without the flag reads as sign-in on
+  ---
+  duration_ms: 0.207119
+  type: 'test'
+  ...
+# Subtest: agreement passes
+ok 4 - agreement passes
+  ---
+  duration_ms: 0.22395
+  type: 'test'
+  ...
+# Subtest: divergence fails in either direction
+ok 5 - divergence fails in either direction
+  ---
+  duration_ms: 0.306328
+  type: 'test'
+  ...
+# Subtest: an unobservable dev server is indeterminate, not agreement
+ok 6 - an unobservable dev server is indeterminate, not agreement
+  ---
+  duration_ms: 0.179441
+  type: 'test'
+  ...
+# Subtest: a dev server that cannot be reached probes as null
+ok 7 - a dev server that cannot be reached probes as null
+  ---
+  duration_ms: 0.33269
+  type: 'test'
+  ...
+# Subtest: a server without the endpoint probes as null, not as agreement
+ok 8 - a server without the endpoint probes as null, not as agreement
+  ---
+  duration_ms: 0.338025
+  type: 'test'
+  ...
+# Subtest: only a divergence warns the smoke verdict
+ok 9 - only a divergence warns the smoke verdict
+  ---
+  duration_ms: 1.255083
+  type: 'test'
+  ...
+# Subtest: the build side resolves the template's shipped app-env
+ok 10 - the build side resolves the template's shipped app-env
+  ---
+  duration_ms: 0.897087
+  type: 'test'
+  ...
+# Subtest: the CLI reports rather than silently passing when run via a symlink
+not ok 11 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 381.400277
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /could not read the dev server's resolved VITE_AUTH_ENABLED/. Input:
+    
+    '[auth-invariant] dev server not running; build value used as reference\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    [auth-invariant] dev server not running; build value used as reference
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:110:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 10
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 719.889602

@@ -1,0 +1,7 @@
+# rt test-platform-full | 20261123-083001 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121
+# cmd: npm run test:platform
+npm error Missing script: "test:platform"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: /home/andy/.cache/npm-local/_logs/2026-11-23T08_30_02_071Z-debug-0.log

@@ -1,0 +1,33 @@
+# rt test | 20261121-232053 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/rollback-rehearsal.test.mjs
+TAP version 13
+# Subtest: free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+not ok 1 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+  ---
+  duration_ms: 8.029603
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EADDRINUSE: address already in use 127.0.0.1:55435'
+  code: 'EADDRINUSE'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    listenInCluster (node:net:1998:12)
+    node:net:2207:7
+    process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+  ...
+# Subtest: restores a synthetic pre-0011 backup after applying migrations through 0027
+ok 2 - restores a synthetic pre-0011 backup after applying migrations through 0027
+  ---
+  duration_ms: 104346.781242
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 104503.201961

@@ -1,0 +1,5 @@
+business-evidence-wallet	readiness-security-FINDINGS	BEW-1	high	BEW preview secret not migrated to env var	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-2	high	CSP unsafe-inline in script-src	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-3	high	BEW RT-08/RT-19 not executed in red team suite	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-4	high	Shakedown findings RT-01/RT-04/RT-08 fixes (PR 1512 gap)	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-5	medium	OWASP red-team pass: 119 failing tests out of 2176 (test:platform)	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv

@@ -1,0 +1,28 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 104
+drwxrwxr-x   4 andy andy  4096 Nov 22 00:03 .
+drwxrwxr-x 695 andy andy 65536 Nov 22 07:05 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 07:11 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  1702 Nov 22 07:11 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 07:11 out
+drwxrwxr-x  23 andy andy  4096 Nov 22 07:08 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 07:11 status.json
+-rw-rw-r--   1 andy andy  1920 Nov 22 04:34 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m→ [0mRead FINDINGS.tsv
+[0m✱ [0mGlob "**/PROGRESS.md"[90m in out · 1 match[0m
+[0m→ [0mRead out/PROGRESS.md
+[91m[1mError: [0m{
+  "name": "UnknownError",
+  "data": {
+    "message": "Unexpected server error. Check server logs for details.",
+    "ref": "err_63d700c4"
+  }
+}
+[91m[1mError: [0mFailed to execute statement

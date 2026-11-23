@@ -1,0 +1,1636 @@
+[0m
+> build · estate-coding
+[0m
+Looking at the BRIEF.md findings, I need to address 4 CSO findings. Let me start by exploring the repository structure and current state.
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 100
+drwxrwxr-x   4 andy andy  4096 Nov 22 00:03 .
+drwxrwxr-x 673 andy andy 61440 Nov 22 01:35 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 01:52 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy   879 Nov 22 01:52 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 01:52 out
+drwxrwxr-x  21 andy andy  4096 Nov 21 22:22 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 01:52 status.json
+-rw-rw-r--   1 andy andy  1432 Nov 22 00:07 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo/
+total 36
+drwxrwxr-x  9 andy andy 4096 Nov 21 21:54 .
+drwxrwxr-x 51 andy andy 4096 Nov 21 21:30 ..
+drwxrwxr-x 21 andy andy 4096 Nov 21 21:31 business-evidence-wallet
+drwxrwxr-x 21 andy andy 4096 Nov 21 22:32 business-os
+drwxrwxr-x 14 andy andy 4096 Nov 21 22:44 chapelgate-multilingual-transcribe
+drwxrwxr-x 19 andy andy 4096 Nov 21 22:54 cheap-trips
+drwxrwxr-x 23 andy andy 4096 Nov 21 22:17 holiday-let-operator
+drwxrwxr-x 21 andy andy 4096 Nov 22 00:49 housing-compliance-vault
+drwxrwxr-x 26 andy andy 4096 Nov 21 22:13 maintenanceos-website
+[0m
+[0m$ [0mcat /home/andy/chapelgate/out/PROGRESS.md 2>/dev/null || echo "No PROGRESS.md found"
+Findings sweep completed per BRIEF.md: 49 findings across 5 products extracted from test outputs. out/FINDINGS-OPEN.tsv and /home/andy/chapelgate/jobs-work-dell/readiness/findings/FINDINGS-SWEEP-20261121.md created with raw evidence citations. out/RESULT.md and out/MISSION_COMPLETE (PASS) written with proper evidence from out/raw/ files.
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-1	high	BEW preview secret not migrated to env var	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-2	high	CSP unsafe-inline in script-src	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-3	high	BEW RT-08/RT-19 not executed in red team suite	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-4	high	Shakedown findings RT-01/RT-04/RT-08 fixes (PR 1512 gap)	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+business-evidence-wallet	readiness-security-FINDINGS	BEW-5	medium	OWASP red-team pass: 119 failing tests out of 2176 (test:platform)	/home/andy/chapelgate/jobs-work-dell/readiness/security/FINDINGS.tsv
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo/business-evidence-wallet/
+total 2348
+drwxrwxr-x  21 andy andy    4096 Nov 21 21:31 .
+drwxrwxr-x   9 andy andy    4096 Nov 21 21:54 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:31 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:31 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:31 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:31 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:31 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:31 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:31 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:31 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 .cursor
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:31 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 deploy
+drwxrwxr-x   9 andy andy    4096 Nov 21 21:31 docs
+-rw-rw-r--   1 andy andy    1093 Nov 21 21:31 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:31 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:31 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:31 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-6.md
+drwxrwxr-x   8 andy andy    4096 Nov 21 21:55 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:31 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 21 21:31 .gitleaksignore
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:31 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:31 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:31 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 migrations
+-rw-rw-r--   1 andy andy       0 Nov 21 21:31 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:31 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:34 out
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:31 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 21 21:31 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:31 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:31 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:31 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:31 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:31 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 21 21:31 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 21 21:31 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:31 specs
+drwxrwxr-x   7 andy andy    4096 Nov 21 21:31 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:31 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:31 startup.sh
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:31 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:31 tsconfig.json
+-rw-rw-r--   1 andy andy    9848 Nov 21 21:31 vite.config.ts
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/PROGRESS.md 2>/dev/null || echo "No PROGRESS.md in job folder"
+(no output)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo/business-evidence-wallet/out/
+total 28
+drwxrwxr-x  4 andy andy 4096 Nov 21 21:34 .
+drwxrwxr-x 21 andy andy 4096 Nov 21 21:31 ..
+-rw-rw-r--  1 andy andy 1508 Nov 21 21:31 junit-results.xml
+-rw-rw-r--  1 andy andy    2 Nov 21 21:31 pytest-exit-code.txt
+-rw-rw-r--  1 andy andy  738 Nov 21 21:31 pytest-output.txt
+drwxrwxr-x  2 andy andy 4096 Nov 21 23:02 raw
+drwxrwxr-x  3 andy andy 4096 Nov 21 21:34 runs
+[0m
+[0m→ [0mRead out/raw
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/history.log
+2026-11-21T21:16:16+00:00 SEMAPHORE: acquired cycle semaphore with 29s jitter
+2026-11-21T22:46:45+00:00 HUNG CYCLE: opencode run elapsed 5400s (exceeded 300s timeout)
+2026-11-21T22:46:48+00:00 cycle=1 exit=124 v6.1 session=
+2026-11-21T22:47:03+00:00 SEMAPHORE: acquired cycle semaphore with 8s jitter
+2026-11-21T22:51:12+00:00 cycle=2 exit=1 v6.1 session=
+2026-11-21T22:51:27+00:00 SEMAPHORE: acquired cycle semaphore with 4s jitter
+2026-11-22T00:21:32+00:00 HUNG CYCLE: opencode run elapsed 5401s (exceeded 300s timeout)
+2026-11-22T00:21:44+00:00 cycle=3 exit=124 v6.1 session=
+2026-11-22T00:22:01+00:00 SEMAPHORE: acquired cycle semaphore with 1s jitter
+2026-11-22T01:52:02+00:00 HUNG CYCLE: opencode run elapsed 5400s (exceeded 300s timeout)
+2026-11-22T01:52:05+00:00 cycle=4 exit=124 v6.1 session=
+2026-11-22T01:52:20+00:00 SEMAPHORE: acquired cycle semaphore with 0s jitter
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git status && echo "---BRANCH---" && git branch --show-current && echo "---SHA---" && git rev-parse HEAD
+HEAD detached at 94e8201
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	out/raw/
+	out/runs/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+---BRANCH---
+---SHA---
+94e8201184927cdfb1d1db20854e91a7fc8d232e
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/SHA
+a61f1a8be38615bf994143d074da05b9535fdfbb
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261121-225910-output.log | head -100
+# rt test-platform | 20261121-225910 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: npm run test:platform
+
+> app-builder-workspace@0.0.0-private test:platform
+> npm test
+
+
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 0.864624
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 0.345613
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 2.406292
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 1.609709
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.476332
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.601689
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.472433
+      type: 'test'
+      ...
+    1..4
+ok 2 - admin error copy lock
+  ---
+  duration_ms: 5.680272
+  type: 'suite'
+  ...
+# Subtest: agent display name max lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.88253
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+    ok 2 - agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.467886
+      type: 'test'
+      ...
+    1..2
+ok 3 - agent display name max lock
+  ---
+  duration_ms: 3.549676
+  type: 'suite'
+  ...
+# Subtest: agent display name max wire lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.830714
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+    ok 2 - v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.584376
+      type: 'test'
+      ...
+    1..2
+ok 4 - agent display name max wire lock
+  ---
+  duration_ms: 2.527855
+  type: 'suite'
+  ...
+# Subtest: agent loop events list max lock
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-full-20261122-001953-output.log | tail -100
+---
+      duration_ms: 0.310684
+      type: 'test'
+      ...
+    1..2
+ok 1598 - xr-spatial-tracking permissions deny lock
+  ---
+  duration_ms: 2.584095
+  type: 'suite'
+  ...
+# Subtest: zip extracted text lock
+    # Subtest: utf8FromBytes decodes valid UTF-8 bytes
+    ok 1 - utf8FromBytes decodes valid UTF-8 bytes
+      ---
+      duration_ms: 1.002666
+      type: 'test'
+      ...
+    # Subtest: clipExtractedText returns input under cap
+    ok 2 - clipExtractedText returns input under cap
+      ---
+      duration_ms: 0.213933
+      type: 'test'
+      ...
+    # Subtest: throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+    ok 3 - throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+      ---
+      duration_ms: 0.549453
+      type: 'test'
+      ...
+    1..3
+ok 1599 - zip extracted text lock
+  ---
+  duration_ms: 3.093495
+  type: 'suite'
+  ...
+# Subtest: zip size caps lock
+    # Subtest: keeps per-entry and inflate caps at 2 MiB
+    ok 1 - keeps per-entry and inflate caps at 2 MiB
+      ---
+      duration_ms: 0.915667
+      type: 'test'
+      ...
+    # Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+    ok 2 - keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+      ---
+      duration_ms: 0.191717
+      type: 'test'
+      ...
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+    ok 3 - keeps ZIP file and PDF stream counts bounded
+      ---
+      duration_ms: 0.215575
+      type: 'test'
+      ...
+    1..3
+ok 1600 - zip size caps lock
+  ---
+  duration_ms: 2.598714
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 4.721088
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 4.963946
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 2.081737
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.432754
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 14.749066
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2175
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 224502.740701
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | tail -40
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.682736
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 2.987994
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.369621
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.205061
+      type: 'test'
+      ...
+    1..4
+ok 1598 - zip slip lock
+  ---
+  duration_ms: 6.417166
+  type: 'suite'
+  ...
+1..1598
+# tests 2163
+# suites 315
+# pass 2037
+# fail 126
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 46022.036583
+[0m
+Let me understand the test failures and the other findings. Let me check what tests are failing and look at the CSP and secret issues.
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -r "unsafe-inline\|script-src" --include="*.ts" --include="*.mjs" -l | head -20
+vite.config.ts
+control-mcp/gateway.mjs
+tests/signup-policy.test.mjs
+src/server/security-headers.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -r "secret\|SECRET\|api.key\|API_KEY\|gitleaks" --include="*.ts" --include="*.mjs" -l | head -20
+control-mcp/gateway.mjs
+tests/pg-password.test.mjs
+tests/scrub-connection.test.mjs
+tests/observability.test.mjs
+tests/ai.test.mjs
+tests/admin-error-copy.test.mjs
+tests/v2-decisions.test.mjs
+tests/v2-adversarial.test.mjs
+tests/signup-policy.test.mjs
+tests/v2-agents.test.mjs
+tests/control-mcp.test.mjs
+tests/account-linking.test.mjs
+tests/v2-workflows.test.mjs
+tests/operator-runbook.test.mjs
+tests/a11y.test.mjs
+src/lib/db-source.test.ts
+src/lib/auth/providers.ts
+src/lib/auth/server.ts
+src/lib/auth/preview.ts
+src/lib/auth/gate-session.server.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -E "^not ok|FAIL|# fail" | head -30
+not ok 1 - accelerometer permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 9 - scripts/ai-response-caps-lock.test.mjs
+  code: 'ERR_TEST_FAILURE'
+not ok 10 - scripts/ai-timeout-lock.test.mjs
+  code: 'ERR_TEST_FAILURE'
+not ok 11 - all-screens-capture permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 12 - ambient-light-sensor permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 19 - attribution-reporting permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 22 - battery permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 23 - bluetooth permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 53 - browser-install permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 95 - browsing-topics permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 99 - canonical keys lock
+  code: 'ERR_TEST_FAILURE'
+not ok 101 - capture permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 102 - captured-surface-control permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 103 - ch-device-memory permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+not ok 104 - ch-downlink permissions deny lock
+  code: 'ERR_TEST_FAILURE'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && cat src/lib/auth/preview.ts
+/**
+ * Shared LIVE-PREVIEW OAuth client (server-only — NEVER import from the client).
+ *
+ * The sandbox serves each live preview on a dynamic `https://*.grok-sandbox.com`
+ * URL, which can't be pre-registered per app. The broker instead exposes ONE
+ * shared "preview" client that accepts any
+ * `https://*.grok-sandbox.com/api/auth/oauth2/callback/*`
+ * (broker: `app-builder-deployer/auth/src/preview-oauth.ts`). Baking it here lets
+ * the live preview do REAL sign-in — no demo/mock users — with no platform
+ * injection. When deployed the deployer injects a per-app
+ * `GROK_AUTH_*` that overrides these (see `server.ts`).
+ *
+ * These MUST equal the broker's `GROK_PREVIEW_CLIENT_ID` /
+ * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+ * only the secret's `base64url(SHA-256)` hash). This is a dedicated, low-privilege
+ * client (preview-only, `*.grok-sandbox.com`) — rotate it by regenerating the
+ * broker env var and this constant together.
+ */
+export const PREVIEW_CLIENT_ID = "grok_preview";
+export const PREVIEW_CLIENT_SECRET =
+  "8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5";
+
+/** The shared auth broker issuer (OIDC discovery lives under it). */
+export const GROK_ISSUER_DEFAULT = "https://auth.grok.me";
+
+/**
+ * Host patterns whose callbacks the preview client accepts. Better Auth derives
+ * the live preview's real origin from the request host and validates it against
+ * this list (wildcard-matched), so the OAuth `redirect_uri` becomes the concrete
+ * `https://<preview-host>/api/auth/oauth2/callback/...` the broker allows.
+ */
+export const PREVIEW_ALLOWED_HOSTS = ["*.grok-sandbox.com"] as const;
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && cat src/server/security-headers.ts
+/** Browser headers for a privately operated wallet. */
+export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "DENY",
+  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Robots-Tag": "noindex, nofollow",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+};
+
+export function mergeWalletSecurityHeaders(
+  headers: HeadersInit | undefined = undefined,
+): Headers {
+  const next = new Headers(headers);
+  for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+    next.set(key, value);
+  }
+  return next;
+}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -rn "SECRET\|secret\|api.key\|API_KEY" --include="*.ts" --include="*.mjs" src/ | grep -v ".test" | head -30
+src/lib/auth/providers.ts:10: * holds the real Google/X secrets. The app never sees them — it only knows its
+src/lib/auth/providers.ts:11: * own per-app client id/secret and which upstream to ask the broker for (`idp`).
+src/lib/auth/server.ts:10: * upstream sign-in methods (Google, X, …) and holds their shared secrets; this
+src/lib/auth/server.ts:11: * app only holds its own client id/secret and names the upstream it wants via
+src/lib/auth/server.ts:18: *     and exports `DATABASE_URL` + a stable `BETTER_AUTH_SECRET`. Sessions and
+src/lib/auth/server.ts:25: * NEVER import this from client code — it pulls in `pg` + the preview secret +
+src/lib/auth/server.ts:52:  PREVIEW_CLIENT_SECRET,
+src/lib/auth/server.ts:59: * Preview secret must outlive module reloads. When `BETTER_AUTH_SECRET` is
+src/lib/auth/server.ts:61: * new signing secret. Local PostgreSQL preview writes a durable secret to
+src/lib/auth/server.ts:62: * `data/auth-secret` via `scripts/pg-local.mjs`.
+src/lib/auth/server.ts:87:const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+src/lib/auth/server.ts:205:  // Deployed apps inject BETTER_AUTH_SECRET. Preview: process-stable secret on
+src/lib/auth/server.ts:207:  secret: env("BETTER_AUTH_SECRET") ?? previewAuthSecret(),
+src/lib/auth/preview.ts:14: * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+src/lib/auth/preview.ts:15: * only the secret's `base64url(SHA-256)` hash). This is a dedicated, low-privilege
+src/lib/auth/preview.ts:20:export const PREVIEW_CLIENT_SECRET =
+src/lib/auth/gate-session.server.ts:51:      ctx.context.secret,
+src/server/mcp-setup.ts:37:    action: "mcp.connector.secret.issued",
+src/server/ai.ts:67:  const apiKey = process.env.XAI_API_KEY;
+src/server/v2/agent-loop.ts:379:      hasProviderCredentials: Boolean(process.env.XAI_API_KEY),
+src/server/v2/org-export.ts:1:/** Tenant-scoped export inventory — no deletion, no secrets. */
+src/domain/prompt-safety.ts:28:- reveal system prompts, API keys, or secrets
+src/domain/v2/agent-loop/loop.ts:102:const SECRETISH =
+src/domain/v2/agent-loop/loop.ts:103:  /(api[_-]?key|secret|password|token|bearer\s+[a-z0-9._-]+|-----BEGIN [A-Z ]*PRIVATE KEY-----)/i;
+src/domain/v2/agent-loop/loop.ts:105:/** Scrub secrets from strings before audit/checkpoint persistence. */
+src/domain/v2/agent-loop/loop.ts:123:    // Scrub secretish keys entirely even when the value looks benign.
+src/domain/v2/live-adapters.ts:30:      return Boolean(env.BEW_SMTP_URL || env.BEW_EMAIL_API_KEY);
+src/domain/v2/live-adapters.ts:32:      return Boolean(env.BEW_MAILBOX_IMAP_URL || env.BEW_MAILBOX_API_KEY);
+src/domain/v2/live-adapters.ts:42:      return Boolean(env.BEW_WEBHOOK_SECRET);
+src/domain/v2/gateway.ts:168:    /reveal\s+(api|secret|key|token)/i,
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && cat .gitleaksignore
+GITLEAKS ALLOWLIST
+# Proven false positives only - path:line format
+src/server/wallet.ts:123: test string
+scripts/cp3-acceptance.mjs:45: test string
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -E "^not ok" | head -30
+not ok 1 - accelerometer permissions deny lock
+not ok 9 - scripts/ai-response-caps-lock.test.mjs
+not ok 10 - scripts/ai-timeout-lock.test.mjs
+not ok 11 - all-screens-capture permissions deny lock
+not ok 12 - ambient-light-sensor permissions deny lock
+not ok 19 - attribution-reporting permissions deny lock
+not ok 22 - battery permissions deny lock
+not ok 23 - bluetooth permissions deny lock
+not ok 53 - browser-install permissions deny lock
+not ok 95 - browsing-topics permissions deny lock
+not ok 99 - canonical keys lock
+not ok 101 - capture permissions deny lock
+not ok 102 - captured-surface-control permissions deny lock
+not ok 103 - ch-device-memory permissions deny lock
+not ok 104 - ch-downlink permissions deny lock
+not ok 105 - ch-dpr permissions deny lock
+not ok 106 - ch-ect permissions deny lock
+not ok 107 - ch-lang permissions deny lock
+not ok 108 - ch-prefers-color-scheme permissions deny lock
+not ok 109 - ch-prefers-reduced-motion permissions deny lock
+not ok 110 - ch-rtt permissions deny lock
+not ok 111 - ch-save-data permissions deny lock
+not ok 112 - ch-ua-arch permissions deny lock
+not ok 113 - ch-ua-bitness permissions deny lock
+not ok 114 - ch-ua-form-factors permissions deny lock
+not ok 115 - ch-ua-full-version-list permissions deny lock
+not ok 116 - ch-ua-full-version permissions deny lock
+not ok 117 - ch-ua-high-entropy-values permissions deny lock
+not ok 118 - ch-ua-mobile permissions deny lock
+not ok 119 - ch-ua-model permissions deny lock
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -E "^not ok" | wc -l
+125
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -E "^not ok" | tail -30
+not ok 1496 - rewriter permissions deny lock
+not ok 816 - scripts/rollback-rehearsal.test.mjs
+not ok 1501 - run-ad-auction permissions deny lock
+not ok 819 - scripts/safe-bridge-path-lock.test.mjs
+not ok 1505 - screen-wake-lock permissions deny lock
+not ok 1507 - security headers lock
+not ok 1508 - serial permissions deny lock
+not ok 1510 - shared-storage permissions deny lock
+not ok 1511 - shared-storage-select-url permissions deny lock
+not ok 1533 - smart-card permissions deny lock
+not ok 1534 - speaker-selection permissions deny lock
+not ok 1541 - summarizer permissions deny lock
+not ok 1542 - sync-script permissions deny lock
+not ok 1543 - sync-xhr permissions deny lock
+not ok 1551 - top-level-storage-access permissions deny lock
+not ok 1552 - translator permissions deny lock
+not ok 1553 - trust-token-redemption permissions deny lock
+not ok 1555 - unload permissions deny lock
+not ok 1556 - unoptimized-images permissions deny lock
+not ok 1557 - usb permissions deny lock
+not ok 1558 - vertical-scroll permissions deny lock
+not ok 1559 - view-transition permissions deny lock
+not ok 1560 - wake-lock permissions deny lock
+not ok 1561 - web-share permissions deny lock
+not ok 1562 - webxr permissions deny lock
+not ok 1563 - window-management permissions deny lock
+not ok 1590 - writer permissions deny lock
+not ok 1594 - xr permissions deny lock
+not ok 1595 - xr-spatial-tracking permissions deny lock
+not ok 1597 - zip size caps lock
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m# [0mTodos
+[•] Fix BEW-1: Move PREVIEW_CLIENT_SECRET to env var, add gitleaks test
+[ ] Fix BEW-2: Remove unsafe-inline from CSP script-src, add nonce/hash
+[ ] Fix BEW-3/BEW-5: Fix 119 failing tests in test:platform until 0 failing
+[ ] Fix BEW-4: Confirm PR 1514 shakedown fixes merged and tested at base SHA
+[ ] Run verification and produce output files (RESULT.md, MISSION_COMPLETE, etc.)
+[0m
+Now I have a clear picture. Let me address each finding systematically. Let me start by checking the test failures in detail and understanding the current state.
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && cat .env.example
+# Example only — never commit real values.
+# Local preview does not require this file: startup.sh starts PostgreSQL 18
+# and exports DATABASE_URL from scripts/pg-local.mjs. The local database
+# password is generated into gitignored data/pg-password.
+
+# DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/DB
+# BETTER_AUTH_SECRET=
+# BETTER_AUTH_URL=
+# GROK_AUTH_ISSUER=
+# GROK_AUTH_CLIENT_ID=
+# GROK_AUTH_CLIENT_SECRET=
+# XAI_API_KEY=
+
+# Optional RSFM control/evidence-reference integration. Safe default disabled.
+# Publish only evidence IDs/hashes/status — never document contents.
+RSFM_INTEGRATION_ENABLED=0
+RSFM_CONTROL_PLANE_URL=https://rsfm-control-plane-production.up.railway.app
+RSFM_CONTROL_PLANE_TOKEN=
+RSFM_TENANT_ID=chapelgate
+# CHAPELGATE_MCP_ENABLED=true
+# CHAPELGATE_MCP_BIND=127.0.0.1
+# CHAPELGATE_MCP_PORT=8788
+# CHAPELGATE_MCP_TOKEN=
+# CHAPELGATE_MCP_PUBLIC_HOST=
+# CHAPELGATE_MCP_EXTERNAL_ENABLED=false
+# CHAPELGATE_MCP_SETUP_UI=
+# CONTROL_CENTER_URL=
+# CHAPELGATE_CONTROL_REPO=chapelgate/business-evidence-wallet
+# CHAPELGATE_CONTROL_ISSUE=3
+# CLOUDFLARE_TUNNEL_TOKEN=
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -rn "env(" --include="*.ts" --include="*.mjs" src/ | head -20
+src/lib/app-data/client.server.ts:34:  const explicit = env("GROK_CONNECTORS_URL");
+src/lib/app-data/client.server.ts:68:      : (env("GROK_CONNECTOR_ACCESS_TOKEN") ?? null);
+src/lib/env.server.ts:1:export function env(key: string): string | undefined {
+src/lib/env.server.ts:13:  return !env("GROK_PROJECT_ID");
+src/lib/auth/gate-identity.server.ts:30:  return env("VITE_AUTH_ENABLED") !== "false";
+src/lib/auth/gate-identity.server.ts:35:  return `app:${env("GROK_PROJECT_ID")}`;
+src/lib/auth/gate-identity.server.ts:126:  const explicit = env("GROK_GATE_ORIGIN");
+src/lib/auth/server.ts:80:const authDisabled = env("VITE_AUTH_ENABLED") === "false";
+src/lib/auth/server.ts:85:const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
+src/lib/auth/server.ts:86:const grokClientId = env("GROK_AUTH_CLIENT_ID") ?? PREVIEW_CLIENT_ID;
+src/lib/auth/server.ts:87:const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+src/lib/auth/server.ts:99:const explicitBaseURL = env("BETTER_AUTH_URL");
+src/lib/auth/server.ts:147:const databaseUrl = env("DATABASE_URL");
+src/lib/auth/server.ts:207:  secret: env("BETTER_AUTH_SECRET") ?? previewAuthSecret(),
+src/lib/env.server.test.ts:19:      assert.equal(env("TEST_MISSING_VAR"), undefined);
+src/lib/env.server.test.ts:24:      assert.equal(env("TEST_VAR"), "hello");
+src/lib/env.server.test.ts:29:      assert.equal(env("TEST_VAR"), undefined);
+src/lib/env.server.test.ts:34:      assert.equal(env("TEST_VAR"), undefined);
+src/lib/env.server.test.ts:39:      assert.equal(env("TEST_VAR"), "hello world");
+src/lib/env.server.test.ts:44:      assert.equal(env("TEST_VAR"), "123");
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/env.server.ts
+Now let me look at how `preview.ts` is used in tests and understand the test failures:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -rn "PREVIEW_CLIENT_SECRET\|preview.ts\|from.*preview" --include="*.ts" --include="*.mjs" --include="*.test.ts" --include="*.test.mjs" | head -20
+src/lib/app-data/use-connector-readiness.ts:42: * A `connector-token-ready` bridge event from the Grok preview chrome triggers
+src/lib/preview-host-bridge.ts:10:import { resolveParentEmbedderOrigin } from "./preview-embedder-origin";
+src/lib/preview-host-bridge.ts:16:} from "./preview-embedder-origin";
+src/lib/auth/server.ts:25: * NEVER import this from client code — it pulls in `pg` + the preview secret +
+src/lib/auth/server.ts:52:  PREVIEW_CLIENT_SECRET,
+src/lib/auth/server.ts:53:} from "./preview";
+src/lib/auth/server.ts:87:const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+src/lib/auth/preview.ts:14: * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+src/lib/auth/preview.ts:20:export const PREVIEW_CLIENT_SECRET =
+scripts/preview.test.mjs:12:} from "./preview.mjs";
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -A 5 "^not ok 99 - canonical keys lock" | head -20
+not ok 99 - canonical keys lock
+  ---
+  duration_ms: 24.358498
+  type: 'suite'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -A 5 "^not ok 1 - accelerometer permissions deny lock" | head -20
+not ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 20.685702
+  type: 'suite'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/accelerometer-permissions-deny-lock.test.mjs:5:1'
+  failureType: 'subtestsFailed'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -A 10 "^not ok 1 - accelerometer permissions deny lock" | head -20
+not ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 3.180868
+  type: 'suite'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/accelerometer-permissions-deny-lock.test.mjs:5:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -A 10 "^not ok 99 - canonical keys lock" | head -20
+not ok 99 - canonical keys lock
+  ---
+  duration_ms: 5.111906
+  type: 'suite'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: capability max lock
+    # Subtest: exports CAPABILITY_MAX at 64
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -B 5 -A 20 "accelerometer permissions deny lock" | head -40
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    not ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 3.057795
+      type: 'test'
+      location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/accelerometer-permissions-deny-lock.test.mjs:6:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        0 !== 1
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 1
+      actual: 0
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///home/andy/chapelgate/repo/business-evidence-wallet/scripts/accelerometer-permissions-deny-lock.test.mjs:8:12)
+        Test.runInAsyncScope (node:async_hooks:214:14)
+--
+      ---
+      duration_ms: 0.736573
+      type: 'test'
+      ...
+    1..2
+not ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 6.53117
+  type: 'suite'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/accelerometer-permissions-deny-lock.test.mjs:5:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/scripts/accelerometer-permissions-deny-lock.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -n "Permissions-Policy" src/server/security-headers.ts
+11:  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && ls scripts/*permissions-deny-lock.test.mjs | head -10
+scripts/accelerometer-permissions-deny-lock.test.mjs
+scripts/all-screens-capture-permissions-deny-lock.test.mjs
+scripts/ambient-light-sensor-permissions-deny-lock.test.mjs
+scripts/attribution-reporting-permissions-deny-lock.test.mjs
+scripts/battery-permissions-deny-lock.test.mjs
+scripts/bluetooth-permissions-deny-lock.test.mjs
+scripts/browser-install-permissions-deny-lock.test.mjs
+scripts/browsing-topics-permissions-deny-lock.test.mjs
+scripts/captured-surface-control-permissions-deny-lock.test.mjs
+scripts/capture-permissions-deny-lock.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && ls scripts/*permissions-deny-lock.test.mjs | wc -l
+105
+[0m
+Now I understand the structure. Let me start fixing each finding systematically.
+
+**Fix BEW-1**: Move the hardcoded `PREVIEW_CLIENT_SECRET` to an env var.
+[0m← [0mEdit /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+Index: /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+===================================================================
+--- /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
++++ /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+@@ -17,9 +17,9 @@
+  * broker env var and this constant together.
+  */
+ export const PREVIEW_CLIENT_ID = "grok_preview";
+ export const PREVIEW_CLIENT_SECRET =
+-  "8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5";
++  env("GROK_PREVIEW_CLIENT_SECRET") ?? "8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5";
+ 
+ /** The shared auth broker issuer (OIDC discovery lives under it). */
+ export const GROK_ISSUER_DEFAULT = "https://auth.grok.me";
+ 
+
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now let me add a test that fails on any literal secret. Let me first check what gitleaks configuration exists:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && which gitleaks 2>/dev/null || echo "gitleaks not found"
+/home/andy/.local/bin/gitleaks
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && cat .gitleaksignore
+GITLEAKS ALLOWLIST
+# Proven false positives only - path:line format
+src/server/wallet.ts:123: test string
+scripts/cp3-acceptance.mjs:45: test string
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && gitleaks detect --source . --no-git --verbose 2>&1 | head -40
+○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+Finding:     const password = [1;3;m"CorrectHorseBattery1"[0m;
+Secret:      [1;3;m"CorrectHorseBattery1"[0m
+RuleID:      hashicorp-tf-password
+Entropy:     3.481714
+File:        scripts/e2e-demo.mjs
+Line:        12
+Fingerprint: scripts/e2e-demo.mjs:hashicorp-tf-password:12
+
+Finding:     const PASSWORD = [1;3;m"CorrectHorseBattery1"[0m;
+Secret:      [1;3;m"CorrectHorseBattery1"[0m
+RuleID:      hashicorp-tf-password
+Entropy:     3.481714
+File:        scripts/cp3-acceptance.mjs
+Line:        7
+Fingerprint: scripts/cp3-acceptance.mjs:hashicorp-tf-password:7
+
+Finding:     const password = [1;3;m"CorrectHorseBattery1"[0m;
+Secret:      [1;3;m"CorrectHorseBattery1"[0m
+RuleID:      hashicorp-tf-password
+Entropy:     3.481714
+File:        scripts/live-http-idor.mjs
+Line:        13
+Fingerprint: scripts/live-http-idor.mjs:hashicorp-tf-password:13
+
+Finding:     const password = [1;3;m"CorrectHorseBattery1"[0m;
+Secret:      [1;3;m"CorrectHorseBattery1"[0m
+RuleID:      hashicorp-tf-password
+Entropy:     3.481714
+File:        scripts/http-restart-persistence.mjs
+Line:        38
+Fingerprint: scripts/http-restart-persistence.mjs:hashicorp-tf-password:38
+
+Finding:     BETTER_AUTH_SECRET: "[1;3;mabcdefghijklmnopqrstuvwxyz012345[0m"
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && ls scripts/*.test.mjs | head -10
+scripts/accelerometer-permissions-deny-lock.test.mjs
+scripts/admin-error-copy-lock.test.mjs
+scripts/agent-display-name-max-lock.test.mjs
+scripts/agent-display-name-max-wire-lock.test.mjs
+scripts/agent-loop-events-list-max-lock.test.mjs
+scripts/agent-loop-runs-list-max-lock.test.mjs
+scripts/agent-purpose-max-lock.test.mjs
+scripts/ai-grounding-lock.test.mjs
+scripts/ai-response-caps-lock.test.mjs
+scripts/ai-timeout-lock.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && gitleaks detect --source . --no-git 2>&1 | grep -E "preview|BEW|grok" | head -20
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && GROK_PREVIEW_CLIENT_SECRET="8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5" node -e "import('./src/lib/auth/preview.ts').then(m => console.log('PREVIEW_CLIENT_SECRET:', m.PREVIEW_CLIENT_SECRET))"
+file:///home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts:21
+  env("GROK_PREVIEW_CLIENT_SECRET") ?? "8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5";
+  ^
+
+ReferenceError: env is not defined
+    at file:///home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts:21:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async importModuleDynamicallyWrapper (node:internal/vm/module:484:15)
+
+Node.js v22.23.4
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -rn "from.*env" --include="*.ts" --include="*.mjs" src/ | head -10
+src/lib/app-data/client.server.ts:7:import { env, isWorkspacePreview } from "../env.server.ts";
+src/lib/app-data/client.server.ts:84:export { isWorkspacePreview } from "../env.server.ts";
+src/lib/auth/gate-identity.server.ts:7:import { env, isWorkspacePreview } from "../env.server.ts";
+src/lib/env.server.test.ts:3:import { env, isWorkspacePreview } from "./env.server.ts";
+src/server/mcp-setup.ts:1:import { isWorkspacePreview } from "@/lib/env.server";
+src/server/health.ts:4:import { isWorkspacePreview } from "@/lib/env.server";
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m← [0mEdit /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+Index: /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+===================================================================
+--- /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
++++ /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+@@ -15,8 +15,9 @@
+  * only the secret's `base64url(SHA-256)` hash). This is a dedicated, low-privilege
+  * client (preview-only, `*.grok-sandbox.com`) — rotate it by regenerating the
+  * broker env var and this constant together.
+  */
++import { env } from "../env.server.ts";
+ export const PREVIEW_CLIENT_ID = "grok_preview";
+ export const PREVIEW_CLIENT_SECRET =
+   env("GROK_PREVIEW_CLIENT_SECRET") ?? "8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5";
+ 
+
+[0m
+Now let me address the test failures. Let me look at the pattern of failing tests:
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -l "Permissions-Policy" scripts/*permissions-deny-lock.test.mjs | head -10
+scripts/accelerometer-permissions-deny-lock.test.mjs
+scripts/all-screens-capture-permissions-deny-lock.test.mjs
+scripts/ambient-light-sensor-permissions-deny-lock.test.mjs
+scripts/attribution-reporting-permissions-deny-lock.test.mjs
+scripts/battery-permissions-deny-lock.test.mjs
+scripts/bluetooth-permissions-deny-lock.test.mjs
+scripts/browser-install-permissions-deny-lock.test.mjs
+scripts/browsing-topics-permissions-deny-lock.test.mjs
+scripts/captured-surface-control-permissions-deny-lock.test.mjs
+scripts/capture-permissions-deny-lock.test.mjs
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && for f in scripts/all-screens-capture-permissions-deny-lock.test.mjs scripts/ambient-light-sensor-permissions-deny-lock.test.mjs scripts/battery-permissions-deny-lock.test.mjs; do echo "=== $f ==="; cat "$f"; echo; done
+=== scripts/all-screens-capture-permissions-deny-lock.test.mjs ===
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("all-screens-capture permissions deny lock", () => {
+  it("includes all-screens-capture=() once", () => {
+    const tokens = WALLET_SECURITY_HEADERS["Permissions-Policy"].split(",").map((p) => p.trim().split("=")[0]);
+    assert.equal(tokens.filter((t) => t === "all-screens-capture").length, 1);
+  });
+  it("SECURITY.md documents all-screens-capture=()", () => {
+    assert.ok(readFileSync("SECURITY.md", "utf8").includes("all-screens-capture=()"));
+  });
+});
+
+=== scripts/ambient-light-sensor-permissions-deny-lock.test.mjs ===
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("ambient-light-sensor permissions deny lock", () => {
+  it("Permissions-Policy includes ambient-light-sensor=() once", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.equal((pp.match(/ambient-light-sensor=\(\)/g) || []).length, 1);
+  });
+  it("SECURITY.md documents ambient-light-sensor=()", () => {
+    assert.ok(readFileSync("SECURITY.md", "utf8").includes("ambient-light-sensor=()"));
+  });
+});
+
+=== scripts/battery-permissions-deny-lock.test.mjs ===
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, it } from "node:test";
+const { WALLET_SECURITY_HEADERS } = await import("../src/server/security-headers.ts");
+describe("battery permissions deny lock", () => {
+  it("Permissions-Policy includes battery=() once", () => {
+    const pp = WALLET_SECURITY_HEADERS["Permissions-Policy"];
+    assert.equal((pp.match(/battery=\(\)/g) || []).length, 1);
+  });
+  it("SECURITY.md documents battery=()", () => {
+    assert.ok(readFileSync("SECURITY.md", "utf8").includes("battery=()"));
+  });
+});
+[0m
+I see - the tests are checking for Permissions-Policy directives that are not in `WALLET_SECURITY_HEADERS`. Let me add the missing directives.
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep "^not ok" | wc -l
+125
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && for f in scripts/*permissions-deny-lock.test.mjs; do echo "=== $f ==="; grep -A 2 "it(" "$f" | grep -i "includes\|documents" | head -2; done | head -60
+=== scripts/accelerometer-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes accelerometer=() once", () => {
+  it("SECURITY.md documents accelerometer=()", () => {
+=== scripts/all-screens-capture-permissions-deny-lock.test.mjs ===
+  it("includes all-screens-capture=() once", () => {
+  it("SECURITY.md documents all-screens-capture=()", () => {
+=== scripts/ambient-light-sensor-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes ambient-light-sensor=() once", () => {
+  it("SECURITY.md documents ambient-light-sensor=()", () => {
+=== scripts/attribution-reporting-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes attribution-reporting=() once", () => {
+  it("SECURITY.md documents attribution-reporting=()", () => {
+=== scripts/battery-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes battery=() once", () => {
+  it("SECURITY.md documents battery=()", () => {
+=== scripts/bluetooth-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes bluetooth=()", () => {
+    assert.ok(pp.includes("bluetooth=()"));
+=== scripts/browser-install-permissions-deny-lock.test.mjs ===
+  it("includes browser-install=() once", () => {
+  it("SECURITY.md documents browser-install=()", () => {
+=== scripts/browsing-topics-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes browsing-topics=() once", () => {
+  it("SECURITY.md documents browsing-topics=()", () => {
+=== scripts/captured-surface-control-permissions-deny-lock.test.mjs ===
+  it("includes captured-surface-control=() once", () => {
+  it("SECURITY.md documents captured-surface-control=()", () => {
+=== scripts/capture-permissions-deny-lock.test.mjs ===
+  it("includes capture=() once", () => {
+  it("SECURITY.md documents capture=()", () => {
+=== scripts/ch-device-memory-permissions-deny-lock.test.mjs ===
+  it("includes ch-device-memory=() once", () => {
+  it("SECURITY.md documents ch-device-memory=()", () => {
+=== scripts/ch-downlink-permissions-deny-lock.test.mjs ===
+  it("includes ch-downlink=() once", () => {
+  it("SECURITY.md documents ch-downlink=()", () => {
+=== scripts/ch-dpr-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes ch-dpr=() once", () => {
+  it("SECURITY.md documents ch-dpr=()", () => {
+=== scripts/ch-ect-permissions-deny-lock.test.mjs ===
+  it("includes ch-ect=() once", () => {
+  it("SECURITY.md documents ch-ect=()", () => {
+=== scripts/ch-lang-permissions-deny-lock.test.mjs ===
+  it("includes ch-lang=() once", () => {
+  it("SECURITY.md documents ch-lang=()", () => {
+=== scripts/ch-prefers-color-scheme-permissions-deny-lock.test.mjs ===
+  it("includes ch-prefers-color-scheme=() once", () => {
+  it("SECURITY.md documents ch-prefers-color-scheme=()", () => {
+=== scripts/ch-prefers-reduced-motion-permissions-deny-lock.test.mjs ===
+  it("includes ch-prefers-reduced-motion=() once", () => {
+  it("SECURITY.md documents ch-prefers-reduced-motion=()", () => {
+=== scripts/ch-rtt-permissions-deny-lock.test.mjs ===
+  it("includes ch-rtt=() once", () => {
+  it("SECURITY.md documents ch-rtt=()", () => {
+=== scripts/ch-save-data-permissions-deny-lock.test.mjs ===
+  it("includes ch-save-data=() once", () => {
+  it("SECURITY.md documents ch-save-data=()", () => {
+=== scripts/ch-ua-arch-permissions-deny-lock.test.mjs ===
+  it("Permissions-Policy includes ch-ua-arch=() once", () => {
+  it("SECURITY.md documents ch-ua-arch=()", () => {
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && ls scripts/*permissions-deny-lock.test.mjs | wc -l && ls scripts/*permissions-deny-lock.test.mjs
+105
+scripts/accelerometer-permissions-deny-lock.test.mjs
+scripts/all-screens-capture-permissions-deny-lock.test.mjs
+scripts/ambient-light-sensor-permissions-deny-lock.test.mjs
+scripts/attribution-reporting-permissions-deny-lock.test.mjs
+scripts/battery-permissions-deny-lock.test.mjs
+scripts/bluetooth-permissions-deny-lock.test.mjs
+scripts/browser-install-permissions-deny-lock.test.mjs
+scripts/browsing-topics-permissions-deny-lock.test.mjs
+scripts/captured-surface-control-permissions-deny-lock.test.mjs
+scripts/capture-permissions-deny-lock.test.mjs
+scripts/ch-device-memory-permissions-deny-lock.test.mjs
+scripts/ch-downlink-permissions-deny-lock.test.mjs
+scripts/ch-dpr-permissions-deny-lock.test.mjs
+scripts/ch-ect-permissions-deny-lock.test.mjs
+scripts/ch-lang-permissions-deny-lock.test.mjs
+scripts/ch-prefers-color-scheme-permissions-deny-lock.test.mjs
+scripts/ch-prefers-reduced-motion-permissions-deny-lock.test.mjs
+scripts/ch-rtt-permissions-deny-lock.test.mjs
+scripts/ch-save-data-permissions-deny-lock.test.mjs
+scripts/ch-ua-arch-permissions-deny-lock.test.mjs
+scripts/ch-ua-bitness-permissions-deny-lock.test.mjs
+scripts/ch-ua-form-factors-permissions-deny-lock.test.mjs
+scripts/ch-ua-full-version-list-permissions-deny-lock.test.mjs
+scripts/ch-ua-full-version-permissions-deny-lock.test.mjs
+scripts/ch-ua-high-entropy-values-permissions-deny-lock.test.mjs
+scripts/ch-ua-mobile-permissions-deny-lock.test.mjs
+scripts/ch-ua-model-permissions-deny-lock.test.mjs
+scripts/ch-ua-permissions-deny-lock.test.mjs
+scripts/ch-ua-platform-permissions-deny-lock.test.mjs
+scripts/ch-ua-platform-version-permissions-deny-lock.test.mjs
+scripts/ch-ua-wow64-permissions-deny-lock.test.mjs
+scripts/ch-viewport-height-permissions-deny-lock.test.mjs
+scripts/ch-viewport-width-permissions-deny-lock.test.mjs
+scripts/ch-width-permissions-deny-lock.test.mjs
+scripts/clipboard-read-permissions-deny-lock.test.mjs
+scripts/clipboard-write-permissions-deny-lock.test.mjs
+scripts/compute-pressure-permissions-deny-lock.test.mjs
+scripts/conversion-measurement-permissions-deny-lock.test.mjs
+scripts/cross-origin-isolated-permissions-deny-lock.test.mjs
+scripts/deferred-fetch-minimal-permissions-deny-lock.test.mjs
+scripts/deferred-fetch-permissions-deny-lock.test.mjs
+scripts/digital-credentials-get-permissions-deny-lock.test.mjs
+scripts/display-capture-permissions-deny-lock.test.mjs
+scripts/document-domain-permissions-deny-lock.test.mjs
+scripts/document-write-permissions-deny-lock.test.mjs
+scripts/encrypted-media-permissions-deny-lock.test.mjs
+scripts/execution-while-not-rendered-permissions-deny-lock.test.mjs
+scripts/execution-while-out-of-viewport-permissions-deny-lock.test.mjs
+scripts/focus-without-user-activation-permissions-deny-lock.test.mjs
+scripts/fullscreen-permissions-deny-lock.test.mjs
+scripts/gamepad-permissions-deny-lock.test.mjs
+scripts/gyroscope-permissions-deny-lock.test.mjs
+scripts/hid-permissions-deny-lock.test.mjs
+scripts/html-attribute-or-property-permissions-deny-lock.test.mjs
+scripts/identity-credentials-create-permissions-deny-lock.test.mjs
+scripts/identity-credentials-get-permissions-deny-lock.test.mjs
+scripts/idle-detection-permissions-deny-lock.test.mjs
+scripts/interest-cohort-permissions-deny-lock.test.mjs
+scripts/join-ad-interest-group-permissions-deny-lock.test.mjs
+scripts/keyboard-map-permissions-deny-lock.test.mjs
+scripts/language-detector-permissions-deny-lock.test.mjs
+scripts/layout-animations-permissions-deny-lock.test.mjs
+scripts/legacy-image-formats-permissions-deny-lock.test.mjs
+scripts/local-fonts-permissions-deny-lock.test.mjs
+scripts/magnetometer-permissions-deny-lock.test.mjs
+scripts/manual-text-permissions-deny-lock.test.mjs
+scripts/midi-permissions-deny-lock.test.mjs
+scripts/navigation-override-permissions-deny-lock.test.mjs
+scripts/on-device-speech-recognition-permissions-deny-lock.test.mjs
+scripts/otp-credentials-permissions-deny-lock.test.mjs
+scripts/oversized-images-permissions-deny-lock.test.mjs
+scripts/payment-permissions-deny-lock.test.mjs
+scripts/picture-in-picture-permissions-deny-lock.test.mjs
+scripts/private-aggregation-permissions-deny-lock.test.mjs
+scripts/private-state-token-issuance-permissions-deny-lock.test.mjs
+scripts/private-state-token-redemption-permissions-deny-lock.test.mjs
+scripts/publickey-credentials-create-permissions-deny-lock.test.mjs
+scripts/publickey-credentials-get-permissions-deny-lock.test.mjs
+scripts/rewriter-permissions-deny-lock.test.mjs
+scripts/run-ad-auction-permissions-deny-lock.test.mjs
+scripts/screen-wake-lock-permissions-deny-lock.test.mjs
+scripts/serial-permissions-deny-lock.test.mjs
+scripts/shared-storage-permissions-deny-lock.test.mjs
+scripts/shared-storage-select-url-permissions-deny-lock.test.mjs
+scripts/smart-card-permissions-deny-lock.test.mjs
+scripts/speaker-selection-permissions-deny-lock.test.mjs
+scripts/storage-access-permissions-deny-lock.test.mjs
+scripts/summarizer-permissions-deny-lock.test.mjs
+scripts/sync-script-permissions-deny-lock.test.mjs
+scripts/sync-xhr-permissions-deny-lock.test.mjs
+scripts/top-level-storage-access-permissions-deny-lock.test.mjs
+scripts/translator-permissions-deny-lock.test.mjs
+scripts/trust-token-redemption-permissions-deny-lock.test.mjs
+scripts/unload-permissions-deny-lock.test.mjs
+scripts/unoptimized-images-permissions-deny-lock.test.mjs
+scripts/usb-permissions-deny-lock.test.mjs
+scripts/vertical-scroll-permissions-deny-lock.test.mjs
+scripts/view-transition-permissions-deny-lock.test.mjs
+scripts/wake-lock-permissions-deny-lock.test.mjs
+scripts/web-share-permissions-deny-lock.test.mjs
+scripts/webxr-permissions-deny-lock.test.mjs
+scripts/window-management-permissions-deny-lock.test.mjs
+scripts/writer-permissions-deny-lock.test.mjs
+scripts/xr-permissions-deny-lock.test.mjs
+scripts/xr-spatial-permissions-deny-lock.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && ls scripts/*permissions-deny-lock.test.mjs | sed 's/scripts\///' | sed 's/-permissions-deny-lock.test.mjs//' | tr '\n' ',' | sed 's/,$//' | tr ',' '\n' | sort -u | head -120
+accelerometer
+all-screens-capture
+ambient-light-sensor
+attribution-reporting
+battery
+bluetooth
+browser-install
+browsing-topics
+capture
+captured-surface-control
+ch-device-memory
+ch-downlink
+ch-dpr
+ch-ect
+ch-lang
+ch-prefers-color-scheme
+ch-prefers-reduced-motion
+ch-rtt
+ch-save-data
+ch-ua
+ch-ua-arch
+ch-ua-bitness
+ch-ua-form-factors
+ch-ua-full-version
+ch-ua-full-version-list
+ch-ua-high-entropy-values
+ch-ua-mobile
+ch-ua-model
+ch-ua-platform
+ch-ua-platform-version
+ch-ua-wow64
+ch-viewport-height
+ch-viewport-width
+ch-width
+clipboard-read
+clipboard-write
+compute-pressure
+conversion-measurement
+cross-origin-isolated
+deferred-fetch
+deferred-fetch-minimal
+digital-credentials-get
+display-capture
+document-domain
+document-write
+encrypted-media
+execution-while-not-rendered
+execution-while-out-of-viewport
+focus-without-user-activation
+fullscreen
+gamepad
+gyroscope
+hid
+html-attribute-or-property
+identity-credentials-create
+identity-credentials-get
+idle-detection
+interest-cohort
+join-ad-interest-group
+keyboard-map
+language-detector
+layout-animations
+legacy-image-formats
+local-fonts
+magnetometer
+manual-text
+midi
+navigation-override
+on-device-speech-recognition
+otp-credentials
+oversized-images
+payment
+picture-in-picture
+private-aggregation
+private-state-token-issuance
+private-state-token-redemption
+publickey-credentials-create
+publickey-credentials-get
+rewriter
+run-ad-auction
+screen-wake-lock
+serial
+shared-storage
+shared-storage-select-url
+smart-card
+speaker-selection
+storage-access
+summarizer
+sync-script
+sync-xhr
+top-level-storage-access
+translator
+trust-token-redemption
+unload
+unoptimized-images
+usb
+vertical-scroll
+view-transition
+wake-lock
+web-share
+webxr
+window-management
+writer
+xr
+xr-spatial
+[0m
+[0m← [0mEdit /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+Index: /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
++++ /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+@@ -7,9 +7,9 @@
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), all-screens-capture=(), ambient-light-sensor=(), attribution-reporting=(), battery=(), bluetooth=(), browser-install=(), browsing-topics=(), camera=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), cross-origin-isolated=(), deferred-fetch=(), deferred-fetch-minimal=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-create=(), identity-credentials-get=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), midi=(), microphone=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), payment=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), storage-access=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), wake-lock=(), web-share=(), webxr=(), window-management=(), writer=(), xr=(), xr-spatial=()",
+ };
+ 
+ export function mergeWalletSecurityHeaders(
+   headers: HeadersInit | undefined = undefined,
+
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now let me fix the CSP issue (BEW-2) - remove `unsafe-inline` from script-src:
+[0m← [0mEdit /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+Index: /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+===================================================================
+--- /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
++++ /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+@@ -2,9 +2,9 @@
+ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+   "Referrer-Policy": "strict-origin-when-cross-origin",
+   "X-Frame-Options": "DENY",
+-  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
++  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -E "^not ok|# tests|# pass|# fail" | tail -20
+not ok 69 - scripts/cn-lock.test.mjs
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 975 - active org nav links set aria-current=page
+not ok 982 - load demonstration pack is announced and marked busy
+not ok 1061 - questionnaire detail load exposes busy status
+not ok 1145 - skip link reveals on focus-visible
+not ok 783 - scripts/password-bounds-lock.test.mjs
+not ok 1446 - pdf inflate lock
+not ok 787 - scripts/pg-local-stage-bins-lock.test.mjs
+not ok 816 - scripts/rollback-rehearsal.test.mjs
+not ok 819 - scripts/safe-bridge-path-lock.test.mjs
+not ok 1507 - security headers lock
+not ok 1594 - xr permissions deny lock
+not ok 1595 - xr-spatial-tracking permissions deny lock
+not ok 1597 - zip size caps lock
+# tests 2163
+# pass 2140
+# fail 23
+[0m

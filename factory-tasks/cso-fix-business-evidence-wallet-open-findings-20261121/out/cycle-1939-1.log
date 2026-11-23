@@ -1,0 +1,1338 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mcat /home/andy/chapelgate/out/PROGRESS.md 2>/dev/null || echo "No PROGRESS.md found"
+All five Welsh pilot deliverables (PROPOSAL-ONE-PAGE.md, CASE-STUDY-TEMPLATE.md, TARGETS.md, OUTREACH-DRAFT.md, TRIAL-TERMS-TEMPLATE.md) have been reviewed by council-doc-line-reviewer gate and received PASS verdicts. Evidence: out/COUNCIL.md (Council of 3 GO), jobs-work-dell/readiness/council-doc-review/findings/ (line-by-line reviews, updated 2026-11-22), jobs-work-dell/readiness/council-doc-review/LEDGER.md (PASS rows for all 5 files). All SHAs match current files. out/raw/welsh-pilot-council-doc-review-20261122-043531-output.log shows 6/6, exit code 0.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 112
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:16 .
+drwxrwxr-x 756 andy andy 69632 Nov 22 19:36 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 19:39 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  3705 Nov 22 19:39 history.log
+-rw-rw-r--   1 andy andy     7 Nov 22 19:39 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 22 19:39 out
+drwxrwxr-x  24 andy andy  4096 Nov 22 18:42 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 19:39 status.json
+-rw-rw-r--   1 andy andy  3121 Nov 22 19:34 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo/
+total 44
+drwxrwxr-x  9 andy andy  4096 Nov 21 21:54 .
+drwxrwxr-x 75 andy andy 12288 Nov 22 14:33 ..
+drwxrwxr-x 21 andy andy  4096 Nov 21 21:31 business-evidence-wallet
+drwxrwxr-x 21 andy andy  4096 Nov 21 22:32 business-os
+drwxrwxr-x 14 andy andy  4096 Nov 21 22:44 chapelgate-multilingual-transcribe
+drwxrwxr-x 19 andy andy  4096 Nov 21 22:54 cheap-trips
+drwxrwxr-x 23 andy andy  4096 Nov 22 03:53 holiday-let-operator
+drwxrwxr-x 21 andy andy  4096 Nov 22 00:49 housing-compliance-vault
+drwxrwxr-x 26 andy andy  4096 Nov 21 22:13 maintenanceos-website
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo/business-evidence-wallet/
+total 2348
+drwxrwxr-x  21 andy andy    4096 Nov 21 21:31 .
+drwxrwxr-x   9 andy andy    4096 Nov 21 21:54 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:31 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:31 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:31 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:31 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:31 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:31 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:31 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:31 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 .cursor
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:31 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 deploy
+drwxrwxr-x   9 andy andy    4096 Nov 21 21:31 docs
+-rw-rw-r--   1 andy andy    1093 Nov 21 21:31 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:31 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:31 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:31 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:31 FIX-LIST-6.md
+drwxrwxr-x   8 andy andy    4096 Nov 22 07:19 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:31 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 21 21:31 .gitleaksignore
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:31 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:31 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:31 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 migrations
+-rw-rw-r--   1 andy andy       0 Nov 21 21:31 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:31 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:34 out
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:31 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 21 21:31 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:31 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:31 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:31 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:31 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:31 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 21 21:31 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 21 21:31 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:31 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:31 specs
+drwxrwxr-x   7 andy andy    4096 Nov 21 21:31 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:31 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:31 startup.sh
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:31 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:31 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:31 tsconfig.json
+-rw-rw-r--   1 andy andy    9784 Nov 22 16:22 vite.config.ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/out/
+total 276
+drwxrwxr-x 19 andy andy  4096 Nov 22 07:56 .
+drwxrwxr-x 75 andy andy 12288 Nov 22 14:33 ..
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-business-evidence-wallet
+-rw-rw-r--  1 andy andy  1322 Nov 17 23:09 AUDIT-business-evidence-wallet.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-complaints
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-chapelgate-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-multilingual-transcribe
+-rw-rw-r--  1 andy andy  1392 Nov 19 16:32 AUDIT-chapelgate-multilingual-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-transcribe
+-rw-rw-r--  1 andy andy  1301 Nov 19 16:32 AUDIT-chapelgate-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cheap-trips
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-cheap-trips.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cloud-workers
+-rw-rw-r--  1 andy andy  1245 Nov 17 23:09 AUDIT-cloud-workers.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-holiday-let-operator
+-rw-rw-r--  1 andy andy  1294 Nov 19 16:33 AUDIT-holiday-let-operator.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-housing-compliance-vault
+-rw-rw-r--  1 andy andy  1322 Nov 19 16:32 AUDIT-housing-compliance-vault.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-information-rights-complaints
+-rw-rw-r--  1 andy andy  1357 Nov 19 16:33 AUDIT-information-rights-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-landlord-os
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-landlord-os.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-legal-case-management
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-legal-case-management.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-maintenanceos
+-rw-rw-r--  1 andy andy  1245 Nov 19 16:34 AUDIT-maintenanceos.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-citizen-agent
+-rw-rw-r--  1 andy andy  1343 Nov 19 16:34 AUDIT-public-sector-citizen-agent.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-document-copilot
+-rw-rw-r--  1 andy andy  1364 Nov 19 16:36 AUDIT-public-sector-document-copilot.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-virtual-worker
+-rw-rw-r--  1 andy andy  1252 Nov 17 23:09 AUDIT-virtual-worker.md
+-rw-rw-r--  1 andy andy  8099 Nov 21 23:51 COMPETITOR-INDEX-TABLE.md
+-rw-rw-r--  1 andy andy  1006 Nov 20 16:27 council-verdict.md
+-rw-rw-r--  1 andy andy   157 Nov 21 17:08 DONE
+-rw-rw-r--  1 andy andy  2760 Nov 22 08:27 EVIDENCE.md
+-rw-rw-r--  1 andy andy  9174 Nov 18 00:51 gitleaks-business-evidence-wallet.json
+-rw-rw-r--  1 andy andy  1533 Nov 18 00:51 gitleaks-chapelgate-complaints.json
+-rw-rw-r--  1 andy andy 27341 Nov 18 00:51 gitleaks-chapelgate-multilingual-transcribe.json
+-rw-rw-r--  1 andy andy  6679 Nov 18 00:51 gitleaks-cheap-trips.json
+-rw-rw-r--  1 andy andy 10702 Nov 18 00:51 gitleaks-holiday-let-operator.json
+-rw-rw-r--  1 andy andy  1417 Nov 18 00:51 gitleaks-public-sector-document-copilot.json
+-rw-rw-r--  1 andy andy 15363 Nov 18 00:51 gitleaks-virtual-worker.json
+-rw-rw-r--  1 andy andy  2587 Nov 22 07:56 METRICS-BASIS.md
+-rw-rw-r--  1 andy andy   593 Nov 22 16:51 MISSION_COMPLETE
+-rw-rw-r--  1 andy andy  1835 Nov 15 13:49 PRODUCT-READINESS-STATUS.md
+-rw-rw-r--  1 andy andy   562 Nov 22 08:21 PROGRESS.md
+drwxrwxr-x  2 andy andy  4096 Nov 22 19:33 raw
+-rw-rw-r--  1 andy andy   572 Nov 22 08:14 RESULT.md
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:32 runs
+-rw-rw-r--  1 andy andy    32 Nov 21 01:12 test-stalled-raw.out
+-rw-rw-r--  1 andy andy  3461 Nov 22 07:56 WEDGE.md
+[0m
+[0m→ [0mRead FINDINGS.tsv
+Let me explore the repository structure and understand what needs to be fixed.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git log --oneline -5
+94e8201 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+257d74c Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+a39fc0b test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+3fc3bf9 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a02 resolve package.json merge conflict (keep branch versions)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git rev-parse HEAD
+94e8201184927cdfb1d1db20854e91a7fc8d232e
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/out/raw/
+total 56
+drwxrwxr-x  2 andy andy 4096 Nov 22 19:33 .
+drwxrwxr-x 19 andy andy 4096 Nov 22 07:56 ..
+-rw-rw-r--  1 andy andy    4 Nov 21 21:32 business-evidence-wallet-20261121-213239-exit-code.txt
+-rw-rw-r--  1 andy andy  586 Nov 21 21:32 business-evidence-wallet-20261121-213239-output.log
+-rw-rw-r--  1 andy andy 1453 Nov 22 19:33 INDEX.tsv
+-rw-rw-r--  1 andy andy    0 Nov 21 21:32 .lock-business-evidence-wallet
+-rw-rw-r--  1 andy andy    0 Nov 22 12:20 .lock-pytest
+-rw-rw-r--  1 andy andy    0 Nov 22 19:33 .lock-welsh-pilot-final
+-rw-rw-r--  1 andy andy    2 Nov 22 12:21 pytest-20261122-122014-exit-code.txt
+-rw-rw-r--  1 andy andy 9106 Nov 22 12:21 pytest-20261122-122014-output.log
+-rw-rw-r--  1 andy andy   68 Nov 22 19:33 SHA
+-rw-rw-r--  1 andy andy    2 Nov 22 04:35 welsh-pilot-council-doc-review-20261122-043531-exit-code.txt
+-rw-rw-r--  1 andy andy    4 Nov 22 04:35 welsh-pilot-council-doc-review-20261122-043531-output.log
+-rw-rw-r--  1 andy andy    2 Nov 22 19:33 welsh-pilot-final-20261122-193324-exit-code.txt
+-rw-rw-r--  1 andy andy 1620 Nov 22 19:33 welsh-pilot-final-20261122-193324-output.log
+[0m
+[0m→ [0mRead /home/andy/chapelgate/out/PROGRESS.md
+[0m→ [0mRead /home/andy/chapelgate/out/RESULT.md
+[0m→ [0mRead /home/andy/chapelgate/out/EVIDENCE.md
+Now let me look at the repo's structure and key files:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && ls -la src/ server/ tests/ public/
+public/:
+total 60
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:31 .
+drwxrwxr-x 21 andy andy  4096 Nov 21 21:31 ..
+-rw-rw-r--  1 andy andy   241 Nov 21 21:31 favicon.svg
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:31 __grok
+-rw-rw-r--  1 andy andy 44070 Nov 21 21:31 og.jpg
+
+server/:
+total 16
+drwxrwxr-x  3 andy andy 4096 Nov 21 21:31 .
+drwxrwxr-x 21 andy andy 4096 Nov 21 21:31 ..
+drwxrwxr-x  2 andy andy 4096 Nov 21 21:31 middleware
+-rw-rw-r--  1 andy andy  262 Nov 21 21:31 virtual-grok-og-identity.d.ts
+
+src/:
+total 68
+drwxrwxr-x  7 andy andy  4096 Nov 21 21:31 .
+drwxrwxr-x 21 andy andy  4096 Nov 21 21:31 ..
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:31 components
+drwxrwxr-x  4 andy andy  4096 Nov 21 21:31 domain
+drwxrwxr-x  6 andy andy  4096 Nov 21 21:31 lib
+-rw-rw-r--  1 andy andy   272 Nov 21 21:31 router.tsx
+drwxrwxr-x  4 andy andy  4096 Nov 21 21:31 routes
+-rw-rw-r--  1 andy andy 29038 Nov 21 21:31 routeTree.gen.ts
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:31 server
+-rw-rw-r--  1 andy andy  1564 Nov 21 21:31 styles.css
+
+tests/:
+total 568
+drwxrwxr-x  2 andy andy  4096 Nov 21 21:31 .
+drwxrwxr-x 21 andy andy  4096 Nov 21 21:31 ..
+-rw-rw-r--  1 andy andy 22989 Nov 21 21:31 a11y.test.mjs
+-rw-rw-r--  1 andy andy  5118 Nov 21 21:31 account-linking.test.mjs
+-rw-rw-r--  1 andy andy   766 Nov 21 21:31 admin-dashboard.test.mjs
+-rw-rw-r--  1 andy andy  1307 Nov 21 21:31 admin-error-copy.test.mjs
+-rw-rw-r--  1 andy andy  4140 Nov 21 21:31 ai.test.mjs
+-rw-rw-r--  1 andy andy 19260 Nov 21 21:31 answers-integrity.test.mjs
+-rw-rw-r--  1 andy andy  7491 Nov 21 21:31 auth-state-machine.test.mjs
+-rw-rw-r--  1 andy andy 33594 Nov 21 21:31 claim-edit.test.mjs
+-rw-rw-r--  1 andy andy 24714 Nov 21 21:31 concurrency-pg.test.mjs
+-rw-rw-r--  1 andy andy 13429 Nov 21 21:31 concurrency.test.mjs
+-rw-rw-r--  1 andy andy 15124 Nov 21 21:31 control-mcp.test.mjs
+-rw-rw-r--  1 andy andy 12646 Nov 21 21:31 db-source.test.mjs
+-rw-rw-r--  1 andy andy 25672 Nov 21 21:31 invariants.test.mjs
+-rw-rw-r--  1 andy andy 15532 Nov 21 21:31 isolation.test.mjs
+-rw-rw-r--  1 andy andy   934 Nov 21 21:31 mcp-setup-ui.test.mjs
+-rw-rw-r--  1 andy andy  9651 Nov 21 21:31 migration-torture.test.mjs
+-rw-rw-r--  1 andy andy  1139 Nov 21 21:31 observability.test.mjs
+-rw-rw-r--  1 andy andy  7265 Nov 21 21:31 operator-improvements.test.mjs
+-rw-rw-r--  1 andy andy  9773 Nov 21 21:31 operator-runbook.test.mjs
+-rw-rw-r--  1 andy andy 10564 Nov 21 21:31 org-lifecycle.test.mjs
+-rw-rw-r--  1 andy andy 21822 Nov 21 21:31 orphan-source-facts.test.mjs
+-rw-rw-r--  1 andy andy  5150 Nov 21 21:31 pack-live-demotion.test.mjs
+-rw-rw-r--  1 andy andy 11336 Nov 21 21:31 parsers-and-injection.test.mjs
+-rw-rw-r--  1 andy andy  1335 Nov 21 21:31 persistence.test.mjs
+-rw-rw-r--  1 andy andy  3936 Nov 21 21:31 pg-harness.mjs
+-rw-rw-r--  1 andy andy  2537 Nov 21 21:31 pglite-harness.mjs
+-rw-rw-r--  1 andy andy  3324 Nov 21 21:31 pg-password.test.mjs
+-rw-rw-r--  1 andy andy  1784 Nov 21 21:31 production-startup.test.mjs
+-rw-rw-r--  1 andy andy 15025 Nov 21 21:31 quotas-and-limits.test.mjs
+-rw-rw-r--  1 andy andy  1841 Nov 21 21:31 resource-bounds.test.mjs
+-rw-rw-r--  1 andy andy  1223 Nov 21 21:31 scrub-connection.test.mjs
+-rw-rw-r--  1 andy andy  8020 Nov 22 16:23 signup-policy.test.mjs
+-rw-rw-r--  1 andy andy  5329 Nov 21 21:31 templates.test.mjs
+-rw-rw-r--  1 andy andy  2883 Nov 21 21:31 tenant-guc-order.test.mjs
+-rw-rw-r--  1 andy andy  4257 Nov 21 21:31 text-limits.test.mjs
+-rw-rw-r--  1 andy andy 22277 Nov 21 21:31 v2-adversarial.test.mjs
+-rw-rw-r--  1 andy andy  8735 Nov 21 21:31 v2-agent-loop.test.mjs
+-rw-rw-r--  1 andy andy 15855 Nov 21 21:31 v2-agents.test.mjs
+-rw-rw-r--  1 andy andy  7954 Nov 21 21:31 v2-authority-obligations.test.mjs
+-rw-rw-r--  1 andy andy  5634 Nov 21 21:31 v2-decisions.test.mjs
+-rw-rw-r--  1 andy andy 13089 Nov 21 21:31 v2-entities.test.mjs
+-rw-rw-r--  1 andy andy  8569 Nov 21 21:31 v2-fact-assertions.test.mjs
+-rw-rw-r--  1 andy andy 13709 Nov 21 21:31 v2-gateway-http.test.mjs
+-rw-rw-r--  1 andy andy 10049 Nov 21 21:31 v2-graph-answers-inbox.test.mjs
+-rw-rw-r--  1 andy andy  1534 Nov 21 21:31 v2-preferences.test.mjs
+-rw-rw-r--  1 andy andy  6048 Nov 21 21:31 v2-quotes-comms.test.mjs
+-rw-rw-r--  1 andy andy  2280 Nov 21 21:31 v2-rls.test.mjs
+-rw-rw-r--  1 andy andy 19193 Nov 21 21:31 v2-workflows.test.mjs
+[0m
+[0m$ [0mcat /home/andy/chapelgate/out/raw/SHA
+de9830ad6d3c7e1bd06fa61091e96839a2da18bb
+/home/andy/chapelgate/repo
+[0m
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/package.json
+[0m→ [0mRead history.log
+Now let me analyze the findings and understand what needs fixing. Let me check for secrets and CSP config:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git diff rc/ew-20261121 HEAD 2>/dev/null | head -100
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git log --oneline --all | head -20
+94e8201 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+257d74c Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+a39fc0b test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+3fc3bf9 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a02 resolve package.json merge conflict (keep branch versions)
+5381028 docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ed Pin dependency versions to exact versions from lockfile
+729c0d3 six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+73e7de4 Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+be7fa51 fix: resolve master red state — typecheck, lint, domain tests (#1506)
+59d6f64 Merge pull request #1509 from chapelgate/fix/fixall-20261113
+9c0068c re-trigger estate gate
+1dd716f chore: add estate-gate BUG artifact for hcv-fixall-20261113
+a14739f fix(housing-compliance): RT-08/RT-10/RT-15 and G33-G37
+14afa85 Merge PR #1507: shakedown findings RT-01/04/08 fixes
+f8554c5 chore: re-trigger estate-gate with BUG route
+0b3f6c0 chore: add RT-01 BUG artifacts for estate-gate validation
+6ee7757 fix(shakedown): address RT-01 findings - org auth via beforeLoad, remove inline loader/server code
+83fa7b9 fix(shakedown): address RT-01, RT-04, RT-08 findings
+f7df911 hcv: security hardening - scrubConnectionString unit tests (#1446)
+[0m
+[0m✱ [0mGrep "secret|SECRET|api_key|API_KEY|gitleaks"[90m in /home/andy/chapelgate/repo/business-evidence-wallet/src · 52 matches[0m
+[0m✱ [0mGrep "unsafe-inline|script-src|style-src|connect-src|frame-src|img-src|font-src|manifest-src|media-src"[90m in /home/andy/chapelgate/repo/business-evidence-wallet · 6 matches[0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git branch -a
+* (HEAD detached at 94e8201)
+  security/release-gate-fix-20261121
+  remotes/origin/security/release-gate-fix-20261121
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git log --oneline rc/ew-20261121..HEAD 2>/dev/null | head -10
+(no output)
+[0m
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/vite.config.ts
+Now let me examine the specific files related to the findings:
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/preview.ts
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/auth/server.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && grep -rn "GROK_PREVIEW_CLIENT_SECRET\|GROK_AUTH_CLIENT_SECRET" --include="*.env*" --include="*.mjs" --include="*.ts" --include="*.js" 2>/dev/null | head -30
+src/lib/auth/server.ts:87:const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+src/lib/auth/preview.ts:14: * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+src/lib/auth/preview.ts:22:  env("GROK_PREVIEW_CLIENT_SECRET");
+.env.example:11:# GROK_AUTH_CLIENT_SECRET=
+[0m
+Let me look at the env.server.ts and find any hard-coded secrets:
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/lib/env.server.ts
+[0m→ [0mRead /home/andy/chapelgate/repo/business-evidence-wallet/src/server/security-headers.ts
+[0m✱ [0mGrep "= "sk-|= "eyJ|= "ghp_|= "xoxb|= "dGVzd|GROK_PREVIEW_CLIENT_SECRET.*=|PREVIEW_CLIENT_SECRET ="[90m in /home/andy/chapelgate/repo/business-evidence-wallet/src · 1 match[0m
+[0m✗ [0mRead out/raw/gitleaks-business-evidence-wallet.json failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/gitleaks-business-evidence-wallet.json
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && cat .env.example
+# Example only — never commit real values.
+# Local preview does not require this file: startup.sh starts PostgreSQL 18
+# and exports DATABASE_URL from scripts/pg-local.mjs. The local database
+# password is generated into gitignored data/pg-password.
+
+# DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/DB
+# BETTER_AUTH_SECRET=
+# BETTER_AUTH_URL=
+# GROK_AUTH_ISSUER=
+# GROK_AUTH_CLIENT_ID=
+# GROK_AUTH_CLIENT_SECRET=
+# XAI_API_KEY=
+
+# Optional RSFM control/evidence-reference integration. Safe default disabled.
+# Publish only evidence IDs/hashes/status — never document contents.
+RSFM_INTEGRATION_ENABLED=0
+RSFM_CONTROL_PLANE_URL=https://rsfm-control-plane-production.up.railway.app
+RSFM_CONTROL_PLANE_TOKEN=
+RSFM_TENANT_ID=chapelgate
+# CHAPELGATE_MCP_ENABLED=true
+# CHAPELGATE_MCP_BIND=127.0.0.1
+# CHAPELGATE_MCP_PORT=8788
+# CHAPELGATE_MCP_TOKEN=
+# CHAPELGATE_MCP_PUBLIC_HOST=
+# CHAPELGATE_MCP_EXTERNAL_ENABLED=false
+# CHAPELGATE_MCP_SETUP_UI=
+# CONTROL_CENTER_URL=
+# CHAPELGATE_CONTROL_REPO=chapelgate/business-evidence-wallet
+# CHAPELGATE_CONTROL_ISSUE=3
+# CLOUDFLARE_TUNNEL_TOKEN=
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git status
+HEAD detached at 94e8201
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/canonical-keys-lock.test.mjs
+	modified:   src/lib/auth/preview.ts
+	modified:   src/server/security-headers.ts
+	modified:   src/server/zip-bounded.ts
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	out/raw/
+	out/runs/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mcd /home/andy/chapelgate && cat out/gitleaks-business-evidence-wallet.json
+[
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 1065,
+  "EndLine": 1065,
+  "StartColumn": 80,
+  "EndColumn": 117,
+  "Match": "key === CANONICAL_KEYS.ISO9001_EXPIRY ",
+  "Secret": "CANONICAL_KEYS.ISO9001_EXPIRY",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/.output/server/_ssr/wallet-BwTluauD.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 4.07333,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/.output/server/_ssr/wallet-BwTluauD.mjs:generic-api-key:1065"
+ },
+ {
+  "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
+  "StartLine": 12,
+  "EndLine": 12,
+  "StartColumn": 8,
+  "EndColumn": 41,
+  "Match": "password = \"CorrectHorseBattery1\";",
+  "Secret": "\"CorrectHorseBattery1\"",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/e2e-demo.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.4817145,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "hashicorp-tf-password",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/e2e-demo.mjs:hashicorp-tf-password:12"
+ },
+ {
+  "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
+  "StartLine": 7,
+  "EndLine": 7,
+  "StartColumn": 8,
+  "EndColumn": 41,
+  "Match": "PASSWORD = \"CorrectHorseBattery1\";",
+  "Secret": "\"CorrectHorseBattery1\"",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/cp3-acceptance.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.4817145,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "hashicorp-tf-password",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/cp3-acceptance.mjs:hashicorp-tf-password:7"
+ },
+ {
+  "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
+  "StartLine": 38,
+  "EndLine": 38,
+  "StartColumn": 8,
+  "EndColumn": 41,
+  "Match": "password = \"CorrectHorseBattery1\";",
+  "Secret": "\"CorrectHorseBattery1\"",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/http-restart-persistence.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.4817145,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "hashicorp-tf-password",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/http-restart-persistence.mjs:hashicorp-tf-password:38"
+ },
+ {
+  "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
+  "StartLine": 13,
+  "EndLine": 13,
+  "StartColumn": 8,
+  "EndColumn": 41,
+  "Match": "password = \"CorrectHorseBattery1\";",
+  "Secret": "\"CorrectHorseBattery1\"",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/live-http-idor.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.4817145,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "hashicorp-tf-password",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/live-http-idor.mjs:hashicorp-tf-password:13"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 43,
+  "EndLine": 43,
+  "StartColumn": 17,
+  "EndColumn": 63,
+  "Match": "AUTH_SECRET: \"abcdefghijklmnopqrstuvwxyz012345\"",
+  "Secret": "abcdefghijklmnopqrstuvwxyz012345",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/staging-preflight.test.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 5,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/staging-preflight.test.mjs:generic-api-key:43"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 60,
+  "EndLine": 60,
+  "StartColumn": 17,
+  "EndColumn": 63,
+  "Match": "AUTH_SECRET: \"abcdefghijklmnopqrstuvwxyz012345\"",
+  "Secret": "abcdefghijklmnopqrstuvwxyz012345",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/staging-preflight.test.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 5,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/staging-preflight.test.mjs:generic-api-key:60"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 77,
+  "EndLine": 77,
+  "StartColumn": 17,
+  "EndColumn": 63,
+  "Match": "AUTH_SECRET: \"abcdefghijklmnopqrstuvwxyz012345\"",
+  "Secret": "abcdefghijklmnopqrstuvwxyz012345",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/staging-preflight.test.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 5,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/scripts/staging-preflight.test.mjs:generic-api-key:77"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 256,
+  "EndLine": 256,
+  "StartColumn": 8,
+  "EndColumn": 45,
+  "Match": "key === CANONICAL_KEYS.ISO9001_EXPIRY ",
+  "Secret": "CANONICAL_KEYS.ISO9001_EXPIRY",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/src/domain/extraction.ts",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 4.07333,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/src/domain/extraction.ts:generic-api-key:256"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 20,
+  "EndLine": 21,
+  "StartColumn": 23,
+  "EndColumn": 69,
+  "Match": "CLIENT_SECRET =\n  \"8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5\"",
+  "Secret": "8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/src/lib/auth/preview.ts",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.831355,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/src/lib/auth/preview.ts:generic-api-key:20"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 4,
+  "EndLine": 4,
+  "StartColumn": 8,
+  "EndColumn": 54,
+  "Match": "SECRET_KEY = \"uVMGUA2Q-EoN231dAlE42lLXySqLi-Qg\"",
+  "Secret": "uVMGUA2Q-EoN231dAlE42lLXySqLi-Qg",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/src/server/langfuse.test.ts",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 4.47641,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/src/server/langfuse.test.ts:generic-api-key:4"
+ },
+ {
+  "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
+  "StartLine": 36,
+  "EndLine": 36,
+  "StartColumn": 42,
+  "EndColumn": 62,
+  "Match": "password: \"mysecret\" ",
+  "Secret": "\"mysecret\"",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/tests/scrub-connection.test.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 2.9219282,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "hashicorp-tf-password",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/tests/scrub-connection.test.mjs:hashicorp-tf-password:36"
+ },
+ {
+  "Description": "Identified a HashiCorp Terraform password field, risking unauthorized infrastructure configuration and security breaches.",
+  "StartLine": 504,
+  "EndLine": 504,
+  "StartColumn": 14,
+  "EndColumn": 47,
+  "Match": "password = \"CorrectHorseBattery1\";",
+  "Secret": "\"CorrectHorseBattery1\"",
+  "File": "/home/andy/chapelgate/repos/business-evidence-wallet/tests/a11y.test.mjs",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.4817145,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "hashicorp-tf-password",
+  "Fingerprint": "/home/andy/chapelgate/repos/business-evidence-wallet/tests/a11y.test.mjs:hashicorp-tf-password:504"
+ }
+]
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git diff src/server/security-headers.ts
+diff --git a/src/server/security-headers.ts b/src/server/security-headers.ts
+index a239fcb..233bc2b 100644
+--- a/src/server/security-headers.ts
++++ b/src/server/security-headers.ts
+@@ -1,14 +1,13 @@
+ /** Browser headers for a privately operated wallet. */
+ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+-  "Referrer-Policy": "strict-origin-when-cross-origin",
+-  "X-Frame-Options": "DENY",
+-  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
++  "Referrer-Policy": "no-referrer",
++  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), all-screens-capture=(), ambient-light-sensor=(), attribution-reporting=(), battery=(), bluetooth=(), browser-install=(), browsing-topics=(), camera=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), cross-origin-isolated=(), deferred-fetch=(), deferred-fetch-minimal=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-create=(), identity-credentials-get=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), midi=(), microphone=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), payment=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), storage-access=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), wake-lock=(), web-share=(), webxr=(), window-management=(), writer=(), xr=(), xr-spatial-tracking=()",
+ };
+ 
+ export function mergeWalletSecurityHeaders(
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git diff src/lib/auth/preview.ts
+diff --git a/src/lib/auth/preview.ts b/src/lib/auth/preview.ts
+index b8822e8..90166f5 100644
+--- a/src/lib/auth/preview.ts
++++ b/src/lib/auth/preview.ts
+@@ -16,9 +16,10 @@
+  * client (preview-only, `*.grok-sandbox.com`) — rotate it by regenerating the
+  * broker env var and this constant together.
+  */
++import { env } from "../env.server.ts";
+ export const PREVIEW_CLIENT_ID = "grok_preview";
+ export const PREVIEW_CLIENT_SECRET =
+-  "8bcdb7fc5a33874ad933ca568918d5790388a0795e44c4d1dea691f801b17ec5";
++  env("GROK_PREVIEW_CLIENT_SECRET");
+ 
+ /** The shared auth broker issuer (OIDC discovery lives under it). */
+ export const GROK_ISSUER_DEFAULT = "https://auth.grok.me";
+[0m
+Now let me understand the full picture. Let me check the tests and current state:
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | tail -50
+---
+      duration_ms: 0.162756
+      type: 'test'
+      ...
+    1..3
+ok 1597 - zip size caps lock
+  ---
+  duration_ms: 1.83363
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.416538
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 1.711926
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.290728
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.166593
+      type: 'test'
+      ...
+    1..4
+ok 1598 - zip slip lock
+  ---
+  duration_ms: 4.540679
+  type: 'suite'
+  ...
+1..1598
+# tests 2170
+# suites 318
+# pass 2156
+# fail 14
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15290.239981
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -A 5 "fail\|FAIL\|Error" | head -100
+# Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.4576
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+--
+# Subtest: answer fail-closed lock
+    # Subtest: uses the canned wording for RED, EXPIRED, and CONFLICT
+    ok 1 - uses the canned wording for RED, EXPIRED, and CONFLICT
+      ---
+      duration_ms: 4.021168
+      type: 'test'
+--
+    # Subtest: ships fail-closed text even when a stored answer claims the requirement is met
+    ok 2 - ships fail-closed text even when a stored answer claims the requirement is met
+      ---
+      duration_ms: 0.279917
+      type: 'test'
+      ...
+    # Subtest: keeps evidence status equal to the computation when a human approves or edits
+--
+    # Subtest: treats only RED, EXPIRED, and CONFLICT as fail-closed
+    ok 4 - treats only RED, EXPIRED, and CONFLICT as fail-closed
+      ---
+      duration_ms: 0.180965
+      type: 'test'
+      ...
+    1..4
+ok 15 - answer fail-closed lock
+  ---
+  duration_ms: 7.555348
+  type: 'suite'
+  ...
+# Subtest: answer status lock
+--
+    # Subtest: draftAnswerText canned wording for fail-closed statuses
+    ok 4 - draftAnswerText canned wording for fail-closed statuses
+      ---
+      duration_ms: 0.428871
+      type: 'test'
+      ...
+    # Subtest: shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    ok 5 - shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+      ---
+      duration_ms: 0.231437
+      type: 'test'
+      ...
+    1..5
+--
+    # Subtest: locks fail-closed wording for RED/EXPIRED/CONFLICT
+    ok 1 - locks fail-closed wording for RED/EXPIRED/CONFLICT
+      ---
+      duration_ms: 10.589476
+      type: 'test'
+      ...
+    # Subtest: never ships confirmatory wording on fail-closed status
+    ok 2 - never ships confirmatory wording on fail-closed status
+      ---
+      duration_ms: 4.057447
+      type: 'test'
+      ...
+    # Subtest: human decision cannot rewrite evidence_status
+--
+# Subtest: cli: a bad argument fails with JSON on stderr
+ok 46 - cli: a bad argument fails with JSON on stderr
+  ---
+  duration_ms: 43.976064
+  type: 'test'
+  ...
+# Subtest: cli: a non-game with no card fails too — the pass exists to produce one
+ok 47 - cli: a non-game with no card fails too — the pass exists to produce one
+  ---
+  duration_ms: 62.452498
+  type: 'test'
+  ...
+# Subtest: cli: --placeholder-ok is how a plain-utility pass reports no card as expected
+--
+    # Subtest: evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+    ok 3 - evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+      ---
+      duration_ms: 0.390383
+      type: 'test'
+      ...
+    # Subtest: hostile injection/exfil findings block live fill
+--
+# Subtest: degenerate current verdict fails closed
+ok 77 - degenerate current verdict fails closed
+  ---
+  duration_ms: 0.747143
+  type: 'test'
+  ...
+# Subtest: multiple signals across viewports all accumulate
+--
+# Subtest: baselineComparison fails closed on malformed or wrong-shape baselines
+ok 80 - baselineComparison fails closed on malformed or wrong-shape baselines
+  ---
+  duration_ms: 2.149513
+  type: 'test'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep "^not ok" | head -20
+not ok 99 - canonical keys lock
+not ok 132 - an unobservable dev server is indeterminate, not agreement
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+not ok 69 - scripts/cn-lock.test.mjs
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+not ok 975 - active org nav links set aria-current=page
+not ok 982 - load demonstration pack is announced and marked busy
+not ok 1061 - questionnaire detail load exposes busy status
+not ok 1145 - skip link reveals on focus-visible
+not ok 783 - scripts/password-bounds-lock.test.mjs
+not ok 787 - scripts/pg-local-stage-bins-lock.test.mjs
+not ok 816 - scripts/rollback-rehearsal.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -B1 "# fail" | head -20
+# pass 2156
+# fail 14
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -A 30 "not ok 99"
+not ok 99 - canonical keys lock
+  ---
+  duration_ms: 4.964783
+  type: 'suite'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: capability max lock
+    # Subtest: exports CAPABILITY_MAX at 64
+    ok 1 - exports CAPABILITY_MAX at 64
+      ---
+      duration_ms: 0.822983
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds capability with CAPABILITY_MAX
+    ok 2 - v2-fns.ts bounds capability with CAPABILITY_MAX
+      ---
+      duration_ms: 0.579476
+      type: 'test'
+      ...
+    1..2
+ok 100 - capability max lock
+  ---
+  duration_ms: 4.195878
+  type: 'suite'
+  ...
+# Subtest: capture permissions deny lock
+    # Subtest: includes capture=() once
+    ok 1 - includes capture=() once
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && npm run test:platform 2>&1 | grep -A 20 "not ok 99\|not ok 132\|not ok 137\|not ok 69\|not ok 205\|not ok 206\|not ok 207\|not ok 975\|not ok 982\|not ok 1061\|not ok 1145\|not ok 783\|not ok 787\|not ok 816" | head -300
+not ok 99 - canonical keys lock
+  ---
+  duration_ms: 7.17282
+  type: 'suite'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/canonical-keys-lock.test.mjs:15:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: capability max lock
+    # Subtest: exports CAPABILITY_MAX at 64
+    ok 1 - exports CAPABILITY_MAX at 64
+      ---
+      duration_ms: 0.822625
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds capability with CAPABILITY_MAX
+    ok 2 - v2-fns.ts bounds capability with CAPABILITY_MAX
+      ---
+      duration_ms: 0.626724
+      type: 'test'
+--
+not ok 132 - an unobservable dev server is indeterminate, not agreement
+  ---
+  duration_ms: 2.557657
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/check-auth-invariant.test.mjs:63:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'ok'
+    - 'indeterminate'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'indeterminate'
+  actual: 'ok'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/repo/business-evidence-wallet/scripts/check-auth-invariant.test.mjs:64:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+--
+not ok 137 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 105.92385
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    undefined !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/repo/business-evidence-wallet/scripts/check-auth-invariant.test.mjs:109:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+--
+not ok 69 - scripts/cn-lock.test.mjs
+  ---
+  duration_ms: 166.341059
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/cn-lock.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: comms lock
+    # Subtest: fixed channel/purpose/status sets
+    ok 1 - fixed channel/purpose/status sets
+      ---
+      duration_ms: 1.450642
+      type: 'test'
+      ...
+    # Subtest: recipient policy: dry-run ok; external email gated; webhook blocked
+    ok 2 - recipient policy: dry-run ok; external email gated; webhook blocked
+      ---
+--
+not ok 205 - docs/RELEASE.md names tip and refuses GO
+  ---
+  duration_ms: 2.148778
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: 94e8201184927cdfb1d1db20854e91a7fc8d232e$/m. Input:
+    
+    '# Release and rollback\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      'Note: Static tip is last docs sync, not a live GO marker.\n' +
+      '\n' +
+      '## Branching\n' +
+      '\n' +
+      '| Ref | Meaning |\n' +
+      '|---|---|\n' +
+--
+not ok 206 - docs/OPERATIONS.md names tip and refuses GO
+  ---
+  duration_ms: 1.155893
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: 94e8201184927cdfb1d1db20854e91a7fc8d232e$/m. Input:
+    
+    '# Operations runbook — Business Evidence Wallet\n' +
+      '\n' +
+      'Technically competent operator guide. No guessing. Do **not** paste secrets,\n' +
+      'invite codes, or customer evidence into chat.\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      '\n' +
+      'Local PostgreSQL 18 is the fully gated clean-room path. A DigitalOcean pilot\n' +
+      'origin is live (see [HOSTED.md](./HOSTED.md)). Neon/Vercel remains separately\n' +
+--
+not ok 207 - docs/OPERATOR.md names tip and refuses GO
+  ---
+  duration_ms: 0.686645
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/ew-1027-release-truth-tip.test.mjs:7:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /^Current master: 94e8201184927cdfb1d1db20854e91a7fc8d232e$/m. Input:
+    
+    '# Operator guide\n' +
+      '\n' +
+      'Business Evidence Wallet stores supplier evidence, human-approved facts, questionnaires, cited response packs, and an audit trail. AI may extract or draft. It does not approve facts and cannot turn RED, EXPIRED, or CONFLICT into GREEN.\n' +
+      '\n' +
+      'This guide is for a named operator running a **private** instance. It is not a public-SaaS onboarding manual.\n' +
+      '\n' +
+      '## Current truth\n' +
+      '\n' +
+      'Current master: f44d55cad3c24cb49e8793a2cb348387d4c9ce19\n' +
+      'Release GO: no\n' +
+      '\n' +
+      '## First run (local PostgreSQL)\n' +
+--
+not ok 975 - active org nav links set aria-current=page
+  ---
+  duration_ms: 5.716045
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/hcv-org-nav-aria-current.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /activeProps=\{\{[^}]*"aria-current": "page"/. Input:
+    
+    'import { Link, Outlet, useParams } from "@tanstack/react-router";\n' +
+      'import { useQuery } from "@tanstack/react-query";\n' +
+      'import { Menu } from "lucide-react";\n' +
+      'import { useEffect, useRef, useState } from "react";\n' +
+      'import { UserButton } from "@/lib/auth/gates";\n' +
+      'import { useMcpSetupUi } from "@/lib/mcp-setup-ui-client";\n' +
+      'import { cn } from "@/lib/utils";\n' +
+      'import { can, type Role, type Permission } from "@/domain/roles";\n' +
+      'import { getOrgFn } from "@/server/fns";\n' +
+      '\n' +
+      'const LINKS = [\n' +
+      '  { to: "/app/$orgId", label: "Overview", permission: "read" as Permission },\n' +
+--
+not ok 982 - load demonstration pack is announced and marked busy
+  ---
+  duration_ms: 1.862309
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/hcv-overview-demo-busy.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Loading…/. Input:
+    
+    'aria-busy={demo.isPending}\n' +
+      '          >\n' +
+      '            {demo.isPending ? "Loading demonstration pack…" : "Load demonstration pack"}\n' +
+      '          </Button>\n' +
+      '          {demo.isPending ? (\n' +
+      '            <p role="status" className="sr-only">\n' +
+      '              Loading demonstration pack.\n' +
+      '            </p>\n' +
+      '          ) : null}\n' +
+      '          {'
+    
+  code: 'ERR_ASSERTION'
+--
+not ok 1061 - questionnaire detail load exposes busy status
+  ---
+  duration_ms: 1.931822
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/hcv-questionnaire-detail-busy.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /q\.isPending\) return <p role="status" aria-busy="true" className="text-muted">Loading…<\/p>/. Input:
+    
+    'import { useQuery } from "@tanstack/react-query";\n' +
+      'import { createFileRoute, Link } from "@tanstack/react-router";\n' +
+      'import { getQuestionnaireFn } from "@/server/fns";\n' +
+      '\n' +
+      'export const Route = createFileRoute("/app/$orgId/questionnaires/$qid")({ component: QDetail });\n' +
+      '\n' +
+      'function QDetail() {\n' +
+      '  const { orgId, qid } = Route.useParams();\n' +
+      '  const q = useQuery({\n' +
+      '    queryKey: ["qn", orgId, qid],\n' +
+      '    queryFn: () => getQuestionnaireFn({ data: { orgId, questionnaireId: qid } }),\n' +
+      '  });\n' +
+--
+not ok 1145 - skip link reveals on focus-visible
+  ---
+  duration_ms: 1.881858
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/hcv-skip-link-focus-visible.test.mjs:6:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /focus-visible:translate-y-0/. Input:
+    
+    'import { QueryClientProvider } from "@tanstack/react-query";\n' +
+      'import {\n' +
+      '  createRootRoute,\n' +
+      '  HeadContent,\n' +
+      '  Outlet,\n' +
+      '  Scripts,\n' +
+      '} from "@tanstack/react-router";\n' +
+      'import { PreviewHostBridge } from "@/components/preview-host-bridge";\n' +
+      'import { AuthProvider } from "@/lib/auth/provider";\n' +
+      'import { queryClient } from "@/lib/query-client";\n' +
+      'import appCss from "../styles.css?url";\n' +
+      '\n' +
+--
+not ok 783 - scripts/password-bounds-lock.test.mjs
+  ---
+  duration_ms: 223.757004
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/password-bounds-lock.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: paste text lock
+    # Subtest: keeps the 100_000 character pasted-text cap
+    ok 1 - keeps the 100_000 character pasted-text cap
+      ---
+      duration_ms: 0.985179
+      type: 'test'
+      ...
+    # Subtest: accepts text at the cap and rejects one character over
+    ok 2 - accepts text at the cap and rejects one character over
+      ---
+--
+not ok 787 - scripts/pg-local-stage-bins-lock.test.mjs
+  ---
+  duration_ms: 145.110566
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/pg-local-stage-bins-lock.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: pglite data dir lock
+    # Subtest: defaults to cwd/data/pglite when unset
+    ok 1 - defaults to cwd/data/pglite when unset
+      ---
+      duration_ms: 0.888948
+      type: 'test'
+      ...
+    # Subtest: returns undefined for explicit :memory:
+    ok 2 - returns undefined for explicit :memory:
+      ---
+--
+not ok 816 - scripts/rollback-rehearsal.test.mjs
+  ---
+  duration_ms: 135.360797
+  type: 'test'
+  location: '/home/andy/chapelgate/repo/business-evidence-wallet/scripts/rollback-rehearsal.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: rsfm enabled lock
+    # Subtest: is off when env unset
+    ok 1 - is off when env unset
+[0m
+Let me look at the current modifications and understand `rt`:
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/TOOLS-INVENTORY.md 2>/dev/null || echo "Not found"
+# Estate security tools inventory (standing)
+Owner: CYBER-SECURITY-OWNER. Last verified: 22 Nov 2026 00:01 GMT. Verify any time: `/home/andy/chapelgate/jobs-work-dell/readiness/security/tools/verify-tools.sh` (writes raw/<stamp>/SUMMARY.tsv + one version file per tool).
+Rules: target only the Dell-hosted RC (never production, the golden line or third parties); installed binaries or pinned images only, never `npx <scanner>`; raw output per frozen SHA in the job's out/raw/; new packs vetted with skillspector (Mac, ~/ai-setup/skill-vetting/skillspector) before use; paid/declaration items parked.
+Every test run's out/ must contain TOOL-COVERAGE.md (template: /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/TOOL-COVERAGE-TEMPLATE.md) or it is incomplete.
+
+| # | Tool | Kind | Location | Status 22 Nov 00:01 | Version raw |
+|---|---|---|---|---|---|
+| 1 | gitleaks | secrets | ~/.local/bin/gitleaks | WORKING 8.18.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/gitleaks.txt |
+| 2 | trufflehog | secrets (verified) | ~/.local/bin/trufflehog (official release, sha256 checked) | WORKING 3.100.0, installed 21 Nov 23:51 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/trufflehog.txt |
+| 3 | semgrep | SAST | ~/tools/venvs/semgrep (isolated venv) | WORKING 1.186.0, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/semgrep.txt |
+| 4 | osv-scanner | dependencies | ~/.local/bin/osv-scanner | WORKING 1.9.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/osv-scanner.txt |
+| 5 | npm audit | dependencies | npm 10.9.9 | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/npm-audit.txt |
+| 6 | pip-audit | dependencies | ~/tools/venvs/pip-audit | WORKING 2.10.1, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pip-audit.txt |
+| 7 | trivy | deps/container/IaC | ~/.local/bin/trivy (official 0.76.2, sha256 checked) | WORKING, replaced dev build 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/trivy.txt |
+| 8 | syft | SBOM | ~/.local/bin/syft | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/syft.txt |
+| 9 | grype | SBOM vulns | ~/.local/bin/grype | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/grype.txt |
+| 10 | ZAP | DAST | wrappers zap-baseline / zap-full / zap-api (ghcr.io/zaproxy/zaproxy:stable) | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/zap.txt |
+| 11 | nuclei | DAST templates | wrapper -> kali image, templates ~/.local/share/nuclei-templates | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nuclei.txt |
+| 12 | sqlmap | SQL injection | wrapper -> kali image | WORKING 1.10.9 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/sqlmap.txt |
+| 13 | nikto | web server | wrapper -> kali image | WORKING 2.6.1 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nikto.txt |
+| 14 | ffuf | fuzzing | wrapper -> kali image | WORKING 2.1.0-dev | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/ffuf.txt |
+| 15 | gobuster | content discovery | wrapper -> kali image | WORKING 3.8.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/gobuster.txt |
+| 16 | nmap | ports/TLS | wrapper -> kali image (NET_RAW cap) | WORKING 7.99, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nmap.txt |
+| 17 | axe | WCAG | npx --no-install axe (project dep) | WORKING 4.14.0 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/axe.txt |
+| 18 | pa11y | WCAG | npx --no-install pa11y | WORKING 10.0.0 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pa11y.txt |
+| 19 | PentAGI | autonomous pentest | docker pentagi (Up) | IMAGE OK; autonomous scan never completed (readiness/security/HANDOVER-chapelgate-multilingual-transcribe-pentagi-20261119.md); auth unblock in progress | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pentagi.txt |
+| 20 | full-shakedown | skill (red team RT suite) | ~/.claude/skills/full-shakedown | PRESENT, in use | |
+| 21 | pentagi-security-testing | skill | ~/.claude/skills/pentagi-security-testing | PRESENT, blocked with PentAGI | |
+| 22 | shannon-pentest | skill | ~/.claude/skills/shannon-pentest | PRESENT; Shannon engine NOT installed: skill requires KeygraphHQ/shannon pinned to a reviewed SHA + isolated worker | |
+| 23 | security-threat-model | skill | ~/.claude/skills/security-threat-model | PRESENT, to run before each red team | |
+| 24 | chapelgate-security-audit | skill | ~/chapelgate/repos/agent-skills/skills/chapelgate-security-audit | PRESENT | |
+| 25 | web-quality-audit | skill | ~/.claude/skills/web-quality-audit | PRESENT | |
+| 26 | security-best-practices | skill | ~/.claude/skills/security-best-practices | PRESENT | |
+| 27 | security-and-hardening | skill | ~/.claude/skills/security-and-hardening | PRESENT | |
+| 28 | github-actions-hardening | skill | ~/.claude/skills/github-actions-hardening | PRESENT | |
+| 29 | agent-owasp-compliance | skill | ~/.claude/skills/agent-owasp-compliance | PRESENT (AI features only) | |
+| 30 | release-standards | skill | ~/chapelgate/jobs-work-dell/skills/release-standards | PRESENT | |
+| 31 | skillspector | skill vetting | Mac ~/ai-setup/skill-vetting/skillspector/.venv | WORKING (Mac) | |
+| X | cloudflare security-audit pack | downloaded pack | FT/reel-trial-cloudflare-security-audit-skill-for-claude-code-20261119/sandbox/security-audit-skill | REJECTED: skillspector 86/100 CRITICAL, DO NOT INSTALL | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/cloudflare-security-audit-skill.SKILLSPECTOR-20261121.md |
+| X | bettercap | network MITM | not installed | NOT APPLICABLE to web products (LAN attack tool) | |
+Renamed aside (not deleted): ~/.local/bin/.trivy.dev-build-*, .pysemgrep.pre-venv-*, .pip-audit.pre-venv-*.
+
+| 32 | claude-bughunter skill pack (elementalsouls/Claude-BugHunter) | pinned 42bd4625d5cd4d206fbb468f0cd7a2e9cf1ef54f | WORKING (skills only) | Added 22 Nov 2026 10:45 GMT on Andy's tip. skillspector --no-llm: 100/100 CRITICAL "DO NOT INSTALL", reviewed by CSO: criticals are attack payload examples in docs and skill text (php webshell / upload payload strings), install scripts have no pipe-to-shell. Accepted with limits: SKILL.md text only, symlinked into ~/.agents/skills (83 skills; name clashes skipped:). EXCLUDED: install.sh/install-community-skills (pulls an unpinned third-party repo), engine/, cbh CLI, mcp/ (HackerOne MCP), offensive-osint/scripts (calls hackerone.com, spawns subprocesses), Burp MCP (Burp Pro is paid, parked). Use only against the Dell-local RC; its external recon/OSINT/enterprise-attack skills are not applicable to our products. Report: raw/claude-bughunter.SKILLSPECTOR-20261122.md |
+[0m
+[0m$ [0mwhich rt 2>/dev/null || type rt 2>/dev/null || echo "rt not found as command"
+/home/andy/bin/rt
+[0m
+[0m$ [0mcd /home/andy/chapelgate/repo/business-evidence-wallet && git diff src/server/security-headers.ts vite.config.ts tests/signup-policy.test.mjs src/server/zip-bounded.ts scripts/canonical-keys-lock.test.mjs scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+diff --git a/scripts/__pycache__/opencode-estate-body.cpython-312.pyc b/scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+index 3c232d7..00d50ab 100644
+Binary files a/scripts/__pycache__/opencode-estate-body.cpython-312.pyc and b/scripts/__pycache__/opencode-estate-body.cpython-312.pyc differ
+diff --git a/scripts/canonical-keys-lock.test.mjs b/scripts/canonical-keys-lock.test.mjs
+index c48bed7..3099303 100644
+--- a/scripts/canonical-keys-lock.test.mjs
++++ b/scripts/canonical-keys-lock.test.mjs
+@@ -33,8 +33,8 @@ describe("canonical keys lock", () => {
+     assert.ok(CANONICAL_KEYS.SMAS_EXPIRY);
+     assert.equal(CANONICAL_KEYS.PROFESSIONAL_INDEMNITY_LIMIT, "insurance.professional_indemnity.limit");
+     assert.equal(CANONICAL_KEYS.PROFESSIONAL_INDEMNITY_EXPIRY, "insurance.professional_indemnity.expiry");
+-    assert.equal(CANONICAL_KEYS.MOTOR_INSURANCE_LIMIT, "insurance.motor_insurance.limit");
+-    assert.equal(CANONICAL_KEYS.MOTOR_INSURANCE_EXPIRY, "insurance.motor_insurance.expiry");
++    assert.equal(CANONICAL_KEYS.MOTOR_INSURANCE_LIMIT, "insurance.motor.limit");
++    assert.equal(CANONICAL_KEYS.MOTOR_INSURANCE_EXPIRY, "insurance.motor.expiry");
+     assert.equal(CANONICAL_KEYS.CYBER_ESSENTIALS_STATUS, "certification.cyber_essentials.status");
+     assert.equal(CANONICAL_KEYS.CYBER_ESSENTIALS_EXPIRY, "certification.cyber_essentials.expiry");
+     assert.equal(CANONICAL_KEYS.ISO_27001_STATUS, "certification.iso_27001.status");
+diff --git a/src/server/security-headers.ts b/src/server/security-headers.ts
+index a239fcb..233bc2b 100644
+--- a/src/server/security-headers.ts
++++ b/src/server/security-headers.ts
+@@ -1,14 +1,13 @@
+ /** Browser headers for a privately operated wallet. */
+ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+-  "Referrer-Policy": "strict-origin-when-cross-origin",
+-  "X-Frame-Options": "DENY",
+-  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
++  "Referrer-Policy": "no-referrer",
++  "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), all-screens-capture=(), ambient-light-sensor=(), attribution-reporting=(), battery=(), bluetooth=(), browser-install=(), browsing-topics=(), camera=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), cross-origin-isolated=(), deferred-fetch=(), deferred-fetch-minimal=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-create=(), identity-credentials-get=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), midi=(), microphone=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), payment=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), storage-access=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), wake-lock=(), web-share=(), webxr=(), window-management=(), writer=(), xr=(), xr-spatial-tracking=()",
+ };
+ 
+ export function mergeWalletSecurityHeaders(
+diff --git a/src/server/zip-bounded.ts b/src/server/zip-bounded.ts
+index 6e5fc88..ecc62ff 100644
+--- a/src/server/zip-bounded.ts
++++ b/src/server/zip-bounded.ts
+@@ -8,7 +8,7 @@ export const MAX_INFLATE_OUTPUT_BYTES = 2 * 1024 * 1024;
+ export const MAX_EXTRACTED_TEXT_CHARS = 512 * 1024;
+ export const MAX_PDF_STREAMS = 80;
+ /** Cumulative decompressed PDF bytes across all streams. Not 80 × 2 MiB. */
+-export const MAX_PDF_DECOMPRESSED_TOTAL_BYTES = 6 * 1024 * 1024;
++export const MAX_PDF_DECOMPRESSED_TOTAL_BYTES = 15 * 1024 * 1024;
+ export const MAX_PARSE_MS = 3_000;
+ /** Cap on XLSX sharedStrings entries before parse aborts. */
+ export const MAX_XLSX_SHARED_STRINGS = 20_000;
+diff --git a/tests/signup-policy.test.mjs b/tests/signup-policy.test.mjs
+index 9472d44..32c5f81 100644
+--- a/tests/signup-policy.test.mjs
++++ b/tests/signup-policy.test.mjs
+@@ -137,7 +137,7 @@ describe("wallet security headers", () => {
+     assert.equal(WALLET_SECURITY_HEADERS["X-Robots-Tag"], "noindex, nofollow");
+     assert.equal(WALLET_SECURITY_HEADERS["Referrer-Policy"], "strict-origin-when-cross-origin");
+     assert.equal(WALLET_SECURITY_HEADERS["X-Frame-Options"], "DENY");
+-    assert.equal(WALLET_SECURITY_HEADERS["Content-Security-Policy"], "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';");
++    assert.equal(WALLET_SECURITY_HEADERS["Content-Security-Policy"], "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';");
+     const headers = mergeWalletSecurityHeaders({ "content-type": "application/json" });
+     assert.equal(headers.get("x-content-type-options"), "nosniff");
+     assert.equal(headers.get("content-type"), "application/json");
+diff --git a/vite.config.ts b/vite.config.ts
+index 6b1aafe..3616da9 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -34,7 +34,7 @@ function securityHeadersPlugin(): Plugin {
+         res.setHeader("X-Content-Type-Options", "nosniff");
+         res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+         res.setHeader("X-Frame-Options", "DENY");
+-        res.setHeader("Content-Security-Policy", "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';");
++        res.setHeader("Content-Security-Policy", "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';");
+         res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+         next();
+       });
+@@ -185,7 +185,7 @@ export default defineConfig(({ command, isPreview }) => ({
+       "X-Content-Type-Options": "nosniff",
+       "Referrer-Policy": "strict-origin-when-cross-origin",
+       "X-Frame-Options": "DENY",
+-      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
++      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+       "X-Robots-Tag": "noindex, nofollow",
+       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+     },
+[0m
+Now let me start addressing the findings systematically. First, let me run the `rt` wrapper to understand how to capture raw evidence:
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mcat /home/andy/bin/rt failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

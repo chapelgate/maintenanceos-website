@@ -1,0 +1,1547 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 104
+drwxrwxr-x   4 andy andy  4096 Nov 22 00:03 .
+drwxrwxr-x 695 andy andy 65536 Nov 22 07:05 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 07:14 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  1834 Nov 22 07:14 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 07:14 out
+drwxrwxr-x  23 andy andy  4096 Nov 22 07:08 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 07:14 status.json
+-rw-rw-r--   1 andy andy  1920 Nov 22 04:34 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✗ [0mRead out/VERIFIER-FEEDBACK.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead FINDINGS.tsv
+[0m→ [0mRead status.json
+[0m→ [0mRead history.log
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2380
+drwxrwxr-x  23 andy andy    4096 Nov 22 07:08 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 00:03 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 05:36 docs
+-rw-rw-r--   1 andy andy    1123 Nov 22 05:36 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 05:43 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     370 Nov 22 06:29 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  274699 Nov 22 05:36 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 05:36 scripts
+-rw-rw-r--   1 andy andy   15457 Nov 22 05:36 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 07:08 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 05:36 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   14297 Nov 22 05:36 vite.config.ts
+[0m
+[0m$ [0mgrep -r "preview" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src --include="*.ts" --include="*.tsx" | head -50
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/db.ts: * JSON.stringify rejects, date -> UTC Date). Normalize both so preview and
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/db.ts:  // Apply migrations/ (the single schema source) so preview matches production.
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/db.ts: * The shared PGLite instance (preview only), with `migrations/*.sql` applied.
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/db.ts: * Lets Better Auth persist to the SAME embedded DB as app data in preview (via a
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/db.ts: * - **PGLite** (preview / no `DATABASE_URL`): open the filesystem (or memory)
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-embedder-origin.ts:  const sep = ".preview.";
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/db-source.ts: * - unset → `{cwd}/data/pglite` (durable local / preview)
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/app-data.test.ts:describe("callTool in the workspace preview vs deployed", () => {
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/app-data.test.ts:  it("returns pending (no loginRequired) when the preview has no token yet", async () => {
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/app-data.test.ts:  it("treats a gate 401 in the preview as pending and parks the rejected token", async () => {
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/app-data.test.ts:  it("classifies a pending preview token as pending before any other kind", () => {
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/app-data.test.ts:      errorMessage: "connector_token_pending: the preview has not received the connector token yet",
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/client.server.ts:// Digest of the last preview token the gate answered 401 for. The readiness
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/client.server.ts:// request, so the client waits for the preview panel to push a fresh token
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/client.server.ts: * rejected. This is what the preview readiness probe reports; it never calls
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/client.server.ts:  "the preview has not received the connector token yet; it arrives once " +
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/client.server.ts:  "the gate rejected the current preview token; the preview panel pushes a " +
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/use-connector-readiness.ts: * A `connector-token-ready` bridge event from the Grok preview chrome triggers
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/use-connector-readiness.ts: * sandbox's own `npm run preview`) is not framed by any preview, so no token
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/app-data/use-connector-readiness.ts: * no `ancestorOrigins`): the token comes through the preview proxy, and the
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts: * Guest side of the grok-web ↔ sandbox preview postMessage bridge.
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts:import { resolveParentEmbedderOrigin } from "./preview-embedder-origin";
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts:} from "./preview-embedder-origin";
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts:export const PREVIEW_BRIDGE_CHANNEL = "grok-preview-bridge" as const;
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts:    const resolved = new URL(path, "https://preview.invalid");
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts:    return resolved.origin === "https://preview.invalid";
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts:  // re-stamped that entry as root, Back would no-op while earlier in-preview
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/preview-host-bridge.ts:    // Do not history.go(-1) off the first entry — that leaves the preview.
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/env.server.ts: * Workspace preview vs deployed app. The deployer writes GROK_PROJECT_ID on
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/env.server.ts: * every publish; the sandbox preview never has it. Single source of truth for
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/gate-identity.server.ts:const PREVIEW_AUDIENCE = "preview";
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts: * Pre-wired for live preview + deploy — do not rewrite this file. To enable
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts: *   - Sandbox live preview: `/workspace/startup.sh` starts local PostgreSQL 18
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts: * NEVER import this from client code — it pulls in `pg` + the preview secret +
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:} from "./preview";
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts: * new signing secret. Local PostgreSQL preview writes a durable secret to
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:function previewAuthSecret(): string {
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:// otherwise fall back to the shared live-preview client, which the broker accepts
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:// for any `*.grok-sandbox.com` callback (see `./preview`).
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:// public URL. In the sandbox live preview there's no fixed URL (each preview gets
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:// preview allowlist, which makes the OAuth `redirect_uri` the concrete preview URL
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:// the broker's preview client accepts.
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:  // (not only the preview wildcard).
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:  allowedHosts: [...previewAllowedHosts, "localhost", "127.0.0.1", "[::1]"],
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:  // (preview is https; local dev is http).
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:      ...previewAllowedHosts,
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:      ...previewAllowedHosts.flatMap((host) => [`https://${host}`, `http://${host}`]),
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:// even redirect to Google/X — the live-preview popup felt stuck on the app for
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/lib/auth/server.ts:// embedded PGLite (preview) via a Kysely dialect — so Better Auth persists to the
+[0m
+[0m✱ [0mGrep "preview.*secret|secret.*preview"[90m in repo/src · 4 matches[0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m→ [0mRead repo/src/lib/auth/server.ts
+[0m✱ [0mGrep "Content-Security-Policy|csp|unsafe-inline"[90m in repo/src · 0 matches[0m
+[0m✱ [0mGrep "Content-Security-Policy|csp|unsafe-inline"[90m in repo/src · 1 match[0m
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 0 matches[0m
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 0 matches[0m
+[0m
+[0m$ [0mrg -r '' "unsafe-inline" /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/ 2>/dev/null || echo "No matches found"
+No matches found
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "script-src|style-src"[90m in repo · 7 matches[0m
+[0m→ [0mRead repo/vite.config.ts[90m [offset=180, limit=50][0m
+[0m✱ [0mGrep "securityHeadersPlugin"[90m in repo · 6 matches[0m
+[0m→ [0mRead repo/vite.config.ts[90m [limit=80, offset=1][0m
+[0m→ [0mRead repo/package.json
+[0m→ [0mRead repo/.env.example
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | head -200
+> app-builder-workspace@0.0.0-private test:platform
+> npm test
+
+
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 0.887197
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 0.903293
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 3.130664
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 1.145631
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.917877
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.556329
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.322673
+      type: 'test'
+      ...
+    1..4
+ok 2 - admin error copy lock
+  ---
+  duration_ms: 5.61889
+  type: 'suite'
+  ...
+# Subtest: agent display name max lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 1.030674
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+    ok 2 - agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.66303
+      type: 'test'
+      ...
+    1..2
+ok 3 - agent display name max lock
+  ---
+  duration_ms: 2.866091
+  type: 'suite'
+  ...
+# Subtest: agent display name max wire lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 1.121331
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+    ok 2 - v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 1.100881
+      type: 'test'
+      ...
+    1..2
+ok 4 - agent display name max wire lock
+  ---
+  duration_ms: 4.573448
+  type: 'suite'
+  ...
+# Subtest: agent loop events list max lock
+    # Subtest: exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+    ok 1 - exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+      ---
+      duration_ms: 0.810569
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+      ---
+      duration_ms: 0.668393
+      type: 'test'
+      ...
+    1..2
+ok 5 - agent loop events list max lock
+  ---
+  duration_ms: 2.64632
+  type: 'suite'
+  ...
+# Subtest: agent loop runs list max lock
+    # Subtest: exports AGENT_LOOP_RUNS_LIST_MAX at 100
+    ok 1 - exports AGENT_LOOP_RUNS_LIST_MAX at 100
+      ---
+      duration_ms: 0.690285
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+      ---
+      duration_ms: 0.355659
+      type: 'test'
+      ...
+    1..2
+ok 6 - agent loop runs list max lock
+  ---
+  duration_ms: 2.060631
+  type: 'suite'
+  ...
+# Subtest: agent purpose max lock
+    # Subtest: exports AGENT_PURPOSE_MAX at 500
+    ok 1 - exports AGENT_PURPOSE_MAX at 500
+      ---
+      duration_ms: 0.845943
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares purpose length against AGENT_PURPOSE_MAX
+    ok 2 - agents.ts compares purpose length against AGENT_PURPOSE_MAX
+      ---
+      duration_ms: 0.387776
+      type: 'test'
+      ...
+    1..2
+ok 7 - agent purpose max lock
+  ---
+  duration_ms: 3.281428
+  type: 'suite'
+  ...
+# Subtest: ai grounding lock
+    # Subtest: accepts an exact token-bounded value case-insensitively
+    ok 1 - accepts an exact token-bounded value case-insensitively
+      ---
+      duration_ms: 3.269876
+      type: 'test'
+      ...
+    # Subtest: rejects a smaller amount that is only a prefix of a larger figure
+    ok 2 - rejects a smaller amount that is only a prefix of a larger figure
+      ---
+      duration_ms: 2.043129
+      type: 'test'
+      ...
+    # Subtest: rejects short tokens that collide inside longer words
+    ok 3 - rejects short tokens that collide inside longer words
+      ---
+      duration_ms: 1.891652
+      type: 'test'
+      ...
+    # Subtest: rejects empty extracted text and display values under 3 chars
+    ok 4 - rejects empty extracted text and display values under 3 chars
+      ---
+      duration_ms: 0.309033
+      type: 'test'
+      ...
+    1..4
+ok 8 - ai grounding lock
+  ---
+  duration_ms: 8.863433
+  type: 'suite'
+  ...
+# Subtest: ai response caps lock
+    # Subtest: keeps fetch timeout at 15 seconds
+    ok 1 - keeps fetch timeout at 15 seconds
+      ---
+      duration_ms: 0.826873
+      type: 'test'
+      ...
+    # Subtest: keeps max response chars at 100000
+    ok 2 - keeps max response chars at 100000
+      ---
+      duration_ms: 0.159264
+      type: 'test'
+      ...
+    # Subtest: timeout stays below max response chars numerically as separate unit caps
+    ok 3 - timeout stays below max response chars numerically as separate unit caps
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -200
+# Subtest: rotates when the session user has no gate-bound account
+    ok 3 - rotates when the session user has no gate-bound account
+      ---
+      duration_ms: 0.069104
+      type: 'test'
+      ...
+    1..3
+ok 15 - sessionBoundToGateIdentity
+  ---
+  duration_ms: 0.394452
+  type: 'suite'
+  ...
+# Subtest: resolveSignInGateState
+    # Subtest: is pending while the session check is in flight, user or not
+    ok 1 - is pending while the session check is in flight, user or not
+      ---
+      duration_ms: 0.968548
+      type: 'test'
+      ...
+    # Subtest: is signed_in once a user is present
+    ok 2 - is signed_in once a user is present
+      ---
+      duration_ms: 0.168429
+      type: 'test'
+      ...
+    # Subtest: is signed_out only after the check resolved with no user
+    ok 3 - is signed_out only after the check resolved with no user
+      ---
+      duration_ms: 0.163935
+      type: 'test'
+      ...
+    1..3
+ok 16 - resolveSignInGateState
+  ---
+  duration_ms: 2.566709
+  type: 'suite'
+  ...
+# Subtest: signup policy
+    # Subtest: processLooksHosted
+        # Subtest: false for undefined, empty, and whitespace
+        ok 1 - false for undefined, empty, and whitespace
+          ---
+          duration_ms: 0.92382
+          type: 'test'
+          ...
+        # Subtest: false for localhost
+        ok 2 - false for localhost
+          ---
+          duration_ms: 0.307784
+          type: 'test'
+          ...
+        # Subtest: false for IPv4 loopback
+        ok 3 - false for IPv4 loopback
+          ---
+          duration_ms: 3.363822
+          type: 'test'
+          ...
+        # Subtest: false for IPv6 loopback
+        ok 4 - false for IPv6 loopback
+          ---
+          duration_ms: 0.257951
+          type: 'test'
+          ...
+        # Subtest: true for remote host
+        ok 5 - true for remote host
+          ---
+          duration_ms: 0.182536
+          type: 'test'
+          ...
+        # Subtest: query host uses last value
+        ok 6 - query host uses last value
+          ---
+          duration_ms: 0.251494
+          type: 'test'
+          ...
+        # Subtest: remote hostaddr overrides loopback host
+        ok 7 - remote hostaddr overrides loopback host
+          ---
+          duration_ms: 0.288107
+          type: 'test'
+          ...
+        # Subtest: loopback hostaddr preserves local status
+        ok 8 - loopback hostaddr preserves local status
+          ---
+          duration_ms: 0.221924
+          type: 'test'
+          ...
+        # Subtest: invalid URL fails closed as hosted
+        ok 9 - invalid URL fails closed as hosted
+          ---
+          duration_ms: 0.410729
+          type: 'test'
+          ...
+        1..9
+    ok 1 - processLooksHosted
+      ---
+      duration_ms: 7.801678
+      type: 'suite'
+      ...
+    # Subtest: signupOpenFromEnv
+        # Subtest: defaults open locally
+        ok 1 - defaults open locally
+          ---
+          duration_ms: 2.779711
+          type: 'test'
+          ...
+        # Subtest: defaults closed when hosted
+        ok 2 - defaults closed when hosted
+          ---
+          duration_ms: 0.256771
+          type: 'test'
+          ...
+        # Subtest: explicit false-like values always close
+        ok 3 - explicit false-like values always close
+          ---
+          duration_ms: 0.167486
+          type: 'test'
+          ...
+        # Subtest: explicit true-like values always open
+        ok 4 - explicit true-like values always open
+          ---
+          duration_ms: 0.145371
+          type: 'test'
+          ...
+        # Subtest: trims values
+        ok 5 - trims values
+          ---
+          duration_ms: 0.117342
+          type: 'test'
+          ...
+        # Subtest: unknown value follows hosted default
+        ok 6 - unknown value follows hosted default
+          ---
+          duration_ms: 0.112853
+          type: 'test'
+          ...
+        1..6
+    ok 2 - signupOpenFromEnv
+      ---
+      duration_ms: 6.980444
+      type: 'suite'
+      ...
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 3 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 0.139609
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into the Better Auth server config
+    ok 4 - wires disableSignUp into the Better Auth server config
+      ---
+      duration_ms: 0.570897
+      type: 'test'
+      ...
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+      ---
+      duration_ms: 0.387893
+      type: 'test'
+      ...
+    1..5
+ok 17 - signup policy
+  ---
+  duration_ms: 16.738431
+  type: 'suite'
+  ...
+# Subtest: formatWalletTimestamp
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    ok 1 - stringifies Date objects so React never receives a raw Date child
+      ---
+      duration_ms: 1.458599
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.194228
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.182795
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 3.081233
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 378.015862
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:domain 2>&1 | tail -100
+type: 'test'
+      ...
+    # Subtest: excludes superseded and archived from as-of current set
+    ok 2 - excludes superseded and archived from as-of current set
+      ---
+      duration_ms: 0.290613
+      type: 'test'
+      ...
+    # Subtest: supports historical insurance evidence questions
+    ok 3 - supports historical insurance evidence questions
+      ---
+      duration_ms: 0.326096
+      type: 'test'
+      ...
+    1..3
+ok 215 - v2 temporal truth
+  ---
+  duration_ms: 5.076775
+  type: 'suite'
+  ...
+# Subtest: v2 renewals planning
+    # Subtest: maps day windows to renewal stages and escalates near/overdue
+    ok 1 - maps day windows to renewal stages and escalates near/overdue
+      ---
+      duration_ms: 1.308091
+      type: 'test'
+      ...
+    1..1
+ok 216 - v2 renewals planning
+  ---
+  duration_ms: 2.911008
+  type: 'suite'
+  ...
+# Subtest: v2 evidence request transitions
+    # Subtest: allows the documented chase workflow and rejects illegal jumps
+    ok 1 - allows the documented chase workflow and rejects illegal jumps
+      ---
+      duration_ms: 0.268743
+      type: 'test'
+      ...
+    # Subtest: exposes built-in evidence request templates
+    ok 2 - exposes built-in evidence request templates
+      ---
+      duration_ms: 0.20587
+      type: 'test'
+      ...
+    1..2
+ok 217 - v2 evidence request transitions
+  ---
+  duration_ms: 0.640665
+  type: 'suite'
+  ...
+# Subtest: v2 form agent dry-run
+    # Subtest: fills from resolver, never invents, and blocks hostile labels
+    ok 1 - fills from resolver, never invents, and blocks hostile labels
+      ---
+      duration_ms: 1.367761
+      type: 'test'
+      ...
+    1..1
+ok 218 - v2 form agent dry-run
+  ---
+  duration_ms: 1.494784
+  type: 'suite'
+  ...
+# Subtest: v2 opportunities scoring
+    # Subtest: normalizes keys, dedupes, and never presents estimates as facts
+    ok 1 - normalizes keys, dedupes, and never presents estimates as facts
+      ---
+      duration_ms: 0.899137
+      type: 'test'
+      ...
+    1..1
+ok 219 - v2 opportunities scoring
+  ---
+  duration_ms: 2.320787
+  type: 'suite'
+  ...
+# Subtest: v2 dual approval policy
+    # Subtest: flags contract/tender and explicit dual authority
+    ok 1 - flags contract/tender and explicit dual authority
+      ---
+      duration_ms: 0.276808
+      type: 'test'
+      ...
+    1..1
+ok 220 - v2 dual approval policy
+  ---
+  duration_ms: 0.579692
+  type: 'suite'
+  ...
+1..220
+# tests 1405
+# suites 209
+# pass 1405
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4555.523261
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:integration 2>&1 | tail -60
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 180000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "fail|FAIL|not ok" | head -50
+# Subtest: answer fail-closed lock
+    # Subtest: ships fail-closed text even when a stored answer claims the requirement is met
+    ok 2 - ships fail-closed text even when a stored answer claims the requirement is met
+    # Subtest: treats only RED, EXPIRED, and CONFLICT as fail-closed
+    ok 4 - treats only RED, EXPIRED, and CONFLICT as fail-closed
+ok 15 - answer fail-closed lock
+    # Subtest: draftAnswerText canned wording for fail-closed statuses
+    ok 4 - draftAnswerText canned wording for fail-closed statuses
+    # Subtest: shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    ok 5 - shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    # Subtest: locks fail-closed wording for RED/EXPIRED/CONFLICT
+    ok 1 - locks fail-closed wording for RED/EXPIRED/CONFLICT
+    # Subtest: never ships confirmatory wording on fail-closed status
+    ok 2 - never ships confirmatory wording on fail-closed status
+# Subtest: cli: a bad argument fails with JSON on stderr
+ok 46 - cli: a bad argument fails with JSON on stderr
+# Subtest: cli: a non-game with no card fails too — the pass exists to produce one
+ok 47 - cli: a non-game with no card fails too — the pass exists to produce one
+    # Subtest: evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+    ok 3 - evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+# Subtest: degenerate current verdict fails closed
+ok 77 - degenerate current verdict fails closed
+# Subtest: baselineComparison fails closed on malformed or wrong-shape baselines
+ok 80 - baselineComparison fails closed on malformed or wrong-shape baselines
+# Subtest: exitCodeFor: navigation failure in any viewport exits 1, beating errors
+ok 90 - exitCodeFor: navigation failure in any viewport exits 1, beating errors
+# Subtest: exitCodeFor: no viewport data is a failure
+ok 92 - exitCodeFor: no viewport data is a failure
+    # Subtest: maps workerLabel and fail-closed payloadHints for known refs
+    ok 1 - maps workerLabel and fail-closed payloadHints for known refs
+    # Subtest: parses alternativesJson and evidenceRefsJson fail-closed
+    ok 3 - parses alternativesJson and evidenceRefsJson fail-closed
+# Subtest: divergence fails in either direction
+ok 131 - divergence fails in either direction
+    # Subtest: classifies connection failures as unavailable
+    ok 1 - classifies connection failures as unavailable
+    # Subtest: isExpiredOn fail-closes unparseable dates and treats null as no constraint
+    ok 2 - isExpiredOn fail-closes unparseable dates and treats null as no constraint
+# Subtest: audit load failures are announced
+ok 322 - audit load failures are announced
+# Subtest: gateway and loop load failures are alerts
+ok 327 - gateway and loop load failures are alerts
+# Subtest: hcv clock fail closed
+ok 402 - hcv clock fail closed
+# Subtest: compliance page announces load and mutation failures
+ok 421 - compliance page announces load and mutation failures
+# Subtest: organisation and status load failures are announced
+ok 445 - organisation and status load failures are announced
+# Subtest: decision inbox announces load and scheduler failures
+ok 478 - decision inbox announces load and scheduler failures
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "^(not ok|# fail)" | head -50
+# fail 0
+# fail 0
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "tests|fail|pass" | tail -20
+# fail 0
+# Subtest: callTool failure memo
+    # Subtest: replays an identical failure within the memo window without refetching
+    ok 1 - replays an identical failure within the memo window without refetching
+ok 1 - callTool failure memo
+    # Subtest: is true only for login-required failures
+    ok 1 - is true only for login-required failures
+    # Subtest: classifies not_connected and failed_precondition
+    ok 5 - classifies not_connected and failed_precondition
+    # Subtest: verifies the header token end to end and fails closed without it
+    ok 1 - verifies the header token end to end and fails closed without it
+        # Subtest: invalid URL fails closed as hosted
+        ok 9 - invalid URL fails closed as hosted
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+# tests 76
+# pass 76
+# fail 0
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:app 2>&1 | tail -100
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:integration 2>&1 | head -200
+> app-builder-workspace@0.0.0-private test:integration
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+    # Subtest: maintains >= 4.5:1 normal-text contrast on both paper and paper-2 surfaces
+    ok 1 - maintains >= 4.5:1 normal-text contrast on both paper and paper-2 surfaces
+      ---
+      duration_ms: 1.332958
+      type: 'test'
+      ...
+    # Subtest: defines visible keyboard focus indicator (:focus-visible) and prefers-reduced-motion rules
+    ok 2 - defines visible keyboard focus indicator (:focus-visible) and prefers-reduced-motion rules
+      ---
+      duration_ms: 0.412676
+      type: 'test'
+      ...
+    1..2
+ok 1 - WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+  ---
+  duration_ms: 8.583117
+  type: 'suite'
+  ...
+# Subtest: WCAG 2.2 AA shell, skip link, landmarks, and status badges
+    # Subtest: provides a skip-to-content link targeting \#main in __root.tsx
+    ok 1 - provides a skip-to-content link targeting \#main in __root.tsx
+      ---
+      duration_ms: 0.882866
+      type: 'test'
+      ...
+    # Subtest: exposes semantic landmarks, aria-labels, and 44x44 mobile menu toggle in OrgShell
+    ok 2 - exposes semantic landmarks, aria-labels, and 44x44 mobile menu toggle in OrgShell
+      ---
+      duration_ms: 0.652128
+      type: 'test'
+      ...
+    # Subtest: uses high-contrast text tokens in StatusBadge and avoids muted text on paper-2
+    ok 3 - uses high-contrast text tokens in StatusBadge and avoids muted text on paper-2
+      ---
+      duration_ms: 2.116206
+      type: 'test'
+      ...
+    1..3
+ok 2 - WCAG 2.2 AA shell, skip link, landmarks, and status badges
+  ---
+  duration_ms: 4.040128
+  type: 'suite'
+  ...
+# Subtest: WCAG 2.2 AA route headings, form labels, error associations, and live regions
+    # Subtest: gives every owned route an h1 heading and no skipped heading levels
+    ok 1 - gives every owned route an h1 heading and no skipped heading levels
+      ---
+      duration_ms: 29.712896
+      type: 'test'
+      ...
+    # Subtest: wires form error states with aria-invalid, aria-describedby, and role='alert'
+    ok 2 - wires form error states with aria-invalid, aria-describedby, and role='alert'
+      ---
+      duration_ms: 2.295531
+      type: 'test'
+      ...
+    # Subtest: ensures every input, select, and textarea in owned routes has an enclosing label or aria-label
+    ok 3 - ensures every input, select, and textarea in owned routes has an enclosing label or aria-label
+      ---
+      duration_ms: 8.168616
+      type: 'test'
+      ...
+    # Subtest: does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+    ok 4 - does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+      ---
+      duration_ms: 5.619621
+      type: 'test'
+      ...
+    # Subtest: uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+    ok 5 - uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+      ---
+      duration_ms: 0.641889
+      type: 'test'
+      ...
+    1..5
+ok 3 - WCAG 2.2 AA route headings, form labels, error associations, and live regions
+  ---
+  duration_ms: 46.97402
+  type: 'suite'
+  ...
+# Subtest: Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+    # Subtest: passes axe-core WCAG 2.2 AA, ARIA landmark/heading/form snapshots, and keyboard focus across public and app routes
+    not ok 1 - passes axe-core WCAG 2.2 AA, ARIA landmark/heading/form snapshots, and keyboard focus across public and app routes
+      ---
+      duration_ms: 69400.343725
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:286:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Timed out waiting for http://127.0.0.1:38939/. Server log:
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        waitHttp (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:275:9)
+        async TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:329:7)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..1
+not ok 4 - Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+  ---
+  duration_ms: 72280.355512
+  type: 'suite'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:282:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now let me understand the current state better. Let me check the tests and also look for the specific issues mentioned in the brief.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:integration 2>&1 | grep -E "not ok|# fail" | head -30
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 300 npm run test:integration 2>&1 | grep -E "not ok|# fail" | head -30
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | grep -E "^(not ok|# fail|# pass|# tests)"
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform > /tmp/platform-test.log 2>&1; echo "EXIT: $?"; tail -50 /tmp/platform-test.log
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run typecheck 2>&1
+> app-builder-workspace@0.0.0-private typecheck
+> tsc --noEmit
+
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, Route<Register, ... 16 more ..., undefined>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test 2>&1 | tail -50
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git status && echo "---" && git log --oneline -5
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .env.example
+	modified:   .gitleaksignore
+	modified:   SECURITY.md
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/cp3-acceptance.mjs
+	modified:   scripts/e2e-demo.mjs
+	modified:   scripts/hcv-overview-demo-busy.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/http-restart-persistence.mjs
+	modified:   scripts/live-http-idor.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/pdf-inflate-lock.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/security-headers-lock.test.mjs
+	modified:   scripts/staging-preflight.test.mjs
+	modified:   scripts/zip-size-caps-lock.test.mjs
+	modified:   server/middleware/wallet-headers.ts
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/server/security-headers.ts
+	modified:   tests/a11y.test.mjs
+	modified:   tests/scrub-connection.test.mjs
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+---
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 300 npm run test 2>&1 | grep -E "not ok|# fail|# pass|# tests"
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m→ [0mRead repo/.gitleaks.toml
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -rn "unsafe-inline" src/ vite.config.ts tests/ 2>/dev/null
+(no output)
+[0m
+Now I have a good understanding of the issues. Let me start fixing them one by one.
+
+**Finding 1: Preview secret hard-coded** - Looking at `src/lib/auth/preview.ts`, line 30-32, the `PREVIEW_CLIENT_SECRET` falls back to throwing an error if not set, but there's no env var defined. Let me check the `.env.example` and see what's needed.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -rn "GROK_PREVIEW_CLIENT_SECRET" .env* scripts/ 2>/dev/null
+.env.example:12:# GROK_PREVIEW_CLIENT_SECRET=
+[0m
+[0m→ [0mRead repo/scripts/secret-scan.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD && echo "---" && git diff HEAD --stat
+a61f1a8be38615bf994143d074da05b9535fdfbb
+---
+ .env.example                                       |    1 +
+ .gitleaksignore                                    |    3 +
+ SECURITY.md                                        |    2 +-
+ control-mcp/gateway.mjs                            |   11 +-
+ docs/OPERATIONS.md                                 |    2 +-
+ docs/OPERATOR.md                                   |    2 +-
+ docs/RELEASE.md                                    |    2 +-
+ .../housing-compliance-vault/RETENTION_HOLD.md     |    2 +-
+ package-lock.json                                  | 1127 +++++++++++++-------
+ .../opencode-estate-body.cpython-312.pyc           |  Bin 14847 -> 14859 bytes
+ scripts/check-auth-invariant.mjs                   |    6 +-
+ scripts/check-auth-invariant.test.mjs              |    2 +-
+ scripts/cp3-acceptance.mjs                         |    2 +-
+ scripts/e2e-demo.mjs                               |    2 +-
+ scripts/hcv-overview-demo-busy.test.mjs            |    4 +-
+ scripts/hcv-questionnaire-detail-busy.test.mjs     |    2 +-
+ scripts/hcv-retention-hold.test.mjs                |    6 +-
+ scripts/http-restart-persistence.mjs               |    2 +-
+ scripts/live-http-idor.mjs                         |    2 +-
+ scripts/migration-plan.test.mjs                    |    4 +
+ scripts/pdf-inflate-lock.test.mjs                  |    2 +-
+ scripts/rollback-rehearsal.test.mjs                |   10 +-
+ scripts/security-headers-lock.test.mjs             |    6 +-
+ scripts/staging-preflight.test.mjs                 |    8 +-
+ scripts/zip-size-caps-lock.test.mjs                |    2 +-
+ server/middleware/wallet-headers.ts                |    2 +-
+ src/components/org-shell.tsx                       |    4 +-
+ src/domain/canonical.ts                            |    6 +-
+ src/routeTree.gen.ts                               |   43 +
+ src/routes/__root.tsx                              |    2 +-
+ src/server/security-headers.ts                     |   15 +-
+ tests/a11y.test.mjs                                |    2 +-
+ tests/scrub-connection.test.mjs                    |    6 +-
+ tests/signup-policy.test.mjs                       |    2 +-
+ vite.config.ts                                     |    8 +-
+ 35 files changed, 844 insertions(+), 458 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 4674a4ff..HEAD -- src/lib/auth/preview.ts
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 4674a4ff:src/lib/auth/preview.ts
+/**
+ * Shared LIVE-PREVIEW OAuth client (server-only — NEVER import from the client).
+ *
+ * The sandbox serves each live preview on a dynamic `https://*.grok-sandbox.com`
+ * URL, which can't be pre-registered per app. The broker instead exposes ONE
+ * shared "preview" client that accepts any
+ * `https://*.grok-sandbox.com/api/auth/oauth2/callback/*`
+ * (broker: `app-builder-deployer/auth/src/preview-oauth.ts`). Baking it here lets
+ * the live preview do REAL sign-in — no demo/mock users — with no platform
+ * injection. When deployed the deployer injects a per-app
+ * `GROK_AUTH_*` that overrides these (see `server.ts`).
+ *
+ * These MUST equal the broker's `GROK_PREVIEW_CLIENT_ID` /
+ * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+ * only the secret's `base64url(SHA-256)` hash). This is a dedicated, low-privilege
+ * client (preview-only, `*.grok-sandbox.com`) — rotate it by regenerating the
+ * broker env var and this constant together.
+ *
+ * SECURITY: PREVIEW_CLIENT_SECRET moved to env var GROK_PREVIEW_CLIENT_SECRET
+ * (Three-Question Release Gate, 19 Nov 2026). Default fallback removed.
+ */
+export const PREVIEW_CLIENT_ID = "grok_preview";
+
+/** Read an env var, treating empty/whitespace as unset. */
+const env = (key: string): string | undefined => {
+  const value = process.env[key]?.trim();
+  return value ? value : undefined;
+};
+
+export const PREVIEW_CLIENT_SECRET = env("GROK_PREVIEW_CLIENT_SECRET") ?? (() => {
+  throw new Error("GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.");
+})();
+
+/** The shared auth broker issuer (OIDC discovery lives under it). */
+export const GROK_ISSUER_DEFAULT = "https://auth.grok.me";
+
+/**
+ * Host patterns whose callbacks the preview client accepts. Better Auth derives
+ * the live preview's real origin from the request host and validates it against
+ * this list (wildcard-matched), so the OAuth `redirect_uri` becomes the concrete
+ * `https://<preview-host>/api/auth/oauth2/callback/...` the broker allows.
+ */
+export const PREVIEW_ALLOWED_HOSTS = ["*.grok-sandbox.com"] as const;
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 4674a4ff..HEAD -- vite.config.ts
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show 4674a4ff:vite.config.ts | grep -A5 "script-src"
+res.setHeader("Content-Security-Policy", `default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com; style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';`);
+        res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+        // Pass nonce to Vite for inline scripts
+        res.setHeader("X-CSP-Nonce", nonce);
+        next();
+      });
+--
+      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+      "X-Robots-Tag": "noindex, nofollow",
+      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    },
+  },
+  preview: {
+--
+      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+      "X-Robots-Tag": "noindex, nofollow",
+      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    },
+  },
+  resolve: { tsconfigPaths: true },
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 4674a4ff..HEAD -- vite.config.ts
+(no output)
+[0m
+[0m→ [0mRead repo/vite.config.ts[90m [limit=60, offset=175][0m
+[0m→ [0mRead repo/tests/signup-policy.test.mjs[90m [limit=80, offset=120][0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node scripts/secret-scan.mjs
+{
+  "files": 5749,
+  "hitCount": 0,
+  "hits": []
+}
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/src/routes/app/$orgId/admin/deletion-audit.tsx[90m [limit=30][0m
+[0m→ [0mRead repo/src/routes/app/$orgId/admin/retention.tsx[90m [limit=30][0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && head -100 src/routeTree.gen.ts
+/* eslint-disable */
+
+// @ts-nocheck
+
+// noinspection JSUnusedGlobalSymbols
+
+// This file was automatically generated by TanStack Router.
+// You should NOT make any changes in this file as it will be overwritten.
+// Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
+
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as HealthRouteImport } from './routes/health'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as MetricsRouteImport } from './routes/metrics'
+import { Route as ReadyRouteImport } from './routes/ready'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppOrgIdRouteImport } from './routes/app/$orgId'
+import { Route as RobotsTxtRouteImport } from './routes/robots.txt'
+import { Route as SitemapXmlRouteImport } from './routes/sitemap.xml'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AppOrgIdIndexRouteImport } from './routes/app/$orgId/index'
+import { Route as AppOrgIdAuditRouteImport } from './routes/app/$orgId/audit'
+import { Route as AppOrgIdComplianceRouteImport } from './routes/app/$orgId/compliance'
+import { Route as AppOrgIdControlMcpRouteImport } from './routes/app/$orgId/control-mcp'
+import { Route as AppOrgIdDecisionsRouteImport } from './routes/app/$orgId/decisions'
+import { Route as AppOrgIdEntitiesRouteImport } from './routes/app/$orgId/entities'
+import { Route as AppOrgIdEvidenceRouteImport } from './routes/app/$orgId/evidence'
+import { Route as AppOrgIdExportsRouteImport } from './routes/app/$orgId/exports'
+import { Route as AppOrgIdFactsRouteImport } from './routes/app/$orgId/facts'
+import { Route as AppOrgIdOpportunitiesRouteImport } from './routes/app/$orgId/opportunities'
+import { Route as AppOrgIdPacksRouteImport } from './routes/app/$orgId/packs'
+import { Route as AppOrgIdQuestionnairesRouteImport } from './routes/app/$orgId/questionnaires'
+import { Route as AppOrgIdTeamRouteImport } from './routes/app/$orgId/team'
+import { Route as ApiV2GatewayAuthorizeRouteImport } from './routes/api/v2/gateway/authorize'
+import { Route as ApiV2GatewayOpenapiRouteImport } from './routes/api/v2/gateway/openapi'
+import { Route as AppOrgIdAdminIndexRouteImport } from './routes/app/$orgId/admin/index'
+import { Route as AppOrgIdAdminDeletionAuditRouteImport } from './routes/app/$orgId/admin/deletion-audit'
+import { Route as AppOrgIdAdminRetentionRouteImport } from './routes/app/$orgId/admin/retention'
+import { Route as AppOrgIdEvidenceIndexRouteImport } from './routes/app/$orgId/evidence.index'
+import { Route as AppOrgIdEvidenceDocIdRouteImport } from './routes/app/$orgId/evidence.$docId'
+import { Route as AppOrgIdPacksIndexRouteImport } from './routes/app/$orgId/packs.index'
+import { Route as AppOrgIdPacksPackIdRouteImport } from './routes/app/$orgId/packs.$packId'
+import { Route as AppOrgIdQuestionnairesIndexRouteImport } from './routes/app/$orgId/questionnaires.index'
+import { Route as AppOrgIdQuestionnairesQidRouteImport } from './routes/app/$orgId/questionnaires.$qid'
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetricsRoute = MetricsRouteImport.update({
+  id: '/metrics',
+  path: '/metrics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadyRoute = ReadyRouteImport.update({
+  id: '/ready',
+  path: '/ready',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrgIdRoute = AppOrgIdRouteImport.update({
+  id: '/$orgId',
+  path: '/$orgId',
+  getParentRoute: () => AppRoute,
+} as any)
+const RobotsTxtRoute = RobotsTxtRouteImport.update({
+[0m
+[0m$ [0mwhich rt 2>/dev/null; ls ~/.local/bin/rt 2>/dev/null; cat /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/TOOLS-INVENTORY.md 2>/dev/null | head -50
+/home/andy/bin/rt
+# Estate security tools inventory (standing)
+Owner: CYBER-SECURITY-OWNER. Last verified: 22 Nov 2026 00:01 GMT. Verify any time: `/home/andy/chapelgate/jobs-work-dell/readiness/security/tools/verify-tools.sh` (writes raw/<stamp>/SUMMARY.tsv + one version file per tool).
+Rules: target only the Dell-hosted RC (never production, the golden line or third parties); installed binaries or pinned images only, never `npx <scanner>`; raw output per frozen SHA in the job's out/raw/; new packs vetted with skillspector (Mac, ~/ai-setup/skill-vetting/skillspector) before use; paid/declaration items parked.
+Every test run's out/ must contain TOOL-COVERAGE.md (template: /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/TOOL-COVERAGE-TEMPLATE.md) or it is incomplete.
+
+| # | Tool | Kind | Location | Status 22 Nov 00:01 | Version raw |
+|---|---|---|---|---|---|
+| 1 | gitleaks | secrets | ~/.local/bin/gitleaks | WORKING 8.18.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/gitleaks.txt |
+| 2 | trufflehog | secrets (verified) | ~/.local/bin/trufflehog (official release, sha256 checked) | WORKING 3.100.0, installed 21 Nov 23:51 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/trufflehog.txt |
+| 3 | semgrep | SAST | ~/tools/venvs/semgrep (isolated venv) | WORKING 1.186.0, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/semgrep.txt |
+| 4 | osv-scanner | dependencies | ~/.local/bin/osv-scanner | WORKING 1.9.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/osv-scanner.txt |
+| 5 | npm audit | dependencies | npm 10.9.9 | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/npm-audit.txt |
+| 6 | pip-audit | dependencies | ~/tools/venvs/pip-audit | WORKING 2.10.1, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pip-audit.txt |
+| 7 | trivy | deps/container/IaC | ~/.local/bin/trivy (official 0.76.2, sha256 checked) | WORKING, replaced dev build 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/trivy.txt |
+| 8 | syft | SBOM | ~/.local/bin/syft | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/syft.txt |
+| 9 | grype | SBOM vulns | ~/.local/bin/grype | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/grype.txt |
+| 10 | ZAP | DAST | wrappers zap-baseline / zap-full / zap-api (ghcr.io/zaproxy/zaproxy:stable) | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/zap.txt |
+| 11 | nuclei | DAST templates | wrapper -> kali image, templates ~/.local/share/nuclei-templates | WORKING | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nuclei.txt |
+| 12 | sqlmap | SQL injection | wrapper -> kali image | WORKING 1.10.9 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/sqlmap.txt |
+| 13 | nikto | web server | wrapper -> kali image | WORKING 2.6.1 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nikto.txt |
+| 14 | ffuf | fuzzing | wrapper -> kali image | WORKING 2.1.0-dev | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/ffuf.txt |
+| 15 | gobuster | content discovery | wrapper -> kali image | WORKING 3.8.2 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/gobuster.txt |
+| 16 | nmap | ports/TLS | wrapper -> kali image (NET_RAW cap) | WORKING 7.99, repaired 22 Nov | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/nmap.txt |
+| 17 | axe | WCAG | npx --no-install axe (project dep) | WORKING 4.14.0 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/axe.txt |
+| 18 | pa11y | WCAG | npx --no-install pa11y | WORKING 10.0.0 | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pa11y.txt |
+| 19 | PentAGI | autonomous pentest | docker pentagi (Up) | IMAGE OK; autonomous scan never completed (readiness/security/HANDOVER-chapelgate-multilingual-transcribe-pentagi-20261119.md); auth unblock in progress | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/20261122-0001/pentagi.txt |
+| 20 | full-shakedown | skill (red team RT suite) | ~/.claude/skills/full-shakedown | PRESENT, in use | |
+| 21 | pentagi-security-testing | skill | ~/.claude/skills/pentagi-security-testing | PRESENT, blocked with PentAGI | |
+| 22 | shannon-pentest | skill | ~/.claude/skills/shannon-pentest | PRESENT; Shannon engine NOT installed: skill requires KeygraphHQ/shannon pinned to a reviewed SHA + isolated worker | |
+| 23 | security-threat-model | skill | ~/.claude/skills/security-threat-model | PRESENT, to run before each red team | |
+| 24 | chapelgate-security-audit | skill | ~/chapelgate/repos/agent-skills/skills/chapelgate-security-audit | PRESENT | |
+| 25 | web-quality-audit | skill | ~/.claude/skills/web-quality-audit | PRESENT | |
+| 26 | security-best-practices | skill | ~/.claude/skills/security-best-practices | PRESENT | |
+| 27 | security-and-hardening | skill | ~/.claude/skills/security-and-hardening | PRESENT | |
+| 28 | github-actions-hardening | skill | ~/.claude/skills/github-actions-hardening | PRESENT | |
+| 29 | agent-owasp-compliance | skill | ~/.claude/skills/agent-owasp-compliance | PRESENT (AI features only) | |
+| 30 | release-standards | skill | ~/chapelgate/jobs-work-dell/skills/release-standards | PRESENT | |
+| 31 | skillspector | skill vetting | Mac ~/ai-setup/skill-vetting/skillspector/.venv | WORKING (Mac) | |
+| X | cloudflare security-audit pack | downloaded pack | FT/reel-trial-cloudflare-security-audit-skill-for-claude-code-20261119/sandbox/security-audit-skill | REJECTED: skillspector 86/100 CRITICAL, DO NOT INSTALL | /home/andy/chapelgate/jobs-work-dell/readiness/security/tools/raw/cloudflare-security-audit-skill.SKILLSPECTOR-20261121.md |
+| X | bettercap | network MITM | not installed | NOT APPLICABLE to web products (LAN attack tool) | |
+Renamed aside (not deleted): ~/.local/bin/.trivy.dev-build-*, .pysemgrep.pre-venv-*, .pip-audit.pre-venv-*.
+[0m
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mRead /home/andy/bin/rt failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

@@ -1,0 +1,116 @@
+# rt test | 20261121-234530 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/check-auth-invariant.test.mjs
+TAP version 13
+# Subtest: the flag predicate matches src/lib/auth
+ok 1 - the flag predicate matches src/lib/auth
+  ---
+  duration_ms: 1.153632
+  type: 'test'
+  ...
+# Subtest: reads the value a live dev server resolved
+ok 2 - reads the value a live dev server resolved
+  ---
+  duration_ms: 0.353094
+  type: 'test'
+  ...
+# Subtest: a server started without the flag reads as sign-in on
+ok 3 - a server started without the flag reads as sign-in on
+  ---
+  duration_ms: 0.160919
+  type: 'test'
+  ...
+# Subtest: agreement passes
+ok 4 - agreement passes
+  ---
+  duration_ms: 0.167435
+  type: 'test'
+  ...
+# Subtest: divergence fails in either direction
+ok 5 - divergence fails in either direction
+  ---
+  duration_ms: 0.211903
+  type: 'test'
+  ...
+# Subtest: an unobservable dev server is indeterminate, not agreement
+not ok 6 - an unobservable dev server is indeterminate, not agreement
+  ---
+  duration_ms: 0.97881
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:63:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'ok'
+    - 'indeterminate'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'indeterminate'
+  actual: 'ok'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:64:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a dev server that cannot be reached probes as null
+ok 7 - a dev server that cannot be reached probes as null
+  ---
+  duration_ms: 0.269521
+  type: 'test'
+  ...
+# Subtest: a server without the endpoint probes as null, not as agreement
+ok 8 - a server without the endpoint probes as null, not as agreement
+  ---
+  duration_ms: 0.408237
+  type: 'test'
+  ...
+# Subtest: only a divergence warns the smoke verdict
+ok 9 - only a divergence warns the smoke verdict
+  ---
+  duration_ms: 1.201184
+  type: 'test'
+  ...
+# Subtest: the build side resolves the template's shipped app-env
+ok 10 - the build side resolves the template's shipped app-env
+  ---
+  duration_ms: 1.078409
+  type: 'test'
+  ...
+# Subtest: the CLI reports rather than silently passing when run via a symlink
+not ok 11 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 73.454433
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:99:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    undefined !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/check-auth-invariant.test.mjs:109:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 9
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 166.092344

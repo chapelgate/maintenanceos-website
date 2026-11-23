@@ -1,0 +1,854 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead .
+[0m→ [0mRead out
+[0m✗ [0mRead out/VERIFIER-FEEDBACK.md failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/EVIDENCE.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead FINDINGS.tsv
+[0m→ [0mRead out/SKILLS-USED.md
+Let me explore the repo and understand the codebase structure.
+[0m→ [0mRead repo
+[0m→ [0mRead out/raw
+[0m→ [0mRead repo/src
+[0m→ [0mRead repo/vite.config.ts
+[0m→ [0mRead repo/package.json
+Let me explore the codebase to understand the findings and what needs fixing.
+[0m✱ [0mGrep "unsafe-inline|script-src"[90m in repo/src · 1 match[0m
+[0m✱ [0mGrep "secret|SECRET|api_key|API_KEY|gitleaks"[90m in repo/src · 54 matches[0m
+[0m→ [0mRead repo/.env.example
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+Let me look at the raw outputs and understand the current state of failures.
+[0m✗ [0mRead out/raw/test-secret-scan-895b8f-20261122-151615-output.log failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-secret-scan-895b8f-20261122-151615-output.log
+[0m→ [0mRead out/raw/test-security-headers-20261121-231512-output.log
+[0m→ [0mRead out/raw/test-platform-20261122-142228-output.log
+[0m→ [0mRead out/raw/test_platform-74dbd3-20261122-154400-output.log
+Let me check the gitleaks scan and also look at what hardcoded secrets exist.
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_secret-scan-895b8f-20261122-151615-output.log 2>/dev/null || echo "File not found, listing raw dir"
+# rt test_secret-scan-895b8f | 20261122-151615 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: npm run test:secret-scan
+
+> app-builder-workspace@0.0.0-private test:secret-scan
+> node scripts/secret-scan.mjs
+
+{
+  "files": 5748,
+  "hitCount": 0,
+  "hits": []
+}
+[0m
+[0m$ [0mls /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+INDEX.tsv
+lint-20261122-150950-exit-code.txt
+lint-20261122-150950-output.log
+SHA
+test-20261122-001855-exit-code.txt
+test-20261122-001855-output.log
+test_domain-092b48-20261122-150847-exit-code.txt
+test_domain-092b48-20261122-150847-output.log
+test-domain-20261122-142458-exit-code.txt
+test-domain-20261122-142458-output.log
+test-integration-20261122-143132-output.log
+test-platform-20261122-142228-exit-code.txt
+test-platform-20261122-142228-output.log
+test_platform-74dbd3-20261122-154400-exit-code.txt
+test_platform-74dbd3-20261122-154400-output.log
+test-platform-final-output.log
+test-platform-full-20261122-001953-exit-code.txt
+test-platform-full-20261122-001953-output.log
+test_secret-scan-895b8f-20261122-151615-exit-code.txt
+test_secret-scan-895b8f-20261122-151615-output.log
+test-security-headers-20261121-231512-exit-code.txt
+test-security-headers-20261121-231512-output.log
+typecheck-20261122-154724-exit-code.txt
+typecheck-20261122-154724-output.log
+[0m
+[0m→ [0mRead out/raw/SHA
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -10 && echo "---STATUS---" && git status && echo "---SHA---" && git rev-parse HEAD
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+73e7de4b Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+---STATUS---
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/secret-scan.mjs
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/routes/app/$orgId/index.tsx
+	modified:   src/server/security-headers.ts
+	modified:   src/server/zip-bounded.ts
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+	test-results/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+---SHA---
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+Let me look at the current state of changes and understand what's been done vs what remains.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff --stat
+control-mcp/gateway.mjs                            |   2 +-
+ docs/OPERATIONS.md                                 |   2 +-
+ docs/OPERATOR.md                                   |   2 +-
+ docs/RELEASE.md                                    |   2 +-
+ .../housing-compliance-vault/RETENTION_HOLD.md     |   2 +-
+ .../opencode-estate-body.cpython-312.pyc           | Bin 14847 -> 14859 bytes
+ scripts/check-auth-invariant.mjs                   |   4 +-
+ scripts/check-auth-invariant.test.mjs              |   2 +-
+ scripts/hcv-questionnaire-detail-busy.test.mjs     |   2 +-
+ scripts/hcv-retention-hold.test.mjs                |   4 +-
+ scripts/migration-plan.test.mjs                    |   6 ++-
+ scripts/rollback-rehearsal.test.mjs                |   8 ++--
+ scripts/secret-scan.mjs                            |   2 +-
+ src/components/org-shell.tsx                       |   4 +-
+ src/domain/canonical.ts                            |   6 +--
+ src/routeTree.gen.ts                               |  43 +++++++++++++++++++++
+ src/routes/__root.tsx                              |   2 +-
+ src/routes/app/$orgId/index.tsx                    |   2 +-
+ src/server/security-headers.ts                     |  17 +++-----
+ src/server/zip-bounded.ts                          |   2 +-
+ tests/signup-policy.test.mjs                       |   4 +-
+ vite.config.ts                                     |   6 +--
+ 22 files changed, 83 insertions(+), 41 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5 --all
+cddaaf20 WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+dcb3aad1 index on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff src/server/security-headers.ts
+diff --git a/src/server/security-headers.ts b/src/server/security-headers.ts
+index 594feb25..cc566e76 100644
+--- a/src/server/security-headers.ts
++++ b/src/server/security-headers.ts
+@@ -1,30 +1,25 @@
+ /** Browser headers for a privately operated wallet. */
+ export const WALLET_SECURITY_HEADERS: Record<string, string> = {
+   "X-Content-Type-Options": "nosniff",
+-  "Referrer-Policy": "strict-origin-when-cross-origin",
+-  "X-Frame-Options": "DENY",
++  "Referrer-Policy": "no-referrer",
+   "Cross-Origin-Opener-Policy": "same-origin",
+   "Cross-Origin-Resource-Policy": "same-origin",
+   "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+   "X-Robots-Tag": "noindex, nofollow",
+-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++  "Permissions-Policy": "accelerometer=(), all-screens-capture=(), ambient-light-sensor=(), autoplay=(), battery=(), bluetooth=(), browser-install=(), browsing-topics=(), capture=(), captured-surface-control=(), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-lang=(), ch-prefers-color-scheme=(), ch-prefers-reduced-motion=(), ch-rtt=(), ch-save-data=(), ch-ua=(), ch-ua-arch=(), ch-ua-bitness=(), ch-ua-form-factors=(), ch-ua-full-version=(), ch-ua-full-version-list=(), ch-ua-high-entropy-values=(), ch-ua-mobile=(), ch-ua-model=(), ch-ua-platform=(), ch-ua-platform-version=(), ch-ua-wow64=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(), clipboard-write=(), compute-pressure=(), conversion-measurement=(), camera=(), microphone=(), geolocation=(), payment=(), attribution-reporting=(), wake-lock=(), writer=(), cross-origin-isolated=(), deferred-fetch-minimal=(), deferred-fetch=(), digital-credentials-get=(), display-capture=(), document-domain=(), document-write=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), focus-without-user-activation=(), fullscreen=(), gamepad=(), gyroscope=(), hid=(), html-attribute-or-property=(), identity-credentials-get=(), identity-credentials-create=(), idle-detection=(), interest-cohort=(), join-ad-interest-group=(), keyboard-map=(), language-detector=(), layout-animations=(), legacy-image-formats=(), local-fonts=(), magnetometer=(), manual-text=(), midi=(), navigation-override=(), on-device-speech-recognition=(), otp-credentials=(), oversized-images=(), picture-in-picture=(), private-aggregation=(), private-state-token-issuance=(), private-state-token-redemption=(), publickey-credentials-create=(), publickey-credentials-get=(), rewriter=(), run-ad-auction=(), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), smart-card=(), speaker-selection=(), storage-access=(), summarizer=(), sync-script=(), sync-xhr=(), top-level-storage-access=(), translator=(), trust-token-redemption=(), unload=(), unoptimized-images=(), usb=(), vertical-scroll=(), view-transition=(), web-share=(), webxr=(), window-management=(), xr=(), xr-spatial-tracking=()",
+ };
+ 
+ const CSP_BASE = "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';";
+ 
+-export function buildCsp(nonce?: string): string {
+-  const scriptSrc = nonce
+-    ? `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`
+-    : "script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com;";
+-  const styleSrc = nonce
+-    ? `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`
+-    : "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;";
++export function buildCsp(nonce: string): string {
++  const scriptSrc = `script-src 'self' 'nonce-${nonce}' https://grok.com https://fonts.googleapis.com;`;
++  const styleSrc = `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com;`;
+   return `${CSP_BASE} ${scriptSrc} ${styleSrc}`;
+ }
+ 
+ export function mergeWalletSecurityHeaders(
+   headers: HeadersInit | undefined = undefined,
+-  nonce?: string,
++  nonce: string,
+ ): Headers {
+   const next = new Headers(headers);
+   for (const [key, value] of Object.entries(WALLET_SECURITY_HEADERS)) {
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff src/lib/auth/preview.ts
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff vite.config.ts
+diff --git a/vite.config.ts b/vite.config.ts
+index 40b65274..dad573b8 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -190,9 +190,9 @@ export default defineConfig(({ command, isPreview }) => ({
+       "X-Content-Type-Options": "nosniff",
+       "Referrer-Policy": "strict-origin-when-cross-origin",
+       "X-Frame-Options": "DENY",
+-      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://grok.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
++      "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+       "X-Robots-Tag": "noindex, nofollow",
+-      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++      "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), attribution-reporting=(), wake-lock=(), writer=()",
+     },
+   },
+   preview: {
+@@ -205,7 +205,7 @@ export default defineConfig(({ command, isPreview }) => ({
+       "X-Frame-Options": "DENY",
+       "Content-Security-Policy": "default-src 'self' https://grok.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' https://grok.com https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://grok.com; img-src 'self' data: https://grok.com; frame-ancestors 'none'; base-uri 'self';",
+       "X-Robots-Tag": "noindex, nofollow",
+-      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
++      "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), attribution-reporting=(), wake-lock=(), writer=()",
+     },
+   },
+   resolve: { tsconfigPaths: true },
+[0m
+Now let me check the platform test results more carefully and look for any remaining hardcoded secrets.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git stash list && echo "---" && git log --oneline 4674a4ff..HEAD 2>/dev/null || echo "no additional commits"
+stash@{0}: WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+---
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npx tsc --noEmit 2>&1 | head -30
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, Route<Register, ... 16 more ..., undefined>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+[0m
+Let me look at the typecheck errors and the current state more carefully.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run lint 2>&1 | tail -40
+> app-builder-workspace@0.0.0-private lint
+> eslint .
+
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.5
+
+TypeError: Error while loading rule '@typescript-eslint/no-unused-expressions': Cannot read properties of undefined (reading 'allowShortCircuit')
+Occurred while linting /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/control-mcp/gateway.mjs
+    at Object.create (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/rules/no-unused-expressions.js:85:5)
+    at create (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/rules/no-unused-expressions.js:28:32)
+    at Object.create (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/@typescript-eslint/utils/dist/eslint-utils/RuleCreator.js:31:20)
+    at createRuleListeners (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:1019:15)
+    at /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:1151:7
+    at Array.forEach (<anonymous>)
+    at runRules (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:1085:31)
+    at #flatVerifyWithoutProcessors (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:2115:4)
+    at Linter._verifyWithFlatConfigArrayAndWithoutProcessors (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:2203:43)
+    at Linter._verifyWithFlatConfigArray (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:2306:15)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npx tsc --noEmit 2>&1 | tail -30
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, Route<Register, ... 16 more ..., undefined>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+[0m
+Let me understand the current state of findings and run the tests to see what's passing/failing.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:platform 2>&1 | tail -50
+---
+      duration_ms: 0.233653
+      type: 'test'
+      ...
+    1..3
+ok 1600 - zip size caps lock
+  ---
+  duration_ms: 2.536355
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.744657
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 1.878989
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.377475
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.228135
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 5.357013
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2177
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 119428.322843
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:platform 2>&1 | grep -A 5 "not ok\|FAIL\|fail"
+# Subtest: answer fail-closed lock
+    # Subtest: uses the canned wording for RED, EXPIRED, and CONFLICT
+    ok 1 - uses the canned wording for RED, EXPIRED, and CONFLICT
+      ---
+      duration_ms: 16.908088
+      type: 'test'
+--
+    # Subtest: ships fail-closed text even when a stored answer claims the requirement is met
+    ok 2 - ships fail-closed text even when a stored answer claims the requirement is met
+      ---
+      duration_ms: 0.250851
+      type: 'test'
+      ...
+    # Subtest: keeps evidence status equal to the computation when a human approves or edits
+--
+    # Subtest: treats only RED, EXPIRED, and CONFLICT as fail-closed
+    ok 4 - treats only RED, EXPIRED, and CONFLICT as fail-closed
+      ---
+      duration_ms: 0.227354
+      type: 'test'
+      ...
+    1..4
+ok 15 - answer fail-closed lock
+  ---
+  duration_ms: 69.478063
+  type: 'suite'
+  ...
+# Subtest: answer status lock
+--
+    # Subtest: draftAnswerText canned wording for fail-closed statuses
+    ok 4 - draftAnswerText canned wording for fail-closed statuses
+      ---
+      duration_ms: 0.482756
+      type: 'test'
+      ...
+    # Subtest: shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    ok 5 - shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+      ---
+      duration_ms: 0.234532
+      type: 'test'
+      ...
+    1..5
+--
+    # Subtest: locks fail-closed wording for RED/EXPIRED/CONFLICT
+    ok 1 - locks fail-closed wording for RED/EXPIRED/CONFLICT
+      ---
+      duration_ms: 10.675195
+      type: 'test'
+      ...
+    # Subtest: never ships confirmatory wording on fail-closed status
+    ok 2 - never ships confirmatory wording on fail-closed status
+      ---
+      duration_ms: 0.589012
+      type: 'test'
+      ...
+    # Subtest: human decision cannot rewrite evidence_status
+--
+# Subtest: cli: a bad argument fails with JSON on stderr
+ok 46 - cli: a bad argument fails with JSON on stderr
+  ---
+  duration_ms: 137.813111
+  type: 'test'
+  ...
+# Subtest: cli: a non-game with no card fails too — the pass exists to produce one
+ok 47 - cli: a non-game with no card fails too — the pass exists to produce one
+  ---
+  duration_ms: 248.781668
+  type: 'test'
+  ...
+# Subtest: cli: --placeholder-ok is how a plain-utility pass reports no card as expected
+--
+    # Subtest: evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+    ok 3 - evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+      ---
+      duration_ms: 0.425641
+      type: 'test'
+      ...
+    # Subtest: hostile injection/exfil findings block live fill
+--
+# Subtest: degenerate current verdict fails closed
+ok 77 - degenerate current verdict fails closed
+  ---
+  duration_ms: 0.300395
+  type: 'test'
+  ...
+# Subtest: multiple signals across viewports all accumulate
+--
+# Subtest: baselineComparison fails closed on malformed or wrong-shape baselines
+ok 80 - baselineComparison fails closed on malformed or wrong-shape baselines
+  ---
+  duration_ms: 19.570939
+  type: 'test'
+  ...
+# Subtest: parseSmokeArgs defaults
+--
+# Subtest: exitCodeFor: navigation failure in any viewport exits 1, beating errors
+ok 90 - exitCodeFor: navigation failure in any viewport exits 1, beating errors
+  ---
+  duration_ms: 0.112457
+  type: 'test'
+  ...
+# Subtest: exitCodeFor: 4xx boundary and missing status
+--
+# Subtest: exitCodeFor: no viewport data is a failure
+ok 92 - exitCodeFor: no viewport data is a failure
+  ---
+  duration_ms: 0.109392
+  type: 'test'
+  ...
+# Subtest: browser-smoke wires the guard and verdict helpers
+--
+    # Subtest: maps workerLabel and fail-closed payloadHints for known refs
+    ok 1 - maps workerLabel and fail-closed payloadHints for known refs
+      ---
+      duration_ms: 4.731907
+      type: 'test'
+      ...
+    # Subtest: unknown kind still yields Worker label and empty hints for unknown refs
+--
+    # Subtest: parses alternativesJson and evidenceRefsJson fail-closed
+    ok 3 - parses alternativesJson and evidenceRefsJson fail-closed
+      ---
+      duration_ms: 0.353433
+      type: 'test'
+      ...
+    1..3
+--
+# Subtest: divergence fails in either direction
+ok 131 - divergence fails in either direction
+  ---
+  duration_ms: 0.38095
+  type: 'test'
+  ...
+# Subtest: an unobservable dev server is indeterminate, not agreement
+--
+    # Subtest: classifies connection failures as unavailable
+    ok 1 - classifies connection failures as unavailable
+      ---
+      duration_ms: 3.102056
+      type: 'test'
+      ...
+    # Subtest: wrapDatabaseError returns DatabaseUnavailableError for outages
+--
+    # Subtest: isExpiredOn fail-closes unparseable dates and treats null as no constraint
+    ok 2 - isExpiredOn fail-closes unparseable dates and treats null as no constraint
+      ---
+      duration_ms: 0.309103
+      type: 'test'
+      ...
+    # Subtest: expiryState marks overdue and leaves blank expiry as none
+--
+# Subtest: audit load failures are announced
+ok 322 - audit load failures are announced
+  ---
+  duration_ms: 1.089394
+  type: 'test'
+  ...
+# Subtest: empty audit sections wait for loaded data without error
+--
+# Subtest: gateway and loop load failures are alerts
+ok 327 - gateway and loop load failures are alerts
+  ---
+  duration_ms: 1.086436
+  type: 'test'
+  ...
+# Subtest: gateway authorisations announce loading status
+--
+# Subtest: hcv clock fail closed
+    # Subtest: does not call an unreadable certificate expiry current
+    ok 1 - does not call an unreadable certificate expiry current
+      ---
+      duration_ms: 8.62497
+      type: 'test'
+--
+ok 402 - hcv clock fail closed
+  ---
+  duration_ms: 11.549196
+  type: 'suite'
+  ...
+# Subtest: clock honesty keeps statutory deadlines off this tree
+--
+# Subtest: compliance page announces load and mutation failures
+ok 421 - compliance page announces load and mutation failures
+  ---
+  duration_ms: 2.419845
+  type: 'test'
+  ...
+# Subtest: compliance board exposes pending state to assistive tech
+--
+# Subtest: organisation and status load failures are announced
+ok 445 - organisation and status load failures are announced
+  ---
+  duration_ms: 1.104674
+  type: 'test'
+  ...
+# Subtest: fallback waiting copy comes after the status error branch
+--
+# Subtest: decision inbox announces load and scheduler failures
+ok 478 - decision inbox announces load and scheduler failures
+  ---
+  duration_ms: 1.041925
+  type: 'test'
+  ...
+# Subtest: decision list exposes pending state
+--
+# Subtest: organisation and model failures on a document are alerts
+ok 507 - organisation and model failures on a document are alerts
+  ---
+  duration_ms: 0.870075
+  type: 'test'
+  ...
+# Subtest: extract and invalidate stay fail-closed until the organisation role loads
+ok 508 - extract and invalidate stay fail-closed until the organisation role loads
+  ---
+  duration_ms: 0.164932
+  type: 'test'
+  ...
+# Subtest: dockerode-cut names absent deps
+--
+# Subtest: entities load failures are announced
+ok 529 - entities load failures are announced
+  ---
+  duration_ms: 6.209031
+  type: 'test'
+  ...
+# Subtest: empty entity states are claimed only after data loads
+--
+# Subtest: paths section exposes pending state and fail-closed empty
+ok 532 - paths section exposes pending state and fail-closed empty
+  ---
+  duration_ms: 0.165543
+  type: 'test'
+  ...
+# Subtest: entity type catalog and relation editor expose pending state
+--
+# Subtest: entity seed, inbound staging, and type archive failures are alerts
+ok 582 - entity seed, inbound staging, and type archive failures are alerts
+  ---
+  duration_ms: 1.06905
+  type: 'test'
+  ...
+# Subtest: a preference hint failure stays an alert
+ok 583 - a preference hint failure stays an alert
+  ---
+  duration_ms: 0.219372
+  type: 'test'
+  ...
+# Subtest: hcv-entries-cut names absent deps
+--
+# Subtest: evidence detail announces load failures and pending claims
+ok 601 - evidence detail announces load failures and pending claims
+  ---
+  duration_ms: 7.896378
+  type: 'test'
+  ...
+# Subtest: candidate claims empty state only renders after document load
+--
+# Subtest: a failed organisation load is not described as a viewer
+ok 607 - a failed organisation load is not described as a viewer
+  ---
+  duration_ms: 0.999977
+  type: 'test'
+  ...
+# Subtest: a failed document list is not an empty library
+ok 608 - a failed document list is not an empty library
+  ---
+  duration_ms: 0.254628
+  type: 'test'
+  ...
+# Subtest: paste save is announced and marked busy
+--
+# Subtest: export load failures are announced
+ok 624 - export load failures are announced
+  ---
+  duration_ms: 1.084583
+  type: 'test'
+  ...
+# Subtest: empty export state is claimed only after data loads
+--
+# Subtest: facts load failures are announced
+ok 635 - facts load failures are announced
+  ---
+  duration_ms: 2.165502
+  type: 'test'
+  ...
+# Subtest: empty fact states are claimed only after data loads
+--
+# Subtest: expiry board load failure is an alert
+ok 753 - expiry board load failure is an alert
+  ---
+  duration_ms: 1.083204
+  type: 'test'
+  ...
+# Subtest: inert-cut names absent deps
+--
+# Subtest: opportunities sections announce load failures
+ok 943 - opportunities sections announce load failures
+  ---
+  duration_ms: 0.249515
+  type: 'test'
+  ...
+# Subtest: opportunities empty states wait for loaded data without error
+--
+# Subtest: organisation list exposes pending state and fail-closed empty
+ok 974 - organisation list exposes pending state and fail-closed empty
+  ---
+  duration_ms: 0.200506
+  type: 'test'
+  ...
+# Subtest: active org nav links set aria-current=page
+--
+# Subtest: overview announces load failures
+ok 978 - overview announces load failures
+  ---
+  duration_ms: 15.84547
+  type: 'test'
+  ...
+# Subtest: an empty expiry board is claimed only after facts have loaded
+--
+# Subtest: a failed count does not complete the first-hour checklist
+ok 980 - a failed count does not complete the first-hour checklist
+  ---
+  duration_ms: 0.211023
+  type: 'test'
+  ...
+# Subtest: overview stats grid exposes pending state for document-backed counts
+--
+# Subtest: secondary pack-detail load failures are announced
+ok 985 - secondary pack-detail load failures are announced
+  ---
+  duration_ms: 4.216807
+  type: 'test'
+  ...
+# Subtest: note and assign mutation failures are announced
+ok 986 - note and assign mutation failures are announced
+  ---
+  duration_ms: 0.221861
+  type: 'test'
+  ...
+# Subtest: freshness banner is claimed only after answer-bank data loads
+--
+# Subtest: packs page announces load failures
+ok 991 - packs page announces load failures
+  ---
+  duration_ms: 0.967322
+  type: 'test'
+  ...
+# Subtest: packs empty state waits for loaded data without error
+--
+# Subtest: questionnaire load failures are announced
+ok 1067 - questionnaire load failures are announced
+  ---
+  duration_ms: 1.112296
+  type: 'test'
+  ...
+# Subtest: empty questionnaire state is claimed only after data loads
+--
+# Subtest: RLS fail-open honesty names the frozen migrations and GUC
+ok 1102 - RLS fail-open honesty names the frozen migrations and GUC
+  ---
+  duration_ms: 1.182804
+  type: 'test'
+  ...
+# Subtest: RLS fail-open honesty forbids a fixed or audit-pass claim
+ok 1103 - RLS fail-open honesty forbids a fixed or audit-pass claim
+  ---
+  duration_ms: 0.520391
+  type: 'test'
+  ...
+# Subtest: rollup-cut names absent deps
+--
+# Subtest: a failed organisation load is an alert and is not treated as a viewer
+ok 1129 - a failed organisation load is an alert and is not treated as a viewer
+  ---
+  duration_ms: 2.947845
+  type: 'test'
+  ...
+# Subtest: organisation loading is a status, and navigation waits for a loaded role
+--
+# Subtest: a failed signup stays an alert and closed signup stays a status
+ok 1138 - a failed signup stays an alert and closed signup stays a status
+  ---
+  duration_ms: 0.216829
+  type: 'test'
+  ...
+# Subtest: signup hosted note names closed default and source order
+--
+# Subtest: team load failures are announced
+ok 1215 - team load failures are announced
+  ---
+  duration_ms: 1.338393
+  type: 'test'
+  ...
+# Subtest: empty team states are claimed only after data loads
+--
+# Subtest: requireMembership fails closed when GUC bind fails after membership
+ok 1266 - requireMembership fails closed when GUC bind fails after membership
+  ---
+  duration_ms: 0.474805
+  type: 'test'
+  ...
+# Subtest: source no longer swallows set_config failures
+ok 1267 - source no longer swallows set_config failures
+  ---
+  duration_ms: 0.314492
+  type: 'test'
+  ...
+# Subtest: tenant membership note names requireMembership before the GUC write
+--
+    # Subtest: hydrateWorkerPayloadHints adds fail-closed guidance for known ref prefixes
+    ok 1 - hydrateWorkerPayloadHints adds fail-closed guidance for known ref prefixes
+      ---
+      duration_ms: 1.471716
+      type: 'test'
+      ...
+    # Subtest: hydrateWorkerPayloadHints returns empty for unknown refs
+--
+    # Subtest: assertTextLimit fail-closes oversize strings
+    ok 3 - assertTextLimit fail-closes oversize strings
+      ---
+      duration_ms: 0.641866
+      type: 'test'
+      ...
+    1..3
+--
+    # Subtest: KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+    ok 1 - KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+      ---
+      duration_ms: 4.322943
+      type: 'test'
+      ...
+    # Subtest: vendor key accept/reject and isKillSwitchKey
+--
+    # Subtest: fail-closed blocks until explicitly enabled
+    ok 3 - fail-closed blocks until explicitly enabled
+      ---
+      duration_ms: 0.376535
+      type: 'test'
+      ...
+    # Subtest: emergency disable and tenant kill override
+--
+    # Subtest: lists one fail-closed probe per kind
+    ok 4 - lists one fail-closed probe per kind
+      ---
+      duration_ms: 5.127004
+      type: 'test'
+      ...
+    1..4
+--
+# Subtest: stopOutcome fails when a pid survives or the port is still held
+ok 1469 - stopOutcome fails when a pid survives or the port is still held
+  ---
+  duration_ms: 0.261618
+  type: 'test'
+  ...
+# Subtest: stopOutcome reports a verified free port
+--
+# Subtest: stopOutcome fails on a listener whose owner cannot be attributed
+ok 1471 - stopOutcome fails on a listener whose owner cannot be attributed
+  ---
+  duration_ms: 0.14434
+  type: 'test'
+  ...
+# Subtest: terminatePids SIGTERMs live pids and skips dead ones
+--
+    # Subtest: surfaces CONFLICTING and open-conflict fail-closed with null value
+    ok 2 - surfaces CONFLICTING and open-conflict fail-closed with null value
+      ---
+      duration_ms: 0.490922
+      type: 'test'
+      ...
+    # Subtest: resolveQuestion never upgrades RED and listMissingEvidence reports gaps
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:platform 2>&1 | grep -B 2 -A 20 "^not ok"
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:platform 2>&1 | grep -E "^# tests|^# pass|^# fail"
+# tests 2178
+# pass 2177
+# fail 1
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:platform 2>&1 | grep -B 5 "not ok"
+---
+  duration_ms: 4.032382
+  type: 'suite'
+  ...
+# Subtest: free-port chooser returns a different non-reserved port when 127.0.0.1:55436 is occupied
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55436 is occupied
+[0m
+Let me find and examine the failing test.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 30 npm run test:platform 2>&1 | grep -A 30 "free-port chooser returns a different non-reserved port"
+(no output)
+[0m
+[0m✱ [0mGrep "free-port chooser"[90m in repo/src · 0 matches[0m
+[0m✱ [0mGrep "free-port"[90m in repo · 1 match[0m
+[0m→ [0mRead repo/scripts/rollback-rehearsal.test.mjs
+[0m✱ [0mGrep "findFreePort"[90m in repo/scripts · 2 matches[0m
+[0m→ [0mRead repo/scripts/rollback-rehearsal.mjs[90m [offset=50, limit=50][0m
+[0m→ [0mRead repo/scripts/rollback-rehearsal.mjs[90m [limit=60][0m
+Let me run just the failing test to see the exact error:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && node --experimental-strip-types --test scripts/rollback-rehearsal.test.mjs 2>&1 | head -40
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 30000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m

@@ -1,0 +1,61 @@
+# rt test | 20261122-001502 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/hcv-overview-demo-busy.test.mjs
+TAP version 13
+# Subtest: load demonstration pack is announced and marked busy
+not ok 1 - load demonstration pack is announced and marked busy
+  ---
+  duration_ms: 1.777998
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-overview-demo-busy.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Loading…/. Input:
+    
+    'aria-busy={demo.isPending}\n' +
+      '          >\n' +
+      '            {demo.isPending ? "Loading demonstration pack…" : "Load demonstration pack"}\n' +
+      '          </Button>\n' +
+      '          {demo.isPending ? (\n' +
+      '            <p role="status" className="sr-only">\n' +
+      '              Loading demonstration pack.\n' +
+      '            </p>\n' +
+      '          ) : null}\n' +
+      '          {'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    aria-busy={demo.isPending}
+              >
+                {demo.isPending ? "Loading demonstration pack…" : "Load demonstration pack"}
+              </Button>
+              {demo.isPending ? (
+                <p role="status" className="sr-only">
+                  Loading demonstration pack.
+                </p>
+              ) : null}
+              {
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-overview-demo-busy.test.mjs:13:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: overview demo errors stay alerts
+ok 2 - overview demo errors stay alerts
+  ---
+  duration_ms: 0.260551
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 92.161301

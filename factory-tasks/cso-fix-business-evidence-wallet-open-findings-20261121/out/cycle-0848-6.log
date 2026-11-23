@@ -1,0 +1,3197 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 104
+drwxrwxr-x   4 andy andy  4096 Nov 22 00:03 .
+drwxrwxr-x 702 andy andy 65536 Nov 22 08:35 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 08:48 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  2278 Nov 22 08:48 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 08:48 out
+drwxrwxr-x  24 andy andy  4096 Nov 22 07:26 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 08:48 status.json
+-rw-rw-r--   1 andy andy  1920 Nov 22 04:34 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/ 2>/dev/null || echo "out directory doesn't exist"
+total 1496
+drwxrwxr-x 4 andy andy   4096 Nov 22 08:48 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 00:03 ..
+-rw-rw-r-- 1 andy andy 224234 Nov 22 01:51 cycle-0022-4.log
+-rw-rw-r-- 1 andy andy  75271 Nov 22 02:23 cycle-0152-5.log
+-rw-rw-r-- 1 andy andy 231783 Nov 22 03:58 cycle-0229-1.log
+-rw-rw-r-- 1 andy andy  40834 Nov 22 04:34 cycle-0359-2.log
+-rw-rw-r-- 1 andy andy 168692 Nov 22 05:40 cycle-0439-1.log
+-rw-rw-r-- 1 andy andy 138086 Nov 22 07:10 cycle-0541-2.log
+-rw-rw-r-- 1 andy andy   1101 Nov 22 07:14 cycle-0711-3.log
+-rw-rw-r-- 1 andy andy  79789 Nov 22 08:14 cycle-0714-4.log
+-rw-rw-r-- 1 andy andy  29388 Nov 22 08:48 cycle-0814-5.log
+-rw-rw-r-- 1 andy andy     35 Nov 22 08:48 cycle-0848-6.log
+-rw-rw-r-- 1 andy andy 213063 Nov 21 22:46 cycle-2116-1.log
+-rw-rw-r-- 1 andy andy  55270 Nov 21 22:51 cycle-2247-2.log
+-rw-rw-r-- 1 andy andy 186568 Nov 22 00:19 cycle-2251-3.log
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 EVIDENCE.md
+-rw-rw-r-- 1 andy andy      6 Nov 22 04:39 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 22 04:39 .preflight-ok
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 07:08 raw
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 RESULT.md
+drwxrwxr-x 3 andy andy   4096 Nov 21 22:58 runs
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 SKILLS-USED.md
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2384
+drwxrwxr-x  24 andy andy    4096 Nov 22 07:26 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 00:03 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 05:36 docs
+-rw-rw-r--   1 andy andy    1123 Nov 22 05:36 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 08:16 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     370 Nov 22 06:29 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  274699 Nov 22 05:36 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 05:36 scripts
+-rw-rw-r--   1 andy andy   15457 Nov 22 05:36 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 07:08 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 05:36 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   14297 Nov 22 05:36 vite.config.ts
+[0m
+[0m→ [0mRead out/PROGRESS.md
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git status && git log --oneline -5
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .env.example
+	modified:   .gitleaksignore
+	modified:   SECURITY.md
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/cp3-acceptance.mjs
+	modified:   scripts/e2e-demo.mjs
+	modified:   scripts/hcv-overview-demo-busy.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/http-restart-persistence.mjs
+	modified:   scripts/live-http-idor.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/pdf-inflate-lock.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/security-headers-lock.test.mjs
+	modified:   scripts/staging-preflight.test.mjs
+	modified:   scripts/zip-size-caps-lock.test.mjs
+	modified:   server/middleware/wallet-headers.ts
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/server/security-headers.ts
+	modified:   tests/a11y.test.mjs
+	modified:   tests/scrub-connection.test.mjs
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+total 920
+drwxrwxr-x 2 andy andy   4096 Nov 22 07:08 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 08:48 ..
+-rw-rw-r-- 1 andy andy  11751 Nov 22 00:23 INDEX.tsv
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 21 22:59 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:42 .lock-typecheck
+-rw-rw-r-- 1 andy andy     41 Nov 22 07:08 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy 436030 Nov 21 22:59 test-platform-20261121-225910-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:43 typecheck-20261121-234252-exit-code.txt
+-rw-rw-r-- 1 andy andy   9509 Nov 21 23:43 typecheck-20261121-234252-output.log
+[0m
+[0m→ [0mRead out/raw/SHA
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/test-platform-final-output.log
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/typecheck-20261121-234252-output.log
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m# [0mTodos
+[ ] Fix Finding 1: Move preview secret to env var, add test that fails on literal secret
+[ ] Fix Finding 2: Remove unsafe-inline from CSP script-src, use nonces/hashes
+[ ] Fix Finding 3: Fix 119 failing tests in test:platform until 0 failing
+[ ] Fix Finding 4: Confirm PR 1514 merged and tested at base SHA; fix any gaps
+[ ] Run verification and update out/MISSION_COMPLETE
+[0m
+Now I understand the task. Let me explore the codebase to understand the current state and fix the findings from BRIEF.md.
+[0m✱ [0mGrep "preview.*secret|secret.*preview"[90m in repo · 8 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m→ [0mRead repo/.gitleaks.toml
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 0 matches[0m
+[0m✱ [0mGrep "Content-Security-Policy|CSP|script-src"[90m in repo · 38 matches[0m
+Let me look at the test failures and the current state of the code more closely.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all | head -20
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+94e82011 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+257d74c0 Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+a80f89e7 hard25: fix home navigation tests, decisions nav wait
+cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+a39fc0b7 test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+9889beac tool-synthetic-data-r1: add synthetic data test register + promptfoo eval
+6930398c feat: add ISO 9001 QMS evidence docs (clauses 4-10)
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+f3aa6b5a fix(auth): hold preview bearer token in memory, never sessionStorage
+729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+73e7de4b Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+b5973e96 forced-merge: reel-trial-claude-security-anti-patterns-api-key-front-end-20261118 result evidence
+1b7e1c68 forced-merge: reel-adopt-six-essential-documents-before-vibe-coding-20261117 result evidence
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test -- --reporter=verbose 2>&1 | head -200
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts --reporter=verbose
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 0.88523
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 6.024808
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 8.17136
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 0.980278
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.198444
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.431347
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.374342
+      type: 'test'
+      ...
+    1..4
+ok 2 - admin error copy lock
+  ---
+  duration_ms: 4.317303
+  type: 'suite'
+  ...
+# Subtest: agent display name max lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 3.903864
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+    ok 2 - agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.41288
+      type: 'test'
+      ...
+    1..2
+ok 3 - agent display name max lock
+  ---
+  duration_ms: 5.513086
+  type: 'suite'
+  ...
+# Subtest: agent display name max wire lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 3.907705
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+    ok 2 - v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.587348
+      type: 'test'
+      ...
+    1..2
+ok 4 - agent display name max wire lock
+  ---
+  duration_ms: 5.770414
+  type: 'suite'
+  ...
+# Subtest: agent loop events list max lock
+    # Subtest: exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+    ok 1 - exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+      ---
+      duration_ms: 0.788901
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+      ---
+      duration_ms: 0.364315
+      type: 'test'
+      ...
+    1..2
+ok 5 - agent loop events list max lock
+  ---
+  duration_ms: 2.176654
+  type: 'suite'
+  ...
+# Subtest: agent loop runs list max lock
+    # Subtest: exports AGENT_LOOP_RUNS_LIST_MAX at 100
+    ok 1 - exports AGENT_LOOP_RUNS_LIST_MAX at 100
+      ---
+      duration_ms: 0.795636
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+      ---
+      duration_ms: 0.37404
+      type: 'test'
+      ...
+    1..2
+ok 6 - agent loop runs list max lock
+  ---
+  duration_ms: 2.465224
+  type: 'suite'
+  ...
+# Subtest: agent purpose max lock
+    # Subtest: exports AGENT_PURPOSE_MAX at 500
+    ok 1 - exports AGENT_PURPOSE_MAX at 500
+      ---
+      duration_ms: 1.026591
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares purpose length against AGENT_PURPOSE_MAX
+    ok 2 - agents.ts compares purpose length against AGENT_PURPOSE_MAX
+      ---
+      duration_ms: 0.414904
+      type: 'test'
+      ...
+    1..2
+ok 7 - agent purpose max lock
+  ---
+  duration_ms: 2.918344
+  type: 'suite'
+  ...
+# Subtest: ai grounding lock
+    # Subtest: accepts an exact token-bounded value case-insensitively
+    ok 1 - accepts an exact token-bounded value case-insensitively
+      ---
+      duration_ms: 4.416549
+      type: 'test'
+      ...
+    # Subtest: rejects a smaller amount that is only a prefix of a larger figure
+    ok 2 - rejects a smaller amount that is only a prefix of a larger figure
+      ---
+      duration_ms: 1.833373
+      type: 'test'
+      ...
+    # Subtest: rejects short tokens that collide inside longer words
+    ok 3 - rejects short tokens that collide inside longer words
+      ---
+      duration_ms: 1.674329
+      type: 'test'
+      ...
+    # Subtest: rejects empty extracted text and display values under 3 chars
+    ok 4 - rejects empty extracted text and display values under 3 chars
+      ---
+      duration_ms: 0.288449
+      type: 'test'
+      ...
+    1..4
+ok 8 - ai grounding lock
+  ---
+  duration_ms: 9.653397
+  type: 'suite'
+  ...
+# Subtest: ai response caps lock
+    # Subtest: keeps fetch timeout at 15 seconds
+    ok 1 - keeps fetch timeout at 15 seconds
+      ---
+      duration_ms: 0.86414
+      type: 'test'
+      ...
+    # Subtest: keeps max response chars at 100000
+    ok 2 - keeps max response chars at 100000
+      ---
+      duration_ms: 0.169071
+      type: 'test'
+      ...
+    # Subtest: timeout stays below max response chars numerically as separate unit caps
+    ok 3 - timeout stays below max response chars numerically as separate unit caps
+      ---
+      duration_ms: 0.2111
+      type: 'test'
+      ...
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test -- --reporter=verbose 2>&1 | tail -200
+# Subtest: rotates when the session user has no gate-bound account
+    ok 3 - rotates when the session user has no gate-bound account
+      ---
+      duration_ms: 0.088357
+      type: 'test'
+      ...
+    1..3
+ok 15 - sessionBoundToGateIdentity
+  ---
+  duration_ms: 0.507324
+  type: 'suite'
+  ...
+# Subtest: resolveSignInGateState
+    # Subtest: is pending while the session check is in flight, user or not
+    ok 1 - is pending while the session check is in flight, user or not
+      ---
+      duration_ms: 0.737953
+      type: 'test'
+      ...
+    # Subtest: is signed_in once a user is present
+    ok 2 - is signed_in once a user is present
+      ---
+      duration_ms: 0.174647
+      type: 'test'
+      ...
+    # Subtest: is signed_out only after the check resolved with no user
+    ok 3 - is signed_out only after the check resolved with no user
+      ---
+      duration_ms: 0.153437
+      type: 'test'
+      ...
+    1..3
+ok 16 - resolveSignInGateState
+  ---
+  duration_ms: 2.031226
+  type: 'suite'
+  ...
+# Subtest: signup policy
+    # Subtest: processLooksHosted
+        # Subtest: false for undefined, empty, and whitespace
+        ok 1 - false for undefined, empty, and whitespace
+          ---
+          duration_ms: 1.059105
+          type: 'test'
+          ...
+        # Subtest: false for localhost
+        ok 2 - false for localhost
+          ---
+          duration_ms: 0.352995
+          type: 'test'
+          ...
+        # Subtest: false for IPv4 loopback
+        ok 3 - false for IPv4 loopback
+          ---
+          duration_ms: 0.207662
+          type: 'test'
+          ...
+        # Subtest: false for IPv6 loopback
+        ok 4 - false for IPv6 loopback
+          ---
+          duration_ms: 0.195422
+          type: 'test'
+          ...
+        # Subtest: true for remote host
+        ok 5 - true for remote host
+          ---
+          duration_ms: 0.186134
+          type: 'test'
+          ...
+        # Subtest: query host uses last value
+        ok 6 - query host uses last value
+          ---
+          duration_ms: 0.272489
+          type: 'test'
+          ...
+        # Subtest: remote hostaddr overrides loopback host
+        ok 7 - remote hostaddr overrides loopback host
+          ---
+          duration_ms: 0.310347
+          type: 'test'
+          ...
+        # Subtest: loopback hostaddr preserves local status
+        ok 8 - loopback hostaddr preserves local status
+          ---
+          duration_ms: 0.222408
+          type: 'test'
+          ...
+        # Subtest: invalid URL fails closed as hosted
+        ok 9 - invalid URL fails closed as hosted
+          ---
+          duration_ms: 0.439174
+          type: 'test'
+          ...
+        1..9
+    ok 1 - processLooksHosted
+      ---
+      duration_ms: 4.931543
+      type: 'suite'
+      ...
+    # Subtest: signupOpenFromEnv
+        # Subtest: defaults open locally
+        ok 1 - defaults open locally
+          ---
+          duration_ms: 1.146625
+          type: 'test'
+          ...
+        # Subtest: defaults closed when hosted
+        ok 2 - defaults closed when hosted
+          ---
+          duration_ms: 0.124046
+          type: 'test'
+          ...
+        # Subtest: explicit false-like values always close
+        ok 3 - explicit false-like values always close
+          ---
+          duration_ms: 0.108441
+          type: 'test'
+          ...
+        # Subtest: explicit true-like values always open
+        ok 4 - explicit true-like values always open
+          ---
+          duration_ms: 0.085362
+          type: 'test'
+          ...
+        # Subtest: trims values
+        ok 5 - trims values
+          ---
+          duration_ms: 0.079941
+          type: 'test'
+          ...
+        # Subtest: unknown value follows hosted default
+        ok 6 - unknown value follows hosted default
+          ---
+          duration_ms: 0.078985
+          type: 'test'
+          ...
+        1..6
+    ok 2 - signupOpenFromEnv
+      ---
+      duration_ms: 1.85889
+      type: 'suite'
+      ...
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 3 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 0.077561
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into the Better Auth server config
+    ok 4 - wires disableSignUp into the Better Auth server config
+      ---
+      duration_ms: 0.460257
+      type: 'test'
+      ...
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+      ---
+      duration_ms: 0.279325
+      type: 'test'
+      ...
+    1..5
+ok 17 - signup policy
+  ---
+  duration_ms: 8.445345
+  type: 'suite'
+  ...
+# Subtest: formatWalletTimestamp
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    ok 1 - stringifies Date objects so React never receives a raw Date child
+      ---
+      duration_ms: 1.011258
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.130383
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.114232
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 2.145971
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 364.136569
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform -- --reporter=verbose 2>&1 | tail -300
+# Subtest: rejects a wrong-issuer token in the loopback default mode
+    ok 4 - rejects a wrong-issuer token in the loopback default mode
+      ---
+      duration_ms: 1.272655
+      type: 'test'
+      ...
+    # Subtest: verifies a preview-audience token when only GROK_GATE_ORIGIN is set
+    ok 5 - verifies a preview-audience token when only GROK_GATE_ORIGIN is set
+      ---
+      duration_ms: 1.336936
+      type: 'test'
+      ...
+    # Subtest: rejects a preview-audience token when GROK_PROJECT_ID is set
+    ok 6 - rejects a preview-audience token when GROK_PROJECT_ID is set
+      ---
+      duration_ms: 1.327036
+      type: 'test'
+      ...
+    # Subtest: rejects an app-audience token in preview mode
+    ok 7 - rejects an app-audience token in preview mode
+      ---
+      duration_ms: 3.455025
+      type: 'test'
+      ...
+    1..7
+ok 11 - gateIdentityFromHeaders
+  ---
+  duration_ms: 30.664103
+  type: 'suite'
+  ...
+# Subtest: gateIdentityEnabled
+    # Subtest: is enabled by default with no gate env vars
+    ok 1 - is enabled by default with no gate env vars
+      ---
+      duration_ms: 0.168817
+      type: 'test'
+      ...
+    # Subtest: is disabled when VITE_AUTH_ENABLED is false
+    ok 2 - is disabled when VITE_AUTH_ENABLED is false
+      ---
+      duration_ms: 0.112073
+      type: 'test'
+      ...
+    1..2
+ok 12 - gateIdentityEnabled
+  ---
+  duration_ms: 0.449328
+  type: 'suite'
+  ...
+# Subtest: gateTokenAudience
+    # Subtest: pins app:<id> when GROK_PROJECT_ID is set, even alongside GROK_GATE_ORIGIN
+    ok 1 - pins app:<id> when GROK_PROJECT_ID is set, even alongside GROK_GATE_ORIGIN
+      ---
+      duration_ms: 0.143122
+      type: 'test'
+      ...
+    # Subtest: pins preview when GROK_PROJECT_ID is unset
+    ok 2 - pins preview when GROK_PROJECT_ID is unset
+      ---
+      duration_ms: 0.122781
+      type: 'test'
+      ...
+    1..2
+ok 13 - gateTokenAudience
+  ---
+  duration_ms: 0.373357
+  type: 'suite'
+  ...
+# Subtest: gateIdentityUserInfo
+    # Subtest: falls back to a synthetic email and name for sub-only claims
+    ok 1 - falls back to a synthetic email and name for sub-only claims
+      ---
+      duration_ms: 0.214441
+      type: 'test'
+      ...
+    # Subtest: keeps real claims, lowercasing the email and marking it verified
+    ok 2 - keeps real claims, lowercasing the email and marking it verified
+      ---
+      duration_ms: 0.18386
+      type: 'test'
+      ...
+    1..2
+ok 14 - gateIdentityUserInfo
+  ---
+  duration_ms: 0.51617
+  type: 'suite'
+  ...
+# Subtest: sessionBoundToGateIdentity
+    # Subtest: keeps the session when it is bound to the same gate sub
+    ok 1 - keeps the session when it is bound to the same gate sub
+      ---
+      duration_ms: 0.192686
+      type: 'test'
+      ...
+    # Subtest: rotates when the session belongs to a different gate sub
+    ok 2 - rotates when the session belongs to a different gate sub
+      ---
+      duration_ms: 0.09659
+      type: 'test'
+      ...
+    # Subtest: rotates when the session user has no gate-bound account
+    ok 3 - rotates when the session user has no gate-bound account
+      ---
+      duration_ms: 0.092886
+      type: 'test'
+      ...
+    1..3
+ok 15 - sessionBoundToGateIdentity
+  ---
+  duration_ms: 0.510909
+  type: 'suite'
+  ...
+# Subtest: resolveSignInGateState
+    # Subtest: is pending while the session check is in flight, user or not
+    ok 1 - is pending while the session check is in flight, user or not
+      ---
+      duration_ms: 0.761405
+      type: 'test'
+      ...
+    # Subtest: is signed_in once a user is present
+    ok 2 - is signed_in once a user is present
+      ---
+      duration_ms: 0.1505
+      type: 'test'
+      ...
+    # Subtest: is signed_out only after the check resolved with no user
+    ok 3 - is signed_out only after the check resolved with no user
+      ---
+      duration_ms: 0.14393
+      type: 'test'
+      ...
+    1..3
+ok 16 - resolveSignInGateState
+  ---
+  duration_ms: 2.04068
+  type: 'suite'
+  ...
+# Subtest: signup policy
+    # Subtest: processLooksHosted
+        # Subtest: false for undefined, empty, and whitespace
+        ok 1 - false for undefined, empty, and whitespace
+          ---
+          duration_ms: 0.666373
+          type: 'test'
+          ...
+        # Subtest: false for localhost
+        ok 2 - false for localhost
+          ---
+          duration_ms: 0.236532
+          type: 'test'
+          ...
+        # Subtest: false for IPv4 loopback
+        ok 3 - false for IPv4 loopback
+          ---
+          duration_ms: 0.133807
+          type: 'test'
+          ...
+        # Subtest: false for IPv6 loopback
+        ok 4 - false for IPv6 loopback
+          ---
+          duration_ms: 0.127323
+          type: 'test'
+          ...
+        # Subtest: true for remote host
+        ok 5 - true for remote host
+          ---
+          duration_ms: 0.115621
+          type: 'test'
+          ...
+        # Subtest: query host uses last value
+        ok 6 - query host uses last value
+          ---
+          duration_ms: 0.171468
+          type: 'test'
+          ...
+        # Subtest: remote hostaddr overrides loopback host
+        ok 7 - remote hostaddr overrides loopback host
+          ---
+          duration_ms: 0.204616
+          type: 'test'
+          ...
+        # Subtest: loopback hostaddr preserves local status
+        ok 8 - loopback hostaddr preserves local status
+          ---
+          duration_ms: 0.174338
+          type: 'test'
+          ...
+        # Subtest: invalid URL fails closed as hosted
+        ok 9 - invalid URL fails closed as hosted
+          ---
+          duration_ms: 0.35259
+          type: 'test'
+          ...
+        1..9
+    ok 1 - processLooksHosted
+      ---
+      duration_ms: 3.25552
+      type: 'suite'
+      ...
+    # Subtest: signupOpenFromEnv
+        # Subtest: defaults open locally
+        ok 1 - defaults open locally
+          ---
+          duration_ms: 0.22641
+          type: 'test'
+          ...
+        # Subtest: defaults closed when hosted
+        ok 2 - defaults closed when hosted
+          ---
+          duration_ms: 0.089375
+          type: 'test'
+          ...
+        # Subtest: explicit false-like values always close
+        ok 3 - explicit false-like values always close
+          ---
+          duration_ms: 0.103287
+          type: 'test'
+          ...
+        # Subtest: explicit true-like values always open
+        ok 4 - explicit true-like values always open
+          ---
+          duration_ms: 0.084635
+          type: 'test'
+          ...
+        # Subtest: trims values
+        ok 5 - trims values
+          ---
+          duration_ms: 0.069494
+          type: 'test'
+          ...
+        # Subtest: unknown value follows hosted default
+        ok 6 - unknown value follows hosted default
+          ---
+          duration_ms: 0.069507
+          type: 'test'
+          ...
+        1..6
+    ok 2 - signupOpenFromEnv
+      ---
+      duration_ms: 1.767884
+      type: 'suite'
+      ...
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 3 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 0.073894
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into the Better Auth server config
+    ok 4 - wires disableSignUp into the Better Auth server config
+      ---
+      duration_ms: 0.424939
+      type: 'test'
+      ...
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+      ---
+      duration_ms: 0.26303
+      type: 'test'
+      ...
+    1..5
+ok 17 - signup policy
+  ---
+  duration_ms: 6.35535
+  type: 'suite'
+  ...
+# Subtest: formatWalletTimestamp
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    ok 1 - stringifies Date objects so React never receives a raw Date child
+      ---
+      duration_ms: 1.216133
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.181072
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.167671
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 2.786052
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 395.640635
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1
+...output truncated...
+
+Full output saved to: /home/andy/.local/share/opencode/tool-output/tool_2027c7e3d001v6QYVr8yN3yg35
+
+ok 1522 - deployed: a confirmed sign-out clears the token, then redirects
+  ---
+  duration_ms: 0.329796
+  type: 'test'
+  ...
+# Subtest: deployed: a sign-out that never settles throws and does NOT redirect
+ok 1523 - deployed: a sign-out that never settles throws and does NOT redirect
+  ---
+  duration_ms: 23.747788
+  type: 'test'
+  ...
+# Subtest: deployed: a rejected sign-out throws and does NOT redirect
+ok 1524 - deployed: a rejected sign-out throws and does NOT redirect
+  ---
+  duration_ms: 1.017279
+  type: 'test'
+  ...
+# Subtest: deployed: the timeout is distinguishable from a rejection
+ok 1525 - deployed: the timeout is distinguishable from a rejection
+  ---
+  duration_ms: 20.288003
+  type: 'test'
+  ...
+# Subtest: settleWithin reports the outcome and never rejects
+ok 1526 - settleWithin reports the outcome and never rejects
+  ---
+  duration_ms: 21.405982
+  type: 'test'
+  ...
+# Subtest: settleWithin waits its full window, then gives up rather than hanging
+ok 1527 - settleWithin waits its full window, then gives up rather than hanging
+  ---
+  duration_ms: 1.188076
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: the preview clear gives up at the preview bound
+ok 1528 - pre-sign-in: the preview clear gives up at the preview bound
+  ---
+  duration_ms: 5.258833
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: a deployed session gets the deployed window, not the preview one
+ok 1529 - pre-sign-in: a deployed session gets the deployed window, not the preview one
+  ---
+  duration_ms: 0.822531
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: a failed clear never blocks sign-in
+ok 1530 - pre-sign-in: a failed clear never blocks sign-in
+  ---
+  duration_ms: 3.880066
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: the preview skips the request when there is no bearer
+ok 1531 - pre-sign-in: the preview skips the request when there is no bearer
+  ---
+  duration_ms: 0.172529
+  type: 'test'
+  ...
+# Subtest: every sign-out bound comes from one rule
+ok 1532 - every sign-out bound comes from one rule
+  ---
+  duration_ms: 0.116596
+  type: 'test'
+  ...
+# Subtest: the defaults are bounded, and deployed waits longer than preview
+ok 1533 - the defaults are bounded, and deployed waits longer than preview
+  ---
+  duration_ms: 0.405543
+  type: 'test'
+  ...
+# Subtest: signup open env lock
+    # Subtest: processLooksHosted treats loopback as local and remote as hosted
+    ok 1 - processLooksHosted treats loopback as local and remote as hosted
+      ---
+      duration_ms: 1.894794
+      type: 'test'
+      ...
+    # Subtest: signupOpenFromEnv honors explicit false/true and defaults closed when hosted
+    ok 2 - signupOpenFromEnv honors explicit false/true and defaults closed when hosted
+      ---
+      duration_ms: 0.874968
+      type: 'test'
+      ...
+    # Subtest: hosted unset never opens a registrar by default
+    ok 3 - hosted unset never opens a registrar by default
+      ---
+      duration_ms: 0.265878
+      type: 'test'
+      ...
+    1..3
+ok 1534 - signup open env lock
+  ---
+  duration_ms: 5.143375
+  type: 'suite'
+  ...
+# Subtest: slug max lock
+    # Subtest: exports SLUG_MAX at 48
+    ok 1 - exports SLUG_MAX at 48
+      ---
+      duration_ms: 0.791601
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds slug with SLUG_MAX
+    ok 2 - v2-fns.ts bounds slug with SLUG_MAX
+      ---
+      duration_ms: 0.87394
+      type: 'test'
+      ...
+    1..2
+ok 1535 - slug max lock
+  ---
+  duration_ms: 3.082709
+  type: 'suite'
+  ...
+# Subtest: smart-card permissions deny lock
+    # Subtest: includes smart-card=() once
+    ok 1 - includes smart-card=() once
+      ---
+      duration_ms: 4.967582
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents smart-card=()
+    ok 2 - SECURITY.md documents smart-card=()
+      ---
+      duration_ms: 0.36815
+      type: 'test'
+      ...
+    1..2
+ok 1536 - smart-card permissions deny lock
+  ---
+  duration_ms: 6.502395
+  type: 'suite'
+  ...
+# Subtest: speaker-selection permissions deny lock
+    # Subtest: Permissions-Policy includes speaker-selection=() once
+    ok 1 - Permissions-Policy includes speaker-selection=() once
+      ---
+      duration_ms: 4.953099
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents speaker-selection=()
+    ok 2 - SECURITY.md documents speaker-selection=()
+      ---
+      duration_ms: 0.346181
+      type: 'test'
+      ...
+    1..2
+ok 1537 - speaker-selection permissions deny lock
+  ---
+  duration_ms: 6.401652
+  type: 'suite'
+  ...
+# Subtest: staging preflight
+    # Subtest: local mode accepts loopback without printing secrets
+    ok 1 - local mode accepts loopback without printing secrets
+      ---
+      duration_ms: 17.02203
+      type: 'test'
+      ...
+    # Subtest: hosted mode refuses missing TLS, short secret, HTTP origin, and open signup
+    ok 2 - hosted mode refuses missing TLS, short secret, HTTP origin, and open signup
+      ---
+      duration_ms: 6.486491
+      type: 'test'
+      ...
+    # Subtest: hosted mode passes a TLS remote with closed signup and https origin
+    ok 3 - hosted mode passes a TLS remote with closed signup and https origin
+      ---
+      duration_ms: 16.82931
+      type: 'test'
+      ...
+    # Subtest: hosted mode accepts edge HTTPS with loopback Postgres (DigitalOcean pilot)
+    ok 4 - hosted mode accepts edge HTTPS with loopback Postgres (DigitalOcean pilot)
+      ---
+      duration_ms: 11.423917
+      type: 'test'
+      ...
+    # Subtest: hosted edge-loopback still fails closed when signup is left open
+    ok 5 - hosted edge-loopback still fails closed when signup is left open
+      ---
+      duration_ms: 6.451071
+      type: 'test'
+      ...
+    1..5
+ok 1538 - staging preflight
+  ---
+  duration_ms: 61.266083
+  type: 'suite'
+  ...
+# Subtest: status compute lock
+    # Subtest: missing current evidence → RED
+    ok 1 - missing current evidence → RED
+      ---
+      duration_ms: 1.39809
+      type: 'test'
+      ...
+    # Subtest: expired-only evidence → EXPIRED, never GREEN
+    ok 2 - expired-only evidence → EXPIRED, never GREEN
+      ---
+      duration_ms: 93.550593
+      type: 'test'
+      ...
+    # Subtest: threshold not_met → RED
+    ok 3 - threshold not_met → RED
+      ---
+      duration_ms: 18.48062
+      type: 'test'
+      ...
+    # Subtest: currency mismatch → AMBER, never GREEN
+    ok 4 - currency mismatch → AMBER, never GREEN
+      ---
+      duration_ms: 0.772794
+      type: 'test'
+      ...
+    # Subtest: conflicting live facts → CONFLICT
+    ok 5 - conflicting live facts → CONFLICT
+      ---
+      duration_ms: 1.387768
+      type: 'test'
+      ...
+    # Subtest: negative display value → RED even when threshold met
+    ok 6 - negative display value → RED even when threshold met
+      ---
+      duration_ms: 2.051914
+      type: 'test'
+      ...
+    1..6
+ok 1539 - status compute lock
+  ---
+  duration_ms: 120.831626
+  type: 'suite'
+  ...
+# Subtest: status properties lock
+    # Subtest: refuses coerce-to-GREEN when computed is RED
+    ok 1 - refuses coerce-to-GREEN when computed is RED
+      ---
+      duration_ms: 0.881771
+      type: 'test'
+      ...
+    # Subtest: refuses coerce-to-GREEN when computed is EXPIRED or CONFLICT
+    ok 2 - refuses coerce-to-GREEN when computed is EXPIRED or CONFLICT
+      ---
+      duration_ms: 0.18738
+      type: 'test'
+      ...
+    # Subtest: refuses coerce-to-GREEN when computed is AMBER
+    ok 3 - refuses coerce-to-GREEN when computed is AMBER
+      ---
+      duration_ms: 0.15509
+      type: 'test'
+      ...
+    # Subtest: keeps GREEN only when computed is already GREEN
+    ok 4 - keeps GREEN only when computed is already GREEN
+      ---
+      duration_ms: 1.736496
+      type: 'test'
+      ...
+    1..4
+ok 1540 - status properties lock
+  ---
+  duration_ms: 4.247396
+  type: 'suite'
+  ...
+# Subtest: scripts/storage-access-permissions-deny-lock.test.mjs
+ok 839 - scripts/storage-access-permissions-deny-lock.test.mjs
+  ---
+  duration_ms: 249.310118
+  type: 'test'
+  ...
+# Subtest: subject max lock
+    # Subtest: exports SUBJECT_MAX at 200
+    ok 1 - exports SUBJECT_MAX at 200
+      ---
+      duration_ms: 0.9269
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds subject with SUBJECT_MAX
+    ok 2 - v2-fns.ts bounds subject with SUBJECT_MAX
+      ---
+      duration_ms: 2.481562
+      type: 'test'
+      ...
+    1..2
+ok 1542 - subject max lock
+  ---
+  duration_ms: 5.84913
+  type: 'suite'
+  ...
+# Subtest: suggest answer bank lock
+    # Subtest: ranks canonical overlap above keyword and prefers approved
+    ok 1 - ranks canonical overlap above keyword and prefers approved
+      ---
+      duration_ms: 1.025886
+      type: 'test'
+      ...
+    # Subtest: returns empty when nothing overlaps
+    ok 2 - returns empty when nothing overlaps
+      ---
+      duration_ms: 1.476878
+      type: 'test'
+      ...
+    # Subtest: soft-boosts preferredAnswerKeys without inventing matches
+    ok 3 - soft-boosts preferredAnswerKeys without inventing matches
+      ---
+      duration_ms: 0.307976
+      type: 'test'
+      ...
+    1..3
+ok 1543 - suggest answer bank lock
+  ---
+  duration_ms: 3.85566
+  type: 'suite'
+  ...
+# Subtest: summarizer permissions deny lock
+    # Subtest: includes summarizer=() once
+    ok 1 - includes summarizer=() once
+      ---
+      duration_ms: 5.035413
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents summarizer=()
+    ok 2 - SECURITY.md documents summarizer=()
+      ---
+      duration_ms: 0.428971
+      type: 'test'
+      ...
+    1..2
+ok 1544 - summarizer permissions deny lock
+  ---
+  duration_ms: 8.737939
+  type: 'suite'
+  ...
+# Subtest: sync-script permissions deny lock
+    # Subtest: Permissions-Policy includes sync-script=() once
+    ok 1 - Permissions-Policy includes sync-script=() once
+      ---
+      duration_ms: 0.914287
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents sync-script=()
+    ok 2 - SECURITY.md documents sync-script=()
+      ---
+      duration_ms: 0.380542
+      type: 'test'
+      ...
+    1..2
+ok 1545 - sync-script permissions deny lock
+  ---
+  duration_ms: 2.464167
+  type: 'suite'
+  ...
+# Subtest: sync-xhr permissions deny lock
+    # Subtest: Permissions-Policy includes sync-xhr=() once
+    ok 1 - Permissions-Policy includes sync-xhr=() once
+      ---
+      duration_ms: 0.872445
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents sync-xhr=()
+    ok 2 - SECURITY.md documents sync-xhr=()
+      ---
+      duration_ms: 0.393493
+      type: 'test'
+      ...
+    1..2
+ok 1546 - sync-xhr permissions deny lock
+  ---
+  duration_ms: 3.477343
+  type: 'suite'
+  ...
+# Subtest: target label max lock
+    # Subtest: exports TARGET_LABEL_MAX at 200
+    ok 1 - exports TARGET_LABEL_MAX at 200
+      ---
+      duration_ms: 2.995512
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds targetLabel with TARGET_LABEL_MAX
+    ok 2 - v2-fns.ts bounds targetLabel with TARGET_LABEL_MAX
+      ---
+      duration_ms: 0.658067
+      type: 'test'
+      ...
+    1..2
+ok 1547 - target label max lock
+  ---
+  duration_ms: 5.917269
+  type: 'suite'
+  ...
+# Subtest: template id max lock
+    # Subtest: exports TEMPLATE_ID_MAX at 80
+    ok 1 - exports TEMPLATE_ID_MAX at 80
+      ---
+      duration_ms: 0.847037
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds templateId with TEMPLATE_ID_MAX
+    ok 2 - v2-fns.ts bounds templateId with TEMPLATE_ID_MAX
+      ---
+      duration_ms: 5.247294
+      type: 'test'
+      ...
+    1..2
+ok 1548 - template id max lock
+  ---
+  duration_ms: 13.159097
+  type: 'suite'
+  ...
+# Subtest: temporal lock
+    # Subtest: TEMPORAL_STATES fixed order
+    ok 1 - TEMPORAL_STATES fixed order
+      ---
+      duration_ms: 1.400351
+      type: 'test'
+      ...
+    # Subtest: isValidOn inclusive effectiveDate, exclusive expiryDate; rejects archived/superseded
+    ok 2 - isValidOn inclusive effectiveDate, exclusive expiryDate; rejects archived/superseded
+      ---
+      duration_ms: 0.32469
+      type: 'test'
+      ...
+    # Subtest: temporalStateOf priority: disputed > superseded > archived > future > expired > current > historical
+    ok 3 - temporalStateOf priority: disputed > superseded > archived > future > expired > current > historical
+      ---
+      duration_ms: 0.252192
+      type: 'test'
+      ...
+    # Subtest: factsAsOf returns only slices valid on the date; never invents
+    ok 4 - factsAsOf returns only slices valid on the date; never invents
+      ---
+      duration_ms: 0.212158
+      type: 'test'
+      ...
+    1..4
+ok 1549 - temporal lock
+  ---
+  duration_ms: 3.525038
+  type: 'suite'
+  ...
+# Subtest: text limits lock
+    # Subtest: keeps the ten field caps for org pack answer note file claim ids
+    ok 1 - keeps the ten field caps for org pack answer note file claim ids
+      ---
+      duration_ms: 7.174706
+      type: 'test'
+      ...
+    # Subtest: assertTextLimit rejects one character over orgName
+    ok 2 - assertTextLimit rejects one character over orgName
+      ---
+      duration_ms: 10.84838
+      type: 'test'
+      ...
+    # Subtest: server fns requireBoundedText for org pack answer claim note resourceId
+    ok 3 - server fns requireBoundedText for org pack answer claim note resourceId
+      ---
+      duration_ms: 4.50216
+      type: 'test'
+      ...
+    # Subtest: wallet clips claim display snippet and canonical key before persist
+    ok 4 - wallet clips claim display snippet and canonical key before persist
+      ---
+      duration_ms: 3.858333
+      type: 'test'
+      ...
+    1..4
+ok 1550 - text limits lock
+  ---
+  duration_ms: 28.054925
+  type: 'suite'
+  ...
+# Subtest: threshold currency lock
+    # Subtest: treats currency mismatch and missing currency as incomparable
+    ok 1 - treats currency mismatch and missing currency as incomparable
+      ---
+      duration_ms: 4.917771
+      type: 'test'
+      ...
+    # Subtest: met only when amount and currency both satisfy gte
+    ok 2 - met only when amount and currency both satisfy gte
+      ---
+      duration_ms: 0.247986
+      type: 'test'
+      ...
+    # Subtest: eq uses the 0.005 epsilon and unknown op is incomparable
+    ok 3 - eq uses the 0.005 epsilon and unknown op is incomparable
+      ---
+      duration_ms: 0.272633
+      type: 'test'
+      ...
+    # Subtest: parseNumericRequirement defaults money currency to GBP
+    ok 4 - parseNumericRequirement defaults money currency to GBP
+      ---
+      duration_ms: 1.675118
+      type: 'test'
+      ...
+    1..4
+ok 1551 - threshold currency lock
+  ---
+  duration_ms: 8.476471
+  type: 'suite'
+  ...
+# Subtest: title obligation title max lock
+    # Subtest: exports OBLIGATION_TITLE_MAX at 200
+    ok 1 - exports OBLIGATION_TITLE_MAX at 200
+      ---
+      duration_ms: 0.711684
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds title with OBLIGATION_TITLE_MAX
+    ok 2 - v2-fns.ts bounds title with OBLIGATION_TITLE_MAX
+      ---
+      duration_ms: 0.524151
+      type: 'test'
+      ...
+    1..2
+ok 1552 - title obligation title max lock
+  ---
+  duration_ms: 2.364269
+  type: 'suite'
+  ...
+# Subtest: to http error lock
+    # Subtest: rewrites 503 HttpError to opaque GENERIC_CLIENT_503
+    ok 1 - rewrites 503 HttpError to opaque GENERIC_CLIENT_503
+      ---
+      duration_ms: 0.907845
+      type: 'test'
+      ...
+    # Subtest: rewrites 5xx HttpError to opaque GENERIC_CLIENT_500
+    ok 2 - rewrites 5xx HttpError to opaque GENERIC_CLIENT_500
+      ---
+      duration_ms: 0.169394
+      type: 'test'
+      ...
+    # Subtest: preserves 4xx HttpError messages
+    ok 3 - preserves 4xx HttpError messages
+      ---
+      duration_ms: 0.139085
+      type: 'test'
+      ...
+    1..3
+ok 1553 - to http error lock
+  ---
+  duration_ms: 2.357477
+  type: 'suite'
+  ...
+# Subtest: top-level-storage-access permissions deny lock
+    # Subtest: Permissions-Policy includes top-level-storage-access=() once
+    ok 1 - Permissions-Policy includes top-level-storage-access=() once
+      ---
+      duration_ms: 0.988647
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents top-level-storage-access=()
+    ok 2 - SECURITY.md documents top-level-storage-access=()
+      ---
+      duration_ms: 0.442009
+      type: 'test'
+      ...
+    1..2
+ok 1554 - top-level-storage-access permissions deny lock
+  ---
+  duration_ms: 2.73496
+  type: 'suite'
+  ...
+# Subtest: translator permissions deny lock
+    # Subtest: includes translator=() once
+    ok 1 - includes translator=() once
+      ---
+      duration_ms: 1.020213
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents translator=()
+    ok 2 - SECURITY.md documents translator=()
+      ---
+      duration_ms: 0.415817
+      type: 'test'
+      ...
+    1..2
+ok 1555 - translator permissions deny lock
+  ---
+  duration_ms: 2.655996
+  type: 'suite'
+  ...
+# Subtest: trust-token-redemption permissions deny lock
+    # Subtest: Permissions-Policy includes trust-token-redemption=() once
+    ok 1 - Permissions-Policy includes trust-token-redemption=() once
+      ---
+      duration_ms: 1.001748
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents trust-token-redemption=()
+    ok 2 - SECURITY.md documents trust-token-redemption=()
+      ---
+      duration_ms: 0.53459
+      type: 'test'
+      ...
+    1..2
+ok 1556 - trust-token-redemption permissions deny lock
+  ---
+  duration_ms: 2.947973
+  type: 'suite'
+  ...
+# Subtest: types enums lock
+    # Subtest: locks answer statuses fail-closed set
+    ok 1 - locks answer statuses fail-closed set
+      ---
+      duration_ms: 5.357097
+      type: 'test'
+      ...
+    # Subtest: locks human states and role hierarchy set
+    ok 2 - locks human states and role hierarchy set
+      ---
+      duration_ms: 0.216772
+      type: 'test'
+      ...
+    # Subtest: locks extraction methods and response types
+    ok 3 - locks extraction methods and response types
+      ---
+      duration_ms: 0.220841
+      type: 'test'
+      ...
+    1..3
+ok 1557 - types enums lock
+  ---
+  duration_ms: 6.986329
+  type: 'suite'
+  ...
+# Subtest: unload permissions deny lock
+    # Subtest: Permissions-Policy includes unload=() once
+    ok 1 - Permissions-Policy includes unload=() once
+      ---
+      duration_ms: 1.522983
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents unload=()
+    ok 2 - SECURITY.md documents unload=()
+      ---
+      duration_ms: 0.478417
+      type: 'test'
+      ...
+    1..2
+ok 1558 - unload permissions deny lock
+  ---
+  duration_ms: 14.456069
+  type: 'suite'
+  ...
+# Subtest: unoptimized-images permissions deny lock
+    # Subtest: includes unoptimized-images=() once
+    ok 1 - includes unoptimized-images=() once
+      ---
+      duration_ms: 0.93421
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents unoptimized-images=()
+    ok 2 - SECURITY.md documents unoptimized-images=()
+      ---
+      duration_ms: 2.049227
+      type: 'test'
+      ...
+    1..2
+ok 1559 - unoptimized-images permissions deny lock
+  ---
+  duration_ms: 4.497097
+  type: 'suite'
+  ...
+# Subtest: usb permissions deny lock
+    # Subtest: Permissions-Policy includes usb=()
+    ok 1 - Permissions-Policy includes usb=()
+      ---
+      duration_ms: 4.27886
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents usb=()
+    ok 2 - SECURITY.md documents usb=()
+      ---
+      duration_ms: 0.326476
+      type: 'test'
+      ...
+    1..2
+ok 1560 - usb permissions deny lock
+  ---
+  duration_ms: 8.964098
+  type: 'suite'
+  ...
+# Subtest: vertical-scroll permissions deny lock
+    # Subtest: Permissions-Policy includes vertical-scroll=() once
+    ok 1 - Permissions-Policy includes vertical-scroll=() once
+      ---
+      duration_ms: 0.877134
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents vertical-scroll=()
+    ok 2 - SECURITY.md documents vertical-scroll=()
+      ---
+      duration_ms: 0.358361
+      type: 'test'
+      ...
+    1..2
+ok 1561 - vertical-scroll permissions deny lock
+  ---
+  duration_ms: 2.493308
+  type: 'suite'
+  ...
+# Subtest: view-transition permissions deny lock
+    # Subtest: Permissions-Policy includes view-transition=() once
+    ok 1 - Permissions-Policy includes view-transition=() once
+      ---
+      duration_ms: 3.962118
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents view-transition=()
+    ok 2 - SECURITY.md documents view-transition=()
+      ---
+      duration_ms: 0.389863
+      type: 'test'
+      ...
+    1..2
+ok 1562 - view-transition permissions deny lock
+  ---
+  duration_ms: 5.633546
+  type: 'suite'
+  ...
+# Subtest: wake-lock permissions deny lock
+    # Subtest: includes wake-lock=() once as its own token
+    ok 1 - includes wake-lock=() once as its own token
+      ---
+      duration_ms: 1.058999
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents wake-lock=()
+    ok 2 - SECURITY.md documents wake-lock=()
+      ---
+      duration_ms: 0.310527
+      type: 'test'
+      ...
+    1..2
+ok 1563 - wake-lock permissions deny lock
+  ---
+  duration_ms: 2.768016
+  type: 'suite'
+  ...
+# Subtest: web-share permissions deny lock
+    # Subtest: Permissions-Policy includes web-share=() once
+    ok 1 - Permissions-Policy includes web-share=() once
+      ---
+      duration_ms: 0.844132
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents web-share=()
+    ok 2 - SECURITY.md documents web-share=()
+      ---
+      duration_ms: 0.364082
+      type: 'test'
+      ...
+    1..2
+ok 1564 - web-share permissions deny lock
+  ---
+  duration_ms: 2.376311
+  type: 'suite'
+  ...
+# Subtest: webxr permissions deny lock
+    # Subtest: includes webxr=() once
+    ok 1 - includes webxr=() once
+      ---
+      duration_ms: 0.705312
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents webxr=()
+    ok 2 - SECURITY.md documents webxr=()
+      ---
+      duration_ms: 0.335001
+      type: 'test'
+      ...
+    1..2
+ok 1565 - webxr permissions deny lock
+  ---
+  duration_ms: 2.11012
+  type: 'suite'
+  ...
+# Subtest: window-management permissions deny lock
+    # Subtest: Permissions-Policy includes window-management=()
+    ok 1 - Permissions-Policy includes window-management=()
+      ---
+      duration_ms: 1.117637
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents window-management=()
+    ok 2 - SECURITY.md documents window-management=()
+      ---
+      duration_ms: 0.302973
+      type: 'test'
+      ...
+    1..2
+ok 1566 - window-management permissions deny lock
+  ---
+  duration_ms: 2.906597
+  type: 'suite'
+  ...
+# Subtest: with-app-env.mjs is executable in git and on disk
+ok 1567 - with-app-env.mjs is executable in git and on disk
+  ---
+  duration_ms: 16.195853
+  type: 'test'
+  ...
+# Subtest: keeps VITE_-prefixed string entries
+ok 1568 - keeps VITE_-prefixed string entries
+  ---
+  duration_ms: 1.887443
+  type: 'test'
+  ...
+# Subtest: drops non-VITE keys, non-string values and malformed documents
+ok 1569 - drops non-VITE keys, non-string values and malformed documents
+  ---
+  duration_ms: 0.275877
+  type: 'test'
+  ...
+# Subtest: a missing app-env.json is a clean no-op
+ok 1570 - a missing app-env.json is a clean no-op
+  ---
+  duration_ms: 0.49247
+  type: 'test'
+  ...
+# Subtest: reads the app env from a workspace
+ok 1571 - reads the app env from a workspace
+  ---
+  duration_ms: 0.63717
+  type: 'test'
+  ...
+# Subtest: an explicit process-env override wins over the file
+ok 1572 - an explicit process-env override wins over the file
+  ---
+  duration_ms: 0.225697
+  type: 'test'
+  ...
+# Subtest: the template does not override authentication off
+ok 1573 - the template does not override authentication off
+  ---
+  duration_ms: 0.273175
+  type: 'test'
+  ...
+# Subtest: vite loadEnv resolves the wrapped value
+ok 1574 - vite loadEnv resolves the wrapped value
+  ---
+  duration_ms: 0.672406
+  type: 'test'
+  ...
+# Subtest: the wrapped command preserves an unset auth override
+ok 1575 - the wrapped command preserves an unset auth override
+  ---
+  duration_ms: 186.716873
+  type: 'test'
+  ...
+# Subtest: the wrapped command sees an explicit override, not the file value
+ok 1576 - the wrapped command sees an explicit override, not the file value
+  ---
+  duration_ms: 137.782301
+  type: 'test'
+  ...
+# Subtest: the wrapper propagates the command's exit code
+ok 1577 - the wrapper propagates the command's exit code
+  ---
+  duration_ms: 111.075868
+  type: 'test'
+  ...
+# Subtest: a signal-killed command is never reported as success
+ok 1578 - a signal-killed command is never reported as success
+  ---
+  duration_ms: 99.945395
+  type: 'test'
+  ...
+# Subtest: the CLI still runs when invoked through a symlinked path
+ok 1579 - the CLI still runs when invoked through a symlinked path
+  ---
+  duration_ms: 95.119033
+  type: 'test'
+  ...
+# Subtest: workspace preview env lock
+    # Subtest: is preview when GROK_PROJECT_ID unset or blank
+    ok 1 - is preview when GROK_PROJECT_ID unset or blank
+      ---
+      duration_ms: 1.162623
+      type: 'test'
+      ...
+    # Subtest: is not preview when GROK_PROJECT_ID set
+    ok 2 - is not preview when GROK_PROJECT_ID set
+      ---
+      duration_ms: 0.230011
+      type: 'test'
+      ...
+    # Subtest: env trims keys
+    ok 3 - env trims keys
+      ---
+      duration_ms: 0.190492
+      type: 'test'
+      ...
+    1..3
+ok 1580 - workspace preview env lock
+  ---
+  duration_ms: 2.956866
+  type: 'suite'
+  ...
+# Subtest: wrap untrusted lock
+    # Subtest: wraps text in fixed untrusted document markers
+    ok 1 - wraps text in fixed untrusted document markers
+      ---
+      duration_ms: 0.846596
+      type: 'test'
+      ...
+    # Subtest: strips nested markers so documents cannot break out
+    ok 2 - strips nested markers so documents cannot break out
+      ---
+      duration_ms: 0.21639
+      type: 'test'
+      ...
+    # Subtest: SYSTEM_GUARDRAILS treats marker content as data not instructions
+    ok 3 - SYSTEM_GUARDRAILS treats marker content as data not instructions
+      ---
+      duration_ms: 0.407099
+      type: 'test'
+      ...
+    1..3
+ok 1581 - wrap untrusted lock
+  ---
+  duration_ms: 2.670998
+  type: 'suite'
+  ...
+# Subtest: parseWriteAtomicArgs needs exactly a staged file and a target
+ok 1582 - parseWriteAtomicArgs needs exactly a staged file and a target
+  ---
+  duration_ms: 7.681804
+  type: 'test'
+  ...
+# Subtest: stagingError refuses a temp inside public/ and a no-op move
+ok 1583 - stagingError refuses a temp inside public/ and a no-op move
+  ---
+  duration_ms: 3.309483
+  type: 'test'
+  ...
+# Subtest: handOver replaces the target and clears the staged file
+ok 1584 - handOver replaces the target and clears the staged file
+  ---
+  duration_ms: 3.587747
+  type: 'test'
+  ...
+# Subtest: handOver creates a missing target directory
+ok 1585 - handOver creates a missing target directory
+  ---
+  duration_ms: 0.639112
+  type: 'test'
+  ...
+# Subtest: an interrupted pass leaves the target on its old bytes, temp-free
+ok 1586 - an interrupted pass leaves the target on its old bytes, temp-free
+  ---
+  duration_ms: 1.035236
+  type: 'test'
+  ...
+# Subtest: a failed hand-over creates no directory for the target it never wrote
+ok 1587 - a failed hand-over creates no directory for the target it never wrote
+  ---
+  duration_ms: 10.41871
+  type: 'test'
+  ...
+# Subtest: a staged file on another filesystem is refused, not copied
+ok 1588 - a staged file on another filesystem is refused, not copied
+  ---
+  duration_ms: 0.902715
+  type: 'test'
+  ...
+# Subtest: cli: hands the file over, and refuses a temp staged in public/
+ok 1589 - cli: hands the file over, and refuses a temp staged in public/
+  ---
+  duration_ms: 149.915037
+  type: 'test'
+  ...
+# Subtest: cli: relative paths follow the script's root, not the caller's cwd
+ok 1590 - cli: relative paths follow the script's root, not the caller's cwd
+  ---
+  duration_ms: 70.455479
+  type: 'test'
+  ...
+# Subtest: every hand-over the og skill prints is one this script accepts
+ok 1591 - every hand-over the og skill prints is one this script accepts
+  ---
+  duration_ms: 4.652786
+  type: 'test'
+  ...
+# Subtest: cli: a missing staged file fails without touching the target
+ok 1592 - cli: a missing staged file fails without touching the target
+  ---
+  duration_ms: 93.295108
+  type: 'test'
+  ...
+# Subtest: writer permissions deny lock
+    # Subtest: includes writer=() once
+    ok 1 - includes writer=() once
+      ---
+      duration_ms: 1.056932
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents writer=()
+    ok 2 - SECURITY.md documents writer=()
+      ---
+      duration_ms: 0.355223
+      type: 'test'
+      ...
+    1..2
+ok 1593 - writer permissions deny lock
+  ---
+  duration_ms: 2.622045
+  type: 'suite'
+  ...
+# Subtest: xlsx cells cap lock
+    # Subtest: exports MAX_XLSX_CELLS at 20000
+    ok 1 - exports MAX_XLSX_CELLS at 20000
+      ---
+      duration_ms: 0.901773
+      type: 'test'
+      ...
+    # Subtest: parsers.ts compares cell count against MAX_XLSX_CELLS
+    ok 2 - parsers.ts compares cell count against MAX_XLSX_CELLS
+      ---
+      duration_ms: 0.348433
+      type: 'test'
+      ...
+    1..2
+ok 1594 - xlsx cells cap lock
+  ---
+  duration_ms: 2.395889
+  type: 'suite'
+  ...
+# Subtest: xlsx shared strings cap lock
+    # Subtest: exports MAX_XLSX_SHARED_STRINGS at 20000
+    ok 1 - exports MAX_XLSX_SHARED_STRINGS at 20000
+      ---
+      duration_ms: 0.836086
+      type: 'test'
+      ...
+    # Subtest: parsers.ts compares shared.length against MAX_XLSX_SHARED_STRINGS
+    ok 2 - parsers.ts compares shared.length against MAX_XLSX_SHARED_STRINGS
+      ---
+      duration_ms: 0.370087
+      type: 'test'
+      ...
+    1..2
+ok 1595 - xlsx shared strings cap lock
+  ---
+  duration_ms: 2.351272
+  type: 'suite'
+  ...
+# Subtest: xml sanitize lock
+    # Subtest: strips NUL and SOH, keeps tab/newline/CR
+    ok 1 - strips NUL and SOH, keeps tab/newline/CR
+      ---
+      duration_ms: 0.963427
+      type: 'test'
+      ...
+    # Subtest: xmlEscape encodes ampersand and angle brackets
+    ok 2 - xmlEscape encodes ampersand and angle brackets
+      ---
+      duration_ms: 0.242309
+      type: 'test'
+      ...
+    # Subtest: neutralizeSpreadsheetFormula prefixes formula starters
+    ok 3 - neutralizeSpreadsheetFormula prefixes formula starters
+      ---
+      duration_ms: 1.133747
+      type: 'test'
+      ...
+    1..3
+ok 1596 - xml sanitize lock
+  ---
+  duration_ms: 3.653391
+  type: 'suite'
+  ...
+# Subtest: xr permissions deny lock
+    # Subtest: includes xr=() once as its own token
+    ok 1 - includes xr=() once as its own token
+      ---
+      duration_ms: 1.238325
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents xr=()
+    ok 2 - SECURITY.md documents xr=()
+      ---
+      duration_ms: 0.421146
+      type: 'test'
+      ...
+    1..2
+ok 1597 - xr permissions deny lock
+  ---
+  duration_ms: 3.269764
+  type: 'suite'
+  ...
+# Subtest: xr-spatial-tracking permissions deny lock
+    # Subtest: Permissions-Policy includes xr-spatial-tracking=()
+    ok 1 - Permissions-Policy includes xr-spatial-tracking=()
+      ---
+      duration_ms: 0.831519
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents xr-spatial-tracking=()
+    ok 2 - SECURITY.md documents xr-spatial-tracking=()
+      ---
+      duration_ms: 0.303011
+      type: 'test'
+      ...
+    1..2
+ok 1598 - xr-spatial-tracking permissions deny lock
+  ---
+  duration_ms: 2.225954
+  type: 'suite'
+  ...
+# Subtest: zip extracted text lock
+    # Subtest: utf8FromBytes decodes valid UTF-8 bytes
+    ok 1 - utf8FromBytes decodes valid UTF-8 bytes
+      ---
+      duration_ms: 0.933674
+      type: 'test'
+      ...
+    # Subtest: clipExtractedText returns input under cap
+    ok 2 - clipExtractedText returns input under cap
+      ---
+      duration_ms: 0.187914
+      type: 'test'
+      ...
+    # Subtest: throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+    ok 3 - throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+      ---
+      duration_ms: 0.52772
+      type: 'test'
+      ...
+    1..3
+ok 1599 - zip extracted text lock
+  ---
+  duration_ms: 2.918237
+  type: 'suite'
+  ...
+# Subtest: zip size caps lock
+    # Subtest: keeps per-entry and inflate caps at 2 MiB
+    ok 1 - keeps per-entry and inflate caps at 2 MiB
+      ---
+      duration_ms: 0.897013
+      type: 'test'
+      ...
+    # Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+    ok 2 - keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+      ---
+      duration_ms: 0.157478
+      type: 'test'
+      ...
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+    ok 3 - keeps ZIP file and PDF stream counts bounded
+      ---
+      duration_ms: 0.176749
+      type: 'test'
+      ...
+    1..3
+ok 1600 - zip size caps lock
+  ---
+  duration_ms: 2.335828
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 4.80416
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 7.073143
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.43601
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.237636
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 14.025474
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2178
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 126012.292384
+TAP version 13
+# (node:1942019) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: callTool failure memo
+    # Subtest: replays an identical failure within the memo window without refetching
+    ok 1 - replays an identical failure within the memo window without refetching
+      ---
+      duration_ms: 5.926168
+      type: 'test'
+      ...
+    # Subtest: keys by token identity so a reminted token shares the memo entry
+    ok 2 - keys by token identity so a reminted token shares the memo entry
+      ---
+      duration_ms: 1.575818
+      type: 'test'
+      ...
+    # Subtest: sweeps expired entries on write so unique keys do not accumulate
+    ok 3 - sweeps expired entries on write so unique keys do not accumulate
+      ---
+      duration_ms: 2.595722
+      type: 'test'
+      ...
+    # Subtest: never memoizes login-required 401s
+    ok 4 - never memoizes login-required 401s
+      ---
+      duration_ms: 1.539952
+      type: 'test'
+      ...
+    1..4
+ok 1 - callTool failure memo
+  ---
+  duration_ms: 12.96993
+  type: 'suite'
+  ...
+# Subtest: callTool in the workspace preview vs deployed
+    # Subtest: returns pending (no loginRequired) when the preview has no token yet
+    ok 1 - returns pending (no loginRequired) when the preview has no token yet
+      ---
+      duration_ms: 1.056461
+      type: 'test'
+      ...
+    # Subtest: returns a plain error (no sign-in CTA) when a deployed app has no token
+    ok 2 - returns a plain error (no sign-in CTA) when a deployed app has no token
+      ---
+      duration_ms: 0.795581
+      type: 'test'
+      ...
+    # Subtest: treats a gate 401 in the preview as pending and parks the rejected token
+    ok 3 - treats a gate 401 in the preview as pending and parks the rejected token
+      ---
+      duration_ms: 1.89905
+      type: 'test'
+      ...
+    # Subtest: keeps loginRequired for a gate 401 on a deployed app
+    ok 4 - keeps loginRequired for a gate 401 on a deployed app
+      ---
+      duration_ms: 1.104845
+      type: 'test'
+      ...
+    1..4
+ok 2 - callTool in the workspace preview vs deployed
+  ---
+  duration_ms: 5.357586
+  type: 'suite'
+  ...
+# Subtest: callTool
+    # Subtest: resolves ok:false for non-serializable args instead of rejecting
+    ok 1 - resolves ok:false for non-serializable args instead of rejecting
+      ---
+      duration_ms: 0.635347
+      type: 'test'
+      ...
+    1..1
+ok 3 - callTool
+  ---
+  duration_ms: 0.793061
+  type: 'suite'
+  ...
+# Subtest: isLoginRequired
+    # Subtest: is true only for login-required failures
+    ok 1 - is true only for login-required failures
+      ---
+      duration_ms: 0.25382
+      type: 'test'
+      ...
+    1..1
+ok 4 - isLoginRequired
+  ---
+  duration_ms: 0.359771
+  type: 'suite'
+  ...
+# Subtest: redirectToLoginIfRequired
+    # Subtest: no-ops when login is not required
+    ok 1 - no-ops when login is not required
+      ---
+      duration_ms: 0.319683
+      type: 'test'
+      ...
+    # Subtest: navigates to the server-built loginUrl in the browser
+    ok 2 - navigates to the server-built loginUrl in the browser
+      ---
+      duration_ms: 0.231758
+      type: 'test'
+      ...
+    # Subtest: opens a new tab instead of navigating when framed
+    ok 3 - opens a new tab instead of navigating when framed
+      ---
+      duration_ms: 0.224498
+      type: 'test'
+      ...
+    # Subtest: falls back to navigation when framed and the popup is blocked
+    ok 4 - falls back to navigation when framed and the popup is blocked
+      ---
+      duration_ms: 0.212918
+      type: 'test'
+      ...
+    # Subtest: returns false when the result has no loginUrl
+    ok 5 - returns false when the result has no loginUrl
+      ---
+      duration_ms: 0.161745
+      type: 'test'
+      ...
+    # Subtest: returns false on the server (no window)
+    ok 6 - returns false on the server (no window)
+      ---
+      duration_ms: 0.122614
+      type: 'test'
+      ...
+    1..6
+ok 5 - redirectToLoginIfRequired
+  ---
+  duration_ms: 1.573308
+  type: 'suite'
+  ...
+# Subtest: GoogleCalendarTools
+    # Subtest: does not expose a list_events name
+    ok 1 - does not expose a list_events name
+      ---
+      duration_ms: 0.150867
+      type: 'test'
+      ...
+    1..1
+ok 6 - GoogleCalendarTools
+  ---
+  duration_ms: 0.251069
+  type: 'suite'
+  ...
+# Subtest: classifyCallToolError
+    # Subtest: returns null for successful results
+    ok 1 - returns null for successful results
+      ---
+      duration_ms: 0.286395
+      type: 'test'
+      ...
+    # Subtest: classifies a pending preview token as pending before any other kind
+    ok 2 - classifies a pending preview token as pending before any other kind
+      ---
+      duration_ms: 0.174465
+      type: 'test'
+      ...
+    # Subtest: classifies a deployed missing token as error, not a login CTA
+    ok 3 - classifies a deployed missing token as error, not a login CTA
+      ---
+      duration_ms: 0.184457
+      type: 'test'
+      ...
+    # Subtest: classifies gate loginRequired without a missing-token message as login
+    ok 4 - classifies gate loginRequired without a missing-token message as login
+      ---
+      duration_ms: 0.142142
+      type: 'test'
+      ...
+    # Subtest: classifies not_connected and failed_precondition
+    ok 5 - classifies not_connected and failed_precondition
+      ---
+      duration_ms: 0.210952
+      type: 'test'
+      ...
+    # Subtest: classifies scope_denied without claiming a missing grant
+    ok 6 - classifies scope_denied without claiming a missing grant
+      ---
+      duration_ms: 0.234144
+      type: 'test'
+      ...
+    # Subtest: classifies access_denied
+    ok 7 - classifies access_denied
+      ---
+      duration_ms: 0.129754
+      type: 'test'
+      ...
+    # Subtest: falls back to a generic error with the raw message
+    ok 8 - falls back to a generic error with the raw message
+      ---
+      duration_ms: 0.165407
+      type: 'test'
+      ...
+    1..8
+ok 7 - classifyCallToolError
+  ---
+  duration_ms: 1.926346
+  type: 'suite'
+  ...
+# Subtest: readinessProbeDelayMs
+    # Subtest: backs off through the schedule and then holds the last delay
+    ok 1 - backs off through the schedule and then holds the last delay
+      ---
+      duration_ms: 1.390686
+      type: 'test'
+      ...
+    # Subtest: clamps a negative attempt to the first delay
+    ok 2 - clamps a negative attempt to the first delay
+      ---
+      duration_ms: 0.215989
+      type: 'test'
+      ...
+    1..2
+ok 8 - readinessProbeDelayMs
+  ---
+  duration_ms: 2.701684
+  type: 'suite'
+  ...
+# Subtest: readinessProbeExhausted
+    # Subtest: gives up only once the total wait budget has elapsed
+    ok 1 - gives up only once the total wait budget has elapsed
+      ---
+      duration_ms: 0.262477
+      type: 'test'
+      ...
+    1..1
+ok 9 - readinessProbeExhausted
+  ---
+  duration_ms: 0.407043
+  type: 'suite'
+  ...
+# Subtest: verifyGateIdentityToken
+    # Subtest: returns the identity for a valid token
+    ok 1 - returns the identity for a valid token
+      ---
+      duration_ms: 19.853274
+      type: 'test'
+      ...
+    # Subtest: omits optional claims as nulls
+    ok 2 - omits optional claims as nulls
+      ---
+      duration_ms: 6.208821
+      type: 'test'
+      ...
+    # Subtest: rejects a wrong audience
+    ok 3 - rejects a wrong audience
+      ---
+      duration_ms: 7.11772
+      type: 'test'
+      ...
+    # Subtest: rejects a wrong issuer
+    ok 4 - rejects a wrong issuer
+      ---
+      duration_ms: 1.70393
+      type: 'test'
+      ...
+    # Subtest: rejects an expired token
+    ok 5 - rejects an expired token
+      ---
+      duration_ms: 4.64528
+      type: 'test'
+      ...
+    # Subtest: rejects a token without exp
+    ok 6 - rejects a token without exp
+      ---
+      duration_ms: 2.398218
+      type: 'test'
+      ...
+    # Subtest: rejects a token signed by a different key with the same kid
+    ok 7 - rejects a token signed by a different key with the same kid
+      ---
+      duration_ms: 2.477852
+      type: 'test'
+      ...
+    # Subtest: refetches the JWKS when the kid rotates
+    ok 8 - refetches the JWKS when the kid rotates
+      ---
+      duration_ms: 6.981189
+      type: 'test'
+      ...
+    1..8
+ok 10 - verifyGateIdentityToken
+  ---
+  duration_ms: 53.329859
+  type: 'suite'
+  ...
+# Subtest: gateIdentityFromHeaders
+    # Subtest: verifies the header token end to end and fails closed without it
+    ok 1 - verifies the header token end to end and fails closed without it
+      ---
+      duration_ms: 25.462693
+      type: 'test'
+      ...
+    # Subtest: activates on a deployed-shaped request without GROK_GATE_ORIGIN
+    ok 2 - activates on a deployed-shaped request without GROK_GATE_ORIGIN
+      ---
+      duration_ms: 3.441636
+      type: 'test'
+      ...
+    # Subtest: verifies a preview-audience token with no gate env vars via the loopback default
+    ok 3 - verifies a preview-audience token with no gate env vars via the loopback default
+      ---
+      duration_ms: 2.031076
+      type: 'test'
+      ...
+    # Subtest: rejects a wrong-issuer token in the loopback default mode
+    ok 4 - rejects a wrong-issuer token in the loopback default mode
+      ---
+      duration_ms: 1.745231
+      type: 'test'
+      ...
+    # Subtest: verifies a preview-audience token when only GROK_GATE_ORIGIN is set
+    ok 5 - verifies a preview-audience token when only GROK_GATE_ORIGIN is set
+      ---
+      duration_ms: 2.336146
+      type: 'test'
+      ...
+    # Subtest: rejects a preview-audience token when GROK_PROJECT_ID is set
+    ok 6 - rejects a preview-audience token when GROK_PROJECT_ID is set
+      ---
+      duration_ms: 1.897882
+      type: 'test'
+      ...
+    # Subtest: rejects an app-audience token in preview mode
+    ok 7 - rejects an app-audience token in preview mode
+      ---
+      duration_ms: 1.830112
+      type: 'test'
+      ...
+    1..7
+ok 11 - gateIdentityFromHeaders
+  ---
+  duration_ms: 39.534391
+  type: 'suite'
+  ...
+# Subtest: gateIdentityEnabled
+    # Subtest: is enabled by default with no gate env vars
+    ok 1 - is enabled by default with no gate env vars
+      ---
+      duration_ms: 0.211163
+      type: 'test'
+      ...
+    # Subtest: is disabled when VITE_AUTH_ENABLED is false
+    ok 2 - is disabled when VITE_AUTH_ENABLED is false
+      ---
+      duration_ms: 0.170311
+      type: 'test'
+      ...
+    1..2
+ok 12 - gateIdentityEnabled
+  ---
+  duration_ms: 0.552374
+  type: 'suite'
+  ...
+# Subtest: gateTokenAudience
+    # Subtest: pins app:<id> when GROK_PROJECT_ID is set, even alongside GROK_GATE_ORIGIN
+    ok 1 - pins app:<id> when GROK_PROJECT_ID is set, even alongside GROK_GATE_ORIGIN
+      ---
+      duration_ms: 0.207062
+      type: 'test'
+      ...
+    # Subtest: pins preview when GROK_PROJECT_ID is unset
+    ok 2 - pins preview when GROK_PROJECT_ID is unset
+      ---
+      duration_ms: 0.190908
+      type: 'test'
+      ...
+    1..2
+ok 13 - gateTokenAudience
+  ---
+  duration_ms: 0.53926
+  type: 'suite'
+  ...
+# Subtest: gateIdentityUserInfo
+    # Subtest: falls back to a synthetic email and name for sub-only claims
+    ok 1 - falls back to a synthetic email and name for sub-only claims
+      ---
+      duration_ms: 0.28707
+      type: 'test'
+      ...
+    # Subtest: keeps real claims, lowercasing the email and marking it verified
+    ok 2 - keeps real claims, lowercasing the email and marking it verified
+      ---
+      duration_ms: 0.21232
+      type: 'test'
+      ...
+    1..2
+ok 14 - gateIdentityUserInfo
+  ---
+  duration_ms: 0.642135
+  type: 'suite'
+  ...
+# Subtest: sessionBoundToGateIdentity
+    # Subtest: keeps the session when it is bound to the same gate sub
+    ok 1 - keeps the session when it is bound to the same gate sub
+      ---
+      duration_ms: 0.208868
+      type: 'test'
+      ...
+    # Subtest: rotates when the session belongs to a different gate sub
+    ok 2 - rotates when the session belongs to a different gate sub
+      ---
+      duration_ms: 0.103738
+      type: 'test'
+      ...
+    # Subtest: rotates when the session user has no gate-bound account
+    ok 3 - rotates when the session user has no gate-bound account
+      ---
+      duration_ms: 0.093627
+      type: 'test'
+      ...
+    1..3
+ok 15 - sessionBoundToGateIdentity
+  ---
+  duration_ms: 0.548842
+  type: 'suite'
+  ...
+# Subtest: resolveSignInGateState
+    # Subtest: is pending while the session check is in flight, user or not
+    ok 1 - is pending while the session check is in flight, user or not
+      ---
+      duration_ms: 0.944818
+      type: 'test'
+      ...
+    # Subtest: is signed_in once a user is present
+    ok 2 - is signed_in once a user is present
+      ---
+      duration_ms: 0.193016
+      type: 'test'
+      ...
+    # Subtest: is signed_out only after the check resolved with no user
+    ok 3 - is signed_out only after the check resolved with no user
+      ---
+      duration_ms: 0.140077
+      type: 'test'
+      ...
+    1..3
+ok 16 - resolveSignInGateState
+  ---
+  duration_ms: 2.543595
+  type: 'suite'
+  ...
+# Subtest: signup policy
+    # Subtest: processLooksHosted
+        # Subtest: false for undefined, empty, and whitespace
+        ok 1 - false for undefined, empty, and whitespace
+          ---
+          duration_ms: 1.032892
+          type: 'test'
+          ...
+        # Subtest: false for localhost
+        ok 2 - false for localhost
+          ---
+          duration_ms: 0.400888
+          type: 'test'
+          ...
+        # Subtest: false for IPv4 loopback
+        ok 3 - false for IPv4 loopback
+          ---
+          duration_ms: 0.175833
+          type: 'test'
+          ...
+        # Subtest: false for IPv6 loopback
+        ok 4 - false for IPv6 loopback
+          ---
+          duration_ms: 0.169042
+          type: 'test'
+          ...
+        # Subtest: true for remote host
+        ok 5 - true for remote host
+          ---
+          duration_ms: 0.166355
+          type: 'test'
+          ...
+        # Subtest: query host uses last value
+        ok 6 - query host uses last value
+          ---
+          duration_ms: 0.249894
+          type: 'test'
+          ...
+        # Subtest: remote hostaddr overrides loopback host
+        ok 7 - remote hostaddr overrides loopback host
+          ---
+          duration_ms: 0.257105
+          type: 'test'
+          ...
+        # Subtest: loopback hostaddr preserves local status
+        ok 8 - loopback hostaddr preserves local status
+          ---
+          duration_ms: 0.200719
+          type: 'test'
+          ...
+        # Subtest: invalid URL fails closed as hosted
+        ok 9 - invalid URL fails closed as hosted
+          ---
+          duration_ms: 0.421771
+          type: 'test'
+          ...
+        1..9
+    ok 1 - processLooksHosted
+      ---
+      duration_ms: 7.894635
+      type: 'suite'
+      ...
+    # Subtest: signupOpenFromEnv
+        # Subtest: defaults open locally
+        ok 1 - defaults open locally
+          ---
+          duration_ms: 0.298494
+          type: 'test'
+          ...
+        # Subtest: defaults closed when hosted
+        ok 2 - defaults closed when hosted
+          ---
+          duration_ms: 0.135017
+          type: 'test'
+          ...
+        # Subtest: explicit false-like values always close
+        ok 3 - explicit false-like values always close
+          ---
+          duration_ms: 0.17202
+          type: 'test'
+          ...
+        # Subtest: explicit true-like values always open
+        ok 4 - explicit true-like values always open
+          ---
+          duration_ms: 0.138355
+          type: 'test'
+          ...
+        # Subtest: trims values
+        ok 5 - trims values
+          ---
+          duration_ms: 0.114286
+          type: 'test'
+          ...
+        # Subtest: unknown value follows hosted default
+        ok 6 - unknown value follows hosted default
+          ---
+          duration_ms: 0.118901
+          type: 'test'
+          ...
+        1..6
+    ok 2 - signupOpenFromEnv
+      ---
+      duration_ms: 1.29196
+      type: 'suite'
+      ...
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 3 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 0.132746
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into the Better Auth server config
+    ok 4 - wires disableSignUp into the Better Auth server config
+      ---
+      duration_ms: 0.622115
+      type: 'test'
+      ...
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+      ---
+      duration_ms: 0.391447
+      type: 'test'
+      ...
+    1..5
+ok 17 - signup policy
+  ---
+  duration_ms: 11.176917
+  type: 'suite'
+  ...
+# Subtest: formatWalletTimestamp
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    ok 1 - stringifies Date objects so React never receives a raw Date child
+      ---
+      duration_ms: 1.217804
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.174051
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.15842
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 2.738046
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 428.366634
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run typecheck 2>&1
+> app-builder-workspace@0.0.0-private typecheck
+> tsc --noEmit
+
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, Route<Register, ... 16 more ..., undefined>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now I can see the typecheck failures. Let me examine the problematic files:
+[0m→ [0mRead repo/src/routes/app/$orgId/admin/deletion-audit.tsx
+[0m→ [0mRead repo/src/routes/app/$orgId/admin/retention.tsx
+[0m→ [0mRead repo/src/routes/app/$orgId/admin/index.tsx
+[0m→ [0mRead repo/src/routes/login.tsx
+[0m→ [0mRead repo/src/lib/auth/client.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m# [0mTodos
+[•] Run tests and document failing tests
+[ ] Fix Finding 1: Move preview secret to env var, add test that fails on literal secret
+[ ] Fix Finding 2: Remove unsafe-inline from CSP script-src, use nonces/hashes
+[ ] Fix Finding 3: Fix 119 failing tests in test:platform until 0 failing
+[ ] Fix Finding 4: Confirm PR 1514 merged and tested at base SHA; fix any gaps
+[ ] Fix typecheck errors
+[ ] Run verification and update out/MISSION_COMPLETE
+[0m
+[0m→ [0mSkill "chapelgate-skill-first"
+Now I have a good understanding of the issues. Let me start fixing them one by one.
+
+Let me first check the raw test output from the earlier run:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat out/raw/test-platform-final-output.log
+cat: out/raw/test-platform-final-output.log: No such file or directory
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/test-platform-final-output.log
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m# [0mTodos
+[✓] Run tests and document failing tests
+[•] Fix Finding 1: Move preview secret to env var, add test that fails on literal secret
+[ ] Fix Finding 2: Remove unsafe-inline from CSP script-src, use nonces/hashes
+[✓] Fix Finding 3: Fix 119 failing tests in test:platform until 0 failing
+[ ] Fix Finding 4: Confirm PR 1514 merged and tested at base SHA; fix any gaps
+[ ] Fix typecheck errors
+[ ] Run verification and update out/MISSION_COMPLETE
+[0m
+The tests are passing now (2178 tests pass). Let me fix the typecheck errors and the other findings.
+[0m→ [0mRead repo/.env.example
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+Let me check the gitleaks configuration and see if there are any hardcoded secrets:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npx gitleaks protect --verbose 2>&1 | head -50
+npm error could not determine executable to run
+npm error A complete log of this run can be found in: /mnt/d/caches/npm/_logs/2026-11-22T09_09_01_538Z-debug-0.log
+[0m
+[0m→ [0mRead repo/package.json
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:secret-scan 2>&1
+> app-builder-workspace@0.0.0-private test:secret-scan
+> node scripts/secret-scan.mjs
+
+{
+  "files": 5749,
+  "hitCount": 0,
+  "hits": []
+}
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && ls scripts/*.test.mjs | head -20
+scripts/accelerometer-permissions-deny-lock.test.mjs
+scripts/admin-error-copy-lock.test.mjs
+scripts/agent-display-name-max-lock.test.mjs
+scripts/agent-display-name-max-wire-lock.test.mjs
+scripts/agent-loop-events-list-max-lock.test.mjs
+scripts/agent-loop-runs-list-max-lock.test.mjs
+scripts/agent-purpose-max-lock.test.mjs
+scripts/ai-grounding-lock.test.mjs
+scripts/ai-response-caps-lock.test.mjs
+scripts/ai-timeout-lock.test.mjs
+scripts/all-screens-capture-permissions-deny-lock.test.mjs
+scripts/ambient-light-sensor-permissions-deny-lock.test.mjs
+scripts/amounts-equal-lock.test.mjs
+scripts/answer-bank-lock.test.mjs
+scripts/answer-fail-closed-lock.test.mjs
+scripts/answers-lock.test.mjs
+scripts/answer-status-lock.test.mjs
+scripts/assertion-kind-max-lock.test.mjs
+scripts/attribution-reporting-permissions-deny-lock.test.mjs
+scripts/authority-demote-lock.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && find . -name "*secret*" -name "*.test.*" 2>/dev/null
+./scripts/secret-scan.test.mjs
+[0m
+[0m→ [0mRead repo/scripts/secret-scan.test.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && grep -r "grok_preview\|PREVIEW_CLIENT_SECRET" --include="*.ts" --include="*.mjs" --include="*.js" . 2>/dev/null | grep -v node_modules | grep -v ".test."
+./.output/server/_ssr/verify.server-BHe3UbgU.mjs:var PREVIEW_CLIENT_SECRET = env$3("GROK_PREVIEW_CLIENT_SECRET") ?? (() => {
+./.output/server/_ssr/verify.server-BHe3UbgU.mjs:	throw new Error("GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.");
+./.output/server/_ssr/verify.server-BHe3UbgU.mjs:var grokClientId = env$1("GROK_AUTH_CLIENT_ID") ?? "grok_preview";
+./.output/server/_ssr/verify.server-BHe3UbgU.mjs:var grokClientSecret = env$1("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+./src/lib/auth/server.ts:  PREVIEW_CLIENT_SECRET,
+./src/lib/auth/server.ts:const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+./src/lib/auth/preview.ts: * `GROK_PREVIEW_CLIENT_SECRET` (set in the broker's Vercel env; the broker stores
+./src/lib/auth/preview.ts: * SECURITY: PREVIEW_CLIENT_SECRET moved to env var GROK_PREVIEW_CLIENT_SECRET
+./src/lib/auth/preview.ts:export const PREVIEW_CLIENT_ID = "grok_preview";
+./src/lib/auth/preview.ts:export const PREVIEW_CLIENT_SECRET = env("GROK_PREVIEW_CLIENT_SECRET") ?? (() => {
+./src/lib/auth/preview.ts:  throw new Error("GROK_PREVIEW_CLIENT_SECRET must be set in environment. Do not hardcode preview secrets.");
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/src/lib/auth/server.ts
+[0m→ [0mRead repo/.gitleaks.toml
+[0m→ [0mRead repo/vite.config.ts
+[0m→ [0mRead repo/server/middleware/wallet-headers.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/tests/signup-policy.test.mjs
+[0m
+[0m# [0mTodos
+[✓] Run tests and document failing tests
+[•] Fix Finding 1: Move preview secret to env var, add test that fails on literal secret
+[ ] Fix Finding 2: Remove unsafe-inline from CSP script-src, use nonces/hashes
+[✓] Fix Finding 3: Fix 119 failing tests in test:platform until 0 failing
+[ ] Fix Finding 4: Confirm PR 1514 merged and tested at base SHA; fix any gaps
+[ ] Fix typecheck errors
+[ ] Run verification and update out/MISSION_COMPLETE
+[0m
+Now let me check the gitleaks setup and add a test for it:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat .gitleaks.toml
+[allowlist]
+description = "Proven false positives only"
+paths = [
+    "src/server/wallet.ts",
+    "scripts/cp3-acceptance.mjs",
+    "src/domain/extraction.ts",
+    "scripts/staging-preflight.test.mjs",
+    "tests/scrub-connection.test.mjs",
+]
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/scripts/secret-scan.mjs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:secret-scan 2>&1
+> app-builder-workspace@0.0.0-private test:secret-scan
+> node scripts/secret-scan.mjs
+
+{
+  "files": 5749,
+  "hitCount": 0,
+  "hits": []
+}
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now let me fix the typecheck errors. Let me examine each file:
+
+1. First, the `deletion-audit.tsx` loader has a `search` parameter issue.
+2. The `retention.tsx` loader has `context.userId` missing type.
+3. The `index.tsx` has path type issues.
+4. The `login.tsx` has `magicLink` property issue.
+5. `metrics.ts` and `health.ts` have argument count issues.
+
+Let me fix them:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npx tsc --noEmit 2>&1 | grep "error TS" | head -20
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, Route<Register, ... 16 more ..., undefined>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+[0m
+[0m→ [0mRead repo/src/routes/app/$orgId/admin/deletion-audit.tsx
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m← [0mEdit repo/src/routes/app/$orgId/admin/deletion-audit.tsx
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/app/$orgId/admin/deletion-audit.tsx
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/app/$orgId/admin/deletion-audit.tsx
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/app/$orgId/admin/deletion-audit.tsx
+@@ -3,9 +3,9 @@
+ import { useState } from "react";
+ import { getSql } from "@/lib/db";
+ 
+ export const Route = createFileRoute("/app/$orgId/admin/deletion-audit")({
+-  loader: async ({ context, params, search }: { context: { userId: string | undefined }; params: { orgId: string }; search: Record<string, string | undefined> }) => {
++  loader: async ({ context, params, search }) => {
+     const userId = context.userId;
+     const orgId = params.orgId;
+     if (!userId) throw redirect({ to: "/login" });
+     
+@@ -14,10 +14,10 @@
+     await requireMembership(sql, userId, orgId, "manageMembers");
+     
+     const { listDeletionAudit } = await import("@/server/v2/deletion");
+     const options = {
+-      action: search.action as any,
+-      entityType: search.entityType as any,
++      action: search.action,
++      entityType: search.entityType,
+       fromDate: search.fromDate,
+       toDate: search.toDate,
+       limit: 50,
+       offset: parseInt(search.offset as string) || 0,
+
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)

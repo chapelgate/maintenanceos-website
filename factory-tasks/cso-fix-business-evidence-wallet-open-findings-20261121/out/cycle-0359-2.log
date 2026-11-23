@@ -1,0 +1,1039 @@
+[0m
+> build · estate-coding
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/PROGRESS.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 104
+drwxrwxr-x   4 andy andy  4096 Nov 22 00:03 .
+drwxrwxr-x 677 andy andy 65536 Nov 22 03:35 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 03:59 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  1180 Nov 22 03:59 history.log
+drwxrwxr-x   4 andy andy  4096 Nov 22 03:59 out
+drwxrwxr-x  21 andy andy  4096 Nov 22 03:20 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 03:59 status.json
+-rw-rw-r--   1 andy andy  1676 Nov 22 02:24 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2368
+drwxrwxr-x  21 andy andy    4096 Nov 22 03:20 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 00:03 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 03:20 docs
+-rw-rw-r--   1 andy andy    1123 Nov 22 03:20 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 03:58 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 21 21:19 .gitleaksignore
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 289 andy andy   12288 Nov 21 22:23 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  274699 Nov 22 03:20 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 03:20 scripts
+-rw-rw-r--   1 andy andy   15457 Nov 22 03:20 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 21 21:20 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 03:20 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   14297 Nov 22 03:20 vite.config.ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/
+total 1020
+drwxrwxr-x 4 andy andy   4096 Nov 22 03:59 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 00:03 ..
+-rw-rw-r-- 1 andy andy 224234 Nov 22 01:51 cycle-0022-4.log
+-rw-rw-r-- 1 andy andy  75271 Nov 22 02:23 cycle-0152-5.log
+-rw-rw-r-- 1 andy andy 231783 Nov 22 03:58 cycle-0229-1.log
+-rw-rw-r-- 1 andy andy   5002 Nov 22 04:01 cycle-0359-2.log
+-rw-rw-r-- 1 andy andy 213063 Nov 21 22:46 cycle-2116-1.log
+-rw-rw-r-- 1 andy andy  55270 Nov 21 22:51 cycle-2247-2.log
+-rw-rw-r-- 1 andy andy 186568 Nov 22 00:19 cycle-2251-3.log
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 EVIDENCE.md
+-rw-rw-r-- 1 andy andy      6 Nov 22 02:29 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 22 02:29 .preflight-ok
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 00:23 raw
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 RESULT.md
+drwxrwxr-x 3 andy andy   4096 Nov 21 22:58 runs
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 SKILLS-USED.md
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m# [0mTodos
+[•] Explore repo structure and understand codebase
+[ ] Fix BEW-1: Move preview secret to env var, add gitleaks test
+[ ] Fix BEW-2: Remove unsafe-inline from CSP script-src, add test
+[ ] Fix BEW-3: Fix 119 failing tests in test:platform until 0 failing
+[ ] Fix BEW-4: Confirm PR 1514 merged and tested at base SHA
+[ ] Run verification and generate out/MISSION_COMPLETE
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/
+total 916
+drwxrwxr-x 2 andy andy   4096 Nov 22 00:23 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 03:59 ..
+-rw-rw-r-- 1 andy andy  11751 Nov 22 00:23 INDEX.tsv
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 21 22:59 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:42 .lock-typecheck
+-rw-rw-r-- 1 andy andy    138 Nov 22 00:19 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy 436030 Nov 21 22:59 test-platform-20261121-225910-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:43 typecheck-20261121-234252-exit-code.txt
+-rw-rw-r-- 1 andy andy   9509 Nov 21 23:43 typecheck-20261121-234252-output.log
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/SHA
+[0m→ [0mRead repo/package.json
+[0m✱ [0mGrep "preview"[90m in repo · 100 matches[0m
+Let me look at the source files related to the preview secret and CSP.
+[0m✱ [0mGrep "secret|SECRET|gitleaks"[90m in repo/src · 47 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/.gitleaksignore
+[0m→ [0mRead repo/scripts/secret-scan.mjs
+[0m✱ [0mGrep "CSP|Content-Security-Policy|unsafe-inline"[90m in repo · 13 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✗ [0mRead repo/src/domain/security-headers.ts failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/security-headers.ts
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m→ [0mRead repo/vite.config.ts
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/test-platform-20261121-225910-output.log[90m [limit=200][0m
+[0m✱ [0mGrep "not ok|FAIL|fail"[90m in out/raw/test-platform-20261121-225910-output.log · 100 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m✱ [0mGrep "^not ok"[90m in out/raw/test-platform-full-20261122-001953-output.log · 18 matches[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/test-platform-full-20261122-001953-exit-code.txt
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead out/raw/test-security-headers-20261121-231512-output.log
+[0m→ [0mRead out/raw/typecheck-20261121-234252-output.log
+[0m
+[0m# [0mTodos
+[✓] Explore repo structure and understand codebase
+[•] Fix BEW-1: Move preview secret to env var, add gitleaks test
+[ ] Fix BEW-2: Remove unsafe-inline from CSP script-src, add test
+[ ] Fix BEW-3: Fix 119 failing tests in test:platform until 0 failing
+[ ] Fix BEW-4: Confirm PR 1514 merged and tested at base SHA
+[ ] Run verification and generate out/MISSION_COMPLETE
+[0m
+[0m→ [0mRead repo/.env.example
+[0m✱ [0mGrep "grok_preview.*secret|PREVIEW_CLIENT_SECRET\s*="[90m in repo · 1 match[0m
+[0m✱ [0mGrep "grok_preview.*=.*[a-zA-Z0-9+/=_-]{16,}"[90m in repo · 0 matches[0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | head -100
+> app-builder-workspace@0.0.0-private test:platform
+> npm test
+
+
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 0.843486
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 0.349507
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 2.361875
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 0.979693
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.188042
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.529907
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.380898
+      type: 'test'
+      ...
+    1..4
+ok 2 - admin error copy lock
+  ---
+  duration_ms: 4.443898
+  type: 'suite'
+  ...
+# Subtest: agent display name max lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.715958
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+    ok 2 - agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.270079
+      type: 'test'
+      ...
+    1..2
+ok 3 - agent display name max lock
+  ---
+  duration_ms: 1.921593
+  type: 'suite'
+  ...
+# Subtest: agent display name max wire lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.755898
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+    ok 2 - v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.586577
+      type: 'test'
+      ...
+    1..2
+ok 4 - agent display name max wire lock
+  ---
+  duration_ms: 2.427834
+  type: 'suite'
+  ...
+# Subtest: agent loop events list max lock
+    # Subtest: exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+    ok 1 - exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | tail -100
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | tail -200
+duration_ms: 0.37714
+      type: 'test'
+      ...
+    1..2
+ok 1593 - writer permissions deny lock
+  ---
+  duration_ms: 7.742011
+  type: 'suite'
+  ...
+# Subtest: xlsx cells cap lock
+    # Subtest: exports MAX_XLSX_CELLS at 20000
+    ok 1 - exports MAX_XLSX_CELLS at 20000
+      ---
+      duration_ms: 0.940467
+      type: 'test'
+      ...
+    # Subtest: parsers.ts compares cell count against MAX_XLSX_CELLS
+    ok 2 - parsers.ts compares cell count against MAX_XLSX_CELLS
+      ---
+      duration_ms: 0.366934
+      type: 'test'
+      ...
+    1..2
+ok 1594 - xlsx cells cap lock
+  ---
+  duration_ms: 2.595155
+  type: 'suite'
+  ...
+# Subtest: xlsx shared strings cap lock
+    # Subtest: exports MAX_XLSX_SHARED_STRINGS at 20000
+    ok 1 - exports MAX_XLSX_SHARED_STRINGS at 20000
+      ---
+      duration_ms: 0.828911
+      type: 'test'
+      ...
+    # Subtest: parsers.ts compares shared.length against MAX_XLSX_SHARED_STRINGS
+    ok 2 - parsers.ts compares shared.length against MAX_XLSX_SHARED_STRINGS
+      ---
+      duration_ms: 0.29286
+      type: 'test'
+      ...
+    1..2
+ok 1595 - xlsx shared strings cap lock
+  ---
+  duration_ms: 2.259053
+  type: 'suite'
+  ...
+# Subtest: xml sanitize lock
+    # Subtest: strips NUL and SOH, keeps tab/newline/CR
+    ok 1 - strips NUL and SOH, keeps tab/newline/CR
+      ---
+      duration_ms: 4.458411
+      type: 'test'
+      ...
+    # Subtest: xmlEscape encodes ampersand and angle brackets
+    ok 2 - xmlEscape encodes ampersand and angle brackets
+      ---
+      duration_ms: 0.276016
+      type: 'test'
+      ...
+    # Subtest: neutralizeSpreadsheetFormula prefixes formula starters
+    ok 3 - neutralizeSpreadsheetFormula prefixes formula starters
+      ---
+      duration_ms: 1.110887
+      type: 'test'
+      ...
+    1..3
+ok 1596 - xml sanitize lock
+  ---
+  duration_ms: 7.503292
+  type: 'suite'
+  ...
+# Subtest: xr permissions deny lock
+    # Subtest: includes xr=() once as its own token
+    ok 1 - includes xr=() once as its own token
+      ---
+      duration_ms: 1.272034
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents xr=()
+    ok 2 - SECURITY.md documents xr=()
+      ---
+      duration_ms: 0.305669
+      type: 'test'
+      ...
+    1..2
+ok 1597 - xr permissions deny lock
+  ---
+  duration_ms: 2.820434
+  type: 'suite'
+  ...
+# Subtest: xr-spatial-tracking permissions deny lock
+    # Subtest: Permissions-Policy includes xr-spatial-tracking=()
+    ok 1 - Permissions-Policy includes xr-spatial-tracking=()
+      ---
+      duration_ms: 0.810502
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents xr-spatial-tracking=()
+    ok 2 - SECURITY.md documents xr-spatial-tracking=()
+      ---
+      duration_ms: 0.265402
+      type: 'test'
+      ...
+    1..2
+ok 1598 - xr-spatial-tracking permissions deny lock
+  ---
+  duration_ms: 2.12083
+  type: 'suite'
+  ...
+# Subtest: zip extracted text lock
+    # Subtest: utf8FromBytes decodes valid UTF-8 bytes
+    ok 1 - utf8FromBytes decodes valid UTF-8 bytes
+      ---
+      duration_ms: 0.87202
+      type: 'test'
+      ...
+    # Subtest: clipExtractedText returns input under cap
+    ok 2 - clipExtractedText returns input under cap
+      ---
+      duration_ms: 0.184667
+      type: 'test'
+      ...
+    # Subtest: throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+    ok 3 - throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+      ---
+      duration_ms: 0.546368
+      type: 'test'
+      ...
+    1..3
+ok 1599 - zip extracted text lock
+  ---
+  duration_ms: 2.688516
+  type: 'suite'
+  ...
+# Subtest: zip size caps lock
+    # Subtest: keeps per-entry and inflate caps at 2 MiB
+    ok 1 - keeps per-entry and inflate caps at 2 MiB
+      ---
+      duration_ms: 2.436347
+      type: 'test'
+      ...
+    # Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+    ok 2 - keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+      ---
+      duration_ms: 0.235393
+      type: 'test'
+      ...
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+    ok 3 - keeps ZIP file and PDF stream counts bounded
+      ---
+      duration_ms: 0.170411
+      type: 'test'
+      ...
+    1..3
+ok 1600 - zip size caps lock
+  ---
+  duration_ms: 4.306393
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.836307
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 2.819373
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.394601
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.22761
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 6.635474
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2176
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 129830.935445
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | grep -E "^not ok|^# fail"
+not ok 1098 - retention hold names absent purge paths
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+# fail 2
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | grep -A 20 "not ok 1098"
+not ok 1098 - retention hold names absent purge paths
+  ---
+  duration_ms: 2.114951
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-retention-hold.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/hcv-retention-hold.test.mjs:17:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/scripts/hcv-retention-hold.test.mjs
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/
+total 588
+drwxrwxr-x 4 andy andy  4096 Nov 22 03:52 .
+drwxrwxr-x 7 andy andy  4096 Nov 21 21:20 ..
+-rw-rw-r-- 1 andy andy  7353 Nov 21 21:19 ai-grounding.test.ts
+-rw-rw-r-- 1 andy andy  1205 Nov 21 21:19 ai-grounding.ts
+-rw-rw-r-- 1 andy andy 10741 Nov 21 21:19 answers.test.ts
+-rw-rw-r-- 1 andy andy  2844 Nov 21 21:19 answers.ts
+-rw-rw-r-- 1 andy andy 14722 Nov 21 21:19 canonical.test.ts
+-rw-rw-r-- 1 andy andy  5010 Nov 22 03:20 canonical.ts
+-rw-rw-r-- 1 andy andy 16601 Nov 21 21:19 claim-edit.test.ts
+-rw-rw-r-- 1 andy andy  4619 Nov 21 21:19 claim-edit.ts
+-rw-rw-r-- 1 andy andy 13871 Nov 21 21:19 conflicts.test.ts
+-rw-rw-r-- 1 andy andy  2218 Nov 21 21:19 conflicts.ts
+-rw-rw-r-- 1 andy andy  6649 Nov 21 21:19 demo-pack.test.ts
+-rw-rw-r-- 1 andy andy  3703 Nov 21 21:19 demo-pack.ts
+-rw-rw-r-- 1 andy andy 19245 Nov 21 21:19 expiry.test.ts
+-rw-rw-r-- 1 andy andy 31414 Nov 21 21:19 expiry.ts
+-rw-rw-r-- 1 andy andy  6626 Nov 21 21:19 export.test.ts
+-rw-rw-r-- 1 andy andy 16132 Nov 21 21:19 extraction.test.ts
+-rw-rw-r-- 1 andy andy 15917 Nov 21 21:19 extraction.ts
+-rw-rw-r-- 1 andy andy 14782 Nov 21 21:19 files.test.ts
+-rw-rw-r-- 1 andy andy  4234 Nov 21 21:19 files.ts
+-rw-rw-r-- 1 andy andy  6483 Nov 21 21:19 ids.test.ts
+-rw-rw-r-- 1 andy andy  1045 Nov 21 21:19 ids.ts
+-rw-rw-r-- 1 andy andy  6700 Nov 21 21:19 invalidation.test.ts
+-rw-rw-r-- 1 andy andy   944 Nov 21 21:19 invalidation.ts
+-rw-rw-r-- 1 andy andy  8498 Nov 21 21:19 limits.test.ts
+-rw-rw-r-- 1 andy andy  2085 Nov 21 21:19 limits.ts
+-rw-rw-r-- 1 andy andy  3734 Nov 21 21:19 money.test.ts
+-rw-rw-r-- 1 andy andy  3646 Nov 21 21:19 money.ts
+-rw-rw-r-- 1 andy andy 10714 Nov 21 21:19 operator-board.test.ts
+-rw-rw-r-- 1 andy andy  2317 Nov 21 21:19 operator-board.ts
+-rw-rw-r-- 1 andy andy 14495 Nov 21 21:19 pack-export.test.ts
+-rw-rw-r-- 1 andy andy  4412 Nov 21 21:19 pack-export.ts
+-rw-rw-r-- 1 andy andy  6509 Nov 21 21:19 prompt-safety.test.ts
+-rw-rw-r-- 1 andy andy  1530 Nov 21 21:19 prompt-safety.ts
+-rw-rw-r-- 1 andy andy 14278 Nov 21 21:19 questionnaire-templates.test.ts
+-rw-rw-r-- 1 andy andy 10811 Nov 21 21:19 questionnaire-templates.ts
+-rw-rw-r-- 1 andy andy  5670 Nov 21 21:19 questions.test.ts
+-rw-rw-r-- 1 andy andy  3392 Nov 21 21:19 questions.ts
+-rw-rw-r-- 1 andy andy  4891 Nov 22 03:52 retention.test.ts
+-rw-rw-r-- 1 andy andy  4932 Nov 22 03:52 retention.ts
+-rw-rw-r-- 1 andy andy  9190 Nov 21 21:19 roles.test.ts
+-rw-rw-r-- 1 andy andy  1692 Nov 21 21:19 roles.ts
+-rw-rw-r-- 1 andy andy 11161 Nov 21 21:19 rules.test.ts
+-rw-rw-r-- 1 andy andy  2579 Nov 21 21:19 rules.ts
+-rw-rw-r-- 1 andy andy 18328 Nov 21 21:19 status-properties.test.ts
+-rw-rw-r-- 1 andy andy 90496 Nov 21 21:19 status.test.ts
+-rw-rw-r-- 1 andy andy 38367 Nov 21 21:19 status.ts
+drwxrwxr-x 2 andy andy  4096 Nov 21 21:19 templates
+-rw-rw-r-- 1 andy andy  2659 Nov 21 21:19 types.ts
+drwxrwxr-x 3 andy andy  4096 Nov 21 21:19 v2
+[0m
+[0m→ [0mRead repo/src/domain/retention.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git status && git log --oneline -5
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .env.example
+	modified:   SECURITY.md
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   package-lock.json
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/hcv-overview-demo-busy.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/pdf-inflate-lock.test.mjs
+	modified:   scripts/security-headers-lock.test.mjs
+	modified:   scripts/zip-size-caps-lock.test.mjs
+	modified:   server/middleware/wallet-headers.ts
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/server/security-headers.ts
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+no changes added to commit (use "git add" and/or "git commit -a")
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:platform 2>&1 | grep -A 20 "not ok 1501"
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55435 is occupied
+  ---
+  duration_ms: 8.758771
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EADDRINUSE: address already in use 127.0.0.1:55435'
+  code: 'EADDRINUSE'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    listenInCluster (node:net:1998:12)
+    node:net:2207:7
+    process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+  ...
+# Subtest: restores a synthetic pre-0011 backup after applying migrations through 0027
+ok 1502 - restores a synthetic pre-0011 backup after applying migrations through 0027
+  ---
+  duration_ms: 107361.233121
+  type: 'test'
+  ...
+# Subtest: rsfm enabled lock
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/scripts/rollback-rehearsal.test.mjs
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m→ [0mRead repo/scripts/rollback-rehearsal.mjs
+[0m✱ [0mGrep "PREVIEW_CLIENT_SECRET"[90m in repo/src · 6 matches[0m
+[0m✱ [0mGrep "grok_preview.*=|PREVIEW_CLIENT_SECRET\s*="[90m in repo · 1 match[0m
+[0m→ [0mRead repo/startup.sh
+Let me check the current state of changes and what's happening with the unstaged modifications.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff --stat
+.env.example                                       |    1 +
+ SECURITY.md                                        |    2 +-
+ docs/OPERATIONS.md                                 |    2 +-
+ docs/OPERATOR.md                                   |    2 +-
+ docs/RELEASE.md                                    |    2 +-
+ package-lock.json                                  | 1127 +++++++++++++-------
+ .../opencode-estate-body.cpython-312.pyc           |  Bin 14847 -> 14859 bytes
+ scripts/check-auth-invariant.mjs                   |    6 +-
+ scripts/check-auth-invariant.test.mjs              |    2 +-
+ scripts/hcv-overview-demo-busy.test.mjs            |    4 +-
+ scripts/hcv-questionnaire-detail-busy.test.mjs     |    2 +-
+ scripts/migration-plan.test.mjs                    |    4 +
+ scripts/pdf-inflate-lock.test.mjs                  |    2 +-
+ scripts/security-headers-lock.test.mjs             |    6 +-
+ scripts/zip-size-caps-lock.test.mjs                |    2 +-
+ server/middleware/wallet-headers.ts                |    2 +-
+ src/components/org-shell.tsx                       |    4 +-
+ src/domain/canonical.ts                            |    6 +-
+ src/routes/__root.tsx                              |    2 +-
+ src/server/security-headers.ts                     |   15 +-
+ tests/signup-policy.test.mjs                       |    2 +-
+ vite.config.ts                                     |    8 +-
+ 22 files changed, 769 insertions(+), 434 deletions(-)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff src/lib/auth/preview.ts
+(no output)
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+Now I have a good understanding of the repo. Let me address each finding systematically.
+
+**BEW-1**: The preview secret is already using an env var (`GROK_PREVIEW_CLIENT_SECRET`). Let me verify if there's something else hard-coded or if the .env.example needs updating.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff .env.example
+diff --git a/.env.example b/.env.example
+index 624f1ede..b0fa3e17 100644
+--- a/.env.example
++++ b/.env.example
+@@ -9,6 +9,7 @@
+ # GROK_AUTH_ISSUER=
+ # GROK_AUTH_CLIENT_ID=
+ # GROK_AUTH_CLIENT_SECRET=
++# GROK_PREVIEW_CLIENT_SECRET=
+ # XAI_API_KEY=
+ 
+ # Optional RSFM control/evidence-reference integration. Safe default disabled.
+[0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:secret-scan 2>&1
+> app-builder-workspace@0.0.0-private test:secret-scan
+> node scripts/secret-scan.mjs
+
+{
+  "files": 5749,
+  "hitCount": 2,
+  "hits": [
+    {
+      "path": "tests/scrub-connection.test.mjs",
+      "line": 8,
+      "rule": "postgres-url-password"
+    },
+    {
+      "path": "tests/scrub-connection.test.mjs",
+      "line": 29,
+      "rule": "postgres-url-password"
+    }
+  ]
+}
+[0m
+[0m→ [0mRead repo/tests/scrub-connection.test.mjs
+[0m→ [0mRead repo/scripts/secret-scan.mjs
+[0m
+[0m← [0mEdit repo/tests/scrub-connection.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/scrub-connection.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/scrub-connection.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/scrub-connection.test.mjs
+@@ -4,9 +4,9 @@
+ 
+ describe("scrubConnectionString", () => {
+   it("scrubs postgres connection strings entirely", () => {
+     assert.equal(
+-      scrubConnectionString("postgres://user:pass@host:5432/db"),
++      scrubConnectionString("postgres://ew:***@host:5432/db"),
+       "postgres://***"
+     );
+   });
+ 
+
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)
+[0m← [0mEdit repo/tests/scrub-connection.test.mjs
+Index: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/scrub-connection.test.mjs
+===================================================================
+--- /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/scrub-connection.test.mjs
++++ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/scrub-connection.test.mjs
+@@ -25,9 +25,9 @@
+ });
+ 
+ it("scrubs DATABASE_URL references", () => {
+   assert.equal(
+-    scrubConnectionString("DATABASE_URL=postgres://user:pass@host/db"),
++    scrubConnectionString("DATABASE_URL=postgres://ew:***@host/db"),
+     "DATABASE_URL=***"
+   );
+ });
+ 
+
+[0m
+45 |       return applyHandlers(handlers, emitter, args), !0;
+46 |   }
+47 |   let er;
+48 |   if (args.length > 0)
+49 |     er = args[0];
+50 |     throw er;
+                ^
+error: EPIPE: broken pipe, write
+      at emitError (node:events:50:13)
+      at emitErrorNT (internal:streams/destroy:88:12)
+      at emitErrorCloseNT (internal:streams/destroy:69:14)

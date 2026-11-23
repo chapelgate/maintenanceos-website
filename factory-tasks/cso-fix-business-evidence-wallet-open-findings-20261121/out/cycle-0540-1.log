@@ -1,0 +1,10 @@
+[0m
+> build · estate-coding
+[0m
+[0m• [0mExplore repo structure[90m Explore Agent[0m
+[0m✗ [0mExplore repo structure failed[90m Explore Agent[0m
+[91m[1mError: [0mSubagent failed (task_id: ses_df9140be8ffeouyUCYhLf1rtBv): {"message":"Service temporarily unavailable: all targets were skipped by pre-dispatch filters reset after 10s","type":"rate_limit_error","code":"ALL_TARGETS_SKIPPED"}
+[0m→ [0mRead .
+[0m→ [0mRead FINDINGS.tsv
+[0m→ [0mRead out
+[91m[1mError: [0m{"message":"nvidia/nvidia/nemotron-3-ultra-550b-a55b: provider — data: {\"error\":{\"message\":\"[503]: Provider-default slot wait exceeded budget 30000ms\",\"type\":\"server_error\",\"code\":\"RATE_LIMIT_QUEUE_TIMEOUT\"}}","type":"server_error","code":"service_unavailable"}

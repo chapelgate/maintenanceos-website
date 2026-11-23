@@ -1,0 +1,533 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead .
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/ && echo "---OUT---" && ls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/ 2>/dev/null || echo "no out dir"
+total 120
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:16 .
+drwxrwxr-x 812 andy andy 69632 Nov 23 06:52 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 23 07:00 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  7113 Nov 23 07:00 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 07:00 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 23 07:01 out
+drwxrwxr-x  25 andy andy  4096 Nov 22 21:09 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 07:01 status.json
+-rw-rw-r--   1 andy andy  5035 Nov 23 07:00 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+---OUT---
+total 3452
+drwxrwxr-x 4 andy andy   4096 Nov 23 07:01 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:16 ..
+-rw-rw-r-- 1 andy andy 224234 Nov 22 01:51 cycle-0022-4.log
+-rw-rw-r-- 1 andy andy   5373 Nov 23 00:42 cycle-0035-1.log
+-rw-rw-r-- 1 andy andy   7136 Nov 23 00:52 cycle-0047-1.log
+-rw-rw-r-- 1 andy andy 124063 Nov 23 02:08 cycle-0125-2.log
+-rw-rw-r-- 1 andy andy  75271 Nov 22 02:23 cycle-0152-5.log
+-rw-rw-r-- 1 andy andy  63307 Nov 23 02:16 cycle-0209-3.log
+-rw-rw-r-- 1 andy andy  52998 Nov 23 02:39 cycle-0216-4.log
+-rw-rw-r-- 1 andy andy 231783 Nov 22 03:58 cycle-0229-1.log
+-rw-rw-r-- 1 andy andy   7956 Nov 23 03:32 cycle-0245-1.log
+-rw-rw-r-- 1 andy andy   8882 Nov 23 03:45 cycle-0337-1.log
+-rw-rw-r-- 1 andy andy  45630 Nov 23 04:45 cycle-0346-2.log
+-rw-rw-r-- 1 andy andy  40834 Nov 22 04:34 cycle-0359-2.log
+-rw-rw-r-- 1 andy andy 168692 Nov 22 05:40 cycle-0439-1.log
+-rw-rw-r-- 1 andy andy    772 Nov 23 06:07 cycle-0540-1.log
+-rw-rw-r-- 1 andy andy 138086 Nov 22 07:10 cycle-0541-2.log
+-rw-rw-r-- 1 andy andy  10592 Nov 23 06:21 cycle-0607-2.log
+-rw-rw-r-- 1 andy andy  53397 Nov 23 06:29 cycle-0626-2.log
+-rw-rw-r-- 1 andy andy     54 Nov 23 07:01 cycle-0701-3.log
+-rw-rw-r-- 1 andy andy   1101 Nov 22 07:14 cycle-0711-3.log
+-rw-rw-r-- 1 andy andy  79789 Nov 22 08:14 cycle-0714-4.log
+-rw-rw-r-- 1 andy andy  29388 Nov 22 08:48 cycle-0814-5.log
+-rw-rw-r-- 1 andy andy 109013 Nov 22 09:14 cycle-0848-6.log
+-rw-rw-r-- 1 andy andy 137688 Nov 22 10:45 cycle-0915-1.log
+-rw-rw-r-- 1 andy andy 214184 Nov 22 12:15 cycle-1046-2.log
+-rw-rw-r-- 1 andy andy  67956 Nov 22 12:48 cycle-1216-3.log
+-rw-rw-r-- 1 andy andy 165251 Nov 22 14:14 cycle-1251-1.log
+-rw-rw-r-- 1 andy andy 159056 Nov 22 15:47 cycle-1420-1.log
+-rw-rw-r-- 1 andy andy 114378 Nov 22 17:20 cycle-1550-2.log
+-rw-rw-r-- 1 andy andy   7513 Nov 22 17:33 cycle-1721-3.log
+-rw-rw-r-- 1 andy andy 131633 Nov 22 19:33 cycle-1805-4.log
+-rw-rw-r-- 1 andy andy  72392 Nov 22 20:10 cycle-1939-1.log
+-rw-rw-r-- 1 andy andy 122883 Nov 22 21:25 cycle-2011-2.log
+-rw-rw-r-- 1 andy andy 213063 Nov 21 22:46 cycle-2116-1.log
+-rw-rw-r-- 1 andy andy   8971 Nov 22 21:43 cycle-2130-2.log
+-rw-rw-r-- 1 andy andy  81774 Nov 22 23:26 cycle-2230-1.log
+-rw-rw-r-- 1 andy andy  55270 Nov 21 22:51 cycle-2247-2.log
+-rw-rw-r-- 1 andy andy 186568 Nov 22 00:19 cycle-2251-3.log
+-rw-rw-r-- 1 andy andy 119217 Nov 23 00:31 cycle-2326-2.log
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 EVIDENCE.md
+-rw-rw-r-- 1 andy andy      6 Nov 23 05:40 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 23 05:40 .preflight-ok
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 15:47 raw
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 RESULT.md
+drwxrwxr-x 3 andy andy   4096 Nov 21 22:58 runs
+-rw-rw-r-- 1 andy andy     62 Nov 22 10:49 SKILLS-USED.md
+[0m
+[0m✗ [0mRead JOB-ID failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/JOB-ID
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead FINDINGS.tsv
+[0m→ [0mRead status.json
+[0m→ [0mRead history.log
+[0m→ [0mRead out/SKILLS-USED.md
+Let me explore the repo and understand the current state of the code.
+[0m→ [0mRead repo
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5 && echo "---" && git rev-parse HEAD
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+---
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 4674a4ff HEAD --stat
+docs/legal/DPA.md                              | 177 ++++++++++++
+ docs/legal/PRIVACY_NOTICE.md                   | 178 ++++++++++++
+ docs/legal/SUB_PROCESSOR_LIST.md               | 139 ++++++++++
+ docs/legal/TERMS_OF_SERVICE.md                 | 195 +++++++++++++
+ migrations/0002_evidence_wallet.sql            |   1 +
+ migrations/0028_ai_extraction_optin.sql        |   7 +
+ migrations/0029_retention_deletion_audit.sql   |  50 ++++
+ src/components/ui/alert.tsx                    |  28 ++
+ src/components/ui/label.tsx                    |  17 ++
+ src/components/ui/switch.tsx                   |  29 ++
+ src/domain/retention.test.ts                   | 136 +++++++++
+ src/domain/retention.ts                        | 135 +++++++++
+ src/lib/auth/client.ts                         |   8 +-
+ src/lib/auth/council-sso.ts                    |  56 ++++
+ src/lib/auth/magic-link.ts                     |  17 ++
+ src/lib/auth/providers.ts                      |   6 +
+ src/lib/auth/server.ts                         |  42 ++-
+ src/routes/api/v2/deletion.ts                  | 130 +++++++++
+ src/routes/api/v2/retention.ts                 |  47 ++++
+ src/routes/app/$orgId/admin/deletion-audit.tsx | 200 ++++++++++++++
+ src/routes/app/$orgId/admin/index.tsx          |  99 ++++++-
+ src/routes/app/$orgId/admin/retention.tsx      | 247 +++++++++++++++++
+ src/routes/login.tsx                           |  72 ++++-
+ src/server/fns.ts                              | 207 ++++++++++++++
+ src/server/v2/deletion.ts                      | 335 ++++++++++++++++++++++
+ src/server/v2/retention.ts                     | 292 ++++++++++++++++++++
+ src/server/wallet.ts                           |  28 +-
+ tests/retention-deletion.test.mjs              | 368 +++++++++++++++++++++++++
+ tests/xai-optin.test.mjs                       |  96 +++++++
+ 29 files changed, 3333 insertions(+), 9 deletions(-)
+[0m
+[0m✱ [0mGrep "preview|secret|env"[90m in repo/src · 100 matches[0m
+[0m✱ [0mGrep "unsafe-inline|script-src|CSP"[90m in repo · 29 matches[0m
+Now let me look at the specific issues. Let me check the test failures and the CSP issue:
+[0m→ [0mRead repo/vite.config.ts
+[0m→ [0mRead repo/src/server/security-headers.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npx vitest run --reporter=verbose 2>&1 | head -100
+npm warn exec The following package was not found and will be installed: vitest@5.1.1
+Warning: Route file "/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/api/v2/deletion.ts" does not export a Route. This file will not be included in the route tree.
+
+If this file is not intended to be a route, you can exclude it using one of these options:
+  1. Rename the file to "/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/api/v2/-deletion.ts" (prefix with "-")
+  2. Use 'routeFileIgnorePattern' in your config to match this file
+
+Current configuration:
+  routeFileIgnorePrefix: "-"
+  routeFileIgnorePattern: undefined
+Warning: Route file "/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/api/v2/retention.ts" does not export a Route. This file will not be included in the route tree.
+
+If this file is not intended to be a route, you can exclude it using one of these options:
+  1. Rename the file to "/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/routes/api/v2/-retention.ts" (prefix with "-")
+  2. Use 'routeFileIgnorePattern' in your config to match this file
+
+Current configuration:
+  routeFileIgnorePrefix: "-"
+  routeFileIgnorePattern: undefined
+
+ RUN  v5.1.1 /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+
+TAP version 13
+# Subtest: WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+    # Subtest: maintains >= 4.5:1 normal-text contrast on both paper and paper-2 surfaces
+    ok 1 - maintains >= 4.5:1 normal-text contrast on both paper and paper-2 surfaces
+      ---
+      duration_ms: 1.582738
+      type: 'test'
+      ...
+    # Subtest: defines visible keyboard focus indicator (:focus-visible) and prefers-reduced-motion rules
+    ok 2 - defines visible keyboard focus indicator (:focus-visible) and prefers-reduced-motion rules
+      ---
+      duration_ms: 2.284325
+      type: 'test'
+      ...
+    1..2
+ok 1 - WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+  ---
+  duration_ms: 4.913069
+  type: 'suite'
+  ...
+# Subtest: WCAG 2.2 AA shell, skip link, landmarks, and status badges
+    # Subtest: provides a skip-to-content link targeting \#main in __root.tsx
+    ok 1 - provides a skip-to-content link targeting \#main in __root.tsx
+      ---
+      duration_ms: 0.302819
+      type: 'test'
+      ...
+    # Subtest: exposes semantic landmarks, aria-labels, and 44x44 mobile menu toggle in OrgShell
+    ok 2 - exposes semantic landmarks, aria-labels, and 44x44 mobile menu toggle in OrgShell
+      ---
+      duration_ms: 0.388449
+      type: 'test'
+      ...
+    # Subtest: uses high-contrast text tokens in StatusBadge and avoids muted text on paper-2
+    ok 3 - uses high-contrast text tokens in StatusBadge and avoids muted text on paper-2
+      ---
+      duration_ms: 0.231885
+      type: 'test'
+      ...
+    1..3
+ok 2 - WCAG 2.2 AA shell, skip link, landmarks, and status badges
+  ---
+  duration_ms: 1.188882
+  type: 'suite'
+  ...
+# Subtest: WCAG 2.2 AA route headings, form labels, error associations, and live regions
+    # Subtest: gives every owned route an h1 heading and no skipped heading levels
+    ok 1 - gives every owned route an h1 heading and no skipped heading levels
+      ---
+      duration_ms: 1.530428
+      type: 'test'
+      ...
+    # Subtest: wires form error states with aria-invalid, aria-describedby, and role='alert'
+    ok 2 - wires form error states with aria-invalid, aria-describedby, and role='alert'
+      ---
+      duration_ms: 1.416489
+      type: 'test'
+      ...
+    # Subtest: ensures every input, select, and textarea in owned routes has an enclosing label or aria-label
+    ok 3 - ensures every input, select, and textarea in owned routes has an enclosing label or aria-label
+      ---
+      duration_ms: 4.805457
+      type: 'test'
+      ...
+    # Subtest: does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+    ok 4 - does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+      ---
+      duration_ms: 1.949071
+      type: 'test'
+      ...
+    # Subtest: uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+    ok 5 - uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+      ---
+      duration_ms: 0.760193
+      type: 'test'
+      ...
+    1..5
+ok 3 - WCAG 2.2 AA route headings, form labels, error associations, and live regions
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat package.json | grep -A 30 '"scripts"'
+"scripts": {
+    "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port ${EW_HTTP_PORT:-8080}",
+    "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate && node scripts/copy-pglite-assets.mjs",
+    "db:migrate": "node scripts/migrate.mjs",
+    "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
+    "preview": "node scripts/with-app-env.mjs vite preview",
+    "preview:restart": "node scripts/preview.mjs restart",
+    "preview:stop": "node scripts/preview.mjs stop",
+    "sbom": "npm sbom --sbom-format cyclonedx",
+    "typecheck": "tsc --noEmit",
+    "check:auth": "node scripts/check-auth-invariant.mjs",
+    "test": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts",
+    "test:domain": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test src/domain/*.test.ts src/domain/v2/*.test.ts src/domain/v2/agent-loop/*.test.ts",
+    "test:integration": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/*.test.mjs",
+    "test:control-mcp": "node --test tests/control-mcp.test.mjs",
+    "test:app": "npm run test:domain && npm run test:integration",
+    "test:mutation-isolation": "node scripts/mutation-isolation.mjs",
+    "test:live-idor": "node scripts/live-http-idor.mjs",
+    "test:gateway-cert": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs scripts/gateway-phase-o-cert.mjs",
+    "test:concurrency-pg": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/concurrency-pg.test.mjs",
+    "test:persistence": "node --experimental-strip-types --import ./scripts/ts-test-register.mjs scripts/pg-restart-persistence.mjs",
+    "test:http-persistence": "node scripts/http-restart-persistence.mjs",
+    "test:backup": "node scripts/pg-backup-restore.mjs",
+    "test:hosted-probe": "node scripts/hosted-probe.mjs",
+    "test:hosted-preflight": "node scripts/staging-preflight.mjs",
+    "test:hosted-acceptance": "node scripts/hosted-acceptance.mjs",
+    "test:secret-scan": "node scripts/secret-scan.mjs",
+    "pg:start": "node scripts/pg-local.mjs start",
+    "pg:stop": "node scripts/pg-local.mjs stop",
+    "pg:status": "node scripts/pg-local.mjs status",
+    "test:platform": "npm test",
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npx vitest run --reporter=verbose 2>&1 | tail -100
+FAIL  src/domain/v2/inbox-ingestion.test.ts [ src/domain/v2/inbox-ingestion.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/inbox-ingestion.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[983/1004]⎯
+
+ FAIL  src/domain/v2/kill-switches.test.ts [ src/domain/v2/kill-switches.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/kill-switches.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[984/1004]⎯
+
+ FAIL  src/domain/v2/live-adapters.test.ts [ src/domain/v2/live-adapters.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/live-adapters.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[985/1004]⎯
+
+ FAIL  src/domain/v2/obligation-key-limits.test.ts [ src/domain/v2/obligation-key-limits.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/obligation-key-limits.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[986/1004]⎯
+
+ FAIL  src/domain/v2/obligation-limits.test.ts [ src/domain/v2/obligation-limits.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/obligation-limits.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[987/1004]⎯
+
+ FAIL  src/domain/v2/obligations.test.ts [ src/domain/v2/obligations.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/obligations.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[988/1004]⎯
+
+ FAIL  src/domain/v2/opportunities.test.ts [ src/domain/v2/opportunities.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/opportunities.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[989/1004]⎯
+
+ FAIL  src/domain/v2/opportunity-discovery.test.ts [ src/domain/v2/opportunity-discovery.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/opportunity-discovery.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[990/1004]⎯
+
+ FAIL  src/domain/v2/opportunity-prep.test.ts [ src/domain/v2/opportunity-prep.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/opportunity-prep.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[991/1004]⎯
+
+ FAIL  src/domain/v2/org-export.test.ts [ src/domain/v2/org-export.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/org-export.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[992/1004]⎯
+
+ FAIL  src/domain/v2/pack-autofill.test.ts [ src/domain/v2/pack-autofill.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/pack-autofill.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[993/1004]⎯
+
+ FAIL  src/domain/v2/policy.test.ts [ src/domain/v2/policy.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/policy.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[994/1004]⎯
+
+ FAIL  src/domain/v2/preference-learning.test.ts [ src/domain/v2/preference-learning.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/preference-learning.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[995/1004]⎯
+
+ FAIL  src/domain/v2/quotes.test.ts [ src/domain/v2/quotes.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/quotes.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[996/1004]⎯
+
+ FAIL  src/domain/v2/renewals.test.ts [ src/domain/v2/renewals.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/renewals.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[997/1004]⎯
+
+ FAIL  src/domain/v2/resolver-types.test.ts [ src/domain/v2/resolver-types.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/resolver-types.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[998/1004]⎯
+
+ FAIL  src/domain/v2/resolver.test.ts [ src/domain/v2/resolver.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/resolver.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[999/1004]⎯
+
+ FAIL  src/domain/v2/template-limits.test.ts [ src/domain/v2/template-limits.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/template-limits.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1000/1004]⎯
+
+ FAIL  src/domain/v2/temporal.test.ts [ src/domain/v2/temporal.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/temporal.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1001/1004]⎯
+
+ FAIL  src/domain/v2/workflows.test.ts [ src/domain/v2/workflows.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/workflows.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1002/1004]⎯
+
+ FAIL  src/domain/v2/agent-loop/loop.test.ts [ src/domain/v2/agent-loop/loop.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/agent-loop/loop.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1003/1004]⎯
+
+ FAIL  src/domain/v2/agent-loop/model-provider.test.ts [ src/domain/v2/agent-loop/model-provider.test.ts ]
+Error: No test suite found in file /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/src/domain/v2/agent-loop/model-provider.test.ts
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1004/1004]⎯
+
+
+ Test Files  1004 failed (1004)
+      Tests  no tests
+   Start at  07:07:41
+   Duration  125.99s (transform 61%, import 35%, worker 3%)
+
+    Isolate  1004 workers spawned · ~328ms startup each (spawn + environment, per file)
+             at least ~21.61s faster with isolate: false — reuses workers across files instead of one per file
+
+close timed out after 10000ms
+Tests closed successfully but something prevents 2 Vite servers from exiting
+You can try to identify the cause by enabling "hanging-process" reporter. See https://vitest.dev/guide/reporters.html#hanging-process-reporter
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm test 2>&1 | tail -60
+type: 'test'
+      ...
+    # Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+    ok 2 - keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+      ---
+      duration_ms: 0.171952
+      type: 'test'
+      ...
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+    ok 3 - keeps ZIP file and PDF stream counts bounded
+      ---
+      duration_ms: 0.149223
+      type: 'test'
+      ...
+    1..3
+ok 1600 - zip size caps lock
+  ---
+  duration_ms: 2.343701
+  type: 'suite'
+  ...
+# Subtest: zip slip lock
+    # Subtest: returns a stored member and skips directory entries
+    ok 1 - returns a stored member and skips directory entries
+      ---
+      duration_ms: 1.824289
+      type: 'test'
+      ...
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    ok 2 - rejects parent segments, absolute names, backslashes, and NUL
+      ---
+      duration_ms: 3.293335
+      type: 'test'
+      ...
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    ok 3 - rejects ZIP64 and archives with more than 64 entries
+      ---
+      duration_ms: 0.372059
+      type: 'test'
+      ...
+    # Subtest: stops extracted text at 512 KiB
+    ok 4 - stops extracted text at 512 KiB
+      ---
+      duration_ms: 0.20656
+      type: 'test'
+      ...
+    1..4
+ok 1601 - zip slip lock
+  ---
+  duration_ms: 7.03194
+  type: 'suite'
+  ...
+1..1601
+# tests 2178
+# suites 320
+# pass 2177
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 122431.371678
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm test 2>&1 | grep -E "^(FAIL|FAIL)" | head -20
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm test 2>&1 | grep -E "(fail|FAIL|FAIL)" | head -30
+# Subtest: answer fail-closed lock
+    # Subtest: ships fail-closed text even when a stored answer claims the requirement is met
+    ok 2 - ships fail-closed text even when a stored answer claims the requirement is met
+    # Subtest: treats only RED, EXPIRED, and CONFLICT as fail-closed
+    ok 4 - treats only RED, EXPIRED, and CONFLICT as fail-closed
+ok 15 - answer fail-closed lock
+    # Subtest: draftAnswerText canned wording for fail-closed statuses
+    ok 4 - draftAnswerText canned wording for fail-closed statuses
+    # Subtest: shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    ok 5 - shippedAnswerText ignores confirmatory stored text for fail-closed statuses
+    # Subtest: locks fail-closed wording for RED/EXPIRED/CONFLICT
+    ok 1 - locks fail-closed wording for RED/EXPIRED/CONFLICT
+    # Subtest: never ships confirmatory wording on fail-closed status
+    ok 2 - never ships confirmatory wording on fail-closed status
+# Subtest: cli: a bad argument fails with JSON on stderr
+ok 46 - cli: a bad argument fails with JSON on stderr
+# Subtest: cli: a non-game with no card fails too — the pass exists to produce one
+ok 47 - cli: a non-game with no card fails too — the pass exists to produce one
+    # Subtest: evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+    ok 3 - evaluateBrowserAction fail-closed on kill switches, host, dry-run submit
+# Subtest: degenerate current verdict fails closed
+ok 77 - degenerate current verdict fails closed
+# Subtest: baselineComparison fails closed on malformed or wrong-shape baselines
+ok 80 - baselineComparison fails closed on malformed or wrong-shape baselines
+# Subtest: exitCodeFor: navigation failure in any viewport exits 1, beating errors
+ok 90 - exitCodeFor: navigation failure in any viewport exits 1, beating errors
+# Subtest: exitCodeFor: no viewport data is a failure
+ok 92 - exitCodeFor: no viewport data is a failure
+    # Subtest: maps workerLabel and fail-closed payloadHints for known refs
+    ok 1 - maps workerLabel and fail-closed payloadHints for known refs
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm test 2>&1 | grep -E "^\s+FAIL\s|^\s+fail" | head -20
+failureType: 'testCodeFailure'
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm test 2>&1 | grep -B 5 "FAIL" | head -30
+---
+  duration_ms: 13.961093
+  type: 'suite'
+  ...
+# Subtest: kill switches lock
+    # Subtest: KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+    ok 1 - KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm test 2>&1 | grep -E "not ok|^# fail|FAIL" | head -20
+# Subtest: KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+    ok 1 - KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+not ok 1501 - free-port chooser returns a different non-reserved port when 127.0.0.1:55436 is occupied
+# fail 1
+[0m
+[0m✱ [0mGrep "free-port chooser"[90m in repo · 1 match[0m
+[0m→ [0mRead repo/scripts/rollback-rehearsal.test.mjs
+[0m→ [0mRead repo/scripts/rollback-rehearsal.mjs
+Let me run the failing test specifically to understand the failure:
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test scripts/rollback-rehearsal.test.mjs 2>&1 | head -60
+TAP version 13
+# Subtest: free-port chooser returns a different non-reserved port when 127.0.0.1:55436 is occupied
+not ok 1 - free-port chooser returns a different non-reserved port when 127.0.0.1:55436 is occupied
+  ---
+  duration_ms: 7.879325
+  type: 'test'
+  location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/scripts/rollback-rehearsal.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: 'listen EADDRINUSE: address already in use 127.0.0.1:55436'
+  code: 'EADDRINUSE'
+  stack: |-
+    Server.setupListenHandle [as _listen2] (node:net:1941:16)
+    listenInCluster (node:net:1998:12)
+    node:net:2207:7
+    process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+  ...
+# Subtest: restores a synthetic pre-0011 backup after applying migrations through 0027
+ok 2 - restores a synthetic pre-0011 backup after applying migrations through 0027
+  ---
+  duration_ms: 111378.026279
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 111793.528427
+[0m
+Let me check the CSP issue more carefully and find the hardcoded preview secret:
+[0m✱ [0mGrep "PREVIEW_SECRET|preview.*secret|previewSecret"[90m in repo · 3 matches[0m
+[0m✱ [0mGrep "gitleaks"[90m in repo · 1 match[0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && cat .gitleaks.toml
+[allowlist]
+description = "Proven false positives only"
+paths = [
+    "src/server/wallet.ts",
+    "scripts/cp3-acceptance.mjs",
+    "src/domain/extraction.ts",
+    "scripts/staging-preflight.test.mjs",
+    "tests/scrub-connection.test.mjs",
+]
+[0m

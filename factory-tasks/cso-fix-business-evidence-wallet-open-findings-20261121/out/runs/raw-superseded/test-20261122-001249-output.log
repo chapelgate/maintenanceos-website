@@ -1,0 +1,60 @@
+# rt test | 20261122-001249 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: node --experimental-strip-types --test scripts/migration-plan.test.mjs
+TAP version 13
+# Subtest: _migrations keys on basename, not path
+ok 1 - _migrations keys on basename, not path
+  ---
+  duration_ms: 1.115189
+  type: 'test'
+  ...
+# Subtest: a file already applied from another directory does not re-apply
+ok 2 - a file already applied from another directory does not re-apply
+  ---
+  duration_ms: 1.217591
+  type: 'test'
+  ...
+# Subtest: pending migrations are returned in name order
+ok 3 - pending migrations are returned in name order
+  ---
+  duration_ms: 14.413859
+  type: 'test'
+  ...
+# Subtest: non-.sql entries are dropped (readdir also yields the auth/ directory)
+ok 4 - non-.sql entries are dropped (readdir also yields the auth/ directory)
+  ---
+  duration_ms: 0.20537
+  type: 'test'
+  ...
+# Subtest: the auth schema copy ships in the globbed migration directory
+ok 5 - the auth schema copy ships in the globbed migration directory
+  ---
+  duration_ms: 0.688182
+  type: 'test'
+  ...
+# Subtest: a database that already applied production 0001-0010 only has 0011-0027 pending
+ok 6 - a database that already applied production 0001-0010 only has 0011-0027 pending
+  ---
+  duration_ms: 0.283373
+  type: 'test'
+  ...
+# Subtest: this workspace's auth schema copy is byte-identical to its source
+ok 7 - this workspace's auth schema copy is byte-identical to its source
+  ---
+  duration_ms: 1.545575
+  type: 'test'
+  ...
+# Subtest: the copy check reads both files and catches an edit
+ok 8 - the copy check reads both files and catches an edit
+  ---
+  duration_ms: 1.011551
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 146.954387

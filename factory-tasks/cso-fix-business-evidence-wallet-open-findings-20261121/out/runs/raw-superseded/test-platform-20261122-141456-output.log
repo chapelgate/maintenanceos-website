@@ -1,0 +1,6 @@
+# rt test-platform | 20261122-141456 | sha a61f1a8be38615bf994143d074da05b9535fdfbb | cwd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+# cmd: timeout 180 npm run test:platform
+
+> app-builder-workspace@0.0.0-private test:platform
+> npm test
+

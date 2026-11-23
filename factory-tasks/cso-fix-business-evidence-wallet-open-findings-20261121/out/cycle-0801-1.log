@@ -1,0 +1,189 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 120
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:16 .
+drwxrwxr-x 820 andy andy 69632 Nov 23 08:00 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 23 08:00 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  7470 Nov 23 08:00 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 08:00 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 23 08:01 out
+drwxrwxr-x  25 andy andy  4096 Nov 22 21:09 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 08:01 status.json
+-rw-rw-r--   1 andy andy  5279 Nov 23 07:45 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2372
+drwxrwxr-x  25 andy andy    4096 Nov 22 21:09 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   5 andy andy    4096 Nov 23 07:06 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 18:42 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 23 06:14 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 293 andy andy   12288 Nov 23 07:09 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 18:42 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 18:42 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 21:09 test-results
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 18:42 vite.config.ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/ /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/ 2>/dev/null
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/:
+total 3496
+drwxrwxr-x 4 andy andy   4096 Nov 23 08:01 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:16 ..
+-rw-rw-r-- 1 andy andy 224234 Nov 22 01:51 cycle-0022-4.log
+-rw-rw-r-- 1 andy andy   5373 Nov 23 00:42 cycle-0035-1.log
+-rw-rw-r-- 1 andy andy   7136 Nov 23 00:52 cycle-0047-1.log
+-rw-rw-r-- 1 andy andy 124063 Nov 23 02:08 cycle-0125-2.log
+-rw-rw-r-- 1 andy andy  75271 Nov 22 02:23 cycle-0152-5.log
+-rw-rw-r-- 1 andy andy  63307 Nov 23 02:16 cycle-0209-3.log
+-rw-rw-r-- 1 andy andy  52998 Nov 23 02:39 cycle-0216-4.log
+-rw-rw-r-- 1 andy andy 231783 Nov 22 03:58 cycle-0229-1.log
+-rw-rw-r-- 1 andy andy   7956 Nov 23 03:32 cycle-0245-1.log
+-rw-rw-r-- 1 andy andy   8882 Nov 23 03:45 cycle-0337-1.log
+-rw-rw-r-- 1 andy andy  45630 Nov 23 04:45 cycle-0346-2.log
+-rw-rw-r-- 1 andy andy  40834 Nov 22 04:34 cycle-0359-2.log
+-rw-rw-r-- 1 andy andy 168692 Nov 22 05:40 cycle-0439-1.log
+-rw-rw-r-- 1 andy andy    772 Nov 23 06:07 cycle-0540-1.log
+-rw-rw-r-- 1 andy andy 138086 Nov 22 07:10 cycle-0541-2.log
+-rw-rw-r-- 1 andy andy  10592 Nov 23 06:21 cycle-0607-2.log
+-rw-rw-r-- 1 andy andy  53397 Nov 23 06:29 cycle-0626-2.log
+-rw-rw-r-- 1 andy andy  30011 Nov 23 07:45 cycle-0701-3.log
+-rw-rw-r-- 1 andy andy   1101 Nov 22 07:14 cycle-0711-3.log
+-rw-rw-r-- 1 andy andy  79789 Nov 22 08:14 cycle-0714-4.log
+-rw-rw-r-- 1 andy andy   7877 Nov 23 07:55 cycle-0745-1.log
+-rw-rw-r-- 1 andy andy    864 Nov 23 08:01 cycle-0801-1.log
+-rw-rw-r-- 1 andy andy  29388 Nov 22 08:48 cycle-0814-5.log
+-rw-rw-r-- 1 andy andy 109013 Nov 22 09:14 cycle-0848-6.log
+-rw-rw-r-- 1 andy andy 137688 Nov 22 10:45 cycle-0915-1.log
+-rw-rw-r-- 1 andy andy 214184 Nov 22 12:15 cycle-1046-2.log
+-rw-rw-r-- 1 andy andy  67956 Nov 22 12:48 cycle-1216-3.log
+-rw-rw-r-- 1 andy andy 165251 Nov 22 14:14 cycle-1251-1.log
+-rw-rw-r-- 1 andy andy 159056 Nov 22 15:47 cycle-1420-1.log
+-rw-rw-r-- 1 andy andy 114378 Nov 22 17:20 cycle-1550-2.log
+-rw-rw-r-- 1 andy andy   7513 Nov 22 17:33 cycle-1721-3.log
+-rw-rw-r-- 1 andy andy 131633 Nov 22 19:33 cycle-1805-4.log
+-rw-rw-r-- 1 andy andy  72392 Nov 22 20:10 cycle-1939-1.log
+-rw-rw-r-- 1 andy andy 122883 Nov 22 21:25 cycle-2011-2.log
+-rw-rw-r-- 1 andy andy 213063 Nov 21 22:46 cycle-2116-1.log
+-rw-rw-r-- 1 andy andy   8971 Nov 22 21:43 cycle-2130-2.log
+-rw-rw-r-- 1 andy andy  81774 Nov 22 23:26 cycle-2230-1.log
+-rw-rw-r-- 1 andy andy  55270 Nov 21 22:51 cycle-2247-2.log
+-rw-rw-r-- 1 andy andy 186568 Nov 22 00:19 cycle-2251-3.log
+-rw-rw-r-- 1 andy andy 119217 Nov 23 00:31 cycle-2326-2.log
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 EVIDENCE.md
+-rw-rw-r-- 1 andy andy      6 Nov 23 07:45 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 23 07:45 .preflight-ok
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 15:47 raw
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 RESULT.md
+drwxrwxr-x 3 andy andy   4096 Nov 21 22:58 runs
+-rw-rw-r-- 1 andy andy     62 Nov 22 10:49 SKILLS-USED.md
+
+/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/:
+total 1928
+drwxrwxr-x 2 andy andy   4096 Nov 22 15:47 .
+drwxrwxr-x 4 andy andy   4096 Nov 23 08:01 ..
+-rw-rw-r-- 1 andy andy  19031 Nov 22 15:47 INDEX.tsv
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:09 lint-20261122-150950-exit-code.txt
+-rw-rw-r-- 1 andy andy   2272 Nov 22 15:09 lint-20261122-150950-output.log
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:09 .lock-lint
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:18 .lock-test
+-rw-rw-r-- 1 andy andy      0 Nov 22 14:24 .lock-test-domain
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:08 .lock-test_domain-092b48
+-rw-rw-r-- 1 andy andy      0 Nov 22 14:31 .lock-test-integration
+-rw-rw-r-- 1 andy andy      0 Nov 22 14:22 .lock-test-platform
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:44 .lock-test_platform-74dbd3
+-rw-rw-r-- 1 andy andy      0 Nov 22 00:19 .lock-test-platform-full
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:16 .lock-test_secret-scan-895b8f
+-rw-rw-r-- 1 andy andy      0 Nov 21 23:15 .lock-test-security-headers
+-rw-rw-r-- 1 andy andy      0 Nov 22 15:47 .lock-typecheck
+-rw-rw-r-- 1 andy andy     41 Nov 22 17:32 SHA
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:18 test-20261122-001855-exit-code.txt
+-rw-rw-r-- 1 andy andy   2294 Nov 22 00:18 test-20261122-001855-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:08 test_domain-092b48-20261122-150847-exit-code.txt
+-rw-rw-r-- 1 andy andy 286161 Nov 22 15:08 test_domain-092b48-20261122-150847-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 14:25 test-domain-20261122-142458-exit-code.txt
+-rw-rw-r-- 1 andy andy 286338 Nov 22 14:25 test-domain-20261122-142458-output.log
+-rw-rw-r-- 1 andy andy   6666 Nov 22 14:32 test-integration-20261122-143132-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 14:24 test-platform-20261122-142228-exit-code.txt
+-rw-rw-r-- 1 andy andy 423561 Nov 22 14:24 test-platform-20261122-142228-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:46 test_platform-74dbd3-20261122-154400-exit-code.txt
+-rw-rw-r-- 1 andy andy 423555 Nov 22 15:46 test_platform-74dbd3-20261122-154400-output.log
+-rw-rw-r-- 1 andy andy    306 Nov 22 07:10 test-platform-final-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 00:23 test-platform-full-20261122-001953-exit-code.txt
+-rw-rw-r-- 1 andy andy 427558 Nov 22 00:23 test-platform-full-20261122-001953-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:16 test_secret-scan-895b8f-20261122-151615-exit-code.txt
+-rw-rw-r-- 1 andy andy    368 Nov 22 15:16 test_secret-scan-895b8f-20261122-151615-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 21 23:15 test-security-headers-20261121-231512-exit-code.txt
+-rw-rw-r-- 1 andy andy   1383 Nov 21 23:15 test-security-headers-20261121-231512-output.log
+-rw-rw-r-- 1 andy andy      2 Nov 22 15:47 typecheck-20261122-154724-exit-code.txt
+-rw-rw-r-- 1 andy andy   6663 Nov 22 15:47 typecheck-20261122-154724-output.log
+[0m
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m# [0mTodos
+[ ] Fix BEW-1: Move hard-coded preview secret to env var, add gitleaks test
+[ ] Fix BEW-2: Remove unsafe-inline from CSP script-src, add nonces/headers, test
+[ ] Fix BEW-3/BEW-5: Fix 119 failing tests out of 2176 in test:platform
+[ ] Fix BEW-4: Confirm PR 1514 merged and tested at base SHA
+[ ] Run all tests, generate RESULT.md and MISSION_COMPLETE
+[0m
+Now I understand the task. There are 5 findings to fix. Let me explore the repo structure and start tackling them one by one.
+[91m[1mError: [0m{"message":"nvidia/nvidia/nemotron-3-ultra-550b-a55b: rate limit — All credentials for model nvidia/nemotron-3-ultra-550b-a55b are cooling down (HTTP 429) (reset after 1m 36s)"}

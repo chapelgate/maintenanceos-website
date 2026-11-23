@@ -1,0 +1,149 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead .
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/repo 2>/dev/null || echo "No repo dir"
+total 44
+drwxrwxr-x  9 andy andy  4096 Nov 21 21:54 .
+drwxrwxr-x 61 andy andy 12288 Nov 23 03:35 ..
+drwxrwxr-x 23 andy andy  4096 Nov 23 01:28 business-evidence-wallet
+drwxrwxr-x 21 andy andy  4096 Nov 21 22:32 business-os
+drwxrwxr-x 14 andy andy  4096 Nov 21 22:44 chapelgate-multilingual-transcribe
+drwxrwxr-x 19 andy andy  4096 Nov 21 22:54 cheap-trips
+drwxrwxr-x 23 andy andy  4096 Nov 22 03:53 holiday-let-operator
+drwxrwxr-x 21 andy andy  4096 Nov 22 00:49 housing-compliance-vault
+drwxrwxr-x 26 andy andy  4096 Nov 21 22:13 maintenanceos-website
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/out/ 2>/dev/null || echo "No out dir"
+total 300
+drwxrwxr-x 19 andy andy  4096 Nov 23 02:04 .
+drwxrwxr-x 61 andy andy 12288 Nov 23 03:35 ..
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-business-evidence-wallet
+-rw-rw-r--  1 andy andy  1322 Nov 17 23:09 AUDIT-business-evidence-wallet.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-complaints
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-chapelgate-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-multilingual-transcribe
+-rw-rw-r--  1 andy andy  1392 Nov 19 16:32 AUDIT-chapelgate-multilingual-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-transcribe
+-rw-rw-r--  1 andy andy  1301 Nov 19 16:32 AUDIT-chapelgate-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cheap-trips
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-cheap-trips.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cloud-workers
+-rw-rw-r--  1 andy andy  1245 Nov 17 23:09 AUDIT-cloud-workers.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-holiday-let-operator
+-rw-rw-r--  1 andy andy  1294 Nov 19 16:33 AUDIT-holiday-let-operator.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-housing-compliance-vault
+-rw-rw-r--  1 andy andy  1322 Nov 19 16:32 AUDIT-housing-compliance-vault.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-information-rights-complaints
+-rw-rw-r--  1 andy andy  1357 Nov 19 16:33 AUDIT-information-rights-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-landlord-os
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-landlord-os.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-legal-case-management
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-legal-case-management.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-maintenanceos
+-rw-rw-r--  1 andy andy  1245 Nov 19 16:34 AUDIT-maintenanceos.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-citizen-agent
+-rw-rw-r--  1 andy andy  1343 Nov 19 16:34 AUDIT-public-sector-citizen-agent.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-document-copilot
+-rw-rw-r--  1 andy andy  1364 Nov 19 16:36 AUDIT-public-sector-document-copilot.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-virtual-worker
+-rw-rw-r--  1 andy andy  1252 Nov 17 23:09 AUDIT-virtual-worker.md
+-rw-rw-r--  1 andy andy  8099 Nov 21 23:51 COMPETITOR-INDEX-TABLE.md
+-rw-rw-r--  1 andy andy   660 Nov 23 01:38 COUNCIL.md
+-rw-rw-r--  1 andy andy  1006 Nov 20 16:27 council-verdict.md
+-rw-rw-r--  1 andy andy   157 Nov 21 17:08 DONE
+-rw-rw-r--  1 andy andy  2760 Nov 22 08:27 EVIDENCE.md
+-rw-rw-r--  1 andy andy  9174 Nov 18 00:51 gitleaks-business-evidence-wallet.json
+-rw-rw-r--  1 andy andy  1533 Nov 18 00:51 gitleaks-chapelgate-complaints.json
+-rw-rw-r--  1 andy andy 27341 Nov 18 00:51 gitleaks-chapelgate-multilingual-transcribe.json
+-rw-rw-r--  1 andy andy  6679 Nov 18 00:51 gitleaks-cheap-trips.json
+-rw-rw-r--  1 andy andy 10702 Nov 18 00:51 gitleaks-holiday-let-operator.json
+-rw-rw-r--  1 andy andy  1417 Nov 18 00:51 gitleaks-public-sector-document-copilot.json
+-rw-rw-r--  1 andy andy 15363 Nov 18 00:51 gitleaks-virtual-worker.json
+-rw-rw-r--  1 andy andy  2587 Nov 22 07:56 METRICS-BASIS.md
+-rw-rw-r--  1 andy andy   610 Nov 23 02:04 MISSION_COMPLETE
+-rw-rw-r--  1 andy andy  1835 Nov 15 13:49 PRODUCT-READINESS-STATUS.md
+-rw-rw-r--  1 andy andy   562 Nov 22 08:21 PROGRESS.md
+-rw-rw-r--  1 andy andy 12878 Nov 23 01:40 PROMISE-TRIAGE.md
+drwxrwxr-x  2 andy andy  4096 Nov 23 03:35 raw
+-rw-rw-r--  1 andy andy  1260 Nov 22 22:18 RESULT.md
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:32 runs
+-rw-rw-r--  1 andy andy    32 Nov 21 01:12 test-stalled-raw.out
+-rw-rw-r--  1 andy andy  2362 Nov 23 02:04 TRIAGE-SUMMARY.md
+-rw-rw-r--  1 andy andy  3461 Nov 22 07:56 WEDGE.md
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead FINDINGS.tsv
+[0m→ [0mRead out/RESULT.md
+[93m[1m! [0mpermission requested: external_directory (/home/andy/.config/opencode/skills/chapelgate-skill-first/*); auto-rejecting
+[0m✗ [0mRead out/MISSION_COMPLETE failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/MISSION_COMPLETE
+[0m→ [0mRead out/raw
+[0m✗ [0mRead /home/andy/.config/opencode/skills/chapelgate-skill-first/SKILL.md failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2372
+drwxrwxr-x  25 andy andy    4096 Nov 22 21:09 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 18:42 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 23 02:14 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 18:42 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 18:42 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 21:09 test-results
+drwxrwxr-x   2 andy andy    4096 Nov 22 18:42 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 18:42 vite.config.ts
+[0m

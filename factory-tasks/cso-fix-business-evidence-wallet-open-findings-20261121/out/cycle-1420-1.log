@@ -1,0 +1,2809 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead FINDINGS.tsv
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/
+total 112
+drwxrwxr-x   4 andy andy  4096 Nov 22 12:16 .
+drwxrwxr-x 745 andy andy 69632 Nov 22 14:05 ..
+-rw-rw-r--   1 andy andy  2254 Nov 21 21:16 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 22 14:19 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy   913 Nov 21 21:55 FINDINGS.tsv
+-rw-rw-r--   1 andy andy  2959 Nov 22 14:19 history.log
+-rw-rw-r--   1 andy andy     7 Nov 22 14:19 .lane-health-state
+drwxrwxr-x   4 andy andy  4096 Nov 22 14:20 out
+drwxrwxr-x  24 andy andy  4096 Nov 22 10:37 repo
+-rw-rw-r--   1 andy andy    81 Nov 22 14:20 status.json
+-rw-rw-r--   1 andy andy  2408 Nov 22 12:49 STEER.md
+-rw-rw-r--   1 andy andy   271 Nov 22 00:03 .STEER.md.bak-20261122-0005
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/ && echo "---REPO---" && ls -la /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/
+total 2208
+drwxrwxr-x 4 andy andy   4096 Nov 22 14:20 .
+drwxrwxr-x 4 andy andy   4096 Nov 22 12:16 ..
+-rw-rw-r-- 1 andy andy 224234 Nov 22 01:51 cycle-0022-4.log
+-rw-rw-r-- 1 andy andy  75271 Nov 22 02:23 cycle-0152-5.log
+-rw-rw-r-- 1 andy andy 231783 Nov 22 03:58 cycle-0229-1.log
+-rw-rw-r-- 1 andy andy  40834 Nov 22 04:34 cycle-0359-2.log
+-rw-rw-r-- 1 andy andy 168692 Nov 22 05:40 cycle-0439-1.log
+-rw-rw-r-- 1 andy andy 138086 Nov 22 07:10 cycle-0541-2.log
+-rw-rw-r-- 1 andy andy   1101 Nov 22 07:14 cycle-0711-3.log
+-rw-rw-r-- 1 andy andy  79789 Nov 22 08:14 cycle-0714-4.log
+-rw-rw-r-- 1 andy andy  29388 Nov 22 08:48 cycle-0814-5.log
+-rw-rw-r-- 1 andy andy 109013 Nov 22 09:14 cycle-0848-6.log
+-rw-rw-r-- 1 andy andy 137688 Nov 22 10:45 cycle-0915-1.log
+-rw-rw-r-- 1 andy andy 214184 Nov 22 12:15 cycle-1046-2.log
+-rw-rw-r-- 1 andy andy  67956 Nov 22 12:48 cycle-1216-3.log
+-rw-rw-r-- 1 andy andy 165251 Nov 22 14:14 cycle-1251-1.log
+-rw-rw-r-- 1 andy andy    894 Nov 22 14:20 cycle-1420-1.log
+-rw-rw-r-- 1 andy andy 213063 Nov 21 22:46 cycle-2116-1.log
+-rw-rw-r-- 1 andy andy  55270 Nov 21 22:51 cycle-2247-2.log
+-rw-rw-r-- 1 andy andy 186568 Nov 22 00:19 cycle-2251-3.log
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 EVIDENCE.md
+-rw-rw-r-- 1 andy andy      6 Nov 22 14:19 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 22 14:19 .preflight-ok
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 PROGRESS.md
+drwxrwxr-x 2 andy andy   4096 Nov 22 14:14 raw
+-rw-rw-r-- 1 andy andy      0 Nov 21 21:22 RESULT.md
+drwxrwxr-x 3 andy andy   4096 Nov 21 22:58 runs
+-rw-rw-r-- 1 andy andy     62 Nov 22 10:49 SKILLS-USED.md
+---REPO---
+total 2368
+drwxrwxr-x  24 andy andy    4096 Nov 22 10:37 .
+drwxrwxr-x   4 andy andy    4096 Nov 22 12:16 ..
+-rw-rw-r--   1 andy andy   23017 Nov 21 21:19 ACCEPTANCE.md
+-rw-rw-r--   1 andy andy   21750 Nov 21 21:19 AGENTS.md
+-rw-rw-r--   1 andy andy    5276 Nov 21 21:19 AGENTS.project.md
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 artifacts
+-rw-rw-r--   1 andy andy   12894 Nov 21 21:19 AUTONOMOUS_WORK_SLICES.md
+-rw-rw-r--   1 andy andy    5942 Nov 21 21:19 COMMERCIAL_ACCEPTANCE_EVIDENCE.md
+-rw-rw-r--   1 andy andy    4398 Nov 21 21:19 COMMERCIAL-READINESS.md
+-rw-rw-r--   1 andy andy   11069 Nov 21 21:19 COMMERCIAL_RELEASE_STATUS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 10:37 control-mcp
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .cursor
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:26 data
+-rw-rw-r--   1 andy andy   12209 Nov 21 21:19 DECISIONS.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 deploy
+drwxrwxr-x  10 andy andy    4096 Nov 22 10:37 docs
+-rw-rw-r--   1 andy andy    1093 Nov 22 10:37 .env.example
+-rw-rw-r--   1 andy andy    1370 Nov 21 21:19 eslint.config.mjs
+-rw-rw-r--   1 andy andy 1594161 Nov 21 21:19 evidence-wallet-independent-review.zip
+-rw-rw-r--   1 andy andy   20157 Nov 21 21:19 FINAL_REPORT_t810u.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-2.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-3.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-4.md
+-rw-rw-r--   1 andy andy      32 Nov 21 21:19 FIX-LIST-6.md
+drwxrwxr-x   9 andy andy    4096 Nov 22 13:08 .git
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .github
+-rw-rw-r--   1 andy andy     391 Nov 21 21:19 .gitignore
+-rw-rw-r--   1 andy andy     149 Nov 22 10:37 .gitleaksignore
+-rw-rw-r--   1 andy andy     243 Nov 22 06:32 .gitleaks.toml
+drwxrwxr-x   4 andy andy    4096 Nov 21 21:19 .grok
+-rw-rw-r--   1 andy andy    2813 Nov 21 21:19 HUMAN_BLOCKERS.md
+-rw-rw-r--   1 andy andy    4492 Nov 21 21:19 MASTER_PROBLEM_REGISTER.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:20 migrations
+drwxrwxr-x 291 andy andy   12288 Nov 22 07:08 node_modules
+-rw-rw-r--   1 andy andy       0 Nov 21 21:19 .node_modules.lock
+-rw-rw-r--   1 andy andy    2805 Nov 21 21:19 opencode.json
+drwxrwxr-x   4 andy andy    4096 Nov 22 07:08 .output
+-rw-rw-r--   1 andy andy    5410 Nov 21 21:19 package.json
+-rw-rw-r--   1 andy andy  263597 Nov 22 10:37 package-lock.json
+-rw-rw-r--   1 andy andy    7666 Nov 21 21:19 PLAN.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 policy
+-rw-rw-r--   1 andy andy      90 Nov 21 21:19 .prettierrc
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 public
+-rw-rw-r--   1 andy andy    7225 Nov 21 21:19 README.md
+-rw-rw-r--   1 andy andy   14220 Nov 21 21:19 RISKS.md
+-rw-rw-r--   1 andy andy    2767 Nov 21 21:19 RUNBOOK.md
+drwxrwxr-x   2 andy andy    4096 Nov 21 21:19 screenshots
+drwxrwxr-x   3 andy andy   53248 Nov 22 10:37 scripts
+-rw-rw-r--   1 andy andy   15437 Nov 22 10:37 SECURITY.md
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 server
+drwxrwxr-x   3 andy andy    4096 Nov 21 21:19 .specify
+drwxrwxr-x 919 andy andy   49152 Nov 21 21:19 specs
+drwxrwxr-x   7 andy andy    4096 Nov 22 10:37 src
+-rwxrwxr-x   1 andy andy     906 Nov 21 21:19 startup-production.sh
+-rwxrwxr-x   1 andy andy    1868 Nov 21 21:19 startup.sh
+drwxrwxr-x   3 andy andy    4096 Nov 22 07:08 .tanstack
+-rw-rw-r--   1 andy andy   74946 Nov 21 21:19 TASKS.md
+drwxrwxr-x   2 andy andy    4096 Nov 22 10:37 tests
+-rw-rw-r--   1 andy andy     722 Nov 21 21:19 tsconfig.json
+-rw-rw-r--   1 andy andy   10179 Nov 22 11:02 vite.config.ts
+[0m
+Let me explore the repo and understand the current state of the codebase to address the findings.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git rev-parse HEAD
+a61f1a8be38615bf994143d074da05b9535fdfbb
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline -5
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git branch -a
+master
+* rc/ew-20261121
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/agy/construction-templates
+  remotes/origin/agy/task-1
+  remotes/origin/agy/task-14
+  remotes/origin/agy/task-2
+  remotes/origin/audit-freeze/bew-v2-rc3-68eff076
+  remotes/origin/backup/pr157-e3e42eb-20261022
+  remotes/origin/bt-a1-configurable
+  remotes/origin/bt-a2-browseres
+  remotes/origin/bt-a3-externalapi
+  remotes/origin/bt10-rate-limit
+  remotes/origin/bt11-a11ytest
+  remotes/origin/bt12-checkauth
+  remotes/origin/bt13-metrics
+  remotes/origin/bt14-lint-fixes
+  remotes/origin/bt15-longoutput
+  remotes/origin/bt4-expiry-warning
+  remotes/origin/bt5-shortfalls
+  remotes/origin/bt7-ocraccessible
+  remotes/origin/bt8-companieshouse
+  remotes/origin/bt9-duplicates
+  remotes/origin/business-os-migration-2026-09-11
+  remotes/origin/chore/opencode-no-nvidia-pin
+  remotes/origin/claude/charter-v2-agents-md
+  remotes/origin/claude/gate-pin-build-readiness
+  remotes/origin/commercial-readiness/security-reconcile-20260930
+  remotes/origin/copilot/integration
+  remotes/origin/crr/2026-10-21
+  remotes/origin/cursor/a4i-autumn-2026-not-suitable-fa9a
+  remotes/origin/cursor/actions-cost-audit-a48f
+  remotes/origin/cursor/agent-loop-cert2-maintenance-9cce
+  remotes/origin/cursor/agent-loop-supervisor-cert-9cce
+  remotes/origin/cursor/bew-signup-gate-d691
+  remotes/origin/cursor/comp-01-legal-pack-d160
+  remotes/origin/cursor/comp-05-legal-pages-d160
+  remotes/origin/cursor/comp-09-a11y-d160
+  remotes/origin/cursor/comp-10-ops-runbooks-d160
+  remotes/origin/cursor/estate-auth-cutover-3f9d
+  remotes/origin/cursor/estate-auth-service-dfdb
+  remotes/origin/cursor/fix-review-findings-1287
+  remotes/origin/cursor/gha-cost-selfhosted-repair-33fa
+  remotes/origin/cursor/opencode-estate-lines-9d80
+  remotes/origin/cursor/opencode-model-fallback-9d80
+  remotes/origin/cursor/overnight-registers-9d80
+  remotes/origin/cursor/public-ai-compute-audit-dfa4
+  remotes/origin/cursor/rc2-security-onto-master-ef9e
+  remotes/origin/cursor/reconcile-production-master-9d80
+  remotes/origin/cursor/release-readiness-8a5b
+  remotes/origin/cursor/release-rehearsal-9d80
+  remotes/origin/cursor/release-truth-reconcile-d160
+  remotes/origin/cursor/rsfm-membership-acceptance-c580
+  remotes/origin/cursor/sovereign-ai-agent-security-bid-396a
+  remotes/origin/cursor/sovereign-ai-hardware-infra-f155
+  remotes/origin/cursor/v2-commissioning-reconciliation-9cce
+  remotes/origin/cursor/v2-evidence-graph-foundations-4a8f
+  remotes/origin/cursor/v2-evidence-graph-foundations-9cce
+  remotes/origin/cursor/v2-independent-audit-signoff-9cce
+  remotes/origin/cursor/v2-post-audit-conditions-closure-9cce
+  remotes/origin/cursor/v2-rc2-human-audit-remediation-9cce
+  remotes/origin/cursor/v2-rc3-operational-blockers-9cce
+  remotes/origin/cursor/v3-evidence-platform-9cce
+  remotes/origin/data/ds0-separate-owner-pilot-data-20261010
+  remotes/origin/deployment/digitalocean-20260913
+  remotes/origin/deployment/reconciled-pilot-20260914
+  remotes/origin/docs/final-report-t810u
+  remotes/origin/docs/final-report-t810u-r2
+  remotes/origin/estate-gate-caller-20261004
+  remotes/origin/ew-commercial-r8
+  remotes/origin/ew-final-report-t810u
+  remotes/origin/ew-fix-01
+  remotes/origin/ew-fix-02
+  remotes/origin/ew-fix-03
+  remotes/origin/ew-fix-04
+  remotes/origin/ew-fix-05
+  remotes/origin/execution-authority-direct-nvdl-20261003
+  remotes/origin/factory/bew-copilot-onboarding
+  remotes/origin/feat/a11y-wcag22-pass
+  remotes/origin/feat/billing-stripe-test
+  remotes/origin/feat/final-report-t810u
+  remotes/origin/feat/housing-compliance-vault
+  remotes/origin/feat/iso9001-qms-evidence-20261116
+  remotes/origin/feat/p0-2-expiry-automation
+  remotes/origin/feat/p0-3-mobile-responsiveness
+  remotes/origin/feat/p1-5-answer-bank-freshness
+  remotes/origin/feat/s01-rls-core-tables
+  remotes/origin/feat/s03-questionnaire-templates
+  remotes/origin/feat/s06-sbom
+  remotes/origin/feat/s06-sbom-vuln-scan
+  remotes/origin/feat/s15-progressive-forms
+  remotes/origin/feat/s16-role-based-ui
+  remotes/origin/feat/uk-gdpr-data-broker-opt-out-docs
+  remotes/origin/feature/document-knowledge-copilot
+  remotes/origin/feature/public-sector-knowledge-copilot
+  remotes/origin/fix-eslint-peer-deps
+  remotes/origin/fix/bearer-token-in-memory-not-sessionstorage
+  remotes/origin/fix/eb-0028-opencode-nvidia-429
+  remotes/origin/fix/ew-check-auth
+  remotes/origin/fix/ew-check-auth-fresh
+  remotes/origin/fix/ew-cp3-lint
+  remotes/origin/fix/ew-cp3-lint-fresh
+  remotes/origin/fix/ew-doc-drift-master-tip
+  remotes/origin/fix/ew-fix-04-release-truth
+  remotes/origin/fix/ew-fix-05-aria-busy
+  remotes/origin/fix/ew-fixlist-2-r19
+  remotes/origin/fix/ew-fixlist-3-r19
+  remotes/origin/fix/ew-fixlist-4-r19
+  remotes/origin/fix/ew-fixlist-6-r19
+  remotes/origin/fix/ew-master-redness-20261106
+  remotes/origin/fix/ew-master-redness-full
+  remotes/origin/fix/ew-metrics-auth
+  remotes/origin/fix/ew-metrics-auth-fresh
+  remotes/origin/fix/ew-npm-audit
+  remotes/origin/fix/ew-npm-audit-fresh
+  remotes/origin/fix/ew-pdf-lock
+  remotes/origin/fix/ew-rls-quotes-r10
+  remotes/origin/fix/ew-v2-rls-fail-closed
+  remotes/origin/fix/ew-v2-rls-fix-quotes
+  remotes/origin/fix/ew-vuln-forward
+  remotes/origin/fix/fixall-20261113
+  remotes/origin/fix/master-red-fixes
+  remotes/origin/fix/master-sbom-vuln-fix
+  remotes/origin/fix/mcp-lint-20260910
+  remotes/origin/fix/mcp-windows-path-20260910
+  remotes/origin/fix/oc-per-comment-concurrency
+  remotes/origin/fix/oc-probe-tokens
+  remotes/origin/fix/pg-local-portable-render
+  remotes/origin/fix/restore-integration-script-20260910
+  remotes/origin/fix/shakedown-findings-20261113
+  remotes/origin/forced-merge/out-1794998819
+  remotes/origin/forced-merge/out-1794998859
+  remotes/origin/forced-merge/reel-adopt-six-essential-documents-before-vibe-coding-20261117-1795005015
+  remotes/origin/forced-merge/reel-trial-claude-security-anti-patterns-api-key-front-end-20261118-1795005066
+  remotes/origin/governance/s031-release-protection
+  remotes/origin/hcv-a11y-error-boundary-test-20261106
+  remotes/origin/hcv-a11y-wcag22-pass-20261105
+  remotes/origin/hcv-accessibility-improvement-20261106
+  remotes/origin/hcv-admin-error-copy-lock-20261029
+  remotes/origin/hcv-admin-ux-20261105
+  remotes/origin/hcv-admin-ux-error-boundary-20261106
+  remotes/origin/hcv-admin-ux-error-boundary-20261106b
+  remotes/origin/hcv-admin-ux-improvement-20261106
+  remotes/origin/hcv-ai-grounding-lock-20261029
+  remotes/origin/hcv-ai-grounding-test-lock-20261029
+  remotes/origin/hcv-answers-lock-20261029
+  remotes/origin/hcv-api-contract-test-20261106
+  remotes/origin/hcv-audit-trail-spec-20261106
+  remotes/origin/hcv-backup-recovery-20261106
+  remotes/origin/hcv-backup-recovery-test-20261106
+  remotes/origin/hcv-buyer-pack-extension-20261106
+  remotes/origin/hcv-buyer-pack-synthetic-20261106
+  remotes/origin/hcv-buyer-pack-synthetic-extension-20261106
+  remotes/origin/hcv-buyer-pack-validation-20261106
+  remotes/origin/hcv-canonical-lock-20261029
+  remotes/origin/hcv-canonical-lock2-20261029
+  remotes/origin/hcv-claim-edit-lock-20261029
+  remotes/origin/hcv-compliance-reports-20261106
+  remotes/origin/hcv-control-mcp-issue-busy
+  remotes/origin/hcv-csp-policy-20261106
+  remotes/origin/hcv-data-retention-policy-20261106
+  remotes/origin/hcv-db-source-lock-20261029
+  remotes/origin/hcv-demo-data-test-20261106
+  remotes/origin/hcv-demo-data-test2-20261106
+  remotes/origin/hcv-demo-data-validation-20261106
+  remotes/origin/hcv-demo-pack-lock-20261029
+  remotes/origin/hcv-docs-20261105
+  remotes/origin/hcv-docs-api-reference-20261106
+  remotes/origin/hcv-e2e-tenant-isolation-20261106
+  remotes/origin/hcv-edge-case-tests-20261104
+  remotes/origin/hcv-edge-case-tests-20261104-rebased
+  remotes/origin/hcv-env-server-lock-20261029
+  remotes/origin/hcv-error-catalog-20261106
+  remotes/origin/hcv-error-component-alerts-20261029
+  remotes/origin/hcv-error-component-lock2-20261029
+  remotes/origin/hcv-error-handling-20261105
+  remotes/origin/hcv-error-handling-improvement-20261106
+  remotes/origin/hcv-error-handling-test-20261106
+  remotes/origin/hcv-evidence-index-alerts-20261029
+  remotes/origin/hcv-expiry-lock-20261029
+  remotes/origin/hcv-extraction-lock-20261029
+  remotes/origin/hcv-file-to-base64-lock-20261029
+  remotes/origin/hcv-files-lock-20261029
+  remotes/origin/hcv-format-wallet-timestamp-lock-20261029
+  remotes/origin/hcv-health-checks-20261106
+  remotes/origin/hcv-ids-lock-20261029
+  remotes/origin/hcv-incident-response-runbook-20261106
+  remotes/origin/hcv-index-alerts-20261029
+  remotes/origin/hcv-integration-api-20261106
+  remotes/origin/hcv-integration-test-20261106
+  remotes/origin/hcv-invalidation-lock-20261029
+  remotes/origin/hcv-legal-docs-clean-20261106
+  remotes/origin/hcv-limits-lock-20261029
+  remotes/origin/hcv-live-region-announcements-20261029
+  remotes/origin/hcv-logging-improvement-20261106
+  remotes/origin/hcv-logging-standards-20261106
+  remotes/origin/hcv-mcp-owner-status
+  remotes/origin/hcv-mcp-owner-status-2
+  remotes/origin/hcv-mcp-setup-ui-lock-20261029
+  remotes/origin/hcv-money-lock-20261029
+  remotes/origin/hcv-monitoring-alerts-20261106
+  remotes/origin/hcv-monitoring-improvement-20261106
+  remotes/origin/hcv-observability-lock
+  remotes/origin/hcv-observability-metrics-extension-20261106
+  remotes/origin/hcv-observability-test-20261106
+  remotes/origin/hcv-onboarding-accessibility-20261106
+  remotes/origin/hcv-onboarding-docs-20261105
+  remotes/origin/hcv-onboarding-flow-20261106
+  remotes/origin/hcv-onboarding-improvement-20261106
+  remotes/origin/hcv-operator-board-lock-20261029
+  remotes/origin/hcv-pack-export-lock-20261029
+  remotes/origin/hcv-performance-baseline-20261106
+  remotes/origin/hcv-performance-test-20261106
+  remotes/origin/hcv-pr1458-prompt-safety
+  remotes/origin/hcv-pr1459-observability
+  remotes/origin/hcv-pr1460-buyer-pack
+  remotes/origin/hcv-pr1461-error-boundary
+  remotes/origin/hcv-preview-embedder-origin-lock-20261029
+  remotes/origin/hcv-privacy-data-handling-20261106
+  remotes/origin/hcv-prompt-safety-corpus-lock-20261106
+  remotes/origin/hcv-prompt-safety-lock-20261029
+  remotes/origin/hcv-query-client-lock-20261029
+  remotes/origin/hcv-questionnaire-templates-lock-20261029
+  remotes/origin/hcv-questions-lock-20261029
+  remotes/origin/hcv-roles-lock-20261029
+  remotes/origin/hcv-rsfm-control-plane-lock-20261029
+  remotes/origin/hcv-rules-lock-20261029
+  remotes/origin/hcv-security-audit-prep-20261106
+  remotes/origin/hcv-security-hardening-20261106
+  remotes/origin/hcv-security-headers-20261029
+  remotes/origin/hcv-security-headers-20261106
+  remotes/origin/hcv-status-lock-20261029
+  remotes/origin/hcv-status-properties-lock-20261029
+  remotes/origin/hcv-utils-lock-20261029
+  remotes/origin/hcv-utils-lock2-20261029
+  remotes/origin/independent-verification-20260908
+  remotes/origin/legal/uk-launch-docs-20261103
+  remotes/origin/local-chore
+  remotes/origin/master
+  remotes/origin/oc/task-1
+  remotes/origin/oc/task-10
+  remotes/origin/oc/task-19
+  remotes/origin/oc/task-3
+  remotes/origin/oc/task-9
+  remotes/origin/opencode/issue122-20261012000615
+  remotes/origin/opencode/issue55-20261011010153
+  remotes/origin/opencode/issue66-20261011011604
+  remotes/origin/opencode/issue68-20261011024833
+  remotes/origin/opencode/issue69-20261011012246
+  remotes/origin/opencode/issue77-20261011075035
+  remotes/origin/opencode/issue82-20261011003157
+  remotes/origin/opencode/issue83-20261011021115
+  remotes/origin/ops/bew-blocker-prep-20261007
+  remotes/origin/ops/bew-blocker-removal-20261007
+  remotes/origin/ops/bew-commercial-specialists-20261006
+  remotes/origin/ops/bew-legal-acceptance-20261007
+  remotes/origin/ops/bew-legal-identity-20261007
+  remotes/origin/ops/bew-release-verifiers-20261006
+  remotes/origin/ops/bew-remaining-gate-workers-20261007
+  remotes/origin/ops/bew-remaining-slice-workers-20261007
+  remotes/origin/ops/bew-s007-review-pack-output-20261007
+  remotes/origin/ops/bew-s007-review-pack-refresh-20261007
+  remotes/origin/ops/bew-s011-dogfood-20261007
+  remotes/origin/ops/bew-s011-evidence-20261007
+  remotes/origin/ops/bew-s017-verifier-20261006
+  remotes/origin/ops/bew-s022-closure-20261007
+  remotes/origin/ops/bew-s023-closure-20261007
+  remotes/origin/ops/bew-s027-closure-20261007
+  remotes/origin/ops/bew-s028-canonical-integration-20261007
+  remotes/origin/ops/bew-s028-closure-20261007
+  remotes/origin/ops/bew-s028-integrate-20261007
+  remotes/origin/ops/bew-s031-live-protection-probe-20261007
+  remotes/origin/ops/bew-s031-plan-blocker-output-20261007
+  remotes/origin/ops/bew-s031-plan-blocker-refresh-20261007
+  remotes/origin/ops/bew-s032-antigravity-review-20261007
+  remotes/origin/ops/bew-s035-focus-integration-20261007
+  remotes/origin/ops/bew-s035-focus-integration-v2-20261007
+  remotes/origin/ops/bew-s035-reconcile-20261007
+  remotes/origin/ops/bew-unfinished-workers-20261007
+  remotes/origin/ops/runner-pool-burst-20260926
+  remotes/origin/ops/security-audit-gate-repin-20261007
+  remotes/origin/ops/security-audit-recon-20261007
+  remotes/origin/pilot/controlled-2026-09-08
+  remotes/origin/policy/nvidia-factory-owner-rule-20261008
+  remotes/origin/pr-214
+  remotes/origin/prep/bew-s022-privacy-20261007
+  remotes/origin/prep/bew-s027-legal-20261007
+  remotes/origin/rc/ew-20261121
+  remotes/origin/rea/evidence-wallet-compliance
+  remotes/origin/rea16/c-01
+  remotes/origin/rea16/c-02
+  remotes/origin/rea16/c-03
+  remotes/origin/rea16/c-04
+  remotes/origin/rea16/c-04-contradictory-certificates
+  remotes/origin/rea16/c-05
+  remotes/origin/rea16/c-06
+  remotes/origin/rea16/d-housingcase/pango-inspection-comparison
+  remotes/origin/rea16/d-housingcase/pango-per-door-job-management
+  remotes/origin/readiness/ew-1023-02-localgate
+  remotes/origin/readiness/ew-1023-03-rollback
+  remotes/origin/readiness/ew-1025-02-master-sha
+  remotes/origin/readiness/ew-1025-04-pilot-onboard
+  remotes/origin/readiness/ew-1025-05-buyer-honesty
+  remotes/origin/readiness/ew-1025-07-operator-checklist
+  remotes/origin/readiness/ew-1025-08-a11y-statement
+  remotes/origin/readiness/ew-1025-09-rls-honesty
+  remotes/origin/readiness/ew-1025-14-security-headers-lock
+  remotes/origin/readiness/ew-1025-15-rate-limit-scopes-lock
+  remotes/origin/readiness/ew-1025-16-release-sha-be84
+  remotes/origin/readiness/ew-1025-17-session-cookie-lock
+  remotes/origin/readiness/ew-1025-18-zip-slip-lock
+  remotes/origin/readiness/ew-1025-19-embedder-origin-lock
+  remotes/origin/readiness/ew-1025-20-password-bounds
+  remotes/origin/readiness/ew-1025-21-parse-budget-lock
+  remotes/origin/readiness/ew-1025-22-ai-timeout-lock
+  remotes/origin/readiness/ew-1025-23-pdf-inflate-lock
+  remotes/origin/readiness/ew-1025-24-file-bytes-lock
+  remotes/origin/readiness/ew-1025-25-admin-error-copy
+  remotes/origin/readiness/ew-1025-26-incident-drill
+  remotes/origin/readiness/ew-1025-27-paste-text-lock
+  remotes/origin/readiness/ew-1025-28-invite-token-lock
+  remotes/origin/readiness/ew-1025-29-health-ready-lock
+  remotes/origin/readiness/ew-1025-30-job-stale-lock
+  remotes/origin/readiness/ew-1025-31-count-limits-lock
+  remotes/origin/readiness/ew-1025-32-pack-recompute-batch
+  remotes/origin/readiness/ew-1025-33-text-limits-lock
+  remotes/origin/readiness/ew-1025-34-money-parse-lock
+  remotes/origin/readiness/ew-1025-35-demo-pack-synthetic
+  remotes/origin/readiness/ew-1025-36-canonical-keys-lock
+  remotes/origin/readiness/ew-1025-37-prompt-safety-corpus-lock
+  remotes/origin/readiness/ew-1025-38-expiry-bucket-honesty
+  remotes/origin/readiness/ew-1025-39-roles-permissions-lock
+  remotes/origin/readiness/ew-1025-40-conflict-engine-lock
+  remotes/origin/readiness/ew-1025-41-answer-fail-closed-lock
+  remotes/origin/readiness/ew-1025-42-invalidation-lock
+  remotes/origin/readiness/ew-1025-43-claim-edit-honesty
+  remotes/origin/readiness/ew-1025-44-threshold-currency-lock
+  remotes/origin/readiness/ew-1025-45-ai-grounding-lock
+  remotes/origin/readiness/ew-1025-46-pack-export-honesty
+  remotes/origin/readiness/ew-1025-47-operator-board-lock
+  remotes/origin/readiness/ew-1025-48-status-properties-lock
+  remotes/origin/readiness/ew-1025-49-negative-evidence-lock
+  remotes/origin/readiness/ew-1025-50-extraction-limits-lock
+  remotes/origin/readiness/ew-1025-55-parse-numeric-lock
+  remotes/origin/readiness/ew-1025-89-opportunities-lock
+  remotes/origin/readiness/ew-1025-90-opportunity-prep-lock
+  remotes/origin/readiness/ew-1025-94-entity-graph-lock
+  remotes/origin/readiness/ew-1025-96-compliance-alerts-lock
+  remotes/origin/readiness/ew-1026-62-neon-pool-options-lock
+  remotes/origin/readiness/ew-1026-authority-level-max
+  remotes/origin/readiness/ew-1026-permissions-encrypted-media-deny
+  remotes/origin/readiness/ew-1026-permissions-hid-deny
+  remotes/origin/readiness/ew-1026-purpose-max
+  remotes/origin/readiness/ew-1027-04-post-slices-verify
+  remotes/origin/readiness/ew-1027-admin-ux
+  remotes/origin/readiness/ew-1027-audit-aria-busy
+  remotes/origin/readiness/ew-1027-audit-empty-gate
+  remotes/origin/readiness/ew-1027-audit-loop-events-busy
+  remotes/origin/readiness/ew-1027-beyond-health-ready-metrics
+  remotes/origin/readiness/ew-1027-claims-empty-gate
+  remotes/origin/readiness/ew-1027-compliance-empty-gate
+  remotes/origin/readiness/ew-1027-compliance-entities-busy
+  remotes/origin/readiness/ew-1027-compliance-renewals-aria-busy
+  remotes/origin/readiness/ew-1027-coop-corp-headers
+  remotes/origin/readiness/ew-1027-decisions-empty-gate
+  remotes/origin/readiness/ew-1027-domain-lock-honesty
+  remotes/origin/readiness/ew-1027-empty-gate-fix
+  remotes/origin/readiness/ew-1027-entities-aria-busy
+  remotes/origin/readiness/ew-1027-entities-catalog-busy
+  remotes/origin/readiness/ew-1027-entities-load-alerts
+  remotes/origin/readiness/ew-1027-entities-paths-busy
+  remotes/origin/readiness/ew-1027-entity-name-max-wire
+  remotes/origin/readiness/ew-1027-evidence-claims-busy
+  remotes/origin/readiness/ew-1027-evidence-empty-gate
+  remotes/origin/readiness/ew-1027-exports-empty-gate
+  remotes/origin/readiness/ew-1027-facts-empty-gate
+  remotes/origin/readiness/ew-1027-facts-history-aria-busy
+  remotes/origin/readiness/ew-1027-file-to-base64-bytes
+  remotes/origin/readiness/ew-1027-gateway-http-typecheck
+  remotes/origin/readiness/ew-1027-hsts-header-lock
+  remotes/origin/readiness/ew-1027-hsts-lock-test-fix
+  remotes/origin/readiness/ew-1027-incident-drill-fix
+  remotes/origin/readiness/ew-1027-incident-drill-fix-2
+  remotes/origin/readiness/ew-1027-incident-metrics-lock
+  remotes/origin/readiness/ew-1027-index-docs-busy
+  remotes/origin/readiness/ew-1027-lint-nvidia-empty-catch
+  remotes/origin/readiness/ew-1027-lint-unused-vars-cleanup
+  remotes/origin/readiness/ew-1027-metrics-observability-lock
+  remotes/origin/readiness/ew-1027-monitoring-verify
+  remotes/origin/readiness/ew-1027-opportunities-aria-busy
+  remotes/origin/readiness/ew-1027-opportunities-aria-busy-fix
+  remotes/origin/readiness/ew-1027-opportunities-empty-gate
+  remotes/origin/readiness/ew-1027-opportunities-templates-aria
+  remotes/origin/readiness/ew-1027-opportunities-templates-busy
+  remotes/origin/readiness/ew-1027-orgs-aria-busy
+  remotes/origin/readiness/ew-1027-orgs-aria-busy-lock
+  remotes/origin/readiness/ew-1027-overview-stats-busy
+  remotes/origin/readiness/ew-1027-packs-detail-aria-busy
+  remotes/origin/readiness/ew-1027-packs-empty-gate
+  remotes/origin/readiness/ew-1027-packs-prefs-busy
+  remotes/origin/readiness/ew-1027-packs-prefs-lock-fix
+  remotes/origin/readiness/ew-1027-permissions-all-screens-capture-deny
+  remotes/origin/readiness/ew-1027-permissions-browser-install-deny
+  remotes/origin/readiness/ew-1027-permissions-capture-deny
+  remotes/origin/readiness/ew-1027-permissions-capture-deny-fix
+  remotes/origin/readiness/ew-1027-permissions-captured-surface-control-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-device-memory-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-downlink-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-dpr-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ect-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-lang-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-prefers-color-scheme-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-prefers-reduced-motion-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-rtt-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-save-data-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-arch-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-bitness-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-form-factors-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-full-version-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-full-version-list-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-high-entropy-values-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-mobile-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-model-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-platform-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-platform-version-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-ua-wow64-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-viewport-height-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-viewport-width-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-width-deny
+  remotes/origin/readiness/ew-1027-permissions-ch-width-deny-v2
+  remotes/origin/readiness/ew-1027-permissions-compute-pressure-deny
+  remotes/origin/readiness/ew-1027-permissions-conversion-measurement-deny
+  remotes/origin/readiness/ew-1027-permissions-deferred-fetch-deny
+  remotes/origin/readiness/ew-1027-permissions-deferred-fetch-minimal-deny
+  remotes/origin/readiness/ew-1027-permissions-digital-credentials-get-deny
+  remotes/origin/readiness/ew-1027-permissions-document-write-deny
+  remotes/origin/readiness/ew-1027-permissions-focus-without-user-activation-deny
+  remotes/origin/readiness/ew-1027-permissions-html-attribute-or-property-deny
+  remotes/origin/readiness/ew-1027-permissions-identity-credentials-create-deny
+  remotes/origin/readiness/ew-1027-permissions-interest-cohort-deny
+  remotes/origin/readiness/ew-1027-permissions-join-ad-interest-group-deny
+  remotes/origin/readiness/ew-1027-permissions-keyboard-map-deny
+  remotes/origin/readiness/ew-1027-permissions-language-detector-deny
+  remotes/origin/readiness/ew-1027-permissions-layout-animations-deny
+  remotes/origin/readiness/ew-1027-permissions-legacy-image-formats-deny
+  remotes/origin/readiness/ew-1027-permissions-manual-text-deny
+  remotes/origin/readiness/ew-1027-permissions-navigation-override-deny
+  remotes/origin/readiness/ew-1027-permissions-on-device-speech-recognition-deny
+  remotes/origin/readiness/ew-1027-permissions-on-device-speech-recognition-deny-2
+  remotes/origin/readiness/ew-1027-permissions-oversized-images-deny
+  remotes/origin/readiness/ew-1027-permissions-private-aggregation-deny
+  remotes/origin/readiness/ew-1027-permissions-private-state-token-issuance-deny
+  remotes/origin/readiness/ew-1027-permissions-private-state-token-redemption-deny
+  remotes/origin/readiness/ew-1027-permissions-publickey-credentials-create-deny
+  remotes/origin/readiness/ew-1027-permissions-publickey-credentials-get-deny
+  remotes/origin/readiness/ew-1027-permissions-rewriter-deny
+  remotes/origin/readiness/ew-1027-permissions-run-ad-auction-deny
+  remotes/origin/readiness/ew-1027-permissions-shared-storage-select-url-deny
+  remotes/origin/readiness/ew-1027-permissions-smart-card-deny
+  remotes/origin/readiness/ew-1027-permissions-speaker-deny
+  remotes/origin/readiness/ew-1027-permissions-summarizer-deny
+  remotes/origin/readiness/ew-1027-permissions-sync-script-deny
+  remotes/origin/readiness/ew-1027-permissions-translator-deny
+  remotes/origin/readiness/ew-1027-permissions-trust-token-redemption-deny
+  remotes/origin/readiness/ew-1027-permissions-unload-deny
+  remotes/origin/readiness/ew-1027-permissions-unoptimized-images-deny
+  remotes/origin/readiness/ew-1027-permissions-vertical-scroll-deny
+  remotes/origin/readiness/ew-1027-permissions-wake-lock-deny
+  remotes/origin/readiness/ew-1027-permissions-webxr-deny
+  remotes/origin/readiness/ew-1027-permissions-writer-deny
+  remotes/origin/readiness/ew-1027-permissions-xr-deny
+  remotes/origin/readiness/ew-1027-pg-local-stage-bins
+  remotes/origin/readiness/ew-1027-pg-local-stage-once
+  remotes/origin/readiness/ew-1027-pg-local-stage-share
+  remotes/origin/readiness/ew-1027-questionnaires-empty-gate
+  remotes/origin/readiness/ew-1027-release-branching-row-fix
+  remotes/origin/readiness/ew-1027-release-branching-tip-note
+  remotes/origin/readiness/ew-1027-release-truth-tip-9a9b
+  remotes/origin/readiness/ew-1027-release-truth-tip-format
+  remotes/origin/readiness/ew-1027-secret-scan-fixture-dummies
+  remotes/origin/readiness/ew-1027-security-headers-lock-sync
+  remotes/origin/readiness/ew-1027-team-agents-aria-busy
+  remotes/origin/readiness/ew-1027-team-empty-gate
+  remotes/origin/readiness/ew-1027-team-invites-caps-busy
+  remotes/origin/readiness/ew-1027-with-app-env-exec
+  remotes/origin/readiness/ew-commercial-registers
+  remotes/origin/readiness/ew-compliance-request-alert
+  remotes/origin/readiness/ew-fix-bt1
+  remotes/origin/readiness/ew-fix-bt1-bt2
+  remotes/origin/readiness/ew-fix-bt1-pdf-parse
+  remotes/origin/readiness/ew-fix-bt2
+  remotes/origin/readiness/ew-fix-bt3
+  remotes/origin/readiness/ew-fixes-comprehensive
+  remotes/origin/readiness/ew-gateway-unused-deny
+  remotes/origin/readiness/ew-invite-mailer
+  remotes/origin/readiness/ew-local-gate
+  remotes/origin/readiness/ew-nvidia-runtime-guard
+  remotes/origin/readiness/ew-observability
+  remotes/origin/readiness/ew-registers-r5
+  remotes/origin/readiness/ew-registers-r7
+  remotes/origin/readiness/ew-t32-droplet-mcp
+  remotes/origin/readiness/ew-template-id-set
+  remotes/origin/readiness/ew-tenant-guc-order
+  remotes/origin/readiness/fix-incident-drill-lock
+  remotes/origin/readiness/gh-runner-estate-pin-bump
+  remotes/origin/readiness/hcv-a11y-status
+  remotes/origin/readiness/hcv-acceptance-matrix
+  remotes/origin/readiness/hcv-admin-error-bearer-scrub
+  remotes/origin/readiness/hcv-admin-ux
+  remotes/origin/readiness/hcv-agent-limits-lock
+  remotes/origin/readiness/hcv-agent-loop-limits-lock
+  remotes/origin/readiness/hcv-ai-grounding-edges
+  remotes/origin/readiness/hcv-ai-grounding-lock
+  remotes/origin/readiness/hcv-ai-grounding-tokens
+  remotes/origin/readiness/hcv-answer-bank-freshness-lock
+  remotes/origin/readiness/hcv-answers
+  remotes/origin/readiness/hcv-answers-human-decision
+  remotes/origin/readiness/hcv-app-session-busy
+  remotes/origin/readiness/hcv-assertion-limits-lock
+  remotes/origin/readiness/hcv-audit-alerts
+  remotes/origin/readiness/hcv-audit-empty-status
+  remotes/origin/readiness/hcv-audit-error-alerts
+  remotes/origin/readiness/hcv-audit-gateway-auth-busy
+  remotes/origin/readiness/hcv-audit-gateway-loading-status
+  remotes/origin/readiness/hcv-audit-list-aria-label
+  remotes/origin/readiness/hcv-audit-loop-events-busy
+  remotes/origin/readiness/hcv-audit-loop-events-loading-status
+  remotes/origin/readiness/hcv-audit-loop-runs-busy
+  remotes/origin/readiness/hcv-audit-loops-loading-status
+  remotes/origin/readiness/hcv-audit-org-events-busy
+  remotes/origin/readiness/hcv-browser-sandbox-hostile-lock
+  remotes/origin/readiness/hcv-browser-sandbox-policy-lock
+  remotes/origin/readiness/hcv-buyer-pack
+  remotes/origin/readiness/hcv-canonical-keys
+  remotes/origin/readiness/hcv-canonical-keys-complete
+  remotes/origin/readiness/hcv-canonical-keys-lock
+  remotes/origin/readiness/hcv-canonical-null-guard
+  remotes/origin/readiness/hcv-claim-edit-failclosed-lock
+  remotes/origin/readiness/hcv-claim-edit-injection
+  remotes/origin/readiness/hcv-claims-empty
+  remotes/origin/readiness/hcv-clock-fail-closed
+  remotes/origin/readiness/hcv-compliance-alerts
+  remotes/origin/readiness/hcv-compliance-board-busy-lock
+  remotes/origin/readiness/hcv-compliance-board-loading-status
+  remotes/origin/readiness/hcv-compliance-empty-status
+  remotes/origin/readiness/hcv-compliance-entities-loading-status
+  remotes/origin/readiness/hcv-compliance-entities-select-loading-status
+  remotes/origin/readiness/hcv-compliance-list-aria-label
+  remotes/origin/readiness/hcv-compliance-obligation-actions-busy
+  remotes/origin/readiness/hcv-compliance-obligations-busy
+  remotes/origin/readiness/hcv-compliance-refresh-busy
+  remotes/origin/readiness/hcv-compliance-renewals-busy-lock
+  remotes/origin/readiness/hcv-compliance-renewals-loading-status
+  remotes/origin/readiness/hcv-compliance-tables-aria-label
+  remotes/origin/readiness/hcv-conflicts-active-status-lock
+  remotes/origin/readiness/hcv-conflicts-agree
+  remotes/origin/readiness/hcv-control-mcp-alerts
+  remotes/origin/readiness/hcv-control-mcp-aria-label
+  remotes/origin/readiness/hcv-control-mcp-owner-status
+  remotes/origin/readiness/hcv-control-mcp-status-busy-lock
+  remotes/origin/readiness/hcv-control-mcp-status-loading-status
+  remotes/origin/readiness/hcv-currency-conflict
+  remotes/origin/readiness/hcv-decisions-alerts
+  remotes/origin/readiness/hcv-decisions-empty-status
+  remotes/origin/readiness/hcv-decisions-inbox-busy-lock
+  remotes/origin/readiness/hcv-decisions-list-aria-label
+  remotes/origin/readiness/hcv-decisions-nested-list-aria-label
+  remotes/origin/readiness/hcv-decisions-scan-busy
+  remotes/origin/readiness/hcv-decisions-sibling-actions-busy
+  remotes/origin/readiness/hcv-demo-files-shape
+  remotes/origin/readiness/hcv-demo-pack-deterministic-lock
+  remotes/origin/readiness/hcv-demo-pack-lock
+  remotes/origin/readiness/hcv-doc-model-alert
+  remotes/origin/readiness/hcv-entities-alerts
+  remotes/origin/readiness/hcv-entities-answer-bank-busy
+  remotes/origin/readiness/hcv-entities-answers-loading-status
+  remotes/origin/readiness/hcv-entities-catalog-list-aria-label
+  remotes/origin/readiness/hcv-entities-create-busy
+  remotes/origin/readiness/hcv-entities-create-typed-busy
+  remotes/origin/readiness/hcv-entities-empty-status
+  remotes/origin/readiness/hcv-entities-inbound-busy
+  remotes/origin/readiness/hcv-entities-inbound-loading-status
+  remotes/origin/readiness/hcv-entities-list-busy
+  remotes/origin/readiness/hcv-entities-merge-entities-busy
+  remotes/origin/readiness/hcv-entities-neighborhood-busy
+  remotes/origin/readiness/hcv-entities-neighborhood-loading-status
+  remotes/origin/readiness/hcv-entities-paths-busy
+  remotes/origin/readiness/hcv-entities-preferences-busy
+  remotes/origin/readiness/hcv-entities-preferences-empty-status
+  remotes/origin/readiness/hcv-entities-preferences-loading-status
+  remotes/origin/readiness/hcv-entities-register-relation-busy
+  remotes/origin/readiness/hcv-entities-relation-catalog-busy
+  remotes/origin/readiness/hcv-entities-relation-catalog-loading-status
+  remotes/origin/readiness/hcv-entities-relations-aria-label
+  remotes/origin/readiness/hcv-entities-relations-busy
+  remotes/origin/readiness/hcv-entities-relations-loading-status
+  remotes/origin/readiness/hcv-entities-review-inbound-busy
+  remotes/origin/readiness/hcv-entities-stale-keys-status
+  remotes/origin/readiness/hcv-entities-type-catalog-busy
+  remotes/origin/readiness/hcv-entity-graph-cycle-lock
+  remotes/origin/readiness/hcv-entity-limits-lock
+  remotes/origin/readiness/hcv-entity-type-parse-lock
+  remotes/origin/readiness/hcv-error-handling
+  remotes/origin/readiness/hcv-error-main-landmark
+  remotes/origin/readiness/hcv-evidence-claims-busy
+  remotes/origin/readiness/hcv-evidence-claims-loading-status
+  remotes/origin/readiness/hcv-evidence-doc-busy-lock
+  remotes/origin/readiness/hcv-evidence-doc-claims-aria-label
+  remotes/origin/readiness/hcv-evidence-doc-empty-status
+  remotes/origin/readiness/hcv-evidence-doc-loading-status
+  remotes/origin/readiness/hcv-evidence-doc-org-busy
+  remotes/origin/readiness/hcv-evidence-docs-loading-status
+  remotes/origin/readiness/hcv-evidence-document-busy
+  remotes/origin/readiness/hcv-evidence-empty-status
+  remotes/origin/readiness/hcv-evidence-index-busy-lock
+  remotes/origin/readiness/hcv-evidence-list
+  remotes/origin/readiness/hcv-evidence-list-aria-label
+  remotes/origin/readiness/hcv-evidence-request-templates-lock
+  remotes/origin/readiness/hcv-evidence-showmore-aria
+  remotes/origin/readiness/hcv-evidence-text-unsafe-lock
+  remotes/origin/readiness/hcv-evidence-viewer-status
+  remotes/origin/readiness/hcv-expiry-buckets
+  remotes/origin/readiness/hcv-expiry-budget
+  remotes/origin/readiness/hcv-expiry-date-null
+  remotes/origin/readiness/hcv-expiry-extract-null
+  remotes/origin/readiness/hcv-expiry-normalize-null
+  remotes/origin/readiness/hcv-expiry-text-null
+  remotes/origin/readiness/hcv-exports-alerts
+  remotes/origin/readiness/hcv-exports-busy
+  remotes/origin/readiness/hcv-exports-empty-status
+  remotes/origin/readiness/hcv-exports-list-aria-label
+  remotes/origin/readiness/hcv-extract-null
+  remotes/origin/readiness/hcv-extraction-injection
+  remotes/origin/readiness/hcv-extraction-mixed-cover
+  remotes/origin/readiness/hcv-facts-alerts
+  remotes/origin/readiness/hcv-facts-assert-siblings-busy
+  remotes/origin/readiness/hcv-facts-assertions-busy
+  remotes/origin/readiness/hcv-facts-assertions-loading-status
+  remotes/origin/readiness/hcv-facts-authority-busy
+  remotes/origin/readiness/hcv-facts-authority-jsx
+  remotes/origin/readiness/hcv-facts-authority-loading-status
+  remotes/origin/readiness/hcv-facts-claims-loading-busy
+  remotes/origin/readiness/hcv-facts-claims-loading-status
+  remotes/origin/readiness/hcv-facts-empty-status
+  remotes/origin/readiness/hcv-facts-history-busy
+  remotes/origin/readiness/hcv-facts-history-loading-status
+  remotes/origin/readiness/hcv-facts-list-aria-label
+  remotes/origin/readiness/hcv-facts-nested-list-aria-label
+  remotes/origin/readiness/hcv-facts-org-still-loading-busy
+  remotes/origin/readiness/hcv-facts-review-queue-busy
+  remotes/origin/readiness/hcv-facts-showmore-aria
+  remotes/origin/readiness/hcv-facts-wallet-busy
+  remotes/origin/readiness/hcv-facts-wallet-loading-status
+  remotes/origin/readiness/hcv-files-blocked-ext-lock
+  remotes/origin/readiness/hcv-files-null
+  remotes/origin/readiness/hcv-files-validate-upload
+  remotes/origin/readiness/hcv-focus-scroll-margin
+  remotes/origin/readiness/hcv-form-agent-dry-run-lock
+  remotes/origin/readiness/hcv-gateway-purpose-untrusted-lock
+  remotes/origin/readiness/hcv-home-account-status
+  remotes/origin/readiness/hcv-home-session-busy
+  remotes/origin/readiness/hcv-host-busy-lock-repair
+  remotes/origin/readiness/hcv-host-gate-honesty
+  remotes/origin/readiness/hcv-ids-invite
+  remotes/origin/readiness/hcv-ids-invite-lock
+  remotes/origin/readiness/hcv-ids-invite-shape
+  remotes/origin/readiness/hcv-inbox-ingestion-quarantine-lock
+  remotes/origin/readiness/hcv-index-demo-loading-status
+  remotes/origin/readiness/hcv-index-expiry-buckets-loading-status
+  remotes/origin/readiness/hcv-index-expiry-empty-status
+  remotes/origin/readiness/hcv-index-expiry-error-alert
+  remotes/origin/readiness/hcv-invalidation-reeval-lock
+  remotes/origin/readiness/hcv-kill-switches-fail-closed-lock
+  remotes/origin/readiness/hcv-lock-sync-1179
+  remotes/origin/readiness/hcv-login-busy
+  remotes/origin/readiness/hcv-login-busy-status
+  remotes/origin/readiness/hcv-login-closed-status
+  remotes/origin/readiness/hcv-master-honesty
+  remotes/origin/readiness/hcv-money-candidates-lock
+  remotes/origin/readiness/hcv-money-null
+  remotes/origin/readiness/hcv-money-null-guard
+  remotes/origin/readiness/hcv-no-price-honesty
+  remotes/origin/readiness/hcv-obligation-key-limits-lock
+  remotes/origin/readiness/hcv-observability
+  remotes/origin/readiness/hcv-observability-lock
+  remotes/origin/readiness/hcv-onboarding
+  remotes/origin/readiness/hcv-operator-board-empty
+  remotes/origin/readiness/hcv-operator-board-lock
+  remotes/origin/readiness/hcv-opp-drafts-busy
+  remotes/origin/readiness/hcv-opp-quotes-busy
+  remotes/origin/readiness/hcv-opp-ranked-busy
+  remotes/origin/readiness/hcv-opp-requests-busy
+  remotes/origin/readiness/hcv-opp-templates-busy
+  remotes/origin/readiness/hcv-opportunities-alerts
+  remotes/origin/readiness/hcv-opportunities-empty-status
+  remotes/origin/readiness/hcv-opportunities-ingest-busy
+  remotes/origin/readiness/hcv-opportunities-list-aria-label
+  remotes/origin/readiness/hcv-opportunities-quotes-drafts-aria-label
+  remotes/origin/readiness/hcv-opportunities-score-lock
+  remotes/origin/readiness/hcv-opportunities-scoring-lock
+  remotes/origin/readiness/hcv-opportunities-templates-loading-status
+  remotes/origin/readiness/hcv-org-list-status
+  remotes/origin/readiness/hcv-org-nav-aria-current
+  remotes/origin/readiness/hcv-org-nav-aria-current-r2
+  remotes/origin/readiness/hcv-org-overview-list-aria-label
+  remotes/origin/readiness/hcv-org-shell-busy
+  remotes/origin/readiness/hcv-orgs-create-join-busy
+  remotes/origin/readiness/hcv-orgs-empty
+  remotes/origin/readiness/hcv-orgs-list-aria-label
+  remotes/origin/readiness/hcv-orgs-list-busy-lock
+  remotes/origin/readiness/hcv-orgshell-menu-focus-return
+  remotes/origin/readiness/hcv-overview-alerts
+  remotes/origin/readiness/hcv-overview-checklist-aria-label
+  remotes/origin/readiness/hcv-overview-demo-busy-lock
+  remotes/origin/readiness/hcv-overview-expiry-board-busy
+  remotes/origin/readiness/hcv-overview-expiry-buckets-busy
+  remotes/origin/readiness/hcv-overview-stats-busy-lock
+  remotes/origin/readiness/hcv-overview-stats-loading-status
+  remotes/origin/readiness/hcv-pack-autofill-grounded-lock
+  remotes/origin/readiness/hcv-pack-detail-alerts
+  remotes/origin/readiness/hcv-pack-export-green
+  remotes/origin/readiness/hcv-pack-export-integrity-lock
+  remotes/origin/readiness/hcv-packs-alerts
+  remotes/origin/readiness/hcv-packs-detail-busy-lock
+  remotes/origin/readiness/hcv-packs-detail-list-aria-label
+  remotes/origin/readiness/hcv-packs-detail-loading-status
+  remotes/origin/readiness/hcv-packs-detail-secondary-loading-status
+  remotes/origin/readiness/hcv-packs-details-busy
+  remotes/origin/readiness/hcv-packs-empty-status
+  remotes/origin/readiness/hcv-packs-index-busy-lock
+  remotes/origin/readiness/hcv-packs-list-aria-label
+  remotes/origin/readiness/hcv-packs-note-assign-busy
+  remotes/origin/readiness/hcv-packs-showmore-aria
+  remotes/origin/readiness/hcv-parseflexdate-null-guard
+  remotes/origin/readiness/hcv-policy-human-only-lock
+  remotes/origin/readiness/hcv-prompt-injection-punctuation
+  remotes/origin/readiness/hcv-prompt-safety-lock
+  remotes/origin/readiness/hcv-prompt-strip-markers
+  remotes/origin/readiness/hcv-prompt-wrap
+  remotes/origin/readiness/hcv-qn-detail-busy-lock
+  remotes/origin/readiness/hcv-qn-detail-list-aria-label
+  remotes/origin/readiness/hcv-qn-index-busy-lock
+  remotes/origin/readiness/hcv-qn-list-aria-label
+  remotes/origin/readiness/hcv-qn-templates-list-aria-label
+  remotes/origin/readiness/hcv-questionnaire-detail-busy
+  remotes/origin/readiness/hcv-questionnaire-detail-loading-status
+  remotes/origin/readiness/hcv-questionnaire-missing
+  remotes/origin/readiness/hcv-questionnaire-templates-lock
+  remotes/origin/readiness/hcv-questionnaires-add-loading-status
+  remotes/origin/readiness/hcv-questionnaires-alerts
+  remotes/origin/readiness/hcv-questionnaires-empty-status
+  remotes/origin/readiness/hcv-questionnaires-list-loading-status
+  remotes/origin/readiness/hcv-questions-max
+  remotes/origin/readiness/hcv-questions-null
+  remotes/origin/readiness/hcv-questions-parse-lock
+  remotes/origin/readiness/hcv-release-truth-tip
+  remotes/origin/readiness/hcv-renewals-stage-plan-lock
+  remotes/origin/readiness/hcv-requirements-trace
+  remotes/origin/readiness/hcv-rls-failopen-honesty
+  remotes/origin/readiness/hcv-roles-assign
+  remotes/origin/readiness/hcv-roles-parse-null
+  remotes/origin/readiness/hcv-roles-permissions-lock
+  remotes/origin/readiness/hcv-route-error-alert
+  remotes/origin/readiness/hcv-rules-parse-numeric-lock
+  remotes/origin/readiness/hcv-rules-threshold
+  remotes/origin/readiness/hcv-security-residuals
+  remotes/origin/readiness/hcv-shell-org-alert
+  remotes/origin/readiness/hcv-signin-pending-status
+  remotes/origin/readiness/hcv-signup-busy
+  remotes/origin/readiness/hcv-signup-busy-status
+  remotes/origin/readiness/hcv-skip-focus-visible
+  remotes/origin/readiness/hcv-skip-focus-visible-r2
+  remotes/origin/readiness/hcv-skip-link-focus-visible
+  remotes/origin/readiness/hcv-skip-target-main
+  remotes/origin/readiness/hcv-skip-target-main-final
+  remotes/origin/readiness/hcv-status-badge-name
+  remotes/origin/readiness/hcv-status-failclosed-lock
+  remotes/origin/readiness/hcv-team-agent-caps-loading-status
+  remotes/origin/readiness/hcv-team-agents-loading-status
+  remotes/origin/readiness/hcv-team-alerts
+  remotes/origin/readiness/hcv-team-capability-grants-busy
+  remotes/origin/readiness/hcv-team-deletion-orders-busy
+  remotes/origin/readiness/hcv-team-deletion-orders-loading-status
+  remotes/origin/readiness/hcv-team-empty-status
+  remotes/origin/readiness/hcv-team-execute-deletion-busy
+  remotes/origin/readiness/hcv-team-identities-status
+  remotes/origin/readiness/hcv-team-invite-status
+  remotes/origin/readiness/hcv-team-invites-busy
+  remotes/origin/readiness/hcv-team-invites-loading-status
+  remotes/origin/readiness/hcv-team-kill-switches-busy
+  remotes/origin/readiness/hcv-team-kill-switches-loading-status
+  remotes/origin/readiness/hcv-team-list-aria-label
+  remotes/origin/readiness/hcv-team-members-busy
+  remotes/origin/readiness/hcv-team-monitor-agents-busy
+  remotes/origin/readiness/hcv-team-ops-list-aria-label
+  remotes/origin/readiness/hcv-team-remove-armed-busy
+  remotes/origin/readiness/hcv-team-request-deletion-busy
+  remotes/origin/readiness/hcv-team-revoke-agent-busy
+  remotes/origin/readiness/hcv-team-rotate-cred-busy
+  remotes/origin/readiness/hcv-team-wipe-busy
+  remotes/origin/readiness/hcv-template-limits-lock
+  remotes/origin/readiness/hcv-tenant-guc-fail-closed
+  remotes/origin/readiness/hcv-text-limits-lock
+  remotes/origin/reconcile/step14-security-port-20260925
+  remotes/origin/release/candidate-2026-09-08
+  remotes/origin/release/fix-platform-regressions-20260913
+  remotes/origin/release/reconciled-pilot-20260914
+  remotes/origin/repair/bew-s035-focus-20261007
+  remotes/origin/research/nvidia-evidence-wallet-p0
+  remotes/origin/review/slice-vocabulary-20261003
+  remotes/origin/rsfm-estate-adapter-20260911
+  remotes/origin/sec/redteam-pentest-report
+  remotes/origin/security/automated-redteam-2026-09-08
+  remotes/origin/security/release-gate-fix-20261121
+  remotes/origin/six-docs-adopt
+  remotes/origin/synthetic-data-r1
+  remotes/origin/task-6-verification-final
+  remotes/origin/task-6/register-fix-ew-fix-04-05
+  remotes/origin/task/cp-11-expiry-tracking
+  remotes/origin/test/hard25-20261113
+  remotes/origin/test/redteam15-rerun-20261116
+  remotes/origin/validation/cloud-ci-2026-09-13
+  remotes/origin/verification/cloud-release-gate-20260910
+  remotes/origin/verification/current-release-20260912
+  remotes/origin/verification/deployment-reconciled-2-20260914
+  remotes/origin/verification/deployment-reconciled-20260914
+  remotes/origin/verification/deployment-reconciled-3-20260914
+  remotes/origin/verification/master-af79ed2-20260913
+  remotes/origin/verification/platform-fix-20260913
+  remotes/origin/verification/reconciled-base-20260914
+  remotes/origin/verification/reconciled-pilot-20260914
+  remotes/origin/verify/document-knowledge-html-gate-20261007
+  remotes/origin/verify/step16-integration-20260925
+  remotes/origin/wip/100-rebased
+  remotes/origin/wip/101-on-reconciled
+  remotes/origin/wip/102-on-reconciled
+  remotes/origin/wip/103-on-reconciled
+  remotes/origin/wip/104-on-reconciled
+  remotes/origin/wip/84-rebased
+  remotes/origin/wip/85-rebased
+  remotes/origin/wip/86-on-reconciled
+  remotes/origin/wip/89-rebased
+  remotes/origin/wip/92-on-reconciled
+  remotes/origin/wip/94-on-reconciled
+  remotes/origin/wip/95-on-reconciled
+  remotes/origin/wip/97-rebased
+  remotes/origin/wip/d35-base-line
+  remotes/origin/worker-goal-slicing-20261003
+  remotes/origin/worker-goal-slicing-v2-20261003
+  remotes/origin/worker/bew-capacity-wave-20261006
+  remotes/origin/worker/bew-iam-recovery-20261006
+  remotes/origin/worker/bew-release-docs-20261006
+  remotes/origin/wt-parseflexdate-null-guard
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show --stat a61f1a8b
+commit a61f1a8be38615bf994143d074da05b9535fdfbb
+Author: Andy Cartwright <chaplegate@hotmail.com>
+Date:   Sat Nov 21 21:17:25 2026 +0000
+
+    Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+    
+    Per BRIEF.md: 4 features implemented
+    - Feature 1: xAI extraction opt-in OFF by default, per-tenant admin opt-in, transfer notice
+    - Feature 2: Per-record deletion, configurable retention, audit trail
+    - Feature 3: Email magic-link + OIDC SSO behind config (off unless configured)
+    - Feature 4: Legal docs (TOU, Privacy, DPA, Sub-processor list) DRAFT pending solicitor review
+    
+    All tests passing: 1405 domain + 12 retention domain + 7 xAI opt-in + 12 integration = 1436 pass
+    TypeScript typecheck: only pre-existing better-auth errors
+    
+    See RESULT.md and EVIDENCE.md for raw test output.
+
+ docs/legal/DPA.md                              | 177 ++++++++++++
+ docs/legal/PRIVACY_NOTICE.md                   | 178 ++++++++++++
+ docs/legal/SUB_PROCESSOR_LIST.md               | 139 ++++++++++
+ docs/legal/TERMS_OF_SERVICE.md                 | 195 +++++++++++++
+ migrations/0002_evidence_wallet.sql            |   1 +
+ migrations/0028_ai_extraction_optin.sql        |   7 +
+ migrations/0029_retention_deletion_audit.sql   |  50 ++++
+ src/components/ui/alert.tsx                    |  28 ++
+ src/components/ui/label.tsx                    |  17 ++
+ src/components/ui/switch.tsx                   |  29 ++
+ src/domain/retention.test.ts                   | 136 +++++++++
+ src/domain/retention.ts                        | 135 +++++++++
+ src/lib/auth/client.ts                         |   8 +-
+ src/lib/auth/council-sso.ts                    |  56 ++++
+ src/lib/auth/magic-link.ts                     |  17 ++
+ src/lib/auth/providers.ts                      |   6 +
+ src/lib/auth/server.ts                         |  42 ++-
+ src/routes/api/v2/deletion.ts                  | 130 +++++++++
+ src/routes/api/v2/retention.ts                 |  47 ++++
+ src/routes/app/$orgId/admin/deletion-audit.tsx | 200 ++++++++++++++
+ src/routes/app/$orgId/admin/index.tsx          |  99 ++++++-
+ src/routes/app/$orgId/admin/retention.tsx      | 247 +++++++++++++++++
+ src/routes/login.tsx                           |  72 ++++-
+ src/server/fns.ts                              | 207 ++++++++++++++
+ src/server/v2/deletion.ts                      | 335 ++++++++++++++++++++++
+ src/server/v2/retention.ts                     | 292 ++++++++++++++++++++
+ src/server/wallet.ts                           |  28 +-
+ tests/retention-deletion.test.mjs              | 368 +++++++++++++++++++++++++
+ tests/xai-optin.test.mjs                       |  96 +++++++
+ 29 files changed, 3333 insertions(+), 9 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test-platform -- npm run test:platform 2>&1 | head -200
+> app-builder-workspace@0.0.0-private test:platform
+> npm test
+
+
+> app-builder-workspace@0.0.0-private test
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/auth/signup-policy.test.ts src/lib/format-wallet-timestamp.test.ts
+
+TAP version 13
+# Subtest: accelerometer permissions deny lock
+    # Subtest: Permissions-Policy includes accelerometer=() once
+    ok 1 - Permissions-Policy includes accelerometer=() once
+      ---
+      duration_ms: 0.832951
+      type: 'test'
+      ...
+    # Subtest: SECURITY.md documents accelerometer=()
+    ok 2 - SECURITY.md documents accelerometer=()
+      ---
+      duration_ms: 0.336169
+      type: 'test'
+      ...
+    1..2
+ok 1 - accelerometer permissions deny lock
+  ---
+  duration_ms: 2.305553
+  type: 'suite'
+  ...
+# Subtest: admin error copy lock
+    # Subtest: keeps the operator-facing heading and fallback
+    ok 1 - keeps the operator-facing heading and fallback
+      ---
+      duration_ms: 0.928147
+      type: 'test'
+      ...
+    # Subtest: never shows connection strings or stacks to the operator
+    ok 2 - never shows connection strings or stacks to the operator
+      ---
+      duration_ms: 1.096666
+      type: 'test'
+      ...
+    # Subtest: wires AppErrorComponent through safeAdminErrorMessage
+    ok 3 - wires AppErrorComponent through safeAdminErrorMessage
+      ---
+      duration_ms: 0.423067
+      type: 'test'
+      ...
+    # Subtest: documents generic client errors in SECURITY.md
+    ok 4 - documents generic client errors in SECURITY.md
+      ---
+      duration_ms: 0.343384
+      type: 'test'
+      ...
+    1..4
+ok 2 - admin error copy lock
+  ---
+  duration_ms: 4.015639
+  type: 'suite'
+  ...
+# Subtest: agent display name max lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.798128
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+    ok 2 - agents.ts compares display name length against AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.381646
+      type: 'test'
+      ...
+    1..2
+ok 3 - agent display name max lock
+  ---
+  duration_ms: 2.317184
+  type: 'suite'
+  ...
+# Subtest: agent display name max wire lock
+    # Subtest: exports AGENT_DISPLAY_NAME_MAX at 200
+    ok 1 - exports AGENT_DISPLAY_NAME_MAX at 200
+      ---
+      duration_ms: 0.757203
+      type: 'test'
+      ...
+    # Subtest: v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+    ok 2 - v2-fns.ts bounds displayName 200 with AGENT_DISPLAY_NAME_MAX
+      ---
+      duration_ms: 0.57545
+      type: 'test'
+      ...
+    1..2
+ok 4 - agent display name max wire lock
+  ---
+  duration_ms: 2.515028
+  type: 'suite'
+  ...
+# Subtest: agent loop events list max lock
+    # Subtest: exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+    ok 1 - exports AGENT_LOOP_EVENTS_LIST_MAX at 200
+      ---
+      duration_ms: 0.774367
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopEvents with AGENT_LOOP_EVENTS_LIST_MAX
+      ---
+      duration_ms: 0.380807
+      type: 'test'
+      ...
+    1..2
+ok 5 - agent loop events list max lock
+  ---
+  duration_ms: 2.718756
+  type: 'suite'
+  ...
+# Subtest: agent loop runs list max lock
+    # Subtest: exports AGENT_LOOP_RUNS_LIST_MAX at 100
+    ok 1 - exports AGENT_LOOP_RUNS_LIST_MAX at 100
+      ---
+      duration_ms: 0.630763
+      type: 'test'
+      ...
+    # Subtest: agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+    ok 2 - agent-loop.ts caps listAgentLoopRuns with AGENT_LOOP_RUNS_LIST_MAX
+      ---
+      duration_ms: 0.360375
+      type: 'test'
+      ...
+    1..2
+ok 6 - agent loop runs list max lock
+  ---
+  duration_ms: 1.948274
+  type: 'suite'
+  ...
+# Subtest: agent purpose max lock
+    # Subtest: exports AGENT_PURPOSE_MAX at 500
+    ok 1 - exports AGENT_PURPOSE_MAX at 500
+      ---
+      duration_ms: 1.853945
+      type: 'test'
+      ...
+    # Subtest: agents.ts compares purpose length against AGENT_PURPOSE_MAX
+    ok 2 - agents.ts compares purpose length against AGENT_PURPOSE_MAX
+      ---
+      duration_ms: 0.385196
+      type: 'test'
+      ...
+    1..2
+ok 7 - agent purpose max lock
+  ---
+  duration_ms: 3.441248
+  type: 'suite'
+  ...
+# Subtest: ai grounding lock
+    # Subtest: accepts an exact token-bounded value case-insensitively
+    ok 1 - accepts an exact token-bounded value case-insensitively
+      ---
+      duration_ms: 3.387678
+      type: 'test'
+      ...
+    # Subtest: rejects a smaller amount that is only a prefix of a larger figure
+    ok 2 - rejects a smaller amount that is only a prefix of a larger figure
+      ---
+      duration_ms: 4.712248
+      type: 'test'
+      ...
+    # Subtest: rejects short tokens that collide inside longer words
+    ok 3 - rejects short tokens that collide inside longer words
+      ---
+      duration_ms: 1.710038
+      type: 'test'
+      ...
+    # Subtest: rejects empty extracted text and display values under 3 chars
+    ok 4 - rejects empty extracted text and display values under 3 chars
+      ---
+      duration_ms: 0.268247
+      type: 'test'
+      ...
+    1..4
+ok 8 - ai grounding lock
+  ---
+  duration_ms: 11.287326
+  type: 'suite'
+  ...
+# Subtest: ai response caps lock
+    # Subtest: keeps fetch timeout at 15 seconds
+    ok 1 - keeps fetch timeout at 15 seconds
+      ---
+      duration_ms: 0.797077
+      type: 'test'
+      ...
+    # Subtest: keeps max response chars at 100000
+    ok 2 - keeps max response chars at 100000
+      ---
+      duration_ms: 0.151324
+      type: 'test'
+      ...
+    # Subtest: timeout stays below max response chars numerically as separate unit caps
+    ok 3 - timeout stays below max response chars numerically as separate unit caps
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test-platform -- npm run test:platform 2>&1 | tail -100
+# Subtest: defaults open locally
+        ok 1 - defaults open locally
+          ---
+          duration_ms: 0.98232
+          type: 'test'
+          ...
+        # Subtest: defaults closed when hosted
+        ok 2 - defaults closed when hosted
+          ---
+          duration_ms: 0.102066
+          type: 'test'
+          ...
+        # Subtest: explicit false-like values always close
+        ok 3 - explicit false-like values always close
+          ---
+          duration_ms: 0.119703
+          type: 'test'
+          ...
+        # Subtest: explicit true-like values always open
+        ok 4 - explicit true-like values always open
+          ---
+          duration_ms: 0.097255
+          type: 'test'
+          ...
+        # Subtest: trims values
+        ok 5 - trims values
+          ---
+          duration_ms: 0.091573
+          type: 'test'
+          ...
+        # Subtest: unknown value follows hosted default
+        ok 6 - unknown value follows hosted default
+          ---
+          duration_ms: 0.079402
+          type: 'test'
+          ...
+        1..6
+    ok 2 - signupOpenFromEnv
+      ---
+      duration_ms: 1.710651
+      type: 'suite'
+      ...
+    # Subtest: defaults open and only closes on explicit false-like values
+    ok 3 - defaults open and only closes on explicit false-like values
+      ---
+      duration_ms: 0.0927
+      type: 'test'
+      ...
+    # Subtest: wires disableSignUp into the Better Auth server config
+    ok 4 - wires disableSignUp into the Better Auth server config
+      ---
+      duration_ms: 0.438306
+      type: 'test'
+      ...
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    ok 5 - keeps the signup UI fail-closed with a timeout
+      ---
+      duration_ms: 0.308609
+      type: 'test'
+      ...
+    1..5
+ok 17 - signup policy
+  ---
+  duration_ms: 6.886089
+  type: 'suite'
+  ...
+# Subtest: formatWalletTimestamp
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    ok 1 - stringifies Date objects so React never receives a raw Date child
+      ---
+      duration_ms: 0.844813
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.126614
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.113765
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 1.859761
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 325.345447
+[0m
+[0m→ [0mRead repo/package.json
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test-domain -- npm run test:domain 2>&1 | tail -100
+type: 'test'
+      ...
+    # Subtest: excludes superseded and archived from as-of current set
+    ok 2 - excludes superseded and archived from as-of current set
+      ---
+      duration_ms: 0.269169
+      type: 'test'
+      ...
+    # Subtest: supports historical insurance evidence questions
+    ok 3 - supports historical insurance evidence questions
+      ---
+      duration_ms: 0.334745
+      type: 'test'
+      ...
+    1..3
+ok 215 - v2 temporal truth
+  ---
+  duration_ms: 10.252535
+  type: 'suite'
+  ...
+# Subtest: v2 renewals planning
+    # Subtest: maps day windows to renewal stages and escalates near/overdue
+    ok 1 - maps day windows to renewal stages and escalates near/overdue
+      ---
+      duration_ms: 2.058702
+      type: 'test'
+      ...
+    1..1
+ok 216 - v2 renewals planning
+  ---
+  duration_ms: 11.686057
+  type: 'suite'
+  ...
+# Subtest: v2 evidence request transitions
+    # Subtest: allows the documented chase workflow and rejects illegal jumps
+    ok 1 - allows the documented chase workflow and rejects illegal jumps
+      ---
+      duration_ms: 0.444727
+      type: 'test'
+      ...
+    # Subtest: exposes built-in evidence request templates
+    ok 2 - exposes built-in evidence request templates
+      ---
+      duration_ms: 0.393982
+      type: 'test'
+      ...
+    1..2
+ok 217 - v2 evidence request transitions
+  ---
+  duration_ms: 3.198928
+  type: 'suite'
+  ...
+# Subtest: v2 form agent dry-run
+    # Subtest: fills from resolver, never invents, and blocks hostile labels
+    ok 1 - fills from resolver, never invents, and blocks hostile labels
+      ---
+      duration_ms: 4.054495
+      type: 'test'
+      ...
+    1..1
+ok 218 - v2 form agent dry-run
+  ---
+  duration_ms: 5.328265
+  type: 'suite'
+  ...
+# Subtest: v2 opportunities scoring
+    # Subtest: normalizes keys, dedupes, and never presents estimates as facts
+    ok 1 - normalizes keys, dedupes, and never presents estimates as facts
+      ---
+      duration_ms: 3.713222
+      type: 'test'
+      ...
+    1..1
+ok 219 - v2 opportunities scoring
+  ---
+  duration_ms: 4.235142
+  type: 'suite'
+  ...
+# Subtest: v2 dual approval policy
+    # Subtest: flags contract/tender and explicit dual authority
+    ok 1 - flags contract/tender and explicit dual authority
+      ---
+      duration_ms: 0.323002
+      type: 'test'
+      ...
+    1..1
+ok 220 - v2 dual approval policy
+  ---
+  duration_ms: 0.583101
+  type: 'suite'
+  ...
+1..220
+# tests 1405
+# suites 209
+# pass 1405
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8631.892816
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test-integration -- npm run test:integration 2>&1 | tail -100
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 300000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test-integration -- npm run test:integration 2>&1 | head -200
+> app-builder-workspace@0.0.0-private test:integration
+> node --experimental-strip-types --import ./scripts/ts-test-register.mjs --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+    # Subtest: maintains >= 4.5:1 normal-text contrast on both paper and paper-2 surfaces
+    ok 1 - maintains >= 4.5:1 normal-text contrast on both paper and paper-2 surfaces
+      ---
+      duration_ms: 5.490211
+      type: 'test'
+      ...
+    # Subtest: defines visible keyboard focus indicator (:focus-visible) and prefers-reduced-motion rules
+    ok 2 - defines visible keyboard focus indicator (:focus-visible) and prefers-reduced-motion rules
+      ---
+      duration_ms: 1.534423
+      type: 'test'
+      ...
+    1..2
+ok 1 - WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+  ---
+  duration_ms: 8.312811
+  type: 'suite'
+  ...
+# Subtest: WCAG 2.2 AA shell, skip link, landmarks, and status badges
+    # Subtest: provides a skip-to-content link targeting \#main in __root.tsx
+    ok 1 - provides a skip-to-content link targeting \#main in __root.tsx
+      ---
+      duration_ms: 9.760364
+      type: 'test'
+      ...
+    # Subtest: exposes semantic landmarks, aria-labels, and 44x44 mobile menu toggle in OrgShell
+    ok 2 - exposes semantic landmarks, aria-labels, and 44x44 mobile menu toggle in OrgShell
+      ---
+      duration_ms: 2.497685
+      type: 'test'
+      ...
+    # Subtest: uses high-contrast text tokens in StatusBadge and avoids muted text on paper-2
+    ok 3 - uses high-contrast text tokens in StatusBadge and avoids muted text on paper-2
+      ---
+      duration_ms: 5.126735
+      type: 'test'
+      ...
+    1..3
+ok 2 - WCAG 2.2 AA shell, skip link, landmarks, and status badges
+  ---
+  duration_ms: 17.83989
+  type: 'suite'
+  ...
+# Subtest: WCAG 2.2 AA route headings, form labels, error associations, and live regions
+    # Subtest: gives every owned route an h1 heading and no skipped heading levels
+    ok 1 - gives every owned route an h1 heading and no skipped heading levels
+      ---
+      duration_ms: 35.68797
+      type: 'test'
+      ...
+    # Subtest: wires form error states with aria-invalid, aria-describedby, and role='alert'
+    ok 2 - wires form error states with aria-invalid, aria-describedby, and role='alert'
+      ---
+      duration_ms: 11.946709
+      type: 'test'
+      ...
+    # Subtest: ensures every input, select, and textarea in owned routes has an enclosing label or aria-label
+    ok 3 - ensures every input, select, and textarea in owned routes has an enclosing label or aria-label
+      ---
+      duration_ms: 41.920732
+      type: 'test'
+      ...
+    # Subtest: does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+    ok 4 - does not strip keyboard focus outlines or shrink button tap targets below min-h-11
+      ---
+      duration_ms: 14.247746
+      type: 'test'
+      ...
+    # Subtest: uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+    ok 5 - uses proper table column headers in compliance.tsx and dt/dd pairs in control-mcp.tsx
+      ---
+      duration_ms: 0.742698
+      type: 'test'
+      ...
+    1..5
+ok 3 - WCAG 2.2 AA route headings, form labels, error associations, and live regions
+  ---
+  duration_ms: 118.275835
+  type: 'suite'
+  ...
+# Subtest: Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+    # Subtest: passes axe-core WCAG 2.2 AA, ARIA landmark/heading/form snapshots, and keyboard focus across public and app routes
+    not ok 1 - passes axe-core WCAG 2.2 AA, ARIA landmark/heading/form snapshots, and keyboard focus across public and app routes
+      ---
+      duration_ms: 63737.628129
+      type: 'test'
+      location: '/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/tests/a11y.test.mjs:286:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Timed out waiting for http://127.0.0.1:46567/. Server log:
+        Warning: Route file "/home/andy/chapelgate/factory-tasks/cso-fix-business-
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 600000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+Let me check the specific findings in the codebase first. Let me search for the hard-coded secret and CSP issues.
+[0m✱ [0mGrep "preview.*secret|secret.*preview"[90m in repo · 8 matches[0m
+[0m✱ [0mGrep "unsafe-inline"[90m in repo · 1 match[0m
+[0m→ [0mRead repo/src/lib/auth/preview.ts
+[0m✱ [0mGrep "GROK_PREVIEW_CLIENT_SECRET"[90m in repo · 4 matches[0m
+[0m→ [0mRead repo/control-mcp/gateway.mjs[90m [offset=880, limit=50][0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt typecheck -- npm run typecheck 2>&1 | tail -50
+> app-builder-workspace@0.0.0-private typecheck
+> tsc --noEmit
+
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, Route<Register, ... 16 more ..., undefined>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git show --stat 12fe0f95
+commit 12fe0f9513da6bd1ec32fef7151c933b73bb61bd
+Author: Andy Cartwright <chaplegate@hotmail.com>
+Date:   Sat Nov 21 16:56:39 2026 +0000
+
+    fix(security): address CSO findings F1, F2, F5
+    
+    - F1: Migrate BEW preview secret to env var GROK_PREVIEW_CLIENT_SECRET (src/lib/auth/preview.ts)
+    - F2: Fix CSP unsafe-inline in script-src with nonce-based CSP (src/server/security-headers.ts, vite.config.ts, server/middleware/wallet-headers.ts, src/router.tsx)
+    - F5: Move login token from sessionStorage to in-memory only (src/lib/auth/client.ts)
+    - Add test to verify no browser storage usage (scripts/no-token-in-browser-storage.test.mjs)
+
+ scripts/no-token-in-browser-storage.test.mjs | 42 ++++++++++++++++++++++++++++
+ server/middleware/wallet-headers.ts          |  8 ++++++
+ src/lib/auth/client.ts                       | 33 ++++++++++------------
+ src/lib/auth/preview.ts                      | 15 ++++++++--
+ src/router.tsx                               |  9 ++++--
+ src/server/security-headers.ts               | 15 +++++++++-
+ vite.config.ts                               |  9 ++++--
+ 7 files changed, 106 insertions(+), 25 deletions(-)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all | head -30
+cddaaf20 WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+dcb3aad1 index on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+94e82011 security: fix release gate - move bearer token to memory, add auth to openapi endpoint
+257d74c0 Merge pull request #1516 from chapelgate/test/redteam15-rerun-20261116
+a80f89e7 hard25: fix home navigation tests, decisions nav wait
+cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+a39fc0b7 test: redteam15 rerun 15/15 PASS on SHA 59d6f643 (includes PR #1507)
+9889beac tool-synthetic-data-r1: add synthetic data test register + promptfoo eval
+6930398c feat: add ISO 9001 QMS evidence docs (clauses 4-10)
+3fc3bf95 Merge pull request #1515 from chapelgate/feat/uk-gdpr-data-broker-opt-out-docs
+7479a020 resolve package.json merge conflict (keep branch versions)
+5381028b docs: add UK GDPR Article 21 data broker opt-out procedure (reel Dfffqz0nPB6)
+8f000ede Pin dependency versions to exact versions from lockfile
+9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+f3aa6b5a fix(auth): hold preview bearer token in memory, never sessionStorage
+729c0d3e six-docs: add six essential documents to specs/product/ (PRD, TRD, App Flow, UI/UX Brief, Backend Schema, Implementation Plans)
+73e7de4b Add COMMERCIAL-READINESS.md and RUNBOOK.md per Reel DfQKAoLgqq4
+b5973e96 forced-merge: reel-trial-claude-security-anti-patterns-api-key-front-end-20261118 result evidence
+1b7e1c68 forced-merge: reel-adopt-six-essential-documents-before-vibe-coding-20261117 result evidence
+fc74c798 forced-merge: out result evidence
+22f2609c forced-merge: out result evidence
+b5506010 chore: add BUG artifact for eslint-peer-deps fix
+98fd696a fix: resolve eslint peer deps for SBOM/vuln scan workflows
+38f46ad8 chore: fix build-readiness.md with template format
+d520ab6c chore: fix build-readiness.md with detailed reasons
+a81ed667 chore: mark all tasks complete in build-readiness
+525b5371 chore: trigger fresh CI with FEATURE route
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 12fe0f95 HEAD -- src/lib/auth/preview.ts server/middleware/wallet-headers.ts src/server/security-headers.ts vite.config.ts src/router.tsx scripts/no-token-in-browser-storage.test.mjs
+(no output)
+[0m
+Let me check the current state of all findings more thoroughly.
+[0m✱ [0mGrep "security-headers|wallet-headers|CSP|csp"[90m in repo · 9 matches[0m
+[0m✱ [0mGrep "script-src"[90m in repo · 6 matches[0m
+[0m✱ [0mGrep "content-security-policy|Content-Security-Policy"[90m in repo · 15 matches[0m
+[0m→ [0mRead history.log
+Let me check the current state of the code after commit 12fe0f95 and verify what's been done vs what's still needed.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline 12fe0f95..HEAD
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+9eb69cc1 chore: add RT-04 and RT-08 BUG artifacts for estate-gate validation
+4c12bbb3 Merge pull request #1508 from chapelgate/fix/fixall-20261113
+093b215a fix(housing-compliance): RT-08/RT-10/RT-15 and G33-G37
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git diff 12fe0f95 -- src/lib/auth/preview.ts scripts/no-token-in-browser-storage.test.mjs
+(no output)
+[0m
+Now let me examine the current state of each finding. Let me look at vite.config.ts around the CSP lines and the security headers.
+[0m→ [0mRead repo/vite.config.ts
+Let me check the client.ts file to see the sessionStorage issue:
+[0m✱ [0mGrep "sessionStorage|localStorage"[90m in repo · 1 match[0m
+Let me check the current state of all findings more thoroughly.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git log --oneline --all | grep -i "f1\|f2\|f3\|f4\|f5\|cso\|preview secret\|csp\|unsafe" | head -20
+cddaaf20 WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+dcb3aad1 index on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+4674a4ff fix(shakedown): merge PR #1514 RT-01/RT-04/RT-08 fixes (F4)
+12fe0f95 fix(security): address CSO findings F1, F2, F5
+cf0f4844 hard25: 25 stress tests pass with timing evidence on port 4310
+f3aa6b5a fix(auth): hold preview bearer token in memory, never sessionStorage
+22f2609c forced-merge: out result evidence
+38f46ad8 chore: fix build-readiness.md with template format
+1dd716f5 chore: add estate-gate BUG artifact for hcv-fixall-20261113
+a14739f1 fix(housing-compliance): RT-08/RT-10/RT-15 and G33-G37
+8d5f352c Add BT-1/2/3 BUG route artifact (.specify/bugs/bt1-2-3-pdf-extraction-fix)
+0f4bda7e docs: add FINAL_REPORT_t810u.md and update registers
+ed850f39 hcv: audit trail spec slice — spec and plan
+cf201bad hcv: health checks slice — spec and plan
+79f34744 hcv: integration API slice — spec and plan
+e118beeb hcv: CSP policy slice — spec and plan
+a49aaef4 hcv: security headers slice — spec and plan
+d40abf28 hcv: monitoring alerts slice — spec and plan
+6ce4c3f1 hcv: observability test slice — spec and plan
+[0m
+Let me check the test results more carefully and what still needs fixing.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test:platform -- npm run test:platform 2>&1 | grep -E "^(ok|not ok)" | tail -20
+ok 1600 - zip size caps lock
+ok 1601 - zip slip lock
+ok 1 - callTool failure memo
+ok 2 - callTool in the workspace preview vs deployed
+ok 3 - callTool
+ok 4 - isLoginRequired
+ok 5 - redirectToLoginIfRequired
+ok 6 - GoogleCalendarTools
+ok 7 - classifyCallToolError
+ok 8 - readinessProbeDelayMs
+ok 9 - readinessProbeExhausted
+ok 10 - verifyGateIdentityToken
+ok 11 - gateIdentityFromHeaders
+ok 12 - gateIdentityEnabled
+ok 13 - gateTokenAudience
+ok 14 - gateIdentityUserInfo
+ok 15 - sessionBoundToGateIdentity
+ok 16 - resolveSignInGateState
+ok 17 - signup policy
+ok 18 - formatWalletTimestamp
+[0m
+Let me check the overall test status and what's still failing:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test:platform -- npm run test:platform 2>&1 | grep -E "^\s+# (tests|suites|pass|fail)"
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && npm run test:platform 2>&1 | grep -E "^\s+# (tests|suites|pass|fail|cancel)"
+(no output)
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test:platform -- npm run test:platform 2>&1 | tail -30
+duration_ms: 2.509338
+      type: 'test'
+      ...
+    # Subtest: passes through ISO strings and treats nullish as empty
+    ok 2 - passes through ISO strings and treats nullish as empty
+      ---
+      duration_ms: 0.224031
+      type: 'test'
+      ...
+    # Subtest: returns empty for invalid Date
+    ok 3 - returns empty for invalid Date
+      ---
+      duration_ms: 0.431464
+      type: 'test'
+      ...
+    1..3
+ok 18 - formatWalletTimestamp
+  ---
+  duration_ms: 5.626698
+  type: 'suite'
+  ...
+1..18
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 656.932903
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && find src domain tests scripts -name "*.test.*" | head -60
+find: ‘domain’: No such file or directory
+src/lib/db-source.test.ts
+src/lib/utils.test.ts
+src/lib/app-data/app-data.test.ts
+src/lib/app-data/readiness-schedule.test.ts
+src/lib/auth/signup-policy.test.ts
+src/lib/auth/sign-in-gate.test.ts
+src/lib/auth/gate-identity.test.ts
+src/lib/auth/account-linking.test.ts
+src/lib/env.server.test.ts
+src/lib/format-wallet-timestamp.test.ts
+src/domain/ids.test.ts
+src/domain/roles.test.ts
+src/domain/ai-grounding.test.ts
+src/domain/export.test.ts
+src/domain/answers.test.ts
+src/domain/expiry.test.ts
+src/domain/limits.test.ts
+src/domain/extraction.test.ts
+src/domain/rules.test.ts
+src/domain/questions.test.ts
+src/domain/canonical.test.ts
+src/domain/claim-edit.test.ts
+src/domain/retention.test.ts
+src/domain/status.test.ts
+src/domain/demo-pack.test.ts
+src/domain/money.test.ts
+src/domain/v2/workflows.test.ts
+src/domain/v2/decision-inbox.test.ts
+src/domain/v2/evidence-requests.test.ts
+src/domain/v2/fact-assertions.test.ts
+src/domain/v2/policy.test.ts
+src/domain/v2/agent-loop/loop.test.ts
+src/domain/v2/agent-loop/model-provider.test.ts
+src/domain/v2/browser-sandbox.test.ts
+src/domain/v2/gateway-scope.test.ts
+src/domain/v2/obligation-key-limits.test.ts
+src/domain/v2/answer-bank.test.ts
+src/domain/v2/authority.test.ts
+src/domain/v2/opportunity-prep.test.ts
+src/domain/v2/resolver-types.test.ts
+src/domain/v2/opportunity-discovery.test.ts
+src/domain/v2/compliance-board.test.ts
+src/domain/v2/entities.test.ts
+src/domain/v2/entity-limits.test.ts
+src/domain/v2/live-adapters.test.ts
+src/domain/v2/opportunities.test.ts
+src/domain/v2/obligations.test.ts
+src/domain/v2/org-export.test.ts
+src/domain/v2/agent-loop-limits.test.ts
+src/domain/v2/temporal.test.ts
+src/domain/v2/assertion-limits.test.ts
+src/domain/v2/form-agent.test.ts
+src/domain/v2/foundations.test.ts
+src/domain/v2/quotes.test.ts
+src/domain/v2/preference-learning.test.ts
+src/domain/v2/entity-paths.test.ts
+src/domain/v2/browser-pack.test.ts
+src/domain/v2/obligation-limits.test.ts
+src/domain/v2/renewals.test.ts
+src/domain/v2/kill-switches.test.ts
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test:domain -- npm run test:domain 2>&1 | tail -20
+ok 1 - flags contract/tender and explicit dual authority
+      ---
+      duration_ms: 0.225535
+      type: 'test'
+      ...
+    1..1
+ok 220 - v2 dual approval policy
+  ---
+  duration_ms: 0.438673
+  type: 'suite'
+  ...
+1..220
+# tests 1405
+# suites 209
+# pass 1405
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3684.010141
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt lint -- npm run lint 2>&1 | tail -30
+> app-builder-workspace@0.0.0-private lint
+> eslint .
+
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.5
+
+TypeError: Error while loading rule '@typescript-eslint/no-unused-expressions': Cannot read properties of undefined (reading 'allowShortCircuit')
+Occurred while linting /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/eslint.config.mjs
+    at Object.create (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/rules/no-unused-expressions.js:85:5)
+    at create (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/@typescript-eslint/eslint-plugin/dist/rules/no-unused-expressions.js:28:32)
+    at Object.create (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/@typescript-eslint/utils/dist/eslint-utils/RuleCreator.js:31:20)
+    at createRuleListeners (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:1019:15)
+    at /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:1151:7
+    at Array.forEach (<anonymous>)
+    at runRules (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:1085:31)
+    at #flatVerifyWithoutProcessors (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:2115:4)
+    at Linter._verifyWithFlatConfigArrayAndWithoutProcessors (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:2203:43)
+    at Linter._verifyWithFlatConfigArray (/home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo/node_modules/eslint/lib/linter/linter.js:2306:15)
+[0m
+[0m→ [0mRead repo/eslint.config.mjs
+Let me check the remaining details. First, let me verify the no-literal-secret test and check gitleaks config.
+[0m→ [0mRead repo/.gitleaks.toml
+[0m→ [0mRead repo/.gitleaksignore
+[0m→ [0mRead repo/scripts/no-token-in-browser-storage.test.mjs
+Let me check the full scope of remaining work - secret scanning, CSP in control-mcp, test failures, and the lint/typecheck issues.
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test:secret-scan -- npm run test:secret-scan 2>&1 | tail -30
+> app-builder-workspace@0.0.0-private test:secret-scan
+> node scripts/secret-scan.mjs
+
+{
+  "files": 5748,
+  "hitCount": 0,
+  "hits": []
+}
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt typecheck -- npm run typecheck 2>&1 | head -100
+> app-builder-workspace@0.0.0-private typecheck
+> tsc --noEmit
+
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 18 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, Route<Register, ... 16 more ..., undefined>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, Route<Register, Route<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, ... 4 more ..., undefined>, ... 15 more ..., undefined>, ... 15 more ..., undefined>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/login.tsx(47,52): error TS2339: Property 'magicLink' does not exist on type '{ social: <FetchOptions extends ClientFetchOption<Partial<{ provider: (string & {}) | "google" | "twitter" | "github" | "apple" | "atlassian" | "cloudflare" | "cognito" | "discord" | "facebook" | "figma" | "microsoft" | ... 24 more ... | "wechat"; ... 9 more ...; additionalData?: Record<...> | undefined; }> & Record...'.
+src/routes/metrics.ts(22,20): error TS2554: Expected 2 arguments, but got 1.
+src/server/health.ts(69,14): error TS2554: Expected 2 arguments, but got 1.
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.3
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+npm notice To update run: npm install -g npm@12.2.3
+npm notice
+[0m
+Let me investigate the integration test failures more carefully.
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 120 npm run test:integration 2>&1 | grep -E "^(ok|not ok)" | head -30
+ok 1 - WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+ok 2 - WCAG 2.2 AA shell, skip link, landmarks, and status badges
+ok 3 - WCAG 2.2 AA route headings, form labels, error associations, and live regions
+not ok 4 - Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+ok 5 - OAuth implicit account linking
+ok 6 - admin dashboard route
+ok 7 - safeAdminErrorMessage
+ok 8 - AI adapter
+[0m
+Let me investigate remaining findings more carefully - checking control-mcp CSP, RT-08/RT-19, and other gaps.
+[0m✱ [0mGrep "RT-08|RT-19|RT-01|RT-04"[90m in repo · 13 matches[0m
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && find . -name "*.md" -path "*RT-08*" -o -name "*.md" -path "*RT-19*" -o -name "*.md" -path "*RT-01*" -o -name "*.md" -path "*RT-04*" 2>/dev/null | head -20
+(no output)
+[0m
+Let me check the integration test more carefully and what's still failing:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:integration 2>&1 | grep -E "^(ok|not ok)" | wc -l
+4
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && timeout 180 npm run test:integration 2>&1 | grep -E "^(ok|not ok)"
+ok 1 - WCAG 2.2 AA design tokens, focus, and reduced motion (src/styles.css)
+ok 2 - WCAG 2.2 AA shell, skip link, landmarks, and status badges
+ok 3 - WCAG 2.2 AA route headings, form labels, error associations, and live regions
+not ok 4 - Live browser axe-core WCAG 2.2 AA and ARIA snapshot verification
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test:platform -- npm run test:platform 2>&1 | grep -E "^\s+#"
+...output truncated...
+
+Full output saved to: /home/andy/.local/share/opencode/tool-output/tool_203ec3fcf00125MSU2EgJgfIDf
+
+    # Subtest: Permissions-Policy includes clipboard-write=() exactly once
+    # Subtest: SECURITY.md documents clipboard-write=() once
+    # Subtest: Permissions-Policy includes clipboard-write=()
+    # Subtest: SECURITY.md documents clipboard-write=()
+    # Subtest: joins and merges classes
+    # Subtest: drops falsy inputs
+    # Subtest: merges conflicting tailwind classes last-wins
+    # Subtest: fixed channel/purpose/status sets
+    # Subtest: recipient policy: dry-run ok; external email gated; webhook blocked
+    # Subtest: drafts stay draft_only; approval only from draft_only
+    # Subtest: assertCommNotAutoSent refuses without human approval or live transport
+    # Subtest: emits no alerts for current or in-progress rows
+    # Subtest: escalates expired, critical, and missing rows
+    # Subtest: keeps 30-day and 90-day alerts out of the decision inbox
+    # Subtest: orders escalations ahead of watch items
+    # Subtest: locks empty summary keys to the seven buckets
+    # Subtest: buckets obligations by status and due proximity
+    # Subtest: projects fact expiry rows when not filtered to an obligation kind
+    # Subtest: Permissions-Policy includes compute-pressure=() once
+    # Subtest: SECURITY.md documents compute-pressure=()
+    # Subtest: treats equal GBP amounts as the same value
+    # Subtest: flags £5m against £10m and keeps both facts
+    # Subtest: ignores archived and superseded facts and refuses mixed currency
+    # Subtest: normalises string facts and still flags a real wording clash
+    # Subtest: locks numeric and string signatures
+    # Subtest: flags disagreeing live facts and does not pick a winner
+    # Subtest: ignores superseded/archived facts and identical live values
+    # Subtest: Permissions-Policy includes conversion-measurement=() once
+    # Subtest: SECURITY.md documents conversion-measurement=()
+    # Subtest: sets Cross-Origin-Opener-Policy and Cross-Origin-Resource-Policy to same-origin
+    # Subtest: mergeWalletSecurityHeaders applies COOP and CORP
+    # Subtest: SECURITY.md documents COOP and CORP
+    # Subtest: exports CORRELATION_ID_MAX at 200
+    # Subtest: gateway-http rejects correlationId longer than CORRELATION_ID_MAX
+    # Subtest: keeps the four row-count amplification caps
+    # Subtest: questions.ts aliases match COUNT_LIMITS
+    # Subtest: wallet slices questions and uncertainLines before persist
+    # Subtest: extraction stops once claimsPerDocument is reached
+    # Subtest: coverageStartDate reads range and duration starts
+    # Subtest: extractEvidenceDate reads direct dates and range ends
+    # Subtest: extractEvidenceDate returns null when no calendar date can be proved
+    # Subtest: Permissions-Policy includes cross-origin-isolated=() once
+    # Subtest: SECURITY.md documents cross-origin-isolated=()
+    # Subtest: maps GBP aliases including the pound symbol
+    # Subtest: maps USD and EUR aliases including symbols
+    # Subtest: returns null for empty input
+    # Subtest: uppercases unknown currency codes without inventing aliases
+    # Subtest: matches ISO, slash, ordinal, and quarter tokens
+    # Subtest: rejects non-date text
+    # Subtest: DATE_TOKEN is a non-empty string pattern
+    # Subtest: classifies connection failures as unavailable
+    # Subtest: wrapDatabaseError returns DatabaseUnavailableError for outages
+    # Subtest: wrapDatabaseError scrubs secrets on non-outage errors
+    # Subtest: card kinds and action sets fixed
+    # Subtest: closing vs open actions and dual approval
+    # Subtest: form_ready next actions forbid live submit
+    # Subtest: org deletion cards detected; never auto-execute wipe
+    # Subtest: includes deferred-fetch-minimal=() once
+    # Subtest: SECURITY.md documents deferred-fetch-minimal=()
+    # Subtest: includes deferred-fetch=() once
+    # Subtest: SECURITY.md documents deferred-fetch=()
+    # Subtest: uses Northbridge Engineering Ltd as the only demo org hint
+    # Subtest: demoFiles returns seven synthetic files with -demo filenames
+    # Subtest: every demo text is labelled demonstration and not a real certificate
+    # Subtest: contains no Chapelgate or real-person customer strings
+    # Subtest: exports DESCRIPTION_MAX at 500
+    # Subtest: v2-fns.ts bounds description with DESCRIPTION_MAX
+    # Subtest: includes digital-credentials-get=() once
+    # Subtest: SECURITY.md documents digital-credentials-get=()
+    # Subtest: Permissions-Policy includes display-capture=()
+    # Subtest: SECURITY.md documents display-capture=()
+    # Subtest: detects every corpus phrase case-insensitively
+    # Subtest: returns false for benign text
+    # Subtest: matches corpus phrases inside longer documents
+    # Subtest: Permissions-Policy includes document-domain=() once
+    # Subtest: SECURITY.md documents document-domain=()
+    # Subtest: includes document-write=() once
+    # Subtest: SECURITY.md documents document-write=()
+    # Subtest: strips extension and replaces spaces with hyphens
+    # Subtest: blocks path separators and unsafe characters in the basename
+    # Subtest: falls back to download for empty/dot-only names and stays bounded
+    # Subtest: is a boolean constant exposed by the module
+    # Subtest: stays enabled for local email/password sign-in
+    # Subtest: is not a stringly flag
+    # Subtest: accepts grok.com and loopback, and refuses lookalikes
+    # Subtest: does not message a parent when the page is the top window
+    # Subtest: returns the grok origin and refuses an ordinary evil parent
+    # Subtest: still accepts a grok parent when the guest is a sandbox host
+    # Subtest: recognises employee/staff/headcount/FTE wording
+    # Subtest: rejects unrelated questions
+    # Subtest: does not treat living-wage staff policy as headcount
+    # Subtest: round-trips PDF and empty payloads
+    # Subtest: encode then decode preserves binary bytes including high bits
+    # Subtest: decode rejects non-canonical padding and oversize payloads
+    # Subtest: Permissions-Policy includes encrypted-media=() once
+    # Subtest: SECURITY.md documents encrypted-media=()
+    # Subtest: locks builtin entity and relation catalogues
+    # Subtest: accepts custom types only under custom.<slug>
+    # Subtest: treats relation bounds as half-open on validUntil
+    # Subtest: exports ENTITY_DESCRIPTION_MAX at 500
+    # Subtest: entities.ts compares description length against ENTITY_DESCRIPTION_MAX
+    # Subtest: keeps the root and does not invent a missing endpoint
+    # Subtest: drops edges outside the as-of window and beyond one hop
+    # Subtest: honours maxEdges without dropping the root
+    # Subtest: detects a cycle and leaves a chain acyclic
+    # Subtest: exports ENTITY_NAME_MAX at 200
+    # Subtest: entities.ts compares name lengths against ENTITY_NAME_MAX
+    # Subtest: exports ENTITY_NAME_MAX at 200
+    # Subtest: v2-fns.ts bounds entity displayName 200 with ENTITY_NAME_MAX
+    # Subtest: returns empty when endpoints not in nodes (never invents)
+    # Subtest: finds undirected path over active edges only
+    # Subtest: skips future-valid edges
+    # Subtest: exports ENTITY_RELATION_TYPE_MAX at 64
+    # Subtest: v2-fns.ts bounds relationType with ENTITY_RELATION_TYPE_MAX
+    # Subtest: exports ENTITY_TYPE_DISPLAY_NAME_MAX at 120
+    # Subtest: entities.ts compares displayName length against ENTITY_TYPE_DISPLAY_NAME_MAX
+    # Subtest: exports ENTITY_TYPE_DISPLAY_NAME_MAX at 120
+    # Subtest: v2-fns.ts bounds displayName 120 with ENTITY_TYPE_DISPLAY_NAME_MAX
+    # Subtest: exports ENTRY_KEY_MAX at 80
+    # Subtest: v2-fns.ts bounds entryKey with ENTRY_KEY_MAX
+    # Subtest: scrubs connection strings and DATABASE_URL fragments
+    # Subtest: toHttpError maps unexpected errors to generic 500 without raw text
+    # Subtest: wrap never returns a connection string or stack to the client
+    # Subtest: SECURITY.md documents generic client errors
+    # Subtest: locks statuses and the built-in template ids
+    # Subtest: allows only the declared transitions
+    # Subtest: returns a known template and null for an unknown id
+    # Subtest: lists templates as copies
+    # Subtest: normalizeEvidenceText strips zero-width and folds nbsp
+    # Subtest: evidenceTextIsUnsafe flags bidi overrides and unresolved letters
+    # Subtest: hasUnresolvedLetters detects non-Latin letters after ASCII strip
+    # Subtest: exports bound
+    # Subtest: wires bound
+    # Subtest: exports bound
+    # Subtest: wires bound
+    # Subtest: exports bound
+    # Subtest: wires bound
+    # Subtest: Permissions-Policy includes execution-while-not-rendered=() once
+    # Subtest: SECURITY.md documents execution-while-not-rendered=()
+    # Subtest: Permissions-Policy includes execution-while-out-of-viewport=() once
+    # Subtest: SECURITY.md documents execution-while-out-of-viewport=()
+    # Subtest: keeps warning windows at 7, 30, and 90 days
+    # Subtest: expiryState never treats expired as current
+    # Subtest: computeExpiryBuckets sends missing expiry to none and expired to expired
+    # Subtest: UNPARSEABLE_EXPIRY sentinel is locked and docs refuse expired-as-current
+    # Subtest: parses ISO and UK long forms
+    # Subtest: rejects non-calendar days
+    # Subtest: returns UNPARSEABLE_EXPIRY for hedged duration-only wording
+    # Subtest: returns null when no date token follows expiry lead
+    # Subtest: extractDateRangeEnd picks the latest end
+    # Subtest: extractCalendarDate returns the first calendar date in free text
+    # Subtest: locks warning windows at 7, 30, and 90 days
+    # Subtest: isExpiredOn fail-closes unparseable dates and treats null as no constraint
+    # Subtest: expiryState marks overdue and leaves blank expiry as none
+    # Subtest: accepts matching org/pack with cited GREEN facts
+    # Subtest: rejects org/pack mismatch and missing org name
+    # Subtest: rejects GREEN answers without cited facts
+    # Subtest: payloadToJson round-trips through parseExportJson
+    # Subtest: parseExportJson rejects missing org, pack, or answers
+    # Subtest: parseExportJson keeps empty answers array when org and pack present
+    # Subtest: accepts fields within TEXT_LIMITS
+    # Subtest: rejects oversized orgName and packTitle
+    # Subtest: rejects oversized answer fields and source locations
+    # Subtest: extracts a public liability limit from clear labelled text
+    # Subtest: drops claims whose display value contains injection traces
+    # Subtest: clips oversized display values to 500 characters
+    # Subtest: returns an empty list for blank input
+    # Subtest: isFactAssertionKind accepts only declared kinds
+    # Subtest: assertionClearsBlocking allows verified/current/superseded only
+    # Subtest: assertionRequestsElevatedDualVerify matches elevated markers
+    # Subtest: FACT_ASSERTION_KINDS fixed; disputed never implies current
+    # Subtest: after blocking demotion, clearing requires verified/current/superseded
+    # Subtest: evaluateFactAssertionGate: one verifier insufficient after dispute; two distinct clear
+    # Subtest: elevated dual-verify marker constant stable
+    # Subtest: factsAsOfByKey returns only matching keys valid on asOf
+    # Subtest: factsAsOfByKey returns empty when key has no valid slice
+    # Subtest: fromApprovedFact maps V1 rows without inventing fields
+    # Subtest: keeps the 4 MiB upload and encoded caps
+    # Subtest: rejects decoded uploads past MAX_FILE_BYTES
+    # Subtest: rejects oversized base64 before decode allocation
+    # Subtest: blocks executable extensions and accepts a tiny PDF
+    # Subtest: encodes bytes to base64
+    # Subtest: handles empty buffer
+    # Subtest: encodes Blob via arrayBuffer when FileReader is absent
+    # Subtest: locks the allowlist and byte caps
+    # Subtest: accepts matching sniff and rejects empty, oversized, and blocked types
+    # Subtest: sniffs PDF and office zip kinds and bounds base64 before decode
+    # Subtest: includes focus-without-user-activation=() once
+    # Subtest: SECURITY.md documents focus-without-user-activation=()
+    # Subtest: treats hostile labels as data only, value null, invented false
+    # Subtest: VERIFIED_FACT carries value and invented false
+    # Subtest: MISSING / UNKNOWN / EXPIRED push missingKeys
+    # Subtest: CONFLICTING pushes conflictKeys
+    # Subtest: readyForHumanReview false when hostile or conflict present
+    # Subtest: inspectSyntheticForm marks hostile labels
+    # Subtest: locks the fourteen dry-run field types in order
+    # Subtest: keeps file_upload and declaration in the set
+    # Subtest: does not silently grow or shrink
+    # Subtest: exports FORM_FIELDS_MAX at 200
+    # Subtest: v2-fns.ts compares fields.length against FORM_FIELDS_MAX
+    # Subtest: exports FORM_REQUIRED_KEYS_MAX at 100
+    # Subtest: v2-fns.ts compares requiredKeys.length against FORM_REQUIRED_KEYS_MAX
+    # Subtest: returns empty string for nullish
+    # Subtest: ISO-formats valid Date and blanks invalid Date
+    # Subtest: stringifies non-Date values as-is
+    # Subtest: prefixes the pound sign
+    # Subtest: uses en-GB grouping for millions
+    # Subtest: formats small whole amounts without inventing decimals
+    # Subtest: keeps the display parseable back to the same amount via LocaleString round-trip shape
+    # Subtest: Permissions-Policy includes fullscreen=() once
+    # Subtest: SECURITY.md documents fullscreen=()
+    # Subtest: Permissions-Policy includes gamepad=() once
+    # Subtest: SECURITY.md documents gamepad=()
+    # Subtest: uses __Host- prefixed cookie name
+    # Subtest: hasGateSessionMarker is false without document
+    # Subtest: cookie name does not include Domain-friendly parent suffix alone
+    # Subtest: exports GATEWAY_AUDIT_LIST_MAX at 200
+    # Subtest: agents.ts caps listGatewayAudit with GATEWAY_AUDIT_LIST_MAX
+    # Subtest: exports GATEWAY_REQUESTED_EVIDENCE_KEYS_MAX at 50
+    # Subtest: gateway-http slices requestedEvidenceKeys with the named max
+    # Subtest: imports policy enums and newId
+    # Subtest: purpose max check is not followed by a stray closing brace
+    # Subtest: imports KEY_MAX from template-limits
+    # Subtest: exports GATEWAY_IDENTITY_ID_MAX at 200
+    # Subtest: gateway-http rejects identityId longer than GATEWAY_IDENTITY_ID_MAX
+    # Subtest: locks protocols and the declared purpose taxonomy
+    # Subtest: enforces purpose to capability affinity and custom.* low-risk caps
+    # Subtest: flags injection-shaped website text as untrusted data
+    # Subtest: builds dry-run and denial envelopes and enforces grant scope
+    # Subtest: exports GATEWAY_PURPOSE_MAX at 200
+    # Subtest: gateway-http rejects purpose longer than GATEWAY_PURPOSE_MAX
+    # Subtest: exports GATEWAY_TENANT_ORG_ID_MAX at 200
+    # Subtest: gateway-http rejects tenantOrgId longer than GATEWAY_TENANT_ORG_ID_MAX
+    # Subtest: keeps opaque 500/503 client messages
+    # Subtest: recognises already-generic 500 messages with ref
+    # Subtest: rejects non-generic or malformed messages
+    # Subtest: allows grok.com and localhost http(s)
+    # Subtest: rejects foreign and invalid origins
+    # Subtest: recognises grok-sandbox guest hosts only
+    # Subtest: exposes exactly Google and X broker providers
+    # Subtest: maps broker idp hints for Google and twitter/X
+    # Subtest: keeps providerId callback segments non-empty and stable
+    # Subtest: Permissions-Policy includes gyroscope=() once
+    # Subtest: SECURITY.md documents gyroscope=()
+    # Subtest: does not call an unreadable certificate expiry current
+    # Subtest: does not call an unreadable obligation due date current
+    # Subtest: jsonResponse keeps JSON content-type and cache-control no-store
+    # Subtest: HealthBody is only ok+db; ReadyBody adds authOrigin, signupOpen, mcpSetupUi
+    # Subtest: getHealth and getReady map up to 200 and down/not-ready to 503 via noSecrets
+    # Subtest: does not embed credentials or claim a release GO
+    # Subtest: Permissions-Policy includes hid=()
+    # Subtest: SECURITY.md documents hid=()
+    # Subtest: refuses loopback and HTTP via the shared origin parser
+    # Subtest: refuses public Grok hosts unless explicitly authorised
+    # Subtest: treats protection without operator credentials as a stop, not a reason to disable it
+    # Subtest: refuses to continue when signup is open
+    # Subtest: does not launch a journey without operator credentials
+    # Subtest: allows loopback without Better Auth origin
+    # Subtest: requires https Better Auth origin for remote DB
+    # Subtest: treats grok project deploy as hosted needing https origin
+    # Subtest: requires https and rejects loopback
+    # Subtest: treats 401/403 and Vercel SSO redirects as protection
+    # Subtest: accepts health/ready JSON only when signup is closed
+    # Subtest: sets Strict-Transport-Security with one-year max-age and includeSubDomains
+    # Subtest: mergeWalletSecurityHeaders keeps HSTS
+    # Subtest: SECURITY.md documents HSTS
+    # Subtest: does not claim preload or force HTTPS on localhost
+    # Subtest: includes html-attribute-or-property=() once
+    # Subtest: SECURITY.md documents html-attribute-or-property=()
+    # Subtest: badRequest throws 400 HttpError
+    # Subtest: notFound throws 404 HttpError
+    # Subtest: forbidden throws 403 HttpError
+    # Subtest: tooManyRequests throws 429 with retryAfterSeconds
+    # Subtest: serviceUnavailable defaults to 503 database message
+    # Subtest: conflict throws 409 with caller message
+    # Subtest: hydrateWorkerPayloadHints adds fail-closed guidance for known ref prefixes
+    # Subtest: hydrateWorkerPayloadHints returns empty for unknown refs
+    # Subtest: formatLinkedArtifactHints renders kind label status and id
+    # Subtest: includes identity-credentials-create=() once
+    # Subtest: SECURITY.md documents identity-credentials-create=()
+    # Subtest: Permissions-Policy includes identity-credentials-get=() once
+    # Subtest: SECURITY.md documents identity-credentials-get=()
+    # Subtest: Permissions-Policy includes idle-detection=() once
+    # Subtest: SECURITY.md documents idle-detection=()
+    # Subtest: locks invite capability shape to inv_ plus 32-36 hex
+    # Subtest: mints 144-bit invite codes and prefixed ids
+    # Subtest: formats today as a calendar date string
+    # Subtest: locks inbound channels and statuses
+    # Subtest: quarantines suspected injection and suggests no keys
+    # Subtest: classifies known hints and dedupes keys
+    # Subtest: leaves an unrecognised message awaiting an evidence link
+    # Subtest: strips reply prefixes and caps the subject at 200 characters
+    # Subtest: passes the local incident drill checklist
+    # Subtest: INCIDENT.md keeps severity classes, probes, and closed-pilot watch signals
+    # Subtest: package.json exposes the drill entrypoints
+    # Subtest: does not claim a production incident or release GO
+    # Subtest: includes interest-cohort=() once
+    # Subtest: SECURITY.md documents interest-cohort=()
+    # Subtest: selects answers that cite the invalidated fact
+    # Subtest: selects answers that cite the invalidated document
+    # Subtest: does not keep GREEN by inertia when citation is unrelated
+    # Subtest: keeps invite token length and 7-day TTL
+    # Subtest: issues inv_ + 36 hex codes that match INVITE_CODE_RE
+    # Subtest: rejects malformed invite codes
+    # Subtest: wallet enforces inviteToken and INVITE_TTL_MS
+    # Subtest: locks invite TTL to seven days
+    # Subtest: locks job stale reclaim window to five minutes
+    # Subtest: assertTextLimit fail-closes oversize strings
+    # Subtest: exports a callable helper
+    # Subtest: returns false at top level when window.self === window.top
+    # Subtest: returns true when framed
+    # Subtest: treats issue/as-of/effective labels as snapshots
+    # Subtest: does not treat expiry wording as an issue snapshot
+    # Subtest: trims labels before matching
+    # Subtest: keeps the 5-minute crash-stale reclaim window
+    # Subtest: wallet imports JOB_STALE_MS and gates freshness on running status
+    # Subtest: treats missing or non-finite createdAt as still fresh when running
+    # Subtest: docs name the 5-minute lease without claiming audit passed
+    # Subtest: Permissions-Policy includes join-ad-interest-group=() once
+    # Subtest: SECURITY.md documents join-ad-interest-group=()
+    # Subtest: exports KEY_MAX at 80
+    # Subtest: v2-fns.ts bounds key with KEY_MAX
+    # Subtest: Permissions-Policy includes keyboard-map=() once
+    # Subtest: SECURITY.md documents keyboard-map=()
+    # Subtest: maps public liability to PL_LIMIT and PL_EXPIRY
+    # Subtest: maps employers liability to EL keys
+    # Subtest: maps employee count and turnover
+    # Subtest: maps ISO 9001 status and expiry
+    # Subtest: returns empty array for unknown keywords
+    # Subtest: KILL_SWITCH_KEYS and FAIL_CLOSED_SWITCH_KEYS fixed sets
+    # Subtest: vendor key accept/reject and isKillSwitchKey
+    # Subtest: fail-closed blocks until explicitly enabled
+    # Subtest: emergency disable and tenant kill override
+    # Subtest: killSwitchForCapability mapping
+    # Subtest: extracts labelled expiry dates as ISO
+    # Subtest: returns empty when no labelled dates
+    # Subtest: parses renewal and valid-until style labels
+    # Subtest: includes language-detector=() once
+    # Subtest: SECURITY.md documents language-detector=()
+    # Subtest: includes layout-animations=() once
+    # Subtest: SECURITY.md documents layout-animations=()
+    # Subtest: reads a leading UK or ISO calendar day
+    # Subtest: returns null when no leading calendar date is present
+    # Subtest: returns null for invalid calendar days instead of inventing one
+    # Subtest: includes legacy-image-formats=() once
+    # Subtest: SECURITY.md documents legacy-image-formats=()
+    # Subtest: locks the adapter kinds
+    # Subtest: treats an empty env as not configured and never live
+    # Subtest: stays live:false even when a synthetic credential is present
+    # Subtest: lists one fail-closed probe per kind
+    # Subtest: Permissions-Policy includes local-fonts=() once
+    # Subtest: SECURITY.md documents local-fonts=()
+    # Subtest: isLoginRequired only when ok=false and loginRequired=true
+    # Subtest: isConnectorPending only when ok=false and pending=true
+    # Subtest: does not conflate login and pending
+    # Subtest: treats localhost and 127.0.0.1 as loopback
+    # Subtest: treats IPv6 loopback as loopback
+    # Subtest: rejects remote hosts
+    # Subtest: Permissions-Policy includes magnetometer=() once
+    # Subtest: SECURITY.md documents magnetometer=()
+    # Subtest: includes manual-text=() once
+    # Subtest: SECURITY.md documents manual-text=()
+    # Subtest: returns template ids whose canonicalKey is missing
+    # Subtest: returns empty when no missing keys match
+    # Subtest: returns empty for empty missing keys
+    # Subtest: suggestedCanonicalKeys are authoritative and skip keyword fallthrough
+    # Subtest: keyword match finds public liability without suggested keys
+    # Subtest: returns empty when nothing matches
+    # Subtest: explicit false always wins
+    # Subtest: workspace preview allows when not false
+    # Subtest: outside preview only exact true enables
+    # Subtest: report exposes required process metrics
+    # Subtest: Prometheus text includes HELP/TYPE and metric samples
+    # Subtest: /metrics route serves Prometheus content-type via observability
+    # Subtest: Permissions-Policy includes midi=()
+    # Subtest: SECURITY.md documents midi=()
+    # Subtest: returns zero candidates for bare numbers (ISO 9001 year, months, dates)
+    # Subtest: keeps currency amounts
+    # Subtest: returns empty for blank input
+    # Subtest: normalises currency aliases to GBP USD EUR
+    # Subtest: parseMoney reads symbol and multiplier forms
+    # Subtest: parseMoneyCandidates skip bare scheme numbers and keep currency amounts
+    # Subtest: module header forbids model override and amountsEqual is numeric
+    # Subtest: exposes a /metrics Prometheus endpoint beyond /health and /ready
+    # Subtest: documents at least one human alert rule beyond health endpoints
+    # Subtest: includes navigation-override=() once
+    # Subtest: SECURITY.md documents navigation-override=()
+    # Subtest: flags revoked, expired, and not-certified displays as negative
+    # Subtest: flags pending and self-certified wording as negative
+    # Subtest: does not flag a plain current-hold assertion
+    # Subtest: still flags historical-only wording without a current assertion
+    # Subtest: keeps Neon pool timeouts and max connections
+    # Subtest: resolveDatabaseUrl trims non-empty URLs
+    # Subtest: resolveDatabaseUrl returns undefined for empty/undefined
+    # Subtest: exports NEXT_DUE_DATE_MAX at 10
+    # Subtest: v2-fns.ts bounds nextDueDate with NEXT_DUE_DATE_MAX
+    # Subtest: folds Cyrillic lookalikes so expired still matches
+    # Subtest: spaced variant replaces invisibles with spaces
+    # Subtest: returns empty string for empty input
+    # Subtest: should not find NVIDIA API references in src/ and non-test scripts/
+    # Subtest: exports OBLIGATION_BUCKET_MAX at 32
+    # Subtest: v2-fns.ts bounds bucket with OBLIGATION_BUCKET_MAX
+    # Subtest: exports OBLIGATION_ENTITY_TYPE_MAX at 64
+    # Subtest: v2-fns.ts bounds entityType with OBLIGATION_ENTITY_TYPE_MAX
+    # Subtest: exports OBLIGATION_EVIDENCE_KEY_MAX at 200
+    # Subtest: obligations.ts compares key length against OBLIGATION_EVIDENCE_KEY_MAX
+    # Subtest: exports OBLIGATION_KIND_MAX at 64
+    # Subtest: v2-fns.ts bounds obligationKind with OBLIGATION_KIND_MAX
+    # Subtest: exports OBLIGATION_RECURRENCE_MAX at 32
+    # Subtest: v2-fns.ts bounds recurrence with OBLIGATION_RECURRENCE_MAX
+    # Subtest: exports OBLIGATION_TITLE_MAX at 200
+    # Subtest: obligations.ts compares title length against OBLIGATION_TITLE_MAX
+    # Subtest: fixed sets for kinds, recurrence, statuses, reminder stages
+    # Subtest: reminderStage: overdue, due_today, upcoming, none
+    # Subtest: deriveObligationStatus: missing/expired/renewal_due/awaiting/current
+    # Subtest: classifyNumericGap: missing, currency mismatch conflict, insufficient, met
+    # Subtest: includes on-device-speech-recognition=() once
+    # Subtest: SECURITY.md documents on-device-speech-recognition=()
+    # Subtest: matches perpetual and indefinite coverage wording
+    # Subtest: does not match ordinary dated expiry wording
+    # Subtest: resets lastIndex so repeated tests stay deterministic
+    # Subtest: buckets expired, due30, due90 and skips archived/superseded/far
+    # Subtest: orders expired before due30 before due90
+    # Subtest: checklist stays undone until each count is positive
+    # Subtest: checklist marks steps done only when the operator has done them
+    # Subtest: locks the category set and external key shape
+    # Subtest: treats scores as estimates and rejects a zero fit
+    # Subtest: marks a fully covered small estimate as low priority
+    # Subtest: counts a verified key listed as missing as a gap
+    # Subtest: boosts rank only and never changes eligibility
+    # Subtest: dedupes on category plus normalised key
+    # Subtest: locks discovery sources and never marks catalog as live external
+    # Subtest: partner feed stub returns empty and refuses live discovery
+    # Subtest: internal catalog filters by query and stays non-live
+    # Subtest: exports OPPORTUNITY_DRAFTS_MAX at 50
+    # Subtest: v2-fns.ts compares drafts.length against OPPORTUNITY_DRAFTS_MAX
+    # Subtest: rejects below the fit threshold
+    # Subtest: blocks on evidence conflicts before missing keys
+    # Subtest: awaits evidence when missing keys exist and suggests chase templates
+    # Subtest: ready_for_review when all keys covered and no conflicts
+    # Subtest: dedupes reusableAnswerKeys
+    # Subtest: dedupes chaseTemplateIds in awaiting_evidence
+    # Subtest: maps missing canonical keys to built-in template ids
+    # Subtest: returns empty for no overlap
+    # Subtest: exports OPPORTUNITY_QUERY_MAX at 200
+    # Subtest: v2-fns.ts bounds query with OPPORTUNITY_QUERY_MAX
+    # Subtest: locks the residency inventory scopes and deletion statuses
+    # Subtest: manifest is an inventory and never a wipe
+    # Subtest: honours an explicit scope subset
+    # Subtest: deletion stays dual-approval and wipe stays flag-gated
+    # Subtest: approval does not execute; unknown actions do not advance
+    # Subtest: otherKey slugs labels under other. and falls back to field
+    # Subtest: otherKey clips the slug to 48 characters
+    # Subtest: categoryForKey returns the first dotted segment
+    # Subtest: Permissions-Policy includes otp-credentials=() once
+    # Subtest: SECURITY.md documents otp-credentials=()
+    # Subtest: includes oversized-images=() once
+    # Subtest: SECURITY.md documents oversized-images=()
+    # Subtest: reuses a usable bank answer only on unmapped narrative fields and never submits
+    # Subtest: blocks an unusable bank answer and leaves the field empty
+    # Subtest: maps a derived bank answer as DERIVED_ANSWER
+    # Subtest: rejects org/pack mismatch, blank org name, and GREEN without facts
+    # Subtest: strips forbidden XML controls and escapes markup
+    # Subtest: neutralizes spreadsheet formula prefixes including disguised ones
+    # Subtest: rejects oversized export fields before OOXML generation
+    # Subtest: keeps synchronous pack recompute batch at 25
+    # Subtest: recomputeAllPacks slices to packRecomputeBatch
+    # Subtest: marks proposed_answers stale when pack count exceeds the batch
+    # Subtest: limits.ts documents remainder-as-stale intent without a release GO
+    # Subtest: returns null when parent is self
+    # Subtest: resolves grok.com referrer when framed
+    # Subtest: rejects foreign parents unless sandbox guest
+    # Subtest: keeps the leaf parse budget at 3 seconds
+    # Subtest: imports MAX_PARSE_MS into the document parsers
+    # Subtest: aborts PDF parsing when the wall clock exceeds the budget
+    # Subtest: checks the budget after DOCX and XLSX unzip
+    # Subtest: returns only non-empty strings from JSON arrays
+    # Subtest: workerLabelForKind maps known kinds and falls back to Worker
+    # Subtest: drops whitespace-only strings
+    # Subtest: parses currency-prefixed and multiplier amounts
+    # Subtest: returns null for empty input
+    # Subtest: falls back to first numeric token when candidates empty
+    # Subtest: parses Public Liability at least money as gte GBP
+    # Subtest: parses employee count requirements
+    # Subtest: uses lte for at-most wording
+    # Subtest: returns null when no numeric requirement is present
+    # Subtest: accepts the five canonical roles
+    # Subtest: rejects case variants and unknown strings
+    # Subtest: rejects empty and non-role tokens
+    # Subtest: keeps pas91 in the seven template ids
+    # Subtest: GO_TO_MARKET and PRODUCT_SPEC state PAS 91 withdrawal and CAS
+    # Subtest: keeps the leaf constants at 8 and 128
+    # Subtest: wires those constants into Better Auth and the signup form
+    # Subtest: rejects a short password and a password over 128 characters
+    # Subtest: accepts a password inside the bounds
+    # Subtest: keeps the 100_000 character pasted-text cap
+    # Subtest: accepts text at the cap and rejects one character over
+    # Subtest: wallet and fns enforce TEXT_LIMITS.pastedText before persist
+    # Subtest: does not raise the cap or claim an unbounded paste
+    # Subtest: Permissions-Policy includes payment=()
+    # Subtest: SECURITY.md documents payment=()
+    # Subtest: keeps PDF stream and decompress caps at the documented values
+    # Subtest: wires those caps into the PDF parser
+    # Subtest: refuses inflate output beyond the per-stream cap
+    # Subtest: does not treat the total PDF budget as streams times per-stream cap
+    # Subtest: defaults to cwd/data/pglite when unset
+    # Subtest: returns undefined for explicit :memory:
+    # Subtest: honours absolute or relative override path
+    # Subtest: Permissions-Policy includes picture-in-picture=() once
+    # Subtest: SECURITY.md documents picture-in-picture=()
+    # Subtest: locks identity types, risk ranks, and the capability catalogue
+    # Subtest: keeps approve and kill-switch human-only
+    # Subtest: requires human approval for legal, high-impact, and hard-to-reverse medium actions
+    # Subtest: maps human roles to least-privilege capability sets
+    # Subtest: loopback keeps connectionString and omits ssl
+    # Subtest: remote forces rejectUnauthorized TLS
+    # Subtest: extra.ssl cannot disable remote certificate verification
+    # Subtest: returns false for loopback hosts so TLS is not forced locally
+    # Subtest: requires TLS for remote hosts and rejects insecure sslmode
+    # Subtest: throws on remote URL with insecure sslmode
+    # Subtest: PREFERENCE_SCOPES fixed; isPreferenceScope
+    # Subtest: preferences never auto-approve or auto-submit
+    # Subtest: rankPreferenceHints: evidence-backed outranks style; weight clamped
+    # Subtest: preferenceSignalFromDecision: approve-only; reject yields null
+    # Subtest: Permissions-Policy includes private-aggregation=() once
+    # Subtest: SECURITY.md documents private-aggregation=()
+    # Subtest: Permissions-Policy includes private-state-token-issuance=() once
+    # Subtest: SECURITY.md documents private-state-token-issuance=()
+    # Subtest: Permissions-Policy includes private-state-token-redemption=() once
+    # Subtest: SECURITY.md documents private-state-token-redemption=()
+    # Subtest: keeps the seven injection phrases
+    # Subtest: wrapUntrusted strips nested tags and wraps with open/close markers
+    # Subtest: SYSTEM_GUARDRAILS forbids inventing, approving, and revealing secrets
+    # Subtest: documentContainsInjection matches corpus case-insensitively
+    # Subtest: Permissions-Policy includes publickey-credentials-create=() once
+    # Subtest: SECURITY.md documents publickey-credentials-create=()
+    # Subtest: Permissions-Policy includes publickey-credentials-get=() once
+    # Subtest: SECURITY.md documents publickey-credentials-get=()
+    # Subtest: exports AGENT_PURPOSE_MAX at 500
+    # Subtest: v2-fns.ts bounds purpose with AGENT_PURPOSE_MAX
+    # Subtest: MAX_QUESTIONS matches COUNT_LIMITS.questions (200)
+    # Subtest: stops adding questions past MAX_QUESTIONS
+    # Subtest: parses a small labelled questionnaire without fabricating extras
+    # Subtest: caps uncertain lines so a huge file cannot amplify them
+    # Subtest: QUOTE_STATUSES fixed set
+    # Subtest: assessMaterialEquivalence: missing awaiting, below_min not_comparable, met comparable
+    # Subtest: preference never overrides missing cover; cheapest only among comparable
+    # Subtest: selectCheapestComparable returns null when none comparable
+    # Subtest: keeps sliding-window RATE_LIMITS for the four mutation scopes
+    # Subtest: builds stable per-user and per-org rate scopes
+    # Subtest: keeps hard QUOTA_LIMITS for orgs docs invites packs exports
+    # Subtest: rate-limit.ts consumes limits inside a DB transaction with tooManyRequests
+    # Subtest: locks per-action rate limits and one-hour windows
+    # Subtest: locks hard storage quotas
+    # Subtest: keeps createOrg stricter than upload and invite
+    # Subtest: uses fixed delay ladder with clamp
+    # Subtest: exhausts after max total window
+    # Subtest: is relative to startedAtMs
+    # Subtest: getReady body includes signupOpen, authOrigin, mcpSetupUi
+    # Subtest: HOSTED.md documents the Andy probe and refuses a default host
+    # Subtest: hosted-signup-closed-probe refuses to run without HOSTED_ORIGIN
+    # Subtest: pairs limit keys with their sibling expiry key
+    # Subtest: returns null for expiry keys themselves
+    # Subtest: returns null for single-component keys
+    # Subtest: isExpiryKey matches only .expiry endings
+    # Subtest: RenewalStage order upcoming_90 to overdue
+    # Subtest: stageFromDays: overdue first, then due_today, then windows
+    # Subtest: planRenewalNotifications maps stages and escalates decision-inbox for overdue/due/upcoming_7/14/30
+    # Subtest: returns VERIFIED_FACT for current approved evidence and never invents
+    # Subtest: surfaces CONFLICTING and open-conflict fail-closed with null value
+    # Subtest: resolveQuestion never upgrades RED and listMissingEvidence reports gaps
+    # Subtest: RESOLVER_CLASSES and FORM_ANSWER_LEVELS fixed sets
+    # Subtest: formLevelFor maps classes to A/B/C/D
+    # Subtest: fromV1AnswerStatus never upgrades RED/EXPIRED/CONFLICT to GREEN
+    # Subtest: assertNotInvented rejects invented and non-null UNKNOWN/MISSING values
+    # Subtest: unknownResult and missingResult always invented:false and value:null
+    # Subtest: includes rewriter=() once
+    # Subtest: SECURITY.md documents rewriter=()
+    # Subtest: owner outranks every role including itself
+    # Subtest: viewer only satisfies viewer
+    # Subtest: mid ranks are ordered contributor < reviewer < admin
+    # Subtest: locks the permission to minimum-role matrix
+    # Subtest: ranks roles and evaluates can() against the matrix
+    # Subtest: parses only the five known roles
+    # Subtest: restricts owner grants and owner-target changes to owners
+    # Subtest: is off when env unset
+    # Subtest: is on only when env is exactly 1
+    # Subtest: does not treat empty string as enabled
+    # Subtest: Permissions-Policy includes run-ad-auction=() once
+    # Subtest: SECURITY.md documents run-ad-auction=()
+    # Subtest: allows same-origin absolute paths
+    # Subtest: rejects protocol-relative and backslash paths
+    # Subtest: rejects empty and non-path values
+    # Subtest: replaces path separators with underscore
+    # Subtest: replaces each run of invalid characters with one underscore
+    # Subtest: falls back to upload for empty or whitespace
+    # Subtest: clips to TEXT_LIMITS.filename
+    # Subtest: exports SCOPE_MAX at 64
+    # Subtest: v2-fns.ts bounds scope with SCOPE_MAX
+    # Subtest: Permissions-Policy includes screen-wake-lock=() once
+    # Subtest: SECURITY.md documents screen-wake-lock=()
+    # Subtest: flags a live postgres URL and not a redacted example
+    # Subtest: exports the private-wallet browser headers
+    # Subtest: mergeWalletSecurityHeaders sets headers without inventing X-Frame-Options
+    # Subtest: health.ts applies mergeWalletSecurityHeaders in jsonResponse
+    # Subtest: SECURITY.md documents the header set including Permissions-Policy
+    # Subtest: Permissions-Policy includes serial=()
+    # Subtest: SECURITY.md documents serial=()
+    # Subtest: names the session token __Host-grok-auth.session_token
+    # Subtest: forces Secure + SameSite=Lax + Path=/ without Domain via useSecureCookies false
+    # Subtest: emitSessionCookie defaults httpOnly and secure true with sameSite lax
+    # Subtest: SECURITY.md or hosted-acceptance still require httpOnly secure session cookies
+    # Subtest: Permissions-Policy includes shared-storage=() once
+    # Subtest: SECURITY.md documents shared-storage=()
+    # Subtest: Permissions-Policy includes shared-storage-select-url=() once
+    # Subtest: SECURITY.md documents shared-storage-select-url=()
+    # Subtest: pending while session check is pending
+    # Subtest: signed_in only when not pending and user present
+    # Subtest: signed_out when not pending and no user
+    # Subtest: processLooksHosted treats loopback as local and remote as hosted
+    # Subtest: signupOpenFromEnv honors explicit false/true and defaults closed when hosted
+    # Subtest: hosted unset never opens a registrar by default
+    # Subtest: exports SLUG_MAX at 48
+    # Subtest: v2-fns.ts bounds slug with SLUG_MAX
+    # Subtest: includes smart-card=() once
+    # Subtest: SECURITY.md documents smart-card=()
+    # Subtest: Permissions-Policy includes speaker-selection=() once
+    # Subtest: SECURITY.md documents speaker-selection=()
+    # Subtest: local mode accepts loopback without printing secrets
+    # Subtest: hosted mode refuses missing TLS, short secret, HTTP origin, and open signup
+    # Subtest: hosted mode passes a TLS remote with closed signup and https origin
+    # Subtest: hosted mode accepts edge HTTPS with loopback Postgres (DigitalOcean pilot)
+    # Subtest: hosted edge-loopback still fails closed when signup is left open
+    # Subtest: missing current evidence → RED
+    # Subtest: expired-only evidence → EXPIRED, never GREEN
+    # Subtest: threshold not_met → RED
+    # Subtest: currency mismatch → AMBER, never GREEN
+    # Subtest: conflicting live facts → CONFLICT
+    # Subtest: negative display value → RED even when threshold met
+    # Subtest: refuses coerce-to-GREEN when computed is RED
+    # Subtest: refuses coerce-to-GREEN when computed is EXPIRED or CONFLICT
+    # Subtest: refuses coerce-to-GREEN when computed is AMBER
+    # Subtest: keeps GREEN only when computed is already GREEN
+    # Subtest: exports SUBJECT_MAX at 200
+    # Subtest: v2-fns.ts bounds subject with SUBJECT_MAX
+    # Subtest: ranks canonical overlap above keyword and prefers approved
+    # Subtest: returns empty when nothing overlaps
+    # Subtest: soft-boosts preferredAnswerKeys without inventing matches
+    # Subtest: includes summarizer=() once
+    # Subtest: SECURITY.md documents summarizer=()
+    # Subtest: Permissions-Policy includes sync-script=() once
+    # Subtest: SECURITY.md documents sync-script=()
+    # Subtest: Permissions-Policy includes sync-xhr=() once
+    # Subtest: SECURITY.md documents sync-xhr=()
+    # Subtest: exports TARGET_LABEL_MAX at 200
+    # Subtest: v2-fns.ts bounds targetLabel with TARGET_LABEL_MAX
+    # Subtest: exports TEMPLATE_ID_MAX at 80
+    # Subtest: v2-fns.ts bounds templateId with TEMPLATE_ID_MAX
+    # Subtest: TEMPORAL_STATES fixed order
+    # Subtest: isValidOn inclusive effectiveDate, exclusive expiryDate; rejects archived/superseded
+    # Subtest: temporalStateOf priority: disputed > superseded > archived > future > expired > current > historical
+    # Subtest: factsAsOf returns only slices valid on the date; never invents
+    # Subtest: keeps the ten field caps for org pack answer note file claim ids
+    # Subtest: assertTextLimit rejects one character over orgName
+    # Subtest: server fns requireBoundedText for org pack answer claim note resourceId
+    # Subtest: wallet clips claim display snippet and canonical key before persist
+    # Subtest: treats currency mismatch and missing currency as incomparable
+    # Subtest: met only when amount and currency both satisfy gte
+    # Subtest: eq uses the 0.005 epsilon and unknown op is incomparable
+    # Subtest: parseNumericRequirement defaults money currency to GBP
+    # Subtest: exports OBLIGATION_TITLE_MAX at 200
+    # Subtest: v2-fns.ts bounds title with OBLIGATION_TITLE_MAX
+    # Subtest: rewrites 503 HttpError to opaque GENERIC_CLIENT_503
+    # Subtest: rewrites 5xx HttpError to opaque GENERIC_CLIENT_500
+    # Subtest: preserves 4xx HttpError messages
+    # Subtest: Permissions-Policy includes top-level-storage-access=() once
+    # Subtest: SECURITY.md documents top-level-storage-access=()
+    # Subtest: includes translator=() once
+    # Subtest: SECURITY.md documents translator=()
+    # Subtest: Permissions-Policy includes trust-token-redemption=() once
+    # Subtest: SECURITY.md documents trust-token-redemption=()
+    # Subtest: locks answer statuses fail-closed set
+    # Subtest: locks human states and role hierarchy set
+    # Subtest: locks extraction methods and response types
+    # Subtest: Permissions-Policy includes unload=() once
+    # Subtest: SECURITY.md documents unload=()
+    # Subtest: includes unoptimized-images=() once
+    # Subtest: SECURITY.md documents unoptimized-images=()
+    # Subtest: Permissions-Policy includes usb=()
+    # Subtest: SECURITY.md documents usb=()
+    # Subtest: Permissions-Policy includes vertical-scroll=() once
+    # Subtest: SECURITY.md documents vertical-scroll=()
+    # Subtest: Permissions-Policy includes view-transition=() once
+    # Subtest: SECURITY.md documents view-transition=()
+    # Subtest: includes wake-lock=() once as its own token
+    # Subtest: SECURITY.md documents wake-lock=()
+    # Subtest: Permissions-Policy includes web-share=() once
+    # Subtest: SECURITY.md documents web-share=()
+    # Subtest: includes webxr=() once
+    # Subtest: SECURITY.md documents webxr=()
+    # Subtest: Permissions-Policy includes window-management=()
+    # Subtest: SECURITY.md documents window-management=()
+    # Subtest: is preview when GROK_PROJECT_ID unset or blank
+    # Subtest: is not preview when GROK_PROJECT_ID set
+    # Subtest: env trims keys
+    # Subtest: wraps text in fixed untrusted document markers
+    # Subtest: strips nested markers so documents cannot break out
+    # Subtest: SYSTEM_GUARDRAILS treats marker content as data not instructions
+    # Subtest: includes writer=() once
+    # Subtest: SECURITY.md documents writer=()
+    # Subtest: exports MAX_XLSX_CELLS at 20000
+    # Subtest: parsers.ts compares cell count against MAX_XLSX_CELLS
+    # Subtest: exports MAX_XLSX_SHARED_STRINGS at 20000
+    # Subtest: parsers.ts compares shared.length against MAX_XLSX_SHARED_STRINGS
+    # Subtest: strips NUL and SOH, keeps tab/newline/CR
+    # Subtest: xmlEscape encodes ampersand and angle brackets
+    # Subtest: neutralizeSpreadsheetFormula prefixes formula starters
+    # Subtest: includes xr=() once as its own token
+    # Subtest: SECURITY.md documents xr=()
+    # Subtest: Permissions-Policy includes xr-spatial-tracking=()
+    # Subtest: SECURITY.md documents xr-spatial-tracking=()
+    # Subtest: utf8FromBytes decodes valid UTF-8 bytes
+    # Subtest: clipExtractedText returns input under cap
+    # Subtest: throws ArchiveTooLargeError when text exceeds MAX_EXTRACTED_TEXT_CHARS
+    # Subtest: keeps per-entry and inflate caps at 2 MiB
+    # Subtest: keeps total uncompressed at 6 MiB and PDF decompressed at 15 MiB
+    # Subtest: keeps ZIP file and PDF stream counts bounded
+    # Subtest: returns a stored member and skips directory entries
+    # Subtest: rejects parent segments, absolute names, backslashes, and NUL
+    # Subtest: rejects ZIP64 and archives with more than 64 entries
+    # Subtest: stops extracted text at 512 KiB
+    # Subtest: replays an identical failure within the memo window without refetching
+    # Subtest: keys by token identity so a reminted token shares the memo entry
+    # Subtest: sweeps expired entries on write so unique keys do not accumulate
+    # Subtest: never memoizes login-required 401s
+    # Subtest: returns pending (no loginRequired) when the preview has no token yet
+    # Subtest: returns a plain error (no sign-in CTA) when a deployed app has no token
+    # Subtest: treats a gate 401 in the preview as pending and parks the rejected token
+    # Subtest: keeps loginRequired for a gate 401 on a deployed app
+    # Subtest: resolves ok:false for non-serializable args instead of rejecting
+    # Subtest: is true only for login-required failures
+    # Subtest: no-ops when login is not required
+    # Subtest: navigates to the server-built loginUrl in the browser
+    # Subtest: opens a new tab instead of navigating when framed
+    # Subtest: falls back to navigation when framed and the popup is blocked
+    # Subtest: returns false when the result has no loginUrl
+    # Subtest: returns false on the server (no window)
+    # Subtest: does not expose a list_events name
+    # Subtest: returns null for successful results
+    # Subtest: classifies a pending preview token as pending before any other kind
+    # Subtest: classifies a deployed missing token as error, not a login CTA
+    # Subtest: classifies gate loginRequired without a missing-token message as login
+    # Subtest: classifies not_connected and failed_precondition
+    # Subtest: classifies scope_denied without claiming a missing grant
+    # Subtest: classifies access_denied
+    # Subtest: falls back to a generic error with the raw message
+    # Subtest: backs off through the schedule and then holds the last delay
+    # Subtest: clamps a negative attempt to the first delay
+    # Subtest: gives up only once the total wait budget has elapsed
+    # Subtest: returns the identity for a valid token
+    # Subtest: omits optional claims as nulls
+    # Subtest: rejects a wrong audience
+    # Subtest: rejects a wrong issuer
+    # Subtest: rejects an expired token
+    # Subtest: rejects a token without exp
+    # Subtest: rejects a token signed by a different key with the same kid
+    # Subtest: refetches the JWKS when the kid rotates
+    # Subtest: verifies the header token end to end and fails closed without it
+    # Subtest: activates on a deployed-shaped request without GROK_GATE_ORIGIN
+    # Subtest: verifies a preview-audience token with no gate env vars via the loopback default
+    # Subtest: rejects a wrong-issuer token in the loopback default mode
+    # Subtest: verifies a preview-audience token when only GROK_GATE_ORIGIN is set
+    # Subtest: rejects a preview-audience token when GROK_PROJECT_ID is set
+    # Subtest: rejects an app-audience token in preview mode
+    # Subtest: is enabled by default with no gate env vars
+    # Subtest: is disabled when VITE_AUTH_ENABLED is false
+    # Subtest: pins app:<id> when GROK_PROJECT_ID is set, even alongside GROK_GATE_ORIGIN
+    # Subtest: pins preview when GROK_PROJECT_ID is unset
+    # Subtest: falls back to a synthetic email and name for sub-only claims
+    # Subtest: keeps real claims, lowercasing the email and marking it verified
+    # Subtest: keeps the session when it is bound to the same gate sub
+    # Subtest: rotates when the session belongs to a different gate sub
+    # Subtest: rotates when the session user has no gate-bound account
+    # Subtest: is pending while the session check is in flight, user or not
+    # Subtest: is signed_in once a user is present
+    # Subtest: is signed_out only after the check resolved with no user
+    # Subtest: processLooksHosted
+        # Subtest: false for undefined, empty, and whitespace
+        # Subtest: false for localhost
+        # Subtest: false for IPv4 loopback
+        # Subtest: false for IPv6 loopback
+        # Subtest: true for remote host
+        # Subtest: query host uses last value
+        # Subtest: remote hostaddr overrides loopback host
+        # Subtest: loopback hostaddr preserves local status
+        # Subtest: invalid URL fails closed as hosted
+    # Subtest: signupOpenFromEnv
+        # Subtest: defaults open locally
+        # Subtest: defaults closed when hosted
+        # Subtest: explicit false-like values always close
+        # Subtest: explicit true-like values always open
+        # Subtest: trims values
+        # Subtest: unknown value follows hosted default
+    # Subtest: defaults open and only closes on explicit false-like values
+    # Subtest: wires disableSignUp into the Better Auth server config
+    # Subtest: keeps the signup UI fail-closed with a timeout
+    # Subtest: stringifies Date objects so React never receives a raw Date child
+    # Subtest: passes through ISO strings and treats nullish as empty
+    # Subtest: returns empty for invalid Date
+[0m
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && rt test:platform -- npm run test:platform 2>&1 | grep -E "^(# tests|# suites|# pass|# fail|# cancelled)"
+# tests 2178
+# suites 320
+# pass 2178
+# fail 0
+# cancelled 0
+# tests 76
+# suites 20
+# pass 76
+# fail 0
+# cancelled 0
+[0m
+Now let me understand the full scope of what's still needed. Let me check what's pre-existing vs newly introduced:
+[0m$ [0mcd /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo && git stash && rt typecheck -- npm run typecheck 2>&1 | head -30; git stash pop
+Saved working directory and index state WIP on rc/ew-20261121: a61f1a8b Implement EW sign-off features: xAI opt-in, retention/deletion, sign-in SSO, legal docs
+
+> app-builder-workspace@0.0.0-private typecheck
+> tsc --noEmit
+
+src/routes/app/$orgId/admin/deletion-audit.tsx(6,38): error TS2345: Argument of type '"/app/$orgId/admin/deletion-audit"' is not assignable to parameter of type 'keyof FileRoutesByPath | undefined'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(7,3): error TS2322: Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'Constrain<({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>, RouteLoaderFn<...> | Rout...'.
+  Type '({ context, params, search }: { context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }) => Promise<{ entries: { metadata: any; id: string; org_id: string; ... 5 more ...; created_at: string; }[]; search: Record<...>; }>' is not assignable to type 'RouteLoaderFn<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Property 'search' is missing in type 'LoaderFnContext<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>' but required in type '{ context: { userId: string | undefined; }; params: { orgId: string; }; search: Record<string, string | undefined>; }'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(32,47): error TS2322: Type '"/app/$orgId/admin/deletion-audit"' is not assignable to type 'ConstrainLiteral<"/app/$orgId/admin/deletion-audit", "/" | "__root__" | "/login" | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/" | "/app/$orgId" | "/robots/txt" | ... 23 more ... | "/app/$orgId/questionnaires/$qid", "/" | ... 34 more ... | "/app/$orgId/questionnaires/$qid">'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(34,20): error TS2339: Property 'action' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(35,24): error TS2339: Property 'entityType' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(36,22): error TS2339: Property 'fromDate' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(37,20): error TS2339: Property 'toDate' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(39,52): error TS2339: Property 'offset' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(129,16): error TS2339: Property 'length' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(145,24): error TS2339: Property 'map' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(179,54): error TS2339: Property 'length' does not exist on type 'never'.
+src/routes/app/$orgId/admin/deletion-audit.tsx(191,31): error TS2339: Property 'length' does not exist on type 'never'.
+src/routes/app/$orgId/admin/index.tsx(67,19): error TS2322: Type '`/app/${string}/admin/retention`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 16 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/index.tsx(74,19): error TS2322: Type '`/app/${string}/admin/deletion-audit`' is not assignable to type '"." | "/" | "/login" | ".." | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/$orgId" | "/robots/txt" | "/sitemap/xml" | "/api/auth/$" | "/app/$orgId/audit" | ... 16 more ... | "/app/$orgId/admin"'.
+src/routes/app/$orgId/admin/retention.tsx(8,38): error TS2345: Argument of type '"/app/$orgId/admin/retention"' is not assignable to parameter of type 'keyof FileRoutesByPath | undefined'.
+src/routes/app/$orgId/admin/retention.tsx(9,3): error TS2322: Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'Constrain<({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>, RouteLoaderFn<Register, RootRoute<Register, ... 10 more ..., undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined> | RouteLoaderObject<...>> | undefined'.
+  Type '({ context, params }: { context: { userId: string | undefined; }; params: { orgId: string; }; }) => Promise<{ config: RetentionConfig; }>' is not assignable to type 'RouteLoaderFn<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>'.
+    Types of parameters '__0' and 'match' are incompatible.
+      Type 'LoaderFnContext<Register, RootRoute<Register, undefined, {}, AnyContext, AnyContext, {}, undefined, unknown, unknown, unknown, unknown, undefined> | ... 4 more ... | Route<...>, ... 7 more ..., undefined>' is not assignable to type '{ context: { userId: string | undefined; }; params: { orgId: string; }; }'.
+        Types of property 'context' are incompatible.
+          Property 'userId' is missing in type '{}' but required in type '{ userId: string | undefined; }'.
+src/routes/app/$orgId/admin/retention.tsx(26,38): error TS2820: Type '"/app/$orgId/admin/retention"' is not assignable to type 'ConstrainLiteral<"/app/$orgId/admin/retention", "/" | "__root__" | "/login" | "/app" | "/health" | "/metrics" | "/ready" | "/signup" | "/api/upload" | "/app/" | "/app/$orgId" | "/robots/txt" | ... 23 more ... | "/app/$orgId/questionnaires/$qid", "/" | ... 34 more ... | "/app/$orgId/questionnaires/$qid">'. Did you mean '"/app/$orgId/admin/"'?
+src/routes/app/$orgId/admin/retention.tsx(30,35): error TS2339: Property 'documentRetentionDays' does not exist on type 'never'.
+On branch rc/ew-20261121
+Your branch is up to date with 'origin/rc/ew-20261121'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   control-mcp/gateway.mjs
+	modified:   docs/OPERATIONS.md
+	modified:   docs/OPERATOR.md
+	modified:   docs/RELEASE.md
+	modified:   docs/modules/housing-compliance-vault/RETENTION_HOLD.md
+	modified:   scripts/__pycache__/opencode-estate-body.cpython-312.pyc
+	modified:   scripts/check-auth-invariant.mjs
+	modified:   scripts/check-auth-invariant.test.mjs
+	modified:   scripts/hcv-questionnaire-detail-busy.test.mjs
+	modified:   scripts/hcv-retention-hold.test.mjs
+	modified:   scripts/migration-plan.test.mjs
+	modified:   scripts/rollback-rehearsal.test.mjs
+	modified:   scripts/secret-scan.mjs
+	modified:   src/components/org-shell.tsx
+	modified:   src/domain/canonical.ts
+	modified:   src/routeTree.gen.ts
+	modified:   src/routes/__root.tsx
+	modified:   src/routes/app/$orgId/index.tsx
+	modified:   src/server/security-headers.ts
+	modified:   src/server/zip-bounded.ts
+	modified:   tests/signup-policy.test.mjs
+	modified:   vite.config.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.gitleaks.toml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (3e5ccacbb2bbda552176afa39f7456f2509143bc)
+[0m
+Now let me check the integration test failure details:
