@@ -101,9 +101,6 @@ for (const file of mediaFiles) {
 md += `\nSource file preserved unchanged. Self-hosted under \`public/media/home/\`; static export only.\n\nEncoded with ffmpeg/libwebp (local crops, no Unsplash/Pexels hotlink).\n\nAll referenced shipped files exist on disk; all source entries resolve.\n\n`;
 
 md += `## Unresolved obligations\n\n`;
-const iscCount = Object.entries(licenceCounts).filter(([l]) => l === "ISC").reduce((sum, [,c]) => sum + c, 0);
-const mplCount = Object.entries(licenceCounts).filter(([l]) => l === "MPL-2.0").reduce((sum, [,c]) => sum + c, 0);
-const lgplCount = Object.entries(licenceCounts).filter(([l]) => /LGPL/.test(l)).reduce((sum, [,c]) => sum + c, 0);
 
 md += `- ISC and other non-reuse packages: reuse interpretation unresolved per estate licence route (MIT/Apache/BSD only).\n`;
 md += `- Conjunctive Sharp packages containing LGPL-3.0-or-later; redistribution interpretation unresolved.\n`;
