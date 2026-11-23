@@ -35,7 +35,13 @@ function getAllBlogSlugs(): string[] {
     });
 }
 
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export function getBlogPostBySlug(slug: string): BlogPost | null {
+  if (!SLUG_PATTERN.test(slug)) {
+    return null;
+  }
+
   const filePath = path.join(process.cwd(), "src/content/blog", `${slug}.mdx`);
 
   if (!fs.existsSync(filePath)) {
