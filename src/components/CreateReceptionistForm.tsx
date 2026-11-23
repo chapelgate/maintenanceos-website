@@ -264,7 +264,7 @@ export function CreateReceptionistForm({
               name="businessUrl"
               type="url"
               inputMode="url"
-              autoComplete="url"
+              autoComplete="off"
               required
               defaultValue={businessUrl}
               onKeyDown={(event) => {
