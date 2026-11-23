@@ -1,0 +1,20 @@
+Install (eggbot): cp repo/epipe-guard.cjs to $HOME/.config/opencode/epipe-guard.cjs (no secrets, no config overwrite), then apply with: git apply out/RUNNER-PATCH.diff
+Rollback: git apply -R out/RUNNER-PATCH.diff; unset NODE_OPTIONS.
+
+--- a/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh
++++ b/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh
+@@ -139,8 +139,9 @@
+   if [ -z "$SID" ]; then
+     F=(-f $T/BRIEF.md); [ -s $T/STEER.md ] && F+=(-f $T/STEER.md); [ -s /home/andy/chapelgate/jobs-work-dell/readiness/RUNNER-RULES.md ] && F+=(-f /home/andy/chapelgate/jobs-work-dell/readiness/RUNNER-RULES.md)  # eggbot 23 Nov runner rules
+-    timeout 5400s $HOME/.opencode/bin/opencode run "$P" -m "$MM" --dir $T --title "$TAG" "${F[@]}" >> $LOG 2>&1; ec=$?
++    NODE_OPTIONS="--require $HOME/.config/opencode/epipe-guard.cjs${NODE_OPTIONS:+ $NODE_OPTIONS}" timeout 5400s $HOME/.opencode/bin/opencode run "$P" -m "$MM" --dir $T --title "$TAG" "${F[@]}" >> $LOG 2>&1 < /dev/null; ec=$?
+     HUNG_ELAPSED=$(( $(date +%s) - HUNG_START ))
+     [ "$HUNG_ELAPSED" -gt 300 ] && echo "$(date -Iseconds) HUNG CYCLE: opencode run elapsed ${HUNG_ELAPSED}s (exceeded 300s timeout)" >> $T/history.log
+     SID=$($HOME/.opencode/bin/opencode session list 2>/dev/null | awk -v t="$TAG" '$2==t{print $1; exit}')
+@@ -145,7 +146,7 @@
+   else
+     HUNG_ELAPSED=$(( $(date +%s) - HUNG_START ))
+     [ "$HUNG_ELAPSED" -gt 300 ] && echo "$(date -Iseconds) HUNG CYCLE: opencode run elapsed ${HUNG_ELAPSED}s (exceeded 300s timeout)" >> $T/history.log
+-    timeout 5400s $HOME/.opencode/bin/opencode run "$CONT" -m "$MM" --dir $T --session "$SID" >> $LOG 2>&1; ec=$?
++    NODE_OPTIONS="--require $HOME/.config/opencode/epipe-guard.cjs${NODE_OPTIONS:+ $NODE_OPTIONS}" timeout 5400s $HOME/.opencode/bin/opencode run "$CONT" -m "$MM" --dir $T --session "$SID" >> $LOG 2>&1 < /dev/null; ec=$?
+   fi
