@@ -1,0 +1,40 @@
+[0m
+> build · estate-coding
+[0m
+[0m→ [0mRead out/ROOT-CAUSE.md
+[0m→ [0mRead repo/epipe-repro.cjs
+[0m→ [0mRead repo/epipe-guard.cjs
+[0m→ [0mRead repo/proof.sh
+[0m→ [0mRead repo/opencode-safe.sh
+[0m→ [0mRead out/RUNNER-PATCH.diff
+[0m
+[0m# [0mTodos
+[•] Analyze epipe-guard.cjs fix for EPIPE crash
+[ ] Evaluate runner patch (RUNNER-PATCH.diff) constraints
+[ ] Review opencode-safe.sh scope
+[ ] Verify evidence from deterministic repro (proof.sh)
+[ ] Formulate GO/NO-GO verdict with file:line findings
+[0m
+[0m# [0mTodos
+[✓] Analyze epipe-guard.cjs fix for EPIPE crash
+[•] Evaluate runner patch (RUNNER-PATCH.diff) constraints
+[ ] Review opencode-safe.sh scope
+[ ] Verify evidence from deterministic repro (proof.sh)
+[ ] Formulate GO/NO-GO verdict with file:line findings
+[0m
+[0m→ [0mSkill "chapelgate-skill-first"
+[0m→ [0mSkill "blast-radius"
+**FINDINGS (file:line):**
+- `repo/epipe-guard.cjs:1-3` — `isEPIPE` narrows swallow to `EPIPE`/`ERR_STREAM_DESTROYED` only. ✓
+- `repo/epipe-guard.cjs:4-8` — `fatal` prints non-EPIPE errors to stderr and `exit(1)`; no masking of real faults. ✓
+- `repo/epipe-guard.cjs:9-10` — `uncaughtException`/`unhandledRejection` catch child-pipe EPIPE thrown inside opencode (the actual root-cause stream). ✓
+- `repo/epipe-guard.cjs:11-14` — `error` listeners on `process.stdout`/`stderr`; **no** global `EventEmitter.emit` monkey-patch. ✓
+- `out/RUNNER-PATCH.diff:10,19` — `NODE_OPTIONS=--require ...` set inline on the two `opencode run` lines only, plus `< /dev/null`; not exported globally. ✓
+- `repo/opencode-safe.sh:5` — `NODE_OPTIONS` exported only within wrapper shell scope (opt-in). ✓
+- `repo/proof.sh:10,17` — deterministic 10-run red/green harness requiring `FAIL=0`. ✓
+
+**RISKS:**
+- `uncaughtException` swallow lets opencode continue after EPIPE; if EPIPE signals a dead pipe opencode must stop using, it keeps running (acceptable for the runner's no-crash goal).
+- `epipe-repro.cjs:4` destroys `process.stdout` — repro fidelity to real child-pipe EPIPE is asserted by author, not independently re-verified here.
+
+**VERDICT: GO** — narrow, reversible, addresses the crash, masks only EPIPE/destroyed, preserves secrets/frozen areas, clean rollback.

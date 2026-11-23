@@ -1,0 +1,14 @@
+Review this EPIPE fix for the estate opencode runner. HEAD 25bc03d2db3cf1e4810fab08369b64eb1f33ec87 on branch fix/opencode-epipe-guard. Give file:line findings and a final GO or NO-GO. Be skeptical; reject if the fix does not address the crash or broadens permissions/secrets/frozen areas.
+
+ROOT CAUSE: opencode 1.19.5 emits `error: EPIPE: broken pipe, write` via unhandled 'error' on a destroyed stream (node:events emitError <- internal/streams/destroy emitErrorNT/emitErrorCloseNT) when a child-process stdout/stderr pipe reader closes. Runner job-run-v6.sh:142 and :147 redirect top-level stdout/stderr to a FILE, so the failing stream is inside opencode. Log-writer-dead theory disproved (log actively written 23 Nov 19:58Z). 76 EPIPE cycle logs recovered; 148/204 per brief.
+
+FIX (narrowed after first review):
+- repo/epipe-guard.cjs: Node preload. Adds 'error' listeners to process.stdout/stderr plus process uncaughtException/unhandledRejection handlers. ALL of them swallow only EPIPE / ERR_STREAM_DESTROYED; any other error is printed to stderr and exits 1. There is NO global EventEmitter.emit monkey-patch. Raw proof out/raw/epipe-nonepipe-fatal-20261123-201227-output.log shows a real Error("REAL-BUG") still exits 1.
+- out/RUNNER-PATCH.diff: NODE_OPTIONS=--require $HOME/.config/opencode/epipe-guard.cjs is set INLINE on the two opencode invocation lines only (not exported globally in the runner), plus < /dev/null. Eggbot applies; no config overwrite, no binary/running-job change. Rollback = revert patch / unset NODE_OPTIONS.
+- repo/opencode-safe.sh: wrapper for ad-hoc nested runs.
+- repo/epipe-repro.cjs + repo/proof.sh: deterministic red/green harness.
+- out/ROOT-CAUSE.md: full evidence.
+
+VERIFICATION at this exact SHA (out/raw/): epipe-red-before-20261123-201225-output.log exit 1 with exact EPIPE stack; epipe-proof-after-20261123-201225-output.log 10/10 runs exit 0, EPIPE_TOTAL=0; epipe-nonepipe-fatal-20261123-201227-output.log exit 1 for a non-EPIPE error.
+
+CONSTRAINTS: no sudo/spend/deletes outside /tmp, no force-push, no shared DB writes, no frozen areas. First Mac review flagged global emit patch, blanket NODE_OPTIONS, and error masking; all three were addressed. Answer with FINDINGS (file:line), RISKS, VERDICT: GO or NO-GO.

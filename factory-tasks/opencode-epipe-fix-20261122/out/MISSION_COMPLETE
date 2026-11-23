@@ -1,0 +1,2 @@
+PASS
+EPIPE root cause fixed, proven (10/10, EPIPE_TOTAL=0 at fix head 25bc03d2 and merged SHA ea1d6767), council GO from 2 families at exact head, merged at ea1d6767f9f89b9ac467f1098dbd5858ee8d1a61. Evidence: out/EVIDENCE.md; result: out/RESULT.md; no push (origin unrelated) per out/PUSH-REQUEST.md.

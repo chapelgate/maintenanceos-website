@@ -1,0 +1,15 @@
+Review this EPIPE fix for the estate opencode runner. Commit dd9c0a5acd515ffa2d81d86b0d1edea55b46ec16 on branch fix/opencode-epipe-guard. Give file:line findings and a final GO or NO-GO. Be skeptical; reject if the fix does not actually address the crash or if it broadens permissions/secrets/frozen areas.
+
+ROOT CAUSE: opencode 1.19.5 emits `error: EPIPE: broken pipe, write` via unhandled 'error' event on a destroyed stream (node:events emitError <- internal/streams/destroy emitErrorNT/emitErrorCloseNT) when a child-process stdout/stderr pipe (bash tool / nested opencode / MCP / log writer) reader closes. Runner job-run-v6.sh:142 and :147 redirect top-level stdout/stderr to a regular FILE, so top-level stdout cannot EPIPE; the failing stream is inside opencode. Log-writer-dead hypothesis disproved: ~/.local/share/opencode/log/opencode.log actively written 23 Nov 19:58Z. Simple repro produced 0 EPIPE in ~50 raw runs; 76 EPIPE cycle logs recovered.
+
+FIX FILES:
+- repo/epipe-guard.cjs: Node preload. Attaches 'error' listener to process.stdout and process.stderr, swallows only EPIPE / ERR_STREAM_DESTROYED, rethrows everything else; plus EventEmitter.emit shim that returns true (handled) for 'error' events whose err.code is EPIPE / ERR_STREAM_DESTROYED, covering child-process stream pipes.
+- repo/opencode-safe.sh: wrapper exporting NODE_OPTIONS=--require <guard> then exec opencode.
+- repo/epipe-repro.cjs: deterministic harness destroying a stream with EPIPE (RED before fix, GREEN after).
+- repo/proof.sh: 10 consecutive guard runs, asserts exit 0 and 0 EPIPE lines.
+- out/RUNNER-PATCH.diff: sets NODE_OPTIONS=--require $HOME/.config/opencode/epipe-guard.cjs on both runner invocation lines and adds < /dev/null. Eggbot applies; no config overwrite, no binary change, no running-job change. Rollback = revert patch / unset NODE_OPTIONS.
+- out/ROOT-CAUSE.md: full evidence.
+
+VERIFICATION (raw at SHA): RED without guard exit 1 with exact EPIPE stack; GREEN with guard 10/10 runs exit 0, EPIPE_TOTAL=0, files out/raw/epipe-red-before-20261123-200037-output.log and out/raw/epipe-proof-after-20261123-200037-output.log.
+
+CONSTRAINTS: no sudo, no spend, no deletes outside /tmp, no force-push, no shared DB writes, no frozen areas touched, council must be line-level and independent. Answer with: FINDINGS (file:line), RISKS, and VERDICT: GO or NO-GO.
