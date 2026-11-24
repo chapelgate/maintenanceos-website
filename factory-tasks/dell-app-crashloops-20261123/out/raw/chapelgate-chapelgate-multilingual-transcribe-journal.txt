@@ -1,0 +1,200 @@
+Nov 23 18:57:30 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 94.
+Nov 23 18:57:30 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 18:57:33 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:57:33 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 18:57:33 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.315s CPU time.
+Nov 23 18:57:53 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 95.
+Nov 23 18:57:53 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 18:57:57 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:57:57 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 18:57:57 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.512s CPU time.
+Nov 23 18:58:17 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 96.
+Nov 23 18:58:17 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 18:58:20 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:58:20 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 18:58:20 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.748s CPU time.
+Nov 23 18:58:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 97.
+Nov 23 18:58:40 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 18:58:44 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:58:44 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 18:58:44 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.032s CPU time.
+Nov 23 18:59:04 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 98.
+Nov 23 18:59:04 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 18:59:08 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:59:08 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 18:59:08 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 5.123s CPU time.
+Nov 23 18:59:29 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 99.
+Nov 23 18:59:29 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: (node:151461) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: ========================================================================================================================
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: ========================================================================================================================
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: Starting evaluation eval-xZV-2026-11-23T18:59:31
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: Running 2 test cases (up to 4 at a time)...
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: │ input                                                      │ [chapelgate-multilingual-transcribe-synthetic] {input}     │
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic chapelgate-multilingual-transcribe     │
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: │                                                            │ response                                                   │
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: │ Intent: {intent}                                           │ [FAIL] OK synthetic chapelgate-multilingual-transcribe     │
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: │                                                            │ response                                                   │
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: ✓ Eval complete (ID: eval-xZV-2026-11-23T18:59:31)
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: » View results: promptfoo view
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: » Share with your team: https://promptfoo.app
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: Results:
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]:   ✓ 1 passed (50.00%)
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]:   ✗ 1 failed (50.00%)
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]:   0 errors (0%)
+Nov 23 18:59:32 andy-Precision-5820-Tower bash[151556]: Duration: 0s (concurrency: 4)
+Nov 23 18:59:32 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:59:32 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 18:59:32 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.469s CPU time.
+Nov 23 18:59:52 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 100.
+Nov 23 18:59:52 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 18:59:55 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:59:55 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 18:59:55 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.261s CPU time.
+Nov 23 19:00:15 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 101.
+Nov 23 19:00:15 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:00:19 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:00:19 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:00:19 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.885s CPU time.
+Nov 23 19:00:39 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 102.
+Nov 23 19:00:39 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:00:43 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:00:43 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:00:43 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.023s CPU time.
+Nov 23 19:01:03 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 103.
+Nov 23 19:01:03 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:01:06 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:01:06 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:01:06 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.910s CPU time.
+Nov 23 19:01:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 104.
+Nov 23 19:01:26 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:01:30 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:01:30 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:01:30 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.651s CPU time.
+Nov 23 19:01:50 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 105.
+Nov 23 19:01:50 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed to add control inotify watch descriptor for control group /user.slice/user-1000.slice/user@1000.service/app.slice/chapelgate-chapelgate-multilingual-transcribe.service: No space left on device
+Nov 23 19:01:50 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed to add memory inotify watch descriptor for control group /user.slice/user-1000.slice/user@1000.service/app.slice/chapelgate-chapelgate-multilingual-transcribe.service: No space left on device
+Nov 23 19:01:50 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:01:53 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:01:53 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:01:53 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.809s CPU time.
+Nov 23 19:02:13 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 106.
+Nov 23 19:02:13 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:02:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:02:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:02:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.127s CPU time.
+Nov 23 19:02:37 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 107.
+Nov 23 19:02:37 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:02:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:02:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:02:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.354s CPU time.
+Nov 23 19:03:00 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 108.
+Nov 23 19:03:00 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:03:04 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:03:04 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:03:04 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.793s CPU time, 291.5M memory peak, 0B memory swap peak.
+Nov 23 19:03:24 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 109.
+Nov 23 19:03:24 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:03:27 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:03:27 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:03:27 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.643s CPU time.
+Nov 23 19:03:47 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 110.
+Nov 23 19:03:47 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:03:51 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:03:51 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:03:51 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.417s CPU time.
+Nov 23 19:04:11 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 111.
+Nov 23 19:04:11 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:04:14 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:04:14 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:04:14 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.907s CPU time.
+Nov 23 19:04:35 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 112.
+Nov 23 19:04:35 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: (node:204439) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: ========================================================================================================================
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: ========================================================================================================================
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: Starting evaluation eval-Yrt-2026-11-23T19:04:38
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: │ input                                                      │ [chapelgate-multilingual-transcribe-synthetic] {input}     │
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic chapelgate-multilingual-transcribe     │
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: │                                                            │ response                                                   │
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: │ Intent: {intent}                                           │ [FAIL] OK synthetic chapelgate-multilingual-transcribe     │
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: │                                                            │ response                                                   │
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: ✓ Eval complete (ID: eval-Yrt-2026-11-23T19:04:38)
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: » View results: promptfoo view
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: » Share with your team: https://promptfoo.app
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: Results:
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]:   ✓ 1 passed (50.00%)
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]:   ✗ 1 failed (50.00%)
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]:   0 errors (0%)
+Nov 23 19:04:39 andy-Precision-5820-Tower bash[204692]: Duration: 0s (concurrency: 4)
+Nov 23 19:04:39 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:04:39 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:04:39 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.648s CPU time.
+Nov 23 19:04:59 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 113.
+Nov 23 19:04:59 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:05:03 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:05:03 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:05:03 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.191s CPU time.
+Nov 23 19:05:23 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 114.
+Nov 23 19:05:23 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:05:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:05:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:05:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.312s CPU time, 271.1M memory peak, 0B memory swap peak.
+Nov 23 19:05:46 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 115.
+Nov 23 19:05:46 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:05:49 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:05:49 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:05:49 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 3.556s CPU time.
+Nov 23 19:06:09 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 116.
+Nov 23 19:06:09 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:06:13 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:06:13 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:06:13 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 4.890s CPU time.
+Nov 23 19:06:33 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Scheduled restart job, restart counter is at 117.
+Nov 23 19:06:33 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: (node:227515) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: ========================================================================================================================
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: ========================================================================================================================
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: Starting evaluation eval-ouw-2026-11-23T19:06:40
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: │ input                                                      │ [chapelgate-multilingual-transcribe-synthetic] {input}     │
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic chapelgate-multilingual-transcribe     │
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: │                                                            │ response                                                   │
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: │ Intent: {intent}                                           │ [FAIL] OK synthetic chapelgate-multilingual-transcribe     │
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: │                                                            │ response                                                   │
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: ✓ Eval complete (ID: eval-ouw-2026-11-23T19:06:40)
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: » View results: promptfoo view
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: » Share with your team: https://promptfoo.app
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: Results:
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]:   ✓ 1 passed (50.00%)
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]:   ✗ 1 failed (50.00%)
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]:   0 errors (0%)
+Nov 23 19:06:40 andy-Precision-5820-Tower bash[229590]: Duration: 0s (concurrency: 4)
+Nov 23 19:06:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:06:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Failed with result 'exit-code'.
+Nov 23 19:06:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-chapelgate-multilingual-transcribe.service: Consumed 5.755s CPU time.

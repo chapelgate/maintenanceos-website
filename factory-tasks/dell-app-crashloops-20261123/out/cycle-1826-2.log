@@ -1,0 +1,6 @@
+[0m
+> build · estate-coding
+[0m
+[93m[1m! [0mpermission requested: external_directory (/etc/systemd/user/*); auto-rejecting
+[0m✗ [0mcat /etc/systemd/user/disk-cleanup.service 2>/dev/null; echo "==="; ls -la /etc/systemd/user/ 2>/dev/null | head -20 failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

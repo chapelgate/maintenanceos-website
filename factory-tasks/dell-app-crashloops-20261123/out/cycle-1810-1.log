@@ -1,0 +1,325 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/dell-services/
+total 932
+drwxrwxr-x 98 andy andy 12288 Nov 23 15:02 .
+drwxrwxr-x 60 andy andy 12288 Nov 23 08:23 ..
+-rw-rw-r--  1 andy andy   484 Nov 12 11:24 99-inotify-watches.conf
+drwxrwxr-x  3 andy andy  4096 Nov 18 11:28 adoption-diff
+drwxrwxr-x  2 andy andy  4096 Nov 17 18:31 ai-observability
+drwxrwxr-x  2 andy andy  4096 Nov 12 11:29 ai-usage
+-rwxrwxr-x  1 andy andy  5612 Nov 15 21:34 alert-monitor.sh
+drwxrwxr-x  2 andy andy  4096 Nov 21 00:29 andy-park4
+drwxrwxr-x  3 andy andy  4096 Nov 21 00:28 auto-heal
+drwxrwxr-x  4 andy andy  4096 Nov 22 12:42 bew-test-pg
+drwxrwxr-x  3 andy andy  4096 Nov 15 20:42 bus
+-rwxrwxr-x  1 andy andy  1228 Nov 22 20:06 business-evidence-wallet-run.sh
+-rwxrwxr-x  1 andy andy  1237 Nov 15 21:21 business-evidence-wallet-run.sh.bak-eggbot-20261122-2006
+drwxrwxr-x  2 andy andy  4096 Nov 12 13:51 caddy-local-127.0.0.1-only
+drwxrwxr-x  5 andy andy 20480 Nov 23 18:10 call-accountability
+drwxrwxr-x  2 andy andy  4096 Nov 19 20:49 capacity-collective
+drwxrwxr-x  2 andy andy  4096 Nov 11 17:32 carry-guard-bin
+-rwxrwxr-x  1 andy andy   650 Nov 15 21:41 chapelgate-council-minutes-run.sh
+-rwxrwxr-x  1 andy andy   622 Nov 15 21:41 chapelgate-information-rights-run.sh
+-rwxrwxr-x  1 andy andy   630 Nov 15 21:41 chapelgate-multilingual-transcribe-run.sh
+drwxrwxr-x  2 andy andy  4096 Nov 21 09:44 cleanup
+drwxrwxr-x  2 andy andy  4096 Nov 23 18:02 commercial-ready-check
+drwxrwxr-x  2 andy andy  4096 Nov 19 23:10 completion-anomaly
+drwxrwxr-x  2 andy andy  4096 Nov 20 21:58 copy-guard
+drwxrwxr-x  6 andy andy  4096 Nov 12 11:31 data
+-rw-rw-r--  1 andy andy   758 Nov 22 16:39 d-cleanup-20261122-1434.log
+-rwxrwxr-x  1 andy andy  1221 Nov 20 02:00 dependency-pin-check.sh
+drwxrwxr-x  2 andy andy  4096 Nov 23 18:03 disk-clear
+drwxrwxr-x  3 andy andy  4096 Nov 22 22:23 disk-council-daily
+drwxrwxr-x  3 andy andy  4096 Nov 20 21:43 disk-guard
+drwxrwxr-x  2 andy andy  4096 Nov 18 17:19 disk-move
+drwxrwxr-x  2 andy andy  4096 Nov 16 20:24 disk-mover
+drwxrwxr-x  2 andy andy  4096 Nov 17 14:34 disk-plan-exec
+drwxrwxr-x  2 andy andy  4096 Nov 17 21:36 disk-relief
+drwxrwxr-x  3 andy andy  4096 Nov 23 17:38 disk-test
+drwxrwxr-x  2 andy andy  4096 Nov 23 18:05 disk-watch
+drwxrwxr-x  2 andy andy  4096 Nov 20 19:27 done-gate
+drwxrwxr-x  4 andy andy  4096 Nov 23 09:03 eggbot-watchdog
+-rwx------  1 andy andy  1003 Nov 17 00:13 enter-nottingham-twilio-keys.sh
+-rwx------  1 andy andy   737 Nov 17 00:13 enter-nottingham-twilio-keys.sh.bak-eggbot-20261117-0013
+-rw-rw-r--  1 andy andy   848 Nov 11 17:33 estate-watchdog-dell.conf
+-rwxrwxr-x  1 andy andy  1762 Nov 11 17:33 estate-watchdog-dell.sh
+drwxrwxr-x  2 andy andy  4096 Nov 19 17:07 failure-log-compliance
+drwxrwxr-x  2 andy andy  4096 Nov 21 21:28 findings-spawn
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:27 focus-guard
+drwxrwxr-x  8 andy andy  4096 Nov 18 12:37 forced-merge
+drwxrwxr-x  3 andy andy  4096 Nov 22 23:14 git-guard
+drwxrwxr-x  2 andy andy  4096 Nov 21 00:28 gpu-watch
+drwxrwxr-x  2 andy andy  4096 Nov 23 12:00 h25-staged
+drwxrwxr-x  3 andy andy  4096 Nov 14 22:36 hang-watchdog
+drwxrwxr-x  2 andy andy  4096 Nov 12 11:29 hl-ical-filter
+-rwxrwxr-x  1 andy andy   859 Nov 22 20:06 holiday-let-operator-run.sh
+-rwxrwxr-x  1 andy andy   868 Nov 15 21:20 holiday-let-operator-run.sh.bak-eggbot-20261122-2006
+-rwxrwxr-x  1 andy andy  1306 Nov 22 20:06 housing-compliance-vault-run.sh
+-rwxrwxr-x  1 andy andy  1315 Nov 15 21:20 housing-compliance-vault-run.sh.bak-eggbot-20261122-1954
+-rwxrwxr-x  1 andy andy  1315 Nov 22 19:54 housing-compliance-vault-run.sh.bak-eggbot-20261122-2006
+-rw-rw-r--  1 andy andy  3791 Nov 20 16:27 inventory-gen.py
+-rw-rw-r--  1 andy andy  3791 Nov 20 16:27 inventory-gen.py.bak-opsfoundations-20261120-1628
+-rw-rw-r--  1 andy andy 63150 Nov 20 16:27 INVENTORY.md.bak-opsfoundations-20261120-1628
+drwxrwxr-x  3 andy andy  4096 Nov 21 08:54 job-db
+-rw-rw-r--  1 andy andy  6185 Nov 16 21:17 job-run-v6-front-port.sh
+drwxrwxr-x  4 andy andy  4096 Nov 21 09:13 job-supervisor
+drwxrwxr-x  2 andy andy  4096 Nov 17 14:36 kill-switch
+-rw-rw-r--  1 andy andy     0 Nov 20 16:20 .lane-edit.lock
+drwxrwxr-x  3 andy andy  4096 Nov 22 20:27 lane-health
+drwxrwxr-x  4 andy andy  4096 Nov 17 19:59 langfuse
+-rwxrwxr-x  1 andy andy   666 Nov 22 20:06 legal-case-management-run.sh
+-rwxrwxr-x  1 andy andy   675 Nov 15 21:23 legal-case-management-run.sh.bak-eggbot-20261122-2006
+drwxrwxr-x  2 andy andy  4096 Nov 14 22:52 load-soak
+drwxrwxr-x  4 andy andy  4096 Nov 19 23:58 local-dell-lane
+drwxrwxr-x  8 andy andy  4096 Nov 16 16:34 local-light-duty
+drwxrwxr-x  3 andy andy  4096 Nov 23 03:00 logs
+drwxrwxr-x  2 andy andy  4096 Nov 22 20:27 loops
+drwxrwxr-x  6 andy andy  4096 Nov 19 11:00 mac-lane
+drwxrwxr-x  2 andy andy  4096 Nov 13 16:40 mac-lmstudio-relay
+-rwxrwxr-x  1 andy andy  1096 Nov 15 21:42 maintenanceos-run.sh
+-rwxrwxr-x  1 andy andy   857 Nov 22 20:06 maintenanceos-website-run.sh
+-rwxrwxr-x  1 andy andy   866 Nov 15 21:23 maintenanceos-website-run.sh.bak-eggbot-20261122-2006
+-rw-rw-r--  1 andy andy   447 Nov 20 16:27 Makefile.bak-opsfoundations-20261120-1628
+drwxrwxr-x  2 andy andy  4096 Nov 21 18:49 memory-admit
+drwxrwxr-x  2 andy andy  4096 Nov 22 00:09 memory-guard
+drwxrwxr-x  5 andy andy  4096 Nov 11 20:36 migration-20261111
+drwxrwxr-x  2 andy andy  4096 Nov 13 11:04 migration-staging-move
+drwxrwxr-x  2 andy andy  4096 Nov 13 11:03 migration-staging-remove
+-rwxrwxr-x  1 andy andy  4514 Nov 19 23:59 missed-promise-check.sh
+drwxrwxr-x  2 andy andy  4096 Nov 23 09:13 model-failrate
+drwxrwxr-x  2 andy andy  4096 Nov 23 08:59 model-pin
+drwxrwxr-x  3 andy andy 32768 Nov 23 17:41 model-preflight
+-rwxrwxr-x  1 andy andy  1132 Nov 11 17:33 mos-loop-watchdog-dell.sh
+-rwxrwxr-x  1 andy andy   448 Nov 15 10:59 move-migration-staging.sh
+-rwxrwxr-x  1 andy andy  1438 Nov 17 00:13 omniroute-b-dell-run.sh
+-rwxrwxr-x  1 andy andy   997 Nov 17 00:13 omniroute-b-dell-run.sh.bak-eggbot-20261117-0013
+-rwx------  1 andy andy  1572 Nov 17 00:13 omniroute-dell-run.sh
+-rwx------  1 andy andy  1125 Nov 17 00:13 omniroute-dell-run.sh.bak-eggbot-20261117-0013
+-rwx------  1 andy andy   874 Nov 11 20:31 omniroute-dell-run.sh.bak-emptyvar-20261111T2053
+-rwxr-xr-x  1 andy andy  1480 Nov 21 03:59 omniroute-docker-proxy.py
+-rw-rw-r--  1 andy andy 13706 Nov 21 05:20 omniroute-front-proxy.py
+-rw-rw-r--  1 andy andy 11257 Nov 20 14:14 omniroute-front-proxy.py.bak-ef-20261120-1411
+-rw-rw-r--  1 andy andy 11262 Nov 20 14:36 omniroute-front-proxy.py.bak-ef-20261120-1415
+-rw-rw-r--  1 andy andy  5939 Nov 16 21:09 omniroute-front-proxy.py.bak-eggbot-20261118-0910
+-rw-rw-r--  1 andy andy  7016 Nov 18 09:10 omniroute-front-proxy.py.bak-eggbot-20261118-0918
+-rw-rw-r--  1 andy andy 10871 Nov 19 21:52 omniroute-front-proxy.py.bak-eggbot-20261119-2246
+-rw-rw-r--  1 andy andy 11646 Nov 20 15:43 omniroute-front-proxy.py.bak-eggbot-20261120-1543
+-rw-rw-r--  1 andy andy 12637 Nov 20 16:30 omniroute-front-proxy.py.bak-eggbot-20261120-1833
+drwxrwxr-x  2 andy andy  4096 Nov 15 01:10 omniroute-reorder
+-rw-rw-r--  1 andy andy  2571 Nov 16 21:17 opencode-front-port.json
+drwxrwxr-x  2 andy andy  4096 Nov 22 10:57 opencode-guard
+drwxrwxr-x  3 andy andy 36864 Nov 23 18:10 overnight-keepalive
+drwxrwxr-x  2 andy andy  4096 Nov 21 21:21 pr-cite-check
+-rw-rw-r--  1 andy andy  4402 Nov 17 22:09 preflight-content-check.py
+-rwxr-xr-x  1 andy andy  1128 Nov 23 17:51 preflight-repo-check.py
+-rwxr-xr-x  1 andy andy  1127 Nov 20 18:14 preflight-repo-check.py.bak-eggbot-20261120-1830
+drwxrwxr-x  2 andy andy  4096 Nov 18 23:40 processed-keeper
+drwxrwxr-x  3 andy andy  4096 Nov 23 18:08 product-watch
+drwxrwxr-x  3 andy andy  4096 Nov 23 00:11 promise-check
+drwxrwxr-x  2 andy andy  4096 Nov 20 18:33 __pycache__
+drwxrwxr-x  2 andy andy  4096 Nov 20 17:03 rate-reroute
+drwxrwxr-x  3 andy andy  4096 Nov 22 23:21 reel-adoption
+drwxrwxr-x  3 andy andy  4096 Nov 18 17:44 reel-cleaner
+drwxrwxr-x  2 andy andy  4096 Nov 21 00:28 reel-implement
+drwxrwxr-x  2 andy andy  4096 Nov 18 23:49 reel-monitor
+drwxrwxr-x  2 andy andy  4096 Nov 22 22:23 reel-review
+drwxrwxr-x  2 andy andy  4096 Nov 20 18:26 rejection-alert
+drwxrwxr-x  2 andy andy  4096 Nov 20 19:23 release-relay
+-rw-rw-r--  1 andy andy  5264 Nov 17 22:04 repo-inventory-gen.py
+-rw-rw-r--  1 andy andy 24925 Nov 23 17:51 repo-inventory.json
+-rw-rw-r--  1 andy andy  8836 Nov 23 17:51 REPO-INVENTORY.md
+drwxrwxr-x  3 andy andy  4096 Nov 20 21:57 retention
+drwxrwxr-x  4 andy andy  4096 Nov 16 16:23 router-guard
+-rwxrwxr-x  1 andy andy  3700 Nov 17 16:03 run-cloudflare-security-audit.sh
+-rw-rw-r--  1 andy andy     0 Nov 20 03:15 .runner-edit.lock
+drwx------  2 andy andy  4096 Nov 15 22:48 secrets
+drwxrwxr-x  2 andy andy  4096 Nov 19 09:56 security-handover
+drwxrwxr-x  2 andy andy  4096 Nov 19 19:51 six-docs-gate
+drwxrwxr-x  6 andy andy  4096 Nov 11 17:28 src
+drwxrwxr-x  2 andy andy  4096 Nov 15 13:15 stage-gate
+drwxrwxr-x  2 andy andy 40960 Nov 23 18:04 state
+drwxrwxr-x  2 andy andy  4096 Nov 18 09:05 status-council-read
+drwxrwxr-x  2 andy andy  4096 Nov 23 17:50 storage-rules
+drwxrwxr-x  2 andy andy  4096 Nov 17 19:39 sudo-prompts
+drwxrwxr-x  2 andy andy  4096 Nov 19 17:51 systemd
+drwxrwxr-x  3 andy andy  4096 Nov 23 18:10 teardown
+drwxrwxr-x  3 andy andy  4096 Nov 21 07:00 tender-scan
+drwxrwxr-x  3 andy andy  4096 Nov 15 00:57 test-loop
+-rw-rw-r--  1 andy andy  1091 Nov 16 20:53 test_proxy_debug.py
+drwxrwxr-x  3 andy andy  4096 Nov 21 21:04 test-raw
+drwxrwxr-x  2 andy andy  4096 Nov 15 20:44 traces
+drwxrwxr-x  3 andy andy  4096 Nov 18 23:48 triage-gate
+drwxrwxr-x  5 andy andy  4096 Nov 18 09:07 trial-sandbox
+-rwx------  1 andy andy  1759 Nov 17 00:13 twilio-fill-nottingham.sh
+-rwx------  1 andy andy  1204 Nov 17 00:12 twilio-fill-nottingham.sh.bak-eggbot-20261117-0012
+drwxrwxr-x  4 andy andy  4096 Nov 21 19:10 uploader-check
+drwxrwxr-x  4 andy andy  4096 Nov 21 23:40 uptime-kuma
+drwxrwxr-x  5 andy andy  4096 Nov 20 18:10 video-intake
+drwxrwxr-x  2 andy andy  4096 Nov 20 22:22 website-uptime
+drwxrwxr-x  8 andy andy  4096 Nov 15 17:46 worktrees
+[0m
+[0m→ [0mRead /home/andy/chapelgate/dell-services/business-evidence-wallet-run.sh
+[0m→ [0mRead /home/andy/chapelgate/dell-services/chapelgate-multilingual-transcribe-run.sh
+[0m→ [0mRead /home/andy/chapelgate/dell-services/maintenanceos-run.sh
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/ 2>/dev/null; echo "---OUT---"; ls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out 2>/dev/null || echo "no out dir"
+total 104
+drwxrwxr-x   4 andy andy  4096 Nov 23 18:12 .
+drwxrwxr-x 850 andy andy 69632 Nov 23 18:10 ..
+-rw-rw-r--   1 andy andy  1609 Nov 23 18:10 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 23 18:10 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy    78 Nov 23 18:10 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 18:10 .lane-health-state
+drwxrwxr-x   3 andy andy  4096 Nov 23 18:10 out
+drwxrwxr-x   2 andy andy  4096 Nov 23 18:10 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 18:10 status.json
+-rw-rw-r--   1 andy andy   923 Nov 23 18:14 STEER.md
+---OUT---
+total 28
+drwxrwxr-x 3 andy andy  4096 Nov 23 18:10 .
+drwxrwxr-x 4 andy andy  4096 Nov 23 18:12 ..
+-rw-rw-r-- 1 andy andy 10375 Nov 23 18:12 cycle-1810-1.log
+-rw-rw-r-- 1 andy andy     6 Nov 23 18:10 JOB-ID
+-rw-rw-r-- 1 andy andy     0 Nov 23 18:10 .preflight-ok
+drwxrwxr-x 2 andy andy  4096 Nov 23 18:10 raw
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/PROGRESS.md 2>/dev/null || echo "no PROGRESS"; echo "---VERIFIER---"; cat /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/VERIFIER-FEEDBACK.md 2>/dev/null || echo "no VERIFIER-FEEDBACK"
+no PROGRESS
+---VERIFIER---
+no VERIFIER-FEEDBACK
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/raw/cycle-1810-1.log
+cat: /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/raw/cycle-1810-1.log: No such file or directory
+[0m
+[0m→ [0mRead STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/raw/
+total 8
+drwxrwxr-x 2 andy andy 4096 Nov 23 18:10 .
+drwxrwxr-x 3 andy andy 4096 Nov 23 18:10 ..
+[0m
+[0m# [0mTodos
+[•] Fix disk-cleanup.service (ExecStartPre exit 2, DRY=0, executable, output path) and prove real run with df before/after
+[ ] Root-cause & fix business-evidence-wallet run script (promptfoo crash exit 1)
+[ ] Root-cause & fix chapelgate-multilingual-transcribe run script (promptfoo exit 1)
+[ ] Root-cause & fix maintenanceos run script (promptfoo exit 1)
+[ ] Start each service, wait, verify NRestarts/ActiveState stable
+[ ] Write out/RESULT.md per service and out/MISSION_COMPLETE
+[0m
+Let me look at the disk-cleanup service and related files.
+[0m$ [0msystemctl --user list-units --type=service | grep -i disk; systemctl --user list-units --type=service | grep -i cleanup
+● disk-cleanup-manual2-20261123-1813.service                          loaded failed       failed             /usr/bin/bash /home/andy/chapelgate/dell-watch/disk-cleanup.sh DRY=0
+● disk-cleanup.service                                                loaded failed       failed             Dell disk clean-up (regenerable caches only)
+● disk-council-daily.service                                          loaded failed       failed             Daily Dell root disk council (report only, strict keep-essential rule)
+  gvfs-udisks2-volume-monitor.service                                 loaded active       running            Virtual filesystem service - disk device monitor
+  job-disk-plan.service                                               loaded active       running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/disk-plan-20261123 60
+● disk-cleanup-manual2-20261123-1813.service                          loaded failed       failed             /usr/bin/bash /home/andy/chapelgate/dell-watch/disk-cleanup.sh DRY=0
+● disk-cleanup.service                                                loaded failed       failed             Dell disk clean-up (regenerable caches only)
+[0m
+[0m$ [0mfind / -name "disk-cleanup.service" 2>/dev/null | head -5
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mfind / -name "dell-state-backup.sh" 2>/dev/null | head -5
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[93m[1m! [0mpermission requested: external_directory (/etc/systemd/user/*); auto-rejecting
+[0m✗ [0mcat /etc/systemd/user/disk-cleanup.service 2>/dev/null; echo "==="; cat /home/andy/chapelgate/.config/systemd/user/disk-cleanup.service 2>/dev/null; echo "==="; find /home/andy/chapelgate -name "disk-cleanup.service" 2>/dev/null failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/dell-watch/ 2>/dev/null; echo "---"; cat /home/andy/chapelgate/dell-watch/disk-cleanup.sh 2>/dev/null
+total 1184
+drwxrwxr-x  4 andy andy   4096 Nov 23 18:25 .
+drwxrwxr-x 60 andy andy  12288 Nov 23 08:23 ..
+-rw-rw-r--  1 andy andy  46559 Nov 23 18:22 ALERTS.md
+-rw-rw-r--  1 andy andy   2568 Nov 16 20:20 ALERTS.md.bak-eggbot-20261116-2025
+-rw-rw-r--  1 andy andy    776 Nov 21 17:43 ANDY-NOTIFY.md
+drwxrwxr-x  3 andy andy   4096 Nov 18 09:10 bin
+-rw-rw-r--  1 andy andy      0 Nov 23 18:15 build-watchman.lock
+-rw-rw-r--  1 andy andy   6552 Nov 23 18:19 DISK-ALERT.md
+-rw-rw-r--  1 andy andy   1851 Nov 11 15:42 disk-cleanup.sh
+-rw-rw-r--  1 andy andy   1047 Nov 21 20:54 EW-UPTIME.md
+-rw-rw-r--  1 andy andy    270 Nov 23 04:15 GPU-DAILY.md
+-rw-rw-r--  1 andy andy    588 Nov 23 18:21 omniroute-health.json
+-rwx------  1 andy andy    867 Nov 18 09:10 omniroute-health.sh
+-rwx------  1 andy andy    766 Nov 11 14:21 omniroute-health.sh.bak-eggbot-20261118-0910
+drwxrwxr-x  2 andy andy   4096 Nov 23 18:24 out
+-rw-rw-r--  1 andy andy  17369 Nov 23 18:21 OVERNIGHT-KEEPALIVE.md
+-rw-rw-r--  1 andy andy    506 Nov 23 18:25 REEL-PIPELINE.md
+-rw-rw-r--  1 andy andy  11580 Nov 20 18:26 REJECTION-ALERTS.md
+-rw-rw-r--  1 andy andy      0 Nov 23 18:25 selfcheck.lock
+-rw-------  1 andy andy     48 Nov 20 12:22 selfcheck-state.json
+-rw-rw-r--  1 andy andy  48611 Nov 23 18:15 STATUS-ARCHIVE.md
+-rw-rw-r--  1 andy andy  22120 Nov 23 18:15 STATUS.md
+-rw-rw-r--  1 andy andy 144545 Nov 16 20:20 STATUS.md.bak-eggbot-20261116-2025
+-rw-rw-r--  1 andy andy   1442 Nov 23 18:19 TEST-LOOP.md
+-rw-rw-r--  1 andy andy 355607 Nov 23 18:20 WATCHDOG-FOR-EGGBOT.md
+-rw-rw-r--  1 andy andy  75492 Nov 23 18:20 WATCHDOG.md
+-rw-------  1 andy andy  55219 Nov 23 18:15 WATCHMAN.json
+-rw-------  1 andy andy  13461 Nov 23 18:15 WATCHMAN.md
+-rw-------  1 andy andy  11454 Nov 23 04:00 watchman-state.journal.json
+-rw-------  1 andy andy 233288 Nov 23 18:15 watchman-state.json
+-rw-rw-r--  1 andy andy      0 Nov 23 18:25 watchman-state.lock
+-rwxrwxr-x  1 andy andy   5739 Nov 21 09:13 watch.sh
+-rwxrwxr-x  1 andy andy   2895 Nov 11 15:40 watch.sh.bak-20261111
+-rwxrwxr-x  1 andy andy   5425 Nov 16 20:20 watch.sh.bak-eggbot-20261116-2025
+-rwxrwxr-x  1 andy andy   4808 Nov 16 20:21 watch.sh.bak-eggbot-20261118-2348
+-rwxrwxr-x  1 andy andy   5604 Nov 19 23:48 watch.sh.bak-eggbot-20261121-0913-07
+-rw-rw-r--  1 andy andy  26243 Nov 23 18:25 WEBSITE-UPTIME.md
+---
+#!/usr/bin/env bash
+# Dell disk clean-up: regenerable stuff only.
+set -u
+LOG=~/chapelgate/factory-tasks/foundation-dell-20261111/out/cleanup-dryrun.txt
+DRY=${DRY:-1}
+
+say(){ echo "$@" | tee -a "$LOG"; }
+
+say "=== Disk clean-up $(date '+%F %H %Z') (dry-run=$DRY) ==="
+df -h /home | tail -1 | tee -a "$LOG"
+
+# 1. npm cache
+if [ -d ~/.npm/_cacache ]; then
+  say "npm cache: $(du -sh ~/.npm/_cacache 2>/dev/null | cut -f1)"
+  [ "$DRY" = "0" ] && npm cache clean --force 2>/dev/null
+fi
+# 2. pnpm cache
+if [ -d ~/.local/share/pnpm/store ]; then
+  say "pnpm store: $(du -sh ~/.local/share/pnpm/store 2>/dev/null | cut -f1)"
+  [ "$DRY" = "0" ] && pnpm store prune 2>/dev/null
+fi
+# 3. pip cache
+if [ -d ~/.cache/pip ]; then
+  say "pip cache: $(du -sh ~/.cache/pip 2>/dev/null | cut -f1)"
+  [ "$DRY" = "0" ] && pip cache purge 2>/dev/null
+fi
+# 4. cargo cache
+if [ -d ~/.cargo ]; then
+  say "cargo: $(du -sh ~/.cargo 2>/dev/null | cut -f1)"
+fi
+# 5. docker build cache
+say "docker build cache:"
+[ "$DRY" = "0" ] && docker builder prune -f --filter until=168h 2>/dev/null || true
+# 6. old factory-runs worktrees older than 7 days
+FR=~/chapelgate/factory-runs
+if [ -d "$FR" ]; then
+  say "factory-runs worktrees >7d:"
+  find "$FR" -maxdepth 1 -type d -mtime +7 -print 2>/dev/null | tee -a "$LOG"
+  [ "$DRY" = "0" ] && find "$FR" -maxdepth 1 -type d -mtime +7 -exec rm -rf {} + 2>/dev/null
+fi
+# 7. task out/ cycle logs older than 30 days compressed rather than deleted
+say "task out/ cycle logs >30d (compress):"
+find ~/chapelgate/factory-tasks ~/chapelgate/jobs-work-dell/tasks -maxdepth 3 -name 'cycle-*.log' -mtime +30 -print 2>/dev/null | tee -a "$LOG"
+[ "$DRY" = "0" ] && find ~/chapelgate/factory-tasks ~/chapelgate/jobs-work-dell/tasks -maxdepth 3 -name 'cycle-*.log' -mtime +30 ! -name '*.gz' -exec gzip {} + 2>/dev/null
+
+echo "=== done ===" | tee -a "$LOG"
+[0m

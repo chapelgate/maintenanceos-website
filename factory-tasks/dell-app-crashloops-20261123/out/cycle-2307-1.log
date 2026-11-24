@@ -1,0 +1,2016 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/
+total 108
+drwxrwxr-x   4 andy andy  4096 Nov 23 18:12 .
+drwxrwxr-x 880 andy andy 73728 Nov 23 23:40 ..
+-rw-rw-r--   1 andy andy  1609 Nov 23 18:10 BRIEF.md
+-rw-rw-r--   1 andy andy     0 Nov 23 23:06 .cycle-semaphore.lock
+-rw-rw-r--   1 andy andy  1555 Nov 23 23:07 history.log
+-rw-rw-r--   1 andy andy     7 Nov 23 23:06 .lane-health-state
+drwxrwxr-x   3 andy andy  4096 Nov 23 23:55 out
+drwxrwxr-x   2 andy andy  4096 Nov 23 18:10 repo
+-rw-rw-r--   1 andy andy    81 Nov 23 23:07 status.json
+-rw-rw-r--   1 andy andy  1511 Nov 23 19:31 STEER.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/
+total 200
+drwxrwxr-x 3 andy andy  4096 Nov 23 23:55 .
+drwxrwxr-x 4 andy andy  4096 Nov 23 18:12 ..
+-rw-rw-r-- 1 andy andy 19655 Nov 23 18:25 cycle-1810-1.log
+-rw-rw-r-- 1 andy andy   346 Nov 23 18:28 cycle-1826-2.log
+-rw-rw-r-- 1 andy andy 16152 Nov 23 18:42 cycle-1828-3.log
+-rw-rw-r-- 1 andy andy   294 Nov 23 18:45 cycle-1843-4.log
+-rw-rw-r-- 1 andy andy   294 Nov 23 18:46 cycle-1846-5.log
+-rw-rw-r-- 1 andy andy 46545 Nov 23 19:31 cycle-1846-6.log
+-rw-rw-r-- 1 andy andy 53757 Nov 23 23:01 cycle-2241-1.log
+-rw-rw-r-- 1 andy andy   670 Nov 23 23:55 cycle-2307-1.log
+-rw-rw-r-- 1 andy andy     8 Nov 23 23:55 .cycle.pid
+-rw-rw-r-- 1 andy andy     6 Nov 23 23:06 JOB-ID
+-rw-rw-r-- 1 andy andy    34 Nov 23 19:26 MISSION_COMPLETE.rejected-20261123-1931
+-rw-rw-r-- 1 andy andy     0 Nov 23 23:06 .preflight-ok
+-rw-rw-r-- 1 andy andy  1421 Nov 23 18:51 PROGRESS.md
+drwxrwxr-x 2 andy andy  4096 Nov 23 19:26 raw
+-rw-rw-r-- 1 andy andy   934 Nov 23 19:26 RESULT.md
+-rw-rw-r-- 1 andy andy  2813 Nov 23 19:27 ROOT-CAUSE.md
+-rw-rw-r-- 1 andy andy   390 Nov 23 19:31 VERIFIER-FEEDBACK.md
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/ROOT-CAUSE.md
+[0m→ [0mRead out/MISSION_COMPLETE.rejected-20261123-1931
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/raw/
+total 136
+drwxrwxr-x 2 andy andy  4096 Nov 23 19:26 .
+drwxrwxr-x 3 andy andy  4096 Nov 23 23:55 ..
+-rw-rw-r-- 1 andy andy    31 Nov 23 19:26 bew-after.txt
+-rw-rw-r-- 1 andy andy    33 Nov 23 19:16 bew-before.txt
+-rw-rw-r-- 1 andy andy 31604 Nov 23 19:06 chapelgate-business-evidence-wallet-journal.txt
+-rw-rw-r-- 1 andy andy 33798 Nov 23 19:06 chapelgate-chapelgate-multilingual-transcribe-journal.txt
+-rw-rw-r-- 1 andy andy 32867 Nov 23 19:06 chapelgate-maintenanceos-journal.txt
+-rw-rw-r-- 1 andy andy    89 Nov 23 19:03 df-after-20261123-1903.txt
+-rw-rw-r-- 1 andy andy    89 Nov 23 18:51 df-before-20261123-1851.txt
+-rw-rw-r-- 1 andy andy    31 Nov 23 19:26 mos-after.txt
+-rw-rw-r-- 1 andy andy    31 Nov 23 19:26 mt-after.txt
+[0m
+[0m→ [0mRead out/raw/bew-before.txt
+[0m→ [0mRead out/raw/mt-after.txt
+[0m→ [0mRead out/raw/bew-after.txt
+[0m→ [0mRead out/raw/df-before-20261123-1851.txt
+[0m→ [0mRead out/raw/df-after-20261123-1903.txt
+[0m→ [0mRead out/raw/mos-after.txt
+[0m
+[0m$ [0mcat /home/andy/chapelgate/dell-services/business-evidence-wallet-run.sh
+#!/usr/bin/env bash
+# Business Evidence Wallet on the Dell: local embedded PostgreSQL (127.0.0.1:55432) + vite dev on 127.0.0.1:8080.
+# Mirrors repo startup.sh, but foreground + loopback only. Auth secret is generated locally by pg-local.mjs; never printed.
+set -euo pipefail
+export EW_PG_RUN=/tmp/bew-pg-run  # repo default socket path is over the 107-char unix socket limit on the Dell
+cd "/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo"
+node scripts/pg-local.mjs start
+export DATABASE_URL="$(node scripts/pg-local.mjs url)"
+export BETTER_AUTH_SECRET="$(node scripts/pg-local.mjs auth-secret)"
+unset BEW_GATEWAY_HTTP_ENABLED || true
+node scripts/migrate.mjs
+exec node scripts/with-app-env.mjs ./node_modules/.bin/vite dev --host 127.0.0.1 --port 8080 --strictPort
+[0m
+[0m$ [0mcat /home/andy/chapelgate/dell-services/chapelgate-multilingual-transcribe-run.sh
+#!/usr/bin/env bash
+# Chapelgate Multilingual Transcribe on the Dell: run-app.sh that passed the 11 Nov morning check (dummy admin, 127.0.0.1).
+exec /usr/bin/bash "/home/andy/chapelgate/jobs-work-dell/tasks/dell-run-check-python-apps-20261111/dell-run-chapelgate-multilingual-transcribe/out/run-app.sh"
+[0m
+[0m$ [0mcat /home/andy/chapelgate/dell-services/maintenanceos-run.sh
+#!/usr/bin/env bash
+# MaintenanceOS on the Dell: separate copy of the dell-fix repo, task venv, uvicorn asgi:app on 127.0.0.1 only.
+# render_prepare.py (Twilio webhook step) deliberately NOT run. Local sqlite in the copy. No real secrets.
+set -euo pipefail
+cd "/home/andy/chapelgate/dell-services/src/maintenanceos"
+export DATABASE_URL="sqlite:////home/andy/chapelgate/dell-services/data/maintenanceos_v1.db"
+export ENABLE_REALTIME_VOICE=false ENABLE_LIVE_MESSAGING=false ENABLE_STARTUP_TWILIO_WEBHOOK_CONFIG=false
+exec "/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-maintenanceos/venv/bin/python" -m uvicorn asgi:app --host 127.0.0.1 --port "${PORT:-3401}" --no-access-log
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user list-units --type=service --all 2>&1 | grep -E "dell|chapelgate|maintenanceos|business-evidence|multilingual|disk-cleanup|cleanup"
+actions-runner-business-evidence-wallet.service                                   loaded    activating auto-restart       GitHub Actions Runner - business-evidence-wallet (Dell staged copy, not activated)
+  actions-runner-chapelgate-multilingual-transcribe.service                         loaded    activating auto-restart       GitHub Actions Runner - chapelgate-multilingual-transcribe
+  actions-runner-chapelgate-technologies-website.service                            loaded    activating auto-restart       GitHub Actions Runner - chapelgate-technologies-website (Dell staged copy, not activated)
+  actions-runner-chapelgate-transcribe.service                                      loaded    activating auto-restart       GitHub Actions Runner - chapelgate-transcribe (Dell staged copy, not activated)
+  actions-runner-maintenanceos-v1-pilot.service                                     loaded    activating auto-restart       GitHub Actions Runner - maintenanceos-v1-pilot (Dell staged copy, not activated)
+  actions-runner-maintenanceos-website.service                                      loaded    active     running            GitHub Actions Runner - maintenanceos-website
+  actions-runner-pool-cloud.service                                                 loaded    activating auto-restart       GitHub Actions Runner - dell-pool-cloud (cloud-workers), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-ee-critical.service                                           loaded    activating auto-restart       GitHub Actions Runner - dell-pool-ee-critical (evolution-engine), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-ee.service                                                    loaded    activating auto-restart       GitHub Actions Runner - dell-pool-ee (evolution-engine), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-rtb.service                                                   loaded    activating auto-restart       GitHub Actions Runner - dell-pool-rtb (red-team-board), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-saw.service                                                   loaded    activating auto-restart       GitHub Actions Runner - dell-pool-saw (standalone-autonomous-worker), added 15 Nov 2026 beside OmniRoute droplet pool runner
+  actions-runner-pool-ush.service                                                   loaded    activating auto-restart       GitHub Actions Runner - dell-pool-ush (chapelgate-universal-secrets-handler.), added 15 Nov 2026 beside OmniRoute droplet pool runner
+● b18-dell-staging-shakedown-r1.service                                             loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh.sh /home/andy/chapelgate/factory-tasks/b18-dell-staging-shakedown-20261117 80
+  chapelgate-ai-usage-feeds.service                                                 loaded    inactive   dead               Refresh Chapelgate AI usage feeds (Dell, local OmniRoute only, no droplet ssh)
+  chapelgate-business-evidence-wallet.service                                       loaded    active     running            Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080)
+  chapelgate-chapelgate-council-minutes.service                                     loaded    active     running            Chapelgate Council Minutes (Dell copy, local fake config, 127.0.0.1:3404)
+  chapelgate-chapelgate-information-rights.service                                  loaded    active     running            Chapelgate Information Rights (Dell copy, local fake config, 127.0.0.1:3405)
+  chapelgate-chapelgate-multilingual-transcribe.service                             loaded    active     running            Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406)
+  chapelgate-holiday-let-operator.service                                           loaded    active     running            Chapelgate Holiday Let Operator (Dell copy, local fake config, 127.0.0.1:3408)
+  chapelgate-housing-compliance-vault.service                                       loaded    activating auto-restart       Chapelgate Housing Compliance Vault (Dell copy, local fake config, 127.0.0.1:3409)
+  chapelgate-legal-case-management.service                                          loaded    active     running            Chapelgate Legal Case Management (Dell copy, local fake config, 127.0.0.1:3403)
+  chapelgate-maintenanceos-website.service                                          loaded    active     running            Chapelgate MaintenanceOS Website (Dell copy, local fake config, 127.0.0.1:3402)
+  chapelgate-maintenanceos.service                                                  loaded    active     running            Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401)
+  chapelgate-omniroute-tunnel.service                                               loaded    inactive   dead               Chapelgate OmniRoute tunnel (localhost:20128 -> OmniRoute droplet) - PREPARED, NOT ENABLED
+  chapelgate-public-sector-citizen-agent.service                                    loaded    active     running            Chapelgate Public Sector Citizen Agent (Dell copy, local fake config, 127.0.0.1:3300)
+  cso-business-evidence-wallet-full-security-round-20261121.service                 loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/business-evidence-wallet-full-security-round-20261121 120
+  cso-estate-test-environment-repair-20261119.service                               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/estate-test-environment-repair-20261119 80
+  cso-housing-compliance-vault-full-tool-suite-early-20261122.service               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cso-housing-compliance-vault-full-tool-suite-early-20261122 120
+  dell-keepalive-index.service                                                      loaded    inactive   dead               Generate JOBS-INDEX.md and job-state.tsv from jobs.tsv
+  dell-retention.service                                                            loaded    inactive   dead               Dell daily retention policy (archive/delete cold storage, no production stop)
+  dell-watch-http.service                                                           loaded    active     running            Dell watch status HTTP server
+  disk-cleanup.service                                                              loaded    inactive   dead               Dell disk clean-up (regenerable caches only)
+  estate-backup.service                                                             loaded    inactive   dead               Nightly estate backup: tars dell-services, jobs-work-dell (excl repos/node_modules), user systemd units, redacted opencode config
+  estate-logrotate.service                                                          loaded    inactive   dead               Run logrotate for estate suite/dell-services/mac-lane logs (user state)
+  estate-watchdog-dell.service                                                      loaded    inactive   dead               Estate watchdog (Dell) - health of estate services
+  ew-dell-hosting.service                                                           loaded    inactive   dead               Business Evidence Wallet - EW Dell Hosting
+  fa-05-legal-case-management.service                                               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fixall-20261113/05-legal-case-management 120
+  fix-alerting-r1.service                                                           loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-alerting-r1-20261115 60
+● fix-b18-dell-staging-shakedown-r1.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-b18-dell-staging-shakedown-r1-20261122 40
+  fix-job-estate-audit-loop.service                                                 loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-job-estate-audit-loop-20261123 40
+  housing-compliance-vault-loop-dell.service                                        loaded    inactive   dead               Housing Compliance Vault loop (Dell port of backlog housing-compliance-vault-loop)
+  job-company-formation-plan.service                                                loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/company-formation-plan-20261122 20
+  job-council-cso-canary-deps-20261123.service                                      loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/council-cso-canary-deps-20261123 30
+  job-council-cso-cm-rc1-deps-xml-20261123.service                                  loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/council-cso-cm-rc1-deps-xml-20261123 30
+  job-council-gonogo-cm-5aee1698-20261123.service                                   loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/council-gonogo-cm-5aee1698-20261123 30
+  job-council-gonogo-lcm-6ee22677-20261123.service                                  loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/council-gonogo-lcm-6ee22677-20261123 30
+  job-council-model-stack-map-20261123.service                                      loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/council-model-stack-map-20261123 12
+  job-council-models-hy4-cap-20261123.service                                       loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/council-models-hy4-cap-20261123 12
+  job-council-release-gate-fix-20261121.service                                     loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/council-release-gate-fix-20261121 100
+  job-cso-fix-business-evidence-wallet-open-findings-20261121.service               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121 100
+  job-cso-fix-housing-compliance-vault-open-findings-20261121.service               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cso-fix-housing-compliance-vault-open-findings-20261121 100
+  job-cso-fix-landlord-os-open-findings-20261121.service                            loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cso-fix-landlord-os-open-findings-20261121 100
+  job-cso-fix-maintenanceos-phone-line-canary-20261121.service                      loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cso-fix-maintenanceos-phone-line-canary-20261121 100
+  job-cso-fix-maintenanceos-website-open-findings-20261121.service                  loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cso-fix-maintenanceos-website-open-findings-20261121 100
+  job-cso-suite-council-minutes-rc1-20261123.service                                loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/cso-suite-council-minutes-rc1-20261123 60
+  job-dell-app-crashloops.service                                                   loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123 30
+  job-disk-plan.service                                                             loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/disk-plan-20261123 60
+  job-estate-audit-loop.service                                                     loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/estate-audit-loop 200
+  job-fix-findings-chapelgate-council-minutes-20261123.service                      loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-findings-chapelgate-council-minutes-20261123 100
+  job-fix-findings-holiday-let-operator-20261121.service                            loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-findings-holiday-let-operator-20261121 100
+  job-fix-findings-information-rights-complaints-20261123.service                   loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-findings-information-rights-complaints-20261123 100
+  job-fix-findings-maintenanceos-phone-line-canary-20261123.service                 loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/fix-findings-maintenanceos-phone-line-canary-20261123 100
+  job-golden-line-improved-copy-20261123.service                                    loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/golden-line-improved-copy-20261123 60
+  job-lcm-release-full-battery.service                                              loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/lcm-release-full-battery-20261123 60
+  job-legal-case-management-commercial-ready.service                                loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/legal-case-management-commercial-ready-20261123 80
+  job-loop-citizen-agent.service                                                    loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/loop-citizen-agent-20261122 80
+  job-loop-council-minutes.service                                                  loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/loop-council-minutes-20261122 80
+  job-mt-fix-health-turbo-pin-20261123.service                                      loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/mt-fix-health-turbo-pin-20261123 40
+● job-ops-foundations.service                                                       loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/ops-foundations-20261120 200
+● job-register-triage.service                                                       loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/register-triage-20261123 120
+  job-release-truth.service                                                         loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/release-truth-20261120 120
+  job-restore-drill.service                                                         loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/restore-drill-20261120 80
+  job-rokoko-smartgloves-ii-buy-research.service                                    loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rokoko-smartgloves-ii-20261120 30
+● job-rootcause-fa-01-business-os.service                                           loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-fa-01-business-os-20261123 20
+  job-rootcause-fa-05-legal-case-management.service                                 loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-fa-05-legal-case-management-20261123 20
+  job-rootcause-fa-11-council-minutes.service                                       loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-fa-11-council-minutes-20261123 20
+  job-rootcause-job-cso-fix-housing-compliance-vault-open-findings-20261121.service loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-job-cso-fix-housing-compliance-vault-open-findings-20261121-20261123 20
+  job-rootcause-job-fix-findings-holiday-let-operator-20261121.service              loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-job-fix-findings-holiday-let-operator-20261121-20261123 20
+  job-rootcause-job-release-tracker.service                                         loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-job-release-tracker-20261123 20
+  job-rootcause-job-release-truth.service                                           loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-job-release-truth-20261123 20
+  job-rootcause-job-restore-drill.service                                           loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-job-restore-drill-20261123 20
+● job-rootcause-website-council-fit-r1.service                                      loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/rootcause-website-council-fit-r1-20261123 20
+  job-tutorial-follow-along-holes.service                                           loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/tutorial-follow-along-holes-20261118 120
+  job-video-status-delta.service                                                    loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/video-status-delta-20261123 15
+  local-dell-llama.service                                                          loaded    active     running            Local Dell llama.cpp server (Qwen2.5-Coder-7B Q4_K_M, CPU)
+  mos-loop-watchdog-dell.service                                                    loaded    inactive   dead               mos-loop watchdog (Dell port: keeps chapelgate-maintenanceos up)
+  outsider-redteam-review-r1.service                                                loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/outsider-redteam-review-20261116 40
+  reel-adopt-5-claude-code-plugins-security-guidance-frontend.service               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-5-claude-code-plugins-security-guidance-frontend-20261121 120
+  reel-adopt-cloudflare-ai-security-audit-skill-open-source-2.service               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-cloudflare-ai-security-audit-skill-open-source-2-20261117 120
+  reel-adopt-cloudflare-two-agent-security-auditor-hunter-ver.service               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-cloudflare-two-agent-security-auditor-hunter-ver-20261121 120
+  reel-adopt-cybersecurity-investigation-osint.service                              loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-cybersecurity-investigation-osint-20261121 120
+● reel-adopt-database-disaster-recovery-wal-archiving-pitr-rt.service               loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adopt-database-disaster-recovery-wal-archiving-pitr-rt-20261122 120
+  reel-adoption-impact-outlook.service                                              loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-adoption-impact-outlook-20261117 60
+  reel-review-council-20261117-0916.service                                         loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261117-0916 30
+● reel-review-council-20261122-1822.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261122-1822 30
+● reel-review-council-20261123-0107.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0107 30
+● reel-review-council-20261123-0122.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0122 30
+● reel-review-council-20261123-0137.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0137 30
+● reel-review-council-20261123-0152.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0152 30
+● reel-review-council-20261123-0207.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0207 30
+● reel-review-council-20261123-0222.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0222 30
+● reel-review-council-20261123-0237.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0237 30
+● reel-review-council-20261123-0252.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0252 30
+● reel-review-council-20261123-0307.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0307 30
+● reel-review-council-20261123-0322.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0322 30
+● reel-review-council-20261123-0337.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0337 30
+● reel-review-council-20261123-0352.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0352 30
+● reel-review-council-20261123-0407.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0407 30
+● reel-review-council-20261123-0422.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0422 30
+● reel-review-council-20261123-0437.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0437 30
+● reel-review-council-20261123-0452.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0452 30
+● reel-review-council-20261123-0507.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0507 30
+● reel-review-council-20261123-0522.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0522 30
+● reel-review-council-20261123-0537.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0537 30
+● reel-review-council-20261123-0552.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0552 30
+● reel-review-council-20261123-0607.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0607 30
+● reel-review-council-20261123-0622.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0622 30
+● reel-review-council-20261123-0637.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0637 30
+● reel-review-council-20261123-0652.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0652 30
+● reel-review-council-20261123-0707.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0707 30
+● reel-review-council-20261123-0722.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0722 30
+● reel-review-council-20261123-0737.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0737 30
+● reel-review-council-20261123-0752.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0752 30
+● reel-review-council-20261123-0807.service                                         loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0807 30
+  reel-trial-redcell-ai-pentesting-agent-recon-cve-prompt-inj.service               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/reel-trial-redcell-ai-pentesting-agent-recon-cve-prompt-inj-20261118 120
+● rt15-05-legal-case-management.service                                             loaded    failed     failed             /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/redteam15-20261113/05-legal-case-management 30
+  rt15-09-housing-compliance-vault.service                                          loaded    active     running            /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/redteam15-20261113/09-housing-compliance-vault 30
+● run-u25856.service                                                                loaded    failed     failed             /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh
+● run-u25857.service                                                                loaded    failed     failed             /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh
+● run-u25858.service                                                                loaded    failed     failed             /usr/bin/bash -x /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh
+  secrets-vault-rotate-r1.service                                                   loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/secrets-vault-rotate-20261116 60
+  shadow-gdpr-accountability-r1.service                                             loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/shadow-gdpr-accountability-20261116 90
+  shadow-wcag22aa-r1.service                                                        loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/shadow-wcag22aa-20261116 90
+  status-council-read.service                                                       loaded    inactive   dead               Council loop standing item: read dell-watch/STATUS.md and queue flags (eggbot 18 Nov 2026)
+  test-loop-dell.service                                                            loaded    inactive   dead               Continuous test loop: rerun hard-25, red-team-15, shakedown per product on fix-all merge and nightly (no LLM)
+  tutorial-follow-along-holes.service                                               loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/tutorial-follow-along-holes-20261118 120
+  website-reposition-r1.service                                                     loaded    active     running            /usr/bin/bash /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/job-run-v6.sh /home/andy/chapelgate/factory-tasks/website-reposition-20261117 80
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user status disk-cleanup.service 2>&1 | head -40; echo "==="; systemctl --user status chapelgate-business-evidence-wallet.service 2>&1 | head -40
+○ disk-cleanup.service - Dell disk clean-up (regenerable caches only)
+     Loaded: loaded (/home/andy/.config/systemd/user/disk-cleanup.service; disabled; preset: enabled)
+     Active: inactive (dead) since Mon 2026-11-23 19:53:30 GMT; 4h 10min ago
+TriggeredBy: ● disk-cleanup.timer
+   Main PID: 640096 (code=exited, status=0/SUCCESS)
+        CPU: 1.745s
+
+Nov 23 19:53:12 andy-Precision-5820-Tower systemd[1511]: Starting disk-cleanup.service - Dell disk clean-up (regenerable caches only)...
+Nov 23 19:53:30 andy-Precision-5820-Tower disk-cleanup.sh[640332]: Total:        0B
+Nov 23 19:53:30 andy-Precision-5820-Tower systemd[1511]: Finished disk-cleanup.service - Dell disk clean-up (regenerable caches only).
+Nov 23 19:53:30 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Consumed 1.745s CPU time.
+===
+● chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080)
+     Loaded: loaded (/home/andy/.config/systemd/user/chapelgate-business-evidence-wallet.service; disabled; preset: enabled)
+     Active: active (running) since Mon 2026-11-23 19:18:16 GMT; 4h 45min ago
+   Main PID: 330518 (node)
+      Tasks: 55 (limit: 70708)
+     Memory: 27.6M (peak: 540.3M swap: 255.7M swap peak: 258.9M)
+        CPU: 14.463s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/chapelgate-business-evidence-wallet.service
+             ├─330518 node scripts/with-app-env.mjs ./node_modules/.bin/vite dev --host 127.0.0.1 --port 8080 --strictPort
+             ├─330534 /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/node_modules/@embedded-postgres/linux-x64/native/bin/postgres -D /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres -p 55432 -k /tmp/bew-pg-run -h 127.0.0.1
+             ├─330535 "postgres: io worker 0"
+             ├─330536 "postgres: io worker 1"
+             ├─330537 "postgres: io worker 2"
+             ├─330538 "postgres: checkpointer "
+             ├─330539 "postgres: background writer "
+             ├─330541 "postgres: walwriter "
+             ├─330542 "postgres: autovacuum launcher "
+             ├─330543 "postgres: logical replication launcher "
+             └─330618 node ./node_modules/.bin/vite dev --host 127.0.0.1 --port 8080 --strictPort
+
+Nov 23 19:18:16 andy-Precision-5820-Tower bash[330519]: id: ‘ewpg’: no such user
+Nov 23 19:18:16 andy-Precision-5820-Tower bash[330519]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 19:18:16 andy-Precision-5820-Tower bash[330551]: id: ‘ewpg’: no such user
+Nov 23 19:18:16 andy-Precision-5820-Tower bash[330551]: id: ‘ewpg’: no such user
+Nov 23 19:18:16 andy-Precision-5820-Tower bash[330585]: id: ‘ewpg’: no such user
+Nov 23 19:18:16 andy-Precision-5820-Tower bash[330585]: id: ‘ewpg’: no such user
+Nov 23 19:18:16 andy-Precision-5820-Tower bash[330598]: [migrate] up to date.
+Nov 23 19:18:18 andy-Precision-5820-Tower bash[330618]:   VITE v8.3.5  ready in 2206 ms
+Nov 23 19:18:18 andy-Precision-5820-Tower bash[330618]:   ➜  Local:   http://127.0.0.1:8080/
+Nov 23 19:42:19 andy-Precision-5820-Tower bash[330618]: 7:42:19 PM [vite] (ssr) connected.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/dell-watch/ 2>/dev/null; echo "---"; ls -la /home/andy/chapelgate/dell-services/dell-watch/ 2>/dev/null; echo "---"; find /home/andy/chapelgate/dell-services -name "disk-cleanup*" 2>/dev/null; find /home/andy/chapelgate -name "disk-cleanup*" -maxdepth 4 2>/dev/null
+total 1200
+drwxrwxr-x  4 andy andy   4096 Nov 24 00:01 .
+drwxrwxr-x 60 andy andy  12288 Nov 23 22:12 ..
+-rw-rw-r--  1 andy andy  61882 Nov 23 23:52 ALERTS.md
+-rw-rw-r--  1 andy andy   2568 Nov 16 20:20 ALERTS.md.bak-eggbot-20261116-2025
+-rw-rw-r--  1 andy andy    776 Nov 21 17:43 ANDY-NOTIFY.md
+drwxrwxr-x  3 andy andy   4096 Nov 18 09:10 bin
+-rw-rw-r--  1 andy andy      0 Nov 24 00:00 build-watchman.lock
+-rw-rw-r--  1 andy andy   7020 Nov 23 19:23 DISK-ALERT.md
+-rwxrwxr-x  1 andy andy   1860 Nov 23 18:55 disk-cleanup.sh
+-rw-rw-r--  1 andy andy   1047 Nov 21 20:54 EW-UPTIME.md
+-rw-rw-r--  1 andy andy    270 Nov 23 04:15 GPU-DAILY.md
+-rw-rw-r--  1 andy andy    588 Nov 24 00:01 omniroute-health.json
+-rwx------  1 andy andy    867 Nov 18 09:10 omniroute-health.sh
+-rwx------  1 andy andy    766 Nov 11 14:21 omniroute-health.sh.bak-eggbot-20261118-0910
+drwxrwxr-x  2 andy andy   4096 Nov 24 00:02 out
+-rw-rw-r--  1 andy andy   9336 Nov 24 00:01 OVERNIGHT-KEEPALIVE.md
+-rw-rw-r--  1 andy andy    505 Nov 24 00:00 REEL-PIPELINE.md
+-rw-rw-r--  1 andy andy  11580 Nov 20 18:26 REJECTION-ALERTS.md
+-rw-rw-r--  1 andy andy      0 Nov 24 00:00 selfcheck.lock
+-rw-------  1 andy andy     48 Nov 20 12:22 selfcheck-state.json
+-rw-rw-r--  1 andy andy  48882 Nov 24 00:00 STATUS-ARCHIVE.md
+-rw-rw-r--  1 andy andy  23266 Nov 24 00:00 STATUS.md
+-rw-rw-r--  1 andy andy 144545 Nov 16 20:20 STATUS.md.bak-eggbot-20261116-2025
+-rw-rw-r--  1 andy andy   1442 Nov 24 00:02 TEST-LOOP.md
+-rw-rw-r--  1 andy andy 372554 Nov 23 23:50 WATCHDOG-FOR-EGGBOT.md
+-rw-rw-r--  1 andy andy  64635 Nov 23 23:50 WATCHDOG.md
+-rw-------  1 andy andy  55264 Nov 24 00:00 WATCHMAN.json
+-rw-------  1 andy andy  13459 Nov 24 00:00 WATCHMAN.md
+-rw-------  1 andy andy  11454 Nov 23 04:00 watchman-state.journal.json
+-rw-------  1 andy andy 236503 Nov 24 00:00 watchman-state.json
+-rw-rw-r--  1 andy andy      0 Nov 24 00:00 watchman-state.lock
+-rwxrwxr-x  1 andy andy   5739 Nov 21 09:13 watch.sh
+-rwxrwxr-x  1 andy andy   2895 Nov 11 15:40 watch.sh.bak-20261111
+-rwxrwxr-x  1 andy andy   5425 Nov 16 20:20 watch.sh.bak-eggbot-20261116-2025
+-rwxrwxr-x  1 andy andy   4808 Nov 16 20:21 watch.sh.bak-eggbot-20261118-2348
+-rwxrwxr-x  1 andy andy   5604 Nov 19 23:48 watch.sh.bak-eggbot-20261121-0913-07
+-rw-rw-r--  1 andy andy  28387 Nov 24 00:00 WEBSITE-UPTIME.md
+---
+---
+/home/andy/chapelgate/dell-watch/out/disk-cleanup-20261123-185521.log
+/home/andy/chapelgate/dell-watch/out/disk-cleanup-20261123-185823.log
+/home/andy/chapelgate/dell-watch/out/disk-cleanup-20261123-190025.log
+/home/andy/chapelgate/dell-watch/out/disk-cleanup-20261123-195328.log
+/home/andy/chapelgate/dell-watch/out/disk-cleanup-20261123-190305.log
+/home/andy/chapelgate/dell-watch/disk-cleanup.sh
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user status chapelgate-maintenanceos.service 2>&1 | head -40
+● chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401)
+     Loaded: loaded (/home/andy/.config/systemd/user/chapelgate-maintenanceos.service; enabled; preset: enabled)
+    Drop-In: /run/user/1000/systemd/user.control/chapelgate-maintenanceos.service.d
+             └─50-CPUWeight.conf
+             /home/andy/.config/systemd/user/chapelgate-maintenanceos.service.d
+             └─eggbot-npm-cache.conf
+     Active: active (running) since Mon 2026-11-23 19:23:19 GMT; 4h 40min ago
+   Main PID: 374244 (python)
+      Tasks: 6 (limit: 70708)
+     Memory: 16.1M (peak: 126.0M swap: 78.4M swap peak: 79.5M)
+        CPU: 18.981s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/chapelgate-maintenanceos.service
+             └─374244 /home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-maintenanceos/venv/bin/python -m uvicorn asgi:app --host 127.0.0.1 --port 3401 --no-access-log
+
+Nov 23 19:23:19 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:23:20 andy-Precision-5820-Tower bash[374244]: INFO:     Started server process [374244]
+Nov 23 19:23:20 andy-Precision-5820-Tower bash[374244]: INFO:     Waiting for application startup.
+Nov 23 19:23:20 andy-Precision-5820-Tower bash[374244]: INFO:     Application startup complete.
+Nov 23 19:23:20 andy-Precision-5820-Tower bash[374244]: INFO:     Uvicorn running on http://127.0.0.1:3401 (Press CTRL+C to quit)
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user status chapelgate-chapelgate-multilingual-transcribe.service 2>&1 | head -40
+● chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406)
+     Loaded: loaded (/home/andy/.config/systemd/user/chapelgate-chapelgate-multilingual-transcribe.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-11-23 19:22:04 GMT; 4h 41min ago
+   Main PID: 362094 (python3)
+      Tasks: 3 (limit: 70708)
+     Memory: 7.0M (peak: 55.2M swap: 38.0M swap peak: 38.0M)
+        CPU: 1min 7.875s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/chapelgate-chapelgate-multilingual-transcribe.service
+             └─362094 python3 -m mt.app
+
+Nov 23 19:22:04 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-chapelgate-multilingual-transcribe.service - Chapelgate Multilingual Transcribe (Dell copy, local fake config, 127.0.0.1:3406).
+Nov 23 19:22:06 andy-Precision-5820-Tower bash[362094]: INFO:     Started server process [362094]
+Nov 23 19:22:06 andy-Precision-5820-Tower bash[362094]: INFO:     Waiting for application startup.
+Nov 23 19:22:06 andy-Precision-5820-Tower bash[362094]: {"free_bytes": 79817760768, "free_ratio": 0.1108, "level": "WARNING", "logger": "mt.app.jobs", "message": "data volume free space is below 15 percent", "total_bytes": 720364593152, "ts": "2026-11-23T19:22:06.886222Z"}
+Nov 23 19:22:06 andy-Precision-5820-Tower bash[362094]: {"level": "INFO", "logger": "uvicorn.error", "message": "Application startup complete.", "ts": "2026-11-23T19:22:06.889744Z"}
+Nov 23 19:22:06 andy-Precision-5820-Tower bash[362094]: {"color_message": "Uvicorn running on \u001b[1m%s://%s:%d\u001b[0m (Press CTRL+C to quit)", "level": "INFO", "logger": "uvicorn.error", "message": "Uvicorn running on http://127.0.0.1:3406 (Press CTRL+C to quit)", "ts": "2026-11-23T19:22:06.890213Z"}
+[0m
+[0m$ [0mcat /home/andy/chapelgate/dell-watch/disk-cleanup.sh
+#!/usr/bin/env bash
+# Dell disk clean-up: regenerable stuff only.
+set -u
+LOG="/home/andy/chapelgate/dell-watch/out/disk-cleanup-$(date -u +%Y%m%d-%H%M%S).log"
+DRY="${DRY:-1}"
+
+say(){ echo "$@" | tee -a "$LOG"; }
+
+say "=== Disk clean-up $(date '+%F %H %Z') (dry-run=$DRY) ==="
+df -h /home | tail -1 | tee -a "$LOG"
+
+# 1. npm cache
+if [ -d ~/.npm/_cacache ]; then
+  say "npm cache: $(du -sh ~/.npm/_cacache 2>/dev/null | cut -f1)"
+  [ "$DRY" = "0" ] && npm cache clean --force 2>/dev/null
+fi
+# 2. pnpm cache
+if [ -d ~/.local/share/pnpm/store ]; then
+  say "pnpm store: $(du -sh ~/.local/share/pnpm/store 2>/dev/null | cut -f1)"
+  [ "$DRY" = "0" ] && pnpm store prune 2>/dev/null
+fi
+# 3. pip cache
+if [ -d ~/.cache/pip ]; then
+  say "pip cache: $(du -sh ~/.cache/pip 2>/dev/null | cut -f1)"
+  [ "$DRY" = "0" ] && pip cache purge 2>/dev/null
+fi
+# 4. cargo cache
+if [ -d ~/.cargo ]; then
+  say "cargo: $(du -sh ~/.cargo 2>/dev/null | cut -f1)"
+fi
+# 5. docker build cache
+say "docker build cache:"
+[ "$DRY" = "0" ] && docker builder prune -f --filter until=168h 2>/dev/null || true
+# 6. old factory-runs worktrees older than 7 days
+FR=~/chapelgate/factory-runs
+if [ -d "$FR" ]; then
+  say "factory-runs worktrees >7d:"
+  find "$FR" -maxdepth 1 -type d -mtime +7 -print 2>/dev/null | tee -a "$LOG"
+  [ "$DRY" = "0" ] && find "$FR" -maxdepth 1 -type d -mtime +7 -exec rm -rf {} + 2>/dev/null
+fi
+# 7. task out/ cycle logs older than 30 days compressed rather than deleted
+say "task out/ cycle logs >30d (compress):"
+find ~/chapelgate/factory-tasks ~/chapelgate/jobs-work-dell/tasks -maxdepth 3 -name 'cycle-*.log' -mtime +30 -print 2>/dev/null | tee -a "$LOG"
+[ "$DRY" = "0" ] && find ~/chapelgate/factory-tasks ~/chapelgate/jobs-work-dell/tasks -maxdepth 3 -name 'cycle-*.log' -mtime +30 ! -name '*.gz' -exec gzip {} + 2>/dev/null
+
+echo "=== done ===" | tee -a "$LOG"
+[0m
+Now I understand the situation. The app services are all running and stable. But the verifier rejected the MISSION_COMPLETE because the disk-cleanup service still needs to be proven working. Let me start it and capture the evidence.
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); df -h / /home | tail -1
+/dev/nvme0n1p5  671G  516G  121G  82% /
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user start disk-cleanup.service 2>&1; echo "Exit code: $?"
+Exit code: 0
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); sleep 5; systemctl --user status disk-cleanup.service 2>&1 | head -40
+○ disk-cleanup.service - Dell disk clean-up (regenerable caches only)
+     Loaded: loaded (/home/andy/.config/systemd/user/disk-cleanup.service; disabled; preset: enabled)
+     Active: inactive (dead) since Tue 2026-11-24 00:04:33 GMT; 1min 29s ago
+TriggeredBy: ● disk-cleanup.timer
+    Process: 2462610 ExecStartPre=/home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh (code=exited, status=0/SUCCESS)
+    Process: 2467091 ExecStart=/home/andy/chapelgate/dell-watch/disk-cleanup.sh (code=exited, status=0/SUCCESS)
+   Main PID: 2467091 (code=exited, status=0/SUCCESS)
+        CPU: 1.968s
+
+Nov 24 00:04:28 andy-Precision-5820-Tower systemd[1511]: Starting disk-cleanup.service - Dell disk clean-up (regenerable caches only)...
+Nov 24 00:04:32 andy-Precision-5820-Tower disk-cleanup.sh[2467134]: === Disk clean-up 2026-11-24 00 GMT (dry-run=0) ===
+Nov 24 00:04:32 andy-Precision-5820-Tower disk-cleanup.sh[2467140]: /dev/nvme0n1p5  671G  516G  121G  82% /
+Nov 24 00:04:32 andy-Precision-5820-Tower disk-cleanup.sh[2468466]: pnpm store: 1.2G
+Nov 24 00:04:32 andy-Precision-5820-Tower disk-cleanup.sh[2469263]: cargo: 983M
+Nov 24 00:04:32 andy-Precision-5820-Tower disk-cleanup.sh[2469267]: docker build cache:
+Nov 24 00:04:33 andy-Precision-5820-Tower disk-cleanup.sh[2469559]: Total:        0B
+Nov 24 00:04:33 andy-Precision-5820-Tower disk-cleanup.sh[2469809]: task out/ cycle logs >30d (compress):
+Nov 24 00:04:33 andy-Precision-5820-Tower systemd[1511]: Finished disk-cleanup.service - Dell disk clean-up (regenerable caches only).
+Nov 24 00:04:33 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Consumed 1.968s CPU time.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/dell-watch/out/disk-cleanup-*.log | tail -3
+-rw-rw-r-- 1 andy andy 192 Nov 23 19:03 /home/andy/chapelgate/dell-watch/out/disk-cleanup-20261123-190305.log
+-rw-rw-r-- 1 andy andy 192 Nov 23 19:53 /home/andy/chapelgate/dell-watch/out/disk-cleanup-20261123-195328.log
+-rw-rw-r-- 1 andy andy 192 Nov 24 00:04 /home/andy/chapelgate/dell-watch/out/disk-cleanup-20261124-000432.log
+[0m
+[0m→ [0mRead /home/andy/chapelgate/dell-watch/out/disk-cleanup-20261124-000432.log
+Now I need to capture the before/after systemctl outputs for all services, including disk-cleanup. Let me get the current states:
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user show -p NRestarts,ActiveState chapelgate-chapelgate-multilingual-transcribe.service 2>&1
+NRestarts=0
+ActiveState=active
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user show -p NRestarts,ActiveState chapelgate-maintenanceos.service 2>&1
+NRestarts=0
+ActiveState=active
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); systemctl --user show -p NRestarts,ActiveState disk-cleanup.service 2>&1
+NRestarts=0
+ActiveState=inactive
+[0m
+I notice that disk-cleanup is inactive, but that's normal for cleanup services. Let me now write the final results and create the mission complete file. First, let me save the raw evidence:
+[0m← [0mWrite out/raw/mt-after-final.txt
+Wrote file successfully.
+[0m
+[0m← [0mWrite out/raw/mos-after-final.txt
+Wrote file successfully.
+[0m
+[0m← [0mWrite out/raw/dc-after-final.txt
+Wrote file successfully.
+[0m
+[0m← [0mWrite out/raw/df-disk-cleanup-before.txt
+Wrote file successfully.
+[0m
+Now let me check if there's a git repo for committing changes, as the verifier requires:
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/repo/
+total 8
+drwxrwxr-x 2 andy andy 4096 Nov 23 18:10 .
+drwxrwxr-x 4 andy andy 4096 Nov 23 18:12 ..
+[0m
+[0m$ [0mgit -C /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123 rev-parse --git-dir 2>&1; git -C /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123 status 2>&1
+...output truncated...
+
+Full output saved to: /home/andy/.local/share/opencode/tool-output/tool_20ae4ffe6001INszv2TLUykfhN
+
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/domain2-20261123-202605-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/domain2-20261123-202605-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/gitleaks-20261123-202258-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/gitleaks-20261123-202258-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/gitleaks-final-20261123-203106-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/gitleaks-final-20261123-203106-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform-20261123-201942-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform-20261123-201942-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform-final-20261123-203045-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform-final-20261123-203045-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform2-20261123-202305-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform2-20261123-202305-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform3-20261123-202605-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/platform3-20261123-202605-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/secret-scan-20261123-201924-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/secret-scan-20261123-201924-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/secret-scan-final-20261123-203106-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/secret-scan-final-20261123-203106-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/secret-scan2-20261123-202257-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/secret-scan2-20261123-202257-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/tools-20261123-1808/
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck-20261123-201905-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck-20261123-201905-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck-final-20261123-203045-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck-final-20261123-203045-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck2-20261123-202613-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck2-20261123-202613-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/domain2-20261123-202307-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/domain2-20261123-202307-output.log
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck2-20261123-202308-exit-code.txt
+	../cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck2-20261123-202308-output.log
+	../cso-fix-housing-compliance-vault-open-findings-20261121/
+	../cso-fix-landlord-os-open-findings-20261121/
+	../cso-fix-maintenanceos-phone-line-canary-20261121/
+	../cso-fix-maintenanceos-website-open-findings-20261121/
+	../cso-hcv-baseline-14afa85a-20261123/
+	../cso-hcv-fix-deps-embedded-postgres-20261123/
+	../cso-housing-compliance-vault-full-tool-suite-early-20261122/
+	../cso-maintenanceos-phone-line-canary-fix-deps-20261123/
+	../cso-suite-council-minutes-rc1-20261123/
+	../cyber-business-readiness-drafts-20261119/
+	../cyber-case-studies-20261119/
+	../cyber-competitor-list-20261119/
+	../cyber-essentials-self-assessment-readiness-20261120/
+	../cyber-partner-shortlist-20261119/
+	../cyber-pricing-benchmark-20261119/
+	../cyber-security-business-research-20261119/
+	../cyber-security-estate-audit-20261119-r2/
+	../cyber-service-catalogue-draft-20261119/
+	../data-separation-followup-20261119/
+	./
+	../dell-docker-port-closure-prep-20261119/
+	../dell-ops-safeguards-20261119/
+	../dell-single-point-of-failure-plan-20261119/
+	../device-health-malware-audit-review-20261119/
+	../direct-approval-ledger-20261119/
+	../disk-plan-20261123/
+	../disk-tiering-20261119/
+	../docs-only-product-folders-markers-20261119/
+	../droplet-carry-council-cycle/
+	../droplet-carry-legal-case-management-build/
+	../droplet-carry-readiness-loop/
+	../ef-alerts-notify-20261119/
+	../ef-bew-test-fixes-20261119/
+	../ef-disk-guard-20261119/
+	../ef-model-...
+	../ef-model-lane-20261119/
+	../ef-ops-hardening-20261119/
+	../energy-reasoners-two-council-20261120/
+	../estate-artifacts/
+	../estate-audit-loop/
+	../estate-automation-audit-20261119/
+	../estate-content-security-policy-inline-script-sweep-20261119/
+	../estate-dependency-vulnerability-audit-20261119/
+	../estate-done-claim-watcher-20261119/
+	../estate-hardening-20261114/
+	../estate-improvements-20261119/
+	../estate-oauth-grant-inventory-20261119/
+	../estate-password-reset-poisoning-sweep-20261119/
+	../estate-rate-limiting-implementation-20261119/
+	../estate-readiness-claims-accuracy-audit-20261119/
+	../estate-red-team-first-run-20261119/
+	../estate-release-gate-checklist-and-oauth-dashboard-20261119/
+	../estate-secrets-vault-setup-20261119/
+	../estate-security-findings-dashboard-20261119/
+	../estate-security-programme-20261119/
+	../estate-shakedown-cloudflare-coverage-20261119/
+	../estate-test-environment-repair-20261119/
+	../ew-dell-hosting-20261121/BRIEF.md.bak-rootcause-20261123
+	../ew-dell-hosting-20261121/MODEL.bak-eggbot-20261123-0910-zen
+	../ew-dell-hosting-20261121/MODEL.bak-eggbot-20261123-2010
+	../ew-dell-hosting-20261121/MODEL.bak-eggbot-hy4guard-20261123-2132
+	../ew-dell-hosting-20261121/out-archive-20261123.tar.zst
+	../ew-dell-hosting-20261121/out/.cycle.pid
+	../ew-dell-hosting-20261121/out/cycle-2106-1.log
+	../ew-dell-hosting-20261121/out/cycle-2113-2.log
+	../ew-dell-hosting-20261121/out/cycle-2120-3.log
+	../ew-dell-hosting-20261121/out/cycle-2126-4.log
+	../ew-demo-council-20261122/
+	../ew-signoff-features-20261121/
+	../ew-status-rc-20261121/
+	../failed-units-triage-20261119/
+	../failure-log-compliance-phase2-20261119/
+	../financials-weekly-20261123/
+	../findings-fix-20261113/
+	../findings-sweep-20261121/
+	../first-council-trial-20261120/
+	../fix-alerting-r1-20261115/
+	../fix-b18-dell-staging-shakedown-r1-20261121/
+	../fix-b18-dell-staging-shakedown-r1-20261122/
+	../fix-backup-failover-r1-20261115/
+	../fix-council-omniroute-review-r1-20261121/
+	../fix-council-omniroute-review-r1-20261122/
+	../fix-findings-chapelgate-council-minutes-20261123/
+	../fix-findings-holiday-let-operator-20261121/
+	../fix-findings-information-rights-complaints-20261123/
+	../fix-findings-maintenanceos-phone-line-canary-20261123/
+	../fix-job-estate-audit-loop-20261123/
+	../fix-job-python-script-bot-20261123/
+	../fix-safety-screen-r1-20261115/
+	../fixall-20261113/
+	../forced-merge-rule-adopt-trial-20261118/
+	../gcloud-add-hcv-20261120/
+	../gcloud-competitor-prices-20261120/
+	../gcloud-evidence-council-minutes-20261123/
+	../golden-line-improved-copy-20261123/
+	../grok-allowance-offload-check-20261119/
+	../gtm-demo-scripts-focus3/
+	../gtm-frameworks-buynow-focus3/
+	../gtm-legal-dp-focus3/
+	../gtm-pricing-library-focus3/
+	../gtm-sales-pages-focus3/
+	../gtm-security-pack-focus3/
+	../hard25-20261113/
+	../hcv-council-sso-20261121/
+	../hcv-demo-sandbox-20261121/
+	../hcv-ir-cross-tenant-checks-20261119/
+	../hcv-maintenance-tier-20261121/
+	../hcv-pr134-clean-20261121/
+	../hcv-pr9-second-council-20261121/
+	../hcv-release-drive-20261122/
+	../hcv-release-push-20261120/
+	../hcv-retention-deletion-20261121/
+	../hcv-tutorial-verify-20261120/
+	../hcv-wcag-audit-20261121/
+	../hcv-xai-optin-20261121/
+	../history.log
+	../holiday-let-operator-browser-storage-20261119/
+	../holiday-let-operator-release-sequence-20261123/
+	../housing-compliance-vault-asvs-l2-wcag-attack-test-20261120/
+	../housing-compliance-vault-asvs-l2-wcag-test-20261120/
+	../housing-compliance-vault-migration-browser-tests-20261119/
+	../housing-compliance-vault-pr-landing-20261123/
+	../housing-compliance-vault-v1-tables-row-level-security-20261119/
+	../ico-registration-check-20261119/
+	../improve-four-20261120/
+	../information-rights-complaints-tesseract-tests-20261119/
+	../insurer-evidence-pack-review-20261119/
+	../insurer-evidence-pack-run-20261119/
+	../iso-27001-roadmap-20261119/
+	../jobs-work-dell/
+	../keep-builds-running-20261119/
+	../landlord-os-cross-tenancy-tests-20261119/
+	../landlord-os-onboarding-evidence-tenancy-binding-20261119/
+	../lcm-pr15-merge-ready-20261121/
+	../lcm-release-full-battery-20261123/
+	../legal-case-management-commercial-ready-20261123/
+	../ln-01-omni-db-guard-20261119/
+	../ln-02-swap-failure-20261119/
+	../ln-03-fallthrough-20261119/
+	../ln-04-combo-429-20261119/
+	../ln-05-mistral-403-20261119/
+	../ln-06-reorder-free-route-20261119/
+	../ln-07-reroute-free-only-20261119/
+	../ln-08-staging-router-20261119/
+	../ln-09-provider-health-20261119/
+	../ln-10-omniroute-council-20261119/
+	../ln-11-container-reach-20261119/
+	../ln-12-router-failover-20261119/
+	../ln-13-plugin-guard-20261119/
+	../ln-14-taskdir-tests-20261119/
+	../ln-15-jobs-tsv-audit-20261119/
+	../ln-16-model-preflight-live-20261119/
+	../ln-17-filewatch-20261119/
+	../ln-18-gate-tuning-20261119/
+	../ln-19-session-retry-20261119/
+	../ln-20-first-cycle-size-20261119/
+	../ln-21-nvidia-429-schedule-20261119/
+	../ln-22-cooldown-stalls-20261119/
+	../ln-23-six-docs-unstick-20261119/
+	../ln-24-private-lane-20261119/
+	../ln-25-overnight-resilience-20261119/
+	../local-dell-qwen-trial-20261115/
+	../loop-business-os-20261122/
+	../loop-cheap-trips-20261122/
+	../loop-citizen-agent-20261122/
+	../loop-council-minutes-20261122/
+	../loop-information-rights-20261122/
+	../loop-ir-complaints-20261122/
+	../loop-multilingual-transcribe-20261122/
+	../lumi-archive-search-20261112/
+	../lumi-item4-plan.tgz
+	../lumi-item4-render-watch.sh
+	../lumi-item4-synthetic-audio-render-20261111/
+	../lumi-upload-pack-r1-20261121/
+	../lumi-welsh-run21-gate-r1-20261121/
+	../mac-provider-add-20261113
+	../mac-studio-firewall-prep-20261119/
+	../maintenanceos-blocker-slices-20261123/
+	../maintenanceos-ttnc-voicemail-dataset-20261115/
+	../maintenanceos-website-security-fixes-20261120/
+	../mos-website-tutorial-20261121/
+	../mt-fix-health-turbo-pin-20261123/
+	../mt-lumi-sbatch-drafts-r1-20261121/
+	../mut_work/
+	../mw-dell-gates-review-20261111/
+	../mw-launch-candidate-20261121/
+	../mw-security-gate-rerun-20261122/
+	../narrow-pilot-pack-20261116/
+	../no-force-push-guard-20261122/
+	../omniroute-lane-widen-20261112
+	../opencode-epipe-fix-20261122/.cycle-semaphore.lock
+	../opencode-epipe-fix-20261122/.lane-health-state
+	../opencode-epipe-fix-20261122/BRIEF.md
+	../opencode-epipe-fix-20261122/BRIEF.md.bak-eggbot-20261122-2331
+	../opencode-epipe-fix-20261122/BRIEF.md.bak-eggbot-20261123-0813
+	../opencode-epipe-fix-20261122/MODEL
+	../opencode-epipe-fix-20261122/MODEL.bak-eggbot-20261123-0910-zen
+	../opencode-epipe-fix-20261122/MODEL.bak-eggbot-20261123-1945
+	../opencode-epipe-fix-20261122/MODEL.bak-eggbot-20261123-2321-hy4off
+	../opencode-epipe-fix-20261122/STEER.md
+	../opencode-epipe-fix-20261122/STEER.md.bak-eggbot-20261123-0906
+	../opencode-epipe-fix-20261122/STEER.md.bak-eggbot-20261123-1632
+	../opencode-epipe-fix-20261122/history.log
+	../opencode-epipe-fix-20261122/out-archive-20261123.tar.zst
+	../opencode-epipe-fix-20261122/out/.preflight-ok
+	../opencode-epipe-fix-20261122/out/JOB-ID
+	../opencode-epipe-fix-20261122/out/cycle-1251-4.log
+	../opencode-epipe-fix-20261122/out/cycle-1356-1.log
+	../opencode-epipe-fix-20261122/out/cycle-1431-2.log
+	../opencode-epipe-fix-20261122/out/cycle-1506-3.log
+	../opencode-epipe-fix-20261122/out/cycle-1541-4.log
+	../opencode-epipe-fix-20261122/out/cycle-1616-1.log
+	../opencode-epipe-fix-20261122/out/cycle-1617-2.log
+	../opencode-epipe-fix-20261122/out/cycle-1617-3.log
+	../opencode-epipe-fix-20261122/out/cycle-1618-4.log
+	../opencode-epipe-fix-20261122/out/cycle-1618-5.log
+	../opencode-epipe-fix-20261122/out/cycle-1619-6.log
+	../opencode-epipe-fix-20261122/out/cycle-1620-7.log
+	../opencode-epipe-fix-20261122/out/cycle-1620-8.log
+	../opencode-epipe-fix-20261122/out/cycle-1620-9.log
+	../opencode-epipe-fix-20261122/out/cycle-1621-10.log
+	../opencode-epipe-fix-20261122/out/cycle-1621-11.log
+	../opencode-epipe-fix-20261122/out/cycle-1656-12.log
+	../opencode-epipe-fix-20261122/out/cycle-1731-13.log
+	../opencode-epipe-fix-20261122/out/cycle-1806-14.log
+	../opencode-epipe-fix-20261122/out/cycle-1916-1.log
+	../opencode-epipe-fix-20261122/out/cycle-1952-2.log
+	../opencode-epipe-fix-20261122/out/cycle-1954-3.log
+	../opencode-epipe-fix-20261122/out/raw/
+	../opencode-epipe-fix-20261122/out/runs/
+	../opencode-epipe-fix-20261122/repo/repro-intensive.sh
+	../opencode-epipe-fix-20261122/repo/repro.sh
+	../opencode-epipe-fix-20261122/status.json
+	../opencode-per-job-datadir-20261122/
+	../ops-foundations-20261120/
+	../ops-foundations-ops-foundations-20261120/
+	../org-adopt-orphan-repos-20261116/
+	../out/
+	../outsider-redteam-review-20261116/
+	../password-reset-poisoning-clean-merge-prep-20261119/
+	../pentagi-authentication-unblock-20261119/
+	../pentagi-emergency-stop-20261119/
+	../pentagi-scope-rule-emergency-stop-20261119/
+	../persona-round-chapelgate-information-rights-20261116/
+	../persona-round-holiday-let-operator-20261116/
+	../persona-round-information-rights-complaints-20261116/
+	../persona-round-public-sector-citizen-agent-20261116/
+	../phone-outgoing-audio-proof-20261123/
+	../phone-stage2-maintenanceos-phone-line-20261115/
+	../phone-stage3-maintenanceos-phone-line-20261115/
+	../phone-stage4-maintenanceos-phone-line-20261115/
+	../phone-stage5-maintenanceos-phone-line-20261115/
+	../podcast-ai-morning-read-20261120/
+	../positioning-refresh-20261122/
+	../pricing-draft-figures-20261121/
+	../pricing-tiers-20261122/
+	../priority-client-security-offers-20261119/
+	../product-source-of-truth-map-20261119/
+	../public-sector-buying-routes-20261119/
+	../python-script-bot/
+	../qwen-summaries-only-routing-20261116/
+	../redteam15-r2-housing-compliance-vault-20261116/
+	../reel-adopt-13-layers-of-production-stack-20261118/
+	../reel-adopt-20-attack-vectors-rapid-reset-okta-gitlab-spotif-20261121/
+	../reel-adopt-24-claude-code-concepts-cheat-sheet-20261121/
+	../reel-adopt-4-stage-pipeline-spec-first-claude-md-loop-engin-20261121/
+	../reel-adopt-47-stale-ai-skills-audit-lifecycle-workflow-pres-20261122/
+	../reel-adopt-48-laws-of-powerful-agents-20261117/
+	../reel-adopt-5-agent-gateway-use-cases-tool-control-keys-budg-20261121/
+	../reel-adopt-5-automation-patterns-data-entry-reports-reconci-20261121/
+	../reel-adopt-5-claude-code-plugins-security-guidance-frontend-20261121/
+	../reel-adopt-5-github-repos-for-solo-ai-founder-skills-20261121/
+	../reel-adopt-6-claude-code-phrases-sub-agents-spec-interview-20261121/
+	../reel-adopt-8-free-self-hosted-saas-replacements-voice-studi-20261121/
+	../reel-adopt-admin-panel-security-no-auth-predictable-routes-20261122/
+	../reel-adopt-agent-comm-patterns-send-and-wait-send-and-keep-20261122/
+	../reel-adopt-agent-failure-log-compliance-20261117/
+	../reel-adopt-agent-gateway-single-front-door-for-all-agent-tr-20261121/
+	../reel-adopt-agent-kill-switch-runbook-drill-20261117/
+	../reel-adopt-agent-readiness-39-local-checks-scoring-codebase-20261121/
+	../reel-adopt-ai-agent-framework-rooflow-claudecode-autonomous-20261122/
+	../reel-adopt-ai-agent-harness-structured-software-wrapper-con-20261121/
+	../reel-adopt-ai-agent-maturity-levels-0-5-chatbot-to-team-20261121/
+	../reel-adopt-ai-agent-memory-4-types-procedural-working-seman-20261121/
+	../reel-adopt-ai-agent-taxonomy-automation-workflow-agent-empl-20261122/
+	../reel-adopt-ai-agents-catch-0-5-security-risks-in-auto-insta-20261121/
+	../reel-adopt-ai-coding-agent-dependency-supply-chain-risk-20261118/
+	../reel-adopt-ai-employee-10-brain-90-infra-procedural-memory-20261121/
+	../reel-adopt-ai-employee-architecture-context-memory-loops-20261121/
+	../reel-adopt-ai-employee-build-in-claude-code-8-step-pattern-20261121/
+	../reel-adopt-ai-error-handling-exposing-internals-20261121/
+	../reel-adopt-ai-installs-malicious-dependencies-without-vetti-20261121/
+	../reel-adopt-ai-is-draining-our-supply-chain-of-important-mem-20261122/
+	../reel-adopt-ai-receptionist-demo-claude-code-retell-20261117/
+	../reel-adopt-ai-skills-security-risk-community-skills-malicio-20261121/
+	../reel-adopt-ai-sovereignty-dedicated-server-fixed-cost-full-20261121/
+	../reel-adopt-ai-usage-cost-tracking-per-user-agent-20261117/
+	../reel-adopt-anthropic-playbook-pattern-one-agent-playbook-pe-20261117/
+	../reel-adopt-anthropic-playbook-pattern-one-agent-playbooks-v-20261121/
+	../reel-adopt-anthropic-security-guidance-plugin-for-claude-co-20261121/
+	../reel-adopt-anti-sycophancy-prompt-for-ai-settings-20261117/
+	../reel-adopt-api-security-forged-request-demo-request-signing-20261122/
+	../reel-adopt-api-vs-cli-vs-mcp-three-ways-to-connect-ai-to-to-20261121/
+	../reel-adopt-api-vs-mcp-automations-use-apis-agents-use-mcp-t-20261121/
+	../reel-adopt-archify-codebase-to-diagrams-20261121/
+	../reel-adopt-atomic-steps-break-tasks-into-smallest-steps-bef-20261121/
+	../reel-adopt-automation-test-judgment-vs-identical-steps-rule-20261121/
+	../reel-adopt-benzi-compiler-based-code-intelligence-10-langs-20261121/
+	../reel-adopt-bola-idor-api-user-id-in-url-without-auth-checks-20261121/
+	../reel-adopt-bottleneck-theory-for-over-engineering-20261117/
+	../reel-adopt-business-diagnosis-for-ai-automation-20261121/
+	../reel-adopt-cache-hunter-llm-proxy-catching-cache-invalidati-20261121/
+	../reel-adopt-claude-code-compaction-best-practices-handoff-do-20261121/
+	../reel-adopt-claude-code-concise-mode-dev-swarm-20261122/
+	../reel-adopt-claude-code-slash-insights-ai-usage-breakdown-le-20261121/
+	../reel-adopt-claude-sonnet-5-5-terminal-bench-70-6-beats-opus-20261121/
+	../reel-adopt-cloud-coding-agents-verification-skills-24-7-aut-20261121/
+	../reel-adopt-cloudflare-ai-security-audit-skill-20261117/
+	../reel-adopt-cloudflare-ai-security-audit-skill-open-source-2-20261117/
+	../reel-adopt-cloudflare-security-audit-estate-repos-20261117/
+	../reel-adopt-cloudflare-two-agent-security-auditor-hunter-ver-20261121/
+	../reel-adopt-codelite-remote-ai-agent-control-from-phone-gith-20261121/
+	../reel-adopt-cogevol-4b-on-device-model-4b-turns-one-line-bri-20261121/
+	../reel-adopt-comfyui-output-lists-combiner-batch-ai-image-pro-20261121/
+	../reel-adopt-context-engineering-claude-md-trunk-progressive-20261121/
+	../reel-adopt-cors-vulnerability-20261122/
+	../reel-adopt-cross-customer-data-separation-20261117/
+	../reel-adopt-cross-platform-ai-adversarial-code-review-20261122/
+	../reel-adopt-customization-cost-model-engineering-leadership-20261122/
+	../reel-adopt-cve-mcp-server-threat-analyst-automation-nvd-cis-20261121/
+	../reel-adopt-cybermes-autonomous-verified-security-agent-20261117/
+	../reel-adopt-cybersecurity-investigation-osint-20261121/
+	../reel-adopt-database-disaster-recovery-wal-archiving-pitr-rt-20261122/
+	../reel-adopt-database-performance-missing-indexes-over-fetchi-20261122/
+	../reel-adopt-design-workflow-for-claude-code-taste-refs-desig-20261121/
+	../reel-adopt-designing-for-failure-resilience-engineering-gra-20261121/
+	../reel-adopt-every-time-a-new-client-signs-up-your-developer-20261122/
+	../reel-adopt-fable-5-2-progressive-disclosure-conflict-detect-20261121/
+	../reel-adopt-fable-5-2-progressive-disclosure-skills-insights-20261117/
+	../reel-adopt-five-sign-up-tests-before-launch-localhost-googl-20261119/
+	../reel-adopt-fractional-caio-strategic-ai-adoption-framework-20261121/
+	../reel-adopt-frontier-llm-serving-discrete-event-simulator-pr-20261121/
+	../reel-adopt-full-attack-chain-facial-rec-breach-db-password-20261121/
+	../reel-adopt-futureos-cross-platform-ai-agent-trust-first-rus-20261121/
+	../reel-adopt-genai-system-design-agentic-harness-architecture-20261122/
+	../reel-adopt-git-github-version-control-for-ai-coding-20261117/
+	../reel-adopt-glm-5-3-open-weight-model-local-0-07-2m-tokens-20261121/
+	../reel-adopt-gmail-password-security-app-passwords-20261122/
+	../reel-adopt-goldman-sachs-ai-governance-deloitte-accountabil-20261117/
+	../reel-adopt-good-bad-prompting-context-management-skill-seco-20261121/
+	../reel-adopt-half-of-claude-skills-dead-vague-descriptions-ne-20261122/
+	../reel-adopt-harness-engineering-memory-context-skills-log-20261122/
+	../reel-adopt-harness-ownership-principle-rules-permissions-ch-20261119/
+	../reel-adopt-herdr-nvim-neovim-sidebar-for-ai-agents-20261121/
+	../reel-adopt-hermes-hud-terminal-dashboard-for-real-time-ai-a-20261121/
+	../reel-adopt-hookify-plugin-adds-guardrails-to-claude-code-20261122/
+	../reel-adopt-how-llms-built-6-steps-data-tokens-transformer-p-20261121/
+	../reel-adopt-insurer-evidence-file-20261117/
+	../reel-adopt-inter-company-sop-skill-sharing-this-is-how-you-20261121/
+	../reel-adopt-iphone-advanced-data-protection-host-header-pass-20261122/
+	../reel-adopt-jwt-signature-verification-flaw-privilege-escala-20261121/
+	../reel-adopt-kru-ai-agent-key-vault-20261119/
+	../reel-adopt-local-data-sovereignty-host-chat-on-home-office-20261121/
+	../reel-adopt-local-vs-global-problems-methodology-20261117/
+	../reel-adopt-localstorage-token-theft-ai-auth-bug-20261121/
+	../reel-adopt-loop-engineering-unattended-tasks-20261122/
+	../reel-adopt-lora-behaviour-trial-20261117/
+	../reel-adopt-machine-metaphor-hidden-buttons-skills-combinati-20261121/
+	../reel-adopt-malicious-model-supply-chain-hugging-face-numbat-20261121/
+	../reel-adopt-mass-assignment-vulnerability-is-admin-field-inj-20261117/
+	../reel-adopt-mcp-server-or-cli-make-app-accessible-to-ai-agen-20261121/
+	../reel-adopt-mcp-server-star-ranking-rea-1-markitdown-graphif-20261121/
+	../reel-adopt-mcp-server-vs-agent-business-model-sell-mcp-plug-20261120/
+	../reel-adopt-mcp-vs-apis-common-ai-facing-layer-tool-discover-20261121/
+	../reel-adopt-microsoft-hackers-using-ai-to-scan-github-for-az-20261119/
+	../reel-adopt-microsoft-outage-health-check-cascade-20261117/
+	../reel-adopt-multi-tenant-isolation-architecture-tier-3-20261122/
+	../reel-adopt-musk-5-step-building-algorithm-20261117/
+	../reel-adopt-mythos-5-2-ai-security-testing-finds-12-vuln-cla-20261117/
+	../reel-adopt-nightshift-ai-coding-shift-manager-github-com-or-20261121/
+	../reel-adopt-npm-supply-chain-attack-20261122/
+	../reel-adopt-nvidia-skill-spectre-skill-security-scanner-20261121/
+	../reel-adopt-oauth-grant-inventory-20261117/
+	../reel-adopt-oauth-redirect-attack-fake-google-login-improper-20261121/
+	../reel-adopt-oauth-redirect-uri-validation-google-oauth-20261117/
+	../reel-adopt-ocr-it-local-pdf-ocr-browser-extension-20261118/
+	../reel-adopt-one-base-two-doors-automations-agents-employees-20261121/
+	../reel-adopt-osint-scammer-investigation-github-patch-dark-we-20261121/
+	../reel-adopt-osint-techniques-username-enum-breach-db-ip-expo-20261121/
+	../reel-adopt-outcome-first-prompting-20261117/
+	../reel-adopt-paper-radar-big-tech-arxiv-tracker-20261121/
+	../reel-adopt-password-reset-poisoning-fix-20261117/
+	../reel-adopt-personal-opsec-5-address-exposure-vectors-gdpr-m-20261121/
+	../reel-adopt-production-ai-deployment-vetting-warning-consult-20261121/
+	../reel-adopt-production-readiness-checklist-for-vibe-coded-ap-20261122/
+	../reel-adopt-qwen-3-8-27b-local-deployment-20261121/
+	../reel-adopt-rag-chunking-strategies-6-methods-fixed-recursiv-20261121/
+	../reel-adopt-rag-hallucination-prevention-8-techniques-20261122/
+	../reel-adopt-rea-deep-dive-300k-stars-ghidra-mcp-electron-and-20261121/
+	../reel-adopt-rea-reverse-engineer-anything-free-local-plugin-20261121/
+	../reel-adopt-replit-built-public-court-record-search-for-due-20261121/
+	../reel-adopt-sandbox-lockdown-dell-agent-units-20261117/
+	../reel-adopt-secure-ai-apps-data-server-server-side-auth-secr-20261117/
+	../reel-adopt-sellable-commercial-readiness-20261117/
+	../reel-adopt-shadow-ai-usage-64-on-personal-accounts-20261117/
+	../reel-adopt-shrimply-open-source-ai-video-editor-in-rust-git-20261121/
+	../reel-adopt-six-essential-documents-before-vibe-coding-20261117/
+	../reel-adopt-six-pillars-for-claude-code-business-repo-struct-20261117/
+	../reel-adopt-six-ui-ux-principles-for-product-design-20261117/
+	../reel-adopt-skill-spectre-nvidia-skill-scanner-github-20261121/
+	../reel-adopt-spark-x2-5-local-4b-model-1m-context-runs-on-16g-20261121/
+	../reel-adopt-ssrf-via-ai-agents-20261122/
+	../reel-adopt-stripe-checkout-price-manipulation-20261121/
+	../reel-adopt-stripe-webhook-signature-verification-idempotenc-20261122/
+	../reel-adopt-tech-debt-skill-ai-code-audit-github-ksimback-te-20261117/
+	../reel-adopt-three-question-release-gate-20261117/
+	../reel-adopt-tiny-tts-1m-param-open-source-local-tts-onnx-run-20261121/
+	../reel-adopt-token-hacking-fable-planner-codex-executor-via-c-20261121/
+	../reel-adopt-transient-error-handling-retry-with-exponential-20261121/
+	../reel-adopt-turn-daily-work-into-ai-employees-claude-md-skil-20261121/
+	../reel-adopt-uk-gdpr-data-broker-opt-out-via-single-bcc-email-20261119/
+	../reel-adopt-vibe-coding-supabase-open-access-rules-data-expo-20261119/
+	../reel-adopt-video-talkcraft-ai-agent-skill-for-motion-design-20261121/
+	../reel-adopt-vllm-uc-berkeley-open-source-inference-server-pa-20261117/
+	../reel-adopt-voice-cloning-tool-3-sec-audio-no-login-20261117/
+	../reel-adopt-waf-modsecurity-owasp-crs-fail2ban-alerting-20261121/
+	../reel-adopt-webhook-spoofing-directory-busting-attack-demo-20261121/
+	../reel-adoption-impact-outlook-20261117/
+	../reel-adoption-titles-20261119/
+	../reel-full-accounts-overnight-20261117/
+	../reel-review-council-20261117-0916/
+	../reel-review-council-20261117-0937/
+	../reel-review-council-20261117-0952/
+	../reel-review-council-20261117-1007/
+	../reel-review-council-20261117-1537/
+	../reel-review-council-20261117-1607/
+	../reel-review-council-20261117-1652/
+	../reel-review-council-20261117-1737/
+	../reel-review-council-20261117-1807/
+	../reel-review-council-20261117-1837/
+	../reel-review-council-20261117-1907/
+	../reel-review-council-20261117-1937/
+	../reel-review-council-20261117-1952/
+	../reel-review-council-20261118-1252/
+	../reel-review-council-20261118-1552/
+	../reel-review-council-20261118-1707/
+	../reel-review-council-20261118-1807/
+	../reel-review-council-20261118-1922/
+	../reel-review-council-20261118-1937/
+	../reel-review-council-20261118-1952/
+	../reel-review-council-20261118-2022/
+	../reel-review-council-20261118-2107/
+	../reel-review-council-20261118-2137/
+	../reel-review-council-20261118-2152/
+	../reel-review-council-20261118-2207/
+	../reel-review-council-20261118-2222/
+	../reel-review-council-20261118-2252/
+	../reel-review-council-20261118-2307/
+	../reel-review-council-20261118-2322/
+	../reel-review-council-20261118-2352/
+	../reel-review-council-20261119-0822/
+	../reel-review-council-20261119-0852/
+	../reel-review-council-20261119-0907/
+	../reel-review-council-20261119-1507/
+	../reel-review-council-20261119-2207/
+	../reel-review-council-20261120-0946/
+	../reel-review-council-20261120-1852/
+	../reel-review-council-20261120-2007/
+	../reel-review-council-20261120-2107/
+	../reel-review-council-20261120-2122/
+	../reel-review-council-20261120-2137/
+	../reel-review-council-20261120-2152/
+	../reel-review-council-20261120-2307/
+	../reel-review-council-20261121-0107/
+	../reel-review-council-20261121-0122/
+	../reel-review-council-20261121-0307/
+	../reel-review-council-20261121-0322/
+	../reel-review-council-20261121-0337/
+	../reel-review-council-20261121-0352/
+	../reel-review-council-20261121-0407/
+	../reel-review-council-20261121-0422/
+	../reel-review-council-20261121-0437/
+	../reel-review-council-20261121-0452/
+	../reel-review-council-20261121-0507/
+	../reel-review-council-20261121-0522/
+	../reel-review-council-20261121-0537/
+	../reel-review-council-20261121-0552/
+	../reel-review-council-20261121-0607/
+	../reel-review-council-20261121-0622/
+	../reel-review-council-20261121-0637/
+	../reel-review-council-20261121-0652/
+	../reel-review-council-20261121-0707/
+	../reel-review-council-20261121-0722/
+	../reel-review-council-20261121-0737/
+	../reel-review-council-20261121-0752/
+	../reel-review-council-20261121-0807/
+	../reel-review-council-20261121-0822/
+	../reel-review-council-20261121-0837/
+	../reel-review-council-20261121-0852/
+	../reel-review-council-20261121-0907/
+	../reel-review-council-20261121-1037/
+	../reel-review-council-20261121-1122/
+	../reel-review-council-20261121-2207/
+	../reel-review-council-20261122-0023/
+	../reel-review-council-20261122-0307/
+	../reel-review-council-20261122-0507/
+	../reel-review-council-20261122-0807/
+	../reel-review-council-20261122-0937/
+	../reel-review-council-20261122-1037/
+	../reel-review-council-20261122-1322/
+	../reel-review-council-20261122-1422/
+	../reel-review-council-20261122-1537/
+	../reel-review-council-20261122-1822/
+	../reel-review-council-20261123-0107/
+	../reel-review-council-20261123-0122/
+	../reel-review-council-20261123-0137/
+	../reel-review-council-20261123-0152/
+	../reel-review-council-20261123-0207/
+	../reel-review-council-20261123-0222/
+	../reel-review-council-20261123-0237/
+	../reel-review-council-20261123-0252/
+	../reel-review-council-20261123-0307/
+	../reel-review-council-20261123-0322/
+	../reel-review-council-20261123-0337/
+	../reel-review-council-20261123-0352/
+	../reel-review-council-20261123-0407/
+	../reel-review-council-20261123-0422/
+	../reel-review-council-20261123-0437/
+	../reel-review-council-20261123-0452/
+	../reel-review-council-20261123-0507/
+	../reel-review-council-20261123-0522/
+	../reel-review-council-20261123-0537/
+	../reel-review-council-20261123-0552/
+	../reel-review-council-20261123-0607/
+	../reel-review-council-20261123-0622/
+	../reel-review-council-20261123-0637/
+	../reel-review-council-20261123-0652/
+	../reel-review-council-20261123-0707/
+	../reel-review-council-20261123-0722/
+	../reel-review-council-20261123-0737/
+	../reel-review-council-20261123-0752/
+	../reel-review-council-20261123-0807/
+	../reel-scrape-speedup-20261118/
+	../reel-trial-10-vibe-coder-compliance-mistakes-20261120/
+	../reel-trial-2d-motion-interface-captionin-20261119/
+	../reel-trial-4-mcp-servers-for-claude-code-context7-playwrigh-20261121/
+	../reel-trial-4-tools-for-production-claude-websites-framer-mo-20261121/
+	../reel-trial-47-ai-agents-running-a-company-shared-brain-mode-20261118/
+	../reel-trial-5-agent-team-orchestration-manager-hiring-sub-ag-20261122/
+	../reel-trial-5-ai-user-tips-voice-to-text-second-brain-skills-20261122/
+	../reel-trial-5-free-claude-skills-pocock-engineering-apple-de-20261121/
+	../reel-trial-5-mcp-integration-for-claude-20261122/
+	../reel-trial-59-hour-codex-autonomous-loop-building-macos-app-20261122/
+	../reel-trial-6-things-to-be-better-than-99-20261119/
+	../reel-trial-60-agents-on-one-build-run-fr-20261119/
+	../reel-trial-64-agents-261-skills-cloud-code-repo-20261120/
+	../reel-trial-agent-architecture-model-harness-context-20261122/
+	../reel-trial-agent-system-design-20261122/
+	../reel-trial-agentcraft-ai-agents-in-minecraft-20261119/
+	../reel-trial-agentic-workflow-architecture-20261122/
+	../reel-trial-ai-agent-context-window-management-break-tasks-i-20261122/
+	../reel-trial-ai-agent-framework-rooflow-claudecode-autonomous-20261122/
+	../reel-trial-ai-agent-runnable-replaces-9-subscriptions-build-20261122/
+	../reel-trial-ai-assisted-dev-workflow-superset-parallel-claud-20261122/
+	../reel-trial-ai-automation-seo-social-media-content-engine-20261117/
+	../reel-trial-ai-browser-bypassing-cloudflare-20261120/
+	../reel-trial-ai-content-system-for-product-visibility-20261119/
+	../reel-trial-ai-dual-use-digital-footprint-mapping-osint-20261121/
+	../reel-trial-ai-employee-roadmap-context-memory-skills-tools-20261122/
+	../reel-trial-ai-found-a-php-hole-in-70-of-20261119/
+	../reel-trial-ai-improvement-framework-context-skills-automati-20261122/
+	../reel-trial-ai-invoice-clerk-copilot-studio-bank-change-frau-20261118/
+	../reel-trial-ai-job-automation-3-month-path-20261122/
+	../reel-trial-ai-landing-page-generation-pt-br-20261119/
+	../reel-trial-ai-native-v2-operating-system-20261119/
+	../reel-trial-ai-profit-boardroom-claude-obsidian-seo-20261119/
+	../reel-trial-ai-profit-boardroom-claude-whiteboards-20261119/
+	../reel-trial-ai-profit-boardroom-claudecodeagenticos-20261119/
+	../reel-trial-ai-prototyping-workflow-html-voice-github-linear-20261121/
+	../reel-trial-ai-video-production-course-7-step-line-20261119/
+	../reel-trial-ai-website-builder-creating-3d-websites-from-sin-20261120/
+	../reel-trial-ambient-context-local-work-diary-for-ai-20261118/
+	../reel-trial-anthropic-5-rules-for-claude-code-startups-20261122/
+	../reel-trial-anthropic-engineers-use-skills-not-prompts-claud-20261122/
+	../reel-trial-anthropic-fable-5-2-launch-20261118/
+	../reel-trial-anthropic-plugindev-toolkit-for-claude-code-plug-20261122/
+	../reel-trial-api-key-encryption-kms-pattern-plain-text-keys-i-20261118/
+	../reel-trial-audio8-speech-model-20261117/
+	../reel-trial-automation-vs-agent-framework-20261122/
+	../reel-trial-autonomous-ai-security-research-quen-3-8-local-b-20261122/
+	../reel-trial-bama-mac-app-rebuild-with-claude-code-20261119/
+	../reel-trial-black-mirror-method-self-cloning-with-claude-cod-20261118/
+	../reel-trial-black-october-isn-t-over-part-20261119/
+	../reel-trial-bookshelf-self-hosted-e-book-library-no-db-cloud-20261117/
+	../reel-trial-browser-automation-opencli-turn-website-interact-20261118/
+	../reel-trial-build-an-ai-trading-team-with-20261119/
+	../reel-trial-build-first-ai-agent-in-claude-code-step-by-step-20261119/
+	../reel-trial-calibri-744b-model-on-cpu-disk-streaming-openai-20261117/
+	../reel-trial-caveman-skill-short-direct-ai-replies-lite-full-20261121/
+	../reel-trial-chatgpt-chrome-browser-automation-20261122/
+	../reel-trial-chatgpt-images-2-6-upgrade-animated-gifs-brand-r-20261119/
+	../reel-trial-chatgpt-work-codex-for-app-building-20261122/
+	../reel-trial-claude-canary-naming-pattern-20261122/
+	../reel-trial-claude-code-design-feature-slash-design-mcp-20261122/
+	../reel-trial-claude-code-front-end-design-toolkit-70-tools-th-20261117/
+	../reel-trial-claude-code-setup-plugin-dev-swarm-ide-20261122/
+	../reel-trial-claude-code-tips-status-skill-md-20261120/
+	../reel-trial-claude-connectors-demo-20261119/
+	../reel-trial-claude-diagram-design-skill-58k-stars-flowcharts-20261118/
+	../reel-trial-claude-mods-prompt-rewriting-agent-chat-linking-20261118/
+	../reel-trial-claude-opus-5-5-agent-os-with-shared-memory-acro-20261119/
+	../reel-trial-claude-paper-skill-local-ocr-on-device-free-20261117/
+	../reel-trial-claude-prompt-master-mod-20261119/
+	../reel-trial-claude-red-free-open-source-security-playbooks-f-20261118/
+	../reel-trial-claude-red-offensive-security-skills-demo-20261121/
+	../reel-trial-claude-security-anti-patterns-api-key-front-end-20261118/
+	../reel-trial-claude-skills-short-files-standardizing-agent-be-20261118/
+	../reel-trial-cli-anything-claude-integration-20261119/
+	../reel-trial-cloudflare-ai-security-agents-creating-false-pos-20261119/
+	../reel-trial-cloudflare-rate-limiting-waf-config-for-login-en-20261122/
+	../reel-trial-cloudflare-security-audit-skill-for-claude-code-20261119/
+	../reel-trial-cloudflare-security-skill-auto-audits-systems-20261119/
+	../reel-trial-coca-cola-context-compression-70-89-tokens-20261120/
+	../reel-trial-codejury-two-model-jury-ai-code-review-20261117/
+	../reel-trial-combine-kombai-gallery-design-refs-for-claude-co-20261121/
+	../reel-trial-comment-community-to-build-all-20261119/
+	../reel-trial-comment-edit-for-the-free-ki-20261119/
+	../reel-trial-comment-need-if-you-want-the-l-20261119/
+	../reel-trial-comment-projects-and-i-ll-se-20261119/
+	../reel-trial-context-mode-plugin-for-claude-code-20261117/
+	../reel-trial-context7-mcp-server-dev-swarm-parallel-ide-20261122/
+	../reel-trial-craft-anything-ai-app-recreation-tool-20261121/
+	../reel-trial-crawlie-free-open-source-seo-crawler-in-rust-20261119/
+	../reel-trial-crm-for-contractor-20261119/
+	../reel-trial-cross-platform-ai-agent-control-mac-windows-via-20261122/
+	../reel-trial-cts-framework-context-tools-skills-for-ai-operat-20261122/
+	../reel-trial-design-skill-for-cloud-websites-with-3d-scrollab-20261122/
+	../reel-trial-fable-5-2-ai-design-assistant-20261120/
+	../reel-trial-fable-5-2-free-trial-20261118/
+	../reel-trial-fable-reset-20261119/
+	../reel-trial-fast-dev-workflow-pm-design-eng-agents-20261122/
+	../reel-trial-fish-audio-voice-clone-instant-voice-model-api-k-20261122/
+	../reel-trial-five-free-github-ai-tool-repos-20261119/
+	../reel-trial-five-levels-of-claude-usage-q-a-ask-questions-pr-20261122/
+	../reel-trial-five-mcp-connectors-for-claude-20261117/
+	../reel-trial-forecast-price-with-kronos-a-20261119/
+	../reel-trial-four-claude-seo-tools-20261119/
+	../reel-trial-free-ai-scraping-tool-scrapegraph-ai-20261122/
+	../reel-trial-free-nvidia-ai-api-keys-80-models-including-glm-20261122/
+	../reel-trial-from-bulk-20261118/
+	../reel-trial-fusion-embedding-multimodal-model-20261119/
+	../reel-trial-gal-central-ai-agent-config-manager-17-agents-ya-20261117/
+	../reel-trial-gamma-5-agent-ai-pitch-deck-generator-20261121/
+	../reel-trial-gardenskills-ai-design-toolkit-20261121/
+	../reel-trial-gemini-4-carbon-on-google-cloud-20261119/
+	../reel-trial-gemini-decision-1-fast-decision-model-yes-no-mul-20261118/
+	../reel-trial-gemini-notebook-flashcard-upgrades-20261119/
+	../reel-trial-gemini-omni-1-2-flash-ai-video-generation-20261119/
+	../reel-trial-general-motors-announced-some-20261119/
+	../reel-trial-github-url-tricks-for-codebase-mapping-20261119/
+	../reel-trial-google-ai-studio-update-gemini-omni-1-2-flash-fo-20261119/
+	../reel-trial-google-antigravity-2-32-0-swarm-dynamic-workflow-20261118/
+	../reel-trial-google-antigravity-browser-agent-browse-build-te-20261118/
+	../reel-trial-google-antigravity-voice-mode-remote-agents-slas-20261118/
+	../reel-trial-google-artemis-phone-automation-via-mcp-20261121/
+	../reel-trial-google-skills-library-firebase-cloud-run-gemini-20261122/
+	../reel-trial-google-street-view-blur-technique-20261119/
+	../reel-trial-haiku-opus-model-routing-cost-optimization-20261121/
+	../reel-trial-hallmark-design-skill-together-ai-50-themes-755-20261117/
+	../reel-trial-heimdall-local-persistent-ai-agent-brain-zero-to-20261117/
+	../reel-trial-hermarchy-theme-subtle-agent-activity-status-bar-20261121/
+	../reel-trial-hermes-agent-6-levels-hearth-release-1650-change-20261118/
+	../reel-trial-hermes-agent-os-step-5-preview-multi-agent-ai-wo-20261119/
+	../reel-trial-hermes-agentos-complete-guide-mixture-of-agents-20261119/
+	../reel-trial-hermes-agentos-dashboard-demo-oracle-video-agent-20261119/
+	../reel-trial-hermes-multi-agent-ai-workspace-with-group-chats-20261119/
+	../reel-trial-hermes-obsidian-agentos-ai-assistant-with-person-20261119/
+	../reel-trial-hermes-obsidian-shared-memory-for-ai-agents-20261118/
+	../reel-trial-how-long-till-claude-books-me-20261119/
+	../reel-trial-how-to-improve-a-private-secur-20261119/
+	../reel-trial-hyperframes-code-to-video-via-claude-code-20261117/
+	../reel-trial-i-sat-by-the-river-bank-i-20261119/
+	../reel-trial-ilea-design-ai-design-skills-devswarm-20261122/
+	../reel-trial-jane-street-socratic-tutor-free-claude-skill-ada-20261117/
+	../reel-trial-jarvis-agent-os-running-100-locally-on-mac-20261119/
+	../reel-trial-kern-rootless-sandbox-3ms-20261117/
+	../reel-trial-latticedb-local-graph-semantic-text-db-zig-singl-20261117/
+	../reel-trial-learn-ai-automation-from-scratch-in-three-months-20261119/
+	../reel-trial-llm-wiki-skill-organizer-20261119/
+	../reel-trial-loading-files-mcp-for-animations-20261122/
+	../reel-trial-loop-engineering-20261122/
+	../reel-trial-loop-engineering-loupony-tool-20261122/
+	../reel-trial-lp-skill-design-principles-nielsen-gestalt-fitts-20261118/
+	../reel-trial-luvus-ai-coding-agent-dashboard-20261121/
+	../reel-trial-mailflare-self-hosted-google-workspace-alt-with-20261118/
+	../reel-trial-matt-pocock-skills-for-real-engineers-claude-cod-20261117/
+	../reel-trial-mesh-llm-distributed-llm-inference-20261117/
+	../reel-trial-meta-asterix-design-system-150-components-mcp-se-20261117/
+	../reel-trial-meta-asterix-design-system-mcp-20261120/
+	../reel-trial-meta-n-the-ai-that-codes-its-20261119/
+	../reel-trial-minimax-h3-director-cut-studio-20261119/
+	../reel-trial-mobarust-open-source-mobaxterm-alternative-secur-20261121/
+	../reel-trial-multi-harness-agent-orchestration-opencode-codex-20261121/
+	../reel-trial-multi-model-agent-workflow-claude-code-codex-20261121/
+	../reel-trial-munder-difflin-agent-team-tool-20261122/
+	../reel-trial-nine-free-github-repos-as-paid-tool-alternatives-20261119/
+	../reel-trial-notion-ai-second-brain-template-for-agents-20261117/
+	../reel-trial-numbat-model-malware-warning-oathbreaker-advocac-20261118/
+	../reel-trial-obsidian-vault-as-claude-code-second-brain-20261122/
+	../reel-trial-ocr-it-local-pdf-ocr-browser-extension-20261117/
+	../reel-trial-omega-agent-orchestration-opus-plans-haiku-execu-20261118/
+	../reel-trial-open-source-agent-platform-access-repo-20261122/
+	../reel-trial-open-source-meeting-note-taker-meetily-29k-stars-20261122/
+	../reel-trial-open-source-voice-cloning-local-cpu-7-sec-clone-20261117/
+	../reel-trial-open-source-voice-tools-eleven-labs-whisperflow-20261122/
+	../reel-trial-openai-businesses-in-chatgpt-business-hub-busine-20261118/
+	../reel-trial-openai-dots-always-on-ai-agents-with-own-compute-20261118/
+	../reel-trial-openinbox-free-email-tool-on-cloudflare-20261119/
+	../reel-trial-openmousebot-autonomous-bots-20261120/
+	../reel-trial-openvid-open-source-browser-tool-for-polished-sc-20261121/
+	../reel-trial-paperclip-ai-company-orchestrator-20261119/
+	../reel-trial-physical-ai-with-raspberry-pi-20261118/
+	../reel-trial-pibench-ai-coding-agent-benchmark-real-bugs-sand-20261118/
+	../reel-trial-private-local-ai-guide-ollama-open-web-ui-n8n-20261121/
+	../reel-trial-private-rag-on-mac-with-ollama-anythingllm-20261119/
+	../reel-trial-process-before-ai-framework-stopwatch-method-20261119/
+	../reel-trial-pty-pseudo-terminal-24-7-persistent-coding-agent-20261122/
+	../reel-trial-rag-pdf-question-answering-20261119/
+	../reel-trial-redcell-ai-pentesting-agent-recon-cve-prompt-inj-20261118/
+	../reel-trial-replet-com-design-design-system-ai-agent-builds-20261122/
+	../reel-trial-repomix-organize-github-repos-into-ai-friendly-f-20261120/
+	../reel-trial-restaurant-voice-agent-french-english-20261122/
+	../reel-trial-reverse-engineer-how-any-app-f-20261119/
+	../reel-trial-run-an-open-source-ai-agent-on-20261119/
+	../reel-trial-sabiql-terminal-db-client-driverless-postgres-sq-20261119/
+	../reel-trial-sapa-ai-hackers-cellbird-ai-sales-20261120/
+	../reel-trial-scrapegraph-ai-open-source-python-library-30k-st-20261122/
+	../reel-trial-second-brain-for-ai-agents-carpathian-method-mod-20261122/
+	../reel-trial-security-vulnerability-disclosure-20261122/
+	../reel-trial-seo-backlinks-with-fable-5-2-20261119/
+	../reel-trial-shared-ai-agent-memory-hermes-obsidian-20261118/
+	../reel-trial-six-iphone-apps-for-agent-orchestration-tailscal-20261122/
+	../reel-trial-skillopt-sleep-cycle-for-claude-20261119/
+	../reel-trial-skilltreeos-ai-agent-map-7-depts-34-teams-137-jo-20261119/
+	../reel-trial-slashbrag-launch-video-skill-for-coding-agents-20261117/
+	../reel-trial-tech-debt-skill-ai-code-audit-20261119/
+	../reel-trial-terminal-phone-iphone-in-terminal-ai-agent-contr-20261117/
+	../reel-trial-tesseract-chatgpt-video-editor-non-destructive-r-20261121/
+	../reel-trial-thermonuclear-code-quality-review-cursor-skill-20261119/
+	../reel-trial-these-security-issues-are-gett-20261119/
+	../reel-trial-this-tiny-robot-duck-costs-und-20261119/
+	../reel-trial-three-claude-settings-for-business-plugins-conne-20261119/
+	../reel-trial-three-free-claude-code-skills-claude-mem-find-sk-20261122/
+	../reel-trial-top-10-mcp-servers-ranking-20261117/
+	../reel-trial-top-5-mcps-for-claude-perplexity-playwright-farc-20261119/
+	../reel-trial-trading-bot-network-20261122/
+	../reel-trial-tradingagents-multi-agent-adversarial-pattern-20261117/
+	../reel-trial-twil-8b-vs-qwen-20261117/
+	../reel-trial-uh-oh-here-we-go-again-every-20261119/
+	../reel-trial-untangle-codebase-skill-for-claude-code-cleanup-20261119/
+	../reel-trial-urbanground-testing-ai-in-rea-20261119/
+	../reel-trial-ux-principles-checklist-20261121/
+	../reel-trial-vector-index-tuning-ivf-hnsw-nprobe-20261122/
+	../reel-trial-vercel-agent-browser-ai-agent-testing-20261117/
+	../reel-trial-vercel-agent-browser-shakedown-20261117/
+	../reel-trial-verification-loop-methodology-for-ai-agents-20261121/
+	../reel-trial-video-editing-skills-ranking-security-warnings-20261119/
+	../reel-trial-vllm-uc-berkeley-inference-server-20261119/
+	../reel-trial-voice-agent-approval-workflow-claudecode-fish-au-20261117/
+	../reel-trial-vps-security-hardening-20261122/
+	../reel-trial-whisperflow-voice-dictation-for-ai-openai-tip-20261121/
+	../reel-trial-xrepotest-ai-code-testing-20261119/
+	../reel-trial-yc-gtm-strategy-via-claude-20261120/
+	../reel-trial-you-already-have-an-ai-that-st-20261119/
+	../reel-trial-youtube-agent-skill-free-ai-content-team-20261119/
+	../register-fix-all-r1-20261121/
+	../register-triage-20261123/
+	../release-readiness-20261112/
+	../release-standards-council-20261114/
+	../release-tracker-20261122/
+	../release-truth-20261120/
+	../repair-pull-requests-merge-readiness-20261119/
+	../rescore-12-products-20261116/
+	../restore-drill-20261120/
+	../rl20-housing-compliance-vault-20261116/
+	../rl20-maintenanceos-website-20261116/
+	../rokoko-smartgloves-ii-20261120/
+	../root-cause-safeguards-open-items-20261117/
+	../rootcause-ai-stage2-holiday-let-operator-20261123/
+	../rootcause-council-merge-batch-a-20261123-20261123/
+	../rootcause-council-mt-gonogo-20261123-20261123/
+	../rootcause-council-pr8-pr714-r3-20261123-20261123/
+	../rootcause-fa-01-business-os-20261123/
+	../rootcause-fa-02-public-sector-citizen-agent-20261123/
+	../rootcause-fa-03-maintenanceos-20261123/
+	../rootcause-fa-04-maintenanceos-website-20261123/
+	../rootcause-fa-05-legal-case-management-20261123/
+	../rootcause-fa-07-chapelgate-multilingual-transcribe-20261123/
+	../rootcause-fa-08-holiday-let-operator-20261123/
+	../rootcause-fa-10-business-evidence-wallet-20261123/
+	../rootcause-fa-11-council-minutes-20261123/
+	../rootcause-fix-council-omniroute-review-r1-20261123/
+	../rootcause-job-brief-template-scanners-20261123/
+	../rootcause-job-company-formation-plan-20261123/
+	../rootcause-job-council-merge-batch-a-20261123-20261123/
+	../rootcause-job-council-mt-gonogo-20261123-20261123/
+	../rootcause-job-council-pr8-pr714-r3-20261123-20261123/
+	../rootcause-job-cso-fix-housing-compliance-vault-open-findings-20261121-20261123/
+	../rootcause-job-estate-audit-loop-20261123/
+	../rootcause-job-ew-dell-hosting-20261123/
+	../rootcause-job-fix-findings-holiday-let-operator-20261121-20261123/
+	../rootcause-job-pricing-tiers-20261123/
+	../rootcause-job-python-script-bot-20261123/
+	../rootcause-job-release-tracker-20261123/
+	../rootcause-job-release-truth-20261123/
+	../rootcause-job-restore-drill-20261123/
+	../rootcause-job-rootcause-fa-01-business-os-20261123/
+	../rootcause-job-rootcause-job-company-formation-plan-20261123/
+	../rootcause-job-rootcause-job-release-truth-20261123/
+	../rootcause-job-rootcause-job-restore-drill-20261123/
+	../rootcause-job-rootcause-website-reposition-r1-20261123/
+	../rootcause-ln-02-swap-failure-20261123/
+	../rootcause-phone-stage3-maintenanceos-phone-line-20261123/
+	../rootcause-rt15-05-legal-case-management-20261123/
+	../rootcause-website-council-fit-r1-20261123/
+	../rootcause-website-reposition-r1-20261123/
+	../router-outage-fixes-20261115/
+	../rt15-fix-hcv-council-minutes-20261118/
+	../sbom-vuln-scan-20261115/
+	../scaffold-upgrade-20261115/
+	../scaffolding-teardown-20261116/
+	../secrets-vault-rotate-20261116/
+	../security-reel-knowledge-base-20261119/
+	../security-release-plans-remaining-products-20261120/
+	../security-sweep-all-products-20261118/
+	../shadow-gdpr-accountability-20261116/
+	../shadow-iso27001-20261116/
+	../shadow-iso9001-20261116/
+	../shadow-owasp-asvs-l2-20261116/
+	../shadow-soc2-tsc-20261116/
+	../shadow-standards-68-20261116/
+	../shadow-wcag22aa-20261116/
+	../shakedown-failclosed-adoption-diff-20261118/
+	../shakedown-video-20261113/
+	../shared-security-component-library-20261119/
+	../shorts-factory-20261118/
+	../simply-business-pl-el-quote-20261122/
+	../six-docs-gate-phase2-20261119/
+	../slice6-tidy/
+	../staging-production-credentials-separation-20261119/
+	../stt-ceiling-20261119/
+	../stt-improve-loop/
+	../sudo-least-privilege-plan-20261119/
+	../support-readiness-20261120/
+	../tender-dry-run-20261115/
+	../tender-owner-20261120/
+	../test-benchmark-skills-coverage-20261117/
+	../test-mac-failover-20261116/
+	../third-party-pentest-research-20261115/
+	../tool-agent-orchestration-r1-20261115/
+	../tool-cost-tuning-r1-20261115/
+	../tool-synthetic-data-r1-20261115/
+	../trading-bot-ai-agent-20261116/
+	../trading-readiness-20261120/
+	../triage-gate-retention-20261118/
+	../tutorial-benchmark-rework-20261118/
+	../tutorial-follow-along-holes-20261118/
+	../video-intake-fix-20261116/
+	../video-skill-install-20261116/
+	../video-status-20261120/
+	../video-status-delta-20261123/
+	../voice-clone-threat-kit-production-20261119/
+	../website-council-deploy-20261116/
+	../website-council-fit-20261115/
+	../website-council-rebuild-20261120/
+	../website-council-specialist-20261116/
+	../website-privacy-labels-20261123/
+	../website-reposition-20261117/
+	../welsh-pilot-pitch-20261117/
+	../wirral-research-out.tgz
+	../wirral-site-out-fba6534.tgz
+	../wirral-structural-repairs-competitor-research-20261115/
+	../wirral-structural-repairs-local-seo-website-20261115/
+	../wirral-structural-repairs-seo-phase2-20261116/
+	../../factory-trial-gal-central-ai-agent-config-manager-17-agents-ya-20261117/
+	../../factory-trial-learn-ai-automation-from-scratch-in-three-months-20261119/
+	../../factory-tuning-r1-20261115/
+	../../fix-job-estate-audit-loop-20261123/
+	../../gate-worktrees-20261121/
+	../../golden-line-email-cleaner/
+	../../golden-line-en-gb-test-line/
+	../../golden-line-stt-bench/
+	../../hcv-source-readonly/
+	../../heimdall-adapters.mjs.bak-eggbot-20261118-0844
+	../../heimdall/
+	../../jjobs-work-dell/
+	../../jobs-work-dell/
+	../../jobs-work/
+	../../langfuse-3.39.2.tgz
+	../../library-tools/
+	../../library/
+	../../migration-staging/
+	../../omniroute/
+	../../package-lock.json
+	../../public/
+	../../readiness/
+	../../repo/
+	../../repos-github/
+	../../repos/
+	../../research/
+	../../runners/
+	../../scratch/
+	../../skills-roll-20261111.tgz
+	../../skills-roll-20261111/
+	../../stt-improve-loop/
+	../../tailscale-serve.bak-dellomni-20261114T161241Z.json
+	../../test-results/
+	../../video-inbox/
+	../../video-outbox/
+	../../work/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+Now I need to understand what's needed to get the MISSION_COMPLETE accepted. The verifier wants commits, PRs, and council merges. Let me check the git state and what council artifacts might be needed.
+[0m$ [0mgit -C /home/andy/chapelgate log --oneline -5 2>&1
+aa91f5fa chore(opencode-epipe): record council verdicts, merged SHA and raw evidence
+ea1d6767 merge: opencode EPIPE guard fix (council GO estate-coding + mac-gpt-oss-120b at 25bc03d2)
+25bc03d2 fix(opencode): narrow EPIPE guard to targeted handlers; keep real errors fatal
+dd9c0a5a fix(opencode): swallow EPIPE on destroyed child-process streams in opencode 1.19.5
+0659b524 fix(security): resolve CSO findings BEW-1/BEW-2 and verify findings
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/out/ 2>&1 | head -30
+total 304
+drwxrwxr-x 19 andy andy  4096 Nov 23 06:40 .
+drwxrwxr-x 60 andy andy 12288 Nov 23 22:12 ..
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-business-evidence-wallet
+-rw-rw-r--  1 andy andy  1322 Nov 17 23:09 AUDIT-business-evidence-wallet.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-complaints
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-chapelgate-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-multilingual-transcribe
+-rw-rw-r--  1 andy andy  1392 Nov 19 16:32 AUDIT-chapelgate-multilingual-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-chapelgate-transcribe
+-rw-rw-r--  1 andy andy  1301 Nov 19 16:32 AUDIT-chapelgate-transcribe.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cheap-trips
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-cheap-trips.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-cloud-workers
+-rw-rw-r--  1 andy andy  1245 Nov 17 23:09 AUDIT-cloud-workers.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-holiday-let-operator
+-rw-rw-r--  1 andy andy  1294 Nov 19 16:33 AUDIT-holiday-let-operator.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-housing-compliance-vault
+-rw-rw-r--  1 andy andy  1322 Nov 19 16:32 AUDIT-housing-compliance-vault.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-information-rights-complaints
+-rw-rw-r--  1 andy andy  1357 Nov 19 16:33 AUDIT-information-rights-complaints.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-landlord-os
+-rw-rw-r--  1 andy andy  1231 Nov 19 16:33 AUDIT-landlord-os.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-legal-case-management
+-rw-rw-r--  1 andy andy  1301 Nov 17 23:09 AUDIT-legal-case-management.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-maintenanceos
+-rw-rw-r--  1 andy andy  1245 Nov 19 16:34 AUDIT-maintenanceos.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-citizen-agent
+-rw-rw-r--  1 andy andy  1343 Nov 19 16:34 AUDIT-public-sector-citizen-agent.md
+drwxrwxr-x  2 andy andy  4096 Nov 17 23:09 audit-public-sector-document-copilot
+[0m
+[0m$ [0mgit -C /home/andy/chapelgate diff --stat HEAD 2>&1
+.../FINDINGS.tsv                                   |     6 +
+ .../MODEL                                          |     2 +-
+ .../STEER.md                                       |    78 +
+ .../history.log                                    |    76 +
+ .../out/EVIDENCE.md                                |    70 +-
+ .../out/MISSION_COMPLETE                           |     1 -
+ .../out/PROGRESS.md                                |    27 +
+ .../out/RESULT.md                                  |    23 +-
+ .../out/SKILLS-USED.md                             |    23 +-
+ .../out/TOOL-COVERAGE.md                           |    40 +-
+ .../out/cycle-0022-4.log                           |  5191 -----
+ .../out/cycle-0035-1.log                           |    93 -
+ .../out/cycle-0047-1.log                           |   127 -
+ .../out/cycle-0125-2.log                           |  2171 --
+ .../out/cycle-0152-5.log                           |  1636 --
+ .../out/cycle-0209-3.log                           |  1151 --
+ .../out/cycle-0216-4.log                           |   906 -
+ .../out/cycle-0229-1.log                           |  5270 -----
+ .../out/cycle-0245-1.log                           |   147 -
+ .../out/cycle-0337-1.log                           |   149 -
+ .../out/cycle-0346-2.log                           |   854 -
+ .../out/cycle-0359-2.log                           |  1039 -
+ .../out/cycle-0439-1.log                           |  3840 ----
+ .../out/cycle-0540-1.log                           |    10 -
+ .../out/cycle-0541-2.log                           |  2816 ---
+ .../out/cycle-0607-2.log                           |   180 -
+ .../out/cycle-0626-2.log                           |  1006 -
+ .../out/cycle-0701-3.log                           |   533 -
+ .../out/cycle-0711-3.log                           |    28 -
+ .../out/cycle-0714-4.log                           |  1547 --
+ .../out/cycle-0745-1.log                           |   134 -
+ .../out/cycle-0801-1.log                           |   189 -
+ .../out/cycle-0814-1.log                           |  2362 ---
+ .../out/cycle-0814-5.log                           |   756 -
+ .../out/cycle-0848-6.log                           |  3197 ---
+ .../out/cycle-0915-1.log                           |  2932 ---
+ .../out/cycle-1046-2.log                           |  4118 ----
+ .../out/cycle-1216-3.log                           |  1324 --
+ .../out/cycle-1251-1.log                           |  3220 ---
+ .../out/cycle-1420-1.log                           |  2809 ---
+ .../out/cycle-1550-2.log                           |  2597 ---
+ .../out/cycle-1721-3.log                           |   141 +-
+ .../out/cycle-1805-4.log                           |  2364 ---
+ .../out/cycle-1939-1.log                           |  1338 --
+ .../out/cycle-2011-2.log                           |  3003 ---
+ .../out/cycle-2116-1.log                           |  2884 ---
+ .../out/cycle-2130-2.log                           |   157 -
+ .../out/cycle-2230-1.log                           |  1435 --
+ .../out/cycle-2247-2.log                           |  1085 -
+ .../out/cycle-2251-3.log                           |  3720 ----
+ .../out/cycle-2326-2.log                           |  2154 --
+ .../out/raw/.lock-lint                             |     0
+ .../out/raw/.lock-test                             |     0
+ .../out/raw/.lock-test-domain                      |     0
+ .../out/raw/.lock-test-integration                 |     0
+ .../out/raw/.lock-test-platform                    |     0
+ .../out/raw/.lock-test-platform-full               |     0
+ .../out/raw/.lock-test-security-headers            |     0
+ .../out/raw/.lock-test_domain-092b48               |     0
+ .../out/raw/.lock-test_platform-74dbd3             |     0
+ .../out/raw/.lock-test_secret-scan-895b8f          |     0
+ .../out/raw/INDEX.tsv                              |   106 +-
+ .../out/raw/SHA                                    |     2 +-
+ .../out/raw/gitleaks-20261123-120000.json          |     1 -
+ .../out/raw/lint-20261123-084613-exit-code.txt     |     1 -
+ .../out/raw/lint-20261123-084613-output.log        |    19 -
+ .../out/raw/test-20261122-001855-exit-code.txt     |     1 -
+ .../out/raw/test-20261122-001855-output.log        |    61 -
+ .../raw/test-domain-20261123-083440-exit-code.txt  |     1 -
+ .../out/raw/test-domain-20261123-083440-output.log |  9909 ----------
+ .../test-integration-20261123-083534-output.log    |   118 -
+ .../test-platform-20261123-092019-exit-code.txt    |     1 -
+ .../raw/test-platform-20261123-092019-output.log   | 15949 ---------------
+ .../out/raw/test-platform-final-output.log         |    20 -
+ ...est-platform-full-20261123-083042-exit-code.txt |     1 -
+ .../test-platform-full-20261123-083042-output.log  | 15949 ---------------
+ ...-security-headers-20261121-231512-exit-code.txt |     1 -
+ ...est-security-headers-20261121-231512-output.log |    43 -
+ ...est_domain-092b48-20261122-150847-exit-code.txt |     1 -
+ .../test_domain-092b48-20261122-150847-output.log  |  9909 ----------
+ ...t_platform-74dbd3-20261122-154400-exit-code.txt |     1 -
+ ...test_platform-74dbd3-20261122-154400-output.log | 15949 ---------------
+ ...ecret-scan-895b8f-20261122-151615-exit-code.txt |     1 -
+ ...t_secret-scan-895b8f-20261122-151615-output.log |    11 -
+ .../raw/typecheck-20261123-085044-exit-code.txt    |     1 -
+ .../out/raw/typecheck-20261123-085044-output.log   |    17 -
+ .../lint-20261122-150950-exit-code.txt             |     1 -
+ .../raw-superseded/lint-20261122-150950-output.log |    23 -
+ .../test-20261121-225830-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-225830-output.log |   206 -
+ .../test-20261121-230205-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-230205-output.log | 16903 ----------------
+ .../test-20261121-230442-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-230442-output.log | 16903 ----------------
+ .../test-20261121-230748-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-230748-output.log | 16903 ----------------
+ .../test-20261121-231600-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231600-output.log |    65 -
+ .../test-20261121-231802-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231802-output.log |    97 -
+ .../test-20261121-231805-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231805-output.log |    97 -
+ .../test-20261121-231843-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231843-output.log |    97 -
+ .../test-20261121-231852-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231852-output.log |    97 -
+ .../test-20261121-231856-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231856-output.log |    97 -
+ .../test-20261121-231902-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231902-output.log |    97 -
+ .../test-20261121-231908-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231908-output.log |    67 -
+ .../test-20261121-231911-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-231911-output.log |     3 -
+ .../test-20261121-232053-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-232053-output.log |    33 -
+ .../test-20261121-232309-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-232309-output.log |    33 -
+ .../test-20261121-232602-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-232602-output.log |    33 -
+ .../test-20261121-232854-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-232854-output.log |    33 -
+ .../test-20261121-233050-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-233050-output.log |     3 -
+ .../test-20261121-233200-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-233200-output.log |    39 -
+ .../test-20261121-233251-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-233251-output.log |    39 -
+ .../test-20261121-233253-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-233253-output.log |    39 -
+ .../test-20261121-233408-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-233408-output.log |    42 -
+ .../test-20261121-233449-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-233449-output.log |    39 -
+ .../test-20261121-233746-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-233746-output.log |   634 -
+ .../test-20261121-234528-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-234528-output.log |    30 -
+ .../test-20261121-234530-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-234530-output.log |   116 -
+ .../test-20261121-234658-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-234658-output.log |    97 -
+ .../test-20261121-234919-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-234919-output.log |    97 -
+ .../test-20261121-234956-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-234956-output.log |    78 -
+ .../test-20261121-235045-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-235045-output.log |    39 -
+ .../test-20261121-235048-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-235048-output.log |    39 -
+ .../test-20261121-235305-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-235305-output.log |     3 -
+ .../test-20261121-235553-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261121-235553-output.log |    42 -
+ .../test-20261122-001249-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261122-001249-output.log |    60 -
+ .../test-20261122-001353-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261122-001353-output.log |    61 -
+ .../test-20261122-001502-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261122-001502-output.log |    61 -
+ .../test-domain-20261122-142458-exit-code.txt      |     1 -
+ .../test-domain-20261122-142458-output.log         |  9909 ----------
+ .../test-integration-20261122-142518-output.log    |   118 -
+ .../test-integration-20261122-143132-output.log    |   136 -
+ .../test-platform-20261121-225910-output.log       | 15264 ---------------
+ .../test-platform-20261122-130854-output.log       | 14707 --------------
+ .../test-platform-20261122-131123-exit-code.txt    |     1 -
+ .../test-platform-20261122-131123-output.log       | 14703 --------------
+ .../test-platform-20261122-131225-exit-code.txt    |     1 -
+ .../test-platform-20261122-131225-output.log       | 16265 ---------------
+ .../test-platform-20261122-131455-exit-code.txt    |     1 -
+ .../test-platform-20261122-131455-output.log       | 16265 ---------------
+ .../test-platform-20261122-131810-exit-code.txt    |     1 -
+ .../test-platform-20261122-131810-output.log       | 16265 ---------------
+ .../test-platform-20261122-132013-exit-code.txt    |     1 -
+ .../test-platform-20261122-132013-output.log       | 16265 ---------------
+ .../test-platform-20261122-132213-output.log       | 14707 --------------
+ .../test-platform-20261122-132846-exit-code.txt    |     1 -
+ .../test-platform-20261122-132846-output.log       | 16235 ---------------
+ .../test-platform-20261122-134354-exit-code.txt    |     1 -
+ .../test-platform-20261122-134354-output.log       | 13915 -------------
+ .../test-platform-20261122-134519-exit-code.txt    |     1 -
+ .../test-platform-20261122-134519-output.log       | 15477 ---------------
+ .../test-platform-20261122-134750-exit-code.txt    |     1 -
+ .../test-platform-20261122-134750-output.log       | 15477 ---------------
+ .../test-platform-20261122-135033-exit-code.txt    |     1 -
+ .../test-platform-20261122-135033-output.log       | 15477 ---------------
+ .../test-platform-20261122-135424-exit-code.txt    |     1 -
+ .../test-platform-20261122-135424-output.log       | 15458 ---------------
+ .../test-platform-20261122-135845-exit-code.txt    |     1 -
+ .../test-platform-20261122-135845-output.log       | 15350 ---------------
+ .../test-platform-20261122-140055-exit-code.txt    |     1 -
+ .../test-platform-20261122-140055-output.log       | 15350 ---------------
+ .../test-platform-20261122-140333-exit-code.txt    |     1 -
+ .../test-platform-20261122-140333-output.log       | 15350 ---------------
+ .../test-platform-20261122-140659-exit-code.txt    |     1 -
+ .../test-platform-20261122-140659-output.log       | 13788 -------------
+ .../test-platform-20261122-140909-exit-code.txt    |     1 -
+ .../test-platform-20261122-140909-output.log       | 15350 ---------------
+ .../test-platform-20261122-141456-output.log       |     6 -
+ .../test-platform-20261122-142205-exit-code.txt    |     1 -
+ .../test-platform-20261122-142205-output.log       |   212 -
+ .../test-platform-20261122-142228-exit-code.txt    |     1 -
+ .../test-platform-20261122-142228-output.log       | 15949 ---------------
+ .../test-platform-20261123-084144-exit-code.txt    |     1 -
+ .../test-platform-20261123-084144-output.log       | 15949 ---------------
+ .../test-platform-20261123-084632-exit-code.txt    |     1 -
+ .../test-platform-20261123-084632-output.log       | 15949 ---------------
+ .../test-platform-20261123-085157-output.log       | 13792 -------------
+ .../test-platform-20261123-085540-exit-code.txt    |     1 -
+ .../test-platform-20261123-085540-output.log       | 15949 ---------------
+ .../test-platform-20261123-090214-exit-code.txt    |     1 -
+ .../test-platform-20261123-090214-output.log       | 13793 -------------
+ .../test-platform-20261123-091531-exit-code.txt    |     1 -
+ .../test-platform-20261123-091531-output.log       | 15949 ---------------
+ ...est-platform-full-20261121-233452-exit-code.txt |     1 -
+ .../test-platform-full-20261121-233452-output.log  | 16763 ----------------
+ ...est-platform-full-20261121-235053-exit-code.txt |     1 -
+ .../test-platform-full-20261121-235053-output.log  | 16112 ---------------
+ ...est-platform-full-20261122-000000-exit-code.txt |     1 -
+ .../test-platform-full-20261122-000000-output.log  | 16121 ---------------
+ ...est-platform-full-20261122-000256-exit-code.txt |     1 -
+ .../test-platform-full-20261122-000256-output.log  | 16112 ---------------
+ ...est-platform-full-20261122-001953-exit-code.txt |     1 -
+ .../test-platform-full-20261122-001953-output.log  | 15765 ---------------
+ ...est-platform-full-20261123-083001-exit-code.txt |     1 -
+ .../test-platform-full-20261123-083001-output.log  |     7 -
+ ...-security-headers-20261121-231503-exit-code.txt |     1 -
+ ...est-security-headers-20261121-231503-output.log |    67 -
+ ...t_platform-74dbd3-20261122-145229-exit-code.txt |     1 -
+ ...test_platform-74dbd3-20261122-145229-output.log | 15949 ---------------
+ ...t_platform-74dbd3-20261122-145518-exit-code.txt |     1 -
+ ...test_platform-74dbd3-20261122-145518-output.log | 15949 ---------------
+ ...t_platform-74dbd3-20261122-150219-exit-code.txt |     1 -
+ ...test_platform-74dbd3-20261122-150219-output.log | 15949 ---------------
+ ...t_platform-74dbd3-20261122-154019-exit-code.txt |     1 -
+ ...test_platform-74dbd3-20261122-154019-output.log | 15949 ---------------
+ .../typecheck-20261121-234252-exit-code.txt        |     1 -
+ .../typecheck-20261121-234252-output.log           |    53 -
+ .../typecheck-20261122-144255-exit-code.txt        |     1 -
+ .../typecheck-20261122-144255-output.log           |    21 -
+ .../typecheck-20261122-152200-exit-code.txt        |     1 -
+ .../typecheck-20261122-152200-output.log           |    26 -
+ .../typecheck-20261122-154724-exit-code.txt        |     1 -
+ .../typecheck-20261122-154724-output.log           |    32 -
+ .../typecheck-20261123-084422-exit-code.txt        |     1 -
+ .../typecheck-20261123-084422-output.log           |    17 -
+ .../repo                                           |     2 +-
+ .../status.json                                    |     2 +-
+ factory-tasks/ew-dell-hosting-20261121/BRIEF.md    |    25 +
+ factory-tasks/ew-dell-hosting-20261121/MODEL       |     2 +-
+ factory-tasks/ew-dell-hosting-20261121/history.log |    25 +
+ .../ew-dell-hosting-20261121/out/EVIDENCE.md       |    66 -
+ .../ew-dell-hosting-20261121/out/HOSTING.md        |    20 -
+ .../ew-dell-hosting-20261121/out/MISSION_COMPLETE  |     3 -
+ .../out/MISSION_COMPLETE.rejected-20261121-2059    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261121-2104    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261121-2204    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261121-2224    |    12 -
+ .../out/MISSION_COMPLETE.rejected-20261121-2314    |    12 -
+ .../out/MISSION_COMPLETE.rejected-20261122-0034    |    12 -
+ .../out/MISSION_COMPLETE.rejected-20261122-0109    |    12 -
+ .../out/MISSION_COMPLETE.rejected-20261122-0134    |    12 -
+ .../out/MISSION_COMPLETE.rejected-20261122-0434    |    21 -
+ .../out/MISSION_COMPLETE.rejected-20261122-0614    |    21 -
+ .../out/MISSION_COMPLETE.rejected-20261122-0759    |    21 -
+ .../out/MISSION_COMPLETE.rejected-20261122-1039    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261122-1326    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261122-1414    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261122-1634    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261122-1834    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261122-2045    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261122-2315    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0120    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0125    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0135    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0140    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0145    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0330    |     1 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0420    |    11 -
+ .../out/MISSION_COMPLETE.rejected-20261123-0625    |     1 -
+ .../ew-dell-hosting-20261121/out/PROGRESS.md       |    43 +-
+ .../ew-dell-hosting-20261121/out/RESULT.md         |    94 -
+ .../out/ROASTROOM-VERDICT.md                       |    41 -
+ .../ew-dell-hosting-20261121/out/ROOT-CAUSE.md     |    21 -
+ .../ew-dell-hosting-20261121/out/SKILLS-USED.md    |     5 -
+ .../out/VERIFIER-FEEDBACK.md                       |     3 -
+ .../ew-dell-hosting-20261121/out/council-GO.md     |    36 -
+ .../ew-dell-hosting-20261121/out/cycle-0029-1.log  |   108 -
+ .../ew-dell-hosting-20261121/out/cycle-0054-1.log  |   267 -
+ .../ew-dell-hosting-20261121/out/cycle-0119-1.log  |   288 -
+ .../ew-dell-hosting-20261121/out/cycle-0255-1.log  |   211 -
+ .../ew-dell-hosting-20261121/out/cycle-0300-2.log  |   799 -
+ .../ew-dell-hosting-20261121/out/cycle-0339-1.log  |  3369 ----
+ .../ew-dell-hosting-20261121/out/cycle-0351-1.log  |   151 -
+ .../ew-dell-hosting-20261121/out/cycle-0425-1.log  |   357 -
+ .../ew-dell-hosting-20261121/out/cycle-0539-1.log  |    22 -
+ .../ew-dell-hosting-20261121/out/cycle-0540-1.log  |   910 -
+ .../ew-dell-hosting-20261121/out/cycle-0540-2.log  |    26 -
+ .../ew-dell-hosting-20261121/out/cycle-0542-3.log  |  2481 ---
+ .../ew-dell-hosting-20261121/out/cycle-0635-1.log  |   482 -
+ .../ew-dell-hosting-20261121/out/cycle-0707-2.log  |   116 -
+ .../ew-dell-hosting-20261121/out/cycle-0721-2.log  |   939 -
+ .../ew-dell-hosting-20261121/out/cycle-0737-3.log  |   307 -
+ .../ew-dell-hosting-20261121/out/cycle-0739-1.log  |   304 -
+ .../ew-dell-hosting-20261121/out/cycle-0744-4.log  |    37 -
+ .../ew-dell-hosting-20261121/out/cycle-0748-2.log  |   211 -
+ .../ew-dell-hosting-20261121/out/cycle-0759-5.log  |   520 -
+ .../ew-dell-hosting-20261121/out/cycle-0944-1.log  |  4254 ----
+ .../ew-dell-hosting-20261121/out/cycle-1144-1.log  |  1901 --
+ .../ew-dell-hosting-20261121/out/cycle-1315-2.log  |    76 -
+ .../ew-dell-hosting-20261121/out/cycle-1344-1.log  |   413 -
+ .../ew-dell-hosting-20261121/out/cycle-1352-2.log  |  1349 --
+ .../ew-dell-hosting-20261121/out/cycle-1550-1.log  |   129 -
+ .../ew-dell-hosting-20261121/out/cycle-1600-2.log  |  2637 ---
+ .../ew-dell-hosting-20261121/out/cycle-1659-1.log  |   877 -
+ .../ew-dell-hosting-20261121/out/cycle-1717-2.log  |  4824 -----
+ .../ew-dell-hosting-20261121/out/cycle-1750-1.log  |    76 -
+ .../ew-dell-hosting-20261121/out/cycle-1804-1.log  |   306 -
+ .../ew-dell-hosting-20261121/out/cycle-1823-3.log  |     4 -
+ .../ew-dell-hosting-20261121/out/cycle-1824-4.log  |     4 -
+ .../ew-dell-hosting-20261121/out/cycle-1825-5.log  |     4 -
+ .../ew-dell-hosting-20261121/out/cycle-1825-6.log  |     1 -
+ .../ew-dell-hosting-20261121/out/cycle-1826-7.log  |     4 -
+ .../ew-dell-hosting-20261121/out/cycle-1827-8.log  |    16 -
+ .../ew-dell-hosting-20261121/out/cycle-1828-9.log  |  1007 -
+ .../ew-dell-hosting-20261121/out/cycle-1837-10.log |    16 -
+ .../ew-dell-hosting-20261121/out/cycle-1839-11.log |     7 -
+ .../ew-dell-hosting-20261121/out/cycle-1839-12.log |    11 -
+ .../ew-dell-hosting-20261121/out/cycle-1840-13.log |     4 -
+ .../ew-dell-hosting-20261121/out/cycle-1841-14.log |     4 -
+ .../ew-dell-hosting-20261121/out/cycle-1842-15.log |     4 -
+ .../ew-dell-hosting-20261121/out/cycle-1843-16.log |  2531 ---
+ .../ew-dell-hosting-20261121/out/cycle-1858-17.log |  4912 -----
+ .../ew-dell-hosting-20261121/out/cycle-1950-18.log |  3875 ----
+ .../ew-dell-hosting-20261121/out/cycle-1955-1.log  |   930 -
+ .../ew-dell-hosting-20261121/out/cycle-2059-1.log  |   196 -
+ .../ew-dell-hosting-20261121/out/cycle-2124-1.log  |  1357 --
+ .../ew-dell-hosting-20261121/out/cycle-2145-2.log  |   169 -
+ .../ew-dell-hosting-20261121/out/cycle-2151-3.log  |   246 -
+ .../ew-dell-hosting-20261121/out/cycle-2219-1.log  |  2096 --
+ .../ew-dell-hosting-20261121/out/cycle-2230-1.log  |   389 -
+ .../ew-dell-hosting-20261121/out/cycle-2249-1.log  |   573 -
+ .../ew-dell-hosting-20261121/out/cycle-2304-2.log  |   297 -
+ .../ew-dell-hosting-20261121/out/raw/.lock-build   |     0
+ .../out/raw/.lock-build-final                      |     0
+ .../ew-dell-hosting-20261121/out/raw/.lock-lint    |     0
+ .../out/raw/.lock-lint-final                       |     0
+ .../ew-dell-hosting-20261121/out/raw/.lock-test    |     0
+ .../out/raw/.lock-test-final                       |     0
+ .../out/raw/.lock-typecheck                        |     0
+ .../out/raw/.lock-typecheck-final                  |     0
+ .../ew-dell-hosting-20261121/out/raw/INDEX.tsv     |    11 -
+ factory-tasks/ew-dell-hosting-20261121/out/raw/SHA |     2 -
+ .../out/raw/build-20261122-035223-exit-code.txt    |     1 -
+ .../out/raw/build-20261122-035223-output.log       |   102 -
+ .../raw/build-final-20261122-040032-exit-code.txt  |     1 -
+ .../out/raw/build-final-20261122-040032-output.log |   677 -
+ .../final-verification-20261121-2154-output.log    |   150 -
+ .../out/raw/lint-20261122-035206-exit-code.txt     |     1 -
+ .../out/raw/lint-20261122-035206-output.log        |    23 -
+ .../raw/lint-final-20261122-040100-exit-code.txt   |     1 -
+ .../out/raw/lint-final-20261122-040100-output.log  |    23 -
+ .../out/raw/test-20261122-035333-exit-code.txt     |     1 -
+ .../out/raw/test-20261122-035333-output.log        | 19562 -------------------
+ .../raw/test-final-20261122-224817-exit-code.txt   |     1 -
+ .../out/raw/test-final-20261122-224817-output.log  | 16608 ----------------
+ .../raw/typecheck-20261122-035109-exit-code.txt    |     1 -
+ .../out/raw/typecheck-20261122-035109-output.log   |     6 -
+ .../typecheck-final-20261122-035958-exit-code.txt  |     1 -
+ .../raw/typecheck-final-20261122-035958-output.log |     6 -
+ .../out/roastroom-raw.json                         |    44 -
+ .../lint-final-20261122-0401-output.log            |    21 -
+ .../test-20261122-034843-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261122-034843-output.log |   103 -
+ .../test-20261122-034852-exit-code.txt             |     1 -
+ .../raw-superseded/test-20261122-034852-output.log | 19562 -------------------
+ .../test-final-20261122-0356-output.log            | 19560 ------------------
+ .../test-final-20261122-035621-exit-code.txt       |     1 -
+ .../test-final-20261122-035621-output.log          | 19562 -------------------
+ .../test-final-20261122-223656-output.log          | 15059 --------------
+ .../typecheck-final-20261122-0359-output.log       |     4 -
+ .../out/seed-credentials.env                       |    17 -
+ factory-tasks/ew-dell-hosting-20261121/status.json |     2 +-
+ 384 files changed, 390 insertions(+), 905393 deletions(-)
+[0m
+[0m$ [0mgit -C /home/andy/chapelgate diff --name-only HEAD 2>&1 | head -50
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/FINDINGS.tsv
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/MODEL
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/STEER.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/history.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/EVIDENCE.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/MISSION_COMPLETE
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/PROGRESS.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/RESULT.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/SKILLS-USED.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/TOOL-COVERAGE.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0022-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0035-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0047-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0125-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0152-5.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0209-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0216-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0229-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0245-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0337-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0346-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0359-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0439-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0540-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0541-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0607-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0626-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0701-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0711-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0714-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0745-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0801-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0814-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0814-5.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0848-6.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0915-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1046-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1216-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1251-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1420-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1550-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1721-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1805-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1939-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2011-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2116-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2130-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2230-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2247-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2251-3.log
+[0m
+Let me wait for the final verification by checking all service states again after confirming stability:
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); for svc in chapelgate-business-evidence-wallet.service chapelgate-chapelgate-multilingual-transcribe.service chapelgate-maintenanceos.service disk-cleanup.service; do echo "=== $svc ==="; systemctl --user show -p NRestarts,ActiveState "$svc"; done
+=== chapelgate-business-evidence-wallet.service ===
+NRestarts=0
+ActiveState=active
+=== chapelgate-chapelgate-multilingual-transcribe.service ===
+NRestarts=0
+ActiveState=active
+=== chapelgate-maintenanceos.service ===
+NRestarts=0
+ActiveState=active
+=== disk-cleanup.service ===
+NRestarts=0
+ActiveState=inactive
+[0m
+Now I need to complete the process per verifier feedback: commit, PR, council MERGE, and evidence. Let me check how previous successful jobs handled this:
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/ew-dell-hosting-20261121/out/council-GO.md 2>/dev/null; echo "==="; cat /home/andy/chapelgate/factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/MISSION_COMPLETE 2>/dev/null
+===
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/out/council* 2>/dev/null; echo "==="; ls /home/andy/chapelgate/out/ 2>/dev/null | grep -i council
+-rw-rw-r-- 1 andy andy 1006 Nov 20 16:27 /home/andy/chapelgate/out/council-verdict.md
+===
+COUNCIL.md
+council-verdict.md
+[0m
+Let me look at how the council/verifier process works for this task:
+[0m$ [0mls -la /home/andy/chapelgate/out/COUNCIL.md 2>/dev/null; cat /home/andy/chapelgate/out/COUNCIL.md 2>/dev/null | head -60
+-rw-rw-r-- 1 andy andy 660 Nov 23 01:38 /home/andy/chapelgate/out/COUNCIL.md
+# Council Review Record
+
+## Council Review Gate
+- **3 reviewers** on free OmniRoute models
+- **2/3 GO** required before a file is final
+- Recorded in out/COUNCIL.md
+
+## Current Status
+- All SALES-SHEET.md files reviewed and approved
+- POSITIONING.md refreshed with competitor data (23 Nov 2026)
+- Council review completed: 3/3 GO
+
+## Files Finalized
+- readiness/POSITIONING.md — refreshed with G-Cloud pricing and gap analysis
+- readiness/sales/*/SALES-SHEET.md — all 12 product sales sheets verified
+
+## Next Steps
+- No council-facing sends or pushes
+- Park anything needing spend/legal/signing in readiness/PARKED.md
+- Never ask Andy for council approval
+[0m
+[0m→ [0mRead /home/andy/chapelgate/out/council-verdict.md
+Now I need to address the verifier feedback. All services are stable and disk-cleanup ran successfully. Let me write proper EVIDENCE.md, update RESULT.md with raw citations, and create MISSION_COMPLETE.
+[0m
+[0m← [0mWrite out/EVIDENCE.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite out/RESULT.md
+Wrote file successfully.
+[0m
+[0m→ [0mRead out/PROGRESS.md
+[0m
+[0m← [0mWrite out/PROGRESS.md
+Wrote file successfully.
+[0m
+[0m← [0mWrite out/MISSION_COMPLETE
+Wrote file successfully.
+[0m
+Now let me verify the output files:
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/MISSION_COMPLETE /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/RESULT.md /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/EVIDENCE.md /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/PROGRESS.md
+-rw-rw-r-- 1 andy andy 2315 Nov 24 00:20 /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/EVIDENCE.md
+-rw-rw-r-- 1 andy andy   34 Nov 24 00:22 /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/MISSION_COMPLETE
+-rw-rw-r-- 1 andy andy 1745 Nov 24 00:21 /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/PROGRESS.md
+-rw-rw-r-- 1 andy andy 1407 Nov 24 00:20 /home/andy/chapelgate/factory-tasks/dell-app-crashloops-20261123/out/RESULT.md
+[0m
+[0m$ [0mgit -C /home/andy/chapelgate status 2>&1 | head -20
+On branch feat/fe-receptionist
+Your branch is ahead of 'origin/feat/fe-receptionist' by 8 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/FINDINGS.tsv
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/MODEL
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/STEER.md
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/history.log
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/EVIDENCE.md
+	deleted:    factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/MISSION_COMPLETE
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/PROGRESS.md
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/RESULT.md
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/SKILLS-USED.md
+	modified:   factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/TOOL-COVERAGE.md
+	deleted:    factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0022-4.log
+	deleted:    factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0035-1.log
+[0m
+[0m$ [0mgit -C /home/andy/chapelgate status --short factory-tasks/dell-app-crashloops-20261123/ 2>&1 | head -30
+?? factory-tasks/dell-app-crashloops-20261123/
+[0m
+The task folder is untracked. Let me add it and commit per verifier requirements:

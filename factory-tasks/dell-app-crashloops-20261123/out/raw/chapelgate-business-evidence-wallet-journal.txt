@@ -1,0 +1,200 @@
+Nov 23 18:06:17 andy-Precision-5820-Tower bash[3599089]: id: ‘ewpg’: no such user
+Nov 23 18:06:17 andy-Precision-5820-Tower bash[3599153]: [migrate] up to date.
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: (node:3601183) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: ========================================================================================================================
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: ========================================================================================================================
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:                 if (globPaths.length === 0) throw new Error(`No configuration file found at ${configPath}. Run "${promptfooCommand("init")}" to create one or pass --config path/to/promptfooconfig.yaml.`);
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:                                                   ^
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: Error: No configuration file found at /home/andy/chapelgate/repos/business-evidence-wallet/tests/promptfoo/promptfooconfig.yaml. Run "promptfoo init" to create one or pass --config path/to/promptfooconfig.yaml.
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at combineConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395:37)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at resolveConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2570:22)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at runEvaluation (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:4673:80)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at async doEval (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5111:17)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at async Command.<anonymous> (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5202:3)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at async Command.parseAsync (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/commander/lib/command.js:1113:5)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at async main (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23091:2)
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]:     at async file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23101:3
+Nov 23 18:06:26 andy-Precision-5820-Tower bash[3603149]: Node.js v22.23.4
+Nov 23 18:06:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:06:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:06:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 6.377s CPU time.
+Nov 23 18:06:46 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1412.
+Nov 23 18:06:46 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:06:46 andy-Precision-5820-Tower bash[3606409]: id: ‘ewpg’: no such user
+Nov 23 18:06:46 andy-Precision-5820-Tower bash[3606409]: id: ‘ewpg’: no such user
+Nov 23 18:06:46 andy-Precision-5820-Tower bash[3606409]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:06:47 andy-Precision-5820-Tower bash[3606505]: id: ‘ewpg’: no such user
+Nov 23 18:06:47 andy-Precision-5820-Tower bash[3606505]: id: ‘ewpg’: no such user
+Nov 23 18:06:47 andy-Precision-5820-Tower bash[3606566]: id: ‘ewpg’: no such user
+Nov 23 18:06:47 andy-Precision-5820-Tower bash[3606566]: id: ‘ewpg’: no such user
+Nov 23 18:06:47 andy-Precision-5820-Tower bash[3606589]: [migrate] up to date.
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: (node:3607003) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: ========================================================================================================================
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: ========================================================================================================================
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:                 if (globPaths.length === 0) throw new Error(`No configuration file found at ${configPath}. Run "${promptfooCommand("init")}" to create one or pass --config path/to/promptfooconfig.yaml.`);
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:                                                   ^
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: Error: No configuration file found at /home/andy/chapelgate/repos/business-evidence-wallet/tests/promptfoo/promptfooconfig.yaml. Run "promptfoo init" to create one or pass --config path/to/promptfooconfig.yaml.
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at combineConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395:37)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at resolveConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2570:22)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at runEvaluation (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:4673:80)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at async doEval (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5111:17)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at async Command.<anonymous> (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5202:3)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at async Command.parseAsync (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/commander/lib/command.js:1113:5)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at async main (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23091:2)
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]:     at async file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23101:3
+Nov 23 18:06:52 andy-Precision-5820-Tower bash[3607237]: Node.js v22.23.4
+Nov 23 18:06:52 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:06:52 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:06:52 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 5.783s CPU time.
+Nov 23 18:07:13 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1413.
+Nov 23 18:07:13 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3608993]: id: ‘ewpg’: no such user
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3608993]: id: ‘ewpg’: no such user
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3608993]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3609044]: id: ‘ewpg’: no such user
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3609044]: id: ‘ewpg’: no such user
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3609053]: id: ‘ewpg’: no such user
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3609053]: id: ‘ewpg’: no such user
+Nov 23 18:07:13 andy-Precision-5820-Tower bash[3609064]: [migrate] up to date.
+Nov 23 18:07:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:07:17 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:07:17 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 4.589s CPU time.
+Nov 23 18:07:37 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1414.
+Nov 23 18:07:37 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611605]: id: ‘ewpg’: no such user
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611605]: id: ‘ewpg’: no such user
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611605]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611699]: id: ‘ewpg’: no such user
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611699]: id: ‘ewpg’: no such user
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611731]: id: ‘ewpg’: no such user
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611731]: id: ‘ewpg’: no such user
+Nov 23 18:07:37 andy-Precision-5820-Tower bash[3611744]: [migrate] up to date.
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: (node:3611930) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: ========================================================================================================================
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: ========================================================================================================================
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:                 if (globPaths.length === 0) throw new Error(`No configuration file found at ${configPath}. Run "${promptfooCommand("init")}" to create one or pass --config path/to/promptfooconfig.yaml.`);
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:                                                   ^
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: Error: No configuration file found at /home/andy/chapelgate/repos/business-evidence-wallet/tests/promptfoo/promptfooconfig.yaml. Run "promptfoo init" to create one or pass --config path/to/promptfooconfig.yaml.
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at combineConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395:37)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at resolveConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2570:22)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at runEvaluation (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:4673:80)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at async doEval (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5111:17)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at async Command.<anonymous> (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5202:3)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at async Command.parseAsync (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/commander/lib/command.js:1113:5)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at async main (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23091:2)
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]:     at async file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23101:3
+Nov 23 18:07:41 andy-Precision-5820-Tower bash[3612364]: Node.js v22.23.4
+Nov 23 18:07:41 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:07:41 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:07:41 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 5.125s CPU time, 342.8M memory peak, 0B memory swap peak.
+Nov 23 18:08:01 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1415.
+Nov 23 18:08:01 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:08:01 andy-Precision-5820-Tower bash[3615616]: id: ‘ewpg’: no such user
+Nov 23 18:08:01 andy-Precision-5820-Tower bash[3615616]: id: ‘ewpg’: no such user
+Nov 23 18:08:01 andy-Precision-5820-Tower bash[3615616]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:08:01 andy-Precision-5820-Tower bash[3615819]: id: ‘ewpg’: no such user
+Nov 23 18:08:01 andy-Precision-5820-Tower bash[3615819]: id: ‘ewpg’: no such user
+Nov 23 18:08:02 andy-Precision-5820-Tower bash[3615903]: id: ‘ewpg’: no such user
+Nov 23 18:08:02 andy-Precision-5820-Tower bash[3615903]: id: ‘ewpg’: no such user
+Nov 23 18:08:02 andy-Precision-5820-Tower bash[3616007]: [migrate] up to date.
+Nov 23 18:08:06 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:08:06 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:08:06 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 5.425s CPU time.
+Nov 23 18:08:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1416.
+Nov 23 18:08:26 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:08:26 andy-Precision-5820-Tower bash[3623181]: id: ‘ewpg’: no such user
+Nov 23 18:08:26 andy-Precision-5820-Tower bash[3623181]: id: ‘ewpg’: no such user
+Nov 23 18:08:26 andy-Precision-5820-Tower bash[3623181]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:08:26 andy-Precision-5820-Tower bash[3623209]: id: ‘ewpg’: no such user
+Nov 23 18:08:26 andy-Precision-5820-Tower bash[3623209]: id: ‘ewpg’: no such user
+Nov 23 18:08:26 andy-Precision-5820-Tower bash[3623218]: id: ‘ewpg’: no such user
+Nov 23 18:08:26 andy-Precision-5820-Tower bash[3623218]: id: ‘ewpg’: no such user
+Nov 23 18:08:27 andy-Precision-5820-Tower bash[3623227]: [migrate] up to date.
+Nov 23 18:08:31 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:08:31 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:08:31 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 6.153s CPU time.
+Nov 23 18:08:51 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1417.
+Nov 23 18:08:51 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:08:51 andy-Precision-5820-Tower bash[3625170]: id: ‘ewpg’: no such user
+Nov 23 18:08:51 andy-Precision-5820-Tower bash[3625170]: id: ‘ewpg’: no such user
+Nov 23 18:08:52 andy-Precision-5820-Tower bash[3625170]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:08:52 andy-Precision-5820-Tower bash[3625223]: id: ‘ewpg’: no such user
+Nov 23 18:08:52 andy-Precision-5820-Tower bash[3625223]: id: ‘ewpg’: no such user
+Nov 23 18:08:52 andy-Precision-5820-Tower bash[3625242]: id: ‘ewpg’: no such user
+Nov 23 18:08:52 andy-Precision-5820-Tower bash[3625242]: id: ‘ewpg’: no such user
+Nov 23 18:08:52 andy-Precision-5820-Tower bash[3625283]: [migrate] up to date.
+Nov 23 18:08:56 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:08:56 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:08:56 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 4.975s CPU time.
+Nov 23 18:09:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1418.
+Nov 23 18:09:16 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627726]: id: ‘ewpg’: no such user
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627726]: id: ‘ewpg’: no such user
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627726]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627778]: id: ‘ewpg’: no such user
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627778]: id: ‘ewpg’: no such user
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627795]: id: ‘ewpg’: no such user
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627795]: id: ‘ewpg’: no such user
+Nov 23 18:09:16 andy-Precision-5820-Tower bash[3627804]: [migrate] up to date.
+Nov 23 18:09:20 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:09:20 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:09:20 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 5.325s CPU time.
+Nov 23 18:09:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1419.
+Nov 23 18:09:40 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:09:40 andy-Precision-5820-Tower bash[3629395]: id: ‘ewpg’: no such user
+Nov 23 18:09:40 andy-Precision-5820-Tower bash[3629395]: id: ‘ewpg’: no such user
+Nov 23 18:09:41 andy-Precision-5820-Tower bash[3629395]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:09:41 andy-Precision-5820-Tower bash[3629434]: id: ‘ewpg’: no such user
+Nov 23 18:09:41 andy-Precision-5820-Tower bash[3629434]: id: ‘ewpg’: no such user
+Nov 23 18:09:41 andy-Precision-5820-Tower bash[3629444]: id: ‘ewpg’: no such user
+Nov 23 18:09:41 andy-Precision-5820-Tower bash[3629444]: id: ‘ewpg’: no such user
+Nov 23 18:09:41 andy-Precision-5820-Tower bash[3629460]: [migrate] up to date.
+Nov 23 18:09:44 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:09:44 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:09:44 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 4.551s CPU time.
+Nov 23 18:10:04 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Scheduled restart job, restart counter is at 1420.
+Nov 23 18:10:04 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:10:05 andy-Precision-5820-Tower bash[3635494]: id: ‘ewpg’: no such user
+Nov 23 18:10:05 andy-Precision-5820-Tower bash[3635494]: id: ‘ewpg’: no such user
+Nov 23 18:10:05 andy-Precision-5820-Tower bash[3635494]: {"ok":true,"engine":"postgresql","versionFile":"18","port":55432,"dataDir":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/postgres","dbName":"evidence_wallet","dbUser":"ew","passwordFile":"/home/andy/chapelgate/jobs-work-dell/tasks/dell-fix-failing-builds-20261111/dell-fix-business-evidence-wallet/repo/data/pg-password","initialized":false,"started":true,"staleLock":{"cleared":false,"reason":"no-pid-file"},"databaseCreated":false,"urlHost":"127.0.0.1"}
+Nov 23 18:10:05 andy-Precision-5820-Tower bash[3635874]: id: ‘ewpg’: no such user
+Nov 23 18:10:05 andy-Precision-5820-Tower bash[3635874]: id: ‘ewpg’: no such user
+Nov 23 18:10:05 andy-Precision-5820-Tower bash[3635958]: id: ‘ewpg’: no such user
+Nov 23 18:10:05 andy-Precision-5820-Tower bash[3635958]: id: ‘ewpg’: no such user
+Nov 23 18:10:06 andy-Precision-5820-Tower bash[3636055]: [migrate] up to date.
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: (node:3638276) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: ========================================================================================================================
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: ========================================================================================================================
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:                 if (globPaths.length === 0) throw new Error(`No configuration file found at ${configPath}. Run "${promptfooCommand("init")}" to create one or pass --config path/to/promptfooconfig.yaml.`);
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:                                                   ^
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: Error: No configuration file found at /home/andy/chapelgate/repos/business-evidence-wallet/tests/promptfoo/promptfooconfig.yaml. Run "promptfoo init" to create one or pass --config path/to/promptfooconfig.yaml.
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at combineConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2395:37)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at resolveConfigs (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:2570:22)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at runEvaluation (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:4673:80)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at async doEval (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5111:17)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at async Command.<anonymous> (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:5202:3)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at async Command.parseAsync (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/commander/lib/command.js:1113:5)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at async main (file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23091:2)
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]:     at async file:///home/andy/.cache/npm-local/_npx/55d1233f1980185b/node_modules/promptfoo/dist/src/main.js:23101:3
+Nov 23 18:10:15 andy-Precision-5820-Tower bash[3640985]: Node.js v22.23.4
+Nov 23 18:10:15 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 18:10:15 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Failed with result 'exit-code'.
+Nov 23 18:10:15 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 6.147s CPU time.
+Nov 23 18:10:28 andy-Precision-5820-Tower systemd[1511]: Stopped chapelgate-business-evidence-wallet.service - Chapelgate Business Evidence Wallet (Dell copy, local PostgreSQL, 127.0.0.1:8080).
+Nov 23 18:10:28 andy-Precision-5820-Tower systemd[1511]: chapelgate-business-evidence-wallet.service: Consumed 6.147s CPU time.

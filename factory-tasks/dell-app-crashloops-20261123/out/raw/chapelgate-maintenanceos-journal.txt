@@ -1,0 +1,200 @@
+Nov 23 19:02:08 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:02:12 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:02:12 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:02:12 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 6.184s CPU time.
+Nov 23 19:02:32 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 102.
+Nov 23 19:02:32 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:02:37 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:02:37 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:02:37 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 6.151s CPU time.
+Nov 23 19:02:57 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 103.
+Nov 23 19:02:57 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: (node:191665) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: ========================================================================================================================
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: ========================================================================================================================
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: Starting evaluation eval-tfY-2026-11-23T19:03:01
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: │ input                                                      │ [maintenanceos-synthetic] {input}                          │
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic maintenanceos response                 │
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: │ Intent: {intent}                                           │ [FAIL] OK synthetic maintenanceos response                 │
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: ✓ Eval complete (ID: eval-tfY-2026-11-23T19:03:01)
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: » View results: promptfoo view
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: » Share with your team: https://promptfoo.app
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: Results:
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]:   ✓ 1 passed (50.00%)
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]:   ✗ 1 failed (50.00%)
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]:   0 errors (0%)
+Nov 23 19:03:01 andy-Precision-5820-Tower bash[191857]: Duration: 0s (concurrency: 4)
+Nov 23 19:03:01 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:03:01 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:03:01 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 6.171s CPU time.
+Nov 23 19:03:22 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 104.
+Nov 23 19:03:22 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:03:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:03:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:03:26 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 5.626s CPU time.
+Nov 23 19:03:46 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 105.
+Nov 23 19:03:46 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: (node:195272) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: ========================================================================================================================
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: ========================================================================================================================
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: Starting evaluation eval-1N9-2026-11-23T19:03:51
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: │ input                                                      │ [maintenanceos-synthetic] {input}                          │
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic maintenanceos response                 │
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: │ Intent: {intent}                                           │ [FAIL] OK synthetic maintenanceos response                 │
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: ✓ Eval complete (ID: eval-1N9-2026-11-23T19:03:51)
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: » View results: promptfoo view
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: » Share with your team: https://promptfoo.app
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: Results:
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]:   ✓ 1 passed (50.00%)
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]:   ✗ 1 failed (50.00%)
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]:   0 errors (0%)
+Nov 23 19:03:51 andy-Precision-5820-Tower bash[195621]: Duration: 0s (concurrency: 4)
+Nov 23 19:03:51 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:03:51 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:03:51 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 6.004s CPU time.
+Nov 23 19:04:11 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 106.
+Nov 23 19:04:11 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: (node:202796) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: ========================================================================================================================
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: ========================================================================================================================
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: Starting evaluation eval-FiA-2026-11-23T19:04:15
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: │ input                                                      │ [maintenanceos-synthetic] {input}                          │
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic maintenanceos response                 │
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: │ Intent: {intent}                                           │ [FAIL] OK synthetic maintenanceos response                 │
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: ✓ Eval complete (ID: eval-FiA-2026-11-23T19:04:15)
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: » View results: promptfoo view
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: » Share with your team: https://promptfoo.app
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: Results:
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]:   ✓ 1 passed (50.00%)
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]:   ✗ 1 failed (50.00%)
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]:   0 errors (0%)
+Nov 23 19:04:16 andy-Precision-5820-Tower bash[202919]: Duration: 0s (concurrency: 4)
+Nov 23 19:04:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:04:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:04:16 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 5.538s CPU time.
+Nov 23 19:04:36 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 107.
+Nov 23 19:04:36 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:04:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:04:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:04:40 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 5.839s CPU time.
+Nov 23 19:05:01 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 108.
+Nov 23 19:05:01 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:05:05 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:05:05 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:05:05 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 5.413s CPU time.
+Nov 23 19:05:25 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 109.
+Nov 23 19:05:25 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: (node:208704) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: ========================================================================================================================
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: ========================================================================================================================
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: Starting evaluation eval-p8J-2026-11-23T19:05:30
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: │ input                                                      │ [maintenanceos-synthetic] {input}                          │
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic maintenanceos response                 │
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: │ Intent: {intent}                                           │ [FAIL] OK synthetic maintenanceos response                 │
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: ✓ Eval complete (ID: eval-p8J-2026-11-23T19:05:30)
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: » View results: promptfoo view
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: » Share with your team: https://promptfoo.app
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: Results:
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]:   ✓ 1 passed (50.00%)
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]:   ✗ 1 failed (50.00%)
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]:   0 errors (0%)
+Nov 23 19:05:30 andy-Precision-5820-Tower bash[208924]: Duration: 0s (concurrency: 4)
+Nov 23 19:05:30 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:05:30 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:05:30 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 5.973s CPU time.
+Nov 23 19:05:50 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 110.
+Nov 23 19:05:50 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: (node:210468) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: ========================================================================================================================
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: ========================================================================================================================
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: Starting evaluation eval-AFm-2026-11-23T19:05:54
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: │ input                                                      │ [maintenanceos-synthetic] {input}                          │
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic maintenanceos response                 │
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: │ Intent: {intent}                                           │ [FAIL] OK synthetic maintenanceos response                 │
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: ✓ Eval complete (ID: eval-AFm-2026-11-23T19:05:54)
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: » View results: promptfoo view
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: » Share with your team: https://promptfoo.app
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: Results:
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]:   ✓ 1 passed (50.00%)
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]:   ✗ 1 failed (50.00%)
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]:   0 errors (0%)
+Nov 23 19:05:54 andy-Precision-5820-Tower bash[210646]: Duration: 0s (concurrency: 4)
+Nov 23 19:05:54 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:05:54 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:05:54 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 5.260s CPU time.
+Nov 23 19:06:14 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 111.
+Nov 23 19:06:14 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: (node:220465) ExperimentalWarning: DecompressInterceptor is experimental and subject to change
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: ========================================================================================================================
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: ⚠️ The current version of promptfoo 0.123.1 is lower than the latest available version 0.126.0.
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: Please run npx promptfoo@latest or npm install -g promptfoo@latest to update.
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: ========================================================================================================================
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: Starting evaluation eval-UG0-2026-11-23T19:06:21
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: Running 2 test cases (up to 4 at a time)...
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: ┌────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────┐
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: │ input                                                      │ [maintenanceos-synthetic] {input}                          │
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: │ Check this synthetic script for real PII: {train_sample}   │ [PASS] OK synthetic maintenanceos response                 │
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: ├────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────┤
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: │ Intent: {intent}                                           │ [FAIL] OK synthetic maintenanceos response                 │
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: └────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────┘
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: ✓ Eval complete (ID: eval-UG0-2026-11-23T19:06:21)
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: » View results: promptfoo view
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: » Share with your team: https://promptfoo.app
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: » Feedback: https://promptfoo.dev/feedback
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: Results:
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]:   ✓ 1 passed (50.00%)
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]:   ✗ 1 failed (50.00%)
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]:   0 errors (0%)
+Nov 23 19:06:22 andy-Precision-5820-Tower bash[221887]: Duration: 0s (concurrency: 4)
+Nov 23 19:06:22 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Main process exited, code=exited, status=1/FAILURE
+Nov 23 19:06:22 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Failed with result 'exit-code'.
+Nov 23 19:06:22 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Consumed 7.106s CPU time.
+Nov 23 19:06:42 andy-Precision-5820-Tower systemd[1511]: chapelgate-maintenanceos.service: Scheduled restart job, restart counter is at 112.
+Nov 23 19:06:42 andy-Precision-5820-Tower systemd[1511]: Started chapelgate-maintenanceos.service - Chapelgate MaintenanceOS (Dell copy, local fake config, 127.0.0.1:3401).

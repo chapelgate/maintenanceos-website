@@ -1,0 +1,279 @@
+[0m
+> build · estate-coding
+[0m
+[0m$ [0msystemctl --user show disk-cleanup.service -p ExecStartPre,ExecStart 2>/dev/null; echo "---"; systemctl --user status disk-cleanup.service 2>/dev/null
+ExecStartPre={ path=/home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh ; argv[]=/home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh ; ignore_errors=no ; start_time=[Mon 2026-11-23 18:10:28 GMT] ; stop_time=[Mon 2026-11-23 18:10:35 GMT] ; pid=3642502 ; code=exited ; status=2 }
+ExecStart={ path=/home/andy/chapelgate/dell-watch/disk-cleanup.sh ; argv[]=/home/andy/chapelgate/dell-watch/disk-cleanup.sh DRY=0 ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+---
+× disk-cleanup.service - Dell disk clean-up (regenerable caches only)
+     Loaded: loaded (/home/andy/.config/systemd/user/disk-cleanup.service; disabled; preset: enabled)
+     Active: failed (Result: exit-code) since Mon 2026-11-23 18:10:35 GMT; 18min ago
+TriggeredBy: ● disk-cleanup.timer
+    Process: 3642502 ExecStartPre=/home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh (code=exited, status=2)
+        CPU: 1.394s
+
+Nov 23 18:10:28 andy-Precision-5820-Tower systemd[1511]: Starting disk-cleanup.service - Dell disk clean-up (regenerable caches only)...
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Control process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Failed with result 'exit-code'.
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: Failed to start disk-cleanup.service - Dell disk clean-up (regenerable caches only).
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Consumed 1.394s CPU time.
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh 2>/dev/null; echo "==="; cat /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh 2>/dev/null
+-rwxrwxr-x 1 andy andy 6006 Nov 19 10:43 /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh
+===
+#!/usr/bin/env bash
+# Dell state backup - snapshots critical state to /mnt/d/state-backups/<timestamp>.tar.zst
+# with sha256, keeps 14 dailies + 8 weeklies. Hooks into cleanup/retention/disk jobs
+# via ExecStartPre wrapper and daily timer.
+#
+# Critical state sources (filesystem paths only, never secrets):
+#   - council verdicts: jobs-work-dell/readiness/council-gates
+#   - DONE / MISSION_COMPLETE markers: jobs-work-dell/*/out/MISSION_COMPLETE, out/DONE
+#   - status.json / state files: jobs-work-dell/*/status.json, dell-services/state/*
+#   - LOOP_STATE: jobs-work-dell/readiness-loop/LOOP_STATE.json
+#   - readiness docs: jobs-work-dell/readiness/* (excl. large repos)
+#   - dell-services configs: /home/andy/chapelgate/dell-services (excl. secrets/, node_modules, logs)
+#   - promises.tsv: dell-services/call-accountability/promises.tsv
+#   - user systemd units: /home/andy/.config/systemd/user/*.service, *.timer
+#
+set -euo pipefail
+
+BACKUP_ROOT="/mnt/d/state-backups"
+LOG_DIR="/mnt/d/logs/central/backups"
+LOG_FILE="${LOG_DIR}/backup-$(date -u +%Y-%m-%d).log"
+CHECKSUM_DIR="/mnt/d/logs/central/backups/checksums"
+
+mkdir -p "$BACKUP_ROOT" "$LOG_DIR" "$CHECKSUM_DIR"
+
+# Guard: /mnt/d must have at least 30G free
+mountpoint -q /mnt/d || { echo "$(date -u +%FT%TZ) | FAIL | dell-state-backup | /mnt/d not mounted, backup skipped" >> "$LOG_FILE"; exit 1; }
+FREE_G=$(df -BG --output=avail /mnt/d | tail -1 | tr -dc 0-9)
+if [ "$FREE_G" -lt 30 ]; then
+  echo "$(date -u +%FT%TZ) | FAIL | dell-state-backup | /mnt/d only ${FREE_G}G free (<30G), skipped" >> "$LOG_FILE"
+  exit 1
+fi
+
+exec 9>/tmp/dell-state-backup.lock; flock -n 9 || { echo "another backup running, skip" >> "$LOG_FILE"; exit 0; }
+
+TS=$(date -u +%Y%m%d-%H%M%S)
+BASE="dell-state-${TS}"
+OUT="${BACKUP_ROOT}/${BASE}.tar.zst"
+CHECKSUM="${CHECKSUM_DIR}/${BASE}.tar.zst.sha256"
+
+TMPDIR=$(mktemp -d)
+trap 'rm -rf "$TMPDIR"' EXIT
+
+echo "$(date -u +%FT%TZ) | INFO | dell-state-backup | starting backup ${BASE}" >> "$LOG_FILE"
+
+LISTFILE="${TMPDIR}/include.list"
+: > "$LISTFILE"
+
+# council verdicts
+[ -d /home/andy/chapelgate/jobs-work-dell/readiness/council-gates ] && find /home/andy/chapelgate/jobs-work-dell/readiness/council-gates -type f 2>/dev/null >> "$LISTFILE" || true
+
+# LOOP_STATE
+[ -f /home/andy/chapelgate/jobs-work-dell/readiness-loop/LOOP_STATE.json ] && echo "/home/andy/chapelgate/jobs-work-dell/readiness-loop/LOOP_STATE.json" >> "$LISTFILE" || true
+
+# promises.tsv
+[ -f /home/andy/chapelgate/dell-services/call-accountability/promises.tsv ] && echo "/home/andy/chapelgate/dell-services/call-accountability/promises.tsv" >> "$LISTFILE" || true
+
+# dell-services state dir (small files)
+[ -d /home/andy/chapelgate/dell-services/state ] && find /home/andy/chapelgate/dell-services/state -type f 2>/dev/null >> "$LISTFILE" || true
+
+# user systemd units
+find /home/andy/.config/systemd/user -maxdepth 1 \( -name '*.service' -o -name '*.timer' \) -type f 2>/dev/null >> "$LISTFILE" || true
+
+# DONE / MISSION_COMPLETE markers and status.json across jobs-work-dell (shallow)
+find /home/andy/chapelgate/jobs-work-dell -maxdepth 4 \( -name "MISSION_COMPLETE" -o -name "DONE" -o -name "status.json" -o -name "LOOP_STATE*" \) -type f 2>/dev/null >> "$LISTFILE" || true
+
+# readiness docs (top-level md/txt only, exclude large subtrees)
+find /home/andy/chapelgate/jobs-work-dell/readiness -maxdepth 2 -type f \( -name '*.md' -o -name '*.txt' -o -name '*.tsv' \) 2>/dev/null >> "$LISTFILE" || true
+
+# dell-services configs (top-level scripts/conf only, no secrets/logs/data/node_modules/repos)
+find /home/andy/chapelgate/dell-services -maxdepth 2 -type f \( -name '*.sh' -o -name '*.py' -o -name '*.conf' -o -name '*.json' -o -name '*.tsv' -o -name '*.md' \) ! -path '*/secrets/*' ! -path '*/logs/*' ! -path '*/data/*' ! -path '*/node_modules/*' ! -path '*/.git/*' 2>/dev/null >> "$LISTFILE" || true
+
+# Redacted opencode config (no secrets)
+OPENCODE_CFG="/home/andy/.config/opencode/opencode.json"
+if [ -f "$OPENCODE_CFG" ]; then
+  sed -E 's/("api[_-]?key"|"token"|"secret"|"password"|"jwt")\s*:\s*"[^"]*"/\1: "**REDACTED**"/gi' "$OPENCODE_CFG" > "$TMPDIR/opencode.json"
+  echo "$TMPDIR/opencode.json" >> "$LISTFILE"
+fi
+
+# Sort and dedupe
+sort -u "$LISTFILE" -o "$LISTFILE"
+
+ENTRY_COUNT=$(wc -l < "$LISTFILE")
+echo "$(date -u +%FT%TZ) | INFO | dell-state-backup | ${ENTRY_COUNT} files to archive" >> "$LOG_FILE"
+
+if [ "$ENTRY_COUNT" -eq 0 ]; then
+  echo "$(date -u +%FT%TZ) | FAIL | dell-state-backup | no files to back up" >> "$LOG_FILE"
+  exit 1
+fi
+
+# Atomic write: build to temp then move
+TMP_OUT="${TMPDIR}/${BASE}.tar.zst.part"
+
+tar -cf - -T "$LISTFILE" 2>/dev/null | zstd -q -T4 -10 -o "$TMP_OUT"
+
+if [ ! -s "$TMP_OUT" ]; then
+  echo "$(date -u +%FT%TZ) | FAIL | dell-state-backup | empty archive produced" >> "$LOG_FILE"
+  exit 1
+fi
+
+# Verify before atomic replace
+zstd -tq "$TMP_OUT" || { echo "$(date -u +%FT%TZ) | FAIL | dell-state-backup | zstd verify failed" >> "$LOG_FILE"; exit 1; }
+
+mv -f "$TMP_OUT" "$OUT"
+
+sha256sum "$OUT" | awk '{print $1"  "$2}' > "$CHECKSUM"
+
+SIZE=$(du -h "$OUT" | cut -f1)
+ENTRIES=$(zstd -dc "$OUT" | tar -tf - | wc -l)
+echo "$(date -u +%FT%TZ) | OK | dell-state-backup | ${BASE} ${SIZE} ${ENTRIES} entries sha256=$(awk '{print $1}' "$CHECKSUM")" >> "$LOG_FILE"
+
+# Retention: keep 14 dailies + 8 weeklies
+WEEKLY_DIR="${BACKUP_ROOT}/weeklies"
+mkdir -p "$WEEKLY_DIR"
+
+find "$BACKUP_ROOT" -maxdepth 1 -name 'dell-state-*.tar.zst' -type f -mtime +14 -delete 2>/dev/null || true
+find "$BACKUP_ROOT" -maxdepth 1 -name 'dell-state-*.tar.zst.sha256' -type f -mtime +14 -delete 2>/dev/null || true
+
+# Promote Sunday backups to weeklies (keep 8)
+if [ "$(date -u +%w)" = "0" ] && [ -f "$OUT" ]; then
+  cp -f "$OUT" "$WEEKLY_DIR/${BASE}.tar.zst"
+  cp -f "$CHECKSUM" "$WEEKLY_DIR/${BASE}.tar.zst.sha256"
+fi
+ls -1t "$WEEKLY_DIR"/dell-state-*.tar.zst 2>/dev/null | tail -n +9 | while read -r w; do rm -f "$w" "${w%.tar.zst}.sha256"; done
+
+echo "$(date -u +%FT%TZ) | OK | dell-state-backup | retention applied" >> "$LOG_FILE"
+[0m
+[0m$ [0mdf -h /
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p5  671G  566G   71G  89% /
+[0m
+[0m→ [0mRead /home/andy/.config/systemd/user/disk-cleanup.service
+[0m
+[0m$ [0mmountpoint -q /mnt/d && echo "/mnt/d is mounted" || echo "/mnt/d is NOT mounted"; df -h /mnt/d 2>/dev/null || echo "no /mnt/d df"
+/mnt/d is mounted
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       1.9T  1.8T   81G  96% /mnt/d
+[0m
+Let me run the backup script to diagnose the exit code 2 issue:
+[0m$ [0mbash -x /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh 2>&1 | head -50
++ set -euo pipefail
++ BACKUP_ROOT=/mnt/d/state-backups
++ LOG_DIR=/mnt/d/logs/central/backups
+++ date -u +%Y-%m-%d
++ LOG_FILE=/mnt/d/logs/central/backups/backup-2026-11-23.log
++ CHECKSUM_DIR=/mnt/d/logs/central/backups/checksums
++ mkdir -p /mnt/d/state-backups /mnt/d/logs/central/backups /mnt/d/logs/central/backups/checksums
++ mountpoint -q /mnt/d
+++ df -BG --output=avail /mnt/d
+++ tail -1
+++ tr -dc 0-9
++ FREE_G=80
++ '[' 80 -lt 30 ']'
++ exec
++ flock -n 9
+++ date -u +%Y%m%d-%H%M%S
++ TS=20261123-183433
++ BASE=dell-state-20261123-183433
++ OUT=/mnt/d/state-backups/dell-state-20261123-183433.tar.zst
++ CHECKSUM=/mnt/d/logs/central/backups/checksums/dell-state-20261123-183433.tar.zst.sha256
+++ mktemp -d
++ TMPDIR=/tmp/tmp.H18tfDqvgt
++ trap 'rm -rf "$TMPDIR"' EXIT
+++ date -u +%FT%TZ
++ echo '2026-11-23T18:34:33Z | INFO | dell-state-backup | starting backup dell-state-20261123-183433'
++ LISTFILE=/tmp/tmp.H18tfDqvgt/include.list
++ :
++ '[' -d /home/andy/chapelgate/jobs-work-dell/readiness/council-gates ']'
++ find /home/andy/chapelgate/jobs-work-dell/readiness/council-gates -type f
++ '[' -f /home/andy/chapelgate/jobs-work-dell/readiness-loop/LOOP_STATE.json ']'
++ echo /home/andy/chapelgate/jobs-work-dell/readiness-loop/LOOP_STATE.json
++ '[' -f /home/andy/chapelgate/dell-services/call-accountability/promises.tsv ']'
++ echo /home/andy/chapelgate/dell-services/call-accountability/promises.tsv
++ '[' -d /home/andy/chapelgate/dell-services/state ']'
++ find /home/andy/chapelgate/dell-services/state -type f
++ find /home/andy/.config/systemd/user -maxdepth 1 '(' -name '*.service' -o -name '*.timer' ')' -type f
++ find /home/andy/chapelgate/jobs-work-dell -maxdepth 4 '(' -name MISSION_COMPLETE -o -name DONE -o -name status.json -o -name 'LOOP_STATE*' ')' -type f
++ find /home/andy/chapelgate/jobs-work-dell/readiness -maxdepth 2 -type f '(' -name '*.md' -o -name '*.txt' -o -name '*.tsv' ')'
++ find /home/andy/chapelgate/dell-services -maxdepth 2 -type f '(' -name '*.sh' -o -name '*.py' -o -name '*.conf' -o -name '*.json' -o -name '*.tsv' -o -name '*.md' ')' '!' -path '*/secrets/*' '!' -path '*/logs/*' '!' -path '*/data/*' '!' -path '*/node_modules/*' '!' -path '*/.git/*'
++ OPENCODE_CFG=/home/andy/.config/opencode/opencode.json
++ '[' -f /home/andy/.config/opencode/opencode.json ']'
++ sed -E 's/("api[_-]?key"|"token"|"secret"|"password"|"jwt")\s*:\s*"[^"]*"/\1: "**REDACTED**"/gi' /home/andy/.config/opencode/opencode.json
++ echo /tmp/tmp.H18tfDqvgt/opencode.json
++ sort -u /tmp/tmp.H18tfDqvgt/include.list -o /tmp/tmp.H18tfDqvgt/include.list
+++ wc -l
++ ENTRY_COUNT=3219
+++ date -u +%FT%TZ
++ echo '2026-11-23T18:34:33Z | INFO | dell-state-backup | 3219 files to archive'
++ '[' 3219 -eq 0 ']'
++ TMP_OUT=/tmp/tmp.H18tfDqvgt/dell-state-20261123-183433.tar.zst.part
+[0m
+[0m$ [0mbash -x /home/andy/chapelgate/factory-tasks/dell-ops-safeguards-20261119/repo/dell-services/backups/dell-state-backup.sh 2>&1 | tail -30; echo "EXIT: $?"
++ echo '2026-11-23T18:35:15Z | INFO | dell-state-backup | 3219 files to archive'
++ '[' 3219 -eq 0 ']'
++ TMP_OUT=/tmp/tmp.XfexKch8dw/dell-state-20261123-183515.tar.zst.part
++ tar -cf - -T /tmp/tmp.XfexKch8dw/include.list
++ zstd -q -T4 -10 -o /tmp/tmp.XfexKch8dw/dell-state-20261123-183515.tar.zst.part
++ '[' '!' -s /tmp/tmp.XfexKch8dw/dell-state-20261123-183515.tar.zst.part ']'
++ zstd -tq /tmp/tmp.XfexKch8dw/dell-state-20261123-183515.tar.zst.part
++ mv -f /tmp/tmp.XfexKch8dw/dell-state-20261123-183515.tar.zst.part /mnt/d/state-backups/dell-state-20261123-183515.tar.zst
++ sha256sum /mnt/d/state-backups/dell-state-20261123-183515.tar.zst
++ awk '{print $1"  "$2}'
+++ du -h /mnt/d/state-backups/dell-state-20261123-183515.tar.zst
+++ cut -f1
++ SIZE=2.5M
+++ zstd -dc /mnt/d/state-backups/dell-state-20261123-183515.tar.zst
+++ tar -tf -
+++ wc -l
++ ENTRIES=3219
+++ date -u +%FT%TZ
+++ awk '{print $1}' /mnt/d/logs/central/backups/checksums/dell-state-20261123-183515.tar.zst.sha256
++ echo '2026-11-23T18:35:16Z | OK | dell-state-backup | dell-state-20261123-183515 2.5M 3219 entries sha256=afe7b77891a6ca64a835035618c1aa6a8dcbd9a1de3f2b3c31dc9768875a0b4f'
++ WEEKLY_DIR=/mnt/d/state-backups/weeklies
++ mkdir -p /mnt/d/state-backups/weeklies
++ find /mnt/d/state-backups -maxdepth 1 -name 'dell-state-*.tar.zst' -type f -mtime +14 -delete
++ find /mnt/d/state-backups -maxdepth 1 -name 'dell-state-*.tar.zst.sha256' -type f -mtime +14 -delete
+++ date -u +%w
++ '[' 1 = 0 ']'
++ tail -n +9
++ read -r w
++ ls -1t '/mnt/d/state-backups/weeklies/dell-state-*.tar.zst'
++ rm -rf /tmp/tmp.XfexKch8dw
+EXIT: 0
+[0m
+[0m$ [0mexport XDG_RUNTIME_DIR=/run/user/$(id -u); journalctl --user -u disk-cleanup.service -n 50 --no-pager 2>&1 | head -60
+Nov 23 00:00:00 andy-Precision-5820-Tower systemd[1511]: Starting disk-cleanup.service - Dell disk clean-up (regenerable caches only)...
+Nov 23 00:00:06 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Control process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 23 00:00:06 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Failed with result 'exit-code'.
+Nov 23 00:00:06 andy-Precision-5820-Tower systemd[1511]: Failed to start disk-cleanup.service - Dell disk clean-up (regenerable caches only).
+Nov 23 00:00:06 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Consumed 1.227s CPU time.
+Nov 23 18:10:28 andy-Precision-5820-Tower systemd[1511]: Starting disk-cleanup.service - Dell disk clean-up (regenerable caches only)...
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Control process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Failed with result 'exit-code'.
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: Failed to start disk-cleanup.service - Dell disk clean-up (regenerable caches only).
+Nov 23 18:10:35 andy-Precision-5820-Tower systemd[1511]: disk-cleanup.service: Consumed 1.394s CPU time.
+[0m
+Let me check the systemd environment and try to reproduce the exit 2:
+[0m$ [0msystemctl --user show disk-cleanup.service -p Environment 2>/dev/null; echo "==="; systemctl --user show disk-cleanup.service -p EnvironmentFiles 2>/dev/null
+Environment=
+===
+[0m
+[0m$ [0mls -la /mnt/d/state-backups/ 2>/dev/null | head -5; echo "==="; ls -la /mnt/d/logs/central/backups/ 2>/dev/null | head -5
+total 114612
+drwxrwxrwx 1 andy andy      4096 Nov 23 18:35 .
+drwxrwxrwx 1 andy andy      8192 Nov 20 16:03 ..
+-rwxrwxrwx 1 andy andy 105607168 Nov 19 10:41 dell-state-20261119-103920.tar.zst
+-rwxrwxrwx 1 andy andy   1790182 Nov 19 10:45 dell-state-20261119-104530.tar.zst
+===
+total 9
+drwxrwxrwx 1 andy andy    0 Nov 23 00:00 .
+drwxrwxrwx 1 andy andy    0 Nov 19 14:55 ..
+-rwxrwxrwx 1 andy andy  423 Nov 19 10:45 backup-2026-11-19.log
+-rwxrwxrwx 1 andy andy 1485 Nov 23 18:35 backup-2026-11-23.log
+[0m
+[93m[1m! [0mpermission requested: external_directory (/mnt/d/logs/central/backups/*); auto-rejecting
+[0m✗ [0mcat /mnt/d/logs/central/backups/backup-2026-11-23.log failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.

@@ -1,0 +1,6 @@
+[0m
+> build · estate-coding
+[0m
+[93m[1m! [0mpermission requested: external_directory (/mnt/d/logs/central/backups/*); auto-rejecting
+[0m✗ [0mRead /mnt/d/logs/central/backups/backup-2026-11-23.log failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
