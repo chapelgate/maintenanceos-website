@@ -1,0 +1,15 @@
+=== chapelgate-business-evidence-wallet 20261124-074726 ===
+NRestarts=0
+ExecMainStatus=0
+ActiveState=active
+SubState=running
+=== chapelgate-chapelgate-multilingual-transcribe 20261124-074726 ===
+NRestarts=0
+ExecMainStatus=0
+ActiveState=active
+SubState=running
+=== chapelgate-maintenanceos 20261124-074726 ===
+NRestarts=0
+ExecMainStatus=0
+ActiveState=active
+SubState=running

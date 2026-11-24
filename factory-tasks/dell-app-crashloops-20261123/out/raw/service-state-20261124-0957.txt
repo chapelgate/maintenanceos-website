@@ -1,0 +1,12 @@
+chapelgate-business-evidence-wallet NRestarts=0
+chapelgate-business-evidence-wallet ExecMainStatus=0
+chapelgate-business-evidence-wallet ActiveState=active
+chapelgate-business-evidence-wallet SubState=running
+chapelgate-chapelgate-multilingual-transcribe NRestarts=0
+chapelgate-chapelgate-multilingual-transcribe ExecMainStatus=0
+chapelgate-chapelgate-multilingual-transcribe ActiveState=active
+chapelgate-chapelgate-multilingual-transcribe SubState=running
+chapelgate-maintenanceos NRestarts=0
+chapelgate-maintenanceos ExecMainStatus=0
+chapelgate-maintenanceos ActiveState=active
+chapelgate-maintenanceos SubState=running

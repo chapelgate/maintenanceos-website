@@ -1,0 +1,7 @@
+=== Disk clean-up 2026-11-24 10 GMT (dry-run=0) ===
+/dev/nvme0n1p5  671G  557G   80G  88% /
+pnpm store: 1.2G
+cargo: 983M
+docker build cache:
+task out/ cycle logs >30d (compress):
+=== done ===
