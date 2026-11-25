@@ -35,7 +35,7 @@ jobs:
             sleep 1
           done
       - name: Install Lighthouse
-        run: npm install -g lighthouse@latest
+        run: npm install -g lighthouse@13.6.0
       - name: Run Lighthouse on key pages (mobile)
         run: |
           set -euo pipefail

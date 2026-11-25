@@ -1,4 +1,4 @@
-import { sanitizeHtml } from "./sanitize";
+import { sanitizeHtml } from "./sanitize.ts";
 
 /**
  * Convert a simple markdown subset to sanitised HTML.

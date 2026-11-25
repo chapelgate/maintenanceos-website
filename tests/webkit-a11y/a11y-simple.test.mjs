@@ -21,7 +21,7 @@ test.describe("WebKit accessibility checks", () => {
     for (const viewport of viewports) {
       test(`axe a11y checks on ${pagePath} at ${viewport.name}`, async ({ page }) => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
-        await page.goto(`https://localhost:3515${pagePath}`);
+        await page.goto(`http://localhost:3000${pagePath}`);
 
         const accessibilityScanResults = await new AxeBuilder({ page })
           .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])

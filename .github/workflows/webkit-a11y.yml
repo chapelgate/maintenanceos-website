@@ -30,27 +30,34 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright WebKit
-        run: npx playwright install webkit
-
       - name: Build static export
         run: npm run build
 
       - name: Start local server
-        run: npx serve out -l 3000 &
+        run: nohup npx serve out -l 3000 > "$RUNNER_TEMP/webkit-server.log" 2>&1 &
 
       - name: Wait for server
         run: |
           for i in {1..30}; do
-            if curl -s http://localhost:3000/ > /dev/null; then
+            if curl -fsS http://localhost:3000/ > /dev/null; then
               echo "Server is ready"
-              break
+              exit 0
             fi
             sleep 1
           done
+          cat "$RUNNER_TEMP/webkit-server.log"
+          exit 1
 
       - name: Run WebKit accessibility tests
-        run: npx playwright test tests/webkit-a11y/ --config playwright-webkit-a11y.config.ts
+        run: |
+          docker run --rm --ipc=host --network=host \
+            -v "$PWD:/work" -w /work \
+            mcr.microsoft.com/playwright:v1.63.0-noble \
+            npx playwright test tests/webkit-a11y/ --config playwright-webkit-a11y.config.ts
+
+      - name: Stop local server
+        if: always()
+        run: pkill -f "serve out -l 3000" || true
 
       - name: Upload HTML report
         if: always()
