@@ -1,0 +1,1287 @@
+[0m
+> build · free-only
+[0m
+[0m✱ [0mGlob "**/*"[90m in . · 25 matches[0m
+[0m✱ [0mGlob "**/*"[90m in /home/andy/chapelgate/dell-services · 100 matches[0m
+[0m✱ [0mGlob "**/*"[90m in /home/andy/chapelgate/jobs-work-dell · 100 matches[0m
+[0m→ [0mRead STEER.md
+[0m→ [0mRead out/PROGRESS.md
+[0m→ [0mRead out/RESULT.md
+[0m→ [0mRead out/VERIFIER-FEEDBACK.md
+[0m→ [0mRead /home/andy/chapelgate/dell-services/council-dr/council-restart.sh
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/COUNCIL-DR.md
+[0m✱ [0mGlob "*"[90m in out/raw · 1 match[0m
+[0m✱ [0mGlob "council-dr-drill-*/**/*"[90m in /home/andy/chapelgate/factory-tasks · 8 matches[0m
+[0m→ [0mRead /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/VERDICT.md
+[0m→ [0mRead /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/OUTCOME.json
+[0m→ [0mRead /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/restart.log
+[0m→ [0mRead out/council-signoff.md
+[0m→ [0mRead out/raw/SHA
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/PARKED.md
+[0m
+[0m$ [0mcd /home/andy/chapelgate && git status
+...output truncated...
+
+Full output saved to: /home/andy/.local/share/opencode/tool-output/tool_2145604e70010v51SqjGPObv3J
+
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/org-lifecycle.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/orphan-source-facts.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/pack-live-demotion.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/parsers-and-injection.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/persistence.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/pg-harness.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/pg-password.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/pglite-harness.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/production-startup.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/quotas-and-limits.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/resource-bounds.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/scrub-connection.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/signup-policy.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/templates.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/tenant-guc-order.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/text-limits.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-adversarial.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-agent-loop.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-agents.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-authority-obligations.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-decisions.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-entities.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-fact-assertions.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-gateway-http.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-graph-answers-inbox.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-preferences.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-quotes-comms.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-rls.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tests/v2-workflows.test.mjs
+	factory-tasks/ef-bew-test-fixes-20261119/repo/tsconfig.json
+	factory-tasks/ef-bew-test-fixes-20261119/repo/vite.config.ts
+	factory-tasks/ef-bew-test-fixes-20261119/status.json
+	factory-tasks/ef-disk-guard-20261119/
+	factory-tasks/ef-model-...
+	factory-tasks/ef-model-lane-20261119/
+	factory-tasks/ef-ops-hardening-20261119/
+	factory-tasks/energy-reasoners-two-council-20261120/
+	factory-tasks/estate-artifacts/
+	factory-tasks/estate-audit-loop/
+	factory-tasks/estate-automation-audit-20261119/
+	factory-tasks/estate-content-security-policy-inline-script-sweep-20261119/
+	factory-tasks/estate-dependency-vulnerability-audit-20261119/
+	factory-tasks/estate-done-claim-watcher-20261119/
+	factory-tasks/estate-efficiency-20261124/
+	factory-tasks/estate-hardening-20261114/
+	factory-tasks/estate-improvements-20261119/
+	factory-tasks/estate-oauth-grant-inventory-20261119/
+	factory-tasks/estate-password-reset-poisoning-sweep-20261119/
+	factory-tasks/estate-rate-limiting-implementation-20261119/
+	factory-tasks/estate-readiness-claims-accuracy-audit-20261119/
+	factory-tasks/estate-red-team-first-run-20261119/
+	factory-tasks/estate-release-gate-checklist-and-oauth-dashboard-20261119/
+	factory-tasks/estate-secrets-vault-setup-20261119/
+	factory-tasks/estate-security-findings-dashboard-20261119/
+	factory-tasks/estate-security-programme-20261119/
+	factory-tasks/estate-shakedown-cloudflare-coverage-20261119/
+	factory-tasks/estate-test-environment-repair-20261119/
+	factory-tasks/evidence-fabrication-rootcause-20261125/
+	factory-tasks/ew-dell-hosting-20261121/BRIEF.md.bak-rootcause-20261123
+	factory-tasks/ew-dell-hosting-20261121/MODEL.bak-eggbot-20261123-0910-zen
+	factory-tasks/ew-dell-hosting-20261121/MODEL.bak-eggbot-20261123-2010
+	factory-tasks/ew-dell-hosting-20261121/MODEL.bak-eggbot-hy4guard-20261123-2132
+	factory-tasks/ew-dell-hosting-20261121/out-archive-20261123.tar.zst
+	factory-tasks/ew-dell-hosting-20261121/out/.cycle.pid
+	factory-tasks/ew-dell-hosting-20261121/out/cycle-2106-1.log
+	factory-tasks/ew-dell-hosting-20261121/out/cycle-2113-2.log
+	factory-tasks/ew-dell-hosting-20261121/out/cycle-2120-3.log
+	factory-tasks/ew-dell-hosting-20261121/out/cycle-2126-4.log
+	factory-tasks/ew-demo-council-20261122/
+	factory-tasks/ew-reuse-scope-council-minutes-20261124/
+	factory-tasks/ew-signoff-features-20261121/
+	factory-tasks/ew-status-rc-20261121/
+	factory-tasks/export-exit-20261124/
+	factory-tasks/failed-units-triage-20261119/
+	factory-tasks/failure-log-compliance-phase2-20261119/
+	factory-tasks/financials-weekly-20261123/
+	factory-tasks/findings-fix-20261113/
+	factory-tasks/findings-sweep-20261121/
+	factory-tasks/first-council-trial-20261120/
+	factory-tasks/fix-alerting-r1-20261115/
+	factory-tasks/fix-b18-dell-staging-shakedown-r1-20261121/
+	factory-tasks/fix-b18-dell-staging-shakedown-r1-20261122/
+	factory-tasks/fix-backup-failover-r1-20261115/
+	factory-tasks/fix-council-omniroute-review-r1-20261121/
+	factory-tasks/fix-council-omniroute-review-r1-20261122/
+	factory-tasks/fix-findings-chapelgate-council-minutes-20261123/
+	factory-tasks/fix-findings-holiday-let-operator-20261121/
+	factory-tasks/fix-findings-information-rights-complaints-20261123/
+	factory-tasks/fix-findings-maintenanceos-phone-line-canary-20261123/
+	factory-tasks/fix-job-estate-audit-loop-20261123/
+	factory-tasks/fix-job-python-script-bot-20261123/
+	factory-tasks/fix-safety-screen-r1-20261115/
+	factory-tasks/fixall-20261113/
+	factory-tasks/forced-merge-rule-adopt-trial-20261118/
+	factory-tasks/gcloud-add-hcv-20261120/
+	factory-tasks/gcloud-cm-flags-for-cso-20261124/
+	factory-tasks/gcloud-competitor-prices-20261120/
+	factory-tasks/gcloud-evidence-citizen-agent-20261124/
+	factory-tasks/gcloud-evidence-council-minutes-20261123/
+	factory-tasks/gcloud-refresh-lcm-ca-20261125/
+	factory-tasks/golden-line-improved-copy-20261123/
+	factory-tasks/grok-allowance-offload-check-20261119/
+	factory-tasks/gtm-demo-scripts-focus3/
+	factory-tasks/gtm-frameworks-buynow-focus3/
+	factory-tasks/gtm-legal-dp-focus3/
+	factory-tasks/gtm-pricing-library-focus3/
+	factory-tasks/gtm-sales-pages-focus3/
+	factory-tasks/gtm-security-pack-focus3/
+	factory-tasks/hard25-20261113/
+	factory-tasks/hcv-council-sso-20261121/
+	factory-tasks/hcv-demo-sandbox-20261121/
+	factory-tasks/hcv-ir-cross-tenant-checks-20261119/
+	factory-tasks/hcv-maintenance-tier-20261121/
+	factory-tasks/hcv-pr134-clean-20261121/
+	factory-tasks/hcv-pr9-second-council-20261121/
+	factory-tasks/hcv-release-drive-20261122/
+	factory-tasks/hcv-release-push-20261120/
+	factory-tasks/hcv-retention-deletion-20261121/
+	factory-tasks/hcv-tutorial-verify-20261120/
+	factory-tasks/hcv-wcag-audit-20261121/
+	factory-tasks/hcv-xai-optin-20261121/
+	factory-tasks/history.log
+	factory-tasks/holiday-let-operator-browser-storage-20261119/
+	factory-tasks/holiday-let-operator-release-sequence-20261123/
+	factory-tasks/housing-compliance-vault-asvs-l2-wcag-attack-test-20261120/
+	factory-tasks/housing-compliance-vault-asvs-l2-wcag-test-20261120/
+	factory-tasks/housing-compliance-vault-migration-browser-tests-20261119/
+	factory-tasks/housing-compliance-vault-pr-landing-20261123/
+	factory-tasks/housing-compliance-vault-v1-tables-row-level-security-20261119/
+	factory-tasks/ico-registration-check-20261119/
+	factory-tasks/improve-four-20261120/
+	factory-tasks/information-rights-complaints-tesseract-tests-20261119/
+	factory-tasks/insurer-evidence-pack-review-20261119/
+	factory-tasks/insurer-evidence-pack-run-20261119/
+	factory-tasks/iso-27001-roadmap-20261119/
+	factory-tasks/jobs-work-dell/
+	factory-tasks/jobs.tsv
+	factory-tasks/keep-builds-running-20261119/
+	factory-tasks/keep-or-cut-12-products-20261124/
+	factory-tasks/landlord-os-cross-tenancy-tests-20261119/
+	factory-tasks/landlord-os-onboarding-evidence-tenancy-binding-20261119/
+	factory-tasks/lcm-a3-security-20261124/
+	factory-tasks/lcm-a4-a9-docs-20261124/
+	factory-tasks/lcm-apply-rootcause-20261124/
+	factory-tasks/lcm-gate-a-review-20261124/
+	factory-tasks/lcm-gate-a1-a2-fix-20261124/
+	factory-tasks/lcm-pr15-ci-20261124/
+	factory-tasks/lcm-pr15-merge-ready-20261121/
+	factory-tasks/lcm-release-full-battery-20261123/
+	factory-tasks/legal-case-management-commercial-ready-20261123/
+	factory-tasks/ln-01-omni-db-guard-20261119/
+	factory-tasks/ln-02-swap-failure-20261119/
+	factory-tasks/ln-03-fallthrough-20261119/
+	factory-tasks/ln-04-combo-429-20261119/
+	factory-tasks/ln-05-mistral-403-20261119/
+	factory-tasks/ln-06-reorder-free-route-20261119/
+	factory-tasks/ln-07-reroute-free-only-20261119/
+	factory-tasks/ln-08-staging-router-20261119/
+	factory-tasks/ln-09-provider-health-20261119/
+	factory-tasks/ln-10-omniroute-council-20261119/
+	factory-tasks/ln-11-container-reach-20261119/
+	factory-tasks/ln-12-router-failover-20261119/
+	factory-tasks/ln-13-plugin-guard-20261119/
+	factory-tasks/ln-14-taskdir-tests-20261119/
+	factory-tasks/ln-15-jobs-tsv-audit-20261119/
+	factory-tasks/ln-16-model-preflight-live-20261119/
+	factory-tasks/ln-17-filewatch-20261119/
+	factory-tasks/ln-18-gate-tuning-20261119/
+	factory-tasks/ln-19-session-retry-20261119/
+	factory-tasks/ln-20-first-cycle-size-20261119/
+	factory-tasks/ln-21-nvidia-429-schedule-20261119/
+	factory-tasks/ln-22-cooldown-stalls-20261119/
+	factory-tasks/ln-23-six-docs-unstick-20261119/
+	factory-tasks/ln-24-private-lane-20261119/
+	factory-tasks/ln-25-overnight-resilience-20261119/
+	factory-tasks/local-dell-qwen-trial-20261115/
+	factory-tasks/loop-business-os-20261122/
+	factory-tasks/loop-cheap-trips-20261122/
+	factory-tasks/loop-citizen-agent-20261122/
+	factory-tasks/loop-council-minutes-20261122/
+	factory-tasks/loop-information-rights-20261122/
+	factory-tasks/loop-ir-complaints-20261122/
+	factory-tasks/loop-multilingual-transcribe-20261122/
+	factory-tasks/lumi-archive-search-20261112/
+	factory-tasks/lumi-item4-plan.tgz
+	factory-tasks/lumi-item4-render-watch.sh
+	factory-tasks/lumi-item4-synthetic-audio-render-20261111/
+	factory-tasks/lumi-upload-pack-r1-20261121/
+	factory-tasks/lumi-welsh-run21-gate-r1-20261121/
+	factory-tasks/mac-council-lane-20261124/
+	factory-tasks/mac-lane-review-20261215/
+	factory-tasks/mac-provider-add-20261113
+	factory-tasks/mac-studio-firewall-prep-20261119/
+	factory-tasks/maintenanceos-blocker-slices-20261123/
+	factory-tasks/maintenanceos-ttnc-voicemail-dataset-20261115/
+	factory-tasks/maintenanceos-website-security-fixes-20261120/
+	factory-tasks/model-scout-20261124/
+	factory-tasks/model-scout-20261125/
+	factory-tasks/mos-website-tutorial-20261121/
+	factory-tasks/mt-fix-health-turbo-pin-20261123/
+	factory-tasks/mt-lumi-sbatch-drafts-r1-20261121/
+	factory-tasks/mut_work/
+	factory-tasks/mw-dell-gates-review-20261111/
+	factory-tasks/mw-launch-candidate-20261121/
+	factory-tasks/mw-security-gate-rerun-20261122/
+	factory-tasks/narrow-pilot-pack-20261116/
+	factory-tasks/no-force-push-guard-20261122/
+	factory-tasks/omniroute-lane-widen-20261112
+	factory-tasks/opencode-epipe-fix-20261122/.cycle-semaphore.lock
+	factory-tasks/opencode-epipe-fix-20261122/.lane-health-state
+	factory-tasks/opencode-epipe-fix-20261122/BRIEF.md
+	factory-tasks/opencode-epipe-fix-20261122/BRIEF.md.bak-eggbot-20261122-2331
+	factory-tasks/opencode-epipe-fix-20261122/BRIEF.md.bak-eggbot-20261123-0813
+	factory-tasks/opencode-epipe-fix-20261122/MODEL
+	factory-tasks/opencode-epipe-fix-20261122/MODEL.bak-eggbot-20261123-0910-zen
+	factory-tasks/opencode-epipe-fix-20261122/MODEL.bak-eggbot-20261123-1945
+	factory-tasks/opencode-epipe-fix-20261122/MODEL.bak-eggbot-20261123-2321-hy4off
+	factory-tasks/opencode-epipe-fix-20261122/STEER.md
+	factory-tasks/opencode-epipe-fix-20261122/STEER.md.bak-eggbot-20261123-0906
+	factory-tasks/opencode-epipe-fix-20261122/STEER.md.bak-eggbot-20261123-1632
+	factory-tasks/opencode-epipe-fix-20261122/history.log
+	factory-tasks/opencode-epipe-fix-20261122/out-archive-20261123.tar.zst
+	factory-tasks/opencode-epipe-fix-20261122/out/.preflight-ok
+	factory-tasks/opencode-epipe-fix-20261122/out/JOB-ID
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1251-4.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1356-1.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1431-2.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1506-3.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1541-4.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1616-1.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1617-2.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1617-3.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1618-4.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1618-5.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1619-6.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1620-7.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1620-8.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1620-9.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1621-10.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1621-11.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1656-12.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1731-13.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1806-14.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1916-1.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1952-2.log
+	factory-tasks/opencode-epipe-fix-20261122/out/cycle-1954-3.log
+	factory-tasks/opencode-epipe-fix-20261122/out/raw/
+	factory-tasks/opencode-epipe-fix-20261122/out/runs/
+	factory-tasks/opencode-epipe-fix-20261122/repo/repro-intensive.sh
+	factory-tasks/opencode-epipe-fix-20261122/repo/repro.sh
+	factory-tasks/opencode-epipe-fix-20261122/status.json
+	factory-tasks/opencode-per-job-datadir-20261122/
+	factory-tasks/ops-foundations-20261120/
+	factory-tasks/ops-foundations-ops-foundations-20261120/
+	factory-tasks/org-adopt-orphan-repos-20261116/
+	factory-tasks/out/
+	factory-tasks/outcomes-loop-councils-20261124/.cycle-semaphore.lock
+	factory-tasks/outcomes-loop-councils-20261124/.lane-health-state
+	factory-tasks/outcomes-loop-councils-20261124/BRIEF.md
+	factory-tasks/outcomes-loop-councils-20261124/BRIEF.md.bak-eggbot-20261124-1308
+	factory-tasks/outcomes-loop-councils-20261124/BRIEF.md.bak-eggbot-20261124-1310
+	factory-tasks/outcomes-loop-councils-20261124/MODEL
+	factory-tasks/outcomes-loop-councils-20261124/STEER.md
+	factory-tasks/outcomes-loop-councils-20261124/STEER.md.bak-eggbot-20261124-1310
+	factory-tasks/outcomes-loop-councils-20261124/__pycache__/
+	factory-tasks/outcomes-loop-councils-20261124/history.log
+	factory-tasks/outcomes-loop-councils-20261124/out/.cycle.pid
+	factory-tasks/outcomes-loop-councils-20261124/out/.preflight-ok
+	factory-tasks/outcomes-loop-councils-20261124/out/HEARTBEAT
+	factory-tasks/outcomes-loop-councils-20261124/out/JOB-ID
+	factory-tasks/outcomes-loop-councils-20261124/out/MISSION_COMPLETE.rejected-20261124-1437
+	factory-tasks/outcomes-loop-councils-20261124/out/RESULT.md
+	factory-tasks/outcomes-loop-councils-20261124/out/VERIFIER-FEEDBACK.md
+	factory-tasks/outcomes-loop-councils-20261124/out/cycle-1302-1.log
+	factory-tasks/outcomes-loop-councils-20261124/out/cycle-1310-2.log
+	factory-tasks/outcomes-loop-councils-20261124/out/cycle-1350-3.log
+	factory-tasks/outcomes-loop-councils-20261124/out/cycle-1929-1.log
+	factory-tasks/outcomes-loop-councils-20261124/out/raw/.lock-council-outcomes-timer
+	factory-tasks/outcomes-loop-councils-20261124/out/raw/.lock-council-outcomes-weekly
+	factory-tasks/outcomes-loop-councils-20261124/out/raw/.lock-verify_outcomes
+	factory-tasks/outcomes-loop-councils-20261124/out/raw/INDEX.tsv
+	factory-tasks/outcomes-loop-councils-20261124/out/runs/
+	factory-tasks/outcomes-loop-councils-20261124/status.json
+	factory-tasks/outsider-redteam-review-20261116/
+	factory-tasks/password-reset-poisoning-clean-merge-prep-20261119/
+	factory-tasks/pentagi-authentication-unblock-20261119/
+	factory-tasks/pentagi-emergency-stop-20261119/
+	factory-tasks/pentagi-scope-rule-emergency-stop-20261119/
+	factory-tasks/persona-round-chapelgate-information-rights-20261116/
+	factory-tasks/persona-round-holiday-let-operator-20261116/
+	factory-tasks/persona-round-information-rights-complaints-20261116/
+	factory-tasks/persona-round-public-sector-citizen-agent-20261116/
+	factory-tasks/phone-outgoing-audio-proof-20261123/
+	factory-tasks/phone-stage2-maintenanceos-phone-line-20261115/
+	factory-tasks/phone-stage3-maintenanceos-phone-line-20261115/
+	factory-tasks/phone-stage4-maintenanceos-phone-line-20261115/
+	factory-tasks/phone-stage5-maintenanceos-phone-line-20261115/
+	factory-tasks/podcast-ai-morning-read-20261120/
+	factory-tasks/positioning-refresh-20261122/
+	factory-tasks/pricing-draft-figures-20261121/
+	factory-tasks/pricing-tiers-20261122/
+	factory-tasks/priority-client-security-offers-20261119/
+	factory-tasks/product-source-of-truth-map-20261119/
+	factory-tasks/promptfoo-gate-upstream-20261125/
+	factory-tasks/public-sector-buying-routes-20261119/
+	factory-tasks/python-script-bot/
+	factory-tasks/qwen-summaries-only-routing-20261116/
+	factory-tasks/redteam15-r2-housing-compliance-vault-20261116/
+	factory-tasks/reel-adopt-13-layers-of-production-stack-20261118/
+	factory-tasks/reel-adopt-20-attack-vectors-rapid-reset-okta-gitlab-spotif-20261121/
+	factory-tasks/reel-adopt-24-claude-code-concepts-cheat-sheet-20261121/
+	factory-tasks/reel-adopt-4-stage-pipeline-spec-first-claude-md-loop-engin-20261121/
+	factory-tasks/reel-adopt-47-stale-ai-skills-audit-lifecycle-workflow-pres-20261122/
+	factory-tasks/reel-adopt-48-laws-of-powerful-agents-20261117/
+	factory-tasks/reel-adopt-5-agent-gateway-use-cases-tool-control-keys-budg-20261121/
+	factory-tasks/reel-adopt-5-automation-patterns-data-entry-reports-reconci-20261121/
+	factory-tasks/reel-adopt-5-claude-code-plugins-security-guidance-frontend-20261121/
+	factory-tasks/reel-adopt-5-github-repos-for-solo-ai-founder-skills-20261121/
+	factory-tasks/reel-adopt-6-claude-code-phrases-sub-agents-spec-interview-20261121/
+	factory-tasks/reel-adopt-8-free-self-hosted-saas-replacements-voice-studi-20261121/
+	factory-tasks/reel-adopt-admin-panel-security-no-auth-predictable-routes-20261122/
+	factory-tasks/reel-adopt-agent-comm-patterns-send-and-wait-send-and-keep-20261122/
+	factory-tasks/reel-adopt-agent-failure-log-compliance-20261117/
+	factory-tasks/reel-adopt-agent-gateway-single-front-door-for-all-agent-tr-20261121/
+	factory-tasks/reel-adopt-agent-kill-switch-runbook-drill-20261117/
+	factory-tasks/reel-adopt-agent-readiness-39-local-checks-scoring-codebase-20261121/
+	factory-tasks/reel-adopt-ai-agent-framework-rooflow-claudecode-autonomous-20261122/
+	factory-tasks/reel-adopt-ai-agent-harness-structured-software-wrapper-con-20261121/
+	factory-tasks/reel-adopt-ai-agent-maturity-levels-0-5-chatbot-to-team-20261121/
+	factory-tasks/reel-adopt-ai-agent-memory-4-types-procedural-working-seman-20261121/
+	factory-tasks/reel-adopt-ai-agent-taxonomy-automation-workflow-agent-empl-20261122/
+	factory-tasks/reel-adopt-ai-agents-catch-0-5-security-risks-in-auto-insta-20261121/
+	factory-tasks/reel-adopt-ai-coding-agent-dependency-supply-chain-risk-20261118/
+	factory-tasks/reel-adopt-ai-employee-10-brain-90-infra-procedural-memory-20261121/
+	factory-tasks/reel-adopt-ai-employee-architecture-context-memory-loops-20261121/
+	factory-tasks/reel-adopt-ai-employee-build-in-claude-code-8-step-pattern-20261121/
+	factory-tasks/reel-adopt-ai-error-handling-exposing-internals-20261121/
+	factory-tasks/reel-adopt-ai-installs-malicious-dependencies-without-vetti-20261121/
+	factory-tasks/reel-adopt-ai-is-draining-our-supply-chain-of-important-mem-20261122/
+	factory-tasks/reel-adopt-ai-receptionist-demo-claude-code-retell-20261117/
+	factory-tasks/reel-adopt-ai-skills-security-risk-community-skills-malicio-20261121/
+	factory-tasks/reel-adopt-ai-sovereignty-dedicated-server-fixed-cost-full-20261121/
+	factory-tasks/reel-adopt-ai-usage-cost-tracking-per-user-agent-20261117/
+	factory-tasks/reel-adopt-anthropic-playbook-pattern-one-agent-playbook-pe-20261117/
+	factory-tasks/reel-adopt-anthropic-playbook-pattern-one-agent-playbooks-v-20261121/
+	factory-tasks/reel-adopt-anthropic-security-guidance-plugin-for-claude-co-20261121/
+	factory-tasks/reel-adopt-anti-sycophancy-prompt-for-ai-settings-20261117/
+	factory-tasks/reel-adopt-api-security-forged-request-demo-request-signing-20261122/
+	factory-tasks/reel-adopt-api-vs-cli-vs-mcp-three-ways-to-connect-ai-to-to-20261121/
+	factory-tasks/reel-adopt-api-vs-mcp-automations-use-apis-agents-use-mcp-t-20261121/
+	factory-tasks/reel-adopt-archify-codebase-to-diagrams-20261121/
+	factory-tasks/reel-adopt-atomic-steps-break-tasks-into-smallest-steps-bef-20261121/
+	factory-tasks/reel-adopt-automation-test-judgment-vs-identical-steps-rule-20261121/
+	factory-tasks/reel-adopt-benzi-compiler-based-code-intelligence-10-langs-20261121/
+	factory-tasks/reel-adopt-bola-idor-api-user-id-in-url-without-auth-checks-20261121/
+	factory-tasks/reel-adopt-bottleneck-theory-for-over-engineering-20261117/
+	factory-tasks/reel-adopt-business-diagnosis-for-ai-automation-20261121/
+	factory-tasks/reel-adopt-cache-hunter-llm-proxy-catching-cache-invalidati-20261121/
+	factory-tasks/reel-adopt-claude-code-compaction-best-practices-handoff-do-20261121/
+	factory-tasks/reel-adopt-claude-code-concise-mode-dev-swarm-20261122/
+	factory-tasks/reel-adopt-claude-code-slash-insights-ai-usage-breakdown-le-20261121/
+	factory-tasks/reel-adopt-claude-sonnet-5-5-terminal-bench-70-6-beats-opus-20261121/
+	factory-tasks/reel-adopt-cloud-coding-agents-verification-skills-24-7-aut-20261121/
+	factory-tasks/reel-adopt-cloudflare-ai-security-audit-skill-20261117/
+	factory-tasks/reel-adopt-cloudflare-ai-security-audit-skill-open-source-2-20261117/
+	factory-tasks/reel-adopt-cloudflare-security-audit-estate-repos-20261117/
+	factory-tasks/reel-adopt-cloudflare-two-agent-security-auditor-hunter-ver-20261121/
+	factory-tasks/reel-adopt-codelite-remote-ai-agent-control-from-phone-gith-20261121/
+	factory-tasks/reel-adopt-cogevol-4b-on-device-model-4b-turns-one-line-bri-20261121/
+	factory-tasks/reel-adopt-comfyui-output-lists-combiner-batch-ai-image-pro-20261121/
+	factory-tasks/reel-adopt-context-engineering-claude-md-trunk-progressive-20261121/
+	factory-tasks/reel-adopt-cors-vulnerability-20261122/
+	factory-tasks/reel-adopt-cross-customer-data-separation-20261117/
+	factory-tasks/reel-adopt-cross-platform-ai-adversarial-code-review-20261122/
+	factory-tasks/reel-adopt-customization-cost-model-engineering-leadership-20261122/
+	factory-tasks/reel-adopt-cve-mcp-server-threat-analyst-automation-nvd-cis-20261121/
+	factory-tasks/reel-adopt-cybermes-autonomous-verified-security-agent-20261117/
+	factory-tasks/reel-adopt-cybersecurity-investigation-osint-20261121/
+	factory-tasks/reel-adopt-database-disaster-recovery-wal-archiving-pitr-rt-20261122/
+	factory-tasks/reel-adopt-database-performance-missing-indexes-over-fetchi-20261122/
+	factory-tasks/reel-adopt-design-workflow-for-claude-code-taste-refs-desig-20261121/
+	factory-tasks/reel-adopt-designing-for-failure-resilience-engineering-gra-20261121/
+	factory-tasks/reel-adopt-every-time-a-new-client-signs-up-your-developer-20261122/
+	factory-tasks/reel-adopt-fable-5-2-progressive-disclosure-conflict-detect-20261121/
+	factory-tasks/reel-adopt-fable-5-2-progressive-disclosure-skills-insights-20261117/
+	factory-tasks/reel-adopt-five-sign-up-tests-before-launch-localhost-googl-20261119/
+	factory-tasks/reel-adopt-fractional-caio-strategic-ai-adoption-framework-20261121/
+	factory-tasks/reel-adopt-frontier-llm-serving-discrete-event-simulator-pr-20261121/
+	factory-tasks/reel-adopt-full-attack-chain-facial-rec-breach-db-password-20261121/
+	factory-tasks/reel-adopt-futureos-cross-platform-ai-agent-trust-first-rus-20261121/
+	factory-tasks/reel-adopt-genai-system-design-agentic-harness-architecture-20261122/
+	factory-tasks/reel-adopt-git-github-version-control-for-ai-coding-20261117/
+	factory-tasks/reel-adopt-glm-5-3-open-weight-model-local-0-07-2m-tokens-20261121/
+	factory-tasks/reel-adopt-gmail-password-security-app-passwords-20261122/
+	factory-tasks/reel-adopt-goldman-sachs-ai-governance-deloitte-accountabil-20261117/
+	factory-tasks/reel-adopt-good-bad-prompting-context-management-skill-seco-20261121/
+	factory-tasks/reel-adopt-half-of-claude-skills-dead-vague-descriptions-ne-20261122/
+	factory-tasks/reel-adopt-harness-engineering-memory-context-skills-log-20261122/
+	factory-tasks/reel-adopt-harness-ownership-principle-rules-permissions-ch-20261119/
+	factory-tasks/reel-adopt-herdr-nvim-neovim-sidebar-for-ai-agents-20261121/
+	factory-tasks/reel-adopt-hermes-hud-terminal-dashboard-for-real-time-ai-a-20261121/
+	factory-tasks/reel-adopt-hookify-plugin-adds-guardrails-to-claude-code-20261122/
+	factory-tasks/reel-adopt-how-llms-built-6-steps-data-tokens-transformer-p-20261121/
+	factory-tasks/reel-adopt-insurer-evidence-file-20261117/
+	factory-tasks/reel-adopt-inter-company-sop-skill-sharing-this-is-how-you-20261121/
+	factory-tasks/reel-adopt-iphone-advanced-data-protection-host-header-pass-20261122/
+	factory-tasks/reel-adopt-jwt-signature-verification-flaw-privilege-escala-20261121/
+	factory-tasks/reel-adopt-kru-ai-agent-key-vault-20261119/
+	factory-tasks/reel-adopt-local-data-sovereignty-host-chat-on-home-office-20261121/
+	factory-tasks/reel-adopt-local-vs-global-problems-methodology-20261117/
+	factory-tasks/reel-adopt-localstorage-token-theft-ai-auth-bug-20261121/
+	factory-tasks/reel-adopt-loop-engineering-unattended-tasks-20261122/
+	factory-tasks/reel-adopt-lora-behaviour-trial-20261117/
+	factory-tasks/reel-adopt-machine-metaphor-hidden-buttons-skills-combinati-20261121/
+	factory-tasks/reel-adopt-malicious-model-supply-chain-hugging-face-numbat-20261121/
+	factory-tasks/reel-adopt-mass-assignment-vulnerability-is-admin-field-inj-20261117/
+	factory-tasks/reel-adopt-mcp-server-or-cli-make-app-accessible-to-ai-agen-20261121/
+	factory-tasks/reel-adopt-mcp-server-star-ranking-rea-1-markitdown-graphif-20261121/
+	factory-tasks/reel-adopt-mcp-server-vs-agent-business-model-sell-mcp-plug-20261120/
+	factory-tasks/reel-adopt-mcp-vs-apis-common-ai-facing-layer-tool-discover-20261121/
+	factory-tasks/reel-adopt-microsoft-hackers-using-ai-to-scan-github-for-az-20261119/
+	factory-tasks/reel-adopt-microsoft-outage-health-check-cascade-20261117/
+	factory-tasks/reel-adopt-multi-tenant-isolation-architecture-tier-3-20261122/
+	factory-tasks/reel-adopt-musk-5-step-building-algorithm-20261117/
+	factory-tasks/reel-adopt-mythos-5-2-ai-security-testing-finds-12-vuln-cla-20261117/
+	factory-tasks/reel-adopt-nightshift-ai-coding-shift-manager-github-com-or-20261121/
+	factory-tasks/reel-adopt-no-caption-available-20261124/
+	factory-tasks/reel-adopt-npm-supply-chain-attack-20261122/
+	factory-tasks/reel-adopt-nvidia-skill-spectre-skill-security-scanner-20261121/
+	factory-tasks/reel-adopt-oauth-grant-inventory-20261117/
+	factory-tasks/reel-adopt-oauth-redirect-attack-fake-google-login-improper-20261121/
+	factory-tasks/reel-adopt-oauth-redirect-uri-validation-google-oauth-20261117/
+	factory-tasks/reel-adopt-ocr-it-local-pdf-ocr-browser-extension-20261118/
+	factory-tasks/reel-adopt-one-base-two-doors-automations-agents-employees-20261121/
+	factory-tasks/reel-adopt-osint-scammer-investigation-github-patch-dark-we-20261121/
+	factory-tasks/reel-adopt-osint-techniques-username-enum-breach-db-ip-expo-20261121/
+	factory-tasks/reel-adopt-outcome-first-prompting-20261117/
+	factory-tasks/reel-adopt-paper-radar-big-tech-arxiv-tracker-20261121/
+	factory-tasks/reel-adopt-password-reset-poisoning-fix-20261117/
+	factory-tasks/reel-adopt-personal-opsec-5-address-exposure-vectors-gdpr-m-20261121/
+	factory-tasks/reel-adopt-production-ai-deployment-vetting-warning-consult-20261121/
+	factory-tasks/reel-adopt-production-readiness-checklist-for-vibe-coded-ap-20261122/
+	factory-tasks/reel-adopt-qwen-3-8-27b-local-deployment-20261121/
+	factory-tasks/reel-adopt-rag-chunking-strategies-6-methods-fixed-recursiv-20261121/
+	factory-tasks/reel-adopt-rag-hallucination-prevention-8-techniques-20261122/
+	factory-tasks/reel-adopt-rea-deep-dive-300k-stars-ghidra-mcp-electron-and-20261121/
+	factory-tasks/reel-adopt-rea-reverse-engineer-anything-free-local-plugin-20261121/
+	factory-tasks/reel-adopt-replit-built-public-court-record-search-for-due-20261121/
+	factory-tasks/reel-adopt-sandbox-lockdown-dell-agent-units-20261117/
+	factory-tasks/reel-adopt-secure-ai-apps-data-server-server-side-auth-secr-20261117/
+	factory-tasks/reel-adopt-sellable-commercial-readiness-20261117/
+	factory-tasks/reel-adopt-shadow-ai-usage-64-on-personal-accounts-20261117/
+	factory-tasks/reel-adopt-shrimply-open-source-ai-video-editor-in-rust-git-20261121/
+	factory-tasks/reel-adopt-six-essential-documents-before-vibe-coding-20261117/
+	factory-tasks/reel-adopt-six-pillars-for-claude-code-business-repo-struct-20261117/
+	factory-tasks/reel-adopt-six-ui-ux-principles-for-product-design-20261117/
+	factory-tasks/reel-adopt-skill-spectre-nvidia-skill-scanner-github-20261121/
+	factory-tasks/reel-adopt-spark-x2-5-local-4b-model-1m-context-runs-on-16g-20261121/
+	factory-tasks/reel-adopt-ssrf-via-ai-agents-20261122/
+	factory-tasks/reel-adopt-stripe-checkout-price-manipulation-20261121/
+	factory-tasks/reel-adopt-stripe-webhook-signature-verification-idempotenc-20261122/
+	factory-tasks/reel-adopt-tech-debt-skill-ai-code-audit-github-ksimback-te-20261117/
+	factory-tasks/reel-adopt-three-question-release-gate-20261117/
+	factory-tasks/reel-adopt-tiny-tts-1m-param-open-source-local-tts-onnx-run-20261121/
+	factory-tasks/reel-adopt-token-hacking-fable-planner-codex-executor-via-c-20261121/
+	factory-tasks/reel-adopt-transient-error-handling-retry-with-exponential-20261121/
+	factory-tasks/reel-adopt-turn-daily-work-into-ai-employees-claude-md-skil-20261121/
+	factory-tasks/reel-adopt-uk-gdpr-data-broker-opt-out-via-single-bcc-email-20261119/
+	factory-tasks/reel-adopt-vibe-coding-supabase-open-access-rules-data-expo-20261119/
+	factory-tasks/reel-adopt-video-talkcraft-ai-agent-skill-for-motion-design-20261121/
+	factory-tasks/reel-adopt-vllm-uc-berkeley-open-source-inference-server-pa-20261117/
+	factory-tasks/reel-adopt-voice-cloning-tool-3-sec-audio-no-login-20261117/
+	factory-tasks/reel-adopt-waf-modsecurity-owasp-crs-fail2ban-alerting-20261121/
+	factory-tasks/reel-adopt-webhook-spoofing-directory-busting-attack-demo-20261121/
+	factory-tasks/reel-adoption-impact-outlook-20261117/
+	factory-tasks/reel-adoption-titles-20261119/
+	factory-tasks/reel-full-accounts-overnight-20261117/
+	factory-tasks/reel-review-council-20261117-0916/
+	factory-tasks/reel-review-council-20261117-0937/
+	factory-tasks/reel-review-council-20261117-0952/
+	factory-tasks/reel-review-council-20261117-1007/
+	factory-tasks/reel-review-council-20261117-1537/
+	factory-tasks/reel-review-council-20261117-1607/
+	factory-tasks/reel-review-council-20261117-1652/
+	factory-tasks/reel-review-council-20261117-1737/
+	factory-tasks/reel-review-council-20261117-1807/
+	factory-tasks/reel-review-council-20261117-1837/
+	factory-tasks/reel-review-council-20261117-1907/
+	factory-tasks/reel-review-council-20261117-1937/
+	factory-tasks/reel-review-council-20261117-1952/
+	factory-tasks/reel-review-council-20261118-1252/
+	factory-tasks/reel-review-council-20261118-1552/
+	factory-tasks/reel-review-council-20261118-1707/
+	factory-tasks/reel-review-council-20261118-1807/
+	factory-tasks/reel-review-council-20261118-1922/
+	factory-tasks/reel-review-council-20261118-1937/
+	factory-tasks/reel-review-council-20261118-1952/
+	factory-tasks/reel-review-council-20261118-2022/
+	factory-tasks/reel-review-council-20261118-2107/
+	factory-tasks/reel-review-council-20261118-2137/
+	factory-tasks/reel-review-council-20261118-2152/
+	factory-tasks/reel-review-council-20261118-2207/
+	factory-tasks/reel-review-council-20261118-2222/
+	factory-tasks/reel-review-council-20261118-2252/
+	factory-tasks/reel-review-council-20261118-2307/
+	factory-tasks/reel-review-council-20261118-2322/
+	factory-tasks/reel-review-council-20261118-2352/
+	factory-tasks/reel-review-council-20261119-0822/
+	factory-tasks/reel-review-council-20261119-0852/
+	factory-tasks/reel-review-council-20261119-0907/
+	factory-tasks/reel-review-council-20261119-1507/
+	factory-tasks/reel-review-council-20261119-2207/
+	factory-tasks/reel-review-council-20261120-0946/
+	factory-tasks/reel-review-council-20261120-1852/
+	factory-tasks/reel-review-council-20261120-2007/
+	factory-tasks/reel-review-council-20261120-2107/
+	factory-tasks/reel-review-council-20261120-2122/
+	factory-tasks/reel-review-council-20261120-2137/
+	factory-tasks/reel-review-council-20261120-2152/
+	factory-tasks/reel-review-council-20261120-2307/
+	factory-tasks/reel-review-council-20261121-0107/
+	factory-tasks/reel-review-council-20261121-0122/
+	factory-tasks/reel-review-council-20261121-0307/
+	factory-tasks/reel-review-council-20261121-0322/
+	factory-tasks/reel-review-council-20261121-0337/
+	factory-tasks/reel-review-council-20261121-0352/
+	factory-tasks/reel-review-council-20261121-0407/
+	factory-tasks/reel-review-council-20261121-0422/
+	factory-tasks/reel-review-council-20261121-0437/
+	factory-tasks/reel-review-council-20261121-0452/
+	factory-tasks/reel-review-council-20261121-0507/
+	factory-tasks/reel-review-council-20261121-0522/
+	factory-tasks/reel-review-council-20261121-0537/
+	factory-tasks/reel-review-council-20261121-0552/
+	factory-tasks/reel-review-council-20261121-0607/
+	factory-tasks/reel-review-council-20261121-0622/
+	factory-tasks/reel-review-council-20261121-0637/
+	factory-tasks/reel-review-council-20261121-0652/
+	factory-tasks/reel-review-council-20261121-0707/
+	factory-tasks/reel-review-council-20261121-0722/
+	factory-tasks/reel-review-council-20261121-0737/
+	factory-tasks/reel-review-council-20261121-0752/
+	factory-tasks/reel-review-council-20261121-0807/
+	factory-tasks/reel-review-council-20261121-0822/
+	factory-tasks/reel-review-council-20261121-0837/
+	factory-tasks/reel-review-council-20261121-0852/
+	factory-tasks/reel-review-council-20261121-0907/
+	factory-tasks/reel-review-council-20261121-1037/
+	factory-tasks/reel-review-council-20261121-1122/
+	factory-tasks/reel-review-council-20261121-2207/
+	factory-tasks/reel-review-council-20261122-0023/
+	factory-tasks/reel-review-council-20261122-0307/
+	factory-tasks/reel-review-council-20261122-0507/
+	factory-tasks/reel-review-council-20261122-0807/
+	factory-tasks/reel-review-council-20261122-0937/
+	factory-tasks/reel-review-council-20261122-1037/
+	factory-tasks/reel-review-council-20261122-1322/
+	factory-tasks/reel-review-council-20261122-1422/
+	factory-tasks/reel-review-council-20261122-1537/
+	factory-tasks/reel-review-council-20261122-1822/
+	factory-tasks/reel-review-council-20261123-0107/
+	factory-tasks/reel-review-council-20261123-0122/
+	factory-tasks/reel-review-council-20261123-0137/
+	factory-tasks/reel-review-council-20261123-0152/
+	factory-tasks/reel-review-council-20261123-0207/
+	factory-tasks/reel-review-council-20261123-0222/
+	factory-tasks/reel-review-council-20261123-0237/
+	factory-tasks/reel-review-council-20261123-0252/
+	factory-tasks/reel-review-council-20261123-0307/
+	factory-tasks/reel-review-council-20261123-0322/
+	factory-tasks/reel-review-council-20261123-0337/
+	factory-tasks/reel-review-council-20261123-0352/
+	factory-tasks/reel-review-council-20261123-0407/
+	factory-tasks/reel-review-council-20261123-0422/
+	factory-tasks/reel-review-council-20261123-0437/
+	factory-tasks/reel-review-council-20261123-0452/
+	factory-tasks/reel-review-council-20261123-0507/
+	factory-tasks/reel-review-council-20261123-0522/
+	factory-tasks/reel-review-council-20261123-0537/
+	factory-tasks/reel-review-council-20261123-0552/
+	factory-tasks/reel-review-council-20261123-0607/
+	factory-tasks/reel-review-council-20261123-0622/
+	factory-tasks/reel-review-council-20261123-0637/
+	factory-tasks/reel-review-council-20261123-0652/
+	factory-tasks/reel-review-council-20261123-0707/
+	factory-tasks/reel-review-council-20261123-0722/
+	factory-tasks/reel-review-council-20261123-0737/
+	factory-tasks/reel-review-council-20261123-0752/
+	factory-tasks/reel-review-council-20261123-0807/
+	factory-tasks/reel-scrape-speedup-20261118/
+	factory-tasks/reel-trial-agentcraft-ai-agents-in-minecraft-20261119/
+	factory-tasks/reel-trial-ai-automation-seo-social-media-content-engine-20261117/
+	factory-tasks/reel-trial-ai-content-system-for-product-visibility-20261119/
+	factory-tasks/reel-trial-ai-found-a-php-hole-in-70-of-20261119/
+	factory-tasks/reel-trial-ai-native-v2-operating-system-20261119/
+	factory-tasks/reel-trial-ai-profit-boardroom-claude-obsidian-seo-20261119/
+	factory-tasks/reel-trial-ai-profit-boardroom-claude-whiteboards-20261119/
+	factory-tasks/reel-trial-ai-profit-boardroom-claudecodeagenticos-20261119/
+	factory-tasks/reel-trial-ambient-context-local-work-diary-for-ai-20261118/
+	factory-tasks/reel-trial-anthropic-fable-5-2-launch-20261118/
+	factory-tasks/reel-trial-api-key-encryption-kms-pattern-plain-text-keys-i-20261118/
+	factory-tasks/reel-trial-audio8-speech-model-20261117/
+	factory-tasks/reel-trial-autonomous-ai-security-research-quen-3-8-local-b-20261122/
+	factory-tasks/reel-trial-black-mirror-method-self-cloning-with-claude-cod-20261118/
+	factory-tasks/reel-trial-black-october-isn-t-over-part-20261119/
+	factory-tasks/reel-trial-build-an-ai-trading-team-with-20261119/
+	factory-tasks/reel-trial-build-first-ai-agent-in-claude-code-step-by-step-20261119/
+	factory-tasks/reel-trial-calibri-744b-model-on-cpu-disk-streaming-openai-20261117/
+	factory-tasks/reel-trial-claude-code-front-end-design-toolkit-70-tools-th-20261117/
+	factory-tasks/reel-trial-claude-diagram-design-skill-58k-stars-flowcharts-20261118/
+	factory-tasks/reel-trial-claude-mods-prompt-rewriting-agent-chat-linking-20261118/
+	factory-tasks/reel-trial-claude-opus-5-5-agent-os-with-shared-memory-acro-20261119/
+	factory-tasks/reel-trial-claude-red-free-open-source-security-playbooks-f-20261118/
+	factory-tasks/reel-trial-claude-red-offensive-security-skills-demo-20261121/
+	factory-tasks/reel-trial-claude-security-anti-patterns-api-key-front-end-20261118/
+	factory-tasks/reel-trial-claude-skills-short-files-standardizing-agent-be-20261118/
+	factory-tasks/reel-trial-cli-anything-claude-integration-20261119/
+	factory-tasks/reel-trial-cloudflare-ai-security-agents-creating-false-pos-20261119/
+	factory-tasks/reel-trial-cloudflare-security-audit-skill-for-claude-code-20261119/
+	factory-tasks/reel-trial-cloudflare-security-skill-auto-audits-systems-20261119/
+	factory-tasks/reel-trial-codejury-two-model-jury-ai-code-review-20261117/
+	factory-tasks/reel-trial-comment-edit-for-the-free-ki-20261119/
+	factory-tasks/reel-trial-comment-need-if-you-want-the-l-20261119/
+	factory-tasks/reel-trial-comment-projects-and-i-ll-se-20261119/
+	factory-tasks/reel-trial-context-mode-plugin-for-claude-code-20261117/
+	factory-tasks/reel-trial-fable-5-2-free-trial-20261118/
+	factory-tasks/reel-trial-fable-reset-20261119/
+	factory-tasks/reel-trial-five-mcp-connectors-for-claude-20261117/
+	factory-tasks/reel-trial-four-claude-seo-tools-20261119/
+	factory-tasks/reel-trial-from-bulk-20261118/
+	factory-tasks/reel-trial-fusion-embedding-multimodal-model-20261119/
+	factory-tasks/reel-trial-gemini-4-carbon-on-google-cloud-20261119/
+	factory-tasks/reel-trial-gemini-decision-1-fast-decision-model-yes-no-mul-20261118/
+	factory-tasks/reel-trial-gemini-notebook-flashcard-upgrades-20261119/
+	factory-tasks/reel-trial-google-ai-studio-update-gemini-omni-1-2-flash-fo-20261119/
+	factory-tasks/reel-trial-google-antigravity-voice-mode-remote-agents-slas-20261118/
+	factory-tasks/reel-trial-google-street-view-blur-technique-20261119/
+	factory-tasks/reel-trial-hallmark-design-skill-together-ai-50-themes-755-20261117/
+	factory-tasks/reel-trial-heimdall-local-persistent-ai-agent-brain-zero-to-20261117/
+	factory-tasks/reel-trial-hermes-agent-6-levels-hearth-release-1650-change-20261118/
+	factory-tasks/reel-trial-hermes-agent-os-step-5-preview-multi-agent-ai-wo-20261119/
+	factory-tasks/reel-trial-hermes-agentos-complete-guide-mixture-of-agents-20261119/
+	factory-tasks/reel-trial-hermes-agentos-dashboard-demo-oracle-video-agent-20261119/
+	factory-tasks/reel-trial-hermes-multi-agent-ai-workspace-with-group-chats-20261119/
+	factory-tasks/reel-trial-hermes-obsidian-agentos-ai-assistant-with-person-20261119/
+	factory-tasks/reel-trial-hermes-obsidian-shared-memory-for-ai-agents-20261118/
+	factory-tasks/reel-trial-how-long-till-claude-books-me-20261119/
+	factory-tasks/reel-trial-how-to-improve-a-private-secur-20261119/
+	factory-tasks/reel-trial-hyperframes-code-to-video-via-claude-code-20261117/
+	factory-tasks/reel-trial-i-sat-by-the-river-bank-i-20261119/
+	factory-tasks/reel-trial-jane-street-socratic-tutor-free-claude-skill-ada-20261117/
+	factory-tasks/reel-trial-kern-rootless-sandbox-3ms-20261117/
+	factory-tasks/reel-trial-latticedb-local-graph-semantic-text-db-zig-singl-20261117/
+	factory-tasks/reel-trial-learn-ai-automation-from-scratch-in-three-months-20261119/
+	factory-tasks/reel-trial-llm-wiki-skill-organizer-20261119/
+	factory-tasks/reel-trial-lp-skill-design-principles-nielsen-gestalt-fitts-20261118/
+	factory-tasks/reel-trial-matt-pocock-skills-for-real-engineers-claude-cod-20261117/
+	factory-tasks/reel-trial-meta-n-the-ai-that-codes-its-20261119/
+	factory-tasks/reel-trial-minimax-h3-director-cut-studio-20261119/
+	factory-tasks/reel-trial-nine-free-github-repos-as-paid-tool-alternatives-20261119/
+	factory-tasks/reel-trial-no-caption-available-20261124/
+	factory-tasks/reel-trial-notion-ai-second-brain-template-for-agents-20261117/
+	factory-tasks/reel-trial-numbat-model-malware-warning-oathbreaker-advocac-20261118/
+	factory-tasks/reel-trial-omega-agent-orchestration-opus-plans-haiku-execu-20261118/
+	factory-tasks/reel-trial-openai-businesses-in-chatgpt-business-hub-busine-20261118/
+	factory-tasks/reel-trial-openai-dots-always-on-ai-agents-with-own-compute-20261118/
+	factory-tasks/reel-trial-openinbox-free-email-tool-on-cloudflare-20261119/
+	factory-tasks/reel-trial-physical-ai-with-raspberry-pi-20261118/
+	factory-tasks/reel-trial-pibench-ai-coding-agent-benchmark-real-bugs-sand-20261118/
+	factory-tasks/reel-trial-private-rag-on-mac-with-ollama-anythingllm-20261119/
+	factory-tasks/reel-trial-process-before-ai-framework-stopwatch-method-20261119/
+	factory-tasks/reel-trial-rag-pdf-question-answering-20261119/
+	factory-tasks/reel-trial-redcell-ai-pentesting-agent-recon-cve-prompt-inj-20261118/
+	factory-tasks/reel-trial-run-an-open-source-ai-agent-on-20261119/
+	factory-tasks/reel-trial-security-vulnerability-disclosure-20261122/
+	factory-tasks/reel-trial-seo-backlinks-with-fable-5-2-20261119/
+	factory-tasks/reel-trial-skillopt-sleep-cycle-for-claude-20261119/
+	factory-tasks/reel-trial-skilltreeos-ai-agent-map-7-depts-34-teams-137-jo-20261119/
+	factory-tasks/reel-trial-slashbrag-launch-video-skill-for-coding-agents-20261117/
+	factory-tasks/reel-trial-tech-debt-skill-ai-code-audit-20261119/
+	factory-tasks/reel-trial-terminal-phone-iphone-in-terminal-ai-agent-contr-20261117/
+	factory-tasks/reel-trial-these-security-issues-are-gett-20261119/
+	factory-tasks/reel-trial-this-tiny-robot-duck-costs-und-20261119/
+	factory-tasks/reel-trial-vps-security-hardening-20261122/
+	factory-tasks/register-fix-all-r1-20261121/
+	factory-tasks/register-triage-20261123/
+	factory-tasks/release-notes-20261124/
+	factory-tasks/release-readiness-20261112/
+	factory-tasks/release-standards-council-20261114/
+	factory-tasks/release-tracker-20261122/
+	factory-tasks/release-truth-20261120/
+	factory-tasks/repair-pull-requests-merge-readiness-20261119/
+	factory-tasks/rescore-12-products-20261116/
+	factory-tasks/restore-drill-20261120/
+	factory-tasks/rl20-housing-compliance-vault-20261116/
+	factory-tasks/rl20-maintenanceos-website-20261116/
+	factory-tasks/rokoko-smartgloves-ii-20261120/
+	factory-tasks/root-cause-safeguards-open-items-20261117/
+	factory-tasks/rootcause-ai-stage2-holiday-let-operator-20261123/
+	factory-tasks/rootcause-ca-a2-tests-20261125/
+	factory-tasks/rootcause-cm-loop-counts-20261125/
+	factory-tasks/rootcause-council-merge-batch-a-20261123-20261123/
+	factory-tasks/rootcause-council-mt-gonogo-20261123-20261123/
+	factory-tasks/rootcause-council-pr8-pr714-r3-20261123-20261123/
+	factory-tasks/rootcause-cso-suite-cm-main-20261125/
+	factory-tasks/rootcause-estate-audit-loop-20261124/
+	factory-tasks/rootcause-fa-01-business-os-20261123/
+	factory-tasks/rootcause-fa-02-public-sector-citizen-agent-20261123/
+	factory-tasks/rootcause-fa-03-maintenanceos-20261123/
+	factory-tasks/rootcause-fa-04-maintenanceos-website-20261123/
+	factory-tasks/rootcause-fa-05-legal-case-management-20261123/
+	factory-tasks/rootcause-fa-07-chapelgate-multilingual-transcribe-20261123/
+	factory-tasks/rootcause-fa-08-holiday-let-operator-20261123/
+	factory-tasks/rootcause-fa-10-business-evidence-wallet-20261123/
+	factory-tasks/rootcause-fa-11-council-minutes-20261123/
+	factory-tasks/rootcause-fix-council-omniroute-review-r1-20261123/
+	factory-tasks/rootcause-gtm-frameworks-buynow-focus3-20261124/
+	factory-tasks/rootcause-job-brief-template-scanners-20261123/
+	factory-tasks/rootcause-job-company-formation-plan-20261123/
+	factory-tasks/rootcause-job-council-merge-batch-a-20261123-20261123/
+	factory-tasks/rootcause-job-council-mt-gonogo-20261123-20261123/
+	factory-tasks/rootcause-job-council-pr8-pr714-r3-20261123-20261123/
+	factory-tasks/rootcause-job-cso-fix-housing-compliance-vault-open-findings-20261121-20261123/
+	factory-tasks/rootcause-job-cso-suite-council-minutes-main-c1e859fd-20261125/
+	factory-tasks/rootcause-job-estate-audit-loop-20261123/
+	factory-tasks/rootcause-job-ew-dell-hosting-20261123/
+	factory-tasks/rootcause-job-fix-findings-holiday-let-operator-20261121-20261123/
+	factory-tasks/rootcause-job-gcloud-evidence-council-minutes-20261123-20261124/
+	factory-tasks/rootcause-job-gtm-pricing-library-focus3-20261124/
+	factory-tasks/rootcause-job-lcm-pr15-ci-20261124-20261125/
+	factory-tasks/rootcause-job-pricing-tiers-20261123/
+	factory-tasks/rootcause-job-python-script-bot-20261123/
+	factory-tasks/rootcause-job-release-tracker-20261123/
+	factory-tasks/rootcause-job-release-truth-20261123/
+	factory-tasks/rootcause-job-restore-drill-20261123/
+	factory-tasks/rootcause-job-rootcause-fa-01-business-os-20261123/
+	factory-tasks/rootcause-job-rootcause-job-company-formation-plan-20261123/
+	factory-tasks/rootcause-job-rootcause-job-release-truth-20261123/
+	factory-tasks/rootcause-job-rootcause-job-restore-drill-20261123/
+	factory-tasks/rootcause-job-rootcause-website-reposition-r1-20261123/
+	factory-tasks/rootcause-lcm-stall-20261124/
+	factory-tasks/rootcause-ln-02-swap-failure-20261123/
+	factory-tasks/rootcause-loop-citizen-agent-20261124/
+	factory-tasks/rootcause-loop-citizen-agent-gate-20261124/
+	factory-tasks/rootcause-loop-council-minutes-gate-20261124/
+	factory-tasks/rootcause-phone-stage3-maintenanceos-phone-line-20261123/
+	factory-tasks/rootcause-release-tracker-r2-20261124/
+	factory-tasks/rootcause-rt15-05-legal-case-management-20261123/
+	factory-tasks/rootcause-website-council-fit-r1-20261123/
+	factory-tasks/rootcause-website-reposition-r1-20261123/
+	factory-tasks/router-failover-fix-20261124/
+	factory-tasks/router-outage-fixes-20261115/
+	factory-tasks/rt15-fix-hcv-council-minutes-20261118/
+	factory-tasks/sbom-vuln-scan-20261115/
+	factory-tasks/scaffold-upgrade-20261115/
+	factory-tasks/scaffolding-teardown-20261116/
+	factory-tasks/secrets-vault-rotate-20261116/
+	factory-tasks/security-reel-knowledge-base-20261119/
+	factory-tasks/security-release-plans-remaining-products-20261120/
+	factory-tasks/security-resilience-20261124/
+	factory-tasks/security-sweep-all-products-20261118/
+	factory-tasks/shadow-gdpr-accountability-20261116/
+	factory-tasks/shadow-iso27001-20261116/
+	factory-tasks/shadow-iso9001-20261116/
+	factory-tasks/shadow-owasp-asvs-l2-20261116/
+	factory-tasks/shadow-soc2-tsc-20261116/
+	factory-tasks/shadow-standards-68-20261116/
+	factory-tasks/shadow-wcag22aa-20261116/
+	factory-tasks/shakedown-failclosed-adoption-diff-20261118/
+	factory-tasks/shakedown-video-20261113/
+	factory-tasks/shared-security-component-library-20261119/
+	factory-tasks/shorts-factory-20261118/
+	factory-tasks/simply-business-pl-el-quote-20261122/
+	factory-tasks/six-docs-gate-phase2-20261119/
+	factory-tasks/slice6-tidy/
+	factory-tasks/staging-production-credentials-separation-20261119/
+	factory-tasks/status-page-20261124/
+	factory-tasks/stt-ceiling-20261119/
+	factory-tasks/stt-improve-loop/
+	factory-tasks/sudo-least-privilege-plan-20261119/
+	factory-tasks/support-readiness-20261120/
+	factory-tasks/teardown-am-20261125/
+	factory-tasks/tender-dry-run-20261115/
+	factory-tasks/tender-owner-20261120/
+	factory-tasks/test-benchmark-skills-coverage-20261117/
+	factory-tasks/test-mac-failover-20261116/
+	factory-tasks/third-party-pentest-research-20261115/
+	factory-tasks/tool-agent-orchestration-r1-20261115/
+	factory-tasks/tool-cost-tuning-r1-20261115/
+	factory-tasks/tool-synthetic-data-r1-20261115/
+	factory-tasks/trading-bot-ai-agent-20261116/
+	factory-tasks/trading-readiness-20261120/
+	factory-tasks/triage-gate-retention-20261118/
+	factory-tasks/tutorial-benchmark-rework-20261118/
+	factory-tasks/tutorial-follow-along-holes-20261118/
+	factory-tasks/video-intake-fix-20261116/
+	factory-tasks/video-skill-install-20261116/
+	factory-tasks/video-status-20261120/
+	factory-tasks/video-status-delta-20261123/
+	factory-tasks/voice-clone-threat-kit-production-20261119/
+	factory-tasks/website-council-deploy-20261116/
+	factory-tasks/website-council-fit-20261115/
+	factory-tasks/website-council-rebuild-20261120/
+	factory-tasks/website-council-specialist-20261116/
+	factory-tasks/website-privacy-labels-20261123/
+	factory-tasks/website-reposition-20261117/
+	factory-tasks/welsh-pilot-pitch-20261117/
+	factory-tasks/wirral-research-out.tgz
+	factory-tasks/wirral-site-out-fba6534.tgz
+	factory-tasks/wirral-structural-repairs-competitor-research-20261115/
+	factory-tasks/wirral-structural-repairs-local-seo-website-20261115/
+	factory-tasks/wirral-structural-repairs-seo-phase2-20261116/
+	factory-trial-gal-central-ai-agent-config-manager-17-agents-ya-20261117/
+	factory-trial-learn-ai-automation-from-scratch-in-three-months-20261119/
+	factory-tuning-r1-20261115/
+	fix-job-estate-audit-loop-20261123/
+	gate-worktrees-20261121/
+	golden-line-email-cleaner/
+	golden-line-en-gb-test-line/
+	golden-line-stt-bench/
+	hcv-source-readonly/
+	heimdall-adapters.mjs.bak-eggbot-20261118-0844
+	heimdall/
+	jjobs-work-dell/
+	jobs-work-dell/
+	jobs-work/
+	langfuse-3.39.2.tgz
+	library-tools/
+	library/
+	migration-staging/
+	omniroute/
+	package-lock.json
+	public/
+	readiness/
+	repo/
+	repos-github/
+	repos/
+	research/
+	runners/
+	scratch/
+	skills-roll-20261111.tgz
+	skills-roll-20261111/
+	stt-improve-loop/
+	tailscale-serve.bak-dellomni-20261114T161241Z.json
+	test-results/
+	test_outcome/
+	video-inbox/
+	video-outbox/
+	work/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[0m
+[0m$ [0mcd /home/andy/chapelgate && git diff --name-only
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/FINDINGS.tsv
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/MODEL
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/STEER.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/history.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/EVIDENCE.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/MISSION_COMPLETE
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/PROGRESS.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/RESULT.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/SKILLS-USED.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/TOOL-COVERAGE.md
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0022-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0035-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0047-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0125-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0152-5.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0209-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0216-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0229-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0245-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0337-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0346-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0359-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0439-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0540-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0541-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0607-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0626-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0701-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0711-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0714-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0745-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0801-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0814-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0814-5.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0848-6.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-0915-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1046-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1216-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1251-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1420-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1550-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1721-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1805-4.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-1939-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2011-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2116-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2130-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2230-1.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2247-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2251-3.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/cycle-2326-2.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-lint
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test-domain
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test-integration
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test-platform
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test-platform-full
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test-security-headers
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test_domain-092b48
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test_platform-74dbd3
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/.lock-test_secret-scan-895b8f
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/INDEX.tsv
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/SHA
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/gitleaks-20261123-120000.json
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/lint-20261123-084613-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/lint-20261123-084613-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-20261122-001855-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-20261122-001855-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-domain-20261123-083440-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-domain-20261123-083440-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-integration-20261123-083534-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261123-092019-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-20261123-092019-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-final-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-full-20261123-083042-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-platform-full-20261123-083042-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-security-headers-20261121-231512-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test-security-headers-20261121-231512-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_domain-092b48-20261122-150847-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_domain-092b48-20261122-150847-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_platform-74dbd3-20261122-154400-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_platform-74dbd3-20261122-154400-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_secret-scan-895b8f-20261122-151615-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/test_secret-scan-895b8f-20261122-151615-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck-20261123-085044-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/raw/typecheck-20261123-085044-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/lint-20261122-150950-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/lint-20261122-150950-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-225830-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-225830-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-230205-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-230205-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-230442-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-230442-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-230748-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-230748-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231600-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231600-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231802-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231802-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231805-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231805-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231843-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231843-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231852-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231852-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231856-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231856-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231902-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231902-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231908-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231908-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231911-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-231911-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232053-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232053-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232309-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232309-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232602-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232602-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232854-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-232854-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233050-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233050-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233200-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233200-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233251-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233251-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233253-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233253-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233408-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233408-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233449-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233449-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233746-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-233746-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234528-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234528-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234530-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234530-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234658-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234658-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234919-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234919-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234956-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-234956-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235045-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235045-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235048-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235048-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235305-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235305-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235553-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261121-235553-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261122-001249-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261122-001249-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261122-001353-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261122-001353-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261122-001502-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-20261122-001502-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-domain-20261122-142458-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-domain-20261122-142458-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-integration-20261122-142518-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-integration-20261122-143132-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261121-225910-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-130854-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131123-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131123-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131225-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131225-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131455-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131455-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131810-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-131810-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-132013-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-132013-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-132213-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-132846-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-132846-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-134354-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-134354-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-134519-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-134519-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-134750-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-134750-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-135033-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-135033-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-135424-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-135424-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-135845-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-135845-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140055-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140055-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140333-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140333-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140659-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140659-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140909-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-140909-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-141456-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-142205-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-142205-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-142228-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261122-142228-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-084144-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-084144-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-084632-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-084632-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-085157-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-085540-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-085540-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-090214-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-090214-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-091531-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-20261123-091531-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261121-233452-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261121-233452-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261121-235053-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261121-235053-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261122-000000-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261122-000000-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261122-000256-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261122-000256-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261122-001953-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261122-001953-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261123-083001-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-platform-full-20261123-083001-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-security-headers-20261121-231503-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test-security-headers-20261121-231503-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-145229-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-145229-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-145518-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-145518-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-150219-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-150219-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-154019-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/test_platform-74dbd3-20261122-154019-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261121-234252-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261121-234252-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261122-144255-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261122-144255-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261122-152200-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261122-152200-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261122-154724-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261122-154724-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261123-084422-exit-code.txt
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/out/runs/raw-superseded/typecheck-20261123-084422-output.log
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/repo
+factory-tasks/cso-fix-business-evidence-wallet-open-findings-20261121/status.json
+factory-tasks/dell-app-crashloops-20261123/STEER.md
+factory-tasks/dell-app-crashloops-20261123/history.log
+factory-tasks/dell-app-crashloops-20261123/out/.cycle.pid
+factory-tasks/dell-app-crashloops-20261123/out/EVIDENCE.md
+factory-tasks/dell-app-crashloops-20261123/out/MISSION_COMPLETE
+factory-tasks/dell-app-crashloops-20261123/out/PROGRESS.md
+factory-tasks/dell-app-crashloops-20261123/out/RESULT.md
+factory-tasks/dell-app-crashloops-20261123/out/VERIFIER-FEEDBACK.md
+factory-tasks/dell-app-crashloops-20261123/out/cycle-2307-1.log
+factory-tasks/dell-app-crashloops-20261123/out/raw/stability-after-20261124-1019.txt
+factory-tasks/dell-app-crashloops-20261123/status.json
+factory-tasks/ew-dell-hosting-20261121/BRIEF.md
+factory-tasks/ew-dell-hosting-20261121/MODEL
+factory-tasks/ew-dell-hosting-20261121/history.log
+factory-tasks/ew-dell-hosting-20261121/out/EVIDENCE.md
+factory-tasks/ew-dell-hosting-20261121/out/HOSTING.md
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2059
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2104
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2204
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2224
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261121-2314
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0034
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0109
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0134
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0434
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0614
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-0759
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1039
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1326
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1414
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1634
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-1834
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-2045
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261122-2315
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0120
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0125
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0135
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0140
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0145
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0330
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0420
+factory-tasks/ew-dell-hosting-20261121/out/MISSION_COMPLETE.rejected-20261123-0625
+factory-tasks/ew-dell-hosting-20261121/out/PROGRESS.md
+factory-tasks/ew-dell-hosting-20261121/out/RESULT.md
+factory-tasks/ew-dell-hosting-20261121/out/ROASTROOM-VERDICT.md
+factory-tasks/ew-dell-hosting-20261121/out/ROOT-CAUSE.md
+factory-tasks/ew-dell-hosting-20261121/out/SKILLS-USED.md
+factory-tasks/ew-dell-hosting-20261121/out/VERIFIER-FEEDBACK.md
+factory-tasks/ew-dell-hosting-20261121/out/council-GO.md
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0029-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0054-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0119-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0255-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0300-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0339-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0351-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0425-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0539-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0540-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0540-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0542-3.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0635-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0707-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0721-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0737-3.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0739-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0744-4.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0748-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0759-5.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-0944-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1144-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1315-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1344-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1352-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1550-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1600-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1659-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1717-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1750-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1804-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1823-3.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1824-4.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1825-5.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1825-6.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1826-7.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1827-8.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1828-9.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1837-10.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1839-11.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1839-12.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1840-13.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1841-14.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1842-15.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1843-16.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1858-17.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1950-18.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-1955-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2059-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2124-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2145-2.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2151-3.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2219-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2230-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2249-1.log
+factory-tasks/ew-dell-hosting-20261121/out/cycle-2304-2.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-build
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-build-final
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-lint
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-lint-final
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-test
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-test-final
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-typecheck
+factory-tasks/ew-dell-hosting-20261121/out/raw/.lock-typecheck-final
+factory-tasks/ew-dell-hosting-20261121/out/raw/INDEX.tsv
+factory-tasks/ew-dell-hosting-20261121/out/raw/SHA
+factory-tasks/ew-dell-hosting-20261121/out/raw/build-20261122-035223-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/build-20261122-035223-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/build-final-20261122-040032-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/build-final-20261122-040032-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/final-verification-20261121-2154-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/lint-20261122-035206-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/lint-20261122-035206-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/lint-final-20261122-040100-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/lint-final-20261122-040100-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/test-20261122-035333-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/test-20261122-035333-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-224817-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/test-final-20261122-224817-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/typecheck-20261122-035109-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/typecheck-20261122-035109-output.log
+factory-tasks/ew-dell-hosting-20261121/out/raw/typecheck-final-20261122-035958-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/raw/typecheck-final-20261122-035958-output.log
+factory-tasks/ew-dell-hosting-20261121/out/roastroom-raw.json
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/lint-final-20261122-0401-output.log
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-20261122-034843-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-20261122-034843-output.log
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-20261122-034852-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-20261122-034852-output.log
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-final-20261122-0356-output.log
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-final-20261122-035621-exit-code.txt
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-final-20261122-035621-output.log
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/test-final-20261122-223656-output.log
+factory-tasks/ew-dell-hosting-20261121/out/runs/raw-superseded/typecheck-final-20261122-0359-output.log
+factory-tasks/ew-dell-hosting-20261121/out/seed-credentials.env
+factory-tasks/ew-dell-hosting-20261121/status.json
+package.json
+[0m
+[0m$ [0mcd /home/andy/chapelgate && git status factory-tasks/dr-councils-20261124/
+On branch feat/fe-receptionist
+Your branch is ahead of 'origin/feat/fe-receptionist' by 3 commits.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	factory-tasks/dr-councils-20261124/
+
+nothing added to commit but untracked files present (use "git add" to track)
+[0m

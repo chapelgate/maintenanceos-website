@@ -1,0 +1,33 @@
+2026-11-24T13:05:36+00:00 DEGRADE: build traffic -> estate-degraded (council-fast untouched, Andy voice 01:14 call 49e2b8f1)
+2026-11-24T13:05:36+00:00 MODEL FILE: per-task MODEL 'free-only' overrides estate-degraded
+2026-11-24T13:05:36+00:00 SEMAPHORE: acquired cycle semaphore with 4s jitter
+2026-11-24T13:26:40+00:00 HUNG CYCLE: opencode run elapsed 1260s (over 300s; stall watchdog kills at 900s silent)
+2026-11-24T13:26:41+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-24T13:26:58+00:00 DEGRADE: build traffic -> estate-degraded (council-fast untouched, Andy voice 01:14 call 49e2b8f1)
+2026-11-24T13:26:58+00:00 MODEL FILE: per-task MODEL 'free-only' overrides estate-degraded
+2026-11-24T13:26:58+00:00 SEMAPHORE: acquired cycle semaphore with 23s jitter
+2026-11-24T13:48:52+00:00 HUNG CYCLE: opencode run elapsed 1291s (over 300s; stall watchdog kills at 900s silent)
+2026-11-24T13:48:53+00:00 cycle=2 exit=0 v6.1 session=
+2026-11-24T13:49:08+00:00 DEGRADE: build traffic -> estate-degraded (council-fast untouched, Andy voice 01:14 call 49e2b8f1)
+2026-11-24T13:49:08+00:00 MODEL FILE: per-task MODEL 'free-only' overrides estate-degraded
+2026-11-24T13:49:08+00:00 SEMAPHORE: acquired cycle semaphore with 18s jitter
+2026-11-24T14:15:26+00:00 STALL KILL: no log output for 900s, model omniroute/free-only, pid 2126015
+2026-11-24T14:15:36+00:00 HUNG CYCLE: opencode run elapsed 1570s (over 300s; stall watchdog kills at 900s silent)
+2026-11-24T14:15:37+00:00 cycle=3 exit=125 v6.1 session=
+2026-11-24T14:15:52+00:00 DEGRADE: build traffic -> estate-degraded (council-fast untouched, Andy voice 01:14 call 49e2b8f1)
+2026-11-24T14:15:52+00:00 MODEL FILE: per-task MODEL 'free-only' overrides estate-degraded
+2026-11-24T14:15:52+00:00 SEMAPHORE: acquired cycle semaphore with 30s jitter
+2026-11-24T14:24:22+00:00 HUNG CYCLE: opencode run elapsed 480s (over 300s; stall watchdog kills at 900s silent)
+2026-11-24T14:24:24+00:00 cycle=4 exit=0 v6.1 session=
+2026-11-25T19:34:58+00:00 DEGRADE CANARY: this cycle uses estate-degraded (in the 50% canary slice)
+2026-11-25T19:34:58+00:00 DEGRADE: build traffic -> estate-degraded (council-fast untouched, Andy voice 01:14 call 49e2b8f1)
+2026-11-25T19:34:58+00:00 MODEL FILE: per-task MODEL 'free-only' overrides estate-degraded
+2026-11-25T19:34:58+00:00 SEMAPHORE: acquired cycle semaphore with 18s jitter
+2026-11-25T19:35:16+00:00 INJECT SCAN: /home/andy/chapelgate/factory-tasks/dr-councils-20261124/STEER.md quarantined (label=steer) - excluded from prompt
+2026-11-25T19:55:46+00:00 HUNG CYCLE: opencode run elapsed 1230s (over 300s; stall watchdog kills at 900s silent)
+2026-11-25T19:55:47+00:00 cycle=1 exit=0 v6.1 session=
+2026-11-25T20:09:43+00:00 DEGRADE CANARY: this cycle uses estate-degraded (in the 50% canary slice)
+2026-11-25T20:09:43+00:00 DEGRADE: build traffic -> estate-degraded (council-fast untouched, Andy voice 01:14 call 49e2b8f1)
+2026-11-25T20:09:43+00:00 MODEL FILE: per-task MODEL 'free-only' overrides estate-degraded
+2026-11-25T20:09:43+00:00 SEMAPHORE: acquired cycle semaphore with 30s jitter
+2026-11-25T20:10:13+00:00 INJECT SCAN: /home/andy/chapelgate/factory-tasks/dr-councils-20261124/STEER.md quarantined (label=steer) - excluded from prompt

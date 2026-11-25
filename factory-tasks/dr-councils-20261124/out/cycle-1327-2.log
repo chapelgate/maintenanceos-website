@@ -1,0 +1,920 @@
+[0m
+> build · free-only
+[0m
+[0m✱ [0mGlob "**/*"[90m in . · 11 matches[0m
+[0m✱ [0mGlob "**/*"[90m in /home/andy/chapelgate/jobs-work-dell · 100 matches[0m
+[0m✗ [0mGlob "**/mac-review.sh" failed[90m in /home/andy/chapelgate/jobs-work-dell/dell-services[0m
+[91m[1mError: [0mripgrep execution failed
+[0m→ [0mRead status.json
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/run_council_a_hcv.sh
+[0m→ [0mRead MODEL
+[0m→ [0mRead out/JOB-ID
+[0m→ [0mRead out
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/PARKED.md
+[0m✱ [0mGlob "**/STEER.md"[90m in . · 0 matches[0m
+[0m✱ [0mGlob "**/council-restart*"[90m in /home/andy/chapelgate/jobs-work-dell · 3 matches[0m
+[0m✱ [0mGlob "**/mac-review*"[90m in /home/andy/chapelgate/jobs-work-dell · 0 matches[0m
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/council-restart-20261124-132523.log
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness
+[0m→ [0mRead out/raw
+[0m→ [0mRead history.log
+[0m✱ [0mGlob "**/model-pin/**"[90m in /home/andy/chapelgate/jobs-work-dell · 0 matches[0m
+[0m✱ [0mGlob "**/council-dr/**"[90m in /home/andy/chapelgate/jobs-work-dell · 0 matches[0m
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/council-restart-20261124-131934.log
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/council-restart-20261124-131958.log
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/COUNCIL-DR.md
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/COUNCIL-QUEUE-STATUS.md
+[0m✗ [0mGlob "**/*" failed[90m in /home/andy/chapelgate/jobs-work-dell/dell-services[0m
+[91m[1mError: [0mripgrep execution failed
+[0m✱ [0mGlob "council-restart.sh"[90m in /home/andy/chapelgate/jobs-work-dell/readiness · 0 matches[0m
+[0m✱ [0mGlob "**/council-restart.sh"[90m in /home/andy/chapelgate/jobs-work-dell · 0 matches[0m
+[0m✗ [0mRead /home/andy/chapelgate/jobs-work-dell/dell-services failed
+[91m[1mError: [0mFile not found: /home/andy/chapelgate/jobs-work-dell/dell-services
+[0m→ [0mRead /home/andy/chapelgate/jobs-work-dell/readiness/COUNCIL-DR.md.bak-dr-councils-20261124-131902
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/jobs-work-dell/dell-services 2>&1 || echo "dell-services not found"
+ls: cannot access '/home/andy/chapelgate/jobs-work-dell/dell-services': No such file or directory
+dell-services not found
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/jobs-work-dell/ | head -50
+total 1140876
+drwxr-xr-x 202 andy andy      32768 Nov 24 11:26 .
+drwxrwxr-x  60 andy andy      12288 Nov 23 22:12 ..
+-rw-rw-r--   1 andy andy       3240 Nov 21 17:01 00-FRAMEWORK-RESEARCH.md
+-rw-r--r--   1 andy andy       1101 Oct 21 23:27 ag-correction2.md
+-rw-rw-r--   1 andy andy       2393 Nov 24 00:11 AGENTS.md
+-rw-r--r--   1 andy andy       3392 Oct 25 11:18 AGENTS.md.bak-20261025-t641
+-rw-r--r--   1 andy andy      21032 Nov 11 12:48 AGENTS.md.bak-20261111T1250
+-rw-r--r--   1 andy andy      21930 Nov 12 09:17 AGENTS.md.bak-20261112
+-rw-r--r--   1 andy andy      21925 Nov 12 09:17 AGENTS.md.bak-20261112-shakedown
+-rw-r--r--   1 andy andy      24047 Nov 14 09:05 AGENTS.md.bak-20261114-095052
+-rw-r--r--   1 andy andy      29873 Nov 18 10:44 AGENTS.md.bak-cybersec-20261119-1001
+-rw-r--r--   1 andy andy      24468 Nov 15 15:52 AGENTS.md.bak-eggbot-20261115-1552
+-rw-r--r--   1 andy andy      25007 Nov 15 15:54 AGENTS.md.bak-eggbot-20261115-1554
+-rw-r--r--   1 andy andy      25222 Nov 15 17:10 AGENTS.md.bak-eggbot-20261115-1710
+-rw-r--r--   1 andy andy      26669 Nov 15 17:33 AGENTS.md.bak-eggbot-20261115-1733
+-rw-r--r--   1 andy andy      27523 Nov 16 16:17 AGENTS.md.bak-eggbot-20261116-1617
+-rw-r--r--   1 andy andy      28324 Nov 17 19:34 AGENTS.md.bak-eggbot-20261117-1934
+-rw-r--r--   1 andy andy      31538 Nov 19 10:01 AGENTS.md.bak-eggbot-20261119-1504
+-rw-r--r--   1 andy andy      32336 Nov 19 16:54 AGENTS.md.bak-eggbot-20261119-1654
+-rw-r--r--   1 andy andy      32491 Nov 20 13:31 AGENTS.md.bak-eggbot-20261120-1331
+-rw-r--r--   1 andy andy      33249 Nov 20 13:32 AGENTS.md.bak-eggbot-20261120-1332
+-rw-rw-r--   1 andy andy       1399 Nov 20 17:23 AGENTS.md.bak-eggbot-20261120-1837
+-rw-rw-r--   1 andy andy       2277 Nov 20 18:47 AGENTS.md.bak-eggbot-20261120-1904
+-rw-rw-r--   1 andy andy       3391 Nov 20 19:04 AGENTS.md.bak-eggbot-20261120-1923
+-rw-rw-r--   1 andy andy       4190 Nov 20 19:23 AGENTS.md.bak-eggbot-20261120-1924-gate
+-rw-rw-r--   1 andy andy       5053 Nov 20 19:24 AGENTS.md.bak-eggbot-20261120-1927-rc
+-rw-rw-r--   1 andy andy       1399 Nov 20 20:09 AGENTS.md.bak-eggbot-20261120-2143
+-rw-rw-r--   1 andy andy       1399 Nov 20 22:42 AGENTS.md.bak-eggbot-20261121-1437
+-rw-rw-r--   1 andy andy       1716 Nov 21 18:49 AGENTS.md.bak-eggbot-20261121-2109
+-rw-rw-r--   1 andy andy       2180 Nov 21 21:09 AGENTS.md.bak-eggbot-20261121-2121
+-rw-rw-r--   1 andy andy       2523 Nov 21 21:21 AGENTS.md.bak-eggbot-20261121-2128
+-rw-r--r--   1 andy andy      13700 Oct 28 19:21 AGENTS.md.bak-ewretro-20261028T203143Z
+-rw-r--r--   1 andy andy      22616 Nov 12 09:17 AGENTS.md.bak-gapclose-1-4-20261112T1128Z
+-rw-r--r--   1 andy andy      22209 Nov 12 09:17 AGENTS.md.bak-prevention-20261114
+-rw-r--r--   1 andy andy      29281 Nov 18 10:43 AGENTS.md.bak-reelimpl-20261118-1043
+-rw-r--r--   1 andy andy      21037 Nov 11 19:14 AGENTS.md.bak-skills-20261111
+-rw-r--r--   1 andy andy      17535 Nov  8 18:55 AGENTS.md.bak-t221u-20261108T185517Z
+-rw-r--r--   1 andy andy       5793 Oct 26 09:09 AGENTS.md.bak-t696u-20261026T090856Z
+-rw-r--r--   1 andy andy       6441 Oct 26 09:09 AGENTS.md.bak-t727u
+-rw-r--r--   1 andy andy       7209 Oct 26 18:35 AGENTS.md.bak-t736u
+-rw-r--r--   1 andy andy       7911 Oct 26 19:58 AGENTS.md.bak-t767u-20261027T1640Z
+-rw-r--r--   1 andy andy       9076 Oct 27 16:40 AGENTS.md.bak-t778u-20261027T195903Z
+-rw-r--r--   1 andy andy      10228 Oct 27 19:59 AGENTS.md.bak-t780u-20261027T204507Z
+-rw-r--r--   1 andy andy      11505 Oct 27 21:02 AGENTS.md.bak-t791u-20261027T230835Z
+-rw-r--r--   1 andy andy      11989 Oct 27 23:23 AGENTS.md.bak-t810u-ewgate-20261028T192145Z
+-rw-r--r--   1 andy andy      13887 Oct 30 08:44 AGENTS.md.bak-t897u
+-rw-r--r--   1 andy andy      14066 Oct 30 22:23 AGENTS.md.bak-t926
+-rw-r--r--   1 andy andy        418 Oct 21 23:27 ag-relaunch.sh
+-rw-r--r--   1 andy andy    1325132 Oct 21 22:14 ag-review-2210.tgz
+[0m
+[0m$ [0mfind /home/andy/chapelgate -name "council-restart.sh" -type f 2>/dev/null
+/home/andy/chapelgate/dell-services/council-dr/council-restart.sh
+[0m
+[0m$ [0mfind /home/andy/chapelgate -name "mac-review.sh" -type f 2>/dev/null
+/home/andy/chapelgate/dell-services/model-pin/mac-review/mac-review.sh
+[0m
+[0m→ [0mRead /home/andy/chapelgate/dell-services/model-pin/mac-review/mac-review.sh
+[0m→ [0mRead /home/andy/chapelgate/dell-services/council-dr/council-restart.sh
+[0m
+[0m# [0mTodos
+[•] Load chapelgate-skill-first skill (mandatory preflight)
+[ ] Verify COUNCIL-DR.md runbook at jobs-work-dell/readiness/COUNCIL-DR.md
+[ ] Verify council-restart.sh at dell-services/council-dr/council-restart.sh
+[ ] Run council-restart.sh twice to prove idempotency with raw output
+[ ] Create throwaway council drill at factory-tasks/council-dr-drill-<ts>
+[ ] Simulate double outage on throwaway unit only (Mac lane env override)
+[ ] Run council-restart.sh and prove run resumes writing VERDICT.md + OUTCOME.json
+[ ] Add council DR host entry to PARKED.md
+[ ] Create backups (.bak-dr-councils-<ts>) and SIGNOFF-TRAIL rows
+[ ] Get estate-coding + mac-review council GO (out/council-signoff.md + OUTCOME.json)
+[ ] Write out/RESULT.md with drill result
+[ ] Write out/raw/SHA (sha256 of script and runbook)
+[ ] Write PASS COUNT: N/M and out/MISSION_COMPLETE
+[0m
+[0m→ [0mSkill "chapelgate-skill-first"
+Now I have a clear picture. Let me examine how existing council runs work to understand the throwaway drill setup.
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks -maxdepth 2 -type f -name "*.md" 2>/dev/null | head -20
+/home/andy/chapelgate/factory-tasks/reel-review-council-20261119-0852/BRIEF.md
+/home/andy/chapelgate/factory-tasks/reel-review-council-20261119-0852/STEER.md
+/home/andy/chapelgate/factory-tasks/reel-trial-4-tools-for-production-claude-websites-framer-mo-20261121/BRIEF.md
+/home/andy/chapelgate/factory-tasks/reel-trial-4-tools-for-production-claude-websites-framer-mo-20261121/STEER.md
+/home/andy/chapelgate/factory-tasks/reel-adopt-vibe-coding-supabase-open-access-rules-data-expo-20261119/BRIEF.md
+/home/andy/chapelgate/factory-tasks/reel-adopt-vibe-coding-supabase-open-access-rules-data-expo-20261119/STEER.md
+/home/andy/chapelgate/factory-tasks/reel-review-council-20261123-0307/STEER.md
+/home/andy/chapelgate/factory-tasks/reel-trial-ambient-context-local-work-diary-for-ai-20261118/BRIEF.md
+/home/andy/chapelgate/factory-tasks/reel-trial-ambient-context-local-work-diary-for-ai-20261118/STEER.md
+/home/andy/chapelgate/factory-tasks/persona-round-holiday-let-operator-20261116/BRIEF.md
+/home/andy/chapelgate/factory-tasks/persona-round-holiday-let-operator-20261116/STEER.md
+/home/andy/chapelgate/factory-tasks/reel-trial-claude-code-tips-status-skill-md-20261120/BRIEF.md
+/home/andy/chapelgate/factory-tasks/reel-trial-claude-code-tips-status-skill-md-20261120/STEER.md
+/home/andy/chapelgate/factory-tasks/disk-tiering-20261119/BRIEF.md
+/home/andy/chapelgate/factory-tasks/disk-tiering-20261119/STEER.md
+/home/andy/chapelgate/factory-tasks/reel-adopt-ai-agent-maturity-levels-0-5-chatbot-to-team-20261121/BRIEF.md
+/home/andy/chapelgate/factory-tasks/reel-adopt-ai-agent-maturity-levels-0-5-chatbot-to-team-20261121/STEER.md
+/home/andy/chapelgate/factory-tasks/reel-review-council-20261121-2207/BRIEF.md
+/home/andy/chapelgate/factory-tasks/reel-review-council-20261121-2207/STEER.md
+/home/andy/chapelgate/factory-tasks/phone-stage4-maintenanceos-phone-line-20261115/BRIEF.md
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks -maxdepth 2 -type d -name "council*" 2>/dev/null
+/home/andy/chapelgate/factory-tasks/council-omniroute-review-20261117
+/home/andy/chapelgate/factory-tasks/council-minutes-demo-20261124
+/home/andy/chapelgate/factory-tasks/council-root-disk-daily-20261121
+/home/andy/chapelgate/factory-tasks/council-cso-canary-deps-20261123
+/home/andy/chapelgate/factory-tasks/council-root-disk-daily-20261123
+/home/andy/chapelgate/factory-tasks/council-gonogo-lcm-6ee22677-20261123
+/home/andy/chapelgate/factory-tasks/council-models-hy4-cap-20261123
+/home/andy/chapelgate/factory-tasks/council-cm-pricing-20261124
+/home/andy/chapelgate/factory-tasks/out/council
+/home/andy/chapelgate/factory-tasks/council-gonogo-mt-d7d6b0eb-20261123
+/home/andy/chapelgate/factory-tasks/council-commercial-viability-20261123
+/home/andy/chapelgate/factory-tasks/council-voice-clone-threat-product-20261119
+/home/andy/chapelgate/factory-tasks/council-landlord-os-591d329
+/home/andy/chapelgate/factory-tasks/council-ec-clean-rate-20261124
+/home/andy/chapelgate/factory-tasks/council-merge-batch-b-20261123
+/home/andy/chapelgate/factory-tasks/council-gonogo-cm-5aee1698-20261123
+/home/andy/chapelgate/factory-tasks/droplet-carry-council-cycle/council-tiebreak
+/home/andy/chapelgate/factory-tasks/droplet-carry-council-cycle/council-a
+/home/andy/chapelgate/factory-tasks/droplet-carry-council-cycle/council-b
+/home/andy/chapelgate/factory-tasks/council-release-gate-fix-20261121
+/home/andy/chapelgate/factory-tasks/council-disk-binlist-20261124
+/home/andy/chapelgate/factory-tasks/council-pr16-hcv-20261123
+/home/andy/chapelgate/factory-tasks/council-runner-hang-fix-20261123
+/home/andy/chapelgate/factory-tasks/council-merge-batch-a-20261123
+/home/andy/chapelgate/factory-tasks/council-cso-cm-rc1-deps-xml-20261123
+/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257
+/home/andy/chapelgate/factory-tasks/droplet-carry-readiness-loop/councils
+/home/andy/chapelgate/factory-tasks/cso-council-minutes-rc1-fix-deps-xml-20261123/council_minutes
+/home/andy/chapelgate/factory-tasks/council-pr8-pr714-r3-20261123
+/home/andy/chapelgate/factory-tasks/council-irc-viability-recheck-20261123
+/home/andy/chapelgate/factory-tasks/council-mt-gonogo-20261123
+/home/andy/chapelgate/factory-tasks/council-root-disk-daily-20261122
+/home/andy/chapelgate/factory-tasks/council-root-disk-daily-20261124
+/home/andy/chapelgate/factory-tasks/council-cm-b2d2488-canary-4e287f54-20261124
+/home/andy/chapelgate/factory-tasks/council-root-disk-daily-20261120
+/home/andy/chapelgate/factory-tasks/council-model-stack-map-20261123
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/
+...output truncated...
+
+Full output saved to: /home/andy/.local/share/opencode/tool-output/tool_20dc6d459001V6iFZPiFUEl57P
+
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-harness-engineering-memory-context-skills-log-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-harness-ownership-principle-rules-permissions-ch-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-herdr-nvim-neovim-sidebar-for-ai-agents-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-hermes-hud-terminal-dashboard-for-real-time-ai-a-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-hookify-plugin-adds-guardrails-to-claude-code-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-how-llms-built-6-steps-data-tokens-transformer-p-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-insurer-evidence-file-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-inter-company-sop-skill-sharing-this-is-how-you-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 23:51 reel-adoption-impact-outlook-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adoption-titles-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-iphone-advanced-data-protection-host-header-pass-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-jwt-signature-verification-flaw-privilege-escala-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-kru-ai-agent-key-vault-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-local-data-sovereignty-host-chat-on-home-office-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-localstorage-token-theft-ai-auth-bug-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-local-vs-global-problems-methodology-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-loop-engineering-unattended-tasks-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-adopt-lora-behaviour-trial-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-machine-metaphor-hidden-buttons-skills-combinati-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-malicious-model-supply-chain-hugging-face-numbat-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-mass-assignment-vulnerability-is-admin-field-inj-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-mcp-server-or-cli-make-app-accessible-to-ai-agen-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-mcp-server-star-ranking-rea-1-markitdown-graphif-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-mcp-server-vs-agent-business-model-sell-mcp-plug-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-mcp-vs-apis-common-ai-facing-layer-tool-discover-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-microsoft-hackers-using-ai-to-scan-github-for-az-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-microsoft-outage-health-check-cascade-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-multi-tenant-isolation-architecture-tier-3-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-musk-5-step-building-algorithm-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 23:36 reel-adopt-mythos-5-2-ai-security-testing-finds-12-vuln-cla-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-nightshift-ai-coding-shift-manager-github-com-or-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 24 08:50 reel-adopt-no-caption-available-20261124
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-npm-supply-chain-attack-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-nvidia-skill-spectre-skill-security-scanner-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-oauth-grant-inventory-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-oauth-redirect-attack-fake-google-login-improper-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-oauth-redirect-uri-validation-google-oauth-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-ocr-it-local-pdf-ocr-browser-extension-20261118
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-one-base-two-doors-automations-agents-employees-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-osint-scammer-investigation-github-patch-dark-we-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-osint-techniques-username-enum-breach-db-ip-expo-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-outcome-first-prompting-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-paper-radar-big-tech-arxiv-tracker-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-password-reset-poisoning-fix-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-personal-opsec-5-address-exposure-vectors-gdpr-m-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-production-ai-deployment-vetting-warning-consult-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-production-readiness-checklist-for-vibe-coded-ap-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-qwen-3-8-27b-local-deployment-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-rag-chunking-strategies-6-methods-fixed-recursiv-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-rag-hallucination-prevention-8-techniques-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-rea-deep-dive-300k-stars-ghidra-mcp-electron-and-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-rea-reverse-engineer-anything-free-local-plugin-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-replit-built-public-court-record-search-for-due-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-sandbox-lockdown-dell-agent-units-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-secure-ai-apps-data-server-server-side-auth-secr-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-sellable-commercial-readiness-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-shadow-ai-usage-64-on-personal-accounts-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-shrimply-open-source-ai-video-editor-in-rust-git-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-six-essential-documents-before-vibe-coding-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-six-pillars-for-claude-code-business-repo-struct-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-six-ui-ux-principles-for-product-design-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-skill-spectre-nvidia-skill-scanner-github-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-spark-x2-5-local-4b-model-1m-context-runs-on-16g-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-ssrf-via-ai-agents-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-stripe-checkout-price-manipulation-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-stripe-webhook-signature-verification-idempotenc-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-tech-debt-skill-ai-code-audit-github-ksimback-te-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-adopt-three-question-release-gate-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-tiny-tts-1m-param-open-source-local-tts-onnx-run-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-token-hacking-fable-planner-codex-executor-via-c-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-transient-error-handling-retry-with-exponential-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-turn-daily-work-into-ai-employees-claude-md-skil-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-uk-gdpr-data-broker-opt-out-via-single-bcc-email-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-vibe-coding-supabase-open-access-rules-data-expo-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-video-talkcraft-ai-agent-skill-for-motion-design-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-vllm-uc-berkeley-open-source-inference-server-pa-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-voice-cloning-tool-3-sec-audio-no-login-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-waf-modsecurity-owasp-crs-fail2ban-alerting-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-adopt-webhook-spoofing-directory-busting-attack-demo-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-full-accounts-overnight-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 23:46 reel-review-council-20261117-0916
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-0937
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-0952
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1007
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1537
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1607
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1652
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1737
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1807
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1837
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1907
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1937
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261117-1952
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-1252
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-1552
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-1707
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-1807
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-1922
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-1937
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-1952
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2022
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2107
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2137
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2152
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2207
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2222
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2252
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2307
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2322
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261118-2352
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261119-0822
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261119-0852
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261119-0907
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261119-1507
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261119-2207
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-0946
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-1852
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-2007
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-2107
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-2122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-2137
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-2152
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261120-2307
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0107
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0307
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0322
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0337
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0352
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0407
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0422
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0437
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0452
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0507
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0522
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0537
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0552
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0607
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0622
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0637
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0652
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0707
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0722
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0737
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0752
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0807
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0822
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0837
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0852
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-0907
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-1037
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-1122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261121-2207
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-0023
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-0307
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-0507
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-0807
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-0937
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-1037
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-1322
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-1422
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-1537
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261122-1822
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0107
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0137
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0152
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0207
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0222
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0237
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0252
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0307
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0322
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0337
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0352
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0407
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0422
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0437
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0452
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0507
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0522
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0537
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0552
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0607
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0622
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0637
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0652
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0707
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0722
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0737
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0752
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-review-council-20261123-0807
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 reel-scrape-speedup-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-10-vibe-coder-compliance-mistakes-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-2d-motion-interface-captionin-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-47-ai-agents-running-a-company-shared-brain-mode-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-4-mcp-servers-for-claude-code-context7-playwrigh-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-4-tools-for-production-claude-websites-framer-mo-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-59-hour-codex-autonomous-loop-building-macos-app-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-5-agent-team-orchestration-manager-hiring-sub-ag-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-5-ai-user-tips-voice-to-text-second-brain-skills-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-5-free-claude-skills-pocock-engineering-apple-de-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-5-mcp-integration-for-claude-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-60-agents-on-one-build-run-fr-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-64-agents-261-skills-cloud-code-repo-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-6-things-to-be-better-than-99-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-agent-architecture-model-harness-context-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-agentcraft-ai-agents-in-minecraft-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-agentic-workflow-architecture-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-agent-system-design-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-agent-context-window-management-break-tasks-i-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-agent-framework-rooflow-claudecode-autonomous-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-agent-runnable-replaces-9-subscriptions-build-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-assisted-dev-workflow-superset-parallel-claud-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-automation-seo-social-media-content-engine-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-browser-bypassing-cloudflare-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-content-system-for-product-visibility-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-dual-use-digital-footprint-mapping-osint-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-employee-roadmap-context-memory-skills-tools-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-found-a-php-hole-in-70-of-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-improvement-framework-context-skills-automati-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-invoice-clerk-copilot-studio-bank-change-frau-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-job-automation-3-month-path-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-landing-page-generation-pt-br-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-native-v2-operating-system-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-profit-boardroom-claudecodeagenticos-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-profit-boardroom-claude-obsidian-seo-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-profit-boardroom-claude-whiteboards-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-prototyping-workflow-html-voice-github-linear-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-video-production-course-7-step-line-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ai-website-builder-creating-3d-websites-from-sin-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ambient-context-local-work-diary-for-ai-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-anthropic-5-rules-for-claude-code-startups-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-anthropic-engineers-use-skills-not-prompts-claud-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-anthropic-fable-5-2-launch-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-anthropic-plugindev-toolkit-for-claude-code-plug-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-api-key-encryption-kms-pattern-plain-text-keys-i-20261118
+drwxrwxr-x   8 andy andy   4096 Nov 23 12:25 reel-trial-audio8-speech-model-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-automation-vs-agent-framework-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-autonomous-ai-security-research-quen-3-8-local-b-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-bama-mac-app-rebuild-with-claude-code-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-black-mirror-method-self-cloning-with-claude-cod-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-black-october-isn-t-over-part-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-bookshelf-self-hosted-e-book-library-no-db-cloud-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-browser-automation-opencli-turn-website-interact-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-build-an-ai-trading-team-with-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-build-first-ai-agent-in-claude-code-step-by-step-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-calibri-744b-model-on-cpu-disk-streaming-openai-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-caveman-skill-short-direct-ai-replies-lite-full-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-chatgpt-chrome-browser-automation-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-chatgpt-images-2-6-upgrade-animated-gifs-brand-r-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-chatgpt-work-codex-for-app-building-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-canary-naming-pattern-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-code-design-feature-slash-design-mcp-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-code-front-end-design-toolkit-70-tools-th-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-code-setup-plugin-dev-swarm-ide-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-code-tips-status-skill-md-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-connectors-demo-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-diagram-design-skill-58k-stars-flowcharts-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-mods-prompt-rewriting-agent-chat-linking-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-opus-5-5-agent-os-with-shared-memory-acro-20261119
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-claude-paper-skill-local-ocr-on-device-free-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-prompt-master-mod-20261119
+drwxrwxr-x   6 andy andy   4096 Nov 23 23:31 reel-trial-claude-red-free-open-source-security-playbooks-f-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-red-offensive-security-skills-demo-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-security-anti-patterns-api-key-front-end-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-claude-skills-short-files-standardizing-agent-be-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-cli-anything-claude-integration-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-cloudflare-ai-security-agents-creating-false-pos-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-cloudflare-rate-limiting-waf-config-for-login-en-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-cloudflare-security-audit-skill-for-claude-code-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 24 00:11 reel-trial-cloudflare-security-skill-auto-audits-systems-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-coca-cola-context-compression-70-89-tokens-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-codejury-two-model-jury-ai-code-review-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-combine-kombai-gallery-design-refs-for-claude-co-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-comment-community-to-build-all-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-comment-edit-for-the-free-ki-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-comment-need-if-you-want-the-l-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-comment-projects-and-i-ll-se-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-context7-mcp-server-dev-swarm-parallel-ide-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-context-mode-plugin-for-claude-code-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-craft-anything-ai-app-recreation-tool-20261121
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-crawlie-free-open-source-seo-crawler-in-rust-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-crm-for-contractor-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-cross-platform-ai-agent-control-mac-windows-via-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-cts-framework-context-tools-skills-for-ai-operat-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-design-skill-for-cloud-websites-with-3d-scrollab-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-fable-5-2-ai-design-assistant-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-fable-5-2-free-trial-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-fable-reset-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-fast-dev-workflow-pm-design-eng-agents-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-fish-audio-voice-clone-instant-voice-model-api-k-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-five-free-github-ai-tool-repos-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-five-levels-of-claude-usage-q-a-ask-questions-pr-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-five-mcp-connectors-for-claude-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-forecast-price-with-kronos-a-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-four-claude-seo-tools-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-free-ai-scraping-tool-scrapegraph-ai-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-free-nvidia-ai-api-keys-80-models-including-glm-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-from-bulk-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-fusion-embedding-multimodal-model-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-gal-central-ai-agent-config-manager-17-agents-ya-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-gamma-5-agent-ai-pitch-deck-generator-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-gardenskills-ai-design-toolkit-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-gemini-4-carbon-on-google-cloud-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-gemini-decision-1-fast-decision-model-yes-no-mul-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-gemini-notebook-flashcard-upgrades-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-gemini-omni-1-2-flash-ai-video-generation-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-general-motors-announced-some-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-github-url-tricks-for-codebase-mapping-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-google-ai-studio-update-gemini-omni-1-2-flash-fo-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-google-antigravity-2-32-0-swarm-dynamic-workflow-20261118
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-google-antigravity-browser-agent-browse-build-te-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-google-antigravity-voice-mode-remote-agents-slas-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-google-artemis-phone-automation-via-mcp-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-google-skills-library-firebase-cloud-run-gemini-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-google-street-view-blur-technique-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-haiku-opus-model-routing-cost-optimization-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hallmark-design-skill-together-ai-50-themes-755-20261117
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-heimdall-local-persistent-ai-agent-brain-zero-to-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermarchy-theme-subtle-agent-activity-status-bar-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermes-agent-6-levels-hearth-release-1650-change-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermes-agentos-complete-guide-mixture-of-agents-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermes-agentos-dashboard-demo-oracle-video-agent-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermes-agent-os-step-5-preview-multi-agent-ai-wo-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermes-multi-agent-ai-workspace-with-group-chats-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermes-obsidian-agentos-ai-assistant-with-person-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-hermes-obsidian-shared-memory-for-ai-agents-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-how-long-till-claude-books-me-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-how-to-improve-a-private-secur-20261119
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-hyperframes-code-to-video-via-claude-code-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ilea-design-ai-design-skills-devswarm-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-i-sat-by-the-river-bank-i-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-jane-street-socratic-tutor-free-claude-skill-ada-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-jarvis-agent-os-running-100-locally-on-mac-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-kern-rootless-sandbox-3ms-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-latticedb-local-graph-semantic-text-db-zig-singl-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-learn-ai-automation-from-scratch-in-three-months-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-llm-wiki-skill-organizer-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-loading-files-mcp-for-animations-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-loop-engineering-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-loop-engineering-loupony-tool-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-lp-skill-design-principles-nielsen-gestalt-fitts-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-luvus-ai-coding-agent-dashboard-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-mailflare-self-hosted-google-workspace-alt-with-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-matt-pocock-skills-for-real-engineers-claude-cod-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-mesh-llm-distributed-llm-inference-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-meta-asterix-design-system-150-components-mcp-se-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-meta-asterix-design-system-mcp-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-meta-n-the-ai-that-codes-its-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-minimax-h3-director-cut-studio-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-mobarust-open-source-mobaxterm-alternative-secur-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-multi-harness-agent-orchestration-opencode-codex-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-multi-model-agent-workflow-claude-code-codex-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-munder-difflin-agent-team-tool-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-nine-free-github-repos-as-paid-tool-alternatives-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 24 08:50 reel-trial-no-caption-available-20261124
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-notion-ai-second-brain-template-for-agents-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-numbat-model-malware-warning-oathbreaker-advocac-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-obsidian-vault-as-claude-code-second-brain-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ocr-it-local-pdf-ocr-browser-extension-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-omega-agent-orchestration-opus-plans-haiku-execu-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-openai-businesses-in-chatgpt-business-hub-busine-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-openai-dots-always-on-ai-agents-with-own-compute-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-openinbox-free-email-tool-on-cloudflare-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-openmousebot-autonomous-bots-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-open-source-agent-platform-access-repo-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-open-source-meeting-note-taker-meetily-29k-stars-20261122
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-open-source-voice-cloning-local-cpu-7-sec-clone-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-open-source-voice-tools-eleven-labs-whisperflow-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-openvid-open-source-browser-tool-for-polished-sc-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-paperclip-ai-company-orchestrator-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-physical-ai-with-raspberry-pi-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-pibench-ai-coding-agent-benchmark-real-bugs-sand-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-private-local-ai-guide-ollama-open-web-ui-n8n-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-private-rag-on-mac-with-ollama-anythingllm-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-process-before-ai-framework-stopwatch-method-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-pty-pseudo-terminal-24-7-persistent-coding-agent-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-rag-pdf-question-answering-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 23:26 reel-trial-redcell-ai-pentesting-agent-recon-cve-prompt-inj-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-replet-com-design-design-system-ai-agent-builds-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-repomix-organize-github-repos-into-ai-friendly-f-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-restaurant-voice-agent-french-english-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-reverse-engineer-how-any-app-f-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-run-an-open-source-ai-agent-on-20261119
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-sabiql-terminal-db-client-driverless-postgres-sq-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-sapa-ai-hackers-cellbird-ai-sales-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-scrapegraph-ai-open-source-python-library-30k-st-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-second-brain-for-ai-agents-carpathian-method-mod-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-security-vulnerability-disclosure-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-seo-backlinks-with-fable-5-2-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-shared-ai-agent-memory-hermes-obsidian-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-six-iphone-apps-for-agent-orchestration-tailscal-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-skillopt-sleep-cycle-for-claude-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-skilltreeos-ai-agent-map-7-depts-34-teams-137-jo-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-slashbrag-launch-video-skill-for-coding-agents-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-tech-debt-skill-ai-code-audit-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-terminal-phone-iphone-in-terminal-ai-agent-contr-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-tesseract-chatgpt-video-editor-non-destructive-r-20261121
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-thermonuclear-code-quality-review-cursor-skill-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 23:31 reel-trial-these-security-issues-are-gett-20261119
+drwxrwxr-x   6 andy andy   4096 Nov 23 17:35 reel-trial-this-tiny-robot-duck-costs-und-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-three-claude-settings-for-business-plugins-conne-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-three-free-claude-code-skills-claude-mem-find-sk-20261122
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 reel-trial-top-10-mcp-servers-ranking-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-top-5-mcps-for-claude-perplexity-playwright-farc-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-tradingagents-multi-agent-adversarial-pattern-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-trading-bot-network-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-twil-8b-vs-qwen-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-uh-oh-here-we-go-again-every-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-untangle-codebase-skill-for-claude-code-cleanup-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-urbanground-testing-ai-in-rea-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-ux-principles-checklist-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-vector-index-tuning-ivf-hnsw-nprobe-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-vercel-agent-browser-ai-agent-testing-20261117
+drwxrwxr-x   8 andy andy   4096 Nov 23 12:25 reel-trial-vercel-agent-browser-shakedown-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-verification-loop-methodology-for-ai-agents-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-video-editing-skills-ranking-security-warnings-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-vllm-uc-berkeley-inference-server-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-voice-agent-approval-workflow-claudecode-fish-au-20261117
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-vps-security-hardening-20261122
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-whisperflow-voice-dictation-for-ai-openai-tip-20261121
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-xrepotest-ai-code-testing-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-yc-gtm-strategy-via-claude-20261120
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-you-already-have-an-ai-that-st-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 reel-trial-youtube-agent-skill-free-ai-content-team-20261119
+drwxrwxr-x   6 andy andy   4096 Nov 23 11:32 register-fix-all-r1-20261121
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 register-triage-20261123
+drwxrwxr-x  14 andy andy   4096 Nov 12 13:46 release-readiness-20261112
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 release-standards-council-20261114
+drwxrwxr-x   4 andy andy   4096 Nov 24 05:01 release-tracker-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 24 10:56 release-truth-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 repair-pull-requests-merge-readiness-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 24 01:33 rescore-12-products-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 11:46 restore-drill-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rl20-housing-compliance-vault-20261116
+drwxrwxr-x   5 andy andy   4096 Nov 23 11:33 rl20-maintenanceos-website-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rokoko-smartgloves-ii-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 22:02 rootcause-ai-stage2-holiday-let-operator-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 21:57 rootcause-council-merge-batch-a-20261123-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 20:46 rootcause-council-mt-gonogo-20261123-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 19:16 rootcause-council-pr8-pr714-r3-20261123-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 23:21 rootcause-fa-01-business-os-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 22:01 rootcause-fa-02-public-sector-citizen-agent-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 22:02 rootcause-fa-03-maintenanceos-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 21:47 rootcause-fa-04-maintenanceos-website-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 22:47 rootcause-fa-05-legal-case-management-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 21:47 rootcause-fa-07-chapelgate-multilingual-transcribe-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 21:47 rootcause-fa-08-holiday-let-operator-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 23:21 rootcause-fa-10-business-evidence-wallet-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 20:10 rootcause-fa-11-council-minutes-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 19:01 rootcause-fix-council-omniroute-review-r1-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 16:26 rootcause-job-brief-template-scanners-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-company-formation-plan-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 22:01 rootcause-job-council-merge-batch-a-20261123-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 20:46 rootcause-job-council-mt-gonogo-20261123-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 18:37 rootcause-job-council-pr8-pr714-r3-20261123-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 20:37 rootcause-job-cso-fix-housing-compliance-vault-open-findings-20261121-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-estate-audit-loop-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 23:21 rootcause-job-ew-dell-hosting-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 22:02 rootcause-job-fix-findings-holiday-let-operator-20261121-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 15:56 rootcause-job-pricing-tiers-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-python-script-bot-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 15:46 rootcause-job-release-tracker-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-release-truth-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-restore-drill-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-rootcause-fa-01-business-os-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-rootcause-job-company-formation-plan-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-rootcause-job-release-truth-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-rootcause-job-restore-drill-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-job-rootcause-website-reposition-r1-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 16:32 rootcause-ln-02-swap-failure-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 24 11:43 rootcause-loop-citizen-agent-20261124
+drwxrwxr-x   4 andy andy   4096 Nov 23 23:21 rootcause-phone-stage3-maintenanceos-phone-line-20261123
+drwxrwxr-x   5 andy andy   4096 Nov 23 22:02 rootcause-rt15-05-legal-case-management-20261123
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 root-cause-safeguards-open-items-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-website-council-fit-r1-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rootcause-website-reposition-r1-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 24 12:01 router-failover-fix-20261124
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 router-outage-fixes-20261115
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 rt15-fix-hcv-council-minutes-20261118
+drwxrwxr-x   7 andy andy   4096 Nov 23 12:25 sbom-vuln-scan-20261115
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 scaffolding-teardown-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 scaffold-upgrade-20261115
+drwxrwxr-x   4 andy andy   4096 Nov 24 11:01 secrets-vault-rotate-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 security-reel-knowledge-base-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 security-release-plans-remaining-products-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 24 01:15 security-resilience-20261124
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 security-sweep-all-products-20261118
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shadow-gdpr-accountability-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shadow-iso27001-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shadow-iso9001-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shadow-owasp-asvs-l2-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shadow-soc2-tsc-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shadow-standards-68-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 24 07:00 shadow-wcag22aa-20261116
+drwxrwxr-x   3 andy andy   4096 Nov 15 10:18 shakeddown-video-20261113
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shakedown-failclosed-adoption-diff-20261118
+drwxrwxr-x  14 andy andy   4096 Nov 13 11:09 shakedown-video-20261113
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shared-security-component-library-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 shorts-factory-20261118
+drwx------   5 andy andy   4096 Nov 23 23:21 simply-business-pl-el-quote-20261122
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 six-docs-gate-phase2-20261119
+drwxrwxr-x   9 andy andy   4096 Nov 23 11:31 slice6-tidy
+drwxrwxr-x   7 andy andy   4096 Nov 23 12:25 staging-production-credentials-separation-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 stt-ceiling-20261119
+drwxrwxr-x   3 andy andy   4096 Nov 23 12:25 stt-improve-loop
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 sudo-least-privilege-plan-20261119
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 support-readiness-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 tender-dry-run-20261115
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 tender-owner-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:18 test-benchmark-skills-coverage-20261117
+drwxrwxr-x   3 andy andy   4096 Nov 23 12:25 test-mac-failover-20261116
+drwxrwxr-x   6 andy andy   4096 Nov 23 12:25 third-party-pentest-research-20261115
+drwxrwxr-x   7 andy andy   4096 Nov 23 12:25 tool-agent-orchestration-r1-20261115
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 tool-cost-tuning-r1-20261115
+drwxrwxr-x   7 andy andy   4096 Nov 23 12:25 tool-synthetic-data-r1-20261115
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 trading-bot-ai-agent-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 trading-readiness-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 triage-gate-retention-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:19 tutorial-benchmark-rework-20261118
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 tutorial-follow-along-holes-20261118
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 video-intake-fix-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 video-skill-install-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 11:27 video-status-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 24 01:35 video-status-delta-20261123
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 voice-clone-threat-kit-production-20261119
+drwxrwxr-x   4 andy andy   4096 Nov 23 11:33 website-council-deploy-20261116
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 website-council-fit-20261115
+drwxrwxr-x   4 andy andy   4096 Nov 23 11:33 website-council-rebuild-20261120
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 website-council-specialist-20261116
+drwxrwxr-x   4 andy andy   4096 Nov 23 20:47 website-privacy-labels-20261123
+drwxrwxr-x   5 andy andy   4096 Nov 24 01:35 website-reposition-20261117
+drwxrwxr-x   4 andy andy   4096 Nov 23 12:25 welsh-pilot-pitch-20261117
+-rw-rw-r--   1 andy andy  14918 Nov 15 22:14 wirral-research-out.tgz
+-rw-rw-r--   1 andy andy 148959 Nov 15 23:17 wirral-site-out-fba6534.tgz
+drwxrwxr-x   5 andy andy   4096 Nov 23 12:25 wirral-structural-repairs-competitor-research-20261115
+drwxrwxr-x   4 andy andy   4096 Nov 23 11:32 wirral-structural-repairs-local-seo-website-20261115
+drwxrwxr-x   6 andy andy   4096 Nov 23 11:27 wirral-structural-repairs-seo-phase2-20261116
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/out/council/
+total 8
+drwxrwxr-x 2 andy andy 4096 Nov 11 20:49 .
+drwxrwxr-x 4 andy andy 4096 Nov 23 20:58 ..
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/
+total 108
+drwxrwxr-x   4 andy andy  4096 Nov 24 13:25 .
+drwxrwxr-x 911 andy andy 77824 Nov 24 13:35 ..
+-rw-rw-r--   1 andy andy   243 Nov 24 13:24 BRIEF.md
+-rw-rw-r--   1 andy andy    10 Nov 24 13:25 .dell-down
+-rw-rw-r--   1 andy andy    63 Nov 24 13:25 .mac-down
+drwxrwxr-x   3 andy andy  4096 Nov 24 13:25 out
+drwxrwxr-x   2 andy andy  4096 Nov 24 13:22 repo
+-rw-rw-r--   1 andy andy    16 Nov 24 13:22 .ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/
+total 20
+drwxrwxr-x 3 andy andy 4096 Nov 24 13:25 .
+drwxrwxr-x 4 andy andy 4096 Nov 24 13:25 ..
+drwxrwxr-x 2 andy andy 4096 Nov 24 13:22 raw
+-rw-rw-r-- 1 andy andy  704 Nov 24 13:25 restart.log
+-rw-rw-r-- 1 andy andy  158 Nov 24 13:24 verdict-prompt.txt
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/repo/
+total 8
+drwxrwxr-x 2 andy andy 4096 Nov 24 13:22 .
+drwxrwxr-x 4 andy andy 4096 Nov 24 13:25 ..
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/.dell-down
+dell-down
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/.mac-down
+mac-dead-endpoint=http://127.0.0.1:9999/fake-dead-mac-endpoint
+[0m
+[0m→ [0mRead /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/BRIEF.md
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/raw/*
+cat: '/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/raw/*': No such file or directory
+[0m
+[0m→ [0mRead /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/restart.log
+[0m→ [0mRead /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/verdict-prompt.txt
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/
+total 108
+drwxrwxr-x   4 andy andy  4096 Nov 24 13:25 .
+drwxrwxr-x 912 andy andy 77824 Nov 24 13:37 ..
+-rw-rw-r--   1 andy andy   243 Nov 24 13:24 BRIEF.md
+-rw-rw-r--   1 andy andy    10 Nov 24 13:25 .dell-down
+-rw-rw-r--   1 andy andy    63 Nov 24 13:25 .mac-down
+drwxrwxr-x   3 andy andy  4096 Nov 24 13:25 out
+drwxrwxr-x   2 andy andy  4096 Nov 24 13:22 repo
+-rw-rw-r--   1 andy andy    16 Nov 24 13:22 .ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/
+total 20
+drwxrwxr-x 3 andy andy 4096 Nov 24 13:25 .
+drwxrwxr-x 4 andy andy 4096 Nov 24 13:25 ..
+drwxrwxr-x 2 andy andy 4096 Nov 24 13:22 raw
+-rw-rw-r-- 1 andy andy  704 Nov 24 13:25 restart.log
+-rw-rw-r-- 1 andy andy  158 Nov 24 13:24 verdict-prompt.txt
+[0m
+[0m$ [0mwhich rt 2>/dev/null || type rt 2>/dev/null || echo "rt not found"; cat /home/andy/chapelgate/jobs-work-dell/AGENTS.md 2>/dev/null | head -50
+/home/andy/bin/rt
+# Chapelgate agent instructions
+
+## Owner-mandated factory architecture
+For AI project factory execution use **GitHub → NVIDIA model connection → project factory → spawned logical workers → results back to GitHub**. One factory and one canonical queue per project. Reuse existing processes. No separate GitHub Actions runners for factory workers, duplicate queues, extra servers or control planes. GitHub Actions can be used for independent CI/release duties, not factory orchestration. Only the owner can authorise an exception. This policy does not imply a factory is deployed or running. Preserve all existing project safety and release gates.
+
+
+## Owner prohibition: shared worker pool
+For project-factory jobs, use only this project's existing GitHub → NVIDIA → project factory → logical AI workers execution path. **Do not dispatch, claim, or execute factory work on the shared worker pool, estate runner pool, or GitHub Actions self-hosted runners.** Existing GitHub Actions may be used solely for independent CI/release validation. Reuse the current authorised job and existing project factory; do not spawn infrastructure or create duplicate queues. A documented instruction is not proof of execution: record job ID, project factory identity, NVIDIA invocation evidence, start/end timestamps and completed output before reporting PASS. Owner alone may authorise an exception.
+- 2026-11-23 eggbot: no script may archive, move or empty any factory-tasks/*/out/ of a live job (active unit or cycle in the last 24h) or of any video/tutorial/demo job; *-archive-*.tar.zst and /mnt/d/estate-media are never deleted or overwritten. One-off /tmp scripts that sweep factory-tasks/*/out are forbidden (cause of the 23 Nov 12:25 video out/ loss).
+
+## 2026-11-24T00:11:06+00:00 STANDING RULE (Andy voice 24 Nov 00:09): OmniRoute build fallback list (estate-coding) is ranked by model CAPABILITY, not provider lane. Most capable first whatever the provider. Back up router DB (VACUUM INTO db_backups/) before any reorder; change both routers. Applied 00:10 by dr eggbot (17 rungs: codex gpt-5.6-sol, claude sonnet-5, nemotron-3-ultra nvidia/openrouter, gemini-3.8-flash, gemini-3-flash-preview, nemotron-3.5-super nvidia/openrouter, gpt-oss-120b groq/mac/lmstudio, glm-4.7-flash zai, gemini-3.1-flash-lite, nemotron-lightning nvidia/openrouter, qwen3.8-27b groq, glm-4.5-flash zai).
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/dr-councils-20261124/out/ && cat /home/andy/chapelgate/factory-tasks/dr-councils-20261124/out/.cycle.pid 2>/dev/null; echo "---"; cat /home/andy/chapelgate/factory-tasks/dr-councils-20261124/out/.preflight-ok 2>/dev/null
+total 220
+drwxrwxr-x 3 andy andy   4096 Nov 24 13:27 .
+drwxrwxr-x 4 andy andy   4096 Nov 24 13:05 ..
+-rw-rw-r-- 1 andy andy 135057 Nov 24 13:26 cycle-1305-1.log
+-rw-rw-r-- 1 andy andy  66803 Nov 24 13:39 cycle-1327-2.log
+-rw-rw-r-- 1 andy andy      8 Nov 24 13:27 .cycle.pid
+-rw-rw-r-- 1 andy andy      6 Nov 24 13:05 JOB-ID
+-rw-rw-r-- 1 andy andy      0 Nov 24 13:05 .preflight-ok
+drwxrwxr-x 2 andy andy   4096 Nov 24 13:05 raw
+1099520
+---
+[0m
+[0m# [0mTodos
+[✓] Load chapelgate-skill-first skill (mandatory preflight)
+[✓] Verify COUNCIL-DR.md runbook at jobs-work-dell/readiness/COUNCIL-DR.md
+[✓] Verify council-restart.sh at dell-services/council-dr/council-restart.sh
+[ ] Run council-restart.sh twice to prove idempotency with raw output
+[ ] Create throwaway council drill at factory-tasks/council-dr-drill-&lt;ts&gt;
+[ ] Simulate double outage on throwaway unit only (Mac lane env override)
+[ ] Run council-restart.sh and prove run resumes writing VERDICT.md + OUTCOME.json
+[ ] Add council DR host entry to PARKED.md
+[ ] Create backups (.bak-dr-councils-&lt;ts&gt;) and SIGNOFF-TRAIL rows
+[ ] Get estate-coding + mac-review council GO (out/council-signoff.md + OUTCOME.json)
+[ ] Write out/RESULT.md with drill result
+[ ] Write out/raw/SHA (sha256 of script and runbook)
+[ ] Write PASS COUNT: N/M and out/MISSION_COMPLETE
+[0m
+[0m$ [0mcd /home/andy/chapelgate && /home/andy/chapelgate/dell-services/council-dr/council-restart.sh
+2026-11-24T13:40:54+00:00 council-restart START
+2026-11-24T13:40:54+00:00 council-restart timers: checking router-diff state
+2026-11-24T13:40:54+00:00 council-restart timers: QWEN-DOWN present, council runs on estate-coding + mac lane
+2026-11-24T13:40:54+00:00 council-restart queue: flushing on-disk queue file /home/andy/chapelgate/jobs-work-dell/readiness/.cycle-semaphore.lock
+2026-11-24T13:40:54+00:00 council-restart queue: no queue file present — nothing queued during outage
+2026-11-24T13:40:54+00:00 council-restart replay: replaying in-flight verdicts from out/raw/
+2026-11-24T13:40:54+00:00 council-restart COMPLETE. Default remains never GO. Builds were never blocked by this down council.
+[0m
+Now let me run it again to prove idempotency:
+[0m$ [0m/home/andy/chapelgate/dell-services/council-dr/council-restart.sh
+2026-11-24T13:41:10+00:00 council-restart START
+2026-11-24T13:41:10+00:00 council-restart timers: checking router-diff state
+2026-11-24T13:41:10+00:00 council-restart timers: QWEN-DOWN present, council runs on estate-coding + mac lane
+2026-11-24T13:41:10+00:00 council-restart queue: flushing on-disk queue file /home/andy/chapelgate/jobs-work-dell/readiness/.cycle-semaphore.lock
+2026-11-24T13:41:10+00:00 council-restart queue: no queue file present — nothing queued during outage
+2026-11-24T13:41:10+00:00 council-restart replay: replaying in-flight verdicts from out/raw/
+2026-11-24T13:41:10+00:00 council-restart COMPLETE. Default remains never GO. Builds were never blocked by this down council.
+[0m
+Now let me check the current state of the throwaway drill and understand what needs to happen next:
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257 -type f | sort
+/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/BRIEF.md
+/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/.dell-down
+/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/.mac-down
+/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/restart.log
+/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/verdict-prompt.txt
+/home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/.ts
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/raw/
+total 8
+drwxrwxr-x 2 andy andy 4096 Nov 24 13:22 .
+drwxrwxr-x 3 andy andy 4096 Nov 24 13:25 ..
+[0m
+[0m$ [0mcat /home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.queue.* 2>/dev/null; echo "---"; ls /home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.* 2>/dev/null
+---
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.queue.20261124-131934
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.queue.20261124-131958
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.queue.20261124-132523
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.queue.20261124-134054
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.queue.20261124-134110
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.replay.20261124-131934
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.replay.20261124-131958
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.replay.20261124-132523
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.replay.20261124-134054
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.replay.20261124-134110
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.timers.20261124-131934
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.timers.20261124-131958
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.timers.20261124-132523
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.timers.20261124-134054
+/home/andy/chapelgate/jobs-work-dell/readiness/.council-restart-done.timers.20261124-134110
+[0m
+[0m$ [0mcat /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/.ts
+20261124-132257
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257 -name "VERDICT.md" -o -name "OUTCOME.json" 2>/dev/null
+(no output)
+[0m
+[0m$ [0mls -la /home/andy/chapelgate/factory-tasks/council-dr-drill-20261124-132257/out/raw/
+total 8
+drwxrwxr-x 2 andy andy 4096 Nov 24 13:22 .
+drwxrwxr-x 3 andy andy 4096 Nov 24 13:25 ..
+[0m
+Now I need to understand what VERDICT.md and OUTCOME.json look like. Let me check an existing council:
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks -name "VERDICT.md" -type f 2>/dev/null | head -10
+/home/andy/chapelgate/factory-tasks/council-cso-canary-deps-20261123/out/VERDICT.md
+/home/andy/chapelgate/factory-tasks/fixall-20261113/02-public-sector-citizen-agent/out/council/b/VERDICT.md
+/home/andy/chapelgate/factory-tasks/fixall-20261113/02-public-sector-citizen-agent/out/council/a/VERDICT.md
+/home/andy/chapelgate/factory-tasks/brief-template-scanners-20261122/out/council-1/VERDICT.md
+/home/andy/chapelgate/factory-tasks/council-gonogo-lcm-6ee22677-20261123/out/VERDICT.md
+/home/andy/chapelgate/factory-tasks/loop-citizen-agent-20261122/out/council/VERDICT.md
+/home/andy/chapelgate/factory-tasks/golden-line-improved-copy-20261123/out/VERDICT.md
+/home/andy/chapelgate/factory-tasks/company-formation-plan-20261122/out/council1/VERDICT.md
+/home/andy/chapelgate/factory-tasks/company-formation-plan-20261122/out/council2/VERDICT.md
+/home/andy/chapelgate/factory-tasks/hcv-pr9-second-council-20261121/out/council-2/VERDICT.md
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks -name "OUTCOME.json" -type f 2>/dev/null | head -10
+(no output)
+[0m
+[0m→ [0mRead /home/andy/chapelgate/factory-tasks/council-cso-canary-deps-20261123/out/VERDICT.md
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks -name "OUTCOME.json" -type f 2>/dev/null | head -1
+(no output)
+[0m
+[93m[1m! [0mpermission requested: external_directory (/home/andy/bin/*); auto-rejecting
+[0m✗ [0mcat /home/andy/bin/rt failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[0m
+[0m$ [0mfind /home/andy/chapelgate/factory-tasks -name "council-signoff.md" -type f 2>/dev/null | head -5
+(no output)
+[0m
+[0m$ [0mfind /home/andy/chapelgate -name "SIGNOFF-TRAIL*" -type f 2>/dev/null | head -5
+/home/andy/chapelgate/dell-services/model-pin/SIGNOFF-TRAIL.md
+/home/andy/chapelgate/dell-services/model-pin/SIGNOFF-TRAIL.md.bak-eggbot-20261124-1257
+[0m
