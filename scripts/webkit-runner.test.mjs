@@ -28,6 +28,7 @@ test("webkit accessibility runs on the estate runner without hosted spend", () =
   );
   assert.match(workflow, /mcr\.microsoft\.com\/playwright:v1\.63\.0-noble/);
   assert.match(workflow, /docker run --rm --ipc=host --network=host/);
+  assert.match(workflow, /--user "\$\(id -u\):\$\(id -g\)"/);
   assert.doesNotMatch(workflow, /ubuntu-latest/);
   assert.doesNotMatch(workflow, /pull_request_target/);
   assert.doesNotMatch(workflow, /playwright install/);

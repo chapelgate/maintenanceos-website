@@ -45,6 +45,7 @@ jobs:
             echo "=== Testing $page ==="
             lighthouse "http://localhost:3000$page" \
               --form-factor=mobile \
+              --throttling-method=provided \
               --output=json \
               --output-path=/tmp/lighthouse-${page//\//-}.json \
               --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage"
