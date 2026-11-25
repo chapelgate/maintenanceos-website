@@ -1,0 +1,5 @@
+# rt council-outcomes-weekly | 20261125-195306 | sha cfa2fcc555cc56bd5a343393ffce5c9f39672a54 | cwd /home/andy/chapelgate/factory-tasks/outcomes-loop-councils-20261124
+# cmd: python3 council-outcomes-weekly.timer
+Chain verified. Head hash: dbcd5469169660a9...
+Parsed 6 outcome records
+Written weekly summary to /home/andy/chapelgate/jobs-work-dell/readiness/COUNCIL-ACCURACY-2026-11-25.md

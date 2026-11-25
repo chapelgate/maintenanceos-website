@@ -1,0 +1,240 @@
+#!/usr/bin/env python3
+"""council-outcomes-weekly.timer - Mon 07:00 weekly summary to COUNCIL-ACCURACY-<date>.md.
+
+Reads COUNCIL-OUTCOMES.tsv, computes accuracy by model family and tier, top 5 repeat mistakes.
+"""
+import os, sys, json, hashlib, datetime, collections
+
+C = '/home/andy/chapelgate'
+OUT = os.path.join(C, 'jobs-work-dell', 'readiness')
+TSV = os.path.join(OUT, 'COUNCIL-OUTCOMES.tsv')
+FAILURE_LOG = os.path.join(OUT, 'FAILURE-LOG.md')
+
+GENESIS_HASH = hashlib.sha256("chapelgate-council-outcomes-genesis".encode()).hexdigest()
+
+def verify_chain():
+    """Verify the hash chain integrity. Returns (valid, error_message)."""
+    if not os.path.exists(TSV):
+        return False, "COUNCIL-OUTCOMES.tsv does not exist"
+    
+    prev_hash = GENESIS_HASH
+    with open(TSV, 'r') as f:
+        lines = [l.strip() for l in f if l.strip()]
+    
+    if not lines:
+        return False, "COUNCIL-OUTCOMES.tsv is empty"
+    
+    # First line might be genesis
+    start_idx = 0
+    if lines[0].startswith('genesis|'):
+        start_idx = 1
+    
+    for i, line in enumerate(lines[start_idx:], start=start_idx):
+        parts = line.rsplit('|', 1)
+        if len(parts) != 2:
+            return False, f"Line {i+1}: malformed (expected hash column)"
+        
+        row_content, row_hash = parts
+        expected_hash = hashlib.sha256((prev_hash + row_content).encode()).hexdigest()
+        
+        if row_hash != expected_hash:
+            return False, f"Line {i+1}: hash mismatch (expected {expected_hash[:16]}..., got {row_hash[:16]}...)"
+        
+        prev_hash = row_hash
+    
+    return True, prev_hash
+
+def parse_tsv():
+    """Parse COUNCIL-OUTCOMES.tsv into structured records."""
+    if not os.path.exists(TSV):
+        return []
+    
+    records = []
+    with open(TSV, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('genesis|'):
+                continue
+            parts = line.rsplit('|', 1)
+            if len(parts) != 2:
+                continue
+            row_content, row_hash = parts
+            fields = row_content.split('|')
+            if len(fields) < 5:
+                continue
+            
+            record = {
+                'decision': fields[0],
+                'tier': fields[1],
+                'sha': fields[2],
+                'reviewers': fields[3],
+                'families': fields[4],
+                'later_event': fields[5] if len(fields) > 5 else '',
+                'later_at': fields[6] if len(fields) > 6 else '',
+                'row_hash': row_hash
+            }
+            records.append(record)
+    
+    return records
+
+def compute_accuracy(records):
+    """Compute accuracy by model family and tier."""
+    family_stats = collections.defaultdict(lambda: {'total': 0, 'correct': 0, 'wrong': 0})
+    tier_stats = collections.defaultdict(lambda: {'total': 0, 'correct': 0, 'wrong': 0})
+    mistakes = []  # list of (mistake_type, family, tier, example_record)
+    
+    for r in records:
+        # Skip backfill records for accuracy
+        if r.get('later_event', '').startswith('backfill'):
+            continue
+        
+        decision = r['decision']
+        tier = r['tier']
+        families = r['families']
+        later_event = r['later_event']
+        
+        # Determine correctness:
+        # GO followed by revert/hotfix/fail = wrong
+        # NO-GO later shipped clean = wrong
+        is_correct = None
+        
+        if decision == 'GO' and later_event in ('revert', 'hotfix', 'fail', 'gate-fail', 'prod-incident'):
+            is_correct = False
+        elif decision == 'NO-GO' and later_event == 'shipped-clean':
+            is_correct = False
+        elif later_event in ('CI-pass', 'no-revert', 'no-hotfix'):
+            is_correct = True
+        # If no follow-up event yet, skip from accuracy
+        elif not later_event:
+            continue
+        
+        if is_correct is None:
+            continue
+        
+        for fam in families.split(','):
+            fam = fam.strip()
+            if not fam:
+                continue
+            family_stats[fam]['total'] += 1
+            if is_correct:
+                family_stats[fam]['correct'] += 1
+            else:
+                family_stats[fam]['wrong'] += 1
+                mistakes.append(('wrong-go' if decision == 'GO' else 'wrong-no-go', fam, tier, r))
+        
+        tier_stats[tier]['total'] += 1
+        if is_correct:
+            tier_stats[tier]['correct'] += 1
+        else:
+            tier_stats[tier]['wrong'] += 1
+            mistakes.append(('wrong-go' if decision == 'GO' else 'wrong-no-go', '', tier, r))
+    
+    return family_stats, tier_stats, mistakes
+
+def get_top_mistakes(mistakes, n=5):
+    """Get top N repeat mistakes with examples."""
+    mistake_counts = collections.Counter()
+    mistake_examples = collections.defaultdict(list)
+    
+    for m in mistakes:
+        mistake_type, family, tier, record = m
+        key = f"{mistake_type} (tier={tier}" + (f", family={family}" if family else "") + ")"
+        mistake_counts[key] += 1
+        mistake_examples[key].append(record)
+    
+    top = mistake_counts.most_common(n)
+    result = []
+    for key, count in top:
+        examples = mistake_examples[key]
+        result.append({
+            'type': key,
+            'count': count,
+            'examples': examples[:3]  # up to 3 examples
+        })
+    
+    return result
+
+def write_weekly_summary(family_stats, tier_stats, top_mistakes):
+    """Write the weekly accuracy summary markdown."""
+    date_str = datetime.datetime.now().strftime('%Y-%m-%d')
+    out_file = os.path.join(OUT, f'COUNCIL-ACCURACY-{date_str}.md')
+    
+    lines = [
+        f"# Council Accuracy Report - {date_str}",
+        f"Generated: {datetime.datetime.now().isoformat()}",
+        "",
+        "## Accuracy by Model Family",
+        "",
+        "| Family | Total Decisions | Correct | Wrong | Accuracy |",
+        "|--------|-----------------|---------|-------|----------|",
+    ]
+    
+    for fam in sorted(family_stats.keys()):
+        s = family_stats[fam]
+        acc = f"{s['correct']}/{s['total']}" if s['total'] > 0 else "N/A"
+        pct = f"{100*s['correct']/s['total']:.1f}%" if s['total'] > 0 else "N/A"
+        lines.append(f"| {fam} | {s['total']} | {s['correct']} | {s['wrong']} | {pct} |")
+    
+    lines.extend(["", "## Accuracy by Tier", "",
+        "| Tier | Total Decisions | Correct | Wrong | Accuracy |",
+        "|------|-----------------|---------|-------|----------|"])
+    
+    for tier in sorted(tier_stats.keys()):
+        s = tier_stats[tier]
+        pct = f"{100*s['correct']/s['total']:.1f}%" if s['total'] > 0 else "N/A"
+        lines.append(f"| {tier} | {s['total']} | {s['correct']} | {s['wrong']} | {pct} |")
+    
+    lines.extend(["", "## Top 5 Repeat Mistakes", ""])
+    
+    if top_mistakes:
+        for i, m in enumerate(top_mistakes, 1):
+            lines.append(f"### {i}. {m['type']} ({m['count']} occurrences)")
+            lines.append("")
+            for ex in m['examples']:
+                lines.append(f"- SHA: `{ex['sha']}`, Decision: {ex['decision']}, Tier: {ex['tier']}, Families: {ex['families']}")
+                if ex.get('later_event'):
+                    lines.append(f"  Follow-up: {ex['later_event']} at {ex['later_at']}")
+            lines.append("")
+    else:
+        lines.append("No repeat mistakes found.")
+    
+    with open(out_file, 'w') as f:
+        f.write('\n'.join(lines) + '\n')
+    
+    print(f"Written weekly summary to {out_file}")
+    return out_file
+
+def main():
+    # Verify chain first (STEER.md §4d)
+    valid, result = verify_chain()
+    if not valid:
+        # Append loud failure to FAILURE-LOG.md
+        with open(FAILURE_LOG, 'a') as f:
+            f.write(f"\n- {datetime.datetime.now().isoformat()} | council-outcomes-weekly.timer | COUNCIL OUTCOMES CHAIN BROKEN: {result} | should have valid hash chain | refusing to compute accuracy\n")
+        print(f"CHAIN BROKEN: {result}")
+        sys.exit(1)
+    
+    head_hash = result
+    print(f"Chain verified. Head hash: {head_hash[:16]}...")
+    
+    # Parse records
+    records = parse_tsv()
+    print(f"Parsed {len(records)} outcome records")
+    
+    # Compute accuracy
+    family_stats, tier_stats, mistakes = compute_accuracy(records)
+    
+    # Get top mistakes
+    top_mistakes = get_top_mistakes(mistakes)
+    
+    # Write summary
+    out_file = write_weekly_summary(family_stats, tier_stats, top_mistakes)
+    
+    # Also append head hash to STATUS.md daily
+    status_file = os.path.join(OUT, 'STATUS.md')
+    daily_line = f"{datetime.datetime.now().isoformat()} {head_hash}\n"
+    with open(status_file, 'a') as f:
+        f.write(daily_line)
+
+if __name__ == '__main__':
+    main()

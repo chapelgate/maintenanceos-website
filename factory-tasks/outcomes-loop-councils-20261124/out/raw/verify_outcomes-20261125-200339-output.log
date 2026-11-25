@@ -1,0 +1,4 @@
+# rt verify_outcomes | 20261125-200339 | sha cfa2fcc555cc56bd5a343393ffce5c9f39672a54 | cwd /home/andy/chapelgate/factory-tasks/outcomes-loop-councils-20261124
+# cmd: python3 verify_outcomes.py
+Chain verified OK. Head: a00fdb6ce2570f45...
+All council outcomes verified successfully

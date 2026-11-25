@@ -1,0 +1,3 @@
+# rt council-outcomes-timer | 20261125-195257 | sha cfa2fcc555cc56bd5a343393ffce5c9f39672a54 | cwd /home/andy/chapelgate/factory-tasks/outcomes-loop-councils-20261124
+# cmd: python3 council-outcomes.timer GO R testsha456 modelX,modelY estate-coding,mac-gpt-oss-120b
+Appended outcome row: GO|R|testsha456|modelX,modelY|estate-coding,mac-gpt-oss-120b|dbcd5469169660a9471...
