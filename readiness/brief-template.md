@@ -33,3 +33,27 @@ Any brief that omits the router protection rule will be rejected at preflight.
 ## PR citations (eggbot 21 Nov 2026, public chief ask)
 - Before writing any PR number into a readiness/report file, check it with `gh pr view <n> -R chapelgate/<repo> --json state,headRefOid` (gh is in ~/.local/bin). Name the repo on the same line and quote the state. Never cite a PR from memory or from an older file.
 - dell-services/pr-cite-check/check.sh runs hourly and lists any PR it cannot find in readiness/PR-CITE-CHECK.md. Fix those rows the same day.
+
+---
+
+## Mandatory: Council OUTCOME.json Template (outcomes-loop-councils-20261124)
+Every council MUST write out/OUTCOME.json next to VERDICT.md with this exact schema:
+```json
+{
+  "decision": "GO|NO-GO|CHANGE|HOLD-RETRY|TIMEOUT-SINGLE",
+  "tier": "S|R|F",
+  "sha": "40-char-commit-sha",
+  "evidence": [{"path": "path/to/test", "command": "pytest ...", "pass_count": "N/M"}],
+  "reviewers": [{"model_id": "opencode/free-only", "family": "deepseek"}],
+  "decided_at": "2026-11-25T19:34:15.630303Z",
+  "result": null
+}
+```
+- `decision`: GO, NO-GO, CHANGE, HOLD-RETRY, or TIMEOUT-SINGLE
+- `tier`: S (small), R (release), or F (structural-fast) — from dell-services/model-pin/review-tiers.conf
+- `sha`: exact 40-char git commit SHA of the reviewed head
+- `evidence`: list of test runs with path, command, and pass_count (N/M format)
+- `reviewers`: array of model_id and family (e.g., "deepseek", "estate-coding", "mac-gpt-oss-120b", "opencode", "qwen")
+- `decided_at`: ISO 8601 timestamp of council decision
+- `result`: null initially; filled later by council-outcomes.timer with follow-up events (CI-pass, revert, hotfix, gate-fail, prod-incident, shipped-clean)
+- dell-services/call-accountability/check.py rejects any verdict without a valid OUTCOME.json (backs up as .bak-outcomes-loop-<ts>, py_compile, atomic mv)
