@@ -11,8 +11,8 @@ function read(rel) {
   return fs.readFileSync(path.join(ROOT, rel), "utf8");
 }
 
-const LOCK_HASH = "b6b40384eb0034ae70ae32d6df5ab824d34a43641611e272e5f207b4af906d37";
-const SOURCE_COMMIT = "ff0140cc8ef7ac48e7fdab2c17d2f8ee4cbd4cbe";
+const LOCK_HASH = "9c85187e060f39b3f0335a97a3430a7653e8e6a1c486621804fadf059e95567e";
+const SOURCE_COMMIT = "948825903bb5798214a6afb6e82d1b5d0ae4564b";
 
 const REUSE_LICENCES = new Set(["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "0BSD"]);
 
@@ -103,7 +103,7 @@ test("licence evidence matches the package lock hash and package versions", () =
   assert.strictEqual(LOCK.lock.lockfileVersion, 3);
 
   const rootDeps = LOCK.lock.packages[""].dependencies || {};
-  assert.strictEqual(rootDeps.next, "16.4.3");
+  assert.strictEqual(rootDeps.next, "16.4.5");
   assert.strictEqual(rootDeps.parse5, "7.3.0");
   assert.strictEqual(rootDeps["pdfjs-dist"], "6.3.289");
   assert.strictEqual(rootDeps.react, "19.3.0");
@@ -116,7 +116,7 @@ test("licence evidence matches the package lock hash and package versions", () =
 
   const next = LOCK.entries.find((e) => e.path === "node_modules/next");
   assert.ok(next, "next entry missing from lock");
-  assert.strictEqual(next.version, "16.4.3");
+  assert.strictEqual(next.version, "16.4.5");
 
   for (const pkg of ["react", "react-dom", "parse5", "pdfjs-dist"]) {
     assert.ok(LOCK.entries.some((e) => e.path === `node_modules/${pkg}`), `${pkg} entry missing from lock`);
