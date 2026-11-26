@@ -1,13 +1,13 @@
 # Why the Stack is Broken (each broken link in one plain sentence)
 
-1. OpenCode JSON has ONE provider "omniroute" at 20140 - NO gemini, codex, cursor, or local-dell-llama providers registered
-2. OmniRoute primary (20128) returns 401 without estate key - codex/gemini/cursor have no API keys configured
-3. OmniRoute-B (20131) returns 401 without estate key - same issue as primary
-4. Local Llama (Qwen on 127.0.0.1:8081) is healthy but NOT registered in OmniRoute's model registry
-5. Mac lane has gpt-oss-120b locally but is NOT behind OmniRoute - separate stack with no shared skills/AGENTS.md
-6. Codex CLI NOT installed on PATH - only ~/.codex dir exists
-7. Gemini CLI NOT installed on PATH
-8. Cursor CLI NOT installed on PATH
+1. OpenCode exposes only the OmniRoute client provider, while Gemini, Codex, Cursor, NVIDIA, Groq, OpenRouter, LM Studio and other connections are correctly registered behind OmniRoute rather than as separate OpenCode providers.
+2. Anonymous requests to OmniRoute primary (20128) return 401 because router authentication is enforced, not because Codex, Gemini or Cursor provider credentials are absent.
+3. Anonymous requests to OmniRoute-B (20131) return 401 for the same enforced router-authentication reason.
+4. Local Llama (Qwen on 127.0.0.1:8081) is healthy but is not yet a verified final rung in the OmniRoute `estate-coding` combo.
+5. The Mac LM Studio lane is wired into OmniRoute through Dell relay 172.17.0.1:11234 as `lm-studio/gpt-oss-120b`, but it is rarely reached by build traffic.
+6. Codex CLI is not installed on PATH, although the `codex chatgpt-andy` connection is registered inside OmniRoute.
+7. Gemini CLI is not installed on PATH, although `gemini-estate-dev` is registered inside OmniRoute.
+8. Cursor CLI is not installed on PATH, although `cursor-api cursor-local` and `cursor-andy` are registered inside OmniRoute.
 9. Fallback proxy port 20130 has NO caller - upstreams include omni-tunnel disabled (20129), likely dead
 10. Omni-tunnel to 64.227.40.86 disabled tonight - breaks any former routing through that path
 11. opencode.json model LIMITS include local-dell-llama:8 but the model is never registered in the upstream OmniRoute containers

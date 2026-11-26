@@ -10,4 +10,9 @@
 - Updated /home/andy/chapelgate/jobs-work-dell/readiness/PARKED.md with NEEDS-ANDY free routes
 - Ran mac-review.sh (exit 0, 27s) → out/council/mac-review.md (verdict: FAIL with hallucinated findings)
 - Wrote out/council/self-review.md (verdict: PASS, refutes mac-review's incorrect claims)
-- Next: write out/EVIDENCE.md and out/MISSION_COMPLETE
+
+## 2026-11-26 verifier correction
+- Read verifier rejection: prior MISSION_COMPLETE lacked a raw-backed pass count and exact-head PR/council evidence.
+- Loaded mandatory chapelgate-skill-first and recorded applicable skills in out/SKILLS-USED.md.
+- Confirmed existing report commit 016dc174 is on branch council/model-stack-map-20261123 and has no PR.
+- Found stale report assertions contradicted by newer STEER evidence; correcting MAP/WHY/PLAN before validation and review.

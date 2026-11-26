@@ -100,34 +100,32 @@ flowchart TB
         FP -->|3rd/spill| MLR[Mac LMStudio Relay :11234]
     end
     
-    subgraph "OmniRoute Providers (registered in front-proxy MODEL_LIMITS)"
-        OP1 --> EC[estate-coding]
-        OP1 --> FO[free-only]
-        OP1 --> GROQ[groq/gpt-oss-120b]
-        OP1 --> OR[openrouter/gpt-oss-120b]
-        OP1 --> CFP[cfp/gpt-oss-120b]
-        OP1 --> MIST[mistral/codestral-latest]
-        OP1 --> LDL[local-dell-llama]
+    subgraph "Wired Through OmniRoute Connections"
+        OP1 --> EC[estate-coding combo]
+        OP1 --> FO[free-only combo]
+        OP1 --> AC[andy-chat combo]
         OP2 --> EC
         OP2 --> FO
-        OP2 --> GROQ
-        OP2 --> OR
-        OP2 --> CFP
-        OP2 --> MIST
-        OP2 --> LDL
-        MLR --> GPT120[gpt-oss-120b]
+        OP2 --> AC
+        MLR --> GPT120[lm-studio/gpt-oss-120b]
         MLR --> NOMIC[nomic-embed]
+        EC --> NV[nvidia connections]
+        EC --> OR[openrouter :free connections]
+        EC --> GEM[gemini-estate-dev]
+        EC --> CODEX[codex chatgpt-andy]
+        EC --> CURSOR[cursor-api connections]
+        EC --> GROQ[groq connections]
+        EC --> LMST[lm-studio/gpt-oss-120b]
     end
-    
-    subgraph "Dead / Not Wired"
-        FALL[Fallback Proxy :20130] -.->|no caller| OP1
+
+    subgraph "Dead / Not Wired / CLI-only Gaps"
+        FALL[Fallback Proxy :20130] -.->|no caller found| OP1
         FALL -.->|tunnel disabled| TUN[Omni-tunnel :20129]
-        FALL -.-> MLR
-        LLAMA[Local Llama :8081] -.->|not registered| OP1
-        MAC[Mac Lane] -.->|separate stack| FP
-        CODEX[Codex CLI] -.->|not installed| OC
-        GEMINI[Gemini CLI] -.->|not installed| OC
-        CURSOR[Cursor CLI] -.->|not installed| OC
+        FALL -.->|live Mac relay upstream| MLR
+        LLAMA[Local Llama :8081] -.->|not yet a verified estate-coding rung| OP1
+        CODEX[Codex CLI] -.->|not installed on PATH| OC
+        GEMINI[Gemini CLI] -.->|not installed on PATH| OC
+        CURSOR[Cursor CLI] -.->|not installed on PATH| OC
     end
     
     subgraph "OpenCode Built-ins (Remote)"
@@ -137,12 +135,11 @@ flowchart TB
         OB --> B4[+43 more free]
     end
     
-    style OP1 fill:#ffcccc
-    style OP2 fill:#ffcccc
+    style OP1 fill:#ccffcc
+    style OP2 fill:#ccffcc
     style MLR fill:#ccffcc
     style LLAMA fill:#ccffcc
     style FALL fill:#ffcccc
-    style MAC fill:#ffffcc
     style CODEX fill:#ffcccc
     style GEMINI fill:#ffcccc
     style CURSOR fill:#ffcccc
@@ -154,26 +151,38 @@ flowchart TB
 |-----------|------|-------|------|--------|
 | opencode-web | 4096 | 127.0.0.1 | None | ALIVE |
 | Front Proxy | 20140 | 0.0.0.0 | Estate OMNIROUTE_API_KEY (injected) | ALIVE |
-| OmniRoute Primary | 20128 | 127.0.0.1 | API Key required | ALIVE (401 without key) |
-| OmniRoute-B | 20131 | 127.0.0.1 | API Key required | ALIVE (401 without key) |
+| OmniRoute Primary | 20128 | 127.0.0.1 | API key required | ALIVE (401 anonymous) |
+| OmniRoute-B | 20131 | 127.0.0.1 | API key required | ALIVE (401 anonymous) |
 | Mac LMStudio Relay | 11234 | 172.17.0.1 / 127.0.0.1 | None | ALIVE |
-| Fallback Proxy | 20130 | 127.0.0.1 | Unknown | DEAD (no caller) |
-| Local Llama | 8081 | 127.0.0.1 | None | ALIVE (not wired) |
+| Fallback Proxy | 20130 | 127.0.0.1 | Unknown | No caller found; Mac relay upstream live |
+| Local Llama | 8081 | 127.0.0.1 | None | ALIVE (not yet verified combo rung) |
 | caddy-local | 20180/20182 | 127.0.0.1 | None | ALIVE |
 | Omni-tunnel | 20129 | - | - | DISABLED |
+
+## OmniRoute Connection/Combo Summary
+
+| Item | Current state | Notes |
+|------|---------------|-------|
+| `estate-coding` | 23 capability-ranked rungs after 24 Nov additions | codex/claude/nvidia/openrouter/gemini/groq/lm-studio; failover defect remains in storms |
+| `andy-chat` | 9 rungs | codex > cursor-api > nvidia > openrouter |
+| `free-only` | 10 rungs | gemini > nvidia > openrouter > groq |
+| connections | 14 total, 10 active | claude inactive; mistral 402; nvidia often 429; zai active but in no combo |
+| `mac-studio-lmstudio` | broken connection | returns 401 `provider_not_configured`; broken rung removed |
+| `lm-studio/gpt-oss-120b` | active via 172.17.0.1:11234 | Mac rungs get almost no build traffic |
+| opencode-zen | not yet a provider node | proposed first custom OpenAI-compatible provider |
 
 ## Model Registry Summary
 
 | Model | Source | Max Concurrency | Health (last 24h) | Notes |
 |-------|--------|-----------------|-------------------|-------|
-| estate-coding | OmniRoute | 32 | Often healthy, rerouted on 429 storms | Primary workhorse |
+| estate-coding | OmniRoute | 32 | Often healthy, but 459 storm requests had up to 15 nvidia-only attempts | Primary workhorse; failover defect |
 | free-only | OmniRoute | 16 | Frequently unhealthy (probed) | Fallback |
-| groq/openai/gpt-oss-120b | OmniRoute | 8 | Occasionally healthy | |
-| openrouter/openai/gpt-oss-120b | OmniRoute | 8 | CREDITS EXHAUSTED | Dead route |
-| cfp/openai/gpt-oss-120b | OmniRoute | 8 | Frequently unhealthy | |
-| mistral/codestral-latest | OmniRoute | 8 | Sometimes healthy | |
-| local-dell-llama | OmniRoute | 8 | NOT REGISTERED | Qwen on :8081 |
-| mac-lmstudio-relay | Mac Relay | 8 | Healthy | gpt-oss-120b + nomic-embed |
-| opencode/beam-free | OpenCode Remote | N/A | Unknown | Remote, 3rd party |
-| opencode/deepseek-v4.1-flash-free | OpenCode Remote | N/A | Excluded from merge-gate | Remote |
-| opencode/hy4-flash-free | OpenCode Remote | N/A | HUNG 54/54 | Off rotation |
+| nvidia nemotron rungs | OmniRoute | shared account ceiling suspected | ~25-30% 200s, rest 429/503 | Do not add more nvidia models for throughput |
+| openrouter :free rungs | OmniRoute | 8 | Daily free cap exhausted | Parked until cap reset/unlock |
+| groq rungs | OmniRoute | 8 | org-level 429 limits | extra groq models add no lanes |
+| gemini connections | OmniRoute | combo rungs | free quota often exhausted | 429-heavy |
+| codex chatgpt-andy | OmniRoute | combo rungs | weekly quota exhausted until 25 Nov 07:04 UTC | CLI not installed |
+| cursor-api connections | OmniRoute | combo rungs | registered | CLI not installed |
+| lm-studio/gpt-oss-120b | Mac relay :11234 | combo rung | 200 in 422ms | rarely reached |
+| local-dell-llama | :8081 | 8 | healthy | not yet verified final rung |
+| opencode/* free models | OpenCode remote | N/A | hy4 hung 54/54; deepseek off merge-gate | Remote, third-party dependency |

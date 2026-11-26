@@ -25,11 +25,20 @@
    - Skills reuse (pentagi-security-testing, etc) already available
    - Coordination only, no login/spend
 
-6. **FREE-NOW**: Opt-in subagent files on best built-in free models for doc/GTM review
-   - Create 1-3 agent files pointing at opencode/beam-free, flint-40b-free, mimo-v2.6-flash-free
-   - Under 2 min total prompt time each
-   - Never security work, never merge-gate reviews
-   - Opencode syntax confirmation needed (debug or docs for v1.19.5)
+6. **FREE-NOW**: Opt-in subagent files on the best smoke-tested OpenCode built-in free models for doc/GTM review only
+    - Do this only after a short read-only smoke test (one prompt each, under 2 minutes total); skip `hy4-flash-free` (hung 54/54) and keep `deepseek-v4.1-flash-free` out of merge-gate reviews
+    - Confirm v1.19.5 accepts the `~/.config/opencode/agents/<name>.md` `mode: subagent` + `model:` syntax before writing agent files
+    - Never security work, never merge-gate reviews; jobs opt in explicitly
+
+### Stalled-build failover plan (Andy 00:47 direction, council decides exact config; no container recreate)
+
+6a. **FREE-NOW, top priority**: make `estate-coding` walk down its rungs instead of returning a terminal 429 to OpenCode.
+    - Measured defect: 459 build requests since 00:12 had up to 15 attempts each, all nvidia-only, with 20 final "all targets were skipped" clients and gemini/groq/lm-studio rungs never reached during storms.
+    - Fix candidates in combo config only: continuous failover on 429/cooling, reject `maxRetries 0` terminal handling, keep a DB backup, apply on both routers, then verify one live request per changed rung.
+
+6b. **FREE-NOW**: stop every incoming build from starting at rank 1 and queueing on the same cooling nvidia rung.
+    - Prefer first-free/non-cooling selection, or least-busy/round-robin among equal-ranked rungs, so no free lane sits idle while work waits.
+    - Cap-stepper ceiling stays administratively capped; free NVIDIA guidance is "up to 40 RPM for most models", and per-account vs per-model remains unverified.
 
 ## Needs Andy (NEEDS-ANDY) - login/subscription/spend
 
@@ -48,10 +57,9 @@
    - Andy-only launch work condition
    - Free route: use opencode as proxy
 
-10. **NEEDS-ANDY**: Add gemini/provider and cursor/provider to opencode.json
-    - Register Gemini and Cursor as named providers in opencode.json
-    - Subscription/spend may be required for API access
-    - Andy-only launch work; keep separate from product
+10. **FREE-NOW**: Treat Gemini, Codex, Cursor, NVIDIA, Groq, OpenRouter and LM Studio as OmniRoute connections/combo rungs, not as separate OpenCode providers
+     - Verified 24 Nov: those providers already exist inside OmniRoute; the CLI tools merely are not installed on PATH
+     - Free route: keep OpenCode pointed only at OmniRoute; do not duplicate router auth in OpenCode
 
 11. **NEEDS-ANDY**: Enable omni-tunnel to 64.227.40.86 (or approved replacement)
     - Restore the disabled tunnel that previously routed through 64.227.40.86
@@ -73,10 +81,11 @@
     - Requires investigation of root cause (429 storms? auth issues?)
     - Andy decision needed on cap adjustment
 
-15. **NEEDS-ANDY**: Mac lane full integration behind OmniRoute
-    - Mac Studio needs opencode.json configured with omniroute provider
-    - Requires mac-review.sh review and council approval
-    - Andy-led; not auto-mergeable
+15. **FREE-NOW**: Treat Mac lane as wired through the Dell LM Studio relay, and remove/repair stale Mac rungs
+     - Verified 24 Nov: OmniRoute connection `mac-studio-lmstudio` baseUrl `http://172.17.0.1:11234/v1` returns 200, and `lm-studio/gpt-oss-120b` returns 200 in 422ms
+     - Broken `mac-studio/gpt-oss-120b` rung was removed because it returned 401 `provider_not_configured`; keep that removal and do not re-add it
+     - Mac build traffic is nearly zero because capability ranking places gpt-oss-120b mid-list; decide whether that is intentional
+     - Free route: use `lm-studio/gpt-oss-120b`; mac-review.sh remains the second review family
 
 ## Council Review Actions (after self + mac-review.sh)
 
@@ -92,9 +101,9 @@
 ## Free Routes Around NEEDS-ANDY Items
 
 - **Free route around #7-9**: Use opencode as front door; all calls go through omniroute-front-proxy:20140 which can spill to Mac relay
-- **Free route around #10**: opencode.json already has omniroute provider; add gemini/cursor as named combo models under a separate key (not omniroute)
+- **Free route around #10**: those providers already exist in OmniRoute; expose them by combo/connection only, with no new keys in OpenCode
 - **Free route around #11**: Skip the disabled tunnel; use Mac LMStudio relay at 11234 as the free route instead
 - **Free route around #12**: Work within current concurrency caps; the front-proxy adaptive throttle already downgrades to STORM_INFLIGHT=16 during 429 spikes
 - **Free route around #13**: Mark openrouter route as PARKED; use cfp/openai/gpt-oss-120b or free-only as alternatives when healthy
 - **Free route around #14**: Monitor model-failrate; if cap drops to 8, adjust workload to stay under new limit
-- **Free route around #15**: Mac lane stays separate; use mac-review.sh for any council votes; no forced integration
+- **Free route around #15**: use the live `lm-studio/gpt-oss-120b` relay rung; use mac-review.sh for second-family reviews; do not force Mac Studio to run the OmniRoute provider config
