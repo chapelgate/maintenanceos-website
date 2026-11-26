@@ -1,0 +1,64 @@
+LISTENERS (ss -ltnp):
+LISTEN 0 5 0.0.0.0:20140 0.0.0.0:* users:(("python3",pid=1805330,fd=3))  # omniroute-front-proxy
+LISTEN 0 4096 127.0.0.1:20128 0.0.0.0:*  # omniroute primary (docker)
+LISTEN 0 4096 127.0.0.1:20131 0.0.0.0:*  # omniroute-b (docker)
+LISTEN 0 5 127.0.0.1:20130 0.0.0.0:* users:(("python3",pid=2078963,fd=3))  # omniroute-fallback
+LISTEN 0 64 172.17.0.1:11234 0.0.0.0:* users:(("python3",pid=3102330,fd=3))  # mac-lmstudio-relay
+LISTEN 0 512 127.0.0.1:8081 0.0.0.0:* users:(("llama-server",pid=1633142,fd=15))  # local llama Qwen
+LISTEN 0 512 127.0.0.1:4096 0.0.0.0:* users:(("opencode",pid=2521,fd=11))  # opencode-web
+LISTEN 0 5 127.0.0.1:18091 0.0.0.0:* users:(("python3",pid=2765,fd=3))  # caddy-local?
+LISTEN 0 4096 127.0.0.1:20180 0.0.0.0:* users:(("caddy",pid=1316004,fd=3))  # caddy-local
+LISTEN 0 4096 127.0.0.1:20182 0.0.0.0:* users:(("caddy",pid=1316004,fd=6))  # caddy-local
+
+FRONT PROXY SOURCE: /home/andy/chapelgate/dell-services/omniroute-front-proxy.py (bound 0.0.0.0:20140)
+UPSTREAMS in order: 20128 -> 20131 -> 11234 (Mac relay)
+
+FALLBACK PROXY: /home/andy/chapelgate/dell-services/omniroute-front-proxy.py.bak-eggbot-20261120-1543 (same upstreams)
+Port 20130 listening but upstreams: 20128, 20129 (omni-tunnel disabled), 11234 - likely dead
+
+MODEL REGISTRY (from front-proxy MODEL_LIMITS):
+- estate-coding: 32 (primary)
+- andy-chat: 32
+- free-only: 16
+- mistral/codestral-latest: 8
+- groq/openai/gpt-oss-120b: 8
+- openrouter/openai/gpt-oss-120b: 8
+- cfp/openai/gpt-oss-120b: 8
+- mac-lmstudio-relay: 8
+- local-dell-llama: 8
+
+OPENCODE BUILT-IN MODELS (v1.19.5, remote via opencode.ai):
+- opencode/beam-free
+- opencode/big-pickle
+- opencode/deepseek-v4.1-flash-free (excluded from merge-gate reviews)
+- opencode/flint-40b-free
+- opencode/hy4-flash-free (off rotation, hung 54/54)
+- opencode/iceman-free
+- opencode/mimo-v2.6-flash-free
+- opencode/nemotron-3.5-lightning-free
+- opencode/nemotron-3.5-super-vl-free
+- opencode/tidepool-alpha-free
++ ~43 more free models in cache (~53 total)
+
+HEALTH STATUS (from /v1/models calls):
+- 127.0.0.1:8081 (llama): 200 OK - Qwen model served
+- 127.0.0.1:20128 (omniroute primary): 401 Auth required
+- 127.0.0.1:20131 (omniroute-b): 401 Auth required
+- 127.0.0.1:11234 (mac relay): 200 OK - gpt-oss-120b + nomic-embed
+- 127.0.0.1:20140 (front proxy): Returns massive model list from Cursor API (300+ models)
+
+CLI INSTALL STATUS:
+- opencode: installed at ~/.opencode/bin/opencode
+- codex: NOT on PATH (~/.codex dir exists)
+- gemini: NOT on PATH
+- cursor: NOT on PATH
+
+OMNI-TUNNEL: Disabled tonight (64.227.40.86)
+
+RATE-ROUTE LOG (last 24h call_logs equivalent - from reroute.log):
+- Constant 429 spikes on nvidia/nemotron/gemini models
+- openrouter credits exhausted (route.model.openrouter-credits-exhausted-20261119-1503)
+- free-only and cfp/openai/gpt-oss-120b frequently probed unhealthy
+- estate-coding (deepseek) often healthy but gets rerouted due to 429 storms
+- groq/openai/gpt-oss-120b occasionally healthy
+- mac-spill.log shows spills to Mac relay when all upstreams 429

@@ -1,0 +1,2 @@
+20261124-000910	backend-source	0	aa91f5fa1caf24bfba37f84b5a1583abe5aee6f7	/home/andy/chapelgate/factory-tasks/council-model-stack-map-20261123/out/raw/backend-source-20261124-000910-output.log	cat /home/andy/chapelgate/dell-services/omniroute-front-proxy.py
+20261124-000910	models-listen	0	aa91f5fa1caf24bfba37f84b5a1583abe5aee6f7	/home/andy/chapelgate/factory-tasks/council-model-stack-map-20261123/out/raw/models-listen-20261124-000910-output.log	curl -s http://127.0.0.1:20140/v1/models
