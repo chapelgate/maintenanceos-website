@@ -121,12 +121,12 @@ export default function AdminPage() {
             Internal review pages
           </h2>
           <ul className="mt-2 list-disc space-y-2 pl-5 text-xs">
-            <li><a href="/buyers/" className="text-accent underline-offset-4 hover:underline">Buyers note</a> — synthetic demo pack, no price/uptime</li>
-            <li><a href="/onboarding/" className="text-accent underline-offset-4 hover:underline">Onboarding walkthrough</a> — ordered steps; scanner frozen (t835u)</li>
-            <li><a href="/accessibility/" className="text-accent underline-offset-4 hover:underline">Accessibility</a> — target, gaps, no WCAG AA claim</li>
-            <li><a href="/status/" className="text-accent underline-offset-4 hover:underline">Status</a> — live build flags mirror</li>
-            <li><a href="/create/" className="text-accent underline-offset-4 hover:underline">Create preview</a> — receptionist draft, no live provisioning</li>
-            <li><a href="/compare/" className="text-accent underline-offset-4 hover:underline">Compare</a> — feature parity table, no competitor PII</li>
+            <li><a href="/buyers/" className="text-accent underline-offset-4 hover:underline">Buyers note: synthetic demo pack, no price/uptime</a></li>
+            <li><a href="/onboarding/" className="text-accent underline-offset-4 hover:underline">Onboarding walkthrough: ordered steps; scanner frozen (t835u)</a></li>
+            <li><a href="/accessibility/" className="text-accent underline-offset-4 hover:underline">Accessibility: target, gaps, no WCAG AA claim</a></li>
+            <li><a href="/status/" className="text-accent underline-offset-4 hover:underline">Status: live build flags mirror</a></li>
+            <li><a href="/create/" className="text-accent underline-offset-4 hover:underline">Create preview: receptionist draft, no live provisioning</a></li>
+            <li><a href="/compare/" className="text-accent underline-offset-4 hover:underline">Compare: feature parity table, no competitor PII</a></li>
           </ul>
         </section>
 
